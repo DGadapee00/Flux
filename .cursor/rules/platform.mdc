@@ -8,7 +8,7 @@ alwaysApply: true
 These apply to every phase. `PLAN.md` is the order of work. Stop at the phase exit test.
 
 - The four course repos (flux-phy2049, flux-mac2313, statics-sim, stats) are read-only sources. Copy from them. Their live sites stay up until that course passes parity, and an in-semester course waits until after its final unless parity is proven and the owner chooses to switch.
-- This repo is public. Raw course files stay out: PDFs, slides, Canvas exports, student names, grades. Rewritten notes ship only with that course's `PROVENANCE.md`. Material without permission stays out.
+- This repo is public. Raw course files (PDFs, slides, Canvas exports) sit only in a course's `incoming/` folder, with permission recorded in its `PROVENANCE.md`, and never ship. Student names and grades never enter the repo. Leave `incoming/` and `.canvas-state.json` alone.
 - `packages/core` knows no course: no course id, code, chapter number, constant, or textbook name. A hook core needs goes on `defineCourse`, `defineLab`, or `problem`.
 - Every number on screen is computed and checked. A subject library has a selftest. A course with a failing check does not ship.
 - 380px portrait is the design width. No horizontal scroll. Phone inputs are at least 16px so Safari does not zoom.

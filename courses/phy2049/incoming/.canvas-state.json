@@ -1,0 +1,1168 @@
+{
+ "course": {
+  "id": "130036",
+  "name": "202680.PHY2049.84245:Calculus-Based Physics II"
+ },
+ "files": {
+  "23854437": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 45 Magnetism Fall 2025.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 45 Magnetism Fall 2025.pdf",
+   "stamp": "2025-09-19T17:29:42Z"
+  },
+  "23854568": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 44 Solutions.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 44 Solutions.pdf",
+   "stamp": "2025-09-19T17:31:01Z"
+  },
+  "23854569": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 44 More about Circuits Fall 2025.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 44 More about Circuits Fall 2025.pdf",
+   "stamp": "2025-09-19T17:30:47Z"
+  },
+  "23854591": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Practice Problems Chapter 37 Solutions.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 37 Solutions.pdf",
+   "stamp": "2025-08-29T13:03:59Z"
+  },
+  "23854593": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Practice Problems Chapter 37 Electric Field and Conductors Fall 2025.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 37 Electric Field and Conductors Fall 2025.pdf",
+   "stamp": "2025-08-29T13:03:40Z"
+  },
+  "23854632": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 41 Current and Resistance Fall 2025.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 41 Current and Resistance Fall 2025.pdf",
+   "stamp": "2026-01-26T18:27:37Z"
+  },
+  "23854657": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Practice Problems Chapter 35 Electrostatic Force Spring 2026.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 35 Electrostatic Force Spring 2026.pdf",
+   "stamp": "2025-12-29T18:52:55Z"
+  },
+  "23854658": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Practice Problems Chapter 34 Soutions.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 34 Soutions.pdf",
+   "stamp": "2025-12-29T18:52:03Z"
+  },
+  "23854659": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Study Group Extra Credit Spring 2026.docx",
+   "path": "incoming/2026-wk40/Study Group Extra Credit Spring 2026.docx",
+   "stamp": "2025-12-29T19:17:37Z"
+  },
+  "23854661": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 40 Solutions.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 40 Solutions.pdf",
+   "stamp": "2025-09-03T17:38:58Z"
+  },
+  "23854667": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 46 Solutions-1.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 46 Solutions-1.pdf",
+   "stamp": "2026-02-09T14:53:40Z"
+  },
+  "23854669": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 45 Solutions.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 45 Solutions.pdf",
+   "stamp": "2025-09-19T17:30:16Z"
+  },
+  "23854670": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 40 Capacitors and Dielectrics Fall 2025.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 40 Capacitors and Dielectrics Fall 2025.pdf",
+   "stamp": "2025-09-03T17:38:43Z"
+  },
+  "23854671": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 43 Electric Circuits Fall 2025.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 43 Electric Circuits Fall 2025.pdf",
+   "stamp": "2025-09-19T17:28:12Z"
+  },
+  "23854672": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 43 Solutions.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 43 Solutions.pdf",
+   "stamp": "2025-09-19T17:28:28Z"
+  },
+  "23854677": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 48 Solutions.pdf",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 48 Solutions.pdf",
+   "stamp": "2025-10-02T13:20:51Z"
+  },
+  "23854682": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 48 EM Induction Fall 2025.pdf",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 48 EM Induction Fall 2025.pdf",
+   "stamp": "2025-10-02T13:20:31Z"
+  },
+  "23854684": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 49 Induction in Circuits Fall 2025.pdf",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 49 Induction in Circuits Fall 2025.pdf",
+   "stamp": "2025-10-02T13:21:59Z"
+  },
+  "23854691": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 50 Electric Generators, Motors and Power Tansmission Fall 2025.pdf",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 50 Electric Generators, Motors and Power Tansmission Fall 2025.pdf",
+   "stamp": "2025-10-09T14:35:04Z"
+  },
+  "23854692": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 51 Applications of EMI Fall 2025.pdf",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 51 Applications of EMI Fall 2025.pdf",
+   "stamp": "2025-10-09T14:35:54Z"
+  },
+  "23854694": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Practice Problems Chapter 36 Part C Solutions.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 36 Part C Solutions.pdf",
+   "stamp": "2026-01-06T17:35:26Z"
+  },
+  "23854695": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 49 Solutions.pdf",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 49 Solutions.pdf",
+   "stamp": "2025-10-02T13:22:17Z"
+  },
+  "23854696": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 51 Solutions.pdf",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 51 Solutions.pdf",
+   "stamp": "2025-10-14T13:55:51Z"
+  },
+  "23854700": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 50 Solutions.pdf",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 50 Solutions.pdf",
+   "stamp": "2025-10-14T13:55:06Z"
+  },
+  "23854719": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 52 RCL Circuits Solutions-1.pdf",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 52 RCL Circuits Solutions-1.pdf",
+   "stamp": "2026-03-23T17:15:24Z"
+  },
+  "23854796": {
+   "fetched": "2026-09-26",
+   "module": "Week 4 - Lecture - September 7 - 13",
+   "name": "Worksheet # 2 Part B UpL Solutions.pdf",
+   "path": "incoming/2026-wk39/Worksheet _ 2 Part B UpL Solutions.pdf",
+   "stamp": "2026-09-10T17:02:22Z"
+  },
+  "23854797": {
+   "fetched": "2026-09-26",
+   "module": "Week 4 - Lecture - September 7 - 13",
+   "name": "Worksheet # 2 Part A MC Solutions.pdf",
+   "path": "incoming/2026-wk39/Worksheet _ 2 Part A MC Solutions.pdf",
+   "stamp": "2026-09-10T17:02:22Z"
+  },
+  "23854811": {
+   "fetched": "2026-10-04",
+   "module": "Week 4 - Lecture - September 7 - 13",
+   "name": "Worksheet # 2 Part B UpL Spring 2026.pdf",
+   "path": "incoming/2026-wk40/Worksheet _ 2 Part B UpL Spring 2026.pdf",
+   "stamp": "2026-01-13T17:07:31Z"
+  },
+  "23854814": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 42 Electrical Power Fall 2025.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 42 Electrical Power Fall 2025.pdf",
+   "stamp": "2026-01-26T18:28:29Z"
+  },
+  "23854824": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 47 Current and the Magnetic Field Spring 2026.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 47 Current and the Magnetic Field Spring 2026.pdf",
+   "stamp": "2026-02-09T14:54:16Z"
+  },
+  "23854828": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 41 Solutions-1.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 41 Solutions-1.pdf",
+   "stamp": "2026-01-28T18:08:56Z"
+  },
+  "23854829": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 42 Solutions-1.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 42 Solutions-1.pdf",
+   "stamp": "2026-01-28T18:09:27Z"
+  },
+  "23854837": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Practice Problems Chapter 36 Part A Solutions.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 36 Part A Solutions.pdf",
+   "stamp": "2025-12-29T18:54:20Z"
+  },
+  "23854838": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Practice Problems Chapter 36 Part A Electric Fields Spring 2026.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 36 Part A Electric Fields Spring 2026.pdf",
+   "stamp": "2025-12-29T18:54:05Z"
+  },
+  "23854839": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Practice Problems Chapter 34 Electric Charge Spring 2026.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 34 Electric Charge Spring 2026.pdf",
+   "stamp": "2025-12-29T18:51:47Z"
+  },
+  "23854840": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Practice Problems Chapter 35 Solutions.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 35 Solutions.pdf",
+   "stamp": "2025-12-29T18:53:10Z"
+  },
+  "23854846": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 52 RCL Circuits Fall 2025-1.pdf",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 52 RCL Circuits Fall 2025-1.pdf",
+   "stamp": "2026-03-23T17:15:09Z"
+  },
+  "23854849": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 46 Magnetic Forces Spring 2026.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 46 Magnetic Forces Spring 2026.pdf",
+   "stamp": "2026-02-09T14:53:22Z"
+  },
+  "23854850": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 47 Solutions-2.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 47 Solutions-2.pdf",
+   "stamp": "2026-02-09T14:54:37Z"
+  },
+  "23854851": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Practice Problems Chapter 36 Part B Solutions-1.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 36 Part B Solutions-1.pdf",
+   "stamp": "2026-01-06T17:34:38Z"
+  },
+  "23854852": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Practice Problems Chapter 36 Part B Electric Fields Spring 2026.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 36 Part B Electric Fields Spring 2026.pdf",
+   "stamp": "2026-01-06T17:34:23Z"
+  },
+  "23854865": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Practice Problems Chapter 36 Part C Electric Fields Spring 2026.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 36 Part C Electric Fields Spring 2026.pdf",
+   "stamp": "2026-01-06T17:35:11Z"
+  },
+  "23967345": {
+   "fetched": "2026-09-26",
+   "module": "Lecture Class Information ",
+   "name": "Montgomery Sylabus Calculus Physics 2 PHY2049 CRN 84245 Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Montgomery Sylabus Calculus Physics 2 PHY2049 CRN 84245 Fall 2026.pdf",
+   "stamp": "2026-07-23T18:52:48Z"
+  },
+  "23967600": {
+   "fetched": "2026-09-26",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Calculus Physics II Lecture Notes Ch 0 Part A Class Expectations and help Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 0 Part A Class Expectations and help Fall 2026.pdf",
+   "stamp": "2026-07-23T19:18:41Z"
+  },
+  "23967601": {
+   "fetched": "2026-09-26",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Calculus Physics II Lecture Notes Ch 0 Part B Problem Solving Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 0 Part B Problem Solving Fall 2026.pdf",
+   "stamp": "2026-07-23T19:18:42Z"
+  },
+  "23967602": {
+   "fetched": "2026-09-26",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Calculus Physics II Lecture Notes Ch 0 Part V - Vector Review Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 0 Part V - Vector Review Fall 2026.pdf",
+   "stamp": "2026-07-23T19:18:43Z"
+  },
+  "23967603": {
+   "fetched": "2026-09-26",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Calculus Physics II Lecture Notes Ch 34 The Electric Charge Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 34 The Electric Charge Fall 2026.pdf",
+   "stamp": "2026-07-23T19:18:43Z"
+  },
+  "23967604": {
+   "fetched": "2026-09-26",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Calculus Physics II Lecture Notes Ch 35 Electro Static Force Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 35 Electro Static Force Fall 2026.pdf",
+   "stamp": "2026-07-23T19:18:44Z"
+  },
+  "24000267": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Physics 1 Video Problems # 1 Vectors.pdf",
+   "path": "incoming/2026-wk40/Physics 1 Video Problems _ 1 Vectors.pdf",
+   "stamp": "2026-07-28T19:52:48Z"
+  },
+  "24000292": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Physics 2 Video Solution Problem.pdf",
+   "path": "incoming/2026-wk40/Physics 2 Video Solution Problem.pdf",
+   "stamp": "2026-07-28T19:57:24Z"
+  },
+  "24015797": {
+   "fetched": "2026-10-04",
+   "module": "Week 2 - Lecture - August 24 - 30",
+   "name": "Worksheet # 1 Part B UpL Fall 2026.pdf",
+   "path": "incoming/2026-wk40/Worksheet _ 1 Part B UpL Fall 2026.pdf",
+   "stamp": "2026-07-30T18:02:13Z"
+  },
+  "24018350": {
+   "fetched": "2026-10-04",
+   "module": "Week 2 - Lecture - August 24 - 30",
+   "name": "Interactive Lessons # 1 Static Electricity Fall 2026-1.docx",
+   "path": "incoming/2026-wk40/Interactive Lessons _ 1 Static Electricity Fall 2026-1.docx",
+   "stamp": "2026-07-30T19:33:46Z"
+  },
+  "24239262": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Practice Problems Chapter V Vector Review Spring 2026-1.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter V Vector Review Spring 2026-1.pdf",
+   "stamp": "2026-08-17T13:38:18Z"
+  },
+  "24239266": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Practice Problems Chapter V Solutions-1.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter V Solutions-1.pdf",
+   "stamp": "2026-08-17T13:38:32Z"
+  },
+  "24239537": {
+   "fetched": "2026-09-26",
+   "module": "Exam 1 - Friday August 28 ",
+   "name": "Exam 1 Equations Physics II Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Exam 1 Equations Physics II Fall 2026.pdf",
+   "stamp": "2026-08-17T14:00:31Z"
+  },
+  "24279897": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Physics 2 Video Solution Problem - Electrostatic 1D.pdf",
+   "path": "incoming/2026-wk40/Physics 2 Video Solution Problem - Electrostatic 1D.pdf",
+   "stamp": "2026-08-20T19:35:39Z"
+  },
+  "24303584": {
+   "fetched": "2026-09-26",
+   "module": "Week 2 - Lecture - August 24 - 30",
+   "name": "Class Activity # 1 Physics 2 Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Class Activity _ 1 Physics 2 Fall 2026.pdf",
+   "stamp": "2026-08-24T13:29:30Z"
+  },
+  "24303585": {
+   "fetched": "2026-09-26",
+   "module": "Week 2 - Lecture - August 24 - 30",
+   "name": "Class Activity # 1 Solutions.pdf",
+   "path": "incoming/2026-wk39/Class Activity _ 1 Solutions.pdf",
+   "stamp": "2026-08-24T13:29:30Z"
+  },
+  "24318927": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Physics 2 Video Solution Problem - Electric Field Part A.pdf",
+   "path": "incoming/2026-wk40/Physics 2 Video Solution Problem - Electric Field Part A.pdf",
+   "stamp": "2026-08-26T13:25:05Z"
+  },
+  "24318930": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Physics 2 Video Solution Problem - Electric Field Part B Total Charge.pdf",
+   "path": "incoming/2026-wk40/Physics 2 Video Solution Problem - Electric Field Part B Total Charge.pdf",
+   "stamp": "2026-08-26T13:26:47Z"
+  },
+  "24318937": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Physics 2 Video Solution Problem - Electric Field Part B E field.pdf",
+   "path": "incoming/2026-wk40/Physics 2 Video Solution Problem - Electric Field Part B E field.pdf",
+   "stamp": "2026-08-26T13:28:21Z"
+  },
+  "24318942": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Physics 2 Video Solution Problem - Electric Field Part C.pdf",
+   "path": "incoming/2026-wk40/Physics 2 Video Solution Problem - Electric Field Part C.pdf",
+   "stamp": "2026-08-26T13:29:56Z"
+  },
+  "24318982": {
+   "fetched": "2026-09-26",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Calculus Physics II Lecture Notes Ch 36 Electric Fields Part A Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 36 Electric Fields Part A Fall 2026.pdf",
+   "stamp": "2026-08-26T13:38:23Z"
+  },
+  "24318983": {
+   "fetched": "2026-09-26",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Calculus Physics II Lecture Notes Ch 36 Electric Fields Part B Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 36 Electric Fields Part B Fall 2026.pdf",
+   "stamp": "2026-08-26T13:38:24Z"
+  },
+  "24318985": {
+   "fetched": "2026-09-26",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Calculus Physics II Lecture Notes Ch 36 Electric Fields Part C Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 36 Electric Fields Part C Fall 2026.pdf",
+   "stamp": "2026-08-26T13:38:24Z"
+  },
+  "24318996": {
+   "fetched": "2026-09-26",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Calculus Physics II Lecture Notes Ch 37 Electric Field, Conductors and Applications Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 37 Electric Field, Conductors and Applications Fall 2026.pdf",
+   "stamp": "2026-08-26T13:39:52Z"
+  },
+  "24327187": {
+   "fetched": "2026-09-26",
+   "module": "Week 2 - Lecture - August 24 - 30",
+   "name": "Worksheet # 1 Part A MC Solutions.pdf",
+   "path": "incoming/2026-wk39/Worksheet _ 1 Part A MC Solutions.pdf",
+   "stamp": "2026-08-27T16:31:17Z"
+  },
+  "24327188": {
+   "fetched": "2026-09-26",
+   "module": "Week 2 - Lecture - August 24 - 30",
+   "name": "Worksheet # 1 Part B UpL Solutions.pdf",
+   "path": "incoming/2026-wk39/Worksheet _ 1 Part B UpL Solutions.pdf",
+   "stamp": "2026-08-27T16:31:18Z"
+  },
+  "24465038": {
+   "fetched": "2026-09-26",
+   "module": "Exam 2 - Friday September 11",
+   "name": "Exam 2 Equations Physics II.pdf",
+   "path": "incoming/2026-wk39/Exam 2 Equations Physics II.pdf",
+   "stamp": "2026-09-02T19:39:24Z"
+  },
+  "24510290": {
+   "fetched": "2026-09-26",
+   "module": "Week 4 - Lecture - September 7 - 13",
+   "name": "Class Activity # 2 Physics 2 Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Class Activity _ 2 Physics 2 Fall 2026.pdf",
+   "stamp": "2026-09-08T16:49:37Z"
+  },
+  "24515958": {
+   "fetched": "2026-09-26",
+   "module": "Week 4 - Lecture - September 7 - 13",
+   "name": "Class Activity # 2 Solutions.pdf",
+   "path": "incoming/2026-wk39/Class Activity _ 2 Solutions.pdf",
+   "stamp": "2026-09-09T13:22:24Z"
+  },
+  "24516735": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 39 More on the Electric Potential Fall 2025-1.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 39 More on the Electric Potential Fall 2025-1.pdf",
+   "stamp": "2026-09-09T15:23:43Z"
+  },
+  "24516738": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 39 Solutions-1.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 39 Solutions-1.pdf",
+   "stamp": "2026-09-09T15:23:59Z"
+  },
+  "24517801": {
+   "fetched": "2026-09-26",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Calculus Physics II Lecture Notes Ch 38 Electric Potenial Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 38 Electric Potenial Fall 2026.pdf",
+   "stamp": "2026-09-09T17:53:18Z"
+  },
+  "24517802": {
+   "fetched": "2026-09-26",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Calculus Physics II Lecture Notes Ch 39 More on the Electric Potenial Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 39 More on the Electric Potenial Fall 2026.pdf",
+   "stamp": "2026-09-09T17:53:19Z"
+  },
+  "24517803": {
+   "fetched": "2026-09-26",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Calculus Physics II Lecture Notes Ch 40 Capacitors and Dielectrics Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 40 Capacitors and Dielectrics Fall 2026.pdf",
+   "stamp": "2026-09-09T17:53:20Z"
+  },
+  "24517804": {
+   "fetched": "2026-09-26",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Calculus Physics II Lecture Notes Ch 41 Current and Resistance Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 41 Current and Resistance Fall 2026.pdf",
+   "stamp": "2026-09-09T17:53:20Z"
+  },
+  "24517805": {
+   "fetched": "2026-09-26",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Calculus Physics II Lecture Notes Ch 42 Electircal Power Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 42 Electircal Power Fall 2026.pdf",
+   "stamp": "2026-09-09T17:53:21Z"
+  },
+  "24525950": {
+   "fetched": "2026-10-04",
+   "module": "Week 6 - Lecture - September 21 - 27",
+   "name": "Worksheet # 3 Part B UpL Physics II Fall 2026.pdf",
+   "path": "incoming/2026-wk40/Worksheet _ 3 Part B UpL Physics II Fall 2026.pdf",
+   "stamp": "2026-09-10T18:59:34Z"
+  },
+  "24530883": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Physics 2 Video Solution Problem - Chapter 39 - More on the electric potential.pdf",
+   "path": "incoming/2026-wk40/Physics 2 Video Solution Problem - Chapter 39 - More on the electric potential.pdf",
+   "stamp": "2026-09-11T15:44:03Z"
+  },
+  "24533141": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 38 Electric Potential Fall 2025-2.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 38 Electric Potential Fall 2025-2.pdf",
+   "stamp": "2026-09-11T20:16:17Z"
+  },
+  "24533142": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 38 Solutions-1.pdf",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 38 Solutions-1.pdf",
+   "stamp": "2026-09-11T20:16:32Z"
+  },
+  "24560022": {
+   "fetched": "2026-09-26",
+   "module": "Exam 3 - Friday September 25",
+   "name": "Exam 3 Equations.pdf",
+   "path": "incoming/2026-wk39/Exam 3 Equations.pdf",
+   "stamp": "2026-09-15T18:27:35Z"
+  },
+  "24560085": {
+   "fetched": "2026-10-04",
+   "module": "Week 6 - Lecture - September 21 - 27",
+   "name": "Interactive Lessons # 2 The Electric Field and Potential Fall 2026.docx",
+   "path": "incoming/2026-wk40/Interactive Lessons _ 2 The Electric Field and Potential Fall 2026.docx",
+   "stamp": "2026-09-15T18:35:56Z"
+  },
+  "24608840": {
+   "fetched": "2026-10-04",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Worksheet # 4 Part A MC Physics II Fall  2026.pdf",
+   "path": "incoming/2026-wk40/Worksheet _ 4 Part A MC Physics II Fall  2026.pdf",
+   "stamp": "2026-09-22T15:04:44Z"
+  },
+  "24608987": {
+   "fetched": "2026-10-04",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Worksheet # 4  Part B UpL Physics II Fall 2026.pdf",
+   "path": "incoming/2026-wk40/Worksheet _ 4  Part B UpL Physics II Fall 2026.pdf",
+   "stamp": "2026-09-22T15:15:03Z"
+  },
+  "24609189": {
+   "fetched": "2026-09-26",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Calculus Physics II Lecture Notes Ch 43 Circuits Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 43 Circuits Fall 2026.pdf",
+   "stamp": "2026-09-22T15:42:25Z"
+  },
+  "24609190": {
+   "fetched": "2026-09-26",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Calculus Physics II Lecture Notes Ch 44 More on Electrical Circuits Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 44 More on Electrical Circuits Fall 2026.pdf",
+   "stamp": "2026-09-22T15:42:26Z"
+  },
+  "24609191": {
+   "fetched": "2026-09-26",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Calculus Physics II Lecture Notes Ch 45 Magnetism Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 45 Magnetism Fall 2026.pdf",
+   "stamp": "2026-09-22T15:42:27Z"
+  },
+  "24609192": {
+   "fetched": "2026-09-26",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Calculus Physics II Lecture Notes Ch 46 Magnetic Forces Fall  2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 46 Magnetic Forces Fall  2026.pdf",
+   "stamp": "2026-09-22T15:42:27Z"
+  },
+  "24609193": {
+   "fetched": "2026-09-26",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Calculus Physics II Lecture Notes Ch 47 Current and the Magnetic Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Calculus Physics II Lecture Notes Ch 47 Current and the Magnetic Fall 2026.pdf",
+   "stamp": "2026-09-22T15:42:28Z"
+  },
+  "24614893": {
+   "fetched": "2026-09-26",
+   "module": "Week 6 - Lecture - September 21 - 27",
+   "name": "Class Activity # 3 Physics 2 Fall 2026.pdf",
+   "path": "incoming/2026-wk39/Class Activity _ 3 Physics 2 Fall 2026.pdf",
+   "stamp": "2026-09-23T11:27:18Z"
+  },
+  "24615088": {
+   "fetched": "2026-09-26",
+   "module": "Week 6 - Lecture - September 21 - 27",
+   "name": "Class Activity # 3 Solutions.pdf",
+   "path": "incoming/2026-wk39/Class Activity _ 3 Solutions.pdf",
+   "stamp": "2026-09-23T13:01:38Z"
+  },
+  "24623854": {
+   "fetched": "2026-09-26",
+   "module": "Week 6 - Lecture - September 21 - 27",
+   "name": "Worksheet # 3 Part A MC Solutions.pdf",
+   "path": "incoming/2026-wk39/Worksheet _ 3 Part A MC Solutions.pdf",
+   "stamp": "2026-09-24T18:02:46Z"
+  },
+  "24623855": {
+   "fetched": "2026-09-26",
+   "module": "Week 6 - Lecture - September 21 - 27",
+   "name": "Worksheet # 3 Part B UpL Solutions.pdf",
+   "path": "incoming/2026-wk39/Worksheet _ 3 Part B UpL Solutions.pdf",
+   "stamp": "2026-09-24T18:02:47Z"
+  },
+  "24671526": {
+   "fetched": "2026-10-04",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Interactive Lessons # 3 Electrical Circuits  Fall 2026.docx",
+   "path": "incoming/2026-wk40/Interactive Lessons _ 3 Electrical Circuits  Fall 2026.docx",
+   "stamp": "2026-10-01T17:17:41Z"
+  },
+  "24671636": {
+   "fetched": "2026-10-04",
+   "module": "Exam 4 - Friday October 9",
+   "name": "Exam 4 Equations.pdf",
+   "path": "incoming/2026-wk40/Exam 4 Equations.pdf",
+   "stamp": "2026-10-01T17:31:37Z"
+  },
+  "24676688": {
+   "fetched": "2026-10-04",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Physics 2 Video Solution Problem - Chapter 43 - Electric Circuits Series and Parallel.pdf",
+   "path": "incoming/2026-wk40/Physics 2 Video Solution Problem - Chapter 43 - Electric Circuits Series and Parallel.pdf",
+   "stamp": "2026-10-02T13:43:58Z"
+  },
+  "24676693": {
+   "fetched": "2026-10-04",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Physics 2 Video Solution Problem - Chapter 43 - Kirchhoffs Rules problems.pdf",
+   "path": "incoming/2026-wk40/Physics 2 Video Solution Problem - Chapter 43 - Kirchhoffs Rules problems.pdf",
+   "stamp": "2026-10-02T13:45:59Z"
+  },
+  "24676703": {
+   "fetched": "2026-10-04",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Physics 2 Video Solution Problem - Chapter 47 Biot Savart Law - Magnetic field.pdf",
+   "path": "incoming/2026-wk40/Physics 2 Video Solution Problem - Chapter 47 Biot Savart Law - Magnetic field.pdf",
+   "stamp": "2026-10-02T13:48:22Z"
+  },
+  "24719278": {
+   "fetched": "2026-10-11",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Class Activity # 4 Physics 2 Fall 2026.pdf",
+   "path": "incoming/2026-wk41/Class Activity _ 4 Physics 2 Fall 2026.pdf",
+   "stamp": "2026-10-07T11:44:58Z"
+  },
+  "24719421": {
+   "fetched": "2026-10-11",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Class Activity # 4 Solutions.pdf",
+   "path": "incoming/2026-wk41/Class Activity _ 4 Solutions.pdf",
+   "stamp": "2026-10-07T13:03:49Z"
+  },
+  "24727740": {
+   "fetched": "2026-10-11",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Physics 2 Video Solutions Problem - Kirchhoffs rules problem 22.pdf",
+   "path": "incoming/2026-wk41/Physics 2 Video Solutions Problem - Kirchhoffs rules problem 22.pdf",
+   "stamp": "2026-10-08T16:43:23Z"
+  },
+  "24727749": {
+   "fetched": "2026-10-11",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Physics 2 Video Solution Problem - Capacitors in series, parallel and combination..docx",
+   "path": "incoming/2026-wk41/Physics 2 Video Solution Problem - Capacitors in series, parallel and combination..docx",
+   "stamp": "2026-10-08T16:45:13Z"
+  },
+  "24727764": {
+   "fetched": "2026-10-11",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Physics 2 Video Solution Problem - Chapter 47 Magnetic field and Force.pdf",
+   "path": "incoming/2026-wk41/Physics 2 Video Solution Problem - Chapter 47 Magnetic field and Force.pdf",
+   "stamp": "2026-10-08T16:47:49Z"
+  },
+  "24727859": {
+   "fetched": "2026-10-11",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Worksheet # 4  Part B UpL Solutions.pdf",
+   "path": "incoming/2026-wk41/Worksheet _ 4  Part B UpL Solutions.pdf",
+   "stamp": "2026-10-08T17:04:49Z"
+  },
+  "24727860": {
+   "fetched": "2026-10-11",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Worksheet # 4 Part A MC Solutions.pdf",
+   "path": "incoming/2026-wk41/Worksheet _ 4 Part A MC Solutions.pdf",
+   "stamp": "2026-10-08T17:04:50Z"
+  },
+  "24727885": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Calculus Physics II Lecture Notes Ch 48 EM Induction Fall 2026.pdf",
+   "path": "incoming/2026-wk41/Calculus Physics II Lecture Notes Ch 48 EM Induction Fall 2026.pdf",
+   "stamp": "2026-10-08T17:08:49Z"
+  },
+  "24727886": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Calculus Physics II Lecture Notes Ch 49 EM Induction in Circuits Fall 2026.pdf",
+   "path": "incoming/2026-wk41/Calculus Physics II Lecture Notes Ch 49 EM Induction in Circuits Fall 2026.pdf",
+   "stamp": "2026-10-08T17:08:50Z"
+  },
+  "24727888": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Calculus Physics II Lecture Notes Ch 50 Electric Motors and Power Generation Fall 2026.pdf",
+   "path": "incoming/2026-wk41/Calculus Physics II Lecture Notes Ch 50 Electric Motors and Power Generation Fall 2026.pdf",
+   "stamp": "2026-10-08T17:08:50Z"
+  },
+  "24727889": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Calculus Physics II Lecture Notes Ch 51 EM Induction Applications Fall 2026.pdf",
+   "path": "incoming/2026-wk41/Calculus Physics II Lecture Notes Ch 51 EM Induction Applications Fall 2026.pdf",
+   "stamp": "2026-10-08T17:08:51Z"
+  },
+  "24727890": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Calculus Physics II Lecture Notes Ch 52 ac Circuits Fall 2026.pdf",
+   "path": "incoming/2026-wk41/Calculus Physics II Lecture Notes Ch 52 ac Circuits Fall 2026.pdf",
+   "stamp": "2026-10-08T17:08:52Z"
+  },
+  "assignment:1880067": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Extra Credit Form a Study Group Fall 2026",
+   "path": "incoming/2026-wk40/Extra Credit Form a Study Group Fall 2026.html",
+   "stamp": "2026-09-01T13:08:45Z"
+  },
+  "assignment:1880069": {
+   "fetched": "2026-10-04",
+   "module": "Week 2 - Lecture - August 24 - 30",
+   "name": "Interactive Lesson  # 1  Static Electricity Fall 2026",
+   "path": "incoming/2026-wk40/Interactive Lesson  _ 1  Static Electricity Fall 2026.html",
+   "stamp": "2026-08-21T18:04:07Z"
+  },
+  "assignment:1880070": {
+   "fetched": "2026-10-04",
+   "module": "Week 6 - Lecture - September 21 - 27",
+   "name": "Interactive Lesson  # 2  The Electric Field and Potential Fall 2026",
+   "path": "incoming/2026-wk40/Interactive Lesson  _ 2  The Electric Field and Potential Fall 2026.html",
+   "stamp": "2026-09-18T18:34:04Z"
+  },
+  "assignment:1880071": {
+   "fetched": "2026-10-04",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Interactive Lesson  # 3 Electric Circuits Fall 2026",
+   "path": "incoming/2026-wk40/Interactive Lesson  _ 3 Electric Circuits Fall 2026.html",
+   "stamp": "2026-10-02T18:52:34Z"
+  },
+  "assignment:1880080": {
+   "fetched": "2026-10-04",
+   "module": "Week 4 - Lecture - September 7 - 13",
+   "name": "Worksheet # 2 Part B Upload Solutions Fall 2026",
+   "path": "incoming/2026-wk40/Worksheet _ 2 Part B Upload Solutions Fall 2026.html",
+   "stamp": "2026-09-04T18:34:43Z"
+  },
+  "assignment:1880081": {
+   "fetched": "2026-10-04",
+   "module": "Week 6 - Lecture - September 21 - 27",
+   "name": "Worksheet # 3 Part B Upload Solutions Fall 2026",
+   "path": "incoming/2026-wk40/Worksheet _ 3 Part B Upload Solutions Fall 2026.html",
+   "stamp": "2026-09-25T11:20:21Z"
+  },
+  "assignment:1880082": {
+   "fetched": "2026-10-04",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Worksheet # 4 Part B Upload Solutions Fall 2026",
+   "path": "incoming/2026-wk40/Worksheet _ 4 Part B Upload Solutions Fall 2026.html",
+   "stamp": "2026-10-02T18:52:33Z"
+  },
+  "assignment:1880088": {
+   "fetched": "2026-10-04",
+   "module": "Week 2 - Lecture - August 24 - 30",
+   "name": "Worksheet #1 UpL Part B - Upload Solutions Fall 2026",
+   "path": "incoming/2026-wk40/Worksheet _1 UpL Part B - Upload Solutions Fall 2026.html",
+   "stamp": "2026-08-27T14:41:20Z"
+  },
+  "page:1868123": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Checklist Week 1 Calculus Physics 2 Fall 2026",
+   "path": "incoming/2026-wk40/Checklist Week 1 Calculus Physics 2 Fall 2026.html",
+   "stamp": "2026-08-13T20:55:17Z"
+  },
+  "page:1868131": {
+   "fetched": "2026-10-04",
+   "module": "Week 2 - Lecture - August 24 - 30",
+   "name": "Checklist Week 2 Calculus Physics 2 Fall 2026",
+   "path": "incoming/2026-wk40/Checklist Week 2 Calculus Physics 2 Fall 2026.html",
+   "stamp": "2026-08-21T18:04:05Z"
+  },
+  "page:1868132": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Checklist Week 3 Calculus Physics 2 Fall 2026",
+   "path": "incoming/2026-wk40/Checklist Week 3 Calculus Physics 2 Fall 2026.html",
+   "stamp": "2026-08-29T00:32:56Z"
+  },
+  "page:1868133": {
+   "fetched": "2026-10-04",
+   "module": "Week 4 - Lecture - September 7 - 13",
+   "name": "Checklist Week 4 Calculus Physics 2 Fall 2026",
+   "path": "incoming/2026-wk40/Checklist Week 4 Calculus Physics 2 Fall 2026.html",
+   "stamp": "2026-09-04T18:34:41Z"
+  },
+  "page:1868134": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Checklist Week 5 Calculus Physics 2 Fall 2026",
+   "path": "incoming/2026-wk40/Checklist Week 5 Calculus Physics 2 Fall 2026.html",
+   "stamp": "2026-09-11T16:31:40Z"
+  },
+  "page:1868135": {
+   "fetched": "2026-10-04",
+   "module": "Week 6 - Lecture - September 21 - 27",
+   "name": "Checklist Week 6 Calculus Physics 2 Fall 2026",
+   "path": "incoming/2026-wk40/Checklist Week 6 Calculus Physics 2 Fall 2026.html",
+   "stamp": "2026-09-18T18:34:01Z"
+  },
+  "page:1868136": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Checklist Week 7 Calculus Physics 2 Fall 2026",
+   "path": "incoming/2026-wk40/Checklist Week 7 Calculus Physics 2 Fall 2026.html",
+   "stamp": "2026-09-25T15:27:08Z"
+  },
+  "page:1868137": {
+   "fetched": "2026-10-04",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Checklist Week 8 Calculus Physics 2 Fall 2026",
+   "path": "incoming/2026-wk40/Checklist Week 8 Calculus Physics 2 Fall 2026.html",
+   "stamp": "2026-10-02T18:52:32Z"
+  },
+  "page:1868138": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Checklist Week 9 Calculus Physics 2 Fall 2026",
+   "path": "incoming/2026-wk41/Checklist Week 9 Calculus Physics 2 Fall 2026.html",
+   "stamp": "2026-10-09T18:35:40Z"
+  },
+  "page:1868145": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Practice Problems Chapter 34 The Electric Charge",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 34 The Electric Charge.html",
+   "stamp": "2026-08-13T20:55:20Z"
+  },
+  "page:1868146": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Practice Problems Chapter 35 The Electric Force",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 35 The Electric Force.html",
+   "stamp": "2026-08-13T20:55:21Z"
+  },
+  "page:1868147": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Practice Problems Chapter 36 The Electric Field Part A ",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 36 The Electric Field Part A .html",
+   "stamp": "2026-08-29T00:32:57Z"
+  },
+  "page:1868148": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Practice Problems Chapter 36 The Electric Field Part B ",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 36 The Electric Field Part B .html",
+   "stamp": "2026-08-29T00:32:58Z"
+  },
+  "page:1868149": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Practice Problems Chapter 36 The Electric Field Part C",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 36 The Electric Field Part C.html",
+   "stamp": "2026-08-29T00:32:59Z"
+  },
+  "page:1868150": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Practice Problems Chapter 37 Conductors ",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 37 Conductors .html",
+   "stamp": "2026-08-29T00:33:00Z"
+  },
+  "page:1868151": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 38 Electric Potential ",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 38 Electric Potential .html",
+   "stamp": "2026-09-11T20:16:35Z"
+  },
+  "page:1868152": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 39 More on the Electric Potential",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 39 More on the Electric Potential.html",
+   "stamp": "2026-09-11T16:31:42Z"
+  },
+  "page:1868153": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 40 Capacitors",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 40 Capacitors.html",
+   "stamp": "2026-09-11T16:31:44Z"
+  },
+  "page:1868154": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 41 Current, Resistance and Ohm's Law ",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 41 Current, Resistance and Ohm_s Law .html",
+   "stamp": "2026-09-11T16:31:45Z"
+  },
+  "page:1868155": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Practice Problems Chapter 42 Electrical Power",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 42 Electrical Power.html",
+   "stamp": "2026-09-11T16:31:46Z"
+  },
+  "page:1868156": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 43 Electric Circuits ",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 43 Electric Circuits .html",
+   "stamp": "2026-09-25T15:27:09Z"
+  },
+  "page:1868157": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 44 More on Electrical Circuits ",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 44 More on Electrical Circuits .html",
+   "stamp": "2026-09-25T15:27:10Z"
+  },
+  "page:1868158": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 45 Magnetism ",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 45 Magnetism .html",
+   "stamp": "2026-09-25T15:27:11Z"
+  },
+  "page:1868159": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 46 Magnetic Forces",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 46 Magnetic Forces.html",
+   "stamp": "2026-09-25T15:27:12Z"
+  },
+  "page:1868160": {
+   "fetched": "2026-10-04",
+   "module": "Week 7 - Lecture - September 28 - October 4",
+   "name": "Practice Problems Chapter 47 Current and the Magnetic Field",
+   "path": "incoming/2026-wk40/Practice Problems Chapter 47 Current and the Magnetic Field.html",
+   "stamp": "2026-09-25T15:27:13Z"
+  },
+  "page:1868161": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 48 Electromagnetic Induction ",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 48 Electromagnetic Induction .html",
+   "stamp": "2026-10-09T18:35:42Z"
+  },
+  "page:1868162": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 49 Induction in Circuits ",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 49 Induction in Circuits .html",
+   "stamp": "2026-10-09T18:35:43Z"
+  },
+  "page:1868163": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 50 Electric Motors, Generators and Power Transmission ",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 50 Electric Motors, Generators and Power Transmission .html",
+   "stamp": "2026-10-09T18:35:44Z"
+  },
+  "page:1868164": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 51 Applications of EMI ",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 51 Applications of EMI .html",
+   "stamp": "2026-10-09T18:35:45Z"
+  },
+  "page:1868165": {
+   "fetched": "2026-10-11",
+   "module": "Week 9 - Lecture - October 12 - 18",
+   "name": "Practice Problems Chapter 52 ac Circuits ",
+   "path": "incoming/2026-wk41/Practice Problems Chapter 52 ac Circuits .html",
+   "stamp": "2026-10-09T18:35:46Z"
+  },
+  "page:1868179": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Practice Problems Chapter V - Vector Review ",
+   "path": "incoming/2026-wk40/Practice Problems Chapter V - Vector Review .html",
+   "stamp": "2026-08-17T13:38:35Z"
+  },
+  "page:1881812": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Problem Solving Video - Vector Addition ",
+   "path": "incoming/2026-wk40/Problem Solving Video - Vector Addition .html",
+   "stamp": "2026-08-20T19:34:41Z"
+  },
+  "page:1881813": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Problem Solving Video - Electrostatics 2D",
+   "path": "incoming/2026-wk40/Problem Solving Video - Electrostatics 2D.html",
+   "stamp": "2026-08-20T19:34:04Z"
+  },
+  "page:1928900": {
+   "fetched": "2026-10-04",
+   "module": "Week 1 - Lecture - August 17 - 23",
+   "name": "Problem Solving Video - Electrostatics 1D",
+   "path": "incoming/2026-wk40/Problem Solving Video - Electrostatics 1D.html",
+   "stamp": "2026-08-20T19:36:27Z"
+  },
+  "page:1930608": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Problem Solving Video - Electric Field Part A",
+   "path": "incoming/2026-wk40/Problem Solving Video - Electric Field Part A.html",
+   "stamp": "2026-08-29T00:32:57Z"
+  },
+  "page:1930609": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Problem Solving Video - Electric Field Part B - Calculating Total Charge.",
+   "path": "incoming/2026-wk40/Problem Solving Video - Electric Field Part B - Calculating Total Charge..html",
+   "stamp": "2026-08-29T00:32:58Z"
+  },
+  "page:1930610": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Problem Solving Video - Electric Field Part B - Calculation of E-field",
+   "path": "incoming/2026-wk40/Problem Solving Video - Electric Field Part B - Calculation of E-field.html",
+   "stamp": "2026-08-29T00:32:58Z"
+  },
+  "page:1930612": {
+   "fetched": "2026-10-04",
+   "module": "Week 3 - Lecture - August 31 - September 6",
+   "name": "Problem Solving Video - Electric Field Part C - Gauss's Law",
+   "path": "incoming/2026-wk40/Problem Solving Video - Electric Field Part C - Gauss_s Law.html",
+   "stamp": "2026-08-29T00:32:59Z"
+  },
+  "page:1932882": {
+   "fetched": "2026-10-04",
+   "module": "Week 5 - Lecture - September 14 - 20",
+   "name": "Problem Solving Video - Electric Potential due to charge distribution ",
+   "path": "incoming/2026-wk40/Problem Solving Video - Electric Potential due to charge distribution .html",
+   "stamp": "2026-09-11T16:31:42Z"
+  },
+  "page:1936391": {
+   "fetched": "2026-10-04",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Problem Solving Video - Series/Parallel Combination Circuits ",
+   "path": "incoming/2026-wk40/Problem Solving Video - Series_Parallel Combination Circuits .html",
+   "stamp": "2026-10-02T18:52:35Z"
+  },
+  "page:1936392": {
+   "fetched": "2026-10-04",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Problem Solving Video - Kirchhoff's Rules Problems",
+   "path": "incoming/2026-wk40/Problem Solving Video - Kirchhoff_s Rules Problems.html",
+   "stamp": "2026-10-02T18:52:35Z"
+  },
+  "page:1936393": {
+   "fetched": "2026-10-04",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Problem Solving Video - Boit Savart Law for Magnetic Fields",
+   "path": "incoming/2026-wk40/Problem Solving Video - Boit Savart Law for Magnetic Fields.html",
+   "stamp": "2026-10-02T18:52:35Z"
+  },
+  "page:1937187": {
+   "fetched": "2026-10-11",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Problem Solving Video - Practice Problem # 22 Kirchhoff's rules",
+   "path": "incoming/2026-wk41/Problem Solving Video - Practice Problem _ 22 Kirchhoff_s rules.html",
+   "stamp": "2026-10-08T17:05:44Z"
+  },
+  "page:1937188": {
+   "fetched": "2026-10-11",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Problem Solving Solutions - Capacitors in series, parallel and combination",
+   "path": "incoming/2026-wk41/Problem Solving Solutions - Capacitors in series, parallel and combination.html",
+   "stamp": "2026-10-08T17:05:46Z"
+  },
+  "page:1937189": {
+   "fetched": "2026-10-11",
+   "module": "Week 8 - Lecture - October 5 - 11",
+   "name": "Problem Solving Video - Magnetic fields and forces",
+   "path": "incoming/2026-wk41/Problem Solving Video - Magnetic fields and forces.html",
+   "stamp": "2026-10-08T17:05:45Z"
+  }
+ },
+ "last_run": {
+  "date": "2026-10-11",
+  "source": "modules",
+  "taken": 31
+ }
+}
