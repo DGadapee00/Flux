@@ -1,10 +1,10 @@
 # FLUX: one platform, many courses
 
-Status: **Phase 1 done** (PR #3 merged 13 Oct 2026). PHY 2049 snapshot `15f8687` is live at https://flux-study.pages.dev/phy2049/ and the Physics card opens it. Open: where weekly PHY drops land now that PHY lives here. Next: Phase 2. flux-phy2049 itself was not edited.
+Status: **Phase 1 done, and PHY cut over early** (13 Oct 2026). PHY 2049 is live at https://flux-study.pages.dev/phy2049/; weekly content drops now land in this repo (Phase 6, done early). Next: Phase 2. flux-phy2049 is frozen.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
-Raw course files never enter it, including through git history: see Phase 1.
+Raw course files live only in a course's `incoming/` folder, with the instructor's permission, and never ship (rule 9).
 Written 13 Oct 2026 from the repos at these commits: flux-phy2049 `15f8687`, flux-mac2313 `bdeef1b`,
 statics-sim `6ce522e`, stats `5ee9103`.
 
@@ -162,9 +162,12 @@ Where they have drifted (the reason to consolidate):
    JSON, so moving from an old domain to the platform loses nothing.
 8. **Provenance per course.** Each course folder has its own PROVENANCE.md saying what course
    material it contains and on whose permission. Course material without permission stays out.
-9. **No raw course files, in the tree or in history.** PDFs, slides, docx, Canvas page exports,
-   solutions and answer keys stay in a private place (a private repo, or the course repo kept
-   private). This repo is public, and a file deleted later is still in its history.
+9. **Raw course files stay in `courses/<id>/incoming/` and never ship.** PDFs, slides, docx and
+   Canvas page exports may sit in the repo only in a course's `incoming/` folder, and only when that
+   course's PROVENANCE.md records the instructor's permission (PHY 2049: yes, 13 Oct 2026). The repo
+   is public, so this is a deliberate choice per course. `packages/checks/raw.mjs` fails on a raw
+   file anywhere else under `courses/`, and `raw.mjs --dist` fails the build if anything raw or from
+   an `incoming/` folder is in the built site.
 
 ---
 
@@ -351,11 +354,12 @@ grading, named sets and overflow check, so every course gets them. Move `stats/*
 
 ### Phase 6: PHY cutover
 
-After the fall final (or earlier if you choose): move the Canvas ingest into `tools/ingest`,
-reading the course id from each manifest, so any course can have weekly drops. The ingest writes
-raw files to a **private** repo (for example `flux-incoming`), never to this one (rule 9). The
-processing run reads them there and commits only rewritten notes and problems here. Old PHY site gets a
-banner pointing to the platform.
+**Done early, 13 Oct 2026, by choice.** PHY's `incoming/` folder and Canvas state moved to
+`courses/phy2049/incoming/`; the Canvas ingest runs from this repo (`.github/workflows/canvas-ingest.yml`);
+the Sunday notes run follows `courses/phy2049/CLAUDE.md` and commits here; `.github/workflows/deploy.yml`
+publishes main to Cloudflare Pages on every push. flux-phy2049 is frozen. Still to do: generalise the
+ingest into `tools/ingest`, reading the Canvas course id from each manifest, when a second course
+gets weekly drops; and a banner on the old PHY site pointing here.
 
 **Exit:** ingest runs from the platform repo; flux-phy2049 is no longer edited.
 
@@ -383,7 +387,7 @@ cross-linked from the courses whose formulas it covers.
 
 | # | Decision | Options | Leaning |
 |---|---|---|---|
-| D1 | Repo visibility | **Decided: public.** Rewritten notes may ship under the PHY instructor's permission; raw course files never do (rule 9). | |
+| D1 | Repo visibility | **Decided: public.** PHY's raw Canvas files are in the repo under `courses/phy2049/incoming/` with the instructor's permission; nothing raw ships (rule 9). | |
 | D2 | Address | one domain for everything vs. one subdomain per course on the same build | one domain; per-course subdomains only if a course needs its own link to share with a class |
 | D3 | Old domains | redirect at cutover vs. leave frozen | banner + link at cutover, leave them up through the term |
 | D4 | TypeScript | stay vanilla JS vs. add types (or JSDoc + `checkJs`) for the contracts only | JSDoc types on `defineCourse`, `defineLab`, `problem`; no build change |

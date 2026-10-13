@@ -1,16 +1,24 @@
 # FLUX: notes for Claude
 
+**This course now lives in the Flux platform repo (DGadapee00/Flux), at `courses/phy2049/`.** Paths
+in this file are relative to that folder, and commands run from it, unless they say "repo root".
+The old repo, flux-phy2049, is frozen and no longer edited. The platform's own rules are in the
+repo root's `AGENTS.md` and `PLAN.md`; where they and this file differ about the platform, they win.
+
 FLUX is a Vite + vanilla JS + three.js + KaTeX study app for PHY 2049. It has three modes: Practice, Notes and Explore. `README.md` covers the layout of the code. `PROVENANCE.md` covers what the instructor has allowed us to include.
 
 ## Checks
 
 - `npm test` runs tex-check, the physics selftest, problems-check and notes-check. All of them must pass.
 - `npx vite build` must succeed.
+- At the repo root, `npm test` and `npm run build` must also pass. The root build includes the
+  built-site raw-file scan, which fails if anything from `incoming/`, or any PDF, slide or Word
+  file, would ship.
 - `node scripts/smoke.mjs` runs every lab headless, and `node scripts/gallery.mjs [labId]` screenshots each scenario into `scripts/output/gallery/`. Both need the dev server on port 5174 (`npx vite --port 5174 --strictPort`, in the background). Font TLS errors in a sandbox are expected; nothing else is.
 
 ## Content drop protocol
 
-A GitHub Action (`.github/workflows/canvas-ingest.yml`) downloads new Canvas course files into `incoming/YYYY-wkNN/` every Sunday. A scheduled Claude Code run then follows this protocol. When someone says "process the content drop", follow the same steps.
+A GitHub Action at the repo root (`.github/workflows/canvas-ingest.yml`) downloads new Canvas course files into `incoming/YYYY-wkNN/` every Sunday. A scheduled Claude Code run then follows this protocol. When someone says "process the content drop", follow the same steps.
 
 ### 0. Is there anything to do?
 
@@ -109,7 +117,7 @@ Build one only for a device the source names, whose working the course equations
 
 ### 4. Verify
 
-- Run `npm test` and `npx vite build`. Both must pass.
+- Run `npm test` and `npx vite build` here, then `npm test` and `npm run build` at the repo root. All four must pass.
 - If a lab or its wiring changed, also run `node scripts/smoke.mjs`. For a new lab, also run `node scripts/gallery.mjs <id>` and look at the screenshots.
 - Self-review against the quality bar, and fix what fails:
   - Count the `box fix` corrections and `box ex` worked examples, and compare with an Exam 3/4 set covering a similar number of chapters.
@@ -128,7 +136,7 @@ Build one only for a device the source names, whose working the course equations
    - any new labs, with a one-line description and their scenarios
    - draft practice problem ideas from any homework or quiz files, as text only
    - anything skipped, and why
-3. If every check in step 4 passed, commit directly on `main`, with a subject `Content drop YYYY-wkNN: <chapters>` and the run report as the commit message body. Then `git pull --rebase origin main` and `git push origin main`. A push to `main` deploys the site, so the notes go live without review.
+3. If every check in step 4 passed, commit directly on `main`, with a subject `Content drop YYYY-wkNN: <chapters>` and the run report as the commit message body. Then `git pull --rebase origin main` and `git push origin main`. A push to `main` deploys the site (the repo root's `.github/workflows/deploy.yml` publishes to Cloudflare Pages), so the notes go live without review.
 4. If any check still fails, or the push to `main` is refused, push the commit to a branch named `content/YYYY-wkNN` instead and open a pull request to `main` with the run report and what failed. Never force-push `main`.
 5. End the run with the run report and the commit link.
 
@@ -137,4 +145,5 @@ Build one only for a device the source names, whose working the course equations
 - Never copy raw course files (PDF, slides, docs) into `src/` or `public/`, or into anything that ships. Only rewritten notes ship.
 - Never include student names, grades or submissions.
 - Never delete `incoming/.canvas-state.json`.
-- Never make the repository public while `incoming/` holds course files.
+- Never put raw course files anywhere but `incoming/`. The repository is public, and the course
+  instructor has allowed his course files to be in it (see `PROVENANCE.md`); they still never ship.

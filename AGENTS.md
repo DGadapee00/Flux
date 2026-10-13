@@ -10,7 +10,9 @@ Copy from the four course repos. Platform work leaves them, and their live sites
 
 Pinned commits, from the plan: flux-phy2049 `15f8687`, flux-mac2313 `bdeef1b`, statics-sim `6ce522e`, stats `5ee9103`.
 
-This repo is public. Raw course files stay out of it: PDFs, slides, Canvas exports, student names, grades, submissions. The prose that ships is rewritten notes, and the course folder's `PROVENANCE.md` says what was included and on whose permission. Material without permission stays out.
+This repo is public. Raw course files (PDFs, slides, Canvas exports) may sit only in a course's `incoming/` folder, and only when that course's `PROVENANCE.md` records the instructor's permission (PHY 2049 has it). They never ship: the build fails if anything raw or from `incoming/` is in the built site. Student names, grades and submissions never enter the repo. The prose that ships is rewritten notes.
+
+PHY 2049's weekly content drop runs here now. The Canvas ingest Action writes to `courses/phy2049/incoming/`; the Sunday notes run follows `courses/phy2049/CLAUDE.md`. Platform work leaves `incoming/` and `.canvas-state.json` alone.
 
 ## Layout
 

@@ -30,6 +30,22 @@ relies on that permission for:
 Anything added under this permission goes in `src/notes/` or is listed in this table, so the
 account stays countable.
 
+## Canvas files in the repository
+
+*Added 13 Oct 2026.* FLUX moved into the Flux study platform (github.com/DGadapee00/Flux, a public
+repository), where PHY 2049 is one course among several. The instructor has said he is fine with his
+course material being used, since he changes it every year, and with FLUX being shared for others to
+use; the author has shown him on a video call how FLUX works and what it uses to build its problems.
+
+On that basis the files the weekly Canvas ingest downloads (lecture notes, practice sheets and their
+solutions, worksheets, Canvas pages) are kept in `courses/phy2049/incoming/` in that public
+repository, where the weekly notes run reads them. They are inputs only:
+
+- The site never contains them. The platform's build fails if any PDF, slide or Word file, or
+  anything from an `incoming/` folder, appears in the built site.
+- What students see is the same as before: rewritten notes, generated problems, and printed answers
+  used as test fixtures.
+
 ## What of the course's material is in the repository
 
 | | |
@@ -46,8 +62,9 @@ number the sheet gives — and the source is cited in the code beside it.
 
 ## What is *not* in the repository
 
-- No worksheets, slides, exams, or Canvas files, in any format. Lecture notes: only the two rewritten
-  sets listed above (Chapters 38–42 and 43–47).
+- No worksheets, slides, exams, or Canvas files **in the site**, in any format. (Since 13 Oct 2026
+  the Canvas files are kept in the repository as inputs; see "Canvas files in the repository" above.
+  None of them ships.)
 - No scans, screenshots, or PDFs of course documents.
 - No copied problem text. Every problem statement in the bank is written fresh and generated from
   randomised parameters, so two students opening the same problem see different numbers.
