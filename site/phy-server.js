@@ -23,7 +23,13 @@ export function phyDevServer() {
           hmr: false,
         },
       });
-      server.middlewares.use(phy.middlewares);
+      // PHY's dev middleware answers every URL, including the hub's `/`.
+      // Only hand it the /phy2049 prefix. The base stays on the URL so Vite resolves assets there.
+      server.middlewares.use((req, res, next) => {
+        const pathOnly = (req.url || '').split('?')[0];
+        if (pathOnly !== '/phy2049' && !pathOnly.startsWith('/phy2049/')) return next();
+        phy.middlewares(req, res, next);
+      });
       const close = () => {
         phy.close();
       };
