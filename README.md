@@ -1,15 +1,15 @@
 # FLUX
 
-One study platform. Each course is a module. This repo is the hub: a course picker in front of the apps that are already live.
+One study platform. Each course is a module inside a track. The hub is the front door: four track cards, and each built course opens the app that is live for it today.
 
-| Course | Opens |
-|---|---|
-| PHY 2049 | https://flux-phy2049.pages.dev |
-| MAC 2313 | https://flux-mac2313.pages.dev |
-| Statics | https://dgadapee00.github.io/statics-sim/ |
-| STA 3032 | https://flux-stats.pages.dev |
+| Track | Built course | Opens |
+|---|---|---|
+| Physics | PHY 2049 | https://flux-phy2049.pages.dev |
+| Math | MAC 2313 | https://flux-mac2313.pages.dev |
+| Mechanics | EGN 3311 Statics | https://dgadapee00.github.io/statics-sim/ |
+| Statistics | STA 3032 | https://flux-stats.pages.dev |
 
-PHY 2049 is the first card. The other three keep their own apps until they are ported. Those repos are not edited from here.
+Courses that are not built yet stay on the card, dimmed. The four course repos are not edited from here.
 
 The hub publishes to https://flux-study.pages.dev. `flux.pages.dev` is an unrelated site, so this project does not use that hostname.
 
@@ -17,6 +17,7 @@ The hub publishes to https://flux-study.pages.dev. `flux.pages.dev` is an unrela
 npm install
 npm start     # http://localhost:5173
 npm test      # every workspace, including the dependency-direction check
+npm run smoke # 380px and 1280px, hover, reduced motion, each built course
 npm run build
 ```
 

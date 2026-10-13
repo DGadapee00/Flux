@@ -28,6 +28,8 @@ const ID = /^[a-z][a-z0-9]*$/;
  * @property {string} code Official course code, once confirmed.
  * @property {string} title
  * @property {string} subject Subject library this course imports.
+ * @property {string} [track] Hub track this course sits under.
+ * @property {number} [order] Position in that track.
  * @property {string} term
  * @property {string} [text] Textbook, when there is one.
  * @property {CourseUnit[]} units

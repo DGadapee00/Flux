@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status: **Phase 0 done** (PR #1 merged 13 Oct 2026; hub live at https://flux-study.pages.dev). Next: Phase 0b (track cards), then Phase 1. The hub is now organised by track (section 1). Nothing in the four existing repos was changed.
+Status: **Phase 0b ready to publish.** Track cards pass `npm test`, `npm run build`, and the hub smoke locally. The live site at https://flux-study.pages.dev is still the Phase 0 course picker until this commit is deployed there. Next: Phase 1. Nothing in the four existing repos was changed.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
@@ -103,16 +103,6 @@ How a track works:
 
 Thermal-fluids also serves the methalox engine (nozzle flow, isentropic relations, combustion
 thermo), so its library should be written to be callable from outside FLUX.
-
----|---|---|---|
-| Math | `subjects/math` | MAC 2313 Calc III | Differential equations, linear algebra |
-| Mechanics | `subjects/mechanics` | Statics | Dynamics, strength of materials, vibrations |
-| Physics | `subjects/em` | PHY 2049 | (PHY 2048 if ever useful as review) |
-| Statistics | `subjects/stats` | STA 3032 | |
-| Thermal-fluids | `subjects/thermo` (new) | | Thermodynamics, fluid mechanics, heat transfer, compressible flow |
-
-Thermal-fluids is the subject that also serves the methalox engine (nozzle flow, isentropic
-relations, combustion thermo), so its library should be written to be callable from outside FLUX.
 
 ---
 
@@ -261,7 +251,7 @@ The other courses then port onto an engine that already works, adding what they 
 
 **Exit:** the hub is live and links to all four apps.
 
-The Pages project is `flux-study` (https://flux-study.pages.dev). `flux.pages.dev` is an unrelated site, checked 13 Oct 2026, so this repo does not use that hostname. Statics' live app is https://dgadapee00.github.io/statics-sim/. Its official course code, and MAC 2313's term, are still unconfirmed (D5).
+The Pages project is `flux-study` (https://flux-study.pages.dev). `flux.pages.dev` is an unrelated site, checked 13 Oct 2026, so this repo does not use that hostname. Statics' live app is https://dgadapee00.github.io/statics-sim/. Statics is EGN 3311 and MAC 2313 was Spring 2026 (D5).
 
 ### Phase 0b: track cards on the hub (small)
 

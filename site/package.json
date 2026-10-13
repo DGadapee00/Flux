@@ -8,7 +8,7 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
-    "test": "node --test test/courses.test.js",
+    "test": "node --test test/*.test.js",
     "smoke": "node scripts/smoke.mjs"
   },
   "devDependencies": {
