@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process';
 import { defineConfig } from 'vite';
+import { phyDevServer } from './phy-server.js';
 
 /**
  * Which commit a build came from. Publishing is a manual upload, so the stamp
@@ -31,6 +32,7 @@ export default defineConfig({
     __BUILD__: JSON.stringify(info),
   },
   plugins: [
+    phyDevServer(),
     {
       name: 'version-stamp',
       generateBundle() {

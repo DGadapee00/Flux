@@ -43,7 +43,8 @@ export default defineConfig({
   ],
   server: {
     port: 5174,
-    open: true,
+    strictPort: true,
+    open: false,
   },
   build: {
     target: 'esnext',

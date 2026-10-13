@@ -1,5 +1,7 @@
 # Deploying FLUX
 
+This copy ships inside the hub. From the repo root, `npm run deploy` publishes `site/dist` (with this app at `phy2049/`) to https://flux-study.pages.dev. `npm run deploy` in this folder refuses, so it does not upload a second site. The rest of this file is how the standalone app at flux-phy2049.pages.dev was published.
+
 **Live at <https://flux-phy2049.pages.dev> on Cloudflare Pages, public, no login.** That was a
 deliberate call: the group is small, a link that just works beats a link that emails people a code,
 and Cloudflare Access was skipped on purpose. `public/robots.txt` and `public/_headers` keep the

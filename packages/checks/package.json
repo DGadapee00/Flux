@@ -4,6 +4,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test test/deps.test.js && node deps.mjs"
+    "test": "node --test test/deps.test.js test/raw.test.js && node deps.mjs && node raw.mjs"
   }
 }

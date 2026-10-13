@@ -162,10 +162,15 @@ async function readHub(page) {
 }
 
 /**
- * @param {number} width
- * @param {{ scroll: number, client: number, cols: number, ids: string[], opens: string[], built: {id:string,href:string}[], unbuilt: string[] }} metrics
+ * Card hrefs are absolute in the DOM. A relative href is the platform copy on this hub.
+ * @param {string} href
+ * @param {string} base
  */
-function assertHub(width, metrics) {
+function resolvedHref(href, base) {
+  return new URL(href, base).href;
+}
+
+function assertHub(width, metrics, hub) {
   const expectedCols = width >= 720 ? 2 : 1;
   if (metrics.scroll > metrics.client + 1) {
     throw new Error(`${width}px scrolls sideways (${metrics.scroll} > ${metrics.client})`);
@@ -178,14 +183,14 @@ function assertHub(width, metrics) {
     throw new Error(`tracks are ${metrics.ids.join(', ')}`);
   }
   TRACKS.forEach((track, i) => {
-    const expected = new URL(latestBuilt(track).href).href;
+    const expected = resolvedHref(latestBuilt(track).href, hub);
     if (metrics.opens[i] !== expected) {
       throw new Error(`${track.id} opens ${metrics.opens[i]}, expected ${expected}`);
     }
   });
   for (const course of builtCourses()) {
     const row = metrics.built.find((item) => item.id === course.id);
-    const expected = new URL(course.href).href;
+    const expected = resolvedHref(course.href, hub);
     if (!row || row.href !== expected) {
       throw new Error(`${course.id} link is ${row ? row.href : 'missing'}, expected ${expected}`);
     }
@@ -290,7 +295,7 @@ async function main() {
       await evalJson(page, 'document.fonts ? document.fonts.ready : null');
       await delay(250);
       const metrics = await readHub(page);
-      assertHub(width, metrics);
+      assertHub(width, metrics, hub);
       if (metrics.motions.some((motion) => motion !== 'still')) {
         throw new Error(`${width}px rest frame is moving (${metrics.motions.join(', ')})`);
       }
@@ -358,14 +363,14 @@ async function main() {
 
     await navigate(page, hub);
     for (const course of builtCourses()) {
-      const prefix = course.href.replace(/\/$/, '');
+      const prefix = resolvedHref(course.href, hub).replace(/\/$/, '');
       await evalJson(page, `document.querySelector('a.course-link[data-course="${course.id}"]').click()`);
       const landed = await waitForPrefix(page, prefix);
       console.log(`${course.id} → ${landed}`);
       await navigate(page, hub);
     }
     for (const track of TRACKS) {
-      const prefix = latestBuilt(track).href.replace(/\/$/, '');
+      const prefix = resolvedHref(latestBuilt(track).href, hub).replace(/\/$/, '');
       await evalJson(page, `document.querySelector('a.track-open[data-track-open="${track.id}"]').click()`);
       const landed = await waitForPrefix(page, prefix);
       console.log(`${track.id} card → ${landed}`);

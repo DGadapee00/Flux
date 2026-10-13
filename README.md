@@ -4,12 +4,12 @@ One study platform. Each course is a module inside a track. The hub is the front
 
 | Track | Built course | Opens |
 |---|---|---|
-| Physics | PHY 2049 | https://flux-phy2049.pages.dev |
+| Physics | PHY 2049 | the copy in this repo, at `phy2049/` |
 | Math | MAC 2313 | https://flux-mac2313.pages.dev |
 | Mechanics | EGN 3311 Statics | https://dgadapee00.github.io/statics-sim/ |
 | Statistics | STA 3032 | https://flux-stats.pages.dev |
 
-Courses that are not built yet stay on the card, dimmed. The four course repos are not edited from here.
+Courses that are not built yet stay on the card, dimmed. PHY 2049 opens the copy in this repo. The other three stay on their own sites until they are ported. Those repos are not edited from here.
 
 The hub publishes to https://flux-study.pages.dev. `flux.pages.dev` is an unrelated site, so this project does not use that hostname.
 
