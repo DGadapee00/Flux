@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status: **plan, not started.** Nothing in the four existing repos is to be changed by this work.
+Status: **Phase 0 built, not published.** Workspaces, the course picker, CI, and the dependency check are on branch `cursor/phase-0-hub-ace4`. The hub is not live yet: `npm run deploy` needs a Cloudflare login (`npx wrangler login` or `CLOUDFLARE_API_TOKEN`). Nothing in the four existing repos was changed.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. flux-phy2049 is now public, so the
@@ -224,6 +224,8 @@ The other courses then port onto an engine that already works, adding what they 
 - CI runs `npm test` across workspaces and the dependency-direction check.
 
 **Exit:** the hub is live and links to all four apps.
+
+The Pages project is `flux-study` (https://flux-study.pages.dev). `flux.pages.dev` is an unrelated site, checked 13 Oct 2026, so this repo does not use that hostname. Statics' live app is https://dgadapee00.github.io/statics-sim/. Its official course code, and MAC 2313's term, are still unconfirmed (D5).
 
 ### Phase 1: import PHY 2049 as it is
 

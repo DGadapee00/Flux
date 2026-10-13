@@ -1,0 +1,23 @@
+{
+  "name": "flux",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "site"
+  ],
+  "scripts": {
+    "start": "npm run start -w @flux/site",
+    "dev": "npm run dev -w @flux/site",
+    "build": "npm run build -w @flux/site",
+    "preview": "npm run preview -w @flux/site",
+    "test": "npm test --workspaces --if-present",
+    "smoke": "npm run smoke -w @flux/site",
+    "deploy": "npm test && npm run build && npx --yes wrangler@latest pages deploy site/dist --project-name flux-study --branch main",
+    "live": "node scripts/live.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

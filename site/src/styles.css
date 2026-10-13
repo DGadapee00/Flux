@@ -1,0 +1,153 @@
+/* Same tokens as the course apps: near-black ground, Manim palette, five type sizes. */
+:root {
+  color-scheme: dark;
+  --bg: #0b0c0e;
+  --panel: #121316;
+  --border: rgba(236, 230, 226, 0.1);
+  --border-hover: rgba(88, 196, 221, 0.55);
+  --text: #ece6e2;
+  --text-muted: #aaa39e;
+  --text-dim: #8f8983;
+  --blue: #58c4dd;
+  --yellow: #f4d345;
+  --red: #fc6255;
+  --fs-meta: 11px;
+  --fs-ui: 13px;
+  --fs-body: 15px;
+  --fs-title: 18px;
+  --radius: 6px;
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  line-height: 1.45;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.wrap {
+  width: min(40rem, 100%);
+  margin: 0 auto;
+  padding: 28px 16px 48px;
+}
+
+.brand {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.mark {
+  width: 40px;
+  height: 40px;
+  flex: none;
+}
+
+h1 {
+  margin: 0;
+  font-size: var(--fs-title);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.lede {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: var(--fs-body);
+  max-width: 36em;
+}
+
+#courses {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: inherit;
+  text-decoration: none;
+  min-height: 44px;
+}
+
+.card:hover,
+.card:focus-visible {
+  border-color: var(--border-hover);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1 1 12rem;
+}
+
+.code {
+  font-family: var(--mono);
+  font-size: var(--fs-meta);
+  letter-spacing: 0.04em;
+  color: var(--blue);
+}
+
+.title {
+  font-size: var(--fs-title);
+  font-weight: 600;
+}
+
+.detail {
+  color: var(--text-dim);
+  font-size: var(--fs-ui);
+}
+
+.open {
+  color: var(--blue);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+}
+
+footer {
+  margin-top: 28px;
+  color: var(--text-dim);
+  font-size: var(--fs-meta);
+}
+
+footer p {
+  margin: 0 0 6px;
+}
+
+footer a {
+  color: var(--text-muted);
+}
