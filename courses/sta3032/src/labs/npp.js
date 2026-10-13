@@ -107,7 +107,7 @@ export default defineLab({
     else if (r.tails > 1 + 0.25 * k) out.push('The ends flare away from the line, low end below it and high end above: an S. The tails are heavier than a normal’s: extreme values come too often.');
     else if (r.n >= 60 && r.tails < 0.85) out.push('The ends curl back toward the middle: lighter tails than a normal (a uniform does this).');
     else out.push('The points stay close to the line. For a small n, some wiggle is normal: press New sample a few times with a normal population to see how much.');
-    out.push('For a t procedure with a small sample, a roughly straight plot is the check the notes ask for; with n ≥ 30 the CLT covers moderate departures.');
+    out.push('For a t procedure with a small sample, a roughly straight plot is the check the course asks for; with n ≥ 30 the CLT covers moderate departures.');
     return out;
   },
 

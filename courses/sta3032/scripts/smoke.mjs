@@ -11,9 +11,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from './playwright.mjs';
 import { PROBLEMS } from '../src/problems/index.js';
-import { accepted, instance } from '../src/problems/engine.js';
+import { accepted, choiceOptions, expected, instance } from '../src/problems/engine.js';
 import { LABS } from '../src/labs/index.js';
-import { NOTES } from '../src/notes/index.js';
 
 const BASE = process.env.SMOKE_URL || 'http://localhost:5177/';
 const OUT = path.resolve('scripts/output/smoke');
@@ -62,15 +61,9 @@ for (const [name, vp] of [['phone', { width: 380, height: 800 }], ['laptop', { w
   const zt = await page.locator('#zout').innerText();
   if (!zt.includes('0.1038') || !zt.includes('1.645')) err(`${name} tables`, `z lookup shows ${zt.replace(/\s+/g, ' ')}`);
   await settle('tables-lookup');
-  await visit('#/mid/notes', 'notes');
+  // An old notes link (Notes mode was removed) lands on the practice list.
+  await visit('#/mid/notes', 'old-notes-link');
   await visit('#/mid/explore', 'explore');
-  // Every notes chapter, with every solution and calculator box open (wide math shows up there).
-  for (const N of NOTES) {
-    await visit(`#/final/notes/${N.ch}`, `notes-${N.ch}`, { shot: false });
-    await page.evaluate(() => document.querySelectorAll('details').forEach((d) => (d.open = true)));
-    await page.waitForTimeout(50);
-    await settle(`notes-${N.ch}-open`, false);
-  }
 
   // Every lab: it draws, a control redraws it, and a prediction runs to its verdict.
   const inked = () =>
@@ -139,10 +132,18 @@ for (const [name, vp] of [['phone', { width: 380, height: 800 }], ['laptop', { w
   await settle('work-right');
 
   // A choice problem, and the solution button.
-  await visit('#/mid?p=c5.which-distribution&s=0', 'choice', { shot: false });
-  await page.click('label.opt >> nth=2');
-  await page.click('[data-act="check"]');
-  if (!(await page.locator('.verdict.ok').count())) err(`${name} choice`, 'Poisson was not accepted for the toll booth');
+  // Version 0 of a multiple-choice problem: tick the option the problem itself says is right.
+  {
+    const tpl = PROBLEMS.find((t) => t.id === 'c5.which-distribution');
+    const inst = instance(tpl, 0);
+    const part = tpl.parts.find((p) => p.kind === 'choice');
+    const want = expected(part, inst.$);
+    const nth = choiceOptions(part, inst.$).findIndex((o) => o.value === want);
+    await visit('#/mid?p=c5.which-distribution&s=0', 'choice', { shot: false });
+    await page.click(`label.opt >> nth=${nth}`);
+    await page.click('[data-act="check"]');
+    if (nth < 0 || !(await page.locator('.verdict.ok').count())) err(`${name} choice`, `the right option (${JSON.stringify(want)}) was not accepted`);
+  }
   await visit('#/mid?p=c1.quartiles&s=3', 'reveal', { shot: false });
   await page.click('[data-act="reveal"]');
   if (!(await page.locator('.steps li').count())) err(`${name} reveal`, 'no steps');

@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4177 --strictPort",
-    "test": "node scripts/stats-check.mjs && node scripts/tex-check.mjs && node scripts/problems-check.mjs && node scripts/labs-check.mjs && node scripts/notes-check.mjs && node --test scripts/route.test.mjs",
+    "test": "node scripts/stats-check.mjs && node scripts/tex-check.mjs && node scripts/problems-check.mjs && node scripts/labs-check.mjs && node --test scripts/route.test.mjs",
     "deploy": "node -e \"console.error('This copy ships with the hub. From the repo root: npm run deploy'); process.exit(1)\"",
     "live": "node scripts/live.mjs",
     "overflow": "node scripts/overflow.mjs"

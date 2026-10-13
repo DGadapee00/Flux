@@ -1,4 +1,4 @@
-/** Chapter 10 · Simple linear regression. The notes write the fitted line as ŷ = a + bx. */
+/** Chapter 10 · Simple linear regression. The course writes the fitted line as ŷ = a + bx. */
 import { problem, kase, range, choice, data, num, mc, tn, fx, pn, hyp, pTex, decide, decisionPart, h1Part, conclusionPart, conclude, statPart, pPart } from '../kit.js';
 import { linRegTest } from '../../stats/infer.js';
 import { createRng } from '../../stats/rng.js';
@@ -34,7 +34,7 @@ const tableScroll = (xs, ys, c) =>
 
 export default [
   problem({
-    ...C10, id: 'c10.fit', title: 'Fitting and using the least-squares line', kind: 'numeric', level: 3, topics: ['regression', 'least-squares', 'prediction'], src: 'Notes Ex 10.2',
+    ...C10, id: 'c10.fit', title: 'Fitting and using the least-squares line', kind: 'numeric', level: 3, topics: ['regression', 'least-squares', 'prediction'],
     vars: { ctx: CTX, n: range(6, 12, 1), x0: range(0.1, 0.9, 0.05), xy: data((rand, v) => pairsOf(rand, v.ctx, v.n), (v) => `${v[0].join(', ')} | ${v[1].join(', ')}`) },
     derive: ($) => {
       const [xs, ys] = $.xy;
@@ -62,11 +62,11 @@ export default [
       String.raw`$$R^2 = 1 - \dfrac{SSE}{S_{yy}} = r^2 = ${fx($.R.r2, 4)}$$`,
       `Slope: each 1-unit increase in ${$.c.x} changes the predicted ${$.c.y} by ${tn($.R.b, 4)} on average. R²: ${fx($.R.r2 * 100, $.R.r2 > 0.999 ? 2 : 1)}% of the variation in ${$.c.y} is explained by the linear relation with ${$.c.x}.`,
     ],
-    cases: [kase('Notes Ex 10.2 (steam usage)', { ctx: 'steam', n: 12, x0: (10 - 21) / (74 - 21), xy: [STEAM_X, STEAM_Y] }, { a: -6.336, b: 9.208, yhat: 85.75, r2: 0.9999 }, { note: 'x = 10°F is below the smallest temperature in the data (21°F), so this prediction is an extrapolation; see the interpretation problem.' })],
+    cases: [],
   }),
 
   problem({
-    ...C10, id: 'c10.interpret', title: 'Interpreting a regression line', kind: 'conceptual', topics: ['regression', 'interpretation', 'extrapolation'], src: 'Notes Ex 10.2(b)–(e)',
+    ...C10, id: 'c10.interpret', title: 'Interpreting a regression line', kind: 'conceptual', topics: ['regression', 'interpretation', 'extrapolation'],
     vars: { q: choice(['slope', 'slope'], ['intercept', 'intercept'], ['extrap', 'extrapolation'], ['r2', 'R²']) },
     derive: ($) => ({ key: $.q }),
     text: (T, $) =>
@@ -110,11 +110,11 @@ export default [
         r2: 'R² is the proportion of the variation in y explained by the linear relation with x: 99.99% here, an almost perfect linear fit.',
       }[$.q],
     ],
-    cases: [kase('Notes Ex 10.2(b)', { q: 'slope' }, { k: 'slope' }), kase('Notes Ex 10.2(c)', { q: 'intercept' }, { k: 'intercept' })],
+    cases: [],
   }),
 
   problem({
-    ...C10, id: 'c10.correlation-test', title: 'Correlation and the test for a linear relation', kind: 'numeric', level: 3, topics: ['correlation', 'regression', 'hypothesis-test'], src: 'Notes Ex 10.3–10.4',
+    ...C10, id: 'c10.correlation-test', title: 'Correlation and the test for a linear relation', kind: 'numeric', level: 3, topics: ['correlation', 'regression', 'hypothesis-test'],
     vars: { ctx: CTX, n: range(8, 14, 1), side: choice(['two', 'two-tailed'], ['right', 'positive'], ['left', 'negative']), alpha: ALPHA, strength: range(0, 1.2, 0.05), xy: data((rand, v) => pairsOf(rand, v.ctx, v.n, v.strength), (v) => `${v[0].join(', ')} | ${v[1].join(', ')}`) },
     derive: ($) => {
       const [xs, ys] = $.xy;
@@ -139,16 +139,14 @@ export default [
       ];
     },
     cases: [
-      kase('Notes Ex 10.4', { ctx: 'noise', n: 10, side: 'right', alpha: 0.05, strength: 1, xy: [NOISE_X, NOISE_Y] }, { r: 0.5262, t: 1.75, p: 0.0591, dec: 'fail' }),
-      kase('Notes Ex 10.3 (steam usage)', { ctx: 'steam', n: 12, side: 'two', alpha: 0.05, strength: 1, xy: [STEAM_X, STEAM_Y] }, { r: 0.9999, t: 272.64, p: 0, dec: 'reject' }),
     ],
   }),
 
   problem({
-    ...C10, id: 'c10.association', title: 'Positive or negative association?', kind: 'conceptual', topics: ['correlation', 'association'], src: 'Notes §10.3',
+    ...C10, id: 'c10.association', title: 'Positive or negative association?', kind: 'conceptual', topics: ['correlation', 'association'],
     vars: {
       s: choice(
-        ['pos1', 'Monthly steam usage and average monthly temperature at the chemical plant of Notes Ex 10.1, where the months with the highest temperatures used the most steam.'],
+        ['pos1', 'Monthly steam usage and average monthly temperature at a chemical plant, where the months with the highest temperatures used the most steam.'],
         ['pos2', 'Hours studied and exam score.'],
         ['neg1', 'The age of a used car and its price.'],
         ['neg2', 'Outdoor temperature and a home’s heating bill.'],
@@ -161,6 +159,6 @@ export default [
     parts: [mc('k', [['pos', 'Positively: as one increases, the other tends to increase (r > 0)'], ['neg', 'Negatively: as one increases, the other tends to decrease (r < 0)']], ($) => $.key)],
     hints: ['Picture the scatter plot: does it rise or fall from left to right?', 'The sign of r (and of the slope b) matches the direction of the association.'],
     steps: ($) => [$.key === 'pos' ? 'Larger values of one go with larger values of the other: a positive association, so r and the slope are positive.' : 'Larger values of one go with smaller values of the other: a negative association, so r and the slope are negative.'],
-    cases: [kase('Notes Ex 10.1', { s: 'pos1' }, { k: 'pos' })],
+    cases: [],
   }),
 ];

@@ -5,7 +5,7 @@ import { zTable, zForArea } from '../../stats/tables.js';
 import { createRng } from '../../stats/rng.js';
 import { mean, sd, sorted } from '../../stats/describe.js';
 
-const PLOTTING_POSITION = 'That uses the area i/(n + 1). The notes use (i − 0.5)/n: for the smallest of n values, 0.5/n.';
+const PLOTTING_POSITION = 'That uses the area i/(n + 1). The course uses (i − 0.5)/n: for the smallest of n values, 0.5/n.';
 
 const C6 = { ch: '6' };
 
@@ -180,7 +180,7 @@ export default [
     hints: ['Table A.3 gives the area to the LEFT of z.', 'Area to the right = 1 − area to the left. Area between = left area at the larger z − left area at the smaller z.'],
     steps: ($) => zSteps($.side, $.za, $.zb, $.side === 'left' ? String.raw`P(Z < ${fx($.za, 2)})` : $.side === 'right' ? String.raw`P(Z > ${fx($.za, 2)})` : String.raw`P(${fx($.za, 2)} < Z < ${fx($.zb, 2)})`),
     twin: { part: 'p', draw: (r, $) => { const z = r.normal(); return $.side === 'left' ? z < $.za : $.side === 'right' ? z > $.za : z > $.za && z < $.zb; } },
-    cases: [kase('Notes Ex 6.2', { side: 'left', z1: 0.52, z2: 0.52 }, { p: 0.6985 }), kase('Walpole §6.3', { side: 'right', z1: 1.84, z2: 1.84 }, { p: 0.0329 }), kase('Walpole §6.3', { side: 'between', z1: -1.97, z2: 0.86 }, { p: 0.7807 })],
+    cases: [ kase('Walpole §6.3', { side: 'right', z1: 1.84, z2: 1.84 }, { p: 0.0329 }), kase('Walpole §6.3', { side: 'between', z1: -1.97, z2: 0.86 }, { p: 0.7807 })],
   }),
 
   problem({
@@ -217,7 +217,7 @@ export default [
     parts: [num('z', ($) => $.z, { alt: ($) => $.look.values, tol: 0, abs: 0.006, label: String.raw`$z_{\alpha}$`, traps: [[($) => -$.z, String.raw`$z_\alpha$ has area $\alpha$ to its RIGHT, so it is positive for $\alpha < 0.5$.`], [($) => zCrit($.alpha / 2), String.raw`That is $z_{\alpha/2}$. $z_\alpha$ puts all of $\alpha$ in one tail.`]] })],
     hints: [String.raw`$z_\alpha$ has area $\alpha$ to its right, so the area to its left is $1 - \alpha$.`, 'Look up 1 − α in the body of Table A.3.'],
     steps: ($) => [String.raw`Area to the left of $z_{${$.alpha}}$: $1 - ${$.alpha} = ${fx(1 - $.alpha, 4)}$`, $.look.line, String.raw`Exact: $z_{${$.alpha}} = ${fx($.z, 4)}$`],
-    cases: [kase('Notes Ex 6.5', { alpha: 0.1 }, { z: 1.28 }), kase('Walpole §6.4', { alpha: 0.05 }, { z: 1.645 }), kase('Walpole §6.4', { alpha: 0.025 }, { z: 1.96 })],
+    cases: [ kase('Walpole §6.4', { alpha: 0.05 }, { z: 1.645 }), kase('Walpole §6.4', { alpha: 0.025 }, { z: 1.96 })],
   }),
 
   // ----------------------------------------------------------------- general normal
@@ -252,8 +252,6 @@ export default [
     },
     twin: { part: 'p', draw: (r, $) => { const x = r.normal($.c.mu, $.c.sigma); return $.side === 'left' ? x < $.x1 : $.side === 'right' ? x > $.x1 : x > $.x1 && x < $.x2; } },
     cases: [
-      kase('Notes Ex 6.3(a)', { ctx: 'height', side: 'left', k1: (35 - 38.72) / 3.17, k2: 0 }, { p: 0.1203 }),
-      kase('Notes Ex 6.4(a)', { ctx: 'run', side: 'between', k1: -6 / 9, k2: 1 }, { p: 0.5889 }),
       kase('Walpole §6.4', { ctx: 'battery', side: 'left', k1: -1.4, k2: -1.4 }, { p: 0.0808 }),
       kase('Walpole §6.4', { ctx: 'bulb', side: 'between', k1: -0.55, k2: 0.85 }, { p: 0.5111 }),
     ],
@@ -279,8 +277,6 @@ export default [
       `Exact (TI-84 invNorm(${fx($.leftArea, 4)}, ${$.c.mu}, ${$.c.sigma})): ${tn($.x, 6)}.`,
     ],
     cases: [
-      kase('Notes Ex 6.3(b)', { ctx: 'height', side: 'left', p: 0.2 }, { x: 36.05 }),
-      kase('Notes Ex 6.4(b), the fastest 10%', { ctx: 'run', side: 'left', p: 0.1 }, { x: 49.47 }),
       kase('Walpole §6.3', { ctx: 'x', side: 'right', p: 0.14 }, { x: 46.48 }),
     ],
   }),
@@ -312,7 +308,7 @@ export default [
 
   // ----------------------------------------------------------------- assessing normality
   problem({
-    ...C6, id: 'c6.normal-plot', title: 'Reading a normal probability plot', kind: 'conceptual', level: 2, topics: ['normal-probability-plot', 'assessing-normality'], src: 'Notes §6.3',
+    ...C6, id: 'c6.normal-plot', title: 'Reading a normal probability plot', kind: 'conceptual', level: 2, topics: ['normal-probability-plot', 'assessing-normality'],
     vars: {
       shape: choice(['normal', 'normal'], ['right', 'right-skewed'], ['left', 'left-skewed'], ['heavy', 'heavy-tailed']),
       xs: data((rand, v) => {
@@ -330,7 +326,7 @@ export default [
     },
     derive: ($) => ({ ok: !!$.xs }),
     valid: ($) => $.ok,
-    text: () => 'The normal probability plot below (theoretical quantiles z on the horizontal axis, the sorted data on the vertical, as in the notes) is for a sample of 36 measurements. What does it suggest about the population?',
+    text: () => 'The normal probability plot below (theoretical quantiles z on the horizontal axis, the sorted data on the vertical, as in the course) is for a sample of 36 measurements. What does it suggest about the population?',
     figure: ($) => nppSVG($.xs),
     parts: [
       mc('shape', [
@@ -354,7 +350,7 @@ export default [
     cases: [],
   }),
   problem({
-    ...C6, id: 'c6.normal-scores', title: 'Building a normal probability plot', kind: 'numeric', level: 2, topics: ['normal-probability-plot', 'assessing-normality'], src: 'Notes Ex 6.6',
+    ...C6, id: 'c6.normal-scores', title: 'Building a normal probability plot', kind: 'numeric', level: 2, topics: ['normal-probability-plot', 'assessing-normality'],
     vars: {
       n: range(5, 8, 1),
       k: range(2, 7, 1),
@@ -382,11 +378,11 @@ export default [
       String.raw`$$z_{${$.k}} = \Phi^{-1}\!\left(\dfrac{${$.k} - 0.5}{${$.n}}\right) = \Phi^{-1}(${fx($.areak, 4)}) = ${fx($.zk, 3)}$$`,
       `All the quantiles: ${$.zs.map((z) => fx(z, 3)).join(', ')}. Plot each against its sorted value; points close to a straight line (as here) support a normal model.`,
     ],
-    cases: [kase('Notes Ex 6.6', { n: 6, k: 4, xs: [31.35, 32.52, 32.06, 31.26, 31.91, 32.37] }, { z1: -1.383, zk: 0.21 })],
+    cases: [],
   }),
 
   problem({
-    ...C6, id: 'c6.uniform-conditional', title: 'Uniform: intervals, conditions, single points', kind: 'numeric', level: 2, topics: ['uniform', 'conditional'], src: 'Notes Ex 6.1',
+    ...C6, id: 'c6.uniform-conditional', title: 'Uniform: intervals, conditions, single points', kind: 'numeric', level: 2, topics: ['uniform', 'conditional'],
     vars: { a: range(0, 10, 1), len: range(4, 10, 1), u: range(1, 8, 1), e: range(2, 9, 1), f: range(1, 8, 1), g: range(1, 9, 1) },
     derive: ($) => {
       const b = $.a + $.len;
@@ -412,11 +408,11 @@ export default [
       String.raw`$$P(X < ${$.inner} \mid X < ${$.cut}) = \dfrac{P(X < ${$.inner})}{P(X < ${$.cut})} = \dfrac{${$.inner - $.a}/${$.len}}{${$.cut - $.a}/${$.len}} = ${fx($.pCond, 4)}$$`,
       String.raw`$P(X = ${$.pt}) = 0$: a single point has no width, so no area.`,
     ],
-    cases: [kase('Notes Ex 6.1', { a: 6, len: 5, u: 3, e: 2, f: 1, g: 1 }, { between: 0.2, less: 0.4, cond: 0.5, point: 0 })],
+    cases: [],
   }),
 
   problem({
-    ...C6, id: 'c6.both-independent', title: 'Two independent normal outcomes', kind: 'numeric', level: 2, topics: ['normal', 'independence', 'product-rule'], src: 'Notes Ex 6.4(c)',
+    ...C6, id: 'c6.both-independent', title: 'Two independent normal outcomes', kind: 'numeric', level: 2, topics: ['normal', 'independence', 'product-rule'],
     vars: { ctx: NORM, k: range(-1.5, 1.5, 0.05) },
     derive: ($) => {
       const c = ctxOf($.ctx);
@@ -435,6 +431,6 @@ export default [
       String.raw`$$P(\text{both}) = P(X_1 < ${$.x})\,P(X_2 < ${$.x}) = (${fx($.t1, 4)})^2 = ${fx($.tboth, 4)}$$`,
     ],
     twin: { part: 'both', draw: (r, $) => r.normal($.c.mu, $.c.sigma) < $.x && r.normal($.c.mu, $.c.sigma) < $.x },
-    cases: [kase('Notes Ex 6.4(c), both finish within an hour', { ctx: 'run', k: -1 / 9 }, { one: 0.4562, both: 0.2077 })],
+    cases: [],
   }),
 ];

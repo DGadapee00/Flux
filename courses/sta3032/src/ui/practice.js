@@ -1,7 +1,7 @@
 /**
  * Practice: the problem list for an exam, and the problem sheet.
  *
- * The loop, as in FLUX: open a problem (its first attempt uses the notes' or textbook's numbers,
+ * The loop, as in FLUX: open a problem (its first attempt uses the textbook's numbers when it has a worked case,
  * later ones fresh numbers), answer, Check. A wrong part says why when it can (the complement,
  * one tail for two, s for σ). Hints come one at a time; the worked solution names every table
  * lookup. A clean solve (right on the first check, no hints, no solution) moves the problem up the
@@ -55,7 +55,7 @@ function todayHTML(unitId, unit, byCh, due, days) {
   const fresh = chapters.find((x) => x.c.seen === 0);
   if (fresh) {
     steps.push(
-      `Start Ch ${fresh.ch}, ${esc(CHAPTER_TITLES[fresh.ch])}: <a href="${hashFor({ unitId, mode: 'notes', chapter: fresh.ch })}">read its notes</a>, then try <a href="${hashFor({ unitId, problemId: fresh.tpls[0].id })}">${esc(fresh.tpls[0].title)}</a>.`,
+      `Start Ch ${fresh.ch}, ${esc(CHAPTER_TITLES[fresh.ch])}: try <a href="${hashFor({ unitId, problemId: fresh.tpls[0].id })}">${esc(fresh.tpls[0].title)}</a>.`,
     );
   } else {
     const weak = chapters.filter((x) => x.c.mastered < x.c.total).sort((a, b) => a.m - b.m)[0];
@@ -300,7 +300,7 @@ function draw(root, unitId) {
     <div class="stack">
       <div class="crumbs">
         <a href="${hashFor({ unitId })}">← ${s && s.label !== 'Chapter list' ? `${s.label} ${s.i + 1} of ${s.n}` : 'All problems'}</a>
-        <span class="dim">Ch ${tpl.ch} · ${esc(tpl.src || '')}</span>
+        <span class="dim">Ch ${tpl.ch}${tpl.src ? ` · ${esc(tpl.src)}` : ''}</span>
       </div>
       <h2>${esc(tpl.title)}</h2>
       ${a.case ? `<p class="dim">These are the numbers from ${esc(a.case.src)}.${a.caseIndex < tpl.cases.length - 1 ? ' Your next attempts go through the other worked examples, then new numbers.' : ' Try it again for new numbers.'}</p>` : ''}

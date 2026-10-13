@@ -1,7 +1,7 @@
 /**
  * The problem bank's self-check. For every template:
  *
- * 1. Each worked case (the notes' or a worksheet's numbers) reproduces its expected answers, and
+ * 1. Each worked case (a textbook example's numbers) reproduces its expected answers, and
  *    the grader accepts them typed as a student would.
  * 2. N seeded versions build, stay finite, and every choice answer is one of the options.
  * 3. The statement, labels, hints, steps and option feedback never show `undefined` or `NaN`,

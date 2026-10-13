@@ -125,9 +125,6 @@ export default [
     },
     twin: { part: 'p', draw: (r, $) => r.binomial($.n, $.p) === $.x },
     cases: [
-      kase('Notes Ex 5.2', { ctx: 'blood', n: 4, p: 0.15, x: 1 }, { p: 0.368 }),
-      kase('Notes Ex 5.3(a)', { ctx: 'favor', n: 15, p: 0.65, x: 10 }, { p: 0.212 }),
-      kase('Notes Ex 5.4(a)', { ctx: 'wireless', n: 20, p: 0.41, x: 5 }, { p: 0.0656 }),
       kase('Walpole §5.2', { ctx: 'recover', n: 15, p: 0.4, x: 5 }, { p: 0.1859 }),
     ],
   }),
@@ -194,11 +191,11 @@ export default [
       String.raw`$\sigma^2 = npq = ${$.n}(${$.p})(${fx(1 - $.p, 2)}) = ${tn($.v, 6)}$`,
       String.raw`$\sigma = \sqrt{${tn($.v, 6)}} = ${tn($.sd, 4)}$`,
     ],
-    cases: [kase('Notes Ex 5.5', { ctx: 'wireless', n: 20, p: 0.41 }, { mu: 8.2, v: 4.838, sd: 2.2 }), kase('Walpole §5.2', { ctx: 'recover', n: 15, p: 0.4 }, { mu: 6, v: 3.6, sd: 1.897 })],
+    cases: [ kase('Walpole §5.2', { ctx: 'recover', n: 15, p: 0.4 }, { mu: 6, v: 3.6, sd: 1.897 })],
   }),
 
   problem({
-    ...C5, id: 'c5.binom-cdf', title: 'Binomial: at most, at least, between (TI-84)', kind: 'numeric', level: 2, topics: ['binomial', 'binomial-cdf'], src: 'Notes Ex 5.3–5.4',
+    ...C5, id: 'c5.binom-cdf', title: 'Binomial: at most, at least, between (TI-84)', kind: 'numeric', level: 2, topics: ['binomial', 'binomial-cdf'],
     vars: { ctx: BIN, n: range(5, 30, 1), p: range(0.05, 0.95, 0.01), qt: QTYPE, r: range(1, 29, 1), w: range(1, 6, 1) },
     derive: ($) => {
       const b = $.r + $.w;
@@ -235,16 +232,11 @@ export default [
       },
     },
     cases: [
-      kase('Notes Ex 5.3(b)', { ctx: 'favor', n: 15, p: 0.65, qt: 'le', r: 6, w: 1 }, { p: 0.042 }),
-      kase('Notes Ex 5.4(b)', { ctx: 'wireless', n: 20, p: 0.41, qt: 'lt', r: 3, w: 1 }, { p: 0.0028 }),
-      kase('Notes Ex 5.4(c)', { ctx: 'wireless', n: 20, p: 0.41, qt: 'le', r: 3, w: 1 }, { p: 0.0128 }),
-      kase('Notes Ex 5.4(d)', { ctx: 'wireless', n: 20, p: 0.41, qt: 'ge', r: 3, w: 1 }, { p: 0.9972 }),
-      kase('Notes Ex 5.4(e)', { ctx: 'wireless', n: 20, p: 0.41, qt: 'between', r: 5, w: 2 }, { p: 0.3381 }),
     ],
   }),
 
   problem({
-    ...C5, id: 'c5.is-binomial', title: 'Is it binomial?', kind: 'conceptual', topics: ['binomial'], src: 'Notes Ex 5.1',
+    ...C5, id: 'c5.is-binomial', title: 'Is it binomial?', kind: 'conceptual', topics: ['binomial'],
     vars: {
       s: choice(
         ['a', 'Flip a coin 5 times. X = the number of heads.'],
@@ -280,12 +272,12 @@ export default [
           h: 'Dealing stops at the first ace, so n is not fixed (and the draws are without replacement too). X is not binomial.',
         }[$.s],
       ],
-    cases: [kase('Notes Ex 5.1(b)', { s: 'b' }, { b: 'yes' }), kase('Notes Ex 5.1(c)', { s: 'c' }, { b: 'n' }), kase('Notes Ex 5.1(e)', { s: 'e' }, { b: 'indep' })],
+    cases: [],
   }),
 
   // ----------------------------------------------------------------- geometric
   problem({
-    ...C5, id: 'c5.geometric', title: 'Geometric: the first success', kind: 'numeric', topics: ['geometric'], src: 'Notes Ex 5.6–5.7',
+    ...C5, id: 'c5.geometric', title: 'Geometric: the first success', kind: 'numeric', topics: ['geometric'],
     vars: {
       ctx: choice(['defect', 'defect'], ['call', 'call'], ['sale', 'sale']),
       p: range(0.01, 0.4, 0.01),
@@ -314,7 +306,7 @@ export default [
       `On the TI-84: geometpdf(${$.p}, ${$.x}) and geometcdf(${$.p}, ${$.x}).`,
     ],
     twin: { part: 'eq', draw: (r, $) => r.geometric($.p) === $.x },
-    cases: [kase('Notes Ex 5.6–5.7', { ctx: 'defect', p: 0.01, x: 5 }, { eq: 0.0096, le: 0.049, mu: 100, sd: 99.5 })],
+    cases: [],
   }),
 
   // ----------------------------------------------------------------- Poisson
@@ -351,11 +343,11 @@ export default [
       `On the TI-84: poissonpdf(${tn($.mu, 6)}, ${$.x}); poissoncdf(μ, r) gives P(X ≤ r).`,
     ],
     twin: { part: 'eq', draw: (r, $) => r.poisson($.mu) === $.x },
-    cases: [kase('Notes Ex 5.8(e)', { ctx: 'deaths', lam: 1.5, t: 2, x: 2 }, { mu: 3, eq: 0.224, one: 0.9502 }), kase('Walpole §5.5', { ctx: 'particles', lam: 4, t: 1, x: 6 }, { mu: 4, eq: 0.1042, one: 0.9817 })],
+    cases: [ kase('Walpole §5.5', { ctx: 'particles', lam: 4, t: 1, x: 6 }, { mu: 4, eq: 0.1042, one: 0.9817 })],
   }),
 
   problem({
-    ...C5, id: 'c5.poisson-basics', title: 'Poisson: none, at least one, more than one', kind: 'numeric', topics: ['poisson', 'complement'], src: 'Notes Ex 5.8',
+    ...C5, id: 'c5.poisson-basics', title: 'Poisson: none, at least one, more than one', kind: 'numeric', topics: ['poisson', 'complement'],
     vars: { ctx: choice(['deaths', 'deaths'], ['typos', 'typos'], ['arrivals', 'arrivals']), lam: range(0.5, 5, 0.25) },
     derive: ($) => ({ p0: Math.exp(-$.lam), one: 1 - Math.exp(-$.lam), gt1: 1 - poisCdf(1, $.lam), p1: poisPmf(1, $.lam), sd: Math.sqrt($.lam) }),
     text: (T, $) =>
@@ -379,10 +371,6 @@ export default [
     ],
     twin: { part: 'gt1', draw: (r, $) => r.poisson($.lam) > 1 },
     cases: [
-      kase('Notes Ex 5.8(a)–(d)', { ctx: 'deaths', lam: 1.5 }, { p0: 0.2231, one: 0.7769, gt1: 0.442, sd: 1.225 }, {
-        key: 'P(X ≥ 1) = 0.7669',
-        note: 'The notes write 1 − 0.2231 = 0.7669; the subtraction gives 0.7769.',
-      }),
     ],
   }),
 
@@ -430,7 +418,7 @@ export default [
 
   // ----------------------------------------------------------------- which one?
   problem({
-    ...C5, id: 'c5.which-distribution', title: 'Which distribution?', kind: 'conceptual', topics: ['binomial', 'geometric', 'poisson'], src: 'Notes Ch 5',
+    ...C5, id: 'c5.which-distribution', title: 'Which distribution?', kind: 'conceptual', topics: ['binomial', 'geometric', 'poisson'],
     vars: {
       s: choice(
         ['b1', 'A quiz has 10 multiple-choice questions with 4 options each. A student guesses on every one. X = the number answered correctly.'],
@@ -461,6 +449,6 @@ export default [
         pois: 'X counts events in a fixed interval, and we know the average rate per interval: Poisson (with μ = rate × length of the interval).',
       }[$.kind],
     ],
-    cases: [kase('Notes Ch 5', { s: 'p3' }, { d: 'pois' })],
+    cases: [],
   }),
 ];

@@ -7,25 +7,9 @@
 import { problemById } from './index.js';
 import { CASE_SEED } from './engine.js';
 
-export const SETS = [
-  {
-    id: 'review1',
-    units: ['mid', 'final'],
-    title: 'Midterm review sheet',
-    short: 'Review sheet',
-    blurb: 'The eight questions of the class review sheet, in its order and wording, every part of each.',
-    items: [
-      { id: 'c1.summarize', src: 'Review 1, Q1' },
-      { id: 'c4.pmf-missing', src: 'Review 1, Q2' },
-      { id: 'c4.linear-combination', src: 'Review 1, Q3' },
-      { id: 'c5.binom-three', src: 'Review 1, Q4' },
-      { id: 'c5.poisson-period', src: 'Review 1, Q5' },
-      { id: 'c4.density-k', src: 'Review 1, Q6' },
-      { id: 'c6.uniform-wait', src: 'Review 1, Q7' },
-      { id: 'c6.normal-spec', src: 'Review 1, Q8' },
-    ],
-  },
-];
+// The class review-sheet set was removed on 13 Oct 2026 (see PROVENANCE.md). Named sets
+// can be added here again; problems-check checks each one.
+export const SETS = [];
 
 export const setById = (id) => SETS.find((s) => s.id === id) || null;
 export const setsForUnit = (unitId) => SETS.filter((s) => s.units.includes(unitId));

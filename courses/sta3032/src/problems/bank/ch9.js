@@ -102,7 +102,7 @@ const WHICH = {
 
 export default [
   problem({
-    ...C9, id: 'c9.independent-or-paired', title: 'Independent or dependent samples?', kind: 'conceptual', topics: ['paired', 'independent-samples'], src: 'Notes §9.1',
+    ...C9, id: 'c9.independent-or-paired', title: 'Independent or dependent samples?', kind: 'conceptual', topics: ['paired', 'independent-samples'],
     vars: {
       s: choice(
         ['i1', 'Patients taking drug A are compared with a separate group of patients taking drug B.'],
@@ -121,12 +121,12 @@ export default [
     parts: [mc('k', [['i', 'Independent samples'], ['d', 'Dependent (matched-pairs) samples']], ($) => $.key)],
     hints: ['Dependent: an individual in one sample determines (or is) the individual in the other.', 'Independent: choosing one sample tells you nothing about who is in the other.'],
     steps: ($) => [$.key === 'd' ? 'Each observation in one sample is paired with a specific observation in the other (the same person, or a natural partner). The samples are dependent: analyze the differences with a paired t procedure.' : 'The two groups are chosen separately; nobody in one group is matched with anybody in the other. The samples are independent.'],
-    cases: [kase('Notes §9.1', { s: 'd1' }, { k: 'd' }), kase('Notes §9.1', { s: 'i1' }, { k: 'i' })],
+    cases: [],
   }),
 
   // ----------------------------------------------------------------- two proportions
   problem({
-    ...C9, id: 'c9.two-prop-test', title: 'Two-proportion z-test', kind: 'numeric', level: 2, topics: ['proportion', 'two-sample', 'z-test'], src: 'Notes Ex 9.1–9.2',
+    ...C9, id: 'c9.two-prop-test', title: 'Two-proportion z-test', kind: 'numeric', level: 2, topics: ['proportion', 'two-sample', 'z-test'],
     vars: { n1: range(100, 2500, 10), n2: range(100, 2500, 10), p1: range(0.1, 0.9, 0.01), gap: range(-0.1, 0.1, 0.005), side: SIDE, alpha: ALPHA },
     derive: ($) => {
       const x1 = Math.round($.n1 * $.p1);
@@ -154,13 +154,11 @@ export default [
       ];
     },
     cases: [
-      kase('Notes Ex 9.1', { n1: 300, n2: 300, p1: 253 / 300, gap: 7 / 300, side: 'two', alpha: 0.05 }, { pool: 0.8317, z: 0.76, p: 0.445, dec: 'fail' }),
-      kase('Notes Ex 9.2 (as headaches: Nasonex vs placebo)', { n1: 2103, n2: 1671, p1: 547 / 2103, gap: 547 / 2103 - 368 / 1671, side: 'right', alpha: 0.05 }, { z: 2.84, p: 0.0023, dec: 'reject' }),
     ],
   }),
 
   problem({
-    ...C9, id: 'c9.two-prop-interval', title: 'Two-proportion z-interval', kind: 'numeric', level: 2, topics: ['proportion', 'two-sample', 'confidence-interval'], src: 'Notes Ex 9.3',
+    ...C9, id: 'c9.two-prop-interval', title: 'Two-proportion z-interval', kind: 'numeric', level: 2, topics: ['proportion', 'two-sample', 'confidence-interval'],
     vars: { n1: range(100, 1500, 10), n2: range(100, 1500, 10), p1: range(0.1, 0.9, 0.01), gap: range(-0.12, 0.12, 0.005), conf: CONF },
     derive: ($) => {
       const x1 = Math.round($.n1 * $.p1);
@@ -183,12 +181,12 @@ export default [
       String.raw`$$(${fx($.d - $.zt.value * $.se, 4)},\ ${fx($.d + $.zt.value * $.se, 4)})$$`,
       $.lo < 0 && $.hi > 0 ? 'The interval contains 0, so the data are consistent with p₁ = p₂.' : 'The interval does not contain 0, so the two proportions differ.',
     ],
-    cases: [kase('Notes Ex 9.3', { n1: 300, n2: 300, p1: 253 / 300, gap: 7 / 300, conf: 0.95 }, { lo: -0.0365, hi: 0.0832 })],
+    cases: [],
   }),
 
   // ----------------------------------------------------------------- two means, variances known
   problem({
-    ...C9, id: 'c9.two-z-test', title: 'Two-sample z-test (variances known)', kind: 'numeric', level: 2, topics: ['two-sample', 'z-test'], src: 'Notes Ex 9.4–9.5',
+    ...C9, id: 'c9.two-z-test', title: 'Two-sample z-test (variances known)', kind: 'numeric', level: 2, topics: ['two-sample', 'z-test'],
     vars: { ctx: choice(['octane', 'octane'], ['burn', 'burn']), n1: range(10, 40, 1), n2: range(10, 40, 1), v1: range(0.8, 2, 0.1), v2: range(0.8, 2, 0.1), gap: range(-1.2, 1.2, 0.01), d0: choice([0, '0'], [1, '1'], [2, '2'], [4, '4']), side: SIDE, alpha: ALPHA },
     derive: ($) => {
       const x1 = $.ctx === 'octane' ? 89 : 22;
@@ -213,13 +211,11 @@ export default [
       ];
     },
     cases: [
-      kase('Notes Ex 9.4', { ctx: 'octane', n1: 15, n2: 20, v1: 1.5, v2: 1.2, gap: -0.69, d0: 0, side: 'two', alpha: 0.05 }, { z: -1.73, p: 0.0845, dec: 'fail' }, { note: 'The notes give x̄₁ = 88.85 and x̄₂ = 89.54; only their difference matters.' }),
-      kase('Notes Ex 9.5', { ctx: 'burn', n1: 35, n2: 35, v1: 9, v2: 9, gap: 6.35 - 4, d0: 4, side: 'right', alpha: 0.05 }, { z: 3.28, p: 0.0005, dec: 'reject' }, { note: 'The notes give x̄₁ = 24.37 and x̄₂ = 18.02 (a difference of 6.35) with σ₁ = σ₂ = 3.' }),
     ],
   }),
 
   problem({
-    ...C9, id: 'c9.two-z-interval', title: 'Two-sample z-interval (variances known)', kind: 'numeric', level: 2, topics: ['two-sample', 'confidence-interval'], src: 'Notes Ex 9.6',
+    ...C9, id: 'c9.two-z-interval', title: 'Two-sample z-interval (variances known)', kind: 'numeric', level: 2, topics: ['two-sample', 'confidence-interval'],
     vars: { n1: range(10, 40, 1), n2: range(10, 40, 1), v1: range(0.8, 2, 0.1), v2: range(0.8, 2, 0.1), x2: range(86, 92, 0.01), gap: range(-1.5, 1.5, 0.01), conf: CONF },
     derive: ($) => {
       const x1 = Number(($.x2 + $.gap).toFixed(2));
@@ -237,12 +233,12 @@ export default [
       String.raw`$$(${fx($.d, 2)} - ${fx($.zt.value * $.se, 4)},\ ${fx($.d, 2)} + ${fx($.zt.value * $.se, 4)}) = (${fx($.d - $.zt.value * $.se, 3)},\ ${fx($.d + $.zt.value * $.se, 3)})$$`,
       $.lo < 0 && $.hi > 0 ? 'The interval contains 0: no significant difference at this level.' : 'The interval does not contain 0: the means differ.',
     ],
-    cases: [kase('Notes Ex 9.6', { n1: 15, n2: 20, v1: 1.5, v2: 1.2, x2: 89.54, gap: -0.69, conf: 0.95 }, { lo: -1.474, hi: 0.094 })],
+    cases: [],
   }),
 
   // ----------------------------------------------------------------- variances
   problem({
-    ...C9, id: 'c9.f-critical', title: 'Critical values of F', kind: 'numeric', topics: ['f-distribution', 'f-table'], src: 'Notes Ex 9.7',
+    ...C9, id: 'c9.f-critical', title: 'Critical values of F', kind: 'numeric', topics: ['f-distribution', 'f-table'],
     vars: { a: choice([0.05, '0.05'], [0.01, '0.01']), v1: range(2, 15, 1), v2: range(2, 30, 1) },
     derive: ($) => {
       const up = fLook($.a, $.v1, $.v2);
@@ -258,11 +254,11 @@ export default [
     ],
     hints: ['Table A.6 gives only upper points (area α to the right) for α = 0.05 and 0.01: column ν₁, row ν₂.', String.raw`For a lower point: $f_{1-\alpha}(\nu_1, \nu_2) = \dfrac{1}{f_{\alpha}(\nu_2, \nu_1)}$, with the degrees of freedom swapped.`],
     steps: ($) => [$.up.line, $.low.line, String.raw`Exact values: $${fx($.fu, 4)}$ and $${fx($.fl, 4)}$`],
-    cases: [kase('Notes Ex 9.7', { a: 0.05, v1: 3, v2: 10 }, { fu: 3.71, fl: 0.1138 })],
+    cases: [],
   }),
 
   problem({
-    ...C9, id: 'c9.f-interval', title: 'Confidence interval for σ₁²/σ₂²', kind: 'numeric', level: 2, topics: ['f-distribution', 'variance', 'confidence-interval'], src: 'Notes Ex 9.8',
+    ...C9, id: 'c9.f-interval', title: 'Confidence interval for σ₁²/σ₂²', kind: 'numeric', level: 2, topics: ['f-distribution', 'variance', 'confidence-interval'],
     vars: { n1: choice(...[6, 7, 8, 9, 10, 11, 13, 16, 21, 25].map((n) => [n, String(n)])), n2: choice(...[6, 7, 8, 9, 10, 11, 13, 16, 21, 25].map((n) => [n, String(n)])), s1sq: range(5, 40, 0.1), s2sq: range(5, 40, 0.1), conf: choice([0.9, '90%'], [0.98, '98%']) },
     derive: ($) => {
       const r = fInterval({ s1sq: $.s1sq, s2sq: $.s2sq, n1: $.n1, n2: $.n2, conf: $.conf });
@@ -284,11 +280,11 @@ export default [
       String.raw`$$\left(\dfrac{${fx($.ratio, 4)}}{${fx($.ta.value, 2)}},\ ${fx($.ratio, 4)} \times ${fx($.tb.value, 2)}\right) = (${fx($.ratio / $.ta.value, 4)},\ ${fx($.ratio * $.tb.value, 4)})$$`,
       $.lo < 1 && $.hi > 1 ? 'The interval contains 1, so equal variances are plausible.' : 'The interval does not contain 1, so the variances differ.',
     ],
-    cases: [kase('Notes Ex 9.8', { n1: 13, n2: 10, s1sq: 12.7, s2sq: 26.4, conf: 0.9 }, { lo: 0.1567, hi: 1.347 })],
+    cases: [],
   }),
 
   problem({
-    ...C9, id: 'c9.f-test', title: 'Two-sample F-test for variances', kind: 'numeric', level: 2, topics: ['f-distribution', 'variance', 'hypothesis-test'], src: 'Notes Ex 9.9–9.10',
+    ...C9, id: 'c9.f-test', title: 'Two-sample F-test for variances', kind: 'numeric', level: 2, topics: ['f-distribution', 'variance', 'hypothesis-test'],
     vars: { n1: range(6, 25, 1), n2: range(6, 25, 1), s1: range(2, 25, 0.01), ratio: range(0.25, 4, 0.01), side: SIDE, alpha: ALPHA },
     derive: ($) => {
       const s2 = Number(($.s1 / Math.sqrt($.ratio)).toFixed(2));
@@ -320,14 +316,12 @@ export default [
       },
     },
     cases: [
-      kase('Notes Ex 9.10', { n1: 10, n2: 8, s1: 7.63, ratio: (7.63 / 23.63) ** 2, side: 'two', alpha: 0.05 }, { f: 0.1043, p: 0.003, dec: 'reject' }),
-      kase('Notes Ex 9.9 (pain thresholds, s² = 12.7 and 26.4)', { n1: 13, n2: 10, s1: Math.sqrt(12.7), ratio: 12.7 / 26.4, side: 'two', alpha: 0.1 }, { f: 0.4811, p: 0.2368, dec: 'fail' }),
     ],
   }),
 
   // ----------------------------------------------------------------- two means, variances unknown
   problem({
-    ...C9, id: 'c9.pooled-t-test', title: 'Pooled two-sample t-test', kind: 'numeric', level: 3, topics: ['two-sample', 't-test', 'pooled'], src: 'Notes Ex 9.11',
+    ...C9, id: 'c9.pooled-t-test', title: 'Pooled two-sample t-test', kind: 'numeric', level: 3, topics: ['two-sample', 't-test', 'pooled'],
     vars: { n1: range(6, 25, 1), n2: range(6, 25, 1), x1: range(10, 20, 0.1), gap: range(-5, 5, 0.1), v1: range(8, 30, 0.1), v2: range(8, 30, 0.1), side: SIDE, alpha: ALPHA },
     derive: ($) => {
       const x2 = Number(($.x1 - $.gap).toFixed(1));
@@ -349,11 +343,11 @@ export default [
       ];
     },
     twin: { part: 'p', n: 20000, draw: (r, $) => { const tt = r.t($.df); return $.side === 'right' ? tt >= $.t : $.side === 'left' ? tt <= $.t : Math.abs(tt) >= Math.abs($.t); } },
-    cases: [kase('Notes Ex 9.11', { n1: 13, n2: 10, x1: 16.2, gap: 1.3, v1: 12.7, v2: 26.4, side: 'two', alpha: 0.05 }, { sp2: 18.57, t: 0.72, p: 0.4812, dec: 'fail' })],
+    cases: [],
   }),
 
   problem({
-    ...C9, id: 'c9.pooled-t-interval', title: 'Pooled two-sample t-interval', kind: 'numeric', level: 3, topics: ['two-sample', 'confidence-interval', 'pooled'], src: 'Notes Ex 9.12',
+    ...C9, id: 'c9.pooled-t-interval', title: 'Pooled two-sample t-interval', kind: 'numeric', level: 3, topics: ['two-sample', 'confidence-interval', 'pooled'],
     vars: { n1: range(6, 25, 1), n2: range(6, 25, 1), x1: range(10, 20, 0.1), gap: range(-5, 5, 0.1), v1: range(8, 30, 0.1), v2: range(8, 30, 0.1), conf: CONF },
     derive: ($) => {
       const x2 = Number(($.x1 - $.gap).toFixed(1));
@@ -371,11 +365,11 @@ export default [
       String.raw`$$E = ${fx($.look.value, 3)}\sqrt{${fx($.sp2, 4)}\left(\frac{1}{${$.n1}} + \frac{1}{${$.n2}}\right)} = ${fx($.look.value * $.se, 4)}$$`,
       String.raw`$$(${fx($.d, 2)} \pm ${fx($.look.value * $.se, 4)}) = (${fx($.d - $.look.value * $.se, 4)},\ ${fx($.d + $.look.value * $.se, 4)})$$`,
     ],
-    cases: [kase('Notes Ex 9.12', { n1: 13, n2: 10, x1: 16.2, gap: 1.3, v1: 12.7, v2: 26.4, conf: 0.95 }, { lo: -2.47, hi: 5.07 })],
+    cases: [],
   }),
 
   problem({
-    ...C9, id: 'c9.welch-t-test', title: 'Two-sample t-test, unequal variances', kind: 'numeric', level: 3, topics: ['two-sample', 't-test', 'welch'], src: 'Notes Ex 9.13',
+    ...C9, id: 'c9.welch-t-test', title: 'Two-sample t-test, unequal variances', kind: 'numeric', level: 3, topics: ['two-sample', 't-test', 'welch'],
     vars: {
       n1: range(6, 12, 1), n2: range(6, 12, 1), side: SIDE, alpha: ALPHA, gap: range(-2, 2, 0.1),
       xy: data((rand, v) => twoSamples(rand, { n1: v.n1, n2: v.n2, m1: 40, m2: 40 - v.gap * 8, s1: 6, s2: 12, dp: 0 }).map((a) => a.map((x) => Math.max(1, x))), (v) => `${v[0].join(', ')} | ${v[1].join(', ')}`),
@@ -399,11 +393,11 @@ export default [
         ...conclude($, `the metro mean is ${REL[$.side]} the rural mean`),
       ];
     },
-    cases: [kase('Notes Ex 9.13', { n1: 10, n2: 8, side: 'two', alpha: 0.1, gap: 0, xy: [[3, 7, 25, 10, 15, 6, 12, 25, 15, 7], [78, 44, 40, 38, 33, 12, 1, 18]] }, { df: 8.17, t: -2.36, p: 0.0455, dec: 'reject' })],
+    cases: [],
   }),
 
   problem({
-    ...C9, id: 'c9.welch-t-interval', title: 'Two-sample t-interval, unequal variances', kind: 'numeric', level: 3, topics: ['two-sample', 'confidence-interval', 'welch'], src: 'Notes Ex 9.14',
+    ...C9, id: 'c9.welch-t-interval', title: 'Two-sample t-interval, unequal variances', kind: 'numeric', level: 3, topics: ['two-sample', 'confidence-interval', 'welch'],
     vars: {
       n1: range(6, 12, 1), n2: range(6, 12, 1), conf: CONF, gap: range(-2, 2, 0.1),
       xy: data((rand, v) => twoSamples(rand, { n1: v.n1, n2: v.n2, m1: 40, m2: 40 - v.gap * 8, s1: 6, s2: 12, dp: 0 }).map((a) => a.map((x) => Math.max(1, x))), (v) => `${v[0].join(', ')} | ${v[1].join(', ')}`),
@@ -426,12 +420,12 @@ export default [
       String.raw`$$(${fx($.d, 3)} \pm ${fx($.look.value, 3)} \times ${fx($.se, 4)}) = (${fx($.d - $.look.value * $.se, 3)},\ ${fx($.d + $.look.value * $.se, 3)})$$`,
       `TI-84 with the exact ν: (${fx($.lo, 3)}, ${fx($.hi, 3)}).`,
     ],
-    cases: [kase('Notes Ex 9.14', { n1: 10, n2: 8, conf: 0.9, gap: 0, xy: [[3, 7, 25, 10, 15, 6, 12, 25, 15, 7], [78, 44, 40, 38, 33, 12, 1, 18]] }, { lo: -36.63, hi: -4.37 })],
+    cases: [],
   }),
 
   // ----------------------------------------------------------------- paired
   problem({
-    ...C9, id: 'c9.paired-t-test', title: 'Paired t-test', kind: 'numeric', level: 3, topics: ['paired', 't-test'], src: 'Notes Ex 9.15–9.16',
+    ...C9, id: 'c9.paired-t-test', title: 'Paired t-test', kind: 'numeric', level: 3, topics: ['paired', 't-test'],
     vars: {
       n: range(6, 12, 1), side: SIDE, alpha: ALPHA, shift: range(-0.4, 0.4, 0.02),
       xy: data((rand, v) => {
@@ -462,13 +456,11 @@ export default [
       ];
     },
     cases: [
-      kase('Notes Ex 9.15', { n: 9, side: 'two', alpha: 0.01, shift: 0, xy: [[1.186, 0.992, 1.322, 1.339, 1.065, 1.402, 1.365, 1.537, 1.559], [1.061, 1.151, 1.063, 1.062, 1.2, 1.178, 1.037, 1.086, 1.052]] }, { dbar: 0.2086, sd: 0.2318, t: 2.7, p: 0.0271, dec: 'fail' }, { key: 'From the notes’ difference column: d̄ = 0.2152, t₀ = 2.75, p = 0.0251', note: 'The notes’ difference column has a slip: machine 4 is listed as 0.337, but 1.339 − 1.062 = 0.277. The TI-84 (L3 = L1 − L2) uses the columns, which give d̄ = 0.2086, t₀ = 2.70 and p = 0.0271; the decision at α = 0.01 is the same. (The calculator steps for this example also mention the dominant hand; that wording belongs to Ex 9.16.)' }),
-      kase('Notes Ex 9.16 (reaction times: dominant − non-dominant hand)', { n: 12, side: 'left', alpha: 0.05, shift: 0, xy: [[0.177, 0.21, 0.186, 0.189, 0.198, 0.194, 0.16, 0.163, 0.166, 0.152, 0.19, 0.172], [0.179, 0.202, 0.208, 0.184, 0.215, 0.193, 0.194, 0.16, 0.209, 0.164, 0.21, 0.197]] }, { dbar: -0.0132, sd: 0.0164, t: -2.78, p: 0.009, dec: 'reject' }),
     ],
   }),
 
   problem({
-    ...C9, id: 'c9.paired-t-interval', title: 'Paired t-interval', kind: 'numeric', level: 3, topics: ['paired', 'confidence-interval'], src: 'Notes Ex 9.17',
+    ...C9, id: 'c9.paired-t-interval', title: 'Paired t-interval', kind: 'numeric', level: 3, topics: ['paired', 'confidence-interval'],
     vars: {
       n: range(6, 12, 1), conf: CONF, shift: range(-0.4, 0.4, 0.02),
       xy: data((rand, v) => {
@@ -494,12 +486,12 @@ export default [
       String.raw`$$${fx($.dbar, 4)} \pm ${fx($.look.value, 3)}\cdot\dfrac{${fx($.sd, 4)}}{\sqrt{${$.n}}} = (${fx($.dbar - ($.look.value * $.sd) / Math.sqrt($.n), 4)},\ ${fx($.dbar + ($.look.value * $.sd) / Math.sqrt($.n), 4)})$$`,
       $.lo < 0 && $.hi > 0 ? 'The interval contains 0: no significant difference at this level.' : 'The interval does not contain 0: the methods differ.',
     ],
-    cases: [kase('Notes Ex 9.17', { n: 9, conf: 0.99, shift: 0, xy: [[1.186, 0.992, 1.322, 1.339, 1.065, 1.402, 1.365, 1.537, 1.559], [1.061, 1.151, 1.063, 1.062, 1.2, 1.178, 1.037, 1.086, 1.052]] }, { lo: -0.0507, hi: 0.4678 }, { note: 'Computed from the method columns. The notes’ difference column lists machine 4 as 0.337; it is 1.339 − 1.062 = 0.277. With that slip the interval would be (−0.047, 0.478).' })],
+    cases: [],
   }),
 
   // ----------------------------------------------------------------- choosing
   problem({
-    ...C9, id: 'c9.which-test', title: 'Which procedure?', kind: 'conceptual', level: 2, topics: ['test-selection'], src: 'Notes Ch 8–10',
+    ...C9, id: 'c9.which-test', title: 'Which procedure?', kind: 'conceptual', level: 2, topics: ['test-selection'],
     vars: {
       proc: choice(...Object.keys(WHICH).map((k) => [k, WHICH[k].name])),
       goal: choice(['test', 'a test'], ['ci', 'an interval']),
@@ -517,6 +509,6 @@ export default [
       'For two means: are the values paired (the same subjects twice)? If not, are the σ’s known? If not, what does the F-test say about the variances?',
     ],
     steps: ($) => [WHICH[$.proc].why, $.goal === 'test' ? 'It asks whether the data support a claim: a hypothesis test.' : 'It asks for an estimate with a margin of error: a confidence interval.'],
-    cases: [kase('Notes Ex 9.16', { proc: 'pd', goal: 'test', alpha: 0.05, u: [0.1, 0.572, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5] }, { k: 'pd', g: 'test' })],
+    cases: [],
   }),
 ];

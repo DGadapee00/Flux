@@ -44,11 +44,11 @@ export default [
     parts: [mc('k', [['d', 'Discrete: its values can be counted'], ['c', 'Continuous: it can take any value in an interval']], ($) => $.kind)],
     hints: ['A discrete random variable takes a countable set of values (often counts: 0, 1, 2, …). A continuous one takes any value in an interval (measurements).', 'Is X a count or a measurement?'],
     steps: ($) => [$.kind === 'd' ? 'X counts something, so its values are 0, 1, 2, …: a countable set. X is discrete.' : 'X is a measurement: between any two possible values there is another. X is continuous.'],
-    cases: [kase('Notes Ex 3.1', { s: 'd5' }, { k: 'd' }), kase('Notes Ex 3.2', { s: 'c5' }, { k: 'c' })],
+    cases: [],
   }),
 
   problem({
-    ...C3, id: 'c3.build-distribution', title: 'Building a distribution and its CDF', kind: 'numeric', level: 2, topics: ['pmf', 'cdf'], src: 'Notes Ex 3.3–3.4',
+    ...C3, id: 'c3.build-distribution', title: 'Building a distribution and its CDF', kind: 'numeric', level: 2, topics: ['pmf', 'cdf'],
     vars: { n: range(3, 6, 1), p: choice([0.5, '50%'], [0.3, '30%'], [0.6, '60%'], [0.2, '20%'], [0.75, '75%']), k: range(0, 5, 1) },
     derive: ($) => ({ q: 1 - $.p, f: binomPmf($.k, $.n, $.p), F: binomCdf($.k, $.n, $.p), C: choose($.n, $.k) }),
     valid: ($) => $.k < $.n,
@@ -68,11 +68,11 @@ export default [
       String.raw`$$F(${$.k}) = ${Array.from({ length: $.k + 1 }, (_, x) => `f(${x})`).join(' + ')} = ${fx($.F, 4)}$$`,
       'A discrete CDF is a step function: it jumps by f(x) at each value x and is flat in between.',
     ],
-    cases: [kase('Notes Ex 3.3–3.4', { n: 4, p: 0.5, k: 2 }, { f: 0.375, F: 0.6875 }, { key: 'f(2) = 6/16, F(2) = 11/16' })],
+    cases: [],
   }),
 
   problem({
-    ...C3, id: 'c3.density-cdf', title: 'A density on an interval, and its CDF', kind: 'numeric', level: 2, topics: ['pdf', 'cdf'], src: 'Notes Ex 3.5–3.6',
+    ...C3, id: 'c3.density-cdf', title: 'A density on an interval, and its CDF', kind: 'numeric', level: 2, topics: ['pdf', 'cdf'],
     vars: { a: range(0, 2, 1), b: range(1, 3, 1), c: range(-2, 2, 0.5), w: range(0.5, 2, 0.5) },
     derive: ($) => {
       const D = $.a ** 3 + $.b ** 3;
@@ -94,7 +94,7 @@ export default [
       String.raw`$$F(x) = \int_{${-$.a}}^{x} ${dens($.D, 't')}\,dt = \dfrac{x^3 + ${$.a ** 3}}{${$.D}}, \qquad F(${$.hi}) = ${fx($.Fhi, 4)}$$`,
     ],
     twin: { part: 'p', draw: (r, $) => { const x = Math.cbrt(r.next() * $.D - $.a ** 3); return x > $.lo && x <= $.hi; } },
-    cases: [kase('Notes Ex 3.5–3.6', { a: 1, b: 2, c: 0, w: 1 }, { p: 1 / 9, F: 2 / 9 }, { key: 'P(0 < X ≤ 1) = 1/9' })],
+    cases: [],
   }),
 
   problem({

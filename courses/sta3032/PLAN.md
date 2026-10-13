@@ -5,6 +5,9 @@ in this file are relative to that folder. The old repo, stats, is frozen and no 
 The platform's own rules are in the repo root's `AGENTS.md` and `PLAN.md`; where they and this
 file differ about the platform, they win.
 
+**13 Oct 2026:** the notes, the review-sheet set and the worked cases from the instructor's notes were
+removed (PROVENANCE.md). Sections below that plan them are history.
+
 Status: **proposal, waiting for approval.** No app code has been written. Nothing in FLUX was changed.
 
 ---

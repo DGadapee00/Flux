@@ -1,13 +1,12 @@
 /**
- * Math wider than the phone column. Opens every problem at 380px with the solution revealed (and
- * every notes chapter with its solutions open) and reports any equation that does not fit its box:
+ * Math wider than the phone column. Opens every problem at 380px with the solution revealed and
+ * reports any equation that does not fit its box:
  * the page itself never scrolls sideways, so the smoke test cannot see a clipped result.
  *
  * Needs the dev server on 5177.   node scripts/overflow.mjs [--seeds 0,5,17]
  */
 import { chromium } from './playwright.mjs';
 import { PROBLEMS } from '../src/problems/index.js';
-import { NOTES } from '../src/notes/index.js';
 
 const BASE = process.env.SMOKE_URL || 'http://localhost:5177/';
 const seedsArg = process.argv.indexOf('--seeds');
@@ -44,17 +43,6 @@ for (const t of PROBLEMS) {
       console.log(`${t.id} s=${s}: ${o.length} too wide, worst +${Math.max(...o.map((x) => x.over))}px, ${o.map((x) => x.kind).join(" ")} — ${o[0].text}`);
       break;
     }
-  }
-}
-for (const N of NOTES) {
-  await page.goto(`${BASE}#/final/notes/${N.ch}`, { waitUntil: 'domcontentloaded' });
-  await page.waitForTimeout(80);
-  await page.evaluate(() => document.querySelectorAll('details').forEach((d) => (d.open = true)));
-  await page.waitForTimeout(60);
-  const o = await measure();
-  if (o.length) {
-    bad++;
-    console.log(`notes ch${N.ch}: ${o.length} too wide, worst +${Math.max(...o.map((x) => x.over))}px, ${o.map((x) => x.kind).join(" ")} — ${o[0].text}`);
   }
 }
 console.log(`overflow: ${bad} screens with math wider than 380px`, byCh);

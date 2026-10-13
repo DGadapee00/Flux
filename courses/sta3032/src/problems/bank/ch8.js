@@ -42,7 +42,7 @@ const clear = ($) => Math.abs($.p - $.alpha) > 0.004 && $.p > 0.0005;
 export default [
   // ----------------------------------------------------------------- language of tests
   problem({
-    ...C8, id: 'c8.hypotheses', title: 'Setting up the hypotheses', kind: 'conceptual', topics: ['hypotheses'], src: 'Notes Ex 8.3',
+    ...C8, id: 'c8.hypotheses', title: 'Setting up the hypotheses', kind: 'conceptual', topics: ['hypotheses'],
     vars: {
       s: choice(
         ['p-right', 'Two percent of children taking competing antibiotics get headaches as a side effect. A researcher wants to know if the percentage of children taking a new antibiotic who get headaches is more than 2%.'],
@@ -70,11 +70,11 @@ export default [
       const [h0, h1] = [String.raw`H_0: ${P} = ${v}`, String.raw`H_1: ${P} ${SYM[$.tail]} ${v}`];
       return [String.raw`$${h0}$ versus $${h1}$`, `${{ two: 'Two', left: 'Left', right: 'Right' }[$.tail]}-tailed: H₁ is what the researcher is trying to find evidence for.`];
     },
-    cases: [kase('Notes Ex 8.3(a)', { s: 'p-right' }, { param: 'p', tail: 'right' }), kase('Notes Ex 8.3(b)', { s: 'mu-two' }, { param: 'mu', tail: 'two' }), kase('Notes Ex 8.3(c)', { s: 'sigma-left' }, { param: 'sigma', tail: 'left' })],
+    cases: [],
   }),
 
   problem({
-    ...C8, id: 'c8.errors', title: 'Type I and Type II errors', kind: 'conceptual', topics: ['errors'], src: 'Notes Ex 8.4',
+    ...C8, id: 'c8.errors', title: 'Type I and Type II errors', kind: 'conceptual', topics: ['errors'],
     vars: { which: choice(['I', 'Type I'], ['II', 'Type II']), ctx: choice(['sodium', 'sodium'], ['drug', 'drug'], ['machine', 'machine']) },
     derive: ($) => ({ key: $.which === 'I' ? 'rt' : 'fa' }),
     text: (T, $) =>
@@ -100,12 +100,12 @@ export default [
     ],
     hints: ['Type I: reject H₀ when H₀ is true. Its probability is α.', 'Type II: fail to reject H₀ when H₀ is false. Its probability is β.'],
     steps: ($) => [$.which === 'I' ? 'A Type I error rejects H₀ although H₀ is true. Here that means acting on H₁ when nothing has changed.' : 'A Type II error fails to reject H₀ although H₀ is false. Here that means missing a real difference.'],
-    cases: [kase('Notes Ex 8.4(a)', { which: 'I', ctx: 'sodium' }, { e: 'rt' }), kase('Notes Ex 8.4(b)', { which: 'II', ctx: 'sodium' }, { e: 'fa' })],
+    cases: [],
   }),
 
   // ----------------------------------------------------------------- z procedures (σ known)
   problem({
-    ...C8, id: 'c8.z-interval', title: 'Z-interval for μ (σ known)', kind: 'numeric', level: 2, topics: ['z-interval', 'confidence-interval'], src: 'Notes Ex 8.2',
+    ...C8, id: 'c8.z-interval', title: 'Z-interval for μ (σ known)', kind: 'numeric', level: 2, topics: ['z-interval', 'confidence-interval'],
     vars: { ctx: MEAN, n: range(30, 120, 1), conf: CONF, shift: range(-1.5, 1.5, 0.05) },
     derive: ($) => {
       const c = ctxOf($.ctx);
@@ -124,11 +124,11 @@ export default [
       String.raw`$$(${$.xbar} - ${tn($.zt.value * $.se, 4)},\ ${$.xbar} + ${tn($.zt.value * $.se, 4)}) = (${tn($.xbar - $.zt.value * $.se, 6)},\ ${tn($.xbar + $.zt.value * $.se, 6)})$$`,
       `We are ${confLabel($.conf)} confident the population mean ${$.c.what} is between these bounds. (TI-84 ZInterval: ${tn($.lo, 6)} to ${tn($.hi, 6)}.)`,
     ],
-    cases: [kase('Notes Ex 8.2', { ctx: 'sodium', n: 44, conf: 0.9, shift: 5 / 9 }, { lo: 920.54, hi: 929.46 })],
+    cases: [],
   }),
 
   problem({
-    ...C8, id: 'c8.z-test', title: 'Z-test for μ (σ known)', kind: 'numeric', level: 2, topics: ['z-test', 'hypothesis-test'], src: 'Notes Ex 8.5',
+    ...C8, id: 'c8.z-test', title: 'Z-test for μ (σ known)', kind: 'numeric', level: 2, topics: ['z-test', 'hypothesis-test'],
     vars: { ctx: MEAN, n: range(30, 100, 1), side: SIDE, alpha: ALPHA, shift: range(-0.6, 0.6, 0.01) },
     derive: ($) => {
       const c = ctxOf($.ctx);
@@ -150,11 +150,11 @@ export default [
       ];
     },
     twin: { part: 'p', n: 30000, draw: (r, $) => { const zz = r.normal(); return $.side === 'right' ? zz >= $.z : $.side === 'left' ? zz <= $.z : Math.abs(zz) >= Math.abs($.z); } },
-    cases: [kase('Notes Ex 8.5', { ctx: 'sodium', n: 44, side: 'right', alpha: 0.1, shift: 5 / 18 }, { z: 1.84, p: 0.0327, dec: 'reject' })],
+    cases: [],
   }),
 
   problem({
-    ...C8, id: 'c8.z-test-data', title: 'Z-test from data', kind: 'numeric', level: 3, topics: ['z-test', 'hypothesis-test'], src: 'Notes Ex 8.6',
+    ...C8, id: 'c8.z-test-data', title: 'Z-test from data', kind: 'numeric', level: 3, topics: ['z-test', 'hypothesis-test'],
     vars: { n: range(8, 15, 1), side: SIDE, alpha: ALPHA, shift: range(-1.2, 1.2, 0.05), xs: data((rand, v) => sampleOf(rand, ctxOf('candy'), v.n, v.shift)) },
     derive: ($) => {
       const c = ctxOf('candy');
@@ -176,11 +176,11 @@ export default [
         ...conclude($, `the machine's mean weight is ${REL[$.side]} 20.1 grams${$.dec === 'reject' && $.side === 'two' ? ' (shut it down and recalibrate)' : ''}`),
       ];
     },
-    cases: [kase('Notes Ex 8.6', { n: 11, side: 'two', alpha: 0.01, shift: 0.3, xs: [19.68, 20.66, 19.56, 19.98, 20.65, 19.61, 20.55, 20.36, 21.02, 21.5, 19.74] }, { xbar: 20.3, z: 1.11, p: 0.2668, dec: 'fail' })],
+    cases: [],
   }),
 
   problem({
-    ...C8, id: 'c8.ci-and-test', title: 'Deciding a two-tailed test with an interval', kind: 'conceptual', topics: ['confidence-interval', 'hypothesis-test', 'duality'], src: 'Notes Ex 8.7, 8.12, 8.17',
+    ...C8, id: 'c8.ci-and-test', title: 'Deciding a two-tailed test with an interval', kind: 'conceptual', topics: ['confidence-interval', 'hypothesis-test', 'duality'],
     vars: { ctx: MEAN, conf: CONF, lo: range(-2, 1, 0.05), w: range(0.4, 2, 0.05), pos: range(-0.5, 1.5, 0.05) },
     derive: ($) => {
       const c = ctxOf($.ctx);
@@ -197,14 +197,13 @@ export default [
       `The ${confLabel($.conf)} interval matches a two-tailed test at α = ${$.alpha}.`,
       $.dec === 'fail' ? `${$.v0} is inside (${$.L}, ${$.H}), so it is a plausible value of μ: fail to reject H₀.` : `${$.v0} is outside (${$.L}, ${$.H}), so it is not a plausible value of μ: reject H₀.`,
     ],
-    cases: [kase('Notes Ex 8.7', { ctx: 'candy', conf: 0.99, lo: (19.83 - 20.1) / 0.6, w: 0.94 / 0.6, pos: 0.27 / 0.94 }, { dec: 'fail' }, { note: 'The 99% z-interval from Ex 8.6 is (19.83, 20.77), which contains 20.1.' }),
-      kase('Notes Ex 8.12', { ctx: 'song', conf: 0.99, lo: (188.12 - 240) / 30, w: (259.44 - 188.12) / 30, pos: (240 - 188.1) / 71.3 }, { dec: 'fail' }, { note: 'The 99% t-interval from Ex 8.9, (188.1, 259.4), contains 240.' }),
+    cases: [
     ],
   }),
 
   // ----------------------------------------------------------------- t procedures (σ unknown)
   problem({
-    ...C8, id: 'c8.t-critical', title: 'Critical values of t', kind: 'numeric', topics: ['t-distribution', 't-table'], src: 'Notes Ex 8.8(a)–(b)',
+    ...C8, id: 'c8.t-critical', title: 'Critical values of t', kind: 'numeric', topics: ['t-distribution', 't-table'],
     vars: { alpha: choice(...[0.1, 0.05, 0.025, 0.01, 0.005].map((a) => [a, String(a)])), df: range(1, 32, 1) },
     derive: ($) => {
       const df = $.df > 30 ? [40, 60, 120][$.df - 31] : $.df;
@@ -214,11 +213,11 @@ export default [
     parts: [num('t', ($) => $.t, { alt: ($) => $.look.values, tol: 0, abs: 0.002, label: String.raw`$t_{\alpha,\nu}$`, traps: [[($) => tCrit($.alpha / 2, $.v), 'That is t with α/2 in the tail. t_α puts all of α in one tail.'], [($) => -$.t, 't_α has area α to its RIGHT, so it is positive.']] })],
     hints: ['Table A.4: row ν, column α (the area to the right).', 'TI-84: invT(1 − α, ν).'],
     steps: ($) => [$.look.line, String.raw`Exact (TI-84 invT(${fx(1 - $.alpha, 3)}, ${$.v})): $${fx($.t, 4)}$`],
-    cases: [kase('Notes Ex 8.8(a)', { alpha: 0.025, df: 17 }, { t: 2.11 }), kase('Notes Ex 8.8(b)', { alpha: 0.005, df: 13 }, { t: 3.012 })],
+    cases: [],
   }),
 
   problem({
-    ...C8, id: 'c8.t-prob', title: 'Probabilities for t', kind: 'numeric', topics: ['t-distribution'], src: 'Notes Ex 8.8(c)',
+    ...C8, id: 'c8.t-prob', title: 'Probabilities for t', kind: 'numeric', topics: ['t-distribution'],
     vars: { df: range(2, 30, 1), x: range(-2.5, 2.5, 0.1), side: choice(['left', 'less than'], ['right', 'greater than']) },
     derive: ($) => ({ p: $.side === 'left' ? tCdf($.x, $.df) : 1 - tCdf($.x, $.df) }),
     valid: ($) => Math.abs($.x) > 0.05,
@@ -226,11 +225,11 @@ export default [
     parts: [prob('p', ($) => $.p, { label: ($T, $) => String.raw`$P(T ${$.side === 'left' ? '<' : '>'} ${$.x})$`, traps: [[($) => 1 - $.p, 'That is the other tail.']] })],
     hints: ['Table A.4 gives only a few upper-tail areas, so use the calculator: tcdf(lower, upper, ν).', 'For P(T < x) use tcdf(−1E99, x, ν); for P(T > x) use tcdf(x, 1E99, ν).'],
     steps: ($) => [String.raw`TI-84: tcdf(${$.side === 'left' ? `-1E99, ${$.x}` : `${$.x}, 1E99`}, ${$.df}) = $${fx($.p, 4)}$`, 'The t curve is symmetric about 0, like z, but with heavier tails.'],
-    cases: [kase('Notes Ex 8.8(c)', { df: 10, x: 0.7, side: 'left' }, { p: 0.7501 })],
+    cases: [],
   }),
 
   problem({
-    ...C8, id: 'c8.t-interval', title: 'T-interval for μ from data', kind: 'numeric', level: 3, topics: ['t-interval', 'confidence-interval'], src: 'Notes Ex 8.9',
+    ...C8, id: 'c8.t-interval', title: 'T-interval for μ from data', kind: 'numeric', level: 3, topics: ['t-interval', 'confidence-interval'],
     vars: { n: range(6, 15, 1), conf: CONF, shift: range(-1, 1, 0.1), xs: data((rand, v) => sampleOf(rand, ctxOf('song'), v.n, v.shift)) },
     derive: ($) => {
       const xbar = mean($.xs);
@@ -249,11 +248,11 @@ export default [
       String.raw`$$(${fx($.xbar, 3)} \pm ${tn(($.look.value * $.s) / Math.sqrt($.n), 5)}) = (${fx($.xbar - ($.look.value * $.s) / Math.sqrt($.n), 2)},\ ${fx($.xbar + ($.look.value * $.s) / Math.sqrt($.n), 2)})$$`,
       `We are ${confLabel($.conf)} confident the mean length of the songs on her phone is between these bounds.`,
     ],
-    cases: [kase('Notes Ex 8.9', { n: 9, conf: 0.99, shift: 0, xs: [201, 257, 284, 208, 179, 222, 217, 206, 240] }, { xbar: 223.78, s: 31.88, lo: 188.12, hi: 259.44 })],
+    cases: [],
   }),
 
   problem({
-    ...C8, id: 'c8.t-test', title: 'One-sample t-test', kind: 'numeric', level: 2, topics: ['t-test', 'hypothesis-test'], src: 'Notes Ex 8.10',
+    ...C8, id: 'c8.t-test', title: 'One-sample t-test', kind: 'numeric', level: 2, topics: ['t-test', 'hypothesis-test'],
     vars: { ctx: MEAN, n: range(8, 60, 1), side: SIDE, alpha: ALPHA, shift: range(-0.8, 0.8, 0.01), sfac: range(0.7, 1.3, 0.05) },
     derive: ($) => {
       const c = ctxOf($.ctx);
@@ -276,11 +275,11 @@ export default [
       ];
     },
     twin: { part: 'p', n: 30000, draw: (r, $) => { const tt = r.t($.df); return $.side === 'right' ? tt >= $.t : $.side === 'left' ? tt <= $.t : Math.abs(tt) >= Math.abs($.t); } },
-    cases: [kase('Notes Ex 8.10', { ctx: 'height', n: 43, side: 'right', alpha: 0.05, shift: 1.28 / 2.8, sfac: 2.77 / 2.8 }, { t: 3.03, p: 0.0021, dec: 'reject' })],
+    cases: [],
   }),
 
   problem({
-    ...C8, id: 'c8.t-test-data', title: 'One-sample t-test from data', kind: 'numeric', level: 3, topics: ['t-test', 'hypothesis-test'], src: 'Notes Ex 8.11',
+    ...C8, id: 'c8.t-test-data', title: 'One-sample t-test from data', kind: 'numeric', level: 3, topics: ['t-test', 'hypothesis-test'],
     vars: { n: range(6, 14, 1), side: SIDE, alpha: ALPHA, shift: range(-1.2, 1.2, 0.05), xs: data((rand, v) => sampleOf(rand, ctxOf('song'), v.n, v.shift)) },
     derive: ($) => {
       const xbar = mean($.xs);
@@ -302,12 +301,12 @@ export default [
         ...conclude($, `the mean song length is ${REL[$.side]} 240 seconds`),
       ];
     },
-    cases: [kase('Notes Ex 8.11', { n: 9, side: 'two', alpha: 0.01, shift: 0, xs: [201, 257, 284, 208, 179, 222, 217, 206, 240] }, { t: -1.53, p: 0.1654, dec: 'fail' })],
+    cases: [],
   }),
 
   // ----------------------------------------------------------------- one proportion
   problem({
-    ...C8, id: 'c8.prop-test', title: 'One-proportion z-test', kind: 'numeric', level: 2, topics: ['proportion', 'z-test', 'hypothesis-test'], src: 'Notes Ex 8.14–8.15',
+    ...C8, id: 'c8.prop-test', title: 'One-proportion z-test', kind: 'numeric', level: 2, topics: ['proportion', 'z-test', 'hypothesis-test'],
     vars: { ctx: choice(['grads', 'grads'], ['defects', 'defects'], ['voters', 'voters']), n: range(100, 1000, 10), p0: range(0.1, 0.9, 0.05), side: SIDE, alpha: ALPHA, shift: range(-2.5, 2.5, 0.05) },
     derive: ($) => {
       const x = Math.round($.n * ($.p0 + $.shift * Math.sqrt(($.p0 * (1 - $.p0)) / $.n)));
@@ -335,13 +334,11 @@ export default [
       ];
     },
     cases: [
-      kase('Notes Ex 8.15', { ctx: 'grads', n: 100, p0: 0.4, side: 'two', alpha: 0.1, shift: 0.03 / Math.sqrt(0.0024) }, { phat: 0.43, z: 0.61, p: 0.5403, dec: 'fail' }),
-      kase('Notes Ex 8.14', { ctx: 'defects', n: 200, p0: 0.05, side: 'left', alpha: 0.05, shift: -0.03 / Math.sqrt(0.05 * 0.95 / 200) }, { phat: 0.02, z: -1.95, p: 0.0258, dec: 'reject' }, { note: 'Here np₀(1 − p₀) = 200(0.05)(0.95) = 9.5, just under the notes’ own condition of 10. The notes carry out the test anyway; strictly, the normal approximation is not justified.' }),
     ],
   }),
 
   problem({
-    ...C8, id: 'c8.prop-interval', title: 'One-proportion z-interval', kind: 'numeric', level: 2, topics: ['proportion', 'confidence-interval'], src: 'Notes Ex 8.16',
+    ...C8, id: 'c8.prop-interval', title: 'One-proportion z-interval', kind: 'numeric', level: 2, topics: ['proportion', 'confidence-interval'],
     vars: { n: range(100, 1500, 10), f: range(0.1, 0.9, 0.01), conf: CONF },
     derive: ($) => {
       const x = Math.round($.n * $.f);
@@ -359,10 +356,10 @@ export default [
       String.raw`$$E = ${$.zt.value}\sqrt{\dfrac{${fx($.phat, 4)}(${fx(1 - $.phat, 4)})}{${$.n}}} = ${fx($.zt.value * $.se, 4)}$$`,
       String.raw`$$(${fx($.phat - $.zt.value * $.se, 4)},\ ${fx($.phat + $.zt.value * $.se, 4)})$$`,
     ],
-    cases: [kase('Notes Ex 8.16', { n: 100, f: 0.43, conf: 0.9 }, { lo: 0.3486, hi: 0.5114 }, { note: 'The notes state the condition as np̂(1 − p̂) ≤ 10; it should read ≥ 10 (a large enough sample).' })],
+    cases: [],
   }),
   problem({
-    ...C8, id: 'c8.ci-meaning', title: 'What a confidence interval means', kind: 'conceptual', topics: ['confidence-interval', 'interpretation'], src: 'Notes §8.1',
+    ...C8, id: 'c8.ci-meaning', title: 'What a confidence interval means', kind: 'conceptual', topics: ['confidence-interval', 'interpretation'],
     vars: { ctx: choice(['song', 'mean'], ['grads', 'proportion'], ['sodium', 'mean']), conf: choice([0.9, '90%'], [0.95, '95%']), c: range(-1, 1, 0.1), w: range(0.4, 1.2, 0.05) },
     derive: ($) => {
       const C = Math.round($.conf * 100);
@@ -396,6 +393,6 @@ export default [
       `The ${$.C}% is the long-run success rate of the method: build intervals this way from many samples, and about ${$.C}% of them contain the true ${$.par}. This one either does or does not; we are "${$.C}% confident" that it does.`,
       `For 99% the critical value grows (z from ${$.C === 90 ? '1.645' : '1.96'} to 2.576), so the same data give a wider interval.`,
     ],
-    cases: [kase('Notes Ex 8.16', { ctx: 'grads', conf: 0.9, c: 0.2, w: 1.0355 }, { m: 'method', wider: 'wider' }, { note: 'The 90% interval for the proportion of college graduates, (0.3486, 0.5114), rounded.' })],
+    cases: [],
   }),
 ];

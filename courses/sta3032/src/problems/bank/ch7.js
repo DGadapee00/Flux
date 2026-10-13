@@ -17,7 +17,7 @@ const LT = choice(['left', 'less than'], ['right', 'greater than']);
 
 export default [
   problem({
-    ...C7, id: 'c7.linear-normal', title: 'A linear function of normal variables', kind: 'numeric', level: 2, topics: ['linear-combination', 'normal'], src: 'Notes Ex 7.1',
+    ...C7, id: 'c7.linear-normal', title: 'A linear function of normal variables', kind: 'numeric', level: 2, topics: ['linear-combination', 'normal'],
     vars: { a0: range(-5, 10, 1), a1: range(-3, 3, 1, { exclude: [0] }), a2: range(-3, 3, 1, { exclude: [0] }), m1: range(-5, 10, 1), v1: range(1, 16, 1), m2: range(-5, 10, 1), v2: range(1, 16, 1), side: LT, k: range(-1.8, 1.8, 0.1) },
     derive: ($) => {
       const mu = $.a0 + $.a1 * $.m1 + $.a2 * $.m2;
@@ -45,11 +45,11 @@ export default [
       String.raw`$P(Y ${$.side === 'left' ? '<' : '>'} ${$.c}) = ${fx($.table, 4)}$ (exact $${fx($.exact, 4)}$)`,
     ],
     twin: { part: 'p', draw: (r, $) => { const y = $.a0 + $.a1 * r.normal($.m1, Math.sqrt($.v1)) + $.a2 * r.normal($.m2, Math.sqrt($.v2)); return $.side === 'left' ? y < $.c : y > $.c; } },
-    cases: [kase('Notes Ex 7.1', { a0: 3, a1: -1, a2: 2, m1: 1, v1: 4, m2: -2, v2: 9, side: 'right', k: 10 / Math.sqrt(40) }, { mu: -2, v: 40, p: 0.0569 })],
+    cases: [],
   }),
 
   problem({
-    ...C7, id: 'c7.xbar-mean-sd', title: 'Mean and standard deviation of x̄', kind: 'numeric', topics: ['sampling-distribution', 'xbar'], src: 'Notes Ex 7.2',
+    ...C7, id: 'c7.xbar-mean-sd', title: 'Mean and standard deviation of x̄', kind: 'numeric', topics: ['sampling-distribution', 'xbar'],
     vars: { mu: range(10, 500, 5), sigma: range(2, 60, 1), n: choice([4, '4'], [9, '9'], [16, '16'], [25, '25'], [36, '36'], [49, '49'], [64, '64'], [100, '100'], [30, '30'], [50, '50']) },
     derive: ($) => ({ se: $.sigma / Math.sqrt($.n), v: ($.sigma * $.sigma) / $.n }),
     text: (T, $) => `A population has mean ${$.mu} and standard deviation ${$.sigma}. Random samples of size ${$.n} are drawn. Find the mean, variance and standard deviation of the sample mean X̄.`,
@@ -69,7 +69,7 @@ export default [
   }),
 
   problem({
-    ...C7, id: 'c7.xbar-prob', title: 'Probabilities for x̄', kind: 'numeric', level: 2, topics: ['sampling-distribution', 'xbar', 'normal'], src: 'Notes Ex 7.4–7.5',
+    ...C7, id: 'c7.xbar-prob', title: 'Probabilities for x̄', kind: 'numeric', level: 2, topics: ['sampling-distribution', 'xbar', 'normal'],
     vars: {
       ctx: choice(['fill', 'fill'], ['gain', 'gain'], ['battery', 'battery']),
       n: range(4, 60, 1),
@@ -100,13 +100,11 @@ export default [
     // Checks the formula (a normal population); how good the CLT is for a skewed one is the lab's job.
     twin: { part: 'p', n: 20000, draw: (r, $) => { let s = 0; for (let i = 0; i < $.n; i++) s += r.normal($.c.mu, $.c.sigma); const m = s / $.n; return $.side === 'left' ? m < $.x : m > $.x; } },
     cases: [
-      kase('Notes Ex 7.4', { ctx: 'fill', n: 10, side: 'left', k: (12 - 12.1) / (0.5 / Math.sqrt(10)) }, { se: 0.1581, p: 0.2635 }),
-      kase('Notes Ex 7.5(b)', { ctx: 'gain', n: 35, side: 'right', k: (36.2 - 30) / (12.9 / Math.sqrt(35)) }, { se: 2.1805, p: 0.0022 }),
     ],
   }),
 
   problem({
-    ...C7, id: 'c7.clt-when', title: 'When is x̄ approximately normal?', kind: 'conceptual', topics: ['clt', 'sampling-distribution'], src: 'Notes Ex 7.5',
+    ...C7, id: 'c7.clt-when', title: 'When is x̄ approximately normal?', kind: 'conceptual', topics: ['clt', 'sampling-distribution'],
     vars: { pop: choice(['normal', 'normally distributed'], ['skewed', 'skewed right'], ['unknown', 'of unknown shape']), n: choice([5, '5'], [10, '10'], [15, '15'], [25, '25'], [35, '35'], [40, '40'], [60, '60'], [100, '100']) },
     derive: ($) => ({ key: $.pop === 'normal' ? 'exact' : $.n >= 30 ? 'clt' : 'no' }),
     text: (T, $) => `A population is ${T.pop}, with a known mean and standard deviation. A random sample of ${$.n} is taken. Can you use a normal model to find probabilities about the sample mean X̄?`,
@@ -117,15 +115,15 @@ export default [
         ['no', 'No: the population is not known to be normal and n < 30', ''],
       ], ($) => $.key),
     ],
-    hints: ['If the population is normal, X̄ is normal for every n.', 'Otherwise the Central Limit Theorem makes X̄ approximately normal once n is large; the notes use n ≥ 30.'],
+    hints: ['If the population is normal, X̄ is normal for every n.', 'Otherwise the Central Limit Theorem makes X̄ approximately normal once n is large; the course uses n ≥ 30.'],
     steps: ($) => [
       { exact: 'A linear function of normal variables is normal, and X̄ is one. So X̄ is exactly normal, whatever n is.', clt: `The population is not normal, but n = ${$.n} ≥ 30, so the Central Limit Theorem says X̄ is approximately normal with mean μ and standard deviation σ/√n.`, no: `The population is not normal and n = ${$.n} < 30, so neither reason applies. A normal model for X̄ is not justified (as in Ex 7.5(a), with n = 10).` }[$.key],
     ],
-    cases: [kase('Notes Ex 7.5(a)', { pop: 'skewed', n: 10 }, { k: 'no' }), kase('Notes Ex 7.5(b)', { pop: 'skewed', n: 35 }, { k: 'clt' })],
+    cases: [],
   }),
 
   problem({
-    ...C7, id: 'c7.normal-approx-binomial', title: 'Normal approximation to the binomial', kind: 'numeric', level: 2, topics: ['normal-approximation', 'binomial', 'continuity-correction'], src: 'Notes Ex 7.6',
+    ...C7, id: 'c7.normal-approx-binomial', title: 'Normal approximation to the binomial', kind: 'numeric', level: 2, topics: ['normal-approximation', 'binomial', 'continuity-correction'],
     vars: {
       ctx: choice(['bulbs', 'bulbs'], ['survey', 'survey'], ['flights', 'flights']),
       n: choice([100, '100'], [200, '200'], [300, '300'], [500, '500'], [1000, '1000']),
@@ -167,7 +165,7 @@ export default [
         ],
       }),
     ],
-    hints: [String.raw`X is binomial. The notes' condition for the normal approximation: $np(1-p) \ge 10$.`, String.raw`Use $\mu = np$ and $\sigma = \sqrt{np(1-p)}$.`, 'Continuity correction: at most r → below r + 0.5; fewer than r → below r − 0.5; at least r → above r − 0.5; more than r → above r + 0.5.'],
+    hints: [String.raw`X is binomial. The course's condition for the normal approximation: $np(1-p) \ge 10$.`, String.raw`Use $\mu = np$ and $\sigma = \sqrt{np(1-p)}$.`, 'Continuity correction: at most r → below r + 0.5; fewer than r → below r − 0.5; at least r → above r − 0.5; more than r → above r + 0.5.'],
     steps: ($) => [
       String.raw`$np(1-p) = ${$.n}(${$.p})(${fx(1 - $.p, 2)}) = ${tn($.v, 6)} \ge 10$, so the normal approximation applies.`,
       String.raw`$\mu = np = ${tn($.mu, 6)}$, $\sigma = \sqrt{${tn($.v, 6)}} = ${tn($.sd, 4)}$`,
@@ -176,11 +174,11 @@ export default [
       zLook($.z).line,
       String.raw`$P \approx ${fx($.table, 4)}$ (exact normal: $${fx($.exact, 4)}$; the true binomial value is $${fx($.binom, 4)}$)`,
     ],
-    cases: [kase('Notes Ex 7.6, more than 950 work', { ctx: 'bulbs', n: 1000, p: 0.95, qt: 'gt', k: 0 }, { v: 47.5, p: 0.4711 })],
+    cases: [],
   }),
 
   problem({
-    ...C7, id: 'c7.phat', title: 'The sampling distribution of p̂', kind: 'numeric', level: 2, topics: ['sampling-distribution', 'proportion'], src: 'Notes Ex 7.7–7.8',
+    ...C7, id: 'c7.phat', title: 'The sampling distribution of p̂', kind: 'numeric', level: 2, topics: ['sampling-distribution', 'proportion'],
     vars: { p: range(0.1, 0.9, 0.01), n: range(40, 400, 10), side: choice(['le', 'at most'], ['ge', 'at least']), k: range(-2, 2, 0.1) },
     derive: ($) => {
       const se = Math.sqrt(($.p * (1 - $.p)) / $.n);
@@ -202,11 +200,11 @@ export default [
       zLook($.z).line,
       String.raw`$P(\hat p ${$.side === 'le' ? '\\le' : '\\ge'} ${$.c}) = ${fx($.table, 4)}$ (exact $${fx($.exact, 4)}$)`,
     ],
-    cases: [kase('Notes Ex 7.8', { p: 0.76, n: 60, side: 'le', k: (0.7 - 0.76) / Math.sqrt((0.76 * 0.24) / 60) }, { m: 0.76, se: 0.0551, pr: 0.1383 })],
+    cases: [],
   }),
 
   problem({
-    ...C7, id: 'c7.point-estimate', title: 'A point estimate of p', kind: 'numeric', topics: ['proportion', 'point-estimate'], src: 'Notes Ex 7.7, 8.13',
+    ...C7, id: 'c7.point-estimate', title: 'A point estimate of p', kind: 'numeric', topics: ['proportion', 'point-estimate'],
     vars: { n: range(200, 2000, 1), f: range(0.1, 0.9, 0.001) },
     derive: ($) => {
       const x = Math.round($.n * $.f);
@@ -216,6 +214,6 @@ export default [
     parts: [num('phat', ($) => $.phat, { label: String.raw`$\hat p$`, tol: 0, abs: 0.0006 })],
     hints: [String.raw`$\hat p = x/n$, the proportion in the sample.`],
     steps: ($) => [String.raw`$$\hat p = \dfrac{x}{n} = \dfrac{${$.x}}{${$.n}} = ${fx($.phat, 4)}$$`, 'The sample proportion is the point estimate of the population proportion p.'],
-    cases: [kase('Notes Ex 7.7', { n: 1016, f: 558 / 1016 }, { phat: 0.5492 })],
+    cases: [],
   }),
 ];
