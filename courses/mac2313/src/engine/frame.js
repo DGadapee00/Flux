@@ -8,6 +8,10 @@
  * Plane `'xyfloor'`: domain on the floor, labeled x (right) and y (depth), height z up.
  * That is the graph of z = f(x,y). `'xy'` stands the plane up; `'xz'` is the physics floor.
  */
+import { fitScale, unitsPerTick } from '@flux/subjects/math/scale.js';
+
+export { fitScale, unitsPerTick };
+
 export const DEFAULT_UPM = 1;
 
 /** The number plane runs to ±GRID_HALF units; a fit puts the content inside ±FIT_UNITS of them. */
@@ -46,19 +50,6 @@ export const PLANE_AXES = {
   xy: { axes: ['x', 'y'], off: 'z' },
   xyfloor: { axes: ['x', 'y'], off: 'z' },
 };
-
-const NICE = [1, 2, 2.5, 5];
-
-export function unitsPerTick(extent, fit = FIT_UNITS) {
-  const want = Math.max(1e-12, extent) / fit;
-  const dec = 10 ** Math.floor(Math.log10(want));
-  for (const n of NICE) if (n * dec >= want * (1 - 1e-9)) return n * dec;
-  return 10 * dec;
-}
-
-export function fitScale(extent, fit = FIT_UNITS) {
-  return 1 / unitsPerTick(extent, fit);
-}
 
 export function snapStep(scale = upm) {
   return 1 / (2 * scale);

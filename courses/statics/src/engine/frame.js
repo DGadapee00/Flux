@@ -11,7 +11,10 @@
  * separation) go into the lab unchanged and the *view* adapts, instead of the positions and
  * charges being rescaled to fit a fixed scene.
  */
+import { fitScale, metersPerUnit } from '@flux/subjects/math/scale.js';
 import { UNITS_PER_METER } from '../physics/constants.js';
+
+export { fitScale, metersPerUnit };
 
 /** The number plane runs to ±GRID_HALF units; a fit puts the content inside ±FIT_UNITS of them. */
 export const GRID_HALF = 7;
@@ -69,21 +72,6 @@ export const PLANE_AXES = {
   xz: { axes: ['x', 'z'], off: 'y' },
   xy: { axes: ['x', 'y'], off: 'z' },
 };
-
-const NICE = [1, 2, 2.5, 5];
-
-/** Meters per grid square: the smallest 1 / 2 / 2.5 / 5 × 10ⁿ that frames `extent` in `fit` squares. */
-export function metersPerUnit(extent, fit = FIT_UNITS) {
-  const want = Math.max(1e-12, extent) / fit;
-  const dec = 10 ** Math.floor(Math.log10(want));
-  for (const n of NICE) if (n * dec >= want * (1 - 1e-9)) return n * dec;
-  return 10 * dec;
-}
-
-/** Units per meter that frames `extent` on a nice grid. */
-export function fitScale(extent, fit = FIT_UNITS) {
-  return 1 / metersPerUnit(extent, fit);
-}
 
 /** Dragging snaps to half a grid square unless the pointer asks for free placement. */
 export function snapStep(scale = upm) {

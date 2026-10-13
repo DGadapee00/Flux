@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@flux/core": "*",
+    "@flux/subjects": "*",
     "katex": "^0.16.47"
   },
   "devDependencies": {
