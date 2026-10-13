@@ -106,7 +106,7 @@ test('motion plays once, holds, pauses off screen, and stays still when reduced'
 
   const reduced = reduceMotion({ ...rest, reduced: false }, { type: 'reduced', on: true });
   const stayed = reduceMotion(reduced, { type: 'enter' });
-  assert.equal(stayed.t, 0);
+  assert.equal(stayed.t, 1, 'reduced motion holds the finished picture');
   assert.equal(stayed.playing, false);
 
   const touch = reduceMotion({ ...rest, fineHover: false, visible: false }, { type: 'show' });

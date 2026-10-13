@@ -305,6 +305,22 @@ function paintStats(svg) {
   const base = 142;
   const slot = (right - left) / scene.counts.length;
   const peak = Math.max(...scene.counts, ...scene.curve.map((point) => point.y));
+  // Ghost outlines at full height, so the resting card already shows the histogram's shape.
+  for (const [index, count] of scene.counts.entries()) {
+    const h = (count / peak) * (base - top);
+    svg.append(
+      svgEl('rect', {
+        x: left + index * slot + 2,
+        y: base - h,
+        width: Math.max(1, slot - 4),
+        height: h,
+        fill: 'none',
+        stroke: TEAL,
+        'stroke-width': 1,
+        opacity: 0.35,
+      }),
+    );
+  }
   const bars = scene.counts.map((count, index) => {
     const rect = svgEl('rect', {
       x: left + index * slot + 2,

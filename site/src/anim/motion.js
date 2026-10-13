@@ -31,7 +31,7 @@
 export function reduceMotion(state, event) {
   switch (event.type) {
     case 'reduced':
-      if (event.on) return { ...state, reduced: true, t: 0, playing: false };
+      if (event.on) return { ...state, reduced: true, t: 1, playing: false };
       return { ...state, reduced: false };
     case 'enter':
       if (state.reduced || !state.fineHover || state.playing) return state;
@@ -77,7 +77,8 @@ export function attachMotion(el, { duration = 900, onFrame }) {
   let last = 0;
 
   function paint() {
-    const t = state.reduced ? 0 : state.t;
+    // Reduced motion shows the finished picture, not the empty first frame.
+    const t = state.reduced ? 1 : state.t;
     onFrame(t);
     el.dataset.t = String(t);
     if (state.reduced || (!state.playing && t === 0)) el.dataset.motion = 'still';

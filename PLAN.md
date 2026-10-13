@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status: **Phase 0b ready to publish.** Track cards pass `npm test`, `npm run build`, and the hub smoke locally. The live site at https://flux-study.pages.dev is still the Phase 0 course picker until this commit is deployed there. Next: Phase 1. Nothing in the four existing repos was changed.
+Status: **Phase 0b done** (PR #2 merged 13 Oct 2026; track cards live at https://flux-study.pages.dev). Next: Phase 1. Nothing in the four existing repos was changed.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
