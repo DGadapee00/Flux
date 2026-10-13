@@ -3,8 +3,9 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   base: './',
   server: {
-    port: 5174,
-    open: true,
+    port: 5176,
+    strictPort: true,
+    open: false,
   },
   build: {
     target: 'esnext',

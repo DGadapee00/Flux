@@ -1,8 +1,14 @@
 # TRUSS — Statics
 
+**This course now lives in the Flux platform repo (DGadapee00/Flux), at `courses/statics/`.** Paths
+in this file are relative to that folder, and commands run from it, unless they say "repo root".
+The old repo, statics-sim, is frozen and no longer edited. The platform's own rules are in the
+repo root's `AGENTS.md` and `PLAN.md`; where they and this file differ about the platform, they win.
+On the hub the route is `#/statics/...`. An old hash such as `#/u3/truss` redirects.
+
 Interactive 3D labs and a generated problem bank for Calculus-Based Statics (Hibbeler Ch 2–10).
-One app at http://localhost:5174/ — units in the top row, labs as tabs, hash URLs so each lab is
-bookmarkable (`#/u3/truss`).
+One app at http://localhost:5176/ — units in the top row, labs as tabs, hash URLs so each lab is
+bookmarkable (`#/statics/u3/truss`).
 
 Built on the engine from [flux-phy2049](https://github.com/DGadapee00/flux-phy2049): the problem
 generator, spaced review, symbols-before-numbers input and the typeset panels are the same code;
@@ -14,7 +20,7 @@ the physics and the labs are new.
 makes TRUSS a link instead of an install — no Git, no Node, no terminal on the other end. Deep links
 survive the move: `#/u3/truss`, or a single problem at `#/u3/truss?p=ch6.truss-joints&s=0`.
 
-Nothing is published yet. **[DEPLOY.md](DEPLOY.md)** has the three routes and what each one exposes —
+The hub serves this copy at `statics/`. **[DEPLOY.md](DEPLOY.md)** has the old standalone routes and what each one exposes —
 the build carries Hibbeler's numbers and printed answers, so read that section before hosting it
 somewhere open.
 
@@ -27,7 +33,7 @@ npm install
 npm start
 ```
 
-Opens at http://localhost:5174/
+Opens at http://localhost:5176/
 
 ```bash
 npm test    # statics self-test (no browser) + the problem-bank check

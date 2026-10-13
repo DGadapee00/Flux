@@ -46,7 +46,7 @@ export const TRACKS = [
         code: 'EGN 3311',
         title: 'Statics',
         term: null,
-        href: 'https://dgadapee00.github.io/statics-sim/',
+        href: 'statics/',
       },
       { id: 'dynamics', code: null, title: 'Dynamics', term: null, href: null },
     ],

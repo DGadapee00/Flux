@@ -10,8 +10,8 @@
 import { CHAPTER_ORDER } from './index.js';
 import { rng } from './engine.js';
 
-export const STORE_KEY = 'flux.problems.v1';
-export const EXAM_KEY = 'flux.exam.v1';
+export const STORE_KEY = 'flux-statics.problems.v1';
+export const EXAM_KEY = 'flux-statics.exam.v1';
 export const INTERVAL_DAYS = [10 / 1440, 1, 3, 7, 16, 35];
 export const MASTERED_BOX = 3;
 const DAY = 864e5;

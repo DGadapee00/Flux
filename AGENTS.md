@@ -39,7 +39,7 @@ Vite 6, `base: './'`, `target: esnext`. Vanilla JS, ES modules. KaTeX 0.16. thre
 
 Node's built-in test runner. There is no test framework to add.
 
-The hub's dev server is port 5173. PHY and Statics already use 5174. MAC 2313 and STA 3032 already use 5175.
+The hub's dev server is port 5173. PHY is 5174, MAC 2313 is 5175, Statics is 5176. STA 3032 stays on 5175 until its import moves it to 5177.
 
 Publishing is a Cloudflare Pages direct upload (`npm run deploy`). A green commit is a snapshot on `main`. The live hub moves when someone uploads. See `DEPLOY.md`. The project name is `flux-study`, because `flux.pages.dev` is an unrelated site.
 
@@ -58,7 +58,7 @@ A course manifest is the object in `PLAN.md` section 4: `id`, `code`, `title`, `
 
 Routes in the course apps are `#/<unit>/<mode>/<lab>`. On the platform that becomes `#/<course>/<unit>/<mode>/<lab>`. Old hashes redirect when that course is brought in.
 
-Storage keys are `flux.<course>.<key>.v<n>`. PHY and Statics both use `flux.problems.v1` and `flux.exam.v1` today. Separate origins hide the clash. One origin makes it a bug. Progress export and import is JSON, so a move between domains keeps the review queue.
+Storage keys are `flux.<course>.<key>.v<n>`. PHY keeps `flux.problems.v1` and `flux.exam.v1`. Statics uses `flux-statics.problems.v1` and `flux-statics.exam.v1`. `packages/checks/storage.mjs` fails when two courses share a key. Progress export and import is JSON, so a move between domains keeps the review queue.
 
 ## Checks
 

@@ -1,5 +1,10 @@
 # Putting TRUSS behind a link
 
+This copy ships inside the hub. From the repo root, `npm run deploy` publishes `site/dist`
+(with this app at `statics/`) to https://flux-study.pages.dev. `npm run deploy` in this folder
+refuses, so it does not upload a second site. The rest of this file is how a standalone build
+was published. On the hub an old hash such as `#/u3/truss` redirects to `#/statics/u3/truss`.
+
 The app is a static site. `npm run build` writes a `dist/` folder of plain HTML, JS and CSS —
 no server, no database, no Node on the other end. Anything that can serve a folder can host it,
 and then the app is a URL: your group opens it on a laptop, a Chromebook, a phone, a library
@@ -7,7 +12,7 @@ machine, with nothing installed and no terminal.
 
 ```bash
 npm run build     # writes dist/ (~2.1 MB)
-npm run preview   # serves dist/ at http://localhost:4173 to check it first
+npm run preview   # serves dist/ at http://localhost:4176 to check it first
 ```
 
 `vite.config.js` sets `base: './'`, so the build works at the root of a domain or in a
@@ -79,7 +84,7 @@ where the whole internet can read them.
 ## After it's live
 
 - **Progress doesn't follow the move.** Mastery is stored in `localStorage` under
-  `flux.problems.v1`, which is per-origin. Your work at `localhost:5174` stays there; the
+  `flux-statics.problems.v1`, which is per-origin. Your work at `localhost:5176` stays there; the
   hosted site starts everyone at zero. That is fine for the group — just don't expect your
   own streak to appear.
 - **Fonts come from Google.** `index.html` pulls Inter and JetBrains Mono from
