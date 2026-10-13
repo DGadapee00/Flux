@@ -1,0 +1,544 @@
+/*
+ * Phone layer. Loaded last, scoped entirely to <= 720px, so nothing here can reach the desktop.
+ *
+ * The premise: the practice bank is the thing worth doing on a phone — problems on the bus, not
+ * orbiting a Gaussian surface one-handed. So practice gets the whole screen, and the labs get a
+ * layout that is honest about the space it has rather than four floating panels landing on top of
+ * each other.
+ *
+ * The desktop HUD anchors panels to the four corners of the viewport. At 390px wide those corners
+ * are the same place, which is why the toggle row was being drawn over the brand and the readout
+ * over Setup. Below 720px the panels stop floating and become a stack: header strips at the top,
+ * a sheet at the bottom, canvas in between.
+ */
+
+/*
+ * Header compaction. Applies to portrait phones and to landscape phones, which have the width for
+ * the desktop arrangement but not the height — a 196px header out of 390px was half the screen.
+ * Position is left alone here so landscape keeps the floating panel; only the contents shrink.
+ */
+@media (max-width: 720px), (max-height: 560px) and (orientation: landscape) {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .brand {
+    gap: 0 10px;
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .brand-mark {
+    grid-column: 1;
+    grid-row: 1;
+    width: 26px;
+    height: 26px;
+  }
+
+  .brand-text {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+  }
+
+  .brand-text h1 {
+    font-size: 17px;
+    letter-spacing: 0.12em;
+  }
+
+  .brand-text .subtitle {
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Practice moves up beside the title — it is the primary action on a phone. */
+  .practice-row {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: center;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .practice-stat,
+  .practice-btn kbd {
+    display: none;
+  }
+
+  .practice-btn {
+    min-height: 34px;
+    padding: 4px 14px;
+  }
+
+  /*
+   * Tabs scroll sideways instead of wrapping. Wrapping is what grew the header to 196px — a third
+   * of the screen — and it got worse the further into the term you went.
+   */
+  .exam-tabs,
+  .lab-tabs {
+    grid-row: auto;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .exam-tabs::-webkit-scrollbar,
+  .lab-tabs::-webkit-scrollbar,
+  .toggles::-webkit-scrollbar,
+  .readout::-webkit-scrollbar {
+    display: none;
+  }
+
+  .exam-tabs {
+    margin-top: 6px;
+    padding-top: 6px;
+  }
+
+  .exam-tab,
+  .tab {
+    flex: 0 0 auto;
+    min-height: 34px;
+    padding-left: 14px;
+    padding-right: 14px;
+    white-space: nowrap;
+  }
+
+  .tab {
+    font-size: 13px;
+  }
+
+  .tab::after {
+    left: 14px;
+    right: 14px;
+  }
+
+  /* Keyboard shortcuts and shift-drag mean nothing on a touch screen, and the bar overflowed. */
+  .hint-bar {
+    display: none;
+  }
+}
+
+/*
+ * Portrait phone. The panels stop floating and become a stack: header strips at the top, a sheet
+ * at the bottom, canvas in between.
+ */
+@media (max-width: 720px) {
+  /*
+   * iOS: 100% resolves against the tall viewport, so the bottom of the layout sits under the
+   * collapsed URL bar. dvh tracks the bar as it hides and shows.
+   */
+  html,
+  body,
+  #app {
+    height: 100dvh;
+  }
+
+  .brand {
+    top: 0;
+    left: 0;
+    right: 0;
+    min-width: 0;
+    max-width: none;
+    border-radius: 0;
+    border-width: 0 0 1px;
+    padding: calc(7px + env(safe-area-inset-top)) 10px 5px;
+  }
+
+  /* ---------- Lab chrome: strips at the top, a sheet at the bottom ---------- */
+
+  #app {
+    --hdr: calc(var(--below-brand, 150px) - 12px);
+  }
+
+  /* Toggles were pinned top-right, which is now the header. Put them under it, scrolling. */
+  .toggles {
+    top: var(--hdr);
+    left: 0;
+    right: 0;
+    max-width: none;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    justify-content: flex-start;
+    border-radius: 0;
+    border-width: 0 0 1px;
+    padding: 6px 10px;
+  }
+
+  .toggles .toggle,
+  .toggles .btn {
+    flex: 0 0 auto;
+    min-height: 34px;
+  }
+
+  /*
+   * The readout becomes a single scrolling row pinned to the bottom edge. A fixed row count makes
+   * its height predictable, which is what lets Setup sit above it without measuring anything.
+   */
+  .readout {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    transform: none;
+    border-radius: 0;
+    border-width: 1px 0 0;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(45%, max-content);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+  }
+
+  /*
+   * Everything below was sized for a 300px column beside the scene, not a strip under it. At
+   * desktop metrics the Setup sheet and the readout together took a third of the phone, which is
+   * the wrong way round: the scene is the thing you came to look at. Tighter type and padding
+   * throughout, and Hide in the switch above drops the sheet entirely when it is in the way.
+   */
+  .controls {
+    top: auto;
+    bottom: calc(54px + env(safe-area-inset-bottom));
+    left: 0;
+    right: 0;
+    width: auto;
+    max-height: 24dvh;
+    border-radius: 0;
+    border-width: 1px 0;
+    padding: 9px 12px;
+    gap: 8px;
+  }
+
+  .panel-header h2 {
+    font-size: 13px;
+  }
+
+  .panel-header .hint {
+    font-size: 10px;
+  }
+
+  .lab-block {
+    gap: 7px;
+  }
+
+  .field {
+    gap: 3px;
+  }
+
+  .field > span,
+  .mini-label {
+    font-size: 10px;
+  }
+
+  /*
+   * The box shrinks but the type stays at 16px: under that, Safari zooms the page when the
+   * control takes focus, which is the thing the practice sheet fixes and must not reintroduce.
+   */
+  .hud select {
+    padding: 5px 9px;
+  }
+
+  .slider-row {
+    gap: 8px;
+  }
+
+  .val {
+    font-size: 13px;
+    min-width: 54px;
+  }
+
+  .seg button {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  /*
+   * The primary action in a lab — Play the sweep, Pause, Tune f to f0. Keeps its type: it is the
+   * one control you reach for, and at 15px serif it reads as the thing to press. Given a proper
+   * touch target instead, which costs no screen space because the sheet scrolls under a fixed cap.
+   */
+  .controls .btn.accent {
+    min-height: 44px;
+  }
+
+  /*
+   * The readout is the answer, not a headline — and it is a fixed height, because the sheets above
+   * are positioned off it by a constant. Left to size itself it came out 50–52px depending on the
+   * lab's glyph metrics, so a 50px offset had nine labs overlapping it by a pixel or two. A device
+   * with different font metrics would make that seam wider, not narrower.
+   */
+  .readout {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-width: none;
+    margin-inline: 0;
+    height: calc(50px + env(safe-area-inset-bottom));
+    padding: 0 12px env(safe-area-inset-bottom);
+    align-content: center;
+  }
+
+  .readout .label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .readout .label {
+    font-size: 10px;
+  }
+
+  .readout .value {
+    font-size: 15px;
+  }
+
+  body.sheet-hidden .controls,
+  body.sheet-hidden .eq-panel {
+    display: none;
+  }
+
+  /*
+   * The equation panel is the law, the live substitution and the insight box — the part that
+   * explains where a number came from, which is most of why this app exists. It was being dropped
+   * entirely below 720px. It shares the bottom sheet with Setup instead, one visible at a time.
+   */
+  .sheet-switch {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 2px;
+    padding: 2px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .sheet-switch button {
+    min-height: 30px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-muted);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .sheet-switch button.active,
+  .sheet-switch button[aria-selected='true'] {
+    color: var(--text);
+    background: rgba(236, 230, 226, 0.09);
+  }
+
+  .eq-panel {
+    display: none;
+    top: auto;
+    bottom: calc(54px + env(safe-area-inset-bottom));
+    left: 0;
+    right: 0;
+    width: auto;
+    max-height: 42dvh;
+    border-radius: 0;
+    border-width: 1px 0;
+    padding: 12px;
+  }
+
+  body.has-legend .eq-panel {
+    max-height: 42dvh;
+  }
+
+  body.show-eq .eq-panel {
+    display: flex;
+  }
+
+  body.show-eq .controls {
+    display: none;
+  }
+
+  /* The legend duplicates the colour key that the equation panel explains properly. */
+  body.show-eq .legend {
+    display: none;
+  }
+
+  /*
+   * The legend is a colour key, not content — it should not cost a tenth of the screen. Stretching
+   * it full width was wrong twice over: it covered the scene horizontally as well as vertically.
+   * Back to roughly its desktop width, and tighter, since it sits over the canvas here.
+   * Clear of the toggle strip, which is a fixed 47px now that it scrolls instead of wrapping.
+   */
+  .legend {
+    left: 10px;
+    right: auto;
+    width: 172px;
+    bottom: auto;
+    top: calc(var(--hdr) + 56px);
+    padding: 5px 8px;
+  }
+
+  .legend-title {
+    font-size: 11.5px;
+    margin-bottom: 3px;
+  }
+
+  .legend-bar {
+    height: 5px;
+  }
+
+  .legend-row {
+    font-size: 10px;
+    margin-top: 2px;
+  }
+
+  /* ---------- Practice takes the screen ---------- */
+
+  body.practice-open .toggles,
+  body.practice-open .controls,
+  body.practice-open .readout,
+  body.practice-open .legend {
+    display: none;
+  }
+
+  /* Undo the desktop rule that slides the legend clear of the side panel. */
+  body.practice-open .legend {
+    left: 10px;
+  }
+
+  .problems {
+    top: var(--hdr);
+    left: 0;
+    right: 0;
+    width: auto;
+    height: calc(100dvh - var(--hdr));
+    max-height: none;
+    border-radius: 0;
+    border-width: 1px 0 0;
+    padding: 0 14px calc(20px + env(safe-area-inset-bottom));
+    background: var(--panel-solid);
+  }
+
+  body.problem-blind .problems {
+    max-height: none;
+  }
+
+  /* Close and back stay reachable while the problem scrolls under them. */
+  .pb-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    margin: 0 -14px;
+    padding: 12px 14px 10px;
+    background: var(--panel-solid);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pb-h {
+    font-size: 19px;
+  }
+
+  .pb-text {
+    font-size: 16px;
+  }
+
+  /*
+   * Safari zooms the page when a focused input is under 16px, which on a problem with three parts
+   * means the layout jumps every time you tab between answers.
+   */
+  .pb-input,
+  .pb-input.sym,
+  .hud input,
+  .hud select {
+    font-size: 16px;
+  }
+
+  .pb-input {
+    min-height: 44px;
+    padding: 10px 11px;
+  }
+
+  /* Touch targets: 44px is the smallest thing a thumb hits reliably. */
+  .pb-x,
+  .pb-back,
+  .pb-chip,
+  .pb-item,
+  .pb-row .btn,
+  .pb-actions .btn,
+  .problems .btn {
+    min-height: 44px;
+  }
+
+  .pb-x,
+  .pb-back {
+    display: inline-flex;
+    align-items: center;
+    min-width: 44px;
+  }
+
+  .linkish {
+    padding: 6px 2px;
+  }
+
+  .pb-chip {
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+  }
+
+  .pb-item {
+    padding: 10px 12px;
+  }
+
+  /*
+   * The palette earns its place here more than anywhere: an iOS keyboard cannot type λ or ε₀ at
+   * all without switching layouts, so on a phone these chips are the only way in. Sized like
+   * keyboard keys rather than the 44px used elsewhere — a dense row of 13 has to stay one thumb
+   * wide — with the spacing opened up to keep them distinct.
+   */
+  .pb-key {
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 17px;
+  }
+
+  .pb-key.op {
+    font-size: 15px;
+  }
+
+  .pb-pal {
+    gap: 6px;
+  }
+
+  .pb-preview .katex {
+    font-size: 1.25em;
+  }
+
+  .pb-parts {
+    gap: 16px;
+  }
+
+  .pb-label {
+    font-size: 13px;
+  }
+}
+
+/*
+ * Landscape phone: there is width for the desktop arrangement but no height, so only the
+ * readout needs moving — it was running underneath the Setup panel on the right.
+ */
+@media (max-width: 960px) and (max-height: 520px) and (orientation: landscape) {
+  .readout {
+    left: 16px;
+    right: auto;
+    transform: none;
+    width: min(520px, calc(100vw - 320px));
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
