@@ -108,7 +108,7 @@ const LEAVES = [
   },
   {
     id: 'chi2',
-    name: 'Chi-squared test for a variance (not in this course’s notes)',
+    name: 'Chi-squared test for a variance (not in this course)',
     short: 'χ² test for σ²',
     set: { target: 'var', samples: 'one' },
     dist: String.raw`$\chi^2$, $\nu = n - 1$`,

@@ -17,7 +17,7 @@ function twoWay(rows, cols, counts) {
 export default [
   // ----------------------------------------------------------------- counting
   problem({
-    ...C2, id: 'c2.multiplication-rule', title: 'The multiplication rule', kind: 'numeric', topics: ['counting'], src: 'Notes Ex 2.7',
+    ...C2, id: 'c2.multiplication-rule', title: 'The multiplication rule', kind: 'numeric', topics: ['counting'],
     vars: {
       ctx: choice(['home', 'home'], ['meal', 'meal'], ['plate', 'plate']),
       a: range(2, 6, 1),
@@ -34,7 +34,7 @@ export default [
     parts: [num('ways', ($) => $.ways, { tol: 0, abs: 0, label: 'Number of ways', traps: [[($) => ($.ctx === 'home' ? $.a + $.b : $.a + $.b + $.c), 'That adds the choices. When one choice is made AND then another, multiply.']] })],
     hints: [String.raw`Multiplication rule: if one operation can be done in $n_1$ ways and, for each of those, a second in $n_2$ ways, together they can be done in $n_1 n_2$ ways.`],
     steps: ($) => [$.ctx === 'home' ? String.raw`$${$.a} \times ${$.b} = ${$.ways}$` : String.raw`$${$.a} \times ${$.b} \times ${$.c} = ${$.ways}$`, 'A tree diagram shows the same count: one branch for each first choice, and from each of those one branch for each second choice.'],
-    cases: [kase('Notes Ex 2.7', { ctx: 'home', a: 4, b: 3, c: 2 }, { ways: 12 })],
+    cases: [],
   }),
 
   problem({
@@ -55,11 +55,11 @@ export default [
       $.ctx === 'books'
         ? [String.raw`$${$.n}! = ${$.ans}$`, `On the TI-84: MATH → PROB → 4:!`]
         : [String.raw`$$ {}_{${$.n}}P_{${$.r}} = \dfrac{${$.n}!}{(${$.n} - ${$.r})!} = ${Array.from({ length: $.r }, (_, i) => $.n - i).join(String.raw` \times `)} = ${$.ans}$$`, `On the TI-84: ${$.n}, MATH → PROB → 2:nPr, ${$.r}`],
-    cases: [kase('Walpole §2.3', { ctx: 'race', n: 8, r: 3 }, { ways: 336 }), kase('Notes Ex 2.8', { ctx: 'awards', n: 25, r: 3 }, { ways: 13800 })],
+    cases: [kase('Walpole §2.3', { ctx: 'race', n: 8, r: 3 }, { ways: 336 }),],
   }),
 
   problem({
-    ...C2, id: 'c2.combinations', title: 'Combinations: choosing a group', kind: 'numeric', level: 2, topics: ['counting', 'combinations', 'probability'], src: 'Walpole §2.3 (notes: 10C3 · 5C2)',
+    ...C2, id: 'c2.combinations', title: 'Combinations: choosing a group', kind: 'numeric', level: 2, topics: ['counting', 'combinations', 'probability'], src: 'Walpole §2.3',
     vars: { n1: range(5, 12, 1), r1: range(1, 4, 1), n2: range(3, 10, 1), r2: range(1, 4, 1) },
     derive: ($) => {
       const ways = choose($.n1, $.r1) * choose($.n2, $.r2);
@@ -79,12 +79,12 @@ export default [
       String.raw`$$P = \dfrac{${$.ways}}{${$.total}} = ${fx($.p, 4)}$$`,
       'On the TI-84: n, MATH → PROB → 3:nCr, r.',
     ],
-    cases: [kase('Walpole §2.3; the notes’ 10C3 × 5C2', { n1: 10, r1: 3, n2: 5, r2: 2 }, { ways: 1200, p: 0.3996 })],
+    cases: [kase('Walpole §2.3: 10C3 × 5C2', { n1: 10, r1: 3, n2: 5, r2: 2 }, { ways: 1200, p: 0.3996 })],
   }),
 
   // ----------------------------------------------------------------- probability rules
   problem({
-    ...C2, id: 'c2.at-least-one', title: 'At least one', kind: 'numeric', topics: ['complement', 'independence'], src: 'Notes Ex 2.6',
+    ...C2, id: 'c2.at-least-one', title: 'At least one', kind: 'numeric', topics: ['complement', 'independence'],
     vars: { what: choice(['coin', 'coin'], ['die', 'die']), n: range(2, 8, 1) },
     derive: ($) => {
       const q = $.what === 'coin' ? 0.5 : 5 / 6;
@@ -99,11 +99,11 @@ export default [
       $.what === 'coin' && $.n === 2 ? 'Listing the sample space agrees: S = {HH, HT, TH, TT}, and 3 of the 4 equally likely outcomes have a head.' : 'For small n you can check by listing the sample space.',
     ],
     twin: { part: 'p', draw: (r, $) => { for (let i = 0; i < $.n; i++) if (r.next() < 1 - $.q) return true; return false; } },
-    cases: [kase('Notes Ex 2.6', { what: 'coin', n: 2 }, { p: 0.75 })],
+    cases: [],
   }),
 
   problem({
-    ...C2, id: 'c2.additive-rule', title: 'The additive rule', kind: 'numeric', topics: ['additive-rule', 'complement'], src: 'Notes Ex 2.11',
+    ...C2, id: 'c2.additive-rule', title: 'The additive rule', kind: 'numeric', topics: ['additive-rule', 'complement'],
     vars: { pa: range(0.2, 0.9, 0.05), pb: range(0.2, 0.9, 0.05), pab: range(0.05, 0.6, 0.05) },
     derive: ($) => ({ union: $.pa + $.pb - $.pab, neither: 1 - ($.pa + $.pb - $.pab), one: $.pa + $.pb - 2 * $.pab }),
     valid: ($) => $.pab <= Math.min($.pa, $.pb) - 0.05 && $.pa + $.pb - $.pab <= 0.98,
@@ -119,11 +119,11 @@ export default [
       String.raw`$P(\text{neither}) = 1 - ${fx($.union, 2)} = ${fx($.neither, 2)}$`,
       String.raw`$P(\text{exactly one}) = ${fx($.union, 2)} - ${fx($.pab, 2)} = ${fx($.one, 2)}$`,
     ],
-    cases: [kase('Notes Ex 2.11', { pa: 0.8, pb: 0.6, pab: 0.5 }, { union: 0.9, neither: 0.1, one: 0.4 })],
+    cases: [],
   }),
 
   problem({
-    ...C2, id: 'c2.conditional-independence', title: 'Conditional probability and independence', kind: 'numeric', level: 2, topics: ['conditional', 'independence'], src: 'Notes Ex 2.15',
+    ...C2, id: 'c2.conditional-independence', title: 'Conditional probability and independence', kind: 'numeric', level: 2, topics: ['conditional', 'independence'],
     vars: { pr: range(0.1, 0.8, 0.01), ps: range(0.1, 0.8, 0.01), mode: choice(['dep', 'dependent'], ['indep', 'independent']), pboth: range(0.02, 0.5, 0.01) },
     derive: ($) => {
       const both = $.mode === 'indep' ? Math.round($.pr * $.ps * 10000) / 10000 : $.pboth;
@@ -140,11 +140,11 @@ export default [
       String.raw`$$P(R \mid S) = \dfrac{P(R \cap S)}{P(S)} = \dfrac{${tn($.both, 4)}}{${tn($.ps)}} = ${fx($.given, 4)}$$`,
       $.indep ? String.raw`$P(R \mid S) = ${fx($.given, 2)} = P(R)$: knowing S does not change the chance of R, so they are independent.` : String.raw`$P(R \mid S) = ${fx($.given, 2)} \ne P(R) = ${tn($.pr)}$: knowing S changes the chance of R, so they are not independent.`,
     ],
-    cases: [kase('Notes Ex 2.15', { pr: 0.33, ps: 0.25, mode: 'dep', pboth: 0.11 }, { given: 0.44, indep: 0 })],
+    cases: [],
   }),
 
   problem({
-    ...C2, id: 'c2.product-rule-independent', title: 'The product rule for independent events', kind: 'numeric', level: 2, topics: ['product-rule', 'independence', 'complement'], src: 'Notes Ex 2.16',
+    ...C2, id: 'c2.product-rule-independent', title: 'The product rule for independent events', kind: 'numeric', level: 2, topics: ['product-rule', 'independence', 'complement'],
     vars: { p1: range(0.1, 0.9, 0.05), p2: range(0.1, 0.9, 0.05), p3: range(0.1, 0.9, 0.05) },
     derive: ($) => {
       const q = [1 - $.p1, 1 - $.p2, 1 - $.p3];
@@ -165,7 +165,7 @@ export default [
       String.raw`$$P(\text{exactly one}) = (${tn($.p1)})(${tn($.q[1])})(${tn($.q[2])}) + (${tn($.q[0])})(${tn($.p2)})(${tn($.q[2])}) + (${tn($.q[0])})(${tn($.q[1])})(${tn($.p3)}) = ${fx($.one, 4)}$$`,
     ],
     twin: { part: 'one', draw: (r, $) => (r.next() < $.p1) + (r.next() < $.p2) + (r.next() < $.p3) === 1 },
-    cases: [kase('Notes Ex 2.16', { p1: 0.5, p2: 2 / 3, p3: 0.75 }, { none: 0.0417, any: 0.9583, one: 0.25 })],
+    cases: [],
   }),
 
   problem({
@@ -195,7 +195,7 @@ export default [
   }),
 
   problem({
-    ...C2, id: 'c2.without-replacement', title: 'Drawing without replacement', kind: 'numeric', topics: ['product-rule', 'conditional'], src: 'Notes §2.7–2.8',
+    ...C2, id: 'c2.without-replacement', title: 'Drawing without replacement', kind: 'numeric', topics: ['product-rule', 'conditional'],
     vars: { r: range(2, 10, 1), b: range(2, 10, 1) },
     derive: ($) => {
       const N = $.r + $.b;

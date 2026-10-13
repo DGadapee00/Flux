@@ -76,7 +76,6 @@ export default defineLab({
     { id: 'phat-small', label: 'p̂ with n = 20, p = 0.1 (np(1−p) < 10)', state: { mode: 'phat', n: 20, pp: 0.1, reps: 5000 } },
     { id: 'phat-ok', label: 'p̂ with n = 150, p = 0.3', state: { mode: 'phat', n: 150, pp: 0.3, reps: 5000 } },
     { id: 'approx', label: 'Bin(100, 0.4): P(35 ≤ X ≤ 45)', state: { mode: 'binom', n: 100, pp: 0.4, a: 35, b: 45, cc: true } },
-    { id: 'morals', label: 'Notes Ex 7.8: p̂ with n = 60, p = 0.76', state: { mode: 'phat', n: 60, pp: 0.76, reps: 5000 } },
     { id: 'approx-small', label: 'Bin(15, 0.4): P(X ≤ 5), the correction matters', state: { mode: 'binom', n: 15, pp: 0.4, a: 0, b: 5, cc: true } },
   ],
 
@@ -221,7 +220,7 @@ export default defineLab({
         String.raw`$X \sim \text{Bin}(${r.n}, ${r.p})$ has $\mu = np = ${fmt(r.mu, 3)}$ and $\sigma = \sqrt{np(1-p)} = ${fmt(r.sd, 4)}$. The bars are exact; the teal curve is $N(\mu, \sigma^2)$.`,
         String.raw`Each bar stands on an interval of width 1: the bar for $x$ covers $x - 0.5$ to $x + 0.5$. So the area that matches $P(${r.a} \le X \le ${r.b})$ runs from $${r.a} - 0.5$ to $${r.b} + 0.5$. Without the correction you cut half of each end bar off. Switch it off to see the difference: here it is ${Math.abs(r.approxRaw - r.exact).toFixed(4)} without, ${Math.abs(r.approxCC - r.exact).toFixed(4)} with.`,
       ];
-      out.push(r.npq >= 10 ? String.raw`$np(1-p) = ${fmt(r.npq, 2)} \ge 10$, so the notes allow the approximation.` : String.raw`$np(1-p) = ${fmt(r.npq, 2)} < 10$: the notes' condition fails, and the bars are visibly lopsided against the curve. Use the binomial itself.`);
+      out.push(r.npq >= 10 ? String.raw`$np(1-p) = ${fmt(r.npq, 2)} \ge 10$, so the course allows the approximation.` : String.raw`$np(1-p) = ${fmt(r.npq, 2)} < 10$: the course's condition fails, and the bars are visibly lopsided against the curve. Use the binomial itself.`);
       return out;
     }
     if (r.mode === 'phat') {
@@ -234,7 +233,7 @@ export default defineLab({
     }
     return [
       String.raw`Top: the population, with $\mu = ${fmt(r.mu, 2)}$, $\sigma = ${fmt(r.sigma, 2)}$; the gold dots are the last sample. Bottom: the means of ${r.reps.toLocaleString('en-US')} samples of size $n = ${r.n}$, against $N(\mu, \sigma^2/n)$ in gold.`,
-      String.raw`The means center on $\mu$ and spread as $\sigma/\sqrt{n} = ${fmt(r.se, 2)}$. Their shape turns normal as $n$ grows even though the population keeps its shape: that is the central limit theorem. The notes use $n \ge 30$ as the rule of thumb; a normal population needs no rule at all.`,
+      String.raw`The means center on $\mu$ and spread as $\sigma/\sqrt{n} = ${fmt(r.se, 2)}$. Their shape turns normal as $n$ grows even though the population keeps its shape: that is the central limit theorem. The course uses $n \ge 30$ as the rule of thumb; a normal population needs no rule at all.`,
     ];
   },
 

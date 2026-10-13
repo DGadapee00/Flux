@@ -12,11 +12,9 @@ import ch7 from './bank/ch7.js';
 import ch8 from './bank/ch8.js';
 import ch9 from './bank/ch9.js';
 import ch10 from './bank/ch10.js';
-import review from './bank/review.js';
 import { UNITS, CHAPTER_ORDER, CHAPTER_TITLES } from '../data/catalog.js';
 
-// The review-sheet problems join their chapters' lists after the chapter's own (bank/review.js).
-export const PROBLEMS = [...ch1, ...ch2, ...ch3, ...ch4, ...ch5, ...ch6, ...ch7, ...ch8, ...ch9, ...ch10, ...review];
+export const PROBLEMS = [...ch1, ...ch2, ...ch3, ...ch4, ...ch5, ...ch6, ...ch7, ...ch8, ...ch9, ...ch10];
 
 const byIdMap = new Map(PROBLEMS.map((p) => [p.id, p]));
 

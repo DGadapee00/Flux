@@ -27,20 +27,6 @@ const SETS = {
     box: [0, 120],
     width: 5,
   },
-  claims: {
-    label: 'Collision claims, dollars (Notes Ex 1.13)',
-    unit: 'dollars',
-    data: [180, 189, 370, 618, 735, 802, 1185, 1414, 1657, 1953, 2332, 2336, 3461, 4668, 6751, 9908, 10034, 21147],
-    box: [0, 26000],
-    width: 2500,
-  },
-  calls: {
-    label: 'Phone call lengths (Notes Ex 1.7)',
-    unit: 'minutes',
-    data: [1, 1, 2, 3, 3, 3, 4, 4, 5, 6, 7, 48],
-    box: [0, 60],
-    width: 5,
-  },
   bolts: {
     label: 'Bolt lengths (one bad reading)',
     unit: 'mm',

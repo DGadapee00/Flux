@@ -16,7 +16,6 @@ test('a prefixed hash is the same route as the old one, and the old one is legac
     assert.equal(route.seed, 3);
     assert.equal(route.bare, false);
     assert.equal(route.labId, null);
-    assert.equal(route.chapter, null);
   }
   assert.equal(hashFor(prefixed), `#/${COURSE}/mid${query}`);
 });
@@ -35,12 +34,11 @@ test('a lab hash keeps its unit, mode, and lab, with the prefix stripped once', 
   assert.equal(hashFor(prefixed), `#/${COURSE}/final/explore/clt`);
 });
 
-test('a notes chapter and a lab scenario survive the prefix', () => {
+test('an old notes link opens the practice list, and a lab scenario survives the prefix', () => {
   const notes = parseHash(`#/${COURSE}/mid/notes/5`);
-  assert.equal(notes.legacy, false);
-  assert.equal(notes.mode, 'notes');
-  assert.equal(notes.chapter, '5');
-  assert.equal(hashFor(notes), `#/${COURSE}/mid/notes/5`);
+  assert.equal(notes.legacy, true, 'notes mode is retired, so the address is rewritten');
+  assert.equal(notes.mode, 'practice');
+  assert.equal(hashFor(notes), `#/${COURSE}/mid`);
 
   const lab = parseHash('#/final/explore/dist?sc=heights');
   assert.equal(lab.legacy, true);

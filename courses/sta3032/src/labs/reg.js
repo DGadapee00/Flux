@@ -21,12 +21,6 @@ const PRESETS = {
   leverage: { label: 'A point far out in x', base: BASE, extra: [20, 6], box: [0, 22, 0, 20] },
   curved: { label: 'A curve', base: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => [x, Number((1 + 0.2 * x * x).toFixed(1))]), extra: null, box: [0, 12, 0, 24] },
   none: { label: 'No relationship', base: [[1, 6.2], [2, 3.1], [3, 8.4], [4, 4.0], [5, 9.1], [6, 2.7], [7, 6.9], [8, 4.4], [9, 7.8], [10, 5.1]], extra: null, box: [0, 12, 0, 14] },
-  noise: {
-    label: 'Noise and blood pressure (Notes Ex 10.4)',
-    base: [[1, 70], [0, 63], [1, 65], [2, 70], [5, 70], [1, 70], [4, 80], [6, 75], [2, 80], [3, 80]],
-    extra: null,
-    box: [0, 7, 55, 90],
-  },
 };
 
 const presetPoints = (P) => (P.extra ? [...P.base, P.extra] : P.base).map(([x, y]) => [x, y]);

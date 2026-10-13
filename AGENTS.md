@@ -64,7 +64,7 @@ Storage keys are `flux.<course>.<key>.v<n>`. PHY keeps `flux.problems.v1` and `f
 
 `npm test` at the repo root runs every workspace test, including the dependency check. A module with a failing check does not ship. `npm run build` must succeed.
 
-Mobile first. 380px portrait is the design width. No horizontal scroll. Phone inputs are at least 16px, because a smaller input makes Safari zoom the page. Smoke covers 380px and 1280px. STA's overflow check opens every revealed solution and every notes chapter at 380px and fails when an equation is wider than the column. Displayed equations wrap (`fitMath`). A single root or fraction that still cannot wrap is split into steps by hand.
+Mobile first. 380px portrait is the design width. No horizontal scroll. Phone inputs are at least 16px, because a smaller input makes Safari zoom the page. Smoke covers 380px and 1280px. STA's overflow check opens every revealed solution at 380px and fails when an equation is wider than the column. Displayed equations wrap (`fitMath`). A single root or fraction that still cannot wrap is split into steps by hand.
 
 Every number on screen is computed, then checked. Each subject library has a selftest. A worked case reproduces a printed answer by a second method, so the check is against a different calculation.
 
@@ -73,7 +73,7 @@ Checks each course already runs, which the port keeps:
 - PHY 2049: tex-check, physics selftest, problems-check, notes-check, derive-check. `scripts/smoke.mjs` and `scripts/gallery.mjs` need the dev server on 5174.
 - MAC 2313: tex-check, math selftest, problems-check. Analytic partials against differences, Fubini both orders, Jacobians included.
 - Statics: tex-check, statics selftest, problems-check. The residual of ΣF = 0 and ΣM = 0, joints against sections, composite parts against integration.
-- STA 3032: stats-check, tex-check, problems-check, labs-check, notes-check. `npm run overflow` and smoke on 5177. Smoke fails when a page is wider than a 380px phone.
+- STA 3032: stats-check, tex-check, problems-check, labs-check, route test. `npm run overflow` and smoke on 5177. Smoke fails when a page is wider than a 380px phone.
 
 TeX inside a JS string is a `String.raw` template. tex-check fails when a backslash is eaten.
 
@@ -105,13 +105,13 @@ The class works on a TI-84. Quartiles are the median of each half, and the media
 
 Printed tables are data. A worked solution quotes the printed value. Grading accepts the exact value and the table value (`alt`). p-values are the calculator's exact values (tcdf, normalcdf, and the rest). Welch's df is the calculator's fractional value. The table's rounded-down df is also accepted. Normal approximation for a binomial, a sample proportion, or a proportion test requires np(1 − p) ≥ 10, and counts use a continuity correction. A normal probability plot puts z_i = Φ⁻¹((i − 0.5)/n) on the x-axis and the sorted data on the y-axis. Table A.6 prints only α = 0.05 and 0.01, so an F interval read from that table is 90% or 98%.
 
-A worked case from the notes may break a condition that generated versions must meet. That condition goes in `sampleValid`. `valid` stays the rule for generated versions.
+A worked case may break a condition that generated versions must meet. That condition goes in `sampleValid`. `valid` stays the rule for generated versions.
 
-Cite a source by section (Walpole §5.2) or by the notes' example number (Notes Ex 1.13). Textbook example numbers are never invented. The review sheet is cited by question (Review 1, Q4). A review-sheet problem asks the sheet's question, all of its parts on one setup, with the sheet's numbers as a worked case. A named set lists them in the sheet's order.
+Cite a source by section (Walpole §5.2). Textbook example numbers are never invented. Nothing from the STA 3032 instructor's notes or review sheets goes in (rewritten notes, worked cases, lab presets) until they have been asked and said yes: see `courses/sta3032/PROVENANCE.md`.
 
 A 2D lab earns its place when moving a parameter corrects an intuition. Each has two to four predictions. `outcome(before, after)` is derived from the lab's own results, and labs-check requires it to equal `expect`. Numbers quoted in a prediction's `why` are recomputed when a preset changes.
 
-Notes: one file per chapter, a lede, sections grouped by part, prose before the formula, why boxes, bridge paragraphs, a formula sheet. Every worked example that states a number carries `checks`, and notes-check recomputes them. A slip in the source keeps the example and adds a `fix`, plus a line in ERRATA. Textbook material beyond the class notes is marked with its Walpole section. Its examples are lettered (2.A, 2.B) and never link a practice case.
+STA 3032 has no Notes mode (removed 13 Oct 2026).
 
 Prose uses `$…$` and `$$…$$`. Money is written "dollars", because a bare `$` starts math.
 

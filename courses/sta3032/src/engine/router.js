@@ -7,17 +7,19 @@ export const COURSE = 'sta3032';
  * Routes, all in the hash so every screen is a link (FLUX's scheme, with modes for labs):
  *
  *   #/sta3032/mid                         practice list for the midterm
- *   #/sta3032/mid?p=c5.binom-table&s=3    that problem, version 3 (s=0 is the notes' or book's numbers)
+ *   #/sta3032/mid?p=c5.binom-table&s=3    that problem, version 3 (s=0 is the book's numbers, when it has a worked case)
  *   #/sta3032/mid/exam                    the practice exam
- *   #/sta3032/mid/notes · /explore · /tables
+ *   #/sta3032/mid/explore · /tables
  *   #/sta3032/final/explore/clt           a lab
- *   #/sta3032/final/explore/dist?sc=heights  a lab set up on one of its scenarios (from a notes example)
- *   #/sta3032/mid/notes/5                 a chapter's notes
+ *   #/sta3032/final/explore/dist?sc=heights  a lab set up on one of its scenarios
+ *
+ * Notes mode was removed on 13 Oct 2026 (PROVENANCE.md). An old `/notes` link opens the practice
+ * list, and the address is rewritten to it.
  *
  * With no link, the app opens the practice list for the exam coming up next.
  * An old hash with no course prefix is the same route, and `legacy` is true.
  */
-export const MODES = ['practice', 'notes', 'explore', 'tables', 'exam'];
+export const MODES = ['practice', 'explore', 'tables', 'exam'];
 
 /**
  * @param {string} [hash] Pass a hash to parse it without touching history. Omit it to read
@@ -32,9 +34,10 @@ export function parseHash(hash) {
   const query = qAt === -1 ? '' : full.slice(qAt + 1);
   const params = new URLSearchParams(query);
   const parts = path.split('/').filter(Boolean);
-  const legacy = parts.length > 0 && parts[0] !== COURSE;
+  let legacy = parts.length > 0 && parts[0] !== COURSE;
   if (parts[0] === COURSE) parts.shift();
   const [a, b, c] = parts;
+  if (b === 'notes') legacy = true; // retired mode: rewrite the address to the practice list
   const unit = unitById(a) || nextUnit();
   const mode = MODES.includes(b) ? b : 'practice';
   const s = params.get('s');
@@ -46,7 +49,6 @@ export function parseHash(hash) {
     set: params.get('set') || null,
     labId: mode === 'explore' && c ? c : null,
     scenario: mode === 'explore' && c ? params.get('sc') || null : null,
-    chapter: mode === 'notes' && c ? c : null,
     bare: parts.length === 0 && query === '',
     legacy,
   };
@@ -57,14 +59,14 @@ export function parseHash(hash) {
   return route;
 }
 
-export function hashFor({ unitId, mode = 'practice', problemId = null, seed = null, set = null, labId = null, chapter = null, scenario = null }) {
+export function hashFor({ unitId, mode = 'practice', problemId = null, seed = null, set = null, labId = null, scenario = null }) {
   const q = new URLSearchParams();
   if (problemId) q.set('p', problemId);
   if (problemId && seed != null) q.set('s', String(seed));
   if (set) q.set('set', set);
   if (mode === 'explore' && labId && scenario) q.set('sc', scenario);
   const qs = q.toString();
-  const lab = mode === 'explore' && labId ? `/${labId}` : mode === 'notes' && chapter ? `/${chapter}` : '';
+  const lab = mode === 'explore' && labId ? `/${labId}` : '';
   return `#/${COURSE}/${unitId}${mode === 'practice' ? '' : `/${mode}`}${lab}${qs ? `?${qs}` : ''}`;
 }
 

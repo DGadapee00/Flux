@@ -17,7 +17,7 @@ function otherQuartiles(xs, p) {
   return { interp, inclusive: half ? median(half) : null };
 }
 export const quartileTraps = (p) => [
-  [($) => otherQuartiles($.xs, p).interp, 'That is a quartile by interpolating between values (the spreadsheet rule). The notes use the TI-84 rule: the median of the lower (or upper) half.'],
+  [($) => otherQuartiles($.xs, p).interp, 'That is a quartile by interpolating between values (the spreadsheet rule). The course uses the TI-84 rule: the median of the lower (or upper) half.'],
   [($) => otherQuartiles($.xs, p).inclusive ?? NaN, 'That half included the median. With an odd n, the TI-84 rule leaves the median out of both halves.'],
 ];
 
@@ -79,7 +79,7 @@ const BATTERIES = [2.2, 4.1, 3.5, 4.5, 3.2, 3.7, 3.0, 2.6, 3.4, 1.6, 3.1, 3.3, 3
 export default [
   // ----------------------------------------------------------- types of data, parameters
   problem({
-    ...C1, id: 'c1.data-type', title: 'Types of data', kind: 'conceptual', topics: ['data-types'], src: 'Notes §1.3',
+    ...C1, id: 'c1.data-type', title: 'Types of data', kind: 'conceptual', topics: ['data-types'],
     vars: {
       item: choice(
         ['cars', 'the number of cars in a parking lot'],
@@ -108,16 +108,16 @@ export default [
     hints: ['Would an average of this make sense? If not, it is a label, even when it is written with digits.', 'Discrete data are counts (whole numbers only). Continuous data are measurements that can take any value in a range.'],
     steps: ($, T) => [
       {
-        q: `${T.item[0].toUpperCase() + T.item.slice(1)} is a label. Its digits (if any) name something; they are not an amount, so it is qualitative. The notes give zip codes and Social Security numbers as examples.`,
+        q: `${T.item[0].toUpperCase() + T.item.slice(1)} is a label. Its digits (if any) name something; they are not an amount, so it is qualitative. The course gives zip codes and Social Security numbers as examples.`,
         d: `${T.item[0].toUpperCase() + T.item.slice(1)} is a count, so it takes whole-number values only: quantitative and discrete.`,
         c: `${T.item[0].toUpperCase() + T.item.slice(1)} is a measurement that can take any value in a range: quantitative and continuous.`,
       }[$.kind],
     ],
-    cases: [kase('Notes §1.3', { item: 'zip' }, { type: 'q' })],
+    cases: [],
   }),
 
   problem({
-    ...C1, id: 'c1.parameter-statistic', title: 'Parameter or statistic?', kind: 'conceptual', topics: ['parameter-statistic'], src: 'Notes Ex 1.2–1.3',
+    ...C1, id: 'c1.parameter-statistic', title: 'Parameter or statistic?', kind: 'conceptual', topics: ['parameter-statistic'],
     vars: {
       s: choice(
         ['p1', '48.2% of all students on your campus own a car.'],
@@ -140,12 +140,12 @@ export default [
     ],
     hints: ['A parameter summarizes a population. A statistic summarizes a sample.', 'Does the number come from every member of the group, or from some of them?'],
     steps: ($) => [$.kind === 'p' ? 'The number summarizes every member of the group (the population), so it is a parameter.' : 'The number summarizes only the members that were sampled, so it is a statistic. It estimates the population’s parameter.'],
-    cases: [kase('Notes Ex 1.2', { s: 'p1' }, { which: 'p' }), kase('Notes Ex 1.3', { s: 's1' }, { which: 's' })],
+    cases: [],
   }),
 
   // ----------------------------------------------------------- center
   problem({
-    ...C1, id: 'c1.mean-median', title: 'Mean and median', kind: 'numeric', topics: ['mean', 'median'], src: 'Notes Ex 1.6',
+    ...C1, id: 'c1.mean-median', title: 'Mean and median', kind: 'numeric', topics: ['mean', 'median'],
     vars: { ctx: CTX, n: range(7, 12, 1), xs: data((r, v) => sampleOf(r, v.ctx, v.n)) },
     derive: ($) => ({ xbar: mean($.xs), med: median($.xs), sum: $.xs.reduce((a, b) => a + b, 0), s: sorted($.xs) }),
     text: (T, $) => `A sample of ${$.n} ${ctxOf($.ctx).label}: ${list($.xs, dpOf($))}. Find the sample mean and the sample median.`,
@@ -163,11 +163,11 @@ export default [
         'On the TI-84: STAT → 1:Edit, enter the data in L1, then STAT → CALC → 1:1-Var Stats. It lists x̄ and, further down, Med.',
       ];
     },
-    cases: [kase('Notes Ex 1.6 (no nitrogen)', { ctx: 'weight', n: 10, xs: NO_NITROGEN }, { xbar: 0.399, med: 0.4 })],
+    cases: [],
   }),
 
   problem({
-    ...C1, id: 'c1.which-center', title: 'Mean or median?', kind: 'conceptual', topics: ['mean', 'median', 'skew', 'resistant'], src: 'Notes Ex 1.7',
+    ...C1, id: 'c1.which-center', title: 'Mean or median?', kind: 'conceptual', topics: ['mean', 'median', 'skew', 'resistant'],
     vars: {
       mean_: range(4, 60, 0.25),
       kind: choice(['right', 'skewed right'], ['left', 'skewed left'], ['sym', 'symmetric']),
@@ -189,7 +189,7 @@ export default [
         ['sym', 'Roughly symmetric', 'In a symmetric data set the mean and the median are about equal. These are far apart.'],
       ], ($) => $.shape, { label: 'The shape of the data is most likely…' }),
       mc('center', [
-        ['median', 'The median', 'For symmetric data the notes use the mean: it uses every value, and no tail drags it.'],
+        ['median', 'The median', 'For symmetric data the course uses the mean: it uses every value, and no tail drags it.'],
         ['mean', 'The mean', 'The mean is not resistant: the values in the long tail drag it away from the typical value.'],
       ], ($) => $.center, { label: 'Which better describes a typical call?' }),
     ],
@@ -202,11 +202,11 @@ export default [
           : String.raw`The mean ($${fx($.mean_, 2)}$) is well below the median ($${fx($.med, 2)}$): a few very small values pull the mean down. That is a left skew.`,
       $.shape === 'sym' ? 'For symmetric data, use the mean: it uses every value, and nothing pulls it off center.' : 'For skewed data, use the median to describe the center. It is resistant; the mean is not.',
     ],
-    cases: [kase('Notes Ex 1.7', { mean_: 7.25, kind: 'right', f: 1 - 3.5 / 7.25, tiny: 0 }, { shape: 'right', center: 'median' })],
+    cases: [],
   }),
 
   problem({
-    ...C1, id: 'c1.mode', title: 'The mode', kind: 'conceptual', topics: ['mode'], src: 'Notes Ex 1.8–1.9',
+    ...C1, id: 'c1.mode', title: 'The mode', kind: 'conceptual', topics: ['mode'],
     vars: {
       style: choice(['one', 'one'], ['none', 'none'], ['two', 'two']),
       xs: data((r, v) => {
@@ -244,12 +244,12 @@ export default [
           ? `${$.m[0]} occurs ${$.xs.filter((x) => x === $.m[0]).length} times, more than any other value, so the mode is ${$.m[0]}.`
           : `${$.m.join(' and ')} each occur ${$.xs.filter((x) => x === $.m[0]).length} times, more than any other value: the data are bimodal.`,
     ],
-    cases: [kase('Notes Ex 1.8 (O-ring failures)', { style: 'one', xs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 3] }, { mode: '0' })],
+    cases: [],
   }),
 
   // ----------------------------------------------------------- spread
   problem({
-    ...C1, id: 'c1.range-sd', title: 'Range and standard deviation', kind: 'numeric', topics: ['range', 'standard-deviation'], src: 'Notes Ex 1.11',
+    ...C1, id: 'c1.range-sd', title: 'Range and standard deviation', kind: 'numeric', topics: ['range', 'standard-deviation'],
     vars: { ctx: CTX, n: range(6, 10, 1), xs: data((r, v) => sampleOf(r, v.ctx, v.n)) },
     derive: ($) => {
       const xbar = mean($.xs);
@@ -273,11 +273,11 @@ export default [
         'On the TI-84, 1-Var Stats gives s as Sx. (σx is the population version, dividing by n.)',
       ];
     },
-    cases: [kase('Notes Ex 1.11 (nitrogen)', { ctx: 'weight', n: 10, xs: NITROGEN }, { R: 0.6, s: 0.187 })],
+    cases: [],
   }),
 
   problem({
-    ...C1, id: 'c1.resistant', title: 'Resistant measures', kind: 'conceptual', topics: ['resistant'], src: 'Notes §1.5–1.7',
+    ...C1, id: 'c1.resistant', title: 'Resistant measures', kind: 'conceptual', topics: ['resistant'],
     vars: {
       m: choice(['mean', 'mean'], ['median', 'median'], ['range', 'range'], ['sd', 'standard deviation'], ['iqr', 'interquartile range (IQR)'], ['var', 'variance']),
     },
@@ -291,12 +291,12 @@ export default [
         : `False. The ${{ mean: 'mean', range: 'range', sd: 'standard deviation', var: 'variance' }[$.m]} uses the size of ${$.m === 'range' ? 'the largest and smallest values' : 'every value'}, so one extreme value can change it a lot.`,
       'Resistant: median and IQR. Not resistant: mean, range, standard deviation and variance.',
     ],
-    cases: [kase('Notes §1.7', { m: 'iqr' }, { tf: 1 })],
+    cases: [],
   }),
 
   // ----------------------------------------------------------- quartiles and box plots
   problem({
-    ...C1, id: 'c1.quartiles', title: 'Quartiles and the IQR', kind: 'numeric', topics: ['quartiles', 'iqr'], src: 'Notes Ex 1.13',
+    ...C1, id: 'c1.quartiles', title: 'Quartiles and the IQR', kind: 'numeric', topics: ['quartiles', 'iqr'],
     vars: {
       n: range(9, 16, 1),
       xs: data((r, v) => Array.from({ length: v.n }, () => 10 + Math.floor(r() * 90))),
@@ -323,13 +323,13 @@ export default [
         String.raw`$\text{IQR} = Q_3 - Q_1 = ${f.q3} - ${f.q1} = ${tn(f.q3 - f.q1, 8)}$`,
       ];
     },
-    cases: [kase('Notes Ex 1.13 (collision claims)', { n: 18, xs: CLAIMS }, { q1: 735, q3: 4668, iqr: 3933 })],
+    cases: [],
   }),
 
   problem({
-    ...C1, id: 'c1.outliers', title: 'Fences and outliers', kind: 'numeric', level: 2, topics: ['outliers', 'box-plot', 'iqr'], src: 'Notes Ex 1.14',
+    ...C1, id: 'c1.outliers', title: 'Fences and outliers', kind: 'numeric', level: 2, topics: ['outliers', 'box-plot', 'iqr'],
     vars: {
-      // The notes' own case is collision claims in dollars; generated versions are waiting times.
+      // Two contexts: drive-through waiting times and insurance collision claims.
       ctx: choice(['wait', 'drive-through waiting times'], ['claims', 'collision claims']),
       n: range(10, 14, 1),
       far: choice([1, 'high'], [-1, 'low'], [0, 'none']),
@@ -362,12 +362,12 @@ export default [
         b.outliers.length ? `Outlier${b.outliers.length > 1 ? 's' : ''}: ${b.outliers.join(', ')}. In a box plot the whiskers stop at ${b.whiskerLow} and ${b.whiskerHigh}, and each outlier is marked with *.` : `Every value lies between the fences, so there are no outliers. The whiskers run to ${b.whiskerLow} and ${b.whiskerHigh}.`,
       ];
     },
-    cases: [kase('Notes Ex 1.14 (collision claims)', { ctx: 'claims', n: 18, far: 1, xs: CLAIMS }, { lf: -5164.5, uf: 10567.5, k: 1 })],
+    cases: [],
   }),
 
   // ----------------------------------------------------------- frequency distributions
   problem({
-    ...C1, id: 'c1.frequency', title: 'Frequency and relative frequency', kind: 'numeric', topics: ['frequency-distribution', 'histogram'], src: 'Notes Ex 1.5',
+    ...C1, id: 'c1.frequency', title: 'Frequency and relative frequency', kind: 'numeric', topics: ['frequency-distribution', 'histogram'],
     vars: {
       k: range(1, 5, 1),
       xs: data((r) => {
@@ -392,6 +392,6 @@ export default [
       String.raw`Relative frequency $= \dfrac{${$.row.f}}{${$.n}} = ${tn($.row.rel, 4)}$`,
       String.raw`Midpoint $= \dfrac{${fx($.row.lo, 1)} + ${fx($.row.hi, 1)}}{2} = ${fx($.row.mid, 2)}$`,
     ],
-    cases: [kase('Notes Ex 1.5 (car batteries)', { k: 3, xs: BATTERIES }, { f: 15, rel: 0.375, mid: 3.2 })],
+    cases: [],
   }),
 ];

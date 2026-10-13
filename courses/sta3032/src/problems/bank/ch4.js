@@ -44,11 +44,11 @@ export default [
       String.raw`Same answer from the definition: $\sigma^2 = \sum (x - \mu)^2 f(x)$.`,
       'On the TI-84: x values in L1, probabilities in L2, then 1-Var Stats with List L1 and FreqList L2. It shows μ as x̄ and σ as σx.',
     ],
-    cases: [kase('Notes Ex 4.1, 4.6', { ctx: 'net', k: 5, shift: 0, ps: [0.35, 0.25, 0.2, 0.1, 0.05, 0.05] }, { mu: 1.4, v: 2.04, sd: 1.428 })],
+    cases: [],
   }),
 
   problem({
-    ...C4, id: 'c4.expected-g', title: 'Expected value of g(X)', kind: 'numeric', topics: ['expectation', 'linear-combination'], src: 'Notes Ex 4.4',
+    ...C4, id: 'c4.expected-g', title: 'Expected value of g(X)', kind: 'numeric', topics: ['expectation', 'linear-combination'],
     vars: { k: range(3, 5, 1), a: range(1, 5, 1), b: range(0, 5, 1), ps: data((r, v) => pmfOf(r, v.k)) },
     derive: ($) => {
       const xs = $.ps.map((_, i) => i);
@@ -64,11 +64,11 @@ export default [
       String.raw`Shortcut: $E(X) = ${tn($.mu, 6)}$, so $E(${$.a}X + ${$.b}) = ${$.a}(${tn($.mu, 6)}) + ${$.b} = ${tn($.eg, 6)}$ thousand dollars.`,
       'On the TI-84: put g(x) in L3 (L3 = 2*L1 + 1, say) and run 1-Var Stats with List L3, FreqList L2.',
     ],
-    cases: [kase('Notes Ex 4.4', { k: 5, a: 2, b: 1, ps: [0.35, 0.25, 0.2, 0.1, 0.05, 0.05] }, { eg: 3.8 })],
+    cases: [],
   }),
 
   problem({
-    ...C4, id: 'c4.commission', title: 'Expected commission from independent deals', kind: 'numeric', level: 2, topics: ['expectation', 'independence'], src: 'Notes Ex 4.2',
+    ...C4, id: 'c4.commission', title: 'Expected commission from independent deals', kind: 'numeric', level: 2, topics: ['expectation', 'independence'],
     vars: { p1: range(0.3, 0.9, 0.05), c1: range(500, 3000, 250), p2: range(0.2, 0.8, 0.05), c2: range(500, 3000, 250) },
     derive: ($) => {
       const q1 = 1 - $.p1;
@@ -87,7 +87,7 @@ export default [
       String.raw`$$E(X) = 0(${fx($.p0, 4)}) + ${$.c1}(${fx($.pa, 4)}) + ${$.c2}(${fx($.pb, 4)}) + ${$.c1 + $.c2}(${fx($.pab, 4)}) = ${tn($.e, 6)}$$`,
       String.raw`Check: the same as $${$.c1}(${fx($.p1, 2)}) + ${$.c2}(${fx($.p2, 2)})$, the expected commission from each appointment added.`,
     ],
-    cases: [kase('Notes Ex 4.2', { p1: 0.7, c1: 1000, p2: 0.4, c2: 1500 }, { p0: 0.18, e: 1300 })],
+    cases: [],
   }),
 
   problem({
@@ -126,8 +126,6 @@ export default [
     ],
     twin: { part: 'v', n: 60000, draw: (r, $) => { const z = $.a * r.normal($.mx, Math.sqrt($.vx)) + $.b * r.normal($.my, Math.sqrt($.vy)) + $.c; return (z - $.m) ** 2; } },
     cases: [
-      kase('Notes Ex 4.8', { mx: -1, vx: 2, my: 2, vy: 3, a: 3, b: -2, c: 5 }, { m: -2, v: 30 }, { note: 'The notes also show the wrong route, Var(3X) − Var(2Y) = 6: variances of independent variables always add.' }),
-      kase('Review 1, Q3', { mx: 1, vx: 1, my: -3, vy: 4, a: 2, b: -1, c: -5 }, { m: 0, v: 8 }),
     ],
   }),
 
@@ -154,11 +152,11 @@ export default [
       'On the TI-84, MATH → 9:fnInt( evaluates each integral.',
     ],
     twin: { part: 'mu', draw: (r, $) => $.s + r.next() ** (1 / ($.k + 1)) },
-    cases: [kase('Walpole §4.1', { k: 1, s: 0 }, { mu: 2 / 3, v: 1 / 18 }), kase('Notes Ex 4.7', { k: 1, s: 1 }, { mu: 5 / 3, v: 1 / 18 })],
+    cases: [kase('Walpole §4.1', { k: 1, s: 0 }, { mu: 2 / 3, v: 1 / 18 }),],
   }),
 
   problem({
-    ...C4, id: 'c4.expected-life', title: 'Expected life from a density with a long tail', kind: 'numeric', level: 2, topics: ['expectation', 'pdf'], src: 'Notes Ex 4.3',
+    ...C4, id: 'c4.expected-life', title: 'Expected life from a density with a long tail', kind: 'numeric', level: 2, topics: ['expectation', 'pdf'],
     vars: { m: choice([50, '50'], [100, '100'], [200, '200'], [250, '250'], [400, '400']), a: range(1.2, 4, 0.1) },
     derive: ($) => {
       const x = Math.round($.a * $.m);
@@ -175,11 +173,11 @@ export default [
       String.raw`$$P(X > ${$.x}) = \int_{${$.x}}^{\infty} \dfrac{${$.c}}{x^3}\,dx = \left[-\dfrac{${$.c / 2}}{x^2}\right]_{${$.x}}^{\infty} = \dfrac{${$.c / 2}}{${$.x}^2} = ${fx($.tail, 4)}$$`,
     ],
     twin: { part: 'tail', draw: (r, $) => $.m / Math.sqrt(r.next()) > $.x },
-    cases: [kase('Notes Ex 4.3', { m: 100, a: 2 }, { mu: 200, tail: 0.25 })],
+    cases: [],
   }),
 
   problem({
-    ...C4, id: 'c4.expected-g-continuous', title: 'E[g(X)] for a continuous X', kind: 'numeric', level: 2, topics: ['expectation', 'pdf', 'linear-combination'], src: 'Notes Ex 4.5',
+    ...C4, id: 'c4.expected-g-continuous', title: 'E[g(X)] for a continuous X', kind: 'numeric', level: 2, topics: ['expectation', 'pdf', 'linear-combination'],
     vars: { a: range(0, 2, 1), b: range(1, 3, 1), c: range(2, 6, 1), d: range(-5, 5, 1) },
     derive: ($) => {
       const D = $.a ** 3 + $.b ** 3;
@@ -194,7 +192,7 @@ export default [
       String.raw`$$E(${$.c}X ${$.d < 0 ? '-' : '+'} ${Math.abs($.d)}) = ${$.c}(${tn($.mu)}) ${$.d < 0 ? '-' : '+'} ${Math.abs($.d)} = ${tn($.eg)}$$`,
       String.raw`Or directly: $\displaystyle\int_{${-$.a}}^{${$.b}} (${$.c}x ${$.d < 0 ? '-' : '+'} ${Math.abs($.d)})\,${dens($.D)}\,dx$ gives the same.`,
     ],
-    cases: [kase('Notes Ex 4.5', { a: 1, b: 2, c: 4, d: 3 }, { eg: 8 })],
+    cases: [],
   }),
 
   problem({

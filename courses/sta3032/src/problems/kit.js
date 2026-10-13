@@ -78,7 +78,7 @@ export function problem(spec) {
   };
 }
 
-/** A worked case: the notes' or a worksheet's own numbers. want: partId → expected value. */
+/** A worked case: a textbook example's own numbers. want: partId → expected value. */
 export const kase = (src, v, want, o = {}) => ({ src, v, want, key: o.key ?? null, note: o.note ?? null });
 
 // ---------- numbers in TeX ----------
