@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status: **Phase 0 done** (PR #1 merged 13 Oct 2026; hub live at https://flux-study.pages.dev). Next: Phase 1. Nothing in the four existing repos was changed.
+Status: **Phase 0 done** (PR #1 merged 13 Oct 2026; hub live at https://flux-study.pages.dev). Next: Phase 0b (track cards), then Phase 1. The hub is now organised by track (section 1). Nothing in the four existing repos was changed.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
@@ -68,12 +68,43 @@ flux/                              one repo, npm workspaces
 Dependency direction is one way only: `courses → subjects → core`. Core never imports a course or
 a subject. A subject never imports a course. Checks enforce it (section 3, rule 6).
 
-### Subjects and courses
+### Tracks: what the hub shows
 
-Courses are grouped by subject, because the subject library is where reuse happens.
+The hub shows **tracks**, not courses. A track is one subject followed through the degree, with its
+courses in order inside it. Earlier courses fold into the later ones, so Physics I material sits
+next to Physics II, and a Calc III topic can point back to where Calc I taught the idea it builds on.
 
-| Subject | Library | Courses now | Likely next |
+| Track | Courses, in order | Subject library | Built today |
 |---|---|---|---|
+| Physics | PHY 2048 Physics I → PHY 2049 Physics II | `mechanics` + `em` | PHY 2049 |
+| Math | MAC 2311 Calc I → MAC 2312 Calc II → MAC 2313 Calc III → MAP 2302 Differential equations | `math` | MAC 2313 |
+| Mechanics | EGN 3311 Statics → Dynamics | `mechanics` | Statics |
+| Statistics | STA 3032 | `stats` | STA 3032 |
+| Thermal-fluids (later) | Thermodynamics → fluid mechanics → heat transfer | `thermo` (new) | |
+
+Codes other than PHY 2049, MAC 2313, EGN 3311 and STA 3032 are the Florida common course numbers
+and still need confirming against UNF's catalog before they go in a manifest.
+
+How a track works:
+
+- **Each course stays a module** with its own manifest, route segment (`#/<course>/...`) and storage
+  namespace. A track is a grouping, not a merged course: the manifest gains `track` and `order`.
+- **Inside the app, a track bar** lists the track's courses in order. Switching course keeps you in
+  the same mode (Practice, Notes, Explore).
+- **Prerequisite links cross courses.** A lab, notes section or problem can name `prereqs`, ids of
+  sections or labs in an earlier course of the same track (Calc III gradient → Calc I derivative;
+  PHY 2049 Gauss's law → MAC 2313 flux integrals is cross-track and allowed too). Unbuilt targets
+  are fine; they render as "not built yet" and the check lists them.
+- **Shared libraries do the folding.** PHY 2048 and Statics both use `subjects/mechanics`; Calc I
+  to differential equations all use `subjects/math`. Building an earlier course is mostly new labs
+  and problems on code that already exists.
+- **Past courses have no Canvas drop.** Courses already taken (Calc I/II, PHY 2048, MAC 2313) are
+  built from the textbook's section list and generated problems, cited by section. Provenance says so.
+
+Thermal-fluids also serves the methalox engine (nozzle flow, isentropic relations, combustion
+thermo), so its library should be written to be callable from outside FLUX.
+
+---|---|---|---|
 | Math | `subjects/math` | MAC 2313 Calc III | Differential equations, linear algebra |
 | Mechanics | `subjects/mechanics` | Statics | Dynamics, strength of materials, vibrations |
 | Physics | `subjects/em` | PHY 2049 | (PHY 2048 if ever useful as review) |
@@ -158,10 +189,12 @@ import { defineCourse } from '@flux/core';
 
 export default defineCourse({
   id: 'statics',                       // route segment and storage namespace
-  code: 'EGN ????',                    // confirm (D5)
+  code: 'EGN 3311',
   title: 'Statics',
   subject: 'mechanics',
-  term: 'Fall 2026',
+  track: 'mechanics',                  // hub card this course sits under
+  order: 1,                            // position in the track (Dynamics is 2)
+  term: null,
   text: 'Hibbeler, Engineering Mechanics: Statics',   // optional
   units: [                             // replaces EXAMS / UNITS
     { id: 'u1', title: 'Force vectors', chapters: ['2'], date: null, labs: ['vectors'] },
@@ -230,6 +263,35 @@ The other courses then port onto an engine that already works, adding what they 
 
 The Pages project is `flux-study` (https://flux-study.pages.dev). `flux.pages.dev` is an unrelated site, checked 13 Oct 2026, so this repo does not use that hostname. Statics' live app is https://dgadapee00.github.io/statics-sim/. Its official course code, and MAC 2313's term, are still unconfirmed (D5).
 
+### Phase 0b: track cards on the hub (small)
+
+Replace the four course links with four **track cards**: Physics, Math, Mechanics, Statistics.
+
+- **Card layout.** A regular card, not a link row: track name at top, an animation in the
+  centre, then the courses in the track as a short list (built ones as links, unbuilt ones dimmed
+  with "not built yet"). Clicking the card opens the most recent built course in the track.
+  Two columns at 720px and up, one column at 380px.
+- **One animation per track,** drawn in SVG or a small canvas (no three.js on the hub), using the
+  scene palette (E yellow, B teal, current gold, force pink, velocity white, + red, − blue):
+  - Physics: a positive and a negative charge with field lines between them; on hover a test
+    charge travels along a line.
+  - Math: a surface's level curves with a gradient arrow; on hover the arrow climbs the levels.
+  - Mechanics: a simple truss under a load; on hover the load drops on and member forces colour
+    in (tension one colour, compression another).
+  - Statistics: a histogram of samples; on hover bars fill in and a normal curve settles over them.
+- **Motion rules.** At rest each animation is a still frame or a very slow idle loop. Hover (or
+  focus, for keyboard users) plays the full animation once and holds the last frame. Touch devices,
+  which have no hover, play it once when the card scrolls into view. `prefers-reduced-motion`
+  shows the still frame only. Animations pause when off screen.
+- **Data.** `site/src/courses.js` becomes `site/src/tracks.js`: tracks in order, each with its
+  courses (`id`, `code`, `title`, `term`, `href` or `null`). Facts from D5: Statics is EGN 3311;
+  MAC 2313 term is Spring 2026.
+- **Checks.** Tests that every track has at least one built course and that every built course has
+  an `href`; smoke at 380px and 1280px with hover simulated on each card; no horizontal scroll.
+
+**Exit:** the hub shows the four track cards, each animates on hover, the reduced-motion and
+380px checks pass, and every built course is one tap away.
+
 ### Phase 1: import PHY 2049 as it is
 
 - **Import a snapshot, not the history.** flux-phy2049's history contains `incoming/` (168 raw
@@ -264,7 +326,9 @@ each move. Order, lowest risk first:
 3. `problems/` engine: kit (generic parts only; constants, `charge()`, `layout()` stay with PHY or
    go to `subjects/em`), engine, progress, fading, sequence, principles, sheets.
 4. `notes/`, `labs/` contract and loader, then `shell/` (router, HUD, practice panel, styles).
-5. `defineCourse` and the course registry; PHY gets its manifest.
+5. `defineCourse` and the course registry; PHY gets its manifest (`track: 'physics'`, `order: 2`).
+6. Track bar in the shell (the track's courses in order, keeping the current mode) and
+   `prereqs` links on labs, notes sections and problems, with a check that lists unbuilt targets.
 
 Rule for this phase: a move that turns a check red is reverted, not patched forward.
 
@@ -305,11 +369,20 @@ banner pointing to the platform.
 
 **Exit:** ingest runs from the platform repo; flux-phy2049 is no longer edited.
 
-### Phase 7 and on: new courses, by subject
+### Phase 7 and on: new courses, by track
 
-Each new course is built directly as a module. Order by what is coming in the degree and by
-propulsion relevance: thermal-fluids courses get the new `subjects/thermo` library, written to be
-reusable by the methalox engine's analysis code.
+Each new course is built directly as a module inside its track:
+
+- **Physics:** PHY 2048, on `subjects/mechanics` (shared with Statics) plus what it adds
+  (kinematics, energy, momentum, rotation, oscillations).
+- **Math:** MAC 2311 and MAC 2312 before MAC 2313, then MAP 2302 after it. Each Calc III lab and
+  notes section gains `prereqs` pointing back at the Calc I/II topic it rests on.
+- **Mechanics:** Dynamics after Statics, reusing its vectors, free-body diagrams and units.
+- **Thermal-fluids:** a new track and `subjects/thermo` library, written to be reusable by the
+  methalox engine's analysis code.
+
+Order: whatever is coming next in the degree first, then earlier courses as review, with
+propulsion-relevant courses ahead of the rest when there is a choice.
 
 Optional: the Engineering-Material cheat sheet becomes a "Reference" module (notes only, no labs),
 cross-linked from the courses whose formulas it covers.
@@ -324,7 +397,7 @@ cross-linked from the courses whose formulas it covers.
 | D2 | Address | one domain for everything vs. one subdomain per course on the same build | one domain; per-course subdomains only if a course needs its own link to share with a class |
 | D3 | Old domains | redirect at cutover vs. leave frozen | banner + link at cutover, leave them up through the term |
 | D4 | TypeScript | stay vanilla JS vs. add types (or JSDoc + `checkJs`) for the contracts only | JSDoc types on `defineCourse`, `defineLab`, `problem`; no build change |
-| D5 | Course codes and terms | confirm each course's official code and term for the manifests | |
+| D5 | Course codes and terms | **Decided:** Statics is EGN 3311. MAC 2313 was taken Spring 2026. Codes for courses not yet built are confirmed when each is started. | |
 
 ---
 
