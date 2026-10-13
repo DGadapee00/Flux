@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status: **Phase 1 done, and PHY cut over early** (13 Oct 2026). PHY 2049 is live at https://flux-study.pages.dev/phy2049/; weekly content drops now land in this repo (Phase 6, done early). Next: Phase 2. flux-phy2049 is frozen.
+Status: **Phase 1 done, PHY cut over early** (13 Oct 2026). PHY 2049 is live at https://flux-study.pages.dev/phy2049/ and its weekly drops land here. **Next: Phase 1b** (import MAC 2313, Statics, STA 3032 as they are), then Phase 2. flux-phy2049 is frozen.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
@@ -309,48 +309,117 @@ Replace the four course links with four **track cards**: Physics, Math, Mechanic
 **Exit:** PHY's full `npm test`, smoke and gallery pass from the platform build, and the PHY entry
 on the hub opens the platform copy.
 
-### Phase 2: carve core and `subjects/em` out of PHY
+### Phase 1b: import MAC 2313, Statics and STA 3032 as they are
 
-Move code out of `courses/phy2049` into packages, one area at a time, running PHY's checks after
-each move. Order, lowest risk first:
+Bring the other three courses in the way PHY came in: a snapshot of each, running unchanged inside
+the hub, each at its own path. No refactoring. After this phase all four courses build and deploy
+from this repo, the four old repos are frozen, and Phase 2 can carve the engine with all four test
+suites as its safety net instead of PHY's alone.
 
-1. `tex/`, `storage/` (namespaced keys + progress export/import), `subjects/em` (`physics/*` + selftest).
-2. `scene3d/` (createScene, frame, viewport, pointer, views, manim, numberPlane, arrows) and `plot2d/`.
-3. `problems/` engine: kit (generic parts only; constants, `charge()`, `layout()` stay with PHY or
-   go to `subjects/em`), engine, progress, fading, sequence, principles, sheets.
-4. `notes/`, `labs/` contract and loader, then `shell/` (router, HUD, practice panel, styles).
-5. `defineCourse` and the course registry; PHY gets its manifest (`track: 'physics'`, `order: 2`).
-6. Track bar in the shell (the track's courses in order, keeping the current mode) and
-   `prereqs` links on labs, notes sections and problems, with a check that lists unbuilt targets.
+One course per branch and PR, in this order: Statics (closed, smallest), MAC 2313 (taken Spring
+2026), STA 3032 (in progress: final 7 Dec 2026).
 
-Rule for this phase: a move that turns a check red is reverted, not patched forward.
+| Course | Source repo (public) | Pinned commit | Folder | Package | Old site |
+|---|---|---|---|---|---|
+| EGN 3311 Statics | DGadapee00/statics-sim | `6ce522ee0e58646b632e94087456076a51678eb4` | `courses/statics` | `@flux/statics` | dgadapee00.github.io/statics-sim |
+| MAC 2313 Calc III | DGadapee00/flux-mac2313 | `bdeef1b34124bef1829318b430a534fb2f6e4ccf` | `courses/mac2313` | `@flux/mac2313` | flux-mac2313.pages.dev |
+| STA 3032 Stats | DGadapee00/stats | `5ee91038940732abfc6605514702a42f28726d5e` | `courses/sta3032` | `@flux/sta3032` | flux-stats.pages.dev |
 
-**Exit:** `courses/phy2049` holds only course content (labs, bank, notes, scenarios, manifest), PHY
-still passes every check, and a throwaway demo course (one lab, three problems) runs on the engine
-without importing anything from PHY.
+None of the three contains a PDF, slide or Word file, or an `incoming/` folder (checked 13 Oct 2026).
+They are 0.7 to 1.3 MB each.
 
-### Phase 3: Statics (first course onto the engine)
+#### Steps for each course
 
-Smallest 3D app and a closed course. Move `physics/statics, truss, frames, friction, sections,
-vectors, units` into `subjects/mechanics`. Anything Statics needs that the engine lacks (its US unit
-system) goes into core or the subject library, not the course.
+1. **Snapshot.** `git clone` the public repo, check that its HEAD is still the pinned commit (if it
+   moved, use the new HEAD and record it), then copy the tree without history:
+   `git -C <src> archive <commit> -- . ':(exclude).github' ':(exclude)package-lock.json' | tar -x -C courses/<id>`.
+   Write the commit to `courses/<id>/SOURCE`. Commit this alone first ("import <course> snapshot at
+   <short sha>") so the wiring commits after it are easy to review.
+2. **Workspace.** Package name `@flux/<id>`. The root lockfile replaces the course's own. Its
+   `deploy` script prints "ships with the hub" and exits 1, as PHY's does. `npm test` at the root now
+   runs this course's checks too.
+3. **Dev port.** Each course gets its own: PHY 5174 (unchanged), **MAC 5175** (unchanged),
+   **Statics 5176**, **STA 3032 5177**. Update `vite.config.js` (`strictPort: true`, `open: false`)
+   and every script and doc that names the old port (stats: `scripts/smoke.mjs`, `scripts/overflow.mjs`,
+   CLAUDE.md, README; mac: `scripts/smoke.mjs`, `verify*.mjs`, `browser-checks.mjs`, README, DEPLOY).
+4. **Storage keys.** One origin now serves every course, so keys must not collide. Statics uses
+   `flux.exam.v1` and `flux.problems.v1`, **the same keys as PHY**: rename them to
+   `flux-statics.exam.v1` and `flux-statics.problems.v1` (`src/problems/progress.js`). MAC
+   (`flux-mac2313.*`) and STA (`fluxstats.*`) are already unique; leave them. Add a root check,
+   `packages/checks/storage.mjs`, that collects every storage key constant under `courses/` and fails
+   if two courses share one.
+5. **Routes.** Same pattern as PHY's router (`courses/phy2049/src/engine/router.js` and its
+   `scripts/route.test.mjs`): the hash gains the course prefix (`#/statics/u2/moments`,
+   `#/mac2313/ch2/gradient`, `#/sta3032/<unit>/explore/<lab>`), old hashes redirect with
+   `history.replaceState`, and a route test covers new form, old form, empty hash and a problem
+   query. Stats' router has a different shape (`parseHash(hash)`, `hashFor`, `go`); keep its shape
+   and add the prefix inside it.
+6. **Dev server.** Generalise `site/phy-server.js` into `site/course-server.js`, one middleware per
+   course at `/<id>/`, from a single list of course ids. `npm run dev` at the root serves the hub and
+   all four courses.
+7. **Build and deploy.** The root `build` builds every course workspace, then the hub, then
+   `scripts/assemble.mjs` copies each `courses/<id>/dist` to `site/dist/<id>/` (a loop over the same
+   course list, failing if one is missing), then `raw.mjs --dist`. `deploy.yml` needs no change.
+8. **Hub.** In `site/src/tracks.js`, the course's `href` becomes its relative path (`statics/`,
+   `mac2313/`, `sta3032/`). Extend the tracks test: every built course's href is relative and, after
+   a build, `site/dist/<href>index.html` exists.
+9. **Course docs.** Add a header to the course's README (and stats' CLAUDE.md and PLAN.md) like the
+   one on PHY's CLAUDE.md: the course lives in Flux at `courses/<id>/`, paths are relative to it, the
+   old repo is frozen, the root AGENTS.md wins on platform matters. Stats' CLAUDE.md line "FLUX
+   itself is not to be modified" is about the old arrangement: replace it.
+10. **Provenance (rule 8).** MAC has a PROVENANCE.md; keep it. Statics and STA 3032 have none: write
+    one each, saying what course material is in the folder and where it came from (Statics: textbook
+    numbers as worked cases, cited by section; STA 3032: notes rewritten from the instructor's notes,
+    printed tables as data, review-sheet questions as worked cases). Whether STA 3032's instructor has
+    been asked is decision D6; until it is answered, write "not yet asked" rather than guessing.
 
-**Exit:** parity (section 5).
+#### Exit, per course
 
-### Phase 4: MAC 2313 (proves subject reuse)
+- `npm test` and `npm run build` at the root pass, including the course's own checks, the raw-file
+  scans, the dependency check and the new storage-key check.
+- The course's own smoke check passes on its new port, at 380px and 1280px, with no page errors and no
+  horizontal scroll. Stats' overflow check passes.
+- Its hub card opens `flux-study.pages.dev/<id>/`, and an old-style link redirects.
+- The live site is deployed from main.
 
-Move `math/*` into `subjects/math`. Vector code shared with Statics and PHY becomes one module; if
-copies disagree, the selftests decide. Bring mac's `domain()` and term-by-term integral display in.
+#### After all three
 
-**Exit:** parity, and `subjects/math` is imported by at least two courses.
+- PLAN status and AGENTS.md list the four courses and their ports.
+- The old repos are frozen. Leave the old sites up; a banner pointing to Flux can come later.
+- Note for the owner: progress kept in the browser does not move between sites, so STA 3032 practice
+  history on flux-stats.pages.dev stays there until Phase 2's export/import exists.
 
-### Phase 5: STA 3032 (adds the 2D lab kind)
+### Phase 2: carve core and the subject libraries out of all four courses
 
-Add `kind: 'plot2d'` to the lab contract, plus stats' seeded labs, checked predictions, `alt`
-grading, named sets and overflow check, so every course gets them. Move `stats/*` into
-`subjects/stats`. The final is 7 Dec 2026: prove parity and switch early, or cut over after it.
+With all four courses in the repo, build `packages/core` from the union of them, not from PHY alone.
 
-**Exit:** parity. Cutover per rule 1.
+1. For each shared file (router, frame, pointer, views, hud, problems panel, plot, format, shared,
+   manim, numberPlane, arrows, kit, engine, progress, styles), diff the four copies and write every
+   difference into `packages/core/MERGE-NOTES.md` before writing code: which course has which feature.
+2. Take PHY's version as the base (the superset for the 3D shell and problem engine), then bring in
+   what the others added: stats' seeded labs, checked predictions, `alt` grading, named sets, overflow
+   check and 380px layer; mac's `domain()` and term-by-term integral display; statics' unit system.
+3. Move code in this order, lowest risk first, running **all four** courses' checks after each move:
+   - `tex/`, `storage/` (namespaced `flux.<course>.<key>.v<n>` keys, with a one-time read of each
+     course's old key, plus progress export/import);
+   - subject libraries: `subjects/em` (PHY `physics/*`), `subjects/mechanics` (statics `physics/*`),
+     `subjects/math` (mac `math/*`), `subjects/stats` (stats `stats/*`), each with its selftest.
+     Where copies of the same helper disagree (vectors, units), the selftests decide;
+   - `scene3d/` and `plot2d/`, with `defineLab({ kind: 'scene3d' | 'plot2d' })`;
+   - the problem engine (generic kit parts only; course constants and helpers stay with the course);
+   - `notes/`, the lab loader, then `shell/` (router, HUD, practice panel, styles).
+4. `defineCourse` and the course registry; each course gets its manifest with `track` and `order`.
+5. Track bar in the shell and `prereqs` links, with a check that lists unbuilt targets.
+
+Rule for this phase: a move that turns any course's check red is reverted, not patched forward.
+
+**Exit:** each `courses/<id>` holds only course content (labs, bank, notes, scenarios, manifest), all
+four pass every check, and progress export/import round-trips in each.
+
+### Phases 3–5: retired
+
+They were "port Statics", "port MAC 2313" and "port STA 3032" onto a finished engine. Phase 1b
+imports them first instead, and Phase 2 folds all four onto the engine at once.
 
 ### Phase 6: PHY cutover
 
@@ -392,6 +461,7 @@ cross-linked from the courses whose formulas it covers.
 | D3 | Old domains | redirect at cutover vs. leave frozen | banner + link at cutover, leave them up through the term |
 | D4 | TypeScript | stay vanilla JS vs. add types (or JSDoc + `checkJs`) for the contracts only | JSDoc types on `defineCourse`, `defineLab`, `problem`; no build change |
 | D5 | Course codes and terms | **Decided:** Statics is EGN 3311. MAC 2313 was taken Spring 2026. Codes for courses not yet built are confirmed when each is started. | |
+| D6 | STA 3032 provenance | Has the STA 3032 instructor been asked about the notes rewritten from theirs? Recorded in `courses/sta3032/PROVENANCE.md` | |
 
 ---
 
