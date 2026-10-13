@@ -1,5 +1,7 @@
 # Provenance and academic integrity
 
+This folder is the Flux platform copy at `courses/mac2313/`, snapshotted from flux-mac2313 at the commit in `SOURCE`. The account below is unchanged.
+
 *What course material this project does and does not contain.*
 
 ## What this is

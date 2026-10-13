@@ -1,5 +1,11 @@
 # Deploying FLUX — MAC 2313
 
+This copy ships inside the hub. From the repo root, `npm run deploy` publishes `site/dist`
+(with this app at `mac2313/`) to https://flux-study.pages.dev. `npm run deploy` in this folder
+refuses, so it does not upload a second site. The rest of this file is how the standalone app
+at flux-mac2313.pages.dev was published. On the hub an old hash such as `#/ch2/gradient` redirects
+to `#/mac2313/ch2/gradient`.
+
 **Live at <https://flux-mac2313.pages.dev> on Cloudflare Pages, public, no login.** Same hosting choice as flux-phy2049: a link that just works. `public/robots.txt` and `public/_headers` keep the site out of search results.
 
 The app is a static site. `npm run build` writes `dist/`. `vite.config.js` sets `base: './'`, and routing is hash-based (`#/ch2/gradient`), so any static host works. Dev server: port **5175** (PHY 2049 owns 5174).

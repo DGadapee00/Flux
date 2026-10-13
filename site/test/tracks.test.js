@@ -5,7 +5,6 @@ import test from 'node:test';
 import { builtCourses, latestBuilt, TRACKS } from '../src/tracks.js';
 
 const LIVE = {
-  mac2313: 'https://flux-mac2313.pages.dev',
   sta3032: 'https://flux-stats.pages.dev',
 };
 
@@ -13,6 +12,7 @@ const LIVE = {
 const PLATFORM_HREF = {
   phy2049: 'phy2049/',
   statics: 'statics/',
+  mac2313: 'mac2313/',
 };
 
 const PLATFORM = 'https://flux-study.pages.dev/';

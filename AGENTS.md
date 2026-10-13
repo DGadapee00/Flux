@@ -58,7 +58,7 @@ A course manifest is the object in `PLAN.md` section 4: `id`, `code`, `title`, `
 
 Routes in the course apps are `#/<unit>/<mode>/<lab>`. On the platform that becomes `#/<course>/<unit>/<mode>/<lab>`. Old hashes redirect when that course is brought in.
 
-Storage keys are `flux.<course>.<key>.v<n>`. PHY keeps `flux.problems.v1` and `flux.exam.v1`. Statics uses `flux-statics.problems.v1` and `flux-statics.exam.v1`. `packages/checks/storage.mjs` fails when two courses share a key. Progress export and import is JSON, so a move between domains keeps the review queue.
+Storage keys are `flux.<course>.<key>.v<n>`. PHY keeps `flux.problems.v1` and `flux.exam.v1`. Statics uses `flux-statics.problems.v1` and `flux-statics.exam.v1`. MAC 2313 keeps `flux-mac2313.problems.v1` and `flux-mac2313.exam.v1`. `packages/checks/storage.mjs` fails when two courses share a key. Progress export and import is JSON, so a move between domains keeps the review queue.
 
 ## Checks
 

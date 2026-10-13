@@ -1,5 +1,5 @@
 {
-  "name": "flux-mac2313",
+  "name": "@flux/mac2313",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -7,11 +7,11 @@
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "test": "node scripts/tex-check.mjs && node src/math/selftest.js && node scripts/problems-check.mjs",
+    "preview": "vite preview --host 127.0.0.1 --port 4175 --strictPort",
+    "test": "node scripts/tex-check.mjs && node src/math/selftest.js && node scripts/problems-check.mjs && node --test scripts/route.test.mjs",
     "verify": "node scripts/browser-checks.mjs",
     "verify:ch": "node scripts/browser-checks.mjs verify-ch1 verify-ch2 verify-ch3 verify-ch4 verify-ch5",
-    "deploy": "npm test && npm run build && npx --yes wrangler@latest pages deploy dist --project-name flux-mac2313 --branch main",
+    "deploy": "node -e \"console.error('This copy ships with the hub. From the repo root: npm run deploy'); process.exit(1)\"",
     "live": "node scripts/live.mjs"
   },
   "dependencies": {

@@ -18,6 +18,8 @@ test('the repo does not share a storage key across courses', () => {
   assert.deepEqual(collisions(keys), []);
   const statics = keys.filter((key) => key.course === 'statics').map((key) => key.value).sort();
   assert.deepEqual(statics, ['flux-statics.exam.v1', 'flux-statics.problems.v1']);
+  const mac = keys.filter((key) => key.course === 'mac2313').map((key) => key.value).sort();
+  assert.deepEqual(mac, ['flux-mac2313.exam.v1', 'flux-mac2313.problems.v1']);
   const phy = keys.filter((key) => key.course === 'phy2049').map((key) => key.value);
   assert.ok(phy.includes('flux.problems.v1'));
   assert.ok(phy.includes('flux.exam.v1'));

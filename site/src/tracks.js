@@ -32,7 +32,7 @@ export const TRACKS = [
         code: 'MAC 2313',
         title: 'Calculus III',
         term: 'Spring 2026',
-        href: 'https://flux-mac2313.pages.dev',
+        href: 'mac2313/',
       },
       { id: 'map2302', code: 'MAP 2302', title: 'Differential equations', term: null, href: null },
     ],

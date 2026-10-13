@@ -135,9 +135,9 @@ if (orbit.handleDrag && !orbit.handleDrag.camHeld) fail.push('dragging the probe
 /*
  * Back lands on the unit's first lab, not on the bare unit hash: parseHash() resolves `#/ch1` to
  * exam.labs[0] and boot normalizes the URL with replaceState, so `#/ch1` is never what a history
- * entry holds. This asserted `#/ch1` and had never passed.
+ * entry holds. The course prefix is part of that normalized hash.
  */
-if (back !== '#/ch1/limits') fail.push(`back hash ${back}`);
+if (back !== '#/mac2313/ch1/limits') fail.push(`back hash ${back}`);
 if (errors.length) fail.push(`page errors: ${errors.join(' | ')}`);
 
 console.log({ first, saddle, afterTh, orbit, practiceOpen, phone, back, errors });
