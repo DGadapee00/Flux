@@ -409,6 +409,7 @@ if (back !== 'faraday') mismatches.push({ name: 'history.back', got: back, exp: 
 await page.evaluate(() => {
   try {
     localStorage.removeItem('flux.problems.v1');
+    localStorage.removeItem('flux.phy2049.problems.v1');
   } catch {}
   location.hash = '#/e3/potential';
 });
@@ -498,7 +499,9 @@ if (loaded.bad.length) mismatches.push({ name: 'problems load into their labs', 
 await page.evaluate(() => {
   try {
     localStorage.removeItem('flux.problems.v1');
+    localStorage.removeItem('flux.phy2049.problems.v1');
     localStorage.removeItem('flux.exam.v1');
+    localStorage.removeItem('flux.phy2049.exam.v1');
   } catch {}
   location.hash = '#/e4/circuits?p=e4.44.two-loop&s=0';
 });
@@ -553,6 +556,7 @@ await page.keyboard.press('Escape');
 await page.evaluate(() => {
   try {
     localStorage.removeItem('flux.predict.v1');
+    localStorage.removeItem('flux.phy2049.predict.v1');
   } catch {}
   location.hash = '#/e3/capacitor';
 });

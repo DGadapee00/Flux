@@ -20,6 +20,7 @@ import { setupsFor, matchExamples } from '../notes/setups.js';
 import { DERIVATIONS } from '../derive/index.js';
 import { LAB_META, examById, examLabel } from '../data/catalog.js';
 import { CHAPTER_TITLES, PROBLEMS } from '../problems/index.js';
+import { courseStore } from '../storage.js';
 import { escapeHTML as esc } from './shared.js';
 
 const MATH = {
@@ -32,27 +33,9 @@ const MATH = {
 
 const countFor = (ch) => PROBLEMS.filter((p) => p.ch === ch).length;
 
-const WIDTH_KEY = 'flux.notes.width';
-const FULL_KEY = 'flux.notes.full';
 const MIN_W = 420;
 const LAB_MIN = 480; // the lab keeps at least this much of the window: a flat lab's labels still fit
-const store = {
-  get(k) {
-    try {
-      return localStorage.getItem(k);
-    } catch {
-      return null;
-    }
-  },
-  set(k, v) {
-    try {
-      if (v == null) localStorage.removeItem(k);
-      else localStorage.setItem(k, v);
-    } catch {
-      /* private window: the size just isn't remembered */
-    }
-  },
-};
+const store = courseStore();
 const EXPAND_SVG = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M8 1.5v13M8 1.5 5.5 4M8 1.5 10.5 4M8 14.5 5.5 12M8 14.5l2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 export function createNotes(api) {
@@ -73,7 +56,7 @@ export function createNotes(api) {
   grip.title = 'Drag to resize the notes · double-click to reset';
   panel.after(grip);
 
-  let savedW = Number(store.get(WIDTH_KEY)) || null;
+  let savedW = Number(store.getItem('notes.width')) || null;
   const maxW = () => Math.max(MIN_W, window.innerWidth - LAB_MIN);
   function applyWidth() {
     if (savedW) root.style.setProperty('--notes-w', `${Math.round(Math.min(maxW(), Math.max(MIN_W, savedW)))}px`);
@@ -81,7 +64,7 @@ export function createNotes(api) {
   }
   function setWidth(px) {
     savedW = px == null ? null : Math.round(Math.min(maxW(), Math.max(MIN_W, px)));
-    store.set(WIDTH_KEY, savedW == null ? null : String(savedW));
+    store.setItem('notes.width', savedW == null ? null : String(savedW));
     applyWidth();
   }
   applyWidth();
@@ -116,12 +99,12 @@ export function createNotes(api) {
     api.reframe?.();
   });
 
-  let full = store.get(FULL_KEY) === '1';
+  let full = store.getItem('notes.full') === '1';
   body.classList.toggle('notes-full', full);
   function setFull(on) {
     full = on;
     body.classList.toggle('notes-full', on);
-    store.set(FULL_KEY, on ? '1' : null);
+    store.setItem('notes.full', on ? '1' : null);
     requestAnimationFrame(() => api.reframe?.());
     const b = panel.querySelector('[data-nt="full"]');
     if (b) {

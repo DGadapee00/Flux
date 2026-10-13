@@ -12,6 +12,8 @@
     "deploy": "node -e \"console.error('This copy ships with the hub. From the repo root: npm run deploy'); process.exit(1)\""
   },
   "dependencies": {
+    "@flux/core": "*",
+    "@flux/subjects": "*",
     "katex": "^0.16.47",
     "three": "^0.172.0"
   },

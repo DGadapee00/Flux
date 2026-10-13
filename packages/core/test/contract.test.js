@@ -30,11 +30,15 @@ test('defineCourse rejects an id that cannot be a storage namespace', () => {
   assert.throws(() => defineCourse({}), TypeError);
 });
 
-test('defineLab requires an id and passes the spec through', () => {
-  const lab = defineLab({ id: 'vectors', title: 'Vectors' });
+test('defineLab requires an id and a kind, and passes the spec through', () => {
+  const lab = defineLab({ id: 'vectors', title: 'Vectors', kind: 'scene3d' });
   assert.equal(lab.id, 'vectors');
   assert.equal(lab.title, 'Vectors');
-  assert.throws(() => defineLab({ title: 'Vectors' }), TypeError);
+  assert.equal(lab.kind, 'scene3d');
+  assert.equal(defineLab({ id: 'sampling', kind: 'plot2d' }).kind, 'plot2d');
+  assert.throws(() => defineLab({ title: 'Vectors', kind: 'scene3d' }), TypeError);
+  assert.throws(() => defineLab({ id: 'vectors' }), TypeError);
+  assert.throws(() => defineLab({ id: 'vectors', kind: 'hud' }), TypeError);
 });
 
 test('problem fills the shared defaults and lets the spec override them', () => {

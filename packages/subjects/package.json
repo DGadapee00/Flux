@@ -3,8 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./em/*": "./src/em/*",
+    "./mechanics/*": "./src/mechanics/*",
+    "./math/*": "./src/math/*",
+    "./stats/*": "./src/stats/*"
+  },
   "scripts": {
-    "test": "node --test test/index.test.js"
+    "test": "node src/mechanics/selftest.js && node --test test/*.test.js"
   }
 }
