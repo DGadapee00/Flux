@@ -1,5 +1,5 @@
 import { MU0 } from './constants.js';
-import { cross, dot, len, scale } from './vec.js';
+import { cross, dot, len, scale } from '../math/vec.js';
 
 const FOURPI = 4 * Math.PI;
 const SOFT = 1e-9;

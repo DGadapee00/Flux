@@ -22,8 +22,10 @@
  * `compute` gets a seeded generator (src/stats/rng.js) built from state.seed, so a lab's picture
  * is reproducible and scripts/labs-check.mjs can run it headless.
  */
+import { defineLab as checkLab } from '@flux/core';
+
 export function defineLab(spec) {
-  return {
+  return checkLab({
     ch: [],
     blurb: '',
     params: [],
@@ -40,5 +42,6 @@ export function defineLab(spec) {
       for (const p of this.params) s[p.id] = p.value;
       return { ...s, ...(spec.initial || {}) };
     },
-  };
+    kind: 'plot2d',
+  });
 }

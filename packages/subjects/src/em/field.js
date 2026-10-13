@@ -1,5 +1,5 @@
 import { K, SOFTEN } from './constants.js';
-import { distSq, len } from './vec.js';
+import { distSq, len } from '../math/vec.js';
 
 /** E at point p from a list of point charges. extraE is a uniform field (N/C). */
 export function fieldAt(p, charges, extraE = null, soften = SOFTEN) {

@@ -3,11 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./scene3d/*": "./src/scene3d/*",
+    "./plot2d/*": "./src/plot2d/*"
+  },
   "scripts": {
     "test": "node --test test/*.test.js"
   },
   "dependencies": {
-    "katex": "^0.16.47"
+    "katex": "^0.16.47",
+    "three": "^0.172.0"
   }
 }

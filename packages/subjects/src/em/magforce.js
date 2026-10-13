@@ -1,5 +1,5 @@
 import { QE } from './constants.js';
-import { cross, scale, add } from './vec.js';
+import { cross, scale, add } from '../math/vec.js';
 import { Bpolyline, wireAlongY } from './bfield.js';
 
 /** Masses as printed on Montgomery's sheet. */

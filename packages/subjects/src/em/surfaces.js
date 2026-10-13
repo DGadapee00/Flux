@@ -1,5 +1,5 @@
 import { SURFACE_EPS } from './constants.js';
-import { dist } from './vec.js';
+import { dist } from '../math/vec.js';
 
 function pushPatch(patches, p, n, u, v, w, h, dA, face) {
   patches.push({

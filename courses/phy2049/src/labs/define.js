@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { defineLab as checkLab } from '@flux/core';
 
 /**
  * Head-on camera for a lab whose work plane is standing up (xy). Looking straight down −z turns the
@@ -55,7 +56,7 @@ export function planeCamera(state) {
  * afterFrame(dt, state, computed, ctx) — per-frame animation that does not need a recompute
  */
 export function defineLab(spec) {
-  return {
+  return checkLab({
     live: false,
     orbit: true,
     hint: '',
@@ -80,5 +81,6 @@ export function defineLab(spec) {
     plot: () => null,
     pointer: null,
     ...spec,
-  };
+    kind: 'scene3d',
+  });
 }

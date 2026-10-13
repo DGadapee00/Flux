@@ -1,1 +1,1 @@
-export * from '@flux/subjects/em/vec.js';
+export * from '@flux/subjects/math/vec.js';

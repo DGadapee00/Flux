@@ -6,12 +6,13 @@
  * Until then each function checks the id and returns the spec. Defaults on `problem`
  * are the fields all four banks already share.
  *
- * `defineLab` covers two shapes that already exist. A scene3d lab draws with three.js
- * (`init`, `recompute`, `syncViews`). A plot2d lab draws on a canvas (`compute(state, rng)`,
- * `draw`). A `kind` field that picks between them arrives with the stats port.
+ * `defineLab` covers two shapes. `kind: 'scene3d'` draws with three.js
+ * (`init`, `recompute`, `syncViews`). `kind: 'plot2d'` draws on a canvas
+ * (`compute(state, rng)`, `draw`). A missing or unknown kind throws.
  */
 
 const ID = /^[a-z][a-z0-9]*$/;
+const LAB_KINDS = new Set(['scene3d', 'plot2d']);
 
 /**
  * @typedef {Object} CourseUnit
@@ -56,6 +57,9 @@ export function defineCourse(spec) {
  */
 export function defineLab(spec) {
   requireId('defineLab', spec);
+  if (!LAB_KINDS.has(spec.kind)) {
+    throw new TypeError("defineLab requires kind 'scene3d' or 'plot2d'");
+  }
   return { ...spec };
 }
 
