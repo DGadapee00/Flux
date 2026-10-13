@@ -8,6 +8,8 @@ test('defineCourse returns the manifest and keeps the id', () => {
     code: 'ABC 0000',
     title: 'Demo',
     subject: 'math',
+    track: 'demo',
+    order: 1,
     term: 'Fall 2026',
     units: [],
     chapters: {},
@@ -17,6 +19,8 @@ test('defineCourse returns the manifest and keeps the id', () => {
   const course = defineCourse(spec);
   assert.equal(course.id, 'demo');
   assert.equal(course.subject, 'math');
+  assert.equal(course.track, 'demo');
+  assert.equal(course.order, 1);
   assert.notEqual(course, spec);
 });
 
