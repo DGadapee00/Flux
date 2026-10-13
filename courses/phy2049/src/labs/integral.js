@@ -1,0 +1,481 @@
+import * as THREE from 'three';
+import { defineLab } from './define.js';
+import { SCENARIOS } from '../data/scenarios.js';
+import {
+  linePerpField,
+  ringAxisField,
+  diskAxisField,
+  linePerpPotential,
+  ringAxisPotential,
+  diskAxisPotential,
+} from '../physics/analytic.js';
+import { coachIntegral } from '../physics/coach.js';
+import { fmtE, fmtV, fmtCharge, fmtLen } from '../ui/format.js';
+import { kv, cells, matchClass } from '../ui/shared.js';
+import { sceneScale, defaultView } from '../engine/frame.js';
+
+/** P sits on the perpendicular bisector — the only place the x-components cancel in pairs. */
+const onBisector = (state) => state.integral.kind === 'rod' && Math.abs(state.integral.x0 || 0) < 1e-9;
+
+const fullRing = (state) => (state.integral.span ?? 2 * Math.PI) >= 2 * Math.PI - 1e-6;
+
+/** Does the geometry kill every component but the axial one? */
+function symmetric(state) {
+  const k = state.integral.kind;
+  if (k === 'rod') return onBisector(state);
+  if (k === 'ring') return fullRing(state);
+  return true; // a plate on its own axis always has E ⟂ to the plate
+}
+
+const deg = (rad) => ((rad * 180) / Math.PI).toFixed(1);
+
+function fmtFrom(mag) {
+  const a = Math.abs(mag);
+  if (a >= 1e3) return `${(mag / 1e3).toFixed(2)} kN/C`;
+  return `${mag.toFixed(0)} N/C`;
+}
+
+export default defineLab({
+  id: 'integral',
+  exam: 'e2',
+  title: 'Integrals',
+  hint: 'Play the Riemann sum along dq',
+  orbit: true,
+  camera: { pos: new THREE.Vector3(2.4, 5.2, 11.2), target: new THREE.Vector3(0, 1.4, 0) },
+  keys: { ' ': 'sweep', r: 'reset', R: 'reset' },
+  scenarios: SCENARIOS.integral,
+  // A problem can hand this lab a 3 m rod; the view scales to it instead of drawing off screen.
+  frame: true,
+  extent: (s) =>
+    s.integral.kind === 'rod'
+      ? Math.max(s.integral.L / 2, s.integral.d, Math.abs(s.integral.x0 || 0))
+      : s.integral.kind === 'disk'
+        ? Math.max(s.integral.R, Math.abs(s.integral.y))
+        : Math.max(s.integral.a, Math.abs(s.integral.y)),
+  defaultState() {
+    return {
+      scenarioId: 'rod',
+      view: defaultView(),
+      integral: { kind: 'rod', L: 0.8, lambda: 2e-6, d: 0.35, n: 20, x0: 0, Q: 2.5e-6, a: 0.32, y: 0.38, span: 2 * Math.PI, R: 0.35, quantity: 'E' },
+      charges: [],
+      extraE: { x: 0, y: 0, z: 0 },
+      show: { flux: false, E: false, nHat: false, lines: false, forces: false },
+      selectedId: null,
+      anim: { playing: false, i: 0 },
+    };
+  },
+  controls() {
+    return `
+        <div class="lab-block">
+          <div class="seg" id="integral-kind">
+            <button type="button" data-kind="rod" class="active">Line</button>
+            <button type="button" data-kind="ring">Ring / arc</button>
+            <button type="button" data-kind="disk">Plate</button>
+          </div>
+          <div id="int-rod">
+            <label class="field">
+              <span>Length L</span>
+              <div class="slider-row">
+                <input type="range" id="int-L" min="0.3" max="1.4" step="0.01" value="0.8" />
+                <span class="mono val" id="int-L-val">0.80 m</span>
+              </div>
+            </label>
+            <label class="field">
+              <span>λ</span>
+              <div class="slider-row">
+                <input type="range" id="int-lambda" min="-5" max="5" step="0.1" value="2" />
+                <span class="mono val" id="int-lambda-val">+2.00 μC/m</span>
+              </div>
+            </label>
+            <label class="field">
+              <span>Distance d to P</span>
+              <div class="slider-row">
+                <input type="range" id="int-d" min="0.12" max="0.9" step="0.01" value="0.35" />
+                <span class="mono val" id="int-d-val">0.35 m</span>
+              </div>
+            </label>
+            <label class="field">
+              <span>P along the rod x₀</span>
+              <div class="slider-row">
+                <input type="range" id="int-x0" min="-1" max="1" step="0.01" value="0" />
+                <span class="mono val" id="int-x0-val">0.00 m</span>
+              </div>
+            </label>
+          </div>
+          <div id="int-ring" hidden>
+            <label class="field">
+              <span>Radius a</span>
+              <div class="slider-row">
+                <input type="range" id="int-a" min="0.12" max="0.7" step="0.01" value="0.32" />
+                <span class="mono val" id="int-a-val">0.32 m</span>
+              </div>
+            </label>
+            <label class="field">
+              <span>Q</span>
+              <div class="slider-row">
+                <input type="range" id="int-Q" min="-5" max="5" step="0.1" value="2.5" />
+                <span class="mono val" id="int-Q-val">+2.50 μC</span>
+              </div>
+            </label>
+            <label class="field">
+              <span>Arc span</span>
+              <div class="slider-row">
+                <input type="range" id="int-span" min="20" max="360" step="5" value="360" />
+                <span class="mono val" id="int-span-val">360° · full ring</span>
+              </div>
+            </label>
+            <label class="field">
+              <span>Axis distance y</span>
+              <div class="slider-row">
+                <input type="range" id="int-y" min="-0.8" max="0.8" step="0.01" value="0.38" />
+                <span class="mono val" id="int-y-val">0.38 m</span>
+              </div>
+            </label>
+          </div>
+          <div id="int-disk" hidden>
+            <label class="field">
+              <span>Plate radius R</span>
+              <div class="slider-row">
+                <input type="range" id="int-R" min="0.1" max="1.2" step="0.01" value="0.35" />
+                <span class="mono val" id="int-R-val">0.35 m</span>
+              </div>
+            </label>
+            <label class="field">
+              <span>Q on the plate</span>
+              <div class="slider-row">
+                <input type="range" id="int-Qd" min="-5" max="5" step="0.1" value="2.5" />
+                <span class="mono val" id="int-Qd-val">+2.50 μC</span>
+              </div>
+            </label>
+            <label class="field">
+              <span>Axis distance y</span>
+              <div class="slider-row">
+                <input type="range" id="int-yd" min="-1.2" max="1.2" step="0.01" value="0.4" />
+                <span class="mono val" id="int-yd-val">0.40 m</span>
+              </div>
+            </label>
+          </div>
+          <label class="field">
+            <span>Slices n (Riemann sum)</span>
+            <div class="slider-row">
+              <input type="range" id="int-n" min="6" max="48" step="1" value="20" />
+              <span class="mono val" id="int-n-val">20</span>
+            </div>
+          </label>
+          <div class="seg" id="int-qty">
+            <button type="button" data-qty="E" class="active">∫ dE</button>
+            <button type="button" data-qty="V">∫ dV = k dq/r</button>
+          </div>
+          <button type="button" class="btn accent" id="btn-sweep-int">Play ∫ dE</button>
+        </div>`;
+  },
+  bind(api) {
+    const $ = (id) => document.getElementById(id);
+    $('integral-kind').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-kind]');
+      if (!btn) return;
+      const kind = btn.dataset.kind;
+      const s = api.slice();
+      s.integral.kind = kind;
+      s.scenarioId = kind === 'ring' ? 'ring' : kind === 'disk' ? 'disk' : 'rod';
+      const sc = SCENARIOS.integral.find((x) => x.id === s.scenarioId);
+      if (sc?.integral) Object.assign(s.integral, sc.integral, { kind });
+      s.anim = { playing: false, i: 0 };
+      api.bump();
+    });
+    $('int-L').addEventListener('input', (e) => {
+      api.slice().integral.L = Number(e.target.value);
+      api.bump();
+    });
+    $('int-lambda').addEventListener('input', (e) => {
+      api.slice().integral.lambda = Number(e.target.value) * 1e-6;
+      api.bump();
+    });
+    $('int-d').addEventListener('input', (e) => {
+      api.slice().integral.d = Number(e.target.value);
+      api.bump();
+    });
+    $('int-x0').addEventListener('input', (e) => {
+      api.slice().integral.x0 = Number(e.target.value);
+      api.bump();
+    });
+    $('int-a').addEventListener('input', (e) => {
+      api.slice().integral.a = Number(e.target.value);
+      api.bump();
+    });
+    $('int-Q').addEventListener('input', (e) => {
+      api.slice().integral.Q = Number(e.target.value) * 1e-6;
+      api.bump();
+    });
+    $('int-y').addEventListener('input', (e) => {
+      api.slice().integral.y = Number(e.target.value);
+      api.bump();
+    });
+    $('int-span').addEventListener('input', (e) => {
+      api.slice().integral.span = (Number(e.target.value) * Math.PI) / 180;
+      api.bump();
+    });
+    $('int-R').addEventListener('input', (e) => {
+      api.slice().integral.R = Number(e.target.value);
+      api.bump();
+    });
+    $('int-Qd').addEventListener('input', (e) => {
+      api.slice().integral.Q = Number(e.target.value) * 1e-6;
+      api.bump();
+    });
+    $('int-yd').addEventListener('input', (e) => {
+      api.slice().integral.y = Number(e.target.value);
+      api.bump();
+    });
+    $('int-n').addEventListener('input', (e) => {
+      api.slice().integral.n = Number(e.target.value);
+      api.bump();
+    });
+    $('int-qty').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-qty]');
+      if (!btn) return;
+      api.slice().integral.quantity = btn.dataset.qty;
+      api.bump();
+    });
+    $('btn-sweep-int').addEventListener('click', () => api.toggleSweep());
+  },
+  syncControls(state) {
+    const $ = (id) => document.getElementById(id);
+    const kind = state.integral.kind;
+    document.querySelectorAll('#integral-kind [data-kind]').forEach((b) => {
+      b.classList.toggle('active', b.dataset.kind === kind);
+    });
+    if ($('int-rod')) $('int-rod').hidden = kind !== 'rod';
+    if ($('int-ring')) $('int-ring').hidden = kind !== 'ring';
+    if ($('int-disk')) $('int-disk').hidden = kind !== 'disk';
+    $('int-L').value = state.integral.L;
+    $('int-L-val').textContent = `${state.integral.L.toFixed(2)} m`;
+    $('int-lambda').value = state.integral.lambda * 1e6;
+    $('int-lambda-val').textContent = `${state.integral.lambda >= 0 ? '+' : ''}${(state.integral.lambda * 1e6).toFixed(2)} μC/m`;
+    // A problem can put P on the rod's own line (d = 0), below the slider's usual start.
+    if (state.integral.d < Number($('int-d').min)) $('int-d').min = String(state.integral.d);
+    $('int-d').value = state.integral.d;
+    $('int-d-val').textContent = `${state.integral.d.toFixed(2)} m`;
+    const x0 = state.integral.x0 || 0;
+    const half = state.integral.L / 2;
+    $('int-x0').value = x0;
+    // Naming where P is matters more than the number: the whole point is which case you are in.
+    const where =
+      Math.abs(x0) < 1e-9
+        ? 'bisector'
+        : Math.abs(Math.abs(x0) - half) < 5e-3
+          ? 'above the end'
+          : Math.abs(x0) > half
+            ? 'off the end'
+            : 'over the rod';
+    $('int-x0-val').textContent = `${x0 >= 0 ? '+' : ''}${x0.toFixed(2)} m · ${where}`;
+    $('int-a').value = state.integral.a;
+    $('int-a-val').textContent = `${state.integral.a.toFixed(2)} m`;
+    $('int-Q').value = state.integral.Q * 1e6;
+    $('int-Q-val').textContent = fmtCharge(state.integral.Q);
+    $('int-y').value = state.integral.y;
+    $('int-y-val').textContent = `${state.integral.y.toFixed(2)} m`;
+    const spanDeg = ((state.integral.span ?? 2 * Math.PI) * 180) / Math.PI;
+    $('int-span').value = Math.round(spanDeg);
+    const arcName =
+      spanDeg >= 359.5 ? 'full ring' : Math.abs(spanDeg - 180) < 3 ? 'half ring' : Math.abs(spanDeg - 90) < 3 ? 'quarter ring' : 'arc';
+    $('int-span-val').textContent = `${spanDeg.toFixed(0)}° · ${arcName}`;
+    $('int-R').value = state.integral.R;
+    $('int-R-val').textContent = `${state.integral.R.toFixed(2)} m`;
+    $('int-Qd').value = state.integral.Q * 1e6;
+    $('int-Qd-val').textContent = fmtCharge(state.integral.Q);
+    $('int-yd').value = state.integral.y;
+    $('int-yd-val').textContent = `${state.integral.y.toFixed(2)} m`;
+    $('int-n').value = state.integral.n;
+    $('int-n-val').textContent = String(state.integral.n);
+    const qE = (state.integral.quantity || 'E') === 'E';
+    if ($('btn-sweep-int')) $('btn-sweep-int').textContent = state.anim.playing ? 'Stop sum' : qE ? 'Play ∫ dE' : 'Play ∫ dV';
+    document.querySelectorAll('#int-qty [data-qty]').forEach((b) => {
+      b.classList.toggle('active', b.dataset.qty === (state.integral.quantity || 'E'));
+    });
+  },
+  recompute(state, computed, ctx) {
+    const distView = ctx.pool.dist();
+    const nShow = state.anim.playing ? state.anim.i : state.integral.n + 1;
+    const data = distView.rebuild(state.integral, nShow);
+    const wantV = (state.integral.quantity || 'E') === 'V';
+    const x0 = state.integral.x0 || 0;
+    const kind = state.integral.kind;
+    const span = state.integral.span ?? 2 * Math.PI;
+    const analytic = wantV
+      ? kind === 'rod'
+        ? linePerpPotential(state.integral.lambda, state.integral.L, state.integral.d, x0)
+        : kind === 'disk'
+          ? diskAxisPotential(state.integral.Q, state.integral.R, state.integral.y)
+          : ringAxisPotential(state.integral.Q, state.integral.a, state.integral.y)
+      : kind === 'rod'
+        ? linePerpField(state.integral.lambda, state.integral.L, state.integral.d, x0)
+        : kind === 'disk'
+          ? diskAxisField(state.integral.Q, state.integral.R, state.integral.y)
+          : ringAxisField(state.integral.Q, state.integral.a, state.integral.y, span);
+    computed.integral = { pieces: data.pieces, partial: distView.partial, analytic };
+    const onAxis = kind === 'ring' || kind === 'disk';
+    const P = { x: onAxis ? 0 : x0, y: onAxis ? state.integral.y : state.integral.d, z: 0 };
+    distView.labelEl.textContent = wantV
+      ? `V = ${fmtV(distView.partial.V)}  vs  ${fmtV(analytic.V)}`
+      : `|E| = ${fmtFrom(computed.integral.partial.mag)}  vs  ${fmtFrom(analytic.mag)}`;
+    const u = sceneScale();
+    distView.label.position.set(P.x * u, P.y * u + 0.4, P.z * u);
+    distView.name?.position.set(P.x * u, P.y * u, P.z * u);
+  },
+  syncViews(state, computed, ctx) {
+    ctx.pool.dist().setVisible(true);
+    ctx.grid.visible = true;
+  },
+  tick(dt, state) {
+    if (!state.anim.playing) return false;
+    const nMax = state.integral.n;
+    state.anim.i += dt * 12;
+    if (state.anim.i >= nMax) {
+      state.anim.i = nMax;
+      state.anim.playing = false;
+    }
+    return true;
+  },
+  law(state) {
+    const kind = state.integral.kind;
+    const wantVLaw = (state.integral.quantity || 'E') === 'V';
+    if (wantVLaw) {
+      if (kind === 'disk') {
+        return [
+          String.raw`dq = 2\pi\sigma s\,ds, \quad V = 2\pi k\sigma\!\displaystyle\int_0^{R}\!\frac{s\,ds}{\sqrt{s^2+y^2}}`,
+          String.raw`\quad = 2\pi k\sigma\left(\sqrt{y^2+R^2} - |y|\right)`,
+        ];
+      }
+      if (kind === 'ring') {
+        // Every piece is the same distance away whatever the span, but Q = λaφ, so 2πa is the full ring's.
+        return fullRing(state)
+          ? [String.raw`V = \dfrac{kQ}{\sqrt{a^2+y^2}} = \dfrac{k\lambda\,2\pi a}{\sqrt{a^2+y^2}}`]
+          : [String.raw`V = \dfrac{kQ}{\sqrt{a^2+y^2}} = \dfrac{k\lambda\,a\phi}{\sqrt{a^2+y^2}}`];
+      }
+      if (onBisector(state)) {
+        return [
+          String.raw`V = k\lambda \displaystyle\int \frac{dx}{r}`,
+          String.raw`= k\lambda \ln\!\left[\dfrac{\sqrt{(L/2)^2+d^2}+L/2}{\sqrt{(L/2)^2+d^2}-L/2}\right]`,
+        ];
+      }
+      // Off the bisector the two ends sit at different distances; u runs along the rod from the foot
+      // of the perpendicular through P, from u₁ at one end to u₂ at the other.
+      return state.integral.d > 0
+        ? [
+            String.raw`V = k\lambda \displaystyle\int_{u_1}^{u_2} \frac{du}{\sqrt{u^2+d^2}}`,
+            String.raw`= k\lambda \ln\!\left[\dfrac{u_2+r_2}{u_1+r_1}\right]`,
+          ]
+        : [String.raw`V = k\lambda \displaystyle\int \frac{du}{|u|} = k\lambda \ln\dfrac{r_{\text{far}}}{r_{\text{near}}}`];
+    }
+    if (kind === 'disk') {
+      // Three short lines rather than one long one: the equation panel is 360px wide.
+      return [
+        String.raw`dq = \sigma\,dA = \sigma\,s\,ds\,d\theta, \quad \displaystyle\int_0^{2\pi}\! d\theta = 2\pi`,
+        String.raw`E_y = 2\pi k\sigma\!\displaystyle\int_0^{R}\!\frac{y\,s\,ds}{(s^2+y^2)^{3/2}}`,
+        String.raw`\quad = 2\pi k\sigma\left[1 - \dfrac{y}{\sqrt{y^2+R^2}}\right]`,
+      ];
+    }
+    if (kind !== 'rod') {
+      return fullRing(state)
+        ? [String.raw`d\vec{E} = \dfrac{k\,dq}{r^2}\,\hat{r}`, String.raw`E_y = \dfrac{kQy}{(y^2+a^2)^{3/2}}, \quad E_x = 0`]
+        : [
+            String.raw`d\vec{E} = \dfrac{k\,dq}{r^2}\,\hat{r}, \quad r = \sqrt{a^2+y^2}\ \text{(every piece)}`,
+            String.raw`E_y = \dfrac{kQy}{(y^2+a^2)^{3/2}} \quad\text{— the span cancels out}`,
+            String.raw`E_x = -\dfrac{2kQa\sin(\phi/2)}{\phi\,r^3} \ne 0`,
+          ];
+    }
+    // Off the bisector nothing cancels, so E_x has to be carried through with E_y.
+    return onBisector(state)
+      ? [
+          String.raw`d\vec{E} = \dfrac{k\,dq}{r^2}\,\hat{r}, \quad dq = \lambda\,dx`,
+          String.raw`E_y = \dfrac{k\lambda}{d}\left(\sin\theta_1 + \sin\theta_2\right), \quad E_x = 0`,
+        ]
+      : [
+          String.raw`d\vec{E} = \dfrac{k\,dq}{r^2}\,\hat{r}, \quad dq = \lambda\,dx`,
+          String.raw`E_y = \dfrac{k\lambda}{d}\left(\sin\theta_1 + \sin\theta_2\right)`,
+          String.raw`E_x = k\lambda\left(\dfrac{1}{r_2} - \dfrac{1}{r_1}\right) \ne 0`,
+        ];
+  },
+  liveRows(state, computed) {
+    const I = computed.integral;
+    if (!I) return '';
+    const kind = state.integral.kind;
+    const wantV = (state.integral.quantity || 'E') === 'V';
+    const p = I.partial;
+    const a = I.analytic;
+    if (wantV) {
+      const rel = Math.abs((p.V ?? 0) - a.V) / Math.max(Math.abs(a.V), 1);
+      const pct = Math.max(0, (1 - rel) * 100);
+      const x0 = state.integral.x0 || 0;
+      const half = state.integral.L / 2;
+      return [
+        kv(String.raw`Running $\sum k\,dq/r$`, fmtV(p.V)),
+        kv(String.raw`Analytic $V$`, fmtV(a.V)),
+        kv('Match', `<span class="${matchClass(pct)}">${pct.toFixed(1)}%</span>`),
+        // The off-bisector formula names u₁, u₂, r₁, r₂: show them.
+        kind === 'rod' && !onBisector(state)
+          ? kv(String.raw`$u_1,\ u_2$ · $r_1,\ r_2$`, `${fmtLen(-half - x0)}, ${fmtLen(half - x0)} · ${fmtLen(a.r1)}, ${fmtLen(a.r2)}`)
+          : '',
+      ].join('');
+    }
+    const rel = Math.abs(p.mag - a.mag) / Math.max(a.mag, 1);
+    const pct = Math.max(0, (1 - rel) * 100);
+    return [
+      kv(String.raw`Running $\sum dE_x$`, fmtE(p.x)),
+      kv(String.raw`Running $\sum dE_y$`, fmtE(p.y)),
+      kv(String.raw`Running $|\vec{E}|$`, fmtE(p.mag)),
+      kv(String.raw`Analytic $|\vec{E}|$`, fmtE(a.mag)),
+      kv('Match', `<span class="${matchClass(pct)}">${pct.toFixed(1)}%</span>`),
+      kind === 'disk'
+        ? kv(
+            String.raw`$\sigma$`,
+            String.raw`${(a.sigma * 1e6).toFixed(2)} μC/m²  ·  $1-\frac{y}{\sqrt{y^2+R^2}}$ = ${(
+              1 - Math.abs(state.integral.y) / Math.hypot(state.integral.y, state.integral.R)
+            ).toFixed(3)}`,
+          )
+        : kind === 'ring'
+          ? kv(
+              String.raw`$r$ to the arc`,
+              String.raw`${fmtLen(a.r)}  ·  span ${(((state.integral.span ?? 2 * Math.PI) * 180) / Math.PI).toFixed(0)}°`,
+            )
+          : onBisector(state)
+            ? kv(String.raw`$\theta$`, String.raw`${deg(a.theta)}°  ·  $r_{\text{end}}$ = ${fmtLen(a.rEnd)}`)
+            : kv(
+                String.raw`$\theta_1,\ \theta_2$`,
+                String.raw`${deg(a.theta1)}°, ${deg(a.theta2)}°  ·  $r_1$ = ${fmtLen(a.r1)}, $r_2$ = ${fmtLen(a.r2)}`,
+              ),
+    ].join('');
+  },
+  readout(state, computed) {
+    const I = computed.integral;
+    if (!I) return '';
+    const kind = state.integral.kind;
+    const p = I.partial;
+    const a = I.analytic;
+    const wantV = (state.integral.quantity || 'E') === 'V';
+    if (wantV) {
+      const rel = Math.abs((p.V ?? 0) - a.V) / Math.max(Math.abs(a.V), 1);
+      const pct = Math.max(0, (1 - rel) * 100);
+      return cells([
+        [String.raw`$\sum dV$`, fmtV(p.V), ''],
+        [String.raw`Analytic $V$`, fmtV(a.V), ''],
+        ['Match', `${pct.toFixed(1)}%`, matchClass(pct)],
+        ['Note', String.raw`$V$ is a scalar`, ''],
+      ]);
+    }
+    const rel = Math.abs(p.mag - a.mag) / Math.max(a.mag, 1);
+    const pct = Math.max(0, (1 - rel) * 100);
+    // "should → 0" is a claim about the bisector, not about the rod. Off it, E_x is the answer.
+    const sym = symmetric(state);
+    return cells([
+      [String.raw`$\sum d\vec{E}$ (running)`, fmtE(p.mag), ''],
+      [String.raw`Analytic $|\vec{E}|$`, fmtE(a.mag), ''],
+      sym
+        ? [String.raw`$E_x$ (should $\to 0$)`, fmtE(p.x), Math.abs(p.x) < 0.08 * Math.max(p.mag, 1) ? 'ok' : '']
+        : [String.raw`$E_x$ (no cancellation)`, fmtE(p.x), ''],
+      [String.raw`$E_y$`, fmtE(p.y), ''],
+    ]);
+  },
+  coach: (state) => coachIntegral(state),
+});

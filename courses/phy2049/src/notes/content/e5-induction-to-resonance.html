@@ -1,0 +1,833 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Induction to Resonance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<style>
+:root{
+  --paper:#F5F6F8; --sheet:#FFFFFF; --ink:#1A2130; --muted:#5A6476; --rule:#DCE0E7;
+  --field:#2C4BB5; --field-soft:#E8ECFA;
+  --copper:#A8531C; --copper-soft:#F8ECE3;
+  --ok:#1F6B4E; --ok-soft:#E5F2EC;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:"IBM Plex Sans Condensed", "Arial Narrow", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#11141B; --sheet:#171B24; --ink:#E4E7EE; --muted:#9AA3B5; --rule:#2A3040;
+    --field:#93A7FF; --field-soft:#1C2340;
+    --copper:#E79461; --copper-soft:#2E2119;
+    --ok:#6FCBA2; --ok-soft:#16281F;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#11141B; --sheet:#171B24; --ink:#E4E7EE; --muted:#9AA3B5; --rule:#2A3040;
+  --field:#93A7FF; --field-soft:#1C2340;
+  --copper:#E79461; --copper-soft:#2E2119;
+  --ok:#6FCBA2; --ok-soft:#16281F;
+}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.62;padding-inline:16px;padding-block:0 64px}
+main{max-width:720px;margin:0 auto}
+header.top{max-width:720px;margin:0 auto;padding-block:48px 24px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3{font-family:var(--sans);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(34px,6vw,52px);font-weight:700;letter-spacing:-.01em;margin-block:10px 14px}
+.lede{font-size:19px;color:var(--muted);max-width:62ch;margin:0}
+.part{margin-top:64px;padding-top:18px;border-top:2px solid var(--ink)}
+.part .eyebrow{color:var(--field)}
+.part h2{font-size:34px;margin-top:6px}
+section.topic{margin-top:44px}
+section.topic h2{font-size:26px;font-weight:600;display:flex;gap:12px;align-items:baseline}
+section.topic h2 .n{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--field);min-width:2.2em}
+h3{font-size:19px;font-weight:600;margin-top:26px}
+p{margin-block:12px;max-width:68ch}
+ul,ol{padding-left:1.3em;max-width:66ch}
+li{margin-block:4px}
+a{color:var(--field)}
+a:focus-visible{outline:2px solid var(--field);outline-offset:2px}
+.bridge{font-style:italic;color:var(--muted);border-left:2px solid var(--rule);padding-left:14px;margin-top:22px}
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;padding-block:4px;margin:14px 0!important}
+.box{border-radius:6px;padding:14px 18px;margin:20px 0;border:1px solid var(--rule);background:var(--sheet)}
+.box > .tag{font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;display:block;margin-bottom:4px}
+.box p{margin-block:8px}
+.box.ex > .tag{color:var(--field)}
+.box.fix{background:var(--copper-soft);border-color:transparent}
+.box.fix > .tag{color:var(--copper)}
+.box.why{background:var(--field-soft);border-color:transparent}
+.box.why > .tag{color:var(--field)}
+.box.key{background:var(--ok-soft);border-color:transparent}
+.box.key > .tag{color:var(--ok)}
+.ans{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto;margin:18px 0}
+table{border-collapse:collapse;width:100%;font-size:16px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--sans);font-weight:600;font-size:15px;border-bottom:2px solid var(--ink)}
+nav.toc{margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:4px 28px;font-size:16px}
+nav.toc h3{grid-column:1/-1;font-size:14px;font-family:var(--mono);font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+nav.toc a{text-decoration:none;color:var(--ink);display:flex;gap:10px;padding:2px 0}
+nav.toc a span{font-family:var(--mono);font-size:13px;color:var(--field);min-width:2em;padding-top:3px}
+nav.toc a:hover{color:var(--field)}
+@media (max-width:560px){nav.toc{grid-template-columns:1fr} body{font-size:17px} mjx-container[display="true"]{font-size:86%} .box{padding:12px 14px}}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid var(--rule);color:var(--muted);font-size:15px}
+</style>
+
+<header class="top">
+  <div class="eyebrow">PHY 2049 · Calculus Physics II · Week 9 · Lecture notes Ch 48–52, rewritten</div>
+  <h1>Induction to Resonance</h1>
+  <p class="lede">One continuous set of notes on electromagnetic induction, inductors, motors and generators, the power grid, induction at work, and AC circuits. The whole thing grows out of one law: a changing magnetic flux makes an emf.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Correction to the original notes</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Faraday's law</h3>
+    <a href="#s1"><span>1</span>Magnetic flux</a>
+    <a href="#s2"><span>2</span>Faraday's law</a>
+    <a href="#s3"><span>3</span>Lenz's law</a>
+    <a href="#s4"><span>4</span>Motional emf and energy</a>
+    <h3>Part II · Inductance</h3>
+    <a href="#s5"><span>5</span>Mutual inductance and transformers</a>
+    <a href="#s6"><span>6</span>Self-inductance</a>
+    <a href="#s7"><span>7</span>Magnetic energy, RL and LC circuits</a>
+    <h3>Part III · Machines and the grid</h3>
+    <a href="#s8"><span>8</span>Motors and back emf</a>
+    <a href="#s9"><span>9</span>Generators</a>
+    <a href="#s10"><span>10</span>Power plants, transmission and the home</a>
+    <h3>Part IV · Induction at work</h3>
+    <a href="#s11"><span>11</span>Eddy currents</a>
+    <a href="#s12"><span>12</span>Sensors, speakers and the solar wind</a>
+    <h3>Part V · AC circuits</h3>
+    <a href="#s13"><span>13</span>R, C and L in an AC circuit</a>
+    <a href="#s14"><span>14</span>Series RLC circuits and phasors</a>
+    <a href="#s15"><span>15</span>Resonance, filters and matching</a>
+    <a href="#s16"><span>16</span>Formula sheet</a>
+  </nav>
+</header>
+
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Faraday's law</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Magnetic flux</h2>
+<p>Exam 4 ran one way: currents make magnetic fields. This chapter runs the other way. A magnetic field that changes inside a loop of wire pushes charge around the loop, the same as a battery would. The quantity that has to change is the <b>magnetic flux</b>.</p>
+<p>Flux counts how much field passes through a surface. Split the surface into small patches \(dA\), each with a unit normal \(\hat n\). Each patch passes \(\vec B\cdot\hat n\,dA\), and the flux is the sum:</p>
+\[\Phi_M = \int \vec B\cdot\hat n\,dA .\]
+<p>The unit is the weber: \(1\ \text{Wb} = 1\ \text{T·m}^2\). Flux is not a field strength. It is field times area, so a weak field through a big loop can carry as much flux as a strong field through a small one.</p>
+
+<h3>Uniform field, flat loop</h3>
+<p>If \(\vec B\) is the same over a flat area \(A\), the dot product comes out of the integral:</p>
+\[\Phi_M = BA\cos\varphi ,\]
+<p>where \(\varphi\) is the angle between \(\vec B\) and the normal \(\hat n\), not between \(\vec B\) and the surface. Only \(B\cos\varphi\), the part of the field along the normal, gets through.</p>
+<ul>
+  <li><b>Largest flux</b> when the normal points along the field (\(\varphi = 0\)): \(\Phi = BA\).</li>
+  <li><b>Zero flux</b> when the normal is perpendicular to the field (\(\varphi = 90^\circ\)). The field lines skim past the loop.</li>
+  <li>A stronger field or a bigger loop gives more flux.</li>
+</ul>
+<p>Rain into a bucket is a good picture. A bucket with its opening facing straight up into vertical rain catches the most. Tilt it and it catches less, in proportion to \(\cos\varphi\). Lay it on its side and it catches none. Harder rain is a stronger field.</p>
+
+<div class="box ex"><span class="tag">Worked example · rectangle in a 4 T field</span>
+<p>A rectangle of area 0.2 m² sits in a uniform 4 T field.</p>
+<ul>
+  <li>Normal along the field, \(\varphi = 0^\circ\): \(\Phi = (4)(0.2)\cos 0^\circ = 0.80\) Wb.</li>
+  <li>Normal at \(\varphi = 60^\circ\): \(\Phi = (4)(0.2)(0.5) = 0.40\) Wb, half the maximum.</li>
+  <li>Normal perpendicular, \(\varphi = 90^\circ\): \(\Phi = 0\).</li>
+</ul>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>Part B writes \(\Phi = (4\ \text{T})(0.2\ \text{m}^2)\cos(40^\circ)\). The angle is 60°, and the answer 0.40 Wb uses 60°. Typed as written, \(\cos 40^\circ\) gives 0.61 Wb.</p>
+</div>
+
+<h3>A field that varies across the loop</h3>
+<p>When \(B\) changes from place to place, the integral has to be done. Choose strips over which \(B\) is constant.</p>
+<div class="box ex"><span class="tag">Worked example · rectangle beside a long wire</span>
+<p>A long straight wire carries current \(I\) along the \(y\)-axis. A rectangle of width \(w\) (along \(y\)) lies in the same plane, from \(x = a\) to \(x = b\). The wire's field is \(\vec B = (\mu_0 I/2\pi x)\,\hat z\), and it is the same along a strip of width \(dx\) and length \(w\). With \(dA = w\,dx\) and \(\hat n = \hat z\):</p>
+\[\Phi_M = \int_a^b \frac{\mu_0 I}{2\pi x}\,w\,dx = \frac{\mu_0 I w}{2\pi}\,\ln\frac{b}{a}.\]
+<p>For \(I = 10\) A, \(w = 0.10\) m, \(a = 2\) cm and \(b = 10\) cm: \(\Phi = (2\times10^{-7})(10)(0.10)\ln 5 = 3.2\times10^{-7}\) Wb. The flux is positive, along \(\hat z\), because \(b > a\) makes the log positive.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes write \(\Phi_M = -\frac{\mu_0 I w}{2\pi}\ln(b/a)\). There is no minus sign. The integral of \(1/x\) from \(a\) to \(b\) is \(+\ln(b/a)\), and the field and the normal both point along \(\hat z\), so the flux is positive.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes write the flux through a loop as \(\oint\vec B\cdot\hat n\,dA\). The circle on the integral means a <i>closed</i> surface, and over any closed surface \(\oint\vec B\cdot d\vec A = 0\) (Gauss's law for magnetism, Exam 4). The flux through a loop is an integral over the open surface the loop bounds: \(\int\vec B\cdot\hat n\,dA\).</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Faraday's law</h2>
+<p>Faraday found that a current appears in a loop only while the flux through it is changing. A steady field does nothing, however strong. The emf around a coil of \(N\) turns is</p>
+\[\mathcal{E} = -N\frac{d\Phi_M}{dt}, \qquad \mathcal{E}_{\text{avg}} = -N\frac{\Delta\Phi_M}{\Delta t}.\]
+<p>The derivative gives the emf at an instant. The ratio of changes gives the average over \(\Delta t\). Each turn links the same flux, so the turns' emfs add like batteries in series. The minus sign is Lenz's law (Section 3).</p>
+<p>The emf is a real voltage. Close the loop through a resistance \(R\) and the induced current is \(I = |\mathcal{E}|/R\). A circuit can't tell an induced emf from a battery's.</p>
+
+<h3>What pushes the charge?</h3>
+<p>A changing magnetic field creates an electric field. That induced \(\vec E\) circles around the region where \(B\) changes, and it pushes charge along the wire. The emf is its work per unit charge around the loop:</p>
+\[\oint \vec E\cdot d\vec L = -\frac{d\Phi_M}{dt}.\]
+<p>This electric field is not the Coulomb field of Exam 2. Its integral around a closed loop is not zero, so it has no potential. It exists even with no wire present; the wire only gives the charge a path.</p>
+
+<h3>Three ways to change the flux</h3>
+<p>\(\Phi = BA\cos\varphi\), so any of three things can change it:</p>
+\[\Delta\Phi_M = B_fA_f\cos\varphi_f - B_iA_i\cos\varphi_i .\]
+<ul>
+  <li><b>Change \(B\):</b> move a magnet, or change the current in a nearby coil. This is a <b>static</b> emf: nothing in the circuit moves. A transformer works this way (Section 5).</li>
+  <li><b>Change \(A\):</b> stretch the loop, or slide one side of it (Section 4).</li>
+  <li><b>Change \(\varphi\):</b> rotate the loop. That is a generator (Section 9).</li>
+</ul>
+<p>Changing \(A\) or \(\varphi\) moves the conductor, so the emf is called <b>dynamic</b> or motional. Faraday's law covers both kinds. A faster change gives a bigger emf.</p>
+
+<div class="box ex"><span class="tag">Worked example · a decaying field</span>
+<p>A coil of \(N = 100\) turns and area \(A = 0.4\) m² faces a uniform field \(\vec B = B_i e^{-\lambda t}\,\hat z\), with \(B_i = 0.5\) T and \(\lambda = 0.2\ \text{s}^{-1}\). The coil's normal is along \(\hat z\), so \(\Phi = AB_ie^{-\lambda t}\) per turn:</p>
+\[\mathcal{E} = -N\frac{d}{dt}\left(AB_ie^{-\lambda t}\right) = N\lambda AB_i\,e^{-\lambda t}.\]
+<p>The two minus signs cancel: a falling flux gives a positive emf. At \(t = 0\), \(\mathcal{E} = (100)(0.2)(0.4)(0.5) = 4.0\) V. At \(t = 5\) s, \(\mathcal{E} = 4.0\,e^{-1} = 1.47\) V. The emf decays at the same rate as the field.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · a loop whose area oscillates</span>
+<p>A circular loop faces a constant field \(B\), and its area changes as \(A = A_0\cos(2\pi ft)\). Only \(A\) changes:</p>
+\[\mathcal{E} = -B\frac{dA}{dt} = BA_0(2\pi f)\sin(2\pi ft).\]
+<p>The emf is largest when the area passes through zero, where it changes fastest. It is zero at the turning points, where the area stops changing for an instant.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · rotating a coil</span>
+<p>A coil with \(N = 10\), \(A = 0.1\) m² starts with its normal along a 0.4 T field, so \(\Phi_i = BA = 0.04\) Wb per turn.</p>
+<p><b>Turned 60° in 0.02 s.</b> \(\Phi_f = (0.04)\cos 60^\circ = 0.02\) Wb, so \(\Delta\Phi = -0.02\) Wb:</p>
+\[\mathcal{E}_{\text{avg}} = -\frac{(10)(-0.02)}{0.02} = 10\ \text{V}.\]
+<p><b>Turned 180° in 0.02 s.</b> The flux now enters the other face: \(\Phi_f = -0.04\) Wb and \(\Delta\Phi = -0.08\) Wb:</p>
+\[\mathcal{E}_{\text{avg}} = -\frac{(10)(-0.08)}{0.02} = 40\ \text{V}.\]
+<p>A half turn changes the flux by \(2BA\), not \(BA\). The flux does not stop at zero; it reverses.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>An emf needs a <i>change</i> in flux. A loop sitting in a 10 T field has no emf. A loop in a 0.1 T field that switches off in a millisecond has a large one.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Lenz's law</h2>
+<p>The minus sign in Faraday's law sets the direction. <b>The induced current flows so that its own magnetic field opposes the change in flux.</b> It does not oppose the field. It opposes the change.</p>
+<ul>
+  <li>Flux <b>increasing</b>: the induced field points opposite the external field, to hold the total down.</li>
+  <li>Flux <b>decreasing</b>: the induced field points the same way as the external field, to prop it up.</li>
+</ul>
+<p>Find a current's direction in four steps:</p>
+<ol>
+  <li>Is the flux through the loop increasing or decreasing?</li>
+  <li>Which way does the external field point?</li>
+  <li>Which way must the induced field point to oppose the change?</li>
+  <li>Use right-hand rule 2: curl your fingers around the loop so your thumb points along the induced field inside it. Your fingers give the current.</li>
+</ol>
+<div class="box why"><span class="tag">Derivation · why the minus sign has to be there</span>
+<p>Suppose the induced current <i>aided</i> the change. A magnet pushed toward a loop would raise the flux, the induced field would raise it further, the current would grow, and the magnet would be pulled in harder. The loop would hand out energy with no one doing work. Opposing the change is what makes you push on the magnet, and that work becomes the electrical energy. Lenz's law is energy conservation.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · ring in a field into the page</span>
+<p><b>A. The field grows.</b> The flux into the page is increasing. The induced field must point out of the page inside the ring. RHR 2 gives a counterclockwise current.</p>
+<p><b>B. The field shrinks</b>, still into the page. The induced field must point into the page to prop it up. The current is clockwise.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · loop crossing a field region</span>
+<p>A loop slides from the left, through a region of field into the page, and out the right side.</p>
+<ol>
+  <li>Outside the region: no flux, no change, no current.</li>
+  <li>Entering: flux into the page grows. The induced field points out, so the current is counterclockwise.</li>
+  <li>Wholly inside a uniform field: the flux is constant, so there is no current, however fast it moves.</li>
+  <li>Leaving: flux into the page falls. The induced field points in, so the current is clockwise.</li>
+  <li>Outside again: no current.</li>
+</ol>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · bulb on a loop pulled into a field</span>
+<p>A single-turn rectangle of area 0.5 m² in series with a 5 Ω bulb is pulled from outside into a 0.4 T field (into the page) in 40 ms.</p>
+<p><b>A.</b> \(\Delta\Phi = (0.4)(0.5) - 0 = 0.2\) Wb, so</p>
+\[\mathcal{E} = -\frac{(1)(0.2)}{0.04} = -5\ \text{V}.\]
+<p><b>B.</b> The bulb carries \(I = 5/5 = 1.0\) A while the loop moves in.</p>
+<p><b>C.</b> The flux into the page grows, so the induced field points out of the page. The current is counterclockwise.</p>
+<p><b>D.</b> Once the loop rests inside the field, the flux is steady and the current is zero.</p>
+<p><b>E.</b> Pulled back out in 40 ms: \(\Delta\Phi = -0.2\) Wb and \(\mathcal{E} = +5\) V. The bulb again carries 1.0 A, now clockwise, because the induced field must prop up the falling flux.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes (Ch 49)</span>
+<p>The Ch 49 notes say the minus sign in \(\mathcal{E} = -M\,dI_p/dt\) "means that the induced magnetic field opposes the external magnetic field." It opposes the <i>change</i> in the external field. When the primary current falls, the induced field points the same way as the external one. The Ch 48 notes state the rule correctly.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Motional emf and energy</h2>
+<p>Move a straight conductor across a magnetic field and its free charges move with it. Each feels \(q\vec v\times\vec B\) along the rod. In a metal the free charges are electrons. They are pushed toward one end, which turns negative, and they leave the other end positive.</p>
+<div class="box why"><span class="tag">Derivation · \(\mathcal{E} = vBL\)</span>
+<p>The separated charge sets up an electric field \(E\) inside the rod, pointing from the positive end to the negative end. Electrons stop piling up when the electric push balances the magnetic one:</p>
+\[eE = evB \quad\Rightarrow\quad E = vB.\]
+<p>A uniform field \(E\) along a rod of length \(L\) gives a potential difference</p>
+\[\mathcal{E} = EL = vBL.\]
+<p>Faraday's law gives the same thing. Let the rod slide along two rails that close the circuit, a distance \(x\) from the far end. The enclosed flux is \(\Phi = BLx\), and</p>
+\[\left|\frac{d\Phi}{dt}\right| = BL\frac{dx}{dt} = vBL .\]
+</div>
+<p>If \(\vec v\) makes an angle \(\varphi\) with \(\vec B\) (and the rod is perpendicular to both), only \(v\sin\varphi\) counts: \(\mathcal{E} = vBL\sin\varphi\). The emf is largest for motion across the field and zero for motion along it. When the rod stops, the push stops and the charges flow back together.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say "the positive charged particles are forced to move in one direction in the conducting material and the negative charged particles are forced to move in the opposite direction." In a metal the positive ions are locked in the lattice. Only electrons move. One end turns positive because electrons have left it. The voltage and its polarity come out the same, but "positive charge flows in a metal" is false.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · a car's axle</span>
+<p>A metal axle 2 m long moves at 27 m/s through a field of \(3\times10^{-4}\) T, at 60° between the velocity and the field.</p>
+\[\mathcal{E} = vBL\sin\varphi = (27)(3\times10^{-4})(2)\sin 60^\circ = 0.014\ \text{V}.\]
+<p>Moving straight across the field, \(\mathcal{E} = 0.016\) V.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The example calls \(3\times10^{-4}\) T "the earth's magnetic field". Earth's field is 25–65 µT, about \(5\times10^{-5}\) T, as the Exam 4 notes and the Ch 50 example (\(3\times10^{-5}\) T) say. With \(5\times10^{-5}\) T the axle gets 2.3 mV at 60° and 2.7 mV straight across: six times less.</p>
+</div>
+
+<h3>Where the energy comes from</h3>
+<p>Close the circuit and a current flows through the moving rod. That current sits in the field, so it feels a force \(F = ILB\). By Lenz's law this force points against the motion. To keep the rod moving at constant speed, something must push with an equal and opposite force.</p>
+<div class="box why"><span class="tag">Derivation · the push pays for the heat</span>
+<p>With a total resistance \(R\), the current is \(I = vBL/R\) and the drag on the rod is</p>
+\[F = ILB = \frac{B^2L^2v}{R}.\]
+<p>The applied force does work at the rate</p>
+\[P_{\text{push}} = Fv = \frac{B^2L^2v^2}{R} = \frac{\mathcal{E}^2}{R} = P_{\text{heat}}.\]
+<p>Every joule the resistor gets came from the push. Push twice as fast and the drag doubles, and the power goes up four times. Open the circuit and \(I = 0\): no drag, no work, no energy delivered.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · rod on rails lighting a resistor</span>
+<p>Rails 0.4 m apart are joined by a 5 Ω resistor. A rod slides along them to the right at a constant 3 m/s, across a 2 T field into the page.</p>
+<p><b>A. Charge separation.</b> \(\vec v\times\vec B\) for rightward motion and a field into the page points up the rod, toward end <i>a</i>. Electrons are pushed the other way, toward <i>b</i>. So <i>a</i> is positive and <i>b</i> is negative.</p>
+<p><b>B. emf.</b> \(\mathcal{E} = vBL = (3)(2)(0.4) = 2.4\) V.</p>
+<p><b>C. Current.</b> \(I = 2.4/5 = 0.48\) A. Inside the rod it runs from <i>b</i> to <i>a</i>; through the resistor it returns from <i>a</i> to <i>b</i>.</p>
+<p><b>D. Force on the rod.</b> \(F = ILB = (0.48)(0.4)(2) = 0.384\) N. Current up the rod in a field into the page gives a force to the left, against the motion.</p>
+<p><b>E. Power.</b> \(P = IV = (0.48)(2.4) = 1.152\) W.</p>
+<p><b>F. Energy in 2 s.</b> \(E = Pt = 2.304\) J.</p>
+<p><b>G. Work by the push.</b> In 2 s the rod moves 6 m, so \(W = F\Delta x = (0.384)(6) = 2.304\) J. That is the resistor's energy.</p>
+<p><b>H. Resistor removed.</b> The circuit is open, no current flows, the magnetic force vanishes and no work is needed to keep the rod moving (ignoring friction). The 2.4 V still appears across the rod.</p>
+</div>
+<p class="bridge">So far the changing flux came from outside: a magnet, a moving rod. The flux can also come from a current in another coil, or in the same coil. That is inductance.</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Inductance</h2>
+</div>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Mutual inductance and transformers</h2>
+<p>A current in one coil, the <b>primary</b>, makes a field. Part of that field passes through a second coil, the <b>secondary</b>. Change the primary current and the flux through the secondary changes, which induces an emf in it. Energy moves from one coil to the other with no wire between them.</p>
+<p>The flux through the secondary is proportional to the primary current. The constant of proportionality, per secondary turn, is the <b>mutual inductance</b> \(M\):</p>
+\[M = \frac{N_s\Phi_s}{I_p}, \qquad \mathcal{E}_s = -N_s\frac{d\Phi_s}{dt} = -M\frac{dI_p}{dt}.\]
+<p>The unit is the henry: \(1\ \text{H} = 1\ \text{V·s/A}\). \(M\) depends only on the coils' shapes, sizes, turns and relative position, and on any iron nearby. It does not depend on the current.</p>
+
+<div class="box ex"><span class="tag">Worked example · coil inside a coil</span>
+<p>Coil 1 is a solenoid with \(N_p = 600\) turns, cross-section 0.01 m² and length 0.2 m. It sits inside coil 2, with \(N_s = 300\) turns. The current in coil 1 rises from 0 to 5 A in 2 ms.</p>
+<p><b>A.</b> The field inside coil 1 at 5 A is</p>
+\[B = \frac{\mu_0 N_p I}{L_p} = \frac{(4\pi\times10^{-7})(600)(5)}{0.2} = 0.0189\ \text{T}.\]
+<p>Coil 2 links the flux of coil 1: \(\Delta\Phi = BA = 1.89\times10^{-4}\) Wb per turn. Then</p>
+\[\mathcal{E}_s = -N_s\frac{\Delta\Phi}{\Delta t} = -(300)\frac{1.89\times10^{-4}}{2\times10^{-3}} = -28.3\ \text{V}.\]
+<p>The mutual inductance is \(M = N_s\Phi/I_p = (300)(1.89\times10^{-4})/5 = 11.3\) mH. The same answer follows from \(M\,\Delta I_p/\Delta t = (0.0113)(2500\ \text{A/s}) = 28.3\) V. (The notes round \(B\) to 0.019 T first and get 28.5 V.)</p>
+<p><b>B.</b> Once the current holds at 5 A, the flux is steady and coil 2 has no emf.</p>
+</div>
+
+<h3>The transformer</h3>
+<p>A transformer is two coils wound on one iron core. The iron guides nearly all the primary's flux through the secondary, so every turn of either coil links the same flux \(\Phi\). An AC source on the primary keeps that flux changing.</p>
+<div class="box why"><span class="tag">Derivation · the turns ratio</span>
+<p>Each turn has the same emf \(d\Phi/dt\). The primary's \(N_p\) turns must match the applied voltage, and the secondary's \(N_s\) turns produce the output:</p>
+\[V_p = N_p\frac{d\Phi}{dt}, \quad V_s = N_s\frac{d\Phi}{dt} \quad\Rightarrow\quad \frac{V_s}{V_p} = \frac{N_s}{N_p}.\]
+<p>An ideal transformer wastes nothing, so the power in equals the power out:</p>
+\[I_pV_p = I_sV_s \quad\Rightarrow\quad \frac{I_p}{I_s} = \frac{V_s}{V_p} = \frac{N_s}{N_p}.\]
+</div>
+<ul>
+  <li><b>Step-up</b> (\(N_s > N_p\)): more voltage, less current.</li>
+  <li><b>Step-down</b> (\(N_s &lt; N_p\)): less voltage, more current.</li>
+  <li>A transformer needs a changing current. On a steady DC supply the flux is constant and the secondary gives nothing.</li>
+</ul>
+
+<div class="box ex"><span class="tag">Worked example · 120 V to 6 V</span>
+<p>A primary of 200 turns runs on 120 V AC. The secondary has 10 turns and feeds a 12 Ω load.</p>
+<p><b>A.</b> \(V_s = V_p N_s/N_p = (120)(10/200) = 6.0\) V.</p>
+<p><b>B.</b> \(I_s = 6.0/12 = 0.50\) A, and \(I_p = I_s(V_s/V_p) = (0.50)(6/120) = 0.025\) A.</p>
+<p><b>C.</b> \(P_p = (0.025)(120) = 3.0\) W and \(P_s = (0.50)(6.0) = 3.0\) W.</p>
+<p>The source sees \(120/0.025 = 4800\ \Omega\). That is the 12 Ω load times \((N_p/N_s)^2 = 400\). A transformer changes how big a load looks from its primary (Section 15).</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say "the Power in a transformer's primary and secondary are always the same." That is true only for an ideal transformer. A real one turns some power into heat in its windings (\(I^2R\)) and in its core (eddy currents, Section 11). Large power transformers pass about 98–99% of the power; small ones in chargers pass less. Energy is conserved: the missing power is heat.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Self-inductance</h2>
+<p>A coil's own field passes through its own turns. Change the current and that flux changes, so the coil induces an emf in itself. By Lenz's law the emf opposes the change in current. A coil built for this is an <b>inductor</b>.</p>
+<p>The flux linked by all \(N\) turns is proportional to the current. The constant is the <b>self-inductance</b> \(L\):</p>
+\[L = \frac{N\Phi}{I}, \qquad \mathcal{E} = -N\frac{d\Phi}{dt} = -L\frac{dI}{dt}.\]
+<p>Here \(\Phi\) is the flux through one turn. \(L\) is in henries.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes write the self-induced emf as \(V_{\text{emf}} = -\frac{d\Phi_M}{dt} - L\frac{dI}{dt}\). That reads as a sum of two emfs, and it drops the \(N\). It is one emf written two ways: \(\mathcal{E} = -N\,d\Phi/dt = -L\,dI/dt\).</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say "the inductance of a coil of wire depends on the current." It doesn't. \(N\Phi\) grows in proportion to \(I\), so their ratio \(L\) is fixed by the coil's turns, size and core, as the notes say later. What depends on the current is how fast it <i>changes</i>, and that sets the emf, not \(L\). (An iron core near saturation is the exception; see below.)</p>
+</div>
+<ul>
+  <li>No change in current, no self-induced emf. A steady current flows through an ideal inductor as through a wire.</li>
+  <li>Rising current: the emf pushes against the current, like a battery facing the wrong way.</li>
+  <li>Falling current: the emf pushes with the current, trying to keep it going.</li>
+  <li>More turns, a bigger area or an iron core give a bigger \(L\).</li>
+</ul>
+
+<div class="box why"><span class="tag">Derivation · inductance of a solenoid</span>
+<p>A solenoid of \(N\) turns, length \(\ell\) and cross-section \(A\), filled with a material of permeability \(\mu\), has \(B = \mu NI/\ell\) inside (Ampère's law, Exam 4). The flux through one turn is \(\Phi = BA\), so</p>
+\[L = \frac{N\Phi}{I} = \frac{N}{I}\cdot\frac{\mu NIA}{\ell} = \frac{\mu N^2 A}{\ell} = \mu n^2 A\ell .\]
+<p>\(L\) goes as \(N^2\): doubling the turns doubles the field and doubles the turns that link it.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · iron-filled solenoid</span>
+<p>\(N = 50\), \(A = 5\times10^{-4}\) m², \(\ell = 0.1\) m, filled with iron, \(\mu = 6.5\times10^{-3}\) T·m/A. The current rises from 0 to 2 A in 10 ms.</p>
+\[L = \frac{(6.5\times10^{-3})(50)^2(5\times10^{-4})}{0.1} = 0.081\ \text{H}\]
+\[\mathcal{E} = -L\frac{\Delta I}{\Delta t} = -(0.081)\frac{2}{0.010} = -16.3\ \text{V}.\]
+<p>With an air core (\(\mu_0\)) the same coil has \(L = 15.7\ \mu\)H, 5,200 times less. Iron is what makes compact inductors possible.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The example lets the current reach 2 A with \(\mu\) held at \(6.5\times10^{-3}\) T·m/A. That would make \(B = \mu NI/\ell = 6.5\) T in the iron. Iron saturates near 2 T (Exam 4, Section 14), which this coil reaches at about 0.6 A. Above that, \(\mu\) and \(L\) fall sharply, so the real emf is smaller than 16 V. The constant-\(\mu\) answer holds only for small currents.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Magnetic energy, RL and LC circuits</h2>
+<h3>Energy stored in an inductor</h3>
+<p>Building up a current in an inductor takes work, because the self-induced emf pushes back the whole time. That work is stored in the magnetic field.</p>
+<div class="box why"><span class="tag">Derivation · \(U = \tfrac12 LI^2\)</span>
+<p>To push current \(I\) against the emf \(L\,dI/dt\), the source delivers power \(P = IL\,dI/dt\). Adding it up from zero to the final current:</p>
+\[U = \int_0^{I} L\,I'\,dI' = \tfrac12 LI^2 .\]
+<p>For a solenoid, \(L = \mu_0 n^2A\ell\) and \(B = \mu_0 nI\), so \(U = \tfrac12\mu_0n^2I^2 A\ell = \dfrac{B^2}{2\mu_0}\,(A\ell)\). The energy per volume of field is \(u_B = B^2/2\mu_0\). The capacitor's \(\tfrac12 CV^2\) is the electric twin of this result.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · energy in the iron solenoid</span>
+<p>The 0.081 H solenoid of Section 6 at 0.5 A, safely below saturation (\(B = 1.6\) T):</p>
+\[U = \tfrac12(0.081)(0.5)^2 = 0.010\ \text{J}.\]
+</div>
+
+<h3>RL circuits</h3>
+<p>Put a resistor and an inductor in series with a battery and close the switch. The current can't jump, because a sudden jump would need an infinite emf. At first the inductor's emf cancels the battery and no current flows. As the current grows, it changes more slowly, the emf shrinks, and the current levels off at \(\mathcal{E}/R\). From then on the inductor acts as a plain wire.</p>
+<div class="box why"><span class="tag">Derivation · the RL current</span>
+<p>The loop rule, with the inductor's drop \(L\,dI/dt\) in the direction of the current:</p>
+\[\mathcal{E} - IR - L\frac{dI}{dt} = 0 .\]
+<p>This is the RC equation of Exam 4 with \(I\) in place of \(q\). Separate and integrate from \(I = 0\) at \(t = 0\):</p>
+\[I(t) = \frac{\mathcal{E}}{R}\left(1-e^{-t/\tau}\right), \qquad \tau = \frac{L}{R}.\]
+<p>After one \(\tau\) the current is at 63% of its final value. Open the switch (with a path left for the current) and it decays as \(e^{-t/\tau}\) instead.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · RL growth</span>
+<p>A 12 V battery, a 6 Ω resistor and a 0.30 H inductor. Then \(\tau = 0.30/6 = 0.050\) s and \(I_f = 2.0\) A.</p>
+<ul>
+  <li>At \(t = 0\): \(I = 0\), and the whole 12 V is across the inductor.</li>
+  <li>At \(t = 50\) ms: \(I = 2.0(1-e^{-1}) = 1.26\) A.</li>
+  <li>After \(5\tau = 0.25\) s: \(I = 1.99\) A, and the inductor stores \(\tfrac12(0.30)(2.0)^2 = 0.60\) J.</li>
+</ul>
+</div>
+
+<h3>LC oscillations</h3>
+<p>Connect a charged capacitor across an inductor, with no resistance. The capacitor starts to discharge, but the inductor won't let the current jump. The current builds up as the capacitor empties. When the capacitor is empty the current is largest, and the inductor keeps it flowing, charging the capacitor the other way. Then the process runs in reverse. Energy sloshes back and forth between the electric field of the capacitor and the magnetic field of the inductor.</p>
+<ul>
+  <li>Capacitor voltage largest: current zero, all energy in the capacitor.</li>
+  <li>Current largest: capacitor voltage zero, all energy in the inductor.</li>
+  <li>The total \(q^2/2C + \tfrac12 LI^2\) stays constant.</li>
+</ul>
+<div class="box why"><span class="tag">Derivation · the resonant frequency</span>
+<p>Around the loop, \(q/C + L\,dI/dt = 0\) with \(I = dq/dt\):</p>
+\[\frac{d^2q}{dt^2} = -\frac{1}{LC}\,q .\]
+<p>That is the equation of a mass on a spring, \(\ddot x = -(k/m)x\). Its solution is \(q = Q\cos\omega t\), with</p>
+\[\omega = \frac{1}{\sqrt{LC}}, \qquad f = \frac{1}{2\pi\sqrt{LC}}.\]
+<p>The inductor plays the mass (it resists changes in current), and \(1/C\) plays the spring.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · LC circuit</span>
+<p>\(L = 2\) mH and \(C = 6\ \mu\)F, capacitor charged.</p>
+<p><b>A.</b> \(f = \dfrac{1}{2\pi\sqrt{(2\times10^{-3})(6\times10^{-6})}} = 1453\) Hz.</p>
+<p><b>B.</b> For 1000 Hz with the same inductor, solve for \(C\):</p>
+\[C = \frac{1}{4\pi^2f^2L} = \frac{1}{4\pi^2(1000)^2(2\times10^{-3})} = 1.27\times10^{-5}\ \text{F}.\]
+<p>If the 6 µF capacitor starts at 10 V, it holds \(\tfrac12(6\times10^{-6})(10)^2 = 3.0\times10^{-4}\) J. When it is empty, all of that is in the inductor: \(I_{\max} = \sqrt{2U/L} = 0.55\) A.</p>
+</div>
+<p>Real circuits have resistance. Each cycle turns some energy into heat, and the oscillation dies away. This is <b>damping</b>. LC circuits are the heart of radio tuners, filters and oscillators, all of which use the one frequency the circuit prefers (Section 15).</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Machines and the grid</h2>
+</div>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Motors and back emf</h2>
+<p>An electric motor turns electrical energy into mechanical work. Exam 4 (Section 11) found the torque on a current loop in a field, \(\tau = NIAB\sin\varphi\). A motor is built to keep that torque turning one way.</p>
+<ul>
+  <li><b>Stator:</b> the part that stays still and makes the field, with permanent magnets or electromagnets.</li>
+  <li><b>Rotor (armature):</b> the part that turns. It carries the coils, or in some motors a magnet.</li>
+  <li><b>Commutator:</b> a split ring on the axle of a DC motor. It reverses the coil's current each half turn, as the coil's normal swings through the field direction. At that point the torque is zero, and the coil's momentum carries it past. The reversed current then keeps the torque in the same direction.</li>
+  <li><b>Brushes:</b> sliding contacts that carry current from the fixed circuit to the turning commutator.</li>
+</ul>
+<p>An <b>AC motor</b> needs no commutator. Its stator coils carry alternating currents, set so their combined magnetic field rotates around the housing. The rotor is dragged around after that rotating field.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the alternating current "creates a current in the coil that appears to rotate around the inside of the motor housing." What rotates is the stator's <i>magnetic field</i>. The currents stay in their fixed coils and only change in size and sign.</p>
+</div>
+
+<h3>Back emf</h3>
+<p>A turning motor coil is a coil turning in a magnetic field. That is a generator (Section 9). So a running motor induces an emf in its own coil. By Lenz's law it opposes the supply that drives the current. This is the <b>back emf</b> \(\mathcal{E}_b\), and it grows with speed.</p>
+<p>The coil's resistance \(r\) sees only the difference between the supply and the back emf:</p>
+\[I = \frac{V - \mathcal{E}_b}{r}.\]
+<ul>
+  <li><b>At start-up</b> the coil isn't turning, \(\mathcal{E}_b = 0\), and the current is largest: \(I = V/r\).</li>
+  <li><b>At running speed</b> the back emf is nearly as big as \(V\), and the current is small.</li>
+</ul>
+<div class="box why"><span class="tag">Derivation · where the power goes</span>
+<p>Multiply \(V = Ir + \mathcal{E}_b\) by \(I\):</p>
+\[IV = I^2r + \mathcal{E}_bI .\]
+<p>The supply delivers \(IV\). The coil heats at \(I^2r\). The rest, \(\mathcal{E}_bI\), is the mechanical power. The back emf is what lets a motor do work. A motor with no back emf turns all its power into heat.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · DC motor on 12 V</span>
+<p>A motor with internal resistance 6 Ω runs on a 12 V supply.</p>
+<p><b>A. At start-up</b>, \(\mathcal{E}_b = 0\): \(I = 12/6 = 2.0\) A.</p>
+<p><b>B. Running</b>, with a back emf of 10 V: \(I = (12-10)/6 = 0.33\) A.</p>
+<p>Running, the supply gives \((12)(0.33) = 4.0\) W. The coil heats at \((0.33)^2(6) = 0.67\) W, and \((10)(0.33) = 3.3\) W becomes work: 83% efficiency. At start-up all 24 W heats the coil. That's why a motor that jams and can't turn burns out.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Generators</h2>
+<p>A generator is a motor run backwards. Turn a coil in a magnetic field and the changing flux induces an emf. Either the coil turns between fixed magnets, or a magnet turns inside fixed coils. Power stations use the second kind. An iron core inside the coil strengthens the field and the output.</p>
+<div class="box why"><span class="tag">Derivation · the sinusoidal emf</span>
+<p>A coil of \(N\) turns and area \(A\) turns at angular speed \(\omega = 2\pi f\) in a uniform field \(B\). Its normal makes angle \(\omega t\) with the field, so</p>
+\[\Phi = BA\cos\omega t, \qquad \mathcal{E} = -N\frac{d\Phi}{dt} = NBA\omega\sin\omega t .\]
+<p>The peak and rms values are</p>
+\[V_p = NBA\omega = NBA(2\pi f), \qquad V_{\text{rms}} = \frac{V_p}{\sqrt2}.\]
+</div>
+<p>Read the emf off the flux graph: the emf is minus the slope of the flux.</p>
+<ul>
+  <li>Where the flux is at a peak or trough (coil facing the field), the slope is zero and so is the emf.</li>
+  <li>Where the flux passes through zero (coil edge-on to the field), the slope is steepest and the emf peaks. A falling flux gives a positive emf; a rising one, negative.</li>
+  <li>Each half turn the flux reverses, so the emf alternates. That is AC.</li>
+</ul>
+
+<div class="box ex"><span class="tag">Worked example · Bob's generator</span>
+<p>Bob wants 120 V rms at 60 Hz from Earth's field, \(3\times10^{-5}\) T, with an armature of area 0.2 m². Solve \(V_{\text{rms}} = NBA(2\pi f)/\sqrt2\) for \(N\):</p>
+\[N = \frac{\sqrt2\,V_{\text{rms}}}{BA(2\pi f)} = \frac{\sqrt2(120)}{(3\times10^{-5})(0.2)(2\pi\cdot60)} = 75{,}000\ \text{turns}.\]
+<p>With a 0.5 T magnet instead, he would need \(75{,}000\times(3\times10^{-5}/0.5) = 4.5\) turns. Real generators use strong electromagnets, not Earth's field.</p>
+</div>
+
+<h3>Counter-torque</h3>
+<p>With nothing connected, a generator's coil carries no current and turns freely, apart from friction. Connect a load and current flows in the coil. That current sits in the field, so it feels a torque, and by Lenz's law the torque opposes the rotation. This <b>counter-torque</b> is what the turbine works against. The more current the load draws, the harder the shaft is to turn. It is the generator's version of the drag on the rod in Section 4.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>A motor takes in current and puts out rotation, and its rotation makes a back emf. A generator takes in rotation and puts out current, and its current makes a counter-torque. Same machine, same physics, run in opposite directions.</p>
+</div>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Power plants, transmission and the home</h2>
+<p>Almost every power plant turns a generator. Most boil water to drive a steam turbine, with heat from coal, natural gas or nuclear fission. Hydroelectric plants use falling water, and wind turbines use the wind. JEA, the Jacksonville utility, runs coal and natural-gas plants and also draws on nuclear power. Its cooling towers release the heat that the steam cycle can't turn into work.</p>
+<p>A plant's generators produce a few kilovolts to a few tens of kilovolts. Step-up transformers raise that to hundreds of kilovolts for the long-distance lines. Substations step it down for neighborhood distribution lines, and a transformer on a pole or a pad steps it down again for the house.</p>
+
+<h3>Why the lines run at high voltage</h3>
+<div class="box why"><span class="tag">Derivation · the loss goes as \(1/V^2\)</span>
+<p>A town needs power \(P\). Sent at voltage \(V\), that takes a current \(I = P/V\). The line's resistance \(R\) turns \(I^2R\) into heat:</p>
+\[P_{\text{loss}} = I^2R = \frac{P^2R}{V^2}.\]
+<p>For the same power and the same wires, ten times the voltage means a tenth of the current and a hundredth of the loss. (Use \(I^2R\), not \(V^2/R\) with the line voltage: only the small drop \(IR\) is across the line's resistance.)</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · 100 kV versus 100 V</span>
+<p>Compare sending the same power over the same wires at \(V_1 = 100{,}000\) V and \(V_2 = 100\) V. \(P^2R\) is the same, so \(P_{\text{loss}}V^2\) is the same:</p>
+\[P_{\text{loss},1}V_1^2 = P_{\text{loss},2}V_2^2 \quad\Rightarrow\quad \frac{P_{\text{loss},2}}{P_{\text{loss},1}} = \frac{V_1^2}{V_2^2} = (1000)^2 = 10^6 .\]
+<p>At 100 V the line wastes a million times as much power as at 100 kV.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes conclude \(P_{\text{loss}\,1} = (1{,}000{,}000)\,P_{\text{loss}\,2}\), which says the 100 kV line loses more. It is the other way round: \(P_{\text{loss}\,1} = V_2^2P_{\text{loss}\,2}/V_1^2 = 10^{-6}\,P_{\text{loss}\,2}\). The low-voltage line loses a million times more, which is the whole point of high-voltage transmission.</p>
+</div>
+<p>There are two ways to cut the loss: raise the voltage, or lower \(R\) with thicker cables. The voltage wins, because the loss falls as its square. Exam 3's power-line lab shows a 100 MW line at 345 kV and at 34.5 kV.</p>
+
+<div class="box ex"><span class="tag">Application · transformer</span>
+<p>The grey can on a utility pole is a step-down transformer. A common one takes 7,200 V from the distribution line and gives 240 V to a few houses, a turns ratio of \(N_p/N_s = 30\). Say the houses draw 24 kW.</p>
+\[I_s = \frac{P}{V_s} = \frac{24{,}000}{240} = 100\ \text{A}, \qquad I_p = I_s\frac{N_s}{N_p} = \frac{100}{30} = 3.33\ \text{A}.\]
+<p>The houses look like a load of \(R = V_s/I_s = 2.4\ \Omega\). From the line, that load looks like \(2.4\times30^2 = 2160\ \Omega\), and indeed \(7200/3.33 = 2160\ \Omega\). The distribution line carries 3.33 A instead of 100 A, so its \(I^2R\) loss is \(30^2 = 900\) times smaller than if it ran at 240 V. A transformer needs AC: on DC its flux would not change, and it would give nothing.</p>
+<p>Ideal transformers waste nothing. A real one this size passes about 98% of the power. The rest heats its copper windings and its iron core. The core is built from thin, insulated steel sheets to stop eddy currents (Section 11).</p>
+</div>
+
+<h3>AC and DC transmission</h3>
+<p>Most of the world's grid is AC, because transformers make it easy to change the voltage. <b>High-voltage DC</b> (HVDC) lines are used for very long links and for underground and undersea cables. A DC line carries its full voltage all the time, while an AC line insulated for a peak voltage carries only \(1/\sqrt2\) of it as rms. DC also avoids the losses a cable's capacitance and inductance cause on AC. The price is the converter stations at each end, which turn AC into DC and back.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say direct current "can generate about twice the voltages as that of a.c." and that HVDC is limited because "transformers are more costly." DC lines run at voltages similar to AC ones (several hundred kilovolts up to about a megavolt). For the same insulation a DC line can use about \(\sqrt2\) times the rms voltage, not twice. And HVDC can't use transformers at all for the DC part. What costs more is the converter stations.</p>
+</div>
+
+<h3>The grid</h3>
+<p>The US grid ties generating stations to customers through high-voltage transmission lines and lower-voltage distribution lines. It is split into three large regions, the Eastern, Western and Texas Interconnections, with only limited links between them. Outages, heavy demand and solar storms (Section 12) can all disturb it. Homes with solar panels can feed power back into the grid.</p>
+
+<h3>Electricity in the home</h3>
+<p>The pole transformer's secondary is <b>center-tapped</b>. The center tap is the neutral. Each end is 120 V rms from the neutral, and the two ends are 180° out of phase, so they are 240 V apart. This <b>split-phase</b> service gives 120 V outlets (one hot wire and the neutral) and 240 V for a dryer, oven or air conditioner (both hot wires).</p>
+<p>The service drop brings the wires to the meter, which counts kilowatt-hours. The main panel splits the supply into circuits, each with a breaker that opens if the circuit draws too much current. Ordinary outlet and lighting circuits are 15 A or 20 A. Dryers, ovens and air handlers get 30–50 A circuits at 240 V.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the pole transformer steps the voltage down "to deliver the power to our house (220 V)" and that "common breakers are 10 A." US homes get 240 V split-phase, as the notes' own later page says, and 120 V at the outlets. Household breakers are 15 A and 20 A; 10 A is not a standard US household size.</p>
+</div>
+<p>Most of Europe uses 230 V at 50 Hz, with 400 V three-phase for heavy loads. At twice the voltage, the same power takes half the current, so thinner wire will do. The cost is a more dangerous shock. The US's 120 V is safer to touch but needs thicker copper. Europe's grid is also AC, heavily linked across borders, with HVDC links to offshore wind farms.</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part IV</div>
+  <h2>Induction at work</h2>
+</div>
+
+<section class="topic" id="s11">
+<h2><span class="n">11</span>Eddy currents</h2>
+<p>Faraday's law doesn't need a wire loop. In a solid piece of metal, any closed path is a loop. When the flux through such paths changes, currents swirl through the metal. These are <b>eddy currents</b>. The metal's resistance turns them into heat, and the field acts on them with a force that opposes the motion causing them.</p>
+<ul>
+  <li>The lower the metal's resistance, the larger the eddy currents and the larger the losses and forces.</li>
+  <li>The energy comes from whatever causes the change: the kinetic energy of a moving conductor, or the source driving a changing field.</li>
+  <li>By Lenz's law the eddy currents oppose the change in flux. Where the flux is growing, their field points against the external field. Where it is shrinking, their field points along it.</li>
+</ul>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the eddy currents' field is always "in the opposite direction as the external field," and that magnetic brakes "transfer mechanical energy (motion) to magnetic energy." The eddy field opposes the <i>change</i>: on the side of a brake disk leaving the magnet's field it points along the external field. And the brake's mechanical energy ends up as heat in the disk, through the eddy currents' \(I^2R\). The field only passes it on.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · conductor sliding into a field</span>
+<p>A metal plate slides across a frictionless table into a region of uniform field, into the page. As its front edge enters, the flux through loops in the plate that straddle the edge grows. Eddy currents circulate counterclockwise there, and the field pushes back on them. The plate slows down, and its lost kinetic energy heats the plate.</p>
+<p>Once the plate is wholly inside the uniform field, no loop in it has a changing flux. The eddy currents stop, and the plate coasts on at its reduced speed. It slows again only as it leaves, when the flux falls. This is the loop of Section 3, made of solid metal.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the plate loses kinetic energy "until it will eventually stop," as if the drag lasted the whole time it is in the field. Eddy currents flow only while the flux changes: as the plate crosses the field's edge. Inside a uniform field it coasts. It stops only if the drag while entering takes all its kinetic energy first.</p>
+</div>
+
+<h3>Putting eddy currents to work</h3>
+<ul>
+  <li><b>Metal detectors.</b> A coil carries an AC current. Nearby metal carries eddy currents, whose field a second coil picks up.</li>
+  <li><b>Magnetic brakes.</b> An electromagnet switched on beside a spinning metal disk sets up eddy currents that slow it. Trains and roller coasters use them. They wear nothing out, and they fade as the motion slows, since slower motion makes smaller currents.</li>
+  <li><b>Damping.</b> A metal vane moving between magnet poles is slowed, which stops a balance or a meter needle from swinging.</li>
+  <li><b>Flaw detection.</b> A crack in a metal part changes the eddy currents a probe coil sets up, and the coil senses the difference.</li>
+  <li><b>Sorting metals.</b> A spinning magnet under a conveyor belt drives eddy currents in aluminum cans and flings them off sideways. Plastic and glass carry on.</li>
+  <li><b>Induction stoves.</b> A coil under the glass carries a high-frequency current. The changing field drives eddy currents in the pot's base, and the pot's resistance turns them into heat. The glass stays cool except where the pot warms it.</li>
+  <li><b>Superconductor levitation.</b> A magnet lowered toward a superconductor induces currents in it that meet no resistance and keep flowing. Their field repels the magnet, and it floats.</li>
+</ul>
+
+<h3>When eddy currents are a problem</h3>
+<p>In transformer cores, motor armatures and inductors, eddy currents waste power as heat. More input power is needed, and the parts must be built bigger to shed the heat. In an MRI scanner, the switching gradient fields drive eddy currents in the machine that blur the images. The fix is to break up the current paths. Cores are made of thin steel sheets (laminations) insulated from each other, or of ferrite, a ceramic magnetic material that barely conducts. A thin sheet encloses little flux, so its eddy emf is small, and the power \(\mathcal{E}^2/R\) falls further still.</p>
+</section>
+
+<section class="topic" id="s12">
+<h2><span class="n">12</span>Sensors, speakers and the solar wind</h2>
+<h3>Magnetic flow meter</h3>
+<p>Water, blood and many other fluids conduct. When a conducting fluid flows across a magnetic field, its ions are pushed to opposite sides of the pipe, like the electrons in the moving rod of Section 4. Electrodes on the pipe wall read the voltage.</p>
+<div class="box ex"><span class="tag">Application · magnetic flow meter</span>
+<p>A pipe of diameter \(d\) carries fluid at average speed \(v\) across a field \(B\). The fluid between the electrodes is a conductor of length \(d\) moving at \(v\), so</p>
+\[V = Bdv .\]
+<p>Take a water main with \(d = 0.10\) m, \(B = 0.010\) T and \(v = 2.0\) m/s: \(V = (0.010)(0.10)(2.0) = 2.0\) mV. The flow rate is \(Q = v\,\pi d^2/4 = 0.0157\ \text{m}^3/\text{s}\), or 15.7 L/s. The voltage is proportional to the speed: double the flow and the reading doubles. The meter has no moving parts and nothing in the stream, so it suits dirty water, slurries and blood.</p>
+</div>
+
+<h3>Ground fault interrupter</h3>
+<p>A GFI outlet passes the hot and neutral wires together through a small sensing coil. Normally the current out on the hot wire equals the current back on the neutral. The two are equal and opposite, so the net current through the coil is zero, its field is zero, and the coil sees no changing flux. If some current finds another way back to ground, through a person, the two no longer cancel. The coil then sees an alternating flux, an emf appears, and the GFI cuts the power within a fraction of a second. It trips at about 5 mA, well below a dangerous shock.</p>
+
+<h3>Speakers and microphones</h3>
+<p>Both use a coil attached to a cone, around a fixed magnet. In a <b>speaker</b> the audio signal drives a current through the coil, and the force \(F = ILB\) (Exam 4) moves the coil and cone back and forth to make sound. In a <b>microphone</b> sound moves the cone, the coil moves through the magnet's field, and a motional emf appears at the frequency of the sound. One is the other run backwards, like the motor and the generator.</p>
+
+<h3>Traffic-light sensors</h3>
+<p>The loop of wire cut into the road at an intersection is a large inductor. The controller drives it with an AC current at tens of kilohertz. A car's metal body above the loop carries eddy currents that oppose the loop's field, which lowers the loop's inductance and raises its frequency. The controller watches for that shift.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the car "drives over a loop of wire" and the field in the loop is "increased thereby inducing a current" that tells the controller the car is there. That emf would last only while the car moves. A car waiting at the light changes nothing and would induce nothing, yet that is the car the sensor must see. Real loop detectors are driven with AC, and the car <i>lowers</i> the loop's inductance through eddy currents in its body.</p>
+</div>
+
+<h3>Electric guitar pickups</h3>
+<p>A pickup is a coil wound around permanent magnets, one under each steel string. The magnets magnetize the strings. A vibrating string moves its magnetized section closer to and farther from the coil, which changes the flux and induces an emf at the string's frequency. The amplifier turns that signal into sound.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes describe the pickup as a coil "with an iron core" under a ferromagnetic string. With only iron there is no field for the string to change, and the coil would give no signal. A pickup's pole pieces are permanent magnets. That is what makes a nylon-string guitar silent through one: nylon can't be magnetized.</p>
+</div>
+
+<h3>RFID tags and induction chargers</h3>
+<p>An <b>RFID tag</b> is a chip joined to a flat coil. A reader's changing field induces an emf in the coil that powers the chip, which answers with its stored data. Tags track books, packages, race runners and medical devices. An <b>induction charger</b> works the same way, as a transformer with the core split in two: a coil in the pad drives a changing field, and a coil in the phone picks up an emf that charges the battery.</p>
+
+<h3>Solar flares and the solar wind</h3>
+<p>Sunspots are dark because they are cooler than the surface around them. Their strong magnetic fields hold back the flow of hot gas from below. A <b>solar flare</b> is a sudden release of the magnetic energy stored near sunspots, when field lines tangle and reconnect. It lasts minutes to hours and releases about ten million times the energy of a volcanic eruption. Bright loops above the sunspots trace the field lines, because the hot charged gas follows them.</p>
+<p>The Sun also streams charged particles outward all the time: the <b>solar wind</b>. It is about 95% protons and electrons, 4–5% alpha particles (He²⁺), and traces of heavier ions such as oxygen and iron. It moves at 300–800 km/s and drags the Sun's magnetic field out with it. Earth's field turns most of it aside, and particles that leak in spiral down the field lines to make aurorae (Exam 4).</p>
+<p>The particles and fields a big solar storm sends toward Earth disturb Earth's magnetic field. A changing field over hundreds of kilometers induces emfs in long conductors. Satellites and radio links fail, and the long lines of a power grid pick up currents that can overheat and destroy transformers. In 1989 a storm blacked out Quebec for nine hours.</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part V</div>
+  <h2>AC circuits</h2>
+</div>
+
+<section class="topic" id="s13">
+<h2><span class="n">13</span>R, C and L in an AC circuit</h2>
+<p>An AC source's voltage swings as a sine wave, \(v = V_0\cos\omega t\) with \(\omega = 2\pi f\). Every current and voltage in the circuit then swings at the same frequency. They need not peak at the same time. The time offset, measured as an angle, is the <b>phase</b>. A resistor keeps the current in step with its voltage. A capacitor and an inductor shift it by a quarter cycle, 90°, in opposite directions.</p>
+<p>A <b>phasor</b> is an arrow that turns counterclockwise at \(\omega\), with its length equal to the amplitude. The real value at any instant is its projection on the horizontal axis. Phasors are not vectors in space. They are a picture of sine waves that lets you add waves of different phase like arrows.</p>
+<p>Each element's opposition to current is the ratio of its rms voltage to its rms current. For a resistor that's \(R\). For a capacitor or an inductor it's called <b>reactance</b>, \(X\), also in ohms.</p>
+
+<h3>Resistor: in phase</h3>
+<p>\(V = IR\) holds at every instant, so the current peaks with the voltage, and \(V_{\text{rms}} = I_{\text{rms}}R\). Resistance doesn't depend on frequency. A resistor turns energy into heat at an average rate \(I_{\text{rms}}^2R\).</p>
+
+<h3>Capacitor: current leads</h3>
+<div class="box why"><span class="tag">Derivation · capacitive reactance</span>
+<p>Put \(v = V_0\sin\omega t\) across a capacitor. Its charge is \(q = Cv\), so the current is</p>
+\[i = \frac{dq}{dt} = \omega CV_0\cos\omega t = \omega CV_0\sin(\omega t + 90^\circ).\]
+<p>The current peaks a quarter cycle <i>before</i> the voltage. Its amplitude is \(I_0 = \omega CV_0\), so</p>
+\[X_C = \frac{V_0}{I_0} = \frac{1}{\omega C} = \frac{1}{2\pi fC}.\]
+</div>
+<p>The current is largest when the voltage is changing fastest, because that is when charge flows on and off the plates fastest. At high frequency the plates never fill, so the capacitor barely resists: \(X_C\to 0\), like a wire. At low frequency they fill and block the current: on DC (\(f = 0\)) a charged capacitor is an open circuit. Over a cycle the capacitor stores energy and hands it back, so its average power is zero.</p>
+<div class="box ex"><span class="tag">Worked example · capacitor alone</span>
+<p>A 2 µF capacitor on a 12 V source.</p>
+<ul>
+  <li><b>120 Hz:</b> \(X_C = 1/(2\pi\cdot120\cdot2\times10^{-6}) = 663\ \Omega\), and \(I = 12/663 = 18.1\) mA.</li>
+  <li><b>1200 Hz:</b> \(X_C = 66.3\ \Omega\), and \(I = 0.181\) A. Ten times the frequency, ten times the current.</li>
+  <li><b>1200 Hz with 20 µF:</b> \(X_C = 6.63\ \Omega\), and \(I = 1.81\) A.</li>
+</ul>
+</div>
+
+<h3>Inductor: voltage leads</h3>
+<div class="box why"><span class="tag">Derivation · inductive reactance</span>
+<p>Let \(i = I_0\sin\omega t\) flow through an inductor. The voltage across it is</p>
+\[v = L\frac{di}{dt} = \omega LI_0\cos\omega t = \omega LI_0\sin(\omega t + 90^\circ).\]
+<p>The voltage peaks a quarter cycle <i>before</i> the current. Its amplitude is \(\omega LI_0\), so</p>
+\[X_L = \frac{V_0}{I_0} = \omega L = 2\pi fL .\]
+</div>
+<p>At high frequency the current changes fast, the self-induced emf is large, and the inductor blocks the current. At low frequency it barely resists: on DC an ideal inductor is a wire. Like the capacitor, it stores energy and hands it back, so its average power is zero.</p>
+<p>The phases are remembered as <b>ELI the ICE man</b>: in an inductor (L) the voltage E leads the current I; in a capacitor (C) the current I leads E.</p>
+<div class="box ex"><span class="tag">Worked example · inductor alone</span>
+<p>A 2 mH inductor on a 12 V source.</p>
+<ul>
+  <li><b>120 Hz:</b> \(X_L = 2\pi(120)(2\times10^{-3}) = 1.51\ \Omega\), and \(I = 12/1.51 = 7.96\) A.</li>
+  <li><b>1200 Hz:</b> \(X_L = 15.1\ \Omega\), and \(I = 0.796\) A. Ten times the frequency, a tenth of the current.</li>
+  <li><b>1200 Hz with 20 mH:</b> \(X_L = 151\ \Omega\), and \(I = 79.6\) mA.</li>
+</ul>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The summary lists \(X_L = 2\pi fL\) with the note "Inductance reactance is inversely proportional to the frequency." \(X_L\) is <i>directly</i> proportional to frequency, as the formula and the examples show: 1.51 Ω at 120 Hz, 15.1 Ω at 1200 Hz. It is \(X_C\) that is inversely proportional.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say "the Inductance is proportional to the rate of change of the current, therefore the voltage across the inductor is proportional to the time rate of change of the current." The inductance is a fixed property of the coil. The <i>voltage</i> is proportional to the rate of change of the current, with \(L\) as the constant: \(v = L\,di/dt\).</p>
+</div>
+</section>
+
+<section class="topic" id="s14">
+<h2><span class="n">14</span>Series RLC circuits and phasors</h2>
+<p>Put a resistor, an inductor and a capacitor in series with an AC source. One current \(i\) flows through all three. Their voltages differ in phase: \(v_R\) is in step with \(i\), \(v_L\) leads it by 90°, and \(v_C\) lags it by 90°. So \(v_L\) and \(v_C\) point in opposite directions on the phasor diagram, and both are perpendicular to \(v_R\).</p>
+<div class="box why"><span class="tag">Derivation · impedance</span>
+<p>The loop rule holds at every instant: \(v_s = v_R + v_L + v_C\). The phasors add like arrows. The reactive part is \(V_L - V_C\) along one axis, and \(V_R\) is along the other:</p>
+\[V_s = \sqrt{V_R^2 + (V_L - V_C)^2} = I\sqrt{R^2 + (X_L - X_C)^2}.\]
+<p>The total opposition is the <b>impedance</b>:</p>
+\[Z = \sqrt{R^2 + (X_L-X_C)^2}, \qquad V_{\text{rms}} = I_{\text{rms}}Z, \qquad \tan\varphi = \frac{X_L - X_C}{R}.\]
+<p>\(\varphi\) is the angle by which the source voltage leads the current.</p>
+</div>
+<ul>
+  <li>\(X_L > X_C\): \(\varphi > 0\). The circuit acts inductively, and the current lags.</li>
+  <li>\(X_L &lt; X_C\): \(\varphi &lt; 0\). The circuit acts capacitively, and the current leads.</li>
+  <li>\(X_L = X_C\): \(\varphi = 0\). The circuit acts like the resistor alone (Section 15).</li>
+</ul>
+<p>The same result in complex numbers: write \(Z = R + iX\) with \(X = X_L - X_C\) and \(i = \sqrt{-1}\). The resistance is the real part, the net reactance the imaginary part, and \(|Z| = \sqrt{R^2 + X^2}\). Only the resistor uses power: \(P = I_{\text{rms}}^2R = I_{\text{rms}}V_{\text{rms}}\cos\varphi\).</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes write "\(V_s = V_R + (V_L - V_C)\)" and describe phase as constructive and destructive interference. The rms voltages do not add as numbers. They add as phasors at right angles. In the example below, \(V_R + V_L - V_C = 67.6 + 34.0 - 107.7 = -6.1\) V, not the source's 100 V. The phasor sum \(\sqrt{67.6^2 + (34.0-107.7)^2} = 100\) V is right. Note that \(V_C\) alone is larger than the source voltage. That can't happen with resistors, and it shows why the plain sum fails.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · series RLC at 1000 Hz</span>
+<p>A 50 Ω resistor, a 4 mH inductor and a 2 µF capacitor in series on 100 V rms.</p>
+<p><b>A. Current at 1000 Hz.</b></p>
+\[X_C = \frac{1}{2\pi(1000)(2\times10^{-6})} = 79.6\ \Omega, \qquad X_L = 2\pi(1000)(4\times10^{-3}) = 25.1\ \Omega\]
+\[Z = \sqrt{50^2 + (25.1-79.6)^2} = 73.9\ \Omega, \qquad I = \frac{100}{73.9} = 1.35\ \text{A}.\]
+<p><b>B. Voltage across the resistor.</b> \(V_R = (1.35)(50) = 67.6\) V. Across the others, \(V_L = 34.0\) V and \(V_C = 107.7\) V.</p>
+<p>The phase angle is \(\varphi = \tan^{-1}(-54.5/50) = -47.4^\circ\): \(X_C\) wins, so the current leads the voltage. The resistor uses \(I^2R = 91.5\) W, which equals \(IV\cos\varphi = (1.35)(100)(0.677)\).</p>
+<p>Parts C and D, at resonance, are in Section 15.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The example writes \(Z = \sqrt{R^2 + (X_L - X_C)}\), without the square on the reactance. Computed as written it gives \(\sqrt{2500 - 54.5} = 49.5\ \Omega\). The 74 Ω the notes report comes from \(\sqrt{R^2 + (X_L - X_C)^2}\).</p>
+</div>
+</section>
+
+<section class="topic" id="s15">
+<h2><span class="n">15</span>Resonance, filters and matching</h2>
+<h3>Resonance</h3>
+<p>\(X_L\) rises with frequency and \(X_C\) falls. At one frequency they are equal and cancel. There \(Z = R\), its smallest value, the current is largest, and \(\varphi = 0\):</p>
+\[2\pi f_0L = \frac{1}{2\pi f_0C} \quad\Rightarrow\quad f_0 = \frac{1}{2\pi\sqrt{LC}}.\]
+<p>That is the LC circuit's own frequency from Section 7. Driving a system at its natural frequency is <b>resonance</b>, and that is where the source transfers the most energy.</p>
+<ul>
+  <li>Below \(f_0\) the capacitor's reactance dominates \(Z\). Above it, the inductor's does.</li>
+  <li>\(L\) and \(C\) set \(f_0\). \(R\) doesn't change \(f_0\). It sets how high the current peak rises (\(I = V/R\)) and how sharp it is.</li>
+  <li>A series RLC circuit passes current near \(f_0\) and blocks other frequencies. It selects a frequency.</li>
+</ul>
+<div class="box ex"><span class="tag">Worked example · series RLC at resonance</span>
+<p>The same 50 Ω, 4 mH, 2 µF circuit on 100 V rms (Section 14).</p>
+<p><b>C.</b> \(f_0 = \dfrac{1}{2\pi\sqrt{(4\times10^{-3})(2\times10^{-6})}} = 1779\) Hz.</p>
+<p><b>D.</b> At \(f_0\), \(Z = R\), so \(I = 100/50 = 2.0\) A.</p>
+<p>Both reactances are then \(2\pi(1779)(0.004) = 44.7\ \Omega\). The inductor and capacitor each have \((2.0)(44.7) = 89\) V across them, but they are 180° apart and cancel. The resistor gets the full 100 V.</p>
+</div>
+
+<h3>Filters</h3>
+<p>An inductor passes low frequencies and blocks high ones. A capacitor passes high frequencies and blocks low ones. A resistor treats all frequencies alike. A filter is named for what it passes: a series inductor makes a <b>low-pass</b> filter, and a series capacitor makes a <b>high-pass</b> filter.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes call inductors "high frequency filters" and capacitors "low frequency filters," meaning what each one blocks. In electronics a filter is named for what it <i>passes</i>. An inductor in series is a low-pass filter and a capacitor in series is a high-pass filter, as the notes' own speaker-crossover paragraph says. Calling an inductor a "high-frequency filter" invites the opposite answer.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · which bulb is brightest?</span>
+<p>Three identical bulbs are wired in parallel branches across an AC source. One bulb is in series with a resistor, one with an inductor, one with a capacitor.</p>
+<ul>
+  <li><b>High frequency:</b> \(X_C\) is small and \(X_L\) is large. The capacitor's bulb is brightest, and the inductor's is dim.</li>
+  <li><b>Low frequency:</b> \(X_L\) is small and \(X_C\) is large. The inductor's bulb is brightest, and the capacitor's is nearly dark.</li>
+  <li>The resistor's bulb is the same at every frequency.</li>
+</ul>
+</div>
+<p><b>Speaker crossovers</b> use this. An inductor in series with the woofer sends it the low notes, and a capacitor in series with the tweeter sends it the high ones.</p>
+
+<div class="box ex"><span class="tag">Application · radio tuner</span>
+<p>Every station's signal reaches the antenna at once. A radio's tuning circuit is an RLC circuit whose resonant frequency the knob sets, with a variable capacitor. At resonance the circuit's impedance is smallest and that station's current is largest; the others are suppressed.</p>
+<p>The AM band runs from 540 kHz to 1700 kHz. With a 240 µH coil, the capacitor must cover</p>
+\[C = \frac{1}{4\pi^2f^2L}: \qquad 362\ \text{pF at 540 kHz}, \qquad 36.5\ \text{pF at 1700 kHz}.\]
+<p>The frequency goes as \(1/\sqrt C\), so a 3.15-fold range of frequency needs a \(3.15^2 = 9.9\)-fold range of capacitance. Classic tuning capacitors run up to about 365 pF.</p>
+</div>
+
+<h3>Parallel RLC</h3>
+<p>In a parallel RLC circuit each element has the full source voltage, and the branch currents add as phasors:</p>
+\[\frac{1}{Z_p} = \sqrt{\left(\frac{1}{R}\right)^2 + \left(\frac{1}{X_L} - \frac{1}{X_C}\right)^2}.\]
+<p>At \(f_0 = 1/2\pi\sqrt{LC}\), the same frequency as in series, the inductor and capacitor currents cancel. Then \(Z_p = R\), its <i>largest</i> value, and the source current is smallest.</p>
+<div class="tbl"><table>
+<tr><th></th><th>Series RLC</th><th>Parallel RLC</th></tr>
+<tr><td>Shared by all elements</td><td>Current</td><td>Voltage</td></tr>
+<tr><td>Impedance at resonance</td><td>Smallest (\(R\))</td><td>Largest (\(R\))</td></tr>
+<tr><td>Source current at resonance</td><td>Largest</td><td>Smallest</td></tr>
+<tr><td>Resonant frequency</td><td colspan="2">\(1/2\pi\sqrt{LC}\) for both</td></tr>
+</table></div>
+
+<h3>Impedance matching</h3>
+<p>A source with internal resistance \(r\) delivers the most power to a load \(R\) when \(R = r\). (The power \(\mathcal{E}^2R/(R+r)^2\) peaks there.) For AC, the load's impedance should be the complex conjugate of the source's: equal resistance, opposite reactance. When the two don't match, a transformer can match them.</p>
+<div class="box why"><span class="tag">Derivation · a transformer scales impedance</span>
+<p>Put a load \(Z_2\) on the secondary. From Section 5, \(V_1 = V_2(N_1/N_2)\) and \(I_1 = I_2(N_2/N_1)\). The primary sees</p>
+\[Z_1 = \frac{V_1}{I_1} = \frac{V_2}{I_2}\left(\frac{N_1}{N_2}\right)^2 = Z_2\left(\frac{N_1}{N_2}\right)^2 \quad\Rightarrow\quad \frac{N_1}{N_2} = \sqrt{\frac{Z_1}{Z_2}}.\]
+</div>
+<div class="box ex"><span class="tag">Worked example · amplifier and speaker</span>
+<p>An amplifier with an 8,000 Ω output drives an 8 Ω speaker. Wired directly, the mismatch distorts the sound and wastes power. The turns ratio that matches them is</p>
+\[\frac{N_1}{N_2} = \sqrt{\frac{8000}{8}} = 31.6 .\]
+<p>A 32:1 transformer makes the speaker look like \(8\times32^2 = 8192\ \Omega\) to the amplifier, within 2.4% of a match. Tube amplifiers use output transformers for this.</p>
+</div>
+<p>Matching also matters for antennas, where it gets the most power into the air, and for fast digital and radio circuits, where a mismatch reflects signals back down the line.</p>
+</section>
+
+<section class="topic" id="s16">
+<h2><span class="n">16</span>Formula sheet</h2>
+<div class="tbl"><table>
+<tr><th>Idea</th><th>Result</th></tr>
+<tr><td>Magnetic flux</td><td>\(\Phi_M=\int\vec B\cdot\hat n\,dA\), \(\;\Phi_M=BA\cos\varphi\) (uniform)</td></tr>
+<tr><td>Faraday's law</td><td>\(\mathcal{E}=-N\,d\Phi_M/dt\), \(\;\oint\vec E\cdot d\vec L=-d\Phi_M/dt\)</td></tr>
+<tr><td>Motional emf, drag</td><td>\(\mathcal{E}=vBL\sin\varphi\), \(\;F=B^2L^2v/R\)</td></tr>
+<tr><td>Mutual inductance</td><td>\(M=N_s\Phi_s/I_p\), \(\;\mathcal{E}_s=-M\,dI_p/dt\)</td></tr>
+<tr><td>Ideal transformer</td><td>\(V_s/V_p=N_s/N_p=I_p/I_s\), \(\;Z_1=Z_2(N_1/N_2)^2\)</td></tr>
+<tr><td>Self-inductance</td><td>\(L=N\Phi/I\), \(\;\mathcal{E}=-L\,dI/dt\), \(\;L_{\text{sol}}=\mu N^2A/\ell\)</td></tr>
+<tr><td>Magnetic energy</td><td>\(U=\tfrac12LI^2\), \(\;u_B=B^2/2\mu_0\)</td></tr>
+<tr><td>RL circuit</td><td>\(I=(\mathcal{E}/R)(1-e^{-t/\tau})\), \(\;\tau=L/R\)</td></tr>
+<tr><td>LC and resonance</td><td>\(f_0=1/2\pi\sqrt{LC}\)</td></tr>
+<tr><td>Motor</td><td>\(I=(V-\mathcal{E}_b)/r\)</td></tr>
+<tr><td>Generator</td><td>\(\mathcal{E}=NBA\omega\sin\omega t\), \(\;V_{\text{rms}}=NBA\omega/\sqrt2\)</td></tr>
+<tr><td>Transmission loss</td><td>\(P_{\text{loss}}=P^2R/V^2\)</td></tr>
+<tr><td>Flow meter</td><td>\(V=Bdv\)</td></tr>
+<tr><td>Reactance</td><td>\(X_C=1/2\pi fC\), \(\;X_L=2\pi fL\)</td></tr>
+<tr><td>Series RLC</td><td>\(Z=\sqrt{R^2+(X_L-X_C)^2}\), \(\;\tan\varphi=(X_L-X_C)/R\), \(\;V=IZ\)</td></tr>
+<tr><td>Parallel RLC</td><td>\(1/Z_p=\sqrt{(1/R)^2+(1/X_L-1/X_C)^2}\)</td></tr>
+<tr><td>AC power</td><td>\(P=I_{\text{rms}}^2R=I_{\text{rms}}V_{\text{rms}}\cos\varphi\)</td></tr>
+</table></div>
+</section>
+</main>
+
+<footer>Rewritten from the Fall 2026 PHY 2049 lecture notes, Chapters 48–52. Every worked answer was recomputed. Constants used: \(\mu_0 = 4\pi\times10^{-7}\) T·m/A, \(e = 1.6\times10^{-19}\) C.</footer>
+
+</body></html>

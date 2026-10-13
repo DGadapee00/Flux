@@ -1,0 +1,242 @@
+# FLUX — PHY 2049
+
+Interactive 3D labs for Montgomery’s Calculus Physics II. Exam units in the top row, labs as tabs, hash URLs so each lab is bookmarkable (`#/e3/potential`).
+
+## Open the live app
+
+**[https://flux-phy2049.pages.dev](https://flux-phy2049.pages.dev)** — no install. Works on a laptop, Chromebook, phone, or library machine.
+
+Deep links work the same as locally, e.g. `#/e3/potential` or a single problem at `#/e4/circuits?p=e4.44.two-loop&s=0`.
+
+The practice bank is built for phones: full-screen problem sheet, thumb-sized targets, inputs that
+don't make Safari zoom. The 3D labs render and respond to touch, but they want a laptop.
+
+Repo: https://github.com/DGadapee00/flux-phy2049 (`main`). The instructor has said he is happy for
+FLUX to include the course's notes, practice problems and exams, since he rewrites them each term;
+so far that covers two sets of rewritten lecture notes (Ch 38–42 and 43–47, in `src/notes/`). No worksheets,
+slides or Canvas files. (`lessons/` holds handouts written from scratch for this app.) **[DEPLOY.md](DEPLOY.md)** covers rebuilding and republishing, and what
+a public build exposes. **[PROVENANCE.md](PROVENANCE.md)** accounts for exactly which course
+material the problem bank draws on, and **[ERRATA.md](ERRATA.md)** lists the twenty-four places the app's
+physics disagrees with a printed answer key, or where a question needs a note.
+
+## Run locally
+
+```bash
+git clone https://github.com/DGadapee00/flux-phy2049.git
+cd flux-phy2049
+npm install
+npm start
+```
+
+Opens at http://localhost:5174/
+
+Already have a clone? `git pull` inside `flux-phy2049` before starting, so the server is running
+the current code.
+
+```bash
+npm run deploy           # test, build, and publish to flux-phy2049.pages.dev (see DEPLOY.md)
+npm run live             # what commit the live site is built from, and what it's missing
+```
+
+```bash
+npm test                 # physics self-test (no browser) — analytic vs numerical, relative tolerances
+node scripts/smoke.mjs   # all labs in a headless browser; original 8 vs scripts/baseline/values.json
+node scripts/gallery.mjs [lab ...]   # screenshot every lab × scenario to scripts/output/gallery
+node scripts/contact.mjs [regex]     # tile those screenshots into contact sheets for review
+```
+
+Playwright is not a dependency here. The three browser scripts borrow one from wherever the machine
+keeps it (`scripts/playwright.mjs`): this project's own `node_modules`, a global install, or
+`PLAYWRIGHT_PATH=/path/to/a/project/that/has/it`.
+
+The self-test checks the code against independent methods rather than against itself: Biot–Savart sums vs closed forms, Ampère loops, Boris-integrated orbits, image-charge surface potentials, Kirchhoff rules on every circuit layout, −ΔΦ/Δt for Faraday, an RK4 simulation of each AC circuit vs its phasor current, and paraxial ray tracing that must land every principal ray on the computed image.
+
+## Notes
+
+**Notes** (the middle of the switch at the top, or **N**) are the class notes for the exam on screen,
+read beside the lab each section describes: open a section and the lab behind the page switches to
+it. Every section ends with where to go next — **See it in the lab** and **Practice Ch 44 · …** — and
+it runs the other way too: a practice problem links to the section it draws on (**Notes §7 · RC
+circuits**, which opens over the problem with a way back to it), and a lab's equation panel links to
+its section. The formula sheet is the last section. Link to a section with `?n=`, e.g.
+`#/e4/rc?n=s7`.
+
+So far the notes cover Exam 1 (*Vectors, Charge and Force*, Ch V, 34–35), Exam 2 (*Field and Flux*,
+Ch 36–37), Exam 3 (*Potential to Power*, Ch 38–42) and Exam 4 (*Charge in Motion*, Ch 43–47); the
+other exams say so and point to those. Open the notes and change the exam picker, and the notes
+follow.
+Adding a set is a file in `src/notes/content/` and an entry in `src/notes/index.js`.
+
+Worked examples that a lab can show carry a **Show this in the lab** button. It loads the example's
+own numbers into the lab, the way a practice problem does: the Kirchhoff two-loop figure, the
+charges in a plane, the nylon capacitor. The setups live in `src/notes/setups.js`, and each has a
+`read()` that `scripts/notes-check.mjs` runs headless against the real lab, so the lab never shows a
+number the notes contradict. On a phone the notes step aside when you press it, and **Notes**
+brings you back to the same section.
+
+On a wide screen the panel's right edge drags to any width (double-click it for the default), and
+the ↕ button folds the header away so the notes run the height of the window. The lab re-frames
+into whatever space is left. Both settings are remembered.
+
+## Applications
+
+Some labs show a real device built from the chapters' physics. Their tabs carry a small gold ring:
+
+| Lab | Exam | What it shows | Physics |
+|---|---|---|---|
+| **Ion thruster** | 3 | Ions fall through two grids and leave as a beam; a neutralizer adds electrons | $q\Delta V = \tfrac12 mv^2$, $\dot m = Im/q$, thrust $\dot m v$, $P = IV$ |
+| **Railgun** | 4 | The rails' own field pushes the armature; the rails push each other apart | Biot–Savart for a wire that ends, $F = \int I\,B\,dy = \frac{\mu_0 I^2}{2\pi}\ln\frac{w-a}{a}$ |
+| **Cyclotron** | 4 | A proton spirals out between two dees; a mass spectrometer sorts ions by mass | $r = mv/qB$, lap time $2\pi m/qB$, $K = (qBR)^2/2m$ |
+| **Power lines** | 3 | A station sends power down a long line; the wires glow as the loss grows, and the town's windows dim | $I = P/V$, $R = \rho(2L)/A$, loss $I^2R = PR/V^2$ |
+| **Motor** | 4 | A coil turns between two poles; the commutator flips its current every half turn | $F = NIsB$, $\tau = NIAB\,\lvert\sin\theta\rvert$, $\bar\tau = \tfrac{2}{\pi}\tau_{\max}$, $P = \bar\tau\omega$ |
+| **MRI magnet** | 4 | A person-sized solenoid, its wire in copper or superconductor, and the protons precessing in its field | $B = \mu_0 nI$, wire $N(2\pi R)$, $I^2R$ in copper, $f = 42.58\ \text{MHz/T}\times B$ |
+| **Transformer** | 5 | Two coils on one iron core, with the AC flux surging round it: a notes example, a pole transformer, and a speaker matched to an amplifier | $V_s/V_p = N_s/N_p = I_p/I_s$, $I_pV_p = I_sV_s$, load seen as $R(N_p/N_s)^2$ |
+| **Flow meter** | 5 | Ions in a flowing fluid part across a pipe in a field; electrodes read the voltage: a water main, an artery, a treatment-plant pipe | $qE = qvB$, $V = Bdv$, $Q = v\,\pi d^2/4$ |
+
+Each is the course model of the device, built only from equations in the notes, with realistic numbers: the thruster is set to the full-power settings of the one on Deep Space 1 and Dawn (40 km/s, 96 mN), and the Navy-scale railgun comes out at 2.5 km/s and 32 MJ. Each lab's explainer ends with **what the course model leaves out** (a pulsed current and back emf in the railgun, ionization cost and the space-charge limit in the thruster, relativity in the cyclotron). The notes carry an **Application** box for each (Exam 3 §7 and §13, Exam 4 §9, §11, §13 and §14, Exam 5 §10 and §12) with a **Show this in the lab** button, and each has a practice problem and two Predict-first prompts. The physics is in `src/physics/devices.js`, checked by the self-test.
+
+## Practice
+
+FLUX has three modes, switched at the top: **Practice**, **Notes** and **Explore**. Practice is the front door — opening the app without a link lands on the practice list for the exam coming up — and **P** switches to it from anywhere. It is the problem bank: 264 generated problems covering every syllabus chapter (V, 34–65), grouped by chapter with a mastery bar for each, or by the principle that decides them. Every chapter with a lab loads its problems straight into it. The list leads with one thing to do: what is due for review, else a mixed set. Filters and grouping fold behind one **Filter** line. **Group by: Principle** puts one law's problems side by side across chapters (Gauss on a sphere, a wire and a sheet), with the ones from earlier exams folded underneath.
+
+1. **Open a problem.** It loads its own setup into the matching lab — the charges, distances and coordinates exactly as the question states them, with the scene scaled to fit (the note under the problem says what one grid square is worth). Nothing is rescaled, so the lab is reading the problem you are working. While it's unsolved, the lab's numbers are hidden: the readout, the equation panel, value labels in the scene, and the arrows that would show a direction answer, and scene pieces that would give it away (an image, the rays past a lens). The geometry stays visible, the names the question uses (q₁, P, I₂) stay labelled, and the scenario box reads "This problem's setup" rather than a preset name. On a phone, **Show lab** lowers the problem sheet so you can see the scene.
+2. **The deciding principle, in the solution.** Each problem is tagged with the principle that decides it (conservation of energy, Gauss's law, Faraday's law, and so on), and the solution opens by naming it, plus the other ideas the problem uses. An earlier version asked students to name the principle before the parts opened; it slowed every problem without helping, so it is off (`ASK_PRINCIPLE` in `src/ui/problems.js`).
+3. **Worked examples that fade.** New to a chapter, a working problem comes with a complete worked example: the same kind of problem with other numbers, every step shown. Solve a problem in that chapter right on the first try and the next one shows only the first steps of *your own* solution, leaving the last one to you. Each further success hides one more step, until you work alone. Studying an example before solving teaches novices more than solving cold (Renkl and colleagues' research on worked examples). The help is withdrawn from the end backward, so the part you do yourself grows. A solve with steps on screen counts toward fading them out, but not as a clean solve for spaced review. **Hide it** removes the example for that attempt.
+4. **Symbols before numbers.** Most multi-step problems open with the formula, not the arithmetic. Write it in symbols and the panel typesets it underneath as you go — what you see is what the grader read, so `a/b+c` shows a fraction over `b` alone and a missing bracket is visible while you type. A row of keys under the box inserts the problem's own symbols in their real glyphs (`λ`, `ε₀`, `μ₀`, `π`, `√`, `²`), which is the only way to enter them on a phone; typing works too, and `λ` and `lam` are the same thing. `/` opens a bracketed denominator with the caret inside it, typed or tapped, because `q/Aε₀` means (q/A)·ε₀ to a parser and `q/(Aε₀)` to a physicist. Meanwhile the panel reads the units off what you've typed and prints them under the box, `units: N/C ✓` or `units: C/m — this one should come out in N/C`. That's the exam habit of writing the problem in units first and checking it lands in the right place, confirmed while you write it. The numeric box for that quantity stays locked until its formula is right, so the numbers go into an expression you've already justified. A practice exam turns the lock off.
+5. **Answer and check.** Numbers accept `2.5e-6`, `2.5 × 10^-6`, or `2.5 μC` — a typed unit is converted, and one of the wrong kind is pointed out. A wrong part says why when it can (sign, power of ten, factor of 2, wrong quadrant), and a wrong multiple-choice pick explains what is wrong with that choice. Every problem has hints, from the idea to the equation to the step people miss, and the worked solution puts the numbers into each formula with their units before the result. Sketch parts are compared with a rubric. After a missed attempt the panel asks what went wrong (applying a particular principle, seeing which idea to use, a slip, or misreading the question) and answers in kind. The list then shows the **principles you most often miss**, counted across every exam: ones you said you misapplied, and ones you didn't see. Each has a **Practice** button for up to five of its problems, weakest first. Mixed sets lean toward these principles.
+6. **The lab checks you.** While you practice, the problem is the main column and the lab is its picture: its controls stay folded away. Once it's solved, the lab's own value appears next to each answer, and **Explore in the lab** opens its controls beside the problem. Change the setup to explore; **Reset to the problem**, pinned at the top of the problem, puts it back. A practice exam shows no lab controls at all, and dims the lab behind a question that has no setup of its own. **Peek** reveals the numbers early, but that attempt then won't count as a clean solve.
+7. **Spaced review and interleaving.** A clean solve (right on the first check, no hints, no peeking) schedules the problem further out: 1, 3, 7, 16, 35 days. A miss brings it back in 10 minutes. **Review due** mixes whatever is due across every exam. Working down a chapter's list, every fourth problem is one you've already met from an earlier chapter (the most overdue, else the weakest), so earlier material keeps coming back instead of one chapter being massed at a time. Your first attempt uses the worksheet's numbers when a sheet exists; after that the numbers change each time.
+8. **Practice exam.** 8 problems across the exam's chapters, weighted toward what you haven't mastered, with a 50-minute timer, no hints and no feedback until you submit. Results show a score by chapter, and each problem opens with its worked solution.
+
+Links open a specific version: `#/e2/field?p=e2.36a.collinear&s=0`. Progress is saved in this browser only. Authoring, answer-key notes and the checks: [PROBLEMS.md](PROBLEMS.md).
+
+Every panel is typeset — including the practice panel, where the statement, hints and worked steps are set as mathematics rather than as ASCII. In the labs: the law at the top of the equation panel, the live rows under it, the explainer at the bottom, and the two headline numbers set larger under the law all render their symbols with KaTeX, with the central equation of an explainer set on its own line.
+
+**Course sheets, in order** works every question from the exam's own practice sheets, class activities and worksheets, in the sheets' order and with their own numbers, each loaded into its lab: 106 for Exam 4 (Practice 43–47, Class Activity 4, then Worksheet 4). Arrows and a drop-down by sheet number move around the list. A question whose worked case carries a sheet label (`'Class Activity 4 #9C'`, or `'#14'` on a template that cites `'Practice 47 …'`) is on the list; `src/problems/sheets.js` builds it, and seed −(k+1) opens case k.
+
+## Predict first
+
+Every lab has a **Predict first** card at the top of its Setup panel, open the first time you visit the lab and folded to one line after that: 53 short experiments across the 26 labs. Each one names a change ("the battery stays connected; pull the plates to twice the separation") and asks what it does to one to three quantities. You answer bigger / smaller / same, or by what factor, or yes / no. You answer while the lab still shows the setup before the change. **Make the change** then plays the change out in the lab — the numbers slide from before to after over a second and a half, so you watch the plates part or the pattern spread — and the card then grades each prediction against the lab's own before-and-after values and gives the reasoning. **Undo** plays it back. **Try it** first loads the preset the experiment is written for, unless the lab is already on it. Several experiments aim at the classic wrong answers: a narrower slit gives a *wider* pattern, a period that doesn't depend on speed, a third polarizer that lets light *through*, a bigger Gaussian sphere with the same flux. The card hides while a practice problem is open, and a tally of right predictions stays in this browser.
+
+## Set it up, step by step
+
+The hard part of most Exam 4 problems is the integral: choosing the piece, writing its distance and angle, setting the limits, and keeping the algebra straight as symbols are swapped for equal ones. **Set it up, step by step**, at the top of the equation panel, walks through that one decision at a time, beside the lab it describes:
+
+| Lab | Derivation |
+|---|---|
+| **RC** | Charging: loop rule → $I = dq/dt$ → separate the variables → limits → $\ln$ → $q(t)$, $I(t)$ |
+| **RC** | Discharging: the sign in $I = -dq/dt$, and $q = Q_0e^{-t/\tau}$ |
+| **Biot–Savart** | A finite straight wire: $d\ell = dy$, $r = \sqrt{y^2 + a^2}$, $\sin\varphi = a/r$, limits, the table integral, the long-wire limit |
+| **Biot–Savart** | A loop on its axis: equal distances, the sideways parts cancel, $\oint d\ell = 2\pi R$ |
+| **Biot–Savart** | A square loop at its centre: four finite wires at $a = L/2$, each seen to $45^\circ$, $B = 2\sqrt2\,\mu_0 I/\pi L$ |
+| **Biot–Savart** | A quarter loop with straight leads: the leads add nothing ($d\vec L \parallel \hat r$), the arc gives $\mu_0 I/8R$ |
+| **Biot–Savart** | The class's half loop with straight leads: $\mu_0 I/4R$ into the page |
+| **Biot–Savart** | The class's P beside one end of a wire: limits $0$ to $L$, and the long-wire limit $\mu_0 I/4\pi a$ |
+| **Biot–Savart** | A hairpin: here the leads count, $\mu_0 I/4R + \mu_0 I/2\pi R$ |
+| **Biot–Savart** | A pie slice: radial sides add nothing, the arcs oppose, $\frac{\mu_0 I\theta}{4\pi}(1/a - 1/b)$ |
+| **Biot–Savart** | Worksheet 4 #15's two semicircles: the flat pieces add nothing, $\frac{\mu_0 I}{4}(1/a - 1/b)$ out of the page |
+| **Biot–Savart** | A rectangle at its centre: two pairs of finite wires, $2\mu_0 I\sqrt{W^2+H^2}/\pi WH$ |
+| **Ampère** | Inside a thick wire: the loop, $B(2\pi r)$, $I_{\text{enc}} = I r^2/a^2$, and the non-uniform $J = \alpha r$ integral |
+
+Each step offers three or four candidate lines; a wrong pick stays on screen with the reason it is wrong. The chosen line joins the working, and every line shows the lab's present numbers: both sides of an equation, or a formula against the lab's own value, with a ✓ when they agree. Swapping $I$ for $dq/dt$ or $\sin\varphi$ for $a/r$ changes the symbols and leaves the number alone, and moving a slider keeps every line in agreement. While a step is open, the part of the picture it is about is drawn over the lab (the piece $dy$, the distance $r$, the Amperian loop, the resistor). The notes carry a **Step through it in the lab** button where they derive the same thing, and practice problems drill the same setups (`e4.44.rc-setup`, `e4.47.wire-setup`, `e4.47.nonuniform-J`, `e4.47.square-loop`, `e4.47.quarter-loop`, `e4.47.hairpin`, `e4.47.sector`). The content is in `src/derive/`; `scripts/derive-check.mjs` (part of `npm test`) runs every line in the real lab at several setups and fails if any pair of numbers disagrees by more than 1%.
+
+## Setting up by hand
+
+Every number in a setup is typed, not approximated: each charge has a box for **q** in μC, and a row of **x, y, z** boxes in the unit the scene is drawn at. The probe (P) and, in Potential, point A get the same rows. Every slider in the app has a box beside it for an exact value, and typing a value past a slider's end widens the slider rather than clamping it.
+
+The number plane is labeled in real distance and the ticks change with the view, so a square is always a round length (5 cm, 50 cm, 1 m). Charge labs frame the layout automatically when it outgrows the view; **Fit view** reframes on demand. Dragging stays in the lab's work plane — the xy plane a problem is written in, or the xz floor for the 3D scenes — and snaps to half a square, so a drag lands on round numbers. Hold **Alt** to place freely.
+
+## Exams
+
+| Unit | Hash | Labs |
+|---|---|---|
+| Exam 1 · Ch V, 34–35 | `#/e1/vectors` | Vectors, Force |
+| Exam 2 · Ch 36–37 | `#/e2/gauss` | Field, Integrals, Gauss, Conductors |
+| Exam 3 · Ch 38–42 | `#/e3/potential` | Potential, Integrals, Capacitor, Ohm, Power, Breakdown |
+| Exam 4 · Ch 43–47 | `#/e4/circuits` | Circuits, RC, Biot–Savart, Ampère, Mag force |
+| Exam 5 · Ch 48–52 | `#/e5/faraday` | Faraday, AC |
+| Exam 6 · Ch 53–57 | `#/e6/emwave` | EM wave, Polarization |
+| Exam 7 · Ch 58–62 | `#/e7/refraction` | Refraction, Mirrors, Lenses |
+| Wave optics · Ch 63–65 | `#/wave` | Interference, Diffraction, Thin film |
+
+### Exam 3 labs
+
+- **Potential** (`#/e3/potential`) — V = Σ kq/r for any charges you place, equipotentials, ΔV and the field's work from point A to the probe, a uniform field, and U = qV for a test charge of either sign.
+- **Integrals** (`#/e3/integral`) — Exam 2's lab, listed here too and opened in its **∫ dV** mode: V from a rod (on its bisector, above an end, or on its own line past the end), a ring or arc, and a disk, as a Riemann sum next to the closed form. It is the lab behind the Ch 39 continuous-charge problems.
+- **Capacitor** (`#/e3/capacitor`) — C = κε₀A/d, battery-connected against isolated when a dielectric goes in, and the energy stored.
+- **Ohm** (`#/e3/ohm`) — R = ρL/A, ρ(T), drift speed, and I = V/R with the charges moving.
+- **Power** (`#/e3/power`) — P = IV four ways, rms against peak, and P(t) for AC.
+- **Breakdown** (`#/e3/breakdown`) — Paschen's law and the doorknob spark. Beyond the practice sheets: its problems are marked *extra* and kept out of mixed sets and practice exams.
+
+### Exam 4 labs
+
+- **Circuits** (`#/e4/circuits`) — fifteen layouts: series and parallel with three or four resistors, two in parallel, R₁ + (R₂∥R₃) with and without an R₄, R₁ ∥ (R₂ + R₃), two identical-bulb networks, one loop with two batteries, two- and three-battery Kirchhoff circuits, a battery with internal resistance, and three cells-and-bulb circuits side by side. Every circuit problem in the bank loads its own numbers into one of them. Solved by nodal analysis; wires colored by potential, dots show real current (hidden, with the node markers, while a problem is unsolved), grey chevrons show the assumed direction, and a battery set negative is drawn turned round. Junction and loop rules are evaluated live.
+- **RC** (`#/e4/rc`) — a battery, switch, resistor and capacitor in one loop, or two capacitors in parallel or in series. Close the switch and the capacitor charges on a clock that fits five time constants into about six seconds; take the battery out and it discharges. You can scrub time in units of τ. The gold dots are the current and slow to a stop as the capacitor fills. The plates brighten with their share of the charge. The plot draws V_C and I against t/τ with the present moment marked. Every RC and capacitor-pair problem in Ch 44 loads its own numbers into it.
+- **Biot–Savart** (`#/e4/biot`) — wire, loop, solenoid. Σ dB is compared with the exact formula for the *same finite* geometry; the ideal limit (μ₀I/2πρ, μ₀nI) is shown separately.
+- **Ampère** (`#/e4/ampere`) — circular Amperian loop as a Riemann sum, pieces colored by B·dl. Centered, off-center, wire outside, two wires, inside a thick wire.
+- **Mag force** (`#/e4/magforce`) — proton / electron orbits and a helix (Boris integration), velocity selector, F = I L × B, parallel wires.
+
+### Exam 5 labs
+
+- **Faraday** (`#/e5/faraday`) — moving magnet, growing loop, sliding bar, rotating generator. Live ε = −dΦ_B/dt; gold chevrons are Lenz’s induced current (counterclockwise from +y is +I and makes +B_y).
+- **AC** (`#/e5/ac`) — series R, RC, RL, RLC. Phasors and |Z|, φ, f₀. Tune through resonance and I peaks when X_L = X_C.
+
+### Exam 6 labs
+
+- **EM wave** (`#/e6/emwave`) — traveling plane wave, E ŷ, B ẑ, S along +x̂. E/B = c = 1/√(μ₀ε₀). Intensity I = ½ c ε₀ E₀². The drawing is stretched and slowed, so a log-scale **spectrum ruler** (1 pm to 1 km) marks where this λ really sits, and what one wavelength is about the size of — an atom for X-rays, a house for FM radio (Ch 54).
+- **Polarization** (`#/e6/polar`) — Malus I = I₀ cos²θ. Unpolarized → one filter is I₀/2. Crossed filters go dark; a 45° filter in the middle brings back I₀/8.
+
+### Exam 7 labs
+
+- **Refraction** (`#/e7/refraction`) — Snell n₁ sinθ₁ = n₂ sinθ₂, θᵣ = θ₁, TIR past θ_c = sin⁻¹(n₂/n₁). Rotation locked.
+- **Mirrors** (`#/e7/mirrors`) — 1/f = 1/d_o + 1/d_i, m = −d_i/d_o. Concave f>0 / convex f<0. Three principal rays.
+- **Lenses** (`#/e7/lenses`) — same equation. Converging / diverging, plus Keplerian telescope and compound-microscope two-lens scenarios.
+
+### Wave optics labs
+
+The bench in these three cannot be drawn to scale — slits sit tenths of a millimetre apart and the
+screen is metres away — so the geometry is stretched and **the pattern is not**: every band on the
+screen is painted pixel by pixel from the real I(θ) for the λ, d, a and L in the panel.
+
+In Interference and Diffraction the screen **keeps its scale** while you slide, with a ruler beside it
+in real units (mm for a flat screen, degrees for a grating, μrad for resolution). Narrow the slits and
+you watch the pattern spread against a ruler that stays put; **Fit screen** refits on demand. Every
+scenario in a lab shares one scale, so switching scenarios compares them honestly. Moving the screen
+back (L) moves it back on the bench too. The screen is drawn as a card standing on the bench, turned
+so you see the pattern on its face as bars of light — as it would look on a wall — with the
+intensity curve I traced beside it on the same scale.
+
+Behind the slits the light is drawn as **waves**: a plane wave up to the barrier, then an animated
+ripple tank from each opening. The ripples use a stand-in wavelength chosen so the drawn geometry puts
+its first order exactly where the real pattern does, so the dark, still lanes between the ripples
+land on the dark bands of the screen. Untick *show the waves* for the ray diagram.
+
+- **Interference** (`#/wave/interference`) — Young's double slit. d sinθ = mλ, Δy = λL/d. **Drag P** along the screen: the two paths to it are drawn, the extra length δ is laid along the longer one and ticked off in wavelengths, and an inset shows the wave from each slit arriving at P and their sum — crests lined up on a bright band, crest on trough on a dark one. Switch on a finite slit width and the single-slit envelope appears over the fringes — at a = d/3 the m = 3 order goes missing, which you can watch happen.
+- **Diffraction** (`#/wave/diffraction`) — three modes. Single slit (a sinθ = mλ for the *dark* fringes, central width 2λL/a, with the sinc² traced beside the screen and a row of Huygens wavelets across the opening), grating (d = 1/N, every order drawn out to m_max = ⌊d/λ⌋ on a screen marked in angle, peaks narrowing as 1/N), and Rayleigh resolution (θ_min = 1.22λ/D: two sources, each with its own Airy curve in its own colour beside the screen, and their sum in white, with how deep the dip between them goes — about 73 % at the limit — until you slide them together into one hump).
+- **Thin film** (`#/wave/thinfilm`) — the film is drawn to scale *with the wave*, so a quarter-wave film is a quarter of a drawn wavelength thick and the wave inside it is visibly n times shorter. Waves run along each ray and turn over at a reflection that flips; the two that leave the top, and an inset of them with their sum, show crest meeting crest or trough. Each reflection is labelled with whether it flips, beside the extra path 2nt and t_min for bright and for dark. Along the top, two strips show a wedge of this film from thin to thick: in the lab's laser light (bright and dark bands λ/2n apart) and in white light, in true colour — black at the thin end for a soap film, as a bubble goes just before it pops. Anti-reflection coating and soap bubble are both scenarios.
+
+Sign conventions: B is along +ŷ in Mag force; Amperian loops and current loops run counterclockwise seen from +y, so current up counts as +I_enc and a positive loop current makes B point up. Faraday uses the same loop convention for Lenz. The EM wave uses E ŷ, B ẑ, travel +x̂ so ŷ × ẑ = x̂.
+
+## Colours
+
+One quantity, one colour, in every lab (`Q` in `src/scene/manim.js`): **E yellow** (and light,
+which is E), **B teal**, **current gold**, **force pink**, **velocity and direction of travel white**,
+**capacitors and C purple**, **+ charge red**, **− charge blue**, a marked point such as A purple, a
+selected charge ringed in white, and images purple (real) or lavender (virtual). The optics labs'
+three principal rays keep gold, teal and blue — no current, field or charge shares those scenes.
+In the panels, yellow is only the one button to press, blue is what is selected, and green and red
+only grade an answer.
+
+## Controls
+
+- **P** opens Practice, **Esc** goes back to Explore
+- The exam picker (named and dated), or `[` / `]`; Back / Forward walk through the labs you visited. With no link, the app opens on the next exam coming up
+- **?** lists the mouse and keyboard controls for the lab on screen
+- Labs in the current exam: keys `1–9`
+- Drag to orbit (Ohm / Power / Circuits / Refraction / Mirrors / Lenses lock rotation), scroll to zoom
+- Drag a charge in the work plane; **Shift-drag** moves it along the third axis; **Alt** drops the snap
+- Click empty space (Gauss / Field / Potential / Conductors / Biot–Savart) to place the probe
+- `Space` plays the integral or sum · `Delete` removes a charge · `+` / `−` add charges · `R` resets the camera
+
+
+

@@ -1,0 +1,766 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Field and Flux</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<style>
+:root{
+  --paper:#F5F6F8; --sheet:#FFFFFF; --ink:#1A2130; --muted:#5A6476; --rule:#DCE0E7;
+  --field:#2C4BB5; --field-soft:#E8ECFA;
+  --copper:#A8531C; --copper-soft:#F8ECE3;
+  --ok:#1F6B4E; --ok-soft:#E5F2EC;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:"IBM Plex Sans Condensed", "Arial Narrow", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#11141B; --sheet:#171B24; --ink:#E4E7EE; --muted:#9AA3B5; --rule:#2A3040;
+    --field:#93A7FF; --field-soft:#1C2340;
+    --copper:#E79461; --copper-soft:#2E2119;
+    --ok:#6FCBA2; --ok-soft:#16281F;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#11141B; --sheet:#171B24; --ink:#E4E7EE; --muted:#9AA3B5; --rule:#2A3040;
+  --field:#93A7FF; --field-soft:#1C2340;
+  --copper:#E79461; --copper-soft:#2E2119;
+  --ok:#6FCBA2; --ok-soft:#16281F;
+}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.62;padding-inline:16px;padding-block:0 64px}
+main{max-width:720px;margin:0 auto}
+header.top{max-width:720px;margin:0 auto;padding-block:48px 24px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3{font-family:var(--sans);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(34px,6vw,52px);font-weight:700;letter-spacing:-.01em;margin-block:10px 14px}
+.lede{font-size:19px;color:var(--muted);max-width:62ch;margin:0}
+.part{margin-top:64px;padding-top:18px;border-top:2px solid var(--ink)}
+.part .eyebrow{color:var(--field)}
+.part h2{font-size:34px;margin-top:6px}
+section.topic{margin-top:44px}
+section.topic h2{font-size:26px;font-weight:600;display:flex;gap:12px;align-items:baseline}
+section.topic h2 .n{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--field);min-width:2.2em}
+h3{font-size:19px;font-weight:600;margin-top:26px}
+p{margin-block:12px;max-width:68ch}
+ul,ol{padding-left:1.3em;max-width:66ch}
+li{margin-block:4px}
+a{color:var(--field)}
+a:focus-visible{outline:2px solid var(--field);outline-offset:2px}
+.bridge{font-style:italic;color:var(--muted);border-left:2px solid var(--rule);padding-left:14px;margin-top:22px}
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;padding-block:4px;margin:14px 0!important}
+.box{border-radius:6px;padding:14px 18px;margin:20px 0;border:1px solid var(--rule);background:var(--sheet)}
+.box > .tag{font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;display:block;margin-bottom:4px}
+.box p{margin-block:8px}
+.box.ex > .tag{color:var(--field)}
+.box.fix{background:var(--copper-soft);border-color:transparent}
+.box.fix > .tag{color:var(--copper)}
+.box.why{background:var(--field-soft);border-color:transparent}
+.box.why > .tag{color:var(--field)}
+.box.key{background:var(--ok-soft);border-color:transparent}
+.box.key > .tag{color:var(--ok)}
+.ans{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto;margin:18px 0}
+table{border-collapse:collapse;width:100%;font-size:16px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--sans);font-weight:600;font-size:15px;border-bottom:2px solid var(--ink)}
+nav.toc{margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:4px 28px;font-size:16px}
+nav.toc h3{grid-column:1/-1;font-size:14px;font-family:var(--mono);font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+nav.toc a{text-decoration:none;color:var(--ink);display:flex;gap:10px;padding:2px 0}
+nav.toc a span{font-family:var(--mono);font-size:13px;color:var(--field);min-width:2em;padding-top:3px}
+nav.toc a:hover{color:var(--field)}
+@media (max-width:560px){nav.toc{grid-template-columns:1fr} body{font-size:17px} mjx-container[display="true"]{font-size:86%} .box{padding:12px 14px}}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid var(--rule);color:var(--muted);font-size:15px}
+</style>
+
+<header class="top">
+  <div class="eyebrow">PHY 2049 · Calculus Physics II · Week 3 · Lecture notes Ch 36–37, rewritten</div>
+  <h1>Field and Flux</h1>
+  <p class="lede">One continuous set of notes on the electric field: what it is, how to build it from point charges and from continuous charge, how Gauss's law uses symmetry to skip the integral, and what it all means for a conductor. Everything follows from one definition, force per unit charge.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Correction to the original notes</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The field itself</h3>
+    <a href="#s1"><span>1</span>Defining the electric field</a>
+    <a href="#s2"><span>2</span>Point charges and superposition</a>
+    <a href="#s3"><span>3</span>Reading field lines</a>
+    <a href="#s4"><span>4</span>Equilibrium: balancing gravity with a field</a>
+    <a href="#s5"><span>5</span>The dipole field on the perpendicular bisector</a>
+    <h3>Part II · Continuous charge</h3>
+    <a href="#s6"><span>6</span>Charge density</a>
+    <a href="#s7"><span>7</span>The finite line charge, on and off its axis</a>
+    <a href="#s8"><span>8</span>Ring and disk on the axis</a>
+    <a href="#s9"><span>9</span>Semicircular arc at its center</a>
+    <h3>Part III · Flux and Gauss's law</h3>
+    <a href="#s10"><span>10</span>Electric flux; zero flux vs. zero field</a>
+    <a href="#s11"><span>11</span>Gauss's law and spherical symmetry</a>
+    <a href="#s12"><span>12</span>Cylindrical and planar symmetry</a>
+    <h3>Part IV · Conductors</h3>
+    <a href="#s13"><span>13</span>Conductors in equilibrium</a>
+    <a href="#s14"><span>14</span>Cavities, induction, and shells</a>
+    <a href="#s15"><span>15</span>Applications: clouds, rods, and cages</a>
+    <a href="#s16"><span>16</span>Formula sheet</a>
+  </nav>
+</header>
+
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The field itself</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Defining the electric field</h2>
+<p>A field exists in a region if an object placed there feels a force because of some property it has. Gravity is the familiar case. A mass \(m\) near Earth feels a force, and dividing by \(m\) leaves something that belongs to the place alone: \(\vec g = \vec F/m\). Charge works the same way. Divide the force on a charge by the charge and what's left is the <b>electric field</b>:</p>
+\[\vec E = \frac{\vec F}{q}, \qquad \text{units N/C}.\]
+<p>The field is defined with a small positive <b>test charge</b>, small enough not to disturb the charges making the field. So \(\vec E\) points the way a positive charge would be pushed. The field is there whether or not any charge is. Once \(\vec E\) is known, any charge placed there feels</p>
+\[\vec F = q\vec E.\]
+<p>A positive charge is pushed along \(\vec E\). A negative charge is pushed against it.</p>
+<div class="box ex"><span class="tag">Worked example · two spheres in one field</span>
+<p>A uniform field of 40,000 N/C points along \(+x\).</p>
+<ul>
+  <li>Sphere A, \(+10\ \mu\text{C}\): \(F = (10\times10^{-6})(40{,}000) = 0.4\) N along \(+x\).</li>
+  <li>Sphere B, \(-10\ \mu\text{C}\): the same 0.4 N, along \(-x\).</li>
+</ul>
+</div>
+
+<h3>Motion in a uniform field</h3>
+<p>Newton's laws don't care where a force comes from. In a uniform field the force \(q\vec E\) is constant, so the acceleration is constant:</p>
+\[\vec a = \frac{q}{m}\vec E.\]
+<p>The constant-acceleration kinematic equations apply. A proton and an electron in the same field feel the same size of force, but the electron is about 1800 times lighter, so it accelerates about 1800 times harder.</p>
+
+<div class="box ex"><span class="tag">Worked example · from rest</span>
+<p>A sphere with \(m = 5\times10^{-3}\) kg and \(q = +15\ \mu\text{C}\) starts from rest in a 500 N/C field and crosses 0.25 m of it. Ignore gravity.</p>
+\[a = \frac{qE}{m} = \frac{(15\times10^{-6})(500)}{5\times10^{-3}} = 1.5\ \text{m/s}^2, \qquad v = \sqrt{2a\,\Delta x} = \sqrt{2(1.5)(0.25)} = 0.87\ \text{m/s}.\]
+</div>
+
+<div class="box ex"><span class="tag">Worked example · stopped by a field</span>
+<p>A ball with \(m = 5\times10^{-3}\) kg and \(q = -10\ \mu\text{C}\) enters a 5000 N/C field moving along \(+x\), parallel to the field lines. It stops 2.0 s later.</p>
+<p>Size of the deceleration: \(a = |q|E/m = (10\times10^{-6})(5000)/(5\times10^{-3}) = 10\ \text{m/s}^2\).</p>
+<p>To stop a ball moving in \(+x\), the force must point in \(-x\). So \(a_x = -10\ \text{m/s}^2\). From \(v_f = v_i + a_xt\):</p>
+\[0 = v_i + (-10)(2.0) \quad\Rightarrow\quad v_i = +20\ \text{m/s}.\]
+<p>Which way does the field point? The force is in \(-x\) and the charge is negative, so the field points opposite the force: along \(+x\). The ball travels \(\tfrac12(20)(2.0) = 20\) m before it stops.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes conclude that "the ball has a negative charge therefore the electric field must be pointing in the negative x direction". The force on the ball is in \(-x\). A negative charge is pushed <i>opposite</i> to the field, so the field points in \(+x\). The notes also write \(v_i = at = (-10)(2) = 20\) m/s. With \(a = -10\ \text{m/s}^2\), \(at = -20\) m/s. The initial velocity is \(v_i = v_f - at = 0 - (-20) = +20\) m/s.</p>
+</div>
+
+<h3>Launched across the field</h3>
+<p>A charge launched perpendicular to \(\vec E\) moves like a ball thrown horizontally, with \(qE/m\) in place of \(g\). Its velocity along the original direction stays the same. It picks up velocity along the field. The path is a parabola. Once it leaves the field, it moves in a straight line at constant velocity.</p>
+<div class="box ex"><span class="tag">Worked example · an electron deflected</span>
+<p>An electron enters a uniform 1000 N/C field at \(v_0 = 3.0\times10^6\) m/s, perpendicular to \(\vec E\). The field region is 5.0 cm long.</p>
+<p>Time inside: \(t = 0.050/(3.0\times10^6) = 1.67\times10^{-8}\) s. Acceleration: \(a = eE/m_e = (1.6\times10^{-19})(1000)/(9.11\times10^{-31}) = 1.76\times10^{14}\ \text{m/s}^2\).</p>
+\[y = \tfrac12at^2 = \tfrac12(1.76\times10^{14})(1.67\times10^{-8})^2 = 2.4\ \text{cm}\]
+\[v_y = at = 2.9\times10^6\ \text{m/s}, \qquad v = \sqrt{(3.0\times10^6)^2+(2.9\times10^6)^2} = 4.2\times10^6\ \text{m/s}.\]
+<p>The electron leaves faster than it entered. The field did work on it: \(eEy = (1.6\times10^{-19})(1000)(0.024) = 3.9\times10^{-18}\) J, which equals the gain in kinetic energy.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say that when \(\vec E\) is perpendicular to the velocity "there is a change in direction of the particle but with no change in speed". That's true of a <i>magnetic</i> force, which stays perpendicular to the velocity as the path bends. An electric force keeps pointing along \(\vec E\). Once the particle is deflected, its velocity has a component along the force, so the field does work and the particle speeds up. The example above gains 40% in speed.</p>
+</div>
+<p>The notes also say the kinematic equations need "motion all along the same line". They don't. They need constant acceleration, which a uniform field gives. The perpendicular launch uses them in each direction separately.</p>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Point charges and superposition</h2>
+<p>Divide Coulomb's law by the test charge. The field of a point charge \(q\) is</p>
+\[\vec E = \frac{kq}{r^2}\,\hat r, \qquad |\vec E| = \frac{k|q|}{r^2},\]
+<p>with \(\hat r\) pointing from the charge to the field point. It points away from a positive charge and toward a negative one. With several charges, each makes its own field as if the others weren't there, and the fields add as vectors:</p>
+\[\vec E_{\text{net}} = \vec E_1 + \vec E_2 + \vec E_3 + \cdots\]
+<p>This is <b>superposition</b>, the same rule as for forces. There doesn't have to be anything at the point. The field is there in empty space.</p>
+
+<div class="box ex"><span class="tag">Worked example · two charges on a line</span>
+<p>Point A has ball 1 (\(-2\ \mu\text{C}\)) 0.1 m to its left and ball 3 (\(+6\ \mu\text{C}\)) 0.2 m to its right.</p>
+<p>Ball 1 is negative, so its field points toward it: \(-x\). Ball 3 is positive, so its field points away from it, which at A is also \(-x\).</p>
+\[E_1 = \frac{(9.0\times10^9)(2\times10^{-6})}{(0.1)^2} = 1.8\times10^6\ \text{N/C}, \qquad E_3 = \frac{(9.0\times10^9)(6\times10^{-6})}{(0.2)^2} = 1.35\times10^6\ \text{N/C}\]
+\[E_x = -1.8\times10^6 - 1.35\times10^6 = -3.15\times10^6\ \text{N/C}.\]
+<p>Put ball 2 (\(-4\ \mu\text{C}\)) at A. It feels \(F_x = qE_x = (-4\times10^{-6})(-3.15\times10^6) = +12.6\) N. The two negative signs give a force along \(+x\), opposite the field. This is the same 12.6 N found with forces in the Exam 1 notes.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes write \(\Sigma E_x = (-1.8\times10^6) + (-1.35\times10^6) = 3.15\times10^6\) N/C and then add "pointing along the negative x-axis" in words. The sum of two negative numbers is negative: \(\Sigma E_x = -3.15\times10^6\) N/C. The sign carries the direction. Dropping it and adding the direction back in words is how signs get lost in longer problems.</p>
+</div>
+
+<h3>Off the line: components</h3>
+<p>When the charges aren't in a line with the point, find each field's direction, split it into components, and add.</p>
+
+<div class="box ex"><span class="tag">Worked example · two charges in a plane</span>
+<p>Put A at the origin. Ball 2 (\(-4\ \mu\text{C}\)) is 0.1 m directly below A. Ball 3 (\(+6\ \mu\text{C}\)) is at \((0.2, -0.1)\) m, a distance \(\sqrt{0.2^2+0.1^2} = 0.224\) m from A.</p>
+<p><b>Ball 2</b> is negative, so its field at A points toward it: straight down.</p>
+\[E_2 = \frac{(9.0\times10^9)(4\times10^{-6})}{(0.1)^2} = 3.6\times10^6\ \text{N/C}, \qquad \vec E_2 = (0,\ -3.6\times10^6)\ \text{N/C}.\]
+<p><b>Ball 3</b> is positive, so its field at A points away from it, along \((-0.2, 0.1)/0.224\): up and to the left, \(26.6^\circ\) above the \(-x\) axis.</p>
+\[E_3 = \frac{(9.0\times10^9)(6\times10^{-6})}{(0.224)^2} = 1.08\times10^6\ \text{N/C}, \qquad \vec E_3 = (-0.966\times10^6,\ +0.483\times10^6)\ \text{N/C}.\]
+<p>Add:</p>
+\[\vec E_{\text{net}} = (-0.966\times10^6,\ -3.12\times10^6)\ \text{N/C}, \qquad |\vec E_{\text{net}}| = 3.27\times10^6\ \text{N/C}.\]
+<p>Both components are negative, so the field points into the third quadrant, \(\tan^{-1}(3.12/0.966) = 73^\circ\) below the \(-x\) axis.</p>
+<p>Put ball 1 (\(-2\ \mu\text{C}\)) at A. The force has size \(qE = (2\times10^{-6})(3.27\times10^6) = 6.5\) N and points opposite the field, into the first quadrant:</p>
+\[\vec F = q\vec E_{\text{net}} = (1.93,\ 6.23)\ \text{N}, \quad 73^\circ \text{ above } +x.\]
+<p>This is the same force the Exam 1 notes find by adding Coulomb forces directly, to rounding.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes get \(\vec E_{\text{net}}\) and the 6.5 N force right, then give the force's direction as "\(26.6^\circ\) above the positive x-axis". \(26.6^\circ\) is the angle of ball 3's position, carried over by mistake. Reversing a field that points \(73^\circ\) below \(-x\) gives a force \(73^\circ\) above \(+x\). The components (1.93, 6.23) N confirm it.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · Problem-solving video · field beside two charges</span>
+<p>P is on the \(x\)-axis. Charge 1 (\(+5\) nC) is 0.4 m to its right. Charge 2 (\(-15\) nC) is 0.6 m further right, 1.0 m from P.</p>
+<p>Charge 1 is positive, so its field at P points away from it: \(-x\). Charge 2 is negative, so its field points toward it: \(+x\).</p>
+\[E_1 = \frac{(9.0\times10^9)(5\times10^{-9})}{(0.4)^2} = 281\ \text{N/C}, \qquad E_2 = \frac{(9.0\times10^9)(15\times10^{-9})}{(1.0)^2} = 135\ \text{N/C}\]
+\[E_x = -281 + 135 = -146\ \text{N/C}.\]
+<p>The field at P is 146 N/C along \(-x\). Charge 2 is three times larger, but it is 2.5 times as far away, which weakens its field by \(2.5^2 = 6.25\).</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · Problem-solving video · field at a corner</span>
+<p>Charges sit on three corners of a rectangle 0.5 m wide and 0.3 m tall. Charge 1 (\(+2\) nC) is top left, charge 2 (\(+30\) nC) top right, and charge 3 (\(-5\) nC) bottom right. P is the empty bottom-left corner. Put P at the origin.</p>
+<ul>
+<li><b>Charge 1</b> is 0.3 m directly above P. Its field points away from it, straight down: \(E_1 = (9.0\times10^9)(2\times10^{-9})/(0.3)^2 = 200\) N/C, so \(\vec E_1 = (0,\ -200)\) N/C.</li>
+<li><b>Charge 2</b> is across the diagonal, \(r = \sqrt{0.5^2+0.3^2} = 0.583\) m away. Its field points away from it, along \((-0.5,\,-0.3)/0.583\). \(E_2 = (9.0\times10^9)(30\times10^{-9})/0.34 = 794\) N/C, so \(\vec E_2 = (-681,\ -409)\) N/C.</li>
+<li><b>Charge 3</b> is 0.5 m to the right. It is negative, so its field points toward it: \(E_3 = (9.0\times10^9)(5\times10^{-9})/(0.5)^2 = 180\) N/C, so \(\vec E_3 = (180,\ 0)\) N/C.</li>
+</ul>
+<p>Add:</p>
+\[\vec E_{\text{net}} = (-681 + 180)\,\hat x + (-200 - 409)\,\hat y = (-501\ \text{N/C})\hat x - (609\ \text{N/C})\hat y\]
+\[|\vec E_{\text{net}}| = 788\ \text{N/C}, \qquad \alpha = \cos^{-1}\tfrac{-501}{788} = 129^\circ, \qquad \beta = \cos^{-1}\tfrac{-609}{788} = 141^\circ.\]
+<p>The field points into the third quadrant, \(51^\circ\) below the \(-x\) axis.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the problem-solving handout</span>
+<p>The handout gives \(|\vec E| = 918.3\) N/C at \(\alpha = 105^\circ\), \(\beta = 165^\circ\). Its angles are what you get by swapping the components of charge 2's field, \((-409, -681)\) instead of \((-681, -409)\). Charge 2 is 0.5 m across from P and 0.3 m up, so the larger part of its field is the \(x\) part. The net field is 788 N/C at \(\alpha = 129^\circ\), \(\beta = 141^\circ\).</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Reading field lines</h2>
+<p>Field lines are a picture of \(\vec E\). Each rule follows from the definition.</p>
+<ul>
+  <li><b>Direction.</b> The line's direction at a point is the direction of \(\vec E\) there.</li>
+  <li><b>Start and end.</b> Lines start on positive charge and end on negative charge, or run off to infinity. They never start or stop in empty space.</li>
+  <li><b>Spacing.</b> Where lines are close together the field is strong. Where they spread apart it is weak.</li>
+  <li><b>No crossings.</b> A crossing would give \(\vec E\) two directions at one point.</li>
+  <li><b>Conductors.</b> Lines meet a conductor's surface at right angles (Section 13).</li>
+</ul>
+<p>A <b>uniform field</b> has the same size and direction everywhere. Its lines are straight, parallel and evenly spaced.</p>
+
+<div class="box ex"><span class="tag">Worked example · reading a plate diagram</span>
+<p>Two parallel plates are drawn with straight, evenly spaced lines running from the top plate to the bottom plate. The even spacing says the field between them is uniform. The lines leave the top plate, so it is positive, and end on the bottom plate, so it is negative. Near the plates' edges the lines bow outward. This is <i>fringing</i>, where the field stops being uniform.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · midpoints</span>
+<p><b>Two equal positive charges.</b> At the midpoint each field points away from its own charge, so the two are equal and opposite. \(E = 0\) there. No lines pass through that point.</p>
+<p><b>Equal and opposite charges.</b> At the midpoint the field from \(+q\) points away from it, toward \(-q\). The field from \(-q\) points toward \(-q\). Both point the same way and add: \(E = 2kq/(d/2)^2 = 8kq/d^2\), from \(+\) toward \(-\). Along the line between the charges, this is the <i>weakest</i> point. The field grows toward either charge, where one of the two distances shrinks.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Equilibrium: balancing gravity with a field</h2>
+<p>A charged object can hang still, or move at constant velocity, when the electric force cancels the other forces on it. Here the other force is gravity. Zero acceleration means</p>
+\[q\vec E + m\vec g = 0 \quad\Rightarrow\quad |q|E = mg,\ \text{with the electric force pointing up}.\]
+<p>A positive charge is held up by a field pointing up. A negative charge needs a field pointing down.</p>
+
+<div class="box ex"><span class="tag">Worked example · field to hold a charge</span>
+<p>A ball of mass \(2.0\times10^{-3}\) kg carries \(+5\ \mu\text{C}\).</p>
+\[E = \frac{mg}{q} = \frac{(2.0\times10^{-3})(9.8)}{5\times10^{-6}} = 3920\ \text{N/C, pointing up.}\]
+</div>
+
+<div class="box ex"><span class="tag">Worked example · charge a field can hold</span>
+<p>A 5000 N/C field points up. What positive charge on a \(1.5\times10^{-3}\) kg ball floats?</p>
+\[q = \frac{mg}{E} = \frac{(1.5\times10^{-3})(9.8)}{5000} = 2.94\ \mu\text{C}.\]
+</div>
+
+<h3>A hanging charge</h3>
+<p>In a horizontal field, a charge on a thread hangs at an angle. The thread's tension balances gravity and the electric force together.</p>
+
+<div class="box ex"><span class="tag">Worked example · thread angle and tension</span>
+<p>A ball with \(m = 5.0\times10^{-3}\) kg and \(q = +3\ \mu\text{C}\) hangs in a horizontal field of \(2.0\times10^4\) N/C.</p>
+<p>Electric force: \(qE = (3\times10^{-6})(2.0\times10^4) = 0.060\) N sideways. Weight: \(mg = 0.049\) N down.</p>
+\[\tan\theta = \frac{0.060}{0.049} = 1.22 \quad\Rightarrow\quad \theta = 51^\circ \text{ from vertical}, \qquad T = \sqrt{0.060^2+0.049^2} = 0.077\ \text{N}.\]
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>The dipole field on the perpendicular bisector</h2>
+<p>An <b>electric dipole</b> is a pair of equal and opposite charges \(\pm q\) a distance \(d\) apart. Molecules can be natural dipoles, or be polarized into one by a nearby charge. The <b>dipole moment</b> \(\vec p\) has magnitude \(p = qd\) and points from \(-q\) to \(+q\).</p>
+<p>Put \(+q\) at \((0, +d/2)\) and \(-q\) at \((0, -d/2)\). Find the field at P \(= (z, 0)\), a distance \(z\) out along the perpendicular bisector.</p>
+
+<div class="box why"><span class="tag">Derivation</span>
+<p>Both charges are the same distance from P: \(r = \sqrt{z^2+(d/2)^2}\). The field of \(+q\) points from \(+q\) to P. The field of \(-q\) points from P to \(-q\):</p>
+\[\vec E_+ = \frac{kq}{r^3}\big(z,\,-\tfrac{d}{2}\big), \qquad \vec E_- = \frac{kq}{r^3}\big(-z,\,-\tfrac{d}{2}\big).\]
+<p>The \(x\)-components cancel. The \(y\)-components add:</p>
+\[\vec E = \frac{kq}{r^3}\big(0,\,-d\big) = -\frac{kp}{\big(z^2+(d/2)^2\big)^{3/2}}\,\hat y.\]
+<p>On the bisector the field points opposite to \(\vec p\), parallel to the line from \(+q\) to \(-q\). Far away (\(z \gg d\)), \(E \approx kp/z^3\). A dipole's field falls as \(1/r^3\), one power faster than a single charge's, because from far away the two charges nearly cancel.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example</span>
+<p>\(q = 3\) nC, \(d = 2\) mm, P is 5 cm from the midpoint.</p>
+\[p = qd = 6\times10^{-12}\ \text{C·m}, \qquad r^2 = (0.05)^2+(0.001)^2 = 2.501\times10^{-3}\ \text{m}^2\]
+\[E = \frac{kp}{r^3} = \frac{(9.0\times10^9)(6\times10^{-12})}{(2.501\times10^{-3})^{3/2}} = 432\ \text{N/C}.\]
+<p>The far-field formula \(kp/z^3\) gives 432 N/C too. P is 25 times farther away than \(d\).</p>
+</div>
+
+<p class="bridge">Every field so far came from a few point charges. Real objects spread charge over a length, an area or a volume. Superposition then becomes an integral. That's Part II.</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Continuous charge</h2>
+</div>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Charge density</h2>
+<p>A continuous object is treated as many tiny charges \(dq\). The total field is the integral of their fields. To write \(dq\), use the density that matches the shape:</p>
+<div class="tbl"><table>
+<tr><th>Distribution</th><th>Density</th><th>Element</th></tr>
+<tr><td>Line (rod, wire, ring, arc)</td><td>\(\lambda = Q/L\) (C/m)</td><td>\(dq=\lambda\,dL\)</td></tr>
+<tr><td>Surface (disk, plate, shell)</td><td>\(\sigma = Q/A\) (C/m²)</td><td>\(dq=\sigma\,dA\)</td></tr>
+<tr><td>Volume (solid sphere, cylinder)</td><td>\(\rho = Q/V\) (C/m³)</td><td>\(dq=\rho\,dV\)</td></tr>
+</table></div>
+<p>The quotients \(Q/L\), \(Q/A\), \(Q/V\) hold when the charge is uniform. When the density varies, integrate:</p>
+\[Q = \int\lambda\,dL, \qquad Q=\int\sigma\,dA, \qquad Q=\int\rho\,dV.\]
+
+<div class="box ex"><span class="tag">Worked example · uniform rod</span>
+<p>A 2 m rod carries 6 µC spread evenly: \(\lambda = 6\times10^{-6}/2 = 3\times10^{-6}\) C/m. A 2 m wire with \(\lambda = 1\times10^{-6}\) C/m carries \(Q = \lambda L = 2\times10^{-6}\) C.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · non-uniform line charge</span>
+<p>A wire of length \(L\) along the \(x\)-axis has \(\lambda = Ax^2\).</p>
+<p>Units: \(\lambda\) is C/m and \(x^2\) is m², so \(A\) is in C/m³.</p>
+\[Q = \int_0^L Ax^2\,dx = \frac{AL^3}{3}.\]
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes put this example under the heading "Non-uniform distribution of <i>surface</i> charge". It is a line charge: the density is \(\lambda\) (C/m) and the element is \(dx\). The surface-charge heading belongs to the plate example below.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · non-uniform surface charge</span>
+<p>A rectangular plate of length \(L\) and width \(w\) has \(\sigma = Bx\), measured along its length. A strip of width \(dx\) across the plate has area \(dA = w\,dx\):</p>
+\[Q = \int_0^L (Bx)(w\,dx) = \frac{BwL^2}{2}.\]
+</div>
+
+<div class="box ex"><span class="tag">Worked example · uniform sphere</span>
+<p>A solid insulating sphere of radius 10 cm has \(\rho = 4\times10^{-6}\ \text{C/m}^3\).</p>
+\[Q = \rho\left(\tfrac43\pi R^3\right) = (4\times10^{-6})\tfrac43\pi(0.10)^3 = 1.67\times10^{-8}\ \text{C}.\]
+</div>
+
+<div class="box ex"><span class="tag">Worked example · Problem-solving video · total charge</span>
+<ul>
+<li>A wire 0.5 m long with uniform \(\lambda = 2\times10^{-6}\) C/m: \(Q = \lambda L = 1.0\times10^{-6}\) C.</li>
+<li>The same wire with \(\lambda = ax^2\) and \(a = 4\times10^{-5}\ \text{C/m}^3\): \(Q = \int_0^L ax^2\,dx = aL^3/3 = (4\times10^{-5})(0.5)^3/3 = 1.67\times10^{-6}\) C.</li>
+<li>A semicircular wire of radius 0.2 m with \(\lambda = 3\times10^{-6}\) C/m. Its length is \(\pi R\), so \(Q = \lambda\pi R = 1.88\times10^{-6}\) C.</li>
+<li>A disk of radius 0.2 m with \(\sigma = br\) and \(b = 8\times10^{-5}\ \text{C/m}^3\). A ring of radius \(r\) and width \(dr\) has area \(2\pi r\,dr\).</li>
+</ul>
+\[Q = \int_0^R (br)(2\pi r\,dr) = \frac{2\pi bR^3}{3} = \frac{2\pi(8\times10^{-5})(0.2)^3}{3} = 1.34\times10^{-6}\ \text{C}.\]
+<p>When the density depends on \(r\), the element must be a ring at that \(r\), so the density is constant across it.</p>
+</div>
+
+<h3>Setting up a field integral</h3>
+<ol>
+  <li>Choose coordinates that match the shape's symmetry.</li>
+  <li>Draw one element \(dq\) and the distance \(r\) from it to the field point. On a disk or ring, \(r\) is not the disk's own radius.</li>
+  <li>Write \(dq\) with the right density and element.</li>
+  <li>Write each component of \(d\vec E\). Look for symmetry that cancels components.</li>
+  <li>Integrate over the whole object.</li>
+</ol>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>The finite line charge, on and off its axis</h2>
+<p>A rod of length \(L\) with uniform \(\lambda\) lies on the \(x\)-axis from \(-L/2\) to \(L/2\).</p>
+
+<h3>On the perpendicular bisector</h3>
+<p>P is a distance \(y\) above the center. An element \(dq=\lambda\,dx\) at position \(x\) is \(r=\sqrt{x^2+y^2}\) from P. \(y\) stays fixed while \(x\), \(r\) and the angle change.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The element at \(+x\) and its mirror at \(-x\) have \(x\)-components that cancel. So \(E_x = 0\). Only \(dE_y = dE\,(y/r)\) survives:</p>
+\[E_y = k\lambda y\int_{-L/2}^{L/2}\frac{dx}{(x^2+y^2)^{3/2}} = k\lambda y\left[\frac{x}{y^2\sqrt{x^2+y^2}}\right]_{-L/2}^{L/2} = \frac{k\lambda L}{y\sqrt{(L/2)^2+y^2}}.\]
+<p>For a very long rod, \(\sqrt{(L/2)^2+y^2} \to L/2\), and \(E_y \to 2k\lambda/y\). That's the infinite line, which Gauss's law gives again in Section 12.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example</span>
+<p>\(\lambda = 4\ \mu\text{C/m}\), \(L=0.30\) m, \(y=0.10\) m:</p>
+\[E_y = \frac{(9.0\times10^9)(4\times10^{-6})(0.30)}{(0.10)\sqrt{(0.15)^2+(0.10)^2}} = 6.0\times10^5\ \text{N/C}.\]
+</div>
+
+<h3>On its own axis</h3>
+<p>Now the rod runs from 0 to \(L\) and P sits on the axis at \(x = L+a\), a distance \(a\) past the end. An element at \(x\) is \(L+a-x\) from P. Every element's field points the same way along the axis, so nothing cancels.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[E = k\lambda\int_0^L \frac{dx}{(L+a-x)^2} = k\lambda\left[\frac{1}{L+a-x}\right]_0^L = k\lambda\left(\frac1a - \frac1{L+a}\right) = \frac{kQ}{a(L+a)},\]
+<p>with \(Q=\lambda L\). Far away (\(a \gg L\)), \(a(L+a)\to a^2\) and \(E\to kQ/a^2\): a point charge.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example</span>
+<p>Same rod, \(\lambda=4\ \mu\text{C/m}\), \(L=0.30\) m, so \(Q = 1.2\ \mu\text{C}\). P is 0.10 m past the end.</p>
+\[E = \frac{kQ}{a(L+a)} = \frac{(9.0\times10^9)(1.2\times10^{-6})}{(0.10)(0.40)} = 2.7\times10^5\ \text{N/C}.\]
+<p>Treating the rod as a point charge at its center, 0.25 m away, gives \(1.7\times10^5\) N/C. That's too small, because the near end of the rod is much closer than the center.</p>
+</div>
+<h3>Above one end</h3>
+<div class="box ex"><span class="tag">Worked example · Problem-solving video · field above one end</span>
+<p>The rod runs from \(x = 0\) to \(x = L\) with uniform \(\lambda > 0\). P is a distance \(b\) above the end at \(x = 0\). An element \(dq = \lambda\,dx\) at \(x\) is \(r = \sqrt{x^2+b^2}\) from P. The vector from the element to P is \((-x,\ b)\), so the element's field has components \(dE\,(-x/r)\) and \(dE\,(b/r)\). Nothing cancels, because every element is on the same side of P.</p>
+\[E_x = -k\lambda\int_0^L\frac{x\,dx}{(x^2+b^2)^{3/2}} = k\lambda\left[\frac{1}{\sqrt{x^2+b^2}}\right]_0^L = k\lambda\left[\frac{1}{\sqrt{b^2+L^2}} - \frac1b\right]\]
+\[E_y = k\lambda b\int_0^L\frac{dx}{(x^2+b^2)^{3/2}} = k\lambda b\left[\frac{x}{b^2\sqrt{x^2+b^2}}\right]_0^L = \frac{k\lambda}{b}\,\frac{L}{\sqrt{b^2+L^2}}\]
+<p>\(E_x\) is negative: the field leans away from the rod. For a very long rod, \(E_x \to -k\lambda/b\) and \(E_y \to k\lambda/b\). The field then points \(45^\circ\) away from the rod, and each component is half the \(2k\lambda/b\) found above the middle.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the problem-solving handout</span>
+<p>The handout asks for the field at a point "above the center of the wire" and says "a and L" are constant. Its figure and its answers put P a height \(b\) above one end. Above the center, \(E_x = 0\) by symmetry and \(E_y\) is the bisector result above. A nonzero \(E_x\) fits only a point above an end.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Ring and disk on the axis</h2>
+<h3>Ring</h3>
+<p>A ring of radius \(R\) carries charge \(Q\). P is on its axis at height \(z\). Every element is the same distance \(r=\sqrt{R^2+z^2}\) from P. Components across the axis cancel in opposite pairs. Only the axial part \(dE\,(z/r)\) survives:</p>
+\[E_z = \frac{kz}{r^3}\int dq = \frac{kQz}{(R^2+z^2)^{3/2}}.\]
+<p>At the center (\(z=0\)) the field is zero, because every element has an opposite partner. Far away (\(z\gg R\)) it becomes \(kQ/z^2\), a point charge. In between it peaks, at \(z=R/\sqrt2\).</p>
+
+<div class="box ex"><span class="tag">Worked example</span>
+<p>\(Q=2\) nC, \(R=5\) cm, \(z=10\) cm:</p>
+\[E_z = \frac{(9.0\times10^9)(2\times10^{-9})(0.10)}{\big((0.05)^2+(0.10)^2\big)^{3/2}} = 1.29\times10^3\ \text{N/C}.\]
+</div>
+
+<div class="box ex"><span class="tag">Worked example · Problem-solving video · ring with λ</span>
+<p>A ring of radius \(R\) carries uniform \(\lambda\). P is on its axis, a distance \(s\) from the center. The ring's charge is \(Q = 2\pi R\lambda\). Put it into the result above with \(z = s\):</p>
+\[E = \frac{kQs}{(R^2+s^2)^{3/2}} = \frac{2\pi k\lambda Rs}{(R^2+s^2)^{3/2}}.\]
+<p>The field points along the axis, away from the ring for \(\lambda > 0\).</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the problem-solving handout</span>
+<p>The handout's answer has \((b^2+L^2)^{3/2}\) in the denominator. Those are the letters of the rod problem before it. The ring has no \(b\) or \(L\). Every element is \(\sqrt{R^2+s^2}\) from P, so the denominator is \((R^2+s^2)^{3/2}\).</p>
+</div>
+
+<h3>Disk</h3>
+<p>Build a disk of radius \(R\) and uniform \(\sigma\) from rings. A ring of radius \(r_1\) and width \(dr_1\) has area \(2\pi r_1\,dr_1\) and charge \(dq = \sigma\,2\pi r_1\,dr_1\). Each ring gives the field above with \(R\) replaced by \(r_1\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[E_z = \int_0^R \frac{k(2\pi\sigma r_1\,dr_1)\,z}{(r_1^2+z^2)^{3/2}} = 2\pi k\sigma z\left[-\frac{1}{\sqrt{r_1^2+z^2}}\right]_0^R = 2\pi k\sigma\left[1 - \frac{z}{\sqrt{R^2+z^2}}\right].\]
+<p>With \(2\pi k = 1/(2\varepsilon_0)\):</p>
+\[E_z = \frac{\sigma}{2\varepsilon_0}\left[1-\frac{z}{\sqrt{R^2+z^2}}\right].\]
+<p>As \(R\to\infty\) the second term vanishes and \(E_z\to \sigma/(2\varepsilon_0)\), the field of an infinite sheet. Section 12 gets the same result from Gauss's law.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example</span>
+<p>\(\sigma = 5\ \mu\text{C/m}^2\), \(R=10\) cm, \(z=2\) cm:</p>
+\[E_z = \frac{5\times10^{-6}}{2(8.85\times10^{-12})}\left[1-\frac{0.02}{\sqrt{(0.10)^2+(0.02)^2}}\right] = (2.82\times10^5)(0.804) = 2.27\times10^5\ \text{N/C}.\]
+<p>An infinite sheet would give \(2.82\times10^5\) N/C. The real disk gives less because it has no charge beyond \(R\).</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Semicircular arc at its center</h2>
+<p>A semicircular arc of radius \(R\) carries uniform \(\lambda\). Find the field at the center O. Measure position on the arc by the angle \(\theta\) from 0 to \(\pi\). An element \(dq=\lambda R\,d\theta\) sits at \(R(\cos\theta,\sin\theta)\), always a distance \(R\) from O.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>For \(\lambda > 0\), the element's field at O points away from it, along \(-(\cos\theta,\sin\theta)\):</p>
+\[d\vec E = \frac{k\lambda\,d\theta}{R}\big(-\cos\theta,\,-\sin\theta\big).\]
+<p>Integrate from 0 to \(\pi\). The \(x\)-part vanishes because \(\int_0^\pi\cos\theta\,d\theta=0\). The \(y\)-part survives:</p>
+\[E_y = -\frac{k\lambda}{R}\int_0^\pi \sin\theta\,d\theta = -\frac{2k\lambda}{R}.\]
+<p>The field at the center has size \(2k\lambda/R\) and points straight away from the middle of the arc. The arc's length is \(\pi R\), so \(\lambda = Q/(\pi R)\) and \(E = 2kQ/(\pi R^2)\).</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example</span>
+<p>\(Q=4\) nC on an arc of radius 5 cm: \(\lambda = Q/(\pi R) = 2.55\times10^{-8}\) C/m.</p>
+\[E = \frac{2k\lambda}{R} = \frac{2(9.0\times10^9)(2.55\times10^{-8})}{0.05} = 9.2\times10^3\ \text{N/C}.\]
+<p>A full ring gives zero at its center. Removing half the ring removes the partners that cancelled the other half.</p>
+</div>
+
+<p class="bridge">Each field above took an integral. When the charge has enough symmetry, Gauss's law replaces the integral with algebra. That's Part III.</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Flux and Gauss's law</h2>
+</div>
+
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Electric flux; zero flux vs. zero field</h2>
+<p><b>Electric flux</b> measures how much field passes through a surface. A flat surface is described by an <b>area vector</b> \(\vec A = A\,\hat n\), whose size is the area and whose direction \(\hat n\) is perpendicular to the surface. In a uniform field:</p>
+\[\Phi_E = \vec E\cdot\vec A = EA\cos\varphi,\]
+<p>where \(\varphi\) is the angle between \(\vec E\) and \(\hat n\), not between \(\vec E\) and the surface. Flux is a scalar in N·m²/C. It is largest when the field passes straight through and zero when the surface is edge-on.</p>
+
+<div class="box ex"><span class="tag">Worked example</span>
+<p>A uniform field of 200 N/C.</p>
+<ul>
+<li>A \(0.2\ \text{m}\times0.1\ \text{m}\) rectangle whose surface makes \(30^\circ\) with \(\vec E\). The normal makes \(60^\circ\): \(\Phi_E = (200)(0.02)\cos60^\circ = 2.0\ \text{N·m}^2/\text{C}\).</li>
+<li>A hoop of diameter 0.5 m facing the field (\(\varphi=0\)): \(A = \pi(0.25)^2 = 0.196\ \text{m}^2\), \(\Phi_E = 39.3\ \text{N·m}^2/\text{C}\).</li>
+<li>The same hoop turned edge-on (\(\varphi=90^\circ\)): \(\Phi_E = 0\).</li>
+</ul>
+</div>
+
+<h3>A field that varies across the surface</h3>
+<p>When \(E\) changes from place to place on the surface, cut the surface into strips on which it is constant, and add their fluxes: \(\Phi_E = \int\vec E\cdot\hat n\,dA\).</p>
+
+<div class="box ex"><span class="tag">Worked example · Problem-solving video · a field that grows with y</span>
+<p>A rectangle in the \(xy\)-plane runs from \(x = 0\) to \(b\) and from \(y = 0\) to \(a\). The field is \(\vec E = my^3\,\hat z\), perpendicular to the rectangle. Take \(\hat n = \hat z\). A strip at height \(y\), of width \(b\) and thickness \(dy\), has area \(dA = b\,dy\) and the same field all along it:</p>
+\[\Phi_E = \int_0^a (my^3)(b\,dy) = \frac{mba^4}{4}.\]
+<p>The units fix \(m\): \(E\) is in N/C and \(y^3\) in m³, so \(m\) is in N/(C·m³).</p>
+</div>
+
+<h3>Closed surfaces</h3>
+<p>A <b>closed</b> surface encloses a volume. By convention \(\hat n\) points outward everywhere, so field leaving counts as positive flux and field entering as negative. The net flux adds up every patch:</p>
+\[\Phi_E = \oint \vec E\cdot\hat n\,dA.\]
+<p>A field line that passes through, entering on one side and leaving on the other, adds nothing to the total. Only lines that start or end inside, on charge inside, leave net flux. Field leaving a surface means net positive charge inside. Field entering means net negative.</p>
+
+<div class="box key"><span class="tag">Key idea</span>
+<p>Zero net flux through a closed surface does not mean zero field on it. It means zero net charge inside. A closed surface next to a charge, not around it, has field through every patch and zero net flux.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>Two slips in the flux examples. For a surface around \(q_2\), the notes write "Net flux equals \(q_2\)". Gauss's law gives \(q_2/\varepsilon_0\). Charge and flux have different units (C vs. N·m²/C). For a Gaussian surface beside a charged sphere, the notes say there is "no net electric field radiating out of the surface". There is field there, entering one side and leaving the other. What is zero is the net <i>flux</i>.</p>
+</div>
+</section>
+
+<section class="topic" id="s11">
+<h2><span class="n">11</span>Gauss's law and spherical symmetry</h2>
+<p><b>Gauss's law</b> relates the flux through any closed surface to the charge inside:</p>
+\[\oint \vec E\cdot\hat n\,dA = \frac{Q_{\text{enc}}}{\varepsilon_0}.\]
+<p>This holds for every closed surface. It helps you <i>find</i> \(E\) when you can choose a <b>Gaussian surface</b>, an imaginary closed surface, on which each piece is one of two kinds:</p>
+<ul>
+  <li>\(\vec E\) is perpendicular to the surface and the same size everywhere on it. That piece contributes \(E\times\text{area}\).</li>
+  <li>\(\vec E\) is parallel to the surface. That piece contributes nothing.</li>
+</ul>
+<p>Match the surface to the symmetry: a sphere for a point or sphere of charge, a cylinder for a line, a short cylinder through a sheet.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say "the electric field lines MUST be perpendicular to the surface at all points to apply Gauss's Law". Gauss's law applies to every closed surface. What the shortcut needs is that each part of the surface has \(\vec E\) either perpendicular to it with constant size, or parallel to it. The notes' own cylinder example uses this: the field is parallel to the end caps, which contribute zero.</p>
+</div>
+
+<div class="box why"><span class="tag">Derivation · point charge</span>
+<p>Center a sphere of radius \(r\) on a charge \(q\). By symmetry \(\vec E\) points straight out and has the same size everywhere on the sphere, so the integral is \(E\) times the area:</p>
+\[E(4\pi r^2) = \frac{q}{\varepsilon_0} \quad\Rightarrow\quad E = \frac{q}{4\pi\varepsilon_0 r^2} = \frac{kq}{r^2}.\]
+<p>This is Coulomb's law again, which checks the method.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · charge from field</span>
+<p>A solid conducting sphere has a field of 500 N/C at 0.4 m from its center. What is its charge? Put a Gaussian sphere at \(r = 0.4\) m:</p>
+\[Q = \varepsilon_0E(4\pi r^2) = (8.85\times10^{-12})(500)(4\pi)(0.4)^2 = 8.9\times10^{-9}\ \text{C} = 8.9\ \text{nC}.\]
+</div>
+
+<h3>Charged shell</h3>
+<p>A thin shell of radius \(R\) carries \(Q = \sigma(4\pi R^2)\). Outside, a Gaussian sphere encloses all of it and \(E = kQ/r^2\). Inside, a Gaussian sphere encloses nothing and \(E = 0\).</p>
+
+<h3>Solid insulating sphere</h3>
+<p>A sphere of radius \(R\) has uniform \(\rho\), so \(Q = \rho\,\tfrac43\pi R^3\). Use a concentric Gaussian sphere of radius \(r\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p><b>Outside (\(r > R\)):</b> all of \(Q\) is enclosed.</p>
+\[E(4\pi r^2) = \frac{Q}{\varepsilon_0} \quad\Rightarrow\quad E = \frac{kQ}{r^2}.\]
+<p><b>Inside (\(r < R\)):</b> only the charge within \(r\) counts, \(Q_{\text{enc}} = \rho\,\tfrac43\pi r^3 = Q(r/R)^3\).</p>
+\[E(4\pi r^2) = \frac{\rho\,\tfrac43\pi r^3}{\varepsilon_0} \quad\Rightarrow\quad E = \frac{\rho r}{3\varepsilon_0} = \frac{kQ}{R^3}\,r.\]
+<p>Inside, \(E\) rises linearly from zero at the center. Outside, it falls as \(1/r^2\). The two agree at \(r=R\).</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example</span>
+<p>\(R=8\) cm, \(\rho=6\ \mu\text{C/m}^3\), so \(Q = 12.9\) nC.</p>
+<ul>
+<li>At \(r=5\) cm (inside): \(E = \rho r/(3\varepsilon_0) = (6\times10^{-6})(0.05)/(3\times8.85\times10^{-12}) = 1.13\times10^4\) N/C.</li>
+<li>At \(r=15\) cm (outside): \(E = kQ/r^2 = 5.15\times10^3\) N/C.</li>
+</ul>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · Problem-solving video · inside and outside</span>
+<p>An insulating sphere of radius 20 cm carries 10 nC spread evenly through its volume.</p>
+<ul>
+<li>At \(r = 10\) cm (inside): \(E = \dfrac{kQ}{R^3}\,r = \dfrac{(9.0\times10^9)(10\times10^{-9})(0.10)}{(0.20)^3} = 1.13\times10^3\) N/C.</li>
+<li>At \(r = 40\) cm (outside): \(E = \dfrac{kQ}{r^2} = \dfrac{(9.0\times10^9)(10\times10^{-9})}{(0.40)^2} = 563\) N/C.</li>
+</ul>
+<p>At the surface both formulas give \(2.25\times10^3\) N/C. Halfway to the center the field is half that. Twice as far out it is a quarter.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the problem-solving handout</span>
+<p>The handout gives 2248 N/C at 40 cm. That is \(kQ/R^2\), the field at the surface, 20 cm from the center. At 40 cm the field is \(kQ/r^2 = 563\) N/C. The printed answers have the field doubling from 10 cm to 40 cm. Outside the sphere it must fall as you move away.</p>
+</div>
+</section>
+
+<section class="topic" id="s12">
+<h2><span class="n">12</span>Cylindrical and planar symmetry</h2>
+<h3>Long charged wire</h3>
+<p>For a long line of charge \(\lambda\), use a Gaussian cylinder of radius \(s\) and length \(L\) around it. By symmetry \(\vec E\) points straight out from the wire. It is perpendicular to the curved side, with constant size there, and parallel to the two end caps:</p>
+\[E(2\pi sL) = \frac{\lambda L}{\varepsilon_0} \quad\Rightarrow\quad E = \frac{\lambda}{2\pi\varepsilon_0 s} = \frac{2k\lambda}{s}.\]
+<p>This matches the long-rod limit of Section 7, in one line instead of an integral.</p>
+
+<div class="box ex"><span class="tag">Worked example</span>
+<p>\(\lambda=3\ \mu\text{C/m}\), \(s=2\) cm: \(E = 2(9.0\times10^9)(3\times10^{-6})/0.02 = 2.7\times10^6\) N/C.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · Problem-solving video · charged cylinder</span>
+<p>A conducting cylinder 1 m long, of radius \(R = 10\) cm, has \(\sigma = 5\times10^{-8}\ \text{C/m}^2\) on its surface. Treat it as long and use a coaxial Gaussian cylinder of radius \(r\) and length \(\ell\). The enclosed charge is \(\sigma(2\pi R\ell)\):</p>
+\[E(2\pi r\ell) = \frac{\sigma\,2\pi R\ell}{\varepsilon_0} \quad\Rightarrow\quad E = \frac{\sigma R}{\varepsilon_0 r}.\]
+<ul>
+<li>40 cm from the axis: \(E = \dfrac{(5\times10^{-8})(0.10)}{(8.85\times10^{-12})(0.40)} = 1.41\times10^3\) N/C.</li>
+<li>40 cm above the surface, so \(r = 50\) cm: \(E = 1.13\times10^3\) N/C.</li>
+</ul>
+<p>At the surface, \(r = R\), this becomes \(\sigma/\varepsilon_0\), the field just outside any conductor (Section 13).</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the problem-solving handout</span>
+<p>The handout asks for the field "40 cm above the cylinder" and answers 1412 N/C. That is the field 40 cm from the axis. Measured from the surface, \(r = 50\) cm and \(E = 1.13\times10^3\) N/C. The Gaussian-cylinder result is exact only for a very long cylinder. At 40 to 50 cm from a cylinder 1 m long, it is an estimate, best near the middle.</p>
+</div>
+
+<h3>Solid insulating cylinder</h3>
+<p>A long cylinder of radius \(R\) has uniform \(\rho\). Use a coaxial Gaussian cylinder of radius \(r\) and length \(L\). Only the curved side contributes, with area \(2\pi rL\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p><b>Outside (\(r > R\)):</b> the enclosed charge is \(\rho\pi R^2L\).</p>
+\[E(2\pi rL) = \frac{\rho\pi R^2L}{\varepsilon_0} \quad\Rightarrow\quad E = \frac{\rho R^2}{2\varepsilon_0 r}.\]
+<p><b>Inside (\(r < R\)):</b> the enclosed charge is \(\rho\pi r^2L\).</p>
+\[E(2\pi rL) = \frac{\rho\pi r^2L}{\varepsilon_0} \quad\Rightarrow\quad E = \frac{\rho r}{2\varepsilon_0}.\]
+<p>Outside, \(\rho\pi R^2\) is the charge per length, \(\lambda\), and the result is the wire's \(2k\lambda/r\). Inside, the field grows linearly, as in the sphere, but with \(2\varepsilon_0\) in place of \(3\varepsilon_0\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example</span>
+<p>\(\rho = 5\ \mu\text{C/m}^3\), \(R = 4\) cm.</p>
+<ul>
+<li>At \(r = 2\) cm: \(E = (5\times10^{-6})(0.02)/(2\times8.85\times10^{-12}) = 5.6\times10^3\) N/C.</li>
+<li>At \(r = 10\) cm: \(E = (5\times10^{-6})(0.04)^2/(2\times8.85\times10^{-12}\times0.10) = 4.5\times10^3\) N/C.</li>
+</ul>
+</div>
+
+<h3>Infinite sheet and parallel plates</h3>
+<p>For a sheet of charge \(\sigma\), use a short cylinder through the sheet with one end cap on each side. \(\vec E\) points straight away from the sheet on both sides, so both caps contribute and the side contributes nothing:</p>
+\[2EA = \frac{\sigma A}{\varepsilon_0} \quad\Rightarrow\quad E = \frac{\sigma}{2\varepsilon_0}.\]
+<p>This is the disk's \(R\to\infty\) limit from Section 8. The field doesn't depend on distance from the sheet.</p>
+<p>For two large plates with \(+\sigma\) and \(-\sigma\), the fields add between the plates and cancel outside:</p>
+\[E_{\text{between}} = \frac{\sigma}{2\varepsilon_0}+\frac{\sigma}{2\varepsilon_0} = \frac{\sigma}{\varepsilon_0}, \qquad E_{\text{outside}} = 0.\]
+
+<div class="box ex"><span class="tag">Worked example</span>
+<p>\(\sigma = 4\ \mu\text{C/m}^2\).</p>
+<ul>
+<li>One sheet: \(E = \sigma/(2\varepsilon_0) = 2.26\times10^5\) N/C on each side.</li>
+<li>Two oppositely charged plates: \(E = \sigma/\varepsilon_0 = 4.52\times10^5\) N/C between them, from \(+\) to \(-\).</li>
+</ul>
+</div>
+<p class="bridge">So far the charge was fixed in place. In a conductor it moves in response to the field, until the field inside is gone. That's Part IV.</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part IV</div>
+  <h2>Conductors</h2>
+</div>
+
+<section class="topic" id="s13">
+<h2><span class="n">13</span>Conductors in equilibrium</h2>
+<p>A conductor has electrons free to move. Put charge on it, or put it in a field, and the electrons move until nothing pushes them any more. That state is <b>electrostatic equilibrium</b>, and it is reached almost instantly. Five facts describe it.</p>
+<ol>
+  <li>The field inside the conductor is zero.</li>
+  <li>Any excess charge sits on the surface.</li>
+  <li>Just outside, the field is perpendicular to the surface.</li>
+  <li>The field outside is strongest where the surface curves most sharply.</li>
+  <li>The whole conductor is at one electric potential (Exam 3 notes).</li>
+</ol>
+
+<div class="box why"><span class="tag">Derivation · the field inside is zero</span>
+<p>Suppose there were a field somewhere inside. Free electrons there would feel a force and move. Equilibrium means nothing moves. So \(\vec E = 0\) everywhere inside.</p>
+<p>A conductor placed in an outside field reaches this by separating charge. Electrons move against the field to one side, leaving the other side positive. The separated charge makes its own field, which exactly cancels the outside field inside the metal.</p>
+</div>
+<div class="box why"><span class="tag">Derivation · excess charge sits on the surface</span>
+<p>Draw a Gaussian surface anywhere inside the metal. \(\vec E = 0\) on all of it, so the flux is zero and it encloses no net charge. That's true for every such surface, so no net charge is anywhere inside. All of it is on the surface.</p>
+</div>
+<p>The field just outside is perpendicular to the surface. A component along the surface would push surface charge along it, which isn't equilibrium. So outside field lines meet the conductor at right angles, and the conductor bends the lines of any field it sits in.</p>
+
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say that in a conductor placed in a field "the positive charge moves along the external electric field lines in the direction of the field and the same amount of negative charge moves in the opposite direction". Only electrons move. They move against the field, and the side they leave is positive because it now has fewer electrons. The picture of charge separation is right; the positive charge doesn't travel.</p>
+</div>
+
+<div class="box why"><span class="tag">Derivation · the field just outside</span>
+<p>Take a small, short cylinder straddling the surface, one end cap just outside and one just inside. The inside cap has \(\vec E = 0\). The side has no flux, because \(\vec E\) is perpendicular to the surface. Only the outside cap counts:</p>
+\[EA = \frac{\sigma A}{\varepsilon_0} \quad\Rightarrow\quad E = \frac{\sigma}{\varepsilon_0}\quad\text{(just outside a conductor).}\]
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>This is twice the field of an isolated sheet with the same \(\sigma\) (Section 12). A lone sheet sends its flux out both faces. A conductor's surface has zero field on the inside, so all of the flux goes out the one open side.</p>
+</div>
+
+<h3>Curvature and surface charge</h3>
+<p>On a sphere, charge spreads evenly: \(\sigma = Q/(4\pi r^2)\). For the same charge, a smaller sphere has a much larger \(\sigma\), and so a larger field at its surface. On an irregular conductor, charge crowds onto the sharply curved parts. The field is strongest at points and edges and weakest on flat areas. The Exam 3 notes show why, using potential.</p>
+<div class="box ex"><span class="tag">Worked example · same charge, two spheres</span>
+<p>5 nC sits on a sphere of radius 2 cm and another 5 nC on a sphere of radius 20 cm.</p>
+\[\sigma_1 = \frac{5\times10^{-9}}{4\pi(0.02)^2} = 9.95\times10^{-7}\ \text{C/m}^2, \qquad E_1 = \frac{\sigma_1}{\varepsilon_0} = 1.12\times10^5\ \text{N/C}\]
+\[\sigma_2 = \frac{5\times10^{-9}}{4\pi(0.20)^2} = 9.95\times10^{-9}\ \text{C/m}^2, \qquad E_2 = \frac{\sigma_2}{\varepsilon_0} = 1.12\times10^3\ \text{N/C}\]
+<p>One tenth the radius gives 100 times the surface field. \(E = \sigma/\varepsilon_0\) agrees with \(kQ/R^2\) at each surface.</p>
+</div>
+</section>
+
+<section class="topic" id="s14">
+<h2><span class="n">14</span>Cavities, induction, and shells</h2>
+<h3>An empty cavity</h3>
+<p>Hollow out a cavity inside a conductor, with nothing in it. A Gaussian surface in the metal around the cavity has \(E=0\) on it, so it encloses no net charge. The field inside the empty cavity is zero too. Nothing outside the conductor, neither its own surface charge nor an outside field, reaches in. (Showing that there is no charge at all on the cavity wall, not just zero net charge, takes the potential argument from the Exam 3 notes.)</p>
+
+<h3>A charge inside the cavity</h3>
+<p>Put \(+q\) inside the cavity, not touching the walls. A Gaussian surface in the metal still has \(E=0\) and still encloses zero net charge. So \(-q\) must be induced on the cavity wall. If the conductor started neutral, conservation puts the matching \(+q\) on the outer surface.</p>
+<p>The \(+q\) on the outside spreads evenly over a spherical outer surface, wherever the charge sits in the cavity. The reason is that the metal between them has zero field: the charge on the outer surface feels only its own repulsion and whatever is outside. The inner charges' arrangement is invisible from outside. Only the total gets through.</p>
+<p>If the charge then touches the wall, it cancels the \(-q\) there, and the conductor keeps \(+q\) on its outer surface. Nothing outside changes.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the outer charge is uniform because "the electric field lines must enter or exit a conductor perpendicular to its surface which means that the charge must be uniformly distributed". Perpendicular lines don't make the charge uniform. On a cube or a pointed conductor the lines are perpendicular everywhere and the charge is not uniform (Section 13). Charge is uniform on a <i>sphere</i>, because nothing inside can affect the outer surface and a sphere has no preferred spot.</p>
+</div>
+
+<h3>A charge inside a shell</h3>
+<p>A point charge \(q\) sits at the center of a conducting shell with inner radius \(a\) and outer radius \(b\). The shell carries its own net charge \(Q_{\text{shell}}\). Use a Gaussian sphere in each region:</p>
+<div class="tbl"><table>
+<tr><th>Region</th><th>\(Q_{\text{enc}}\)</th><th>Field</th></tr>
+<tr><td>\(r < a\) (cavity)</td><td>\(q\)</td><td>\(E=kq/r^2\)</td></tr>
+<tr><td>\(a < r < b\) (metal)</td><td>0</td><td>\(E=0\)</td></tr>
+<tr><td>\(r > b\) (outside)</td><td>\(q+Q_{\text{shell}}\)</td><td>\(E=k(q+Q_{\text{shell}})/r^2\)</td></tr>
+</table></div>
+<p>The inner wall carries \(-q\). The outer surface carries the rest, \(q + Q_{\text{shell}}\), so the shell's total is still \(Q_{\text{shell}}\).</p>
+
+<div class="box ex"><span class="tag">Worked example</span>
+<p>\(q=+2\) nC at the center. Shell: \(a=3\) cm, \(b=5\) cm, \(Q_{\text{shell}}=-5\) nC.</p>
+<ul>
+<li>Inner wall: \(-2\) nC over \(4\pi a^2\), so \(\sigma_{\text{in}} = -1.77\times10^{-7}\ \text{C/m}^2\).</li>
+<li>Outer surface: \(+2 - 5 = -3\) nC over \(4\pi b^2\), so \(\sigma_{\text{out}} = -9.55\times10^{-8}\ \text{C/m}^2\).</li>
+<li>At \(r=2\) cm: \(E=kq/r^2 = 4.5\times10^4\) N/C, outward.</li>
+<li>At \(r=4\) cm, in the metal: \(E=0\).</li>
+<li>At \(r=8\) cm: \(E = k(3\times10^{-9})/(0.08)^2 = 4.2\times10^3\) N/C, pointing inward, because the enclosed charge is negative.</li>
+</ul>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · Problem-solving video · sphere inside a shell</span>
+<p>A solid conducting sphere of radius \(R_1 = 2\) cm carries \(+10\ \mu\text{C}\). Around it is a conducting shell with inner radius \(R_2 = 10\) cm and outer radius \(R_3 = 12\) cm, carrying \(-2\ \mu\text{C}\).</p>
+<p><b>Charge on the shell's surfaces.</b> A Gaussian sphere inside the shell's metal has \(E = 0\) on it, so it encloses zero net charge. The inner surface must carry \(-10\ \mu\text{C}\). The shell's total is \(-2\ \mu\text{C}\), so the outer surface carries \(-2 - (-10) = +8\ \mu\text{C}\).</p>
+<ul>
+<li>\(r = 1\) cm, in the solid sphere's metal: \(E = 0\).</li>
+<li>\(r = 5\) cm, in the gap: \(Q_{\text{enc}} = +10\ \mu\text{C}\), so \(E = (9.0\times10^9)(10\times10^{-6})/(0.05)^2 = 3.6\times10^7\) N/C, outward.</li>
+<li>\(r = 11\) cm, in the shell's metal: \(E = 0\).</li>
+<li>\(r = 15\) cm, outside: \(Q_{\text{enc}} = +8\ \mu\text{C}\), so \(E = (9.0\times10^9)(8\times10^{-6})/(0.15)^2 = 3.2\times10^6\) N/C, outward.</li>
+</ul>
+</div>
+</section>
+
+<section class="topic" id="s15">
+<h2><span class="n">15</span>Applications: clouds, rods, and cages</h2>
+<p><b>Lightning.</b> Inside a storm cloud, water droplets and ice collide as they are carried up and down, and electrons are knocked from one to another. Updrafts sort them by size: the upper cloud ends up positive and the lower cloud negative. The negative base induces positive charge on the ground below. When the field gets large enough, around \(3\times10^6\) V/m for air, the air ionizes and a conducting channel forms. Most of the time that's to the ground, but strikes also happen within the cloud.</p>
+
+<p><b>Lightning rods.</b> A lightning rod is a grounded conductor with a sharp tip. As a negative cloud passes over, it induces positive charge up the rod from the ground. The sharp tip makes the field there strong enough to ionize the nearby air. Positive ions drift up toward the cloud and reduce the field that would otherwise build up. If lightning does strike, the rod carries the current to ground instead of through the building.</p>
+
+<p><b>Corona discharge.</b> Near a sharp, highly charged conductor, the ionized air glows as electrons and ions recombine. The color depends on the gas. It shows up on sharp edges of high-voltage lines and as St. Elmo's fire on ship masts under charged clouds. Fluorescent tubes stuck in the ground under high-voltage power lines light up from the lines' field alone.</p>
+
+<div class="box key"><span class="tag">Key idea · why a metal cage protects you</span>
+<p>A car body or a wire cage is a conductor around an empty space. When charge lands on the outside, it spreads over the outer surface and the field inside stays zero (Section 14). A lightning current flows around the outside of the metal to ground. It is the metal that protects you, not the rubber tires. A conductor used this way is a <b>Faraday cage</b>.</p>
+</div>
+<p>A Faraday cage blocks static electric fields and radio waves and microwaves, whose changing fields drive currents in the metal that cancel them inside. It does not block static or slowly changing magnetic fields. A mesh cage lets visible light through, because light's wavelength is far smaller than the holes.</p>
+<p><b>Electrostatic discharge.</b> Static charge can destroy electronic parts when it jumps. Technicians prevent this by bonding people and equipment to a common ground with wrist straps, mats and special flooring. Sensitive parts are shipped in conductive bags that act as small Faraday cages.</p>
+</section>
+
+<section class="topic" id="s16">
+<h2><span class="n">16</span>Formula sheet</h2>
+<div class="tbl"><table>
+<tr><th>Idea</th><th>Result</th></tr>
+<tr><td>Field, force</td><td>\(\vec E=\vec F/q\), \(\;\vec F=q\vec E\), \(\;\vec a = q\vec E/m\)</td></tr>
+<tr><td>Point charge, superposition</td><td>\(\vec E=kq\hat r/r^2\), \(\;\vec E_{\text{net}}=\sum\vec E_i\)</td></tr>
+<tr><td>Balance with gravity</td><td>\(|q|E=mg\)</td></tr>
+<tr><td>Dipole, on the bisector</td><td>\(E=kp/(z^2+(d/2)^2)^{3/2}\to kp/z^3\), \(\;p = qd\)</td></tr>
+<tr><td>Charge density</td><td>\(dq=\lambda\,dL,\ \sigma\,dA,\ \rho\,dV\)</td></tr>
+<tr><td>Rod, bisector / own axis</td><td>\(E=\dfrac{k\lambda L}{y\sqrt{(L/2)^2+y^2}}\), \(\;E=\dfrac{kQ}{a(L+a)}\)</td></tr>
+<tr><td>Ring / disk on axis</td><td>\(E=\dfrac{kQz}{(R^2+z^2)^{3/2}}\), \(\;E=\dfrac{\sigma}{2\varepsilon_0}\Big[1-\dfrac{z}{\sqrt{R^2+z^2}}\Big]\)</td></tr>
+<tr><td>Semicircular arc, center</td><td>\(E=2k\lambda/R\)</td></tr>
+<tr><td>Flux</td><td>\(\Phi_E=\vec E\cdot\vec A=EA\cos\varphi\), \(\;\Phi_E=\oint\vec E\cdot\hat n\,dA\)</td></tr>
+<tr><td>Gauss's law</td><td>\(\oint\vec E\cdot\hat n\,dA=Q_{\text{enc}}/\varepsilon_0\)</td></tr>
+<tr><td>Solid sphere, in / out</td><td>\(E=\rho r/3\varepsilon_0\), \(\;E=kQ/r^2\)</td></tr>
+<tr><td>Solid cylinder, in / out</td><td>\(E=\rho r/2\varepsilon_0\), \(\;E=\rho R^2/2\varepsilon_0 r\)</td></tr>
+<tr><td>Long wire</td><td>\(E=2k\lambda/s=\lambda/2\pi\varepsilon_0 s\)</td></tr>
+<tr><td>Sheet, between plates</td><td>\(E=\sigma/2\varepsilon_0\), \(\;E_{\text{between}}=\sigma/\varepsilon_0\)</td></tr>
+<tr><td>Conductor</td><td>\(E=0\) inside, \(\;E=\sigma/\varepsilon_0\) just outside</td></tr>
+</table></div>
+</section>
+
+</main>
+
+<footer>Rewritten from the Fall 2026 PHY 2049 lecture notes, Chapters 36–37, and the instructor's problem-solving video handouts for them. Every worked answer was recomputed. Constants used: \(k = 9.0\times10^9\ \text{N·m}^2/\text{C}^2\), \(\varepsilon_0 = 8.85\times10^{-12}\ \text{C}^2/(\text{N·m}^2)\), \(e = 1.6\times10^{-19}\) C, \(m_p = 1.67\times10^{-27}\) kg, \(m_e = 9.11\times10^{-31}\) kg, \(g = 9.8\ \text{m/s}^2\).</footer>
+
+</body></html>
