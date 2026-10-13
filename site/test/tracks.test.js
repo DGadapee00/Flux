@@ -3,11 +3,13 @@ import test from 'node:test';
 import { builtCourses, latestBuilt, TRACKS } from '../src/tracks.js';
 
 const LIVE = {
-  phy2049: 'https://flux-phy2049.pages.dev',
   mac2313: 'https://flux-mac2313.pages.dev',
   statics: 'https://dgadapee00.github.io/statics-sim/',
   sta3032: 'https://flux-stats.pages.dev',
 };
+
+/** PHY is the platform copy. The other three stay on their own sites until they are ported. */
+const PLATFORM = 'https://flux-study.pages.dev/';
 
 test('four tracks, each with a built course, in degree order', () => {
   assert.deepEqual(
@@ -18,8 +20,13 @@ test('four tracks, each with a built course, in degree order', () => {
     const built = track.courses.filter((course) => course.href);
     assert.ok(built.length >= 1, `${track.id} has a built course`);
     for (const course of built) {
-      assert.equal(course.href, LIVE[course.id]);
-      assert.ok(course.href.startsWith('https://'));
+      if (course.id === 'phy2049') {
+        assert.equal(course.href, 'phy2049/');
+        assert.equal(new URL(course.href, PLATFORM).href, 'https://flux-study.pages.dev/phy2049/');
+      } else {
+        assert.equal(course.href, LIVE[course.id]);
+        assert.ok(course.href.startsWith('https://'));
+      }
     }
     for (const course of track.courses) {
       if (!course.href) assert.equal(course.href, null);

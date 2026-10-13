@@ -1,0 +1,2175 @@
+/* 3Blue1Brown / Manim look: near-black ground, flat panels, Computer Modern math, Manim palette. */
+:root {
+  --bg: #0b0c0e;
+  --panel: rgba(14, 15, 18, 0.88);
+  --panel-solid: #121316;
+  --border: rgba(236, 230, 226, 0.1);
+  --border-hover: rgba(236, 230, 226, 0.24);
+  --text: #ece6e2;
+  --text-muted: #aaa39e;
+  --text-dim: #8f8983; /* 5.6:1 on the panel ground (was 4:1, under AA for small text) */
+
+  --blue: #58c4dd;
+  --blue-d: #29abca;
+  --blue-e: #1c758a;
+  --teal: #5cd0b3;
+  --green: #83c167;
+  --yellow: #f4d345;
+  --gold: #f0ac5f;
+  --red: #fc6255;
+  --purple: #9a72ac;
+  --lavender: #c7b3dc;
+  --pink: #d147bd;
+
+  --accent: var(--blue);
+  --accent-soft: rgba(88, 196, 221, 0.12);
+  --pos: var(--red);
+  --pos-soft: rgba(252, 98, 85, 0.12);
+  --neg: var(--blue);
+  --neg-soft: rgba(88, 196, 221, 0.12);
+  --ok: var(--green);
+  --warn: var(--gold);
+  --danger: var(--red);
+
+  /*
+   * Type scale: five sizes, nothing between. meta = labels and captions; ui = controls and body
+   * text in panels; body = problem statements and values; title = panel and problem titles;
+   * display = the one big number (the exam timer). The only size off the scale is 16px for inputs
+   * on a phone (mobile.css), where anything smaller makes Safari zoom the page.
+   */
+  --fs-meta: 11px;
+  --fs-ui: 13px;
+  --fs-body: 15px;
+  --fs-title: 18px;
+  --fs-display: 24px;
+
+  /*
+   * What a colour means in the panels (the scene keeps its physics colours: + red, − blue, current
+   * yellow, B teal…). Yellow: the one primary button on screen. Blue: selected, focused, a link.
+   * Green / red: right / wrong, and only when grading. Amber: a warning.
+   */
+  --select: var(--blue);
+  --select-soft: rgba(88, 196, 221, 0.12);
+  --select-line: rgba(88, 196, 221, 0.55);
+
+  --radius: 6px;
+  --radius-sm: 4px;
+  --font: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
+  --serif: KaTeX_Main, 'Latin Modern Roman', 'CMU Serif', 'Cambria', Georgia, serif;
+  --math: KaTeX_Math, 'Latin Modern Math', 'Cambria Math', serif;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * Tells the browser the page is dark, so what it draws itself (a select's open list, scrollbars,
+ * checkboxes, the number-input spinners) is drawn dark too. Without it Windows opened the exam
+ * picker as a white list of the app's light text, near unreadable.
+ */
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--fs-ui);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#c {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+#label-layer {
+  z-index: 5;
+}
+
+.hidden,
+[hidden] {
+  display: none !important;
+}
+
+.mono {
+  font-family: var(--serif);
+  font-variant-numeric: tabular-nums;
+}
+
+.hud {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hud.panel,
+.hud .btn,
+.hud .toggle,
+.hud .tab,
+.hud input,
+.hud select,
+.hud .seg button {
+  pointer-events: auto;
+}
+
+.panel {
+  background: var(--panel);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+/* ---------- Brand + tabs ---------- */
+
+.brand {
+  top: 16px;
+  left: 16px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 12px;
+  padding: 12px 14px;
+  min-width: 300px;
+  max-width: 480px;
+}
+
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  align-self: center;
+}
+
+.brand-text h1 {
+  font-family: var(--serif);
+  font-size: var(--fs-display);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  line-height: 1.1;
+}
+
+.brand-text .subtitle {
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+/* The exam picker: full name and date on a laptop; mobile.css moves it into the phone's one-line header. */
+.exam-select {
+  display: block;
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 10px;
+  font: inherit;
+  font-size: var(--fs-ui);
+  font-weight: 500;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  min-height: 34px;
+  /*
+   * Own chevron rather than the platform's. The native control reserves about 30px for its arrow,
+   * which on a 390px row was the difference between "Exam 2" and "Exan", and it renders as a light
+   * system widget in a dark panel.
+   */
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 6px 20px 6px 9px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23c9c4bd' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  background-size: 10px 6px;
+}
+
+.lab-tabs {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+#toggle-host,
+#legend-host {
+  display: contents;
+}
+
+.tab-row {
+  display: flex;
+  gap: 2px;
+}
+
+.tab {
+  flex: 1;
+  position: relative;
+  padding: 6px 6px 7px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--fs-ui);
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+/* The devices' row: a small label that starts a new line of tabs. */
+.tab-group {
+  flex-basis: 100%;
+  padding: 6px 6px 0;
+  font-size: var(--fs-meta);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Application tabs: a small gold ring before the name. */
+.tab.app::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  vertical-align: 2px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold);
+}
+
+.tab:hover {
+  color: var(--text);
+  background: rgba(236, 230, 226, 0.04);
+}
+
+.tab::after {
+  content: '';
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 1px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--text);
+  transform: scaleX(0);
+  transition: transform 0.35s var(--ease);
+}
+
+.tab.active {
+  color: var(--text);
+}
+
+.tab.active::after {
+  transform: scaleX(1);
+}
+
+/* ---------- Toggles ---------- */
+
+/* Phone-only control; the phone layer switches it on. See mobile.css. */
+.sheet-switch {
+  display: none;
+}
+
+
+.toggles {
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  max-width: min(440px, calc(100vw - 40px));
+  justify-content: flex-end;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--fs-ui);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+
+.toggle:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+
+.toggle.active {
+  color: var(--text);
+  border-color: var(--select-line);
+  background: var(--select-soft);
+}
+
+.toggle-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  opacity: 0.6;
+}
+
+.toggle.active .toggle-dot {
+  opacity: 1;
+  border-color: var(--select);
+  background: var(--select);
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-ui);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+
+.btn:hover {
+  border-color: var(--border-hover);
+  background: rgba(236, 230, 226, 0.05);
+}
+
+.btn.ghost {
+  color: var(--text-muted);
+}
+
+.btn.accent {
+  width: 100%;
+  margin-top: 4px;
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--yellow);
+  background: rgba(244, 211, 69, 0.08);
+  border-color: rgba(244, 211, 69, 0.4);
+}
+
+.btn.accent:hover {
+  background: rgba(244, 211, 69, 0.15);
+}
+
+.btn.pos {
+  color: var(--pos);
+  background: var(--pos-soft);
+  border-color: rgba(252, 98, 85, 0.4);
+  flex: 1;
+}
+
+.btn.neg {
+  color: var(--neg);
+  background: var(--neg-soft);
+  border-color: rgba(88, 196, 221, 0.4);
+  flex: 1;
+}
+
+/* ---------- Equation panel ---------- */
+
+.eq-panel {
+  top: var(--below-brand, 196px);
+  left: 16px;
+  width: min(360px, calc(100vw - 360px));
+  /* The readout sits at bottom:42 and stands ~70 tall, so stopping 64px short ran straight
+     through it on any window short enough for this panel to reach its limit. */
+  max-height: calc(100vh - var(--below-brand, 196px) - 16px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  /*
+   * Scroll affordance: the first layer scrolls with the content and covers the second at the end,
+   * so the shadow shows only while there is more panel below.
+   */
+  background-image:
+    linear-gradient(to top, var(--panel), rgba(14, 15, 18, 0)),
+    linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+  background-repeat: no-repeat, no-repeat;
+  background-size:
+    100% 26px,
+    100% 22px;
+  background-position: bottom, bottom;
+  background-attachment: local, scroll;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.eq-panel > * {
+  flex-shrink: 0;
+}
+
+/* The legend sits in the bottom-left corner under this panel; stop short of it. */
+body.has-legend .eq-panel {
+  max-height: calc(100vh - var(--below-brand, 196px) - 104px);
+}
+
+.law {
+  color: var(--text);
+  padding: 2px 0 10px;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.law .katex {
+  font-size: 1.32em;
+}
+
+/* Units from the equation panel: phone only (mobile.css), where the header has no room for it. */
+.eq-units {
+  display: none;
+  justify-self: start;
+}
+
+/* The headline numbers: two, larger than the rows under them, and never cut to "9…". */
+.eq-result {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.eq-result .cell {
+  min-width: 0;
+}
+
+.eq-result .label {
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.eq-result .value {
+  margin-top: 1px;
+  font-family: var(--serif);
+  font-size: var(--fs-title);
+  line-height: 1.25;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.eq-result .value.ok {
+  color: var(--text);
+}
+
+.eq-result .value.warn {
+  color: var(--warn);
+}
+
+.eq-result .value.bad {
+  color: var(--danger);
+}
+
+.eq-result .value.qV {
+  color: var(--blue);
+}
+
+.eq-result .value.qI {
+  color: var(--gold);
+}
+
+.eq-result .value.qR {
+  color: var(--green);
+}
+
+.eq-result .value.qP {
+  color: var(--red);
+}
+
+.law-row {
+  padding: 3px 0;
+  white-space: nowrap;
+}
+
+.eq-live {
+  font-family: var(--serif);
+  font-size: var(--fs-body);
+  color: var(--text-muted);
+  display: grid;
+  gap: 3px;
+}
+
+.eq-live .row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: baseline;
+  /* KaTeX brings its own struts; without this a typeset label makes the row taller than a plain one. */
+  line-height: 1.3;
+}
+
+.eq-live .katex {
+  line-height: 1.1;
+}
+
+.eq-live .k {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.eq-live .v {
+  color: var(--text);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.eq-live .ok {
+  color: var(--text);
+}
+
+.eq-live .warn {
+  color: var(--warn);
+}
+
+.eq-live .bad {
+  color: var(--danger);
+}
+
+sub,
+sup {
+  font-size: 0.72em;
+  line-height: 0;
+}
+
+.insight {
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.insight-title {
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  color: var(--text);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.insight p {
+  color: var(--text-muted);
+  font-size: var(--fs-ui);
+  line-height: 1.6;
+}
+
+.insight p + p {
+  margin-top: 7px;
+}
+
+/* Inline math inside prose: matched to the sentence it sits in, never taller than its line. */
+.insight .katex,
+.eq-live .katex {
+  font-size: 1.04em;
+}
+
+/* A displayed equation, the way a textbook sets the one line an argument turns on. */
+.prose-eq {
+  margin: 6px 0;
+  padding: 2px 0;
+  text-align: center;
+  color: var(--text);
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.prose-eq .katex-display {
+  margin: 0;
+}
+
+.prose-eq .katex {
+  font-size: 1.12em;
+}
+
+/* ---------- Controls ---------- */
+
+.controls {
+  top: 196px;
+  right: 16px;
+  width: 300px;
+  max-height: calc(100vh - 196px - 16px);
+  overflow: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.panel-header h2 {
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.panel-header .hint {
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  text-align: right;
+}
+
+.lab-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.field > span,
+.mini-label {
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.slider-row input[type='range'] {
+  flex: 1;
+}
+
+.val {
+  font-size: var(--fs-body);
+  color: var(--text);
+  min-width: 70px;
+  text-align: right;
+}
+
+.slider-num {
+  flex: 0 0 62px;
+  width: 62px;
+}
+
+.hud input[type='number']::-webkit-outer-spin-button,
+.hud input[type='number']::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+select {
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--panel-solid);
+  color: var(--text);
+  font: inherit;
+}
+
+/*
+ * The open list of any select. A select whose own background is see-through (the exam picker) gets
+ * a white list from Windows unless the options say otherwise, so they always do.
+ */
+select option,
+select optgroup {
+  background-color: var(--panel-solid);
+  color: var(--text);
+}
+
+select option:disabled {
+  color: var(--text-dim);
+}
+
+.row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.row.wrap {
+  flex-wrap: wrap;
+}
+
+.seg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.seg button {
+  padding: 5px 9px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--fs-meta);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+
+.seg button:hover {
+  color: var(--text);
+  border-color: var(--border-hover);
+}
+
+.seg button.active {
+  color: var(--text);
+  background: var(--select-soft);
+  border-color: var(--select-line);
+}
+
+.charge-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 220px;
+  overflow: auto;
+}
+
+.charge-item {
+  display: grid;
+  grid-template-columns: 76px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 7px 9px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+}
+
+.charge-item .mono {
+  font-size: var(--fs-body);
+}
+
+.charge-item.empty {
+  display: block;
+  cursor: default;
+  color: var(--text-dim);
+}
+
+.charge-item.elements {
+  cursor: default;
+}
+
+.charge-item.selected {
+  border-color: var(--select-line);
+  background: var(--select-soft);
+}
+
+.badge {
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+
+.badge.in {
+  color: var(--text);
+  background: rgba(236, 230, 226, 0.1);
+}
+
+.badge.out {
+  color: var(--text-dim);
+  background: rgba(236, 230, 226, 0.05);
+}
+
+.badge.on {
+  color: var(--warn);
+  background: rgba(240, 172, 95, 0.14);
+}
+
+.charge-item input[type='range'] {
+  width: 100%;
+}
+
+/* ---------- Typed values: charges and coordinates ---------- */
+
+.charge-item {
+  grid-template-columns: 26px 1fr auto;
+  gap: 8px;
+}
+
+.q-name {
+  font-family: var(--math);
+  font-size: var(--fs-body);
+  color: var(--text-muted);
+}
+
+.num-field {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.num-field .unit {
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+}
+
+.hud input[type='number'] {
+  pointer-events: auto;
+  /* No spinners: they eat half the width of a box that has to hold "0.025". */
+  appearance: textfield;
+  -moz-appearance: textfield;
+  width: 100%;
+  min-width: 0;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.32);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--fs-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+.hud input[type='number']:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(88, 196, 221, 0.08);
+}
+
+.coord-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.coord-head,
+.coord-row {
+  display: grid;
+  grid-template-columns: 20px repeat(3, 1fr) 24px;
+  gap: 5px;
+  align-items: center;
+}
+
+.coord-head {
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.coord-name {
+  font-family: var(--math);
+  font-size: var(--fs-ui);
+  color: var(--text-muted);
+}
+
+.coord-row.selected .coord-name {
+  color: var(--select);
+}
+
+.coord-unit {
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+}
+
+.scale-row {
+  justify-content: space-between;
+}
+
+.scale-row .tiny {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ---------- Legends ---------- */
+
+.legend {
+  left: 16px;
+  bottom: 16px;
+  padding: 9px 12px;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  width: 176px;
+  pointer-events: none;
+}
+
+.legend-title {
+  font-family: var(--font);
+  font-size: var(--fs-ui);
+  color: var(--text);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.legend-bar {
+  height: 8px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #58c4dd, #2c2e33 50%, #f4d345);
+}
+
+.legend-v {
+  background: linear-gradient(90deg, #1c758a, #58c4dd 20%, #5cd0b3 40%, #83c167 60%, #f4d345 80%, #fc6255);
+}
+
+.legend-cvd {
+  background: linear-gradient(90deg, #1d4f8c, #3f8fd6 20%, #8fd0ee 40%, #ece6b8 60%, #f4b942 80%, #e07b39);
+}
+
+.legend-sigma {
+  background: linear-gradient(90deg, #58c4dd, #3a3d44 50%, #fc6255);
+}
+
+.legend-bdl {
+  background: linear-gradient(90deg, #9a72ac, #2c2e33 50%, #5cd0b3);
+}
+
+.qB {
+  color: var(--teal);
+}
+
+.circuit-label.right-text {
+  text-align: right;
+}
+
+.tab.soon {
+  color: var(--text-dim);
+  font-style: italic;
+  opacity: 0.6;
+  cursor: default;
+}
+
+.tab.soon:hover {
+  background: transparent;
+  color: var(--text-dim);
+}
+
+.legend-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.tiny {
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+
+#mini-plot {
+  width: 100%;
+  height: 92px;
+  border-top: 1px solid var(--border);
+  padding-top: 4px;
+}
+
+#mini-plot.lead {
+  height: 150px;
+  margin-bottom: 6px;
+}
+
+input[type='checkbox'] {
+  accent-color: var(--blue);
+}
+
+/* ---------- Readout ---------- */
+
+/*
+ * Centred on the viewport, the readout ran under the equation panel on the left and under Setup on
+ * the right — 56px at 1440 wide, 136px at 1280 — which only looked fine because the overlap
+ * happened to fall where the panels were short. It sits in the band between them instead, still
+ * centred within that band, so it can never reach either one.
+ */
+.readout {
+  left: 416px;
+  right: 332px;
+  bottom: 42px;
+  width: auto;
+  max-width: 920px;
+  margin-inline: auto;
+  padding: 10px 18px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px 20px;
+}
+
+.readout .cell {
+  min-width: 0;
+  padding-left: 12px;
+  border-left: 1px solid var(--border);
+}
+
+.readout .cell:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.readout .label {
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.readout .value {
+  font-family: var(--serif);
+  font-size: var(--fs-title);
+  color: var(--text);
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
+}
+
+.readout .value.ok {
+  color: var(--text);
+}
+
+.readout .value.warn {
+  color: var(--warn);
+}
+
+.readout .value.bad {
+  color: var(--danger);
+}
+
+/* ---------- In-scene labels (Manim background stroke instead of boxes) ---------- */
+
+.grid-tick {
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  pointer-events: none;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  text-shadow:
+    0 0 4px #000,
+    0 0 3px #000,
+    1px 1px 0 #000,
+    -1px -1px 0 #000;
+}
+
+.charge-label,
+.probe-label,
+.axis-label {
+  font-family: var(--serif);
+  font-size: var(--fs-body);
+  color: var(--text);
+  pointer-events: none;
+  white-space: nowrap;
+  transform: translate(-50%, -100%);
+  text-shadow:
+    0 0 3px #000,
+    0 0 3px #000,
+    1px 1px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000;
+}
+
+.charge-label.pos {
+  color: #ffb3ab;
+}
+
+.charge-label.neg {
+  color: #b4e6f2;
+}
+
+.charge-label .cl-name,
+.charge-label .cl-val {
+  display: block;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.charge-label .cl-name {
+  font-style: italic;
+}
+
+.charge-label .cl-val {
+  font-size: var(--fs-ui);
+}
+
+.charge-label.small {
+  display: none;
+}
+
+.charge-label.selected {
+  color: #fff;
+  font-weight: 600;
+}
+
+.probe-label {
+  color: var(--text);
+}
+
+/* The probe's name (P, B …) beside the white dot. */
+.probe-name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: var(--fs-body);
+  color: var(--text);
+  pointer-events: none;
+  white-space: nowrap;
+  text-shadow:
+    0 0 3px #000,
+    0 0 3px #000,
+    1px 1px 0 #000,
+    -1px -1px 0 #000;
+}
+
+/* Problem-named points (B, C, P₁ …): the name, with any value lines stacked under it. */
+.mark-label {
+  text-align: center;
+  line-height: 1.2;
+}
+
+.mark-label .mark-val {
+  display: block;
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.axis-label {
+  font-family: var(--math);
+  font-style: italic;
+  font-size: var(--fs-title);
+  transform: translate(-50%, -50%);
+}
+
+/* ---------- Circuit schematic (Ohm / Power) ---------- */
+
+.qV {
+  color: var(--blue);
+}
+
+.qI {
+  color: var(--gold);
+}
+
+.qR {
+  color: var(--green);
+}
+
+.qP {
+  color: var(--red);
+}
+
+.qC {
+  color: var(--purple);
+}
+
+.readout .value.qV {
+  color: var(--blue);
+}
+
+.readout .value.qI {
+  color: var(--gold);
+}
+
+.readout .value.qR {
+  color: var(--green);
+}
+
+.readout .value.qP {
+  color: var(--red);
+}
+
+/* Phone only (mobile.css): on a laptop its numbers are the equation panel's result row. */
+@media (min-width: 721px) {
+  .readout {
+    display: none;
+  }
+}
+
+.eq-live .katex {
+  font-size: 1.08em;
+}
+
+.circuit-label {
+  font-family: var(--serif);
+  font-size: clamp(14px, 1.3vw, 18px);
+  line-height: 1.3;
+  color: var(--text);
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  text-shadow:
+    0 0 4px #000,
+    0 0 4px #000;
+}
+
+.circuit-label.left {
+  transform: translate(-100%, -50%);
+  text-align: right;
+}
+
+.circuit-label > span {
+  display: block;
+}
+
+.circuit-label .name {
+  font-size: var(--fs-title);
+  color: var(--text);
+}
+
+/* "Bulb A": the name a problem uses for that element, set above its R and I lines. */
+.circuit-label .circuit-bulb {
+  font-family: var(--font);
+  font-size: var(--fs-ui);
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.circuit-label small {
+  display: block;
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.circuit-eq .big {
+  font-size: clamp(22px, 2.3vw, 34px);
+  line-height: 1.2;
+}
+
+.circuit-eq .nums {
+  font-size: clamp(13px, 1.25vw, 17px);
+  font-variant-numeric: tabular-nums;
+}
+
+.circuit-eq .nums span,
+.circuit-eq .big span {
+  display: inline;
+}
+
+.circuit-eq .avg {
+  margin-top: 2px;
+}
+
+.circuit-sign {
+  font-family: var(--serif);
+  font-size: var(--fs-display);
+  color: var(--blue);
+  transform: translate(-50%, -50%);
+  text-shadow: 0 0 4px #000;
+}
+
+/* ---------- Sliders ---------- */
+
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(236, 230, 226, 0.25);
+  outline: none;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--text);
+  cursor: pointer;
+  transition: transform 0.15s var(--ease);
+}
+
+input[type='range']::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--text);
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--select);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(236, 230, 226, 0.14);
+  border-radius: 3px;
+}
+
+@media (max-width: 980px) {
+  .eq-panel {
+    width: min(280px, calc(100vw - 40px));
+    max-height: 36vh;
+  }
+  .controls {
+    width: 260px;
+    max-height: 40vh;
+  }
+  /* Narrower panels here, so the band the readout sits in can be correspondingly wider. */
+  .readout {
+    left: 312px;
+    right: 292px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+/* ---------- Units reference ---------- */
+
+/*
+ * Sits in the same column as the Practice panel and opens the same way; the two close each other.
+ * Reference you read while working, so it is scrollable and does not cover the scene's centre.
+ */
+.units-ref {
+  top: var(--below-brand, 230px);
+  left: 16px;
+  width: min(384px, calc(100vw - 360px));
+  max-height: calc(100vh - var(--below-brand, 230px) - 16px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 14px 16px 16px;
+  background: rgba(14, 15, 18, 0.94);
+}
+
+body.units-open #eq-panel {
+  display: none;
+}
+
+/* Same as the Practice panel: keep the lab's colour legend clear of the column. */
+body.units-open .legend {
+  left: calc(min(384px, 100vw - 360px) + 32px);
+}
+
+.ur-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ur-row {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 9px 2px;
+  border-top: 1px solid var(--border);
+}
+
+.ur-row:first-child {
+  border-top: 0;
+}
+
+.ur-sym {
+  font-size: var(--fs-title);
+  color: var(--accent, #e8c16a);
+  padding-top: 1px;
+  overflow: hidden;
+}
+
+.ur-name {
+  font-size: var(--fs-ui);
+  font-weight: 600;
+}
+
+.ur-unit {
+  font-size: var(--fs-ui);
+  margin-top: 1px;
+}
+
+.ur-eq {
+  opacity: 0.62;
+  margin-left: 4px;
+}
+
+.ur-base {
+  font-size: var(--fs-meta);
+  opacity: 0.5;
+  font-variant-numeric: tabular-nums;
+  margin-top: 2px;
+}
+
+.ur-from {
+  margin-top: 5px;
+  font-size: var(--fs-ui);
+  opacity: 0.8;
+}
+
+/* Constants are given, not measured — dimmer so the measured quantities read first. */
+.ur-const .ur-name {
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.ur-foot {
+  margin-top: 10px;
+  opacity: 0.6;
+}
+
+/* Wave bench (Interference, Diffraction): the ruler beside the screen and the inset at P. */
+.ruler-label {
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 0 3px #000;
+}
+
+.ruler-label.unit {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.wave-inset {
+  width: 190px;
+  padding: 6px 8px 4px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.wave-inset canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.wave-inset-title {
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.wave-inset-caption {
+  white-space: nowrap;
+  font-family: var(--font);
+  font-size: var(--fs-ui);
+  color: var(--text);
+  text-align: center;
+  pointer-events: none;
+  padding-top: 4px;
+  text-shadow: 0 0 3px #000;
+}
+
+.lab-block .tiny a {
+  color: var(--accent);
+}
+
+/* EM wave: the log-scale spectrum ruler above the readout. */
+.spectrum-ruler {
+  position: fixed;
+  left: 416px;
+  right: 332px;
+  bottom: 16px;
+  max-width: 920px;
+  margin-inline: auto;
+  padding: 8px 14px 6px;
+  font-family: var(--font);
+  pointer-events: none;
+}
+
+.spectrum-ruler[hidden] {
+  display: none;
+}
+
+.spec-title {
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.spec-title span {
+  color: var(--text);
+}
+
+.spec-bar {
+  position: relative;
+  height: 16px;
+  border-radius: 3px;
+  overflow: visible;
+}
+
+.spec-band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  opacity: 0.85;
+  overflow: hidden;
+}
+
+.spec-band span {
+  display: block;
+  font-size: var(--fs-meta);
+  line-height: 16px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+
+.spec-vis-label {
+  position: absolute;
+  top: 17px;
+  transform: translateX(-50%);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.spec-marker {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 3px;
+  margin-left: -1.5px;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 0 6px #fff;
+  transition: left 0.25s ease;
+}
+
+.spec-ticks,
+.spec-sizes {
+  position: relative;
+  height: 14px;
+}
+
+.spec-ticks {
+  margin-top: 10px;
+}
+
+.spec-tick {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 4px;
+  background: var(--text-dim);
+}
+
+.spec-tick span,
+.spec-size {
+  position: absolute;
+  top: 3px;
+  transform: translateX(-50%);
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.spec-size {
+  top: 0;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+@media (max-width: 900px) {
+  .spectrum-ruler {
+    display: none;
+  }
+}
+
+/* Read by screen readers, not shown. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Predict first (src/ui/predict.js) ---------- */
+
+.predict {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Open, it reads as the lab's opening question rather than one more control. */
+.predict.open {
+  margin: 0 -6px;
+  padding: 10px 10px 12px;
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius);
+  background: rgba(236, 230, 226, 0.03);
+}
+
+.pr-watch {
+  font-size: var(--fs-ui);
+  color: var(--text-muted);
+  animation: pr-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pr-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.pr-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.pr-toggle {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.pr-toggle::before {
+  content: '▸';
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  transition: transform 0.2s var(--ease);
+}
+
+.pr-toggle[aria-expanded='true']::before {
+  transform: rotate(90deg);
+}
+
+.pr-title {
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.pr-count {
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.pr-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.pr-nav button {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--fs-ui);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pr-nav button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.pr-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pr-ask {
+  font-family: var(--serif);
+  font-size: var(--fs-body);
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.pr-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pr-q {
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.pr-opts button[aria-pressed='true'] {
+  color: var(--text);
+  background: var(--select-soft);
+  border-color: var(--select-line);
+}
+
+.pr-go {
+  width: 100%;
+  font-weight: 600;
+  color: var(--yellow);
+  border-color: rgba(244, 211, 69, 0.4);
+  background: rgba(244, 211, 69, 0.08);
+}
+
+.pr-go:hover:not(:disabled) {
+  background: rgba(244, 211, 69, 0.15);
+}
+
+.pr-go:disabled {
+  color: var(--text-dim);
+  border-color: var(--border);
+  background: transparent;
+  cursor: default;
+}
+
+.pr-res {
+  display: grid;
+  gap: 2px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.pr-res.ok {
+  background: rgba(131, 193, 103, 0.08);
+}
+
+.pr-res.bad {
+  background: rgba(252, 98, 85, 0.08);
+}
+
+.pr-vals {
+  font-size: var(--fs-ui);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.pr-ok {
+  color: var(--green);
+}
+
+.pr-bad {
+  color: var(--red);
+}
+
+.pr-why {
+  font-size: var(--fs-ui);
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.pr-ask .katex,
+.pr-why .katex,
+.pr-q .katex,
+.pr-res .katex {
+  font-size: 1.04em;
+}
+
+.pr-after .btn {
+  flex: 1;
+}
+
+/* ---------- Mouse and keyboard (the ? button; replaces the hint bar) ---------- */
+
+.keys-btn {
+  min-width: 34px;
+  font-weight: 600;
+}
+
+.keys {
+  top: 84px;
+  right: 16px;
+  width: 300px;
+  z-index: 20;
+  padding: 12px 14px 14px;
+  background: rgba(14, 15, 18, 0.96);
+  display: grid;
+  gap: 8px;
+}
+
+.keys-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.keys-head h2 {
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+
+.keys-hint {
+  font-size: var(--fs-ui);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.keys-list {
+  display: grid;
+  gap: 5px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+
+.keys-row {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--fs-ui);
+  color: var(--text);
+}
+
+.keys-row kbd {
+  justify-self: start;
+  padding: 1px 6px;
+  border: 1px solid var(--border-hover);
+  border-radius: 3px;
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+/* Railgun: the ⊙ marks for B out of the page, between the rails. */
+.rg-dot {
+  font-size: 15px;
+  opacity: 0.85;
+}
+
+/* ---------- Set it up: step-through derivations (src/ui/derive.js) ---------- */
+.derive-open {
+  width: 100%;
+  margin: 8px 0 4px;
+  color: var(--lavender);
+  border-color: rgba(199, 179, 220, 0.45);
+  font-weight: 600;
+}
+
+.derive-open:hover {
+  background: rgba(199, 179, 220, 0.1);
+}
+
+/* While a derivation is open it is the whole panel, a little wider for the algebra (desktop). */
+@media (min-width: 721px) and (min-height: 561px), (min-width: 721px) and (orientation: portrait) {
+  .eq-panel.deriving {
+    width: min(460px, calc(100vw - 360px));
+  }
+}
+
+.eq-panel.deriving > :not(#derive) {
+  display: none !important;
+}
+
+.derive {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--text);
+  font-size: var(--fs-ui);
+  line-height: 1.5;
+}
+
+.derive-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.derive-pick {
+  max-width: 64%;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--panel-solid);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-meta);
+}
+
+.derive-title {
+  margin: 0;
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+
+.derive-goal,
+.derive-ask {
+  margin: 0;
+  font-size: var(--fs-body);
+}
+
+.derive-work {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.derive-line {
+  padding: 6px 8px;
+  border-left: 2px solid var(--lavender);
+  background: rgba(199, 179, 220, 0.05);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.derive-tex {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.derive-tex .katex-display {
+  margin: 2px 0;
+}
+
+.derive-val {
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.derive-val.agree {
+  color: var(--green);
+}
+
+.derive-units {
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  overflow-x: auto;
+}
+
+.derive-after,
+.derive-shown {
+  margin: 4px 0 0;
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.derive-shown {
+  color: var(--gold);
+}
+
+.derive-step,
+.derive-done,
+.derive-off {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.derive-count {
+  margin: 0;
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.derive-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.derive-opt {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(236, 230, 226, 0.03);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-body);
+  text-align: left;
+  cursor: pointer;
+  overflow-x: auto;
+}
+
+.derive-opt:hover:not(:disabled) {
+  border-color: var(--lavender);
+  background: rgba(199, 179, 220, 0.08);
+}
+
+.derive-opt.wrong {
+  opacity: 0.55;
+  text-decoration: line-through;
+  text-decoration-color: var(--red);
+  cursor: default;
+}
+
+.derive-why {
+  margin: -2px 0 2px;
+  padding: 6px 8px;
+  border-left: 2px solid var(--red);
+  font-size: var(--fs-ui);
+  color: var(--text-muted);
+}
+
+.derive-reveal {
+  align-self: flex-start;
+  font-size: var(--fs-meta);
+}
+
+.derive-label {
+  color: var(--lavender);
+}
+
+body.problem-blind #eq-derive,
+body.problem-blind #derive {
+  display: none !important;
+}
+
+/* Step-through feedback: a right pick says so and waits for "Next step"; a wrong one says so too. */
+.derive-badge {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  font-weight: 700;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.derive-badge.ok {
+  color: #0b0c0e;
+  background: var(--green);
+}
+
+.derive-badge.no {
+  color: #0b0c0e;
+  background: var(--red);
+}
+
+.derive-opt.right {
+  border-color: var(--green);
+  background: rgba(131, 193, 103, 0.14);
+  opacity: 1;
+  cursor: default;
+}
+
+.derive-opt.idle {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.derive-opt.wrong .derive-badge {
+  display: inline-block;
+}
+
+.derive-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid rgba(131, 193, 103, 0.5);
+  border-radius: var(--radius-sm);
+  background: rgba(131, 193, 103, 0.08);
+}
+
+.derive-confirm-head {
+  margin: 0;
+  color: var(--green);
+  font-weight: 600;
+}
+
+.derive-next {
+  align-self: flex-start;
+  color: var(--green);
+  border-color: rgba(131, 193, 103, 0.55);
+  font-weight: 600;
+}
+
+.derive-retry {
+  margin: 0;
+  color: var(--red);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+}
+
+.derive-tally {
+  margin: 4px 0 0;
+  font-size: var(--fs-meta);
+  font-weight: 600;
+}
+
+.derive-tally.first {
+  color: var(--green);
+}
+
+.derive-tally.late {
+  color: var(--gold);
+}

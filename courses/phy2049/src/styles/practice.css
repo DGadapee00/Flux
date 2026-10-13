@@ -1,0 +1,1855 @@
+/* ---------- Practice: problems panel, blind mode, practice exam ---------- */
+
+.practice-row {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.practice-stat {
+  min-width: 0;
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: auto;
+}
+
+body.practice-open #eq-panel {
+  display: none;
+}
+
+/* Keep lab legends clear of the panel. */
+body.practice-open .legend {
+  left: calc(var(--sheet-w) + 32px);
+}
+
+/* ---------- Explore | Practice ---------- */
+
+.mode-switch {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.mode-switch button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mode-switch button:hover {
+  color: var(--text);
+}
+
+.mode-switch button.active {
+  color: var(--text);
+  border-color: var(--select-line);
+  background: var(--select-soft);
+}
+
+/* How many reviews are due: the one number the header keeps. */
+.mode-badge {
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: #1a1206;
+  font-size: var(--fs-meta);
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
+.units-btn {
+  padding: 6px 10px;
+}
+
+/*
+ * Practice is the main thing: the problem sheet is the left column, wider than the equation panel it
+ * replaces, and the lab is its picture. The lab's controls wait in a drawer (body.lab-open, opened
+ * from the problem once it is solved), and a practice exam shows no controls at all.
+ */
+:root {
+  --sheet-w: min(480px, calc(100vw - 400px));
+}
+
+@media (min-width: 721px) {
+  body.practice-open .controls,
+  body.practice-open #toggle-host {
+    display: none;
+  }
+
+  body.practice-open.lab-open .controls {
+    display: flex;
+  }
+
+  body.practice-open.lab-open #toggle-host {
+    display: contents;
+  }
+
+  body.exam-mode .controls,
+  body.exam-mode #toggle-host {
+    display: none !important;
+  }
+}
+
+/* An exam question without a setup of its own: the lab behind it is not about it, so it recedes. */
+#c,
+#label-layer {
+  transition: opacity 0.3s var(--ease);
+}
+
+body.scene-idle #c,
+body.scene-idle #label-layer {
+  opacity: 0.12;
+}
+
+.readout:empty {
+  display: none;
+}
+
+.problems {
+  top: var(--below-brand, 230px);
+  left: 16px;
+  width: var(--sheet-w);
+  max-height: calc(100vh - var(--below-brand, 230px) - 16px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(14, 15, 18, 0.94);
+}
+
+
+
+.problems > * {
+  flex-shrink: 0;
+}
+
+.pb-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  /* Stays in view while a long problem scrolls: back, reset, close. */
+  position: sticky;
+  top: -14px;
+  z-index: 2;
+  margin: -14px -16px 0;
+  padding: 14px 16px 10px;
+  /* Opaque: at even 97% a bold line scrolling underneath shows through. */
+  background: rgb(14, 15, 18);
+}
+
+.pb-head .pb-reset {
+  margin-left: auto;
+  padding: 5px 10px;
+  color: var(--gold);
+  border-color: rgba(240, 172, 95, 0.45);
+}
+
+.pb-filterbox {
+  display: grid;
+  gap: 8px;
+}
+
+.pb-filter-toggle {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--fs-ui);
+  cursor: pointer;
+}
+
+.pb-filter-toggle::before {
+  content: '▸';
+  font-size: var(--fs-meta);
+  transition: transform 0.2s var(--ease);
+}
+
+.pb-filter-toggle[aria-expanded='true']::before {
+  transform: rotate(90deg);
+}
+
+.pb-filter-toggle:hover {
+  color: var(--text);
+}
+
+.pb-kicker {
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.pb-h {
+  font-family: var(--serif);
+  font-size: var(--fs-title);
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+.pb-sub {
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.pb-x,
+.pb-back,
+.linkish {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.pb-x {
+  font-size: var(--fs-title);
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.pb-back {
+  font-size: var(--fs-ui);
+  padding: 2px 0;
+}
+
+.pb-x:hover,
+.pb-back:hover,
+.linkish:hover {
+  color: var(--text);
+}
+
+.linkish {
+  font-size: inherit;
+  color: var(--blue);
+  text-decoration: underline;
+  text-decoration-color: rgba(88, 196, 221, 0.35);
+  text-underline-offset: 2px;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.pb-meter-bar,
+.pb-ch-meter {
+  position: relative;
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(236, 230, 226, 0.1);
+  overflow: hidden;
+}
+
+.pb-meter-bar i,
+.pb-ch-meter i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--green);
+  border-radius: 2px;
+}
+
+.pb-meter-text {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.pb-actions {
+  display: grid;
+  gap: 6px;
+}
+
+.pb-actions .btn.accent,
+.pb-row .btn.accent {
+  width: auto;
+  margin-top: 0;
+  font-size: var(--fs-body);
+}
+
+.pb-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.pb-row .btn {
+  flex: 1 1 auto;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.pb-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pb-chip {
+  padding: 6px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--fs-ui);
+  cursor: pointer;
+}
+
+.pb-chip:hover {
+  color: var(--text);
+}
+
+.pb-chip.on {
+  color: var(--text);
+  border-color: var(--select-line);
+  background: var(--select-soft);
+}
+
+.pb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pb-ch-head {
+  display: grid;
+  grid-template-columns: 1fr 56px auto;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2px;
+}
+
+.pb-ch-name {
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.pb-ch-count {
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.pb-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 10px 1fr auto;
+  align-items: center;
+  gap: 9px;
+  padding: 6px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-ui);
+  text-align: left;
+  cursor: pointer;
+}
+
+.pb-item:hover {
+  background: rgba(236, 230, 226, 0.05);
+}
+
+.pb-item-title {
+  min-width: 0;
+}
+
+.pb-item-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.pb-level {
+  letter-spacing: 0;
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.pb-lab-badge {
+  font-size: var(--fs-meta);
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+.pb-lab-badge.here {
+  color: var(--blue);
+  border-color: rgba(88, 196, 221, 0.45);
+}
+
+.pb-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text-dim);
+}
+
+.pb-dot.s-learning {
+  border-color: var(--blue);
+  background: rgba(88, 196, 221, 0.35);
+}
+
+.pb-dot.s-due {
+  border-color: var(--gold);
+  background: rgba(240, 172, 95, 0.35);
+}
+
+.pb-dot.s-missed {
+  border-color: var(--red);
+  background: rgba(252, 98, 85, 0.35);
+}
+
+.pb-dot.s-mastered {
+  border-color: var(--green);
+  background: var(--green);
+}
+
+.pb-welcome {
+  font-size: var(--fs-ui);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.pb-foot,
+.pb-empty {
+  font-size: var(--fs-meta);
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+
+.pb-dim {
+  font-size: var(--fs-meta);
+  font-weight: 400;
+  color: var(--text-dim);
+}
+
+.pb-text {
+  font-family: var(--serif);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.pb-extra {
+  margin-left: 4px;
+  padding: 0 5px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  vertical-align: 1px;
+}
+
+.pb-figure {
+  margin: 6px 0 10px;
+}
+
+.pb-figure svg {
+  display: block;
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+}
+
+.pb-note {
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+  border-left: 2px solid var(--border-hover);
+  padding-left: 8px;
+}
+
+.pb-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-meta);
+  line-height: 1.45;
+  color: var(--text-muted);
+  background: var(--accent-soft);
+  border: 1px solid rgba(88, 196, 221, 0.25);
+}
+
+.pb-banner.warn {
+  background: rgba(240, 172, 95, 0.08);
+  border-color: rgba(240, 172, 95, 0.3);
+}
+
+.pb-banner.good {
+  background: rgba(131, 193, 103, 0.08);
+  border-color: rgba(131, 193, 103, 0.3);
+}
+
+.pb-banner.quiet {
+  background: transparent;
+  border-color: var(--border);
+}
+
+.pb-parts {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pb-part {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border: 0;
+  min-width: 0;
+}
+
+.pb-label {
+  font-size: var(--fs-ui);
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 0;
+}
+
+.pb-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pb-input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 9px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-hover);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: var(--fs-body);
+  font-variant-numeric: tabular-nums;
+}
+
+.pb-input.sym {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: var(--fs-ui);
+}
+
+.pb-input:focus {
+  outline: none;
+  border-color: var(--select);
+}
+
+.pb-input[readonly] {
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+.pb-unit {
+  font-family: var(--serif);
+  font-size: var(--fs-body);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.pb-mark {
+  display: inline-block;
+  min-width: 14px;
+  font-size: var(--fs-body);
+  text-align: center;
+}
+
+.pb-part.ok .pb-mark {
+  color: var(--green);
+}
+
+.pb-part.bad .pb-mark {
+  color: var(--red);
+}
+
+.pb-part.ok .pb-input {
+  border-color: rgba(131, 193, 103, 0.6);
+}
+
+.pb-part.bad .pb-input,
+.pb-part.empty .pb-input {
+  border-color: rgba(252, 98, 85, 0.6);
+}
+
+.pb-fb {
+  font-size: var(--fs-meta);
+  color: var(--red);
+}
+
+.pb-fb:empty,
+.pb-parse:empty,
+.pb-labval:empty {
+  display: none;
+}
+
+.pb-fb.good {
+  color: var(--green);
+}
+
+.pb-parse {
+  font-size: var(--fs-meta);
+  color: var(--gold);
+}
+
+.pb-parse.ok {
+  color: var(--green);
+}
+
+.pb-parse.bad {
+  color: var(--gold);
+}
+
+/* A number held until the formula above it is right. */
+.pb-held {
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+}
+
+.pb-part.held .pb-label {
+  color: var(--text-dim);
+}
+
+.pb-part.held .pb-input {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pb-symhelp {
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+}
+
+.pb-symhelp code {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  color: var(--text-muted);
+}
+
+.pb-want {
+  font-size: var(--fs-ui);
+  color: var(--text-muted);
+}
+
+.pb-labval {
+  font-size: var(--fs-ui);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.pb-lab-tag {
+  font-size: var(--fs-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--blue);
+  margin-right: 4px;
+}
+
+.agree {
+  color: var(--green);
+}
+
+.disagree {
+  color: var(--gold);
+}
+
+.pb-opt {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 8px;
+  align-items: start;
+  padding: 5px 6px;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-ui);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.pb-opt:hover {
+  background: rgba(236, 230, 226, 0.05);
+}
+
+.pb-opt input {
+  margin-top: 3px;
+  accent-color: var(--select);
+}
+
+.pb-opt.key {
+  background: rgba(131, 193, 103, 0.12);
+}
+
+.pb-opt.wrong {
+  background: rgba(252, 98, 85, 0.1);
+}
+
+.pb-part.choice legend {
+  margin-bottom: 2px;
+}
+
+.pb-rubric {
+  font-size: var(--fs-ui);
+  line-height: 1.5;
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(236, 230, 226, 0.05);
+}
+
+.pb-hints {
+  display: grid;
+  gap: 4px;
+  padding-left: 18px;
+  font-size: var(--fs-ui);
+  color: var(--text);
+}
+
+.pb-solution {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.pb-solution h3 {
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.pb-verdict {
+  font-size: var(--fs-ui);
+  color: var(--text-muted);
+}
+
+.pb-verdict.good {
+  color: var(--green);
+}
+
+.pb-steps {
+  display: grid;
+  gap: 5px;
+  padding-left: 18px;
+  font-family: var(--serif);
+  font-size: var(--fs-body);
+  line-height: 1.45;
+  color: var(--text);
+}
+
+/*
+ * KaTeX renders at 1.21em by default, which makes a typeset formula tower over the sentence it
+ * sits in. Bring it back to the size of the prose, and give a wrapped line room to breathe.
+ */
+.pb-text .katex,
+.pb-steps .katex,
+.pb-hints .katex,
+.pb-label .katex,
+.pb-rubric .katex,
+.pb-opt .katex,
+.pb-want .katex {
+  font-size: 1.06em;
+}
+
+.pb-steps li,
+.pb-hints li {
+  line-height: 1.7;
+}
+
+/* A substitution line (a fraction with units on every factor) can outgrow a phone; scroll it, don't spill. */
+.pb-steps li {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 2px;
+}
+
+.pb-key {
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.pb-labchecks:empty {
+  display: none;
+}
+
+.pb-labrow {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.pb-timer {
+  font-family: var(--serif);
+  font-size: var(--fs-display);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.pb-timer.low {
+  color: var(--red);
+}
+
+.pb-examnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pb-examnav button {
+  width: 28px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--fs-ui);
+  cursor: pointer;
+}
+
+.pb-examnav button.done {
+  color: var(--text);
+  background: rgba(236, 230, 226, 0.08);
+}
+
+.pb-examnav button.on {
+  color: var(--text);
+  border-color: var(--select-line);
+  background: var(--select-soft);
+}
+
+.pb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-ui);
+  color: var(--text);
+}
+
+.pb-table td {
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.pb-table td:nth-child(2) {
+  width: 70px;
+  padding: 0 10px;
+}
+
+.pb-table td.num {
+  text-align: right;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Blind mode: the lab keeps its geometry; numbers that would give the answer away are hidden. */
+body.problem-blind #eq-live,
+body.problem-blind #eq-result,
+body.problem-blind #insight,
+body.problem-blind #mini-plot,
+body.problem-blind #readout {
+  visibility: hidden;
+}
+
+/* Help text that states a result (the direction of travel, say) waits until the problem is solved. */
+body.problem-blind .tell {
+  display: none;
+}
+
+body.problem-blind .veiled,
+body.problem-blind .veiled * {
+  color: transparent !important;
+  text-shadow: none !important;
+}
+
+body.problem-blind .veiled {
+  background: rgba(236, 230, 226, 0.12);
+  border-radius: 3px;
+}
+
+body.problem-blind .veiled .katex {
+  visibility: hidden;
+}
+
+@media (max-width: 980px) {
+  :root {
+    --sheet-w: min(400px, calc(100vw - 40px));
+  }
+}
+
+
+/* ---------- Formula input: rendered preview and the symbol palette ---------- */
+
+/*
+ * The preview shows the expression as the parser read it. It is deliberately quiet — a panel, not
+ * a headline — because it is there to be glanced at while typing, not read.
+ */
+.pb-preview:empty {
+  display: none;
+}
+
+.pb-preview {
+  margin-top: 6px;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.28);
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.pb-preview .katex-display {
+  margin: 0;
+}
+
+.pb-preview .katex {
+  font-size: 1.15em;
+  color: var(--text);
+}
+
+.pb-pal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.pb-pal-gap {
+  flex: 0 0 8px;
+}
+
+/* ×10^ and − for numeric answers: only where the keyboard is a number pad (numPadHTML). */
+.pb-numpal {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .pb-numpal {
+    display: flex;
+  }
+}
+
+.pb-key {
+  min-width: 30px;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(236, 230, 226, 0.04);
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: var(--fs-body);
+  line-height: 1.3;
+  cursor: pointer;
+  /* Two quick taps (− then ×10^) are two keys, not a double-tap zoom. */
+  touch-action: manipulation;
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.pb-key:hover {
+  border-color: var(--border-hover);
+  background: rgba(236, 230, 226, 0.09);
+}
+
+.pb-key.op {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: var(--fs-ui);
+  color: var(--text-muted);
+}
+
+.pb-symhelp code {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.92em;
+  color: var(--text-muted);
+}
+
+/* A stage of a chapter's learning path (src/problems/sequence.js). */
+.pb-stage {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 10px 0 3px;
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.pb-stage:first-of-type {
+  margin-top: 4px;
+}
+
+.pb-stage-n {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+}
+
+/* "Show lab" only matters where the sheet covers the scene: phones. */
+.pb-scene {
+  display: none;
+}
+
+/* The principle step (src/problems/principle-step.js): name the law before the parts open. */
+.pb-principle {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-sm);
+  background: rgba(236, 230, 226, 0.03);
+  min-width: 0;
+}
+
+.pb-principle legend {
+  float: left;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 2px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.pb-popts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.pb-popt {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(236, 230, 226, 0.03);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-ui);
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pb-popt:hover,
+.pb-popt:focus-visible {
+  border-color: var(--select-line);
+  background: var(--select-soft);
+}
+
+.pb-punsure {
+  justify-self: start;
+  font-size: var(--fs-meta);
+}
+
+.pb-principle.done {
+  gap: 4px;
+  font-size: var(--fs-ui);
+  color: var(--text);
+}
+
+.pb-principle.done.ok {
+  border-color: rgba(131, 193, 103, 0.35);
+  background: rgba(131, 193, 103, 0.06);
+}
+
+.pb-principle.done.ok .pb-mark {
+  color: var(--green);
+}
+
+.pb-principle.done.bad {
+  border-color: rgba(252, 98, 85, 0.35);
+  background: rgba(252, 98, 85, 0.05);
+}
+
+.pb-principle.done.bad .pb-mark {
+  color: var(--red);
+}
+
+.pb-principle b,
+.pb-pline b {
+  font-weight: 600;
+}
+
+.pb-pstate {
+  font-family: var(--serif);
+  font-size: var(--fs-ui);
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.pb-pcue {
+  font-size: var(--fs-ui);
+  color: var(--text);
+}
+
+.pb-pline {
+  font-size: var(--fs-ui);
+  color: var(--text-muted);
+}
+
+/* "What went wrong?" after a missed attempt. */
+.pb-gap {
+  display: grid;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px dashed var(--border-hover);
+  border-radius: var(--radius-sm);
+}
+
+.pb-gap .pb-chip {
+  font-size: var(--fs-meta);
+  text-align: left;
+}
+
+.pb-gap.done p {
+  font-size: var(--fs-ui);
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.pb-mixed {
+  margin-right: 4px;
+  padding: 0 6px;
+  border: 1px solid rgba(88, 196, 221, 0.45);
+  border-radius: 999px;
+  color: var(--blue);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Group by principle */
+.pb-group {
+  align-items: center;
+}
+
+.pb-group .pb-dim {
+  margin-right: 2px;
+}
+
+.pb-pgroup .pb-pstate {
+  margin: 2px 6px 4px;
+  font-size: var(--fs-ui);
+}
+
+.pb-ptally {
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.pb-chtag {
+  display: inline-block;
+  min-width: 42px;
+  margin-right: 6px;
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.pb-earlier > summary {
+  padding: 4px 6px;
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.pb-earlier[open] > summary {
+  color: var(--text-muted);
+}
+
+/* Principles you most often miss (progress.principleMisses) */
+.pb-weak {
+  display: grid;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-sm);
+  background: rgba(236, 230, 226, 0.03);
+}
+
+.pb-weak-h {
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.pb-weak-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.pb-weak-name {
+  font-size: var(--fs-ui);
+  color: var(--text);
+}
+
+.pb-weak-row .btn {
+  padding: 5px 10px;
+  font-size: var(--fs-meta);
+}
+
+/* Fading worked examples (src/problems/fading.js) */
+.pb-guide {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid rgba(88, 196, 221, 0.3);
+  border-radius: var(--radius-sm);
+  background: rgba(88, 196, 221, 0.05);
+}
+
+.pb-guide.hidden {
+  display: block;
+  padding: 6px 10px;
+  background: transparent;
+  border-style: dashed;
+}
+
+.pb-guide-h {
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  color: var(--blue);
+  font-weight: 600;
+}
+
+.pb-guide-text {
+  font-family: var(--serif);
+  font-size: var(--fs-ui);
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.pb-guide .pb-steps {
+  font-size: var(--fs-ui);
+}
+
+.pb-guide-yours {
+  font-size: var(--fs-ui);
+  color: var(--text);
+}
+
+.pb-guide .linkish {
+  justify-self: start;
+  font-size: var(--fs-meta);
+}
+
+.pb-guide-text .katex,
+.pb-guide .pb-steps .katex {
+  font-size: 1.04em;
+}
+
+/* ---------- Notes (src/ui/notes.js): the class notes, read beside the lab ---------- */
+
+:root {
+  --notes-w: min(760px, calc(100vw - 440px));
+}
+
+.notes {
+  top: var(--below-brand, 230px);
+  left: 16px;
+  width: var(--notes-w);
+  max-height: calc(100vh - var(--below-brand, 230px) - 16px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 0 28px 28px;
+  z-index: 12;
+  background: rgb(14, 15, 18);
+  /* The notes' own colour names, mapped onto the app's palette (their legend swatches use them). */
+  --field: var(--blue);
+  --field-soft: rgba(88, 196, 221, 0.1);
+  --copper: var(--gold);
+  --copper-soft: rgba(240, 172, 95, 0.09);
+  --ok: var(--text);
+  --ok-soft: rgba(236, 230, 226, 0.05);
+}
+
+body.notes-open #eq-panel,
+body.notes-open .problems,
+body.notes-open .units-ref {
+  display: none;
+}
+
+@media (min-width: 721px) {
+  body.notes-open .controls,
+  body.notes-open #toggle-host {
+    display: none;
+  }
+}
+
+body.notes-open .legend {
+  left: calc(var(--notes-w) + 32px);
+}
+
+.nt-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 -28px;
+  padding: 12px 28px 10px;
+  background: rgb(14, 15, 18);
+  border-bottom: 1px solid var(--border);
+}
+
+.nt-jump {
+  flex: 1;
+  min-width: 0;
+  max-width: 460px;
+}
+
+.nt-head .pb-x {
+  margin-left: auto;
+}
+
+.nt-head .nt-full {
+  margin-left: auto;
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.nt-head .nt-full:hover,
+.nt-head .nt-full:focus-visible {
+  color: var(--text);
+  border-color: var(--select);
+}
+
+.nt-head .nt-full[aria-pressed='true'] {
+  color: var(--select);
+  border-color: var(--select);
+}
+
+.nt-head .nt-full + .pb-x {
+  margin-left: 0;
+}
+
+/* The notes' right edge: a strip to drag, drawn as a short handle at its middle. */
+.notes-grip {
+  position: fixed;
+  top: var(--below-brand, 230px);
+  left: calc(16px + var(--notes-w) - 6px);
+  width: 12px;
+  height: calc(100vh - var(--below-brand, 230px) - 16px);
+  z-index: 13;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.notes-grip::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  width: 4px;
+  height: 56px;
+  margin-top: -28px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background 0.15s;
+}
+
+.notes-grip:hover::after,
+.notes-grip:focus-visible::after,
+body.notes-resizing .notes-grip::after {
+  background: var(--select);
+}
+
+.notes-grip:focus-visible {
+  outline: none;
+}
+
+body.notes-resizing {
+  cursor: ew-resize;
+  user-select: none;
+}
+
+/* Full height: the brand header folds away and the notes run the height of the window. */
+@media (min-width: 721px) {
+  body.notes-open.notes-full #brand {
+    display: none;
+  }
+
+  body.notes-open.notes-full .notes,
+  body.notes-open.notes-full .notes-grip {
+    top: 16px;
+  }
+
+  body.notes-open.notes-full .notes {
+    max-height: calc(100vh - 32px);
+  }
+
+  body.notes-open.notes-full .notes-grip {
+    height: calc(100vh - 32px);
+  }
+}
+
+@media (max-width: 720px) {
+  .notes-grip,
+  .nt-head .nt-full {
+    display: none;
+  }
+}
+
+.nt-doc {
+  font-family: var(--serif);
+  font-size: var(--fs-body);
+  line-height: 1.65;
+  color: var(--text);
+}
+
+.nt-doc .eyebrow {
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.nt-doc header.top {
+  padding: 22px 0 18px;
+  border-bottom: 1px solid var(--border-hover);
+}
+
+.nt-doc h1 {
+  margin: 8px 0 10px;
+  font-family: var(--font);
+  font-size: var(--fs-display);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.nt-doc .lede {
+  color: var(--text-muted);
+}
+
+.nt-doc h2,
+.nt-doc h3 {
+  font-family: var(--font);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.nt-doc h2 {
+  margin-top: 34px;
+  font-size: var(--fs-title);
+}
+
+.nt-doc h2 .n {
+  display: inline-block;
+  min-width: 1.6em;
+  color: var(--blue);
+}
+
+.nt-doc h3 {
+  margin-top: 22px;
+  font-size: var(--fs-body);
+}
+
+/* No measure of their own: the panel's width (at most 760px) is the line length. */
+.nt-doc p {
+  margin: 10px 0;
+}
+
+.nt-doc ul,
+.nt-doc ol {
+  margin: 10px 0;
+  padding-left: 1.3em;
+}
+
+.nt-doc li {
+  margin: 4px 0;
+}
+
+.nt-doc .part {
+  margin-top: 44px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-hover);
+}
+
+.nt-doc .part .eyebrow {
+  color: var(--blue);
+}
+
+.nt-doc .part h2 {
+  margin-top: 4px;
+  font-size: var(--fs-display);
+}
+
+.nt-doc .bridge {
+  margin-top: 20px;
+  padding-left: 14px;
+  border-left: 2px solid var(--border-hover);
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.nt-doc .katex-display {
+  margin: 12px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 2px;
+}
+
+.nt-doc .katex {
+  font-size: 1.06em;
+}
+
+/* Callouts: example, derivation, correction, key idea. */
+.nt-doc .box {
+  margin: 18px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(236, 230, 226, 0.03);
+}
+
+.nt-doc .box > .tag {
+  display: block;
+  margin-bottom: 2px;
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nt-doc .box p {
+  margin: 6px 0;
+}
+
+.nt-doc .box.ex > .tag {
+  color: var(--blue);
+}
+
+.nt-doc .box.why {
+  border-color: transparent;
+  background: var(--field-soft);
+}
+
+.nt-doc .box.why > .tag {
+  color: var(--blue);
+}
+
+.nt-doc .box.fix {
+  border-color: rgba(240, 172, 95, 0.3);
+  background: var(--copper-soft);
+}
+
+.nt-doc .box.fix > .tag {
+  color: var(--gold);
+}
+
+.nt-doc .box.key {
+  border-color: var(--border-hover);
+  border-left: 3px solid var(--text);
+}
+
+.nt-doc .box.key > .tag {
+  color: var(--text);
+}
+
+.nt-doc .ans {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: var(--fs-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+.nt-doc .tbl {
+  overflow-x: auto;
+  margin: 16px 0;
+}
+
+.nt-doc table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+.nt-doc th,
+.nt-doc td {
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+
+.nt-doc th {
+  font-family: var(--font);
+  font-weight: 600;
+  border-bottom-color: var(--border-hover);
+}
+
+.nt-doc nav.toc {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 24px;
+  margin-top: 20px;
+  font-family: var(--font);
+  font-size: var(--fs-ui);
+}
+
+.nt-doc nav.toc h3 {
+  grid-column: 1 / -1;
+  margin-top: 12px;
+  font-size: var(--fs-meta);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.nt-doc nav.toc a {
+  display: flex;
+  gap: 10px;
+  padding: 3px 0;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.nt-doc nav.toc a span {
+  min-width: 1.8em;
+  color: var(--blue);
+  font-variant-numeric: tabular-nums;
+}
+
+.nt-doc nav.toc a:hover {
+  color: var(--blue);
+}
+
+.nt-doc .nt-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 16px;
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.nt-doc .nt-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 2px;
+  vertical-align: -1px;
+}
+
+.nt-doc a {
+  color: var(--blue);
+}
+
+.nt-doc footer {
+  margin-top: 40px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font);
+  font-size: var(--fs-ui);
+  color: var(--text-muted);
+}
+
+/* Where to go from a section: its lab, and its practice problems. */
+.nt-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 4px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-hover);
+  font-family: var(--font);
+}
+
+/* "Show this in the lab" under a worked example (src/notes/setups.js). */
+.nt-setup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin-top: 12px;
+  font-family: var(--font);
+}
+
+.nt-setup .nt-show {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.nt-setup .nt-show:hover,
+.nt-setup .nt-show:focus-visible {
+  background: rgba(88, 196, 221, 0.1);
+}
+
+.nt-setup .nt-show.is-on {
+  background: rgba(88, 196, 221, 0.14);
+}
+
+.nt-setup-note {
+  font-size: var(--fs-meta);
+  color: var(--muted);
+}
+
+/* Opened from a problem, the lab belongs to the problem. */
+.notes.nt-problem .nt-setup {
+  display: none;
+}
+
+.nt-empty .nt-sets {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.nt-empty {
+  padding-top: 20px;
+  font-family: var(--font);
+}
+
+.pb-notes {
+  justify-self: start;
+  align-self: flex-start;
+  font-size: var(--fs-ui);
+}
+
+.eq-notes {
+  align-self: flex-start;
+  font-size: var(--fs-ui);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --notes-w: auto;
+  }
+
+  .notes {
+    top: var(--hdr);
+    left: 0;
+    right: 0;
+    width: auto;
+    height: calc(100dvh - var(--hdr));
+    max-height: none;
+    border-radius: 0;
+    border-width: 1px 0 0;
+    padding: 0 16px calc(28px + env(safe-area-inset-bottom) + (100lvh - 100svh));
+  }
+
+  .nt-head {
+    margin: 0 -16px;
+    padding: 10px 16px;
+  }
+
+  .nt-doc nav.toc {
+    grid-template-columns: 1fr;
+  }
+
+  .nt-jump {
+    font-size: 16px;
+  }
+
+  body.notes-open .toggles,
+  body.notes-open .controls,
+  body.notes-open .readout,
+  body.notes-open .legend {
+    display: none;
+  }
+}
+
+/* "Course sheets, in order": every question from the exam's own sheets (src/problems/sheets.js). */
+.pb-row .btn.pb-sheets {
+  flex: 1;
+  color: var(--lavender);
+  border-color: rgba(199, 179, 220, 0.45);
+  font-weight: 600;
+}
+
+.pb-sheetnav {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin: 4px 0 8px;
+}
+
+.pb-sheetnav .btn {
+  padding: 4px 10px;
+  font-size: var(--fs-body);
+}
+
+.pb-sheetjump {
+  flex: 1;
+  min-width: 0;
+  padding: 5px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--panel-solid);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-ui);
+}

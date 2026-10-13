@@ -1,0 +1,515 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Vectors, Charge and Force</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<style>
+:root{
+  --paper:#F5F6F8; --sheet:#FFFFFF; --ink:#1A2130; --muted:#5A6476; --rule:#DCE0E7;
+  --field:#2C4BB5; --field-soft:#E8ECFA;
+  --copper:#A8531C; --copper-soft:#F8ECE3;
+  --ok:#1F6B4E; --ok-soft:#E5F2EC;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:"IBM Plex Sans Condensed", "Arial Narrow", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#11141B; --sheet:#171B24; --ink:#E4E7EE; --muted:#9AA3B5; --rule:#2A3040;
+    --field:#93A7FF; --field-soft:#1C2340;
+    --copper:#E79461; --copper-soft:#2E2119;
+    --ok:#6FCBA2; --ok-soft:#16281F;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#11141B; --sheet:#171B24; --ink:#E4E7EE; --muted:#9AA3B5; --rule:#2A3040;
+  --field:#93A7FF; --field-soft:#1C2340;
+  --copper:#E79461; --copper-soft:#2E2119;
+  --ok:#6FCBA2; --ok-soft:#16281F;
+}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.62;padding-inline:16px;padding-block:0 64px}
+main{max-width:720px;margin:0 auto}
+header.top{max-width:720px;margin:0 auto;padding-block:48px 24px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3{font-family:var(--sans);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(34px,6vw,52px);font-weight:700;letter-spacing:-.01em;margin-block:10px 14px}
+.lede{font-size:19px;color:var(--muted);max-width:62ch;margin:0}
+.part{margin-top:64px;padding-top:18px;border-top:2px solid var(--ink)}
+.part .eyebrow{color:var(--field)}
+.part h2{font-size:34px;margin-top:6px}
+section.topic{margin-top:44px}
+section.topic h2{font-size:26px;font-weight:600;display:flex;gap:12px;align-items:baseline}
+section.topic h2 .n{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--field);min-width:2.2em}
+h3{font-size:19px;font-weight:600;margin-top:26px}
+p{margin-block:12px;max-width:68ch}
+ul,ol{padding-left:1.3em;max-width:66ch}
+li{margin-block:4px}
+a{color:var(--field)}
+a:focus-visible{outline:2px solid var(--field);outline-offset:2px}
+.bridge{font-style:italic;color:var(--muted);border-left:2px solid var(--rule);padding-left:14px;margin-top:22px}
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;padding-block:4px;margin:14px 0!important}
+.box{border-radius:6px;padding:14px 18px;margin:20px 0;border:1px solid var(--rule);background:var(--sheet)}
+.box > .tag{font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;display:block;margin-bottom:4px}
+.box p{margin-block:8px}
+.box.ex > .tag{color:var(--field)}
+.box.fix{background:var(--copper-soft);border-color:transparent}
+.box.fix > .tag{color:var(--copper)}
+.box.why{background:var(--field-soft);border-color:transparent}
+.box.why > .tag{color:var(--field)}
+.box.key{background:var(--ok-soft);border-color:transparent}
+.box.key > .tag{color:var(--ok)}
+.ans{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto;margin:18px 0}
+table{border-collapse:collapse;width:100%;font-size:16px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--sans);font-weight:600;font-size:15px;border-bottom:2px solid var(--ink)}
+nav.toc{margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:4px 28px;font-size:16px}
+nav.toc h3{grid-column:1/-1;font-size:14px;font-family:var(--mono);font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+nav.toc a{text-decoration:none;color:var(--ink);display:flex;gap:10px;padding:2px 0}
+nav.toc a span{font-family:var(--mono);font-size:13px;color:var(--field);min-width:2em;padding-top:3px}
+nav.toc a:hover{color:var(--field)}
+@media (max-width:560px){nav.toc{grid-template-columns:1fr} body{font-size:17px} mjx-container[display="true"]{font-size:86%} .box{padding:12px 14px}}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid var(--rule);color:var(--muted);font-size:15px}
+</style>
+
+<header class="top">
+  <div class="eyebrow">PHY 2049 · Calculus Physics II · Week 1 · Lecture notes Ch V, 34–35, rewritten</div>
+  <h1>Vectors, Charge and Force</h1>
+  <p class="lede">One continuous set of notes on the tools the rest of the course is built from: vectors, electric charge, and Coulomb's law. Every field, force and flux that follows is a vector sum of pieces like the ones here.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Correction to the original notes</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Vectors</h3>
+    <a href="#s1"><span>1</span>Components, magnitude and direction</a>
+    <a href="#s2"><span>2</span>Unit vectors and vector addition</a>
+    <a href="#s3"><span>3</span>The dot product</a>
+    <a href="#s4"><span>4</span>The cross product</a>
+    <h3>Part II · The Electric Charge</h3>
+    <a href="#s5"><span>5</span>Charge: quantized and conserved</a>
+    <a href="#s6"><span>6</span>Conductors, insulators and contact charging</a>
+    <a href="#s7"><span>7</span>Induction and polarization</a>
+    <h3>Part III · Coulomb's Law</h3>
+    <a href="#s8"><span>8</span>Coulomb's law</a>
+    <a href="#s9"><span>9</span>Superposition of forces</a>
+    <a href="#s10"><span>10</span>Equilibrium points and comparing forces</a>
+    <a href="#s11"><span>11</span>Formula sheet</a>
+  </nav>
+</header>
+
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Vectors</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Components, magnitude and direction</h2>
+<p>A <b>scalar</b> is a number with a unit: a time of 5 s, a mass of 4.2 kg. A <b>vector</b> also has a direction. A displacement of 5 m northeast and one of 5 m straight down are different vectors. Force, velocity, and later the electric field are all vectors. Two vectors are equal when they have the same magnitude, direction and units. Where the arrow is drawn doesn't matter.</p>
+<p>The <b>magnitude</b> \(|\vec A|\) is the vector's length. It is never negative. Multiplying a vector by \(-1\) keeps the length and reverses the direction, so \(-\vec A\) is a different vector from \(\vec A\).</p>
+<p>Pick perpendicular axes. Every vector can then be replaced by its <b>components</b>, the pieces along each axis that add tip to tail to give the vector back. Let \(\vec A\) point at angle \(\theta\) counterclockwise from the \(+x\) axis. Drop a perpendicular from its tip to the \(x\)-axis. The right triangle has hypotenuse \(|\vec A|\), so</p>
+\[A_x = |\vec A|\cos\theta, \qquad A_y = |\vec A|\sin\theta.\]
+<p>Reading the same triangle backward gives the magnitude and direction from the components:</p>
+\[|\vec A| = \sqrt{A_x^2+A_y^2}, \qquad \tan\theta = \frac{A_y}{A_x}.\]
+<p>\(\arctan\) can't tell \(30^\circ\) from \(210^\circ\), because both have the same ratio. Check the signs of \(A_x\) and \(A_y\) and put \(\theta\) in the matching quadrant.</p>
+
+<h3>Direction angles</h3>
+<p>The notes measure direction a second way, which extends cleanly to three dimensions. Let \(\alpha\), \(\beta\), \(\gamma\) be the angles from the \(+x\), \(+y\) and \(+z\) axes to the vector. Then each component is the magnitude times the cosine of its own angle:</p>
+\[A_x = |\vec A|\cos\alpha, \qquad A_y = |\vec A|\cos\beta, \qquad A_z = |\vec A|\cos\gamma.\]
+<p>Going back, \(\alpha = \cos^{-1}(A_x/|\vec A|)\) and so on. Keep the sign of the component inside the inverse cosine. A negative component gives an angle over \(90^\circ\), which is the point.</p>
+
+<div class="box ex"><span class="tag">Worked example · angle below the \(-x\) axis</span>
+<p>\(\vec C\) has magnitude 12 m and points \(20^\circ\) below the \(-x\) axis. Measured from \(+x\), \(\alpha = 180^\circ + 20^\circ = 200^\circ\). Measured from \(+y\), \(\beta = 90^\circ + 20^\circ = 110^\circ\).</p>
+\[C_x = 12\cos200^\circ = -11.3\ \text{m}, \qquad C_y = 12\cos110^\circ = -4.1\ \text{m}.\]
+<p>Both components are negative, as they should be for a vector in the third quadrant.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · a 3D force</span>
+<p>\(\vec F = (40\ \text{N})\hat x + (20\ \text{N})\hat y + (-60\ \text{N})\hat z\).</p>
+\[|\vec F| = \sqrt{40^2+20^2+60^2} = 74.8\ \text{N}\]
+\[\alpha = \cos^{-1}\tfrac{40}{74.8} = 57.7^\circ, \qquad \beta = \cos^{-1}\tfrac{20}{74.8} = 74.5^\circ, \qquad \gamma = \cos^{-1}\tfrac{-60}{74.8} = 143.3^\circ.\]
+<p>\(\gamma\) is over \(90^\circ\) because \(F_z\) is negative.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Unit vectors and vector addition</h2>
+<p>A <b>unit vector</b> carries direction only. It has magnitude 1 and no units. Dividing any vector by its magnitude leaves its direction:</p>
+\[\hat A = \frac{\vec A}{|\vec A|}, \qquad \vec A = |\vec A|\,\hat A.\]
+<p>The axis unit vectors \(\hat x, \hat y, \hat z\) give every vector a component form:</p>
+\[\vec A = A_x\hat x + A_y\hat y + A_z\hat z.\]
+<p>Multiplying by a scalar \(s\) scales every component: \(s\vec A = (sA_x)\hat x + (sA_y)\hat y + (sA_z)\hat z\). There is no division by a vector.</p>
+
+<h3>Adding vectors</h3>
+<p>Graphically, place the vectors tip to tail. The sum runs from the first tail to the last tip. Algebraically, \(\hat x\), \(\hat y\) and \(\hat z\) are independent directions, so each component adds on its own:</p>
+\[\vec R = \vec A + \vec B + \vec C = (A_x+B_x+C_x)\hat x + (A_y+B_y+C_y)\hat y + (A_z+B_z+C_z)\hat z.\]
+<p>A change in a vector is a subtraction, which is addition of the negative: \(\Delta\vec A = \vec A_f + (-\vec A_i)\).</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The magnitude of a sum is not the sum of the magnitudes. Two 10 N forces pulling opposite ways add to 0 N, not 20 N. Net force is always found component by component.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes write the \(y\)-component of a sum as \(\Sigma R_y = A_y + B_y + C_z + \cdots\). The last term should be \(C_y\). A \(z\)-component never contributes to the \(y\) sum.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · two forces on a box</span>
+<p>\(\vec F_1\) is 2.15 N at \(26.6^\circ\) below the \(+x\) axis. \(\vec F_2\) is 7.2 N along \(+y\).</p>
+\[F_{1x} = 2.15\cos26.6^\circ = +1.92\ \text{N}, \qquad F_{1y} = -2.15\sin26.6^\circ = -0.96\ \text{N}\]
+\[F_{2x} = 0, \qquad F_{2y} = +7.2\ \text{N}\]
+<p>Add the components:</p>
+\[\Sigma\vec F = (1.92\ \text{N})\hat x + (6.24\ \text{N})\hat y, \qquad |\Sigma\vec F| = \sqrt{1.92^2+6.24^2} = 6.5\ \text{N}.\]
+\[\alpha = \cos^{-1}\tfrac{1.92}{6.53} = 73^\circ \text{ from } +x, \qquad \beta = \cos^{-1}\tfrac{6.24}{6.53} = 17^\circ \text{ from } +y.\]
+<p>These are the same two forces that act on ball 1 in Section 9.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · Problem-solving video · three forces</span>
+<p>Three forces act on an object. \(\vec T\) is 200 N at \(\Theta_1 = 60^\circ\) above the \(-x\) axis. \(\vec F\) is 50 N at \(\Theta_2 = 20^\circ\) above the \(+x\) axis. \(\vec W\) is 300 N straight down.</p>
+\[\vec T = (-200\cos60^\circ,\ 200\sin60^\circ) = (-100,\ 173.2)\ \text{N}\]
+\[\vec F = (50\cos20^\circ,\ 50\sin20^\circ) = (47.0,\ 17.1)\ \text{N}\]
+\[\vec W = (0,\ -300)\ \text{N}\]
+<p>Add the components:</p>
+\[\Sigma\vec F = (-53.0\ \text{N})\hat x + (-109.7\ \text{N})\hat y, \qquad |\Sigma\vec F| = \sqrt{53.0^2+109.7^2} = 121.8\ \text{N}.\]
+\[\alpha = \cos^{-1}\tfrac{-53.0}{121.8} = 116^\circ, \qquad \beta = \cos^{-1}\tfrac{-109.7}{121.8} = 154^\circ.\]
+<p>Both components are negative, so the net force points down and to the left.</p>
+<p><b>Balancing the forces.</b> Now let the sizes change but not the angles, so that \(\Sigma\vec F = 0\). Each component must vanish on its own:</p>
+\[x:\quad -|\vec T|\cos\Theta_1 + |\vec F|\cos\Theta_2 = 0\]
+\[y:\quad |\vec T|\sin\Theta_1 + |\vec F|\sin\Theta_2 - |\vec W| = 0\]
+<p>The \(y\) equation gives \(|\vec W| = |\vec T|\sin\Theta_1 + |\vec F|\sin\Theta_2\). (\(\sin\Theta\) is the same as \(\cos(90^\circ-\Theta)\).) Solve it for \(|\vec F|\) with \(|\vec W| = 300\) N and \(|\vec T| = 200\) N:</p>
+\[|\vec F| = \frac{|\vec W| - |\vec T|\sin\Theta_1}{\sin\Theta_2} = \frac{300 - 173.2}{0.342} = 371\ \text{N}.\]
+<p>That balances \(y\) only. The \(x\) sum is then \(-100 + 371\cos20^\circ = +248\) N, so the object is not in equilibrium. Keep \(|\vec W| = 300\) N and solve both equations together: \(|\vec T| = 286\) N and \(|\vec F| = 152\) N.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the problem-solving handout</span>
+<p>The handout gives \(|\vec F| = 1248\) N for the last part. Its own formula, \(\big(|\vec W| - |\vec T|\cos(90^\circ-\Theta_1)\big)/\cos(90^\circ-\Theta_2)\), gives \((300-173.2)/0.342 = 371\) N. That value balances only the \(y\) components. With \(|\vec T|\) held at 200 N, no \(|\vec F|\) makes the net force zero. The handout also gives \(\beta = 153^\circ\) for the first part. The components give \(154^\circ\).</p>
+</div>
+
+<h3>Calculus on vectors</h3>
+<p>Derivatives and integrals act on each component separately:</p>
+\[\frac{d\vec A}{dt} = \frac{dA_x}{dt}\hat x + \frac{dA_y}{dt}\hat y + \frac{dA_z}{dt}\hat z, \qquad \int\vec A\,dt = \Big(\int A_x\,dt\Big)\hat x + \Big(\int A_y\,dt\Big)\hat y + \Big(\int A_z\,dt\Big)\hat z.\]
+<div class="box ex"><span class="tag">Worked example · a drone</span>
+<p>A drone's velocity is \(\vec v = (0.3t^2)\hat x + (5 + 4t)\hat y\) m/s, with \(t\) in seconds.</p>
+<p>Displacement from 0 to 10 s:</p>
+\[\Delta\vec x = \Big[0.1t^3\Big]_0^{10}\hat x + \Big[5t + 2t^2\Big]_0^{10}\hat y = (100\ \text{m})\hat x + (250\ \text{m})\hat y.\]
+<p>\(|\Delta\vec x| = 269\) m, at \(\alpha = 68^\circ\) and \(\beta = 22^\circ\).</p>
+<p>Acceleration at 10 s: \(\vec a = (0.6t)\hat x + 4\hat y = (6\ \text{m/s}^2)\hat x + (4\ \text{m/s}^2)\hat y\), so \(|\vec a| = \sqrt{52} = 7.2\ \text{m/s}^2\).</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>The dot product</h2>
+<p>Vectors can be multiplied two ways. The <b>dot product</b> turns two vectors into a scalar:</p>
+\[\vec A\cdot\vec B = |\vec A||\vec B|\cos\varphi,\]
+<p>where \(\varphi\) is the angle between them. It measures how much of \(\vec A\) lies along \(\vec B\), times the length of \(\vec B\).</p>
+<p>The sign comes from \(\cos\varphi\):</p>
+<ul>
+  <li>\(\varphi < 90^\circ\): positive. The vectors point roughly the same way. At \(\varphi = 0\) it is \(+|\vec A||\vec B|\).</li>
+  <li>\(\varphi = 90^\circ\): zero. The vectors are perpendicular.</li>
+  <li>\(\varphi > 90^\circ\): negative. The vectors point roughly opposite. At \(\varphi = 180^\circ\) it is \(-|\vec A||\vec B|\).</li>
+</ul>
+
+<div class="box why"><span class="tag">Derivation · component form</span>
+<p>The axis unit vectors are perpendicular and each has length 1, so \(\hat x\cdot\hat x = 1\) and \(\hat x\cdot\hat y = 0\), and likewise for the rest. Distribute:</p>
+\[\vec A\cdot\vec B = (A_x\hat x+A_y\hat y+A_z\hat z)\cdot(B_x\hat x+B_y\hat y+B_z\hat z) = A_xB_x + A_yB_y + A_zB_z.\]
+<p>Two special cases follow. Dotting with an axis unit vector pulls out a component: \(\vec A\cdot\hat x = |\vec A|\cos\alpha = A_x\). Dotting a vector with itself gives its length squared: \(\vec A\cdot\vec A = |\vec A|^2\), so \(|\vec A| = \sqrt{\vec A\cdot\vec A}\).</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · angle between two vectors</span>
+<p>\(\vec A = 5\hat x + 2\hat y\), \(\vec B = \hat x - 3\hat y\).</p>
+\[\vec A\cdot\vec B = (5)(1)+(2)(-3) = -1\]
+\[|\vec A| = \sqrt{29} = 5.385, \qquad |\vec B| = \sqrt{10} = 3.162\]
+\[\cos\varphi = \frac{-1}{(5.385)(3.162)} = -0.0587 \quad\Rightarrow\quad \varphi = 93.4^\circ.\]
+<p>A small negative dot product means just past perpendicular.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>The cross product</h2>
+<p>The <b>cross product</b> turns two vectors into a third vector, perpendicular to both:</p>
+\[\vec C = \vec A\times\vec B, \qquad |\vec C| = |\vec A||\vec B|\sin\varphi.\]
+<p>It is zero when the vectors are parallel or antiparallel, and largest when they are perpendicular. That's the reverse of the dot product.</p>
+<p>The direction comes from the <b>right-hand rule</b>. Point your fingers along \(\vec A\), curl them toward \(\vec B\), and your thumb points along \(\vec A\times\vec B\). The notes give an equivalent version: index finger along \(\vec A\), middle finger along \(\vec B\), thumb along \(\vec A\times\vec B\).</p>
+
+<div class="box why"><span class="tag">Derivation · component form, and order matters</span>
+<p>Use \(\hat x\times\hat y=\hat z\), \(\hat y\times\hat z=\hat x\), \(\hat z\times\hat x=\hat y\), and \(\hat x\times\hat x=0\) (a vector is parallel to itself). For two vectors in the \(xy\)-plane:</p>
+\[\vec A\times\vec B = (A_x\hat x + A_y\hat y)\times(B_x\hat x + B_y\hat y) = (A_xB_y - A_yB_x)\,\hat z.\]
+<p>Swapping the order flips every unit-vector product (\(\hat y\times\hat x = -\hat z\)), so</p>
+\[\vec A\times\vec B = -\,\vec B\times\vec A.\]
+</div>
+
+<div class="box ex"><span class="tag">Worked example · a torque</span>
+<p>A wrench handle runs \(\vec r = 0.40\ \text{m}\,\hat x\) from the bolt. A force \(\vec F = 60\ \text{N}\,\hat y\) acts at its end.</p>
+\[\vec\tau = \vec r\times\vec F = (0.40)(60)(\hat x\times\hat y) = 24\ \hat z\ \text{N·m}.\]
+<p>Fingers along \(\hat x\), curl toward \(\hat y\): the thumb points out of the page. The bolt turns counterclockwise.</p>
+</div>
+<p class="bridge">Coulomb's law in Part III uses addition and the dot product. The magnetic force in Exam 4 is a cross product. First, the thing that feels the force: electric charge.</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>The Electric Charge</h2>
+</div>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Charge: quantized and conserved</h2>
+<p>There are four fundamental forces: gravity, electromagnetism, and the weak and strong nuclear forces. All of them act without contact, through a field. Physics I covered gravity. This course covers electricity and magnetism.</p>
+<p><b>Electric charge</b> is an intrinsic property of the proton and the electron. The unit is the coulomb (C). Everyday charges are around a nanocoulomb (\(10^{-9}\) C). There are two kinds. Like charges repel and unlike charges attract. "Positive" and "negative" are only names; they could as well be "green" and "blue". Treating them as algebraic signs is still useful, because then \(q_1q_2 > 0\) means repulsion (Section 8).</p>
+<div class="tbl"><table>
+<tr><th>Particle</th><th>Charge</th><th>Mass</th></tr>
+<tr><td>Electron</td><td>\(-1.6\times10^{-19}\) C</td><td>\(9.11\times10^{-31}\) kg</td></tr>
+<tr><td>Proton</td><td>\(+1.6\times10^{-19}\) C</td><td>\(1.67\times10^{-27}\) kg</td></tr>
+<tr><td>Neutron</td><td>0</td><td>\(1.675\times10^{-27}\) kg</td></tr>
+</table></div>
+<p>The proton is about 1800 times heavier than the electron but carries exactly the same size of charge. A <b>neutral</b> object has equal numbers of protons and electrons. It is full of charge; the charges cancel. Protons and neutrons are made of quarks (up: \(+\tfrac23 e\), down: \(-\tfrac13 e\)). A proton is up-up-down and a neutron is up-down-down. Quarks are never found alone, so no free charge is ever a fraction of \(e\).</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes describe the quark as "pure energy". A quark is a particle with mass and charge, like the electron. What the notes mean is that no smaller particle is known inside it.</p>
+</div>
+
+<h3>Ions and quantization</h3>
+<p>Protons are locked in the nucleus. Objects are charged by adding or removing electrons. An atom with a missing electron is a positive ion; one with an extra electron is a negative ion. Any object's charge is</p>
+\[Q = (N_p - N_e)\,e \qquad\text{or}\qquad Q = Ne, \quad N = \text{number of missing or extra electrons}.\]
+<p>So charge is <b>quantized</b>: it comes in whole multiples of \(e = 1.6\times10^{-19}\) C. One coulomb is \(6.25\times10^{18}\) electrons.</p>
+<div class="box ex"><span class="tag">Worked example · counting electrons</span>
+<p>A balloon carries \(-12\ \mu\text{C}\). How many extra electrons is that?</p>
+\[N = \frac{|Q|}{e} = \frac{12\times10^{-6}}{1.6\times10^{-19}} = 7.5\times10^{13}\ \text{electrons}.\]
+</div>
+
+<h3>Conservation</h3>
+<p>Charge is never created or destroyed on its own. It moves from one object to another, or appears in equal and opposite pairs. The total charge of an isolated system never changes.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Quantization says charge moves in whole multiples of \(e\). Conservation says the total never changes. Section 6's touching-spheres example uses conservation for the total and symmetry to split it.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Conductors, insulators and contact charging</h2>
+<p>Whether charge can move through a material depends on how tightly its electrons are held. Only electrons move. Protons move only when whole atoms do.</p>
+<ul>
+  <li><b>Conductors</b> (copper, silver, aluminum, gold) have loosely bound outer electrons that roam the whole object. Charge placed anywhere spreads over the entire surface. Touch one spot to ground and the whole object discharges.</li>
+  <li><b>Insulators</b> (plastic, glass, rubber, wood, pure water) hold their electrons tightly. Charge stays where it is put. Touching one spot discharges only that spot.</li>
+  <li><b>Semiconductors</b> (silicon, germanium) sit in between. Doping, temperature or light changes how well they conduct.</li>
+</ul>
+<p>The labels depend on conditions. Pure water insulates but salt water conducts.</p>
+<p>A net charge can be put on an object three ways. Two of them are here; induction is Section 7.</p>
+<ul>
+  <li><b>Rubbing (triboelectric charging).</b> Electrons move from the material that holds them more weakly to the one that holds them more strongly. The two end up with equal and opposite charges. Fur, glass, hair, nylon and silk tend to end up positive. Teflon, rubber, amber, wood and cotton tend to end up negative.</li>
+  <li><b>Direct contact.</b> Touch a charged object to a conductor and some of its charge spreads onto the conductor, because like charges push each other apart and the conductor gives them more room.</li>
+</ul>
+
+<div class="box ex"><span class="tag">Worked example · two spheres touch</span>
+<p>Two identical conducting spheres on insulating stands carry \(Q_A = -3\ \mu\text{C}\) and \(Q_B = +4\ \mu\text{C}\). They touch and are separated.</p>
+<p>The total is conserved: \(-3 + 4 = +1\ \mu\text{C}\). The spheres are identical, so nothing favors one over the other and they share it equally: \(+0.5\ \mu\text{C}\) each.</p>
+<p>What actually moved? Sphere A went from \(-3\) to \(+0.5\ \mu\text{C}\). It lost \(3.5\ \mu\text{C}\) of electrons, which is \(3.5\times10^{-6}/1.6\times10^{-19} = 2.2\times10^{13}\) electrons, all of them flowing to B.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes explain this example as "3½ µC of positive charge" flowing from sphere B to sphere A, saying that "by convention the positive charge flows to the negative charge". The final charges are right. But in a metal only electrons move, as the notes themselves say a few pages earlier. What happened is that 3.5 µC of electrons flowed from A to B. Positive charge flowing the other way is a bookkeeping equivalent, not what the metal does.</p>
+</div>
+<p class="bridge">Rubbing and contact both need a touch. Section 7 charges an object without touching it, by first pushing its own charges around.</p>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Induction and polarization</h2>
+<p>Bring a charged rod near a neutral object without touching it. The object's charges shift. Charge of the rod's sign is pushed away and the opposite charge is pulled closer. The object stays neutral overall. This is <b>polarization</b>. In a conductor, free electrons move across the whole object. In an insulator, each atom's electron cloud shifts slightly toward or away from the rod. Either way there is a near side and a far side with opposite charge.</p>
+
+<div class="box why"><span class="tag">Derivation · why a neutral object is attracted</span>
+<p>The near side carries charge opposite to the rod's, so it is attracted. The far side carries the same sign, so it is repelled. The amounts are equal, but Coulomb's law falls off as \(1/r^2\) (Section 8). The near side is closer, so its attraction wins. This works for a rod of either sign.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>A charged object can attract a neutral one, whatever its sign. It can never repel a neutral one. Repulsion means the object already has a net charge. That's why a charged balloon sticks to a neutral wall, and falls off once its charge leaks away.</p>
+</div>
+
+<h3>Charging by induction</h3>
+<p>Polarization only rearranges charge. <b>Induction</b> uses it to leave a lasting net charge on a conductor.</p>
+<div class="box ex"><span class="tag">Worked example · grounding a sphere</span>
+<ol>
+  <li>Bring a negative rod near a neutral conducting sphere. Electrons are pushed to the far side.</li>
+  <li>Connect the sphere to ground. <b>Ground</b> is anything big enough to take or give charge without noticeably charging itself, like the Earth or a person. The pushed electrons flow off into it.</li>
+  <li>Break the ground connection while the rod is still there. The electrons can't come back.</li>
+  <li>Remove the rod. The sphere is left positive, and the charge spreads over its surface.</li>
+</ol>
+<p>A positive rod leaves the sphere negative. Induction always leaves the opposite sign to the inducing charge. Contact leaves the same sign.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two touching spheres</span>
+<p>Spheres A and B touch. A positive rod is brought near A. Electrons crowd toward the rod onto A, leaving B short of electrons. Separate the spheres with the rod still in place: A is negative and B is positive, with equal and opposite charges. Nothing was grounded. The total is still zero.</p>
+</div>
+
+<h3>Everyday charge</h3>
+<ul>
+  <li><b>Static cling.</b> Clothes rub together in the dryer and end up with opposite charges. Damp fabric conducts well enough to leak charge away, so cling appears only once the clothes are dry.</li>
+  <li><b>Tape.</b> Pulling two strips of tape apart charges them, and they bend toward or away from each other.</li>
+  <li><b>Doorknob shocks.</b> Shoes rubbing on a rug charge your body; the charge jumps to the next conductor you touch.</li>
+  <li><b>Electrostatic air filters.</b> A charged grid charges passing dust and smoke, and an oppositely charged plate collects it.</li>
+</ul>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say rubbing leaves an "equal amount of positive and negative charge on each piece of clothing", and that the dryer "can sense this" to know when the clothes are dry. An item with equal positive and negative charge is neutral and would not cling. Rubbing moves electrons from one item to another, so one ends up net negative and the other net positive. Dryers do not sense the charge. An auto-dry sensor is two metal strips: wet clothes touching both conduct between them, and dry clothes do not.</p>
+</div>
+<p class="bridge">Rubbing, contact and induction all leave charge sitting still. Charge at rest pushes on every other charge nearby. Coulomb's law says how hard.</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Coulomb's Law</h2>
+</div>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Coulomb's law</h2>
+<p>Two point charges \(q_1\) and \(q_2\), a distance \(r\) apart, push or pull on each other along the line joining them. A <b>point charge</b> is small enough to treat as a point. A uniformly charged sphere acts like a point charge at its center. The magnitude is</p>
+\[|\vec F_E| = \frac{k\,|q_1||q_2|}{r^2}, \qquad k = \frac{1}{4\pi\varepsilon_0} = 9.0\times10^9\ \frac{\text{N·m}^2}{\text{C}^2}.\]
+<p>\(\varepsilon_0 = 8.85\times10^{-12}\ \text{C}^2/(\text{N·m}^2)\) is the <b>permittivity of free space</b>. The forces on the two charges are equal and opposite (Newton's third law), even when \(q_1 \neq q_2\). The force is the same anywhere on a circle of radius \(r\) around a charge.</p>
+<p>The notes find the direction by reasoning (like charges repel, unlike attract) and use magnitudes in the formula. An equivalent way lets the signs do it. Write the force on \(q_2\) along the unit vector \(\hat r\) that points from \(q_1\) to \(q_2\):</p>
+\[\vec F_{\text{on }2} = \frac{kq_1q_2}{r^2}\,\hat r.\]
+<p>Like signs give \(q_1q_2 > 0\): the force points along \(+\hat r\), away from \(q_1\). Unlike signs give \(q_1q_2 < 0\): the force points back toward \(q_1\). Use one method or the other, never half of each.</p>
+<p>Coulomb's law has the same \(1/r^2\) form as Newton's gravity. The difference is that mass has one sign, so gravity only attracts. Charge has two, so the electric force can attract or repel.</p>
+
+<div class="box ex"><span class="tag">Worked example · Mike and Cathy</span>
+<p>Mike's ball carries \(-2\) C. Cathy's carries \(+0.5\) C. They are 1 m apart, Mike on the left.</p>
+<p><b>Force on Cathy's ball:</b></p>
+\[|\vec F| = \frac{(9.0\times10^9)(2)(0.5)}{(1)^2} = 9.0\times10^9\ \text{N},\]
+<p>about \(2\times10^9\) pounds. Opposite charges attract, so it pulls Cathy's ball toward Mike's, in the \(-x\) direction.</p>
+<p><b>Force on Mike's ball:</b> the same product \(q_1q_2\) at the same distance, so the same \(9.0\times10^9\) N, now in the \(+x\) direction toward Cathy.</p>
+<p><b>Mike's ball, mass 2 kg, released:</b> \(a = F/m = 9.0\times10^9/2 = 4.5\times10^9\ \text{m/s}^2\).</p>
+<p>If both balls had the same sign, the forces would reverse: Mike's ball pushed in \(-x\), Cathy's in \(+x\).</p>
+<p>Charges of a coulomb are enormous. Everyday objects carry nanocoulombs to microcoulombs.</p>
+</div>
+
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>For the force of Cathy's ball on Mike's, the notes compute \((9.0\times10^9)(2\ \text{C})(2\ \text{C})/(1\ \text{m})^2\), using Mike's charge twice, and report \(9.0\times10^9\) N. That arithmetic gives \(3.6\times10^{10}\) N. The reported answer is right, and the product is the same \((2)(0.5)\) as before. Newton's third law guarantees the two forces are equal.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Superposition of forces</h2>
+<p>With several charges, the net force on one charge is the <b>vector sum</b> of the forces from each of the others. Each pair acts as if the others weren't there. This is <b>superposition</b>.</p>
+<ol>
+  <li>List only the forces on the charge in question.</li>
+  <li>Find each direction from "like repel, unlike attract".</li>
+  <li>Find each magnitude from Coulomb's law with that pair's charges and distance.</li>
+  <li>Add components.</li>
+</ol>
+<p>On a line, the components are just signed numbers along that line. The sign comes from the direction of each force and the chosen axis, not from the sign of the charges.</p>
+
+<div class="box ex"><span class="tag">Worked example · three charges in a line</span>
+<p>Ball 1 (\(-2\ \mu\text{C}\)) sits at \(x = 0\), ball 2 (\(-4\ \mu\text{C}\)) at \(x = 0.1\) m, ball 3 (\(+6\ \mu\text{C}\)) at \(x = 0.3\) m.</p>
+<p><b>Net force on ball 2.</b> Ball 1 is like-charged and to the left, so it pushes ball 2 right. Ball 3 is unlike and to the right, so it pulls ball 2 right.</p>
+\[F_{1\text{ on }2} = \frac{(9.0\times10^9)(2\times10^{-6})(4\times10^{-6})}{(0.1)^2} = 7.2\ \text{N}, \qquad F_{3\text{ on }2} = \frac{(9.0\times10^9)(6\times10^{-6})(4\times10^{-6})}{(0.2)^2} = 5.4\ \text{N}\]
+\[\Sigma F_x = +7.2 + 5.4 = +12.6\ \text{N}.\]
+<p><b>Net force on ball 1.</b> Ball 2 pushes ball 1 left (7.2 N, same pair). Ball 3 is 0.3 m away and pulls ball 1 right:</p>
+\[F_{3\text{ on }1} = \frac{(9.0\times10^9)(6\times10^{-6})(2\times10^{-6})}{(0.3)^2} = 1.2\ \text{N}\]
+\[\Sigma F_x = -7.2 + 1.2 = -6.0\ \text{N}.\]
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>In the second half of this example, the notes write "the force that ball 1 exerts on ball 2 is repulsive therefore is in the negative x direction" and label the sum "\(\Sigma F_x\) on ball 2". Both should say ball 1. The force on ball 2 from ball 1 points \(+x\), as the first half found. The force on ball 1 from ball 2 points \(-x\). The 2D example has the same slip, calling \(\vec F_{2\text{ on }1}\) "the force on ball 2 due to ball 1". The numbers are right. The labels matter, because the label decides the direction.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · three charges in a plane</span>
+<p>Ball 1 (\(-2\ \mu\text{C}\)) is at the origin. Ball 2 (\(-4\ \mu\text{C}\)) is 0.1 m directly below it. Ball 3 (\(+6\ \mu\text{C}\)) is 0.2 m to the right of ball 2, so 0.224 m from ball 1, at \(26.6^\circ\) below the \(+x\) axis.</p>
+<p><b>Ball 2 on ball 1:</b> like charges repel, so the force points up, along \(+y\).</p>
+\[F_{2\text{ on }1} = \frac{(9.0\times10^9)(4\times10^{-6})(2\times10^{-6})}{(0.1)^2} = 7.2\ \text{N}\]
+<p><b>Ball 3 on ball 1:</b> unlike charges attract, so the force points toward ball 3, \(26.6^\circ\) below \(+x\).</p>
+\[F_{3\text{ on }1} = \frac{(9.0\times10^9)(6\times10^{-6})(2\times10^{-6})}{(0.224)^2} = 2.15\ \text{N}\]
+<p>These are the two forces of the Section 2 example, so</p>
+\[\Sigma\vec F = (1.92\ \text{N})\hat x + (6.24\ \text{N})\hat y, \quad 6.5\ \text{N at } 73^\circ \text{ above } +x.\]
+</div>
+
+<div class="box ex"><span class="tag">Worked example · Problem-solving video 1 · charges on a line</span>
+<p>Charge 1 (\(+5\ \mu\text{C}\)) is at \(x = 0\). Charge 2 (\(-1\ \mu\text{C}\)) is 0.5 m to its right. Charge 3 (\(-5\ \mu\text{C}\)) is 0.2 m past charge 2, at \(x = 0.7\) m. First the three pair forces:</p>
+\[F_{12} = \frac{(9.0\times10^9)(5\times10^{-6})(1\times10^{-6})}{(0.5)^2} = 0.180\ \text{N}\]
+\[F_{13} = \frac{(9.0\times10^9)(5\times10^{-6})(5\times10^{-6})}{(0.7)^2} = 0.459\ \text{N}\]
+\[F_{23} = \frac{(9.0\times10^9)(1\times10^{-6})(5\times10^{-6})}{(0.2)^2} = 1.125\ \text{N}\]
+<p><b>On charge 1.</b> Both others are negative and to its right. Both pull it right: \(\Sigma F_x = +0.180 + 0.459 = +0.639\) N.</p>
+<p><b>On charge 2.</b> Charge 1 pulls it left. Charge 3 is like-charged and to its right, so it pushes charge 2 left too: \(\Sigma F_x = -0.180 - 1.125 = -1.305\) N.</p>
+<p><b>On charge 3.</b> Charge 1 pulls it left. Charge 2 pushes it right: \(\Sigma F_x = -0.459 + 1.125 = +0.666\) N.</p>
+<p>Check: the three net forces add to zero, \(0.639 - 1.305 + 0.666 = 0\). Each pair's forces are equal and opposite, so the forces inside any group of charges cancel.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the problem-solving handout</span>
+<p>The handout's answers are \(-0.28\) N, \(+0.945\) N and \(-0.665\) N. Those are the forces you get if charge 3 were positive. With charge 3 negative, as stated, it attracts charge 1 and repels charge 2. The forces are \(+0.639\) N, \(-1.305\) N and \(+0.666\) N. The sign of each answer is its direction, so all three printed directions are wrong.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · Problem-solving video 2 · charges on a rectangle</span>
+<p>Charges sit on three corners of a rectangle 0.5 m wide and 0.4 m tall. Charge 1 (\(+10\ \mu\text{C}\)) is top left, charge 2 (\(+5\ \mu\text{C}\)) top right, and charge 3 (\(-15\ \mu\text{C}\)) bottom right. Find the net force on charge 1.</p>
+<p><b>Charge 2 on charge 1:</b> like charges 0.5 m apart. The push points left, along \(-x\).</p>
+\[F_{2\text{ on }1} = \frac{(9.0\times10^9)(10\times10^{-6})(5\times10^{-6})}{(0.5)^2} = 1.80\ \text{N}\]
+<p><b>Charge 3 on charge 1:</b> unlike charges along the diagonal, \(r = \sqrt{0.5^2+0.4^2} = 0.640\) m. The pull points toward charge 3, along \((0.5,\,-0.4)/0.640\).</p>
+\[F_{3\text{ on }1} = \frac{(9.0\times10^9)(10\times10^{-6})(15\times10^{-6})}{0.41} = 3.29\ \text{N}\]
+\[\vec F_{3\text{ on }1} = 3.29\,(0.781,\ -0.625) = (2.57,\ -2.06)\ \text{N}\]
+<p>Add:</p>
+\[\Sigma\vec F = (-1.80 + 2.57)\,\hat x - 2.06\,\hat y = (0.77\ \text{N})\hat x - (2.06\ \text{N})\hat y\]
+\[|\Sigma\vec F| = 2.20\ \text{N}, \qquad \alpha = \cos^{-1}\tfrac{0.77}{2.20} = 69^\circ, \qquad \beta = \cos^{-1}\tfrac{-2.06}{2.20} = 159^\circ.\]
+<p>The force points down and a little to the right, \(21^\circ\) from straight down.</p>
+</div>
+
+<h3>Applications</h3>
+<ul>
+  <li><b>Smoke detectors and electrostatic filters</b> charge particles and collect them on an oppositely charged plate.</li>
+  <li><b>Photocopiers</b> charge a drum, then shine the page's image on it. Light removes the charge where the page is white. Toner sticks only where charge remains and is then pressed onto paper and heated to fix it.</li>
+  <li><b>Car painting</b> charges the paint droplets one way and the car body the other, so paint is pulled onto the body and less is wasted.</li>
+</ul>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Equilibrium points and comparing forces</h2>
+<h3>Where a third charge feels nothing</h3>
+<p>Two like charges \(q_1\) and \(q_2\) sit a distance \(d\) apart. Between them, each pushes a test charge toward the other. At one point the pushes balance.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Let the point be \(x\) from \(q_1\), so \(d-x\) from \(q_2\). Set the magnitudes equal. \(k\) and the test charge cancel:</p>
+\[\frac{q_1}{x^2} = \frac{q_2}{(d-x)^2} \quad\Rightarrow\quad \frac{d-x}{x} = \sqrt{\frac{q_2}{q_1}} \quad\Rightarrow\quad x = \frac{d}{1+\sqrt{q_2/q_1}}.\]
+<p>The point sits closer to the smaller charge.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example</span>
+<p>\(q_1 = +9.0\ \mu\text{C}\) at \(x=0\), \(q_2 = +4.0\ \mu\text{C}\) at \(x = 0.50\) m.</p>
+\[x = \frac{0.50}{1+\sqrt{4/9}} = \frac{0.50}{1.667} = 0.30\ \text{m from }q_1.\]
+<p>Check: \(9/0.30^2 = 100\) and \(4/0.20^2 = 100\).</p>
+</div>
+<p>For unlike charges, the pushes between them point the same way and never cancel. The balance point is then outside the pair, beyond the smaller charge.</p>
+
+<h3>Electric force vs. gravity</h3>
+<p>An electron and a proton attract both electrically and gravitationally. At the hydrogen atom's size, \(r = 5.29\times10^{-11}\) m:</p>
+\[F_E = \frac{ke^2}{r^2} = \frac{(9.0\times10^9)(1.6\times10^{-19})^2}{(5.29\times10^{-11})^2} = 8.23\times10^{-8}\ \text{N}\]
+\[F_G = \frac{Gm_em_p}{r^2} = \frac{(6.67\times10^{-11})(9.11\times10^{-31})(1.67\times10^{-27})}{(5.29\times10^{-11})^2} = 3.63\times10^{-47}\ \text{N}\]
+\[\frac{F_E}{F_G} = 2.3\times10^{39}.\]
+<p>Both forces go as \(1/r^2\), so the ratio is the same at any distance. Gravity between charged particles is negligible, and this course ignores it unless a problem includes it.</p>
+
+<h3>Scaling the force</h3>
+<p>Since \(F \propto q_1q_2/r^2\), changing the inputs rescales the force:</p>
+\[\frac{F_{\text{new}}}{F_{\text{old}}} = \left(\frac{q_1'}{q_1}\right)\left(\frac{q_2'}{q_2}\right)\left(\frac{r}{r'}\right)^2.\]
+<div class="box key"><span class="tag">Key idea</span>
+<p>Halve the distance and the force quadruples. Double it and the force drops to a quarter. Triple one charge and halve the distance: \(3\times2^2 = 12\) times the force, not 6. The distance factor is squared; the charge factors aren't.</p>
+</div>
+</section>
+
+<section class="topic" id="s11">
+<h2><span class="n">11</span>Formula sheet</h2>
+<div class="tbl"><table>
+<tr><th>Idea</th><th>Result</th></tr>
+<tr><td>Components</td><td>\(A_x=|\vec A|\cos\alpha\), \(A_y=|\vec A|\cos\beta\), \(A_z=|\vec A|\cos\gamma\)</td></tr>
+<tr><td>Magnitude</td><td>\(|\vec A|=\sqrt{\vec A\cdot\vec A}=\sqrt{A_x^2+A_y^2+A_z^2}\)</td></tr>
+<tr><td>Unit vector</td><td>\(\hat A = \vec A/|\vec A|\)</td></tr>
+<tr><td>Vector addition</td><td>\(\vec R=(A_x{+}B_x)\hat x+(A_y{+}B_y)\hat y+(A_z{+}B_z)\hat z\)</td></tr>
+<tr><td>Dot product</td><td>\(\vec A\cdot\vec B=|\vec A||\vec B|\cos\varphi=A_xB_x+A_yB_y+A_zB_z\)</td></tr>
+<tr><td>Cross product</td><td>\(|\vec A\times\vec B|=|\vec A||\vec B|\sin\varphi\), right-hand rule, \(\vec A\times\vec B=-\vec B\times\vec A\)</td></tr>
+<tr><td>Charge</td><td>\(Q=Ne\), \(e=1.6\times10^{-19}\) C</td></tr>
+<tr><td>Coulomb's law</td><td>\(|\vec F|=\dfrac{k|q_1||q_2|}{r^2}\), \(k=\dfrac{1}{4\pi\varepsilon_0}=9.0\times10^9\ \text{N·m}^2/\text{C}^2\)</td></tr>
+<tr><td>Superposition</td><td>\(\vec F_{\text{net}}=\sum_i \vec F_i\), added by components</td></tr>
+<tr><td>Balance point (like charges)</td><td>\(x=\dfrac{d}{1+\sqrt{q_2/q_1}}\) from \(q_1\)</td></tr>
+<tr><td>Force scaling</td><td>\(F_{\text{new}}/F_{\text{old}}=(q_1'/q_1)(q_2'/q_2)(r/r')^2\)</td></tr>
+</table></div>
+</section>
+
+</main>
+
+<footer>Rewritten from the Fall 2026 PHY 2049 lecture notes, Chapter V (vector review) and Chapters 34–35, and the instructor's problem-solving video handouts for them. Every worked answer was recomputed. Constants used: \(e = 1.6\times10^{-19}\) C, \(k = 9.0\times10^9\ \text{N·m}^2/\text{C}^2\), \(\varepsilon_0 = 8.85\times10^{-12}\ \text{C}^2/(\text{N·m}^2)\), \(G = 6.67\times10^{-11}\ \text{N·m}^2/\text{kg}^2\), \(m_e = 9.11\times10^{-31}\) kg, \(m_p = 1.67\times10^{-27}\) kg.</footer>
+
+</body></html>

@@ -1,0 +1,66 @@
+# Weekly: copy the course's new or changed Canvas files into incoming/, where the weekly Claude Code
+# run (see CLAUDE.md, "Content drop protocol") turns them into notes and commits them to main.
+#
+# Needs, in the repo's Settings > Secrets and variables > Actions:
+#   secret   CANVAS_TOKEN      a Canvas access token (90 days at most: renew it before it lapses)
+#   variable CANVAS_BASE_URL   e.g. https://unf.instructure.com
+#   variable CANVAS_COURSE_ID  the number in the course's URL, /courses/<id>
+# Until the variables are set the job is skipped, not failed. Run it by hand from the Actions tab.
+name: Canvas ingest
+
+on:
+  schedule:
+    - cron: '17 5 * * 0' # Sundays 05:17 UTC: 1:17 am in Jacksonville in summer time, 12:17 am in winter. Early, because
+                         # GitHub often starts scheduled runs hours late, and the notes run comes after this.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: canvas-ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    if: ${{ vars.CANVAS_COURSE_ID != '' && vars.CANVAS_BASE_URL != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # The branch tip, not the run's commit: a re-run of an old run would otherwise start
+      # behind main and fail to push.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Fetch new course files
+        id: fetch
+        env:
+          CANVAS_TOKEN: ${{ secrets.CANVAS_TOKEN }}
+          CANVAS_BASE_URL: ${{ vars.CANVAS_BASE_URL }}
+          CANVAS_COURSE_ID: ${{ vars.CANVAS_COURSE_ID }}
+        run: python3 scripts/canvas_ingest.py
+
+      - name: Commit them
+        run: |
+          git add incoming
+          if git diff --cached --quiet; then
+            echo "Nothing new on Canvas."
+            exit 0
+          fi
+          git config user.name "flux-ingest[bot]"
+          git config user.email "flux-ingest@users.noreply.github.com"
+          git commit -m "Ingest: ${{ steps.fetch.outputs.taken }} new course file(s) from Canvas"
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
+
+      # A failure nobody sees is how a pipeline quietly stops. Say so where it will be noticed.
+      - name: Open an issue if this failed
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create \
+            --title "Canvas ingest failed ($(date -u +%Y-%m-%d))" \
+            --body "The weekly Canvas ingest failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}. If the log says the token was refused, it has expired: make a new one in Canvas (Account > Settings > New Access Token) and replace the CANVAS_TOKEN secret."

@@ -1,0 +1,113 @@
+# Provenance and academic integrity
+
+*A one-page account of what course material this project does and does not contain, prepared for
+the instructor. Every number below is countable from the repository; the commands are at the end.*
+
+## What this is
+
+FLUX is a study tool: 24 interactive 3D labs plus a bank of generated practice problems, covering
+the syllabus chapters. It runs in a browser at <https://flux-phy2049.pages.dev> with nothing to
+install. It was written by a student in the course, for the course.
+
+Its purpose is a **second opinion**. When a student works a problem, the matching lab computes the
+same quantity by a different route — a Riemann sum against a closed form, a Kirchhoff solve against
+a measured loop, ray tracing against the lens equation — and says whether the two agree. The app is
+not a place to look up answers; it is a place to find out whether your own answer survives contact
+with the physics.
+
+## Course material, with the instructor's permission
+
+*Added 26 Sep 2026, extended 27 Sep 2026.* The instructor has said he is happy for FLUX to include
+the course's notes, practice problems and exams, since he rewrites them each term. The project now
+relies on that permission for:
+
+| | |
+|---|---|
+| Lecture notes | **4 sets**, as rewritten notes (every worked answer recomputed, slips in the original marked as corrections): Chapters V, 34–35, *Vectors, Charge and Force* (`src/notes/content/e1-vectors-charge-and-force.html`); Chapters 36–37, *Field and Flux* (`src/notes/content/e2-field-and-flux.html`); Chapters 38–42, *Potential to Power* (`src/notes/content/e3-potential-to-power.html`); and Chapters 43–47, *Charge in Motion* (`src/notes/content/e4-charge-in-motion.html`). Kept as written and read in the app's **Notes** mode. |
+| Lab readings and slides | *Added 5 Oct 2026.* The Lab 6 reading (RC circuits and their time constants) and the RC circuit slides, rewritten into Section 7 of the Chapters 43–47 notes: the method, a recomputed table, a worked example of our own, and their slips marked as corrections. No text or images copied. |
+| Practice sheets, worksheets, exams | Used as before (below): cited, answers as test fixtures, no copied text. None added wholesale yet. |
+
+Anything added under this permission goes in `src/notes/` or is listed in this table, so the
+account stays countable.
+
+## What of the course's material is in the repository
+
+| | |
+|---|---|
+| Problem templates | **258** |
+| …that cite a practice sheet or worksheet (`src: 'Practice 39 #8–10'`) | **128** |
+| …that use a printed answer as a ground-truth check | **100** |
+| Individual printed answers stored | **178**, across 390 worked cases |
+| Templates checked only against physics the app computes itself | **158** |
+
+So roughly **three fifths of the bank owes nothing to the course's answer keys.** Where a printed
+answer is used, it is used as a test fixture — a check that the app's own physics reproduces the
+number the sheet gives — and the source is cited in the code beside it.
+
+## What is *not* in the repository
+
+- No worksheets, slides, exams, or Canvas files, in any format. Lecture notes: only the two rewritten
+  sets listed above (Chapters 38–42 and 43–47).
+- No scans, screenshots, or PDFs of course documents.
+- No copied problem text. Every problem statement in the bank is written fresh and generated from
+  randomised parameters, so two students opening the same problem see different numbers.
+- No figures. Problems that depend on a printed figure were either rebuilt from scratch with our
+  own geometry or left out; those are flagged in the code.
+
+Until 26 Sep 2026 the repository was source-only, and the README said so throughout; the notes above
+are the first course material added under the instructor's permission. Git history is available if
+useful.
+
+## How the physics is verified
+
+The app does not trust itself. `npm test` runs **429 assertions**, each checking a result against an
+independent method rather than against a stored value — Biot–Savart sums against closed forms,
+Ampère loops, Boris-integrated orbits, image-charge surface potentials, Kirchhoff's rules on every
+circuit layout, −ΔΦ/Δt for Faraday, RK4 integration of each AC circuit against its phasor current,
+and paraxial ray tracing that must land every principal ray on the computed image. A further check
+runs all 258 templates through **13,518 comparisons** against the labs.
+
+This is why the app can disagree with an answer key and be worth listening to. See
+[ERRATA.md](ERRATA.md) for the twenty-four places it does or needs a note, fourteen of which look like genuine slips.
+
+## Where it is hosted, and who can read it
+
+Public on Cloudflare Pages, at an unlisted URL, with `robots.txt` and an `X-Robots-Tag` header
+asking search engines to skip it. It will not surface in a search for a problem's wording.
+
+**That is a courtesy, not a lock.** Anyone given the link can read everything, including the 178
+printed answers. If those practice sheets are reused from term to term, that is worth deciding
+deliberately rather than by default. Two remedies, either of which can be done the same day:
+
+1. **Gate it.** Cloudflare Access restricts the site to a named list of email addresses, free for up
+   to 50 users. Setup is about fifteen minutes and is documented in [DEPLOY.md](DEPLOY.md).
+2. **Remove the printed answers.** Deleting the 178 `key` values costs nothing functionally — those
+   100 templates would simply be checked against the app's own physics, like the other 158.
+
+## Student data
+
+None leaves the device. Progress is kept in the browser's `localStorage`, per browser. There are no
+accounts, no server, no database, no analytics and no telemetry. Nothing is transmitted anywhere,
+and no one — including the author — can see who used it or how they did.
+
+## If it were used in the course
+
+Four things worth settling early rather than late:
+
+- **Ownership and licence.** It is currently a student's private repository. Course infrastructure
+  needs an explicit answer about who owns it and under what terms.
+- **Maintenance.** Who fixes it after the author graduates. The test suite makes changes safe to
+  make, but someone has to make them.
+- **Accessibility.** This is the honest weak point. The labs are a WebGL canvas that leans on colour
+  and pointer interaction; there are keyboard shortcuts but no screen-reader story. That is
+  acceptable for an optional study aid and becomes a real obligation if it is ever required work.
+- **Cost.** Zero. Cloudflare Pages' free tier covers it, with no per-student fee at any class size.
+
+## Checking these numbers
+
+```bash
+grep -c "src: '" src/problems/bank/*.js        # templates citing a practice sheet
+grep -c "key: "  src/problems/bank/*.js        # printed answers stored as test fixtures
+grep -rn "note: '" src/problems/bank/*.js      # every recorded disagreement
+npm test                                       # the 429 independent physics checks
+```

@@ -1,6 +1,6 @@
 # Deploying the hub
 
-The hub is a static site. `npm run build` writes `site/dist/`. Cloudflare Pages serves that folder. The project is **direct upload**, same as the course apps: a push to `main` does not publish anything.
+The hub is a static site. `npm run build` writes `site/dist/`, including the PHY 2049 app at `site/dist/phy2049/`. Cloudflare Pages serves that folder. The project is **direct upload**, same as the course apps: a push to `main` does not publish anything.
 
 **Live URL: https://flux-study.pages.dev**
 
