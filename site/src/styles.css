@@ -151,7 +151,3 @@ footer p {
 footer a {
   color: var(--text-muted);
 }
-
-#build:empty {
-  display: none;
-}

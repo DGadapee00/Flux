@@ -35,7 +35,6 @@ for (const course of COURSES) {
   list.append(item);
 }
 
-const build = document.querySelector('#build');
-if (build && typeof __BUILD__ !== 'undefined' && __BUILD__.commit) {
-  build.textContent = `Built from ${__BUILD__.commit}`;
+if (typeof __BUILD__ !== 'undefined' && __BUILD__.commit) {
+  console.log(`FLUX ${__BUILD__.commit}`);
 }
