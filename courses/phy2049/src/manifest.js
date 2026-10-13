@@ -1,0 +1,33 @@
+import { defineCourse } from '@flux/core';
+import { EXAMS } from './data/catalog.js';
+
+/** Courses on the hub, in degree order. The bar links to the built ones. */
+export const TRACK = [
+  { id: 'phy2049', label: 'PHY 2049', href: '../phy2049/' },
+  { id: 'mac2313', label: 'MAC 2313', href: '../mac2313/' },
+  { id: 'statics', label: 'EGN 3311', href: '../statics/' },
+  { id: 'sta3032', label: 'STA 3032', href: '../sta3032/' },
+];
+
+export const course = defineCourse({
+  id: 'phy2049',
+  code: 'PHY 2049',
+  title: 'Physics II',
+  subject: 'em',
+  track: 'physics',
+  order: 2,
+  term: 'Fall 2026',
+  units: EXAMS.map((exam) => ({
+    id: exam.id,
+    title: exam.title,
+    chapters: [exam.chapters],
+    date: exam.date,
+    labs: exam.labs,
+  })),
+  chapters: {},
+  labs: () => import('./labs/load.js'),
+  problems: () => import('./problems/index.js'),
+  notes: () => import('./notes/index.js'),
+  ingest: { canvasCourseId: '130036' },
+  prereqs: [],
+});

@@ -1,4 +1,5 @@
 import 'katex/dist/katex.min.css';
+import { mountCourseFiles, mountTrackBar } from '@flux/core';
 import * as THREE from 'three';
 import { createScene } from './scene/createScene.js';
 import { createHUD } from './ui/hud.js';
@@ -12,6 +13,12 @@ import { setFrame, refit, defaultView, sceneScale, workPlane } from './engine/fr
 import { applyProblem } from './problems/simbridge.js';
 import { createPractice } from './ui/problems.js';
 import { ANSWER_LAYER } from './scene/manim.js';
+import { TRACK, course } from './manifest.js';
+import { courseStore } from './storage.js';
+
+const brand = document.getElementById('brand');
+mountTrackBar(brand, { currentId: course.id, courses: TRACK });
+mountCourseFiles(brand, { courseId: course.id, store: courseStore() });
 
 const canvas = document.getElementById('c');
 const { renderer, scene, camera, controls, labels, grid } = createScene(canvas);

@@ -13,7 +13,7 @@
     "dev": "npm run dev -w @flux/site",
     "build": "node packages/checks/raw.mjs && npm run build -w @flux/phy2049 && npm run build -w @flux/statics && npm run build -w @flux/mac2313 && npm run build -w @flux/sta3032 && npm run build -w @flux/site && node scripts/assemble.mjs && node packages/checks/raw.mjs --dist",
     "preview": "npm run preview -w @flux/site",
-    "test": "npm test --workspaces --if-present && node --test scripts/sync-phy.test.mjs scripts/storage-roundtrip.test.mjs",
+    "test": "npm test --workspaces --if-present && node --test scripts/sync-phy.test.mjs scripts/storage-roundtrip.test.mjs scripts/backup-roundtrip.test.mjs && node packages/checks/prereqs.mjs",
     "smoke": "npm run smoke -w @flux/site",
     "gallery": "npm run gallery -w @flux/phy2049",
     "deploy": "npm test && npm run build && npx --yes wrangler@latest pages deploy site/dist --project-name flux-study --branch main",

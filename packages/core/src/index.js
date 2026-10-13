@@ -3,3 +3,9 @@ export { DUAL_WRITE_UNTIL, browserStorage, createStore, memoryStorage, storageKe
 export { breakable, createTex, escapeHTML, fitMath, mathPieces } from './tex.js';
 export { CASE_SEED, createEngine, hashSeed, rng } from './problems/engine.js';
 export { INTERVAL_DAYS, MASTERED_BOX, createProgress, pickInterleave, pickSet } from './problems/progress.js';
+export { createLabLoader } from './labs/load.js';
+export { createNotes } from './notes/render.js';
+export { downloadJSON, exportBundle, importBundle, mountCourseFiles, mountHubBackup, mountTrackBar, parseProgressText } from './progress/files.js';
+export { createLabRouter } from './shell/lab-route.js';
+export { createModesRouter } from './shell/modes-route.js';
+export { mountPage } from './shell/page.js';
