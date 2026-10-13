@@ -1,3 +1,5 @@
+import { createLabLoader } from '@flux/core';
+
 const loaders = {
   vectors: () => import('./vectors.js'),
   particle: () => import('./particle.js'),
@@ -9,26 +11,9 @@ const loaders = {
   sections: () => import('./sections.js'),
 };
 
-const cache = new Map();
+const labs = createLabLoader(loaders);
 
-export function hasLab(id) {
-  return !!loaders[id];
-}
-
-export async function loadLab(id) {
-  if (cache.has(id)) return cache.get(id);
-  const loader = loaders[id];
-  if (!loader) return null;
-  const mod = await loader();
-  const lab = mod.default;
-  cache.set(id, lab);
-  return lab;
-}
-
-export function loadExamLabs(labIds) {
-  return Promise.all(labIds.filter(hasLab).map(loadLab));
-}
-
-export function registerLabLoader(id, loader) {
-  loaders[id] = loader;
-}
+export const hasLab = labs.hasLab;
+export const loadLab = labs.loadLab;
+export const loadExamLabs = labs.loadExamLabs;
+export const registerLabLoader = labs.registerLabLoader;

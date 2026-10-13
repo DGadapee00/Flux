@@ -186,6 +186,23 @@ h1 {
   font-size: var(--fs-meta);
 }
 
+.backup {
+  margin-top: 28px;
+}
+
+.backup h2 {
+  margin: 0 0 6px;
+  font-size: var(--fs-title);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.backup p {
+  margin: 0 0 10px;
+  color: var(--text-muted);
+  max-width: 36em;
+}
+
 footer {
   margin-top: 28px;
   color: var(--text-dim);

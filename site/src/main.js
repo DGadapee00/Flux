@@ -1,4 +1,5 @@
 import { mountCardAnimation } from './anim/draw.js';
+import { mountBackup } from './backup.js';
 import { latestBuilt, TRACKS } from './tracks.js';
 
 const root = document.querySelector('#tracks');
@@ -52,6 +53,8 @@ for (const track of TRACKS) {
   root.append(card);
   mountCardAnimation(card, stage, track.id);
 }
+
+mountBackup();
 
 if (typeof __BUILD__ !== 'undefined' && __BUILD__.commit) {
   console.log(`FLUX ${__BUILD__.commit}`);

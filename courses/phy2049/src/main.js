@@ -1,4 +1,5 @@
 import 'katex/dist/katex.min.css';
+import { mountCourseFiles, mountTrackBar } from '@flux/core';
 import * as THREE from 'three';
 import { createScene } from './scene/createScene.js';
 import { createHUD } from './ui/hud.js';
@@ -20,6 +21,8 @@ import { createNotes } from './ui/notes.js';
 import { createDerive } from './ui/derive.js';
 import { derivationById } from './derive/index.js';
 import { sectionForLab } from './notes/index.js';
+import { TRACK, course } from './manifest.js';
+import { courseStore } from './storage.js';
 // declared before use by createPractice's callbacks
 let units;
 let notes;
@@ -32,6 +35,10 @@ console.info(
   `FLUX build ${__BUILD__.commit}${__BUILD__.subject ? ` — ${__BUILD__.subject}` : ''} (built ${__BUILD__.built})`,
 );
 window.__build = __BUILD__;
+
+const brand = document.getElementById('brand');
+mountTrackBar(brand, { currentId: course.id, courses: TRACK });
+mountCourseFiles(brand, { courseId: course.id, store: courseStore() });
 
 const $id = (id) => document.getElementById(id);
 const canvas = document.getElementById('c');

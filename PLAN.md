@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status: **Phase 1b done** (13 Oct 2026). All four courses build from this repo and are live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 5174, MAC 5175, Statics 5176, STA 3032 5177. PHY's weekly drops land here. **Next: Phase 2.** flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their sites stay up.
+Status: **Phase 2 done** (13 Oct 2026). All four courses build from this repo and are live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 5174, MAC 5175, Statics 5176, STA 3032 5177. PHY's weekly drops land here. **Next: Phase 2b (optional, after 23 Oct 2026).** flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their sites stay up.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
@@ -409,12 +409,16 @@ With all four courses in the repo, build `packages/core` from the union of them,
    - the problem engine (generic kit parts only; course constants and helpers stay with the course);
    - `notes/`, the lab loader, then `shell/` (router, HUD, practice panel, styles).
 4. `defineCourse` and the course registry; each course gets its manifest with `track` and `order`.
-5. Track bar in the shell and `prereqs` links, with a check that lists unbuilt targets.
 
 Rule for this phase: a move that turns any course's check red is reverted, not patched forward.
 
-**Exit:** each `courses/<id>` holds only course content (labs, bank, notes, scenarios, manifest), all
-four pass every check, and progress export/import round-trips in each.
+**Exit:** core owns tex, storage and backup, the subject libraries, the scene3d and plot2d hosts, the problem engine and Leitner review, the notes renderer, the lab loader and the routers; each course keeps its own HUD, practice panel and styles.
+
+### Phase 2b (after 23 Oct 2026, optional)
+
+Move UI into core one feature at a time, and only when that feature should exist in every course.
+
+1. Track bar in the shell and `prereqs` links, with a check that lists unbuilt targets.
 
 ### Phases 3–5: retired
 
