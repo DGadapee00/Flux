@@ -1,0 +1,16 @@
+---
+description: One-way imports across core, subjects, courses, and the site
+alwaysApply: true
+---
+
+# Dependency direction
+
+`courses → subjects → core`. The checker is `packages/checks/deps.mjs`, and it runs as part of `npm test`.
+
+- Core imports neither `@flux/subjects` nor anything under `courses/`. A relative path that climbs out of `packages/core` into a subject or a course fails the check.
+- A subject may import `@flux/core`. A subject imports no course and no file under `site/`.
+- A course may import `@flux/core` and `@flux/subjects`. A course imports no other course and no file under `site/`.
+- The site may import core, subjects, and courses. It is where the course list lives.
+- External packages (`vite`, `katex`, `three`, `node:`) are fine from any layer.
+
+Course-specific rules (TI-84 quartiles, Merino notation, Hibbeler sign conventions, PHY notes structure) live in the course, or in `AGENTS.md` until that course is ported. They are not copied into `packages/core`.

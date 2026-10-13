@@ -1,0 +1,17 @@
+---
+description: FLUX platform rules from PLAN.md section 3
+alwaysApply: true
+---
+
+# Platform rules
+
+These apply to every phase. `PLAN.md` is the order of work. Stop at the phase exit test.
+
+- The four course repos (flux-phy2049, flux-mac2313, statics-sim, stats) are read-only sources. Copy from them. Their live sites stay up until that course passes parity, and an in-semester course waits until after its final unless parity is proven and the owner chooses to switch.
+- This repo is public. Raw course files stay out: PDFs, slides, Canvas exports, student names, grades. Rewritten notes ship only with that course's `PROVENANCE.md`. Material without permission stays out.
+- `packages/core` knows no course: no course id, code, chapter number, constant, or textbook name. A hook core needs goes on `defineCourse`, `defineLab`, or `problem`.
+- Every number on screen is computed and checked. A subject library has a selftest. A course with a failing check does not ship.
+- 380px portrait is the design width. No horizontal scroll. Phone inputs are at least 16px so Safari does not zoom.
+- Dependencies run one way: `courses → subjects → core`. `packages/checks/deps.mjs` fails `npm test` on an import the wrong way, and on a course name inside `packages/core`.
+- Storage keys are `flux.<course>.<key>.v<n>`. Progress export and import is JSON.
+- Each course folder has its own `PROVENANCE.md`.

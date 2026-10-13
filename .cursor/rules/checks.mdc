@@ -1,0 +1,18 @@
+---
+description: How FLUX is tested, built, and shown on a phone
+alwaysApply: true
+---
+
+# Checks and layout
+
+`npm test` at the repo root is the definition of done. It runs every workspace, including the dependency-direction check. `npm run build` must succeed. A failing check does not ship.
+
+Stack: Vite 6, vanilla JS ES modules, KaTeX 0.16, three.js 0.172 for 3D labs. No framework and no TypeScript build. JSDoc on `defineCourse`, `defineLab`, and `problem`. Tests are `node --test` scripts.
+
+The hub dev server is port 5173. Leave 5174 and 5175 for the course apps.
+
+Mobile first. Design at 380px portrait, and check 1280px too. No horizontal scroll. `npm run smoke` opens the hub in headless Chrome at both widths and follows each course card to its live app.
+
+TeX in a JS string is a `String.raw` template. A backslash eaten by an ordinary string is a failing tex-check once that course is in the repo.
+
+Deploy is a Cloudflare Pages direct upload (`npm run deploy` to project `flux-study`). Pushing `main` does not publish the hub.

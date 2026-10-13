@@ -1,0 +1,3 @@
+# The course apps ask not to be indexed. The hub points at them, so it does too.
+User-agent: *
+Disallow: /
