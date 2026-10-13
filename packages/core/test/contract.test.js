@@ -22,7 +22,7 @@ test('defineCourse returns the manifest and keeps the id', () => {
 
 test('defineCourse rejects an id that cannot be a storage namespace', () => {
   assert.throws(() => defineCourse({ id: '' }), TypeError);
-  assert.throws(() => defineCourse({ id: 'PHY2049' }), TypeError);
+  assert.throws(() => defineCourse({ id: 'UPPER' }), TypeError);
   assert.throws(() => defineCourse({}), TypeError);
 });
 

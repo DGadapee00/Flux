@@ -228,9 +228,10 @@ async function main() {
     }
     console.log('smoke ok');
   } finally {
-    chrome.kill();
+    chrome.kill('SIGKILL');
     await server.close();
-    fs.rmSync(userData, { recursive: true, force: true });
+    await delay(200);
+    fs.rmSync(userData, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
   }
 }
 
