@@ -17,14 +17,41 @@ test('the repo does not share a storage key across courses', () => {
   const keys = collectKeys();
   assert.deepEqual(collisions(keys), []);
   const statics = keys.filter((key) => key.course === 'statics').map((key) => key.value).sort();
-  assert.deepEqual(statics, ['flux-statics.exam.v1', 'flux-statics.problems.v1']);
+  assert.deepEqual(statics, [
+    'flux-statics.exam.v1',
+    'flux-statics.problems.v1',
+    'flux.statics.exam.v1',
+    'flux.statics.problems.v1',
+  ]);
   const mac = keys.filter((key) => key.course === 'mac2313').map((key) => key.value).sort();
-  assert.deepEqual(mac, ['flux-mac2313.exam.v1', 'flux-mac2313.problems.v1']);
+  assert.deepEqual(mac, [
+    'flux-mac2313.exam.v1',
+    'flux-mac2313.problems.v1',
+    'flux.mac2313.exam.v1',
+    'flux.mac2313.problems.v1',
+  ]);
   const sta = keys.filter((key) => key.course === 'sta3032').map((key) => key.value).sort();
-  assert.deepEqual(sta, ['fluxstats.exam.v1', 'fluxstats.labs.v1', 'fluxstats.problems.v1']);
-  const phy = keys.filter((key) => key.course === 'phy2049').map((key) => key.value);
-  assert.ok(phy.includes('flux.problems.v1'));
-  assert.ok(phy.includes('flux.exam.v1'));
+  assert.deepEqual(sta, [
+    'flux.sta3032.exam.v1',
+    'flux.sta3032.labs.v1',
+    'flux.sta3032.problems.v1',
+    'fluxstats.exam.v1',
+    'fluxstats.labs.v1',
+    'fluxstats.problems.v1',
+  ]);
+  const phy = keys.filter((key) => key.course === 'phy2049').map((key) => key.value).sort();
+  assert.deepEqual(phy, [
+    'flux.exam.v1',
+    'flux.notes.full',
+    'flux.notes.width',
+    'flux.phy2049.exam.v1',
+    'flux.phy2049.notes.full.v1',
+    'flux.phy2049.notes.width.v1',
+    'flux.phy2049.predict.v1',
+    'flux.phy2049.problems.v1',
+    'flux.predict.v1',
+    'flux.problems.v1',
+  ]);
 });
 
 test('two courses with the same key fail, and a non-key constant does not count', () => {

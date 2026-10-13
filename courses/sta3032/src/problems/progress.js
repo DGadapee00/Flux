@@ -11,47 +11,23 @@
  */
 import { CHAPTER_ORDER } from '../data/catalog.js';
 import { mulberry32 as rng } from '../stats/rng.js';
+import { browserStorage, courseStore } from '../storage.js';
 
-export const STORE_KEY = 'fluxstats.problems.v1';
-export const EXAM_KEY = 'fluxstats.exam.v1';
+export { EXAM_KEY, STORE_KEY, browserStorage, memoryStorage } from '../storage.js';
+
 export const INTERVAL_DAYS = [10 / 1440, 1, 3, 7, 16, 35];
 export const MASTERED_BOX = 3;
 const DAY = 864e5;
 
-export function browserStorage() {
-  try {
-    return typeof localStorage === 'undefined' ? null : localStorage;
-  } catch {
-    return null;
-  }
+function freshData(store) {
+  const data = store.readJSON('problems');
+  if (!data || data.v !== 1 || typeof data.items !== 'object') return { v: 1, items: {} };
+  return data;
 }
 
-export function memoryStorage() {
-  const m = new Map();
-  return { getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)), removeItem: (k) => m.delete(k) };
-}
-
-function readJSON(storage, key) {
-  try {
-    const raw = storage?.getItem(key);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-function writeJSON(storage, key, value) {
-  try {
-    if (value == null) storage?.removeItem(key);
-    else storage?.setItem(key, JSON.stringify(value));
-  } catch {
-    /* storage full or blocked: progress just isn't kept */
-  }
-}
-
-export function createProgress(storage = browserStorage()) {
-  let data = readJSON(storage, STORE_KEY);
-  if (!data || data.v !== 1 || typeof data.items !== 'object') data = { v: 1, items: {} };
+export function createProgress(storage = browserStorage(), { now } = {}) {
+  const store = courseStore(storage, now);
+  let data = freshData(store);
 
   const get = (id) => data.items[id] || null;
 
@@ -86,7 +62,7 @@ export function createProgress(storage = browserStorage()) {
       if (principle.ok) it.pOk = (it.pOk || 0) + 1;
     }
     data.items[id] = it;
-    writeJSON(storage, STORE_KEY, data);
+    store.writeJSON('problems', data);
     return it;
   }
 
@@ -99,7 +75,7 @@ export function createProgress(storage = browserStorage()) {
     if (!it || !gap) return;
     it.gaps = it.gaps || {};
     it.gaps[gap] = (it.gaps[gap] || 0) + 1;
-    writeJSON(storage, STORE_KEY, data);
+    store.writeJSON('problems', data);
   }
 
   /** Principle step tallies over the given ids: how often the principle was named, and named right. */
@@ -188,7 +164,7 @@ export function createProgress(storage = browserStorage()) {
 
   function reset() {
     data = { v: 1, items: {} };
-    writeJSON(storage, STORE_KEY, data);
+    store.writeJSON('problems', data);
   }
 
   return {
@@ -203,8 +179,13 @@ export function createProgress(storage = browserStorage()) {
     dueIds,
     nextSeed,
     reset,
-    loadExam: () => readJSON(storage, EXAM_KEY),
-    saveExam: (exam) => writeJSON(storage, EXAM_KEY, exam),
+    loadExam: () => store.readJSON('exam'),
+    saveExam: (exam) => store.writeJSON('exam', exam),
+    exportJSON: () => store.exportJSON(),
+    importJSON(blob) {
+      store.importJSON(blob);
+      data = freshData(store);
+    },
     get data() {
       return data;
     },

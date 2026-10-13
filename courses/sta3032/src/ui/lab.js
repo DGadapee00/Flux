@@ -14,23 +14,18 @@ import { LABS, labById } from '../labs/index.js';
 import { unitById } from '../data/catalog.js';
 import { hashFor } from '../engine/router.js';
 import { createRng } from '../stats/rng.js';
+import { courseStore } from '../storage.js';
 import { mathProse, escapeHTML as esc } from './shared.js';
-
-const TALLY_KEY = 'fluxstats.labs.v1';
 
 function loadTally() {
   try {
-    return JSON.parse(localStorage.getItem(TALLY_KEY)) || {};
+    return JSON.parse(courseStore().getItem('labs') || 'null') || {};
   } catch {
     return {};
   }
 }
 function saveTally(t) {
-  try {
-    localStorage.setItem(TALLY_KEY, JSON.stringify(t));
-  } catch {
-    /* private window: the tally just is not kept */
-  }
+  courseStore().setItem('labs', JSON.stringify(t));
 }
 
 export function renderExplore(root, { unitId, labId, scenario = null }) {

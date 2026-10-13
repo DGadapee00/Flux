@@ -16,13 +16,12 @@
  */
 import { predictionsFor } from '../data/predictions.js';
 import { run, outcomes, choices, matchesExpect, cloneState } from '../engine/predict.js';
+import { courseStore } from '../storage.js';
 import { mathProse } from './shared.js';
-
-const KEY = 'flux.predict.v1';
 
 function readTally() {
   try {
-    const d = JSON.parse(localStorage.getItem(KEY) || 'null');
+    const d = JSON.parse(courseStore().getItem('predict') || 'null');
     const t = d && d.v === 1 && d.items ? d : { v: 1, items: {} };
     t.seen ||= {};
     return t;
@@ -32,11 +31,7 @@ function readTally() {
 }
 
 function writeTally(d) {
-  try {
-    localStorage.setItem(KEY, JSON.stringify(d));
-  } catch {
-    /* storage refused: the tally just isn't kept */
-  }
+  courseStore().setItem('predict', JSON.stringify(d));
 }
 
 /** Whether the lab already holds a setup the prompt can start from, or needs its preset loaded. */
