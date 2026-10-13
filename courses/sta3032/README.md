@@ -1,5 +1,11 @@
 # FLUX·stats — STA 3032
 
+**This course now lives in the Flux platform repo (DGadapee00/Flux), at `courses/sta3032/`.** Paths
+in this file are relative to that folder, and commands run from it, unless they say "repo root".
+The old repo, stats, is frozen and no longer edited. The platform's own rules are in the
+repo root's `AGENTS.md` and `PLAN.md`; where they and this file differ about the platform, they win.
+On the hub the route is `#/sta3032/...`. An old hash such as `#/mid` redirects.
+
 A study app for STA 3032 (Fall 2026; Walpole, Myers, Myers & Ye, *Probability & Statistics for
 Engineers & Scientists*). It is the sibling of [FLUX](https://github.com/DGadapee00/flux-phy2049)
 for PHY 2049, with the same approach: generated practice problems tied to the course, worked
@@ -9,7 +15,7 @@ solutions, spaced review, and interactive labs. It is built for a phone first.
 
 ```bash
 npm install
-npm start          # http://localhost:5175
+npm start          # http://localhost:5177
 npm test           # stats-check, tex-check, problems-check, labs-check, notes-check
 node scripts/smoke.mjs   # every screen at 380px and 1280px (needs the dev server running)
 ```

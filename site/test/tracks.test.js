@@ -4,15 +4,14 @@ import path from 'node:path';
 import test from 'node:test';
 import { builtCourses, latestBuilt, TRACKS } from '../src/tracks.js';
 
-const LIVE = {
-  sta3032: 'https://flux-stats.pages.dev',
-};
+const LIVE = {};
 
 /** Relative hrefs are the copies in this repo. The rest stay on their own sites until imported. */
 const PLATFORM_HREF = {
   phy2049: 'phy2049/',
   statics: 'statics/',
   mac2313: 'mac2313/',
+  sta3032: 'sta3032/',
 };
 
 const PLATFORM = 'https://flux-study.pages.dev/';

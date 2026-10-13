@@ -1,13 +1,18 @@
 # FLUX·stats: notes for Claude
 
+**This course now lives in the Flux platform repo (DGadapee00/Flux), at `courses/sta3032/`.** Paths
+in this file are relative to that folder, and commands run from it, unless they say "repo root".
+The old repo, stats, is frozen and no longer edited. The platform's own rules are in the
+repo root's `AGENTS.md` and `PLAN.md`; where they and this file differ about the platform, they win.
+
 Vite + vanilla JS + KaTeX study app for STA 3032. Sibling of FLUX (DGadapee00/flux-phy2049), whose
-engine and conventions were copied and adapted here; FLUX itself is not to be modified. PLAN.md
-holds the plan and the course decisions (tables, quartile rule, exam dates, build order).
+engine and conventions were copied and adapted here. This folder's `PLAN.md` holds the course
+decisions (tables, quartile rule, exam dates, build order).
 
 ## Checks
 
 - `npm test` (stats-check, tex-check, problems-check, labs-check, notes-check) must pass. `npx vite build` must succeed.
-- `node scripts/smoke.mjs` needs the dev server on 5175 (`npx vite --port 5175 --strictPort`, in the
+- `node scripts/smoke.mjs` needs the dev server on 5177 (`npx vite --port 5177 --strictPort`, in the
   background). It fails on page errors and on any page wider than a 380px phone. Look at the
   screenshots in `scripts/output/smoke/` after UI changes.
 - `npm run overflow` (same server) opens every problem with its solution revealed, and every notes

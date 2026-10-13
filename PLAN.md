@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status: **Phase 1 done, PHY cut over early** (13 Oct 2026). PHY 2049 is live at https://flux-study.pages.dev/phy2049/ and its weekly drops land here. **Next: Phase 1b** (import MAC 2313, Statics, STA 3032 as they are), then Phase 2. flux-phy2049 is frozen.
+Status: **Phase 1b imported** (13 Oct 2026). PHY 2049, Statics, MAC 2313, and STA 3032 are in this repo. Ports: hub 5173, PHY 5174, MAC 5175, Statics 5176, STA 3032 5177. PHY 2049 is live at https://flux-study.pages.dev/phy2049/. The other three are imported and not published. **Next: Phase 2.** flux-phy2049, statics-sim, flux-mac2313, and stats are frozen. Their sites stay up.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
@@ -461,7 +461,7 @@ cross-linked from the courses whose formulas it covers.
 | D3 | Old domains | redirect at cutover vs. leave frozen | banner + link at cutover, leave them up through the term |
 | D4 | TypeScript | stay vanilla JS vs. add types (or JSDoc + `checkJs`) for the contracts only | JSDoc types on `defineCourse`, `defineLab`, `problem`; no build change |
 | D5 | Course codes and terms | **Decided:** Statics is EGN 3311. MAC 2313 was taken Spring 2026. Codes for courses not yet built are confirmed when each is started. | |
-| D6 | STA 3032 provenance | Has the STA 3032 instructor been asked about the notes rewritten from theirs? Recorded in `courses/sta3032/PROVENANCE.md` | |
+| D6 | STA 3032 provenance | Has the STA 3032 instructor been asked about the notes rewritten from theirs? Recorded in `courses/sta3032/PROVENANCE.md` | not yet asked |
 
 ---
 

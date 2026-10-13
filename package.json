@@ -11,7 +11,7 @@
   "scripts": {
     "start": "npm run start -w @flux/site",
     "dev": "npm run dev -w @flux/site",
-    "build": "node packages/checks/raw.mjs && npm run build -w @flux/phy2049 && npm run build -w @flux/statics && npm run build -w @flux/mac2313 && npm run build -w @flux/site && node scripts/assemble.mjs && node packages/checks/raw.mjs --dist",
+    "build": "node packages/checks/raw.mjs && npm run build -w @flux/phy2049 && npm run build -w @flux/statics && npm run build -w @flux/mac2313 && npm run build -w @flux/sta3032 && npm run build -w @flux/site && node scripts/assemble.mjs && node packages/checks/raw.mjs --dist",
     "preview": "npm run preview -w @flux/site",
     "test": "npm test --workspaces --if-present && node --test scripts/sync-phy.test.mjs",
     "smoke": "npm run smoke -w @flux/site",

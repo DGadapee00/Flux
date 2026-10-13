@@ -60,7 +60,7 @@ export const TRACKS = [
         code: 'STA 3032',
         title: 'Probability and Statistics',
         term: 'Fall 2026',
-        href: 'https://flux-stats.pages.dev',
+        href: 'sta3032/',
       },
     ],
   },

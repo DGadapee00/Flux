@@ -3,13 +3,13 @@
  * every notes chapter with its solutions open) and reports any equation that does not fit its box:
  * the page itself never scrolls sideways, so the smoke test cannot see a clipped result.
  *
- * Needs the dev server on 5175.   node scripts/overflow.mjs [--seeds 0,5,17]
+ * Needs the dev server on 5177.   node scripts/overflow.mjs [--seeds 0,5,17]
  */
 import { chromium } from './playwright.mjs';
 import { PROBLEMS } from '../src/problems/index.js';
 import { NOTES } from '../src/notes/index.js';
 
-const BASE = process.env.SMOKE_URL || 'http://localhost:5175/';
+const BASE = process.env.SMOKE_URL || 'http://localhost:5177/';
 const seedsArg = process.argv.indexOf('--seeds');
 const SEEDS = seedsArg > 0 ? process.argv[seedsArg + 1].split(',').map(Number) : [0, 5, 17];
 

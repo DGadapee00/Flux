@@ -1,5 +1,10 @@
 # flux-stats: Phase 0 plan
 
+**This course now lives in the Flux platform repo (DGadapee00/Flux), at `courses/sta3032/`.** Paths
+in this file are relative to that folder. The old repo, stats, is frozen and no longer edited.
+The platform's own rules are in the repo root's `AGENTS.md` and `PLAN.md`; where they and this
+file differ about the platform, they win.
+
 Status: **proposal, waiting for approval.** No app code has been written. Nothing in FLUX was changed.
 
 ---

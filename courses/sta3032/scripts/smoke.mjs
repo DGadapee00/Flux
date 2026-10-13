@@ -3,7 +3,7 @@
  * or a page wider than the screen (horizontal scroll on a phone is a bug here). Screenshots go to
  * scripts/output/smoke/ for looking at.
  *
- * Needs the dev server: npx vite --port 5175 --strictPort   (in the background)
+ * Needs the dev server: npx vite --port 5177 --strictPort   (in the background)
  *
  *   node scripts/smoke.mjs [--all]    --all opens every problem, not a sample
  */
@@ -15,7 +15,7 @@ import { accepted, instance } from '../src/problems/engine.js';
 import { LABS } from '../src/labs/index.js';
 import { NOTES } from '../src/notes/index.js';
 
-const BASE = process.env.SMOKE_URL || 'http://localhost:5175/';
+const BASE = process.env.SMOKE_URL || 'http://localhost:5177/';
 const OUT = path.resolve('scripts/output/smoke');
 fs.mkdirSync(OUT, { recursive: true });
 const ALL = process.argv.includes('--all');
