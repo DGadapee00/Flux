@@ -5,6 +5,9 @@
   "type": "module",
   "exports": "./src/index.js",
   "scripts": {
-    "test": "node --test test/contract.test.js"
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "katex": "^0.16.47"
   }
 }

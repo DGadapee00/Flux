@@ -14,6 +14,7 @@
     "overflow": "node scripts/overflow.mjs"
   },
   "dependencies": {
+    "@flux/core": "*",
     "katex": "^0.16.47"
   },
   "devDependencies": {

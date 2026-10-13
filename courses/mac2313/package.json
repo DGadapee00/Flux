@@ -15,6 +15,7 @@
     "live": "node scripts/live.mjs"
   },
   "dependencies": {
+    "@flux/core": "*",
     "katex": "^0.16.47",
     "three": "^0.172.0"
   },

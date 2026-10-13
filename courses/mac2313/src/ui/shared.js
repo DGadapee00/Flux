@@ -1,4 +1,4 @@
-import katex from 'katex';
+import { createTex } from '@flux/core';
 
 const TEX_MACROS = {
   '\\qV': '\\textcolor{#58C4DD}{V}',
@@ -11,50 +11,9 @@ const TEX_MACROS = {
   '\\net': '_{\\text{net}}',
 };
 
-const texCache = new Map();
+const { tex, mathText, mathProse, escapeHTML } = createTex(TEX_MACROS);
 
-export function tex(src, display = false) {
-  const key = display ? `D:${src}` : src;
-  let html = texCache.get(key);
-  if (!html) {
-    html = katex.renderToString(src, { throwOnError: false, displayMode: display, macros: TEX_MACROS });
-    texCache.set(key, html);
-  }
-  return html;
-}
-
-/**
- * Panel text is written in a light markup: prose with math between `$…$`, typeset by KaTeX, so a
- * row label, an explainer and the law at the top of the panel all render the same way.
- *
- * Text outside the delimiters passes through as HTML — every string here is authored in this repo,
- * and several carry `<sup>`/`<sub>` from the number formatters.
- */
-export function mathText(s, escape = false) {
-  const keep = escape ? escapeHTML : (x) => x;
-  const str = s == null ? '' : String(s);
-  if (str.indexOf('$') < 0) return keep(str);
-  let out = '';
-  let i = 0;
-  for (;;) {
-    const a = str.indexOf('$', i);
-    if (a < 0) return out + keep(str.slice(i));
-    const b = str.indexOf('$', a + 1);
-    if (b < 0) return out + keep(str.slice(i));
-    out += keep(str.slice(i, a)) + tex(str.slice(a + 1, b));
-    i = b + 1;
-  }
-}
-
-const HTML_ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-export const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => HTML_ESC[c]);
-
-/**
- * Prose that may carry math but never markup: everything outside `$…$` is escaped. Problem
- * statements, worked steps and hints go through this — they are prose, and they contain `<` and
- * `>` often enough ("$q < 0$", "r > R") that passing them through as HTML would be a mistake.
- */
-export const mathProse = (s) => mathText(s, true);
+export { tex, mathText, mathProse, escapeHTML };
 
 /** A displayed (centered) equation inside an explainer body. */
 export const eq = (src) => ({ eq: src });
