@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -54,8 +55,21 @@ test('the card opens the latest built course, and D5 is on the list', () => {
   );
 });
 
-test('after a build, each platform copy has an index under site/dist', () => {
+test('after a build, each platform copy has an index under site/dist', (t) => {
   if (!fs.existsSync(DIST)) return;
+  // Only judge a build of this commit. A dist left over from an older checkout is not this build.
+  const stampFile = path.join(DIST, 'version.json');
+  let head = '';
+  try {
+    head = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
+  } catch {
+    return;
+  }
+  const stamp = fs.existsSync(stampFile) ? JSON.parse(fs.readFileSync(stampFile, 'utf8')) : {};
+  if (!stamp.commit || !head.startsWith(stamp.commit.slice(0, 7))) {
+    t.skip(`site/dist is from ${stamp.commit || 'an unknown build'}, not ${head}`);
+    return;
+  }
   for (const course of builtCourses()) {
     if (!PLATFORM_HREF[course.id]) continue;
     const index = path.join(DIST, course.href, 'index.html');

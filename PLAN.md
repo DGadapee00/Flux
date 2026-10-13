@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status: **Phase 1b imported** (13 Oct 2026). PHY 2049, Statics, MAC 2313, and STA 3032 are in this repo. Ports: hub 5173, PHY 5174, MAC 5175, Statics 5176, STA 3032 5177. PHY 2049 is live at https://flux-study.pages.dev/phy2049/. The other three are imported and not published. **Next: Phase 2.** flux-phy2049, statics-sim, flux-mac2313, and stats are frozen. Their sites stay up.
+Status: **Phase 1b done** (13 Oct 2026). All four courses build from this repo and are live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 5174, MAC 5175, Statics 5176, STA 3032 5177. PHY's weekly drops land here. **Next: Phase 2.** flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their sites stay up. Open: D6.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
