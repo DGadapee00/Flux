@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status: **Phase 1 done in the repo** (PHY 2049 snapshot `15f8687` wired on `phase-1-import`; the hub card opens `phy2049/`). The live hub still serves the previous upload until someone runs `npm run deploy`. Next: Phase 2. flux-phy2049 itself was not edited.
+Status: **Phase 1 done** (PR #3 merged 13 Oct 2026). PHY 2049 snapshot `15f8687` is live at https://flux-study.pages.dev/phy2049/ and the Physics card opens it. Open: where weekly PHY drops land now that PHY lives here. Next: Phase 2. flux-phy2049 itself was not edited.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
