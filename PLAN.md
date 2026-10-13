@@ -1,10 +1,10 @@
 # FLUX: one platform, many courses
 
-Status: **Phase 0 built, not published.** Workspaces, the course picker, CI, and the dependency check are on branch `cursor/phase-0-hub-ace4`. The hub is not live yet: `npm run deploy` needs a Cloudflare login (`npx wrangler login` or `CLOUDFLARE_API_TOKEN`). Nothing in the four existing repos was changed.
+Status: **Phase 0 done** (PR #1 merged 13 Oct 2026; hub live at https://flux-study.pages.dev). Next: Phase 1. Nothing in the four existing repos was changed.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
-of it. The other three courses port onto that engine afterward. flux-phy2049 is now public, so the
-platform repo can be public (D1).
+of it. The other three courses port onto that engine afterward. This repo is public (D1).
+Raw course files never enter it, including through git history: see Phase 1.
 Written 13 Oct 2026 from the repos at these commits: flux-phy2049 `15f8687`, flux-mac2313 `bdeef1b`,
 statics-sim `6ce522e`, stats `5ee9103`.
 
@@ -141,6 +141,9 @@ Where they have drifted (the reason to consolidate):
    JSON, so moving from an old domain to the platform loses nothing.
 8. **Provenance per course.** Each course folder has its own PROVENANCE.md saying what course
    material it contains and on whose permission. Course material without permission stays out.
+9. **No raw course files, in the tree or in history.** PDFs, slides, docx, Canvas page exports,
+   solutions and answer keys stay in a private place (a private repo, or the course repo kept
+   private). This repo is public, and a file deleted later is still in its history.
 
 ---
 
@@ -229,14 +232,24 @@ The Pages project is `flux-study` (https://flux-study.pages.dev). `flux.pages.de
 
 ### Phase 1: import PHY 2049 as it is
 
-- Bring flux-phy2049 in with `git subtree add --prefix=courses/phy2049 <url> main` so its history
-  comes along and later drops can be pulled with `git subtree pull`.
+- **Import a snapshot, not the history.** flux-phy2049's history contains `incoming/` (168 raw
+  Canvas files, about 33 MB: lecture-note PDFs, solution sheets, worksheet keys). A `git subtree add`
+  would publish all of it in this repo's history. Instead, copy the tree at a pinned commit with
+  `incoming/` excluded:
+  `git -C <phy> archive <commit> -- . ':(exclude)incoming' | tar -x -C courses/phy2049`.
+  Record the source commit in `courses/phy2049/SOURCE` and in the commit message. PHY's history
+  stays in flux-phy2049.
+- Add a check that fails the build if any file under `courses/` is a PDF, pptx, docx or doc, or sits
+  under a path named `incoming`. PHY's own `lessons/*.docx` are generated from `lessons/src/`, so
+  leave the .docx out of the import (they rebuild) rather than allowlisting them.
 - Change only what is needed to run inside the monorepo: package name, workspace wiring, dev port,
   deploy target, and the route prefix `#/phy2049/...` (old hash routes redirect).
 - No refactoring yet. Every file under `src/` stays as it was.
-- Weekly content: while the old repo is still the live PHY site, pull each week's drop with
-  `git subtree pull --prefix=courses/phy2049 <url> main`. This stays a clean pull until Phase 2
-  starts moving files; after that, drops are new notes HTML and bank files, which copy over 1:1.
+- Weekly content: while flux-phy2049 is still the live PHY site, sync each week with a script,
+  `scripts/sync-phy.mjs <to-commit>`, that reads the commit in `SOURCE`, applies
+  `git diff SOURCE..<to-commit> -- . ':(exclude)incoming'` under `courses/phy2049`, and updates
+  `SOURCE`. Before Phase 2 this applies cleanly. After Phase 2 moves files, drops are mostly new
+  notes HTML and bank files; the script reports anything it cannot place.
 
 **Exit:** PHY's full `npm test`, smoke and gallery pass from the platform build, and the PHY entry
 on the hub opens the platform copy.
@@ -284,8 +297,10 @@ grading, named sets and overflow check, so every course gets them. Move `stats/*
 
 ### Phase 6: PHY cutover
 
-After the fall final (or earlier if you choose): move the Canvas ingest Action into `tools/ingest`,
-reading the course id from each manifest, so any course can have weekly drops. Old PHY site gets a
+After the fall final (or earlier if you choose): move the Canvas ingest into `tools/ingest`,
+reading the course id from each manifest, so any course can have weekly drops. The ingest writes
+raw files to a **private** repo (for example `flux-incoming`), never to this one (rule 9). The
+processing run reads them there and commits only rewritten notes and problems here. Old PHY site gets a
 banner pointing to the platform.
 
 **Exit:** ingest runs from the platform repo; flux-phy2049 is no longer edited.
@@ -305,7 +320,7 @@ cross-linked from the courses whose formulas it covers.
 
 | # | Decision | Options | Leaning |
 |---|---|---|---|
-| D1 | Repo visibility | **Decided: public.** flux-phy2049 was made public, so its notes can come along. | |
+| D1 | Repo visibility | **Decided: public.** Rewritten notes may ship under the PHY instructor's permission; raw course files never do (rule 9). | |
 | D2 | Address | one domain for everything vs. one subdomain per course on the same build | one domain; per-course subdomains only if a course needs its own link to share with a class |
 | D3 | Old domains | redirect at cutover vs. leave frozen | banner + link at cutover, leave them up through the term |
 | D4 | TypeScript | stay vanilla JS vs. add types (or JSDoc + `checkJs`) for the contracts only | JSDoc types on `defineCourse`, `defineLab`, `problem`; no build change |
