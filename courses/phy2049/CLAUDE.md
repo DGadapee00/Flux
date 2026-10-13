@@ -107,7 +107,7 @@ When the notes derive an integral one of the labs shows (an RC equation, a Biot�
 
 Build one only for a device the source names, whose working the course equations fully explain, with realistic numbers you can check. At most two new labs per run. If a device doesn't meet that bar, name it in the run report as a candidate instead. Copy the pattern of `mri.js`, `motor.js` and `powerline.js`, which are the models:
 
-- **Physics.** Add a pure function to `src/physics/devices.js` with a comment deriving it, and checks to `src/physics/selftest.js`: the notes' numbers, and at least one scaling (double an input, predict the factor).
+- **Physics.** Add a pure function to `packages/subjects/src/em/devices.js` (repo root; `src/physics/devices.js` here only re-exports it) with a comment deriving it, and checks to `src/physics/selftest.js`: the notes' numbers, and at least one scaling (double an input, predict the factor).
 - **Lab.** `src/labs/<id>.js` with `defineLab`: `orbit: false` and a fixed camera, so the lab fits a phone. Use the `label`, `si` and `points` helpers in `src/labs/device-kit.js` and the scene palette (E yellow, B teal, I gold, F pink, v white). Hide unused particles with `setDrawRange`, never by moving them off screen. Give it 2–3 scenarios with real numbers, sliders for the inputs, a readout, and an explainer that ends with **What the course model leaves out.**
 - **Register it** in `src/data/catalog.js` (the exam's `labs` list and `LAB_META` with `app: true`), `src/labs/load.js` and `src/data/quantities.js`. Add two Predict-first prompts to `src/data/predictions.js`.
 - **Notes.** The `Application · <device>` box gets a setup in `src/notes/setups.js` for the new lab.
