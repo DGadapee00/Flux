@@ -1,7 +1,7 @@
 /**
  * PHY 2048 course map, from OpenStax University Physics Volume 1.
  * Dates stay empty: this is a review course. Labs stay empty until the physics
- * shell exists. `BANK_CHAPTERS` are the chapters with problems in this slice.
+ * shell exists. `BANK_CHAPTERS` lists the chapters that have problems.
  */
 
 export const UNITS = [
@@ -88,7 +88,7 @@ export const CHAPTERS = {
 };
 
 /** Chapters whose problems are in the bank. */
-export const BANK_CHAPTERS = ['2', '3', '4', '5', '6', '7', '8'];
+export const BANK_CHAPTERS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '15'];
 
 export function unitForChapter(ch) {
   const id = String(ch);

@@ -23,6 +23,10 @@ import {
 import {
   pendulumPeriod, physicalPendulumPeriod, shm, shmEnergy, springOmega, springPeriod,
 } from './oscillation.js';
+import {
+  circularOrbitEnergy, circularOrbitPeriod, circularOrbitSpeed, escapeSpeed, gravityEnergy,
+  gravityField, gravityForce,
+} from './gravitation.js';
 
 let passed = 0;
 let failed = 0;
@@ -288,6 +292,23 @@ console.log('\nOscillation');
     'a point mass on a string is a simple pendulum');
   const rod = physicalPendulumPeriod(inertiaRodEnd(mass, L), mass, L / 2, g);
   approx(rod, 2 * Math.PI * Math.sqrt((2 * L) / (3 * g)), 1e-12, 'a rod about its end swings as 2π √(2L/3g)');
+}
+
+console.log('\nGravitation');
+{
+  const M = 5.97e24;
+  const m = 500;
+  const r = 7e6;
+  approx(gravityForce(M, m, r), m * gravityField(M, r), 1e-12, 'the force is the field times the test mass');
+
+  const vEsc = escapeSpeed(M, r);
+  const u = gravityEnergy(m, M, r);
+  approx(kineticEnergy(m, vEsc) + u, 0, 1e-6 * Math.abs(u), 'escape speed puts the total energy at zero');
+
+  const vCirc = circularOrbitSpeed(M, r);
+  approx(vCirc * vCirc / r, gravityField(M, r), 1e-12, 'a circular orbit falls at the field strength');
+  approx(circularOrbitPeriod(M, r), (2 * Math.PI * r) / vCirc, 1e-12, 'the period is one lap at the orbital speed');
+  approx(circularOrbitEnergy(m, M, r), kineticEnergy(m, vCirc) + u, 1e-9, 'orbit energy is kinetic plus potential');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);
