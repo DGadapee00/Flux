@@ -96,7 +96,8 @@ function styleOnce() {
   const style = document.createElement('style');
   style.id = 'flux-files-style';
   style.textContent = `
-.flux-track, .flux-files {
+.flux-hub { display: inline-flex; align-items: center; color: inherit; }
+.flux-files {
   grid-column: 1 / -1;
   display: flex;
   flex-wrap: wrap;
@@ -106,19 +107,9 @@ function styleOnce() {
   max-width: 100%;
   margin-top: 8px;
 }
-.flux-track a, .flux-track span, .flux-files button {
+.flux-files button {
   font: 500 16px/1.2 Inter, system-ui, sans-serif;
   color: inherit;
-}
-.flux-track a {
-  text-decoration: none;
-  min-height: 32px;
-  display: inline-flex;
-  align-items: center;
-}
-.flux-track span[aria-current="page"] {
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 .flux-files button {
   min-height: 32px;
@@ -248,28 +239,30 @@ export function mountHubBackup(parent, parts) {
 }
 
 /**
- * Links to the other courses on this track. The course passes the list.
+ * The way back to the hub. The course-listing row is gone; the brand mark (logo) links to the hub instead.
+ * If the header already has an `a.brand`, its href is pointed at the hub; otherwise the `.brand-mark`
+ * icon is wrapped in a link. `courses` is accepted for compatibility and ignored.
  * @param {HTMLElement} parent
- * @param {{ currentId: string, courses: { id: string, label: string, href?: string }[] }} spec
+ * @param {{ currentId?: string, courses?: unknown[], hubHref?: string }} [spec]
  */
-export function mountTrackBar(parent, { currentId, courses }) {
+export function mountTrackBar(parent, { hubHref = '../' } = {}) {
   styleOnce();
-  const nav = document.createElement('nav');
-  nav.className = 'flux-track';
-  nav.setAttribute('aria-label', 'Courses');
-  for (const course of courses) {
-    if (course.id === currentId) {
-      const here = document.createElement('span');
-      here.textContent = course.label;
-      here.setAttribute('aria-current', 'page');
-      nav.append(here);
-    } else if (course.href) {
-      const link = document.createElement('a');
-      link.href = course.href;
-      link.textContent = course.label;
-      nav.append(link);
-    }
+  const scope = parent.closest('header') || parent;
+  const existing = scope.querySelector('a.brand') || (parent.matches('a.brand') ? parent : null);
+  if (existing) {
+    existing.href = hubHref;
+    existing.setAttribute('aria-label', 'FLUX hub');
+    return existing;
   }
-  parent.append(nav);
-  return nav;
+  const mark = scope.querySelector('.brand-mark');
+  if (!mark) return null;
+  if (mark.parentElement && mark.parentElement.matches('a.flux-hub')) return mark.parentElement;
+  const link = document.createElement('a');
+  link.className = 'flux-hub';
+  link.href = hubHref;
+  link.setAttribute('aria-label', 'FLUX hub');
+  link.title = 'All courses';
+  mark.replaceWith(link);
+  link.append(mark);
+  return link;
 }
