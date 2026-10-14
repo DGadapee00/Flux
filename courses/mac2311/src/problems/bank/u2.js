@@ -168,6 +168,7 @@ export default [
     id: 'u2.rates',
     exam: 'u2',
     ch: '4',
+    lab: 'rates',
     src: 'OpenStax Calc 1 §4.1',
     title: 'A sliding ladder',
     kind: 'numeric',
@@ -182,17 +183,30 @@ export default [
       const y = Math.sqrt(100 - $.x * $.x);
       const dt = 1e-4;
       const y2 = Math.sqrt(100 - ($.x + $.v * dt) * ($.x + $.v * dt));
-      return { dy: (y2 - y) / dt };
+      return { y, dy: (y2 - y) / dt };
     },
     text: (T) =>
-      String.raw`A ladder $10$ feet long leans on a wall. The base slides out at $${T.v}$ feet per second. Find the vertical velocity of the top, in feet per second, when the base is $${T.x}$ feet from the wall. Up is positive.`,
-    parts: [num('dy', ($) => $.dy, 'ft/s', { label: 'vertical velocity', abs: 1e-3 })],
+      String.raw`A ladder $10$ feet long leans on a wall. The base slides out at $${T.v}$ feet per second. When the base is $${T.x}$ feet from the wall, give the height of the top in feet, and its vertical velocity in feet per second. Up is positive.`,
+    parts: [
+      num('y', ($) => $.y, 'ft', { label: 'height', abs: 1e-3 }),
+      num('dy', ($) => $.dy, 'ft/s', { label: 'vertical velocity', abs: 1e-3 }),
+    ],
     hints: ['$x^2+y^2=100$. Differentiate in time: $2x x\'+2y y\'=0$.'],
     steps: ($, f) => [
       String.raw`The top is $${f($.y)}$ feet up.`,
       String.raw`$y'=-x x'/y=${f($.dy)}$. Negative means the top is moving down.`,
     ],
-    cases: [kase('base 6 ft, 2 ft/s', { x: 6, v: 2 }, { dy: -1.5 })],
+    sim: {
+      scenario: 'mid',
+      setup(slice, $) {
+        slice.L = 10;
+        slice.x = $.x;
+        slice.v = $.v;
+        return domain(slice, { xMin: -1, xMax: 12, yMin: -2, yMax: 11, plane: 'xy' });
+      },
+      read: (c) => ({ y: c.y, dy: c.dy }),
+    },
+    cases: [kase('base 6 ft, 2 ft/s', { x: 6, v: 2 }, { y: 8, dy: -1.5 })],
   }),
 
   problem({

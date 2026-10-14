@@ -140,6 +140,13 @@ export function ladderVelocity(length, x, dx) {
   return { y, dy: (-x * dx) / y };
 }
 
+/** Same top speed from a short slide of the base. */
+export function ladderStep(length, x, dx, dt = 1e-4) {
+  const y = Math.sqrt(length * length - x * x);
+  const y2 = Math.sqrt(length * length - (x + dx * dt) * (x + dx * dt));
+  return (y2 - y) / dt;
+}
+
 export function sineRule(k, x) {
   return k * Math.cos(k * x);
 }

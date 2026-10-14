@@ -24,6 +24,7 @@ async function go(hash, lab) {
 const CHECK = {
   limits: (c) => Number.isFinite(c.limit) && c.exists === true && c.agree === true && !Number.isFinite(c.value),
   secant: (c) => Number.isFinite(c.fp) && Number.isFinite(c.msec) && c.agree === true,
+  rates: (c) => Number.isFinite(c.y) && Number.isFinite(c.dy) && c.dy < 0 && c.agree === true,
   riemann: (c) => Number.isFinite(c.sum) && Number.isFinite(c.exact) && c.agree === true,
 };
 

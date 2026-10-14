@@ -15,8 +15,7 @@ export const EXAMS = [
     title: 'Derivatives',
     chapters: '3',
     date: null,
-    labs: ['secant'],
-    coming: ['Related rates'],
+    labs: ['secant', 'rates'],
   },
   {
     id: 'u3',
@@ -41,6 +40,7 @@ export const EXAMS = [
 export const LAB_META = {
   limits: { id: 'limits', exam: 'u1', title: 'Limits' },
   secant: { id: 'secant', exam: 'u2', title: 'Secant' },
+  rates: { id: 'rates', exam: 'u2', title: 'Ladder' },
   riemann: { id: 'riemann', exam: 'u4', title: 'Riemann' },
 };
 

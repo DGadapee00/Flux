@@ -32,9 +32,13 @@ export class GraphView {
     this.bars = fatSegments(segmentCapacity(BAR_MAX * 4), { color: M.gold, width: 1.5, opacity: 0.8 });
     this.guides = fatSegments(segmentCapacity(6), { color: M.yellow, width: 1.6, opacity: 0.9 });
     this.marks = fatSegments(segmentCapacity(MARK_SEGS), { color: M.white, width: 2, opacity: 1 });
+    this.rod = fatSegments(segmentCapacity(1), { color: M.teal, width: 3.4, opacity: 1 });
+    this.motion = fatSegments(segmentCapacity(8), { color: M.gold, width: 2.2, opacity: 0.95 });
     this.guides.visible = false;
     this.marks.visible = false;
-    this.group.add(this.curve, this.secant, this.tangent, this.bars, this.guides, this.marks);
+    this.rod.visible = false;
+    this.motion.visible = false;
+    this.group.add(this.curve, this.secant, this.tangent, this.bars, this.guides, this.marks, this.rod, this.motion);
   }
 
   setVisible(on) {
@@ -121,4 +125,41 @@ export class GraphView {
     }
     setFatSegments(this.marks, flat);
   }
+
+  syncRod(x0, y0, x1, y1, show = true) {
+    this.rod.visible = !!show && [x0, y0, x1, y1].every(Number.isFinite);
+    if (!this.rod.visible) {
+      setFatSegments(this.rod, []);
+      return;
+    }
+    const flat = [];
+    pushSeg(flat, x0, y0, x1, y1, 0.06);
+    setFatSegments(this.rod, flat);
+  }
+
+  /** @param {{ x: number, y: number, dx: number, dy: number }[]} arrows */
+  syncMotion(arrows, show = true) {
+    this.motion.visible = !!show && arrows.length > 0;
+    if (!this.motion.visible) {
+      setFatSegments(this.motion, []);
+      return;
+    }
+    const flat = [];
+    for (const a of arrows.slice(0, 2)) pushArrow(flat, a.x, a.y, a.dx, a.dy);
+    setFatSegments(this.motion, flat);
+  }
+}
+
+function pushArrow(flat, x, y, dx, dy) {
+  if (![x, y, dx, dy].every(Number.isFinite)) return;
+  const len = Math.hypot(dx, dy);
+  if (len < 1e-6) return;
+  const x1 = x + dx;
+  const y1 = y + dy;
+  pushSeg(flat, x, y, x1, y1, 0.07);
+  const ux = dx / len;
+  const uy = dy / len;
+  const head = Math.min(0.35, len * 0.45);
+  pushSeg(flat, x1, y1, x1 - ux * head + uy * head * 0.4, y1 - uy * head - ux * head * 0.4, 0.07);
+  pushSeg(flat, x1, y1, x1 - ux * head - uy * head * 0.4, y1 - uy * head + ux * head * 0.4, 0.07);
 }
