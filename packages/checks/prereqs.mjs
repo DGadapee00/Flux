@@ -3,13 +3,14 @@
  * A prereq id that is not on the hub at all is a failure.
  * An empty list prints nothing extra: there is nothing unbuilt to show.
  */
+import { course as calc1 } from '../../courses/mac2311/src/manifest.js';
 import { course as mac } from '../../courses/mac2313/src/manifest.js';
 import { course as phy } from '../../courses/phy2049/src/manifest.js';
 import { course as sta } from '../../courses/sta3032/src/manifest.js';
 import { course as mech } from '../../courses/statics/src/manifest.js';
 import { TRACKS } from '../../site/src/tracks.js';
 
-const courses = [phy, mac, mech, sta];
+const courses = [phy, calc1, mac, mech, sta];
 const known = new Map();
 for (const track of TRACKS) {
   for (const card of track.courses) known.set(card.id, card);

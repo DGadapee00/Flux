@@ -1,0 +1,25 @@
+{
+  "name": "@flux/mac2311",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4178 --strictPort",
+    "test": "node scripts/tex-check.mjs && node src/math/selftest.js && node scripts/problems-check.mjs && node --test scripts/route.test.mjs",
+    "verify": "node scripts/browser-checks.mjs",
+    "deploy": "node -e \"console.error('This copy ships with the hub. From the repo root: npm run deploy'); process.exit(1)\""
+  },
+  "dependencies": {
+    "@flux/core": "*",
+    "@flux/shells": "*",
+    "@flux/subjects": "*",
+    "katex": "^0.16.47",
+    "three": "^0.172.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}

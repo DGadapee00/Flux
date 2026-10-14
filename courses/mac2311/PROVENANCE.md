@@ -1,0 +1,20 @@
+# Provenance
+
+MAC 2311 is a review course. It has no Canvas drop and no instructor files.
+
+## Source
+
+Problems and labs follow the section list of OpenStax *Calculus Volume 1*,
+[openstax.org/details/books/calculus-volume-1](https://openstax.org/details/books/calculus-volume-1).
+
+The book is CC BY 4.0: [creativecommons.org/licenses/by/4.0](https://creativecommons.org/licenses/by/4.0/).
+
+## What ships
+
+Statements are written fresh. Numbers are generated. A worked case may use a section's setup, cited as `OpenStax Calc 1 §2.3`, and never an invented example number. No figures and no text are copied.
+
+## What does not ship
+
+No worksheets, slides, exams, or notes from a course. No student names, grades, or submissions.
+
+Progress stays in the browser under `flux.mac2311.problems.v1` and `flux.mac2311.exam.v1`.
