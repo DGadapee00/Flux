@@ -137,12 +137,89 @@ const phoneTay = await page.evaluate(() => ({
 }));
 if (phoneTay.scroll > phoneTay.client + 1) fail.push(`taylor 380 scroll ${JSON.stringify(phoneTay)}`);
 
+await page.setViewportSize({ width: 1280, height: 900 });
+await page.goto('http://localhost:5179/#/mac2312/u2/numint', { waitUntil: 'networkidle' });
+await page.waitForFunction(() => window.__flux?.state?.lab === 'numint', null, { timeout: 15000 });
+await settle();
+const coarse = await page.evaluate(() => {
+  const c = window.__flux.computed;
+  return { n: window.__flux.state.n, trap: c.trap, simp: c.simp, trapErr: c.trapErr, simpErr: c.simpErr, agree: c.agree, closer: c.closer };
+});
+const trap4 = (Math.PI / 4) * (1 + Math.SQRT2);
+const simp4 = (Math.PI / 6) * (1 + 2 * Math.SQRT2);
+if (coarse.n !== 4) fail.push(`panels ${coarse.n}`);
+if (!(Math.abs(coarse.trap - trap4) < 1e-9)) fail.push(`trap ${coarse.trap}`);
+if (!(Math.abs(coarse.simp - simp4) < 1e-9)) fail.push(`simp ${coarse.simp}`);
+if (!(coarse.simpErr < coarse.trapErr)) fail.push(`errors trap ${coarse.trapErr} simp ${coarse.simpErr}`);
+if (coarse.agree !== true || coarse.closer !== true) fail.push('numerical rules disagree');
+await page.screenshot({ path: path.join(out, 'numint-desktop.png'), fullPage: true });
+
+await page.fill('#num-n', '8');
+await page.dispatchEvent('#num-n', 'input');
+await page.waitForTimeout(200);
+const mid = await page.evaluate(() => ({
+  n: window.__flux.state.n,
+  trapErr: window.__flux.computed.trapErr,
+  simpErr: window.__flux.computed.simpErr,
+  closer: window.__flux.computed.closer,
+  agree: window.__flux.computed.agree,
+}));
+if (mid.n !== 8) fail.push(`mid panels ${mid.n}`);
+if (!(mid.trapErr < coarse.trapErr && mid.simpErr < coarse.simpErr)) fail.push(`errors did not fall ${JSON.stringify(mid)}`);
+if (mid.closer !== true || mid.agree !== true) fail.push('eight panels disagree');
+
+await page.setViewportSize({ width: 380, height: 780 });
+await settle();
+await page.screenshot({ path: path.join(out, 'numint-phone.png'), fullPage: true });
+const phoneNum = await page.evaluate(() => ({
+  scroll: document.documentElement.scrollWidth,
+  client: document.documentElement.clientWidth,
+}));
+if (phoneNum.scroll > phoneNum.client + 1) fail.push(`numint 380 scroll ${JSON.stringify(phoneNum)}`);
+
+await page.setViewportSize({ width: 1280, height: 900 });
+await page.goto('http://localhost:5179/#/mac2312/u2/improper', { waitUntil: 'networkidle' });
+await page.waitForFunction(() => window.__flux?.state?.lab === 'improper', null, { timeout: 15000 });
+await settle();
+const near = await page.evaluate(() => {
+  const c = window.__flux.computed;
+  return { b: window.__flux.state.b, area: c.area, tail: c.tail, agree: c.agree };
+});
+if (!(Math.abs(near.b - 2) < 1e-9)) fail.push(`bound ${near.b}`);
+if (!(Math.abs(near.area - 0.5) < 1e-12) || !(Math.abs(near.tail - 0.5) < 1e-12)) fail.push(`near area ${near.area}`);
+if (near.agree !== true) fail.push('improper disagrees');
+await page.screenshot({ path: path.join(out, 'improper-desktop.png'), fullPage: true });
+
+await page.selectOption('#scenario', 'far');
+await page.waitForTimeout(200);
+const far = await page.evaluate(() => ({
+  b: window.__flux.state.b,
+  area: window.__flux.computed.area,
+  tail: window.__flux.computed.tail,
+  agree: window.__flux.computed.agree,
+}));
+if (!(Math.abs(far.b - 8) < 1e-9)) fail.push(`far bound ${far.b}`);
+if (!(Math.abs(far.area - 0.875) < 1e-12)) fail.push(`far area ${far.area}`);
+if (!(Math.abs(far.tail - 0.125) < 1e-12)) fail.push(`far tail ${far.tail}`);
+if (!(far.area > near.area && far.tail < near.tail)) fail.push('the tail did not shrink');
+if (far.agree !== true) fail.push('far bound disagrees');
+
+await page.setViewportSize({ width: 380, height: 780 });
+await settle();
+await page.screenshot({ path: path.join(out, 'improper-phone.png'), fullPage: true });
+const phoneImp = await page.evaluate(() => ({
+  scroll: document.documentElement.scrollWidth,
+  client: document.documentElement.clientWidth,
+}));
+if (phoneImp.scroll > phoneImp.client + 1) fail.push(`improper 380 scroll ${JSON.stringify(phoneImp)}`);
+
+await page.setViewportSize({ width: 1280, height: 900 });
 await page.goto('http://localhost:5179/#/mac2312/u1/solids', { waitUntil: 'networkidle' });
 await page.waitForFunction(() => window.__flux?.state?.lab === 'solids', null, { timeout: 10000 });
 await page.goBack();
 await page.waitForTimeout(400);
 const back = await page.evaluate(() => location.hash);
-if (back !== '#/mac2312/u3/taylor') fail.push(`back hash ${back}`);
+if (back !== '#/mac2312/u2/improper') fail.push(`back hash ${back}`);
 
 await browser.close();
 

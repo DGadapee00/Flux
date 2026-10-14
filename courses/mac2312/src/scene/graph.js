@@ -4,6 +4,8 @@ import { M, fatSegments, setFatSegments, segmentCapacity } from '@flux/core/scen
 
 const CURVE_N = 160;
 const MARK_SEGS = 24;
+const NODE_SEGS = 180;
+const HATCH_N = 40;
 
 function world(x, y, lift = 0) {
   const u = sceneScale();
@@ -28,7 +30,13 @@ export class GraphView {
     this.curve = fatSegments(segmentCapacity(CURVE_N - 1), { color: M.teal, width: 3.2, opacity: 0.95 });
     this.poly = fatSegments(segmentCapacity(CURVE_N - 1), { color: M.yellow, width: 2.6, opacity: 0.95 });
     this.marks = fatSegments(segmentCapacity(MARK_SEGS), { color: M.white, width: 2, opacity: 1 });
-    this.group.add(this.curve, this.poly, this.marks);
+    this.nodes = fatSegments(segmentCapacity(NODE_SEGS), { color: M.white, width: 2, opacity: 1 });
+    this.hatch = fatSegments(segmentCapacity(HATCH_N), { color: M.gold, width: 1.5, opacity: 0.85 });
+    this.bound = fatSegments(segmentCapacity(1), { color: M.white, width: 2.2, opacity: 1 });
+    this.nodes.visible = false;
+    this.hatch.visible = false;
+    this.bound.visible = false;
+    this.group.add(this.curve, this.poly, this.marks, this.nodes, this.hatch, this.bound);
   }
 
   setVisible(on) {
@@ -72,5 +80,53 @@ export class GraphView {
       pushSeg(flat, x + r * Math.cos(t0), y + r * Math.sin(t0), x + r * Math.cos(t1), y + r * Math.sin(t1), 0.07);
     }
     setFatSegments(this.marks, flat);
+  }
+
+  /** @param {{ x: number, y: number }[]} points */
+  syncNodes(points, show = true) {
+    const list = (points || []).filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y)).slice(0, 17);
+    this.nodes.visible = !!show && list.length > 0;
+    if (!this.nodes.visible) {
+      setFatSegments(this.nodes, []);
+      return;
+    }
+    const flat = [];
+    const n = 10;
+    const r = 0.055;
+    for (const p of list) {
+      for (let i = 0; i < n; i++) {
+        const t0 = (2 * Math.PI * i) / n;
+        const t1 = (2 * Math.PI * (i + 1)) / n;
+        pushSeg(flat, p.x + r * Math.cos(t0), p.y + r * Math.sin(t0), p.x + r * Math.cos(t1), p.y + r * Math.sin(t1), 0.07);
+      }
+    }
+    setFatSegments(this.nodes, flat);
+  }
+
+  /** Gold strokes from the axis up to the curve. The picture of an area, not the number. */
+  syncHatch(fn, a, b, show = true) {
+    this.hatch.visible = !!show && Number.isFinite(a) && Number.isFinite(b) && b > a;
+    if (!this.hatch.visible) {
+      setFatSegments(this.hatch, []);
+      return;
+    }
+    const flat = [];
+    for (let i = 0; i < HATCH_N; i++) {
+      const x = a + ((b - a) * (i + 0.5)) / HATCH_N;
+      const y = fn(x);
+      pushSeg(flat, x, 0, x, y, 0.02);
+    }
+    setFatSegments(this.hatch, flat);
+  }
+
+  syncBound(x, y, show = true) {
+    this.bound.visible = !!show && Number.isFinite(x) && Number.isFinite(y);
+    if (!this.bound.visible) {
+      setFatSegments(this.bound, []);
+      return;
+    }
+    const flat = [];
+    pushSeg(flat, x, 0, x, y, 0.06);
+    setFatSegments(this.bound, flat);
   }
 }

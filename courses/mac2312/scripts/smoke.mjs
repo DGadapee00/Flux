@@ -33,6 +33,18 @@ const CHECK = {
     Math.abs(c.poly - 0.5) < 1e-9 &&
     c.err > 0.01 &&
     c.err < 0.03,
+  numint: (c) =>
+    c.agree === true &&
+    c.closer === true &&
+    c.n === 4 &&
+    Math.abs(c.trap - (Math.PI / 4) * (1 + Math.SQRT2)) < 1e-9 &&
+    Math.abs(c.simp - (Math.PI / 6) * (1 + 2 * Math.SQRT2)) < 1e-9 &&
+    Math.abs(c.exact - 2) < 1e-12,
+  improper: (c) =>
+    c.agree === true &&
+    Math.abs(c.area - 0.5) < 1e-12 &&
+    Math.abs(c.tail - 0.5) < 1e-12 &&
+    c.limit === 1,
 };
 
 await page.goto('http://localhost:5179/#/mac2312/u1/solids', { waitUntil: 'networkidle', timeout: 30000 });

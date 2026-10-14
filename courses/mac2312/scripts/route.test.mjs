@@ -41,13 +41,16 @@ test('a unit hash opens that unit’s first lab', () => {
   const route = parseRoute('#/mac2312/u1');
   assert.equal(route.examId, 'u1');
   assert.equal(route.labId, 'solids');
+  const techniques = parseRoute('#/mac2312/u2');
+  assert.equal(techniques.examId, 'u2');
+  assert.equal(techniques.labId, 'numint');
   const series = parseRoute('#/mac2312/u3');
   assert.equal(series.examId, 'u3');
   assert.equal(series.labId, 'taylor');
 });
 
 test('a unit with no lab stays on that unit', () => {
-  const route = parseRoute('#/mac2312/u2');
-  assert.equal(route.examId, 'u2');
+  const route = parseRoute('#/mac2312/u4');
+  assert.equal(route.examId, 'u4');
   assert.equal(route.labId, null);
 });

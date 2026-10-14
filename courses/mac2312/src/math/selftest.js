@@ -19,6 +19,25 @@ import {
   washerShell,
   washerSimpson,
   washerVolume,
+  arcsinHalf,
+  arcsinHalfSimpson,
+  improperArea,
+  improperSimpson,
+  improperTail,
+  partialLn,
+  partialSimpson,
+  partialSplit,
+  partsXSin,
+  partsXSinSimpson,
+  sinExact,
+  sinSimpson,
+  sinSimpson4,
+  sinSimpsonPanels,
+  sinSquaredHalf,
+  sinSquaredSimpson,
+  sinTrap,
+  sinTrap4,
+  sinTrapPanels,
 } from './calc2.js';
 
 let failed = 0;
@@ -70,6 +89,33 @@ check('Horner matches exp', near(taylorHorner('exp', 0, 4, 0.5), taylorSum('exp'
 check('cos order 2 at 1/2 is 7/8', near(taylorSum('cos', 0, 2, 0.5), 7 / 8, 1e-12));
 check('Horner matches cos', near(taylorHorner('cos', 0, 2, 0.5), 7 / 8, 1e-12));
 check('sample of sine', near(sampleFn('sin', 0), 0, 1e-12));
+
+check('four-panel trapezoid is (π/4)(1+√2)', near(sinTrap(4), sinTrap4(), 1e-12));
+check('panel trap matches the weights', near(sinTrapPanels(4), sinTrap(4), 1e-12));
+check('eight-panel trap matches too', near(sinTrapPanels(8), sinTrap(8), 1e-12));
+check('four-panel Simpson is (π/6)(1+2√2)', near(sinSimpson(4), sinSimpson4(), 1e-12));
+check('panel Simpson matches the weights', near(sinSimpsonPanels(4), sinSimpson(4), 1e-12));
+check('exact sine integral is 2', near(sinExact(), 2, 1e-12));
+check('Simpson is closer than the trapezoid at n=4', Math.abs(sinSimpson(4) - 2) < Math.abs(sinTrap(4) - 2));
+check('Simpson is closer at n=8', Math.abs(sinSimpson(8) - 2) < Math.abs(sinTrap(8) - 2));
+check('eight panels beat four, for the trapezoid', Math.abs(sinTrap(8) - 2) < Math.abs(sinTrap(4) - 2));
+check('eight panels beat four, for Simpson', Math.abs(sinSimpson(8) - 2) < Math.abs(sinSimpson(4) - 2));
+
+check('area up to 2 is 1/2', near(improperArea(2), 0.5, 1e-12));
+check('area up to 4 is 3/4', near(improperArea(4), 0.75, 1e-12));
+check('area up to 8 is 7/8', near(improperArea(8), 0.875, 1e-12));
+check('tail up to 2 is 1/2', near(improperTail(2), 0.5, 1e-12));
+check('area and tail add to 1', near(improperArea(4) + improperTail(4), 1, 1e-12));
+check('Simpson matches the improper area', near(improperSimpson(4), improperArea(4), 1e-8));
+
+check('parts integral is π', near(partsXSin(), Math.PI, 1e-12));
+check('Simpson matches the parts integral', near(partsXSinSimpson(), Math.PI, 1e-8));
+check('sine squared on a quarter turn is π/4', near(sinSquaredHalf(), Math.PI / 4, 1e-12));
+check('Simpson matches that sine squared', near(sinSquaredSimpson(), sinSquaredHalf(), 1e-8));
+check('arcsin of 1/2 is π/6', near(arcsinHalf(), Math.PI / 6, 1e-12));
+check('Simpson matches that arcsin', near(arcsinHalfSimpson(), arcsinHalf(), 1e-8));
+check('partial fractions equal ln(4/3)', near(partialSplit(), partialLn(), 1e-12));
+check('Simpson matches the partial fractions', near(partialSimpson(), partialLn(), 1e-8));
 
 if (failed) {
   console.error(`selftest: ${failed} failed`);
