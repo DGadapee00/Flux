@@ -15,7 +15,7 @@ import {
 import { createProgress, pickSet, MASTERED_BOX, INTERVAL_DAYS } from '../problems/progress.js';
 import { examById, LAB_META } from '../data/catalog.js';
 
-const homeId = 'u2';
+const homeId = 'u1';
 
 export function createPractice(api) {
   return createMathPractice(api, {

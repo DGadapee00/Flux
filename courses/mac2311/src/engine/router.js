@@ -6,7 +6,7 @@ const router = createLabRouter({
   exams: EXAMS,
   labMeta: LAB_META,
   examById,
-  emptyRoute: () => ({ examId: 'u2', labId: 'secant' }),
+  emptyRoute: () => ({ examId: 'u1', labId: 'limits' }),
 });
 
 export const COURSE = router.courseId;

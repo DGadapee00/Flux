@@ -1,5 +1,5 @@
 import { absContinuousAt, absDifferentiableAt0, deltaFor, deltaSearch, holeLimit, holePlugged, lawAverage, lawExact, polyAt, polyAverage, sidesOfAbs, squeezeHolds } from '../../math/calc1.js';
-import { kase, num, problem, range, tf } from '../kit.js';
+import { domain, kase, num, problem, range, tf } from '../kit.js';
 
 const dummy = { dummy: range(1, 1, 1) };
 
@@ -45,6 +45,7 @@ export default [
     id: 'u1.lim.hole',
     exam: 'u1',
     ch: '2',
+    lab: 'limits',
     src: 'OpenStax Calc 1 §2.3',
     title: 'A removable hole',
     kind: 'numeric',
@@ -61,6 +62,16 @@ export default [
       String.raw`For $x\neq ${$.a}$, $f(x)=x+${$.a}$.`,
       String.raw`The limit is $${f($.lim)}$. The function itself is not defined at that point.`,
     ],
+    sim: {
+      scenario: 'hole',
+      setup(slice, $) {
+        slice.kind = 'hole';
+        slice.a = $.a;
+        slice.h = 0.35;
+        return domain(slice, { xMin: $.a - 2.4, xMax: $.a + 2.4, yMin: -1, yMax: Math.abs(2 * $.a) + 2, plane: 'xy' });
+      },
+      read: (c) => ({ lim: c.limit }),
+    },
     cases: [kase('a=1', { a: 1 }, { lim: 2 })],
   }),
 
@@ -68,6 +79,7 @@ export default [
     id: 'u1.lim.oneside',
     exam: 'u1',
     ch: '2',
+    lab: 'limits',
     src: 'OpenStax Calc 1 §2.2',
     title: 'One-sided limits disagree',
     kind: 'conceptual',
@@ -80,6 +92,16 @@ export default [
     parts: [tf('exists', false, { label: 'the limit exists' })],
     hints: ['The left-hand limit is $-1$. The right-hand limit is $1$.'],
     steps: () => ['The two sides disagree, so the two-sided limit does not exist.'],
+    sim: {
+      scenario: 'sign',
+      setup(slice) {
+        slice.kind = 'sign';
+        slice.a = 0;
+        slice.h = 0.3;
+        return domain(slice, { xMin: -2.4, xMax: 2.4, yMin: -2, yMax: 2, plane: 'xy' });
+      },
+      read: (c) => ({ exists: c.exists ? 1 : 0 }),
+    },
     cases: [kase('at 0', { dummy: 1 }, { exists: 0 })],
   }),
 
@@ -135,6 +157,7 @@ export default [
     id: 'u1.lim.eps',
     exam: 'u1',
     ch: '2',
+    lab: 'limits',
     src: 'OpenStax Calc 1 §2.5',
     title: 'A delta for a line',
     kind: 'numeric',
@@ -154,6 +177,18 @@ export default [
       String.raw`$|${$.m}x|<${f($.eps)}$ when $|x|<${f($.delta)}$.`,
       'A bisection that keeps the inequality strict lands on the same $\\delta$.',
     ],
+    sim: {
+      scenario: 'line',
+      setup(slice, $) {
+        slice.kind = 'line';
+        slice.m = $.m;
+        slice.a = 0;
+        slice.eps = $.eps;
+        slice.h = 0.05;
+        return domain(slice, { xMin: -2, xMax: 2, yMin: -2, yMax: 2, plane: 'xy' });
+      },
+      read: (c) => ({ delta: c.delta }),
+    },
     cases: [kase('m=2, ε=0.1', { m: 2, k: 1 }, { delta: 0.05 })],
   }),
 
@@ -234,5 +269,48 @@ export default [
       'The same value shows up just left and just right of the point.',
     ],
     cases: [kase('m=2, b=-1, a=3', { m: 2, b: -1, a: 3 }, { lim: 5 })],
+  }),
+
+  problem({
+    id: 'u1.lim.jump',
+    exam: 'u1',
+    ch: '2',
+    lab: 'limits',
+    src: 'OpenStax Calc 1 §2.2',
+    title: 'A jump',
+    kind: 'numeric',
+    level: 2,
+    topics: ['limits'],
+    vars: { a: range(-1, 2, 1), k: range(1, 3, 1), c: range(4, 6, 1) },
+    derive: ($) => ({ left: $.k, right: $.c }),
+    second: ($) => {
+      const f = (x) => (x < $.a ? $.k : $.c);
+      const h = 1e-6;
+      return { left: f($.a - h), right: f($.a + h) };
+    },
+    text: (T, $) =>
+      String.raw`Let $f(x)=${$.k}$ when $x<${paren($.a)}$, and $f(x)=${$.c}$ when $x\ge ${paren($.a)}$. Find the one-sided limits at $x=${paren($.a)}$.`,
+    parts: [
+      num('left', ($) => $.left, '', { label: 'left-hand limit' }),
+      num('right', ($) => $.right, '', { label: 'right-hand limit' }),
+    ],
+    hints: ['The left-hand limit uses only inputs below $a$. The right-hand limit uses only inputs above $a$.'],
+    steps: ($, f) => [
+      String.raw`From the left, $f$ is the constant $${$.k}$, so the limit is $${f($.left)}$.`,
+      String.raw`From the right, $f$ is the constant $${$.c}$, so the limit is $${f($.right)}$.`,
+    ],
+    sim: {
+      scenario: 'jump',
+      setup(slice, $) {
+        slice.kind = 'jump';
+        slice.a = $.a;
+        slice.leftValue = $.k;
+        slice.rightValue = $.c;
+        slice.h = 0.3;
+        return domain(slice, { xMin: $.a - 2.4, xMax: $.a + 2.4, yMin: -1, yMax: Math.max($.k, $.c) + 1, plane: 'xy' });
+      },
+      read: (c) => ({ left: c.left, right: c.right }),
+    },
+    cases: [kase('a=1, k=2, c=4', { a: 1, k: 2, c: 4 }, { left: 2, right: 4 })],
   }),
 ];

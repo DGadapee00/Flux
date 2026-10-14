@@ -33,6 +33,7 @@ import {
   simpsonSquare01,
   sineQuotient,
   sineRule,
+  limitPicture,
   squeezeHolds,
 } from './calc1.js';
 
@@ -94,6 +95,28 @@ check('two-sided limit does not exist', sides.exists === false);
 check('|x| is continuous at 0', absContinuousAt(0) === true);
 check('|x| is not differentiable at 0', absDifferentiableAt0() === false);
 check('squeeze bound holds', squeezeHolds() === true);
+
+const holePic = limitPicture('hole', { a: 3, h: 0.4 });
+check('hole limit is 6', near(holePic.limit, 6, 1e-12));
+check('hole has no value', Number.isFinite(holePic.value) === false);
+check('hole probes match the limit', near(holePic.probeLeft, 6, 1e-5) && near(holePic.probeRight, 6, 1e-5));
+check('hole samples sit off the limit by h', near(holePic.sampleLeft, 6 - 0.4, 1e-12) && near(holePic.sampleRight, 6 + 0.4, 1e-12));
+
+const jumpPic = limitPicture('jump', { a: 1, h: 0.2, leftValue: 0, rightValue: 4 });
+check('jump sides are the two values', near(jumpPic.left, 0, 1e-12) && near(jumpPic.right, 4, 1e-12));
+check('jump has no two-sided limit', jumpPic.exists === false && Number.isFinite(jumpPic.limit) === false);
+check('jump probes match the sides', near(jumpPic.probeLeft, 0, 1e-12) && near(jumpPic.probeRight, 4, 1e-12));
+
+const signPic = limitPicture('sign', { a: 0, h: 0.3 });
+check('sign sides are −1 and 1', near(signPic.left, -1, 1e-12) && near(signPic.right, 1, 1e-12));
+check('sign limit does not exist', signPic.exists === false);
+
+const band = limitPicture('line', { a: 1, h: 0.01, eps: 0.1, m: 2 });
+check('line limit is m·a', near(band.limit, 2, 1e-12));
+check('line delta matches the bisection', near(band.delta, 0.05, 1e-12) && near(band.deltaAlt, 0.05, 1e-6));
+check('a step inside delta stays in the band', band.inside === true);
+const outside = limitPicture('line', { a: 1, h: 0.2, eps: 0.1, m: 2 });
+check('a step past delta leaves the band', outside.inside === false);
 
 if (failed) {
   console.error(`selftest: ${failed} failed`);
