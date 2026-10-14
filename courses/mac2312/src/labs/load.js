@@ -2,6 +2,8 @@ import { createLabLoader } from '@flux/core';
 
 const loaders = {
   solids: () => import('./solids.js'),
+  numint: () => import('./numint.js'),
+  improper: () => import('./improper.js'),
   taylor: () => import('./taylor.js'),
 };
 

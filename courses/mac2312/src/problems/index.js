@@ -1,7 +1,8 @@
 import u1 from './bank/u1.js';
+import u2 from './bank/u2.js';
 import u3 from './bank/u3.js';
 
-export const PROBLEMS = [...u1, ...u3];
+export const PROBLEMS = [...u1, ...u2, ...u3];
 
 const byId = new Map(PROBLEMS.map((p) => [p.id, p]));
 

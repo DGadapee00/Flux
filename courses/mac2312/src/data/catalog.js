@@ -15,8 +15,7 @@ export const EXAMS = [
     title: 'Techniques',
     chapters: '3',
     date: null,
-    labs: [],
-    coming: ['Parts', 'Trig sub', 'Partial fractions'],
+    labs: ['numint', 'improper'],
   },
   {
     id: 'u3',
@@ -39,6 +38,8 @@ export const EXAMS = [
 
 export const LAB_META = {
   solids: { id: 'solids', exam: 'u1', title: 'Solids' },
+  numint: { id: 'numint', exam: 'u2', title: 'Numerical' },
+  improper: { id: 'improper', exam: 'u2', title: 'Improper' },
   taylor: { id: 'taylor', exam: 'u3', title: 'Taylor' },
 };
 
