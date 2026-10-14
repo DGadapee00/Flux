@@ -37,7 +37,7 @@ test('the catalog follows the OpenStax chapters named for this course', () => {
   }
 });
 
-test('chapters 2, 3 and 4 each carry a problem bank', () => {
+test('each banked chapter has at least four problems', () => {
   for (const ch of BANK_CHAPTERS) {
     const n = PROBLEMS.filter((problem) => problem.ch === ch).length;
     assert.ok(n >= 4, `chapter ${ch} has ${n} problems`);

@@ -3,7 +3,7 @@
  * Problem-bank check for PHY 2048 (no browser, no lab):
  *   node scripts/problems-check.mjs [--samples N] [--only idPrefix]
  *
- * For every template in chapters 2–4:
+ * For every template in the banked chapters:
  *   1. the worked case matches its key, and the grader accepts that key
  *   2. second() agrees with the library answer (a different method)
  *   3. seeded samples stay finite, and choice answers are options

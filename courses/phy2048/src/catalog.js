@@ -87,8 +87,8 @@ export const CHAPTERS = {
   15: 'Oscillations',
 };
 
-/** Chapters whose problems ship in this slice. */
-export const BANK_CHAPTERS = ['2', '3', '4'];
+/** Chapters whose problems are in the bank. */
+export const BANK_CHAPTERS = ['2', '3', '4', '5', '6', '7', '8'];
 
 export function unitForChapter(ch) {
   const id = String(ch);

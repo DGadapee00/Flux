@@ -14,6 +14,6 @@ The chapter list follows that volume, keeping the chapters named in `PLAN.md`: v
 
 ## What is in this folder
 
-The catalog, and the problem bank for Chapters 2–4. Later chapters are named in the catalog and do not have problems yet. There is no interface and no lab: those wait on the physics shell, after 23 Oct 2026.
+The catalog, and the problem bank for Chapters 2–8. Later chapters are named in the catalog and do not have problems yet. There is no interface and no lab: those wait on the physics shell, after 23 Oct 2026.
 
 The shared mechanics functions live in `packages/subjects/src/mechanics/`. They are not course material.
