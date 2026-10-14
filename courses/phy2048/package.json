@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node scripts/tex-check.mjs && node scripts/problems-check.mjs && node --test scripts/catalog.test.mjs"
+    "test": "node scripts/tex-check.mjs && node scripts/labs-check.mjs && node scripts/problems-check.mjs && node --test scripts/catalog.test.mjs"
   },
   "dependencies": {
     "@flux/core": "*",

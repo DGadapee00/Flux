@@ -1,7 +1,8 @@
 /**
  * PHY 2048 course map, from OpenStax University Physics Volume 1.
- * Dates stay empty: this is a review course. Labs stay empty until the physics
- * shell exists. `BANK_CHAPTERS` lists the chapters that have problems.
+ * Dates stay empty: this is a review course. Five labs are logic only. The
+ * scene is drawn after the physics shell moves. `BANK_CHAPTERS` lists the
+ * chapters that have problems.
  */
 
 export const UNITS = [
@@ -11,7 +12,7 @@ export const UNITS = [
     title: 'Vectors and kinematics',
     chapters: ['2', '3', '4'],
     date: null,
-    labs: [],
+    labs: ['projectile'],
   },
   {
     id: 'u2',
@@ -19,7 +20,7 @@ export const UNITS = [
     title: "Newton's laws and friction",
     chapters: ['5', '6'],
     date: null,
-    labs: [],
+    labs: ['incline'],
   },
   {
     id: 'u3',
@@ -27,7 +28,7 @@ export const UNITS = [
     title: 'Work and energy',
     chapters: ['7', '8'],
     date: null,
-    labs: [],
+    labs: ['track'],
   },
   {
     id: 'u4',
@@ -35,7 +36,7 @@ export const UNITS = [
     title: 'Momentum and collisions',
     chapters: ['9'],
     date: null,
-    labs: [],
+    labs: ['collide'],
   },
   {
     id: 'u5',
@@ -43,7 +44,7 @@ export const UNITS = [
     title: 'Rotation, torque and angular momentum',
     chapters: ['10', '11'],
     date: null,
-    labs: [],
+    labs: ['rotor'],
   },
   {
     id: 'u6',

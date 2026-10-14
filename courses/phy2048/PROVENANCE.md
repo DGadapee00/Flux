@@ -14,6 +14,6 @@ The chapter list follows that volume, keeping the chapters named in `PLAN.md`: v
 
 ## What is in this folder
 
-The catalog, and a problem bank for every chapter this course keeps: 2–13 and 15. There is no interface and no lab: those wait on the physics shell, after 23 Oct 2026.
+The catalog, and a problem bank for every chapter this course keeps: 2–13 and 15. Five labs are logic only: projectile, incline, track, collide, and rotor. Their numbers are computed in this folder. The scene is drawn when the physics shell moves, after 23 Oct 2026. Drag is left out of the projectile. Equilibrium, gravitation, and oscillations have no lab yet. There is no interface.
 
 The shared mechanics functions live in `packages/subjects/src/mechanics/`. They are not course material.

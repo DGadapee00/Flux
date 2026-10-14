@@ -18,7 +18,7 @@ export const course = defineCourse({
     labs: unit.labs,
   })),
   chapters: CHAPTERS,
-  // Labs arrive with the physics shell, after 23 Oct 2026.
-  labs: () => Promise.resolve({}),
+  // Numbers are computed here. The scene is drawn after the physics shell moves.
+  labs: () => import('./labs/load.js'),
   problems: () => import('./problems/index.js'),
 });
