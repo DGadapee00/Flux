@@ -216,6 +216,74 @@ export function absDifferentiableAt0() {
   return Math.abs(left - right) < 1e-6;
 }
 
+/**
+ * One picture of a limit: a line, a hole, a jump, or a sign change.
+ * `left` and `right` are the one-sided limits. `probeLeft` and `probeRight`
+ * are the function a tiny step away, the second route.
+ */
+export function limitPicture(kind, { a = 0, h = 0.4, eps = 0.5, m = 2, leftValue = 0, rightValue = 1 } = {}) {
+  const step = Math.max(1e-4, h);
+  const axis = a === 0 ? 'x' : a < 0 ? `x+${-a}` : `x-${a}`;
+  let f;
+  let left;
+  let right;
+  let value;
+  let tex;
+  if (kind === 'hole') {
+    f = (x) => (x === a ? NaN : x + a);
+    left = a + a;
+    right = a + a;
+    value = NaN;
+    tex = `\\dfrac{x^2-${a * a}}{${axis}}`;
+  } else if (kind === 'jump') {
+    f = (x) => (x < a ? leftValue : rightValue);
+    left = leftValue;
+    right = rightValue;
+    value = rightValue;
+    tex = 'jump';
+  } else if (kind === 'sign') {
+    f = (x) => (x < a ? -1 : x > a ? 1 : NaN);
+    left = -1;
+    right = 1;
+    value = NaN;
+    tex = `\\dfrac{${axis}}{|${axis}|}`;
+  } else {
+    f = (x) => m * x;
+    left = m * a;
+    right = m * a;
+    value = m * a;
+    tex = `${m}x`;
+  }
+  const near = 1e-6;
+  const probeLeft = f(a - near);
+  const probeRight = f(a + near);
+  const exists = Math.abs(left - right) <= 1e-9;
+  const delta = kind === 'line' || kind == null ? eps / Math.abs(m) : NaN;
+  const deltaAlt = Number.isFinite(delta) ? deltaSearch(m, eps) : NaN;
+  const inside = Number.isFinite(delta) && step < delta;
+  return {
+    f,
+    a,
+    h: step,
+    eps,
+    m,
+    tex,
+    left,
+    right,
+    value,
+    sampleLeft: f(a - step),
+    sampleRight: f(a + step),
+    probeLeft,
+    probeRight,
+    exists,
+    limit: exists ? left : NaN,
+    delta,
+    deltaAlt,
+    inside,
+    kind: kind === 'jump' || kind === 'hole' || kind === 'sign' ? kind : 'line',
+  };
+}
+
 export function squeezeHolds() {
   for (let i = 1; i <= 40; i++) {
     const x = i / 200;

@@ -22,6 +22,7 @@ async function go(hash, lab) {
 }
 
 const CHECK = {
+  limits: (c) => Number.isFinite(c.limit) && c.exists === true && c.agree === true && !Number.isFinite(c.value),
   secant: (c) => Number.isFinite(c.fp) && Number.isFinite(c.msec) && c.agree === true,
   riemann: (c) => Number.isFinite(c.sum) && Number.isFinite(c.exact) && c.agree === true,
 };
@@ -63,12 +64,12 @@ for (const { exam, id } of catalogLabs) {
   else if (!ok(snap.computed)) mismatches.push({ name: `${id}.routes`, got: snap.computed, exp: true });
 }
 
-await go('#/u1', null);
+await go('#/u3', null);
 const emptyUnit = await page.evaluate(() => ({
   exam: window.__flux?.state?.examId,
   lab: window.__flux?.app?.lab,
 }));
-if (emptyUnit.exam !== 'u1' || emptyUnit.lab != null) mismatches.push({ name: 'u1', got: emptyUnit, exp: 'unit with no lab' });
+if (emptyUnit.exam !== 'u3' || emptyUnit.lab != null) mismatches.push({ name: 'u3', got: emptyUnit, exp: 'unit with no lab' });
 
 await go('#/u2/secant', 'secant');
 await page.goBack();

@@ -29,16 +29,22 @@ test('a bare lab id still resolves, and the course prefix is stripped once', () 
   assert.equal(prefixed.labId, 'riemann');
 });
 
-test('an empty hash is not legacy and opens the secant lab', () => {
+test('an empty hash is not legacy and opens the limit lab', () => {
   const route = parseRoute('');
   assert.equal(route.legacy, false);
-  assert.equal(route.examId, 'u2');
-  assert.equal(route.labId, 'secant');
-  assert.equal(courseHash(route.examId, route.labId), `#/${COURSE}/u2/secant`);
+  assert.equal(route.examId, 'u1');
+  assert.equal(route.labId, 'limits');
+  assert.equal(courseHash(route.examId, route.labId), `#/${COURSE}/u1/limits`);
+});
+
+test('a unit hash opens that unit’s first lab', () => {
+  const route = parseRoute('#/mac2311/u1');
+  assert.equal(route.examId, 'u1');
+  assert.equal(route.labId, 'limits');
 });
 
 test('a unit with no lab yet keeps the unit and a null lab', () => {
-  const route = parseRoute('#/mac2311/u1');
-  assert.equal(route.examId, 'u1');
+  const route = parseRoute('#/mac2311/u3');
+  assert.equal(route.examId, 'u3');
   assert.equal(route.labId, null);
 });

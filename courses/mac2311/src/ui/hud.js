@@ -2,7 +2,7 @@ import { createHUD as createMathHUD } from '@flux/shells/math/hud.js';
 import { EXAMS, examById, LAB_META } from '../data/catalog.js';
 import { course } from '../manifest.js';
 
-const homeId = 'u2';
+const homeId = 'u1';
 
 export function createHUD(api) {
   return createMathHUD(api, {

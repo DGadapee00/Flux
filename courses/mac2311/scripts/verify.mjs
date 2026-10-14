@@ -120,10 +120,55 @@ const mid = await page.evaluate(() => ({
   sum: window.__flux.computed.sum,
 }));
 
-await page.goto('http://localhost:5178/#/mac2311/u1', { waitUntil: 'networkidle' });
+await page.goto('http://localhost:5178/#/mac2311/u1/limits', { waitUntil: 'networkidle' });
+await page.waitForFunction(() => window.__flux?.state?.lab === 'limits');
+await page.waitForTimeout(400);
+const hole = await page.evaluate(() => ({
+  scenario: window.__flux.state.scenarioId,
+  limit: window.__flux.computed.limit,
+  value: window.__flux.computed.value,
+  exists: window.__flux.computed.exists,
+  agree: window.__flux.computed.agree,
+}));
+await page.screenshot({ path: path.join(out, 'limits-hole.png'), fullPage: true });
+await page.selectOption('#scenario', 'jump');
+await page.waitForTimeout(200);
+const jump = await page.evaluate(() => ({
+  left: window.__flux.computed.left,
+  right: window.__flux.computed.right,
+  exists: window.__flux.computed.exists,
+}));
+await page.selectOption('#scenario', 'line');
+await page.waitForTimeout(150);
+await page.fill('#lim-h', '0.1');
+await page.dispatchEvent('#lim-h', 'input');
+await page.fill('#lim-eps', '0.5');
+await page.dispatchEvent('#lim-eps', 'input');
+await page.waitForTimeout(150);
+const inside = await page.evaluate(() => ({
+  inside: window.__flux.computed.inside,
+  delta: window.__flux.computed.delta,
+}));
+await page.fill('#lim-eps', '0.1');
+await page.dispatchEvent('#lim-eps', 'input');
+await page.waitForTimeout(150);
+const tight = await page.evaluate(() => ({
+  inside: window.__flux.computed.inside,
+  delta: window.__flux.computed.delta,
+}));
+await page.setViewportSize({ width: 380, height: 780 });
 await page.waitForTimeout(300);
-await page.goto('http://localhost:5178/#/mac2311/u2/secant', { waitUntil: 'networkidle' });
-await page.waitForFunction(() => window.__flux?.state?.lab === 'secant');
+const limitsPhone = await page.evaluate(() => ({
+  scroll: document.documentElement.scrollWidth,
+  client: document.documentElement.clientWidth,
+  lab: window.__flux.state.lab,
+}));
+
+await page.setViewportSize({ width: 1280, height: 900 });
+await page.goto('http://localhost:5178/#/mac2311/u3', { waitUntil: 'networkidle' });
+await page.waitForTimeout(300);
+await page.goto('http://localhost:5178/#/mac2311/u1/limits', { waitUntil: 'networkidle' });
+await page.waitForFunction(() => window.__flux?.state?.lab === 'limits');
 await page.goBack();
 await page.waitForTimeout(400);
 const back = await page.evaluate(() => location.hash);
@@ -149,10 +194,17 @@ if (!Number.isFinite(riemann.sum) || !riemann.agree) fail.push(`riemann ${JSON.s
 if (Math.abs(riemann.exact - 1 / 3) > 1e-9) fail.push(`exact ${riemann.exact}`);
 if (mid.sample !== 'mid') fail.push(`sample ${mid.sample}`);
 if (!(Math.abs(mid.sum - riemann.sum) > 1e-6)) fail.push('midpoint sum did not move');
-if (back !== '#/mac2311/u1') fail.push(`back hash ${back}`);
+if (hole.scenario !== 'hole') fail.push(`limits scenario ${hole.scenario}`);
+if (!hole.agree || hole.exists !== true || !Number.isFinite(hole.limit)) fail.push(`hole ${JSON.stringify(hole)}`);
+if (Number.isFinite(hole.value)) fail.push(`hole value ${hole.value}`);
+if (jump.exists !== false || jump.left !== 0 || jump.right !== 1) fail.push(`jump ${JSON.stringify(jump)}`);
+if (inside.inside !== true || Math.abs(inside.delta - 0.25) > 1e-9) fail.push(`band ${JSON.stringify(inside)}`);
+if (tight.inside !== false || Math.abs(tight.delta - 0.05) > 1e-9) fail.push(`tight band ${JSON.stringify(tight)}`);
+if (limitsPhone.scroll > limitsPhone.client + 1) fail.push(`limits 380px scrolls (${limitsPhone.scroll} > ${limitsPhone.client})`);
+if (back !== '#/mac2311/u3') fail.push(`back hash ${back}`);
 if (errors.length) fail.push(`page errors: ${errors.join(' | ')}`);
 
-console.log({ first, corner, smallH, practiceOpen, phone, riemann, mid, back, errors });
+console.log({ first, corner, smallH, practiceOpen, phone, riemann, mid, hole, jump, inside, tight, limitsPhone, back, errors });
 if (fail.length) {
   console.error('VERIFY FAIL', fail);
   process.exit(1);

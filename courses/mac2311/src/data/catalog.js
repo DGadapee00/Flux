@@ -7,8 +7,7 @@ export const EXAMS = [
     title: 'Functions and limits',
     chapters: '1–2',
     date: null,
-    labs: [],
-    coming: ['Limit explorer'],
+    labs: ['limits'],
   },
   {
     id: 'u2',
@@ -40,6 +39,7 @@ export const EXAMS = [
 ];
 
 export const LAB_META = {
+  limits: { id: 'limits', exam: 'u1', title: 'Limits' },
   secant: { id: 'secant', exam: 'u2', title: 'Secant' },
   riemann: { id: 'riemann', exam: 'u4', title: 'Riemann' },
 };
