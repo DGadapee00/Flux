@@ -3,6 +3,7 @@ import { createLabLoader } from '@flux/core';
 const loaders = {
   limits: () => import('./limits.js'),
   secant: () => import('./secant.js'),
+  rates: () => import('./rates.js'),
   riemann: () => import('./riemann.js'),
 };
 

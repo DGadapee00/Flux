@@ -13,6 +13,7 @@ import {
   exactSquare01,
   holeLimit,
   holePlugged,
+  ladderStep,
   ladderVelocity,
   lawAverage,
   lawExact,
@@ -76,6 +77,9 @@ check('solved circle agrees', near(circleSlopeSolved(5, 3), circleSlope(3, 4), 1
 const ladder = ladderVelocity(10, 6, 2);
 check('ladder height is 8', near(ladder.y, 8, 1e-12));
 check('ladder top velocity is −1.5', near(ladder.dy, -1.5, 1e-12));
+check('a short slide matches that velocity', near(ladderStep(10, 6, 2), -1.5, 1e-4));
+check('doubling the base speed doubles the top speed', near(ladderVelocity(10, 6, 4).dy, -3, 1e-12));
+check('the top drops faster when the base is farther out', Math.abs(ladderVelocity(10, 8, 2).dy) > Math.abs(ladderVelocity(10, 2, 2).dy));
 check('sine rule matches the quotient', near(sineRule(2, 0), sineQuotient(2, 0), 1e-6));
 check('sine at 0 is the coefficient', near(sineRule(2, 0), 2, 1e-12));
 
