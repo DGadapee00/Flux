@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status: **Phase 2 done** (13 Oct 2026). All four courses build from this repo and are live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 5174, MAC 5175, Statics 5176, STA 3032 5177. PHY's weekly drops land here. **Next: Phase 2b (optional, after 23 Oct 2026).** flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their sites stay up.
+Status: **Phase 2 done** (13 Oct 2026). All four courses build from this repo and are live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 5174, MAC 5175, Statics 5176, STA 3032 5177 (next: MAC 2311 5178, MAC 2312 5179, PHY 2048 5180). PHY's weekly drops land here. **Next: Phase 7** (Calc I, Calc II, Physics I). flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their old sites redirect here.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
@@ -436,14 +436,117 @@ gets weekly drops; and a banner on the old PHY site pointing here.
 
 **Exit:** ingest runs from the platform repo; flux-phy2049 is no longer edited.
 
-### Phase 7 and on: new courses, by track
+### Phase 7: Calc I, Calc II and Physics I
+
+Three new courses, built directly on the platform: **MAC 2311 Calculus I** and **MAC 2312
+Calculus II** in the Math track (before MAC 2313), and **PHY 2048 Physics I** in the Physics
+track (before PHY 2049). They are review courses (already taken), so they have no exam dates and
+no Canvas drop. The owner wants them for review and as the base the later courses link back to.
+
+#### Rules for this phase
+
+- **PHY 2049 is in use until its Exam 5 on 23 Oct 2026.** Nothing in this phase edits
+  `courses/phy2049/` or changes how core behaves for it before 24 Oct. Additions to core and the
+  subject libraries are fine when every course's checks still pass.
+- **Content source (D7):** OpenStax, openly licensed (CC BY 4.0) and free to cite:
+  *Calculus Volume 1* (MAC 2311), *Calculus Volume 2* (MAC 2312), *University Physics Volume 1*
+  (PHY 2048). Problems cite by section (`OpenStax Calc 1 §3.4`), statements are written fresh with
+  generated numbers, and a worked case may use a book example's numbers with its section cited.
+  No figures or text copied. Each course's PROVENANCE.md says so and gives the licence.
+- **Same quality bar as the existing courses:** every number is computed and checked by a
+  selftest; each problem has a second opinion (a lab or a second method computes the same answer);
+  380px first; tex-check, problems-check, smoke and the raw/storage/dependency checks pass.
+- **One chapter per PR** after the first slice, so each can be reviewed and deployed alone.
+
+#### The shell for each course (no new forks)
+
+A new course needs a HUD, a practice panel and styles, and those are still per course (Phase 2).
+Copying them a fourth and fifth time would deepen the duplication Phase 2 stopped. Instead:
+
+1. **Math shell, now.** Move MAC 2313's HUD, practice panel and styles, unchanged, into
+   `packages/shells/math/`. MAC 2313 imports them from there. This is a pure move: MAC 2313's
+   tests, smoke and `verify` checks must pass with no behaviour change. MAC 2311 and MAC 2312
+   then use the same shell. Most Calc I/II labs are 2D (graphs of y = f(x)): they use the shell's
+   head-on `xy` plane camera, as MAC 2313's Chapter 1 labs already do.
+2. **Physics shell, after 23 Oct.** The same move for PHY 2049's HUD, practice panel and styles
+   into `packages/shells/physics/`, then PHY 2048 uses it. Until then PHY 2048 builds everything
+   that is not UI (below).
+3. Dependency direction becomes `courses → shells → subjects → core`. Update
+   `packages/checks/deps.mjs` and AGENTS.md. A shell names no course and no chapter; course data
+   comes in through the manifest and the course's labs.
+
+#### MAC 2311 Calculus I (`courses/mac2311`, port 5178, track math, order 1)
+
+Units, following OpenStax Calculus Volume 1:
+1. Functions and limits (Ch 1–2): limit laws, one-sided limits, continuity, the ε–δ picture.
+2. Derivatives (Ch 3): the definition as a limit, rules, chain rule, implicit differentiation,
+   related rates (Ch 4.1).
+3. Applications (Ch 4): linear approximation, extrema, MVT, curve sketching, optimization,
+   L'Hôpital, Newton's method.
+4. Integration (Ch 5): antiderivatives, Riemann sums, the definite integral, FTC, substitution.
+
+Labs to start with (each corrects an intuition, with predictions): secant to tangent (the
+derivative as a limit), limit explorer (one-sided, holes, jumps, ε–δ band), related-rates ladder,
+optimization box, Riemann sums to the integral (left/right/mid/trap, error vs n), FTC accumulation.
+
+#### MAC 2312 Calculus II (`courses/mac2312`, port 5179, track math, order 2)
+
+Units, following OpenStax Calculus Volume 2:
+1. Applications of integration (Ch 2, Vol 1 Ch 6): area between curves, volumes by disks, washers
+   and shells, arc length, work.
+2. Techniques (Ch 3): parts, trig integrals, trig substitution, partial fractions, numerical
+   integration, improper integrals.
+3. Sequences and series (Ch 5–6): convergence tests, power series, Taylor and Maclaurin series.
+4. Parametric and polar (Ch 7), linking forward to MAC 2313's Chapter 2 labs.
+
+Labs to start with: solids of revolution (disk/washer/shell, the same solid both ways), Taylor
+polynomial builder (order and centre vs error), series partial sums (which tests decide what),
+improper integral area as the bound moves, numerical integration error.
+
+#### PHY 2048 Physics I (`courses/phy2048`, port 5180, track physics, order 1)
+
+Units, following OpenStax University Physics Volume 1 (confirm against the UNF syllabus if the
+owner has it, D7): vectors and kinematics (Ch 2–4), Newton's laws and friction (Ch 5–6), work and
+energy (Ch 7–8), momentum and collisions (Ch 9), rotation, torque and angular momentum (Ch 10–11),
+equilibrium (Ch 12), gravitation (Ch 13), oscillations (Ch 15).
+
+Before 24 Oct, build only what is not UI:
+- `subjects/mechanics` grows kinematics, dynamics, energy, momentum, rotation and oscillation
+  functions, each with selftests. Statics' existing vectors and units are reused, not copied.
+- The catalog, the problem bank by chapter (with cases and checks), and lab logic written
+  against the scene3d contract.
+After 24 Oct: the physics shell move, then the labs go live. Labs to start with: projectile
+(launch angle vs range, with and without drag noted as left out), inclined plane with friction,
+energy bar charts on a track, 1D collisions (elastic to inelastic), rotation and torque.
+
+#### Track links
+
+- Hub: the three courses appear in their track cards (`site/src/tracks.js`) once each is live.
+- Track bar: each course appears in its track's bar in order.
+- `prereqs` (from Phase 2b): MAC 2313 labs and notes point back to the Calc I/II topic they rest on
+  (gradient → derivative, double integral → Riemann sum, polar area → polar curves); PHY 2049 points
+  back to PHY 2048 (electric potential energy → work and energy, magnetic force → circular motion);
+  PHY 2048 equilibrium points across to Statics. A check lists links to unbuilt targets.
+
+#### Order of work
+
+1. Math shell move (MAC 2313 unchanged) and the dependency rule.
+2. MAC 2311 first slice: manifest, catalog, two labs (secant → tangent, Riemann sums), 15–20
+   problems across Units 1–2, selftests, PROVENANCE.md, hub and track bar entries. Merge and deploy.
+3. MAC 2311 one unit per PR, then MAC 2312 the same way (first slice: solids of revolution and
+   Taylor polynomials).
+4. In parallel, PHY 2048's mechanics library, catalog and problem bank (no UI) on its own branch.
+5. After 23 Oct: physics shell move, PHY 2048 labs, then its first deploy.
+6. `prereqs` links across the tracks.
+
+**Exit for each course:** every unit has labs and problems, all checks pass, it is live on the hub
+and in its track bar, and its PROVENANCE.md names the source and licence.
+
+### Phase 8 and on: new courses, by track
 
 Each new course is built directly as a module inside its track:
 
-- **Physics:** PHY 2048, on `subjects/mechanics` (shared with Statics) plus what it adds
-  (kinematics, energy, momentum, rotation, oscillations).
-- **Math:** MAC 2311 and MAC 2312 before MAC 2313, then MAP 2302 after it. Each Calc III lab and
-  notes section gains `prereqs` pointing back at the Calc I/II topic it rests on.
+- **Math:** MAP 2302 differential equations after MAC 2313.
 - **Mechanics:** Dynamics after Statics, reusing its vectors, free-body diagrams and units.
 - **Thermal-fluids:** a new track and `subjects/thermo` library, written to be reusable by the
   methalox engine's analysis code.
@@ -466,6 +569,7 @@ cross-linked from the courses whose formulas it covers.
 | D4 | TypeScript | stay vanilla JS vs. add types (or JSDoc + `checkJs`) for the contracts only | JSDoc types on `defineCourse`, `defineLab`, `problem`; no build change |
 | D5 | Course codes and terms | **Decided:** Statics is EGN 3311. MAC 2313 was taken Spring 2026. Codes for courses not yet built are confirmed when each is started. | |
 | D6 | STA 3032 provenance | **Decided 13 Oct 2026:** not asked, so the instructor's material (rewritten notes, review-sheet set, worked cases and lab presets from the notes) was removed. Recorded in `courses/sta3032/PROVENANCE.md`. | |
+| D7 | Source for Calc I, Calc II, Physics I | **Default:** OpenStax (CC BY 4.0): Calculus Vol 1 and 2, University Physics Vol 1, cited by section. Switch to the UNF course texts if the owner prefers; confirm PHY 2048's chapter list against the UNF syllabus. | |
 
 ---
 
