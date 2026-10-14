@@ -27,6 +27,10 @@ test('a bare lab id still resolves, and the course prefix is stripped once', () 
   assert.equal(prefixed.legacy, false);
   assert.equal(prefixed.examId, 'u3');
   assert.equal(prefixed.labId, 'taylor');
+  const series = parseRoute('#/series');
+  assert.equal(series.legacy, true);
+  assert.equal(series.examId, 'u3');
+  assert.equal(series.labId, 'series');
 });
 
 test('an empty hash is not legacy and opens the solids lab', () => {

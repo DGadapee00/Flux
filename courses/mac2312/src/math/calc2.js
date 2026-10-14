@@ -239,3 +239,94 @@ export function partialLn() {
 export function partialSimpson() {
   return simpson((x) => 1 / ((x + 1) * (x + 2)), 0, 1);
 }
+
+/** Sum of the first n powers of r, starting at r^0. */
+export function geomPartial(r, n) {
+  const count = Math.max(0, Math.round(n));
+  if (count === 0) return 0;
+  if (r === 1) return count;
+  return (1 - r ** count) / (1 - r);
+}
+
+/** The same geometric sum, one term at a time. */
+export function geomLoop(r, n) {
+  const count = Math.max(0, Math.round(n));
+  let sum = 0;
+  let term = 1;
+  for (let k = 0; k < count; k++) {
+    sum += term;
+    term *= r;
+  }
+  return sum;
+}
+
+export function geomTerm(r, n) {
+  return r ** (Math.max(1, Math.round(n)) - 1);
+}
+
+export function harmonicSum(n) {
+  let sum = 0;
+  for (let k = 1; k <= n; k++) sum += 1 / k;
+  return sum;
+}
+
+/** Odds and evens added separately, then combined. */
+export function harmonicSplit(n) {
+  let odd = 0;
+  let even = 0;
+  for (let k = 1; k <= n; k++) {
+    if (k % 2) odd += 1 / k;
+    else even += 1 / k;
+  }
+  return odd + even;
+}
+
+export function altSum(n) {
+  let sum = 0;
+  for (let k = 1; k <= n; k++) sum += (k % 2 ? 1 : -1) / k;
+  return sum;
+}
+
+/** Pairs (1/(2k−1) − 1/(2k)), plus a leftover odd term. */
+export function altGroups(n) {
+  let sum = 0;
+  const pairs = Math.floor(n / 2);
+  for (let k = 1; k <= pairs; k++) sum += 1 / (2 * k - 1) - 1 / (2 * k);
+  if (n % 2) sum += 1 / n;
+  return sum;
+}
+
+export function squareSum(n) {
+  let sum = 0;
+  for (let k = 1; k <= n; k++) sum += 1 / (k * k);
+  return sum;
+}
+
+export function squareSplit(n) {
+  let odd = 0;
+  let even = 0;
+  for (let k = 1; k <= n; k++) {
+    const term = 1 / (k * k);
+    if (k % 2) odd += term;
+    else even += term;
+  }
+  return odd + even;
+}
+
+export function onesSum(n) {
+  return Math.round(n);
+}
+
+export function onesLoop(n) {
+  let sum = 0;
+  for (let k = 1; k <= n; k++) sum += 1;
+  return sum;
+}
+
+export function ln2() {
+  return Math.log(2);
+}
+
+export function ln2Recip() {
+  return -Math.log(0.5);
+}

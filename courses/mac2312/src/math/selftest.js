@@ -24,11 +24,24 @@ import {
   improperArea,
   improperSimpson,
   improperTail,
+  altGroups,
+  altSum,
+  geomLoop,
+  geomPartial,
+  geomTerm,
+  harmonicSplit,
+  harmonicSum,
+  ln2,
+  ln2Recip,
+  onesLoop,
+  onesSum,
   partialLn,
   partialSimpson,
   partialSplit,
   partsXSin,
   partsXSinSimpson,
+  squareSplit,
+  squareSum,
   sinExact,
   sinSimpson,
   sinSimpson4,
@@ -116,6 +129,22 @@ check('arcsin of 1/2 is π/6', near(arcsinHalf(), Math.PI / 6, 1e-12));
 check('Simpson matches that arcsin', near(arcsinHalfSimpson(), arcsinHalf(), 1e-8));
 check('partial fractions equal ln(4/3)', near(partialSplit(), partialLn(), 1e-12));
 check('Simpson matches the partial fractions', near(partialSimpson(), partialLn(), 1e-8));
+
+check('eight geometric halves sum to 255/128', near(geomPartial(0.5, 8), 255 / 128, 1e-12));
+check('the geometric loop agrees', near(geomLoop(0.5, 8), geomPartial(0.5, 8), 1e-12));
+check('the eighth half-power is 1/128', near(geomTerm(0.5, 8), 1 / 128, 1e-12));
+check('a long geometric partial sits on its limit', near(geomPartial(0.5, 40), 2, 1e-9));
+check('H_8 is 761/280', near(harmonicSum(8), 761 / 280, 1e-12));
+check('splitting H_8 agrees', near(harmonicSplit(8), harmonicSum(8), 1e-12));
+check('H_n sits above ln(n+1)', harmonicSum(12) > Math.log(13));
+check('eight alternating terms sum to 533/840', near(altSum(8), 533 / 840, 1e-12));
+check('grouping the alternating terms agrees', near(altGroups(8), altSum(8), 1e-12));
+check('ln 2 from the reciprocal agrees', near(ln2Recip(), ln2(), 1e-12));
+check('four squares sum to 205/144', near(squareSum(4), 205 / 144, 1e-12));
+check('splitting the squares agrees', near(squareSplit(8), squareSum(8), 1e-12));
+check('the squares stay under π²/6', squareSum(12) < (Math.PI * Math.PI) / 6);
+check('eight ones sum to 8', near(onesSum(8), 8, 1e-12));
+check('the ones loop agrees', near(onesLoop(8), onesSum(8), 1e-12));
 
 if (failed) {
   console.error(`selftest: ${failed} failed`);

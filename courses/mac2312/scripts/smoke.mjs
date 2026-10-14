@@ -45,6 +45,12 @@ const CHECK = {
     Math.abs(c.area - 0.5) < 1e-12 &&
     Math.abs(c.tail - 0.5) < 1e-12 &&
     c.limit === 1,
+  series: (c) =>
+    c.agree === true &&
+    c.converges === true &&
+    Math.abs(c.sn - 255 / 128) < 1e-9 &&
+    Math.abs(c.limit - 2) < 1e-12 &&
+    Math.abs(c.an - 1 / 128) < 1e-12,
 };
 
 await page.goto('http://localhost:5179/#/mac2312/u1/solids', { waitUntil: 'networkidle', timeout: 30000 });

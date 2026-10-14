@@ -214,12 +214,90 @@ const phoneImp = await page.evaluate(() => ({
 if (phoneImp.scroll > phoneImp.client + 1) fail.push(`improper 380 scroll ${JSON.stringify(phoneImp)}`);
 
 await page.setViewportSize({ width: 1280, height: 900 });
+await page.goto('http://localhost:5179/#/mac2312/u3/series', { waitUntil: 'networkidle' });
+await page.waitForFunction(() => window.__flux?.state?.lab === 'series', null, { timeout: 15000 });
+await settle();
+const geom = await page.evaluate(() => {
+  const c = window.__flux.computed;
+  return {
+    kind: window.__flux.state.kind,
+    n: window.__flux.state.n,
+    sn: c.sn,
+    an: c.an,
+    limit: c.limit,
+    agree: c.agree,
+    converges: c.converges,
+  };
+});
+if (geom.kind !== 'geom' || geom.n !== 8) fail.push(`series default ${geom.kind} n=${geom.n}`);
+if (!(Math.abs(geom.sn - 255 / 128) < 1e-9)) fail.push(`geom sum ${geom.sn}`);
+if (!(Math.abs(geom.an - 1 / 128) < 1e-12)) fail.push(`geom term ${geom.an}`);
+if (!(Math.abs(geom.limit - 2) < 1e-12)) fail.push(`geom limit ${geom.limit}`);
+if (geom.agree !== true || geom.converges !== true) fail.push('geometric series disagrees');
+await page.screenshot({ path: path.join(out, 'series-desktop.png'), fullPage: true });
+
+await page.fill('#ser-n', '4');
+await page.dispatchEvent('#ser-n', 'input');
+await page.waitForTimeout(200);
+const four = await page.evaluate(() => ({ n: window.__flux.state.n, sn: window.__flux.computed.sn, agree: window.__flux.computed.agree }));
+if (four.n !== 4) fail.push(`series terms ${four.n}`);
+if (!(Math.abs(four.sn - 15 / 8) < 1e-9)) fail.push(`four halves ${four.sn}`);
+if (four.agree !== true) fail.push('four halves disagree');
+
+await page.selectOption('#scenario', 'harm');
+await page.waitForTimeout(200);
+const harm = await page.evaluate(() => ({
+  kind: window.__flux.state.kind,
+  n: window.__flux.state.n,
+  sn: window.__flux.computed.sn,
+  converges: window.__flux.computed.converges,
+  agree: window.__flux.computed.agree,
+}));
+if (harm.kind !== 'harm' || harm.n !== 8) fail.push(`harmonic ${harm.kind} n=${harm.n}`);
+if (!(Math.abs(harm.sn - 761 / 280) < 1e-9)) fail.push(`H_8 ${harm.sn}`);
+if (harm.converges !== false || harm.agree !== true) fail.push('harmonic should have no ceiling');
+
+await page.selectOption('#scenario', 'ones');
+await page.waitForTimeout(200);
+const ones = await page.evaluate(() => ({
+  sn: window.__flux.computed.sn,
+  an: window.__flux.computed.an,
+  converges: window.__flux.computed.converges,
+  agree: window.__flux.computed.agree,
+}));
+if (!(Math.abs(ones.sn - 8) < 1e-12) || !(Math.abs(ones.an - 1) < 1e-12)) fail.push(`ones ${ones.sn}`);
+if (ones.converges !== false || ones.agree !== true) fail.push('ones should diverge');
+
+await page.selectOption('#scenario', 'alt');
+await page.waitForTimeout(200);
+const alt = await page.evaluate(() => ({
+  n: window.__flux.state.n,
+  sn: window.__flux.computed.sn,
+  limit: window.__flux.computed.limit,
+  converges: window.__flux.computed.converges,
+  agree: window.__flux.computed.agree,
+}));
+if (alt.n !== 8) fail.push(`alternating terms ${alt.n}`);
+if (!(Math.abs(alt.sn - 533 / 840) < 1e-9)) fail.push(`alt sum ${alt.sn}`);
+if (!(Math.abs(alt.limit - Math.LN2) < 1e-12)) fail.push(`alt limit ${alt.limit}`);
+if (alt.converges !== true || alt.agree !== true) fail.push('alternating series disagrees');
+
+await page.setViewportSize({ width: 380, height: 780 });
+await settle();
+await page.screenshot({ path: path.join(out, 'series-phone.png'), fullPage: true });
+const phoneSer = await page.evaluate(() => ({
+  scroll: document.documentElement.scrollWidth,
+  client: document.documentElement.clientWidth,
+}));
+if (phoneSer.scroll > phoneSer.client + 1) fail.push(`series 380 scroll ${JSON.stringify(phoneSer)}`);
+
+await page.setViewportSize({ width: 1280, height: 900 });
 await page.goto('http://localhost:5179/#/mac2312/u1/solids', { waitUntil: 'networkidle' });
 await page.waitForFunction(() => window.__flux?.state?.lab === 'solids', null, { timeout: 10000 });
 await page.goBack();
 await page.waitForTimeout(400);
 const back = await page.evaluate(() => location.hash);
-if (back !== '#/mac2312/u2/improper') fail.push(`back hash ${back}`);
+if (back !== '#/mac2312/u3/series') fail.push(`back hash ${back}`);
 
 await browser.close();
 
