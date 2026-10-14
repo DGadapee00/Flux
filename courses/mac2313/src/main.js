@@ -1,3 +1,6 @@
+import '@flux/shells/math/styles/main.css';
+import '@flux/shells/math/styles/practice.css';
+import '@flux/shells/math/styles/mobile.css';
 import 'katex/dist/katex.min.css';
 import { mountTrackBar } from '@flux/core';
 import * as THREE from 'three';

@@ -12,6 +12,6 @@ These apply to every phase. `PLAN.md` is the order of work. Stop at the phase ex
 - `packages/core` knows no course: no course id, code, chapter number, constant, or textbook name. A hook core needs goes on `defineCourse`, `defineLab`, or `problem`.
 - Every number on screen is computed and checked. A subject library has a selftest. A course with a failing check does not ship.
 - 380px portrait is the design width. No horizontal scroll. Phone inputs are at least 16px so Safari does not zoom.
-- Dependencies run one way: `courses → subjects → core`. `packages/checks/deps.mjs` fails `npm test` on an import the wrong way, and on a course name inside `packages/core`.
+- Dependencies run one way: `courses → shells → subjects → core`. `packages/checks/deps.mjs` fails `npm test` on an import the wrong way, on a course name inside `packages/core` or `packages/shells`, and on a chapter literal inside a shell.
 - Storage keys are `flux.<course>.<key>.v<n>`. Progress export and import is JSON.
 - Each course folder has its own `PROVENANCE.md`.

@@ -19,19 +19,21 @@ PHY 2049's weekly content drop runs here now. The Canvas ingest Action writes to
 ```
 packages/core        engine contracts. No course knowledge.
 packages/subjects    shared domain math, pure functions and a selftest each
+packages/shells      course-family UI: HUD, practice panel, styles. No course and no chapter.
 packages/checks      dependency-direction check
 courses/<id>         one folder per course, once it is ported
 site                 the Vite hub
 ```
 
-Dependency direction is one way: `courses → subjects → core`.
+Dependency direction is one way: `courses → shells → subjects → core`.
 
-- `packages/core` imports neither a subject nor a course. It contains no course id, course code, chapter number, constant, or textbook name. A hook core needs goes on `defineCourse`, `defineLab`, or `problem`.
-- A subject may import core. A subject imports no course.
-- A course may import core and subjects. A course imports no other course.
+- `packages/core` imports neither a subject, a shell, nor a course. It contains no course id, course code, chapter number, constant, or textbook name. A hook core needs goes on `defineCourse`, `defineLab`, or `problem`.
+- A subject may import core. A subject imports no shell and no course.
+- A shell may import core and subjects. A shell imports no course. A shell names no course and no chapter; the course passes its catalog, bank, and code in.
+- A course may import core, subjects, and shells. A course imports no other course.
 - The site may import core, subjects, and courses. It is the registry.
 
-`packages/checks/deps.mjs` fails `npm test` when an import points the wrong way, and when a file under `packages/core` names a course.
+`packages/checks/deps.mjs` fails `npm test` when an import points the wrong way, and when a file under `packages/core` or `packages/shells` names a course. A chapter literal in a shell fails the same check.
 
 ## Stack
 
