@@ -1,5 +1,5 @@
 import 'katex/dist/katex.min.css';
-import { mountCourseFiles, mountPage, mountTrackBar } from '@flux/core';
+import { mountPage, mountTrackBar } from '@flux/core';
 import { UNITS } from './data/catalog.js';
 import { hashFor, parseHash } from './engine/router.js';
 import { TRACK, course } from './manifest.js';
@@ -16,7 +16,6 @@ window.__build = __BUILD__;
 
 const header = document.querySelector('.top-inner');
 mountTrackBar(header, { currentId: course.id, courses: TRACK });
-mountCourseFiles(header, { courseId: course.id, store: courseStore() });
 
 mountPage({
   view: document.getElementById('view'),
