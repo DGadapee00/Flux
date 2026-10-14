@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status: **Phase 2 done** (13 Oct 2026). All four courses build from this repo and are live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 5174, MAC 5175, Statics 5176, STA 3032 5177 (next: MAC 2311 5178, MAC 2312 5179, PHY 2048 5180). PHY's weekly drops land here. **Next: Phase 7** (Calc I, Calc II, Physics I). flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their old sites redirect here.
+Status: **Phase 2 done** (13 Oct 2026). All four courses build from this repo and are live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 5174, MAC 5175, Statics 5176, STA 3032 5177 (next: MAC 2311 5178, MAC 2312 5179, PHY 2048 5180). PHY's weekly drops land here. **Next: Phase 7** (Calc I, Calc II, Physics I) and **Phase A1** (the rocket, engine first), in parallel. flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their old sites redirect here.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
@@ -541,6 +541,134 @@ energy bar charts on a track, 1D collisions (elastic to inelastic), rotation and
 
 **Exit for each course:** every unit has labs and problems, all checks pass, it is live on the hub
 and in its track bar, and its PROVENANCE.md names the source and licence.
+
+### Phase A1: Applications, the rocket, engine first
+
+Flux gets a second way in. The **school side** is bottom-up: track, course, chapter, lab. The
+**applications side** is top-down: vehicle, subsystem, component, then "what physics governs
+this?", then a link down into the course lab or notes section that teaches it. The courses do not
+change. The applications side is a new kind of module whose pages point into them.
+
+It starts with the engine, because that is the owner's main interest, and the reference engine is
+his own: **the 25 lbf GOX/GCH₄ engine** in DGadapee00/25lbf-methalox-engine (MIT licence). Every
+page shows that engine's real numbers instead of a textbook example. Tanks, structures and the rest
+of a vehicle come after the engine.
+
+#### What already exists, and what Flux builds
+
+The engine repo's **stand sim** (`Sim/`, live at dgadapee00.github.io/25lbf-methalox-engine) already
+covers the feed system and the test: blowdown, choked orifices, regulators, valve timing, the
+injector, chamber fill, ignition inside the flammability limits, hot fire from the CEA table,
+faults and aborts, the choke-margin study, and a Quest VR view. It is the owner's portfolio
+artifact and stays in its own repo, with its own deploy and its own PROVENANCE rule.
+
+- Flux **links into** the stand sim for those topics (its hash routes: `#/lab/injector`,
+  `#/lab/chamber-fill`, `#/lab/orifice`, `#/lab/regulator`, `#/stand/hot-fire`, `#/lab/margin`).
+  It does not rebuild them.
+- Flux **builds** what the stand sim does not explain: why the nozzle is shaped as it is, what
+  sets c\* and the combustion temperature, why L\* and the contraction ratio matter, the heat load
+  on the wall, the structural margin, and the link from each of those down into school material.
+
+#### Design data: the engine repo is the source of truth
+
+- `applications/rocket/design/` holds a copy of the engine repo's design files at a pinned commit,
+  recorded in `applications/rocket/design/SOURCE`: `Sim/data/components.json` (every design value,
+  each with its own `source`), `Sim/data/cea_gox_gch4.json`, and
+  `Phase1_Calculations/cea/design_point.txt`. Flux never edits these numbers. A sync script copies a
+  later commit in, like `scripts/sync-phy.mjs` did.
+- The engine repo marks these values **preliminary** until its Phase 1 tag `v0.2-sizing-frozen`.
+  Every page that shows one says so until that tag exists.
+- Selftests check that the design table agrees with itself, which is also the first lesson:
+  ṁ = P_c·A_t / c\* gives c\* ≈ 1644 m/s from the 8.0 mm throat, 250 psia and 52.7 g/s (about
+  0.92 of ideal, as the plan assumes); C_F = F / (P_c·A_t) ≈ 1.28 for ε = 3 at sea level;
+  D_e = D_t·√ε = 13.9 mm; D_c = D_t·√CR = 22.6 mm.
+
+#### Component tree (engine)
+
+| Component | The questions it answers | Physics | Stand-sim link |
+|---|---|---|---|
+| Propellants and combustion | Why O/F 2.8 and not peak 3.3? What sets T_c and c\*? | equilibrium chemistry (CEA), molar mass, γ | hot fire |
+| Injector | Why choked gas injection? How big are the orifices? | choked orifice flow, C_d·A | injector, orifice |
+| Combustion chamber | Why L\* = 35 in and CR = 8? | residence time, chamber volume, Mach at the injector face | chamber fill |
+| Nozzle | Why converging–diverging? Why ε = 3? | choked throat, area–Mach relation, isentropic expansion, thrust coefficient, over- and under-expansion | hot fire |
+| Thermal | How long can it run? | Bartz heat flux, lumped heat-sink transient, film cooling | (wall-temperature node not built in the stand sim yet) |
+| Structure | Will it hold? | thin-wall hoop stress, burst margin ≥ 4, bolts and flanges, thrust mount load path | — |
+| Ignition | How does it light without a hard start? | flammability limits, energy, unburned propellant | chamber fill, hot fire |
+| Feed system | How does gas get from bottle to chamber? | blowdown, regulators, choke margin | blowdown, regulator, margin |
+| Instrumentation and test | How do we know what it did? | load cell, P_c transducer, c\* efficiency from data | hot fire, test mode |
+
+#### A component page
+
+Each page has the same parts:
+
+1. **What it does**, in two sentences.
+2. **How it is built on this engine**: a cutaway with the part highlighted, and its design numbers
+   from `design/`, each with its source and the preliminary flag.
+3. **The physics**: derived, not listed, in the voice of the course notes; then **what the model
+   leaves out**.
+4. **Its own sim**, where one teaches something (the nozzle sim: P_c, ε and ambient pressure in;
+   thrust, I_sp, exit pressure and the flow regime out).
+5. **Go deeper**: `teaches` links into course labs, notes sections and problems
+   (momentum and thrust → PHY 2048; pressure and fluids → PHY 2048; integrals of a contour →
+   Calc II; energy and specific heats → thermodynamics). A target not built yet shows as
+   "not built yet".
+6. **On the stand**: links into the stand sim's matching lab.
+
+#### The library under it: `subjects/thermo`
+
+New, with selftests against published values: ideal gas and specific heats; isentropic relations;
+the area–Mach relation (both branches); choked mass flux; c\*, C_F and thrust, including the
+pressure term; a Bartz heat-flux estimate and a lumped heat-sink transient; thin-wall pressure
+vessel stress (in `subjects/mechanics`). Checks: the isentropic tables of NACA Report 1135, the
+committed CEA design-point output, and worked examples from Sutton's *Rocket Propulsion
+Elements* cited by section.
+
+The stand sim has its own gas physics (`Sim/src/physics/`). Flux's library is written separately and
+the two are checked against each other at the design point: two independent implementations
+agreeing is the same "second opinion" idea the course labs use.
+
+#### Module, routes and hub
+
+- `applications/rocket/` with a manifest from `defineSystem({ id, title, components })`. Each
+  component: `{ id, title, parent, design: [keys], teaches: [links], stand: [stand-sim routes],
+  page: () => import(...) }`. Dependency direction: `applications → shells → subjects → core`,
+  and an application may link to courses but not import them.
+- Routes: `#/rocket/engine/nozzle`. Served at `flux-study.pages.dev/rocket/`.
+- Hub: an **Applications** row below the tracks, with a Rocket card (its animation: the cutaway
+  with the flow accelerating through the throat).
+- The cutaway is generated from the design geometry (D_c, D_t, D_e, L\*, contraction and
+  expansion half-angles), not modelled by hand, so it follows the design when the numbers change.
+  Tapping a region opens its page. A VR walk-through can come later (the stand sim already has a
+  Quest view, and Truth Mines is the same kind of dependency map).
+
+#### Coverage report: the applications side decides what to build next
+
+A check collects every `teaches` link and lists the ones whose target does not exist yet, grouped
+by the course or subject they need. That list becomes the build order for the school side:
+thermodynamics, compressible flow and heat transfer are the first gaps the engine will expose
+(the Thermal-fluids track in Phase 8).
+
+#### Order of work
+
+1. Contract (`defineSystem`), routes, the hub's Applications row, the `design/` copy with its sync
+   script and SOURCE, and the design-table consistency selftests.
+2. `subjects/thermo` with its selftests (NACA 1135, CEA design point, Sutton), then the cross-check
+   against the stand sim's numbers.
+3. First slice, deployed: the cutaway and the **Nozzle** and **Propellants and combustion** pages,
+   with the nozzle sim.
+4. Combustion chamber, Injector, Feed system and Ignition pages (mostly physics plus stand-sim links).
+5. Thermal (Bartz and the heat-sink transient), then Structure (hoop stress, burst margin).
+6. Instrumentation and test, then the coverage report.
+7. Next level up, after the engine: tanks (pressure vessel, ullage, propellant management,
+   material choice: aluminium, stainless and composite), then structures, then the vehicle.
+
+**Rules:** nothing here touches `courses/phy2049` before 24 Oct 2026; every number shown is
+computed and checked; every design number comes from `design/`; nothing is copied from Sutton or
+other books but equations and cited values; the stand sim's repo is not edited from Flux.
+
+**Exit for the engine:** every component page is live with its design numbers, physics, links and
+(where useful) its own sim; all selftests pass, including the cross-check with the stand sim; the
+coverage report runs in `npm test`.
 
 ### Phase 8 and on: new courses, by track
 
