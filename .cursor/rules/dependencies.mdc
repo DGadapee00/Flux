@@ -1,15 +1,16 @@
 ---
-description: One-way imports across core, subjects, courses, and the site
+description: One-way imports across core, subjects, shells, courses, and the site
 alwaysApply: true
 ---
 
 # Dependency direction
 
-`courses → subjects → core`. The checker is `packages/checks/deps.mjs`, and it runs as part of `npm test`.
+`courses → shells → subjects → core`. The checker is `packages/checks/deps.mjs`, and it runs as part of `npm test`.
 
-- Core imports neither `@flux/subjects` nor anything under `courses/`. A relative path that climbs out of `packages/core` into a subject or a course fails the check.
-- A subject may import `@flux/core`. A subject imports no course and no file under `site/`.
-- A course may import `@flux/core` and `@flux/subjects`. A course imports no other course and no file under `site/`.
+- Core imports neither `@flux/subjects` nor `@flux/shells` nor anything under `courses/`. A relative path that climbs out of `packages/core` into a subject, a shell, or a course fails the check.
+- A subject may import `@flux/core`. A subject imports no shell, no course, and no file under `site/`.
+- A shell may import `@flux/core` and `@flux/subjects`. A shell imports no course. A shell names no course and no chapter.
+- A course may import `@flux/core`, `@flux/subjects`, and `@flux/shells`. A course imports no other course and no file under `site/`.
 - The site may import core, subjects, and courses. It is where the course list lives.
 - External packages (`vite`, `katex`, `three`, `node:`) are fine from any layer.
 

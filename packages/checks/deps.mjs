@@ -1,7 +1,8 @@
 /**
- * Dependency direction: courses → subjects → core.
- * Core never imports a subject or a course. A subject never imports a course.
- * The site and tools may import courses. Nothing in core may name a course.
+ * Dependency direction: courses → shells → subjects → core.
+ * Core never imports a subject, a shell, or a course. A subject never imports a shell or a course.
+ * A shell never imports a course. The site and tools may import courses.
+ * Nothing in core or a shell may name a course. A shell names no chapter either.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -13,6 +14,7 @@ export const ROOT = path.resolve(CHECKS_DIR, '../..');
 const LAYER_DIRS = [
   ['core', 'packages/core'],
   ['subjects', 'packages/subjects'],
+  ['shells', 'packages/shells'],
   ['checks', 'packages/checks'],
   ['courses', 'courses'],
   ['site', 'site'],
@@ -23,11 +25,15 @@ const LAYER_DIRS = [
 const ALLOWED = {
   core: new Set(['core']),
   subjects: new Set(['core', 'subjects']),
-  checks: new Set(['core', 'subjects', 'checks', 'courses', 'site', 'tools']),
-  courses: new Set(['core', 'subjects', 'courses']),
+  shells: new Set(['core', 'subjects', 'shells']),
+  checks: new Set(['core', 'subjects', 'shells', 'checks', 'courses', 'site', 'tools']),
+  courses: new Set(['core', 'subjects', 'shells', 'courses']),
   site: new Set(['core', 'subjects', 'courses', 'site']),
   tools: new Set(['core', 'subjects', 'courses', 'tools']),
 };
+
+/** A quoted unit id, or a chapter number written out. Course data stays in the course. */
+const CHAPTER_LITERAL = /(?:['"`]ch\d+['"`]|\bChapter\s+\d+|\bCh\s+\d+)/;
 
 /**
  * Names that would mean core knows which course it is serving.
@@ -131,6 +137,15 @@ export function courseMarker(source) {
 }
 
 /**
+ * @param {string} source
+ * @returns {string|null} The chapter literal that matched, if any.
+ */
+export function chapterMarker(source) {
+  const match = source.match(CHAPTER_LITERAL);
+  return match ? match[0] : null;
+}
+
+/**
  * @param {string} root
  * @returns {{ file: string, message: string }[]}
  */
@@ -142,9 +157,16 @@ export function scan(root = ROOT) {
     const fromLayer = layerOf(rel);
     if (!fromLayer) continue;
     const source = fs.readFileSync(file, 'utf8');
-    if (fromLayer === 'core') {
+    if (fromLayer === 'core' || fromLayer === 'shells') {
       const marker = courseMarker(source);
-      if (marker) violations.push({ file: rel, message: `core names a course (${marker})` });
+      if (marker) {
+        const who = fromLayer === 'core' ? 'core' : 'shell';
+        violations.push({ file: rel, message: `${who} names a course (${marker})` });
+      }
+    }
+    if (fromLayer === 'shells') {
+      const chapter = chapterMarker(source);
+      if (chapter) violations.push({ file: rel, message: `shell names a chapter (${chapter})` });
     }
     for (const spec of importSpecifiers(source)) {
       const toLayer = layerForSpecifier(spec, file, root, names);

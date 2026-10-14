@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { courseMarker, importSpecifiers, scan } from '../deps.mjs';
+import { chapterMarker, courseMarker, importSpecifiers, scan } from '../deps.mjs';
 
 test('import specifiers ignore comments and keep real imports', () => {
   const source = `
@@ -28,6 +28,13 @@ test('core may not name a course', () => {
   assert.equal(courseMarker('package phy2049'), 'phy2049');
 });
 
+test('a shell may not name a chapter', () => {
+  assert.equal(chapterMarker('the unit id comes from the course'), null);
+  assert.equal(chapterMarker('Ch ${exam.chapters}'), null);
+  assert.equal(chapterMarker("homeId = 'ch2'"), "'ch2'");
+  assert.equal(chapterMarker('Chapter 4 is integration'), 'Chapter 4');
+});
+
 test('a wrong-way import fails, and the real tree does not', () => {
   assert.deepEqual(scan(), []);
 
@@ -44,6 +51,26 @@ test('a wrong-way import fails, and the real tree does not', () => {
   assert.deepEqual(messages, [
     "core imports subjects via '@flux/subjects'",
     'core names a course (MAC 2313)',
+  ]);
+});
+
+test('a shell may import core, and a course may import a shell', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'flux-deps-shell-'));
+  write(root, 'packages/core/package.json', { name: '@flux/core' });
+  write(root, 'packages/subjects/package.json', { name: '@flux/subjects' });
+  write(root, 'packages/shells/package.json', { name: '@flux/shells' });
+  write(root, 'packages/shells/math/hud.js', "import { problem } from '@flux/core';\nexport const hud = 1;\n");
+  write(root, 'packages/shells/math/named.js', 'export const note = "MAC 2313";\n');
+  write(root, 'packages/shells/math/chapter.js', "export const home = 'ch1';\n");
+  write(root, 'packages/subjects/src/back.js', "import { hud } from '@flux/shells/math/hud.js';\n");
+  write(root, 'courses/demo/index.js', "import { hud } from '@flux/shells/math/hud.js';\n");
+
+  const violations = scan(root);
+  const messages = violations.map((v) => v.message).sort();
+  assert.deepEqual(messages, [
+    "shell names a chapter ('ch1')",
+    'shell names a course (MAC 2313)',
+    "subjects imports shells via '@flux/shells/math/hud.js'",
   ]);
 });
 
