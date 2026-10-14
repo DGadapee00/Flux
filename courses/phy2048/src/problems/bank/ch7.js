@@ -20,10 +20,7 @@ export default [
       theta: range(0, 180, 15, '°'),
     },
     derive: ($) => ({ W: work($.F, $.d, $.theta) }),
-    second: ($) => {
-      const th = $.theta * DEG;
-      return { W: $.F * Math.cos(th) * $.d + $.F * Math.sin(th) * 0 };
-    },
+    second: ($) => ({ W: $.F * Math.cos($.theta * DEG) * $.d }),
     text: (T) => `A constant force of magnitude ${T.F} N acts on an object while the object moves ${T.d} m in a straight line. The angle between the force and the displacement is ${T.theta}°. Find the work done by the force.`,
     parts: [
       num('W', ($) => $.W, 'J', { label: 'work' }),
