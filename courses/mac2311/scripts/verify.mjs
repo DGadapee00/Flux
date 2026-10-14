@@ -120,6 +120,49 @@ const mid = await page.evaluate(() => ({
   sum: window.__flux.computed.sum,
 }));
 
+await page.goto('http://localhost:5178/#/mac2311/u4/accum', { waitUntil: 'networkidle' });
+await page.waitForFunction(() => window.__flux?.state?.lab === 'accum');
+await settle();
+const accum = await page.evaluate(() => ({
+  x: window.__flux.state.x,
+  area: window.__flux.computed.area,
+  height: window.__flux.computed.height,
+  agree: window.__flux.computed.agree,
+}));
+await page.screenshot({ path: path.join(out, 'ftc-accum.png'), fullPage: true });
+await page.fill('#ac-x', '1.5');
+await page.dispatchEvent('#ac-x', 'input');
+await page.waitForTimeout(150);
+const later = await page.evaluate(() => ({
+  x: window.__flux.state.x,
+  area: window.__flux.computed.area,
+  height: window.__flux.computed.height,
+  agree: window.__flux.computed.agree,
+}));
+await page.selectOption('#scenario', 'line');
+await page.waitForTimeout(200);
+const line = await page.evaluate(() => ({
+  area: window.__flux.computed.area,
+  height: window.__flux.computed.height,
+  agree: window.__flux.computed.agree,
+}));
+await page.selectOption('#scenario', 'sine');
+await page.waitForTimeout(200);
+const sine = await page.evaluate(() => ({
+  area: window.__flux.computed.area,
+  height: window.__flux.computed.height,
+  agree: window.__flux.computed.agree,
+}));
+await page.setViewportSize({ width: 380, height: 780 });
+await page.waitForTimeout(300);
+const accumPhone = await page.evaluate(() => ({
+  scroll: document.documentElement.scrollWidth,
+  client: document.documentElement.clientWidth,
+  lab: window.__flux.state.lab,
+}));
+await page.screenshot({ path: path.join(out, 'ftc-accum-380.png'), fullPage: true });
+await page.setViewportSize({ width: 1280, height: 900 });
+
 await page.goto('http://localhost:5178/#/mac2311/u1/limits', { waitUntil: 'networkidle' });
 await page.waitForFunction(() => window.__flux?.state?.lab === 'limits');
 await page.waitForTimeout(400);
@@ -264,6 +307,14 @@ if (!Number.isFinite(riemann.sum) || !riemann.agree) fail.push(`riemann ${JSON.s
 if (Math.abs(riemann.exact - 1 / 3) > 1e-9) fail.push(`exact ${riemann.exact}`);
 if (mid.sample !== 'mid') fail.push(`sample ${mid.sample}`);
 if (!(Math.abs(mid.sum - riemann.sum) > 1e-6)) fail.push('midpoint sum did not move');
+if (!accum.agree || Math.abs(accum.area - 1 / 3) > 1e-6 || Math.abs(accum.height - 1) > 1e-9) fail.push(`accum ${JSON.stringify(accum)}`);
+if (!later.agree || Math.abs(later.x - 1.5) > 1e-9 || Math.abs(later.height - 2.25) > 1e-6 || Math.abs(later.area - 1.125) > 1e-6) {
+  fail.push(`later ${JSON.stringify(later)}`);
+}
+if (!(later.height > accum.height)) fail.push('moving right did not raise the height');
+if (!line.agree || Math.abs(line.area - 2) > 1e-6 || Math.abs(line.height - 3) > 1e-9) fail.push(`line ${JSON.stringify(line)}`);
+if (!sine.agree || Math.abs(sine.area - 1) > 1e-6 || Math.abs(sine.height - 1) > 1e-6) fail.push(`sine ${JSON.stringify(sine)}`);
+if (accumPhone.scroll > accumPhone.client + 1) fail.push(`ftc 380px scrolls (${accumPhone.scroll} > ${accumPhone.client})`);
 if (hole.scenario !== 'hole') fail.push(`limits scenario ${hole.scenario}`);
 if (!hole.agree || hole.exists !== true || !Number.isFinite(hole.limit)) fail.push(`hole ${JSON.stringify(hole)}`);
 if (Number.isFinite(hole.value)) fail.push(`hole value ${hole.value}`);
@@ -282,7 +333,7 @@ if (boxPhone.scroll > boxPhone.client + 1) fail.push(`box 380px scrolls (${boxPh
 if (back !== '#/mac2311/u3/box') fail.push(`back hash ${back}`);
 if (errors.length) fail.push(`page errors: ${errors.join(' | ')}`);
 
-console.log({ first, corner, smallH, practiceOpen, phone, riemann, mid, hole, jump, inside, tight, ladder, steep, flat, half, limitsPhone, ratesPhone, box, peak, deep, boxPhone, back, errors });
+console.log({ first, corner, smallH, practiceOpen, phone, riemann, mid, accum, later, line, sine, accumPhone, hole, jump, inside, tight, ladder, steep, flat, half, limitsPhone, ratesPhone, box, peak, deep, boxPhone, back, errors });
 if (fail.length) {
   console.error('VERIFY FAIL', fail);
   process.exit(1);
