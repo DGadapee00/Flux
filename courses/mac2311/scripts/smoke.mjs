@@ -27,6 +27,12 @@ const CHECK = {
   rates: (c) => Number.isFinite(c.y) && Number.isFinite(c.dy) && c.dy < 0 && c.agree === true,
   box: (c) => Number.isFinite(c.v) && Number.isFinite(c.vmax) && c.agree === true && c.dv > 0 && c.v < c.vmax,
   riemann: (c) => Number.isFinite(c.sum) && Number.isFinite(c.exact) && c.agree === true,
+  accum: (c) =>
+    Number.isFinite(c.area) &&
+    Number.isFinite(c.height) &&
+    c.agree === true &&
+    Math.abs(c.area - 1 / 3) < 1e-6 &&
+    Math.abs(c.height - 1) < 1e-9,
 };
 
 await page.goto('http://localhost:5178/#/mac2311/u2/secant', { waitUntil: 'networkidle', timeout: 30000 });

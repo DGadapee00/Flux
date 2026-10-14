@@ -31,8 +31,7 @@ export const EXAMS = [
     title: 'Integration',
     chapters: '5',
     date: null,
-    labs: ['riemann'],
-    coming: ['FTC'],
+    labs: ['riemann', 'accum'],
   },
 ];
 
@@ -42,6 +41,7 @@ export const LAB_META = {
   rates: { id: 'rates', exam: 'u2', title: 'Ladder' },
   box: { id: 'box', exam: 'u3', title: 'Open box' },
   riemann: { id: 'riemann', exam: 'u4', title: 'Riemann' },
+  accum: { id: 'accum', exam: 'u4', title: 'FTC' },
 };
 
 export const CHAPTER_TITLES = {

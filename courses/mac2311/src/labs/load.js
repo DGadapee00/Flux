@@ -6,6 +6,7 @@ const loaders = {
   rates: () => import('./rates.js'),
   box: () => import('./box.js'),
   riemann: () => import('./riemann.js'),
+  accum: () => import('./accum.js'),
 };
 
 const labs = createLabLoader(loaders);

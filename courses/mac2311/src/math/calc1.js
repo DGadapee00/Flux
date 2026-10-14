@@ -90,6 +90,63 @@ export function simpsonSquare01() {
   return simpson((x) => x * x, 0, 1);
 }
 
+/** ∫_a^x f, from the antiderivative. */
+export function accumArea(id, a, x) {
+  const g = graphById(id);
+  return g.F(x) - g.F(a);
+}
+
+/** FTC: the accumulation grows at f(x). */
+export function accumHeight(id, x) {
+  return graphById(id).f(x);
+}
+
+/** Same area by Simpson's rule. */
+export function accumSimpson(id, a, x) {
+  return simpson(graphById(id).f, a, x);
+}
+
+/** Same growth rate from a short move of the upper limit. */
+export function accumStep(id, a, x, h = 1e-4) {
+  return (accumArea(id, a, x + h) - accumArea(id, a, x - h)) / (2 * h);
+}
+
+/** ∫_0^b x^n dx. */
+export function powerIntegral(n, b) {
+  return b ** (n + 1) / (n + 1);
+}
+
+export function powerIntegralSimpson(n, b) {
+  return simpson((t) => t ** n, 0, b);
+}
+
+/** ∫_0^b (2x+1) dx. */
+export function lineIntegral(b) {
+  return b * b + b;
+}
+
+export function lineIntegralSimpson(b) {
+  return simpson((t) => 2 * t + 1, 0, b);
+}
+
+function binom(n, k) {
+  let c = 1;
+  for (let i = 0; i < k; i++) c = (c * (n - i)) / (i + 1);
+  return c;
+}
+
+/** ∫_0^1 2x (x^2+1)^n dx, by the substitution u=x^2+1. */
+export function substIntegral(n) {
+  return (2 ** (n + 1) - 1) / (n + 1);
+}
+
+/** Same integral after expanding the binomial and integrating term by term. */
+export function substExpanded(n) {
+  let s = 0;
+  for (let k = 0; k <= n; k++) s += binom(n, k) / (k + 1);
+  return s;
+}
+
 export function powerRule(n, x) {
   return n * x ** (n - 1);
 }

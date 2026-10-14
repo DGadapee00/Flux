@@ -2,6 +2,10 @@
  * Second routes for the Calc I rules. Run: node src/math/selftest.js
  */
 import {
+  accumArea,
+  accumHeight,
+  accumSimpson,
+  accumStep,
   absContinuousAt,
   absDifferentiableAt0,
   chainExpanded,
@@ -37,12 +41,16 @@ import {
   squareMvtQuotient,
   lawAverage,
   lawExact,
+  lineIntegral,
+  lineIntegralSimpson,
   leftSquare01,
   leftSquareLoop,
   midSquare01,
   midSquareLoop,
   polyAt,
   polyAverage,
+  powerIntegral,
+  powerIntegralSimpson,
   powerQuotient,
   powerRule,
   productExpanded,
@@ -53,6 +61,8 @@ import {
   sidesOfAbs,
   simpsonSquare01,
   sineQuotient,
+  substExpanded,
+  substIntegral,
   sineRule,
   limitPicture,
   squeezeHolds,
@@ -81,6 +91,18 @@ check('mid formula n=4 is 0.328125', near(midSquare01(4), 0.328125, 1e-12));
 check('mid formula matches the loop', near(midSquare01(8), midSquareLoop(8), 1e-12));
 check('exact ∫x² on [0,1] is 1/3', near(exactSquare01(), 1 / 3, 1e-12));
 check('Simpson agrees with 1/3', near(simpsonSquare01(), 1 / 3, 1e-9));
+check('accumulation of x² up to 1 is 1/3', near(accumArea('quad', 0, 1), 1 / 3, 1e-12));
+check('that accumulation grows at height 1', near(accumHeight('quad', 1), 1, 1e-12));
+check('a short move of the limit matches the height', near(accumStep('quad', 0, 1), 1, 1e-6));
+check('Simpson matches the accumulation', near(accumSimpson('quad', 0, 1), accumArea('quad', 0, 1), 1e-8));
+check('accumulation up to 2 is 8/3', near(accumArea('quad', 0, 2), 8 / 3, 1e-12));
+check('sine accumulates to 1 by π/2', near(accumArea('sine', 0, Math.PI / 2), 1, 1e-12));
+check('line integral on [0, 1] is 2', near(lineIntegral(1), 2, 1e-12));
+check('Simpson matches the line integral', near(lineIntegralSimpson(1), 2, 1e-8));
+check('∫x³ on [0, 2] is 4', near(powerIntegral(3, 2), 4, 1e-12));
+check('Simpson matches that power integral', near(powerIntegralSimpson(3, 2), 4, 1e-8));
+check('substitution integral for n=2 is 7/3', near(substIntegral(2), 7 / 3, 1e-12));
+check('the binomial expansion agrees', near(substExpanded(2), substIntegral(2), 1e-12));
 check('left sum sits under the integral', leftSquare01(4) < exactSquare01());
 check('midpoint is closer than the left sum', Math.abs(midSquare01(4) - 1 / 3) < Math.abs(leftSquare01(4) - 1 / 3));
 
