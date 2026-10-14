@@ -13,8 +13,28 @@ import {
   exactSquare01,
   holeLimit,
   holePlugged,
+  boxBestCut,
+  boxBestCutSearch,
+  boxVolume,
+  boxVolumeRate,
+  boxVolumeStep,
+  cubicCritical,
+  cubicCriticalSearch,
+  cubicCriticalValue,
+  cubicInflection,
+  cubicInflectionSearch,
+  differenceLimit,
+  differenceLimitHopital,
   ladderStep,
   ladderVelocity,
+  newtonSqrt,
+  newtonSqrtStep,
+  sincLimit,
+  sincLimitHopital,
+  sqrtLinear,
+  sqrtLinearQuotient,
+  squareMvt,
+  squareMvtQuotient,
   lawAverage,
   lawExact,
   leftSquare01,
@@ -80,6 +100,29 @@ check('ladder top velocity is −1.5', near(ladder.dy, -1.5, 1e-12));
 check('a short slide matches that velocity', near(ladderStep(10, 6, 2), -1.5, 1e-4));
 check('doubling the base speed doubles the top speed', near(ladderVelocity(10, 6, 4).dy, -3, 1e-12));
 check('the top drops faster when the base is farther out', Math.abs(ladderVelocity(10, 8, 2).dy) > Math.abs(ladderVelocity(10, 2, 2).dy));
+
+check('open box at the peak holds 128', near(boxVolume(12, 2), 128, 1e-12));
+check('open box slope is zero at the peak', near(boxVolumeRate(12, 2), 0, 1e-12));
+check('a short cut change matches that slope', near(boxVolumeStep(12, 1), boxVolumeRate(12, 1), 1e-6));
+check('the centered step is zero at the peak', near(boxVolumeStep(12, 2), 0, 1e-6));
+check('a scan finds the peak cut', near(boxBestCutSearch(12), boxBestCut(12), 1e-8));
+check('the small cut holds less than the peak', boxVolume(12, 1) < boxVolume(12, boxBestCut(12)));
+check('the large cut holds less than the peak', boxVolume(12, 4) < boxVolume(12, boxBestCut(12)));
+check('square root tangent line', near(sqrtLinear(2), 2.25, 1e-12));
+check('square root tangent line as a quotient', near(sqrtLinearQuotient(2), sqrtLinear(2), 1e-12));
+check('critical point of x³−3x', near(cubicCritical(3), 1, 1e-12));
+check('value at that critical point', near(cubicCriticalValue(3), -2, 1e-12));
+check('bisection finds the critical point', near(cubicCriticalSearch(3), 1, 1e-8));
+check('mean value c is the midpoint', near(squareMvt(1, 5), 3, 1e-12));
+check('secant slope gives the same c', near(squareMvtQuotient(1, 5), squareMvt(1, 5), 1e-12));
+check('inflection of x³+3x²', near(cubicInflection(3), -1, 1e-12));
+check('bisection finds the inflection', near(cubicInflectionSearch(3), -1, 1e-8));
+check('cancelled limit is 4', near(differenceLimit(2), 4, 1e-12));
+check("L'Hôpital agrees on that limit", near(differenceLimitHopital(2), 4, 1e-8));
+check('sin(2x)/x tends to 2', near(sincLimit(2), 2, 1e-12));
+check("L'Hôpital agrees on sine over x", near(sincLimitHopital(2), 2, 1e-6));
+check('one Newton step from 2', near(newtonSqrt(2, 2), 1.5, 1e-12));
+check('the update formula agrees', near(newtonSqrtStep(2, 2), newtonSqrt(2, 2), 1e-12));
 check('sine rule matches the quotient', near(sineRule(2, 0), sineQuotient(2, 0), 1e-6));
 check('sine at 0 is the coefficient', near(sineRule(2, 0), 2, 1e-12));
 

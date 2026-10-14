@@ -147,6 +147,126 @@ export function ladderStep(length, x, dx, dt = 1e-4) {
   return (y2 - y) / dt;
 }
 
+/** Open box: square sheet of side `side`, corner squares of side `cut`. */
+export function boxVolume(side, cut) {
+  const w = side - 2 * cut;
+  return cut * w * w;
+}
+
+/** dV/dx = (side − 2x)(side − 6x). Zero at x = side/6 inside (0, side/2). */
+export function boxVolumeRate(side, cut) {
+  return (side - 2 * cut) * (side - 6 * cut);
+}
+
+export function boxBestCut(side) {
+  return side / 6;
+}
+
+/** Same rate from a short change in the cut, centered so the peak reads as zero. */
+export function boxVolumeStep(side, cut, dt = 1e-4) {
+  return (boxVolume(side, cut + dt) - boxVolume(side, cut - dt)) / (2 * dt);
+}
+
+/** The cut that maximizes volume, found by bisection on the difference quotient. */
+export function boxBestCutSearch(side) {
+  let lo = side * 1e-3;
+  let hi = side / 2 - side * 1e-3;
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    if (boxVolumeStep(side, mid) > 0) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+/** Tangent line to √x at a², evaluated at a²+1. */
+export function sqrtLinear(a) {
+  return a + 1 / (2 * a);
+}
+
+/** Same value written as one fraction. */
+export function sqrtLinearQuotient(a) {
+  return (2 * a * a + 1) / (2 * a);
+}
+
+/** Positive critical point of x³ − kx. */
+export function cubicCritical(k) {
+  return Math.sqrt(k / 3);
+}
+
+export function cubicCriticalValue(k) {
+  const x = cubicCritical(k);
+  return x * x * x - k * x;
+}
+
+/** Same critical point by bisection on f'. */
+export function cubicCriticalSearch(k) {
+  let lo = 0;
+  let hi = Math.sqrt(k) + 1;
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    if (3 * mid * mid - k < 0) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+/** c from the Mean Value Theorem for x² on [a, b]. */
+export function squareMvt(a, b) {
+  return (a + b) / 2;
+}
+
+/** Same c from the secant slope divided by f'. */
+export function squareMvtQuotient(a, b) {
+  return (b * b - a * a) / (b - a) / 2;
+}
+
+/** Inflection of x³ + a x². */
+export function cubicInflection(a) {
+  return -a / 3;
+}
+
+/** Same point by bisection on f''. */
+export function cubicInflectionSearch(a) {
+  let lo = -Math.abs(a) - 1;
+  let hi = Math.abs(a) + 1;
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    if (6 * mid + 2 * a < 0) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+/** lim (x→a) (x² − a²)/(x − a), after cancelling. */
+export function differenceLimit(a) {
+  return 2 * a;
+}
+
+/** Same limit by differentiating the top and the bottom. */
+export function differenceLimitHopital(a) {
+  return df1((x) => x * x, a) / df1((x) => x - a, a);
+}
+
+/** lim (x→0) sin(kx)/x. */
+export function sincLimit(k) {
+  return k;
+}
+
+export function sincLimitHopital(k) {
+  return df1((x) => Math.sin(k * x), 0) / df1((x) => x, 0);
+}
+
+/** One Newton step for x² − c, from the Babylonian form. */
+export function newtonSqrt(c, x0) {
+  return (x0 + c / x0) / 2;
+}
+
+/** Same step from x − f(x)/f'(x). */
+export function newtonSqrtStep(c, x0) {
+  return x0 - (x0 * x0 - c) / (2 * x0);
+}
+
 export function sineRule(k, x) {
   return k * Math.cos(k * x);
 }

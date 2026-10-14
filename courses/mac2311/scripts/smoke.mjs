@@ -25,6 +25,7 @@ const CHECK = {
   limits: (c) => Number.isFinite(c.limit) && c.exists === true && c.agree === true && !Number.isFinite(c.value),
   secant: (c) => Number.isFinite(c.fp) && Number.isFinite(c.msec) && c.agree === true,
   rates: (c) => Number.isFinite(c.y) && Number.isFinite(c.dy) && c.dy < 0 && c.agree === true,
+  box: (c) => Number.isFinite(c.v) && Number.isFinite(c.vmax) && c.agree === true && c.dv > 0 && c.v < c.vmax,
   riemann: (c) => Number.isFinite(c.sum) && Number.isFinite(c.exact) && c.agree === true,
 };
 
@@ -65,12 +66,15 @@ for (const { exam, id } of catalogLabs) {
   else if (!ok(snap.computed)) mismatches.push({ name: `${id}.routes`, got: snap.computed, exp: true });
 }
 
-await go('#/u3', null);
-const emptyUnit = await page.evaluate(() => ({
+await go('#/u3', 'box');
+const unitOpen = await page.evaluate(() => ({
   exam: window.__flux?.state?.examId,
-  lab: window.__flux?.app?.lab,
+  lab: window.__flux?.state?.lab,
+  hash: location.hash,
 }));
-if (emptyUnit.exam !== 'u3' || emptyUnit.lab != null) mismatches.push({ name: 'u3', got: emptyUnit, exp: 'unit with no lab' });
+if (unitOpen.exam !== 'u3' || unitOpen.lab !== 'box' || unitOpen.hash !== '#/mac2311/u3/box') {
+  mismatches.push({ name: 'u3', got: unitOpen, exp: 'unit hash opens the box' });
+}
 
 await go('#/u2/secant', 'secant');
 await page.goBack();

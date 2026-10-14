@@ -23,8 +23,7 @@ export const EXAMS = [
     title: 'Applications',
     chapters: '4',
     date: null,
-    labs: [],
-    coming: ['Optimization', "L'Hôpital"],
+    labs: ['box'],
   },
   {
     id: 'u4',
@@ -41,6 +40,7 @@ export const LAB_META = {
   limits: { id: 'limits', exam: 'u1', title: 'Limits' },
   secant: { id: 'secant', exam: 'u2', title: 'Secant' },
   rates: { id: 'rates', exam: 'u2', title: 'Ladder' },
+  box: { id: 'box', exam: 'u3', title: 'Open box' },
   riemann: { id: 'riemann', exam: 'u4', title: 'Riemann' },
 };
 

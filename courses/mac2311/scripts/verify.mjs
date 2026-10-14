@@ -199,8 +199,44 @@ const ratesPhone = await page.evaluate(() => ({
 await page.screenshot({ path: path.join(out, 'rates-ladder-380.png'), fullPage: true });
 
 await page.setViewportSize({ width: 1280, height: 900 });
-await page.goto('http://localhost:5178/#/mac2311/u3', { waitUntil: 'networkidle' });
+await page.goto('http://localhost:5178/#/mac2311/u3/box', { waitUntil: 'networkidle' });
+await page.waitForFunction(() => window.__flux?.state?.lab === 'box');
+await settle();
+const box = await page.evaluate(() => ({
+  x: window.__flux.state.x,
+  v: window.__flux.computed.v,
+  dv: window.__flux.computed.dv,
+  vmax: window.__flux.computed.vmax,
+  best: window.__flux.computed.best,
+  agree: window.__flux.computed.agree,
+}));
+await page.screenshot({ path: path.join(out, 'open-box.png'), fullPage: true });
+await page.selectOption('#scenario', 'peak');
+await page.waitForTimeout(200);
+const peak = await page.evaluate(() => ({
+  x: window.__flux.state.x,
+  v: window.__flux.computed.v,
+  dv: window.__flux.computed.dv,
+  agree: window.__flux.computed.agree,
+}));
+await page.selectOption('#scenario', 'deep');
+await page.waitForTimeout(200);
+const deep = await page.evaluate(() => ({
+  x: window.__flux.state.x,
+  v: window.__flux.computed.v,
+  dv: window.__flux.computed.dv,
+  agree: window.__flux.computed.agree,
+}));
+await page.setViewportSize({ width: 380, height: 780 });
 await page.waitForTimeout(300);
+const boxPhone = await page.evaluate(() => ({
+  scroll: document.documentElement.scrollWidth,
+  client: document.documentElement.clientWidth,
+  lab: window.__flux.state.lab,
+}));
+await page.screenshot({ path: path.join(out, 'open-box-380.png'), fullPage: true });
+
+await page.setViewportSize({ width: 1280, height: 900 });
 await page.goto('http://localhost:5178/#/mac2311/u1/limits', { waitUntil: 'networkidle' });
 await page.waitForFunction(() => window.__flux?.state?.lab === 'limits');
 await page.goBack();
@@ -239,10 +275,14 @@ if (!ladder.agree || Math.abs(ladder.y - 8) > 1e-6 || Math.abs(ladder.dy + 1.5) 
 if (!(flat.x === 8 && flat.agree && Math.abs(flat.dy) > steep)) fail.push(`flat ${JSON.stringify(flat)} vs steep ${steep}`);
 if (Math.abs(half - flat.dy / 2) > 1e-6) fail.push(`half speed ${half} vs ${flat.dy}`);
 if (ratesPhone.scroll > ratesPhone.client + 1) fail.push(`ladder 380px scrolls (${ratesPhone.scroll} > ${ratesPhone.client})`);
-if (back !== '#/mac2311/u3') fail.push(`back hash ${back}`);
+if (!box.agree || !(box.dv > 0) || !(box.v < box.vmax) || Math.abs(box.best - 2) > 1e-9) fail.push(`box ${JSON.stringify(box)}`);
+if (!peak.agree || Math.abs(peak.x - 2) > 1e-9 || Math.abs(peak.v - 128) > 1e-6 || Math.abs(peak.dv) > 1e-6) fail.push(`peak ${JSON.stringify(peak)}`);
+if (!deep.agree || deep.x !== 4 || !(deep.dv < 0) || !(deep.v < peak.v)) fail.push(`deep ${JSON.stringify(deep)}`);
+if (boxPhone.scroll > boxPhone.client + 1) fail.push(`box 380px scrolls (${boxPhone.scroll} > ${boxPhone.client})`);
+if (back !== '#/mac2311/u3/box') fail.push(`back hash ${back}`);
 if (errors.length) fail.push(`page errors: ${errors.join(' | ')}`);
 
-console.log({ first, corner, smallH, practiceOpen, phone, riemann, mid, hole, jump, inside, tight, ladder, steep, flat, half, limitsPhone, ratesPhone, back, errors });
+console.log({ first, corner, smallH, practiceOpen, phone, riemann, mid, hole, jump, inside, tight, ladder, steep, flat, half, limitsPhone, ratesPhone, box, peak, deep, boxPhone, back, errors });
 if (fail.length) {
   console.error('VERIFY FAIL', fail);
   process.exit(1);
