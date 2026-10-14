@@ -23,7 +23,7 @@ export const EXAMS = [
     title: 'Sequences and series',
     chapters: '5–6',
     date: null,
-    labs: ['taylor'],
+    labs: ['taylor', 'series'],
   },
   {
     id: 'u4',
@@ -41,6 +41,7 @@ export const LAB_META = {
   numint: { id: 'numint', exam: 'u2', title: 'Numerical' },
   improper: { id: 'improper', exam: 'u2', title: 'Improper' },
   taylor: { id: 'taylor', exam: 'u3', title: 'Taylor' },
+  series: { id: 'series', exam: 'u3', title: 'Series' },
 };
 
 export const CHAPTER_TITLES = {

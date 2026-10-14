@@ -5,6 +5,7 @@ const loaders = {
   numint: () => import('./numint.js'),
   improper: () => import('./improper.js'),
   taylor: () => import('./taylor.js'),
+  series: () => import('./series.js'),
 };
 
 const labs = createLabLoader(loaders);

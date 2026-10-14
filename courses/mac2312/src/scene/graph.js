@@ -83,7 +83,7 @@ export class GraphView {
   }
 
   /** @param {{ x: number, y: number }[]} points */
-  syncNodes(points, show = true) {
+  syncNodes(points, show = true, radius = 0.055) {
     const list = (points || []).filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y)).slice(0, 17);
     this.nodes.visible = !!show && list.length > 0;
     if (!this.nodes.visible) {
@@ -92,7 +92,7 @@ export class GraphView {
     }
     const flat = [];
     const n = 10;
-    const r = 0.055;
+    const r = radius;
     for (const p of list) {
       for (let i = 0; i < n; i++) {
         const t0 = (2 * Math.PI * i) / n;
@@ -127,6 +127,18 @@ export class GraphView {
     }
     const flat = [];
     pushSeg(flat, x, 0, x, y, 0.06);
+    setFatSegments(this.bound, flat);
+  }
+
+  /** A horizontal guide. Shares the bound buffer, so a lab uses this or syncBound. */
+  syncLevel(y, x0, x1, show = true) {
+    this.bound.visible = !!show && [y, x0, x1].every(Number.isFinite);
+    if (!this.bound.visible) {
+      setFatSegments(this.bound, []);
+      return;
+    }
+    const flat = [];
+    pushSeg(flat, x0, y, x1, y, 0.05);
     setFatSegments(this.bound, flat);
   }
 }
