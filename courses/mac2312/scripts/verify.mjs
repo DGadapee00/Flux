@@ -339,16 +339,16 @@ if (para.agree !== true) fail.push('parabola disagrees');
 
 await page.selectOption('#scenario', 'line');
 await page.waitForTimeout(200);
-const line = await page.evaluate(() => ({
+const segment = await page.evaluate(() => ({
   slope: window.__flux.computed.slope,
   length: window.__flux.computed.length,
   y: window.__flux.computed.y,
   agree: window.__flux.computed.agree,
 }));
-if (!(Math.abs(line.slope - 2) < 1e-12)) fail.push(`line slope ${line.slope}`);
-if (!(Math.abs(line.y - 2) < 1e-12)) fail.push(`line y ${line.y}`);
-if (!(Math.abs(line.length - Math.sqrt(5)) < 1e-12)) fail.push(`line length ${line.length}`);
-if (line.agree !== true) fail.push('line disagrees');
+if (!(Math.abs(segment.slope - 2) < 1e-12)) fail.push(`line slope ${segment.slope}`);
+if (!(Math.abs(segment.y - 2) < 1e-12)) fail.push(`line y ${segment.y}`);
+if (!(Math.abs(segment.length - Math.sqrt(5)) < 1e-12)) fail.push(`line length ${segment.length}`);
+if (segment.agree !== true) fail.push('line disagrees');
 
 await page.setViewportSize({ width: 380, height: 780 });
 await settle();
@@ -376,17 +376,17 @@ await page.screenshot({ path: path.join(out, 'polar-desktop.png'), fullPage: tru
 await page.fill('#pol-k', '2');
 await page.dispatchEvent('#pol-k', 'input');
 await page.waitForTimeout(200);
-const half = await page.evaluate(() => ({
+const halfDisk = await page.evaluate(() => ({
   k: window.__flux.state.k,
   area: window.__flux.computed.area,
   naive: window.__flux.computed.naive,
   agree: window.__flux.computed.agree,
   differs: window.__flux.computed.differs,
 }));
-if (half.k !== 2) fail.push(`half sweep ${half.k}`);
-if (!(Math.abs(half.area - Math.PI / 2) < 1e-9)) fail.push(`half area ${half.area}`);
-if (!(Math.abs(half.naive - Math.PI) < 1e-9)) fail.push(`half naive ${half.naive}`);
-if (half.agree !== true || half.differs !== true) fail.push('half disk disagrees');
+if (halfDisk.k !== 2) fail.push(`half sweep ${halfDisk.k}`);
+if (!(Math.abs(halfDisk.area - Math.PI / 2) < 1e-9)) fail.push(`half area ${halfDisk.area}`);
+if (!(Math.abs(halfDisk.naive - Math.PI) < 1e-9)) fail.push(`half naive ${halfDisk.naive}`);
+if (halfDisk.agree !== true || halfDisk.differs !== true) fail.push('half disk disagrees');
 
 await page.selectOption('#scenario', 'card');
 await page.waitForTimeout(200);
@@ -404,15 +404,15 @@ if (card.agree !== true || card.differs !== true) fail.push('cardioid disagrees'
 
 await page.selectOption('#scenario', 'shift');
 await page.waitForTimeout(200);
-const shift = await page.evaluate(() => ({
+const shifted = await page.evaluate(() => ({
   area: window.__flux.computed.area,
   naive: window.__flux.computed.naive,
   agree: window.__flux.computed.agree,
   differs: window.__flux.computed.differs,
 }));
-if (!(Math.abs(shift.area - Math.PI) < 1e-9)) fail.push(`shifted area ${shift.area}`);
-if (!(Math.abs(shift.naive - 4) < 1e-9)) fail.push(`shifted naive ${shift.naive}`);
-if (shift.agree !== true || shift.differs !== true) fail.push('shifted circle disagrees');
+if (!(Math.abs(shifted.area - Math.PI) < 1e-9)) fail.push(`shifted area ${shifted.area}`);
+if (!(Math.abs(shifted.naive - 4) < 1e-9)) fail.push(`shifted naive ${shifted.naive}`);
+if (shifted.agree !== true || shifted.differs !== true) fail.push('shifted circle disagrees');
 
 await page.setViewportSize({ width: 380, height: 780 });
 await settle();
