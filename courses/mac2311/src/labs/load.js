@@ -4,6 +4,7 @@ const loaders = {
   limits: () => import('./limits.js'),
   secant: () => import('./secant.js'),
   rates: () => import('./rates.js'),
+  box: () => import('./box.js'),
   riemann: () => import('./riemann.js'),
 };
 

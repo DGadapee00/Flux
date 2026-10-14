@@ -34,11 +34,26 @@ export class GraphView {
     this.marks = fatSegments(segmentCapacity(MARK_SEGS), { color: M.white, width: 2, opacity: 1 });
     this.rod = fatSegments(segmentCapacity(1), { color: M.teal, width: 3.4, opacity: 1 });
     this.motion = fatSegments(segmentCapacity(8), { color: M.gold, width: 2.2, opacity: 0.95 });
+    this.wire = fatSegments(segmentCapacity(12), { color: M.teal, width: 2.8, opacity: 1 });
+    this.peak = fatSegments(segmentCapacity(12), { color: M.white, width: 1.6, opacity: 0.75 });
     this.guides.visible = false;
     this.marks.visible = false;
     this.rod.visible = false;
     this.motion.visible = false;
-    this.group.add(this.curve, this.secant, this.tangent, this.bars, this.guides, this.marks, this.rod, this.motion);
+    this.wire.visible = false;
+    this.peak.visible = false;
+    this.group.add(
+      this.curve,
+      this.secant,
+      this.tangent,
+      this.bars,
+      this.guides,
+      this.marks,
+      this.rod,
+      this.motion,
+      this.peak,
+      this.wire,
+    );
   }
 
   setVisible(on) {
@@ -147,6 +162,20 @@ export class GraphView {
     const flat = [];
     for (const a of arrows.slice(0, 2)) pushArrow(flat, a.x, a.y, a.dx, a.dy);
     setFatSegments(this.motion, flat);
+  }
+
+  /** @param {'wire'|'peak'} which @param {{ x0: number, y0: number, x1: number, y1: number }[]} segs */
+  syncBox(which, segs, show = true) {
+    const line = which === 'peak' ? this.peak : this.wire;
+    line.visible = !!show && segs.length > 0;
+    if (!line.visible) {
+      setFatSegments(line, []);
+      return;
+    }
+    const flat = [];
+    const lift = which === 'peak' ? 0.04 : 0.07;
+    for (const s of segs.slice(0, 12)) pushSeg(flat, s.x0, s.y0, s.x1, s.y1, lift);
+    setFatSegments(line, flat);
   }
 }
 
