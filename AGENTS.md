@@ -41,7 +41,7 @@ Vite 6, `base: './'`, `target: esnext`. Vanilla JS, ES modules. KaTeX 0.16. thre
 
 Node's built-in test runner. There is no test framework to add.
 
-The hub's dev server is port 5173. PHY is 5174, MAC 2313 is 5175, Statics is 5176, STA 3032 is 5177.
+The hub's dev server is port 5173. PHY is 5174, MAC 2313 is 5175, Statics is 5176, STA 3032 is 5177, MAC 2311 is 5178.
 
 Publishing is a Cloudflare Pages direct upload (`npm run deploy`). A green commit is a snapshot on `main`. The live hub moves when someone uploads. See `DEPLOY.md`. The project name is `flux-study`, because `flux.pages.dev` is an unrelated site.
 

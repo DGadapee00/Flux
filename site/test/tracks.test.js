@@ -11,6 +11,7 @@ const LIVE = {};
 const PLATFORM_HREF = {
   phy2049: 'phy2049/',
   statics: 'statics/',
+  mac2311: 'mac2311/',
   mac2313: 'mac2313/',
   sta3032: 'sta3032/',
 };
@@ -51,7 +52,7 @@ test('the card opens the latest built course, and D5 is on the list', () => {
   assert.equal(latestBuilt(TRACKS[3]).id, 'sta3032');
   assert.deepEqual(
     builtCourses().map((course) => course.id),
-    ['phy2049', 'mac2313', 'statics', 'sta3032'],
+    ['phy2049', 'mac2311', 'mac2313', 'statics', 'sta3032'],
   );
 });
 

@@ -25,7 +25,7 @@ export const TRACKS = [
     id: 'math',
     name: 'Math',
     courses: [
-      { id: 'mac2311', code: 'MAC 2311', title: 'Calculus I', term: null, href: null },
+      { id: 'mac2311', code: 'MAC 2311', title: 'Calculus I', term: null, href: 'mac2311/' },
       { id: 'mac2312', code: 'MAC 2312', title: 'Calculus II', term: null, href: null },
       {
         id: 'mac2313',
