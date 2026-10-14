@@ -51,6 +51,20 @@ const CHECK = {
     Math.abs(c.sn - 255 / 128) < 1e-9 &&
     Math.abs(c.limit - 2) < 1e-12 &&
     Math.abs(c.an - 1 / 128) < 1e-12,
+  parametric: (c) =>
+    c.agree === true &&
+    c.k === 2 &&
+    Math.abs(c.x) < 1e-9 &&
+    Math.abs(c.y - 1) < 1e-9 &&
+    Math.abs(c.slope) < 1e-9 &&
+    Math.abs(c.speed - 1) < 1e-12 &&
+    Math.abs(c.length - Math.PI / 2) < 1e-9,
+  polar: (c) =>
+    c.agree === true &&
+    c.differs === true &&
+    c.k === 4 &&
+    Math.abs(c.area - Math.PI) < 1e-9 &&
+    Math.abs(c.naive - 2 * Math.PI) < 1e-9,
 };
 
 await page.goto('http://localhost:5179/#/mac2312/u1/solids', { waitUntil: 'networkidle', timeout: 30000 });

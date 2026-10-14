@@ -2,8 +2,9 @@ import u1 from './bank/u1.js';
 import u2 from './bank/u2.js';
 import u3 from './bank/u3.js';
 import series from './bank/series.js';
+import u4 from './bank/u4.js';
 
-export const PROBLEMS = [...u1, ...u2, ...u3, ...series];
+export const PROBLEMS = [...u1, ...u2, ...u3, ...series, ...u4];
 
 const byId = new Map(PROBLEMS.map((p) => [p.id, p]));
 

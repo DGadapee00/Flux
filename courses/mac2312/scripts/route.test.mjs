@@ -31,6 +31,14 @@ test('a bare lab id still resolves, and the course prefix is stripped once', () 
   assert.equal(series.legacy, true);
   assert.equal(series.examId, 'u3');
   assert.equal(series.labId, 'series');
+  const parametric = parseRoute('#/parametric');
+  assert.equal(parametric.legacy, true);
+  assert.equal(parametric.examId, 'u4');
+  assert.equal(parametric.labId, 'parametric');
+  const polar = parseRoute('#/polar');
+  assert.equal(polar.legacy, true);
+  assert.equal(polar.examId, 'u4');
+  assert.equal(polar.labId, 'polar');
 });
 
 test('an empty hash is not legacy and opens the solids lab', () => {
@@ -53,8 +61,8 @@ test('a unit hash opens that unit’s first lab', () => {
   assert.equal(series.labId, 'taylor');
 });
 
-test('a unit with no lab stays on that unit', () => {
+test('unit 4 opens the parametric lab', () => {
   const route = parseRoute('#/mac2312/u4');
   assert.equal(route.examId, 'u4');
-  assert.equal(route.labId, null);
+  assert.equal(route.labId, 'parametric');
 });
