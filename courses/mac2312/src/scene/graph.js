@@ -141,4 +141,32 @@ export class GraphView {
     pushSeg(flat, x0, y, x1, y, 0.05);
     setFatSegments(this.bound, flat);
   }
+
+  /** A polyline in the plane. `which` is `curve` (teal) or `poly` (yellow). */
+  syncPath(which, points, show = true) {
+    const line = which === 'poly' ? this.poly : this.curve;
+    const list = (points || []).filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y)).slice(0, CURVE_N);
+    line.visible = !!show && list.length > 1;
+    if (!line.visible) {
+      setFatSegments(line, []);
+      return;
+    }
+    const flat = [];
+    const lift = which === 'poly' ? 0.05 : 0.03;
+    for (let i = 1; i < list.length; i++) pushSeg(flat, list[i - 1].x, list[i - 1].y, list[i].x, list[i].y, lift);
+    setFatSegments(line, flat);
+  }
+
+  /** Rays from the origin. Shares the hatch buffer, so a lab uses this or syncHatch. */
+  syncFan(points, show = true) {
+    const list = (points || []).filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y)).slice(0, HATCH_N);
+    this.hatch.visible = !!show && list.length > 0;
+    if (!this.hatch.visible) {
+      setFatSegments(this.hatch, []);
+      return;
+    }
+    const flat = [];
+    for (const p of list) pushSeg(flat, 0, 0, p.x, p.y, 0.02);
+    setFatSegments(this.hatch, flat);
+  }
 }

@@ -330,3 +330,147 @@ export function ln2() {
 export function ln2Recip() {
   return -Math.log(0.5);
 }
+
+/** Unit circle x = cos t, y = sin t. Slope is null when the tangent is vertical. */
+export function circleAt(t) {
+  const x = Math.cos(t);
+  const y = Math.sin(t);
+  const dx = -y;
+  const dy = x;
+  return { x, y, dx, dy, speed: Math.hypot(dx, dy), slope: Math.abs(dx) < 1e-12 ? null : dy / dx };
+}
+
+/** Slope from x² + y² = 1, so y' = −x/y. */
+export function circleSlopeImplicit(t) {
+  const y = Math.sin(t);
+  if (Math.abs(y) < 1e-12) return null;
+  return -Math.cos(t) / y;
+}
+
+/** Arc length of the unit circle from 0 to t. The speed is 1. */
+export function circleLength(t) {
+  return t;
+}
+
+export function circleLengthSimpson(t) {
+  if (t === 0) return 0;
+  return simpson((s) => Math.hypot(-Math.sin(s), Math.cos(s)), 0, t);
+}
+
+/** Parabola x = t, y = t². */
+export function paraAt(t) {
+  const dy = 2 * t;
+  return { x: t, y: t * t, dx: 1, dy, speed: Math.hypot(1, dy), slope: dy };
+}
+
+/** Same slope after eliminating the parameter: y = x². */
+export function paraSlopeCart(t) {
+  return 2 * t;
+}
+
+/** ∫₀ᵗ √(1+4u²) du = (t/2)√(1+4t²) + (1/4) ln(2t + √(1+4t²)). */
+export function paraLength(t) {
+  if (t === 0) return 0;
+  const s = Math.hypot(1, 2 * t);
+  return (t / 2) * s + 0.25 * Math.log(2 * t + s);
+}
+
+export function paraLengthSimpson(t) {
+  if (t === 0) return 0;
+  return simpson((u) => Math.hypot(1, 2 * u), 0, t);
+}
+
+/** Central difference of the distance, a second reading of the speed. */
+export function paraSpeedDiff(t) {
+  const h = 1e-4;
+  const a = t - h;
+  const b = t + h;
+  return Math.hypot(b - a, b * b - a * a) / (2 * h);
+}
+
+/** Line x = t, y = 2t. */
+export function lineAt(t) {
+  return { x: t, y: 2 * t, dx: 1, dy: 2, speed: Math.sqrt(5), slope: 2 };
+}
+
+export function lineLength(t) {
+  return Math.abs(t) * Math.sqrt(5);
+}
+
+/** Straight-line distance from the origin to (t, 2t). */
+export function lineDistance(t) {
+  return Math.hypot(t, 2 * t);
+}
+
+export function polarX(r, theta) {
+  return r * Math.cos(theta);
+}
+
+export function polarY(r, theta) {
+  return r * Math.sin(theta);
+}
+
+export function polarXCo(r, theta) {
+  return r * Math.sin(Math.PI / 2 - theta);
+}
+
+export function polarYCo(r, theta) {
+  return r * Math.cos(Math.PI / 2 - theta);
+}
+
+/** Area inside r = 1 from 0 to α: (1/2) ∫ r² dθ. */
+export function unitArea(alpha) {
+  return alpha / 2;
+}
+
+/** The same sector as a fraction of the disk π r². */
+export function unitAreaDisk(alpha) {
+  return Math.PI * (alpha / (2 * Math.PI));
+}
+
+/** ∫ r dθ, which is not the area. */
+export function unitNaive(alpha) {
+  return alpha;
+}
+
+export function cardioidR(theta) {
+  return 1 + Math.cos(theta);
+}
+
+/** (1/2) ∫₀ᵅ (1+cos θ)² dθ. */
+export function cardioidArea(alpha) {
+  return 0.5 * (1.5 * alpha + 2 * Math.sin(alpha) + 0.25 * Math.sin(2 * alpha));
+}
+
+export function cardioidSimpson(alpha) {
+  if (alpha === 0) return 0;
+  const f = (th) => 0.5 * cardioidR(th) ** 2;
+  // On a full turn the Simpson error estimate cancels, so the integral is split at π.
+  if (alpha <= Math.PI) return simpson(f, 0, alpha);
+  return simpson(f, 0, Math.PI) + simpson(f, Math.PI, alpha);
+}
+
+export function cardioidNaive(alpha) {
+  return alpha + Math.sin(alpha);
+}
+
+/** r = 2 cos θ, the circle of radius 1 centred at (1, 0). θ runs from −π/2. */
+export function shiftR(theta) {
+  return 2 * Math.cos(theta);
+}
+
+export function shiftArea(alpha) {
+  return alpha + 0.5 * Math.sin(2 * alpha) + Math.PI / 2;
+}
+
+export function shiftSimpson(alpha) {
+  return simpson((th) => 2 * Math.cos(th) ** 2, -Math.PI / 2, alpha);
+}
+
+export function shiftNaive(alpha) {
+  return 2 * Math.sin(alpha) + 2;
+}
+
+export function shiftDisk() {
+  return Math.PI;
+}

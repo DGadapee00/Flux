@@ -292,12 +292,144 @@ const phoneSer = await page.evaluate(() => ({
 if (phoneSer.scroll > phoneSer.client + 1) fail.push(`series 380 scroll ${JSON.stringify(phoneSer)}`);
 
 await page.setViewportSize({ width: 1280, height: 900 });
+await page.goto('http://localhost:5179/#/mac2312/u4/parametric', { waitUntil: 'networkidle' });
+await page.waitForFunction(() => window.__flux?.state?.lab === 'parametric', null, { timeout: 15000 });
+await settle();
+const circle = await page.evaluate(() => {
+  const c = window.__flux.computed;
+  return { k: window.__flux.state.k, x: c.x, y: c.y, slope: c.slope, speed: c.speed, length: c.length, agree: c.agree };
+});
+if (circle.k !== 2) fail.push(`parametric mark ${circle.k}`);
+if (!(Math.abs(circle.x) < 1e-9) || !(Math.abs(circle.y - 1) < 1e-9)) fail.push(`circle point ${circle.x}, ${circle.y}`);
+if (!(Math.abs(circle.slope) < 1e-9)) fail.push(`circle slope ${circle.slope}`);
+if (!(Math.abs(circle.speed - 1) < 1e-12)) fail.push(`circle speed ${circle.speed}`);
+if (!(Math.abs(circle.length - Math.PI / 2) < 1e-9)) fail.push(`circle length ${circle.length}`);
+if (circle.agree !== true) fail.push('unit circle disagrees');
+await page.screenshot({ path: path.join(out, 'parametric-desktop.png'), fullPage: true });
+
+await page.fill('#par-k', '1');
+await page.dispatchEvent('#par-k', 'input');
+await page.waitForTimeout(200);
+const quarter = await page.evaluate(() => ({
+  k: window.__flux.state.k,
+  slope: window.__flux.computed.slope,
+  speed: window.__flux.computed.speed,
+  length: window.__flux.computed.length,
+  agree: window.__flux.computed.agree,
+}));
+if (quarter.k !== 1) fail.push(`quarter mark ${quarter.k}`);
+if (!(Math.abs(quarter.slope + 1) < 1e-9)) fail.push(`quarter slope ${quarter.slope}`);
+if (!(Math.abs(quarter.speed - 1) < 1e-12)) fail.push('speed changed on the circle');
+if (!(Math.abs(quarter.length - Math.PI / 4) < 1e-9)) fail.push(`quarter length ${quarter.length}`);
+if (quarter.agree !== true) fail.push('quarter turn disagrees');
+
+await page.selectOption('#scenario', 'para');
+await page.waitForTimeout(200);
+const para = await page.evaluate(() => {
+  const c = window.__flux.computed;
+  return { k: window.__flux.state.k, x: c.x, y: c.y, slope: c.slope, speed: c.speed, length: c.length, agree: c.agree };
+});
+const paraLen = 0.5 * Math.sqrt(5) + 0.25 * Math.log(2 + Math.sqrt(5));
+if (para.k !== 4) fail.push(`parabola mark ${para.k}`);
+if (!(Math.abs(para.x - 1) < 1e-12) || !(Math.abs(para.y - 1) < 1e-12)) fail.push(`parabola point ${para.x}, ${para.y}`);
+if (!(Math.abs(para.slope - 2) < 1e-12)) fail.push(`parabola slope ${para.slope}`);
+if (!(Math.abs(para.speed - Math.sqrt(5)) < 1e-12)) fail.push(`parabola speed ${para.speed}`);
+if (!(Math.abs(para.length - paraLen) < 1e-9)) fail.push(`parabola length ${para.length}`);
+if (para.agree !== true) fail.push('parabola disagrees');
+
+await page.selectOption('#scenario', 'line');
+await page.waitForTimeout(200);
+const segment = await page.evaluate(() => ({
+  slope: window.__flux.computed.slope,
+  length: window.__flux.computed.length,
+  y: window.__flux.computed.y,
+  agree: window.__flux.computed.agree,
+}));
+if (!(Math.abs(segment.slope - 2) < 1e-12)) fail.push(`line slope ${segment.slope}`);
+if (!(Math.abs(segment.y - 2) < 1e-12)) fail.push(`line y ${segment.y}`);
+if (!(Math.abs(segment.length - Math.sqrt(5)) < 1e-12)) fail.push(`line length ${segment.length}`);
+if (segment.agree !== true) fail.push('line disagrees');
+
+await page.setViewportSize({ width: 380, height: 780 });
+await settle();
+await page.screenshot({ path: path.join(out, 'parametric-phone.png'), fullPage: true });
+const phonePar = await page.evaluate(() => ({
+  scroll: document.documentElement.scrollWidth,
+  client: document.documentElement.clientWidth,
+}));
+if (phonePar.scroll > phonePar.client + 1) fail.push(`parametric 380 scroll ${JSON.stringify(phonePar)}`);
+
+await page.setViewportSize({ width: 1280, height: 900 });
+await page.goto('http://localhost:5179/#/mac2312/u4/polar', { waitUntil: 'networkidle' });
+await page.waitForFunction(() => window.__flux?.state?.lab === 'polar', null, { timeout: 15000 });
+await settle();
+const disk = await page.evaluate(() => {
+  const c = window.__flux.computed;
+  return { k: window.__flux.state.k, area: c.area, naive: c.naive, agree: c.agree, differs: c.differs };
+});
+if (disk.k !== 4) fail.push(`polar sweep ${disk.k}`);
+if (!(Math.abs(disk.area - Math.PI) < 1e-9)) fail.push(`disk area ${disk.area}`);
+if (!(Math.abs(disk.naive - 2 * Math.PI) < 1e-9)) fail.push(`disk naive ${disk.naive}`);
+if (disk.agree !== true || disk.differs !== true) fail.push('unit disk area disagrees');
+await page.screenshot({ path: path.join(out, 'polar-desktop.png'), fullPage: true });
+
+await page.fill('#pol-k', '2');
+await page.dispatchEvent('#pol-k', 'input');
+await page.waitForTimeout(200);
+const halfDisk = await page.evaluate(() => ({
+  k: window.__flux.state.k,
+  area: window.__flux.computed.area,
+  naive: window.__flux.computed.naive,
+  agree: window.__flux.computed.agree,
+  differs: window.__flux.computed.differs,
+}));
+if (halfDisk.k !== 2) fail.push(`half sweep ${halfDisk.k}`);
+if (!(Math.abs(halfDisk.area - Math.PI / 2) < 1e-9)) fail.push(`half area ${halfDisk.area}`);
+if (!(Math.abs(halfDisk.naive - Math.PI) < 1e-9)) fail.push(`half naive ${halfDisk.naive}`);
+if (halfDisk.agree !== true || halfDisk.differs !== true) fail.push('half disk disagrees');
+
+await page.selectOption('#scenario', 'card');
+await page.waitForTimeout(200);
+const card = await page.evaluate(() => ({
+  k: window.__flux.state.k,
+  area: window.__flux.computed.area,
+  naive: window.__flux.computed.naive,
+  agree: window.__flux.computed.agree,
+  differs: window.__flux.computed.differs,
+}));
+if (card.k !== 4) fail.push(`cardioid sweep ${card.k}`);
+if (!(Math.abs(card.area - (3 * Math.PI) / 2) < 1e-9)) fail.push(`cardioid area ${card.area}`);
+if (!(Math.abs(card.naive - 2 * Math.PI) < 1e-9)) fail.push(`cardioid naive ${card.naive}`);
+if (card.agree !== true || card.differs !== true) fail.push('cardioid disagrees');
+
+await page.selectOption('#scenario', 'shift');
+await page.waitForTimeout(200);
+const shifted = await page.evaluate(() => ({
+  area: window.__flux.computed.area,
+  naive: window.__flux.computed.naive,
+  agree: window.__flux.computed.agree,
+  differs: window.__flux.computed.differs,
+}));
+if (!(Math.abs(shifted.area - Math.PI) < 1e-9)) fail.push(`shifted area ${shifted.area}`);
+if (!(Math.abs(shifted.naive - 4) < 1e-9)) fail.push(`shifted naive ${shifted.naive}`);
+if (shifted.agree !== true || shifted.differs !== true) fail.push('shifted circle disagrees');
+
+await page.setViewportSize({ width: 380, height: 780 });
+await settle();
+await page.screenshot({ path: path.join(out, 'polar-phone.png'), fullPage: true });
+const phonePol = await page.evaluate(() => ({
+  scroll: document.documentElement.scrollWidth,
+  client: document.documentElement.clientWidth,
+}));
+if (phonePol.scroll > phonePol.client + 1) fail.push(`polar 380 scroll ${JSON.stringify(phonePol)}`);
+
+await page.setViewportSize({ width: 1280, height: 900 });
 await page.goto('http://localhost:5179/#/mac2312/u1/solids', { waitUntil: 'networkidle' });
 await page.waitForFunction(() => window.__flux?.state?.lab === 'solids', null, { timeout: 10000 });
 await page.goBack();
 await page.waitForTimeout(400);
 const back = await page.evaluate(() => location.hash);
-if (back !== '#/mac2312/u3/series') fail.push(`back hash ${back}`);
+if (back !== '#/mac2312/u4/polar') fail.push(`back hash ${back}`);
 
 await browser.close();
 

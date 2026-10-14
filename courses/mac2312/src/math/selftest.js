@@ -26,6 +26,32 @@ import {
   improperTail,
   altGroups,
   altSum,
+  cardioidArea,
+  cardioidNaive,
+  cardioidSimpson,
+  circleAt,
+  circleLength,
+  circleLengthSimpson,
+  circleSlopeImplicit,
+  lineAt,
+  lineDistance,
+  lineLength,
+  paraAt,
+  paraLength,
+  paraLengthSimpson,
+  paraSlopeCart,
+  paraSpeedDiff,
+  polarX,
+  polarXCo,
+  polarY,
+  polarYCo,
+  shiftArea,
+  shiftDisk,
+  shiftNaive,
+  shiftSimpson,
+  unitArea,
+  unitAreaDisk,
+  unitNaive,
   geomLoop,
   geomPartial,
   geomTerm,
@@ -145,6 +171,45 @@ check('splitting the squares agrees', near(squareSplit(8), squareSum(8), 1e-12))
 check('the squares stay under π²/6', squareSum(12) < (Math.PI * Math.PI) / 6);
 check('eight ones sum to 8', near(onesSum(8), 8, 1e-12));
 check('the ones loop agrees', near(onesLoop(8), onesSum(8), 1e-12));
+
+const top = circleAt(Math.PI / 2);
+check('unit circle at π/2 is (0, 1)', near(top.x, 0, 1e-12) && near(top.y, 1, 1e-12));
+check('that tangent is horizontal', top.slope != null && near(top.slope, 0, 1e-12));
+check('implicit slope agrees at π/2', near(circleSlopeImplicit(Math.PI / 2), 0, 1e-12));
+check('unit-circle speed is 1', near(top.speed, 1, 1e-12));
+check('quarter-circle length is π/2', near(circleLength(Math.PI / 2), Math.PI / 2, 1e-12));
+check('Simpson matches the quarter circle', near(circleLengthSimpson(Math.PI / 2), Math.PI / 2, 1e-9));
+const corner = circleAt(Math.PI / 4);
+check('slope at π/4 is −1', near(corner.slope, -1, 1e-12));
+check('implicit slope agrees at π/4', near(circleSlopeImplicit(Math.PI / 4), -1, 1e-12));
+
+const para = paraAt(1);
+check('parabola at 1 is (1, 1)', near(para.x, 1, 1e-12) && near(para.y, 1, 1e-12));
+check('parabola slope is 2', near(para.slope, 2, 1e-12) && near(paraSlopeCart(1), 2, 1e-12));
+check('parabola speed is √5', near(para.speed, Math.sqrt(5), 1e-12));
+check('a difference quotient matches that speed', near(paraSpeedDiff(1), Math.sqrt(5), 1e-6));
+check('parabola length matches Simpson', near(paraLengthSimpson(1), paraLength(1), 1e-8));
+
+const line = lineAt(1);
+check('line at 1 is (1, 2)', near(line.x, 1, 1e-12) && near(line.y, 2, 1e-12));
+check('line slope is 2', near(line.slope, 2, 1e-12));
+check('line length is the distance √5', near(lineLength(1), Math.sqrt(5), 1e-12) && near(lineDistance(1), Math.sqrt(5), 1e-12));
+
+check('r=2 at π/3 is (1, √3)', near(polarX(2, Math.PI / 3), 1, 1e-12) && near(polarY(2, Math.PI / 3), Math.sqrt(3), 1e-12));
+check('cofunction conversion agrees', near(polarXCo(2, Math.PI / 3), polarX(2, Math.PI / 3), 1e-12) && near(polarYCo(2, Math.PI / 3), polarY(2, Math.PI / 3), 1e-12));
+
+check('unit disk has area π', near(unitArea(2 * Math.PI), Math.PI, 1e-12));
+check('the disk fraction agrees', near(unitAreaDisk(2 * Math.PI), Math.PI, 1e-12));
+check('integrating r around the unit circle gives 2π', near(unitNaive(2 * Math.PI), 2 * Math.PI, 1e-12));
+check('a half turn of the unit circle is π/2', near(unitArea(Math.PI), Math.PI / 2, 1e-12));
+check('full cardioid area is 3π/2', near(cardioidArea(2 * Math.PI), (3 * Math.PI) / 2, 1e-12));
+check('Simpson matches the cardioid', near(cardioidSimpson(2 * Math.PI), (3 * Math.PI) / 2, 1e-8));
+check('cardioid to π is 3π/4', near(cardioidArea(Math.PI), (3 * Math.PI) / 4, 1e-12));
+check('integrating the cardioid radius gives 2π', near(cardioidNaive(2 * Math.PI), 2 * Math.PI, 1e-9));
+check('shifted circle has area π', near(shiftArea(Math.PI / 2), Math.PI, 1e-12) && near(shiftDisk(), Math.PI, 1e-12));
+check('Simpson matches the shifted circle', near(shiftSimpson(Math.PI / 2), Math.PI, 1e-8));
+check('half of that circle is π/2', near(shiftArea(0), Math.PI / 2, 1e-12));
+check('integrating r on the shifted circle gives 4', near(shiftNaive(Math.PI / 2), 4, 1e-12));
 
 if (failed) {
   console.error(`selftest: ${failed} failed`);

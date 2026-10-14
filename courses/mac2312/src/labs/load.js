@@ -6,6 +6,8 @@ const loaders = {
   improper: () => import('./improper.js'),
   taylor: () => import('./taylor.js'),
   series: () => import('./series.js'),
+  parametric: () => import('./parametric.js'),
+  polar: () => import('./polar.js'),
 };
 
 const labs = createLabLoader(loaders);

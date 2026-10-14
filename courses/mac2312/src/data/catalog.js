@@ -31,8 +31,7 @@ export const EXAMS = [
     title: 'Parametric and polar',
     chapters: '7',
     date: null,
-    labs: [],
-    coming: ['Parametric', 'Polar'],
+    labs: ['parametric', 'polar'],
   },
 ];
 
@@ -42,6 +41,8 @@ export const LAB_META = {
   improper: { id: 'improper', exam: 'u2', title: 'Improper' },
   taylor: { id: 'taylor', exam: 'u3', title: 'Taylor' },
   series: { id: 'series', exam: 'u3', title: 'Series' },
+  parametric: { id: 'parametric', exam: 'u4', title: 'Parametric' },
+  polar: { id: 'polar', exam: 'u4', title: 'Polar' },
 };
 
 export const CHAPTER_TITLES = {
