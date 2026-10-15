@@ -1300,6 +1300,16 @@ select:focus-visible {
   .readout .value {
     font-size: 13px;
   }
+  .readout .value.stack {
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: clip;
+    line-height: 1.15;
+  }
+  .readout .value.stack .lo,
+  .readout .value.stack .hi {
+    display: block;
+  }
   .hint-bar {
     display: none;
   }

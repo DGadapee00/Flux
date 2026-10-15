@@ -13,7 +13,8 @@ import {
 } from './kinematics.js';
 import { atwood, bankedCurve, centripetalForce, hangingIncline, incline, newton, springCollar, verticalLoop } from './dynamics.js';
 import {
-  gravitationalEnergy, kineticEnergy, power, speedFromEnergy, springEnergy, work, workVector,
+  collarPath, collarTrip, conservativeWork, gravitationalEnergy, kineticEnergy, pathPotential,
+  power, speedFromEnergy, springEnergy, springStop, springWork, work, workVector,
 } from './energy.js';
 import { centerOfMass, collide1D, impulse, momentum } from './momentum.js';
 import { inclineState } from './friction.js';
@@ -396,6 +397,85 @@ console.log('\nParticle kinetics');
   const springForce = { x: -30 * 0.1 * u.x, y: -30 * 0.1 * u.y };
   const along = (weightForce.x + springForce.x) * u.x + (weightForce.y + springForce.y) * u.y;
   approx(sloped.a, along / 2, 1e-12, 'sloped collar matches the force dotted onto the rod');
+}
+
+console.log('\nWork and energy');
+{
+  const g = 9.81;
+  const direct = springWork(40, 0.5, 0.4);
+  const via = collarPath({ mass: 2, k: 40, thetaDeg: 30, points: [0.5, 0.15, 0.4], v1: 0, mu: 0, g });
+  approx(via.spring, direct, 1e-12, 'a detour does not change the spring work');
+  approx(via.direct, direct, 1e-12, 'the end stretches give that same spring work');
+  approx(via.friction, 0, 1e-12, 'a smooth rod takes no friction work');
+
+  const rough = collarPath({ mass: 2, k: 40, thetaDeg: 30, points: [0.5, 0.15, 0.4], v1: 3, mu: 0.15, g });
+  const straight = collarTrip({ mass: 2, k: 40, thetaDeg: 30, x1: 0.5, x2: 0.4, v1: 3, mu: 0.15, g });
+  ok(Math.abs(rough.friction) > Math.abs(straight.friction) + 0.1, 'the longer slide takes more friction work');
+  approx(rough.spring, straight.spring, 1e-12, 'friction does not change the spring work');
+
+  function integratedSpeed({ mass, k, thetaDeg, points, v1, mu, g: grav }) {
+    const steps = 4000;
+    const sin = Math.sin(thetaDeg * DEG);
+    const cos = Math.cos(thetaDeg * DEG);
+    let v2 = v1 * v1;
+    for (let leg = 0; leg < points.length - 1; leg++) {
+      const x1 = points[leg];
+      const x2 = points[leg + 1];
+      const dir = Math.sign(x2 - x1) || 1;
+      const dx = (x2 - x1) / steps;
+      for (let i = 0; i < steps; i++) {
+        const x = x1 + (i + 0.5) * dx;
+        const a = grav * sin - (k / mass) * x - mu * grav * cos * dir;
+        v2 += 2 * a * dx;
+        if (v2 < -1e-8) return 0;
+      }
+    }
+    return Math.sqrt(Math.max(0, v2));
+  }
+  const slide = { mass: 2, k: 80, thetaDeg: 30, points: [0.5, 0], v1: 0, mu: 0.2, g };
+  const energySpeed = collarPath(slide).speed;
+  approx(energySpeed, integratedSpeed(slide), 1e-6, 'collar speed matches integration along the rod');
+  const fromParts = speedFromEnergy({
+    mass: 2,
+    k0: 0,
+    u0: 0,
+    u: 0,
+    wnc: collarTrip({ mass: 2, k: 80, thetaDeg: 30, x1: 0.5, x2: 0, v1: 0, mu: 0.2, g }).spring
+      + collarTrip({ mass: 2, k: 80, thetaDeg: 30, x1: 0.5, x2: 0, v1: 0, mu: 0.2, g }).gravity
+      + collarTrip({ mass: 2, k: 80, thetaDeg: 30, x1: 0.5, x2: 0, v1: 0, mu: 0.2, g }).friction,
+  });
+  approx(energySpeed, fromParts, 1e-12, 'the same works through speedFromEnergy');
+
+  let lo = 0;
+  let hi = 2;
+  const stopArgs = { mass: 3, k: 60, v: 4, mu: 0.15, g };
+  while (collarTrip({ mass: 3, k: 60, thetaDeg: 0, x1: 0, x2: hi, v1: 4, mu: 0.15, g }).t2 > 0) hi *= 2;
+  for (let i = 0; i < 50; i++) {
+    const mid = 0.5 * (lo + hi);
+    if (collarTrip({ mass: 3, k: 60, thetaDeg: 0, x1: 0, x2: mid, v1: 4, mu: 0.15, g }).t2 > 0) lo = mid;
+    else hi = mid;
+  }
+  approx(springStop(stopArgs), 0.5 * (lo + hi), 1e-8, 'the stopping stretch matches an energy root');
+
+  const spec = { mass: 1.5, g, k: 20, anchor: [0, 0], rest: 0 };
+  const A = [0.2, 1];
+  const B = [1.4, 0.4];
+  const closed = conservativeWork(spec, A, B);
+  const steps = 4000;
+  let trap = 0;
+  for (let i = 0; i < steps; i++) {
+    const t = (i + 0.5) / steps;
+    const x = A[0] + t * (B[0] - A[0]);
+    const y = A[1] + t * (B[1] - A[1]);
+    const dx = (B[0] - A[0]) / steps;
+    const dy = (B[1] - A[1]) / steps;
+    const len = Math.hypot(x, y);
+    const sx = len > 1e-12 ? -spec.k * x : 0;
+    const sy = len > 1e-12 ? -spec.k * y : 0;
+    trap += sx * dx + (sy - spec.mass * g) * dy;
+  }
+  approx(closed, trap, 1e-6, 'conservative work matches the straight-line integral');
+  approx(pathPotential({ ...spec, x: 0, y: 0 }), gravitationalEnergy(spec.mass, g, 0) + springEnergy(spec.k, 0), 1e-12, 'potential at the anchor is the rest energy');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);

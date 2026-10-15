@@ -13,6 +13,8 @@ const LIMIT = {
   relative: 1e-4,
   fma: 1e-6,
   curve: 1e-4,
+  collar: 1e-6,
+  paths: 1e-5,
 };
 
 const fails = [];

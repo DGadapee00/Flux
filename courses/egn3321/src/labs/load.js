@@ -6,6 +6,8 @@ const loaders = {
   relative: () => import('./relative.js'),
   fma: () => import('./fma.js'),
   curve: () => import('./curve.js'),
+  collar: () => import('./collar.js'),
+  paths: () => import('./paths.js'),
 };
 
 const labs = createLabLoader(loaders);
