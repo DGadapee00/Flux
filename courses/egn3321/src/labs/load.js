@@ -11,6 +11,9 @@ const loaders = {
   impulse: () => import('./impulse.js'),
   impact: () => import('./impact.js'),
   rocket: () => import('./rocket.js'),
+  ic: () => import('./ic.js'),
+  'slider-crank': () => import('./slider-crank.js'),
+  rolling: () => import('./rolling.js'),
 };
 
 const labs = createLabLoader(loaders);
