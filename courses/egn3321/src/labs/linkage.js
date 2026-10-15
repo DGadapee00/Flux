@@ -59,16 +59,32 @@ function barEnd(length, deg) {
   return { x: length * Math.sin(th), y: -length * Math.cos(th) };
 }
 
-function arc(thetaDeg, radius) {
-  const a0 = -Math.PI / 2;
-  const a1 = -Math.PI / 2 + thetaDeg * Math.PI / 180;
-  const steps = 28;
+function sweep(fromDeg, toDeg, radius) {
+  const a0 = -Math.PI / 2 + (fromDeg * Math.PI) / 180;
+  const a1 = -Math.PI / 2 + (toDeg * Math.PI) / 180;
+  const steps = 32;
   const pts = [];
   for (let i = 0; i <= steps; i++) {
     const a = a0 + (a1 - a0) * (i / steps);
     pts.push({ x: radius * Math.cos(a), y: radius * Math.sin(a) });
   }
   return pts;
+}
+
+/** A narrow outline, so a bar that lies on a grid axis is still a bar. */
+function rod(x0, y0, x1, y1, half) {
+  const dx = x1 - x0;
+  const dy = y1 - y0;
+  const len = Math.hypot(dx, dy) || 1;
+  const px = (-dy / len) * half;
+  const py = (dx / len) * half;
+  return [
+    { x: x0 + px, y: y0 + py },
+    { x: x1 + px, y: y1 + py },
+    { x: x1 - px, y: y1 - py },
+    { x: x0 - px, y: y0 - py },
+    { x: x0 + px, y: y0 + py },
+  ];
 }
 
 function zigzag(x0, y0, x1, y1, amp) {
@@ -287,12 +303,13 @@ export default defineLab({
     const speed = Math.hypot(c.vx, c.vy);
     const show = speed > 1e-6 ? Math.min(0.38 * L, 0.1 * L * speed) : 0;
     if (!slots) {
+      const half = Math.max(0.04, 0.028 * L);
       const ghost = barEnd(L, Number(state.theta1) || 0);
-      setLine(h.barGhost, [{ x: 0, y: 0 }, ghost]);
-      setLine(h.barBody, [{ x: 0, y: 0 }, { x: c.ex, y: c.ey }]);
-      const wound = Number(state.kappa) > 0 && Math.abs(Number(state.theta2) || 0) > 1;
+      setLine(h.barGhost, rod(0, 0, ghost.x, ghost.y, half * 0.7));
+      setLine(h.barBody, rod(0, 0, c.ex, c.ey, half));
+      const wound = Number(state.kappa) > 0 && Math.abs((Number(state.theta1) || 0) - (Number(state.theta2) || 0)) > 1;
       h.barArc.visible = wound;
-      if (wound) setLine(h.barArc, arc(Number(state.theta2) || 0, 0.18 * L));
+      if (wound) setLine(h.barArc, sweep(Number(state.theta2) || 0, Number(state.theta1) || 0, 0.22 * L));
       h.barPin.position.set(0, 0, 0);
       h.barG.position.set(c.gx, c.gy, 0);
       placeIncomingArrow(h.barWeight, new THREE.Vector3(c.gx, c.gy, 0), 0, -weight, { scale, minLength: 0, gap: L * 0.03 });
