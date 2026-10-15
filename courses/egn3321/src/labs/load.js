@@ -14,6 +14,9 @@ const loaders = {
   ic: () => import('./ic.js'),
   'slider-crank': () => import('./slider-crank.js'),
   rolling: () => import('./rolling.js'),
+  inertia: () => import('./inertia.js'),
+  pendulum: () => import('./pendulum.js'),
+  'roll-slip': () => import('./roll-slip.js'),
 };
 
 const labs = createLabLoader(loaders);

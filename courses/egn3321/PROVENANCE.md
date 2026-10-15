@@ -34,8 +34,14 @@ gears, absolute motion, relative velocity, the instantaneous centre, rolling, an
 relative acceleration. The numbers are generated and cited by section. Rotating
 axes (§16.8) stay out.
 
-Units 6–7 are catalog entries only. Their labs are listed as coming. They have no
-problems and no notes yet.
+Unit 6 is planar kinetics of a rigid body. The labs are mass moments of composite
+bodies (`inertia`), a bar or plate released about a pin (`pendulum`), and roll or
+slip on an incline (`roll-slip`). The problems cover Hibbeler Dynamics Chapter 17:
+mass moments, a crate that slides or tips, pin reactions, and roll or slip, in SI
+and in US customary units. The numbers are generated and cited by section.
+
+Unit 7 is a catalog entry only. Its labs are listed as coming. It has no problems
+and no notes yet.
 
 The Unit 1 notes are rewritten from the section list. They are not a transcription.
 A `box fix` names a mistake a student would make by trusting a common slip, and it

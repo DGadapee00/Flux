@@ -37,7 +37,7 @@ test('an empty hash is not legacy and opens Unit 1 on rectilinear motion', () =>
   assert.equal(courseHash(route.examId, route.labId), `#/${COURSE}/u1/rectilinear`);
 });
 
-test('Unit 5 opens on the instant centre, and a later unit with no labs keeps none', () => {
+test('Unit 5 opens on the instant centre, and Unit 6 opens on inertia', () => {
   const u3 = parseRoute(`#/${COURSE}/u3`);
   assert.equal(u3.legacy, false);
   assert.equal(u3.examId, 'u3');
@@ -53,7 +53,11 @@ test('Unit 5 opens on the instant centre, and a later unit with no labs keeps no
   const later = parseRoute(`#/${COURSE}/u6`);
   assert.equal(later.legacy, false);
   assert.equal(later.examId, 'u6');
-  assert.equal(later.labId, null);
+  assert.equal(later.labId, 'inertia');
+  const last = parseRoute(`#/${COURSE}/u7`);
+  assert.equal(last.legacy, false);
+  assert.equal(last.examId, 'u7');
+  assert.equal(last.labId, null);
   const old = parseRoute('#/u1/rectilinear');
   assert.equal(old.legacy, true);
   assert.equal(old.examId, 'u1');

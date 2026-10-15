@@ -21,6 +21,9 @@ const LIMIT = {
   ic: 1e-4,
   'slider-crank': 1e-4,
   rolling: 1e-4,
+  inertia: 1e-4,
+  pendulum: 1e-6,
+  'roll-slip': 1e-6,
 };
 
 const fails = [];
