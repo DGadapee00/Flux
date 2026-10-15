@@ -205,6 +205,32 @@ body.notes-resizing {
   color: var(--text-muted);
 }
 
+.nt-doc nav.toc {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 16px;
+  font-family: var(--font);
+  font-size: 14px;
+}
+
+.nt-doc nav.toc a {
+  display: flex;
+  gap: 8px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.nt-doc nav.toc a span {
+  min-width: 1.8em;
+  color: var(--blue);
+  font-variant-numeric: tabular-nums;
+}
+
+.nt-doc nav.toc a:hover {
+  color: var(--blue);
+}
+
 .nt-doc h2,
 .nt-doc h3 {
   font-family: var(--font);

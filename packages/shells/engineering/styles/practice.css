@@ -801,7 +801,9 @@ body.problem-blind .veiled .katex {
 }
 
 @media (max-width: 720px) {
-  body.practice-open .controls {
+  body.practice-open .controls,
+  body.practice-open .toggles,
+  body.practice-open .sheet-toggle {
     display: none;
   }
   .problems {
@@ -809,5 +811,9 @@ body.problem-blind .veiled .katex {
     right: 10px;
     width: auto;
     max-height: calc(100vh - var(--below-brand, 230px) - 40px);
+  }
+  .pb-input,
+  .pb-input.sym {
+    font-size: 16px;
   }
 }

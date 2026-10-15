@@ -52,8 +52,8 @@ export const EXAMS = [
     title: 'Rigid-body kinetics',
     chapters: '17',
     date: 'Ch 17',
-    labs: [],
-    coming: ['Inertia', 'Pendulum', 'Roll or slip'],
+    labs: ['inertia', 'pendulum', 'roll-slip'],
+    coming: [],
   },
   {
     id: 'u7',
@@ -80,6 +80,9 @@ export const LAB_META = {
   ic: { id: 'ic', exam: 'u5', title: 'Centre' },
   'slider-crank': { id: 'slider-crank', exam: 'u5', title: 'Slider-crank' },
   rolling: { id: 'rolling', exam: 'u5', title: 'Rolling' },
+  inertia: { id: 'inertia', exam: 'u6', title: 'Inertia' },
+  pendulum: { id: 'pendulum', exam: 'u6', title: 'Pendulum' },
+  'roll-slip': { id: 'roll-slip', exam: 'u6', title: 'Roll or slip' },
 };
 
 export const CHAPTER_TITLES = {
@@ -89,6 +92,7 @@ export const CHAPTER_TITLES = {
   14: 'Kinetics of a particle: work and energy',
   15: 'Kinetics of a particle: impulse and momentum',
   16: 'Planar kinematics of a rigid body',
+  17: 'Planar kinetics of a rigid body: force and acceleration',
 };
 
 export function examById(id) {
