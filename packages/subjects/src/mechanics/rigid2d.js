@@ -120,9 +120,10 @@ export function sliderCrank({ r, l, theta, omega = 0, alpha = 0 }) {
   if (!(cphi > 1e-8)) return { ...quiet, x, phi };
   const phiDot = (n * cth * omega) / cphi;
   const phiDdot = (n * (-sth * omega * omega + cth * alpha) + Math.sin(phi) * phiDot * phiDot) / cphi;
-  const v = -r * sth * omega - l * Math.sin(phi) * phiDot;
-  const a = -r * cth * omega * omega - r * sth * alpha - l * cphi * phiDot * phiDot - l * Math.sin(phi) * phiDdot;
-  return { x, phi, v, a, phiDot, phiDdot, locked: false };
+  const vRaw = -r * sth * omega - l * Math.sin(phi) * phiDot;
+  const aRaw = -r * cth * omega * omega - r * sth * alpha - l * cphi * phiDot * phiDot - l * Math.sin(phi) * phiDdot;
+  const snap = (n) => (Math.abs(n) < 1e-8 ? 0 : n);
+  return { x, phi, v: snap(vRaw), a: snap(aRaw), phiDot, phiDdot, locked: false };
 }
 
 /** Two intersections of circles, or null when they miss. Tangent circles repeat the one point. */

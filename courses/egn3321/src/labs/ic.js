@@ -6,7 +6,7 @@ import {
   relativeVelocity,
   rollingPoint,
 } from '@flux/subjects/mechanics/rigid2d.js';
-import { M, makeDot, makeLine, setArrow, setLine } from '../scene/draw.js';
+import { M, makeArrow, makeDot, makeLine, setArrow, setLine } from '../scene/draw.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
 import { THREE, defineLab } from './define.js';
