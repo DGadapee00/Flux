@@ -1,0 +1,8 @@
+/* Plot canvas. Loaded by a course that mounts a plot2d lab. Statics does not import this file. */
+
+#plot {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}

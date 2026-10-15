@@ -1,5 +1,6 @@
 import { setLawEl, prose, mathText } from './shared.js';
 import { drawVx, drawAC, drawVI } from './plot.js';
+import { mountNotesTab } from './notes.js';
 import { sceneScale, workPlane, lenLabel, PLANE_AXES } from '@flux/core/scene3d/frame.js';
 
 /**
@@ -12,9 +13,11 @@ import { sceneScale, workPlane, lenLabel, PLANE_AXES } from '@flux/core/scene3d/
  * @param {Record<string, { title?: string }>} catalog.labMeta
  * @param {string} catalog.title Name printed on the brand line.
  * @param {string} catalog.homeId Unit shown before one is mounted.
+ * @param {object} [catalog.notes] Core `createNotes` dependencies. Omit when the manifest has no notes.
  */
 export function createHUD(api, catalog) {
   const { exams: EXAMS, examById, labMeta: LAB_META, title, homeId } = catalog;
+  const notesTab = mountNotesTab(api, catalog.notes);
   const $ = (id) => document.getElementById(id);
   let lawKey = '';
   let mountedId = '';
@@ -125,6 +128,7 @@ export function createHUD(api, catalog) {
 
   function mount(lab, exam, state) {
     const examId = exam?.id || homeId;
+    notesTab?.onExam(examId);
     const labId = lab?.id || '';
     renderExamTabs(examId);
     renderLabTabs(exam, labId);
@@ -174,13 +178,18 @@ export function createHUD(api, catalog) {
 
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      api.escape();
+      if (notesTab?.isOpen()) notesTab.close();
+      else api.escape();
       return;
     }
     if (e.target.matches('input, select, textarea')) return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === 'p' || e.key === 'P') {
       api.togglePractice();
+      return;
+    }
+    if (notesTab && (e.key === 'n' || e.key === 'N')) {
+      notesTab.toggle();
       return;
     }
     if (e.key === '[') {
@@ -250,7 +259,7 @@ export function createHUD(api, catalog) {
     }
   }
 
-  return { mount, update };
+  return { mount, update, notes: notesTab };
 }
 
 export { sciHTML } from './format.js';
