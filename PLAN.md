@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status (15 Oct 2026): **Phase 7 math track done.** MAC 2311 and MAC 2312 are live, every unit with its labs and problems. **PHY 2048 groundwork is merged** (07fbbe2): the mechanics library, catalog, problem bank and lab logic. Its interface comes after PHY 2049's Exam 5 on 23 Oct 2026, with the physics shell. Live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /mac2311/, /mac2312/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 2049 5174, MAC 2313 5175, Statics 5176, STA 3032 5177, MAC 2311 5178, MAC 2312 5179, PHY 2048 5180, EGN 3321 5181, EGN 3331 5182, EML 3100 5183. PHY's weekly drops land here. **Phase 8 decisions, answered 15 Oct 2026:** Dalton takes all three courses next term and Dynamics is built first (D8); generated numbers are cited by textbook section (D9); R-134a comes from an equation of state in a later PR (D10); coverage follows the course packs, plus Dynamics' §15.9 rocket lab (D11). The engineering shell is in `packages/shells/engineering`, and Statics imports it. The shell's Notes tab and plot2d stage are in, behind manifest flags. `subjects/src/convert.js` holds the exact unit definitions. **Next:** the Dynamics first slice; PHY 2048's interface after 23 Oct; **Phase A1** (the rocket, engine first). flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their old sites redirect here.
+Status (15 Oct 2026): **Phase 7 math track done.** MAC 2311 and MAC 2312 are live, every unit with its labs and problems. **PHY 2048 groundwork is merged** (07fbbe2): the mechanics library, catalog, problem bank and lab logic. Its interface comes after PHY 2049's Exam 5 on 23 Oct 2026, with the physics shell. Live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /mac2311/, /mac2312/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 2049 5174, MAC 2313 5175, Statics 5176, STA 3032 5177, MAC 2311 5178, MAC 2312 5179, PHY 2048 5180, EGN 3321 5181, EGN 3331 5182, EML 3100 5183. PHY's weekly drops land here. **Phase 8 decisions, answered 15 Oct 2026:** Dalton takes all three courses next term and Dynamics is built first (D8); generated numbers are cited by textbook section (D9); R-134a comes from an equation of state in a later PR (D10); coverage follows the course packs, plus Dynamics' §15.9 rocket lab (D11). The engineering shell is in `packages/shells/engineering`, and Statics imports it. The shell's Notes tab and plot2d stage are in, behind manifest flags. `subjects/src/convert.js` holds the exact unit definitions. **Dynamics first slice is in:** `courses/egn3321` on port 5181, Unit 1 complete (rectilinear, path-nt, relative, Ch 1 and Ch 12, Unit 1 notes, `mechanics/path.js`). The hub card links to it. **Next:** Dynamics Unit 2, one PR per unit; PHY 2048's interface after 23 Oct; **Phase A1** (the rocket, engine first). flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their old sites redirect here.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
@@ -684,7 +684,7 @@ coverage report runs in `npm test`.
 Three engineering courses, built directly on the platform. **EGN 3321 Dynamics** and **EGN 3331
 Mechanics of Materials** join the Mechanics track after Statics. **EML 3100 Thermodynamics** starts
 the Thermal-fluids track. The codes and the chapter order are the owner's course packs. All three
-are on the hub now, marked "not built yet" (`site/src/tracks.js`).
+are on the hub (`site/src/tracks.js`). Dynamics links to `egn3321/`. Mechanics of Materials and Thermodynamics are still marked "not built yet".
 
 | Course | Folder and id | Port | Track, order | Text |
 |---|---|---|---|---|
@@ -1189,11 +1189,11 @@ One branch and one PR each. Each merges and deploys alone. Every PR keeps all co
 4. **`subjects/src/convert.js` with its selftest.** Done. Exact foot, pound-mass, pound-force, Btu, and
    rankine, and the derived psi, slug, ft·lbf, and horsepower. Round trips, and the derived values
    checked from the definitions a second way.
-5. **Dynamics first slice:** manifest, catalog with all seven units (labs listed as `coming`),
-   PROVENANCE.md, CONVENTIONS.md (three significant figures, both unit systems, the sections left
-   out), port 5181 in course-server, build and assemble, the hub href, prereqs. Unit 1 complete:
-   `rectilinear`, `path-nt` and `relative`, the §1.3–1.6 and Ch 12 problems, Unit 1 notes,
-   `mechanics/path.js`. Merge and deploy.
+5. **Dynamics first slice.** Done. `courses/egn3321` on port 5181: manifest, catalog of all seven
+   units (unbuilt labs listed as `coming`), PROVENANCE.md, CONVENTIONS.md (three significant figures,
+   both unit systems, the sections left out), the hub href, prereqs, and the hub backup. Unit 1 is
+   complete: `rectilinear`, `path-nt`, `relative`, the §1.3–1.6 and Ch 12 problems, Unit 1 notes,
+   and `mechanics/path.js`. Merge and deploy.
 6. **Dynamics, one PR per unit:** Unit 2 (`fma`, `curve`), Unit 3 (`collar`, `paths`), Unit 4
    (`impulse`, `impact`, `rocket`), Unit 5 (`ic`, `slider-crank`, `rolling`,
    `rigid2d.js`), Unit 6 (`inertia`, `pendulum`, `roll-slip`, `inertia.js`), Unit 7 (`race`,

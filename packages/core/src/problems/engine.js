@@ -111,7 +111,8 @@ function isTable(part) {
  * @param {Record<string, string>} [options.texSym] Identifier → TeX.
  * @param {object|null} [options.units] Dimension helpers: ZERO, CONST_DIMS, parseUnit, formatDim, dimEqual, isDimensionless, dimMul, dimDiv, dimScale.
  * @param {object|null} [options.typed] Prefix table for a number typed with a unit. Null skips conversion.
- * @param {{ figures?: number, lo?: number, hi?: number, tiny?: boolean }} [options.sig]
+ * @param {{ figures?: number, lo?: number, hi?: number, tiny?: boolean, leadingOne?: boolean }} [options.sig]
+ *        `leadingOne` prints one extra figure when the first significant digit is 1.
  * @param {'full'|'articles'|'none'} [options.prose]
  * @param {'sig'|'plain'} [options.steps] `plain` calls `steps($, T)` and is the values-only solution.
  * @param {boolean} [options.optionWhy] Include each option's `why` on the rendered part.
@@ -129,7 +130,7 @@ export function createEngine(options = {}) {
   const texSym = options.texSym ?? { pi: '\\pi' };
   const units = options.units ?? null;
   const typed = options.typed ?? null;
-  const sigOpt = { figures: 3, lo: 0.01, hi: 1e5, tiny: true, ...options.sig };
+  const sigOpt = { figures: 3, lo: 0.01, hi: 1e5, tiny: true, leadingOne: false, ...options.sig };
   const prose = options.prose ?? 'none';
   const stepsMode = options.steps ?? 'sig';
   const optionWhy = !!options.optionWhy;
@@ -139,14 +140,24 @@ export function createEngine(options = {}) {
   const choiceNotes = !!options.choiceNotes;
   const unitFn = !!options.unitFn;
 
-  function sig(x, n = sigOpt.figures) {
+  function sig(x, n) {
+    const requested = n == null ? sigOpt.figures : n;
+    const figs = n == null ? figuresFor(x, requested) : requested;
     if (!Number.isFinite(x)) return '—';
     if (x === 0 || (sigOpt.tiny && Math.abs(x) < 1e-300)) return '0';
     const a = Math.abs(x);
-    if (a >= sigOpt.lo && a < sigOpt.hi) return String(Number(x.toPrecision(n)));
-    const [m, e] = x.toExponential(n - 1).split('e');
+    if (a >= sigOpt.lo && a < sigOpt.hi) return String(Number(x.toPrecision(figs)));
+    const [m, e] = x.toExponential(figs - 1).split('e');
     const exp = String(Number(e)).replace(/./g, (c) => SUP[c]);
     return `${Number(m)} × 10${exp}`;
+  }
+
+  /** One extra figure when the first significant digit is 1, and only for the default count. */
+  function figuresFor(x, n) {
+    if (!sigOpt.leadingOne || !Number.isFinite(x) || x === 0) return n;
+    const exp = Math.floor(Math.log10(Math.abs(x)) + 1e-12);
+    const lead = Math.floor(Math.abs(x) / 10 ** exp + 1e-9);
+    return lead === 1 ? n + 1 : n;
   }
 
   function fmtPlain(v) {

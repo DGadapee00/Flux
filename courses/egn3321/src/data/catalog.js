@@ -1,0 +1,96 @@
+/** Course map. `labs` are built. `coming` is the rest of that unit, still to be written. */
+
+export const EXAMS = [
+  {
+    id: 'u1',
+    n: 1,
+    title: 'Particle kinematics',
+    chapters: '1, 12',
+    date: 'Ch 12',
+    labs: ['rectilinear', 'path-nt', 'relative'],
+    coming: [],
+  },
+  {
+    id: 'u2',
+    n: 2,
+    title: 'Force and acceleration',
+    chapters: '13',
+    date: 'Ch 13',
+    labs: [],
+    coming: ['F = ma', 'Curve'],
+  },
+  {
+    id: 'u3',
+    n: 3,
+    title: 'Work and energy',
+    chapters: '14',
+    date: 'Ch 14',
+    labs: [],
+    coming: ['Collar', 'Paths'],
+  },
+  {
+    id: 'u4',
+    n: 4,
+    title: 'Impulse and momentum',
+    chapters: '15',
+    date: 'Ch 15',
+    labs: [],
+    coming: ['Impulse', 'Impact', 'Rocket'],
+  },
+  {
+    id: 'u5',
+    n: 5,
+    title: 'Rigid-body kinematics',
+    chapters: '16',
+    date: 'Ch 16',
+    labs: [],
+    coming: ['Instant centre', 'Slider-crank', 'Rolling'],
+  },
+  {
+    id: 'u6',
+    n: 6,
+    title: 'Rigid-body kinetics',
+    chapters: '17',
+    date: 'Ch 17',
+    labs: [],
+    coming: ['Inertia', 'Pendulum', 'Roll or slip'],
+  },
+  {
+    id: 'u7',
+    n: 7,
+    title: 'Rigid-body energy',
+    chapters: '18',
+    date: 'Ch 18',
+    labs: [],
+    coming: ['Race', 'Linkage'],
+  },
+];
+
+export const LAB_META = {
+  rectilinear: { id: 'rectilinear', exam: 'u1', title: 'Rectilinear' },
+  'path-nt': { id: 'path-nt', exam: 'u1', title: 'Path' },
+  relative: { id: 'relative', exam: 'u1', title: 'Relative' },
+};
+
+export const CHAPTER_TITLES = {
+  1: 'Units and significant figures',
+  12: 'Kinematics of a particle',
+};
+
+export function examById(id) {
+  return EXAMS.find((e) => e.id === id) || EXAMS[0];
+}
+
+export function examForLab(labId) {
+  const meta = LAB_META[labId];
+  return meta ? examById(meta.exam) : EXAMS[0];
+}
+
+export function examIndex(id) {
+  const i = EXAMS.findIndex((e) => e.id === id);
+  return i < 0 ? 0 : i;
+}
+
+export function examLabel(exam) {
+  return exam ? `Unit ${exam.n}` : 'Unit';
+}

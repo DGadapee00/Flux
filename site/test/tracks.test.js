@@ -15,6 +15,7 @@ const PLATFORM_HREF = {
   mac2312: 'mac2312/',
   mac2313: 'mac2313/',
   sta3032: 'sta3032/',
+  egn3321: 'egn3321/',
 };
 
 const PLATFORM = 'https://flux-study.pages.dev/';
@@ -52,24 +53,25 @@ test('the card opens the latest built course, and D5 is on the list', () => {
   assert.equal(latestBuilt(TRACKS[0]).id, 'phy2049');
   assert.equal(latestBuilt(TRACKS[1]).id, 'mac2313');
   assert.equal(latestBuilt(TRACKS[1]).term, 'Spring 2026');
-  assert.equal(latestBuilt(TRACKS[2]).id, 'statics');
-  assert.equal(latestBuilt(TRACKS[2]).code, 'EGN 3311');
+  assert.equal(latestBuilt(TRACKS[2]).id, 'egn3321');
+  assert.equal(latestBuilt(TRACKS[2]).code, 'EGN 3321');
   assert.equal(latestBuilt(TRACKS[3]).id, 'sta3032');
   assert.equal(latestBuilt(TRACKS[4]), null);
   assert.deepEqual(
     builtCourses().map((course) => course.id),
-    ['phy2049', 'mac2311', 'mac2312', 'mac2313', 'statics', 'sta3032'],
+    ['phy2049', 'mac2311', 'mac2312', 'mac2313', 'statics', 'egn3321', 'sta3032'],
   );
 });
 
-test('Phase 8 courses are on the hub with their codes, not built yet', () => {
+test('Phase 8: Dynamics is built, and the later two courses are still listed', () => {
   const card = (id) => TRACKS.flatMap((track) => track.courses.map((course) => ({ track: track.id, ...course }))).find((course) => course.id === id);
   assert.deepEqual(
     TRACKS[2].courses.map((course) => course.code),
     ['EGN 3311', 'EGN 3321', 'EGN 3331'],
   );
+  const dynamics = card('egn3321');
+  assert.deepEqual([dynamics.track, dynamics.code, dynamics.title, dynamics.href], ['mechanics', 'EGN 3321', 'Dynamics', 'egn3321/']);
   for (const [id, track, code, title] of [
-    ['egn3321', 'mechanics', 'EGN 3321', 'Dynamics'],
     ['egn3331', 'mechanics', 'EGN 3331', 'Mechanics of Materials'],
     ['eml3100', 'thermal', 'EML 3100', 'Thermodynamics'],
   ]) {

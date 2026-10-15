@@ -12,6 +12,8 @@
  */
 
 const ID = /^[a-z][a-z0-9]*$/;
+/** Lab ids follow the catalog: letters, digits, and a hyphen between words (`path-nt`). */
+const LAB_ID = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
 const LAB_KINDS = new Set(['scene3d', 'plot2d']);
 
 /**
@@ -56,7 +58,7 @@ export function defineCourse(spec) {
  * @param {Record<string, unknown> & { id: string }} spec
  */
 export function defineLab(spec) {
-  requireId('defineLab', spec);
+  requireId('defineLab', spec, LAB_ID);
   if (!LAB_KINDS.has(spec.kind)) {
     throw new TypeError("defineLab requires kind 'scene3d' or 'plot2d'");
   }
@@ -84,8 +86,9 @@ export function problem(spec) {
  * @param {string} fn
  * @param {{ id?: unknown }} spec
  */
-function requireId(fn, spec) {
-  if (typeof spec?.id !== 'string' || !ID.test(spec.id)) {
-    throw new TypeError(`${fn} requires an id of lowercase letters and digits, starting with a letter`);
+function requireId(fn, spec, pattern = ID) {
+  if (typeof spec?.id !== 'string' || !pattern.test(spec.id)) {
+    const extra = pattern === ID ? '' : ', with a hyphen allowed between words';
+    throw new TypeError(`${fn} requires an id of lowercase letters and digits, starting with a letter${extra}`);
   }
 }

@@ -145,7 +145,7 @@ export function createHUD(api, catalog) {
     const host = $('lab-controls');
     if (!lab) {
       const coming = (exam?.coming || []).join(', ') || 'coming next';
-      host.innerHTML = `<p class="tiny">The ${coming} labs aren’t built yet. The practice problems for this unit are ready: press <b>P</b> or use Practice.</p>`;
+      host.innerHTML = `<p class="tiny">The ${coming} labs are not built yet.</p>`;
       mountedId = '';
       renderToggles(null);
       renderLegend(null);

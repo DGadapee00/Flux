@@ -404,6 +404,7 @@ export function createPractice(api, bank) {
   function startExam() {
     const examId = st.listExam;
     const tpls = problemsForExam(examId);
+    if (!tpls.length) return;
     const set = pickSet(tpls, progress, { n: Math.min(EXAM_SIZE, tpls.length) });
     const now = Date.now();
     st.exam = {
