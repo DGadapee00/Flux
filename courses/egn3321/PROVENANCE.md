@@ -1,7 +1,7 @@
 # Provenance
 
 EGN 3321 Dynamics lives in this folder. There is no earlier public repo to snapshot.
-The course is written here, unit by unit. Units 1, 2, 3, and 4 are in.
+The course is written here, unit by unit. Units 1, 2, 3, 4, and 5 are in.
 
 ## What course material is here
 
@@ -27,7 +27,14 @@ block, central and oblique impact, angular momentum of a particle, and the rocke
 in SI and in US customary units. The numbers are generated and cited by section.
 Steady flow (§15.8) stays out.
 
-Units 5–7 are catalog entries only. Their labs are listed as coming. They have no
+Unit 5 is planar kinematics of a rigid body. The labs are an instantaneous centre
+(`ic`: a ladder, a rolling wheel, and a four-bar), a slider-crank, and rolling
+without slip. The problems cover Hibbeler Dynamics Chapter 16: belts and external
+gears, absolute motion, relative velocity, the instantaneous centre, rolling, and
+relative acceleration. The numbers are generated and cited by section. Rotating
+axes (§16.8) stay out.
+
+Units 6–7 are catalog entries only. Their labs are listed as coming. They have no
 problems and no notes yet.
 
 The Unit 1 notes are rewritten from the section list. They are not a transcription.

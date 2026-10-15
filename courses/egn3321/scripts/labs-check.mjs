@@ -18,6 +18,9 @@ const LIMIT = {
   impulse: 1e-6,
   impact: 1e-9,
   rocket: 1e-4,
+  ic: 1e-4,
+  'slider-crank': 1e-4,
+  rolling: 1e-4,
 };
 
 const fails = [];
