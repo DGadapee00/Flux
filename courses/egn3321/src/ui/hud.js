@@ -12,6 +12,7 @@ export function createHUD(api) {
     examById,
     labMeta: LAB_META,
     title: course.title,
+    wordmark: course.code,
     homeId,
     notes: notesDeps,
   });

@@ -12,12 +12,21 @@ import { sceneScale, workPlane, lenLabel, PLANE_AXES } from '@flux/core/scene3d/
  * @param {(id: string) => object|undefined} catalog.examById
  * @param {Record<string, { title?: string }>} catalog.labMeta
  * @param {string} catalog.title Name printed on the brand line.
+ * @param {string} [catalog.wordmark] Heading beside the logo. Omit it and the page heading stays as written.
  * @param {string} catalog.homeId Unit shown before one is mounted.
  * @param {object} [catalog.notes] Core `createNotes` dependencies. Omit when the manifest has no notes.
  */
 export function createHUD(api, catalog) {
-  const { exams: EXAMS, examById, labMeta: LAB_META, title, homeId } = catalog;
+  const { exams: EXAMS, examById, labMeta: LAB_META, title, homeId, wordmark } = catalog;
   const notesTab = mountNotesTab(api, catalog.notes);
+  if (wordmark) {
+    const heading = document.getElementById('brand')?.querySelector('h1');
+    if (heading) {
+      heading.textContent = wordmark;
+      heading.classList.toggle('wordmark-long', wordmark.length > 6);
+    }
+    if (title) document.title = `${wordmark} — ${title}`;
+  }
   const $ = (id) => document.getElementById(id);
   let lawKey = '';
   let mountedId = '';

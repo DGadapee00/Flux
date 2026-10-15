@@ -7,7 +7,7 @@ import { matchExamples, setupsFor } from './setups.js';
 
 const countFor = (ch) => PROBLEMS.filter((p) => p.ch === ch).length;
 
-/** No step-through derivations in Unit 1. The field stays so the notes panel can iterate it. */
+/** No step-through derivations yet. The field stays so the notes panel can iterate it. */
 export const DERIVATIONS = [];
 
 export const notesDeps = {

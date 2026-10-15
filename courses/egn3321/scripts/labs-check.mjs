@@ -11,6 +11,8 @@ const LIMIT = {
   rectilinear: 2e-3,
   'path-nt': 1e-3,
   relative: 1e-4,
+  fma: 1e-6,
+  curve: 1e-4,
 };
 
 const fails = [];
