@@ -8,7 +8,8 @@
     "./em/*": "./src/em/*",
     "./mechanics/*": "./src/mechanics/*",
     "./math/*": "./src/math/*",
-    "./stats/*": "./src/stats/*"
+    "./stats/*": "./src/stats/*",
+    "./convert.js": "./src/convert.js"
   },
   "scripts": {
     "test": "node src/mechanics/selftest.js && node src/mechanics/motion-selftest.js && node --test test/*.test.js"
