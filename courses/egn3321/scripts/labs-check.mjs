@@ -15,6 +15,9 @@ const LIMIT = {
   curve: 1e-4,
   collar: 1e-6,
   paths: 1e-5,
+  impulse: 1e-6,
+  impact: 1e-9,
+  rocket: 1e-4,
 };
 
 const fails = [];

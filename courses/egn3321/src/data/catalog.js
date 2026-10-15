@@ -34,8 +34,8 @@ export const EXAMS = [
     title: 'Impulse and momentum',
     chapters: '15',
     date: 'Ch 15',
-    labs: [],
-    coming: ['Impulse', 'Impact', 'Rocket'],
+    labs: ['impulse', 'impact', 'rocket'],
+    coming: [],
   },
   {
     id: 'u5',
@@ -74,6 +74,9 @@ export const LAB_META = {
   curve: { id: 'curve', exam: 'u2', title: 'Curve' },
   collar: { id: 'collar', exam: 'u3', title: 'Collar' },
   paths: { id: 'paths', exam: 'u3', title: 'Paths' },
+  impulse: { id: 'impulse', exam: 'u4', title: 'Impulse' },
+  impact: { id: 'impact', exam: 'u4', title: 'Impact' },
+  rocket: { id: 'rocket', exam: 'u4', title: 'Rocket' },
 };
 
 export const CHAPTER_TITLES = {
@@ -81,6 +84,7 @@ export const CHAPTER_TITLES = {
   12: 'Kinematics of a particle',
   13: 'Kinetics of a particle: force and acceleration',
   14: 'Kinetics of a particle: work and energy',
+  15: 'Kinetics of a particle: impulse and momentum',
 };
 
 export function examById(id) {

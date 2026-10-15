@@ -8,6 +8,9 @@ const loaders = {
   curve: () => import('./curve.js'),
   collar: () => import('./collar.js'),
   paths: () => import('./paths.js'),
+  impulse: () => import('./impulse.js'),
+  impact: () => import('./impact.js'),
+  rocket: () => import('./rocket.js'),
 };
 
 const labs = createLabLoader(loaders);

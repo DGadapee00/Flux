@@ -16,7 +16,10 @@ import {
   collarPath, collarTrip, conservativeWork, gravitationalEnergy, kineticEnergy, pathPotential,
   power, speedFromEnergy, springEnergy, springStop, springWork, work, workVector,
 } from './energy.js';
-import { centerOfMass, collide1D, impulse, momentum } from './momentum.js';
+import {
+  centerOfMass, collide1D, collideOblique, impactLoss, impulse, impulseRamp, momentum,
+  particleAngularMomentum, rocketDeltaV,
+} from './momentum.js';
 import { inclineState } from './friction.js';
 import {
   angularAcceleration, angularMomentum, constAlpha, inertiaDisk, inertiaPoint, inertiaRodCenter,
@@ -476,6 +479,75 @@ console.log('\nWork and energy');
   }
   approx(closed, trap, 1e-6, 'conservative work matches the straight-line integral');
   approx(pathPotential({ ...spec, x: 0, y: 0 }), gravitationalEnergy(spec.mass, g, 0) + springEnergy(spec.k, 0), 1e-12, 'potential at the anchor is the rest energy');
+}
+
+console.log('\nImpulse and momentum');
+{
+  function rampArea(a, b, t0, t1) {
+    const steps = 4000;
+    const dt = (t1 - t0) / steps;
+    let area = 0;
+    for (let i = 0; i < steps; i++) {
+      const t = t0 + (i + 0.5) * dt;
+      area += (a + b * t) * dt;
+    }
+    return area;
+  }
+  approx(impulseRamp(10, 30, 0, 2), rampArea(10, 30, 0, 2), 1e-8, 'a linear impulse matches the midpoint area');
+  approx(impulseRamp(100, 0, 0, 0.4), impulse(100, 0.4), 1e-12, 'a flat ramp is the constant-force impulse');
+
+  const m1 = 2;
+  const m2 = 3;
+  const u1 = 5;
+  const u2 = -1;
+  const e = 0.4;
+  const hit = collide1D(m1, m2, u1, u2, e);
+  const before = kineticEnergy(m1, u1) + kineticEnergy(m2, u2);
+  const after = kineticEnergy(m1, hit.v1) + kineticEnergy(m2, hit.v2);
+  approx(impactLoss(m1, m2, u1, u2, e), before - after, 1e-9, 'the loss formula matches the drop in kinetic energy');
+  approx(impactLoss(m1, m2, u1, u2, 1), 0, 1e-12, 'an elastic impact loses none');
+  const stuck = collide1D(m1, m2, u1, u2, 0);
+  const stuckKE = kineticEnergy(m1, stuck.v1) + kineticEnergy(m2, stuck.v2);
+  approx(impactLoss(m1, m2, u1, u2, 0), before - stuckKE, 1e-9, 'a perfectly inelastic impact matches the kinetic-energy drop');
+
+  const ob = collideOblique({ m1: 2, m2: 3, un1: 4, ut1: 1.5, un2: -1, ut2: 0.5, e: 0.6 });
+  approx(ob.vt1, 1.5, 1e-12, 'the first tangent velocity is copied through');
+  approx(ob.vt2, 0.5, 1e-12, 'the second tangent velocity is copied through');
+  const p = 2 * 4 + 3 * -1;
+  const rel = 0.6 * (4 - -1);
+  const vn1 = (p - 3 * rel) / 5;
+  const vn2 = vn1 + rel;
+  approx(ob.vn1, vn1, 1e-12, 'the normal speeds solve the momentum and restitution pair');
+  approx(ob.vn2, vn2, 1e-12, 'the second normal speed solves the same pair');
+  const vcm = p / 5;
+  approx(ob.vcm, vcm, 1e-12, 'the reported centre-of-mass speed is the incoming one');
+  approx((2 * ob.vn1 + 3 * ob.vn2) / 5, vcm, 1e-12, 'the centre-of-mass speed is unchanged');
+  const t0 = kineticEnergy(2, 4) + kineticEnergy(3, -1) + kineticEnergy(2, 1.5) + kineticEnergy(3, 0.5);
+  const t1 = kineticEnergy(2, ob.vn1) + kineticEnergy(3, ob.vn2) + kineticEnergy(2, ob.vt1) + kineticEnergy(3, ob.vt2);
+  approx(impactLoss(2, 3, 4, -1, 0.6), t0 - t1, 1e-9, 'tangent kinetic energy cancels in the loss');
+
+  function burn(spec) {
+    const steps = 4000;
+    const tb = (spec.m0 - spec.mf) / spec.mdot;
+    const dt = tb / steps;
+    let m = spec.m0;
+    let speed = 0;
+    for (let i = 0; i < steps; i++) {
+      const mid = m - 0.5 * spec.mdot * dt;
+      speed += (spec.mdot * spec.ve / mid - spec.g) * dt;
+      m -= spec.mdot * dt;
+    }
+    return speed;
+  }
+  const coast = { m0: 200, mf: 80, ve: 1500, mdot: 40, g: 0 };
+  approx(rocketDeltaV(coast).dv, burn(coast), 1e-6, 'a coasting rocket matches the midpoint burn');
+  const gravity = { m0: 200, mf: 80, ve: 1500, mdot: 40, g: 9.81 };
+  approx(rocketDeltaV(gravity).dv, burn(gravity), 1e-6, 'a rocket in gravity matches the midpoint burn');
+  const heavy = { m0: 400, mf: 280, ve: 1500, mdot: 40, g: 0 };
+  approx(rocketDeltaV(heavy).dv, burn(heavy), 1e-6, 'a smaller mass ratio matches the midpoint burn');
+
+  const L = particleAngularMomentum(2, v(0.4, -0.3, 0), v(1, 3, 0));
+  approx(L.z, 2 * (0.4 * 3 - (-0.3) * 1), 1e-12, 'particle angular momentum is m times x vy minus y vx');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);
