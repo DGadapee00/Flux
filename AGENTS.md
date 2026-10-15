@@ -29,7 +29,7 @@ Dependency direction is one way: `courses → shells → subjects → core`.
 
 - `packages/core` imports neither a subject, a shell, nor a course. It contains no course id, course code, chapter number, constant, or textbook name. A hook core needs goes on `defineCourse`, `defineLab`, or `problem`.
 - A subject may import core. A subject imports no shell and no course.
-- A shell may import core and subjects. A shell imports no course. A shell names no course and no chapter; the course passes its catalog, bank, and code in. `packages/shells/math` is the calculus HUD. `packages/shells/engineering` is the mechanics HUD, practice panel, styles, and free-body drawing. Statics reaches that shell through the thin wrappers in `courses/statics/src/ui/`.
+- A shell may import core and subjects. A shell imports no course. A shell names no course and no chapter; the course passes its catalog, bank, and code in. `packages/shells/math` is the calculus HUD. `packages/shells/engineering` is the mechanics HUD, practice panel, styles, and free-body drawing. Statics reaches that shell through the thin wrappers in `courses/statics/src/ui/`. The Notes tab is shown only when the course passes notes, and `stage.js` mounts a `plot2d` canvas in place of the three.js stage. A course that uses either one imports `styles/notes.css` or `styles/stage.css`.
 - A course may import core, subjects, and shells. A course imports no other course.
 - The site may import core, subjects, and courses. It is the registry.
 
