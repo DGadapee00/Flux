@@ -1,3 +1,5 @@
+import '@flux/shells/engineering/styles/main.css';
+import '@flux/shells/engineering/styles/practice.css';
 import 'katex/dist/katex.min.css';
 import { mountTrackBar } from '@flux/core';
 import * as THREE from 'three';

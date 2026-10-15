@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { defineLab } from './define.js';
-import { label, sliderRow, bindSlider, putSlider, showBlock, arcSegments } from './parts.js';
-import { M, fatSegments, Arrow, markAnswer, setFatSegments, segmentCapacity } from '../scene/manim.js';
+import { label, sliderRow, bindSlider, putSlider, showBlock } from './parts.js';
+import { M, fatSegments, markAnswer, setFatSegments, segmentCapacity } from '../scene/manim.js';
+import { aimArrow, applyCutFace, coupleCurl, fixedWallSegments, forceArrow, pinGlyph, rollerGlyph } from '@flux/shells/engineering/fbd.js';
 import { v } from '../physics/vectors.js';
 import { rigidBody2D, distributedLoad } from '../physics/statics.js';
 import { internalAt, shearMomentDiagram } from '../physics/sections.js';
@@ -188,8 +189,7 @@ export default defineLab({
     markAnswer(vCurve);
     markAnswer(mCurve);
 
-    const dir = new THREE.Vector3(0, -1, 0);
-    const mk = (color, w = 0.035) => new Arrow(dir, new THREE.Vector3(), 1, color, 0.24, 0.18, w);
+    const mk = (color, w = 0.035) => forceArrow(new THREE.Vector3(0, -1, 0), color, w);
     const load = mk(M.yellow);
     const dist = Array.from({ length: N_DIST }, () => mk(M.yellow, 0.018));
     const react = [0, 1].map(() => markAnswer(mk(M.green)));
@@ -199,9 +199,8 @@ export default defineLab({
     const heads = [mk(M.yellow, 0.001), markAnswer(mk(M.pink, 0.001)), markAnswer(mk(M.green, 0.001))];
     group.add(load, ...dist, ...react, reactX, cutV, cutN, ...heads);
 
-    const triGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(-0.2, -0.32, 0), new THREE.Vector3(0.2, -0.32, 0)]);
-    const pin = new THREE.Mesh(triGeo, new THREE.MeshBasicMaterial({ color: M.green, toneMapped: false, side: THREE.DoubleSide }));
-    const roller = new THREE.Mesh(new THREE.CircleGeometry(0.15, 24), new THREE.MeshBasicMaterial({ color: M.green, toneMapped: false }));
+    const pin = pinGlyph(M.green);
+    const roller = rollerGlyph(M.green);
     group.add(pin, roller);
 
     const dotGeo = new THREE.CircleGeometry(0.08, 18);
@@ -298,15 +297,6 @@ export default defineLab({
       lab.position.set(x, y, 0);
       if (html != null) lab.element.innerHTML = html;
     };
-    const aim = (arrow, from, to) => {
-      const d = to.clone().sub(from);
-      const len = d.length();
-      arrow.visible = len > 1e-4;
-      if (!arrow.visible) return;
-      arrow.position.copy(from);
-      arrow.setDirection(d.normalize());
-      arrow.setLength(len);
-    };
     const cutX = X(state.c);
     const fbd = state.showCut;
 
@@ -326,12 +316,7 @@ export default defineLab({
     h.roller.visible = false;
     const wall = [];
     if (state.support === 'cantilever') {
-      const x = X(0);
-      wall.push(x, Y_BEAM - 0.6, 0, x, Y_BEAM + 0.6, 0);
-      for (let i = 0; i < 5; i++) {
-        const y = Y_BEAM - 0.55 + i * 0.27;
-        wall.push(x, y, 0, x - 0.2, y - 0.18, 0);
-      }
+      wall.push(...fixedWallSegments(X(0), Y_BEAM));
     } else {
       h.pin.visible = true;
       h.pin.position.set(X(0), Y_BEAM - 0.06, 0);
@@ -351,7 +336,7 @@ export default defineLab({
     const tone = (x, col) => (faded(x) ? M.greyDark : col);
     if (state.P) {
       h.load.setColor(tone(state.a, M.yellow));
-      aim(h.load, new THREE.Vector3(X(state.a), Y_BEAM + 1.35, 0), new THREE.Vector3(X(state.a), Y_BEAM + 0.1, 0));
+      aimArrow(h.load, new THREE.Vector3(X(state.a), Y_BEAM + 1.35, 0), new THREE.Vector3(X(state.a), Y_BEAM + 0.1, 0));
       put(Lb.P, X(state.a), Y_BEAM + 1.55, `P = ${state.P.toFixed(0)} lb`);
     }
     const env = [];
@@ -370,7 +355,7 @@ export default defineLab({
         const x = (L * i) / (N_DIST - 1);
         if (x > xEnd + 1e-9 || -c.wfn(x) < 1e-9) return;
         arrow.setColor(tone(x, M.yellow));
-        aim(arrow, new THREE.Vector3(X(x), top(x), 0), new THREE.Vector3(X(x), Y_BEAM + 0.08, 0));
+        aimArrow(arrow, new THREE.Vector3(X(x), top(x), 0), new THREE.Vector3(X(x), Y_BEAM + 0.08, 0));
       });
       put(Lb.w, X(xEnd * 0.25), top(xEnd * 0.25) + 0.25, `w = ${state.w.toFixed(0)} lb/ft${state.dist === 'triangular' ? ' (peak)' : ''}`);
     }
@@ -384,7 +369,7 @@ export default defineLab({
     let cArc = [];
     if (state.M0) {
       const ctr = new THREE.Vector3(X(state.cm), Y_BEAM, 0);
-      cArc = curl(headCouple, ctr, 0.42, Math.sign(state.M0));
+      cArc = coupleCurl(headCouple, ctr, 0.42, Math.sign(state.M0));
       put(Lb.M0, ctr.x, ctr.y + 0.7, `M₀ = ${state.M0.toFixed(0)} lb·ft`);
     }
     setFatSegments(h.coupleArc, cArc);
@@ -402,14 +387,14 @@ export default defineLab({
       const len = Math.max(0.25, Math.abs(r.Fy) * kF);
       if (Math.abs(r.Fy) > 1e-9) {
         const up = r.Fy > 0;
-        aim(h.react[i], new THREE.Vector3(x, up ? base - len : base, 0), new THREE.Vector3(x, up ? base : base - len, 0));
+        aimArrow(h.react[i], new THREE.Vector3(x, up ? base - len : base, 0), new THREE.Vector3(x, up ? base : base - len, 0));
       }
       put(i === 0 ? Lb.RA : Lb.RB, x + 0.1, base - len - 0.28, `${r.name}<sub>y</sub> = ${r.Fy.toFixed(1)} lb`);
     });
     const RA = c.reactions[0];
     let wArc = [];
     if (RA.M) {
-      wArc = curl(headWall, new THREE.Vector3(X(0), Y_BEAM, 0), 0.5, Math.sign(RA.M));
+      wArc = coupleCurl(headWall, new THREE.Vector3(X(0), Y_BEAM, 0), 0.5, Math.sign(RA.M));
       put(Lb.MA, X(0) - 0.2, Y_BEAM + 0.85, `M<sub>A</sub> = ${RA.M.toFixed(0)} lb·ft`);
     }
     setFatSegments(h.wallArc, wArc);
@@ -443,18 +428,16 @@ export default defineLab({
 
     // Internal forces on the left segment's cut face, in their positive senses: V down, M
     // counterclockwise, N pulling away. Drawn in the direction they actually act.
-    h.cutV.visible = false;
-    h.cutN.visible = false;
-    let arc = [];
-    if (fbd && state.c > 1e-6) {
-      const face = new THREE.Vector3(cutX, Y_BEAM, 0);
-      if (Math.abs(c.at.V) > 1e-9) {
-        const down = c.at.V > 0;
-        aim(h.cutV, face.clone().add(new THREE.Vector3(0.12, down ? 0.75 : -0.75, 0)), face.clone().add(new THREE.Vector3(0.12, 0, 0)));
-      }
-      if (Math.abs(c.at.N) > 1e-9) aim(h.cutN, face, face.clone().add(new THREE.Vector3(c.at.N > 0 ? 0.7 : -0.7, 0, 0)));
-      if (Math.abs(c.at.M) > 1e-9) arc = curl(headCut, face, 0.38, Math.sign(c.at.M));
-    }
+    const arc = applyCutFace({
+      show: fbd && state.c > 1e-6,
+      cutV: h.cutV,
+      cutN: h.cutN,
+      momentHead: headCut,
+      face: new THREE.Vector3(cutX, Y_BEAM, 0),
+      N: c.at.N,
+      V: c.at.V,
+      M: c.at.M,
+    });
     setFatSegments(h.cutArc, arc);
     ctx.grid.visible = false;
   },
@@ -542,18 +525,4 @@ function setFill(mesh, pts, X, yOf, base) {
   }
   mesh.geometry.attributes.position.needsUpdate = true;
   mesh.geometry.setDrawRange(0, k / 3);
-}
-
-/** A curled arrow around `c` for a couple: sign +1 counterclockwise. Returns the arc segments. */
-function curl(head, c, r, sign) {
-  const sweep = sign * 1.4 * Math.PI;
-  const start = Math.PI / 2 - sweep / 2;
-  const endA = start + sweep;
-  const end = new THREE.Vector3(c.x + r * Math.cos(endA), c.y + r * Math.sin(endA), c.z);
-  const tangent = new THREE.Vector3(-Math.sin(endA), Math.cos(endA), 0).multiplyScalar(sign);
-  head.visible = true;
-  head.position.copy(end).addScaledVector(tangent, -0.22);
-  head.setDirection(tangent);
-  head.setLength(0.22, 0.2, 0.16);
-  return arcSegments(c, r, start, sweep * 0.9, 36);
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Guard for the panel markup (src/ui/shared.js): TeX written inside an ordinary template literal.
+ * Guard for the panel markup (the engineering shell, and this course's src): TeX written inside an ordinary template literal.
  *
  * `` `$V_{\text{rms}}$` `` is not the string it looks like — JavaScript turns `\t` into a tab, so
  * KaTeX receives `V_{<TAB>ext{rms}}` and silently renders "extrms". The same trap is waiting in
@@ -11,7 +11,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const ROOT = path.resolve('src');
+const ROOTS = [path.resolve('src'), path.resolve('../../packages/shells/engineering')];
 const EATEN = /\\+[tnvfrb0xu]/g;
 
 function walk(dir) {
@@ -45,7 +45,7 @@ function literals(src) {
 }
 
 const problems = [];
-for (const file of walk(ROOT)) {
+for (const file of ROOTS.flatMap((root) => walk(root))) {
   const src = fs.readFileSync(file, 'utf8');
   for (const lit of literals(src)) {
     // A `$` that does not open an interpolation is an inline-math delimiter; math needs a pair.
