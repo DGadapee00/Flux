@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rigid-body energy</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3321 · Dynamics · Unit 7 · Hibbeler Ch 18</p>
+  <h1>Rigid-body energy</h1>
+  <p class="lede">Work and energy for a rigid body in the plane. Translation of the mass centre and spin about that centre make up T. A one-degree linkage can write the same T about the instantaneous centre.</p>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>Kinetic energy</a>
+    <a href="#s2"><span>02</span>Work of a couple</a>
+    <a href="#s3"><span>03</span>Rolling without slip</a>
+    <a href="#s4"><span>04</span>The instantaneous centre</a>
+    <a href="#s5"><span>05</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Kinetic energy</h2>
+<p>A rigid body in the plane carries kinetic energy in two parts. The mass centre translates. The body spins about that centre.</p>
+\[ T = \tfrac{1}{2}mv_G^2 + \tfrac{1}{2}I_G\omega^2 \]
+<p>\(v_G\) is the speed of the mass centre. \(\omega\) is the angular speed. \(I_G\) is the moment about the centre.</p>
+<div class="box ex"><span class="tag">Worked example · the same drop</span>
+<p>A hoop, a disk, and a sphere roll 2 m down a 30° incline. They start from rest. The finish speeds are 3.74, 3.62, and 3.13 m/s. Each body of mass 2 kg gains the same kinetic energy, 19.62 J.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a rolling disk</span>
+<p>A disk of mass 2 kg and radius 0.25 m rolls at 3 m/s. Translation holds 9 J. Rotation holds 4.5 J. The total is 13.5 J.</p>
+</div>
+<div class="box fix"><span class="tag">Fix</span>
+<p>Reporting only \(\tfrac{1}{2}I_G\omega^2\) drops the translation of the mass centre. Both terms belong in \(T\). Hibbeler §18.1.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>For rolling without slip, \(\omega = v_G/R\). The same \(T\) is \(\tfrac{1}{2}I_C\omega^2\) about the contact.</p>
+</div>
+</section>
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Work of a couple</h2>
+<p>A couple does work through the angle it turns. The angle is in radians.</p>
+\[ U = \int_{\theta_1}^{\theta_2} M\,d\theta \]
+<p>A torsional spring has \(M = -\kappa(\theta - \theta_0)\). Between two angles its work equals the drop in \(\tfrac{1}{2}\kappa(\theta-\theta_0)^2\).</p>
+<div class="box ex"><span class="tag">Worked example · a bar released from horizontal</span>
+<p>A 4 kg bar, 2 m long, is pinned at one end and released from rest while horizontal. At the bottom, \(\omega = v_G = 3.84\). The kinetic energy is \(mgL/2\), which reads 39.2 J.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a torsional spring</span>
+<p>The same bar has a torsional spring of stiffness 15 N·m/rad, unstretched when the bar hangs down. From horizontal to the bottom the spring does 18.51 J of work. \(\omega = 4.65\ \mathrm{rad/s}\), and \(T = 57.7\ \mathrm{J}\).</p>
+</div>
+<div class="box fix"><span class="tag">Fix</span>
+<p>The work of a couple is \(\int M\,d\theta\). A force times an arc length is a different job, and it misses this moment. Hibbeler §18.3.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Unstretched at the bottom, the spring hands its stored energy to the bar. The bar arrives faster than it would under gravity alone.</p>
+</div>
+</section>
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Rolling without slip</h2>
+<p>A hoop, a disk, and a sphere roll from rest down the same incline. Write \(k = I_G/(mR^2)\). Energy gives the finish speed, and mass and radius cancel.</p>
+\[ v = \sqrt{\frac{2gs\sin\theta}{1+k}} \]
+<div class="box why"><span class="tag">Why</span>
+<p>The centre drops \(s\sin\theta\), so \(mg s\sin\theta = \tfrac{1}{2}mv^2 + \tfrac{1}{2}I_G\omega^2\). Rolling sets \(\omega = v/R\) and \(I_G = kmR^2\). Cancel \(m\). The denominator is \(1+k\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a sphere finishes first</span>
+<p>On a 2 m run at 30°, the times are 1.068 s for the sphere, 1.106 s for the disk, and 1.277 s for the hoop. The sphere has \(k = 2/5\), the smallest of the three.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a sphere in feet</span>
+<p>A sphere rolls 10 ft from rest down a 30° incline. With \(g = 32.2\ \mathrm{ft/s^2}\), the speed is 15.17 ft/s. The weight cancels.</p>
+</div>
+<div class="box fix"><span class="tag">Fix</span>
+<p>Putting \(k_G\) in the denominator counts the radius of gyration once. The factor is \(k_G^2/R^2\). Mass cancels, so only \(k\) orders the race. Hibbeler §18.5.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Hoop \(k = 1\), disk \(k = 1/2\), solid sphere \(k = 2/5\). The sphere finishes first.</p>
+</div>
+</section>
+<section class="topic" id="s4">
+<h2><span class="n">04</span>The instantaneous centre</h2>
+<p>A rod with one end in a horizontal slot and one end in a vertical slot has a single degree of freedom. At each angle the instantaneous centre is the corner opposite the rod.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The foot moves horizontally, so the centre of rotation lies on the vertical through the foot. The top moves vertically, so it also lies on the horizontal through the top. That corner is the instantaneous centre. \(I_{IC} = I_G + m(L/2)^2 = mL^2/3\), and \(T = \tfrac{1}{2}I_{IC}\omega^2\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a rod in two slots</span>
+<p>A 3 kg rod, 1.5 m long, is released from rest at 60° from the floor. At 30°, \(\omega = 2.68\ \mathrm{rad/s}\) and \(v_G = 2.01\ \mathrm{m/s}\). \(I_{IC} = mL^2/3 = 2.25\ \mathrm{kg\cdot m^2}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a spring at the foot</span>
+<p>The same rod has a spring at the foot. The natural length equals the rod, so the spring starts compressed. At 30°, \(\omega = 4.06\ \mathrm{rad/s}\) and \(T = 18.52\ \mathrm{J}\).</p>
+</div>
+<div class="box fix"><span class="tag">Fix</span>
+<p>\(T = \tfrac{1}{2}I_{IC}\omega^2\) is an identity at that instant. \(\Sigma M_{IC} = I_{IC}\alpha\) is not, because the instantaneous centre moves. Integrate the energy, or the real one-degree equation. Hibbeler §18.1.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Use the instantaneous centre for \(T\). Keep the moment equation on a fixed point, or on the mass centre.</p>
+</div>
+</section>
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Formula sheet</h2>
+<ul>
+<li>Hoop \(k = 1\). Disk \(k = 1/2\). Solid sphere \(k = 2/5\). Here \(k = I_G/(mR^2) = k_G^2/R^2\).</li>
+<li>Rolling from rest: \(v = \sqrt{2gs\sin\theta/(1+k)}\).</li>
+<li>\(T = \tfrac{1}{2}mv_G^2 + \tfrac{1}{2}I_G\omega^2\). About the contact, or about a fixed pin, \(T = \tfrac{1}{2}I\omega^2\).</li>
+<li>Uniform bar, pinned, released from horizontal: \(\omega = \sqrt{3g/L}\) at the bottom, and \(v_G = \omega L/2\).</li>
+<li>Torsional spring, unstretched at \(\theta_0\): \(U = \tfrac{1}{2}\kappa\big((\theta_1-\theta_0)^2 - (\theta_2-\theta_0)^2\big)\), with the angles in radians.</li>
+<li>Rod in two slots: \(I_{IC} = mL^2/3\) and \(T = \tfrac{1}{2}I_{IC}\omega^2\).</li>
+<li>\(g = 9.81\ \mathrm{m/s^2}\). A US problem uses \(g = 32.2\ \mathrm{ft/s^2}\).</li>
+</ul>
+</section>
+</main>
+</body>
+</html>

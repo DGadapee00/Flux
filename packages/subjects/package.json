@@ -12,6 +12,6 @@
     "./convert.js": "./src/convert.js"
   },
   "scripts": {
-    "test": "node src/mechanics/selftest.js && node src/mechanics/motion-selftest.js && node src/mechanics/path-selftest.js && node src/mechanics/rigid-selftest.js && node src/mechanics/inertia-selftest.js && node --test test/*.test.js"
+    "test": "node src/mechanics/selftest.js && node src/mechanics/motion-selftest.js && node src/mechanics/path-selftest.js && node src/mechanics/rigid-selftest.js && node src/mechanics/inertia-selftest.js && node src/mechanics/rigid-energy-selftest.js && node --test test/*.test.js"
   }
 }

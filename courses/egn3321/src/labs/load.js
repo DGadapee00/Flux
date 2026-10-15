@@ -17,6 +17,8 @@ const loaders = {
   inertia: () => import('./inertia.js'),
   pendulum: () => import('./pendulum.js'),
   'roll-slip': () => import('./roll-slip.js'),
+  race: () => import('./race.js'),
+  linkage: () => import('./linkage.js'),
 };
 
 const labs = createLabLoader(loaders);

@@ -24,6 +24,8 @@ const LIMIT = {
   inertia: 1e-4,
   pendulum: 1e-6,
   'roll-slip': 1e-6,
+  race: 1e-6,
+  linkage: 1e-4,
 };
 
 const fails = [];

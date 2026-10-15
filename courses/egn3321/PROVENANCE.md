@@ -40,8 +40,11 @@ slip on an incline (`roll-slip`). The problems cover Hibbeler Dynamics Chapter 1
 mass moments, a crate that slides or tips, pin reactions, and roll or slip, in SI
 and in US customary units. The numbers are generated and cited by section.
 
-Unit 7 is a catalog entry only. Its labs are listed as coming. It has no problems
-and no notes yet.
+Unit 7 is work and energy of a rigid body. The labs are a hoop, disk, and sphere
+racing down an incline (`race`) and a pinned bar or a rod in two slots
+(`linkage`). The problems cover Hibbeler Dynamics Chapter 18: kinetic energy,
+the work of a couple, and energy conservation for rolling bodies and linkages,
+in SI and in US customary units. The numbers are generated and cited by section.
 
 The Unit 1 notes are rewritten from the section list. They are not a transcription.
 A `box fix` names a mistake a student would make by trusting a common slip, and it
