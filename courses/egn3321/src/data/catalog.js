@@ -25,8 +25,8 @@ export const EXAMS = [
     title: 'Work and energy',
     chapters: '14',
     date: 'Ch 14',
-    labs: [],
-    coming: ['Collar', 'Paths'],
+    labs: ['collar', 'paths'],
+    coming: [],
   },
   {
     id: 'u4',
@@ -72,12 +72,15 @@ export const LAB_META = {
   relative: { id: 'relative', exam: 'u1', title: 'Relative' },
   fma: { id: 'fma', exam: 'u2', title: 'F = ma' },
   curve: { id: 'curve', exam: 'u2', title: 'Curve' },
+  collar: { id: 'collar', exam: 'u3', title: 'Collar' },
+  paths: { id: 'paths', exam: 'u3', title: 'Paths' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Units and significant figures',
   12: 'Kinematics of a particle',
   13: 'Kinetics of a particle: force and acceleration',
+  14: 'Kinetics of a particle: work and energy',
 };
 
 export function examById(id) {

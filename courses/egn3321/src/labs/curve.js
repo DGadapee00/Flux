@@ -341,7 +341,7 @@ export default defineLab({
     return cells([
       ['speed', `${fig(c.speed)} m/s`],
       ['design', `${fig(c.vDesign)} m/s`],
-      ['band', `${fig(c.vMin)} to ${fig(c.vMax)} m/s`],
+      ['band', `<span class="lo">${fig(c.vMin)}–</span><span class="hi">${fig(c.vMax)} m/s</span>`, 'stack'],
       ['normal', `${fig(c.N)} N`],
     ]);
   },
