@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status: **Phase 2 done** (13 Oct 2026). All four courses build from this repo and are live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 5174, MAC 5175, Statics 5176, STA 3032 5177 (next: MAC 2311 5178, MAC 2312 5179, PHY 2048 5180). PHY's weekly drops land here. **Next: Phase 7** (Calc I, Calc II, Physics I) and **Phase A1** (the rocket, engine first), in parallel. flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their old sites redirect here.
+Status (15 Oct 2026): **Phase 7 math track done.** MAC 2311 and MAC 2312 are live, every unit with its labs and problems. **PHY 2048 groundwork is merged** (07fbbe2): the mechanics library, catalog, problem bank and lab logic. Its interface comes after PHY 2049's Exam 5 on 23 Oct 2026, with the physics shell. Live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /mac2311/, /mac2312/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 2049 5174, MAC 2313 5175, Statics 5176, STA 3032 5177, MAC 2311 5178, MAC 2312 5179, PHY 2048 5180, EGN 3321 5181, EGN 3331 5182, EML 3100 5183. PHY's weekly drops land here. **Next:** PHY 2048's interface after 23 Oct, **Phase A1** (the rocket, engine first), and **Phase 8** (Dynamics, Mechanics of Materials, Thermodynamics), planned below and on the hub as not built yet. flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their old sites redirect here.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
@@ -77,13 +77,14 @@ next to Physics II, and a Calc III topic can point back to where Calc I taught t
 | Track | Courses, in order | Subject library | Built today |
 |---|---|---|---|
 | Physics | PHY 2048 Physics I → PHY 2049 Physics II | `mechanics` + `em` | PHY 2049 |
-| Math | MAC 2311 Calc I → MAC 2312 Calc II → MAC 2313 Calc III → MAP 2302 Differential equations | `math` | MAC 2313 |
-| Mechanics | EGN 3311 Statics → Dynamics | `mechanics` | Statics |
+| Math | MAC 2311 Calc I → MAC 2312 Calc II → MAC 2313 Calc III → MAP 2302 Differential equations | `math` | MAC 2311, MAC 2312, MAC 2313 |
+| Mechanics | EGN 3311 Statics → EGN 3321 Dynamics and EGN 3331 Mechanics of Materials | `mechanics` | Statics |
 | Statistics | STA 3032 | `stats` | STA 3032 |
-| Thermal-fluids (later) | Thermodynamics → fluid mechanics → heat transfer | `thermo` (new) | |
+| Thermal-fluids | EML 3100 Thermodynamics → fluid mechanics → heat transfer | `thermo` (new) | none yet (Phase 8) |
 
-Codes other than PHY 2049, MAC 2313, EGN 3311 and STA 3032 are the Florida common course numbers
-and still need confirming against UNF's catalog before they go in a manifest.
+EGN 3321, EGN 3331 and EML 3100 are the codes on the owner's course packs (D5). PHY 2048 and MAP 2302
+are the Florida common course numbers and still need confirming against UNF's catalog before they
+go in a manifest.
 
 How a track works:
 
@@ -418,7 +419,12 @@ Rule for this phase: a move that turns any course's check red is reverted, not p
 
 Move UI into core one feature at a time, and only when that feature should exist in every course.
 
-1. Track bar in the shell and `prereqs` links, with a check that lists unbuilt targets.
+1. `prereqs` links, with a check that lists unbuilt targets (`packages/checks/prereqs.mjs`).
+
+The track bar is dropped. On 13 Oct 2026 the course-listing row came out of every course header
+(508b60e), and so did the per-course Export and Import buttons (2afb9d5). A course header has no
+course switcher; its logo links to the hub, whose track cards are the track view, and backup and
+restore live on the hub.
 
 ### Phases 3–5: retired
 
@@ -437,6 +443,9 @@ gets weekly drops; and a banner on the old PHY site pointing here.
 **Exit:** ingest runs from the platform repo; flux-phy2049 is no longer edited.
 
 ### Phase 7: Calc I, Calc II and Physics I
+
+**Math track done, 15 Oct 2026:** MAC 2311 and MAC 2312 are live, on the math shell. **PHY 2048:**
+the non-UI groundwork is merged (07fbbe2). The physics shell move and its labs come after 23 Oct.
 
 Three new courses, built directly on the platform: **MAC 2311 Calculus I** and **MAC 2312
 Calculus II** in the Math track (before MAC 2313), and **PHY 2048 Physics I** in the Physics
@@ -522,7 +531,7 @@ energy bar charts on a track, 1D collisions (elastic to inelastic), rotation and
 #### Track links
 
 - Hub: the three courses appear in their track cards (`site/src/tracks.js`) once each is live.
-- Track bar: each course appears in its track's bar in order.
+- Track bar: dropped (Phase 2b). The hub card lists the track's courses in order.
 - `prereqs` (from Phase 2b): MAC 2313 labs and notes point back to the Calc I/II topic they rest on
   (gradient → derivative, double integral → Riemann sum, polar area → polar curves); PHY 2049 points
   back to PHY 2048 (electric potential energy → work and energy, magnetic force → circular motion);
@@ -646,7 +655,7 @@ agreeing is the same "second opinion" idea the course labs use.
 A check collects every `teaches` link and lists the ones whose target does not exist yet, grouped
 by the course or subject they need. That list becomes the build order for the school side:
 thermodynamics, compressible flow and heat transfer are the first gaps the engine will expose
-(the Thermal-fluids track in Phase 8).
+(the Thermal-fluids track: Thermodynamics in Phase 8, the rest after).
 
 #### Order of work
 
@@ -670,14 +679,537 @@ other books but equations and cited values; the stand sim's repo is not edited f
 (where useful) its own sim; all selftests pass, including the cross-check with the stand sim; the
 coverage report runs in `npm test`.
 
-### Phase 8 and on: new courses, by track
+### Phase 8: Dynamics, Mechanics of Materials and Thermodynamics
 
-Each new course is built directly as a module inside its track:
+Three engineering courses, built directly on the platform. **EGN 3321 Dynamics** and **EGN 3331
+Mechanics of Materials** join the Mechanics track after Statics. **EML 3100 Thermodynamics** starts
+the Thermal-fluids track. The codes and the chapter order are the owner's course packs. All three
+are on the hub now, marked "not built yet" (`site/src/tracks.js`).
+
+| Course | Folder and id | Port | Track, order | Text |
+|---|---|---|---|---|
+| EGN 3321 Dynamics | `courses/egn3321` | 5181 | mechanics, 2 | Hibbeler, *Engineering Mechanics: Dynamics* |
+| EGN 3331 Mechanics of Materials | `courses/egn3331` | 5182 | mechanics, 3 | Hibbeler, *Mechanics of Materials* |
+| EML 3100 Thermodynamics | `courses/eml3100` | 5183 | thermal, 1 | Çengel & Boles, *Thermodynamics: An Engineering Approach* |
+
+The id is the course code in lowercase, as MAC 2311 and MAC 2312 did. It is the route segment
+(`#/egn3321/u2/explore/fma`) and the storage namespace (`flux.egn3321.problems.v1`).
+
+#### Track placement
+
+- **Mechanics:** EGN 3311 Statics → EGN 3321 Dynamics and EGN 3331 Mechanics of Materials. Both rest
+  on Statics and neither on the other, so their order numbers only set the order of the list.
+- **Thermal-fluids:** EML 3100 Thermodynamics first. Fluid mechanics and heat transfer follow when
+  their codes are known. The hub card exists now. It lists Thermodynamics and opens nothing until a
+  course is built. Its animation is a Carnot cycle on P–v, and its test checks the enclosed area
+  against R(T_H − T_L) ln(v₂/v₁).
+- **Prerequisite links** (`prereqs`, a check lists unbuilt targets): Dynamics → PHY 2048 (kinematics,
+  Newton's laws, energy, momentum, rotation) and Statics (free-body diagrams, centroids, moments of
+  inertia). Mechanics of Materials → Statics (sections, trusses, centroids, area moments of inertia)
+  and MAC 2311 (integration, for the elastic curve). Thermodynamics → PHY 2048 (work and energy) and
+  MAC 2311 (integrals, for boundary work).
+- **Applications links:** the rocket's Nozzle page teaches through Thermodynamics' `nozzle` and
+  `isentropic` labs. Its Structure page teaches through Mechanics of Materials' `vessel` lab. Dynamics'
+  `rocket` lab (variable mass) is linked from the Propellants page.
+
+#### Rules for this phase
+
+- **Course packs are for coverage and order only.** The instructors' packs set the chapter list
+  and its order. Nothing from them ships: no rewritten notes, no worked cases, no lab presets, no
+  review questions. This is decision D6 applied before it can come up. PROVENANCE.md in each folder
+  says so. If an instructor later agrees in writing, their material can come in like PHY 2049's.
+- **Textbook use:** problems and notes cite the text by section (Hibbeler §12.7, Çengel §5-4).
+  Statements are written fresh with generated numbers. A worked case uses numbers computed for this
+  bank and cites the section its method comes from. No textbook example or problem number is
+  invented, and none is copied until D9 is decided. No figures, no tables copied.
+- **Property data is computed, not copied.** Steam properties come from IAPWS-IF97. Ideal-gas
+  properties come from the NASA 7-coefficient polynomials. Both are published, free standards, and
+  their own verification values are the selftests. Material constants (E, G, ν, σ_Y, α) are stated
+  in each problem.
+- **Units:** both systems, as the texts use them. SI and US customary values go through one
+  conversion module with exact definitions. Hibbeler's rule for answers: three significant figures,
+  four when the leading digit is 1. Grading accepts the exact value, and the course rounding is what
+  the worked solution prints.
+- **Headers:** a course header has the logo, the course code and title, and the mode tabs. It has
+  no course-switcher row and no Export or Import buttons. The logo links to the hub
+  (`mountTrackBar` from `@flux/core`). Backup and restore live on the hub only.
+- **Same bar as every course:** every number on screen is computed, then checked by a second
+  method. tex-check, problems-check, labs-check, notes-check, the subject selftests, smoke at 380px
+  and 1280px, overflow at 380px, and the raw, storage, dependency and prereq checks all pass.
+- **PHY 2049 is untouched.** Nothing here edits `courses/phy2049/`, its `incoming/` or
+  `.canvas-state.json`.
+
+#### The shell: one engineering shell, moved out of Statics
+
+Phase 7 moved MAC 2313's HUD, practice panel and styles into `packages/shells/math/`, and MAC 2311
+and MAC 2312 import them through two thin files (`ui/hud.js`, `ui/problems.js`) that pass the
+catalog, the bank and the course code in. Phase 8 does the same for this family:
+
+1. **Move Statics' UI into `packages/shells/engineering/`.** Its `ui/hud.js`, `ui/problems.js`,
+   `ui/format.js`, `ui/plot.js`, `ui/shared.js` and `styles/` move unchanged, except that whatever
+   names Statics (its code, its unit ids, its chapter numbers) becomes a parameter, so deps.mjs
+   passes. Statics keeps two thin wrappers, as MAC 2311 has. This is a pure move. Statics is closed,
+   and its tests, smoke and screenshots must come out the same.
+2. **Free-body diagrams move with it.** The FBD drawing in Statics' `particle`, `beam` and `frame`
+   labs (body, supports, arrows, the cut face's N, V and M in the chapter's positive senses) becomes
+   `shells/engineering/fbd.js`. Dynamics draws its FBDs and kinetic diagrams with it. Mechanics of
+   Materials draws its cut members with it.
+3. **The shell gains two things the new courses need, behind manifest flags.** A Notes tab, shown
+   only when the manifest has `notes` (Statics has none, so its header does not change), using
+   core's `createNotes`. A `plot2d` stage: a lab of `kind: 'plot2d'` mounts a canvas from
+   `@flux/core/plot2d` in place of the three.js stage. Thermodynamics' property diagrams use it.
+4. **No copied HUD.** A new course writes only its catalog, labs, bank, notes and the two wrappers.
+   A course that needs a different control asks the shell for a hook.
+
+The physics shell (PHY 2049's UI, after 23 Oct) stays a separate family. If the two shells turn out
+to be the same code once both exist, they merge then, not before.
+
+#### Notes: PHY 2049's structure
+
+Each unit has one notes file, written for Flux in the structure of PHY 2049's
+`e4-charge-in-motion.html`:
+
+- `header.top` with an eyebrow (`EGN 3321 · Dynamics · Unit 1 · Hibbeler Ch 12`), an h1, a lede of
+  one or two sentences, the legend, and a toc grouped by part.
+- `div.part` blocks, each with its eyebrow (`Part I`) and h2.
+- `section.topic` numbered s1, s2, … with an `h2` holding `span.n` and the title. The last section is
+  the formula sheet.
+- Boxes: `ex` (worked example), `why` (derivation), `fix` (a correction), `key` (key idea). A `fix`
+  names something a student would get wrong by trusting the source, cites the section, and gives the
+  correct version. Published errata for the text go here, and so do the classic misreadings
+  (Celsius in a Carnot ratio, gauge pressure in the ideal-gas law, the contact point of a rolling
+  wheel having zero acceleration).
+- Math is `\( \)` and `\[ \]`, typeset by KaTeX. `$` is never a delimiter in a notes file.
+- Voice: short declarative sentences, about 15 words. Derive each rule. Recompute every worked
+  answer before writing it down.
+
+The registry is `notes/index.js`, shaped like PHY 2049's: per unit `{ unit, title, chapters, file,
+load, sections }`, each section `{ id, n, title, lab, ch, topics, problems, home }`. `notes/setups.js`
+gives a worked example a "Show this in the lab" button, and its `read()` pairs the lab's value with
+the notes' value. notes-check (generalised from PHY 2049's into `packages/checks/notes.mjs`, PHY's
+own copy untouched) checks the section list against the file, every lab, chapter and problem a
+section names, every formula with KaTeX, and every setup headless within 2%.
+
+The notes are written from the text's section list and derivations, not from the instructors'
+packs.
+
+#### EGN 3321 Dynamics (`courses/egn3321`, port 5181)
+
+Units follow the course pack. Hibbeler sections the pack does not name are left out until the
+owner says otherwise (D11): cylindrical components (§12.8, §13.6), dependent motion (§12.9), central
+force (§13.7), steady flow and variable mass (§15.8–15.9, but see `rocket` below), and rotating axes
+(§16.8).
+
+**Unit 1. Particle kinematics** (units and significant figures, which the Dynamics volume does not
+repeat, cited from Hibbeler *Statics* §1.3–1.6; Ch 12: rectilinear, curvilinear,
+normal–tangential, relative motion)
+
+- `rectilinear`: linked s–t, v–t and a–t graphs, with a piecewise a(t) the student drags.
+  Shows that v is the area under a–t and s the area under v–t, and that distance and displacement
+  part when v changes sign. Recompute: exact integration of each polynomial piece. Check: RK4
+  integration of the same a(t), and total distance as ∫|v| dt against the sum of |Δs| between
+  zero crossings of v.
+- `path-nt`: a particle moving along y = f(x) with speed v(t). Shows that the acceleration does
+  not point along the path: a_t = v̇ and a_n = v²/ρ. Recompute: ρ = (1 + y′²)^{3/2}/|y″|. Check:
+  differentiate the position twice in x–y components (subjects/math/ndiff), then project onto t
+  and n.
+- `relative`: two particles on their own paths, seen from translating axes on A. Shows that
+  v_B/A = v_B − v_A can point where neither velocity does. Recompute: vector subtraction. Check:
+  numerical derivative of r_B − r_A.
+
+**Unit 2. Particle kinetics: force and acceleration** (Ch 13)
+
+- `fma`: blocks, pulleys and an incline with friction. Shows that the rope tension is not the hanging
+  weight while the system accelerates, and when friction is static or kinetic. Recompute: solve
+  ΣF = ma for a and T with `mechanics/dynamics.js` and `friction.js`. Check: integrate the motion
+  for a time t; the net work over the displacement equals ½mv².
+- `curve`: a car on a banked curve and a bead in a vertical loop, in n–t axes. Shows the speed band
+  where the car holds without friction, and where the normal force is least in a loop. Recompute:
+  n–t equations. Check: the same forces in x–y components at each angle, residual of ΣF − ma = 0.
+
+**Unit 3. Work and energy** (Ch 14)
+
+- `collar`: a collar on a rod with a spring, gravity and optional friction. Shows that a spring's
+  work depends only on its start and end stretch. Recompute: T₁ + ΣU₁₋₂ = T₂. Check: integrate the
+  equation of motion along the rod and compare the speed at the end.
+- `paths`: the same two end points joined by three paths, in gravity plus a spring, then with
+  friction. Shows that conservative work is path independent and friction work is not. Recompute:
+  −ΔV. Check: the line integral ∫F·dr along each path by quadrature.
+
+**Unit 4. Impulse and momentum** (Ch 15)
+
+- `impulse`: an F–t curve the student shapes. Shows that a short large force and a long small force
+  with the same area give the same Δv. Recompute: the area under F(t). Check: integrate m dv/dt = F.
+- `impact`: central and oblique impact with restitution e. Shows that momentum is conserved for every
+  e, and that energy lost grows as e falls; along the tangent nothing changes. Recompute: the
+  closed-form post-impact velocities. Check: the centre-of-mass velocity is unchanged, and the
+  energy lost equals ½μ(1 − e²)v_rel² with μ the reduced mass, against T before minus T after.
+- `rocket` (optional, §15.9): a rocket burning at constant ṁ. Shows that Δv grows with ln(m₀/m_f),
+  not with the mass burned. Recompute: Δv = v_e ln(m₀/m_f) − g t_b. Check: integrate
+  m dv/dt = ṁv_e − mg numerically. Built only if the owner keeps §15.9 (D11). The rocket
+  application links to it.
+
+**Unit 5. Planar kinematics of a rigid body** (Ch 16: instantaneous centre, relative acceleration)
+
+- `ic`: a sliding ladder, a rolling wheel, a four-bar linkage. Shows that the IC is found from two
+  velocity directions and moves as the body moves. Recompute: v_B = v_A + ω × r_B/A. Check:
+  ω = v_A / r_A/IC from the IC construction, and the derivative of the linkage's position equations.
+- `slider-crank`: a crank at constant ω driving a slider. Shows that the slider still accelerates,
+  because of the −ω²r term. Recompute: a_B = a_A + α × r_B/A − ω²r_B/A. Check: x_B(θ) differentiated
+  twice numerically (absolute motion analysis, §16.4).
+- `rolling`: a wheel rolling without slip, with a point traced on its rim. Shows that the contact
+  point has zero velocity but acceleration rω² toward the centre, and the top point moves at 2v.
+  Recompute: relative velocity and acceleration from the centre. Check: differentiate the
+  cycloid.
+
+**Unit 6. Planar kinetics of a rigid body** (Ch 17)
+
+- `inertia`: mass moments of inertia of composite bodies about any axis. Shows that I depends on how
+  far the mass is from the axis, not how much there is. Recompute: tabulated shapes plus the
+  parallel-axis theorem (`mechanics/rotation.js`). Check: numerical volume integration of r² dm
+  (`subjects/math/quadrature.js`).
+- `pendulum`: a slender bar or plate released from rest about a pin. Shows that the pin force at
+  release is not the weight (a horizontal slender bar: mg/4). Recompute: ΣM_O = I_O α and
+  ΣF = m a_G. Check: moments about G instead of O; the residual of all three equations.
+- `roll-slip`: a disk, hoop or sphere on an incline with friction μ. Shows when it rolls and when it
+  slips, and that rolling acceleration is g sin θ / (1 + k²/r²). Recompute: the rolling case, then
+  the friction it needs against μN. Check: integrate the kinetics and compare the speed with the
+  energy method of Ch 18.
+
+**Unit 7. Work and energy of a rigid body** (Ch 18)
+
+- `race`: hoop, disk and sphere racing down an incline. Shows that mass and radius cancel; only k/r
+  decides. Recompute: T₁ + V₁ = T₂ + V₂ with T = ½mv² + ½I_Gω². Check: the Ch 17 kinetics integrated
+  in time.
+- `linkage`: a bar or linkage released with a spring. Shows how to write T when the IC carries the
+  kinematics. Recompute: energy conservation with velocities from the IC. Check: numerical
+  integration of the one-degree-of-freedom equation of motion.
+
+Problem types per chapter (each template has a second opinion: its lab or a second method):
+
+| Chapter | Templates | Answers |
+|---|---|---|
+| Statics §1.3–1.6 | convert a derived quantity between SI and US customary; round to Hibbeler's figures; dimensional homogeneity | num, mc, tf |
+| 12 | s(t) → v, a; a(s) or a(v) by separating variables; distance with a reversal; areas of erratic-motion graphs; projectile range, height and time; a_n and a for y = f(x); relative velocity and acceleration | num, sym |
+| 13 | blocks, pulleys and friction (a, T); max speed on a banked curve; normal force in a loop; spring-attached collar | num |
+| 14 | work–energy with springs and friction (speed, distance); power and efficiency; energy conservation; path independence | num, tf |
+| 15 | impulse of F(t); momentum conservation (recoil, bullet and block); central impact with e; oblique impact; angular momentum about a point | num |
+| 16 | gears and belts (ω, α); absolute motion analysis; relative velocity and the IC; relative acceleration in a slider-crank or four-bar | num |
+| 17 | mass moment of inertia (composite, parallel axis); crate that slides or tips; pin reactions in fixed-axis rotation; roll or slip | num, mc |
+| 18 | kinetic energy of a rigid body; work of a couple and a spring; energy conservation for linkages and rolling bodies | num |
+
+Shared code: `subjects/mechanics` vectors, units (lb, slug, ft, kip), constants (g, g in ft/s²),
+friction, and PHY 2048's kinematics, dynamics, energy, momentum and rotation. New in
+`subjects/mechanics`, each with a selftest: `path.js` (n–t components and radius of curvature),
+`rigid2d.js` (relative velocity and acceleration, the IC, slider-crank and four-bar position
+solutions), `inertia.js` (mass moments of inertia of standard shapes, composite bodies), and
+restitution and reduced-mass energy loss in `momentum.js`. FBDs and kinetic diagrams from
+`shells/engineering/fbd.js`.
+
+#### EGN 3331 Mechanics of Materials (`courses/egn3331`, port 5182)
+
+Units follow the course pack, Hibbeler Ch 1–9, 12 and 13. Chapters 10 (strain transformation), 11
+(beam design) and 14 (energy methods) are not in the pack and are left out (D11).
+
+**Unit 1. Stress** (Ch 1, §1.3–1.6, with the statics review and trusses)
+
+- `cut`: an axially loaded bar cut on a plane at angle θ. Shows that the largest shear is on the 45°
+  plane, not on the cross-section. Recompute: σ = (P/A) cos²θ and τ = (P/2A) sin 2θ from the cut's
+  equilibrium. Check: the same numbers from the stress transformation of Ch 9 with σ_x = P/A; and the
+  left and right segments' equilibrium give equal and opposite internal loads.
+- `truss-stress`: a truss with member areas the student sets. Shows that the most stressed member
+  is not always the one with the largest force, and how the factor of safety picks an area.
+  Recompute: member forces from `mechanics/truss.js`, then σ = F/A. Check: method of sections against
+  method of joints (`truss.js` already has both).
+- `pins`: single and double shear, and bearing, in a pinned connection. Shows that double shear
+  halves τ and that bearing can govern. Recompute: τ = V/A over each shear plane. Check: equilibrium
+  of the pin's free-body, segment by segment.
+
+**Unit 2. Strain and material behaviour** (Ch 2–3: strain; Hooke's law, strain energy, Poisson's
+ratio, creep and fatigue)
+
+- `tension-test`: a stress–strain curve for a ductile steel and an aluminium, with loading and
+  unloading. Shows that E is the initial slope, that unloading follows E and leaves a permanent set,
+  and where the 0.2% offset yield sits. Recompute: a bilinear-with-hardening model for steel and
+  Ramberg–Osgood for aluminium, and the offset line's intersection by root finding. Check: modulus
+  of resilience σ_Y²/2E against the trapezoid area under the curve, and toughness by quadrature
+  against the model's integral.
+- `poisson`: a bar stretched, contracting sideways. Shows that the volume change is (1 − 2ν)ε and
+  vanishes at ν = 0.5. Recompute: the small-strain formula. Check: the deformed volume
+  L(1 + ε)·[w(1 − νε)]² computed directly.
+- Creep and fatigue are notes and problems (reading an S–N curve the problem states). No lab.
+
+**Unit 3. Axial load** (Ch 4: deformation, indeterminate members, thermal stress)
+
+- `axial`: a stepped or tapered bar under several loads. Shows that the displacement accumulates
+  along the bar and the internal force diagram sets it. Recompute: δ = Σ NL/AE. Check: ∫N/(AE) dx by
+  quadrature, which also handles the taper.
+- `indeterminate`: a bar between two walls with a load, or a rigid bar on posts. Shows that the
+  stiffer path carries more load. Recompute: compatibility (the force method). Check: a 1D
+  direct-stiffness assembly and solve.
+- `thermal`: a bar heated between walls, with an optional gap. Shows that the stress does not depend
+  on length, and the temperature at which the gap closes. Recompute: σ = −EαΔT after closure.
+  Check: the stiffness method with a thermal load vector.
+
+**Unit 4. Torsion** (Ch 5)
+
+- `torsion`: a solid or hollow circular shaft. Shows that τ grows linearly with ρ, so a hollow shaft
+  keeps most of the strength at much less weight. Recompute: τ = Tρ/J and φ = TL/JG. Check: ∫τρ dA
+  over the section by quadrature gives back T, and J by quadrature against the closed form.
+- `twist`: a stepped shaft with gears, or a shaft fixed at both ends, transmitting power. Shows the
+  torque diagram and that a faster shaft can be thinner for the same power. Recompute: T = P/ω,
+  φ = Σ TL/JG, compatibility when fixed at both ends. Check: the stiffness method, and the same
+  answer worked in hp and rpm.
+
+**Unit 5. Bending** (Ch 6: shear and moment diagrams, bending stress)
+
+- `diagrams`: a beam with point loads, couples and distributed loads. Shows dV/dx = −w and
+  dM/dx = V: the moment peaks where the shear crosses zero. Recompute: integrate the load (the
+  graphical method). Check: the method of sections at every x (`mechanics/sections.js`
+  `internalAt`).
+- `flexure`: a rectangle, I and T section under a moment. Shows that the neutral axis passes through
+  the centroid, and that a T section's top and bottom stresses differ. Recompute: σ = −My/I with
+  the centroid and I from `sections.js` `compositeI`. Check: ∫σ dA = 0 and −∫yσ dA = M by quadrature
+  over the section.
+
+**Unit 6. Transverse shear** (Ch 7: shear formula, shear flow)
+
+- `shear`: τ = VQ/It across a rectangle and an I section. Shows that τ peaks at the neutral axis and
+  the web carries most of V. Recompute: Q from the composite area above the cut. Check: ∫τ dA over
+  the section gives back V; Q by quadrature.
+- `built-up`: boards or plates fastened into a beam. Shows that the fastener spacing comes from the
+  shear flow on the part being held, s = F_allow / q. Recompute: q = VQ/I. Check: the change in the
+  flange's normal force between two sections dx apart, (ΔM/I)Q, equals q·dx.
+
+**Unit 7. Pressure vessels and combined loading** (Ch 8)
+
+- `vessel`: a thin-walled cylinder and sphere. Shows that the hoop stress is twice the longitudinal
+  stress, so a cylinder splits along its length. Recompute: σ₁ = pr/t, σ₂ = pr/2t. Check: integrate
+  p r sin θ over half the cylinder for the force balance. The rocket's Structure page links here.
+- `combined`: a post or bracket with axial load, bending and torsion. Shows which point of the
+  section is critical, by superposition. Recompute: each load's stress at the point. Check: internal
+  loads from 3D vector moments (`mechanics/vectors.js`, `statics.js`) against the scalar component
+  method; the stress state then goes to `mohr`.
+
+**Unit 8. Stress transformation** (Ch 9)
+
+- `mohr`: a plane-stress element the student rotates, beside its Mohr's circle. Shows that principal
+  planes 90° apart on the element are 180° apart on the circle, and that the largest in-plane shear
+  is 45° from them. Recompute: the transformation equations. Check: the circle's geometry, and the
+  eigenvalues of the 2×2 stress tensor; three methods agree.
+
+**Unit 9. Deflection of beams** (Ch 12)
+
+- `deflection`: cantilever, simply supported and overhanging beams under point and distributed
+  loads. Shows that the largest deflection is where the slope is zero, not where the moment peaks.
+  Recompute: the elastic curve by integration with discontinuity functions and boundary conditions.
+  Check: numerical double integration of M/EI (trapezoid with the boundary conditions) and, for
+  combined loads, superposition of the single cases.
+- `propped`: a propped cantilever or a continuous beam. Shows how compatibility fixes the redundant
+  reaction. Recompute: superposition of deflections. Check: finite differences on EIv″ = M with the
+  redundant unknown.
+
+**Unit 10. Buckling of columns** (Ch 13)
+
+- `buckling`: a column with pinned, fixed and free ends. Shows that P_cr falls with (KL)², follows
+  the weak axis, and that Euler holds only while σ_cr stays below σ_Y. Recompute:
+  P_cr = π²EI/(KL)². Check: the smallest eigenvalue of EIv″ + Pv = 0 by finite differences.
+
+Problem types per chapter:
+
+| Chapter | Templates | Answers |
+|---|---|---|
+| 1 | internal loads by the method of sections; average normal and shear stress; stress on an inclined plane; truss member stress; single and double shear, bearing; allowable stress and factor of safety | num |
+| 2 | normal and shear strain from a deformed shape or displacements | num |
+| 3 | E, yield and resilience from a stated curve; Hooke's law; Poisson's ratio; shear modulus and G = E/2(1 + ν); strain energy; creep and fatigue reading | num, mc, tf |
+| 4 | δ for stepped and tapered bars; superposition; indeterminate bars and rigid bars on posts; thermal stress, with and without a gap | num |
+| 5 | τ and φ in solid and hollow shafts; power transmission (SI and hp, rpm); stepped shafts; shafts fixed at both ends | num |
+| 6 | shear and moment diagrams (values at points, max, location); flexure formula on composite sections | num, sym |
+| 7 | τ = VQ/It at a point; τ_max; fastener spacing from shear flow | num |
+| 8 | thin-walled cylinders and spheres (stress, required thickness); stress at a point under combined loads | num |
+| 9 | stresses on a rotated plane; principal stresses and angle; maximum in-plane shear; Mohr's circle reading | num |
+| 12 | slope and deflection by integration; superposition with a load table; propped cantilever reaction | num, sym |
+| 13 | Euler load with effective length; weak axis; critical stress against yield | num, mc |
+
+Shared code: `subjects/mechanics` sections (`internalAt`, `shearMomentDiagram`, `composite`,
+`compositeI`, centroids), truss, frames, statics, vectors and units, all from Statics. New in
+`subjects/mechanics`, each with a selftest: `materials.js` (stress and strain, axial, torsion,
+flexure, transverse shear, shear flow), `vessels.js` (thin-wall stresses; also used by the rocket's
+Structure page), `transform.js` (plane-stress transformation, principal values), `elastic.js`
+(elastic curve by integration and a numerical integrator, superposition cases), `buckling.js`
+(Euler and its finite-difference check), and `stiffness1d.js` (axial and torsional direct stiffness,
+for the indeterminate checks).
+
+#### EML 3100 Thermodynamics (`courses/eml3100`, port 5183)
+
+Units follow the course pack, Çengel & Boles Ch 1–7. Unsteady flow (the charging and discharging
+part of Ch 5) is left out unless the owner says otherwise (D11).
+
+**Unit 1. Basic concepts** (Ch 1)
+
+- `manometer`: a U-tube and a multi-fluid manometer on a tank. Shows that pressure depends on depth
+  and density only, not on the tube's width or shape, and the difference between gauge and absolute.
+  Recompute: P = P_atm + Σρgh along the fluid path. Check: walk the path from the other end; the
+  two pressures at the tank agree.
+
+**Unit 2. Energy and the first law** (Ch 2)
+
+- `balance`: a tank with a paddle wheel, a resistance heater and heat loss, drawn as energy bars
+  (in, out, stored). Shows that heat and work are both energy crossing the boundary, with one sign
+  convention. A second scenario chains a motor and a pump: the overall efficiency is the product.
+  Recompute: E_in − E_out = ΔE_system. Check: the rate form dE/dt = Q̇ − Ẇ integrated in time
+  against the integrated balance.
+
+**Unit 3. Pure substances and property tables** (Ch 3)
+
+- `phase`: T–v and P–v diagrams of water with the saturation dome, and a state the student drags.
+  Shows that heating at constant pressure holds T at T_sat while x runs from 0 to 1, and that the
+  plateau shrinks to nothing at the critical point. Recompute: IAPWS-IF97 regions 1, 2 and 4.
+  Check: dP_sat/dT from region 4 against h_fg/(T v_fg) from regions 1 and 2 (Clapeyron), and
+  v = v_f + x v_fg against the mass-weighted mixture.
+- `interpolate`: the table a student reads, generated from IF97 at the printed spacing, against the
+  exact value. Shows where linear interpolation is fine (superheated vapour far from the dome) and
+  where it is not (near saturation, near the critical point), including double interpolation.
+  Recompute: the interpolation as a student does it. Check: IF97 at the same state.
+- `ideal`: water's compressibility factor Z = Pv/RT over (P, T). Shows that steam is nearly ideal
+  at low pressure and high temperature, and far from it near the dome. Recompute: Z from IF97.
+  Check: the generalised compressibility (Lee–Kesler) as a second opinion, agreeing within a few
+  percent away from the critical point.
+
+**Unit 4. Closed systems** (Ch 4)
+
+- `piston`: a piston–cylinder with a process the student picks: constant P, constant V, isothermal,
+  or polytropic Pv^n = C. Shows that boundary work is the area under the path, so two paths between
+  the same states do different work. Recompute: the closed form for each process. Check: the
+  trapezoid integral of P dv along the drawn path, and closure of Q − W = ΔU with u from IF97 or the
+  ideal-gas model.
+- `cp-cv`: heating air at constant volume and at constant pressure. Shows that c_p − c_v = R, and
+  when a constant c_p is good enough. Recompute: Δh and Δu from the NASA polynomials. Check: Δh by
+  quadrature of c_p(T) against the polynomial's closed-form h, and against c_p,avg ΔT (the book's
+  average-specific-heat method).
+
+**Unit 5. Control volumes** (Ch 5: mass and energy balances; nozzles, diffusers, pipe flow)
+
+- `nozzle`: a steady nozzle or diffuser with inlet and exit states. Shows that a small enthalpy drop
+  gives a large velocity (the factor of 1000 between kJ/kg and m²/s²), and that ṁ = ρAV fixes the
+  area. Recompute: h₁ + V₁²/2 = h₂ + V₂²/2 and the mass balance. Check: for an ideal gas, the same
+  exit from the isentropic relations in `subjects/thermo` (shared with the rocket's Nozzle page);
+  for steam, from IF97 with the exit state found by Newton iteration.
+- `devices`: turbine, compressor, throttle, mixing chamber, heat exchanger and heated pipe, one at a
+  time. Shows that a throttle keeps h constant yet cools steam and not an ideal gas, and that in pipe
+  flow the KE and PE terms are usually small next to Δh. Recompute: the device's mass and energy
+  balance. Check: the residual of both balances is zero, and the throttle's temperature drop
+  against the integrated Joule–Thomson coefficient from IF97.
+
+**Unit 6. The second law** (Ch 6: heat engines, refrigerators and heat pumps, Carnot)
+
+- `carnot`: a Carnot engine, refrigerator or heat pump between two reservoirs. Shows that the limits
+  depend only on T_L/T_H in kelvins, that COP_HP = COP_R + 1, and what a ratio in Celsius gets wrong.
+  Recompute: η = 1 − T_L/T_H and the COPs. Check: run an ideal-gas Carnot cycle (two isotherms, two
+  adiabats), integrate P dv for W_net and take W_net/Q_H.
+- `claims`: an inventor's engine, refrigerator or heat pump with stated Q and W. Shows how to call a
+  device reversible, irreversible or impossible. Recompute: compare η or COP with the Carnot limit.
+  Check: the sign of the Clausius integral ∮δQ/T on the same data.
+
+**Unit 7. Entropy** (Ch 7: entropy, isentropic processes, isentropic efficiencies)
+
+- `ts`: the T–s diagram of water with processes drawn on it. Shows that the area under a reversible
+  path is the heat, and that a real expansion moves right of the isentropic line. Recompute: s from
+  IF97. Check: ∫dh/T along a constant-pressure path by quadrature against the change in s.
+- `efficiency`: a turbine, compressor or nozzle with isentropic efficiency η. Shows that lower η
+  means a hotter exit and more entropy generated. Recompute: the actual exit from the isentropic exit
+  and η. Check: s_gen from the entropy balance is never negative and is zero only at η = 1; for air,
+  T₂s from T₁(P₂/P₁)^{(k−1)/k} against the variable-specific-heat route with P_r.
+- `generation`: heat crossing a wall between two temperatures. Shows that entropy generation goes to
+  zero as the temperature difference does. Recompute: S_gen = Q(1/T_L − 1/T_H). Check: the sum of
+  the reservoirs' entropy changes against the entropy balance on the wall.
+
+Problem types per chapter:
+
+| Chapter | Templates | Answers |
+|---|---|---|
+| 1 | gauge and absolute pressure; manometers and barometers; temperature scales and differences; unit conversions | num |
+| 2 | forms of energy; mechanical and shaft work; first law for a closed system; efficiencies of devices and chains | num, tf |
+| 3 | phase from (P, T) or (P, v); quality and mixture properties; interpolation; ideal-gas state; compressibility | num, mc |
+| 4 | boundary work for each process; energy balance for rigid tanks and piston–cylinders; Δu and Δh of ideal gases; incompressible substances | num |
+| 5 | mass balance; nozzles and diffusers; turbines and compressors; throttles; mixing chambers; heat exchangers; pipe and duct flow | num |
+| 6 | thermal efficiency and COP; Carnot limits; reversible, irreversible or impossible | num, mc |
+| 7 | Δs of pure substances, ideal gases and incompressible substances; isentropic processes; isentropic efficiencies; entropy generation | num, tf |
+
+Answers that come from a property table grade against the IF97 value with the course's tolerance.
+The class reads printed tables, so a worked solution shows the interpolation from the generated
+table and also states the exact value. This is STA 3032's `alt` rule: exact and table value both
+accepted.
+
+Shared code: **`subjects/thermo`, new**, pure functions in SI with no DOM, so the rocket engine's
+analysis code can import it (Phase A1 writes the same library; whichever starts first creates the
+folder, and the other adds files):
+
+- `if97.js`: IAPWS-IF97 regions 1, 2 and 4 (region 3, near the critical point, in a later PR; until
+  then a state there says so instead of returning a number). Selftest: the verification values
+  printed in the IAPWS-IF97 release, to the digits it gives.
+- `steam.js`: saturation tables by T and by P, superheated and compressed-liquid tables, generated
+  from IF97 at the spacing a printed table uses; state lookup from any two of P, T, v, u, h, s, x.
+  Selftest: round trips, and the consistency checks (h = u + Pv; Clapeyron; s and v as the
+  derivatives of g, by finite differences).
+- `idealgas.js`: NASA 7-coefficient polynomials for N₂, O₂, Ar, CO₂, H₂O and air; c_p, h, u, s°, P_r
+  and v_r. Selftest: c_p against the numerical derivative of h, s° against ∫c_p/T dT by quadrature,
+  values at 298.15 K against the polynomials' source.
+- `interp.js`: single and double linear interpolation as a student does it.
+- `flow.js`: steady-flow device balances; `cycles.js`: Carnot limits and the ideal-gas Carnot
+  cycle; `isentropic.js`: the ideal-gas isentropic relations (with Phase A1's area–Mach and choked
+  flow beside them).
+- Units: a shared `subjects/src/convert.js` with exact definitions (1 ft = 0.3048 m,
+  1 lbm = 0.45359237 kg, 1 lbf = 1 lbm × 9.80665 m/s², 1 Btu = 1055.05585262 J, 1 R = 5/9 K) and
+  derived ones (psi, slug, ft·lbf, hp). Selftest: round trips and the derived values. The mechanics
+  courses use it too.
+
+R-134a, which Çengel uses for refrigerators and heat pumps, waits on D10. Until then those problems
+use water and air.
+
+#### Order of work
+
+One branch and one PR each. Each merges and deploys alone. Every PR keeps all courses' checks green.
+
+1. **This plan, and the hub entries** (EGN 3321 and EGN 3331 in Mechanics, a Thermal-fluids card
+   with EML 3100, all "not built yet").
+2. **Engineering shell move.** Statics' HUD, practice panel, styles and FBD drawing into
+   `packages/shells/engineering/`; Statics on thin wrappers; deps.mjs and AGENTS.md updated. Pure
+   move: Statics' tests, smoke and screenshots unchanged.
+3. **Shell additions behind flags:** the Notes tab when a manifest has notes, and the `plot2d` stage.
+   Statics unchanged. A fixture course in the shell's test exercises both.
+4. **`subjects/src/convert.js`** with its selftest.
+5. **Dynamics first slice:** manifest, catalog with all seven units (labs listed as `coming`),
+   PROVENANCE.md, CONVENTIONS.md (three significant figures, both unit systems, the sections left
+   out), port 5181 in course-server, build and assemble, the hub href, prereqs. Unit 1 complete:
+   `rectilinear`, `path-nt` and `relative`, the §1.3–1.6 and Ch 12 problems, Unit 1 notes,
+   `mechanics/path.js`. Merge and deploy.
+6. **Dynamics, one PR per unit:** Unit 2 (`fma`, `curve`), Unit 3 (`collar`, `paths`), Unit 4
+   (`impulse`, `impact`, and `rocket` if D11 keeps it), Unit 5 (`ic`, `slider-crank`, `rolling`,
+   `rigid2d.js`), Unit 6 (`inertia`, `pendulum`, `roll-slip`, `inertia.js`), Unit 7 (`race`,
+   `linkage`). Each PR carries that unit's labs, problems, notes and selftests.
+7. **Mechanics of Materials first slice:** the same skeleton with all ten units, Unit 1 complete
+   (`cut`, `truss-stress`, `pins`, Ch 1 problems, notes, `materials.js` started). Merge and deploy.
+8. **Mechanics of Materials, one PR per unit:** Units 2 to 10, in the pack's order.
+9. **`subjects/thermo` base:** `if97.js` (regions 1, 2, 4), `steam.js`, `idealgas.js`, `interp.js`
+   and their selftests. If Phase A1 step 2 has already created the folder, this PR adds to it.
+10. **Thermodynamics first slice:** the skeleton with all seven units, Unit 1 complete (`manometer`,
+    Ch 1 problems, notes) and the Thermal-fluids card's href. Merge and deploy.
+11. **Thermodynamics, one PR per unit:** Units 2 to 7. Unit 3 is the largest (three labs on IF97).
+12. IF97 region 3, and R-134a if D10 says yes.
+13. `prereqs` links into and out of the three courses, and the applications links.
+
+Steps 5–6, 7–8 and 9–11 are independent once the shell (2–3) is in. They run in the order of D8:
+the course coming up next in the degree first.
+
+**Exit for each course:** every unit has its labs, problems and notes; all checks pass; it is live
+on the hub; its PROVENANCE.md says what it contains and that the course packs set only coverage and
+order.
+
+### Phase 9 and on
 
 - **Math:** MAP 2302 differential equations after MAC 2313.
-- **Mechanics:** Dynamics after Statics, reusing its vectors, free-body diagrams and units.
-- **Thermal-fluids:** a new track and `subjects/thermo` library, written to be reusable by the
-  methalox engine's analysis code.
+- **Thermal-fluids:** fluid mechanics, then heat transfer, on `subjects/thermo`.
 
 Order: whatever is coming next in the degree first, then earlier courses as review, with
 propulsion-relevant courses ahead of the rest when there is a choice.
@@ -695,9 +1227,13 @@ cross-linked from the courses whose formulas it covers.
 | D2 | Address | one domain for everything vs. one subdomain per course on the same build | one domain; per-course subdomains only if a course needs its own link to share with a class |
 | D3 | Old domains | redirect at cutover vs. leave frozen | banner + link at cutover, leave them up through the term |
 | D4 | TypeScript | stay vanilla JS vs. add types (or JSDoc + `checkJs`) for the contracts only | JSDoc types on `defineCourse`, `defineLab`, `problem`; no build change |
-| D5 | Course codes and terms | **Decided:** Statics is EGN 3311. MAC 2313 was taken Spring 2026. Codes for courses not yet built are confirmed when each is started. | |
+| D5 | Course codes and terms | **Decided:** Statics is EGN 3311. MAC 2313 was taken Spring 2026. EGN 3321 Dynamics, EGN 3331 Mechanics of Materials and EML 3100 Thermodynamics are the codes on the owner's course packs (15 Oct 2026). Other codes are confirmed when each course is started. | |
 | D6 | STA 3032 provenance | **Decided 13 Oct 2026:** not asked, so the instructor's material (rewritten notes, review-sheet set, worked cases and lab presets from the notes) was removed. Recorded in `courses/sta3032/PROVENANCE.md`. | |
 | D7 | Source for Calc I, Calc II, Physics I | **Default:** OpenStax (CC BY 4.0): Calculus Vol 1 and 2, University Physics Vol 1, cited by section. Switch to the UNF course texts if the owner prefers; confirm PHY 2048's chapter list against the UNF syllabus. | |
+| D8 | Terms and exam dates for EGN 3321, EGN 3331, EML 3100 | in progress or coming next (dates in each unit, the Exam view opens on the next one, perhaps a Canvas drop) vs. review (no dates, like Phase 7) | the course coming next in the degree is built first; dates go in when the owner has them |
+| D9 | Textbook numbers in worked cases (Hibbeler, Çengel) | generated numbers cited by section (PHY 2048's rule) vs. the book's example numbers (Statics' rule, which AGENTS.md calls a provenance decision) | generated numbers, cited by section; the property standards give the printed-answer checks |
+| D10 | R-134a properties for Çengel's refrigeration problems | a published equation of state (Tillner-Roth & Baehr, 1994) in `subjects/thermo` vs. leave R-134a out | the equation of state, in a late Thermodynamics PR; water and air until then |
+| D11 | Sections the course packs do not name | follow the packs exactly vs. add the text's neighbouring sections | follow the packs; keep Dynamics' `rocket` lab (§15.9) as optional because the rocket application links to it |
 
 ---
 

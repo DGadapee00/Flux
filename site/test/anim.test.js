@@ -5,6 +5,7 @@ import { solveTruss } from '../src/anim/mechanics.js';
 import { reduceMotion } from '../src/anim/motion.js';
 import { connectingLines, fieldAt, probePath } from '../src/anim/physics.js';
 import { normalPdf, statsScene } from '../src/anim/stats.js';
+import { carnotCycle, corners, enclosedArea, heatIn, K, netWork, T_COLD, T_HOT } from '../src/anim/thermal.js';
 
 const rest = {
   t: 0,
@@ -115,4 +116,30 @@ test('motion plays once, holds, pauses off screen, and stays still when reduced'
   const again = reduceMotion({ ...touch, playing: false, t: 1 }, { type: 'show' });
   assert.equal(again.t, 1);
   assert.equal(again.playing, false);
+});
+
+test('the Carnot cycle closes, its adiabats hold P v^k, and its area is the net work', () => {
+  const { v1, v2, v3, v4 } = corners();
+  const { legs, path } = carnotCycle();
+  assert.equal(legs.length, 4);
+  const first = path[0];
+  const last = path[path.length - 1];
+  assert.ok(Math.abs(first.x - last.x) < 1e-12 && Math.abs(first.y - last.y) < 1e-12, 'the path closes');
+  assert.ok(v1 < v2 && v2 < v3 && v4 < v3 && v1 < v4);
+  for (const [i, T] of [
+    [0, T_HOT],
+    [2, T_COLD],
+  ]) {
+    for (const point of legs[i]) assert.ok(Math.abs(point.x * point.y - T) < 1e-12, 'Pv = RT on an isotherm');
+  }
+  for (const i of [1, 3]) {
+    const c = legs[i][0].y * legs[i][0].x ** K;
+    for (const point of legs[i]) assert.ok(Math.abs(point.y * point.x ** K - c) < 1e-12, 'P v^k is constant');
+  }
+  // Second calculation: the polygon's area against R (T_H − T_L) ln(v2/v1).
+  const area = enclosedArea(path.slice(0, -1));
+  assert.ok(area > 0, 'an engine runs clockwise on P–v');
+  assert.ok(Math.abs(area - netWork()) / netWork() < 0.01, `area ${area} vs ${netWork()}`);
+  assert.ok(Math.abs(netWork() / heatIn() - (1 - T_COLD / T_HOT)) < 1e-12, 'Carnot efficiency');
+  assert.ok(Math.abs(v3 / v4 - v2 / v1) < 1e-12, 'the two isotherms span the same volume ratio');
 });

@@ -1,5 +1,5 @@
 /**
- * SVG pictures for the four tracks. Geometry comes from the anim modules.
+ * SVG pictures for the five tracks. Geometry comes from the anim modules.
  * t = 0 is the still frame. t = 1 is the frame the hover animation holds.
  */
 
@@ -8,6 +8,7 @@ import { solveTruss } from './mechanics.js';
 import { attachMotion } from './motion.js';
 import { connectingLines, NEGATIVE, POSITIVE, probePath } from './physics.js';
 import { statsScene } from './stats.js';
+import { carnotCycle, corners, T_COLD, T_HOT } from './thermal.js';
 
 const SVG = 'http://www.w3.org/2000/svg';
 
@@ -105,6 +106,7 @@ const PAINT = {
   math: paintMath,
   mechanics: paintMechanics,
   stats: paintStats,
+  thermal: paintThermal,
 };
 
 /**
@@ -359,6 +361,88 @@ function paintStats(svg) {
       bar.rect.setAttribute('y', (base - h).toFixed(2));
     }
     curve.setAttribute('opacity', String(curveT));
+  };
+}
+
+/**
+ * A Carnot cycle on P–v. At rest the hot and cold isotherms and the cycle's outline show.
+ * On hover the state travels 1 → 2 → 3 → 4 → 1 and the enclosed area, the net work, fills in.
+ * @param {SVGSVGElement} svg
+ */
+function paintThermal(svg) {
+  const width = 320;
+  const height = 168;
+  const { v1, v3 } = corners();
+  const { legs, path } = carnotCycle();
+  const pMax = Math.max(...path.map((point) => point.y));
+  const pMin = Math.min(...path.map((point) => point.y));
+  const bounds = { x0: v1 - 0.35, x1: v3 + 0.3, y0: pMin - 0.12, y1: pMax + 0.08 };
+  const axisOrigin = project(bounds.x0 + 0.12, bounds.y0 + 0.04, bounds, width, height);
+  svg.append(
+    svgEl('polyline', {
+      points: `${axisOrigin.x},14 ${axisOrigin.x},${axisOrigin.y} ${width - 14},${axisOrigin.y}`,
+      fill: 'none',
+      stroke: AXIS,
+      'stroke-width': 1.2,
+    }),
+  );
+  for (const [T, colour] of [
+    [T_HOT, RED],
+    [T_COLD, BLUE],
+  ]) {
+    const curve = [];
+    for (let i = 0; i <= 48; i += 1) {
+      const v = bounds.x0 + 0.2 + ((bounds.x1 - bounds.x0 - 0.25) * i) / 48;
+      const p = T / v;
+      if (p <= bounds.y1 && p >= bounds.y0) curve.push({ x: v, y: p });
+    }
+    svg.append(
+      svgEl('polyline', {
+        points: polyline(curve, bounds, width, height),
+        fill: 'none',
+        stroke: colour,
+        'stroke-width': 1.2,
+        'stroke-dasharray': '4 4',
+        opacity: 0.55,
+      }),
+    );
+  }
+  const area = svgEl('polygon', {
+    points: polyline(path, bounds, width, height),
+    fill: E,
+    opacity: 0,
+  });
+  svg.append(area);
+  for (const points of legs) {
+    svg.append(
+      svgEl('polyline', {
+        points: polyline(points, bounds, width, height),
+        fill: 'none',
+        stroke: MUTED,
+        'stroke-width': 1.6,
+        'stroke-linejoin': 'round',
+      }),
+    );
+  }
+  const trail = svgEl('polyline', {
+    fill: 'none',
+    stroke: WHITE,
+    'stroke-width': 2.4,
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
+  });
+  const state = svgEl('circle', { r: 4.5, fill: WHITE, opacity: 0 });
+  svg.append(trail, state);
+  return (t) => {
+    const travel = Math.min(1, t / 0.75);
+    const fill = Math.max(0, (t - 0.6) / 0.4);
+    const index = Math.min(path.length - 1, Math.round(travel * (path.length - 1)));
+    trail.setAttribute('points', t === 0 ? '' : polyline(path.slice(0, index + 1), bounds, width, height));
+    const here = project(path[index].x, path[index].y, bounds, width, height);
+    state.setAttribute('cx', here.x.toFixed(1));
+    state.setAttribute('cy', here.y.toFixed(1));
+    state.setAttribute('opacity', t === 0 ? '0' : '1');
+    area.setAttribute('opacity', (0.28 * fill).toFixed(3));
   };
 }
 

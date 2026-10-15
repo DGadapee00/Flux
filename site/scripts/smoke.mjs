@@ -152,7 +152,7 @@ async function readHub(page) {
         client: document.documentElement.clientWidth,
         cols,
         ids: tracks.map((el) => el.dataset.track),
-        opens: tracks.map((el) => el.querySelector('.track-open').href),
+        opens: tracks.map((el) => el.querySelector('.track-open')?.href ?? null),
         built: [...document.querySelectorAll('a.course-link')].map((a) => ({ id: a.dataset.course, href: a.href })),
         unbuilt: [...document.querySelectorAll('.unbuilt')].map((el) => el.textContent),
         motions: tracks.map((el) => el.dataset.motion),
@@ -183,7 +183,8 @@ function assertHub(width, metrics, hub) {
     throw new Error(`tracks are ${metrics.ids.join(', ')}`);
   }
   TRACKS.forEach((track, i) => {
-    const expected = resolvedHref(latestBuilt(track).href, hub);
+    const latest = latestBuilt(track);
+    const expected = latest ? resolvedHref(latest.href, hub) : null;
     if (metrics.opens[i] !== expected) {
       throw new Error(`${track.id} opens ${metrics.opens[i]}, expected ${expected}`);
     }
@@ -370,7 +371,9 @@ async function main() {
       await navigate(page, hub);
     }
     for (const track of TRACKS) {
-      const prefix = resolvedHref(latestBuilt(track).href, hub).replace(/\/$/, '');
+      const latest = latestBuilt(track);
+      if (!latest) continue;
+      const prefix = resolvedHref(latest.href, hub).replace(/\/$/, '');
       await evalJson(page, `document.querySelector('a.track-open[data-track-open="${track.id}"]').click()`);
       const landed = await waitForPrefix(page, prefix);
       console.log(`${track.id} card → ${landed}`);
