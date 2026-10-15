@@ -1,7 +1,7 @@
 # Provenance
 
 EGN 3321 Dynamics lives in this folder. There is no earlier public repo to snapshot.
-The course is written here, unit by unit. Units 1, 2, and 3 are in.
+The course is written here, unit by unit. Units 1, 2, 3, and 4 are in.
 
 ## What course material is here
 
@@ -20,7 +20,14 @@ Unit 3 is work and energy. The labs are a collar on a rod (`collar`) and three p
 between the same ends (`paths`). The problems cover Hibbeler Dynamics Chapter 14.
 The numbers are generated and cited by section.
 
-Units 4–7 are catalog entries only. Their labs are listed as coming. They have no
+Unit 4 is impulse and momentum. The labs are an F–t area (`impulse`), central and
+oblique impact (`impact`), and a rocket at constant burn rate (`rocket`, §15.9).
+The problems cover Hibbeler Dynamics Chapter 15: impulse, recoil, a bullet and a
+block, central and oblique impact, angular momentum of a particle, and the rocket
+in SI and in US customary units. The numbers are generated and cited by section.
+Steady flow (§15.8) stays out.
+
+Units 5–7 are catalog entries only. Their labs are listed as coming. They have no
 problems and no notes yet.
 
 The Unit 1 notes are rewritten from the section list. They are not a transcription.

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Impulse and momentum</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3321 · Dynamics · Unit 4 · Hibbeler Ch 15</p>
+  <h1>Impulse and momentum</h1>
+  <p class="lede">Impulse is the area under a force. A collision conserves momentum for every restitution. A rocket's gain follows the mass ratio.</p>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>Principle of linear impulse and momentum</a>
+    <a href="#s2"><span>02</span>Conservation of momentum</a>
+    <a href="#s3"><span>03</span>Impact</a>
+    <a href="#s4"><span>04</span>Oblique impact</a>
+    <a href="#s5"><span>05</span>Angular momentum</a>
+    <a href="#s6"><span>06</span>A rocket</a>
+    <a href="#s7"><span>07</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Principle of linear impulse and momentum</h2>
+<p>The impulse of a force is the area under its graph of force against time. That area equals the change in momentum.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Start from \(F = ma\). Integrate both sides over time. The left side is the area. The right side is \(mv_2 - mv_1\).</p>
+</div>
+\[
+\int F\,dt = m\Delta v.
+\]
+<div class="box ex"><span class="tag">Worked example · equal areas</span>
+<p>A 2 kg particle starts at rest. A 100 N force acts for 0.4 s. Then 40 N acts for 1 s. Each area is 40 N·s. The speed becomes 40 m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a short pulse</span>
+<p>The same mass starts at rest. A 400 N force acts for 0.1 s, which is still 40 N·s. Then 20 N acts for 1 s and adds 20 N·s. The speed becomes 30 m/s.</p>
+</div>
+<div class="box fix"><span class="tag">Fix</span>
+<p>The impulse is the area, not the height of the force. A short spike and a long push with the same area give the same change in speed. Hibbeler §15.1.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Add the areas. Divide the total by the mass. Add that change to the starting speed.</p>
+</div>
+</section>
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Conservation of momentum</h2>
+<p>Internal impulses between parts of a system cancel in pairs. If the external impulse is zero, the total momentum stays constant.</p>
+<div class="box ex"><span class="tag">Worked example · a gun recoil</span>
+<p>A 0.02 kg bullet leaves a 4 kg gun at 400 m/s. The gun was at rest. The recoil speed is 2 m/s. The two momenta sum to zero.</p>
+</div>
+<div class="box fix"><span class="tag">Fix</span>
+<p>Do not drop an external impulse and still claim conservation. Internal impulses cancel. An outside force acting over a time does not. Hibbeler §15.3.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>For two bodies with no outside impulse, \(m_1 u_1 + m_2 u_2 = m_1 v_1 + m_2 v_2\).</p>
+</div>
+</section>
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Impact</h2>
+<p>The line of impact is the normal. Restitution sets the separation speed along that line. Momentum along the line is conserved for every value of \(e\).</p>
+\[
+v_{n2} - v_{n1} = e(u_{n1} - u_{n2}).
+\]
+<div class="box ex"><span class="tag">Worked example · a direct collision</span>
+<p>Two 1 kg bodies meet along a line. One moves at 4 m/s. The other is at rest. \(e = 0.5\). They leave at 1 m/s and 3 m/s. The kinetic energy lost is 3 J.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · they stick</span>
+<p>A 1 kg body at 8 m/s hits a 3 kg body at rest. \(e = 0\). Both leave at 2 m/s. The collision loses 24 J.</p>
+</div>
+<div class="box fix"><span class="tag">Fix</span>
+<p>Momentum is conserved for every coefficient of restitution. Kinetic energy is conserved only when \(e = 1\). Hibbeler §15.4.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Solve the momentum equation and the restitution equation together.</p>
+</div>
+</section>
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Oblique impact</h2>
+<p>Split each velocity into a normal part and a tangent part. The normal parts follow the direct-impact equations. The tangent parts stay as they were.</p>
+<div class="box ex"><span class="tag">Worked example · the tangent is unchanged</span>
+<p>Two 2 kg bodies collide. One approaches at 4 m/s, 30° from the normal. The other is at rest on the normal. \(e = 1\). The tangent part stays 2 m/s. The normal parts exchange, so the second body leaves at 3.46 m/s.</p>
+</div>
+<div class="box fix"><span class="tag">Fix</span>
+<p>Do not multiply the tangent velocity by \(e\). Restitution acts only along the line of impact. Hibbeler §15.4.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Keep the tangent component. Solve the normal components as a direct impact.</p>
+</div>
+</section>
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Angular momentum</h2>
+<p>The angular momentum of a particle about a point is \(\mathbf{r} \times m\mathbf{v}\). The moment arm is measured from that point to the particle.</p>
+\[
+L_z = m(xv_y - yv_x).
+\]
+<div class="box ex"><span class="tag">Worked example · a particle passing a point</span>
+<p>A 2 kg particle is at (0.4, −0.3) m. Its velocity is (1, 3) m/s. The angular momentum about the origin is 3 kg·m²/s.</p>
+</div>
+<div class="box fix"><span class="tag">Fix</span>
+<p>The moment arm runs from the chosen point to the particle. It is not the distance measured along the velocity. Hibbeler §15.5.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Use one point. Keep the signs of \(x\), \(y\), \(v_x\), and \(v_y\).</p>
+</div>
+</section>
+<section class="topic" id="s6">
+<h2><span class="n">06</span>A rocket</h2>
+<p>A rocket loses mass. Thrust is the burn rate times the exhaust speed relative to the rocket. Gravity subtracts \(g\) times the burn time.</p>
+\[
+\Delta v = v_e \ln(m_0/m_f) - g t_b.
+\]
+<div class="box ex"><span class="tag">Worked example · a coasting burn</span>
+<p>A rocket burns from 200 kg to 80 kg. The exhaust speed is 1500 m/s and the burn rate is 40 kg/s. With no gravity, \(\Delta v\) is 1374 m/s. The mass ratio is 2.5. The burn lasts 3 s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the same mass burned</span>
+<p>The same 120 kg leaves a heavier rocket, from 400 kg down to 280 kg, at the same rate and exhaust speed. The ratio is 1.429. \(\Delta v\) falls to 535 m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · gravity during the burn</span>
+<p>The first rocket burns the same way with \(g = 9.81\) m/s². The speed gain is 1345 m/s.</p>
+</div>
+<div class="box fix"><span class="tag">Fix</span>
+<p>\(\Delta v\) is \(v_e\) times the log of the mass ratio, minus \(g t_b\). It is not \(v_e\) times the burned mass divided by \(m_0\). Hibbeler §15.9.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>A larger mass ratio gives a larger \(\Delta v\), even when the burned mass is the same. Steady flow of a fluid stream, §15.8, is left out of this course.</p>
+</div>
+</section>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Formula sheet</h2>
+<ul>
+<li>\(\int F\,dt = m\Delta v\). The impulse is the area.</li>
+<li>If the external impulse is zero, the total momentum is constant.</li>
+<li>Direct impact: momentum along the line, and \(v_2 - v_1 = e(u_1 - u_2)\).</li>
+<li>Oblique impact: the tangent components stay as they were.</li>
+<li>\(L_z = m(xv_y - yv_x)\).</li>
+<li>Rocket: \(\Delta v = v_e\ln(m_0/m_f) - gt_b\), with \(t_b = (m_0 - m_f)/\dot m\).</li>
+<li>This unit uses \(g = 9.81\) m/s², or \(32.2\) ft/s². The slug is the US mass.</li>
+<li>Steady flow, §15.8, stays out.</li>
+</ul>
+</section>
+</main>
+</body>
+</html>
