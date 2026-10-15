@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { defineLab } from './define.js';
 import { label, sliderRow, bindSlider, putSlider, showBlock } from './parts.js';
-import { M, fatSegments, Arrow, markAnswer, setFatSegments, segmentCapacity } from '../scene/manim.js';
+import { M, fatSegments, markAnswer, setFatSegments, segmentCapacity } from '../scene/manim.js';
+import { forceArrow, pinRing, pinnedGroundSegments, placeIncomingArrow, segmentPairs } from '@flux/shells/engineering/fbd.js';
 import { solveFrame } from '../physics/frames.js';
 import { kv, cells, qv, eq } from '../ui/shared.js';
 
@@ -137,14 +138,13 @@ export default defineLab({
     const ground = fatSegments(segmentCapacity(24), { color: M.green, width: 2 });
     const twoForce = fatSegments(segmentCapacity(4), { color: M.yellow, width: 1.4, dashed: true });
     group.add(...bodies, ground, twoForce);
-    const ringGeo = new THREE.RingGeometry(0.08, 0.14, 24);
     const rings = Array.from({ length: 12 }, () => {
-      const r = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: M.white, toneMapped: false }));
+      const r = pinRing(M.white);
       group.add(r);
       return r;
     });
     const arrows = Array.from({ length: POOL }, () => {
-      const a = new Arrow(new THREE.Vector3(1, 0, 0), new THREE.Vector3(), 1, M.pink, 0.24, 0.18, 0.032);
+      const a = forceArrow(new THREE.Vector3(1, 0, 0), M.pink, 0.032);
       group.add(a);
       return a;
     });
@@ -201,14 +201,8 @@ export default defineLab({
     h.bodies.forEach((line, i) => {
       const b = names[i];
       if (!b) return setFatSegments(line, []);
-      const seg = [];
-      const pts = model.bodies[b];
-      for (let k = 1; k < pts.length; k++) {
-        const p0 = P(model.points[pts[k - 1]], b);
-        const p1 = P(model.points[pts[k]], b);
-        seg.push(p0.x, p0.y, 0, p1.x, p1.y, 0);
-      }
-      setFatSegments(line, seg);
+      const pts = model.bodies[b].map((n) => P(model.points[n], b));
+      setFatSegments(line, segmentPairs(pts));
     });
 
     // Two-force members get a dashed line of action, extended past both ends.
@@ -235,9 +229,7 @@ export default defineLab({
     for (const sp of model.supports || []) {
       const v3 = P(pt(model, sp.at), sp.body);
       ring(v3);
-      const y = v3.y - 0.34;
-      g.push(v3.x, v3.y, 0, v3.x - 0.22, y, 0, v3.x, v3.y, 0, v3.x + 0.22, y, 0, v3.x - 0.34, y, 0, v3.x + 0.34, y, 0);
-      for (let k = 0; k < 4; k++) g.push(v3.x - 0.3 + k * 0.18, y, 0, v3.x - 0.42 + k * 0.18, y - 0.14, 0);
+      g.push(...pinnedGroundSegments(v3.x, v3.y));
     }
     setFatSegments(h.ground, g);
 
@@ -251,18 +243,13 @@ export default defineLab({
       const a = h.arrows[ai];
       const tag = h.tags[ai];
       ai++;
-      const len = Math.max(0.3, m * k);
-      const dir = new THREE.Vector3(F[0], F[1], 0).normalize();
       // Arrows end at the point they act on, so they read as pushes and pulls on that member.
-      a.visible = true;
-      a.position.copy(atV3).addScaledVector(dir, -len - 0.1);
-      a.setDirection(dir);
-      a.setLength(len);
+      const placed = placeIncomingArrow(a, atV3, F[0], F[1], { scale: k });
       a.setColor(color);
       a.layers.set(0);
       a.traverse((o) => o.layers.set(answer ? 1 : 0));
       tag.visible = true;
-      tag.position.copy(atV3).addScaledVector(dir, -len - 0.35);
+      tag.position.copy(atV3).addScaledVector(placed.dir, -placed.len - 0.35);
       tag.element.innerHTML = `<span class="tiny">${text}</span>`;
       tag.layers.set(answer ? 1 : 0);
     };

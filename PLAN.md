@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status (15 Oct 2026): **Phase 7 math track done.** MAC 2311 and MAC 2312 are live, every unit with its labs and problems. **PHY 2048 groundwork is merged** (07fbbe2): the mechanics library, catalog, problem bank and lab logic. Its interface comes after PHY 2049's Exam 5 on 23 Oct 2026, with the physics shell. Live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /mac2311/, /mac2312/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 2049 5174, MAC 2313 5175, Statics 5176, STA 3032 5177, MAC 2311 5178, MAC 2312 5179, PHY 2048 5180, EGN 3321 5181, EGN 3331 5182, EML 3100 5183. PHY's weekly drops land here. **Next:** PHY 2048's interface after 23 Oct, **Phase A1** (the rocket, engine first), and **Phase 8** (Dynamics, Mechanics of Materials, Thermodynamics), planned below and on the hub as not built yet. flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their old sites redirect here.
+Status (15 Oct 2026): **Phase 7 math track done.** MAC 2311 and MAC 2312 are live, every unit with its labs and problems. **PHY 2048 groundwork is merged** (07fbbe2): the mechanics library, catalog, problem bank and lab logic. Its interface comes after PHY 2049's Exam 5 on 23 Oct 2026, with the physics shell. Live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /mac2311/, /mac2312/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 2049 5174, MAC 2313 5175, Statics 5176, STA 3032 5177, MAC 2311 5178, MAC 2312 5179, PHY 2048 5180, EGN 3321 5181, EGN 3331 5182, EML 3100 5183. PHY's weekly drops land here. **Phase 8 decisions, answered 15 Oct 2026:** Dalton takes all three courses next term and Dynamics is built first (D8); generated numbers are cited by textbook section (D9); R-134a comes from an equation of state in a later PR (D10); coverage follows the course packs, plus Dynamics' §15.9 rocket lab (D11). The engineering shell is in `packages/shells/engineering`, and Statics imports it. **Next:** the shell's notes tab and plot2d stage, then Dynamics; PHY 2048's interface after 23 Oct; **Phase A1** (the rocket, engine first). flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their old sites redirect here.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
@@ -695,6 +695,15 @@ are on the hub now, marked "not built yet" (`site/src/tracks.js`).
 The id is the course code in lowercase, as MAC 2311 and MAC 2312 did. It is the route segment
 (`#/egn3321/u2/explore/fma`) and the storage namespace (`flux.egn3321.problems.v1`).
 
+#### Decisions, answered 15 Oct 2026
+
+Dalton takes EGN 3321, EGN 3331, and EML 3100 next term. These are the answers, and the build follows them.
+
+- **D8.** All three courses are next term, so they are built as coming courses, not as undated review. Dynamics is built first. Exam dates go into each unit when he has them.
+- **D9.** Worked cases use generated numbers and cite the textbook by section. No textbook example number is copied or invented. The property standards still supply the printed-answer checks.
+- **D10.** R-134a comes from the Tillner-Roth & Baehr equation of state, in a later Thermodynamics PR. Refrigeration problems use water and air until that PR.
+- **D11.** Coverage follows the course packs. Sections a pack does not name stay out. Dynamics keeps the §15.9 rocket lab, because the rocket application links to it.
+
 #### Track placement
 
 - **Mechanics:** EGN 3311 Statics → EGN 3321 Dynamics and EGN 3331 Mechanics of Materials. Both rest
@@ -721,7 +730,7 @@ The id is the course code in lowercase, as MAC 2311 and MAC 2312 did. It is the 
 - **Textbook use:** problems and notes cite the text by section (Hibbeler §12.7, Çengel §5-4).
   Statements are written fresh with generated numbers. A worked case uses numbers computed for this
   bank and cites the section its method comes from. No textbook example or problem number is
-  invented, and none is copied until D9 is decided. No figures, no tables copied.
+  invented, and none is copied (D9). No figures, no tables copied.
 - **Property data is computed, not copied.** Steam properties come from IAPWS-IF97. Ideal-gas
   properties come from the NASA 7-coefficient polynomials. Both are published, free standards, and
   their own verification values are the selftests. Material constants (E, G, ν, σ_Y, α) are stated
@@ -795,10 +804,10 @@ packs.
 
 #### EGN 3321 Dynamics (`courses/egn3321`, port 5181)
 
-Units follow the course pack. Hibbeler sections the pack does not name are left out until the
-owner says otherwise (D11): cylindrical components (§12.8, §13.6), dependent motion (§12.9), central
-force (§13.7), steady flow and variable mass (§15.8–15.9, but see `rocket` below), and rotating axes
-(§16.8).
+Units follow the course pack (D11). Hibbeler sections the pack does not name are left out:
+cylindrical components (§12.8, §13.6), dependent motion (§12.9), central
+force (§13.7), steady flow (§15.8), and rotating axes
+(§16.8). Variable mass (§15.9) is the `rocket` lab below.
 
 **Unit 1. Particle kinematics** (units and significant figures, which the Dynamics volume does not
 repeat, cited from Hibbeler *Statics* §1.3–1.6; Ch 12: rectilinear, curvilinear,
@@ -844,10 +853,9 @@ normal–tangential, relative motion)
   e, and that energy lost grows as e falls; along the tangent nothing changes. Recompute: the
   closed-form post-impact velocities. Check: the centre-of-mass velocity is unchanged, and the
   energy lost equals ½μ(1 − e²)v_rel² with μ the reduced mass, against T before minus T after.
-- `rocket` (optional, §15.9): a rocket burning at constant ṁ. Shows that Δv grows with ln(m₀/m_f),
+- `rocket` (§15.9, kept by D11): a rocket burning at constant ṁ. Shows that Δv grows with ln(m₀/m_f),
   not with the mass burned. Recompute: Δv = v_e ln(m₀/m_f) − g t_b. Check: integrate
-  m dv/dt = ṁv_e − mg numerically. Built only if the owner keeps §15.9 (D11). The rocket
-  application links to it.
+  m dv/dt = ṁv_e − mg numerically. The rocket application links to it.
 
 **Unit 5. Planar kinematics of a rigid body** (Ch 16: instantaneous centre, relative acceleration)
 
@@ -909,7 +917,7 @@ restitution and reduced-mass energy loss in `momentum.js`. FBDs and kinetic diag
 #### EGN 3331 Mechanics of Materials (`courses/egn3331`, port 5182)
 
 Units follow the course pack, Hibbeler Ch 1–9, 12 and 13. Chapters 10 (strain transformation), 11
-(beam design) and 14 (energy methods) are not in the pack and are left out (D11).
+(beam design) and 14 (energy methods) are not in the pack and are left out (D11, answered).
 
 **Unit 1. Stress** (Ch 1, §1.3–1.6, with the statics review and trusses)
 
@@ -1043,7 +1051,7 @@ for the indeterminate checks).
 #### EML 3100 Thermodynamics (`courses/eml3100`, port 5183)
 
 Units follow the course pack, Çengel & Boles Ch 1–7. Unsteady flow (the charging and discharging
-part of Ch 5) is left out unless the owner says otherwise (D11).
+part of Ch 5) is left out (D11, answered).
 
 **Unit 1. Basic concepts** (Ch 1)
 
@@ -1164,8 +1172,8 @@ folder, and the other adds files):
   derived ones (psi, slug, ft·lbf, hp). Selftest: round trips and the derived values. The mechanics
   courses use it too.
 
-R-134a, which Çengel uses for refrigerators and heat pumps, waits on D10. Until then those problems
-use water and air.
+R-134a, which Çengel uses for refrigerators and heat pumps, comes from an equation of state in a
+later PR (D10, answered). Until that PR, those problems use water and air.
 
 #### Order of work
 
@@ -1173,9 +1181,8 @@ One branch and one PR each. Each merges and deploys alone. Every PR keeps all co
 
 1. **This plan, and the hub entries** (EGN 3321 and EGN 3331 in Mechanics, a Thermal-fluids card
    with EML 3100, all "not built yet").
-2. **Engineering shell move.** Statics' HUD, practice panel, styles and FBD drawing into
-   `packages/shells/engineering/`; Statics on thin wrappers; deps.mjs and AGENTS.md updated. Pure
-   move: Statics' tests, smoke and screenshots unchanged.
+2. **Engineering shell move.** Done. Statics' HUD, practice panel, styles and FBD drawing are in
+   `packages/shells/engineering/`; Statics is on thin wrappers; AGENTS.md names the shell.
 3. **Shell additions behind flags:** the Notes tab when a manifest has notes, and the `plot2d` stage.
    Statics unchanged. A fixture course in the shell's test exercises both.
 4. **`subjects/src/convert.js`** with its selftest.
@@ -1185,7 +1192,7 @@ One branch and one PR each. Each merges and deploys alone. Every PR keeps all co
    `rectilinear`, `path-nt` and `relative`, the §1.3–1.6 and Ch 12 problems, Unit 1 notes,
    `mechanics/path.js`. Merge and deploy.
 6. **Dynamics, one PR per unit:** Unit 2 (`fma`, `curve`), Unit 3 (`collar`, `paths`), Unit 4
-   (`impulse`, `impact`, and `rocket` if D11 keeps it), Unit 5 (`ic`, `slider-crank`, `rolling`,
+   (`impulse`, `impact`, `rocket`), Unit 5 (`ic`, `slider-crank`, `rolling`,
    `rigid2d.js`), Unit 6 (`inertia`, `pendulum`, `roll-slip`, `inertia.js`), Unit 7 (`race`,
    `linkage`). Each PR carries that unit's labs, problems, notes and selftests.
 7. **Mechanics of Materials first slice:** the same skeleton with all ten units, Unit 1 complete
@@ -1196,11 +1203,10 @@ One branch and one PR each. Each merges and deploys alone. Every PR keeps all co
 10. **Thermodynamics first slice:** the skeleton with all seven units, Unit 1 complete (`manometer`,
     Ch 1 problems, notes) and the Thermal-fluids card's href. Merge and deploy.
 11. **Thermodynamics, one PR per unit:** Units 2 to 7. Unit 3 is the largest (three labs on IF97).
-12. IF97 region 3, and R-134a if D10 says yes.
+12. IF97 region 3, then R-134a from its equation of state (D10).
 13. `prereqs` links into and out of the three courses, and the applications links.
 
-Steps 5–6, 7–8 and 9–11 are independent once the shell (2–3) is in. They run in the order of D8:
-the course coming up next in the degree first.
+Steps 5–6, 7–8 and 9–11 are independent once the shell (2–3) is in. D8 builds Dynamics first.
 
 **Exit for each course:** every unit has its labs, problems and notes; all checks pass; it is live
 on the hub; its PROVENANCE.md says what it contains and that the course packs set only coverage and
@@ -1230,10 +1236,10 @@ cross-linked from the courses whose formulas it covers.
 | D5 | Course codes and terms | **Decided:** Statics is EGN 3311. MAC 2313 was taken Spring 2026. EGN 3321 Dynamics, EGN 3331 Mechanics of Materials and EML 3100 Thermodynamics are the codes on the owner's course packs (15 Oct 2026). Other codes are confirmed when each course is started. | |
 | D6 | STA 3032 provenance | **Decided 13 Oct 2026:** not asked, so the instructor's material (rewritten notes, review-sheet set, worked cases and lab presets from the notes) was removed. Recorded in `courses/sta3032/PROVENANCE.md`. | |
 | D7 | Source for Calc I, Calc II, Physics I | **Default:** OpenStax (CC BY 4.0): Calculus Vol 1 and 2, University Physics Vol 1, cited by section. Switch to the UNF course texts if the owner prefers; confirm PHY 2048's chapter list against the UNF syllabus. | |
-| D8 | Terms and exam dates for EGN 3321, EGN 3331, EML 3100 | in progress or coming next (dates in each unit, the Exam view opens on the next one, perhaps a Canvas drop) vs. review (no dates, like Phase 7) | the course coming next in the degree is built first; dates go in when the owner has them |
-| D9 | Textbook numbers in worked cases (Hibbeler, Çengel) | generated numbers cited by section (PHY 2048's rule) vs. the book's example numbers (Statics' rule, which AGENTS.md calls a provenance decision) | generated numbers, cited by section; the property standards give the printed-answer checks |
-| D10 | R-134a properties for Çengel's refrigeration problems | a published equation of state (Tillner-Roth & Baehr, 1994) in `subjects/thermo` vs. leave R-134a out | the equation of state, in a late Thermodynamics PR; water and air until then |
-| D11 | Sections the course packs do not name | follow the packs exactly vs. add the text's neighbouring sections | follow the packs; keep Dynamics' `rocket` lab (§15.9) as optional because the rocket application links to it |
+| D8 | Terms and exam dates for EGN 3321, EGN 3331, EML 3100 | **Decided 15 Oct 2026:** Dalton takes all three next term. Dynamics is built first. Dates go into each unit when he has them. | |
+| D9 | Textbook numbers in worked cases (Hibbeler, Çengel) | **Decided 15 Oct 2026:** generated numbers, cited by textbook section. No textbook example number is copied or invented. | |
+| D10 | R-134a properties for Çengel's refrigeration problems | **Decided 15 Oct 2026:** the Tillner-Roth & Baehr equation of state, in a later Thermodynamics PR. Water and air until then. | |
+| D11 | Sections the course packs do not name | **Decided 15 Oct 2026:** follow the course packs' coverage, and keep Dynamics' rocket lab (§15.9). | |
 
 ---
 

@@ -4,9 +4,14 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./math/*": "./math/*"
+    "./math/*": "./math/*",
+    "./engineering/*": "./engineering/*"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
-    "@flux/core": "*"
+    "@flux/core": "*",
+    "three": "^0.172.0"
   }
 }

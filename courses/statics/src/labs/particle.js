@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { defineLab } from './define.js';
 import { label, sliderRow, bindSlider, putSlider, showBlock, zUp, flat } from './parts.js';
-import { M, fatSegments, Arrow, markAnswer, setFatSegments, segmentCapacity } from '../scene/manim.js';
+import { M, fatSegments, markAnswer, setFatSegments, segmentCapacity } from '../scene/manim.js';
+import { forceArrow, placeOutgoingArrow, segmentPairs } from '@flux/shells/engineering/fbd.js';
 import { v, scale, mag, unit, fromAngle2D } from '../physics/vectors.js';
 import { particleEq2D, particleEq3D } from '../physics/statics.js';
 import { kv, cells, qv, eq } from '../ui/shared.js';
@@ -113,12 +114,12 @@ export default defineLab({
     const anchorGeo = new THREE.SphereGeometry(0.09, 14, 10);
     const anchors = [0, 1, 2].map(() => new THREE.Mesh(anchorGeo, new THREE.MeshBasicMaterial({ color: M.green, toneMapped: false })));
     anchors.forEach((a) => group.add(a));
-    const weight = new Arrow(new THREE.Vector3(0, -1, 0), new THREE.Vector3(), 1, M.grey, 0.28, 0.2, 0.04);
-    const pulls = MEMBER_COLORS.map((c) => markAnswer(new Arrow(new THREE.Vector3(1, 0, 0), new THREE.Vector3(), 1, c, 0.26, 0.2, 0.035)));
+    const weight = forceArrow(new THREE.Vector3(0, -1, 0), M.grey, 0.04, 0.28, 0.2);
+    const pulls = MEMBER_COLORS.map((c) => markAnswer(forceArrow(new THREE.Vector3(1, 0, 0), c, 0.035, 0.26, 0.2)));
     group.add(weight, ...pulls);
     const poly = new THREE.Group();
-    const polyW = new Arrow(new THREE.Vector3(0, -1, 0), new THREE.Vector3(), 1, M.grey, 0.22, 0.16, 0.03);
-    const polyT = MEMBER_COLORS.map((c) => new Arrow(new THREE.Vector3(1, 0, 0), new THREE.Vector3(), 1, c, 0.22, 0.16, 0.03));
+    const polyW = forceArrow(new THREE.Vector3(0, -1, 0), M.grey, 0.03, 0.22, 0.16);
+    const polyT = MEMBER_COLORS.map((c) => forceArrow(new THREE.Vector3(1, 0, 0), c, 0.03, 0.22, 0.16));
     poly.add(polyW, ...polyT);
     markAnswer(poly);
     group.add(poly);
@@ -202,7 +203,7 @@ export default defineLab({
         }
         push(prev, B);
       } else {
-        push(A, B);
+        seg.push(...segmentPairs([A, B]));
       }
       h.anchors[i].visible = true;
       h.anchors[i].position.copy(B);
@@ -240,11 +241,11 @@ export default defineLab({
     // Forces on the ring: the weight, then each solved tension pulling toward its anchor.
     const place = (arrow, origin, vec, lengthScale) => {
       const m = mag(vec);
-      arrow.visible = m > 1e-9 && Number.isFinite(m);
-      if (!arrow.visible) return;
-      arrow.position.copy(origin);
-      arrow.setDirection(map(vec).normalize());
-      arrow.setLength(Math.max(0.3, m * lengthScale));
+      if (!(m > 1e-9 && Number.isFinite(m))) {
+        arrow.visible = false;
+        return;
+      }
+      placeOutgoingArrow(arrow, origin, map(vec), Math.max(0.3, m * lengthScale));
     };
     place(h.weight, at(v(0, 0, 0)), c.W, k);
     h.labels.W.position.copy(at(scale(c.W, (k * 1.08))));
@@ -273,11 +274,11 @@ export default defineLab({
       const step = (arrow, vec) => {
         const s = map(scale(vec, k));
         const len = s.length();
-        arrow.visible = len > 1e-6;
-        if (!arrow.visible) return;
-        arrow.position.copy(tail);
-        arrow.setDirection(s.clone().normalize());
-        arrow.setLength(len);
+        if (!(len > 1e-6)) {
+          arrow.visible = false;
+          return;
+        }
+        placeOutgoingArrow(arrow, tail, s, len);
         tail = tail.clone().add(s);
       };
       step(h.polyW, c.W);
