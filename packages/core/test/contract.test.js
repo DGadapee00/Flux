@@ -27,6 +27,7 @@ test('defineCourse returns the manifest and keeps the id', () => {
 test('defineCourse rejects an id that cannot be a storage namespace', () => {
   assert.throws(() => defineCourse({ id: '' }), TypeError);
   assert.throws(() => defineCourse({ id: 'UPPER' }), TypeError);
+  assert.throws(() => defineCourse({ id: 'path-nt' }), TypeError);
   assert.throws(() => defineCourse({}), TypeError);
 });
 
@@ -39,6 +40,11 @@ test('defineLab requires an id and a kind, and passes the spec through', () => {
   assert.throws(() => defineLab({ title: 'Vectors', kind: 'scene3d' }), TypeError);
   assert.throws(() => defineLab({ id: 'vectors' }), TypeError);
   assert.throws(() => defineLab({ id: 'vectors', kind: 'hud' }), TypeError);
+  assert.equal(defineLab({ id: 'path-nt', kind: 'scene3d' }).id, 'path-nt');
+  assert.equal(defineLab({ id: 'slider-crank', kind: 'scene3d' }).id, 'slider-crank');
+  assert.throws(() => defineLab({ id: '-path', kind: 'scene3d' }), TypeError);
+  assert.throws(() => defineLab({ id: 'path-', kind: 'scene3d' }), TypeError);
+  assert.throws(() => defineLab({ id: 'path--nt', kind: 'scene3d' }), TypeError);
 });
 
 test('problem fills the shared defaults and lets the spec override them', () => {

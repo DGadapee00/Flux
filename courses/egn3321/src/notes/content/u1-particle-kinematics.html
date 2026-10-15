@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Particle kinematics</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3321 · Dynamics · Unit 1 · Hibbeler Ch 12</p>
+  <h1>Particle kinematics</h1>
+  <p class="lede">Position, velocity, and acceleration, before any force law. The numbers below are recomputed. Sections the course pack does not name stay out.</p>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>Units and significant figures</a>
+    <a href="#s2"><span>02</span>Rectilinear motion</a>
+    <a href="#s3"><span>03</span>Erratic graphs</a>
+    <a href="#s4"><span>04</span>Projectile motion</a>
+    <a href="#s5"><span>05</span>Normal and tangential components</a>
+    <a href="#s6"><span>06</span>Relative motion, translating axes</a>
+    <a href="#s7"><span>07</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Units and significant figures</h2>
+<p>A force in pounds and a length in feet have to become newtons and metres before they enter an SI equation. One foot is exactly 0.3048 m. One pound-force is one pound-mass times 9.80665 m/s².</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The pound-force is defined with standard gravity, 9.80665 m/s². Multiply the force by that factor. Multiply the arm by 0.3048. The product is the moment, in newton-metres.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · 50 lbf through 4 ft</span>
+<p>A 50 lbf force has a 4 ft arm. The force is 222 N, to three figures. The arm is 1.219 m, four figures, because the first digit is 1. The moment is 271 N·m.</p>
+</div>
+<p>Report three significant figures. When the first significant digit is 1, keep four. Count from the first non-zero digit.</p>
+<div class="box ex"><span class="tag">Worked example · three figures</span>
+<p>The product \(3 \times 5 \times \pi / 7\) is 6.73198 before rounding. The first digit is 6, so three figures give 6.73.</p>
+</div>
+<p>An equation is dimensionally homogeneous when every added term measures the same kind of quantity. \(v = v_0 + at\) is homogeneous. \(v = v_0 + a\) is not: a velocity is being added to an acceleration.</p>
+<div class="box fix"><span class="tag">Fix</span>
+<p>The pound-force uses 9.80665 m/s². Projectile motion in this unit uses \(g = 9.81\) m/s². A student who uses one of those values for both jobs changes the third figure. Hibbeler Statics §1.3 and Dynamics §12.6.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Convert first. Then round. Three figures, or four when the leading digit is 1.</p>
+</div>
+</section>
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Rectilinear motion</h2>
+<p>On a straight line, velocity is the slope of \(s(t)\). Acceleration is the slope of \(v(t)\). The other direction is an area.</p>
+\[
+v = \frac{ds}{dt}, \qquad a = \frac{dv}{dt}, \qquad a\,ds = v\,dv.
+\]
+<p>Constant acceleration integrates at once:</p>
+\[
+v = v_0 + at, \qquad s = s_0 + v_0 t + \frac{1}{2}at^2.
+\]
+<p>When \(a = ks\), separate the variables. Integrate \(v\,dv = ks\,ds\). The speed is \(\sqrt{v_0^2 + ks^2}\) if the particle passes the origin at \(v_0\).</p>
+<div class="box ex"><span class="tag">Worked example · a reversal</span>
+<p>A particle starts at the origin with \(v_0 = 4\) m/s and \(a = -2\) m/s². At \(t = 5\) s the velocity is \(-6\) m/s and the position is \(-5\) m. It stopped at \(t = 2\) s, at \(s = 4\) m. The path out and back is 13 m.</p>
+</div>
+<div class="box fix"><span class="tag">Fix</span>
+<p>Distance is 13 m. Displacement is \(-5\) m. Reporting the absolute value of the displacement as the distance drops the leg after the stop. Hibbeler §12.2.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Displacement is the net change in \(s\). Distance adds the lengths of the pieces, including the piece after the velocity changes sign.</p>
+</div>
+</section>
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Erratic graphs</h2>
+<p>An \(a\)–\(t\) graph made of steps has a constant acceleration on each step. The area of a step is that step’s change in velocity. Then step the position forward with the average velocity on the interval.</p>
+<div class="box ex"><span class="tag">Worked example · three steps</span>
+<p>Start from rest. Accelerate at 2 m/s² for 3 s, then at \(-1\) m/s² for 2 s, then at 0 for 1 s. The velocity ends at 4 m/s. The position ends at 23 m.</p>
+</div>
+<div class="box why"><span class="tag">Why</span>
+<p>The first area is \(2 \times 3 = 6\) m/s, so \(v = 6\) m/s and \(s = 9\) m. The next area is \(-2\) m/s, so \(v = 4\) m/s and \(s = 19\) m. The last step holds \(v\) and adds 4 m. End at 23 m.</p>
+</div>
+</section>
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Projectile motion</h2>
+<p>Horizontal velocity stays constant when the only acceleration is gravity. Vertical velocity changes at \(g = 9.81\) m/s². Resolve the launch velocity, then treat the two axes separately.</p>
+<div class="box ex"><span class="tag">Worked example · level ground</span>
+<p>Launch at 20 m/s, 30° above the horizontal, from level ground. The range is 35.3 m. The maximum height is 5.10 m. The time of flight is 2.04 s.</p>
+</div>
+<div class="box why"><span class="tag">Why</span>
+<p>\(v_x = 17.32\) m/s and \(v_y = 10.00\) m/s. The vertical velocity is zero at the top, so the height is \(v_y^2 / (2g)\). Flight time is \(2v_y / g\). Range is \(v_x\) times that time.</p>
+</div>
+</section>
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Normal and tangential components</h2>
+<p>The tangential piece \(a_t\) changes the speed. The normal piece \(a_n = v^2 / \rho\) turns the velocity. They are perpendicular. The magnitude is the root of the sum of the squares.</p>
+<p>For a graph \(y = f(x)\), the radius of curvature is</p>
+\[
+\rho = \frac{(1 + y'^2)^{3/2}}{|y''|}.
+\]
+<p>The unit normal points toward the concave side. A positive \(y''\) points it upward.</p>
+<div class="box ex"><span class="tag">Worked example · a parabola</span>
+<p>The path is \(y = \tfrac{1}{2} x^2\). At \(x = 2\) m the speed is 3 m/s and \(a_t = 0\). Then \(y' = 2\) and \(y'' = 1\), so \(\rho = 11.18\) m. The normal acceleration is 0.805 m/s². That is also \(|a|\).</p>
+</div>
+<div class="box fix"><span class="tag">Fix</span>
+<p>Acceleration is not tangent to the path. Here \(a_t = 0\), and \(a_n = 0.805\) m/s². A student who reports \(a = a_t\) misses the turn. Hibbeler §12.7.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>\(a_t\) changes speed. \(a_n\) changes direction. Either one can be zero while the other is not.</p>
+</div>
+</section>
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Relative motion, translating axes</h2>
+<p>Axes fixed to A, and not rotating, see B by subtraction. The positions are not needed for the relative velocity or the relative acceleration.</p>
+\[
+\vec{v}_{B/A} = \vec{v}_B - \vec{v}_A, \qquad \vec{a}_{B/A} = \vec{a}_B - \vec{a}_A.
+\]
+<div class="box ex"><span class="tag">Worked example · two velocities</span>
+<p>A moves at \((3, 1)\) m/s. B moves at \((1, 4)\) m/s. Then \(\vec{v}_{B/A} = (-2, 3)\) m/s. The relative speed is 3.61 m/s. That direction is neither velocity.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Subtract the vectors. Do not subtract the speeds and then invent a direction.</p>
+</div>
+</section>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Formula sheet</h2>
+<ul>
+<li>1 ft = 0.3048 m. 1 lbf = 4.4482216152605 N, from 0.45359237 kg times 9.80665 m/s².</li>
+<li>Three significant figures. Four when the first significant digit is 1.</li>
+<li>\(v = ds/dt\), \(a = dv/dt\), and \(a\,ds = v\,dv\).</li>
+<li>Constant \(a\): \(v = v_0 + at\), \(s = s_0 + v_0 t + \tfrac{1}{2} at^2\).</li>
+<li>Distance is the sum of the lengths. Displacement is the net \(\Delta s\).</li>
+<li>Projectile: \(g = 9.81\) m/s² downward. \(v_x\) is constant.</li>
+<li>\(a_t = \dot{v}\), \(a_n = v^2/\rho\), \(\rho = (1+y'^2)^{3/2}/|y''|\).</li>
+<li>\(\vec{v}_{B/A} = \vec{v}_B - \vec{v}_A\) for translating axes.</li>
+</ul>
+<p>Left out of this course, because the pack does not name them: cylindrical coordinates (§12.8 and §13.6), dependent motion (§12.9), central-force motion (§13.7), steady flow (§15.8), and rotating axes (§16.8). The rocket, §15.9, is Unit 4.</p>
+</section>
+</main>
+</body>
+</html>

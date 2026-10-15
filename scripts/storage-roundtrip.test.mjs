@@ -36,6 +36,14 @@ import {
   TALLY_KEY,
   courseStore as staStore,
 } from '../courses/sta3032/src/storage.js';
+import { createProgress as dynamicsProgress, memoryStorage as dynamicsMemory } from '../courses/egn3321/src/problems/progress.js';
+import {
+  EXAM_KEY as DYN_EXAM,
+  FULL_KEY as DYN_FULL,
+  STORE_KEY as DYN_STORE,
+  WIDTH_KEY as DYN_WIDTH,
+  courseStore as dynamicsStore,
+} from '../courses/egn3321/src/storage.js';
 import { createProgress as staticsProgress, memoryStorage as staticsMemory } from '../courses/statics/src/problems/progress.js';
 import {
   EXAM_KEY as STATICS_EXAM,
@@ -151,4 +159,29 @@ roundTrip({
   examKey: STA_EXAM,
   legacyExam: STA_LEGACY_EXAM,
   extras: [{ slot: 'labs', key: TALLY_KEY, legacy: LEGACY_TALLY_KEY, value: '{"sampling":{"p1":{"right":1}}}' }],
+});
+
+test('egn3321: export and import with no legacy key', () => {
+  const storage = dynamicsMemory();
+  const progress = dynamicsProgress(storage, { now: () => 0 });
+  progress.record('u1.12.polynomial', { correct: true, clean: true, now: 1000 });
+  progress.saveExam({ id: 'u1', n: 1 });
+  dynamicsStore(storage, () => 0).setItem('notes.width', '480');
+  dynamicsStore(storage, () => 0).setItem('notes.full', '1');
+  assert.match(storage.getItem(DYN_STORE), /u1\.12\.polynomial/);
+  assert.equal(storage.getItem('flux-egn3321.problems.v1'), null);
+
+  const blob = progress.exportJSON();
+  for (const key of [DYN_STORE, DYN_EXAM, DYN_WIDTH, DYN_FULL]) storage.removeItem(key);
+  const cleared = dynamicsProgress(storage, { now: () => 0 });
+  assert.equal(cleared.get('u1.12.polynomial'), null);
+  assert.equal(cleared.loadExam(), null);
+  cleared.importJSON(blob);
+  assert.equal(cleared.get('u1.12.polynomial').box, 1);
+  assert.deepEqual(cleared.loadExam(), { id: 'u1', n: 1 });
+  const restored = dynamicsStore(storage, () => 0);
+  assert.equal(restored.getItem('notes.width'), '480');
+  assert.equal(restored.getItem('notes.full'), '1');
+  assert.throws(() => cleared.importJSON({ v: 1, courseId: 'other', keys: {} }), /does not match this course/);
+  assert.equal(cleared.get('u1.12.polynomial').box, 1);
 });
