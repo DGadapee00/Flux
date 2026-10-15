@@ -4,6 +4,8 @@ const loaders = {
   rectilinear: () => import('./rectilinear.js'),
   'path-nt': () => import('./path-nt.js'),
   relative: () => import('./relative.js'),
+  fma: () => import('./fma.js'),
+  curve: () => import('./curve.js'),
 };
 
 const labs = createLabLoader(loaders);

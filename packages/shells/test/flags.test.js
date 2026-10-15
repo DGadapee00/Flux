@@ -212,6 +212,21 @@ test('a fixture course with notes opens them beside the lab', async () => {
   assert.equal(seen.escape, 1);
 });
 
+test('the wordmark is a course option, and omitting it leaves the heading', () => {
+  page();
+  document.getElementById('brand').insertAdjacentHTML('afterbegin', '<h1 id="mark">TRUSS</h1>');
+  createHUD(api(), catalog);
+  assert.equal(document.getElementById('mark').textContent, 'TRUSS');
+  assert.equal(document.getElementById('mark').classList.contains('wordmark-long'), false);
+
+  page();
+  document.getElementById('brand').insertAdjacentHTML('afterbegin', '<h1 id="mark">TRUSS</h1>');
+  createHUD(api(), { ...catalog, wordmark: 'EGN 3321', title: 'Dynamics' });
+  assert.equal(document.getElementById('mark').textContent, 'EGN 3321');
+  assert.equal(document.getElementById('mark').classList.contains('wordmark-long'), true);
+  assert.equal(document.title, 'EGN 3321 — Dynamics');
+});
+
 test('a plot2d lab takes the three.js canvas down and draws on the plot canvas', () => {
   page();
   const canvas3d = document.getElementById('c');

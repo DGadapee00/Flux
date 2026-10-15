@@ -11,11 +11,12 @@ import {
   averageVelocity, centripetalAccel, circularPeriod, constAccel1D, constVelocity,
   flight, landingTime, projectile, relativeVelocity, speedFromDisplacement, timeAtSpeed,
 } from './kinematics.js';
-import { atwood, centripetalForce, incline, newton } from './dynamics.js';
+import { atwood, bankedCurve, centripetalForce, hangingIncline, incline, newton, springCollar, verticalLoop } from './dynamics.js';
 import {
   gravitationalEnergy, kineticEnergy, power, speedFromEnergy, springEnergy, work, workVector,
 } from './energy.js';
 import { centerOfMass, collide1D, impulse, momentum } from './momentum.js';
+import { inclineState } from './friction.js';
 import {
   angularAcceleration, angularMomentum, constAlpha, inertiaDisk, inertiaPoint, inertiaRodCenter,
   inertiaRodEnd, parallelAxisMass, rollingIncline, rotationalKE, torqueMag,
@@ -309,6 +310,92 @@ console.log('\nGravitation');
   approx(vCirc * vCirc / r, gravityField(M, r), 1e-12, 'a circular orbit falls at the field strength');
   approx(circularOrbitPeriod(M, r), (2 * Math.PI * r) / vCirc, 1e-12, 'the period is one lap at the orbital speed');
   approx(circularOrbitEnergy(m, M, r), kineticEnergy(m, vCirc) + u, 1e-9, 'orbit energy is kinetic plus potential');
+}
+
+console.log('\nParticle kinetics');
+{
+  const g = 9.81;
+  // A block that must slide: friction.js walks the regime, dynamics.js writes a = g sinθ − μ g cosθ.
+  const mass = 3;
+  const theta = 30;
+  const slide = incline({ mass, thetaDeg: theta, mu: 0.15, g, motion: 'down' });
+  const fr = inclineState({ W: mass * g, theta, mus: 0.2, muk: 0.15 });
+  approx(slide.N, fr.N, 1e-12, 'incline normal matches the friction free-body');
+  approx(slide.aDown, -fr.net / mass, 1e-12, 'downhill acceleration matches −net / m');
+
+  // Hanging mass, known to descend. Independent equation, then both free-bodies' residuals.
+  const block = 4;
+  const hang = 6;
+  const tow = hangingIncline({ block, hang, thetaDeg: 30, muk: 0.2, mus: 0.3, g, v0: 0 });
+  const N = block * g * Math.cos(30 * DEG);
+  const expectA = (hang * g - block * g * Math.sin(30 * DEG) - 0.2 * N) / (block + hang);
+  approx(tow.a, expectA, 1e-12, 'accelerating tow matches ΣF = ma with kinetic friction');
+  ok(tow.regime === 'kinetic', 'that tow is kinetic');
+  const resHang = hang * g - tow.T - hang * tow.a;
+  const resBlock = tow.T - block * g * Math.sin(30 * DEG) + tow.f - block * tow.a;
+  approx(resHang, 0, 1e-12, 'hanging free-body residual is zero');
+  approx(resBlock, 0, 1e-12, 'block free-body residual is zero');
+
+  const held = hangingIncline({ block: 4, hang: 3, thetaDeg: 30, muk: 0.2, mus: 0.4, g, v0: 0 });
+  approx(held.a, 0, 1e-12, 'a lighter hanging mass is held by static friction');
+  approx(held.T, 3 * g, 1e-12, 'at rest the tension equals the hanging weight');
+
+  // x–y solve for the bank, against the n–t formulas. +x toward the centre.
+  function bankXY(m, radius, thetaDeg, speed) {
+    const th = thetaDeg * DEG;
+    const nx = Math.sin(th);
+    const ny = Math.cos(th);
+    const dx = Math.cos(th);
+    const dy = -Math.sin(th);
+    const bx = m * speed * speed / radius;
+    const by = m * g;
+    const detXY = nx * dy - dx * ny;
+    return {
+      N: (bx * dy - dx * by) / detXY,
+      f: (nx * by - bx * ny) / detXY,
+    };
+  }
+  const car = bankedCurve({ mass: 800, radius: 50, thetaDeg: 20, speed: 12, mu: 0.25, g });
+  const xy = bankXY(800, 50, 20, 12);
+  approx(car.N, xy.N, 1e-12, 'banked normal matches the x–y solve');
+  approx(car.f, xy.f, 1e-12, 'banked friction matches the x–y solve');
+  const design = bankedCurve({ mass: 800, radius: 50, thetaDeg: 20, speed: car.vDesign, mu: 0, g });
+  approx(design.f, 0, 1e-9, 'the design speed needs no friction');
+  approx(design.N, (800 * g) / Math.cos(20 * DEG), 1e-9, 'and the normal is mg / cosθ');
+  const fast = bankedCurve({ mass: 800, radius: 50, thetaDeg: 30, speed: 0, mu: 0.1, g });
+  const atMax = bankXY(800, 50, 30, fast.vMax);
+  approx(Math.abs(atMax.f), 0.1 * atMax.N, 1e-9, 'at the maximum speed, friction is μN');
+  const atMin = bankXY(800, 50, 30, fast.vMin);
+  approx(atMin.f, -0.1 * atMin.N, 1e-9, 'at the minimum speed, friction is μN up the bank');
+
+  // Loop speed by integrating a_t along the arc, against energy.
+  function loopSpeed(radius, vb, phiDeg) {
+    const phi = phiDeg * DEG;
+    const steps = 4000;
+    const dphi = phi / steps;
+    let v = vb;
+    for (let i = 0; i < steps; i++) {
+      const mid = (i + 0.5) * dphi;
+      const at = -g * Math.sin(mid);
+      const next2 = v * v + 2 * at * radius * dphi;
+      v = Math.sqrt(Math.max(0, next2));
+    }
+    return v;
+  }
+  const bead = verticalLoop({ mass: 0.5, radius: 0.4, speedBottom: 5, phiDeg: 180, g });
+  approx(bead.speed, loopSpeed(0.4, 5, 180), 1e-6, 'loop speed matches integration of a_t');
+  approx(bead.N, 0.5 * (bead.speed * bead.speed / 0.4 - g), 1e-12, 'at the top, N = m(v²/ρ − g)');
+  const bottom = verticalLoop({ mass: 0.5, radius: 0.4, speedBottom: 5, phiDeg: 0, g });
+  ok(bottom.N > bead.N, 'the normal force is larger at the bottom than at the top');
+
+  const collar = springCollar({ mass: 2, k: 40, x: 0.15, thetaDeg: 0, g });
+  approx(collar.a, -(springOmega(2, 40) ** 2) * 0.15, 1e-12, 'horizontal collar acceleration is −ω²x');
+  const sloped = springCollar({ mass: 2, k: 30, x: 0.1, thetaDeg: 20, g });
+  const u = { x: Math.cos(20 * DEG), y: -Math.sin(20 * DEG) };
+  const weightForce = { x: 0, y: -2 * g };
+  const springForce = { x: -30 * 0.1 * u.x, y: -30 * 0.1 * u.y };
+  const along = (weightForce.x + springForce.x) * u.x + (weightForce.y + springForce.y) * u.y;
+  approx(sloped.a, along / 2, 1e-12, 'sloped collar matches the force dotted onto the rod');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);

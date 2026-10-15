@@ -136,6 +136,11 @@ body {
   line-height: 1.1;
 }
 
+.brand-text h1.wordmark-long {
+  font-size: 18px;
+  letter-spacing: 0.06em;
+}
+
 .brand-text .subtitle {
   font-size: 11px;
   color: var(--text-muted);

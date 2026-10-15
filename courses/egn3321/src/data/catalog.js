@@ -16,8 +16,8 @@ export const EXAMS = [
     title: 'Force and acceleration',
     chapters: '13',
     date: 'Ch 13',
-    labs: [],
-    coming: ['F = ma', 'Curve'],
+    labs: ['fma', 'curve'],
+    coming: [],
   },
   {
     id: 'u3',
@@ -70,11 +70,14 @@ export const LAB_META = {
   rectilinear: { id: 'rectilinear', exam: 'u1', title: 'Rectilinear' },
   'path-nt': { id: 'path-nt', exam: 'u1', title: 'Path' },
   relative: { id: 'relative', exam: 'u1', title: 'Relative' },
+  fma: { id: 'fma', exam: 'u2', title: 'F = ma' },
+  curve: { id: 'curve', exam: 'u2', title: 'Curve' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Units and significant figures',
   12: 'Kinematics of a particle',
+  13: 'Kinetics of a particle: force and acceleration',
 };
 
 export function examById(id) {

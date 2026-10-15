@@ -11,6 +11,7 @@ export function createHUD(api) {
     examById,
     labMeta: LAB_META,
     title: course.title,
+    wordmark: 'TRUSS',
     homeId,
   });
 }
