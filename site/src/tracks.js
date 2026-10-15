@@ -4,7 +4,8 @@
  * A relative href is the copy in this repo. An absolute href is that course's own site.
  * Statics is EGN 3311 and MAC 2313 was Spring 2026 (PLAN.md, D5).
  * Codes for courses that are not built yet are the Florida common numbers from the plan.
- * Dynamics has no code until that course is started.
+ * EGN 3321, EGN 3331 and EML 3100 are the codes on the owner's course packs (PLAN.md, Phase 8).
+ * A track may have no built course yet. Its card shows the list and opens nothing.
  */
 export const TRACKS = [
   {
@@ -48,7 +49,8 @@ export const TRACKS = [
         term: null,
         href: 'statics/',
       },
-      { id: 'dynamics', code: null, title: 'Dynamics', term: null, href: null },
+      { id: 'egn3321', code: 'EGN 3321', title: 'Dynamics', term: null, href: null },
+      { id: 'egn3331', code: 'EGN 3331', title: 'Mechanics of Materials', term: null, href: null },
     ],
   },
   {
@@ -64,10 +66,15 @@ export const TRACKS = [
       },
     ],
   },
+  {
+    id: 'thermal',
+    name: 'Thermal-fluids',
+    courses: [{ id: 'eml3100', code: 'EML 3100', title: 'Thermodynamics', term: null, href: null }],
+  },
 ];
 
 /**
- * The last built course in degree order. The card opens this one.
+ * The last built course in degree order. The card opens this one. Null when none is built.
  * @param {{ courses: { href: string|null }[] }} track
  */
 export function latestBuilt(track) {

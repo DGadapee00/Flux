@@ -20,14 +20,18 @@ const PLATFORM_HREF = {
 const PLATFORM = 'https://flux-study.pages.dev/';
 const DIST = path.resolve(import.meta.dirname, '../../site/dist');
 
-test('four tracks, each with a built course, in degree order', () => {
+/** Tracks whose first course is not built yet. Their cards list the courses and open nothing. */
+const UNBUILT_TRACKS = ['thermal'];
+
+test('five tracks in order, each with a built course unless it is still to come', () => {
   assert.deepEqual(
     TRACKS.map((track) => track.id),
-    ['physics', 'math', 'mechanics', 'stats'],
+    ['physics', 'math', 'mechanics', 'stats', 'thermal'],
   );
   for (const track of TRACKS) {
     const built = track.courses.filter((course) => course.href);
-    assert.ok(built.length >= 1, `${track.id} has a built course`);
+    if (UNBUILT_TRACKS.includes(track.id)) assert.equal(built.length, 0, `${track.id} has no built course yet`);
+    else assert.ok(built.length >= 1, `${track.id} has a built course`);
     for (const course of built) {
       if (PLATFORM_HREF[course.id]) {
         assert.equal(course.href, PLATFORM_HREF[course.id]);
@@ -51,10 +55,29 @@ test('the card opens the latest built course, and D5 is on the list', () => {
   assert.equal(latestBuilt(TRACKS[2]).id, 'statics');
   assert.equal(latestBuilt(TRACKS[2]).code, 'EGN 3311');
   assert.equal(latestBuilt(TRACKS[3]).id, 'sta3032');
+  assert.equal(latestBuilt(TRACKS[4]), null);
   assert.deepEqual(
     builtCourses().map((course) => course.id),
     ['phy2049', 'mac2311', 'mac2312', 'mac2313', 'statics', 'sta3032'],
   );
+});
+
+test('Phase 8 courses are on the hub with their codes, not built yet', () => {
+  const card = (id) => TRACKS.flatMap((track) => track.courses.map((course) => ({ track: track.id, ...course }))).find((course) => course.id === id);
+  assert.deepEqual(
+    TRACKS[2].courses.map((course) => course.code),
+    ['EGN 3311', 'EGN 3321', 'EGN 3331'],
+  );
+  for (const [id, track, code, title] of [
+    ['egn3321', 'mechanics', 'EGN 3321', 'Dynamics'],
+    ['egn3331', 'mechanics', 'EGN 3331', 'Mechanics of Materials'],
+    ['eml3100', 'thermal', 'EML 3100', 'Thermodynamics'],
+  ]) {
+    const course = card(id);
+    assert.ok(course, `${id} is on the hub`);
+    assert.deepEqual([course.track, course.code, course.title, course.href], [track, code, title, null]);
+    assert.match(id, /^[a-z][a-z0-9]*$/);
+  }
 });
 
 test('after a build, each platform copy has an index under site/dist', (t) => {

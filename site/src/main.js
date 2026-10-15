@@ -6,19 +6,24 @@ const root = document.querySelector('#tracks');
 
 for (const track of TRACKS) {
   const latest = latestBuilt(track);
-  if (!latest?.href) throw new Error(`${track.id} has no built course`);
 
   const card = document.createElement('article');
   card.className = 'card';
   card.dataset.track = track.id;
 
   const heading = document.createElement('h2');
-  const open = document.createElement('a');
-  open.className = 'track-open';
-  open.href = latest.href;
-  open.dataset.trackOpen = track.id;
-  open.textContent = track.name;
-  heading.append(open);
+  if (latest) {
+    const open = document.createElement('a');
+    open.className = 'track-open';
+    open.href = latest.href;
+    open.dataset.trackOpen = track.id;
+    open.textContent = track.name;
+    heading.append(open);
+  } else {
+    // Nothing built yet: the card names the track and lists its courses, and opens nothing.
+    card.dataset.unbuilt = '';
+    heading.textContent = track.name;
+  }
 
   const stage = document.createElement('div');
   stage.className = 'stage';
