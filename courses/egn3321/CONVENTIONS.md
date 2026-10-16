@@ -36,4 +36,4 @@ The rocket, §15.9, is kept. It is a Unit 4 lab, not part of Unit 1.
 
 Rewritten, one file per unit, in the notes-panel structure: eyebrow, h1, lede, toc,
 `section.topic`. Math uses `\( \)` and `\[ \]` only. A dollar sign is never a delimiter
-in a notes file. Voice is short and declarative. A `box fix` names the mistake and the section.
+in a notes file. Voice is short and declarative. A common-mistake box names the mistake and the section.

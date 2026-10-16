@@ -54,26 +54,11 @@ function apply(id, state) {
   state.tEnd = sc.pieces[sc.pieces.length - 1].t1;
 }
 
-function mapX(t, tEnd) {
-  const end = Math.max(tEnd, 1e-6);
-  return -5.5 + (11 * t) / end;
-}
-
-function band(samples, y0, half) {
-  let lo = Math.min(...samples, 0);
-  let hi = Math.max(...samples, 0);
-  if (hi - lo < 1e-9) {
-    hi += 1;
-    lo -= 1;
-  }
-  return samples.map((v) => y0 + ((v - lo) / (hi - lo) - 0.5) * 2 * half);
-}
-
 export default defineLab({
   id: 'rectilinear',
   exam: 'u1',
   title: 'Rectilinear',
-  hint: 'Drag the acceleration. The area under a–t is the change in v.',
+  hint: 'The plot shows a, v, and s against time, each in its own unit. Move the probe.',
   camera: { pos: new THREE.Vector3(0, 0, 16), target: new THREE.Vector3(0, 0, 0) },
   scenarios: SCENARIOS,
   defaultState() {
@@ -91,7 +76,7 @@ export default defineLab({
       ${slider('rl-a2', 'a₂ (m/s²)', -4, -8, 8, 0.5)}
       ${slider('rl-end', 'end time (s)', 5, 1, 10, 0.1)}
       ${slider('rl-t', 'probe time (s)', 5, 0, 10, 0.1)}
-      <p class="tiny">Gold is a–t, white is v–t, teal is s–t. The marker is the probe. Space plays the probe.</p>`;
+      <p class="tiny">The plot panel draws a, v, and s against time in seconds, each in its own unit. The marker is the probe. Space plays the probe.</p>`;
   },
   bind(api) {
     bindSlider('rl-v0', (s, v) => { s.v0 = v; }, api);
@@ -138,14 +123,12 @@ export default defineLab({
   },
   init(ctx) {
     const group = new THREE.Group();
-    const aLine = makeLine(M.gold);
-    const vLine = makeLine(M.white);
-    const sLine = makeLine(M.teal);
-    const marker = makeLine(M.yellow);
-    const dot = makeDot(M.yellow, 0.14);
-    group.add(aLine, vLine, sLine, marker, dot);
+    const track = makeLine(M.grey);
+    const origin = makeLine(M.white);
+    const dot = makeDot(M.yellow, 0.16);
+    group.add(track, origin, dot);
     ctx.scene.add(group);
-    return { group, aLine, vLine, sLine, marker, dot };
+    return { group, track, origin, dot };
   },
   enter(ctx, handle) {
     handle.group.visible = true;
@@ -196,20 +179,24 @@ export default defineLab({
   },
   syncViews(state, computed, ctx) {
     const h = ctx.handle;
-    const tEnd = computed.tEnd || 1;
-    const put = (line, values, y0) => {
-      const ys = band(values, y0, 1.15);
-      setLine(
-        line,
-        values.map((_, i) => ({ x: mapX((i / (values.length - 1)) * tEnd, tEnd), y: ys[i] })),
-      );
-    };
-    put(h.aLine, computed.as, 3.3);
-    put(h.vLine, computed.vs, 0);
-    put(h.sLine, computed.ss, -3.3);
-    const x = mapX(computed.t, tEnd);
-    setLine(h.marker, [{ x, y: -4.6 }, { x, y: 4.6 }]);
+    const samples = computed.ss || [0];
+    const span = Math.max(1, ...samples.map((v) => Math.abs(v)), Math.abs(computed.s || 0));
+    const x = ((computed.s || 0) / span) * 4.2;
+    setLine(h.track, [{ x: -4.8, y: 0 }, { x: 4.8, y: 0 }]);
+    setLine(h.origin, [{ x: 0, y: -0.28 }, { x: 0, y: 0.28 }]);
     h.dot.position.set(x, 0, 0);
+  },
+  plot(state, c) {
+    return {
+      type: 'series',
+      t: c.ts,
+      probe: c.t,
+      series: [
+        { label: 'a', unit: 'm/s²', color: '#f0ac5f', y: c.as },
+        { label: 'v', unit: 'm/s', color: '#ece6e2', y: c.vs },
+        { label: 's', unit: 'm', color: '#5cd0b3', y: c.ss },
+      ],
+    };
   },
   tick(dt, state) {
     if (!state.anim?.playing) return false;

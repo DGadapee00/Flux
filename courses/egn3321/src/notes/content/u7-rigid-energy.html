@@ -21,38 +21,48 @@
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Kinetic energy</h2>
 <p>A rigid body in the plane carries kinetic energy in two parts. The mass centre translates. The body spins about that centre.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The mass centre moves as a particle and contributes \(\tfrac{1}{2}mv_G^2\). Spin about the centre contributes \(\tfrac{1}{2}I_G\omega^2\). Rolling without slip ties them by \(\omega = v_G/R\).</p>
+</div>
+
 \[ T = \tfrac{1}{2}mv_G^2 + \tfrac{1}{2}I_G\omega^2 \]
 <p>\(v_G\) is the speed of the mass centre. \(\omega\) is the angular speed. \(I_G\) is the moment about the centre.</p>
 <div class="box ex"><span class="tag">Worked example · the same drop</span>
-<p>A hoop, a disk, and a sphere roll 2 m down a 30° incline. They start from rest. The finish speeds are 3.74, 3.62, and 3.13 m/s. Each body of mass 2 kg gains the same kinetic energy, 19.62 J.</p>
+<p>A hoop, a disk, and a sphere roll 2 m down a 30° incline. They start from rest. The finish speeds are 3.13 m/s for the hoop, 3.62 m/s for the disk, and 3.74 m/s for the sphere. Each body of mass 2 kg gains the same kinetic energy, 19.62 J.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · a rolling disk</span>
 <p>A disk of mass 2 kg and radius 0.25 m rolls at 3 m/s. Translation holds 9 J. Rotation holds 4.5 J. The total is 13.5 J.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Reporting only \(\tfrac{1}{2}I_G\omega^2\) drops the translation of the mass centre. Both terms belong in \(T\). Hibbeler §18.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>For rolling without slip, \(\omega = v_G/R\). The same \(T\) is \(\tfrac{1}{2}I_C\omega^2\) about the contact.</p>
 </div>
+<p>Energy uses the speed of the mass centre and the spin about that centre. It does not give a friction force or a pin force. Those still need the force and moment equations.</p>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Work of a couple</h2>
 <p>A couple does work through the angle it turns. The angle is in radians.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The work of a couple is the moment times the angle, and the angle is in radians. For a torsional spring, \(M = -\kappa(\theta-\theta_0)\). Its work is the drop in \(\tfrac{1}{2}\kappa(\theta-\theta_0)^2\).</p>
+</div>
+
 \[ U = \int_{\theta_1}^{\theta_2} M\,d\theta \]
 <p>A torsional spring has \(M = -\kappa(\theta - \theta_0)\). Between two angles its work equals the drop in \(\tfrac{1}{2}\kappa(\theta-\theta_0)^2\).</p>
 <div class="box ex"><span class="tag">Worked example · a bar released from horizontal</span>
-<p>A 4 kg bar, 2 m long, is pinned at one end and released from rest while horizontal. At the bottom, \(\omega = v_G = 3.84\). The kinetic energy is \(mgL/2\), which reads 39.2 J.</p>
+<p>A 4 kg bar, 2 m long, is pinned at one end and released from rest while horizontal. At the bottom, \(\omega = 3.84\) rad/s and \(v_G = 3.84\) m/s. They match because the centre is 1 m from the pin. The kinetic energy is \(mgL/2\), which reads 39.2 J.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · a torsional spring</span>
 <p>The same bar has a torsional spring of stiffness 15 N·m/rad, unstretched when the bar hangs down. From horizontal to the bottom the spring does 18.51 J of work. \(\omega = 4.65\ \mathrm{rad/s}\), and \(T = 57.7\ \mathrm{J}\).</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>The work of a couple is \(\int M\,d\theta\). A force times an arc length is a different job, and it misses this moment. Hibbeler §18.3.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Unstretched at the bottom, the spring hands its stored energy to the bar. The bar arrives faster than it would under gravity alone.</p>
 </div>
+<p>The angle in a couple is in radians. The model leaves out a spring that hits a stop, and a moment that depends on the speed.</p>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Rolling without slip</h2>
@@ -67,12 +77,13 @@
 <div class="box ex"><span class="tag">Worked example · a sphere in feet</span>
 <p>A sphere rolls 10 ft from rest down a 30° incline. With \(g = 32.2\ \mathrm{ft/s^2}\), the speed is 15.17 ft/s. The weight cancels.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Putting \(k_G\) in the denominator counts the radius of gyration once. The factor is \(k_G^2/R^2\). Mass cancels, so only \(k\) orders the race. Hibbeler §18.5.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Hoop \(k = 1\), disk \(k = 1/2\), solid sphere \(k = 2/5\). The sphere finishes first.</p>
 </div>
+<p>The race assumes rolling without slip for the whole run. If friction cannot supply the torque, the body slips and this speed formula does not apply. Mass cancels only while \(k\) is fixed by the shape.</p>
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>The instantaneous centre</h2>
@@ -86,12 +97,13 @@
 <div class="box ex"><span class="tag">Worked example · a spring at the foot</span>
 <p>The same rod has a spring at the foot. The natural length equals the rod, so the spring starts compressed. At 30°, \(\omega = 4.06\ \mathrm{rad/s}\) and \(T = 18.52\ \mathrm{J}\).</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>\(T = \tfrac{1}{2}I_{IC}\omega^2\) is an identity at that instant. \(\Sigma M_{IC} = I_{IC}\alpha\) is not, because the instantaneous centre moves. Integrate the energy, or the real one-degree equation. Hibbeler §18.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Use the instantaneous centre for \(T\). Keep the moment equation on a fixed point, or on the mass centre.</p>
 </div>
+<p>Kinetic energy about the instantaneous centre is valid at that instant. A moment sum about that moving point is not. Use the energy, or take moments about a fixed point or the mass centre.</p>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Formula sheet</h2>
@@ -104,6 +116,7 @@
 <li>Rod in two slots: \(I_{IC} = mL^2/3\) and \(T = \tfrac{1}{2}I_{IC}\omega^2\).</li>
 <li>\(g = 9.81\ \mathrm{m/s^2}\). A US problem uses \(g = 32.2\ \mathrm{ft/s^2}\).</li>
 </ul>
+<p>The formulas assume the constraint holds for the whole motion. Slip, bearing friction, and a spring that bottoms out are left out.</p>
 </section>
 </main>
 </body>

@@ -45,6 +45,7 @@ const units = [
       num('F', ($) => $.F, 'N', { label: 'force' }),
       num('M', ($) => $.F * $.L, 'N·m', { label: 'moment' }),
     ],
+    level: 1,
     hints: [
       String.raw`One pound-force is defined as $1\ \mathrm{lbm}\times 9.80665\ \mathrm{m/s^2}$.`,
       'One foot is 0.3048 m. Multiply the converted force by the converted arm.',
@@ -89,7 +90,10 @@ const units = [
         correct: ($) => hibbeler($.raw),
       },
     ],
-    hints: ['Count figures from the first non-zero digit. A leading 1 keeps one extra figure.'],
+    level: 1,
+    hints: ['Count figures from the first non-zero digit. A leading 1 keeps one extra figure.',
+      "Round the finished product. Rounding a factor and then multiplying changes the third figure.",
+    ],
     steps: ($, sig) => [
       String.raw`The unrounded value is $${sig($.raw, 6)}$.`,
       `The reported value is ${hibbeler($.raw)}.`,
@@ -118,7 +122,10 @@ const units = [
     parts: [
       mc('homo', [[1, 'True'], [0, 'False']], ($) => (EQ_OK[$.eq] ? 1 : 0), { label: 'homogeneous?' }),
     ],
-    hints: ['Every term that is added must measure the same kind of quantity.'],
+    level: 2,
+    hints: ['Every term that is added must measure the same kind of quantity.',
+      "Give each term a power of length and a power of time. The product of acceleration and time is a velocity. A bare acceleration is not.",
+    ],
     steps: ($, sig) => {
       void sig;
       const ok = homogeneous($.eq);

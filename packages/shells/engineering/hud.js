@@ -1,7 +1,8 @@
 import { sceneScale, workPlane, lenLabel, PLANE_AXES } from '@flux/core/scene3d/frame.js';
 import { bindCourseHeader } from '../header.js';
 import { mountNotesTab } from './notes.js';
-import { drawVx, drawAC, drawVI } from './plot.js';
+import { drawSeries, drawVx, drawAC, drawVI } from './plot.js';
+import { choices, matchesExpect, outcomes, run } from './predict.js';
 import { setLawEl, prose, mathText } from './shared.js';
 
 /**
@@ -28,6 +29,107 @@ export function createHUD(api, catalog) {
   let mountedId = '';
   /** Refreshers for the typed boxes beside each slider, rebuilt whenever a lab mounts. */
   const sliderBoxes = [];
+  const pred = { labId: '', index: 0, phase: 'ask', picks: {}, got: null, before: null, after: null };
+  let predKey = '';
+
+  function bindPredict() {
+    const host = $('predict');
+    if (!host || host.dataset.bound) return;
+    host.dataset.bound = '1';
+    host.addEventListener('click', (event) => {
+      const button = event.target.closest('button');
+      if (!button || !pred.lab) return;
+      const prompts = pred.lab.predictions || [];
+      const prompt = prompts[pred.index];
+      if (!prompt) return;
+      if (button.dataset.act === 'next') {
+        pred.index = (pred.index + 1) % prompts.length;
+        pred.phase = 'ask';
+        pred.picks = {};
+        pred.got = null;
+        predKey = '';
+        renderPredict(pred.lab);
+        return;
+      }
+      if (button.dataset.act === 'again') {
+        pred.phase = 'ask';
+        pred.picks = {};
+        pred.got = null;
+        predKey = '';
+        renderPredict(pred.lab);
+        return;
+      }
+      if (button.dataset.watch) {
+        const raw = button.dataset.value;
+        pred.picks[button.dataset.watch] = raw === 'true' ? true : raw === 'false' ? false : Number.isFinite(Number(raw)) && raw !== '' && button.dataset.numeric === '1' ? Number(raw) : raw;
+        predKey = '';
+        renderPredict(pred.lab);
+        return;
+      }
+      if (button.dataset.act === 'apply') {
+        const live = api.slice();
+        const fresh = pred.lab.defaultState();
+        pred.lab.applyScenario(prompt.scenario, fresh);
+        prompt.prep?.(fresh);
+        const { before, after, next } = run(pred.lab, fresh, prompt);
+        pred.before = before;
+        pred.after = after;
+        pred.got = outcomes(prompt, before, after);
+        pred.phase = 'result';
+        predKey = '';
+        for (const key of Object.keys(live)) delete live[key];
+        Object.assign(live, next);
+        api.bump(false);
+      }
+    });
+  }
+
+  function renderPredict(lab) {
+    const host = $('predict');
+    if (!host) return;
+    const prompts = lab?.predictions || [];
+    const hidden = !prompts.length || document.body.classList.contains('practice-open');
+    host.hidden = hidden;
+    if (hidden) return;
+    if (pred.labId !== lab.id) {
+      pred.labId = lab.id;
+      pred.index = 0;
+      pred.phase = 'ask';
+      pred.picks = {};
+      pred.got = null;
+      predKey = '';
+    }
+    pred.lab = lab;
+    const prompt = prompts[pred.index];
+    const key = `${lab.id}|${pred.index}|${pred.phase}|${JSON.stringify(pred.picks)}|${pred.got ? 'g' : ''}`;
+    if (key === predKey) return;
+    predKey = key;
+    const n = prompts.length;
+    const head = `<div class="pred-head"><h3>Predict first</h3><span>${pred.index + 1} of ${n}</span></div>`;
+    const ask = `<div class="pred-ask">${prose(prompt.ask)}</div>`;
+    if (pred.phase === 'result' && pred.got) {
+      const rows = prompt.watch.map((w) => {
+        const right = pred.got[w.id] === pred.picks[w.id];
+        const label = choices(prompt, w).find(([value]) => value === pred.got[w.id]);
+        return `<p class="pred-grade ${right ? 'ok' : 'bad'}">${prose(w.label)}: ${right ? 'right' : `the lab says ${label ? label[1] : pred.got[w.id]}`}.</p>`;
+      }).join('');
+      const note = matchesExpect(prompt, pred.got)
+        ? prose(prompt.why)
+        : prose('This setup did not do what the usual case does, so the explanation for that case stays put.');
+      host.innerHTML = `${head}${ask}${rows}<div class="pred-why">${note}</div><div class="pred-row"><button type="button" class="btn ghost" data-act="again">Try again</button><button type="button" class="btn" data-act="next">Next</button></div>`;
+      return;
+    }
+    const ready = prompt.watch.every((w) => w.id in pred.picks);
+    const rows = prompt.watch.map((w) => {
+      const buttons = choices(prompt, w).map(([value, label]) => {
+        const on = pred.picks[w.id] === value;
+        const numeric = typeof value === 'number' ? ' data-numeric="1"' : '';
+        return `<button type="button" class="pred-choice${on ? ' on' : ''}" data-watch="${w.id}" data-value="${value}"${numeric}>${label}</button>`;
+      }).join('');
+      return `<div class="pred-q"><div>${prose(w.label)}</div><div class="pred-row">${buttons}</div></div>`;
+    }).join('');
+    host.innerHTML = `${head}${ask}${rows}<div class="pred-row"><button type="button" class="btn" data-act="apply"${ready ? '' : ' disabled'}>Make the change</button>${n > 1 ? '<button type="button" class="btn ghost" data-act="next">Another</button>' : ''}</div>`;
+  }
 
   function setLaw(lines) {
     const key = (lines || []).join('\n');
@@ -215,6 +317,9 @@ export function createHUD(api, catalog) {
       $('insight-title').textContent = examById(state.examId)?.title || '';
       $('insight-body').innerHTML = prose((examById(state.examId)?.coming || []).join(', '));
       $('mini-plot').hidden = true;
+      $('mini-plot').classList.remove('series');
+      const predict = $('predict');
+      if (predict) predict.hidden = true;
       return;
     }
     if (state.scenarioId && $('scenario').value !== state.scenarioId) {
@@ -241,12 +346,17 @@ export function createHUD(api, catalog) {
     const canvas = $('mini-plot');
     if (!plot) {
       canvas.hidden = true;
+      canvas.classList.remove('series');
     } else {
       canvas.hidden = false;
+      canvas.classList.toggle('series', plot.type === 'series');
       if (plot.type === 'Vx') drawVx(canvas, plot.xs, plot.Vs, plot.xProbe, plot.xA);
       if (plot.type === 'ac') drawAC(canvas, plot.power, plot.t);
       if (plot.type === 'vi') drawVI(canvas, plot);
+      if (plot.type === 'series') drawSeries(canvas, plot);
     }
+    bindPredict();
+    renderPredict(lab);
   }
 
   return { mount, update, notes: notesTab };

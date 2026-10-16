@@ -205,3 +205,144 @@ function nearest(xs, x) {
   }
   return best;
 }
+
+const TICK = '11px sans-serif';
+const TEAL = '#5cd0b3';
+
+function niceStep(span, count) {
+  if (!(span > 0) || !Number.isFinite(span)) return 1;
+  const raw = span / Math.max(1, count);
+  const pow = 10 ** Math.floor(Math.log10(raw));
+  const err = raw / pow;
+  const nice = err <= 1.5 ? 1 : err <= 3 ? 2 : err <= 7 ? 5 : 10;
+  return nice * pow;
+}
+
+function fmtTick(v, step) {
+  if (!Number.isFinite(v) || Math.abs(v) < Math.abs(step) * 1e-6) return '0';
+  const digits = Math.abs(step) >= 1 ? 0 : Math.abs(step) >= 0.1 ? 1 : 2;
+  const text = v.toFixed(digits);
+  return text === '-0' ? '0' : text;
+}
+
+/**
+ * Stacked time plots. Time is seconds on every row. Each row has its own vertical unit,
+ * so position, velocity, and acceleration are not forced onto one scale.
+ *
+ * @param {HTMLCanvasElement} canvas
+ * @param {{ t: number[], probe?: number, series: { label: string, unit: string, color?: string, y: number[] }[] }} plot
+ */
+export function drawSeries(canvas, plot) {
+  if (!canvas) return;
+  const { ctx, w, h } = setup(canvas);
+  const series = plot?.series || [];
+  const ts = plot?.t || [];
+  if (!series.length || ts.length < 2) return;
+  const left = 42;
+  const right = 8;
+  const top = 6;
+  const bottom = 18;
+  const rowH = (h - top - bottom) / series.length;
+  const t0 = ts[0];
+  const t1 = ts[ts.length - 1];
+  const xmap = (t) => left + ((t - t0) / Math.max(t1 - t0, 1e-9)) * (w - left - right);
+
+  series.forEach((row, index) => {
+    const y0 = top + index * rowH;
+    const ys = row.y || [];
+    let lo = Math.min(...ys, 0);
+    let hi = Math.max(...ys, 0);
+    if (hi - lo < 1e-9) {
+      hi += 1;
+      lo -= 1;
+    }
+    const pad = (hi - lo) * 0.08;
+    lo -= pad;
+    hi += pad;
+    const ymap = (v) => y0 + 16 + (1 - (v - lo) / (hi - lo)) * (rowH - 22);
+    const axisY = ymap(Math.min(hi, Math.max(lo, 0)));
+
+    ctx.strokeStyle = 'rgba(41,171,202,0.18)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(left, y0 + 2);
+    ctx.lineTo(left, y0 + rowH - 2);
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(236,230,226,0.55)';
+    ctx.beginPath();
+    ctx.moveTo(left, axisY);
+    ctx.lineTo(w - right, axisY);
+    ctx.stroke();
+
+    const step = niceStep(hi - lo, 3);
+    ctx.fillStyle = 'rgba(236,230,226,0.72)';
+    ctx.font = TICK;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    const start = Math.ceil(lo / step) * step;
+    for (let v = start; v <= hi + step * 0.01; v += step) {
+      const Y = ymap(v);
+      if (Y < y0 + 12 || Y > y0 + rowH - 4) continue;
+      ctx.fillText(fmtTick(v, step), left - 4, Y);
+    }
+
+    ctx.strokeStyle = row.color || TEAL;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let i = 0; i < ys.length; i++) {
+      const X = xmap(ts[Math.min(i, ts.length - 1)]);
+      const Y = ymap(ys[i]);
+      if (i === 0) ctx.moveTo(X, Y);
+      else ctx.lineTo(X, Y);
+    }
+    ctx.stroke();
+
+    ctx.font = SERIF;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = row.color || TEAL;
+    ctx.fillText(`${row.label} (${row.unit})`, left + 4, y0 + 1);
+  });
+
+  if (Number.isFinite(plot.probe)) {
+    const X = xmap(plot.probe);
+    ctx.setLineDash([3, 3]);
+    ctx.strokeStyle = YELLOW;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(X, top);
+    ctx.lineTo(X, h - bottom);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    series.forEach((row, index) => {
+      const y0 = top + index * rowH;
+      const ys = row.y || [];
+      let lo = Math.min(...ys, 0);
+      let hi = Math.max(...ys, 0);
+      if (hi - lo < 1e-9) {
+        hi += 1;
+        lo -= 1;
+      }
+      const pad = (hi - lo) * 0.08;
+      lo -= pad;
+      hi += pad;
+      const ymap = (v) => y0 + 16 + (1 - (v - lo) / (hi - lo)) * (rowH - 22);
+      const i = nearest(ts, plot.probe);
+      dot(ctx, X, ymap(ys[i]), row.color || TEAL);
+    });
+  }
+
+  const stepT = niceStep(t1 - t0, 4);
+  ctx.fillStyle = 'rgba(236,230,226,0.8)';
+  ctx.font = TICK;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  const tStart = Math.ceil(t0 / stepT) * stepT;
+  for (let t = tStart; t <= t1 + stepT * 0.01; t += stepT) {
+    const X = xmap(t);
+    if (X < left + 8 || X > w - right - 28) continue;
+    ctx.fillText(fmtTick(t, stepT), X, h - 1);
+  }
+  ctx.textAlign = 'right';
+  ctx.fillText('t (s)', w - 2, h - 1);
+}

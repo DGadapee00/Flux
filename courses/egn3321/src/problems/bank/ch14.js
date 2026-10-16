@@ -91,11 +91,14 @@ const ch14 = [
       v1: range(0, 3, 0.5, 'm/s'),
     },
     valid: ($) => $.x1 > $.x2 + 0.05 && reaches($, G, 0),
-    text: (T) => String.raw`A ${T.m} kg collar slides on a smooth rod at ${T.theta}° above the horizontal. A spring along the rod has $k = ${T.k}$ N/m and is unstretched at the upper end of this measurement. The collar passes ${T.x1} m down the rod at ${T.v1} m/s. Find its speed at ${T.x2} m.`,
+    text: (T) => String.raw`A ${T.m} kg collar slides on a smooth rod at ${T.theta}° above the horizontal. A spring lies along the rod. Measure $x$ down the rod from the unstretched point, so the stretch equals $x$. The spring has $k = ${T.k}$ N/m. The collar passes $x = ${T.x1}$ m at ${T.v1} m/s. Find its speed at $x = ${T.x2}$ m.`,
     parts: [
       num('speed', ($) => collarPath({ mass: $.m, k: $.k, thetaDeg: $.theta, points: [$.x1, $.x2], v1: $.v1, mu: 0, g: G }).speed, 'm/s', { label: 'speed at the end' }),
     ],
-    hints: ['The spring work is one half k times the change in the square of the stretch. Gravity uses the height change along the rod.'],
+    level: 2,
+    hints: ['The spring work is one half k times the change in the square of the stretch. Gravity uses the height change along the rod.',
+      "x is measured down the rod from the unstretched point, so the stretch equals x. Gravity does m g sin theta times (x2 minus x1).",
+    ],
     steps: ($, sig) => {
       const row = collarPath({ mass: $.m, k: $.k, thetaDeg: $.theta, points: [$.x1, $.x2], v1: $.v1, mu: 0, g: G });
       return [
@@ -139,11 +142,14 @@ const ch14 = [
       v1: range(0, 3, 0.5, 'm/s'),
     },
     valid: ($) => $.x1 > $.x2 + 0.05 && reaches($, G, $.mu),
-    text: (T) => String.raw`A ${T.m} kg collar slides on a rod at ${T.theta}° above the horizontal. $\mu_k = ${T.mu}$. The spring along the rod has $k = ${T.k}$ N/m. The collar passes ${T.x1} m down the rod at ${T.v1} m/s. Find its speed at ${T.x2} m. The rod's normal is $mg\cos\theta$.`,
+    text: (T) => String.raw`A ${T.m} kg collar slides on a rough rod at ${T.theta}° above the horizontal, with $\mu_k = ${T.mu}$. A spring lies along the rod. Measure $x$ down the rod from the unstretched point, so the stretch equals $x$. The spring has $k = ${T.k}$ N/m. The collar passes $x = ${T.x1}$ m at ${T.v1} m/s and does not turn around before $x = ${T.x2}$ m. Find its speed there. The rod carries the weight component perpendicular to the rod, so the normal is $mg\cos\theta$.`,
     parts: [
       num('speed', ($) => collarPath({ mass: $.m, k: $.k, thetaDeg: $.theta, points: [$.x1, $.x2], v1: $.v1, mu: $.mu, g: G }).speed, 'm/s', { label: 'speed at the end' }),
     ],
-    hints: ['Add the friction work: minus the kinetic coefficient times the normal times the distance. The spring work is unchanged.'],
+    level: 2,
+    hints: ['Add the friction work: minus the kinetic coefficient times the normal times the distance. The spring work is unchanged.',
+      "The normal is m g cos theta, because the spring lies along the rod. On one leg, friction work is minus mu_k times that normal times the distance.",
+    ],
     steps: ($, sig) => {
       const row = collarPath({ mass: $.m, k: $.k, thetaDeg: $.theta, points: [$.x1, $.x2], v1: $.v1, mu: $.mu, g: G });
       return [
@@ -187,7 +193,10 @@ const ch14 = [
     parts: [
       num('x', ($) => springStop({ mass: $.m, k: $.k, v: $.v, mu: $.mu, g: G }), 'm', { label: 'compression' }),
     ],
-    hints: ['Set the final kinetic energy to zero. Friction does minus mu m g times the compression, and the spring stores one half k x squared.'],
+    level: 2,
+    hints: ['Set the final kinetic energy to zero. Friction does minus mu m g times the compression, and the spring stores one half k x squared.',
+      "The compression appears in the spring term and in the friction term. Bring both to one side and keep the positive root.",
+    ],
     steps: ($, sig) => {
       const x = springStop({ mass: $.m, k: $.k, v: $.v, mu: $.mu, g: G });
       return [
@@ -219,7 +228,10 @@ const ch14 = [
       num('P', ($) => power(pull($), $.v), 'W', { label: 'output power' }),
       num('Pin', ($) => power(pull($), $.v) / $.eta, 'W', { label: 'input power' }),
     ],
-    hints: ['At constant speed the pull equals the downhill part of the weight plus kinetic friction. Power is that force times the speed. Input power is the output divided by the efficiency.'],
+    level: 2,
+    hints: ['At constant speed the pull equals the downhill part of the weight plus kinetic friction. Power is that force times the speed. Input power is the output divided by the efficiency.',
+      "The output is the smaller power. Divide it by the efficiency. Multiplying by the efficiency gives the wrong input.",
+    ],
     steps: ($, sig) => {
       const F = pull($);
       const P = power(F, $.v);
@@ -254,7 +266,10 @@ const ch14 = [
     parts: [
       num('hp', ($) => ($.F * $.v) / FT_LBF_PER_S_PER_HP, 'hp', { label: 'power' }),
     ],
-    hints: ['Power is force times speed. Divide foot-pounds per second by 550 to get horsepower.'],
+    level: 1,
+    hints: ['Power is force times speed. Divide foot-pounds per second by 550 to get horsepower.',
+      "The speed is already in ft/s and the force is already in pounds. Divide their product by 550.",
+    ],
     steps: ($, sig) => [
       String.raw`$P = Fv = ${sig($.F * $.v)}$ ft·lb/s.`,
       String.raw`That is ${sig(($.F * $.v) / FT_LBF_PER_S_PER_HP)} horsepower.`,
@@ -290,7 +305,11 @@ const ch14 = [
       num('work', ($) => pathReport({ mass: $.m, k: $.k, mu: $.mu, rise: $.rise, ax: $.ax, ay: $.ay, bx: $.bx, by: $.by, g: G }).potential, 'J', { label: 'work of weight and spring' }),
       num('friction', ($) => pathReport({ mass: $.m, k: $.k, mu: $.mu, rise: $.rise, ax: $.ax, ay: $.ay, bx: $.bx, by: $.by, g: G }).frictionArch, 'J', { label: 'friction work on the arch' }),
     ],
-    hints: ['Weight and the spring are conservative, so their work is minus the change in potential. Friction work is minus mu m g times the length of that path.'],
+    level: 3,
+    hints: ['Weight and the spring are conservative, so their work is minus the change in potential. Friction work is minus mu m g times the length of that path.',
+      "The weight and the spring contribute minus the change in potential, computed from the two ends alone.",
+      "Friction work on the arch is minus mu_k m g times the length of that arch. The paths share the potential change and differ in length.",
+    ],
     steps: ($, sig) => {
       const row = pathReport({ mass: $.m, k: $.k, mu: $.mu, rise: $.rise, ax: $.ax, ay: $.ay, bx: $.bx, by: $.by, g: G });
       return [
@@ -341,11 +360,14 @@ const ch14 = [
       const { straight, via } = detour($);
       return straight.reaches && via.reaches;
     },
-    text: (T) => String.raw`A 2 kg collar slides on a smooth-looking rod at 30° above the horizontal, already moving at 4 m/s. It goes from a stretch of ${T.x1} m to ${T.x2} m, or it detours out to ${T.xFar} m first. $k = ${T.k}$ N/m and $\mu_k = ${T.mu}$. Does the work of the ${T.kind} change when the collar takes the detour?`,
+    text: (T) => String.raw`A 2 kg collar slides on a rod at 30° above the horizontal, already moving at 4 m/s. Measure the stretch down the rod from the unstretched point. The collar goes from a stretch of ${T.x1} m to ${T.x2} m, or it continues out to ${T.xFar} m and then comes back to ${T.x2} m. $k = ${T.k}$ N/m and $\mu_k = ${T.mu}$. Does the work of the ${T.kind} change on that longer route?`,
     parts: [
       mc('path', [[1, 'Yes'], [0, 'No']], ($) => ($.kind === 'friction' ? 1 : 0), { label: 'depends on the detour?' }),
     ],
-    hints: ['A spring stores energy from its stretch. Kinetic friction spends energy on every metre of the slide.'],
+    level: 2,
+    hints: ['A spring stores energy from its stretch. Kinetic friction spends energy on every metre of the slide.',
+      "The spring work uses only the end stretches, so the turnaround cancels. Friction adds a cost on every extra metre.",
+    ],
     steps: ($, sig) => {
       void sig;
       const yes = $.kind === 'friction';
@@ -383,11 +405,14 @@ const ch14 = [
       v1: range(4, 10, 1, 'ft/s'),
     },
     valid: ($) => $.x1 > $.x2 + 0.2 && reaches($, G_FT, $.mu),
-    text: (T) => String.raw`A ${T.m} slug collar slides on a rod at ${T.theta}° above the horizontal. $\mu_k = ${T.mu}$. The spring has $k = ${T.k}$ lb/ft. The collar passes ${T.x1} ft down the rod at ${T.v1} ft/s. Find its speed at ${T.x2} ft. Use $g = 32.2$ ft/s².`,
+    text: (T) => String.raw`A ${T.m} slug collar slides on a rod at ${T.theta}° above the horizontal, with $\mu_k = ${T.mu}$. A spring lies along the rod. Measure $x$ down the rod from the unstretched point, so the stretch equals $x$. The spring has $k = ${T.k}$ lb/ft. The collar passes $x = ${T.x1}$ ft at ${T.v1} ft/s. Find its speed at $x = ${T.x2}$ ft. Use $g = 32.2$ ft/s². The normal is the weight component perpendicular to the rod.`,
     parts: [
       num('speed', ($) => collarPath({ mass: $.m, k: $.k, thetaDeg: $.theta, points: [$.x1, $.x2], v1: $.v1, mu: $.mu, g: G_FT }).speed, 'ft/s', { label: 'speed at the end' }),
     ],
-    hints: ['The work-energy equation is the same in US customary units. The mass is in slugs, so a force in pounds is already mass times acceleration.'],
+    level: 2,
+    hints: ['The work-energy equation is the same in US customary units. The mass is in slugs, so a force in pounds is already mass times acceleration.',
+      "Keep slugs, feet, and pounds together. x is the stretch, measured down the rod from the unstretched point.",
+    ],
     steps: ($, sig) => {
       const row = collarPath({ mass: $.m, k: $.k, thetaDeg: $.theta, points: [$.x1, $.x2], v1: $.v1, mu: $.mu, g: G_FT });
       return [
