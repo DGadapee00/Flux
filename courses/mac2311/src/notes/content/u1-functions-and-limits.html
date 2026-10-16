@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Functions and limits</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">MAC 2311 · Calculus I · Unit 1 · OpenStax Ch 1–2</p>
+  <h1>Functions and limits</h1>
+  <p class="lede">A limit is the number the outputs approach. The value at the point can be missing. Every number below is recomputed.</p>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>The limit of a function</a>
+    <a href="#s2"><span>02</span>One-sided limits</a>
+    <a href="#s3"><span>03</span>Limit laws</a>
+    <a href="#s4"><span>04</span>Continuity</a>
+    <a href="#s5"><span>05</span>Epsilon and delta</a>
+    <a href="#s6"><span>06</span>The squeeze theorem</a>
+    <a href="#s7"><span>07</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<section class="topic" id="s1">
+<h2><span class="n">01</span>The limit of a function</h2>
+<p>A function assigns one output to each input in its domain. A limit asks what those outputs approach as the input approaches a number. The function need not have a value there.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>A polynomial is a sum of powers of \(x\). Each power has a limit, and the limit of a sum is the sum of the limits. Substituting the number therefore gives the limit.</p>
+</div>
+\[
+\lim_{x\to 2}(x^2+3x)=4+6=10.
+\]
+<div class="box ex"><span class="tag">Worked example · a polynomial at 2</span>
+<p>Take \(x^2+3x\) as \(x\) approaches 2. The square approaches 4. The linear term approaches 6. The sum approaches 10. The value at 2 is also 10.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A student who will not substitute, because a limit never uses the point, reports that this limit does not exist. For a polynomial the value is the limit. OpenStax Calculus Volume 1 §2.2.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>For a polynomial, substitute. The limit equals the value.</p>
+</div>
+<p>This shortcut is for polynomials and other continuous functions. A hole, a jump, or a quotient that is zero over zero needs the two sides, which the next section computes.</p>
+</section>
+<section class="topic" id="s2">
+<h2><span class="n">02</span>One-sided limits</h2>
+<p>The left-hand limit uses inputs below \(a\). The right-hand limit uses inputs above \(a\). The two-sided limit exists only when those two numbers are equal.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Factor \(x^2-4=(x-2)(x+2)\). For \(x\neq 2\) the factor \(x-2\) cancels. Both sides then follow the line \(x+2\). The missing input is not part of the limit.</p>
+</div>
+\[
+\lim_{x\to 2}\frac{x^2-4}{x-2}=4.
+\]
+<div class="box ex"><span class="tag">Worked example · a hole at 2</span>
+<p>Let \(f(x)=(x^2-4)/(x-2)\) for \(x\neq 2\). Then \(f(x)=x+2\). Both one-sided limits are 4, so the limit is 4. The function has no value at 2.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The limit is 4. A student who says the limit does not exist, because \(f(2)\) is undefined, has read the value instead of the two sides. OpenStax Calculus Volume 1 §2.3.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · sides that disagree</span>
+<p>At \(a=0\) the left-hand limit is 0 and the right-hand limit is 1. The sides differ, so the two-sided limit does not exist. Their average, \(1/2\), is neither side.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Both sides must give the same number. Otherwise the two-sided limit does not exist.</p>
+</div>
+<p>A jump and a sign change are the same test: compare the two sides. The picture in the lab marks each side. The missing point, when there is one, is an open circle.</p>
+</section>
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Limit laws</h2>
+<p>The limit of a sum is the sum of the limits. A constant factor comes out of a limit. Each piece must have a limit before the law applies.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>\(2x^2\) and \(3x\) each have a limit at 2. Add those two numbers. The factor 2 stays on the square. The factor 3 stays on \(x\).</p>
+</div>
+\[
+\lim_{x\to 2}(2x^2+3x)=2\cdot 4+3\cdot 2=14.
+\]
+<div class="box ex"><span class="tag">Worked example · a sum at 2</span>
+<p>As \(x\) approaches 2, \(2x^2\) approaches 8 and \(3x\) approaches 6. The sum of the limits is 14. Sampling the function on both sides of 2 agrees.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A student who multiplies 3 by the square computes \(2\cdot 4+3\cdot 4=20\). The 3 multiplies \(x\), and the 2 multiplies \(x^2\). OpenStax Calculus Volume 1 §2.3.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Split the sum. Scale each limit by its own factor.</p>
+</div>
+<p>The laws leave out a quotient whose denominator approaches 0. That case returns to the cancellation in the previous section, or it has no limit.</p>
+</section>
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Continuity</h2>
+<p>A function is continuous at \(a\) when the limit exists, the value \(f(a)\) exists, and the two are equal. A hole has a limit and no value, so it is not continuous there.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Continuity is three checks. Drop any one and the name does not apply. The absolute value meets at its corner, so the value matches both sides. The two slopes do not match.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a corner at 0</span>
+<p>\(f(x)=|x|\). Both one-sided limits are 0, and \(f(0)=0\), so \(f\) is continuous at 0. The left difference quotient is \(-1\). The right one is \(1\). The derivative does not exist at 0.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Continuous does not mean differentiable. A student who marks \(|x|\) discontinuous at the corner, because of the sharp turn, has mixed up the two tests. OpenStax Calculus Volume 1 §2.4.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>The corner of \(|x|\) is continuous. It is not differentiable.</p>
+</div>
+<p>The hole at 2 from the earlier section has limit 4 and no value, so it fails continuity. Filling the hole with 4 would make it continuous. Filling it with any other number would not.</p>
+</section>
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Epsilon and delta</h2>
+<p>The limit is \(L\) when every \(\varepsilon&gt;0\) has a \(\delta&gt;0\) such that \(0&lt;|x-a|&lt;\delta\) forces \(|f(x)-L|&lt;\varepsilon\). For a line through the origin, divide \(\varepsilon\) by the absolute value of the slope.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>\(|mx|&lt;\varepsilon\) rearranges to \(|x|&lt;\varepsilon/|m|\) when \(m\neq 0\). The largest such \(\delta\) is that quotient. Any smaller positive \(\delta\) also works. The definition asks for one that works.</p>
+</div>
+\[
+\delta=\frac{\varepsilon}{|m|}.
+\]
+<div class="box ex"><span class="tag">Worked example · a line of slope 2</span>
+<p>Let \(f(x)=2x\) and \(\varepsilon=0.5\). Then \(\delta=0.5/2=0.25\). If \(|x|&lt;0.25\), then \(|2x|&lt;0.5\). A sample step has to be smaller than this \(\delta\) to stay inside the band.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A student who sets \(\delta=\varepsilon=0.5\) lets \(|x|=0.4\) into the window. Then \(|2x|=0.8\), which is past \(\varepsilon\). Divide by the slope. OpenStax Calculus Volume 1 §2.5.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>For \(f(x)=mx\) at 0, \(\delta=\varepsilon/|m|\).</p>
+</div>
+<p>The line in this section passes through the origin, so \(L=0\). A line \(mx+b\) uses the same \(\delta\), because the added constant cancels in \(|f(x)-f(a)|\).</p>
+</section>
+<section class="topic" id="s6">
+<h2><span class="n">06</span>The squeeze theorem</h2>
+<p>If \(g(x)\le f(x)\le h(x)\) near \(a\), and \(g\) and \(h\) share a limit \(L\), then \(f\) has limit \(L\). The middle function is trapped between the two bounds.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Sine stays between \(-1\) and \(1\). Multiply by \(x^2\), which is never negative. Then \(-x^2\le x^2\sin(1/x)\le x^2\). Both bounds approach 0 as \(x\) approaches 0, so the middle one does too.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a sine squeezed to 0</span>
+<p>Let \(f(0)=0\) and \(f(x)=x^2\sin(1/x)\) otherwise. Then \(-x^2\le f(x)\le x^2\) for \(x\neq 0\). Both bounds have limit 0. The limit of \(f\) is 0.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(\sin(1/x)\) by itself has no limit at 0. A student who stops there misses the factor \(x^2\), which forces the product to 0. OpenStax Calculus Volume 1 §2.3.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>The bounds go to the same place. The middle function follows them.</p>
+</div>
+<p>The same trap works with a constant factor in front of \(x^2\). The bounds are then a constant times \(\pm x^2\), and both still approach 0.</p>
+</section>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Formula sheet</h2>
+<ul>
+<li>A polynomial limit equals the value. Substitute.</li>
+<li>The two-sided limit exists only when the left-hand and right-hand limits agree.</li>
+<li>After cancelling a common factor, evaluate what remains.</li>
+<li>\(\lim(f+g)=\lim f+\lim g\), and \(\lim(cf)=c\lim f\), when the pieces exist.</li>
+<li>Continuous at \(a\) means \(\lim_{x\to a}f(x)=f(a)\).</li>
+<li>For \(f(x)=mx\) at 0, \(\delta=\varepsilon/|m|\).</li>
+<li>If \(-x^2\le f(x)\le x^2\) and both bounds approach 0, then \(f\) approaches 0.</li>
+</ul>
+<p>Left out of this unit: infinite limits, asymptotes, and the derivative as a limit. Derivatives are Unit 2. The lab draws a hole, a jump, a sign change, and an epsilon band on a line.</p>
+<p>Each line above is the model for this unit. A function that oscillates and is not trapped by two bounds is left out.</p>
+</section>
+</main>
+</body>
+</html>

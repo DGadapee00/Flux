@@ -10,6 +10,15 @@
 
 export const CASE_SEED = 1000000;
 
+/** What to say when a symbolic answer adds an arbitrary constant. */
+export const NO_PLUS_C = 'use the antiderivative that is 0 at x = 0, no +C';
+
+/** True when the input adds +C and C is not one of the part's variables. */
+export function constantOfIntegration(input, symbols) {
+  if ((symbols || []).includes('C')) return false;
+  return /\+\s*C(?![A-Za-z0-9_])/.test(String(input).replace(/[−–]/g, '-'));
+}
+
 const SUP = { '-': '⁻', 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' };
 const SUP_DIGIT = { '⁻': '-', '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9' };
 
@@ -812,11 +821,6 @@ export function createEngine(options = {}) {
     return { ok: false, text: units.formatDim(got), want: part.unit };
   }
 
-  function constantOfIntegration(input, symbols) {
-    if ((symbols || []).includes('C')) return false;
-    return /\+\s*C(?![A-Za-z0-9_])/.test(String(input).replace(/[−–]/g, '-'));
-  }
-
   function gradeSymbolic(part, input, $) {
     let want;
     let got;
@@ -831,7 +835,7 @@ export function createEngine(options = {}) {
       got = compile(input, part.vars, part.alias);
     } catch (e) {
       if (constantOfIntegration(input, part.vars)) {
-        return { correct: false, feedback: 'use the antiderivative that is 0 at x = 0, no +C' };
+        return { correct: false, feedback: NO_PLUS_C };
       }
       return { correct: false, feedback: e.message };
     }

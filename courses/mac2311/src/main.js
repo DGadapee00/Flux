@@ -1,6 +1,7 @@
 import '@flux/shells/math/styles/main.css';
 import '@flux/shells/math/styles/practice.css';
 import '@flux/shells/math/styles/mobile.css';
+import '@flux/shells/math/styles/notes.css';
 import 'katex/dist/katex.min.css';
 import { mountTrackBar } from '@flux/core';
 import * as THREE from 'three';
@@ -10,6 +11,7 @@ import { examById, examForLab } from './data/catalog.js';
 import { parseHash, writeHash, neighborExam, problemQuery } from './engine/router.js';
 import { loadLab, loadExamLabs } from './labs/load.js';
 import { setFrame, refit, defaultView, sceneScale, workPlane, mathToWorld } from './engine/frame.js';
+import { applyExample } from './notes/setups.js';
 import { applyProblem } from './problems/simbridge.js';
 import { createPractice } from './ui/problems.js';
 import { ANSWER_LAYER } from '@flux/core/scene3d/manim.js';
@@ -81,6 +83,26 @@ const hud = createHUD({
     applyFrame({ force: true });
     goCamera(app.lab);
     bump(false);
+  },
+  examId: () => app.examId,
+  explore: (labId) => setLab(labId),
+  showLab: (labId) => setLab(labId),
+  practiceChapter(examId) {
+    const go = examId && examId !== app.examId ? setExam(examId) : Promise.resolve();
+    return go.then(() => practice?.open());
+  },
+  setupExample(examId, ex) {
+    const go = examId && examId !== app.examId ? setExam(examId, ex.lab) : setLab(ex.lab);
+    return go.then(() => {
+      if (!app.lab || app.lab.id !== ex.lab) return;
+      applyExample(app.lab, slice(), ex);
+      applyFrame({ force: true });
+      goCamera(app.lab);
+      bump(false);
+    });
+  },
+  reframe() {
+    goCamera(app.lab);
   },
 });
 

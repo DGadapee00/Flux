@@ -79,7 +79,7 @@ const hud = createHUD({
   slice,
   fitView: () => {
     applyFrame({ force: true });
-    goCamera(app.lab);
+    goCamera(app.lab, { snap: true });
     bump(false);
   },
 });
@@ -89,9 +89,16 @@ controls.addEventListener('start', () => {
   camTween = null;
 });
 
-function goCamera(lab) {
+function goCamera(lab, { snap = false } = {}) {
   const cam = lab?.cameraFor?.(slice()) || lab?.camera;
   if (!cam) return;
+  if (snap) {
+    camTween = null;
+    camera.position.copy(cam.pos);
+    controls.target.copy(cam.target);
+    controls.update();
+    return;
+  }
   camTween = {
     t: 0,
     fromPos: camera.position.clone(),
@@ -211,8 +218,8 @@ async function setLab(labId) {
   applyFrame();
   lab.enter(ctx, app.handles[labId], s);
   setOrbit(lab.orbit);
-  goCamera(lab);
   hud.mount(lab, examById(app.examId), s);
+  goCamera(lab);
   practice?.onMount({ byProblem: loadingProblem });
   writeHash(app.examId, labId, { replace: booting, query: app.query });
   app.dirty = true;

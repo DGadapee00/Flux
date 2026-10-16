@@ -3,6 +3,7 @@ import test from 'node:test';
 import { defineCourse, defineLab } from '@flux/core';
 import { setup } from '@flux/core/plot2d/plot.js';
 import { createHUD } from '../engineering/hud.js';
+import { createHUD as createMathHUD } from '../math/hud.js';
 import { createStage } from '../engineering/stage.js';
 import { installDOM } from './dom.js';
 
@@ -260,4 +261,64 @@ test('a plot2d lab takes the three.js canvas down and draws on the plot canvas',
   assert.equal(stage.show(scene, {}, () => 0).kind, 'scene3d');
   assert.equal(canvas3d.hidden, false);
   assert.equal(stage.plot.hidden, true);
+});
+
+function mathPage() {
+  page();
+  const host = document.createElement('div');
+  host.id = 'sheet-switch';
+  document.getElementById('app').appendChild(host);
+}
+
+test('a math course with no notes keeps a single practice button', () => {
+  mathPage();
+  const hud = createMathHUD(api(), catalog);
+  assert.equal(hud.notes, null);
+  assert.equal(document.getElementById('btn-notes'), null);
+  assert.equal(document.querySelector('.mode-tabs'), null);
+});
+
+test('a math course with notes opens them beside the lab', async () => {
+  mathPage();
+  const bag = new Map();
+  const store = {
+    getItem: (k) => (bag.has(k) ? bag.get(k) : null),
+    setItem: (k, v) => {
+      if (v == null) bag.delete(k);
+      else bag.set(k, String(v));
+    },
+  };
+  const set = {
+    exam: 'u1',
+    title: 'Functions and limits',
+    chapters: '2',
+    load: async () => NOTES_HTML,
+    sections: [{ id: 's1', n: 1, title: 'Area under the graph', lab: 'diagram', ch: [] }],
+  };
+  const hud = createMathHUD(api(), {
+    ...catalog,
+    notes: {
+      notesForExam: () => set,
+      allNotes: () => [set],
+      setupsFor: () => [],
+      matchExamples: () => [],
+      DERIVATIONS: [],
+      LAB_META: catalog.labMeta,
+      examById: catalog.examById,
+      examLabel: (exam) => `Unit ${exam.n}`,
+      CHAPTER_TITLES: {},
+      countFor: () => 0,
+      esc: (value) => String(value),
+      store,
+    },
+  });
+  const btn = document.getElementById('btn-notes');
+  assert.equal(btn.textContent.includes('Notes'), true);
+  assert.equal(document.getElementById('btn-practice').parentNode.className, 'mode-tabs');
+  key('n');
+  await new Promise((resolve) => setTimeout(resolve, 30));
+  assert.equal(hud.notes.isOpen(), true);
+  assert.equal(document.getElementById('notes').textContent.includes('Motion of a point'), true);
+  key('Escape');
+  assert.equal(hud.notes.isOpen(), false);
 });

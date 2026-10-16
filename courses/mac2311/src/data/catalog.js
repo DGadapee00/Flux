@@ -59,3 +59,7 @@ export function examForLab(labId) {
   const meta = LAB_META[labId];
   return meta ? examById(meta.exam) : examById('u2');
 }
+
+export function examLabel(exam) {
+  return exam ? `Unit ${exam.n}` : 'Unit';
+}
