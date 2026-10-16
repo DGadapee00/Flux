@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
-import { builtCourses, latestBuilt, TRACKS } from '../src/tracks.js';
+import { builtCourses, latestBuilt, TRACKS, trackSiblings, visibleTracks } from '../src/tracks.js';
 
 const LIVE = {};
 
@@ -28,6 +28,10 @@ test('five tracks in order, each with a built course unless it is still to come'
   assert.deepEqual(
     TRACKS.map((track) => track.id),
     ['physics', 'math', 'mechanics', 'stats', 'thermal'],
+  );
+  assert.deepEqual(
+    visibleTracks().map((track) => track.id),
+    ['physics', 'math', 'mechanics', 'stats'],
   );
   for (const track of TRACKS) {
     const built = track.courses.filter((course) => course.href);
@@ -63,7 +67,7 @@ test('the card opens the latest built course, and D5 is on the list', () => {
   );
 });
 
-test('Phase 8: Dynamics is built, and the later two courses are still listed', () => {
+test('Phase 8: Dynamics is built, and the later two courses stay in the list', () => {
   const card = (id) => TRACKS.flatMap((track) => track.courses.map((course) => ({ track: track.id, ...course }))).find((course) => course.id === id);
   assert.deepEqual(
     TRACKS[2].courses.map((course) => course.code),
@@ -76,10 +80,39 @@ test('Phase 8: Dynamics is built, and the later two courses are still listed', (
     ['eml3100', 'thermal', 'EML 3100', 'Thermodynamics'],
   ]) {
     const course = card(id);
-    assert.ok(course, `${id} is on the hub`);
+    assert.ok(course, `${id} stays in the track list`);
     assert.deepEqual([course.track, course.code, course.title, course.href], [track, code, title, null]);
     assert.match(id, /^[a-z][a-z0-9]*$/);
   }
+  assert.equal(
+    visibleTracks().some((track) => track.id === 'thermal'),
+    false,
+  );
+});
+
+test('a course header gets its track, in hub order, with unbuilt siblings unlinked', () => {
+  assert.deepEqual(
+    trackSiblings('egn3321').map((course) => [course.id, course.code, course.href]),
+    [
+      ['statics', 'EGN 3311', '../statics/'],
+      ['egn3321', 'EGN 3321', '../egn3321/'],
+      ['egn3331', 'EGN 3331', null],
+    ],
+  );
+  assert.deepEqual(
+    trackSiblings('mac2312').map((course) => course.href),
+    ['../mac2311/', '../mac2312/', '../mac2313/', null],
+  );
+  assert.deepEqual(trackSiblings('sta3032').map((course) => course.code), ['STA 3032']);
+  assert.deepEqual(trackSiblings('missing'), []);
+  const external = trackSiblings('phy2049', [
+    {
+      id: 'physics',
+      name: 'Physics',
+      courses: [{ id: 'phy2049', code: 'PHY 2049', title: 'Physics II', href: 'https://example.test/phy/' }],
+    },
+  ]);
+  assert.equal(external[0].href, 'https://example.test/phy/');
 });
 
 test('after a build, each platform copy has an index under site/dist', (t) => {

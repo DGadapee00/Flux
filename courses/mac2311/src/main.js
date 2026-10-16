@@ -13,7 +13,6 @@ import { setFrame, refit, defaultView, sceneScale, workPlane, mathToWorld } from
 import { applyProblem } from './problems/simbridge.js';
 import { createPractice } from './ui/problems.js';
 import { ANSWER_LAYER } from '@flux/core/scene3d/manim.js';
-import { TRACK, course } from './manifest.js';
 
 console.info(
   `FLUX build ${__BUILD__.commit}${__BUILD__.subject ? ` — ${__BUILD__.subject}` : ''} (built ${__BUILD__.built})`,
@@ -21,7 +20,7 @@ console.info(
 window.__build = __BUILD__;
 
 const brand = document.getElementById('brand');
-mountTrackBar(brand, { currentId: course.id, courses: TRACK });
+mountTrackBar(brand);
 
 const canvas = document.getElementById('c');
 const { renderer, scene, camera, controls, labels, grid } = createScene(canvas);

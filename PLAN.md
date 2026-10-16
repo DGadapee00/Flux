@@ -90,8 +90,9 @@ How a track works:
 
 - **Each course stays a module** with its own manifest, route segment (`#/<course>/...`) and storage
   namespace. A track is a grouping, not a merged course: the manifest gains `track` and `order`.
-- **Inside the app, a track bar** lists the track's courses in order. Switching course keeps you in
-  the same mode (Practice, Notes, Explore).
+- **Inside the app, a track row** lists that track's courses in the hub's order. A built course links
+  to its app. A course that is not built yet stays on the row and does not link. This is the sibling
+  row, not a list of every course. The logo still links to the hub.
 - **Prerequisite links cross courses.** A lab, notes section or problem can name `prereqs`, ids of
   sections or labs in an earlier course of the same track (Calc III gradient → Calc I derivative;
   PHY 2049 Gauss's law → MAC 2313 flux integrals is cross-track and allowed too). Unbuilt targets
@@ -421,10 +422,11 @@ Move UI into core one feature at a time, and only when that feature should exist
 
 1. `prereqs` links, with a check that lists unbuilt targets (`packages/checks/prereqs.mjs`).
 
-The track bar is dropped. On 13 Oct 2026 the course-listing row came out of every course header
-(508b60e), and so did the per-course Export and Import buttons (2afb9d5). A course header has no
-course switcher; its logo links to the hub, whose track cards are the track view, and backup and
-restore live on the hub.
+The all-courses row is gone. On 13 Oct 2026 that row came out of every course header (508b60e), and
+so did the per-course Export and Import buttons (2afb9d5). On 16 Oct 2026 the math and engineering
+headers gained a sibling-track row: the courses in this track, in the order `@flux/tracks` gives the
+hub. An unbuilt sibling stays on the row and does not link. The logo still links to the hub. Backup
+and restore stay on the hub.
 
 ### Phases 3–5: retired
 
@@ -531,7 +533,7 @@ energy bar charts on a track, 1D collisions (elastic to inelastic), rotation and
 #### Track links
 
 - Hub: the three courses appear in their track cards (`site/src/tracks.js`) once each is live.
-- Track bar: dropped (Phase 2b). The hub card lists the track's courses in order.
+- Sibling row: a math or engineering header lists its track in the hub's order. The hub card lists the same courses.
 - `prereqs` (from Phase 2b): MAC 2313 labs and notes point back to the Calc I/II topic they rest on
   (gradient → derivative, double integral → Riemann sum, polar area → polar curves); PHY 2049 points
   back to PHY 2048 (electric potential energy → work and energy, magnetic force → circular motion);
@@ -683,8 +685,7 @@ coverage report runs in `npm test`.
 
 Three engineering courses, built directly on the platform. **EGN 3321 Dynamics** and **EGN 3331
 Mechanics of Materials** join the Mechanics track after Statics. **EML 3100 Thermodynamics** starts
-the Thermal-fluids track. The codes and the chapter order are the owner's course packs. All three
-are on the hub (`site/src/tracks.js`). Dynamics links to `egn3321/`. Mechanics of Materials and Thermodynamics are still marked "not built yet".
+the Thermal-fluids track. The codes and the chapter order are the owner's course packs. Dynamics links to `egn3321/`. Mechanics of Materials stays on the Mechanics card, marked "not built yet". Thermodynamics stays in the track list; the Thermal-fluids card is hidden until a course in that track is built.
 
 | Course | Folder and id | Port | Track, order | Text |
 |---|---|---|---|---|
@@ -709,9 +710,9 @@ Dalton takes EGN 3321, EGN 3331, and EML 3100 next term. These are the answers, 
 - **Mechanics:** EGN 3311 Statics → EGN 3321 Dynamics and EGN 3331 Mechanics of Materials. Both rest
   on Statics and neither on the other, so their order numbers only set the order of the list.
 - **Thermal-fluids:** EML 3100 Thermodynamics first. Fluid mechanics and heat transfer follow when
-  their codes are known. The hub card exists now. It lists Thermodynamics and opens nothing until a
-  course is built. Its animation is a Carnot cycle on P–v, and its test checks the enclosed area
-  against R(T_H − T_L) ln(v₂/v₁).
+  their codes are known. The hub card waits until a course in the track is built. The Carnot
+  animation stays in the repo for that card, and its test checks the enclosed area against
+  R(T_H − T_L) ln(v₂/v₁).
 - **Prerequisite links** (`prereqs`, a check lists unbuilt targets): Dynamics → PHY 2048 (kinematics,
   Newton's laws, energy, momentum, rotation) and Statics (free-body diagrams, centroids, moments of
   inertia). Mechanics of Materials → Statics (sections, trusses, centroids, area moments of inertia)

@@ -24,8 +24,10 @@ function page() {
     <div id="app">
       <canvas id="c"></canvas>
       <header id="brand" class="hud panel brand">
+        <h1 id="mark">TRUSS</h1>
         <p id="brand-sub"></p>
-        <nav id="exam-tabs"></nav>
+        <nav id="track-row"></nav>
+        <select id="exam-select"></select>
         <nav id="lab-tabs"></nav>
         <div class="practice-row">
           <button id="btn-practice" type="button">Practice</button>
@@ -72,7 +74,9 @@ const catalog = {
   exams: [{ id: 'u1', n: 1, title: 'Motion of a point', chapters: '12', labs: ['diagram'], coming: [] }],
   examById: (id) => catalog.exams.find((exam) => exam.id === id),
   labMeta: { diagram: { title: 'Diagram' } },
+  code: 'FIX 1000',
   title: 'Fixture',
+  courseId: 'fixture',
   homeId: 'u1',
 };
 
@@ -110,9 +114,11 @@ test('a course with no notes keeps the practice button where it was', () => {
   assert.equal(practice.parentNode.childNodes.filter((node) => node.nodeType === 1).length, 2);
 
   hud.mount(null, catalog.exams[0], { examId: 'u1' });
-  const brand = document.getElementById('brand-sub').textContent;
-  assert.equal(brand.startsWith('Fixture · Unit 1 · Motion of a point · '), true);
-  assert.equal(brand.endsWith('12'), true);
+  assert.equal(document.getElementById('mark').textContent, 'FLUX');
+  assert.equal(document.getElementById('brand-sub').textContent, 'FIX 1000 · Fixture');
+  const select = document.getElementById('exam-select');
+  assert.equal(select.value, 'u1');
+  assert.equal(select.querySelector('option').textContent, 'Unit 1 · Motion of a point');
   key('n');
   key('Escape');
   assert.equal(calls.key, 1);
@@ -212,19 +218,13 @@ test('a fixture course with notes opens them beside the lab', async () => {
   assert.equal(seen.escape, 1);
 });
 
-test('the wordmark is a course option, and omitting it leaves the heading', () => {
+test('the wordmark is FLUX, the course code, and the title', () => {
   page();
-  document.getElementById('brand').insertAdjacentHTML('afterbegin', '<h1 id="mark">TRUSS</h1>');
-  createHUD(api(), catalog);
-  assert.equal(document.getElementById('mark').textContent, 'TRUSS');
+  createHUD(api(), { ...catalog, code: 'EGN 3321', title: 'Dynamics', courseId: 'egn3321' });
+  assert.equal(document.getElementById('mark').textContent, 'FLUX');
   assert.equal(document.getElementById('mark').classList.contains('wordmark-long'), false);
-
-  page();
-  document.getElementById('brand').insertAdjacentHTML('afterbegin', '<h1 id="mark">TRUSS</h1>');
-  createHUD(api(), { ...catalog, wordmark: 'EGN 3321', title: 'Dynamics' });
-  assert.equal(document.getElementById('mark').textContent, 'EGN 3321');
-  assert.equal(document.getElementById('mark').classList.contains('wordmark-long'), true);
-  assert.equal(document.title, 'EGN 3321 — Dynamics');
+  assert.equal(document.getElementById('brand-sub').textContent, 'EGN 3321 · Dynamics');
+  assert.equal(document.title, 'FLUX — EGN 3321');
 });
 
 test('a plot2d lab takes the three.js canvas down and draws on the plot canvas', () => {

@@ -16,7 +16,6 @@ import { setFrame, refit, defaultView, sceneScale, workPlane, mathToWorld } from
 import { applyProblem } from './problems/simbridge.js';
 import { createPractice } from './ui/problems.js';
 import { ANSWER_LAYER } from './scene/manim.js';
-import { TRACK, course } from './manifest.js';
 import { courseStore } from './storage.js';
 
 console.info(
@@ -25,7 +24,7 @@ console.info(
 window.__build = __BUILD__;
 
 const brand = document.getElementById('brand');
-mountTrackBar(brand, { currentId: course.id, courses: TRACK });
+mountTrackBar(brand);
 
 const canvas = document.getElementById('c');
 const { renderer, scene, camera, controls, labels, grid } = createScene(canvas);

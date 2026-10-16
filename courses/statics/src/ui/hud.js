@@ -1,3 +1,4 @@
+import { trackSiblings } from '@flux/tracks';
 import { createHUD as createEngineeringHUD } from '@flux/shells/engineering/hud.js';
 import { EXAMS, examById, LAB_META } from '../data/catalog.js';
 import { course } from '../manifest.js';
@@ -10,8 +11,10 @@ export function createHUD(api) {
     exams: EXAMS,
     examById,
     labMeta: LAB_META,
+    code: course.code,
     title: course.title,
-    wordmark: 'TRUSS',
+    courseId: course.id,
+    track: trackSiblings(course.id),
     homeId,
   });
 }

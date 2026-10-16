@@ -1,10 +1,10 @@
 import { mountCardAnimation } from './anim/draw.js';
 import { mountBackup } from './backup.js';
-import { latestBuilt, TRACKS } from './tracks.js';
+import { latestBuilt, visibleTracks } from './tracks.js';
 
 const root = document.querySelector('#tracks');
 
-for (const track of TRACKS) {
+for (const track of visibleTracks()) {
   const latest = latestBuilt(track);
 
   const card = document.createElement('article');

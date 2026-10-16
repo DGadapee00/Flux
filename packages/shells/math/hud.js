@@ -1,6 +1,7 @@
-import { setLawEl, prose, mathText } from './shared.js';
-import { drawVx, drawAC, drawVI, drawPaschen, drawAccum } from './plot.js';
 import { sceneScale, workPlane, lenLabel, PLANE_AXES } from '@flux/core/scene3d/frame.js';
+import { bindCourseHeader } from '../header.js';
+import { drawVx, drawAC, drawVI, drawPaschen, drawAccum } from './plot.js';
+import { setLawEl, prose, mathText } from './shared.js';
 
 /**
  * Math-course HUD. The course passes its catalog; this module names no course and no chapter.
@@ -10,11 +11,15 @@ import { sceneScale, workPlane, lenLabel, PLANE_AXES } from '@flux/core/scene3d/
  * @param {object[]} catalog.exams
  * @param {(id: string) => object|undefined} catalog.examById
  * @param {Record<string, { title?: string }>} catalog.labMeta
- * @param {string} catalog.code Course code, printed on the brand line.
+ * @param {string} catalog.code Course code, printed under FLUX with the title.
+ * @param {string} catalog.title Course title, printed under FLUX with the code.
+ * @param {string} [catalog.courseId] Marks this course in the track row.
+ * @param {{ id?: string, code?: string, title?: string, href?: string|null }[]} [catalog.track] Sibling courses, hub order.
  * @param {string} catalog.homeId Unit shown before one is mounted.
  */
 export function createHUD(api, catalog) {
-  const { exams: EXAMS, examById, labMeta: LAB_META, code, homeId } = catalog;
+  const { examById, labMeta: LAB_META, homeId } = catalog;
+  const header = bindCourseHeader(catalog, api);
   const $ = (id) => document.getElementById(id);
   let lawKey = '';
   let mountedId = '';
@@ -32,14 +37,6 @@ export function createHUD(api, catalog) {
     const list = !lab ? [] : typeof lab.scenarios === 'function' ? lab.scenarios() : lab.scenarios || [];
     $('scenario').innerHTML = list.map((s) => `<option value="${s.id}">${s.name}</option>`).join('');
     $('scenario').closest('label').hidden = list.length === 0;
-  }
-
-  function renderExamTabs(examId) {
-    $('exam-tabs').innerHTML = EXAMS.map((e) => {
-      const on = e.id === examId;
-      const label = e.id === 'wave' ? 'W' : String(e.n);
-      return `<button type="button" class="exam-tab${on ? ' active' : ''}" data-exam="${e.id}" aria-selected="${on}" title="Exam ${e.n}: ${e.title}">${label}</button>`;
-    }).join('');
   }
 
   function renderLabTabs(exam, labId) {
@@ -136,11 +133,8 @@ export function createHUD(api, catalog) {
   function mount(lab, exam, state) {
     const examId = exam?.id || homeId;
     const labId = lab?.id || '';
-    renderExamTabs(examId);
+    header.showUnit(examId);
     renderLabTabs(exam, labId);
-    $('brand-sub').textContent = exam
-      ? `${code} · Ch ${exam.chapters} · ${exam.title}`
-      : code;
     $('setup-hint').innerHTML = mathText(lab?.hint || exam?.coming?.join(' · ') || '');
     $('hint-action').innerHTML = mathText(lab?.hint || '');
     $('hint-orbit').textContent = lab && lab.orbit === false ? 'Rotation locked' : 'Drag to orbit';
@@ -179,10 +173,6 @@ export function createHUD(api, catalog) {
     }
   }
 
-  $('exam-tabs').addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-exam]');
-    if (btn) Promise.resolve(api.setExam(btn.dataset.exam)).catch((err) => navFailed(`unit ${btn.textContent.trim()}`, err));
-  });
   $('lab-tabs').addEventListener('click', (e) => {
     const btn = e.target.closest('[data-lab]');
     if (btn) Promise.resolve(api.setLab(btn.dataset.lab)).catch((err) => navFailed(btn.textContent.trim(), err));

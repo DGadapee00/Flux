@@ -239,9 +239,11 @@ export function mountHubBackup(parent, parts) {
 }
 
 /**
- * The way back to the hub. The course-listing row is gone; the brand mark (logo) links to the hub instead.
+ * The way back to the hub. The logo links there.
+ * The sibling-track row is drawn by the course shell from the hub's track list, not here:
+ * `courses` is accepted and ignored so an older caller cannot put the all-courses row back.
  * If the header already has an `a.brand`, its href is pointed at the hub; otherwise the `.brand-mark`
- * icon is wrapped in a link. `courses` is accepted for compatibility and ignored.
+ * icon is wrapped in a link.
  * @param {HTMLElement} parent
  * @param {{ currentId?: string, courses?: unknown[], hubHref?: string }} [spec]
  */
