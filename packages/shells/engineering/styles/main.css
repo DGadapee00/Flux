@@ -1282,16 +1282,29 @@ select:focus-visible {
   .brand-text .subtitle {
     font-size: 10px;
   }
-  .practice-row {
+  /*
+   * practice.css loads after this file and sets `.practice-row` to a full-width row.
+   * The extra class keeps the phone rule on top of that, so Practice sits beside the wordmark
+   * instead of covering it.
+   */
+  .brand .practice-row {
     grid-column: 3;
     grid-row: 1;
     align-self: center;
+    justify-content: flex-end;
     margin-top: 0;
     padding-top: 0;
     border-top: 0;
+    min-width: 0;
   }
-  .practice-stat,
-  .practice-btn kbd {
+  .brand .mode-tabs {
+    gap: 4px;
+  }
+  .brand .practice-btn {
+    padding: 4px 10px;
+  }
+  .brand .practice-stat,
+  .brand .practice-btn kbd {
     display: none;
   }
   .track-row {
