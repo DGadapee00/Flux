@@ -381,14 +381,14 @@
    * The legend is a colour key, not content — it should not cost a tenth of the screen. Stretching
    * it full width was wrong twice over: it covered the scene horizontally as well as vertically.
    * Back to roughly its desktop width, and tighter, since it sits over the canvas here.
-   * Clear of the toggle strip. Two wrapped rows of chips are about 90px.
+   * Clear of the toggle strip. Three wrapped rows of chips are about 130px.
    */
   .legend {
     left: 10px;
     right: auto;
     width: 172px;
     bottom: auto;
-    top: calc(var(--hdr) + 104px);
+    top: calc(var(--hdr) + 142px);
     padding: 5px 8px;
   }
 
