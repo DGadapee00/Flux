@@ -11,6 +11,9 @@
     "test": "node --test test/*.test.js",
     "smoke": "node scripts/smoke.mjs"
   },
+  "dependencies": {
+    "@flux/tracks": "*"
+  },
   "devDependencies": {
     "vite": "^6.0.0"
   }

@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
-import { builtCourses, latestBuilt, TRACKS } from '../src/tracks.js';
+import { builtCourses, latestBuilt, visibleTracks } from '../src/tracks.js';
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const chromeBin = process.env.CHROME || 'google-chrome';
@@ -178,11 +178,12 @@ function assertHub(width, metrics, hub) {
   if (metrics.cols !== expectedCols) {
     throw new Error(`${width}px has ${metrics.cols} columns, expected ${expectedCols}`);
   }
-  const ids = TRACKS.map((track) => track.id);
+  const shown = visibleTracks();
+  const ids = shown.map((track) => track.id);
   if (JSON.stringify(metrics.ids) !== JSON.stringify(ids)) {
     throw new Error(`tracks are ${metrics.ids.join(', ')}`);
   }
-  TRACKS.forEach((track, i) => {
+  shown.forEach((track, i) => {
     const latest = latestBuilt(track);
     const expected = latest ? resolvedHref(latest.href, hub) : null;
     if (metrics.opens[i] !== expected) {
@@ -303,7 +304,7 @@ async function main() {
       if (width === 380 || width === 1280) {
         const shot = await page.send('Page.captureScreenshot', { format: 'png' });
         fs.writeFileSync(path.join(outDir, `hub-${width}.png`), Buffer.from(shot.data, 'base64'));
-        for (const track of TRACKS) {
+        for (const track of visibleTracks()) {
           await hoverTrack(page, track.id);
           const box = await evalJson(
             page,
@@ -343,7 +344,7 @@ async function main() {
       features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
     });
     await navigate(page, hub);
-    for (const track of TRACKS) {
+    for (const track of visibleTracks()) {
       await evalJson(
         page,
         `document.querySelector('[data-track="${track.id}"]').scrollIntoView({ block: 'center' })`,
@@ -370,9 +371,8 @@ async function main() {
       console.log(`${course.id} → ${landed}`);
       await navigate(page, hub);
     }
-    for (const track of TRACKS) {
+    for (const track of visibleTracks()) {
       const latest = latestBuilt(track);
-      if (!latest) continue;
       const prefix = resolvedHref(latest.href, hub).replace(/\/$/, '');
       await evalJson(page, `document.querySelector('a.track-open[data-track-open="${track.id}"]').click()`);
       const landed = await waitForPrefix(page, prefix);

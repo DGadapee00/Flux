@@ -1,7 +1,8 @@
 /**
  * Dependency direction: courses → shells → subjects → core.
- * Core never imports a subject, a shell, or a course. A subject never imports a shell or a course.
- * A shell never imports a course. The site and tools may import courses.
+ * Courses and the site may also import `@flux/tracks` (the hub's track list). That package imports nothing.
+ * Core never imports a subject, a shell, a track list, or a course. A subject never imports a shell or a course.
+ * A shell never imports a course or the track list. The site and tools may import courses.
  * Nothing in core or a shell may name a course. A shell names no chapter either.
  */
 import fs from 'node:fs';
@@ -15,6 +16,7 @@ const LAYER_DIRS = [
   ['core', 'packages/core'],
   ['subjects', 'packages/subjects'],
   ['shells', 'packages/shells'],
+  ['tracks', 'packages/tracks'],
   ['checks', 'packages/checks'],
   ['courses', 'courses'],
   ['site', 'site'],
@@ -26,9 +28,10 @@ const ALLOWED = {
   core: new Set(['core']),
   subjects: new Set(['core', 'subjects']),
   shells: new Set(['core', 'subjects', 'shells']),
-  checks: new Set(['core', 'subjects', 'shells', 'checks', 'courses', 'site', 'tools']),
-  courses: new Set(['core', 'subjects', 'shells', 'courses']),
-  site: new Set(['core', 'subjects', 'courses', 'site']),
+  tracks: new Set(['tracks']),
+  checks: new Set(['core', 'subjects', 'shells', 'tracks', 'checks', 'courses', 'site', 'tools']),
+  courses: new Set(['core', 'subjects', 'shells', 'tracks', 'courses']),
+  site: new Set(['core', 'subjects', 'tracks', 'courses', 'site']),
   tools: new Set(['core', 'subjects', 'courses', 'tools']),
 };
 

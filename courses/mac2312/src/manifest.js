@@ -1,12 +1,6 @@
 import { defineCourse } from '@flux/core';
 import { EXAMS } from './data/catalog.js';
 
-export const TRACK = [
-  { id: 'mac2311', label: 'MAC 2311', href: '../mac2311/' },
-  { id: 'mac2312', label: 'MAC 2312', href: '../mac2312/' },
-  { id: 'mac2313', label: 'MAC 2313', href: '../mac2313/' },
-];
-
 export const course = defineCourse({
   id: 'mac2312',
   code: 'MAC 2312',

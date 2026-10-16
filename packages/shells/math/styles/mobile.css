@@ -73,10 +73,10 @@
   }
 
   /*
-   * Tabs scroll sideways instead of wrapping. Wrapping is what grew the header to 196px — a third
-   * of the screen — and it got worse the further into the term you went.
+   * Lab tabs scroll sideways instead of wrapping. Wrapping is what grew the header — a third
+   * of the screen — and it got worse the further into the term you went. The unit picker is one
+   * select, so it stays on its own row. Its type is 16px: under that, Safari zooms on focus.
    */
-  .exam-tabs,
   .lab-tabs {
     grid-row: auto;
     flex-wrap: nowrap;
@@ -86,19 +86,22 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .exam-tabs::-webkit-scrollbar,
+  .track-row {
+    margin-top: 6px;
+    padding-top: 6px;
+  }
+
+  .exam-select {
+    margin-top: 6px;
+    font-size: 16px;
+  }
+
   .lab-tabs::-webkit-scrollbar,
   .toggles::-webkit-scrollbar,
   .readout::-webkit-scrollbar {
     display: none;
   }
 
-  .exam-tabs {
-    margin-top: 6px;
-    padding-top: 6px;
-  }
-
-  .exam-tab,
   .tab {
     flex: 0 0 auto;
     min-height: 34px;
