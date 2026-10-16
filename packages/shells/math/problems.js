@@ -715,7 +715,7 @@ export function createPractice(api, bank) {
         ${held ? '<div class="pb-held">Write the formula above first — then put the numbers in.</div>' : ''}
         <div class="pb-parse ${msg.cls}" data-parse="${i}">${msg.html}</div>
         <div class="pb-fb">${esc(fb)}</div>
-        ${cur.revealed || (cur.finished && !res?.correct) ? `<div class="pb-want">Answer: ${esc(sym ? part.expr : showValue(part, r, part.get(cur.inst.$)))}</div>` : ''}
+        ${cur.revealed || (cur.finished && !res?.correct) ? `<div class="pb-want">Answer: ${esc(sym ? expected(part, cur.inst.$) : showValue(part, r, part.get(cur.inst.$)))}</div>` : ''}
         ${labSlot}
       </div>`;
     }

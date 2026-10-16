@@ -7,7 +7,7 @@ export const EXAMS = [
     title: 'Applications of integration',
     chapters: '2',
     date: null,
-    labs: ['solids'],
+    labs: ['solids', 'arc'],
   },
   {
     id: 'u2',
@@ -37,6 +37,7 @@ export const EXAMS = [
 
 export const LAB_META = {
   solids: { id: 'solids', exam: 'u1', title: 'Solids' },
+  arc: { id: 'arc', exam: 'u1', title: 'Arc length' },
   numint: { id: 'numint', exam: 'u2', title: 'Numerical' },
   improper: { id: 'improper', exam: 'u2', title: 'Improper' },
   taylor: { id: 'taylor', exam: 'u3', title: 'Taylor' },

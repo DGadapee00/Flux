@@ -44,7 +44,7 @@ function seriesCamera(state) {
 
 function clampN(n) {
   const k = Math.round(Number.isFinite(n) ? n : 8);
-  return Math.min(12, Math.max(4, k));
+  return Math.min(120, Math.max(4, k));
 }
 
 function kindOf(kind) {
@@ -109,7 +109,7 @@ export default defineLab({
         <label class="field">
           <span>terms</span>
           <div class="slider-row">
-            <input type="range" id="ser-n" min="4" max="12" step="1" value="8" />
+            <input type="range" id="ser-n" min="4" max="120" step="1" value="8" />
           </div>
         </label>
       </div>`;

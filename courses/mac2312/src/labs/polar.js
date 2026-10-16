@@ -47,9 +47,10 @@ function kindOf(kind) {
   return 'disk';
 }
 
-function clampK(k) {
-  const n = Math.round(Number.isFinite(k) ? k : 4);
-  return Math.min(4, Math.max(1, n));
+function clampK(k, kind) {
+  const n = Number.isFinite(k) ? k : 4;
+  if (kind === 'shift') return Math.min(4, Math.max(1, n));
+  return Math.min(50, Math.max(1, Math.round(n)));
 }
 
 function endAngle(kind, k) {
@@ -128,7 +129,7 @@ export default defineLab({
         <label class="field">
           <span id="pol-name">quarter turns</span>
           <div class="slider-row">
-            <input type="range" id="pol-k" min="1" max="4" step="1" value="4" />
+            <input type="range" id="pol-k" min="1" max="50" step="1" value="4" />
           </div>
         </label>
       </div>`;
@@ -142,8 +143,13 @@ export default defineLab({
   syncControls(state) {
     const slider = document.getElementById('pol-k');
     const name = document.getElementById('pol-name');
-    if (slider) slider.value = state.k;
-    if (name) name.textContent = state.kind === 'shift' ? 'fourths of the curve' : 'quarter turns';
+    if (!slider) return;
+    const shift = state.kind === 'shift';
+    slider.min = '1';
+    slider.max = shift ? '4' : '50';
+    slider.step = shift ? '0.06' : '1';
+    slider.value = state.k;
+    if (name) name.textContent = shift ? 'fourths of the curve' : 'quarter turns';
   },
   applyScenario(id, state) {
     const s = SCENARIOS.find((item) => item.id === id) || SCENARIOS[0];
@@ -159,7 +165,7 @@ export default defineLab({
   recompute(state, computed) {
     keepXy(state);
     const kind = kindOf(state.kind);
-    const k = clampK(state.k);
+    const k = clampK(state.k, kind);
     state.kind = kind;
     state.k = k;
     Object.assign(state, FRAME);

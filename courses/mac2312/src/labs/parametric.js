@@ -49,9 +49,9 @@ function kindOf(kind) {
 }
 
 function clampK(kind, k) {
-  const n = Math.round(Number.isFinite(k) ? k : 0);
-  const max = kind === 'circle' ? 8 : 4;
-  return Math.min(max, Math.max(0, n));
+  const n = Number.isFinite(k) ? k : 0;
+  if (kind === 'circle') return Math.min(72, Math.max(0, Math.round(n)));
+  return Math.min(4, Math.max(0, n));
 }
 
 function paramT(kind, k) {
@@ -164,7 +164,7 @@ export default defineLab({
         <label class="field">
           <span id="par-name">quarter turns of π</span>
           <div class="slider-row">
-            <input type="range" id="par-k" min="0" max="8" step="1" value="2" />
+            <input type="range" id="par-k" min="0" max="72" step="1" value="2" />
           </div>
         </label>
       </div>`;
@@ -181,7 +181,8 @@ export default defineLab({
     if (!slider) return;
     const circle = state.kind === 'circle';
     slider.min = '0';
-    slider.max = circle ? '8' : '4';
+    slider.max = circle ? '72' : '4';
+    slider.step = circle ? '1' : '0.08';
     slider.value = state.k;
     if (name) name.textContent = circle ? 'quarter turns of π' : 'fourths of the segment';
   },

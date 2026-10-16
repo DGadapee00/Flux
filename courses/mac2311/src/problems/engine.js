@@ -20,6 +20,7 @@ export const {
   hashSeed,
   build,
   sampleValues,
+  countVersions,
   instance,
   sig,
   render,

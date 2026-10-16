@@ -50,7 +50,10 @@ export default [
       num('fx', ($) => $.fx, '', { label: '$\\partial f/\\partial x$ at $P$' }),
       num('fy', ($) => $.fy, '', { label: '$\\partial f/\\partial y$ at $P$' }),
     ],
-    hints: ['Treat $y$ as constant to get $\\partial f/\\partial x$; treat $x$ as constant to get $\\partial f/\\partial y$.'],
+    hints: [
+      'Treat $y$ as constant to get $\\partial f/\\partial x$; treat $x$ as constant to get $\\partial f/\\partial y$.',
+      'Each first partial is linear: evaluate $2ax$ and $2by$ at the given point.',
+    ],
     steps: ($, f, T) => [
       `$f_x = ${T.a === '1' ? '2x' : `2\\cdot${T.a}x = ${prod(2, T.a)}x`}$, so at $P$ we get $${f($.fx)}$.`,
       `$f_y = ${prod(2, T.b)}y$, so at $P$ we get $${f($.fy)}$.`,
@@ -74,7 +77,7 @@ export default [
     level: 2,
     topics: ['partials', 'symbolic'],
     vars: {
-      a: range(1, 5, 1),
+      a: range(1, 50, 1),
     },
     derive: ($) => ({ x: 1, y: 1, fx: $.a, fy: $.a }),
     valid: ($) => $.a !== 0,
@@ -82,7 +85,10 @@ export default [
     parts: [
       sym('fx_sym', 'a*y', ['a', 'x', 'y'], ($) => $.a * $.y, { label: '$\\partial f/\\partial x$' }),
     ],
-    hints: ['$y$ is a constant when differentiating with respect to $x$.'],
+    hints: [
+      '$y$ is a constant when differentiating with respect to $x$.',
+      'The formula still contains $y$. Do not plug in a point.',
+    ],
     steps: ($, f, T) => [`$f_x = ${T.a} y$.`],
     sim: {
       scenario: 'xy',
@@ -121,7 +127,10 @@ export default [
       num('fx', ($) => $.fx, '', { label: '$\\partial f/\\partial x$' }),
       num('fy', ($) => $.fy, '', { label: '$\\partial f/\\partial y$' }),
     ],
-    hints: ['$\\nabla f = (f_x, f_y)$.'],
+    hints: [
+      '$\\nabla f = (f_x, f_y)$.',
+      'Differentiate $ax^2$ in $x$ and $-by^2$ in $y$, then evaluate at the point.',
+    ],
     steps: ($, f) => [`$\\nabla f = (${f($.fx)}, ${f($.fy)})$.`],
     sim: {
       scenario: 'saddle',
@@ -141,13 +150,16 @@ export default [
     kind: 'derivation',
     level: 2,
     topics: ['gradient', 'symbolic'],
-    vars: { a: range(1, 4, 1), b: range(1, 4, 1) },
+    vars: { a: range(1, 8, 1), b: range(1, 8, 1) },
     derive: ($) => ({ x: 0.5, y: 0.5, fx: 2 * $.a * 0.5, fy: 2 * $.b * 0.5 }),
     text: (T) => `Let $f(x,y) = ${coef(T.a)}x^2 + ${coef(T.b)}y^2$. Write the $x$-component of $\\nabla f$ as a formula.`,
     parts: [
       sym('gx', '2*a*x', ['a', 'b', 'x', 'y'], ($) => 2 * $.a * $.x, { label: '$(\\nabla f)_x$' }),
     ],
-    hints: ['$(\\nabla f)_x = \\partial f/\\partial x$.'],
+    hints: [
+      '$(\\nabla f)_x = \\partial f/\\partial x$.',
+      'The $x$-component still depends on $x$. Leave $x$ in the formula.',
+    ],
     steps: ($, f, T) => [`$(\\nabla f)_x = ${prod(2, T.a)}x$.`],
     sim: {
       scenario: 'paraboloid',
@@ -190,7 +202,10 @@ export default [
     text: (T, $) =>
       `Let $f(x,y) = ${coef(T.a)}x + ${coef(T.b)}y$ and let $\\hat u$ make an angle $${T.deg}^\\circ$ with the positive $x$-axis. Find $D_{\\hat u} f$ at $(${T.x0}, ${T.y0})$.`,
     parts: [num('Du', ($) => $.Du, '', { label: '$D_{\\hat u} f$', abs: 0.02 })],
-    hints: ['$D_{\\hat u} f = \\nabla f \\cdot \\hat u$, and $\\hat u = (\\cos\\theta, \\sin\\theta)$.'],
+    hints: [
+      '$D_{\\hat u} f = \\nabla f \\cdot \\hat u$, and $\\hat u = (\\cos\\theta, \\sin\\theta)$.',
+      'For this plane, $\\nabla f=(a,b)$ at every point, so the base point does not change the value.',
+    ],
     steps: ($, f) => [`$\\nabla f = (${f($.fx)}, ${f($.fy)})$, $\\hat u = (${f($.ux)}, ${f($.uy)})$, so $D_{\\hat u} f = ${f($.Du)}$.`],
     sim: {
       scenario: 'plane',
@@ -226,7 +241,10 @@ export default [
     text: (T) =>
       `Let $f(x,y) = ${coef(T.a)}x + ${coef(T.b)}y$ and $u = (${T.ux}, ${T.uy})$. The notes require a unit vector. Normalize $u$ and find $D_{\\hat u} f$ at the origin.`,
     parts: [num('Du', ($) => $.Du, '', { label: '$D_{\\hat u} f$', abs: 0.02 })],
-    hints: ['$\\hat u = u/\\|u\\|$, then $D_{\\hat u} f = \\nabla f \\cdot \\hat u$. Do not plug the raw $(u_x, u_y)$ into Theorem 17.'],
+    hints: [
+      '$\\hat u = u/\\|u\\|$, then $D_{\\hat u} f = \\nabla f \\cdot \\hat u$. Do not plug the raw $(u_x, u_y)$ into Theorem 17.',
+      'Divide each component of $u$ by $\\sqrt{u_x^2+u_y^2}$ before the dot product.',
+    ],
     steps: ($, f) => [`$\\|u\\| = ${f($.L)}$, $\\hat u = (${f($.hx)}, ${f($.hy)})$, $D_{\\hat u} f = ${f($.Du)}$.`],
     sim: {
       scenario: 'plane',
@@ -253,8 +271,8 @@ export default [
     level: 1,
     topics: ['gradient'],
     vars: {
-      a: range(1, 3, 1),
-      b: range(1, 3, 1),
+      a: range(1, 4, 1),
+      b: range(1, 4, 1),
       x0: range(1, 2, 1),
       y0: range(1, 2, 1),
     },
@@ -274,7 +292,10 @@ export default [
         { label: 'steepest ascent' },
       ),
     ],
-    hints: ['$D_{\\hat u} f$ is largest when $\\hat u$ points the same way as $\\nabla f$.'],
+    hints: [
+      '$D_{\\hat u} f$ is largest when $\\hat u$ points the same way as $\\nabla f$.',
+      'A level curve is the direction of zero change, and $-\\nabla f$ is steepest descent.',
+    ],
     steps: () => ['Steepest ascent is the direction of $\\nabla f$.'],
     sim: {
       scenario: 'paraboloid',
@@ -293,13 +314,16 @@ export default [
     kind: 'conceptual',
     level: 1,
     topics: ['directional'],
-    vars: { dummy: range(1, 1, 1) },
-    text: () =>
-      `True or false: if $\\hat u$ is tangent to a level curve of $f$ at $P$, then $D_{\\hat u} f(P) = 0$.`,
+    vars: { n: range(1, 50, 1) },
+    text: (T) =>
+      `Let $f(x,y)=${T.n}x^2+y^2$. True or false: if $\\hat u$ is tangent to a level curve of $f$ at $P$, then $D_{\\hat u} f(P) = 0$.`,
     parts: [tf('tf', true, { label: 'statement' })],
-    hints: ['Along a level curve $f$ is constant, so its rate of change in that direction is zero. Equivalently $\\hat u \\perp \\nabla f$.'],
+    hints: [
+      'Along a level curve $f$ is constant, so its rate of change in that direction is zero. Equivalently $\\hat u \\perp \\nabla f$.',
+      'Changing the coefficient of $x^2$ rescales the gradient. It does not tilt the level-curve tangent off the perpendicular.',
+    ],
     steps: () => ['True: $D_{\\hat u} f = \\nabla f \\cdot \\hat u = 0$ when $\\hat u$ is orthogonal to $\\nabla f$.'],
-    cases: [kase('sample', { dummy: 1 }, { tf: 1 })],
+    cases: [kase('sample', { n: 1 }, { tf: 1 })],
   }),
 
   problem({
@@ -329,7 +353,10 @@ export default [
     text: (T) =>
       `Let $f(x,y) = ${coef(T.a)}x^2 + ${coef(T.b)}y^2$. Using the tangent plane at $(${T.x0}, ${T.y0})$, estimate $f(${T.x0}+${T.dx}, ${T.y0}+${T.dy})$.`,
     parts: [num('z', ($) => $.z, '', { label: 'estimate', abs: 0.05 })],
-    hints: ['$f(x_0+\\Delta x, y_0+\\Delta y) \\approx f(P) + f_x \\Delta x + f_y \\Delta y$.'],
+    hints: [
+      '$f(x_0+\\Delta x, y_0+\\Delta y) \\approx f(P) + f_x \\Delta x + f_y \\Delta y$.',
+      'Use the partials at $(x_0,y_0)$, not at the shifted point.',
+    ],
     steps: ($, f) => [`$f(P) = ${f($.f0)}$, $\\nabla f = (${f($.fx)}, ${f($.fy)})$, estimate $${f($.z)}$.`],
     sim: {
       scenario: 'paraboloid',
@@ -350,36 +377,40 @@ export default [
     level: 2,
     topics: ['gradient', 'directional'],
     vars: {
-      x0: range(0, 2, 1),
-      y0: range(0, 2, 1),
+      a: range(1, 4, 1),
+      x0: range(-2, 2, 1),
+      y0: range(-2, 2, 1),
     },
     derive: ($) => {
-      const fx = $.y0;
-      const fy = $.x0;
+      const fx = $.a * $.y0;
+      const fy = $.a * $.x0;
       const ux = 1 / Math.SQRT2;
       const uy = 1 / Math.SQRT2;
       return { fx, fy, Du: fx * ux + fy * uy };
     },
     text: (T) =>
-      `Let $f(x,y) = xy$ at $P = (${T.x0}, ${T.y0})$, and $\\hat u = (1/\\sqrt{2},\\, 1/\\sqrt{2})$. Find $\\nabla f$ and $D_{\\hat u} f$.`,
+      `Let $f(x,y) = ${coef(T.a)}xy$ at $P = (${T.x0}, ${T.y0})$, and $\\hat u = (1/\\sqrt{2},\\, 1/\\sqrt{2})$. Find $\\nabla f$ and $D_{\\hat u} f$.`,
     parts: [
       num('fx', ($) => $.fx, '', { label: '$f_x$' }),
       num('fy', ($) => $.fy, '', { label: '$f_y$' }),
       num('Du', ($) => $.Du, '', { label: '$D_{\\hat u} f$', abs: 0.02 }),
     ],
-    hints: ['$\\nabla f = (y, x)$ for $f = xy$. Then dot with $\\hat u$.'],
+    hints: [
+      '$\\nabla f = (ay, ax)$ for $f = axy$. Then dot with $\\hat u$.',
+      '$(1/\\sqrt{2}, 1/\\sqrt{2})$ is already a unit vector, so do not divide it again.',
+    ],
     steps: ($, f) => [`$\\nabla f = (${f($.fx)}, ${f($.fy)})$, $D_{\\hat u} f = ${f($.Du)}$.`],
     sim: {
       scenario: 'xy',
       setup(slice, $) {
         slice.surfaceId = 'xy';
-        slice.params = { a: 1, b: 1, c: 0 };
+        slice.params = { a: $.a, b: 1, c: 0 };
         slice.probe = { x: $.x0, y: $.y0, z: 0 };
         slice.theta = Math.PI / 4;
         return domain(slice, box);
       },
       read: (c) => ({ fx: c.fx, fy: c.fy, Du: c.Du }),
     },
-    cases: [kase('sample', { x0: 1, y0: 1 }, { fx: 1, fy: 1, Du: Math.SQRT2 })],
+    cases: [kase('sample', { a: 1, x0: 1, y0: 1 }, { fx: 1, fy: 1, Du: Math.SQRT2 })],
   }),
 ];

@@ -28,6 +28,11 @@ const CHECK = {
     Number.isFinite(c.shell) &&
     Math.abs(c.disk - 8 * Math.PI) < 1e-6 &&
     Math.abs(c.shell - 8 * Math.PI) < 1e-6,
+  arc: (c) =>
+    c.agree === true &&
+    c.kind === 'parabola' &&
+    c.chord < c.length &&
+    Math.abs(c.length - (0.5 * Math.sqrt(5) + 0.25 * Math.log(2 + Math.sqrt(5)))) < 1e-6,
   taylor: (c) =>
     c.agree === true &&
     Math.abs(c.poly - 0.5) < 1e-9 &&

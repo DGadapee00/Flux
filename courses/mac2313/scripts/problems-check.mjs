@@ -13,7 +13,7 @@
  */
 import { PROBLEMS, CHAPTER_ORDER, CHAPTER_TITLES, problemsForExam } from '../src/problems/index.js';
 import { createProgress, memoryStorage, pickSet, INTERVAL_DAYS } from '../src/problems/progress.js';
-import { build, instance, render, expected, withinTol, evalSymbolic, gradeSymbolic, grade, parseNumber, exprToTex } from '../src/problems/engine.js';
+import { build, instance, render, expected, withinTol, evalSymbolic, gradeSymbolic, grade, parseNumber, exprToTex, countVersions } from '../src/problems/engine.js';
 import { applyProblem, headlessCtx } from '../src/problems/simbridge.js';
 import { mathProse } from '../src/ui/shared.js';
 import { loadLab } from '../src/labs/load.js';
@@ -31,6 +31,39 @@ const errors = [];
 const notes = [];
 let simChecks = 0;
 const err = (id, msg) => errors.push(`${id}: ${msg}`);
+
+function gcdInt(a, b) {
+  let x = Math.abs(a);
+  let y = Math.abs(b);
+  while (y) {
+    const t = x % y;
+    x = y;
+    y = t;
+  }
+  return x || 1;
+}
+
+/** A printed multiple of π whose fraction still has a common factor, such as 4π/2. */
+function unreducedPi(text) {
+  if (typeof text !== 'string') return null;
+  const forms = [
+    /(-?\d+)\s*\\pi\s*\/\s*(\d+)/g,
+    /(-?\d+)\s*\/\s*(\d+)\s*\\pi/g,
+    /\\d?frac\{(-?\d+)\\pi\}\{(\d+)\}/g,
+  ];
+  for (const re of forms) {
+    for (const m of text.matchAll(re)) {
+      const n = Math.abs(Number(m[1]));
+      const d = Number(m[2]);
+      if (d > 1 && gcdInt(n, d) > 1) return m[0];
+    }
+  }
+  return null;
+}
+
+function symKey(part, $) {
+  return typeof part.expr === 'function' ? part.expr($) : part.expr;
+}
 
 function checkRender(tpl, inst) {
   const r = render(inst);
@@ -108,6 +141,30 @@ for (const tpl of PROBLEMS) {
   if (tpl.sim && !tpl.lab) err(tpl.id, 'sim without lab');
   if (!tpl.cases.length) err(tpl.id, 'no worked case');
   labsUsed[tpl.lab || '(none)'] = (labsUsed[tpl.lab || '(none)'] || 0) + 1;
+  const hintCount = Array.isArray(tpl.hints) ? tpl.hints.filter((h) => String(h).trim()).length : 0;
+  if (hintCount < 2) err(tpl.id, `need at least 2 hints, have ${hintCount}`);
+  let piBad = null;
+  const versions = countVersions(tpl, {
+    need: 50,
+    onEach(values) {
+      if (piBad) return;
+      try {
+        piBad = unreducedPi(render(build(tpl, values)).text);
+      } catch {
+        /* a version that will not build is already excluded from the count */
+      }
+    },
+  });
+  if (versions < 50) err(tpl.id, `${versions} distinct versions; need at least 50`);
+  for (const c of tpl.cases) {
+    if (piBad) break;
+    try {
+      piBad = unreducedPi(render(build(tpl, c.v)).text);
+    } catch {
+      /* case build errors are reported below */
+    }
+  }
+  if (piBad) err(tpl.id, `write the multiple of π in lowest terms, not ${piBad}`);
 
   // 1. worked cases
   for (const c of tpl.cases) {
@@ -164,8 +221,9 @@ for (const tpl of PROBLEMS) {
     }
     if (seed <= 3) {
       for (const p of tpl.parts.filter((q) => q.kind === 'symbolic')) {
-        if (!gradeSymbolic(p, p.expr).correct) err(tpl.id, `grader rejects its own key for ${p.id}`);
-        if (gradeSymbolic(p, `(${p.expr})*1.1`).correct) err(tpl.id, `grader accepts a wrong answer for ${p.id}`);
+        const key = symKey(p, inst.$);
+        if (!gradeSymbolic(p, key, inst.$).correct) err(tpl.id, `grader rejects its own key for ${p.id}`);
+        if (gradeSymbolic(p, `(${key})*1.1`, inst.$).correct) err(tpl.id, `grader accepts a wrong answer for ${p.id}`);
       }
     }
     try {
@@ -231,9 +289,11 @@ if (!Number.isNaN(parseNumber('abc'))) err('engine', 'parseNumber accepts text')
  * way to tell whether their formula was read correctly.
  */
 for (const tpl of PROBLEMS) {
+  const sample = tpl.cases[0] ? build(tpl, tpl.cases[0].v) : instance(tpl, 1);
   for (const part of tpl.parts.filter((p) => p.kind === 'symbolic')) {
-    const t = exprToTex(part.expr, part.vars, part.alias);
-    if (!t) err(tpl.id, `symbolic ${part.id}: "${part.expr}" does not render to TeX`);
+    const key = symKey(part, sample.$);
+    const t = exprToTex(key, part.vars, part.alias);
+    if (!t) err(tpl.id, `symbolic ${part.id}: "${key}" does not render to TeX`);
     else if (/undefined|NaN/.test(t)) err(tpl.id, `symbolic ${part.id}: TeX came out as "${t}"`);
   }
 }
