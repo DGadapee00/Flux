@@ -83,7 +83,9 @@ export default [
     valid: ($) => $.a !== 0,
     text: (T) => `Let $f(x,y) = ${coef(T.a)}xy$. Write $\\partial f/\\partial x$ as a formula in $x$ and $y$.`,
     parts: [
-      sym('fx_sym', 'a*y', ['a', 'x', 'y'], ($) => $.a * $.y, { label: '$\\partial f/\\partial x$' }),
+      sym('fx_sym', ($) => (Number($.a) === 1 ? 'y' : `${$.a}*y`), ['x', 'y'], ($) => $.a * $.y, {
+        label: '$\\partial f/\\partial x$',
+      }),
     ],
     hints: [
       '$y$ is a constant when differentiating with respect to $x$.',
@@ -100,7 +102,9 @@ export default [
       },
       read: (c, s, $) => ({ '@fx': [c.fx, $.a * s.probe.y] }),
     },
-    cases: [kase('sample', { a: 2 }, {})],
+    cases: [
+      kase('sample', { a: 2 }, { fx_sym: '2*y' }, { accept: { fx_sym: ['2y'] }, reject: { fx_sym: ['a*y'] } }),
+    ],
   }),
 
   problem({
@@ -154,7 +158,7 @@ export default [
     derive: ($) => ({ x: 0.5, y: 0.5, fx: 2 * $.a * 0.5, fy: 2 * $.b * 0.5 }),
     text: (T) => `Let $f(x,y) = ${coef(T.a)}x^2 + ${coef(T.b)}y^2$. Write the $x$-component of $\\nabla f$ as a formula.`,
     parts: [
-      sym('gx', '2*a*x', ['a', 'b', 'x', 'y'], ($) => 2 * $.a * $.x, { label: '$(\\nabla f)_x$' }),
+      sym('gx', ($) => `${2 * $.a}*x`, ['x', 'y'], ($) => 2 * $.a * $.x, { label: '$(\\nabla f)_x$' }),
     ],
     hints: [
       '$(\\nabla f)_x = \\partial f/\\partial x$.',
@@ -171,7 +175,9 @@ export default [
       },
       read: (c, s, $) => ({ '@gx': [c.fx, 2 * $.a * s.probe.x] }),
     },
-    cases: [kase('sample', { a: 1, b: 1 }, {})],
+    cases: [
+      kase('sample', { a: 1, b: 1 }, { gx: '2*x' }, { accept: { gx: ['2x'] }, reject: { gx: ['2*a*x'] } }),
+    ],
   }),
 
   problem({
@@ -316,7 +322,7 @@ export default [
     topics: ['directional'],
     vars: { n: range(1, 50, 1) },
     text: (T) =>
-      `Let $f(x,y)=${T.n}x^2+y^2$. True or false: if $\\hat u$ is tangent to a level curve of $f$ at $P$, then $D_{\\hat u} f(P) = 0$.`,
+      `Let $f(x,y)=${coef(T.n)}x^2+y^2$. True or false: if $\\hat u$ is tangent to a level curve of $f$ at $P$, then $D_{\\hat u} f(P) = 0$.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
       'Along a level curve $f$ is constant, so its rate of change in that direction is zero. Equivalently $\\hat u \\perp \\nabla f$.',

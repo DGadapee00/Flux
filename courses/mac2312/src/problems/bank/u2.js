@@ -326,6 +326,11 @@ export default [
       String.raw`The antiderivative is $${cosAnti($.a, $.b)}$.`,
       String.raw`At $x=1$ it equals $${f($.val)}$.`,
     ],
-    cases: [kase('a=2, b=2', { a: 2, b: 2 }, { formula: 'sin(2*x)', val: Math.sin(2) })],
+    cases: [
+      kase('a=2, b=2', { a: 2, b: 2 }, { formula: 'sin(2*x)', val: Math.sin(2) }, {
+        accept: { formula: ['sin(2x)'] },
+        reject: { formula: ['sin(2*x)+C'] },
+      }),
+    ],
   }),
 ];

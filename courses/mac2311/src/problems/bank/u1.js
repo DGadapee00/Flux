@@ -1,5 +1,5 @@
 import { deltaFor, deltaSearch, holeLimit, holePlugged, lawAverage, lawExact, polyAt, polyAverage } from '../../math/calc1.js';
-import { domain, kase, num, problem, range, tf } from '../kit.js';
+import { coef, domain, kase, num, problem, range, tf } from '../kit.js';
 
 function paren(n) {
   return n < 0 ? `(${n})` : String(n);
@@ -26,7 +26,8 @@ export default [
     derive: ($) => ({ lim: polyAt($.a, $.b) }),
     second: ($) => ({ lim: polyAverage($.a, $.b) }),
     text: (T, $) => {
-      const term = $.b < 0 ? String.raw`-${-$.b}x` : $.b > 0 ? String.raw`+${$.b}x` : '';
+      const n = Number($.b);
+      const term = n === 0 ? '' : n > 0 ? `+${coef(n)}x` : `-${coef(-n)}x`;
       const at = $.a < 0 ? String.raw`(${$.a})` : String($.a);
       return String.raw`Find $\lim_{x\to ${at}}(x^2${term})$.`;
     },
@@ -160,7 +161,7 @@ export default [
     vars: { c: range(1, 10, 1), a: range(-2, 2, 1) },
     derive: ($) => ({ lim: lawExact($.c, $.a) }),
     second: ($) => ({ lim: lawAverage($.c, $.a) }),
-    text: (T) => String.raw`Find $\lim_{x\to ${T.a}}\left(${T.c}x^2+3x\right)$.`,
+    text: (T) => String.raw`Find $\lim_{x\to ${T.a}}\left(${coef(T.c)}x^2+3x\right)$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit' })],
     hints: [
       String.raw`The limit of a sum is the sum of the limits.`,
@@ -190,7 +191,7 @@ export default [
     },
     second: ($) => ({ delta: deltaSearch($.m, $.eps) }),
     text: (T, $, f) =>
-      String.raw`Let $f(x)=${T.m}x$. For $\varepsilon=${f($.eps)}$, the largest $\delta$ with $|x-0|<\delta$ implying $|f(x)|<\varepsilon$ is`,
+      String.raw`Let $f(x)=${coef(T.m)}x$. For $\varepsilon=${f($.eps)}$, the largest $\delta$ with $|x-0|<\delta$ implying $|f(x)|<\varepsilon$ is`,
     parts: [num('delta', ($) => $.delta, '', { label: '$\\delta$', abs: 1e-4 })],
     hints: [
       String.raw`$|mx|<\varepsilon$ exactly when $|x|<\varepsilon/|m|$.`,
@@ -235,7 +236,7 @@ export default [
       }
       return { lim: ok ? 0 : NaN };
     },
-    text: (T) => String.raw`Define $f(0)=0$ and $f(x)=${T.m}x^2\sin(1/x)$ otherwise. Find $\lim_{x\to 0}f(x)$.`,
+    text: (T) => String.raw`Define $f(0)=0$ and $f(x)=${coef(T.m)}x^2\sin(1/x)$ otherwise. Find $\lim_{x\to 0}f(x)$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit', abs: 1e-6 })],
     hints: [
       String.raw`$-mx^2\le mx^2\sin(1/x)\le mx^2$, and both bounds go to $0$.`,
@@ -303,7 +304,7 @@ export default [
       return { lim: 0.5 * (f($.a + h) + f($.a - h)) };
     },
     text: (T) => {
-      const slope = T.b < 0 ? String.raw`${T.m}x-${-T.b}` : T.b > 0 ? String.raw`${T.m}x+${T.b}` : String.raw`${T.m}x`;
+      const slope = T.b < 0 ? String.raw`${coef(T.m)}x-${-T.b}` : T.b > 0 ? String.raw`${coef(T.m)}x+${T.b}` : String.raw`${coef(T.m)}x`;
       return String.raw`Find $\lim_{x\to ${paren(T.a)}}(${slope})$.`;
     },
     parts: [num('lim', ($) => $.lim, '', { label: 'limit' })],

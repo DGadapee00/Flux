@@ -80,7 +80,15 @@ export function problem(spec) {
   };
 }
 
-export const kase = (src, v, want, o = {}) => ({ src, v, want, key: o.key ?? null, note: o.note ?? null });
+export const kase = (src, v, want, o = {}) => ({
+  src,
+  v,
+  want,
+  key: o.key ?? null,
+  note: o.note ?? null,
+  accept: o.accept ?? null,
+  reject: o.reject ?? null,
+});
 
 /**
  * Frame a rectangular domain so the problem's own numbers sit in the scene.

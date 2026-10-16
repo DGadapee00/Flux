@@ -1,4 +1,4 @@
-import { problem, range, num, mc, tf, kase, domain } from '../kit.js';
+import { coef, problem, range, num, mc, tf, kase, domain } from '../kit.js';
 
 export default [
   problem({
@@ -89,7 +89,7 @@ export default [
     topics: ['triple'],
     vars: { n: range(1, 50, 1) },
     text: (T) =>
-      `Let $f(x,y,z)=${T.n}xyz$, continuous on a box $B$. True or false: $\\iiint_B f\\,dV$ does not depend on whether you iterate $dz\\,dy\\,dx$ or $dx\\,dy\\,dz$.`,
+      `Let $f(x,y,z)=${coef(T.n)}xyz$, continuous on a box $B$. True or false: $\\iiint_B f\\,dV$ does not depend on whether you iterate $dz\\,dy\\,dx$ or $dx\\,dy\\,dz$.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
       'Fubini: the six orders agree on a box for a continuous $f$.',

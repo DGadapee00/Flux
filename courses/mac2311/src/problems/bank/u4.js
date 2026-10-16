@@ -17,7 +17,7 @@ import {
   substExpanded,
   substIntegral,
 } from '../../math/calc1.js';
-import { domain, kase, num, problem, range, sym, tf, xPow } from '../kit.js';
+import { coef, domain, kase, num, problem, range, sym, tf, xPow } from '../kit.js';
 
 const plane = { xMin: -0.3, xMax: 1.4, yMin: -0.3, yMax: 1.4, plane: 'xy' };
 
@@ -270,7 +270,7 @@ export default [
       val: simpson((t) => $.a * t ** $.n, 0, 1),
     }),
     text: (T) =>
-      String.raw`Let $f(x)=${T.a}x^{${T.n}}$. Write the antiderivative that is $0$ at $x=0$, as a formula in $x$, and give its value at $x=1$.`,
+      String.raw`Let $f(x)=${coef(T.a)}x^{${T.n}}$. Write the antiderivative that is $0$ at $x=0$, as a formula in $x$, and give its value at $x=1$.`,
     parts: [
       sym(
         'formula',
@@ -289,6 +289,11 @@ export default [
       String.raw`The antiderivative is $${xPow($.a, $.n + 1, $.n + 1)}$.`,
       String.raw`At $x=1$ it equals $${f($.val)}$.`,
     ],
-    cases: [kase('a=2, n=2', { a: 2, n: 2 }, { formula: '2/3*x^3', val: 2 / 3 })],
+    cases: [
+      kase('a=2, n=2', { a: 2, n: 2 }, { formula: '2/3*x^3', val: 2 / 3 }, {
+        accept: { formula: ['(2/3)*x^3'] },
+        reject: { formula: ['2/3*x^3+C'] },
+      }),
+    ],
   }),
 ];

@@ -440,7 +440,7 @@ export default [
     topics: ['extrema'],
     vars: { n: range(1, 50, 1) },
     text: (T) =>
-      `Let $f(x,y)=${T.n}x^2-y^2$. True or false: if $\\nabla f(a,b)=(0,0)$, then $f$ has a local min or max at $(a,b)$.`,
+      `Let $f(x,y)=${coef(T.n)}x^2-y^2$. True or false: if $\\nabla f(a,b)=(0,0)$, then $f$ has a local min or max at $(a,b)$.`,
     parts: [tf('tf', false, { label: 'statement' })],
     hints: [
       'A saddle is a critical point that is neither a min nor a max.',

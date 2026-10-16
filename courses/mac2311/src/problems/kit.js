@@ -123,7 +123,17 @@ export function problem(spec) {
   };
 }
 
-export const kase = (src, v, want, o = {}) => ({ src, v, want, key: o.key ?? null, note: o.note ?? null });
+export const coef = (c) => (String(c) === '1' ? '' : String(c) === '-1' ? '-' : String(c));
+
+export const kase = (src, v, want, o = {}) => ({
+  src,
+  v,
+  want,
+  key: o.key ?? null,
+  note: o.note ?? null,
+  accept: o.accept ?? null,
+  reject: o.reject ?? null,
+});
 
 export function domain(s, { xMin, xMax, yMin, yMax, plane = 'xy' } = {}) {
   const extent = Math.max(1e-9, Math.abs(xMin), Math.abs(xMax), Math.abs(yMin), Math.abs(yMax));

@@ -314,6 +314,11 @@ export default [
       String.raw`The polynomial is $${expTaylor($.a)}$.`,
       String.raw`At $x=1/2$ it equals $${f($.val)}$.`,
     ],
-    cases: [kase('a=1', { a: 1 }, { formula: '1+x+1/2*x^2', val: 1.625 })],
+    cases: [
+      kase('a=1', { a: 1 }, { formula: '1+x+1/2*x^2', val: 1.625 }, {
+        accept: { formula: ['1+x+x^2/2'] },
+        reject: { formula: ['1+x+x^2'] },
+      }),
+    ],
   }),
 ];

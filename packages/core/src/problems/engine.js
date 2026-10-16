@@ -812,6 +812,11 @@ export function createEngine(options = {}) {
     return { ok: false, text: units.formatDim(got), want: part.unit };
   }
 
+  function constantOfIntegration(input, symbols) {
+    if ((symbols || []).includes('C')) return false;
+    return /\+\s*C(?![A-Za-z0-9_])/.test(String(input).replace(/[−–]/g, '-'));
+  }
+
   function gradeSymbolic(part, input, $) {
     let want;
     let got;
@@ -825,6 +830,9 @@ export function createEngine(options = {}) {
     try {
       got = compile(input, part.vars, part.alias);
     } catch (e) {
+      if (constantOfIntegration(input, part.vars)) {
+        return { correct: false, feedback: 'use the antiderivative that is 0 at x = 0, no +C' };
+      }
       return { correct: false, feedback: e.message };
     }
     const r = rng(12345);

@@ -7,7 +7,9 @@
  *   1. worked cases reproduce their expected answers (the worksheet key where one exists)
  *   2. N seeded samples satisfy valid(), give finite answers, and give choice answers that are options
  *   3. text, labels, steps render without throwing or printing "undefined"/"NaN"
- *   4. symbolic keys equal get($); the grader accepts the key and rejects a perturbed one
+ *   4. symbolic keys equal get($); the grader accepts the key and rejects a perturbed one.
+ *      A symbolic template's worked case names a formula, an equivalent rewrite, and a wrong answer.
+ *      Problem text never prints a coefficient of 1 against a variable (`1x^{2}`).
  *   5. sim agreement: load the instance into the real lab (applyProblem), run lab.recompute
  *      headless, and compare sim.read(...) with the problem's own answers
  */
@@ -127,6 +129,59 @@ async function checkSim(tpl, inst, label) {
   }
 }
 
+/** A coefficient of 1 written against a variable: `1x^{2}` should be `x^{2}`. */
+function leadingOne(text) {
+  const m = /(?<![0-9.])1[xyz](?![0-9])/.exec(String(text));
+  return m ? m[0] : null;
+}
+
+/**
+ * The key bakes in the version's numbers. Template parameters are not symbols a student types.
+ * The worked case gives the formula, one rewrite that must grade right, and one answer that must not.
+ */
+function checkSymbolicCases(tpl) {
+  const symbolic = tpl.parts.filter((p) => p.kind === 'symbolic');
+  if (!symbolic.length) return;
+  const params = new Set(Object.keys(tpl.vars || {}));
+  for (const part of symbolic) {
+    for (const name of part.vars) {
+      if (params.has(name)) err(tpl.id, `symbolic ${part.id}: ${name} is a template parameter, not a symbol the student types`);
+    }
+    let covered = false;
+    for (const c of tpl.cases) {
+      const formula = c.want?.[part.id];
+      if (typeof formula !== 'string') continue;
+      let inst;
+      try {
+        inst = build(tpl, c.v);
+      } catch {
+        continue;
+      }
+      const graded = gradeSymbolic(part, formula, inst.$);
+      if (!graded.correct) {
+        err(tpl.id, `symbolic ${part.id}: case ${c.src} formula ${JSON.stringify(formula)} grades wrong${graded.feedback ? ` (${graded.feedback})` : ''}`);
+        continue;
+      }
+      const alts = [].concat(c.accept?.[part.id] ?? []).filter((s) => typeof s === 'string' && s);
+      const bads = [].concat(c.reject?.[part.id] ?? []).filter((s) => typeof s === 'string' && s);
+      if (!alts.length || !bads.length) continue;
+      for (const alt of alts) {
+        const g = gradeSymbolic(part, alt, inst.$);
+        if (!g.correct) err(tpl.id, `symbolic ${part.id}: case ${c.src} rewrite ${JSON.stringify(alt)} grades wrong${g.feedback ? ` (${g.feedback})` : ''}`);
+      }
+      for (const bad of bads) {
+        const g = gradeSymbolic(part, bad, inst.$);
+        if (g.correct) err(tpl.id, `symbolic ${part.id}: case ${c.src} wrong answer ${JSON.stringify(bad)} grades right`);
+        else if (/\+\s*C(?![A-Za-z0-9_])/.test(bad) && !/no \+C/.test(g.feedback || '')) {
+          err(tpl.id, `symbolic ${part.id}: typing +C should say to drop the constant, not ${JSON.stringify(g.feedback)}`);
+        }
+      }
+      covered = true;
+    }
+    if (!covered) err(tpl.id, `symbolic ${part.id}: needs a worked case with a formula, an equivalent rewrite, and a wrong answer`);
+  }
+}
+
 const seen = new Set();
 const labsUsed = {};
 for (const tpl of PROBLEMS) {
@@ -144,12 +199,15 @@ for (const tpl of PROBLEMS) {
   const hintCount = Array.isArray(tpl.hints) ? tpl.hints.filter((h) => String(h).trim()).length : 0;
   if (hintCount < 2) err(tpl.id, `need at least 2 hints, have ${hintCount}`);
   let piBad = null;
+  let oneBad = null;
   const versions = countVersions(tpl, {
     need: 50,
     onEach(values) {
-      if (piBad) return;
+      if (piBad && oneBad) return;
       try {
-        piBad = unreducedPi(render(build(tpl, values)).text);
+        const text = render(build(tpl, values)).text;
+        if (!piBad) piBad = unreducedPi(text);
+        if (!oneBad) oneBad = leadingOne(text);
       } catch {
         /* a version that will not build is already excluded from the count */
       }
@@ -157,14 +215,18 @@ for (const tpl of PROBLEMS) {
   });
   if (versions < 50) err(tpl.id, `${versions} distinct versions; need at least 50`);
   for (const c of tpl.cases) {
-    if (piBad) break;
+    if (piBad && oneBad) break;
     try {
-      piBad = unreducedPi(render(build(tpl, c.v)).text);
+      const text = render(build(tpl, c.v)).text;
+      if (!piBad) piBad = unreducedPi(text);
+      if (!oneBad) oneBad = leadingOne(text);
     } catch {
       /* case build errors are reported below */
     }
   }
   if (piBad) err(tpl.id, `write the multiple of π in lowest terms, not ${piBad}`);
+  if (oneBad) err(tpl.id, `write a coefficient of 1 as the variable itself, not ${oneBad}`);
+  checkSymbolicCases(tpl);
 
   // 1. worked cases
   for (const c of tpl.cases) {

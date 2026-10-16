@@ -141,6 +141,14 @@ test('countVersions is the legal cartesian product, and a symbolic key may depen
   assert.equal(evalSymbolic(sym, $), 8);
   assert.equal(grade(sym, $, '4*x').correct, true);
   assert.equal(grade(sym, $, '5*x').correct, false);
+  const plusC = grade(sym, $, '4*x+C');
+  assert.equal(plusC.correct, false);
+  assert.equal(plusC.feedback, 'use the antiderivative that is 0 at x = 0, no +C');
+  assert.equal(grade(sym, $, '4*x + C').feedback, 'use the antiderivative that is 0 at x = 0, no +C');
+  assert.match(grade(sym, $, '4*x+Q').feedback, /Unknown symbol/);
+  const withC = { ...sym, vars: ['x', 'C'] };
+  assert.equal(grade(withC, $, '4*x+C').feedback, '');
+  assert.equal(grade(withC, $, '4*x+C').correct, false);
 });
 
 test('pickSet is stable for a seed and stays inside chapterOrder', () => {

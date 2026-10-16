@@ -14,7 +14,7 @@ import {
   sineRule,
 } from '../../math/calc1.js';
 import { df1 } from '@flux/subjects/math/ndiff.js';
-import { domain, kase, num, problem, range, sym, xPow } from '../kit.js';
+import { coef, domain, kase, num, problem, range, sym, xPow } from '../kit.js';
 
 const plane = { xMin: -2.4, xMax: 2.4, yMin: -0.5, yMax: 4.5, plane: 'xy' };
 
@@ -140,7 +140,7 @@ export default [
     vars: { a: range(1, 5, 1), b: range(1, 4, 1), x: range(0, 2, 1) },
     derive: ($) => ({ fp: chainRule($.a, $.b, $.x) }),
     second: ($) => ({ fp: chainExpanded($.a, $.b, $.x) }),
-    text: (T) => String.raw`Let $f(x)=(${T.a}x+${T.b})^3$. Find $f'(${T.x})$.`,
+    text: (T) => String.raw`Let $f(x)=(${coef(T.a)}x+${T.b})^3$. Find $f'(${T.x})$.`,
     parts: [num('fp', ($) => $.fp, '', { label: "$f'$" })],
     hints: [
       String.raw`Outer derivative $3u^2$, times the inner derivative.`,
@@ -242,7 +242,7 @@ export default [
     vars: { k: range(1, 10, 1), x: range(0, 4, 1) },
     derive: ($) => ({ fp: sineRule($.k, $.x) }),
     second: ($) => ({ fp: sineQuotient($.k, $.x) }),
-    text: (T) => String.raw`Find the derivative of $f(x)=\sin(${T.k}x)$ at $x=${T.x}$.`,
+    text: (T) => String.raw`Find the derivative of $f(x)=\sin(${coef(T.k)}x)$ at $x=${T.x}$.`,
     parts: [num('fp', ($) => $.fp, '', { label: "$f'$" })],
     hints: [
       String.raw`$\dfrac{d}{dx}\sin(kx)=k\cos(kx)$.`,
@@ -268,7 +268,7 @@ export default [
       fp: df1((t) => $.a * t ** $.n, $.x),
     }),
     text: (T) =>
-      String.raw`Let $f(x)=${T.a}x^{${T.n}}$. Write $f'(x)$ as a formula in $x$, and give $f'(2)$.`,
+      String.raw`Let $f(x)=${coef(T.a)}x^{${T.n}}$. Write $f'(x)$ as a formula in $x$, and give $f'(2)$.`,
     parts: [
       sym('formula', ($) => xPow($.a * $.n, 1, $.n - 1), ['x'], ($) => $.a * $.n * $.x ** ($.n - 1), {
         label: "$f'(x)$",
@@ -283,6 +283,11 @@ export default [
       String.raw`$f'(x)=${xPow($.a * $.n, 1, $.n - 1)}$.`,
       String.raw`At $x=2$, $f'(2)=${f($.fp)}$.`,
     ],
-    cases: [kase('a=1, n=2', { a: 1, n: 2 }, { formula: '2*x', fp: 4 })],
+    cases: [
+      kase('a=1, n=2', { a: 1, n: 2 }, { formula: '2*x', fp: 4 }, {
+        accept: { formula: ['2x'] },
+        reject: { formula: ['x^2'] },
+      }),
+    ],
   }),
 ];
