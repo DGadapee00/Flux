@@ -94,7 +94,7 @@ export default [
     topics: ['partials'],
     vars: { n: range(1, 50, 1) },
     text: (T) =>
-      `Let $f(x,y)=${T.n}x^2 y$. True or false: if the mixed partials of $f$ are continuous on a disk about $P$, then $f_{xy}(P)=f_{yx}(P)$.`,
+      `Let $f(x,y)=${coef(T.n)}x^2 y$. True or false: if the mixed partials of $f$ are continuous on a disk about $P$, then $f_{xy}(P)=f_{yx}(P)$.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
       'This is the equality of mixed partials when they are continuous.',
@@ -116,7 +116,7 @@ export default [
     topics: ['partials'],
     vars: { n: range(1, 50, 1) },
     text: (T) =>
-      `Let $f(x,y)=${T.n}x^2+y$. The partial $\\partial f/\\partial x$ at $P$ is the derivative of which one-variable slice?`,
+      `Let $f(x,y)=${coef(T.n)}x^2+y$. The partial $\\partial f/\\partial x$ at $P$ is the derivative of which one-variable slice?`,
     parts: [
       mc(
         'slice',
@@ -313,7 +313,7 @@ export default [
     topics: ['chain'],
     vars: { n: range(1, 50, 1) },
     text: (T) =>
-      `Let $f(x,y)=${T.n}xy$ and let $\\gamma$ be a smooth curve. True or false: if $g=f\\circ\\gamma$, then $g'(t)=\\nabla f(\\gamma(t))\\cdot\\gamma'(t)$.`,
+      `Let $f(x,y)=${coef(T.n)}xy$ and let $\\gamma$ be a smooth curve. True or false: if $g=f\\circ\\gamma$, then $g'(t)=\\nabla f(\\gamma(t))\\cdot\\gamma'(t)$.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
       "Write out $\\nabla f\\cdot\\gamma'=(f_x, f_y)\\cdot(x', y')$.",
@@ -335,7 +335,7 @@ export default [
     topics: ['chain'],
     vars: { n: range(1, 50, 1) },
     text: (T) =>
-      `Let $f(x,y)=${T.n}(x^2+y^2)$ and $h(s,t)=f(s\\cos t,\\, s\\sin t)$. Finding $\\partial h/\\partial s$ and $\\partial h/\\partial t$ is which version of the chain rule?`,
+      `Let $f(x,y)=${coef(T.n)}(x^2+y^2)$ and $h(s,t)=f(s\\cos t,\\, s\\sin t)$. Finding $\\partial h/\\partial s$ and $\\partial h/\\partial t$ is which version of the chain rule?`,
     parts: [
       mc(
         'ver',

@@ -1,4 +1,4 @@
-import { problem, range, num, tf, kase, domain, choice } from '../kit.js';
+import { coef, problem, range, num, tf, kase, domain, choice } from '../kit.js';
 import { riemann1d } from '../../math/riemann.js';
 import { graphById } from '../../math/graphs1.js';
 
@@ -106,7 +106,7 @@ export default [
     topics: ['limits'],
     vars: { m: range(1, 50, 1) },
     text: (T) =>
-      `True or false: if $f'(c)=0$, then $f$ has a local min or max at $c$. The counterexample family is $f(x)=${T.m}x^3$.`,
+      `True or false: if $f'(c)=0$, then $f$ has a local min or max at $c$. The counterexample family is $f(x)=${coef(T.m)}x^3$.`,
     parts: [tf('tf', false, { label: 'statement' })],
     hints: [
       "$f(x)=mx^3$ has $f'(0)=0$ and is strictly increasing when $m>0$.",
@@ -129,7 +129,7 @@ export default [
     vars: { m: range(1, 50, 1) },
     derive: () => ({ f0: 0, fp: 0 }),
     text: (T) =>
-      `Define $f(0)=0$ and $f(x)=x^2\\sin(1/x)$ for $x\\neq 0$. The bound $|f(x)|\\le ${T.m}x^2$ holds. Find $f(0)$ and $f'(0)$.`,
+      `Define $f(0)=0$ and $f(x)=x^2\\sin(1/x)$ for $x\\neq 0$. The bound $|f(x)|\\le ${coef(T.m)}x^2$ holds. Find $f(0)$ and $f'(0)$.`,
     parts: [
       num('f0', ($) => $.f0, '', { label: '$f(0)$', abs: 0.02 }),
       num('fp', ($) => $.fp, '', { label: "$f'(0)$", abs: 0.05 }),

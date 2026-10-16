@@ -1,4 +1,4 @@
-import { problem, range, num, mc, tf, kase, domain } from '../kit.js';
+import { coef, problem, range, num, mc, tf, kase, domain } from '../kit.js';
 
 const sq = { xMin: 0, xMax: 1, yMin: 0, yMax: 1 };
 
@@ -54,7 +54,7 @@ export default [
     vars: { a: range(1, 8, 1), b: range(1, 8, 1) },
     derive: ($) => ({ sum: 0.3125 * ($.a + $.b) }),
     text: (T) =>
-      `Let $f(x,y)=${T.a}x^2+${T.b}y^2$ on $[0,1]\\times[0,1]$. Compute the midpoint Riemann sum with $n=2$ (four equal squares).`,
+      `Let $f(x,y)=${coef(T.a)}x^2+${coef(T.b)}y^2$ on $[0,1]\\times[0,1]$. Compute the midpoint Riemann sum with $n=2$ (four equal squares).`,
     parts: [num('sum', ($) => $.sum, '', { label: 'sum', abs: 0.02 })],
     hints: [
       'Centres at $(1/4,1/4)$, $(1/4,3/4)$, $(3/4,1/4)$, $(3/4,3/4)$. Each $\\Delta A=1/4$.',
@@ -92,7 +92,7 @@ export default [
     vars: { a: range(1, 8, 1), b: range(1, 8, 1) },
     derive: ($) => ({ I: ($.a + $.b) / 3 }),
     text: (T) =>
-      `Let $f(x,y)=${T.a}x^2+${T.b}y^2$ on $D=[0,1]\\times[0,1]$. Find $\\iint_D f\\,dA$.`,
+      `Let $f(x,y)=${coef(T.a)}x^2+${coef(T.b)}y^2$ on $D=[0,1]\\times[0,1]$. Find $\\iint_D f\\,dA$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iint$', abs: 0.03 })],
     hints: [
       'Iterate: $\\int_0^1(ax^2+by^2)\\,dy = ax^2+b/3$. Then integrate in $x$.',
@@ -125,7 +125,7 @@ export default [
     topics: ['riemann'],
     vars: { n: range(1, 50, 1) },
     text: (T) =>
-      `Let $f(x,y)=${T.n}x^2+y^2$, which is continuous. True or false: on a closed rectangle $D$, every Riemann sum (any sample point) tends to $\\iint_D f\\,dA$ as the mesh goes to zero.`,
+      `Let $f(x,y)=${coef(T.n)}x^2+y^2$, which is continuous. True or false: on a closed rectangle $D$, every Riemann sum (any sample point) tends to $\\iint_D f\\,dA$ as the mesh goes to zero.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
       'Continuity on a closed rectangle is enough for integrability, and the sample point in each cell does not matter in the limit.',
@@ -147,7 +147,7 @@ export default [
     topics: ['fubini'],
     vars: { n: range(1, 50, 1) },
     text: (T) =>
-      `Let $f(x,y)=${T.n}xy$, continuous on a rectangle $[a,b]\\times[c,d]$. True or false: $\\int_a^b\\int_c^d f\\,dy\\,dx = \\int_c^d\\int_a^b f\\,dx\\,dy$.`,
+      `Let $f(x,y)=${coef(T.n)}xy$, continuous on a rectangle $[a,b]\\times[c,d]$. True or false: $\\int_a^b\\int_c^d f\\,dy\\,dx = \\int_c^d\\int_a^b f\\,dx\\,dy$.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
       'This is Fubini on a rectangle.',
@@ -169,7 +169,7 @@ export default [
     topics: ['iterated'],
     vars: { a: range(1, 8, 1), b: range(1, 8, 1) },
     derive: ($) => ({ I: ($.a + $.b) / 3 }),
-    text: (T) => `Evaluate $\\int_0^1\\int_0^1(${T.a}x^2+${T.b}y^2)\\,dy\\,dx$.`,
+    text: (T) => `Evaluate $\\int_0^1\\int_0^1(${coef(T.a)}x^2+${coef(T.b)}y^2)\\,dy\\,dx$.`,
     parts: [num('I', ($) => $.I, '', { label: 'value', abs: 0.03 })],
     hints: [
       'Inner: $\\int_0^1(ax^2+by^2)\\,dy = ax^2+b/3$. Then integrate in $x$.',
@@ -206,7 +206,7 @@ export default [
     topics: ['iterated'],
     vars: { a: range(1, 5, 1), A: range(1, 4, 1), B: range(1, 3, 1) },
     derive: ($) => ({ I: $.a * (($.A * $.A) / 2) * (($.B * $.B) / 2) }),
-    text: (T) => `Evaluate $\\iint_D ${T.a}xy\\,dA$ for $D=[0,${T.A}]\\times[0,${T.B}]$.`,
+    text: (T) => `Evaluate $\\iint_D ${coef(T.a)}xy\\,dA$ for $D=[0,${T.A}]\\times[0,${T.B}]$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iint$', abs: 0.03 })],
     hints: [
       'The variables separate: $a\\bigl(\\int_0^A x\\,dx\\bigr)\\bigl(\\int_0^B y\\,dy\\bigr)$.',
@@ -342,7 +342,7 @@ export default [
     vars: { a: range(1, 8, 1), b: range(1, 8, 1) },
     derive: ($) => ({ I: (Math.PI / 4) * ($.a + $.b) }),
     text: (T) =>
-      `Evaluate $\\iint_{D_1}(${T.a}x^2+${T.b}y^2)\\,dA$ in polar coordinates, where $D_1$ is the unit disk.`,
+      `Evaluate $\\iint_{D_1}(${coef(T.a)}x^2+${coef(T.b)}y^2)\\,dA$ in polar coordinates, where $D_1$ is the unit disk.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iint$', abs: 0.05 })],
     hints: [
       '$ax^2+by^2 = r^2(a\\cos^2\\theta+b\\sin^2\\theta)$, times the Jacobian $r$.',
@@ -374,7 +374,7 @@ export default [
     topics: ['polar-integral'],
     vars: { n: range(1, 50, 1) },
     text: (T) =>
-      `Let $f(x,y)=${T.n}(x^2+y^2)$. When changing $\\iint_{D_R} f(x,y)\\,dA$ to polar, the area element is which of the following?`,
+      `Let $f(x,y)=${coef(T.n)}(x^2+y^2)$. When changing $\\iint_{D_R} f(x,y)\\,dA$ to polar, the area element is which of the following?`,
     parts: [
       mc(
         'dA',
@@ -408,7 +408,7 @@ export default [
     topics: ['polar-integral'],
     vars: { a: range(1, 10, 1), R: range(1, 5, 1) },
     derive: () => ({ I: 0 }),
-    text: (T) => `Evaluate $\\iint_{D} ${T.a}xy\\,dA$, where $D$ is the disk of radius ${T.R} about the origin.`,
+    text: (T) => `Evaluate $\\iint_{D} ${coef(T.a)}xy\\,dA$, where $D$ is the disk of radius ${T.R} about the origin.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iint$', abs: 0.05 })],
     hints: [
       '$xy$ is odd in $x$ and the disk is symmetric about $x=0$. Polar: $\\int_0^{2\\pi}\\cos\\theta\\sin\\theta\\,d\\theta=0$.',

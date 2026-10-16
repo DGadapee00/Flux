@@ -18,7 +18,7 @@ import {
   squareMvt,
   squareMvtQuotient,
 } from '../../math/calc1.js';
-import { domain, kase, num, problem, range } from '../kit.js';
+import { coef, domain, kase, num, problem, range } from '../kit.js';
 
 export default [
   problem({
@@ -108,7 +108,7 @@ export default [
       const x = cubicCriticalSearch($.k);
       return { x, y: x * x * x - $.k * x };
     },
-    text: (T) => String.raw`Let $f(x)=x^3-${T.k}x$. Find the positive critical point, and $f$ there.`,
+    text: (T) => String.raw`Let $f(x)=x^3-${coef(T.k)}x$. Find the positive critical point, and $f$ there.`,
     parts: [
       num('x', ($) => $.x, '', { label: 'critical point', abs: 1e-4 }),
       num('y', ($) => $.y, '', { label: '$f$', abs: 1e-4 }),
@@ -162,7 +162,7 @@ export default [
     vars: { a: range(1, 50, 1) },
     derive: ($) => ({ x: cubicInflection($.a) }),
     second: ($) => ({ x: cubicInflectionSearch($.a) }),
-    text: (T) => String.raw`Let $f(x)=x^3+${T.a}x^2$. Find the $x$-coordinate of the inflection point.`,
+    text: (T) => String.raw`Let $f(x)=x^3+${coef(T.a)}x^2$. Find the $x$-coordinate of the inflection point.`,
     parts: [num('x', ($) => $.x, '', { label: 'inflection', abs: 1e-4 })],
     hints: [
       'Set the second derivative equal to zero.',
@@ -212,7 +212,7 @@ export default [
     vars: { k: range(1, 50, 1) },
     derive: ($) => ({ lim: sincLimit($.k) }),
     second: ($) => ({ lim: sincLimitHopital($.k) }),
-    text: (T) => String.raw`Find $\lim_{x\to 0}\dfrac{\sin(${T.k}x)}{x}$.`,
+    text: (T) => String.raw`Find $\lim_{x\to 0}\dfrac{\sin(${coef(T.k)}x)}{x}$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit', abs: 1e-4 })],
     hints: [
       String.raw`The form is $0/0$. The derivative of $\sin(kx)$ at $0$ is $k$.`,

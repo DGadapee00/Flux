@@ -155,22 +155,25 @@
 
   #app {
     --hdr: calc(var(--below-brand, 150px) - 12px);
+    --readout-h: calc(96px + env(safe-area-inset-bottom));
   }
 
-  /* Toggles were pinned top-right, which is now the header. Put them under it, scrolling. */
+  /* Toggles sit under the header. They wrap so the last chip is not cut off the right edge. */
   .toggles {
     top: var(--hdr);
     left: 0;
     right: 0;
     max-width: none;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scrollbar-width: none;
+    flex-wrap: wrap;
+    overflow: visible;
     justify-content: flex-start;
     border-radius: 0;
     border-width: 0 0 1px;
     padding: 6px 10px;
+  }
+
+  .toggles .sheet-switch {
+    flex: 0 0 auto;
   }
 
   .toggles .toggle,
@@ -180,8 +183,9 @@
   }
 
   /*
-   * The readout becomes a single scrolling row pinned to the bottom edge. A fixed row count makes
-   * its height predictable, which is what lets Setup sit above it without measuring anything.
+   * Four cells wrap onto two rows. A scrolling row with the scrollbar hidden left the last two
+   * (b and match, on Arc length) off the right edge. The height stays fixed so Setup can sit
+   * above the readout without measuring it.
    */
   .readout {
     left: 0;
@@ -191,13 +195,16 @@
     transform: none;
     border-radius: 0;
     border-width: 1px 0 0;
-    grid-template-columns: none;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(45%, max-content);
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scrollbar-width: none;
-    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: row;
+    overflow: hidden;
+    row-gap: 4px;
+    padding: 6px 12px calc(6px + env(safe-area-inset-bottom));
+  }
+
+  .readout .cell:nth-child(2n + 1) {
+    border-left: 0;
+    padding-left: 0;
   }
 
   /*
@@ -208,7 +215,7 @@
    */
   .controls {
     top: auto;
-    bottom: calc(54px + env(safe-area-inset-bottom));
+    bottom: var(--readout-h);
     left: 0;
     right: 0;
     width: auto;
@@ -283,8 +290,7 @@
     bottom: 0;
     max-width: none;
     margin-inline: 0;
-    height: calc(50px + env(safe-area-inset-bottom));
-    padding: 0 12px env(safe-area-inset-bottom);
+    height: var(--readout-h);
     align-content: center;
   }
 
@@ -344,7 +350,7 @@
   .eq-panel {
     display: none;
     top: auto;
-    bottom: calc(54px + env(safe-area-inset-bottom));
+    bottom: var(--readout-h);
     left: 0;
     right: 0;
     width: auto;
@@ -375,14 +381,14 @@
    * The legend is a colour key, not content — it should not cost a tenth of the screen. Stretching
    * it full width was wrong twice over: it covered the scene horizontally as well as vertically.
    * Back to roughly its desktop width, and tighter, since it sits over the canvas here.
-   * Clear of the toggle strip, which is a fixed 47px now that it scrolls instead of wrapping.
+   * Clear of the toggle strip. Two wrapped rows of chips are about 90px.
    */
   .legend {
     left: 10px;
     right: auto;
     width: 172px;
     bottom: auto;
-    top: calc(var(--hdr) + 56px);
+    top: calc(var(--hdr) + 104px);
     padding: 5px 8px;
   }
 

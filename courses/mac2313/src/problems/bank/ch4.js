@@ -1,4 +1,4 @@
-import { problem, range, num, mc, tf, kase, domain } from '../kit.js';
+import { coef, problem, range, num, mc, tf, kase, domain } from '../kit.js';
 
 const box = { xMin: -2, xMax: 2, yMin: -2, yMax: 2 };
 
@@ -362,7 +362,7 @@ export default [
     topics: ['partials3'],
     vars: { n: range(1, 50, 1) },
     text: (T) =>
-      `Let $f(x,y,z)=${T.n}x^2 y z$. True or false: if the second partials of $f$ are continuous near $P$, then $f_{xy}(P)=f_{yx}(P)$, $f_{xz}(P)=f_{zx}(P)$, and $f_{yz}(P)=f_{zy}(P)$.`,
+      `Let $f(x,y,z)=${coef(T.n)}x^2 y z$. True or false: if the second partials of $f$ are continuous near $P$, then $f_{xy}(P)=f_{yx}(P)$, $f_{xz}(P)=f_{zx}(P)$, and $f_{yz}(P)=f_{zy}(P)$.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
       'This is the three-variable analogue of the equality of mixed partials.',
@@ -384,7 +384,7 @@ export default [
     topics: ['partials3'],
     vars: { n: range(1, 50, 1) },
     text: (T) =>
-      `Let $f(x,y,z)=${T.n}x^2+y^2-z^2$. True or false: if $\\nabla f(a,b,c)=(0,0,0)$, then $f$ has a local min or max at $(a,b,c)$.`,
+      `Let $f(x,y,z)=${coef(T.n)}x^2+y^2-z^2$. True or false: if $\\nabla f(a,b,c)=(0,0,0)$, then $f$ has a local min or max at $(a,b,c)$.`,
     parts: [tf('tf', false, { label: 'statement' })],
     hints: [
       '$f=x^2+y^2-z^2$ has $\\nabla f=(0,0,0)$ at the origin and takes both signs nearby.',
