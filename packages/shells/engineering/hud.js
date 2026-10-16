@@ -310,6 +310,38 @@ export function createHUD(api, catalog) {
       : 'Shift-drag for height';
   }
 
+  function drawPlot(plot) {
+    const canvas = $('mini-plot');
+    if (!canvas) return;
+    if (!plot) {
+      canvas.hidden = true;
+      canvas.classList.remove('series');
+      return;
+    }
+    canvas.hidden = false;
+    canvas.classList.toggle('series', plot.type === 'series');
+    if (plot.type === 'Vx') drawVx(canvas, plot.xs, plot.Vs, plot.xProbe, plot.xA);
+    if (plot.type === 'ac') drawAC(canvas, plot.power, plot.t);
+    if (plot.type === 'vi') drawVI(canvas, plot);
+    if (plot.type === 'series') drawSeries(canvas, plot);
+    drawnSize = `${canvas.clientWidth}x${canvas.clientHeight}`;
+  }
+
+  let lastPlot = null;
+  let drawnSize = '';
+  const plotCanvas = $('mini-plot');
+  if (plotCanvas && typeof ResizeObserver !== 'undefined') {
+    let frame = 0;
+    const observer = new ResizeObserver(() => {
+      const size = `${plotCanvas.clientWidth}x${plotCanvas.clientHeight}`;
+      if (!lastPlot || plotCanvas.clientWidth < 2 || plotCanvas.clientHeight < 2 || size === drawnSize) return;
+      drawnSize = size;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => drawPlot(lastPlot));
+    });
+    observer.observe(plotCanvas);
+  }
+
   function update(state, computed, lab) {
     if (!lab) {
       $('eq-live').innerHTML = '';
@@ -342,19 +374,8 @@ export function createHUD(api, catalog) {
     $('eq-live').innerHTML = lab.liveRows(state, computed);
     $('readout').innerHTML = lab.readout(state, computed);
 
-    const plot = lab.plot(state, computed);
-    const canvas = $('mini-plot');
-    if (!plot) {
-      canvas.hidden = true;
-      canvas.classList.remove('series');
-    } else {
-      canvas.hidden = false;
-      canvas.classList.toggle('series', plot.type === 'series');
-      if (plot.type === 'Vx') drawVx(canvas, plot.xs, plot.Vs, plot.xProbe, plot.xA);
-      if (plot.type === 'ac') drawAC(canvas, plot.power, plot.t);
-      if (plot.type === 'vi') drawVI(canvas, plot);
-      if (plot.type === 'series') drawSeries(canvas, plot);
-    }
+    lastPlot = lab.plot(state, computed);
+    drawPlot(lastPlot);
     bindPredict();
     renderPredict(lab);
   }
