@@ -27,7 +27,10 @@ export default [
       num('fyy', ($) => $.fyy, '', { label: '$f_{yy}$' }),
       num('fxy', ($) => $.fxy, '', { label: '$f_{xy}$', abs: 0.02 }),
     ],
-    hints: ['Differentiate $f_x=2ax$ and $f_y=2by$ once more. Mixed is zero because neither first partial sees the other variable.'],
+    hints: [
+      'Differentiate $f_x=2ax$ and $f_y=2by$ once more. Mixed is zero because neither first partial sees the other variable.',
+      'Second pure partials of a quadratic are constant, so the point does not change $f_{xx}$ or $f_{yy}$.',
+    ],
     steps: ($, f) => [`$f_{xx}=${f($.fxx)}$, $f_{yy}=${f($.fyy)}$, $f_{xy}=${f($.fxy)}$.`],
     sim: {
       scenario: 'paraboloid',
@@ -61,7 +64,10 @@ export default [
     text: (T) =>
       `Let $f(x,y)=${coef(T.a)}x^2 y$. Find $f_{xy}$ at $(${T.x0}, ${T.y0})$.`,
     parts: [num('fxy', ($) => $.fxy, '', { label: '$f_{xy}$', abs: 0.02 })],
-    hints: ['$f_x=2axy$, then differentiate in $y$. Or $f_y=ax^2$, then differentiate in $x$. Schwarz says the two orders match.'],
+    hints: [
+      '$f_x=2axy$, then differentiate in $y$. Or $f_y=ax^2$, then differentiate in $x$. Schwarz says the two orders match.',
+      'The mixed partial is $2ax$. The $y$-coordinate is not in it.',
+    ],
     steps: ($, f, T) => [`$f_x=${prod(2, T.a)}xy$, so $f_{xy}=${prod(2, T.a)}x=${f($.fxy)}$.`],
     sim: {
       scenario: 'prod2',
@@ -86,13 +92,16 @@ export default [
     kind: 'conceptual',
     level: 1,
     topics: ['partials'],
-    vars: { dummy: range(1, 1, 1) },
-    text: () =>
-      `True or false: if the mixed partials of $f$ are continuous on a disk about $P$, then $f_{xy}(P)=f_{yx}(P)$.`,
+    vars: { n: range(1, 50, 1) },
+    text: (T) =>
+      `Let $f(x,y)=${T.n}x^2 y$. True or false: if the mixed partials of $f$ are continuous on a disk about $P$, then $f_{xy}(P)=f_{yx}(P)$.`,
     parts: [tf('tf', true, { label: 'statement' })],
-    hints: ['This is the equality of mixed partials when they are continuous.'],
+    hints: [
+      'This is the equality of mixed partials when they are continuous.',
+      'Continuity of the mixed partials is the hypothesis. Differentiability of $f$ alone is not what the theorem asks for.',
+    ],
     steps: () => ['True — that is Theorem 12.'],
-    cases: [kase('sample', { dummy: 1 }, { tf: 1 })],
+    cases: [kase('sample', { n: 1 }, { tf: 1 })],
   }),
 
   problem({
@@ -105,9 +114,9 @@ export default [
     kind: 'conceptual',
     level: 1,
     topics: ['partials'],
-    vars: { dummy: range(1, 1, 1) },
-    text: () =>
-      `The partial $\\partial f/\\partial x$ at $P$ is the derivative of which one-variable slice?`,
+    vars: { n: range(1, 50, 1) },
+    text: (T) =>
+      `Let $f(x,y)=${T.n}x^2+y$. The partial $\\partial f/\\partial x$ at $P$ is the derivative of which one-variable slice?`,
     parts: [
       mc(
         'slice',
@@ -121,9 +130,12 @@ export default [
         { label: 'slice' },
       ),
     ],
-    hints: ['$P_y(x)=f(x,y)$ with $y$ locked. Its ordinary derivative is $f_x$.'],
+    hints: [
+      '$P_y(x)=f(x,y)$ with $y$ locked. Its ordinary derivative is $f_x$.',
+      '$Q_x$ holds $x$ fixed and varies $y$, which produces $f_y$ instead.',
+    ],
     steps: () => ['$P_y$, the slice that holds $y$ fixed.'],
-    cases: [kase('sample', { dummy: 1 }, { slice: 'Py' })],
+    cases: [kase('sample', { n: 1 }, { slice: 'Py' })],
   }),
 
   problem({
@@ -136,15 +148,18 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['chain'],
-    vars: { k: range(0, 3, 1) },
+    vars: { deg: range(0, 350, 5) },
     derive: ($) => {
-      const t = ($.k * Math.PI) / 6;
+      const t = $.deg * Math.PI / 180;
       return { t, gp: Math.cos(2 * t) };
     },
-    text: (T, $) =>
-      `Let $f(x,y)=xy$ and $\\gamma(t)=(\\cos t,\\sin t)$. For $g=f\\circ\\gamma$, find $g'(t)$ at $t=${['0', '\\pi/6', '\\pi/3', '\\pi/2'][Number(T.k)]}$.`,
+    text: (T) =>
+      `Let $f(x,y)=xy$ and $\\gamma(t)=(\\cos t,\\sin t)$. For $g=f\\circ\\gamma$, find $g'(t)$ at the angle $${T.deg}^\\circ$.`,
     parts: [num('gp', ($) => $.gp, '', { label: "$g'(t)$", abs: 0.03 })],
-    hints: ["$g'(t)=f_x x'+f_y y'$. Here $f_x=y$, $f_y=x$, $x'=-\\sin t$, $y'=\\cos t$."],
+    hints: [
+      "$g'(t)=f_x x'+f_y y'$. Here $f_x=y$, $f_y=x$, $x'=-\\sin t$, $y'=\\cos t$.",
+      'The product simplifies to $\\cos 2t$. Convert the given angle to radians before evaluating.',
+    ],
     steps: ($, f) => [`$g'(t)=\\cos 2t=${f($.gp)}$.`],
     sim: {
       scenario: 'xy-circle',
@@ -160,7 +175,7 @@ export default [
       },
       read: (c) => ({ gp: c.gp }),
     },
-    cases: [kase('sample', { k: 0 }, { gp: 1 })],
+    cases: [kase('sample', { deg: 0 }, { gp: 1 })],
   }),
 
   problem({
@@ -173,12 +188,15 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['chain'],
-    vars: { t0: range(0.5, 1, 0.5) },
+    vars: { t0: range(-1.4, 1.4, 0.05) },
     derive: ($) => ({ gp: 2 * $.t0 + 4 * $.t0 * $.t0 * $.t0 }),
     text: (T) =>
       `Let $f(x,y)=x^2+y^2$ and $\\gamma(t)=(t, t^2)$. For $g=f\\circ\\gamma$, find $g'(${T.t0})$.`,
     parts: [num('gp', ($) => $.gp, '', { label: "$g'$", abs: 0.03 })],
-    hints: ["$f_x=2x$, $f_y=2y$, $x'=1$, $y'=2t$, so $g'=2t+4t^3$."],
+    hints: [
+      "$f_x=2x$, $f_y=2y$, $x'=1$, $y'=2t$, so $g'=2t+4t^3$.",
+      'On $\\gamma(t)=(t,t^2)$ the chain rule uses $x=t$ and $y=t^2$, so the $y$ term contributes $4t^3$.',
+    ],
     steps: ($, f) => [`$g'=2t+4t^3=${f($.gp)}$.`],
     sim: {
       scenario: 'para-parab',
@@ -208,14 +226,17 @@ export default [
     level: 2,
     topics: ['chain'],
     vars: {
-      s0: range(0.5, 1.5, 0.5),
-      deg: range(0, 180, 90),
+      s0: range(0.4, 1.9, 0.1),
+      deg: range(0, 330, 30),
     },
     derive: ($) => ({ hs: 2 * $.s0, ht: 0, t: ($.deg * Math.PI) / 180 }),
     text: (T) =>
       `Let $f(x,y)=x^2+y^2$ and $h(s,t)=f(s\\cos t,\\, s\\sin t)$. Find $\\partial h/\\partial s$ at $s=${T.s0}$, $t=${T.deg}^\\circ$.`,
     parts: [num('hs', ($) => $.hs, '', { label: '$h_s$', abs: 0.03 })],
-    hints: ['$h(s,t)=s^2$, so $h_s=2s$ at every angle.'],
+    hints: [
+      '$h(s,t)=s^2$, so $h_s=2s$ at every angle.',
+      'The angle changes the point on the circle of radius $s$, not the radial derivative of $s^2$.',
+    ],
     steps: ($, f) => [`$h_s=2s=${f($.hs)}$.`],
     sim: {
       scenario: 'para-polar',
@@ -247,16 +268,18 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['chain'],
-    vars: { k: range(0, 2, 1) },
+    vars: { s0: range(1, 4, 1), deg: range(0, 330, 15) },
     derive: ($) => {
-      const t = ($.k * Math.PI) / 4;
-      const s = 1;
-      return { s, t, ht: s * s * Math.cos(2 * t) };
+      const t = ($.deg * Math.PI) / 180;
+      return { s: $.s0, t, ht: $.s0 * $.s0 * Math.cos(2 * t) };
     },
-    text: (T, $) =>
-      `Let $f(x,y)=xy$ and $h(s,t)=f(s\\cos t,\\, s\\sin t)$. Find $\\partial h/\\partial t$ at $s=1$, $t=${['0', '\\pi/4', '\\pi/2'][Number(T.k)]}$.`,
+    text: (T) =>
+      `Let $f(x,y)=xy$ and $h(s,t)=f(s\\cos t,\\, s\\sin t)$. Find $\\partial h/\\partial t$ at $s=${T.s0}$, $t=${T.deg}^\\circ$.`,
     parts: [num('ht', ($) => $.ht, '', { label: '$h_t$', abs: 0.03 })],
-    hints: ['$h_t=f_x x_t+f_y y_t$ with $x_t=-s\\sin t$, $y_t=s\\cos t$. At $s=1$ this is $\\cos 2t$.'],
+    hints: [
+      '$h_t=f_x x_t+f_y y_t$ with $x_t=-s\\sin t$, $y_t=s\\cos t$. The result is $s^2\\cos 2t$.',
+      'Square the radius first, then multiply by $\\cos 2t$. Convert degrees before using the double angle.',
+    ],
     steps: ($, f) => [`$h_t=\\cos 2t=${f($.ht)}$.`],
     sim: {
       scenario: 'xy-polar',
@@ -266,7 +289,7 @@ export default [
         slice.innerId = 'polar';
         slice.params = { a: 1, b: 1, c: 0 };
         slice.sMin = 0.3;
-        slice.sMax = 2;
+        slice.sMax = 4;
         slice.t0 = 0;
         slice.t1 = 2 * Math.PI;
         slice.s = $.s;
@@ -275,7 +298,7 @@ export default [
       },
       read: (c) => ({ ht: c.ht }),
     },
-    cases: [kase('sample', { k: 0 }, { ht: 1 })],
+    cases: [kase('sample', { s0: 1, deg: 0 }, { ht: 1 })],
   }),
 
   problem({
@@ -288,13 +311,16 @@ export default [
     kind: 'conceptual',
     level: 1,
     topics: ['chain'],
-    vars: { dummy: range(1, 1, 1) },
-    text: () =>
-      `True or false: if $g=f\\circ\\gamma$, then $g'(t)=\\nabla f(\\gamma(t))\\cdot\\gamma'(t)$.`,
+    vars: { n: range(1, 50, 1) },
+    text: (T) =>
+      `Let $f(x,y)=${T.n}xy$ and let $\\gamma$ be a smooth curve. True or false: if $g=f\\circ\\gamma$, then $g'(t)=\\nabla f(\\gamma(t))\\cdot\\gamma'(t)$.`,
     parts: [tf('tf', true, { label: 'statement' })],
-    hints: ["Write out $\\nabla f\\cdot\\gamma'=(f_x, f_y)\\cdot(x', y')$."],
+    hints: [
+      "Write out $\\nabla f\\cdot\\gamma'=(f_x, f_y)\\cdot(x', y')$.",
+      'The coefficient in $f$ scales both sides. It does not change the identity.',
+    ],
     steps: () => ["True — that is Theorem 15 rewritten with a dot product."],
-    cases: [kase('sample', { dummy: 1 }, { tf: 1 })],
+    cases: [kase('sample', { n: 1 }, { tf: 1 })],
   }),
 
   problem({
@@ -307,9 +333,9 @@ export default [
     kind: 'conceptual',
     level: 1,
     topics: ['chain'],
-    vars: { dummy: range(1, 1, 1) },
-    text: () =>
-      `Let $h(s,t)=f(s\\cos t,\\, s\\sin t)$. Finding $\\partial h/\\partial s$ and $\\partial h/\\partial t$ is which version of the chain rule?`,
+    vars: { n: range(1, 50, 1) },
+    text: (T) =>
+      `Let $f(x,y)=${T.n}(x^2+y^2)$ and $h(s,t)=f(s\\cos t,\\, s\\sin t)$. Finding $\\partial h/\\partial s$ and $\\partial h/\\partial t$ is which version of the chain rule?`,
     parts: [
       mc(
         'ver',
@@ -323,8 +349,11 @@ export default [
         { label: 'version' },
       ),
     ],
-    hints: ['The inner map takes two parameters $(s,t)$ to a point in the plane. That is the second version.'],
+    hints: [
+      'The inner map takes two parameters $(s,t)$ to a point in the plane. That is the second version.',
+      'The first version is a single parameter $t$ along a curve $\\gamma(t)$. Here both $s$ and $t$ are inputs.',
+    ],
     steps: () => ['Second version: $g(s,t)=(s\\cos t,\\, s\\sin t)$ and $h=f\\circ g$.'],
-    cases: [kase('sample', { dummy: 1 }, { ver: 'two' })],
+    cases: [kase('sample', { n: 1 }, { ver: 'two' })],
   }),
 ];

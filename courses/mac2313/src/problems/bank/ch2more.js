@@ -4,7 +4,8 @@ const plane = { xMin: -2.5, xMax: 2.5, yMin: -2.5, yMax: 2.5 };
 
 function loadPolar(slice, $) {
   slice.probe = { x: $.x0, y: $.y0, z: 0 };
-  return domain(slice, plane);
+  const m = Math.max(2.5, Math.abs($.x0), Math.abs($.y0)) + 0.5;
+  return domain(slice, { xMin: -m, xMax: m, yMin: -m, yMax: m });
 }
 
 export default [
@@ -19,8 +20,8 @@ export default [
     level: 1,
     topics: ['polar'],
     vars: {
-      x0: range(-2, 2, 1),
-      y0: range(-2, 2, 1),
+      x0: range(-4, 4, 1),
+      y0: range(-4, 4, 1),
     },
     valid: ($) => !($.x0 === 0 && $.y0 === 0),
     derive: ($) => {
@@ -35,7 +36,10 @@ export default [
       num('r', ($) => $.r, '', { label: '$r$', abs: 0.02 }),
       num('thDeg', ($) => $.thDeg, '°', { label: '$\\theta$', wrap: 360, abs: 1 }),
     ],
-    hints: ['$r=\\sqrt{x^2+y^2}$. $\\theta$ is the angle from the positive $x$-axis, taken in $[0,2\\pi)$.'],
+    hints: [
+      '$r=\\sqrt{x^2+y^2}$. $\\theta$ is the angle from the positive $x$-axis, taken in $[0,2\\pi)$.',
+      'A point in the third or fourth quadrant has $\\theta$ past $180^\\circ$. Add $360^\\circ$ if the calculator returns a negative angle.',
+    ],
     steps: ($, f) => [`$r=${f($.r)}$, $\\theta=${f($.thDeg)}^\\circ$.`],
     sim: {
       scenario: 'q1',
@@ -56,8 +60,8 @@ export default [
     level: 1,
     topics: ['polar'],
     vars: {
-      r: range(1, 3, 1),
-      deg: range(0, 315, 45),
+      r: range(1, 4, 1),
+      deg: range(0, 350, 10),
     },
     valid: ($) => $.r > 0,
     derive: ($) => {
@@ -69,13 +73,17 @@ export default [
       num('x', ($) => $.x, '', { label: '$x$', abs: 0.02 }),
       num('y', ($) => $.y, '', { label: '$y$', abs: 0.02 }),
     ],
-    hints: ['$x=r\\cos\\theta$, $y=r\\sin\\theta$. Convert degrees to radians first, or use a known angle.'],
+    hints: [
+      '$x=r\\cos\\theta$, $y=r\\sin\\theta$. Convert degrees to radians first, or use a known angle.',
+      'Cosine is the horizontal component and sine is the vertical one. Watch the quadrant.',
+    ],
     steps: ($, f) => [`$(x,y)=(${f($.x)}, ${f($.y)})$.`],
     sim: {
       scenario: 'q1',
       setup(slice, $) {
         slice.probe = { x: $.x, y: $.y, z: 0 };
-        return domain(slice, { xMin: -3.5, xMax: 3.5, yMin: -3.5, yMax: 3.5 });
+        const m = $.r + 0.5;
+        return domain(slice, { xMin: -m, xMax: m, yMin: -m, yMax: m });
       },
       read: (c) => ({ x: c.back.x, y: c.back.y }),
     },
@@ -92,13 +100,16 @@ export default [
     kind: 'conceptual',
     level: 1,
     topics: ['polar'],
-    vars: { dummy: range(1, 1, 1) },
-    text: () =>
-      `True or false: for every $(x,y)\\neq(0,0)$ there is a unique pair $(r,\\theta)$ with $r>0$ and $\\theta\\in[0,2\\pi)$ such that $x=r\\cos\\theta$ and $y=r\\sin\\theta$.`,
+    vars: { n: range(1, 50, 1) },
+    text: (T) =>
+      `Take the point $(${T.n}, 1)$, which is not the origin. True or false: there is a unique pair $(r,\\theta)$ with $r>0$ and $\\theta\\in[0,2\\pi)$ such that $x=r\\cos\\theta$ and $y=r\\sin\\theta$.`,
     parts: [tf('tf', true, { label: 'statement' })],
-    hints: ['This is Theorem 10. The origin is the only point excluded.'],
+    hints: [
+      'This is Theorem 10. The origin is the only point excluded.',
+      'Adding $2\\pi$ to $\\theta$ lands outside $[0,2\\pi)$, so it is not a second pair in the required range.',
+    ],
     steps: () => ['True — that is the content of the polar-coordinate theorem.'],
-    cases: [kase('sample', { dummy: 1 }, { tf: 1 })],
+    cases: [kase('sample', { n: 1 }, { tf: 1 })],
   }),
 
   problem({
@@ -111,7 +122,7 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['polar'],
-    vars: { deg: range(0, 270, 90) },
+    vars: { deg: range(0, 350, 5) },
     derive: ($) => {
       const th = $.deg * DEG;
       return { rx: Math.cos(th), ry: Math.sin(th) };
@@ -122,7 +133,10 @@ export default [
       num('rx', ($) => $.rx, '', { label: '$\\hat r_x$', abs: 0.02 }),
       num('ry', ($) => $.ry, '', { label: '$\\hat r_y$', abs: 0.02 }),
     ],
-    hints: ['$\\hat r$ is the unit vector pointing from the origin toward $P$.'],
+    hints: [
+      '$\\hat r$ is the unit vector pointing from the origin toward $P$.',
+      'Its length is $1$, so the components are $\\cos\\theta$ and $\\sin\\theta$, not the coordinates of a longer vector.',
+    ],
     steps: ($, f) => [`$\\hat r=(${f($.rx)}, ${f($.ry)})$.`],
     sim: {
       scenario: 'q1',
@@ -145,18 +159,21 @@ export default [
     kind: 'numeric',
     level: 1,
     topics: ['parametric'],
-    vars: { k: range(0, 3, 1) },
+    vars: { deg: range(0, 350, 5) },
     derive: ($) => {
-      const t = ($.k * Math.PI) / 2;
+      const t = $.deg * DEG;
       return { t, x: Math.cos(t), y: Math.sin(t) };
     },
-    text: (T, $) =>
-      `Let $\\gamma(t)=(\\cos t,\\sin t)$. Find $\\gamma(t)$ at $t=${['0', '\\pi/2', '\\pi', '3\\pi/2'][Number(T.k)]}$.`,
+    text: (T) =>
+      `Let $\\gamma(t)=(\\cos t,\\sin t)$. Find $\\gamma(t)$ at the angle $${T.deg}^\\circ$.`,
     parts: [
       num('x', ($) => $.x, '', { label: '$x(t)$', abs: 0.02 }),
       num('y', ($) => $.y, '', { label: '$y(t)$', abs: 0.02 }),
     ],
-    hints: ['Plug the given $t$ into $(\\cos t,\\sin t)$.'],
+    hints: [
+      'Plug the given angle into $(\\cos t,\\sin t)$. Convert degrees to radians first.',
+      'The first component is cosine and the second is sine.',
+    ],
     steps: ($, f) => [`$\\gamma(t)=(${f($.x)}, ${f($.y)})$.`],
     sim: {
       scenario: 'circle',
@@ -169,7 +186,7 @@ export default [
       },
       read: (c) => ({ x: c.x, y: c.y }),
     },
-    cases: [kase('sample', { k: 1 }, { x: 0, y: 1 })],
+    cases: [kase('sample', { deg: 90 }, { x: 0, y: 1 })],
   }),
 
   problem({
@@ -182,7 +199,7 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['parametric'],
-    vars: { t0: range(0.5, 1.5, 0.5) },
+    vars: { t0: range(-1.4, 1.4, 0.05) },
     derive: ($) => {
       const xp = 1;
       const yp = 2 * $.t0;
@@ -191,7 +208,10 @@ export default [
     text: (T) =>
       `Let $\\gamma(t)=(t, t^2)$. Find the slope of the tangent line at $t=${T.t0}$.`,
     parts: [num('slope', ($) => $.slope, '', { label: "$y'/x'$", abs: 0.02 })],
-    hints: ["$x'=1$, $y'=2t$, so the slope is $2t$."],
+    hints: [
+      "$x'=1$, $y'=2t$, so the slope is $2t$.",
+      'The slope uses the parameter $t$, not the $y$-coordinate $t^2$.',
+    ],
     steps: ($, f) => [`$\\text{slope}=2t=${f($.slope)}$.`],
     sim: {
       scenario: 'parabola',
@@ -217,9 +237,18 @@ export default [
     kind: 'conceptual',
     level: 2,
     topics: ['parametric'],
-    vars: { dummy: range(1, 1, 1) },
-    text: () =>
-      `Let $\\gamma(t)=(t^2, t^3-3t)$. At $t=0$, is the tangent horizontal or vertical?`,
+    vars: { t: range(-2, 2, 0.04) },
+    derive: ($) => {
+      const xp = 2 * $.t;
+      const yp = 3 * $.t * $.t - 3;
+      let kind = 'oblique';
+      if (Math.abs(xp) < 1e-9 && Math.abs(yp) < 1e-9) kind = 'cusp';
+      else if (Math.abs(xp) < 1e-9) kind = 'vertical';
+      else if (Math.abs(yp) < 1e-9) kind = 'horizontal';
+      return { kind };
+    },
+    text: (T) =>
+      `Let $\\gamma(t)=(t^2, t^3-3t)$. At $t=${T.t}$, is the tangent horizontal, vertical, oblique, or a cusp?`,
     parts: [
       mc(
         'kind',
@@ -227,26 +256,29 @@ export default [
           ['horizontal', 'Horizontal'],
           ['vertical', 'Vertical'],
           ['oblique', 'Neither — oblique'],
-          ['cusp', 'Undefined'],
+          ['cusp', 'Cusp (speed zero)'],
         ],
-        'vertical',
+        ($) => $.kind,
         { label: 'tangent' },
       ),
     ],
-    hints: ["$x'=2t$ vanishes at $t=0$, while $y'=3t^2-3$ is $-3\\neq 0$."],
-    steps: () => ['Vertical: $x\'(0)=0$ and $y\'(0)\\neq 0$.'],
+    hints: [
+      "A vertical tangent has $x'=0$ and $y'\\neq 0$. A horizontal tangent has $y'=0$ and $x'\\neq 0$.",
+      "Here $x'=2t$ and $y'=3t^2-3$. Both vanish together nowhere on this curve, so the tangent is never a cusp.",
+    ],
+    steps: ($, f, T) => [`At $t=${T.t}$ the tangent is ${$.kind}.`],
     sim: {
       scenario: 'cubic',
-      setup(slice) {
+      setup(slice, $) {
         slice.curveId = 'cubic';
         slice.t0 = -2;
         slice.t1 = 2;
-        slice.t = 0;
+        slice.t = $.t;
         return domain(slice, { xMin: -1, xMax: 5, yMin: -3, yMax: 3 });
       },
       read: (c) => ({ kind: c.tangent }),
     },
-    cases: [kase('sample', { dummy: 1 }, { kind: 'vertical' })],
+    cases: [kase('sample', { t: 0 }, { kind: 'vertical' })],
   }),
 
   problem({
@@ -255,29 +287,32 @@ export default [
     ch: '2',
     lab: 'parametric',
     src: 'Merino §2.3 type',
-    title: 'Arc length of the unit circle',
+    title: 'Arc length along the unit circle',
     kind: 'numeric',
     level: 2,
     topics: ['parametric'],
-    vars: { dummy: range(1, 1, 1) },
-    derive: () => ({ L: 2 * Math.PI }),
-    text: () =>
-      `Let $\\gamma(t)=(\\cos t, \\sin t)$ on $[0,2\\pi]$. Find the length $L(\\gamma)$.`,
+    vars: { tEnd: range(0.1, 6.2, 0.1) },
+    derive: ($) => ({ L: $.tEnd }),
+    text: (T) =>
+      `Let $\\gamma(t)=(\\cos t, \\sin t)$. Find the length from $t=0$ to $t=${T.tEnd}$.`,
     parts: [num('L', ($) => $.L, '', { label: '$L(\\gamma)$', abs: 0.05 })],
-    hints: ["$\\sqrt{x'^2+y'^2}=1$, so the integral is just the length of the interval."],
-    steps: () => ['$L=\\int_0^{2\\pi} 1\\,dt=2\\pi$.'],
+    hints: [
+      "$\\sqrt{x'^2+y'^2}=1$, so the integral is just the length of the interval.",
+      'Speed $1$ times the elapsed parameter is the length. Do not multiply by an extra $2\\pi$ unless the interval has that length.',
+    ],
+    steps: ($, f) => [`Speed is $1$, so $L=${f($.L)}$.`],
     sim: {
       scenario: 'circle',
-      setup(slice) {
+      setup(slice, $) {
         slice.curveId = 'circle';
         slice.t0 = 0;
         slice.t1 = 2 * Math.PI;
-        slice.t = 2 * Math.PI;
+        slice.t = $.tEnd;
         return domain(slice, { xMin: -2, xMax: 2, yMin: -2, yMax: 2 });
       },
       read: (c) => ({ L: c.Lsimp }),
     },
-    cases: [kase('sample', { dummy: 1 }, { L: 2 * Math.PI })],
+    cases: [kase('sample', { tEnd: 2 * Math.PI }, { L: 2 * Math.PI })],
   }),
 
   problem({
@@ -290,7 +325,7 @@ export default [
     kind: 'numeric',
     level: 1,
     topics: ['extrema'],
-    vars: { a: range(1, 3, 1), b: range(1, 3, 1) },
+    vars: { a: range(1, 8, 1), b: range(1, 8, 1) },
     derive: () => ({ x: 0, y: 0 }),
     text: (T) =>
       `Let $f(x,y)=${coef(T.a)}x^2+${coef(T.b)}y^2$. Find the critical point $(x,y)$.`,
@@ -298,7 +333,10 @@ export default [
       num('x', ($) => $.x, '', { label: '$x$', abs: 0.02 }),
       num('y', ($) => $.y, '', { label: '$y$', abs: 0.02 }),
     ],
-    hints: ['Solve $\\nabla f=(0,0)$. Here $f_x=2ax$, $f_y=2by$.'],
+    hints: [
+      'Solve $\\nabla f=(0,0)$. Here $f_x=2ax$, $f_y=2by$.',
+      'With $a$ and $b$ nonzero, each equation forces the matching variable to be $0$.',
+    ],
     steps: () => ['$(0,0)$ is the only solution.'],
     sim: {
       scenario: 'paraboloid',
@@ -323,8 +361,9 @@ export default [
     kind: 'conceptual',
     level: 2,
     topics: ['extrema'],
-    vars: { dummy: range(1, 1, 1) },
-    text: () => `Let $f(x,y)=x^2-y^2$. What does the Hessian test say at $(0,0)$?`,
+    vars: { a: range(1, 8, 1), b: range(1, 8, 1) },
+    text: (T) =>
+      `Let $f(x,y)=${coef(T.a)}x^2-${coef(T.b)}y^2$. What does the Hessian test say at $(0,0)$?`,
     parts: [
       mc(
         'kind',
@@ -338,19 +377,22 @@ export default [
         { label: 'classification' },
       ),
     ],
-    hints: ['$D=f_{xx}f_{yy}-(f_{xy})^2=2\\cdot(-2)-0=-4<0$.'],
-    steps: () => ['$D=-4<0$, so a saddle.'],
+    hints: [
+      '$D=f_{xx}f_{yy}-(f_{xy})^2$. Here $f_{xx}=2a>0$ and $f_{yy}=-2b<0$, so $D<0$.',
+      'A negative $D$ is a saddle, whatever the sign of $f_{xx}$.',
+    ],
+    steps: () => ['$D<0$, so a saddle.'],
     sim: {
       scenario: 'saddle',
-      setup(slice) {
+      setup(slice, $) {
         slice.surfaceId = 'saddle';
-        slice.params = { a: 1, b: 1, c: 0 };
+        slice.params = { a: $.a, b: $.b, c: 0 };
         slice.probe = { x: 0, y: 0, z: 0 };
         return domain(slice, { xMin: -2, xMax: 2, yMin: -2, yMax: 2 });
       },
       read: (c) => ({ kind: c.kind }),
     },
-    cases: [kase('sample', { dummy: 1 }, { kind: 'saddle' })],
+    cases: [kase('sample', { a: 1, b: 1 }, { kind: 'saddle' })],
   }),
 
   problem({
@@ -363,24 +405,27 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['extrema'],
-    vars: { dummy: range(1, 1, 1) },
-    derive: () => ({ D: 27 }),
-    text: () =>
-      `Let $f(x,y)=x^3+y^3-3xy$. Compute $D=f_{xx}f_{yy}-(f_{xy})^2$ at $(1,1)$.`,
-    parts: [num('D', ($) => $.D, '', { label: '$D(1,1)$', abs: 0.05 })],
-    hints: ['$f_{xx}=6x$, $f_{yy}=6y$, $f_{xy}=-3$.'],
-    steps: () => ['$D=6\\cdot6-(-3)^2=36-9=27$.'],
+    vars: { x0: range(-2, 2, 0.5), y0: range(-2, 2, 0.5) },
+    derive: ($) => ({ D: 36 * $.x0 * $.y0 - 9 }),
+    text: (T) =>
+      `Let $f(x,y)=x^3+y^3-3xy$. Compute $D=f_{xx}f_{yy}-(f_{xy})^2$ at $(${T.x0}, ${T.y0})$.`,
+    parts: [num('D', ($) => $.D, '', { label: '$D$', abs: 0.05 })],
+    hints: [
+      '$f_{xx}=6x$, $f_{yy}=6y$, $f_{xy}=-3$, so $D=36xy-9$.',
+      'Evaluate at the given point. The mixed partial is the constant $-3$, not a function of $x$ or $y$.',
+    ],
+    steps: ($, f) => [`$D=36xy-9=${f($.D)}$.`],
     sim: {
       scenario: 'cubic',
-      setup(slice) {
+      setup(slice, $) {
         slice.surfaceId = 'cubic';
         slice.params = { a: 1, b: 1, c: 0 };
-        slice.probe = { x: 1, y: 1, z: 0 };
+        slice.probe = { x: $.x0, y: $.y0, z: 0 };
         return domain(slice, { xMin: -2, xMax: 2, yMin: -2, yMax: 2 });
       },
       read: (c) => ({ D: c.D }),
     },
-    cases: [kase('sample', { dummy: 1 }, { D: 27 })],
+    cases: [kase('sample', { x0: 1, y0: 1 }, { D: 27 })],
   }),
 
   problem({
@@ -393,12 +438,15 @@ export default [
     kind: 'conceptual',
     level: 1,
     topics: ['extrema'],
-    vars: { dummy: range(1, 1, 1) },
-    text: () =>
-      `True or false: if $\\nabla f(a,b)=(0,0)$, then $f$ has a local min or max at $(a,b)$.`,
+    vars: { n: range(1, 50, 1) },
+    text: (T) =>
+      `Let $f(x,y)=${T.n}x^2-y^2$. True or false: if $\\nabla f(a,b)=(0,0)$, then $f$ has a local min or max at $(a,b)$.`,
     parts: [tf('tf', false, { label: 'statement' })],
-    hints: ['A saddle is a critical point that is neither a min nor a max.'],
+    hints: [
+      'A saddle is a critical point that is neither a min nor a max.',
+      'This $f$ has $\\nabla f=(0,0)$ at the origin, and it takes both signs in every neighbourhood.',
+    ],
     steps: () => ['False — Theorem 13 is one direction only.'],
-    cases: [kase('sample', { dummy: 1 }, { tf: 0 })],
+    cases: [kase('sample', { n: 1 }, { tf: 0 })],
   }),
 ];

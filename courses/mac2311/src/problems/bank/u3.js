@@ -31,7 +31,7 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['optimization'],
-    vars: { side: range(12, 24, 6) },
+    vars: { side: range(6, 55, 1) },
     derive: ($) => {
       const cut = boxBestCut($.side);
       return { cut, vol: boxVolume($.side, cut) };
@@ -46,7 +46,10 @@ export default [
       num('cut', ($) => $.cut, 'in', { label: 'cut', abs: 1e-3 }),
       num('vol', ($) => $.vol, 'in^3', { label: 'volume', abs: 1e-2 }),
     ],
-    hints: [String.raw`If the sheet has side $s$, then $V(x)=x(s-2x)^2$. The useful root of $V'(x)=0$ is $x=s/6$.`],
+    hints: [
+      String.raw`If the sheet has side $s$, then $V(x)=x(s-2x)^2$. The useful root of $V'(x)=0$ is $x=s/6$.`,
+      'The other root is $x=s/2$, which leaves no sheet to fold. Use $s/6$.',
+    ],
     steps: ($, f) => [
       String.raw`$V'(x)=(s-2x)(s-6x)=0$ gives the cut $${f($.cut)}$ inches.`,
       String.raw`The volume there is $${f($.vol)}$. A scan of $V$ peaks at the same cut.`,
@@ -73,13 +76,16 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['linear approximation'],
-    vars: { a: range(2, 5, 1) },
+    vars: { a: range(2, 51, 1) },
     derive: ($) => ({ y: sqrtLinear($.a) }),
     second: ($) => ({ y: sqrtLinearQuotient($.a) }),
     text: (T, $) =>
       String.raw`Use the tangent line to $\sqrt{x}$ at $x=${$.a * $.a}$ to approximate $\sqrt{${$.a * $.a + 1}}$.`,
     parts: [num('y', ($) => $.y, '', { label: 'approximation', abs: 1e-6 })],
-    hints: [String.raw`$\dfrac{d}{dx}\sqrt{x}=1/(2\sqrt{x})$. Add that slope times $1$.`],
+    hints: [
+      String.raw`$\dfrac{d}{dx}\sqrt{x}=1/(2\sqrt{x})$. Add that slope times $1$.`,
+      'The base point is a perfect square. Add $1$ over twice its square root.',
+    ],
     steps: ($, f) => [
       String.raw`At $x=${$.a * $.a}$ the slope is $1/(2\cdot${$.a})$.`,
       String.raw`The tangent line gives $${f($.y)}$.`,
@@ -96,7 +102,7 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['extrema'],
-    vars: { k: range(3, 12, 3) },
+    vars: { k: range(3, 150, 3) },
     derive: ($) => ({ x: cubicCritical($.k), y: cubicCriticalValue($.k) }),
     second: ($) => {
       const x = cubicCriticalSearch($.k);
@@ -107,7 +113,10 @@ export default [
       num('x', ($) => $.x, '', { label: 'critical point', abs: 1e-4 }),
       num('y', ($) => $.y, '', { label: '$f$', abs: 1e-4 }),
     ],
-    hints: ['Differentiate. Set the derivative equal to zero.'],
+    hints: [
+      'Differentiate. Set the derivative equal to zero.',
+      'Solve $3x^2=k$ and keep the positive root.',
+    ],
     steps: ($, f) => [
       String.raw`$f'(x)=3x^2-${$.k}=0$ gives $x=${f($.x)}$.`,
       String.raw`$f$ there is $${f($.y)}$. Bisection on $f'$ finds the same point.`,
@@ -124,13 +133,16 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['mean value theorem'],
-    vars: { p: range(1, 2, 1), q: range(4, 6, 1) },
+    vars: { p: range(0, 6, 1), q: range(8, 15, 1) },
     derive: ($) => ({ c: squareMvt($.p, $.q) }),
     second: ($) => ({ c: squareMvtQuotient($.p, $.q) }),
     text: (T) =>
       String.raw`For $f(x)=x^2$ on $[${T.p},${T.q}]$, the Mean Value Theorem gives a $c$ where $f'(c)$ equals the secant slope. Find $c$.`,
     parts: [num('c', ($) => $.c, '', { label: '$c$', abs: 1e-6 })],
-    hints: [String.raw`The secant slope is $(q^2-p^2)/(q-p)$, and $f'(c)=2c$.`],
+    hints: [
+      String.raw`The secant slope is $(q^2-p^2)/(q-p)$, and $f'(c)=2c$.`,
+      'That secant slope simplifies to $p+q$. Half of it is $c$.',
+    ],
     steps: ($, f) => [
       String.raw`The secant slope is $${$.p}+${$.q}$. Half of that is $c=${f($.c)}$.`,
       'Dividing that slope by $2$ gives the same $c$.',
@@ -147,12 +159,15 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['curve sketching'],
-    vars: { a: range(3, 6, 1) },
+    vars: { a: range(1, 50, 1) },
     derive: ($) => ({ x: cubicInflection($.a) }),
     second: ($) => ({ x: cubicInflectionSearch($.a) }),
     text: (T) => String.raw`Let $f(x)=x^3+${T.a}x^2$. Find the $x$-coordinate of the inflection point.`,
     parts: [num('x', ($) => $.x, '', { label: 'inflection', abs: 1e-4 })],
-    hints: ['Set the second derivative equal to zero.'],
+    hints: [
+      'Set the second derivative equal to zero.',
+      'The second derivative is $6x+2a$. Solve for $x$.',
+    ],
     steps: ($, f) => [
       String.raw`$6x+2\cdot${$.a}=0$ gives $x=${f($.x)}$.`,
       'Bisection on the second derivative finds the same point.',
@@ -169,12 +184,15 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ["l'hôpital"],
-    vars: { a: range(2, 5, 1) },
+    vars: { a: range(1, 50, 1) },
     derive: ($) => ({ lim: differenceLimit($.a) }),
     second: ($) => ({ lim: differenceLimitHopital($.a) }),
     text: (T) => String.raw`Find $\lim_{x\to ${T.a}}\dfrac{x^2-${T.a}^2}{x-${T.a}}$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit', abs: 1e-4 })],
-    hints: [String.raw`The form is $0/0$. Differentiate the top and the bottom, or cancel $x-a$.`],
+    hints: [
+      String.raw`The form is $0/0$. Differentiate the top and the bottom, or cancel $x-a$.`,
+      'After cancelling, the expression is $x+a$. Substitute the limit point.',
+    ],
     steps: ($, f) => [
       String.raw`Cancelling leaves $x+${$.a}$, so the limit is $${f($.lim)}$.`,
       "Differentiating the top and the bottom agrees.",
@@ -191,12 +209,15 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ["l'hôpital"],
-    vars: { k: range(2, 5, 1) },
+    vars: { k: range(1, 50, 1) },
     derive: ($) => ({ lim: sincLimit($.k) }),
     second: ($) => ({ lim: sincLimitHopital($.k) }),
     text: (T) => String.raw`Find $\lim_{x\to 0}\dfrac{\sin(${T.k}x)}{x}$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit', abs: 1e-4 })],
-    hints: [String.raw`The form is $0/0$. The derivative of $\sin(kx)$ at $0$ is $k$.`],
+    hints: [
+      String.raw`The form is $0/0$. The derivative of $\sin(kx)$ at $0$ is $k$.`,
+      'The derivative of the denominator is $1$, so the limit is that numerator derivative.',
+    ],
     steps: ($, f) => [
       String.raw`The limit is $${f($.lim)}$.`,
       'A difference quotient for the numerator, over $1$, agrees.',
@@ -213,13 +234,16 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ["newton's method"],
-    vars: { c: range(2, 5, 1), x0: range(2, 4, 1) },
+    vars: { c: range(2, 11, 1), x0: range(2, 6, 1) },
     derive: ($) => ({ x1: newtonSqrt($.c, $.x0) }),
     second: ($) => ({ x1: newtonSqrtStep($.c, $.x0) }),
     text: (T) =>
       String.raw`Apply one step of Newton's method to $f(x)=x^2-${T.c}$, starting at $x=${T.x0}$.`,
     parts: [num('x1', ($) => $.x1, '', { label: 'next guess', abs: 1e-6 })],
-    hints: [String.raw`$x_1=x_0-f(x_0)/f'(x_0)$, and $f'(x)=2x$.`],
+    hints: [
+      String.raw`$x_1=x_0-f(x_0)/f'(x_0)$, and $f'(x)=2x$.`,
+      'That step is the average of $x_0$ and $c/x_0$.',
+    ],
     steps: ($, f) => [
       String.raw`$(${$.x0}+${$.c}/${$.x0})/2=${f($.x1)}$.`,
       "Subtracting $f/f'$ gives the same guess.",

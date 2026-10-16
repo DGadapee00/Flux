@@ -1,7 +1,5 @@
-import { absContinuousAt, absDifferentiableAt0, deltaFor, deltaSearch, holeLimit, holePlugged, lawAverage, lawExact, polyAt, polyAverage, sidesOfAbs, squeezeHolds } from '../../math/calc1.js';
+import { deltaFor, deltaSearch, holeLimit, holePlugged, lawAverage, lawExact, polyAt, polyAverage } from '../../math/calc1.js';
 import { domain, kase, num, problem, range, tf } from '../kit.js';
-
-const dummy = { dummy: range(1, 1, 1) };
 
 function paren(n) {
   return n < 0 ? `(${n})` : String(n);
@@ -24,7 +22,7 @@ export default [
     kind: 'numeric',
     level: 1,
     topics: ['limits'],
-    vars: { a: range(-2, 3, 1), b: range(-2, 3, 1) },
+    vars: { a: range(-4, 5, 1), b: range(-2, 2, 1) },
     derive: ($) => ({ lim: polyAt($.a, $.b) }),
     second: ($) => ({ lim: polyAverage($.a, $.b) }),
     text: (T, $) => {
@@ -33,7 +31,10 @@ export default [
       return String.raw`Find $\lim_{x\to ${at}}(x^2${term})$.`;
     },
     parts: [num('lim', ($) => $.lim, '', { label: 'limit' })],
-    hints: [String.raw`A polynomial is continuous. The limit equals the value.`],
+    hints: [
+      String.raw`A polynomial is continuous. The limit equals the value.`,
+      'Substitute the number the limit approaches, then simplify.',
+    ],
     steps: ($, f) => [
       String.raw`Plug in: $(${paren($.a)})^2${signedTerm($.b, $.a)}=${f($.lim)}$.`,
       'The values just left and right of that point average to the same number.',
@@ -51,13 +52,16 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['limits'],
-    vars: { a: range(1, 4, 1) },
+    vars: { a: range(1, 50, 1) },
     derive: ($) => ({ aa: $.a * $.a, lim: holeLimit($.a) }),
     second: ($) => ({ lim: holePlugged($.a) }),
     text: (T, $) =>
       String.raw`Let $f(x)=\dfrac{x^2-${$.a * $.a}}{x-${T.a}}$ for $x\neq ${T.a}$. Find $\lim_{x\to ${T.a}}f(x)$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit' })],
-    hints: [String.raw`Factor $x^2-a^2=(x-a)(x+a)$, then cancel for $x\neq a$.`],
+    hints: [
+      String.raw`Factor $x^2-a^2=(x-a)(x+a)$, then cancel for $x\neq a$.`,
+      'The cancelled factor leaves $x+a$. Evaluate that at the hole.',
+    ],
     steps: ($, f) => [
       String.raw`For $x\neq ${$.a}$, $f(x)=x+${$.a}$.`,
       String.raw`The limit is $${f($.lim)}$. The function itself is not defined at that point.`,
@@ -85,24 +89,34 @@ export default [
     kind: 'conceptual',
     level: 1,
     topics: ['limits'],
-    vars: dummy,
+    vars: { c: range(-24, 25, 1) },
     derive: () => ({}),
-    second: () => ({ exists: sidesOfAbs(0).exists ? 1 : 0 }),
-    text: () => String.raw`True or false: $\lim_{x\to 0}\dfrac{|x|}{x}$ exists.`,
+    second: ($) => {
+      const h = 1e-8;
+      const f = (x) => Math.abs(x - $.c) / (x - $.c);
+      return { exists: Math.abs(f($.c - h) - f($.c + h)) < 1e-6 ? 1 : 0 };
+    },
+    text: (T, $) => String.raw`True or false: $\lim_{x\to ${paren($.c)}}\dfrac{|x-${paren($.c)}|}{x-${paren($.c)}}$ exists.`,
     parts: [tf('exists', false, { label: 'the limit exists' })],
-    hints: ['The left-hand limit is $-1$. The right-hand limit is $1$.'],
-    steps: () => ['The two sides disagree, so the two-sided limit does not exist.'],
+    hints: [
+      'The left-hand limit is $-1$. The right-hand limit is $1$.',
+      'Shift the input by $c$. The two one-sided values still disagree.',
+    ],
+    steps: ($, f) => {
+      void f;
+      return ['The two sides disagree, so the two-sided limit does not exist.'];
+    },
     sim: {
       scenario: 'sign',
-      setup(slice) {
+      setup(slice, $) {
         slice.kind = 'sign';
-        slice.a = 0;
+        slice.a = $.c;
         slice.h = 0.3;
-        return domain(slice, { xMin: -2.4, xMax: 2.4, yMin: -2, yMax: 2, plane: 'xy' });
+        return domain(slice, { xMin: $.c - 2.4, xMax: $.c + 2.4, yMin: -2, yMax: 2, plane: 'xy' });
       },
       read: (c) => ({ exists: c.exists ? 1 : 0 }),
     },
-    cases: [kase('at 0', { dummy: 1 }, { exists: 0 })],
+    cases: [kase('at 0', { c: 0 }, { exists: 0 })],
   }),
 
   problem({
@@ -114,7 +128,7 @@ export default [
     kind: 'conceptual',
     level: 1,
     topics: ['continuity'],
-    vars: { a: range(1, 4, 1) },
+    vars: { a: range(1, 50, 1) },
     derive: ($) => ({ aa: $.a * $.a }),
     second: ($) => {
       const value = ($.a * $.a - $.aa) / ($.a - $.a);
@@ -123,7 +137,10 @@ export default [
     text: (T, $) =>
       String.raw`Let $f(x)=\dfrac{x^2-${$.a * $.a}}{x-${T.a}}$ for $x\neq ${T.a}$, and do not give $f$ a value at $x=${T.a}$. True or false: $f$ is continuous at $x=${T.a}$.`,
     parts: [tf('cont', false, { label: 'continuous' })],
-    hints: ['Continuity needs a function value at the point, equal to the limit.'],
+    hints: [
+      'Continuity needs a function value at the point, equal to the limit.',
+      'The limit exists after cancelling. The function still has no value at the hole.',
+    ],
     steps: ($, f) => [
       String.raw`The limit is $${f(holeLimit($.a))}$.`,
       'There is no function value there, so $f$ is not continuous at that point.',
@@ -140,12 +157,15 @@ export default [
     kind: 'numeric',
     level: 1,
     topics: ['limits'],
-    vars: { c: range(1, 4, 1), a: range(-2, 3, 1) },
+    vars: { c: range(1, 10, 1), a: range(-2, 2, 1) },
     derive: ($) => ({ lim: lawExact($.c, $.a) }),
     second: ($) => ({ lim: lawAverage($.c, $.a) }),
     text: (T) => String.raw`Find $\lim_{x\to ${T.a}}\left(${T.c}x^2+3x\right)$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit' })],
-    hints: [String.raw`The limit of a sum is the sum of the limits.`],
+    hints: [
+      String.raw`The limit of a sum is the sum of the limits.`,
+      'Evaluate each term at the limit point, then add.',
+    ],
     steps: ($, f) => [
       String.raw`$${$.c}\cdot(${paren($.a)})^2+3\cdot${paren($.a)}=${f($.lim)}$.`,
       'Sampling the function on both sides of the point agrees.',
@@ -163,7 +183,7 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['epsilon-delta'],
-    vars: { m: range(2, 5, 1), k: range(1, 4, 1) },
+    vars: { m: range(1, 10, 1), k: range(1, 5, 1) },
     derive: ($) => {
       const eps = $.k / 10;
       return { eps, delta: deltaFor($.m, eps) };
@@ -172,7 +192,10 @@ export default [
     text: (T, $, f) =>
       String.raw`Let $f(x)=${T.m}x$. For $\varepsilon=${f($.eps)}$, the largest $\delta$ with $|x-0|<\delta$ implying $|f(x)|<\varepsilon$ is`,
     parts: [num('delta', ($) => $.delta, '', { label: '$\\delta$', abs: 1e-4 })],
-    hints: [String.raw`$|mx|<\varepsilon$ exactly when $|x|<\varepsilon/|m|$.`],
+    hints: [
+      String.raw`$|mx|<\varepsilon$ exactly when $|x|<\varepsilon/|m|$.`,
+      'Divide $\\varepsilon$ by the slope. That quotient is $\\delta$.',
+    ],
     steps: ($, f) => [
       String.raw`$|${$.m}x|<${f($.eps)}$ when $|x|<${f($.delta)}$.`,
       'A bisection that keeps the inequality strict lands on the same $\\delta$.',
@@ -201,17 +224,31 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['limits'],
-    vars: dummy,
+    vars: { m: range(1, 50, 1) },
     derive: () => ({ lim: 0 }),
-    second: () => ({ lim: squeezeHolds() ? 0 : NaN }),
-    text: () => String.raw`Define $f(0)=0$ and $f(x)=x^2\sin(1/x)$ otherwise. Find $\lim_{x\to 0}f(x)$.`,
+    second: ($) => {
+      let ok = true;
+      for (let i = 1; i <= 40; i++) {
+        const x = i / 200;
+        const f = Math.abs($.m * x * x * Math.sin(1 / x));
+        if (f > $.m * x * x + 1e-9) ok = false;
+      }
+      return { lim: ok ? 0 : NaN };
+    },
+    text: (T) => String.raw`Define $f(0)=0$ and $f(x)=${T.m}x^2\sin(1/x)$ otherwise. Find $\lim_{x\to 0}f(x)$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit', abs: 1e-6 })],
-    hints: [String.raw`$-x^2\le x^2\sin(1/x)\le x^2$, and both bounds go to $0$.`],
-    steps: () => [
-      String.raw`$-x^2\le f(x)\le x^2$ for $x\neq 0$.`,
-      'Both bounds have limit $0$, so $f$ does too.',
+    hints: [
+      String.raw`$-mx^2\le mx^2\sin(1/x)\le mx^2$, and both bounds go to $0$.`,
+      'The sine factor stays between $-1$ and $1$, so it cannot stop the $x^2$ from going to $0$.',
     ],
-    cases: [kase('at 0', { dummy: 1 }, { lim: 0 })],
+    steps: ($, f) => {
+      void f;
+      return [
+        String.raw`$-${$.m}x^2\le f(x)\le ${$.m}x^2$ for $x\neq 0$.`,
+        'Both bounds have limit $0$, so $f$ does too.',
+      ];
+    },
+    cases: [kase('m=1', { m: 1 }, { lim: 0 })],
   }),
 
   problem({
@@ -223,23 +260,30 @@ export default [
     kind: 'conceptual',
     level: 1,
     topics: ['continuity', 'derivatives'],
-    vars: dummy,
+    vars: { c: range(-24, 25, 1) },
     derive: () => ({}),
-    second: () => ({
-      cont: absContinuousAt(0) ? 1 : 0,
-      diff: absDifferentiableAt0() ? 1 : 0,
-    }),
-    text: () => String.raw`For $f(x)=|x|$ at $x=0$, mark each statement.`,
+    second: ($) => {
+      const h = 1e-6;
+      const f = (x) => Math.abs(x - $.c);
+      const cont = Math.abs(f($.c + h) - f($.c)) < 1e-5 && Math.abs(f($.c - h) - f($.c)) < 1e-5;
+      const left = (f($.c) - f($.c - h)) / h;
+      const right = (f($.c + h) - f($.c)) / h;
+      return { cont: cont ? 1 : 0, diff: Math.abs(left - right) < 1e-6 ? 1 : 0 };
+    },
+    text: (T, $) => String.raw`For $f(x)=|x-${paren($.c)}|$ at $x=${paren($.c)}$, mark each statement.`,
     parts: [
-      tf('cont', true, { label: 'continuous at 0' }),
-      tf('diff', false, { label: 'differentiable at 0' }),
+      tf('cont', true, { label: 'continuous at the corner' }),
+      tf('diff', false, { label: 'differentiable at the corner' }),
     ],
-    hints: ['The left and right difference quotients are $-1$ and $1$.'],
+    hints: [
+      'The left and right difference quotients are $-1$ and $1$.',
+      'The graph meets at the corner, so the function value matches both one-sided limits.',
+    ],
     steps: () => [
-      '$|x|$ meets at the origin, so it is continuous there.',
+      'The two sides of the absolute value meet, so it is continuous there.',
       'The corner means the two one-sided derivatives disagree.',
     ],
-    cases: [kase('at 0', { dummy: 1 }, { cont: 1, diff: 0 })],
+    cases: [kase('at 0', { c: 0 }, { cont: 1, diff: 0 })],
   }),
 
   problem({
@@ -263,7 +307,10 @@ export default [
       return String.raw`Find $\lim_{x\to ${paren(T.a)}}(${slope})$.`;
     },
     parts: [num('lim', ($) => $.lim, '', { label: 'limit' })],
-    hints: ['A line is continuous. The limit equals the value.'],
+    hints: [
+      'A line is continuous. The limit equals the value.',
+      'Multiply the slope by the limit point, then add the intercept.',
+    ],
     steps: ($, f) => [
       String.raw`$${$.m}\cdot${paren($.a)}${$.b < 0 ? String.raw`-${-$.b}` : $.b > 0 ? `+${$.b}` : ''}=${f($.lim)}$.`,
       'The same value shows up just left and just right of the point.',
@@ -281,7 +328,7 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['limits'],
-    vars: { a: range(-1, 2, 1), k: range(1, 3, 1), c: range(4, 6, 1) },
+    vars: { a: range(-4, 5, 1), k: range(1, 5, 1), c: range(6, 10, 1) },
     derive: ($) => ({ left: $.k, right: $.c }),
     second: ($) => {
       const f = (x) => (x < $.a ? $.k : $.c);
@@ -294,7 +341,10 @@ export default [
       num('left', ($) => $.left, '', { label: 'left-hand limit' }),
       num('right', ($) => $.right, '', { label: 'right-hand limit' }),
     ],
-    hints: ['The left-hand limit uses only inputs below $a$. The right-hand limit uses only inputs above $a$.'],
+    hints: [
+      'The left-hand limit uses only inputs below $a$. The right-hand limit uses only inputs above $a$.',
+      'Read the constant on that side. Do not average the two heights.',
+    ],
     steps: ($, f) => [
       String.raw`From the left, $f$ is the constant $${$.k}$, so the limit is $${f($.left)}$.`,
       String.raw`From the right, $f$ is the constant $${$.c}$, so the limit is $${f($.right)}$.`,

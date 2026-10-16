@@ -29,18 +29,18 @@ export function shellSimpson(b) {
   return simpson((y) => 2 * Math.PI * y * (b - y * y), 0, yMax);
 }
 
-/** Area between y = x and y = x² on [0, 1]. */
-export function areaBetween() {
-  return 1 / 2 - 1 / 3;
+/** Area between y = x and y = x² on [0, b], with the line above the parabola when b is in (0, 1]. */
+export function areaBetween(b = 1) {
+  return (b * b) / 2 - (b * b * b) / 3;
 }
 
-export function areaBetweenSimpson() {
-  return simpson((x) => x - x * x, 0, 1);
+export function areaBetweenSimpson(b = 1) {
+  return simpson((x) => x - x * x, 0, b);
 }
 
-/** Washer volume of that region about the x-axis: π ∫ (x² − x⁴) dx = 2π/15. */
-export function washerVolume() {
-  return Math.PI * (1 / 3 - 1 / 5);
+/** Washer volume of that region about the x-axis: π ∫ (x² − x⁴) dx. On [0, 1] this is 2π/15. */
+export function washerVolume(b = 1) {
+  return Math.PI * (b ** 3 / 3 - b ** 5 / 5);
 }
 
 /** Same washer by shells: 2π ∫ y (√y − y) dy. */
@@ -48,17 +48,22 @@ export function washerShell() {
   return 2 * Math.PI * (2 / 5 - 1 / 3);
 }
 
-export function washerSimpson() {
-  return Math.PI * simpson((x) => x * x - x ** 4, 0, 1);
+export function washerSimpson(b = 1) {
+  return Math.PI * simpson((x) => x * x - x ** 4, 0, b);
 }
 
-/** Length of the segment from (0, 0) to (1, 1). */
-export function segmentLength() {
-  return Math.SQRT2;
+/** Length of y = x from (0, 0) to (b, b). */
+export function segmentLength(b = 1) {
+  return Math.abs(b) * Math.SQRT2;
 }
 
-export function segmentSimpson() {
-  return simpson(() => Math.SQRT2, 0, 1);
+export function segmentSimpson(b = 1) {
+  return simpson(() => Math.SQRT2, 0, b);
+}
+
+/** Chord from (0, 0) to (b, b²), the straight shortcut under y = x². */
+export function parabolaChord(b) {
+  return Math.hypot(b, b * b);
 }
 
 /** Work to stretch a spring F = kx from 0 to d. */
@@ -380,6 +385,15 @@ export function paraLengthSimpson(t) {
   return simpson((u) => Math.hypot(1, 2 * u), 0, t);
 }
 
+/** Arc length of y = x² on [0, b]. The closed form is the parametric length at t = b. */
+export function parabolaArc(b) {
+  return paraLength(b);
+}
+
+export function parabolaArcSimpson(b) {
+  return paraLengthSimpson(b);
+}
+
 /** Central difference of the distance, a second reading of the speed. */
 export function paraSpeedDiff(t) {
   const h = 1e-4;
@@ -445,9 +459,18 @@ export function cardioidArea(alpha) {
 export function cardioidSimpson(alpha) {
   if (alpha === 0) return 0;
   const f = (th) => 0.5 * cardioidR(th) ** 2;
-  // On a full turn the Simpson error estimate cancels, so the integral is split at π.
-  if (alpha <= Math.PI) return simpson(f, 0, alpha);
-  return simpson(f, 0, Math.PI) + simpson(f, Math.PI, alpha);
+  // On a full period the Simpson error estimate cancels, so each piece stops at π.
+  const step = Math.PI;
+  let sum = 0;
+  let t = 0;
+  const end = Math.abs(alpha);
+  const sign = alpha < 0 ? -1 : 1;
+  while (t < end - 1e-12) {
+    const next = Math.min(end, t + step);
+    sum += simpson(f, sign * t, sign * next);
+    t = next;
+  }
+  return sum;
 }
 
 export function cardioidNaive(alpha) {

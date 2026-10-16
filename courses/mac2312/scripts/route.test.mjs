@@ -49,6 +49,13 @@ test('an empty hash is not legacy and opens the solids lab', () => {
   assert.equal(courseHash(route.examId, route.labId), `#/${COURSE}/u1/solids`);
 });
 
+test('unit 1 arc length is the second lab', () => {
+  const route = parseRoute('#/mac2312/u1/arc');
+  assert.equal(route.examId, 'u1');
+  assert.equal(route.labId, 'arc');
+  assert.equal(courseHash('u1', 'arc'), `#/${COURSE}/u1/arc`);
+});
+
 test('a unit hash opens that unit’s first lab', () => {
   const route = parseRoute('#/mac2312/u1');
   assert.equal(route.examId, 'u1');

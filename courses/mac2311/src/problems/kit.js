@@ -34,6 +34,80 @@ export const mc = (id, options, correct, o = {}) => ({
 export const tf = (id, correct, o = {}) =>
   mc(id, [[1, 'True'], [0, 'False']], typeof correct === 'function' ? correct : correct ? 1 : 0, o);
 
+/**
+ * Symbolic answer. `expr` may be a string or a function of the version.
+ * `vars` lists the symbols a student may type, plus pi.
+ */
+export const sym = (id, expr, vars, get, o = {}) => ({
+  id,
+  kind: 'symbolic',
+  expr,
+  vars: Array.isArray(vars) ? vars : Object.keys(vars),
+  units: null,
+  unit: o.unit ?? null,
+  get,
+  alias: o.alias ?? {},
+  label: o.label ?? null,
+});
+
+function gcd(a, b) {
+  let x = Math.abs(Math.round(a));
+  let y = Math.abs(Math.round(b));
+  while (y) {
+    const t = x % y;
+    x = y;
+    y = t;
+  }
+  return x || 1;
+}
+
+/** Lowest-terms coefficient times x^exp. xPow(4, 2, 3) is 2*x^3. */
+export function xPow(num, den, exp) {
+  let n = Math.round(num);
+  let d = Math.round(den);
+  if (d < 0) {
+    n = -n;
+    d = -d;
+  }
+  const g = gcd(n, d);
+  n /= g;
+  d /= g;
+  const sign = n < 0 ? '-' : '';
+  const an = Math.abs(n);
+  if (exp === 0) return d === 1 ? `${sign}${an}` : `${sign}${an}/${d}`;
+  const pow = exp === 1 ? 'x' : `x^${exp}`;
+  if (d === 1 && an === 1) return `${sign}${pow}`;
+  const coeff = d === 1 ? String(an) : `${an}/${d}`;
+  return `${sign}${coeff}*${pow}`;
+}
+
+/** Sum of terms that already carry their own sign. */
+export function sumTerms(terms) {
+  const parts = terms.filter((t) => t && t !== '0');
+  if (!parts.length) return '0';
+  return parts
+    .map((t, i) => (i === 0 || t.startsWith('-') ? t : `+${t}`))
+    .join('');
+}
+
+/** Lowest-terms multiple of π. piTex(4, 2) is \pi. piTex(3, 2) is 3\pi/2. */
+export function piTex(numer, denom) {
+  let n = Math.round(numer);
+  let d = Math.round(denom);
+  if (d < 0) {
+    n = -n;
+    d = -d;
+  }
+  const g = gcd(n, d);
+  n /= g;
+  d /= g;
+  if (n === 0) return '0';
+  const sign = n < 0 ? '-' : '';
+  const an = Math.abs(n);
+  const body = an === 1 ? '\\pi' : `${an}\\pi`;
+  return d === 1 ? `${sign}${body}` : `${sign}${body}/${d}`;
+}
+
 export function problem(spec) {
   return {
     level: 1,

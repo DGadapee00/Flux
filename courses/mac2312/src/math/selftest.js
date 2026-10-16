@@ -38,6 +38,9 @@ import {
   lineLength,
   paraAt,
   paraLength,
+  parabolaArc,
+  parabolaArcSimpson,
+  parabolaChord,
   paraLengthSimpson,
   paraSlopeCart,
   paraSpeedDiff,
@@ -107,6 +110,11 @@ check('shells rebuild the washer', near(washerShell(), washerVolume(), 1e-12));
 check('Simpson matches the washer', near(washerSimpson(), washerVolume(), 1e-8));
 check('segment length is √2', near(segmentLength(), Math.SQRT2, 1e-12));
 check('Simpson matches the segment', near(segmentSimpson(), segmentLength(), 1e-8));
+check('a longer line is b√2', near(segmentLength(3), 3 * Math.SQRT2, 1e-12));
+check('parabola arc at 1 matches the parametric length', near(parabolaArc(1), paraLength(1), 1e-12));
+check('Simpson matches the parabola arc', near(parabolaArcSimpson(1), parabolaArc(1), 1e-8));
+check('the chord under y=x² is shorter than the arc', parabolaChord(1) < parabolaArc(1));
+check('on a line the arc equals the chord', near(segmentLength(1.5), Math.hypot(1.5, 1.5), 1e-12));
 check('spring work for k=4, d=2 is 8', near(springWork(4, 2), 8, 1e-12));
 check('Simpson matches the spring', near(springSimpson(4, 2), springWork(4, 2), 1e-8));
 

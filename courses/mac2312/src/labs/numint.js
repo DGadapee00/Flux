@@ -33,7 +33,7 @@ function numCamera(state) {
 function evenCount(n) {
   let k = Math.round(Number.isFinite(n) ? n : 4);
   if (k % 2) k += 1;
-  return Math.min(16, Math.max(2, k));
+  return Math.min(100, Math.max(2, k));
 }
 
 function chordAt(xs, ys, x) {
@@ -76,7 +76,7 @@ export default defineLab({
         <label class="field">
           <span>panels</span>
           <div class="slider-row">
-            <input type="range" id="num-n" min="2" max="16" step="2" value="4" />
+            <input type="range" id="num-n" min="2" max="100" step="2" value="4" />
           </div>
         </label>
       </div>`;

@@ -215,18 +215,72 @@ export function createEngine(options = {}) {
       for (const [name, spec] of Object.entries(tpl.vars)) {
         if (spec.type === 'data') values[name] = spec.make(rand, values);
       }
-      let inst;
-      try {
-        inst = build(tpl, values);
-      } catch {
-        continue;
-      }
-      if (!tpl.valid(inst.$)) continue;
-      if (tpl.sampleValid && !tpl.sampleValid(inst.$)) continue;
-      if (tpl.parts.some((p) => p.get && !Number.isFinite(p.get(inst.$)))) continue;
+      if (!accepts(tpl, values)) continue;
       return values;
     }
     throw new Error(`${tpl.id}: could not satisfy valid() in 4000 tries`);
+  }
+
+  function axisValues(spec) {
+    if (spec.type === 'choice') return spec.options.map((o) => o.value);
+    if (spec.type === 'range') {
+      const steps = Math.round((spec.max - spec.min) / spec.step);
+      const out = [];
+      for (let i = 0; i <= steps; i++) {
+        const v = clean(spec.min + spec.step * i);
+        if (spec.exclude?.includes(v)) continue;
+        out.push(v);
+      }
+      return out;
+    }
+    return null;
+  }
+
+  function accepts(tpl, values) {
+    let inst;
+    try {
+      inst = build(tpl, values);
+    } catch {
+      return false;
+    }
+    if (!tpl.valid(inst.$)) return false;
+    if (tpl.sampleValid && !tpl.sampleValid(inst.$)) return false;
+    if (tpl.parts.some((p) => p.get && !Number.isFinite(p.get(inst.$)))) return false;
+    return true;
+  }
+
+  /**
+   * How many distinct versions the sampler can draw.
+   * Stops once `need` legal versions are found. A template with no variables has one version.
+   * `onEach` sees legal value tuples, up to `need`.
+   */
+  function countVersions(tpl, { need = Infinity, onEach } = {}) {
+    const names = Object.keys(tpl.vars || {});
+    if (!names.length) {
+      const ok = accepts(tpl, {});
+      if (ok && onEach) onEach({});
+      return ok ? 1 : 0;
+    }
+    const axes = names.map((name) => ({ name, values: axisValues(tpl.vars[name]) }));
+    if (axes.some((axis) => !axis.values)) return 0;
+    let count = 0;
+    const values = {};
+    function walk(i) {
+      if (count >= need) return;
+      if (i === axes.length) {
+        if (!accepts(tpl, values)) return;
+        count++;
+        if (onEach) onEach({ ...values });
+        return;
+      }
+      for (const v of axes[i].values) {
+        values[axes[i].name] = v;
+        walk(i + 1);
+        if (count >= need) return;
+      }
+    }
+    walk(0);
+    return count;
   }
 
   function instance(tpl, seed, { worksheet = false } = {}) {
@@ -284,10 +338,16 @@ export function createEngine(options = {}) {
     return out;
   }
 
+  function exprKey(part, $) {
+    const raw = typeof part.expr === 'function' ? part.expr($) : part.expr;
+    if (typeof raw !== 'string') throw new Error('symbolic key must be a string');
+    return raw;
+  }
+
   function expected(part, $) {
     if (part.kind === 'numeric') return part.scale == null ? part.get($) : part.get($) / part.scale;
     if (part.kind === 'choice') return typeof part.correct === 'function' ? part.correct($) : part.correct;
-    if (part.kind === 'symbolic') return part.expr;
+    if (part.kind === 'symbolic') return exprKey(part, $);
     return null;
   }
 
@@ -512,7 +572,7 @@ export function createEngine(options = {}) {
       const correct = input === want;
       return { correct, feedback: correct ? '' : why(input) };
     }
-    if (part.kind === 'symbolic') return gradeSymbolic(part, input);
+    if (part.kind === 'symbolic') return gradeSymbolic(part, input, $);
     return { correct: !!input, feedback: '' };
   }
 
@@ -752,11 +812,13 @@ export function createEngine(options = {}) {
     return { ok: false, text: units.formatDim(got), want: part.unit };
   }
 
-  function gradeSymbolic(part, input) {
+  function gradeSymbolic(part, input, $) {
     let want;
     let got;
+    let key;
     try {
-      want = compile(part.expr, part.vars, part.alias);
+      key = exprKey(part, $);
+      want = compile(key, part.vars, part.alias);
     } catch (e) {
       return { correct: false, feedback: `Bad answer key: ${e.message}` };
     }
@@ -797,7 +859,7 @@ export function createEngine(options = {}) {
   }
 
   function evalSymbolic(part, $) {
-    return compile(part.expr, part.vars, part.alias)($);
+    return compile(exprKey(part, $), part.vars, part.alias)($);
   }
 
   function evalAtScope(input, part, scope) {
@@ -812,6 +874,7 @@ export function createEngine(options = {}) {
     seedForAttempt,
     build,
     sampleValues,
+    countVersions,
     instance,
     sig,
     choiceOptions,

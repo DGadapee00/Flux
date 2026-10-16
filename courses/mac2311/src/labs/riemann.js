@@ -58,7 +58,7 @@ export default defineLab({
         <label class="field">
           <span>n</span>
           <div class="slider-row">
-            <input type="range" id="rm-n" min="2" max="40" step="1" value="4" />
+            <input type="range" id="rm-n" min="2" max="60" step="1" value="4" />
           </div>
         </label>
         <label class="field">
@@ -111,7 +111,7 @@ export default defineLab({
     const g = graphById(state.graphId);
     const a = state.a;
     const b = state.b;
-    const n = Math.max(2, Math.min(40, Math.round(state.n) || 4));
+    const n = Math.max(2, Math.min(60, Math.round(state.n) || 4));
     const sample = state.sample === 'right' || state.sample === 'mid' ? state.sample : 'left';
     state.n = n;
     state.sample = sample;

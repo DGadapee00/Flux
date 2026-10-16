@@ -1,7 +1,5 @@
 import { problem, range, num, mc, tf, kase, domain } from '../kit.js';
 
-const unit = { xMin: 0, xMax: 1, yMin: 0, yMax: 1 };
-
 export default [
   problem({
     id: 'ch5.triple.vol',
@@ -13,12 +11,15 @@ export default [
     kind: 'numeric',
     level: 1,
     topics: ['triple'],
-    vars: { a: range(1, 2, 1), b: range(1, 2, 1), c: range(1, 2, 1) },
+    vars: { a: range(1, 4, 1), b: range(1, 4, 1), c: range(1, 4, 1) },
     derive: ($) => ({ V: $.a * $.b * $.c }),
     text: (T) =>
       `Let $f=1$ on $B=[0,${T.a}]\\times[0,${T.b}]\\times[0,${T.c}]$. Find $\\iiint_B f\\,dV$.`,
     parts: [num('V', ($) => $.V, '', { label: 'volume', abs: 0.03 })],
-    hints: ['$f=1$, so the integral is the volume of the box.'],
+    hints: [
+      '$f=1$, so the integral is the volume of the box.',
+      'Multiply the three edge lengths. The order of integration does not change a constant integrand.',
+    ],
     steps: ($, f) => [`$${f($.V)}$.`],
     sim: {
       scenario: 'one',
@@ -44,32 +45,36 @@ export default [
     ch: '5',
     lab: 'triple',
     src: 'Merino §5 type',
-    title: '$xyz$ on the unit cube',
+    title: '$xyz$ on a box',
     kind: 'numeric',
     level: 2,
     topics: ['triple'],
-    vars: { dummy: range(1, 1, 1) },
-    derive: () => ({ I: 0.125 }),
-    text: () => `Let $f(x,y,z)=xyz$ on $[0,1]^3$. Find $\\iiint f\\,dV$.`,
+    vars: { A: range(1, 4, 1), B: range(1, 4, 1), C: range(1, 4, 1) },
+    derive: ($) => ({ I: (($.A * $.A) / 2) * (($.B * $.B) / 2) * (($.C * $.C) / 2) }),
+    text: (T) =>
+      `Let $f(x,y,z)=xyz$ on $[0,${T.A}]\\times[0,${T.B}]\\times[0,${T.C}]$. Find $\\iiint f\\,dV$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iiint$', abs: 0.02 })],
-    hints: ['The variables separate: $\\int_0^1 x\\,dx=1/2$, three times, so $1/8$.'],
-    steps: () => ['$1/8$.'],
+    hints: [
+      'The variables separate: $\\int_0^A x\\,dx = A^2/2$, and the same for $y$ and $z$.',
+      'Multiply the three halves. On the unit cube each factor is $1/2$, so the integral is $1/8$.',
+    ],
+    steps: ($, f) => [`$(A^2/2)(B^2/2)(C^2/2) = ${f($.I)}$.`],
     sim: {
       scenario: 'xyz',
-      setup(slice) {
+      setup(slice, $) {
         slice.fieldId = 'xyz';
         slice.xMin = 0;
-        slice.xMax = 1;
+        slice.xMax = $.A;
         slice.yMin = 0;
-        slice.yMax = 1;
+        slice.yMax = $.B;
         slice.zMin = 0;
-        slice.zMax = 1;
+        slice.zMax = $.C;
         slice.n = 6;
-        return domain(slice, unit);
+        return domain(slice, { xMin: 0, xMax: $.A, yMin: 0, yMax: $.B });
       },
       read: (c) => ({ I: c.closed }),
     },
-    cases: [kase('sample', { dummy: 1 }, { I: 0.125 })],
+    cases: [kase('sample', { A: 1, B: 1, C: 1 }, { I: 0.125 })],
   }),
 
   problem({
@@ -82,13 +87,16 @@ export default [
     kind: 'conceptual',
     level: 1,
     topics: ['triple'],
-    vars: { dummy: range(1, 1, 1) },
-    text: () =>
-      `True or false: if $f$ is continuous on a box $B$, then $\\int\\!\\int\\!\\int_B f\\,dV$ does not depend on whether you iterate $dz\\,dy\\,dx$ or $dx\\,dy\\,dz$.`,
+    vars: { n: range(1, 50, 1) },
+    text: (T) =>
+      `Let $f(x,y,z)=${T.n}xyz$, continuous on a box $B$. True or false: $\\iiint_B f\\,dV$ does not depend on whether you iterate $dz\\,dy\\,dx$ or $dx\\,dy\\,dz$.`,
     parts: [tf('tf', true, { label: 'statement' })],
-    hints: ['Fubini: the six orders agree on a box for a continuous $f$.'],
+    hints: [
+      'Fubini: the six orders agree on a box for a continuous $f$.',
+      'The coefficient factors out of every order, so it cannot make two orders disagree.',
+    ],
     steps: () => ['True.'],
-    cases: [kase('sample', { dummy: 1 }, { tf: 1 })],
+    cases: [kase('sample', { n: 1 }, { tf: 1 })],
   }),
 
   problem({
@@ -101,29 +109,32 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['triple'],
-    vars: { dummy: range(1, 1, 1) },
-    derive: () => ({ I: 2 }),
-    text: () =>
-      `Let $f(x,y,z)=x$ on $[0,2]\\times[0,1]\\times[0,1]$. Find $\\iiint f\\,dV$.`,
+    vars: { A: range(1, 5, 1), B: range(1, 4, 1), C: range(1, 3, 1) },
+    derive: ($) => ({ I: (($.A * $.A) / 2) * $.B * $.C }),
+    text: (T) =>
+      `Let $f(x,y,z)=x$ on $[0,${T.A}]\\times[0,${T.B}]\\times[0,${T.C}]$. Find $\\iiint f\\,dV$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iiint$', abs: 0.04 })],
-    hints: ['$\\int_0^2 x\\,dx=2$, times area $1$ in $y$ and $z$.'],
-    steps: () => ['$2$.'],
+    hints: [
+      '$\\int_0^A x\\,dx = A^2/2$, then multiply by the lengths in $y$ and $z$.',
+      '$f$ does not depend on $y$ or $z$, so those integrals are just the edge lengths.',
+    ],
+    steps: ($, f) => [`$(A^2/2) \\cdot B \\cdot C = ${f($.I)}$.`],
     sim: {
       scenario: 'x',
-      setup(slice) {
+      setup(slice, $) {
         slice.fieldId = 'xonly';
         slice.xMin = 0;
-        slice.xMax = 2;
+        slice.xMax = $.A;
         slice.yMin = 0;
-        slice.yMax = 1;
+        slice.yMax = $.B;
         slice.zMin = 0;
-        slice.zMax = 1;
+        slice.zMax = $.C;
         slice.n = 6;
-        return domain(slice, { xMin: 0, xMax: 2, yMin: 0, yMax: 1 });
+        return domain(slice, { xMin: 0, xMax: $.A, yMin: 0, yMax: $.B });
       },
       read: (c) => ({ I: c.closed }),
     },
-    cases: [kase('sample', { dummy: 1 }, { I: 2 })],
+    cases: [kase('sample', { A: 2, B: 1, C: 1 }, { I: 2 })],
   }),
 
   problem({
@@ -136,25 +147,29 @@ export default [
     kind: 'numeric',
     level: 1,
     topics: ['cyl'],
-    vars: { dummy: range(1, 1, 1) },
-    derive: () => ({ V: Math.PI }),
-    text: () =>
-      `A cylinder of radius $1$ and height $1$ (so $z\\in[0,1]$). Find its volume.`,
+    vars: { R: range(1, 5, 1), H: range(1, 10, 1) },
+    derive: ($) => ({ V: Math.PI * $.R * $.R * $.H }),
+    text: (T) =>
+      `A cylinder of radius ${T.R} and height ${T.H} (so $z\\in[0,${T.H}]$). Find its volume.`,
     parts: [num('V', ($) => $.V, '', { label: 'volume', abs: 0.06 })],
-    hints: ['$\\pi R^2 H=\\pi$. In cylindrical coordinates the Jacobian $r$ is what produces $\\pi R^2$.'],
-    steps: () => ['$\\pi$.'],
+    hints: [
+      '$\\pi R^2 H$. In cylindrical coordinates the Jacobian $r$ is what produces $\\pi R^2$.',
+      'Height is the $z$-interval. Do not cube the radius: that formula belongs to a ball.',
+    ],
+    steps: ($, f) => [`$\\pi R^2 H = ${f($.V)}$.`],
     sim: {
       scenario: 'vol',
-      setup(slice) {
+      setup(slice, $) {
         slice.fieldId = 'one';
-        slice.R = 1;
+        slice.R = $.R;
         slice.z0 = 0;
-        slice.z1 = 1;
-        return domain(slice, { xMin: -1.2, xMax: 1.2, yMin: -1.2, yMax: 1.2 });
+        slice.z1 = $.H;
+        const m = $.R + 0.2;
+        return domain(slice, { xMin: -m, xMax: m, yMin: -m, yMax: m });
       },
       read: (c) => ({ V: c.closed }),
     },
-    cases: [kase('sample', { dummy: 1 }, { V: Math.PI })],
+    cases: [kase('sample', { R: 1, H: 1 }, { V: Math.PI })],
   }),
 
   problem({
@@ -167,8 +182,8 @@ export default [
     kind: 'choice',
     level: 1,
     topics: ['cyl'],
-    vars: { dummy: range(1, 1, 1) },
-    text: () => `In cylindrical coordinates, $dV$ is:`,
+    vars: { n: range(1, 50, 1) },
+    text: (T) => `A cylinder of radius ${T.n}. In cylindrical coordinates, $dV$ is:`,
     parts: [
       mc(
         'jac',
@@ -181,9 +196,12 @@ export default [
         'r',
       ),
     ],
-    hints: ['The $xy$-slice is polar: the extra factor is $r$, same as double polar.'],
+    hints: [
+      'The $xy$-slice is polar: the extra factor is $r$, same as double polar.',
+      'The radius of this cylinder does not change the Jacobian. $\\sin\\varphi$ belongs to spherical coordinates.',
+    ],
     steps: () => ['$dV=r\\,dr\\,d\\theta\\,dz$.'],
-    cases: [kase('sample', { dummy: 1 }, { jac: 'r' })],
+    cases: [kase('sample', { n: 1 }, { jac: 'r' })],
   }),
 
   problem({
@@ -196,25 +214,29 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['cyl'],
-    vars: { dummy: range(1, 1, 1) },
-    derive: () => ({ I: 2 * Math.PI }),
-    text: () =>
-      `Let $f=z$ on the cylinder $x^2+y^2\\le 1$, $z\\in[0,2]$. Find $\\iiint f\\,dV$.`,
+    vars: { R: range(1, 5, 1), H: range(1, 10, 1) },
+    derive: ($) => ({ I: Math.PI * $.R * $.R * (($.H * $.H) / 2) }),
+    text: (T) =>
+      `Let $f=z$ on the cylinder $x^2+y^2\\le ${T.R}^2$, $z\\in[0,${T.H}]$. Find $\\iiint f\\,dV$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iiint$', abs: 0.08 })],
-    hints: ['Base area $\\pi$, $\\int_0^2 z\\,dz=2$, so the integral is $2\\pi$.'],
-    steps: () => ['$\\iiint z\\,dV = \\pi R^2 \\cdot \\tfrac12\\bigl(z_1^2-z_0^2\\bigr) = \\pi \\cdot \\tfrac12 \\cdot 2^2 = 2\\pi$.'],
+    hints: [
+      'The base has area $\\pi R^2$, and $\\int_0^H z\\,dz = H^2/2$.',
+      'Multiply those. The integrand does not depend on $x$ or $y$, so the base contributes only its area.',
+    ],
+    steps: ($, f) => [`$\\pi R^2 \\cdot (H^2/2) = ${f($.I)}$.`],
     sim: {
       scenario: 'z',
-      setup(slice) {
+      setup(slice, $) {
         slice.fieldId = 'zonly';
-        slice.R = 1;
+        slice.R = $.R;
         slice.z0 = 0;
-        slice.z1 = 2;
-        return domain(slice, { xMin: -1.2, xMax: 1.2, yMin: -1.2, yMax: 1.2 });
+        slice.z1 = $.H;
+        const m = $.R + 0.2;
+        return domain(slice, { xMin: -m, xMax: m, yMin: -m, yMax: m });
       },
       read: (c) => ({ I: c.closed }),
     },
-    cases: [kase('sample', { dummy: 1 }, { I: 2 * Math.PI })],
+    cases: [kase('sample', { R: 1, H: 2 }, { I: 2 * Math.PI })],
   }),
 
   problem({
@@ -223,26 +245,30 @@ export default [
     ch: '5',
     lab: 'sph',
     src: 'Merino §5 type',
-    title: 'Volume of the unit ball',
+    title: 'Volume of a ball',
     kind: 'numeric',
     level: 1,
     topics: ['sph'],
-    vars: { dummy: range(1, 1, 1) },
-    derive: () => ({ V: (4 / 3) * Math.PI }),
-    text: () => `Find the volume of the unit ball $x^2+y^2+z^2\\le 1$.`,
+    vars: { R: range(1, 50, 1) },
+    derive: ($) => ({ V: (4 / 3) * Math.PI * $.R ** 3 }),
+    text: (T) => `Find the volume of the ball $x^2+y^2+z^2\\le ${T.R}^2$.`,
     parts: [num('V', ($) => $.V, '', { label: 'volume', abs: 0.08 })],
-    hints: ['$\\tfrac43\\pi R^3$ with $R=1$. The Jacobian $\\rho^2\\sin\\varphi$ is what produces this.'],
-    steps: () => ['$\\tfrac43\\pi$.'],
+    hints: [
+      '$\\tfrac43\\pi R^3$. The Jacobian $\\rho^2\\sin\\varphi$ is what produces this.',
+      'The radius is cubed, not squared. A squared radius is the area of a disk.',
+    ],
+    steps: ($, f) => [`$\\tfrac43\\pi R^3 = ${f($.V)}$.`],
     sim: {
       scenario: 'vol',
-      setup(slice) {
+      setup(slice, $) {
         slice.fieldId = 'one';
-        slice.R = 1;
-        return domain(slice, { xMin: -1.2, xMax: 1.2, yMin: -1.2, yMax: 1.2 });
+        slice.R = $.R;
+        const m = $.R + 0.2;
+        return domain(slice, { xMin: -m, xMax: m, yMin: -m, yMax: m });
       },
       read: (c) => ({ V: c.closed }),
     },
-    cases: [kase('sample', { dummy: 1 }, { V: (4 / 3) * Math.PI })],
+    cases: [kase('sample', { R: 1 }, { V: (4 / 3) * Math.PI })],
   }),
 
   problem({
@@ -255,8 +281,8 @@ export default [
     kind: 'choice',
     level: 1,
     topics: ['sph'],
-    vars: { dummy: range(1, 1, 1) },
-    text: () => `In spherical coordinates, $dV$ is:`,
+    vars: { n: range(1, 50, 1) },
+    text: (T) => `The ball of radius ${T.n}. In spherical coordinates, $dV$ is:`,
     parts: [
       mc(
         'jac',
@@ -269,9 +295,12 @@ export default [
         'rho2sin',
       ),
     ],
-    hints: ['$\\rho$ is the distance from the origin; $\\varphi$ is the angle from $+z$.'],
+    hints: [
+      '$\\rho$ is the distance from the origin; $\\varphi$ is the angle from $+z$.',
+      'The cylindrical factor $r\\,dr\\,d\\theta\\,dz$ is the other option. A ball uses $\\rho^2\\sin\\varphi$.',
+    ],
     steps: () => ['$dV=\\rho^2\\sin\\varphi\\,d\\rho\\,d\\varphi\\,d\\theta$.'],
-    cases: [kase('sample', { dummy: 1 }, { jac: 'rho2sin' })],
+    cases: [kase('sample', { n: 1 }, { jac: 'rho2sin' })],
   }),
 
   problem({
@@ -284,9 +313,9 @@ export default [
     kind: 'choice',
     level: 1,
     topics: ['sph'],
-    vars: { dummy: range(1, 1, 1) },
-    text: () =>
-      `In this course, $\\varphi$ in spherical coordinates is the angle from the positive $z$-axis. Its range on a full ball is:`,
+    vars: { n: range(1, 50, 1) },
+    text: (T) =>
+      `On the ball of radius ${T.n}, $\\varphi$ is the angle from the positive $z$-axis. Its range on a full ball is:`,
     parts: [
       mc(
         'phi',
@@ -299,9 +328,12 @@ export default [
         'pi',
       ),
     ],
-    hints: ['$\\varphi=0$ is the north pole, $\\varphi=\\pi$ is the south pole. $\\theta$ is the one that runs a full turn.'],
+    hints: [
+      '$\\varphi=0$ is the north pole, $\\varphi=\\pi$ is the south pole. $\\theta$ is the one that runs a full turn.',
+      'The radius does not change the angle. $[0,\\pi/2]$ would stop at the equator.',
+    ],
     steps: () => ['$[0,\\pi]$.'],
-    cases: [kase('sample', { dummy: 1 }, { phi: 'pi' })],
+    cases: [kase('sample', { n: 1 }, { phi: 'pi' })],
   }),
 
   problem({
@@ -314,22 +346,26 @@ export default [
     kind: 'numeric',
     level: 2,
     topics: ['sph'],
-    vars: { dummy: range(1, 1, 1) },
+    vars: { R: range(1, 50, 1) },
     derive: () => ({ I: 0 }),
-    text: () => `Let $f(x,y,z)=z$ on the unit ball. Find $\\iiint f\\,dV$.`,
+    text: (T) => `Let $f(x,y,z)=z$ on the ball of radius ${T.R}. Find $\\iiint f\\,dV$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iiint$', abs: 0.05 })],
-    hints: ['$z$ is odd in $z$ and the ball is symmetric about $z=0$.'],
+    hints: [
+      '$z$ is odd in $z$ and the ball is symmetric about $z=0$.',
+      'A larger radius scales both the upper and lower halves the same way, so the integral stays $0$.',
+    ],
     steps: () => ['$0$.'],
     sim: {
       scenario: 'z',
-      setup(slice) {
+      setup(slice, $) {
         slice.fieldId = 'zonly';
-        slice.R = 1;
-        return domain(slice, { xMin: -1.2, xMax: 1.2, yMin: -1.2, yMax: 1.2 });
+        slice.R = $.R;
+        const m = $.R + 0.2;
+        return domain(slice, { xMin: -m, xMax: m, yMin: -m, yMax: m });
       },
       read: (c) => ({ I: c.closed }),
     },
-    cases: [kase('sample', { dummy: 1 }, { I: 0 })],
+    cases: [kase('sample', { R: 1 }, { I: 0 })],
   }),
 
   problem({
@@ -338,26 +374,30 @@ export default [
     ch: '5',
     lab: 'sph',
     src: 'Merino §5 type',
-    title: '$\\iiint(x^2+y^2+z^2)\\,dV$ on the unit ball',
+    title: '$\\iiint(x^2+y^2+z^2)\\,dV$ on a ball',
     kind: 'numeric',
     level: 2,
     topics: ['sph'],
-    vars: { dummy: range(1, 1, 1) },
-    derive: () => ({ I: (4 / 5) * Math.PI }),
-    text: () =>
-      `Let $f(x,y,z)=x^2+y^2+z^2$ on the unit ball. Find $\\iiint f\\,dV$.`,
+    vars: { R: range(1, 50, 1) },
+    derive: ($) => ({ I: (4 / 5) * Math.PI * $.R ** 5 }),
+    text: (T) =>
+      `Let $f(x,y,z)=x^2+y^2+z^2$ on the ball of radius ${T.R}. Find $\\iiint f\\,dV$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iiint$', abs: 0.08 })],
-    hints: ['$f=\\rho^2$, times Jacobian $\\rho^2\\sin\\varphi$. $\\int_0^1\\rho^4\\,d\\rho=1/5$, times $4\\pi$.'],
-    steps: () => ['$\\tfrac45\\pi$.'],
+    hints: [
+      '$f=\\rho^2$, times Jacobian $\\rho^2\\sin\\varphi$. $\\int_0^R\\rho^4\\,d\\rho=R^5/5$, times $4\\pi$.',
+      'The angular integrals give $4\\pi$, and the radial power is $5$, not $3$. Volume would stop at $\\rho^2$ in the Jacobian alone.',
+    ],
+    steps: ($, f) => [`$\\tfrac45\\pi R^5 = ${f($.I)}$.`],
     sim: {
       scenario: 'bowl',
-      setup(slice) {
+      setup(slice, $) {
         slice.fieldId = 'bowl';
-        slice.R = 1;
-        return domain(slice, { xMin: -1.2, xMax: 1.2, yMin: -1.2, yMax: 1.2 });
+        slice.R = $.R;
+        const m = $.R + 0.2;
+        return domain(slice, { xMin: -m, xMax: m, yMin: -m, yMax: m });
       },
       read: (c) => ({ I: c.closed }),
     },
-    cases: [kase('sample', { dummy: 1 }, { I: (4 / 5) * Math.PI })],
+    cases: [kase('sample', { R: 1 }, { I: (4 / 5) * Math.PI })],
   }),
 ];

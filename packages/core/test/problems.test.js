@@ -114,6 +114,35 @@ test('a clean solve promotes every time unless whenDue is set, and cap clamps th
   assert.ok(spaced.get('p').due <= cap);
 });
 
+test('countVersions is the legal cartesian product, and a symbolic key may depend on the version', () => {
+  const { countVersions, grade, evalSymbolic } = createEngine();
+  const range = (min, max, step) => ({ type: 'range', min, max, step });
+  const fixed = {
+    id: 'fixed',
+    vars: { a: range(1, 3, 1) },
+    derive: () => ({}),
+    valid: () => true,
+    parts: [],
+  };
+  assert.equal(countVersions(fixed), 3);
+  const gated = { ...fixed, valid: ($) => $.a !== 2 };
+  assert.equal(countVersions(gated, { need: 50 }), 2);
+  const wide = { ...fixed, vars: { a: range(1, 10, 1), b: range(1, 10, 1) } };
+  assert.equal(countVersions(wide, { need: 50 }), 50);
+
+  const sym = {
+    kind: 'symbolic',
+    expr: ($) => `${$.a}*x`,
+    vars: ['x'],
+    alias: {},
+    get: ($) => $.a * $.x,
+  };
+  const $ = { a: 4, x: 2 };
+  assert.equal(evalSymbolic(sym, $), 8);
+  assert.equal(grade(sym, $, '4*x').correct, true);
+  assert.equal(grade(sym, $, '5*x').correct, false);
+});
+
 test('pickSet is stable for a seed and stays inside chapterOrder', () => {
   const templates = [
     { id: 'a', ch: '1', kind: 'numeric' },
