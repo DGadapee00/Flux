@@ -152,6 +152,10 @@ for (const tpl of PROBLEMS) {
   if (typeof tpl.second !== 'function' && !tpl.sim) err(tpl.id, 'no second method and no lab');
   if (!tpl.cases.length) err(tpl.id, 'no worked case');
   if (!tpl.title) err(tpl.id, 'no title for the practice list');
+  if (!Array.isArray(tpl.hints) || tpl.hints.length < 2 || tpl.hints.length > 3) {
+    err(tpl.id, `${tpl.hints?.length ?? 0} hints; want 2 or 3`);
+  }
+  if (tpl.level !== 1 && tpl.level !== 2 && tpl.level !== 3) err(tpl.id, `level ${tpl.level} is not 1, 2, or 3`);
 
   for (const c of tpl.cases) {
     let inst;

@@ -61,7 +61,10 @@ const ch16 = [
       num('speed', ($) => rollContact($.r1, $.w1, $.r2).speed, 'm/s', { label: 'belt speed' }),
       num('omega', ($) => rollContact($.r1, $.w1, $.r2).omega2, 'rad/s', { label: 'driven angular velocity' }),
     ],
-    hints: ['The belt speed is the driver radius times its angular velocity. The driven pulley shares that speed, in the same sense.'],
+    level: 1,
+    hints: ['The belt speed is the driver radius times its angular velocity. The driven pulley shares that speed, in the same sense.',
+      "The driven angular velocity is the belt speed divided by the driven radius. The larger pulley turns more slowly.",
+    ],
     steps: ($, sig) => {
       const row = rollContact($.r1, $.w1, $.r2);
       return [
@@ -95,7 +98,10 @@ const ch16 = [
       num('omega', ($) => rollContact($.r1, $.w1, $.r2, { external: true }).omega2, 'rad/s', { label: 'driven angular velocity' }),
       num('alpha', ($) => rollContact($.r1, $.w1, $.r2, { external: true }).ratio * $.a1, 'rad/s²', { label: 'driven angular acceleration' }),
     ],
-    hints: ['External gears reverse the sense. The pitch line has one speed and one tangential acceleration.'],
+    level: 2,
+    hints: ['External gears reverse the sense. The pitch line has one speed and one tangential acceleration.',
+      "If the driver angular velocity is positive, the driven one is negative. Use the same radius ratio, and the same sign, for the angular acceleration.",
+    ],
     steps: ($, sig) => {
       const ratio = $.r1 / $.r2;
       return [
@@ -130,7 +136,10 @@ const ch16 = [
       num('speed', ($) => Math.abs($.r1 * $.w1), 'ft/s', { label: 'belt speed' }),
       num('omega', ($) => rollContact($.r1, $.w1, $.r2).omega2, 'rad/s', { label: 'driven angular velocity' }),
     ],
-    hints: ['Work in feet and radians per second. An open belt does not reverse the rotation.'],
+    level: 1,
+    hints: ['Work in feet and radians per second. An open belt does not reverse the rotation.',
+      "The belt speed is the driver radius in feet times omega in rad/s. Divide by the driven radius for its angular velocity.",
+    ],
     steps: ($, sig) => [
       String.raw`Belt speed: $r_1\omega_1 = ${sig($.r1 * $.w1)}\ \mathrm{ft/s}$.`,
       String.raw`$\omega_2 = (r_1/r_2)\omega_1 = ${sig(($.r1 / $.r2) * $.w1)}\ \mathrm{rad/s}$.`,
@@ -161,7 +170,10 @@ const ch16 = [
       num('x', ($) => sliderCrank({ r: $.r, l: $.l, theta: $.theta * DEG, omega: $.omega, alpha: 0 }).x, 'm', { label: 'slider position' }),
       num('v', ($) => sliderCrank({ r: $.r, l: $.l, theta: $.theta * DEG, omega: $.omega, alpha: 0 }).v, 'm/s', { label: 'slider velocity' }),
     ],
-    hints: ['Write the slider coordinate from the crank angle and the rod angle. Differentiate that coordinate.'],
+    level: 2,
+    hints: ['Write the slider coordinate from the crank angle and the rod angle. Differentiate that coordinate.',
+      "The rod angle satisfies sin phi = (r/l) sin theta. Differentiate x = r cos theta + l cos phi, and keep omega equal to the crank rate.",
+    ],
     steps: ($, sig) => {
       const row = sliderCrank({ r: $.r, l: $.l, theta: $.theta * DEG, omega: $.omega, alpha: 0 });
       return [
@@ -207,7 +219,10 @@ const ch16 = [
       num('vx', ($) => relativeVelocity({ x: $.vax, y: $.vay, z: 0 }, $.omega, { x: $.rx, y: $.ry, z: 0 }).x, 'm/s', { label: 'x component of v_B' }),
       num('vy', ($) => relativeVelocity({ x: $.vax, y: $.vay, z: 0 }, $.omega, { x: $.rx, y: $.ry, z: 0 }).y, 'm/s', { label: 'y component of v_B' }),
     ],
-    hints: ['Add omega cross r to the velocity of A. That cross product is perpendicular to the bar.'],
+    level: 2,
+    hints: ['Add omega cross r to the velocity of A. That cross product is perpendicular to the bar.',
+      "With omega counterclockwise, the cross product is (−omega y, omega x). Add that vector to the velocity of A.",
+    ],
     steps: ($, sig) => {
       const row = relativeVelocity({ x: $.vax, y: $.vay, z: 0 }, $.omega, { x: $.rx, y: $.ry, z: 0 });
       return [
@@ -245,7 +260,10 @@ const ch16 = [
       num('omega', ($) => ladder($.L, $.theta, $.v).omega, 'rad/s', { label: 'angular velocity' }),
       num('vTop', ($) => ladder($.L, $.theta, $.v).down, 'm/s', { label: 'downward speed of the top' }),
     ],
-    hints: ['The instantaneous centre is the corner across from the ladder. Divide the foot speed by the height of the top.'],
+    level: 2,
+    hints: ['The instantaneous centre is the corner across from the ladder. Divide the foot speed by the height of the top.',
+      "The top speed is omega times the horizontal reach of the ladder. That reach is the distance from the corner to the top.",
+    ],
     steps: ($, sig) => {
       const row = ladder($.L, $.theta, $.v);
       return [
@@ -290,7 +308,10 @@ const ch16 = [
       num('speed', ($) => rollingPoint({ radius: $.R, speed: $.v, phi: $.phi * DEG }).speed, 'm/s', { label: 'speed of the mark' }),
       num('vTop', ($) => rollingPoint({ radius: $.R, speed: $.v, phi: $.phi * DEG }).vTop, 'm/s', { label: 'speed of the top point' }),
     ],
-    hints: ['The contact point is the instantaneous centre. The top is two radii away, so it moves at twice the centre speed.'],
+    level: 1,
+    hints: ['The contact point is the instantaneous centre. The top is two radii away, so it moves at twice the centre speed.',
+      "Measure the mark from the contact point. Its speed is omega times its distance to that point.",
+    ],
     steps: ($, sig) => {
       const row = rollingPoint({ radius: $.R, speed: $.v, phi: $.phi * DEG });
       return [
@@ -330,7 +351,11 @@ const ch16 = [
     parts: [
       num('a', ($) => sliderCrank({ r: $.r, l: $.l, theta: $.theta * DEG, omega: $.omega, alpha: $.alpha }).a, 'm/s²', { label: 'slider acceleration' }),
     ],
-    hints: ['Differentiate the slider position a second time. Zero velocity at a dead centre does not make the acceleration zero.'],
+    level: 3,
+    hints: ['Differentiate the slider position a second time. Zero velocity at a dead centre does not make the acceleration zero.',
+      "The product rule on the angle leaves an omega-squared term in that second derivative.",
+      "At a dead centre the velocity is zero. That omega-squared term in the acceleration remains.",
+    ],
     steps: ($, sig) => {
       const row = sliderCrank({ r: $.r, l: $.l, theta: $.theta * DEG, omega: $.omega, alpha: $.alpha });
       return [

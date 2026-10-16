@@ -23,18 +23,23 @@
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Fixed-axis rotation</h2>
 <p>A point on a body that rotates about a fixed axis moves on a circle. Its speed is the radius times \(\omega\). Its tangential acceleration is the radius times \(\alpha\).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Points in contact share one arc speed, \(r\omega\). An open belt keeps the sense of rotation. External gears push back, so the sense reverses. The same ratio gives \(\alpha\).</p>
+</div>
+
 <div class="box ex"><span class="tag">Worked example · an open belt</span>
 <p>An open belt joins pulleys of radii 0.15 m and 0.3 m. The driver turns at 20 rad/s. The belt speed is 3 m/s. The driven pulley turns at 10 rad/s, in the same sense.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · external gears</span>
 <p>External gears have pitch radii 0.1 m and 0.25 m. The driver turns at 8 rad/s and speeds up at 2 rad/s². The driven gear turns at −3.2 rad/s and at −0.8 rad/s².</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>An open belt does not reverse the rotation. External gears do. The pitch line still has one speed. Hibbeler §16.3.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Match the arc speeds. Keep the sign for a belt. Flip it for external gears.</p>
 </div>
+<p>The belt does not slip, and the gear teeth stay in mesh. The model leaves out belt creep and a tooth leaving contact.</p>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Absolute motion analysis</h2>
@@ -48,32 +53,42 @@
 <div class="box ex"><span class="tag">Worked example · fully extended</span>
 <p>The same crank at 0° puts the slider at 1 m. The velocity is 0. The crank and the rod are in one line.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Write the position, then differentiate. Do not start from the acceleration formula. Hibbeler §16.4.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>One position equation. Differentiate it once for \(v\), and again for \(a\).</p>
 </div>
+<p>One position equation is enough when the linkage has one degree of freedom. The model leaves out a flexible rod and a joint with clearance.</p>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Relative velocity</h2>
 <p>Two points of a rigid body differ by a rotation. The velocity of B is the velocity of A plus \(\omega\) crossed with the vector from A to B.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>A rigid body keeps the distance from A to B fixed. The relative motion is a rotation, so the velocity of B is the velocity of A plus \(\omega\times\mathbf{r}_{B/A}\).</p>
+</div>
+
 \[
 \vec v_B = \vec v_A + \omega\times\vec r_{B/A}.
 \]
 <div class="box ex"><span class="tag">Worked example · a bar</span>
 <p>Point A moves at (1, 0.5) m/s. Point B is 0.4 m to the right and 0.3 m up. \(\omega\) is 2 rad/s counterclockwise. The velocity of B is (0.4, 1.3) m/s.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>\(\omega\times\vec r\) is perpendicular to the bar. It is not a component along the bar. Hibbeler §16.5.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Positive \(\omega\) is counterclockwise: \(\omega\mathbf{k}\times(x, y) = (-\omega y,\ \omega x)\).</p>
 </div>
+<p>The body is rigid, so the distance from A to B is fixed. A body that bends would need another term in the relative velocity.</p>
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Instantaneous centre</h2>
 <p>The instantaneous centre is the point of the body, or of its extension, whose velocity is zero at this instant. Every other point moves perpendicular to the line drawn from the centre, with speed \(\omega\) times that distance.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The instantaneous centre is the point whose velocity is zero right now. The perpendiculars to two known velocities meet there. Every other speed is \(\omega\) times the distance from that point.</p>
+</div>
+
 <div class="box ex"><span class="tag">Worked example · a sliding ladder</span>
 <p>A 4 m ladder leans at 60° to the floor. The foot moves out at 2 m/s. The centre is the corner across from the ladder. \(\omega\) is 0.577 rad/s. The top falls at 1.155 m/s.</p>
 </div>
@@ -83,16 +98,21 @@
 <div class="box ex"><span class="tag">Worked example · the contact point</span>
 <p>A wheel of radius 0.4 m rolls at 2 m/s. The contact point is the instantaneous centre. \(\omega\) is −5 rad/s. The top moves at 4 m/s.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>The instantaneous centre is the point with zero velocity. It is not the mass centre, and it moves as the body moves. Hibbeler §16.6.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Draw the lines through two points, each perpendicular to that point’s velocity. They meet at the centre.</p>
 </div>
+<p>The instantaneous centre is at rest only at this instant. It is not a pin. Using it as a fixed axis at a later time is a different problem.</p>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Relative acceleration</h2>
 <p>The acceleration of B adds three pieces: the acceleration of A, the tangential piece \(\alpha\times r\), and the centripetal piece \(-\omega^2 r\).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Differentiate \(\mathbf{v}_B = \mathbf{v}_A + \omega\times\mathbf{r}\). One new piece is \(\alpha\times\mathbf{r}\), tangent to the relative position. The other is \(-\omega^2\mathbf{r}\), toward A.</p>
+</div>
+
 \[
 \vec a_B = \vec a_A + \alpha\times\vec r - \omega^2\vec r.
 \]
@@ -102,16 +122,21 @@
 <div class="box ex"><span class="tag">Worked example · the inner dead centre</span>
 <p>Folded, the same crank still has speed 0. The acceleration is 15 m/s², outward along the slider.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Zero velocity does not mean zero acceleration. The \(-\omega^2 r\) term remains at a dead centre. Hibbeler §16.7.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Keep the centripetal term even when the point you care about is stopped.</p>
 </div>
+<p>The centripetal term stays in the acceleration when the velocity is zero. The model leaves out a crank whose length changes.</p>
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Rolling without slip</h2>
 <p>A wheel that rolls without slip has its contact point instantaneously at rest. That point is the instantaneous centre. The centre of the wheel moves at \(v = R\omega\), and the top moves at \(2v\).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>No slip means the contact point matches the ground, so its velocity is zero. That point is the instantaneous centre. The wheel centre is one radius away, and the top is two.</p>
+</div>
+
 <div class="box ex"><span class="tag">Worked example · the contact point</span>
 <p>A wheel of radius 0.4 m rolls at 2 m/s. The contact point has speed 0. Its acceleration is 10 m/s² toward the centre.</p>
 </div>
@@ -121,12 +146,13 @@
 <div class="box ex"><span class="tag">Worked example · a side point</span>
 <p>The point level with the centre moves at 2.83 m/s. The acceleration is still 10 m/s² toward the centre.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>The contact point is instantaneously at rest. It is not a fixed point, so it still has acceleration \(v^2/R\) toward the centre. Hibbeler §16.6 and §16.7.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Speed from the contact point: zero at the ground, \(v\) at the centre, \(2v\) at the top. Acceleration of a rim point: \(v^2/R\) toward the centre.</p>
 </div>
+<p>No slip is a constraint on the velocity. It does not say whether friction can enforce that constraint. The force question belongs to kinetics.</p>
 </section>
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Formula sheet</h2>
@@ -141,6 +167,7 @@
 <li>A belt may be stated in feet. The speed ratio is the same.</li>
 <li>Rotating axes, §16.8, stay out of this unit.</li>
 </ul>
+<p>Rotating frames stay out. So do a slipping belt and a wheel that both rolls and slides.</p>
 </section>
 </main>
 </body>

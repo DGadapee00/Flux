@@ -77,7 +77,10 @@ const ch15 = [
       num('J', ($) => impulseRamp($.f1, $.s1, 0, $.t1) + $.f2 * $.t2, 'N·s', { label: 'total impulse' }),
       num('v', ($) => $.v0 + (impulseRamp($.f1, $.s1, 0, $.t1) + $.f2 * $.t2) / $.m, 'm/s', { label: 'final speed' }),
     ],
-    hints: ['The impulse is the area under F(t). A straight ramp has the area of the average force times the duration.'],
+    level: 1,
+    hints: ['The impulse is the area under F(t). A straight ramp has the area of the average force times the duration.',
+      "The change in speed is the total impulse divided by the mass. Add that change to the starting speed.",
+    ],
     steps: ($, sig) => {
       const j1 = impulseRamp($.f1, $.s1, 0, $.t1);
       const j2 = $.f2 * $.t2;
@@ -125,7 +128,10 @@ const ch15 = [
     parts: [
       num('vg', ($) => ($.mb * $.vb) / $.Mg, 'm/s', { label: 'recoil speed' }),
     ],
-    hints: ['Take the bullet and the gun as one system. Their momenta sum to zero.'],
+    level: 1,
+    hints: ['Take the bullet and the gun as one system. Their momenta sum to zero.',
+      "The gun velocity is opposite the bullet velocity. Its size is the bullet momentum divided by the gun mass.",
+    ],
     steps: ($, sig) => [
       String.raw`$m_b v_b + m_g v_g = 0$.`,
       String.raw`The recoil speed is ${sig(($.mb * $.vb) / $.Mg)} m/s.`,
@@ -152,7 +158,10 @@ const ch15 = [
     parts: [
       num('v', ($) => collide1D($.mb, $.M, $.vb, 0, 0).v1, 'm/s', { label: 'shared speed' }),
     ],
-    hints: ['An embedded bullet is a perfectly inelastic collision. Momentum is conserved, and the two masses leave together.'],
+    level: 2,
+    hints: ['An embedded bullet is a perfectly inelastic collision. Momentum is conserved, and the two masses leave together.',
+      "With e equal to 0 there is one shared speed. It is the bullet momentum divided by the combined mass.",
+    ],
     steps: ($, sig) => {
       const v = ($.mb * $.vb) / ($.mb + $.M);
       return [
@@ -196,7 +205,10 @@ const ch15 = [
       num('v1', ($) => collide1D($.m1, $.m2, $.u1, $.u2, $.e).v1, 'm/s', { label: 'speed of the first mass' }),
       num('v2', ($) => collide1D($.m1, $.m2, $.u1, $.u2, $.e).v2, 'm/s', { label: 'speed of the second mass' }),
     ],
-    hints: ['Write conservation of momentum and the restitution equation. Solve that pair.'],
+    level: 2,
+    hints: ['Write conservation of momentum and the restitution equation. Solve that pair.',
+      "Take the line as positive in the incoming direction of the first mass. A negative result is a rebound.",
+    ],
     steps: ($, sig) => {
       const hit = solveLine($.m1, $.m2, $.u1, $.u2, $.e);
       return [
@@ -243,7 +255,11 @@ const ch15 = [
       num('vn2', ($) => oblique($).vn2, 'm/s', { label: 'normal speed of the second body' }),
       num('vt', ($) => oblique($).vt1, 'm/s', { label: 'tangent speed of the first body' }),
     ],
-    hints: ['Split the incoming velocity into a normal part and a tangent part. The tangent part is unchanged.'],
+    level: 3,
+    hints: ['Split the incoming velocity into a normal part and a tangent part. The tangent part is unchanged.',
+      "The normal part of the first body is u cos theta. Apply momentum and restitution to the normal parts only.",
+      "The tangent speed is u sin theta. Do not multiply that part by e.",
+    ],
     steps: ($, sig) => {
       const th = $.theta * DEG;
       const un1 = $.u1 * Math.cos(th);
@@ -293,7 +309,10 @@ const ch15 = [
     parts: [
       num('L', ($) => particleAngularMomentum($.m, v($.x, $.y, 0), v($.vx, $.vy, 0)).z, 'kg·m²/s', { label: 'angular momentum' }),
     ],
-    hints: ['The moment about the origin is m times x vy minus y vx.'],
+    level: 2,
+    hints: ['The moment about the origin is m times x vy minus y vx.',
+      "Keep the signs of x, y, vx, and vy. The moment arm is from the origin to the particle, not along the velocity.",
+    ],
     steps: ($, sig) => [
       String.raw`$L_z = m(x v_y - y v_x)$.`,
       String.raw`$L_z = ${sig($.m * ($.x * $.vy - $.y * $.vx))}\ \mathrm{kg\cdot m^2/s}$.`,
@@ -321,7 +340,10 @@ const ch15 = [
     parts: [
       num('dv', ($) => rocketDeltaV({ m0: $.m0, mf: $.mf, ve: $.ve, mdot: $.mdot, g: G }).dv, 'm/s', { label: 'change in speed' }),
     ],
-    hints: ['The speed gain is the exhaust speed times the log of the mass ratio, minus g times the burn time.'],
+    level: 2,
+    hints: ['The speed gain is the exhaust speed times the log of the mass ratio, minus g times the burn time.',
+      "The burn time is the burned mass divided by the burn rate. Subtract g times that time from the logarithm term.",
+    ],
     steps: ($, sig) => {
       const row = rocketDeltaV({ m0: $.m0, mf: $.mf, ve: $.ve, mdot: $.mdot, g: G });
       return [
@@ -363,7 +385,10 @@ const ch15 = [
     parts: [
       num('dv', ($) => rocketDeltaV({ m0: $.m0, mf: $.mf, ve: $.ve, mdot: $.mdot, g: G_FT }).dv, 'ft/s', { label: 'change in speed' }),
     ],
-    hints: ['The equation is the same in US customary units. The mass is in slugs, and g is 32.2 ft/s².'],
+    level: 2,
+    hints: ['The equation is the same in US customary units. The mass is in slugs, and g is 32.2 ft/s².',
+      "The burned mass is m0 minus mf. Divide by the burn rate, then subtract g times the burn time from ve times the log of the mass ratio.",
+    ],
     steps: ($, sig) => {
       const row = rocketDeltaV({ m0: $.m0, mf: $.mf, ve: $.ve, mdot: $.mdot, g: G_FT });
       return [

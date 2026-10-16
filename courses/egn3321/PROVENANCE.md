@@ -1,7 +1,7 @@
 # Provenance
 
 EGN 3321 Dynamics lives in this folder. There is no earlier public repo to snapshot.
-The course is written here, unit by unit. Units 1, 2, 3, 4, and 5 are in.
+The course is written here, unit by unit. Units 1 through 7 are in.
 
 ## What course material is here
 
@@ -46,9 +46,9 @@ racing down an incline (`race`) and a pinned bar or a rod in two slots
 the work of a couple, and energy conservation for rolling bodies and linkages,
 in SI and in US customary units. The numbers are generated and cited by section.
 
-The Unit 1 notes are rewritten from the section list. They are not a transcription.
-A `box fix` names a mistake a student would make by trusting a common slip, and it
-cites the section.
+The notes for Units 1 through 7 are rewritten from the section list. They are not a
+transcription. A common-mistake box names a mistake a student would make by trusting
+a common slip, and it cites the section.
 
 ## What is not here
 

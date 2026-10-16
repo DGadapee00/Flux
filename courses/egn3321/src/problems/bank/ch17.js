@@ -94,7 +94,10 @@ const ch17 = [
       num('center', ($) => inertiaRodCenter($.m, $.L), 'kg·m²', { label: 'about the centre' }),
       num('end', ($) => inertiaRodEnd($.m, $.L), 'kg·m²', { label: 'about one end' }),
     ],
-    hints: ['The centre moment is mL²/12. The end is that moment plus m(L/2)².'],
+    level: 1,
+    hints: ['The centre moment is mL²/12. The end is that moment plus m(L/2)².',
+      "About the centre, use m L squared over 12. About the end, add m times (L/2) squared, which simplifies to m L squared over 3.",
+    ],
     steps: ($, sig) => {
       const center = inertiaRodCenter($.m, $.L);
       const end = inertiaRodEnd($.m, $.L);
@@ -150,7 +153,10 @@ const ch17 = [
         return rows[0][0];
       }, { label: 'largest mass moment' }),
     ],
-    hints: ['A hoop is mR², a disk is half of that, and a solid sphere is (2/5)mR².'],
+    level: 1,
+    hints: ['A hoop is mR², a disk is half of that, and a solid sphere is (2/5)mR².',
+      "Divide each moment by m R squared if you want to compare shape alone. The hoop's factor is 1, the disk's is 1/2, and the sphere's is 2/5.",
+    ],
     steps: ($, sig) => [
       String.raw`Hoop: $mR^2=${sig(inertiaHoop($.m, $.R))}\ \mathrm{kg\cdot m^2}$.`,
       String.raw`Disk: $\frac{1}{2}mR^2=${sig(inertiaDisk($.m, $.R))}\ \mathrm{kg\cdot m^2}$.`,
@@ -196,7 +202,10 @@ const ch17 = [
         plateM: $.mp, plateW: $.w, plateH: $.h, diskM: $.md, diskR: $.r, diskX: $.d,
       }).I, 'kg·m²', { label: 'mass moment' }),
     ],
-    hints: ['Add the moment of the plate to the centre moment of the disk and to md².'],
+    level: 2,
+    hints: ['Add the moment of the plate to the centre moment of the disk and to md².',
+      "The plate moment about its centre is m times (width squared plus height squared) over 12. The disk adds half its mass times r squared, and its mass times d squared.",
+    ],
     steps: ($, sig) => {
       const row = plateDiskInertia({
         plateM: $.mp, plateW: $.w, plateH: $.h, diskM: $.md, diskR: $.r, diskX: $.d,
@@ -244,7 +253,10 @@ const ch17 = [
     parts: [
       num('I', ($) => diskWithHole({ mass: $.m, radius: $.R, holeRadius: $.r, holeOffset: $.d }).I, 'kg·m²', { label: 'mass moment' }),
     ],
-    hints: ['Subtract the hole. Its moment about the disk centre is the centre moment plus md².'],
+    level: 2,
+    hints: ['Subtract the hole. Its moment about the disk centre is the centre moment plus md².',
+      "The hole mass follows from the disk mass and the area ratio. Subtract (I_G + md^2) of that hole from the full disk.",
+    ],
     steps: ($, sig) => {
       const row = diskWithHole({ mass: $.m, radius: $.R, holeRadius: $.r, holeOffset: $.d });
       return [
@@ -285,7 +297,10 @@ const ch17 = [
         ['tip', 'It tips'],
       ], ($) => crateForces($).mode, { label: 'as the force grows, the crate first…' }),
     ],
-    hints: ['Sliding needs μ times the weight. Tipping needs the weight times half the width, divided by the height of the force.'],
+    level: 2,
+    hints: ['Sliding needs μ times the weight. Tipping needs the weight times half the width, divided by the height of the force.',
+      "The force is at the top, so the tipping arm is the full height. Report the smaller of the two forces as what happens first.",
+    ],
     steps: ($, sig) => {
       const row = crateForces($);
       const word = row.mode === 'slide' ? 'slides' : 'tips';
@@ -327,7 +342,10 @@ const ch17 = [
       num('pin', ($) => barParts($, G).pin, 'N', { label: 'pin force' }),
       num('alpha', ($) => barParts($, G).alpha, 'rad/s²', { label: 'angular acceleration' }),
     ],
-    hints: ['The lever arm of the weight about the pin is (L/2) sin θ, and I_O is mL²/3. Then use ΣF = m a_G.'],
+    level: 2,
+    hints: ['The lever arm of the weight about the pin is (L/2) sin θ, and I_O is mL²/3. Then use ΣF = m a_G.',
+      "I_O alpha equals the moment of the weight, m g times (L/2) sin theta. The pin components then come from the sum of the forces on the mass centre.",
+    ],
     steps: ($, sig) => {
       const row = barParts($, G);
       return [
@@ -372,7 +390,10 @@ const ch17 = [
         return Math.abs(barPin({ mass, length: $.L, thetaDeg: 90, omega: 0, g: G_FT }).alpha);
       }, 'rad/s²', { label: 'angular acceleration' }),
     ],
-    hints: ['The mass is the weight divided by 32.2. A horizontal bar at release puts a quarter of the weight on the pin.'],
+    level: 2,
+    hints: ['The mass is the weight divided by 32.2. A horizontal bar at release puts a quarter of the weight on the pin.',
+      "Use g = 32.2 ft/s squared for the angular acceleration. The quarter-weight pin force holds only while the bar is horizontal and still at rest.",
+    ],
     steps: ($, sig) => {
       const mass = $.W / G_FT;
       const row = barPin({ mass, length: $.L, thetaDeg: 90, omega: 0, g: G_FT });
@@ -413,7 +434,11 @@ const ch17 = [
         ['slip', 'Slips'],
       ], ($) => rollParts($).mode, { label: 'the motion is…' }),
     ],
-    hints: ['Rolling needs friction m g sin θ times k/(1+k), with k = I/(mR²). If that exceeds μN, friction is μN and the body slips.'],
+    level: 3,
+    hints: ['Rolling needs friction m g sin θ times k/(1+k), with k = I/(mR²). If that exceeds μN, friction is μN and the body slips.',
+      "Compute k from the shape first: 1 for a hoop, 1/2 for a disk, 2/5 for a sphere. Then compare the friction rolling needs with mu times the normal.",
+      "When it slips, write the force equation and the moment equation separately. Do not set a equal to alpha R.",
+    ],
     steps: ($, sig) => {
       const row = rollParts($);
       if (row.mode === 'roll') {

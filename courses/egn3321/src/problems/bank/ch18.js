@@ -140,7 +140,10 @@ const ch18 = [
       num('rot', ($) => rollKE($).rot, 'J', { label: 'rotational' }),
       num('total', ($) => rollKE($).total, 'J', { label: 'total' }),
     ],
-    hints: ['Translation is one half m v squared. Rotation uses k = I over m R squared, and rolling sets omega = v/R.'],
+    level: 2,
+    hints: ['Translation is one half m v squared. Rotation uses k = I over m R squared, and rolling sets omega = v/R.',
+      "For rolling, omega is v over R. The spin term is then one half k m v squared, with k = I_G over m R squared.",
+    ],
     steps: ($, sig) => {
       const row = rollKE($);
       const k = $.shape === 'sphere' ? '2/5' : $.shape === 'hoop' ? '1' : '1/2';
@@ -180,7 +183,10 @@ const ch18 = [
         ['hoop', 'Hoop'],
       ], ($) => raceParts($).winner, { label: 'finishes first' }),
     ],
-    hints: ['Mass and radius cancel. Compare 1 + k for a sphere (k = 2/5), a disk (k = 1/2), and a hoop (k = 1).'],
+    level: 2,
+    hints: ['Mass and radius cancel. Compare 1 + k for a sphere (k = 2/5), a disk (k = 1/2), and a hoop (k = 1).',
+      "Set the drop in height equal to one half m v squared times (1 + k). Mass and radius cancel. The smallest k finishes first.",
+    ],
     steps: ($, sig) => {
       const row = raceByHand($);
       return [
@@ -229,7 +235,10 @@ const ch18 = [
         return Math.sqrt((2 * drop) / (7 / 5));
       }, 'ft/s', { label: 'speed' }),
     ],
-    hints: ['A sphere has k = 2/5. The weight cancels, and g is 32.2 ft/s squared.'],
+    level: 2,
+    hints: ['A sphere has k = 2/5. The weight cancels, and g is 32.2 ft/s squared.',
+      "A sphere has k = 2/5. The height dropped is the slope length times sin of 30 degrees, and g is 32.2 ft/s squared.",
+    ],
     steps: ($, sig) => {
       const drop = G_FT * $.s * 0.5;
       const v = Math.sqrt((2 * drop) / (7 / 5));
@@ -266,7 +275,10 @@ const ch18 = [
       num('omega', ($) => barRelease($).omega, 'rad/s', { label: 'angular speed' }),
       num('vG', ($) => barRelease($).vG, 'm/s', { label: 'speed of G' }),
     ],
-    hints: ['The centre drops L/2. I about the pin is m L squared over 3, so omega is the square root of 3g/L.'],
+    level: 2,
+    hints: ['The centre drops L/2. I about the pin is m L squared over 3, so omega is the square root of 3g/L.',
+      "The centre drops L/2. Set m g times that drop equal to one half I_O omega squared, with I_O = m L squared over 3.",
+    ],
     steps: ($, sig) => {
       const row = barByHand($);
       return [
@@ -314,7 +326,11 @@ const ch18 = [
       num('work', ($) => coupleRelease($).work, 'J', { label: 'work of the spring' }),
       num('omega', ($) => coupleRelease($).omega, 'rad/s', { label: 'angular speed' }),
     ],
-    hints: ['The spring is unstretched at the bottom. Its work is one half kappa times (pi/2) squared. Add that to the drop in height.'],
+    level: 3,
+    hints: ['The spring is unstretched at the bottom. Its work is one half kappa times (pi/2) squared. Add that to the drop in height.',
+      "Add the spring work to m g times (L/2). That sum is the kinetic energy at the bottom.",
+      "The angle in the spring is pi/2 radians. I_O is m L squared over 3, and omega is the square root of 2T over I_O.",
+    ],
     steps: ($, sig) => {
       const row = coupleByHand($);
       return [
@@ -359,7 +375,11 @@ const ch18 = [
       num('omega', ($) => slotsRelease($).omega, 'rad/s', { label: 'angular speed' }),
       num('vG', ($) => slotsRelease($).vG, 'm/s', { label: 'speed of G' }),
     ],
-    hints: ['The instantaneous centre is the corner opposite the rod. I about that corner is m L squared over 3.'],
+    level: 3,
+    hints: ['The instantaneous centre is the corner opposite the rod. I about that corner is m L squared over 3.',
+      "The centre drops (L/2) times (sin of theta1 minus sin of theta2). Set m g times that drop equal to one half I omega squared.",
+      "The mass centre is L/2 from the corner, so the speed of G is omega times L/2.",
+    ],
     steps: ($, sig) => {
       const row = slotsByHand($);
       return [
@@ -409,7 +429,11 @@ const ch18 = [
       num('omega', ($) => springRelease($).omega, 'rad/s', { label: 'angular speed' }),
       num('T', ($) => springRelease($).T, 'J', { label: 'kinetic energy' }),
     ],
-    hints: ['The spring natural length equals the rod. It is compressed when the rod is steep, so it speeds the fall.'],
+    level: 3,
+    hints: ['The spring natural length equals the rod. It is compressed when the rod is steep, so it speeds the fall.',
+      "At angle theta the spring length is L cos theta, so the compression is L minus L cos theta.",
+      "Include the drop in spring energy with the drop of the centre. I about the corner is still m L squared over 3.",
+    ],
     steps: ($, sig) => {
       const row = springByHand($);
       return [

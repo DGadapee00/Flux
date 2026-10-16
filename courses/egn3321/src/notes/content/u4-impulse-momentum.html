@@ -35,29 +35,39 @@
 <div class="box ex"><span class="tag">Worked example · a short pulse</span>
 <p>The same mass starts at rest. A 400 N force acts for 0.1 s, which is still 40 N·s. Then 20 N acts for 1 s and adds 20 N·s. The speed becomes 30 m/s.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>The impulse is the area, not the height of the force. A short spike and a long push with the same area give the same change in speed. Hibbeler §15.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Add the areas. Divide the total by the mass. Add that change to the starting speed.</p>
 </div>
+<p>The body is a particle, and \(F\) is the net force along the line. The model leaves out a force missing from the area, and any rotation of a finite body.</p>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Conservation of momentum</h2>
 <p>Internal impulses between parts of a system cancel in pairs. If the external impulse is zero, the total momentum stays constant.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Forces between the bullet and the gun are internal. They cancel in the total momentum. With no lasting outside push, that total stays at its initial value.</p>
+</div>
+
 <div class="box ex"><span class="tag">Worked example · a gun recoil</span>
 <p>A 0.02 kg bullet leaves a 4 kg gun at 400 m/s. The gun was at rest. The recoil speed is 2 m/s. The two momenta sum to zero.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Do not drop an external impulse and still claim conservation. Internal impulses cancel. An outside force acting over a time does not. Hibbeler §15.3.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>For two bodies with no outside impulse, \(m_1 u_1 + m_2 u_2 = m_1 v_1 + m_2 v_2\).</p>
 </div>
+<p>Internal impulses cancel in pairs. An outside force that acts through the interval does not. Recoil here also leaves out momentum carried off by the gas.</p>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Impact</h2>
 <p>The line of impact is the normal. Restitution sets the separation speed along that line. Momentum along the line is conserved for every value of \(e\).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The collision is short, so the outside impulse is left out and momentum along the line is kept. Restitution sets the separation speed. Kinetic energy returns in full only when \(e = 1\).</p>
+</div>
+
 \[
 v_{n2} - v_{n1} = e(u_{n1} - u_{n2}).
 \]
@@ -67,45 +77,60 @@ v_{n2} - v_{n1} = e(u_{n1} - u_{n2}).
 <div class="box ex"><span class="tag">Worked example · they stick</span>
 <p>A 1 kg body at 8 m/s hits a 3 kg body at rest. \(e = 0\). Both leave at 2 m/s. The collision loses 24 J.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Momentum is conserved for every coefficient of restitution. Kinetic energy is conserved only when \(e = 1\). Hibbeler §15.4.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Solve the momentum equation and the restitution equation together.</p>
 </div>
+<p>The impact is treated as instantaneous, so outside impulses during the collision are neglected. Deformation of the bodies is summed up by \(e\), not drawn.</p>
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Oblique impact</h2>
 <p>Split each velocity into a normal part and a tangent part. The normal parts follow the direct-impact equations. The tangent parts stay as they were.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>A smooth face has no tangent impulse, so each tangent velocity is unchanged. The normal velocities are a direct impact, with the same \(e\) and the same momentum balance.</p>
+</div>
+
 <div class="box ex"><span class="tag">Worked example · the tangent is unchanged</span>
 <p>Two 2 kg bodies collide. One approaches at 4 m/s, 30° from the normal. The other is at rest on the normal. \(e = 1\). The tangent part stays 2 m/s. The normal parts exchange, so the second body leaves at 3.46 m/s.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Do not multiply the tangent velocity by \(e\). Restitution acts only along the line of impact. Hibbeler §15.4.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Keep the tangent component. Solve the normal components as a direct impact.</p>
 </div>
+<p>The faces are smooth, so there is no tangent impulse. A rough collision would change the tangent speeds. That model is left out.</p>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Angular momentum</h2>
 <p>The angular momentum of a particle about a point is \(\mathbf{r} \times m\mathbf{v}\). The moment arm is measured from that point to the particle.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Angular momentum about a point is \(\mathbf{r}\times m\mathbf{v}\). In the plane the cross product has one component, \(m(xv_y - yv_x)\).</p>
+</div>
+
 \[
 L_z = m(xv_y - yv_x).
 \]
 <div class="box ex"><span class="tag">Worked example · a particle passing a point</span>
 <p>A 2 kg particle is at (0.4, −0.3) m. Its velocity is (1, 3) m/s. The angular momentum about the origin is 3 kg·m²/s.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>The moment arm runs from the chosen point to the particle. It is not the distance measured along the velocity. Hibbeler §15.5.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Use one point. Keep the signs of \(x\), \(y\), \(v_x\), and \(v_y\).</p>
 </div>
+<p>This is the angular momentum of a particle. It is not yet the spin of a rigid body. The moment arm runs from the chosen point to the particle.</p>
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>A rocket</h2>
 <p>A rocket loses mass. Thrust is the burn rate times the exhaust speed relative to the rocket. Gravity subtracts \(g\) times the burn time.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Thrust is the exhaust speed times the rate at which mass leaves. Divide the equation of motion by the changing mass and integrate. The gain is \(v_e\ln(m_0/m_f)\), and gravity subtracts \(gt_b\).</p>
+</div>
+
 \[
 \Delta v = v_e \ln(m_0/m_f) - g t_b.
 \]
@@ -118,12 +143,13 @@ L_z = m(xv_y - yv_x).
 <div class="box ex"><span class="tag">Worked example · gravity during the burn</span>
 <p>The first rocket burns the same way with \(g = 9.81\) m/s². The speed gain is 1345 m/s.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>\(\Delta v\) is \(v_e\) times the log of the mass ratio, minus \(g t_b\). It is not \(v_e\) times the burned mass divided by \(m_0\). Hibbeler §15.9.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>A larger mass ratio gives a larger \(\Delta v\), even when the burned mass is the same. Steady flow of a fluid stream, §15.8, is left out of this course.</p>
 </div>
+<p>The exhaust speed and the burn rate are constant, the burn is vertical, and drag is left out. Gravity is taken as constant over the short burn.</p>
 </section>
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Formula sheet</h2>
@@ -137,6 +163,7 @@ L_z = m(xv_y - yv_x).
 <li>This unit uses \(g = 9.81\) m/s², or \(32.2\) ft/s². The slug is the US mass.</li>
 <li>Steady flow, §15.8, stays out.</li>
 </ul>
+<p>Steady flow of a fluid stream stays out. Drag on the rocket, and a burn rate that changes, stay out of the formulas above.</p>
 </section>
 </main>
 </body>

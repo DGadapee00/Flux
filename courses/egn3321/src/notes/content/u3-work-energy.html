@@ -31,57 +31,73 @@ T_1 + \sum U_{1-2} = T_2.
 <div class="box ex"><span class="tag">Worked example · released from a stretch</span>
 <p>A 2 kg collar is released on a smooth 30° rod. The spring has \(k = 80\) N/m. The collar starts 0.5 m down the rod from the unstretched point and slides to that point. The spring does 10 J. Gravity does −4.9 J. The speed there is 2.26 m/s.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>The spring work is not \(\tfrac{1}{2}ks_2^2\) by itself. Both end stretches enter: \(\tfrac{1}{2}k(s_1^2 - s_2^2)\). Hibbeler §14.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Sum the work of the weight, the spring, and friction. Solve for the unknown speed, or for the unknown distance.</p>
 </div>
+<p>Measure \(x\) down the rod from the unstretched point. The spring lies along the rod, so the stretch equals \(x\). Work and energy give the speed at two positions and leave out the time between them.</p>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Work of a spring</h2>
 <p>A spring force depends on the stretch, not on the shape of the trip. Integrate \(-ks\,ds\). The path in between cancels.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The spring force is \(-ks\), opposite the stretch. Integrate from \(s_1\) to \(s_2\). Every intermediate stretch cancels, and the work is \(\tfrac{1}{2}k(s_1^2 - s_2^2)\).</p>
+</div>
+
 \[
 U_s = \tfrac{1}{2}k(s_1^2 - s_2^2).
 \]
 <div class="box ex"><span class="tag">Worked example · out and back</span>
 <p>A 2 kg collar on a 25° rod moves at 4 m/s with a stretch of 0.2 m. It goes out to 0.6 m and returns to 0.2 m. \(k = 50\) N/m and \(\mu_k = 0.2\). The spring work is 0 J, the same as the end stretches alone. Friction does −2.85 J. The speed on return is 3.63 m/s.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Going past the end and coming back does not add spring work. The extra stretch is undone on the way back. Hibbeler §14.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Use the stretch at the start and the stretch at the end. Do not add the stretch at a turnaround.</p>
 </div>
+<p>The spring is linear and massless. A coil with its own mass, or a force that is not proportional to stretch, does not use \(\tfrac{1}{2}k\) times the change in the square of the stretch.</p>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Friction on a slide</h2>
 <p>Kinetic friction opposes the motion. On a straight rod its magnitude is \(\mu_k mg\cos\theta\). Its work is negative on every leg.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Kinetic friction has size \(\mu_k N\) and opposes the velocity on every leg. On a straight rod, \(N = mg\cos\theta\). The work on a leg is minus that force times the length of the leg.</p>
+</div>
+
 <div class="box ex"><span class="tag">Worked example · a rough slide</span>
 <p>Repeat the smooth release with \(\mu_k = 0.2\). The spring still does 10 J. Friction does −1.699 J. The speed at the unstretched point falls to 1.843 m/s.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · where it stops</span>
 <p>A 2 kg block hits a horizontal spring at 3 m/s. \(k = 40\) N/m and \(\mu_k = 0.1\). It stops after a compression of 0.624 m. Set \(T_2 = 0\) and solve the quadratic.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Do not drop the friction term because a spring is also in the problem. Friction removes energy on the way in, and again on the way out. Hibbeler §14.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>\(U_f = -\mu_k N\, s\), with \(s\) the distance traveled, not the net displacement.</p>
 </div>
+<p>On a rough rod the normal is \(mg\cos\theta\), the weight component perpendicular to the rod. If the collar turns around, add the return leg. The kinetic coefficient is constant.</p>
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Power and efficiency</h2>
 <p>Power is the work per time. For a force along the velocity, \(P = Fv\). Efficiency is output power divided by input power.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Work along the velocity is force times distance. Divide by time and the distance per time is the speed, so \(P = Fv\). Efficiency is that output divided by the power the motor draws.</p>
+</div>
+
 <div class="box ex"><span class="tag">Worked example · a steady climb</span>
 <p>A 4 kg block is pulled up a 25° incline at 2 m/s. \(\mu_k = 0.15\). The motor efficiency is 0.8. The output power is 43.8 W. The motor draws 54.8 W.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Power is not force times distance. That product is work. Divide by time, or multiply the force by the speed. Hibbeler §14.4.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>One horsepower is 550 ft·lb/s. Efficiency is always below 1 for a real motor, so the input is the larger power.</p>
 </div>
+<p>Power here is a force along a steady velocity. The model leaves out a force that changes through the stroke, and a motor whose efficiency depends on speed.</p>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Path independence</h2>
@@ -95,12 +111,13 @@ U_s = \tfrac{1}{2}k(s_1^2 - s_2^2).
 <div class="box ex"><span class="tag">Worked example · friction on the arch</span>
 <p>The same ends with \(\mu_k = 0.25\), and friction of magnitude \(\mu_k mg\). The straight path does −7.69 J. The arch does −8.2 J. The conservative part is still −3.74 J.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Do not cancel friction because the ends match. Matching ends cancel the weight and the spring. They do not cancel friction. Hibbeler §14.5.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Use \(-\Delta V\) for the weight and the spring. Add \(-\mu_k mg\) times the path length when that friction model is the one in the problem.</p>
 </div>
+<p>Matching ends cancel the weight and the spring. They do not cancel friction. The friction model on these paths has size \(\mu_k mg\), the horizontal-surface case.</p>
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Formula sheet</h2>
@@ -112,6 +129,7 @@ U_s = \tfrac{1}{2}k(s_1^2 - s_2^2).
 <li>This unit uses \(g = 9.81\) m/s², or \(32.2\) ft/s². The slug is the US mass.</li>
 </ul>
 <p>The sections left out of the course stay left out. This unit does not add them.</p>
+<p>Each line above is the model for this unit. A spring with mass, and a friction coefficient that changes with speed, are left out.</p>
 </section>
 </main>
 </body>

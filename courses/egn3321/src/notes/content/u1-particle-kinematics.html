@@ -34,16 +34,21 @@
 <p>The product \(3 \times 5 \times \pi / 7\) is 6.73198 before rounding. The first digit is 6, so three figures give 6.73.</p>
 </div>
 <p>An equation is dimensionally homogeneous when every added term measures the same kind of quantity. \(v = v_0 + at\) is homogeneous. \(v = v_0 + a\) is not: a velocity is being added to an acceleration.</p>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>The pound-force uses 9.80665 m/s². Projectile motion in this unit uses \(g = 9.81\) m/s². A student who uses one of those values for both jobs changes the third figure. Hibbeler Statics §1.3 and Dynamics §12.6.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Convert first. Then round. Three figures, or four when the leading digit is 1.</p>
 </div>
+<p>The conversion uses the exact foot and the defined pound-force. It leaves out a local value of \(g\). A scale that reads pounds already used standard gravity.</p>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Rectilinear motion</h2>
 <p>On a straight line, velocity is the slope of \(s(t)\). Acceleration is the slope of \(v(t)\). The other direction is an area.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>If \(a\) is constant, \(dv/dt = a\) integrates to \(v = v_0 + at\). Then \(ds/dt = v\) integrates to the position formula. When \(a\) is known against \(s\), the chain rule \(a = v\,dv/ds\) removes the time.</p>
+</div>
+
 \[
 v = \frac{ds}{dt}, \qquad a = \frac{dv}{dt}, \qquad a\,ds = v\,dv.
 \]
@@ -55,12 +60,13 @@ v = v_0 + at, \qquad s = s_0 + v_0 t + \frac{1}{2}at^2.
 <div class="box ex"><span class="tag">Worked example · a reversal</span>
 <p>A particle starts at the origin with \(v_0 = 4\) m/s and \(a = -2\) m/s². At \(t = 5\) s the velocity is \(-6\) m/s and the position is \(-5\) m. It stopped at \(t = 2\) s, at \(s = 4\) m. The path out and back is 13 m.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Distance is 13 m. Displacement is \(-5\) m. Reporting the absolute value of the displacement as the distance drops the leg after the stop. Hibbeler §12.2.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Displacement is the net change in \(s\). Distance adds the lengths of the pieces, including the piece after the velocity changes sign.</p>
 </div>
+<p>Constant acceleration leaves out drag, a spring, and any turn. When \(a\) depends on \(s\), use \(a\,ds = v\,dv\). A curve needs the normal acceleration of a later section.</p>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Erratic graphs</h2>
@@ -71,6 +77,7 @@ v = v_0 + at, \qquad s = s_0 + v_0 t + \frac{1}{2}at^2.
 <div class="box why"><span class="tag">Why</span>
 <p>The first area is \(2 \times 3 = 6\) m/s, so \(v = 6\) m/s and \(s = 9\) m. The next area is \(-2\) m/s, so \(v = 4\) m/s and \(s = 19\) m. The last step holds \(v\) and adds 4 m. End at 23 m.</p>
 </div>
+<p>A step graph leaves out the rounding between corners. The area rule still holds for a smooth graph: integrate \(a\) over the interval, then step \(s\) with the average velocity.</p>
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Projectile motion</h2>
@@ -81,10 +88,15 @@ v = v_0 + at, \qquad s = s_0 + v_0 t + \frac{1}{2}at^2.
 <div class="box why"><span class="tag">Why</span>
 <p>\(v_x = 17.32\) m/s and \(v_y = 10.00\) m/s. The vertical velocity is zero at the top, so the height is \(v_y^2 / (2g)\). Flight time is \(2v_y / g\). Range is \(v_x\) times that time.</p>
 </div>
+<p>This projectile leaves out drag and wind. With drag, the horizontal acceleration is not zero, and the two axes no longer separate.</p>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Normal and tangential components</h2>
 <p>The tangential piece \(a_t\) changes the speed. The normal piece \(a_n = v^2 / \rho\) turns the velocity. They are perpendicular. The magnitude is the root of the sum of the squares.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>\(a_t\) is the rate of change of speed. \(a_n = v^2/\rho\) is what turning the velocity requires. For a graph \(y = f(x)\), \(\rho\) is the quotient of the first and second derivatives.</p>
+</div>
+
 <p>For a graph \(y = f(x)\), the radius of curvature is</p>
 \[
 \rho = \frac{(1 + y'^2)^{3/2}}{|y''|}.
@@ -93,16 +105,21 @@ v = v_0 + at, \qquad s = s_0 + v_0 t + \frac{1}{2}at^2.
 <div class="box ex"><span class="tag">Worked example · a parabola</span>
 <p>The path is \(y = \tfrac{1}{2} x^2\). At \(x = 2\) m the speed is 3 m/s and \(a_t = 0\). Then \(y' = 2\) and \(y'' = 1\), so \(\rho = 11.18\) m. The normal acceleration is 0.805 m/s². That is also \(|a|\).</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Acceleration is not tangent to the path. Here \(a_t = 0\), and \(a_n = 0.805\) m/s². A student who reports \(a = a_t\) misses the turn. Hibbeler §12.7.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>\(a_t\) changes speed. \(a_n\) changes direction. Either one can be zero while the other is not.</p>
 </div>
+<p>The curvature formula is for a plane curve \(y = f(x)\). A space curve needs a different radius. The model also takes \(a_t\) as given, rather than from a force.</p>
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Relative motion, translating axes</h2>
 <p>Axes fixed to A, and not rotating, see B by subtraction. The positions are not needed for the relative velocity or the relative acceleration.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Axes on A translate with A and do not rotate. Subtract A's velocity from B's, and A's acceleration from B's. The positions are not in those two differences.</p>
+</div>
+
 \[
 \vec{v}_{B/A} = \vec{v}_B - \vec{v}_A, \qquad \vec{a}_{B/A} = \vec{a}_B - \vec{a}_A.
 \]
@@ -112,6 +129,7 @@ v = v_0 + at, \qquad s = s_0 + v_0 t + \frac{1}{2}at^2.
 <div class="box key"><span class="tag">Key</span>
 <p>Subtract the vectors. Do not subtract the speeds and then invent a direction.</p>
 </div>
+<p>These axes translate with A and do not rotate. A rotating frame adds terms this section does not carry. Rotating axes stay out of the course.</p>
 </section>
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Formula sheet</h2>
@@ -126,6 +144,7 @@ v = v_0 + at, \qquad s = s_0 + v_0 t + \frac{1}{2}at^2.
 <li>\(\vec{v}_{B/A} = \vec{v}_B - \vec{v}_A\) for translating axes.</li>
 </ul>
 <p>Left out of this course, because the pack does not name them: cylindrical coordinates (§12.8 and §13.6), dependent motion (§12.9), central-force motion (§13.7), steady flow (§15.8), and rotating axes (§16.8). The rocket, §15.9, is Unit 4.</p>
+<p>Each line above is the model for this unit. Drag, a flexible part, and a coefficient that changes with speed are left out.</p>
 </section>
 </main>
 </body>

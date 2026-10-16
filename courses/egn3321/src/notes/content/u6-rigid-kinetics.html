@@ -22,6 +22,10 @@
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Mass moment of inertia</h2>
 <p>The mass moment \(I\) measures how far the mass sits from the axis. Moving that mass farther out raises \(I\) even when the mass itself stays fixed. For a known centre moment, the parallel-axis theorem gives the moment about a parallel axis:</p>
+<div class="box why"><span class="tag">Why</span>
+<p>\(I = \int r^2\,dm\). To move a known centre moment onto a parallel axis, add \(md^2\). The shift starts at the mass centre, where the cross term is zero.</p>
+</div>
+
 \[ I = I_G + md^2 \]
 <p>\(G\) is the mass centre. \(d\) is the distance between the two axes.</p>
 <div class="box ex"><span class="tag">Worked example · a rod about its end</span>
@@ -30,32 +34,42 @@
 <div class="box ex"><span class="tag">Worked example · the same mass and radius</span>
 <p>A hoop, a disk, and a solid sphere each have mass 2 kg and radius 0.5 m. The centre moments are 0.5, 0.25, and 0.2 kg·m². The hoop is the largest, because every bit of its mass is at the rim.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>The parallel-axis shift starts at the mass centre. Adding \(md^2\) to a moment about some other point counts the distance twice. Hibbeler §17.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>A slender rod is \(mL^2/12\) about its centre and \(mL^2/3\) about one end.</p>
 </div>
+<p>The parallel-axis shift starts at the mass centre. These shapes are the standard rod, hoop, disk, and solid sphere. A different mass distribution needs its own integral.</p>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Composite bodies</h2>
 <p>A composite moment is the sum of the parts, each moved onto the same axis. A hole is a part with negative mass. Subtract its centre moment and its \(md^2\).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Move each part from its own mass centre onto the one axis, using \(I_G + md^2\), then add. A hole is the same term with a minus sign.</p>
+</div>
+
 <div class="box ex"><span class="tag">Worked example · a plate and a disk</span>
 <p>A 5 kg plate is 0.6 m by 0.4 m. A 2 kg disk of radius 0.1 m sits 0.2 m from the plate centre. About that centre, \(I = 0.307\ \mathrm{kg\cdot m^2}\).</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · a disk with a hole</span>
 <p>A 12 kg disk of radius 0.3 m loses a hole of radius 0.1 m. The hole centre is 0.12 m from the disk centre. The mass given is the disk before the cut. What remains has \(I = 0.514\ \mathrm{kg\cdot m^2}\).</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>The hole keeps its own centre moment and the parallel-axis term. Dropping \(md^2\) understates the piece being subtracted. Hibbeler §17.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>One axis for every part. Shift each part from its own mass centre, then add.</p>
 </div>
+<p>Every part is moved onto one axis, perpendicular to the plate. A hole keeps its centre moment and its \(md^2\). An axis in some other direction is left out.</p>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Translation</h2>
 <p>In translation the body does not rotate, so \(\alpha = 0\) and \(\Sigma M_G = 0\). The force equations are still \(\Sigma F = ma_G\). A horizontal force on a crate can slide it or tip it. The smaller of those two forces happens first.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Translation means \(\alpha = 0\), so the moment about the mass centre is zero. Sliding is the friction limit \(\mu mg\). Tipping is the moment limit about the front corner. The smaller force is reached first.</p>
+</div>
+
 <p>Sliding needs \(P = \mu mg\). Tipping, with the force at the top, needs \(P = mg(b/2)/h\) about the front corner.</p>
 <div class="box ex"><span class="tag">Worked example · a crate that slides</span>
 <p>A 40 kg crate is 0.5 m wide and 0.5 m tall, with \(\mu = 0.25\). The force is applied at the top. Sliding needs 98.1 N. Tipping needs 196.2 N. The crate slides.</p>
@@ -63,12 +77,13 @@
 <div class="box ex"><span class="tag">Worked example · a crate that tips</span>
 <p>A 20 kg crate is 0.4 m wide and 0.8 m tall, with \(\mu = 0.5\). Sliding needs 98.1 N. Tipping needs 49.05 N. The crate tips.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Check the friction limit and the corner moment. The smaller force is the one that happens. Hibbeler §17.3.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>\(\Sigma M_G = 0\) while the crate is still translating. The normal reaches the front corner at the tip.</p>
 </div>
+<p>Until the crate tips it translates, so the moment about the mass centre is zero. The force is at the top edge. A lower force changes the tipping value.</p>
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Rotation about a fixed axis</h2>
@@ -88,12 +103,13 @@
 <div class="box ex"><span class="tag">Worked example · a bar in feet</span>
 <p>A bar weighs 32.2 lb and is 4 ft long. Released from rest while horizontal, the pin holds 8.05 lb. \(\alpha = 12.08\ \mathrm{rad/s^2}\). Here \(g = 32.2\ \mathrm{ft/s^2}\).</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>At the horizontal release the pin holds \(mg/4\). Putting the whole weight on the pin is the wrong free-body result. Hibbeler §17.4.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Moments about the pin give \(\alpha\). The pin components then come from the motion of \(G\).</p>
 </div>
+<p>At release from rest, \(\omega = 0\), so the mass centre has no normal acceleration yet. Friction in the pin bearing is left out.</p>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>General plane motion</h2>
@@ -112,12 +128,13 @@
 <div class="box ex"><span class="tag">Worked example · a sphere that rolls</span>
 <p>The same mass and radius, as a solid sphere, with \(\mu = 0.3\). It rolls. \(a = 3.50\ \mathrm{m/s^2}\) and the friction is 2.80 N.</p>
 </div>
-<div class="box fix"><span class="tag">Fix</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>A rolling body is slower than a sliding block on the same incline. Divide \(g\sin\theta\) by \(1 + k_G^2/R^2\). A hoop needs more friction than a disk. Hibbeler §17.5.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Compare the friction rolling needs with \(\mu N\). Under the limit, it rolls. Over the limit, it slips.</p>
 </div>
+<p>Friction is Coulomb, and rolling resistance is left out. Past the friction limit the no-slip constraint is dropped, and the body both slides and spins.</p>
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Formula sheet</h2>
@@ -133,6 +150,7 @@
 <li>That roll needs \(f = mg\sin\theta\cdot k/(1+k)\), with \(k = k_G^2/R^2\). It slips when this \(f\) exceeds \(\mu N\).</li>
 <li>\(g = 9.81\ \mathrm{m/s^2}\). A US problem uses \(g = 32.2\ \mathrm{ft/s^2}\).</li>
 </ul>
+<p>Bearing friction and rolling resistance are left out of every line above. A body that is not uniform needs a different \(I_G\).</p>
 </section>
 </main>
 </body>

@@ -95,7 +95,10 @@ const ch13 = [
       num('a', ($) => atwood($.m1, $.m2, G).a, 'm/s²', { label: 'acceleration' }),
       num('T', ($) => atwood($.m1, $.m2, G).T, 'N', { label: 'tension' }),
     ],
-    hints: ['Write ΣF = ma for each mass. The heavier side descends. The tension is shared.'],
+    level: 1,
+    hints: ['Write ΣF = ma for each mass. The heavier side descends. The tension is shared.',
+      "For the heavier mass, its weight minus the tension equals mass times acceleration. For the lighter mass, the tension minus its weight does the same.",
+    ],
     steps: ($, sig) => {
       const row = atwood($.m1, $.m2, G);
       return [
@@ -144,7 +147,10 @@ const ch13 = [
       num('a', ($) => blockMotion($, G).a, 'm/s²', { label: 'acceleration down the plane' }),
       num('N', ($) => blockMotion($, G).N, 'N', { label: 'normal force' }),
     ],
-    hints: ['Compare mg sinθ with μₛN before using μₖ. From rest, friction is kinetic only if the block slides.'],
+    level: 2,
+    hints: ['Compare mg sinθ with μₛN before using μₖ. From rest, friction is kinetic only if the block slides.',
+      "The normal is the weight times cos theta. If it slides, the downhill acceleration is g sin theta minus mu_k g cos theta.",
+    ],
     steps: ($, sig) => {
       const row = blockMotion($, G);
       return [
@@ -191,7 +197,10 @@ const ch13 = [
       num('a', ($) => hangingIncline({ block: $.m, hang: $.M, thetaDeg: $.theta, muk: $.muk, mus: $.mus, g: G, v0: 0 }).a, 'm/s²', { label: 'acceleration' }),
       num('T', ($) => hangingIncline({ block: $.m, hang: $.M, thetaDeg: $.theta, muk: $.muk, mus: $.mus, g: G, v0: 0 }).T, 'N', { label: 'tension' }),
     ],
-    hints: ['One coordinate for both bodies. Static friction holds when it can cancel the unbalanced force.'],
+    level: 2,
+    hints: ['One coordinate for both bodies. Static friction holds when it can cancel the unbalanced force.',
+      "Take the hanging mass descending as the positive direction. Friction on the block then points up the plane.",
+    ],
     steps: ($, sig) => {
       const row = hangingIncline({ block: $.m, hang: $.M, thetaDeg: $.theta, muk: $.muk, mus: $.mus, g: G, v0: 0 });
       return [
@@ -245,7 +254,11 @@ const ch13 = [
         return bankedCurve({ mass: $.m, radius: $.R, thetaDeg: $.theta, speed: row.vMax, mu: $.mu, g: G }).N;
       }, 'N', { label: 'normal force at the maximum speed' }),
     ],
-    hints: ['With no friction there is one speed, √(ρ g tanθ). Friction down the bank raises the maximum. Friction up the bank lowers the minimum.'],
+    level: 3,
+    hints: ['With no friction there is one speed, √(ρ g tanθ). Friction down the bank raises the maximum. Friction up the bank lowers the minimum.',
+      "Resolve the normal and the friction into horizontal and vertical parts. The vertical sum is zero. The horizontal sum is mass times v squared over the radius.",
+      "Friction up the bank and friction down the bank are two free-body diagrams. Each one has its own speed.",
+    ],
     steps: ($, sig) => {
       const row = bankedCurve({ mass: $.m, radius: $.R, thetaDeg: $.theta, mu: $.mu, g: G });
       const at = bankedCurve({ mass: $.m, radius: $.R, thetaDeg: $.theta, speed: row.vMax, mu: $.mu, g: G });
@@ -294,7 +307,10 @@ const ch13 = [
       num('speed', ($) => verticalLoop({ mass: $.m, radius: $.R, speedBottom: $.vb, phiDeg: $.phi, g: G }).speed, 'm/s', { label: 'speed' }),
       num('N', ($) => verticalLoop({ mass: $.m, radius: $.R, speedBottom: $.vb, phiDeg: $.phi, g: G }).N, 'N', { label: 'normal force' }),
     ],
-    hints: ['The height above the bottom is ρ(1 − cosφ). Then ΣF toward the centre is m v²/ρ.'],
+    level: 2,
+    hints: ['The height above the bottom is ρ(1 − cosφ). Then ΣF toward the centre is m v²/ρ.',
+      "Use energy to get the speed at that angle. At the top the weight points toward the centre, so it helps supply the normal acceleration.",
+    ],
     steps: ($, sig) => {
       const row = verticalLoop({ mass: $.m, radius: $.R, speedBottom: $.vb, phiDeg: $.phi, g: G });
       return [
@@ -335,7 +351,10 @@ const ch13 = [
       num('a', ($) => springCollar({ mass: $.m, k: $.k, x: $.x, thetaDeg: $.theta, g: G }).a, 'm/s²', { label: 'acceleration down the rod' }),
       num('N', ($) => springCollar({ mass: $.m, k: $.k, x: $.x, thetaDeg: $.theta, g: G }).N, 'N', { label: 'force from the rod' }),
     ],
-    hints: ['The spring force is kx along the rod. The rod force cancels the part of the weight perpendicular to the rod.'],
+    level: 2,
+    hints: ['The spring force is kx along the rod. The rod force cancels the part of the weight perpendicular to the rod.',
+      "Along the rod, the downhill part of the weight minus k x equals mass times acceleration. x is the stretch, measured down the rod from the unstretched point.",
+    ],
     steps: ($, sig) => {
       const row = springCollar({ mass: $.m, k: $.k, x: $.x, thetaDeg: $.theta, g: G });
       return [
@@ -368,7 +387,10 @@ const ch13 = [
       num('a', ($) => blockMotion($, G_FT).a, 'ft/s²', { label: 'acceleration down the plane' }),
       num('N', ($) => blockMotion($, G_FT).N, 'lb', { label: 'normal force' }),
     ],
-    hints: ['The US customary mass unit in F = ma is the slug. The weight is m times 32.2.'],
+    level: 2,
+    hints: ['The US customary mass unit in F = ma is the slug. The weight is m times 32.2.',
+      "The normal is the weight times cos theta. Test static friction against the downhill part of the weight before using mu_k.",
+    ],
     steps: ($, sig) => {
       const row = blockMotion($, G_FT);
       return [

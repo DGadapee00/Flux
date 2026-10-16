@@ -80,7 +80,10 @@ const ch12 = [
         label: 'v(t) as a formula',
       }),
     ],
-    hints: ['Differentiate s once for v, and again for a. The jerk is the coefficient of t in a.'],
+    level: 1,
+    hints: ['Differentiate s once for v, and again for a. The jerk is the coefficient of t in a.',
+      "Leave v(t) as that derivative, in symbols. The numbers for s, v, and a are those formulas at the given t.",
+    ],
     steps: ($, sig) => {
       const row = polyAt($);
       return [
@@ -126,7 +129,10 @@ const ch12 = [
     parts: [
       num('v', ($) => Math.sqrt($.v0 ** 2 + $.k * $.s ** 2), 'm/s', { label: 'speed' }),
     ],
-    hints: [String.raw`Separate variables: $v\,dv = a\,ds = ks\,ds$.`],
+    level: 2,
+    hints: [String.raw`Separate variables: $v\,dv = a\,ds = ks\,ds$.`,
+      "Integrate from the passage through the origin. The speed at s is the square root of v0 squared plus k s squared.",
+    ],
     steps: ($, sig) => [
       String.raw`$\int_{v_0}^{v} v\,dv = \int_0^{s} ks\,ds$.`,
       String.raw`$v = ${sig(Math.sqrt($.v0 ** 2 + $.k * $.s ** 2))}\ \mathrm{m/s}$.`,
@@ -158,7 +164,10 @@ const ch12 = [
       num('v', ($) => trip($).v, 'm/s', { label: 'velocity' }),
       num('dist', ($) => trip($).dist, 'm', { label: 'distance' }),
     ],
-    hints: ['The speed is zero once. Add the lengths of the two legs. Do not report |s| as the distance.'],
+    level: 2,
+    hints: ['The speed is zero once. Add the lengths of the two legs. Do not report |s| as the distance.',
+      "Locate the stop from v0 + a t = 0. Each leg is the absolute change in s on that side of the stop.",
+    ],
     steps: ($, sig) => {
       const row = trip($);
       const tStop = -$.v0 / $.a;
@@ -213,7 +222,10 @@ const ch12 = [
       num('s', ($) => erratic($).s, 'm', { label: 'position' }),
       num('v', ($) => erratic($).v, 'm/s', { label: 'velocity' }),
     ],
-    hints: ['The area under each a–t step is that step’s Δv. Then step s forward with the average velocity on the step.'],
+    level: 2,
+    hints: ['The area under each a–t step is that step’s Δv. Then step s forward with the average velocity on the step.',
+      "The average velocity on a step is the mean of the velocities at its two ends. Multiply by the duration, then add the steps.",
+    ],
     steps: ($, sig) => {
       const row = erratic($);
       return [
@@ -268,7 +280,10 @@ const ch12 = [
       num('h', ($) => flightOf($).hMax, 'm', { label: 'maximum height' }),
       num('t', ($) => flightOf($).tFlight, 's', { label: 'time of flight' }),
     ],
-    hints: ['Resolve the launch velocity. The vertical motion is constant acceleration. The horizontal velocity stays constant.'],
+    level: 2,
+    hints: ['Resolve the launch velocity. The vertical motion is constant acceleration. The horizontal velocity stays constant.',
+      "On level ground the flight time is twice the initial vertical velocity, divided by g. The range is the horizontal velocity times that time.",
+    ],
     steps: ($, sig) => {
       const row = flightOf($);
       return [
@@ -310,7 +325,11 @@ const ch12 = [
       num('an', ($) => curveOf($).an, 'm/s²', { label: 'normal acceleration' }),
       num('mag', ($) => curveOf($).magA, 'm/s²', { label: 'acceleration magnitude' }),
     ],
-    hints: [String.raw`For this curve $y' = cx$ and $y'' = c$. Then $\rho = (1+y'^2)^{3/2}/|y''|$ and $a_n = v^2/\rho$.`],
+    level: 3,
+    hints: [String.raw`For this curve $y' = cx$ and $y'' = c$. Then $\rho = (1+y'^2)^{3/2}/|y''|$ and $a_n = v^2/\rho$.`,
+      "Evaluate the first and second derivatives at the given x before substituting into the radius formula.",
+      "The normal acceleration is the speed squared over that radius. The magnitude is the root of the two components squared and added.",
+    ],
     steps: ($, sig) => {
       const row = curveOf($);
       return [
@@ -367,7 +386,10 @@ const ch12 = [
       num('ax', ($) => $.abx - $.aax, 'm/s²', { label: 'a_B/A,x' }),
       num('ay', ($) => $.aby - $.aay, 'm/s²', { label: 'a_B/A,y' }),
     ],
-    hints: ['Use translating axes on A: subtract A’s vectors from B’s. The positions are not needed.'],
+    level: 2,
+    hints: ['Use translating axes on A: subtract A’s vectors from B’s. The positions are not needed.',
+      "The relative speed is the magnitude of that vector difference. Subtracting the two speeds loses the direction.",
+    ],
     steps: ($, sig) => {
       const vx = $.vbx - $.vax;
       const vy = $.vby - $.vay;
