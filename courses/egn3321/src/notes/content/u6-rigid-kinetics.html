@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 6 · Hibbeler Ch 17</p>
   <h1>Rigid-body kinetics</h1>
-  <p class="lede">Force and acceleration for a rigid body in the plane. The mass moment says how hard the body is to spin. The pin force and the friction then follow from the motion of the mass centre.</p>
+  <p class="lede">Force and acceleration for a rigid body in the plane. The mass moment says how hard the body is to spin. The pin force and the friction then follow from the motion of the mass centre. Each formula below is derived from \(\Sigma\vec F = m\vec a_G\) and \(\Sigma M_G = I_G\alpha\), and the numbers are recomputed.</p>
   <nav class="toc">
     <a href="#s1"><span>01</span>Mass moment of inertia</a>
     <a href="#s2"><span>02</span>Composite bodies</a>
@@ -23,53 +23,68 @@
 <h2><span class="n">01</span>Mass moment of inertia</h2>
 <p>The mass moment \(I\) measures how far the mass sits from the axis. Moving that mass farther out raises \(I\) even when the mass itself stays fixed. For a known centre moment, the parallel-axis theorem gives the moment about a parallel axis:</p>
 <div class="box why"><span class="tag">Why</span>
-<p>\(I = \int r^2\,dm\). To move a known centre moment onto a parallel axis, add \(md^2\). The shift starts at the mass centre, where the cross term is zero.</p>
+<p>\(I = \int r^2\,dm\). For a slender rod of mass \(m\) and length \(L\), \(dm = (m/L)\,dx\). About the centre, \(I_G = \int_{-L/2}^{L/2} x^2 (m/L)\,dx = mL^2/12\). For a disk, add rings: a ring of radius \(r\) and width \(dr\) holds mass \((2m/R^2)\,r\,dr\), so \(I = \int_0^R r^2 (2m/R^2) r\,dr = mR^2/2\).</p>
+<p>To move a known centre moment onto a parallel axis a distance \(d\) away, write each mass element's distance as \(\vec r = \vec d + \vec\rho\), with \(\vec\rho\) from the mass centre. Then \(r^2 = d^2 + 2\vec d\cdot\vec\rho + \rho^2\). The middle term integrates to zero, because \(\int\vec\rho\,dm = 0\) about the mass centre. What is left is \(md^2 + I_G\).</p>
 </div>
-
+<p>A solid sphere is a stack of thin disks. The disk at height \(z\) has radius \(\sqrt{R^2 - z^2}\), so its moment is \(\tfrac12\,dm\,(R^2 - z^2)\). Integrating over the stack gives \(\tfrac25 mR^2\). A hoop needs no integral: every element sits at \(R\), so \(I = mR^2\).</p>
 \[ I = I_G + md^2 \]
-<p>\(G\) is the mass centre. \(d\) is the distance between the two axes.</p>
+<p>\(G\) is the mass centre. \(d\) is the distance between the two axes. The radius of gyration \(k\) is the radius at which all the mass would give the same moment: \(I = mk^2\).</p>
 <div class="box ex"><span class="tag">Worked example · a rod about its end</span>
 <p>A slender rod has mass 6 kg and length 2 m. About the centre, \(I_G = 2\ \mathrm{kg\cdot m^2}\). About one end, \(I = 8\ \mathrm{kg\cdot m^2}\).</p>
+<p>Check with the integral from the end: \(\int_0^2 x^2 (3)\,dx = 8\). The parallel-axis shift and the direct integral agree.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · the same mass and radius</span>
 <p>A hoop, a disk, and a solid sphere each have mass 2 kg and radius 0.5 m. The centre moments are 0.5, 0.25, and 0.2 kg·m². The hoop is the largest, because every bit of its mass is at the rim.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · a flywheel in feet</span>
+<p>A disk flywheel weighs 50 lb and has a 1.5 ft radius. Its mass is \(50/32.2 = 1.553\) slug. So \(I = \tfrac12(1.553)(1.5^2) = 1.747\) slug·ft². A 10 lb·ft torque spins it up at \(10/1.747 = 5.72\) rad/s².</p>
+</div>
+<p>The radius of gyration makes shapes easy to compare. The hoop has \(k = R\). The disk has \(k = 0.707R\). The solid sphere has \(k = 0.632R\). The smaller \(k\) is, the easier the body is to spin up for its mass and size.</p>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The parallel-axis shift starts at the mass centre. Adding \(md^2\) to a moment about some other point counts the distance twice. Hibbeler §17.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>A slender rod is \(mL^2/12\) about its centre and \(mL^2/3\) about one end.</p>
+<p>A slender rod is \(mL^2/12\) about its centre and \(mL^2/3\) about one end. Shift from \(G\), never between two other axes.</p>
 </div>
-<p>The parallel-axis shift starts at the mass centre. These shapes are the standard rod, hoop, disk, and solid sphere. A different mass distribution needs its own integral.</p>
+<p>In the Inertia lab, slide the axis along the rod. \(I\) is smallest at the centre and grows with the square of the offset.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The parallel-axis shift starts at the mass centre. These shapes are the standard rod, hoop, disk, and solid sphere, each uniform. A different mass distribution needs its own integral. In the plane only one axis matters. In three dimensions a body has a full inertia tensor, which this course leaves out.</p>
+</div>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Composite bodies</h2>
 <p>A composite moment is the sum of the parts, each moved onto the same axis. A hole is a part with negative mass. Subtract its centre moment and its \(md^2\).</p>
 <div class="box why"><span class="tag">Why</span>
-<p>Move each part from its own mass centre onto the one axis, using \(I_G + md^2\), then add. A hole is the same term with a minus sign.</p>
+<p>The integral \(\int r^2\,dm\) over the whole body splits into integrals over the parts. Move each part from its own mass centre onto the one axis, using \(I_G + md^2\), then add. A hole is a region where the integral was counted and should not have been: the same term with a minus sign.</p>
 </div>
-
 <div class="box ex"><span class="tag">Worked example · a plate and a disk</span>
 <p>A 5 kg plate is 0.6 m by 0.4 m. A 2 kg disk of radius 0.1 m sits 0.2 m from the plate centre. About that centre, \(I = 0.307\ \mathrm{kg\cdot m^2}\).</p>
+<p>The plate gives \(5(0.36 + 0.16)/12 = 0.217\). The disk gives \(\tfrac12(2)(0.01) + 2(0.2^2) = 0.09\). Most of the disk's share is its \(md^2\).</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · a disk with a hole</span>
 <p>A 12 kg disk of radius 0.3 m loses a hole of radius 0.1 m. The hole centre is 0.12 m from the disk centre. The mass given is the disk before the cut. What remains has \(I = 0.514\ \mathrm{kg\cdot m^2}\).</p>
+<p>The hole holds a ninth of the area, so 1.333 kg. Its share is \(\tfrac12(1.333)(0.01) + 1.333(0.0144) = 0.0259\). The full disk is \(\tfrac12(12)(0.09) = 0.54\). Subtract.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a pendulum with a bob</span>
+<p>A 2 kg rod 1 m long swings about one end. A 1 kg solid sphere of radius 0.1 m is fixed at the far end, its centre 1.1 m from the pin. The rod gives \(2(1)^2/3 = 0.667\). The sphere gives \(0.4(1)(0.01) + 1(1.21) = 1.214\). The total is \(1.88\ \mathrm{kg\cdot m^2}\), and \(k = \sqrt{1.88/3} = 0.792\) m.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The hole keeps its own centre moment and the parallel-axis term. Dropping \(md^2\) understates the piece being subtracted. Hibbeler §17.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>One axis for every part. Shift each part from its own mass centre, then add.</p>
+<p>One axis for every part. Shift each part from its own mass centre, then add. Subtract holes the same way.</p>
 </div>
-<p>Every part is moved onto one axis, perpendicular to the plate. A hole keeps its centre moment and its \(md^2\). An axis in some other direction is left out.</p>
+<p>In the Inertia lab, the composite scenario moves the disk across the plate. Its \(md^2\) term dominates once it is far from the axis.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Every part is moved onto one axis, perpendicular to the plate. A hole keeps its centre moment and its \(md^2\). An axis in some other direction is left out. So are fillets, bolts, and every small feature a drawing would show.</p>
+</div>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Translation</h2>
 <p>In translation the body does not rotate, so \(\alpha = 0\) and \(\Sigma M_G = 0\). The force equations are still \(\Sigma F = ma_G\). A horizontal force on a crate can slide it or tip it. The smaller of those two forces happens first.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>Translation means \(\alpha = 0\), so the moment about the mass centre is zero. Sliding is the friction limit \(\mu mg\). Tipping is the moment limit about the front corner. The smaller force is reached first.</p>
+<p>For a rigid body, \(\Sigma M_G = I_G\alpha\). Translation means \(\alpha = 0\), so the moment about the mass centre is zero, even while the body accelerates. Sliding is the friction limit \(\mu mg\). Tipping is the moment limit about the front corner. The smaller force is reached first.</p>
 </div>
-
 <p>Sliding needs \(P = \mu mg\). Tipping, with the force at the top, needs \(P = mg(b/2)/h\) about the front corner.</p>
 <div class="box ex"><span class="tag">Worked example · a crate that slides</span>
 <p>A 40 kg crate is 0.5 m wide and 0.5 m tall, with \(\mu = 0.25\). The force is applied at the top. Sliding needs 98.1 N. Tipping needs 196.2 N. The crate slides.</p>
@@ -77,18 +92,31 @@
 <div class="box ex"><span class="tag">Worked example · a crate that tips</span>
 <p>A 20 kg crate is 0.4 m wide and 0.8 m tall, with \(\mu = 0.5\). Sliding needs 98.1 N. Tipping needs 49.05 N. The crate tips.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · pushing lower</span>
+<p>Push the tall 20 kg crate at mid-height, 0.4 m up, instead of at the top. Taking moments about the front corner, tipping now needs \(P = mg(b/2)/h_P = 196.2(0.2)/0.4 = 98.1\) N. That ties the sliding force. Push any lower and the crate slides first. The push height is a design choice, not a given.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a crate on a braking truck</span>
+<p>A crate 0.5 m wide stands on a truck bed with its mass centre 0.6 m up. \(\mu_s = 0.5\). The truck brakes at \(a\). Friction must decelerate the crate, so sliding starts at \(a = \mu_s g = 4.91\) m/s². About the mass centre, the friction's moment must be balanced by the normal force shifting forward. It reaches the front edge at \(a = g(0.25)/0.6 = 4.09\) m/s². Braking at 4.5 m/s² tips the crate before it slides.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · weight transfer in a car</span>
+<p>A 1500 kg car has its mass centre 0.5 m up, 1.2 m behind the front axle and 1.4 m ahead of the rear, on a 2.6 m wheelbase. At rest the front axle carries \(14{,}715(1.4/2.6) = 7920\) N and the rear 6790 N.</p>
+<p>Accelerating at 3 m/s² needs 4500 N of drive at the road. That force acts 0.5 m below \(G\), so \(\Sigma M_G = 0\) shifts \(ma h/L = 865\) N of load onto the rear axle. The rear now carries 7660 N, and the front 7060 N.</p>
+</div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Check the friction limit and the corner moment. The smaller force is the one that happens. Hibbeler §17.3.</p>
+<p>Check the friction limit and the corner moment. The smaller force is the one that happens. And take moments about \(G\), not about a corner, unless you include the \(ma_G\) term: about any other point, \(\Sigma M\) is not zero in accelerated translation. Hibbeler §17.3.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>\(\Sigma M_G = 0\) while the crate is still translating. The normal reaches the front corner at the tip.</p>
+<p>\(\Sigma M_G = 0\) while the body is still translating. The normal reaches the front corner at the tip. Acceleration moves load toward the back of a car and the front of a braking one.</p>
 </div>
-<p>Until the crate tips it translates, so the moment about the mass centre is zero. The force is at the top edge. A lower force changes the tipping value.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Until the crate tips it translates, so the moment about the mass centre is zero. The force is at the top edge, and a lower force changes the tipping value. The car is rigid: suspension, which lets the body pitch, is left out, so the load shift happens at once instead of after a short settling.</p>
+</div>
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Rotation about a fixed axis</h2>
 <p>A body on a fixed pin obeys \(\Sigma M_O = I_O\alpha\). The pin force then comes from \(\Sigma F = ma_G\). At release from rest, \(\omega = 0\), so the mass centre has no normal acceleration yet.</p>
 <div class="box why"><span class="tag">Why</span>
+<p>About the mass centre, \(\Sigma M_G = I_G\alpha\). Shift the moment point to the pin O, a distance \(d\) away. The resultant force \(m\vec a_G\) adds a moment \(m\,a_t\,d = md^2\alpha\). So \(\Sigma M_O = (I_G + md^2)\alpha = I_O\alpha\). Moments about the pin skip the unknown pin force.</p>
 <p>A uniform bar pinned at one end has \(I_O = mL^2/3\). Held horizontal, the weight's moment is \(mg(L/2)\), so \(\alpha = 3g/(2L)\). The centre is \(L/2\) from the pin, and \(a_G = 3g/4\) downward. Then \(mg - O = m(3g/4)\), and the pin holds \(mg/4\).</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · a horizontal bar</span>
@@ -97,6 +125,15 @@
 <div class="box ex"><span class="tag">Worked example · a hanging bar</span>
 <p>The same bar, hanging straight down and at rest, puts 39.2 N on the pin. \(\alpha = 0\).</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · swinging through the bottom</span>
+<p>Released from horizontal, the same bar reaches the vertical with \(\omega^2 = 3g/L = 14.7\) rad²/s², by energy (Unit 7). So \(\omega = 3.84\) rad/s. There the weight passes through the pin, so \(\alpha = 0\). But \(G\) moves on a circle: \(a_G = (L/2)\omega^2 = 14.7\) m/s², upward. The pin holds \(m(g + 14.7) = 98.1\) N, two and a half times the weight.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the sweet spot</span>
+<p>A bar of length \(L\) hangs from a pin and is struck horizontally at distance \(q\) below the pin. The blow \(P\) gives \(\alpha = Pq/I_O = 3Pq/(mL^2)\), and \(a_G = \alpha L/2\). The horizontal pin force is \(P - ma_G = P(1 - 3q/(2L))\). It vanishes at \(q = 2L/3\). Struck there, the pin feels no horizontal jolt. That point is the centre of percussion: the sweet spot on a bat.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · spinning up a flywheel</span>
+<p>The 1.747 slug·ft² flywheel of section 1 is driven by a steady 10 lb·ft. At 5.72 rad/s², it reaches 1800 rpm, which is 188.5 rad/s, after \(188.5/5.72 = 32.9\) s. Doubling the flywheel's radius at the same weight would quadruple that time.</p>
+</div>
 <div class="box ex"><span class="tag">Worked example · a square plate</span>
 <p>A 2 kg square plate, 0.4 m on a side, is pinned at a corner and released from rest. The pin holds 7.36 N horizontally and 12.26 N vertically. \(\alpha = 18.39\ \mathrm{rad/s^2}\).</p>
 </div>
@@ -104,12 +141,15 @@
 <p>A bar weighs 32.2 lb and is 4 ft long. Released from rest while horizontal, the pin holds 8.05 lb. \(\alpha = 12.08\ \mathrm{rad/s^2}\). Here \(g = 32.2\ \mathrm{ft/s^2}\).</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>At the horizontal release the pin holds \(mg/4\). Putting the whole weight on the pin is the wrong free-body result. Hibbeler §17.4.</p>
+<p>At the horizontal release the pin holds \(mg/4\). Putting the whole weight on the pin is the wrong free-body result. At the bottom of the swing, the reverse mistake gives \(mg\) instead of \(2.5mg\). Hibbeler §17.4.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Moments about the pin give \(\alpha\). The pin components then come from the motion of \(G\).</p>
+<p>Moments about the pin give \(\alpha\). The pin components then come from the motion of \(G\): \(r\alpha\) along the path and \(r\omega^2\) toward the pin.</p>
 </div>
-<p>At release from rest, \(\omega = 0\), so the mass centre has no normal acceleration yet. Friction in the pin bearing is left out.</p>
+<p>In the Pendulum lab, set the angle and the angular speed. The pin components are split into the part that holds the weight and the part that turns \(G\).</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>At release from rest, \(\omega = 0\), so the mass centre has no normal acceleration yet. Friction in the pin bearing is left out, and so is air drag on the swinging body. Both would slowly drain the swing. The pin is also rigid: it does not deflect under load.</p>
+</div>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>General plane motion</h2>
@@ -117,8 +157,10 @@
 \[ a = \frac{g\sin\theta}{1 + k_G^2/R^2} \]
 <p>Write \(k = k_G^2/R^2 = I_G/(mR^2)\). The friction that rolling needs is \(mg\sin\theta\cdot k/(1+k)\). If that force exceeds \(\mu N\), the body slips and friction is \(\mu N\).</p>
 <div class="box why"><span class="tag">Why</span>
-<p>Down the plane, \(mg\sin\theta - f = ma\). About the centre, \(fR = I_G a/R\). Eliminate \(f\). The denominator is \(1 + I_G/(mR^2)\).</p>
+<p>Down the plane, \(mg\sin\theta - f = ma\). About the centre, \(fR = I_G\alpha\), and rolling without slip sets \(\alpha = a/R\). So \(f = I_G a/R^2\). Eliminate \(f\). The denominator is \(1 + I_G/(mR^2)\).</p>
+<p>If the needed \(f\) exceeds \(\mu N\), set \(f = \mu N\) instead, and drop the rolling constraint. Then \(a = g(\sin\theta - \mu\cos\theta)\) and \(\alpha = \mu N R/I_G\) separately.</p>
 </div>
+<p>The factor \(1 + k\) has a plain meaning. The weight's pull down the slope must speed up the centre and spin the body. A share \(1/(1 + k)\) goes to the centre's acceleration and \(k/(1 + k)\) to the spin. A disk puts a third of the effort into spinning. A hoop puts half.</p>
 <div class="box ex"><span class="tag">Worked example · a disk that rolls</span>
 <p>A 2 kg disk of radius 0.25 m is released on a 30° incline with \(\mu = 0.3\). It rolls. \(a = 3.27\ \mathrm{m/s^2}\) and the friction is 3.27 N.</p>
 </div>
@@ -127,14 +169,24 @@
 </div>
 <div class="box ex"><span class="tag">Worked example · a sphere that rolls</span>
 <p>The same mass and radius, as a solid sphere, with \(\mu = 0.3\). It rolls. \(a = 3.50\ \mathrm{m/s^2}\) and the friction is 2.80 N.</p>
+<p>The sphere's \(k = 0.4\) is the smallest of the three shapes, so it accelerates fastest. Released together, the sphere beats the disk, and the disk beats a rolling hoop, whatever their masses and sizes.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a disk pulled at its centre</span>
+<p>A 2 kg disk on level ground is pulled forward at its centre by 6 N. Friction must spin it up, so it acts backward at the contact. With \(k = 1/2\): \(6 - f = 2a\) and \(fR = \tfrac12(2)R^2(a/R)\), so \(f = a\). Then \(a = 2\) m/s² and \(f = 2\) N. A third of the pull goes into spinning the disk.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a sphere in feet</span>
+<p>A 10 lb solid sphere rolls down a 20° ramp. With \(k = 2/5\), \(a = (5/7)(32.2)\sin 20^\circ = 7.87\) ft/s². The weight cancels. Rolling needs \(f/N = (2/7)\tan 20^\circ = 0.104\), so any \(\mu_s\) above that keeps it rolling.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>A rolling body is slower than a sliding block on the same incline. Divide \(g\sin\theta\) by \(1 + k_G^2/R^2\). A hoop needs more friction than a disk. Hibbeler §17.5.</p>
+<p>A rolling body is slower than a sliding block on the same incline. Divide \(g\sin\theta\) by \(1 + k_G^2/R^2\). A hoop needs more friction than a disk. And friction's direction is whatever the rolling needs, not always against the motion: on the pulled disk it points backward, on a driven wheel it points forward. Hibbeler §17.5.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Compare the friction rolling needs with \(\mu N\). Under the limit, it rolls. Over the limit, it slips.</p>
 </div>
-<p>Friction is Coulomb, and rolling resistance is left out. Past the friction limit the no-slip constraint is dropped, and the body both slides and spins.</p>
+<p>In the Roll or slip lab, lower \(\mu\) until the hoop slips. The readout switches from the rolling formula to \(\mu N\), and \(a\) jumps up.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Friction is Coulomb, and rolling resistance is left out. Past the friction limit the no-slip constraint is dropped, and the body both slides and spins. Rolling without slip does no work at the contact, so energy is conserved while it rolls. Unit 7 uses exactly that.</p>
+</div>
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Formula sheet</h2>
@@ -142,10 +194,10 @@
 <li>Rod, centre: \(I_G = \frac{1}{12}mL^2\). Rod, end: \(I_O = \frac{1}{3}mL^2\).</li>
 <li>Hoop: \(mR^2\). Disk: \(\frac{1}{2}mR^2\). Solid sphere: \(\frac{2}{5}mR^2\).</li>
 <li>Plate, about its centre: \(I_G = \frac{1}{12}m(w^2+h^2)\).</li>
-<li>Parallel axis, from the mass centre: \(I = I_G + md^2\).</li>
+<li>Parallel axis, from the mass centre: \(I = I_G + md^2\). Radius of gyration: \(I = mk^2\).</li>
 <li>Translation: \(\Sigma\vec F = m\vec a_G\) and \(\Sigma M_G = 0\).</li>
-<li>Fixed pin: \(\Sigma M_O = I_O\alpha\), then \(\Sigma\vec F = m\vec a_G\).</li>
-<li>Horizontal bar, released from rest: the pin holds \(mg/4\).</li>
+<li>Fixed pin: \(\Sigma M_O = I_O\alpha\), then \(\Sigma\vec F = m\vec a_G\), with \(a_t = r\alpha\) and \(a_n = r\omega^2\).</li>
+<li>Horizontal bar, released from rest: the pin holds \(mg/4\). At the bottom of the swing: \(5mg/2\).</li>
 <li>Rolling without slip: \(a = g\sin\theta/(1+k_G^2/R^2)\).</li>
 <li>That roll needs \(f = mg\sin\theta\cdot k/(1+k)\), with \(k = k_G^2/R^2\). It slips when this \(f\) exceeds \(\mu N\).</li>
 <li>\(g = 9.81\ \mathrm{m/s^2}\). A US problem uses \(g = 32.2\ \mathrm{ft/s^2}\).</li>

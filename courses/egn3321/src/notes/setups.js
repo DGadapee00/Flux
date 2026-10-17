@@ -707,6 +707,18 @@ export const SETUPS = {
         read: (c) => ({ pin: [c.pin, 4 * 9.81], alpha: [c.alpha, 0] }),
       },
       {
+        tag: 'swinging through the bottom',
+        lab: 'pendulum',
+        scenario: 'hanging',
+        setup(s) {
+          s.mass = 4;
+          s.length = 2;
+          s.theta = 0;
+          s.omega = Math.sqrt((3 * 9.81) / 2);
+        },
+        read: (c) => ({ pin: [c.pin, 98.1], alpha: [c.alpha, 0] }),
+      },
+      {
         tag: 'a square plate',
         lab: 'pendulum',
         scenario: 'plate',
