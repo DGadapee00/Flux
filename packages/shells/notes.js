@@ -1,11 +1,10 @@
 import { createNotes } from '@flux/core';
 
 /**
- * Notes tab for an engineering course. Shown only when the course passes `notes`
- * (the manifest has notes). Statics passes none, so this returns null and does
- * not touch the header.
+ * Notes tab, shared by the math and engineering HUDs. Shown only when the course passes `notes`
+ * (the manifest has notes). A course that passes none gets null, and the header is untouched.
  *
- * A course that passes notes also imports `styles/notes.css`.
+ * A course that passes notes also imports `@flux/shells/styles/notes.css`.
  *
  * @param {object} api Same host api as the HUD, plus `examId()`.
  * @param {object|null|undefined} notesDeps Arguments for core `createNotes`.

@@ -55,6 +55,10 @@ export function examById(id) {
   return EXAMS.find((e) => e.id === id) || EXAMS[1];
 }
 
+export function examLabel(exam) {
+  return exam ? `Unit ${exam.n}` : 'Unit';
+}
+
 export function examForLab(labId) {
   const meta = LAB_META[labId];
   return meta ? examById(meta.exam) : examById('u2');

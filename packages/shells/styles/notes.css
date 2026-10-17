@@ -1,4 +1,4 @@
-/* Notes panel. Loaded by a course whose manifest has notes. Statics does not import this file. */
+/* Notes panel, for either shell. Loaded only by a course whose manifest has notes. */
 
 :root {
   --notes-w: min(760px, calc(100vw - 440px));
@@ -288,6 +288,17 @@ body.notes-resizing {
 
 .nt-doc .box.fix > .tag {
   color: var(--gold);
+}
+
+/* What a section's model leaves out: the last box of a section. */
+.nt-doc .box.out {
+  border-style: dashed;
+  border-color: var(--border-hover);
+  background: transparent;
+}
+
+.nt-doc .box.out > .tag {
+  color: var(--text-muted);
 }
 
 .nt-doc .katex-display {

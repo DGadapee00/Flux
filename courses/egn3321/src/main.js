@@ -1,6 +1,6 @@
 import '@flux/shells/engineering/styles/main.css';
 import '@flux/shells/engineering/styles/practice.css';
-import '@flux/shells/engineering/styles/notes.css';
+import '@flux/shells/styles/notes.css';
 import 'katex/dist/katex.min.css';
 import { mountTrackBar } from '@flux/core';
 import { ANSWER_LAYER } from '@flux/core/scene3d/manim.js';
