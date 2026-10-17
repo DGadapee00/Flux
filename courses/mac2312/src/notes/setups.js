@@ -57,6 +57,39 @@ export const SETUPS = {
       },
     ],
   },
+  u2: {
+    s5: [
+      {
+        tag: 'four panels on sine',
+        lab: 'numint',
+        scenario: 'coarse',
+        setup(s) {
+          s.n = 4;
+        },
+        read: (c) => ({ trap: [c.trap, 1.8961], simp: [c.simp, 2.00456], trapErr: [c.trapErr, 0.1039], simpErr: [c.simpErr, 0.00456] }),
+      },
+      {
+        tag: 'doubling the panels',
+        lab: 'numint',
+        scenario: 'mid',
+        setup(s) {
+          s.n = 8;
+        },
+        read: (c) => ({ trapErr: [c.trapErr, 0.0258], simpErr: [c.simpErr, 0.000269] }),
+      },
+    ],
+    s6: [
+      {
+        tag: 'the tail of 1 over x squared',
+        lab: 'improper',
+        scenario: 'mid',
+        setup(s) {
+          s.b = 4;
+        },
+        read: (c) => ({ area: [c.area, 0.75], tail: [c.tail, 0.25] }),
+      },
+    ],
+  },
 };
 
 export function exampleTag(tagText) {
