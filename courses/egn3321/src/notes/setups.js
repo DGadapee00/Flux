@@ -391,6 +391,20 @@ export const SETUPS = {
         },
         read: (c) => ({ vn1: [c.vn1, 2], vn2: [c.vn2, 2], loss: [c.loss, 24] }),
       },
+      {
+        tag: 'a head-on meeting',
+        lab: 'impact',
+        scenario: 'central',
+        setup(s) {
+          s.m1 = 2;
+          s.m2 = 1;
+          s.u1 = 3;
+          s.u2 = -1;
+          s.e = 0.8;
+          s.theta = 0;
+        },
+        read: (c) => ({ vn1: [c.vn1, 0.6], vn2: [c.vn2, 3.8], loss: [c.loss, 1.92] }),
+      },
     ],
     s4: [
       {
