@@ -133,6 +133,28 @@ export const SETUPS = {
       },
     ],
   },
+  u3: {
+    s6: [
+      {
+        tag: 'a small cut',
+        lab: 'box',
+        scenario: 'short',
+        setup(s) {
+          s.x = 1;
+        },
+        read: (c) => ({ v: [c.v, 100], dv: [c.dv, 60] }),
+      },
+      {
+        tag: 'the best cut',
+        lab: 'box',
+        scenario: 'peak',
+        setup(s) {
+          s.x = 2;
+        },
+        read: (c) => ({ v: [c.v, 128], dv: [c.dv, 0], best: [c.best, 2] }),
+      },
+    ],
+  },
 };
 
 export function exampleTag(tagText) {
