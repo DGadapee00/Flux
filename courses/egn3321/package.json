@@ -9,6 +9,7 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4181 --strictPort",
     "test": "node scripts/tex-check.mjs && node scripts/problems-check.mjs && node scripts/labs-check.mjs && node scripts/notes-check.mjs && node --test scripts/route.test.mjs",
+    "layout": "node scripts/layout.mjs",
     "deploy": "node -e \"console.error('This copy ships with the hub. From the repo root: npm run deploy'); process.exit(1)\""
   },
   "dependencies": {

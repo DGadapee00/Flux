@@ -383,7 +383,8 @@ body {
   top: var(--below-brand, 196px);
   left: 16px;
   width: min(360px, calc(100vw - 360px));
-  max-height: calc(100vh - var(--below-brand, 196px) - 64px);
+  /* The HUD sets --readout-clear when the readout bar runs under this panel: the bar's top to the bottom edge. */
+  max-height: calc(100vh - var(--below-brand, 196px) - var(--readout-clear, 64px));
   overflow: auto;
   overscroll-behavior: contain;
   /*
@@ -410,7 +411,7 @@ body {
 }
 
 body.has-legend .eq-panel {
-  max-height: calc(100vh - var(--below-brand, 196px) - 168px);
+  max-height: calc(100vh - var(--below-brand, 196px) - max(168px, var(--readout-clear, 64px)));
 }
 
 .law {
@@ -532,7 +533,7 @@ sup {
   top: 196px;
   right: 16px;
   width: 300px;
-  max-height: calc(100vh - 260px);
+  max-height: calc(100vh - 196px - var(--readout-clear, 64px));
   overflow: auto;
   padding: 14px;
   display: flex;
@@ -894,8 +895,11 @@ select {
   padding-top: 4px;
 }
 
+/* Three stacked rows. The plot gives up height before the panel scrolls it out of view. */
 #mini-plot.series {
   height: 248px;
+  min-height: 168px;
+  flex-shrink: 1;
 }
 
 .predict {
@@ -997,6 +1001,23 @@ input[type='checkbox'] {
   gap: 8px 20px;
 }
 
+/* Wide enough: the readout sits between the side panels and covers neither. */
+@media (min-width: 1260px) {
+  .readout {
+    left: calc(32px + min(384px, 100vw - 360px));
+    right: 332px;
+    transform: none;
+    width: auto;
+    max-width: 920px;
+    margin-inline: auto;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .readout .cell {
+    flex: 1 1 auto;
+  }
+}
+
 .readout .cell {
   min-width: 0;
   padding-left: 12px;
@@ -1019,9 +1040,9 @@ input[type='checkbox'] {
   font-size: 18px;
   color: var(--text);
   margin-top: 1px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* A long value wraps rather than hide behind an ellipsis. */
+  overflow-wrap: break-word;
+  line-height: 1.2;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1281,6 +1302,11 @@ select:focus-visible {
 }
 
 @media (max-width: 720px) {
+  /* The sheet sits on the readout bar, which grows when a value wraps; the HUD measures it as --bar-clear. */
+  :root {
+    --sheet-h: 36vh;
+    --sheet-bottom: max(66px, var(--bar-clear, 0px));
+  }
   .eq-panel {
     display: none;
   }
@@ -1411,14 +1437,14 @@ select:focus-visible {
     top: auto;
     left: 8px;
     right: auto;
-    bottom: calc(66px + 36vh + 8px);
+    bottom: calc(var(--sheet-bottom) + var(--sheet-h) + 8px);
     padding: 4px;
   }
   .sheet-toggle {
     display: block;
     pointer-events: auto;
     right: 8px;
-    bottom: calc(66px + 36vh + 8px);
+    bottom: calc(var(--sheet-bottom) + var(--sheet-h) + 8px);
     padding: 7px 14px;
     color: var(--text);
     font: inherit;
@@ -1430,7 +1456,7 @@ select:focus-visible {
   }
   .controls {
     top: auto;
-    bottom: 66px;
+    bottom: var(--sheet-bottom);
     left: 8px;
     right: 8px;
     width: auto;
@@ -1444,13 +1470,20 @@ select:focus-visible {
     display: none;
   }
   body.sheet-explain .eq-panel {
-    display: block;
+    display: flex;
     top: auto;
-    bottom: 66px;
+    bottom: var(--sheet-bottom);
     left: 8px;
     right: 8px;
     width: auto;
-    max-height: 36vh;
+    max-height: var(--sheet-h);
+  }
+  /*
+   * A stacked plot needs the room: the sheet grows rather than hide it below the fold,
+   * and the buttons that sit on the sheet stay clear of the header.
+   */
+  body.sheet-explain:has(#mini-plot.series:not([hidden])) {
+    --sheet-h: min(62vh, calc(100vh - var(--below-brand, 180px) - 118px));
   }
   .readout {
     bottom: 8px;
