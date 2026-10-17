@@ -10,6 +10,8 @@
  *   4. symbolic keys equal get($); the grader accepts the key and rejects a perturbed one.
  *      A symbolic template's worked case names a formula, an equivalent rewrite, and a wrong answer.
  *      Problem text never prints a coefficient of 1 against a variable (`1x^{2}`).
+ *      Every template has 50 versions, writes multiples of π in lowest terms, and has two or three
+ *      hints. The first hint names the idea: it does not print the answer.
  *   5. sim agreement: load the instance into the real lab (applyProblem), run lab.recompute
  *      headless, and compare sim.read(...) with the problem's own answers
  */
@@ -72,6 +74,9 @@ function checkRender(tpl, inst) {
   const strings = [r.text, ...r.parts.map((p) => `${p.label ?? ''} ${(p.options || []).map((o) => o.label).join(' ')} ${p.rubric ?? ''}`), ...r.steps, ...r.hints];
   const blob = strings.join('\n');
   if (/undefined|NaN|\[object/.test(blob)) err(tpl.id, `rendered text contains undefined/NaN:\n${blob.slice(0, 300)}`);
+  // A formula key is typed input. Inside math it is shown through exprToTex, never with its `*`.
+  for (const m of blob.matchAll(/\$([^$]+)\$/g)) if (m[1].includes('*')) err(tpl.id, `a formula key leaks into the math: ${m[0]}`);
+  if (/[A-Za-z)]\^(\{1\}|1(?![0-9.]))/.test(r.text)) err(tpl.id, `write a first power without its exponent: ${r.text.slice(0, 160)}`);
   // The panel typesets `$…$` (src/ui/shared.js); KaTeX marks what it cannot parse instead of throwing.
   for (const s of strings) {
     const html = mathProse(s);
@@ -209,6 +214,110 @@ function checkSymbolicCases(tpl) {
   }
 }
 
+/** Ways a number can be printed in prose: 3 and 4 significant figures, a small fraction, a fraction of π. */
+function numberForms(v) {
+  const forms = new Set();
+  if (!Number.isFinite(v) || Math.abs(v) < 1e-9 || Math.abs(Math.abs(v) - 1) < 1e-9) return forms;
+  for (const p of [3, 4]) forms.add(String(Number(v.toPrecision(p))));
+  for (const [scale, tex] of [[1, ''], [Math.PI, '\\pi']]) {
+    const q = v / scale;
+    for (let d = 1; d <= 24; d++) {
+      const n = Math.round(q * d);
+      if (n === 0 || Math.abs(q * d - n) > 1e-9 || gcdInt(n, d) !== 1) continue;
+      const an = Math.abs(n);
+      const sign = n < 0 ? '-' : '';
+      const top = tex ? (an === 1 ? tex : `${an}${tex}`) : String(an);
+      if (d === 1) {
+        if (tex) forms.add(`${sign}${top}`);
+      } else {
+        forms.add(`${sign}${top}/${d}`);
+        forms.add(`${sign}\\frac{${top}}{${d}}`);
+        forms.add(`${sign}\\dfrac{${top}}{${d}}`);
+        forms.add(`${sign}\\tfrac{${top}}{${d}}`);
+      }
+      break;
+    }
+  }
+  return forms;
+}
+
+/** Prose with exponents and subscripts removed, so the 2 in x^2 is not read as a number. */
+function bareProse(s) {
+  return String(s)
+    .replace(/\^\{[^}]*\}|\^-?\d+(\.\d+)?|\^\\?[a-z]+/gi, '')
+    .replace(/_\{[^}]*\}|_-?\d+|_[a-z]/gi, '')
+    .replace(/\s+/g, '');
+}
+
+function printsNumber(prose, form) {
+  const esc = form.replace(/[.*+?^${}()|[\]\\/-]/g, '\\$&');
+  return new RegExp(`(^|[^0-9.\\\\a-z])${esc}(?![0-9]|\\.[0-9])`, 'i').test(prose);
+}
+
+/** The answers a first hint states outright, for this version. Values the problem text already shows do not count. */
+function hintLeaks(tpl, inst) {
+  const r = render(inst);
+  const first = bareProse(r.hints[0] ?? '');
+  const text = bareProse(r.text);
+  const out = [];
+  for (const p of tpl.parts) {
+    if (p.kind === 'numeric') {
+      for (const f of numberForms(expected(p, inst.$))) {
+        if (printsNumber(first, f) && !printsNumber(text, f)) {
+          out.push(`${p.id}=${f}`);
+          break;
+        }
+      }
+    }
+    if (p.kind === 'symbolic') {
+      let tex = '';
+      try {
+        tex = bareProse(exprToTex(symKey(p, inst.$), p.vars, p.alias)).replace(/\\cdot|[{}\\]/g, '');
+      } catch {
+        /* an unparsable key is reported by the symbolic checks */
+      }
+      if (tex.length >= 4 && first.replace(/\\cdot|[{}\\]/g, '').includes(tex)) out.push(`${p.id}=${tex}`);
+    }
+  }
+  return out;
+}
+
+/**
+ * Two or three hints. The first names the idea and stops short: across the worked cases and the
+ * seeded versions, it may not print an answer in more than a quarter of them.
+ */
+function checkHints(tpl) {
+  const count = Array.isArray(tpl.hints) ? tpl.hints.length : 0;
+  if (count < 2 || count > 3) err(tpl.id, `need 2 or 3 hints, have ${count}`);
+  let tried = 0;
+  let leaked = 0;
+  let example = '';
+  const look = (inst) => {
+    tried++;
+    const leaks = hintLeaks(tpl, inst);
+    if (leaks.length) {
+      leaked++;
+      example ||= leaks.join(', ');
+    }
+  };
+  for (const c of tpl.cases) {
+    try {
+      look(build(tpl, c.v));
+    } catch {
+      /* case build errors are reported with the worked cases */
+    }
+  }
+  const n = Object.keys(tpl.vars).length ? 40 : 0;
+  for (let seed = 1; seed <= n; seed++) {
+    try {
+      look(instance(tpl, seed));
+    } catch {
+      break;
+    }
+  }
+  if (tried && leaked / tried > 0.25) err(tpl.id, `the first hint gives the answer away in ${leaked} of ${tried} versions (${example})`);
+}
+
 const seen = new Set();
 const labsUsed = {};
 for (const tpl of PROBLEMS) {
@@ -223,8 +332,7 @@ for (const tpl of PROBLEMS) {
   if (tpl.sim && !tpl.lab) err(tpl.id, 'sim without lab');
   if (!tpl.cases.length) err(tpl.id, 'no worked case');
   labsUsed[tpl.lab || '(none)'] = (labsUsed[tpl.lab || '(none)'] || 0) + 1;
-  const hintCount = Array.isArray(tpl.hints) ? tpl.hints.filter((h) => String(h).trim()).length : 0;
-  if (hintCount < 2) err(tpl.id, `need at least 2 hints, have ${hintCount}`);
+  checkHints(tpl);
   let piBad = null;
   let oneBad = null;
   const versions = countVersions(tpl, {

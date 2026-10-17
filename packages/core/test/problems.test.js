@@ -151,6 +151,21 @@ test('countVersions is the legal cartesian product, and a symbolic key may depen
   assert.equal(grade(withC, $, '4*x+C').correct, false);
 });
 
+test('a hint may be a function of the version', () => {
+  const { build, render } = createEngine();
+  const tpl = {
+    id: 'hinted',
+    vars: { a: { type: 'range', min: 3, max: 3, step: 1 } },
+    derive: () => ({}),
+    valid: () => true,
+    text: (T) => `a is ${T.a}`,
+    parts: [],
+    hints: ['plain', (T, $) => `twice a is ${2 * $.a}`],
+    steps: () => [],
+  };
+  assert.deepEqual(render(build(tpl, { a: 3 })).hints, ['plain', 'twice a is 6']);
+});
+
 test('pickSet is stable for a seed and stays inside chapterOrder', () => {
   const templates = [
     { id: 'a', ch: '1', kind: 'numeric' },

@@ -50,8 +50,9 @@ export default [
       num('y', ($) => $.y, '', { label: 'y', abs: 1e-6 }),
     ],
     hints: [
-      String.raw`$\cos$ and $\sin$ of a quarter turn are $0$ and $1$, in that order or swapped.`,
-      'Reduce the angle by full turns first, then read cosine for $x$ and sine for $y$.',
+      'A parametric curve gives the point directly: substitute $t$ into both rules.',
+      (T) => String.raw`Reduce $t=${piTex(T.k, 4)}$ by whole turns of $2\pi$. Then find where that angle sits on the unit circle.`,
+      '$x$ is the cosine of the angle, and $y$ is its sine.',
     ],
     steps: ($, f) => [
       String.raw`$x=${f($.x)}$ and $y=${f($.y)}$.`,
@@ -85,8 +86,9 @@ export default [
     text: (T) => String.raw`On $x=\cos t$, $y=\sin t$, find $dy/dx$ at $t=${piTex(T.k, 4)}$.`,
     parts: [num('slope', ($) => $.slope, '', { label: 'slope', abs: 1e-6 })],
     hints: [
-      String.raw`$\dfrac{dy}{dx}=\dfrac{dy/dt}{dx/dt}=-\dfrac{\cos t}{\sin t}$.`,
-      'A vertical tangent makes the denominator $0$. Those angles are not drawn by this problem. Reduce $t$ before you divide.',
+      String.raw`For a parametric curve, $\dfrac{dy}{dx}=\dfrac{dy/dt}{dx/dt}$.`,
+      String.raw`Here $dx/dt=-\sin t$ and $dy/dt=\cos t$.`,
+      (T) => String.raw`Evaluate both at $t=${piTex(T.k, 4)}$, then divide.`,
     ],
     steps: ($, f) => [
       String.raw`$\dfrac{\cos t}{-\sin t}=${f($.slope)}$.`,
@@ -120,8 +122,9 @@ export default [
     text: (T) => String.raw`How long is the unit circle $x=\cos t$, $y=\sin t$ from $t=0$ to $t=${piTex(T.k, 4)}$?`,
     parts: [num('len', ($) => $.len, '', { label: 'length', abs: 1e-6 })],
     hints: [
-      'The speed is 1, so the length equals the change in $t$.',
-      'That change is the angle itself, once it is written in radians.',
+      String.raw`Arc length is $\int\sqrt{(dx/dt)^2+(dy/dt)^2}\,dt$.`,
+      String.raw`Here $(dx/dt)^2+(dy/dt)^2=\sin^2t+\cos^2t$.`,
+      (T) => String.raw`Integrate that constant speed from $0$ to $${piTex(T.k, 4)}$.`,
     ],
     steps: ($, f) => [
       String.raw`The length is $t=${f($.len)}$.`,
@@ -158,8 +161,9 @@ export default [
       num('len', ($) => $.len, '', { label: 'length', abs: 1e-6 }),
     ],
     hints: [
-      'Slope is rise over run. Length is the distance between the endpoints.',
-      'The run is $t$ and the rise is $2t$, so the distance is $t\\sqrt{5}$.',
+      String.raw`The slope is $\dfrac{dy/dt}{dx/dt}$. The length is $\int\sqrt{(dx/dt)^2+(dy/dt)^2}\,dt$.`,
+      'Here $dx/dt=1$ and $dy/dt=2$, both constant.',
+      (T) => String.raw`The speed is constant, so the length is the speed times $${T.t}$.`,
     ],
     steps: ($, f) => [
       String.raw`The slope is $2/1=${f($.slope)}$.`,
@@ -193,8 +197,9 @@ export default [
     text: (T) => String.raw`The parabola $x=t$, $y=t^2$ runs from $t=0$ to $t=${T.t}$. Give its arc length.`,
     parts: [num('len', ($) => $.len, '', { label: 'length', abs: 1e-6 })],
     hints: [
-      String.raw`The speed is $\sqrt{1+4t^2}$. Integrate it.`,
-      'The antiderivative is $(t/2)\\sqrt{1+4t^2}+(1/4)\\ln(2t+\\sqrt{1+4t^2})$. Evaluate it at the right end.',
+      String.raw`Arc length is $\int\sqrt{(dx/dt)^2+(dy/dt)^2}\,dt$.`,
+      String.raw`Here the speed is $\sqrt{1+4t^2}$.`,
+      (T, $, f) => String.raw`With $u=2t$ the length is $\tfrac12\int_0^{${f(2 * $.t)}}\sqrt{1+u^2}\,du$, and $\int\sqrt{1+u^2}\,du=\tfrac12\bigl(u\sqrt{1+u^2}+\ln(u+\sqrt{1+u^2})\bigr)$.`,
     ],
     steps: ($, f) => [
       String.raw`The antiderivative gives $${f($.len)}$.`,
@@ -236,8 +241,9 @@ export default [
       num('y', ($) => $.y, '', { label: 'y', abs: 1e-6 }),
     ],
     hints: [
-      String.raw`$x=r\cos\theta$ and $y=r\sin\theta$.`,
-      'Reduce the angle by full turns, then multiply the cosine and the sine by $r=2$.',
+      String.raw`Polar to Cartesian: $x=r\cos\theta$ and $y=r\sin\theta$.`,
+      (T) => String.raw`Reduce $\theta=${piTex(T.k, 6)}$ by whole turns, and find its reference angle.`,
+      'Multiply the cosine and the sine by $r=2$. Watch the signs in each quadrant.',
     ],
     steps: ($, f) => [
       String.raw`$x=${f($.x)}$ and $y=${f($.y)}$.`,
@@ -262,8 +268,9 @@ export default [
     text: (T) => String.raw`Find the area swept by $r=1$ from $\theta=0$ to $\theta=${piTex(T.k, 2)}$.`,
     parts: [num('area', ($) => $.area, '', { label: 'area', abs: 1e-6 })],
     hints: [
-      String.raw`A sector of the unit disk is a fraction of $\pi$. The polar formula is $\frac12\int r^2\,d\theta$.`,
-      'For $r=1$ the integral is half the angle. Write the angle in radians first.',
+      String.raw`Polar area is $\tfrac12\int r^2\,d\theta$.`,
+      String.raw`With $r=1$ the integrand is the constant $\tfrac12$.`,
+      (T) => String.raw`Integrate it from $0$ to $${piTex(T.k, 2)}$.`,
     ],
     steps: ($, f) => [
       String.raw`$\frac12\alpha=${f($.area)}$.`,
@@ -297,8 +304,9 @@ export default [
     text: (T) => String.raw`Find the area swept by $r=1+\cos\theta$ from $\theta=0$ to $\theta=${piTex(T.k, 2)}$.`,
     parts: [num('area', ($) => $.area, '', { label: 'area', abs: 1e-6 })],
     hints: [
-      String.raw`Expand $(1+\cos\theta)^2$ and integrate $\frac12 r^2$.`,
-      'The antiderivative is $\\frac12\\left(\\frac32\\theta+2\\sin\\theta+\\frac14\\sin 2\\theta\\right)$. Evaluate it at the right end.',
+      String.raw`Polar area is $\tfrac12\int r^2\,d\theta$.`,
+      String.raw`$(1+\cos\theta)^2=1+2\cos\theta+\cos^2\theta$, and $\cos^2\theta=\tfrac12(1+\cos 2\theta)$.`,
+      (T) => String.raw`Integrate each term from $0$ to $${piTex(T.k, 2)}$, then halve the total.`,
     ],
     steps: ($, f) => [
       String.raw`The area is $${f($.area)}$.`,
@@ -333,8 +341,9 @@ export default [
       String.raw`The curve $r=2\cos\theta$ starts at $\theta=-\pi/2$. Sweep $${T.k}$ fourths of the way toward $\theta=\pi/2$. Give the area.`,
     parts: [num('area', ($) => $.area, '', { label: 'area', abs: 1e-6 })],
     hints: [
-      String.raw`A full sweep, four fourths, is a circle of radius $1$, so its area is $\pi$.`,
-      'The polar integral is $\\frac12\\int r^2\\,d\\theta$ with $r=2\\cos\\theta$. Stop at the angle this sweep reaches.',
+      String.raw`Polar area is $\tfrac12\int r^2\,d\theta$.`,
+      (T) => String.raw`The sweep ends at $\theta=-\dfrac{\pi}{2}+${T.k}\cdot\dfrac{\pi}{4}$.`,
+      String.raw`$r^2=4\cos^2\theta=2(1+\cos 2\theta)$. Integrate $\tfrac12 r^2$ over the sweep.`,
     ],
     steps: ($, f) => [
       String.raw`The polar integral gives $${f($.area)}$.`,
@@ -378,8 +387,8 @@ export default [
       }),
     ],
     hints: [
-      String.raw`The area element is $\frac12 r^2\,d\theta$, not $r\,d\theta$.`,
-      'For $r=1$ the integral of $r$ equals the angle. The area is half of that angle. Those agree only when the angle is $0$.',
+      String.raw`The polar area element is $\tfrac12 r^2\,d\theta$: a thin sector, not a thin strip.`,
+      (T) => String.raw`With $r=1$, compare $\int\tfrac12\,d\theta$ with $\int 1\,d\theta$, from $0$ to $${piTex(T.k, 2)}$.`,
     ],
     steps: () => [
       'The integral of $r=1$ equals the angle.',

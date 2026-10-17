@@ -33,8 +33,9 @@ export default [
       String.raw`The region under $y=\sqrt{x}$ from $0$ to $${T.b}$ is rotated about the $x$-axis. Find the volume.`,
     parts: [num('v', ($) => $.v, '', { label: 'volume', abs: 1e-6 })],
     hints: [
-      String.raw`A disk has radius $\sqrt{x}$, so the slice area is $\pi x$.`,
-      'Integrate $\\pi x$ from $0$ to $b$. The antiderivative is $\\pi x^2/2$.',
+      'Slice across the axis. Each slice is a disk whose radius is the height of the curve.',
+      String.raw`At $x$ the radius is $\sqrt{x}$, so the slice area is $\pi x$.`,
+      (T) => String.raw`Integrate $\pi x$ from $0$ to $${T.b}$.`,
     ],
     steps: ($, f) => [
       String.raw`Disks: $V=\pi\int_0^{${f($.b)}} x\,dx=\pi b^2/2$.`,
@@ -71,8 +72,9 @@ export default [
       String.raw`The same region, under $y=\sqrt{x}$ on $[0,${T.b}]$, is rotated about the $x$-axis. Find the volume with cylindrical shells.`,
     parts: [num('v', ($) => $.v, '', { label: 'volume', abs: 1e-6 })],
     hints: [
-      String.raw`At height $y$ the shell has radius $y$ and length $b-y^2$.`,
-      'The shells run from $y=0$ to $y=\\sqrt{b}$. Integrate $2\\pi y(b-y^2)$.',
+      'Shells about the $x$-axis lie along it. Slice in $y$, not in $x$.',
+      (T) => String.raw`At height $y$ the shell has radius $y$. It runs from $x=y^2$ to $x=${T.b}$.`,
+      (T) => String.raw`Integrate $2\pi y(${T.b}-y^2)$ from $y=0$ to $y=\sqrt{${T.b}}$.`,
     ],
     steps: ($, f) => [
       String.raw`Shells: $V=\int_0^{\sqrt{b}} 2\pi y(b-y^2)\,dy$.`,
@@ -109,8 +111,9 @@ export default [
       String.raw`For the solid under $y=\sqrt{x}$ on $[0,${T.b}]$, rotated about the $x$-axis, give the volume divided by $\pi$.`,
     parts: [num('q', ($) => $.q, '', { label: 'volume / π', abs: 1e-6 })],
     hints: [
-      String.raw`The $\pi$ cancels, and $\int_0^b x\,dx=b^2/2$.`,
-      'Square $b$ and divide by $2$.',
+      'Set up the disk integral. The factor $\\pi$ comes outside it.',
+      String.raw`Each disk has area $\pi(\sqrt{x})^2=\pi x$.`,
+      (T) => String.raw`So the volume over $\pi$ is $\int_0^{${T.b}}x\,dx$.`,
     ],
     steps: ($, f) => [
       String.raw`$V/\pi=b^2/2=${f($.q)}$.`,
@@ -145,8 +148,8 @@ export default [
       String.raw`True or false: for $y=\sqrt{x}$ on $[0,${T.b}]$, rotated about the $x$-axis, disks and shells give the same volume.`,
     parts: [tf('same', ($) => (Math.abs(diskVolume($.b) - shellVolume($.b)) < 1e-6 ? 1 : 0), { label: 'volumes agree' })],
     hints: [
-      'Both methods describe one solid, so the integrals must agree.',
-      'Compute $\\pi b^2/2$ both ways. The two expressions are equal for every $b>0$.',
+      'Disks and shells slice one solid in two directions. Each integral is exact, not an estimate.',
+      (T) => String.raw`Compute both: $\int_0^{${T.b}}\pi x\,dx$ and $\int_0^{\sqrt{${T.b}}}2\pi y(${T.b}-y^2)\,dy$.`,
     ],
     steps: () => ['The disk integral and the shell integral are two ways of adding the same solid.'],
     cases: [kase('b=4', { b: 4 }, { same: 1 })],
@@ -167,8 +170,9 @@ export default [
     text: (T) => String.raw`Find the area between $y=x$ and $y=x^2$ on $[0,${T.b}]$.`,
     parts: [num('a', ($) => $.a, '', { label: 'area', abs: 1e-6 })],
     hints: [
-      String.raw`On this interval the line sits above the parabola, so the height is $x-x^2$.`,
-      'The antiderivative is $x^2/2-x^3/3$. Evaluate it at $b$, then subtract the value at $0$.',
+      'The area between two curves is the integral of the top one minus the bottom one.',
+      String.raw`On $[0,1]$, $x\ge x^2$, so the line is on top.`,
+      (T) => String.raw`Integrate $x-x^2$ from $0$ to $${T.b}$.`,
     ],
     steps: ($, f) => [
       String.raw`$\int_0^b (x-x^2)\,dx=b^2/2-b^3/3$.`,
@@ -193,8 +197,9 @@ export default [
       String.raw`The region between $y=x$ and $y=x^2$ on $[0,${T.b}]$ is rotated about the $x$-axis. Find the volume.`,
     parts: [num('v', ($) => $.v, '', { label: 'volume', abs: 1e-6 })],
     hints: [
-      String.raw`A washer has outer radius $x$ and inner radius $x^2$.`,
-      'Integrate $\\pi(x^2-x^4)$ from $0$ to $b$.',
+      'Each slice is a washer: a disk with a smaller disk removed.',
+      'The outer radius is $x$. The inner radius is $x^2$.',
+      (T) => String.raw`Integrate $\pi(x^2-x^4)$ from $0$ to $${T.b}$.`,
     ],
     steps: ($, f) => [
       String.raw`Washers: $\pi\int_0^b (x^2-x^4)\,dx$.`,
@@ -220,8 +225,9 @@ export default [
     text: (T) => String.raw`Find the arc length of $y=x$ from $(0,0)$ to $(${T.b},${T.b})$.`,
     parts: [num('len', ($) => $.len, '', { label: 'length', abs: 1e-6 })],
     hints: [
-      String.raw`$y'=1$, so $\sqrt{1+(y')^2}=\sqrt{2}$.`,
-      'The integrand is constant, so the length is the interval length times $\\sqrt{2}$.',
+      String.raw`Arc length is $\int\sqrt{1+(y')^2}\,dx$.`,
+      'For $y=x$ the slope is $1$ everywhere, so the integrand is a constant.',
+      (T) => String.raw`Integrate that constant from $0$ to $${T.b}$. The distance formula checks it.`,
     ],
     steps: ($, f) => [
       String.raw`$\int_0^b \sqrt{2}\,dx=b\sqrt{2}$.`,
@@ -256,8 +262,9 @@ export default [
       String.raw`A spring pulls back with force $kx$. The constant is $${T.k}$ pounds per foot. It is stretched $${T.d}$ feet from rest. Find the work in foot-pounds.`,
     parts: [num('w', ($) => $.w, '', { label: 'work', abs: 1e-6 })],
     hints: [
-      String.raw`Work is $\int_0^d kx\,dx$.`,
-      'The antiderivative is $kx^2/2$. Evaluate it at the stretched length $d$.',
+      'Work by a varying force is the integral of the force over the distance.',
+      (T) => String.raw`At a stretch of $x$ feet the force is $${String(T.k) === '1' ? '' : T.k}x$ pounds.`,
+      (T) => String.raw`Integrate it from $x=0$ to $x=${T.d}$.`,
     ],
     steps: ($, f) => [
       String.raw`$W=kd^2/2=${f($.w)}$.`,

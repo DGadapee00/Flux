@@ -37,8 +37,9 @@ export default [
       num('thDeg', ($) => $.thDeg, '°', { label: '$\\theta$', wrap: 360, abs: 1 }),
     ],
     hints: [
-      '$r=\\sqrt{x^2+y^2}$. $\\theta$ is the angle from the positive $x$-axis, taken in $[0,2\\pi)$.',
-      'A point in the third or fourth quadrant has $\\theta$ past $180^\\circ$. Add $360^\\circ$ if the calculator returns a negative angle.',
+      String.raw`$r=\sqrt{x^2+y^2}$. $\theta$ is the angle from the positive $x$-axis, measured counterclockwise.`,
+      (T) => String.raw`Plot $(${T.x0}, ${T.y0})$ first, and note its quadrant.`,
+      String.raw`$\arctan(y/x)$ is off by $180^\circ$ when $x<0$. Add $360^\circ$ to a negative angle.`,
     ],
     steps: ($, f) => [`$r=${f($.r)}$, $\\theta=${f($.thDeg)}^\\circ$.`],
     sim: {
@@ -74,8 +75,9 @@ export default [
       num('y', ($) => $.y, '', { label: '$y$', abs: 0.02 }),
     ],
     hints: [
-      '$x=r\\cos\\theta$, $y=r\\sin\\theta$. Convert degrees to radians first, or use a known angle.',
-      'Cosine is the horizontal component and sine is the vertical one. Watch the quadrant.',
+      String.raw`Polar to Cartesian: $x=r\cos\theta$ and $y=r\sin\theta$.`,
+      (T) => String.raw`Find the reference angle of $${T.deg}^\circ$, and its quadrant.`,
+      (T) => String.raw`Multiply the cosine and the sine by $r=${T.r}$. Watch the signs.`,
     ],
     steps: ($, f) => [`$(x,y)=(${f($.x)}, ${f($.y)})$.`],
     sim: {
@@ -105,8 +107,8 @@ export default [
       `Take the point $(${T.n}, 1)$, which is not the origin. True or false: there is a unique pair $(r,\\theta)$ with $r>0$ and $\\theta\\in[0,2\\pi)$ such that $x=r\\cos\\theta$ and $y=r\\sin\\theta$.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
-      'This is Theorem 10. The origin is the only point excluded.',
-      'Adding $2\\pi$ to $\\theta$ lands outside $[0,2\\pi)$, so it is not a second pair in the required range.',
+      String.raw`The notes fix $r>0$ and one turn of angle, $\theta\in[0,2\pi)$.`,
+      String.raw`Adding $2\pi$ to $\theta$ gives the same point, but it leaves the allowed interval.`,
     ],
     steps: () => ['True — that is the content of the polar-coordinate theorem.'],
     cases: [kase('sample', { n: 1 }, { tf: 1 })],
@@ -134,8 +136,8 @@ export default [
       num('ry', ($) => $.ry, '', { label: '$\\hat r_y$', abs: 0.02 }),
     ],
     hints: [
-      '$\\hat r$ is the unit vector pointing from the origin toward $P$.',
-      'Its length is $1$, so the components are $\\cos\\theta$ and $\\sin\\theta$, not the coordinates of a longer vector.',
+      String.raw`$\hat r$ is the unit vector pointing away from the origin at angle $\theta$.`,
+      (T) => String.raw`Find $\cos ${T.deg}^\circ$ and $\sin ${T.deg}^\circ$ from the reference angle and the quadrant.`,
     ],
     steps: ($, f) => [`$\\hat r=(${f($.rx)}, ${f($.ry)})$.`],
     sim: {
@@ -171,8 +173,9 @@ export default [
       num('y', ($) => $.y, '', { label: '$y(t)$', abs: 0.02 }),
     ],
     hints: [
-      'Plug the given angle into $(\\cos t,\\sin t)$. Convert degrees to radians first.',
-      'The first component is cosine and the second is sine.',
+      'Substitute the parameter into each component.',
+      (T) => String.raw`At $t=${T.deg}^\circ$, find the cosine and the sine from the reference angle.`,
+      'The first component is the cosine. The second is the sine.',
     ],
     steps: ($, f) => [`$\\gamma(t)=(${f($.x)}, ${f($.y)})$.`],
     sim: {
@@ -209,8 +212,9 @@ export default [
       `Let $\\gamma(t)=(t, t^2)$. Find the slope of the tangent line at $t=${T.t0}$.`,
     parts: [num('slope', ($) => $.slope, '', { label: "$y'/x'$", abs: 0.02 })],
     hints: [
-      "$x'=1$, $y'=2t$, so the slope is $2t$.",
-      'The slope uses the parameter $t$, not the $y$-coordinate $t^2$.',
+      String.raw`The slope of a parametric curve is $\dfrac{y'(t)}{x'(t)}$.`,
+      String.raw`Here $x'(t)=1$ and $y'(t)=2t$.`,
+      (T) => String.raw`Evaluate at $t=${T.t0}$.`,
     ],
     steps: ($, f) => [`$\\text{slope}=2t=${f($.slope)}$.`],
     sim: {
@@ -263,8 +267,9 @@ export default [
       ),
     ],
     hints: [
-      "A vertical tangent has $x'=0$ and $y'\\neq 0$. A horizontal tangent has $y'=0$ and $x'\\neq 0$.",
-      "Here $x'=2t$ and $y'=3t^2-3$. Both vanish together nowhere on this curve, so the tangent is never a cusp.",
+      String.raw`Compute $x'(t)$ and $y'(t)$. Their zeros decide the kind of tangent.`,
+      String.raw`Here $x'(t)=2t$ and $y'(t)=3t^2-3$.`,
+      (T) => String.raw`Evaluate both at $t=${T.t}$. A zero $y'$ alone is horizontal. A zero $x'$ alone is vertical.`,
     ],
     steps: ($, f, T) => [`At $t=${T.t}$ the tangent is ${$.kind}.`],
     sim: {
@@ -297,8 +302,9 @@ export default [
       `Let $\\gamma(t)=(\\cos t, \\sin t)$. Find the length from $t=0$ to $t=${T.tEnd}$.`,
     parts: [num('L', ($) => $.L, '', { label: '$L(\\gamma)$', abs: 0.05 })],
     hints: [
-      "$\\sqrt{x'^2+y'^2}=1$, so the integral is just the length of the interval.",
-      'Speed $1$ times the elapsed parameter is the length. Do not multiply by an extra $2\\pi$ unless the interval has that length.',
+      String.raw`Length is $\int\|\gamma'(t)\|\,dt$.`,
+      String.raw`$\gamma'(t)=(-\sin t,\cos t)$, and its length is $1$.`,
+      (T) => String.raw`Integrate that speed from $0$ to $${T.tEnd}$.`,
     ],
     steps: ($, f) => [`Speed is $1$, so $L=${f($.L)}$.`],
     sim: {
@@ -334,8 +340,9 @@ export default [
       num('y', ($) => $.y, '', { label: '$y$', abs: 0.02 }),
     ],
     hints: [
-      'Solve $\\nabla f=(0,0)$. Here $f_x=2ax$, $f_y=2by$.',
-      'With $a$ and $b$ nonzero, each equation forces the matching variable to be $0$.',
+      String.raw`A critical point is where $\nabla f=(0,0)$.`,
+      (T, $) => String.raw`$f_x=${2 * $.a}x$ and $f_y=${2 * $.b}y$.`,
+      'Set each partial to zero and solve.',
     ],
     steps: () => ['$(0,0)$ is the only solution.'],
     sim: {
@@ -378,8 +385,9 @@ export default [
       ),
     ],
     hints: [
-      '$D=f_{xx}f_{yy}-(f_{xy})^2$. Here $f_{xx}=2a>0$ and $f_{yy}=-2b<0$, so $D<0$.',
-      'A negative $D$ is a saddle, whatever the sign of $f_{xx}$.',
+      String.raw`The Hessian test uses $D=f_{xx}f_{yy}-f_{xy}^2$ at the critical point.`,
+      (T, $) => String.raw`Here $f_{xx}=${2 * $.a}$, $f_{yy}=-${2 * $.b}$, and $f_{xy}=0$.`,
+      'Find the sign of $D$. A negative $D$ is a saddle. A positive $D$ is an extremum.',
     ],
     steps: () => ['$D<0$, so a saddle.'],
     sim: {
@@ -411,8 +419,9 @@ export default [
       `Let $f(x,y)=x^3+y^3-3xy$. Compute $D=f_{xx}f_{yy}-(f_{xy})^2$ at $(${T.x0}, ${T.y0})$.`,
     parts: [num('D', ($) => $.D, '', { label: '$D$', abs: 0.05 })],
     hints: [
-      '$f_{xx}=6x$, $f_{yy}=6y$, $f_{xy}=-3$, so $D=36xy-9$.',
-      'Evaluate at the given point. The mixed partial is the constant $-3$, not a function of $x$ or $y$.',
+      'Find the three second partials first, then evaluate them at the point.',
+      String.raw`$f_x=3x^2-3y$ and $f_y=3y^2-3x$.`,
+      (T) => String.raw`So $f_{xx}=6x$, $f_{yy}=6y$, and $f_{xy}=-3$. Evaluate at $(${T.x0}, ${T.y0})$.`,
     ],
     steps: ($, f) => [`$D=36xy-9=${f($.D)}$.`],
     sim: {
@@ -443,8 +452,8 @@ export default [
       `Let $f(x,y)=${coef(T.n)}x^2-y^2$. True or false: if $\\nabla f(a,b)=(0,0)$, then $f$ has a local min or max at $(a,b)$.`,
     parts: [tf('tf', false, { label: 'statement' })],
     hints: [
-      'A saddle is a critical point that is neither a min nor a max.',
-      'This $f$ has $\\nabla f=(0,0)$ at the origin, and it takes both signs in every neighbourhood.',
+      'A critical point can be a minimum, a maximum, or neither.',
+      String.raw`At the origin, $\nabla f=(0,0)$. Look at $f$ along the $x$-axis, then along the $y$-axis.`,
     ],
     steps: () => ['False — Theorem 13 is one direction only.'],
     cases: [kase('sample', { n: 1 }, { tf: 0 })],

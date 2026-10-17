@@ -30,8 +30,9 @@ export default [
     text: (T) => String.raw`Add the first $${T.n}$ terms of $\sum (1/2)^k$, starting at $k=0$.`,
     parts: [num('sn', ($) => $.sn, '', { label: 'partial sum', abs: 1e-6 })],
     hints: [
-      String.raw`$\sum_{k=0}^{n-1} r^k=(1-r^n)/(1-r)$ with $r=1/2$.`,
-      'That formula simplifies to $2(1-(1/2)^n)$. Substitute the given $n$.',
+      String.raw`A finite geometric sum has a closed form: $\sum_{k=0}^{n-1}r^k=\dfrac{1-r^n}{1-r}$.`,
+      (T) => String.raw`Here $r=1/2$, and there are $${T.n}$ terms.`,
+      (T) => String.raw`Compute $(1/2)^{${T.n}}$ first, then use the formula.`,
     ],
     steps: ($, f) => [
       String.raw`$2\left(1-(1/2)^n\right)=${f($.sn)}$.`,
@@ -64,8 +65,9 @@ export default [
     text: (T) => String.raw`The geometric series with ratio $1/${T.d}$ converges. Give its sum.`,
     parts: [num('sum', ($) => $.sum, '', { label: 'sum', abs: 1e-6 })],
     hints: [
-      String.raw`For $|r|<1$, the sum is $1/(1-r)$.`,
-      'Here $r=1/d$, so the sum is $d/(d-1)$.',
+      String.raw`A geometric series $\sum_{k=0}^{\infty}r^k$ with $|r|<1$ sums to $1/(1-r)$.`,
+      (T) => String.raw`Here $r=1/${T.d}$.`,
+      (T) => String.raw`Simplify $1/(1-1/${T.d})$: multiply its top and bottom by $${T.d}$.`,
     ],
     steps: ($, f) => [
       String.raw`$1/(1-1/d)=d/(d-1)=${f($.sum)}$.`,
@@ -90,8 +92,9 @@ export default [
     text: (T) => String.raw`Find the ${T.n}th harmonic number, $H_n=1+1/2+\cdots+1/n$.`,
     parts: [num('sn', ($) => $.sn, '', { label: 'H_n', abs: 1e-6 })],
     hints: [
-      'Add the reciprocals. There is no shorter closed form.',
-      'Add the odd denominators and the even denominators separately, then combine those two totals.',
+      'There is no closed form for $H_n$. Add the terms.',
+      (T) => String.raw`Add $1/k$ for $k=1$ to $${T.n}$.`,
+      'Keep at least four decimals in each term, so the rounding does not pile up.',
     ],
     steps: ($, f) => [
       String.raw`$H_n=${f($.sn)}$.`,
@@ -125,8 +128,8 @@ export default [
       String.raw`True or false: the harmonic series converges. Through $${T.n}$ terms the partial sum is already above $\ln(n+1)$.`,
     parts: [tf('conv', ($) => (harmonicSum($.n) > Math.log($.n + 1) ? 0 : 1), { label: 'the series converges' })],
     hints: [
-      String.raw`The integral of $1/x$ from 1 to infinity diverges, and the harmonic sum sits above it.`,
-      'Compare $H_n$ with $\\ln(n+1)$. A sum that stays above a divergent integral cannot settle.',
+      'Compare the sum with the integral of $1/x$.',
+      String.raw`Each term $1/k$ is at least the area under $1/x$ on $[k,k+1]$. So $H_n>\ln(n+1)$, which grows without bound.`,
     ],
     steps: () => ['The terms go to 0, and that is not enough. The integral test says the sums have no ceiling.'],
     cases: [kase('n=8', { n: 8 }, { conv: 0 })],
@@ -148,8 +151,9 @@ export default [
     text: (T) => String.raw`Add the first $${T.n}$ terms of $\sum_{k=1}^{\infty}(-1)^{k+1}/k$.`,
     parts: [num('sn', ($) => $.sn, '', { label: 'partial sum', abs: 1e-6 })],
     hints: [
-      'Pair each odd denominator with the next even one.',
-      'Each pair is $1/(2k-1)-1/(2k)$. Add the pairs, and keep a leftover odd term when $n$ is odd.',
+      'Add the terms in order. Pairing neighbours keeps the arithmetic short.',
+      String.raw`Each pair is $\dfrac{1}{2k-1}-\dfrac{1}{2k}=\dfrac{1}{2k(2k-1)}$.`,
+      (T, $) => String.raw`There are $${$.n / 2}$ pairs. Add them.`,
     ],
     steps: ($, f) => [
       String.raw`The partial sum is $${f($.sn)}$.`,
@@ -182,8 +186,9 @@ export default [
     text: (T) => String.raw`The series $\sum_{k=1}^{\infty}(-1)^{k+1}\dfrac{x^k}{k}$ converges at $x=${T.x}$. Give its sum.`,
     parts: [num('s', ($) => $.s, '', { label: 'sum', abs: 1e-6 })],
     hints: [
-      String.raw`This is the Taylor series for $\ln(1+x)$ on $0<x\le 1$.`,
-      'The sum is $\\ln(1+x)$. At $x=1$ that is $\\ln 2$.',
+      'Compare the series with a Taylor series you know.',
+      String.raw`$\ln(1+x)=x-\dfrac{x^2}{2}+\dfrac{x^3}{3}-\cdots$ for $-1<x\le 1$.`,
+      (T) => String.raw`So the sum is that function at $x=${T.x}$.`,
     ],
     steps: ($, f) => [
       String.raw`The sum is $\ln(1+x)=${f($.s)}$.`,
@@ -207,8 +212,9 @@ export default [
     text: (T) => String.raw`Add the first $${T.n}$ terms of $\sum 1/k^2$.`,
     parts: [num('sn', ($) => $.sn, '', { label: 'partial sum', abs: 1e-6 })],
     hints: [
-      String.raw`The integral of $1/x^2$ converges, so this p-series converges. The partial sum is still a plain addition.`,
-      'Add $1/k^2$ from $k=1$ through the given $n$. Odd and even denominators are a second way to total the same terms.',
+      'A partial sum is a plain addition of the first terms.',
+      (T) => String.raw`Add $1/k^2$ for $k=1$ to $${T.n}$.`,
+      'Keep at least four decimals in each term, so the rounding does not pile up.',
     ],
     steps: ($, f) => [
       String.raw`The partial sum is $${f($.sn)}$.`,

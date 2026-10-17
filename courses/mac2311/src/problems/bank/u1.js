@@ -33,8 +33,9 @@ export default [
     },
     parts: [num('lim', ($) => $.lim, '', { label: 'limit' })],
     hints: [
-      String.raw`A polynomial is continuous. The limit equals the value.`,
-      'Substitute the number the limit approaches, then simplify.',
+      'A polynomial is continuous everywhere. Its limit at a point is its value there.',
+      (T, $) => String.raw`Substitute $x=${$.a}$ into each term.`,
+      (T, $) => String.raw`The square term gives $${$.a * $.a}$. Add the value of the linear term.`,
     ],
     steps: ($, f) => [
       String.raw`Plug in: $(${paren($.a)})^2${signedTerm($.b, $.a)}=${f($.lim)}$.`,
@@ -60,8 +61,9 @@ export default [
       String.raw`Let $f(x)=\dfrac{x^2-${$.a * $.a}}{x-${T.a}}$ for $x\neq ${T.a}$. Find $\lim_{x\to ${T.a}}f(x)$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit' })],
     hints: [
-      String.raw`Factor $x^2-a^2=(x-a)(x+a)$, then cancel for $x\neq a$.`,
-      'The cancelled factor leaves $x+a$. Evaluate that at the hole.',
+      'Substitution gives $0/0$. That form says nothing yet, so simplify first.',
+      (T, $) => String.raw`Factor the top: $x^2-${$.a * $.a}=(x-${$.a})(x+${$.a})$.`,
+      (T, $) => String.raw`For $x\neq ${$.a}$ the quotient is $x+${$.a}$. That line has no hole, so substitute.`,
     ],
     steps: ($, f) => [
       String.raw`For $x\neq ${$.a}$, $f(x)=x+${$.a}$.`,
@@ -97,11 +99,12 @@ export default [
       const f = (x) => Math.abs(x - $.c) / (x - $.c);
       return { exists: Math.abs(f($.c - h) - f($.c + h)) < 1e-6 ? 1 : 0 };
     },
-    text: (T, $) => String.raw`True or false: $\lim_{x\to ${paren($.c)}}\dfrac{|x-${paren($.c)}|}{x-${paren($.c)}}$ exists.`,
+    text: (T, $) => String.raw`True or false: $\lim_{x\to ${$.c}}\dfrac{|x-${paren($.c)}|}{x-${paren($.c)}}$ exists.`,
     parts: [tf('exists', false, { label: 'the limit exists' })],
     hints: [
-      'The left-hand limit is $-1$. The right-hand limit is $1$.',
-      'Shift the input by $c$. The two one-sided values still disagree.',
+      'A two-sided limit exists only when both one-sided limits exist and agree.',
+      (T, $) => String.raw`For $x>${$.c}$ the top equals the bottom. For $x<${$.c}$ the top is minus the bottom.`,
+      'Read off each one-sided limit, then compare them.',
     ],
     steps: ($, f) => {
       void f;
@@ -139,8 +142,8 @@ export default [
       String.raw`Let $f(x)=\dfrac{x^2-${$.a * $.a}}{x-${T.a}}$ for $x\neq ${T.a}$, and do not give $f$ a value at $x=${T.a}$. True or false: $f$ is continuous at $x=${T.a}$.`,
     parts: [tf('cont', false, { label: 'continuous' })],
     hints: [
-      'Continuity needs a function value at the point, equal to the limit.',
-      'The limit exists after cancelling. The function still has no value at the hole.',
+      'Continuity at a point needs three things: a value there, a limit there, and the two equal.',
+      (T, $) => String.raw`Check the first condition at $x=${$.a}$ before computing anything.`,
     ],
     steps: ($, f) => [
       String.raw`The limit is $${f(holeLimit($.a))}$.`,
@@ -164,8 +167,9 @@ export default [
     text: (T) => String.raw`Find $\lim_{x\to ${T.a}}\left(${coef(T.c)}x^2+3x\right)$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit' })],
     hints: [
-      String.raw`The limit of a sum is the sum of the limits.`,
-      'Evaluate each term at the limit point, then add.',
+      'The limit of a sum is the sum of the limits. A constant factor comes outside.',
+      (T, $) => String.raw`Find the limit of $${coef($.c)}x^2$ and of $3x$ separately, as $x\to ${$.a}$.`,
+      'Each term is continuous, so its limit is its value. Add the two values.',
     ],
     steps: ($, f) => [
       String.raw`$${$.c}\cdot(${paren($.a)})^2+3\cdot${paren($.a)}=${f($.lim)}$.`,
@@ -194,8 +198,9 @@ export default [
       String.raw`Let $f(x)=${coef(T.m)}x$. For $\varepsilon=${f($.eps)}$, the largest $\delta$ with $|x-0|<\delta$ implying $|f(x)|<\varepsilon$ is`,
     parts: [num('delta', ($) => $.delta, '', { label: '$\\delta$', abs: 1e-4 })],
     hints: [
-      String.raw`$|mx|<\varepsilon$ exactly when $|x|<\varepsilon/|m|$.`,
-      'Divide $\\varepsilon$ by the slope. That quotient is $\\delta$.',
+      String.raw`Start from the goal $|f(x)|<\varepsilon$. Rewrite it as a condition on $|x|$.`,
+      (T, $, f) => String.raw`The goal is $${coef($.m)}|x|<${f($.eps)}$.`,
+      String.raw`Divide by the slope. That bound on $|x|$ is the largest $\delta$ that works.`,
     ],
     steps: ($, f) => [
       String.raw`$|${$.m}x|<${f($.eps)}$ when $|x|<${f($.delta)}$.`,
@@ -239,8 +244,9 @@ export default [
     text: (T) => String.raw`Define $f(0)=0$ and $f(x)=${coef(T.m)}x^2\sin(1/x)$ otherwise. Find $\lim_{x\to 0}f(x)$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit', abs: 1e-6 })],
     hints: [
-      String.raw`$-mx^2\le mx^2\sin(1/x)\le mx^2$, and both bounds go to $0$.`,
-      'The sine factor stays between $-1$ and $1$, so it cannot stop the $x^2$ from going to $0$.',
+      String.raw`The sine factor stays in $[-1,1]$, whatever $1/x$ does.`,
+      (T, $) => String.raw`So $-${coef($.m)}x^2\le f(x)\le ${coef($.m)}x^2$ for $x\neq 0$.`,
+      'Find the limit of each bound at $0$. The squeeze theorem does the rest.',
     ],
     steps: ($, f) => {
       void f;
@@ -271,14 +277,15 @@ export default [
       const right = (f($.c + h) - f($.c)) / h;
       return { cont: cont ? 1 : 0, diff: Math.abs(left - right) < 1e-6 ? 1 : 0 };
     },
-    text: (T, $) => String.raw`For $f(x)=|x-${paren($.c)}|$ at $x=${paren($.c)}$, mark each statement.`,
+    text: (T, $) => String.raw`For $f(x)=|x-${paren($.c)}|$ at $x=${$.c}$, mark each statement.`,
     parts: [
       tf('cont', true, { label: 'continuous at the corner' }),
       tf('diff', false, { label: 'differentiable at the corner' }),
     ],
     hints: [
-      'The left and right difference quotients are $-1$ and $1$.',
-      'The graph meets at the corner, so the function value matches both one-sided limits.',
+      'Continuity compares the value with the limit. Differentiability compares the two one-sided slopes.',
+      (T, $) => String.raw`Right of $x=${$.c}$ the graph is a line of slope $1$. Left of it, the slope is $-1$.`,
+      (T, $) => String.raw`Both pieces have height $0$ at $x=${$.c}$.`,
     ],
     steps: () => [
       'The two sides of the absolute value meet, so it is continuous there.',
@@ -305,12 +312,13 @@ export default [
     },
     text: (T) => {
       const slope = T.b < 0 ? String.raw`${coef(T.m)}x-${-T.b}` : T.b > 0 ? String.raw`${coef(T.m)}x+${T.b}` : String.raw`${coef(T.m)}x`;
-      return String.raw`Find $\lim_{x\to ${paren(T.a)}}(${slope})$.`;
+      return String.raw`Find $\lim_{x\to ${T.a}}(${slope})$.`;
     },
     parts: [num('lim', ($) => $.lim, '', { label: 'limit' })],
     hints: [
-      'A line is continuous. The limit equals the value.',
-      'Multiply the slope by the limit point, then add the intercept.',
+      'A line is continuous, so its limit at a point is its value there.',
+      (T, $) => String.raw`Multiply the slope $${$.m}$ by $${paren($.a)}$.`,
+      'Then add the constant term.',
     ],
     steps: ($, f) => [
       String.raw`$${$.m}\cdot${paren($.a)}${$.b < 0 ? String.raw`-${-$.b}` : $.b > 0 ? `+${$.b}` : ''}=${f($.lim)}$.`,
@@ -337,14 +345,15 @@ export default [
       return { left: f($.a - h), right: f($.a + h) };
     },
     text: (T, $) =>
-      String.raw`Let $f(x)=${$.k}$ when $x<${paren($.a)}$, and $f(x)=${$.c}$ when $x\ge ${paren($.a)}$. Find the one-sided limits at $x=${paren($.a)}$.`,
+      String.raw`Let $f(x)=${$.k}$ when $x<${$.a}$, and $f(x)=${$.c}$ when $x\ge ${$.a}$. Find the one-sided limits at $x=${$.a}$.`,
     parts: [
       num('left', ($) => $.left, '', { label: 'left-hand limit' }),
       num('right', ($) => $.right, '', { label: 'right-hand limit' }),
     ],
     hints: [
-      'The left-hand limit uses only inputs below $a$. The right-hand limit uses only inputs above $a$.',
-      'Read the constant on that side. Do not average the two heights.',
+      'A one-sided limit uses only the inputs on that side of the point.',
+      (T, $) => String.raw`Just below $x=${$.a}$, use the rule for $x<${$.a}$. Just above, use the other rule.`,
+      'Each rule is a constant. Do not average the two heights.',
     ],
     steps: ($, f) => [
       String.raw`From the left, $f$ is the constant $${$.k}$, so the limit is $${f($.left)}$.`,

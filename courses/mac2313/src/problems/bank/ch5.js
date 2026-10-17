@@ -17,8 +17,8 @@ export default [
       `Let $f=1$ on $B=[0,${T.a}]\\times[0,${T.b}]\\times[0,${T.c}]$. Find $\\iiint_B f\\,dV$.`,
     parts: [num('V', ($) => $.V, '', { label: 'volume', abs: 0.03 })],
     hints: [
-      '$f=1$, so the integral is the volume of the box.',
-      'Multiply the three edge lengths. The order of integration does not change a constant integrand.',
+      'The integral of $1$ over a region is its volume.',
+      'For a box, the volume is the product of the edge lengths.',
     ],
     steps: ($, f) => [`$${f($.V)}$.`],
     sim: {
@@ -55,8 +55,9 @@ export default [
       `Let $f(x,y,z)=xyz$ on $[0,${T.A}]\\times[0,${T.B}]\\times[0,${T.C}]$. Find $\\iiint f\\,dV$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iiint$', abs: 0.02 })],
     hints: [
-      'The variables separate: $\\int_0^A x\\,dx = A^2/2$, and the same for $y$ and $z$.',
-      'Multiply the three halves. On the unit cube each factor is $1/2$, so the integral is $1/8$.',
+      'The integrand is a product of one-variable factors, and the region is a box. The integral splits into three.',
+      (T) => String.raw`It equals $\left(\int_0^{${T.A}}x\,dx\right)\left(\int_0^{${T.B}}y\,dy\right)\left(\int_0^{${T.C}}z\,dz\right)$.`,
+      'Each factor is half the square of its upper limit.',
     ],
     steps: ($, f) => [`$(A^2/2)(B^2/2)(C^2/2) = ${f($.I)}$.`],
     sim: {
@@ -92,8 +93,8 @@ export default [
       `Let $f(x,y,z)=${coef(T.n)}xyz$, continuous on a box $B$. True or false: $\\iiint_B f\\,dV$ does not depend on whether you iterate $dz\\,dy\\,dx$ or $dx\\,dy\\,dz$.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
-      'Fubini: the six orders agree on a box for a continuous $f$.',
-      'The coefficient factors out of every order, so it cannot make two orders disagree.',
+      "Fubini's theorem in three variables says when the order of an iterated integral can be swapped.",
+      'On a box, its hypothesis is that $f$ is continuous. Check that for this $f$.',
     ],
     steps: () => ['True.'],
     cases: [kase('sample', { n: 1 }, { tf: 1 })],
@@ -115,8 +116,9 @@ export default [
       `Let $f(x,y,z)=x$ on $[0,${T.A}]\\times[0,${T.B}]\\times[0,${T.C}]$. Find $\\iiint f\\,dV$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iiint$', abs: 0.04 })],
     hints: [
-      '$\\int_0^A x\\,dx = A^2/2$, then multiply by the lengths in $y$ and $z$.',
-      '$f$ does not depend on $y$ or $z$, so those integrals are just the edge lengths.',
+      'The integrand depends only on $x$. Integrate it, then account for the $y$ and $z$ directions.',
+      (T) => String.raw`$\int_0^{${T.A}}x\,dx$ is half the square of $${T.A}$.`,
+      (T) => String.raw`The $y$ and $z$ integrals of $1$ give the edge lengths $${T.B}$ and $${T.C}$.`,
     ],
     steps: ($, f) => [`$(A^2/2) \\cdot B \\cdot C = ${f($.I)}$.`],
     sim: {
@@ -153,8 +155,9 @@ export default [
       `A cylinder of radius ${T.R} and height ${T.H} (so $z\\in[0,${T.H}]$). Find its volume.`,
     parts: [num('V', ($) => $.V, '', { label: 'volume', abs: 0.06 })],
     hints: [
-      '$\\pi R^2 H$. In cylindrical coordinates the Jacobian $r$ is what produces $\\pi R^2$.',
-      'Height is the $z$-interval. Do not cube the radius: that formula belongs to a ball.',
+      String.raw`In cylindrical coordinates, $dV=r\,dr\,d\theta\,dz$.`,
+      (T) => String.raw`Integrate $r$ from $0$ to $${T.R}$, $\theta$ over a full turn, and $z$ from $0$ to $${T.H}$.`,
+      'The three integrals separate. Multiply them.',
     ],
     steps: ($, f) => [`$\\pi R^2 H = ${f($.V)}$.`],
     sim: {
@@ -197,8 +200,8 @@ export default [
       ),
     ],
     hints: [
-      'The $xy$-slice is polar: the extra factor is $r$, same as double polar.',
-      'The radius of this cylinder does not change the Jacobian. $\\sin\\varphi$ belongs to spherical coordinates.',
+      'Cylindrical coordinates are polar coordinates in the $xy$-plane, with $z$ unchanged.',
+      'So the factor in $dV$ is the factor in the polar $dA$.',
     ],
     steps: () => ['$dV=r\\,dr\\,d\\theta\\,dz$.'],
     cases: [kase('sample', { n: 1 }, { jac: 'r' })],
@@ -220,8 +223,9 @@ export default [
       `Let $f=z$ on the cylinder $x^2+y^2\\le ${T.R}^2$, $z\\in[0,${T.H}]$. Find $\\iiint f\\,dV$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iiint$', abs: 0.08 })],
     hints: [
-      'The base has area $\\pi R^2$, and $\\int_0^H z\\,dz = H^2/2$.',
-      'Multiply those. The integrand does not depend on $x$ or $y$, so the base contributes only its area.',
+      String.raw`In cylindrical coordinates, $dV=r\,dr\,d\theta\,dz$, and the integrand is $z$.`,
+      (T) => String.raw`The $r$ and $\theta$ integrals give the base area, $\pi\cdot ${T.R}^2$.`,
+      (T) => String.raw`Multiply that by $\int_0^{${T.H}}z\,dz$.`,
     ],
     steps: ($, f) => [`$\\pi R^2 \\cdot (H^2/2) = ${f($.I)}$.`],
     sim: {
@@ -254,8 +258,9 @@ export default [
     text: (T) => `Find the volume of the ball $x^2+y^2+z^2\\le ${T.R}^2$.`,
     parts: [num('V', ($) => $.V, '', { label: 'volume', abs: 0.08 })],
     hints: [
-      '$\\tfrac43\\pi R^3$. The Jacobian $\\rho^2\\sin\\varphi$ is what produces this.',
-      'The radius is cubed, not squared. A squared radius is the area of a disk.',
+      String.raw`In spherical coordinates, $dV=\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta$.`,
+      (T) => String.raw`Integrate $\rho$ from $0$ to $${T.R}$, $\varphi$ from $0$ to $\pi$, and $\theta$ from $0$ to $2\pi$.`,
+      String.raw`The angular integrals are $\int_0^{\pi}\sin\varphi\,d\varphi=2$ and $\int_0^{2\pi}d\theta=2\pi$.`,
     ],
     steps: ($, f) => [`$\\tfrac43\\pi R^3 = ${f($.V)}$.`],
     sim: {
@@ -296,8 +301,8 @@ export default [
       ),
     ],
     hints: [
-      '$\\rho$ is the distance from the origin; $\\varphi$ is the angle from $+z$.',
-      'The cylindrical factor $r\\,dr\\,d\\theta\\,dz$ is the other option. A ball uses $\\rho^2\\sin\\varphi$.',
+      String.raw`The volume element comes from the Jacobian of $(\rho,\varphi,\theta)\mapsto(x,y,z)$.`,
+      String.raw`A small spherical box has sides $d\rho$, $\rho\,d\varphi$, and $\rho\sin\varphi\,d\theta$.`,
     ],
     steps: () => ['$dV=\\rho^2\\sin\\varphi\\,d\\rho\\,d\\varphi\\,d\\theta$.'],
     cases: [kase('sample', { n: 1 }, { jac: 'rho2sin' })],
@@ -329,8 +334,8 @@ export default [
       ),
     ],
     hints: [
-      '$\\varphi=0$ is the north pole, $\\varphi=\\pi$ is the south pole. $\\theta$ is the one that runs a full turn.',
-      'The radius does not change the angle. $[0,\\pi/2]$ would stop at the equator.',
+      String.raw`$\varphi=0$ is the positive $z$-axis.`,
+      String.raw`$\theta$ already sweeps a full turn. $\varphi$ only has to reach the negative $z$-axis.`,
     ],
     steps: () => ['$[0,\\pi]$.'],
     cases: [kase('sample', { n: 1 }, { phi: 'pi' })],
@@ -351,8 +356,8 @@ export default [
     text: (T) => `Let $f(x,y,z)=z$ on the ball of radius ${T.R}. Find $\\iiint f\\,dV$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iiint$', abs: 0.05 })],
     hints: [
-      '$z$ is odd in $z$ and the ball is symmetric about $z=0$.',
-      'A larger radius scales both the upper and lower halves the same way, so the integral stays $0$.',
+      'Look for a symmetry of the region and of the integrand before computing.',
+      String.raw`Reflecting $z\to -z$ keeps the ball the same and flips the sign of the integrand.`,
     ],
     steps: () => ['$0$.'],
     sim: {
@@ -384,8 +389,9 @@ export default [
       `Let $f(x,y,z)=x^2+y^2+z^2$ on the ball of radius ${T.R}. Find $\\iiint f\\,dV$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iiint$', abs: 0.08 })],
     hints: [
-      '$f=\\rho^2$, times Jacobian $\\rho^2\\sin\\varphi$. $\\int_0^R\\rho^4\\,d\\rho=R^5/5$, times $4\\pi$.',
-      'The angular integrals give $4\\pi$, and the radial power is $5$, not $3$. Volume would stop at $\\rho^2$ in the Jacobian alone.',
+      String.raw`Use spherical coordinates. The integrand is $\rho^2$.`,
+      String.raw`With $dV=\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta$, the radial integrand is $\rho^4$.`,
+      (T) => String.raw`The angles give $4\pi$. Integrate $\rho^4$ from $0$ to $${T.R}$.`,
     ],
     steps: ($, f) => [`$\\tfrac45\\pi R^5 = ${f($.I)}$.`],
     sim: {

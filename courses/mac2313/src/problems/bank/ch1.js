@@ -21,8 +21,9 @@ export default [
     text: (T) => `Let $f(x)=x^2$. Find $f'(${T.x0})$.`,
     parts: [num('fp', ($) => $.fp, '', { label: "$f'$" })],
     hints: [
-      "$f'(x)=2x$.",
-      'Multiply the x-coordinate of the point by 2.',
+      String.raw`Write the difference quotient $\dfrac{f(x_0+h)-f(x_0)}{h}$. Simplify it before letting $h\to 0$.`,
+      (T) => String.raw`With $x_0=${T.x0}$, the top is $(x_0+h)^2-x_0^2=2x_0h+h^2$.`,
+      String.raw`Divide by $h$, then let $h\to 0$. Only the term without $h$ survives.`,
     ],
     steps: ($, f) => [`$f'(${$.x0})=${f($.fp)}$.`],
     sim: {
@@ -55,8 +56,9 @@ export default [
       `Let $f(x)=\\dfrac{x^2-1}{x-1}$ for $x\\neq 1$. Find $\\lim_{x\\to ${T.x0}}f(x)$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit', abs: 0.05 })],
     hints: [
-      'Factor: $x^2-1=(x-1)(x+1)$. Cancel for $x\\neq 1$.',
-      'The cancelled factor leaves $x+1$. Substitute the point the limit approaches.',
+      String.raw`At $x=1$ the quotient is $0/0$. Everywhere else it is an ordinary fraction.`,
+      String.raw`Factor: $x^2-1=(x-1)(x+1)$. Cancel for $x\neq 1$.`,
+      (T) => String.raw`The simplified function is the line $x+1$. Find its limit as $x\to ${T.x0}$.`,
     ],
     steps: ($, f) => [`The limit is $${f($.lim)}$. At $x=1$ the original formula is not defined.`],
     sim: {
@@ -84,11 +86,11 @@ export default [
     level: 1,
     topics: ['limits'],
     vars: { c: range(-24, 25, 1) },
-    text: (T) => `True or false: $f(x)=|x-${T.c}|$ is differentiable at $x=${T.c}$.`,
+    text: (T, $) => `True or false: $f(x)=|x${$.c < 0 ? `+${-$.c}` : $.c > 0 ? `-${$.c}` : ''}|$ is differentiable at $x=${T.c}$.`,
     parts: [tf('tf', false, { label: 'statement' })],
     hints: [
-      'Left and right difference quotients go to $-1$ and $+1$. Continuity is weaker.',
-      'Shift the corner to $c$. The two one-sided slopes are still $-1$ and $1$.',
+      'Differentiable means the difference quotient has one limit, the same from both sides.',
+      (T) => String.raw`Right of $x=${T.c}$, $f$ is a line of slope $1$. Left of it, the slope is $-1$.`,
     ],
     steps: () => ['False. The function is continuous at the corner, and the one-sided slopes disagree.'],
     cases: [kase('the origin', { c: 0 }, { tf: 0 })],
@@ -109,8 +111,8 @@ export default [
       `True or false: if $f'(c)=0$, then $f$ has a local min or max at $c$. The counterexample family is $f(x)=${coef(T.m)}x^3$.`,
     parts: [tf('tf', false, { label: 'statement' })],
     hints: [
-      "$f(x)=mx^3$ has $f'(0)=0$ and is strictly increasing when $m>0$.",
-      'A zero derivative is required for an interior extremum. This family shows it is not enough.',
+      'A local extremum needs $f$ to rise on one side of the point and fall on the other.',
+      (T) => String.raw`For $f(x)=${coef(T.m)}x^3$, $f'(0)=0$. Compare the sign of $f$ just left and just right of $0$.`,
     ],
     steps: () => ['False. $f\'=0$ is necessary for an interior extremum, not sufficient.'],
     cases: [kase('m=1', { m: 1 }, { tf: 0 })],
@@ -135,8 +137,9 @@ export default [
       num('fp', ($) => $.fp, '', { label: "$f'(0)$", abs: 0.05 }),
     ],
     hints: [
-      'Squeeze: $|f(x)|\\le x^2$, and $x^2$ is at most $m x^2$ for this $m$.',
-      'The difference quotient is $x\\sin(1/x)$, which is squeezed to $0$ with $x$.',
+      'The function value is given. The derivative needs the difference quotient at $0$.',
+      String.raw`That quotient is $\dfrac{f(h)-f(0)}{h}=h\sin(1/h)$.`,
+      (T) => String.raw`The bound gives $\left|\dfrac{f(h)}{h}\right|\le ${coef(T.m)}|h|$. Squeeze it as $h\to 0$.`,
     ],
     steps: () => ['$f(0)=0$ and $f\'(0)=0$.'],
     sim: {
@@ -168,8 +171,9 @@ export default [
     text: (T) => `Let $f(x)=x^2$ on $[0,${T.b}]$. Find $\\int_0^{${T.b}} f(x)\\,dx$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\int$', abs: 0.02 })],
     hints: [
-      'The antiderivative of $x^2$ is $x^3/3$.',
-      'Subtract the value at $0$ from the value at the right end.',
+      'Use the Fundamental Theorem: an antiderivative, evaluated at the two ends.',
+      'An antiderivative of $x^2$ is $x^3/3$.',
+      (T) => String.raw`Evaluate it at $${T.b}$, and subtract its value at $0$.`,
     ],
     steps: ($, f) => [`$F(b)-F(0)=${f($.I)}$.`],
     sim: {
@@ -206,8 +210,9 @@ export default [
       `Let $f(x)=x^2$ on $[0,1]$. Compute the ${T.sample} Riemann sum with $n=${T.n}$.`,
     parts: [num('sum', ($) => $.sum, '', { label: 'sum', abs: 0.01 })],
     hints: [
-      'Each panel has width $1/n$. A midpoint sample sits at the centre of its panel.',
-      'Multiply each sample height by the panel width, then add the panels.',
+      'A Riemann sum adds height times width over the panels.',
+      (T, $) => String.raw`Each panel has width $1/${T.n}$. Sample each panel at its ${{ left: 'left edge', mid: 'centre', right: 'right edge' }[$.sample]}.`,
+      'Square each sample, add the squares, and multiply by the width.',
     ],
     steps: ($, f) => [`The sum is $${f($.sum)}$.`],
     sim: {
@@ -240,8 +245,9 @@ export default [
     text: (T) => `Let $f(x)=2x+1$ on $[0,${T.b}]$. Find $\\int_0^{${T.b}} f(x)\\,dx$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\int$', abs: 0.02 })],
     hints: [
-      'The antiderivative of $2x+1$ is $x^2+x$.',
-      'Evaluate that antiderivative at the right end. It is $0$ at the left end.',
+      'Integrate term by term with the power rule.',
+      'An antiderivative of $2x+1$ is $x^2+x$.',
+      (T) => String.raw`Evaluate it at $${T.b}$, and subtract its value at $0$.`,
     ],
     steps: ($, f) => [`$F(b)-F(0)=${f($.I)}$.`],
     sim: {
@@ -275,8 +281,9 @@ export default [
     text: (T) => `Let $f(x)=2x+1$ on $[0,${T.b}]$. Find the length of the graph.`,
     parts: [num('L', ($) => $.L, '', { label: '$L$', abs: 0.04 })],
     hints: [
-      "The speed is $\\sqrt{1+f'(x)^2}=\\sqrt{5}$, a constant.",
-      'Multiply that speed by the length of the interval.',
+      String.raw`The length of a graph is $\int\sqrt{1+f'(x)^2}\,dx$.`,
+      String.raw`Here $f'(x)=2$ everywhere, so the integrand is a constant.`,
+      (T) => String.raw`Multiply that constant by the interval length, $${T.b}$.`,
     ],
     steps: ($, f) => [`The length is $${f($.L)}$.`],
     sim: {
@@ -310,8 +317,9 @@ export default [
     text: (T) => `Let $f(x)=\\sqrt{1-x^2}$ on $[-${T.c},${T.c}]$. Find $\\int_{-${T.c}}^{${T.c}} f(x)\\,dx$.`,
     parts: [num('I', ($) => $.I, '', { label: 'area', abs: 0.05 })],
     hints: [
-      'This is the area under the unit circle between $-c$ and $c$.',
-      'The antiderivative is $\\tfrac12\\bigl(x\\sqrt{1-x^2}+\\arcsin x\\bigr)$. Evaluate the change from $-c$ to $c$.',
+      String.raw`The graph of $\sqrt{1-x^2}$ is the upper half of the unit circle.`,
+      String.raw`Substitute $x=\sin\theta$. Then $\sqrt{1-x^2}\,dx=\cos^2\theta\,d\theta$.`,
+      (T) => String.raw`An antiderivative is $\tfrac12\bigl(x\sqrt{1-x^2}+\arcsin x\bigr)$. Evaluate it from $-${T.c}$ to $${T.c}$.`,
     ],
     steps: ($, f) => [`The area is $${f($.I)}$.`],
     sim: {
@@ -344,8 +352,8 @@ export default [
       `True or false: for an increasing $f$ on $[a,b]$, the left Riemann sum is strictly less than the right Riemann sum for every $n\\ge ${T.n}$.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
-      'Each left sample is smaller than the matching right sample.',
-      'Every panel width is positive, so the inequality survives the sum, for every panel count at least $1$.',
+      'Compare the two sums panel by panel. They use the same widths.',
+      'On each panel of an increasing function, the left edge is lower than the right edge.',
     ],
     steps: () => ['True. The inequality holds for every $n\\ge 1$, so it holds from this $n$ upward.'],
     cases: [kase('n=1', { n: 1 }, { tf: 1 })],

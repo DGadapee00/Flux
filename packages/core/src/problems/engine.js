@@ -330,7 +330,7 @@ export function createEngine(options = {}) {
         row.rubric = p.rubric ?? null;
         return row;
       }),
-      hints: tpl.hints,
+      hints: (tpl.hints || []).map((h) => (typeof h === 'function' ? h(T, $, sig) : h)),
       steps: stepsMode === 'plain' ? tpl.steps($, T) : tpl.steps($, sig, T),
     };
     if (showFigure) out.figure = tpl.figure ? tpl.figure($, T) : null;

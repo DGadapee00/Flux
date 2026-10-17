@@ -15,8 +15,33 @@ import {
 } from '../../math/calc1.js';
 import { df1 } from '@flux/subjects/math/ndiff.js';
 import { coef, domain, kase, num, problem, range, sym, xPow } from '../kit.js';
+import { exprToTex } from '../engine.js';
 
 const plane = { xMin: -2.4, xMax: 2.4, yMin: -0.5, yMax: 4.5, plane: 'xy' };
+
+/** x to a power, as TeX: x for 1, x^{n} otherwise. */
+const xTex = (n) => (n === 1 ? 'x' : `x^{${n}}`);
+
+/** The same, as a formula key. */
+const xKey = (n) => (n === 1 ? 'x' : `x^${n}`);
+
+/** Coefficient times a factor in a key, dropping a coefficient of 1. */
+const times = (c, rest) => (c === 1 ? rest : `${c}*${rest}`);
+
+/** k·x inside a function, as a key. */
+const kx = (k) => (k === 1 ? 'x' : `${k}*x`);
+
+/** d/dx (ax+b)^n = n·a·(ax+b)^(n−1). */
+function chainKey(a, b, n) {
+  const inner = `(${kx(a)}+${b})`;
+  return times(n * a, n - 1 === 1 ? inner : `${inner}^${n - 1}`);
+}
+
+/** d/dx a·sin(kx) = a·k·cos(kx). */
+const sineKey = (a, k) => times(a * k, `cos(${kx(k)})`);
+
+/** d/dx x^n·sin(kx) = n·x^(n−1)·sin(kx) + k·x^n·cos(kx). */
+const productKey = (n, k) => `${times(n, `${xKey(n - 1)}*sin(${kx(k)})`)}+${times(k, `${xKey(n)}*cos(${kx(k)})`)}`;
 
 export default [
   problem({
@@ -35,8 +60,9 @@ export default [
     text: (T) => String.raw`Let $f(x)=x^2$. Find $f'(${T.x0})$.`,
     parts: [num('fp', ($) => $.fp, '', { label: "$f'$" })],
     hints: [
-      String.raw`The limit of the difference quotient is $2x$.`,
-      'Multiply the point by $2$.',
+      String.raw`Write the difference quotient $\dfrac{f(x_0+h)-f(x_0)}{h}$. Simplify it before letting $h\to 0$.`,
+      (T) => String.raw`With $x_0=${T.x0}$, the top is $(x_0+h)^2-x_0^2=2x_0h+h^2$.`,
+      String.raw`Divide by $h$, then let $h\to 0$. Only the term without $h$ survives.`,
     ],
     steps: ($, f) => [
       String.raw`$f'(${$.x0})=2\cdot${$.x0}=${f($.fp)}$.`,
@@ -72,8 +98,9 @@ export default [
     text: (T) => String.raw`Find the derivative of $f(x)=x^{${T.n}}$ at $x=${T.x}$.`,
     parts: [num('fp', ($) => $.fp, '', { label: "$f'$" })],
     hints: [
-      String.raw`$\dfrac{d}{dx}x^n=nx^{n-1}$.`,
-      'Bring down the old exponent, then lower the power by one.',
+      String.raw`Use the power rule: $\dfrac{d}{dx}x^n=nx^{n-1}$.`,
+      (T, $) => String.raw`Here $f'(x)=${$.n}${$.n === 2 ? 'x' : `x^{${$.n - 1}}`}$.`,
+      (T) => String.raw`Substitute $x=${T.x}$.`,
     ],
     steps: ($, f) => [String.raw`$${$.n}\cdot(${$.x})^{${$.n - 1}}=${f($.fp)}$.`],
     cases: [kase('n=3, x=2', { n: 3, x: 2 }, { fp: 12 })],
@@ -94,8 +121,9 @@ export default [
     text: (T) => String.raw`Let $f(x)=x^2(${T.c}x+${T.d})$. Find $f'(${T.x})$.`,
     parts: [num('fp', ($) => $.fp, '', { label: "$f'$" })],
     hints: [
-      String.raw`$(uv)'=u'v+uv'$. Take $u=x^2$ and $v$ the linear factor.`,
-      'Add the two products, then substitute the given $x$.',
+      String.raw`Use the product rule: $(uv)'=u'v+uv'$.`,
+      (T, $) => String.raw`Take $u=x^2$ and $v=${$.c}x+${$.d}$. Then $u'=2x$ and $v'=${$.c}$.`,
+      (T, $) => String.raw`Form $2x(${$.c}x+${$.d})+${$.c}x^2$, then substitute $x=${$.x}$.`,
     ],
     steps: ($, f) => [
       String.raw`Product rule: $2x(${$.c}x+${$.d})+x^2\cdot${$.c}$ at $x=${$.x}$ is $${f($.fp)}$.`,
@@ -119,8 +147,9 @@ export default [
     text: (T) => String.raw`Let $f(x)=\dfrac{x^2}{x+${T.k}}$. Find $f'(${T.x})$.`,
     parts: [num('fp', ($) => $.fp, '', { label: "$f'$" })],
     hints: [
-      String.raw`$(u/v)'=(u'v-uv')/v^2$.`,
-      'The top is $2x(x+k)-x^2$. Divide by the square of the denominator.',
+      String.raw`Use the quotient rule: $(u/v)'=(u'v-uv')/v^2$.`,
+      (T, $) => String.raw`Take $u=x^2$ and $v=x+${$.k}$. Then $u'=2x$ and $v'=1$.`,
+      (T, $) => String.raw`Evaluate $\dfrac{2x(x+${$.k})-x^2}{(x+${$.k})^2}$ at $x=${$.x}$.`,
     ],
     steps: ($, f) => [
       String.raw`$\dfrac{2x(x+${$.k})-x^2}{(x+${$.k})^2}$ at $x=${$.x}$ is $${f($.fp)}$.`,
@@ -143,8 +172,9 @@ export default [
     text: (T) => String.raw`Let $f(x)=(${coef(T.a)}x+${T.b})^3$. Find $f'(${T.x})$.`,
     parts: [num('fp', ($) => $.fp, '', { label: "$f'$" })],
     hints: [
-      String.raw`Outer derivative $3u^2$, times the inner derivative.`,
-      'The inner derivative is the coefficient of $x$. Multiply, then substitute.',
+      'Use the chain rule: the outer derivative at the inner function, times the inner derivative.',
+      (T, $) => String.raw`The outer function is $u^3$, with $u=${coef($.a)}x+${$.b}$. Its derivative is $3u^2$.`,
+      (T, $) => String.raw`Multiply $3(${coef($.a)}x+${$.b})^2$ by $${$.a}$, then substitute $x=${$.x}$.`,
     ],
     steps: ($, f) => [
       String.raw`$3(${$.a}\cdot${$.x}+${$.b})^2\cdot${$.a}=${f($.fp)}$.`,
@@ -172,8 +202,9 @@ export default [
       String.raw`The curve $x^2+y^2=${$.r * $.r}$ passes through $(${T.x},${f($.y)})$ in the first quadrant. Find $dy/dx$ there.`,
     parts: [num('slope', ($) => $.slope, '', { label: '$dy/dx$' })],
     hints: [
-      String.raw`Differentiate both sides: $2x+2y\,y'=0$.`,
-      'Solve for $y\'$. It is $-x/y$.',
+      String.raw`Differentiate both sides in $x$. Treat $y$ as a function of $x$, so $y^2$ needs the chain rule.`,
+      String.raw`That gives $2x+2y\,y'=0$.`,
+      (T, $, f) => String.raw`Solve for $y'$, then use $x=${$.x}$ and $y=${f($.y)}$.`,
     ],
     steps: ($, f) => [
       String.raw`$y'=-x/y=-${$.x}/${f($.y)}=${f($.slope)}$.`,
@@ -210,8 +241,9 @@ export default [
       num('dy', ($) => $.dy, 'ft/s', { label: 'vertical velocity', abs: 1e-3 }),
     ],
     hints: [
-      "$x^2+y^2=100$. Differentiate in time: $2x x'+2y y'=0$.",
-      'Solve for $y\'$. The height is the positive square root.',
+      'Write one equation that relates the two lengths. Then differentiate it in time.',
+      String.raw`$x^2+y^2=100$, so $2x\,x'+2y\,y'=0$.`,
+      (T) => String.raw`Find $y$ from $x=${T.x}$ first. Then solve for $y'$ with $x'=${T.v}$.`,
     ],
     steps: ($, f) => [
       String.raw`The top is $${f($.y)}$ feet up.`,
@@ -245,8 +277,9 @@ export default [
     text: (T) => String.raw`Find the derivative of $f(x)=\sin(${coef(T.k)}x)$ at $x=${T.x}$.`,
     parts: [num('fp', ($) => $.fp, '', { label: "$f'$" })],
     hints: [
-      String.raw`$\dfrac{d}{dx}\sin(kx)=k\cos(kx)$.`,
-      'The chain rule multiplies by the coefficient inside the sine. Then substitute $x$.',
+      String.raw`Use the chain rule on $\sin(kx)$: the outer derivative times the inner derivative.`,
+      (T, $) => String.raw`The inner function is $${coef($.k)}x$. Its derivative is $${$.k}$.`,
+      (T, $) => String.raw`So $f'(x)=${coef($.k)}\cos(${coef($.k)}x)$. Substitute $x=${$.x}$, in radians.`,
     ],
     steps: ($, f) => [String.raw`$${$.k}\cos(${$.k}\cdot${$.x})=${f($.fp)}$.`],
     cases: [kase('k=2, x=0', { k: 2, x: 0 }, { fp: 2 })],
@@ -276,17 +309,134 @@ export default [
       num('fp', ($) => $.fp, '', { label: "$f'(2)$" }),
     ],
     hints: [
-      String.raw`$\dfrac{d}{dx}ax^n=anx^{n-1}$.`,
-      'The coefficient is $a$ times $n$. The new power is one less than $n$.',
+      'Use the power rule. A constant factor stays in front.',
+      (T, $) => String.raw`The exponent $${$.n}$ comes down and multiplies the coefficient $${$.a}$.`,
+      (T, $) => String.raw`The new exponent is $${$.n - 1}$. For the number, substitute $x=2$.`,
     ],
     steps: ($, f) => [
-      String.raw`$f'(x)=${xPow($.a * $.n, 1, $.n - 1)}$.`,
+      String.raw`$f'(x)=${exprToTex(xPow($.a * $.n, 1, $.n - 1), ['x'])}$.`,
       String.raw`At $x=2$, $f'(2)=${f($.fp)}$.`,
     ],
     cases: [
       kase('a=1, n=2', { a: 1, n: 2 }, { formula: '2*x', fp: 4 }, {
         accept: { formula: ['2x'] },
         reject: { formula: ['x^2'] },
+      }),
+    ],
+  }),
+  problem({
+    id: 'u2.sym.chain',
+    exam: 'u2',
+    ch: '3',
+    src: 'OpenStax Calc 1 §3.6',
+    title: 'Chain rule as a formula',
+    kind: 'derivation',
+    level: 2,
+    topics: ['derivatives', 'symbolic'],
+    vars: { a: range(1, 5, 1), b: range(1, 5, 1), n: range(2, 5, 1) },
+    derive: ($) => ({ x: 1, fp: $.n * $.a * ($.a + $.b) ** ($.n - 1) }),
+    second: ($) => ({
+      formula: chainKey($.a, $.b, $.n),
+      fp: df1((t) => ($.a * t + $.b) ** $.n, 1),
+    }),
+    text: (T) => String.raw`Let $f(x)=(${coef(T.a)}x+${T.b})^{${T.n}}$. Write $f'(x)$ as a formula in $x$, and give $f'(1)$.`,
+    parts: [
+      sym('formula', ($) => chainKey($.a, $.b, $.n), ['x'], ($) => $.n * $.a * ($.a * $.x + $.b) ** ($.n - 1), {
+        label: "$f'(x)$",
+      }),
+      num('fp', ($) => $.fp, '', { label: "$f'(1)$" }),
+    ],
+    hints: [
+      'Use the chain rule: the outer derivative at the inner function, times the inner derivative.',
+      (T, $) => String.raw`The outer function is $u^{${$.n}}$, with $u=${coef($.a)}x+${$.b}$. Its derivative is $${$.n}${$.n === 2 ? 'u' : `u^{${$.n - 1}}`}$.`,
+      (T, $) => String.raw`Multiply by the inner derivative, $${$.a}$. For the number, substitute $x=1$.`,
+    ],
+    steps: ($, f) => [
+      String.raw`$f'(x)=${exprToTex(chainKey($.a, $.b, $.n), ['x'])}$.`,
+      String.raw`At $x=1$, $f'(1)=${f($.fp)}$.`,
+    ],
+    cases: [
+      kase('a=2, b=1, n=3', { a: 2, b: 1, n: 3 }, { formula: '6*(2*x+1)^2', fp: 54 }, {
+        accept: { formula: ['24*x^2+24*x+6'] },
+        reject: { formula: ['3*(2*x+1)^2'] },
+      }),
+    ],
+  }),
+
+  problem({
+    id: 'u2.sym.trig',
+    exam: 'u2',
+    ch: '3',
+    src: 'OpenStax Calc 1 §3.5',
+    title: 'Derivative of a sine, as a formula',
+    kind: 'derivation',
+    level: 2,
+    topics: ['derivatives', 'symbolic'],
+    vars: { a: range(1, 9, 1), k: range(1, 9, 1) },
+    derive: ($) => ({ x: 1, fp: $.a * $.k * Math.cos($.k) }),
+    second: ($) => ({
+      formula: sineKey($.a, $.k),
+      fp: df1((t) => $.a * Math.sin($.k * t), 1),
+    }),
+    text: (T) => String.raw`Let $f(x)=${coef(T.a)}\sin(${coef(T.k)}x)$. Write $f'(x)$ as a formula in $x$, and give $f'(1)$.`,
+    parts: [
+      sym('formula', ($) => sineKey($.a, $.k), ['x'], ($) => $.a * $.k * Math.cos($.k * $.x), {
+        label: "$f'(x)$",
+      }),
+      num('fp', ($) => $.fp, '', { label: "$f'(1)$", abs: 1e-6 }),
+    ],
+    hints: [
+      'Differentiate the sine, then apply the chain rule to what is inside it.',
+      String.raw`$\dfrac{d}{dx}\sin u=\cos u\cdot u'$.`,
+      (T, $) => String.raw`Here $u=${coef($.k)}x$, so $u'=${$.k}$.${$.a === 1 ? '' : ` The factor $${$.a}$ stays in front.`} For the number, substitute $x=1$, in radians.`,
+    ],
+    steps: ($, f) => [
+      String.raw`$f'(x)=${exprToTex(sineKey($.a, $.k), ['x'])}$.`,
+      String.raw`At $x=1$, $f'(1)=${f($.fp)}$.`,
+    ],
+    cases: [
+      kase('a=3, k=2', { a: 3, k: 2 }, { formula: '6*cos(2*x)', fp: 6 * Math.cos(2) }, {
+        accept: { formula: ['6cos(2x)'] },
+        reject: { formula: ['3*cos(2*x)'] },
+      }),
+    ],
+  }),
+
+  problem({
+    id: 'u2.sym.product',
+    exam: 'u2',
+    ch: '3',
+    src: 'OpenStax Calc 1 §3.3',
+    title: 'Product rule as a formula',
+    kind: 'derivation',
+    level: 3,
+    topics: ['derivatives', 'symbolic'],
+    vars: { n: range(2, 6, 1), k: range(1, 10, 1) },
+    derive: ($) => ({ x: 1, fp: $.n * Math.sin($.k) + $.k * Math.cos($.k) }),
+    second: ($) => ({
+      formula: productKey($.n, $.k),
+      fp: df1((t) => t ** $.n * Math.sin($.k * t), 1),
+    }),
+    text: (T, $) => String.raw`Let $f(x)=${xTex($.n)}\sin(${coef(T.k)}x)$. Write $f'(x)$ as a formula in $x$, and give $f'(1)$.`,
+    parts: [
+      sym('formula', ($) => productKey($.n, $.k), ['x'], ($) => $.n * $.x ** ($.n - 1) * Math.sin($.k * $.x) + $.k * $.x ** $.n * Math.cos($.k * $.x), {
+        label: "$f'(x)$",
+      }),
+      num('fp', ($) => $.fp, '', { label: "$f'(1)$", abs: 1e-6 }),
+    ],
+    hints: [
+      'The function is a product. Use the product rule, then the chain rule inside the sine.',
+      (T, $) => String.raw`Take $u=${xTex($.n)}$ and $v=\sin(${coef($.k)}x)$.`,
+      (T, $) => String.raw`Then $u'=${$.n}${xTex($.n - 1)}$ and $v'=${coef($.k)}\cos(${coef($.k)}x)$. Form $u'v+uv'$, then substitute $x=1$.`,
+    ],
+    steps: ($, f) => [
+      String.raw`$f'(x)=${exprToTex(productKey($.n, $.k), ['x'])}$.`,
+      String.raw`At $x=1$, $f'(1)=${f($.fp)}$.`,
+    ],
+    cases: [
+      kase('n=2, k=1', { n: 2, k: 1 }, { formula: '2*x*sin(x)+x^2*cos(x)', fp: 2 * Math.sin(1) + Math.cos(1) }, {
+        accept: { formula: ['x^2*cos(x)+2x*sin(x)'] },
+        reject: { formula: ['2*x*cos(x)'] },
       }),
     ],
   }),
