@@ -90,6 +90,76 @@ export const SETUPS = {
       },
     ],
   },
+  u3: {
+    s2: [
+      {
+        tag: 'eight halvings',
+        lab: 'series',
+        scenario: 'geom',
+        setup(s) {
+          s.n = 8;
+        },
+        read: (c) => ({ sn: [c.sn, 1.9921875], limit: [c.limit, 2] }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'the harmonic series',
+        lab: 'series',
+        scenario: 'harm',
+        setup(s) {
+          s.n = 8;
+        },
+        read: (c) => ({ sn: [c.sn, 2.718] }),
+      },
+    ],
+    s5: [
+      {
+        tag: 'eight alternating terms',
+        lab: 'series',
+        scenario: 'alt',
+        setup(s) {
+          s.n = 8;
+        },
+        read: (c) => ({ sn: [c.sn, 0.6345], limit: [c.limit, 0.6931] }),
+      },
+    ],
+    s7: [
+      {
+        tag: 'the tangent line to sine',
+        lab: 'taylor',
+        scenario: 'line',
+        setup(s) {
+          s.n = 1;
+          s.a = 0;
+          s.x = 0.5;
+        },
+        read: (c) => ({ poly: [c.poly, 0.5], f: [c.f, 0.47943], err: [c.err, 0.0206] }),
+      },
+      {
+        tag: 'order five',
+        lab: 'taylor',
+        scenario: 'fifth',
+        setup(s) {
+          s.n = 5;
+          s.a = 0;
+          s.x = 0.5;
+        },
+        read: (c) => ({ poly: [c.poly, 0.479427], err: [c.err, 1.54e-6] }),
+      },
+      {
+        tag: 'a centre at π/2',
+        lab: 'taylor',
+        scenario: 'shift',
+        setup(s) {
+          s.n = 2;
+          s.a = Math.PI / 2;
+          s.x = Math.PI / 2 + 0.4;
+        },
+        read: (c) => ({ poly: [c.poly, 0.92], f: [c.f, 0.92106] }),
+      },
+    ],
+  },
 };
 
 export function exampleTag(tagText) {
