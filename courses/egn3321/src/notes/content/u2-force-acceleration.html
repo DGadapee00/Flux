@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 2 · Hibbeler Ch 13</p>
   <h1>Force and acceleration</h1>
-  <p class="lede">Newton's second law for a particle, in rectangular axes and in n–t. The numbers below are recomputed. Cylindrical coordinates and central-force motion stay out.</p>
+  <p class="lede">Newton's second law for a particle, in rectangular axes and in n–t. Each special formula below is derived from \(\sum \vec F = m\vec a\) and a free-body diagram, then checked on a worked case. The numbers are recomputed. Cylindrical coordinates and central-force motion stay out.</p>
   <nav class="toc">
     <a href="#s1"><span>01</span>Equations of motion</a>
     <a href="#s2"><span>02</span>Friction on an incline</a>
@@ -23,54 +23,102 @@
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Equations of motion</h2>
 <p>A free-body diagram comes first. Then \(\sum F = ma\) along each axis. The acceleration is the unknown, or the force is, but not both at once.</p>
+\[
+\sum F_x = m a_x, \qquad \sum F_y = m a_y.
+\]
+<p>The law holds in an inertial frame, one that does not accelerate. For engineering problems on the ground, the ground is inertial enough. The forces are the ones drawn on the diagram: weight, contact forces, cable forces, springs. \(ma\) is not a force and is never drawn as one.</p>
+<div class="box ex"><span class="tag">Worked example · an elevator scale</span>
+<p>A 150 lb person stands on a scale in an elevator that accelerates upward at 4 ft/s². The forces on the person are the weight, 150 lb down, and the scale's push \(N\) up. The mass is \(150/32.2 = 4.66\) slug. So \(N - 150 = 4.66 \times 4\), and \(N = 169\) lb. The scale reads 169 lb.</p>
+<p>Check with the ratio form: \(N = W(1 + a/g) = 150 \times 1.124 = 169\) lb.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a push at an angle</span>
+<p>A 25 kg crate is pushed with 200 N directed 30° below the horizontal. \(\mu_k = 0.3\). The push presses the crate into the floor, so \(N = 25(9.81) + 200\sin 30^\circ = 345\) N, not the weight. Friction is \(0.3 \times 345 = 104\) N. The horizontal equation gives \(a = (173.2 - 103.6)/25 = 2.79\) m/s².</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a hanging accelerometer</span>
+<p>A 0.2 kg bob hangs on a string from a car's mirror. The car accelerates forward at 3 m/s². The string tilts back by \(\theta\). Horizontally, \(T\sin\theta = ma\). Vertically, \(T\cos\theta = mg\). Divide: \(\tan\theta = a/g\), so \(\theta = 17.0^\circ\). The tension is \(m\sqrt{g^2 + a^2} = 2.05\) N, more than the bob's weight of 1.96 N. Reading the angle measures the acceleration, whatever the bob's mass.</p>
+</div>
+<p>Two masses on one string over a light pulley make the classic connected system, Atwood's machine.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>Two masses on one string share one speed. Their accelerations are equal in size and opposite in direction. Adding the two equations cancels the tension.</p>
+<p>Two masses on one string share one speed. Their accelerations are equal in size and opposite in direction. Let \(m_2\) descend with acceleration \(a\). Then \(m_2 g - T = m_2 a\) and \(T - m_1 g = m_1 a\). Adding the two equations cancels the tension: \((m_2 - m_1)g = (m_1 + m_2)a\). Put \(a\) back into either equation for \(T\).</p>
 </div>
 \[
 a = \frac{m_2 - m_1}{m_1 + m_2}\, g, \qquad T = \frac{2 m_1 m_2}{m_1 + m_2}\, g.
 \]
 <div class="box ex"><span class="tag">Worked example · a heavier side</span>
 <p>Take \(m_1 = 2\) kg and \(m_2 = 4\) kg, with \(g = 9.81\) m/s². Then \(a = 3.27\) m/s² when the 4 kg mass descends. The tension is 26.2 N. The 4 kg weight is 39.2 N.</p>
+<p>From rest, after 1 s, the masses move at 3.27 m/s and have each travelled 1.64 m.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The tension equals the hanging weight only when the acceleration is zero. While the system accelerates, the rope force and the weight differ. Hibbeler §13.3.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Write one equation per mass. Solve them together. Do not replace the tension with a weight.</p>
+<p>Write one equation per mass. Solve them together. Do not replace the tension with a weight, or the normal force with \(mg\), without checking the diagram.</p>
 </div>
-<p>The pulley is light and the string does not stretch. Pulley inertia and the mass of the rope would change the acceleration.</p>
+<p>In the F = ma lab, the Two masses scenario draws both free bodies. The work–energy check in the readout must agree with the acceleration.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The pulley is light and the string does not stretch. Pulley inertia and the mass of the rope would change the acceleration: a heavy pulley needs Unit 6's rotational equation, and a stretching string makes the two accelerations differ while it stretches.</p>
+</div>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Friction on an incline</h2>
 <p>Ask whether the block slides before writing a friction force. At rest, friction is whatever equilibrium needs, up to \(\mu_s N\). Once it slides, friction is \(\mu_k N\) and it opposes the velocity.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>The normal force is \(mg\cos\theta\). The downhill part of the weight is \(mg\sin\theta\). If that part exceeds \(\mu_s N\), the block slides and the acceleration uses \(\mu_k\).</p>
+<p>Tilt the axes along the slope. Perpendicular to it nothing accelerates, so \(N = mg\cos\theta\). Along it, the downhill part of the weight is \(mg\sin\theta\). The block holds if friction can match that, so the test is \(mg\sin\theta \le \mu_s mg\cos\theta\), or \(\tan\theta \le \mu_s\). The mass cancels.</p>
+<p>If the block slides down, kinetic friction acts uphill: \(ma = mg\sin\theta - \mu_k mg\cos\theta\). The mass cancels again.</p>
 </div>
+<p>So the block holds if \(\tan\theta \le \mu_s\). Sliding down, it accelerates at</p>
+\[
+a = g(\sin\theta - \mu_k\cos\theta).
+\]
+<p>The steepest angle that holds is the angle of repose, \(\theta = \arctan\mu_s\). For \(\mu_s = 0.2\) it is 11.3°.</p>
 <div class="box ex"><span class="tag">Worked example · a block that slides</span>
 <p>A 3 kg block is released on a 30° incline. \(\mu_s = 0.2\) and \(\mu_k = 0.15\). The normal force is 25.5 N. Static friction cannot hold it. The downhill acceleration is 3.63 m/s².</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · a block that holds</span>
+<p>The same block on a 10° incline. \(\tan 10^\circ = 0.176\), which is below \(\mu_s = 0.2\), so it holds. The downhill pull is \(3(9.81)\sin 10^\circ = 5.11\) N. Static friction matches it: 5.11 N uphill. The limit \(\mu_s N = 5.80\) N is not reached.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · launched up the slope</span>
+<p>Give the 3 kg block a push up the 30° slope at 4 m/s. Now it moves uphill, so kinetic friction acts downhill, alongside the weight. The deceleration is \(9.81(\sin 30^\circ + 0.15\cos 30^\circ) = 6.18\) m/s². It stops after \(0.647\) s and \(4^2/(2 \times 6.18) = 1.29\) m.</p>
+<p>At the stop, friction must be re-tested. \(\tan 30^\circ = 0.577\) exceeds \(\mu_s = 0.2\), so the block does not stay. It slides back down at 3.63 m/s², the case above. The trip up and the trip down have different accelerations because friction flips direction.</p>
+</div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Friction is not \(\mu N\) just because a coefficient is printed. At rest, and not on the verge, the friction force is smaller than \(\mu_s N\). Hibbeler §13.4.</p>
+<p>Friction is not \(\mu N\) just because a coefficient is printed. At rest, and not on the verge, the friction force is smaller than \(\mu_s N\). On the 10° slope it is 5.11 N, not 5.80 N. Hibbeler §13.4.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Test \(\mu_s\) first. Use \(\mu_k\) only after the block is sliding.</p>
+<p>Test \(\mu_s\) first. Use \(\mu_k\) only after the block is sliding. While it holds, friction is whatever equilibrium needs.</p>
 </div>
-<p>Friction here is Coulomb: one static limit, then a constant kinetic value. The model leaves out drag that grows with speed, and a coefficient that changes along the surface.</p>
+<p>In the F = ma lab, the Block on a rough incline scenario reports the regime, static or kinetic. Raise the angle past 11.3° and watch it change.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Friction here is Coulomb: one static limit, then a constant kinetic value. The model leaves out drag that grows with speed, a coefficient that changes along the surface, and the stick–slip chatter of a real block near the limit.</p>
+</div>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Connected bodies</h2>
 <p>A block on an incline, tied to a hanging mass, is still one coordinate. Positive means the hanging mass descends. Friction on the block opposes that impending motion, or holds the system if it can.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>One light string means one tension. One coordinate means one acceleration. Take the hanging mass descending as positive, and solve the two free-body equations together.</p>
+<p>One light string means one tension. One coordinate means one acceleration. With block mass \(m\) and hanging mass \(M\), the hanging mass gives \(Mg - T = Ma\). If the block slides up, friction acts down the slope, so \(T - mg\sin\theta - \mu_k mg\cos\theta = ma\). Add the two:</p>
+\[
+a = \frac{Mg - mg\sin\theta - \mu_k mg\cos\theta}{m + M}.
+\]
+<p>Before using it, check that the net drive \(Mg - mg\sin\theta\) beats \(\mu_s mg\cos\theta\). If not, the system holds. If the drive is negative, the block would slide down and pull the hanging mass up. Then friction acts up the slope, every sign in the block's equation flips, and the coordinate should be reversed before solving.</p>
 </div>
-
 <div class="box ex"><span class="tag">Worked example · a hanging tow</span>
 <p>A 4 kg block on a 30° incline is tied to a hanging 6 kg mass. \(\mu_s = 0.3\) and \(\mu_k = 0.2\). The system slides. The acceleration is 3.24 m/s². The tension is 39.4 N. The hanging weight is 58.9 N.</p>
+<p>From the formula: \((58.86 - 19.62 - 6.80)/10 = 3.24\) m/s². Then \(T = 6(9.81 - 3.24) = 39.4\) N.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a tow that holds</span>
+<p>Swap the 6 kg mass for 3 kg. The net drive is \(29.43 - 19.62 = 9.81\) N. The static limit is \(0.3 \times 4(9.81)\cos 30^\circ = 10.19\) N. The limit wins, so nothing moves. The tension equals the hanging weight, 29.4 N, and friction supplies the 9.81 N difference, down the slope.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(\mu_k\) for a system that never started. With the 3 kg mass, the kinetic formula gives \(a = (29.43 - 19.62 - 6.80)/7 = 0.43\) m/s², a motion that does not happen. Test the static limit first. Hibbeler §13.4.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>At rest, the tension equals the hanging weight. In motion, \(T = M(g - a)\) when \(a\) is the downward acceleration of that mass.</p>
 </div>
-<p>The string is light, so one tension serves both bodies. A heavy rope would make the tension vary along its length.</p>
+<p>In the F = ma lab, the Incline tied to a hanging mass scenario shows both free bodies. Lower the hanging mass until the regime turns static.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The string is light, so one tension serves both bodies. A heavy rope would make the tension vary along its length. The pulley is frictionless and massless, and the block does not tip.</p>
+</div>
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Banked curve</h2>
@@ -81,57 +129,100 @@ a = \frac{m_2 - m_1}{m_1 + m_2}\, g, \qquad T = \frac{2 m_1 m_2}{m_1 + m_2}\, g.
 <div class="box ex"><span class="tag">Worked example · no friction</span>
 <p>A curve of radius 40 m is banked at 20°. With \(\mu = 0\), one speed stays on the road: 11.95 m/s. Any other speed needs friction.</p>
 </div>
+<div class="box why"><span class="tag">Why</span>
+<p>At the top speed, the car is about to slide up and out, so friction \(\mu N\) acts down the bank. Horizontally: \(N\sin\theta + \mu N\cos\theta = mv^2/\rho\). Vertically: \(N\cos\theta - \mu N\sin\theta = mg\). Divide:</p>
+\[
+v_{\max}^2 = \rho g\,\frac{\sin\theta + \mu\cos\theta}{\cos\theta - \mu\sin\theta}.
+\]
+<p>At the lowest speed friction acts up the bank, and both signs on \(\mu\) flip.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a band of speeds</span>
+<p>The same 40 m curve at 20°, now with \(\mu = 0.2\). The formula gives \(v_{\max} = 15.4\) m/s and \(v_{\min} = 7.74\) m/s. The no-friction speed, 11.95 m/s, sits inside the band. A 1000 kg car at 12 m/s needs only 27.7 N of friction.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a flat curve in feet</span>
+<p>A flat curve, \(\theta = 0\), of radius 300 ft. \(\mu_s = 0.6\). Friction alone supplies \(mv^2/\rho\), so \(v_{\max} = \sqrt{\mu\rho g} = \sqrt{0.6 \times 300 \times 32.2} = 76.1\) ft/s. That is 51.9 mph. The car's weight cancels.</p>
+</div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The no-friction speed is \(\sqrt{\rho g\tan\theta}\), not \(\sqrt{\rho g\sin\theta}\). The sine belongs in the horizontal equation, and the cosine in the vertical one. Hibbeler §13.5.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Friction down the bank raises the maximum speed. Friction up the bank lowers the minimum. Together they make a band.</p>
 </div>
-<p>The road is one horizontal circle, and the car stays on the pavement. The model leaves out a bank that changes along the road, and a car that lifts an inside wheel.</p>
+<p>In the Curve lab, the Bank with friction scenario draws the band. Move the speed across it and watch friction change sign at the design speed.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The road is one horizontal circle, and the car stays on the pavement. The model leaves out a bank that changes along the road, a car that lifts an inside wheel, and the different grip of the front and rear tyres. A car is a rigid body, not a particle, and Unit 6 adds the moments.</p>
+</div>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Vertical loop</h2>
 <p>Measure \(\phi\) from the bottom. The height above the bottom is \(\rho(1-\cos\phi)\). Energy gives the speed. The normal force, positive toward the centre, is \(N = m(v^2/\rho + g\cos\phi)\).</p>
 <div class="box why"><span class="tag">Why</span>
-<p>The height above the bottom is \(\rho(1-\cos\phi)\). Energy turns that height into a speed. With \(\phi\) measured from the bottom, the inward equation is \(N = m(v^2/\rho + g\cos\phi)\).</p>
+<p>The height above the bottom is \(\rho(1-\cos\phi)\). A smooth track does no work, so energy turns that height into lost speed: \(v^2 = v_b^2 - 2g\rho(1 - \cos\phi)\). Toward the centre, the track pushes with \(N\), and the weight contributes \(-mg\cos\phi\): at the bottom it points away from the centre, at the top toward it. So \(N - mg\cos\phi = mv^2/\rho\), which rearranges to the formula above.</p>
 </div>
-
 <div class="box ex"><span class="tag">Worked example · the top of the loop</span>
 <p>A 0.5 kg particle enters a smooth loop of radius 0.4 m at 5 m/s. At the top the speed is 3.05 m/s and \(N = 6.73\) N. At the bottom, \(N = 36.2\) N.</p>
+<p>Check both with the formula. At the top, \(v^2 = 25 - 4(9.81)(0.4) = 9.30\), so \(N = 0.5(9.304/0.4 - 9.81) = 6.725\) N, which rounds to 6.73 N. At the bottom, \(N = 0.5(25/0.4 + 9.81) = 36.2\) N, more than seven times the weight.</p>
+</div>
+<div class="box why"><span class="tag">Why</span>
+<p>The particle stays on the track while \(N \ge 0\). At the top, \(\cos\phi = -1\), so the condition is \(v_{\text{top}}^2 \ge g\rho\). Energy gives \(v_{\text{top}}^2 = v_b^2 - 4g\rho\). So the entry speed must satisfy \(v_b^2 \ge 5g\rho\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · just enough speed</span>
+<p>For \(\rho = 0.4\) m, the least entry speed is \(\sqrt{5 \times 9.81 \times 0.4} = 4.43\) m/s. Entering at that speed, the particle reaches the top at \(\sqrt{9.81 \times 0.4} = 1.98\) m/s, and the track pushes on it with almost nothing.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · falling short</span>
+<p>Enter at 4 m/s instead. Set \(N = 0\) with \(v^2 = 16 - 7.848(1 - \cos\phi)\). That gives \(20.38 + 19.62\cos\phi = -9.81\cos\phi\), so \(\cos\phi = -0.692\) and \(\phi = 134^\circ\). The particle leaves the track there, past the side but short of the top, and falls inside the loop as a projectile.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The normal force is not the weight, and it is smallest at the top, not the bottom. At the top the weight points toward the centre, so it helps supply \(mv^2/\rho\). Hibbeler §13.5.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>A car on the inside of the track leaves when \(N\) would have to be negative. That happens first at the top.</p>
+<p>A car on the inside of the track leaves when \(N\) would have to be negative. On a full loop that happens first at the top. The entry speed needs \(v_b^2 \ge 5g\rho\).</p>
 </div>
-<p>The particle is a point on a smooth track. The model leaves out friction, the size of a vehicle, and any normal force that would have to pull on the car.</p>
+<p>In the Curve lab, the Vertical loop scenario reports the regime: on track, leaves, or short. Sweep \(\phi\) and watch \(N\) fall toward the top.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The particle is a point on a smooth track. The model leaves out friction, the size of a vehicle, and any normal force that would have to pull on the car. A roller coaster's wheels lock it to the rail from both sides, so it can have negative \(N\). This model cannot.</p>
+</div>
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Spring on a collar</h2>
 <p>A collar on a smooth rod has one axis, along the rod. The spring force is \(kx\), from the unstretched point. The rod's force is the part of the weight perpendicular to the rod. It does no work, and it does not enter \(\sum F = ma\) along the rod.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>Along the rod the forces are \(mg\sin\theta\) downhill and \(kx\) toward the unstretched point. Their difference is \(ma\). The rod cancels \(mg\cos\theta\), so that component is the rod force.</p>
+<p>Along the rod the forces are \(mg\sin\theta\) downhill and \(kx\) toward the unstretched point. Their difference is \(ma\). Perpendicular to the rod nothing accelerates, so the rod cancels \(mg\cos\theta\). That component is the rod force.</p>
 </div>
-
+\[
+a = g\sin\theta - \frac{k}{m}\,x, \qquad N_{\text{rod}} = mg\cos\theta.
+\]
 <div class="box ex"><span class="tag">Worked example · a stretched spring</span>
 <p>A 2 kg collar is on a smooth rod at 20° above the horizontal. The spring has \(k = 30\) N/m and is stretched 0.1 m down the rod. The acceleration down the rod is 1.855 m/s². The rod pushes with 18.4 N.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>\(a = g\sin\theta - (k/m)x\), with \(x\) positive down the rod. The rod force is \(mg\cos\theta\).</p>
+<div class="box ex"><span class="tag">Worked example · where it settles</span>
+<p>The acceleration is zero where \(kx = mg\sin\theta\): \(x = 2(9.81)\sin 20^\circ/30 = 0.224\) m. Released at 0.1 m, the collar speeds up down the rod until it passes 0.224 m, then slows. With no friction it oscillates about that point forever.</p>
 </div>
-<p>The spring lies along the rod, so the stretch equals the coordinate measured down the rod. This section leaves out friction. The rod force does no work along the rod.</p>
+<div class="box ex"><span class="tag">Worked example · its speed at the rest point</span>
+<p>Released from rest at 0.1 m, how fast is the collar at 0.224 m? Integrate \(a\,dx = v\,dv\) from Unit 1 along the rod: \(\tfrac12 v^2 = g\sin\theta\,\Delta x - \tfrac{k}{2m}(x_2^2 - x_1^2)\). That is \(3.355(0.1237) - 7.5(0.0400) = 0.115\) m²/s², so \(v = 0.479\) m/s. The same number comes from Unit 3's work–energy principle, which is this integral with \(m\) multiplied through. By symmetry the collar turns back at \(x = 0.347\) m.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Measuring the stretch from the equilibrium point instead of the unstretched point. The spring force is \(kx\) with \(x\) from where the spring has its natural length. Measured from 0.224 m, the 0.1 m position has \(x = -0.124\) m, and the force comes out with the wrong size. Hibbeler §13.4.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>\(a = g\sin\theta - (k/m)x\), with \(x\) positive down the rod from the unstretched point. The rod force is \(mg\cos\theta\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The spring lies along the rod, so the stretch equals the coordinate measured down the rod. A spring anchored off the rod stretches by a Pythagorean length, and its force has a component into the rod. This section also leaves out friction. The rod force does no work along the rod.</p>
+</div>
 </section>
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Formula sheet</h2>
 <ul>
 <li>\(\sum \vec F = m\vec a\). Draw the free-body before writing a component.</li>
 <li>Atwood: \(a = (m_2-m_1)g/(m_1+m_2)\), \(T = 2 m_1 m_2 g/(m_1+m_2)\).</li>
-<li>Incline, sliding down: \(a = g\sin\theta - \mu_k g\cos\theta\). Test \(\mu_s\) before using \(\mu_k\).</li>
+<li>Incline: holds if \(\tan\theta \le \mu_s\). Sliding down: \(a = g\sin\theta - \mu_k g\cos\theta\).</li>
+<li>Tow: \(a = (Mg - mg\sin\theta - \mu_k mg\cos\theta)/(m + M)\), after the static test.</li>
 <li>Kinematics in this unit uses \(g = 9.81\) m/s², or \(32.2\) ft/s². The slug is the US mass in \(F = ma\).</li>
-<li>Bank, no friction: \(v = \sqrt{\rho g\tan\theta}\).</li>
-<li>Loop, \(\phi\) from the bottom: \(v^2 = v_b^2 - 2g\rho(1-\cos\phi)\), \(N = m(v^2/\rho + g\cos\phi)\).</li>
-<li>Collar: \(a = g\sin\theta - (k/m)x\) along the rod.</li>
+<li>Bank, no friction: \(v = \sqrt{\rho g\tan\theta}\). With friction: \(v_{\max}^2 = \rho g(\sin\theta + \mu\cos\theta)/(\cos\theta - \mu\sin\theta)\).</li>
+<li>Flat curve: \(v_{\max} = \sqrt{\mu\rho g}\).</li>
+<li>Loop, \(\phi\) from the bottom: \(v^2 = v_b^2 - 2g\rho(1-\cos\phi)\), \(N = m(v^2/\rho + g\cos\phi)\). Full loop: \(v_b^2 \ge 5g\rho\).</li>
+<li>Collar: \(a = g\sin\theta - (k/m)x\) along the rod. Rest point \(x = mg\sin\theta/k\).</li>
 </ul>
 <p>Left out, because the pack does not name them: cylindrical coordinates (§13.6) and central-force motion (§13.7). The same list as Unit 1 still stands for the later chapters.</p>
 <p>Each line above is the model for this unit. A heavy pulley, drag, and a stretch that is not along the rod are left out.</p>
