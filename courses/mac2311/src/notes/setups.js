@@ -155,6 +155,62 @@ export const SETUPS = {
       },
     ],
   },
+  u4: {
+    s2: [
+      {
+        tag: 'four left rectangles',
+        lab: 'riemann',
+        scenario: 'quad',
+        setup(s) {
+          s.n = 4;
+          s.sample = 'left';
+        },
+        read: (c) => ({ sum: [c.sum, 0.21875], exact: [c.exact, 1 / 3] }),
+      },
+      {
+        tag: 'four midpoints',
+        lab: 'riemann',
+        scenario: 'quad',
+        setup(s) {
+          s.n = 4;
+          s.sample = 'mid';
+        },
+        read: (c) => ({ sum: [c.sum, 0.328125] }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'a trapezoid by geometry',
+        lab: 'riemann',
+        scenario: 'line',
+        setup(s) {
+          s.n = 4;
+          s.sample = 'left';
+        },
+        read: (c) => ({ sum: [c.sum, 5], exact: [c.exact, 6] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'the area up to 1',
+        lab: 'accum',
+        scenario: 'quad',
+        setup(s) {
+          s.x = 1;
+        },
+        read: (c) => ({ area: [c.area, 1 / 3], height: [c.height, 1] }),
+      },
+      {
+        tag: 'one hump of sine',
+        lab: 'accum',
+        scenario: 'sine',
+        setup(s) {
+          s.x = Math.PI / 2;
+        },
+        read: (c) => ({ area: [c.area, 1], height: [c.height, 1] }),
+      },
+    ],
+  },
 };
 
 export function exampleTag(tagText) {

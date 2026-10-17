@@ -53,6 +53,23 @@ export const NOTES = {
       { id: 's9', n: 9, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u4: {
+    exam: 'u4',
+    title: 'Integration',
+    chapters: '5',
+    file: 'u4-integration.html',
+    load: () => import('./content/u4-integration.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'Antiderivatives', lab: null, ch: ['5'], topics: ['antiderivatives'] },
+      { id: 's2', n: 2, title: 'Area as a limit of sums', lab: 'riemann', ch: ['5'], topics: ['integration'], home: true },
+      { id: 's3', n: 3, title: 'The definite integral', lab: 'riemann', ch: ['5'], topics: ['definite integral'] },
+      { id: 's4', n: 4, title: 'The Fundamental Theorem', lab: 'accum', ch: ['5'], topics: ['fundamental theorem'], home: true },
+      { id: 's5', n: 5, title: 'Net change', lab: null, ch: ['5'], topics: ['definite integral'] },
+      { id: 's6', n: 6, title: 'Substitution', lab: null, ch: ['5'], topics: ['substitution', 'symbolic'] },
+      { id: 's7', n: 7, title: 'Exponentials and logarithms', lab: null, ch: ['5'], topics: ['antiderivatives'] },
+      { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
