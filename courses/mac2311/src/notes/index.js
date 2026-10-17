@@ -35,6 +35,24 @@ export const NOTES = {
       { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u3: {
+    exam: 'u3',
+    title: 'Applications of derivatives',
+    chapters: '4',
+    file: 'u3-applications.html',
+    load: () => import('./content/u3-applications.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'Linear approximation', lab: null, ch: ['4'], topics: ['linear approximation'] },
+      { id: 's2', n: 2, title: 'Extreme values', lab: null, ch: ['4'], topics: ['extrema'] },
+      { id: 's3', n: 3, title: 'The Mean Value Theorem', lab: null, ch: ['4'], topics: ['mean value theorem'] },
+      { id: 's4', n: 4, title: 'The shape of a graph', lab: null, ch: ['4'], topics: ['curve sketching'] },
+      { id: 's5', n: 5, title: 'Limits at infinity', lab: null, ch: ['4'], topics: ['curve sketching'] },
+      { id: 's6', n: 6, title: 'Optimization', lab: 'box', ch: ['4'], topics: ['optimization'], home: true },
+      { id: 's7', n: 7, title: "L'Hôpital's rule", lab: null, ch: ['4'], topics: ["l'hôpital"] },
+      { id: 's8', n: 8, title: "Newton's method", lab: null, ch: ['4'], topics: ["newton's method"] },
+      { id: 's9', n: 9, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
