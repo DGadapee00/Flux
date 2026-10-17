@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Integration</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">MAC 2311 · Calculus I · Unit 4 · OpenStax Calculus Volume 1, §4.10 and Ch 5</p>
+  <h1>Integration</h1>
+  <p class="lede">An integral is a limit of sums. The Fundamental Theorem says that limit can be found by undoing a derivative. This unit builds both halves and joins them. The numbers below are recomputed.</p>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>Antiderivatives</a>
+    <a href="#s2"><span>02</span>Area as a limit of sums</a>
+    <a href="#s3"><span>03</span>The definite integral</a>
+    <a href="#s4"><span>04</span>The Fundamental Theorem</a>
+    <a href="#s5"><span>05</span>Net change</a>
+    <a href="#s6"><span>06</span>Substitution</a>
+    <a href="#s7"><span>07</span>Exponentials and logarithms</a>
+    <a href="#s8"><span>08</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Antiderivatives</h2>
+<p>\(F\) is an antiderivative of \(f\) when \(F' = f\). Every derivative rule, read backwards, is an antiderivative rule.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Two antiderivatives of the same \(f\) differ by a constant. Let \(F\) and \(G\) both have derivative \(f\) on an interval. Then \((F - G)' = 0\) there. Unit 3's Mean Value Theorem says a function with zero derivative on an interval is constant. So \(G = F + C\).</p>
+</div>
+<p>The whole family is written \(\int f(x)\,dx = F(x) + C\), the indefinite integral. Reversing the power rule gives the most-used entry:</p>
+\[
+\int x^n\,dx = \frac{x^{n+1}}{n + 1} + C, \qquad n \ne -1.
+\]
+<p>Check any antiderivative by differentiating it. \(\tfrac{d}{dx}\, x^{n+1}/(n + 1) = x^n\). The rule fails at \(n = -1\), where it would divide by zero. Section 7 handles that case.</p>
+<div class="box ex"><span class="tag">Worked example · a ball thrown up</span>
+<p>A ball leaves the ground at \(20\) m/s, straight up. Its acceleration is \(-9.8\) m/s². So \(v(t) = -9.8t + C\), and \(v(0) = 20\) fixes \(C = 20\). Then \(s(t) = 20t - 4.9t^2 + D\), and \(s(0) = 0\) fixes \(D = 0\).</p>
+<p>The ball stops rising when \(v = 0\), at \(t = 20/9.8 = 2.04\) s. Its height then is \(s = 20.4\) m.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Dropping \(+C\) loses the family. Here it would set \(v(0) = 0\), a ball that never left the ground. Each antiderivative step adds one constant, and each needs one condition to fix it.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>An antiderivative undoes a derivative. All antiderivatives of \(f\) differ by constants. A starting value picks one.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Most functions have antiderivatives that no formula writes down. \(e^{-x^2}\) is the standard example. Its integrals are found numerically, as in Calculus II.</p>
+</div>
+</section>
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Area as a limit of sums</h2>
+<p>To find the area under a positive \(f\) on \([a, b]\), cut the interval into \(n\) strips of width \(\Delta x = (b - a)/n\). Over each strip, build a rectangle whose height is \(f\) at a sample point. Add the rectangles.</p>
+\[
+R_n = \sum_{i=1}^{n} f(x_i^*)\,\Delta x.
+\]
+<p>A left sum samples each strip at its left edge. A right sum uses the right edge. A midpoint sum uses the centre. As \(n\) grows, all three approach the same number, the area.</p>
+<div class="box ex"><span class="tag">Worked example · four left rectangles</span>
+<p>Take \(f(x) = x^2\) on \([0, 1]\) with \(n = 4\), so \(\Delta x = 1/4\). The left edges are \(0, 1/4, 1/2, 3/4\). The heights are \(0, 1/16, 4/16, 9/16\). The sum is \((14/16)(1/4) = 0.21875\).</p>
+<p>The right sum uses \(1/4, 1/2, 3/4, 1\), and gives \(0.46875\). The exact area is \(1/3\). It lies between them, because \(x^2\) is increasing.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · four midpoints</span>
+<p>The same function, with each strip sampled at its centre: \(1/8, 3/8, 5/8, 7/8\). The sum is \(0.328125\). With only four strips it is already within \(0.0052\) of \(1/3\).</p>
+</div>
+<div class="box why"><span class="tag">Why</span>
+<p>The right sum for \(x^2\) can be summed exactly. With \(x_i = i/n\), it is \(\tfrac{1}{n^3}\sum_{i=1}^{n} i^2\). The sum of the first \(n\) squares is \(n(n + 1)(2n + 1)/6\). So</p>
+\[
+R_n = \frac{(n + 1)(2n + 1)}{6n^2} \to \frac{2}{6} = \frac13.
+\]
+<p>At \(n = 100\), \(R_n = 0.33835\). The formula for \(\sum i\) comes from pairing: \(1 + n\), \(2 + (n - 1)\), and so on. There are \(n/2\) pairs, each worth \(n + 1\), so \(\sum_{i=1}^{n} i = n(n + 1)/2\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A Riemann sum with a fixed \(n\) is an estimate, not the area. Four left rectangles give \(0.219\), off by a third. The area is the limit as \(n \to \infty\).</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Height at a sample point, times width, summed over the strips. The area is the limit as the strips get thin. For an increasing \(f\), the left sum is low and the right sum is high.</p>
+</div>
+<p>In the Riemann lab, raise \(n\) and switch between left, right, and midpoint samples. The readout tracks the sum against the exact value. Simpson's rule gives the second opinion.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Closed forms for sums of powers exist only for simple integrands. For most functions, the limit is not taken by hand. The next sections find it another way.</p>
+</div>
+</section>
+<section class="topic" id="s3">
+<h2><span class="n">03</span>The definite integral</h2>
+<p>The definite integral is the limit of Riemann sums, for any choice of sample points, as the widest strip shrinks to zero.</p>
+\[
+\int_a^b f(x)\,dx = \lim_{n \to \infty} \sum_{i=1}^{n} f(x_i^*)\,\Delta x.
+\]
+<p>A continuous function on \([a, b]\) always has one. Where \(f\) is negative, the rectangles have negative height. So the integral is a signed area: area above the axis minus area below.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The properties come straight from the sums. A constant factor comes out of every term, so \(\int cf = c\int f\). Sums split, so \(\int (f + g) = \int f + \int g\). Strips on \([a, b]\) and on \([b, c]\) together make strips on \([a, c]\). Reversing the limits makes every \(\Delta x\) negative, so \(\int_b^a f = -\int_a^b f\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a trapezoid by geometry</span>
+<p>\(\int_0^2 (2x + 1)\,dx\) is the area of a trapezoid with parallel sides \(f(0) = 1\) and \(f(2) = 5\), and width \(2\). So it is \(\tfrac12(1 + 5)(2) = 6\).</p>
+<p>The left sum with \(n = 4\) samples \(1, 2, 3, 4\), at width \(1/2\). It gives \(5\). For a line, the left sum misses one triangle per strip. Together they make \(\tfrac12 \cdot (5 - 1) \cdot \tfrac12 = 1\).</p>
+</div>
+<p>The average value of \(f\) on \([a, b]\) is the height of the rectangle with the same area:</p>
+\[
+f_{\text{avg}} = \frac{1}{b - a}\int_a^b f(x)\,dx.
+\]
+<p>For \(\sin x\) on \([0, \pi]\), the integral is \(2\), found in the next section. So the average is \(2/\pi = 0.637\). The peak is \(1\).</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A definite integral is not always an area. \(\int_0^{2\pi} \sin x\,dx = 0\), because the hump below cancels the hump above. The total area between the curve and the axis is \(4\). For area, integrate \(|f|\).</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>The definite integral is a limit of sums. It is a signed area. It is linear, it splits at interior points, and it changes sign when the limits swap.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The proof that every continuous function is integrable is in an analysis course. Functions with infinitely many jumps, or unbounded ones, need more care. Improper integrals come in Calculus II.</p>
+</div>
+</section>
+<section class="topic" id="s4">
+<h2><span class="n">04</span>The Fundamental Theorem</h2>
+<p>Let the upper limit vary. \(A(x) = \int_a^x f(t)\,dt\) is the area accumulated from \(a\) up to \(x\). The theorem has two parts. The first says how fast \(A\) grows. The second turns that into a way to compute integrals.</p>
+<div class="box why"><span class="tag">Why</span>
+<p><strong>Part 1.</strong> For a small \(h \gt 0\), \(A(x + h) - A(x)\) is the area of a thin strip over \([x, x + h]\). Divided by \(h\), it is the average height of \(f\) on that strip. As \(h \to 0\), a continuous \(f\) has average height \(f(x)\) on the strip. So \(A'(x) = f(x)\).</p>
+<p><strong>Part 2.</strong> Let \(F\) be any antiderivative of \(f\). Part 1 says \(A\) is one too. So \(A = F + C\). At \(x = a\), \(A(a) = 0\), so \(C = -F(a)\). At \(x = b\), \(A(b) = F(b) - F(a)\).</p>
+</div>
+\[
+\begin{aligned}
+\frac{d}{dx}\int_a^x f(t)\,dt &= f(x),\\
+\int_a^b f(x)\,dx &= F(b) - F(a).
+\end{aligned}
+\]
+<div class="box ex"><span class="tag">Worked example · the area up to 1</span>
+<p>Let \(A(x) = \int_0^x t^2\,dt\). An antiderivative of \(t^2\) is \(t^3/3\). So \(A(1) = 1/3 - 0 = 1/3\). That is the limit the Riemann sums of section 2 were approaching. Part 1 gives \(A'(1) = 1^2 = 1\) without integrating.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one hump of sine</span>
+<p>\(\int_0^{\pi} \sin x\,dx = [-\cos x]_0^{\pi} = -\cos\pi + \cos 0 = 2\). Halfway, \(A(\pi/2) = 1 - \cos(\pi/2) = 1\), and the height there is \(\sin(\pi/2) = 1\).</p>
+</div>
+<p>When the upper limit is a function of \(x\), the chain rule joins in. \(\tfrac{d}{dx}\int_0^{x^2}\cos t\,dt = \cos(x^2) \cdot 2x\). At \(x = 1\) that is \(2\cos 1 = 1.081\).</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The order is upper minus lower: \(F(b) - F(a)\). Reversing it flips the sign. For \(\int_0^{\pi}\sin x\,dx\), the reverse order gives \(-2\) for an area that is plainly positive.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Accumulated area grows at the rate \(f\). To integrate \(f\) from \(a\) to \(b\), find any antiderivative, and subtract its value at \(a\) from its value at \(b\).</p>
+</div>
+<p>In the FTC lab, drag \(x\). The shaded area is \(A(x)\), and the readout's height is \(f(x)\). A short step in \(x\) shows the area growing at that height.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Part 1 needs \(f\) continuous at \(x\). At a jump, \(A\) still exists, but it has a corner and no derivative there.</p>
+</div>
+</section>
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Net change</h2>
+<p>Part 2 of the theorem, applied to \(F'\), says the integral of a rate is the net change:</p>
+\[
+\int_a^b F'(t)\,dt = F(b) - F(a).
+\]
+<p>The integral of velocity is displacement. The integral of a flow rate is the volume that flowed. Each is a net change, with gains and losses cancelling.</p>
+<div class="box ex"><span class="tag">Worked example · displacement and distance</span>
+<p>A particle has \(v(t) = t^2 - 4\) m/s on \([0, 3]\). An antiderivative is \(t^3/3 - 4t\). The displacement is \((9 - 12) - 0 = -3\) m.</p>
+<p>The velocity is negative until \(t = 2\), then positive. The distance adds the two legs as positive amounts: \(16/3\) m on \([0, 2]\), and \(7/3\) m on \([2, 3]\). The total is \(23/3 = 7.67\) m.</p>
+</div>
+<div class="box why"><span class="tag">Why</span>
+<p>Distance is \(\int_a^b |v(t)|\,dt\). Speed is never negative, so no leg cancels another. Split the interval where \(v\) changes sign, and integrate each piece with the sign that makes it positive.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(|{-3}| = 3\) m is not the distance. That misses the back-and-forth: the particle went \(16/3\) m one way and \(7/3\) m back. Split at the sign change first.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a tank that turns to draining</span>
+<p>Water enters a tank at \(r(t) = 10 - 2t\) litres per minute. Over the first \(5\) minutes the rate is positive. The net change is \(\int_0^5 (10 - 2t)\,dt = 50 - 25 = 25\) L gained.</p>
+<p>Run it to \(t = 8\). The rate turns negative at \(t = 5\), and the tank drains. The net change from \(0\) to \(8\) is \(80 - 64 = 16\) L. So \(9\) L drained out in the last \(3\) minutes. The integral already subtracted them.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Integrate a rate to get a net change. Integrate its absolute value to get a total.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The net change needs a starting value to become a position or an amount. The integral only gives the difference. Physical applications such as work and pressure come in Calculus II.</p>
+</div>
+</section>
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Substitution</h2>
+<p>Substitution is the chain rule read backwards. When the integrand holds a function and its derivative, rename the inside.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The chain rule says \(\tfrac{d}{dx}F(g(x)) = f(g(x))\,g'(x)\), where \(F' = f\). So \(F(g(x))\) is an antiderivative of \(f(g(x))\,g'(x)\). With \(u = g(x)\) and \(du = g'(x)\,dx\):</p>
+\[
+\int f(g(x))\,g'(x)\,dx = \int f(u)\,du.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · a definite substitution</span>
+<p>\(\int_0^1 2x(x^2 + 1)^3\,dx\). Let \(u = x^2 + 1\), so \(du = 2x\,dx\). At \(x = 0\), \(u = 1\). At \(x = 1\), \(u = 2\). The integral becomes \(\int_1^2 u^3\,du = (16 - 1)/4 = 3.75\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a missing constant</span>
+<p>\(\int x\cos(x^2)\,dx\). Let \(u = x^2\), so \(du = 2x\,dx\), and \(x\,dx = \tfrac12\,du\). The integral is \(\tfrac12\int\cos u\,du = \tfrac12\sin(x^2) + C\). Differentiate to check: \(\tfrac12\cos(x^2) \cdot 2x\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an inside of 3x</span>
+<p>\(\int_0^{\pi/3}\sin(3x)\,dx\). Let \(u = 3x\), so \(dx = du/3\), and \(u\) runs from \(0\) to \(\pi\). The integral is \(\tfrac13\int_0^{\pi}\sin u\,du = \tfrac13 \cdot 2 = 2/3\). A linear inside always costs one division by its slope.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · solving back for x</span>
+<p>\(\int_0^3 x\sqrt{x + 1}\,dx\). Let \(u = x + 1\). Then \(du = dx\), but an \(x\) is left over. Solve the substitution for it: \(x = u - 1\). The integral becomes \(\int_1^4 (u - 1)u^{1/2}\,du = \int_1^4 (u^{3/2} - u^{1/2})\,du\).</p>
+<p>That is \(\tfrac25(32 - 1) - \tfrac23(8 - 1) = 12.4 - 4.667 = 7.733\). Simpson's rule on the original integral gives the same four figures.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Keeping the old limits after substituting. \(\int_0^1 u^3\,du = 0.25\), not \(3.75\). Either change the limits to \(u\) values, or return to \(x\) before evaluating. Do not mix the two.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Pick \(u\) as the inside function whose derivative is also present. Convert \(dx\), and convert the limits. A constant factor that is off can be divided out. A missing \(x\) cannot.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Substitution works only when the derivative of the inside is present, up to a constant. Integrals like \(\int x\sin x\,dx\) need integration by parts, the first topic of Calculus II.</p>
+</div>
+</section>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Exponentials and logarithms</h2>
+<p>Each derivative rule from Unit 2 gives an integral rule.</p>
+\[
+\begin{aligned}
+\int e^x\,dx &= e^x + C,\\
+\int \frac{dx}{x} &= \ln|x| + C.
+\end{aligned}
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>The first is \((e^x)' = e^x\) read backwards. For the second, \((\ln x)' = 1/x\) for \(x \gt 0\). For \(x \lt 0\), \(\ln(-x)\) has derivative \(-1/(-x) = 1/x\) by the chain rule. Both cases are \(\ln|x|\). This fills the gap the power rule left at \(n = -1\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two integrals</span>
+<p>\(\int_1^e dx/x = \ln e - \ln 1 = 1\). So the area under \(1/x\) from \(1\) to \(e\) is exactly \(1\), which is one way to define \(e\).</p>
+<p>\(\int_0^1 e^{2x}\,dx\): with \(u = 2x\), it is \(\tfrac12(e^2 - 1) = 3.19\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the tangent</span>
+<p>\(\int\tan x\,dx = \int \sin x/\cos x\,dx\). Let \(u = \cos x\), so \(du = -\sin x\,dx\). The integral is \(-\int du/u = -\ln|\cos x| + C\). On \([0, \pi/4]\) it gives \(-\ln(1/\sqrt{2}) = \tfrac12\ln 2 = 0.347\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · base 2</span>
+<p>\(\int_1^2 2^x\,dx = [2^x/\ln 2]_1^2 = (4 - 2)/0.6931 = 2.885\). The \(\ln 2\) is the constant from the derivative of \(2^x\), now dividing instead of multiplying.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(\int x^{-1}\,dx\) is not \(x^0/0\). The power rule does not apply at \(n = -1\). The answer is \(\ln|x|\). Without the absolute value, it would be undefined for every negative \(x\).</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>\(e^x\) integrates to itself. \(1/x\) integrates to \(\ln|x|\). Other bases follow from \(a^x = e^{x\ln a}\): \(\int a^x\,dx = a^x/\ln a + C\).</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The text can also define \(\ln x\) as \(\int_1^x dt/t\) and build \(e^x\) as its inverse. That route proves the exponential's properties rather than assuming them. It is in §6.6 of the text.</p>
+</div>
+</section>
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Formula sheet</h2>
+<ul>
+<li>\(\int x^n\,dx = x^{n+1}/(n + 1) + C\), for \(n \ne -1\). \(\int dx/x = \ln|x| + C\).</li>
+<li>\(\int e^x\,dx = e^x + C\). \(\int \sin x\,dx = -\cos x + C\). \(\int \cos x\,dx = \sin x + C\).</li>
+<li>\(\sum_{i=1}^{n} i = n(n + 1)/2\). \(\sum_{i=1}^{n} i^2 = n(n + 1)(2n + 1)/6\).</li>
+<li>Riemann sum: \(\sum f(x_i^*)\,\Delta x\), with \(\Delta x = (b - a)/n\).</li>
+<li>\(\int_b^a f = -\int_a^b f\). \(\int_a^c f = \int_a^b f + \int_b^c f\).</li>
+<li>Average value: \(\tfrac{1}{b - a}\int_a^b f\,dx\).</li>
+<li>FTC 1: \(\tfrac{d}{dx}\int_a^x f(t)\,dt = f(x)\). FTC 2: \(\int_a^b f = F(b) - F(a)\).</li>
+<li>Net change: \(\int_a^b F'(t)\,dt = F(b) - F(a)\). Distance: \(\int |v|\,dt\).</li>
+<li>Substitution: \(u = g(x)\), \(du = g'(x)\,dx\), and change the limits.</li>
+</ul>
+</section>
+</main>
+</body>
+</html>
