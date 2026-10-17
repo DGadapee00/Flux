@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 3 · Hibbeler Ch 14</p>
   <h1>Work and energy</h1>
-  <p class="lede">Work connects the speed at two positions. A spring cares about its end stretches. Friction cares about the path. The numbers below are recomputed.</p>
+  <p class="lede">Work connects the speed at two positions. A spring cares about its end stretches. Gravity cares about the change in height. Friction cares about the path. Each rule is derived from \(\sum F = ma\), and the numbers below are recomputed.</p>
   <nav class="toc">
     <a href="#s1"><span>01</span>Principle of work and energy</a>
     <a href="#s2"><span>02</span>Work of a spring</a>
@@ -24,108 +24,177 @@
 <p>Kinetic energy is \(\tfrac{1}{2}mv^2\). The work of every force, from position 1 to position 2, changes that energy.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Along a rod, \(a\,ds = v\,dv\). Multiply by the mass and integrate. The left side is the work. The right side is \(T_2 - T_1\).</p>
+<p>The same holds on any path. Dot Newton's law with a small displacement \(d\vec r = \vec v\,dt\): \(\vec F \cdot d\vec r = m\,(d\vec v/dt)\cdot\vec v\,dt = m\vec v \cdot d\vec v = d(\tfrac12 mv^2)\). Only the force component along the path does work. A normal force, perpendicular to the path, does none.</p>
 </div>
 \[
-T_1 + \sum U_{1-2} = T_2.
+T_1 + \sum U_{1-2} = T_2, \qquad U_{1-2} = \int_1^2 \vec F \cdot d\vec r.
 \]
+<p>The weight is constant, \(-mg\,\hat\jmath\). Its work is \(\int -mg\,dy = -mg\,\Delta y\), whatever the path between the two heights. Lifting costs \(mg\) per unit of height. Falling pays the same back.</p>
 <div class="box ex"><span class="tag">Worked example · released from a stretch</span>
 <p>A 2 kg collar is released on a smooth 30° rod. The spring has \(k = 80\) N/m. The collar starts 0.5 m down the rod from the unstretched point and slides to that point. The spring does 10 J. Gravity does −4.9 J. The speed there is 2.26 m/s.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · halfway up</span>
+<p>Stop the same collar at 0.25 m. The spring work is \(\tfrac12(80)(0.5^2 - 0.25^2) = 7.5\) J. Gravity does \(-2(9.81)(0.25\sin 30^\circ) = -2.45\) J. So \(\tfrac12(2)v^2 = 5.05\) J, and \(v = 2.25\) m/s. Almost all the speed is gained in the first quarter metre, where the spring pushes hardest.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · down a chute in feet</span>
+<p>A crate slides from rest down a smooth chute, 20 ft long at 30°. It drops \(20\sin 30^\circ = 10\) ft. Only the weight works, so \(\tfrac12 mv^2 = mg(10)\), and \(v = \sqrt{2(32.2)(10)} = 25.4\) ft/s. The mass cancels, so the crate's weight is not needed.</p>
+<p>Check with Unit 1: the acceleration down the chute is \(32.2\sin 30^\circ = 16.1\) ft/s², and \(v^2 = 2(16.1)(20) = 644\). The same 25.4 ft/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a sled pulled at an angle</span>
+<p>A 20 kg sled starts from rest and is pulled 10 m across snow by a rope at 30° above the horizontal. The rope tension is 100 N, and \(\mu_k = 0.1\). Only the rope's horizontal part works: \(100\cos 30^\circ \times 10 = 866\) J. The rope's vertical part lifts some weight off the snow, so \(N = 196.2 - 50 = 146.2\) N, and friction does \(-0.1 \times 146.2 \times 10 = -146\) J. The net 720 J gives \(v = \sqrt{2(720)/20} = 8.48\) m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a force that grows</span>
+<p>A 4 kg block starts from rest on a smooth floor. A horizontal force \(F = 6x^2\) N, with \(x\) in metres, pushes it from \(x = 0\) to \(x = 2\) m. The work is \(\int_0^2 6x^2\,dx = 2x^3\big|_0^2 = 16\) J. So \(\tfrac12(4)v^2 = 16\), and \(v = 2.83\) m/s. The force's final value, 24 N, times 2 m would overstate the work threefold.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a pull through a rope</span>
+<p>A rope runs from a block on the floor, up over a small pulley 3 m above the floor, to a hand that pulls with a constant 50 N. The block moves from 4 m to 1 m, measured horizontally from below the pulley. The pull's direction on the block changes all the way, but its work is simple: the hand's force times the rope it takes in. The rope from pulley to block shortens from \(\sqrt{3^2 + 4^2} = 5\) m to \(\sqrt{3^2 + 1^2} = 3.16\) m. The work on the block is \(50 \times 1.84 = 91.9\) J.</p>
+</div>
+<p>Two bodies joined by an inextensible cable form one system. The cable's tension does positive work on one body and equal negative work on the other, so it drops out. For Unit 2's Atwood machine, released from rest, after 1.635 m: \((4 - 2)(9.81)(1.635) = \tfrac12(6)v^2\), so \(v = 3.27\) m/s. That matches the constant-acceleration result.</p>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The spring work is not \(\tfrac{1}{2}ks_2^2\) by itself. Both end stretches enter: \(\tfrac{1}{2}k(s_1^2 - s_2^2)\). Hibbeler §14.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Sum the work of the weight, the spring, and friction. Solve for the unknown speed, or for the unknown distance.</p>
+<p>Sum the work of the weight, the spring, and friction. Solve for the unknown speed, or for the unknown distance. A force perpendicular to the motion does no work.</p>
 </div>
-<p>Measure \(x\) down the rod from the unstretched point. The spring lies along the rod, so the stretch equals \(x\). Work and energy give the speed at two positions and leave out the time between them.</p>
+<p>In the Collar lab, the readout lists each force's work separately. A step-by-step integration of \(\sum F = ma\) along the rod arrives at the same speed.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Work and energy give the speed at two positions and leave out the time between them. They also cannot find a force that does no work, such as the rod's normal force. For those, return to \(\sum F = ma\) in the normal direction. Measure \(x\) down the rod from the unstretched point: the spring lies along the rod, so the stretch equals \(x\).</p>
+</div>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Work of a spring</h2>
 <p>A spring force depends on the stretch, not on the shape of the trip. Integrate \(-ks\,ds\). The path in between cancels.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>The spring force is \(-ks\), opposite the stretch. Integrate from \(s_1\) to \(s_2\). Every intermediate stretch cancels, and the work is \(\tfrac{1}{2}k(s_1^2 - s_2^2)\).</p>
+<p>The sign tells the story. If the spring gets longer, \(s_2 \gt s_1\), the work is negative: the body pulled the spring out and lost energy to it. If the spring relaxes, the work is positive. The work done <em>on</em> the spring by the body is the negative of this.</p>
 </div>
-
 \[
 U_s = \tfrac{1}{2}k(s_1^2 - s_2^2).
 \]
+<p>On a graph of spring force against stretch, the force is a straight line through the origin. The work between two stretches is the area of the trapezoid under that line, which is the average force times the change in stretch: \(\tfrac12 k(s_1 + s_2)(s_1 - s_2)\). That is the same formula, read from a picture.</p>
 <div class="box ex"><span class="tag">Worked example · out and back</span>
 <p>A 2 kg collar on a 25° rod moves at 4 m/s with a stretch of 0.2 m. It goes out to 0.6 m and returns to 0.2 m. \(k = 50\) N/m and \(\mu_k = 0.2\). The spring work is 0 J, the same as the end stretches alone. Friction does −2.85 J. The speed on return is 3.63 m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a bumper in feet</span>
+<p>A 3000 lb cart rolls into a bumper spring at 2 ft/s. \(k = 1500\) lb/ft. The mass is \(3000/32.2 = 93.2\) slug, so the kinetic energy is \(\tfrac12(93.2)(2^2) = 186\) ft·lb. The spring absorbs it all at maximum compression: \(\tfrac12(1500)x^2 = 186\). So \(x = 0.498\) ft, or 5.98 in. The peak spring force is \(1500 \times 0.498 = 748\) lb.</p>
+</div>
+<p>When the spring is anchored off the path, the stretch is a distance, not the coordinate. Find the spring's length at each end with Pythagoras, subtract the natural length, and use those stretches in the same formula.</p>
+<div class="box ex"><span class="tag">Worked example · a spring anchored off the rod</span>
+<p>A spring with \(k = 100\) N/m and natural length 0.3 m is anchored 0.4 m above a horizontal rod. The collar moves from 0.3 m along the rod to the point directly below the anchor. The spring's length goes from \(\sqrt{0.3^2 + 0.4^2} = 0.5\) m to 0.4 m. Its stretch goes from 0.2 m to 0.1 m. The spring does \(\tfrac12(100)(0.04 - 0.01) = 1.5\) J on the collar.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Going past the end and coming back does not add spring work. The extra stretch is undone on the way back. Hibbeler §14.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Use the stretch at the start and the stretch at the end. Do not add the stretch at a turnaround.</p>
+<p>Use the stretch at the start and the stretch at the end. Do not add the stretch at a turnaround. Stretch is measured from the spring's natural length.</p>
 </div>
-<p>The spring is linear and massless. A coil with its own mass, or a force that is not proportional to stretch, does not use \(\tfrac{1}{2}k\) times the change in the square of the stretch.</p>
+<p>In the Collar lab, the Out and back scenario prints the spring work and the direct end-to-end value side by side. They agree to the joule.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The spring is linear and massless. A coil with its own mass carries kinetic energy of its own, and a force that is not proportional to stretch does not use \(\tfrac{1}{2}k\) times the change in the square of the stretch. A real bumper also loses some energy to internal damping, so the cart rebounds slower than it arrived.</p>
+</div>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Friction on a slide</h2>
 <p>Kinetic friction opposes the motion. On a straight rod its magnitude is \(\mu_k mg\cos\theta\). Its work is negative on every leg.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>Kinetic friction has size \(\mu_k N\) and opposes the velocity on every leg. On a straight rod, \(N = mg\cos\theta\). The work on a leg is minus that force times the length of the leg.</p>
+<p>Kinetic friction has size \(\mu_k N\) and opposes the velocity on every leg. On a straight rod, \(N = mg\cos\theta\). The work on a leg is minus that force times the length of the leg. When the direction of motion reverses, so does friction, and its work stays negative.</p>
 </div>
-
 <div class="box ex"><span class="tag">Worked example · a rough slide</span>
 <p>Repeat the smooth release with \(\mu_k = 0.2\). The spring still does 10 J. Friction does −1.699 J. The speed at the unstretched point falls to 1.843 m/s.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · where it stops</span>
 <p>A 2 kg block hits a horizontal spring at 3 m/s. \(k = 40\) N/m and \(\mu_k = 0.1\). It stops after a compression of 0.624 m. Set \(T_2 = 0\) and solve the quadratic.</p>
+<p>The equation is \(9 - 20x^2 - 1.962x = 0\). Its positive root is \(x = 0.624\) m. The spring holds 7.78 J at that point, and friction has taken 1.22 J.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the rebound</span>
+<p>At full compression the spring pushes with \(40 \times 0.624 = 24.9\) N. Friction can hold at most a few newtons, so the block comes back. On the way out the spring returns its 7.78 J, and friction takes another 1.22 J. The block leaves the spring with \(\tfrac12(2)v^2 = 6.55\) J, at 2.56 m/s. It arrived at 3 m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a box skids in feet</span>
+<p>A 10 lb box slides across a floor at 12 ft/s. \(\mu_k = 0.3\). Friction is \(0.3 \times 10 = 3\) lb, and its work over a distance \(d\) is \(-3d\). The kinetic energy is \(\tfrac12(10/32.2)(12^2) = 22.4\) ft·lb. So the box stops after \(d = 7.45\) ft. The weight cancels in \(d = v^2/(2\mu_k g)\).</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Do not drop the friction term because a spring is also in the problem. Friction removes energy on the way in, and again on the way out. Hibbeler §14.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>\(U_f = -\mu_k N\, s\), with \(s\) the distance traveled, not the net displacement.</p>
+<p>\(U_f = -\mu_k N\, s\), with \(s\) the distance traveled, not the net displacement. The energy friction removes becomes heat.</p>
 </div>
-<p>On a rough rod the normal is \(mg\cos\theta\), the weight component perpendicular to the rod. If the collar turns around, add the return leg. The kinetic coefficient is constant.</p>
+<p>In the Collar lab, the rough scenario lists the friction work with the others. Raise \(\mu_k\) until the collar no longer reaches the end.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>On a rough rod the normal is \(mg\cos\theta\), the weight component perpendicular to the rod. A spring that pushes into the rod, or a curved rod, changes \(N\) along the way. The kinetic coefficient is constant, and the heat it makes is never followed: no part of the model warms up.</p>
+</div>
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Power and efficiency</h2>
 <p>Power is the work per time. For a force along the velocity, \(P = Fv\). Efficiency is output power divided by input power.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>Work along the velocity is force times distance. Divide by time and the distance per time is the speed, so \(P = Fv\). Efficiency is that output divided by the power the motor draws.</p>
+<p>The work in a short time is \(\vec F \cdot d\vec r\). Divide by \(dt\): \(P = \vec F \cdot \vec v\). Along the velocity that is \(Fv\). Efficiency is that output divided by the power the motor draws.</p>
 </div>
-
+\[
+P = \vec F \cdot \vec v, \qquad \eta = \frac{P_{\text{out}}}{P_{\text{in}}}.
+\]
 <div class="box ex"><span class="tag">Worked example · a steady climb</span>
 <p>A 4 kg block is pulled up a 25° incline at 2 m/s. \(\mu_k = 0.15\). The motor efficiency is 0.8. The output power is 43.8 W. The motor draws 54.8 W.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · climbing a grade in horsepower</span>
+<p>A 3500 lb car holds 60 mph, which is 88 ft/s, up a 5% grade. The grade's angle has \(\sin\theta = 0.0499\). Ignoring drag, the engine must supply the weight's downhill part times the speed: \(3500 \times 0.0499 \times 88 = 15{,}400\) ft·lb/s. Divide by 550: 28.0 hp at the wheels.</p>
+</div>
+<p>Power also limits acceleration. At constant power, the driving force is \(P/v\), so it falls as the speed rises. A 100 kW car of 1500 kg at 20 m/s can push with at most 5000 N. Its acceleration is at most \(3.33\) m/s², less at higher speed. Work and energy also give the time: at constant power, \(P\,t = \tfrac12 mv^2\) from rest. The same car reaches 20 m/s in at least \(1500(400)/(2 \times 100{,}000) = 3.0\) s, with every loss ignored.</p>
+<div class="box ex"><span class="tag">Worked example · an elevator motor</span>
+<p>An elevator car and its load weigh 2000 lb and rise at a steady 3 ft/s. The cable tension equals the weight, so the output power is \(2000 \times 3 = 6000\) ft·lb/s, or 10.9 hp. With a motor efficiency of 0.75, the motor draws \(10.9/0.75 = 14.5\) hp. A counterweight would cut both, because it pays back what the car's weight costs.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Power is not force times distance. That product is work. Divide by time, or multiply the force by the speed. Hibbeler §14.4.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>One horsepower is 550 ft·lb/s. Efficiency is always below 1 for a real motor, so the input is the larger power.</p>
+<p>One horsepower is 550 ft·lb/s, or 746 W. Efficiency is always below 1 for a real machine, so the input is the larger power. Efficiencies in series multiply: a 0.9 motor through a 0.95 gearbox gives 0.855.</p>
 </div>
-<p>Power here is a force along a steady velocity. The model leaves out a force that changes through the stroke, and a motor whose efficiency depends on speed.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Power here is a force along a steady velocity. The model leaves out a force that changes through the stroke, a motor whose efficiency depends on speed, and air drag, which grows with the square of speed. At highway speed, drag usually costs more power than the grade.</p>
+</div>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Path independence</h2>
 <p>The work of a conservative force equals \(-\Delta V\). Gravity and a spring are conservative. Kinetic friction is not: its work follows the length of the path.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>\(V = mgy + \tfrac{1}{2}ks^2\). The difference \(V_1 - V_2\) uses the ends. No integral along the route remains.</p>
+<p>Section 1 showed the weight's work is \(-mg\,\Delta y\). Section 2 showed the spring's is \(-\tfrac12 k\,\Delta(s^2)\). Each depends only on the ends. So each is minus the change of a potential: \(V = mgy + \tfrac{1}{2}ks^2\). The difference \(V_1 - V_2\) uses the ends. No integral along the route remains.</p>
+<p>When only conservative forces do work, \(T_1 + V_1 = T_2 + V_2\). That is conservation of mechanical energy.</p>
 </div>
+\[
+U_{\text{cons}} = V_1 - V_2, \qquad T_1 + V_1 = T_2 + V_2.
+\]
 <div class="box ex"><span class="tag">Worked example · three paths</span>
 <p>A 1.2 kg particle moves from (0.2, 1) m to (1.4, 0.4) m. A spring with \(k = 20\) N/m is anchored at the origin. With no friction, the straight path, the corner, and the arch each do −3.74 J.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · friction on the arch</span>
 <p>The same ends with \(\mu_k = 0.25\), and friction of magnitude \(\mu_k mg\). The straight path does −7.69 J. The arch does −8.2 J. The conservative part is still −3.74 J.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · a pendulum released from 60°</span>
+<p>A 0.5 kg bob on a 1.2 m string is released from 60°. The string does no work, and gravity is conservative. The bob drops \(1.2(1 - \cos 60^\circ) = 0.6\) m, so \(v = \sqrt{2(9.81)(0.6)} = 3.43\) m/s at the bottom.</p>
+<p>Energy gives the speed. Unit 2's n-direction equation gives the tension: \(T = m(g + v^2/L) = 0.5(9.81 + 9.81) = 9.81\) N. From 60°, the bottom tension is exactly twice the weight.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the least release height for a loop</span>
+<p>A particle slides from rest down a smooth track into a vertical loop of radius \(\rho\). Unit 2 showed it stays on at the top if \(v_{\text{top}}^2 \ge g\rho\). Energy from the release height \(h\) to the top, at height \(2\rho\), gives \(mgh = mg(2\rho) + \tfrac12 m(g\rho)\). So \(h = 2.5\rho\). For \(\rho = 0.4\) m, release from at least 1.0 m. That gives \(\sqrt{2(9.81)(1.0)} = 4.43\) m/s at the bottom, Unit 2's \(\sqrt{5g\rho}\).</p>
+</div>
+<p>A closed loop tells conservative and non-conservative forces apart. Around any closed path, gravity and a spring do zero total work, because the ends coincide. Friction does negative work on every leg, so its total around a loop is never zero. That is why no potential exists for it.</p>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Do not cancel friction because the ends match. Matching ends cancel the weight and the spring. They do not cancel friction. Hibbeler §14.5.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Use \(-\Delta V\) for the weight and the spring. Add \(-\mu_k mg\) times the path length when that friction model is the one in the problem.</p>
 </div>
-<p>Matching ends cancel the weight and the spring. They do not cancel friction. The friction model on these paths has size \(\mu_k mg\), the horizontal-surface case.</p>
+<p>In the Paths lab, drag the arch higher. The conservative work stays at −3.74 J. The friction work grows with the length of the path.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The friction model on these paths has size \(\mu_k mg\), the horizontal-surface case. On a curved surface \(N\) depends on the curvature and the speed, and the friction work would need them both. The potential \(mgy\) also assumes uniform gravity, fine near the ground and wrong for orbits.</p>
+</div>
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Formula sheet</h2>
 <ul>
-<li>\(T_1 + \sum U_{1-2} = T_2\), with \(T = \tfrac{1}{2}mv^2\).</li>
+<li>\(T_1 + \sum U_{1-2} = T_2\), with \(T = \tfrac{1}{2}mv^2\) and \(U = \int \vec F \cdot d\vec r\).</li>
 <li>Spring: \(U_s = \tfrac{1}{2}k(s_1^2 - s_2^2)\). Weight: \(U_g = -mg\,\Delta y\), with \(y\) upward.</li>
-<li>Kinetic friction on a rod: \(U_f = -\mu_k (mg\cos\theta)\, s\).</li>
-<li>Power: \(P = Fv\). Efficiency \(\eta = P_\mathrm{out}/P_\mathrm{in}\). One horsepower is 550 ft·lb/s.</li>
+<li>Kinetic friction on a rod: \(U_f = -\mu_k (mg\cos\theta)\, s\), with \(s\) the distance traveled.</li>
+<li>Power: \(P = \vec F \cdot \vec v\). Efficiency \(\eta = P_\mathrm{out}/P_\mathrm{in}\). One horsepower is 550 ft·lb/s, or 746 W.</li>
+<li>Conservative: \(V = mgy + \tfrac12 ks^2\), and \(T_1 + V_1 = T_2 + V_2\) when nothing else works.</li>
 <li>This unit uses \(g = 9.81\) m/s², or \(32.2\) ft/s². The slug is the US mass.</li>
 </ul>
 <p>The sections left out of the course stay left out. This unit does not add them.</p>
