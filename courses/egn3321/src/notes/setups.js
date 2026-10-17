@@ -243,6 +243,21 @@ export const SETUPS = {
         },
         read: (c) => ({ speed: [c.speed, 2.2572106680591424], spring: [c.spring, 10] }),
       },
+      {
+        tag: 'halfway up',
+        lab: 'collar',
+        scenario: 'smooth',
+        setup(s) {
+          s.mass = 2;
+          s.k = 80;
+          s.theta = 30;
+          s.mu = 0;
+          s.x1 = 0.5;
+          s.x2 = 0.25;
+          s.v1 = 0;
+        },
+        read: (c) => ({ speed: [c.speed, 2.25], spring: [c.spring, 7.5], gravity: [c.gravity, -2.45] }),
+      },
     ],
     s2: [
       {
