@@ -54,6 +54,10 @@ export const CHAPTER_TITLES = {
   7: 'Parametric and polar',
 };
 
+export function examLabel(exam) {
+  return exam ? `Unit ${exam.n}` : 'Unit';
+}
+
 export function examById(id) {
   return EXAMS.find((e) => e.id === id) || EXAMS[0];
 }
