@@ -87,6 +87,36 @@ await page.goBack();
 await page.waitForTimeout(400);
 const afterBack = await page.evaluate(() => location.hash);
 
+/** Notes: open with N, show a worked example in its lab, and fit the window at both widths. */
+async function notesPass(width, height) {
+  await page.setViewportSize({ width, height });
+  await go('#/u1/limits', 'limits');
+  await page.keyboard.press('n');
+  await page.waitForSelector('#notes:not([hidden]) .nt-doc section.topic', { timeout: 10000 });
+  const open = await page.evaluate(() => {
+    const panel = document.getElementById('notes');
+    const r = panel.getBoundingClientRect();
+    return {
+      sections: panel.querySelectorAll('.nt-doc section.topic').length,
+      katexErrors: panel.querySelectorAll('.katex-error').length,
+      wide: panel.scrollWidth > panel.clientWidth + 1,
+      page: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+      inside: r.left >= 0 && r.right <= window.innerWidth + 1,
+    };
+  });
+  if (open.sections < 5) mismatches.push({ name: `notes.${width}.sections`, got: open.sections, exp: '5 or more' });
+  if (open.katexErrors) mismatches.push({ name: `notes.${width}.katex`, got: open.katexErrors, exp: 0 });
+  if (open.wide || open.page || !open.inside) mismatches.push({ name: `notes.${width}.fit`, got: open, exp: 'no sideways scroll' });
+  await page.click('#notes .nt-show[data-ex="s3:0"]');
+  await page.waitForFunction(() => Math.abs((window.__flux?.computed?.limit ?? NaN) - 6) < 1e-9, null, { timeout: 10000 });
+  if (await page.evaluate(() => !document.getElementById('notes').hidden)) await page.keyboard.press('Escape');
+  const closed = await page.evaluate(() => document.getElementById('notes').hidden);
+  if (!closed) mismatches.push({ name: `notes.${width}.escape`, got: 'open', exp: 'closed' });
+  return open;
+}
+const notesWide = await notesPass(1280, 800);
+const notesPhone = await notesPass(380, 820);
+
 await page.setViewportSize({ width: 380, height: 780 });
 await page.waitForTimeout(300);
 const phone = await page.evaluate(() => ({
@@ -105,4 +135,4 @@ if (mismatches.length) {
   console.error('mismatches:', mismatches);
   process.exit(1);
 }
-console.log('smoke: all labs ok', { labs: catalogLabs.length, fp: g.fp, back: afterBack, phone });
+console.log('smoke: all labs ok', { labs: catalogLabs.length, fp: g.fp, back: afterBack, phone, notesWide, notesPhone });

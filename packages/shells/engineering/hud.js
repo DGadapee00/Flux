@@ -1,6 +1,6 @@
 import { sceneScale, workPlane, lenLabel, PLANE_AXES } from '@flux/core/scene3d/frame.js';
 import { bindCourseHeader } from '../header.js';
-import { mountNotesTab } from './notes.js';
+import { mountNotesTab } from '../notes.js';
 import { drawSeries, drawVx, drawAC, drawVI } from './plot.js';
 import { choices, matchesExpect, outcomes, run } from './predict.js';
 import { setLawEl, prose, mathText } from './shared.js';

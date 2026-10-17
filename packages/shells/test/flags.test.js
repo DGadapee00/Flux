@@ -3,6 +3,7 @@ import test from 'node:test';
 import { defineCourse, defineLab } from '@flux/core';
 import { setup } from '@flux/core/plot2d/plot.js';
 import { createHUD } from '../engineering/hud.js';
+import { createHUD as createMathHUD } from '../math/hud.js';
 import { createStage } from '../engineering/stage.js';
 import { installDOM } from './dom.js';
 
@@ -40,6 +41,7 @@ function page() {
       <div id="insight-body"></div>
       <canvas id="mini-plot"></canvas>
       <div id="readout"></div>
+      <div id="sheet-switch"></div>
       <div id="toggle-host"></div>
       <button id="btn-reset-cam" type="button"></button>
       <div id="setup-hint"></div>
@@ -216,6 +218,57 @@ test('a fixture course with notes opens them beside the lab', async () => {
   assert.equal(seen.escape, 0);
   key('Escape');
   assert.equal(seen.escape, 1);
+});
+
+test('the math HUD mounts the same Notes tab', async () => {
+  page();
+  const set = {
+    exam: 'u1',
+    title: 'Motion of a point',
+    chapters: '12',
+    load: async () => NOTES_HTML,
+    sections: [{ id: 's1', n: '1', title: 'Area under the graph', lab: 'diagram', ch: [] }],
+  };
+  const seen = { escape: 0 };
+  const hud = createMathHUD(
+    api({
+      escape() {
+        seen.escape += 1;
+      },
+    }),
+    {
+      ...catalog,
+      notes: {
+        notesForExam: () => set,
+        allNotes: () => [set],
+        setupsFor: () => [],
+        matchExamples: () => [],
+        DERIVATIONS: [],
+        LAB_META: catalog.labMeta,
+        examById: catalog.examById,
+        examLabel: (exam) => `Unit ${exam.n}`,
+        CHAPTER_TITLES: {},
+        countFor: () => 0,
+        esc: (value) => String(value),
+        store: { getItem: () => null, setItem() {} },
+      },
+    },
+  );
+  assert.equal(document.getElementById('btn-practice').parentNode.className, 'mode-tabs');
+  key('n');
+  await new Promise((resolve) => setTimeout(resolve, 30));
+  assert.equal(hud.notes.isOpen(), true);
+  assert.equal(document.getElementById('notes').textContent.includes('Area under the graph'), true);
+  key('Escape');
+  assert.equal(hud.notes.isOpen(), false);
+  assert.equal(seen.escape, 0);
+});
+
+test('a math course with no notes has no Notes tab', () => {
+  page();
+  const hud = createMathHUD(api(), catalog);
+  assert.equal(hud.notes, null);
+  assert.equal(document.getElementById('btn-notes'), null);
 });
 
 test('the wordmark is FLUX, the course code, and the title', () => {

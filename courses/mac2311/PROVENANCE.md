@@ -13,8 +13,10 @@ The book is CC BY 4.0: [creativecommons.org/licenses/by/4.0](https://creativecom
 
 Statements are written fresh. Numbers are generated. A worked case may use a section's setup, cited as `OpenStax Calc 1 §2.3`, and never an invented example number. No figures and no text are copied.
 
+The notes in `src/notes/content/` follow the book's section list. Their prose, derivations, and worked examples are written here, and every number in them is recomputed.
+
 ## What does not ship
 
 No worksheets, slides, exams, or notes from a course. No student names, grades, or submissions.
 
-Progress stays in the browser under `flux.mac2311.problems.v1` and `flux.mac2311.exam.v1`.
+Progress stays in the browser under `flux.mac2311.problems.v1` and `flux.mac2311.exam.v1`. The notes panel remembers its width and height under `flux.mac2311.notes.width.v1` and `flux.mac2311.notes.full.v1`.
