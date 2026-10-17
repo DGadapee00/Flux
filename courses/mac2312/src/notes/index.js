@@ -19,6 +19,22 @@ export const NOTES = {
       { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u2: {
+    exam: 'u2',
+    title: 'Techniques of integration',
+    chapters: '3',
+    file: 'u2-techniques.html',
+    load: () => import('./content/u2-techniques.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'Integration by parts', lab: null, ch: ['3'], topics: ['parts', 'symbolic'] },
+      { id: 's2', n: 2, title: 'Trigonometric integrals', lab: null, ch: ['3'], topics: ['trig integrals'] },
+      { id: 's3', n: 3, title: 'Trigonometric substitution', lab: null, ch: ['3'], topics: ['trig sub'] },
+      { id: 's4', n: 4, title: 'Partial fractions', lab: null, ch: ['3'], topics: ['partial fractions'] },
+      { id: 's5', n: 5, title: 'Numerical integration', lab: 'numint', ch: ['3'], topics: ['numerical'], home: true },
+      { id: 's6', n: 6, title: 'Improper integrals', lab: 'improper', ch: ['3'], topics: ['improper'], home: true },
+      { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;

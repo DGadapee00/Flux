@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Techniques of integration</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">MAC 2312 · Calculus II · Unit 2 · OpenStax Calculus Volume 2, Ch 3</p>
+  <h1>Techniques of integration</h1>
+  <p class="lede">Substitution undoes the chain rule. This unit adds the other tools: parts undoes the product rule, trigonometric identities and substitutions tame roots, partial fractions split quotients. When no tool fits, numerical rules estimate the integral, and a limit handles infinite ones. The numbers below are recomputed.</p>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>Integration by parts</a>
+    <a href="#s2"><span>02</span>Trigonometric integrals</a>
+    <a href="#s3"><span>03</span>Trigonometric substitution</a>
+    <a href="#s4"><span>04</span>Partial fractions</a>
+    <a href="#s5"><span>05</span>Numerical integration</a>
+    <a href="#s6"><span>06</span>Improper integrals</a>
+    <a href="#s7"><span>07</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Integration by parts</h2>
+<p>The product rule says \((uv)' = u'v + uv'\). Integrate both sides and rearrange. One integral trades for another.</p>
+\[
+\int u\,dv = uv - \int v\,du.
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>Integrating \((uv)' = u'v + uv'\) gives \(uv = \int v\,du + \int u\,dv\), since \(du = u'\,dx\) and \(dv = v'\,dx\). Solve for \(\int u\,dv\). For a definite integral, the \(uv\) term is evaluated at the two limits.</p>
+</div>
+<p>The choice of \(u\) decides whether the new integral is easier. Choose for \(u\) the factor that gets simpler when differentiated. A common order of preference is: logarithms, inverse trig functions, algebraic powers, trig functions, exponentials.</p>
+<div class="box ex"><span class="tag">Worked example · x times e to the x</span>
+<p>\(\int_0^1 x e^x\,dx\). Take \(u = x\) and \(dv = e^x\,dx\). Then \(du = dx\) and \(v = e^x\). So the integral is \([x e^x]_0^1 - \int_0^1 e^x\,dx = e - (e - 1) = 1\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a logarithm alone</span>
+<p>\(\int_1^e \ln x\,dx\). There seems to be one factor, but \(dv = dx\) is the other. Take \(u = \ln x\), so \(du = dx/x\) and \(v = x\). The integral is \([x\ln x]_1^e - \int_1^e dx = e - (e - 1) = 1\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · x sin x over one hump</span>
+<p>\(\int_0^{\pi} x\sin x\,dx\). Take \(u = x\), \(dv = \sin x\,dx\), so \(v = -\cos x\). The integral is \([-x\cos x]_0^{\pi} + \int_0^{\pi}\cos x\,dx = \pi + 0 = \pi\).</p>
+</div>
+<p>Sometimes parts returns the original integral. Then solve for it like an unknown. Two rounds on \(\int e^x \sin x\,dx\) give \(e^x\sin x - e^x\cos x - \int e^x\sin x\,dx\). Moving the integral across gives \(\tfrac12 e^x(\sin x - \cos x) + C\).</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Choosing \(u = e^x\) and \(dv = x\,dx\) for \(\int x e^x\,dx\) makes it worse. The new integral is \(\int \tfrac12 x^2 e^x\,dx\), with a higher power. If the new integral is harder, swap the roles.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>\(\int u\,dv = uv - \int v\,du\). Let \(u\) be the factor that simplifies when differentiated. If the original integral comes back, solve for it.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Repeated parts on \(x^n e^x\) can be organised in a table, the tabular method. It is a bookkeeping shortcut for the same formula, and the text shows it.</p>
+</div>
+</section>
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Trigonometric integrals</h2>
+<p>Integrals of products of powers of \(\sin x\) and \(\cos x\) yield to two identities: \(\sin^2 x + \cos^2 x = 1\), and the half-angle forms</p>
+\[
+\begin{aligned}
+\sin^2 x &= \tfrac12(1 - \cos 2x),\\
+\cos^2 x &= \tfrac12(1 + \cos 2x).
+\end{aligned}
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>If either power is odd, save one factor of that function for \(du\). Convert the rest with \(\sin^2 + \cos^2 = 1\). The integral becomes a polynomial in the other function. If both powers are even, nothing can be saved. Lower the powers with the half-angle forms instead.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an odd power of sine</span>
+<p>\(\int_0^{\pi/2} \sin^3 x\cos^2 x\,dx\). Save one \(\sin x\). Write \(\sin^2 x = 1 - \cos^2 x\). With \(u = \cos x\), \(du = -\sin x\,dx\), and \(u\) runs from \(1\) to \(0\). The integral is \(\int_0^1 (u^2 - u^4)\,du = 1/3 - 1/5 = 2/15\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an even power</span>
+<p>\(\int_0^{\pi} \sin^2 x\,dx = \tfrac12\int_0^{\pi}(1 - \cos 2x)\,dx = \tfrac12\bigl[x - \tfrac12\sin 2x\bigr]_0^{\pi} = \pi/2\). That is half the interval's length, since \(\sin^2\) and \(\cos^2\) share it equally.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Substituting \(u = \sin x\) in \(\int \sin^2 x\,dx\) needs a \(\cos x\,dx\) that is not there. Even powers of a single function do not reduce by substitution. Use the half-angle form.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Odd power: save one factor and convert the rest. Even powers: half-angle formulas. Check the answer by differentiating.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Powers of \(\tan\) and \(\sec\) follow the same idea, with \(\sec^2 x = 1 + \tan^2 x\) and \(du = \sec^2 x\,dx\). The text's §3.2 lists those cases.</p>
+</div>
+</section>
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Trigonometric substitution</h2>
+<p>A root of a quadratic is a side of a right triangle in disguise. Substituting a trigonometric function turns the root into a single trig term.</p>
+<ul>
+<li>\(\sqrt{a^2 - x^2}\): let \(x = a\sin\theta\). Then the root is \(a\cos\theta\).</li>
+<li>\(\sqrt{a^2 + x^2}\): let \(x = a\tan\theta\). Then the root is \(a\sec\theta\).</li>
+<li>\(\sqrt{x^2 - a^2}\): let \(x = a\sec\theta\). Then the root is \(a\tan\theta\).</li>
+</ul>
+<div class="box why"><span class="tag">Why</span>
+<p>Each choice makes an identity do the work. With \(x = a\sin\theta\), \(a^2 - x^2 = a^2(1 - \sin^2\theta) = a^2\cos^2\theta\). On \(-\pi/2 \le \theta \le \pi/2\), \(\cos\theta \ge 0\), so the root is \(a\cos\theta\) with no sign trouble. The other two use \(1 + \tan^2 = \sec^2\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · part of a circle</span>
+<p>\(\int_0^1 \sqrt{4 - x^2}\,dx\). Let \(x = 2\sin\theta\), \(dx = 2\cos\theta\,d\theta\). Then \(\theta\) runs from \(0\) to \(\pi/6\), and the integrand becomes \(4\cos^2\theta\). The half-angle form gives \([2\theta + \sin 2\theta]_0^{\pi/6} = \pi/3 + \sqrt{3}/2 = 1.913\).</p>
+<p>Geometry agrees. The region is a sector of angle \(\pi/6\) in a circle of radius \(2\), with area \(\pi/3\), plus a triangle of area \(\sqrt{3}/2\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the arcsine</span>
+<p>\(\int dx/\sqrt{1 - x^2}\). With \(x = \sin\theta\), \(dx = \cos\theta\,d\theta\) and the root is \(\cos\theta\). The integrand becomes \(1\), so the integral is \(\theta = \arcsin x\), plus \(C\). From \(0\) to \(1/2\) it is \(\pi/6 = 0.524\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Forgetting \(dx = a\cos\theta\,d\theta\). For part of the circle, dropping it leaves \(\int_0^{\pi/6} 2\cos\theta\,d\theta = 1\), far from \(1.913\). Every substitution converts \(dx\), not only the integrand.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Match the root to a Pythagorean identity. Convert \(x\), \(dx\), and the limits. Read the answer back in \(x\) from a right triangle.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>A quadratic that is not in one of the three forms needs completing the square first. \(\sqrt{x^2 + 2x + 5}\) becomes \(\sqrt{(x + 1)^2 + 4}\), and then the tangent substitution applies.</p>
+</div>
+</section>
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Partial fractions</h2>
+<p>A rational function whose bottom factors can be split into simpler fractions. Each piece integrates to a logarithm or an arctangent.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>For distinct linear factors, write</p>
+\[
+\frac{p(x)}{(x - r_1)(x - r_2)} = \frac{A}{x - r_1} + \frac{B}{x - r_2}.
+\]
+<p>Multiply through by \((x - r_1)\) and let \(x \to r_1\). The \(B\) term vanishes, leaving \(A = p(r_1)/(r_1 - r_2)\). This is the cover-up rule: cover the factor, and evaluate the rest at its root.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two linear factors</span>
+<p>\(\int_0^1 \dfrac{3x + 5}{(x + 1)(x + 3)}\,dx\). Cover \(x + 1\) and set \(x = -1\): \(A = 2/2 = 1\). Cover \(x + 3\) and set \(x = -3\): \(B = -4/(-2) = 2\). The integral is \([\ln(x + 1) + 2\ln(x + 3)]_0^1 = \ln 2 + 2\ln(4/3) = 1.269\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a difference of squares</span>
+<p>\(\int_2^3 dx/(x^2 - 1)\). The bottom is \((x - 1)(x + 1)\). The cover-up gives \(A = 1/2\) and \(B = -1/2\). The integral is \(\tfrac12[\ln|x - 1| - \ln|x + 1|]_2^3 = \tfrac12(\ln\tfrac24 - \ln\tfrac13) = \tfrac12\ln 1.5 = 0.203\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a constant on top</span>
+<p>\(\int_0^1 \dfrac{dx}{(x + 1)(x + 2)}\). The cover-up gives \(A = 1\) and \(B = -1\). The integral is \([\ln(x + 1) - \ln(x + 2)]_0^1 = \ln\tfrac23 - \ln\tfrac12 = \ln\tfrac43 = 0.288\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Partial fractions need the top's degree below the bottom's. For \(x^2/(x^2 - 1)\), divide first: \(1 + 1/(x^2 - 1)\). Splitting without dividing produces constants that do not exist.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Divide if the top's degree is not lower. Factor the bottom. Find each constant by cover-up. Integrate each piece as a logarithm.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>A repeated factor \((x - r)^2\) needs both \(A/(x - r)\) and \(B/(x - r)^2\). An irreducible quadratic needs \((Ax + B)/(x^2 + c^2)\), which integrates to a logarithm plus an arctangent. Both are in §3.4 of the text.</p>
+</div>
+</section>
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Numerical integration</h2>
+<p>Most integrals have no antiderivative in closed form. Numerical rules estimate them from samples of the integrand. Split \([a, b]\) into \(n\) panels of width \(h = (b - a)/n\).</p>
+<p>The trapezoidal rule joins neighbouring samples with straight lines. Simpson's rule fits a parabola through each pair of panels, and needs \(n\) even.</p>
+\[
+\begin{aligned}
+T_n &= \tfrac{h}{2}\,(f_0 + 2f_1 + \cdots + 2f_{n-1} + f_n),\\
+S_n &= \tfrac{h}{3}\,(f_0 + 4f_1 + 2f_2 + \cdots + 4f_{n-1} + f_n).
+\end{aligned}
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>A trapezoid over one panel has area \(\tfrac{h}{2}(f_i + f_{i+1})\). Adding them counts every interior sample twice. That is also the average of the left and right Riemann sums.</p>
+<p>The parabola through three equally spaced points has area \(\tfrac{h}{3}(f_0 + 4f_1 + f_2)\). Integrate it with its vertex at the middle sample to check. Chaining those blocks gives the weights \(1, 4, 2, 4, \ldots, 4, 1\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · four panels on sine</span>
+<p>Estimate \(\int_0^{\pi}\sin x\,dx = 2\) with \(n = 4\). The trapezoidal rule gives \(1.8961\), off by \(0.1039\). Simpson's rule gives \(2.00456\), off by \(0.00456\). The same five samples feed both.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · doubling the panels</span>
+<p>With \(n = 8\), the trapezoid error falls to \(0.0258\), about a quarter. Simpson's falls to \(0.000269\), about a sixteenth. The trapezoid error shrinks like \(1/n^2\). Simpson's shrinks like \(1/n^4\).</p>
+</div>
+<p>Error bounds make that precise. If \(|f''| \le M\) on \([a, b]\), then \(|E_T| \le M(b - a)^3/(12n^2)\). If \(|f^{(4)}| \le K\), then \(|E_S| \le K(b - a)^5/(180n^4)\). For sine with \(n = 4\), both \(M\) and \(K\) are \(1\). The bounds are \(0.162\) and \(0.0066\). The true errors sit under them.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Simpson's rule with an odd \(n\) is not defined. The parabolas pair the panels. With \(n = 5\), the last panel has no partner, and the weights do not close with a \(1\).</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Trapezoid: weights \(1, 2, \ldots, 2, 1\), times \(h/2\), with error like \(1/n^2\). Simpson: weights \(1, 4, 2, \ldots, 4, 1\), times \(h/3\), with error like \(1/n^4\).</p>
+</div>
+<p>In the Numerical lab, step from \(4\) to \(8\) to \(16\) panels. The readout shows both errors falling at their own rates.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Both bounds need a bound on a derivative, which is often unknown. In practice, the estimate is recomputed with \(n\) doubled, and the change between the two is taken as the error.</p>
+</div>
+</section>
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Improper integrals</h2>
+<p>An integral over an infinite interval, or of an unbounded function, is defined as a limit of ordinary integrals. If the limit is finite, the integral converges. Otherwise it diverges.</p>
+\[
+\int_1^{\infty} f(x)\,dx = \lim_{b \to \infty}\int_1^b f(x)\,dx.
+\]
+<div class="box ex"><span class="tag">Worked example · the tail of 1 over x squared</span>
+<p>\(\int_1^b x^{-2}\,dx = 1 - 1/b\). At \(b = 4\) the area is \(0.75\), and \(0.25\) is still missing. At \(b = 8\) the area is \(0.875\). As \(b \to \infty\), the area approaches \(1\). So \(\int_1^{\infty} x^{-2}\,dx = 1\): an unbounded region with finite area.</p>
+</div>
+<div class="box why"><span class="tag">Why</span>
+<p>For \(p \ne 1\), \(\int_1^b x^{-p}\,dx = (b^{1-p} - 1)/(1 - p)\). If \(p \gt 1\), \(b^{1-p} \to 0\), and the integral is \(1/(p - 1)\). If \(p \lt 1\), \(b^{1-p} \to \infty\). If \(p = 1\), the integral is \(\ln b \to \infty\). So</p>
+\[
+\int_1^{\infty} \frac{dx}{x^p} \ \text{converges exactly when} \ p \gt 1.
+\]
+</div>
+<p>An unbounded integrand works the same way, with the limit at the bad point. \(\int_0^1 x^{-1/2}\,dx = \lim_{a \to 0^+}(2 - 2\sqrt{a}) = 2\). Near \(0\) the exponent test flips: \(\int_0^1 x^{-p}\,dx\) converges exactly when \(p \lt 1\).</p>
+<p>When no antiderivative is available, compare. If \(0 \le f \le g\) and \(\int g\) converges, so does \(\int f\). For \(x \ge 1\), \(e^{-x^2} \le e^{-x}\). Since \(\int_1^{\infty} e^{-x}\,dx = 1/e = 0.368\), the integral of \(e^{-x^2}\) converges, and is smaller.</p>
+<div class="box ex"><span class="tag">Worked example · parts out to infinity</span>
+<p>\(\int_0^{\infty} x e^{-x}\,dx\). By parts, \(\int_0^b x e^{-x}\,dx = 1 - (b + 1)e^{-b}\). The exponential beats the linear factor, so \((b + 1)e^{-b} \to 0\). The integral is \(1\). At \(b = 10\) the finite piece is already \(0.9995\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Missing a bad point inside the interval. \(\int_{-1}^{1} x^{-2}\,dx\) evaluated as \([-1/x]_{-1}^{1}\) gives \(-2\). A positive function cannot have a negative integral. The integrand is unbounded at \(0\), and each half diverges. So the integral diverges.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Replace the bad end with a variable, integrate, and take the limit. \(\int_1^{\infty} x^{-p}\) converges for \(p \gt 1\). \(\int_0^1 x^{-p}\) converges for \(p \lt 1\). Compare when you cannot integrate.</p>
+</div>
+<p>In the Improper lab, push the bound from \(2\) to \(8\). The area climbs toward \(1\), and the tail shrinks like \(1/b\).</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>A limit comparison test, which compares the ratio \(f/g\) rather than \(f\) and \(g\) directly, is in the text. The same convergence ideas return for series in Unit 3.</p>
+</div>
+</section>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Formula sheet</h2>
+<ul>
+<li>Parts: \(\int u\,dv = uv - \int v\,du\).</li>
+<li>\(\sin^2 x = \tfrac12(1 - \cos 2x)\). \(\cos^2 x = \tfrac12(1 + \cos 2x)\).</li>
+<li>\(\sqrt{a^2 - x^2}\): \(x = a\sin\theta\). \(\sqrt{a^2 + x^2}\): \(x = a\tan\theta\). \(\sqrt{x^2 - a^2}\): \(x = a\sec\theta\).</li>
+<li>Cover-up: for \(\dfrac{p(x)}{(x - r_1)(x - r_2)}\), \(A = p(r_1)/(r_1 - r_2)\).</li>
+<li>Trapezoid: \(\tfrac{h}{2}(f_0 + 2f_1 + \cdots + 2f_{n-1} + f_n)\). Error \(\le M(b - a)^3/(12n^2)\).</li>
+<li>Simpson: \(\tfrac{h}{3}(f_0 + 4f_1 + 2f_2 + \cdots + 4f_{n-1} + f_n)\). Error \(\le K(b - a)^5/(180n^4)\).</li>
+<li>\(\int_1^{\infty} x^{-p}\,dx = 1/(p - 1)\) for \(p \gt 1\). Diverges for \(p \le 1\).</li>
+<li>Comparison: \(0 \le f \le g\) and \(\int g\) converges, so \(\int f\) converges.</li>
+</ul>
+</section>
+</main>
+</body>
+</html>
