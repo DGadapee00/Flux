@@ -505,6 +505,19 @@ export const SETUPS = {
         },
         read: (c) => ({ x: [c.x, 1], v: [c.v, 0] }),
       },
+      {
+        tag: 'at 45°',
+        lab: 'slider-crank',
+        scenario: 'mid',
+        setup(s) {
+          s.r = 0.2;
+          s.l = 0.8;
+          s.theta = 45;
+          s.omega = 10;
+          s.alpha = 0;
+        },
+        read: (c) => ({ x: [c.x, 0.929], v: [c.v, -1.67] }),
+      },
     ],
     s4: [
       {
@@ -539,6 +552,16 @@ export const SETUPS = {
         },
         read: (c) => ({ omega: [c.omega, -5], speed: [c.speed, 4] }),
       },
+      {
+        tag: 'a four-bar',
+        lab: 'ic',
+        scenario: 'linkage',
+        setup(s) {
+          s.linkTheta = 60;
+          s.linkOmega = 2;
+        },
+        read: (c) => ({ omega: [c.omega, -0.516], speed: [c.speed, 1.17], icx: [c.icx, 2.44], icy: [c.icy, 4.22] }),
+      },
     ],
     s5: [
       {
@@ -566,6 +589,19 @@ export const SETUPS = {
           s.alpha = 0;
         },
         read: (c) => ({ a: [c.a, 15], v: [c.v, 0] }),
+      },
+      {
+        tag: 'the slider at 45°',
+        lab: 'slider-crank',
+        scenario: 'mid',
+        setup(s) {
+          s.r = 0.2;
+          s.l = 0.8;
+          s.theta = 45;
+          s.omega = 10;
+          s.alpha = 0;
+        },
+        read: (c) => ({ a: [c.a, -14.2] }),
       },
     ],
     s6: [

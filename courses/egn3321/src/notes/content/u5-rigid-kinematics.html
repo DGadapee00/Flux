@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 5 · Hibbeler Ch 16</p>
   <h1>Rigid-body kinematics</h1>
-  <p class="lede">A rigid body in the plane has translation and one rotation. The instantaneous centre is the point that is at rest right now. It moves as the body moves.</p>
+  <p class="lede">A rigid body in the plane has translation and one rotation. The instantaneous centre is the point that is at rest right now. It moves as the body moves. Each relation below comes from one fact: the distance between two points of a rigid body never changes. The numbers are recomputed.</p>
   <nav class="toc">
     <a href="#s1"><span>01</span>Fixed-axis rotation</a>
     <a href="#s2"><span>02</span>Absolute motion analysis</a>
@@ -24,28 +24,47 @@
 <h2><span class="n">01</span>Fixed-axis rotation</h2>
 <p>A point on a body that rotates about a fixed axis moves on a circle. Its speed is the radius times \(\omega\). Its tangential acceleration is the radius times \(\alpha\).</p>
 <div class="box why"><span class="tag">Why</span>
-<p>Points in contact share one arc speed, \(r\omega\). An open belt keeps the sense of rotation. External gears push back, so the sense reverses. The same ratio gives \(\alpha\).</p>
+<p>A point at radius \(r\) travels the arc \(s = r\theta\), with \(\theta\) in radians. Differentiate: \(v = r\dot\theta = r\omega\). Differentiate again: \(a_t = r\alpha\). The point also moves on a circle, so Unit 1's normal acceleration applies: \(a_n = v^2/r = r\omega^2\), toward the axis.</p>
+<p>With constant \(\alpha\), the angle obeys the same equations as a particle on a line: \(\omega = \omega_0 + \alpha t\), \(\theta = \theta_0 + \omega_0 t + \tfrac12\alpha t^2\), and \(\omega^2 = \omega_0^2 + 2\alpha\Delta\theta\).</p>
 </div>
-
+\[
+v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
+\]
+<div class="box ex"><span class="tag">Worked example · a flywheel spins up</span>
+<p>A flywheel starts from rest and speeds up at 3 rad/s² for 4 s. Then \(\omega = 12\) rad/s, and it has turned 24 rad, which is 3.82 revolutions. A point 0.5 m out moves at 6 m/s. Its tangential acceleration is 1.5 m/s². Its normal acceleration is \(0.5 \times 144 = 72\) m/s², and the normal part dominates.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a grinder winds down</span>
+<p>A grinder at 3000 rpm is switched off and coasts to rest in 20 s at a steady rate. In rad/s, \(\omega_0 = 314\). So \(\alpha = -314/20 = -15.7\) rad/s². The angle turned is the average speed times the time, \(157 \times 20 = 3140\) rad, which is 500 revolutions.</p>
+</div>
+<p>Two wheels joined by a belt or by meshing teeth share one speed at the contact. That links their angular speeds.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Points in contact share one arc speed, \(r\omega\). An open belt keeps the sense of rotation. External gears push back, so the sense reverses. Differentiating \(r_1\omega_1 = r_2\omega_2\) gives the same ratio for \(\alpha\).</p>
+</div>
 <div class="box ex"><span class="tag">Worked example · an open belt</span>
 <p>An open belt joins pulleys of radii 0.15 m and 0.3 m. The driver turns at 20 rad/s. The belt speed is 3 m/s. The driven pulley turns at 10 rad/s, in the same sense.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · external gears</span>
 <p>External gears have pitch radii 0.1 m and 0.25 m. The driver turns at 8 rad/s and speeds up at 2 rad/s². The driven gear turns at −3.2 rad/s and at −0.8 rad/s².</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · a motor pulley in feet</span>
+<p>A motor turns a pulley of 3 in radius at 1800 rpm. In radians per second, \(\omega = 1800 \times 2\pi/60 = 188.5\) rad/s. The radius is 0.25 ft, so the belt runs at 47.1 ft/s. The ratio of radii carries over unchanged in any unit.</p>
+</div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>An open belt does not reverse the rotation. External gears do. The pitch line still has one speed. Hibbeler §16.3.</p>
+<p>An open belt does not reverse the rotation. External gears do. The pitch line still has one speed. And \(v = r\omega\) needs \(\omega\) in rad/s: 1800 rpm times 0.25 ft is not a speed. Hibbeler §16.3.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Match the arc speeds. Keep the sign for a belt. Flip it for external gears.</p>
+<p>Match the arc speeds. Keep the sign for a belt. Flip it for external gears. Convert rpm before multiplying by a radius.</p>
 </div>
-<p>The belt does not slip, and the gear teeth stay in mesh. The model leaves out belt creep and a tooth leaving contact.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The belt does not slip, and the gear teeth stay in mesh. The model leaves out belt creep, the small slip as a loaded belt stretches around the pulley, and a tooth leaving contact. It also treats the axis as fixed, with no bearing play.</p>
+</div>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Absolute motion analysis</h2>
 <p>Write the coordinate you want in terms of one angle. Differentiate that equation. The velocity comes out of the first derivative, and the acceleration out of the second.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>The rod closes the linkage: \(\sin\phi = (r/\ell)\sin\theta\). The slider coordinate is \(x = r\cos\theta + \ell\cos\phi\). Time derivatives of \(x\) are the slider velocity and acceleration.</p>
+<p>Differentiate the closure: \(\cos\phi\,\dot\phi = (r/\ell)\cos\theta\,\dot\theta\). That gives \(\dot\phi\). Then \(\dot x = -r\sin\theta\,\omega - \ell\sin\phi\,\dot\phi\).</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · mid stroke</span>
 <p>A crank of 0.2 m turns at 10 rad/s. The rod is 0.8 m. At 90° the slider is at 0.775 m. Its velocity is −2 m/s.</p>
@@ -53,44 +72,63 @@
 <div class="box ex"><span class="tag">Worked example · fully extended</span>
 <p>The same crank at 0° puts the slider at 1 m. The velocity is 0. The crank and the rod are in one line.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · at 45°</span>
+<p>The same crank at 45°. The closure gives \(\sin\phi = 0.25\sin 45^\circ = 0.177\), so \(\phi = 10.2^\circ\). The slider is at \(0.141 + 0.787 = 0.929\) m. The rod turns at \(\dot\phi = 0.25\cos 45^\circ \times 10/\cos\phi = 1.80\) rad/s. The slider velocity is \(-1.414 - 0.8(0.177)(1.80) = -1.67\) m/s.</p>
+<p>The crank's own term, \(-r\omega\sin\theta\), is \(-1.41\) m/s. The rod's swing adds the rest. At 90° the rod term vanishes, which is why the mid-stroke speed is exactly \(r\omega\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the ladder by geometry</span>
+<p>A 4 m ladder makes angle \(\theta\) with the floor. Its foot is at \(x = 4\cos\theta\) and its top at \(y = 4\sin\theta\). With the foot moving out at 2 m/s at \(\theta = 60^\circ\): \(\dot x = -4\sin\theta\,\dot\theta = 2\), so \(\dot\theta = -0.577\) rad/s. Then \(\dot y = 4\cos\theta\,\dot\theta = -1.155\) m/s. Section 4 finds the same numbers another way.</p>
+</div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Write the position, then differentiate. Do not start from the acceleration formula. Hibbeler §16.4.</p>
+<p>Write the position, then differentiate. Do not start from the acceleration formula. And differentiate every angle that changes: dropping \(\dot\phi\) at 45° gives −1.41 m/s instead of −1.67 m/s. Hibbeler §16.4.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>One position equation. Differentiate it once for \(v\), and again for \(a\).</p>
+<p>One position equation. Differentiate it once for \(v\), and again for \(a\). Use the chain rule on every angle.</p>
 </div>
-<p>One position equation is enough when the linkage has one degree of freedom. The model leaves out a flexible rod and a joint with clearance.</p>
+<p>In the Slider-crank lab, sweep the crank angle. The readout's velocity and acceleration come from the derivatives, and a finite difference of the position agrees.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>One position equation is enough when the linkage has one degree of freedom. The model leaves out a flexible rod and a joint with clearance. Mechanisms with two loops need two closure equations, solved together.</p>
+</div>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Relative velocity</h2>
 <p>Two points of a rigid body differ by a rotation. The velocity of B is the velocity of A plus \(\omega\) crossed with the vector from A to B.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>A rigid body keeps the distance from A to B fixed. The relative motion is a rotation, so the velocity of B is the velocity of A plus \(\omega\times\mathbf{r}_{B/A}\).</p>
+<p>Positions add: \(\vec r_B = \vec r_A + \vec r_{B/A}\). A rigid body keeps the length of \(\vec r_{B/A}\) fixed, so that vector can only turn. A vector of fixed length turning at \(\omega\) changes at \(\omega\times\vec r_{B/A}\), perpendicular to itself. Differentiate the sum.</p>
 </div>
-
 \[
 \vec v_B = \vec v_A + \omega\times\vec r_{B/A}.
 \]
+<p>Any point of the body can serve as A. Choose the one whose velocity is known completely, such as a pin on a crank or a point on a guide. Choose B where one direction is known, such as a slider. Each vector equation gives two scalar equations, so it can find two unknowns: usually \(\omega\) and one speed.</p>
 <div class="box ex"><span class="tag">Worked example · a bar</span>
 <p>Point A moves at (1, 0.5) m/s. Point B is 0.4 m to the right and 0.3 m up. \(\omega\) is 2 rad/s counterclockwise. The velocity of B is (0.4, 1.3) m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the ladder by relative velocity</span>
+<p>The same 4 m ladder at 60°. Take A at the foot, moving at (2, 0) m/s, and B at the top, which can only move vertically. Then \(\vec r_{B/A} = (-2, 3.46)\) m. The cross product gives \(\omega\mathbf{k}\times\vec r_{B/A} = (-3.46\omega, -2\omega)\).</p>
+<p>B has no horizontal velocity, so \(2 - 3.46\omega = 0\), and \(\omega = 0.577\) rad/s. Then \(v_{B,y} = -2(0.577) = -1.155\) m/s. Geometry and relative velocity agree.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a wheel's top, relatively</span>
+<p>A wheel of radius \(R\) rolls with its centre at \(v\) and \(\omega = -v/R\) (clockwise). Take A at the centre. The top is at \(\vec r_{B/A} = (0, R)\). Then \(\omega\mathbf{k}\times(0, R) = (-\omega R, 0) = (v, 0)\). So the top moves at \(v + v = 2v\). The bottom, at \((0, -R)\), gets \(v - v = 0\). Section 6 reaches both from the instantaneous centre.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>\(\omega\times\vec r\) is perpendicular to the bar. It is not a component along the bar. Hibbeler §16.5.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Positive \(\omega\) is counterclockwise: \(\omega\mathbf{k}\times(x, y) = (-\omega y,\ \omega x)\).</p>
+<p>Positive \(\omega\) is counterclockwise: \(\omega\mathbf{k}\times(x, y) = (-\omega y,\ \omega x)\). Each constraint, such as a guide or a pin, gives one scalar equation.</p>
 </div>
-<p>The body is rigid, so the distance from A to B is fixed. A body that bends would need another term in the relative velocity.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The body is rigid, so the distance from A to B is fixed. A body that bends would need another term in the relative velocity. The equation also assumes plane motion: one \(\omega\), along \(\mathbf{k}\).</p>
+</div>
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Instantaneous centre</h2>
 <p>The instantaneous centre is the point of the body, or of its extension, whose velocity is zero at this instant. Every other point moves perpendicular to the line drawn from the centre, with speed \(\omega\) times that distance.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>The instantaneous centre is the point whose velocity is zero right now. The perpendiculars to two known velocities meet there. Every other speed is \(\omega\) times the distance from that point.</p>
+<p>Put A at the instantaneous centre, where \(\vec v_A = 0\). The relative velocity equation leaves \(\vec v_B = \omega\times\vec r_{B/IC}\). So every point moves perpendicular to its line from the centre, at \(\omega\) times its distance. Turned around, the perpendiculars to two known velocities meet at the centre.</p>
 </div>
-
 <div class="box ex"><span class="tag">Worked example · a sliding ladder</span>
 <p>A 4 m ladder leans at 60° to the floor. The foot moves out at 2 m/s. The centre is the corner across from the ladder. \(\omega\) is 0.577 rad/s. The top falls at 1.155 m/s.</p>
+<p>The foot is \(4\sin 60^\circ = 3.46\) m below the centre, so \(\omega = 2/3.46\). The top is \(4\cos 60^\circ = 2\) m from it, so its speed is \(2\omega\).</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · a shallower ladder</span>
 <p>The same ladder at 30°, with the same foot speed, has \(\omega = 1\) rad/s. The top falls at 3.46 m/s. A shallower ladder drops the top faster.</p>
@@ -98,21 +136,30 @@
 <div class="box ex"><span class="tag">Worked example · the contact point</span>
 <p>A wheel of radius 0.4 m rolls at 2 m/s. The contact point is the instantaneous centre. \(\omega\) is −5 rad/s. The top moves at 4 m/s.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · the middle of the ladder</span>
+<p>The ladder's midpoint, at 60°, is 2 m from the instantaneous centre, the half-diagonal of the rectangle the ladder spans. It moves at \(2 \times 0.577 = 1.155\) m/s, perpendicular to that line. Every point on the ladder is at a different distance, so every point has a different speed.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a four-bar</span>
+<p>A four-bar has a 1 m crank pinned at the origin, a 2.5 m coupler, and a 2 m rocker pinned 3 m away along the ground. The crank is at 60° and turns at 2 rad/s, so its tip A, at (0.5, 0.866) m, moves at 2 m/s perpendicular to the crank. The coupler's other end, B, is at (2.74, 1.98) m, and it moves perpendicular to the rocker.</p>
+<p>Extend the crank line and the rocker line. They meet at (2.44, 4.22) m, the coupler's instantaneous centre. A is 3.88 m from it, so the coupler turns at \(2/3.88 = 0.516\) rad/s, clockwise. B is 2.26 m from it, so B moves at \(0.516 \times 2.26 = 1.17\) m/s. The rocker turns at \(1.17/2 = 0.583\) rad/s.</p>
+</div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The instantaneous centre is the point with zero velocity. It is not the mass centre, and it moves as the body moves. Hibbeler §16.6.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Draw the lines through two points, each perpendicular to that point’s velocity. They meet at the centre.</p>
+<p>Draw the lines through two points, each perpendicular to that point's velocity. They meet at the centre. If they are parallel, the body is translating, and \(\omega = 0\).</p>
 </div>
-<p>The instantaneous centre is at rest only at this instant. It is not a pin. Using it as a fixed axis at a later time is a different problem.</p>
+<p>In the Centre lab, move the foot speed or the angle. The centre stays at the corner of the rectangle, and the speeds scale with the distances to it.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The instantaneous centre is at rest only at this instant. It is not a pin. Using it as a fixed axis at a later time is a different problem. It gives velocities only: the instantaneous centre's own acceleration is not zero, so it cannot be used for accelerations.</p>
+</div>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Relative acceleration</h2>
 <p>The acceleration of B adds three pieces: the acceleration of A, the tangential piece \(\alpha\times r\), and the centripetal piece \(-\omega^2 r\).</p>
 <div class="box why"><span class="tag">Why</span>
-<p>Differentiate \(\mathbf{v}_B = \mathbf{v}_A + \omega\times\mathbf{r}\). One new piece is \(\alpha\times\mathbf{r}\), tangent to the relative position. The other is \(-\omega^2\mathbf{r}\), toward A.</p>
+<p>Differentiate \(\mathbf{v}_B = \mathbf{v}_A + \omega\times\mathbf{r}\). The product rule gives two new pieces. One is \(\dot\omega\times\mathbf{r} = \alpha\times\mathbf{r}\), tangent to the relative position. The other is \(\omega\times(\omega\times\mathbf{r})\), which in the plane is \(-\omega^2\mathbf{r}\), toward A.</p>
 </div>
-
 \[
 \vec a_B = \vec a_A + \alpha\times\vec r - \omega^2\vec r.
 \]
@@ -122,21 +169,30 @@
 <div class="box ex"><span class="tag">Worked example · the inner dead centre</span>
 <p>Folded, the same crank still has speed 0. The acceleration is 15 m/s², outward along the slider.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · the slider at 45°</span>
+<p>At 45° the slider's acceleration is −14.2 m/s². A centred second difference of the position, \(\omega^2\,x''(\theta)\), gives the same −14.22 m/s².</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the ladder's top</span>
+<p>Keep the ladder's foot at a steady 2 m/s. At 60°, \(\dot\theta = -0.577\) rad/s. A steady foot means \(\ddot x = 0\), and differentiating \(\dot x = -4\sin\theta\,\dot\theta\) gives \(\ddot\theta = -\cos\theta\,\dot\theta^2/\sin\theta = -0.192\) rad/s². Then \(\ddot y = 4(-\sin\theta\,\dot\theta^2 + \cos\theta\,\ddot\theta) = -1.54\) m/s². The top speeds up as it falls, though the foot does not.</p>
+</div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Zero velocity does not mean zero acceleration. The \(-\omega^2 r\) term remains at a dead centre. Hibbeler §16.7.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Keep the centripetal term even when the point you care about is stopped.</p>
+<p>Keep the centripetal term even when the point you care about is stopped. Two constraint directions give two scalar equations for \(\alpha\) and one unknown acceleration.</p>
 </div>
-<p>The centripetal term stays in the acceleration when the velocity is zero. The model leaves out a crank whose length changes.</p>
+<p>In the Slider-crank lab, set the crank to 0° and then to 180°. The speed reads zero both times. The acceleration does not.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The centripetal term stays in the acceleration when the velocity is zero. The model leaves out a crank whose length changes, and the Coriolis term that a point sliding along a rotating body would add. That case is rotating axes, §16.8, which the course leaves out.</p>
+</div>
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Rolling without slip</h2>
 <p>A wheel that rolls without slip has its contact point instantaneously at rest. That point is the instantaneous centre. The centre of the wheel moves at \(v = R\omega\), and the top moves at \(2v\).</p>
 <div class="box why"><span class="tag">Why</span>
 <p>No slip means the contact point matches the ground, so its velocity is zero. That point is the instantaneous centre. The wheel centre is one radius away, and the top is two.</p>
+<p>No slip also ties distance to angle. A wheel that turns through \(\theta\) lays down an arc \(R\theta\) of its rim, so its centre moves \(s = R\theta\). Differentiate twice: \(v_G = R\omega\) and \(a_G = R\alpha\).</p>
 </div>
-
 <div class="box ex"><span class="tag">Worked example · the contact point</span>
 <p>A wheel of radius 0.4 m rolls at 2 m/s. The contact point has speed 0. Its acceleration is 10 m/s² toward the centre.</p>
 </div>
@@ -146,24 +202,37 @@
 <div class="box ex"><span class="tag">Worked example · a side point</span>
 <p>The point level with the centre moves at 2.83 m/s. The acceleration is still 10 m/s² toward the centre.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · a wheel speeding up</span>
+<p>Let the same wheel's centre accelerate at 1 m/s², so \(\alpha = 2.5\) rad/s². At the contact point the tangential pieces cancel: \(a_G\) forward and \(\alpha R\) backward. Only the 10 m/s² upward remains. At the top they add: 2 m/s² forward and 10 m/s² down, a total of 10.2 m/s².</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a bicycle wheel in feet</span>
+<p>A bicycle rolls at 15 mph, which is 22 ft/s, on wheels of 13 in radius. \(\omega = 22/(13/12) = 20.3\) rad/s, or 194 rpm. The top of each tyre moves at 44 ft/s, while the bottom is at rest on the road.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a planet gear</span>
+<p>A planet gear of radius 0.1 m rolls around the outside of a fixed sun gear of radius 0.2 m. The arm carrying the planet's centre turns at 3 rad/s. The planet's centre is 0.3 m from the sun's centre, so it moves at 0.9 m/s. The planet touches the fixed sun at its instantaneous centre, 0.1 m from its own centre. So the planet spins at \(0.9/0.1 = 9\) rad/s, three times the arm.</p>
+</div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The contact point is instantaneously at rest. It is not a fixed point, so it still has acceleration \(v^2/R\) toward the centre. Hibbeler §16.6 and §16.7.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Speed from the contact point: zero at the ground, \(v\) at the centre, \(2v\) at the top. Acceleration of a rim point: \(v^2/R\) toward the centre.</p>
+<p>Speed from the contact point: zero at the ground, \(v\) at the centre, \(2v\) at the top. Acceleration of a rim point: \(v^2/R\) toward the centre, plus the \(\alpha\) terms when the wheel speeds up.</p>
 </div>
-<p>No slip is a constraint on the velocity. It does not say whether friction can enforce that constraint. The force question belongs to kinetics.</p>
+<p>In the Rolling lab, move the point around the rim. The speed traces the distance from the contact point, and the acceleration size stays at \(v^2/R\) while the wheel rolls steadily.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>No slip is a constraint on the velocity. It does not say whether friction can enforce that constraint. The force question belongs to kinetics, in Unit 6. The wheel and the ground are also rigid: a real tyre flattens at the contact, so its rolling radius is a little less than its free radius.</p>
+</div>
 </section>
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Formula sheet</h2>
 <ul>
+<li>\(v = r\omega\), \(a_t = r\alpha\), \(a_n = r\omega^2\). Constant \(\alpha\): \(\omega^2 = \omega_0^2 + 2\alpha\Delta\theta\).</li>
 <li>Open belt, same sense: \(r_1\omega_1 = r_2\omega_2\). External gears flip the sign.</li>
 <li>\(\vec v_B = \vec v_A + \omega\times\vec r_{B/A}\).</li>
 <li>\(\vec a_B = \vec a_A + \alpha\times\vec r - \omega^2\vec r\).</li>
-<li>The instantaneous centre is where the perpendiculars to two velocities meet.</li>
-<li>Rolling without slip: contact speed 0, top speed \(2v\), rim acceleration \(v^2/R\) toward the centre.</li>
+<li>The instantaneous centre is where the perpendiculars to two velocities meet. Use it for velocities only.</li>
+<li>Rolling without slip: contact speed 0, top speed \(2v\), rim acceleration \(v^2/R\) toward the centre. \(a_G = R\alpha\).</li>
 <li>Slider-crank: \(\sin\phi = (r/\ell)\sin\theta\), and \(x = r\cos\theta + \ell\cos\phi\).</li>
-<li>Angles on the sliders are in degrees. The derivatives use radians.</li>
+<li>Angles on the sliders are in degrees. The derivatives use radians. 1 rpm is \(2\pi/60\) rad/s.</li>
 <li>A belt may be stated in feet. The speed ratio is the same.</li>
 <li>Rotating axes, §16.8, stay out of this unit.</li>
 </ul>
