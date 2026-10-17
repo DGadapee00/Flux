@@ -39,7 +39,7 @@ let readings = 0;
 const words = {};
 const MIN_WORDS = 3000;
 /** Units not yet brought to the depth rules. This list only shrinks. */
-const PENDING = new Set(['u4', 'u5', 'u6', 'u7']);
+const PENDING = new Set(['u5', 'u6', 'u7']);
 for (const [key, set] of Object.entries(NOTES)) {
   const name = `${key} (${set.title})`;
   const exam = EXAMS.find((e) => e.id === set.exam);
