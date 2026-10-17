@@ -75,9 +75,9 @@ Checks each course already runs, which the port keeps:
 
 - PHY 2049: tex-check, physics selftest, problems-check, notes-check, derive-check. `scripts/smoke.mjs` and `scripts/gallery.mjs` need the dev server on 5174.
 - MAC 2313: tex-check, math selftest, problems-check. Analytic partials against differences, Fubini both orders, Jacobians included.
-- Statics: tex-check, statics selftest, problems-check. The residual of ΣF = 0 and ΣM = 0, joints against sections, composite parts against integration.
+- Statics: tex-check, statics selftest, problems-check. The residual of ΣF = 0 and ΣM = 0, joints against sections, composite parts against integration. `npm run layout` on 5176.
 - STA 3032: stats-check, tex-check, problems-check, labs-check, route test. `npm run overflow` and smoke on 5177. Smoke fails when a page is wider than a 380px phone.
-- EGN 3321: tex-check, problems-check, labs-check, notes-check, route test, on port 5181. Three significant figures, four when the leading digit is 1. Both unit systems go through `subjects/src/convert.js`. The sections left out are in `courses/egn3321/CONVENTIONS.md`.
+- EGN 3321: tex-check, problems-check, labs-check, notes-check, route test, on port 5181. `npm run layout` opens every lab and scenario at 1280×800 and 380×820, and fails when the readout bar covers a panel or a plot, a readout value overflows its cell, the a, v, s plot runs below its panel's fold, or the page scrolls sideways. Statics runs the same check, from `packages/shells/engineering/layout-check.mjs`. Three significant figures, four when the leading digit is 1. Both unit systems go through `subjects/src/convert.js`. The sections left out are in `courses/egn3321/CONVENTIONS.md`.
 
 TeX inside a JS string is a `String.raw` template. tex-check fails when a backslash is eaten.
 

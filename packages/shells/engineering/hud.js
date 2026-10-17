@@ -342,6 +342,33 @@ export function createHUD(api, catalog) {
     observer.observe(plotCanvas);
   }
 
+  /**
+   * A side panel that the readout bar runs under stops above the bar, and the phone sheet sits on it.
+   * The bar's height changes with the lab and when a value wraps, so it is measured, not assumed.
+   */
+  const readoutEl = $('readout');
+  const sidePanels = [$('eq-panel'), document.querySelector('.controls')].filter(Boolean);
+  const cleared = new Map();
+  const setClear = (el, name, px) => {
+    const key = `${name}|${px}`;
+    if (cleared.get(el) === key) return;
+    cleared.set(el, key);
+    el.style.setProperty(name, `${px}px`);
+  };
+  const clearReadout = () => {
+    if (!readoutEl) return;
+    const bar = readoutEl.getBoundingClientRect();
+    const shown = bar.height > 0;
+    for (const el of sidePanels) {
+      const side = el.getBoundingClientRect();
+      const under = shown && side.width > 0 && bar.left < side.right && side.left < bar.right;
+      setClear(el, '--readout-clear', under ? Math.max(64, Math.ceil(window.innerHeight - bar.top + 12)) : 64);
+    }
+    setClear(document.documentElement, '--bar-clear', shown ? Math.ceil(window.innerHeight - bar.top + 8) : 0);
+  };
+  if (readoutEl && typeof ResizeObserver !== 'undefined') new ResizeObserver(clearReadout).observe(readoutEl);
+  window.addEventListener('resize', clearReadout);
+
   function update(state, computed, lab) {
     if (!lab) {
       $('eq-live').innerHTML = '';
@@ -378,6 +405,7 @@ export function createHUD(api, catalog) {
     drawPlot(lastPlot);
     bindPredict();
     renderPredict(lab);
+    clearReadout();
   }
 
   return { mount, update, notes: notesTab };

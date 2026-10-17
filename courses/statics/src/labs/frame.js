@@ -323,7 +323,7 @@ export default defineLab({
       ]);
     }
     const B = Math.hypot(sol.values.Bx, sol.values.By);
-    const sup = (model.supports || []).map((s) => `${s.at}: ${Math.hypot(sol.values[`${s.at}x`], sol.values[`${s.at}y`]).toFixed(0)}`).join(' · ');
+    const sup = (model.supports || []).map((s) => `${s.at}:\u00a0${Math.hypot(sol.values[`${s.at}x`], sol.values[`${s.at}y`]).toFixed(0)}`).join(' · ');
     return cells([
       ['pin B', `${B.toFixed(1)} ${uF}`, 'ok'],
       [`$B_x$ · $B_y$ on ${model.pins[0].bodies[0]}`, `${sol.values.Bx.toFixed(1)} · ${sol.values.By.toFixed(1)}`, ''],
