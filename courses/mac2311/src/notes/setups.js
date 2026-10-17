@@ -63,6 +63,76 @@ export const SETUPS = {
       },
     ],
   },
+  u2: {
+    s1: [
+      {
+        tag: 'a shrinking secant',
+        lab: 'secant',
+        scenario: 'quad',
+        setup(s) {
+          s.x0 = 1;
+          s.h = 0.4;
+        },
+        read: (c) => ({ msec: [c.msec, 2.4], fp: [c.fp, 2] }),
+      },
+      {
+        tag: 'a corner',
+        lab: 'secant',
+        scenario: 'abs',
+        setup(s) {
+          s.x0 = 0;
+          s.h = 0.4;
+        },
+        read: (c) => ({ left: [c.left, -1], right: [c.right, 1] }),
+      },
+    ],
+    s2: [
+      {
+        tag: 'secant on a cubic',
+        lab: 'secant',
+        scenario: 'cube',
+        setup(s) {
+          s.x0 = 1;
+          s.h = 0.4;
+        },
+        read: (c) => ({ msec: [c.msec, 4.36], fp: [c.fp, 3] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'the slope of sine at π/3',
+        lab: 'secant',
+        scenario: 'sine',
+        setup(s) {
+          s.x0 = Math.PI / 3;
+          s.h = 0.4;
+        },
+        read: (c) => ({ msec: [c.msec, 0.316], fp: [c.fp, 0.5] }),
+      },
+    ],
+    s6: [
+      {
+        tag: 'the ladder at 6 ft',
+        lab: 'rates',
+        scenario: 'mid',
+        setup(s) {
+          s.x = 6;
+          s.v = 2;
+        },
+        read: (c) => ({ y: [c.y, 8], dy: [c.dy, -1.5] }),
+      },
+      {
+        tag: 'the ladder at 2 ft',
+        lab: 'rates',
+        scenario: 'steep',
+        setup(s) {
+          s.x = 2;
+          s.v = 2;
+        },
+        read: (c) => ({ y: [c.y, 9.8], dy: [c.dy, -0.408] }),
+      },
+    ],
+  },
 };
 
 export function exampleTag(tagText) {

@@ -60,8 +60,9 @@
 <p>Suppose the two-sided limit is \(L\). Then \(f(x)\) is close to \(L\) for every \(x\) near \(a\), so it is close to \(L\) for those on the left and for those on the right. Both one-sided limits are \(L\).</p>
 <p>Now suppose both one-sided limits are \(L\). Near \(a\), the left inputs give values close to \(L\), and so do the right inputs. Together those are all the inputs near \(a\). So the two-sided limit is \(L\).</p>
 </div>
+<p>So the two-sided limit is \(L\) exactly when</p>
 \[
-\lim_{x \to a} f(x) = L \quad\Longleftrightarrow\quad \lim_{x \to a^-} f(x) = L \ \text{ and } \ \lim_{x \to a^+} f(x) = L.
+\lim_{x \to a^-} f(x) = \lim_{x \to a^+} f(x) = L.
 \]
 <div class="box ex"><span class="tag">Worked example · a jump</span>
 <p>Let \(f(x) = 2\) for \(x \lt 1\) and \(f(x) = 4\) for \(x \ge 1\). Every input just left of \(1\) gives \(2\). So \(\lim_{x \to 1^-} f(x) = 2\). Every input just right gives \(4\). So \(\lim_{x \to 1^+} f(x) = 4\).</p>
@@ -90,8 +91,12 @@
 <h2><span class="n">03</span>Limit laws and the 0/0 form</h2>
 <p>Most limits are found with a few laws rather than a table. Suppose \(\lim_{x \to a} f(x) = L\) and \(\lim_{x \to a} g(x) = M\). Then:</p>
 \[
-\lim (f \pm g) = L \pm M, \qquad \lim (cf) = cL, \qquad \lim (fg) = LM, \qquad \lim \frac{f}{g} = \frac{L}{M} \ \ (M \ne 0).
+\begin{aligned}
+\lim (f \pm g) &= L \pm M, & \lim (cf) &= cL,\\
+\lim (fg) &= LM, & \lim \frac{f}{g} &= \frac{L}{M}.
+\end{aligned}
 \]
+<p>The last law needs \(M \ne 0\).</p>
 <p>Powers and roots follow from the product law: \(\lim f^n = L^n\), and \(\lim \sqrt[n]{f} = \sqrt[n]{L}\) when the root is defined.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Take the sum law. Pick a tolerance. Go close enough to \(a\) that \(f\) is within half that tolerance of \(L\), and \(g\) within half of \(M\). Then \(f + g\) is within the whole tolerance of \(L + M\), because the two errors add at most. Section 5 makes "tolerance" precise. The product and quotient laws use the same idea with more algebra.</p>
@@ -114,7 +119,11 @@
 <div class="box why"><span class="tag">Why</span>
 <p>Take \(0 \lt x \lt \pi/2\) on the unit circle. Three areas are nested: the triangle inside the sector, the sector, and the triangle that reaches the tangent line. Their areas are \(\tfrac12 \sin x\), \(\tfrac12 x\), and \(\tfrac12 \tan x\). So</p>
 \[
-\sin x \le x \le \tan x \quad\Longrightarrow\quad \cos x \le \frac{\sin x}{x} \le 1.
+\sin x \le x \le \tan x,
+\]
+<p>and so</p>
+\[
+\cos x \le \frac{\sin x}{x} \le 1.
 \]
 <p>The second form divides by \(\sin x\), then flips each fraction. As \(x \to 0^+\), \(\cos x \to 1\). The squeeze gives \(\sin x / x \to 1\). The function is even, so the left side agrees.</p>
 </div>
@@ -188,14 +197,18 @@
 <section class="topic" id="s5">
 <h2><span class="n">05</span>The precise definition</h2>
 <p>"Close enough" becomes a pair of numbers. \(\varepsilon\) is how close we demand \(f(x)\) be to \(L\). \(\delta\) is how close \(x\) must be to \(a\) to guarantee it.</p>
+<p>\(\lim_{x \to a} f(x) = L\) means: for every \(\varepsilon \gt 0\) there is a \(\delta \gt 0\) such that</p>
 \[
-\lim_{x \to a} f(x) = L \quad\text{means}\quad \text{for every } \varepsilon \gt 0 \text{ there is a } \delta \gt 0 \text{ with } 0 \lt |x - a| \lt \delta \;\Rightarrow\; |f(x) - L| \lt \varepsilon.
+0 \lt |x - a| \lt \delta \;\Rightarrow\; |f(x) - L| \lt \varepsilon.
 \]
 <p>The order matters. The challenger picks \(\varepsilon\) first. We answer with a \(\delta\). A proof gives a rule that answers every \(\varepsilon\). The condition \(0 \lt |x - a|\) leaves out \(x = a\), as the informal definition did.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>For a line \(f(x) = mx + b\) with \(m \ne 0\), the claimed limit at \(a\) is \(L = ma + b\). The error is</p>
 \[
-|f(x) - L| = |mx + b - ma - b| = |m|\,|x - a|.
+\begin{aligned}
+|f(x) - L| &= |mx + b - ma - b|\\
+&= |m|\,|x - a|.
+\end{aligned}
 \]
 <p>That is less than \(\varepsilon\) exactly when \(|x - a| \lt \varepsilon/|m|\). So \(\delta = \varepsilon/|m|\) works, and no larger \(\delta\) does. A steeper line needs a narrower window.</p>
 </div>

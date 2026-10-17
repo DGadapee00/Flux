@@ -18,6 +18,23 @@ export const NOTES = {
       { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u2: {
+    exam: 'u2',
+    title: 'Derivatives',
+    chapters: '3',
+    file: 'u2-derivatives.html',
+    load: () => import('./content/u2-derivatives.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'The derivative as a limit', lab: 'secant', ch: ['3'], topics: ['derivatives'], home: true },
+      { id: 's2', n: 2, title: 'Power, product, and quotient rules', lab: 'secant', ch: ['3'], topics: ['derivatives', 'symbolic'] },
+      { id: 's3', n: 3, title: 'Rates of change on a line', lab: null, ch: ['3'], topics: ['derivatives'] },
+      { id: 's4', n: 4, title: 'Sine and cosine', lab: 'secant', ch: ['3'], topics: ['derivatives'] },
+      { id: 's5', n: 5, title: 'The chain rule', lab: null, ch: ['3'], topics: ['derivatives', 'symbolic'] },
+      { id: 's6', n: 6, title: 'Implicit differentiation and related rates', lab: 'rates', ch: ['3'], topics: ['related rates'], problems: ['u2.rates', 'u2.implicit'], home: true },
+      { id: 's7', n: 7, title: 'Inverses, exponentials, and logarithms', lab: null, ch: ['3'], topics: ['derivatives'] },
+      { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
