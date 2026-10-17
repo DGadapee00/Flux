@@ -108,7 +108,8 @@ export const NOTES = {
       { id: 's2', n: 2, title: 'Work of a couple', lab: 'linkage', ch: ['18'], topics: ['couple', 'bar'] },
       { id: 's3', n: 3, title: 'Rolling without slip', lab: 'race', ch: ['18'], topics: ['race'], home: true },
       { id: 's4', n: 4, title: 'The instantaneous centre', lab: 'linkage', ch: ['18'], topics: ['linkage', 'spring'], home: true },
-      { id: 's5', n: 5, title: 'Formula sheet', lab: null, ch: [] },
+      { id: 's5', n: 5, title: 'Conservation of energy', lab: null, ch: ['18'], topics: ['energy'] },
+      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
 };
