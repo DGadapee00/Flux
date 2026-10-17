@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Parametric and polar</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">MAC 2312 · Calculus II · Unit 4 · OpenStax Calculus Volume 2, Ch 7</p>
+  <h1>Parametric and polar curves</h1>
+  <p class="lede">Not every curve is the graph of a function. A parameter traces a path in time. Polar coordinates describe a curve by distance and angle. Slopes, lengths, and areas carry over, each with its own formula, and each formula is derived. The numbers below are recomputed.</p>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>Parametric curves</a>
+    <a href="#s2"><span>02</span>Calculus on parametric curves</a>
+    <a href="#s3"><span>03</span>Polar coordinates</a>
+    <a href="#s4"><span>04</span>Area and length in polar</a>
+    <a href="#s5"><span>05</span>Conic sections</a>
+    <a href="#s6"><span>06</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Parametric curves</h2>
+<p>A parametric curve gives both coordinates as functions of a third variable: \(x = x(t)\), \(y = y(t)\). As \(t\) runs, the point \((x(t), y(t))\) moves. The curve has a direction, and it can cross itself or retrace itself, which a graph cannot.</p>
+<div class="box ex"><span class="tag">Worked example · a point on the unit circle</span>
+<p>\(x = \cos t\), \(y = \sin t\). Since \(x^2 + y^2 = 1\) for every \(t\), the point stays on the unit circle. It moves counterclockwise, once around for each \(2\pi\) of \(t\). At \(t = \pi/4\) it is at \((0.7071, 0.7071)\).</p>
+</div>
+<p>Eliminating the parameter finds the ordinary equation, when one exists. From \(x = t\) and \(y = t^2\), substitute \(t = x\): the curve is the parabola \(y = x^2\). Elimination loses the timing. The parabola does not say where the point is at \(t = 1\).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>A cycloid shows why parameters help. A wheel of radius \(r\) rolls along the \(x\)-axis. After turning through angle \(t\), its centre has moved \(rt\), and a point on its rim sits at angle \(t\) behind the centre. So</p>
+\[
+x = r(t - \sin t), \qquad y = r(1 - \cos t).
+\]
+<p>Writing \(y\) as a function of \(x\) would need inverting \(t - \sin t\), which has no formula. The parametric form is the natural description.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A parametrisation can cover only part of the eliminated curve. \(x = \cos^2 t\), \(y = \cos^2 t\) satisfies \(y = x\), but only for \(0 \le x \le 1\), since \(\cos^2 t\) never leaves that interval. Check the range of each coordinate.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>A parameter traces a path with a direction. Eliminating it gives the shape and loses the timing.</p>
+</div>
+<p>In the Parametric lab, slide \(t\) along the unit circle, the parabola, or the line. The point moves, and its tangent turns with it.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Curves in space need a third coordinate, \(z(t)\). That is the start of Calculus III, where these formulas gain one more term.</p>
+</div>
+</section>
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Calculus on parametric curves</h2>
+<p>Where \(dx/dt \ne 0\), a parametric curve is locally a graph, and the chain rule gives its slope.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Treat \(y\) as a function of \(x\), and \(x\) as a function of \(t\). The chain rule says \(dy/dt = (dy/dx)(dx/dt)\). Divide by \(dx/dt\).</p>
+</div>
+\[
+\frac{dy}{dx} = \frac{dy/dt}{dx/dt}.
+\]
+<p>The tangent is horizontal where \(dy/dt = 0\) and \(dx/dt \ne 0\). It is vertical where \(dx/dt = 0\) and \(dy/dt \ne 0\).</p>
+<div class="box ex"><span class="tag">Worked example · the slope at π/4</span>
+<p>On the unit circle, \(dx/dt = -\sin t\) and \(dy/dt = \cos t\). So \(dy/dx = -\cos t/\sin t\). At \(t = \pi/4\) the slope is \(-1\). The tangent is perpendicular to the radius, which has slope \(1\).</p>
+</div>
+<p>The second derivative is the derivative of \(dy/dx\) with respect to \(x\). By the same rule, \(d^2y/dx^2 = \bigl(\tfrac{d}{dt}(dy/dx)\bigr)/(dx/dt)\). For the circle, that is \(-1/\sin^3 t\). At \(\pi/4\) it is \(-2.83\). The upper half of the circle is concave down.</p>
+<p>Arc length uses the speed of the moving point. Over a short step, the point moves \(\Delta x\) and \(\Delta y\). The distance is \(\sqrt{\Delta x^2 + \Delta y^2}\). Divide inside by \(\Delta t^2\) and outside by \(\Delta t\), and let the step shrink:</p>
+\[
+L = \int_a^b \sqrt{\Bigl(\frac{dx}{dt}\Bigr)^2 + \Bigl(\frac{dy}{dt}\Bigr)^2}\,dt.
+\]
+<div class="box ex"><span class="tag">Worked example · a parabola traced to t = 1</span>
+<p>\(x = t\), \(y = t^2\), from \(t = 0\) to \(1\). The speed is \(\sqrt{1 + 4t^2}\). The length is \(1.479\), as Unit 1 found for the graph \(y = x^2\). At \(t = 1\) the slope is \(2t/1 = 2\), and the speed is \(\sqrt{5} = 2.236\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one arch of a cycloid</span>
+<p>With \(r = 1\), the speed is \(\sqrt{(1 - \cos t)^2 + \sin^2 t} = \sqrt{2 - 2\cos t} = 2\sin(t/2)\). One arch runs from \(t = 0\) to \(2\pi\). Its length is \(\int_0^{2\pi} 2\sin(t/2)\,dt = 8\). The arch is \(8\) times the wheel's radius, a result known since 1658.</p>
+<p>The area under the arch is \(\int y\,dx = \int_0^{2\pi}(1 - \cos t)^2\,dt = 3\pi\). That is three times the wheel's area.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(dy/dx\) is not \(dy/dt\). For the parabola at \(t = 1\), \(dy/dt = 2\), and \(dy/dx = 2\) too, only because \(dx/dt = 1\). On the circle at \(\pi/4\), \(dy/dt = 0.707\) while the slope is \(-1\). Always divide by \(dx/dt\).</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Slope: \((dy/dt)/(dx/dt)\). Length: the integral of the speed. A retraced stretch is counted twice, so use one pass of \(t\).</p>
+</div>
+<p>In the Parametric lab, the readout gives the slope, the speed, and the length so far. On the circle the speed stays at \(1\), so the length equals \(t\).</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Where both \(dx/dt\) and \(dy/dt\) vanish, the curve can have a cusp, as the cycloid does where it touches the ground. The slope formula gives \(0/0\) there and needs a limit.</p>
+</div>
+</section>
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Polar coordinates</h2>
+<p>A point can be located by its distance \(r\) from the origin and its angle \(\theta\) from the positive \(x\)-axis. The conversions come from a right triangle:</p>
+\[
+x = r\cos\theta, \quad y = r\sin\theta, \quad r^2 = x^2 + y^2.
+\]
+<div class="box ex"><span class="tag">Worked example · converting a point</span>
+<p>\(r = 2\), \(\theta = \pi/3\). Then \(x = 2\cos(\pi/3) = 1\) and \(y = 2\sin(\pi/3) = \sqrt{3} = 1.732\). Going back, \(r = \sqrt{1 + 3} = 2\), and the angle is \(\pi/3\).</p>
+</div>
+<p>A polar curve gives \(r\) as a function of \(\theta\). Some familiar shapes have simple polar equations.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Take \(r = 2\cos\theta\). Multiply by \(r\): \(r^2 = 2r\cos\theta\). Convert: \(x^2 + y^2 = 2x\). Complete the square: \((x - 1)^2 + y^2 = 1\). The curve is a circle of radius \(1\), centred at \((1, 0)\). It is traced once as \(\theta\) runs from \(-\pi/2\) to \(\pi/2\).</p>
+</div>
+<p>The cardioid \(r = 1 + \cos\theta\) is heart-shaped. It reaches \(r = 2\) at \(\theta = 0\) and pinches to \(r = 0\) at \(\theta = \pi\). Its slope comes from treating it as a parametric curve with parameter \(\theta\): \(x = r(\theta)\cos\theta\), \(y = r(\theta)\sin\theta\).</p>
+<div class="box ex"><span class="tag">Worked example · a slope on the cardioid</span>
+<p>At \(\theta = \pi/2\), \(r = 1\) and \(dr/d\theta = -\sin\theta = -1\). Then \(dx/d\theta = r'\cos\theta - r\sin\theta = -1\), and \(dy/d\theta = r'\sin\theta + r\cos\theta = -1\). The slope is \((-1)/(-1) = 1\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(\theta = \arctan(y/x)\) is right only in the first and fourth quadrants. The point \((-1, -1)\) has \(\arctan(1) = \pi/4\), but it lies at \(\theta = 5\pi/4\). Place the point in its quadrant first.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>\(x = r\cos\theta\), \(y = r\sin\theta\). To recognise a polar curve, multiply by \(r\) and convert. For slopes, treat \(\theta\) as a parameter.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Negative values of \(r\) are allowed in the text: they point the opposite way. A curve like \(r = \cos 2\theta\), a four-petal rose, uses them. This section keeps \(r \ge 0\).</p>
+</div>
+</section>
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Area and length in polar</h2>
+<p>In polar coordinates the natural slice is a thin sector, not a strip. A sector of radius \(r\) and angle \(\Delta\theta\) has area \(\tfrac12 r^2\Delta\theta\).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>A full disk of radius \(r\) has area \(\pi r^2\), and a full turn is \(2\pi\). A sector is the fraction \(\Delta\theta/2\pi\) of it: \(\tfrac12 r^2\Delta\theta\). Fan the region into thin sectors, add, and let the angles shrink:</p>
+\[
+A = \frac12\int_\alpha^\beta r(\theta)^2\,d\theta.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · the unit disk</span>
+<p>\(r = 1\) from \(0\) to \(2\pi\): \(A = \tfrac12 \cdot 2\pi = \pi\). The formula agrees with geometry.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the cardioid</span>
+<p>\(A = \tfrac12\int_0^{2\pi}(1 + \cos\theta)^2\,d\theta\). Expand, and use \(\cos^2\theta = \tfrac12(1 + \cos 2\theta)\). The cosine terms integrate to \(0\) over a full turn. What is left is \(\tfrac12 \cdot \tfrac32 \cdot 2\pi = 3\pi/2 = 4.712\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the shifted circle</span>
+<p>\(r = 2\cos\theta\) from \(-\pi/2\) to \(\pi/2\). \(A = \tfrac12\int 4\cos^2\theta\,d\theta = \pi\). The circle has radius \(1\), so geometry agrees again.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The area element is \(\tfrac12 r^2\,d\theta\), not \(r\,d\theta\). For the unit disk, \(\int_0^{2\pi} r\,d\theta = 2\pi\), double the area. For the cardioid, \(\int r\,d\theta = 2\pi = 6.283\) instead of \(4.712\). For the shifted circle it gives \(4\) instead of \(\pi\).</p>
+</div>
+<p>The area between two polar curves subtracts the inner \(r^2\) from the outer. Inside the cardioid and outside the unit circle, \(1 + \cos\theta \gt 1\) where \(\cos\theta \gt 0\). So \(A = \tfrac12\int_{-\pi/2}^{\pi/2}\bigl((1 + \cos\theta)^2 - 1\bigr)\,d\theta = 2 + \pi/4 = 2.785\).</p>
+<p>Arc length follows from the parametric formula with \(\theta\) as the parameter. The two derivatives combine to \(r^2 + (dr/d\theta)^2\):</p>
+\[
+L = \int_\alpha^\beta \sqrt{r^2 + \Bigl(\frac{dr}{d\theta}\Bigr)^2}\,d\theta.
+\]
+<p>For the cardioid, \(r^2 + r'^2 = 2 + 2\cos\theta = 4\cos^2(\theta/2)\). The length over a full turn is \(\int_0^{2\pi} 2|\cos(\theta/2)|\,d\theta = 8\).</p>
+<div class="box key"><span class="tag">Key</span>
+<p>Polar area: \(\tfrac12\int r^2\,d\theta\). Between curves: \(\tfrac12\int (r_{\text{out}}^2 - r_{\text{in}}^2)\,d\theta\). Length: \(\int\sqrt{r^2 + r'^2}\,d\theta\).</p>
+</div>
+<p>In the Polar lab, sweep the angle around the disk, the cardioid, or the shifted circle. The readout compares the sector formula with the naive \(\int r\,d\theta\). They disagree for every sweep.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Finding where two polar curves meet can miss points. The origin can lie on both curves at different angles, which setting \(r_1 = r_2\) never finds. Sketch both curves before integrating.</p>
+</div>
+</section>
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Conic sections</h2>
+<p>A parabola, an ellipse, and a hyperbola are the curves cut from a cone by a plane. Each has a definition by distances.</p>
+<ul>
+<li>A parabola is the set of points equally far from a focus and a line, the directrix.</li>
+<li>An ellipse is the set of points whose distances to two foci add to a constant.</li>
+<li>A hyperbola is the set of points whose distances to two foci differ by a constant.</li>
+</ul>
+<p>All three share one description. Let \(e \gt 0\). The points whose distance to a focus is \(e\) times their distance to a directrix form an ellipse if \(e \lt 1\), a parabola if \(e = 1\), and a hyperbola if \(e \gt 1\). The number \(e\) is the eccentricity.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Put the focus at the origin and the directrix at \(x = d\). A point at polar \((r, \theta)\) is \(r\) from the focus and \(d - r\cos\theta\) from the directrix. Setting \(r = e(d - r\cos\theta)\) and solving for \(r\):</p>
+\[
+r = \frac{ed}{1 + e\cos\theta}.
+\]
+<p>One polar equation covers all three conics.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an ellipse from its eccentricity</span>
+<p>Take \(e = 0.5\) and \(d = 2\). Then \(r = 1/(1 + 0.5\cos\theta)\). At \(\theta = 0\), \(r = 0.667\), the nearest point. At \(\theta = \pi\), \(r = 2\), the farthest. The major axis is \(0.667 + 2 = 2.667\) long.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The eccentricity is not the ellipse's aspect ratio. With \(e = 0.5\), the ellipse above is only about \(13\%\) narrower than it is long. Its two axes are \(2.667\) and \(2.309\).</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>\(e \lt 1\): ellipse. \(e = 1\): parabola. \(e \gt 1\): hyperbola. In polar form about a focus, \(r = ed/(1 + e\cos\theta)\).</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Rotated conics, whose equations have an \(xy\) term, are not covered. Orbits are the main application: a planet's path is a conic with the sun at a focus. That result is Newton's, and it belongs to physics.</p>
+</div>
+</section>
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Formula sheet</h2>
+<ul>
+<li>Parametric slope: \(dy/dx = (dy/dt)/(dx/dt)\).</li>
+<li>\(d^2y/dx^2 = \bigl(\tfrac{d}{dt}(dy/dx)\bigr)/(dx/dt)\).</li>
+<li>Parametric length: \(\int\sqrt{x'(t)^2 + y'(t)^2}\,dt\). Area under: \(\int y\,x'(t)\,dt\).</li>
+<li>Cycloid: \(x = r(t - \sin t)\), \(y = r(1 - \cos t)\). One arch: length \(8r\), area \(3\pi r^2\).</li>
+<li>\(x = r\cos\theta\), \(y = r\sin\theta\), \(r^2 = x^2 + y^2\).</li>
+<li>Polar area: \(\tfrac12\int r^2\,d\theta\). Polar length: \(\int\sqrt{r^2 + r'^2}\,d\theta\).</li>
+<li>Cardioid \(r = 1 + \cos\theta\): area \(3\pi/2\), length \(8\).</li>
+<li>Conic about a focus: \(r = ed/(1 + e\cos\theta)\).</li>
+</ul>
+</section>
+</main>
+</body>
+</html>

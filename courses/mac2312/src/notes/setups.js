@@ -160,6 +160,68 @@ export const SETUPS = {
       },
     ],
   },
+  u4: {
+    s1: [
+      {
+        tag: 'a point on the unit circle',
+        lab: 'parametric',
+        scenario: 'circle',
+        setup(s) {
+          s.k = 1;
+        },
+        read: (c) => ({ x: [c.x, 0.7071], y: [c.y, 0.7071] }),
+      },
+    ],
+    s2: [
+      {
+        tag: 'the slope at π/4',
+        lab: 'parametric',
+        scenario: 'circle',
+        setup(s) {
+          s.k = 1;
+        },
+        read: (c) => ({ slope: [c.slope, -1], speed: [c.speed, 1] }),
+      },
+      {
+        tag: 'a parabola traced to t = 1',
+        lab: 'parametric',
+        scenario: 'para',
+        setup(s) {
+          s.k = 4;
+        },
+        read: (c) => ({ length: [c.length, 1.479], slope: [c.slope, 2], speed: [c.speed, 2.236] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'the unit disk',
+        lab: 'polar',
+        scenario: 'disk',
+        setup(s) {
+          s.k = 4;
+        },
+        read: (c) => ({ area: [c.area, Math.PI], naive: [c.naive, 2 * Math.PI] }),
+      },
+      {
+        tag: 'the cardioid',
+        lab: 'polar',
+        scenario: 'card',
+        setup(s) {
+          s.k = 4;
+        },
+        read: (c) => ({ area: [c.area, 4.712], naive: [c.naive, 6.283] }),
+      },
+      {
+        tag: 'the shifted circle',
+        lab: 'polar',
+        scenario: 'shift',
+        setup(s) {
+          s.k = 4;
+        },
+        read: (c) => ({ area: [c.area, Math.PI], naive: [c.naive, 4] }),
+      },
+    ],
+  },
 };
 
 export function exampleTag(tagText) {

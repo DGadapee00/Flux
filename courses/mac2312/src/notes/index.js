@@ -53,6 +53,21 @@ export const NOTES = {
       { id: 's9', n: 9, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u4: {
+    exam: 'u4',
+    title: 'Parametric and polar curves',
+    chapters: '7',
+    file: 'u4-parametric-polar.html',
+    load: () => import('./content/u4-parametric-polar.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'Parametric curves', lab: 'parametric', ch: ['7'], topics: ['parametric'], home: true },
+      { id: 's2', n: 2, title: 'Calculus on parametric curves', lab: 'parametric', ch: ['7'], topics: ['parametric'] },
+      { id: 's3', n: 3, title: 'Polar coordinates', lab: null, ch: ['7'], topics: ['polar'] },
+      { id: 's4', n: 4, title: 'Area and length in polar', lab: 'polar', ch: ['7'], topics: ['polar'], home: true },
+      { id: 's5', n: 5, title: 'Conic sections', lab: null, ch: ['7'] },
+      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
