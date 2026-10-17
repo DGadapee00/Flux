@@ -35,6 +35,24 @@ export const NOTES = {
       { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u3: {
+    exam: 'u3',
+    title: 'Sequences and series',
+    chapters: '5–6',
+    file: 'u3-series.html',
+    load: () => import('./content/u3-series.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'Sequences', lab: null, ch: ['5'] },
+      { id: 's2', n: 2, title: 'Series and the geometric series', lab: 'series', ch: ['5'], topics: ['series'], home: true },
+      { id: 's3', n: 3, title: 'The integral test', lab: 'series', ch: ['5'], topics: ['series'] },
+      { id: 's4', n: 4, title: 'Comparison and ratio tests', lab: null, ch: ['5'], topics: ['series'] },
+      { id: 's5', n: 5, title: 'Alternating series', lab: 'series', ch: ['5'], topics: ['series'] },
+      { id: 's6', n: 6, title: 'Power series', lab: null, ch: ['6'], topics: ['series'] },
+      { id: 's7', n: 7, title: 'Taylor polynomials', lab: 'taylor', ch: ['6'], topics: ['taylor', 'symbolic'], home: true },
+      { id: 's8', n: 8, title: 'Working with power series', lab: null, ch: ['6'], topics: ['taylor'] },
+      { id: 's9', n: 9, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
