@@ -19,8 +19,8 @@ export default [
       `Let $f(x,y)=1$ on $D=[0,${T.a}]\\times[0,${T.b}]$. What is every Riemann sum, for any $n$ and any sample point?`,
     parts: [num('A', ($) => $.A, '', { label: 'sum', abs: 0.02 })],
     hints: [
-      'Each box has height 1, so the sum is just the area of $D$.',
-      'The sample point and the number of boxes do not matter: every cell contributes exactly its area.',
+      'Every sample height is $1$, so each term of the sum is the area of its cell.',
+      'The cells tile $D$, with no overlap and no gap.',
     ],
     steps: ($, f) => [`The sum is the area $${f($.A)}$.`],
     sim: {
@@ -57,8 +57,9 @@ export default [
       `Let $f(x,y)=${coef(T.a)}x^2+${coef(T.b)}y^2$ on $[0,1]\\times[0,1]$. Compute the midpoint Riemann sum with $n=2$ (four equal squares).`,
     parts: [num('sum', ($) => $.sum, '', { label: 'sum', abs: 0.02 })],
     hints: [
-      'Centres at $(1/4,1/4)$, $(1/4,3/4)$, $(3/4,1/4)$, $(3/4,3/4)$. Each $\\Delta A=1/4$.',
-      'The four $x^2$ samples sum to $1.25$, and so do the four $y^2$ samples. Multiply by the coefficients and by $\\Delta A$.',
+      'A midpoint sum samples each cell at its centre and multiplies by the cell area.',
+      String.raw`The centres are $(\tfrac14,\tfrac14)$, $(\tfrac14,\tfrac34)$, $(\tfrac34,\tfrac14)$, and $(\tfrac34,\tfrac34)$. Each cell has area $\tfrac14$.`,
+      (T, $) => String.raw`Evaluate $${coef($.a)}x^2+${coef($.b)}y^2$ at each centre, add, and multiply by $\tfrac14$.`,
     ],
     steps: ($, f) => [`The midpoint sum is $${f($.sum)}$.`],
     sim: {
@@ -95,8 +96,9 @@ export default [
       `Let $f(x,y)=${coef(T.a)}x^2+${coef(T.b)}y^2$ on $D=[0,1]\\times[0,1]$. Find $\\iint_D f\\,dA$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iint$', abs: 0.03 })],
     hints: [
-      'Iterate: $\\int_0^1(ax^2+by^2)\\,dy = ax^2+b/3$. Then integrate in $x$.',
-      '$\\int_0^1 x^2\\,dx=1/3$ and $\\int_0^1 y^2\\,dy=1/3$, so the integral is $(a+b)/3$.',
+      'On a rectangle, a double integral equals an iterated integral, in either order.',
+      'Integrate in $y$ first. The $x^2$ term is a constant for that integral.',
+      'Then integrate the result in $x$ from $0$ to $1$.',
     ],
     steps: ($, f) => [`$(a+b)/3 = ${f($.I)}$.`],
     sim: {
@@ -128,8 +130,8 @@ export default [
       `Let $f(x,y)=${coef(T.n)}x^2+y^2$, which is continuous. True or false: on a closed rectangle $D$, every Riemann sum (any sample point) tends to $\\iint_D f\\,dA$ as the mesh goes to zero.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
-      'Continuity on a closed rectangle is enough for integrability, and the sample point in each cell does not matter in the limit.',
-      'The coefficient does not affect the limit statement. A polynomial is continuous on every closed rectangle.',
+      'Integrability on a closed rectangle needs a condition on $f$. Check whether this $f$ meets it.',
+      'A continuous function on a closed rectangle is integrable, whatever the sample points.',
     ],
     steps: () => ['True — that is the content of the double-integral definition plus continuity.'],
     cases: [kase('sample', { n: 1 }, { tf: 1 })],
@@ -150,8 +152,8 @@ export default [
       `Let $f(x,y)=${coef(T.n)}xy$, continuous on a rectangle $[a,b]\\times[c,d]$. True or false: $\\int_a^b\\int_c^d f\\,dy\\,dx = \\int_c^d\\int_a^b f\\,dx\\,dy$.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
-      'This is Fubini on a rectangle.',
-      'Both orders integrate the same continuous function over the same rectangle. The coefficient factors out of each.',
+      "Fubini's theorem says when the order of an iterated integral can be swapped.",
+      'On a rectangle, its hypothesis is that $f$ is continuous there.',
     ],
     steps: () => ['True — Theorem 21.'],
     cases: [kase('sample', { n: 1 }, { tf: 1 })],
@@ -172,8 +174,9 @@ export default [
     text: (T) => `Evaluate $\\int_0^1\\int_0^1(${coef(T.a)}x^2+${coef(T.b)}y^2)\\,dy\\,dx$.`,
     parts: [num('I', ($) => $.I, '', { label: 'value', abs: 0.03 })],
     hints: [
-      'Inner: $\\int_0^1(ax^2+by^2)\\,dy = ax^2+b/3$. Then integrate in $x$.',
-      'Each pure square integrates to one third of its coefficient, so the value is $(a+b)/3$.',
+      'Integrate in $y$ first. The $x^2$ term is a constant for that integral.',
+      String.raw`$\int_0^1 y^2\,dy=\tfrac13$ and $\int_0^1 dy=1$.`,
+      'Then integrate the result in $x$ from $0$ to $1$.',
     ],
     steps: ($, f) => [`$(a+b)/3 = ${f($.I)}$.`],
     sim: {
@@ -209,8 +212,9 @@ export default [
     text: (T) => `Evaluate $\\iint_D ${coef(T.a)}xy\\,dA$ for $D=[0,${T.A}]\\times[0,${T.B}]$.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iint$', abs: 0.03 })],
     hints: [
-      'The variables separate: $a\\bigl(\\int_0^A x\\,dx\\bigr)\\bigl(\\int_0^B y\\,dy\\bigr)$.',
-      'Each one-variable integral is half a square: $A^2/2$ and $B^2/2$.',
+      'The integrand is a function of $x$ times a function of $y$, and $D$ is a rectangle. The integral splits.',
+      (T, $) => String.raw`It equals $${coef($.a)}\left(\int_0^{${T.A}}x\,dx\right)\left(\int_0^{${T.B}}y\,dy\right)$.`,
+      'Each factor is half the square of its upper limit.',
     ],
     steps: ($, f) => [`$a \\cdot (A^2/2) \\cdot (B^2/2) = ${f($.I)}$.`],
     sim: {
@@ -246,8 +250,9 @@ export default [
       `Let $D=\\{(x,y): x\\ge 0,\\, y\\ge 0,\\, x+y\\le 1\\}$ and let $f(x,y)=${T.c}$. Find $\\iint_D f\\,dA$.`,
     parts: [num('A', ($) => $.A, '', { label: 'integral', abs: 0.03 })],
     hints: [
-      'Type I: $x$ from $0$ to $1$, $y$ from $0$ to $1-x$. The inner integral of a constant $c$ is $c(1-x)$.',
-      'The region has area $1/2$, so the integral of the constant $c$ is $c/2$.',
+      'The integral of a constant over $D$ is the constant times the area of $D$.',
+      String.raw`As a Type I region, $x$ runs from $0$ to $1$ and $y$ from $0$ to $1-x$.`,
+      (T) => String.raw`Integrate $${T.c}$ over those limits, or multiply $${T.c}$ by the area of the triangle.`,
     ],
     steps: ($, f) => [`$c/2 = ${f($.A)}$.`],
     sim: {
@@ -279,8 +284,9 @@ export default [
       `Let $D$ be the disk $x^2+y^2\\le ${T.R}^2$. Find $\\iint_D 1\\,dA$ by iterating in Cartesian coordinates.`,
     parts: [num('A', ($) => $.A, '', { label: 'area', abs: 0.08 })],
     hints: [
-      '$x$ runs from $-R$ to $R$, and $y$ runs from $-\\sqrt{R^2-x^2}$ to $\\sqrt{R^2-x^2}$.',
-      'The inner length is $2\\sqrt{R^2-x^2}$. The whole integral is the disk area $\\pi R^2$.',
+      'Fix $x$ first, and find how far $y$ can run inside the disk.',
+      (T) => String.raw`$y$ runs from $-\sqrt{${T.R}^2-x^2}$ to $\sqrt{${T.R}^2-x^2}$, and $x$ from $-${T.R}$ to $${T.R}$.`,
+      (T) => String.raw`The inner integral is $2\sqrt{${T.R}^2-x^2}$. Substitute $x=${coef(T.R)}\sin\theta$ for the outer one.`,
     ],
     steps: ($, f) => [`The area is $\\pi R^2=${f($.A)}$.`],
     sim: {
@@ -312,8 +318,9 @@ export default [
       `Let $D_R$ be the disk of radius ${T.R} about the origin. Using polar coordinates, find $\\iint_{D_R} 1\\,dA$.`,
     parts: [num('A', ($) => $.A, '', { label: 'area', abs: 0.08 })],
     hints: [
-      '$\\int_0^R\\int_0^{2\\pi} r\\,d\\theta\\,dr = 2\\pi\\cdot R^2/2 = \\pi R^2$. The $r$ is the Jacobian.',
-      'Forgetting the Jacobian leaves $\\int_0^{2\\pi}d\\theta\\int_0^R dr = 2\\pi R$, which is not the area.',
+      String.raw`In polar coordinates, $dA=r\,dr\,d\theta$.`,
+      (T) => String.raw`The disk is $0\le r\le ${T.R}$ and $0\le\theta<2\pi$.`,
+      (T) => String.raw`Integrate $r$ from $0$ to $${T.R}$, then multiply by the angle range.`,
     ],
     steps: ($, f) => [`$\\pi R^2=${f($.A)}$.`],
     sim: {
@@ -345,8 +352,9 @@ export default [
       `Evaluate $\\iint_{D_1}(${coef(T.a)}x^2+${coef(T.b)}y^2)\\,dA$ in polar coordinates, where $D_1$ is the unit disk.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iint$', abs: 0.05 })],
     hints: [
-      '$ax^2+by^2 = r^2(a\\cos^2\\theta+b\\sin^2\\theta)$, times the Jacobian $r$.',
-      'Over a full turn, $\\int_0^{2\\pi}\\cos^2\\theta\\,d\\theta=\\int_0^{2\\pi}\\sin^2\\theta\\,d\\theta=\\pi$, and $\\int_0^1 r^3\\,dr=1/4$. The integral is $\\pi(a+b)/4$.',
+      String.raw`Switch to polar: $x=r\cos\theta$, $y=r\sin\theta$, and $dA=r\,dr\,d\theta$.`,
+      (T, $) => String.raw`The integrand becomes $r^2(${coef($.a)}\cos^2\theta+${coef($.b)}\sin^2\theta)$, times $r$.`,
+      String.raw`Over a full turn, $\int\cos^2\theta\,d\theta=\int\sin^2\theta\,d\theta=\pi$. The radial part is $\int_0^1 r^3\,dr$.`,
     ],
     steps: ($, f) => [`$\\pi(a+b)/4 = ${f($.I)}$.`],
     sim: {
@@ -389,8 +397,8 @@ export default [
       ),
     ],
     hints: [
-      'The Jacobian determinant of $(r\\cos\\theta, r\\sin\\theta)$ is $r$.',
-      'The factor $r^2$ from $x^2+y^2$ belongs to the integrand, not to $dA$.',
+      String.raw`The area element comes from the Jacobian of $(r,\theta)\mapsto(r\cos\theta,\, r\sin\theta)$.`,
+      String.raw`That Jacobian is the determinant of $\begin{pmatrix}\cos\theta & -r\sin\theta\\ \sin\theta & r\cos\theta\end{pmatrix}$.`,
     ],
     steps: () => ['$dA=r\\,dr\\,d\\theta$.'],
     cases: [kase('sample', { n: 1 }, { dA: 'r' })],
@@ -411,8 +419,8 @@ export default [
     text: (T) => `Evaluate $\\iint_{D} ${coef(T.a)}xy\\,dA$, where $D$ is the disk of radius ${T.R} about the origin.`,
     parts: [num('I', ($) => $.I, '', { label: '$\\iint$', abs: 0.05 })],
     hints: [
-      '$xy$ is odd in $x$ and the disk is symmetric about $x=0$. Polar: $\\int_0^{2\\pi}\\cos\\theta\\sin\\theta\\,d\\theta=0$.',
-      'The radius and the coefficient scale a zero integral. They do not move it off zero.',
+      'Look for a symmetry of the region and of the integrand before computing.',
+      String.raw`Replacing $x$ by $-x$ keeps the disk the same and flips the sign of $xy$.`,
     ],
     steps: () => ['$0$ by symmetry.'],
     sim: {
@@ -456,8 +464,8 @@ export default [
       ),
     ],
     hints: [
-      'Same convention as Chapter 2: $\\theta\\in[0,2\\pi)$.',
-      'The radius does not change the angle interval. Degrees are not the convention used here.',
+      'The notes fix one convention for polar angles and keep it in every chapter.',
+      'The interval covers one full turn. It is closed at one end and open at the other, so no ray is counted twice.',
     ],
     steps: () => ['$[0,2\\pi)$.'],
     cases: [kase('sample', { n: 1 }, { iv: 'tau' })],

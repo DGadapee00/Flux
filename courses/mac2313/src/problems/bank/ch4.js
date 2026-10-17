@@ -26,8 +26,11 @@ export default [
       `Let $u=(${T.ux}, ${T.uy}, ${T.uz})$ and $v=(${T.vx}, ${T.vy}, ${T.vz})$. Compute $u\\cdot v$.`,
     parts: [num('du', ($) => $.du, '', { label: '$u\\cdot v$' })],
     hints: [
-      '$u\\cdot v = u_1 v_1 + u_2 v_2 + u_3 v_3$.',
-      'Pair matching components. A zero in one vector kills that term.',
+      'The dot product multiplies matching components and adds the products.',
+      (T, $) => {
+        const p = (n) => (n < 0 ? `(${n})` : `${n}`);
+        return String.raw`Form $${p($.ux)}\cdot${p($.vx)}+${p($.uy)}\cdot${p($.vy)}+${p($.uz)}\cdot${p($.vz)}$.`;
+      },
     ],
     steps: ($, f) => [`$u\\cdot v=${f($.du)}$.`],
     sim: {
@@ -61,8 +64,9 @@ export default [
       num('cz', ($) => $.cz, '', { label: '$(u\\times v)_z$', abs: 0.02 }),
     ],
     hints: [
-      'The $k$-component is $u_x v_y - u_y v_x$.',
-      'These vectors lie in the $xy$-plane, so the $i$ and $j$ components of the cross product are $0$.',
+      String.raw`Use the determinant with $\mathbf{i}$, $\mathbf{j}$, $\mathbf{k}$ in the first row.`,
+      'Both vectors lie in the $xy$-plane, so their cross product points along the $z$-axis.',
+      String.raw`The $\mathbf{k}$-component is $u_xv_y-u_yv_x$.`,
     ],
     steps: ($, f) => [`$u\\times v=(0, 0, ${f($.cz)})$.`],
     sim: {
@@ -92,8 +96,8 @@ export default [
       `Let $u=(${T.n}, 0, 0)$ and $v=(0, 1, 0)$. True or false: $u\\times v$ is still defined if the third component is dropped and $u$, $v$ are treated as vectors in $\\mathbb{R}^2$.`,
     parts: [tf('tf', false, { label: 'statement' })],
     hints: [
-      'The notes introduce the cross product only after moving to $\\mathbb{R}^3$. Its output is a vector orthogonal to both inputs, which needs a third dimension.',
-      'The dot product works in $\\mathbb{R}^2$. The cross product does not.',
+      'The cross product returns a vector perpendicular to both inputs.',
+      String.raw`In $\mathbb{R}^2$, two independent vectors leave no direction perpendicular to both.`,
     ],
     steps: () => ['False — $u\\times v$ is an $\\mathbb{R}^3$ operation.'],
     cases: [kase('sample', { n: 1 }, { tf: 0 })],
@@ -115,8 +119,9 @@ export default [
       `Let $u=(${T.a},0,0)$ and $v=(0,${T.b},0)$. What is the area of the parallelogram they span?`,
     parts: [num('A', ($) => $.A, '', { label: 'area', abs: 0.03 })],
     hints: [
-      'That area is $\\|u\\times v\\|$.',
-      'For these axis-aligned vectors the area is the product of the two nonzero components.',
+      String.raw`The parallelogram spanned by $u$ and $v$ has area $\|u\times v\|$.`,
+      'These vectors are perpendicular, so the parallelogram is a rectangle.',
+      'Its sides are the lengths of $u$ and $v$.',
     ],
     steps: ($, f) => [`The area is $${f($.A)}$.`],
     sim: {
@@ -150,8 +155,9 @@ export default [
       num('z', ($) => $.z, '', { label: '$z$', abs: 0.03 }),
     ],
     hints: [
-      'Plug the given $t$ into each component.',
-      'The third component is half of $t$, not $t$ itself.',
+      'Substitute the given $t$ into each component.',
+      (T) => String.raw`Use radians for $\cos ${T.t}$ and $\sin ${T.t}$.`,
+      'The third component is half of $t$.',
     ],
     steps: ($, f) => [`$\\gamma(t)=(${f($.x)}, ${f($.y)}, ${f($.z)})$.`],
     sim: {
@@ -184,8 +190,9 @@ export default [
       `Let $\\gamma(t)=(\\cos t, \\sin t, t/2)$. Find the length from $t=0$ to $t=${T.tEnd}$.`,
     parts: [num('L', ($) => $.L, '', { label: '$L(\\gamma)$', abs: 0.08 })],
     hints: [
-      "$\\sqrt{x'^2+y'^2+z'^2}=\\sqrt{5}/2$, a constant speed.",
-      'Multiply that speed by the length of the $t$-interval. Do not assume the interval is a full turn.',
+      String.raw`Length is $\int\|\gamma'(t)\|\,dt$.`,
+      String.raw`$\gamma'(t)=(-\sin t,\cos t,\tfrac12)$.`,
+      (T) => String.raw`Its length is constant. Multiply it by $${T.tEnd}$.`,
     ],
     steps: ($, f) => [`$L=(\\sqrt{5}/2)\\,t = ${f($.L)}$.`],
     sim: {
@@ -218,8 +225,9 @@ export default [
       `Let $\\gamma(t)=(t, 2\\cos t, 2\\sin t)$. Find $\\|\\gamma'(${T.t})\\|$.`,
     parts: [num('speed', ($) => $.speed, '', { label: "$\\|\\gamma'\\|$", abs: 0.03 })],
     hints: [
-      "$x'=1$, $y'=-2\\sin t$, $z'=2\\cos t$, so the speed is $\\sqrt{1+4}=\\sqrt{5}$, constant.",
-      'The $t$ in the question does not change the answer: $\\sin^2 t+\\cos^2 t=1$ at every point.',
+      String.raw`Speed is $\|\gamma'(t)\|$.`,
+      String.raw`$\gamma'(t)=(1,-2\sin t,2\cos t)$.`,
+      String.raw`Square the components and add them. Use $\sin^2t+\cos^2t=1$.`,
     ],
     steps: () => ['$\\sqrt{5}$ at every $t$.'],
     sim: {
@@ -256,8 +264,8 @@ export default [
       num('zp', ($) => $.zp, '', { label: "$z'$" }),
     ],
     hints: [
-      "$\\gamma'(t)=(2,1,-1)$ is constant, so every tangent is parallel to that vector.",
-      'Differentiate each component. None of them still contains $t$.',
+      String.raw`A direction of the tangent line at $t$ is $\gamma'(t)$.`,
+      'Differentiate each component in $t$.',
     ],
     steps: () => ['$(2,1,-1)$.'],
     sim: {
@@ -298,8 +306,9 @@ export default [
       num('fz', ($) => $.fz, '', { label: '$f_z$' }),
     ],
     hints: [
-      'Treat the other two variables as constant. $\\nabla f=(2x,2y,2z)$.',
-      'Each component is twice the matching coordinate. A zero coordinate gives a zero partial.',
+      String.raw`$\nabla f=(f_x,f_y,f_z)$. For each one, hold the other two variables fixed.`,
+      String.raw`$f_x=2x$, $f_y=2y$, and $f_z=2z$.`,
+      (T) => String.raw`Evaluate at $(${T.x0}, ${T.y0}, ${T.z0})$.`,
     ],
     steps: ($, f) => [`$\\nabla f=(${f($.fx)}, ${f($.fy)}, ${f($.fz)})$.`],
     sim: {
@@ -334,8 +343,9 @@ export default [
       `Let $f(x,y,z)=x^2 y z$. Find $f_{xy}$ at $(${T.x0}, ${T.y0}, ${T.z0})$.`,
     parts: [num('fxy', ($) => $.fxy, '', { label: '$f_{xy}$' })],
     hints: [
-      '$f_x=2xyz$, then differentiate in $y$: $f_{xy}=2xz$. Schwarz says $f_{yx}$ is the same.',
-      'The $y$ coordinate drops out of $f_{xy}$. Multiply $2xz$ at the given point.',
+      String.raw`$f_{xy}$ means: differentiate in $x$, then in $y$.`,
+      String.raw`$f_x=2xyz$.`,
+      (T) => String.raw`Differentiate that in $y$, then evaluate at $(${T.x0}, ${T.y0}, ${T.z0})$.`,
     ],
     steps: ($, f) => [`$f_{xy}=2xz=${f($.fxy)}$.`],
     sim: {
@@ -365,8 +375,8 @@ export default [
       `Let $f(x,y,z)=${coef(T.n)}x^2 y z$. True or false: if the second partials of $f$ are continuous near $P$, then $f_{xy}(P)=f_{yx}(P)$, $f_{xz}(P)=f_{zx}(P)$, and $f_{yz}(P)=f_{zy}(P)$.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
-      'This is the three-variable analogue of the equality of mixed partials.',
-      'There are three pairs, not only $f_{xy}$ and $f_{yx}$. Continuity of the second partials is the hypothesis.',
+      'Recall the hypothesis of the theorem on mixed partials. It does not depend on the number of variables.',
+      'Each pair of mixed partials involves two of the variables, with the third held fixed.',
     ],
     steps: () => ['True — Theorem 25.'],
     cases: [kase('sample', { n: 1 }, { tf: 1 })],
@@ -387,8 +397,8 @@ export default [
       `Let $f(x,y,z)=${coef(T.n)}x^2+y^2-z^2$. True or false: if $\\nabla f(a,b,c)=(0,0,0)$, then $f$ has a local min or max at $(a,b,c)$.`,
     parts: [tf('tf', false, { label: 'statement' })],
     hints: [
-      '$f=x^2+y^2-z^2$ has $\\nabla f=(0,0,0)$ at the origin and takes both signs nearby.',
-      'A positive coefficient on $x^2$ does not remove the $-z^2$ direction, so the origin is still not a local extremum.',
+      'A critical point can be a minimum, a maximum, or neither.',
+      String.raw`At the origin, $\nabla f=(0,0,0)$. Look at $f$ along the $x$-axis, then along the $z$-axis.`,
     ],
     steps: () => ['False — a critical point need not be a local min or max.'],
     cases: [kase('sample', { n: 1 }, { tf: 0 })],

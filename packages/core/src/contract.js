@@ -66,6 +66,7 @@ export function defineLab(spec) {
 }
 
 /**
+ * A hint is a string, or a function `(T, $, sig)` of the version, like `text`.
  * @param {Record<string, unknown>} spec
  */
 export function problem(spec) {

@@ -16,6 +16,7 @@ import {
   sinTrapPanels,
 } from '../../math/calc2.js';
 import { domain, kase, num, piTex, problem, range, sym, tf } from '../kit.js';
+import { exprToTex } from '../engine.js';
 
 const numFrame = { xMin: -0.3, xMax: 3.5, yMin: -0.35, yMax: 1.45, plane: 'xy' };
 const impFrame = { xMin: 0.2, xMax: 8.8, yMin: -0.25, yMax: 1.35, plane: 'xy' };
@@ -42,6 +43,12 @@ function cosAnti(a, b) {
   return `${n}/${d}*sin(${arg})`;
 }
 
+/** The antiderivative of x·sin(ax) that is 0 at 0: sin(ax)/a² − x·cos(ax)/a. */
+function partsKey(a) {
+  if (a === 1) return 'sin(x)-x*cos(x)';
+  return `sin(${a}*x)/${a * a}-x*cos(${a}*x)/${a}`;
+}
+
 export default [
   problem({
     id: 'u2.parts.xsin',
@@ -58,8 +65,9 @@ export default [
     text: (T) => String.raw`Find $\int_0^{${T.n}} x\sin x\,dx$.`,
     parts: [num('v', ($) => $.v, '', { label: 'value', abs: 1e-6 })],
     hints: [
-      String.raw`Let $u=x$ and $dv=\sin x\,dx$. Then $du=dx$ and $v=-\cos x$.`,
-      'The antiderivative is $-x\\cos x+\\sin x$. Evaluate it at the upper limit, then subtract the value at $0$.',
+      'Integrate by parts. Choose $u$ as the factor that gets simpler when you differentiate it.',
+      String.raw`Take $u=x$ and $dv=\sin x\,dx$. Then $du=dx$ and $v=-\cos x$.`,
+      (T) => String.raw`So $\int x\sin x\,dx=-x\cos x+\int\cos x\,dx$. Evaluate from $0$ to $${T.n}$, in radians.`,
     ],
     steps: ($, f) => [
       String.raw`$-x\cos x+\sin x$ from $0$ to $n$ is $-n\cos n+\sin n$.`,
@@ -89,8 +97,9 @@ export default [
     text: (T) => String.raw`Find $\int_0^{${piTex(T.k, 2)}} \sin^2 x\,dx$.`,
     parts: [num('v', ($) => $.v, '', { label: 'value', abs: 1e-6 })],
     hints: [
-      String.raw`$\sin^2 x=(1-\cos 2x)/2$.`,
-      'Integrate that identity. The cosine term vanishes at a multiple of $\\pi$, so only the $x/2$ term remains.',
+      'Lower the power of the sine with a double-angle identity first.',
+      String.raw`$\sin^2 x=\tfrac12(1-\cos 2x)$.`,
+      (T) => String.raw`An antiderivative is $x/2-\sin(2x)/4$. Evaluate it at $${piTex(T.k, 2)}$.`,
     ],
     steps: ($, f) => [
       String.raw`The double-angle form integrates to half the upper limit.`,
@@ -114,8 +123,9 @@ export default [
     text: (T) => String.raw`Find $\int_0^{${T.c}} \dfrac{1}{\sqrt{1-x^2}}\,dx$.`,
     parts: [num('v', ($) => $.v, '', { label: 'value', abs: 1e-6 })],
     hints: [
-      String.raw`The substitution $x=\sin\theta$ turns the integrand into $1$. The antiderivative is $\arcsin x$.`,
-      'Evaluate $\\arcsin$ at the upper limit and subtract $\\arcsin 0$.',
+      String.raw`The root $\sqrt{1-x^2}$ suggests $x=\sin\theta$.`,
+      String.raw`Then $dx=\cos\theta\,d\theta$ and $\sqrt{1-x^2}=\cos\theta$. The integrand becomes $1$.`,
+      (T) => String.raw`So the integral is the change in $\theta$, from $\arcsin 0$ to $\arcsin ${T.c}$.`,
     ],
     steps: ($, f) => [
       String.raw`$\arcsin c-\arcsin 0$ is the value.`,
@@ -139,8 +149,9 @@ export default [
     text: (T) => String.raw`Find $\int_0^{${T.b}} \dfrac{1}{(x+1)(x+2)}\,dx$.`,
     parts: [num('v', ($) => $.v, '', { label: 'value', abs: 1e-6 })],
     hints: [
-      String.raw`$\dfrac{1}{(x+1)(x+2)}=\dfrac{1}{x+1}-\dfrac{1}{x+2}$.`,
-      'The antiderivative is $\\ln(x+1)-\\ln(x+2)$. Evaluate it at $b$ and at $0$.',
+      'Split the fraction into partial fractions first.',
+      String.raw`Write $\dfrac{1}{(x+1)(x+2)}=\dfrac{A}{x+1}+\dfrac{B}{x+2}$. Cover up each factor to find $A$ and $B$.`,
+      (T) => String.raw`Each piece integrates to a logarithm. Evaluate from $0$ to $${T.b}$.`,
     ],
     steps: ($, f) => [
       String.raw`$\ln(b+1)-\ln(b+2)-\ln(1/2)$ is the value.`,
@@ -169,8 +180,9 @@ export default [
       num('err', ($) => $.err, '', { label: 'error', abs: 1e-6 }),
     ],
     hints: [
-      String.raw`$h=\pi/n$. Weight the endpoints once and the interior samples twice.`,
-      'Subtract the estimate from $2$ and take the absolute value. That difference is the error.',
+      'The trapezoidal rule joins neighbouring samples with straight lines.',
+      (T) => String.raw`With $n=${T.n}$, $h=\pi/${T.n}$. The end samples weigh $1$ and the interior samples weigh $2$, all times $h/2$.`,
+      'The error is the absolute difference between your estimate and $2$.',
     ],
     steps: ($, f) => [
       String.raw`The weighted sum is $${f($.trap)}$.`,
@@ -208,8 +220,9 @@ export default [
       num('err', ($) => $.err, '', { label: 'error', abs: 1e-6 }),
     ],
     hints: [
-      String.raw`$n$ is even. The weights run $1,4,2,4,\ldots,2,4,1$, and the factor is $h/3$.`,
-      'The error is the absolute difference between that weighted sum and $2$.',
+      "Simpson's rule fits a parabola through each pair of panels.",
+      (T) => String.raw`With $n=${T.n}$, $h=\pi/${T.n}$. The weights run $1,4,2,4,\ldots,4,1$, all times $h/3$.`,
+      'The error is the absolute difference between your estimate and $2$.',
     ],
     steps: ($, f) => [
       String.raw`The weighted sum is $${f($.simp)}$.`,
@@ -247,8 +260,8 @@ export default [
       String.raw`True or false: for $\int_0^{\pi}\sin x\,dx$ with $n=${T.n}$ panels, Simpson's rule has a smaller absolute error than the trapezoidal rule.`,
     parts: [tf('closer', ($) => (Math.abs(sinSimpson($.n) - 2) < Math.abs(sinTrap($.n) - 2) ? 1 : 0), { label: 'Simpson is closer' })],
     hints: [
-      'Simpson fits a parabola through each pair of panels. The trapezoid fits a chord.',
-      'Compute both absolute errors and compare them. The smaller one is the closer rule.',
+      'With the same panels, a parabola follows a curved arc more closely than a chord does.',
+      (T) => String.raw`Compute both estimates with $n=${T.n}$, then compare each one with $2$.`,
     ],
     steps: () => ['On this hump the parabola follows the curve more closely than the chord, at every even panel count here.'],
     cases: [kase('n=4', { n: 4 }, { closer: 1 })],
@@ -274,8 +287,9 @@ export default [
       num('tail', ($) => $.tail, '', { label: 'tail', abs: 1e-6 }),
     ],
     hints: [
-      String.raw`The antiderivative of $x^{-2}$ is $-1/x$.`,
-      'The area on $[1,B]$ is $1-1/B$. The missing tail is the rest of the way to $1$.',
+      'Find an antiderivative, then evaluate it at the two limits.',
+      String.raw`An antiderivative of $x^{-2}$ is $-1/x$.`,
+      'The integral all the way to infinity is $1$. The tail is the part the finite area has not reached.',
     ],
     steps: ($, f) => [
       String.raw`Area $1-1/B=${f($.area)}$.`,
@@ -319,17 +333,61 @@ export default [
       num('val', ($) => $.val, '', { label: 'value at 1', abs: 1e-6 }),
     ],
     hints: [
-      String.raw`The antiderivative of $\cos(bx)$ is $(1/b)\sin(bx)$.`,
-      'Multiply by the constant in front, and reduce that fraction. The result is $0$ at $x=0$, so no constant is added.',
+      String.raw`Undo the chain rule: $\dfrac{d}{dx}\sin(bx)=b\cos(bx)$.`,
+      (T, $) => String.raw`So an antiderivative of $\cos(${$.b === 1 ? '' : $.b}x)$ is $\sin(${$.b === 1 ? '' : $.b}x)$ divided by $${$.b}$.`,
+      (T, $) => String.raw`${$.a === 1 ? '' : `Multiply by $${$.a}$ and reduce the fraction. `}It is already $0$ at $x=0$. For the number, substitute $x=1$.`,
     ],
     steps: ($, f) => [
-      String.raw`The antiderivative is $${cosAnti($.a, $.b)}$.`,
+      String.raw`The antiderivative is $${exprToTex(cosAnti($.a, $.b), ['x'])}$.`,
       String.raw`At $x=1$ it equals $${f($.val)}$.`,
     ],
     cases: [
       kase('a=2, b=2', { a: 2, b: 2 }, { formula: 'sin(2*x)', val: Math.sin(2) }, {
         accept: { formula: ['sin(2x)'] },
         reject: { formula: ['sin(2*x)+C'] },
+      }),
+    ],
+  }),
+  problem({
+    id: 'u2.sym.parts',
+    exam: 'u2',
+    ch: '3',
+    src: 'OpenStax Calc 2 §3.1',
+    title: 'Integration by parts, as a formula',
+    kind: 'derivation',
+    level: 3,
+    topics: ['parts', 'symbolic'],
+    vars: { a: range(1, 50, 1) },
+    derive: ($) => ({ x: 1, val: Math.sin($.a) / ($.a * $.a) - Math.cos($.a) / $.a }),
+    second: ($) => ({
+      formula: partsKey($.a),
+      val: simpson((t) => t * Math.sin($.a * t), 0, 1),
+    }),
+    text: (T, $) =>
+      String.raw`Let $f(x)=x\sin(${$.a === 1 ? '' : $.a}x)$. Write the antiderivative that is $0$ at $x=0$, as a formula in $x$, and give its value at $x=1$.`,
+    parts: [
+      sym('formula', ($) => partsKey($.a), ['x'], ($) => Math.sin($.a * $.x) / ($.a * $.a) - ($.x * Math.cos($.a * $.x)) / $.a, {
+        label: 'antiderivative',
+      }),
+      num('val', ($) => $.val, '', { label: 'value at 1', abs: 1e-6 }),
+    ],
+    hints: [
+      'Integrate by parts. Choose $u$ as the factor that gets simpler when you differentiate it.',
+      (T, $) => {
+        const ax = $.a === 1 ? 'x' : `${$.a}x`;
+        return String.raw`Take $u=x$ and $dv=\sin(${ax})\,dx$. Then $du=dx$ and $v=-\cos(${ax})${$.a === 1 ? '' : `/${$.a}`}$.`;
+      },
+      String.raw`The parts formula leaves $\int v\,du$, a cosine integral. Check that your result is $0$ at $x=0$, so no constant is needed.`,
+    ],
+    steps: ($, f) => [
+      String.raw`$uv=-x\cos(${$.a === 1 ? '' : $.a}x)${$.a === 1 ? '' : `/${$.a}`}$, and $\int v\,du$ adds the sine term.`,
+      String.raw`The antiderivative is $${exprToTex(partsKey($.a), ['x'])}$.`,
+      String.raw`At $x=1$ it equals $${f($.val)}$.`,
+    ],
+    cases: [
+      kase('a=1', { a: 1 }, { formula: 'sin(x)-x*cos(x)', val: Math.sin(1) - Math.cos(1) }, {
+        accept: { formula: ['-x*cos(x)+sin(x)'] },
+        reject: { formula: ['x*cos(x)-sin(x)', 'sin(x)-x*cos(x)+C'] },
       }),
     ],
   }),

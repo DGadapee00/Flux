@@ -47,8 +47,9 @@ export default [
       num('vol', ($) => $.vol, 'in^3', { label: 'volume', abs: 1e-2 }),
     ],
     hints: [
-      String.raw`If the sheet has side $s$, then $V(x)=x(s-2x)^2$. The useful root of $V'(x)=0$ is $x=s/6$.`,
-      'The other root is $x=s/2$, which leaves no sheet to fold. Use $s/6$.',
+      'Write the volume as a function of the cut $x$. Then find where its derivative is zero.',
+      (T) => String.raw`A cut $x$ leaves a base $${T.side}-2x$ on a side, and the height is $x$. So $V(x)=x(${T.side}-2x)^2$.`,
+      String.raw`Set $V'(x)=0$. One root leaves no sheet to fold. Keep the other, and evaluate $V$ there.`,
     ],
     steps: ($, f) => [
       String.raw`$V'(x)=(s-2x)(s-6x)=0$ gives the cut $${f($.cut)}$ inches.`,
@@ -83,8 +84,9 @@ export default [
       String.raw`Use the tangent line to $\sqrt{x}$ at $x=${$.a * $.a}$ to approximate $\sqrt{${$.a * $.a + 1}}$.`,
     parts: [num('y', ($) => $.y, '', { label: 'approximation', abs: 1e-6 })],
     hints: [
-      String.raw`$\dfrac{d}{dx}\sqrt{x}=1/(2\sqrt{x})$. Add that slope times $1$.`,
-      'The base point is a perfect square. Add $1$ over twice its square root.',
+      String.raw`Near a point $x_0$, $f(x)\approx f(x_0)+f'(x_0)(x-x_0)$.`,
+      (T, $) => String.raw`Take $x_0=${$.a * $.a}$, where $\sqrt{x_0}=${$.a}$ exactly.`,
+      (T, $) => String.raw`The slope there is $1/(2\sqrt{x_0})=1/${2 * $.a}$, and the step is $1$.`,
     ],
     steps: ($, f) => [
       String.raw`At $x=${$.a * $.a}$ the slope is $1/(2\cdot${$.a})$.`,
@@ -114,8 +116,9 @@ export default [
       num('y', ($) => $.y, '', { label: '$f$', abs: 1e-4 }),
     ],
     hints: [
-      'Differentiate. Set the derivative equal to zero.',
-      'Solve $3x^2=k$ and keep the positive root.',
+      String.raw`A critical point is where $f'(x)=0$.`,
+      (T) => String.raw`$f'(x)=3x^2-${T.k}$.`,
+      (T) => String.raw`Solve $3x^2=${T.k}$. Keep the positive root, then evaluate $f$ there.`,
     ],
     steps: ($, f) => [
       String.raw`$f'(x)=3x^2-${$.k}=0$ gives $x=${f($.x)}$.`,
@@ -140,8 +143,9 @@ export default [
       String.raw`For $f(x)=x^2$ on $[${T.p},${T.q}]$, the Mean Value Theorem gives a $c$ where $f'(c)$ equals the secant slope. Find $c$.`,
     parts: [num('c', ($) => $.c, '', { label: '$c$', abs: 1e-6 })],
     hints: [
-      String.raw`The secant slope is $(q^2-p^2)/(q-p)$, and $f'(c)=2c$.`,
-      'That secant slope simplifies to $p+q$. Half of it is $c$.',
+      'Start with the slope of the secant line across the whole interval.',
+      (T) => String.raw`The secant slope is $\dfrac{${T.q}^2-${T.p}^2}{${T.q}-${T.p}}$.`,
+      String.raw`Set $2c$ equal to that slope and solve for $c$.`,
     ],
     steps: ($, f) => [
       String.raw`The secant slope is $${$.p}+${$.q}$. Half of that is $c=${f($.c)}$.`,
@@ -165,8 +169,9 @@ export default [
     text: (T) => String.raw`Let $f(x)=x^3+${coef(T.a)}x^2$. Find the $x$-coordinate of the inflection point.`,
     parts: [num('x', ($) => $.x, '', { label: 'inflection', abs: 1e-4 })],
     hints: [
-      'Set the second derivative equal to zero.',
-      'The second derivative is $6x+2a$. Solve for $x$.',
+      String.raw`An inflection point is where $f''$ changes sign.`,
+      (T, $) => String.raw`$f''(x)=6x+${2 * $.a}$.`,
+      'Set it to zero. A line crosses zero once, and its sign changes there.',
     ],
     steps: ($, f) => [
       String.raw`$6x+2\cdot${$.a}=0$ gives $x=${f($.x)}$.`,
@@ -190,8 +195,9 @@ export default [
     text: (T) => String.raw`Find $\lim_{x\to ${T.a}}\dfrac{x^2-${T.a}^2}{x-${T.a}}$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit', abs: 1e-4 })],
     hints: [
-      String.raw`The form is $0/0$. Differentiate the top and the bottom, or cancel $x-a$.`,
-      'After cancelling, the expression is $x+a$. Substitute the limit point.',
+      String.raw`Substitution gives $0/0$. Use L'Hôpital's rule, or factor the top.`,
+      String.raw`L'Hôpital: differentiate the top and the bottom separately. The top gives $2x$. The bottom gives $1$.`,
+      (T) => String.raw`Evaluate $2x/1$ at $x=${T.a}$.`,
     ],
     steps: ($, f) => [
       String.raw`Cancelling leaves $x+${$.a}$, so the limit is $${f($.lim)}$.`,
@@ -215,8 +221,9 @@ export default [
     text: (T) => String.raw`Find $\lim_{x\to 0}\dfrac{\sin(${coef(T.k)}x)}{x}$.`,
     parts: [num('lim', ($) => $.lim, '', { label: 'limit', abs: 1e-4 })],
     hints: [
-      String.raw`The form is $0/0$. The derivative of $\sin(kx)$ at $0$ is $k$.`,
-      'The derivative of the denominator is $1$, so the limit is that numerator derivative.',
+      String.raw`Substitution gives $0/0$, so L'Hôpital's rule applies.`,
+      String.raw`Differentiate the top with the chain rule. The bottom's derivative is $1$.`,
+      String.raw`Evaluate at $x=0$, where $\cos 0=1$.`,
     ],
     steps: ($, f) => [
       String.raw`The limit is $${f($.lim)}$.`,
@@ -241,8 +248,9 @@ export default [
       String.raw`Apply one step of Newton's method to $f(x)=x^2-${T.c}$, starting at $x=${T.x0}$.`,
     parts: [num('x1', ($) => $.x1, '', { label: 'next guess', abs: 1e-6 })],
     hints: [
-      String.raw`$x_1=x_0-f(x_0)/f'(x_0)$, and $f'(x)=2x$.`,
-      'That step is the average of $x_0$ and $c/x_0$.',
+      String.raw`One Newton step is $x_1=x_0-f(x_0)/f'(x_0)$.`,
+      (T, $) => String.raw`Here $f(${$.x0})=${$.x0 * $.x0 - $.c}$ and $f'(${$.x0})=${2 * $.x0}$.`,
+      'Divide those, then subtract the quotient from the starting point.',
     ],
     steps: ($, f) => [
       String.raw`$(${$.x0}+${$.c}/${$.x0})/2=${f($.x1)}$.`,

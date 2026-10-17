@@ -28,8 +28,9 @@ export default [
       num('fxy', ($) => $.fxy, '', { label: '$f_{xy}$', abs: 0.02 }),
     ],
     hints: [
-      'Differentiate $f_x=2ax$ and $f_y=2by$ once more. Mixed is zero because neither first partial sees the other variable.',
-      'Second pure partials of a quadratic are constant, so the point does not change $f_{xx}$ or $f_{yy}$.',
+      'Take the first partials, then differentiate each one again.',
+      (T, $) => String.raw`$f_x=${2 * $.a}x$ and $f_y=${2 * $.b}y$.`,
+      String.raw`Differentiate $f_x$ in $x$ for $f_{xx}$, and in $y$ for $f_{xy}$.`,
     ],
     steps: ($, f) => [`$f_{xx}=${f($.fxx)}$, $f_{yy}=${f($.fyy)}$, $f_{xy}=${f($.fxy)}$.`],
     sim: {
@@ -65,8 +66,9 @@ export default [
       `Let $f(x,y)=${coef(T.a)}x^2 y$. Find $f_{xy}$ at $(${T.x0}, ${T.y0})$.`,
     parts: [num('fxy', ($) => $.fxy, '', { label: '$f_{xy}$', abs: 0.02 })],
     hints: [
-      '$f_x=2axy$, then differentiate in $y$. Or $f_y=ax^2$, then differentiate in $x$. Schwarz says the two orders match.',
-      'The mixed partial is $2ax$. The $y$-coordinate is not in it.',
+      String.raw`$f_{xy}$ means: differentiate in $x$, then in $y$.`,
+      (T, $) => String.raw`$f_x=${2 * $.a}xy$.`,
+      (T) => String.raw`Differentiate that in $y$, then evaluate at $(${T.x0}, ${T.y0})$.`,
     ],
     steps: ($, f, T) => [`$f_x=${prod(2, T.a)}xy$, so $f_{xy}=${prod(2, T.a)}x=${f($.fxy)}$.`],
     sim: {
@@ -97,8 +99,8 @@ export default [
       `Let $f(x,y)=${coef(T.n)}x^2 y$. True or false: if the mixed partials of $f$ are continuous on a disk about $P$, then $f_{xy}(P)=f_{yx}(P)$.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
-      'This is the equality of mixed partials when they are continuous.',
-      'Continuity of the mixed partials is the hypothesis. Differentiability of $f$ alone is not what the theorem asks for.',
+      'Recall the hypothesis of the theorem on mixed partials, often named for Clairaut or Schwarz.',
+      'Compare the hypothesis in the statement with the one in the theorem.',
     ],
     steps: () => ['True — that is Theorem 12.'],
     cases: [kase('sample', { n: 1 }, { tf: 1 })],
@@ -131,8 +133,8 @@ export default [
       ),
     ],
     hints: [
-      '$P_y(x)=f(x,y)$ with $y$ locked. Its ordinary derivative is $f_x$.',
-      '$Q_x$ holds $x$ fixed and varies $y$, which produces $f_y$ instead.',
+      String.raw`$\partial f/\partial x$ is the rate of change of $f$ when only $x$ moves.`,
+      'So the slice must hold $y$ fixed and let $x$ vary.',
     ],
     steps: () => ['$P_y$, the slice that holds $y$ fixed.'],
     cases: [kase('sample', { n: 1 }, { slice: 'Py' })],
@@ -157,8 +159,9 @@ export default [
       `Let $f(x,y)=xy$ and $\\gamma(t)=(\\cos t,\\sin t)$. For $g=f\\circ\\gamma$, find $g'(t)$ at the angle $${T.deg}^\\circ$.`,
     parts: [num('gp', ($) => $.gp, '', { label: "$g'(t)$", abs: 0.03 })],
     hints: [
-      "$g'(t)=f_x x'+f_y y'$. Here $f_x=y$, $f_y=x$, $x'=-\\sin t$, $y'=\\cos t$.",
-      'The product simplifies to $\\cos 2t$. Convert the given angle to radians before evaluating.',
+      String.raw`Chain rule along a curve: $g'(t)=f_x\,x'(t)+f_y\,y'(t)$.`,
+      String.raw`Here $f_x=y$, $f_y=x$, $x'(t)=-\sin t$, and $y'(t)=\cos t$.`,
+      (T) => String.raw`Substitute $x=\cos t$ and $y=\sin t$, then evaluate at $t=${T.deg}^\circ$.`,
     ],
     steps: ($, f) => [`$g'(t)=\\cos 2t=${f($.gp)}$.`],
     sim: {
@@ -194,8 +197,9 @@ export default [
       `Let $f(x,y)=x^2+y^2$ and $\\gamma(t)=(t, t^2)$. For $g=f\\circ\\gamma$, find $g'(${T.t0})$.`,
     parts: [num('gp', ($) => $.gp, '', { label: "$g'$", abs: 0.03 })],
     hints: [
-      "$f_x=2x$, $f_y=2y$, $x'=1$, $y'=2t$, so $g'=2t+4t^3$.",
-      'On $\\gamma(t)=(t,t^2)$ the chain rule uses $x=t$ and $y=t^2$, so the $y$ term contributes $4t^3$.',
+      String.raw`Chain rule along a curve: $g'(t)=f_x\,x'(t)+f_y\,y'(t)$.`,
+      String.raw`Here $f_x=2x$, $f_y=2y$, $x'(t)=1$, and $y'(t)=2t$.`,
+      (T) => String.raw`Substitute $x=t$ and $y=t^2$, then evaluate at $t=${T.t0}$.`,
     ],
     steps: ($, f) => [`$g'=2t+4t^3=${f($.gp)}$.`],
     sim: {
@@ -234,8 +238,9 @@ export default [
       `Let $f(x,y)=x^2+y^2$ and $h(s,t)=f(s\\cos t,\\, s\\sin t)$. Find $\\partial h/\\partial s$ at $s=${T.s0}$, $t=${T.deg}^\\circ$.`,
     parts: [num('hs', ($) => $.hs, '', { label: '$h_s$', abs: 0.03 })],
     hints: [
-      '$h(s,t)=s^2$, so $h_s=2s$ at every angle.',
-      'The angle changes the point on the circle of radius $s$, not the radial derivative of $s^2$.',
+      String.raw`$h_s=f_x\,x_s+f_y\,y_s$, with $x=s\cos t$ and $y=s\sin t$.`,
+      String.raw`Here $x_s=\cos t$ and $y_s=\sin t$.`,
+      (T) => String.raw`Simplify with $\cos^2t+\sin^2t=1$, then use $s=${T.s0}$.`,
     ],
     steps: ($, f) => [`$h_s=2s=${f($.hs)}$.`],
     sim: {
@@ -277,8 +282,9 @@ export default [
       `Let $f(x,y)=xy$ and $h(s,t)=f(s\\cos t,\\, s\\sin t)$. Find $\\partial h/\\partial t$ at $s=${T.s0}$, $t=${T.deg}^\\circ$.`,
     parts: [num('ht', ($) => $.ht, '', { label: '$h_t$', abs: 0.03 })],
     hints: [
-      '$h_t=f_x x_t+f_y y_t$ with $x_t=-s\\sin t$, $y_t=s\\cos t$. The result is $s^2\\cos 2t$.',
-      'Square the radius first, then multiply by $\\cos 2t$. Convert degrees before using the double angle.',
+      String.raw`$h_t=f_x\,x_t+f_y\,y_t$, with $x=s\cos t$ and $y=s\sin t$.`,
+      String.raw`Here $f_x=y$, $f_y=x$, $x_t=-s\sin t$, and $y_t=s\cos t$.`,
+      (T) => String.raw`The sum simplifies to $s^2\cos 2t$. Evaluate at $s=${T.s0}$ and $t=${T.deg}^\circ$.`,
     ],
     steps: ($, f) => [`$h_t=\\cos 2t=${f($.ht)}$.`],
     sim: {
@@ -316,8 +322,8 @@ export default [
       `Let $f(x,y)=${coef(T.n)}xy$ and let $\\gamma$ be a smooth curve. True or false: if $g=f\\circ\\gamma$, then $g'(t)=\\nabla f(\\gamma(t))\\cdot\\gamma'(t)$.`,
     parts: [tf('tf', true, { label: 'statement' })],
     hints: [
-      "Write out $\\nabla f\\cdot\\gamma'=(f_x, f_y)\\cdot(x', y')$.",
-      'The coefficient in $f$ scales both sides. It does not change the identity.',
+      String.raw`Write both sides in components: $\nabla f=(f_x, f_y)$ and $\gamma'=(x', y')$.`,
+      'Expand the dot product and compare it with the chain rule along a curve.',
     ],
     steps: () => ["True — that is Theorem 15 rewritten with a dot product."],
     cases: [kase('sample', { n: 1 }, { tf: 1 })],
@@ -350,8 +356,8 @@ export default [
       ),
     ],
     hints: [
-      'The inner map takes two parameters $(s,t)$ to a point in the plane. That is the second version.',
-      'The first version is a single parameter $t$ along a curve $\\gamma(t)$. Here both $s$ and $t$ are inputs.',
+      'Count the parameters of the inner map.',
+      String.raw`The inner map here is $(s,t)\mapsto(s\cos t,\, s\sin t)$.`,
     ],
     steps: () => ['Second version: $g(s,t)=(s\\cos t,\\, s\\sin t)$ and $h=f\\circ g$.'],
     cases: [kase('sample', { n: 1 }, { ver: 'two' })],
