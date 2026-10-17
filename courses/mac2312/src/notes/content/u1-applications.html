@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Applications of integration</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">MAC 2312 · Calculus II · Unit 1 · OpenStax Calculus Volume 2, Ch 2</p>
+  <h1>Applications of integration</h1>
+  <p class="lede">Every application here follows one pattern. Cut the quantity into thin pieces. Approximate one piece. Add the pieces as a Riemann sum, and let the pieces shrink to an integral. The numbers below are recomputed.</p>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>Area between curves</a>
+    <a href="#s2"><span>02</span>Volumes by slicing</a>
+    <a href="#s3"><span>03</span>Volumes by shells</a>
+    <a href="#s4"><span>04</span>Arc length and surface area</a>
+    <a href="#s5"><span>05</span>Work</a>
+    <a href="#s6"><span>06</span>Centres of mass</a>
+    <a href="#s7"><span>07</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Area between curves</h2>
+<p>Suppose \(f(x) \ge g(x)\) on \([a, b]\). A thin vertical strip at \(x\) has height \(f(x) - g(x)\) and width \(dx\). Adding the strips gives the area.</p>
+\[
+A = \int_a^b \bigl(f(x) - g(x)\bigr)\,dx.
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>Over a strip of width \(\Delta x\), the region is almost a rectangle of height \(f(x_i) - g(x_i)\). The sum of those rectangles is a Riemann sum for \(f - g\). As \(\Delta x \to 0\), it becomes the integral. The formula does not care whether either curve is above the axis. Only the difference counts.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a line over a parabola</span>
+<p>On \([0, 1]\), \(x \ge x^2\). The area between them is \(\int_0^1 (x - x^2)\,dx = 1/2 - 1/3 = 1/6\).</p>
+</div>
+<p>When the curves cross, the top one changes. Split the interval at each crossing, or integrate \(|f - g|\).</p>
+<div class="box ex"><span class="tag">Worked example · curves that cross</span>
+<p>\(y = x\) and \(y = x^3\) cross at \(-1\), \(0\), and \(1\). On \([0, 1]\), \(x\) is on top, and the area is \(1/2 - 1/4 = 1/4\). On \([-1, 0]\), \(x^3\) is on top, and the area is also \(1/4\). The total is \(1/2\).</p>
+<p>Integrating \(x - x^3\) straight across \([-1, 1]\) gives \(0\). The two pieces cancel. That number is not an area.</p>
+</div>
+<p>Some regions are easier in horizontal strips. Then the right curve minus the left curve is the length, and \(dy\) is the width.</p>
+<div class="box ex"><span class="tag">Worked example · horizontal strips</span>
+<p>The region between \(x = y^2\) and \(x = y + 2\). They meet where \(y^2 = y + 2\), at \(y = -1\) and \(y = 2\). The line is on the right. The area is \(\int_{-1}^{2} (y + 2 - y^2)\,dy = 10/3 + 7/6 = 4.5\).</p>
+<p>Vertical strips would need two integrals here, because the bottom boundary changes at \(x = 1\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Subtracting in the wrong order gives a negative area. For the line over the parabola, \(\int_0^1 (x^2 - x)\,dx = -1/6\). Sketch first, and subtract the lower curve from the upper.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Top minus bottom, in \(dx\). Right minus left, in \(dy\). Split where the curves cross.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The intersections are found by algebra here. For most pairs of curves they need a numerical root finder, such as Newton's method. The area formula is unchanged.</p>
+</div>
+</section>
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Volumes by slicing</h2>
+<p>Cut a solid into thin slabs across an axis. If the slab at \(x\) has cross-sectional area \(A(x)\) and thickness \(dx\), its volume is about \(A(x)\,dx\). Add them.</p>
+\[
+V = \int_a^b A(x)\,dx.
+\]
+<p>A solid of revolution has circular slices. Rotating the region under \(y = f(x)\) about the \(x\)-axis makes disks of radius \(f(x)\), so \(A(x) = \pi f(x)^2\).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>A cone of radius \(r\) and height \(h\) checks the method. Lay it along the \(x\)-axis with its tip at \(0\). The radius grows linearly, so at \(x\) it is \(rx/h\). Then</p>
+\[
+\begin{aligned}
+V &= \int_0^h \pi\Bigl(\frac{rx}{h}\Bigr)^2 dx\\
+&= \frac{\pi r^2}{h^2}\cdot\frac{h^3}{3} = \frac{\pi r^2 h}{3}.
+\end{aligned}
+\]
+<p>That is the cone formula from geometry, now derived. With \(r = 3\) and \(h = 4\) it gives \(12\pi = 37.7\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · disks under a root</span>
+<p>Rotate the region under \(y = \sqrt{x}\) on \([0, 4]\) about the \(x\)-axis. Each disk has area \(\pi(\sqrt{x})^2 = \pi x\). So \(V = \int_0^4 \pi x\,dx = 8\pi = 25.1\). Dividing out \(\pi\) leaves \(8\).</p>
+</div>
+<p>A region with a hole in the middle makes washers. The area of a washer is the outer disk minus the inner one: \(\pi(R^2 - r^2)\).</p>
+<div class="box ex"><span class="tag">Worked example · a washer</span>
+<p>Rotate the region between \(y = x\) and \(y = x^2\) on \([0, 1]\) about the \(x\)-axis. The outer radius is \(x\), the inner \(x^2\). So \(V = \pi\int_0^1 (x^2 - x^4)\,dx = \pi(1/3 - 1/5) = 2\pi/15 = 0.419\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(\pi(R^2 - r^2)\) is not \(\pi(R - r)^2\). For the washer above, squaring the difference gives \(\pi\int_0^1 (x - x^2)^2\,dx = \pi/30 = 0.105\). That is a quarter of the true volume. Square each radius, then subtract.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Volume is the integral of cross-sectional area. Disks: \(\pi R^2\). Washers: \(\pi(R^2 - r^2)\). Radii are measured from the axis of rotation.</p>
+</div>
+<p>In the Solids lab, the Disks scenario stacks slices under \(\sqrt{x}\). The readout gives the volume by the antiderivative and by Simpson's rule.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Rotation about a line other than an axis shifts every radius. About \(y = -1\), for instance, a disk's radius becomes \(f(x) + 1\). The text works those cases in §2.2.</p>
+</div>
+</section>
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Volumes by shells</h2>
+<p>Instead of slicing across the axis, cut the solid into thin cylindrical shells around it. A shell of radius \(r\), height \(h\), and thickness \(dr\) has volume about \(2\pi r h\,dr\): unroll it into a thin slab of length \(2\pi r\).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The exact volume of a shell is the outer cylinder minus the inner one: \(\pi h\bigl((r + dr)^2 - r^2\bigr) = 2\pi r h\,dr + \pi h\,dr^2\). The second term is a thin slab times a thin slab. In the Riemann sum it vanishes faster than \(dr\), so only \(2\pi r h\,dr\) survives the limit.</p>
+</div>
+\[
+V = \int 2\pi\,(\text{radius})(\text{height})\,d(\text{radius}).
+\]
+<div class="box ex"><span class="tag">Worked example · the same solid by shells</span>
+<p>The solid under \(\sqrt{x}\) on \([0, 4]\), rotated about the \(x\)-axis. Shells around that axis are horizontal. At height \(y\), a shell has radius \(y\), and it runs from \(x = y^2\) to \(x = 4\). So</p>
+\[
+\begin{aligned}
+V &= \int_0^2 2\pi y\,(4 - y^2)\,dy\\
+&= 2\pi\,(8 - 4) = 8\pi.
+\end{aligned}
+\]
+<p>Disks gave \(8\pi\) too. Two slicings of one solid must agree.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · around the y-axis</span>
+<p>Rotate the region under \(y = x - x^2\) on \([0, 1]\) about the \(y\)-axis. A vertical strip at \(x\) sweeps a shell of radius \(x\) and height \(x - x^2\). So \(V = 2\pi\int_0^1 (x^2 - x^3)\,dx = 2\pi(1/3 - 1/4) = \pi/6 = 0.524\).</p>
+<p>Washers here would need \(x\) as a function of \(y\) on both sides of the hump. Shells avoid that.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The radius is the distance to the axis, not the coordinate. Around the line \(x = 2\), a strip at \(x\) has radius \(2 - x\). Using \(x\) builds the solid around the wrong line.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Shells: \(2\pi \times\) radius \(\times\) height \(\times\) thickness. Slice parallel to the axis for shells and across it for disks. Pick the one whose integrand needs no solving.</p>
+</div>
+<p>In the Solids lab, the Both ways scenario shows disks and shells for one solid. The two readouts agree for every right end \(b\).</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The shell argument assumes the height is a single segment for each radius. A region that folds back on itself needs to be split first.</p>
+</div>
+</section>
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Arc length and surface area</h2>
+<p>Cut a curve into short pieces. Each piece is nearly a straight segment. Its length is \(\sqrt{\Delta x^2 + \Delta y^2}\).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Over a step \(\Delta x\), the Mean Value Theorem gives a point where \(\Delta y = f'(x_i^*)\,\Delta x\). So the segment's length is \(\sqrt{1 + f'(x_i^*)^2}\,\Delta x\). The sum of the segments is a Riemann sum.</p>
+</div>
+\[
+L = \int_a^b \sqrt{1 + f'(x)^2}\,dx.
+\]
+<div class="box ex"><span class="tag">Worked example · a parabola to x = 1</span>
+<p>For \(y = x^2\) from \(0\) to \(1\), \(f'(x) = 2x\), so \(L = \int_0^1 \sqrt{1 + 4x^2}\,dx\). The antiderivative is \(\tfrac{x}{2}\sqrt{1 + 4x^2} + \tfrac14\ln\bigl(2x + \sqrt{1 + 4x^2}\bigr)\). At \(1\) that is \(1.118 + 0.361 = 1.479\).</p>
+<p>The straight chord from \((0, 0)\) to \((1, 1)\) is \(\sqrt{2} = 1.414\). The curve is longer, as it must be.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a line, by both routes</span>
+<p>For \(y = x\) from \(0\) to \(1\), \(f' = 1\), and the integrand is the constant \(\sqrt{2}\). So \(L = \sqrt{2}\). The distance formula gives the same number. A formula that works must agree with geometry on a line.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a parabola to x = 2</span>
+<p>Run the same parabola to \(x = 2\). The antiderivative gives \(L = 4.647\). The chord to \((2, 4)\) is \(\sqrt{20} = 4.472\). The gap has grown from \(0.065\) to \(0.175\), because the curve bends more over the longer run.</p>
+</div>
+<p>Rotating the curve about the \(x\)-axis sweeps a surface. Each short piece sweeps a band of radius \(f(x)\) and slant width \(\sqrt{1 + f'^2}\,dx\).</p>
+\[
+S = \int_a^b 2\pi f(x)\sqrt{1 + f'(x)^2}\,dx.
+\]
+<div class="box ex"><span class="tag">Worked example · a sphere</span>
+<p>Take \(f(x) = \sqrt{r^2 - x^2}\) on \([-r, r]\). Then \(f' = -x/f\), so \(f\sqrt{1 + f'^2} = \sqrt{f^2 + x^2} = r\). The integrand is the constant \(2\pi r\). So \(S = 2\pi r \cdot 2r = 4\pi r^2\). For \(r = 2\) that is \(50.3\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(2\pi f(x)\,dx\) for the band, without the slant factor, treats each band as a flat ring. For a sphere that gives \(\int_{-r}^{r} 2\pi\sqrt{r^2 - x^2}\,dx = \pi^2 r^2\), which is \(39.5\) for \(r = 2\) instead of \(50.3\). The slant is not small where the curve is steep.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Arc length: \(\int\sqrt{1 + f'^2}\,dx\). Surface area: \(\int 2\pi f\sqrt{1 + f'^2}\,dx\). The square root is the slant of each piece.</p>
+</div>
+<p>In the Arc length lab, the readout gives the length by the antiderivative and by Simpson's rule, next to the chord. Push the right end out and watch the gap grow.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Most arc-length integrals have no closed form. \(\int\sqrt{1 + \cos^2 x}\,dx\), the length of a sine wave, is one. They are evaluated numerically, as in Unit 2.</p>
+</div>
+</section>
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Work</h2>
+<p>A constant force \(F\) over a distance \(d\) does work \(W = Fd\). A force that varies is constant over a short enough step. Add the steps.</p>
+\[
+W = \int_a^b F(x)\,dx.
+\]
+<div class="box ex"><span class="tag">Worked example · a spring</span>
+<p>A spring pulls back with force \(kx\) when stretched \(x\) from rest (Hooke's law). With \(k = 4\) lb/ft, stretching it \(2\) ft takes \(\int_0^2 4x\,dx = 8\) ft·lb.</p>
+<p>The second foot costs three times the first: \(\int_1^2 4x\,dx = 6\), against \(\int_0^1 4x\,dx = 2\). The force grows as the spring stretches.</p>
+</div>
+<p>When different parts of a body move different distances, slice the body instead of the path. Each slice has its own weight and its own lift.</p>
+<div class="box ex"><span class="tag">Worked example · pumping out a tank</span>
+<p>A cylindrical tank has radius \(2\) m and height \(5\) m, full of water. Pump it all out over the top. A slab at height \(y\) has volume \(4\pi\,dy\), weight \(\rho g \cdot 4\pi\,dy\), and must rise \(5 - y\) m.</p>
+\[
+\begin{aligned}
+W &= \int_0^5 \rho g\,(4\pi)(5 - y)\,dy\\
+&= \rho g \cdot 4\pi \cdot 12.5.
+\end{aligned}
+\]
+<p>With \(\rho = 1000\) kg/m³ and \(g = 9.81\) m/s², \(W = 1.54 \times 10^6\) J.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · winding up a chain</span>
+<p>A chain \(20\) m long, of mass \(2\) kg per metre, hangs from a winch. Winding it in lifts the piece \(y\) m below the winch by \(y\) m. That piece weighs \(2 \cdot 9.81\,dy\) N. So \(W = \int_0^{20} 19.62\,y\,dy = 19.62 \cdot 200 = 3920\) J.</p>
+<p>The answer equals the chain's whole weight, \(392\) N, lifted \(10\) m. That is the distance its centre of mass rises, which section 6 explains.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Lifting the whole tank's weight the full \(5\) m doubles the answer, to \(3.08 \times 10^6\) J. The top slab barely moves. Only the bottom slab rises the full height. The integral weighs each slab by its own distance.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Work is force integrated over distance. When the distance varies through the body, slice the body and integrate weight times lift.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The water is lifted slowly, so it gains no speed and no kinetic energy. Friction in the pipe and the pump's efficiency are ignored. A real pump does more work than this integral.</p>
+</div>
+</section>
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Centres of mass</h2>
+<p>The centre of mass is the balance point. For point masses \(m_i\) at positions \(x_i\), it is the weighted average \(\bar{x} = \sum m_i x_i / \sum m_i\). A thin plate of uniform density is the limit of many small masses.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Cut the region under \(y = f(x)\) into strips. A strip at \(x\) has area \(f(x)\,dx\), so its mass is proportional to that. Its own centre is at \(x\) across and at \(f(x)/2\) up. Weight each position by the strip's area and add.</p>
+</div>
+\[
+\bar{x} = \frac{\int x f(x)\,dx}{\int f(x)\,dx},
+\]
+\[
+\bar{y} = \frac{\int \tfrac12 f(x)^2\,dx}{\int f(x)\,dx}.
+\]
+<div class="box ex"><span class="tag">Worked example · under a parabola</span>
+<p>The region under \(y = x^2\) on \([0, 1]\) has area \(1/3\). Then \(\bar{x} = (1/4)/(1/3) = 0.75\), and \(\bar{y} = (1/10)/(1/3) = 0.3\). The balance point sits toward the tall end, and low, because most of the area is near the axis there.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The centroid is not the midpoint of the interval. For the parabola it is at \(0.75\), not \(0.5\). The tall end carries more area, and the average leans toward it.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>A centre of mass is a weighted average. Weight each strip by its area, and place it at the strip's own centre.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The plate is uniform. A density that varies across it enters each integral as a weight. Pappus's theorem, which links centroids to volumes of revolution, is in §2.6 of the text.</p>
+</div>
+</section>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Formula sheet</h2>
+<ul>
+<li>Area: \(\int_a^b (f - g)\,dx\), top minus bottom. In \(y\): right minus left.</li>
+<li>Volume: \(\int A(x)\,dx\). Disk \(\pi R^2\). Washer \(\pi(R^2 - r^2)\).</li>
+<li>Shells: \(\int 2\pi\,(\text{radius})(\text{height})\,d(\text{radius})\).</li>
+<li>Cone: \(\pi r^2 h/3\). Sphere's surface: \(4\pi r^2\).</li>
+<li>Arc length: \(\int_a^b \sqrt{1 + f'(x)^2}\,dx\).</li>
+<li>Surface area: \(\int_a^b 2\pi f(x)\sqrt{1 + f'(x)^2}\,dx\).</li>
+<li>Work: \(\int F(x)\,dx\). Spring: \(F = kx\), work \(kd^2/2\).</li>
+<li>Pumping: \(\int \rho g \times (\text{slab area}) \times (\text{lift})\,dy\).</li>
+<li>Centroid: \(\bar{x} = \int x f\,dx / \int f\,dx\), \(\bar{y} = \int \tfrac12 f^2\,dx / \int f\,dx\).</li>
+</ul>
+</section>
+</main>
+</body>
+</html>

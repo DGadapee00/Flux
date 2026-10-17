@@ -2,6 +2,7 @@ import { trackSiblings } from '@flux/tracks';
 import { createHUD as createMathHUD } from '@flux/shells/math/hud.js';
 import { EXAMS, examById, LAB_META } from '../data/catalog.js';
 import { course } from '../manifest.js';
+import { notesDeps } from '../notes/deps.js';
 
 const homeId = 'u1';
 
@@ -15,5 +16,6 @@ export function createHUD(api) {
     courseId: course.id,
     track: trackSiblings(course.id),
     homeId,
+    notes: notesDeps,
   });
 }

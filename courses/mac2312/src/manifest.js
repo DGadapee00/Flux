@@ -26,5 +26,6 @@ export const course = defineCourse({
   },
   labs: () => import('./labs/load.js'),
   problems: () => import('./problems/index.js'),
+  notes: () => import('./notes/index.js'),
   prereqs: [],
 });
