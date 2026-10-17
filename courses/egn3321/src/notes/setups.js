@@ -38,6 +38,15 @@ export const SETUPS = {
         },
         read: (c) => ({ s: [c.s, 23], v: [c.v, 4] }),
       },
+      {
+        tag: 'a ramp in acceleration',
+        lab: 'rectilinear',
+        scenario: 'ramp',
+        setup(s) {
+          s.t = 2;
+        },
+        read: (c) => ({ s: [c.s, 6.67], v: [c.v, 5], a: [c.a, 2] }),
+      },
     ],
     s5: [
       {
@@ -52,6 +61,19 @@ export const SETUPS = {
           s.at = 0;
         },
         read: (c) => ({ rho: [c.rho, 11.18], an: [c.an, 0.805] }),
+      },
+      {
+        tag: 'speeding up through a bend',
+        lab: 'path-nt',
+        scenario: 'turn',
+        setup(s) {
+          s.shape = 'parabola';
+          s.c = 0.8;
+          s.x = 1.2;
+          s.speed = 4;
+          s.at = 1.5;
+        },
+        read: (c) => ({ rho: [c.rho, 3.33], an: [c.an, 4.81], magA: [c.magA, 5.03] }),
       },
     ],
     s6: [

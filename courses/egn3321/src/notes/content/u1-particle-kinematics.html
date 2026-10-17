@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 1 · Hibbeler Ch 12</p>
   <h1>Particle kinematics</h1>
-  <p class="lede">Position, velocity, and acceleration, before any force law. The numbers below are recomputed. Sections the course pack does not name stay out.</p>
+  <p class="lede">Position, velocity, and acceleration, before any force law. Every relation below is derived from the two definitions \(v = ds/dt\) and \(a = dv/dt\), then used on a worked case. The numbers are recomputed. Sections the course pack does not name stay out.</p>
   <nav class="toc">
     <a href="#s1"><span>01</span>Units and significant figures</a>
     <a href="#s2"><span>02</span>Rectilinear motion</a>
@@ -24,122 +24,209 @@
 <h2><span class="n">01</span>Units and significant figures</h2>
 <p>A force in pounds and a length in feet have to become newtons and metres before they enter an SI equation. One foot is exactly 0.3048 m. One pound-force is one pound-mass times 9.80665 m/s².</p>
 <div class="box why"><span class="tag">Why</span>
-<p>The pound-force is defined with standard gravity, 9.80665 m/s². Multiply the force by that factor. Multiply the arm by 0.3048. The product is the moment, in newton-metres.</p>
+<p>The pound-force is defined with standard gravity, 9.80665 m/s². A pound-mass is exactly 0.45359237 kg. Multiply them: one pound-force is 4.4482 N. Multiply a force by that factor. Multiply an arm by 0.3048. The product is the moment, in newton-metres.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · 50 lbf through 4 ft</span>
 <p>A 50 lbf force has a 4 ft arm. The force is 222 N, to three figures. The arm is 1.219 m, four figures, because the first digit is 1. The moment is 271 N·m.</p>
+</div>
+<p>The US customary mass unit is the slug. It is the mass that one pound-force accelerates at 1 ft/s². Newton's second law fixes it: \(1\ \text{slug} = 1\ \text{lbf}\cdot\text{s}^2/\text{ft}\). In SI that is 14.594 kg.</p>
+<div class="box ex"><span class="tag">Worked example · a car's mass in slugs</span>
+<p>A car weighs 2000 lb. Its mass is \(W/g = 2000/32.174 = 62.2\) slug, using standard gravity in ft/s². In SI, the same car is \(2000 \times 0.45359\) = 907 kg.</p>
+<p>Check by converting the other way: \(62.16 \times 14.594 = 907.2\) kg. The two routes agree.</p>
 </div>
 <p>Report three significant figures. When the first significant digit is 1, keep four. Count from the first non-zero digit.</p>
 <div class="box ex"><span class="tag">Worked example · three figures</span>
 <p>The product \(3 \times 5 \times \pi / 7\) is 6.73198 before rounding. The first digit is 6, so three figures give 6.73.</p>
 </div>
-<p>An equation is dimensionally homogeneous when every added term measures the same kind of quantity. \(v = v_0 + at\) is homogeneous. \(v = v_0 + a\) is not: a velocity is being added to an acceleration.</p>
+<p>An equation is dimensionally homogeneous when every added term measures the same kind of quantity. \(v = v_0 + at\) is homogeneous: \(at\) is (m/s²)(s), which is m/s. \(v = v_0 + a\) is not. A velocity is being added to an acceleration. Checking dimensions catches a dropped \(t\) before any number is computed.</p>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The pound-force uses 9.80665 m/s². Projectile motion in this unit uses \(g = 9.81\) m/s². A student who uses one of those values for both jobs changes the third figure. Hibbeler Statics §1.3 and Dynamics §12.6.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Convert first. Then round. Three figures, or four when the leading digit is 1.</p>
+<p>Convert first. Then round. Three figures, or four when the leading digit is 1. Check dimensions before numbers.</p>
 </div>
-<p>The conversion uses the exact foot and the defined pound-force. It leaves out a local value of \(g\). A scale that reads pounds already used standard gravity.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The conversion uses the exact foot and the defined pound-force. It leaves out a local value of \(g\). A scale that reads pounds already used standard gravity. Measurement uncertainty is also left out: three figures is a reporting rule, not a statement about how well a quantity is known.</p>
+</div>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Rectilinear motion</h2>
 <p>On a straight line, velocity is the slope of \(s(t)\). Acceleration is the slope of \(v(t)\). The other direction is an area.</p>
+\[
+v = \frac{ds}{dt}, \qquad a = \frac{dv}{dt}.
+\]
 <div class="box why"><span class="tag">Why</span>
-<p>If \(a\) is constant, \(dv/dt = a\) integrates to \(v = v_0 + at\). Then \(ds/dt = v\) integrates to the position formula. When \(a\) is known against \(s\), the chain rule \(a = v\,dv/ds\) removes the time.</p>
+<p>If \(a\) is constant, \(dv/dt = a\) integrates to \(v = v_0 + at\). Then \(ds/dt = v_0 + at\) integrates to \(s = s_0 + v_0 t + \tfrac12 at^2\).</p>
+<p>When \(a\) is known against \(s\), time is in the way. The chain rule removes it: \(a = dv/dt = (dv/ds)(ds/dt) = v\,dv/ds\). So \(a\,ds = v\,dv\). With constant \(a\), integrate both sides from the start: \(a(s - s_0) = \tfrac12(v^2 - v_0^2)\).</p>
 </div>
-
 \[
-v = \frac{ds}{dt}, \qquad a = \frac{dv}{dt}, \qquad a\,ds = v\,dv.
+\begin{aligned}
+v &= v_0 + at,\\
+s &= s_0 + v_0 t + \tfrac12 at^2,\\
+v^2 &= v_0^2 + 2a(s - s_0).
+\end{aligned}
 \]
-<p>Constant acceleration integrates at once:</p>
-\[
-v = v_0 + at, \qquad s = s_0 + v_0 t + \frac{1}{2}at^2.
-\]
-<p>When \(a = ks\), separate the variables. Integrate \(v\,dv = ks\,ds\). The speed is \(\sqrt{v_0^2 + ks^2}\) if the particle passes the origin at \(v_0\).</p>
+<p>The third equation is the one to use when time is neither given nor asked for. It follows from the first two by eliminating \(t\), as well as from \(a\,ds = v\,dv\).</p>
 <div class="box ex"><span class="tag">Worked example · a reversal</span>
 <p>A particle starts at the origin with \(v_0 = 4\) m/s and \(a = -2\) m/s². At \(t = 5\) s the velocity is \(-6\) m/s and the position is \(-5\) m. It stopped at \(t = 2\) s, at \(s = 4\) m. The path out and back is 13 m.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · stopping from 60 mph</span>
+<p>A car at 60 mph brakes at a steady 20 ft/s². First convert: 60 mph is 88 ft/s. The time equation gives \(t = 88/20 = 4.40\) s to stop. The velocity–position equation, with \(v = 0\), gives \(d = v_0^2/(2a) = 88^2/40 = 194\) ft.</p>
+<p>Check in SI. 88 ft/s is 26.82 m/s, and 20 ft/s² is 6.096 m/s². The distance is \(26.82^2/12.19 = 59.0\) m, which is 194 ft.</p>
+</div>
+<p>When \(a\) depends on \(s\), separate the variables in \(a\,ds = v\,dv\) and integrate. For \(a = ks\), a particle that passes the origin at \(v_0\) has speed \(\sqrt{v_0^2 + ks^2}\).</p>
+<div class="box ex"><span class="tag">Worked example · a pull toward the origin</span>
+<p>Let \(a = -4s\), in m/s² with \(s\) in m. The particle passes the origin at 2 m/s. Integrate \(v\,dv = -4s\,ds\): \(\tfrac12 v^2 - 2 = -2s^2\), so \(v^2 = 4 - 4s^2\). The particle stops where \(v = 0\): at \(s = 1\) m. It then returns, so the motion is an oscillation between \(\pm 1\) m.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Distance is 13 m. Displacement is \(-5\) m. Reporting the absolute value of the displacement as the distance drops the leg after the stop. Hibbeler §12.2.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Displacement is the net change in \(s\). Distance adds the lengths of the pieces, including the piece after the velocity changes sign.</p>
+<p>Displacement is the net change in \(s\). Distance adds the lengths of the pieces, including the piece after the velocity changes sign. Use \(a\,ds = v\,dv\) when time is not in the question.</p>
 </div>
-<p>Constant acceleration leaves out drag, a spring, and any turn. When \(a\) depends on \(s\), use \(a\,ds = v\,dv\). A curve needs the normal acceleration of a later section.</p>
+<p>In the Rectilinear lab, the plot shows \(a\), \(v\), and \(s\) against time. Move the probe through the stop and watch the distance and the displacement separate.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Constant acceleration leaves out drag, which grows with speed, and a brake whose grip fades as it heats. Either makes \(a\) a function of \(v\), which needs \(dt = dv/a(v)\) instead. A curve needs the normal acceleration of section 5.</p>
+</div>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Erratic graphs</h2>
-<p>An \(a\)–\(t\) graph made of steps has a constant acceleration on each step. The area of a step is that step’s change in velocity. Then step the position forward with the average velocity on the interval.</p>
+<p>When the motion comes as a graph rather than a formula, read it with the same two definitions. The slope of an \(s\)–\(t\) graph is \(v\). The slope of a \(v\)–\(t\) graph is \(a\). Areas run the other way.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Integrate \(a = dv/dt\) over an interval: \(\Delta v = \int a\,dt\), the area under the \(a\)–\(t\) graph. Integrate \(v = ds/dt\): \(\Delta s = \int v\,dt\), the area under the \(v\)–\(t\) graph. On a step where \(a\) is constant, \(v\) is linear. Its area is the width times the average of the end velocities. That trapezoid is exact, not an estimate.</p>
+</div>
+<p>An \(a\)–\(t\) graph made of steps has a constant acceleration on each step. The area of a step is that step's change in velocity. Then step the position forward with the average velocity on the interval.</p>
 <div class="box ex"><span class="tag">Worked example · three steps</span>
 <p>Start from rest. Accelerate at 2 m/s² for 3 s, then at \(-1\) m/s² for 2 s, then at 0 for 1 s. The velocity ends at 4 m/s. The position ends at 23 m.</p>
 </div>
 <div class="box why"><span class="tag">Why</span>
 <p>The first area is \(2 \times 3 = 6\) m/s, so \(v = 6\) m/s and \(s = 9\) m. The next area is \(-2\) m/s, so \(v = 4\) m/s and \(s = 19\) m. The last step holds \(v\) and adds 4 m. End at 23 m.</p>
 </div>
-<p>A step graph leaves out the rounding between corners. The area rule still holds for a smooth graph: integrate \(a\) over the interval, then step \(s\) with the average velocity.</p>
+<p>A graph need not be steps. If \(a\) is linear in time, \(v\) is a parabola and \(s\) a cubic. Integrate term by term.</p>
+<div class="box ex"><span class="tag">Worked example · a ramp in acceleration</span>
+<p>Let \(a = 1 + 0.5t\) m/s², with \(v_0 = 2\) m/s and \(s_0 = 0\). Then \(v = 2 + t + 0.25t^2\) and \(s = 2t + 0.5t^2 + t^3/12\). At \(t = 2\) s: \(a = 2\) m/s², \(v = 5\) m/s, and \(s = 4 + 2 + 0.667 = 6.67\) m.</p>
+</div>
+<p>A \(v\)–\(s\) graph gives acceleration through \(a = v\,dv/ds\): the height times the slope. On \(v = 2s + 1\), at \(s = 1\) m, \(v = 3\) m/s and \(dv/ds = 2\) s⁻¹. So \(a = 6\) m/s².</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The slope of a \(v\)–\(s\) graph is not the acceleration. On \(v = 2s + 1\) the slope is 2 everywhere, but the acceleration is \(v\) times it, which grows with \(v\). It is 6 m/s² at \(s = 1\) m and 10 m/s² at \(s = 2\) m. Hibbeler §12.3.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Slopes give the next derivative down the chain. Areas give the change one step up. On a \(v\)–\(s\) graph, multiply the slope by the height.</p>
+</div>
+<p>In the Rectilinear lab, the Two constant accelerations scenario is a two-step graph. The Ramp scenario is the linear acceleration above. A fourth-order Runge–Kutta step gives the same \(s\) and \(v\) as the integrals.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A step graph leaves out the rounding between corners. Real acceleration cannot jump: a jump would need an infinite rate of change of force. The area rule still holds for a smooth graph. Integrate \(a\) over the interval, then step \(s\) with the area under \(v\).</p>
+</div>
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Projectile motion</h2>
 <p>Horizontal velocity stays constant when the only acceleration is gravity. Vertical velocity changes at \(g = 9.81\) m/s². Resolve the launch velocity, then treat the two axes separately.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The acceleration vector is \((0, -g)\). Each component is a constant-acceleration problem from section 2. Horizontally \(a_x = 0\), so \(x = v_0\cos\theta\,t\). Vertically \(y = v_0\sin\theta\,t - \tfrac12 g t^2\). Eliminate \(t\) between them:</p>
+\[
+y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
+\]
+<p>The path is a parabola. On level ground it returns to \(y = 0\) at \(x = v_0^2\sin 2\theta / g\). That range is largest at \(\theta = 45^\circ\).</p>
+</div>
 <div class="box ex"><span class="tag">Worked example · level ground</span>
 <p>Launch at 20 m/s, 30° above the horizontal, from level ground. The range is 35.3 m. The maximum height is 5.10 m. The time of flight is 2.04 s.</p>
 </div>
 <div class="box why"><span class="tag">Why</span>
-<p>\(v_x = 17.32\) m/s and \(v_y = 10.00\) m/s. The vertical velocity is zero at the top, so the height is \(v_y^2 / (2g)\). Flight time is \(2v_y / g\). Range is \(v_x\) times that time.</p>
+<p>\(v_x = 17.32\) m/s and \(v_y = 10.00\) m/s. The vertical velocity is zero at the top, so the height is \(v_y^2 / (2g)\). Flight time is \(2v_y / g\). Range is \(v_x\) times that time. The range formula agrees: \(400\sin 60^\circ / 9.81 = 35.3\) m.</p>
 </div>
-<p>This projectile leaves out drag and wind. With drag, the horizontal acceleration is not zero, and the two axes no longer separate.</p>
+<div class="box ex"><span class="tag">Worked example · off a cliff</span>
+<p>A ball leaves a 20 m cliff horizontally at 15 m/s. Vertically it starts from rest, so \(20 = \tfrac12(9.81)t^2\) gives \(t = 2.02\) s. In that time it travels \(15 \times 2.02 = 30.3\) m out. At impact its vertical speed is \(9.81 \times 2.02 = 19.8\) m/s. Its speed is \(\sqrt{15^2 + 19.8^2} = 24.8\) m/s.</p>
+<p>Check with energy: \(v^2 = 15^2 + 2(9.81)(20) = 617\), so \(v = 24.8\) m/s. The two routes agree.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a punt in feet</span>
+<p>A ball is kicked at 80 ft/s, 50° above level ground. In US units \(g = 32.2\) ft/s². The components are \(v_x = 51.4\) ft/s and \(v_y = 61.3\) ft/s. The flight time is \(2v_y/g = 3.81\) s, the range \(51.4 \times 3.81 = 196\) ft, and the peak \(v_y^2/(2g) = 58.3\) ft.</p>
+<p>Check in SI. 80 ft/s is 24.38 m/s, and \(24.38^2\sin 100^\circ/9.81 = 59.7\) m, which is 196 ft.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The 45° rule and the range formula assume the landing height equals the launch height. From the cliff, a 45° launch is not the longest throw, and \(v_0^2\sin 2\theta/g\) does not apply. Solve the vertical equation for the actual landing height. Hibbeler §12.6.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Two independent problems share one clock. Horizontal: constant velocity. Vertical: constant acceleration \(-g\). Solve for \(t\) in the axis that has enough information, then use it in the other.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>This projectile leaves out drag and wind. With drag, the horizontal acceleration is not zero, and the two axes no longer separate: drag on each axis depends on the total speed. It also leaves out the variation of \(g\) with height and the curvature of the ground. Over a few hundred metres neither matters.</p>
+</div>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Normal and tangential components</h2>
 <p>The tangential piece \(a_t\) changes the speed. The normal piece \(a_n = v^2 / \rho\) turns the velocity. They are perpendicular. The magnitude is the root of the sum of the squares.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>\(a_t\) is the rate of change of speed. \(a_n = v^2/\rho\) is what turning the velocity requires. For a graph \(y = f(x)\), \(\rho\) is the quotient of the first and second derivatives.</p>
+<p>Write the velocity as speed times direction: \(\vec{v} = v\,\hat{u}_t\). Differentiate with the product rule: \(\vec{a} = \dot{v}\,\hat{u}_t + v\,\dot{\hat{u}}_t\).</p>
+<p>The unit tangent keeps length 1, so its rate of change is perpendicular to it, along \(\hat{u}_n\). It turns at the rate the path turns: \(d\theta/dt = (d\theta/ds)(ds/dt) = v/\rho\). So \(\dot{\hat{u}}_t = (v/\rho)\,\hat{u}_n\), and the second term is \((v^2/\rho)\,\hat{u}_n\).</p>
 </div>
-
+\[
+\vec{a} = \dot{v}\,\hat{u}_t + \frac{v^2}{\rho}\,\hat{u}_n, \qquad |\vec{a}| = \sqrt{a_t^2 + a_n^2}.
+\]
 <p>For a graph \(y = f(x)\), the radius of curvature is</p>
 \[
 \rho = \frac{(1 + y'^2)^{3/2}}{|y''|}.
 \]
-<p>The unit normal points toward the concave side. A positive \(y''\) points it upward.</p>
+<p>The unit normal points toward the concave side. A positive \(y''\) points it upward. On a circle, \(\rho\) is the radius. On a straight line, \(y'' = 0\) and \(\rho\) is infinite, so \(a_n = 0\).</p>
 <div class="box ex"><span class="tag">Worked example · a parabola</span>
 <p>The path is \(y = \tfrac{1}{2} x^2\). At \(x = 2\) m the speed is 3 m/s and \(a_t = 0\). Then \(y' = 2\) and \(y'' = 1\), so \(\rho = 11.18\) m. The normal acceleration is 0.805 m/s². That is also \(|a|\).</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · speeding up through a bend</span>
+<p>The path is \(y = 0.4x^2\). At \(x = 1.2\) m, \(y' = 0.96\) and \(y'' = 0.8\), so \(\rho = 1.9216^{3/2}/0.8 = 3.33\) m. The speed is 4 m/s and rising at 1.5 m/s². Then \(a_n = 16/3.33 = 4.81\) m/s², and \(|a| = \sqrt{1.5^2 + 4.81^2} = 5.03\) m/s².</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · braking in a curve</span>
+<p>A car on a 100 m radius curve travels at 25 m/s and brakes at 2 m/s². The normal part is \(25^2/100 = 6.25\) m/s², toward the centre. The tangential part is 2 m/s², backward. The total is \(\sqrt{6.25^2 + 2^2} = 6.56\) m/s². The tyres must supply all of it.</p>
+</div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Acceleration is not tangent to the path. Here \(a_t = 0\), and \(a_n = 0.805\) m/s². A student who reports \(a = a_t\) misses the turn. Hibbeler §12.7.</p>
+<p>Acceleration is not tangent to the path. In the parabola example \(a_t = 0\), and \(a_n = 0.805\) m/s². A student who reports \(a = a_t\) misses the turn. Hibbeler §12.7.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>\(a_t\) changes speed. \(a_n\) changes direction. Either one can be zero while the other is not.</p>
 </div>
-<p>The curvature formula is for a plane curve \(y = f(x)\). A space curve needs a different radius. The model also takes \(a_t\) as given, rather than from a force.</p>
+<p>In the Path lab, the gold arrow is \(a_t\) and the normal arrow points to the concave side. A numerical second derivative gives the same \(\rho\) as the formula.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The curvature formula is for a plane curve \(y = f(x)\). A space curve needs a binormal direction and a different radius. The model also takes \(a_t\) as given, rather than from a force. Unit 2 supplies the force.</p>
+</div>
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Relative motion, translating axes</h2>
 <p>Axes fixed to A, and not rotating, see B by subtraction. The positions are not needed for the relative velocity or the relative acceleration.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>Axes on A translate with A and do not rotate. Subtract A's velocity from B's, and A's acceleration from B's. The positions are not in those two differences.</p>
+<p>Positions add as vectors: \(\vec{r}_B = \vec{r}_A + \vec{r}_{B/A}\). Differentiate in time. Because the axes on A translate and do not rotate, their unit vectors are constant, and each term differentiates directly. One derivative gives the velocities. A second gives the accelerations.</p>
 </div>
-
 \[
 \vec{v}_{B/A} = \vec{v}_B - \vec{v}_A, \qquad \vec{a}_{B/A} = \vec{a}_B - \vec{a}_A.
 \]
 <div class="box ex"><span class="tag">Worked example · two velocities</span>
 <p>A moves at \((3, 1)\) m/s. B moves at \((1, 4)\) m/s. Then \(\vec{v}_{B/A} = (-2, 3)\) m/s. The relative speed is 3.61 m/s. That direction is neither velocity.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · crossing a river</span>
+<p>A boat moves at 3 m/s relative to the water, pointed straight across. The river flows at 1.5 m/s. The boat's ground velocity is the sum: \((1.5, 3)\) m/s. Its speed over ground is 3.35 m/s, at 26.6° downstream from straight across.</p>
+<p>To land directly opposite, point upstream by \(\varphi\) with \(3\sin\varphi = 1.5\), so \(\varphi = 30^\circ\). The crossing speed drops to \(3\cos 30^\circ = 2.60\) m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · relative acceleration</span>
+<p>At a junction, car A speeds up eastward at 2 m/s² while car B speeds up northward at 1 m/s². Seen from A, B accelerates at \(\vec{a}_{B/A} = (0, 1) - (2, 0) = (-2, 1)\) m/s². Its size is 2.24 m/s². An observer in A sees B pull away north-westward, although B never moves west.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Subtracting speeds instead of vectors. In the first example, \(|\vec{v}_B| - |\vec{v}_A| = 4.12 - 3.16 = 0.96\) m/s. The relative speed is 3.61 m/s. Speeds subtract only when the velocities are parallel. Hibbeler §12.10.</p>
+</div>
 <div class="box key"><span class="tag">Key</span>
 <p>Subtract the vectors. Do not subtract the speeds and then invent a direction.</p>
 </div>
-<p>These axes translate with A and do not rotate. A rotating frame adds terms this section does not carry. Rotating axes stay out of the course.</p>
+<p>In the Relative lab, drag either velocity. The relative arrow is drawn from A, and its components are the differences.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>These axes translate with A and do not rotate. A rotating frame adds terms this section does not carry: a Coriolis term and a centripetal term. Rotating axes stay out of the course. The model also treats A and B as points with no size.</p>
+</div>
 </section>
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Formula sheet</h2>
 <ul>
-<li>1 ft = 0.3048 m. 1 lbf = 4.4482216152605 N, from 0.45359237 kg times 9.80665 m/s².</li>
+<li>1 ft = 0.3048 m. 1 lbf = 4.4482216152605 N, from 0.45359237 kg times 9.80665 m/s². 1 slug = 14.594 kg.</li>
 <li>Three significant figures. Four when the first significant digit is 1.</li>
 <li>\(v = ds/dt\), \(a = dv/dt\), and \(a\,ds = v\,dv\).</li>
-<li>Constant \(a\): \(v = v_0 + at\), \(s = s_0 + v_0 t + \tfrac{1}{2} at^2\).</li>
+<li>Constant \(a\): \(v = v_0 + at\), \(s = s_0 + v_0 t + \tfrac{1}{2} at^2\), \(v^2 = v_0^2 + 2a(s - s_0)\).</li>
 <li>Distance is the sum of the lengths. Displacement is the net \(\Delta s\).</li>
-<li>Projectile: \(g = 9.81\) m/s² downward. \(v_x\) is constant.</li>
+<li>Graphs: \(\Delta v\) is the area under \(a\)–\(t\). \(\Delta s\) is the area under \(v\)–\(t\). On \(v\)–\(s\), \(a = v\,dv/ds\).</li>
+<li>Projectile: \(g = 9.81\) m/s² downward. \(v_x\) is constant. Level-ground range \(v_0^2\sin 2\theta/g\).</li>
 <li>\(a_t = \dot{v}\), \(a_n = v^2/\rho\), \(\rho = (1+y'^2)^{3/2}/|y''|\).</li>
 <li>\(\vec{v}_{B/A} = \vec{v}_B - \vec{v}_A\) for translating axes.</li>
 </ul>
