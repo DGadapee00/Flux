@@ -5,7 +5,7 @@
  * Every setup matches one worked example, and the lab agrees within 2%.
  * Every \( \) and \[ \] typesets.
  * Every section but the formula sheet has a worked example and ends with what the model leaves out,
- * and each unit runs to at least 3,000 words. Units in PENDING are still being deepened.
+ * and each unit runs to at least 3,000 words.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -38,8 +38,6 @@ let shown = 0;
 let readings = 0;
 const words = {};
 const MIN_WORDS = 3000;
-/** Units not yet brought to the depth rules. This list only shrinks. */
-const PENDING = new Set(['u7']);
 for (const [key, set] of Object.entries(NOTES)) {
   const name = `${key} (${set.title})`;
   const exam = EXAMS.find((e) => e.id === set.exam);
@@ -66,16 +64,14 @@ for (const [key, set] of Object.entries(NOTES)) {
   }
 
   words[key] = text(html.replace(/<head>[\s\S]*?<\/head>/, '')).split(' ').filter(Boolean).length;
-  if (!PENDING.has(key)) {
-    if (words[key] < MIN_WORDS) fail(name, `${words[key]} words; a unit needs at least ${MIN_WORDS}`);
-    for (const s of set.sections) {
-      if (s.title === 'Formula sheet') continue;
-      const sec = html.match(new RegExp(`<section class="topic" id="${s.id}">([\\s\\S]*?)</section>`))?.[1] || '';
-      if (!/<div class="box ex">/.test(sec)) fail(name, `${s.id}: no worked example`);
-      const last = [...sec.matchAll(/<div class="box ([a-z]+)">/g)].pop();
-      const tail = last ? sec.slice(last.index) : '';
-      if (!last || last[1] !== 'out' || /<\/div>[\s\S]*<(p|div|ul|ol)\b/.test(tail)) fail(name, `${s.id}: does not end with a "What the model leaves out" box`);
-    }
+  if (words[key] < MIN_WORDS) fail(name, `${words[key]} words; a unit needs at least ${MIN_WORDS}`);
+  for (const s of set.sections) {
+    if (s.title === 'Formula sheet') continue;
+    const sec = html.match(new RegExp(`<section class="topic" id="${s.id}">([\\s\\S]*?)</section>`))?.[1] || '';
+    if (!/<div class="box ex">/.test(sec)) fail(name, `${s.id}: no worked example`);
+    const last = [...sec.matchAll(/<div class="box ([a-z]+)">/g)].pop();
+    const tail = last ? sec.slice(last.index) : '';
+    if (!last || last[1] !== 'out' || /<\/div>[\s\S]*<(p|div|ul|ol)\b/.test(tail)) fail(name, `${s.id}: does not end with a "What the model leaves out" box`);
   }
 
   for (const s of set.sections) {
@@ -156,4 +152,4 @@ if (fails.length) {
   console.error(`notes: ${fails.length} problem(s)\n  ${fails.join('\n  ')}`);
   process.exit(1);
 }
-console.log(`notes: ${Object.keys(NOTES).length} sets (${Object.entries(words).map(([k, n]) => `${k} ${n}${PENDING.has(k) ? '*' : ''}`).join(', ')} words; * still pending) · ${sections} sections · ${formulas} formulas typeset · ${linked.length}/${covered.length} problems link to a section · ${shown} worked examples shown in a lab (${readings} readings)`);
+console.log(`notes: ${Object.keys(NOTES).length} sets (${Object.entries(words).map(([k, n]) => `${k} ${n}`).join(', ')} words) · ${sections} sections · ${formulas} formulas typeset · ${linked.length}/${covered.length} problems link to a section · ${shown} worked examples shown in a lab (${readings} readings)`);
