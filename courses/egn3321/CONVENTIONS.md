@@ -37,3 +37,7 @@ The rocket, §15.9, is kept. It is a Unit 4 lab, not part of Unit 1.
 Rewritten, one file per unit, in the notes-panel structure: eyebrow, h1, lede, toc,
 `section.topic`. Math uses `\( \)` and `\[ \]` only. A dollar sign is never a delimiter
 in a notes file. Voice is short and declarative. A common-mistake box names the mistake and the section.
+
+Each result is derived before it is used. Every section but the formula sheet has at least one
+worked example and ends with a `box out`, "What the model leaves out". A unit runs to at least
+3,000 words. notes-check enforces all three.
