@@ -5,6 +5,7 @@ import { courseStore as macStore } from '@flux/mac2313/src/storage.js';
 import { courseStore as phyStore } from '@flux/phy2049/src/storage.js';
 import { courseStore as staStore } from '@flux/sta3032/src/storage.js';
 import { courseStore as dynamicsStore } from '@flux/egn3321/src/storage.js';
+import { courseStore as materialsStore } from '@flux/egn3331/src/storage.js';
 import { courseStore as thermoStore } from '@flux/eml3100/src/storage.js';
 import { courseStore as staticsStore } from '@flux/statics/src/storage.js';
 
@@ -19,6 +20,7 @@ export function backupParts() {
     { courseId: 'sta3032', store: staStore() },
     { courseId: 'egn3321', store: dynamicsStore() },
     { courseId: 'eml3100', store: thermoStore() },
+    { courseId: 'egn3331', store: materialsStore() },
   ];
 }
 

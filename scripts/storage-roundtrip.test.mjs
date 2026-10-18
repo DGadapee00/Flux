@@ -52,6 +52,14 @@ import {
   WIDTH_KEY as THERMO_WIDTH,
   courseStore as thermoStore,
 } from '../courses/eml3100/src/storage.js';
+import { createProgress as materialsProgress, memoryStorage as materialsMemory } from '../courses/egn3331/src/problems/progress.js';
+import {
+  EXAM_KEY as MATERIALS_EXAM,
+  FULL_KEY as MATERIALS_FULL,
+  STORE_KEY as MATERIALS_STORE,
+  WIDTH_KEY as MATERIALS_WIDTH,
+  courseStore as materialsStore,
+} from '../courses/egn3331/src/storage.js';
 import { createProgress as staticsProgress, memoryStorage as staticsMemory } from '../courses/statics/src/problems/progress.js';
 import {
   EXAM_KEY as STATICS_EXAM,
@@ -212,6 +220,28 @@ test('eml3100: export and import with no legacy key', () => {
   assert.equal(cleared.get('u1.2.phase').box, 1);
   assert.deepEqual(cleared.loadExam(), { id: 'u2', n: 2 });
   const restored = thermoStore(storage, () => 0);
+  assert.equal(restored.getItem('notes.width'), '520');
+  assert.equal(restored.getItem('notes.full'), '1');
+});
+
+test('egn3331: export and import with no legacy key', () => {
+  const storage = materialsMemory();
+  const progress = materialsProgress(storage, { now: () => 0 });
+  progress.record('u1.1.inclined', { correct: true, clean: true, now: 1000 });
+  progress.saveExam({ id: 'u1', n: 1 });
+  materialsStore(storage, () => 0).setItem('notes.width', '520');
+  materialsStore(storage, () => 0).setItem('notes.full', '1');
+  assert.equal(MATERIALS_STORE, 'flux.egn3331.problems.v1');
+  assert.match(storage.getItem(MATERIALS_STORE), /u1\.1\.inclined/);
+
+  const blob = progress.exportJSON();
+  for (const key of [MATERIALS_STORE, MATERIALS_EXAM, MATERIALS_WIDTH, MATERIALS_FULL]) storage.removeItem(key);
+  const cleared = materialsProgress(storage, { now: () => 0 });
+  assert.equal(cleared.get('u1.1.inclined'), null);
+  cleared.importJSON(blob);
+  assert.equal(cleared.get('u1.1.inclined').box, 1);
+  assert.deepEqual(cleared.loadExam(), { id: 'u1', n: 1 });
+  const restored = materialsStore(storage, () => 0);
   assert.equal(restored.getItem('notes.width'), '520');
   assert.equal(restored.getItem('notes.full'), '1');
 });

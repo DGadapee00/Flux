@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Stress</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 1 · Ch 1</p>
+  <h1>Stress</h1>
+  <p class="lede">Statics finds the forces on a body. Mechanics of materials asks what those forces do inside it. The first answer is stress: force per unit area, on a chosen plane, at a chosen point. These notes cut bodies open, find the internal loads, and turn them into normal and shear stress in bars, trusses and pinned joints. They end with the factor of safety, which turns a stress into a design. Every number is computed by the course's library and checked a second way.</p>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>Internal loads</a>
+    <a href="#s2"><span>02</span>Average normal stress</a>
+    <a href="#s3"><span>03</span>Stress on an inclined plane</a>
+    <a href="#s4"><span>04</span>Stress in truss members</a>
+    <a href="#s5"><span>05</span>Shear and bearing in connections</a>
+    <a href="#s6"><span>06</span>Allowable stress and the factor of safety</a>
+    <a href="#s7"><span>07</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Internal loads</h2>
+<p>A body in equilibrium is in equilibrium in every part. Cut it anywhere, and each piece must still balance. The forces that hold a piece together across the cut are the internal loads. They are invisible until the cut is made. Roylance §4.1 cuts beams this way to draw their shear and moment diagrams.</p>
+<p>In a plane problem the cut face carries three internal loads:</p>
+<ul>
+<li>the normal force \(N\), perpendicular to the cut, positive when it pulls (tension);</li>
+<li>the shear force \(V\), along the cut;</li>
+<li>the bending moment \(M\), which turns the face.</li>
+</ul>
+<p>The two faces of a cut carry equal and opposite loads. That is Newton's third law, applied to the two pieces.</p>
+<div class="box why"><span class="tag">Why three equations are enough</span>
+<p>A rigid piece in a plane has three ways to move: two translations and one rotation. Equilibrium gives one equation for each:</p>
+\[
+\Sigma F_x = 0,\quad \Sigma F_y = 0,\quad \Sigma M = 0
+\]
+<p>The cut face adds three unknowns, \(N\), \(V\) and \(M\). Once the support reactions are known, any one piece gives exactly three equations for those three. Choose the piece with fewer loads on it.</p>
+</div>
+<p>The method has four steps. Find the support reactions from the whole body. Cut at the section you want. Draw the free body of one piece, with \(N\), \(V\) and \(M\) on the cut in their positive senses. Solve the three equations.</p>
+<p>The sign convention matters. Here \(N\) is positive in tension. \(V\) is positive when it acts downward on the left piece's cut face. \(M\) is positive when it makes the beam sag. A negative answer means the load acts the other way.</p>
+<div class="box ex"><span class="tag">Worked example · a beam with a pull</span>
+<p>A beam spans 6 m. It is pinned at A, on the left, and sits on a roller at B. A load of 30 kN acts down, 4 m from A. A horizontal pull of 10 kN acts at B, away from A. Find the internal loads 2 m from A.</p>
+<p>Reactions first. Moments about B give \(A_y \times 6 = 30 \times 2\), so \(A_y = 10\) kN. Vertical balance gives \(B_y = 20\) kN. The roller takes no horizontal load, so \(A_x = 10\) kN, pulling away from B.</p>
+<p>Keep the left 2 m. Only \(A_x\) and \(A_y\) act on it.</p>
+\[
+N = 10\ \text{kN},\quad V = 10\ \text{kN},\quad M = 10 \times 2 = 20\ \text{kN·m}
+\]
+<p>The beam is in tension, the shear is positive, and the beam sags.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a cut past the load</span>
+<p>Same beam, cut 5 m from A. The left piece now holds the 30 kN load, so \(V = 10 - 30 = -20\) kN. The moment is \(M = 10 \times 5 - 30 \times 1 = 20\) kN·m.</p>
+<p>Check with the right piece. It is 1 m long and carries only \(B_y = 20\) kN and the 10 kN pull. Its moment about the cut is \(20 \times 1 = 20\) kN·m. Its shear is 20 kN, which is −20 kN in the left piece's convention. The two pieces agree.</p>
+</div>
+<div class="box key"><span class="tag">The rule</span>
+<p>Reactions from the whole body. Then one piece, three equations, three internal loads. Check with the other piece when the numbers matter.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The method treats each piece as rigid while it balances the forces. Real pieces deform, and for a statically determinate body that makes no difference to the loads. For an indeterminate body, deformation decides how the load splits, and Unit 3 adds it. The internal loads are also resultants. They say nothing yet about how the force spreads over the cut. That is what stress does.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Average normal stress</h2>
+<p>Stress is force per unit area. Shrink a patch of the cut face around a point. The force on the patch, divided by its area, tends to a limit: the stress at that point on that plane. Roylance §1.1 introduces stress this way, with the strain it causes.</p>
+<p>The part perpendicular to the plane is the normal stress, \(\sigma\). The part along the plane is the shear stress, \(\tau\). The unit is the pascal, one newton per square metre. Engineering stresses are large, so they are quoted in megapascals. One MPa is one newton per square millimetre. In US units the stress is in psi or ksi: pounds or kips per square inch.</p>
+<div class="box why"><span class="tag">Why σ = P/A in a straight bar</span>
+<p>Take a straight, uniform bar loaded by \(P\) through the centroid of each end. Cut it square. Equilibrium of one piece says the stresses on the cut add up to \(P\):</p>
+\[
+\int_A \sigma\,dA = P
+\]
+<p>Far from the ends, every fibre of the bar stretches by the same amount, so every fibre carries the same stress. A constant comes out of the integral:</p>
+\[
+\sigma = \frac{P}{A}
+\]
+<p>The moment of that uniform stress about any axis through the centroid is zero. That is why the load must pass through the centroid. A load off the centroid adds bending, which Unit 5 treats.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a rod in tension</span>
+<p>A solid rod of diameter 20 mm carries 20 kN in tension. Its area is \(\pi (20)^2/4 = 314.2\ \text{mm}^2\).</p>
+\[
+\sigma = \frac{20\,000\ \text{N}}{314.2\ \text{mm}^2} = 63.66\ \text{MPa}
+\]
+<p>The stress does not depend on the rod's length. A rod twice as long carries the same stress and stretches twice as far.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · kip and inches</span>
+<p>A tie rod of diameter 1 in carries 10 kip. Its area is \(\pi/4 = 0.7854\ \text{in}^2\).</p>
+\[
+\sigma = \frac{10\ \text{kip}}{0.7854\ \text{in}^2} = 12.73\ \text{ksi}
+\]
+<p>Check in SI. 10 kip is 44.48 kN, and 1 in is 25.4 mm, so the area is 506.7 mm². The stress is \(44\,480/506.7 = 87.79\) MPa. One ksi is 6.895 MPa, and \(12.73 \times 6.895 = 87.79\) MPa. The two routes agree.</p>
+</div>
+<p>Compression is the same formula with a negative sign. A short post under 36 kN on 450 mm² carries \(\sigma = -80\) MPa. A long, slender member in compression can fail by buckling first, at a far lower stress. Unit 10 treats that.</p>
+<div class="box key"><span class="tag">The rule</span>
+<p>Internal normal force over the area it acts on. Keep the sign: tension positive, compression negative. Newtons and square millimetres give MPa.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>\(\sigma = P/A\) is an average. It is exact only away from the ends, holes and changes of section. Near a point load, a pin hole or a fillet, the stress piles up. Saint-Venant's principle says the disturbance fades within about one width of its cause. The local peak can be several times the average, and Roylance §5.1 computes the factor for a hole. A brittle part or a part in fatigue cares about that peak.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Stress on an inclined plane</h2>
+<p>A square cut through a bar in tension shows only normal stress. That does not mean the bar carries no shear. Shear lives on other planes. Cut the same bar on a slant, and the same internal force now crosses the plane at an angle. Part of it pushes across, and part of it slides along. Roylance §3.3 starts its treatment of stress transformation from exactly this cut.</p>
+<p>Let \(\theta\) be the angle between the bar's axis and the normal to the cut. At \(\theta = 0\) the cut is the cross-section.</p>
+<div class="box why"><span class="tag">Why σ = (P/A) cos²θ and τ = (P/2A) sin 2θ</span>
+<p>Keep the piece on one side of the cut. It still carries \(P\) along the bar, so the cut must supply \(P\) too. The cut's area is larger than the cross-section:</p>
+\[
+A_\theta = \frac{A}{\cos\theta}
+\]
+<p>Resolve \(P\) into a part along the plane's normal, \(P\cos\theta\), and a part along the plane, \(P\sin\theta\). Divide each by the plane's area:</p>
+\[
+\sigma = \frac{P\cos\theta}{A/\cos\theta} = \frac{P}{A}\cos^2\theta
+\]
+\[
+\tau = \frac{P\sin\theta}{A/\cos\theta} = \frac{P}{2A}\sin 2\theta
+\]
+<p>The last step uses \(2\sin\theta\cos\theta = \sin 2\theta\).</p>
+</div>
+<p>Three facts follow from the two formulas.</p>
+<ul>
+<li>The largest normal stress is on the cross-section: \(\sigma = P/A\) at \(\theta = 0\).</li>
+<li>The largest shear stress is on the 45° planes: \(\tau = P/2A\), half the largest normal stress.</li>
+<li>Planes at \(\theta\) and \(\theta + 90^\circ\) have normal stresses that add to \(P/A\).</li>
+</ul>
+<div class="box ex"><span class="tag">Worked example · the 30° cut</span>
+<p>A bar of area 200 mm² carries 20 kN in tension. On the cross-section, \(P/A = 100\) MPa. On the plane whose normal is 30° from the axis:</p>
+\[
+\sigma = 100\cos^2 30^\circ = 75.0\ \text{MPa}
+\]
+\[
+\tau = 50\sin 60^\circ = 43.30\ \text{MPa}
+\]
+<p>Check by the force balance. The plane's area is \(200/\cos 30^\circ = 230.9\ \text{mm}^2\). The normal force is \(20\cos 30^\circ = 17.32\) kN, and \(17\,320/230.9 = 75.0\) MPa. The shear force is \(20\sin 30^\circ = 10.0\) kN, and \(10\,000/230.9 = 43.30\) MPa.</p>
+</div>
+<p>The 45° result explains how materials fail. A ductile metal yields when the shear on some plane gets too large. In a tension test the 45° planes carry the most shear, and the slip lines on a yielding steel bar run at about 45°. Roylance §6.1 builds the Tresca yield criterion on this. A brittle material fails when the normal stress gets too large, so a cast-iron bar in tension breaks square.</p>
+<div class="box ex"><span class="tag">Worked example · a scarf joint</span>
+<p>Two pieces of a bar of area 400 mm² are glued on a plane whose normal is 60° from the axis. The glue holds 8 MPa in tension and 5 MPa in shear. Each limit gives its own largest load.</p>
+\[
+P_\sigma = \frac{8 \times 400}{\cos^2 60^\circ} = 12.8\ \text{kN}
+\]
+\[
+P_\tau = \frac{5 \times 400}{\sin 60^\circ \cos 60^\circ} = 4.62\ \text{kN}
+\]
+<p>The joint holds 4.62 kN, and the shear governs. The slanted joint has more glue area than a square butt joint. It takes the load mostly as shear, which this glue handles less well.</p>
+</div>
+<div class="box key"><span class="tag">The rule</span>
+<p>The stress depends on the plane. For a bar in tension, \(\sigma\) peaks on the cross-section and \(\tau\) peaks at 45°, with half the size.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The formulas assume uniform stress on the cut, so they hold away from the ends. They cover a uniaxial load only. A body under several loads has a general plane stress state, and Unit 8 rotates that with the full transformation and Mohr's circle. The formulas also say nothing about strength. Whether a plane fails depends on the material, and a glue, a weld or a grain boundary can be weaker on one plane than the rest.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Stress in truss members</h2>
+<p>A truss is built from straight members pinned at their ends, with loads applied only at the joints. Each member is then a two-force member. Two equal and opposite forces act at its ends, along the line between the pins. The member carries pure axial force: tension or compression, nothing else. Roylance §2.1 analyses trusses this way.</p>
+<p>That makes the stress simple. The force is constant along the member, so is the area, and \(\sigma = F/A\) holds everywhere away from the pins. The work is in finding \(F\).</p>
+<div class="box why"><span class="tag">Why the forces do not depend on the areas</span>
+<p>A statically determinate truss has as many equilibrium equations as unknowns: two per joint, against the member forces and three reactions. The equations hold the geometry and the loads, and nothing else. The areas and the material never appear. So the forces are fixed before a single member is sized, and changing an area changes only that member's stress.</p>
+<p>An indeterminate truss has more members than the equations can solve. Its forces depend on the members' stiffness, \(EA/L\). Unit 3 treats that case.</p>
+</div>
+<p>The lab's truss is a three-panel Pratt truss. Panels are 2 m wide and the truss is 2 m deep. A, B, C and D run along the bottom; E sits above B and F above C. It is pinned at A, rests on a roller at D, and carries P at B and 2P at C.</p>
+<div class="box ex"><span class="tag">Worked example · the lab's truss</span>
+<p>Take P = 20 kN and every area 400 mm². Moments about A give \(6D_y = 2(20) + 4(40)\), so \(D_y = 33.33\) kN and \(A_y = 26.67\) kN.</p>
+<p>Cut through BC, BF and EF, and keep the left part. Members EF and BF both pass through F, so sum moments about F. The lever arms about F are 4 m for \(A_y\), 2 m for the load at B, and 2 m for BC:</p>
+\[
+-4(26.67) + 2(20) + 2F_{BC} = 0
+\]
+<p>So \(F_{BC} = 33.33\) kN in tension, and \(\sigma_{BC} = 33\,330/400 = 83.33\) MPa. The method of joints for the whole truss gives the same force.</p>
+<p>The most stressed member is the end post FD. At joint D the roller pushes up 33.33 kN, and FD at 45° must balance it alone. So \(F_{FD} = -33.33\sqrt{2} = -47.14\) kN, and \(\sigma_{FD} = -117.9\) MPa.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a thin web</span>
+<p>Now make the web (BE, CF and BF) lighter: 300 mm² instead of 400. The forces do not change. FD still carries the largest force, 47.14 kN, at 117.9 MPa. The vertical CF carries 40.00 kN on 300 mm²:</p>
+\[
+\sigma_{CF} = \frac{40\,000}{300} = 133.3\ \text{MPa}
+\]
+<p>CF is now the most stressed member, though it does not carry the most force. Stress, not force, decides which member yields first.</p>
+</div>
+<div class="box key"><span class="tag">The rule</span>
+<p>Solve the truss for its forces, by joints or by sections. Then divide each force by its own member's area. Compare stresses, never forces, to find the critical member.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Real joints are bolted or welded, not frictionless pins, so members carry some bending near the joints. The members' own weight acts along their length, not at the joints. Both effects are usually small for a slender truss. A compression member can also buckle long before it yields. FD at 118 MPa may be safe against yield yet still too slender, and Unit 10 checks that.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Shear and bearing in connections</h2>
+<p>Members are joined by pins, bolts and rivets. A pin carries the load across the joint by shear. The load tries to slide one part of the pin past the next. Roylance §2.3 treats shear stress and the strain it causes. The average shear stress is defined like the normal stress: the shear force over the area it acts on.</p>
+\[
+\tau_{\text{avg}} = \frac{V}{A}
+\]
+<p>For a pin, the area is the pin's cross-section, \(\pi d^2/4\). The force \(V\) is what crosses one shear plane: a plane between two parts the pin holds together.</p>
+<div class="box why"><span class="tag">Why double shear halves the stress</span>
+<p>In a lap joint the bar overlaps one lug. The pin crosses one gap between them, so one plane carries all of \(P\). In a clevis the bar sits between two legs, and the pin crosses two gaps. Walk along the pin: the first leg pushes \(P/2\) one way, the bar pushes \(P\) the other way, the second leg pushes \(P/2\) back. The shear across each gap is the running sum of the loads before it: \(P/2\), then \(P/2\) again.</p>
+\[
+\tau_{\text{single}} = \frac{P}{\pi d^2/4},\qquad \tau_{\text{double}} = \frac{P/2}{\pi d^2/4}
+\]
+</div>
+<p>A pin can also fail by crushing the hole it bears on. The contact pressure between a pin and a plate is not uniform, but it is summarised by the average bearing stress: the force over the projected area of the contact, the pin's diameter times the plate's thickness.</p>
+\[
+\sigma_b = \frac{P}{d\,t}
+\]
+<div class="box ex"><span class="tag">Worked example · from one plane to two</span>
+<p>A bar carries 10 kN through a 12 mm pin. The pin's area is 113.1 mm². In a lap joint the pin shears on one plane:</p>
+\[
+\tau = \frac{10\,000}{113.1} = 88.42\ \text{MPa}
+\]
+<p>In a clevis it shears on two, so \(\tau = 44.21\) MPa. The bar, 12 mm thick, still presses all 10 kN on the pin. Its bearing stress is \(10\,000/(12 \times 12) = 69.44\) MPa either way.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a thin bar</span>
+<p>Keep the clevis, with 8 mm legs, and make the bar 5 mm thick. Allowables: 100 MPa in shear for the pin, 200 MPa in bearing for the plates. Each mode gives its own largest load:</p>
+<ul>
+<li>pin shear: \(2 \times 100 \times 113.1 = 22.62\) kN;</li>
+<li>bearing on the bar: \(200 \times 12 \times 5 = 12.0\) kN;</li>
+<li>bearing on the legs: \(2 \times 200 \times 12 \times 8 = 38.4\) kN.</li>
+</ul>
+<p>The joint may carry 12.0 kN, and bearing on the bar governs. A bigger pin would not help much. A thicker bar would.</p>
+</div>
+<div class="box key"><span class="tag">The rule</span>
+<p>Count the shear planes. Shear is the load per plane over the pin's area. Bearing is the load on each plate over \(d\,t\). Check every mode; the smallest allowable load governs.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Both stresses are averages. The shear on a pin's cross-section is not uniform: it peaks at the middle, about a third above the average for a round section. Bearing pressure peaks where the pin and the hole meet first. The pin also bends between the plates, which adds normal stress. And the plate can tear out behind the pin, or fail in tension across the net section beside the hole. Design codes add checks for each, with allowables chosen to cover the averages' error.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Allowable stress and the factor of safety</h2>
+<p>A stress means nothing until it is compared with what the material can take. The failure stress comes from a test: the yield stress for a ductile metal, the ultimate stress for a brittle one, a shear strength for a pin. Roylance §1.4 shows how these numbers come from a stress–strain curve.</p>
+<p>A design keeps the working stress below the failure stress by a margin. The factor of safety is the ratio:</p>
+\[
+\mathrm{FS} = \frac{\sigma_{\text{fail}}}{\sigma_{\text{allow}}}
+\]
+<p>For a linear problem it is also the ratio of the failure load to the working load. The allowable stress is the failure stress divided by FS.</p>
+<div class="box why"><span class="tag">Why a margin at all</span>
+<p>The loads are estimates. The material's strength varies from batch to batch. The analysis averages stresses that really peak. The part corrodes, wears and is sometimes misused. Each uncertainty eats into the margin. A factor of safety of 1.5 to 3 covers them for ordinary structures, and codes set the value for each use.</p>
+</div>
+<p>Sizing reverses the stress formula. For an axial member, the smallest area is</p>
+\[
+A_{\min} = \frac{F\,\mathrm{FS}}{\sigma_{\text{fail}}}
+\]
+<div class="box ex"><span class="tag">Worked example · sizing the chords</span>
+<p>In the lab's truss with P = 20 kN, every chord is to have the same area. The steel yields at 250 MPa, and FS = 2. The largest chord force is FD's 47.14 kN.</p>
+\[
+A_{\min} = \frac{47\,140 \times 2}{250} = 377.1\ \text{mm}^2
+\]
+<p>Every other chord carries less force, so it has a larger factor of safety at that area.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a pin in kip and inches</span>
+<p>A clevis pin carries 6 kip in double shear. The pin's steel fails in shear at 30 ksi, and FS = 2. The allowable shear stress is 15 ksi. Each plane carries 3 kip, so each needs \(3/15 = 0.2\ \text{in}^2\).</p>
+\[
+d = \sqrt{\frac{4(0.2)}{\pi}} = 0.505\ \text{in}
+\]
+<p>A designer would pick the next standard size up, a 9/16 in pin.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the margin on a rod</span>
+<p>A 20 mm rod carries 50 kN, and yields at 250 MPa. Its stress is \(50\,000/314.2 = 159.2\) MPa.</p>
+\[
+\mathrm{FS} = \frac{250}{159.2} = 1.571
+\]
+<p>By loads: the rod would yield at \(250 \times 314.2 = 78.54\) kN, and \(78.54/50 = 1.571\).</p>
+</div>
+<div class="box key"><span class="tag">The rule</span>
+<p>Find the critical stress, compare it with the failure stress, and keep the ratio above the required factor of safety. To size a part, divide the force by the allowable stress.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A single factor of safety lumps every uncertainty together. Modern codes split it: one factor on each kind of load, another on the material's strength. Failure is also not only yielding. A part under many cycles can fail by fatigue far below the yield stress, Roylance §6.5. A compression member can buckle. A crack can grow. Each needs its own check against its own allowable.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Formula sheet</h2>
+\[
+\Sigma F_x = 0,\quad \Sigma F_y = 0,\quad \Sigma M = 0
+\]
+\[
+\sigma = \frac{P}{A}
+\]
+\[
+\sigma = \frac{P}{A}\cos^2\theta,\quad \tau = \frac{P}{2A}\sin 2\theta
+\]
+\[
+\tau_{\max} = \frac{P}{2A}\quad (\theta = 45^\circ)
+\]
+\[
+\tau_{\text{avg}} = \frac{V}{A},\quad V = \frac{P}{n}\ \ (n\ \text{planes})
+\]
+\[
+\sigma_b = \frac{P}{d\,t}
+\]
+\[
+\mathrm{FS} = \frac{\sigma_{\text{fail}}}{\sigma_{\text{allow}}},\quad A_{\min} = \frac{F\,\mathrm{FS}}{\sigma_{\text{fail}}}
+\]
+\[
+1\ \text{MPa} = 1\ \text{N/mm}^2,\quad 1\ \text{ksi} = 6.895\ \text{MPa}
+\]
+</section>
+</main>
+</body>
+</html>
