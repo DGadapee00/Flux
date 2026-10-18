@@ -1,0 +1,17 @@
+/* EGN 3331: the labs are 2D diagrams on the shell's plot stage. Nothing here orbits or hides answers. */
+
+#label-layer {
+  display: none;
+}
+
+#btn-work-first,
+#btn-reset-cam,
+#hint-orbit,
+#hint-plane {
+  display: none !important;
+}
+
+/* The toggles panel holds only the two buttons above, so it has nothing to show. */
+#toggles:not(:has(#toggle-host :is(button, label))) {
+  display: none;
+}

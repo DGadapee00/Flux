@@ -51,7 +51,7 @@ export const TRACKS = [
         href: 'statics/',
       },
       { id: 'egn3321', code: 'EGN 3321', title: 'Dynamics', term: null, href: 'egn3321/' },
-      { id: 'egn3331', code: 'EGN 3331', title: 'Mechanics of Materials', term: null, href: null },
+      { id: 'egn3331', code: 'EGN 3331', title: 'Mechanics of Materials', term: null, href: 'egn3331/' },
     ],
   },
   {
