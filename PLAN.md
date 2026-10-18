@@ -691,7 +691,7 @@ the Thermal-fluids track. The codes and the chapter order are the owner's course
 |---|---|---|---|---|
 | EGN 3321 Dynamics | `courses/egn3321` | 5181 | mechanics, 2 | Hibbeler, *Engineering Mechanics: Dynamics* |
 | EGN 3331 Mechanics of Materials | `courses/egn3331` | 5182 | mechanics, 3 | Hibbeler, *Mechanics of Materials* |
-| EML 3100 Thermodynamics | `courses/eml3100` | 5183 | thermal, 1 | Çengel & Boles, *Thermodynamics: An Engineering Approach* |
+| EML 3100 Thermodynamics | `courses/eml3100` | 5183 | thermal, 1 | Yan, *Introduction to Engineering Thermodynamics* (BCcampus); OpenStax *University Physics Volume 2* Ch 1–4 for physics background (D13) |
 
 The id is the course code in lowercase, as MAC 2311 and MAC 2312 did. It is the route segment
 (`#/egn3321/u2/explore/fma`) and the storage namespace (`flux.egn3321.problems.v1`).
@@ -715,8 +715,18 @@ Dalton takes EGN 3321, EGN 3331, and EML 3100 next term. These are the answers, 
      - Pure functions, no DOM, with its own package entry, so the engine pages and the engine repo can import it.
      - SI and English units go through `subjects/src/convert.js`.
      - Flux generates its own property tables from the library. No textbook table is copied. Grading accepts the exact value and the value interpolated linearly from the generated table, through the existing `alt` mechanism. A test shows that an answer interpolated the textbook way passes.
-  2. **EML 3100 first slice.** It waits until the owner names the textbook UNF uses, so problems cite the right sections. The Çengel & Boles row above is a placeholder until then.
+  2. **EML 3100 first slice.** Its textbooks are settled by D13, below.
   3. **Mechanics of Materials first slice.**
+
+#### Decision, answered 18 Oct 2026 (textbooks for EML 3100)
+
+- **D13.** EML 3100 cites two open textbooks:
+  - **Claire Yu Yan, *Introduction to Engineering Thermodynamics*** (BCcampus, 2022, CC BY-NC-SA 4.0), for the engineering units. Section numbers are the BCcampus Pressbooks edition's. The LibreTexts copy numbers some sections one higher.
+  - **OpenStax *University Physics Volume 2*, Ch 1–4** (CC BY 4.0), for the physics background: temperature, kinetic theory, the first law, heat engines.
+  - Topics past Yan's Chapter 6 (the Rankine and Brayton cycles, vapour-compression refrigeration) are cited by topic only, until a source is chosen.
+  - Every citation goes through one map, `courses/eml3100/src/data/textbook.js`. Problems and notes ask the map for a topic's citation, so switching books changes one file.
+  - Flux writes its own text and tables. Nothing is copied from either book: no prose, figures, tables, examples or problems.
+  - The course pack still sets coverage and order (D11). Its chapter numbers (Çengel & Boles, Ch 1–7) name the units below and are not cited to students.
 
 #### Track placement
 
@@ -741,7 +751,7 @@ Dalton takes EGN 3321, EGN 3331, and EML 3100 next term. These are the answers, 
   and its order. Nothing from them ships: no rewritten notes, no worked cases, no lab presets, no
   review questions. This is decision D6 applied before it can come up. PROVENANCE.md in each folder
   says so. If an instructor later agrees in writing, their material can come in like PHY 2049's.
-- **Textbook use:** problems and notes cite the text by section (Hibbeler §12.7, Çengel §5-4).
+- **Textbook use:** problems and notes cite the text by section (Hibbeler §12.7, Yan §4.3).
   Statements are written fresh with generated numbers. A worked case uses numbers computed for this
   bank and cites the section its method comes from. No textbook example or problem number is
   invented, and none is copied (D9). No figures, no tables copied.
@@ -1064,8 +1074,10 @@ for the indeterminate checks).
 
 #### EML 3100 Thermodynamics (`courses/eml3100`, port 5183)
 
-Units follow the course pack, Çengel & Boles Ch 1–7. Unsteady flow (the charging and discharging
-part of Ch 5) is left out (D11, answered).
+Units follow the course pack's coverage and order: Çengel & Boles Ch 1–7, the chapter numbers
+in the headings below. Students see citations to Yan and OpenStax instead, from
+`src/data/textbook.js` (D13). Unsteady flow (the charging and discharging part of Ch 5) is left out
+(D11, answered).
 
 **Unit 1. Basic concepts** (Ch 1)
 
@@ -1186,7 +1198,7 @@ folder, and the other adds files):
   derived ones (psi, slug, ft·lbf, hp). Selftest: round trips and the derived values. The mechanics
   courses use it too.
 
-R-134a, which Çengel uses for refrigerators and heat pumps, comes from an equation of state in a
+R-134a, which refrigerator and heat-pump problems use, comes from an equation of state in a
 later PR (D10, answered). Until that PR, those problems use water and air.
 
 #### Order of work
@@ -1251,9 +1263,11 @@ cross-linked from the courses whose formulas it covers.
 | D6 | STA 3032 provenance | **Decided 13 Oct 2026:** not asked, so the instructor's material (rewritten notes, review-sheet set, worked cases and lab presets from the notes) was removed. Recorded in `courses/sta3032/PROVENANCE.md`. | |
 | D7 | Source for Calc I, Calc II, Physics I | **Default:** OpenStax (CC BY 4.0): Calculus Vol 1 and 2, University Physics Vol 1, cited by section. Switch to the UNF course texts if the owner prefers; confirm PHY 2048's chapter list against the UNF syllabus. | |
 | D8 | Terms and exam dates for EGN 3321, EGN 3331, EML 3100 | **Decided 15 Oct 2026:** Dalton takes all three next term. Dynamics is built first. Dates go into each unit when he has them. | |
-| D9 | Textbook numbers in worked cases (Hibbeler, Çengel) | **Decided 15 Oct 2026:** generated numbers, cited by textbook section. No textbook example number is copied or invented. | |
-| D10 | R-134a properties for Çengel's refrigeration problems | **Decided 15 Oct 2026:** the Tillner-Roth & Baehr equation of state, in a later Thermodynamics PR. Water and air until then. | |
+| D9 | Textbook numbers in worked cases (Hibbeler, and the thermodynamics text) | **Decided 15 Oct 2026:** generated numbers, cited by textbook section. No textbook example number is copied or invented. | |
+| D10 | R-134a properties for refrigeration problems | **Decided 15 Oct 2026:** the Tillner-Roth & Baehr equation of state, in a later Thermodynamics PR. Water and air until then. | |
 | D11 | Sections the course packs do not name | **Decided 15 Oct 2026:** follow the course packs' coverage, and keep Dynamics' rocket lab (§15.9). | |
+| D12 | What comes after Dynamics | **Decided 18 Oct 2026:** Thermodynamics first, its property library before its screens, then Mechanics of Materials. | |
+| D13 | EML 3100 textbooks | **Decided 18 Oct 2026:** Yan, *Introduction to Engineering Thermodynamics* (BCcampus, CC BY-NC-SA 4.0), and OpenStax *University Physics Volume 2* Ch 1–4 (CC BY 4.0). Topics past Yan Ch 6 cited by topic until a source is chosen. One citation map, `courses/eml3100/src/data/textbook.js`. Nothing copied. | |
 
 ---
 
