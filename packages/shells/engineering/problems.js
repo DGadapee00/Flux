@@ -12,7 +12,8 @@
  * this module only calls api.openInLab(inst) and reads api.computed / api.slice().
  */
 import { NO_PLUS_C, constantOfIntegration } from '@flux/core';
-import { mathProse } from './shared.js';
+import { mathProse, tex } from './shared.js';
+import { createLoop } from '../practice/loop.js';
 
 const EXAM_MINUTES = 50;
 const EXAM_SIZE = 8;
@@ -138,6 +139,9 @@ export function createPractice(api, bank) {
   const panel = $('problems');
   const body = document.body;
   const progress = createProgress();
+  const TITLE = (x) => esc(x);
+  // The reference course's practice loop: each part turns on when the course supplies its data (practice/loop.js).
+  const loop = createLoop(bank, { esc, prose, tex, progress, body });
 
   // The header grows with the Practice row; park the left column just below it.
   const brand = $('brand');
@@ -149,7 +153,7 @@ export function createPractice(api, bank) {
     open: false,
     view: 'list', // 'list' | 'problem' | 'exam' | 'results'
     listExam: api.examId() || homeId,
-    filter: { kind: 'all', lab: false },
+    filter: { kind: 'all', lab: false, group: 'chapter' },
     cur: null, // the attempt on screen
     session: null, // { label, ids, i }
     exam: progress.loadExam(), // saved practice exam (may be finished or in progress)
@@ -165,6 +169,7 @@ export function createPractice(api, bank) {
     st.open = on;
     panel.hidden = !on;
     body.classList.toggle('practice-open', on);
+    if (!on) loop.setDrawer(false);
     $('btn-practice').setAttribute('aria-expanded', on ? 'true' : 'false');
     $('btn-practice').classList.toggle('active', on);
     syncBlind();
@@ -185,6 +190,7 @@ export function createPractice(api, bank) {
     const blind = st.open && ((inExamView() && !!cur) || (!!cur && cur.mode === 'practice' && !cur.finished && !cur.peeked));
     body.classList.toggle('problem-blind', blind);
     api.setSceneBlind?.(blind);
+    loop.syncDrawer(cur, { blind, exam: st.open && inExamView() && !!cur });
   }
 
   function updateBrand() {
@@ -201,18 +207,20 @@ export function createPractice(api, bank) {
   }
 
   // ------------------------------------------------------------------ attempts
-  function newAttempt(id, seed, mode) {
+  function newAttempt(id, seed, mode, opts = {}) {
     const tpl = problemById(id);
     if (!tpl) return null;
     const inst = instance(tpl, seed);
     inst.seed = seed;
+    const view = render(inst);
     return {
+      ...loop.attempt(tpl, seed, mode, view, opts),
       id,
       seed,
       tpl,
       inst,
       mode, // 'practice' | 'exam' | 'review'
-      view: render(inst),
+      view,
       note: '',
       inputs: {},
       results: {},
@@ -244,17 +252,19 @@ export function createPractice(api, bank) {
     renderPanel();
   }
 
-  function openProblem(id, { seed, session, push = true } = {}) {
+  function openProblem(id, { seed, session, pos, push = true, principle = true, again = false } = {}) {
     const s = seed ?? progress.nextSeed(id);
-    const cur = newAttempt(id, s, 'practice');
+    const cur = newAttempt(id, s, 'practice', { principle, again });
     if (!cur) return;
     st.session = session || null;
+    if (session) session.pos = pos ?? session.ids.indexOf(id);
     st.view = 'problem';
     setOpen(true);
     loadAttempt(cur, { push });
   }
 
   function leaveProblem({ push = true } = {}) {
+    loop.setDrawer(false);
     st.cur = null;
     st.view = 'list';
     st.token++;
@@ -287,7 +297,7 @@ export function createPractice(api, bank) {
   function gradedInput(cur, part) {
     const raw = cur.inputs[part.id];
     if (part.kind !== 'choice') return raw;
-    const opts = part.options;
+    const opts = bank.choiceOptions ? bank.choiceOptions(part, cur.inst.$) : part.options;
     if (part.multi) return (raw || []).map((i) => opts[i]?.value);
     return raw == null ? null : opts[raw]?.value;
   }
@@ -351,8 +361,8 @@ export function createPractice(api, bank) {
     cur.finished = true;
     cur.correct = correct && !cur.revealed;
     if (cur.mode === 'practice') {
-      const clean = cur.correct && cur.firstTry !== false && cur.hints === 0 && !cur.peeked;
-      cur.recorded = progress.record(cur.id, { correct: cur.correct, clean, hints: cur.hints, peeked: cur.peeked, revealed: cur.revealed, seed: cur.seed });
+      const { clean, rightFirst, guided, principle } = loop.record(cur);
+      cur.recorded = progress.record(cur.id, { correct: cur.correct, clean, hints: cur.hints, peeked: cur.peeked, revealed: cur.revealed, seed: cur.seed, principle, guided, rightFirst });
       cur.clean = clean;
     }
     syncBlind();
@@ -378,21 +388,49 @@ export function createPractice(api, bank) {
   // ------------------------------------------------------------------ sessions
   function listIds() {
     const tpls = filteredTemplates(st.listExam);
-    return orderByChapter(tpls).map((t) => t.id);
+    return (st.filter.group === 'principle' ? loop.orderByPrinciple(orderByChapter(tpls)) : orderByChapter(tpls)).map((t) => t.id);
+  }
+
+  function sessionPos() {
+    const s = st.session;
+    if (!s) return -1;
+    return s.pos ?? s.ids.indexOf(st.cur?.id);
   }
 
   function nextInSession() {
     const s = st.session;
     if (!s) return null;
-    const i = s.ids.indexOf(st.cur?.id);
-    return s.ids[i + 1] || null;
+    return s.ids[sessionPos() + 1] || null;
+  }
+
+  /** Whether the problem on screen was dropped into the path from an earlier chapter. */
+  const isInterleaved = () => !!st.session?.mixedAt?.includes(sessionPos());
+
+  /** Move on in the session, dropping in a problem from an earlier chapter every few (practice/loop.js). */
+  function advance() {
+    const s = st.session;
+    const cur = st.cur;
+    if (!s || !cur) return;
+    const i = sessionPos();
+    loop.interleave(s, cur, i);
+    const id = s.ids[i + 1];
+    if (id) openProblem(id, { session: s, pos: i + 1 });
   }
 
   function startMixed() {
     const tpls = problemsForExam(st.listExam);
-    const ids = pickSet(tpls, progress, { n: Math.min(MIXED_SIZE, tpls.length), maxConceptual: 0.4 }).map((t) => t.id);
+    // Lean the set toward the principles most often missed, when the course names its principles.
+    const ids = pickSet(tpls, progress, { n: Math.min(MIXED_SIZE, tpls.length), maxConceptual: 0.4, weight: loop.mixedWeight() }).map((t) => t.id);
     if (!ids.length) return;
     openProblem(ids[0], { session: { label: 'Mixed set', ids } });
+  }
+
+  /** Practise one principle: up to MIXED_SIZE of its problems from any unit, weakest first. */
+  function startPrinciple(pid) {
+    const tpls = loop.byPrinciple(pid);
+    const ids = pickSet(tpls, progress, { n: Math.min(MIXED_SIZE, tpls.length), maxConceptual: 0.4 }).map((t) => t.id);
+    if (!ids.length) return;
+    openProblem(ids[0], { session: { label: loop.pname(pid), ids } });
   }
 
   function startReview() {
@@ -542,31 +580,32 @@ export function createPractice(api, bank) {
     const chip = (key, value, label) =>
       `<button type="button" class="pb-chip${st.filter[key] === value ? ' on' : ''}" data-filter="${key}:${value}">${label}</button>`;
 
-    const groups = [];
-    for (const ch of CHAPTER_ORDER) {
+    const itemHTML = (t, { chTag = false } = {}) => {
+      const s = progress.status(t.id);
+      const labTitle = t.lab ? LAB_META[t.lab]?.title : '';
+      const here = t.lab && t.lab === labId;
+      return `<button type="button" class="pb-item" data-open="${esc(t.id)}">
+              <span class="pb-dot s-${s}" title="${STATUS_LABEL[s]}"></span>
+              <span class="pb-item-title">${chTag ? `<span class="pb-chtag">Ch ${esc(t.ch)}</span>` : ''}${TITLE(t.title)}</span>
+              <span class="pb-item-meta">${levelDots(t.level)}${labTitle ? `<span class="pb-lab-badge${here ? ' here' : ''}">${esc(labTitle)}</span>` : ''}</span>
+            </button>`;
+    };
+
+    const byPrinciple = loop.on.principles && st.filter.group === 'principle';
+    const groups = byPrinciple ? loop.principleGroups(tpls, all, itemHTML) : [];
+    for (const ch of byPrinciple ? [] : CHAPTER_ORDER) {
       const inCh = tpls.filter((t) => t.ch === ch);
       if (!inCh.length) continue;
       const chIds = all.filter((t) => t.ch === ch).map((t) => t.id);
       const cc = progress.counts(chIds);
       const cm = Math.round(progress.mastery(chIds) * 100);
-      groups.push(`<section class="pb-ch">
+      groups.push(`<section class="pb-ch" data-ch="${esc(ch)}">
         <div class="pb-ch-head">
           <span class="pb-ch-name">Ch ${esc(ch)} · ${esc(CHAPTER_TITLES[ch] || '')}</span>
           <span class="pb-ch-meter" title="${cm}% mastery"><i style="width:${cm}%"></i></span>
           <span class="pb-ch-count">${cc.mastered}/${cc.total}</span>
         </div>
-        ${inCh
-          .map((t) => {
-            const s = progress.status(t.id);
-            const labTitle = t.lab ? LAB_META[t.lab]?.title : '';
-            const here = t.lab && t.lab === labId;
-            return `<button type="button" class="pb-item" data-open="${esc(t.id)}">
-              <span class="pb-dot s-${s}" title="${STATUS_LABEL[s]}"></span>
-              <span class="pb-item-title">${esc(t.title)}</span>
-              <span class="pb-item-meta">${levelDots(t.level)}${labTitle ? `<span class="pb-lab-badge${here ? ' here' : ''}">${esc(labTitle)}</span>` : ''}</span>
-            </button>`;
-          })
-          .join('')}
+        ${inCh.map((t) => itemHTML(t)).join('')}
       </section>`);
     }
 
@@ -589,10 +628,12 @@ export function createPractice(api, bank) {
         </div>
         ${lastResults}
       </div>
+      ${loop.weakHTML(MIXED_SIZE)}
       <div class="pb-filters">
         ${chip('kind', 'all', 'All')}${chip('kind', 'numeric', 'Numeric')}${chip('kind', 'conceptual', 'Concept')}${chip('kind', 'derivation', 'Derivation')}
         ${labHere ? `<button type="button" class="pb-chip${st.filter.lab ? ' on' : ''}" data-filter="lab:toggle">${esc(LAB_META[labId].title)} lab only</button>` : ''}
       </div>
+      ${loop.on.principles ? `<div class="pb-filters pb-group" role="group" aria-label="Group problems by"><span class="pb-dim">Group by</span>${chip('group', 'chapter', 'Chapter')}${chip('group', 'principle', 'Principle')}</div>` : ''}
       <div class="pb-list">${groups.join('') || '<p class="pb-empty">No problems match these filters.</p>'}</div>
       <p class="pb-foot">Your first try uses the worksheet's numbers when there is one; after that the numbers change every time. Progress stays in this browser. <button type="button" class="linkish" data-act="reset-progress">Reset progress</button></p>`;
   }
@@ -650,8 +691,12 @@ export function createPractice(api, bank) {
       const val = cur.inputs[part.id] ?? '';
       const held = sym ? null : pendingSymbol(cur, i);
       const help = sym
-        ? `<div class="pb-symhelp">Symbols: ${part.vars.map(esc).join(', ')} · constants k, eps0, mu0, pi, c, g · e.g. <code>2*k*lam/R</code>, <code>sqrt(x^2 + d^2)</code></div>`
+        ? loop.on.palette
+          ? `<div class="pb-symhelp">Tap to insert, or type. <code>/</code> makes a fraction.</div>`
+          : `<div class="pb-symhelp">Symbols: ${part.vars.map(esc).join(', ')} · constants k, eps0, mu0, pi, c, g · e.g. <code>2*k*lam/R</code>, <code>sqrt(x^2 + d^2)</code></div>`
         : '';
+      const palette = sym ? loop.paletteHTML(part, i) : locked ? '' : loop.numPadHTML(i, held);
+      const preview = sym && loop.on.palette ? `<div class="pb-preview" data-preview="${i}">${loop.previewHTML(part, val)}</div>` : '';
       const msg = parseMessage(part, val);
       return `<div class="pb-part${state}${held ? ' held' : ''}" data-part="${esc(part.id)}">
         <label class="pb-label" for="pb-in-${i}">${label}</label>
@@ -661,10 +706,12 @@ export function createPractice(api, bank) {
           ${part.unit ? `<span class="pb-unit">${esc(part.unit)}</span>` : ''}
           <span class="pb-mark">${mark}</span>
         </div>
+        ${preview}
+        ${palette}
         ${help}
         ${held ? '<div class="pb-held">Write the formula above first — then put the numbers in.</div>' : ''}
         <div class="pb-parse ${msg.cls}" data-parse="${i}">${msg.html}</div>
-        <div class="pb-fb">${esc(fb)}</div>
+        <div class="pb-fb">${prose(fb)}</div>
         ${cur.revealed || (cur.finished && !res?.correct) ? `<div class="pb-want">Answer: ${esc(sym ? part.expr : showValue(part, r, part.get(cur.inst.$)))}</div>` : ''}
         ${labSlot}
       </div>`;
@@ -684,7 +731,7 @@ export function createPractice(api, bank) {
       return `<fieldset class="pb-part choice${state}" data-part="${esc(part.id)}">
         <legend class="pb-label">${label}${part.multi ? ' <span class="pb-dim">(select all that apply)</span>' : ''} <span class="pb-mark">${mark}</span></legend>
         ${opts}
-        <div class="pb-fb">${esc(fb)}</div>
+        <div class="pb-fb">${prose(fb)}</div>
         ${labSlot}
       </fieldset>`;
     }
@@ -722,9 +769,9 @@ export function createPractice(api, bank) {
       return `<div class="pb-banner"><span>The ${esc(labTitle)} lab shows this setup. Its numbers are hidden until you solve it.</span><button type="button" class="linkish" data-act="peek" title="Counts as a peek: this attempt won't count as a clean solve">Peek</button></div>`;
     }
     if (cur.tpl.sim?.read) {
-      return `<div class="pb-banner good"><span>The lab is live: its numbers are shown next to your answers. Change the setup to explore.</span></div>`;
+      return `<div class="pb-banner good"><span>The lab is live: its numbers are shown next to your answers. Change the setup to explore.</span>${loop.labButton(cur, api.labId())}</div>`;
     }
-    return `<div class="pb-banner quiet"><span>The lab is live. Change the setup to explore what-ifs.</span></div>`;
+    return `<div class="pb-banner quiet"><span>The lab is live. Change the setup to explore what-ifs.</span>${loop.labButton(cur, api.labId())}</div>`;
   }
 
   function solutionHTML(cur) {
@@ -738,7 +785,7 @@ export function createPractice(api, bank) {
       const days = INTERVAL_DAYS[cur.recorded?.box ?? 0];
       verdict = `Right on the first try. Next review ${fmtDays(days)}.`;
     } else if (cur.correct) {
-      verdict = 'Solved. It will come back for review soon, so you can do it clean.';
+      verdict = loop.verdict(cur) || 'Solved. It will come back for review soon, so you can do it clean.';
     } else {
       verdict = 'Study the steps, then try it again with new numbers.';
     }
@@ -753,7 +800,9 @@ export function createPractice(api, bank) {
         : `<button type="button" class="btn accent" data-act="list">More problems</button>`;
     return `<section class="pb-solution">
       <div class="pb-verdict ${cur.correct ? 'good' : ''}">${esc(verdict)}</div>
+      ${loop.gapHTML(cur)}
       <h3>Solution</h3>
+      ${loop.principleLine(tpl)}
       <ol class="pb-steps">${steps}</ol>
       ${key}
       <div class="pb-labchecks" id="pb-labchecks"></div>
@@ -788,14 +837,15 @@ export function createPractice(api, bank) {
         <nav class="pb-examnav" aria-label="Exam problems">${nav}</nav>`;
     } else {
       const s = st.session;
-      const pos = s && s.ids.includes(cur.id) ? ` · ${s.ids.indexOf(cur.id) + 1} of ${s.ids.length}` : '';
+      const pos = s && sessionPos() >= 0 ? ` · ${sessionPos() + 1} of ${s.ids.length}` : '';
       head = `<div class="pb-head">
           <button type="button" class="pb-back" data-act="list">← ${s ? esc(s.label) + pos : 'Problems'}</button>
           <button type="button" class="pb-x" data-act="close" title="Back to the lab (P)" aria-label="Close practice">×</button>
         </div>`;
     }
 
-    const buttons = exam
+    const gated = loop.gated(cur);
+    const buttons = gated ? '' : exam
       ? `<div class="pb-row">
           <button type="button" class="btn" data-act="exam-prev" ${st.exam.i === 0 ? 'disabled' : ''}>← Previous</button>
           ${st.exam.i < st.exam.items.length - 1 ? `<button type="button" class="btn accent" data-act="exam-next">Next →</button>` : `<button type="button" class="btn accent" data-act="exam-submit">Submit exam</button>`}
@@ -810,12 +860,15 @@ export function createPractice(api, bank) {
         </div>`;
 
     return `${head}
-      <div class="pb-kicker">Ch ${esc(tpl.ch)} · ${esc(CHAPTER_TITLES[tpl.ch] || '')} · ${levelDots(tpl.level)} ${KIND_LABEL[tpl.kind] || ''}${src}</div>
+      <div class="pb-kicker">${loop.badges(cur, isInterleaved())}Ch ${esc(tpl.ch)} · ${esc(CHAPTER_TITLES[tpl.ch] || '')} · ${levelDots(tpl.level)} ${KIND_LABEL[tpl.kind] || ''}${src}</div>
       <h2 class="pb-h">${esc(tpl.title)}</h2>
       <p class="pb-text">${prose(cur.view.text)}</p>
+      ${loop.notesLink(cur)}
       ${cur.note ? `<p class="pb-note">${esc(cur.note)}</p>` : ''}
       ${bannerHTML(cur)}
-      <form class="pb-parts" onsubmit="return false">${tpl.parts.map((p, i) => partHTML(cur, p, i)).join('')}</form>
+      ${loop.principleHTML(cur)}
+      ${gated ? '' : loop.guideHTML(cur)}
+      ${gated ? '' : `<form class="pb-parts" onsubmit="return false">${tpl.parts.map((p, i) => partHTML(cur, p, i)).join('')}</form>`}
       ${buttons}
       ${hints ? `<ol class="pb-hints">${hints}</ol>` : ''}
       ${solutionHTML(cur)}`;
@@ -929,7 +982,27 @@ export function createPractice(api, bank) {
     const cur = st.cur;
     if (t.dataset.open) {
       const ids = listIds();
-      openProblem(t.dataset.open, { session: { label: 'Problems', ids } });
+      const grouped = st.filter.group === 'principle';
+      openProblem(t.dataset.open, { session: { label: grouped ? 'By principle' : 'Problems', ids, mix: !grouped } });
+      return;
+    }
+    if (t.dataset.principle && loop.pickPrinciple(cur, t.dataset.principle)) {
+      renderPanel();
+      panel.querySelector('.pb-parts .pb-input, .pb-parts input')?.focus({ preventScroll: true });
+      return;
+    }
+    if (t.dataset.notes) {
+      if (cur) readInputs(cur);
+      const [examId, section] = t.dataset.notes.split(':');
+      api.openNotes?.({ examId, section, fromProblem: true });
+      return;
+    }
+    if (t.dataset.weak) {
+      startPrinciple(t.dataset.weak);
+      return;
+    }
+    if (t.dataset.gap && loop.noteGap(cur, t.dataset.gap)) {
+      renderPanel();
       return;
     }
     if (t.dataset.filter) {
@@ -975,6 +1048,19 @@ export function createPractice(api, bank) {
       case 'check':
         check();
         break;
+      case 'guide-hide':
+      case 'guide-show':
+        if (cur) {
+          readInputs(cur);
+          cur.guideHidden = t.dataset.act === 'guide-hide';
+          renderPanel();
+        }
+        break;
+      case 'lab':
+        if (cur) readInputs(cur);
+        loop.setDrawer(!body.classList.contains('lab-open'));
+        renderPanel();
+        break;
       case 'hint':
         if (cur) {
           readInputs(cur);
@@ -998,13 +1084,12 @@ export function createPractice(api, bank) {
         restoreSetup();
         break;
       case 'again':
-        if (cur) openProblem(cur.id, { seed: 1 + Math.floor(Math.random() * 99999), session: st.session?.exam ? null : st.session });
+        // The principle was settled a moment ago on this same problem; asking again would be a formality.
+        if (cur) openProblem(cur.id, { seed: 1 + Math.floor(Math.random() * 99999), session: st.session?.exam ? null : st.session, pos: sessionPos(), principle: false, again: true });
         break;
-      case 'next': {
-        const id = nextInSession();
-        if (id) openProblem(id, { session: st.session });
+      case 'next':
+        advance();
         break;
-      }
       case 'mixed':
         startMixed();
         break;
@@ -1069,6 +1154,8 @@ export function createPractice(api, bank) {
           out.className = `pb-parse ${msg.cls}`;
           out.innerHTML = msg.html;
         }
+        const pv = panel.querySelector(`[data-preview="${el.dataset.input}"]`);
+        if (pv) pv.innerHTML = loop.previewHTML(part, el.value);
       }
     }
     if (cur.mode === 'exam') saveExamInputs();
@@ -1083,6 +1170,8 @@ export function createPractice(api, bank) {
     e.preventDefault();
     if (st.cur?.mode === 'practice' && !st.cur.finished) check();
   });
+
+  loop.installKeys(panel);
 
   $('btn-practice').addEventListener('click', () => toggle());
 

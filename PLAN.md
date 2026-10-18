@@ -1262,7 +1262,7 @@ The course in progress when this was decided (Mechanics of Materials) stops at i
 
 1. **R0, the scorecard.** Done 18 Oct 2026. `npm run scorecard` (`packages/checks/scorecard.mjs`) measures every course against the standard's section 6
    and prints a table. Manifests gain `standard: false` (PHY 2049's after 24 Oct); CI fails only for courses marked `true`. Application labs are marked `app: true` in a course's `LAB_META`, and a template counts toward structural variety when it declares `variety` or picks among non-numeric configurations.
-2. **R1, the practice loop in the shells.** Port PHY 2049's principle step, fading, coaching with
+2. **R1, the practice loop in the shells.** Done 18 Oct 2026: `packages/shells/practice/`, wired into both shells' panels, with Node tests and a browser smoke on a fixture course (`packages/shells/test/`). No course turns a feature on yet except the phone number pad. Port PHY 2049's principle step, fading, coaching with
    per-answer `why` and `traps`, interleaving and the weak-principle list, the notes link, the lab
    drawer, the symbolic palette (engineering shell) and the number pad into both shells, as copies.
    Each feature turns on when a course supplies its data. Tests for each, run against a small
