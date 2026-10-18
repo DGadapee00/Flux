@@ -16,7 +16,8 @@
     <a href="#s4"><span>04</span>Oblique impact</a>
     <a href="#s5"><span>05</span>Angular momentum</a>
     <a href="#s6"><span>06</span>A rocket</a>
-    <a href="#s7"><span>07</span>Formula sheet</a>
+    <a href="#s7"><span>07</span>Application: an upper stage</a>
+    <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -222,7 +223,40 @@ m\,dv = -v_e\,dm - mg\,dt.
 </div>
 </section>
 <section class="topic" id="s7">
-<h2><span class="n">07</span>Formula sheet</h2>
+<h2><span class="n">07</span>Application: an upper stage</h2>
+<p>An engine data sheet gives thrust, burn rate and specific impulse. The rocket equation needs the exhaust speed. All three are the same fact, written three ways.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The thrust is the momentum the exhaust carries away each second: \(F = \dot m\,v_e\). So \(v_e = F/\dot m\). Specific impulse is the impulse per unit weight of propellant: \(I_{sp} = F/(\dot m g_0) = v_e/g_0\). It is quoted in seconds. Multiply by \(g_0 = 9.81\) m/s² to get back to a speed.</p>
+</div>
+\[
+v_e = \frac{F}{\dot m} = I_{sp}\,g_0, \qquad \Delta v = v_e\ln\frac{m_0}{m_f} - g\,t_b.
+\]
+<p>A stage must also lift itself. At ignition the thrust must beat the weight: \(F &gt; m_0 g\). The ratio \(F/(m_0 g)\) is the thrust-to-weight ratio.</p>
+<div class="box ex"><span class="tag">Worked example · a methane–oxygen stage</span>
+<p>A 500 kg stage burns 5 kg/s and makes 15,000 N. Then \(v_e = 15000/5 = 3000\) m/s, and \(I_{sp} = 3000/9.81 = 306\) s. At ignition the thrust-to-weight ratio is \(15000/4905 = 3.06\).</p>
+<p>It burns down to 200 kg, a mass ratio of 2.5. The burn takes \(300/5 = 60\) s. The ideal gain is \(3000\ln 2.5 = 2749\) m/s. Gravity takes \(9.81 \times 60 = 589\) m/s. The speed at burnout is 2160 m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the same stage, throttled up</span>
+<p>Double the burn rate to 10 kg/s at the same exhaust speed. The thrust doubles to 30,000 N. The mass ratio is still 2.5, so the ideal gain is still 2749 m/s. The burn now takes 30 s, and gravity takes only 294 m/s. The speed at burnout rises to 2455 m/s.</p>
+<p>A faster burn spends less time holding itself up. That is why launch stages start with a thrust-to-weight ratio well above 1.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a stage that barely lifts</span>
+<p>Fit the same 15,000 N engine to a 1500 kg stage that burns down to 600 kg. The mass ratio is again 2.5, and the ideal gain again 2749 m/s. But the thrust-to-weight ratio is \(15000/14715 = 1.02\). The burn lasts \(900/5 = 180\) s. Gravity takes 1766 m/s, and only 983 m/s is left.</p>
+<p>At ignition the net acceleration is \(15000/1500 - 9.81 = 0.19\) m/s². The stage creeps off the pad and spends its first minute fighting its own weight.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The burn time is the propellant over the burn rate, \((m_0 - m_f)/\dot m\). It is not the whole mass over the burn rate. For the first stage, \(500/5 = 100\) s would put the gravity loss at 981 m/s instead of 589 m/s. The dry mass never leaves the nozzle. Hibbeler §15.9.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>The mass ratio sets the ideal gain. The thrust-to-weight ratio sets how much of it gravity takes. Read \(v_e\) from \(F/\dot m\) or \(I_{sp}g_0\).</p>
+</div>
+<p>In the Rocket lab, the burn-in-gravity scenario takes all three stages above. Move the burn rate and watch \(t_b\) and the gravity loss fall together.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real engine's thrust grows as the outside pressure falls, so sea-level and vacuum specific impulse differ. The model holds \(v_e\) constant. It also leaves out drag, which is largest low and slow, and the turn toward horizontal flight.</p>
+</div>
+</section>
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Formula sheet</h2>
 <ul>
 <li>\(\int F\,dt = m\Delta v\). The impulse is the area. Average force is impulse over contact time.</li>
 <li>If the external impulse is zero, the total momentum is constant.</li>

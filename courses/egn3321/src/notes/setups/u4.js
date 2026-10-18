@@ -146,4 +146,45 @@ export default {
       read: (c) => ({ dv: [c.dv, 1500 * Math.log(2.5) - 9.81 * 3] }),
     },
   ],
+  s7: [
+    {
+      tag: 'a methane–oxygen stage',
+      lab: 'rocket',
+      scenario: 'gravity',
+      setup(s) {
+        s.m0 = 500;
+        s.mf = 200;
+        s.ve = 3000;
+        s.mdot = 5;
+        s.g = 9.81;
+      },
+      read: (c) => ({ dv: [c.dv, 3000 * Math.log(2.5) - 9.81 * 60], tb: [c.tb, 60], ratio: [c.ratio, 2.5] }),
+    },
+    {
+      tag: 'the same stage, throttled up',
+      lab: 'rocket',
+      scenario: 'gravity',
+      setup(s) {
+        s.m0 = 500;
+        s.mf = 200;
+        s.ve = 3000;
+        s.mdot = 10;
+        s.g = 9.81;
+      },
+      read: (c) => ({ dv: [c.dv, 3000 * Math.log(2.5) - 9.81 * 30], tb: [c.tb, 30] }),
+    },
+    {
+      tag: 'a stage that barely lifts',
+      lab: 'rocket',
+      scenario: 'gravity',
+      setup(s) {
+        s.m0 = 1500;
+        s.mf = 600;
+        s.ve = 3000;
+        s.mdot = 5;
+        s.g = 9.81;
+      },
+      read: (c) => ({ dv: [c.dv, 3000 * Math.log(2.5) - 9.81 * 180], tb: [c.tb, 180], burned: [c.burned, 900] }),
+    },
+  ],
 };
