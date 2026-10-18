@@ -11,6 +11,7 @@
  * The panel takes the left column (where the equation panel lives). Main owns lab switching;
  * this module only calls api.openInLab(inst) and reads api.computed / api.slice().
  */
+import { NO_PLUS_C, constantOfIntegration } from '@flux/core';
 import { mathProse, tex } from './shared.js';
 
 const EXAM_MINUTES = 50;
@@ -648,6 +649,7 @@ export function createPractice(api, bank) {
     try {
       compile(value, part.vars, part.alias);
     } catch (err) {
+      if (constantOfIntegration(value, part.vars)) return { cls: 'bad', html: esc(NO_PLUS_C) };
       return { cls: 'bad', html: esc(err.message) };
     }
     const s = api.slice?.();
@@ -687,7 +689,8 @@ export function createPractice(api, bank) {
     const state = !res ? '' : res.empty ? ' empty' : res.correct ? ' ok' : ' bad';
     const label = prose(partLabel(part, r, cur.tpl.parts.length));
     const review = cur.mode === 'review';
-    const fb = !res ? '' : res.empty ? (review ? 'No answer given.' : 'Answer this part.') : res.correct ? '' : res.feedback || (review || cur.finished ? 'Incorrect.' : 'Not yet — try again.');
+    const graded = !res ? '' : res.empty ? (review ? 'No answer given.' : 'Answer this part.') : res.correct ? '' : res.feedback || (review || cur.finished ? 'Incorrect.' : 'Not yet — try again.');
+    const fb = graded === NO_PLUS_C ? '' : graded;
     const mark = !res || res.empty ? '' : res.correct ? '✓' : '✗';
     const labSlot = `<div class="pb-labval" data-lab-part="${esc(part.id)}"></div>`;
 

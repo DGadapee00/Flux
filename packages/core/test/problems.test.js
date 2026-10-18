@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { createEngine } from '../src/problems/engine.js';
+import { NO_PLUS_C, constantOfIntegration, createEngine } from '../src/problems/engine.js';
 import { createProgress, pickSet } from '../src/problems/progress.js';
 
 const ZERO = [0];
@@ -176,4 +176,13 @@ test('pickSet is stable for a seed and stays inside chapterOrder', () => {
   const opts = { n: 2, seed: 7, chapterOrder: ['1', '2'] };
   assert.deepEqual(pickSet(templates, progress, opts).map((t) => t.id), pickSet(templates, progress, opts).map((t) => t.id));
   assert.throws(() => pickSet(templates, progress, { n: 1 }));
+});
+
+test('+C is named as a constant of integration unless C is a variable of the part', () => {
+  assert.equal(constantOfIntegration('x^3/3 + C', ['x']), true);
+  assert.equal(constantOfIntegration('x^3/3 − C', ['x']), false);
+  assert.equal(constantOfIntegration('x^3/3+C', ['x']), true);
+  assert.equal(constantOfIntegration('x^3/3 + Cx', ['x']), false);
+  assert.equal(constantOfIntegration('x^3/3 + C', ['x', 'C']), false);
+  assert.match(NO_PLUS_C, /no \+C/);
 });
