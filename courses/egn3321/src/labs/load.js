@@ -20,6 +20,13 @@ const loaders = {
   'roll-slip': () => import('./roll-slip.js'),
   race: () => import('./race.js'),
   linkage: () => import('./linkage.js'),
+  // Application labs, one per unit: 2D labs on the plot stage (define2d.js), app: true.
+  boost: () => import('./boost.js'),
+  liftoff: () => import('./liftoff.js'),
+  landing: () => import('./landing.js'),
+  gearbox: () => import('./gearbox.js'),
+  spinup: () => import('./spinup.js'),
+  tipover: () => import('./tipover.js'),
 };
 
 const labs = createLabLoader(loaders);

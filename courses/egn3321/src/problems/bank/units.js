@@ -20,12 +20,32 @@ function homogeneous(id) {
   return false;
 }
 
+/** Each rounding a student might report, with what it gets wrong. */
 function roundChoices(raw) {
-  const vals = [2, 3, 4].map((n) => Number(raw.toPrecision(n)));
   const right = hibbeler(raw);
-  if (!vals.includes(right)) vals.push(right);
-  return [...new Set(vals)].map((value) => ({ value, label: String(value) }));
+  const lead1 = Math.floor(Math.abs(raw) / 10 ** Math.floor(Math.log10(Math.abs(raw)) + 1e-12) + 1e-9) === 1;
+  const why = {
+    2: 'Two figures throws away the third, which the rule keeps.',
+    3: lead1 ? 'The first digit is 1, so the rule keeps a fourth figure.' : 'Three figures is right here.',
+    4: lead1 ? 'Four figures is right here: the first digit is 1.' : 'Four figures is kept only when the first digit is 1.',
+  };
+  const out = [];
+  for (const n of [2, 3, 4]) {
+    const value = Number(raw.toPrecision(n));
+    if (out.some((o) => o.value === value)) continue;
+    out.push({ value, label: String(value), why: value === right ? 'This follows the rule.' : why[n] });
+  }
+  if (!out.some((o) => o.value === right)) out.push({ value: right, label: String(right), why: 'This follows the rule.' });
+  return out;
 }
+
+/** Why each verdict is wrong for each equation: shown when a student picks it. */
+const HOMO_WHY = {
+  vat: 'Each term is a velocity: $v$, $v_0$, and $at$ (m/s² times s).',
+  s: 'Each term is a length: $s$, $s_0$, $v_0t$ and $\\tfrac12 at^2$.',
+  bad: '$v$ and $v_0$ are m/s, but $a$ alone is m/s². The time factor is missing.',
+  mix: '$s$ is a length, but $v_0$ alone is a speed. It needs a factor of $t$.',
+};
 
 const units = [
   problem({
@@ -77,10 +97,11 @@ const units = [
     vars: {
       a: range(2, 9, 1),
       b: range(2, 9, 1),
+      op: choice(['product', 'a product'], ['quotient', 'a quotient']),
     },
-    derive: ($) => ({ raw: ($.a * $.b * Math.PI) / 7 }),
+    derive: ($) => ({ raw: $.op === 'product' ? ($.a * $.b * Math.PI) / 7 : (100 * $.a) / ($.b * Math.PI) }),
     valid: ($) => roundChoices($.raw).length >= 3,
-    text: (T, $) => String.raw`A product comes out to $${$.raw.toPrecision(8)}$ before rounding. Which value follows the three-significant-figure rule, with four figures when the first digit is 1?`,
+    text: (T, $) => String.raw`${T.op === 'a product' ? 'A product' : 'A quotient'} comes out to $${$.raw.toPrecision(8)}$ before rounding. Which value follows the three-significant-figure rule, with four figures when the first digit is 1?`,
     parts: [
       {
         id: 'round',
@@ -99,7 +120,7 @@ const units = [
       `The reported value is ${hibbeler($.raw)}.`,
     ],
     second: ($) => ({ round: hibbelerExp($.raw) }),
-    cases: [kase('Hibbeler Statics §1.5', { a: 3, b: 5 }, { round: 6.73 })],
+    cases: [kase('Hibbeler Statics §1.5', { a: 3, b: 5, op: 'product' }, { round: 6.73 })],
   }),
 
   problem({
@@ -120,7 +141,14 @@ const units = [
     },
     text: (T) => `Is this equation dimensionally homogeneous? ${T.eq}`,
     parts: [
-      mc('homo', [[1, 'True'], [0, 'False']], ($) => (EQ_OK[$.eq] ? 1 : 0), { label: 'homogeneous?' }),
+      {
+        ...mc('homo', [[1, 'True'], [0, 'False']], ($) => (EQ_OK[$.eq] ? 1 : 0), { label: 'homogeneous?' }),
+        // The same reason serves both options: it is shown only for the wrong one.
+        options: [
+          { value: 1, label: 'True', why: ($) => HOMO_WHY[$.eq] },
+          { value: 0, label: 'False', why: ($) => HOMO_WHY[$.eq] },
+        ],
+      },
     ],
     level: 2,
     hints: ['Every term that is added must measure the same kind of quantity.',

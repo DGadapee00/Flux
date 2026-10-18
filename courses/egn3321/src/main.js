@@ -1,5 +1,7 @@
 import '@flux/shells/engineering/styles/main.css';
 import '@flux/shells/engineering/styles/practice.css';
+import '@flux/shells/engineering/styles/stage.css';
+import './styles.css';
 import '@flux/shells/styles/notes.css';
 import 'katex/dist/katex.min.css';
 import { mountTrackBar } from '@flux/core';
@@ -15,6 +17,7 @@ import { course } from './manifest.js';
 import { applyExample } from './notes/setups.js';
 import { applyProblem } from './problems/simbridge.js';
 import { createScene } from './scene/createScene.js';
+import { createStage } from '@flux/shells/engineering/stage.js';
 import { createHUD } from './ui/hud.js';
 import { createPractice } from './ui/problems.js';
 
@@ -23,6 +26,8 @@ mountTrackBar(brand);
 
 const canvas = document.getElementById('c');
 const { renderer, scene, camera, controls, labels, grid } = createScene(canvas);
+// The application labs are 2D: the stage swaps the three.js canvas for a plot canvas (define2d.js).
+const stage = createStage(canvas);
 const pool = createViewPool(scene);
 const clock = new THREE.Clock();
 camera.layers.enable(ANSWER_LAYER);
@@ -405,6 +410,45 @@ function stepViewShift() {
   else camera.setViewOffset(w, h, -next, 0, w, h);
 }
 
+/**
+ * The 2D stage. A plot2d lab is drawn when its numbers change, and when a panel moves or the
+ * window resizes (the drawing fits the space the panels leave). A scene3d lab gets its canvas back.
+ */
+let stageKind = 'scene3d';
+let layoutKey = '';
+let layoutAt = 0;
+function layoutChanged(now) {
+  if (now - layoutAt < 200) return false;
+  layoutAt = now;
+  const parts = [window.innerWidth, window.innerHeight, document.body.className];
+  for (const id of ['brand', 'eq-panel', 'controls', 'readout', 'problems', 'btn-sheet', 'notes']) {
+    const el = document.getElementById(id);
+    const r = el && !el.hidden ? el.getBoundingClientRect() : null;
+    parts.push(r ? `${Math.round(r.left)},${Math.round(r.top)},${Math.round(r.width)},${Math.round(r.height)}` : '-');
+  }
+  const key = parts.join('|');
+  if (key === layoutKey) return false;
+  layoutKey = key;
+  return true;
+}
+
+function drawStage(changed) {
+  const lab = app.lab;
+  const plot = lab?.kind === 'plot2d';
+  labels.domElement.hidden = plot;
+  document.body.classList.toggle('plot-lab', plot);
+  if (!plot) {
+    if (stageKind !== 'scene3d') stage.show(null, {});
+    stageKind = 'scene3d';
+    return;
+  }
+  const relayout = layoutChanged(performance.now());
+  if (changed || relayout || stageKind !== lab.id) {
+    stage.show(lab, slice());
+    stageKind = lab.id;
+  }
+}
+
 function frame() {
   const dt = Math.min(0.05, clock.getDelta());
   stepCamera(dt);
@@ -417,7 +461,8 @@ function frame() {
     if (lab.tick(dt, s, computed, ctx)) app.dirty = true;
   }
 
-  if (app.dirty || s.dirty || pointer.dragging || lab?.live) {
+  const changed = app.dirty || s.dirty || pointer.dragging || lab?.live;
+  if (changed) {
     recompute();
     syncViews();
     hud.update(publicState(), computed, lab);
@@ -425,6 +470,7 @@ function frame() {
     app.dirty = false;
     if (s.dirty !== undefined) s.dirty = false;
   }
+  drawStage(changed);
   practice.frame();
   renderer.render(scene, camera);
   labels.render(scene, camera);
@@ -437,6 +483,7 @@ window.__gauss = {
   },
   computed,
   app,
+  stage,
   camera,
   controls,
   practice,

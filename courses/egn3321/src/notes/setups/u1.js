@@ -89,4 +89,19 @@ export default {
       read: (c) => ({ vx: [c.vx, -2], vy: [c.vy, 3], speed: [c.speed, 3.61] }),
     },
   ],
+  s7: [
+    { tag: 'a student rocket', lab: 'boost', scenario: 'student', read: (c) => ({ vBo: [c.vBo, 122.5], hBo: [c.hBo, 153], apogee: [c.apogee, 918], t: [c.tApogee, 15.0] }) },
+    {
+      tag: 'thrust and weight',
+      lab: 'boost',
+      scenario: 'student',
+      setup(s) {
+        s.a = 600 / 12 - 9.81;
+        s.tb = 3;
+      },
+      read: (c) => ({ vBo: [c.vBo, 121], hBo: [c.hBo, 181], apogee: [c.apogee, 922] }),
+    },
+    { tag: 'a long gentle burn', lab: 'boost', scenario: 'long', read: (c) => ({ vBo: [c.vBo, 120], hBo: [c.hBo, 360], apogee: [c.apogee, 1094] }) },
+    { tag: 'a hop test', lab: 'boost', scenario: 'hop', read: (c) => ({ apogee: [c.apogee, 31.3], ground: [c.tGround, 7.75] }) },
+  ],
 };

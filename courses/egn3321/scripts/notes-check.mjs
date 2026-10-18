@@ -42,6 +42,7 @@ let readings = 0;
 const words = {};
 const MIN_WORDS = 3000;
 for (const [key, set] of Object.entries(NOTES)) {
+  if (ONLY && key !== ONLY) continue;
   const name = `${key} (${set.title})`;
   const exam = EXAMS.find((e) => e.id === set.exam);
   if (key !== set.exam) fail(name, `registered under "${key}" but says exam "${set.exam}"`);
