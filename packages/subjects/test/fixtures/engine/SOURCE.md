@@ -14,3 +14,17 @@ engine repo checked out.
 Flux never edits these files. `test/thermo.test.js` checks each SHA-256 above. To move to a later
 engine commit, run `node scripts/engine-fixtures.mjs <engine checkout> <commit>`, which copies
 both files from that commit, and update this table and the hashes in the test.
+
+## Note: methane's specific heat
+
+`thermo_nasa7.json`'s CH₄ (GRI-Mech 3.0) runs above NIST-JANAF: cp is 0.98% higher at 600 K and
+2.54% higher at 1000 K. It agrees with NASA Glenn's CH₄ (CEA's database) within 0.25% up to
+1000 K, and JANAF's methane matches a rigid-rotor harmonic oscillator, so the gap is between the
+references. Flux keeps the engine's data unchanged. Details: `src/thermo/PROVENANCE.md`; the text
+for a note to the engine repo: `docs/engine-issue-ch4-cp.md`.
+
+## Note: methane's heat of formation
+
+`design_point.txt` was run with CH₄ at −17895 cal/mol (−74.873 kJ/mol), not the −74.600 kJ/mol
+in `thermo_nasa7.json`. Engine-page calculations use −74.873 kJ/mol so they reproduce the design
+point.

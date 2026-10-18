@@ -47,7 +47,9 @@ test('a state outside the formulation, or in region 5, throws', () => {
 test('an ideal gas outside its fitted range throws', () => {
   throwsRange(() => cpMolar('CO2', 4000), 'outside', /CO2 is fitted from 200 K to 3500 K/);
   throwsRange(() => cpMolar('N2', 250), 'outside', /N2 is fitted from 298\.15 K/);
-  throwsRange(() => gas('air').cp(250), 'outside', /N2/);
+  throwsRange(() => gas('air').cp(150), 'outside', /fitted from 200 K/);
+  assert.ok(Math.abs(gas('air').cp(200) - 1002.4) < 1, 'air works at 200 K');
+  throwsRange(() => cpMolar('glenn:N2', 150), 'outside', /glenn:N2 is fitted from 200 K/);
   assert.ok(Number.isFinite(cpMolar('AR', 200)));
   assert.throws(() => cpMolar('XE', 300), TypeError);
 });

@@ -587,6 +587,11 @@ artifact and stays in its own repo, with its own deploy and its own PROVENANCE r
   each with its own `source`), `Sim/data/cea_gox_gch4.json`, and
   `Phase1_Calculations/cea/design_point.txt`. Flux never edits these numbers. A sync script copies a
   later commit in, like `scripts/sync-phy.mjs` did.
+- **Methane's heat of formation:** engine-page calculations use −74.873 kJ/mol, the reactant
+  enthalpy written into the CEA input (−17895 cal/mol), so they reproduce the committed design
+  point. `subjects/thermo` gives −74.600 kJ/mol (GRI-Mech and NASA Glenn); the difference is the
+  1.08 cal/g reactant-enthalpy gap its test explains. `applications/rocket/design/SOURCE` records
+  this when Phase A1 creates it. (Decided 18 Oct 2026.)
 - The engine repo marks these values **preliminary** until its Phase 1 tag `v0.2-sizing-frozen`.
   Every page that shows one says so until that tag exists.
 - Selftests check that the design table agrees with itself, which is also the first lesson:
