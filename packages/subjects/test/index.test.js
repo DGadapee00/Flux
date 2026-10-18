@@ -7,8 +7,8 @@ import { parseUnit as parseMech } from '../src/mechanics/units.js';
 import { mean, sd } from '../src/stats/describe.js';
 import { SUBJECTS } from '../src/index.js';
 
-test('the four subject libraries are present', () => {
-  assert.deepEqual(SUBJECTS, ['em', 'math', 'mechanics', 'stats']);
+test('the five subject libraries are present', () => {
+  assert.deepEqual(SUBJECTS, ['em', 'math', 'mechanics', 'stats', 'thermo']);
 });
 
 test('shared vector arithmetic, the grid step, and both unit tables', () => {
