@@ -12,7 +12,7 @@
  *   6. sim agreement: applyProblem, recompute headless, compare sim.read with get()
  *
  * And the course standard (docs/COURSE-STANDARD.md, section 4):
- *   7. principle tags from src/problems/principles.js, the primary first
+ *   7. principle tags, where a template has them, name principles in src/problems/principles.js
  *   8. a `why` on every option of every choice part
  *   9. at least two traps per numeric template, each a value the grader rejects with its own
  *      message in at least 3 of 4 versions (a trap that lands on the answer teaches nothing)
@@ -194,7 +194,6 @@ for (const tpl of PROBLEMS) {
     err(tpl.id, `${tpl.hints?.length ?? 0} hints; want 2 or 3`);
   }
   if (tpl.level !== 1 && tpl.level !== 2 && tpl.level !== 3) err(tpl.id, `level ${tpl.level} is not 1, 2, or 3`);
-  if (!tpl.principles?.length) err(tpl.id, 'no principle tags');
   for (const pid of tpl.principles || []) if (!PRINCIPLES[pid]) err(tpl.id, `unknown principle ${pid}`);
   const numericParts = tpl.parts.filter((p) => p.kind === 'numeric');
   if (numericParts.length) {

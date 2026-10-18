@@ -7,6 +7,12 @@ import ch17 from './bank/ch17.js';
 import ch18 from './bank/ch18.js';
 import units from './bank/units.js';
 import u1More from './bank/u1-more.js';
+import u2More from './bank/u2-more.js';
+import u3More from './bank/u3-more.js';
+import u4More from './bank/u4-more.js';
+import u5More from './bank/u5-more.js';
+import u6More from './bank/u6-more.js';
+import u7More from './bank/u7-more.js';
 import { foldCoaching } from '@flux/shells/practice/coaching.js';
 import { applyPrincipleTags } from '@flux/shells/practice/principles.js';
 import coaching from './coaching/index.js';
@@ -17,7 +23,7 @@ import { PRINCIPLE_TAGS } from './principles.js';
  * one file per unit, and are folded in here so the app and the checker see the same thing. Each
  * template's principle tags come from src/problems/principles.js.
  */
-export const PROBLEMS = foldCoaching(applyPrincipleTags([...units, ...ch12, ...u1More, ...ch13, ...ch14, ...ch15, ...ch16, ...ch17, ...ch18], PRINCIPLE_TAGS), coaching);
+export const PROBLEMS = foldCoaching(applyPrincipleTags([...units, ...ch12, ...u1More, ...ch13, ...u2More, ...ch14, ...u3More, ...ch15, ...u4More, ...ch16, ...u5More, ...ch17, ...u6More, ...ch18, ...u7More], PRINCIPLE_TAGS), coaching);
 
 const byIdMap = new Map(PROBLEMS.map((p) => [p.id, p]));
 

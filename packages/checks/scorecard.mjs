@@ -34,15 +34,12 @@ const marked = new Set(argv.flatMap((a, i) => (a === '--mark' ? [argv[i + 1]] : 
 
 /** The thresholds, in the standard's words. */
 export const T = {
-  wordsCore: 5000,
-  wordsReview: 3000,
   examples: 6,
   predictions: 2,
   apps: 1,
   conceptual: 0.25,
   why: 1,
   traps: 1,
-  principles: 1,
   hints: 1,
   structure: 0.6,
   cited: 1,
@@ -172,23 +169,19 @@ async function measure(id) {
       const n = trapCount(t);
       return n === null ? null : n >= 2;
     }),
-    principles: share(problems, (t) => Array.isArray(t.principles) && t.principles.length > 0),
     hints: share(problems, (t) => Array.isArray(t.hints) && t.hints.length >= 2),
     structure: share(problems, structural),
     cited: share(problems, (t) => (t.cases || []).some((c) => typeof c.src === 'string' && c.src.trim())),
   };
 
-  const wordsNeed = review ? T.wordsReview : T.wordsCore;
   const minOf = (k) => (rows.length ? Math.min(...rows.map((r) => r[k])) : 0);
   const checks = {
-    words: [minOf('words'), minOf('words') >= wordsNeed, wordsNeed],
     examples: [minOf('examples'), minOf('examples') >= T.examples],
     predictions: [minOf('minPredictions'), minOf('minPredictions') >= T.predictions],
     apps: [minOf('apps'), minOf('apps') >= T.apps],
     conceptual: [minOf('conceptual'), minOf('conceptual') >= T.conceptual],
     why: [bank.why, bank.why === null || bank.why >= T.why],
     traps: [bank.traps, bank.traps === null || bank.traps >= T.traps],
-    principles: [bank.principles, bank.principles !== null && bank.principles >= T.principles],
     hints: [bank.hints, bank.hints !== null && bank.hints >= T.hints],
     structure: [bank.structure, bank.structure !== null && bank.structure >= T.structure],
     cited: [bank.cited, bank.cited !== null && bank.cited >= T.cited],
@@ -199,14 +192,12 @@ async function measure(id) {
 
 const pct = (x) => (x === null || x === undefined ? 'n/a' : `${Math.round(x * 100)}%`);
 const COLS = [
-  ['words', 'words/unit', (v) => String(v)],
   ['examples', 'lab examples/unit', (v) => String(v)],
   ['predictions', 'predictions/lab', (v) => String(v)],
   ['apps', 'app labs/unit', (v) => String(v)],
   ['conceptual', 'conceptual', pct],
   ['why', 'why', pct],
   ['traps', '≥2 traps', pct],
-  ['principles', 'principles', pct],
   ['hints', '≥2 hints', pct],
   ['structure', 'structure', pct],
   ['cited', 'cited case', pct],
@@ -245,7 +236,7 @@ const md = args.has('--md');
 const quiet = args.has('--quiet');
 if (!quiet) console.log(table(results, md));
 if (!md && !quiet) {
-  console.log(`\nThresholds: words ≥${T.wordsCore} per unit (≥${T.wordsReview} review), ≥${T.examples} lab examples per unit, ≥${T.predictions} predictions per lab, ≥${T.apps} application lab per unit, ≥${T.conceptual * 100}% conceptual per unit; why, traps, principles, hints and a cited case on every template; ≥${T.structure * 100}% varied by structure. A per-unit column shows the weakest unit. Smoke, overflow and layout run in each course's browser scripts.`);
+  console.log(`\nThresholds: ≥${T.examples} lab examples per unit, ≥${T.predictions} predictions per lab, ≥${T.apps} application lab per unit, ≥${T.conceptual * 100}% conceptual per unit; why, traps, hints and a cited case on every template; ≥${T.structure * 100}% varied by structure. A per-unit column shows the weakest unit. Smoke, overflow and layout run in each course's browser scripts.`);
 }
 if (args.has('--units') && !quiet) for (const r of results) console.log(`\n${unitTable(r)}`);
 

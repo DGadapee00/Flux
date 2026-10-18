@@ -1268,9 +1268,9 @@ The course in progress when this was decided (Mechanics of Materials) stops at i
    Each feature turns on when a course supplies its data. Tests for each, run against a small
    fixture course.
 3. **R2, the pilot: Dynamics (EGN 3321).** The owner takes it next term and it is the closest to the
-   bar. Principle list and tags, `why` and `traps` on every template, structural variety and designed
-   numbers, conceptual share, application labs (one per unit), notes to 5,000 words per unit with lab
-   setups, OCW worked cases. Then the owner's review (standard, section 7) and `standard: true`.
+   bar. `why` and `traps` on every template, structural variety and designed numbers, conceptual
+   share, application labs (one per unit), notes with lab setups, OCW worked cases. (18 Oct 2026: the
+   owner dropped the 5,000-word floor and the principle-tag requirement, for every course.) Then the owner's review (standard, section 7) and `standard: true`.
    Dynamics becomes the template other courses copy.
 4. **R3, next term's other courses to the bar:** Thermodynamics (EML 3100), then Mechanics of
    Materials (EGN 3331), each unit built to the standard from the start.
