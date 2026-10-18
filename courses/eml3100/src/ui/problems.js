@@ -1,0 +1,33 @@
+import { createPractice as createEngineeringPractice } from '@flux/shells/engineering/problems.js';
+import { LAB_META, examById } from '../data/catalog.js';
+import { CHAPTER_ORDER, CHAPTER_TITLES, PROBLEMS, problemById, problemsForExam } from '../problems/index.js';
+import { checkUnits, compile, expected, grade, instance, render, sig, withinTol } from '../problems/engine.js';
+import { INTERVAL_DAYS, MASTERED_BOX, createProgress, pickSet } from '../problems/progress.js';
+
+/** Unit the practice list opens on. The shell does not know it. */
+const homeId = 'u1';
+
+export function createPractice(api) {
+  return createEngineeringPractice(api, {
+    PROBLEMS,
+    problemById,
+    problemsForExam,
+    CHAPTER_ORDER,
+    CHAPTER_TITLES,
+    instance,
+    render,
+    grade,
+    expected,
+    sig,
+    withinTol,
+    compile,
+    checkUnits,
+    createProgress,
+    pickSet,
+    MASTERED_BOX,
+    INTERVAL_DAYS,
+    examById,
+    LAB_META,
+    homeId,
+  });
+}
