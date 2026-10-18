@@ -24,6 +24,8 @@ export const course = defineCourse({
     labs: unit.labs,
   })),
   chapters: CHAPTER_TITLES,
+  // Measured by `npm run scorecard` against docs/COURSE-STANDARD.md. Set true only once it passes.
+  standard: false,
   labs: () => import('./labs/index.js'),
   problems: () => import('./problems/index.js'),
   prereqs: [],

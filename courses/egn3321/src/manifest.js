@@ -18,6 +18,8 @@ export const course = defineCourse({
     labs: exam.labs,
   })),
   chapters: {},
+  // Measured by `npm run scorecard` against docs/COURSE-STANDARD.md. Set true only once it passes.
+  standard: false,
   labs: () => import('./labs/load.js'),
   problems: () => import('./problems/index.js'),
   notes: () => import('./notes/index.js'),

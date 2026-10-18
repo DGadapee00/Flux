@@ -4,6 +4,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test test/deps.test.js test/raw.test.js test/storage.test.js && node deps.mjs && node raw.mjs && node storage.mjs"
+    "test": "node --test test/deps.test.js test/raw.test.js test/storage.test.js test/scorecard.test.js && node deps.mjs && node raw.mjs && node storage.mjs"
   }
 }

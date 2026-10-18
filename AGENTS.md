@@ -66,7 +66,7 @@ Storage keys are `flux.<course>.<key>.v<n>`. PHY keeps `flux.problems.v1` and `f
 
 ## Checks
 
-`npm test` at the repo root runs every workspace test, including the dependency check. A module with a failing check does not ship. `npm run build` must succeed.
+`npm test` at the repo root runs every workspace test, including the dependency check and the scorecard. `npm run scorecard` measures every course against `docs/COURSE-STANDARD.md` section 6 (`--units` for each unit, `--md` for a PR). It fails only for a course whose manifest says `standard: true`; every manifest says `false` until its course passes and the owner has reviewed it. Review courses (`review: true`: Calc I–III, Statics) need 3,000 words of notes per unit instead of 5,000. PHY 2049's manifest is left alone until 24 Oct 2026 and reads as not marked. A module with a failing check does not ship. `npm run build` must succeed.
 
 Mobile first. 380px portrait is the design width. No horizontal scroll. Phone inputs are at least 16px, because a smaller input makes Safari zoom the page. Smoke covers 380px and 1280px. STA's overflow check opens every revealed solution at 380px and fails when an equation is wider than the column. Displayed equations wrap (`fitMath`). A single root or fraction that still cannot wrap is split into steps by hand.
 
