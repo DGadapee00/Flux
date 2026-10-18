@@ -136,4 +136,23 @@ export default {
       read: (c) => ({ a: [c.a, (5 / 7) * 9.81 * 0.5], f: [c.f, (9.81 * 2) / 7] }),
     },
   ],
+  s6: [
+    {
+      tag: 'a small turbopump',
+      lab: 'spinup',
+      scenario: 'pump',
+      read: (c) => ({ I: [c.I, 9.1e-5], alpha0: [c.alpha0, 5270], wInf: [c.wInfRpm, 50600], t: [c.tRated, 1.08] }),
+    },
+    {
+      tag: 'bearing friction only',
+      lab: 'spinup',
+      scenario: 'pump',
+      setup(s) {
+        s.Mr = 0;
+      },
+      read: (c) => ({ alpha0: [c.alpha0, 5270], t: [c.tRated, 0.794] }),
+    },
+    { tag: 'twice the impeller mass', lab: 'spinup', scenario: 'heavy', read: (c) => ({ I: [c.I, 1.81e-4], alpha0: [c.alpha0, 2650], wInf: [c.wInfRpm, 50600], t: [c.tRated, 2.14] }) },
+    { tag: 'a weak starter', lab: 'spinup', scenario: 'weak', read: (c) => ({ wInf: [c.wInfRpm, 42000], t: [c.tRated, 2.26] }) },
+  ],
 };

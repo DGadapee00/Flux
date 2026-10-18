@@ -11,6 +11,7 @@ export default {
     { id: 's3', n: 3, title: 'Translation', lab: null, ch: ['17'], topics: ['crate'] },
     { id: 's4', n: 4, title: 'Rotation about a fixed axis', lab: 'pendulum', ch: ['17'], topics: ['pin'], home: true },
     { id: 's5', n: 5, title: 'General plane motion', lab: 'roll-slip', ch: ['17'], topics: ['roll', 'slip'], home: true },
-    { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's6', n: 6, title: 'Application: turbopump spin-up', lab: 'spinup', ch: ['17'], topics: ['pin'], problems: ['u6.17.spinup', 'u6.17.spin-time'], home: true },
+    { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };
