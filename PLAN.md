@@ -1,6 +1,6 @@
 # FLUX: one platform, many courses
 
-Status (15 Oct 2026): **Phase 7 math track done.** MAC 2311 and MAC 2312 are live, every unit with its labs and problems. **PHY 2048 groundwork is merged** (07fbbe2): the mechanics library, catalog, problem bank and lab logic. Its interface comes after PHY 2049's Exam 5 on 23 Oct 2026, with the physics shell. Live: https://flux-study.pages.dev/ with /phy2049/, /statics/, /egn3321/, /mac2311/, /mac2312/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 2049 5174, MAC 2313 5175, Statics 5176, STA 3032 5177, MAC 2311 5178, MAC 2312 5179, PHY 2048 5180, EGN 3321 5181, EGN 3331 5182, EML 3100 5183. PHY's weekly drops land here. **Phase 8 decisions, answered 15 Oct 2026:** Dalton takes all three courses next term and Dynamics is built first (D8); generated numbers are cited by textbook section (D9); R-134a comes from an equation of state in a later PR (D10); coverage follows the course packs, plus Dynamics' §15.9 rocket lab (D11). The engineering shell is in `packages/shells/engineering`, and Statics imports it. The shell's Notes tab and plot2d stage are in, behind manifest flags. `subjects/src/convert.js` holds the exact unit definitions. **Dynamics Units 1–7 are in:** `courses/egn3321` on port 5181. Unit 1 is kinematics. Unit 2 is force and acceleration (`fma`, `curve`, Ch 13). Unit 3 is work and energy (`collar`, `paths`, Ch 14). Unit 4 is impulse and momentum (`impulse`, `impact`, `rocket`, Ch 15). Unit 5 is planar rigid-body kinematics (`ic`, `slider-crank`, `rolling`, Ch 16). Unit 6 is planar rigid-body kinetics (`inertia`, `pendulum`, `roll-slip`, Ch 17). Unit 7 is rigid-body work and energy (`race`, `linkage`, Ch 18). The hub card links to it. **EML 3100's first slice is in (18 Oct 2026):** `courses/eml3100` on port 5183, Units 1–2 (pure substances and ideal gases; the first law for closed systems), the `phase` and `piston` labs, 17 problem templates and notes, citing Yan and OpenStax UP2 (D13). The Thermal-fluids card is on the hub. **Next (D12, 18 Oct 2026):** Thermodynamics first, library before screens. 1. `packages/subjects/thermo`: IAPWS-IF97 regions 1, 2 and 4, NASA-7 ideal gases, isentropic relations, generated property tables, with selftests and no UI. 2. The EML 3100 first slice, after the owner names UNF's textbook. 3. Mechanics of Materials first slice. PHY 2048's interface still comes after 23 Oct. **Phase A1** (the rocket, engine first) uses the same thermo library. flux-phy2049, statics-sim, flux-mac2313 and stats are frozen; their old sites redirect here.
+Status (17 Oct 2026): **Phase R is next: rework every course to `docs/COURSE-STANDARD.md`, except PHY 2049.** New units are paused until the shells carry PHY 2049's practice loop (R1); Dynamics is the pilot (R2). Live (once deploy secrets are set): https://flux-study.pages.dev/ with /phy2049/, /statics/, /egn3321/, /eml3100/, /mac2311/, /mac2312/, /mac2313/, /sta3032/. Ports: hub 5173, PHY 2049 5174, MAC 2313 5175, Statics 5176, STA 3032 5177, MAC 2311 5178, MAC 2312 5179, PHY 2048 5180, EGN 3321 5181, EGN 3331 5182, EML 3100 5183. Nothing touches courses/phy2049 before 24 Oct 2026 (Exam 5 on 23 Oct). PHY's weekly drops land here. Earlier status, superseded: see git history of this line.
 
 Revised 13 Oct 2026: PHY 2049 is imported first, whole and unchanged, and the engine is carved out
 of it. The other three courses port onto that engine afterward. This repo is public (D1).
@@ -1242,6 +1242,38 @@ Steps 5–6, 7–8 and 9–11 are independent once the shell (2–3) is in. D8 b
 **Exit for each course:** every unit has its labs, problems and notes; all checks pass; it is live
 on the hub; its PROVENANCE.md says what it contains and that the course packs set only coverage and
 order.
+
+### Phase R: rework every course to the standard (except PHY 2049)
+
+Decided 17 Oct 2026: the courses other than PHY 2049 feel half-built, and a review confirmed why
+(`docs/COURSE-STANDARD.md`, section 1). New units stop until the platform can carry PHY 2049's
+practice loop, and every course is then reworked to one written bar.
+
+**Rules.** `docs/COURSE-STANDARD.md` is the bar. Nothing touches `courses/phy2049` before 24 Oct 2026.
+The course in progress when this was decided (Mechanics of Materials) stops at its first slice.
+
+1. **R0, the scorecard.** `npm run scorecard` measures every course against the standard's section 6
+   and prints a table. Manifests gain `standard: false`; CI fails only for courses marked `true`.
+2. **R1, the practice loop in the shells.** Port PHY 2049's principle step, fading, coaching with
+   per-answer `why` and `traps`, interleaving and the weak-principle list, the notes link, the lab
+   drawer, the symbolic palette (engineering shell) and the number pad into both shells, as copies.
+   Each feature turns on when a course supplies its data. Tests for each, run against a small
+   fixture course.
+3. **R2, the pilot: Dynamics (EGN 3321).** The owner takes it next term and it is the closest to the
+   bar. Principle list and tags, `why` and `traps` on every template, structural variety and designed
+   numbers, conceptual share, application labs (one per unit), notes to 5,000 words per unit with lab
+   setups, OCW worked cases. Then the owner's review (standard, section 7) and `standard: true`.
+   Dynamics becomes the template other courses copy.
+4. **R3, next term's other courses to the bar:** Thermodynamics (EML 3100), then Mechanics of
+   Materials (EGN 3331), each unit built to the standard from the start.
+5. **R4, the review courses:** Calc I, Calc II, Calc III (no notes yet), Statics (no notes yet). Redo the
+   problem banks for structural variety and designed numbers (replace the range-widened templates),
+   add conceptual problems, symbolic answers, traps and principles; add application labs and notes.
+6. **R5, PHY 2048** after 24 Oct, built to the standard on the physics shell.
+7. **STA 3032** last: the owner does not use it. Keep it passing its checks; rework only on request.
+
+**Exit:** every course except STA 3032 is `standard: true` in its manifest, and the scorecard passes
+in CI.
 
 ### Phase 9 and on
 
