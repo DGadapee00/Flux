@@ -15,7 +15,8 @@
     <a href="#s3"><span>03</span>Rolling without slip</a>
     <a href="#s4"><span>04</span>The instantaneous centre</a>
     <a href="#s5"><span>05</span>Conservation of energy</a>
-    <a href="#s6"><span>06</span>Formula sheet</a>
+    <a href="#s6"><span>06</span>Application: a lander tipping over</a>
+    <a href="#s7"><span>07</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -195,7 +196,52 @@
 </div>
 </section>
 <section class="topic" id="s6">
-<h2><span class="n">06</span>Formula sheet</h2>
+<h2><span class="n">06</span>Application: a lander tipping over</h2>
+<p>A vehicle that lands on legs can tip over. A gust, a sideways drift at touchdown, or a pad on a rock starts it turning about one footpad. It either rocks back or goes over. Energy decides which, in one line.</p>
+<p>Take the outer pad as O. The vehicle turns about O as a rigid body. The pad's force acts at a point that does not move, so it does no work. Only the weight does. Section 5 applies: \(T_1 + V_1 = T_2 + V_2\).</p>
+<div class="box why"><span class="tag">Why the tip-over speed is what it is</span>
+<p>Let G sit a height \(h\) above the pads and a distance \(b\) in from O. Then G is \(r = \sqrt{b^2 + h^2}\) from O. As the vehicle tilts by \(\theta\), G swings on a circle of radius \(r\) about O. Its height is \(r\cos(\varphi_0 - \theta)\), with \(\tan\varphi_0 = b/h\).</p>
+<p>That height is largest, \(r\), at \(\theta = \varphi_0\): G straight above the pad. Past that point the weight's moment about O changes sign and pulls the vehicle over. So the vehicle tips if and only if its kinetic energy can lift G by \(\Delta h = r - h\).</p>
+<p>About the fixed pad, \(T = \tfrac12 I_O\omega^2\), with \(I_O = m(k_G^2 + r^2)\) by the parallel-axis theorem. Set \(\tfrac12 I_O\omega_c^2 = mg\,\Delta h\):</p>
+\[
+\omega_c = \sqrt{\frac{2g\,(r - h)}{k_G^2 + r^2}}.
+\]
+<p>The mass cancels. Only the geometry is left: where G is, and how the mass is spread about it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a squat lander</span>
+<p>A 600 kg lander has G 1.5 m above its pads and 2.0 m in from each pad. Its radius of gyration about G is 1.5 m. A gust rocks it about one pad at 1.0 rad/s.</p>
+<p>Here \(r = \sqrt{2^2 + 1.5^2} = 2.5\) m, so G must rise \(2.5 - 1.5 = 1.0\) m. The barrier is \(600(9.81)(1.0) = 5{,}890\) J. With \(I_O = 600(1.5^2 + 2.5^2) = 5{,}100\ \mathrm{kg\cdot m^2}\), the vehicle has \(\tfrac12(5100)(1.0)^2 = 2{,}550\) J. It rocks back.</p>
+<p>It stops where \(\cos(\varphi_0 - \theta) = h/r + T_1/(mgr) = 0.6 + 2550/14{,}715 = 0.773\). That is \(\varphi_0 - \theta = 39.4^\circ\). With \(\varphi_0 = 53.1^\circ\), the largest tilt is 13.8°.</p>
+<p>The tip-over speed is \(\omega_c = \sqrt{2(9.81)(1.0)/8.5} = 1.52\) rad/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a harder gust</span>
+<p>The same lander rocked at 1.6 rad/s has \(\tfrac12(5100)(1.6)^2 = 6{,}530\) J, more than the 5,890 J barrier. It goes over. At the balance point it still turns at \(\sqrt{1.6^2 - 1.519^2} = 0.502\) rad/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a tall vehicle on narrow legs</span>
+<p>A 1,200 kg hop-test vehicle is tall and slim. G is 4.0 m up, the pads 1.5 m out, and \(k_G = 2.5\) m. Then \(r = \sqrt{1.5^2 + 4^2} = 4.27\) m. G need rise only \(4.272 - 4 = 0.272\) m.</p>
+<p>\(I_O/m = 2.5^2 + 4.272^2 = 24.5\ \mathrm{m^2}\), so \(\omega_c = \sqrt{2(9.81)(0.272)/24.5} = 0.467\) rad/s. A rock of 0.5 rad/s tips it: it has 3,680 J against a barrier of 3,200 J.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · spreading the legs</span>
+<p>Give the same vehicle legs that reach 3.0 m out. Now \(r = 5.0\) m and the climb is a full 1.0 m. \(I_O/m = 6.25 + 25 = 31.25\ \mathrm{m^2}\), so \(\omega_c = \sqrt{19.62/31.25} = 0.792\) rad/s.</p>
+<p>Doubling the stance raised \(\omega_c\) by 70%. The 0.5 rad/s rock now lifts G to a tilt of only 8.5° before it falls back.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a uniform box</span>
+<p>A cargo module is a uniform box 4.0 m wide and 3.0 m tall, on pads at its bottom corners. For a box, \(k_G^2 = (w^2 + H^2)/12 = 25/12 = 2.08\ \mathrm{m^2}\). G is 1.5 m up and 2.0 m in, so \(r = 2.5\) m again.</p>
+<p>\(I_O/m = 2.08 + 6.25 = 8.33\ \mathrm{m^2}\), which is \(\tfrac43 r^2\), the box's moment about its corner. Then \(\omega_c = \sqrt{19.62/8.333} = 1.53\) rad/s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(I_G\) for the spin. The vehicle turns about the pad, not about G. For the squat lander, \(I_G\) alone gives \(\omega_c = \sqrt{19.62/2.25} = 2.95\) rad/s, nearly twice the true 1.52 rad/s. A designer who trusted it would think the lander twice as safe as it is. Hibbeler §18.5.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Tipping is an energy barrier. G must climb \(\sqrt{b^2 + h^2} - h\) to get above the pad. Wide pads and a low G make the climb long. Mass does not matter.</p>
+</div>
+<p>In the Tip-over lab, the chart plots the rise of G against tilt, per kilogram, with the starting kinetic energy as a dashed line. Where the line meets the curve, the vehicle stops. A time-stepped integration of \(I_O\ddot\theta = -mgr\sin(\varphi_0 - \theta)\) gives the same largest tilt as the energy equation.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The model starts with the vehicle already turning about the pad. The snag that starts it is an impact, which needs angular momentum, not energy. It also assumes the pad does not slide, the ground is level, and the legs are rigid. A leg that crushes lowers G as it tilts and helps. A slope tilts the vehicle before the gust arrives and shrinks the climb.</p>
+</div>
+</section>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Formula sheet</h2>
 <ul>
 <li>Hoop \(k = 1\). Disk \(k = 1/2\). Solid sphere \(k = 2/5\). Here \(k = I_G/(mR^2) = k_G^2/R^2\).</li>
 <li>Rolling from rest: \(v = \sqrt{2gs\sin\theta/(1+k)}\). Rotational share: \(k/(1 + k)\).</li>
@@ -204,6 +250,7 @@
 <li>Couple: \(U = \int M\,d\theta\), \(P = M\omega\).</li>
 <li>Torsional spring, unstretched at \(\theta_0\): \(U = \tfrac{1}{2}\kappa\big((\theta_1-\theta_0)^2 - (\theta_2-\theta_0)^2\big)\), with the angles in radians.</li>
 <li>Rod in two slots: \(I_{IC} = mL^2/3\), \(T = \tfrac{1}{2}I_{IC}\omega^2\), and \(\omega^2 = 3g(\sin\theta_1 - \sin\theta_2)/L\).</li>
+<li>Tip-over about a pad: \(r = \sqrt{b^2 + h^2}\), \(I_O = m(k_G^2 + r^2)\), \(\omega_c = \sqrt{2g(r - h)/(k_G^2 + r^2)}\).</li>
 <li>\(g = 9.81\ \mathrm{m/s^2}\). A US problem uses \(g = 32.2\ \mathrm{ft/s^2}\).</li>
 </ul>
 <p>The formulas assume the constraint holds for the whole motion. Slip, bearing friction, and a spring that bottoms out are left out.</p>

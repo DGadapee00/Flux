@@ -127,4 +127,27 @@ export default {
       },
     },
   ],
+  s6: [
+    { tag: 'a squat lander', lab: 'tipover', scenario: 'lander', read: (c) => ({ dh: [c.dh, 1.0], IO: [c.IO, 5100], omegaC: [c.omegaC, 1.52], tilt: [c.thetaMaxDeg, 13.8] }) },
+    {
+      tag: 'a harder gust',
+      lab: 'tipover',
+      scenario: 'lander',
+      setup(s) {
+        s.w0 = 1.6;
+      },
+      read: (c) => ({ T0: [c.T0, 6530], wTop: [c.wTop, 0.502] }),
+    },
+    { tag: 'a tall vehicle on narrow legs', lab: 'tipover', scenario: 'tall', read: (c) => ({ r: [c.r, 4.27], dh: [c.dh, 0.272], omegaC: [c.omegaC, 0.467], T0: [c.T0, 3680], barrier: [c.barrier, 3200] }) },
+    { tag: 'spreading the legs', lab: 'tipover', scenario: 'wide', read: (c) => ({ omegaC: [c.omegaC, 0.792], tilt: [c.thetaMaxDeg, 8.5] }) },
+    {
+      tag: 'a uniform box',
+      lab: 'tipover',
+      scenario: 'lander',
+      setup(s) {
+        s.kG = Math.sqrt(25 / 12);
+      },
+      read: (c) => ({ IOm: [c.IOm, 8.333], omegaC: [c.omegaC, 1.53] }),
+    },
+  ],
 };
