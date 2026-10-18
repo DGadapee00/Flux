@@ -19,6 +19,8 @@ export const course = defineCourse({
   })),
   chapters: CHAPTERS,
   // Numbers are computed here. The scene is drawn after the physics shell moves.
+  // Measured by `npm run scorecard` against docs/COURSE-STANDARD.md. Set true only once it passes.
+  standard: false,
   labs: () => import('./labs/load.js'),
   problems: () => import('./problems/index.js'),
 });

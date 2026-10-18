@@ -1260,8 +1260,8 @@ practice loop, and every course is then reworked to one written bar.
 **Rules.** `docs/COURSE-STANDARD.md` is the bar. Nothing touches `courses/phy2049` before 24 Oct 2026.
 The course in progress when this was decided (Mechanics of Materials) stops at its first slice: `courses/egn3331` on port 5182, Unit 1 (stress: the `cut`, `truss-stress` and `pins` labs, 11 problems, notes) and the other nine units listed as coming.
 
-1. **R0, the scorecard.** `npm run scorecard` measures every course against the standard's section 6
-   and prints a table. Manifests gain `standard: false`; CI fails only for courses marked `true`.
+1. **R0, the scorecard.** Done 18 Oct 2026. `npm run scorecard` (`packages/checks/scorecard.mjs`) measures every course against the standard's section 6
+   and prints a table. Manifests gain `standard: false` (PHY 2049's after 24 Oct); CI fails only for courses marked `true`. Application labs are marked `app: true` in a course's `LAB_META`, and a template counts toward structural variety when it declares `variety` or picks among non-numeric configurations.
 2. **R1, the practice loop in the shells.** Port PHY 2049's principle step, fading, coaching with
    per-answer `why` and `traps`, interleaving and the weak-principle list, the notes link, the lab
    drawer, the symbolic palette (engineering shell) and the number pad into both shells, as copies.
