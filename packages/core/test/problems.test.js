@@ -186,3 +186,16 @@ test('+C is named as a constant of integration unless C is a variable of the par
   assert.equal(constantOfIntegration('x^3/3 + C', ['x', 'C']), false);
   assert.match(NO_PLUS_C, /no \+C/);
 });
+
+test('a part with alt grades in its own unit, and a typed unit does not stop it', () => {
+  const { grade } = createEngine({ numbers: 'unit' });
+  // get() is in pascals; the part asks for kPa, so expected and alt are both in kPa.
+  const part = { kind: 'numeric', get: () => 8650, scale: 1000, alt: () => 8.714, tol: 0.003, unit: 'kPa' };
+  assert.equal(grade(part, {}, '8.65').correct, true, 'the exact value in kPa');
+  assert.equal(grade(part, {}, '8.714 kPa').correct, true, 'the table value, with its unit typed');
+  assert.equal(grade(part, {}, '2754 kJ/kg').correct, false, 'a wrong number is still wrong');
+  assert.equal(grade(part, {}, '8650').correct, false, 'pascals are not kPa');
+  const percent = createEngine({ numbers: 'percent' });
+  const prob = { kind: 'numeric', get: () => 0.25, alt: () => 0.251, tol: 0, abs: 0.002, prob: true };
+  assert.equal(percent.grade(prob, {}, '25%').correct, true, 'a percent course still reads a percent');
+});

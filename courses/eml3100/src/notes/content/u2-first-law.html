@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>First law for closed systems</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EML 3100 · Thermodynamics · Unit 2 · Yan Ch 4</p>
+  <h1>First law for closed systems</h1>
+  <p class="lede">Energy is conserved. For a closed system that becomes one balance: heat in, minus work out, equals the change in stored energy. These notes derive the boundary work for each process, find the internal energy of air and steam, and close the balance on every example. Each number is computed by the course's property library and checked a second way.</p>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>Energy, heat and work</a>
+    <a href="#s2"><span>02</span>Boundary work</a>
+    <a href="#s3"><span>03</span>Polytropic processes</a>
+    <a href="#s4"><span>04</span>Internal energy and specific heats</a>
+    <a href="#s5"><span>05</span>The first law with steam</a>
+    <a href="#s6"><span>06</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Energy, heat and work</h2>
+<p>A closed system holds a fixed mass. Energy can cross its boundary in two ways: as heat \(Q\), driven by a temperature difference, and as work \(W\), any other transfer, such as a moving piston or a turning shaft. Yan §4.2 treats heat; Yan §4.3 treats work.</p>
+<p>Inside, the system stores energy as kinetic energy, potential energy, and internal energy \(U\): the energy of its molecules. Yan §4.1 introduces \(U\).</p>
+<div class="box why"><span class="tag">Why Q − W = ΔE</span>
+<p>Energy is neither made nor destroyed. Over a process, what enters minus what leaves is what the system stores. Count heat added to the system as positive, and work done by the system as positive. Then heat adds energy, and work done by the system removes it:</p>
+\[
+Q - W = \Delta U + \Delta KE + \Delta PE
+\]
+<p>A piston–cylinder or a tank at rest has no change in kinetic or potential energy worth counting. The balance shrinks to \(Q - W = \Delta U\). Yan §4.4 states it this way.</p>
+</div>
+<p>Heat and work are not properties. They exist only while crossing the boundary, and their size depends on the path between two states. \(U\) is a property: its change depends only on the end states.</p>
+<div class="box ex"><span class="tag">Worked example · a paddle wheel in a tank</span>
+<p>A rigid tank holds 0.5 kg of air at 27 °C. A paddle wheel does 20 kJ of work on it. Heat of 5 kJ leaks out. With the sign convention, \(W = -20\) kJ and \(Q = -5\) kJ.</p>
+\[
+\Delta U = Q - W = -5 - (-20) = 15\ \text{kJ}
+\]
+<p>With \(c_v = 0.7178\) kJ/(kg·K), the air warms by \(15/(0.5 \times 0.7178) = 41.8\) K. The paddle does work, yet the air ends hotter, exactly as if it had been heated.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two paths, one change of state</span>
+<p>Take 0.05 m³ of air at 200 kPa to 0.10 m³ at 100 kPa, two ways. Path 1: expand at 200 kPa to 0.10 m³, then cool at constant volume to 100 kPa. The work is \(200 \times 0.05 = 10\) kJ. Path 2: cool at constant volume to 100 kPa, then expand at 100 kPa. The work is \(100 \times 0.05 = 5\) kJ.</p>
+<p>The end states are the same, and \(PV\) is 10 kJ at both ends. For an ideal gas that means the same temperature, so \(\Delta U = 0\) on either path. The first law then gives \(Q = W\): 10 kJ of heat on path 1, 5 kJ on path 2. Same states, same \(\Delta U\), different heat and work.</p>
+</div>
+<div class="box fix"><span class="tag">Two sign conventions</span>
+<p>Physics texts, OpenStax UP2 §3.3 among them, also write \(\Delta U = Q - W\) with \(W\) done by the system. Some engineering texts write \(\Delta U = Q + W\), with \(W\) done on the system. The physics is the same; only the sign of \(W\) flips. These notes and the problems use work done by the system.</p>
+</div>
+<div class="box key"><span class="tag">The rule</span>
+<p>Draw the boundary. List every heat and work crossing it, with signs. Then \(Q - W = \Delta U\) for a stationary closed system.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The balance holds between equilibrium states. It says nothing about how fast the heat flows or how long the process takes. It also ignores kinetic and potential energy, which matter for a falling or spinning system. Chemical and nuclear energy are left out: nothing here reacts.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Boundary work</h2>
+<p>A gas pushing a piston does work. If the piston moves slowly, the gas pressure stays uniform and the work can be computed from the gas alone. Yan §4.3 derives it.</p>
+<div class="box why"><span class="tag">Why the work is the area under the path</span>
+<p>The gas pushes the piston, of area \(A\), with force \(PA\). The piston moves \(ds\). The work is \(PA\,ds = P\,dV\). Sum the steps from state 1 to state 2:</p>
+\[
+W_b = \int_1^2 P\,dV
+\]
+<p>On a P–V diagram, that integral is the area under the path. Two paths between the same states enclose different areas, so they do different work.</p>
+</div>
+<p>Three paths have closed forms.</p>
+<ul>
+<li>Constant pressure: \(W_b = P(V_2 - V_1)\).</li>
+<li>Constant volume: \(W_b = 0\).</li>
+<li>Constant temperature, ideal gas: \(P = mRT/V\), so \(W_b = mRT\ln(V_2/V_1) = P_1V_1\ln(V_2/V_1)\).</li>
+</ul>
+<div class="box ex"><span class="tag">Worked example · expansion at constant pressure</span>
+<p>Air in a cylinder at 200 kPa and 27 °C fills 0.05 m³. It is heated at constant pressure until it fills 0.10 m³. The mass is \(PV/(RT) = 0.1161\) kg.</p>
+\[
+W_b = 200 \times (0.10 - 0.05) = 10.0\ \text{kJ}
+\]
+<p>The volume doubled at constant pressure, so the absolute temperature doubled: from 300.15 K to 600.3 K, 327.1 °C. The polynomials give \(\Delta U = 25.64\) kJ. So \(Q = \Delta U + W_b = 35.64\) kJ. Simpson's rule on \(\int P\,dV\) gives the same 10.0 kJ.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · expansion at constant temperature</span>
+<p>Air at 400 kPa and 77 °C fills 0.02 m³. It expands at constant temperature to 0.06 m³.</p>
+\[
+W_b = 400 \times 0.02 \times \ln 3 = 8.789\ \text{kJ}
+\]
+<p>The temperature does not change, so \(\Delta U = 0\) and \(Q = 8.789\) kJ. Every joule of work came in as heat. At constant pressure, between the same volumes, the work would be \(400 \times 0.04 = 16.0\) kJ: the pressure stays high instead of falling as \(1/V\).</p>
+</div>
+<div class="box why"><span class="tag">Why kPa times m³ is kJ</span>
+<p>One kPa is 1000 N/m². Multiply by one m³ and the square metres cancel against the cubic metre, leaving 1000 N·m, which is 1 kJ. In English units the bookkeeping is longer. psia is lbf/in², so multiply by 144 to get lbf/ft². Times ft³ gives ft·lbf, and 778.17 ft·lbf make one Btu. A gas at 100 psia expanding by 4 ft³ does \(100 \times 144 \times 4 = 57\,600\) ft·lbf, or 74.02 Btu.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a compression</span>
+<p>1 kg of air at 30 °C is squeezed slowly at constant temperature from 100 kPa to 300 kPa. Then \(W_b = mRT\ln(P_1/P_2) = 1 \times 0.2870 \times 303.15 \times \ln(1/3) = -95.60\) kJ. The minus sign says work was done on the air. Since \(\Delta U = 0\), the same 95.60 kJ left as heat. A compressor that is not cooled cannot stay isothermal: it heats the gas instead.</p>
+</div>
+<div class="box key"><span class="tag">The rule</span>
+<p>Find the path \(P(V)\). Integrate it, or use the closed form. Expansion gives positive work, compression negative. kPa times m³ is kJ.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The integral uses the gas pressure, which is only uniform when the piston moves slowly: a quasi-equilibrium process. A piston slammed outward does less work than \(\int P\,dV\) predicts. Friction between piston and wall also turns some work into heat. And this is boundary work only: a paddle wheel or an electric heater does work that does not appear on the P–V diagram.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Polytropic processes</h2>
+<p>Many real expansions and compressions follow \(PV^n = C\) for some constant \(n\). This is a polytropic process. It covers the others: \(n = 0\) is constant pressure, \(n = 1\) is constant temperature for an ideal gas, and \(n \to \infty\) is constant volume. Yan §4.3 gives the work.</p>
+<div class="box why"><span class="tag">Why the work is (P₂V₂ − P₁V₁)/(1 − n)</span>
+<p>With \(P = CV^{-n}\):</p>
+\[
+W_b = \int_1^2 CV^{-n}\,dV = C\,\frac{V_2^{1-n} - V_1^{1-n}}{1-n}
+\]
+<p>Replace \(C\) by \(P_2V_2^n\) in the first term and by \(P_1V_1^n\) in the second. The powers of \(V\) combine:</p>
+\[
+W_b = \frac{P_2V_2 - P_1V_1}{1-n}
+\]
+<p>At \(n = 1\) the formula divides zero by zero. That case is the isotherm, with its logarithm.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a polytropic expansion</span>
+<p>Air at 1000 kPa and 327 °C fills 0.01 m³. It expands to 0.04 m³ with \(n = 1.3\). The end pressure is \(P_2 = 1000 \times (0.01/0.04)^{1.3} = 164.9\) kPa.</p>
+\[
+\begin{aligned}
+W_b &= \frac{164.9 \times 0.04 - 1000 \times 0.01}{1 - 1.3}\\
+&= 11.34\ \text{kJ}
+\end{aligned}
+\]
+<p>For an ideal gas, \(T_2 = T_1(V_1/V_2)^{n-1} = 600.15 \times 0.25^{0.3} = 395.9\) K, 122.8 °C. The air cooled while doing work, so \(\Delta U = -8.808\) kJ. The first law gives \(Q = -8.808 + 11.34 = 2.534\) kJ: a little heat came in.</p>
+</div>
+<div class="box why"><span class="tag">Why the temperature follows a power law</span>
+<p>For an ideal gas, \(T = PV/(mR)\). Divide the end states: \(T_2/T_1 = (P_2V_2)/(P_1V_1)\). With \(P_2/P_1 = (V_1/V_2)^n\):</p>
+\[
+\frac{T_2}{T_1} = \left(\frac{V_1}{V_2}\right)^{n-1} = \left(\frac{P_2}{P_1}\right)^{(n-1)/n}
+\]
+<p>Both forms give 395.9 K in the example above. A slow adiabatic process of an ideal gas with constant specific heats is polytropic with \(n = k = c_p/c_v\), 1.4 for air near room temperature. OpenStax UP2 §3.6 derives that case.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · compressing air tenfold</span>
+<p>Air at 100 kPa and 300 K is compressed adiabatically and slowly to 1 MPa. With \(k = 1.4\), \(T_2 = 300 \times 10^{0.4/1.4} = 579.2\) K. With \(c_p\) varying with temperature, as the NASA polynomials give it, the same compression ends at 574.0 K. The constant-\(k\) answer is 5 K, about 2%, too hot in the temperature rise, because \(k\) falls as air warms.</p>
+</div>
+<p>Raise \(n\) and the path falls more steeply. With \(n = 1.6\) between the same volumes, the work falls to 9.41 kJ and the air ends at −11.9 °C. The lab's predict-first prompt asks for exactly this.</p>
+<div class="box key"><span class="tag">The rule</span>
+<p>\(P_1V_1^n = P_2V_2^n\) fixes the missing end state. Then \(W_b = (P_2V_2 - P_1V_1)/(1-n)\) for \(n \ne 1\), and \(W_b = P_1V_1\ln(V_2/V_1)\) for \(n = 1\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real compression does not keep \(n\) exactly constant. Fitting one \(n\) to measured end states hides how the heat flowed along the way. The polytropic form is a curve fit, not a law. It is useful because it brackets the real path between the isotherm and the adiabat.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Internal energy and specific heats</h2>
+<p>The specific heat at constant volume, \(c_v\), is the energy needed to warm one kilogram by one kelvin when no boundary work is done. At constant pressure, \(c_p\) includes the work of expansion. Yan §4.1 defines both; OpenStax UP2 §3.5 does the same per mole.</p>
+<div class="box why"><span class="tag">Why c_p − c_v = R for an ideal gas</span>
+<p>Define enthalpy \(h = u + Pv\). For an ideal gas \(Pv = RT\), so \(h = u + RT\). Both \(u\) and \(h\) then depend on \(T\) alone, and</p>
+\[
+c_p = \frac{dh}{dT} = \frac{du}{dT} + R = c_v + R
+\]
+<p>For air at 300 K, \(c_p = 1.005\) and \(c_v = 0.7178\) kJ/(kg·K). The difference is 0.2871, which is \(R\).</p>
+</div>
+<p>For an ideal gas, \(u\) depends on temperature only. So for any process, \(\Delta u = \int c_v\,dT\), even at constant pressure. But \(c_v\) itself rises with temperature: air's goes from 0.7178 at 300 K to 0.854 kJ/(kg·K) at 1000 K. The molecules start to vibrate as they warm, and each new motion stores energy.</p>
+<div class="box why"><span class="tag">Why air's c_v is near 5R/2</span>
+<p>Each way a molecule can store energy holds \(\tfrac12 k_BT\) on average. OpenStax UP2 §2.3 calls this equipartition. A single atom only moves: three directions, so \(c_v = \tfrac32 R\). A two-atom molecule also turns about two axes: five ways, so \(c_v = \tfrac52 R\). Vibration joins in only when the gas is hot.</p>
+<p>Argon has \(R = 0.2081\) kJ/(kg·K), so \(c_v = 0.3122\), exactly what the data gives at any temperature. For air, \(\tfrac52 R = 0.7176\) kJ/(kg·K), against 0.7178 measured at 300 K. By 1000 K the measured value is 0.854: vibration has woken up.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · heating air at constant volume</span>
+<p>A rigid tank holds 2 kg of air at 25 °C. It is heated to 525 °C. No boundary work is done, so \(Q = m(u_2 - u_1)\). The NASA polynomials give \(Q = 756.4\) kJ.</p>
+<p>The textbook shortcut takes \(c_v\) at the average temperature, 275 °C: \(c_v = 0.7523\) kJ/(kg·K). Then \(Q \approx 2 \times 0.7523 \times 500 = 752.3\) kJ, 0.5% low. Using \(c_v\) at 300 K instead gives 717.8 kJ, 5.1% low. Both the polynomial value and the average-\(c_v\) value are accepted in the problems.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the same heating at constant pressure</span>
+<p>Heat the same 2 kg of air from 25 °C to 525 °C in a piston–cylinder held at constant pressure instead. The end temperatures are the same, so \(\Delta U\) is the same 756.4 kJ. But now the air pushes the piston out: its volume grows by the ratio of absolute temperatures, 798.15/298.15 = 2.677. The work is \(P\Delta V = mR\,\Delta T = 2 \times 0.2871 \times 500 = 287.1\) kJ.</p>
+<p>So \(Q = 756.4 + 287.1 = 1043\) kJ. The polynomials give \(m\,\Delta h = 1043\) kJ directly. The extra 287.1 kJ is exactly \(mR\,\Delta T\), which is \(c_p - c_v = R\) at work: heating at constant pressure costs more because some of the energy leaves as work.</p>
+</div>
+<div class="box key"><span class="tag">The rule</span>
+<p>Ideal gas: \(\Delta u = \int c_v\,dT\) and \(\Delta h = \int c_p\,dT\), from tables or polynomials. Over a modest range, \(c_v\) at the average temperature is close.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>\(u = u(T)\) is exact only for an ideal gas. Steam near its dome is not one: its \(u\) depends on pressure too, so it comes from the tables. Air's polynomials here hold from 200 K to 3500 K. Above that, air starts to dissociate and the mixture is no longer the same gas.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>The first law with steam</h2>
+<p>Steam is not an ideal gas near its dome, so its \(u\) and \(h\) come from the tables. The balance is the same: \(Q - W_b = m(u_2 - u_1)\). At constant pressure it takes a simpler form.</p>
+<div class="box why"><span class="tag">Why Q = mΔh at constant pressure</span>
+<p>At constant pressure, \(W_b = P(V_2 - V_1) = m(P v_2 - P v_1)\). Add it to \(m(u_2 - u_1)\):</p>
+\[
+\begin{aligned}
+Q &= m\big[(u_2 + Pv_2) - (u_1 + Pv_1)\big]\\
+&= m(h_2 - h_1)
+\end{aligned}
+\]
+<p>This is why tables list enthalpy: at constant pressure, the heat is the enthalpy change.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · boiling in a piston–cylinder</span>
+<p>A piston holds 0.5 kg of water at 500 kPa with quality 0.2. At 500 kPa, \(v_f = 0.001093\) and \(v_g = 0.3748\) m³/kg, so \(v_1 = 0.07583\) m³/kg and \(V_1 = 0.03792\) m³. Heat it until the volume is 0.08 m³.</p>
+<p>Now \(v_2 = 0.16\) m³/kg, still between \(v_f\) and \(v_g\). So the water is still boiling at 151.8 °C, with \(x_2 = 0.4252\).</p>
+\[
+\begin{aligned}
+W_b &= 500 \times (0.08 - 0.03792)\\
+&= 21.04\ \text{kJ}
+\end{aligned}
+\]
+<p>With \(h_1 = 1062\) and \(h_2 = 1537\) kJ/kg, \(Q = 0.5 \times (1537 - 1062) = 237.4\) kJ. The other way: \(\Delta U = 216.3\) kJ, and \(Q = 216.3 + 21.04 = 237.4\) kJ.</p>
+</div>
+<p>Expand further, to 0.12 m³, and the temperature stays at 151.8 °C. The quality rises to 0.639 and the heat to 463 kJ. Heat goes in; the temperature does not move. Try it in the lab's steam scenario.</p>
+<div class="box ex"><span class="tag">Worked example · past the dome</span>
+<p>1 kg of water at 500 kPa and quality 0.4 is heated at constant pressure to 275 °C. State 1: \(v_1 = 0.1506\) m³/kg, \(h_1 = 1483\) kJ/kg. State 2 is superheated: \(v_2 = 0.4986\) m³/kg, \(h_2 = 3013\) kJ/kg. So \(W_b = 500 \times (0.4986 - 0.1506) = 174.0\) kJ and \(Q = 3013 - 1483 = 1530\) kJ. About 11% of the heat leaves again as work.</p>
+</div>
+<p>A rigid tank does no boundary work, so the heat goes straight into internal energy. With steam the tank's specific volume is fixed, and the end state comes from \(v\) and the new temperature.</p>
+<div class="box ex"><span class="tag">Worked example · a rigid tank of wet steam</span>
+<p>A rigid tank holds 2 kg of water at 101 °C with quality 0.1. So \(v = 0.1627\) m³/kg and \(u_1 = 631.6\) kJ/kg, at 105.1 kPa. Heat it to 141 °C. There \(v_g\) is still larger than 0.1627, so the water is still a mixture, now with \(x_2 = 0.327\) at 371.8 kPa and \(u_2 = 1233\) kJ/kg.</p>
+\[
+\begin{aligned}
+Q &= m(u_2 - u_1) = 2 \times (1233 - 631.6)\\
+&= 1203\ \text{kJ}
+\end{aligned}
+\]
+<p>A second route uses enthalpy: \(u = h - Pv\), so \(Q = m[(h_2 - h_1) - v(P_2 - P_1)]\). It gives the same 1203 kJ. Here the pressure term is \(2 \times 0.1627 \times 266.7 = 86.8\) kJ: using \(\Delta h\) for a rigid tank would overstate the heat by that much.</p>
+</div>
+<div class="box key"><span class="tag">The rule</span>
+<p>Fix both states with two properties each. Read \(u\) or \(h\) from the tables. At constant pressure, \(Q = m\,\Delta h\). In a rigid tank, \(Q = m\,\Delta u\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Each state is an equilibrium state. Real boiling has bubbles, temperature gradients and a little superheat at the wall. The piston is massless and frictionless, so the gas pressure equals the outside pressure. A heavy or sticking piston changes the work. And the steam tables here stop at 350 °C on the dome and at 800 °C above it.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Formula sheet</h2>
+\[
+Q - W = \Delta U + \Delta KE + \Delta PE
+\]
+\[
+W_b = \int_1^2 P\,dV
+\]
+\[
+W_b = P(V_2 - V_1)\quad (P\ \text{constant})
+\]
+\[
+W_b = P_1V_1\ln(V_2/V_1)\quad (PV\ \text{constant})
+\]
+\[
+W_b = \frac{P_2V_2 - P_1V_1}{1-n}\quad (PV^n\ \text{constant})
+\]
+\[
+h = u + Pv, \quad c_p - c_v = R
+\]
+\[
+Q = m\,\Delta h\quad (P\ \text{constant})
+\]
+\[
+Q = m\,\Delta u\quad (V\ \text{constant})
+\]
+<p>Signs: heat added to the system and work done by the system are positive. kPa·m³ = kJ. Air at 300 K: \(c_p = 1.005\), \(c_v = 0.7178\) kJ/(kg·K).</p>
+</section>
+</main>
+</body>
+</html>

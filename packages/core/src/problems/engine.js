@@ -360,8 +360,9 @@ export function createEngine(options = {}) {
     return null;
   }
 
+  /** The exact value and the alternates, all in the unit the part asks for (`alt` returns that unit too). */
   function accepted(part, $) {
-    const out = [part.get($)];
+    const out = [expected(part, $)];
     if (part.alt) for (const v of [].concat(part.alt($))) if (Number.isFinite(v)) out.push(v);
     return out;
   }
@@ -516,7 +517,7 @@ export function createEngine(options = {}) {
   function grade(part, $, input) {
     if (part.kind === 'numeric') {
       if (isTable(part)) {
-        const got = parsePercent(input);
+        const got = parseNumber(input);
         if (!Number.isFinite(got)) return { correct: false, feedback: 'Enter a number, for example 0.3085, 12.5 or 3/8.' };
         const accept = accepted(part, $);
         if (accept.some((v) => withinTol(got, v, part, $))) return { correct: true, feedback: '' };

@@ -44,6 +44,14 @@ import {
   WIDTH_KEY as DYN_WIDTH,
   courseStore as dynamicsStore,
 } from '../courses/egn3321/src/storage.js';
+import { createProgress as thermoProgress, memoryStorage as thermoMemory } from '../courses/eml3100/src/problems/progress.js';
+import {
+  EXAM_KEY as THERMO_EXAM,
+  FULL_KEY as THERMO_FULL,
+  STORE_KEY as THERMO_STORE,
+  WIDTH_KEY as THERMO_WIDTH,
+  courseStore as thermoStore,
+} from '../courses/eml3100/src/storage.js';
 import { createProgress as staticsProgress, memoryStorage as staticsMemory } from '../courses/statics/src/problems/progress.js';
 import {
   EXAM_KEY as STATICS_EXAM,
@@ -184,4 +192,26 @@ test('egn3321: export and import with no legacy key', () => {
   assert.equal(restored.getItem('notes.full'), '1');
   assert.throws(() => cleared.importJSON({ v: 1, courseId: 'other', keys: {} }), /does not match this course/);
   assert.equal(cleared.get('u1.12.polynomial').box, 1);
+});
+
+test('eml3100: export and import with no legacy key', () => {
+  const storage = thermoMemory();
+  const progress = thermoProgress(storage, { now: () => 0 });
+  progress.record('u1.2.phase', { correct: true, clean: true, now: 1000 });
+  progress.saveExam({ id: 'u2', n: 2 });
+  thermoStore(storage, () => 0).setItem('notes.width', '520');
+  thermoStore(storage, () => 0).setItem('notes.full', '1');
+  assert.equal(THERMO_STORE, 'flux.eml3100.problems.v1');
+  assert.match(storage.getItem(THERMO_STORE), /u1\.2\.phase/);
+
+  const blob = progress.exportJSON();
+  for (const key of [THERMO_STORE, THERMO_EXAM, THERMO_WIDTH, THERMO_FULL]) storage.removeItem(key);
+  const cleared = thermoProgress(storage, { now: () => 0 });
+  assert.equal(cleared.get('u1.2.phase'), null);
+  cleared.importJSON(blob);
+  assert.equal(cleared.get('u1.2.phase').box, 1);
+  assert.deepEqual(cleared.loadExam(), { id: 'u2', n: 2 });
+  const restored = thermoStore(storage, () => 0);
+  assert.equal(restored.getItem('notes.width'), '520');
+  assert.equal(restored.getItem('notes.full'), '1');
 });
