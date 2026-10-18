@@ -10,7 +10,7 @@ it there without inventing a new shape.
 
 ## 0. Gate
 
-- The course is the first unchecked item in `ROADMAP.md` "Now", or the owner asked for it.
+- The course is the first unchecked item in `ROADMAP.md`'s build list, or the owner asked for it.
 - `docs/courses/<id>.md` exists and its status is **confirmed** by the owner. If it is **draft**, do
   step 1 only, open a PR with the completed spine, and stop.
 - Fewer than two other courses have units in progress (DECISIONS.md, D18).
@@ -19,16 +19,16 @@ it there without inventing a new shape.
 
 Fill every section of `docs/courses/TEMPLATE.md` that the draft leaves open:
 
-1. **UNF order.** If the owner has given a syllabus or course pack (in `courses/<id>/incoming/` or the
-   conversation), set the units and their order from it. Coverage and order only (D11).
-2. **Textbook.** List the candidates with their licences, verified on the publisher's page. The
-   owner chooses (D21). Prefer open texts.
-3. **OCW map.** Open the counterpart's syllabus and calendar. For each unit, name the OCW lectures,
-   problem sets and exams that match, and which have posted solutions. Note topics OCW covers that
-   UNF does not, and the reverse.
+1. **OCW program first** (D23). Open the counterpart's syllabus and calendar. Set the units and
+   their order from it. For each unit, name the OCW lectures, problem sets and exams, and which
+   have posted solutions. Note what OCW covers past the UNF course.
+2. **Textbook second.** List the candidates with their licences, verified on the publisher's page.
+   The owner chooses (D21). Prefer open texts. Map each unit to its sections.
+3. **UNF syllabus third,** if the owner has given one (in `courses/<id>/incoming/` or the
+   conversation): exam dates, exam style, and any topic OCW lacks, added to the right unit.
 4. **Labs.** For each unit: the labs (each with "Shows that …", how it recomputes, and its second
-   method), one application lab tied to the engine where it fits, two predictions per lab, the
-   problem families by structure, and the traps.
+   method), one application lab on a real everyday or industrial device, two predictions per lab,
+   the problem families by structure, and the traps.
 5. **Libraries.** Which `subjects` modules exist already (search before you plan a new one), and which
    new ones are needed.
 6. **Open questions** for the owner.
@@ -44,9 +44,9 @@ copy their content.
    `src/manifest.js` (`standard: false`, `track`, `order`, `prereqs`), `src/data/catalog.js` with
    **every** unit (unbuilt labs in `coming`), `src/data/textbook.js` (the citation map; nothing
    copied), the two shell wrappers in `src/ui/`, `src/storage.js` with `flux.<id>.*` keys.
-2. `PROVENANCE.md`: what the course contains, the sources and their licences, that course packs set
-   only coverage and order, that nothing is copied. `CONVENTIONS.md`: significant figures, units,
-   sign conventions, sections left out.
+2. `PROVENANCE.md`: what the course contains, the sources and their licences (OCW program, then
+   textbook, then any UNF syllabus), and that nothing is copied. `CONVENTIONS.md`: significant
+   figures, units, sign conventions, sections left out.
 3. Scripts copied from EGN 3321 and pointed at this course: tex-check, problems-check, labs-check,
    notes-check, route test, layout.
 4. The root `package.json` build gains the course; `packages/tracks/tracks.js` gains it with its

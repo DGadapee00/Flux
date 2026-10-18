@@ -15,7 +15,7 @@ R4: notes for every unit, structural variety, traps, application labs.
 
 - **Textbook:** Hibbeler, *Engineering Mechanics: Statics*, Ch 2–10, cited by section. Worked cases
   carry numbers from public problem decks (`courses/statics/PROVENANCE.md`).
-- **OCW standard:** [2.001 Mechanics & Materials I, Fall 2006](https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/):
+- **OCW program:** [2.001 Mechanics & Materials I, Fall 2006](https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/):
   lecture notes and problem sets. Its first part is statics.
 
 ## Units
@@ -25,5 +25,4 @@ The catalog is `courses/statics/src/data/catalog.js`. Conventions are in
 
 ## Rework notes (R4)
 
-- Application labs to add: the engine's thrust mount as a frame (reactions at the stand's bolts),
-  and a propellant-bottle rack as a truss.
+- Application labs to add: a highway sign gantry as a truss, and a car jack as a frame.

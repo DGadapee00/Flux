@@ -5,8 +5,8 @@ description: Build or rework one unit of a Flux course to docs/COURSE-STANDARD.m
 
 # Build one unit to the standard
 
-One unit per PR. The unit's spine block in `docs/courses/<id>.md` is the plan. If the spine and the
-code disagree, stop and ask; do not pick one silently.
+One unit per PR. The unit's spine block in `docs/courses/<id>.md` is the plan, in the OCW program's
+order (D23). If the spine and the code disagree, stop and ask; do not pick one silently.
 
 ## 1. Read before writing
 
@@ -33,8 +33,7 @@ For each lab in the spine:
   leaves out**.
 - Recompute in the lab; check by the second method in the course's tests.
 - Two to four predictions in `predictions.js`, each outcome computed by the lab; labs-check verifies.
-- The application lab: a real device, numbers from the engine repo's design table where it is the
-  engine (marked preliminary while the engine repo says so), or stated with a source.
+- The application lab: a real everyday or industrial device, with numbers stated and cited.
 - Register in the catalog (`LAB_META`, `app: true` for an application lab) and the lab loader.
 
 ## 4. Problems

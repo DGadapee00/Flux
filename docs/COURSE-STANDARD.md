@@ -48,8 +48,9 @@ everything in the same place in any course. Do not build a different app.
   test on the shell's fixture course.
 - **Header.** Logo (links to the hub), course code and title, mode controls. The track row lists the
   track's courses. No Export or Import buttons; backup lives on the hub.
-- **Units across the top, labs as tabs.** Each unit maps to an exam (or to a textbook chapter group
-  for a review course) and lists its labs. Unbuilt labs are listed as `coming`.
+- **Units across the top, labs as tabs.** Units follow the OCW program's order (D23) and list their
+  labs. Unbuilt labs are listed as `coming`. Exam dates and practice-exam shape are added course by
+  course when its syllabus is available (D27).
 - **Three ways in, all linked.**
   - **Explore**: the labs.
   - **Practice**: the problem bank, review, practice exams.
@@ -67,7 +68,7 @@ everything in the same place in any course. Do not build a different app.
 
 ## 3. Notes
 
-- One file per unit, following the course's own order, structured as the exemplar: `header.top`
+- One file per unit, in the OCW program's order, structured as the exemplar: `header.top`
   (eyebrow, h1, lede, legend, toc), `div.part`, `section.topic` numbered s1, s2, …, boxes `ex`, `why`,
   `fix`, `key`. The last section is the formula sheet.
 - Math is `\( \)` and `\[ \]`, typeset by KaTeX. `$` is never a delimiter in a notes file.
@@ -92,9 +93,9 @@ everything in the same place in any course. Do not build a different app.
 - Two to four predict-first prompts, each with an outcome the lab computes and labs-check verifies.
 - 2–3 scenarios with real numbers, sliders for the inputs, a readout, and an explainer that ends
   with **What the model leaves out**.
-- At least one **application lab** per unit: a real device the unit's equations fully explain, with
-  realistic numbers you can check. Prefer the 25 lbf engine and its stand (ROADMAP.md,
-  Applications). Use design values from the engine repo, marked preliminary while it says so.
+- At least one **application lab** per unit: a real everyday or industrial device the unit's
+  equations fully explain, with realistic numbers from a cited source (PHY 2049's MRI, motor and
+  power line are the models; D25).
 - Every problem with a physical setup opens its lab at that setup, with numbers hidden until solved.
 - Readable at 380×820 and 1280×800, axis labels in the right units, nothing covered by panels.
   Look at the screenshots yourself.
@@ -127,16 +128,13 @@ supports. AGENTS.md lists the flags.
 
 ## 7. Sources
 
-- **Course packs and syllabi** set coverage and order only (D11). Nothing from them ships unless the
-  instructor agrees in writing and `PROVENANCE.md` records it.
-- **Textbooks** are cited by section through one map, `src/data/textbook.js`. Open texts are
-  preferred (D7, D13, D14). Copyrighted texts are cited, never copied, and their example numbers
-  are never used (D9).
-- **MIT OpenCourseWare is the standard for material** (D15). Each course's spine names its OCW
-  counterpart.
-  - **Coverage.** A unit covers what the counterpart's matching lectures cover, except where the
-    UNF course pack leaves a topic out (D11 wins) or the counterpart goes past the UNF course (the
-    spine says so).
+In this order of authority (D23): the OCW program, then the textbook, then the UNF syllabus.
+
+- **MIT OpenCourseWare is the program** (D15, D23). Each course's spine names its OCW counterpart.
+  - **Units and order.** The counterpart's calendar sets the units and their order.
+  - **Coverage.** A unit covers what the counterpart's matching lectures cover. Where the
+    counterpart goes past the UNF course (transistors in 6.002, say), the spine says what is left
+    out.
   - **Difficulty.** Level-3 problems are as hard as the counterpart's problem sets.
   - **Printed answers.** Worked cases come from OCW problem sets and exams with posted solutions,
     or from an open textbook's examples. The template reproduces the printed answer by our own
@@ -147,6 +145,12 @@ supports. AGENTS.md lists the flags.
     and figures. Problem numbers and answers are cited facts; statements are rewritten. Figures
     and anything OCW marks as outside its licence are never used. MIT's name appears only in
     citations, never as endorsement.
+- **Textbooks** come second. They fill in what OCW does not cover and are cited by section through
+  one map, `src/data/textbook.js`. Open texts are preferred (D7, D13, D14, D21). Copyrighted texts
+  are cited, never copied, and their example numbers are never used (D9).
+- **UNF syllabi and course packs** come third, when available: exam dates, exam style, and any topic
+  UNF covers that OCW does not. Nothing from them ships unless the instructor agrees in writing and
+  `PROVENANCE.md` records it.
 - **Property data and constants** are computed from published standards (IF97, NASA polynomials) or
   stated in the problem, never copied from a textbook table.
 

@@ -7,7 +7,7 @@ course: every other course must look, work and teach like it.
 ## Read before you work
 
 1. **This file.** The rules. They bind every change.
-2. **`ROADMAP.md`.** What to build next. Take the first unchecked item in "Now"; start nothing else.
+2. **`ROADMAP.md`.** What to build next. Take the first unchecked item in its build list.
 3. **`docs/COURSE-STANDARD.md`.** Before any course work: what a course is, the exemplar files to
    copy the shape of, and the bar.
 4. **`docs/courses/<id>.md`.** The course's spine: its units, sources, OCW counterpart and labs.
@@ -20,18 +20,18 @@ saying so in the PR. `docs/history/` is the archive; nothing there is an instruc
 
 ## Rules
 
-1. **PHY 2049 is frozen until 24 Oct 2026** (Exam 5 is 23 Oct). Nothing edits `courses/phy2049/`
-   or changes core behaviour it depends on. After that, only the weekly content drop and planned
-   moves touch it.
+1. **Never break a course a student is using.** Every PR keeps every course working and its checks
+   green. If your task names a freeze (an exam week, say), honour it.
 2. **Raw course files never ship.** PDFs, slides, Word files and Canvas exports may sit only in
    `courses/<id>/incoming/`, and only when that course's `PROVENANCE.md` records the instructor's
    permission. `packages/checks/raw.mjs` fails on a raw file anywhere else, and `raw.mjs --dist`
    fails the build if one reaches `site/dist`. Leave `incoming/` and `.canvas-state.json` alone.
 3. **No student data.** Names, grades and submissions never enter the repo.
-4. **Copy nothing from a book, a course pack or OCW.** Cite by section through the course's
-   `src/data/textbook.js`. Course packs and syllabi set coverage and order only (D11). OCW is the
-   standard for coverage, difficulty and printed answers, cited, never copied (D15). MIT's name
-   appears only in citations. STA 3032's instructor material stays out (D6).
+4. **The OCW program first, then the textbook** (D23). A course's MIT OpenCourseWare counterpart sets
+   its units, their order, its coverage, its level-3 difficulty and its printed answers (D15). The
+   textbook fills in and is cited by section through `src/data/textbook.js`. A UNF syllabus adds
+   exam dates, exam style and any topic OCW lacks. **Copy nothing** from any of them: write fresh
+   and cite. MIT's name appears only in citations. STA 3032's instructor material stays out (D6).
 5. **Every number on screen is computed, then checked a second way,** in the course's tests. A worked
    case reproduces a printed answer by our own computation.
 6. **A course writes no UI of its own.** It uses a shell (`packages/shells/math` or `engineering`)
@@ -43,7 +43,7 @@ saying so in the PR. `docs/history/` is the archive; nothing there is an instruc
 9. **Never set `standard: true`.** The owner does, after reviewing a unit as a student.
 10. **Phone first.** 380 px portrait is the design width. No sideways scroll. Inputs at least 16 px.
     Look at the screenshots at 380×820 and 1280×800 yourself.
-11. **The engine repo is read-only** from Flux. Its design numbers are copied in at a pinned commit.
+11. **Application labs use everyday and industrial devices** with real, cited numbers (D25).
 12. **Storage keys** are `flux.<course>.<key>.v<n>`. `packages/checks/storage.mjs` fails on a clash.
 
 ## Layout and dependencies
@@ -69,7 +69,7 @@ Libraries worth knowing before you write your own:
 - `subjects/src/convert.js`: exact foot, pound-mass, pound-force, Btu, rankine, and derived psi, slug,
   ft·lbf, hp. Every unit conversion goes through it.
 - `@flux/subjects/thermo`: IAPWS-IF97 regions 1, 2, 4; NASA-7 and NASA Glenn ideal gases (air from
-  200 K); isentropic flow; generated property tables. Pure, SI, importable by the engine repo. A state
+  200 K); isentropic flow; generated property tables. Pure, SI, no DOM. A state
   outside its fits throws `ThermoRangeError`; generators keep to `covered(T, p)`. A table-read answer
   passes `tableInterp(...)` as `alt` with an explicit `tol`. Sources: `src/thermo/PROVENANCE.md`.
 - `subjects/em`: circuits by modified nodal analysis, fields, optics (from PHY 2049).

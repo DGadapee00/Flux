@@ -17,5 +17,3 @@ this skill only points there and adds the platform rules that sit around it.
 4. Platform rules still apply (`AGENTS.md`): raw files stay in `incoming/`; no student data;
    `npm test` and `npm run build` pass before any push to `main`; never delete
    `.canvas-state.json`.
-5. Before 24 Oct 2026, change nothing in `courses/phy2049` except the notes, their registry and setups,
-   and the `incoming/` moves the protocol calls for.
