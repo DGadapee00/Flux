@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Browser smoke for EML 3100, against the dev server on 5183 (or SMOKE_URL).
+ * Browser smoke for EGN 3331, against the dev server on 5182 (or SMOKE_URL).
  *
  * At 1280×800 and 380×820, for every lab and scenario (and on a phone with the Explain sheet
  * open and shut): no page error, the plot canvas shows and has drawn, the diagram's box is clear
@@ -14,7 +14,7 @@ import { COURSE } from '../src/engine/router.js';
 import { NOTES } from '../src/notes/index.js';
 import { chromium } from './playwright.mjs';
 
-const BASE = process.env.SMOKE_URL || 'http://localhost:5183/';
+const BASE = process.env.SMOKE_URL || 'http://localhost:5182/';
 const SIZES = [[1280, 800], [380, 820]];
 const fails = [];
 const browser = await chromium.launch({ headless: true });
@@ -120,9 +120,9 @@ for (const [w, h] of SIZES) {
     if (r.katex) fails.push(`${tag}: ${r.katex} KaTeX errors`);
     if (r.wide.length) fails.push(`${tag}: equations wider than the column: ${r.wide.join(' | ')}`);
     if (r.sideways || !r.inside) fails.push(`${tag}: scrolls sideways or leaves the screen`);
-    if (exam === 'u2') {
-      await page.click('#notes .nt-show[data-ex="s2:0"]');
-      await page.waitForFunction(() => Math.abs((window.__flux?.computed?.W ?? NaN) - 10000) < 1e-6, null, { timeout: 10000 });
+    if (exam === 'u1') {
+      await page.click('#notes .nt-show[data-ex="s3:0"]');
+      await page.waitForFunction(() => Math.abs((window.__flux?.computed?.sigma ?? NaN) - 75e6) < 1, null, { timeout: 10000 });
     }
     if (await page.evaluate(() => !document.getElementById('notes').hidden)) await page.keyboard.press('Escape');
     if (!(await page.evaluate(() => document.getElementById('notes').hidden))) fails.push(`${tag}: Escape did not close the notes`);
@@ -131,9 +131,9 @@ for (const [w, h] of SIZES) {
 
 // Practice: a problem with a lab opens in that lab with the problem's numbers.
 await page.setViewportSize({ width: 1280, height: 800 });
-await go(`#/${COURSE}/u2/piston?p=u2.4.work-isobaric&s=0`, 'piston');
-await page.waitForFunction(() => Math.abs((window.__flux?.computed?.W ?? NaN) - 60000) < 1e-6, null, { timeout: 10000 }).catch(() => {
-  fails.push('practice: u2.4.work-isobaric case did not set the piston lab to W = 60 kJ');
+await go(`#/${COURSE}/u1/cut?p=u1.1.inclined&s=0`, 'cut');
+await page.waitForFunction(() => Math.abs((window.__flux?.computed?.tau ?? NaN) - 43.30127018922193e6) < 1, null, { timeout: 10000 }).catch(() => {
+  fails.push('practice: u1.1.inclined case did not set the cut lab to τ = 43.3 MPa');
 });
 const practiceOpen = await page.evaluate(() => !document.getElementById('problems').hidden);
 if (!practiceOpen) fails.push('practice: the problem panel did not open from the link');

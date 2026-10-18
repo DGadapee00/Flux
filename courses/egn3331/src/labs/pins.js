@@ -29,8 +29,8 @@ export function modes(state) {
   const bLeg = bearing(P / planes, d, tc);
   return [
     { id: 'shear', name: 'pin shear', stress: tau, allow: tauAllow },
-    { id: 'bar', name: 'bearing on the bar', stress: bBar, allow: bearAllow },
-    { id: 'leg', name: planes === 2 ? 'bearing on a leg' : 'bearing on the lug', stress: bLeg, allow: bearAllow },
+    { id: 'bar', name: 'bar bearing', stress: bBar, allow: bearAllow },
+    { id: 'leg', name: planes === 2 ? 'leg bearing' : 'lug bearing', stress: bLeg, allow: bearAllow },
   ].map((m) => ({ ...m, use: m.stress / m.allow }));
 }
 
@@ -124,7 +124,7 @@ export default defineLab({
         fill: alpha(bar ? C.gold : C.text, bar ? 0.16 : 0.08),
         stroke: alpha(C.text, 0.6),
       });
-      label(S, bar ? 'bar' : two ? 'leg' : 'lug', [x + w / 2, H / 2 + shift], { dy: -10, color: C.dim });
+      if (w * S.k > 26) label(S, bar ? 'bar' : two ? 'leg' : 'lug', [x + w / 2, H / 2 + shift], { dy: -10, color: C.dim });
       x += w;
       if (i < parts.length - 1) {
         planesAt.push(x + gap / 2);
@@ -185,7 +185,7 @@ export default defineLab({
   coach(state, c) {
     const g = c.modes.find((m) => m.id === c.governs);
     if (c.bearingGoverns) {
-      return { title: 'Bearing governs', body: String.raw`The pin is strong enough, but ${g.name} reaches its allowable first. A thicker plate, not a bigger pin, raises the load most cheaply.` };
+      return { title: 'Bearing governs', body: String.raw`The pin is strong enough, but the ${g.name} reaches its allowable first. A thicker plate, not a bigger pin, raises the load most cheaply.` };
     }
     return state.planes === 2
       ? { title: 'Two planes share the load', body: String.raw`Each plane carries $P/2$, so $\tau = ${fig(c.tau / 1e6)}$ MPa, half of what one plane would carry.` }

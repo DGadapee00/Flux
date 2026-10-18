@@ -695,7 +695,7 @@ the Thermal-fluids track. The codes and the chapter order are the owner's course
 | Course | Folder and id | Port | Track, order | Text |
 |---|---|---|---|---|
 | EGN 3321 Dynamics | `courses/egn3321` | 5181 | mechanics, 2 | Hibbeler, *Engineering Mechanics: Dynamics* |
-| EGN 3331 Mechanics of Materials | `courses/egn3331` | 5182 | mechanics, 3 | Hibbeler, *Mechanics of Materials* |
+| EGN 3331 Mechanics of Materials | `courses/egn3331` | 5182 | mechanics, 3 | Roylance, *Mechanics of Materials* (MIT OpenCourseWare 3.11) (D14) |
 | EML 3100 Thermodynamics | `courses/eml3100` | 5183 | thermal, 1 | Yan, *Introduction to Engineering Thermodynamics* (BCcampus); OpenStax *University Physics Volume 2* Ch 1–4 for physics background (D13) |
 
 The id is the course code in lowercase, as MAC 2311 and MAC 2312 did. It is the route segment
@@ -732,6 +732,14 @@ Dalton takes EGN 3321, EGN 3331, and EML 3100 next term. These are the answers, 
   - Every citation goes through one map, `courses/eml3100/src/data/textbook.js`. Problems and notes ask the map for a topic's citation, so switching books changes one file.
   - Flux writes its own text and tables. Nothing is copied from either book: no prose, figures, tables, examples or problems.
   - The course pack still sets coverage and order (D11). Its chapter numbers (Çengel & Boles, Ch 1–7) name the units below and are not cited to students.
+
+#### Decision, answered 18 Oct 2026 (textbook for EGN 3331)
+
+- **D14.** EGN 3331 cites David Roylance's *Mechanics of Materials* modules, published on MIT OpenCourseWare as course 3.11 (Fall 1999, CC BY-NC-SA 4.0).
+  - OpenCourseWare posts the modules as separate, unnumbered files. Section numbers are the collected edition's (Engineering LibreTexts, "Mechanics of Materials (Roylance)"), which keeps the same titles and order.
+  - Topics the modules do not treat (bearing stress, the factor of safety, statically indeterminate axial members, thermal stress, combined loading, column buckling) are cited by topic only, until a source is chosen.
+  - Every citation goes through one map, `courses/egn3331/src/data/textbook.js`. Nothing is copied.
+  - The units and the "Ch" numbers in the practice list follow the course pack (D11), which is the order the class works in.
 
 #### Track placement
 
@@ -1250,7 +1258,7 @@ Decided 17 Oct 2026: the courses other than PHY 2049 feel half-built, and a revi
 practice loop, and every course is then reworked to one written bar.
 
 **Rules.** `docs/COURSE-STANDARD.md` is the bar. Nothing touches `courses/phy2049` before 24 Oct 2026.
-The course in progress when this was decided (Mechanics of Materials) stops at its first slice.
+The course in progress when this was decided (Mechanics of Materials) stops at its first slice: `courses/egn3331` on port 5182, Unit 1 (stress: the `cut`, `truss-stress` and `pins` labs, 11 problems, notes) and the other nine units listed as coming.
 
 1. **R0, the scorecard.** `npm run scorecard` measures every course against the standard's section 6
    and prints a table. Manifests gain `standard: false`; CI fails only for courses marked `true`.
@@ -1304,6 +1312,7 @@ cross-linked from the courses whose formulas it covers.
 | D10 | R-134a properties for refrigeration problems | **Decided 15 Oct 2026:** the Tillner-Roth & Baehr equation of state, in a later Thermodynamics PR. Water and air until then. | |
 | D11 | Sections the course packs do not name | **Decided 15 Oct 2026:** follow the course packs' coverage, and keep Dynamics' rocket lab (§15.9). | |
 | D12 | What comes after Dynamics | **Decided 18 Oct 2026:** Thermodynamics first, its property library before its screens, then Mechanics of Materials. | |
+| D14 | EGN 3331 textbook | **Decided 18 Oct 2026:** Roylance, *Mechanics of Materials* (MIT OpenCourseWare 3.11, CC BY-NC-SA 4.0), cited by section through `courses/egn3331/src/data/textbook.js`. Topics the modules do not treat are cited by topic. Nothing copied. | |
 | D13 | EML 3100 textbooks | **Decided 18 Oct 2026:** Yan, *Introduction to Engineering Thermodynamics* (BCcampus, CC BY-NC-SA 4.0), and OpenStax *University Physics Volume 2* Ch 1–4 (CC BY 4.0). Topics past Yan Ch 6 cited by topic until a source is chosen. One citation map, `courses/eml3100/src/data/textbook.js`. Nothing copied. | |
 
 ---
