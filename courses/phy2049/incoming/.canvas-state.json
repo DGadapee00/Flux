@@ -788,6 +788,34 @@
    "path": "incoming/2026-wk41/Calculus Physics II Lecture Notes Ch 52 ac Circuits Fall 2026.pdf",
    "stamp": "2026-10-08T17:08:52Z"
   },
+  "24753389": {
+   "fetched": "2026-10-18",
+   "module": "Week 10 - Lecture - October 19 - 25",
+   "name": "Worksheet # 5 Part A MC Physics II Fall 2026.pdf",
+   "path": "incoming/2026-wk42/Worksheet _ 5 Part A MC Physics II Fall 2026.pdf",
+   "stamp": "2026-10-12T15:56:57Z"
+  },
+  "24759694": {
+   "fetched": "2026-10-18",
+   "module": "Exam 5 Friday October 23",
+   "name": "Exam 5 Equations.pdf",
+   "path": "incoming/2026-wk42/Exam 5 Equations.pdf",
+   "stamp": "2026-10-13T14:29:44Z"
+  },
+  "24760707": {
+   "fetched": "2026-10-18",
+   "module": "Week 10 - Lecture - October 19 - 25",
+   "name": "Interactive Lessons # 4 Magnetic Fields and Induction Fall 2026.docx",
+   "path": "incoming/2026-wk42/Interactive Lessons _ 4 Magnetic Fields and Induction Fall 2026.docx",
+   "stamp": "2026-10-13T17:23:34Z"
+  },
+  "24774301": {
+   "fetched": "2026-10-18",
+   "module": "Week 10 - Lecture - October 19 - 25",
+   "name": "Worksheet # 5 Part B UpL Physics II Fall 2026-1.pdf",
+   "path": "incoming/2026-wk42/Worksheet _ 5 Part B UpL Physics II Fall 2026-1.pdf",
+   "stamp": "2026-10-15T18:20:17Z"
+  },
   "assignment:1880067": {
    "fetched": "2026-10-04",
    "module": "Week 1 - Lecture - August 17 - 23",
@@ -816,6 +844,13 @@
    "path": "incoming/2026-wk40/Interactive Lesson  _ 3 Electric Circuits Fall 2026.html",
    "stamp": "2026-10-02T18:52:34Z"
   },
+  "assignment:1880072": {
+   "fetched": "2026-10-18",
+   "module": "Week 10 - Lecture - October 19 - 25",
+   "name": "Interactive Lesson # 4 Magnetic Fields and Faraday's Law Fall 2026",
+   "path": "incoming/2026-wk42/Interactive Lesson _ 4 Magnetic Fields and Faraday_s Law Fall 2026.html",
+   "stamp": "2026-10-16T18:47:54Z"
+  },
   "assignment:1880080": {
    "fetched": "2026-10-04",
    "module": "Week 4 - Lecture - September 7 - 13",
@@ -837,6 +872,13 @@
    "path": "incoming/2026-wk40/Worksheet _ 4 Part B Upload Solutions Fall 2026.html",
    "stamp": "2026-10-02T18:52:33Z"
   },
+  "assignment:1880083": {
+   "fetched": "2026-10-18",
+   "module": "Week 10 - Lecture - October 19 - 25",
+   "name": "Worksheet # 5 Part B Upload Solutions Fall 2026",
+   "path": "incoming/2026-wk42/Worksheet _ 5 Part B Upload Solutions Fall 2026.html",
+   "stamp": "2026-10-16T18:47:53Z"
+  },
   "assignment:1880088": {
    "fetched": "2026-10-04",
    "module": "Week 2 - Lecture - August 24 - 30",
@@ -850,6 +892,13 @@
    "name": "Checklist Week 1 Calculus Physics 2 Fall 2026",
    "path": "incoming/2026-wk40/Checklist Week 1 Calculus Physics 2 Fall 2026.html",
    "stamp": "2026-08-13T20:55:17Z"
+  },
+  "page:1868124": {
+   "fetched": "2026-10-18",
+   "module": "Week 10 - Lecture - October 19 - 25",
+   "name": "Checklist Week 10 Calculus Physics 2 Fall 2026",
+   "path": "incoming/2026-wk42/Checklist Week 10 Calculus Physics 2 Fall 2026.html",
+   "stamp": "2026-10-16T18:47:52Z"
   },
   "page:1868131": {
    "fetched": "2026-10-04",
@@ -1161,8 +1210,8 @@
   }
  },
  "last_run": {
-  "date": "2026-10-11",
+  "date": "2026-10-18",
   "source": "modules",
-  "taken": 31
+  "taken": 7
  }
 }
