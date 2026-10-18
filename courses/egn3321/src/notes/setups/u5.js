@@ -126,6 +126,35 @@ export default {
       read: (c) => ({ a: [c.a, -14.2] }),
     },
   ],
+  s7: [
+    {
+      tag: 'a two-stage reduction',
+      lab: 'gearbox',
+      scenario: 'reduction',
+      read: (c) => ({ w2: [c.w2, -10000], w4: [c.w4, 5000], v12: [c.v12, 62.8], v34: [c.v34, 26.2] }),
+    },
+    {
+      tag: 'a fuel pump that runs faster',
+      lab: 'gearbox',
+      scenario: 'step-up',
+      read: (c) => ({ w2: [c.w2, -10000], w4: [c.w4, 20000], v34: [c.v34, 41.9] }),
+    },
+    {
+      tag: 'an idler',
+      lab: 'gearbox',
+      scenario: 'idler',
+      read: (c) => ({ w2: [c.w2, -15000], w4: [c.w4, 12000], v12: [c.v12, 62.8], v34: [c.v34, 62.8] }),
+    },
+    {
+      tag: 'bigger teeth',
+      lab: 'gearbox',
+      scenario: 'reduction',
+      setup(s) {
+        s.m = 4;
+      },
+      read: (c) => ({ w4: [c.w4, 5000], v12: [c.v12, 126] }),
+    },
+  ],
   s6: [
     {
       tag: 'the contact point',

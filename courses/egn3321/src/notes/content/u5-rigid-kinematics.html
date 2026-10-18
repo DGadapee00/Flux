@@ -16,7 +16,8 @@
     <a href="#s4"><span>04</span>Instantaneous centre</a>
     <a href="#s5"><span>05</span>Relative acceleration</a>
     <a href="#s6"><span>06</span>Rolling without slip</a>
-    <a href="#s7"><span>07</span>Formula sheet</a>
+    <a href="#s7"><span>07</span>Application: a turbopump gearbox</a>
+    <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -223,10 +224,47 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 </div>
 </section>
 <section class="topic" id="s7">
-<h2><span class="n">07</span>Formula sheet</h2>
+<h2><span class="n">07</span>Application: a turbopump gearbox</h2>
+<p>A liquid rocket engine feeds its propellants with a turbopump. A small turbine, driven by hot gas, spins the pumps. The turbine runs best fast. The pumps often run best slower, and not at the same speed as each other. A gearbox between them sets each speed. It is section 1's contact rule, applied mesh by mesh.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Gears that mesh have the same tooth size, the module \(m\). The pitch circle of a gear with \(N\) teeth has circumference \(N\) tooth spacings, so its radius is \(r = mN/2\). At a mesh the pitch circles roll on each other: \(r_1\omega_1 = r_2\omega_2\). The module cancels, and \(\omega_2/\omega_1 = N_1/N_2\). An external mesh reverses the sense.</p>
+<p>Two gears keyed to one shaft share one \(\omega\), not one pitch-line speed. So a compound train multiplies its stage ratios:</p>
+\[
+\frac{\omega_4}{\omega_1} = \frac{N_1}{N_2}\cdot\frac{N_3}{N_4}.
+\]
+<p>An idler meshes on both sides. Its teeth appear once on top and once below, and cancel: \(\omega_4/\omega_1 = N_1/N_4\).</p>
+</div>
+<p>In the Gearbox lab, pinion 1 is on the turbine. Gear 2 is on the oxidiser pump shaft. Gear 3 rides on the same shaft and drives gear 4 on the fuel pump. All four gears have a 2 mm module, so a 20-tooth pinion has a 20 mm pitch radius.</p>
+<div class="box ex"><span class="tag">Worked example · a two-stage reduction</span>
+<p>The turbine spins pinion 1, 20 teeth, at 30,000 rpm. Gear 2 has 60 teeth, so the oxidiser pump turns at \(30{,}000 \times 20/60 = 10{,}000\) rpm, the other way. Gear 3 has 25 teeth and gear 4 has 50, so the fuel pump turns at \(10{,}000 \times 25/50 = 5{,}000\) rpm. Two reversals: it turns the same way as the turbine.</p>
+<p>The pinion's pitch radius is 20 mm. In rad/s, \(\omega_1 = 30{,}000 \times 2\pi/60 = 3{,}142\) rad/s. The teeth of mesh 1–2 move at \(0.020 \times 3{,}142 = 62.8\) m/s. At mesh 3–4 they move at \(0.025 \times 1{,}047 = 26.2\) m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a fuel pump that runs faster</span>
+<p>Swap the second stage: gear 3 has 40 teeth and gear 4 has 20. The oxidiser pump still turns at 10,000 rpm. The fuel pump turns at \(10{,}000 \times 40/20 = 20{,}000\) rpm. One train sets two pump speeds, one below the turbine's and one above the oxidiser pump's. At mesh 3–4 the teeth move at \(0.040 \times 1{,}047 = 41.9\) m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an idler</span>
+<p>Now gear 2, 40 teeth, meshes with pinion 1 and with gear 4, 50 teeth. Gear 2 turns at \(30{,}000 \times 20/40 = 15{,}000\) rpm. Gear 4 turns at \(15{,}000 \times 40/50 = 12{,}000\) rpm. That is \(30{,}000 \times 20/50\): the idler's 40 teeth cancel.</p>
+<p>Check with the pitch lines. Gear 2's pitch radius is 40 mm, and \(15{,}000\) rpm is \(1{,}571\) rad/s. Its teeth move at \(0.040 \times 1{,}571 = 62.8\) m/s at both meshes. An idler passes one pitch-line speed straight through.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · bigger teeth</span>
+<p>Go back to the two-stage reduction and double the module to 4 mm. Every radius doubles, every ratio stays, and the fuel pump still turns at 5,000 rpm. The pinion's radius is now 40 mm, so its teeth move at \(0.040 \times 3{,}142 = 126\) m/s. Bigger teeth carry more load, but they move faster at the same rpm.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Matching pitch-line speeds across a shaft. Gears 2 and 3 share \(\omega\), not \(r\omega\). In the reduction, gear 2's teeth move at 62.8 m/s and gear 3's at 26.2 m/s. Carrying 62.8 m/s on to gear 4 would give \(62.8/0.050 = 1{,}257\) rad/s, or 12,000 rpm, instead of 5,000. Hibbeler §16.3.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Across a mesh, match \(r\omega\), so \(\omega\) goes as \(1/N\). Along a shaft, match \(\omega\). Count the external meshes for the sense.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The model treats each mesh as two pitch circles rolling without slip. It leaves out backlash, the play between teeth, and the twist of a shaft under load. It says nothing about torque: which gear carries the load, and how fast the turbine can spin the pumps up, is Unit 6. Many turbopumps put the turbine and both pumps on one shaft and need no gearbox. The gearbox earns its weight when the pumps want different speeds.</p>
+</div>
+</section>
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Formula sheet</h2>
 <ul>
 <li>\(v = r\omega\), \(a_t = r\alpha\), \(a_n = r\omega^2\). Constant \(\alpha\): \(\omega^2 = \omega_0^2 + 2\alpha\Delta\theta\).</li>
 <li>Open belt, same sense: \(r_1\omega_1 = r_2\omega_2\). External gears flip the sign.</li>
+<li>Gears: \(r = mN/2\), so \(\omega_2/\omega_1 = N_1/N_2\). A compound train multiplies its stages. An idler's teeth cancel.</li>
 <li>\(\vec v_B = \vec v_A + \omega\times\vec r_{B/A}\).</li>
 <li>\(\vec a_B = \vec a_A + \alpha\times\vec r - \omega^2\vec r\).</li>
 <li>The instantaneous centre is where the perpendiculars to two velocities meet. Use it for velocities only.</li>
