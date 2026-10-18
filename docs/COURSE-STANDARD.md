@@ -49,8 +49,8 @@ Four causes, in order of weight:
 
 - One set per unit, following the course's own order and textbook sections, with the MIT OCW
   counterpart linked as "Another view".
-- At least ~5,000 words per unit for a core course. Derive each result; never list formulas without
-  where they come from.
+- No word count. Derive each result; never list formulas without where they come from. (The
+  owner dropped the 5,000-word floor on 18 Oct 2026.)
 - Worked examples: at least 6 per unit, recomputed, each with a **Show this in the lab** setup where a
   lab can show it (checked by notes-check against the lab).
 - "Common mistake" boxes for the errors students actually make, and **What the model leaves out** at
@@ -82,8 +82,8 @@ Four causes, in order of weight:
 - **Mix per unit:** at least 25% conceptual (choice, true/false or ordering, each wrong option with
   its own `why`), symbolic answers wherever the natural answer is an expression, and numeric
   problems at levels 1, 2 and 3.
-- **Principle tags** on every template (the course's own principle list, like PHY 2049's
-  `principles.js`), driving the principle step.
+- **Principle tags** are optional. A course that supplies them gets the principle step; none is
+  required (the owner dropped the requirement on 18 Oct 2026).
 - **Wrong-answer feedback:** every choice option has a `why`, and every numeric template has at
   least two `traps` (the specific wrong values a known mistake produces, with what the mistake was).
 - **Hints:** 2–3, staged (the first points at the principle, the last at the step), never the answer.
@@ -113,14 +113,12 @@ PHY 2049 keeps its own copy until 24 Oct 2026; Phase 2b later moves it onto the 
 
 | Check | Threshold |
 |---|---|
-| Notes words per unit | ≥ 5,000 (core), ≥ 3,000 (review courses) |
 | Notes examples with a lab setup per unit | ≥ 6 |
 | Predict-first prompts per lab | ≥ 2 |
 | Application labs per unit | ≥ 1 |
 | Conceptual share of problems per unit | ≥ 25% |
 | `why` on every choice option | 100% |
 | Numeric templates with ≥ 2 traps | 100% |
-| Templates with principle tags | 100% |
 | Templates with ≥ 2 hints | 100% |
 | Templates whose variety comes from structure (not only ranges) | ≥ 60% |
 | Worked cases citing a source | ≥ 1 per template |

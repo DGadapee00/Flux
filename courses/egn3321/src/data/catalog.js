@@ -7,7 +7,7 @@ export const EXAMS = [
     title: 'Particle kinematics',
     chapters: '1, 12',
     date: 'Ch 12',
-    labs: ['rectilinear', 'path-nt', 'relative'],
+    labs: ['rectilinear', 'path-nt', 'relative', 'boost'],
     coming: [],
   },
   {
@@ -16,7 +16,7 @@ export const EXAMS = [
     title: 'Force and acceleration',
     chapters: '13',
     date: 'Ch 13',
-    labs: ['fma', 'curve'],
+    labs: ['fma', 'curve', 'liftoff'],
     coming: [],
   },
   {
@@ -25,7 +25,7 @@ export const EXAMS = [
     title: 'Work and energy',
     chapters: '14',
     date: 'Ch 14',
-    labs: ['collar', 'paths'],
+    labs: ['collar', 'paths', 'landing'],
     coming: [],
   },
   {
@@ -43,7 +43,7 @@ export const EXAMS = [
     title: 'Rigid-body kinematics',
     chapters: '16',
     date: 'Ch 16',
-    labs: ['ic', 'slider-crank', 'rolling'],
+    labs: ['ic', 'slider-crank', 'rolling', 'gearbox'],
     coming: [],
   },
   {
@@ -52,7 +52,7 @@ export const EXAMS = [
     title: 'Rigid-body kinetics',
     chapters: '17',
     date: 'Ch 17',
-    labs: ['inertia', 'pendulum', 'roll-slip'],
+    labs: ['inertia', 'pendulum', 'roll-slip', 'spinup'],
     coming: [],
   },
   {
@@ -61,7 +61,7 @@ export const EXAMS = [
     title: 'Rigid-body energy',
     chapters: '18',
     date: 'Ch 18',
-    labs: ['race', 'linkage'],
+    labs: ['race', 'linkage', 'tipover'],
     coming: [],
   },
 ];
@@ -70,13 +70,14 @@ export const LAB_META = {
   rectilinear: { id: 'rectilinear', exam: 'u1', title: 'Rectilinear' },
   'path-nt': { id: 'path-nt', exam: 'u1', title: 'Path' },
   relative: { id: 'relative', exam: 'u1', title: 'Relative' },
+  boost: { id: 'boost', exam: 'u1', title: 'Boost', app: true },
   fma: { id: 'fma', exam: 'u2', title: 'F = ma' },
   curve: { id: 'curve', exam: 'u2', title: 'Curve' },
   collar: { id: 'collar', exam: 'u3', title: 'Collar' },
   paths: { id: 'paths', exam: 'u3', title: 'Paths' },
   impulse: { id: 'impulse', exam: 'u4', title: 'Impulse' },
   impact: { id: 'impact', exam: 'u4', title: 'Impact' },
-  rocket: { id: 'rocket', exam: 'u4', title: 'Rocket' },
+  rocket: { id: 'rocket', exam: 'u4', title: 'Rocket', app: true },
   ic: { id: 'ic', exam: 'u5', title: 'Centre' },
   'slider-crank': { id: 'slider-crank', exam: 'u5', title: 'Slider-crank' },
   rolling: { id: 'rolling', exam: 'u5', title: 'Rolling' },
@@ -85,6 +86,11 @@ export const LAB_META = {
   'roll-slip': { id: 'roll-slip', exam: 'u6', title: 'Roll or slip' },
   race: { id: 'race', exam: 'u7', title: 'Race' },
   linkage: { id: 'linkage', exam: 'u7', title: 'Linkage' },
+  liftoff: { id: 'liftoff', exam: 'u2', title: 'Liftoff', app: true },
+  landing: { id: 'landing', exam: 'u3', title: 'Landing', app: true },
+  gearbox: { id: 'gearbox', exam: 'u5', title: 'Gearbox', app: true },
+  spinup: { id: 'spinup', exam: 'u6', title: 'Spin-up', app: true },
+  tipover: { id: 'tipover', exam: 'u7', title: 'Tip-over', app: true },
 };
 
 export const CHAPTER_TITLES = {

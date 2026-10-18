@@ -16,7 +16,8 @@
     <a href="#s4"><span>04</span>Banked curve</a>
     <a href="#s5"><span>05</span>Vertical loop</a>
     <a href="#s6"><span>06</span>Spring on a collar</a>
-    <a href="#s7"><span>07</span>Formula sheet</a>
+    <a href="#s7"><span>07</span>Application: leaving the pad</a>
+    <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -212,7 +213,49 @@ a = g\sin\theta - \frac{k}{m}\,x, \qquad N_{\text{rod}} = mg\cos\theta.
 </div>
 </section>
 <section class="topic" id="s7">
-<h2><span class="n">07</span>Formula sheet</h2>
+<h2><span class="n">07</span>Application: leaving the pad</h2>
+<p>A rocket on its pad is a particle with three forces: thrust up, weight down, and the pad or its clamps. Section 1's equation of motion is all it takes to say whether it lifts, and how hard it accelerates once it does.</p>
+<p>The ratio that matters is thrust to weight, \(T/W = T/(mg)\). Above 1 the rocket can leave. At or below 1 the pad holds it. The net acceleration is</p>
+\[
+a = \frac{T}{m} - g = g\left(\frac{T}{W} - 1\right).
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>Take up as positive. On the pad, before it moves, \(\sum F = 0\): \(T - mg - F_{\text{clamp}} = 0\), so the clamps hold \(F_{\text{clamp}} = T - mg\). Once they let go that force is gone, and \(T - mg = ma\). Divide by \(m\) and factor \(g\) out.</p>
+<p>Thrust stays roughly constant through a burn, but the mass does not. Propellant leaves at a rate \(\dot m\), so \(m = m_0 - \dot m\,t\) and \(a\) climbs as the rocket gets lighter. Integrate \(dv = (T/m - g)\,dt\) with \(dt = -dm/\dot m\):</p>
+\[
+v_{bo} = \frac{T}{\dot m}\ln\frac{m_0}{m_{bo}} - g\,t_b.
+\]
+<p>Unit 4 reaches the same result from momentum, with \(T/\dot m\) as the exhaust speed.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a student rocket</span>
+<p>A 20 kg rocket has \(T/W = 2\) at ignition, so \(T = 2(20)(9.81) = 392.4\) N. It lifts at \(a = 9.81(2 - 1) = 9.81\) m/s². It burns 4 kg of propellant in 5 s, \(\dot m = 0.8\) kg/s.</p>
+<p>At burnout it weighs 16 kg, and \(a = 392.4/16 - 9.81 = 14.7\) m/s². The speed is \(490.5\ln(20/16) - 9.81(5) = 109.5 - 49.1 = 60.4\) m/s, at 141 m. The lab's RK4 steps give the same speed.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the clamps</span>
+<p>A 20 kg rocket is clamped to its pad while the motor comes up to full thrust, 396.2 N. Its weight is 196.2 N. Before release the clamps hold \(396.2 - 196.2 = 200\) N. At release, \(a = 200/20 = 10.0\) m/s².</p>
+<p>The tower is 20 m tall. From rest, \(t = \sqrt{2(20)/10} = 2.00\) s to clear it. Over those 2 s the mass changes by a few percent, so treating it as constant is fair.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an under-powered rocket</span>
+<p>A 50 kg rocket has \(T/W = 0.9\) at ignition: \(T = 441.5\) N against a 490.5 N weight. It burns 1 kg/s for 20 s. It sits on the pad until its weight falls to the thrust, at \(m = 441.5/9.81 = 45\) kg. That takes 5 s.</p>
+<p>Then it flies for the last 15 s. At burnout it weighs 30 kg and accelerates at \(441.5/30 - 9.81 = 4.91\) m/s². Its speed is \(441.5\ln(45/30) - 9.81(15) = 179.0 - 147.2 = 31.8\) m/s, at 148 m. The first 5 s of propellant bought nothing.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a heavy lifter</span>
+<p>A 1,000 kg vehicle has \(T/W = 1.2\): \(T = 11{,}772\) N. It leaves the pad at only \(0.2g = 1.96\) m/s². Over a 60 s burn it uses 240 kg of propellant, \(\dot m = 4\) kg/s.</p>
+<p>At burnout, 760 kg, \(a = 11{,}772/760 - 9.81 = 5.68\) m/s², nearly three times the lift-off value. The speed is \(2943\ln(1000/760) - 9.81(60) = 807.7 - 588.6 = 219\) m/s, at 5.47 km.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking \(T/m\) as the acceleration. For the student rocket that gives 19.6 m/s², twice the true 9.81 m/s². The weight acts the whole time, on the pad and in flight. A second slip is to stop at \(T/W - 1 = 1\): that is the acceleration in units of \(g\), and it still needs the 9.81. Hibbeler §13.4.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>\(a = g(T/W - 1)\). Below \(T/W = 1\) the pad holds the rocket. As propellant burns, \(m\) falls and \(a\) rises.</p>
+</div>
+<p>In the Liftoff lab, move the thrust-to-weight slider below 1 and watch the lift-off line move right. The shaded area under \(a(t)\) is the burnout speed.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Drag, which grows with speed squared and matters long before burnout. Thrust also changes with altitude, as the outside pressure falls. The model keeps the rocket vertical: a real one pitches over, and part of its thrust then goes sideways.</p>
+</div>
+</section>
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Formula sheet</h2>
 <ul>
 <li>\(\sum \vec F = m\vec a\). Draw the free-body before writing a component.</li>
 <li>Atwood: \(a = (m_2-m_1)g/(m_1+m_2)\), \(T = 2 m_1 m_2 g/(m_1+m_2)\).</li>
@@ -223,6 +266,7 @@ a = g\sin\theta - \frac{k}{m}\,x, \qquad N_{\text{rod}} = mg\cos\theta.
 <li>Flat curve: \(v_{\max} = \sqrt{\mu\rho g}\).</li>
 <li>Loop, \(\phi\) from the bottom: \(v^2 = v_b^2 - 2g\rho(1-\cos\phi)\), \(N = m(v^2/\rho + g\cos\phi)\). Full loop: \(v_b^2 \ge 5g\rho\).</li>
 <li>Collar: \(a = g\sin\theta - (k/m)x\) along the rod. Rest point \(x = mg\sin\theta/k\).</li>
+<li>Rocket on the pad: clamp force \(T - mg\). Lift-off \(a = g(T/W - 1)\). Burnout speed \(v_{bo} = (T/\dot m)\ln(m_0/m_{bo}) - g\,t_b\).</li>
 </ul>
 <p>Left out, because the pack does not name them: cylindrical coordinates (§13.6) and central-force motion (§13.7). The same list as Unit 1 still stands for the later chapters.</p>
 <p>Each line above is the model for this unit. A heavy pulley, drag, and a stretch that is not along the rod are left out.</p>

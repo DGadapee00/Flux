@@ -16,7 +16,8 @@
     <a href="#s4"><span>04</span>Projectile motion</a>
     <a href="#s5"><span>05</span>Normal and tangential components</a>
     <a href="#s6"><span>06</span>Relative motion, translating axes</a>
-    <a href="#s7"><span>07</span>Formula sheet</a>
+    <a href="#s7"><span>07</span>Application: a sounding rocket</a>
+    <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -78,6 +79,19 @@ v^2 &= v_0^2 + 2a(s - s_0).
 <div class="box ex"><span class="tag">Worked example · a pull toward the origin</span>
 <p>Let \(a = -4s\), in m/s² with \(s\) in m. The particle passes the origin at 2 m/s. Integrate \(v\,dv = -4s\,ds\): \(\tfrac12 v^2 - 2 = -2s^2\), so \(v^2 = 4 - 4s^2\). The particle stops where \(v = 0\): at \(s = 1\) m. It then returns, so the motion is an oscillation between \(\pm 1\) m.</p>
 </div>
+<p>A resistance that grows with speed gives the other common law, \(a = -kv\). It slows a particle without ever reversing it.</p>
+<div class="box why"><span class="tag">Why a resistance slows linearly with distance</span>
+<p>Put \(a = -kv\) into \(a\,ds = v\,dv\): \(-kv\,ds = v\,dv\). The speed cancels from both sides, which is the whole trick. What is left is \(dv = -k\,ds\). Integrate from the origin, where the speed is \(v_0\):</p>
+\[
+v = v_0 - ks.
+\]
+<p>The speed falls by the same amount for every metre travelled. It reaches zero at \(s = v_0/k\), and the particle stops there for good.</p>
+<p>In time the story looks different. From \(dv/dt = -kv\), the speed decays as \(v = v_0 e^{-kt}\). It never quite reaches zero, yet the distance it covers adds up to the finite \(v_0/k\). Both statements are true. The distance law is linear; the time law is exponential.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a boat coasting to a stop</span>
+<p>A small boat cuts its motor at 6 m/s. Water resistance gives \(a = -0.5v\), with \(k = 0.5\) s⁻¹. After 4 m it is moving at \(v = 6 - 0.5(4) = 4\) m/s. It stops after \(6/0.5 = 12\) m.</p>
+<p>Check in time. The speed halves when \(e^{-0.5t} = 0.5\), at \(t = \ln 2/0.5 = 1.39\) s. The distance by then is \(\int_0^t 6e^{-0.5\tau}\,d\tau = 12(1 - 0.5) = 6\) m. The distance law agrees: \(v = 6 - 0.5(6) = 3\) m/s, half the start.</p>
+</div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Distance is 13 m. Displacement is \(-5\) m. Reporting the absolute value of the displacement as the distance drops the leg after the stop. Hibbeler §12.2.</p>
 </div>
@@ -113,6 +127,17 @@ v^2 &= v_0^2 + 2a(s - s_0).
 <div class="box key"><span class="tag">Key</span>
 <p>Slopes give the next derivative down the chain. Areas give the change one step up. On a \(v\)–\(s\) graph, multiply the slope by the height.</p>
 </div>
+<p>A graph also answers questions without a number. Read its shape first.</p>
+<ul>
+<li>A straight \(v\)–\(t\) line has a constant slope. The acceleration is constant, and the \(s\)–\(t\) graph is a parabola.</li>
+<li>Where the \(v\)–\(t\) graph crosses zero, the particle stops and turns. The \(s\)–\(t\) graph is flat there: a peak or a trough.</li>
+<li>The \(s\)–\(t\) graph bends upward where \(a &gt; 0\) and downward where \(a &lt; 0\). Its bend says nothing about which way the particle moves.</li>
+<li>A jump in the \(a\)–\(t\) graph is a corner in the \(v\)–\(t\) graph. The \(s\)–\(t\) graph stays smooth.</li>
+</ul>
+<div class="box ex"><span class="tag">Worked example · a ball thrown up</span>
+<p>A ball leaves the hand at 12 m/s, straight up. Its \(v\)–\(t\) graph is a straight line from 12 m/s, falling at 9.81 m/s². It crosses zero at \(t = 12/9.81 = 1.22\) s. That is the top. The area of the triangle above the axis is \(\tfrac12(1.22)(12) = 7.34\) m, the height climbed. The same height from \(v^2 = v_0^2 - 2gh\) is \(144/19.62 = 7.34\) m.</p>
+<p>The \(s\)–\(t\) graph is a parabola that bends downward the whole time: going up, at the top, and coming down. The acceleration never changes sign.</p>
+</div>
 <p>In the Rectilinear lab, the Two constant accelerations scenario is a two-step graph. The Ramp scenario is the linear acceleration above. A fourth-order Runge–Kutta step gives the same \(s\) and \(v\) as the integrals.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>A step graph leaves out the rounding between corners. Real acceleration cannot jump: a jump would need an infinite rate of change of force. The area rule still holds for a smooth graph. Integrate \(a\) over the interval, then step \(s\) with the area under \(v\).</p>
@@ -141,6 +166,15 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 <div class="box ex"><span class="tag">Worked example · a punt in feet</span>
 <p>A ball is kicked at 80 ft/s, 50° above level ground. In US units \(g = 32.2\) ft/s². The components are \(v_x = 51.4\) ft/s and \(v_y = 61.3\) ft/s. The flight time is \(2v_y/g = 3.81\) s, the range \(51.4 \times 3.81 = 196\) ft, and the peak \(v_y^2/(2g) = 58.3\) ft.</p>
 <p>Check in SI. 80 ft/s is 24.38 m/s, and \(24.38^2\sin 100^\circ/9.81 = 59.7\) m, which is 196 ft.</p>
+</div>
+<p>At the top of the flight, the vertical velocity is zero. Nothing else is. The horizontal velocity is still \(v_0\cos\theta\), so the speed is at its least but not zero. The acceleration is still \(g\), straight down.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>"At the top the ball stops, so its acceleration is zero." Both halves are wrong. In the level-ground example the ball still moves at 17.3 m/s at the top. Its acceleration is 9.81 m/s² downward, as it is everywhere else on the path. If \(a\) were zero at the top, the ball would keep its velocity and never come down.</p>
+</div>
+<p>The top of the arc is also a curve, so section 5 applies to it. There the velocity is horizontal and \(g\) is perpendicular to it. All of \(g\) is normal acceleration, so \(g = v_x^2/\rho\).</p>
+<div class="box ex"><span class="tag">Worked example · the bend at the top</span>
+<p>For the 20 m/s, 30° launch, \(v_x = 17.32\) m/s. At the top, \(\rho = v_x^2/g = 300/9.81 = 30.6\) m. At the launch point the speed is 20 m/s, and the normal part of \(g\) is \(g\cos 30^\circ = 8.50\) m/s². There \(\rho = 400/8.50 = 47.1\) m. The path is most sharply curved at its top.</p>
+<p>Check from the parabola. With \(y = x\tan\theta - g x^2/(2v_0^2\cos^2\theta)\), \(|y''| = g/(v_0^2\cos^2\theta) = 9.81/300 = 0.0327\) m⁻¹. At the top \(y' = 0\), so \(\rho = 1/0.0327 = 30.6\) m. The two routes agree.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The 45° rule and the range formula assume the landing height equals the launch height. From the cliff, a 45° launch is not the longest throw, and \(v_0^2\sin 2\theta/g\) does not apply. Solve the vertical equation for the actual landing height. Hibbeler §12.6.</p>
@@ -176,6 +210,18 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 <div class="box ex"><span class="tag">Worked example · braking in a curve</span>
 <p>A car on a 100 m radius curve travels at 25 m/s and brakes at 2 m/s². The normal part is \(25^2/100 = 6.25\) m/s², toward the centre. The tangential part is 2 m/s², backward. The total is \(\sqrt{6.25^2 + 2^2} = 6.56\) m/s². The tyres must supply all of it.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · a wavy track</span>
+<p>The path is \(y = 0.5\sin x\), in metres. At \(x = 1\) m, \(y' = 0.5\cos 1 = 0.270\) and \(y'' = -0.5\sin 1 = -0.421\) m⁻¹. Then \(\rho = (1.0730)^{3/2}/0.421 = 2.64\) m. The second derivative is negative, so the track is concave down there and the normal points down and toward the inside of the crest.</p>
+<p>At 3 m/s with \(a_t = 2\) m/s², \(a_n = 9/2.64 = 3.41\) m/s² and \(|a| = \sqrt{2^2 + 3.41^2} = 3.95\) m/s². At the crest, \(x = \pi/2\), the slope is zero and \(\rho = 1/0.5 = 2\) m. The level-path shortcut \(\rho = 1/|y''|\) holds only there.</p>
+</div>
+<p>Which way does the acceleration point? Sketch the two pieces and add them.</p>
+<ul>
+<li>At constant speed, \(a_t = 0\). The acceleration points straight into the concave side of the path, toward the centre of curvature.</li>
+<li>Speeding up through a bend, \(a_t\) points forward. The acceleration leans ahead of the normal.</li>
+<li>Braking through a bend, \(a_t\) points backward. The acceleration leans behind the normal.</li>
+<li>On a straight path, \(a_n = 0\). The acceleration lies along the path, forward or back.</li>
+</ul>
+<p>The angle between the acceleration and the normal is \(\arctan(a_t/a_n)\). For the braking car above, that is \(\arctan(2/6.25) = 17.7^\circ\) behind the line to the centre.</p>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Acceleration is not tangent to the path. In the parabola example \(a_t = 0\), and \(a_n = 0.805\) m/s². A student who reports \(a = a_t\) misses the turn. Hibbeler §12.7.</p>
 </div>
@@ -206,6 +252,15 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 <div class="box ex"><span class="tag">Worked example · relative acceleration</span>
 <p>At a junction, car A speeds up eastward at 2 m/s² while car B speeds up northward at 1 m/s². Seen from A, B accelerates at \(\vec{a}_{B/A} = (0, 1) - (2, 0) = (-2, 1)\) m/s². Its size is 2.24 m/s². An observer in A sees B pull away north-westward, although B never moves west.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · rain on a windscreen</span>
+<p>Rain falls straight down at 8 m/s. A car drives east at 20 m/s. Relative to the car, the rain moves at \(\vec{v}_{r/c} = (0, -8) - (20, 0) = (-20, -8)\) m/s. Its speed is 21.5 m/s. It streaks backward at \(\arctan(8/20) = 21.8^\circ\) below the horizontal, although on the ground it falls straight down.</p>
+<p>The driver sees the rain come almost head-on. A passenger standing still sees it fall vertically. Both are right: each measures the rain against their own axes.</p>
+</div>
+<p>Relative motion is a choice of observer, not a different physics. Pick the frame in which the question is simplest. To find when two ships come closest, work in one ship's frame: the other moves in a straight line at the relative velocity, and the closest point is the foot of a perpendicular. To find where a dropped package lands, work on the ground: it leaves the plane with the plane's velocity and falls as a projectile.</p>
+<div class="box ex"><span class="tag">Worked example · closest approach</span>
+<p>Ship B starts 10 km east of ship A. Relative to A, B moves at \((-6, 8)\) km/h, a relative speed of 10 km/h. In A's frame B travels a straight line. The time of closest approach is \(-(\vec{r}\cdot\vec{v})/v^2 = 60/100 = 0.6\) h. Then B sits at \((10 - 3.6,\ 4.8) = (6.4, 4.8)\) km from A, a distance of 8.0 km.</p>
+<p>Check with the perpendicular: the distance from A to the line is \(|r_x v_y - r_y v_x|/v = 80/10 = 8.0\) km. The two routes agree.</p>
+</div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Subtracting speeds instead of vectors. In the first example, \(|\vec{v}_B| - |\vec{v}_A| = 4.12 - 3.16 = 0.96\) m/s. The relative speed is 3.61 m/s. Speeds subtract only when the velocities are parallel. Hibbeler §12.10.</p>
 </div>
@@ -218,7 +273,51 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 </div>
 </section>
 <section class="topic" id="s7">
-<h2><span class="n">07</span>Formula sheet</h2>
+<h2><span class="n">07</span>Application: a sounding rocket</h2>
+<p>A sounding rocket flies straight up. Its motor burns for a few seconds and then the rocket coasts. The whole flight is rectilinear motion in two pieces, each with a constant acceleration. Nothing beyond this unit is needed to find how high it goes.</p>
+<p>During the burn the net acceleration is the thrust less the weight, over the mass: \(a = T/m - g\). Treat the mass as constant for now; Unit 4 lets it fall as propellant burns. After burnout only gravity acts, and the acceleration is \(-g\).</p>
+<div class="box why"><span class="tag">Why the apogee splits into two heights</span>
+<p>From rest, with constant \(a\) for \(t_b\) seconds, section 2 gives the state at burnout:</p>
+\[
+v_{bo} = a\,t_b, \qquad h_{bo} = \tfrac12 a\,t_b^2.
+\]
+<p>Then the rocket coasts with \(a = -g\) until its speed is zero. Time is not needed, so use \(v^2 = v_0^2 + 2a\,\Delta s\) with \(v = 0\):</p>
+\[
+\Delta h_{\text{coast}} = \frac{v_{bo}^2}{2g}.
+\]
+<p>The apogee is the sum, \(h_{\max} = h_{bo} + v_{bo}^2/2g\). It is reached at \(t = t_b + v_{bo}/g\).</p>
+<p>Section 3 gives the same number another way. The \(v\)–\(t\) graph is a triangle: a line rising to \(v_{bo}\), then a line falling at slope \(-g\) to zero. Its area is \(\tfrac12 v_{bo}(t_b + v_{bo}/g)\), which expands to the same sum.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a student rocket</span>
+<p>A student rocket accelerates at a net 49 m/s², about five times \(g\), for 2.5 s. At burnout \(v_{bo} = 49 \times 2.5 = 122.5\) m/s and \(h_{bo} = \tfrac12(49)(2.5)^2 = 153\) m.</p>
+<p>The coast adds \(122.5^2/(2 \times 9.81) = 765\) m. The apogee is 918 m, reached 15.0 s after launch. The motor is out after the first 17% of the climb. The rest is momentum.</p>
+<p>The area of the \(v\)–\(t\) triangle checks it: \(\tfrac12(122.5)(14.99) = 918\) m.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · thrust and weight</span>
+<p>A 12 kg rocket has a motor that gives 600 N for 3.0 s. The net acceleration is \(600/12 - 9.81 = 40.2\) m/s². At burnout it is moving at \(40.19 \times 3 = 121\) m/s, at a height of \(\tfrac12(40.19)(9) = 181\) m.</p>
+<p>The coast adds \(120.6^2/19.62 = 741\) m, for an apogee of 922 m. Leaving out the weight would give \(a = 50\) m/s² and an apogee of 1,500 m: an error of 60%.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a long gentle burn</span>
+<p>The same burnout speed can come from a gentler burn: 20 m/s² for 6 s reaches 120 m/s, about the student rocket's speed. But it reaches it higher, at \(\tfrac12(20)(36) = 360\) m. The coast adds \(120^2/19.62 = 734\) m, and the apogee is 1,094 m.</p>
+<p>Same burnout speed, higher burnout, higher apogee. In this model, with no drag, a longer burn wins. A real rocket that burns long and slowly pays a gravity loss: it holds itself up against \(g\) for longer. Here that is already inside the net \(a\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a hop test</span>
+<p>A test vehicle hovers just above its own weight: a net 3 m/s² for 4 s. It reaches 12 m/s at 24 m, coasts up another \(12^2/19.62 = 7.34\) m, and peaks at 31.3 m. With the engine out, it falls back to the pad 7.75 s after lift-off.</p>
+<p>The fall from 31.3 m takes \(\sqrt{2(31.34)/9.81} = 2.53\) s, and the peak came at \(4 + 12/9.81 = 5.22\) s. Their sum is 7.75 s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Two slips come up often. The first is stopping at burnout: 153 m for the student rocket, when the apogee is 918 m. The second is subtracting \(g\) from an acceleration that is already net, or forgetting it in \(T/m\). Read whether the acceleration given is the thrust's alone or the net one. Hibbeler §12.2–12.3.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Split the flight where the acceleration changes. The coast height depends only on the burnout speed: \(v_{bo}^2/2g\). The area under \(v\)–\(t\) is the height.</p>
+</div>
+<p>In the Boost lab, move the burn time and the acceleration. The shaded triangle under \(v\)–\(t\) is the apogee, and the column on the left shows where burnout and apogee sit.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Drag is the big omission. At 120 m/s the air pushes back hard, and a real rocket of this size reaches perhaps two-thirds of these heights. The model also keeps the mass constant, when a solid motor may burn a fifth of the rocket's mass; Unit 4 adds that. Thrust is not constant either: a real motor ramps up and tails off. The area rule still holds for any thrust curve. Wind and weathercocking tilt the path, which makes it a projectile problem.</p>
+</div>
+</section>
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Formula sheet</h2>
 <ul>
 <li>1 ft = 0.3048 m. 1 lbf = 4.4482216152605 N, from 0.45359237 kg times 9.80665 m/s². 1 slug = 14.594 kg.</li>
 <li>Three significant figures. Four when the first significant digit is 1.</li>
@@ -229,6 +328,8 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 <li>Projectile: \(g = 9.81\) m/s² downward. \(v_x\) is constant. Level-ground range \(v_0^2\sin 2\theta/g\).</li>
 <li>\(a_t = \dot{v}\), \(a_n = v^2/\rho\), \(\rho = (1+y'^2)^{3/2}/|y''|\).</li>
 <li>\(\vec{v}_{B/A} = \vec{v}_B - \vec{v}_A\) for translating axes.</li>
+<li>\(a = -kv\): \(v = v_0 - ks\) in distance, \(v = v_0e^{-kt}\) in time.</li>
+<li>Boost and coast: \(v_{bo} = at_b\), \(h_{bo} = \tfrac12 at_b^2\), \(h_{\max} = h_{bo} + v_{bo}^2/2g\), with \(a = T/m - g\).</li>
 </ul>
 <p>Left out of this course, because the pack does not name them: cylindrical coordinates (§12.8 and §13.6), dependent motion (§12.9), central-force motion (§13.7), steady flow (§15.8), and rotating axes (§16.8). The rocket, §15.9, is Unit 4.</p>
 <p>Each line above is the model for this unit. Drag, a flexible part, and a coefficient that changes with speed are left out.</p>

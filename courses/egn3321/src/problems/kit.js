@@ -18,6 +18,7 @@ export const num = (id, get, unit, o = {}) => ({
   tol: o.tol ?? 0.02,
   abs: o.abs ?? 1e-6,
   label: o.label ?? null,
+  ...(o.traps ? { traps: o.traps } : {}),
 });
 
 export const mc = (id, options, correct, o = {}) => ({

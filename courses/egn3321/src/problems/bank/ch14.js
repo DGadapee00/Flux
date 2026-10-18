@@ -27,10 +27,13 @@ function reaches($, g, mu) {
   return collarTrip({ mass: $.m, k: $.k, thetaDeg: $.theta, x1: $.x1, x2: $.x2, v1: $.v1, mu, g }).reaches;
 }
 
+/** Speed on reaching the spring: friction has already worked over the gap, if there is one. */
+export const contactSpeed = ($) => Math.sqrt($.v * $.v - 2 * $.mu * G * ($.start === 'gap' ? $.d : 0));
+
 function stopRoot($) {
   let lo = 0;
   let hi = 1;
-  const energy = (x) => collarTrip({ mass: $.m, k: $.k, thetaDeg: 0, x1: 0, x2: x, v1: $.v, mu: $.mu, g: G }).t2;
+  const energy = (x) => collarTrip({ mass: $.m, k: $.k, thetaDeg: 0, x1: 0, x2: x, v1: contactSpeed($), mu: $.mu, g: G }).t2;
   while (energy(hi) > 0 && hi < 1e4) hi *= 2;
   for (let i = 0; i < 60; i++) {
     const mid = 0.5 * (lo + hi);
@@ -41,6 +44,7 @@ function stopRoot($) {
 }
 
 function pull($) {
+  if ($.route === 'hoist') return $.m * G;
   const parallel = work($.m * G, 1, 90 - $.theta);
   const friction = work($.mu * $.m * G, 1, $.theta);
   return parallel + friction;
@@ -136,7 +140,7 @@ const ch14 = [
       m: range(1, 4, 0.5, 'kg'),
       k: range(40, 120, 5, 'N/m'),
       theta: range(15, 40, 5, 'deg'),
-      mu: range(0.05, 0.3, 0.05, ''),
+      mu: range(0.1, 0.3, 0.05, ''),
       x1: range(0.3, 0.7, 0.05, 'm'),
       x2: range(0, 0.2, 0.05, 'm'),
       v1: range(0, 3, 0.5, 'm/s'),
@@ -183,29 +187,39 @@ const ch14 = [
     lab: null,
     src: 'Hibbeler §14.1',
     topics: ['spring', 'friction'],
+    // Designed numbers: the compression is picked, and the speed that gives it follows.
     vars: {
-      m: range(1, 5, 0.5, 'kg'),
-      k: range(20, 80, 5, 'N/m'),
-      v: range(2, 6, 0.5, 'm/s'),
-      mu: range(0, 0.3, 0.05, ''),
+      m: range(2, 5, 0.5, 'kg'),
+      k: range(20, 50, 5, 'N/m'),
+      xs: range(0.2, 0.5, 0.05, 'm'),
+      mu: range(0.1, 0.3, 0.05, ''),
+      d: range(0.5, 1.5, 0.25, 'm'),
+      start: choice(['contact', 'as it meets the spring'], ['gap', 'some way short of the spring']),
     },
-    text: (T) => String.raw`A ${T.m} kg block slides on a horizontal surface at ${T.v} m/s and meets a spring of stiffness ${T.k} N/m. $\mu_k = ${T.mu}$. The spring is unstretched at the contact. How far is the spring compressed when the block stops?`,
+    derive: ($) => ({ v: Math.sqrt(($.k * $.xs * $.xs) / $.m + 2 * $.mu * G * ($.xs + ($.start === 'gap' ? $.d : 0))) }),
+    text: (T, $, sig) => ($.start === 'gap'
+      ? String.raw`A ${T.m} kg block slides on a horizontal surface. It is moving at $${sig($.v)}$ m/s when it is ${T.d} m short of a spring of stiffness ${T.k} N/m. $\mu_k = ${T.mu}$ on the whole surface. The spring is unstretched at the contact. How far is the spring compressed when the block stops?`
+      : String.raw`A ${T.m} kg block slides on a horizontal surface at $${sig($.v)}$ m/s and meets a spring of stiffness ${T.k} N/m. $\mu_k = ${T.mu}$. The spring is unstretched at the contact. How far is the spring compressed when the block stops?`),
     parts: [
-      num('x', ($) => springStop({ mass: $.m, k: $.k, v: $.v, mu: $.mu, g: G }), 'm', { label: 'compression' }),
+      num('x', ($) => springStop({ mass: $.m, k: $.k, v: contactSpeed($), mu: $.mu, g: G }), 'm', { label: 'compression' }),
     ],
     level: 2,
     hints: ['Set the final kinetic energy to zero. Friction does minus mu m g times the compression, and the spring stores one half k x squared.',
       "The compression appears in the spring term and in the friction term. Bring both to one side and keep the positive root.",
     ],
     steps: ($, sig) => {
-      const x = springStop({ mass: $.m, k: $.k, v: $.v, mu: $.mu, g: G });
+      const x = springStop({ mass: $.m, k: $.k, v: contactSpeed($), mu: $.mu, g: G });
       return [
-        String.raw`$\tfrac{1}{2}mv^2 = \tfrac{1}{2}kx^2 + \mu mgx$.`,
+        ...($.start === 'gap' ? [String.raw`Over the gap, friction takes $\mu_k mg d$: the block meets the spring at $v_c = \sqrt{v^2 - 2\mu_k g d} = ${sig(contactSpeed($))}$ m/s.`] : []),
+        String.raw`$\tfrac{1}{2}mv_c^2 = \tfrac{1}{2}kx^2 + \mu mgx$.`,
         String.raw`The compression is ${sig(x)}\ \mathrm{m}.`,
       ];
     },
     second: ($) => ({ x: stopRoot($) }),
-    cases: [kase('Hibbeler §14.1', { m: 2, k: 40, v: 3, mu: 0.1 }, { x: 0.62356125659626 })],
+    cases: [
+      kase('Hibbeler §14.1', { m: 2, k: 40, xs: 0.5, mu: 0.1, d: 1, start: 'contact' }, { x: 0.5 }),
+      kase('Hibbeler §14.1', { m: 2, k: 40, xs: 0.5, mu: 0.1, d: 1, start: 'gap' }, { x: 0.5 }),
+    ],
   }),
 
   problem({
@@ -219,11 +233,14 @@ const ch14 = [
     vars: {
       m: range(2, 10, 1, 'kg'),
       theta: range(10, 35, 5, 'deg'),
-      mu: range(0, 0.3, 0.05, ''),
+      mu: range(0.1, 0.3, 0.05, ''),
       v: range(0.5, 3, 0.5, 'm/s'),
       eta: range(0.6, 0.9, 0.05, ''),
+      route: choice(['incline', 'up a rough incline'], ['hoist', 'straight up on a hoist']),
     },
-    text: (T) => String.raw`A ${T.m} kg block is pulled up a ${T.theta}° incline at a constant ${T.v} m/s. $\mu_k = ${T.mu}$. The motor's efficiency is ${T.eta}. Find the output power, and the input power the motor draws.`,
+    text: (T, $) => ($.route === 'hoist'
+      ? String.raw`A motor hoists a ${T.m} kg load straight up at a constant ${T.v} m/s. The motor's efficiency is ${T.eta}. Find the output power, and the input power the motor draws.`
+      : String.raw`A ${T.m} kg block is pulled up a ${T.theta}° incline at a constant ${T.v} m/s. $\mu_k = ${T.mu}$. The motor's efficiency is ${T.eta}. Find the output power, and the input power the motor draws.`),
     parts: [
       num('P', ($) => power(pull($), $.v), 'W', { label: 'output power' }),
       num('Pin', ($) => power(pull($), $.v) / $.eta, 'W', { label: 'input power' }),
@@ -243,11 +260,14 @@ const ch14 = [
     },
     second: ($) => {
       const th = $.theta * DEG;
-      const F = $.m * G * (Math.sin(th) + $.mu * Math.cos(th));
+      const F = $.route === 'hoist' ? $.m * G : $.m * G * (Math.sin(th) + $.mu * Math.cos(th));
       const P = F * $.v;
       return { P, Pin: P / $.eta };
     },
-    cases: [kase('Hibbeler §14.4', { m: 4, theta: 25, mu: 0.15, v: 2, eta: 0.8 }, { P: 43.83613645040553, Pin: 54.79517056300691 })],
+    cases: [
+      kase('Hibbeler §14.4', { m: 4, theta: 25, mu: 0.15, v: 2, eta: 0.8, route: 'incline' }, { P: 43.83613645040553, Pin: 54.79517056300691 }),
+      kase('Hibbeler §14.4', { m: 4, theta: 25, mu: 0.15, v: 2, eta: 0.8, route: 'hoist' }, { P: 78.48, Pin: 98.1 }),
+    ],
   }),
 
   problem({
@@ -261,24 +281,32 @@ const ch14 = [
     vars: {
       F: range(20, 80, 5, 'lb'),
       v: range(2, 12, 1, 'ft/s'),
+      FN: range(100, 400, 25, 'N'),
+      vm: range(0.5, 4, 0.5, 'm/s'),
+      units: choice(['us', 'in pounds and feet'], ['si', 'in newtons and metres']),
     },
-    text: (T) => String.raw`A winch pulls with a steady ${T.F} lb at ${T.v} ft/s. Find the power in horsepower. One horsepower is 550 ft·lb/s.`,
+    text: (T, $) => ($.units === 'si'
+      ? String.raw`A winch pulls with a steady ${T.FN} N at ${T.vm} m/s. Find the power in horsepower. One horsepower is 745.7 W.`
+      : String.raw`A winch pulls with a steady ${T.F} lb at ${T.v} ft/s. Find the power in horsepower. One horsepower is 550 ft·lb/s.`),
     parts: [
-      num('hp', ($) => ($.F * $.v) / FT_LBF_PER_S_PER_HP, 'hp', { label: 'power' }),
+      num('hp', ($) => ($.units === 'si' ? convert($.FN * $.vm, 'W', 'hp') : ($.F * $.v) / FT_LBF_PER_S_PER_HP), 'hp', { label: 'power' }),
     ],
     level: 1,
     hints: ['Power is force times speed. Divide foot-pounds per second by 550 to get horsepower.',
-      "The speed is already in ft/s and the force is already in pounds. Divide their product by 550.",
+      "Keep the force and the speed in one system. Then divide by that system's horsepower: 550 ft·lb/s, or 745.7 W.",
     ],
-    steps: ($, sig) => [
-      String.raw`$P = Fv = ${sig($.F * $.v)}$ ft·lb/s.`,
-      String.raw`That is ${sig(($.F * $.v) / FT_LBF_PER_S_PER_HP)} horsepower.`,
-    ],
+    steps: ($, sig) => ($.units === 'si'
+      ? [String.raw`$P = Fv = ${sig($.FN * $.vm)}$ W.`, String.raw`That is ${sig(convert($.FN * $.vm, 'W', 'hp'))} horsepower.`]
+      : [String.raw`$P = Fv = ${sig($.F * $.v)}$ ft·lb/s.`, String.raw`That is ${sig(($.F * $.v) / FT_LBF_PER_S_PER_HP)} horsepower.`]),
     second: ($) => {
+      if ($.units === 'si') return { hp: (convert($.FN, 'N', 'lbf') * convert($.vm, 'm', 'ft')) / FT_LBF_PER_S_PER_HP };
       const watts = convert($.F, 'lbf', 'N') * convert($.v, 'ft', 'm');
       return { hp: convert(watts, 'W', 'hp') };
     },
-    cases: [kase('Hibbeler §14.4', { F: 40, v: 8 }, { hp: 0.5818181818181818 })],
+    cases: [
+      kase('Hibbeler §14.4', { F: 40, v: 8, FN: 200, vm: 2, units: 'us' }, { hp: 0.5818181818181818 }),
+      kase('Hibbeler §14.4', { F: 40, v: 8, FN: 200, vm: 2, units: 'si' }, { hp: 0.5364088358380112 }),
+    ],
   }),
 
   problem({
@@ -292,7 +320,7 @@ const ch14 = [
     vars: {
       m: range(0.6, 2, 0.2, 'kg'),
       k: range(5, 40, 5, 'N/m'),
-      mu: range(0, 0.4, 0.05, ''),
+      mu: range(0.1, 0.4, 0.05, ''),
       rise: range(0.15, 0.6, 0.05, 'm'),
       ax: range(0.1, 0.4, 0.1, 'm'),
       ay: range(0.6, 1.4, 0.2, 'm'),

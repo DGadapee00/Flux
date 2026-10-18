@@ -1,0 +1,11 @@
+/* EGN 3321: the 2D application labs have no camera, so the 3D buttons and hints step aside. */
+body.plot-lab #btn-work-first,
+body.plot-lab #btn-reset-cam,
+body.plot-lab #hint-orbit,
+body.plot-lab #hint-plane {
+  display: none !important;
+}
+
+body.plot-lab #toggles:not(:has(#toggle-host :is(button, label))) {
+  display: none;
+}

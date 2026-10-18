@@ -1,6 +1,7 @@
 import { G, G_FT } from '@flux/subjects/mechanics/constants.js';
 import { centralInertia } from '@flux/subjects/mechanics/inertia.js';
 import {
+  ROLL_K,
   pinnedRelease,
   raceDown,
   rollingEnergy,
@@ -29,6 +30,7 @@ function rollByHand($) {
 }
 
 function raceParts($, g = G) {
+  // Given the height, the slope length follows from it; the speeds depend on the height alone.
   const row = raceDown({ thetaDeg: $.theta, distance: $.s, mass: $.m, g });
   return { sphere: row.sphere.v, disk: row.disk.v, hoop: row.hoop.v, winner: row.winner };
 }
@@ -46,21 +48,28 @@ function raceByHand($, g = G) {
   return { sphere, disk, hoop, winner };
 }
 
+/** Where the bar is read: hanging straight down, or 30° below the horizontal (60° from the vertical). */
+const BAR_AT = { bottom: 0, low30: 60 };
+
 function barRelease($) {
   return pinnedRelease({
     mass: $.m,
     length: $.L,
     theta1Deg: 90,
-    theta2Deg: 0,
+    theta2Deg: BAR_AT[$.at],
     kappa: 0,
     restDeg: 0,
   });
 }
 
 function barByHand($) {
-  const omega = Math.sqrt((3 * G) / $.L);
+  // The centre drops (L/2) cos θ₂; ½(mL²/3)ω² = mg(L/2) cos θ₂.
+  const omega = Math.sqrt((3 * G * Math.cos(BAR_AT[$.at] * DEG)) / $.L);
   return { omega, vG: omega * ($.L / 2) };
 }
+
+/** Where the torsional spring is unstretched: with the bar hanging down, or horizontal at the start. */
+const REST = { bottom: 0, start: 90 };
 
 function coupleRelease($) {
   return pinnedRelease({
@@ -69,12 +78,13 @@ function coupleRelease($) {
     theta1Deg: 90,
     theta2Deg: 0,
     kappa: $.kappa,
-    restDeg: 0,
+    restDeg: REST[$.rest],
   });
 }
 
 function coupleByHand($) {
-  const work = 0.5 * $.kappa * (Math.PI / 2) ** 2;
+  // Unwinding toward rest the spring gives up ½κ(π/2)²; winding up away from rest it takes it.
+  const work = ($.rest === 'start' ? -1 : 1) * 0.5 * $.kappa * (Math.PI / 2) ** 2;
   const drop = ($.m * G * $.L) / 2 + work;
   const IO = ($.m * $.L * $.L) / 3;
   return { work, omega: Math.sqrt((2 * drop) / IO) };
@@ -171,17 +181,27 @@ const ch18 = [
       R: range(0.1, 0.4, 0.05, 'm'),
       theta: range(15, 45, 5, 'deg'),
       s: range(1, 4, 0.5, 'm'),
+      given: choice(['slope', 'the distance along the slope'], ['height', 'the height dropped']),
     },
-    text: (T) => String.raw`A hoop, a disk, and a solid sphere, each of mass ${T.m} kg and radius ${T.R} m, roll ${T.s} m from rest down a ${T.theta}° incline. Find each finish speed, and which shape finishes first.`,
+    text: (T, $, sig) => ($.given === 'height'
+      ? String.raw`A hoop, a disk, and a solid sphere, each of mass ${T.m} kg and radius ${T.R} m, roll from rest down a ${T.theta}° incline until each has dropped a height of ${sig($.s * Math.sin($.theta * DEG))} m. Find each finish speed, and which shape finishes first.`
+      : String.raw`A hoop, a disk, and a solid sphere, each of mass ${T.m} kg and radius ${T.R} m, roll ${T.s} m from rest down a ${T.theta}° incline. Find each finish speed, and which shape finishes first.`),
     parts: [
       num('sphere', ($) => raceParts($).sphere, 'm/s', { label: 'sphere' }),
       num('disk', ($) => raceParts($).disk, 'm/s', { label: 'disk' }),
       num('hoop', ($) => raceParts($).hoop, 'm/s', { label: 'hoop' }),
-      mc('winner', [
-        ['sphere', 'Sphere'],
-        ['disk', 'Disk'],
-        ['hoop', 'Hoop'],
-      ], ($) => raceParts($).winner, { label: 'finishes first' }),
+      {
+        ...mc('winner', [
+          ['sphere', 'Sphere'],
+          ['disk', 'Disk'],
+          ['hoop', 'Hoop'],
+        ], ($) => raceParts($).winner, { label: 'finishes first' }),
+        options: [
+          { value: 'sphere', label: 'Sphere', why: 'Smallest k, 2/5: only 2/7 of its energy goes into spin, so it moves fastest at every point.' },
+          { value: 'disk', label: 'Disk', why: 'A disk has k = 1/2, more than the sphere’s 2/5. A third of its energy spins it, against 2/7 for the sphere.' },
+          { value: 'hoop', label: 'Hoop', why: 'A hoop has k = 1: half its energy goes into spin. It finishes last, whatever its mass or radius.' },
+        ],
+      },
     ],
     level: 2,
     hints: ['Mass and radius cancel. Compare 1 + k for a sphere (k = 2/5), a disk (k = 1/2), and a hoop (k = 1).',
@@ -208,7 +228,7 @@ const ch18 = [
       },
       read: (c) => ({ sphere: c.sphere, disk: c.disk, hoop: c.hoop, winner: c.winner }),
     },
-    cases: [kase('Hibbeler §18.5', { m: 2, R: 0.2, theta: 30, s: 2 }, {
+    cases: [kase('Hibbeler §18.5', { m: 2, R: 0.2, theta: 30, s: 2, given: 'slope' }, {
       sphere: 3.7435659089009925,
       disk: 3.6166282640050245,
       hoop: 3.1320919526731648,
@@ -225,37 +245,36 @@ const ch18 = [
     src: 'Hibbeler §18.5',
     topics: ['race'],
     vars: {
+      shape: choice(['sphere', 'solid sphere'], ['disk', 'solid disk'], ['hoop', 'thin hoop']),
       W: range(10, 40, 2, 'lb'),
       s: range(4, 20, 1, 'ft'),
     },
-    text: (T) => String.raw`A sphere weighs ${T.W} lb and rolls ${T.s} ft from rest down a 30° incline. Find its speed. The weight cancels. Use $g=32.2\ \mathrm{ft/s^2}$.`,
+    text: (T) => String.raw`A ${T.shape} weighs ${T.W} lb and rolls ${T.s} ft from rest down a 30° incline. Find its speed. The weight cancels. Use $g=32.2\ \mathrm{ft/s^2}$.`,
     parts: [
-      num('v', ($) => {
-        const drop = G_FT * $.s * 0.5;
-        return Math.sqrt((2 * drop) / (7 / 5));
-      }, 'ft/s', { label: 'speed' }),
+      num('v', ($) => Math.sqrt((2 * G_FT * $.s * 0.5) / (1 + ROLL_K[$.shape])), 'ft/s', { label: 'speed' }),
     ],
     level: 2,
-    hints: ['A sphere has k = 2/5. The weight cancels, and g is 32.2 ft/s squared.',
-      "A sphere has k = 2/5. The height dropped is the slope length times sin of 30 degrees, and g is 32.2 ft/s squared.",
+    hints: ['A sphere has k = 2/5, a disk 1/2, a hoop 1. The weight cancels, and g is 32.2 ft/s squared.',
+      "The height dropped is the slope length times sin of 30 degrees. Set m g times it equal to one half m v squared times (1 + k).",
     ],
     steps: ($, sig) => {
-      const drop = G_FT * $.s * 0.5;
-      const v = Math.sqrt((2 * drop) / (7 / 5));
+      const k = ROLL_K[$.shape];
+      const v = Math.sqrt((2 * G_FT * $.s * 0.5) / (1 + k));
+      const kTex = { sphere: '2/5', disk: '1/2', hoop: '1' }[$.shape];
       return [
-        String.raw`The weight cancels. $k=2/5$ and $\sin 30^\circ=1/2$.`,
-        String.raw`$v=\sqrt{2gs\sin\theta/(7/5)}=${sig(v)}\ \mathrm{ft/s}$.`,
+        String.raw`The weight cancels. For a ${$.shape}, $k=${kTex}$, and $\sin 30^\circ=1/2$.`,
+        String.raw`$v=\sqrt{2gs\sin\theta/(1+k)}=${sig(v)}\ \mathrm{ft/s}$.`,
       ];
     },
     second: ($) => {
       const mass = $.W / G_FT;
       const radius = 1;
-      const I = (2 / 5) * mass * radius * radius;
+      const I = centralInertia($.shape, mass, radius);
       const k = I / (mass * radius * radius);
       const drop = G_FT * $.s * Math.sin(30 * DEG);
       return { v: Math.sqrt((2 * drop) / (1 + k)) };
     },
-    cases: [kase('Hibbeler §18.5', { W: 20, s: 10 }, { v: 15.165750888103101 })],
+    cases: [kase('Hibbeler §18.5', { shape: 'sphere', W: 20, s: 10 }, { v: 15.165750888103101 })],
   }),
 
   problem({
@@ -269,21 +288,23 @@ const ch18 = [
     vars: {
       m: range(2, 8, 0.5, 'kg'),
       L: range(0.8, 2.4, 0.2, 'm'),
+      at: choice(['bottom', 'as it hangs straight down'], ['low30', 'when it is 30° below the horizontal']),
     },
-    text: (T) => String.raw`A uniform bar of mass ${T.m} kg and length ${T.L} m is pinned at one end. It is released from rest while horizontal. Find its angular speed and the speed of the mass centre at the bottom.`,
+    text: (T) => String.raw`A uniform bar of mass ${T.m} kg and length ${T.L} m is pinned at one end. It is released from rest while horizontal. Find its angular speed and the speed of the mass centre ${T.at}.`,
     parts: [
       num('omega', ($) => barRelease($).omega, 'rad/s', { label: 'angular speed' }),
       num('vG', ($) => barRelease($).vG, 'm/s', { label: 'speed of G' }),
     ],
     level: 2,
-    hints: ['The centre drops L/2. I about the pin is m L squared over 3, so omega is the square root of 3g/L.',
-      "The centre drops L/2. Set m g times that drop equal to one half I_O omega squared, with I_O = m L squared over 3.",
+    hints: ['Only the weight does work: the pin does not move. I about the pin is m L squared over 3.',
+      "Find how far the centre has dropped: L/2 at the bottom, and (L/2) sin 30° when the bar is 30° below the horizontal. Set m g times that drop equal to one half I_O omega squared.",
     ],
     steps: ($, sig) => {
       const row = barByHand($);
+      const drop = $.at === 'bottom' ? 'L/2' : String.raw`(L/2)\sin 30^\circ = L/4`;
       return [
-        String.raw`The centre drops $L/2$, and $I_O=mL^2/3$.`,
-        String.raw`$\tfrac{1}{2}I_O\omega^2=mgL/2$, so $\omega=\sqrt{3g/L}=${sig(row.omega)}\ \mathrm{rad/s}$.`,
+        String.raw`The centre drops $${drop}$, and $I_O=mL^2/3$.`,
+        String.raw`$\tfrac{1}{2}I_O\omega^2=mg\cdot${drop.split('=').pop().trim()}$, so $\omega=${sig(row.omega)}\ \mathrm{rad/s}$.`,
         String.raw`$v_G=\omega L/2=${sig(row.vG)}\ \mathrm{m/s}$.`,
       ];
     },
@@ -294,13 +315,13 @@ const ch18 = [
         s.mass = $.m;
         s.length = $.L;
         s.theta1 = 90;
-        s.theta2 = 0;
+        s.theta2 = BAR_AT[$.at];
         s.kappa = 0;
         s.restDeg = 0;
       },
       read: (c) => ({ omega: c.omega, vG: c.vG }),
     },
-    cases: [kase('Hibbeler §18.5', { m: 4, L: 2 }, { omega: 3.836013555763327, vG: 3.836013555763327 })],
+    cases: [kase('Hibbeler §18.5', { m: 4, L: 2, at: 'bottom' }, { omega: 3.836013555763327, vG: 3.836013555763327 })],
   }),
 
   problem({
@@ -314,27 +335,30 @@ const ch18 = [
     vars: {
       m: range(3, 8, 0.5, 'kg'),
       L: range(1.2, 2.4, 0.2, 'm'),
-      kappa: range(0, 12, 0.5, 'N·m/rad'),
+      kappa: range(2, 12, 0.5, 'N·m/rad'),
+      rest: choice(['bottom', 'when the bar hangs straight down'], ['start', 'when the bar is horizontal, where it starts']),
     },
     valid: ($) => {
       const drop = ($.m * G * $.L) / 2;
-      const spring = 0.5 * $.kappa * (Math.PI / 2) ** 2;
+      const spring = ($.rest === 'start' ? -1 : 1) * 0.5 * $.kappa * (Math.PI / 2) ** 2;
       return drop + spring > 0;
     },
-    text: (T) => String.raw`A uniform bar of mass ${T.m} kg and length ${T.L} m is pinned at one end. A torsional spring of stiffness ${T.kappa} N·m/rad is unstretched when the bar hangs straight down. The bar is released from rest while horizontal. Find the work of the spring and the angular speed at the bottom.`,
+    text: (T) => String.raw`A uniform bar of mass ${T.m} kg and length ${T.L} m is pinned at one end. A torsional spring of stiffness ${T.kappa} N·m/rad is unstretched ${T.rest}. The bar is released from rest while horizontal. Find the work of the spring and the angular speed at the bottom.`,
     parts: [
       num('work', ($) => coupleRelease($).work, 'J', { label: 'work of the spring' }),
       num('omega', ($) => coupleRelease($).omega, 'rad/s', { label: 'angular speed' }),
     ],
     level: 3,
-    hints: ['The spring is unstretched at the bottom. Its work is one half kappa times (pi/2) squared. Add that to the drop in height.',
-      "Add the spring work to m g times (L/2). That sum is the kinetic energy at the bottom.",
+    hints: ['The spring work is one half kappa times (pi/2) squared. Its sign depends on whether the bar turns toward the spring’s rest angle or away from it.',
+      "Add the spring work, with its sign, to m g times (L/2). That sum is the kinetic energy at the bottom.",
       "The angle in the spring is pi/2 radians. I_O is m L squared over 3, and omega is the square root of 2T over I_O.",
     ],
     steps: ($, sig) => {
       const row = coupleByHand($);
       return [
-        String.raw`The spring is unstretched at the bottom. $U=\tfrac{1}{2}\kappa(\pi/2)^2=${sig(row.work)}\ \mathrm{J}$.`,
+        $.rest === 'start'
+          ? String.raw`The spring winds up by $\pi/2$ as the bar falls. $U=-\tfrac{1}{2}\kappa(\pi/2)^2=${sig(row.work)}\ \mathrm{J}$.`
+          : String.raw`The spring unwinds to rest at the bottom. $U=\tfrac{1}{2}\kappa(\pi/2)^2=${sig(row.work)}\ \mathrm{J}$.`,
         String.raw`Gravity drops $mgL/2$. With the spring, $T=${sig(($.m * G * $.L) / 2 + row.work)}\ \mathrm{J}$.`,
         String.raw`$I_O=mL^2/3$, so $\omega=\sqrt{2T/I_O}=${sig(row.omega)}\ \mathrm{rad/s}$.`,
       ];
@@ -348,11 +372,11 @@ const ch18 = [
         s.theta1 = 90;
         s.theta2 = 0;
         s.kappa = $.kappa;
-        s.restDeg = 0;
+        s.restDeg = REST[$.rest];
       },
       read: (c) => ({ work: c.work, omega: c.omega }),
     },
-    cases: [kase('Hibbeler §18.3', { m: 4, L: 2, kappa: 15 }, { work: 18.505508252042546, omega: 4.653446636044723 })],
+    cases: [kase('Hibbeler §18.3', { m: 4, L: 2, kappa: 15, rest: 'bottom' }, { work: 18.505508252042546, omega: 4.653446636044723 })],
   }),
 
   problem({
@@ -421,7 +445,7 @@ const ch18 = [
       L: range(1, 2, 0.1, 'm'),
       theta1: range(50, 70, 5, 'deg'),
       theta2: range(20, 35, 5, 'deg'),
-      k: range(0, 80, 5, 'N/m'),
+      k: range(10, 80, 5, 'N/m'),
     },
     valid: ($) => $.theta1 > $.theta2,
     text: (T) => String.raw`The rod of the previous layout has mass ${T.m} kg and length ${T.L} m. A spring of stiffness ${T.k} N/m joins the corner to the foot. Its natural length equals the rod. Released from rest at ${T.theta1}° from the floor, find the angular speed and the kinetic energy at ${T.theta2}°.`,

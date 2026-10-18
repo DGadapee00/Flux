@@ -19,7 +19,10 @@ import { CHAPTER_ORDER, PROBLEMS } from '../src/problems/index.js';
 import { headlessCtx } from '../src/problems/simbridge.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const src = fs.readFileSync(path.join(root, 'src/notes/index.js'), 'utf8');
+// The registry is one file per unit (src/notes/units/), each loading its own HTML.
+const src = fs.readdirSync(path.join(root, 'src/notes/units')).map((f) => fs.readFileSync(path.join(root, 'src/notes/units', f), 'utf8')).join('\n');
+const onlyAt = process.argv.indexOf('--only');
+const ONLY = onlyAt >= 0 ? process.argv[onlyAt + 1] : '';
 const topics = new Set(PROBLEMS.flatMap((p) => p.topics || []));
 const fails = [];
 const fail = (set, msg) => fails.push(`${set}: ${msg}`);
@@ -39,11 +42,12 @@ let readings = 0;
 const words = {};
 const MIN_WORDS = 3000;
 for (const [key, set] of Object.entries(NOTES)) {
+  if (ONLY && key !== ONLY) continue;
   const name = `${key} (${set.title})`;
   const exam = EXAMS.find((e) => e.id === set.exam);
   if (key !== set.exam) fail(name, `registered under "${key}" but says exam "${set.exam}"`);
   if (!exam) fail(name, `exam "${set.exam}" is not in the catalog`);
-  if (!src.includes(`import('./content/${set.file}?raw')`)) fail(name, `load() does not import ./content/${set.file}`);
+  if (!src.includes(`import('../content/${set.file}?raw')`)) fail(name, `load() does not import ../content/${set.file}`);
   const file = path.join(root, 'src/notes/content', set.file);
   if (!fs.existsSync(file)) {
     fail(name, `missing file src/notes/content/${set.file}`);
