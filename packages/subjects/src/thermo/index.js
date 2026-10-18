@@ -1,6 +1,6 @@
 /**
  * Thermodynamic properties: water and steam (IAPWS-IF97 regions 1, 2 and 4), ideal gases (NASA
- * 7-coefficient polynomials from GRI-Mech 3.0), isentropic flow, and generated property tables.
+ * polynomials from GRI-Mech 3.0 and NASA Glenn), isentropic flow, and generated property tables.
  *
  * Pure functions, no DOM. The only import outside this folder is ../convert.js, for the exact unit
  * definitions. SI base units throughout: K, Pa, m³/kg, J/kg, J/(kg·K). units.js converts to kPa,
@@ -17,7 +17,7 @@ export {
 } from './if97.js';
 export { waterTP, satT, satP, mixT, mixP, waterP, waterTv, WATER_LIMITS } from './water.js';
 export {
-  R_UNIVERSAL, P_STANDARD, T_REF, AIR, SPECIES, cpR, hRT, sR, cpMolar, hMolar, s0Molar, molarMass, gas, isentropicT,
+  R_UNIVERSAL, P_STANDARD, T_REF, AIR, SPECIES, cpR, hRT, sR, cpMolar, hMolar, s0Molar, molarMass, gas, isentropicT, speciesInfo,
 } from './idealgas.js';
 export { temperatureRatio, pressureRatio, densityRatio, areaRatio, machFromArea, chokedMassFlux } from './isentropic.js';
 export {

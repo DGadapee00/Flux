@@ -7,7 +7,7 @@
  * ways (the region 4 equation, and the Gibbs-equality of regions 1 and 2); Clausius–Clapeyron;
  * cp against dh/dT; region 2 at low pressure against the NASA-7 ideal-gas H₂O, a different dataset.
  * NASA-7: NIST-JANAF values, cp against dh/dT, s° against ∫cp/T dT, continuity at T_mid,
- * and CH₄ against a rigid-rotor harmonic-oscillator model.
+ * NASA Glenn N₂, O₂ and Ar against JANAF down to 200 K, and CH₄ from GRI-Mech, NASA Glenn and JANAF.
  * Isentropic flow: NACA Report 1135 values and the inverse on both branches.
  */
 import { R_WATER, psat, region1Raw, region2Raw, tsat } from './if97.js';
@@ -184,29 +184,61 @@ for (const sp of ['N2', 'O2', 'CO2', 'H2O', 'CH4', 'AR']) {
   approx(hMolar(sp, r.T_mid - 1e-9), hMolar(sp, r.T_mid), 1e-6, `${sp} h is continuous at ${r.T_mid} K`);
 }
 
-console.log('CH₄ against a rigid-rotor harmonic oscillator (fundamentals 2917, 1534, 3019, 1306 cm⁻¹)');
+console.log('CH₄: GRI-Mech against NASA Glenn, and both against NIST-JANAF');
 {
-  // cp/R = 4 for translation and rotation of a nonlinear molecule, plus an Einstein term per mode.
+  // GRI-Mech 3.0 and NASA Glenn (Gurvich 1991, CEA's database) agree to 0.25% up to 1000 K.
+  for (const T of [300, 400, 500, 600, 800, 1000]) approx(cpMolar('CH4', T), cpMolar('glenn:CH4', T), 2.5e-3, `CH₄ cp at ${T} K, GRI against Glenn`);
+  // JANAF's methane (Chase 1998) is lower: 52.221 J/(mol·K) at 600 K and 71.795 at 1000 K. It matches a
+  // rigid-rotor harmonic oscillator (fundamentals 2917, 1534, 3019, 1306 cm⁻¹) to 0.01%, so it leaves
+  // out the anharmonic terms the Gurvich data carries. GRI runs 0.98% and 2.54% above it.
   const MODES = [[2917, 1], [1534, 2], [3019, 3], [1306, 3]];
   const C2 = 1.438776877; // second radiation constant, cm·K
   const cpHO = (T) => R_UNIVERSAL * (4 + MODES.reduce((a, [nu, g]) => {
     const x = (C2 * nu) / T;
     return a + (g * x * x * Math.exp(x)) / (Math.exp(x) - 1) ** 2;
   }, 0));
-  for (const T of [300, 400, 500]) approx(cpMolar('CH4', T), cpHO(T), 5e-3, `CH₄ cp at ${T} K, within 0.5%`);
-  approx(cpMolar('CH4', 600), cpHO(600), 1.2e-2, 'CH₄ cp at 600 K, within 1.2%');
-  const dev = cpMolar('CH4', 1000) / cpHO(1000) - 1;
-  ok(dev > 0.02 && dev < 0.03, `CH₄ cp at 1000 K runs ${(dev * 100).toFixed(1)}% above the model, as idealgas.js says`);
+  for (const [T, janaf, gap] of [[600, 52.221, 0.0098], [1000, 71.795, 0.0254]]) {
+    approx(cpHO(T), janaf, 2e-4, `JANAF CH₄ cp at ${T} K is the harmonic-oscillator value`);
+    approx(cpMolar('CH4', T) / janaf - 1, gap, 0.02, `GRI CH₄ cp at ${T} K is ${(gap * 100).toFixed(2)}% above JANAF`);
+  }
 }
 
-console.log('Air');
+console.log('NASA Glenn N₂, O₂ and Ar against NIST-JANAF at 200, 250 and 300 K');
+{
+  const JANAF_LOW = {
+    N2: { 200: [29.107, 179.985, -2.857], 250: [29.111, 186.477, -1.402], 300: [29.125, 191.789, 0.054] },
+    O2: { 200: [29.126, 193.485, -2.868], 250: [29.201, 199.99, -1.41], 300: [29.385, 205.329, 0.054] },
+  };
+  for (const [sp, rows] of Object.entries(JANAF_LOW)) {
+    for (const [T, [cp, s, dh]] of Object.entries(rows)) {
+      const t = Number(T);
+      approx(cpMolar(`glenn:${sp}`, t), cp, 5e-4, `${sp} cp at ${T} K`);
+      approx(s0Molar(`glenn:${sp}`, t), s, 1e-4, `${sp} s° at ${T} K`);
+      // JANAF prints h − h(298.15) to 1 J/mol, so compare it to ±2 J/mol, not as a ratio.
+      approx((hMolar(`glenn:${sp}`, t) - hMolar(`glenn:${sp}`, 298.15)) / 1e3 - dh, 0, 2e-3, `${sp} h − h(298.15) at ${T} K`);
+    }
+  }
+  // Argon: cp = 5R/2 exactly, so s°(T) = s°(298.15) + (5R/2) ln(T/298.15) with JANAF's 154.845 J/(mol·K).
+  for (const T of [200, 250, 300]) {
+    approx(cpMolar('glenn:AR', T), 2.5 * R_UNIVERSAL, 1e-5, `Ar cp at ${T} K is 5R/2`);
+    approx(s0Molar('glenn:AR', T), 154.845 + 2.5 * R_UNIVERSAL * Math.log(T / 298.15), 1e-4, `Ar s° at ${T} K`);
+  }
+}
+
+console.log('Air, from 200 K');
 {
   const air = gas('air');
-  approx(molarMass(AIR) * 1e3, 28.965, 1e-4, 'molar mass, g/mol');
+  approx(molarMass('air') * 1e3, 28.965, 1e-4, 'molar mass, g/mol');
   approx(air.R, 287.05, 2e-4, 'R, J/(kg·K)');
-  // JANAF cp at 298.15 K, mole-weighted: N₂ 29.124, O₂ 29.376, Ar 20.786, CO₂ 37.129 J/(mol·K).
-  const cpJanaf = (AIR.N2 * 29.124 + AIR.O2 * 29.376 + AIR.AR * 20.786 + AIR.CO2 * 37.129) / (molarMass(AIR) * 1e3);
-  approx(air.cp(298.15) / 1e3, cpJanaf, 2e-3, `cp at 298.15 K from JANAF species values (${cpJanaf.toFixed(4)} kJ/(kg·K))`);
+  ok(air.T_low === 200, 'good from 200 K');
+  // JANAF cp, mole-weighted over N₂, O₂ and Ar (20.786). CO₂ is 0.03% of the moles; its term uses
+  // GRI's cp, checked against JANAF at 298.15 K above.
+  for (const T of [200, 250, 300]) {
+    const x = AIR;
+    const janaf = { N2: { 200: 29.107, 250: 29.111, 300: 29.125 }, O2: { 200: 29.126, 250: 29.201, 300: 29.385 } };
+    const cp = x['glenn:N2'] * janaf.N2[T] + x['glenn:O2'] * janaf.O2[T] + x['glenn:AR'] * 20.786 + x.CO2 * cpMolar('CO2', T);
+    approx(air.cp(T) / 1e3, cp / (molarMass('air') * 1e3), 5e-4, `cp at ${T} K from JANAF species values`);
+  }
   approx(air.gamma(300), 1.4, 2e-3, 'γ at 300 K');
   approx(air.hSensible(298.15), 0, 1e-12, 'sensible enthalpy is zero at 298.15 K');
 }
