@@ -129,4 +129,19 @@ export default {
       read: (c) => ({ speed: [c.speed, 1.98] }),
     },
   ],
+  s7: [
+    { tag: 'a student rocket', lab: 'liftoff', scenario: 'student', read: (c) => ({ T: [c.T, 392.4], a0: [c.a0, 9.81], aBo: [c.aBo, 14.7], vBo: [c.vBo, 60.4], hBo: [c.hBo, 141] }) },
+    {
+      tag: 'the clamps',
+      lab: 'liftoff',
+      scenario: 'student',
+      setup(s) {
+        s.m0 = 20;
+        s.tw = (10 + 9.81) / 9.81;
+      },
+      read: (c) => ({ T: [c.T, 396.2], a0: [c.a0, 10.0] }),
+    },
+    { tag: 'an under-powered rocket', lab: 'liftoff', scenario: 'sits', read: (c) => ({ tLift: [c.tLift, 5], aBo: [c.aBo, 4.91], vBo: [c.vBo, 31.8], hBo: [c.hBo, 148] }) },
+    { tag: 'a heavy lifter', lab: 'liftoff', scenario: 'heavy', read: (c) => ({ a0: [c.a0, 1.96], aBo: [c.aBo, 5.68], vBo: [c.vBo, 219], hBo: [c.hBo, 5465] }) },
+  ],
 };

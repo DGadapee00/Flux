@@ -12,6 +12,7 @@ export default {
     { id: 's4', n: 4, title: 'Banked curve', lab: 'curve', ch: ['13'], topics: ['bank'], home: true },
     { id: 's5', n: 5, title: 'Vertical loop', lab: 'curve', ch: ['13'], topics: ['loop'] },
     { id: 's6', n: 6, title: 'Spring on a collar', lab: null, ch: ['13'], topics: ['spring'] },
-    { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's7', n: 7, title: 'Application: leaving the pad', lab: 'liftoff', ch: ['13'], topics: ['newton'], problems: ['u2.13.liftoff', 'u2.13.elevator'], home: true },
+    { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };
