@@ -15,7 +15,8 @@
     <a href="#s3"><span>03</span>Friction on a slide</a>
     <a href="#s4"><span>04</span>Power and efficiency</a>
     <a href="#s5"><span>05</span>Path independence</a>
-    <a href="#s6"><span>06</span>Formula sheet</a>
+    <a href="#s6"><span>06</span>Application: crush pads on a lander</a>
+    <a href="#s7"><span>07</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -188,11 +189,49 @@ U_{\text{cons}} = V_1 - V_2, \qquad T_1 + V_1 = T_2 + V_2.
 </div>
 </section>
 <section class="topic" id="s6">
-<h2><span class="n">06</span>Formula sheet</h2>
+<h2><span class="n">06</span>Application: crush pads on a lander</h2>
+<p>A lander's legs end in crushable pads. Aluminium honeycomb crushes at a nearly constant force once it starts to buckle. The pad turns the lander's motion into bent metal over a short stroke. Work and energy give that stroke without any time history.</p>
+<p>Two forces work on the lander between touchdown and rest. The pads push up with \(F\) over the stroke \(s\): their work is \(-F s\). The weight pulls down over the same stroke: its work is \(+mg\,s\). The final kinetic energy is zero.</p>
+<div class="box why"><span class="tag">Why the stroke has \(F - mg\) in it</span>
+<p>Write \(T_1 + \sum U_{1-2} = T_2\) from touchdown at \(v_0\) to rest:</p>
+\[
+\tfrac12 m v_0^2 + mg\,s - F\,s = 0 \quad\Rightarrow\quad s = \frac{m v_0^2}{2(F - mg)}.
+\]
+<p>The weight is on the energy side. It keeps doing positive work while the pad crushes, so the pad must absorb more than the touchdown energy. Only \(F - mg\) stops the lander. The same net force gives the deceleration, \(a = F/m - g\), and it is constant while the pad crushes. Check: \(v_0^2 = 2as\) with that \(a\) gives the same \(s\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a hop-test vehicle</span>
+<p>A 250 kg test vehicle touches down at 3 m/s on Earth. Its pads crush at a total of 6,952.5 N, and they are 0.30 m long. The weight is \(250 \times 9.81 = 2{,}452.5\) N, so \(F - mg = 4{,}500\) N. The touchdown energy is \(\tfrac12(250)(3^2) = 1{,}125\) J. The stroke is \(1{,}125/4{,}500 = 0.25\) m, inside the pad.</p>
+<p>The deceleration is \(4{,}500/250 = 18\) m/s², or 1.83 g. The stop takes \(3/18 = 0.167\) s. The pad pushes with 2.83 times the weight: the payload feels \(F/m = 27.8\) m/s².</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a lunar touchdown</span>
+<p>A 1,200 kg lander touches down on the Moon at 2 m/s, where \(g = 1.62\) m/s². Its pads crush at 13,944 N. The weight is only 1,944 N, so \(F - mg = 12{,}000\) N. The energy is \(\tfrac12(1{,}200)(2^2) = 2{,}400\) J, and the stroke is \(2{,}400/12{,}000 = 0.20\) m. The deceleration is \(12{,}000/1{,}200 = 10\) m/s², about 1.02 g.</p>
+<p>Fly the same lander, pad and speed on Earth. The weight becomes 11,772 N and leaves only 2,172 N to stop it. The stroke grows to \(2{,}400/2{,}172 = 1.10\) m. A pad sized for the Moon bottoms out on Earth.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a hard landing</span>
+<p>The hop-test vehicle comes down at 4.5 m/s, half as fast again. The deceleration is still 18 m/s², because the crush force is the same. The stroke it needs is \(4.5^2/(2 \times 18) = 0.5625\) m: 2.25 times as long, the square of 1.5. The pad has 0.30 m.</p>
+<p>Over the full pad the lander loses \(2as = 2(18)(0.30) = 10.8\) m²/s² of \(v^2\). It reaches the hard stop at \(\sqrt{20.25 - 10.8} = 3.07\) m/s. To stop it inside 0.30 m, the pads would need \(F = m(v_0^2/2s + g) = 250(33.75 + 9.81) = 10{,}890\) N.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving the weight out: \(F s = \tfrac12 mv_0^2\). For the hop-test vehicle that gives \(1{,}125/6{,}952.5 = 0.162\) m, a stroke 35% short. The weight does positive work over the whole crush. On Earth, with a gentle pad, it is most of the load. Hibbeler §14.3.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Halving the crush force does not double the stroke. The stroke goes as \(1/(F - mg)\). Halving \(F\) on the hop-test vehicle takes \(F - mg\) from 4,500 N to 1,024 N, and the stroke from 0.25 m to 1.10 m: 4.4 times.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>The pad absorbs the touchdown energy and the weight's work over the stroke. The stroke goes as \(v_0^2\) and as \(1/(F - mg)\). A constant crush force gives a constant deceleration, whatever the speed.</p>
+</div>
+<p>In the Touchdown lab, the gold line is the pad's work \(F s\) and the white line is \(\tfrac12 mv_0^2 + mg\,s\). They cross at the stroke that stops the lander. The dashed line is the end of the pad. A time-stepped crush gives the same stroke and the same speed at the stop.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real honeycomb pad has a peak force before it starts to crush, then a plateau, then a steep rise when it is fully crushed. The model keeps only the plateau. It treats the lander as one rigid mass: no leg flex, no rebound, and all legs touching at once. A lander that lands on one leg first, or with sideways speed, is a Unit 7 problem.</p>
+</div>
+</section>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Formula sheet</h2>
 <ul>
 <li>\(T_1 + \sum U_{1-2} = T_2\), with \(T = \tfrac{1}{2}mv^2\) and \(U = \int \vec F \cdot d\vec r\).</li>
 <li>Spring: \(U_s = \tfrac{1}{2}k(s_1^2 - s_2^2)\). Weight: \(U_g = -mg\,\Delta y\), with \(y\) upward.</li>
 <li>Kinetic friction on a rod: \(U_f = -\mu_k (mg\cos\theta)\, s\), with \(s\) the distance traveled.</li>
+<li>Crush pad from touchdown to rest: \(\tfrac12 mv_0^2 + mg\,s = F s\), so \(s = mv_0^2/[2(F - mg)]\) and \(a = F/m - g\).</li>
 <li>Power: \(P = \vec F \cdot \vec v\). Efficiency \(\eta = P_\mathrm{out}/P_\mathrm{in}\). One horsepower is 550 ft·lb/s, or 746 W.</li>
 <li>Conservative: \(V = mgy + \tfrac12 ks^2\), and \(T_1 + V_1 = T_2 + V_2\) when nothing else works.</li>
 <li>This unit uses \(g = 9.81\) m/s², or \(32.2\) ft/s². The slug is the US mass.</li>

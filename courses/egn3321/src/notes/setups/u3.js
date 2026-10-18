@@ -101,4 +101,9 @@ export default {
       read: (c) => ({ workLine: [c.workLine, -7.685248834669128], workArch: [c.workArch, -8.203987604003883] }),
     },
   ],
+  s6: [
+    { tag: 'a hop-test vehicle', lab: 'landing', scenario: 'hopper', read: (c) => ({ need: [c.need, 0.25], a: [c.a, 18], t: [c.tStop, 0.167] }) },
+    { tag: 'a lunar touchdown', lab: 'landing', scenario: 'lunar', read: (c) => ({ need: [c.need, 0.2], a: [c.a, 10] }) },
+    { tag: 'a hard landing', lab: 'landing', scenario: 'hard', read: (c) => ({ need: [c.need, 0.5625], hit: [c.vHit, 3.07] }) },
+  ],
 };
