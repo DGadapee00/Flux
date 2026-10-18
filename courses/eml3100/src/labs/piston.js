@@ -217,11 +217,12 @@ export default defineLab({
     axes(P, { xLabel: 'V (m³)', yLabel: 'P (kPa)' });
     const own = pts(state.process);
     fillUnder(P, own, alpha(c.W >= 0 ? C.gold : C.blue, 0.22));
-    for (const k of others) {
+    // Label the higher curve above its end and the lower one below, so the two never touch.
+    const ends = others.map((k) => ({ k, end: pts(k)[120] })).sort((a, b) => b.end[1] - a.end[1]);
+    ends.forEach(({ k, end }, i) => {
       line(P, pts(k), { color: alpha(C.text, 0.35), width: 1.5, dash: [5, 5] });
-      const end = pts(k)[120];
-      note(P, PROCESS_NAME[k], end[0], end[1], { dx: 6, dy: -4, color: C.dim });
-    }
+      note(P, PROCESS_NAME[k], end[0], end[1], { dx: 6, dy: i === 0 ? -6 : 14, color: C.dim });
+    });
     line(P, own, { color: C.yellow, width: 2.5 });
     dot(P, c.V1, c.p1 / 1e3, { color: C.text, r: 4 });
     dot(P, c.V2, c.p2 / 1e3, { color: C.yellow, r: 5, ring: alpha(C.yellow, 0.35) });

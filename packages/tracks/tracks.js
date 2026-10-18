@@ -70,7 +70,7 @@ export const TRACKS = [
   {
     id: 'thermal',
     name: 'Thermal-fluids',
-    courses: [{ id: 'eml3100', code: 'EML 3100', title: 'Thermodynamics', term: null, href: null }],
+    courses: [{ id: 'eml3100', code: 'EML 3100', title: 'Thermodynamics', term: null, href: 'eml3100/' }],
   },
 ];
 

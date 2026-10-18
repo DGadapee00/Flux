@@ -84,6 +84,8 @@ export function layout(canvas, x, y, pad = { left: 52, right: 14, top: 26, botto
   const { ctx, w, h } = setup(canvas);
   const free = freeRect(w, h);
   const box = { x0: free.x0 + pad.left, x1: free.x1 - pad.right, y0: free.y0 + pad.top, y1: free.y1 - pad.bottom };
+  // Recorded for the smoke test, which checks that no panel covers the plot.
+  if (canvas.dataset) canvas.dataset.box = [box.x0 - pad.left, box.y0 - pad.top, box.x1 + pad.right, box.y1 + pad.bottom].map(Math.round).join(',');
   const X = axisMap(x.lo, x.hi, box.x0, box.x1, !!x.log);
   const Y = axisMap(y.lo, y.hi, box.y1, box.y0, !!y.log);
   ctx.save();

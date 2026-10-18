@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FLUX — EGN 3321</title>
+    <title>FLUX — EML 3100</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,6 +14,7 @@
   <body>
     <div id="app">
       <canvas id="c"></canvas>
+      <div id="label-layer" aria-hidden="true"></div>
 
       <header class="hud panel brand" id="brand">
         <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
@@ -28,7 +29,7 @@
         </svg>
         <div class="brand-text">
           <h1>FLUX</h1>
-          <p class="subtitle" id="brand-sub">EGN 3321 · Dynamics</p>
+          <p class="subtitle" id="brand-sub">EML 3100 · Thermodynamics</p>
         </div>
         <nav class="track-row" id="track-row" aria-label="Courses in this track"></nav>
         <select class="exam-select" id="exam-select" aria-label="Unit"></select>
@@ -82,15 +83,11 @@
       <button type="button" class="hud panel sheet-toggle" id="btn-sheet" aria-pressed="false">Explain</button>
 
       <div class="hud hint-bar" id="hint-bar">
-        <span id="hint-orbit">Drag to orbit</span>
+        <span id="hint-orbit" hidden></span>
+        <span id="hint-action">Move a slider. The diagram follows.</span>
         <span class="sep">·</span>
-        <span>Scroll to zoom</span>
-        <span class="sep">·</span>
-        <span id="hint-action">Move a slider. The picture follows.</span>
-        <span class="sep">·</span>
-        <span id="hint-plane">Shift-drag for height</span>
-        <span class="sep">·</span>
-        <span>1–9 labs · [ ] units</span>
+        <span id="hint-plane" hidden></span>
+        <span>1–9 labs · [ ] units · N notes · P practice</span>
       </div>
     </div>
 

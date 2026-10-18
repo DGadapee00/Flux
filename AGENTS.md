@@ -43,7 +43,7 @@ Vite 6, `base: './'`, `target: esnext`. Vanilla JS, ES modules. KaTeX 0.16. thre
 
 Node's built-in test runner. There is no test framework to add.
 
-The hub's dev server is port 5173. PHY is 5174, MAC 2313 is 5175, Statics is 5176, STA 3032 is 5177, MAC 2311 is 5178, MAC 2312 is 5179, PHY 2048 is 5180, EGN 3321 is 5181.
+The hub's dev server is port 5173. PHY is 5174, MAC 2313 is 5175, Statics is 5176, STA 3032 is 5177, MAC 2311 is 5178, MAC 2312 is 5179, PHY 2048 is 5180, EGN 3321 is 5181, EML 3100 is 5183.
 
 Publishing is a Cloudflare Pages direct upload (`npm run deploy`). A green commit is a snapshot on `main`. The live hub moves when someone uploads. See `DEPLOY.md`. The project name is `flux-study`, because `flux.pages.dev` is an unrelated site.
 
@@ -62,7 +62,7 @@ A course manifest is the object in `PLAN.md` section 4: `id`, `code`, `title`, `
 
 Routes in the course apps are `#/<unit>/<mode>/<lab>`. On the platform that becomes `#/<course>/<unit>/<mode>/<lab>`. Old hashes redirect when that course is brought in.
 
-Storage keys are `flux.<course>.<key>.v<n>`. PHY keeps `flux.problems.v1` and `flux.exam.v1`. Statics uses `flux-statics.problems.v1` and `flux-statics.exam.v1`. MAC 2313 keeps `flux-mac2313.problems.v1` and `flux-mac2313.exam.v1`. STA 3032 keeps `fluxstats.problems.v1`, `fluxstats.exam.v1`, and `fluxstats.labs.v1`. EGN 3321 uses `flux.egn3321.problems.v1`, `flux.egn3321.exam.v1`, `flux.egn3321.notes.width.v1`, and `flux.egn3321.notes.full.v1`, with no legacy key. MAC 2311 uses `flux.mac2311.problems.v1`, `flux.mac2311.exam.v1`, `flux.mac2311.notes.width.v1`, and `flux.mac2311.notes.full.v1`. MAC 2312 uses the same four names under `flux.mac2312`. `packages/checks/storage.mjs` fails when two courses share a key. Progress export and import is JSON, so a move between domains keeps the review queue. Browser progress on flux-stats.pages.dev stays there until that export exists.
+Storage keys are `flux.<course>.<key>.v<n>`. PHY keeps `flux.problems.v1` and `flux.exam.v1`. Statics uses `flux-statics.problems.v1` and `flux-statics.exam.v1`. MAC 2313 keeps `flux-mac2313.problems.v1` and `flux-mac2313.exam.v1`. STA 3032 keeps `fluxstats.problems.v1`, `fluxstats.exam.v1`, and `fluxstats.labs.v1`. EGN 3321 uses `flux.egn3321.problems.v1`, `flux.egn3321.exam.v1`, `flux.egn3321.notes.width.v1`, and `flux.egn3321.notes.full.v1`, with no legacy key. MAC 2311 uses `flux.mac2311.problems.v1`, `flux.mac2311.exam.v1`, `flux.mac2311.notes.width.v1`, and `flux.mac2311.notes.full.v1`. MAC 2312 uses the same four names under `flux.mac2312`, and EML 3100 under `flux.eml3100`. `packages/checks/storage.mjs` fails when two courses share a key. Progress export and import is JSON, so a move between domains keeps the review queue. Browser progress on flux-stats.pages.dev stays there until that export exists.
 
 ## Checks
 
@@ -79,6 +79,7 @@ Checks each course already runs, which the port keeps:
 - Statics: tex-check, statics selftest, problems-check. The residual of ΣF = 0 and ΣM = 0, joints against sections, composite parts against integration. `npm run layout` on 5176.
 - STA 3032: stats-check, tex-check, problems-check, labs-check, route test. `npm run overflow` and smoke on 5177. Smoke fails when a page is wider than a 380px phone.
 - Subjects, thermo: `src/thermo/selftest.js` (IF97's verification tables, p_sat two ways, Clausius–Clapeyron, NIST-JANAF down to 200 K, NACA 1135); its data sources are in `src/thermo/PROVENANCE.md` and `test/thermo.test.js` (the range errors, the generated tables, the engine repo's NASA-7 file and CEA design point at a pinned commit in `test/fixtures/engine/`, and grading of a table-interpolated answer).
+- EML 3100: tex-check, problems-check (at least 50 versions, 2–3 hints with a first that does not give the answer, levels 1–3, citations from `src/data/textbook.js`, the table value accepted through `alt`, an English-unit problem in each unit), labs-check (each lab's slider swept end to end), notes-check (citations included), route and textbook tests. `npm run smoke` on 5183 opens every lab and scenario at 1280×800 and 380×820 and fails when a panel covers the diagram, the plot draws nothing, or the notes overflow. Conventions are in `courses/eml3100/CONVENTIONS.md`.
 - EGN 3321: tex-check, problems-check, labs-check, notes-check, route test, on port 5181. `npm run layout` opens every lab and scenario at 1280×800 and 380×820, and fails when the readout bar covers a panel or a plot, a readout value overflows its cell, the a, v, s plot runs below its panel's fold, or the page scrolls sideways. Statics runs the same check, from `packages/shells/engineering/layout-check.mjs`. Three significant figures, four when the leading digit is 1. Both unit systems go through `subjects/src/convert.js`. The sections left out are in `courses/egn3321/CONVENTIONS.md`.
 
 TeX inside a JS string is a `String.raw` template. tex-check fails when a backslash is eaten.
@@ -104,6 +105,10 @@ Notation follows Merino. Points are (x, y) and (x, y, z). Curves are γ(t). The 
 ### Statics
 
 Hibbeler, chapters 2–10. The second opinion is equilibrium about every point, reported as a residual. US customary units, when Statics is ported, go in `subjects/mechanics`, where the next mechanics course can use them. The bank's worked cases carry textbook numbers. Publishing that build is a provenance decision, spelled out before the files move.
+
+### EML 3100
+
+Yan, *Introduction to Engineering Thermodynamics* (BCcampus), and OpenStax *University Physics Volume 2* Ch 1–4, cited by section through `src/data/textbook.js` only (PLAN.md, D13). Nothing is copied from either book. Four significant figures. Heat added and work done by the system are positive. Water stays in IF97 regions 1, 2 and 4. The rest is in `courses/eml3100/CONVENTIONS.md`.
 
 ### STA 3032
 

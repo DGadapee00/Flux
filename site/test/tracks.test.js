@@ -16,13 +16,14 @@ const PLATFORM_HREF = {
   mac2313: 'mac2313/',
   sta3032: 'sta3032/',
   egn3321: 'egn3321/',
+  eml3100: 'eml3100/',
 };
 
 const PLATFORM = 'https://flux-study.pages.dev/';
 const DIST = path.resolve(import.meta.dirname, '../../site/dist');
 
 /** Tracks whose first course is not built yet. Their cards list the courses and open nothing. */
-const UNBUILT_TRACKS = ['thermal'];
+const UNBUILT_TRACKS = [];
 
 test('five tracks in order, each with a built course unless it is still to come', () => {
   assert.deepEqual(
@@ -31,7 +32,7 @@ test('five tracks in order, each with a built course unless it is still to come'
   );
   assert.deepEqual(
     visibleTracks().map((track) => track.id),
-    ['physics', 'math', 'mechanics', 'stats'],
+    ['physics', 'math', 'mechanics', 'stats', 'thermal'],
   );
   for (const track of TRACKS) {
     const built = track.courses.filter((course) => course.href);
@@ -60,14 +61,14 @@ test('the card opens the latest built course, and D5 is on the list', () => {
   assert.equal(latestBuilt(TRACKS[2]).id, 'egn3321');
   assert.equal(latestBuilt(TRACKS[2]).code, 'EGN 3321');
   assert.equal(latestBuilt(TRACKS[3]).id, 'sta3032');
-  assert.equal(latestBuilt(TRACKS[4]), null);
+  assert.equal(latestBuilt(TRACKS[4]).id, 'eml3100');
   assert.deepEqual(
     builtCourses().map((course) => course.id),
-    ['phy2049', 'mac2311', 'mac2312', 'mac2313', 'statics', 'egn3321', 'sta3032'],
+    ['phy2049', 'mac2311', 'mac2312', 'mac2313', 'statics', 'egn3321', 'sta3032', 'eml3100'],
   );
 });
 
-test('Phase 8: Dynamics is built, and the later two courses stay in the list', () => {
+test('Phase 8: Dynamics and Thermodynamics are built, and Mechanics of Materials stays in the list', () => {
   const card = (id) => TRACKS.flatMap((track) => track.courses.map((course) => ({ track: track.id, ...course }))).find((course) => course.id === id);
   assert.deepEqual(
     TRACKS[2].courses.map((course) => course.code),
@@ -75,10 +76,9 @@ test('Phase 8: Dynamics is built, and the later two courses stay in the list', (
   );
   const dynamics = card('egn3321');
   assert.deepEqual([dynamics.track, dynamics.code, dynamics.title, dynamics.href], ['mechanics', 'EGN 3321', 'Dynamics', 'egn3321/']);
-  for (const [id, track, code, title] of [
-    ['egn3331', 'mechanics', 'EGN 3331', 'Mechanics of Materials'],
-    ['eml3100', 'thermal', 'EML 3100', 'Thermodynamics'],
-  ]) {
+  const thermo = card('eml3100');
+  assert.deepEqual([thermo.track, thermo.code, thermo.title, thermo.href], ['thermal', 'EML 3100', 'Thermodynamics', 'eml3100/']);
+  for (const [id, track, code, title] of [['egn3331', 'mechanics', 'EGN 3331', 'Mechanics of Materials']]) {
     const course = card(id);
     assert.ok(course, `${id} stays in the track list`);
     assert.deepEqual([course.track, course.code, course.title, course.href], [track, code, title, null]);
@@ -86,7 +86,7 @@ test('Phase 8: Dynamics is built, and the later two courses stay in the list', (
   }
   assert.equal(
     visibleTracks().some((track) => track.id === 'thermal'),
-    false,
+    true,
   );
 });
 

@@ -3,7 +3,7 @@ import {
 } from '@flux/subjects/thermo';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, alpha, axes, dot, layout, line, note } from './diagram.js';
+import { C, alpha, axes, dot, fmtTick, layout, line, note } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, showField, slider } from './widgets.js';
 
@@ -229,7 +229,8 @@ export default defineLab({
     const yOf = (pt) => (pv ? pt.p : toC(pt.T));
     axes(P, {
       xLabel: 'v (m³/kg)',
-      yLabel: pv ? 'P (Pa)' : 'T (°C)',
+      yLabel: pv ? 'P (kPa)' : 'T (°C)',
+      yFmt: pv ? (v) => fmtTick(v / 1e3) : fmtTick,
     });
     const d = dome();
     const fill = alpha(C.teal, 0.08);

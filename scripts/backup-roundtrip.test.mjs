@@ -12,6 +12,7 @@ import { courseStore as macStore } from '@flux/mac2313/src/storage.js';
 import { courseStore as phyStore } from '@flux/phy2049/src/storage.js';
 import { courseStore as staStore } from '@flux/sta3032/src/storage.js';
 import { courseStore as dynamicsStore } from '@flux/egn3321/src/storage.js';
+import { courseStore as thermoStore } from '@flux/eml3100/src/storage.js';
 import { courseStore as staticsStore } from '@flux/statics/src/storage.js';
 
 const COURSES = [
@@ -22,6 +23,7 @@ const COURSES = [
   ['statics', staticsStore],
   ['sta3032', staStore],
   ['egn3321', dynamicsStore],
+  ['eml3100', thermoStore],
 ];
 
 function parts(fill) {
@@ -46,7 +48,7 @@ test('each course export restores that course and rejects another course id', ()
 test('one hub file round-trips every course', () => {
   const saved = parts(true);
   const blob = exportBundle(saved);
-  assert.deepEqual(Object.keys(blob.courses), ['phy2049', 'mac2311', 'mac2312', 'mac2313', 'statics', 'sta3032', 'egn3321']);
+  assert.deepEqual(Object.keys(blob.courses), ['phy2049', 'mac2311', 'mac2312', 'mac2313', 'statics', 'sta3032', 'egn3321', 'eml3100']);
   const fresh = parts(false);
   importBundle(blob, fresh);
   for (let i = 0; i < fresh.length; i++) assert.equal(fresh[i].store.readJSON('problems').n, i);
