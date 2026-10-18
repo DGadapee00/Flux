@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { BOOKS, SECTIONS, cite, citeLong } from '../src/data/textbook.js';
 
-test('the book and its licence (PLAN.md, D14)', () => {
+test('the book and its licence (DECISIONS.md, D14)', () => {
   assert.equal(BOOKS.roylance.license, 'CC BY-NC-SA 4.0');
   assert.match(BOOKS.roylance.url, /^https:\/\/ocw\.mit\.edu\/courses\/3-11-mechanics-of-materials-fall-1999\/$/);
 });

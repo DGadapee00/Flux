@@ -1,0 +1,19 @@
+---
+description: Flux rules live in AGENTS.md; procedures live in .claude/skills
+alwaysApply: true
+---
+
+# Flux
+
+Read `AGENTS.md` at the repo root before any change. It is the only rulebook, and it says what to
+read next: `ROADMAP.md` for what to build, `docs/COURSE-STANDARD.md` for the bar and the exemplar
+files, `docs/courses/<id>.md` for the course's spine, and `DECISIONS.md` for what is settled.
+
+For a procedure, open and follow the matching `SKILL.md` in `.claude/skills/`:
+
+- `flux-new-course`: start a course from its spine.
+- `flux-build-unit`: build or rework one unit to the standard.
+- `flux-review-unit`: self-review a unit before opening its PR.
+- `flux-content-drop`: the weekly PHY 2049 content drop.
+
+Do not add rules here. Change `AGENTS.md` instead, so Claude Code and Cursor read the same rules.

@@ -3,7 +3,7 @@
 EML 3100 Thermodynamics lives in this folder. There is no earlier repo to snapshot. The course is
 written here, unit by unit. Units 1 and 2 are in.
 
-## Textbooks (PLAN.md, D13)
+## Textbooks (DECISIONS.md, D13)
 
 | Book | Licence | Used for |
 |---|---|---|

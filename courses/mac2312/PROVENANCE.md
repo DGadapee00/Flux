@@ -7,7 +7,7 @@ MAC 2312 is a review course. It has no Canvas drop and no instructor files.
 Problems and labs follow the section list of OpenStax *Calculus Volume 2*,
 [openstax.org/details/books/calculus-volume-2](https://openstax.org/details/books/calculus-volume-2).
 
-The book is CC BY 4.0: [creativecommons.org/licenses/by/4.0](https://creativecommons.org/licenses/by/4.0/).
+The book is CC BY-NC-SA 4.0: [creativecommons.org/licenses/by-nc-sa/4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). (Corrected 18 Oct 2026: OpenStax publishes its Calculus volumes under CC BY-NC-SA, not CC BY. Flux cites and copies nothing, so nothing else changes.)
 
 ## What ships
 

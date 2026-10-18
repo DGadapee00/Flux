@@ -10,7 +10,7 @@ https://openstax.org/books/university-physics-volume-1
 
 Statements are written fresh, with generated numbers. A worked case uses numbers computed for this bank, and the citation is the section the method comes from. No figure and no textbook sentence is copied.
 
-The chapter list follows that volume, keeping the chapters named in `PLAN.md`: vectors and kinematics (Ch 2–4), Newton's laws (Ch 5–6), work and energy (Ch 7–8), momentum (Ch 9), rotation (Ch 10–11), equilibrium (Ch 12), gravitation (Ch 13), oscillations (Ch 15). Fluids, waves, and sound are not part of this course. Confirm the list against the UNF syllabus before treating it as final (`PLAN.md` decision D7).
+The chapter list follows that volume, keeping the chapters named in `docs/courses/phy2048.md`: vectors and kinematics (Ch 2–4), Newton's laws (Ch 5–6), work and energy (Ch 7–8), momentum (Ch 9), rotation (Ch 10–11), equilibrium (Ch 12), gravitation (Ch 13), oscillations (Ch 15). Fluids, waves, and sound are not part of this course. Confirm the list against the UNF syllabus before treating it as final (`DECISIONS.md`, D7).
 
 ## What is in this folder
 

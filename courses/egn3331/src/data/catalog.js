@@ -1,6 +1,6 @@
 /**
  * Course map. `labs` are built. `coming` is the rest of that unit, still to be written.
- * Units and chapter numbers follow the course pack (PLAN.md, D11), which is the order the class
+ * Units and chapter numbers follow the course pack (DECISIONS.md, D11), which is the order the class
  * works in. Readings are cited from Roylance through src/data/textbook.js (D14).
  */
 

@@ -1,137 +1,138 @@
-# FLUX
+# Flux: rules for agents
 
-This repo is the study platform. Each course is a module. `PLAN.md` is the order of work. Finish a phase only when its exit test passes, and leave the next phase unstarted.
+Flux is one study platform for the owner's mechanical-engineering degree at UNF. Each course is a
+module in this repo; the hub at https://flux-study.pages.dev links them. PHY 2049 is the reference
+course: every other course must look, work and teach like it.
 
-The rules in `PLAN.md` section 3 are binding. This file is those rules as they apply to the code, plus the conventions already shared by flux-phy2049, flux-mac2313, statics-sim, and stats.
+## Read before you work
 
-## Read-only sources
+1. **This file.** The rules. They bind every change.
+2. **`ROADMAP.md`.** What to build next. Take the first unchecked item in "Now"; start nothing else.
+3. **`docs/COURSE-STANDARD.md`.** Before any course work: what a course is, the exemplar files to
+   copy the shape of, and the bar.
+4. **`docs/courses/<id>.md`.** The course's spine: its units, sources, OCW counterpart and labs.
+   Build from the spine. If the spine and the code disagree, stop and say so.
+5. **The skill for the job** in `.claude/skills/`: `flux-new-course`, `flux-build-unit`,
+   `flux-review-unit`, `flux-content-drop`. Cursor: open the skill's `SKILL.md` and follow it.
 
-Copy from the four course repos. Platform work leaves them, and their live sites, as they are. A course in the middle of its semester keeps its current site until the module here has passed parity (`PLAN.md` section 5). Cutover waits until after the final unless parity is proven and the owner chooses to switch.
+`DECISIONS.md` records what is settled. Do not reopen a decision. Do not act on an open one without
+saying so in the PR. `docs/history/` is the archive; nothing there is an instruction.
 
-Pinned commits, from the plan: flux-phy2049 `15f8687`, flux-mac2313 `bdeef1b`, statics-sim `6ce522e`, stats `5ee9103`.
+## Rules
 
-This repo is public. Raw course files (PDFs, slides, Canvas exports) may sit only in a course's `incoming/` folder, and only when that course's `PROVENANCE.md` records the instructor's permission (PHY 2049 has it). They never ship: the build fails if anything raw or from `incoming/` is in the built site. Student names, grades and submissions never enter the repo. The prose that ships is rewritten notes.
+1. **PHY 2049 is frozen until 24 Oct 2026** (Exam 5 is 23 Oct). Nothing edits `courses/phy2049/`
+   or changes core behaviour it depends on. After that, only the weekly content drop and planned
+   moves touch it.
+2. **Raw course files never ship.** PDFs, slides, Word files and Canvas exports may sit only in
+   `courses/<id>/incoming/`, and only when that course's `PROVENANCE.md` records the instructor's
+   permission. `packages/checks/raw.mjs` fails on a raw file anywhere else, and `raw.mjs --dist`
+   fails the build if one reaches `site/dist`. Leave `incoming/` and `.canvas-state.json` alone.
+3. **No student data.** Names, grades and submissions never enter the repo.
+4. **Copy nothing from a book, a course pack or OCW.** Cite by section through the course's
+   `src/data/textbook.js`. Course packs and syllabi set coverage and order only (D11). OCW is the
+   standard for coverage, difficulty and printed answers, cited, never copied (D15). MIT's name
+   appears only in citations. STA 3032's instructor material stays out (D6).
+5. **Every number on screen is computed, then checked a second way,** in the course's tests. A worked
+   case reproduces a printed answer by our own computation.
+6. **A course writes no UI of its own.** It uses a shell (`packages/shells/math` or `engineering`)
+   through two thin wrappers. A missing control becomes a shell hook behind a flag, with a test on
+   the shell's fixture course. A course never imports another course.
+7. **Spine before code** (D18). A new course starts with its spine confirmed by the owner. At most
+   two courses have units in progress at once, besides Phase R rework.
+8. **One unit per PR.** Every course's checks stay green on every PR. A failing check does not ship.
+9. **Never set `standard: true`.** The owner does, after reviewing a unit as a student.
+10. **Phone first.** 380 px portrait is the design width. No sideways scroll. Inputs at least 16 px.
+    Look at the screenshots at 380×820 and 1280×800 yourself.
+11. **The engine repo is read-only** from Flux. Its design numbers are copied in at a pinned commit.
+12. **Storage keys** are `flux.<course>.<key>.v<n>`. `packages/checks/storage.mjs` fails on a clash.
 
-PHY 2049's weekly content drop runs here now. The Canvas ingest Action writes to `courses/phy2049/incoming/`; the Sunday notes run follows `courses/phy2049/CLAUDE.md`. Platform work leaves `incoming/` and `.canvas-state.json` alone.
-
-## Layout
+## Layout and dependencies
 
 ```
-packages/core        engine contracts. No course knowledge.
-packages/subjects    shared domain math, pure functions and a selftest each
-packages/shells      course-family UI: HUD, practice panel, styles. No course and no chapter.
-packages/tracks      the hub's track list. Courses and the site may import it. It imports nothing.
-packages/checks      dependency-direction check
-courses/<id>         one folder per course, once it is ported
-site                 the Vite hub
+packages/core       engine contracts: defineCourse, defineLab, problem, router, storage, tex, plot2d, scene3d
+packages/subjects   shared domain math (math, mechanics, em, stats, thermo, convert.js), pure, each with a selftest
+packages/shells     course-family UI: math, engineering, practice (the loop), notes.js. No course, no chapter.
+packages/tracks     the hub's track list. Imports nothing.
+packages/checks     deps, raw, storage, prereqs, scorecard
+courses/<id>        one folder per course
+site                the Vite hub
 ```
 
-Dependency direction is one way: `courses → shells → subjects → core`. Courses and the site may also import `@flux/tracks`.
+Imports run one way: `courses → shells → subjects → core`. Courses and the site may import
+`@flux/tracks`. Core names no course, chapter, constant or textbook; a hook core needs goes on
+`defineCourse`, `defineLab` or `problem`. `packages/checks/deps.mjs` fails `npm test` on an import
+the wrong way, on a course name in core or a shell, and on a chapter literal in a shell. Anything a
+second course could use goes into `subjects`, with a selftest, not into the course.
 
-- `packages/core` imports neither a subject, a shell, nor a course. It contains no course id, course code, chapter number, constant, or textbook name. A hook core needs goes on `defineCourse`, `defineLab`, or `problem`.
-- A subject may import core. A subject imports no shell and no course. `subjects/src/convert.js` is the exact foot, pound-mass, pound-force, Btu, and rankine conversion, plus the derived psi, slug, ft·lbf, and horsepower. The mechanics and thermal courses share it.
-- `@flux/subjects/thermo` is the property library: IAPWS-IF97 regions 1, 2 and 4 for water, NASA-7 polynomials (GRI-Mech 3.0, identical to the engine repo's) and NASA Glenn's (NASA/TP-2002-211556) for ideal gases, air from 200 K, isentropic flow, and generated property tables. It is pure, in SI base units, and imports only `convert.js`, so the rocket pages and the engine repo can use it. A state in region 3, region 5, or outside a fit throws a `ThermoRangeError` that names it. Problem generators keep to states where `covered(T, p)` holds. Flux prints its own tables from the library and copies none. A thermo problem that a student would answer from a table passes `tableInterp(...)` as `alt`, with an explicit `tol`.
-- A shell may import core and subjects. A shell imports no course. A shell names no course and no chapter; the course passes its catalog, bank, and code in. `packages/shells/math` is the calculus HUD. `packages/shells/engineering` is the mechanics HUD, practice panel, styles, and free-body drawing. Statics reaches that shell through the thin wrappers in `courses/statics/src/ui/`. `packages/shells/notes.js` is the Notes tab both HUDs mount, shown only when the course passes notes. A course with notes imports `@flux/shells/styles/notes.css`. In the engineering shell, `stage.js` mounts a `plot2d` canvas in place of the three.js stage, and a course that uses it imports `styles/stage.css`.
-- `packages/shells/practice` is PHY 2049's practice loop, copied for both shells (Phase R, R1): the principle step, faded worked examples, coaching (`foldCoaching`), interleaving and the weak-principle list, the problem → notes link, the lab drawer, the symbol palette and the phone number pad. Each turns on when the course's practice bank supplies its data: `PRINCIPLES` (with `principleConfused`, `principleTwins`, and `askPrinciple: false` to keep the tags but skip the question) and templates' `principles`; `fading: true`; `pickInterleave`; `sectionForProblem` (and `api.openNotes`); `labDrawer: true`; `GLYPH` and `exprToTex`. A wrong option's `why` reaches the student only when the course's engine sets `choiceNotes: true`; numeric `traps` always do. `npm run smoke -w @flux/shells` runs the loop in both shells on a fixture course at 380×820 and 1280×800.
-- A course may import core, subjects, shells, and `@flux/tracks`. A course imports no other course.
-- The site may import core, subjects, courses, and `@flux/tracks`. It is the registry. The track list in `@flux/tracks` is what the hub cards and the course headers both read.
+Libraries worth knowing before you write your own:
 
-`packages/checks/deps.mjs` fails `npm test` when an import points the wrong way, and when a file under `packages/core` or `packages/shells` names a course. A chapter literal in a shell fails the same check.
-
-## Stack
-
-Vite 6, `base: './'`, `target: esnext`. Vanilla JS, ES modules. KaTeX 0.16. three.js 0.172 for the 3D labs. STA 3032's labs are 2D canvas and do not use three.js. No framework. No TypeScript build. The contracts carry JSDoc.
-
-Node's built-in test runner. There is no test framework to add.
-
-The hub's dev server is port 5173. PHY is 5174, MAC 2313 is 5175, Statics is 5176, STA 3032 is 5177, MAC 2311 is 5178, MAC 2312 is 5179, PHY 2048 is 5180, EGN 3321 is 5181, EGN 3331 is 5182, EML 3100 is 5183.
-
-Publishing is a Cloudflare Pages direct upload (`npm run deploy`). A green commit is a snapshot on `main`. The live hub moves when someone uploads. See `DEPLOY.md`. The project name is `flux-study`, because `flux.pages.dev` is an unrelated site.
+- `subjects/src/convert.js`: exact foot, pound-mass, pound-force, Btu, rankine, and derived psi, slug,
+  ft·lbf, hp. Every unit conversion goes through it.
+- `@flux/subjects/thermo`: IAPWS-IF97 regions 1, 2, 4; NASA-7 and NASA Glenn ideal gases (air from
+  200 K); isentropic flow; generated property tables. Pure, SI, importable by the engine repo. A state
+  outside its fits throws `ThermoRangeError`; generators keep to `covered(T, p)`. A table-read answer
+  passes `tableInterp(...)` as `alt` with an explicit `tol`. Sources: `src/thermo/PROVENANCE.md`.
+- `subjects/em`: circuits by modified nodal analysis, fields, optics (from PHY 2049).
+- `subjects/mechanics`: vectors, units, friction, sections, truss, frames, path, rigid2d, inertia,
+  materials. FBDs are drawn by `shells/engineering/fbd.js`.
+- `packages/shells/practice`: PHY 2049's practice loop. A course turns features on by supplying data:
+  `PRINCIPLES` and templates' `principles` (`askPrinciple: false` keeps tags without the question),
+  `fading: true`, `pickInterleave`, `sectionForProblem` with `api.openNotes`, `labDrawer: true`,
+  `GLYPH` and `exprToTex`, and `choiceNotes: true` so a wrong option's `why` reaches the student.
+  Numeric `traps` always do.
+- In the engineering shell, a lab of `kind: 'plot2d'` gets a canvas stage (`stage.js`; import
+  `styles/stage.css`). A course with notes passes `notes` and imports `@flux/shells/styles/notes.css`.
 
 ## Contracts
 
-`defineCourse`, `defineLab`, and `problem` live in `@flux/core`. They are identity checks until Phase 2 moves the engine here. Call them by those names anyway.
+- A manifest (`src/manifest.js`): `id`, `code`, `title`, `subject`, `track`, `order`, `term`,
+  `standard`, units, chapters, and lazy `labs`, `problems`, `notes`, `sets`, `formulas`, `ingest`. The
+  id is lowercase letters and digits; it is the route segment and the storage namespace.
+- `defineLab`: scene3d (`init`, `enter`, `recompute`, `syncViews`, scenarios, controls) or plot2d
+  (`compute(state, rng)` pure and seeded, `draw`, `predictions`).
+- `problem({ id, exam, ch, lab, src, vars, derive, text, parts, hints, steps, sim })` with `range`,
+  `choice`, `num`, `mc`, `tf`, `sym`, `self`, `kase`, `alt`, `traps`, `why`.
+- Routes: `#/<course>/<unit>/<lab>`, `?p=<problem>&s=<step>`, `?n=<notes section>`.
+- TeX inside a JS string is a `String.raw` template; tex-check fails when a backslash is eaten.
+- Legacy storage keys kept for imported courses: PHY `flux.problems.v1`, `flux.exam.v1`; Statics
+  `flux-statics.*.v1`; MAC 2313 `flux-mac2313.*.v1`; STA 3032 `fluxstats.*.v1`. New courses use only
+  `flux.<id>.*`.
 
-A course manifest is the object in `PLAN.md` section 4: `id`, `code`, `title`, `subject`, `term`, `units`, `chapters`, and lazy `labs`, `problems`, optional `sets`, `notes`, `formulas`, `ingest`. The `id` is the route segment and the storage namespace. It is lowercase letters and digits, starting with a letter.
+## Stack, ports, deploy
 
-`defineLab` has two shapes already in the wild:
+Vite 6 (`base: './'`), vanilla JS modules, KaTeX 0.16, three.js 0.172, Node's built-in test runner.
+No framework, no TypeScript build; contracts carry JSDoc. Node 22.
 
-- scene3d (PHY, MAC, Statics): `init`, `enter`, `recompute`, `syncViews`, scenarios, controls.
-- plot2d (STA): `compute(state, rng)`, `draw`, `predictions`. `compute` is pure. The seeded generator is the only source of randomness, so a picture can be replayed.
+Dev ports: hub 5173, PHY 2049 5174, MAC 2313 5175, Statics 5176, STA 3032 5177, MAC 2311 5178,
+MAC 2312 5179, PHY 2048 5180, EGN 3321 5181, EGN 3331 5182, EML 3100 5183. Reserved for the courses
+ahead (spines): MAP 2302 5184, EEL 3111 5185, EML 3015 5186, EML 3101 5187, EGN 3203 5188, EML 4140
+5189, EML 4312 5190, EML 4301C 5191, EML 4501 5192, EML 4507C 5193, EML 4320C 5194, EMA 3010 5195.
 
-`problem({ id, exam, ch, lab, src, vars, derive, text, parts, hints, steps, sim })` with `range`, `choice`, `num`, `mc`, `tf`, `sym`, `self`, `kase`. The fields every bank already shares are the defaults in `problem()`.
-
-Routes in the course apps are `#/<unit>/<mode>/<lab>`. On the platform that becomes `#/<course>/<unit>/<mode>/<lab>`. Old hashes redirect when that course is brought in.
-
-Storage keys are `flux.<course>.<key>.v<n>`. PHY keeps `flux.problems.v1` and `flux.exam.v1`. Statics uses `flux-statics.problems.v1` and `flux-statics.exam.v1`. MAC 2313 keeps `flux-mac2313.problems.v1` and `flux-mac2313.exam.v1`. STA 3032 keeps `fluxstats.problems.v1`, `fluxstats.exam.v1`, and `fluxstats.labs.v1`. EGN 3321 uses `flux.egn3321.problems.v1`, `flux.egn3321.exam.v1`, `flux.egn3321.notes.width.v1`, and `flux.egn3321.notes.full.v1`, with no legacy key. MAC 2311 uses `flux.mac2311.problems.v1`, `flux.mac2311.exam.v1`, `flux.mac2311.notes.width.v1`, and `flux.mac2311.notes.full.v1`. MAC 2312 uses the same four names under `flux.mac2312`, EML 3100 under `flux.eml3100`, and EGN 3331 under `flux.egn3331`. `packages/checks/storage.mjs` fails when two courses share a key. Progress export and import is JSON, so a move between domains keeps the review queue. Browser progress on flux-stats.pages.dev stays there until that export exists.
+Deploy: `.github/workflows/deploy.yml` publishes `main` to Cloudflare Pages project `flux-study`
+when the Cloudflare secrets are set; `npm run deploy` does the same by hand. `npm run live` says which
+commit is live. See `DEPLOY.md`.
 
 ## Checks
 
-`npm test` at the repo root runs every workspace test, including the dependency check and the scorecard. `npm run scorecard` measures every course against `docs/COURSE-STANDARD.md` section 6 (`--units` for each unit, `--md` for a PR). It fails only for a course whose manifest says `standard: true`; every manifest says `false` until its course passes and the owner has reviewed it. There is no word count for notes and no principle-tag requirement (dropped by the owner, 18 Oct 2026); words per unit still print in `--units`. PHY 2049's manifest is left alone until 24 Oct 2026 and reads as not marked. A module with a failing check does not ship. `npm run build` must succeed.
+- `npm test`: every workspace's tests, the dependency, raw, storage and prereq checks, and the
+  scorecard (fails only for a course marked `standard: true`). Must pass.
+- `npm run build`: must succeed. It runs `raw.mjs` before and `raw.mjs --dist` after.
+- `npm run scorecard` (`--units`, `--md`): the standard's floor, per course.
+- Browser checks, each needing that course's dev server: the course's `layout` (EGN 3321, Statics),
+  `smoke` (EML 3100, EGN 3331), `overflow` (STA 3032) or `verify` (MAC courses) script;
+  `npm run smoke -w @flux/shells` for the practice loop; PHY 2049's `scripts/smoke.mjs` and
+  `scripts/gallery.mjs` on 5174. A new course copies EGN 3321's `layout`. Playwright is not a
+  dependency; scripts borrow a global install.
 
-Mobile first. 380px portrait is the design width. No horizontal scroll. Phone inputs are at least 16px, because a smaller input makes Safari zoom the page. Smoke covers 380px and 1280px. STA's overflow check opens every revealed solution at 380px and fails when an equation is wider than the column. Displayed equations wrap (`fitMath`). A single root or fraction that still cannot wrap is split into steps by hand.
+## Course conventions
 
-Every number on screen is computed, then checked. Each subject library has a selftest. A worked case reproduces a printed answer by a second method, so the check is against a different calculation.
-
-Checks each course already runs, which the port keeps:
-
-- PHY 2049: tex-check, physics selftest, problems-check, notes-check, derive-check. `scripts/smoke.mjs` and `scripts/gallery.mjs` need the dev server on 5174.
-- MAC 2313: tex-check, math selftest, problems-check. Analytic partials against differences, Fubini both orders, Jacobians included.
-- Statics: tex-check, statics selftest, problems-check. The residual of ΣF = 0 and ΣM = 0, joints against sections, composite parts against integration. `npm run layout` on 5176.
-- STA 3032: stats-check, tex-check, problems-check, labs-check, route test. `npm run overflow` and smoke on 5177. Smoke fails when a page is wider than a 380px phone.
-- Subjects, thermo: `src/thermo/selftest.js` (IF97's verification tables, p_sat two ways, Clausius–Clapeyron, NIST-JANAF down to 200 K, NACA 1135); its data sources are in `src/thermo/PROVENANCE.md` and `test/thermo.test.js` (the range errors, the generated tables, the engine repo's NASA-7 file and CEA design point at a pinned commit in `test/fixtures/engine/`, and grading of a table-interpolated answer).
-- EML 3100: tex-check, problems-check (at least 50 versions, 2–3 hints with a first that does not give the answer, levels 1–3, citations from `src/data/textbook.js`, the table value accepted through `alt`, an English-unit problem in each unit), labs-check (each lab's slider swept end to end), notes-check (citations included), route and textbook tests. `npm run smoke` on 5183 opens every lab and scenario at 1280×800 and 380×820 and fails when a panel covers the diagram, the plot draws nothing, or the notes overflow. Conventions are in `courses/eml3100/CONVENTIONS.md`.
-- EGN 3331: the same checks as EML 3100 (tex-check, problems-check, labs-check, notes-check, route and textbook tests), with three significant figures, four when the leading digit is 1. `npm run smoke` on 5182. `subjects/src/mechanics/materials-selftest.js` checks the stress formulas: the inclined plane against the cut's force balance and the transformation, a pin's planes against its segments, truss stresses by joints and sections. Conventions are in `courses/egn3331/CONVENTIONS.md`.
-- EGN 3321: tex-check, problems-check, labs-check, notes-check, route test, on port 5181. `npm run layout` opens every lab and scenario at 1280×800 and 380×820, and fails when the readout bar covers a panel or a plot, a readout value overflows its cell, the a, v, s plot runs below its panel's fold, or the page scrolls sideways. Statics runs the same check, from `packages/shells/engineering/layout-check.mjs`. Three significant figures, four when the leading digit is 1. Both unit systems go through `subjects/src/convert.js`. The sections left out are in `courses/egn3321/CONVENTIONS.md`.
-
-TeX inside a JS string is a `String.raw` template. tex-check fails when a backslash is eaten.
-
-## Conventions that belong to a course
-
-These stay with the course (its `CONVENTIONS.md` once the course is ported). They are recorded here so a port does not flatten them into core, and does not drop them.
-
-### PHY 2049
-
-Notes are rewritten, one file per exam, in the structure of `e4-charge-in-motion.html`: eyebrow, h1, lede, legend, toc, parts, `section.topic` numbered s1, s2, boxes `ex` (worked example), `why` (derivation), `fix` (a correction), `key`. Math in the notes files is `\( \)` and `\[ \]`, typeset by KaTeX. `$` is a delimiter in problem prose. It is never a delimiter in the notes files.
-
-Voice for those notes: short declarative sentences, about 15 words. Periods, colons, and lists. Derive a rule. Recompute every worked answer. Where the source is wrong, give the correct version and a `box fix` that says what the original said. A silent correction is a bug. A `box fix` names something a student would get wrong by trusting the source. Slides are not copied, and source images are not included.
-
-Keep the class's own examples and their labels. Colour in the labs is one quantity, one colour: E yellow, B teal, current gold, force pink, velocity white, positive charge red, negative charge blue. In the panels, yellow is the one primary button, blue means selected, and green and red appear only when an answer is graded.
-
-The weekly Canvas drop stays in flux-phy2049 until Phase 6. Homework and quizzes are draft ideas in a run report. An automated run adds a problem only for a new application lab, and only for a device the source names, whose working the course equations fully explain.
-
-### MAC 2313
-
-Notation follows Merino. Points are (x, y) and (x, y, z). Curves are γ(t). The directional derivative is D_u f with a unit vector. θ is in [0, 2π). The cross product is only in R³.
-
-### Statics
-
-Hibbeler, chapters 2–10. The second opinion is equilibrium about every point, reported as a residual. US customary units, when Statics is ported, go in `subjects/mechanics`, where the next mechanics course can use them. The bank's worked cases carry textbook numbers. Publishing that build is a provenance decision, spelled out before the files move.
-
-### EML 3100
-
-Yan, *Introduction to Engineering Thermodynamics* (BCcampus), and OpenStax *University Physics Volume 2* Ch 1–4, cited by section through `src/data/textbook.js` only (PLAN.md, D13). Nothing is copied from either book. Four significant figures. Heat added and work done by the system are positive. Water stays in IF97 regions 1, 2 and 4. The rest is in `courses/eml3100/CONVENTIONS.md`.
-
-### EGN 3331
-
-Roylance, *Mechanics of Materials* (MIT OpenCourseWare 3.11), cited by section through `src/data/textbook.js` only (PLAN.md, D14). Nothing is copied. Units follow the course pack. Tension is positive. Stopped at its first slice by Phase R. The rest is in `courses/egn3331/CONVENTIONS.md`.
-
-### STA 3032
-
-The class works on a TI-84. Quartiles are the median of each half, and the median is excluded when n is odd. s uses n − 1. Regression is written ŷ = a + bx, with a the intercept and b the slope.
-
-Printed tables are data. A worked solution quotes the printed value. Grading accepts the exact value and the table value (`alt`). p-values are the calculator's exact values (tcdf, normalcdf, and the rest). Welch's df is the calculator's fractional value. The table's rounded-down df is also accepted. Normal approximation for a binomial, a sample proportion, or a proportion test requires np(1 − p) ≥ 10, and counts use a continuity correction. A normal probability plot puts z_i = Φ⁻¹((i − 0.5)/n) on the x-axis and the sorted data on the y-axis. Table A.6 prints only α = 0.05 and 0.01, so an F interval read from that table is 90% or 98%.
-
-A worked case may break a condition that generated versions must meet. That condition goes in `sampleValid`. `valid` stays the rule for generated versions.
-
-Cite a source by section (Walpole §5.2). Textbook example numbers are never invented. Nothing from the STA 3032 instructor's notes or review sheets goes in (rewritten notes, worked cases, lab presets) until they have been asked and said yes: see `courses/sta3032/PROVENANCE.md`.
-
-A 2D lab earns its place when moving a parameter corrects an intuition. Each has two to four predictions. `outcome(before, after)` is derived from the lab's own results, and labs-check requires it to equal `expect`. Numbers quoted in a prediction's `why` are recomputed when a preset changes.
-
-STA 3032 has no Notes mode (removed 13 Oct 2026).
-
-Prose uses `$…$` and `$$…$$`. Money is written "dollars", because a bare `$` starts math.
+Each course keeps its own in `courses/<id>/CONVENTIONS.md` (or `CLAUDE.md` for PHY 2049 and
+STA 3032). Read it before editing that course. Examples: Hibbeler's three significant figures (four
+when the leading digit is 1), Merino's notation in MAC 2313, the TI-84 rules in STA 3032, the sign
+convention in EML 3100.
 
 ## Voice
 
-Notes and course prose use short declarative sentences. Say a thing once. Recompute the number before writing it down.
+Notes and course prose: short declarative sentences, about 15 words. No em dashes. No filler
+("simply", "just", "actually"). Derive, don't list. Say a thing once. Recompute every number before
+writing it down.

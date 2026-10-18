@@ -21,4 +21,4 @@ npm run smoke # 380px and 1280px, hover, reduced motion, each built course
 npm run build
 ```
 
-[DEPLOY.md](DEPLOY.md) covers publishing. [PLAN.md](PLAN.md) is the phase order. [AGENTS.md](AGENTS.md) is the rules.
+[DEPLOY.md](DEPLOY.md) covers publishing. [AGENTS.md](AGENTS.md) is the rules. [ROADMAP.md](ROADMAP.md) is what comes next. [DECISIONS.md](DECISIONS.md) is what is settled. [docs/COURSE-STANDARD.md](docs/COURSE-STANDARD.md) is the bar, and [docs/courses/](docs/courses/) has a plan for every course.

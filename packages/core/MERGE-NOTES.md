@@ -377,7 +377,7 @@ What `packages/core` already exports stays: `defineCourse`, `defineLab`, `proble
 
 ### `defineCourse(spec)`
 
-Unchanged from `PLAN.md` section 4 and from `packages/core/src/contract.js`. `id` is lowercase letters and digits, starting with a letter. It is the route prefix and the storage namespace. Optional `track`, `order`, `text`, `sets`, `notes`, `formulas`, `ingest`. The lazy loaders stay lazy.
+Unchanged from `PLAN.md` section 4 (now `docs/history/PLAN-2026-10-18.md`) and from `packages/core/src/contract.js`. `id` is lowercase letters and digits, starting with a letter. It is the route prefix and the storage namespace. Optional `track`, `order`, `text`, `sets`, `notes`, `formulas`, `ingest`. The lazy loaders stay lazy.
 
 Two fields the shell reads, both optional so a course that omits them keeps today's behavior:
 
