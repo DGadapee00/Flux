@@ -6,8 +6,17 @@ import ch16 from './bank/ch16.js';
 import ch17 from './bank/ch17.js';
 import ch18 from './bank/ch18.js';
 import units from './bank/units.js';
+import { foldCoaching } from '@flux/shells/practice/coaching.js';
+import { applyPrincipleTags } from '@flux/shells/practice/principles.js';
+import coaching from './coaching/index.js';
+import { PRINCIPLE_TAGS } from './principles.js';
 
-export const PROBLEMS = [...units, ...ch12, ...ch13, ...ch14, ...ch15, ...ch16, ...ch17, ...ch18];
+/*
+ * Traps, wrong-option explanations and extra hints live beside the bank (src/problems/coaching/),
+ * one file per unit, and are folded in here so the app and the checker see the same thing. Each
+ * template's principle tags come from src/problems/principles.js.
+ */
+export const PROBLEMS = foldCoaching(applyPrincipleTags([...units, ...ch12, ...ch13, ...ch14, ...ch15, ...ch16, ...ch17, ...ch18], PRINCIPLE_TAGS), coaching);
 
 const byIdMap = new Map(PROBLEMS.map((p) => [p.id, p]));
 

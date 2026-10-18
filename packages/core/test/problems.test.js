@@ -199,3 +199,15 @@ test('a part with alt grades in its own unit, and a typed unit does not stop it'
   const prob = { kind: 'numeric', get: () => 0.25, alt: () => 0.251, tol: 0, abs: 0.002, prob: true };
   assert.equal(percent.grade(prob, {}, '25%').correct, true, 'a percent course still reads a percent');
 });
+
+test('a trap names its mistake, and a part with traps still hears about sign, powers of ten and factors of 2', () => {
+  const { grade } = createEngine();
+  const part = { id: 'v', kind: 'numeric', get: ($) => $.a * $.t, scale: 1, tol: 0.02, abs: 1e-6, traps: [[($) => 0.5 * $.a * $.t * $.t, 'That is the distance.']] };
+  const $ = { a: 2, t: 3 };
+  assert.equal(grade(part, $, '6').correct, true);
+  assert.equal(grade(part, $, '9').feedback, 'That is the distance.');
+  assert.equal(grade(part, $, '-6').feedback, 'Right size, wrong sign.');
+  assert.equal(grade(part, $, '6000').feedback, 'Off by a factor of 10^3.');
+  assert.equal(grade(part, $, '12').feedback, 'Off by a factor of 2.');
+  assert.equal(grade(part, $, '7.5').feedback, '');
+});

@@ -10,6 +10,13 @@
  *   4. symbolic keys equal get($); the grader accepts the key and rejects a perturbed one
  *   5. second() agrees with get() (numeric, 1e-4 relative) or with the choice answer
  *   6. sim agreement: applyProblem, recompute headless, compare sim.read with get()
+ *
+ * And the course standard (docs/COURSE-STANDARD.md, section 4):
+ *   7. principle tags from src/problems/principles.js, the primary first
+ *   8. a `why` on every option of every choice part
+ *   9. at least two traps per numeric template, each a value the grader rejects with its own
+ *      message in at least 3 of 4 versions (a trap that lands on the answer teaches nothing)
+ *  10. a third of each unit conceptual (the standard asks 25%), and 60% of the bank varied by structure
  */
 import { dimEqual, formatDim, parseUnit } from '@flux/subjects/mechanics/units.js';
 import { LAB_META, EXAMS } from '../src/data/catalog.js';
@@ -30,6 +37,7 @@ import {
 } from '../src/problems/engine.js';
 import { createProgress, memoryStorage, pickSet, INTERVAL_DAYS } from '../src/problems/progress.js';
 import { applyProblem, headlessCtx } from '../src/problems/simbridge.js';
+import { PRINCIPLES } from '../src/problems/principles.js';
 import { mathProse } from '../src/ui/shared.js';
 
 const args = process.argv.slice(2);
@@ -139,6 +147,36 @@ async function checkSim(tpl, inst, label) {
   }
 }
 
+/** Every option of every choice part carries a `why`. */
+function checkWhy(tpl, inst) {
+  for (const p of tpl.parts.filter((q) => q.kind === 'choice')) {
+    const opts = typeof p.options === 'function' ? p.options(inst.$) : p.options;
+    for (const o of opts) if (!o.why) err(tpl.id, `option "${o.label ?? o.value}" of ${p.id} has no why`);
+  }
+}
+
+/** Traps: at least two per numeric template, and each one fires with its own message. */
+const trapStats = new Map();
+function checkTraps(tpl, inst) {
+  for (const p of tpl.parts.filter((q) => q.kind === 'numeric')) {
+    for (const [fn, msg] of p.traps || []) {
+      const key = `${tpl.id}:${p.id}:${msg}`;
+      const st = trapStats.get(key) || { tried: 0, fired: 0 };
+      st.tried++;
+      const v = fn(inst.$) / (p.scale ?? 1);
+      if (Number.isFinite(v)) {
+        const r = grade(p, inst.$, String(v));
+        if (!r.correct && r.feedback === (typeof msg === 'function' ? msg(inst.$) : msg)) st.fired++;
+      }
+      trapStats.set(key, st);
+    }
+  }
+}
+
+/** Varied by structure: it says what it varies, or a choice picks among configurations. */
+const structural = (t) => (Array.isArray(t.variety) ? t.variety.length > 0 : !!t.variety) || Object.values(t.vars || {}).some((v) => v?.type === 'choice' && v.options?.some((o) => typeof o.value !== 'number'));
+const conceptual = (t) => t.parts.length > 0 && t.parts.every((p) => p.kind === 'choice' || p.kind === 'self');
+
 const seen = new Set();
 for (const tpl of PROBLEMS) {
   if (ONLY && !tpl.id.startsWith(ONLY)) continue;
@@ -156,6 +194,13 @@ for (const tpl of PROBLEMS) {
     err(tpl.id, `${tpl.hints?.length ?? 0} hints; want 2 or 3`);
   }
   if (tpl.level !== 1 && tpl.level !== 2 && tpl.level !== 3) err(tpl.id, `level ${tpl.level} is not 1, 2, or 3`);
+  if (!tpl.principles?.length) err(tpl.id, 'no principle tags');
+  for (const pid of tpl.principles || []) if (!PRINCIPLES[pid]) err(tpl.id, `unknown principle ${pid}`);
+  const numericParts = tpl.parts.filter((p) => p.kind === 'numeric');
+  if (numericParts.length) {
+    const n = numericParts.reduce((k, p) => k + (p.traps?.length || 0), 0);
+    if (n < 2) err(tpl.id, `${n} trap(s) on its numeric parts; want at least 2`);
+  }
 
   for (const c of tpl.cases) {
     let inst;
@@ -199,6 +244,8 @@ for (const tpl of PROBLEMS) {
       break;
     }
     checkAnswers(tpl, inst, `seed ${seed}`);
+    checkWhy(tpl, inst);
+    checkTraps(tpl, inst);
     try {
       checkRender(tpl, inst);
     } catch (e) {
@@ -218,6 +265,19 @@ for (const tpl of PROBLEMS) {
       break;
     }
   }
+}
+
+for (const [key, st] of trapStats) {
+  if (st.fired < 0.75 * st.tried) err(key.split(':')[0], `trap "${key.split(':').slice(2).join(':')}" fires in ${st.fired} of ${st.tried} versions`);
+}
+if (!ONLY) {
+  for (const exam of EXAMS) {
+    const tpls = problemsForExam(exam.id);
+    const share = tpls.filter(conceptual).length / Math.max(1, tpls.length);
+    if (share < 0.25) err(exam.id, `${Math.round(share * 100)}% conceptual; the standard asks at least 25%`);
+  }
+  const varied = PROBLEMS.filter(structural).length / PROBLEMS.length;
+  if (varied < 0.6) err('bank', `${Math.round(varied * 100)}% of templates varied by structure; the standard asks 60%`);
 }
 
 for (const [s, v] of [

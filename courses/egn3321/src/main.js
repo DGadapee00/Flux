@@ -351,6 +351,8 @@ practice = createPractice({
   slice,
   computed,
   labelLayer: labels.domElement,
+  // A problem's notes link opens its section beside the problem.
+  openNotes: (where) => hud.notes?.open(where),
 });
 
 function followUrl() {

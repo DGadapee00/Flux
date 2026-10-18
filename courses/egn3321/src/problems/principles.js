@@ -1,0 +1,234 @@
+/**
+ * The principle that governs each Dynamics problem (docs/COURSE-STANDARD.md, section 4).
+ *
+ * Novices file problems by what they look like ("the pulley one"); experts by the law that decides
+ * them (Chi, Feltovich & Glaser). These tags index the bank by principle, so the same law shows up
+ * across chapters: a collar on a spring, a rolling disk and a released bar all answer to work and
+ * energy. Each template gets one primary principle, then up to two it also leans on. The primary
+ * drives the principle step that opens a practice problem.
+ *
+ * Hibbeler sections are where each principle is stated (src/problems/kit.js cites them).
+ * problems-check confirms every template is tagged with principles that exist.
+ */
+export const PRINCIPLES = {
+  // --- Kinematics of a particle (Ch 12)
+  'rect-kin': {
+    name: 'Rectilinear kinematics',
+    statement: 'Along a line, $v = ds/dt$, $a = dv/dt$ and $a\\,ds = v\\,dv$. With constant $a$ these integrate to $v = v_0 + at$ and $s = s_0 + v_0t + \\tfrac12at^2$.',
+    cue: 'Position, speed or acceleration along a straight line, with no forces asked about.',
+    family: 'Kinematics',
+  },
+  'curv-kin': {
+    name: 'Curvilinear motion',
+    statement: 'On a curved path, split the motion: $x$–$y$ components move independently (a projectile), or $n$–$t$ components give $a_t = \\dot v$ and $a_n = v^2/\\rho$.',
+    cue: 'A curved path: a projectile, a radius of curvature, or a normal acceleration.',
+    family: 'Kinematics',
+  },
+  'rel-motion': {
+    name: 'Relative motion',
+    statement: 'Positions, velocities and accelerations add as vectors: $\\vec v_B = \\vec v_A + \\vec v_{B/A}$, seen from translating axes.',
+    cue: 'One moving thing seen from another.',
+    family: 'Kinematics',
+  },
+
+  // --- Kinetics of a particle (Ch 13–15)
+  newton: {
+    name: 'Newton’s second law',
+    statement: '$\\Sigma\\vec F = m\\vec a$, in the components the path suggests: $x$–$y$ on a straight track, $n$–$t$ on a curve with $\\Sigma F_n = mv^2/\\rho$.',
+    cue: 'Forces and an acceleration at one instant.',
+    family: 'Kinetics',
+  },
+  energy: {
+    name: 'Work and energy',
+    statement: '$T_1 + \\Sigma U_{1\\to2} = T_2$. With only conservative forces doing work, $T_1 + V_1 = T_2 + V_2$, with $V_g = mgy$ and $V_e = \\tfrac12ks^2$.',
+    cue: 'Speeds at two positions, with forces that depend on position.',
+    family: 'Energy',
+  },
+  power: {
+    name: 'Power and efficiency',
+    statement: 'Power is the rate of work: $P = \\vec F\\cdot\\vec v$. Efficiency is power out over power in.',
+    cue: 'A rate: how fast work is done, a motor rating, horsepower.',
+    family: 'Energy',
+  },
+  impulse: {
+    name: 'Impulse and momentum',
+    statement: '$m\\vec v_1 + \\sum\\int \\vec F\\,dt = m\\vec v_2$: the impulse of the forces changes the momentum.',
+    cue: 'A force acting over a time.',
+    family: 'Momentum',
+  },
+  'momentum-cons': {
+    name: 'Conservation of linear momentum',
+    statement: 'With no external impulse on the system, $\\Sigma m\\vec v$ is the same before and after: in a collision, a recoil, or a body splitting.',
+    cue: 'Bodies push on each other briefly, and nothing outside does.',
+    family: 'Momentum',
+  },
+  restitution: {
+    name: 'Coefficient of restitution',
+    statement: 'Along the line of impact, $e = (v_{B2} - v_{A2})/(v_{A1} - v_{B1})$. $e = 1$ is elastic, $e = 0$ plastic. Along the contact plane each body keeps its own momentum.',
+    cue: 'A collision where the rebound matters.',
+    family: 'Momentum',
+  },
+  'angular-momentum': {
+    name: 'Angular momentum of a particle',
+    statement: '$\\vec H_O = \\vec r\\times m\\vec v$, and $\\Sigma\\vec M_O = \\dot{\\vec H}_O$: with no moment about $O$, $H_O$ is conserved.',
+    cue: 'A moment about a point, or a particle on a string or a central force.',
+    family: 'Momentum',
+  },
+  'variable-mass': {
+    name: 'Variable mass: thrust',
+    statement: 'A body ejecting mass at $\\dot m$ with relative speed $v_e$ feels a thrust $\\dot m v_e$; integrated, $\\Delta v = v_e\\ln(m_0/m_f)$ less gravity loss.',
+    cue: 'Mass leaves the body as it moves: a rocket, a jet.',
+    family: 'Momentum',
+  },
+
+  // --- Kinematics of a rigid body (Ch 16)
+  'fixed-axis': {
+    name: 'Rotation about a fixed axis',
+    statement: 'Every point moves on a circle: $v = \\omega r$, $a_t = \\alpha r$, $a_n = \\omega^2 r$. Gears and belts share the speed at the contact: $\\omega_A r_A = \\omega_B r_B$.',
+    cue: 'A wheel, gear, belt or pulley turning about a fixed axle.',
+    family: 'Rigid kinematics',
+  },
+  'rel-velocity': {
+    name: 'Relative velocity in a rigid body',
+    statement: '$\\vec v_B = \\vec v_A + \\vec\\omega\\times\\vec r_{B/A}$. The instantaneous centre is the point with zero velocity: every speed is $\\omega$ times the distance from it.',
+    cue: 'Two points of one moving body, or a linkage at one instant.',
+    family: 'Rigid kinematics',
+  },
+  'rel-accel': {
+    name: 'Relative acceleration in a rigid body',
+    statement: '$\\vec a_B = \\vec a_A + \\vec\\alpha\\times\\vec r_{B/A} - \\omega^2\\vec r_{B/A}$. Solve the velocities first: $\\omega$ is needed for the last term.',
+    cue: 'An acceleration in a linkage or a rolling body.',
+    family: 'Rigid kinematics',
+  },
+  rolling: {
+    name: 'Rolling without slipping',
+    statement: 'The contact point is at rest: $v_G = \\omega r$ and $a_G = \\alpha r$. Friction holds it there only while $F \\le \\mu_s N$.',
+    cue: 'A wheel, disk or ball rolling on a surface.',
+    family: 'Rigid kinematics',
+  },
+
+  // --- Kinetics of a rigid body (Ch 17–18)
+  'rigid-newton': {
+    name: 'Equations of motion of a rigid body',
+    statement: '$\\Sigma\\vec F = m\\vec a_G$ and $\\Sigma M_G = I_G\\alpha$ (or $\\Sigma M_P = \\Sigma(\\mathcal M_k)_P$ about any point). Translation, rotation and general plane motion are special cases.',
+    cue: 'Forces and moments on a body that turns or might tip.',
+    family: 'Rigid kinetics',
+  },
+  inertia: {
+    name: 'Mass moment of inertia',
+    statement: '$I = \\int r^2\\,dm$. Shift axes with $I = I_G + md^2$, and build composites from parts, subtracting holes.',
+    cue: 'How hard a body is to spin: shapes, axes, holes.',
+    family: 'Rigid kinetics',
+  },
+  'rigid-energy': {
+    name: 'Work and energy for a rigid body',
+    statement: '$T = \\tfrac12mv_G^2 + \\tfrac12I_G\\omega^2$, and $T_1 + \\Sigma U_{1\\to2} = T_2$. A couple does work $M\\,\\Delta\\theta$.',
+    cue: 'A body that turns, with speeds at two positions.',
+    family: 'Rigid kinetics',
+  },
+
+  // --- Tools
+  units: {
+    name: 'Units and dimensions',
+    statement: 'Every term of an equation has the same dimensions. Convert with exact factors, and round to three figures at the end.',
+    cue: 'A conversion, a rounding, or a check of an equation’s form.',
+    family: 'Tools',
+  },
+};
+
+/** Principles mistaken for each one, most tempting first (the principle step's distractors). */
+export const CONFUSED = {
+  'rect-kin': ['curv-kin', 'newton', 'energy', 'rel-motion', 'impulse'],
+  'curv-kin': ['rect-kin', 'newton', 'rel-motion', 'fixed-axis', 'energy'],
+  'rel-motion': ['curv-kin', 'rect-kin', 'rel-velocity', 'momentum-cons', 'newton'],
+  newton: ['energy', 'impulse', 'rect-kin', 'rigid-newton', 'power'],
+  energy: ['newton', 'impulse', 'power', 'momentum-cons', 'rigid-energy'],
+  power: ['energy', 'newton', 'impulse', 'rigid-energy', 'fixed-axis'],
+  impulse: ['momentum-cons', 'energy', 'newton', 'restitution', 'variable-mass'],
+  'momentum-cons': ['impulse', 'energy', 'restitution', 'newton', 'angular-momentum'],
+  restitution: ['momentum-cons', 'energy', 'impulse', 'newton', 'rel-motion'],
+  'angular-momentum': ['impulse', 'momentum-cons', 'energy', 'rigid-newton', 'fixed-axis'],
+  'variable-mass': ['impulse', 'momentum-cons', 'newton', 'energy', 'power'],
+  'fixed-axis': ['rel-velocity', 'rolling', 'curv-kin', 'rigid-newton', 'power'],
+  'rel-velocity': ['rel-accel', 'fixed-axis', 'rolling', 'rel-motion', 'curv-kin'],
+  'rel-accel': ['rel-velocity', 'rigid-newton', 'fixed-axis', 'rolling', 'curv-kin'],
+  rolling: ['rel-velocity', 'fixed-axis', 'rigid-newton', 'rigid-energy', 'rel-accel'],
+  'rigid-newton': ['newton', 'rigid-energy', 'inertia', 'rolling', 'rel-accel'],
+  inertia: ['rigid-newton', 'rigid-energy', 'fixed-axis', 'rolling', 'newton'],
+  'rigid-energy': ['energy', 'rigid-newton', 'inertia', 'rolling', 'power'],
+};
+
+/**
+ * Pairs too close to use as each other's distractor: one is a special case of the other, so a
+ * student picking it is half right (energy for a rigid body is energy; momentum conservation is
+ * impulse with no external impulse; restitution rides on momentum conservation).
+ */
+export const TWINS = [
+  ['energy', 'rigid-energy'],
+  ['impulse', 'momentum-cons'],
+  ['momentum-cons', 'restitution'],
+  ['impulse', 'variable-mass'],
+  ['newton', 'rigid-newton'],
+  ['rel-velocity', 'rolling'],
+  ['rel-accel', 'rolling'],
+];
+
+/** Template id → [primary, …secondary]. */
+export const PRINCIPLE_TAGS = {
+  'u1.1.convert': ['units'],
+  'u1.1.figures': ['units'],
+  'u1.1.homogeneous': ['units'],
+  'u1.12.polynomial': ['rect-kin'],
+  'u1.12.separate': ['rect-kin'],
+  'u1.12.distance': ['rect-kin'],
+  'u1.12.erratic': ['rect-kin'],
+  'u1.12.projectile': ['curv-kin'],
+  'u1.12.path': ['curv-kin'],
+  'u1.12.relative': ['rel-motion', 'rect-kin'],
+  'u2.13.atwood': ['newton'],
+  'u2.13.incline': ['newton'],
+  'u2.13.tow': ['newton'],
+  'u2.13.bank': ['newton', 'curv-kin'],
+  'u2.13.loop': ['newton', 'curv-kin'],
+  'u2.13.spring': ['newton', 'curv-kin'],
+  'u2.13.incline-ft': ['newton', 'units'],
+  'u3.14.speed': ['energy'],
+  'u3.14.rough': ['energy'],
+  'u3.14.stop': ['energy'],
+  'u3.14.power': ['power', 'newton'],
+  'u3.14.hp': ['power', 'units'],
+  'u3.14.paths': ['energy'],
+  'u3.14.same': ['energy'],
+  'u3.14.us': ['energy', 'units'],
+  'u4.15.impulse': ['impulse'],
+  'u4.15.recoil': ['momentum-cons'],
+  'u4.15.ballistic': ['momentum-cons', 'energy'],
+  'u4.15.central': ['restitution', 'momentum-cons'],
+  'u4.15.oblique': ['restitution', 'momentum-cons'],
+  'u4.15.angular': ['angular-momentum'],
+  'u4.15.rocket': ['variable-mass'],
+  'u4.15.rocket-ft': ['variable-mass', 'units'],
+  'u5.16.belt': ['fixed-axis'],
+  'u5.16.gears': ['fixed-axis'],
+  'u5.16.pulley-ft': ['fixed-axis', 'units'],
+  'u5.16.absolute': ['rel-velocity'],
+  'u5.16.bar': ['rel-velocity'],
+  'u5.16.ladder': ['rel-velocity'],
+  'u5.16.wheel': ['rolling', 'rel-velocity'],
+  'u5.16.accel': ['rel-accel', 'rel-velocity'],
+  'u6.17.rod': ['inertia'],
+  'u6.17.spread': ['inertia'],
+  'u6.17.plate': ['inertia'],
+  'u6.17.hole': ['inertia'],
+  'u6.17.crate': ['rigid-newton'],
+  'u6.17.pin': ['rigid-newton', 'inertia'],
+  'u6.17.pin-ft': ['rigid-newton', 'units'],
+  'u6.17.roll': ['rigid-newton', 'rolling'],
+  'u7.18.ke': ['rigid-energy', 'inertia'],
+  'u7.18.race': ['rigid-energy', 'rolling'],
+  'u7.18.race-ft': ['rigid-energy', 'units'],
+  'u7.18.bar': ['rigid-energy'],
+  'u7.18.couple': ['rigid-energy'],
+  'u7.18.slots': ['rigid-energy', 'rel-velocity'],
+  'u7.18.spring': ['rigid-energy'],
+};

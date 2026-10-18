@@ -511,6 +511,17 @@ export function createEngine(options = {}) {
     if (want !== 0 && near(Math.sqrt(Math.abs(want)))) return 'That is the square root of the answer. Was the variance asked for, not the standard deviation?';
     if (want > 0 && near(want * want)) return 'That is the square of the answer. Was the standard deviation asked for, not the variance?';
     if (near(-want) && want !== 0) return 'Right size, wrong sign.';
+    // The same slips the plain numeric branch names, for a part graded here because it has traps.
+    if (want !== 0 && got !== 0) {
+      const r = Math.log10(Math.abs(got / want));
+      const k = Math.round(r);
+      if (k !== 0 && Math.abs(r - k) < 0.01) {
+        const pu = unitOf(part, $);
+        return pu ? `Off by 10^${k} — check unit prefixes (${pu}).` : `Off by a factor of 10^${k}.`;
+      }
+      const r2 = Math.abs(got / want);
+      if (Math.abs(r2 - 2) < 0.02 || Math.abs(r2 - 0.5) < 0.01) return 'Off by a factor of 2.';
+    }
     return '';
   }
 
