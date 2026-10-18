@@ -6,13 +6,16 @@
   "exports": {
     "./math/*": "./math/*",
     "./engineering/*": "./engineering/*",
-    "./styles/*": "./styles/*"
+    "./styles/*": "./styles/*",
+    "./practice/*": "./practice/*"
   },
   "scripts": {
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "smoke": "node test/practice-smoke.mjs"
   },
   "dependencies": {
     "@flux/core": "*",
-    "three": "^0.172.0"
+    "three": "^0.172.0",
+    "@flux/subjects": "*"
   }
 }
