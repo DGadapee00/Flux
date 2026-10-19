@@ -66,6 +66,14 @@ export const SECTIONS = Object.freeze({
 
   // Yan, Chapters 5 and 6, cited as chapters
   'control-volume': { book: 'yan', chapter: '5', title: 'The First Law of Thermodynamics for a Control Volume' },
+  'mass-flow': { book: 'yan', chapter: '5', title: 'The First Law of Thermodynamics for a Control Volume' },
+  'nozzle': { book: 'yan', chapter: '5', title: 'The First Law of Thermodynamics for a Control Volume' },
+  'diffuser': { book: 'yan', chapter: '5', title: 'The First Law of Thermodynamics for a Control Volume' },
+  'turbine': { book: 'yan', chapter: '5', title: 'The First Law of Thermodynamics for a Control Volume' },
+  'compressor': { book: 'yan', chapter: '5', title: 'The First Law of Thermodynamics for a Control Volume' },
+  'throttle': { book: 'yan', chapter: '5', title: 'The First Law of Thermodynamics for a Control Volume' },
+  'mixing': { book: 'yan', chapter: '5', title: 'The First Law of Thermodynamics for a Control Volume' },
+  'heat-exchanger': { book: 'yan', chapter: '5', title: 'The First Law of Thermodynamics for a Control Volume' },
   'second-law': { book: 'yan', chapter: '6', title: 'Entropy and the Second Law of Thermodynamics' },
   'entropy': { book: 'yan', chapter: '6', title: 'Entropy and the Second Law of Thermodynamics' },
 
