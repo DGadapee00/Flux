@@ -60,3 +60,17 @@ export function mountNotesTab(api, notesDeps) {
   btn.addEventListener('click', () => notes.toggle());
   return notes;
 }
+
+/**
+ * Open the notes at the section a `?n=<section>` link names. The course calls this with the route
+ * it just parsed, at boot and when the hash changes. A link that names a problem wins: that
+ * problem's own notes link opens its section beside it. Returns whether the notes were opened.
+ *
+ * @param {ReturnType<typeof createNotes>|null|undefined} notes The HUD's `notes`.
+ * @param {{ examId: string, problemId?: string|null, notes?: string|null }} route
+ */
+export function openNotesFromRoute(notes, route) {
+  if (!notes || !route.notes || route.problemId) return false;
+  notes.open({ examId: route.examId, section: route.notes });
+  return true;
+}

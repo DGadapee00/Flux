@@ -1,5 +1,6 @@
 /**
- * Hash grammar `#/<course>/<unit>/<lab>`, plus `?p=` and `?s=`.
+ * Hash grammar `#/<course>/<unit>/<lab>`, plus `?p=` and `?s=` for a problem and `?n=` for a notes
+ * section (`notes` on the route; null when the link names none).
  * An old hash with no course prefix is the same route, and `legacy` is true.
  * The course supplies the catalog and what an empty hash opens.
  *
@@ -23,6 +24,7 @@ export function createLabRouter({ courseId, exams, labMeta, examById, emptyRoute
     const s = Number(params.get('s'));
     const problem = {
       problemId,
+      notes: params.get('n') || null,
       seed: Number.isFinite(s) ? Math.max(seedFloor, Math.floor(s)) : 0,
       query,
     };
@@ -59,6 +61,7 @@ export function createLabRouter({ courseId, exams, labMeta, examById, emptyRoute
       labId: route.labId,
       problemId: route.problemId,
       seed: route.seed,
+      notes: route.notes,
     };
   }
 

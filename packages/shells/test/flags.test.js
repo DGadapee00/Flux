@@ -5,6 +5,7 @@ import { setup } from '@flux/core/plot2d/plot.js';
 import { createHUD } from '../engineering/hud.js';
 import { createHUD as createMathHUD } from '../math/hud.js';
 import { createStage } from '../engineering/stage.js';
+import { openNotesFromRoute } from '../notes.js';
 import { installDOM } from './dom.js';
 
 const NOTES_HTML = `<header class="top">
@@ -314,3 +315,46 @@ test('a plot2d lab takes the three.js canvas down and draws on the plot canvas',
   assert.equal(canvas3d.hidden, false);
   assert.equal(stage.plot.hidden, true);
 });
+
+for (const [name, makeHUD] of [['engineering', createHUD], ['math', createMathHUD]]) {
+  test(`${name} shell: ?n=<section> opens the notes at that section`, async () => {
+    page();
+    const set = {
+      exam: 'u1',
+      title: 'Motion of a point',
+      chapters: '12',
+      load: async () => NOTES_HTML,
+      sections: [{ id: 's1', n: '1', title: 'Area under the graph', lab: 'diagram', ch: [] }],
+    };
+    const shown = [];
+    const hud = makeHUD(api({ showLab: (lab, exam) => shown.push([lab, exam]) }), {
+      ...catalog,
+      notes: {
+        notesForExam: () => set,
+        allNotes: () => [set],
+        setupsFor: () => [],
+        matchExamples: () => [],
+        DERIVATIONS: [],
+        LAB_META: catalog.labMeta,
+        examById: catalog.examById,
+        examLabel: (exam) => `Unit ${exam.n}`,
+        CHAPTER_TITLES: {},
+        countFor: () => 0,
+        esc: (value) => String(value),
+        store: { getItem: () => null, setItem() {} },
+      },
+    });
+
+    // A problem link wins, and a link with no section leaves the notes shut.
+    assert.equal(openNotesFromRoute(hud.notes, { examId: 'u1', problemId: 'p1', notes: 's1' }), false);
+    assert.equal(openNotesFromRoute(hud.notes, { examId: 'u1', problemId: null, notes: null }), false);
+    assert.equal(hud.notes.isOpen(), false);
+
+    assert.equal(openNotesFromRoute(hud.notes, { examId: 'u1', problemId: null, notes: 's1' }), true);
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    assert.equal(hud.notes.isOpen(), true);
+    assert.equal(document.getElementById('notes').textContent.includes('Area under the graph'), true);
+    assert.deepEqual(shown.at(-1), ['diagram', 'u1']);
+    assert.equal(openNotesFromRoute(null, { examId: 'u1', notes: 's1' }), false);
+  });
+}

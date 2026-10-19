@@ -66,7 +66,7 @@ subject libraries (a function written for one course serves the next), and one s
 - [x] **Reference guide** (AGENTS.md, this roadmap, DECISIONS.md, the standard, a spine for every
       course, the skills).
 - [x] **Inventory** of every course against the outline: `docs/INVENTORY.md`.
-- [ ] **Platform fixes from the inventory:** notes deep links (`?n=`) in the shells; the scorecard
+- [x] **Platform fixes from the inventory:** notes deep links (`?n=`) in the shells; the scorecard
       reads coaching files.
 - [x] **Course-neutral references:** content exemplars are PHY 2049 only; `courses/starter` is the
       course to copy; course plans live in `docs/course-plans/`; the shell notes CSS styles parts and
