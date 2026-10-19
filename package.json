@@ -17,7 +17,7 @@
     "test": "npm test --workspaces --if-present && node --test scripts/sync-phy.test.mjs scripts/storage-roundtrip.test.mjs scripts/backup-roundtrip.test.mjs && node packages/checks/prereqs.mjs && node packages/checks/scorecard.mjs --quiet",
     "smoke": "npm run smoke -w @flux/site",
     "gallery": "npm run gallery -w @flux/phy2049",
-    "deploy": "npm test && npm run build && npx --yes wrangler@latest pages deploy site/dist --project-name flux-study --branch main",
+    "deploy": "node -e \"console.error('Pushing main deploys the hub: Cloudflare Pages builds it (see DEPLOY.md).'); process.exit(1)\"",
     "live": "node scripts/live.mjs"
   },
   "engines": {

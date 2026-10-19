@@ -3,7 +3,7 @@
 **This course now lives in the Flux platform repo (DGadapee00/Flux), at `courses/sta3032/`.** Paths
 in this file are relative to that folder, and commands run from it, unless they say "repo root".
 The old repo, stats, is frozen and no longer edited. The platform's own rules are in the
-repo root's `AGENTS.md` and `PLAN.md`; where they and this file differ about the platform, they win.
+repo root's `AGENTS.md` and `ROADMAP.md`; where they and this file differ about the platform, they win.
 
 Vite + vanilla JS + KaTeX study app for STA 3032. Sibling of FLUX (DGadapee00/flux-phy2049), whose
 engine and conventions were copied and adapted here. This folder's `PLAN.md` holds the course

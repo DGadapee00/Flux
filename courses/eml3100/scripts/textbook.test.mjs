@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { BOOKS, SECTIONS, cite, citeLong } from '../src/data/textbook.js';
 
-test('the two books and their licences (PLAN.md, D13)', () => {
+test('the two books and their licences (DECISIONS.md, D13)', () => {
   assert.equal(BOOKS.yan.license, 'CC BY-NC-SA 4.0');
   assert.equal(BOOKS.up2.license, 'CC BY 4.0');
 });

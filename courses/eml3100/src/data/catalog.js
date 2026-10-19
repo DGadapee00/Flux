@@ -1,7 +1,7 @@
 /**
  * Course map. `labs` are built. `coming` is the rest of that unit, still to be written.
  * Chapter numbers are Yan's (src/data/textbook.js), so "Ch 2" in the practice list is the chapter
- * a student reads. The course pack sets which topics are covered and in what order (PLAN.md, D11).
+ * a student reads. The course pack sets which topics are covered and in what order (DECISIONS.md, D11).
  */
 
 export const EXAMS = [

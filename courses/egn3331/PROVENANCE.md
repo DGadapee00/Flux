@@ -3,7 +3,7 @@
 EGN 3331 Mechanics of Materials lives in this folder. There is no earlier repo to snapshot. The
 course is written here. Unit 1 is in; Phase R stopped the course at that first slice.
 
-## Textbook (PLAN.md, D14)
+## Textbook (DECISIONS.md, D14)
 
 | Source | Licence | Used for |
 |---|---|---|

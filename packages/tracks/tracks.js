@@ -2,9 +2,9 @@
  * Tracks the hub shows, courses in degree order.
  * A course with href is built and opens that app. href null is not built yet.
  * A relative href is the copy in this repo. An absolute href is that course's own site.
- * Statics is EGN 3311 and MAC 2313 was Spring 2026 (PLAN.md, D5).
+ * Statics is EGN 3311 and MAC 2313 was Spring 2026 (DECISIONS.md, D5).
  * Codes for courses that are not built yet are the Florida common numbers from the plan.
- * EGN 3321, EGN 3331 and EML 3100 are the codes on the owner's course packs (PLAN.md, Phase 8).
+ * EGN 3321, EGN 3331 and EML 3100 are the codes on the owner's course packs (docs/history/PLAN-2026-10-18.md, Phase 8).
  * A track with no built course is not a hub card. It stays in this list, and the card
  * appears when one of its courses has an href. Course headers read the same list.
  */

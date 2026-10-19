@@ -1,5 +1,5 @@
 /**
- * Every textbook citation EGN 3331 shows, in one place (PLAN.md, D14). Problems and notes name a
+ * Every textbook citation EGN 3331 shows, in one place (DECISIONS.md, D14). Problems and notes name a
  * topic and ask this file for its citation, so changing books changes this file only.
  *
  * The text is David Roylance's Mechanics of Materials modules, published on MIT OpenCourseWare as

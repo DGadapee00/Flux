@@ -2,7 +2,7 @@
 
 **This course now lives in the Flux platform repo (DGadapee00/Flux), at `courses/sta3032/`.** Paths
 in this file are relative to that folder. The old repo, stats, is frozen and no longer edited.
-The platform's own rules are in the repo root's `AGENTS.md` and `PLAN.md`; where they and this
+The platform's own rules are in the repo root's `AGENTS.md` and `ROADMAP.md`; where they and this
 file differ about the platform, they win.
 
 **13 Oct 2026:** the notes, the review-sheet set and the worked cases from the instructor's notes were

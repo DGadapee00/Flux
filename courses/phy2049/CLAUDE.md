@@ -3,7 +3,7 @@
 **This course now lives in the Flux platform repo (DGadapee00/Flux), at `courses/phy2049/`.** Paths
 in this file are relative to that folder, and commands run from it, unless they say "repo root".
 The old repo, flux-phy2049, is frozen and no longer edited. The platform's own rules are in the
-repo root's `AGENTS.md` and `PLAN.md`; where they and this file differ about the platform, they win.
+repo root's `AGENTS.md` and `ROADMAP.md`; where they and this file differ about the platform, they win.
 
 FLUX is a Vite + vanilla JS + three.js + KaTeX study app for PHY 2049. It has three modes: Practice, Notes and Explore. `README.md` covers the layout of the code. `PROVENANCE.md` covers what the instructor has allowed us to include.
 

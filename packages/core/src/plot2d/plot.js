@@ -2,7 +2,7 @@
  * A small 2D plotting kit on Canvas 2D: scales, axes, bars, curves, shaded areas, points.
  * Drawn at the device's pixel ratio so strokes stay sharp on a phone. No dependencies.
  *
- * Colours follow the app's meanings (PLAN.md §3): population / H₀ blue, sample / statistic
+ * Colours follow the app's meanings (docs/COURSE-STANDARD.md, section 2): population / H₀ blue, sample / statistic
  * gold, sampling distribution teal, H₁ / effect pink, Type I red, Type II purple, captured green.
  */
 export const C = {

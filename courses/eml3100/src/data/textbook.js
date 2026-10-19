@@ -1,5 +1,5 @@
 /**
- * Every textbook citation EML 3100 shows, in one place (PLAN.md, D13). Problems and notes name a
+ * Every textbook citation EML 3100 shows, in one place (DECISIONS.md, D13). Problems and notes name a
  * topic and ask this file for its citation, so changing books changes this file only.
  *
  * Flux writes its own text and tables. Nothing is copied from either book: these entries are

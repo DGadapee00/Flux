@@ -21,7 +21,7 @@ both files from that commit, and update this table and the hashes in the test.
 2.54% higher at 1000 K. It agrees with NASA Glenn's CH₄ (CEA's database) within 0.25% up to
 1000 K, and JANAF's methane matches a rigid-rotor harmonic oscillator, so the gap is between the
 references. Flux keeps the engine's data unchanged. Details: `src/thermo/PROVENANCE.md`; the text
-for a note to the engine repo: `docs/engine-issue-ch4-cp.md`.
+for a note to the engine repo: `docs/history/engine-issue-ch4-cp.md`.
 
 ## Note: methane's heat of formation
 
