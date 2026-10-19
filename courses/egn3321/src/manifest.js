@@ -1,5 +1,6 @@
 import { defineCourse } from '@flux/core';
 import { EXAMS } from './data/catalog.js';
+import { BOOKS } from './data/textbook.js';
 
 export const course = defineCourse({
   id: 'egn3321',
@@ -9,7 +10,7 @@ export const course = defineCourse({
   track: 'mechanics',
   order: 2,
   term: '',
-  text: 'Hibbeler, Engineering Mechanics: Dynamics',
+  text: `${BOOKS.dynamics.short}, ${BOOKS.dynamics.title}`,
   units: EXAMS.map((exam) => ({
     id: exam.id,
     title: exam.title,
