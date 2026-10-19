@@ -130,7 +130,7 @@ export default defineLab({
   readout: (state, c) => cells([
     ['heat to water', `${fig(c.Q / KW)} kW`],
     ['electric power', `${fig(c.elec / KW)} kW`],
-    ['most flow served', `${fig(c.maxGpm)} gal/min`],
+    ['most flow', `${fig(c.maxGpm)} gal/min`],
     ['outlet', `${fig(toC(c.Tout))} °C`],
   ]),
   coach: leavesOut(OUT, (state, c) => {

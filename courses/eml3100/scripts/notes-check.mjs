@@ -22,6 +22,8 @@ import { SECTIONS, cite } from '../src/data/textbook.js';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const src = fs.readFileSync(path.join(root, 'src/notes/index.js'), 'utf8');
 const topics = new Set(PROBLEMS.flatMap((p) => p.topics || []));
+/** Units reworked to the standard (D32): legend, parts, grouped toc, footer. Units 1 and 2 follow in R3a. */
+const STRUCTURED = new Set(['u3']);
 const fails = [];
 const fail = (set, msg) => fails.push(`${set}: ${msg}`);
 
@@ -61,6 +63,21 @@ for (const [key, set] of Object.entries(NOTES)) {
   for (const f of found) {
     const reg = set.sections.find((s) => s.id === f.id);
     if (reg && reg.title !== f.title) fail(name, `${f.id} is titled "${f.title}" in the file but "${reg.title}" in the registry`);
+  }
+
+  if (STRUCTURED.has(key)) {
+    if (!/<div class="legend">/.test(html)) fail(name, 'no legend in the header');
+    if (!/<footer>/.test(html)) fail(name, 'no source footer');
+    const partsAt = [...html.matchAll(/<div class="part">\s*<div class="eyebrow">Part ([IVX]+)<\/div>\s*<h2>([^<]+)<\/h2>\s*<\/div>/g)];
+    if (partsAt.length < 2) fail(name, `${partsAt.length} parts; want at least 2`);
+    const tocHeads = [...html.matchAll(/<nav class="toc"[^>]*>([\s\S]*?)<\/nav>/g)].flatMap((m) => [...m[1].matchAll(/<h3>([^<]+)<\/h3>/g)].map((h) => h[1]));
+    if (tocHeads.join('|') !== [...partsAt.map((m) => `Part ${m[1]} · ${m[2]}`), 'Reference'].join('|')) fail(name, `the toc headings (${tocHeads.join('; ')}) do not match the parts and a Reference group`);
+    const main = html.slice(html.indexOf('<main>'));
+    const firstPart = main.indexOf('<div class="part">');
+    if (firstPart < 0 || main.indexOf('<section class="topic"') < firstPart) fail(name, 'a section comes before the first part');
+    const lastPart = main.lastIndexOf('<div class="part">');
+    const afterLast = [...main.slice(lastPart).matchAll(/<section class="topic" id="([^"]+)">/g)].length;
+    if (afterLast < 2) fail(name, 'the last part holds no section besides the formula sheet');
   }
 
   words[key] = text(html.replace(/<head>[\s\S]*?<\/head>/, '')).split(' ').filter(Boolean).length;
