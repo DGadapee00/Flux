@@ -74,4 +74,17 @@ export default {
       ],
     },
   },
+
+  'u5.16.rotor-tip': {
+    traps: {
+      speed: [
+        [($) => $.r * $.w, 'That is the tip’s speed about the hub alone. The helicopter is moving too, so its velocity adds as a vector.'],
+        [($) => $.w, 'ω is an angular rate. Multiply by the radius to get the tip’s speed, v = ωr.'],
+      ],
+      accel: [
+        [($) => $.r * $.w, 'Acceleration toward the hub is ω²r. That is ωr, a speed, not an acceleration.'],
+        [($) => $.w * $.w, 'The centripetal acceleration is ω²r. The radius is missing.'],
+      ],
+    },
+  },
 };

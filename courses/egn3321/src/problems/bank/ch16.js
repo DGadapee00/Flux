@@ -42,6 +42,17 @@ function rimFromCycloid($) {
   return Math.hypot(vx, vy);
 }
 
+/** A rotor of radius r turning counterclockwise at w, on a base flying along +x. The blade's angle is measured from +x. */
+const BLADE_DEG = { adv: 270, ret: 90 };
+function rotorTip($) {
+  const th = BLADE_DEG[$.blade] * DEG;
+  const vx = $.vB - $.r * $.w * Math.sin(th);
+  const vy = $.r * $.w * Math.cos(th);
+  const ax = $.aB - $.r * $.w * $.w * Math.cos(th);
+  const ay = -$.r * $.w * $.w * Math.sin(th);
+  return { vx, vy, ax, ay, speed: Math.hypot(vx, vy), accel: Math.hypot(ax, ay) };
+}
+
 const ch16 = [
   problem({
     id: 'u5.16.belt',
@@ -416,6 +427,56 @@ const ch16 = [
       read: (c) => ({ a: c.a }),
     },
     cases: [kase('Hibbeler §16.7', { r: 0.2, l: 0.8, theta: 0, omega: 10, alpha: 0 }, { a: -25 })],
+  }),
+
+  problem({
+    id: 'u5.16.rotor-tip',
+    title: 'Tip of a rotor on a moving machine',
+    exam: 'u5',
+    ch: '16',
+    lab: null,
+    src: 'Hibbeler §16.5, §16.7',
+    topics: ['relative-velocity', 'relative-acceleration'],
+    // Which blade is the structure: the advancing tip adds the flight speed, the retreating tip subtracts it.
+    vars: {
+      blade: choice(['adv', 'the advancing blade, pointing to the right of the flight'], ['ret', 'the retreating blade, pointing to the left']),
+      vB: range(5, 20, 1, 'm/s'),
+      aB: range(0.5, 2, 0.5, 'm/s²'),
+      r: range(1.5, 6, 0.5, 'm'),
+      w: range(10, 30, 2, 'rad/s'),
+    },
+    valid: ($) => $.r * $.w > 2 * $.vB,
+    text: (T) => String.raw`A helicopter flies level, east, at ${T.vB} m/s, speeding up at ${T.aB} m/s². Its rotor, radius ${T.r} m, turns counterclockwise seen from above at a steady ${T.w} rad/s. Find the speed and the acceleration of the tip of ${T.blade}, relative to the ground.`,
+    parts: [
+      num('speed', ($) => rotorTip($).speed, 'm/s', { label: 'speed of the tip' }),
+      num('accel', ($) => rotorTip($).accel, 'm/s²', { label: 'acceleration of the tip' }),
+    ],
+    level: 2,
+    hints: ['The tip’s velocity is the helicopter’s velocity plus the tip’s velocity about the hub, v = v_B + ω × r. Which way does ω × r point for this blade?',
+      'The rotor turns at a steady rate, so the tip’s acceleration is a_B − ω²r: the helicopter’s plus one toward the hub. There is no α × r term.',
+    ],
+    steps: ($, sig) => {
+      const e = rotorTip($);
+      return [
+        String.raw`$\vec v = \vec v_B + \vec\omega\times\vec r$: $v_x = ${sig(e.vx)}$ and $v_y = ${sig(e.vy)}\ \mathrm{m/s}$, so $v = ${sig(e.speed)}\ \mathrm{m/s}$.`,
+        String.raw`$\vec a = \vec a_B - \omega^2\vec r$: $a_x = ${sig(e.ax)}$ and $a_y = ${sig(e.ay)}\ \mathrm{m/s^2}$, so $a = ${sig(e.accel)}\ \mathrm{m/s^2}$.`,
+      ];
+    },
+    // Second: differentiate the tip's position twice by central differences.
+    second: ($) => {
+      const th = BLADE_DEG[$.blade] * DEG;
+      const pos = (t) => [$.vB * t + 0.5 * $.aB * t * t + $.r * Math.cos($.w * t + th), $.r * Math.sin($.w * t + th)];
+      const h = 1e-3 / $.w;
+      const [xp, yp] = pos(h);
+      const [xm, ym] = pos(-h);
+      const [x0, y0] = pos(0);
+      const v = Math.hypot((xp - xm) / (2 * h), (yp - ym) / (2 * h));
+      const a = Math.hypot((xp - 2 * x0 + xm) / (h * h), (yp - 2 * y0 + ym) / (h * h));
+      return { speed: v, accel: a };
+    },
+    cases: [
+      kase('MIT OCW 2.003SC (Fall 2011), Problem Set 2, Problem 3', { blade: 'adv', vB: 5, aB: 0.5, r: 5.2, w: 10 * Math.PI }, { speed: 168.4, accel: 5132 }, { note: 'The rotor turns at 5 rev/s, which is 10π rad/s. The printed answers are 168.4 m/s and about 5,132 m/s², more than 500 g. The printed solution draws the tip at the instant the blade is perpendicular to the flight.' }),
+    ],
   }),
 ];
 

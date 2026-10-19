@@ -77,6 +77,17 @@ function detour($) {
   return { straight, via };
 }
 
+/** Two cars lock together head-on, seen from the ground or from a train moving with car A. Car A moves east. */
+function frameEnergy($) {
+  const f = $.frame === 'train' ? $.v1 : 0;
+  const u1 = $.v1 - f;
+  const u2 = -$.v2 - f;
+  const vf = ($.m1 * u1 + $.m2 * u2) / ($.m1 + $.m2);
+  const before = 0.5 * $.m1 * u1 * u1 + 0.5 * $.m2 * u2 * u2;
+  const after = 0.5 * ($.m1 + $.m2) * vf * vf;
+  return { u1, u2, vf, before, after, lost: before - after };
+}
+
 const ch14 = [
   problem({
     id: 'u3.14.speed',
@@ -450,6 +461,56 @@ const ch14 = [
     },
     second: ($) => ({ speed: slideSpeed($, G_FT, $.mu) }),
     cases: [kase('Hibbeler §14.2', { m: 2, k: 10, theta: 20, mu: 0.1, x1: 1, x2: 0, v1: 6 }, { speed: 3.5947576124080576 })],
+  }),
+
+  problem({
+    id: 'u3.14.frames',
+    title: 'Energy lost when two cars lock together',
+    exam: 'u3',
+    ch: '14',
+    lab: null,
+    src: 'Hibbeler §14.3',
+    topics: ['energy', 'frames'],
+    // The frame is the structure: the ground, or a train moving with the first car. T changes with the frame; the loss does not.
+    vars: {
+      frame: choice(['ground', 'the ground'], ['train', 'a train that moves with the first car']),
+      m1: range(500, 1500, 100, 'kg'),
+      m2: range(500, 2500, 100, 'kg'),
+      v1: range(10, 30, 5, 'm/s'),
+      v2: range(10, 30, 5, 'm/s'),
+    },
+    text: (T, $) => String.raw`Car A, ${T.m1} kg, drives east at ${T.v1} m/s. Car B, ${T.m2} kg, drives west at ${T.v2} m/s. They meet head-on and lock together. An observer on ${T.frame} measures the speeds. Find the kinetic energy of the two cars before, after, and the energy lost.`,
+    parts: [
+      num('Tb', ($) => frameEnergy($).before, 'J', { label: 'kinetic energy before' }),
+      num('Ta', ($) => frameEnergy($).after, 'J', { label: 'kinetic energy after' }),
+      num('lost', ($) => frameEnergy($).lost, 'J', { label: 'energy lost' }),
+    ],
+    level: 2,
+    hints: ['Locked together, the cars keep their total momentum. Find the common velocity in the observer’s own frame.',
+      'T is one half m v² for each car before, and for the pair after. Change frame on the velocities, before squaring them.',
+    ],
+    steps: ($, sig) => {
+      const e = frameEnergy($);
+      return [
+        String.raw`In this frame the cars move at $${sig(e.u1)}$ and $${sig(e.u2)}\ \mathrm{m/s}$. Momentum gives the common velocity $${sig(e.vf)}\ \mathrm{m/s}$.`,
+        String.raw`Before, $T = \tfrac12 m_1u_1^2 + \tfrac12 m_2u_2^2 = ${sig(e.before)}\ \mathrm{J}$. After, $T = \tfrac12(m_1+m_2)v_f^2 = ${sig(e.after)}\ \mathrm{J}$.`,
+        String.raw`The loss is $${sig(e.lost)}\ \mathrm{J}$, the same in every inertial frame: $\tfrac12\mu v_{\mathrm{rel}}^2$.`,
+      ];
+    },
+    // Second: König's split, T = ½ M V² + ½ μ v_rel². Only the first term depends on the frame, and only the second is lost.
+    second: ($) => {
+      const M = $.m1 + $.m2;
+      const mu = ($.m1 * $.m2) / M;
+      const vrel = $.v1 + $.v2;
+      const u1 = $.v1 - ($.frame === 'train' ? $.v1 : 0);
+      const u2 = -$.v2 - ($.frame === 'train' ? $.v1 : 0);
+      const Vcm = ($.m1 * u1 + $.m2 * u2) / M;
+      return { Tb: 0.5 * M * Vcm * Vcm + 0.5 * mu * vrel * vrel, Ta: 0.5 * M * Vcm * Vcm, lost: 0.5 * mu * vrel * vrel };
+    },
+    cases: [
+      kase('MIT OCW 2.003SC (Fall 2011), Problem Set 1, Problem 6a', { frame: 'ground', m1: 1000, m2: 2000, v1: 25, v2: 25 }, { Tb: 937500, Ta: 104167, lost: 833333 }, { note: 'Two cars meet head-on and lock together. The printed values are 937,500 J before, 104,167 J after, and 833,333 J lost.' }),
+      kase('MIT OCW 2.003SC (Fall 2011), Problem Set 1, Problem 6b', { frame: 'train', m1: 1000, m2: 2000, v1: 25, v2: 25 }, { Tb: 2500000, Ta: 1666667, lost: 833333 }, { note: 'The same collision seen from a train moving with the first car. T before and after change; the loss does not.' }),
+    ],
   }),
 ];
 

@@ -200,6 +200,7 @@ export const PRINCIPLE_TAGS = {
   'u3.14.paths': ['energy'],
   'u3.14.same': ['energy'],
   'u3.14.us': ['energy', 'units'],
+  'u3.14.frames': ['energy', 'momentum-cons'],
   'u4.15.impulse': ['impulse'],
   'u4.15.recoil': ['momentum-cons'],
   'u4.15.ballistic': ['momentum-cons', 'energy'],
@@ -216,6 +217,7 @@ export const PRINCIPLE_TAGS = {
   'u5.16.ladder': ['rel-velocity'],
   'u5.16.wheel': ['rolling', 'rel-velocity'],
   'u5.16.accel': ['rel-accel', 'rel-velocity'],
+  'u5.16.rotor-tip': ['rel-velocity', 'rel-accel'],
   'u6.17.rod': ['inertia'],
   'u6.17.spread': ['inertia'],
   'u6.17.plate': ['inertia'],
@@ -231,4 +233,5 @@ export const PRINCIPLE_TAGS = {
   'u7.18.couple': ['rigid-energy'],
   'u7.18.slots': ['rigid-energy', 'rel-velocity'],
   'u7.18.spring': ['rigid-energy'],
+  'u7.18.wheel-hill': ['rigid-energy', 'rolling'],
 };
