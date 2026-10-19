@@ -111,8 +111,8 @@ ahead (spines): MAP 2302 5184, EEL 3111 5185, EML 3015 5186, EML 3101 5187, EGN 
 5189, EML 4312 5190, EML 4301C 5191, EML 4501 5192, EML 4507C 5193, EML 4320C 5194, EMA 3010 5195.
 
 Deploy: a push to `main` publishes. Cloudflare Pages project `flux-study` is connected to this repo
-and runs `npm run build` into `site/dist`. Run `npm test` before pushing to `main`; the Cloudflare
-build does not. `npm run live` says which commit is live. See `DEPLOY.md`.
+and runs `npm test && npm run build` into `site/dist`, so a failing test blocks the deploy. `npm run
+live` says which commit is live. See `DEPLOY.md`.
 
 ## Checks
 

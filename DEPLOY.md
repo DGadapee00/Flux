@@ -8,11 +8,11 @@ The hub is a static site. `npm run build` writes `site/dist/`, with every course
 ## A push to `main` publishes
 
 The Pages project `flux-study` is connected to this GitHub repo (set 18 Oct 2026). On every push to
-`main`, Cloudflare clones the repo and runs:
+`main`, Cloudflare clones the repo, installs dependencies and runs:
 
 | Setting | Value |
 |---|---|
-| Build command | `npm run build` |
+| Build command | `npm test && npm run build` |
 | Build output directory | `site/dist` |
 | Root directory | (blank: the repo root) |
 | Environment variable | `NODE_VERSION` = `22`, in Production and Preview |
@@ -25,8 +25,8 @@ or from an `incoming/` folder is in `site/dist`. If those build settings are eve
 publishes the repo root instead, raw course files included. That happened once (18 Oct 2026);
 check the settings first if the live site ever shows repository files.
 
-The build does not run `npm test`; GitHub's `ci.yml` runs it on every push. Run `npm test` before
-pushing to `main`.
+A failing test stops the build, so nothing that fails `npm test` goes live. GitHub's `ci.yml` runs the
+same tests on every push and pull request.
 
 ## Checking what is live
 
