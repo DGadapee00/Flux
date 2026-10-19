@@ -63,6 +63,9 @@ subject libraries (a function written for one course serves the next), and one s
 - [x] **R2** Dynamics to the standard. Waits on the owner's review.
 - [x] **Reference guide** (AGENTS.md, this roadmap, DECISIONS.md, the standard, a spine for every
       course, the skills).
+- [x] **Inventory** of every course against the outline: `docs/INVENTORY.md`.
+- [ ] **Platform fixes from the inventory:** notes deep links (`?n=`) in the shells; the scorecard
+      reads coaching files; the rule questions in `docs/INVENTORY.md` section 3 settled.
 - [ ] **R3a EML 3100.** Re-map the spine's units to 16.050's calendar, then Yan, keeping any
       course-pack topic 16.050 lacks (D23). Owner confirms the spine. Then each unit to the standard.
 - [ ] **R3b EGN 3331.** The same: re-map to 3.11 and 2.001, then Roylance. Owner confirms. Units 2–10
