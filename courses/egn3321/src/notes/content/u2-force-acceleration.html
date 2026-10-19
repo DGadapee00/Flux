@@ -9,18 +9,34 @@
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 2 · Hibbeler Ch 13</p>
   <h1>Force and acceleration</h1>
   <p class="lede">Newton's second law for a particle, in rectangular axes and in n–t. Each special formula below is derived from \(\sum \vec F = m\vec a\) and a free-body diagram, then checked on a worked case. The numbers are recomputed. Cylindrical coordinates and central-force motion stay out.</p>
-  <nav class="toc">
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Forces on straight paths</h3>
     <a href="#s1"><span>01</span>Equations of motion</a>
     <a href="#s2"><span>02</span>Friction on an incline</a>
     <a href="#s3"><span>03</span>Connected bodies</a>
+    <h3>Part II · Curves and springs</h3>
     <a href="#s4"><span>04</span>Banked curve</a>
     <a href="#s5"><span>05</span>Vertical loop</a>
     <a href="#s6"><span>06</span>Spring on a collar</a>
+    <h3>Part III · An application</h3>
     <a href="#s7"><span>07</span>Application: leaving the pad</a>
+    <h3>Reference</h3>
     <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Forces on straight paths</h2>
+</div>
+
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Equations of motion</h2>
 <p>A free-body diagram comes first. Then \(\sum F = ma\) along each axis. The acceleration is the unknown, or the force is, but not both at once.</p>
@@ -122,8 +138,14 @@ a = \frac{Mg - mg\sin\theta - \mu_k mg\cos\theta}{m + M}.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The string is light, so one tension serves both bodies. A heavy rope would make the tension vary along its length. The pulley is frictionless and massless, and the block does not tip.</p>
 </div>
+<p class="bridge">Part II adds two things the straight-path problems lacked: a path that bends, and a force that depends on position.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/7-3-solving-pulley-systems/" target="_blank" rel="noopener">7.3 Solving Pulley Systems</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-4-drag-forces-constraints-and-continuous-systems/12-5-worked-example-2-blocks-and-2-pulleys/" target="_blank" rel="noopener">12.5 Worked Example - 2 Blocks and 2 Pulleys</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/free-body-diagrams-and-fictitious-forces/" target="_blank" rel="noopener">Lecture 4, Free Body Diagrams and Fictitious Forces</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Curves and springs</h2>
+</div>
+
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Banked curve</h2>
 <p>The path is a horizontal circle, so \(a_n = v^2/\rho\) points toward the centre and \(a_t = 0\) at constant speed. Resolve the normal force and the friction along the bank, then check the same forces horizontally and vertically.</p>
@@ -216,8 +238,14 @@ a = g\sin\theta - \frac{k}{m}\,x, \qquad N_{\text{rod}} = mg\cos\theta.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The spring lies along the rod, so the stretch equals the coordinate measured down the rod. A spring anchored off the rod stretches by a Pythagorean length, and its force has a component into the rod. This section also leaves out friction. The rod force does no work along the rod.</p>
 </div>
+<p class="bridge">Part III puts the equation of motion to work on a rocket that loses mass as it climbs.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/7-4-hookes-law/" target="_blank" rel="noopener">7.4 Hooke's Law</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>An application</h2>
+</div>
+
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Application: leaving the pad</h2>
 <p>A rocket on its pad is a particle with three forces: thrust up, weight down, and the pad or its clamps. Section 1's equation of motion is all it takes to say whether it lifts, and how hard it accelerates once it does.</p>
@@ -279,5 +307,6 @@ v_{bo} = \frac{T}{\dot m}\ln\frac{m_0}{m_{bo}} - g\,t_b.
 <p>Each line above is the model for this unit. A heavy pulley, drag, and a stretch that is not along the rod are left out.</p>
 </section>
 </main>
+<footer>Written for Flux from Hibbeler, Engineering Mechanics: Dynamics, Chapter 13, cited by section, with MIT OCW 8.01SC and 2.003SC as Another view. Every worked answer was recomputed.</footer>
 </body>
 </html>

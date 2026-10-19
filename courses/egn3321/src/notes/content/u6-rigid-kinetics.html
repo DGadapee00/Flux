@@ -9,17 +9,33 @@
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 6 · Hibbeler Ch 17</p>
   <h1>Rigid-body kinetics</h1>
   <p class="lede">Force and acceleration for a rigid body in the plane. The mass moment says how hard the body is to spin. The pin force and the friction then follow from the motion of the mass centre. Each formula below is derived from \(\Sigma\vec F = m\vec a_G\) and \(\Sigma M_G = I_G\alpha\), and the numbers are recomputed.</p>
-  <nav class="toc">
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Inertia</h3>
     <a href="#s1"><span>01</span>Mass moment of inertia</a>
     <a href="#s2"><span>02</span>Composite bodies</a>
+    <h3>Part II · Equations of motion</h3>
     <a href="#s3"><span>03</span>Translation</a>
     <a href="#s4"><span>04</span>Rotation about a fixed axis</a>
     <a href="#s5"><span>05</span>General plane motion</a>
+    <h3>Part III · An application</h3>
     <a href="#s6"><span>06</span>Application: turbopump spin-up</a>
+    <h3>Reference</h3>
     <a href="#s7"><span>07</span>Formula sheet</a>
   </nav>
 </header>
 <main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Inertia</h2>
+</div>
+
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Mass moment of inertia</h2>
 <p>The mass moment \(I\) measures how far the mass sits from the axis. Moving that mass farther out raises \(I\) even when the mass itself stays fixed. For a known centre moment, the parallel-axis theorem gives the moment about a parallel axis:</p>
@@ -80,8 +96,14 @@
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>Every part is moved onto one axis, perpendicular to the plate. A hole keeps its centre moment and its \(md^2\). An axis in some other direction is left out. So are fillets, bolts, and every small feature a drawing would show.</p>
 </div>
+<p class="bridge">Inertia measures how the mass is spread about an axis. Part II puts it into the equations of motion.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/29-4-parallel-axis-theorem/" target="_blank" rel="noopener">29.4 Parallel Axis Theorem</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/17-4-center-of-mass-of-a-system-of-extended-objects/" target="_blank" rel="noopener">17.4 Center of Mass of a System of Extended Objects</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Equations of motion</h2>
+</div>
+
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Translation</h2>
 <p>In translation the body does not rotate, so \(\alpha = 0\) and \(\Sigma M_G = 0\). The force equations are still \(\Sigma F = ma_G\). A horizontal force on a crate can slide it or tip it. The smaller of those two forces happens first.</p>
@@ -192,8 +214,14 @@
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>Friction is Coulomb, and rolling resistance is left out. Past the friction limit the no-slip constraint is dropped, and the body both slides and spins. Rolling without slip does no work at the contact, so energy is conserved while it rolls. Unit 7 uses exactly that.</p>
 </div>
+<p class="bridge">Part III applies the fixed-axis equation to a rotor that spins up.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/36-5-analyze-force-and-torque-in-translation-and-rotation-problems/" target="_blank" rel="noopener">36.5 Analyze Force and Torque in Translation and Rotation Problems</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/36-2-worked-example-wheel-rolling-without-slipping-down-inclined-plane-torque-method/" target="_blank" rel="noopener">36.2 Worked Example - Wheel Rolling Without Slipping Down Inclined Plane - Torque Method</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/finding-equations-of-motion-for-rigid-body-rotation/" target="_blank" rel="noopener">Lecture 8, Finding Equations of Motion for Rigid Body Rotation</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>An application</h2>
+</div>
+
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Application: turbopump spin-up</h2>
 <p>A pump-fed rocket engine cannot start until its turbopump is turning. A small starter turbine spins the rotor up from rest to its rated speed. The rotor turns about a fixed axis, so section 4 governs it: \(\Sigma M = I\alpha\).</p>
@@ -257,5 +285,6 @@ I\,\frac{d\omega}{dt} = M - M_f - k\omega^2 = A - k\omega^2, \qquad A = M - M_f.
 <p>Bearing friction and rolling resistance are left out of every line above. A body that is not uniform needs a different \(I_G\).</p>
 </section>
 </main>
+<footer>Written for Flux from Hibbeler, Engineering Mechanics: Dynamics, Chapter 17, cited by section, with MIT OCW 8.01SC and 2.003SC as Another view. Every worked answer was recomputed.</footer>
 </body>
 </html>

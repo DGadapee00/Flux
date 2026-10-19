@@ -9,18 +9,34 @@
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 5 · Hibbeler Ch 16</p>
   <h1>Rigid-body kinematics</h1>
   <p class="lede">A rigid body in the plane has translation and one rotation. The instantaneous centre is the point that is at rest right now. It moves as the body moves. Each relation below comes from one fact: the distance between two points of a rigid body never changes. The numbers are recomputed.</p>
-  <nav class="toc">
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Rotation about an axis</h3>
     <a href="#s1"><span>01</span>Fixed-axis rotation</a>
     <a href="#s2"><span>02</span>Absolute motion analysis</a>
+    <h3>Part II · Relative motion in a body</h3>
     <a href="#s3"><span>03</span>Relative velocity</a>
     <a href="#s4"><span>04</span>Instantaneous centre</a>
     <a href="#s5"><span>05</span>Relative acceleration</a>
+    <h3>Part III · Rolling, and an application</h3>
     <a href="#s6"><span>06</span>Rolling without slip</a>
     <a href="#s7"><span>07</span>Application: a turbopump gearbox</a>
+    <h3>Reference</h3>
     <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Rotation about an axis</h2>
+</div>
+
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Fixed-axis rotation</h2>
 <p>A point on a body that rotates about a fixed axis moves on a circle. Its speed is the radius times \(\omega\). Its tangential acceleration is the radius times \(\alpha\).</p>
@@ -91,8 +107,14 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>One position equation is enough when the linkage has one degree of freedom. The model leaves out a flexible rod and a joint with clearance. Mechanisms with two loops need two closure equations, solved together.</p>
 </div>
+<p class="bridge">A fixed axis fixes the path of every point. Part II handles a body whose axis moves, and finds the velocity of one point from another.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/28-2-introduction-to-translation-and-rotation/" target="_blank" rel="noopener">28.2 Introduction to Translation and Rotation</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Relative motion in a body</h2>
+</div>
+
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Relative velocity</h2>
 <p>Two points of a rigid body differ by a rotation. The velocity of B is the velocity of A plus \(\omega\) crossed with the vector from A to B.</p>
@@ -190,8 +212,14 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The centripetal term stays in the acceleration when the velocity is zero. The model leaves out a crank whose length changes, and the Coriolis term that a point sliding along a rotating body would add. That case is rotating axes, §16.8, which the course leaves out.</p>
 </div>
+<p class="bridge">Part III applies relative motion to a wheel that rolls and to a gear train that meshes.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/35-3-rolling-wheel-in-the-ground-frame/" target="_blank" rel="noopener">35.3 Rolling Wheel in the Ground Frame</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Rolling, and an application</h2>
+</div>
+
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Rolling without slip</h2>
 <p>A wheel that rolls without slip has its contact point instantaneously at rest. That point is the instantaneous centre. The centre of the wheel moves at \(v = R\omega\), and the top moves at \(2v\).</p>
@@ -284,5 +312,6 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <p>Rotating frames stay out. So do a slipping belt and a wheel that both rolls and slides.</p>
 </section>
 </main>
+<footer>Written for Flux from Hibbeler, Engineering Mechanics: Dynamics, Chapter 16, cited by section, with MIT OCW 8.01SC and 2.003SC as Another view. Every worked answer was recomputed.</footer>
 </body>
 </html>

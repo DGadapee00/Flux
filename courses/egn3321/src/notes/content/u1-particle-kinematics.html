@@ -9,18 +9,34 @@
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 1 · Hibbeler Ch 12</p>
   <h1>Particle kinematics</h1>
   <p class="lede">Position, velocity, and acceleration, before any force law. Every relation below is derived from the two definitions \(v = ds/dt\) and \(a = dv/dt\), then used on a worked case. The numbers are recomputed. Sections the course pack does not name stay out.</p>
-  <nav class="toc">
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Units and motion along a line</h3>
     <a href="#s1"><span>01</span>Units and significant figures</a>
     <a href="#s2"><span>02</span>Rectilinear motion</a>
     <a href="#s3"><span>03</span>Erratic graphs</a>
+    <h3>Part II · Motion in a plane</h3>
     <a href="#s4"><span>04</span>Projectile motion</a>
     <a href="#s5"><span>05</span>Normal and tangential components</a>
     <a href="#s6"><span>06</span>Relative motion, translating axes</a>
+    <h3>Part III · An application</h3>
     <a href="#s7"><span>07</span>Application: a sounding rocket</a>
+    <h3>Reference</h3>
     <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Units and motion along a line</h2>
+</div>
+
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Units and significant figures</h2>
 <p>A force in pounds and a length in feet have to become newtons and metres before they enter an SI equation. One foot is exactly 0.3048 m. One pound-force is one pound-mass times 9.80665 m/s².</p>
@@ -143,8 +159,14 @@ v = v_0 - ks.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>A step graph leaves out the rounding between corners. Real acceleration cannot jump: a jump would need an infinite rate of change of force. The area rule still holds for a smooth graph. Integrate \(a\) over the interval, then step \(s\) with the area under \(v\).</p>
 </div>
+<p class="bridge">Everything so far moved along a line. A particle in a plane has an acceleration that need not point along its path, and Part II measures it in the path’s own axes.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/2-4-integration/" target="_blank" rel="noopener">2.4 Integration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/2-3-worked-example-acceleration-from-position/" target="_blank" rel="noopener">2.3 Worked Example - Acceleration from Position</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Motion in a plane</h2>
+</div>
+
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Projectile motion</h2>
 <p>Horizontal velocity stays constant when the only acceleration is gravity. Vertical velocity changes at \(g = 9.81\) m/s². Resolve the launch velocity, then treat the two axes separately.</p>
@@ -275,8 +297,14 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>These axes translate with A and do not rotate. A rotating frame adds terms this section does not carry: a Coriolis term and a centripetal term. Rotating axes stay out of the course. The model also treats A and B as points with no size.</p>
 </div>
+<p class="bridge">Part III returns to a straight line. A sounding rocket needs only the graphs of Part I, with a burn and a coast.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/4-3-reference-frames/" target="_blank" rel="noopener">4.3 Reference Frames</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/18-1-relative-velocity/" target="_blank" rel="noopener">18.1 Relative Velocity</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/newton2019s-laws-vectors-and-reference-frames/" target="_blank" rel="noopener">Lecture 1, Newton's Laws, Vectors, and Reference Frames</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>An application</h2>
+</div>
+
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Application: a sounding rocket</h2>
 <p>A sounding rocket flies straight up. Its motor burns for a few seconds and then the rocket coasts. The whole flight is rectilinear motion in two pieces, each with a constant acceleration. Nothing beyond this unit is needed to find how high it goes.</p>
@@ -341,5 +369,6 @@ v_{bo} = a\,t_b, \qquad h_{bo} = \tfrac12 a\,t_b^2.
 <p>Each line above is the model for this unit. Drag, a flexible part, and a coefficient that changes with speed are left out.</p>
 </section>
 </main>
+<footer>Written for Flux from Hibbeler, Engineering Mechanics: Dynamics, Chapter 12, with units from the Statics volume, §1.3 to §1.5, cited by section, with MIT OCW 8.01SC and 2.003SC as Another view. Every worked answer was recomputed.</footer>
 </body>
 </html>
