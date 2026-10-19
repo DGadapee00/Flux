@@ -9,18 +9,34 @@
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 3 · Hibbeler Ch 15</p>
   <h1>Impulse and momentum</h1>
   <p class="lede">Impulse is the area under a force. A collision conserves momentum for every restitution. A rocket's gain follows the mass ratio. Each of these is \(\sum F = ma\) integrated over time, and each is derived below. The numbers are recomputed.</p>
-  <nav class="toc">
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Impulse and momentum</h3>
     <a href="#s1"><span>01</span>Principle of linear impulse and momentum</a>
     <a href="#s2"><span>02</span>Conservation of momentum</a>
+    <h3>Part II · Collisions</h3>
     <a href="#s3"><span>03</span>Impact</a>
     <a href="#s4"><span>04</span>Oblique impact</a>
+    <h3>Part III · Angular momentum and rockets</h3>
     <a href="#s5"><span>05</span>Angular momentum</a>
     <a href="#s6"><span>06</span>A rocket</a>
     <a href="#s7"><span>07</span>Application: an upper stage</a>
+    <h3>Reference</h3>
     <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Impulse and momentum</h2>
+</div>
+
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Principle of linear impulse and momentum</h2>
 <p>The impulse of a force is the area under its graph of force against time. That area equals the change in momentum.</p>
@@ -85,8 +101,14 @@
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>Internal impulses cancel in pairs. An outside force that acts through the interval does not. Recoil here also leaves out momentum carried off by the gas, which is a few percent for a rifle. The boat ignores water drag during the jump.</p>
 </div>
+<p class="bridge">Impulse and momentum give the speeds after a push. A collision is a push too short to measure, so Part II uses momentum and a coefficient of restitution in place of the force.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/16-1-conservation-of-momentum/" target="_blank" rel="noopener">16.1 Conservation of Momentum</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/18-2-set-up-a-recoil-problem/" target="_blank" rel="noopener">18.2 Set up a Recoil Problem</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Collisions</h2>
+</div>
+
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Impact</h2>
 <p>The line of impact is the normal. Restitution sets the separation speed along that line. Momentum along the line is conserved for every value of \(e\).</p>
@@ -157,8 +179,14 @@ v_{n2} - v_{n1} = e(u_{n1} - u_{n2}).
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The faces are smooth, so there is no tangent impulse. A rough collision would change the tangent speeds, and set a ball spinning. That model is left out, as is any rotation the impact gives the bodies.</p>
 </div>
+<p class="bridge">Part II kept the mass fixed and the motion on a line. Part III takes moments about a point, and then lets the mass leave.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-9-collision-theory/27-6-2d-collisions/" target="_blank" rel="noopener">27.6 2D Collisions</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Angular momentum and rockets</h2>
+</div>
+
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Angular momentum</h2>
 <p>The angular momentum of a particle about a point is \(\mathbf{r} \times m\mathbf{v}\). The moment arm is measured from that point to the particle.</p>
@@ -278,5 +306,6 @@ v_e = \frac{F}{\dot m} = I_{sp}\,g_0, \qquad \Delta v = v_e\ln\frac{m_0}{m_f} - 
 <p>Steady flow of a fluid stream stays out. Drag on the rocket, and a burn rate that changes, stay out of the formulas above.</p>
 </section>
 </main>
+<footer>Written for Flux from Hibbeler, Engineering Mechanics: Dynamics, Chapter 15, cited by section, with MIT OCW 8.01SC and 2.003SC as Another view. Every worked answer was recomputed.</footer>
 </body>
 </html>

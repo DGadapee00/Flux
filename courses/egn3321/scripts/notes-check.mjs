@@ -4,6 +4,8 @@
  * Section ids and titles match. Labs, chapters, and topics exist.
  * Every setup matches one worked example, and the lab agrees within 2%.
  * Every \( \) and \[ \] typesets.
+ * Every unit is built as PHY 2049's e4-charge-in-motion is (D32): a legend, a toc grouped by part, a
+ * `div.part` before each part's first section, and a source footer.
  * Every section but the formula sheet has a worked example. No word count (DECISIONS.md, D16) and no
  * fixed box at the end of each section (D30, D32): boxes follow the content, as in PHY 2049.
  */
@@ -65,6 +67,20 @@ for (const [key, set] of Object.entries(NOTES)) {
     const reg = set.sections.find((s) => s.id === f.id);
     if (reg && reg.title !== f.title) fail(name, `${f.id} is titled "${f.title}" in the file but "${reg.title}" in the registry`);
   }
+
+  // Structure (D32): legend, parts that cover every section but the formula sheet, a grouped toc, a footer.
+  if (!/<div class="legend">/.test(html)) fail(name, 'no legend in the header');
+  if (!/<footer>/.test(html)) fail(name, 'no source footer');
+  const partsAt = [...html.matchAll(/<div class="part">\s*<div class="eyebrow">Part ([IVX]+)<\/div>\s*<h2>([^<]+)<\/h2>\s*<\/div>/g)];
+  if (partsAt.length < 2) fail(name, `${partsAt.length} parts; want at least 2`);
+  const tocHeads = [...html.matchAll(/<nav class="toc"[^>]*>([\s\S]*?)<\/nav>/g)].flatMap((m) => [...m[1].matchAll(/<h3>([^<]+)<\/h3>/g)].map((h) => h[1]));
+  if (tocHeads.join('|') !== [...partsAt.map((m) => `Part ${m[1]} · ${m[2]}`), 'Reference'].join('|')) fail(name, `the toc headings (${tocHeads.join('; ')}) do not match the parts and a Reference group`);
+  const main = html.slice(html.indexOf('<main>'));
+  const firstPart = main.indexOf('<div class="part">');
+  if (firstPart < 0 || main.indexOf('<section class="topic"') < firstPart) fail(name, 'a section comes before the first part');
+  const lastPart = main.lastIndexOf('<div class="part">');
+  const afterLast = [...main.slice(lastPart).matchAll(/<section class="topic" id="([^"]+)">/g)].length;
+  if (afterLast < 2) fail(name, 'the last part holds no section besides the formula sheet');
 
   words[key] = text(html.replace(/<head>[\s\S]*?<\/head>/, '')).split(' ').filter(Boolean).length;
   for (const s of set.sections) {
