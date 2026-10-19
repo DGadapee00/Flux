@@ -22,15 +22,15 @@ Legend: ✓ meets the outline. ◐ partly. ✗ missing. "n/a" does not apply.
 
 | Course | Same app | Notes | Labs | Problems | Practice loop | Sources | OCW order |
 |---|---|---|---|---|---|---|---|
-| PHY 2049 (reference) | ✓ own UI | ◐ Exams 1–5 only | ◐ | ◐ | ✓ own copy | ◐ | exempt (see 3.6) |
+| PHY 2049 (reference) | ✓ own UI | ◐ Exams 1–5 only | ◐ | ◐ | ✓ own copy | ◐ | keeps its order (D28) |
 | PHY 2048 | ✗ no UI yet | ✗ none | ✗ none | ✗ | ✗ | ◐ | ◐ |
-| MAC 2311 | ✓ math shell | ◐ | ✗ | ✗ | ◐ | ◐ | ◐ close |
-| MAC 2312 | ✓ math shell | ◐ | ✗ | ✗ | ◐ | ◐ | ✗ re-cut |
+| MAC 2311 | ✓ math shell | ◐ | ✗ | ✗ | ◐ | ◐ | ◐ merge (D28) |
+| MAC 2312 | ✓ math shell | ◐ | ✗ | ✗ | ◐ | ◐ | ◐ merge (D28) |
 | MAC 2313 | ✓ math shell | ✗ none | ✗ | ✗ | ✗ | ◐ | ✗ coverage gap |
 | EGN 3311 Statics | ✓ eng. shell | ✗ none | ✗ | ✗ | ✗ | ◐ | ◐ OCW narrower |
-| EGN 3321 Dynamics | ✓ eng. shell | ✓ | ✓ | ✓ | ✓ | ◐ | ◐ scope differs |
-| EGN 3331 | ✓ eng. shell | ◐ Unit 1 of 10 | ◐ | ✗ | ◐ | ✓ map | ✗ re-cut |
-| EML 3100 | ✓ eng. shell | ◐ 2 units | ◐ | ✗ | ◐ | ✓ map | ✗ re-cut |
+| EGN 3321 Dynamics | ✓ eng. shell | ✓ | ✓ | ✓ | ✓ | ◐ | ◐ swap Units 3–4 |
+| EGN 3331 | ✓ eng. shell | ◐ Unit 1 of 11 | ◐ | ✗ | ◐ | ✓ map | ◐ new order planned |
+| EML 3100 | ✓ eng. shell | ◐ 2 units | ◐ | ✗ | ◐ | ✓ map | ✓ built units in order |
 | STA 3032 | ✗ separate app | ✗ removed | ◐ | ◐ | ◐ own | ◐ | not reworked |
 
 Only Dynamics is close to the outline. Every course, Dynamics included, is missing two things the
@@ -111,16 +111,18 @@ Fix these once and every course gains.
 
 ## 3. Where the outline and the code disagree about the rules
 
-These need an owner decision, because either the outline or the exemplars should change.
+Items 1, 2, 5, 6 and 7 were decided on 18 Oct 2026 (D28–D31) and the standard now says so. Items 3
+and 4 are still open; until the owner answers, they stay recommendations.
 
 1. **"What the model leaves out".** The standard asks for it at the end of every lab explainer and
    every notes section with an idealisation. In the reference course it appears only in the 8
    application labs' explainers, and in none of PHY 2049's notes. The shell courses put it in the
    notes (a `box out` per section) and in no lab. *Recommendation:* require it in application-lab
    explainers (as PHY does) and as a `box out` in notes (as the shells do); drop it from concept-lab
-   explainers.
+   explainers. **Decided: both places (D30).** Dynamics' seven application labs and every future
+   application lab need the explainer line.
 2. **`box out` is not in the standard.** The shell notes use five box types; the standard names
-   four. *Recommendation:* add `out` to the standard.
+   four. *Recommendation:* add `out` to the standard. **Decided (D30).**
 3. **Notes structure.** PHY 2049's notes group sections into `div.part` with a legend; no shell
    course does, including Dynamics, which the standard lists as an exemplar. *Recommendation:* make
    parts and the legend required for units with more than about eight sections, optional below.
@@ -130,14 +132,17 @@ These need an owner decision, because either the outline or the exemplars should
 5. **D23 and course boundaries.** OCW runs Calc I and II as one course (18.01SC), and PHY 2049 follows
    its instructor by permission. *Recommendation:* where courses split differently from OCW, UNF sets
    the boundary and OCW sets the order inside it; PHY 2049 keeps its instructor's order and links 8.02
-   as Another view.
+   as Another view. **Decided differently (D28):** Calculus I and II become one module that follows
+   18.01SC end to end. PHY 2049 keeps its order.
 6. **D23 when the OCW course has a different scope.** 2.003SC assumes 8.01 and goes on to Lagrange
    and vibration; 16.050 is a second thermodynamics course; 2.001 covers statics in four lectures.
    Following those calendars literally would drop topics UNF teaches. *Recommendation:* in those
    cases, the spine maps each unit to the OCW lectures that cover it (from more than one OCW course
-   if needed), OCW sets the order where it has one, and the textbook orders the rest.
+   if needed), OCW sets the order where it has one, and the textbook orders the rest. **Decided
+   (D29).** Each affected spine now has its OCW map.
 7. **EGN 3331 energy methods.** The course pack left out Hibbeler Ch 14 (D11). 2.001 teaches energy
    methods. Under D23 OCW sets coverage, so it comes back in unless the owner says otherwise.
+   **Decided: back in (D31)**, as Unit 10 of the new order.
 
 ## 4. Course by course
 
@@ -156,8 +161,8 @@ conceptual, 83% structural variety; every practice-loop feature on; coaching per
 - No `textbook.js` citation map.
 - Order: 2.003SC starts after particle dynamics (it assumes 8.01) and ends with Lagrange and
   vibration, which belong to EML 4312. Units 1–4 map to 8.01SC weeks 1–9; Units 5–7 map to 2.003SC
-  lectures 3–8. 8.01SC puts momentum before energy; Dynamics puts energy first. Whether to swap
-  Units 3 and 4 is for the owner's review.
+  lectures 3–8. 8.01SC puts momentum before energy; Dynamics puts energy first. Under D29
+  Units 3 and 4 swap.
 - Application labs include rocket and turbopump labs (`liftoff`, `rocket`, `spinup`). They are
   generic rocket physics, not the methalox engine, so D25 does not require removing them.
 
@@ -167,17 +172,15 @@ conceptual, 83% structural variety; every practice-loop feature on; coaching per
 property library under it.
 
 **Gaps:**
-- Only 2 of 7 planned units (properties; first law for closed systems).
+- Only 2 of 5 units built (properties; first law for closed systems).
 - No application lab. No `why` or traps.
 - 0% conceptual in Unit 2. No structural variety.
 - 3 `fix` boxes in two units.
-- Order: 16.050 runs energy, work and heat, then the first law, enthalpy and control volumes, then
-  the second law (cycles, Carnot, Brayton, refrigerators, reversibility), then entropy. The code
-  starts with property tables. Pure-substance tables are barely in 16.050 (they come in its Part
-  2.B), so they come from Yan.
-- Proposed re-cut: concepts and energy; first law for closed systems; properties of pure substances
-  and ideal gases; control volumes; the second law and cycles; entropy. 16.050 Parts 2 and 3 (power
-  cycles, thermochemistry, heat transfer) belong to EML 3101 and EML 4140.
+- New order (D29, in the spine): 16.050 Part 0 puts properties and states (L3) before energy, work
+  and heat (L5), so the two built units stay where they are. The old seven units fold into five:
+  properties and pure substances; energy and the first law for closed systems; control volumes;
+  cycles and the second law; entropy. 16.050 Parts 2 and 3 (power cycles, thermochemistry, heat
+  transfer) belong to EML 3101 and EML 4140.
 
 ### 4.3 EGN 3331 Mechanics of Materials
 
@@ -185,7 +188,7 @@ property library under it.
 materials selftests.
 
 **Gaps:**
-- 9 of 10 units not built (17 labs `coming`).
+- 10 of 11 units not built (17 labs `coming`, plus energy methods).
 - Unit 1 notes have no `fix` box.
 - 11 templates with no `why` or traps and 0% conceptual. No application lab.
 - Order: 2.001 (whose required text is Hibbeler's *Mechanics of Materials*) runs axial loading and
@@ -219,9 +222,10 @@ with arc length and surface area; then parametric and polar; then L'Hôpital and
 then Taylor series. The built order is applications (with arc length), techniques (with numerical
 and improper), series, then parametric and polar.
 
-**Proposed re-cut:** applications (with numerical integration); techniques (with arc length and
-surface area); parametric and polar; L'Hôpital, improper integrals and series. 18.01SC covers only
-Taylor series, so the convergence tests come from OpenStax.
+**Decided (D28):** MAC 2311 and MAC 2312 merge into one module in 18.01SC's order: differentiation;
+applications of differentiation; the definite integral and its applications; techniques; parametric
+and polar; L'Hôpital, improper integrals and series. 18.01SC covers only Taylor series, so the
+convergence tests come from OpenStax. The plan is `docs/courses/mac2311-2312.md`.
 
 ### 4.6 MAC 2313 Calculus III
 
@@ -296,28 +300,29 @@ unless the owner asks.
 **Platform (before more course work):**
 1. Notes deep links (`?n=`) in the shell router, with a shell test.
 2. The scorecard reads coaching files, so PHY 2049 and Dynamics are measured the same way.
-3. Settle the rule questions in section 3 and update `docs/COURSE-STANDARD.md` and D23.
+3. Settle items 3 and 4 of section 3 (notes parts and legend; the box recipe).
 
 **Courses, following the roadmap:**
 
 4. **EML 3100 (R3a):**
-   - Re-cut to the 16.050-led order (4.2).
-   - Then units 1–6 to the standard.
+   - The owner confirms the five-unit order in the spine (D29).
+   - Then Units 3–5 to the standard.
    - Add an application lab and traps to the built units.
 5. **EGN 3331 (R3b):**
-   - Re-cut to the 2.001 order, plus energy methods if the owner agrees.
+   - The owner confirms the eleven-unit order in the spine (2.001 order, energy methods back, D31).
    - Add `fix` boxes, `why` and traps to Unit 1.
-   - Build Units 2–10.
+   - Build Units 2–11.
 6. **Dynamics:**
    - OCW worked cases and Another view links.
+   - Explainers ending with what the model leaves out on its seven application labs (D30).
+   - Swap Units 3 and 4 so momentum comes before energy, as 8.01SC does (D29).
    - Owner review.
-   - Decide whether to swap Units 3 and 4.
 7. **The new courses**, back to back (`ROADMAP.md`).
 8. **Review courses (R4):**
-   - MAC 2312 re-cut.
+   - Merge MAC 2311 and MAC 2312 into one module in 18.01SC's order (D28).
    - MAC 2313 notes and the missing vector-calculus units.
    - Statics notes.
-   - MAC 2311 template rework.
+   - Calculus I and II template rework.
    - All four: predictions, application labs, traps, conceptual problems.
 9. **PHY 2048 (R5)** after Phase 2b:
    - UI and notes.

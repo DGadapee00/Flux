@@ -28,7 +28,9 @@ saying so in the PR. `docs/history/` is the archive; nothing there is an instruc
    fails the build if one reaches `site/dist`. Leave `incoming/` and `.canvas-state.json` alone.
 3. **No student data.** Names, grades and submissions never enter the repo.
 4. **The OCW program first, then the textbook** (D23). A course's MIT OpenCourseWare counterpart sets
-   its units, their order, its coverage, its level-3 difficulty and its printed answers (D15). The
+   its units, their order, its coverage, its level-3 difficulty and its printed answers (D15). When
+   scopes differ, the spine maps units to OCW lectures and the textbook orders the rest (D29).
+   Calculus I and II are one module; PHY 2049 keeps its instructor's order (D28). The
    textbook fills in and is cited by section through `src/data/textbook.js`. A UNF syllabus adds
    exam dates, exam style and any topic OCW lacks. **Copy nothing** from any of them: write fresh
    and cite. MIT's name appears only in citations. STA 3032's instructor material stays out (D6).

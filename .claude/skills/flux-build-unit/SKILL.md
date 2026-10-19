@@ -29,11 +29,11 @@ order (D23). If the spine and the code disagree, stop and ask; do not pick one s
 For each lab in the spine:
 
 - Write the intuition it corrects as the first line of its doc comment ("Shows that …").
-- 2–3 scenarios with real numbers, sliders, a readout, an explainer ending with **What the model
-  leaves out**.
+- 2–3 scenarios with real numbers, sliders, a readout, and an explainer.
 - Recompute in the lab; check by the second method in the course's tests.
 - Two to four predictions in `predictions.js`, each outcome computed by the lab; labs-check verifies.
-- The application lab: a real everyday or industrial device, with numbers stated and cited.
+- The application lab: a real everyday or industrial device, with numbers stated and cited. Its
+  explainer ends with **What the course model leaves out.** (D30).
 - Register in the catalog (`LAB_META`, `app: true` for an application lab) and the lab loader.
 
 ## 4. Problems
@@ -54,8 +54,8 @@ For each lab in the spine:
 - One file, structured exactly as the exemplar. Derive every result. Recompute every example.
 - At least six worked examples, each with a **Show this in the lab** setup where a lab can show it.
 - `box fix` for each mistake students make here (the traps you wrote are a good list).
-- **What the model leaves out** in each section with an idealisation; **Another view** linking the
-  OCW lecture.
+- A `box out` (what the model leaves out) in each section with an idealisation; **Another view**
+  linking the OCW lecture.
 - Register the sections (`lab`, `ch`, `topics`, `problems`) so problems and labs link back.
 
 ## 6. Verify

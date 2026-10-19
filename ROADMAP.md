@@ -45,13 +45,12 @@ subject libraries (a function written for one course serves the next), and one s
 |---|---|---|---|---|
 | PHY 2049 Physics II | [phy2049](docs/courses/phy2049.md) | reference | not yet scored | weekly drops; Phase 2b shell move |
 | PHY 2048 Physics I | [phy2048](docs/courses/phy2048.md) | library and bank, no UI | fails | R5, after the physics shell |
-| MAC 2311 Calculus I | [mac2311](docs/courses/mac2311.md) | 4 units, notes | fails | R4 |
-| MAC 2312 Calculus II | [mac2312](docs/courses/mac2312.md) | 4 units, notes | fails | R4 |
+| MAC 2311–2312 Calculus I and II | [mac2311-2312](docs/courses/mac2311-2312.md) | two modules, 4 units each, notes | fails | R4: merge into one (D28) |
 | MAC 2313 Calculus III | [mac2313](docs/courses/mac2313.md) | labs and bank, no notes | fails | R4 |
 | EGN 3311 Statics | [statics](docs/courses/statics.md) | labs and bank, no notes | fails | R4 |
-| EGN 3321 Dynamics | [egn3321](docs/courses/egn3321.md) | 7 units, notes | **passes** | owner review |
-| EGN 3331 Mechanics of Materials | [egn3331](docs/courses/egn3331.md) | Unit 1 of 10 | fails | R3b: re-map to OCW, then build |
-| EML 3100 Thermodynamics | [eml3100](docs/courses/eml3100.md) | 2 units | fails | R3a: re-map to OCW, then build |
+| EGN 3321 Dynamics | [egn3321](docs/courses/egn3321.md) | 7 units, notes | **passes** | swap Units 3–4, app-lab explainers, owner review |
+| EGN 3331 Mechanics of Materials | [egn3331](docs/courses/egn3331.md) | Unit 1 of 11 | fails | R3b: confirm the new order, then build |
+| EML 3100 Thermodynamics | [eml3100](docs/courses/eml3100.md) | 2 of 5 units | fails | R3a: confirm the order, then build |
 | STA 3032 Statistics | [sta3032](docs/courses/sta3032.md) | complete, older style | fails | keep passing; no rework |
 
 ## 3. The build list, in order
@@ -60,16 +59,19 @@ subject libraries (a function written for one course serves the next), and one s
 
 - [x] **R0** Scorecard (`npm run scorecard`), `standard: false` in every manifest.
 - [x] **R1** The practice loop in the shells (`packages/shells/practice`).
-- [x] **R2** Dynamics to the standard. Waits on the owner's review.
+- [x] **R2** Dynamics to the standard.
+- [ ] **R2b Dynamics follow-ups:** swap Units 3 and 4 so momentum comes before energy (D29); end
+      each application lab's explainer with **What the course model leaves out.** (D30); OCW worked
+      cases and Another view links. Then the owner's review.
 - [x] **Reference guide** (AGENTS.md, this roadmap, DECISIONS.md, the standard, a spine for every
       course, the skills).
 - [x] **Inventory** of every course against the outline: `docs/INVENTORY.md`.
 - [ ] **Platform fixes from the inventory:** notes deep links (`?n=`) in the shells; the scorecard
-      reads coaching files; the rule questions in `docs/INVENTORY.md` section 3 settled.
-- [ ] **R3a EML 3100.** Re-map the spine's units to 16.050's calendar, then Yan, keeping any
-      course-pack topic 16.050 lacks (D23). Owner confirms the spine. Then each unit to the standard.
-- [ ] **R3b EGN 3331.** The same: re-map to 3.11 and 2.001, then Roylance. Owner confirms. Units 2–10
-      to the standard.
+      reads coaching files; items 3–4 of `docs/INVENTORY.md` section 3 settled.
+- [ ] **R3a EML 3100.** The five-unit order in its spine (16.050 Part 0–1, then Yan; D29). Owner
+      confirms. Then Units 3–5 to the standard, and an application lab, `why` and traps for 1–2.
+- [ ] **R3b EGN 3331.** The eleven-unit order in its spine (2.001, energy methods back; D29, D31).
+      Owner confirms. Then Unit 1's gaps, and Units 2–11 to the standard.
 
 ### New courses, back to back (D24)
 
@@ -96,10 +98,15 @@ EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come las
 ### Review courses (already taken)
 
 - [ ] **EMA 3010 Materials Science**, new: [ema3010](docs/courses/ema3010.md), OCW 3.091 (Fall 2018).
-- [ ] **R4** MAC 2311, MAC 2312, MAC 2313 (notes needed), Statics (notes needed): re-map each to its
-      OCW program (18.01SC, 18.02SC, 2.001), replace range-widened templates, add conceptual
-      problems, traps and application labs.
-- [ ] **R5** PHY 2048 on the physics shell, after Phase 2b.
+- [ ] **R4a Calculus I and II:** merge MAC 2311 and MAC 2312 into one module in 18.01SC's order
+      (D28, `docs/courses/mac2311-2312.md`), keeping progress and redirecting old links. Then the
+      template rework, predictions, application labs, traps and conceptual problems.
+- [ ] **R4b MAC 2313:** notes, the missing vector-calculus units (Lagrange multipliers through
+      Stokes), 18.02SC's order, and the same rework.
+- [ ] **R4c Statics:** notes, and the same rework, with 2.001 Lectures 1–6 setting their topics'
+      order (D29).
+- [ ] **R5** PHY 2048 on the physics shell, after Phase 2b, in 8.01SC's order (momentum before
+      energy), with drag and variable-mass problems added (D29).
 - STA 3032: keep its checks passing. Rework only if the owner asks.
 
 ### Platform items that can run beside the list
@@ -116,7 +123,7 @@ EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come las
 | Track | Courses, in order |
 |---|---|
 | Physics | PHY 2048 → PHY 2049 |
-| Math | MAC 2311 → MAC 2312 → MAC 2313 → MAP 2302 → EGN 3203 |
+| Math | Calculus I and II (MAC 2311–2312) → MAC 2313 → MAP 2302 → EGN 3203 |
 | Mechanics | EGN 3311 → EGN 3321, EGN 3331 → EML 4501 → EML 4507C |
 | Thermal-fluids | EML 3100 → EML 3101, EML 3015 → EML 4140 |
 | Systems | EEL 3111 → EML 4312 → EML 4301C |

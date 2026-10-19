@@ -18,6 +18,12 @@ R4: notes for every unit, structural variety, traps, application labs.
 - **OCW program:** [2.001 Mechanics & Materials I, Fall 2006](https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/):
   lecture notes and problem sets. Its first part is statics.
 
+## OCW map (D29)
+
+2.001 teaches statics in Lectures 1–6: forces and moments, equilibrium, planar trusses, friction,
+shear and moment diagrams. Those set the order of the topics they cover. Frames and machines, 3D
+equilibrium, centroids and moments of inertia come from Hibbeler, in Hibbeler's order.
+
 ## Units
 
 The catalog is `courses/statics/src/data/catalog.js`. Conventions are in

@@ -45,6 +45,10 @@ The plan these came from is archived in `docs/history/PLAN-2026-10-18.md`.
 | D25 | **The methalox engine stays out of Flux for now.** Flux is built as a general study platform first. Application labs use everyday and industrial devices. Connecting the engine is a later project. The earlier engine plan is in `docs/history/PLAN-2026-10-18.md`, Phase A1. | 18 Oct 2026 (owner) |
 | D26 | **No dated "do not edit" limits in the guidance docs.** Rules describe how to work, not temporary freezes. An exam-week freeze is given to an agent in its task, not written into AGENTS.md. | 18 Oct 2026 (owner) |
 | D27 | **No standard "exam view".** Exam dates and practice-exam shape are set course by course when its syllabus is available. | 18 Oct 2026 (owner) |
+| D28 | **Calculus I and II are one module; PHY 2049 keeps its order.** MAC 2311 and MAC 2312 merge into one Calculus I and II module that follows 18.01SC from differentiation to Taylor series, with sequences and convergence tests from OpenStax. PHY 2049 follows its instructor's order; 8.02 is its Another view. | 18 Oct 2026 (owner) |
+| D29 | **When an OCW course's scope differs from the UNF course,** the spine maps each unit to the OCW lectures that cover it, from more than one OCW course if needed (Dynamics: 8.01SC and 2.003SC). OCW sets the order where it has one; the textbook orders the rest. | 18 Oct 2026 (owner) |
+| D30 | **"What the model leaves out" goes in two places:** the explainer of every application lab, ending with **What the course model leaves out.**, and a `box out` in every notes section that uses an idealisation. Concept-lab explainers need not have it. `out` joins the standard's box types. | 18 Oct 2026 (owner) |
+| D31 | **EGN 3331 teaches energy methods** (Hibbeler Ch 14), as 2.001 does. Reverses the course pack's omission under D11. | 18 Oct 2026 (owner) |
 
 ## Open
 

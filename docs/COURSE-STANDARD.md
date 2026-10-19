@@ -29,7 +29,7 @@ Before you write a part, open its exemplar and match it. Copy the structure; wri
 | Notes, engineering | `courses/egn3321/src/notes/content/u2-force-acceleration.html` | The same structure on the engineering shell |
 | Notes registry and setups | `courses/phy2049/src/notes/index.js`, `setups.js`; `courses/egn3321/src/notes/index.js`, `setups/u2.js` | Sections linked to labs and problems; **Show this in the lab** |
 | Notes protocol and quality bar | `courses/phy2049/CLAUDE.md`, "The quality bar" | Voice rules, the error hunt, self-review |
-| Application lab | `courses/phy2049/src/labs/mri.js`, `motor.js`, `powerline.js`; `courses/egn3321/src/labs/liftoff.js` | A real device, real numbers, closed form plus a second method, **What the model leaves out** |
+| Application lab | `courses/phy2049/src/labs/mri.js`, `motor.js`, `powerline.js` | A real device, real numbers, closed form plus a second method, **What the model leaves out** |
 | Concept lab with predictions | `courses/egn3321/src/labs/rectilinear.js`, `predictions.js` | A slider that corrects an intuition; predictions computed by the lab |
 | Problem template | `courses/egn3321/src/problems/bank/u2-more.js` | Structural variety, `traps` with the mistake named, levels |
 | Coaching and principles | `courses/egn3321/src/problems/coaching/u2.js`, `principles.js` | Staged hints; principle tags where the course uses them |
@@ -69,15 +69,17 @@ everything in the same place in any course. Do not build a different app.
 ## 3. Notes
 
 - One file per unit, in the OCW program's order, structured as the exemplar: `header.top`
-  (eyebrow, h1, lede, legend, toc), `div.part`, `section.topic` numbered s1, s2, …, boxes `ex`, `why`,
-  `fix`, `key`. The last section is the formula sheet.
+  (eyebrow, h1, lede, legend, toc), `div.part`, `section.topic` numbered s1, s2, …, boxes `ex`
+  (worked example), `why` (derivation), `fix` (correction), `key` (key idea) and `out` (what the
+  model leaves out). The last section is the formula sheet.
 - Math is `\( \)` and `\[ \]`, typeset by KaTeX. `$` is never a delimiter in a notes file.
 - Derive each result. Never list a formula without where it comes from.
 - Worked examples: at least six per unit, each recomputed, each with a **Show this in the lab** setup
   where a lab can show it. notes-check runs every setup against the real lab within 2%.
 - `box fix` for the mistakes students make and for errors in sources (published errata, classic
   misreadings). Every `fix` names something a student would get wrong.
-- **What the model leaves out** at the end of every section that uses an idealisation.
+- **What the model leaves out**, as a `box out`, at the end of every section that uses an
+  idealisation (D30).
 - **Another view**: each unit links its matching OCW lecture or notes (section 7).
 - Voice: PHY 2049's rules. Short declarative sentences, about 15 words. No em dashes. No filler.
   Say a thing once. No word count (D16): a unit is long enough when every topic is derived and
@@ -91,11 +93,11 @@ everything in the same place in any course. Do not build a different app.
   numerical integration, joints against sections, analytic against finite differences). The check
   runs in the course's tests.
 - Two to four predict-first prompts, each with an outcome the lab computes and labs-check verifies.
-- 2–3 scenarios with real numbers, sliders for the inputs, a readout, and an explainer that ends
-  with **What the model leaves out**.
+- 2–3 scenarios with real numbers, sliders for the inputs, a readout, and an explainer.
 - At least one **application lab** per unit: a real everyday or industrial device the unit's
   equations fully explain, with realistic numbers from a cited source (PHY 2049's MRI, motor and
-  power line are the models; D25).
+  power line are the models; D25). Its explainer ends with **What the course model leaves out.**
+  (D30).
 - Every problem with a physical setup opens its lab at that setup, with numbers hidden until solved.
 - Readable at 380×820 and 1280×800, axis labels in the right units, nothing covered by panels.
   Look at the screenshots yourself.
@@ -131,7 +133,12 @@ supports. AGENTS.md lists the flags.
 In this order of authority (D23): the OCW program, then the textbook, then the UNF syllabus.
 
 - **MIT OpenCourseWare is the program** (D15, D23). Each course's spine names its OCW counterpart.
-  - **Units and order.** The counterpart's calendar sets the units and their order.
+  - **Units and order.** The counterpart's calendar sets the units and their order. Where OCW runs
+    two UNF courses as one, Flux does too: Calculus I and II are one module following 18.01SC
+    (D28). PHY 2049 keeps its instructor's order and links 8.02 as Another view (D28).
+  - **When the scope differs** (an OCW course that assumes more, goes further, or covers a topic in a
+    few lectures), the spine maps each unit to the OCW lectures that cover it, from more than one
+    OCW course if needed. OCW sets the order where it has one; the textbook orders the rest (D29).
   - **Coverage.** A unit covers what the counterpart's matching lectures cover. Where the
     counterpart goes past the UNF course (transistors in 6.002, say), the spine says what is left
     out.
