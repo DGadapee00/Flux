@@ -23,21 +23,21 @@ D17).
 ## 1. Read these first
 
 Before you write a part, open its exemplar and match it. Copy the structure; write your own content.
-PHY 2049 is the benchmark for every part. The Dynamics files show the same parts on the engineering
-shell; where they differ from PHY 2049 (its notes have no parts or legend), follow PHY 2049.
+Every content exemplar is PHY 2049, the benchmark (D32). No other course is an exemplar. The one
+non-PHY file below is `courses/starter`, the course to copy for wiring: it names no real course
+and holds only placeholder content.
 
 | Part | Exemplar | What to take from it |
 |---|---|---|
-| Notes file | `courses/phy2049/src/notes/content/e4-charge-in-motion.html`, `e3-potential-to-power.html` | Structure, voice, derivations, worked examples, `box fix` |
-| Notes, engineering | `courses/egn3321/src/notes/content/u2-force-acceleration.html` | The same structure on the engineering shell |
-| Notes registry and setups | `courses/phy2049/src/notes/index.js`, `setups.js`; `courses/egn3321/src/notes/index.js`, `setups/u2.js` | Sections linked to labs and problems; **Show this in the lab** |
+| Notes file | `courses/phy2049/src/notes/content/e4-charge-in-motion.html`, `e3-potential-to-power.html` | Structure (parts, legend, toc), voice, derivations, worked examples, `box fix` |
+| Notes registry and setups | `courses/phy2049/src/notes/index.js`, `setups.js` | Sections linked to labs and problems; **Show this in the lab** |
 | Notes protocol and quality bar | `courses/phy2049/CLAUDE.md`, "The quality bar" | Voice rules, the error hunt, self-review |
-| Application lab | `courses/phy2049/src/labs/mri.js`, `motor.js`, `powerline.js` | A real device, real numbers, closed form plus a second method, **What the model leaves out** |
-| Concept lab with predictions | `courses/egn3321/src/labs/rectilinear.js`, `predictions.js` | A slider that corrects an intuition; predictions computed by the lab |
-| Problem template | `courses/egn3321/src/problems/bank/u2-more.js` | Structural variety, `traps` with the mistake named, levels |
-| Coaching and principles | `courses/egn3321/src/problems/coaching/u2.js`, `principles.js` | Staged hints; principle tags where the course uses them |
-| Citation map | `courses/egn3331/src/data/textbook.js` | One file maps topics to sections; nothing copied |
-| Course spine | `docs/courses/map2302.md` | What a course plan must say before code |
+| Application lab | `courses/phy2049/src/labs/mri.js`, `motor.js`, `powerline.js` | A real device, real numbers, closed form plus a second method, **What the course model leaves out** |
+| Concept lab with predictions | `courses/phy2049/src/labs/capacitor.js`, `src/data/predictions.js` | A slider that corrects an intuition; predictions computed by the lab |
+| Problem template | `courses/phy2049/src/problems/bank/e4.js` | Worked steps, levels, a lab behind the problem |
+| Coaching and principles | `courses/phy2049/src/problems/coaching/e2.js`, `principles.js` | Staged hints, a `why` for each wrong answer, principle tags |
+| Course wiring | `courses/starter` (its `README.md` says how to copy it) | Manifest, catalog, shell wrappers, storage keys, citation map, checks; one example unit |
+| Course plan | `docs/course-plans/TEMPLATE.md` | What a course plan must say before code |
 
 ## 2. What every course is
 

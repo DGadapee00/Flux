@@ -5,7 +5,7 @@ owner's review. Next: EML 3100, then EGN 3331, each re-mapped to its OCW program
 standard. After that, every remaining course in order, back to back (D24).
 
 This file says what to build next. `AGENTS.md` has the rules. `docs/COURSE-STANDARD.md` is the bar.
-`DECISIONS.md` records what is settled. `docs/courses/<id>.md` is each course's plan. The old
+`DECISIONS.md` records what is settled. `docs/course-plans/<id>.md` is each course's plan. The old
 phase-by-phase plan is archived in `docs/history/PLAN-2026-10-18.md`.
 
 ## How an agent picks work
@@ -43,15 +43,15 @@ subject libraries (a function written for one course serves the next), and one s
 
 | Course | Spine | Built | Scorecard | Next |
 |---|---|---|---|---|
-| PHY 2049 Physics II | [phy2049](docs/courses/phy2049.md) | reference | not yet scored | weekly drops; Phase 2b shell move |
-| PHY 2048 Physics I | [phy2048](docs/courses/phy2048.md) | library and bank, no UI | fails | R5, after the physics shell |
-| MAC 2311–2312 Calculus I and II | [mac2311-2312](docs/courses/mac2311-2312.md) | two modules, 4 units each, notes | fails | R4: merge into one (D28) |
-| MAC 2313 Calculus III | [mac2313](docs/courses/mac2313.md) | labs and bank, no notes | fails | R4 |
-| EGN 3311 Statics | [statics](docs/courses/statics.md) | labs and bank, no notes | fails | R4 |
-| EGN 3321 Dynamics | [egn3321](docs/courses/egn3321.md) | 7 units, notes | **passes** | swap Units 3–4, app-lab explainers, owner review |
-| EGN 3331 Mechanics of Materials | [egn3331](docs/courses/egn3331.md) | Unit 1 of 11 | fails | R3b: confirm the new order, then build |
-| EML 3100 Thermodynamics | [eml3100](docs/courses/eml3100.md) | 2 of 5 units | fails | R3a: confirm the order, then build |
-| STA 3032 Statistics | [sta3032](docs/courses/sta3032.md) | complete, older style | fails | keep passing; no rework |
+| PHY 2049 Physics II | [phy2049](docs/course-plans/phy2049.md) | reference | not yet scored | weekly drops; Phase 2b shell move |
+| PHY 2048 Physics I | [phy2048](docs/course-plans/phy2048.md) | library and bank, no UI | fails | R5, after the physics shell |
+| MAC 2311–2312 Calculus I and II | [mac2311-2312](docs/course-plans/mac2311-2312.md) | two modules, 4 units each, notes | fails | R4: merge into one (D28) |
+| MAC 2313 Calculus III | [mac2313](docs/course-plans/mac2313.md) | labs and bank, no notes | fails | R4 |
+| EGN 3311 Statics | [statics](docs/course-plans/statics.md) | labs and bank, no notes | fails | R4 |
+| EGN 3321 Dynamics | [egn3321](docs/course-plans/egn3321.md) | 7 units, notes | **passes** | swap Units 3–4, app-lab explainers, owner review |
+| EGN 3331 Mechanics of Materials | [egn3331](docs/course-plans/egn3331.md) | Unit 1 of 11 | fails | R3b: confirm the new order, then build |
+| EML 3100 Thermodynamics | [eml3100](docs/course-plans/eml3100.md) | 2 of 5 units | fails | R3a: confirm the order, then build |
+| STA 3032 Statistics | [sta3032](docs/course-plans/sta3032.md) | complete, older style | fails | keep passing; no rework |
 
 ## 3. The build list, in order
 
@@ -68,6 +68,11 @@ subject libraries (a function written for one course serves the next), and one s
 - [x] **Inventory** of every course against the outline: `docs/INVENTORY.md`.
 - [ ] **Platform fixes from the inventory:** notes deep links (`?n=`) in the shells; the scorecard
       reads coaching files.
+- [x] **Course-neutral references:** content exemplars are PHY 2049 only; `courses/starter` is the
+      course to copy; course plans live in `docs/course-plans/`; the shell notes CSS styles parts and
+      the legend; the word floor and the fixed end-of-section box are gone from every notes-check.
+- [ ] **A math-shell starter** before MAP 2302 starts: `courses/starter` is on the engineering
+      shell. Add the math-shell wiring to it (or a second starter) with the same example unit.
 - [ ] **R3a EML 3100.** The five-unit order in its spine (16.050 Part 0–1, then Yan; D29). Owner
       confirms. Then Units 3–5 to the standard, and an application lab, `why` and traps for 1–2.
 - [ ] **R3b EGN 3331.** The eleven-unit order in its spine (2.001, energy methods back; D29, D31).
@@ -80,26 +85,26 @@ first slice, then one unit per PR. At most two courses in progress at once (D18)
 
 | # | Course | Spine | OCW program |
 |---|---|---|---|
-| 1 | MAP 2302 Differential Equations | [map2302](docs/courses/map2302.md) | 18.03SC (Fall 2011) |
-| 2 | EEL 3111 Circuit Analysis I | [eel3111](docs/courses/eel3111.md) | 6.002 (Spring 2007) |
-| 3 | EML 3101 Thermodynamics II | [eml3101](docs/courses/eml3101.md) | 16.050 (Fall 2002) |
-| 4 | EML 3015 Fluids | [eml3015](docs/courses/eml3015.md) | 2.06 (Spring 2013) |
-| 5 | EGN 3203 Modern Computation Methods | [egn3203](docs/courses/egn3203.md) | 2.086 (Spring 2013) |
-| 6 | EML 4140 Heat Transfer | [eml4140](docs/courses/eml4140.md) | 2.51 (Fall 2008) |
-| 7 | EML 4312 Modeling and Analysis of Dynamic Systems | [eml4312](docs/courses/eml4312.md) | 2.003SC (Fall 2011), 2.004 (Spring 2008) |
-| 8 | EML 4501 Machine Design | [eml4501](docs/courses/eml4501.md) | 2.72 (Spring 2009) |
-| 9 | EML 4320C Integrated Design and Manufacturing | [eml4320c](docs/courses/eml4320c.md) | 2.008 (Spring 2004) |
-| 10 | EML 4507C Finite Element Modeling and Analysis | [eml4507c](docs/courses/eml4507c.md) | 2.092 (Fall 2009) |
-| 11 | EML 4301C Control of Machinery | [eml4301c](docs/courses/eml4301c.md) | 2.004 (Spring 2008) |
+| 1 | MAP 2302 Differential Equations | [map2302](docs/course-plans/map2302.md) | 18.03SC (Fall 2011) |
+| 2 | EEL 3111 Circuit Analysis I | [eel3111](docs/course-plans/eel3111.md) | 6.002 (Spring 2007) |
+| 3 | EML 3101 Thermodynamics II | [eml3101](docs/course-plans/eml3101.md) | 16.050 (Fall 2002) |
+| 4 | EML 3015 Fluids | [eml3015](docs/course-plans/eml3015.md) | 2.06 (Spring 2013) |
+| 5 | EGN 3203 Modern Computation Methods | [egn3203](docs/course-plans/egn3203.md) | 2.086 (Spring 2013) |
+| 6 | EML 4140 Heat Transfer | [eml4140](docs/course-plans/eml4140.md) | 2.51 (Fall 2008) |
+| 7 | EML 4312 Modeling and Analysis of Dynamic Systems | [eml4312](docs/course-plans/eml4312.md) | 2.003SC (Fall 2011), 2.004 (Spring 2008) |
+| 8 | EML 4501 Machine Design | [eml4501](docs/course-plans/eml4501.md) | 2.72 (Spring 2009) |
+| 9 | EML 4320C Integrated Design and Manufacturing | [eml4320c](docs/course-plans/eml4320c.md) | 2.008 (Spring 2004) |
+| 10 | EML 4507C Finite Element Modeling and Analysis | [eml4507c](docs/course-plans/eml4507c.md) | 2.092 (Fall 2009) |
+| 11 | EML 4301C Control of Machinery | [eml4301c](docs/course-plans/eml4301c.md) | 2.004 (Spring 2008) |
 
 The order follows prerequisites: MAP 2302 and EEL 3111 feed most of what follows; EML 4140 needs
 EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come last.
 
 ### Review courses (already taken)
 
-- [ ] **EMA 3010 Materials Science**, new: [ema3010](docs/courses/ema3010.md), OCW 3.091 (Fall 2018).
+- [ ] **EMA 3010 Materials Science**, new: [ema3010](docs/course-plans/ema3010.md), OCW 3.091 (Fall 2018).
 - [ ] **R4a Calculus I and II:** merge MAC 2311 and MAC 2312 into one module in 18.01SC's order
-      (D28, `docs/courses/mac2311-2312.md`), keeping progress and redirecting old links. Then the
+      (D28, `docs/course-plans/mac2311-2312.md`), keeping progress and redirecting old links. Then the
       template rework, predictions, application labs, traps and conceptual problems.
 - [ ] **R4b MAC 2313:** notes, the missing vector-calculus units (Lagrange multipliers through
       Stokes), 18.02SC's order, and the same rework.

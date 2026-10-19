@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Example unit</title>
+</head>
+<body>
+<!--
+  EXAMPLE NOTES. Replace with the unit's own notes; keep the structure.
+  The benchmark is PHY 2049 (courses/phy2049/src/notes/content/e4-charge-in-motion.html, D32):
+  header.top with eyebrow, h1, lede, legend and a toc grouped by part; div.part blocks; numbered
+  section.topic blocks; boxes placed where the content needs them (ex, why, fix, key, out); the
+  formula sheet last; a footer naming the sources. Math is \( \) and \[ \]; a dollar sign is
+  never a delimiter here.
+-->
+<header class="top">
+  <div class="eyebrow">STARTER · Example course · Unit 1 · OCW lectures and text sections go here</div>
+  <h1>Example unit</h1>
+  <p class="lede">Two short sections on a tank that fills and drains, to show the shape every unit's notes take.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Rates</h3>
+    <a href="#s1"><span>1</span>The net rate</a>
+    <a href="#s2"><span>2</span>Accumulation</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Rates</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>The net rate</h2>
+<p>Water flows into a tank at \(q_{in}\) and drains at \(q_{out}\). In a short time \(dt\) the volume gains \(q_{in}\,dt\) and loses \(q_{out}\,dt\). So it changes by their difference.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+\frac{dV}{dt} = q_{in} - q_{out}.
+\]
+<p>With both rates constant, the right side is a constant. The volume grows in a straight line.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a tank with a drain</span>
+<p>An empty 300 L tank fills at 0.5 L/s and drains at 0.1 L/s. The net rate is 0.4 L/s. It fills in \(300/0.4 = 750\) s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Dividing by the inflow alone gives 600 s. The drain runs the whole time, so the answer is 750 s.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real drain slows as the water gets shallower. Here the rates are constant.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Accumulation</h2>
+<p>Integrate the rate from the start. What is in the tank is what was there plus the net rate times the time.</p>
+\[
+V(t) = V_0 + (q_{in} - q_{out})\,t.
+\]
+<div class="box ex"><span class="tag">Worked example · after 100 seconds</span>
+<p>A tank holds 120 L. It fills at 0.5 L/s and drains at 0.2 L/s. After 100 s it holds \(120 + 0.3 \times 100 = 150\) L.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Only the difference of the rates matters, never either one alone.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+\frac{dV}{dt} = q_{in} - q_{out}, \qquad V(t) = V_0 + (q_{in} - q_{out})\,t, \qquad t_{fill} = \frac{V_{cap} - V_0}{q_{in} - q_{out}}.
+\]
+</section>
+
+</main>
+<footer>Example notes for the starter course. A real unit names its OCW lectures and textbook sections here, and the constants it uses.</footer>
+</body>
+</html>

@@ -227,7 +227,7 @@ and improper), series, then parametric and polar.
 **Decided (D28):** MAC 2311 and MAC 2312 merge into one module in 18.01SC's order: differentiation;
 applications of differentiation; the definite integral and its applications; techniques; parametric
 and polar; L'Hôpital, improper integrals and series. 18.01SC covers only Taylor series, so the
-convergence tests come from OpenStax. The plan is `docs/courses/mac2311-2312.md`.
+convergence tests come from OpenStax. The plan is `docs/course-plans/mac2311-2312.md`.
 
 ### 4.6 MAC 2313 Calculus III
 

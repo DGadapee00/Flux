@@ -10,7 +10,7 @@ module in this repo; the hub at https://flux-study.pages.dev links them. PHY 204
 2. **`ROADMAP.md`.** What to build next. Take the first unchecked item in its build list.
 3. **`docs/COURSE-STANDARD.md`.** Before any course work: what a course is, the exemplar files to
    copy the shape of, and the bar.
-4. **`docs/courses/<id>.md`.** The course's spine: its units, sources, OCW counterpart and labs.
+4. **`docs/course-plans/<id>.md`.** The course's spine: its units, sources, OCW counterpart and labs.
    Build from the spine. If the spine and the code disagree, stop and say so.
 5. **The skill for the job** in `.claude/skills/`: `flux-new-course`, `flux-build-unit`,
    `flux-review-unit`, `flux-content-drop`. Cursor: open the skill's `SKILL.md` and follow it.
@@ -38,7 +38,8 @@ saying so in the PR. `docs/history/` is the archive; nothing there is an instruc
    case reproduces a printed answer by our own computation.
 6. **A course writes no UI of its own.** It uses a shell (`packages/shells/math` or `engineering`)
    through two thin wrappers. A missing control becomes a shell hook behind a flag, with a test on
-   the shell's fixture course. A course never imports another course.
+   the shell's fixture course. A course never imports another course. A new course starts as a
+   copy of `courses/starter`, never of another real course.
 7. **Spine before code** (D18). A new course starts with its spine confirmed by the owner. At most
    two courses have units in progress at once, besides Phase R rework.
 8. **One unit per PR.** Every course's checks stay green on every PR. A failing check does not ship.
@@ -56,7 +57,7 @@ packages/subjects   shared domain math (math, mechanics, em, stats, thermo, conv
 packages/shells     course-family UI: math, engineering, practice (the loop), notes.js. No course, no chapter.
 packages/tracks     the hub's track list. Imports nothing.
 packages/checks     deps, raw, storage, prereqs, scorecard
-courses/<id>        one folder per course
+courses/<id>        one folder per course; courses/starter is the course-neutral one to copy
 site                the Vite hub
 ```
 
@@ -109,6 +110,7 @@ Dev ports: hub 5173, PHY 2049 5174, MAC 2313 5175, Statics 5176, STA 3032 5177, 
 MAC 2312 5179, PHY 2048 5180, EGN 3321 5181, EGN 3331 5182, EML 3100 5183. Reserved for the courses
 ahead (spines): MAP 2302 5184, EEL 3111 5185, EML 3015 5186, EML 3101 5187, EGN 3203 5188, EML 4140
 5189, EML 4312 5190, EML 4301C 5191, EML 4501 5192, EML 4507C 5193, EML 4320C 5194, EMA 3010 5195.
+`courses/starter`, the course to copy, is 5199; it is tested but never built into the site.
 
 Deploy: a push to `main` publishes. Cloudflare Pages project `flux-study` is connected to this repo
 and runs `npm test && npm run build` into `site/dist`, so a failing test blocks the deploy. `npm run

@@ -1,23 +1,23 @@
 ---
 name: flux-new-course
-description: Start a new Flux course from its spine in docs/courses/<id>.md, through the first slice (skeleton plus Unit 1 to the standard). Use when ROADMAP.md says a course is next and its folder does not exist yet.
+description: Start a new Flux course from its spine in docs/course-plans/<id>.md, through the first slice (skeleton plus Unit 1 to the standard). Use when ROADMAP.md says a course is next and its folder does not exist yet.
 ---
 
 # Start a new Flux course
 
-A new course is the same app as PHY 2049 and Dynamics with different content. This procedure gets
+A new course is the same app as PHY 2049 with different content. This procedure gets
 it there without inventing a new shape.
 
 ## 0. Gate
 
 - The course is the first unchecked item in `ROADMAP.md`'s build list, or the owner asked for it.
-- `docs/courses/<id>.md` exists and its status is **confirmed** by the owner. If it is **draft**, do
+- `docs/course-plans/<id>.md` exists and its status is **confirmed** by the owner. If it is **draft**, do
   step 1 only, open a PR with the completed spine, and stop.
 - Fewer than two other courses have units in progress (DECISIONS.md, D18).
 
 ## 1. Complete the spine (a docs-only PR)
 
-Fill every section of `docs/courses/TEMPLATE.md` that the draft leaves open:
+Fill every section of `docs/course-plans/TEMPLATE.md` that the draft leaves open:
 
 1. **OCW program first** (D23). Open the counterpart's syllabus and calendar. Set the units and
    their order from it. For each unit, name the OCW lectures, problem sets and exams, and which
@@ -37,8 +37,8 @@ Open the PR, ask the owner to confirm, and stop.
 
 ## 2. First slice (after the owner confirms)
 
-Copy the shape of `courses/egn3321` (engineering shell) or `courses/mac2311` (math shell). Do not
-copy their content.
+Copy `courses/starter`, the course-neutral wiring with one example unit, and follow its `README.md`.
+Never copy another real course. Content and its depth come from PHY 2049 (D32).
 
 1. `courses/<id>/` with `package.json`, `vite.config.js` (port from `AGENTS.md`), `index.html`,
    `src/manifest.js` (`standard: false`, `track`, `order`, `prereqs`), `src/data/catalog.js` with
@@ -47,8 +47,8 @@ copy their content.
 2. `PROVENANCE.md`: what the course contains, the sources and their licences (OCW program, then
    textbook, then any UNF syllabus), and that nothing is copied. `CONVENTIONS.md`: significant
    figures, units, sign conventions, sections left out.
-3. Scripts copied from EGN 3321 and pointed at this course: tex-check, problems-check, labs-check,
-   notes-check, route test, layout.
+3. The starter's scripts come with the copy: tex-check, problems-check, labs-check, notes-check,
+   route test, layout. Point them at the new course's labs and problem ids.
 4. The root `package.json` build gains the course; `packages/tracks/tracks.js` gains it with its
    `href`; the hub backup includes its storage keys.
 5. **Unit 1 to the standard**, by the `flux-build-unit` skill.
