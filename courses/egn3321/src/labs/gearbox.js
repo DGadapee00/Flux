@@ -2,7 +2,7 @@ import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
 import { C, alpha, axes, begin, label, plotIn, poly, sceneIn, seg, split } from './diagram.js';
 import { defineLab } from './define2d.js';
-import { bindSlider, showField, slider } from './widgets.js';
+import { bindSlider, showField, slider, leavesOut } from './widgets.js';
 
 const RPM = (2 * Math.PI) / 60;
 
@@ -91,6 +91,9 @@ function byContact(state, t) {
 const rel = (a, b) => Math.abs(a - b) / Math.max(1e-12, Math.abs(b));
 
 const sense = (w) => (w > 0 ? 'ccw' : 'cw');
+
+/** What the real device has that the model ignores (D30). */
+const OUT = String.raw`The model treats each mesh as two pitch circles rolling without slip. That gives speeds and senses and nothing else. A real train has backlash, the play between teeth, and its shafts twist under load. It says nothing about torque, or about which gear carries the load: that is Unit 6. Many turbopumps carry the turbine and both pumps on one shaft and need no gearbox. A gearbox earns its weight when the pumps want different speeds.`;
 
 export default defineLab({
   id: 'gearbox',
@@ -234,7 +237,7 @@ export default defineLab({
       ['pitch v', `${fig(c.v12)} m/s`],
     ]);
   },
-  coach(state, c) {
+  coach: leavesOut(OUT, (state, c) => {
     if (c.idler) {
       return {
         title: 'The idler cancels out',
@@ -245,7 +248,7 @@ export default defineLab({
       title: 'Each mesh reverses the sense',
       body: String.raw`Two external meshes: shaft 4 turns the same way as the turbine, at $${fig(Math.abs(c.w4))}$ rpm. The pitch line of mesh 1–2 moves at $${fig(c.v12)}$ m/s.`,
     };
-  },
+  }),
   predictions: [
     {
       id: 'gb-faster',

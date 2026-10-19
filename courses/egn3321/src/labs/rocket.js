@@ -5,7 +5,7 @@ import { M, makeLine, setLine } from '../scene/draw.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
 import { THREE, defineLab } from './define.js';
-import { bindSlider, slider } from './widgets.js';
+import { bindSlider, slider, leavesOut } from './widgets.js';
 
 const SCENARIOS = [
   {
@@ -87,6 +87,9 @@ const BODY = [
   { x: 0.28, y: 1.05 },
   { x: 0, y: 1.55 },
 ];
+
+/** What the real device has that the model ignores (D30). */
+const OUT = String.raw`The exhaust speed and the burn rate are constant. A real engine's thrust grows as the outside pressure falls, so its exhaust speed differs between the ground and a vacuum. Drag, which is largest low and slow, is left out, and so is the turn from vertical toward horizontal flight, which changes the gravity loss from $g t_b$ to the sum of $g\sin\gamma$ over the burn, with $\gamma$ the climb angle above horizontal. Gravity is taken as constant over the burn.`;
 
 export default defineLab({
   id: 'rocket',
@@ -193,7 +196,7 @@ export default defineLab({
       ['time', `${fig(c.tb)} s`],
     ]);
   },
-  coach(state, c) {
+  coach: leavesOut(OUT, (state, c) => {
     if (state.g > 0) {
       return {
         title: 'Gravity takes g times the burn time',
@@ -211,5 +214,5 @@ export default defineLab({
       title: 'The speed grows with the mass ratio',
       body: String.raw`$\Delta v = v_e\ln(m_0/m_f) = ${fig(c.dv)}\ \mathrm{m/s}$. The ratio is ${fig(c.ratio)}.`,
     };
-  },
+  }),
 });
