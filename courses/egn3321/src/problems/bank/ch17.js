@@ -352,6 +352,7 @@ const ch17 = [
       kase('Hibbeler §17.3', { m: 40, b: 0.5, h: 0.5, mu: 0.25, where: 'top' }, { slide: 98.1, tip: 196.2, mode: 'slide' }),
       kase('Hibbeler §17.3', { m: 20, b: 0.4, h: 0.8, mu: 0.5, where: 'top' }, { slide: 98.1, tip: 49.05, mode: 'tip' }),
       kase('Hibbeler §17.3', { m: 20, b: 0.4, h: 0.8, mu: 0.4, where: 'mid' }, { slide: 78.48, tip: 98.1, mode: 'slide' }),
+      kase('MIT OCW 2.003SC (Fall 2011), Problem Set 5, Problem 4', { m: 800, b: 0.2, h: 2, mu: 0.3, where: 'mid' }, { slide: 2354.4, tip: 784.8, mode: 'tip' }, { note: 'A box rides on an accelerating cart. The inertial force m·a acts at the mass centre, as a push at mid-height does. The printed limits are a = 0.3 g to slide and a = 0.1 g to tip, so it tips first; times the 800 kg mass they are 2,354 N and 785 N.' }),
     ],
   }),
 

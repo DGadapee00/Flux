@@ -12,6 +12,8 @@ const G_FT = 32.2;
 const DEG = Math.PI / 180;
 
 const kOf = (shape) => ROLL_K[shape];
+/** (k_G / R)² for `u7.18.wheel-hill`: a given radius of gyration, a uniform disk (1/2), or a hoop (1). */
+const wheelK2 = ($) => ($.body === 'wheel' ? ($.kG / $.R) ** 2 : $.body === 'disk' ? 0.5 : 1);
 const sinT = ($) => Math.sin($.theta * DEG);
 
 /** The race's three speeds, each with the same two slips. */
@@ -93,6 +95,23 @@ export default {
         return Math.sqrt((2 * (e.gravity + e.spring)) / $.m) / ($.L / 2);
       }, 'That puts all the energy into ½ m v_G². The rod also turns: T = ½ I_IC ω² with I_IC = mL²/3.']],
       T: [[($) => slotEnergy($).gravity, 'That is gravity’s work alone. The compressed spring also releases energy as the rod falls.']],
+    },
+  },
+
+  'u7.18.wheel-hill': {
+    traps: {
+      T: [
+        [($) => ($.m * G * $.h) / 2, 'Kinetic energy at the bottom equals the work of gravity, m g h, with nothing lost to slipping. The ½ belongs to ½mv², not to the work.'],
+        [($) => $.m * $.h, 'Work is force times distance: the weight m g, not the mass, times the drop.'],
+      ],
+      v: [
+        [($) => Math.sqrt(2 * G * $.h), 'That treats the wheel as a block sliding down. A rolling wheel spends part of m g h on spin, so it is slower.'],
+        [($) => Math.sqrt(2 * G * $.h * (1 + wheelK2($))), 'The spin term is in the denominator: ½mv²(1 + k²/R²) = mgh, so v² = 2gh/(1 + k²/R²).'],
+      ],
+      share: [
+        [() => 100, 'Part of the energy is spin: ½ m k²ω². Translation is less than the whole.'],
+        [($) => (100 * $.R * $.R) / ($.R * $.R + 2 * wheelK2($) * $.R * $.R), 'The spin term is ½ I_G ω² once, with I_G = m k². It was counted twice.'],
+      ],
     },
   },
 };

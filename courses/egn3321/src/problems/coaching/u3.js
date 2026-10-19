@@ -39,6 +39,15 @@ function powerOut($) {
 
 const paths = ($) => pathReport({ mass: $.m, k: $.k, mu: $.mu, rise: $.rise, ax: $.ax, ay: $.ay, bx: $.bx, by: $.by, g: G });
 
+/** The cars of `u3.14.frames`, in the observer's frame: both speeds, the energy before and after. */
+function frameT($) {
+  const f = $.frame === 'train' ? $.v1 : 0;
+  const u1 = $.v1 - f;
+  const u2 = -$.v2 - f;
+  const vf = ($.m1 * u1 + $.m2 * u2) / ($.m1 + $.m2);
+  return { u1, u2, before: 0.5 * $.m1 * u1 * u1 + 0.5 * $.m2 * u2 * u2, after: 0.5 * ($.m1 + $.m2) * vf * vf };
+}
+
 export default {
   'u3.14.speed': {
     traps: {
@@ -114,6 +123,23 @@ export default {
       speed: [
         [($) => collar($, { g: G_FT, half: 2 }), 'The spring work is ½k(s₁² − s₂²). The factor of one half is missing.'],
         [($) => collar($, { g: G_FT, gsign: -1 }), 'The collar moves up the rod, so the weight does negative work. The sign of the gravity term is flipped.'],
+      ],
+    },
+  },
+
+  'u3.14.frames': {
+    traps: {
+      Tb: [
+        [($) => 2 * frameT($).before, 'Kinetic energy is one half m v². The ½ is missing from each term.'],
+        [($) => 0.5 * ($.m1 + $.m2) * ($.v1 + $.v2) ** 2, 'The cars are two bodies moving at different speeds. Add ½ m v² for each, not one body at the closing speed.'],
+      ],
+      Ta: [
+        [($) => frameT($).before, 'Kinetic energy is not conserved when the cars lock together. Momentum is. T after is less than T before.'],
+        [($) => 0.5 * ($.m1 + $.m2) * ((frameT($).u1 + frameT($).u2) / 2) ** 2, 'The common velocity is weighted by mass: (m₁u₁ + m₂u₂)/(m₁ + m₂), not the plain average.'],
+      ],
+      lost: [
+        [($) => 0.5 * ($.m1 + $.m2) * ($.v1 + $.v2) ** 2, 'That uses the total mass. The loss is ½μv², with the reduced mass μ = m₁m₂/(m₁ + m₂) and v the closing speed.'],
+        [($) => frameT($).after, 'That is the energy left, not the energy lost.'],
       ],
     },
   },

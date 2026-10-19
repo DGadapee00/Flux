@@ -157,15 +157,23 @@ const ch15 = [
         String.raw`$m_b v_b - M v_g = 0$.`,
         String.raw`$v_g = m_b v_b/M = ${sig(($.mb * $.vb) / $.Mg)}\ \mathrm{m/s}$.`,
       ]),
-    // Second: iterate on the shell's ground speed until momentum balances.
+    // Second: find the recoil speed at which the momenta balance, by bisection. (Iterating
+    // v = m_b (u - v)/M diverges once the shell outweighs the cannon, as a girl leaping from a cart does.)
     second: ($) => {
-      let vg = 0;
-      for (let i = 0; i < 200; i++) vg = momentum($.mb, $.given === 'muzzle' ? $.vb - vg : $.vb) / $.Mg;
-      return { vg };
+      if ($.given !== 'muzzle') return { vg: momentum($.mb, $.vb) / $.Mg };
+      let lo = 0;
+      let hi = $.vb;
+      for (let i = 0; i < 100; i++) {
+        const mid = (lo + hi) / 2;
+        if (momentum($.mb, $.vb - mid) - $.Mg * mid > 0) lo = mid;
+        else hi = mid;
+      }
+      return { vg: (lo + hi) / 2 };
     },
     cases: [
       kase('Hibbeler §15.3', { given: 'ground', mb: 20, vb: 300, Mg: 200 }, { vg: 30 }),
       kase('Hibbeler §15.3', { given: 'muzzle', mb: 20, vb: 330, Mg: 200 }, { vg: 30 }),
+      kase('MIT OCW 2.003SC (Fall 2011), Problem Set 3, Problem 3a', { given: 'muzzle', mb: 75, vb: 3, Mg: 50 }, { vg: 1.8 }, { note: 'A girl leaps from a cart at 3 m/s relative to the cart. The printed velocity of the cart is −1.8 m/s: it moves opposite to the leap.' }),
     ],
   }),
 
@@ -277,6 +285,7 @@ const ch15 = [
     cases: [
       kase('Hibbeler §15.4', { meet: 'rest', m1: 1, m2: 1, u1: 4, w: 1, e: 0.5 }, { v1: 1, v2: 3 }),
       kase('Hibbeler §15.4', { meet: 'headon', m1: 2, m2: 1, u1: 3, w: 1, e: 0.8 }, { v1: 0.6, v2: 3.8 }),
+      kase('MIT OCW 2.003SC (Fall 2011), Problem Set 1, Problem 6', { meet: 'headon', m1: 1000, m2: 2000, u1: 25, w: 25, e: 0 }, { v1: -8.333, v2: -8.333 }, { note: 'Two cars meet head-on and stick together, so e = 0. The printed kinetic energy lost is 833,333 J.' }),
     ],
   }),
 
