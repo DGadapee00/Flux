@@ -1,4 +1,4 @@
-/** Unit 4 notes: the file, and its sections with their labs and topics. See ../index.js. */
+/** Impulse and momentum (id u4, Unit 3) notes: the file, and its sections with their labs and topics. See ../index.js. */
 export default {
   exam: 'u4',
   title: 'Impulse and momentum',

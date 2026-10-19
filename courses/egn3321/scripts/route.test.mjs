@@ -63,3 +63,14 @@ test('Unit 5 opens on the instant centre, Unit 6 on inertia, and Unit 7 on the r
   assert.equal(old.examId, 'u1');
   assert.equal(old.labId, 'rectilinear');
 });
+
+test('momentum comes before energy (D29), and both keep their ids', async () => {
+  const { EXAMS, examById } = await import('../src/data/catalog.js');
+  assert.deepEqual(EXAMS.map((e) => e.id), ['u1', 'u2', 'u4', 'u3', 'u5', 'u6', 'u7']);
+  assert.deepEqual(EXAMS.map((e) => e.n), [1, 2, 3, 4, 5, 6, 7]);
+  assert.equal(examById('u4').title, 'Impulse and momentum');
+  assert.equal(examById('u3').title, 'Work and energy');
+  assert.equal(parseRoute(`#/${COURSE}/u3`).labId, 'collar');
+  assert.equal(parseRoute(`#/${COURSE}/u4`).labId, 'impulse');
+  assert.equal(parseRoute(`#/${COURSE}/u3/landing`).examId, 'u3');
+});

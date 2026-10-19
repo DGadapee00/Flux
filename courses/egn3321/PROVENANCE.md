@@ -16,16 +16,16 @@ Unit 2 is particle kinetics: force and acceleration. The labs are blocks and pul
 (`fma`) and a banked curve with a vertical loop (`curve`). The problems cover
 Hibbeler Dynamics Chapter 13. The numbers are generated and cited by section.
 
-Unit 3 is work and energy. The labs are a collar on a rod (`collar`) and three paths
-between the same ends (`paths`). The problems cover Hibbeler Dynamics Chapter 14.
-The numbers are generated and cited by section.
-
-Unit 4 is impulse and momentum. The labs are an F–t area (`impulse`), central and
+Unit 3 is impulse and momentum (id `u4`). The labs are an F–t area (`impulse`), central and
 oblique impact (`impact`), and a rocket at constant burn rate (`rocket`, §15.9).
 The problems cover Hibbeler Dynamics Chapter 15: impulse, recoil, a bullet and a
 block, central and oblique impact, angular momentum of a particle, and the rocket
 in SI and in US customary units. The numbers are generated and cited by section.
 Steady flow (§15.8) stays out.
+
+Unit 4 is work and energy (id `u3`). The labs are a collar on a rod (`collar`) and three paths
+between the same ends (`paths`). The problems cover Hibbeler Dynamics Chapter 14.
+The numbers are generated and cited by section.
 
 Unit 5 is planar kinematics of a rigid body. The labs are an instantaneous centre
 (`ic`: a ladder, a rolling wheel, and a four-bar), a slider-crank, and rolling

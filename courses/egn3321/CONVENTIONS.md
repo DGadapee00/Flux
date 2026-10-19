@@ -30,7 +30,7 @@ The course pack does not name these, so they stay out (D11):
 - steady flow of a mass system, §15.8
 - rotating axes, §16.8
 
-The rocket, §15.9, is kept. It is a Unit 4 lab, not part of Unit 1.
+The rocket, §15.9, is kept. It is a Unit 3 lab (id `u4`), not part of Unit 1.
 
 ## Notes
 

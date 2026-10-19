@@ -1,5 +1,5 @@
 /**
- * Unit 3, beyond the numeric drills: three conceptual questions, each wrong option with its own
+ * Work and energy (id u3, Unit 4), beyond the numeric drills: three conceptual questions, each wrong option with its own
  * reason, and the unit's application, a lander's crushable pads (the `landing` lab).
  */
 import { G, choice, kase, num, problem, range } from '../kit.js';

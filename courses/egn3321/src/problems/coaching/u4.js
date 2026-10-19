@@ -1,5 +1,5 @@
 /**
- * Unit 4 coaching: for each template, numeric `traps` (the wrong value a known mistake produces,
+ * Impulse and momentum (id u4, Unit 3) coaching: for each template, numeric `traps` (the wrong value a known mistake produces,
  * and what the mistake was). Folded into the bank by src/problems/index.js.
  *
  * Values inside `$` are SI (slugs and ft/s for the US-customary rocket). A trap returns a value in
