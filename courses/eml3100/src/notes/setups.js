@@ -4,6 +4,8 @@
  */
 import { R_WATER, fromC, mixP, toC, waterTP } from '@flux/subjects/thermo';
 
+const KJ = 1e3;
+
 const onIsobar = (p, tC) => (s) => {
   s.p = p;
   s.h = waterTP(fromC(tC), p).h;
@@ -117,6 +119,121 @@ export const SETUPS = {
           s.V2 = 0.4986;
         },
         read: (c) => ({ W: [c.W / 1e3, 174.0], Q: [c.Q / 1e3, 1530] }),
+      },
+    ],
+  },
+  u3: {
+    s1: [
+      {
+        tag: 'air in a duct',
+        lab: 'nozzle',
+        scenario: 'subsonic',
+        read: (c) => ({ mdot: [c.mdot, 1.568] }),
+      },
+    ],
+    s2: [
+      {
+        tag: 'a steam turbine',
+        lab: 'devices',
+        scenario: 'turbine',
+        read: (c) => ({ W: [c.W / KJ, 1774], T2: [toC(c.T2), 45.81] }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'an air compressor',
+        lab: 'devices',
+        scenario: 'compressor',
+        read: (c) => ({ W: [-c.W / KJ, 223.6] }),
+      },
+      {
+        tag: 'a wetter exhaust',
+        lab: 'devices',
+        scenario: 'turbine',
+        setup(s) {
+          s.x2 = 0.8;
+        },
+        read: (c) => ({ W: [c.W / KJ, 2252] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'a converging nozzle',
+        lab: 'nozzle',
+        scenario: 'subsonic',
+        read: (c) => ({ V2: [c.V2, 298.1], T2: [toC(c.T2), 83.35], A2: [c.A2 * 1e4, 13.45], M2: [c.M2, 0.788] }),
+      },
+      {
+        tag: 'expanding to 100 kPa',
+        lab: 'nozzle',
+        scenario: 'supersonic',
+        read: (c) => ({ V2: [c.V2, 568.5], T2: [c.T2, 239.9], A2: [c.A2 * 1e4, 19.0], M2: [c.M2, 1.83] }),
+      },
+      {
+        tag: 'a diffuser',
+        lab: 'nozzle',
+        scenario: 'diffuser',
+        read: (c) => ({ V2: [c.V2, 151.1], T2: [c.T2, 319.7], A2: [c.A2 * 1e4, 141.1] }),
+      },
+      {
+        tag: 'steam through a nozzle',
+        lab: 'nozzle',
+        scenario: 'steam',
+        read: (c) => ({ V2: [c.V2, 773.4], dh: [-c.dh / KJ, 298.3], x2: [c.x2, 0.9895] }),
+      },
+    ],
+    s5: [
+      {
+        tag: 'throttling steam',
+        lab: 'devices',
+        scenario: 'throttle',
+        read: (c) => ({ T2: [toC(c.T2), 274.9] }),
+      },
+      {
+        tag: 'hot liquid flashes',
+        lab: 'devices',
+        scenario: 'flash',
+        read: (c) => ({ x2: [c.x2, 0.1533], T2: [toC(c.T2), 99.61] }),
+      },
+      {
+        tag: 'throttling air',
+        lab: 'devices',
+        scenario: 'throttle-air',
+        read: (c) => ({ T2: [toC(c.T2), 27.0] }),
+      },
+    ],
+    s6: [
+      {
+        tag: 'hot and cold water',
+        lab: 'devices',
+        scenario: 'mixer',
+        read: (c) => ({ T2: [toC(c.T2), 29.99] }),
+      },
+      {
+        tag: 'a heat exchanger',
+        lab: 'devices',
+        scenario: 'exchanger',
+        read: (c) => ({ Q: [c.Qx / KJ, 167.6], T2: [toC(c.T2), 41.72] }),
+      },
+    ],
+    s7: [
+      {
+        tag: 'one shower',
+        lab: 'heater',
+        scenario: 'shower',
+        read: (c) => ({ Q: [c.Q / KJ, 22.33], P: [c.elec / KJ, 22.79], maxGpm: [c.maxGpm, 2.96] }),
+      },
+      {
+        tag: 'a shower in winter',
+        lab: 'heater',
+        scenario: 'winter',
+        read: (c) => ({ P: [c.elec / KJ, 29.56], Tout: [toC(c.Tout), 45.1], maxGpm: [c.maxGpm, 2.28] }),
+      },
+      {
+        tag: 'two showers',
+        lab: 'heater',
+        scenario: 'two',
+        read: (c) => ({ P: [c.elec / KJ, 45.58], Tout: [toC(c.Tout), 41.8], maxGpm: [c.maxGpm, 3.95] }),
       },
     ],
   },

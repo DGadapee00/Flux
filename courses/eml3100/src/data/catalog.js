@@ -23,17 +23,30 @@ export const EXAMS = [
     labs: ['piston'],
     coming: [],
   },
+  {
+    id: 'u3',
+    n: 3,
+    title: 'Control volumes: mass and energy',
+    chapters: '5',
+    date: 'Yan Ch 5',
+    labs: ['nozzle', 'devices', 'heater'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
   phase: { id: 'phase', exam: 'u1', title: 'Phase diagram' },
   piston: { id: 'piston', exam: 'u2', title: 'Boundary work' },
+  nozzle: { id: 'nozzle', exam: 'u3', title: 'Nozzle and diffuser' },
+  devices: { id: 'devices', exam: 'u3', title: 'Steady-flow devices' },
+  heater: { id: 'heater', exam: 'u3', title: 'Water heater', app: true },
 };
 
 export const CHAPTER_TITLES = {
   2: 'Properties of a pure substance',
   3: 'Ideal and real gases',
   4: 'The first law for closed systems',
+  5: 'Control volumes: mass and energy',
 };
 
 export function examById(id) {

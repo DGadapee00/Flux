@@ -8,6 +8,7 @@ import {
   K_PER_R,
   KG_PER_LBM,
   KG_PER_SLUG,
+  M3_PER_GAL_US,
   M_PER_FT,
   N_PER_LBF,
   PA_PER_PSI,
@@ -112,4 +113,8 @@ test('an unknown unit is rejected, and so is a change of kind', () => {
   assert.throws(() => toSI(1, 'lb'), /unknown unit: lb/);
   assert.throws(() => fromSI(1, 'stone'), /unknown unit: stone/);
   assert.throws(() => convert(1, 'ft', 'kg'), /cannot convert ft to kg/);
+});
+
+test('a US gallon is 231 cubic inches, which is 3.785411784 litres', () => {
+  close(M3_PER_GAL_US, 0.003785411784, 'US gallon in cubic metres');
 });
