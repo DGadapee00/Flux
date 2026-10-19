@@ -1,5 +1,5 @@
 /**
- * Unit 4, beyond the numeric drills: four conceptual questions, each wrong option with its own
+ * Impulse and momentum (id u4, Unit 3), beyond the numeric drills: four conceptual questions, each wrong option with its own
  * reason, and the unit's application, an upper stage's vertical burn (the `rocket` lab).
  */
 import { collide1D, rocketDeltaV } from '@flux/subjects/mechanics/momentum.js';

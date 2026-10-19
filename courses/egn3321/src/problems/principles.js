@@ -31,24 +31,12 @@ export const PRINCIPLES = {
     family: 'Kinematics',
   },
 
-  // --- Kinetics of a particle (Ch 13–15)
+  // --- Kinetics of a particle (Ch 13, 15, 14: momentum before energy, D29)
   newton: {
     name: 'Newton’s second law',
     statement: '$\\Sigma\\vec F = m\\vec a$, in the components the path suggests: $x$–$y$ on a straight track, $n$–$t$ on a curve with $\\Sigma F_n = mv^2/\\rho$.',
     cue: 'Forces and an acceleration at one instant.',
     family: 'Kinetics',
-  },
-  energy: {
-    name: 'Work and energy',
-    statement: '$T_1 + \\Sigma U_{1\\to2} = T_2$. With only conservative forces doing work, $T_1 + V_1 = T_2 + V_2$, with $V_g = mgy$ and $V_e = \\tfrac12ks^2$.',
-    cue: 'Speeds at two positions, with forces that depend on position.',
-    family: 'Energy',
-  },
-  power: {
-    name: 'Power and efficiency',
-    statement: 'Power is the rate of work: $P = \\vec F\\cdot\\vec v$. Efficiency is power out over power in.',
-    cue: 'A rate: how fast work is done, a motor rating, horsepower.',
-    family: 'Energy',
   },
   impulse: {
     name: 'Impulse and momentum',
@@ -79,6 +67,18 @@ export const PRINCIPLES = {
     statement: 'A body ejecting mass at $\\dot m$ with relative speed $v_e$ feels a thrust $\\dot m v_e$; integrated, $\\Delta v = v_e\\ln(m_0/m_f)$ less gravity loss.',
     cue: 'Mass leaves the body as it moves: a rocket, a jet.',
     family: 'Momentum',
+  },
+  energy: {
+    name: 'Work and energy',
+    statement: '$T_1 + \\Sigma U_{1\\to2} = T_2$. With only conservative forces doing work, $T_1 + V_1 = T_2 + V_2$, with $V_g = mgy$ and $V_e = \\tfrac12ks^2$.',
+    cue: 'Speeds at two positions, with forces that depend on position.',
+    family: 'Energy',
+  },
+  power: {
+    name: 'Power and efficiency',
+    statement: 'Power is the rate of work: $P = \\vec F\\cdot\\vec v$. Efficiency is power out over power in.',
+    cue: 'A rate: how fast work is done, a motor rating, horsepower.',
+    family: 'Energy',
   },
 
   // --- Kinematics of a rigid body (Ch 16)

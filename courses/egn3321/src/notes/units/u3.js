@@ -1,4 +1,4 @@
-/** Unit 3 notes: the file, and its sections with their labs and topics. See ../index.js. */
+/** Work and energy (id u3, Unit 4) notes: the file, and its sections with their labs and topics. See ../index.js. */
 export default {
   exam: 'u3',
   title: 'Work and energy',

@@ -48,7 +48,7 @@ subject libraries (a function written for one course serves the next), and one s
 | MAC 2311–2312 Calculus I and II | [mac2311-2312](docs/course-plans/mac2311-2312.md) | two modules, 4 units each, notes | fails | R4: merge into one (D28) |
 | MAC 2313 Calculus III | [mac2313](docs/course-plans/mac2313.md) | labs and bank, no notes | fails | R4 |
 | EGN 3311 Statics | [statics](docs/course-plans/statics.md) | labs and bank, no notes | fails | R4 |
-| EGN 3321 Dynamics | [egn3321](docs/course-plans/egn3321.md) | 7 units, notes | **passes** | swap Units 3–4, app-lab explainers, owner review |
+| EGN 3321 Dynamics | [egn3321](docs/course-plans/egn3321.md) | 7 units, notes | **passes** | app-lab explainers, OCW cases, owner review |
 | EGN 3331 Mechanics of Materials | [egn3331](docs/course-plans/egn3331.md) | Unit 1 of 11 | fails | R3b: confirm the new order, then build |
 | EML 3100 Thermodynamics | [eml3100](docs/course-plans/eml3100.md) | 2 of 5 units | fails | R3a: confirm the order, then build |
 | STA 3032 Statistics | [sta3032](docs/course-plans/sta3032.md) | complete, older style | fails | keep passing; no rework |
@@ -60,7 +60,7 @@ subject libraries (a function written for one course serves the next), and one s
 - [x] **R0** Scorecard (`npm run scorecard`), `standard: false` in every manifest.
 - [x] **R1** The practice loop in the shells (`packages/shells/practice`).
 - [x] **R2** Dynamics to the standard.
-- [ ] **R2b Dynamics follow-ups:** swap Units 3 and 4 so momentum comes before energy (D29); end
+- [ ] **R2b Dynamics follow-ups:** ~~swap Units 3 and 4 so momentum comes before energy (D29)~~ (done); end
       each application lab's explainer with **What the course model leaves out.** (D30); OCW worked
       cases and Another view links. Then the owner's review.
 - [x] **Reference guide** (AGENTS.md, this roadmap, DECISIONS.md, the standard, a spine for every
