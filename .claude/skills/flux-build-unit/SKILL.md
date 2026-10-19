@@ -5,7 +5,7 @@ description: Build or rework one unit of a Flux course to docs/COURSE-STANDARD.m
 
 # Build one unit to the standard
 
-One unit per PR. The unit's spine block in `docs/courses/<id>.md` is the plan, in the OCW program's
+One unit per PR. The unit's spine block in `docs/course-plans/<id>.md` is the plan, in the OCW program's
 order (D23). If the spine and the code disagree, stop and ask; do not pick one silently.
 
 ## 1. Read before writing

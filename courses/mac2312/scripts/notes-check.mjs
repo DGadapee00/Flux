@@ -4,7 +4,8 @@
  * Section ids and titles match. Labs, chapters, and topics exist.
  * Every setup matches one worked example, and the lab agrees within 2%.
  * Every \( \) and \[ \] typesets.
- * Every section but the formula sheet has a worked example and ends with what it leaves out.
+ * Every section but the formula sheet has a worked example. No fixed box at the end of each section
+ * (DECISIONS.md, D30, D32): boxes follow the content, as in PHY 2049.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -66,9 +67,6 @@ for (const [key, set] of Object.entries(NOTES)) {
     if (s.title === 'Formula sheet') continue;
     const sec = html.match(new RegExp(`<section class="topic" id="${s.id}">([\\s\\S]*?)</section>`))?.[1] || '';
     if (!/<div class="box ex">/.test(sec)) fail(name, `${s.id}: no worked example`);
-    const last = [...sec.matchAll(/<div class="box ([a-z]+)">/g)].pop();
-    const tail = last ? sec.slice(last.index) : '';
-    if (!last || last[1] !== 'out' || /<\/div>[\s\S]*<(p|div|ul|ol)\b/.test(tail)) fail(name, `${s.id}: does not end with a "What it leaves out" box`);
   }
 
   for (const s of set.sections) {

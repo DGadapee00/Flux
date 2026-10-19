@@ -21,8 +21,14 @@
   padding: 0 28px 28px;
   z-index: 12;
   background: rgb(14, 15, 18);
+  /* The notes' own colour names, mapped onto the app's palette (their legend swatches use them), as
+     in PHY 2049. */
+  --field: var(--blue);
   --field-soft: rgba(88, 196, 221, 0.1);
+  --copper: var(--gold);
   --copper-soft: rgba(240, 172, 95, 0.09);
+  --ok: var(--text);
+  --ok-soft: rgba(236, 230, 226, 0.05);
 }
 
 body.notes-open #eq-panel,
@@ -329,4 +335,40 @@ body.notes-resizing {
 .nt-empty {
   padding-top: 20px;
   font-family: var(--font);
+}
+
+/* Parts and the legend, PHY 2049's notes structure (DECISIONS.md, D32). The renderer renames the
+   notes' .legend to .nt-legend so it does not collide with a lab's legend. */
+.nt-doc .part {
+  margin-top: 44px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-hover);
+}
+
+.nt-doc .part .eyebrow {
+  color: var(--blue);
+}
+
+.nt-doc .part h2 {
+  margin-top: 4px;
+  font-size: var(--fs-display);
+}
+
+.nt-doc .nt-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 16px;
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.nt-doc .nt-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 2px;
+  vertical-align: -1px;
 }
