@@ -50,7 +50,9 @@ function rotorTip($) {
   const vy = $.r * $.w * Math.cos(th);
   const ax = $.aB - $.r * $.w * $.w * Math.cos(th);
   const ay = -$.r * $.w * $.w * Math.sin(th);
-  return { vx, vy, ax, ay, speed: Math.hypot(vx, vy), accel: Math.hypot(ax, ay) };
+  // cos 270° and sin 180° are not exactly zero in floating point; the steps would print 1e-15.
+  const z = (x) => (Math.abs(x) < 1e-9 ? 0 : x);
+  return { vx: z(vx), vy: z(vy), ax: z(ax), ay: z(ay), speed: Math.hypot(vx, vy), accel: Math.hypot(ax, ay) };
 }
 
 const ch16 = [

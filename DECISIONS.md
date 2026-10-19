@@ -35,7 +35,7 @@ The plan these came from is archived in `docs/history/PLAN-2026-10-18.md`.
 | # | Decision | Date |
 |---|---|---|
 | D15 | **MIT OpenCourseWare is the standard for material.** Every course names its OCW counterpart in its spine. The counterpart is the coverage check for each unit, the difficulty bar for level-3 problems, and the source of worked cases whose printed answers our templates reproduce (cited by course, term, problem set and problem). Its text, figures and problem statements are not copied: Flux writes its own and cites. MIT's name appears only as attribution, never as endorsement. Details: `docs/COURSE-STANDARD.md`, section 7. | 18 Oct 2026 (owner) |
-| D16 | **No word count for notes and no principle-tag requirement.** Principle tags stay optional: a course that supplies them gets the principle step. | 18 Oct 2026 (owner) |
+| D16 | **No word count for notes and no principle-tag requirement.** Principle tags stay optional. (The "which principle decides this problem?" step it mentioned was removed by D33.) | 18 Oct 2026 (owner) |
 | D17 | **The standard is PHY 2049's exemplars and the owner's review; the scorecard is a floor.** A course passes the scorecard and then the owner works one unit as a student before its manifest says `standard: true`. | 18 Oct 2026 (owner) |
 | D18 | **Spine before code, and few courses in flight.** A course's spine (`docs/course-plans/<id>.md`) is confirmed by the owner before code is written. At most two courses have units in progress at once, besides Phase R rework. A course is finished to the standard before the next one starts, unless the owner says otherwise. | 18 Oct 2026 (owner) |
 | D19 | **Tracks.** Math gains MAP 2302 then EGN 3203; Mechanics gains EML 4501 then EML 4507C; Thermal-fluids is EML 3100, EML 3101, EML 3015, EML 4140; a new **Systems** track is EEL 3111, EML 4312, EML 4301C; a new **Materials and manufacturing** track (id `making`) is EMA 3010, EML 4320C. A course joins `packages/tracks` when its first slice is built. | 18 Oct 2026 (owner) |
@@ -51,6 +51,8 @@ The plan these came from is archived in `docs/history/PLAN-2026-10-18.md`.
 | D31 | **EGN 3331 teaches energy methods** (Hibbeler Ch 14), as 2.001 does. Reverses the course pack's omission under D11. | 18 Oct 2026 (owner) |
 
 | D32 | **PHY 2049 is the benchmark for every course.** Where any course differs from PHY 2049 (notes structure and boxes, lab explainers, the practice loop, layout), PHY 2049's version is the target. Notes group sections into `div.part` with a legend, as PHY's do, and place boxes where the content needs them, not one of each per section. The shells converge on PHY 2049's layout after Phase 2b. The one exception is unit order, which comes from OCW (D23); PHY 2049 keeps its own (D28). | 18 Oct 2026 (owner) |
+| D33 | **No "which principle decides this problem?" step.** Practice problems do not ask the student to name the principle before solving, in any course or shell, and no guide prescribes it. Principle tags stay optional and still drive the deciding-principle line, "what went wrong", the weak-principle list and the group-by-principle view. PHY 2049 has its own copy of the step; it is removed once its exam freeze ends (24 Oct 2026). | 19 Oct 2026 (owner) |
+
 ## Open
 
 | # | Question | Default until answered |
