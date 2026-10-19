@@ -1,1 +1,68 @@
-{"18-03sc":{"byUnit":{"unit-i-first-order-differential-equations":"Unit 1","unit-ii-second-order-constant-coefficient-linear-equations":"Unit 2","unit-iii-fourier-series-and-laplace-transform":"Unit 3","unit-iv-first-order-systems":"Unit 4"},"note":"From docs/course-plans/map2302.md: Unit 1 (18.03SC Unit I), Unit 2 (Unit II), Unit 3 (Unit III), Unit 4 (Unit IV)."}}
+{
+ "18-03sc": {
+  "byUnit": {
+   "unit-i-first-order-differential-equations": "Unit 1",
+   "unit-ii-second-order-constant-coefficient-linear-equations": "Unit 2",
+   "unit-iii-fourier-series-and-laplace-transform": "Unit 3",
+   "unit-iv-first-order-systems": "Unit 4"
+  },
+  "note": "From docs/course-plans/map2302.md: Unit 1 (18.03SC Unit I), Unit 2 (Unit II), Unit 3 (Unit III), Unit 4 (Unit IV)."
+ },
+ "8-01sc": {
+  "byLesson": {
+   "1": "Unit 1",
+   "2": "Unit 1",
+   "3": "Unit 1",
+   "4": "Unit 2",
+   "6": "Unit 2",
+   "7": "Unit 2",
+   "12": "Unit 2",
+   "5.3": "Unit 2",
+   "4.3": "Units 1, 2",
+   "8": "Unit 1",
+   "9": "Unit 1",
+   "10": "Units 1, 5",
+   "11": "Unit 2",
+   "15": "Unit 3",
+   "16": "Unit 3",
+   "17": "Unit 3",
+   "18": "Unit 3",
+   "19": "Unit 3",
+   "26": "Unit 3",
+   "27": "Unit 3",
+   "20": "Unit 4",
+   "21": "Unit 4",
+   "22": "Unit 4",
+   "23": "Unit 4",
+   "24": "Unit 4",
+   "25": "Unit 4",
+   "32": "Units 3, 6",
+   "33": "Unit 6",
+   "34": "Unit 6",
+   "28": "Unit 5",
+   "29": "Unit 6",
+   "30": "Unit 6",
+   "31": "Unit 6",
+   "35": "Unit 5",
+   "36": "Unit 6",
+   "37": "Unit 7",
+   "4.4": "unmapped",
+   "27.5": "unmapped",
+   "37.3": "unmapped",
+   "37.4": "unmapped"
+  },
+  "note": "From docs/course-plans/egn3321.md (OCW map, D29), refined by lesson. Lessons 4.4, 5.1, 5.2, 13, 14, 27.5, 37.3 and 37.4 stay unmapped: Dynamics does not teach them (it leaves out drag, continuous systems and rigid-body angular momentum)."
+ },
+ "2-003sc": {
+  "bySession": {
+   "1": "Unit 2",
+   "2": "Units 1, 5",
+   "3": "Unit 6",
+   "4": "Unit 2",
+   "6": "Unit 6",
+   "7": "Unit 6",
+   "8": "Units 6, 7"
+  },
+  "note": "From docs/course-plans/egn3321.md. Quizzes (5, 11) and lectures 9-15 (Lagrange, vibration: EML 4312) are unmapped."
+ }
+}

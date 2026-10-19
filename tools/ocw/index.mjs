@@ -17,6 +17,7 @@
 import { existsSync, promises as fs } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { fluxUnit as unitFor } from './unit-map.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..', '..');
@@ -24,7 +25,6 @@ const REF = join(ROOT, 'reference', 'ocw');
 const DOCS = join(ROOT, 'docs', 'ocw');
 const COURSES = JSON.parse(await fs.readFile(join(HERE, 'courses.json'), 'utf8'));
 const textbooks = JSON.parse(await fs.readFile(join(HERE, 'textbooks.json'), 'utf8'));
-const UNIT_MAPS = JSON.parse(await fs.readFile(join(HERE, 'unit-maps.json'), 'utf8'));
 
 const mdEscape = (s) => s.replace(/\|/g, '\\|').replace(/\n+/g, ' ').trim();
 
@@ -335,13 +335,6 @@ async function getAssessments(course, dest) {
   return final;
 }
 
-function fluxUnit(slug, session) {
-  const map = UNIT_MAPS[slug];
-  if (!map) return 'unmapped';
-  if (map.byUnit && session.unit && map.byUnit[session.unit]) return map.byUnit[session.unit];
-  return 'unmapped';
-}
-
 async function buildIndex(course) {
   const dest = join(REF, course.slug);
   if (!existsSync(join(dest, 'FILES.json'))) {
@@ -373,7 +366,7 @@ async function buildIndex(course) {
     L.push('|---|---|---|---|');
     sessions.forEach((s, i) => {
       const label = s.label ? ` (${s.label})` : '';
-      L.push(`| ${i + 1} | ${mdEscape(s.title)}${label} | [page](${s.url}) | ${fluxUnit(course.slug, s)} |`);
+      L.push(`| ${i + 1} | ${mdEscape(s.title)}${label} | [page](${s.url}) | ${unitFor(course.slug, s, i)} |`);
     });
   }
   L.push('');
