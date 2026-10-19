@@ -93,7 +93,7 @@ first slice, then one unit per PR. At most two courses in progress at once (D18)
 | 6 | EML 4140 Heat Transfer | [eml4140](docs/course-plans/eml4140.md) | 2.51 (Fall 2008) |
 | 7 | EML 4312 Modeling and Analysis of Dynamic Systems | [eml4312](docs/course-plans/eml4312.md) | 2.003SC (Fall 2011), 2.004 (Spring 2008) |
 | 8 | EML 4501 Machine Design | [eml4501](docs/course-plans/eml4501.md) | 2.72 (Spring 2009) |
-| 9 | EML 4320C Integrated Design and Manufacturing | [eml4320c](docs/course-plans/eml4320c.md) | 2.008 (Spring 2004) |
+| 9 | EML 4320C Integrated Design and Manufacturing | [eml4320c](docs/course-plans/eml4320c.md) | 2.008 (Spring 2025) |
 | 10 | EML 4507C Finite Element Modeling and Analysis | [eml4507c](docs/course-plans/eml4507c.md) | 2.092 (Fall 2009) |
 | 11 | EML 4301C Control of Machinery | [eml4301c](docs/course-plans/eml4301c.md) | 2.004 (Spring 2008) |
 

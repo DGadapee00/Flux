@@ -10,6 +10,9 @@ order (D23). If the spine and the code disagree, stop and ask; do not pick one s
 
 ## 1. Read before writing
 
+- Run `npm run ocw -- <slug>` for the course's OCW program (slug in `tools/ocw/courses.json`)
+  before reading its lectures and problem sets. Material lands in the git-ignored
+  `reference/ocw/<slug>/`, indexed by `docs/ocw/<slug>.md`; it is never committed.
 - `docs/COURSE-STANDARD.md` in full, and its exemplar for each part you will write (section 1).
 - The course's `CONVENTIONS.md` and `src/data/textbook.js`.
 - The unit's OCW lectures and problem sets named in the spine. Note which problems have posted
@@ -25,6 +28,10 @@ order (D23). If the spine and the code disagree, stop and ask; do not pick one s
   factor).
 
 ## 3. Labs
+
+Scaffold first: `npm run new-lab -- <course-id> <lab-id> --kind plot|scene2d|scene3d --unit uN --title "Title" [--app]`
+writes the lab file, the catalog and loader entries, and two prediction stubs, all with TODOs
+where the content goes. Then fill the physics.
 
 For each lab in the spine:
 

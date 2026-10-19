@@ -19,9 +19,12 @@ it there without inventing a new shape.
 
 Fill every section of `docs/course-plans/TEMPLATE.md` that the draft leaves open:
 
-1. **OCW program first** (D23). Open the counterpart's syllabus and calendar. Set the units and
-   their order from it. For each unit, name the OCW lectures, problem sets and exams, and which
-   have posted solutions. Note what OCW covers past the UNF course.
+1. **OCW program first** (D23). Run `npm run ocw -- <slug>` for the counterpart (slug in
+   `tools/ocw/courses.json`) before mapping the plan to the OCW calendar; the material lands
+   in the git-ignored `reference/ocw/<slug>/`, indexed by `docs/ocw/<slug>.md`. Open the
+   counterpart's syllabus and calendar. Set the units and their order from it. For each unit,
+   name the OCW lectures, problem sets and exams, and which have posted solutions. Note what
+   OCW covers past the UNF course.
 2. **Textbook second.** List the candidates with their licences, verified on the publisher's page.
    The owner chooses (D21). Prefer open texts. Map each unit to its sections.
 3. **UNF syllabus third,** if the owner has given one (in `courses/<id>/incoming/` or the
@@ -39,6 +42,15 @@ Open the PR, ask the owner to confirm, and stop.
 
 Copy `courses/starter`, the course-neutral wiring with one example unit, and follow its `README.md`.
 Never copy another real course. Content and its depth come from PHY 2049 (D32).
+
+**Shell swap.** The starter is wired to the engineering shell. If the spine's Shell row says
+`math`, swap the three `src/ui/` imports from `@flux/shells/engineering/` to
+`@flux/shells/math/` (`hud.js`, `problems.js`, `shared.js` — same export names). Math labs
+render through the math shell's `plot.js` (function plots, direction fields, phase lines),
+not the engineering 2D scene; study `courses/mac2311/src/labs/` for the shape, not the
+starter's tank example (temporary pointer until the math-shell starter lands — ROADMAP).
+The lab contract is unchanged: scenarios, recompute, second-method check, predictions,
+explainer. There is no free-body-diagram module on the math shell.
 
 1. `courses/<id>/` with `package.json`, `vite.config.js` (port from `AGENTS.md`), `index.html`,
    `src/manifest.js` (`standard: false`, `track`, `order`, `prereqs`), `src/data/catalog.js` with
