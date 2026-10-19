@@ -60,8 +60,8 @@ subject libraries (a function written for one course serves the next), and one s
 - [x] **R0** Scorecard (`npm run scorecard`), `standard: false` in every manifest.
 - [x] **R1** The practice loop in the shells (`packages/shells/practice`).
 - [x] **R2** Dynamics to the standard.
-- [ ] **R2b Dynamics follow-ups:** ~~swap Units 3 and 4 so momentum comes before energy (D29)~~ (done); end
-      each application lab's explainer with **What the course model leaves out.** (D30); OCW worked
+- [ ] **R2b Dynamics follow-ups:** ~~swap Units 3 and 4 so momentum comes before energy (D29)~~ (done); ~~end
+      each application lab's explainer with **What the course model leaves out.** (D30)~~ (done); OCW worked
       cases and Another view links. Then the owner's review.
 - [x] **Reference guide** (AGENTS.md, this roadmap, DECISIONS.md, the standard, a spine for every
       course, the skills).

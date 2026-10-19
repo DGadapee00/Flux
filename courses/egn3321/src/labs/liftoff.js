@@ -2,7 +2,7 @@ import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
 import { C, alpha, arrow, axes, begin, dot, label, line, note, plotIn, poly, seg } from './diagram.js';
 import { defineLab } from './define2d.js';
-import { bindSlider, slider } from './widgets.js';
+import { bindSlider, slider, leavesOut } from './widgets.js';
 
 const G = 9.81;
 
@@ -84,6 +84,9 @@ function stepped(m0, tw, tb, pf) {
   }
   return { vBo: v, hBo: s };
 }
+
+/** What the real device has that the model ignores (D30). */
+const OUT = String.raw`Drag, which grows as the speed squared, and thrust, which rises as the outside pressure falls. Thrust here is full from the first instant and the burn rate is steady. A real engine builds up over a moment and is often throttled. The rocket is held vertical. A real one pitches over soon after lift-off, and part of its thrust then goes sideways.`;
 
 export default defineLab({
   id: 'liftoff',
@@ -235,7 +238,7 @@ export default defineLab({
       ['burnout h', `${fig(c.hBo)} m`],
     ]);
   },
-  coach(state, c) {
+  coach: leavesOut(OUT, (state, c) => {
     if (!c.lifts) {
       return {
         title: 'Thrust never beats weight',
@@ -252,7 +255,7 @@ export default defineLab({
       title: 'The acceleration grows as the mass falls',
       body: String.raw`Thrust is constant, but $m$ drops from $${fig(c.m0)}$ to $${fig(c.mBo)}$ kg. $a$ rises from $${fig(c.a0)}$ to $${fig(c.aBo)}$ m/s².`,
     };
-  },
+  }),
   predictions: [
     {
       id: 'lo-double',
