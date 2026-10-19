@@ -2,6 +2,7 @@ import '@flux/shells/math/styles/main.css';
 import '@flux/shells/math/styles/practice.css';
 import '@flux/shells/math/styles/mobile.css';
 import '@flux/shells/styles/notes.css';
+import { openNotesFromRoute } from '@flux/shells/notes.js';
 import 'katex/dist/katex.min.css';
 import { mountTrackBar } from '@flux/core';
 import * as THREE from 'three';
@@ -281,8 +282,10 @@ practice = createPractice({
 });
 
 function followUrl() {
-  const { examId, labId, problemId, seed } = parseHash();
+  const route = parseHash();
+  const { examId, labId, problemId, seed } = route;
   if (practice.followUrl(problemId, seed)) return;
+  openNotesFromRoute(hud.notes, route);
   if (examId === app.examId && labId === app.labId) return;
   if (labId) setLab(labId);
   else setExam(examId);
@@ -353,6 +356,7 @@ const boot = parseHash();
 setExam(boot.examId, boot.labId).then(() => {
   booting = false;
   if (boot.problemId) practice.followUrl(boot.problemId, boot.seed);
+  else openNotesFromRoute(hud.notes, boot);
   recompute();
   syncViews();
   hud.update(publicState(), computed, app.lab);

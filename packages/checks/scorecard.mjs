@@ -18,6 +18,11 @@
  * registry and its files, and the notes' lab setups. Smoke, overflow and layout run in each
  * course's own browser scripts, not here.
  *
+ * A course may keep hints, wrong-answer `why` and `traps` beside the bank in `src/problems/coaching/`
+ * (PHY 2049 does). The scorecard reads that index when it exists and counts what a template and its
+ * coaching entry hold together, once. A course that already folds the file in (Dynamics) is not
+ * counted twice.
+ *
  * "Variety from structure" counts a template when it declares `variety` (what it varies: the
  * configuration, the unknown, the representation), or when one of its `choice` variables picks
  * among non-numeric options. Number ranges alone do not count.
@@ -25,6 +30,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { withCoaching } from './coaching.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const COURSES = ['phy2049', 'phy2048', 'mac2311', 'mac2312', 'mac2313', 'statics', 'egn3321', 'egn3331', 'eml3100', 'sta3032'];
@@ -103,7 +109,8 @@ async function measure(id) {
   const units = course.units || [];
   const review = !!course.review;
   const P = await course.problems();
-  const problems = P.PROBLEMS || [];
+  const coaching = (await tryLoad(`${dir}/problems/coaching/index.js`))?.default || {};
+  const problems = (P.PROBLEMS || []).map((t) => withCoaching(t, coaching[t.id]));
   const engine = await tryLoad(`${dir}/problems/engine.js`);
   const instance = P.instance || engine?.instance;
   const sample = (t) => {

@@ -3,6 +3,7 @@ import '@flux/shells/engineering/styles/practice.css';
 import '@flux/shells/engineering/styles/stage.css';
 import './styles.css';
 import '@flux/shells/styles/notes.css';
+import { openNotesFromRoute } from '@flux/shells/notes.js';
 import 'katex/dist/katex.min.css';
 import { mountTrackBar } from '@flux/core';
 import { ANSWER_LAYER } from '@flux/core/scene3d/manim.js';
@@ -361,8 +362,10 @@ practice = createPractice({
 });
 
 function followUrl() {
-  const { examId, labId, problemId, seed } = parseHash();
+  const route = parseHash();
+  const { examId, labId, problemId, seed } = route;
   if (practice.followUrl(problemId, seed)) return;
+  openNotesFromRoute(hud.notes, route);
   if (examId === app.examId && labId === app.labId) return;
   if (labId) setLab(labId);
   else setExam(examId);
@@ -494,6 +497,7 @@ const boot = parseHash();
 setExam(boot.examId, boot.labId).then(() => {
   booting = false;
   if (boot.problemId) practice.followUrl(boot.problemId, boot.seed);
+  else openNotesFromRoute(hud.notes, boot);
   recompute();
   syncViews();
   hud.update(publicState(), computed, app.lab);

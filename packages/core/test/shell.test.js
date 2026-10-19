@@ -44,6 +44,24 @@ test('a lab route keeps a negative seed only when the course allows it', () => {
   assert.equal(clamped.courseHash('u2', 'gamma', '?p=a'), '#/demo/u2/gamma?p=a');
 });
 
+test('a lab route reads ?n= as a notes section and keeps it apart from ?p=', () => {
+  const router = createLabRouter({
+    courseId: 'demo',
+    exams,
+    labMeta,
+    examById,
+    emptyRoute: () => ({ examId: 'u1', labId: 'alpha' }),
+  });
+  const notes = router.parseRoute('#/demo/u2/gamma?n=s3');
+  assert.equal(notes.notes, 's3');
+  assert.equal(notes.problemId, null);
+  assert.equal(notes.examId, 'u2');
+  assert.equal(notes.labId, 'gamma');
+  assert.equal(router.parseRoute('#/demo/u2/gamma').notes, null);
+  assert.equal(router.parseRoute('#/demo/u2?p=x&s=4&n=s1').notes, 's1');
+  assert.equal(router.parseRoute('#/beta?n=s2').notes, 's2');
+});
+
 test('a retired mode opens practice and is legacy', () => {
   const units = [{ id: 'mid' }, { id: 'final' }];
   const router = createModesRouter({
