@@ -1,1 +1,198 @@
-[{"flux":["phy2049"],"role":"another-view","slug":"8-02","term":"Spring 2007","title":"8.02 Physics II: Electricity and Magnetism","url":"https://ocw.mit.edu/courses/8-02-physics-ii-electricity-and-magnetism-spring-2007/"},{"flux":["phy2048","egn3321"],"role":"program","slug":"8-01sc","term":"Fall 2016","title":"8.01SC Classical Mechanics","url":"https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/"},{"flux":["mac2311","mac2312"],"role":"program","slug":"18-01sc","term":"Fall 2010","title":"18.01SC Single Variable Calculus","url":"https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/"},{"flux":["mac2313"],"role":"program","slug":"18-02sc","term":"Fall 2010","title":"18.02SC Multivariable Calculus","url":"https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/"},{"flux":["map2302"],"role":"program","slug":"18-03sc","term":"Fall 2011","title":"18.03SC Differential Equations","url":"https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/"},{"flux":["sta3032"],"role":"program","slug":"18-05","term":"Spring 2014","title":"18.05 Introduction to Probability and Statistics","url":"https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/"},{"flux":["statics","egn3331"],"role":"program","slug":"2-001","term":"Fall 2006","title":"2.001 Mechanics and Materials I","url":"https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/"},{"flux":["egn3321","eml4312"],"role":"program","slug":"2-003sc","term":"Fall 2011","title":"2.003SC Engineering Dynamics","url":"https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/"},{"flux":["egn3331"],"role":"program","slug":"3-11","term":"Fall 1999","title":"3.11 Mechanics of Materials","url":"https://ocw.mit.edu/courses/3-11-mechanics-of-materials-fall-1999/"},{"flux":["eml3100","eml3101"],"role":"program","slug":"16-050","term":"Fall 2002","title":"16.050 Thermal Energy","url":"https://ocw.mit.edu/courses/16-050-thermal-energy-fall-2002/"},{"flux":["eml3015"],"role":"program","slug":"2-06","term":"Spring 2013","title":"2.06 Fluid Dynamics","url":"https://ocw.mit.edu/courses/2-06-fluid-dynamics-spring-2013/"},{"flux":["egn3203"],"role":"program","slug":"2-086","term":"Spring 2013","title":"2.086 Numerical Computation for Mechanical Engineers","url":"https://ocw.mit.edu/courses/2-086-numerical-computation-for-mechanical-engineers-spring-2013/"},{"flux":["eml4140"],"role":"program","slug":"2-51","term":"Fall 2008","title":"2.51 Intermediate Heat and Mass Transfer","url":"https://ocw.mit.edu/courses/2-51-intermediate-heat-and-mass-transfer-fall-2008/"},{"flux":["eel3111"],"role":"program","slug":"6-002","term":"Spring 2007","title":"6.002 Circuits and Electronics","url":"https://ocw.mit.edu/courses/6-002-circuits-and-electronics-spring-2007/"},{"flux":["eml4312","eml4301c"],"role":"program","slug":"2-004","term":"Spring 2008","title":"2.004 Dynamics and Control II","url":"https://ocw.mit.edu/courses/2-004-dynamics-and-control-ii-spring-2008/"},{"flux":["eml4501"],"role":"program","slug":"2-72","term":"Spring 2009","title":"2.72 Elements of Mechanical Design","url":"https://ocw.mit.edu/courses/2-72-elements-of-mechanical-design-spring-2009/"},{"flux":["eml4507c"],"role":"program","slug":"2-092","term":"Fall 2009","title":"2.092 Finite Element Analysis of Solids and Fluids I","url":"https://ocw.mit.edu/courses/2-092-finite-element-analysis-of-solids-and-fluids-i-fall-2009/"},{"flux":["ema3010"],"role":"program","slug":"3-091","term":"Fall 2018","title":"3.091 Introduction to Solid-State Chemistry","url":"https://ocw.mit.edu/courses/3-091-introduction-to-solid-state-chemistry-fall-2018/"}]
+[
+  {
+    "flux": [
+      "phy2049"
+    ],
+    "role": "another-view",
+    "slug": "8-02",
+    "term": "Spring 2007",
+    "title": "8.02 Physics II: Electricity and Magnetism",
+    "url": "https://ocw.mit.edu/courses/8-02-physics-ii-electricity-and-magnetism-spring-2007/"
+  },
+  {
+    "flux": [
+      "phy2048",
+      "egn3321"
+    ],
+    "role": "program",
+    "slug": "8-01sc",
+    "term": "Fall 2016",
+    "title": "8.01SC Classical Mechanics",
+    "url": "https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/"
+  },
+  {
+    "flux": [
+      "mac2311",
+      "mac2312"
+    ],
+    "role": "program",
+    "slug": "18-01sc",
+    "term": "Fall 2010",
+    "title": "18.01SC Single Variable Calculus",
+    "url": "https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/"
+  },
+  {
+    "flux": [
+      "mac2313"
+    ],
+    "role": "program",
+    "slug": "18-02sc",
+    "term": "Fall 2010",
+    "title": "18.02SC Multivariable Calculus",
+    "url": "https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/"
+  },
+  {
+    "flux": [
+      "map2302"
+    ],
+    "role": "program",
+    "slug": "18-03sc",
+    "term": "Fall 2011",
+    "title": "18.03SC Differential Equations",
+    "url": "https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/"
+  },
+  {
+    "flux": [
+      "sta3032"
+    ],
+    "role": "program",
+    "slug": "18-05",
+    "term": "Spring 2014",
+    "title": "18.05 Introduction to Probability and Statistics",
+    "url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/"
+  },
+  {
+    "flux": [
+      "statics",
+      "egn3331"
+    ],
+    "role": "program",
+    "slug": "2-001",
+    "term": "Fall 2006",
+    "title": "2.001 Mechanics and Materials I",
+    "url": "https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/"
+  },
+  {
+    "flux": [
+      "egn3321",
+      "eml4312"
+    ],
+    "role": "program",
+    "slug": "2-003sc",
+    "term": "Fall 2011",
+    "title": "2.003SC Engineering Dynamics",
+    "url": "https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/"
+  },
+  {
+    "flux": [
+      "egn3331"
+    ],
+    "role": "program",
+    "slug": "3-11",
+    "term": "Fall 1999",
+    "title": "3.11 Mechanics of Materials",
+    "url": "https://ocw.mit.edu/courses/3-11-mechanics-of-materials-fall-1999/"
+  },
+  {
+    "flux": [
+      "eml3100",
+      "eml3101"
+    ],
+    "role": "program",
+    "slug": "16-050",
+    "term": "Fall 2002",
+    "title": "16.050 Thermal Energy",
+    "url": "https://ocw.mit.edu/courses/16-050-thermal-energy-fall-2002/"
+  },
+  {
+    "flux": [
+      "eml3015"
+    ],
+    "role": "program",
+    "slug": "2-06",
+    "term": "Spring 2013",
+    "title": "2.06 Fluid Dynamics",
+    "url": "https://ocw.mit.edu/courses/2-06-fluid-dynamics-spring-2013/"
+  },
+  {
+    "flux": [
+      "egn3203"
+    ],
+    "role": "program",
+    "slug": "2-086",
+    "term": "Spring 2013",
+    "title": "2.086 Numerical Computation for Mechanical Engineers",
+    "url": "https://ocw.mit.edu/courses/2-086-numerical-computation-for-mechanical-engineers-spring-2013/"
+  },
+  {
+    "flux": [
+      "eml4140"
+    ],
+    "role": "program",
+    "slug": "2-51",
+    "term": "Fall 2008",
+    "title": "2.51 Intermediate Heat and Mass Transfer",
+    "url": "https://ocw.mit.edu/courses/2-51-intermediate-heat-and-mass-transfer-fall-2008/"
+  },
+  {
+    "flux": [
+      "eel3111"
+    ],
+    "role": "program",
+    "slug": "6-002",
+    "term": "Spring 2007",
+    "title": "6.002 Circuits and Electronics",
+    "url": "https://ocw.mit.edu/courses/6-002-circuits-and-electronics-spring-2007/"
+  },
+  {
+    "flux": [
+      "eml4312",
+      "eml4301c"
+    ],
+    "role": "program",
+    "slug": "2-004",
+    "term": "Spring 2008",
+    "title": "2.004 Dynamics and Control II",
+    "url": "https://ocw.mit.edu/courses/2-004-dynamics-and-control-ii-spring-2008/"
+  },
+  {
+    "flux": [
+      "eml4501"
+    ],
+    "role": "program",
+    "slug": "2-72",
+    "term": "Spring 2009",
+    "title": "2.72 Elements of Mechanical Design",
+    "url": "https://ocw.mit.edu/courses/2-72-elements-of-mechanical-design-spring-2009/"
+  },
+  {
+    "flux": [
+      "eml4507c"
+    ],
+    "role": "program",
+    "slug": "2-092",
+    "term": "Fall 2009",
+    "title": "2.092 Finite Element Analysis of Solids and Fluids I",
+    "url": "https://ocw.mit.edu/courses/2-092-finite-element-analysis-of-solids-and-fluids-i-fall-2009/"
+  },
+  {
+    "flux": [
+      "ema3010"
+    ],
+    "role": "program",
+    "slug": "3-091",
+    "term": "Fall 2018",
+    "title": "3.091 Introduction to Solid-State Chemistry",
+    "url": "https://ocw.mit.edu/courses/3-091-introduction-to-solid-state-chemistry-fall-2018/"
+  },
+  {
+    "slug": "2-008",
+    "title": "2.008 Design and Manufacturing II",
+    "term": "Spring 2025",
+    "url": "https://ocw.mit.edu/courses/2-008-design-and-manufacturing-ii-spring-2025/",
+    "flux": [
+      "eml4320c"
+    ],
+    "role": "program"
+  }
+]

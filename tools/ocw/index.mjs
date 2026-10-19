@@ -23,6 +23,7 @@ const ROOT = resolve(HERE, '..', '..');
 const REF = join(ROOT, 'reference', 'ocw');
 const DOCS = join(ROOT, 'docs', 'ocw');
 const COURSES = JSON.parse(await fs.readFile(join(HERE, 'courses.json'), 'utf8'));
+const textbooks = JSON.parse(await fs.readFile(join(HERE, 'textbooks.json'), 'utf8'));
 const UNIT_MAPS = JSON.parse(await fs.readFile(join(HERE, 'unit-maps.json'), 'utf8'));
 
 const mdEscape = (s) => s.replace(/\|/g, '\\|').replace(/\n+/g, ' ').trim();
@@ -273,12 +274,11 @@ async function getAssessments(course, dest) {
       types.includes('Problem Sets') ||
       types.includes('Assignments') ||
       types.includes('Activity Assignments') ||
-      types.includes('Activity Assignments with Examples');
+      types.includes('Activity Assignments with Examples') ||
+      // Some courses file problem sets under Recitations (e.g. 16.050).
+      (types.includes('Recitations') && /(^|[_-])(ps|pset|problem)[-_]?\d/i.test(dir));
     const isEx = types.includes('Exams');
     if (!isPS && !isEx) continue;
-    // Session self-check quizzes are typed as Exams by OCW; the index lists
-    // only course-level exams here. Quizzes live on their session pages.
-    if (isEx && !isPS && /quiz/.test(dir)) continue;
     items.push({
       dir,
       title: meta.title || dir,
@@ -287,17 +287,26 @@ async function getAssessments(course, dest) {
       hasSolutions: types.includes('Problem Set Solutions') || types.includes('Exam Solutions'),
     });
   }
+  // Session self-check quizzes are typed as Exams by OCW (e.g. 18-03sc); the
+  // index lists only course-level exams. But when a course's exams are ALL
+  // quiz-named (e.g. 2-008), those quizzes ARE the course exams — keep them.
+  const hasNonQuizExams = items.some((i) => i.kind === 'ex' && !/quiz/.test(i.dir));
+  const filtered = hasNonQuizExams
+    ? items.filter((i) => i.kind !== 'ex' || !/quiz/.test(i.dir))
+    : items;
   // Pair Scholar q/s resources: a questions resource has posted solutions when
-  // its solutions sibling exists (Xq -> Xs, or X -> Xs).
-  const byDir = new Map(items.map((i) => [i.dir, i]));
-  for (const i of items) {
+  // its solutions sibling exists (Xq -> Xs, or X -> Xs, or X -> X_sol).
+  const byDir = new Map(filtered.map((i) => [i.dir, i]));
+  for (const i of filtered) {
     if (i.hasSolutions) continue;
-    const candidates = /q$/.test(i.dir)
-      ? [i.dir.replace(/q$/, 's')]
-      : [i.dir + 's'];
+    const base = i.dir.replace(/_(pdf|html?)$/, '');
+    const candidates = /q$/.test(base)
+      ? [base.replace(/q$/, 's'), base + '_sol', base + 's']
+      : [base + 's', base + '_sol', base + '_s'];
     for (const c of candidates) {
-      const sib = byDir.get(c);
-      if (sib && (sib.hasSolutions || /(s|sol)$/.test(sib.dir))) {
+      // Match dir names that may carry a trailing _pdf/_html suffix.
+      const sib = byDir.get(c) || byDir.get(c + '_pdf') || byDir.get(c + '_html');
+      if (sib && (sib.hasSolutions || /(s|sol)(_pdf|_html)?$/.test(sib.dir))) {
         i.hasSolutions = true;
         break;
       }
@@ -305,7 +314,7 @@ async function getAssessments(course, dest) {
   }
   // The index lists each set/exam once: pure solution siblings only mark status.
   const final = { problemSets: [], exams: [] };
-  for (const i of items) {
+  for (const i of filtered) {
     const isSolResource = i.hasSolutions && !/q$/.test(i.dir) && /(s$|sol)/.test(i.dir);
     if (isSolResource) continue;
     (i.kind === 'ps' ? final.problemSets : final.exams).push(i);
@@ -383,6 +392,34 @@ async function buildIndex(course) {
     for (const e of exams) {
       L.push(`| ${mdEscape(e.title)} | ${e.hasSolutions ? 'yes' : 'no'} | [page](${e.url}) |`);
     }
+  }
+  L.push('');
+  // Free/open textbook, if one was paired with this course (tools/ocw/textbooks.json).
+  const book = textbooks.find((b) => b.slug === course.slug);
+  // 3-11 ships its open textbook inside the OCW download itself.
+  const ocwBook =
+    course.slug === '3-11'
+      ? {
+          title: 'Modules in Mechanics of Materials (Roylance) — OCW open textbook',
+          url: course.url + 'resources/3_11_f_99_coursetextbook_pdf/',
+          license: 'OCW / CC BY-NC-SA 4.0',
+        }
+      : null;
+  const tb = book
+    ? { title: book.title, url: book.source, license: book.license, note: book.note }
+    : ocwBook;
+  L.push('## Free textbook');
+  L.push('');
+  if (tb) {
+    L.push(`**[${mdEscape(tb.title)}](${tb.url})** — ${tb.license}.`);
+    if (tb.note) L.push(mdEscape(tb.note));
+    L.push('');
+    L.push(
+      `Local copy (not committed): \`reference/textbooks/${course.slug}/textbook.pdf\`` +
+        (book ? '' : ' — inside the OCW download at `reference/ocw/3-11/`.')
+    );
+  } else {
+    L.push('_No paired free textbook — the OCW material above is the reference._');
   }
   L.push('');
   return L.join('\n') + '\n';
