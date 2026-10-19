@@ -19,9 +19,12 @@ it there without inventing a new shape.
 
 Fill every section of `docs/course-plans/TEMPLATE.md` that the draft leaves open:
 
-1. **OCW program first** (D23). Open the counterpart's syllabus and calendar. Set the units and
-   their order from it. For each unit, name the OCW lectures, problem sets and exams, and which
-   have posted solutions. Note what OCW covers past the UNF course.
+1. **OCW program first** (D23). Run `npm run ocw -- <slug>` for the counterpart (slug in
+   `tools/ocw/courses.json`) before mapping the plan to the OCW calendar; the material lands
+   in the git-ignored `reference/ocw/<slug>/`, indexed by `docs/ocw/<slug>.md`. Open the
+   counterpart's syllabus and calendar. Set the units and their order from it. For each unit,
+   name the OCW lectures, problem sets and exams, and which have posted solutions. Note what
+   OCW covers past the UNF course.
 2. **Textbook second.** List the candidates with their licences, verified on the publisher's page.
    The owner chooses (D21). Prefer open texts. Map each unit to its sections.
 3. **UNF syllabus third,** if the owner has given one (in `courses/<id>/incoming/` or the

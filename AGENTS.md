@@ -14,6 +14,10 @@ module in this repo; the hub at https://flux-study.pages.dev links them. PHY 204
    Build from the spine. If the spine and the code disagree, stop and say so.
 5. **The skill for the job** in `.claude/skills/`: `flux-new-course`, `flux-build-unit`,
    `flux-review-unit`, `flux-content-drop`. Cursor: open the skill's `SKILL.md` and follow it.
+6. **`docs/ocw/<slug>.md`** when you need the OCW program's material. Fetch it first with
+   `npm run ocw -- <slug>` (slugs in `tools/ocw/courses.json`); it lands in the git-ignored
+   `reference/ocw/<slug>/` and is never committed. The index file is the map; the download is
+   the territory.
 
 `DECISIONS.md` records what is settled. Do not reopen a decision. Do not act on an open one without
 saying so in the PR. `docs/history/` is the archive; nothing there is an instruction.

@@ -18,7 +18,8 @@
     "smoke": "npm run smoke -w @flux/site",
     "gallery": "npm run gallery -w @flux/phy2049",
     "deploy": "node -e \"console.error('Pushing main deploys the hub: Cloudflare Pages builds it (see DEPLOY.md).'); process.exit(1)\"",
-    "live": "node scripts/live.mjs"
+    "live": "node scripts/live.mjs",
+    "ocw": "node tools/ocw/fetch.mjs"
   },
   "engines": {
     "node": ">=22"
