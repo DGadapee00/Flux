@@ -252,9 +252,9 @@ export function createPractice(api, bank) {
     renderPanel();
   }
 
-  function openProblem(id, { seed, session, pos, push = true, principle = true, again = false } = {}) {
+  function openProblem(id, { seed, session, pos, push = true, again = false } = {}) {
     const s = seed ?? progress.nextSeed(id);
-    const cur = newAttempt(id, s, 'practice', { principle, again });
+    const cur = newAttempt(id, s, 'practice', { again });
     if (!cur) return;
     st.session = session || null;
     if (session) session.pos = pos ?? session.ids.indexOf(id);
@@ -361,8 +361,8 @@ export function createPractice(api, bank) {
     cur.finished = true;
     cur.correct = correct && !cur.revealed;
     if (cur.mode === 'practice') {
-      const { clean, rightFirst, guided, principle } = loop.record(cur);
-      cur.recorded = progress.record(cur.id, { correct: cur.correct, clean, hints: cur.hints, peeked: cur.peeked, revealed: cur.revealed, seed: cur.seed, principle, guided, rightFirst });
+      const { clean, rightFirst, guided } = loop.record(cur);
+      cur.recorded = progress.record(cur.id, { correct: cur.correct, clean, hints: cur.hints, peeked: cur.peeked, revealed: cur.revealed, seed: cur.seed, guided, rightFirst });
       cur.clean = clean;
     }
     syncBlind();
@@ -844,8 +844,7 @@ export function createPractice(api, bank) {
         </div>`;
     }
 
-    const gated = loop.gated(cur);
-    const buttons = gated ? '' : exam
+    const buttons = exam
       ? `<div class="pb-row">
           <button type="button" class="btn" data-act="exam-prev" ${st.exam.i === 0 ? 'disabled' : ''}>← Previous</button>
           ${st.exam.i < st.exam.items.length - 1 ? `<button type="button" class="btn accent" data-act="exam-next">Next →</button>` : `<button type="button" class="btn accent" data-act="exam-submit">Submit exam</button>`}
@@ -866,9 +865,8 @@ export function createPractice(api, bank) {
       ${loop.notesLink(cur)}
       ${cur.note ? `<p class="pb-note">${esc(cur.note)}</p>` : ''}
       ${bannerHTML(cur)}
-      ${loop.principleHTML(cur)}
-      ${gated ? '' : loop.guideHTML(cur)}
-      ${gated ? '' : `<form class="pb-parts" onsubmit="return false">${tpl.parts.map((p, i) => partHTML(cur, p, i)).join('')}</form>`}
+      ${loop.guideHTML(cur)}
+      <form class="pb-parts" onsubmit="return false">${tpl.parts.map((p, i) => partHTML(cur, p, i)).join('')}</form>
       ${buttons}
       ${hints ? `<ol class="pb-hints">${hints}</ol>` : ''}
       ${solutionHTML(cur)}`;
@@ -986,11 +984,6 @@ export function createPractice(api, bank) {
       openProblem(t.dataset.open, { session: { label: grouped ? 'By principle' : 'Problems', ids, mix: !grouped } });
       return;
     }
-    if (t.dataset.principle && loop.pickPrinciple(cur, t.dataset.principle)) {
-      renderPanel();
-      panel.querySelector('.pb-parts .pb-input, .pb-parts input')?.focus({ preventScroll: true });
-      return;
-    }
     if (t.dataset.notes) {
       if (cur) readInputs(cur);
       const [examId, section] = t.dataset.notes.split(':');
@@ -1084,8 +1077,7 @@ export function createPractice(api, bank) {
         restoreSetup();
         break;
       case 'again':
-        // The principle was settled a moment ago on this same problem; asking again would be a formality.
-        if (cur) openProblem(cur.id, { seed: 1 + Math.floor(Math.random() * 99999), session: st.session?.exam ? null : st.session, pos: sessionPos(), principle: false, again: true });
+        if (cur) openProblem(cur.id, { seed: 1 + Math.floor(Math.random() * 99999), session: st.session?.exam ? null : st.session, pos: sessionPos(), again: true });
         break;
       case 'next':
         advance();

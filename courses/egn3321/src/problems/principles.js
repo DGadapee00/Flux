@@ -5,7 +5,7 @@
  * them (Chi, Feltovich & Glaser). These tags index the bank by principle, so the same law shows up
  * across chapters: a collar on a spring, a rolling disk and a released bar all answer to work and
  * energy. Each template gets one primary principle, then up to two it also leans on. The primary
- * drives the principle step that opens a practice problem.
+ * is the one shown with a solution and used to group the list.
  *
  * Hibbeler sections are where each principle is stated (src/problems/kit.js cites them).
  * problems-check confirms every template is tagged with principles that exist.
@@ -135,43 +135,6 @@ export const PRINCIPLES = {
     family: 'Tools',
   },
 };
-
-/** Principles mistaken for each one, most tempting first (the principle step's distractors). */
-export const CONFUSED = {
-  'rect-kin': ['curv-kin', 'newton', 'energy', 'rel-motion', 'impulse'],
-  'curv-kin': ['rect-kin', 'newton', 'rel-motion', 'fixed-axis', 'energy'],
-  'rel-motion': ['curv-kin', 'rect-kin', 'rel-velocity', 'momentum-cons', 'newton'],
-  newton: ['energy', 'impulse', 'rect-kin', 'rigid-newton', 'power'],
-  energy: ['newton', 'impulse', 'power', 'momentum-cons', 'rigid-energy'],
-  power: ['energy', 'newton', 'impulse', 'rigid-energy', 'fixed-axis'],
-  impulse: ['momentum-cons', 'energy', 'newton', 'restitution', 'variable-mass'],
-  'momentum-cons': ['impulse', 'energy', 'restitution', 'newton', 'angular-momentum'],
-  restitution: ['momentum-cons', 'energy', 'impulse', 'newton', 'rel-motion'],
-  'angular-momentum': ['impulse', 'momentum-cons', 'energy', 'rigid-newton', 'fixed-axis'],
-  'variable-mass': ['impulse', 'momentum-cons', 'newton', 'energy', 'power'],
-  'fixed-axis': ['rel-velocity', 'rolling', 'curv-kin', 'rigid-newton', 'power'],
-  'rel-velocity': ['rel-accel', 'fixed-axis', 'rolling', 'rel-motion', 'curv-kin'],
-  'rel-accel': ['rel-velocity', 'rigid-newton', 'fixed-axis', 'rolling', 'curv-kin'],
-  rolling: ['rel-velocity', 'fixed-axis', 'rigid-newton', 'rigid-energy', 'rel-accel'],
-  'rigid-newton': ['newton', 'rigid-energy', 'inertia', 'rolling', 'rel-accel'],
-  inertia: ['rigid-newton', 'rigid-energy', 'fixed-axis', 'rolling', 'newton'],
-  'rigid-energy': ['energy', 'rigid-newton', 'inertia', 'rolling', 'power'],
-};
-
-/**
- * Pairs too close to use as each other's distractor: one is a special case of the other, so a
- * student picking it is half right (energy for a rigid body is energy; momentum conservation is
- * impulse with no external impulse; restitution rides on momentum conservation).
- */
-export const TWINS = [
-  ['energy', 'rigid-energy'],
-  ['impulse', 'momentum-cons'],
-  ['momentum-cons', 'restitution'],
-  ['impulse', 'variable-mass'],
-  ['newton', 'rigid-newton'],
-  ['rel-velocity', 'rolling'],
-  ['rel-accel', 'rolling'],
-];
 
 /** Template id → [primary, …secondary]. */
 export const PRINCIPLE_TAGS = {

@@ -171,8 +171,6 @@ export function fullBank({ storage } = {}) {
     LAB_META,
     homeId: 'u1',
     PRINCIPLES,
-    principleConfused: { newton: ['energy', 'momentum', 'equilibrium'], energy: ['newton', 'momentum', 'kinematics'] },
-    principleTwins: [],
     fading: true,
     sectionForProblem,
     labDrawer: true,

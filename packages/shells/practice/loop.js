@@ -7,8 +7,7 @@
  * the panel:
  *
  *   PRINCIPLES (+ principleConfused, principleTwins) and templates' `principles` tags
- *       → the principle step before a problem (unless askPrinciple: false), the deciding principle
- *         in the solution, "what went wrong" after a miss, the weak-principle list, mixed sets
+ *       → the deciding principle in the solution, "what went wrong" after a miss, the weak-principle list, mixed sets
  *         that lean toward weak principles, and grouping the list by principle.
  *   fading: true          → worked examples that fade backward as a chapter is learned.
  *   pickInterleave        → every MIX_EVERY problems along a chapter list, one from earlier.
@@ -20,7 +19,7 @@
  * Per-option `why` and numeric `traps` are graded by @flux/core; the panel shows that feedback
  * typeset. A course's coaching file is folded in by practice/coaching.js.
  */
-import { UNSURE, createPrincipleStep, primaryOf } from './principles.js';
+import { isTool, primaryOf } from './principles.js';
 import { createFading } from './fading.js';
 
 /** Working a chapter's list, every fourth problem is a review from an earlier chapter. */
@@ -32,11 +31,9 @@ export const MIX_EVERY = 3;
  */
 export function createLoop(bank, { esc, prose, tex, progress, body }) {
   const P = bank.PRINCIPLES && Object.keys(bank.PRINCIPLES).length ? bank.PRINCIPLES : null;
-  const step = P ? createPrincipleStep({ PRINCIPLES: P, confused: bank.principleConfused, twins: bank.principleTwins }) : null;
   const fading = bank.fading ? createFading({ instance: bank.instance, render: bank.render }) : null;
   const on = {
-    principles: !!step,
-    ask: !!step && bank.askPrinciple !== false,
+    principles: !!P,
     fading: !!fading,
     interleave: typeof bank.pickInterleave === 'function',
     notes: typeof bank.sectionForProblem === 'function',
@@ -48,67 +45,26 @@ export function createLoop(bank, { esc, prose, tex, progress, body }) {
 
   // ---------------------------------------------------------------- attempts
   /** The loop's part of a new attempt. */
-  function attempt(tpl, seed, mode, view, { principle = true, again = false } = {}) {
+  function attempt(tpl, seed, mode, view, { again = false } = {}) {
     const guide = on.fading && mode === 'practice' ? fading.guidanceFor(tpl, progress, { templates: bank.PROBLEMS, seed, steps: view.steps.length, again }) : null;
     return {
       guide,
       example: guide?.level === 'example' ? fading.workedExample(tpl, guide.exampleSeed) : null,
       guideHidden: false,
-      // Practice only: an exam stays an exam, and a review of one shows what was sat.
-      principle: on.ask && principle && mode === 'practice' && step.asksPrinciple(tpl) ? { options: step.principleOptions(tpl, seed), pick: null, ok: null } : null,
       gap: null,
     };
   }
 
   /** What a finished practice attempt records, beyond what the panel already knows. */
   function record(cur) {
-    const principleOk = !cur.principle || cur.principle.ok === true;
-    const rightFirst = cur.correct && cur.firstTry !== false && cur.hints === 0 && !cur.peeked && principleOk;
+    const rightFirst = cur.correct && cur.firstTry !== false && cur.hints === 0 && !cur.peeked;
     // Worked steps on screen make it a guided solve: it counts toward fading them out, not as clean.
     const guided = !!cur.guide;
     return {
       clean: rightFirst && !guided,
       rightFirst,
       guided,
-      principle: cur.principle?.pick != null ? { ok: cur.principle.ok } : null,
     };
-  }
-
-  /** Until the principle is named, the parts (and Check, hints, solution) wait. */
-  const gated = (cur) => cur.mode !== 'exam' && !!cur.principle && cur.principle.pick == null && !cur.finished;
-
-  // ---------------------------------------------------------------- the principle step
-  function principleHTML(cur) {
-    const ps = cur.principle;
-    if (!ps) return '';
-    const want = primaryOf(cur.tpl);
-    const W = P[want];
-    if (ps.pick == null) {
-      const opts = ps.options.map((id) => `<button type="button" class="pb-popt" data-principle="${esc(id)}">${esc(pname(id))}</button>`).join('');
-      return `<fieldset class="pb-principle">
-        <legend class="pb-label">First: which principle decides this problem?</legend>
-        <div class="pb-popts">${opts}</div>
-        <button type="button" class="linkish pb-punsure" data-principle="${UNSURE}">Not sure — show me</button>
-        <p class="pb-dim">Name it before you solve. The parts open once you choose, and a wrong or unsure pick means this attempt won't count as a clean solve.</p>
-      </fieldset>`;
-    }
-    if (ps.ok) return `<div class="pb-principle done ok"><div><span class="pb-mark">✓</span> <b>${esc(W.name)}</b></div><div class="pb-pstate">${prose(W.statement)}</div></div>`;
-    const picked = ps.pick !== UNSURE && P[ps.pick]
-      ? `<div class="pb-dim">You chose ${esc(pname(ps.pick))}. That one is for: ${esc(P[ps.pick].cue.replace(/\.$/, '').toLowerCase())}.</div>`
-      : '';
-    return `<div class="pb-principle done bad">
-      <div><span class="pb-mark">✗</span> The deciding principle is <b>${esc(W.name)}</b></div>
-      <div class="pb-pstate">${prose(W.statement)}</div>
-      <div class="pb-pcue">The cue: ${prose(W.cue)}</div>
-      ${picked}
-    </div>`;
-  }
-
-  function pickPrinciple(cur, pick) {
-    if (!cur?.principle || cur.principle.pick != null) return false;
-    cur.principle.pick = pick;
-    cur.principle.ok = step.gradePrinciple(cur.tpl, pick);
-    return true;
   }
 
   /** "Deciding principle: …" above the worked solution. */
@@ -139,8 +95,8 @@ export function createLoop(bank, { esc, prose, tex, progress, body }) {
     return `<div class="pb-gap">
       <div class="pb-label">What went wrong?</div>
       <div class="pb-filters">
-        ${tags.filter((t) => !step.isTool(t) || tags.length === 1).map((t) => opt(t, `Applying ${pname(t).replace(/^./, (c) => c.toLowerCase())}`)).join('')}
-        ${!step.isTool(want) ? opt('which', 'Seeing which idea to use') : ''}
+        ${tags.filter((t) => !isTool(P, t) || tags.length === 1).map((t) => opt(t, `Applying ${pname(t).replace(/^./, (c) => c.toLowerCase())}`)).join('')}
+        ${!isTool(P, want) ? opt('which', 'Seeing which idea to use') : ''}
         ${opt('slip', 'A slip: sign, units, powers of ten, algebra')}
         ${opt('read', 'Misreading the question')}
       </div>
@@ -209,7 +165,6 @@ export function createLoop(bank, { esc, prose, tex, progress, body }) {
     for (const pid of Object.keys(P)) {
       const inP = ordered.filter((t) => primaryOf(t) === pid);
       if (!inP.length) continue;
-      const tally = progress.principleTally(bank.PROBLEMS.filter((t) => primaryOf(t) === pid).map((t) => t.id));
       const mIds = all.filter((t) => primaryOf(t) === pid).map((t) => t.id);
       const cm = Math.round(progress.mastery(mIds) * 100);
       const cc = progress.counts(mIds);
@@ -219,7 +174,7 @@ export function createLoop(bank, { esc, prose, tex, progress, body }) {
             <span class="pb-ch-meter" title="${cm}% mastery"><i style="width:${cm}%"></i></span>
             <span class="pb-ch-count">${cc.mastered}/${cc.total}</span>
           </div>
-          <p class="pb-pstate">${prose(P[pid].statement)}${tally.asked ? ` <span class="pb-ptally" title="Principle step">Named right ${tally.ok} of ${tally.asked}</span>` : ''}</p>
+          <p class="pb-pstate">${prose(P[pid].statement)}</p>
           ${inP.map((t) => itemHTML(t, { chTag: true })).join('')}
         </section>`);
     }
@@ -229,7 +184,7 @@ export function createLoop(bank, { esc, prose, tex, progress, body }) {
   // ---------------------------------------------------------------- faded worked examples
   /**
    * The worked example, or the worked first steps, for a student new to the chapter. It sits
-   * between the principle step and the parts, and goes away once the attempt is finished.
+   * above the parts, and goes away once the attempt is finished.
    */
   function guideHTML(cur) {
     const g = cur.guide;
@@ -266,9 +221,6 @@ export function createLoop(bank, { esc, prose, tex, progress, body }) {
       return cur.guide.level === 'example'
         ? 'Solved, with a worked example beside you. It will come back soon to do on your own.'
         : `Solved, with the first ${cur.guide.shown === 1 ? 'step' : `${cur.guide.shown} steps`} worked for you. Next time, one fewer.`;
-    }
-    if (cur.principle && !cur.principle.ok && cur.firstTry !== false && !cur.hints && !cur.peeked) {
-      return 'Solved — but the principle wasn’t named, so it will come back soon to do clean.';
     }
     return null;
   }
@@ -444,9 +396,6 @@ export function createLoop(bank, { esc, prose, tex, progress, body }) {
     primaryOf,
     attempt,
     record,
-    gated,
-    principleHTML,
-    pickPrinciple,
     principleLine,
     gapHTML,
     noteGap,
