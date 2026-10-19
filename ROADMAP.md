@@ -111,9 +111,7 @@ EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come las
 
 ### Platform items that can run beside the list
 
-- [ ] **Deploy secrets.** `deploy.yml` publishes `main` only when `CLOUDFLARE_API_TOKEN` and
-      `CLOUDFLARE_ACCOUNT_ID` are set in the repo's Actions secrets. Until then the live site moves
-      only on `npm run deploy`.
+- [x] **Deploys:** Cloudflare Pages builds and publishes every push to `main` (`DEPLOY.md`).
 - [ ] **Phase 2b:** move PHY 2049's HUD, practice panel and styles into `packages/shells/physics/`,
       unchanged, with PHY's tests and gallery identical before and after. PHY 2048 then builds on it.
 - [ ] **Converge the shells on PHY 2049** (D32): once the physics shell exists, bring the math and

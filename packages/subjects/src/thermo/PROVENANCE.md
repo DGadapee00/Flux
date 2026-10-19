@@ -33,7 +33,7 @@ cp in J/(mol·K). GRI agrees with NASA Glenn, CEA's own database (Gurvich 1991),
 300 K to 1000 K. JANAF's values match a rigid-rotor harmonic-oscillator calculation to 0.01%
 (`selftest.js`), so they leave out the anharmonic terms the Gurvich data carries. The difference is
 between the references, not an error in GRI's fit. Flux keeps GRI's CH₄ identical to the engine
-repo's. The text for a note to the engine repo is in `docs/engine-issue-ch4-cp.md`.
+repo's. The text for a note to the engine repo is in `docs/history/engine-issue-ch4-cp.md`.
 
 ## Methane's heat of formation in engine-page calculations
 
