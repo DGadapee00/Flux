@@ -295,18 +295,25 @@ async function getAssessments(course, dest) {
     ? items.filter((i) => i.kind !== 'ex' || !/quiz/.test(i.dir))
     : items;
   // Pair Scholar q/s resources: a questions resource has posted solutions when
-  // its solutions sibling exists (Xq -> Xs, or X -> Xs, or X -> X_sol).
+  // its solutions sibling exists (Xq -> Xs, X -> Xs, X -> X_sol, Xprb -> Xsol).
   const byDir = new Map(filtered.map((i) => [i.dir, i]));
   for (const i of filtered) {
     if (i.hasSolutions) continue;
-    const base = i.dir.replace(/_(pdf|html?)$/, '');
-    const candidates = /q$/.test(base)
-      ? [base.replace(/q$/, 's'), base + '_sol', base + 's']
-      : [base + 's', base + '_sol', base + '_s'];
+    // Strip file-type and dedup suffixes: "mit18_01sc_pset1prb-1" -> "mit18_01sc_pset1prb".
+    const base = i.dir.replace(/_(pdf|html?)$/, '').replace(/-\d+$/, '');
+    const candidates = [];
+    if (/prb$/.test(base)) candidates.push(base.replace(/prb$/, 'sol'));
+    if (/q$/.test(base)) candidates.push(base.replace(/q$/, 's'));
+    candidates.push(base + 's', base + '_sol', base + '_s', base + 'sol');
     for (const c of candidates) {
-      // Match dir names that may carry a trailing _pdf/_html suffix.
-      const sib = byDir.get(c) || byDir.get(c + '_pdf') || byDir.get(c + '_html');
-      if (sib && (sib.hasSolutions || /(s|sol)(_pdf|_html)?$/.test(sib.dir))) {
+      // Match dir names that may carry trailing _pdf/_html or -N dedup suffixes.
+      const sib =
+        byDir.get(c) ||
+        byDir.get(c + '_pdf') ||
+        byDir.get(c + '_html') ||
+        [...byDir.keys()].find((k) => k === c || k.startsWith(c + '-'));
+      const sibDir = typeof sib === 'string' ? sib : sib?.dir;
+      if (sibDir && (byDir.get(sibDir)?.hasSolutions || /(s|sol)(_pdf|_html)?$/.test(sibDir))) {
         i.hasSolutions = true;
         break;
       }
