@@ -29,6 +29,10 @@ order (D23). If the spine and the code disagree, stop and ask; do not pick one s
 
 ## 3. Labs
 
+Scaffold first: `npm run new-lab -- <course-id> <lab-id> --kind plot|scene2d|scene3d --unit uN --title "Title" [--app]`
+writes the lab file, the catalog and loader entries, and two prediction stubs, all with TODOs
+where the content goes. Then fill the physics.
+
 For each lab in the spine:
 
 - Write the intuition it corrects as the first line of its doc comment ("Shows that …").

@@ -20,7 +20,8 @@
     "deploy": "node -e \"console.error('Pushing main deploys the hub: Cloudflare Pages builds it (see DEPLOY.md).'); process.exit(1)\"",
     "live": "node scripts/live.mjs",
     "ocw": "node tools/ocw/fetch.mjs",
-    "ocw:textbooks": "node tools/ocw/fetch-textbooks.mjs"
+    "ocw:textbooks": "node tools/ocw/fetch-textbooks.mjs",
+    "new-lab": "node tools/new-lab.mjs"
   },
   "engines": {
     "node": ">=22"
