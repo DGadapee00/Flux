@@ -43,6 +43,9 @@ export const N_PER_LBF = KG_PER_LBM * G_STANDARD;
 /** Metres in one inch. One foot is twelve inches. */
 export const M_PER_IN = M_PER_FT / 12;
 
+/** Cubic metres in one US gallon: 231 cubic inches, exactly. */
+export const M3_PER_GAL_US = 231 * M_PER_IN ** 3;
+
 /** Pascals in one pound-force per square inch. */
 export const PA_PER_PSI = N_PER_LBF / M_PER_IN ** 2;
 

@@ -4,6 +4,9 @@ import { PREDICTIONS } from './predictions.js';
 const loaders = {
   phase: () => import('./phase.js'),
   piston: () => import('./piston.js'),
+  nozzle: () => import('./nozzle.js'),
+  devices: () => import('./devices.js'),
+  heater: () => import('./heater.js'),
 };
 
 const labs = createLabLoader(loaders);
