@@ -66,9 +66,6 @@
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The impulse is the area, not the height of the force. A short spike and a long push with the same area give the same change in speed. And in a rebound the speeds add: writing \(20 - 15\) instead of \(15 + 20\) undercounts the impulse sevenfold. Hibbeler §15.1.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Add the areas. Divide the total by the mass. Add that change to the starting velocity, with its sign.</p>
-</div>
 <p>In the Impulse lab, reshape the force pulses while keeping their areas. The final speed does not move.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The body is a particle, and \(F\) is the net force along the line. The model leaves out a force missing from the area, and any rotation of a finite body. During a 5 ms blow, the weight's impulse is only 0.007 N·s, so non-impulsive forces like it are usually dropped. That is a choice, and it fails for long contacts.</p>
@@ -146,9 +143,6 @@ v_{n2} - v_{n1} = e(u_{n1} - u_{n2}).
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Momentum is conserved for every coefficient of restitution. Kinetic energy is conserved only when \(e = 1\). Hibbeler §15.4.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Solve the momentum equation and the restitution equation together. The energy loss follows from \(e\), the reduced mass, and the closing speed.</p>
-</div>
 <p>In the Impact lab, slide \(e\) from 0 to 1. The final velocities move, the total momentum does not, and the lost energy falls to zero.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The impact is treated as instantaneous, so outside impulses during the collision are neglected. Deformation of the bodies is summed up by \(e\), not drawn. Real \(e\) depends on the impact speed and the temperature. A single number is a fit, not a law.</p>
@@ -172,9 +166,6 @@ v_{n2} - v_{n1} = e(u_{n1} - u_{n2}).
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Do not multiply the tangent velocity by \(e\). Restitution acts only along the line of impact. Scaling the whole velocity by 0.6 would send the floor ball off at 6 m/s and 30°. Hibbeler §15.4.</p>
-</div>
-<div class="box key"><span class="tag">Key</span>
-<p>Keep the tangent component. Solve the normal components as a direct impact.</p>
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The faces are smooth, so there is no tangent impulse. A rough collision would change the tangent speeds, and set a ball spinning. That model is left out, as is any rotation the impact gives the bodies.</p>
@@ -210,9 +201,6 @@ L_z = m(xv_y - yv_x), \qquad \sum M_O = \dot H_O.
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The moment arm runs from the chosen point to the particle. It is not the distance measured along the velocity. Hibbeler §15.5.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Use one point. Keep the signs of \(x\), \(y\), \(v_x\), and \(v_y\). A force through that point leaves \(H\) unchanged.</p>
-</div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>This is the angular momentum of a particle. It is not yet the spin of a rigid body, which Unit 6 builds by adding up particles. Central-force orbits, where this conservation does most of its work, are left out of the course.</p>
 </div>
@@ -246,9 +234,6 @@ m\,dv = -v_e\,dm - mg\,dt.
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>\(\Delta v\) is \(v_e\) times the log of the mass ratio, minus \(g t_b\). It is not \(v_e\) times the burned mass divided by \(m_0\). For the first rocket, that wrong form gives 900 m/s instead of 1374 m/s. Hibbeler §15.9.</p>
-</div>
-<div class="box key"><span class="tag">Key</span>
-<p>A larger mass ratio gives a larger \(\Delta v\), even when the burned mass is the same. Steady flow of a fluid stream, §15.8, is left out of this course.</p>
 </div>
 <p>In the Rocket lab, the coast, heavy, and gravity scenarios are the three examples above. The lab integrates the momentum balance step by step and matches the logarithm.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
