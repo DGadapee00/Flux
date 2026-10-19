@@ -50,6 +50,7 @@ The plan these came from is archived in `docs/history/PLAN-2026-10-18.md`.
 | D30 | **"What the model leaves out" goes in two places:** the explainer of every application lab, ending with **What the course model leaves out.**, and a `box out` in every notes section that uses an idealisation. Concept-lab explainers need not have it. `out` joins the standard's box types. | 18 Oct 2026 (owner) |
 | D31 | **EGN 3331 teaches energy methods** (Hibbeler Ch 14), as 2.001 does. Reverses the course pack's omission under D11. | 18 Oct 2026 (owner) |
 
+| D32 | **PHY 2049 is the benchmark for every course.** Where any course differs from PHY 2049 (notes structure and boxes, lab explainers, the practice loop, layout), PHY 2049's version is the target. Notes group sections into `div.part` with a legend, as PHY's do, and place boxes where the content needs them, not one of each per section. The shells converge on PHY 2049's layout after Phase 2b. The one exception is unit order, which comes from OCW (D23); PHY 2049 keeps its own (D28). | 18 Oct 2026 (owner) |
 ## Open
 
 | # | Question | Default until answered |

@@ -67,7 +67,7 @@ subject libraries (a function written for one course serves the next), and one s
       course, the skills).
 - [x] **Inventory** of every course against the outline: `docs/INVENTORY.md`.
 - [ ] **Platform fixes from the inventory:** notes deep links (`?n=`) in the shells; the scorecard
-      reads coaching files; items 3–4 of `docs/INVENTORY.md` section 3 settled.
+      reads coaching files.
 - [ ] **R3a EML 3100.** The five-unit order in its spine (16.050 Part 0–1, then Yan; D29). Owner
       confirms. Then Units 3–5 to the standard, and an application lab, `why` and traps for 1–2.
 - [ ] **R3b EGN 3331.** The eleven-unit order in its spine (2.001, energy methods back; D29, D31).
@@ -116,6 +116,9 @@ EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come las
       only on `npm run deploy`.
 - [ ] **Phase 2b:** move PHY 2049's HUD, practice panel and styles into `packages/shells/physics/`,
       unchanged, with PHY's tests and gallery identical before and after. PHY 2048 then builds on it.
+- [ ] **Converge the shells on PHY 2049** (D32): once the physics shell exists, bring the math and
+      engineering shells' header, unit picker, mode switch, notes panel and practice panel to its
+      layout, one piece per PR, every course's checks green.
 - [ ] A banner on the frozen flux-phy2049 site pointing to Flux.
 
 ## 4. Tracks (D19)

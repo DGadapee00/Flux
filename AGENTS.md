@@ -1,8 +1,8 @@
 # Flux: rules for agents
 
 Flux is one study platform for the owner's mechanical-engineering degree at UNF. Each course is a
-module in this repo; the hub at https://flux-study.pages.dev links them. PHY 2049 is the reference
-course: every other course must look, work and teach like it.
+module in this repo; the hub at https://flux-study.pages.dev links them. PHY 2049 is the benchmark
+(D32): every other course must look, work and teach like it.
 
 ## Read before you work
 

@@ -111,8 +111,7 @@ Fix these once and every course gains.
 
 ## 3. Where the outline and the code disagree about the rules
 
-Items 1, 2, 5, 6 and 7 were decided on 18 Oct 2026 (D28–D31) and the standard now says so. Items 3
-and 4 are still open; until the owner answers, they stay recommendations.
+All seven were decided on 18 Oct 2026 (D28–D32), and the standard now says so.
 
 1. **"What the model leaves out".** The standard asks for it at the end of every lab explainer and
    every notes section with an idealisation. In the reference course it appears only in the 8
@@ -126,9 +125,12 @@ and 4 are still open; until the owner answers, they stay recommendations.
 3. **Notes structure.** PHY 2049's notes group sections into `div.part` with a legend; no shell
    course does, including Dynamics, which the standard lists as an exemplar. *Recommendation:* make
    parts and the legend required for units with more than about eight sections, optional below.
+   **Decided: always, as PHY 2049 does (D32).** Every shell course's notes need parts and a legend.
 4. **Box recipe.** Every shell notes file has exactly one `why`, one `key` and one `out` per section.
    PHY 2049's boxes follow the content (some sections have three `fix`, some none). The recipe meets
    the counts but can read as filler. *Recommendation:* the review skill should look for it.
+   **Decided (D32):** boxes follow the content, as PHY 2049's do. The review skill now flags the
+   recipe, and existing notes are rewritten when each course is reworked.
 5. **D23 and course boundaries.** OCW runs Calc I and II as one course (18.01SC), and PHY 2049 follows
    its instructor by permission. *Recommendation:* where courses split differently from OCW, UNF sets
    the boundary and OCW sets the order inside it; PHY 2049 keeps its instructor's order and links 8.02
@@ -300,7 +302,8 @@ unless the owner asks.
 **Platform (before more course work):**
 1. Notes deep links (`?n=`) in the shell router, with a shell test.
 2. The scorecard reads coaching files, so PHY 2049 and Dynamics are measured the same way.
-3. Settle items 3 and 4 of section 3 (notes parts and legend; the box recipe).
+3. Notes in every shell course gain parts and a legend, and lose the one-of-each box recipe, as each
+   course is reworked (D32).
 
 **Courses, following the roadmap:**
 

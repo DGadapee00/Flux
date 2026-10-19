@@ -1,7 +1,8 @@
 # The Flux course standard
 
-PHY 2049 is the reference course. It works because it was built around a real class and around how
-people learn physics, not because it has more files. This document says what every course must be
+PHY 2049 is the benchmark: the idealised state every course is built toward (D32). It works because
+it was built around a real class and around how people learn physics, not because it has more files.
+Where another course does something differently, PHY 2049's way is the target. This document says what every course must be
 and how good each part must be. Read it in full before you write any part of a course.
 
 A course is finished when three things are true:
@@ -22,6 +23,8 @@ D17).
 ## 1. Read these first
 
 Before you write a part, open its exemplar and match it. Copy the structure; write your own content.
+PHY 2049 is the benchmark for every part. The Dynamics files show the same parts on the engineering
+shell; where they differ from PHY 2049 (its notes have no parts or legend), follow PHY 2049.
 
 | Part | Exemplar | What to take from it |
 |---|---|---|
@@ -72,6 +75,9 @@ everything in the same place in any course. Do not build a different app.
   (eyebrow, h1, lede, legend, toc), `div.part`, `section.topic` numbered s1, s2, …, boxes `ex`
   (worked example), `why` (derivation), `fix` (correction), `key` (key idea) and `out` (what the
   model leaves out). The last section is the formula sheet.
+- Sections are grouped into parts (`div.part`) with a legend, as in every PHY 2049 notes file (D32).
+- Boxes go where the content needs them. A section may have three `fix` boxes or none. One `why`, one
+  `key` and one `out` in every section, whatever its content, is a recipe, not a standard (D32).
 - Math is `\( \)` and `\[ \]`, typeset by KaTeX. `$` is never a delimiter in a notes file.
 - Derive each result. Never list a formula without where it comes from.
 - Worked examples: at least six per unit, each recomputed, each with a **Show this in the lab** setup

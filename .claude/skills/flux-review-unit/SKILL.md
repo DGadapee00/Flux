@@ -10,9 +10,9 @@ as PHY 2049's content-drop protocol is on a source.
 
 ## Does it look like Flux?
 
-- Open the unit beside PHY 2049 and Dynamics at 380×820 and 1280×800. Same header, same unit row,
-  same lab tabs, same practice panel, same notes panel. Any screen that looks like a different app
-  is a bug.
+- Open the unit beside PHY 2049, the benchmark (D32), at 380×820 and 1280×800. Its content should
+  match PHY 2049's depth. Its screens should match the other courses on its shell exactly, until the
+  shells converge on PHY 2049's layout (ROADMAP.md). Any screen that looks like a third app is a bug.
 - Colours keep their meanings (docs/COURSE-STANDARD.md, section 2).
 
 ## Labs
@@ -39,6 +39,9 @@ as PHY 2049's content-drop protocol is on a source.
 - Every topic in the spine's unit block appears. Every example is recomputed.
 - Average sentence length near 15 words; no em dashes; no filler.
 - Every "Section N" reference and every setup points at something that exists.
+- Parts and a legend, as PHY 2049's notes have. Boxes placed by content: if every section has
+  exactly one `why`, one `key` and one `out`, rewrite until the boxes follow what each section
+  needs (D32).
 
 ## Sources
 
