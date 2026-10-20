@@ -90,18 +90,19 @@ export default {
     },
   ],
   s7: [
-    { tag: 'a student rocket', lab: 'boost', scenario: 'student', read: (c) => ({ vBo: [c.vBo, 122.5], hBo: [c.hBo, 153], apogee: [c.apogee, 918], t: [c.tApogee, 15.0] }) },
+    { tag: 'a metro train', lab: 'train', scenario: 'metro', read: (c) => ({ vTop: [c.vTop, 22], s1: [c.s1, 220], brake: [c.sBrake, 302.5], total: [c.total, 522.5] }) },
     {
-      tag: 'thrust and weight',
-      lab: 'boost',
-      scenario: 'student',
+      tag: 'tractive force on a grade',
+      lab: 'train',
+      scenario: 'metro',
       setup(s) {
-        s.a = 600 / 12 - 9.81;
-        s.tb = 3;
+        s.a1 = 0.16 - 9.81 * 0.01;
+        s.t1 = 18 / (0.16 - 9.81 * 0.01);
+        s.t = s.t1;
       },
-      read: (c) => ({ vBo: [c.vBo, 121], hBo: [c.hBo, 181], apogee: [c.apogee, 922] }),
+      read: (c) => ({ vTop: [c.vTop, 18], s1: [c.s1, 2617] }),
     },
-    { tag: 'a long gentle burn', lab: 'boost', scenario: 'long', read: (c) => ({ vBo: [c.vBo, 120], hBo: [c.hBo, 360], apogee: [c.apogee, 1094] }) },
-    { tag: 'a hop test', lab: 'boost', scenario: 'hop', read: (c) => ({ apogee: [c.apogee, 31.3], ground: [c.tGround, 7.75] }) },
+    { tag: 'the same speed, a gentler start', lab: 'train', scenario: 'gentle', read: (c) => ({ vTop: [c.vTop, 22], total: [c.total, 742.5] }) },
+    { tag: 'a short yard hop', lab: 'train', scenario: 'yard', read: (c) => ({ vTop: [c.vTop, 5], total: [c.total, 50] }) },
   ],
 };

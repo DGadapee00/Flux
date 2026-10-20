@@ -166,6 +166,8 @@ export default defineLab({
       title: 'The acceleration is not the tangent',
       body: [
         String.raw`$a_t = ${fig(c.at)}\ \mathrm{m/s^2}$ changes the speed. $a_n = ${fig(c.an)}\ \mathrm{m/s^2}$ turns it.`,
+        'The normal part never speeds the particle up or slows it down. It only bends the velocity toward the centre of curvature.',
+        String.raw`That centre sits ${fig(c.rho)} metres away, along the normal. Halve that radius and the same speed needs twice the normal acceleration.`,
         eq(String.raw`a=\sqrt{a_t^{2}+a_n^{2}}`),
       ],
     };
