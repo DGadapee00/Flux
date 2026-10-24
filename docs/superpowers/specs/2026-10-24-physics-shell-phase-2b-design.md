@@ -163,8 +163,8 @@ moves first.
 |---|---|---|
 | 2b-0 | **The gate** | Builds the comparison tool. Moves no code. |
 | 2b-1 | Shell skeleton. One `shared.js` for all three shells, the generic `format` and `plot` helpers, styles wholesale | Adds the `physics` exports and fixture. Mechanical. |
-| 2b-2 | `chrome`, header, unit picker, mode switch, `units` | The wordmark comes from the shared `header.js`. The track bar stays core's `mountTrackBar`. |
-| 2b-3 | `hud` | Plots map and `labPanel` hooks. |
+| 2b-2 | `chrome`, `units` | The wordmark comes from the shared `header.js`. The track bar stays core's `mountTrackBar`. |
+| 2b-3 | `hud`, which holds the unit picker and mode switch | Plots map, `labPanel` and `examNote` hooks. |
 | 2b-4 | `predict`, `derive` | `derive.js` draws with PHY 2049's `Q` colour map, which the course passes in. The notes wrapper stays in the course: it is already 32 lines over core. |
 | 2b-5 | `problems` onto `practice/loop.js` | May split into 5a and 5b. |
 | 2b-6 | Split EM-only CSS into a course stylesheet. Fixture tests for every flag. Docs. | Ticks Phase 2b in ROADMAP and updates `docs/COURSE-STANDARD.md`. |
