@@ -55,7 +55,17 @@ Three facts shape the design.
 2. **A shell course is thin.** EGN 3321 on the engineering shell keeps its own `main.js` (505
    lines) and three or four wrappers of 10 to 50 lines each (`ui/hud.js` is 22 lines,
    `ui/problems.js` is 50). The physics shell follows that shape. `main.js` stays in the course.
-3. **PHY 2048's labs already use the contract.** `courses/phy2048/src/labs/define.js` sets
+3. **The engineering shell is already a decoupled fork of this UI.** Measured by `diff`: `shared.js`
+   is byte-identical in PHY 2049, the engineering shell and the math shell. `format.js` differs by
+   35 lines. `hud.js` and `problems.js` have drifted (576 and 873 differing lines), and the math and
+   engineering panels are near copies of each other (10 differing lines in the first 400). So the
+   physics shell must not add a fourth copy of anything it can share. Consolidating the panels is
+   D32's job, after this work, but this work must not make it harder.
+4. **Some of the move is already done.** The scene3d helpers (`manim`, `frame`, `createScene`,
+   `arrows`, `numberPlane`, pointers) live in `packages/core/src/scene3d/`, and PHY 2049's
+   `scene/` and `engine/` files re-export them and add electromagnetic objects. PHY 2049's
+   `ui/notes.js` is 32 lines over core's `createNotes`. Neither needs a shell piece.
+5. **PHY 2048's labs already use the contract.** `courses/phy2048/src/labs/define.js` sets
    `kind: 'scene3d'` with empty `init` and `syncViews`, as PHY 2049's labs do. No contract change is
    needed for the later sub-projects.
 
@@ -83,9 +93,9 @@ packages/shells/physics/
   predict.js    the predict-then-run card
   units.js      the units reference
   derive.js     step-through derivations
-  format.js     number and unit formatting
-  plot.js       canvas plot helpers (generic ones only)
-  shared.js     tex, prose, escape helpers
+  format.js     the generic number formatters: sciHTML, sciTex, sciText, signedSci
+  plot.js       canvas plot helpers: setupCanvas, drawAxes, drawDot, PLOT_COLORS
+  shared.js     re-exports packages/shells/shared.js (the one copy, see below)
   chrome.js     renders the page chrome (see below)
   styles/       main.css, practice.css, mobile.css
 ```
@@ -105,13 +115,14 @@ imported from a course. For PHY 2049 the hooks are:
 | Predictions per lab | `predictionsFor(labId)` | `data/predictions.js` |
 | The problem bank and its progress | the `bank` object that `practice/loop.js` already documents | `problems/*` |
 | Notes and the notes link per lab | `notes` module, `sectionForLab` | `notes/index.js` |
-| Derivations | `derivations` module | `derive/index.js` |
+| Derivations, and the colours they draw with | `derivations`, `colors` (PHY 2049's `Q` map) | `derive/index.js`, `scene/manim.js` |
 | Storage | `courseStore` | `storage.js` |
 | Frame helpers (units, work plane) | passed in as functions | `engine/frame.js` |
 
 Lab-specific plots (`drawVx`, `drawAC`, `drawVI`, `drawPaschen`, `drawRC`) are electromagnetic.
-They stay in the course and are passed to the HUD as a `plots` map keyed by lab id. Only generic
-canvas helpers move to the shell's `plot.js`. The charge list in `hud.js` (`resetChargeListSig`)
+They stay in the course and are passed to the HUD as a `plots` map keyed by plot type. Only the
+canvas helpers they share (`setup`, `axes`, `dot` and the colour constants, private to `plot.js`
+today) are exported from the shell's `plot.js`, so PHY 2048's plots can use them. The charge list in `hud.js` (`resetChargeListSig`)
 becomes a `labPanel` hook the course fills for the labs that need one.
 
 ### The page chrome
@@ -137,6 +148,10 @@ grep, so an upper bound on the coupling). Two things happen to it:
 2. Behaviour that only the PHY 2049 copy has moves into the loop behind a flag, with a test on the
    fixture course.
 
+Because the engineering panel is already a hook-based descendant of this one, the first step is to
+diff the two. If the physics-only residue is small, `physics/problems.js` builds on the engineering
+panel with flags instead of becoming another 1,300-line copy. The plan sets the threshold.
+
 This is the riskiest PR. It is split in two if the diff passes about 1,500 lines changed.
 
 ## PR sequence
@@ -147,10 +162,10 @@ moves first.
 | PR | Piece | Notes |
 |---|---|---|
 | 2b-0 | **The gate** | Builds the comparison tool. Moves no code. |
-| 2b-1 | Shell skeleton, `shared`, `format`, `plot` (generic part), styles wholesale | Adds the `physics` fixture and the exports. Mechanical. |
+| 2b-1 | Shell skeleton. One `shared.js` for all three shells, the generic `format` and `plot` helpers, styles wholesale | Adds the `physics` exports and fixture. Mechanical. |
 | 2b-2 | `chrome`, header, unit picker, mode switch, `units` | The wordmark comes from the shared `header.js`. The track bar stays core's `mountTrackBar`. |
 | 2b-3 | `hud` | Plots map and `labPanel` hooks. |
-| 2b-4 | `predict`, `derive`, notes wiring | `derive.js` pulls in scene helpers from `scene/manim.js`. Those that name no EM concept move to `@flux/core/scene3d`, which already hosts `manim.js` for the engineering shell. |
+| 2b-4 | `predict`, `derive` | `derive.js` draws with PHY 2049's `Q` colour map, which the course passes in. The notes wrapper stays in the course: it is already 32 lines over core. |
 | 2b-5 | `problems` onto `practice/loop.js` | May split into 5a and 5b. |
 | 2b-6 | Split EM-only CSS into a course stylesheet. Fixture tests for every flag. Docs. | Ticks Phase 2b in ROADMAP and updates `docs/COURSE-STANDARD.md`. |
 
