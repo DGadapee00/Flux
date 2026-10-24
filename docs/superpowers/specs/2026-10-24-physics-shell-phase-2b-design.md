@@ -213,10 +213,14 @@ stay in the git-ignored `scripts/output/`. They are never committed.
    levels 1 to 3 with hints, traps, `why` and conceptual items, application labs on everyday
    devices (D25), and the drag and variable-mass problems 8.01SC adds.
 4. **OpenStax coverage gaps.** The catalog skips Volume 1 Ch 1 (units and measurement), Ch 14
-   (fluids), Ch 16 (waves) and Ch 17 (sound). Whether to add them, and where, is the owner's call.
-   It is noted here because D23 puts the OCW program first and OpenStax second.
+   (fluids), Ch 16 (waves) and Ch 17 (sound). The owner has said to add Ch 14, 16 and 17 (24 Oct
+   2026). They join PHY 2048 as units after oscillations, because 8.01SC does not cover them and
+   OpenStax fills in (D23). Ch 1 folds into Unit 1's notes as a units and measurement section. The
+   spine and `catalog.js` change in sub-project 2, not here. Owner confirmation of the new spine is
+   still required (rule 7).
 
-## Open for the owner
+## Decided by the owner (24 Oct 2026)
 
-1. **Freeze.** Is any PHY 2049 week one where no PR should merge? If so, the sequence pauses then.
-2. **Ch 14, 16, 17.** Add them in sub-project 4, or leave them out? Not needed for this spec.
+1. **Freeze.** No PHY 2049 week is frozen. Rule 1 still applies to every PR.
+2. **Ch 14, 16, 17.** Add them, as described under sub-project 4.
+3. **Spec.** Approved. Next step is the implementation plan.
