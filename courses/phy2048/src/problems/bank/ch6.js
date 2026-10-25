@@ -472,6 +472,8 @@ export default [
       const vMax = Math.sqrt($.mu * G * $.r);
       return { speed, muNeed, vMax, ans: $.q === 'mu' ? muNeed : ($.unit === 'kmh' ? vMax / MPS_PER_KMH : vMax) };
     },
+    // Drawn versions stay with road speeds and real tyres: up to about 130 km/h and μ ≤ 1.
+    sampleValid: ($) => ($.q === 'mu' ? $.muNeed <= 1 : $.vMax <= 36),
     // From the banked-curve solver at 0°: the friction it needs over N, or the top of its band.
     second: ($) => {
       const speed = $.unit === 'kmh' ? $.vkmh * MPS_PER_KMH : $.vms;
@@ -544,6 +546,8 @@ export default [
       const rIdeal = ($.v * $.v) / (G * Math.tan($.th * DEG));
       return { vIdeal, thIdeal, rIdeal, ans: { speed: vIdeal, angle: thIdeal, radius: rIdeal }[$.q] };
     },
+    // Drawn versions stay with road speeds, up to about 160 km/h, and banks up to 45°.
+    sampleValid: ($) => ($.q === 'speed' ? $.vIdeal <= 45 : $.thIdeal <= 45 && $.rIdeal <= 2000),
     // From the general banked-curve solver: the speed at which friction is zero, found by bisection.
     second: ($) => {
       const fAt = (speed, r, th) => bankedCurve({ mass: 1, radius: r, thetaDeg: th, speed, g: G }).f;

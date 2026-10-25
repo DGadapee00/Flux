@@ -14,12 +14,14 @@ These stay in the course. They are not copied into `packages/core` or the shell.
   `unit` and the practice exam is still called a practice exam.
 - **Colour.** The platform's meanings. Force is pink, velocity white. Unit 2 adds two, in the
   relative-motion and wind-triangle labs: the velocity of the moving frame (a current, a wind, minus
-  an observer's velocity) is teal, and the resulting velocity over the ground is gold.
-- **Labs.** Units 1 and 2 are drawn (graph panels and flat vector scenes, framed by `fit` and the
+  an observer's velocity) is teal, and the resulting velocity over the ground is gold. In Unit 3's
+  force diagrams every force is pink and labelled, so the acceleration there is a thin yellow arrow,
+  and a reference line on a graph (free fall, a weight, a terminal speed) is yellow too.
+- **Labs.** Units 1 to 3 are drawn (graph panels and flat vector scenes, framed by `fit` and the
   free space). The projectile lab draws the world at one scale on both axes, so angles are true. The
-  four older labs in Units 3 to 6 are logic only until their unit's PR draws them.
+  three older labs in Units 4 to 6 are logic only until their unit's PR draws them.
   A lab says its numbers once, as `readoutCells`, and its law as TeX lines.
-- **Notes.** One file per unit in `src/notes/content/`, registered in `src/notes/units/`. Units 1 and 2
+- **Notes.** One file per unit in `src/notes/content/`, registered in `src/notes/units/`. Units 1 to 3
   have them. A worked example's setup in `src/notes/setups/` is checked against the lab within 2%.
 - **Problems.** A unit built to the standard is listed in `STANDARD_UNITS` in `scripts/problems-check.mjs`,
   which then also requires a level, a declared variety, a cited case, traps that can fire, and a lab
