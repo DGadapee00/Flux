@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Newton's Laws and Their Applications</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">PHY 2048 · Physics I · Unit 3 · OpenStax University Physics Vol. 1, Ch 5–6, rewritten</div>
+  <h1>Newton's Laws and Their Applications</h1>
+  <p class="lede">Unit 2 described motion. This unit explains it: a net force changes a velocity, and nothing else does. Draw the body alone, list what touches it, and write one equation per direction.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The three laws</h3>
+    <a href="#s1"><span>1</span>Force and the first law</a>
+    <a href="#s2"><span>2</span>The second law</a>
+    <a href="#s3"><span>3</span>Mass and weight</a>
+    <a href="#s4"><span>4</span>The third law and choosing a system</a>
+    <h3>Part II · The forces you meet</h3>
+    <a href="#s5"><span>5</span>Normal force and tension</a>
+    <a href="#s6"><span>6</span>Free-body diagrams</a>
+    <h3>Part III · Solving problems</h3>
+    <a href="#s7"><span>7</span>Connected bodies</a>
+    <a href="#s8"><span>8</span>Apparent weight</a>
+    <a href="#s9"><span>9</span>Friction</a>
+    <h3>Part IV · Curves and drag</h3>
+    <a href="#s10"><span>10</span>Centripetal force</a>
+    <a href="#s11"><span>11</span>Drag and terminal speed</a>
+    <h3>Reference</h3>
+    <a href="#s12"><span>12</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The three laws</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Force and the first law</h2>
+<p>A force is a push or a pull, with a size and a direction. Forces are vectors, so they add by components, as in Unit 1. The <b>net force</b> on a body is the vector sum of every force on it from outside.</p>
+<p>The <b>first law</b> says that a body keeps its velocity, in size and direction, unless a net force acts on it. A body at rest stays at rest. A moving body keeps moving in a straight line at a steady speed. This tendency is <b>inertia</b>. A force is needed to change a motion, not to keep one going.</p>
+<p>The law holds in an <b>inertial frame</b>: a frame that is not itself accelerating. The ground is nearly one. An accelerating car is not, which is why a coffee cup slides on its dashboard with no force pushing it.</p>
+<div class="box ex"><span class="tag">Worked example · riding at a steady speed</span>
+<p>An elevator carries a 75.0 kg man up at a steady speed. His velocity does not change, so the net force on him is zero. Two forces act: his weight, \(mg = 735.8\ \text{N}\) down, and the push of the floor up. The push must also be 735.8 N. Moving up does not need extra force; only speeding up does.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A steadily moving body does not need a net force in its direction of motion. A car cruising at 100 km/h has its forward push from the road exactly balanced by drag and rolling resistance. If the push were bigger, the car would speed up.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>The second law</h2>
+<p>A net force changes the velocity, and the change is larger for a smaller mass. The <b>second law</b> makes this exact:</p>
+\[
+\sum\vec F = m\vec a.
+\]
+<p>It is a vector equation, so it is three equations, one per axis: \(\sum F_x = ma_x\), and the same for \(y\) and \(z\). The acceleration points the same way as the net force. The SI unit of force follows from it: one newton gives one kilogram an acceleration of \(1\ \text{m/s}^2\), so \(1\ \text{N} = 1\ \text{kg·m/s}^2\).</p>
+<div class="box ex"><span class="tag">Worked example · a lawn mower</span>
+<p>The push on a 24 kg mower, less the friction on it, is a net 51 N along the ground. The acceleration is \(a = F_{\text{net}}/m = 51/24 = 2.1\ \text{m/s}^2\), in the direction of the net force. Nothing here says how big the push or the friction is on its own; only their difference matters.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · several forces on a particle</span>
+<p>Four forces act on a 4.0 kg particle: 10.0 N at \(30^\circ\) above \(+x\), 40.0 N down, 5.0 N along \(-x\) and 2.0 N up. Add each column:</p>
+\[
+a_x = \frac{10.0\cos30^\circ - 5.0}{4.0} = 0.915\ \text{m/s}^2, \qquad a_y = \frac{10.0\sin30^\circ + 2.0 - 40.0}{4.0} = -8.25\ \text{m/s}^2.
+\]
+<p>The size is \(\sqrt{0.915^2 + 8.25^2} = 8.30\ \text{m/s}^2\), at \(276^\circ\) from \(+x\): almost straight down, a little to the right.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The book prints this acceleration's size as \(8.4\ \text{m/s}^2\). Its own components, 0.92 and \(-8.25\), give 8.30. Rounding \(a_y\) to \(-8.3\) and then squaring gives 8.35, which rounds to 8.4. Keep the extra digits until the end.</p>
+<p>Forces do not add as numbers. Adding the four sizes, 57 N, and dividing by 4.0 kg gives \(14\ \text{m/s}^2\), far too big, because most of the forces point in different directions.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Mass and weight</h2>
+<p><b>Mass</b> measures inertia: how hard a body is to accelerate. It is the same everywhere. <b>Weight</b> is the gravitational pull on the body. In free fall it is the only force, and the body accelerates at \(g\), so the second law gives</p>
+\[
+\vec w = m\vec g, \qquad w = mg.
+\]
+<p>A 5.0 kg body weighs 49 N on Earth and 8.4 N on the Moon, where \(g = 1.67\ \text{m/s}^2\). Its mass is 5.0 kg in both places. A pound is a unit of force: one pound-force is 4.448 N.</p>
+<div class="box ex"><span class="tag">Worked example · lifting a stone</span>
+<p>A farmer lifts a stone that weighs 180 N, so it speeds up at \(1.5\ \text{m/s}^2\). The mass is not 180: it is \(m = w/g = 180/9.81 = 18.35\ \text{kg}\). Two forces act, his pull \(F\) up and the weight down:</p>
+\[
+F - w = ma \quad\Rightarrow\quad F = 180 + 18.35(1.5) = 207.5\ \text{N}.
+\]
+<p>If he pulls with 230.0 N instead, \(a = (230.0 - 180)/18.35 = 2.72\ \text{m/s}^2\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The book's answer to that last question is \(2.78\ \text{m/s}^2\). It rounds the mass to 18 kg first: \(50/18 = 2.78\). With \(m = 18.35\ \text{kg}\) the acceleration is \(2.72\ \text{m/s}^2\), 2% less.</p>
+<p>A weight in newtons is not a mass. Putting 180 in \(F = ma\) as the mass gives a force about ten times too big.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>The third law and choosing a system</h2>
+<p>Forces come in pairs. If body A pushes on body B, then B pushes on A with a force of the same size in the opposite direction:</p>
+\[
+\vec F_{AB} = -\vec F_{BA}.
+\]
+<p>The two forces of a pair act on <i>different</i> bodies, so they never cancel each other in one body's equation. A swimmer pushes the wall backward; the wall pushes her forward, and that push is what moves her. A car's tyres push the road backward; the road pushes the car forward.</p>
+<p>Which forces enter \(\sum\vec F = m\vec a\) depends on the system you choose. A force between two parts of the system is internal: its pair is inside the system too, and the two cancel. Only <b>external</b> forces count.</p>
+<div class="box ex"><span class="tag">Worked example · a professor and a cart</span>
+<p>A 65.0 kg professor pushes a 12.0 kg cart carrying 7.0 kg of equipment. She pushes back on the floor with 150 N, so the floor pushes her forward with 150 N. Friction on the cart totals 24.0 N. Take all three as the system: the forces between her and the cart are internal.</p>
+\[
+a = \frac{150 - 24.0}{65.0 + 12.0 + 7.0} = \frac{126}{84.0} = 1.50\ \text{m/s}^2.
+\]
+<p>For her push on the cart, choose the cart and equipment alone. Now her push \(P\) is external: \(P - 24.0 = 19.0(1.50)\), so \(P = 52.5\ \text{N}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A book's weight and the table's push on it are not a third-law pair. Both act on the book, and they are equal only because the book does not accelerate: that is the second law. The weight's pair is the book's pull on Earth.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>The forces you meet</h2>
+</div>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Normal force and tension</h2>
+<p>A surface pushes back on anything pressed against it. That push is the <b>normal force</b> \(\vec N\), perpendicular to the surface. It is as large as it needs to be to stop the body sinking in, no larger.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>On a slope at angle \(\theta\), tilt the axes to lie along and across the surface. The weight has a part \(mg\sin\theta\) down the slope and \(mg\cos\theta\) into it. Nothing moves into the surface, so across it the forces balance:</p>
+\[
+N - mg\cos\theta = 0 \quad\Rightarrow\quad N = mg\cos\theta.
+\]
+<p>On level ground \(\theta = 0\) and \(N = mg\). On a slope \(N\) is less than the weight, and on a vertical wall it is zero.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the normal force on a slope</span>
+<p>A 60 kg snowboarder rides a \(13^\circ\) slope. Her weight is 588.6 N. Into the slope it has \(588.6\cos13^\circ = 573.5\ \text{N}\), and the slope pushes back with exactly that. Along it the weight has \(588.6\sin13^\circ = 132.4\ \text{N}\), which is what friction has to fight.</p>
+</div>
+<p>A string, rope or cable pulls along its own length. The size of that pull is the <b>tension</b> \(T\). A light string over a frictionless pulley has the same tension all along it.</p>
+<div class="box ex"><span class="tag">Worked example · a tightrope and a traffic light</span>
+<p>A 70.0 kg walker stands at the middle of a wire that sags \(5.0^\circ\) on each side. The two tensions are equal, and their vertical parts hold up the weight: \(2T\sin5.0^\circ = 686.7\ \text{N}\), so \(T = 3940\ \text{N}\). That is almost six times the weight. A small sag needs a huge tension.</p>
+<p>A 15.0 kg traffic light hangs from wires at \(30^\circ\) and \(45^\circ\). Along \(x\), \(T_1\cos30^\circ = T_2\cos45^\circ\). Along \(y\), \(T_1\sin30^\circ + T_2\sin45^\circ = 147.2\ \text{N}\). Solving, \(T_1 = 107.7\ \text{N}\) and \(T_2 = 131.9\ \text{N}\). The steeper wire carries more.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>On a slope the normal force is not \(mg\). Using \(N = mg\) overstates the friction by the factor \(1/\cos\theta\): 2.6% at \(13^\circ\), 41% at \(45^\circ\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Strings and cables here have no mass and do not stretch, and pulleys have no mass or friction. A real cable sags under its own weight and stretches a little, and a real pulley takes some force to turn.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Free-body diagrams</h2>
+<p>A <b>free-body diagram</b> shows one body alone, as a dot or a box, with every external force on it as an arrow from that point. Build it the same way each time. Draw the weight. Then add one force for each thing that touches the body: a normal force and, if rough, a friction force for each surface; a tension for each string. Add nothing else.</p>
+<div class="box ex"><span class="tag">Worked example · two blocks on a ramp</span>
+<p>Block B slides down a ramp. Block A sits on B's top face and is pulled up the ramp by a rope. Block A touches only B: its diagram has its weight, the tension, a normal force from B, and friction from B down the ramp, against its slide relative to B.</p>
+<p>Block B touches two surfaces, the ramp and block A. Its diagram has its weight, a normal force and friction from the ramp, and a normal force and friction from A. The friction from A on B points up the ramp: it is the third-law pair of B's friction on A. The rope is tied to A, so it does not appear on B.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Every force on a free-body diagram has a source you can name: Earth, or something touching the body. A force without a source does not belong.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The force of a throw does not travel with the ball. Once it leaves the hand, a ball in flight has only its weight on it, if air drag is ignored.</p>
+<p>Do not draw a centrifugal force on a body moving in a circle. In the ground's frame nothing pushes outward. The net force points inward, toward the centre (Section 10).</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Solving problems</h2>
+</div>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Connected bodies</h2>
+<p>When bodies are tied together, draw each alone and write the second law for each. A light string makes their accelerations equal in size and carries one tension. The equations share \(a\) and \(T\), and adding them removes \(T\).</p>
+<div class="box ex"><span class="tag">Worked example · a block on a table and a hanging block</span>
+<p>A 5.00 kg block on a smooth table is tied over a pulley to a 3.00 kg block hanging below. For the table block, \(T = m_1a\). For the hanging block, down positive, \(m_2g - T = m_2a\). Add them:</p>
+\[
+a = \frac{m_2g}{m_1 + m_2} = \frac{3.00(9.81)}{8.00} = 3.68\ \text{m/s}^2, \qquad T = m_1a = 18.4\ \text{N}.
+\]
+<p>The hanging block weighs 29.4 N, but the string pulls it up with only 18.4 N. The difference, 11.0 N, is what accelerates it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an Atwood machine</span>
+<p>Blocks of 2.00 kg and 4.00 kg hang on either side of a pulley. Up positive for the light one: \(T - m_1g = m_1a\) and \(T - m_2g = -m_2a\). Subtract:</p>
+\[
+a = \frac{(m_2 - m_1)g}{m_1 + m_2} = \frac{2.00(9.81)}{6.00} = 3.27\ \text{m/s}^2, \qquad T = m_1(g + a) = 26.2\ \text{N}.
+\]
+<p>The tension lies between the two weights, 19.6 N and 39.2 N. Double both masses and \(a\) does not change, but \(T\) doubles.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a tractor pulling carts</span>
+<p>A 650.0 kg baggage tractor pulls carts of 250.0 kg and 150.0 kg from rest. The ground pushes it forward with \(F = 820.0t\) N. For the whole train, \(a = 820.0t/1050 = 0.7810t\ \text{m/s}^2\). The acceleration grows, so integrate: \(v = 0.3905t^2\), and after 3.00 s it is moving at 3.51 m/s.</p>
+<p>The cable to the first cart pulls both carts, so at 3.00 s its tension is \(T = (250.0 + 150.0)(0.7810)(3.00) = 937\ \text{N}\). The book prints 938 N, because it uses \(a = 0.7805t\) in that step: \(820/1050\) is 0.7810.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The tension is not the hanging weight while the system accelerates. Setting \(T = m_2g\) leaves the hanging block no net force, so it could not speed up. The tension equals the weight only when nothing accelerates.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real pulley has mass and must be spun up, so the tensions on its two sides differ. Unit 6 adds that.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Apparent weight</h2>
+<p>A bathroom scale reads the force it pushes up with, the normal force on you. In an accelerating elevator that is not your weight. With up positive, the second law for you is</p>
+\[
+N - mg = ma \quad\Rightarrow\quad N = m(g + a).
+\]
+<p>The scale reads more than your weight while your acceleration points up, less while it points down, and zero in free fall. What matters is the direction of the acceleration, not of the motion.</p>
+<div class="box ex"><span class="tag">Worked example · a scale in a rising elevator</span>
+<p>A 75.0 kg man stands on a scale in an elevator that speeds up going upward at \(1.20\ \text{m/s}^2\). The scale reads \(N = 75.0(9.81 + 1.20) = 825.8\ \text{N}\). A scale marked in kilograms divides by \(g\) and shows 84.2 kg. Once the elevator climbs at a steady speed, it reads 735.8 N, his weight.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · slowing on the way down</span>
+<p>The same elevator goes down and slows to stop at \(1.20\ \text{m/s}^2\). Slowing a downward motion is an upward acceleration, \(a = +1.20\ \text{m/s}^2\). The scale reads 825.8 N, the same as when it sped up on the way up.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Going down does not make the scale read less. Speeding up on the way down does; slowing down on the way down makes it read more. At any steady speed it reads the weight.</p>
+</div>
+<div class="box out"><span class="tag">What the course model leaves out</span>
+<p>A real elevator ramps its acceleration in and out smoothly, so the reading slides from one value to the next. A spring scale also bounces for a moment after each change.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Friction</h2>
+<p>Friction acts along a surface, against the sliding of one body over another, or against the slide that would happen without it. It comes in two kinds.</p>
+<p><b>Static friction</b> holds a body at rest. It takes whatever value is needed, up to a limit: \(f_s \le \mu_sN\). <b>Kinetic friction</b> acts once the body slides. It has one value, \(f_k = \mu_kN\), against the sliding. Usually \(\mu_k\) is less than \(\mu_s\): it is harder to start a crate moving than to keep it moving.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A body rests on a slope. It stays put while static friction can match the pull down the slope: \(mg\sin\theta \le \mu_smg\cos\theta\). The mass cancels, leaving</p>
+\[
+\tan\theta \le \mu_s.
+\]
+<p>Once it slides, along the slope \(mg\sin\theta - \mu_kmg\cos\theta = ma\), so \(a = g(\sin\theta - \mu_k\cos\theta)\). The mass cancels again: a heavy box and a light one slide alike.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a snowboarder and a skier</span>
+<p>A snowboarder rides a \(13^\circ\) slope with \(\mu_k = 0.20\): \(a = 9.81(\sin13^\circ - 0.20\cos13^\circ) = 0.295\ \text{m/s}^2\). On a \(10^\circ\) slope the same snow gives \(-0.229\ \text{m/s}^2\): she slows down.</p>
+<p>A 62 kg skier on a \(25^\circ\) slope feels 45.0 N of friction. The normal force is \(62(9.81)\cos25^\circ = 551.2\ \text{N}\), so \(\mu_k = 45.0/551.2 = 0.082\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a box that will not stay put</span>
+<p>A box is set down on a \(25^\circ\) ramp with \(\mu_s = 0.30\). Since \(\tan25^\circ = 0.466\) is more than 0.30, static friction cannot hold it, and it slides. A box five times as heavy slides too: the mass does not enter the test.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a crate on an accelerating truck</span>
+<p>A 50.0 kg crate rides on a truck bed with \(\mu_s = 0.400\) and \(\mu_k = 0.300\). Friction is the only horizontal force on it. To ride along at \(2.00\ \text{m/s}^2\) it needs \(50.0(2.00) = 100\ \text{N}\), less than the \(\mu_smg = 196\ \text{N}\) available, so it holds.</p>
+<p>At \(5.00\ \text{m/s}^2\) it would need 250 N, more than 196 N, so it slips. Friction becomes kinetic, \(0.300(490.5) = 147\ \text{N}\), and the crate accelerates at \(2.94\ \text{m/s}^2\). It slides back across the bed at \(2.06\ \text{m/s}^2\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Whether a body starts to slide is decided by \(\mu_s\), not \(\mu_k\). Once it slides, its acceleration uses \(\mu_k\).</p>
+<p>Static friction is not always \(\mu_sN\). That is its largest value. A crate at rest on a gentle ramp has exactly \(mg\sin\theta\) of friction, often much less.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A coefficient of friction is not a fixed number. It changes with the surfaces, their cleanliness, the temperature and, a little, the speed. Values are good to a digit or two.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part IV</div>
+  <h2>Curves and drag</h2>
+</div>
+
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Centripetal force</h2>
+<p>Unit 2 showed that motion on a circle at speed \(v\) has an acceleration \(v^2/r\) toward the centre. The second law then says a net force must point there:</p>
+\[
+F_c = \frac{mv^2}{r} = m\omega^2r.
+\]
+<p>This <b>centripetal force</b> is not a new kind of force. It is the net of the real forces: friction, a normal force, tension or gravity.</p>
+<div class="box ex"><span class="tag">Worked example · a car on a flat curve</span>
+<p>A 900.0 kg car takes a flat 500.0 m curve at 25.00 m/s. It needs \(F_c = 900.0(25.00)^2/500.0 = 1125\ \text{N}\) toward the centre. On a flat road only friction points that way. Static friction can give at most \(\mu_smg\), so</p>
+\[
+\mu_s \ge \frac{v^2}{rg} = \frac{625}{500.0(9.81)} = 0.127.
+\]
+<p>The mass cancels. At twice the speed the car needs four times the friction: \(\mu_s \ge 0.51\).</p>
+</div>
+<div class="box why"><span class="tag">Derivation</span>
+<p>On a road banked at \(\theta\), the normal force leans toward the centre. With no friction, its horizontal part must give \(mv^2/r\) and its vertical part must hold up \(mg\):</p>
+\[
+N\sin\theta = \frac{mv^2}{r}, \qquad N\cos\theta = mg \quad\Rightarrow\quad \tan\theta = \frac{v^2}{rg}.
+\]
+<p>At that one speed the curve needs no friction. Faster, friction must point down the bank; slower, up it. Friction turns the single design speed into a band.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a steeply banked curve</span>
+<p>A 100.0 m curve is banked at \(31.0^\circ\). Its design speed is \(v = \sqrt{rg\tan\theta} = \sqrt{100.0(9.81)(0.6009)} = 24.3\ \text{m/s}\), about 87 km/h. At that speed a car holds the curve even on ice.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the top of a loop</span>
+<p>A 40.0 kg rider passes upside down over the top of a 7.00 m loop at 10.0 m/s. At the top the centre is below her, so the seat's push \(N\) and her weight both point to it: \(N + mg = mv^2/r\). So \(N = 40.0(100/7.00 - 9.81) = 179\ \text{N}\). She leaves the seat when \(N\) would drop below zero, at \(v = \sqrt{gr} = 8.29\ \text{m/s}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The book writes \(\tan31.0^\circ = 0.6009\) and then puts 0.609 into the next line. Its answer, 24.3 m/s, comes from 0.6009. With 0.609 the speed would be 24.4 m/s.</p>
+<p>There is no outward centrifugal force in the ground's frame. A passenger pressed against the outer door is being pushed inward by the door. His inertia carries him straight while the car turns.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The car is a point. A real car shifts its load to the outer wheels and can tip before it slides, and its tyres grip with a slip angle that this model ignores.</p>
+</div>
+</section>
+
+<section class="topic" id="s11">
+<h2><span class="n">11</span>Drag and terminal speed</h2>
+<p>A body moving through air or water feels <b>drag</b>, a force against its motion that grows with its speed. For people, cars and balls in air it grows as the square of the speed:</p>
+\[
+F_D = \tfrac12\rho CAv^2,
+\]
+<p>with \(\rho\) the fluid's density, \(A\) the area facing the flow, and \(C\) the drag coefficient, a number near 1 measured in a wind tunnel. For small, slow bodies in a liquid, drag is closer to \(F = bv\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A body falls from rest. Down positive, \(m\,dv/dt = mg - \tfrac12\rho CAv^2\). At first drag is small and it speeds up at nearly \(g\). As \(v\) grows the drag grows, until it equals the weight. Then the net force is zero and the speed stops changing: the <b>terminal speed</b>,</p>
+\[
+\tfrac12\rho CAv_t^2 = mg \quad\Rightarrow\quad v_t = \sqrt{\frac{2mg}{\rho CA}}.
+\]
+<p>Separating and integrating the equation gives \(v = v_t\tanh(gt/v_t)\). A body that starts faster than \(v_t\) has more drag than weight and slows toward it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a skydiver, spread-eagle</span>
+<p>An 85 kg skydiver falls spread-eagle with \(A = 0.70\ \text{m}^2\) and \(C = 1.0\) through air of density \(1.21\ \text{kg/m}^3\):</p>
+\[
+v_t = \sqrt{\frac{2(85)(9.81)}{1.21(1.0)(0.70)}} = 44.4\ \text{m/s} = 160\ \text{km/h}.
+\]
+<p>A 50 kg skydiver in the same position reaches \(\sqrt{50/85} \times 44.4 = 34.0\ \text{m/s}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · head first</span>
+<p>A 75 kg skydiver diving head first presents only \(A = 0.18\ \text{m}^2\), with \(C = 0.70\). Now \(CA = 0.126\ \text{m}^2\), and \(v_t = 98.2\ \text{m/s}\), about 354 km/h. Shrinking the drag area is how a diver catches a partner below.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a bead sinking in oil</span>
+<p>A 0.050 kg bead sinks in thick oil with linear drag, \(b = 0.50\ \text{kg/s}\). Down positive, \(m\,dv/dt = mg - bv\). Integrate from rest: \(v = v_t(1 - e^{-t/\tau})\), with \(v_t = mg/b = 0.981\ \text{m/s}\) and \(\tau = m/b = 0.10\ \text{s}\). After one time constant it has \(1 - 1/e = 63\%\) of \(v_t\): 0.620 m/s.</p>
+<p>The same law slows a coasting boat. With the motor off, \(m\,dv/dt = -bv\) gives \(v = v_0e^{-bt/m}\). A boat that drops from 4.0 to 1.0 m/s in 10 s has \(b/m = \ln4/10 = 0.139\ \text{s}^{-1}\), and it coasts at most \(v_0m/b = 28.9\ \text{m}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>At terminal speed the acceleration is zero, not \(g\). The body still falls, but at a constant velocity: drag has grown to match the weight.</p>
+<p>Twice the mass does not double a quadratic terminal speed. Since \(v_t \propto \sqrt m\), it grows by \(\sqrt2\). Four times the area halves it.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The drag coefficient changes with speed and shape, and a falling body may turn. The air is thinner high up, so a jumper's terminal speed falls as she descends. Buoyancy is left out, which matters for a bead in oil.</p>
+</div>
+</section>
+
+<section class="topic" id="s12">
+<h2><span class="n">12</span>Formula sheet</h2>
+\[
+\sum\vec F = m\vec a, \qquad \vec F_{AB} = -\vec F_{BA}, \qquad w = mg, \qquad 1\ \text{N} = 1\ \text{kg·m/s}^2
+\]
+\[
+N = mg\cos\theta\ \text{(slope)}, \qquad f_s \le \mu_sN, \qquad f_k = \mu_kN, \qquad \text{holds when } \tan\theta \le \mu_s
+\]
+\[
+a = g(\sin\theta - \mu_k\cos\theta)\ \text{(sliding down)}, \qquad N = m(g + a)\ \text{(scale, up positive)}
+\]
+\[
+a = \frac{(m_2 - m_1)g}{m_1 + m_2}, \qquad T = \frac{2m_1m_2g}{m_1 + m_2}\ \text{(Atwood)}
+\]
+\[
+F_c = \frac{mv^2}{r}, \qquad \mu_s \ge \frac{v^2}{rg}\ \text{(flat curve)}, \qquad \tan\theta = \frac{v^2}{rg}\ \text{(ideal bank)}
+\]
+\[
+F_D = \tfrac12\rho CAv^2, \qquad v_t = \sqrt{\frac{2mg}{\rho CA}}, \qquad v_t = \frac{mg}{b},\ \tau = \frac{m}{b}\ \text{(linear)}
+\]
+</section>
+
+</main>
+<footer>
+<p>Sources: OpenStax, <i>University Physics Volume 1</i>, Chapters 5 and 6 (CC BY-NC-SA 4.0), rewritten; the worked examples are recomputed and cite the book's examples by title. Constants: \(g = 9.81\ \text{m/s}^2\), air density \(1.21\ \text{kg/m}^3\).</p>
+</footer>
+</body>
+</html>
