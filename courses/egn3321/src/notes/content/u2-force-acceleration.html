@@ -9,18 +9,34 @@
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 2 · Hibbeler Ch 13</p>
   <h1>Force and acceleration</h1>
   <p class="lede">Newton's second law for a particle, in rectangular axes and in n–t. Each special formula below is derived from \(\sum \vec F = m\vec a\) and a free-body diagram, then checked on a worked case. The numbers are recomputed. Cylindrical coordinates and central-force motion stay out.</p>
-  <nav class="toc">
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Forces on straight paths</h3>
     <a href="#s1"><span>01</span>Equations of motion</a>
     <a href="#s2"><span>02</span>Friction on an incline</a>
     <a href="#s3"><span>03</span>Connected bodies</a>
+    <h3>Part II · Curves and springs</h3>
     <a href="#s4"><span>04</span>Banked curve</a>
     <a href="#s5"><span>05</span>Vertical loop</a>
     <a href="#s6"><span>06</span>Spring on a collar</a>
+    <h3>Part III · An application</h3>
     <a href="#s7"><span>07</span>Application: leaving the pad</a>
+    <h3>Reference</h3>
     <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Forces on straight paths</h2>
+</div>
+
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Equations of motion</h2>
 <p>A free-body diagram comes first. Then \(\sum F = ma\) along each axis. The acceleration is the unknown, or the force is, but not both at once.</p>
@@ -52,13 +68,11 @@ a = \frac{m_2 - m_1}{m_1 + m_2}\, g, \qquad T = \frac{2 m_1 m_2}{m_1 + m_2}\, g.
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The tension equals the hanging weight only when the acceleration is zero. While the system accelerates, the rope force and the weight differ. Hibbeler §13.3.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Write one equation per mass. Solve them together. Do not replace the tension with a weight, or the normal force with \(mg\), without checking the diagram.</p>
-</div>
 <p>In the F = ma lab, the Two masses scenario draws both free bodies. The work–energy check in the readout must agree with the acceleration.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The pulley is light and the string does not stretch. Pulley inertia and the mass of the rope would change the acceleration: a heavy pulley needs Unit 6's rotational equation, and a stretching string makes the two accelerations differ while it stretches.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/4-1-newtons-first-and-second-laws/" target="_blank" rel="noopener">4.1 Newton's First and Second Laws</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/newton2019s-laws-vectors-and-reference-frames/" target="_blank" rel="noopener">Lecture 1, Newton's Laws, Vectors, and Reference Frames</a>.</p>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Friction on an incline</h2>
@@ -92,6 +106,7 @@ a = g(\sin\theta - \mu_k\cos\theta).
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>Friction here is Coulomb: one static limit, then a constant kinetic value. The model leaves out drag that grows with speed, a coefficient that changes along the surface, and the stick–slip chatter of a real block near the limit.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/6-1-contact-forces/" target="_blank" rel="noopener">6.1 Contact Forces</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/6-2-static-friction-lesson/" target="_blank" rel="noopener">6.2 Static Friction Lesson</a>.</p>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Connected bodies</h2>
@@ -120,7 +135,14 @@ a = \frac{Mg - mg\sin\theta - \mu_k mg\cos\theta}{m + M}.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The string is light, so one tension serves both bodies. A heavy rope would make the tension vary along its length. The pulley is frictionless and massless, and the block does not tip.</p>
 </div>
+<p class="bridge">Part II adds two things the straight-path problems lacked: a path that bends, and a force that depends on position.</p>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/7-3-solving-pulley-systems/" target="_blank" rel="noopener">7.3 Solving Pulley Systems</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-4-drag-forces-constraints-and-continuous-systems/12-5-worked-example-2-blocks-and-2-pulleys/" target="_blank" rel="noopener">12.5 Worked Example - 2 Blocks and 2 Pulleys</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/free-body-diagrams-and-fictitious-forces/" target="_blank" rel="noopener">Lecture 4, Free Body Diagrams and Fictitious Forces</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Curves and springs</h2>
+</div>
+
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Banked curve</h2>
 <p>The path is a horizontal circle, so \(a_n = v^2/\rho\) points toward the centre and \(a_t = 0\) at constant speed. Resolve the normal force and the friction along the bank, then check the same forces horizontally and vertically.</p>
@@ -153,6 +175,7 @@ v_{\max}^2 = \rho g\,\frac{\sin\theta + \mu\cos\theta}{\cos\theta - \mu\sin\thet
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The road is one horizontal circle, and the car stays on the pavement. The model leaves out a bank that changes along the road, a car that lifts an inside wheel, and the different grip of the front and rear tyres. A car is a rigid body, not a particle, and Unit 6 adds the moments.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/11-2-worked-example-car-on-a-banked-turn/" target="_blank" rel="noopener">11.2 Worked Example - Car on a Banked Turn</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/11-1-newtons-2nd-law-and-circular-motion/" target="_blank" rel="noopener">11.1 Newton's 2nd Law and Circular Motion</a>.</p>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Vertical loop</h2>
@@ -183,6 +206,7 @@ v_{\max}^2 = \rho g\,\frac{\sin\theta + \mu\cos\theta}{\cos\theta - \mu\sin\thet
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The particle is a point on a smooth track. The model leaves out friction, the size of a vehicle, and any normal force that would have to pull on the car. A roller coaster's wheels lock it to the rail from both sides, so it can have negative \(N\). This model cannot.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/11-1-newtons-2nd-law-and-circular-motion/" target="_blank" rel="noopener">11.1 Newton's 2nd Law and Circular Motion</a>.</p>
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Spring on a collar</h2>
@@ -200,18 +224,22 @@ a = g\sin\theta - \frac{k}{m}\,x, \qquad N_{\text{rod}} = mg\cos\theta.
 <p>The acceleration is zero where \(kx = mg\sin\theta\): \(x = 2(9.81)\sin 20^\circ/30 = 0.224\) m. Released at 0.1 m, the collar speeds up down the rod until it passes 0.224 m, then slows. With no friction it oscillates about that point forever.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · its speed at the rest point</span>
-<p>Released from rest at 0.1 m, how fast is the collar at 0.224 m? Integrate \(a\,dx = v\,dv\) from Unit 1 along the rod: \(\tfrac12 v^2 = g\sin\theta\,\Delta x - \tfrac{k}{2m}(x_2^2 - x_1^2)\). That is \(3.355(0.1237) - 7.5(0.0400) = 0.115\) m²/s², so \(v = 0.479\) m/s. The same number comes from Unit 3's work–energy principle, which is this integral with \(m\) multiplied through. By symmetry the collar turns back at \(x = 0.347\) m.</p>
+<p>Released from rest at 0.1 m, how fast is the collar at 0.224 m? Integrate \(a\,dx = v\,dv\) from Unit 1 along the rod: \(\tfrac12 v^2 = g\sin\theta\,\Delta x - \tfrac{k}{2m}(x_2^2 - x_1^2)\). That is \(3.355(0.1237) - 7.5(0.0400) = 0.115\) m²/s², so \(v = 0.479\) m/s. The same number comes from Unit 4's work–energy principle, which is this integral with \(m\) multiplied through. By symmetry the collar turns back at \(x = 0.347\) m.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Measuring the stretch from the equilibrium point instead of the unstretched point. The spring force is \(kx\) with \(x\) from where the spring has its natural length. Measured from 0.224 m, the 0.1 m position has \(x = -0.124\) m, and the force comes out with the wrong size. Hibbeler §13.4.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>\(a = g\sin\theta - (k/m)x\), with \(x\) positive down the rod from the unstretched point. The rod force is \(mg\cos\theta\).</p>
-</div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The spring lies along the rod, so the stretch equals the coordinate measured down the rod. A spring anchored off the rod stretches by a Pythagorean length, and its force has a component into the rod. This section also leaves out friction. The rod force does no work along the rod.</p>
 </div>
+<p class="bridge">Part III puts the equation of motion to work on a rocket that loses mass as it climbs.</p>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/7-4-hookes-law/" target="_blank" rel="noopener">7.4 Hooke's Law</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>An application</h2>
+</div>
+
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Application: leaving the pad</h2>
 <p>A rocket on its pad is a particle with three forces: thrust up, weight down, and the pad or its clamps. Section 1's equation of motion is all it takes to say whether it lifts, and how hard it accelerates once it does.</p>
@@ -225,7 +253,7 @@ a = \frac{T}{m} - g = g\left(\frac{T}{W} - 1\right).
 \[
 v_{bo} = \frac{T}{\dot m}\ln\frac{m_0}{m_{bo}} - g\,t_b.
 \]
-<p>Unit 4 reaches the same result from momentum, with \(T/\dot m\) as the exhaust speed.</p>
+<p>Unit 3 reaches the same result from momentum, with \(T/\dot m\) as the exhaust speed.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · a student rocket</span>
 <p>A 20 kg rocket has \(T/W = 2\) at ignition, so \(T = 2(20)(9.81) = 392.4\) N. It lifts at \(a = 9.81(2 - 1) = 9.81\) m/s². It burns 4 kg of propellant in 5 s, \(\dot m = 0.8\) kg/s.</p>
@@ -253,6 +281,7 @@ v_{bo} = \frac{T}{\dot m}\ln\frac{m_0}{m_{bo}} - g\,t_b.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>Drag, which grows with speed squared and matters long before burnout. Thrust also changes with altitude, as the outside pressure falls. The model keeps the rocket vertical: a real one pitches over, and part of its thrust then goes sideways.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/19-5-rocket-problem-5-thrust-and-external-forces/" target="_blank" rel="noopener">19.5 Rocket Problem 5 - Thrust and External Forces</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/4-1-newtons-first-and-second-laws/" target="_blank" rel="noopener">4.1 Newton's First and Second Laws</a>.</p>
 </section>
 <section class="topic" id="s8">
 <h2><span class="n">08</span>Formula sheet</h2>
@@ -272,5 +301,6 @@ v_{bo} = \frac{T}{\dot m}\ln\frac{m_0}{m_{bo}} - g\,t_b.
 <p>Each line above is the model for this unit. A heavy pulley, drag, and a stretch that is not along the rod are left out.</p>
 </section>
 </main>
+<footer>Written for Flux from Hibbeler, Engineering Mechanics: Dynamics, Chapter 13, cited by section, with MIT OCW 8.01SC and 2.003SC as Another view. Every worked answer was recomputed.</footer>
 </body>
 </html>

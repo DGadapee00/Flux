@@ -5,7 +5,7 @@
  * them (Chi, Feltovich & Glaser). These tags index the bank by principle, so the same law shows up
  * across chapters: a collar on a spring, a rolling disk and a released bar all answer to work and
  * energy. Each template gets one primary principle, then up to two it also leans on. The primary
- * drives the principle step that opens a practice problem.
+ * is the one shown with a solution and used to group the list.
  *
  * Hibbeler sections are where each principle is stated (src/problems/kit.js cites them).
  * problems-check confirms every template is tagged with principles that exist.
@@ -31,24 +31,12 @@ export const PRINCIPLES = {
     family: 'Kinematics',
   },
 
-  // --- Kinetics of a particle (Ch 13–15)
+  // --- Kinetics of a particle (Ch 13, 15, 14: momentum before energy, D29)
   newton: {
     name: 'Newton’s second law',
     statement: '$\\Sigma\\vec F = m\\vec a$, in the components the path suggests: $x$–$y$ on a straight track, $n$–$t$ on a curve with $\\Sigma F_n = mv^2/\\rho$.',
     cue: 'Forces and an acceleration at one instant.',
     family: 'Kinetics',
-  },
-  energy: {
-    name: 'Work and energy',
-    statement: '$T_1 + \\Sigma U_{1\\to2} = T_2$. With only conservative forces doing work, $T_1 + V_1 = T_2 + V_2$, with $V_g = mgy$ and $V_e = \\tfrac12ks^2$.',
-    cue: 'Speeds at two positions, with forces that depend on position.',
-    family: 'Energy',
-  },
-  power: {
-    name: 'Power and efficiency',
-    statement: 'Power is the rate of work: $P = \\vec F\\cdot\\vec v$. Efficiency is power out over power in.',
-    cue: 'A rate: how fast work is done, a motor rating, horsepower.',
-    family: 'Energy',
   },
   impulse: {
     name: 'Impulse and momentum',
@@ -79,6 +67,18 @@ export const PRINCIPLES = {
     statement: 'A body ejecting mass at $\\dot m$ with relative speed $v_e$ feels a thrust $\\dot m v_e$; integrated, $\\Delta v = v_e\\ln(m_0/m_f)$ less gravity loss.',
     cue: 'Mass leaves the body as it moves: a rocket, a jet.',
     family: 'Momentum',
+  },
+  energy: {
+    name: 'Work and energy',
+    statement: '$T_1 + \\Sigma U_{1\\to2} = T_2$. With only conservative forces doing work, $T_1 + V_1 = T_2 + V_2$, with $V_g = mgy$ and $V_e = \\tfrac12ks^2$.',
+    cue: 'Speeds at two positions, with forces that depend on position.',
+    family: 'Energy',
+  },
+  power: {
+    name: 'Power and efficiency',
+    statement: 'Power is the rate of work: $P = \\vec F\\cdot\\vec v$. Efficiency is power out over power in.',
+    cue: 'A rate: how fast work is done, a motor rating, horsepower.',
+    family: 'Energy',
   },
 
   // --- Kinematics of a rigid body (Ch 16)
@@ -136,43 +136,6 @@ export const PRINCIPLES = {
   },
 };
 
-/** Principles mistaken for each one, most tempting first (the principle step's distractors). */
-export const CONFUSED = {
-  'rect-kin': ['curv-kin', 'newton', 'energy', 'rel-motion', 'impulse'],
-  'curv-kin': ['rect-kin', 'newton', 'rel-motion', 'fixed-axis', 'energy'],
-  'rel-motion': ['curv-kin', 'rect-kin', 'rel-velocity', 'momentum-cons', 'newton'],
-  newton: ['energy', 'impulse', 'rect-kin', 'rigid-newton', 'power'],
-  energy: ['newton', 'impulse', 'power', 'momentum-cons', 'rigid-energy'],
-  power: ['energy', 'newton', 'impulse', 'rigid-energy', 'fixed-axis'],
-  impulse: ['momentum-cons', 'energy', 'newton', 'restitution', 'variable-mass'],
-  'momentum-cons': ['impulse', 'energy', 'restitution', 'newton', 'angular-momentum'],
-  restitution: ['momentum-cons', 'energy', 'impulse', 'newton', 'rel-motion'],
-  'angular-momentum': ['impulse', 'momentum-cons', 'energy', 'rigid-newton', 'fixed-axis'],
-  'variable-mass': ['impulse', 'momentum-cons', 'newton', 'energy', 'power'],
-  'fixed-axis': ['rel-velocity', 'rolling', 'curv-kin', 'rigid-newton', 'power'],
-  'rel-velocity': ['rel-accel', 'fixed-axis', 'rolling', 'rel-motion', 'curv-kin'],
-  'rel-accel': ['rel-velocity', 'rigid-newton', 'fixed-axis', 'rolling', 'curv-kin'],
-  rolling: ['rel-velocity', 'fixed-axis', 'rigid-newton', 'rigid-energy', 'rel-accel'],
-  'rigid-newton': ['newton', 'rigid-energy', 'inertia', 'rolling', 'rel-accel'],
-  inertia: ['rigid-newton', 'rigid-energy', 'fixed-axis', 'rolling', 'newton'],
-  'rigid-energy': ['energy', 'rigid-newton', 'inertia', 'rolling', 'power'],
-};
-
-/**
- * Pairs too close to use as each other's distractor: one is a special case of the other, so a
- * student picking it is half right (energy for a rigid body is energy; momentum conservation is
- * impulse with no external impulse; restitution rides on momentum conservation).
- */
-export const TWINS = [
-  ['energy', 'rigid-energy'],
-  ['impulse', 'momentum-cons'],
-  ['momentum-cons', 'restitution'],
-  ['impulse', 'variable-mass'],
-  ['newton', 'rigid-newton'],
-  ['rel-velocity', 'rolling'],
-  ['rel-accel', 'rolling'],
-];
-
 /** Template id → [primary, …secondary]. */
 export const PRINCIPLE_TAGS = {
   'u1.1.convert': ['units'],
@@ -200,6 +163,7 @@ export const PRINCIPLE_TAGS = {
   'u3.14.paths': ['energy'],
   'u3.14.same': ['energy'],
   'u3.14.us': ['energy', 'units'],
+  'u3.14.frames': ['energy', 'momentum-cons'],
   'u4.15.impulse': ['impulse'],
   'u4.15.recoil': ['momentum-cons'],
   'u4.15.ballistic': ['momentum-cons', 'energy'],
@@ -216,6 +180,7 @@ export const PRINCIPLE_TAGS = {
   'u5.16.ladder': ['rel-velocity'],
   'u5.16.wheel': ['rolling', 'rel-velocity'],
   'u5.16.accel': ['rel-accel', 'rel-velocity'],
+  'u5.16.rotor-tip': ['rel-velocity', 'rel-accel'],
   'u6.17.rod': ['inertia'],
   'u6.17.spread': ['inertia'],
   'u6.17.plate': ['inertia'],
@@ -231,4 +196,5 @@ export const PRINCIPLE_TAGS = {
   'u7.18.couple': ['rigid-energy'],
   'u7.18.slots': ['rigid-energy', 'rel-velocity'],
   'u7.18.spring': ['rigid-energy'],
+  'u7.18.wheel-hill': ['rigid-energy', 'rolling'],
 };

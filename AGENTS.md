@@ -84,7 +84,7 @@ Libraries worth knowing before you write your own:
 - `subjects/mechanics`: vectors, units, friction, sections, truss, frames, path, rigid2d, inertia,
   materials. FBDs are drawn by `shells/engineering/fbd.js`.
 - `packages/shells/practice`: PHY 2049's practice loop. A course turns features on by supplying data:
-  `PRINCIPLES` and templates' `principles` (`askPrinciple: false` keeps tags without the question),
+  `PRINCIPLES` and templates' `principles` (tags only: no problem asks which principle decides it, D34),
   `fading: true`, `pickInterleave`, `sectionForProblem` with `api.openNotes`, `labDrawer: true`,
   `GLYPH` and `exprToTex`, and `choiceNotes: true` so a wrong option's `why` reaches the student.
   Numeric `traps` always do.

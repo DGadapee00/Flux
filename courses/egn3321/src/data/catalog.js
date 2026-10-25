@@ -1,4 +1,10 @@
-/** Course map. `labs` are built. `coming` is the rest of that unit, still to be written. */
+/**
+ * Course map. `labs` are built. `coming` is the rest of that unit, still to be written.
+ *
+ * Momentum comes before energy, as 8.01SC orders them (D29). The unit ids keep their old names so
+ * stored progress and links still work: `u4` (impulse and momentum) is Unit 3, `u3` (work and
+ * energy) is Unit 4. Order and the number shown (`n`) follow this array, not the id.
+ */
 
 export const EXAMS = [
   {
@@ -20,21 +26,21 @@ export const EXAMS = [
     coming: [],
   },
   {
-    id: 'u3',
-    n: 3,
-    title: 'Work and energy',
-    chapters: '14',
-    date: 'Ch 14',
-    labs: ['collar', 'paths', 'landing'],
-    coming: [],
-  },
-  {
     id: 'u4',
-    n: 4,
+    n: 3,
     title: 'Impulse and momentum',
     chapters: '15',
     date: 'Ch 15',
     labs: ['impulse', 'impact', 'rocket'],
+    coming: [],
+  },
+  {
+    id: 'u3',
+    n: 4,
+    title: 'Work and energy',
+    chapters: '14',
+    date: 'Ch 14',
+    labs: ['collar', 'paths', 'landing'],
     coming: [],
   },
   {

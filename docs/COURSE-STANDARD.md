@@ -126,7 +126,9 @@ everything in the same place in any course. Do not build a different app.
 - **Worked cases:** at least one per template that reproduces a printed answer, cited (section 7).
 - **Second opinion:** every numeric answer is also computed by a second method (the lab, a
   numerical integral, a simulation).
-- **Principle tags** are optional (D16). A course that supplies them gets the principle step.
+- **Principle tags** are optional (D16). A course that supplies them gets the deciding principle
+  shown with each solution, "what went wrong" after a miss and a group-by-principle view. No problem
+  asks the student to name the principle before solving (D34).
 
 ## 6. The practice loop
 

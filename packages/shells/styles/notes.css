@@ -372,3 +372,48 @@ body.notes-resizing {
   border-radius: 2px;
   vertical-align: -1px;
 }
+
+/* The rest of PHY 2049's notes structure (D32): a toc grouped by part, the closing bridge of a part,
+   the key box, the source footer, and the Another view line. */
+.nt-doc nav.toc h3 {
+  margin: 10px 0 0;
+  font-size: var(--fs-meta);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.nt-doc .bridge {
+  margin-top: 18px;
+  padding-left: 12px;
+  border-left: 2px solid var(--border-hover);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.nt-doc .box.key {
+  border-color: transparent;
+  background: var(--ok-soft);
+}
+
+.nt-doc .box.key > .tag {
+  color: var(--text);
+}
+
+.nt-doc footer {
+  margin-top: 28px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-hover);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.nt-doc .another-view {
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+
+.nt-doc .another-view a {
+  color: var(--blue);
+}

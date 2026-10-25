@@ -129,6 +129,13 @@ function springByHand($) {
   return { omega, T: drop > 0 ? drop : 0 };
 }
 
+/** A wheel rolling down a slope, from rest. k is the radius of gyration about the mass centre. */
+function hillWheel($) {
+  const k = $.body === 'wheel' ? $.kG : $.body === 'disk' ? $.R / Math.SQRT2 : $.R;
+  const v = Math.sqrt((2 * G * $.h) / (1 + (k * k) / ($.R * $.R)));
+  return { k, v, T: $.m * G * $.h, share: (100 * $.R * $.R) / ($.R * $.R + k * k) };
+}
+
 const ch18 = [
   problem({
     id: 'u7.18.ke',
@@ -483,6 +490,65 @@ const ch18 = [
       omega: 4.057517803412053,
       T: 18.521382065631496,
     })],
+  }),
+
+  problem({
+    id: 'u7.18.wheel-hill',
+    title: 'A wheel rolls down a hill',
+    exam: 'u7',
+    ch: '18',
+    lab: null,
+    src: 'Hibbeler §18.1, §18.5',
+    topics: ['energy', 'rolling'],
+    // What the wheel is is the structure: a wheel whose radius of gyration is given, a uniform disk, or a hoop.
+    vars: {
+      body: choice(['wheel', 'a wheel with radius of gyration k_G'], ['disk', 'a uniform disk'], ['hoop', 'a hoop']),
+      m: range(50, 200, 25, 'kg'),
+      R: range(0.5, 1.5, 0.25, 'm'),
+      kG: range(0.2, 0.6, 0.1, 'm'),
+      h: range(1, 5, 0.5, 'm'),
+    },
+    valid: ($) => $.body !== 'wheel' || $.kG < $.R,
+    text: (T, $) => ($.body === 'wheel'
+      ? String.raw`A ${T.m} kg wheel of radius ${T.R} m and radius of gyration $k_G = ${T.kG}$ m is released from rest and rolls without slipping down a hill. Find its kinetic energy and its speed after its centre has dropped ${T.h} m, and the share of that kinetic energy that is translation.`
+      : String.raw`A ${T.m} kg ${$.body}, radius ${T.R} m, is released from rest and rolls without slipping down a hill. Find its kinetic energy and its speed after its centre has dropped ${T.h} m, and the share of that kinetic energy that is translation.`),
+    parts: [
+      num('T', ($) => hillWheel($).T, 'J', { label: 'kinetic energy' }),
+      num('v', ($) => hillWheel($).v, 'm/s', { label: 'speed of the centre' }),
+      num('share', ($) => hillWheel($).share, '%', { label: 'share that is translation' }),
+    ],
+    level: 2,
+    hints: ['No slipping means the contact point does no work, so only gravity does. Start from rest: T equals m g h.',
+      'T = ½ m v² + ½ m k² ω², with ω = v/R. Solve that for v, and the translation share is the first term over the sum.',
+    ],
+    steps: ($, sig) => {
+      const e = hillWheel($);
+      return [
+        String.raw`$T = mgh = ${sig(e.T)}\ \mathrm{J}$, since the wheel starts at rest and only gravity works.`,
+        String.raw`$T = \tfrac12 m v^2\,(1 + k_G^2/R^2)$ with $k_G = ${sig(e.k)}\ \mathrm{m}$, so $v = ${sig(e.v)}\ \mathrm{m/s}$.`,
+        String.raw`Translation share: $R^2/(R^2 + k_G^2) = ${sig(e.share)}\%$.`,
+      ];
+    },
+    // Second: Newton's laws with no slip give a constant acceleration down a 25° slope. Step it down to the same drop.
+    second: ($) => {
+      const th = 25 * DEG;
+      const k = $.body === 'wheel' ? $.kG : $.body === 'disk' ? $.R / Math.SQRT2 : $.R;
+      const a = (G * Math.sin(th)) / (1 + (k * k) / ($.R * $.R));
+      const s = $.h / Math.sin(th);
+      const dt = 1e-5;
+      let x = 0;
+      let v = 0;
+      while (x < s) {
+        v += a * dt;
+        x += v * dt;
+      }
+      const trans = 0.5 * $.m * v * v;
+      const spin = 0.5 * $.m * k * k * (v / $.R) ** 2;
+      return { T: trans + spin, v, share: (100 * trans) / (trans + spin) };
+    },
+    cases: [
+      kase('MIT OCW 2.003SC (Fall 2011), Problem Set 6, Problem 6', { body: 'wheel', m: 150, R: 1.25, kG: 0.6, h: 2 }, { T: 2943, v: 5.647, share: 81.28 }, { note: 'The printed answers are formulas: T = m g h and a translation share of R²/(k_G² + R²). With R = 1.25 m and k_G = 0.6 m they give 2,943 J at a 2 m drop and 81.28%. The speed follows from T.' }),
+    ],
   }),
 ];
 

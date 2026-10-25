@@ -2,7 +2,7 @@ import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
 import { C, alpha, arrow, axes, begin, dot, label, line, note, plotIn, poly, sceneIn, seg } from './diagram.js';
 import { defineLab } from './define2d.js';
-import { bindSlider, slider } from './widgets.js';
+import { bindSlider, slider, leavesOut } from './widgets.js';
 
 const G = 9.81;
 const DEG = Math.PI / 180;
@@ -99,6 +99,9 @@ export function omegaCNumeric(geom) {
   }
   return 0.5 * (lo + hi);
 }
+
+/** What the real device has that the model ignores (D30). */
+const OUT = String.raw`The model starts with the vehicle already turning about the pad. What starts it is an impact, which needs angular momentum, not energy. It also assumes the pad does not slide, the ground is level, and the legs are rigid. A leg that crushes lowers $G$ as the vehicle tilts and helps. A slope tilts the vehicle before the gust arrives and shrinks the climb.`;
 
 export default defineLab({
   id: 'tipover',
@@ -236,7 +239,7 @@ export default defineLab({
       [c.tips ? 'result' : 'max tilt', c.tips ? 'tips' : `${fig(c.thetaMaxDeg)}°`],
     ]);
   },
-  coach(state, c) {
+  coach: leavesOut(OUT, (state, c) => {
     if (c.tips) {
       return {
         title: 'It goes over',
@@ -247,7 +250,7 @@ export default defineLab({
       title: 'It rocks back',
       body: String.raw`It needs $${fig(c.barrier)}$ J to reach the balance point and has $${fig(c.T0)}$ J. It stops at $${fig(c.thetaMaxDeg)}°$ of tilt, short of $${fig(c.phi0Deg)}°$.`,
     };
-  },
+  }),
   predictions: [
     {
       id: 'tp-legs',

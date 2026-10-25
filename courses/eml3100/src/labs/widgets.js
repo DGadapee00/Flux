@@ -15,3 +15,15 @@ export function showField(id, on) {
   const el = document.getElementById(`${id}-field`);
   if (el) el.hidden = !on;
 }
+
+/**
+ * An application lab's explainer ends with what the course model leaves out (D30). `out` is that
+ * paragraph; it is added after the lab's own body in every branch of `coach`.
+ */
+export function leavesOut(out, coach) {
+  const label = '<b>What the course model leaves out.</b>';
+  return (state, c) => {
+    const k = coach(state, c);
+    return { ...k, body: [...(Array.isArray(k.body) ? k.body : [k.body]), `${label} ${out}`] };
+  };
+}

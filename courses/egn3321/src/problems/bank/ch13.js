@@ -349,7 +349,9 @@ const ch13 = [
       vmin: 7.744418798838714,
       vmax: 15.449146275256043,
       N: 11259.185634603346,
-    })],
+    }),
+      kase('MIT OCW 2.003SC (Fall 2011), Problem Set 4, Problem 2', { m: 2, R: 0.25, theta: 30, mu: 0.2 }, { vmax: 1.468 }, { note: 'A 2 kg spool on a rod turning about a vertical axis, the rod inclined at 30°, behaves as a car on a bank: the rod plays the bank and the spool sits 0.25 m from the axis. The printed answer is the largest turning rate before it slips up, 5.87 rad/s; the speed is that rate times 0.25 m.' }),
+    ],
   }),
 
   problem({

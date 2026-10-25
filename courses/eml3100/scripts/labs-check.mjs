@@ -10,7 +10,9 @@ import { LAB_META } from '../src/data/catalog.js';
 import { loadLab } from '../src/labs/load.js';
 import { mathProse } from '../src/ui/shared.js';
 
-const LIMIT = { phase: 5e-4, piston: 1e-8 };
+const LIMIT = { phase: 5e-4, piston: 1e-8, nozzle: 1e-5, devices: 1e-8 };
+const OUT_LABEL = '<b>What the course model leaves out.</b>';
+const NAMED = /tesla|rheem|bosch|stiebel|rinnai|navien|ecosmart/i;
 
 const fails = [];
 let checks = 0;
@@ -29,6 +31,7 @@ function finite(id, computed) {
 
 for (const id of Object.keys(LAB_META)) {
   const lab = await loadLab(id);
+  const limit = lab.gapLimit ?? LIMIT[id];
   if (lab.kind !== 'plot2d') fails.push(`${id}: kind ${lab.kind}, want plot2d`);
   const list = typeof lab.scenarios === 'function' ? lab.scenarios() : lab.scenarios || [];
   if (!list.length) fails.push(`${id}: no scenarios`);
@@ -43,7 +46,25 @@ for (const id of Object.keys(LAB_META)) {
       continue;
     }
     checks++;
-    if (!(computed.gap < LIMIT[id])) fails.push(`${id}/${sc.id}: gap ${computed.gap} exceeds ${LIMIT[id]}`);
+    if (LAB_META[id].app) {
+      // An application lab's explainer ends with what the model leaves out, whichever branch the state picks (D30).
+      let body;
+      try {
+        const k = lab.coach(state, computed);
+        body = Array.isArray(k?.body) ? k.body : [k?.body];
+      } catch (err) {
+        fails.push(`${id}/${sc.id}: coach throws: ${err.message}`);
+        body = [];
+      }
+      const last = body.at(-1);
+      if (typeof last !== 'string' || !last.startsWith(OUT_LABEL) || last.length < OUT_LABEL.length + 80) {
+        fails.push(`${id}/${sc.id}: the explainer does not end with "What the course model leaves out."`);
+      } else {
+        typeset(`${id}/${sc.id}`, last);
+        if (NAMED.test(body.join(' '))) fails.push(`${id}/${sc.id}: the explainer names a product or brand (D25)`);
+      }
+    }
+    if (!(computed.gap < limit)) fails.push(`${id}/${sc.id}: gap ${computed.gap} exceeds ${limit}`);
     finite(`${id}/${sc.id}`, computed);
 
     // The slider, end to end.
@@ -65,7 +86,7 @@ for (const id of Object.keys(LAB_META)) {
         break;
       }
       sweeps++;
-      if (!(c.gap < LIMIT[id])) fails.push(`${id}/${sc.id}: ${key} = ${s[key]} gives gap ${c.gap}`);
+      if (!(c.gap < limit)) fails.push(`${id}/${sc.id}: ${key} = ${s[key]} gives gap ${c.gap}`);
       finite(`${id}/${sc.id} at ${key} = ${s[key]}`, c);
     }
   }
@@ -101,7 +122,7 @@ for (const id of Object.keys(LAB_META)) {
       }
       const computed = {};
       lab.recompute(next, computed);
-      if (!(computed.gap < LIMIT[id])) fails.push(`${prompt.id}: after the change, gap ${computed.gap} exceeds ${LIMIT[id]}`);
+      if (!(computed.gap < limit)) fails.push(`${prompt.id}: after the change, gap ${computed.gap} exceeds ${limit}`);
     } catch (err) {
       fails.push(`${prompt.id}: ${err.message}`);
     }

@@ -2,7 +2,7 @@ import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
 import { C, alpha, arrow, axes, begin, dot, label, line, note, plotIn, poly, seg } from './diagram.js';
 import { defineLab } from './define2d.js';
-import { bindSlider, slider } from './widgets.js';
+import { bindSlider, slider, leavesOut } from './widgets.js';
 
 const G = 9.81;
 
@@ -68,6 +68,9 @@ function areaUnderV(a, tb) {
   }
   return s;
 }
+
+/** What the real device has that the model ignores (D30). */
+const OUT = String.raw`Drag is the big one. At these speeds the air pushes back hard, and a real rocket of this size reaches perhaps two-thirds of the height shown. A real motor does not hold one thrust: it ramps up, tails off, and loses mass as it burns, so $a$ is not constant. Wind and a tilted launch rail bend the path away from vertical. The area rule still holds for any $v(t)$. Only its shape changes.`;
 
 export default defineLab({
   id: 'boost',
@@ -197,7 +200,7 @@ export default defineLab({
       ['t apogee', `${fig(c.tApogee)} s`],
     ]);
   },
-  coach(state, c) {
+  coach: leavesOut(OUT, (state, c) => {
     if (c.coastShare > 0.5) {
       return {
         title: 'Most of the height comes after burnout',
@@ -208,7 +211,7 @@ export default defineLab({
       title: 'A gentle burn',
       body: String.raw`With $a = ${fig(c.a)}$ m/s², most of the climb happens under power. The coast adds only $${fig(c.coast)}$ m.`,
     };
-  },
+  }),
   predictions: [
     {
       id: 'bo-burn',

@@ -9,18 +9,34 @@
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 1 · Hibbeler Ch 12</p>
   <h1>Particle kinematics</h1>
   <p class="lede">Position, velocity, and acceleration, before any force law. Every relation below is derived from the two definitions \(v = ds/dt\) and \(a = dv/dt\), then used on a worked case. The numbers are recomputed. Sections the course pack does not name stay out.</p>
-  <nav class="toc">
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Units and motion along a line</h3>
     <a href="#s1"><span>01</span>Units and significant figures</a>
     <a href="#s2"><span>02</span>Rectilinear motion</a>
     <a href="#s3"><span>03</span>Erratic graphs</a>
+    <h3>Part II · Motion in a plane</h3>
     <a href="#s4"><span>04</span>Projectile motion</a>
     <a href="#s5"><span>05</span>Normal and tangential components</a>
     <a href="#s6"><span>06</span>Relative motion, translating axes</a>
+    <h3>Part III · An application</h3>
     <a href="#s7"><span>07</span>Application: a sounding rocket</a>
+    <h3>Reference</h3>
     <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Units and motion along a line</h2>
+</div>
+
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Units and significant figures</h2>
 <p>A force in pounds and a length in feet have to become newtons and metres before they enter an SI equation. One foot is exactly 0.3048 m. One pound-force is one pound-mass times 9.80665 m/s².</p>
@@ -42,9 +58,6 @@
 <p>An equation is dimensionally homogeneous when every added term measures the same kind of quantity. \(v = v_0 + at\) is homogeneous: \(at\) is (m/s²)(s), which is m/s. \(v = v_0 + a\) is not. A velocity is being added to an acceleration. Checking dimensions catches a dropped \(t\) before any number is computed.</p>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The pound-force uses 9.80665 m/s². Projectile motion in this unit uses \(g = 9.81\) m/s². A student who uses one of those values for both jobs changes the third figure. Hibbeler Statics §1.3 and Dynamics §12.6.</p>
-</div>
-<div class="box key"><span class="tag">Key</span>
-<p>Convert first. Then round. Three figures, or four when the leading digit is 1. Check dimensions before numbers.</p>
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The conversion uses the exact foot and the defined pound-force. It leaves out a local value of \(g\). A scale that reads pounds already used standard gravity. Measurement uncertainty is also left out: three figures is a reporting rule, not a statement about how well a quantity is known.</p>
@@ -102,6 +115,7 @@ v = v_0 - ks.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>Constant acceleration leaves out drag, which grows with speed, and a brake whose grip fades as it heats. Either makes \(a\) a function of \(v\), which needs \(dt = dv/a(v)\) instead. A curve needs the normal acceleration of section 5.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/1-5-instantaneous-velocity-in-1d/" target="_blank" rel="noopener">1.5 Instantaneous Velocity in 1D</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/2-2-acceleration-in-1d/" target="_blank" rel="noopener">2.2 Acceleration in 1D</a>.</p>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Erratic graphs</h2>
@@ -142,7 +156,14 @@ v = v_0 - ks.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>A step graph leaves out the rounding between corners. Real acceleration cannot jump: a jump would need an infinite rate of change of force. The area rule still holds for a smooth graph. Integrate \(a\) over the interval, then step \(s\) with the area under \(v\).</p>
 </div>
+<p class="bridge">Everything so far moved along a line. A particle in a plane has an acceleration that need not point along its path, and Part II measures it in the path’s own axes.</p>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/2-4-integration/" target="_blank" rel="noopener">2.4 Integration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/2-3-worked-example-acceleration-from-position/" target="_blank" rel="noopener">2.3 Worked Example - Acceleration from Position</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Motion in a plane</h2>
+</div>
+
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Projectile motion</h2>
 <p>Horizontal velocity stays constant when the only acceleration is gravity. Vertical velocity changes at \(g = 9.81\) m/s². Resolve the launch velocity, then treat the two axes separately.</p>
@@ -185,6 +206,7 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>This projectile leaves out drag and wind. With drag, the horizontal acceleration is not zero, and the two axes no longer separate: drag on each axis depends on the total speed. It also leaves out the variation of \(g\) with height and the curvature of the ground. Over a few hundred metres neither matters.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/3-4-projectile-motion/" target="_blank" rel="noopener">3.4 Projectile Motion</a>.</p>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Normal and tangential components</h2>
@@ -232,6 +254,7 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The curvature formula is for a plane curve \(y = f(x)\). A space curve needs a binormal direction and a different radius. The model also takes \(a_t\) as given, rather than from a force. Unit 2 supplies the force.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/10-1-circular-motion-2013-acceleration/" target="_blank" rel="noopener">10.1 Circular Motion - Acceleration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/9-2-uniform-circular-motion-direction-of-the-acceleration/" target="_blank" rel="noopener">9.2 Uniform Circular Motion - Direction of the Acceleration</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>.</p>
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Relative motion, translating axes</h2>
@@ -264,18 +287,22 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Subtracting speeds instead of vectors. In the first example, \(|\vec{v}_B| - |\vec{v}_A| = 4.12 - 3.16 = 0.96\) m/s. The relative speed is 3.61 m/s. Speeds subtract only when the velocities are parallel. Hibbeler §12.10.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Subtract the vectors. Do not subtract the speeds and then invent a direction.</p>
-</div>
 <p>In the Relative lab, drag either velocity. The relative arrow is drawn from A, and its components are the differences.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>These axes translate with A and do not rotate. A rotating frame adds terms this section does not carry: a Coriolis term and a centripetal term. Rotating axes stay out of the course. The model also treats A and B as points with no size.</p>
 </div>
+<p class="bridge">Part III returns to a straight line. A sounding rocket needs only the graphs of Part I, with a burn and a coast.</p>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/4-3-reference-frames/" target="_blank" rel="noopener">4.3 Reference Frames</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/18-1-relative-velocity/" target="_blank" rel="noopener">18.1 Relative Velocity</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/newton2019s-laws-vectors-and-reference-frames/" target="_blank" rel="noopener">Lecture 1, Newton's Laws, Vectors, and Reference Frames</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>An application</h2>
+</div>
+
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Application: a sounding rocket</h2>
 <p>A sounding rocket flies straight up. Its motor burns for a few seconds and then the rocket coasts. The whole flight is rectilinear motion in two pieces, each with a constant acceleration. Nothing beyond this unit is needed to find how high it goes.</p>
-<p>During the burn the net acceleration is the thrust less the weight, over the mass: \(a = T/m - g\). Treat the mass as constant for now; Unit 4 lets it fall as propellant burns. After burnout only gravity acts, and the acceleration is \(-g\).</p>
+<p>During the burn the net acceleration is the thrust less the weight, over the mass: \(a = T/m - g\). Treat the mass as constant for now; Unit 3 lets it fall as propellant burns. After burnout only gravity acts, and the acceleration is \(-g\).</p>
 <div class="box why"><span class="tag">Why the apogee splits into two heights</span>
 <p>From rest, with constant \(a\) for \(t_b\) seconds, section 2 gives the state at burnout:</p>
 \[
@@ -313,8 +340,9 @@ v_{bo} = a\,t_b, \qquad h_{bo} = \tfrac12 a\,t_b^2.
 </div>
 <p>In the Boost lab, move the burn time and the acceleration. The shaded triangle under \(v\)–\(t\) is the apogee, and the column on the left shows where burnout and apogee sit.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Drag is the big omission. At 120 m/s the air pushes back hard, and a real rocket of this size reaches perhaps two-thirds of these heights. The model also keeps the mass constant, when a solid motor may burn a fifth of the rocket's mass; Unit 4 adds that. Thrust is not constant either: a real motor ramps up and tails off. The area rule still holds for any thrust curve. Wind and weathercocking tilt the path, which makes it a projectile problem.</p>
+<p>Drag is the big omission. At 120 m/s the air pushes back hard, and a real rocket of this size reaches perhaps two-thirds of these heights. The model also keeps the mass constant, when a solid motor may burn a fifth of the rocket's mass; Unit 3 adds that. Thrust is not constant either: a real motor ramps up and tails off. The area rule still holds for any thrust curve. Wind and weathercocking tilt the path, which makes it a projectile problem.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/2-4-integration/" target="_blank" rel="noopener">2.4 Integration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/1-7-worked-example-derivatives-in-kinematics/" target="_blank" rel="noopener">1.7 Worked Example - Derivatives in Kinematics</a>.</p>
 </section>
 <section class="topic" id="s8">
 <h2><span class="n">08</span>Formula sheet</h2>
@@ -331,9 +359,10 @@ v_{bo} = a\,t_b, \qquad h_{bo} = \tfrac12 a\,t_b^2.
 <li>\(a = -kv\): \(v = v_0 - ks\) in distance, \(v = v_0e^{-kt}\) in time.</li>
 <li>Boost and coast: \(v_{bo} = at_b\), \(h_{bo} = \tfrac12 at_b^2\), \(h_{\max} = h_{bo} + v_{bo}^2/2g\), with \(a = T/m - g\).</li>
 </ul>
-<p>Left out of this course, because the pack does not name them: cylindrical coordinates (§12.8 and §13.6), dependent motion (§12.9), central-force motion (§13.7), steady flow (§15.8), and rotating axes (§16.8). The rocket, §15.9, is Unit 4.</p>
+<p>Left out of this course, because the pack does not name them: cylindrical coordinates (§12.8 and §13.6), dependent motion (§12.9), central-force motion (§13.7), steady flow (§15.8), and rotating axes (§16.8). The rocket, §15.9, is Unit 3.</p>
 <p>Each line above is the model for this unit. Drag, a flexible part, and a coefficient that changes with speed are left out.</p>
 </section>
 </main>
+<footer>Written for Flux from Hibbeler, Engineering Mechanics: Dynamics, Chapter 12, with units from the Statics volume, §1.3 to §1.5, cited by section, with MIT OCW 8.01SC and 2.003SC as Another view. Every worked answer was recomputed.</footer>
 </body>
 </html>

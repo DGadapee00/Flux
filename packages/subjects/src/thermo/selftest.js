@@ -13,6 +13,7 @@
 import { R_WATER, psat, region1Raw, region2Raw, tsat } from './if97.js';
 import { AIR, R_UNIVERSAL, cpMolar, gas, hMolar, isentropicT, molarMass, s0Molar } from './idealgas.js';
 import { NASA7 } from './nasa7-data.js';
+import { exitEnthalpy, exitVelocity, flowArea, idealGasNozzle, isentropicVdp, jouleThomsonWater, massFlow, mixing, steadyEnergy, tFromH, throttleByJouleThomson } from './flow.js';
 import { areaRatio, chokedMassFlux, densityRatio, machFromArea, pressureRatio, temperatureRatio } from './isentropic.js';
 import { FACTORS, fromC, fromF } from './units.js';
 import { mixP, satP, satT, waterP, waterTP, waterTv } from './water.js';
@@ -280,6 +281,37 @@ for (const M of [0.2, 0.7, 1.5, 3.2]) {
   const Ts = T0 * temperatureRatio(1, g);
   const rhoS = (p0 / (R * T0)) * densityRatio(1, g);
   approx(chokedMassFlux(p0, T0, R, g), rhoS * Math.sqrt(g * R * Ts), 1e-12, 'choked mass flux = ρ* a*');
+}
+
+// ---------- Steady-flow control volumes ----------
+
+console.log('Steady flow: mass and energy balances');
+{
+  const air = gas('air');
+  // A drop of 5 kJ/kg in h is 100 m/s from rest: the factor of 1000 between kJ and J.
+  approx(exitVelocity({ h1: 5000, h2: 0, V1: 0 }), 100, 1e-12, 'Δh = 5 kJ/kg from rest gives 100 m/s');
+  approx(exitEnthalpy({ h1: 5000, V1: 0, V2: 100 }), 0, 1e-12, 'the exit enthalpy that goes with 100 m/s');
+  approx(steadyEnergy({ h1: 5000, h2: 0, V1: 0, V2: 100 }), 0, 1e-12, 'q − w = 0 for that adiabatic nozzle');
+  approx(massFlow(0.01, 50, 0.5), 1, 1e-12, 'ṁ = A V / v');
+  approx(flowArea(1, 50, 0.5), 0.01, 1e-12, 'A = ṁ v / V');
+  const mix = mixing([{ m: 2, h: 100e3 }, { m: 1, h: 400e3 }]);
+  approx(mix.h, 200e3, 1e-12, 'mixing: ṁ-weighted enthalpy');
+  approx(mix.m, 3, 1e-12, 'mixing: masses add');
+  // Ideal gas: T from h by bisection against the polynomial, and h(T) back.
+  for (const T of [250, 400, 900, 1800]) approx(tFromH(air, air.h(T)), T, 1e-9, `air: T from h round trip at ${T} K`);
+  // An ideal nozzle: the energy balance against ∫ v dp along the isentrope (dh = v dp).
+  for (const [T1, p1, V1, p2] of [[400, 600e3, 30, 300e3], [300, 200e3, 10, 100e3], [800, 1e6, 100, 400e3]]) {
+    const n = idealGasNozzle(air, { T1, p1, V1, p2 });
+    approx(isentropicVdp(air, { T1, p1, p2 }), n.h2 - n.h1, 1e-7, `air nozzle ${T1} K, ${p1 / 1e3} → ${p2 / 1e3} kPa: ∫v dp = Δh`);
+    approx(n.V2 * n.V2 / 2 - V1 * V1 / 2, n.h1 - n.h2, 1e-12, 'air nozzle: ΔKE = −Δh');
+  }
+  // Throttling water: h₂ = h₁ against the Joule–Thomson coefficient integrated along the isenthalp.
+  for (const [T1, p1, p2] of [[573.15, 2e6, 0.5e6], [473.15, 1e6, 0.2e6], [723.15, 5e6, 1e6]]) {
+    const h1 = waterTP(T1, p1).h;
+    const out = waterP(p2, 'h', h1);
+    approx(throttleByJouleThomson(T1, p1, p2), out.T, 1e-6, `steam at ${T1 - 273.15} °C, ${p1 / 1e6} → ${p2 / 1e6} MPa: h₂ = h₁ and ∫μ dp agree on T₂`);
+  }
+  ok(jouleThomsonWater(573.15, 2e6) > 0, 'superheated steam cools when throttled (μ_JT > 0)');
 }
 
 // ---------- Units ----------

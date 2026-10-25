@@ -163,6 +163,35 @@ function checkHints(tpl) {
   if (leaked / tried > 0.25) err(tpl.id, `the first hint gives the answer away in ${leaked} of ${tried} versions (${example})`);
 }
 
+/** Units reworked to the standard (docs/COURSE-STANDARD.md): coaching is checked here. The rest follow in R3a. */
+const COACHED = new Set(['u3']);
+
+/** Every option of every choice part carries a `why`. */
+function checkWhy(tpl, inst) {
+  for (const p of tpl.parts.filter((q) => q.kind === 'choice')) {
+    const opts = typeof p.options === 'function' ? p.options(inst.$) : p.options;
+    for (const o of opts) if (!o.why) err(tpl.id, `option "${o.label ?? o.value}" of ${p.id} has no why`);
+  }
+}
+
+/** Traps: each fires with its own message when its wrong value is typed. */
+const trapStats = new Map();
+function checkTraps(tpl, inst) {
+  for (const p of tpl.parts.filter((q) => q.kind === 'numeric')) {
+    for (const [fn, msg] of p.traps || []) {
+      const key = `${tpl.id}:${p.id}:${msg}`;
+      const st = trapStats.get(key) || { tried: 0, fired: 0 };
+      st.tried++;
+      const v = fn(inst.$);
+      if (Number.isFinite(v)) {
+        const r = grade(p, inst.$, String(v));
+        if (!r.correct && r.feedback === (typeof msg === 'function' ? msg(inst.$) : msg)) st.fired++;
+      }
+      trapStats.set(key, st);
+    }
+  }
+}
+
 const seen = new Set();
 const englishByUnit = {};
 for (const tpl of PROBLEMS) {
@@ -181,6 +210,11 @@ for (const tpl of PROBLEMS) {
   for (const c of tpl.cases) if (!CITATIONS.has(c.src)) err(tpl.id, `case src "${c.src}" is not a citation from textbook.js`);
   if ((tpl.topics || []).includes('english')) englishByUnit[tpl.exam] = (englishByUnit[tpl.exam] || 0) + 1;
   checkHints(tpl);
+  if (COACHED.has(tpl.exam)) {
+    const n = tpl.parts.filter((p) => p.kind === 'numeric').reduce((k, p) => k + (p.traps?.length || 0), 0);
+    if (tpl.parts.some((p) => p.kind === 'numeric') && n < 2) err(tpl.id, `${n} trap(s) on its numeric parts; want at least 2`);
+    if (!tpl.variety?.length) err(tpl.id, 'does not say what it varies (variety)');
+  }
   const versions = countVersions(tpl, { need: MIN_VERSIONS });
   if (versions < MIN_VERSIONS) err(tpl.id, `${versions} distinct versions; need at least ${MIN_VERSIONS}`);
 
@@ -224,6 +258,10 @@ for (const tpl of PROBLEMS) {
       break;
     }
     checkAnswers(tpl, inst, `seed ${seed}`);
+    if (COACHED.has(tpl.exam)) {
+      checkWhy(tpl, inst);
+      checkTraps(tpl, inst);
+    }
     try {
       checkRender(tpl, inst);
     } catch (e) {
@@ -238,6 +276,10 @@ for (const tpl of PROBLEMS) {
       break;
     }
   }
+}
+
+for (const [key, st] of trapStats) {
+  if (st.fired < 0.75 * st.tried) err(key.split(':')[0], `trap "${key.split(':').slice(2).join(':')}" fires in ${st.fired} of ${st.tried} versions`);
 }
 
 if (!ONLY) for (const e of EXAMS) if (!englishByUnit[e.id]) err(e.id, 'no problem in English units');

@@ -8,6 +8,7 @@ import {
   K_PER_R,
   KG_PER_LBM,
   KG_PER_SLUG,
+  M3_PER_GAL_US,
   M_PER_FT,
   M_PER_KM,
   M_PER_MI,
@@ -139,4 +140,8 @@ test('speeds and rotation rates: 3.6 km/h is 1 m/s, a knot is 1852 m per hour, 6
   // 60 rpm is one turn a second; doubling the rate doubles ω.
   close(60 * RAD_S_PER_RPM, 2 * Math.PI, '60 rpm');
   close((120 * RAD_S_PER_RPM) / (60 * RAD_S_PER_RPM), 2, 'twice the rpm');
+});
+
+test('a US gallon is 231 cubic inches, which is 3.785411784 litres', () => {
+  close(M3_PER_GAL_US, 0.003785411784, 'US gallon in cubic metres');
 });

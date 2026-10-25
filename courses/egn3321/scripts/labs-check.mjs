@@ -44,6 +44,29 @@ function typeset(id, text) {
   if (mathProse(String(text ?? '')).includes('katex-error')) fails.push(`${id}: KaTeX cannot parse: ${text}`);
 }
 
+const OUT_LABEL = '<b>What the course model leaves out.</b>';
+// Application labs stay generic (D25): no named engine or vehicle programme in an explainer.
+const NAMED = /methalox|raptor|starship|starhopper|merlin|falcon|spacex|blue origin|be-4/i;
+
+/** An application lab's explainer ends with what the model leaves out, whichever branch the state picks (D30). */
+function explainer(id, tag, lab, state, computed) {
+  let coach;
+  try {
+    coach = lab.coach(state, computed);
+  } catch (err) {
+    fails.push(`${id}/${tag}: coach throws: ${err.message}`);
+    return;
+  }
+  const body = Array.isArray(coach?.body) ? coach.body : [coach?.body];
+  const last = body.at(-1);
+  if (typeof last !== 'string' || !last.startsWith(OUT_LABEL) || last.length < OUT_LABEL.length + 80) {
+    fails.push(`${id}/${tag}: the explainer does not end with "What the course model leaves out."`);
+    return;
+  }
+  typeset(`${id}/${tag}`, last);
+  if (NAMED.test(body.join(' '))) fails.push(`${id}/${tag}: the explainer names a specific engine or vehicle programme (D25)`);
+}
+
 for (const id of Object.keys(LAB_META)) {
   if (ONLY && id !== ONLY) continue;
   const lab = await loadLab(id);
@@ -62,6 +85,7 @@ for (const id of Object.keys(LAB_META)) {
       continue;
     }
     checks++;
+    if (LAB_META[id].app) explainer(id, sc.id, lab, state, computed);
     if (!(computed.gap < limit)) fails.push(`${id}/${sc.id}: gap ${computed.gap} exceeds ${limit}`);
     for (const [key, value] of Object.entries(computed)) {
       if (typeof value === 'number' && !Number.isFinite(value)) fails.push(`${id}/${sc.id}: ${key} is ${value}`);
@@ -81,6 +105,7 @@ for (const id of Object.keys(LAB_META)) {
           break;
         }
         sweeps++;
+        if (LAB_META[id].app) explainer(id, `${sc.id} at ${key} = ${st[key]}`, lab, st, c);
         if (!(c.gap < limit)) fails.push(`${id}/${sc.id}: ${key} = ${st[key]} gives gap ${c.gap}`);
         for (const [k, v] of Object.entries(c)) if (typeof v === 'number' && !Number.isFinite(v)) fails.push(`${id}/${sc.id} at ${key} = ${st[key]}: ${k} is ${v}`);
       }

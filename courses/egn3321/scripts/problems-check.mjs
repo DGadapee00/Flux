@@ -305,6 +305,12 @@ for (const [s, v] of [
   if (new Set(a.map((t) => t.ch)).size < 2) err('pickSet', 'Unit 1 set skipped a chapter');
 }
 
+// D15: every unit has at least one worked case that reproduces a printed OCW answer, cited by course, term, set and problem.
+for (const e of EXAMS) {
+  const cited = PROBLEMS.some((t) => t.exam === e.id && t.cases.some((c) => /^MIT OCW 2\.003SC \(Fall 2011\), (Problem Set|Quiz) \d+, Problem \d+/.test(c.src)));
+  if (!cited) err(e.id, 'no worked case cites an OCW problem (MIT OCW 2.003SC (Fall 2011), Problem Set n, Problem m)');
+}
+
 console.log(`${seen.size} templates · ${PROBLEMS.reduce((sum, p) => sum + p.cases.length, 0)} worked cases · ${secondChecks} second-method checks · ${simChecks} sim comparisons`);
 for (const e of errors) console.log('FAIL ', e);
 console.log(errors.length ? `${errors.length} failure(s)` : 'problems: all checks passed');

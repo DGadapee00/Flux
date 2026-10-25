@@ -2,7 +2,7 @@ import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
 import { C, alpha, axes, begin, dot, label, line, note, plotIn, poly, seg } from './diagram.js';
 import { defineLab } from './define2d.js';
-import { bindSlider, slider } from './widgets.js';
+import { bindSlider, slider, leavesOut } from './widgets.js';
 
 const G_EARTH = 9.81;
 
@@ -60,6 +60,9 @@ function stepCrush({ m, v0, F, L, g }) {
   }
   return { used: s, vHit: v };
 }
+
+/** What the real device has that the model ignores (D30). */
+const OUT = String.raw`The pad here crushes at one steady force. A real honeycomb pad has a peak force before it starts to crush, then a plateau, then a steep rise when it is fully crushed. The lander is one rigid mass, with no leg flex or rebound, and all its legs touch at the same instant. A lander that touches one leg first, or comes in with sideways speed, is the tip-over problem of Unit 7.`;
 
 export default defineLab({
   id: 'landing',
@@ -167,7 +170,7 @@ export default defineLab({
       ['at the stop', `${fig(c.vHit)} m/s`],
     ]);
   },
-  coach(state, c) {
+  coach: leavesOut(OUT, (state, c) => {
     if (!c.stops) {
       return { title: 'The pad cannot hold the weight', body: String.raw`The crush force $${fig(c.F)}$ N is less than the weight $${fig(c.W)}$ N. The lander keeps speeding up through the pad.` };
     }
@@ -181,7 +184,7 @@ export default defineLab({
       title: 'Stops inside the pad',
       body: String.raw`The pad takes $${fig(c.ke)}$ J of motion and $${fig(c.W * c.need)}$ J from the weight over $${fig(c.need)}$ m, at $${fig(c.decelG)}$ g.`,
     };
-  },
+  }),
   predictions: [
     {
       id: 'ld-faster',

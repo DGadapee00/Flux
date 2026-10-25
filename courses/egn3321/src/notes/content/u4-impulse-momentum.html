@@ -6,21 +6,37 @@
 </head>
 <body>
 <header class="top">
-  <p class="eyebrow">EGN 3321 · Dynamics · Unit 4 · Hibbeler Ch 15</p>
+  <p class="eyebrow">EGN 3321 · Dynamics · Unit 3 · Hibbeler Ch 15</p>
   <h1>Impulse and momentum</h1>
   <p class="lede">Impulse is the area under a force. A collision conserves momentum for every restitution. A rocket's gain follows the mass ratio. Each of these is \(\sum F = ma\) integrated over time, and each is derived below. The numbers are recomputed.</p>
-  <nav class="toc">
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Impulse and momentum</h3>
     <a href="#s1"><span>01</span>Principle of linear impulse and momentum</a>
     <a href="#s2"><span>02</span>Conservation of momentum</a>
+    <h3>Part II · Collisions</h3>
     <a href="#s3"><span>03</span>Impact</a>
     <a href="#s4"><span>04</span>Oblique impact</a>
+    <h3>Part III · Angular momentum and rockets</h3>
     <a href="#s5"><span>05</span>Angular momentum</a>
     <a href="#s6"><span>06</span>A rocket</a>
     <a href="#s7"><span>07</span>Application: an upper stage</a>
+    <h3>Reference</h3>
     <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Impulse and momentum</h2>
+</div>
+
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Principle of linear impulse and momentum</h2>
 <p>The impulse of a force is the area under its graph of force against time. That area equals the change in momentum.</p>
@@ -30,7 +46,7 @@
 \[
 \int F\,dt = m\Delta v.
 \]
-<p>Work and energy integrate the force over distance. Impulse and momentum integrate it over time. Use impulse when the time is given or asked for, or when the force is a short, sharp blow whose distance is unknown.</p>
+<p>Impulse and momentum integrate the force over time. Work and energy, in Unit 4, integrate it over distance. Use impulse when the time is given or asked for, or when the force is a short, sharp blow whose distance is unknown.</p>
 <div class="box ex"><span class="tag">Worked example · equal areas</span>
 <p>A 2 kg particle starts at rest. A 100 N force acts for 0.4 s. Then 40 N acts for 1 s. Each area is 40 N·s. The speed becomes 40 m/s.</p>
 </div>
@@ -50,13 +66,11 @@
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The impulse is the area, not the height of the force. A short spike and a long push with the same area give the same change in speed. And in a rebound the speeds add: writing \(20 - 15\) instead of \(15 + 20\) undercounts the impulse sevenfold. Hibbeler §15.1.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Add the areas. Divide the total by the mass. Add that change to the starting velocity, with its sign.</p>
-</div>
 <p>In the Impulse lab, reshape the force pulses while keeping their areas. The final speed does not move.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The body is a particle, and \(F\) is the net force along the line. The model leaves out a force missing from the area, and any rotation of a finite body. During a 5 ms blow, the weight's impulse is only 0.007 N·s, so non-impulsive forces like it are usually dropped. That is a choice, and it fails for long contacts.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/15-1-momentum-and-impulse/" target="_blank" rel="noopener">15.1 Momentum and Impulse</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/15-3-worked-example-bouncing-ball/" target="_blank" rel="noopener">15.3 Worked Example - Bouncing Ball</a>.</p>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Conservation of momentum</h2>
@@ -84,7 +98,14 @@
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>Internal impulses cancel in pairs. An outside force that acts through the interval does not. Recoil here also leaves out momentum carried off by the gas, which is a few percent for a rifle. The boat ignores water drag during the jump.</p>
 </div>
+<p class="bridge">Impulse and momentum give the speeds after a push. A collision is a push too short to measure, so Part II uses momentum and a coefficient of restitution in place of the force.</p>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/16-1-conservation-of-momentum/" target="_blank" rel="noopener">16.1 Conservation of Momentum</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/18-2-set-up-a-recoil-problem/" target="_blank" rel="noopener">18.2 Set up a Recoil Problem</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Collisions</h2>
+</div>
+
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Impact</h2>
 <p>The line of impact is the normal. Restitution sets the separation speed along that line. Momentum along the line is conserved for every value of \(e\).</p>
@@ -122,13 +143,11 @@ v_{n2} - v_{n1} = e(u_{n1} - u_{n2}).
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Momentum is conserved for every coefficient of restitution. Kinetic energy is conserved only when \(e = 1\). Hibbeler §15.4.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Solve the momentum equation and the restitution equation together. The energy loss follows from \(e\), the reduced mass, and the closing speed.</p>
-</div>
 <p>In the Impact lab, slide \(e\) from 0 to 1. The final velocities move, the total momentum does not, and the lost energy falls to zero.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The impact is treated as instantaneous, so outside impulses during the collision are neglected. Deformation of the bodies is summed up by \(e\), not drawn. Real \(e\) depends on the impact speed and the temperature. A single number is a fit, not a law.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-9-collision-theory/26-1-momentum-in-collisions/" target="_blank" rel="noopener">26.1 Momentum in Collisions</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-9-collision-theory/27-2-relative-velocity-in-1d/" target="_blank" rel="noopener">27.2 Relative Velocity in 1D</a>.</p>
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Oblique impact</h2>
@@ -148,13 +167,17 @@ v_{n2} - v_{n1} = e(u_{n1} - u_{n2}).
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Do not multiply the tangent velocity by \(e\). Restitution acts only along the line of impact. Scaling the whole velocity by 0.6 would send the floor ball off at 6 m/s and 30°. Hibbeler §15.4.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Keep the tangent component. Solve the normal components as a direct impact.</p>
-</div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The faces are smooth, so there is no tangent impulse. A rough collision would change the tangent speeds, and set a ball spinning. That model is left out, as is any rotation the impact gives the bodies.</p>
 </div>
+<p class="bridge">Part II kept the mass fixed and the motion on a line. Part III takes moments about a point, and then lets the mass leave.</p>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-9-collision-theory/27-6-2d-collisions/" target="_blank" rel="noopener">27.6 2D Collisions</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Angular momentum and rockets</h2>
+</div>
+
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Angular momentum</h2>
 <p>The angular momentum of a particle about a point is \(\mathbf{r} \times m\mathbf{v}\). The moment arm is measured from that point to the particle.</p>
@@ -178,12 +201,10 @@ L_z = m(xv_y - yv_x), \qquad \sum M_O = \dot H_O.
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The moment arm runs from the chosen point to the particle. It is not the distance measured along the velocity. Hibbeler §15.5.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Use one point. Keep the signs of \(x\), \(y\), \(v_x\), and \(v_y\). A force through that point leaves \(H\) unchanged.</p>
-</div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>This is the angular momentum of a particle. It is not yet the spin of a rigid body, which Unit 6 builds by adding up particles. Central-force orbits, where this conservation does most of its work, are left out of the course.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-11-angular-momentum/32-1-angular-momentum-for-a-point-particle/" target="_blank" rel="noopener">32.1 Angular Momentum for a Point Particle</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-11-angular-momentum/34-1-torque-causes-angular-momentum-to-change-point-particle/" target="_blank" rel="noopener">34.1 Torque Causes Angular Momentum to Change - Point Particle</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/angular-momentum-and-torque/" target="_blank" rel="noopener">Lecture 3, Angular Momentum and Torque</a>.</p>
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>A rocket</h2>
@@ -214,13 +235,11 @@ m\,dv = -v_e\,dm - mg\,dt.
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>\(\Delta v\) is \(v_e\) times the log of the mass ratio, minus \(g t_b\). It is not \(v_e\) times the burned mass divided by \(m_0\). For the first rocket, that wrong form gives 900 m/s instead of 1374 m/s. Hibbeler §15.9.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>A larger mass ratio gives a larger \(\Delta v\), even when the burned mass is the same. Steady flow of a fluid stream, §15.8, is left out of this course.</p>
-</div>
 <p>In the Rocket lab, the coast, heavy, and gravity scenarios are the three examples above. The lab integrates the momentum balance step by step and matches the logarithm.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The exhaust speed and the burn rate are constant, the burn is vertical, and drag is left out. Gravity is taken as constant over the short burn. A real ascent also turns over as it climbs, which changes the gravity loss from \(gt_b\) to \(g\sin\gamma\) integrated over the burn.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/19-1-rocket-problem-1-set-up-the-problem/" target="_blank" rel="noopener">19.1 Rocket Problem 1 - Set up the Problem</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/19-6-rocket-problem-6-solution-for-no-external-forces/" target="_blank" rel="noopener">19.6 Rocket Problem 6 - Solution for No External Forces</a>.</p>
 </section>
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Application: an upper stage</h2>
@@ -254,6 +273,7 @@ v_e = \frac{F}{\dot m} = I_{sp}\,g_0, \qquad \Delta v = v_e\ln\frac{m_0}{m_f} - 
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>A real engine's thrust grows as the outside pressure falls, so sea-level and vacuum specific impulse differ. The model holds \(v_e\) constant. It also leaves out drag, which is largest low and slow, and the turn toward horizontal flight.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/19-5-rocket-problem-5-thrust-and-external-forces/" target="_blank" rel="noopener">19.5 Rocket Problem 5 - Thrust and External Forces</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/19-7-rocket-problem-7-solution-with-external-forces/" target="_blank" rel="noopener">19.7 Rocket Problem 7 - Solution with External Forces</a>.</p>
 </section>
 <section class="topic" id="s8">
 <h2><span class="n">08</span>Formula sheet</h2>
@@ -271,5 +291,6 @@ v_e = \frac{F}{\dot m} = I_{sp}\,g_0, \qquad \Delta v = v_e\ln\frac{m_0}{m_f} - 
 <p>Steady flow of a fluid stream stays out. Drag on the rocket, and a burn rate that changes, stay out of the formulas above.</p>
 </section>
 </main>
+<footer>Written for Flux from Hibbeler, Engineering Mechanics: Dynamics, Chapter 15, cited by section, with MIT OCW 8.01SC and 2.003SC as Another view. Every worked answer was recomputed.</footer>
 </body>
 </html>

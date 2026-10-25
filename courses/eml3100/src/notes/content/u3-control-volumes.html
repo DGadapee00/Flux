@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Control volumes: mass and energy</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EML 3100 · Thermodynamics · Unit 3 · Yan Ch 5</p>
+  <h1>Control volumes: mass and energy</h1>
+  <p class="lede">Most engines are open: a fluid flows in, something happens, and it flows out. One mass balance and one energy balance cover a turbine, a nozzle, a valve, a mixing chamber and a water heater. The balance is the same each time. Only the terms that vanish change. Every number below is recomputed by the course's property library and checked a second way.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The two balances</h3>
+    <a href="#s1"><span>01</span>Control volumes and the mass balance</a>
+    <a href="#s2"><span>02</span>The steady-flow energy equation</a>
+    <h3>Part II · Devices that make work or speed</h3>
+    <a href="#s3"><span>03</span>Turbines and compressors</a>
+    <a href="#s4"><span>04</span>Nozzles and diffusers</a>
+    <h3>Part III · Devices that move energy between streams</h3>
+    <a href="#s5"><span>05</span>Throttles</a>
+    <a href="#s6"><span>06</span>Mixing chambers and heat exchangers</a>
+    <a href="#s7"><span>07</span>Application: a tankless water heater</a>
+    <h3>Reference</h3>
+    <a href="#s8"><span>08</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The two balances</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Control volumes and the mass balance</h2>
+<p>A closed system follows a fixed mass. A pump, a turbine or a pipe lets fluid through, so it is easier to fix a region of space instead. That region is the control volume. Its boundary is the control surface. Fluid crosses the surface at the inlets and the outlets.</p>
+<p>Steady flow means nothing inside the volume changes with time. The mass inside stays the same, so the mass entering each second equals the mass leaving.</p>
+<div class="box why"><span class="tag">Why the mass flow is A V / v</span>
+<p>Fluid moves at speed \(V\) through a cross-section of area \(A\). In a time \(dt\) it fills a slab of length \(V\,dt\). The slab has volume \(A V\,dt\). Its mass is that volume divided by the specific volume \(v\). The mass per second is</p>
+\[
+\dot m = \frac{A V}{v} = \rho A V.
+\]
+<p>Steady flow then requires \(\sum \dot m_{in} = \sum \dot m_{out}\). Yan Ch 5 starts here.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · air in a duct</span>
+<p>Air at 600 kPa and 127 °C moves at 30 m/s through a duct of \(100\ \mathrm{cm^2}\). The specific volume is \(v = RT/P = 0.28705 \times 400/600 = 0.1914\) m³/kg. The mass flow is \(\dot m = 0.01 \times 30/0.1914 = 1.568\) kg/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a garden hose</span>
+<p>Water flows at 2.5 gal/min through a hose of 0.5 in. inside diameter. One gallon is 0.003785 m³, so the volume flow is \(1.577\times10^{-4}\) m³/s. The area is \(\pi(0.0127)^2/4 = 1.267\times10^{-4}\) m². The speed is \(V = \dot V/A = 1.245\) m/s. At \(\rho = 999\) kg/m³ the mass flow is 0.1576 kg/s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(AV\) is a volume flow, in m³/s. It becomes a mass flow only after the division by \(v\). For a gas the specific volume comes from \(v = RT/P\) with the absolute temperature. Using °C there turns 127 into 400 K at best and into 127 K at worst. Yan Ch 5.</p>
+</div>
+<p>In the Nozzle lab, the first scenario passes this air through a converging nozzle. The mass flow reads 1.568 kg/s at every exit pressure.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The speed is not the same across a pipe. It is zero at the wall and largest on the centreline. The model uses the average speed, which is what \(\dot m = \rho A V\) needs when \(\rho\) is uniform.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>The steady-flow energy equation</h2>
+<p>Take one unit of mass crossing the control volume from inlet 1 to outlet 2. It carries internal energy, kinetic energy and potential energy. It also has to push itself in and out against the pressure of the fluid around it.</p>
+<div class="box why"><span class="tag">Why enthalpy appears</span>
+<p>Start from the closed-system balance for the mass that crosses. Heat \(q\) is added and shaft work \(w\) is done. Pushing the fluid into the volume at pressure \(P_1\) costs \(P_1 v_1\) per kilogram. Pushing the fluid out at \(P_2\) gives back \(P_2 v_2\). That flow work is not shaft work, so it stays on the energy side:</p>
+\[
+\begin{aligned}
+q - w &= (u_2 + P_2v_2) - (u_1 + P_1v_1)\\
+&\quad + \tfrac12(V_2^2 - V_1^2) + g(z_2 - z_1).
+\end{aligned}
+\]
+<p>The group \(u + Pv\) is the enthalpy \(h\). With a mass flow \(\dot m\) the rate form is</p>
+\[
+\dot Q - \dot W = \dot m\left[\Delta h + \Delta KE + \Delta PE\right]
+\]
+<p>where \(\Delta KE = \tfrac12(V_2^2 - V_1^2)\) and \(\Delta PE = g(z_2 - z_1)\) are per kilogram.</p>
+</div>
+<p>The sign convention is the one from Unit 2: heat added to the fluid is positive, and work done by the fluid is positive. The enthalpy is in J/kg inside the kinetic term. A drop of 5 kJ/kg in \(h\) gives \(V = \sqrt{2\times5000} = 100\) m/s. The factor of 1000 between kJ and J is where most slips happen.</p>
+<div class="box ex"><span class="tag">Worked example · a steam turbine</span>
+<p>Steam at 3 MPa and 400 °C enters an adiabatic turbine at 2 kg/s. It leaves at 10 kPa with a quality of 0.90. Kinetic and potential energy are neglected. The tables give \(h_1 = 3231.6\) kJ/kg. At 10 kPa, \(h_f = 191.81\) and \(h_{fg} = 2392.1\), so \(h_2 = 191.81 + 0.90\times2392.1 = 2344.7\) kJ/kg. The balance reduces to \(\dot W = \dot m(h_1 - h_2) = 2\times886.9 = 1774\) kW. The exhaust is a saturated mixture at 45.81 °C.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the flow work inside h</span>
+<p>Split the same two enthalpies into \(u\) and \(Pv\). At the inlet \(u_1 = 2933.4\) and \(P_1v_1 = 298.1\) kJ/kg, which add to 3231.5. At the outlet \(u_2 = 2212.6\) and \(P_2v_2 = 132.0\), which add to 2344.6. The difference is 886.9 kJ/kg again. Using \(u\) alone would give 720.8 kJ/kg and a power 19 % low.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A flowing fluid uses \(h\), not \(u\). The closed-system balance of Unit 2 has no flow work, so it uses \(u\). Here the \(Pv\) term is large: 298 kJ/kg of 3231 at the inlet. Yan Ch 5.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Write the full balance first. Then cross out what the device does not have: no shaft means \(\dot W = 0\), an insulated body means \(\dot Q = 0\), a small height or speed change drops its term. What is left is the device's equation.</p>
+</div>
+<p>In the Steady-flow devices lab, the turbine scenario shows two columns of energy flow, in and out. They are the same height for every device.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Steady flow assumes nothing changes with time. A device starting up or filling a tank is unsteady, and the energy stored inside the volume then matters. This unit leaves it out.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 16.050 Thermal Energy (Fall 2002) develops the same open-system balance in its first lectures, on its <a href="https://ocw.mit.edu/courses/16-050-thermal-energy-fall-2002/pages/calendar/" target="_blank" rel="noopener">calendar page</a>. Problem sets there carry no printed solutions, so the numbers in these notes are our own.</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Devices that make work or speed</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Turbines and compressors</h2>
+<p>A turbine lets a fluid expand over blades and turns a shaft. A compressor uses a shaft to raise the pressure. Both are close to adiabatic, because the fluid passes through quickly and the casing is small. The speeds in and out are similar. So heat and kinetic energy drop out, and the work is the enthalpy change:</p>
+\[
+\dot W_{turbine} = \dot m(h_1 - h_2)
+\]
+\[
+\dot W_{in,\ compressor} = \dot m(h_2 - h_1)
+\]
+<p>For an ideal gas \(h\) depends on temperature only, and \(\Delta h = \int c_p\,dT\). For steam, read it from the tables.</p>
+<div class="box ex"><span class="tag">Worked example · an air compressor</span>
+<p>A compressor takes air at 1 kg/s from 27 °C to 247 °C. The air tables give \(h_2 - h_1 = 223.58\) kJ/kg. The power input is \(\dot W_{in} = 1\times223.58 = 223.6\) kW. The integral \(\int c_p\,dT\) from 300.15 K to 520.15 K gives the same figure. At the mean temperature, 410 K, \(c_p = 1.0148\) kJ/(kg·K), and \(1.0148\times220 = 223.3\) kJ/kg is within 0.1 %.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a wetter exhaust</span>
+<p>Return to the turbine of the last section and let the exhaust be wetter, at \(x = 0.80\). Then \(h_2 = 191.81 + 0.80\times2392.1 = 2105.5\) kJ/kg. The power is \(2\times(3231.6 - 2105.5) = 2252\) kW, up from 1774 kW. A wetter exhaust means more of the enthalpy left as work. It also means more liquid droplets on the last blades, which wear them.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>For air use \(c_p\), not \(c_v\). Taking \(c_v \Delta T\) leaves out the flow work and gives 160 kJ/kg instead of 223.6. And a compressor does work on the air: with work out as positive, a compressor's \(\dot W\) is negative. Yan Ch 5.</p>
+</div>
+<p>In the Steady-flow devices lab, switch between the turbine and the compressor. The work bar moves from the right column to the left.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real turbine or compressor is not reversible. Friction and turbulence make the exhaust enthalpy higher than an ideal machine's, and the work smaller. The efficiency that measures this comes with entropy, in Unit 5.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Nozzles and diffusers</h2>
+<p>A nozzle turns enthalpy into speed. A diffuser turns speed back into enthalpy. Neither has a shaft, and the flow is fast, so the heat is negligible. The energy equation reduces to</p>
+\[
+V_2^2 = V_1^2 + 2(h_1 - h_2).
+\]
+<p>For an ideal reversible adiabatic nozzle the exit state is on the same entropy line as the inlet. For an ideal gas that gives \(T_2/T_1 = (P_2/P_1)^{(k-1)/k}\) when \(k\) is constant. The tables and the course library use the full \(c_p(T)\).</p>
+<div class="box why"><span class="tag">Why a nozzle narrows, then widens</span>
+<p>Mass is steady, so \(\rho A V\) is constant. Take logarithms and differentiate: \(d\rho/\rho + dA/A + dV/V = 0\). In a reversible adiabatic flow with no shaft, \(dh = v\,dP\), so the energy equation gives \(V\,dV = -v\,dP\). The pressure change follows the speed of sound \(a\), \(dP = a^2 d\rho\), so</p>
+\[
+\frac{d\rho}{\rho} = -\frac{V\,dV}{a^2} = -M^2\frac{dV}{V}
+\]
+\[
+\frac{dA}{A} = (M^2 - 1)\frac{dV}{V}
+\]
+<p>Below Mach 1 the speed rises as the area falls. Above Mach 1 the density falls so fast that the area must rise for the speed to rise. A diffuser reverses both.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a converging nozzle</span>
+<p>Air at 400 K, 600 kPa and 30 m/s enters a nozzle of \(100\ \mathrm{cm^2}\) and leaves at 400 kPa. The exit temperature from \(s_2 = s_1\) is 356.5 K, or 83.35 °C. The enthalpy drop is 43.98 kJ/kg, so \(V_2 = \sqrt{30^2 + 2\times43978} = 298.1\) m/s. The exit area is \(\dot m v_2/V_2 = 13.45\ \mathrm{cm^2}\). The Mach number is 0.788, below 1, so the nozzle narrowed.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · expanding to 100 kPa</span>
+<p>Let the same air expand to 100 kPa. The exit temperature is 239.9 K (−33.2 °C), the enthalpy drop is 161.1 kJ/kg, and the exit speed is 568.5 m/s. The mass flow is the same 1.568 kg/s, but the air is far less dense, so the exit area grows to \(19.0\ \mathrm{cm^2}\). The exit Mach number is 1.83. The flow passed Mach 1 on the way, which needs a throat and a widening passage.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a diffuser</span>
+<p>Air at 300 K, 100 kPa and 250 m/s enters a diffuser and leaves at 125 kPa. The exit temperature is 319.7 K and the enthalpy rise is 19.84 kJ/kg. The speed falls to \(\sqrt{250^2 - 2\times19842} = 151.1\) m/s. Since the flow is subsonic, the passage widens: the exit area is 1.41 times the inlet's, 141 \(\mathrm{cm^2}\) here.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · steam through a nozzle</span>
+<p>Steam at 2 MPa, 300 °C and 40 m/s expands reversibly to 500 kPa. The inlet entropy is 6.7685 kJ/(kg·K). At 500 kPa and that entropy the enthalpy is 2726.0 kJ/kg, against 3024.3 at the inlet. The drop is 298.3 kJ/kg. The exit speed is \(\sqrt{40^2 + 2\times298270} = 773.4\) m/s and the exit quality is 0.9895. The steam has just started to condense.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Two slips are common. First, leaving out the inlet kinetic energy: \(V_2 = \sqrt{2\Delta h}\) is fine only when \(V_1\) is small. Second, the factor of 1000: \(h\) must be in J/kg inside the root. A third is expanding at constant temperature. A nozzle is adiabatic, and the gas cools as it speeds up. Yan Ch 5.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Find \(h_2\) from the entropy, not from the temperature. Then \(V_2\) from the energy balance. The area follows from the mass balance. Subsonic nozzles narrow, supersonic nozzles widen, diffusers do the opposite.</p>
+</div>
+<p>In the Nozzle lab, drag the exit pressure. The curve shows the area the stream needs at each pressure. It narrows to a throat at Mach 1 and widens past it.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The nozzle is reversible and adiabatic. A real one has friction at the walls, which cuts the exit speed by a few per cent. Beyond a limiting pressure ratio the flow chokes, and a shock wave can form in the widening part. The lab shows the ideal curve only.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Devices that move energy between streams</h2>
+</div>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Throttles</h2>
+<p>A throttle is a valve, a capillary tube or a porous plug. The fluid squeezes through, and its pressure drops with no shaft and no heat. The speed in and out is similar, so</p>
+\[
+h_2 = h_1.
+\]
+<p>The enthalpy does not change. What the temperature does depends on the fluid.</p>
+<div class="box why"><span class="tag">Why an ideal gas does not cool</span>
+<p>For an ideal gas \(h = h(T)\) only. Equal enthalpies mean equal temperatures, however large the pressure drop. A real fluid has \(h(T,P)\), so equal enthalpies at a lower pressure mean a different temperature. The slope \(\mu_{JT} = (\partial T/\partial P)_h\) is the Joule–Thomson coefficient. For steam at these states it is positive, so the steam cools as the pressure falls.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · throttling steam</span>
+<p>Steam at 2 MPa and 300 °C goes through a valve to 100 kPa. Its enthalpy is 3024.3 kJ/kg before and after. At 100 kPa that enthalpy is superheated steam at 274.9 °C, 25.1 K cooler. It is still well above the saturation temperature, 99.6 °C. Integrating \(\mu_{JT}\,dP\) from 2 MPa to 100 kPa along the way gives the same 274.9 °C.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · hot liquid flashes</span>
+<p>Liquid water at 1.5 MPa and 180 °C has \(h = 763.4\) kJ/kg. It is throttled to 100 kPa, where \(h_f = 417.4\) and \(h_{fg} = 2257.5\) kJ/kg. The enthalpy is between \(h_f\) and \(h_g\), so a mixture forms: \(x = (763.4 - 417.4)/2257.5 = 0.1533\). Fifteen per cent of the water boils, and the stream cools to 99.6 °C. A fall of 80 K comes from no heat exchange at all.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · throttling air</span>
+<p>Air at 500 kPa and 27 °C goes through a valve to 100 kPa. Since \(h\) depends on \(T\) only, \(h_2 = h_1\) gives \(T_2 = 27\) °C. The pressure fell by a factor of five and the temperature did not move. The specific volume rose five times.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The temperature after a throttle is not the temperature before. And it is not always lower either: only an ideal gas stays put. For a liquid close to boiling, the pressure drop can bring a flash, and part of the water leaves as vapour. Use \(h\) to find the state, then read \(T\). Yan Ch 5.</p>
+</div>
+<p>In the Steady-flow devices lab, the three throttle scenarios keep the same bar height before and after. Only what the bar is made of changes.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Inside the valve the fluid speeds up and the pressure drops below the outlet value. Outside, it slows down again and the kinetic energy turns back into enthalpy. The model sees only the two ends, which is all the balance needs.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Mixing chambers and heat exchangers</h2>
+<p>A mixing chamber joins streams. A heat exchanger lets two streams swap energy without mixing. Neither has a shaft, and both are insulated from the room. Energy in equals energy out.</p>
+\[
+\sum \dot m_{in} h_{in} = \sum \dot m_{out} h_{out}.
+\]
+<p>The mixed stream's enthalpy is the average of the inlets, weighted by mass flow. For an exchanger, the heat leaving the hot stream enters the cold stream.</p>
+<div class="box why"><span class="tag">Why the control volume matters</span>
+<p>Draw the boundary around the whole exchanger and no heat crosses it: \(\dot Q = 0\) and \(\sum\dot m h\) in equals out. Draw it around the cold side alone and heat crosses it, \(\dot Q = \dot m_c(h_{co} - h_{ci})\). The two choices say the same thing. The second hands you the heat rate to compare with the hot side.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · hot and cold water</span>
+<p>A chamber at 200 kPa receives 1 kg/s at 60 °C and 2 kg/s at 15 °C. The enthalpies are 251.3 and 63.17 kJ/kg. The outlet carries 3 kg/s at \(h_3 = (251.3 + 2\times63.17)/3 = 125.9\) kJ/kg, which is liquid water at 29.99 °C. The simple average of the temperatures, 37.5 °C, is wrong: twice as much cold water pulls the outlet toward the cold side.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a heat exchanger</span>
+<p>Hot water at 1 kg/s cools from 90 °C to 50 °C in an exchanger at 300 kPa. Cold water at 1.5 kg/s enters at 15 °C. The hot enthalpies are 377.15 and 209.58 kJ/kg, so \(\dot Q = 1\times167.56 = 167.6\) kW. The cold side takes the same: \(h_{co} = 63.27 + 167.56/1.5 = 174.98\) kJ/kg, which is 41.72 °C. The cold stream rises 26.7 K while the hot one falls 40 K, because there is more cold water.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The temperature changes are equal only if the flow rates are equal. The enthalpy changes carry the mass flows: \(\dot m_h\Delta h_h = \dot m_c\Delta h_c\). And a cold stream can never leave hotter than the hot stream enters. Yan Ch 5.</p>
+</div>
+<p>In the Steady-flow devices lab, the mixer and exchanger scenarios have a slider for the cold flow. Raise it and see the outlet temperature fall.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The balance does not say how big the exchanger must be. That depends on how fast heat moves between the streams, which is heat transfer, not thermodynamics. The model also ignores pressure drop along the tubes.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Application: a tankless water heater</h2>
+<p>A tankless heater has no store of hot water. Cold water goes in, a heating element warms it as it passes, and hot water comes out. The control volume has one inlet, one outlet, heat in and no shaft. The balance is</p>
+\[
+\dot Q = \dot m\,(h_{out} - h_{in}).
+\]
+<p>US Department of Energy guidance puts tankless heaters at about 2 to 5 gal/min. Federal rules cap a showerhead at 2.5 gal/min. DOE's suggested water-heater setting is 120 °F, or 48.9 °C. The inlet temperatures, the 98 % electric efficiency and the heater ratings below are assumed values, and the lab says so.</p>
+<div class="box ex"><span class="tag">Worked example · one shower</span>
+<p>A shower of 2.5 gal/min runs from 15 °C inlet water to 48.9 °C. Water at 400 kPa has \(\rho = 999.2\) kg/m³, so \(\dot m = 0.1576\) kg/s. The enthalpy rise is \(205.07 - 63.37 = 141.7\) kJ/kg. The heat into the water is \(\dot Q = 22.33\) kW. At 98 % efficiency the element draws 22.79 kW, or 95 A at 240 V. A 27 kW heater has room to spare: the most flow it serves at this rise is 2.96 gal/min.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a shower in winter</span>
+<p>In winter the inlet is 5 °C. The rise grows from 33.9 K to 43.9 K and the enthalpy rise to 183.7 kJ/kg. The heat needed is 28.97 kW and the power drawn is 29.56 kW. A 27 kW heater cannot supply it. At 2.5 gal/min the water leaves at 45.1 °C, not 48.9, or the flow must drop to 2.28 gal/min to hold the setting.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two showers</span>
+<p>Two showers at 5 gal/min together need 44.67 kW of heat from 15 °C, and 45.58 kW from the wall. A 36 kW heater cannot reach it. It serves at most 3.95 gal/min at this setting, and at 5 gal/min the water leaves at 41.8 °C. Doubling the flow doubled the power, because \(\dot Q\) is proportional to \(\dot m\). That is why a house with several bathrooms needs more than one unit.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The flow is in gallons per minute. Convert both: gallons to cubic metres, and minutes to seconds. Missing the factor of 60 makes the power 60 times too large. And efficiency divides: the wall supplies more electricity than the water receives. Yan Ch 5.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Power is flow times rise. A colder inlet, a hotter setting or a bigger flow raises it. Moving both temperatures by the same amount does not. Cut the flow and the heater keeps its setting.</p>
+</div>
+<p>In the Water heater lab, the curve shows the power needed against the flow. The dashed line is the heater's rating. When the dot crosses it, the heater has run out of power.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The model holds the inlet temperature and the flow steady. A real heater lags when a tap opens, so the first seconds of water are cool. It loses a little heat through its casing, scales up with hard water, and cannot hold a set temperature when the flow changes faster than its controller. The supply pipe also limits it: the heater is rated for a rise at a flow, and a cold winter inlet cuts the flow it can serve.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Formula sheet</h2>
+<ul>
+<li>Mass: \(\dot m = AV/v = \rho AV\). Steady: \(\sum\dot m_{in} = \sum\dot m_{out}\).</li>
+<li>Energy: \(\dot Q - \dot W = \dot m\left[\Delta h + \tfrac12\Delta V^2 + g\Delta z\right]\), with \(h\) in J/kg inside the kinetic term.</li>
+<li>Turbine: \(\dot W = \dot m(h_1 - h_2)\). Compressor: \(\dot W_{in} = \dot m(h_2 - h_1)\). Ideal gas: \(\Delta h = \int c_p\,dT\).</li>
+<li>Nozzle or diffuser: \(V_2^2 = V_1^2 + 2(h_1 - h_2)\), with \(s_2 = s_1\) when reversible.</li>
+<li>Area and speed: \(dA/A = (M^2 - 1)\,dV/V\).</li>
+<li>Throttle: \(h_2 = h_1\). An ideal gas keeps its temperature. A liquid may flash: \(x = (h_1 - h_f)/h_{fg}\).</li>
+<li>Mixer: \(\dot m_3 h_3 = \sum \dot m_i h_i\). Exchanger: \(\dot m_h\Delta h_h = \dot m_c\Delta h_c\).</li>
+<li>Heater: \(\dot Q = \dot m(h_{out} - h_{in})\), electric power \(= \dot Q/\eta\). One US gallon is 0.003785 m³.</li>
+</ul>
+<p>Unsteady flow, such as filling or emptying a tank, stays out of this unit. So does entropy, which comes with the second law.</p>
+</section>
+</main>
+<footer>Written for Flux from Yan, Introduction to Engineering Thermodynamics, Chapter 5, cited by chapter, with MIT OCW 16.050 as Another view. The heater's flow limits and setting come from US Department of Energy guidance; its other inputs are assumed and labelled. Every worked answer was recomputed.</footer>
+</body>
+</html>

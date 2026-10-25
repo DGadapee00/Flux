@@ -434,7 +434,9 @@ const ch12 = [
       rho: (1 + 4) ** 1.5,
       an: 9 / (1 + 4) ** 1.5,
       mag: 9 / (1 + 4) ** 1.5,
-    })],
+    }),
+      kase('MIT OCW 2.003SC (Fall 2011), Problem Set 2, Problem 1a', { c: 0.8, x: 2, speed: 8, at: 4, shape: 'parabola' }, { rho: 8.4, an: 7.623, mag: 8.608 }, { note: 'The printed radius is rounded to 8.4 m. The unrounded value is 8.396 m, and the other two figures use it.' }),
+    ],
   }),
 
   problem({
@@ -516,6 +518,7 @@ const ch12 = [
       }, {
         vx: -4, vy: 3, speed: 5, ax: -1, ay: -2,
       }),
+      kase('MIT OCW 2.003SC (Fall 2011), Problem Set 1, Problem 2', { vax: 10 * Math.SQRT2, vay: 10 * Math.SQRT2, vbx: 5 * Math.sqrt(3), vby: 5, aax: 0, aay: 0, abx: 0, aby: 0, given: 'xy' }, { vx: -5.482, vy: -9.142, speed: 10.66 }, { note: 'A is the ship at 20 m/s, 45° above the x axis; B is the smoke, carried at the wind velocity, 10 m/s at 30°. The printed answer is the vector (5√3 − 10√2, 5 − 10√2) m/s.' }),
     ],
   }),
 ];

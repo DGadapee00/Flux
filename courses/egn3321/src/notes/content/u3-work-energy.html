@@ -6,20 +6,36 @@
 </head>
 <body>
 <header class="top">
-  <p class="eyebrow">EGN 3321 · Dynamics · Unit 3 · Hibbeler Ch 14</p>
+  <p class="eyebrow">EGN 3321 · Dynamics · Unit 4 · Hibbeler Ch 14</p>
   <h1>Work and energy</h1>
   <p class="lede">Work connects the speed at two positions. A spring cares about its end stretches. Gravity cares about the change in height. Friction cares about the path. Each rule is derived from \(\sum F = ma\), and the numbers below are recomputed.</p>
-  <nav class="toc">
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The principle and the work of forces</h3>
     <a href="#s1"><span>01</span>Principle of work and energy</a>
     <a href="#s2"><span>02</span>Work of a spring</a>
     <a href="#s3"><span>03</span>Friction on a slide</a>
+    <h3>Part II · Power and path independence</h3>
     <a href="#s4"><span>04</span>Power and efficiency</a>
     <a href="#s5"><span>05</span>Path independence</a>
+    <h3>Part III · An application</h3>
     <a href="#s6"><span>06</span>Application: crush pads on a lander</a>
+    <h3>Reference</h3>
     <a href="#s7"><span>07</span>Formula sheet</a>
   </nav>
 </header>
 <main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The principle and the work of forces</h2>
+</div>
+
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Principle of work and energy</h2>
 <p>Kinetic energy is \(\tfrac{1}{2}mv^2\). The work of every force, from position 1 to position 2, changes that energy.</p>
@@ -54,13 +70,11 @@ T_1 + \sum U_{1-2} = T_2, \qquad U_{1-2} = \int_1^2 \vec F \cdot d\vec r.
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The spring work is not \(\tfrac{1}{2}ks_2^2\) by itself. Both end stretches enter: \(\tfrac{1}{2}k(s_1^2 - s_2^2)\). Hibbeler §14.1.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Sum the work of the weight, the spring, and friction. Solve for the unknown speed, or for the unknown distance. A force perpendicular to the motion does no work.</p>
-</div>
 <p>In the Collar lab, the readout lists each force's work separately. A step-by-step integration of \(\sum F = ma\) along the rod arrives at the same speed.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>Work and energy give the speed at two positions and leave out the time between them. They also cannot find a force that does no work, such as the rod's normal force. For those, return to \(\sum F = ma\) in the normal direction. Measure \(x\) down the rod from the unstretched point: the spring lies along the rod, so the stretch equals \(x\).</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/20-5-work-kinetic-energy-theorem/" target="_blank" rel="noopener">20.5 Work-Kinetic Energy Theorem</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/20-1-kinetic-energy/" target="_blank" rel="noopener">20.1 Kinetic Energy</a>.</p>
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Work of a spring</h2>
@@ -86,13 +100,11 @@ U_s = \tfrac{1}{2}k(s_1^2 - s_2^2).
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Going past the end and coming back does not add spring work. The extra stretch is undone on the way back. Hibbeler §14.1.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Use the stretch at the start and the stretch at the end. Do not add the stretch at a turnaround. Stretch is measured from the spring's natural length.</p>
-</div>
 <p>In the Collar lab, the Out and back scenario prints the spring work and the direct end-to-end value side by side. They agree to the joule.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The spring is linear and massless. A coil with its own mass carries kinetic energy of its own, and a force that is not proportional to stretch does not use \(\tfrac{1}{2}k\) times the change in the square of the stretch. A real bumper also loses some energy to internal damping, so the cart rebounds slower than it arrived.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-8-potential-energy-and-energy-conservation/23-4-potential-energy-of-a-spring/" target="_blank" rel="noopener">23.4 Potential Energy of a Spring</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/20-3-work-by-a-non-constant-force/" target="_blank" rel="noopener">20.3 Work by a Non-Constant Force</a>.</p>
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Friction on a slide</h2>
@@ -123,7 +135,14 @@ U_s = \tfrac{1}{2}k(s_1^2 - s_2^2).
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>On a rough rod the normal is \(mg\cos\theta\), the weight component perpendicular to the rod. A spring that pushes into the rod, or a curved rod, changes \(N\) along the way. The kinetic coefficient is constant, and the heat it makes is never followed: no part of the model warms up.</p>
 </div>
+<p class="bridge">Part I counted the work of each force. Part II asks how fast the work is done, and when its value does not depend on the path.</p>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/22-2-path-dependence-friction/" target="_blank" rel="noopener">22.2 Path Dependence - Friction</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/21-6-worked-example-block-going-down-a-ramp/" target="_blank" rel="noopener">21.6 Worked Example - Block Going Down a Ramp</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Power and path independence</h2>
+</div>
+
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Power and efficiency</h2>
 <p>Power is the work per time. For a force along the velocity, \(P = Fv\). Efficiency is output power divided by input power.</p>
@@ -152,6 +171,7 @@ P = \vec F \cdot \vec v, \qquad \eta = \frac{P_{\text{out}}}{P_{\text{in}}}.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>Power here is a force along a steady velocity. The model leaves out a force that changes through the stroke, a motor whose efficiency depends on speed, and air drag, which grows with the square of speed. At highway speed, drag usually costs more power than the grade.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/20-6-power/" target="_blank" rel="noopener">20.6 Power</a>.</p>
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Path independence</h2>
@@ -180,14 +200,18 @@ U_{\text{cons}} = V_1 - V_2, \qquad T_1 + V_1 = T_2 + V_2.
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Do not cancel friction because the ends match. Matching ends cancel the weight and the spring. They do not cancel friction. Hibbeler §14.5.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Use \(-\Delta V\) for the weight and the spring. Add \(-\mu_k mg\) times the path length when that friction model is the one in the problem.</p>
-</div>
 <p>In the Paths lab, drag the arch higher. The conservative work stays at −3.74 J. The friction work grows with the length of the path.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The friction model on these paths has size \(\mu_k mg\), the horizontal-surface case. On a curved surface \(N\) depends on the curvature and the speed, and the friction work would need them both. The potential \(mgy\) also assumes uniform gravity, fine near the ground and wrong for orbits.</p>
 </div>
+<p class="bridge">Part III uses a force that is nearly constant, a crushing pad, to stop a lander.</p>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/22-1-path-independence-gravity/" target="_blank" rel="noopener">22.1 Path Independence - Gravity</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/22-3-conservative-forces/" target="_blank" rel="noopener">22.3 Conservative Forces</a>.</p>
 </section>
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>An application</h2>
+</div>
+
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Application: crush pads on a lander</h2>
 <p>A lander's legs end in crushable pads. Aluminium honeycomb crushes at a nearly constant force once it starts to buckle. The pad turns the lander's motion into bent metal over a short stroke. Work and energy give that stroke without any time history.</p>
@@ -224,6 +248,7 @@ U_{\text{cons}} = V_1 - V_2, \qquad T_1 + V_1 = T_2 + V_2.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>A real honeycomb pad has a peak force before it starts to crush, then a plateau, then a steep rise when it is fully crushed. The model keeps only the plateau. It treats the lander as one rigid mass: no leg flex, no rebound, and all legs touching at once. A lander that lands on one leg first, or with sideways speed, is a Unit 7 problem.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/20-2-work-by-a-constant-force/" target="_blank" rel="noopener">20.2 Work by a Constant Force</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/22-4-non-conservative-forces/" target="_blank" rel="noopener">22.4 Non-Conservative Forces</a>.</p>
 </section>
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Formula sheet</h2>
@@ -240,5 +265,6 @@ U_{\text{cons}} = V_1 - V_2, \qquad T_1 + V_1 = T_2 + V_2.
 <p>Each line above is the model for this unit. A spring with mass, and a friction coefficient that changes with speed, are left out.</p>
 </section>
 </main>
+<footer>Written for Flux from Hibbeler, Engineering Mechanics: Dynamics, Chapter 14, cited by section, with MIT OCW 8.01SC and 2.003SC as Another view. Every worked answer was recomputed.</footer>
 </body>
 </html>

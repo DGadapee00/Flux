@@ -65,6 +65,9 @@ export const MPS_PER_KNOT = M_PER_NMI / S_PER_H;
 /** Radians per second in one revolution per minute: 2π radians in 60 s. */
 export const RAD_S_PER_RPM = (2 * Math.PI) / S_PER_MIN;
 
+/** Cubic metres in one US gallon: 231 cubic inches, exactly. */
+export const M3_PER_GAL_US = 231 * M_PER_IN ** 3;
+
 /** Pascals in one pound-force per square inch. */
 export const PA_PER_PSI = N_PER_LBF / M_PER_IN ** 2;
 

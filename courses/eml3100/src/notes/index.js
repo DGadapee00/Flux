@@ -33,6 +33,23 @@ export const NOTES = {
       { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u3: {
+    exam: 'u3',
+    title: 'Control volumes: mass and energy',
+    chapters: '5',
+    file: 'u3-control-volumes.html',
+    load: () => import('./content/u3-control-volumes.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'Control volumes and the mass balance', lab: 'nozzle', ch: ['5'], topics: ['mass-flow'] },
+      { id: 's2', n: 2, title: 'The steady-flow energy equation', lab: 'devices', ch: ['5'], topics: ['control-volume'], home: true },
+      { id: 's3', n: 3, title: 'Turbines and compressors', lab: 'devices', ch: ['5'], topics: ['turbine', 'compressor'] },
+      { id: 's4', n: 4, title: 'Nozzles and diffusers', lab: 'nozzle', ch: ['5'], topics: ['nozzle', 'diffuser'] },
+      { id: 's5', n: 5, title: 'Throttles', lab: 'devices', ch: ['5'], topics: ['throttle'] },
+      { id: 's6', n: 6, title: 'Mixing chambers and heat exchangers', lab: 'devices', ch: ['5'], topics: ['mixing', 'heat-exchanger'] },
+      { id: 's7', n: 7, title: 'Application: a tankless water heater', lab: 'heater', ch: ['5'], topics: ['english'] },
+      { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;

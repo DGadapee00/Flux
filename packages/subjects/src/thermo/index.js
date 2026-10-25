@@ -19,6 +19,10 @@ export { waterTP, satT, satP, mixT, mixP, waterP, waterTv, WATER_LIMITS } from '
 export {
   R_UNIVERSAL, P_STANDARD, T_REF, AIR, SPECIES, cpR, hRT, sR, cpMolar, hMolar, s0Molar, molarMass, gas, isentropicT, speciesInfo,
 } from './idealgas.js';
+export {
+  massFlow, flowArea, steadyEnergy, exitEnthalpy, exitVelocity, mixing, exchangerColdRise, tFromH, idealGasNozzle,
+  integrateVdp, isentropicVdp, jouleThomsonWater, throttleByJouleThomson,
+} from './flow.js';
 export { temperatureRatio, pressureRatio, densityRatio, areaRatio, machFromArea, chokedMassFlux } from './isentropic.js';
 export {
   SAT_T_GRID, SAT_P_GRID, SUPERHEAT_P_GRID, SUPERHEAT_T_GRID, COMPRESSED_P_GRID, COMPRESSED_T_GRID,

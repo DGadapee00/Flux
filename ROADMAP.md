@@ -49,9 +49,9 @@ subject libraries (a function written for one course serves the next), and one s
 | MAC 2311–2312 Calculus I and II | [mac2311-2312](docs/course-plans/mac2311-2312.md) | two modules, 4 units each, notes | fails | R4: merge into one (D28) |
 | MAC 2313 Calculus III | [mac2313](docs/course-plans/mac2313.md) | labs and bank, no notes | fails | R4 |
 | EGN 3311 Statics | [statics](docs/course-plans/statics.md) | labs and bank, no notes | fails | R4 |
-| EGN 3321 Dynamics | [egn3321](docs/course-plans/egn3321.md) | 7 units, notes | **passes** | swap Units 3–4, app-lab explainers, owner review |
+| EGN 3321 Dynamics | [egn3321](docs/course-plans/egn3321.md) | 7 units, notes | **passes** | app-lab explainers, OCW cases, owner review |
 | EGN 3331 Mechanics of Materials | [egn3331](docs/course-plans/egn3331.md) | Unit 1 of 11 | fails | R3b: confirm the new order, then build |
-| EML 3100 Thermodynamics | [eml3100](docs/course-plans/eml3100.md) | 2 of 5 units | fails | R3a: confirm the order, then build |
+| EML 3100 Thermodynamics | [eml3100](docs/course-plans/eml3100.md) | 3 of 5 units (Unit 3 to the standard) | fails | R3a: Units 4–5, then `why` and traps for Units 1–2 |
 | STA 3032 Statistics | [sta3032](docs/course-plans/sta3032.md) | complete, older style | fails | keep passing; no rework |
 
 ## 3. The build list, in order
@@ -61,9 +61,9 @@ subject libraries (a function written for one course serves the next), and one s
 - [x] **R0** Scorecard (`npm run scorecard`), `standard: false` in every manifest.
 - [x] **R1** The practice loop in the shells (`packages/shells/practice`).
 - [x] **R2** Dynamics to the standard.
-- [ ] **R2b Dynamics follow-ups:** swap Units 3 and 4 so momentum comes before energy (D29); end
-      each application lab's explainer with **What the course model leaves out.** (D30); OCW worked
-      cases and Another view links. Then the owner's review.
+- [ ] **R2b Dynamics follow-ups:** ~~swap Units 3 and 4 so momentum comes before energy (D29)~~ (done); ~~end
+      each application lab's explainer with **What the course model leaves out.** (D30)~~ (done); the Hibbeler citation map,
+      the Flux-units columns and the Another view links (done); the notes' parts, legend and footer (D32, done); OCW worked cases for every unit (done, from 2.003SC solutions; see `courses/egn3321/ERRATA.md`). Then the owner's review.
 - [x] **Reference guide** (AGENTS.md, this roadmap, DECISIONS.md, the standard, a spine for every
       course, the skills).
 - [x] **Inventory** of every course against the outline: `docs/INVENTORY.md`.
@@ -74,8 +74,11 @@ subject libraries (a function written for one course serves the next), and one s
       the legend; the word floor and the fixed end-of-section box are gone from every notes-check.
 - [ ] **A math-shell starter** before MAP 2302 starts: `courses/starter` is on the engineering
       shell. Add the math-shell wiring to it (or a second starter) with the same example unit.
-- [ ] **R3a EML 3100.** The five-unit order in its spine (16.050 Part 0–1, then Yan; D29). Owner
-      confirms. Then Units 3–5 to the standard, and an application lab, `why` and traps for 1–2.
+- [ ] **R3a EML 3100.** The five-unit order in its spine (16.050 Part 0–1, then Yan; D29), confirmed
+      by the owner. Unit 3 (control volumes) is built to the standard: three labs, a tankless-heater
+      application lab, 16 templates, notes in PHY 2049's layout. Still to do: Units 4–5 (cycles and
+      the second law, entropy) to the standard, an application lab for each, and `why`, traps,
+      conceptual problems and the notes layout for Units 1–2.
 - [ ] **R3b EGN 3331.** The eleven-unit order in its spine (2.001, energy methods back; D29, D31).
       Owner confirms. Then Unit 1's gaps, and Units 2–11 to the standard.
 

@@ -1,4 +1,4 @@
-/** Unit 4 worked examples the labs can show. See ../setups.js. */
+/** Impulse and momentum (id u4, Unit 3) worked examples the labs can show. See ../setups.js. */
 export default {
   s1: [
     {

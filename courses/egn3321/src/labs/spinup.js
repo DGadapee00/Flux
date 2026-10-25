@@ -2,7 +2,7 @@ import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
 import { C, alpha, arrow, axes, begin, dot, label, line, note, plotIn, sceneIn } from './diagram.js';
 import { defineLab } from './define2d.js';
-import { bindSlider, slider } from './widgets.js';
+import { bindSlider, slider, leavesOut } from './widgets.js';
 
 const RPM = (2 * Math.PI) / 60;
 
@@ -88,6 +88,9 @@ export function spinupByStepping({ I, M, Mf, Mr, rpm }) {
   }
   return Infinity;
 }
+
+/** What the real device has that the model ignores (D30). */
+const OUT = String.raw`A real starter turbine's torque falls as it speeds up. The pump's torque follows $\omega^2$ only near its design point, and the bearing friction here is a constant. The shaft is rigid: a real shaft twists, and a long one has critical speeds to pass through on the way up. Fluid in the impeller adds inertia that this $I$ leaves out.`;
 
 export default defineLab({
   id: 'spinup',
@@ -229,7 +232,7 @@ export default defineLab({
       ['t rated', c.reaches ? `${fig(c.tRated)} s` : 'never'],
     ]);
   },
-  coach(state, c) {
+  coach: leavesOut(OUT, (state, c) => {
     if (!c.reaches) {
       return {
         title: 'The starter cannot reach rated speed',
@@ -240,7 +243,7 @@ export default defineLab({
       title: 'Inertia sets how fast, the load sets how far',
       body: String.raw`From rest, $\alpha_0 = ${fig(c.alpha0)}$ rad/s². At that rate the rotor would reach rated speed in $${fig(c.tLinear)}$ s. The pump load slows the climb, and it takes $${fig(c.tRated)}$ s.`,
     };
-  },
+  }),
   predictions: [
     {
       id: 'sp-inertia',

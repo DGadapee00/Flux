@@ -5,6 +5,7 @@
 import { G, G_FT } from '@flux/subjects/mechanics/constants.js';
 
 export { G, G_FT };
+export { cite } from '../data/textbook.js';
 
 export const range = (min, max, step, unit = '', si = 1) => ({ type: 'range', min, max, step, unit, si });
 export const choice = (...opts) => ({ type: 'choice', options: opts.map(([value, label]) => ({ value, label })) });

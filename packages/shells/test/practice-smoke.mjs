@@ -4,9 +4,8 @@
  *
  *   node test/practice-smoke.mjs      (from packages/shells; starts its own server on 5190)
  *
- * At 380×820 (a touch phone) and 1280×800, in the math and the engineering shell: the principle
- * step holds the parts back until a principle is picked; a wrong pick says which one decides it; a
- * worked example sits above a first problem; a trap value gets its message and a wrong option its
+ * At 380×820 (a touch phone) and 1280×800, in the math and the engineering shell: a problem opens
+ * with its parts and no principle question; a worked example sits above a first problem; a trap value gets its message and a wrong option its
  * why; the solution names the deciding principle and asks what went wrong; the miss shows in the
  * weak-principle list; the notes link calls the course; the lab drawer opens on desktop; the
  * palette inserts and previews a formula; the number pad shows on the phone only; nothing scrolls
@@ -48,18 +47,13 @@ async function run(shell, [w, h]) {
   if (shell === 'physics') await page.click('[data-act="filters"]');
   expect(await page.locator('[data-filter="group:principle"]').count() === 1, `${tag}: no "group by principle" chip`);
 
-  // A numeric problem: principle step first, parts held back.
+  // A numeric problem: no principle question, the parts are there at once.
   await page.click('[data-open="f.1.force"]');
-  await page.waitForSelector('.pb-principle');
-  expect((await page.locator('.pb-parts').count()) === 0, `${tag}: the parts show before a principle is picked`);
-  expect((await page.locator('.pb-popt').count()) === 4, `${tag}: the principle step does not offer four principles`);
+  await page.waitForSelector('.pb-parts');
+  expect((await page.locator('.pb-principle, .pb-popt').count()) === 0, `${tag}: a principle question is on the page`);
+  expect(!/which principle decides/i.test(await page.textContent('#problems')), `${tag}: the problem asks which principle decides it`);
   expect((await page.locator('.pb-notes').count()) === 1, `${tag}: no notes link`);
-  const wrong = await page.$$eval('.pb-popt', (els) => els.map((e) => e.dataset.principle).find((p) => p !== 'newton'));
-  await page.click(`[data-principle="${wrong}"]`);
-  await page.waitForSelector('.pb-principle.done.bad');
-  expect(/Newton’s second law/.test(await page.textContent('.pb-principle')), `${tag}: a wrong pick does not name the deciding principle`);
   expect((await page.locator('.pb-guide .pb-guide-h').count()) === 1, `${tag}: no worked example on a first problem`);
-  expect((await page.locator('.pb-parts').count()) === 1, `${tag}: the parts do not open after the pick`);
   const pad = await page.locator('.pb-numpal').first().isVisible();
   expect(pad === phone, `${tag}: the number pad is ${pad ? 'shown' : 'hidden'}`);
 
@@ -93,9 +87,7 @@ async function run(shell, [w, h]) {
 
   // A choice problem: a wrong option's why.
   await page.click('[data-open="f.1.which"]');
-  await page.waitForSelector('.pb-principle');
-  await page.click('[data-principle="energy"]');
-  await page.waitForSelector('.pb-principle.done.ok');
+  await page.waitForSelector('.pb-parts');
   const opt = await page.$$eval('[data-choice="0"]', (els) => els.findIndex((e) => e.nextElementSibling.textContent.includes('Impulse')));
   await page.check(`[data-choice="0"][value="${opt}"]`);
   await page.click('[data-act="check"]');
@@ -105,8 +97,6 @@ async function run(shell, [w, h]) {
   // A formula: the palette inserts, the preview typesets.
   await page.click('[data-act="list"]');
   await page.click('[data-open="f.1.formula"]');
-  await page.waitForSelector('.pb-principle');
-  await page.click('[data-principle="kinematics"]');
   await page.waitForSelector('.pb-parts .pb-pal');
   await page.click('[data-key-for="0"][data-ins="a"]');
   await page.click('[data-key-for="0"][data-ins="t"]');
