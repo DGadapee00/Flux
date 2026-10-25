@@ -275,6 +275,11 @@ class Element extends Node {
     return selector.split(',').some((part) => matchSimple(this, part.trim()));
   }
 
+  contains(other) {
+    for (let node = other; node; node = node.parentNode) if (node === this) return true;
+    return false;
+  }
+
   closest(selector) {
     let node = this;
     while (node && node.nodeType === 1) {

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Browser smoke for the practice loop in both shells, on the fixture course (test/fixture/).
+ * Browser smoke for the practice loop in the three shells, on the fixture course (test/fixture/).
  *
  *   node test/practice-smoke.mjs      (from packages/shells; starts its own server on 5190)
  *
@@ -44,6 +44,8 @@ async function run(shell, [w, h]) {
   await page.goto(`${BASE}${shell}.html`, { waitUntil: 'networkidle' });
   await page.click('#btn-practice');
   await page.waitForSelector('#problems:not([hidden]) .pb-list');
+  // The physics panel keeps its filters folded behind a toggle.
+  if (shell === 'physics') await page.click('[data-act="filters"]');
   expect(await page.locator('[data-filter="group:principle"]').count() === 1, `${tag}: no "group by principle" chip`);
 
   // A numeric problem: principle step first, parts held back.
@@ -113,6 +115,17 @@ async function run(shell, [w, h]) {
   await page.waitForSelector('.pb-preview .katex');
   expect(true, '');
 
+  // The physics shell's own pieces, on a course with no electromagnetic data.
+  if (shell === 'physics') {
+    const missing = await page.evaluate(() => window.__fixture.chromeIds.filter((id) => !document.getElementById(id)));
+    expect(missing.length === 0, `${tag}: the chrome is missing ${missing.join(', ')}`);
+    expect((await page.locator('#exam-select option').count()) === 2, `${tag}: the unit picker does not list both units`);
+    expect(/FIX 1000/.test(await page.textContent('#brand-sub')), `${tag}: the sub-title lost the course code`);
+    await page.evaluate(() => window.__fixture.units.toggle());
+    expect(/force/.test(await page.textContent('#units-ref')), `${tag}: the units panel does not list its rows`);
+    await page.evaluate(() => window.__fixture.units.close());
+  }
+
   // Nothing sideways at either size.
   const wide = await page.evaluate(() => {
     const p = document.getElementById('problems');
@@ -124,7 +137,7 @@ async function run(shell, [w, h]) {
 }
 
 try {
-  for (const shell of ['engineering', 'math']) {
+  for (const shell of ['engineering', 'math', 'physics']) {
     for (const size of [[1280, 800], [380, 820]]) await run(shell, size);
   }
 } finally {
@@ -136,4 +149,4 @@ if (fails.length) {
   console.error(`practice smoke: ${fails.length} problem(s)\n  ${fails.join('\n  ')}`);
   process.exit(1);
 }
-console.log(`practice smoke: both shells at 1280×800 and 380×820 · ${checks} checks · no page errors`);
+console.log(`practice smoke: three shells at 1280×800 and 380×820 · ${checks} checks · no page errors`);

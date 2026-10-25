@@ -1,3 +1,9 @@
+// Before KaTeX's CSS, as the stylesheet links were before it: the cascade order is unchanged.
+// em-main.css holds the rules only this course's labs use, split out of the shell's main.css.
+import '@flux/shells/physics/styles/main.css';
+import './styles/em-main.css';
+import '@flux/shells/physics/styles/practice.css';
+import '@flux/shells/physics/styles/mobile.css';
 import 'katex/dist/katex.min.css';
 import { mountTrackBar } from '@flux/core';
 import * as THREE from 'three';
@@ -16,6 +22,7 @@ import { applyProblem } from './problems/simbridge.js';
 import { applyExample } from './notes/setups.js';
 import { createPractice } from './ui/problems.js';
 import { createUnits } from './ui/units.js';
+import { renderChrome } from '@flux/shells/physics/chrome.js';
 import { createPredict } from './ui/predict.js';
 import { createNotes } from './ui/notes.js';
 import { createDerive } from './ui/derive.js';
@@ -35,6 +42,13 @@ console.info(
   `FLUX build ${__BUILD__.commit}${__BUILD__.subject ? ` — ${__BUILD__.subject}` : ''} (built ${__BUILD__.built})`,
 );
 window.__build = __BUILD__;
+
+// The page's panels, before anything reads an element by id.
+renderChrome(document.getElementById('app'), {
+  code: course.code,
+  setupHint: 'Drag charges through the surface',
+  unitName: 'Exam',
+});
 
 const brand = document.getElementById('brand');
 mountTrackBar(brand, { currentId: course.id, courses: TRACK });

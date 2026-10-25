@@ -6,6 +6,7 @@
   "exports": {
     "./math/*": "./math/*",
     "./engineering/*": "./engineering/*",
+    "./physics/*": "./physics/*",
     "./styles/*": "./styles/*",
     "./notes.js": "./notes.js",
     "./practice/*": "./practice/*"
