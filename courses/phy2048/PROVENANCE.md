@@ -14,6 +14,13 @@ The units follow that volume's chapters in the book's order (D33), as set in `do
 
 ## What is in this folder
 
-The catalog of 13 units, the page wiring, the citation map `src/data/textbook.js` (section titles only), and a problem bank for the chapters 2–13 and 15. Chapters 1, 14, 16 and 17 have no problems yet. Five labs are logic only: projectile, incline, track, collide and rotor. Their numbers are computed in this folder. The course runs on the physics shell (`npm run dev`, port 5180) with Practice, Notes, the units reference and Predict first. Unit 1 (Ch 1–3) is built: three labs, notes, and 34 problems. The other units' canvases show only the grid until each unit's PR draws its labs. The hub links the course.
+The catalog of 13 units, the page wiring, the citation map `src/data/textbook.js` (section titles only), and a problem bank for the chapters 2–13 and 15. Chapters 1, 14, 16 and 17 have no problems yet. Four older labs are logic only: incline, track, collide and rotor. Their numbers are computed in this folder. The course runs on the physics shell (`npm run dev`, port 5180) with Practice, Notes, the units reference and Predict first. Unit 1 (Ch 1–3) is built: three labs, notes, and 34 problems. Unit 2 (Ch 4) is built: four labs, notes, and 17 problems. The other units' canvases show only the grid until each unit's PR draws its labs. The hub links the course.
+
+## Application lab numbers
+
+- `stopping-distance` (Unit 1): OpenStax §3.4, "How Far Does a Car Go?".
+- `wind-triangle` (Unit 2): OpenStax §4.5, "Flying a Plane in a Wind" (300 km/h, a 90 km/h wind from the northeast). The Cessna 172 cruises at about 120 kn true airspeed (Cessna 172S Pilot's Operating Handbook, cruise performance). The Boeing 737-800 cruises at Mach 0.785, about 450 kn at 35 000 ft (Boeing 737 airport planning document). Jet-stream winds of 150 kn and more: NOAA National Weather Service, JetStream. Only the figures are used; no text or figure is copied.
+
+The book's source text was read from the public `openstax/osbooks-university-physics-bundle` repository, in a clone outside this repo. Nothing from it is committed.
 
 The shared mechanics functions live in `packages/subjects/src/mechanics/`. They are not course material.

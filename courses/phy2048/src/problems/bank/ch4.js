@@ -451,10 +451,12 @@ export default [
     topics: ['circular'],
     vars: {
       rep: choice(['rpm', 'revolutions per minute'], ['period', 'the time for one turn']),
-      r: range(0.1, 2, 0.1, 'm'),
-      rpm: range(30, 3000, 30, 'rpm'),
+      r: range(0.1, 1.5, 0.1, 'm'),
+      rpm: range(60, 1800, 60, 'rpm'),
       T: range(0.5, 10, 0.5, 's'),
     },
+    // Drawn versions stay with fans and wheels a student can picture, tips under 40 m/s. A case (Venus) may go past.
+    sampleValid: ($) => $.v <= 40,
     derive: ($) => {
       const omega = $.rep === 'rpm' ? $.rpm * RAD_S_PER_RPM : (2 * Math.PI) / $.T;
       const m = circularMotion({ r: $.r, v: omega * $.r });

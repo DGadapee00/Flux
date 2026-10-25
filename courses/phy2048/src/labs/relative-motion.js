@@ -190,13 +190,18 @@ export default defineLab({
     const [ox, oy] = P({ x: 0, y: 0 });
     const [axp, ayp] = P(u);
     const [bx, by] = P(r);
+    // A flat triangle (the two velocities in line) would draw the sum on top of them: slide it aside.
+    const flat = Math.abs((axp - ox) * (by - oy) - (ayp - oy) * (bx - ox)) < 0.4;
+    const L = Math.hypot(bx - ox, by - oy) || 1;
+    const sx = flat ? ((by - oy) / L) * 0.32 : 0;
+    const sy = flat ? (-(bx - ox) / L) * 0.32 : 0;
     placeArrow(h.uArrow, ox, oy, axp, ayp, 0.05);
     placeArrow(h.wArrow, axp, ayp, bx, by, 0.05);
-    placeArrow(h.rArrow, ox, oy, bx, by, 0.04);
+    placeArrow(h.rArrow, ox + sx, oy + sy, bx + sx, by + sy, 0.04);
     const names = NAMES[state.kind];
     labelBeside(h.uName, `${names.u}<br>${fmt(state.u.s, 3)} ${state.unit}`, ox, oy, axp, ayp, bx, by);
     labelBeside(h.wName, `${names.w}<br>${fmt(state.w.s, 3)} ${state.unit}`, axp, ayp, bx, by, ox, oy);
-    labelBeside(h.rName, `${names.r}<br>${fmt(computed.speed, 3)} ${state.unit}`, ox, oy, bx, by, axp, ayp);
+    labelBeside(h.rName, `${names.r}<br>${fmt(computed.speed, 3)} ${state.unit}`, ox + sx, oy + sy, bx + sx, by + sy, axp, ayp, -1);
   },
   law: (state) => (state && NAMES[state.kind]?.minus
     ? [String.raw`\vec v_{CT} = \vec v_{CE} + \vec v_{ET} = \vec v_{CE} - \vec v_{TE}`]

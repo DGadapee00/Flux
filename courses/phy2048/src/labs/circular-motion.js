@@ -184,8 +184,8 @@ export default defineLab({
     updateFatLine(h.radius, [0, CY, 0, px, py, 0]);
     h.particle.position.set(px, py, 0.06);
     h.rName.element.innerHTML = `<i>r</i> = ${fmt(state.r, 4)} m`;
-    // On the radius, near the centre, on the side the velocity points away from.
-    h.rName.position.set(0.3 * px + 0.75 * s, CY + 0.3 * (py - CY) - 0.75 * c, 0);
+    // Beside the radius, near the centre, on the side the velocity points to; the label for a sits on the other.
+    h.rName.position.set(0.3 * px - 0.75 * s, CY + 0.3 * (py - CY) + 0.75 * c, 0);
     // The velocity is tangent, counterclockwise, drawn at a fixed length: its direction is the point.
     const tx = -s;
     const ty = c;

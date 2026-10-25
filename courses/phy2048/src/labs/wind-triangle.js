@@ -188,12 +188,17 @@ export default defineLab({
     const [ox, oy] = P({ x: 0, y: 0 });
     const [ax, ay] = P(a);
     const [gx, gy] = P(g);
+    // A flat triangle (wind along the course) would draw the ground speed on top of the others: slide it aside.
+    const flat = Math.abs((ax - ox) * (gy - oy) - (ay - oy) * (gx - ox)) < 0.4;
+    const L = Math.hypot(gx - ox, gy - oy) || 1;
+    const sx = flat ? ((gy - oy) / L) * 0.32 : 0;
+    const sy = flat ? (-(gx - ox) / L) * 0.32 : 0;
     placeArrow(h.air, ox, oy, ax, ay, 0.05);
     placeArrow(h.wind, ax, ay, gx, gy, 0.05);
-    placeArrow(h.ground, ox, oy, gx, gy, 0.04);
+    placeArrow(h.ground, ox + sx, oy + sy, gx + sx, gy + sy, 0.04);
     labelBeside(h.airName, `heading ${fmt(computed.heading, 3)}°<br>${fmt(state.air, 3)} km/h`, ox, oy, ax, ay, gx, gy);
     labelBeside(h.windName, `wind<br>${fmt(state.wind, 3)} km/h`, ax, ay, gx, gy, ox, oy);
-    labelBeside(h.groundName, `course ${fmt(state.track, 3)}°<br>${fmt(computed.ground, 4)} km/h`, ox, oy, gx, gy, ax, ay);
+    labelBeside(h.groundName, `course ${fmt(state.track, 3)}°<br>${fmt(computed.ground, 4)} km/h`, ox + sx, oy + sy, gx + sx, gy + sy, ax, ay, -1);
   },
   law: () => [
     String.raw`\vec v_{PG} = \vec v_{PA} + \vec v_{AG}`,

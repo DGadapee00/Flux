@@ -172,18 +172,21 @@ export function placeArrow(arrow, x0, y0, x1, y1, z = 0.04) {
 }
 
 /**
- * Place a label beside the segment (x0, y0)–(x1, y1), on the side away from the point (xo, yo).
+ * Place a label beside the segment (x0, y0)–(x1, y1), on the side away from the point (xo, yo), or on
+ * the left (side 1) or right (side −1) of it when that point is on the line.
  * The label renderer centres a label on its point, so the offset grows with the label's half-width
  * when the segment is steep: about 0.1 scene units per character of its longest line.
  */
-export function labelBeside(lab, html, x0, y0, x1, y1, xo, yo) {
+export function labelBeside(lab, html, x0, y0, x1, y1, xo, yo, side = 1) {
   lab.element.innerHTML = html;
   const L = Math.hypot(x1 - x0, y1 - y0) || 1;
   let nx = -(y1 - y0) / L;
   let ny = (x1 - x0) / L;
   const mx = 0.5 * (x0 + x1);
   const my = 0.5 * (y0 + y1);
-  if (nx * (xo - mx) + ny * (yo - my) > 0) {
+  // A third point on the line itself (a flat triangle) cannot pick a side, so `side` does.
+  const toward = nx * (xo - mx) + ny * (yo - my);
+  if (Math.abs(toward) < 0.2 ? side < 0 : toward > 0) {
     nx = -nx;
     ny = -ny;
   }

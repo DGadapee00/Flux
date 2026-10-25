@@ -324,11 +324,13 @@ export default defineLab({
 
     // The top of the flight.
     hd.apex.visible = computed.tTop > 0;
-    hd.apexName.visible = hd.apex.visible;
+    // The label would sit on the ball when the chosen moment is near the top.
+    hd.apexName.visible = hd.apex.visible && Math.hypot((computed.x - computed.xTop) * k, (computed.y - computed.hMax) * k) > 1.4;
     if (hd.apex.visible) {
       hd.apex.position.set(sx(computed.xTop), sy(computed.hMax), 0.05);
       hd.apexName.element.innerHTML = `top, ${fmt(computed.hMax, 3)} m`;
-      hd.apexName.position.set(sx(computed.xTop), sy(computed.hMax) + 0.42, 0);
+      // Under the arch, where the path leaves room and the velocity arrows do not reach.
+      hd.apexName.position.set(sx(computed.xTop), sy(computed.hMax) - 0.45, 0);
     }
 
     // The ball at the chosen moment, its velocity, its parts, and g.
@@ -350,7 +352,8 @@ export default defineLab({
     hd.gName.position.set(bx + 0.3, by - 1.0, 0);
 
     // Ticks in metres along the floor and up the left side.
-    const stepX = niceStep(xHi - xLo, 5);
+    // Ticks no closer than about a label's width (x) and height (y) on screen.
+    const stepX = niceStep(xHi - xLo, Math.max(2, Math.min(5, Math.floor(BOX.w / 1.6))));
     let n = 0;
     for (let x = Math.ceil(xLo / stepX) * stepX; x <= xHi + 1e-9 && n < hd.xTicks.length; x += stepX) {
       const tick = hd.xTicks[n++];
@@ -359,7 +362,7 @@ export default defineLab({
       tick.position.set(sx(x), BOX.bottom - 0.32, 0);
     }
     for (; n < hd.xTicks.length; n += 1) hd.xTicks[n].visible = false;
-    const stepY = niceStep(yHi - yLo, 4);
+    const stepY = niceStep(yHi - yLo, Math.max(1, Math.min(4, Math.floor(((yHi - yLo) * k) / 0.75))));
     n = 0;
     for (let y = Math.ceil(yLo / stepY) * stepY; y <= yHi + 1e-9 && n < hd.yTicks.length; y += stepY) {
       const tick = hd.yTicks[n++];
