@@ -2,6 +2,7 @@ import { createPractice as createPhysicsPractice } from '@flux/shells/physics/pr
 import { LAB_META, chapterSpan, examById, examLabel } from '../catalog.js';
 import { GLYPH, checkUnits, choiceOptions, compile, exprToTex, expected, grade, instance, render, sig, withinTol } from '../problems/engine.js';
 import { CHAPTER_ORDER, CHAPTER_TITLES, PROBLEMS, problemById, problemsForExam } from '../problems/index.js';
+import { sectionForProblem } from '../notes/index.js';
 import { INTERVAL_DAYS, MASTERED_BOX, createProgress, pickInterleave, pickSet } from '../problems/progress.js';
 
 /** What a part with no label is called, when its id is a symbol: ("th" → "θ"). */
@@ -34,6 +35,7 @@ export function createPractice(api) {
     examNote: (unit) => `Ch ${chapterSpan(unit)}`,
     LAB_META,
     homeId: 'u1',
+    sectionForProblem,
     exprToTex,
     GLYPH,
     paletteConsts: ['g', 'pi'],

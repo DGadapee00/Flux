@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Units, Vectors and Motion Along a Line</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">PHY 2048 · Physics I · Unit 1 · OpenStax University Physics Vol. 1, Ch 1–3, rewritten</div>
+  <h1>Units, Vectors and Motion Along a Line</h1>
+  <p class="lede">Measure with care, add vectors by their components, and describe motion on a line with one idea: a rate of change, and the area under it.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Measuring</h3>
+    <a href="#s1"><span>1</span>Units, prefixes and conversion</a>
+    <a href="#s2"><span>2</span>Dimensions and estimates</a>
+    <a href="#s3"><span>3</span>Significant figures and uncertainty</a>
+    <h3>Part II · Vectors</h3>
+    <a href="#s4"><span>4</span>Components, magnitude and direction</a>
+    <a href="#s5"><span>5</span>Adding and subtracting vectors</a>
+    <a href="#s6"><span>6</span>The dot and cross products</a>
+    <h3>Part III · Motion along a line</h3>
+    <a href="#s7"><span>7</span>Position, displacement and velocity</a>
+    <a href="#s8"><span>8</span>Acceleration</a>
+    <a href="#s9"><span>9</span>Motion with constant acceleration</a>
+    <a href="#s10"><span>10</span>Free fall</a>
+    <a href="#s11"><span>11</span>Velocity and position from an acceleration that changes</a>
+    <h3>Reference</h3>
+    <a href="#s12"><span>12</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Measuring</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Units, prefixes and conversion</h2>
+<p>A measurement is a number and a unit. The number alone says nothing: 5 might be seconds, meters or kilograms. Physics uses the SI system. Its base units here are the meter (m), the kilogram (kg) and the second (s). Every other unit is a product or quotient of these, such as the newton or the joule.</p>
+<p>A prefix scales a unit by a power of ten. Kilo is \(10^3\), mega \(10^6\), giga \(10^9\), tera \(10^{12}\), peta \(10^{15}\) and exa \(10^{18}\). Milli is \(10^{-3}\) and micro \(10^{-6}\). Prefixes do not stack. The kilogram already carries one, so to give a mass a different prefix, go back to grams first.</p>
+<div class="box ex"><span class="tag">Worked example · choosing a prefix</span>
+<p>Restate \(1.93\times10^{13}\ \text{kg}\) so the number is between 1 and 1000. In grams it is \(1.93\times10^{16}\ \text{g}\). That sits between \(10^{15}\) (peta) and \(10^{18}\) (exa). With peta the number is \(19.3\). So the mass is \(19.3\ \text{Pg}\).</p>
+</div>
+<h3>Converting</h3>
+<p>A conversion factor is a ratio equal to 1, such as \(1609.344\ \text{m}/1\ \text{mi}\). Multiplying by 1 changes the unit and not the quantity. Write each factor so the unit you want to remove cancels, and the units tell you whether it is the right way up. One mile is 5280 ft and one foot is exactly 0.3048 m, so one mile is exactly 1609.344 m.</p>
+<div class="box ex"><span class="tag">Worked example · a drive home</span>
+<p>The drive from the university to home is 10 mi and takes 20 min. The average speed is distance over time.</p>
+\[
+v = \frac{10\ \text{mi}}{20\ \text{min}} \times \frac{1609.344\ \text{m}}{1\ \text{mi}} \times \frac{1\ \text{min}}{60\ \text{s}} = \frac{16\,093.44\ \text{m}}{1200\ \text{s}} = 13.4\ \text{m/s}.
+\]
+<p>The distance is \(16.09\ \text{km}\). The textbook rounds a mile to 1609 m and prints 13 m/s. The unrounded answer is 13.4 m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a speed limit</span>
+<p>A highway limit is 65 mi/h. The distance factor is the same, and an hour is 3600 s.</p>
+\[
+65\ \tfrac{\text{mi}}{\text{h}}\times\frac{1609.344\ \text{m}}{1\ \text{mi}}\times\frac{1\ \text{h}}{3600\ \text{s}} = 29.1\ \text{m/s}.
+\]
+<p>In kilometers per hour that is \(65\times1.609344 = 104.6\ \text{km/h}\). To go from km/h to m/s, divide by 3.6. To go the other way, multiply by 3.6.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Dividing 16 093 m by 20 min gives 805 m per minute, and it is not a speed in m/s. The minutes have to become seconds too. Treating the 20 minutes as 20 hours is the same error with a different factor.</p>
+<p>A mile is not 1000 m. The 1000 belongs to the kilometer. Mixing them up makes a 10 mi trip look like 10 km, which is about 40% too short.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Dimensions and estimates</h2>
+<p>A dimension says what kind of quantity something is: length L, mass M, time T. A speed has dimension \(\text{L}\,\text{T}^{-1}\) whatever the units, miles per hour or meters per second. Two rules follow. Quantities that are added or set equal must have the same dimension. And the argument of a sine, an exponential or a logarithm must be a pure number.</p>
+<p>These rules check an equation before any numbers go in. They can also fix its shape. A stone dropped from a height \(h\) falls for a time \(t\) that can depend only on \(h\) and \(g\). Write \(t\propto h^a g^b\). The dimensions of the right side are \(\text{L}^{a+b}\,\text{T}^{-2b}\), and the left side is \(\text{T}\). So \(-2b = 1\) and \(a + b = 0\), which gives \(b=-\tfrac12\) and \(a = \tfrac12\):</p>
+\[
+t \propto \sqrt{\frac{h}{g}}.
+\]
+<p>Dimensions cannot give the pure number in front. Section 10 finds it is \(\sqrt2\).</p>
+<div class="box ex"><span class="tag">Worked example · checking equations</span>
+<p>Take \([s]=\text{L}\), \([v]=\text{L}\,\text{T}^{-1}\), \([a]=\text{L}\,\text{T}^{-2}\) and \([t]=\text{T}\). First, \(s = vt + \tfrac12 at^2\). The terms are \(\text{L}\), \(\text{L}\,\text{T}^{-1}\cdot\text{T}=\text{L}\) and \(\text{L}\,\text{T}^{-2}\cdot\text{T}^2=\text{L}\). They agree, so it is consistent.</p>
+<p>Second, \(s = vt^2 + \tfrac12 at\). The terms are \(\text{L}\), \(\text{L}\,\text{T}\) and \(\text{L}\,\text{T}^{-1}\). They disagree, so it is not consistent. Third, \(v = \sin(at^2/s)\). The argument \(at^2/s\) is \(\text{L}\,\text{T}^{-2}\,\text{T}^2/\text{L}\), a pure number, which is allowed. But the sine is then a pure number and \(v\) is not. So it fails.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Consistency is necessary and not sufficient. The equation \(v^2 = v_0^2 + as\) has the right dimensions in every term, and it is still wrong: the correct form has a factor 2 in front of \(as\). Dimensions cannot see a pure number.</p>
+</div>
+<h3>Estimating</h3>
+<p>An estimate asks for the order of magnitude, the nearest power of ten, with a stated chain of reasoning. Build the quantity from simpler ones: a mass from a density and a volume, a volume from an area and a depth. Where you cannot recall a value, bound it between a number that is too small and one that is too big, and take the middle of the powers of ten. One significant figure is enough.</p>
+<div class="box ex"><span class="tag">Worked example · the mass of the oceans</span>
+<p>Water covers most of Earth's surface, so take the ocean area as the area of a sphere of diameter \(d = 10^7\ \text{m}\): \(A=\pi d^2 \approx 3\times10^{14}\ \text{m}^2\). The deepest water is about 10 km and a depth over 1 km is common, so take the average depth as \(\sqrt{10^3\times10^4}\approx3\times10^3\ \text{m}\). Then</p>
+\[
+M = \rho A D = (10^3\ \text{kg/m}^3)(\pi\times10^{14}\ \text{m}^2)(3\times10^{3}\ \text{m}) = 9.4\times10^{20}\ \text{kg}.
+\]
+<p>The order of magnitude is \(10^{21}\ \text{kg}\). The book rounds \(\pi\) to 3 and prints \(9\times10^{20}\ \text{kg}\). It lies between the mass of the atmosphere, about \(10^{19}\ \text{kg}\), and the mass of Earth, about \(10^{25}\ \text{kg}\), so it is plausible.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The ocean does not cover the whole surface, and its depth is not uniform. An estimate trusts that errors above and below roughly cancel. It is good to a factor of a few, and no better.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Significant figures and uncertainty</h2>
+<p>Every measurement has an uncertainty. A reading of 5.1 kg with an uncertainty of 0.3 kg is written \(5.1\pm0.3\ \text{kg}\). The <b>percent uncertainty</b> compares the two:</p>
+\[
+\text{percent uncertainty} = \frac{\delta A}{A}\times100\%.
+\]
+<div class="box ex"><span class="tag">Worked example · a bag of apples</span>
+<p>Four bags of apples read 4.8, 5.3, 4.9 and 5.4 lb. Their average is 5.1 lb. Half the range, \((5.4-4.8)/2\), is 0.3 lb. The percent uncertainty is</p>
+\[
+\frac{0.3}{5.1}\times100\% = 5.9\%.
+\]
+<p>The weight is \(5.1\ \text{lb}\pm6\%\). The pounds cancel, so a percent uncertainty has no unit.</p>
+</div>
+<p>When no uncertainty is given, the digits you write say how good the number is. The significant figures of a number are its digits from the first nonzero one on. The number 0.0620 has three, and 8.5 has two. Two rules follow from adding uncertainties. A product or quotient keeps as many significant figures as the factor with the fewest. A sum or difference keeps as many decimal places as the term with the fewest.</p>
+<p>The reason for the first rule is that relative uncertainties add in a product. In \(0.0620\times8.5\), the first factor is good to \(0.00005/0.0620\approx0.08\%\) and the second to \(0.05/8.5\approx0.6\%\). The product is good to about 0.7%, which is \(0.527\pm0.004\). The digit in the thousandths place is not trustworthy, so write 0.53.</p>
+<div class="box ex"><span class="tag">Worked example · how many digits</span>
+<p>A calculator gives \(0.0620\times8.5 = 0.527\). The fewest significant figures is two, so the result is 0.53. It gives \(125.4+0.62=126.02\). The fewest decimal places is one, so the result is 126.0. For \(120.0-0.46 = 119.54\), one decimal place gives 119.5.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the whole range as the uncertainty doubles it. Half the range is the convention here. Dividing the uncertainty by the first reading and not the average is the same sort of slip.</p>
+<p>Rounding in the middle of a calculation also costs digits. The book adds \(5.73-6.58+4.00=3.15\) from components it rounded to hundredths, and then prints 3.1. Unrounded, the sum is 3.158, which rounds to 3.2. Keep every digit until the last step, then round once.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Vectors</h2>
+</div>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Components, magnitude and direction</h2>
+<p>A <b>scalar</b> has a size and a unit: a time of 5 s, a mass of 4.2 kg, a distance of 12 cm. A <b>vector</b> also has a direction. A displacement of 12 cm to the left and one of 12 cm to the right are different vectors with the same magnitude. Velocity, acceleration and force are vectors. Speed and distance are not.</p>
+<p>Choose perpendicular axes. A vector at angle \(\theta\) counterclockwise from the \(+x\) axis, with magnitude \(A\), makes a right triangle with its two <b>components</b>. Its hypotenuse is \(A\), so</p>
+\[
+A_x = A\cos\theta, \qquad A_y = A\sin\theta, \qquad A = \sqrt{A_x^2 + A_y^2}.
+\]
+<p>The direction comes back from \(\tan\theta = A_y/A_x\). The arctangent returns an angle between \(-90^\circ\) and \(90^\circ\), because a ratio cannot tell \((3,4)\) from \((-3,-4)\). Read the signs of both components to find the quadrant, and add \(180^\circ\) when \(A_x\) is negative.</p>
+<p>In three dimensions the magnitude is \(\sqrt{A_x^2+A_y^2+A_z^2}\). A <b>unit vector</b> has magnitude 1 and carries only a direction. Dividing a vector by its own magnitude gives the unit vector along it, and \(\hat\imath,\hat\jmath,\hat k\) are the ones along the axes, so \(\vec A = A_x\hat\imath + A_y\hat\jmath + A_z\hat k\).</p>
+<div class="box ex"><span class="tag">Worked example · a pointer on a screen</span>
+<p>A mouse pointer moves from (6.0 cm, 1.6 cm) to (2.0 cm, 4.5 cm). The displacement is the final position minus the initial one: \(D_x = 2.0-6.0=-4.0\ \text{cm}\) and \(D_y = 4.5-1.6 = 2.9\ \text{cm}\). Its magnitude is</p>
+\[
+D = \sqrt{(-4.0)^2 + 2.9^2} = 4.9\ \text{cm}.
+\]
+<p>The arctangent gives \(\tan^{-1}(2.9/-4.0) = -35.9^\circ\). The components say the vector points up and to the left, in the second quadrant. So \(\theta = -35.9^\circ + 180^\circ = 144.1^\circ\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a drone's takeoff</span>
+<p>A drone is at (300, 200, 100) m with respect to a tower, then one minute later at (1200, 2100, 250) m. The displacement is (900, 1900, 150) m. Its magnitude is</p>
+\[
+\sqrt{900^2+1900^2+150^2}\ \text{m} = 2108\ \text{m} = 2.11\ \text{km}.
+\]
+<p>The unit vector along it is the displacement divided by 2108 m: \((0.427,\ 0.901,\ 0.071)\). The magnitude of the average velocity over the minute is \(2108/60 = 35.1\ \text{m/s}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The arctangent of \(-4.0/2.9\) alone is \(-54^\circ\), and so is the arctangent of \(4.0/-2.9\). Neither tells the quadrant. Always sketch the components first.</p>
+<p>The components use the cosine for the side next to the angle and the sine for the side opposite it. If the angle is measured from the vertical, they swap. Check by testing \(\theta = 0\): a vector along the angle's reference axis has all of its length in that component.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Adding and subtracting vectors</h2>
+<p>To add two vectors graphically, draw the second with its tail at the tip of the first. The sum goes from the first tail to the second tip. The order does not matter, and the parallelogram rule gives the same result. To subtract, add the opposite: \(\vec A - \vec B = \vec A + (-\vec B)\).</p>
+<p>Drawing leads to a rule that is easy to compute. Each component of the sum is the sum of the components. For \(\vec R = \vec A + \vec B\),</p>
+\[
+R_x = A_x + B_x, \qquad R_y = A_y + B_y.
+\]
+<p>The tail-to-tip picture shows why: moving along \(\vec A\) then \(\vec B\) changes \(x\) by \(A_x\) then \(B_x\). The magnitude is then \(R = \sqrt{R_x^2 + R_y^2}\). It is not \(A + B\), unless the vectors point the same way. By the law of cosines on the triangle, with \(\varphi\) the angle between the two vectors,</p>
+\[
+R^2 = A^2 + B^2 + 2AB\cos\varphi.
+\]
+<p>At \(\varphi = 0\) this is \((A+B)^2\), and at \(\varphi = 180^\circ\) it is \((A-B)^2\).</p>
+<div class="box ex"><span class="tag">Worked example · a 3–4–5 pair</span>
+<p>Let \(\vec a = (3, 0)\ \text{m}\) and \(\vec b = (0, 4)\ \text{m}\). Then \(\vec a+\vec b = (3,4)\ \text{m}\), with length \(\sqrt{9+16}=5\ \text{m}\). The lengths of \(\vec a\) and \(\vec b\) add to 7 m, and the sum is 5 m. At a right angle, \(\cos\varphi=0\), so \(R^2=a^2+b^2\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · four dogs, one toy</span>
+<p>Three dogs pull on a toy. Astro pulls 160.0 N at 55° south of east, Balto 200.0 N at 60° east of north, and Clifford 140.0 N at 55° west of north. Take east as \(+x\). The angles from \(+x\) are \(-55^\circ\), \(30^\circ\) and \(145^\circ\).</p>
+\[
+\begin{aligned}
+R_x &= 160\cos(-55^\circ) + 200\cos30^\circ + 140\cos145^\circ = 91.8 + 173.2 - 114.7 = 150.3\ \text{N},\\
+R_y &= 160\sin(-55^\circ) + 200\sin30^\circ + 140\sin145^\circ = -131.1 + 100.0 + 80.3 = 49.2\ \text{N}.
+\end{aligned}
+\]
+<p>A fourth dog stops the toy from moving by pulling with \(-\vec R = (-150.3, -49.2)\ \text{N}\). Its magnitude is \(\sqrt{150.3^2+49.2^2} = 158.1\ \text{N}\). Both components are negative, so the direction is in the third quadrant: \(\tan^{-1}(49.2/150.3)=18.1^\circ\) south of west, which is \(198.1^\circ\) from \(+x\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a difference of vectors</span>
+<p>Let \(\vec A\) have magnitude 10.0 at \(35^\circ\) and \(\vec B\) have magnitude 7.0 at \(-110^\circ\), both in centimeters. Their components are \(\vec A = (8.19, 5.74)\) and \(\vec B = (-2.39, -6.58)\). Then \(\vec A - \vec B = (8.19+2.39,\ 5.74+6.58) = (10.6,\ 12.3)\ \text{cm}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding magnitudes gives \(160+200+140 = 500\ \text{N}\) for the three pulls, and the actual resultant is 158 N. The three do not pull the same way. Always add components.</p>
+<p>A direction angle of \(-110^\circ\) has a negative sine. Writing \(110^\circ\) instead flips the sign of the \(y\) component. And for the fourth dog, remember the minus sign: the balancing pull points opposite to the resultant, not along it.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>These vectors are free arrows. Where a force acts on a body also matters for turning it, and a later unit takes that up. Here the dogs pull on a point.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>The dot and cross products</h2>
+<p>Two vectors can be multiplied in two ways. The <b>scalar product</b> gives a number and the <b>vector product</b> gives a vector. Each answers a different question about the angle \(\varphi\) between them.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Define \(\vec A\cdot\vec B = AB\cos\varphi\). To compute it from components, put \(\vec A\), \(\vec B\) and \(\vec A-\vec B\) in a triangle. The law of cosines says</p>
+\[
+|\vec A-\vec B|^2 = A^2 + B^2 - 2AB\cos\varphi.
+\]
+<p>The left side is \((A_x-B_x)^2 + (A_y-B_y)^2\), which expands to \(A^2 + B^2 - 2(A_xB_x + A_yB_y)\). Compare the two:</p>
+\[
+\vec A\cdot\vec B = AB\cos\varphi = A_xB_x + A_yB_y + A_zB_z.
+\]
+<p>(The \(z\) term appears in the same way in three dimensions.)</p>
+</div>
+<p>So \(\vec A\cdot\vec B\) is the length of \(\vec A\) times the part of \(\vec B\) along it. It is positive below \(90^\circ\), zero at \(90^\circ\) and negative above it. A vector dotted with itself is the square of its length.</p>
+<p>The vector product has magnitude \(AB\sin\varphi\), the area of the parallelogram the two vectors span. Its direction is perpendicular to both, given by the right-hand rule. For vectors in the \(xy\) plane it points along \(z\), with</p>
+\[
+(\vec A\times\vec B)_z = A_xB_y - A_yB_x = AB\sin\varphi,
+\]
+<p>where \(\varphi\) is measured counterclockwise from \(\vec A\) to \(\vec B\). Swapping the order flips the sign: \(\vec B\times\vec A = -\vec A\times\vec B\).</p>
+<div class="box ex"><span class="tag">Worked example · at an obtuse angle</span>
+<p>Let \(\vec a = (3, 2)\ \text{m}\) and \(\vec b = (-4, 1)\ \text{m}\). Then \(\vec a\cdot\vec b = 3(-4) + 2(1) = -10\ \text{m}^2\), which is negative, so the angle is over \(90^\circ\). The cross product is \(3(1) - 2(-4) = 11\ \text{m}^2\). Check with the angle: \(|a|=3.606\), \(|b|=4.123\), and \(\cos\varphi = -10/14.87 = -0.673\), so \(\varphi = 132.3^\circ\) and \(ab\sin\varphi = 14.87\times0.740 = 11.0\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the area of a parallelogram</span>
+<p>Let \(\vec a = (4, 1)\ \text{m}\) and \(\vec b = (2, 3)\ \text{m}\). Then \(\vec a\times\vec b = 4(3) - 1(2) = 10\ \text{m}^2\), so the two vectors span a parallelogram of area 10 m². The dot product is \(8 + 3 = 11\ \text{m}^2\). The angle between them is \(\tan^{-1}(10/11) = 42.3^\circ\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the angle between two forces</span>
+<p>Let \(\vec F_1 = (10.0, -20.4, 2.0)\ \text{N}\) and \(\vec F_2 = (-15.0, 0, -6.2)\ \text{N}\). The dot product is \(-150.0 + 0 - 12.4 = -162.4\ \text{N}^2\). The magnitudes are 22.8 N and 16.2 N. So \(\cos\varphi = -162.4/(22.8\times16.2) = -0.439\), and \(\varphi = 116.0^\circ\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the torque on a nut</span>
+<p>A wrench handle is 0.25 m long, and a 20.00 N force acts on its end at \(40^\circ\) from the handle. The torque is \(\vec\tau = \vec R\times\vec F\), so \(\tau_z = RF\sin\varphi = 0.25\times20.00\times\sin40^\circ = 3.2\ \text{N·m}\), counterclockwise. If the force acts at \(-45^\circ\), the sign flips: \(0.25\times20.00\times\sin(-45^\circ) = -3.5\ \text{N·m}\), clockwise.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Find an angle from the cosine of the dot product and not the sine of the cross product. The sine gives \(30^\circ\) for both \(30^\circ\) and \(150^\circ\). The cosine separates them, and its sign tells acute from obtuse.</p>
+<p>A dot product is a single number. If you get a vector, you took the wrong product. And \(\vec A\cdot\vec B = AB\) only when the vectors are parallel: leaving out the \(\cos\varphi\) is the usual slip.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Motion along a line</h2>
+</div>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Position, displacement and velocity</h2>
+<p>For motion along a line, pick an origin and a positive direction. The <b>position</b> \(x(t)\) is a signed number. The <b>displacement</b> from time \(t_1\) to \(t_2\) is \(\Delta x = x(t_2)-x(t_1)\). It depends only on the start and the end. The <b>distance traveled</b> adds up the size of every stretch of the path, so it is never smaller than \(|\Delta x|\).</p>
+<p>The <b>average velocity</b> is the displacement over the time, \(\bar v = \Delta x/\Delta t\). It can be negative. The <b>average speed</b> is the distance over the time, and it cannot.</p>
+<p>The velocity at an instant is the limit of the average over a shrinking interval:</p>
+\[
+v(t) = \lim_{\Delta t\to0}\frac{\Delta x}{\Delta t} = \frac{dx}{dt}.
+\]
+<p>On the graph of \(x\) against \(t\), the average velocity is the slope of the chord between two points and the instantaneous velocity is the slope of the tangent. The speed is \(|v|\).</p>
+<div class="box ex"><span class="tag">Worked example · delivering flyers</span>
+<p>Jill walks east from her house, with east as \(+x\). She is at 500 m after 9 min, back at 0 after 9 more minutes, at 1000 m after 15 more, and at \(-750\ \text{m}\) after 25 more. Her total time is 58 min, or 3480 s. The displacement is \(-750 - 0 = -750\ \text{m}\). The average velocity is \(-750/3480 = -0.216\ \text{m/s}\). The distance walked is \(500+500+1000+1750 = 3750\ \text{m}\). Her average speed is \(3750/3480 = 1.08\ \text{m/s}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a ball tossed up from a bridge</span>
+<p>A ball is thrown up at 14.7 m/s from a bridge deck, with \(+y\) upward. Its position is \(x(t) = 14.7t - 4.905t^2\), in meters. At \(t=1\ \text{s}\), the velocity is \(14.7 - 9.81 = 4.89\ \text{m/s}\). Over the 6 s shown in the lab it ends at \(x(6) = 88.2 - 176.6 = -88.4\ \text{m}\), below the deck. The chord over \(1\ \text{s}\) to \(2\ \text{s}\) has slope \((9.78 - 9.795)/1 = -0.015\ \text{m/s}\), nothing like \(4.89\ \text{m/s}\), because the ball turns around inside that interval.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the chord shrinks to the tangent</span>
+<p>Use the same ball. Shrink the interval that starts at 1 s from 1 s to 0.1 s. The chord from 1.0 s to 1.1 s has slope \((10.23495 - 9.795)/0.1 = 4.40\ \text{m/s}\). The tangent at 1 s has slope \(4.89\ \text{m/s}\). The gap closes as the interval does, from \(4.9\ \text{m/s}\) down to \(0.49\ \text{m/s}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · velocity from a formula</span>
+<p>A particle has \(x(t) = 3.0t + 0.50t^3\) in meters. The velocity is \(dx/dt = 3.0 + 1.5t^2\), so \(v(2.0) = 3.0+6.0 = 9.0\ \text{m/s}\). The average velocity from 1.0 s to 3.0 s is \((22.5-3.5)/2.0 = 9.5\ \text{m/s}\), close to 9.0 over a short interval around 2 s, as expected.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Average speed is not the size of the average velocity. Jill's average velocity is \(-0.216\ \text{m/s}\), and her average speed is 1.08 m/s. They match only when the motion never turns around.</p>
+<p>Do not average the average velocities of different legs. Jill's four legs take different times, so an unweighted mean of their velocities is wrong. Use the total displacement over the total time.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The ball is a point, with no size or spin, and a smooth curve describes its path. Real objects have extent, and position means the position of one chosen point on them.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Acceleration</h2>
+<p>Acceleration is the rate at which velocity changes. The average over an interval is \(\bar a = \Delta v/\Delta t\), and at an instant</p>
+\[
+a(t) = \frac{dv}{dt} = \frac{d^2x}{dt^2}.
+\]
+<p>It is the slope of the \(v\)–\(t\) graph. Its unit is m/s², meters per second, per second. Acceleration is a signed number too. The sign says which way the velocity is changing, and it does not say whether the object speeds up.</p>
+<p>The speed grows when velocity and acceleration have the same sign. It shrinks when they have opposite signs. A positive acceleration slows a body that is moving in the negative direction.</p>
+<div class="box ex"><span class="tag">Worked example · a racehorse leaves the gate</span>
+<p>A racehorse goes from rest to 15.0 m/s due west in 1.80 s. Take east as positive, so the final velocity is \(-15.0\ \text{m/s}\). The average acceleration is</p>
+\[
+\bar a = \frac{-15.0 - 0}{1.80} = -8.33\ \text{m/s}^2.
+\]
+<p>The negative sign says the velocity is becoming more negative. Here the velocity and the acceleration are both negative, so the horse is speeding up.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a train that speeds up and brakes</span>
+<p>A train starts from rest. It accelerates at \(2\ \text{m/s}^2\) for 1.5 s, then coasts for 3.0 s, then brakes at \(-2\ \text{m/s}^2\) for 1.5 s. In the first stage \(\Delta v = 2\times1.5 = 3\ \text{m/s}\), and the velocity then stays at 3 m/s. The braking removes the same 3 m/s, so it ends at rest. The change in velocity over a stage is the area under the \(a\)–\(t\) graph there. The displacement is the area under the \(v\)–\(t\) graph: \(2.25 + 3\times3.0 + 2.25 = 13.5\ \text{m}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A negative acceleration does not mean slowing down. A horse running west at \(-15\ \text{m/s}\) with \(a=-8.3\ \text{m/s}^2\) is speeding up. Compare the signs of \(v\) and \(a\); do not read the sign of \(a\) alone.</p>
+<p>A velocity of zero does not mean an acceleration of zero. A ball at the top of its flight has \(v=0\) for an instant, with \(a=-9.81\ \text{m/s}^2\). Section 10 returns to this.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Motion with constant acceleration</h2>
+<p>Much of mechanics has an acceleration that is constant, or close to it. Three results cover it. Start from \(a = dv/dt\) with \(a\) constant. Integrating from 0 to \(t\) gives</p>
+\[
+v = v_0 + at.
+\]
+<div class="box why"><span class="tag">Derivation</span>
+<p>With \(v\) a straight line in time, the average velocity over \(0\) to \(t\) is the middle of the line, \(\tfrac12(v_0+v)\). The displacement is the average velocity times the time:</p>
+\[
+\Delta x = \tfrac12(v_0 + v)\,t = \tfrac12(v_0 + v_0 + at)\,t = v_0t + \tfrac12at^2.
+\]
+<p>That is the area of the trapezoid under the \(v\)–\(t\) graph. To remove the time, solve the first result for \(t = (v-v_0)/a\) and substitute into \(\Delta x = \tfrac12(v_0+v)t\):</p>
+\[
+\Delta x = \frac{(v_0+v)(v-v_0)}{2a} = \frac{v^2 - v_0^2}{2a}, \qquad\text{so}\qquad v^2 = v_0^2 + 2a\,\Delta x.
+\]
+</div>
+<p>Use these as a set. List the known quantities, find the unknown, and choose the one that holds the unknown and nothing else.</p>
+<div class="box ex"><span class="tag">Worked example · braking on dry concrete</span>
+<p>On dry concrete a car can slow at 7.00 m/s². It travels at 30.0 m/s, about 108 km/h. A driver sees a light turn red and takes 0.500 s to reach the brake. During the reaction the speed does not change, so the car covers \(30.0\times0.500 = 15.0\ \text{m}\). Braking ends at rest: \(0 = v_0^2 - 2ad\), so</p>
+\[
+d = \frac{v_0^2}{2a} = \frac{30.0^2}{2(7.00)} = 64.3\ \text{m}.
+\]
+<p>The whole stop takes \(15.0 + 64.3 = 79.3\ \text{m}\), in \(0.500 + 30.0/7.00 = 4.79\ \text{s}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · braking on wet concrete</span>
+<p>Wet concrete slows the same car at only 5.00 m/s². The reaction distance is unchanged at 15.0 m. The braking distance becomes \(30.0^2/(2\times5.00) = 90.0\ \text{m}\), so the whole stop is 105 m. The road changed only the braking part.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a landing airplane</span>
+<p>An airplane touches down at 70.0 m/s and slows at \(1.50\ \text{m/s}^2\) for 40.0 s. Then \(v = 70.0 + (-1.50)(40.0) = 10.0\ \text{m/s}\), still positive. The distance is \(70.0(40.0) - \tfrac12(1.50)(40.0)^2 = 2800 - 1200 = 1600\ \text{m}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a cheetah and a gazelle</span>
+<p>A gazelle runs past a hiding cheetah at a steady 10 m/s. At that instant the cheetah starts from rest at \(4\ \text{m/s}^2\). Each animal has its own position, \(x_g = 10t\) and \(x_c = \tfrac12(4)t^2\). They meet when the positions are equal: \(2t^2 = 10t\), so \(t = 5\ \text{s}\), at \(x = 50\ \text{m}\). The cheetah is then running at \(4\times5 = 20\ \text{m/s}\), twice as fast as the gazelle.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(d = v_0^2/a\) leaves out the 2, which comes from the \(\tfrac12\) in the position formula. It makes the braking distance twice too long. And the speed rule has no \(\tfrac12\): it is \(v=v_0+at\).</p>
+<p>The stopping distance is not \(v_0\) times the time to stop. The car slows the whole way, so its average speed is \(v_0/2\). Doubling the speed doubles the reaction distance, and it quadruples the braking distance: 15 m/s needs 16.1 m to brake, and 30 m/s needs 64.3 m.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real car does not brake at one steady rate. The tires grip differently as the load shifts, the brakes fade when hot, and air drag helps a little at speed. The values 7.00 and 5.00 m/s² are the book's, for dry and wet concrete. A reaction time of half a second is for an alert driver, and a distracted one takes longer.</p>
+</div>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Free fall</h2>
+<p>Close to Earth's surface, with air resistance ignored, every falling body has the same acceleration, \(g = 9.81\ \text{m/s}^2\) downward. A body thrown up is in free fall too: it is "falling" the whole time. Taking \(+y\) upward, \(a=-g\), and the constant-acceleration results become</p>
+\[
+v = v_0 - gt, \qquad y = y_0 + v_0t - \tfrac12gt^2, \qquad v^2 = v_0^2 - 2g(y-y_0).
+\]
+<p>Dropped from rest from a height \(h\), the fall takes \(t=\sqrt{2h/g}\). That is the square-root form that dimensions pointed to in Section 2, with the pure number \(\sqrt2\) in front.</p>
+<p>The motion is symmetric. At the top \(v=0\), and the climb takes \(v_0/g\). Landing back at the launch height after a time \(T\) means \(0 = v_0T - \tfrac12gT^2\), so \(v_0 = gT/2\), and the climb is half of \(T\). The ball returns with the speed it left with.</p>
+<div class="box ex"><span class="tag">Worked example · a pop-up</span>
+<p>A baseball is hit straight up and caught at the same height 5.0 s later. Then \(v_0 = gT/2 = 9.81\times2.5 = 24.5\ \text{m/s}\). The top is at \(v_0^2/(2g) = 24.5^2/19.62 = 30.7\ \text{m}\), reached after 2.5 s. When caught, the velocity is \(v_0-gT = -24.5\ \text{m/s}\). The acceleration at the top is \(-9.81\ \text{m/s}^2\), the same as everywhere else.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the ball at the top of its flight</span>
+<p>The tossed ball of Section 7 has \(v = 14.7 - 9.81t\). It is zero at \(t = 14.7/9.81 = 1.5\ \text{s}\), the moment the ball turns. The velocity is changing from positive to negative there, at \(-9.81\ \text{m/s}^2\). A velocity that is zero for an instant and changing is the reason the acceleration is not zero.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · thrown down from a building</span>
+<p>A ball is thrown down at 4.9 m/s from a 98 m building. With \(+y\) up, \(-98 = -4.9t - \tfrac12(9.81)t^2\). That is \(4.905t^2 + 4.9t - 98 = 0\), a quadratic in \(t\). Its roots are \(t = 3.998\ \text{s}\) and \(t=-4.997\ \text{s}\). The negative root is a time before the throw, so \(t = 4.0\ \text{s}\). The velocity is \(v=-4.9-9.81(3.998) = -44.1\ \text{m/s}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The acceleration at the top is not zero. Nothing about the instant when \(v = 0\) turns gravity off. It would be zero only if the ball hung there, and it does not.</p>
+<p>With \(+y\) up, the velocity on the way down is negative, and \(a=-g\) the whole time. Keep one sign convention from the first line to the last. Mixing "\(g = 9.81\)" with an upward-positive axis flips signs in the middle of a solution.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Air resistance. For a dense object over a few meters it is small. For a feather, or for a skydiver after a few seconds, it is not, and Chapter 6 adds the drag force. Here \(g\) is also taken as the same at every height, which holds near the surface.</p>
+</div>
+</section>
+
+<section class="topic" id="s11">
+<h2><span class="n">11</span>Velocity and position from an acceleration that changes</h2>
+<p>If the acceleration is not constant, the three results of Section 9 do not apply. The two definitions still do. Integrate them:</p>
+\[
+v(t) = v_0 + \int_0^t a(t')\,dt', \qquad x(t) = x_0 + \int_0^t v(t')\,dt'.
+\]
+<p>The change in velocity is the area under the \(a\)–\(t\) graph, and the change in position is the area under the \(v\)–\(t\) graph, counting the part below the axis as negative. The distance traveled counts that part as positive. When the acceleration is constant in each of several stages, the area is a sum of rectangles, and the position is a chain of quadratics, one per stage, carried forward.</p>
+<div class="box ex"><span class="tag">Worked example · out, back, and out again</span>
+<p>A cart starts at 6 m/s. Its acceleration is \(-3\), \(-3\), \(+3\) and \(+3\ \text{m/s}^2\) in four stages of 1.5 s each. The velocities at the stage boundaries are 1.5, \(-3.0\), 1.5 and 6.0 m/s. The positions are 5.625, 4.5, 3.375 and 9.0 m. The velocity changes sign in the second stage, at 0.5 s into it, and again in the third. So the displacement is 9 m, and the distance is \(5.625 + (0.375+1.5) + (1.5+0.375) + 5.625 = 15\ \text{m}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a motorboat slowing for the dock</span>
+<p>A boat moves at 5.0 m/s when its acceleration becomes \(a(t) = -\tfrac14t\ \text{m/s}^2\), with \(t\) in seconds. Integrate once: \(v(t) = 5.0 - \tfrac18t^2\), with the constant fixed by \(v(0)=5.0\). It stops when \(5.0 = t^2/8\), so \(t = \sqrt{40} = 6.3\ \text{s}\). Integrate again: \(x(t) = 5.0t - \tfrac1{24}t^3\). At the stop, \(x = 31.6 - 10.5 = 21.1\ \text{m}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Do not put \(a(t) = -t/4\) into \(v = v_0 + at\). That formula needs a constant \(a\). Here the acceleration starts at zero and grows, so at 2 s the velocity is \(5.0 - 0.5 = 4.5\ \text{m/s}\), and not \(5.0 + (-0.5)(2) = 4.0\ \text{m/s}\).</p>
+<p>The constant of integration is the starting value. Forgetting it gives \(v = -t^2/8\), which is negative from the start.</p>
+</div>
+</section>
+
+<section class="topic" id="s12">
+<h2><span class="n">12</span>Formula sheet</h2>
+\[
+v = \frac{dx}{dt}, \qquad a = \frac{dv}{dt}, \qquad \bar v = \frac{\Delta x}{\Delta t}, \qquad \bar a = \frac{\Delta v}{\Delta t}
+\]
+\[
+v = v_0 + at, \qquad \Delta x = v_0t + \tfrac12at^2, \qquad v^2 = v_0^2 + 2a\,\Delta x \qquad (a\ \text{constant})
+\]
+\[
+d_{\text{stop}} = v\,t_r + \frac{v^2}{2a}, \qquad v_0 = \frac{gT}{2}\ \text{(returns after } T\text{)}, \qquad g = 9.81\ \text{m/s}^2
+\]
+\[
+A_x = A\cos\theta, \quad A_y = A\sin\theta, \quad A = \sqrt{A_x^2+A_y^2}, \quad R^2 = A^2 + B^2 + 2AB\cos\varphi
+\]
+\[
+\vec A\cdot\vec B = AB\cos\varphi = A_xB_x + A_yB_y + A_zB_z, \qquad |\vec A\times\vec B| = AB\sin\varphi
+\]
+\[
+\frac{\delta A}{A}\times100\%\ \text{(percent uncertainty)}, \qquad 1\ \text{mi} = 1609.344\ \text{m}, \qquad 1\ \text{m/s} = 3.6\ \text{km/h}
+\]
+</section>
+
+</main>
+<footer>
+<p>Sources: OpenStax, <i>University Physics Volume 1</i>, Chapters 1–3 (CC BY-NC-SA 4.0), rewritten; the worked examples are recomputed and cite the book's examples by title. Constants: \(g = 9.81\ \text{m/s}^2\), \(1\ \text{mi} = 1609.344\ \text{m}\).</p>
+</footer>
+</body>
+</html>

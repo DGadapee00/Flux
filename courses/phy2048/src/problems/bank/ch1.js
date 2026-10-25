@@ -113,7 +113,7 @@ export default [
       String.raw`$v = d/t = ${texNum($.v)}\ \mathrm{m/s}$`,
     ],
     cases: [
-      kase('OpenStax University Physics Vol. 1 §1.3, "Converting Nonmetric Units to Metric": 10 mi in 20 min', { d: 10, t: 20 }, { v: 13.4082, dkm: 16.0934 }, {
+      kase('OpenStax University Physics Vol. 1 §1.3, "Converting Nonmetric Units to Metric": 10 mi in 20 min', { d: 10, t: 20 }, { v: 13.4112, dkm: 16.09344 }, {
         note: 'The book uses 1609 m per mile and keeps two significant figures, so it prints 13 m/s. With the exact 1609.344 m the speed is 13.41 m/s.',
       }),
     ],

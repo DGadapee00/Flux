@@ -5,6 +5,7 @@
  * console error, no sideways scroll, a law that typeset, and numbers on screen that are not NaN.
  */
 import { EXAMS } from '../src/catalog.js';
+import { NOTES } from '../src/notes/index.js';
 import { COURSE } from '../src/engine/router.js';
 import { chromium } from './playwright.mjs';
 
@@ -57,6 +58,28 @@ for (const viewport of SIZES) {
         if (/NaN|undefined/.test(seen.text)) fails.push(`${where}: shows NaN or undefined`);
         if (seen.lawError) fails.push(`${where}: the law did not typeset`);
         if (seen.bad) fails.push(`${where}: ${seen.bad} input(s) under 16px`);
+      }
+    }
+  }
+  // Every notes section opens, and "Show this in the lab" loads its example.
+  for (const set of Object.values(NOTES)) {
+    for (const section of set.sections) {
+      await page.goto('about:blank');
+      await page.goto(`${base}#/${COURSE}/${set.exam}/${section.lab || EXAMS.find((u) => u.id === set.exam).labs[0]}?n=${section.id}`);
+      await page.waitForFunction(() => window.__phy2048?.app?.lab, null, { timeout: 15000 });
+      await page.waitForTimeout(250);
+      const open = await page.evaluate(() => ({
+        open: document.body.classList.contains('notes-open'),
+        over: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        shows: document.querySelectorAll('#notes [data-show], #notes button').length,
+      }));
+      views += 1;
+      if (!open.open) fails.push(`${tag} notes ${section.id}: the panel did not open`);
+      if (open.over > 0) fails.push(`${tag} notes ${section.id}: scrolls sideways by ${open.over}px`);
+      const show = await page.$('#notes button:has-text("Show this in the lab")');
+      if (show) {
+        await show.click();
+        await page.waitForTimeout(300);
       }
     }
   }

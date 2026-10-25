@@ -54,7 +54,7 @@ export default [
       String.raw`$\alpha = ${texNum($.alpha)}^\circ$, $\beta = ${texNum($.beta)}^\circ$, $\gamma = ${texNum($.gamma)}^\circ$`,
     ],
     cases: [
-      kase('OpenStax University Physics Vol. 1 §2.2, "Magnitude and Direction of the Displacement Vector": D = (−4.0, 2.9) cm', { Fx: -4, Fy: 2.9, Fz: 0 }, { F: 4.94065, alpha: 144.0368, beta: 54.0368, gamma: 90 }, {
+      kase('OpenStax University Physics Vol. 1 §2.2, "Magnitude and Direction of the Displacement Vector": D = (−4.0, 2.9) cm', { Fx: -4, Fy: 2.9, Fz: 0 }, { F: 4.94065, alpha: 144.0579, beta: 54.0579, gamma: 90 }, {
         note: 'The book prints D = 4.9 cm at 144.1° (it rounds the arctangent first).',
       }),
       kase('hand', { Fx: 3, Fy: 4, Fz: 12 }, { F: 13, alpha: 76.6576, beta: 72.0798, gamma: 22.6199 }),
@@ -155,7 +155,7 @@ export default [
       String.raw`$\hat u = (${texNum($.ux)},\ ${texNum($.uy)},\ ${texNum($.uz)})$`,
     ],
     cases: [
-      kase('OpenStax University Physics Vol. 1 §2.2, "Takeoff of a Drone": from (300, 200, 100) m to (1200, 2100, 250) m', { ax: 300, ay: 200, az: 100, bx: 1200, by: 2100, bz: 250 }, { L: 2102.38, ux: 0.428086, uy: 0.903739, uz: 0.071348 }, {
+      kase('OpenStax University Physics Vol. 1 §2.2, "Takeoff of a Drone": from (300, 200, 100) m to (1200, 2100, 250) m', { ax: 300, ay: 200, az: 100, bx: 1200, by: 2100, bz: 250 }, { L: 2107.72, ux: 0.427001, uy: 0.901446, uz: 0.0711668 }, {
         note: 'The book prints the displacement (900, 1900, 150) m and its magnitude, 2.11 km.',
       }),
       kase('hand', { ax: 1, ay: 2, az: 2, bx: 4, by: 6, bz: 6 }, {
@@ -349,7 +349,7 @@ export default [
       String.raw`$R = ${texNum($.R)}\ \mathrm{cm}$ at $${texNum($.th)}^\circ$`,
     ],
     cases: [
-      kase('OpenStax University Physics Vol. 1 §2.3, "Analytical Computation of a Resultant": A = 10.0 at 35°, B = 7.0 at −110°, C = 8.0 at 30°', { A: 10, a: 35, B: 7, b: -110, C: 8, c: 30 }, { Rx: 12.7256, Ry: 3.1578, R: 13.1119, th: 13.9441 }, {
+      kase('OpenStax University Physics Vol. 1 §2.3, "Analytical Computation of a Resultant": A = 10.0 at 35°, B = 7.0 at −110°, C = 8.0 at 30°', { A: 10, a: 35, B: 7, b: -110, C: 8, c: 30 }, { Rx: 12.7256, Ry: 3.1578, R: 13.1119, th: 13.9367 }, {
         note: 'The book rounds each component to 0.01 cm before adding and prints R = (12.7, 3.1) cm. Unrounded, Ry is 3.16 cm.',
       }),
     ],

@@ -219,7 +219,7 @@ export default [
       String.raw`$t = \sqrt{2h/g} = ${texNum($.t)}\ \mathrm{s}$`,
     ],
     cases: [
-      kase('OpenStax University Physics Vol. 1 §3.5, "Free Fall of a Ball", dropped from rest instead of thrown (the same quadratic with v0 = 0): 98 m', { h: 98 }, { v: 43.8, t: 4.46 }, {
+      kase('OpenStax University Physics Vol. 1 §3.5, "Free Fall of a Ball", dropped from rest instead of thrown (the same quadratic with v0 = 0): 98 m', { h: 98 }, { v: 43.8493, t: 4.46986 }, {
         note: 'The book throws the ball down at 4.9 m/s and gets 4.0 s; from rest the same fall takes 4.5 s. The case is the same formulas without the throw.',
       }),
       kase('hand', { h: 20 }, { v: 19.8091, t: 2.01928 }),
@@ -260,7 +260,7 @@ export default [
       String.raw`$t_{\mathrm{top}} = v_0/g = ${texNum($.tTop)}\ \mathrm{s}$, so the return takes $${texNum($.tBack)}\ \mathrm{s}$`,
     ],
     cases: [
-      kase('OpenStax University Physics Vol. 1 §3.5, "Vertical Motion of a Baseball": launched at 24.5 m/s', { v0: 24.5 }, { h: 30.6, tTop: 2.5, tBack: 5 }, {
+      kase('OpenStax University Physics Vol. 1 §3.5, "Vertical Motion of a Baseball": launched at 24.5 m/s', { v0: 24.5 }, { h: 30.5938, tTop: 2.49745, tBack: 4.9949 }, {
         note: 'The book prints 30.6 m and 2.5 s, using g = 9.8 m/s². With 9.81 m/s² the time is 2.497 s.',
       }),
       kase('hand', { v0: 18 }, { h: 16.5138, tTop: 1.83486, tBack: 3.66972 }),

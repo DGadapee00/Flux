@@ -14,10 +14,13 @@ import { EXAMS, examById, examForLab } from './catalog.js';
 import { parseHash, neighborExam, problemQuery, writeHash } from './engine/router.js';
 import { createLabPointer } from './engine/pointer.js';
 import { createViewPool } from './engine/views.js';
+import { sectionForLab } from './notes/index.js';
+import { applyExample } from './notes/setups.js';
 import { applyProblem } from './problems/simbridge.js';
 import { loadExamLabs, loadLab } from './labs/load.js';
 import { course } from './manifest.js';
 import { createHUD } from './ui/hud.js';
+import { createNotes } from './ui/notes.js';
 import { createPredict } from './ui/predict.js';
 import { createPractice } from './ui/problems.js';
 import { createUnits } from './ui/units.js';
@@ -30,10 +33,6 @@ renderChrome(document.getElementById('app'), {
   setupHint: 'Move a slider. The numbers follow.',
   unitName: 'Unit',
 });
-
-// Notes arrive with each unit (docs/course-plans/phy2048.md); until then the mode is not offered.
-const notesButton = document.getElementById('btn-notes');
-if (notesButton) notesButton.hidden = true;
 
 mountTrackBar(document.getElementById('brand'));
 
@@ -60,6 +59,7 @@ const computed = {};
 /** Practice panel (src/ui/problems.js); created once the lab-switching functions exist. */
 let practice = null;
 let units = null;
+let notes = null;
 let loadingProblem = false;
 let booting = true;
 
@@ -109,11 +109,23 @@ const hud = createHUD({
   },
   togglePractice: () => {
     units?.close(); // they share the left column
+    // Notes can sit over the practice sheet; P goes back to it rather than closing it.
+    if (notes?.isOpen()) {
+      notes.close();
+      if (!practice.isOpen()) practice.open();
+      return;
+    }
     practice.toggle();
   },
   toggleUnits: () => units.toggle(),
-  toggleNotes: () => {},
-  escape: () => practice.escape(),
+  toggleNotes: () => {
+    units?.close();
+    notes.toggle();
+  },
+  escape: () => {
+    if (notes?.isOpen()) notes.close();
+    else practice.escape();
+  },
   bump,
   slice,
   fitView: () => {
@@ -156,7 +168,7 @@ function freeSpace() {
   if (w <= PHONE_MAX) {
     const top = shown($id('toggles')) ? $id('toggles').getBoundingClientRect().bottom : $id('brand').getBoundingClientRect().bottom;
     let bottom = h;
-    for (const id of ['controls', 'eq-panel', 'problems', 'units-ref']) {
+    for (const id of ['controls', 'eq-panel', 'problems', 'units-ref', 'notes']) {
       const el = $id(id);
       if (shown(el)) bottom = Math.min(bottom, el.getBoundingClientRect().top);
     }
@@ -164,7 +176,7 @@ function freeSpace() {
     return { left: 0, right: w, top, bottom: top + strip, aspect: w / h, hfrac: strip / h };
   }
   let left = 0;
-  for (const id of ['eq-panel', 'problems', 'units-ref']) {
+  for (const id of ['eq-panel', 'problems', 'units-ref', 'notes']) {
     const el = $id(id);
     if (shown(el)) left = Math.max(left, el.getBoundingClientRect().right);
   }
@@ -291,6 +303,7 @@ async function setExam(examId, preferredLab) {
   pool.hideAll();
   hud.mount(null, exam, { examId: exam.id });
   practice?.onMount({ byProblem: loadingProblem });
+  afterMount();
   writeHash(exam.id, '', { replace: booting, query: app.query });
   app.dirty = true;
 }
@@ -322,6 +335,7 @@ async function setLab(labId, { examId = app.examId } = {}) {
   goCamera(lab);
   hud.mount(lab, examById(app.examId), s);
   practice?.onMount({ byProblem: loadingProblem });
+  afterMount();
   writeHash(app.examId, labId, { replace: booting, query: app.query });
   app.dirty = true;
 }
@@ -371,7 +385,10 @@ async function openProblemInApp(inst, { push = true, query = true } = {}) {
 
 units = createUnits({
   // One overlay at a time: they share the left column.
-  onOpen: () => practice?.close?.(),
+  onOpen: () => {
+    practice?.close?.();
+    notes?.close?.();
+  },
 });
 
 practice = createPractice({
@@ -388,7 +405,7 @@ practice = createPractice({
   labId: () => app.labId,
   examId: () => app.examId,
   setExam: (id) => setExam(id),
-  openNotes: () => {},
+  openNotes: (o) => notes.open(o),
   slice,
   computed,
   labelLayer: labels.domElement,
@@ -404,25 +421,82 @@ const predict = createPredict({
   practiceActive: () => !!practice.current(),
 });
 
-/** The header's switch shows the mode on screen. Notes are not offered yet. */
-const modeButtons = { practice: $id('btn-practice'), explore: $id('btn-explore') };
+/*
+ * Notes (src/ui/notes.js): the unit's notes, read beside the lab each section describes.
+ * Notes, Practice and Explore are the three modes in the header's switch.
+ */
+notes = createNotes({
+  examId: () => app.examId,
+  showLab: (labId, examId) => {
+    if (app.labId !== labId) setLab(labId, { examId });
+  },
+  explore: (labId, examId) => {
+    practice.close();
+    setLab(labId, { examId });
+  },
+  practiceChapter: (examId, ch) => practice.showChapter(ch, examId),
+  // "Show this in the lab" on a worked example: the example's own numbers, loaded like a problem's.
+  setupExample: async (examId, ex) => {
+    if (app.lab?.id !== ex.lab) await setLab(ex.lab, { examId });
+    if (app.lab?.id !== ex.lab) return;
+    applyExample(app.lab, slice(), ex);
+    applyFrame({ force: true });
+    goCamera(app.lab);
+    bump();
+  },
+  stepThrough: async () => {},
+  // The notes were resized: frame the lab again in whatever space is left.
+  reframe: () => goCamera(app.lab),
+});
+
+/** The header's switch shows the mode on screen: Notes over Practice over Explore. */
+const modeButtons = { practice: $id('btn-practice'), notes: $id('btn-notes'), explore: $id('btn-explore') };
 function syncModeSwitch() {
-  const mode = document.body.classList.contains('practice-open') ? 'practice' : 'explore';
+  const cls = document.body.classList;
+  const mode = cls.contains('notes-open') ? 'notes' : cls.contains('practice-open') ? 'practice' : 'explore';
   for (const [k, b] of Object.entries(modeButtons)) {
     if (!b) continue;
     b.classList.toggle('active', k === mode);
     b.setAttribute('aria-selected', k === mode ? 'true' : 'false');
   }
 }
-new MutationObserver(syncModeSwitch).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+// When a panel opens or closes, the free space changes: frame the lab into what is left, once the panel has settled.
+let lastMode = '';
+new MutationObserver(() => {
+  syncModeSwitch();
+  const cls = document.body.classList;
+  const mode = `${cls.contains('notes-open')}${cls.contains('practice-open')}${cls.contains('units-open')}`;
+  if (mode === lastMode) return;
+  lastMode = mode;
+  setTimeout(() => goCamera(app.lab), 320);
+}).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 modeButtons.practice?.addEventListener('click', () => {
   units.close();
+  notes.close();
   if (!practice.isOpen()) practice.open();
+});
+modeButtons.notes?.addEventListener('click', () => {
+  units.close();
+  if (!notes.isOpen()) notes.resume(app.examId);
 });
 modeButtons.explore?.addEventListener('click', () => {
   units.close();
+  notes.close();
   practice.close();
 });
+
+/** After a lab or unit mounts: the notes follow the unit, and the lab links to its section. */
+function afterMount() {
+  notes?.onExam(app.examId);
+  const link = $id('eq-notes');
+  if (!link) return;
+  const hit = app.labId ? sectionForLab(app.labId, app.examId) : null;
+  link.hidden = !hit;
+  if (hit) {
+    link.textContent = `Notes §${hit.section.n} · ${hit.section.title} →`;
+    link.onclick = () => notes.open({ examId: hit.set.exam, section: hit.section.id });
+  }
+}
 
 function followUrl() {
   const { examId, labId, problemId, seed } = parseHash();
@@ -519,12 +593,15 @@ window.__phy2048 = {
 };
 
 const boot = parseHash();
+// `#/phy2048/u1/vectors?n=s4` opens the notes at a section. Read now: booting rewrites the hash.
+const bootNotes = new URLSearchParams(location.hash.split('?')[1] || '').get('n');
 // No link at all: a student opening the app. Practice is the front door.
 const bare = !location.hash.replace(/^#\/?/, '');
 setExam(boot.examId, boot.labId).then(() => {
   booting = false;
   if (boot.problemId) practice.followUrl(boot.problemId, boot.seed);
   else if (bare) practice.open();
+  if (bootNotes && !boot.problemId) notes.open({ examId: app.examId, section: bootNotes });
   syncModeSwitch();
   recompute();
   syncViews();
