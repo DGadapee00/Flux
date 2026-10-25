@@ -97,13 +97,18 @@ export default defineLab({
     return { a, N, f, holds: false };
   },
   law(state) {
-    if (state.motion === 'rest') return [String.raw`It holds when $\mu_s \ge \tan\theta$.`];
-    if (state.motion === 'up') return [String.raw`$a = g(\sin\theta + \mu_k\cos\theta)$, downhill.`];
-    return [String.raw`$a = g(\sin\theta - \mu_k\cos\theta)$, downhill.`];
+    if (state.motion === 'rest') return [String.raw`\mu_s \ge \tan\theta\quad\text{(it holds)}`];
+    if (state.motion === 'up') return [String.raw`a = g(\sin\theta + \mu_k\cos\theta)\quad\text{(downhill)}`];
+    return [String.raw`a = g(\sin\theta - \mu_k\cos\theta)\quad\text{(downhill)}`];
   },
-  readout(state, computed) {
-    const hold = state.motion === 'rest' ? (computed.holds ? 'It stays put.' : 'Static friction cannot hold it.') : 'It is sliding.';
-    return String.raw`${hold} Acceleration down the plane $${fmt(computed.a)}$ m/s². Normal force $${fmt(computed.N)}$ N. Friction $${fmt(computed.f)}$ N.`;
+  readoutCells(state, computed) {
+    const hold = state.motion === 'rest' ? (computed.holds ? 'It stays put' : 'It slides: static friction cannot hold it') : 'It is sliding';
+    return [
+      ['Acceleration down the plane', `${fmt(computed.a)} m/s²`],
+      ['Normal force', `${fmt(computed.N)} N`],
+      ['Friction', `${fmt(computed.f)} N`],
+      ['Status', hold, state.motion === 'rest' ? (computed.holds ? 'ok' : 'warn') : ''],
+    ];
   },
   coach() {
     return {

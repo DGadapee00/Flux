@@ -15,18 +15,32 @@ const engine = createEngine({
   prose: 'none',
   steps: 'sig',
   numbers: 'unit',
+  // A wrong option's `why` comes back as its feedback.
+  choiceNotes: true,
   sig: { figures: 4, lo: 0.01, hi: 1e5, tiny: true },
 });
 
 export const {
+  rng,
+  hashSeed,
   build,
+  sampleValues,
   instance,
+  sig,
   render,
   expected,
+  answers,
+  parseNumber,
   withinTol,
   grade,
   parseExpr,
+  evalAst,
+  compile,
   dimensionOf,
+  checkUnits,
   gradeSymbolic,
   evalSymbolic,
+  choiceOptions,
+  exprToTex,
+  GLYPH,
 } = engine;

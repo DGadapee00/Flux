@@ -156,3 +156,49 @@ export function unitForChapter(ch) {
 export function unitById(id) {
   return UNITS.find((unit) => unit.id === id) || null;
 }
+
+/** The shell's names for these: a unit is what other courses call an exam. */
+export const EXAMS = UNITS;
+
+/** The labs built so far (logic only until each unit's scene is drawn). */
+export const LAB_META = {
+  projectile: { id: 'projectile', exam: 'u2', title: 'Projectile' },
+  incline: { id: 'incline', exam: 'u3', title: 'Incline' },
+  track: { id: 'track', exam: 'u4', title: 'Track' },
+  collide: { id: 'collide', exam: 'u5', title: 'Collisions' },
+  rotor: { id: 'rotor', exam: 'u6', title: 'Rotor' },
+};
+
+export function examById(id) {
+  return UNITS.find((unit) => unit.id === id) || UNITS[0];
+}
+
+export function examForLab(labId) {
+  const meta = LAB_META[labId];
+  return meta ? examById(meta.exam) : UNITS[0];
+}
+
+export function examIndex(id) {
+  const i = UNITS.findIndex((unit) => unit.id === id);
+  return i < 0 ? 0 : i;
+}
+
+export function examLabel(unit) {
+  return unit ? `Unit ${unit.n}` : 'Unit';
+}
+
+/** "1–3" or "9" for a unit's chapters. */
+export function chapterSpan(unit) {
+  const c = unit.chapters;
+  return c.length > 1 ? `${c[0]}–${c[c.length - 1]}` : c[0];
+}
+
+/** The picker's full line: "Unit 3 · Newton's laws and their applications · Ch 5–6". */
+export function examLongLabel(unit) {
+  return `${examLabel(unit)} · ${unit.title} · Ch ${chapterSpan(unit)}`;
+}
+
+/** A student opening the course with no link starts at the first unit. */
+export function nextExam() {
+  return UNITS[0];
+}

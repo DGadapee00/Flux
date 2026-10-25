@@ -63,3 +63,6 @@ export function choices(prompt, w) {
   if (mode === 'factor') return (prompt.factors || DEFAULT_FACTORS).map((f) => [f, `×${f}`]);
   return [['bigger', 'Bigger'], ['same', 'Same'], ['smaller', 'Smaller']];
 }
+
+/** Whether the prompt's worked reasoning applies: the lab did what `expect` says. */
+export const matchesExpect = (prompt, got) => prompt.watch.every((w) => got[w.id] === prompt.expect[w.id]);

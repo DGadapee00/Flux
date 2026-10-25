@@ -102,10 +102,16 @@ export default defineLab({
     return { v1, v2, K0, K, lost: K0 - K };
   },
   law() {
-    return [String.raw`$m_1 u_1 + m_2 u_2 = m_1 v_1 + m_2 v_2$, and $v_2 - v_1 = e(u_1 - u_2)$.`];
+    return [String.raw`m_1 u_1 + m_2 u_2 = m_1 v_1 + m_2 v_2`, String.raw`v_2 - v_1 = e\,(u_1 - u_2)`];
   },
-  readout(_state, computed) {
-    return String.raw`After: $${fmt(computed.v1)}$ m/s and $${fmt(computed.v2)}$ m/s. Kinetic energy $${fmt(computed.K0)}$ J before, $${fmt(computed.K)}$ J after. Lost $${fmt(computed.lost)}$ J.`;
+  readoutCells(_state, computed) {
+    return [
+      ['Velocity of mass 1 after', `${fmt(computed.v1)} m/s`],
+      ['Velocity of mass 2 after', `${fmt(computed.v2)} m/s`],
+      ['Kinetic energy before', `${fmt(computed.K0)} J`],
+      ['Kinetic energy after', `${fmt(computed.K)} J`],
+      ['Kinetic energy lost', `${fmt(computed.lost)} J`],
+    ];
   },
   coach() {
     return {

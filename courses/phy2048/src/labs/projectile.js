@@ -107,10 +107,15 @@ export default defineLab({
     };
   },
   law() {
-    return [String.raw`$R = v_0^2 \sin 2\theta / g$ on level ground. Drag is left out.`];
+    return [String.raw`R = \dfrac{v_0^2 \sin 2\theta}{g}\quad\text{(level ground)}`];
   },
-  readout(_state, computed) {
-    return String.raw`Range $${fmt(computed.range)}$ m. Highest point $${fmt(computed.hMax)}$ m. Time in the air $${fmt(computed.tFlight)}$ s. Landing speed $${fmt(computed.speed)}$ m/s.`;
+  readoutCells(_state, computed) {
+    return [
+      ['Range', `${fmt(computed.range)} m`],
+      ['Highest point', `${fmt(computed.hMax)} m`],
+      ['Time in the air', `${fmt(computed.tFlight)} s`],
+      ['Landing speed', `${fmt(computed.speed)} m/s`],
+    ];
   },
   coach() {
     return {

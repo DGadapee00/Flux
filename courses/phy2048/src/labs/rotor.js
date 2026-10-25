@@ -114,15 +114,22 @@ export default defineLab({
     return { tau, I, alpha: tau / I, a: null };
   },
   law(state) {
-    if (state.mode === 'roll') return [String.raw`$a = g\sin\theta / (1 + I/(mR^2))$. No slip: $\alpha = a/R$.`];
-    return [String.raw`$\tau = RF$ and $\alpha = \tau/I$, with $I = \frac{1}{2}mR^2$ for the disk.`];
+    if (state.mode === 'roll') return [String.raw`a = \dfrac{g\sin\theta}{1 + I/(mR^2)}`, String.raw`\alpha = a/R\quad\text{(no slip)}`];
+    return [String.raw`\tau = RF`, String.raw`\alpha = \tau/I`, String.raw`I = \tfrac{1}{2}mR^2\quad\text{(disk)}`];
   },
-  readout(state, computed) {
+  readoutCells(state, computed) {
     if (state.mode === 'roll') {
       const who = state.shape === 'hoop' ? 'Hoop' : 'Disk';
-      return String.raw`${who}. Acceleration $${fmt(computed.a)}$ m/s². Angular acceleration $${fmt(computed.alpha)}$ rad/s².`;
+      return [
+        [`${who}: acceleration`, `${fmt(computed.a)} m/s²`],
+        ['Angular acceleration', `${fmt(computed.alpha)} rad/s²`],
+      ];
     }
-    return String.raw`Torque $${fmt(computed.tau)}$ N·m. Moment $${fmt(computed.I)}$ kg·m². Angular acceleration $${fmt(computed.alpha)}$ rad/s².`;
+    return [
+      ['Torque', `${fmt(computed.tau)} N·m`],
+      ['Moment of inertia', `${fmt(computed.I)} kg·m²`],
+      ['Angular acceleration', `${fmt(computed.alpha)} rad/s²`],
+    ];
   },
   coach() {
     return {

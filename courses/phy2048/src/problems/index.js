@@ -39,4 +39,11 @@ const byId = new Map(PROBLEMS.map((p) => [p.id, p]));
 
 export const problemById = (id) => byId.get(id) || null;
 
+export const problemsForExam = (examId) => PROBLEMS.filter((p) => p.exam === examId);
+export const problemsForLab = (labId) => PROBLEMS.filter((p) => p.lab === labId);
+
+/** Chapters in the order a student meets them. Only chapters with problems appear. */
+export const CHAPTER_ORDER = BANK_CHAPTERS;
+export const CHAPTER_TITLES = CHAPTERS;
+
 export { BANK_CHAPTERS, CHAPTERS };

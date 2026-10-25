@@ -3,8 +3,20 @@
  * by the physics shell, so init and syncViews stay empty on purpose.
  */
 import { defineLab as checkLab } from '@flux/core';
+import { cells, kv } from '@flux/shells/physics/shared.js';
 
+/**
+ * A lab says what it reads out once, as `readoutCells(state, computed)`: [label, value, class?]
+ * rows. The readout strip and the equation panel's live rows are both made from it.
+ */
 export function defineLab(spec) {
+  const fromCells = spec.readoutCells
+    ? {
+        readout: (state, computed) => cells(spec.readoutCells(state, computed)),
+        // The first two cells are the headline numbers above; the rest are listed under them.
+        liveRows: (state, computed) => spec.readoutCells(state, computed).slice(2).map(([k, v]) => kv(k, v)).join(''),
+      }
+    : {};
   return checkLab({
     live: false,
     orbit: true,
@@ -30,6 +42,7 @@ export function defineLab(spec) {
     plot: () => null,
     pointer: null,
     ...spec,
+    ...fromCells,
     kind: 'scene3d',
   });
 }

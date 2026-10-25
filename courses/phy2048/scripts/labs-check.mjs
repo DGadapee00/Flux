@@ -14,7 +14,7 @@ import { UNITS } from '../src/catalog.js';
 import { loadLab } from '../src/labs/load.js';
 import { choices, outcomes, run } from '../src/labs/predict.js';
 
-const { mathProse } = createTex();
+const { mathProse, tex } = createTex();
 const errors = [];
 const err = (id, msg) => errors.push(`${id}: ${msg}`);
 
@@ -74,8 +74,14 @@ for (const { id, unit } of listed) {
     for (const [key, want] of Object.entries(other)) {
       if (!agree(computed[key], want)) err(id, `scenario ${sc.id} ${key}: ${computed[key]} vs second ${want}`);
     }
-    typeset(id, lab.readout(state, computed));
-    for (const line of lab.law(state, computed)) typeset(id, line);
+    for (const [label, value] of lab.readoutCells(state, computed)) {
+      typeset(id, label);
+      typeset(id, value);
+    }
+    for (const line of lab.law(state, computed)) {
+      if (!line || /undefined|NaN/.test(line)) err(id, `law line is empty or has undefined: ${line}`);
+      else if (tex(line).includes('katex-error')) err(id, `KaTeX cannot parse this law: ${line.slice(0, 160)}`);
+    }
     const coach = lab.coach(state, computed);
     typeset(id, coach.title);
     const body = Array.isArray(coach.body) ? coach.body : [coach.body];

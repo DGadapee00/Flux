@@ -113,10 +113,15 @@ export default defineLab({
     };
   },
   law() {
-    return [String.raw`$mgh = \frac{1}{2}mv^2 + mgy$. Friction is left out.`];
+    return [String.raw`mgh = \tfrac{1}{2}mv^2 + mgy`];
   },
-  readout(_state, computed) {
-    return String.raw`Potential $${fmt(computed.U)}$ J. Kinetic $${fmt(computed.K)}$ J. Total $${fmt(computed.E)}$ J. Speed $${fmt(computed.v)}$ m/s.`;
+  readoutCells(_state, computed) {
+    return [
+      ['Potential energy', `${fmt(computed.U)} J`],
+      ['Kinetic energy', `${fmt(computed.K)} J`],
+      ['Total', `${fmt(computed.E)} J`],
+      ['Speed', `${fmt(computed.v)} m/s`],
+    ];
   },
   coach() {
     return {

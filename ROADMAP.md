@@ -111,7 +111,7 @@ EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come las
       Stokes), 18.02SC's order, and the same rework.
 - [ ] **R4c Statics:** notes, and the same rework, with 2.001 Lectures 1–6 setting their topics'
       order (D29).
-- [ ] **R5** PHY 2048 on the physics shell (Phase 2b is done), from OpenStax *University Physics Volume 1* alone
+- [ ] **R5** PHY 2048 on the physics shell (Phase 2b is done; R5a catalog, bank and citations and R5b the page are done, units follow, one per PR), from OpenStax *University Physics Volume 1* alone
       (D33): 13 units in book order, with drag, variable-mass, fluids, waves and sound added.
 - STA 3032: keep its checks passing. Rework only if the owner asks.
 

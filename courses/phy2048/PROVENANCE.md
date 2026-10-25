@@ -14,6 +14,6 @@ The units follow that volume's chapters in the book's order (D33), as set in `do
 
 ## What is in this folder
 
-The catalog of 13 units, the citation map `src/data/textbook.js` (section titles only), and a problem bank for the chapters 2–13 and 15. Chapters 1, 14, 16 and 17 have no problems yet. Five labs are logic only: projectile, incline, track, collide and rotor. Their numbers are computed in this folder. The scene is drawn when the course moves onto the physics shell. There is no interface yet.
+The catalog of 13 units, the page wiring, the citation map `src/data/textbook.js` (section titles only), and a problem bank for the chapters 2–13 and 15. Chapters 1, 14, 16 and 17 have no problems yet. Five labs are logic only: projectile, incline, track, collide and rotor. Their numbers are computed in this folder. The course runs on the physics shell (`npm run dev`, port 5180) with Practice, the units reference and Predict first. The canvas shows only the grid; each unit's PR draws its labs. There are no notes yet, and the hub does not link the course until Unit 1 is built to the standard.
 
 The shared mechanics functions live in `packages/subjects/src/mechanics/`. They are not course material.
