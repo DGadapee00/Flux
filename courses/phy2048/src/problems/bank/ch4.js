@@ -164,7 +164,7 @@ export default [
       String.raw`$\vec v = (${texNum($.vx)}, ${texNum($.vy)})\ \mathrm{m/s}$, speed $${texNum($.v)}\ \mathrm{m/s}$`,
     ],
     cases: [
-      kase('OpenStax University Physics Vol. 1 §4.2, "A Skier": 2.1 m/s² down a 15° slope from (75.0, −20.0) m at (4.1, −1.1) m/s, after 10.0 s', { a: 2.1, phi: 15, x0: 75, y0: -20, v0: 4.245, t: 10, mode: 'speed' }, { x: 217.43, y: -58.24, v: 25.24 }, {
+      kase('OpenStax University Physics Vol. 1 §4.2, "A Skier": 2.1 m/s² down a 15° slope from (75.0, −20.0) m at (4.1, −1.1) m/s, after 10.0 s', { a: 2.1, phi: 15, x0: 75, y0: -20, v0: 4.245, t: 10, mode: 'speed' }, { x: 217.425, y: -58.163, v: 25.245 }, {
         note: 'The book rounds a_x to 2.0 m/s² and prints (216.0, −58.0) m and 25 m/s. Unrounded, a_x = 2.03 m/s², which adds 1.4 m to x.',
       }),
       kase('hand', { a: 2, phi: 30, x0: 0, y0: 0, v0: 6, t: 2, mode: 'slow' }, { x: 6.9282, y: -4, v: 2 }),

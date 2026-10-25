@@ -5,9 +5,10 @@
  * so a section links to its lab and its problems, and a problem and a lab link back.
  */
 import u1 from './units/u1.js';
+import u2 from './units/u2.js';
 
 /** One file per unit in ./units/, so each unit's sections change without touching the others. */
-export const NOTES = { u1 };
+export const NOTES = { u1, u2 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
 

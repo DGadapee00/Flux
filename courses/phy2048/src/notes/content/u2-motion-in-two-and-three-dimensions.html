@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Motion in Two and Three Dimensions</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">PHY 2048 · Physics I · Unit 2 · OpenStax University Physics Vol. 1, Ch 4, rewritten</div>
+  <h1>Motion in Two and Three Dimensions</h1>
+  <p class="lede">Split a motion into perpendicular parts and each part is the motion along a line from Unit 1. A projectile, a turn and a crossing in a current all follow from that one step.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Vectors of motion</h3>
+    <a href="#s1"><span>1</span>Position, displacement and velocity</a>
+    <a href="#s2"><span>2</span>Acceleration, and constant acceleration in a plane</a>
+    <h3>Part II · Projectiles</h3>
+    <a href="#s3"><span>3</span>Two independent motions</a>
+    <a href="#s4"><span>4</span>Time of flight, trajectory and range</a>
+    <a href="#s5"><span>5</span>Launching to or from a height</a>
+    <h3>Part III · Circular motion</h3>
+    <a href="#s6"><span>6</span>Uniform circular motion</a>
+    <a href="#s7"><span>7</span>Speeding up and slowing down on a circle</a>
+    <h3>Part IV · Relative motion</h3>
+    <a href="#s8"><span>8</span>Reference frames and relative velocity</a>
+    <a href="#s9"><span>9</span>Heading into a wind or a current</a>
+    <h3>Reference</h3>
+    <a href="#s10"><span>10</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Vectors of motion</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Position, displacement and velocity</h2>
+<p>In two or three dimensions a particle's place is a vector from the origin, the <b>position vector</b>. Each coordinate is a function of time:</p>
+\[
+\vec r(t) = x(t)\,\hat\imath + y(t)\,\hat\jmath + z(t)\,\hat k.
+\]
+<p>The <b>displacement</b> from time \(t_1\) to \(t_2\) is the change in that vector, \(\Delta\vec r = \vec r(t_2) - \vec r(t_1)\). It is the arrow from the first point to the second. It ignores the path, so it is the shortest route between them.</p>
+<div class="box ex"><span class="tag">Worked example · a satellite over the pole</span>
+<p>A satellite circles Earth in a polar orbit 400 km up, so 6770 km from the centre. Put the origin at the centre, \(x\) east and \(y\) north. Over the North Pole, \(\vec r_1 = (0,\ 6770)\ \text{km}\). At latitude \(-45^\circ\), \(\vec r_2 = (6770\cos45^\circ,\ -6770\sin45^\circ) = (4787,\ -4787)\ \text{km}\). The displacement is</p>
+\[
+\Delta\vec r = \vec r_2 - \vec r_1 = (4787,\ -11\,557)\ \text{km}, \qquad |\Delta\vec r| = 12\,509\ \text{km},
+\]
+<p>at \(\tan^{-1}(-11\,557/4787) = -67.5^\circ\) from east. The satellite flew a quarter circle and more. The displacement is the straight chord.</p>
+</div>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Velocity is the rate of change of position, now a vector:</p>
+\[
+\vec v = \lim_{\Delta t\to0}\frac{\vec r(t+\Delta t) - \vec r(t)}{\Delta t} = \frac{d\vec r}{dt} = \frac{dx}{dt}\,\hat\imath + \frac{dy}{dt}\,\hat\jmath + \frac{dz}{dt}\,\hat k.
+\]
+<p>The chord \(\Delta\vec r\) joins two points of the path. As \(\Delta t\) shrinks, the second point slides onto the first and the chord turns into the tangent. So the velocity is always tangent to the path. Its size is the speed.</p>
+</div>
+<p>The <b>average velocity</b> over an interval is the displacement over the time, \(\vec v_{\text{avg}} = \Delta\vec r/\Delta t\). It equals the velocity at the middle of the interval only when the velocity changes linearly with time.</p>
+<div class="box ex"><span class="tag">Worked example · average against instantaneous</span>
+<p>A particle is at \(\vec r(t) = 2.0t^2\,\hat\imath + (2.0 + 3.0t)\,\hat\jmath + 5.0t\,\hat k\) m. Differentiate each part: \(\vec v = 4.0t\,\hat\imath + 3.0\,\hat\jmath + 5.0\,\hat k\) m/s. At 2.0 s that is \((8.0,\ 3.0,\ 5.0)\) m/s, a speed of \(\sqrt{64 + 9 + 25} = 9.90\) m/s. From 1.0 s to 3.0 s the average is \([(18, 11, 15) - (2, 5, 5)]/2.0 = (8.0,\ 3.0,\ 5.0)\) m/s, the same. The velocity is linear in \(t\), so they agree.</p>
+<p>Now take \(\vec r(t) = 3.0t^3\,\hat\imath + 4.0\,\hat\jmath\) m. At 3.0 s, \(\vec v = 9.0t^2\,\hat\imath = 81\,\hat\imath\) m/s. From 2.0 s to 4.0 s the average is \((192 - 24)\,\hat\imath/2.0 = 84\,\hat\imath\) m/s. The velocity grows as \(t^2\), so the average is not the middle value.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The book prints the second average as \(84\,\hat\jmath\) m/s. The \(y\) coordinate is 4.0 m at every instant, so nothing moves along \(\hat\jmath\). The average velocity is \(84\,\hat\imath\) m/s.</p>
+<p>The speed is the size of \(\vec v\), not of \(\vec r\). A particle far from the origin can be at rest.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Each component of \(\vec r\), \(\vec v\) and \(\vec a\) depends only on its own coordinate. Motion along \(x\) has no effect on motion along \(y\). So a motion in a plane is two motions along lines, sharing one clock.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Acceleration, and constant acceleration in a plane</h2>
+<p>The acceleration is the rate of change of the velocity, part by part:</p>
+\[
+\vec a = \frac{d\vec v}{dt} = \frac{d^2x}{dt^2}\,\hat\imath + \frac{d^2y}{dt^2}\,\hat\jmath + \frac{d^2z}{dt^2}\,\hat k.
+\]
+<p>Velocity is a vector, so it changes in two ways: in size and in direction. Either one is an acceleration. A car at a steady speed on a curve accelerates, because its direction turns. Section 6 finds how much.</p>
+<div class="box ex"><span class="tag">Worked example · an acceleration that changes</span>
+<p>A particle has \(\vec v(t) = 5.0t\,\hat\imath + t^2\,\hat\jmath - 2.0t^3\,\hat k\) m/s. Differentiate: \(\vec a = 5.0\,\hat\imath + 2.0t\,\hat\jmath - 6.0t^2\,\hat k\ \text{m/s}^2\). At 2.0 s, \(\vec a = (5.0,\ 4.0,\ -24)\ \text{m/s}^2\), of size \(\sqrt{25 + 16 + 576} = 24.8\ \text{m/s}^2\).</p>
+</div>
+<p>When \(\vec a\) is constant, each component obeys Unit 1's three equations on its own axis:</p>
+\[
+v_x = v_{0x} + a_xt, \qquad x = x_0 + v_{0x}t + \tfrac12a_xt^2, \qquad v_x^2 = v_{0x}^2 + 2a_x(x - x_0),
+\]
+<p>and the same with \(y\) in place of \(x\). Only \(t\) is shared.</p>
+<div class="box ex"><span class="tag">Worked example · a skier on a slope</span>
+<p>A skier on a \(15^\circ\) slope speeds up at \(2.1\ \text{m/s}^2\) down it. Take \(x\) horizontal and \(y\) up. Then \(a_x = 2.1\cos15^\circ = 2.03\ \text{m/s}^2\) and \(a_y = -2.1\sin15^\circ = -0.544\ \text{m/s}^2\). She starts at \((75.0,\ -20.0)\) m moving at \((4.1,\ -1.1)\) m/s. After 10.0 s,</p>
+\[
+x = 75.0 + 41.0 + \tfrac12(2.03)(100) = 217.4\ \text{m}, \qquad y = -20.0 - 11.0 - \tfrac12(0.544)(100) = -58.2\ \text{m}.
+\]
+<p>Her velocity is \((4.1 + 20.3,\ -1.1 - 5.4) = (24.4,\ -6.5)\) m/s, a speed of 25.2 m/s. The book rounds \(a_x\) to 2.0 before multiplying and prints 216.0 m. The unrounded value is 1.4 m farther.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A constant acceleration. A real skier meets snow friction that changes with speed, and air drag that grows as the square of the speed. Both make \(\vec a\) shrink as she speeds up.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Projectiles</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Two independent motions</h2>
+<p>A projectile is anything thrown and then left to gravity. Leave out air resistance. Then the only acceleration is \(g\) straight down: \(a_x = 0\) and \(a_y = -g\), with \(y\) up. Section 2's equations become two simple motions.</p>
+\[
+\text{Horizontal:}\quad x = x_0 + v_{0x}t, \quad v_x = v_{0x}. \qquad \text{Vertical:}\quad y = y_0 + v_{0y}t - \tfrac12gt^2, \quad v_y = v_{0y} - gt.
+\]
+<p>A launch at speed \(v_0\) and angle \(\theta\) above the horizontal has \(v_{0x} = v_0\cos\theta\) and \(v_{0y} = v_0\sin\theta\). The horizontal velocity never changes. The vertical motion is a ball tossed straight up at \(v_{0y}\). At the top \(v_y = 0\), so from \(v_y^2 = v_{0y}^2 - 2g(y - y_0)\) the height gained is</p>
+\[
+h = \frac{v_{0y}^2}{2g}, \qquad \text{reached at}\quad t = \frac{v_{0y}}{g}.
+\]
+<div class="box ex"><span class="tag">Worked example · a firework at the top of its climb</span>
+<p>A shell leaves at 70.0 m/s, \(75.0^\circ\) above the horizontal. Its parts are \(v_{0y} = 70.0\sin75^\circ = 67.6\) m/s and \(v_{0x} = 70.0\cos75^\circ = 18.1\) m/s. It bursts at the top, where \(v_y = 0\):</p>
+\[
+h = \frac{67.6^2}{2(9.81)} = 233.0\ \text{m}, \qquad t = \frac{67.6}{9.81} = 6.89\ \text{s}, \qquad x = 18.1 \times 6.89 = 124.9\ \text{m}.
+\]
+<p>The burst is \(\sqrt{124.9^2 + 233.0^2} = 264\) m from the launch, at \(61.8^\circ\) above the horizontal. That is less than \(75^\circ\), because the path has already curved over. The book uses \(g = 9.80\) and prints the same 233 m, 6.90 s and 125 m.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a rock thrown flat off a cliff</span>
+<p>A rock leaves a 100.0 m cliff horizontally at 15.0 m/s. Its vertical motion is a drop from rest: \(100.0 = \tfrac12(9.81)t^2\), so \(t = 4.52\) s. It lands \(15.0 \times 4.52 = 67.7\) m out. There \(v_y = -9.81 \times 4.52 = -44.3\) m/s, and</p>
+\[
+v = \sqrt{15.0^2 + 44.3^2} = 46.8\ \text{m/s}, \qquad \tan^{-1}\frac{44.3}{15.0} = 71.3^\circ\ \text{below the horizontal}.
+\]
+<p>A rock dropped from the same edge lands at the same instant. The 15.0 m/s sideways changes where it lands, not when.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>At the top the velocity is not zero. Only \(v_y\) is zero. The speed there is \(v_x = v_0\cos\theta\), and \(v^2 = v_x^2\) holds only at that one point. Anywhere else, \(v^2 = v_x^2 + v_y^2\).</p>
+<p>The acceleration at the top is not zero either. It is \(g\) downward at every point of the flight. The horizontal acceleration is zero everywhere, even though the ball moves sideways the whole time.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The two motions share only the time. Find the time from the motion that pins it down, usually the vertical one, then use it in the other.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Time of flight, trajectory and range</h2>
+<p>Launch from the origin and land at the same height. Landing means \(y = 0\) again:</p>
+\[
+v_0\sin\theta\,t - \tfrac12gt^2 = t\left(v_0\sin\theta - \tfrac12gt\right) = 0 \quad\Rightarrow\quad T = \frac{2v_0\sin\theta}{g}.
+\]
+<p>The root \(t = 0\) is the launch. The flight is twice the climb.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Eliminate \(t\) to get the path. From \(x = v_0\cos\theta\,t\), \(t = x/(v_0\cos\theta)\). Put that into \(y\):</p>
+\[
+y = x\tan\theta - \frac{g}{2v_0^2\cos^2\theta}\,x^2.
+\]
+<p>That is a parabola opening downward. It crosses \(y = 0\) at \(x = 0\) and at \(x = 2v_0^2\sin\theta\cos\theta/g\). With \(2\sin\theta\cos\theta = \sin2\theta\), the <b>range</b> is</p>
+\[
+R = \frac{v_0^2\sin2\theta}{g}.
+\]
+<p>It is largest when \(\sin2\theta = 1\), at \(\theta = 45^\circ\). And \(\sin2\theta = \sin(180^\circ - 2\theta)\), so \(\theta\) and \(90^\circ - \theta\) give the same range. The steeper one climbs higher and stays up longer, with less horizontal speed to spend.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the low golf shot</span>
+<p>A golfer wants the ball to carry 90.0 m on level ground with a low \(30^\circ\) shot. Solve the range for the speed:</p>
+\[
+v_0 = \sqrt{\frac{Rg}{\sin2\theta}} = \sqrt{\frac{90.0 \times 9.81}{\sin60^\circ}} = 31.9\ \text{m/s}.
+\]
+<p>The ball is up for \(2(31.9)\sin30^\circ/9.81 = 3.25\) s and peaks at 13.0 m. Its path is \(y = 0.577x - 0.00641x^2\), with \(x\) and \(y\) in metres.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the high golf shot</span>
+<p>On another hole the golfer wants 90.0 m with a steep \(70^\circ\) shot that stops where it lands. Now \(\sin140^\circ = 0.643\), and</p>
+\[
+v_0 = \sqrt{\frac{90.0 \times 9.81}{0.643}} = 37.0\ \text{m/s}.
+\]
+<p>The ball peaks at 61.8 m and is up for 7.10 s. The two angles add to \(100^\circ\), not \(90^\circ\), so the shots do not tie at one speed. Hit at 31.9 m/s, the \(70^\circ\) shot carries only 66.8 m.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(R = v_0^2\sin2\theta/g\) is for a launch and a landing at one height. From a roof, into the stands, or onto a slope it gives the wrong answer. Section 5 does those.</p>
+<p>The range has \(\sin2\theta\), not \(\sin\theta\). Using \(\sin\theta\) at \(30^\circ\) gives a range too small by the factor \(\sin30^\circ/\sin60^\circ = 0.577\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Air drag, which shortens every range and moves the best angle below \(45^\circ\). And a flat Earth. Over a long range the ground curves away under the path. Earth's surface drops about 5 m in 8 km, and a body falls 4.9 m in the first second. So a body launched flat at 8 km/s keeps falling around the curve and never lands: it is in orbit.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Launching to or from a height</h2>
+<p>When the landing is \(\Delta y\) above the launch (negative for below), the time comes from the vertical motion alone:</p>
+\[
+\Delta y = v_0\sin\theta\,t - \tfrac12gt^2 \quad\Rightarrow\quad \tfrac12gt^2 - v_0\sin\theta\,t + \Delta y = 0.
+\]
+<p>That is a quadratic. Above the launch it has two positive roots: the ball passes the landing height on the way up and again on the way down. Take the later one. Below the launch one root is negative, a time before the throw. Then \(x = v_0\cos\theta\,t\), and the landing speed follows from \(v_y = v_0\sin\theta - gt\).</p>
+<div class="box ex"><span class="tag">Worked example · a tennis ball caught in the stands</span>
+<p>A ball leaves the racket at 30.0 m/s, \(45^\circ\) up, and a fan 10.0 m above the court catches it on the way down. Here \(v_{0y} = 21.2\) m/s, and \(4.905t^2 - 21.2t + 10.0 = 0\) has roots 0.54 s and 3.79 s. The catch is at 3.79 s, 80.3 m away. Then \(v_y = 21.2 - 9.81(3.79) = -15.9\) m/s, so</p>
+\[
+v = \sqrt{21.2^2 + 15.9^2} = 26.5\ \text{m/s}, \qquad \tan^{-1}\frac{15.9}{21.2} = 36.9^\circ\ \text{below the horizontal}.
+\]
+<p>Energy agrees: \(v^2 = v_0^2 - 2g\Delta y = 900 - 196 = 704\), so \(v = 26.5\) m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a golfer above the green</span>
+<p>A golfer stands 20.0 m above the green and hits at 20.0 m/s, \(40^\circ\) up. Then \(v_{0y} = 12.9\) m/s and \(v_{0x} = 15.3\) m/s. The landing has \(\Delta y = -20.0\) m: \(4.905t^2 - 12.9t - 20.0 = 0\), so \(t = 3.72\) s. The ball lands \(15.32 \times 3.718 = 57.0\) m out, at 28.1 m/s, \(57.0^\circ\) below the horizontal.</p>
+<p>The book rounds the time to 3.7 s and prints 56.7 m. With the unrounded time the ball lands 57.0 m out.</p>
+</div>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A slope through the launch point, rising at angle \(\varphi\), is the line \(y = x\tan\varphi\). Tilt the axes to lie along and across it. Gravity has a part \(-g\sin\varphi\) along the slope and \(-g\cos\varphi\) across it. The launch has \(v_0\sin(\theta - \varphi)\) across it. The motion across the slope is a toss with acceleration \(g\cos\varphi\), so the ball is back on the slope after</p>
+\[
+t = \frac{2v_0\sin(\theta - \varphi)}{g\cos\varphi}, \qquad d = \frac{v_0\cos\theta\,t}{\cos\varphi} = \frac{2v_0^2\cos\theta\sin(\theta - \varphi)}{g\cos^2\varphi}.
+\]
+<p>For a slope that falls away, \(\varphi\) is negative. With \(\varphi = 0\) both reduce to Section 4.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a shot up a slope</span>
+<p>A ball is launched at 20.0 m/s, \(50^\circ\) above the horizontal, from the foot of a \(20^\circ\) slope. Across the slope it starts at \(20.0\sin30^\circ = 10.0\) m/s against \(9.81\cos20^\circ = 9.22\ \text{m/s}^2\). So it is back on the slope after \(t = 2(10.0)/9.22 = 2.17\) s, and</p>
+\[
+d = \frac{20.0\cos50^\circ \times 2.17}{\cos20^\circ} = 29.7\ \text{m}\ \text{up the slope}.
+\]
+<p>The best aim up this slope is \(45^\circ + \varphi/2 = 55^\circ\), which reaches \(v_0^2/[g(1 + \sin\varphi)] = 30.4\) m.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The level-ground range and the time \(2v_0\sin\theta/g\) do not apply when the landing is at another height. For the tennis ball they give 91.7 m and 4.32 s. The ball is caught at 80.3 m and 3.79 s.</p>
+<p>Above the launch, the smaller root of the quadratic is the moment the ball rises past the landing height. The catch is on the way down, at the larger root.</p>
+<p>The landing angle equals the launch angle only on level ground.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Drag again, and the size of the ball. A golf ball also spins, and the spin gives it lift, so a real drive carries well past these numbers.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Circular motion</h2>
+</div>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Uniform circular motion</h2>
+<p>A particle goes round a circle of radius \(r\) at a steady speed \(v\). Its speed is constant, but its velocity turns, so it accelerates.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>In a short time \(\Delta t\) the particle moves through a small angle \(\Delta\theta\). The position vector turns by \(\Delta\theta\), and so does the velocity, which stays perpendicular to it. The two triangles, one made by \(\vec r\), \(\vec r'\) and \(\Delta\vec r\), the other by \(\vec v\), \(\vec v'\) and \(\Delta\vec v\), have the same angle between equal sides. They are similar, so</p>
+\[
+\frac{|\Delta\vec v|}{v} = \frac{|\Delta\vec r|}{r} \quad\Rightarrow\quad \frac{|\Delta\vec v|}{\Delta t} = \frac{v}{r}\,\frac{|\Delta\vec r|}{\Delta t} \to \frac{v}{r}\,v.
+\]
+<p>So \(a_c = v^2/r\). As \(\Delta t \to 0\), \(\Delta\vec v\) becomes perpendicular to \(\vec v\), pointing at the centre. This is the <b>centripetal acceleration</b>.</p>
+<p>A second route: write \(\vec r(t) = r\cos\omega t\,\hat\imath + r\sin\omega t\,\hat\jmath\), where \(\omega = v/r\) is the <b>angular speed</b> in radians per second. Differentiate twice: \(\vec a = -\omega^2\vec r\). It points opposite \(\vec r\), at the centre, with size \(\omega^2r = v^2/r\).</p>
+</div>
+\[
+a_c = \frac{v^2}{r} = \omega^2r, \qquad \omega = \frac{v}{r} = \frac{2\pi}{T}, \qquad T = \frac{2\pi r}{v}.
+\]
+<p>Doubling the speed doubles how fast the velocity turns and doubles the velocity being turned, so \(a_c\) grows four times. Doubling the radius at the same speed halves it.</p>
+<div class="box ex"><span class="tag">Worked example · a jet turning at 1 g</span>
+<p>A jet at 134.1 m/s turns in a level circle. For a centripetal acceleration of \(g\), set \(v^2/r = 9.81\ \text{m/s}^2\):</p>
+\[
+r = \frac{134.1^2}{9.81} = 1833\ \text{m}.
+\]
+<p>A full circle would take \(2\pi(1833)/134.1 = 85.9\) s. The book uses \(g = 9.8\) and prints 1835 m. A tighter turn, or a faster one, means more than 1 g.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a point on a fan blade</span>
+<p>A fan turns at a steady 360.0 rev/min. A point on its blade sits 10.0 cm from the axis. One revolution is \(2\pi\) rad and a minute is 60 s, so</p>
+\[
+\omega = 360.0 \times \frac{2\pi}{60} = 37.70\ \text{rad/s}, \quad v = \omega r = 3.770\ \text{m/s}, \quad a_c = \omega^2r = 142.1\ \text{m/s}^2.
+\]
+<p>That is 14.5 times \(g\), toward the axis.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The book's answer to this fan problem is \(144\ \text{m/s}^2\). It rounds the speed to 3.8 m/s and then squares it. Unrounded, \(3.770^2/0.100 = 142.1\ \text{m/s}^2\). Round at the end, not in the middle.</p>
+<p>\(\omega\) must be in radians per second. Using 360 for one revolution makes \(\omega\) 57.3 times too big and \(a_c\) about 3300 times too big.</p>
+<p>The acceleration does not point along the velocity. At a steady speed it is at \(90^\circ\) to it, toward the centre. A passenger feels pushed outward, but that is the passenger's own tendency to go straight.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real turn is not a perfect circle at a perfect speed, and the body is not a point. Something must supply the force for \(a_c\): the road's grip on the tyres, the air on the wings. Unit 3 finds those forces.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Speeding up and slowing down on a circle</h2>
+<p>If the speed also changes, the acceleration gains a second part. The rate of change of the speed is the <b>tangential acceleration</b>, \(a_T = dv/dt\), along the velocity. The turning still gives \(a_c = v^2/r\) toward the centre, using the speed at that instant. The two parts are perpendicular, so</p>
+\[
+\vec a = \vec a_c + \vec a_T, \qquad |\vec a| = \sqrt{a_c^2 + a_T^2}.
+\]
+<p>Speeding up tips \(\vec a\) forward of the radius, so it makes less than \(90^\circ\) with \(\vec v\). Slowing down tips it back, past \(90^\circ\).</p>
+<div class="box ex"><span class="tag">Worked example · total acceleration on a 2 m circle</span>
+<p>A particle moves on a circle of radius 2.0 m with speed \(v(t) = 4.0 - 6.0/t^2\) m/s. At 2.0 s its speed is \(4.0 - 1.5 = 2.5\) m/s. The parts are</p>
+\[
+a_c = \frac{2.5^2}{2.0} = 3.125\ \text{m/s}^2, \qquad a_T = \frac{dv}{dt} = \frac{12.0}{t^3} = 1.5\ \text{m/s}^2.
+\]
+<p>So \(|\vec a| = \sqrt{3.125^2 + 1.5^2} = 3.47\ \text{m/s}^2\), at \(\tan^{-1}(3.125/1.5) = 64.4^\circ\) from the velocity.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The book prints \(3.44\ \text{m/s}^2\) for this example. It rounds \(a_c\) to 3.1 before squaring: \(\sqrt{3.1^2 + 1.5^2} = 3.44\). With \(a_c = 3.125\) the total is \(3.47\ \text{m/s}^2\).</p>
+<p>The two parts do not add as numbers. \(3.125 + 1.5 = 4.6\) is the answer only if they pointed the same way, and they are at right angles.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · braking on a roundabout</span>
+<p>A car on a 20 m roundabout at 10 m/s brakes, losing speed at \(3.0\ \text{m/s}^2\). At that instant \(a_c = 100/20 = 5.0\ \text{m/s}^2\) and \(a_T = -3.0\ \text{m/s}^2\). The total is \(\sqrt{25 + 9} = 5.83\ \text{m/s}^2\), at \(121^\circ\) from the velocity: inward and backward.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A fixed radius. A car that brakes on a curve usually widens its path, so \(r\) changes too, and the path is no longer a circle.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part IV</div>
+  <h2>Relative motion</h2>
+</div>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Reference frames and relative velocity</h2>
+<p>A velocity is always measured from somewhere: the ground, a train, a moving river. That somewhere is a <b>reference frame</b>. A passenger walking back at 2 m/s in a train that moves at 10 m/s east moves at 8 m/s east over the ground.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Let frame \(S'\) move relative to frame \(S\). The position of a particle \(P\) seen from \(S\) is its position seen from \(S'\) plus the position of \(S'\)'s origin seen from \(S\): \(\vec r_{PS} = \vec r_{PS'} + \vec r_{S'S}\). Differentiate:</p>
+\[
+\vec v_{PS} = \vec v_{PS'} + \vec v_{S'S}, \qquad \vec a_{PS} = \vec a_{PS'} + \vec a_{S'S}.
+\]
+<p>The inner subscripts match and cancel in the reading: \(P\) in \(S'\), \(S'\) in \(S\), gives \(P\) in \(S\). Swapping the subscripts reverses a velocity: \(\vec v_{S'S} = -\vec v_{SS'}\).</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>If \(S'\) moves at a constant velocity relative to \(S\), then \(\vec a_{S'S} = 0\) and \(\vec a_{PS} = \vec a_{PS'}\). Observers moving steadily relative to each other disagree about velocities and agree about every acceleration.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a car seen from a truck</span>
+<p>A car drives east at 80 km/h and a truck south at 70 km/h, toward the same crossing. Seen from the truck, the car moves at \(\vec v_{CT} = \vec v_{CE} + \vec v_{ET} = \vec v_{CE} - \vec v_{TE}\). With \(x\) east and \(y\) north, that is \((80,\ 0) - (0,\ -70) = (80,\ 70)\) km/h:</p>
+\[
+|\vec v_{CT}| = \sqrt{80^2 + 70^2} = 106\ \text{km/h}, \qquad \tan^{-1}\frac{70}{80} = 41.2^\circ\ \text{north of east}.
+\]
+<p>To the truck driver the car seems to drift north, though it never moves north over the ground.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a boat pointing across a river</span>
+<p>A boat moves at 4.5 m/s through the water and points due north, straight across a river 60 m wide. The river runs east at 3.0 m/s. Over the ground</p>
+\[
+\vec v_{BE} = \vec v_{BW} + \vec v_{WE} = (3.0,\ 4.5)\ \text{m/s}, \qquad |\vec v_{BE}| = 5.41\ \text{m/s},
+\]
+<p>at \(\tan^{-1}(3.0/4.5) = 33.7^\circ\) east of north. Only the 4.5 m/s across the river carries the boat over, so it crosses in \(60/4.5 = 13.3\) s. In that time the current carries it \(3.0 \times 13.3 = 40\) m downstream.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Seen from the truck, subtract the truck's velocity. Adding it gives \((80,\ -70)\), which is the car's velocity in a frame moving north, not the truck's.</p>
+<p>A faster current does not change the crossing time of a boat that points straight across. The current runs along the river and adds nothing across it. It only lands the boat farther downstream.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Each velocity is one steady vector. A real river runs fastest in the middle and slowest at the banks, so the drift is an average.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Heading into a wind or a current</h2>
+<p>To reach a point, a pilot chooses a <b>heading</b>, where the nose points. The wind then sets the <b>track</b>, where the plane goes. They differ unless the wind lies along the course. To fly a set course, point into the wind by the angle that cancels its part across the course.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The rule is \(\vec v_{PG} = \vec v_{PA} + \vec v_{AG}\): plane over the ground equals plane through the air plus air over the ground. Split the wind into a part \(w_\perp\) across the course and \(w_\parallel\) against it. The ground velocity must lie along the course, so the airspeed's part across it cancels \(w_\perp\):</p>
+\[
+v_{PA}\sin\alpha = w_\perp \quad\Rightarrow\quad \alpha = \sin^{-1}\frac{w_\perp}{v_{PA}}.
+\]
+<p>Here \(\alpha\) is the correction, the angle between heading and course. The rest of the airspeed points along the course, so the ground speed is \(v_{PG} = v_{PA}\cos\alpha - w_\parallel\). Pilots call \(\alpha\) the wind correction angle. When \(w_\perp\) exceeds the airspeed, no heading works.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · flying north in a northeast wind</span>
+<p>A plane flies at 300 km/h in still air and must fly due north. A 90 km/h wind blows from the northeast, toward the southwest. Its parts are \(90\cos45^\circ = 63.6\) km/h toward the west and 63.6 km/h toward the south. The nose turns east of north by</p>
+\[
+\alpha = \sin^{-1}\frac{63.6}{300} = 12.2^\circ, \qquad v_{PG} = 300\cos12.2^\circ - 63.6 = 229.5\ \text{km/h}.
+\]
+<p>The book prints \(12^\circ\) and 230 km/h. The wind costs 70.5 km/h of ground speed, more than its 63.6 km/h headwind part, because part of the airspeed is spent cancelling the crosswind.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · aiming upstream to land straight across</span>
+<p>Return to the boat of Section 8: 4.5 m/s through the water, a 3.0 m/s current, a river 60 m wide. To land straight across, aim upstream by \(\alpha = \sin^{-1}(3.0/4.5) = 41.8^\circ\). The speed straight across is then \(\sqrt{4.5^2 - 3.0^2} = 3.35\) m/s, and the crossing takes \(60/3.35 = 17.9\) s. Pointing straight across took 13.3 s and drifted 40 m. Aiming upstream removes the drift and costs 4.6 s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Do not point the nose at the destination and add the wind. Then the track is not the course: at 300 km/h north in that wind, the plane would fly 245 km/h, \(15^\circ\) west of north, and miss. The wind adds to the velocity that makes the track right.</p>
+<p>The nose turns toward the side the wind comes from. Turning away doubles the drift.</p>
+<p>A pure crosswind still costs ground speed: \(v_{PG} = v_{PA}\cos\alpha\), less than \(v_{PA}\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A steady wind. Real winds change with height and along the route, so flight plans take a forecast for each leg and pilots correct in flight. Over a long route the shortest path on the curved Earth is a great circle, whose course changes as the plane flies.</p>
+</div>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Formula sheet</h2>
+\[
+\vec v = \frac{d\vec r}{dt}, \qquad \vec a = \frac{d\vec v}{dt}, \qquad \vec v_{\text{avg}} = \frac{\Delta\vec r}{\Delta t}
+\]
+\[
+x = x_0 + v_0\cos\theta\,t, \qquad y = y_0 + v_0\sin\theta\,t - \tfrac12gt^2, \qquad v_y = v_0\sin\theta - gt
+\]
+\[
+h = \frac{v_0^2\sin^2\theta}{2g}, \qquad T = \frac{2v_0\sin\theta}{g}, \qquad R = \frac{v_0^2\sin2\theta}{g}\quad\text{(level ground)}
+\]
+\[
+y = x\tan\theta - \frac{gx^2}{2v_0^2\cos^2\theta}, \qquad d_{\text{slope}} = \frac{2v_0^2\cos\theta\sin(\theta - \varphi)}{g\cos^2\varphi}
+\]
+\[
+a_c = \frac{v^2}{r} = \omega^2r, \qquad \omega = \frac{v}{r} = \frac{2\pi}{T}, \qquad a_T = \frac{dv}{dt}, \qquad |\vec a| = \sqrt{a_c^2 + a_T^2}
+\]
+\[
+\vec v_{PS} = \vec v_{PS'} + \vec v_{S'S}, \qquad \sin\alpha = \frac{w_\perp}{v_{PA}}, \qquad v_{PG} = v_{PA}\cos\alpha - w_\parallel
+\]
+\[
+g = 9.81\ \text{m/s}^2, \qquad 1\ \text{rev/min} = \frac{2\pi}{60}\ \text{rad/s}, \qquad 1\ \text{m/s} = 3.6\ \text{km/h}
+\]
+</section>
+
+</main>
+<footer>
+<p>Sources: OpenStax, <i>University Physics Volume 1</i>, Chapter 4 (CC BY-NC-SA 4.0), rewritten; the worked examples are recomputed and cite the book's examples by title. Constants: \(g = 9.81\ \text{m/s}^2\).</p>
+</footer>
+</body>
+</html>
