@@ -195,3 +195,22 @@ export function labelBeside(lab, html, x0, y0, x1, y1, xo, yo, side = 1) {
   const off = 0.3 + Math.abs(nx) * 0.1 * chars + Math.abs(ny) * 0.22 * lines;
   lab.position.set(mx + nx * off, my + ny * off, 0);
 }
+
+/**
+ * A straight line drawn on a graph panel from (t0, v0) to (t1, v1), cut where it leaves the panel's
+ * value range [lo, hi]. `graph.line` extends its chord past both ends; a reference line must not.
+ */
+export function graphSegment(line, graph, { t0, v0, t1, v1, lo, hi }) {
+  let a = t0;
+  let b = t1;
+  const k = (v1 - v0) / (t1 - t0);
+  if (Math.abs(k) > 1e-12) {
+    const tLo = t0 + (lo - v0) / k;
+    const tHi = t0 + (hi - v0) / k;
+    a = Math.max(a, Math.min(tLo, tHi));
+    b = Math.min(b, Math.max(tLo, tHi));
+  }
+  line.visible = b > a;
+  if (!line.visible) return;
+  updateFatLine(line, [graph.sx(a), graph.sy(v0 + k * (a - t0)), 0.03, graph.sx(b), graph.sy(v0 + k * (b - t0)), 0.03]);
+}
