@@ -17,7 +17,7 @@ test('manifest is PHY 2048, first in the physics track', async () => {
   assert.equal(course.units.length, 13);
   assert.deepEqual(course.units.map((unit) => unit.labs), [
     ['vectors', 'kinematics-graphs', 'stopping-distance'],
-    ['projectile'],
+    ['projectile', 'circular-motion', 'relative-motion', 'wind-triangle'],
     ['incline'],
     ['track'],
     ['collide'],
@@ -32,7 +32,7 @@ test('manifest is PHY 2048, first in the physics track', async () => {
   ]);
   const labs = await course.labs();
   assert.equal(typeof labs.loadLab, 'function');
-  for (const id of ['vectors', 'kinematics-graphs', 'stopping-distance', 'projectile', 'incline', 'track', 'collide', 'rotor']) {
+  for (const id of ['vectors', 'kinematics-graphs', 'stopping-distance', 'projectile', 'circular-motion', 'relative-motion', 'wind-triangle', 'incline', 'track', 'collide', 'rotor']) {
     const lab = await labs.loadLab(id);
     assert.equal(lab.id, id);
     assert.equal(lab.kind, 'scene3d');
