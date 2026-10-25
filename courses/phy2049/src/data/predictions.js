@@ -763,6 +763,70 @@ export const PREDICTIONS = [
     why: 'The electrodes are twice as far apart, so $V = Bdv$ doubles. The pipe’s area goes as $d^2$, so four times the water flows.',
   },
   {
+    id: 'radargun-double-v',
+    lab: 'radargun',
+    scenario: 'notes',
+    ask: 'The car closes on the gun twice as fast.',
+    apply(s) {
+      s.v *= 2;
+    },
+    watch: [
+      { id: 'df', label: 'the beat Δf the gun counts', get: (c) => c.rg.shift, fmt: fmtHz },
+      { id: 'lam', label: 'the wavelength the gun sends', get: (c) => c.rg.lambda, fmt: (v) => plain(v * 100, 'cm') },
+    ],
+    mode: 'factor',
+    expect: { df: 2, lam: 1 },
+    why: 'The shift is $\\Delta f = 2fv/c$, proportional to the speed, so it doubles. The gun’s own wave is set by the gun: $\\lambda = c/f$ does not care what the car does.',
+  },
+  {
+    id: 'radargun-reverse',
+    lab: 'radargun',
+    scenario: 'notes',
+    ask: 'The car turns around and drives away from the gun at the same speed.',
+    apply(s) {
+      s.v = -s.v;
+    },
+    watch: [
+      { id: 'fe', label: 'the echo’s shift (positive when the echo is higher than f)', get: (c) => c.rg.shift, fmt: fmtHz, signed: true },
+      { id: 'df', label: 'the size of the beat', get: (c) => Math.abs(c.rg.shift), fmt: fmtHz },
+    ],
+    mode: 'dir',
+    expect: { fe: 'smaller', df: 'same' },
+    why: 'A receding car lowers the echo: $f_{\\text{echo}} = f(1 + 2v/c)$, and $v$ is now negative. The beat is the difference between the two frequencies, and its size $2f|v|/c$ is unchanged. The gun reads the speed either way.',
+  },
+  {
+    id: 'solarsail-double-r',
+    lab: 'solarsail',
+    scenario: 'notes',
+    ask: 'Fly the same sail twice as far from the Sun.',
+    apply(s) {
+      s.r *= 2;
+    },
+    watch: [
+      { id: 'I', label: 'the sunlight’s intensity on the sail', get: (c) => c.ss.I, fmt: fmtIrr },
+      { id: 'F', label: 'the push on the sail', get: (c) => c.ss.F, fmt: (v) => T(v, 'N') },
+    ],
+    mode: 'factor',
+    expect: { I: 0.25, F: 0.25 },
+    why: 'The Sun’s power spreads over a sphere of area $4\\pi r^2$, so twice as far the intensity is a quarter. The push $F = 2IA/c$ follows the intensity down.',
+  },
+  {
+    id: 'solarsail-double-m',
+    lab: 'solarsail',
+    scenario: 'notes',
+    ask: 'Carry a craft twice as heavy on the same sail.',
+    apply(s) {
+      s.m *= 2;
+    },
+    watch: [
+      { id: 'F', label: 'the push on the sail', get: (c) => c.ss.F, fmt: (v) => T(v, 'N') },
+      { id: 'a', label: 'the acceleration', get: (c) => c.ss.a, fmt: (v) => T(v, 'm/s²') },
+    ],
+    mode: 'factor',
+    expect: { F: 1, a: 0.5 },
+    why: 'The light does not care what the sail carries: $F = 2IA/c$ is unchanged. Newton’s second law then gives half the acceleration, $a = F/m$.',
+  },
+  {
     id: 'motor-double-s',
     lab: 'motor',
     scenario: 'course',

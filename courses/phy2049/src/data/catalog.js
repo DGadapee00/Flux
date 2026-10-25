@@ -56,7 +56,7 @@ export const EXAMS = [
     title: 'EM waves',
     chapters: '53–57',
     date: 'Fri 11/6',
-    labs: ['emwave', 'polar'],
+    labs: ['emwave', 'polar', 'radargun', 'solarsail'],
     coming: [],
   },
   {
@@ -101,6 +101,8 @@ export const LAB_META = {
   mri: { id: 'mri', exam: 'e4', title: 'MRI', app: true },
   transformer: { id: 'transformer', exam: 'e5', title: 'Transformer', app: true },
   flowmeter: { id: 'flowmeter', exam: 'e5', title: 'Flow meter', app: true },
+  radargun: { id: 'radargun', exam: 'e6', title: 'Radar gun', app: true },
+  solarsail: { id: 'solarsail', exam: 'e6', title: 'Solar sail', app: true },
   faraday: { id: 'faraday', exam: 'e5', title: 'Faraday' },
   ac: { id: 'ac', exam: 'e5', title: 'AC' },
   emwave: { id: 'emwave', exam: 'e6', title: 'EM wave' },

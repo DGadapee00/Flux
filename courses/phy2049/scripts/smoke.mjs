@@ -46,6 +46,8 @@ const LAB = {
   mri: 'e4',
   transformer: 'e5',
   flowmeter: 'e5',
+  radargun: 'e6',
+  solarsail: 'e6',
 };
 
 async function go(lab) {
@@ -371,7 +373,7 @@ await go('lenses');
 
 // Application labs: every scenario builds its scene and animates without an error.
 const apps = {};
-for (const lab of ['railgun', 'thruster', 'powerline', 'cyclotron', 'motor', 'mri', 'transformer', 'flowmeter']) {
+for (const lab of ['railgun', 'thruster', 'powerline', 'cyclotron', 'motor', 'mri', 'transformer', 'flowmeter', 'radargun', 'solarsail']) {
   await go(lab);
   const ids = await page.evaluate(() => [...document.querySelectorAll('#scenario option')].map((o) => o.value).filter((v) => v && !v.startsWith('__')));
   for (const id of ids) {

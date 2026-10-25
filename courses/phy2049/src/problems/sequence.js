@@ -11,6 +11,17 @@
  * otherwise). A chapter not listed keeps the bank's order.
  */
 export const SEQUENCE = {
+  55: [
+    ['Intensity and the fields', ['e6.55.intensity', 'e6.55.E-from-I']],
+    ['Spreading from a source', ['e6.55.point-source']],
+    ['Light pushes', ['e6.55.pressure']],
+    ['Application: a solar sail', ['e6.55.solar-sail']],
+  ],
+  53: [
+    ['Wavelength and frequency', ['e6.53.f-from-lambda', 'e6.53.wave-eq']],
+    ['E, B and the direction of travel', ['e6.53.B-from-E', 'e6.53.direction']],
+    ['Application: a police radar gun', ['e6.53.radar-gun']],
+  ],
   38: [
     ['What V, U and E are', ['e3.38.units-of', 'e3.38.point-V', 'e3.38.pair-energy', 'e3.38.work-and-deltaV']],
     ['The uniform field', ['e3.38.uniform-dV', 'e3.38.uniform-rank', 'e3.38.uniform-path', 'e3.38.uniform-zero-V']],

@@ -94,6 +94,8 @@ export const LAB_UNITS = {
   ac: ['Z', 'X', 'omega', 'f', 'I', 'V', 'R', 'C', 'L', 'P'],
   emwave: ['E', 'B', 'S', 'c', 'f', 'wavelength'],
   polar: ['S', 'E', 'n'],
+  radargun: ['f', 'wavelength', 'c'],
+  solarsail: ['S', 'F', 'A', 'P', 'c'],
   refraction: ['n', 'c', 'wavelength'],
   mirrors: ['fLens', 'M', 'r'],
   lenses: ['fLens', 'Pwr', 'M', 'n'],
