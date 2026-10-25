@@ -49,6 +49,22 @@ export const M_PER_MI = 5280 * M_PER_FT;
 /** Metres in one kilometre. */
 export const M_PER_KM = 1000;
 
+/** Seconds in one minute and in one hour. */
+export const S_PER_MIN = 60;
+export const S_PER_H = 3600;
+
+/** Metres in one international nautical mile, exactly. A knot is one nautical mile per hour. */
+export const M_PER_NMI = 1852;
+
+/** Metres per second in one kilometre per hour: 1000 m in 3600 s, so 1/3.6. */
+export const MPS_PER_KMH = M_PER_KM / S_PER_H;
+
+/** Metres per second in one knot. */
+export const MPS_PER_KNOT = M_PER_NMI / S_PER_H;
+
+/** Radians per second in one revolution per minute: 2π radians in 60 s. */
+export const RAD_S_PER_RPM = (2 * Math.PI) / S_PER_MIN;
+
 /** Pascals in one pound-force per square inch. */
 export const PA_PER_PSI = N_PER_LBF / M_PER_IN ** 2;
 

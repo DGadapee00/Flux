@@ -8,7 +8,7 @@
  */
 
 import { G } from './constants.js';
-import { add, mag, scale, sub, v } from './vectors.js';
+import { add, angle2D, dot, fromAngle2D, mag, scale, sub, v } from './vectors.js';
 
 const DEG = Math.PI / 180;
 
@@ -190,4 +190,72 @@ export function circularPeriod(speed, radius) {
 /** Velocity of A as measured from B: v_A − v_B. */
 export function relativeVelocity(vA, vB) {
   return sub(vA, vB);
+}
+
+/**
+ * Circular motion at one instant: radius r, speed v, and the rate the speed changes, aT.
+ *
+ * The velocity stays tangent, so its direction turns at ω = v/r. In a short time dt it turns
+ * through ω dt, and the velocity changes by v ω dt pointing at the centre. Dividing by dt gives the
+ * centripetal acceleration a_c = vω = v²/r = ω²r. A changing speed adds aT along the tangent. The
+ * two parts are perpendicular, so |a| = √(a_c² + aT²). The angle of a from the velocity is
+ * atan2(a_c, aT): 90° when the speed is steady, less when speeding up, more when slowing down.
+ */
+export function circularMotion({ r, v, aT = 0 }) {
+  if (!(r > 0)) return null;
+  const omega = v / r;
+  const ac = (v * v) / r;
+  return {
+    omega,
+    ac,
+    aT,
+    alpha: aT / r,
+    a: Math.hypot(ac, aT),
+    angleFromV: Math.atan2(ac, aT) / DEG,
+    period: Math.abs(v) > 0 ? (2 * Math.PI * r) / Math.abs(v) : Infinity,
+  };
+}
+
+/**
+ * The heading that keeps a craft's ground track along `trackDeg` in a wind or a current `wind`
+ * (the velocity of the air or water over the ground). Angles are degrees counterclockwise from +x.
+ *
+ * Velocities add: v_ground = v_air + w. Split w along the track (û) and across it (n̂). The ground
+ * velocity has no part across the track, so the air velocity must carry −(w·n̂) across. Its part
+ * along the track is then √(s² − (w·n̂)²), and the ground speed is that plus w·û. When the cross
+ * part of the wind is larger than the airspeed, no heading works and the result is null.
+ */
+export function headingForTrack({ airspeed, wind, trackDeg }) {
+  const u = fromAngle2D(1, trackDeg);
+  const n = fromAngle2D(1, trackDeg + 90);
+  const across = -dot(wind, n);
+  if (Math.abs(across) > airspeed) return null;
+  const along = Math.sqrt(airspeed * airspeed - across * across);
+  const air = add(scale(u, along), scale(n, across));
+  const ground = add(air, wind);
+  const headingDeg = angle2D(air);
+  let correction = headingDeg - trackDeg;
+  correction = ((correction + 540) % 360) - 180;
+  return { headingDeg, correctionDeg: correction, groundSpeed: dot(ground, u), air, ground };
+}
+
+/**
+ * A launch from a point on a straight slope that rises at slopeDeg (negative when it falls away),
+ * at thetaDeg above the horizontal.
+ *
+ * Measure along the slope and across it. Gravity has −g sin φ along and −g cos φ across. The launch
+ * has v0 cos(θ−φ) along and v0 sin(θ−φ) across. The motion across is a toss with acceleration
+ * −g cos φ, so it is back on the slope at t = 2 v0 sin(θ−φ)/(g cos φ). Along the slope the distance is
+ * d = v0 cos(θ−φ) t − ½ g sin φ t², which simplifies to d = 2 v0² cos θ sin(θ−φ)/(g cos² φ).
+ * The point is (d cos φ, d sin φ) from the launch. Null when the launch points into the slope.
+ */
+export function slopeLanding({ v0, thetaDeg, slopeDeg, g = G }) {
+  const th = thetaDeg * DEG;
+  const ph = slopeDeg * DEG;
+  if (!(Math.sin(th - ph) > 0) || !(Math.cos(ph) > 0)) return null;
+  const t = (2 * v0 * Math.sin(th - ph)) / (g * Math.cos(ph));
+  const d = v0 * Math.cos(th - ph) * t - 0.5 * g * Math.sin(ph) * t * t;
+  const vx = v0 * Math.cos(th);
+  const vy = v0 * Math.sin(th) - g * t;
+  return { t, d, x: d * Math.cos(ph), y: d * Math.sin(ph), vx, vy, speed: Math.hypot(vx, vy) };
 }

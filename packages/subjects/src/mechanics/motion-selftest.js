@@ -6,11 +6,12 @@
  *   node src/mechanics/motion-selftest.js
  */
 import assert from 'node:assert/strict';
-import { dot, fromAngle2D, mag, v } from './vectors.js';
+import { dot, fromAngle2D, mag, scale, v } from './vectors.js';
 import { momentAbout } from './statics.js';
 import {
   averageVelocity, centripetalAccel, circularPeriod, constAccel1D, constVelocity,
-  flight, landingTime, piecewiseMotion, projectile, relativeVelocity, speedFromDisplacement, stoppingDistance, timeAtSpeed,
+  circularMotion, flight, headingForTrack, landingTime, piecewiseMotion, projectile, relativeVelocity, slopeLanding,
+  speedFromDisplacement, stoppingDistance, timeAtSpeed,
 } from './kinematics.js';
 import { atwood, bankedCurve, centripetalForce, hangingIncline, incline, newton, springCollar, verticalLoop } from './dynamics.js';
 import {
@@ -114,6 +115,75 @@ console.log('Kinematics');
   approx(circularPeriod(4, 2), Math.PI, 1e-12, 'period is π');
   const rel = relativeVelocity(v(3, 4, 0), v(1, 0, 0));
   approx(mag(rel), Math.sqrt(20), 1e-12, 'relative velocity magnitude');
+}
+
+console.log('\nCircular motion, headings in a wind, launches on a slope');
+{
+  // Circular motion, checked by differentiating the position twice. θ(t) = ω t + ½ α t² on a circle
+  // of radius r; at t = 0 the particle is at (r, 0) moving +y. Project a on the radius and the tangent.
+  for (const [r, speed, aT] of [[2, 2.5, 1.5], [20, 10, 0], [8, 6, -2]]) {
+    const c = circularMotion({ r, v: speed, aT });
+    const w = speed / r;
+    const al = aT / r;
+    const pos = (t) => {
+      const th = w * t + 0.5 * al * t * t;
+      return [r * Math.cos(th), r * Math.sin(th)];
+    };
+    const h = 1e-4 / Math.max(1, w);
+    const d2 = (k) => {
+      const f = (s) => (pos(s * h)[k] - 2 * pos(0)[k] + pos(-s * h)[k]) / (s * h) ** 2;
+      return (4 * f(1) - f(2)) / 3;
+    };
+    const ax = d2(0);
+    const ay = d2(1);
+    approx(c.ac, -ax, 1e-6 * Math.max(1, c.ac), `a_c = v²/r = ${c.ac.toFixed(4)} matches the second derivative inward`);
+    approx(c.aT, ay, 1e-6 * Math.max(1, Math.abs(aT)), `a_T matches the second derivative along the tangent`);
+    approx(c.a, Math.hypot(ax, ay), 1e-6 * Math.max(1, c.a), '|a| matches');
+  }
+  const book = circularMotion({ r: 2, v: 2.5, aT: 1.5 });
+  approx(book.a, 3.46636, 1e-5, 'OpenStax §4.4 total acceleration: 3.47 m/s² unrounded');
+  approx(90 - book.angleFromV, 90 - 64.3597, 1e-3, 'and 64.4° from the tangent');
+  approx(circularMotion({ r: 5, v: 8 }).ac / circularMotion({ r: 5, v: 4 }).ac, 4, 1e-12, 'twice the speed, four times a_c');
+  approx(circularMotion({ r: 10, v: 4 }).ac / circularMotion({ r: 5, v: 4 }).ac, 0.5, 1e-12, 'twice the radius at one speed, half a_c');
+  approx(circularMotion({ r: 3, v: 4 }).angleFromV, 90, 1e-12, 'steady speed: a is perpendicular to v');
+
+  // A heading in a wind, checked by the sine rule. OpenStax §4.5: 300 km/h, a 90 km/h wind from the
+  // northeast (blowing toward 225°), track due north (90°).
+  const wind = fromAngle2D(90, 225);
+  const plane = headingForTrack({ airspeed: 300, wind, trackDeg: 90 });
+  const wca = Math.asin((90 * Math.sin(45 * DEG)) / 300) / DEG;
+  approx(plane.correctionDeg, -wca, 1e-9, `heading ${wca.toFixed(2)}° east of north, by the sine rule`);
+  approx(plane.groundSpeed, 300 * Math.cos(wca * DEG) - 90 * Math.cos(45 * DEG), 1e-9, `ground speed ${plane.groundSpeed.toFixed(1)} km/h`);
+  approx(plane.ground.x, 0, 1e-9, 'the ground velocity has no part across the track');
+  approx(plane.groundSpeed, 229.53, 0.01, 'the book prints 230 km/h');
+  const fast = headingForTrack({ airspeed: 600, wind: scale(wind, 2), trackDeg: 90 });
+  approx(fast.correctionDeg, plane.correctionDeg, 1e-12, 'double both speeds: the same heading');
+  approx(fast.groundSpeed, 2 * plane.groundSpeed, 1e-9, 'and twice the ground speed');
+  assert.equal(headingForTrack({ airspeed: 50, wind: v(60, 0, 0), trackDeg: 90 }), null, 'a crosswind faster than the airspeed has no heading');
+
+  // A slope, checked by flying the projectile and bisecting for where it meets the line y = x tan φ.
+  for (const [v0, th, ph] of [[20, 50, 20], [15, 30, -25], [31.93, 30, 0]]) {
+    const land = slopeLanding({ v0, thetaDeg: th, slopeDeg: ph, g: 9.81 });
+    const shot = flight({ r0: v(0, 0, 0), v0: fromAngle2D(v0, th), g: 9.81 });
+    const gap = (t) => shot.state(t).y - shot.state(t).x * Math.tan(ph * DEG);
+    let lo = 1e-6;
+    let hi = 100;
+    for (let i = 0; i < 200; i += 1) {
+      const mid = 0.5 * (lo + hi);
+      if (gap(mid) > 0) lo = mid;
+      else hi = mid;
+    }
+    const p = shot.state(lo);
+    approx(land.t, lo, 1e-9, `slope ${ph}°: landing time ${land.t.toFixed(4)} s by bisection`);
+    approx(land.d, Math.hypot(p.x, p.y), 1e-7, `slope ${ph}°: ${land.d.toFixed(3)} m along the slope`);
+  }
+  const twice = slopeLanding({ v0: 40, thetaDeg: 50, slopeDeg: 20, g: 9.81 });
+  const once = slopeLanding({ v0: 20, thetaDeg: 50, slopeDeg: 20, g: 9.81 });
+  approx(twice.d / once.d, 4, 1e-12, 'twice the speed, four times as far up the slope');
+  approx(twice.t / once.t, 2, 1e-12, 'and twice the time');
+  const best = slopeLanding({ v0: 20, thetaDeg: 45 + 10, slopeDeg: 20, g: 9.81 });
+  approx(best.d, (20 * 20) / (9.81 * (1 + Math.sin(20 * DEG))), 1e-9, 'aimed at 45° + φ/2 it reaches v0²/(g(1 + sin φ))');
+  approx(slopeLanding({ v0: 31.93, thetaDeg: 30, slopeDeg: 0, g: 9.8 }).d, 90.1, 0.05, 'level ground: the golf shot of §4.3 lands about 90 m away');
 }
 
 console.log('\nDynamics');

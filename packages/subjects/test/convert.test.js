@@ -11,6 +11,10 @@ import {
   M_PER_FT,
   M_PER_KM,
   M_PER_MI,
+  MPS_PER_KMH,
+  MPS_PER_KNOT,
+  M_PER_NMI,
+  RAD_S_PER_RPM,
   N_PER_LBF,
   PA_PER_PSI,
   SI_FACTORS,
@@ -126,4 +130,13 @@ test('a mile is 5280 feet, which is 1609.344 m, and a kilometre is 1000 m', () =
   close(convert(60, 'mi', 'ft'), 316800, 'sixty miles in feet');
   assert.equal(M_PER_KM, 1000);
   assert.throws(() => convert(1, 'mi', 'kg'));
+});
+
+test('speeds and rotation rates: 3.6 km/h is 1 m/s, a knot is 1852 m per hour, 60 rpm is 2π rad/s', () => {
+  close(36 * MPS_PER_KMH, 10, '36 km/h');
+  close(MPS_PER_KNOT * 3600, M_PER_NMI, 'a knot for an hour');
+  close(MPS_PER_KNOT / MPS_PER_KMH, 1.852, 'a knot in km/h');
+  // 60 rpm is one turn a second; doubling the rate doubles ω.
+  close(60 * RAD_S_PER_RPM, 2 * Math.PI, '60 rpm');
+  close((120 * RAD_S_PER_RPM) / (60 * RAD_S_PER_RPM), 2, 'twice the rpm');
 });
