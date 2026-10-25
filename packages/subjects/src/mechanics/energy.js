@@ -132,3 +132,41 @@ export function pathPotential({ mass, g = G, k = 0, x, y, anchor = [0, 0], rest 
 export function conservativeWork(spec, a, b) {
   return pathPotential({ ...spec, x: a[0], y: a[1] }) - pathPotential({ ...spec, x: b[0], y: b[1] });
 }
+
+/**
+ * The work of a force field along a path, W = ∫ F · dr, by Simpson's rule in the path parameter.
+ * `force(x, y)` gives {x, y}; `path(u)` gives {x, y} for u from 0 to 1. A force that depends on the
+ * direction of travel, such as friction, takes the unit tangent as its third argument.
+ */
+export function workAlongPath(force, path, n = 400) {
+  const steps = n % 2 ? n + 1 : n;
+  const h = 1 / steps;
+  const integrand = (u) => {
+    const e = 1e-6;
+    const a = path(Math.max(0, u - e));
+    const b = path(Math.min(1, u + e));
+    const du = Math.min(1, u + e) - Math.max(0, u - e);
+    const dx = (b.x - a.x) / du;
+    const dy = (b.y - a.y) / du;
+    const p = path(u);
+    const len = Math.hypot(dx, dy) || 1;
+    const F = force(p.x, p.y, { x: dx / len, y: dy / len });
+    return F.x * dx + F.y * dy;
+  };
+  let sum = integrand(0) + integrand(1);
+  for (let i = 1; i < steps; i += 1) sum += (i % 2 ? 4 : 2) * integrand(i * h);
+  return (sum * h) / 3;
+}
+
+/**
+ * Power to drive a car up a grade at a steady speed. With no change of speed the engine's work goes
+ * into height and losses: P = m g v sin θ + P_loss, where tan θ is the grade as a fraction. With the
+ * losses given as a share of the engine's power, P = m g v sin θ / (1 − share).
+ */
+export function climbPower({ mass, speed, grade, lossShare = 0, lossForce = 0, g = G }) {
+  const th = Math.atan(grade);
+  const climb = mass * g * speed * Math.sin(th);
+  const fromForce = lossForce * speed;
+  const total = (climb + fromForce) / (1 - lossShare);
+  return { theta: th / DEG, climb, total, losses: total - climb };
+}
