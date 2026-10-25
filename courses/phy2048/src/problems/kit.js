@@ -4,7 +4,11 @@
  */
 import { problem as defineProblem } from '@flux/core';
 
-export const range = (min, max, step, unit = '') => ({ type: 'range', min, max, step, unit, si: 1 });
+/** A range sampled in the unit the student sees; `si` turns it into SI for `$` (1 Mm → 1e6). */
+export const range = (min, max, step, unit = '', si = 1) => ({ type: 'range', min, max, step, unit, si });
+
+/** A variable that picks among named options, so a template can vary its structure and not only its numbers. */
+export const choice = (...opts) => ({ type: 'choice', options: opts.map(([value, label]) => ({ value, label })) });
 
 /** Numeric answer. get($) is the value in `unit`. */
 export const num = (id, get, unit, o = {}) => ({
@@ -19,15 +23,23 @@ export const num = (id, get, unit, o = {}) => ({
   label: o.label ?? null,
 });
 
-/** Multiple choice. `correct` is an option value or a function of $. */
-export const mc = (id, options, correct, o = {}) => ({
-  id,
-  kind: 'choice',
-  options: options.map(([value, label]) => ({ value, label })),
-  correct,
-  multi: false,
-  label: o.label ?? null,
-});
+/**
+ * Multiple choice. `options` is a list of [value, label, why] (why is shown when a student picks that
+ * option), or a function of $ that gives this version's list. `correct` is a value or a function of $.
+ */
+export const mc = (id, options, correct, o = {}) => {
+  const norm = (list) => list.map(([value, label, why]) => (why ? { value, label, why } : { value, label }));
+  return {
+    id,
+    kind: 'choice',
+    options: typeof options === 'function' ? ($) => norm(options($)) : norm(options),
+    correct,
+    multi: !!o.multi,
+    label: o.label ?? null,
+  };
+};
+
+export const tf = (id, correct, o = {}) => mc(id, [[1, 'True'], [0, 'False']], correct ? 1 : 0, o);
 
 /**
  * Symbolic answer. `vars` maps each symbol to its SI unit. The check confirms
@@ -50,7 +62,7 @@ export function problem(spec) {
 }
 
 /** A worked instance. `want` maps a part id to the value a student would type. */
-export const kase = (src, v, want) => ({ src, v, want, note: null });
+export const kase = (src, v, want, o = {}) => ({ src, v, want, note: o.note ?? null });
 
 /** A number inside `$…$`: significant figures, with TeX scientific notation. */
 export function texNum(x, n = 4) {

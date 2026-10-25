@@ -13,11 +13,13 @@
  */
 import { createTex, mathPieces } from '@flux/core';
 import { dimEqual, parseUnit } from '@flux/subjects/mechanics/units.js';
-import { BANK_CHAPTERS, CHAPTERS, unitForChapter } from '../src/catalog.js';
+import { BANK_CHAPTERS, CHAPTERS, LAB_META, unitForChapter } from '../src/catalog.js';
 import { PROBLEMS } from '../src/problems/index.js';
 import {
-  build, dimensionOf, evalSymbolic, expected, grade, gradeSymbolic, instance, parseExpr, render, withinTol,
+  build, choiceOptions, dimensionOf, evalSymbolic, expected, grade, gradeSymbolic, instance, parseExpr, render, withinTol,
 } from '../src/problems/engine.js';
+import { loadLab } from '../src/labs/load.js';
+import { applyProblem, headlessCtx } from '../src/problems/simbridge.js';
 
 const { mathProse } = createTex();
 
@@ -97,6 +99,41 @@ function checkSymbolic(tpl, inst) {
   }
 }
 
+/** Units built to the standard. Their templates must meet the unit rules below; the others are reworked as their units are built. */
+const STANDARD_UNITS = ['u1'];
+
+
+/** The lab, set up as the problem sets it up, must show the answers the template computes. */
+async function checkSim(tpl, inst, label) {
+  if (!tpl.lab || !tpl.sim) return;
+  const lab = await loadLab(tpl.lab);
+  if (!lab) {
+    err(tpl.id, `${label}: lab ${tpl.lab} does not load`);
+    return;
+  }
+  const slice = lab.defaultState();
+  const computed = {};
+  try {
+    applyProblem(lab, slice, inst);
+    lab.recompute(slice, computed, headlessCtx());
+  } catch (e) {
+    err(tpl.id, `${label}: the lab throws on this setup: ${e.message}`);
+    return;
+  }
+  if (!tpl.sim.read) return;
+  for (const [id, shown] of Object.entries(tpl.sim.read(computed, slice))) {
+    const part = tpl.parts.find((p) => p.id === id);
+    if (!part) {
+      err(tpl.id, `${label}: sim.read names ${id}, which is not a part`);
+      continue;
+    }
+    const want = part.get(inst.$);
+    if (!(Math.abs(shown - want) <= 0.02 * Math.max(1e-9, Math.abs(want)) + 1e-9)) {
+      err(tpl.id, `${label}: the lab shows ${id} = ${shown}, the template says ${want}`);
+    }
+  }
+}
+
 const seen = new Set();
 const counts = Object.fromEntries(BANK_CHAPTERS.map((ch) => [ch, 0]));
 
@@ -110,7 +147,14 @@ for (const tpl of PROBLEMS) {
   const unit = unitForChapter(tpl.ch);
   if (!unit || tpl.exam !== unit.id) err(tpl.id, `exam ${tpl.exam} does not own chapter ${tpl.ch}`);
   if (!/^OpenStax University Physics Vol\. 1 §\d+\.\d+$/.test(tpl.src)) err(tpl.id, `citation missing: ${tpl.src}`);
-  if (tpl.lab || tpl.sim) err(tpl.id, 'this slice has no lab');
+  const standard = STANDARD_UNITS.includes(tpl.exam);
+  if (!!tpl.lab !== !!tpl.sim) err(tpl.id, 'a problem with a lab needs a sim, and a sim needs a lab');
+  if (tpl.lab && !LAB_META[tpl.lab]) err(tpl.id, `lab ${tpl.lab} is not in the catalog`);
+  if (tpl.lab && LAB_META[tpl.lab] && !unit?.labs.includes(tpl.lab)) err(tpl.id, `lab ${tpl.lab} is not one of ${unit?.id}'s labs`);
+  if (standard && !Number.isInteger(tpl.level) || tpl.level < 1 || tpl.level > 3) err(tpl.id, `level ${tpl.level} is not 1, 2 or 3`);
+  if (standard && !tpl.variety?.length && !Object.values(tpl.vars || {}).some((x) => x?.type === 'choice')) err(tpl.id, 'declare `variety`, or vary a choice variable');
+  const cited = tpl.cases.filter((c) => /OpenStax University Physics Vol\. 1 §\d+\.\d+/.test(c.src));
+  if (standard && !cited.length) err(tpl.id, 'no case cites an OpenStax section and example');
   if (typeof tpl.second !== 'function') err(tpl.id, 'missing second()');
   if (!tpl.hints?.length) err(tpl.id, 'missing hints');
   if (typeof tpl.steps !== 'function') err(tpl.id, 'missing steps');
@@ -141,7 +185,8 @@ for (const tpl of PROBLEMS) {
         err(tpl.id, `case ${c.src} part ${part.id}: grader rejects ${want}`);
       }
     }
-    checkSecond(tpl, inst, `case ${c.src}`);
+    checkSecond(tpl, inst, `case ${c.src.slice(0, 40)}`);
+    await checkSim(tpl, inst, `case ${c.src.slice(0, 40)}`);
     checkSymbolic(tpl, inst);
     checkRender(tpl, inst);
   }
@@ -161,11 +206,12 @@ for (const tpl of PROBLEMS) {
       }
       if (part.kind === 'choice') {
         const want = expected(part, inst.$);
-        const opts = new Set(part.options.map((o) => o.value));
+        const opts = new Set(choiceOptions(part, inst.$).map((o) => o.value));
         if (!opts.has(want)) err(tpl.id, `seed ${seed} part ${part.id} answer ${want} is not an option`);
       }
     }
     checkSecond(tpl, inst, `seed ${seed}`);
+    await checkSim(tpl, inst, `seed ${seed}`);
     if (seed <= 2) checkSymbolic(tpl, inst);
     try {
       checkRender(tpl, inst);

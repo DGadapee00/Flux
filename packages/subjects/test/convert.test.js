@@ -9,6 +9,8 @@ import {
   KG_PER_LBM,
   KG_PER_SLUG,
   M_PER_FT,
+  M_PER_KM,
+  M_PER_MI,
   N_PER_LBF,
   PA_PER_PSI,
   SI_FACTORS,
@@ -42,6 +44,8 @@ const PARTNER = {
   m: 'ft',
   ft: 'in',
   in: 'ft',
+  mi: 'km',
+  km: 'mi',
   kg: 'lbm',
   lbm: 'slug',
   slug: 'lbm',
@@ -112,4 +116,14 @@ test('an unknown unit is rejected, and so is a change of kind', () => {
   assert.throws(() => toSI(1, 'lb'), /unknown unit: lb/);
   assert.throws(() => fromSI(1, 'stone'), /unknown unit: stone/);
   assert.throws(() => convert(1, 'ft', 'kg'), /cannot convert ft to kg/);
+});
+
+test('a mile is 5280 feet, which is 1609.344 m, and a kilometre is 1000 m', () => {
+  assert.equal(M_PER_MI, 5280 * M_PER_FT);
+  close(M_PER_MI, 1609.344, 'mile');
+  close(toSI(1, 'mi'), 1609.344, 'toSI mile');
+  close(convert(1, 'mi', 'km'), 1.609344, 'mile in km');
+  close(convert(60, 'mi', 'ft'), 316800, 'sixty miles in feet');
+  assert.equal(M_PER_KM, 1000);
+  assert.throws(() => convert(1, 'mi', 'kg'));
 });

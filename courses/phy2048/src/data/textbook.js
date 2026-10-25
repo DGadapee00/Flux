@@ -124,6 +124,16 @@ export const LEFT_OUT = Object.freeze(['1.1', '8.5', '13.6', '13.7']);
 
 /** topic → the section that treats it. */
 export const TOPICS = Object.freeze({
+  units: '1.2',
+  conversion: '1.3',
+  prefixes: '1.2',
+  'dimensional-analysis': '1.4',
+  estimation: '1.5',
+  uncertainty: '1.6',
+  'significant-figures': '1.6',
+  scalars: '2.1',
+  acceleration: '3.3',
+  integration: '3.6',
   kinematics: '3.1',
   average: '3.1',
   'constant-acceleration': '3.4',

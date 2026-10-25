@@ -43,6 +43,12 @@ export const N_PER_LBF = KG_PER_LBM * G_STANDARD;
 /** Metres in one inch. One foot is twelve inches. */
 export const M_PER_IN = M_PER_FT / 12;
 
+/** Metres in one international mile: 5280 feet, so 1609.344 m exactly. */
+export const M_PER_MI = 5280 * M_PER_FT;
+
+/** Metres in one kilometre. */
+export const M_PER_KM = 1000;
+
 /** Pascals in one pound-force per square inch. */
 export const PA_PER_PSI = N_PER_LBF / M_PER_IN ** 2;
 
@@ -66,6 +72,8 @@ export const SI_FACTORS = Object.freeze({
   m: 1,
   ft: M_PER_FT,
   in: M_PER_IN,
+  mi: M_PER_MI,
+  km: M_PER_KM,
   kg: 1,
   lbm: KG_PER_LBM,
   slug: KG_PER_SLUG,
@@ -87,6 +95,8 @@ const KIND = Object.freeze({
   m: 'length',
   ft: 'length',
   in: 'length',
+  mi: 'length',
+  km: 'length',
   kg: 'mass',
   lbm: 'mass',
   slug: 'mass',

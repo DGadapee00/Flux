@@ -146,7 +146,7 @@ export const CHAPTERS = {
 };
 
 /** Chapters whose problems are in the bank. */
-export const BANK_CHAPTERS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '15'];
+export const BANK_CHAPTERS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '15'];
 
 export function unitForChapter(ch) {
   const id = String(ch);

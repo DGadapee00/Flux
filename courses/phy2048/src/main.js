@@ -14,6 +14,7 @@ import { EXAMS, examById, examForLab } from './catalog.js';
 import { parseHash, neighborExam, problemQuery, writeHash } from './engine/router.js';
 import { createLabPointer } from './engine/pointer.js';
 import { createViewPool } from './engine/views.js';
+import { applyProblem } from './problems/simbridge.js';
 import { loadExamLabs, loadLab } from './labs/load.js';
 import { course } from './manifest.js';
 import { createHUD } from './ui/hud.js';
@@ -343,8 +344,26 @@ async function openProblemInApp(inst, { push = true, query = true } = {}) {
       await setLab(tpl.lab, { examId: tpl.exam });
       if (app.lab?.id !== tpl.lab) await setLab(tpl.lab, { examId: tpl.exam });
     } else if (app.examId !== tpl.exam) await setExam(tpl.exam);
+    let note = '';
+    if (tpl.lab && app.lab?.id === tpl.lab && tpl.sim) {
+      note = applyProblem(app.lab, slice(), inst);
+      slice().custom = false;
+      applyFrame();
+      goCamera(app.lab);
+      bump();
+    } else if (tpl.lab && app.lab?.id === tpl.lab && slice().problemId) {
+      // This problem only opens its lab, which still holds the last problem's setup, and its numbers
+      // may be that problem's answer. Start the lab over from its defaults.
+      const fresh = freshSlice(app.lab);
+      fresh.lab = app.lab.id;
+      app.slices[app.lab.id] = fresh;
+      hud.mount(app.lab, examById(app.examId), fresh);
+      applyFrame({ force: true });
+      goCamera(app.lab);
+      bump();
+    }
     writeHash(app.examId, app.labId, { replace: !push, query: app.query });
-    return '';
+    return note;
   } finally {
     loadingProblem = false;
   }

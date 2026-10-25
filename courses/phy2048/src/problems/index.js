@@ -1,4 +1,5 @@
 /** PHY 2048 problem bank, one module per OpenStax chapter this course keeps. */
+import ch1 from './bank/ch1.js';
 import ch2 from './bank/ch2.js';
 import ch3 from './bank/ch3.js';
 import ch4 from './bank/ch4.js';
@@ -12,9 +13,12 @@ import ch11 from './bank/ch11.js';
 import ch12 from './bank/ch12.js';
 import ch13 from './bank/ch13.js';
 import ch15 from './bank/ch15.js';
+import { foldCoaching } from '@flux/shells/practice/coaching.js';
 import { BANK_CHAPTERS, CHAPTERS } from '../catalog.js';
+import coaching from './coaching/index.js';
 
 export const BY_CHAPTER = {
+  1: ch1,
   2: ch2,
   3: ch3,
   4: ch4,
@@ -30,10 +34,14 @@ export const BY_CHAPTER = {
   15: ch15,
 };
 
-export const PROBLEMS = [
-  ...ch2, ...ch3, ...ch4, ...ch5, ...ch6, ...ch7, ...ch8,
+/*
+ * Traps, wrong-option explanations and extra hints live beside the bank (src/problems/coaching/),
+ * one file per unit, and are folded in here so the app and the checks see the same thing.
+ */
+export const PROBLEMS = foldCoaching([
+  ...ch1, ...ch2, ...ch3, ...ch4, ...ch5, ...ch6, ...ch7, ...ch8,
   ...ch9, ...ch10, ...ch11, ...ch12, ...ch13, ...ch15,
-];
+], coaching);
 
 const byId = new Map(PROBLEMS.map((p) => [p.id, p]));
 
