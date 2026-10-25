@@ -13,7 +13,9 @@ import {
   circularMotion, flight, headingForTrack, landingTime, piecewiseMotion, projectile, relativeVelocity, slopeLanding,
   speedFromDisplacement, stoppingDistance, timeAtSpeed,
 } from './kinematics.js';
-import { atwood, bankedCurve, centripetalForce, hangingIncline, incline, newton, springCollar, verticalLoop } from './dynamics.js';
+import {
+  apparentWeight, atwood, bankedCurve, centripetalForce, crateOnTruck, hangingIncline, incline, newton, springCollar, verticalLoop,
+} from './dynamics.js';
 import {
   collarPath, collarTrip, conservativeWork, gravitationalEnergy, kineticEnergy, pathPotential,
   power, speedFromEnergy, springEnergy, springStop, springWork, work, workVector,
@@ -184,6 +186,28 @@ console.log('\nCircular motion, headings in a wind, launches on a slope');
   const best = slopeLanding({ v0: 20, thetaDeg: 45 + 10, slopeDeg: 20, g: 9.81 });
   approx(best.d, (20 * 20) / (9.81 * (1 + Math.sin(20 * DEG))), 1e-9, 'aimed at 45° + φ/2 it reaches v0²/(g(1 + sin φ))');
   approx(slopeLanding({ v0: 31.93, thetaDeg: 30, slopeDeg: 0, g: 9.8 }).d, 90.1, 0.05, 'level ground: the golf shot of §4.3 lands about 90 m away');
+}
+
+console.log('\nAn elevator scale, and a crate on a truck');
+{
+  // The scale, checked in the elevator's own frame: there the person is at rest under N, the weight
+  // and a pseudo-force −ma, and those three add to zero.
+  for (const a of [1.2, 0, -1.2, -9.81]) {
+    const s = apparentWeight({ mass: 75, a, g: 9.81 });
+    const residual = s.N + -75 * 9.81 + -75 * a;
+    approx(a === -9.81 ? s.N : residual, 0, 1e-9, `a = ${a}: N = ${s.N.toFixed(2)} N balances the weight and the pseudo-force`);
+  }
+  approx(apparentWeight({ mass: 75, a: 1.2, g: 9.8 }).N, 825, 1e-12, 'OpenStax §6.1: 75.0 kg at 1.20 m/s² up reads 825 N');
+  approx(apparentWeight({ mass: 150, a: 1.2 }).N / apparentWeight({ mass: 75, a: 1.2 }).N, 2, 1e-12, 'twice the mass, twice the reading');
+  // OpenStax §6.2, "A Crate on an Accelerating Truck": 50.0 kg, μs 0.400, μk 0.300, g 9.80.
+  const slow = crateOnTruck({ mass: 50, aTruck: 2, mus: 0.4, muk: 0.3, g: 9.8 });
+  approx(slow.f, 100, 1e-12, 'at 2.00 m/s² static friction gives 100 N and the crate rides along');
+  const fast = crateOnTruck({ mass: 50, aTruck: 5, mus: 0.4, muk: 0.3, g: 9.8 });
+  approx(fast.f, 147, 1e-12, 'at 5.00 m/s² it slips: kinetic friction 147 N');
+  approx(fast.aCrate, 2.94, 1e-12, 'and the crate accelerates at 2.94 m/s²');
+  approx(fast.aRelative, -2.06, 1e-9, 'sliding back across the bed at 2.06 m/s²');
+  // A second method: Newton's law on the crate alone, f = m a_crate.
+  approx(fast.f / 50, fast.aCrate, 1e-12, 'f = m a for the crate');
 }
 
 console.log('\nDynamics');

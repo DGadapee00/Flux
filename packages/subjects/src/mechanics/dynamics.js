@@ -168,3 +168,29 @@ export function springCollar({ mass, k, x, thetaDeg, g = G }) {
   const N = mass * g * Math.cos(th);
   return { a, N, spring };
 }
+
+/**
+ * What a bathroom scale reads under a person of mass m in an elevator with upward acceleration a.
+ * The scale pushes up with N and gravity pulls down with mg, so N − mg = ma and N = m(g + a).
+ * The scale reads N: more than the weight while the acceleration points up, less while it points
+ * down, and zero in free fall (a = −g). `kg` is what a scale marked in kilograms shows, N/g.
+ */
+export function apparentWeight({ mass, a, g = G }) {
+  const N = mass * (g + a);
+  return { N: Math.max(0, N), kg: Math.max(0, N) / g, weight: mass * g, ratio: (g + a) / g };
+}
+
+/**
+ * A crate on the flat bed of a truck that accelerates at aTruck. If it rides along, static friction
+ * supplies all of m·aTruck. That is possible only while m·aTruck ≤ μs·m·g, so the crate slips once
+ * aTruck > μs g. Then kinetic friction μk m g gives it μk g, less than the truck's, and it slides
+ * back across the bed at aTruck − μk g.
+ */
+export function crateOnTruck({ mass, aTruck, mus, muk, g = G }) {
+  const N = mass * g;
+  const need = mass * Math.abs(aTruck);
+  const slips = need > mus * N + 1e-9;
+  const f = slips ? muk * N : need;
+  const aCrate = slips ? Math.sign(aTruck) * muk * g : aTruck;
+  return { N, f, slips, aCrate, aRelative: aCrate - aTruck, limit: mus * N };
+}
