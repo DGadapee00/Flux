@@ -1,0 +1,276 @@
+/* Rules only this course's labs and scenes use, moved out of the physics shell's main.css in source order. */
+.charge-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 220px;
+  overflow: auto;
+}
+.charge-item {
+  display: grid;
+  grid-template-columns: 76px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 7px 9px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+}
+.charge-item.empty {
+  display: block;
+  cursor: default;
+  color: var(--text-dim);
+}
+.charge-item.elements {
+  cursor: default;
+}
+.charge-item.selected {
+  border-color: var(--select-line);
+  background: var(--select-soft);
+}
+.charge-item input[type='range'] {
+  width: 100%;
+}
+.charge-item {
+  grid-template-columns: 26px 1fr auto;
+  gap: 8px;
+}
+.q-name {
+  font-family: var(--math);
+  font-size: var(--fs-body);
+  color: var(--text-muted);
+}
+.coord-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.coord-head,
+.coord-row {
+  display: grid;
+  grid-template-columns: 20px repeat(3, 1fr) 24px;
+  gap: 5px;
+  align-items: center;
+}
+.coord-head {
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+.coord-name {
+  font-family: var(--math);
+  font-size: var(--fs-ui);
+  color: var(--text-muted);
+}
+.coord-row.selected .coord-name {
+  color: var(--select);
+}
+.coord-unit {
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+}
+.legend-v {
+  background: linear-gradient(90deg, #1c758a, #58c4dd 20%, #5cd0b3 40%, #83c167 60%, #f4d345 80%, #fc6255);
+}
+.legend-cvd {
+  background: linear-gradient(90deg, #1d4f8c, #3f8fd6 20%, #8fd0ee 40%, #ece6b8 60%, #f4b942 80%, #e07b39);
+}
+.legend-sigma {
+  background: linear-gradient(90deg, #58c4dd, #3a3d44 50%, #fc6255);
+}
+.legend-bdl {
+  background: linear-gradient(90deg, #9a72ac, #2c2e33 50%, #5cd0b3);
+}
+.circuit-label.right-text {
+  text-align: right;
+}
+.charge-label .cl-name,
+.charge-label .cl-val {
+  display: block;
+  text-align: center;
+  line-height: 1.15;
+}
+.charge-label .cl-name {
+  font-style: italic;
+}
+.charge-label .cl-val {
+  font-size: var(--fs-ui);
+}
+.probe-label {
+  color: var(--text);
+}
+.mark-label {
+  text-align: center;
+  line-height: 1.2;
+}
+.mark-label .mark-val {
+  display: block;
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+.circuit-label .circuit-bulb {
+  font-family: var(--font);
+  font-size: var(--fs-ui);
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+.circuit-eq .big {
+  font-size: clamp(22px, 2.3vw, 34px);
+  line-height: 1.2;
+}
+.circuit-eq .nums {
+  font-size: clamp(13px, 1.25vw, 17px);
+  font-variant-numeric: tabular-nums;
+}
+.circuit-eq .nums span,
+.circuit-eq .big span {
+  display: inline;
+}
+.circuit-eq .avg {
+  margin-top: 2px;
+}
+.ruler-label {
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 0 3px #000;
+}
+.ruler-label.unit {
+  color: var(--text);
+  font-weight: 600;
+}
+.wave-inset {
+  width: 190px;
+  padding: 6px 8px 4px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  pointer-events: none;
+}
+.wave-inset canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.wave-inset-title {
+  font-family: var(--font);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.wave-inset-caption {
+  white-space: nowrap;
+  font-family: var(--font);
+  font-size: var(--fs-ui);
+  color: var(--text);
+  text-align: center;
+  pointer-events: none;
+  padding-top: 4px;
+  text-shadow: 0 0 3px #000;
+}
+.spectrum-ruler {
+  position: fixed;
+  left: 416px;
+  right: 332px;
+  bottom: 16px;
+  max-width: 920px;
+  margin-inline: auto;
+  padding: 8px 14px 6px;
+  font-family: var(--font);
+  pointer-events: none;
+}
+.spectrum-ruler[hidden] {
+  display: none;
+}
+.spec-title {
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.spec-title span {
+  color: var(--text);
+}
+.spec-bar {
+  position: relative;
+  height: 16px;
+  border-radius: 3px;
+  overflow: visible;
+}
+.spec-band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  opacity: 0.85;
+  overflow: hidden;
+}
+.spec-band span {
+  display: block;
+  font-size: var(--fs-meta);
+  line-height: 16px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+.spec-vis-label {
+  position: absolute;
+  top: 17px;
+  transform: translateX(-50%);
+  font-size: var(--fs-meta);
+  color: var(--text-muted);
+}
+.spec-marker {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 3px;
+  margin-left: -1.5px;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 0 6px #fff;
+  transition: left 0.25s ease;
+}
+.spec-ticks,
+.spec-sizes {
+  position: relative;
+  height: 14px;
+}
+.spec-ticks {
+  margin-top: 10px;
+}
+.spec-tick {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 4px;
+  background: var(--text-dim);
+}
+.spec-tick span,
+.spec-size {
+  position: absolute;
+  top: 3px;
+  transform: translateX(-50%);
+  font-size: var(--fs-meta);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.spec-size {
+  top: 0;
+  color: var(--text-muted);
+  font-style: italic;
+}
+@media (max-width: 900px) {
+.spectrum-ruler {
+    display: none;
+  }
+}
+.rg-dot {
+  font-size: 15px;
+  opacity: 0.85;
+}

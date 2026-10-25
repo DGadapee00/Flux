@@ -1,5 +1,7 @@
 // Before KaTeX's CSS, as the stylesheet links were before it: the cascade order is unchanged.
+// em-main.css holds the rules only this course's labs use, split out of the shell's main.css.
 import '@flux/shells/physics/styles/main.css';
+import './styles/em-main.css';
 import '@flux/shells/physics/styles/practice.css';
 import '@flux/shells/physics/styles/mobile.css';
 import 'katex/dist/katex.min.css';

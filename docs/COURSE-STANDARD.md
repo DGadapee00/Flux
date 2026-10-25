@@ -44,9 +44,10 @@ and holds only placeholder content.
 Every course is the same app with different content. A student who knows PHY 2049 should find
 everything in the same place in any course. Do not build a different app.
 
-- **One shell.** A course uses `packages/shells/math` or `packages/shells/engineering` (and
-  `physics` once Phase 2b moves PHY 2049's UI there). It writes its catalog, labs, bank, notes and
-  two thin wrappers (`ui/hud.js`, `ui/problems.js`). It writes no HUD, panel or stylesheet of its
+- **One shell.** A course uses `packages/shells/math`, `packages/shells/engineering` or
+  `packages/shells/physics` (PHY 2049's UI). It writes its catalog, labs, bank, notes and
+  two thin wrappers (`ui/hud.js`, `ui/problems.js`). The physics shell also takes `ui/units.js`,
+  `ui/predict.js` and `ui/derive.js`. It writes no HUD, panel or stylesheet of its
   own. If it needs a control the shell lacks, it adds a hook to the shell, behind a flag, with a
   test on the shell's fixture course.
 - **Header.** Logo (links to the hub), course code and title, mode controls. The track row lists the

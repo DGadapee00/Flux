@@ -2,7 +2,8 @@
 
 Status (18 Oct 2026): **Phase R.** Dynamics (EGN 3321) passes the scorecard and waits for the
 owner's review. Next: EML 3100, then EGN 3331, each re-mapped to its OCW program and built to the
-standard. After that, every remaining course in order, back to back (D24).
+standard. After that, every remaining course in order, back to back (D24). Phase 2b is done (24 Oct
+2026): PHY 2049's UI lives in `packages/shells/physics/`, and PHY 2048 can be wired to it.
 
 This file says what to build next. `AGENTS.md` has the rules. `docs/COURSE-STANDARD.md` is the bar.
 `DECISIONS.md` records what is settled. `docs/course-plans/<id>.md` is each course's plan. The old
@@ -43,8 +44,8 @@ subject libraries (a function written for one course serves the next), and one s
 
 | Course | Spine | Built | Scorecard | Next |
 |---|---|---|---|---|
-| PHY 2049 Physics II | [phy2049](docs/course-plans/phy2049.md) | reference | not yet scored | weekly drops; Phase 2b shell move |
-| PHY 2048 Physics I | [phy2048](docs/course-plans/phy2048.md) | library and bank, no UI | fails | R5, after the physics shell |
+| PHY 2049 Physics II | [phy2049](docs/course-plans/phy2049.md) | reference | not yet scored | weekly drops; on the physics shell |
+| PHY 2048 Physics I | [phy2048](docs/course-plans/phy2048.md) | library and bank, no UI | fails | R5: wire it to the physics shell, units in 8.01SC's order |
 | MAC 2311–2312 Calculus I and II | [mac2311-2312](docs/course-plans/mac2311-2312.md) | two modules, 4 units each, notes | fails | R4: merge into one (D28) |
 | MAC 2313 Calculus III | [mac2313](docs/course-plans/mac2313.md) | labs and bank, no notes | fails | R4 |
 | EGN 3311 Statics | [statics](docs/course-plans/statics.md) | labs and bank, no notes | fails | R4 |
@@ -110,16 +111,20 @@ EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come las
       Stokes), 18.02SC's order, and the same rework.
 - [ ] **R4c Statics:** notes, and the same rework, with 2.001 Lectures 1–6 setting their topics'
       order (D29).
-- [ ] **R5** PHY 2048 on the physics shell, after Phase 2b, in 8.01SC's order (momentum before
+- [ ] **R5** PHY 2048 on the physics shell (Phase 2b is done), in 8.01SC's order (momentum before
       energy), with drag and variable-mass problems added (D29).
 - STA 3032: keep its checks passing. Rework only if the owner asks.
 
 ### Platform items that can run beside the list
 
 - [x] **Deploys:** Cloudflare Pages builds and publishes every push to `main` (`DEPLOY.md`).
-- [ ] **Phase 2b:** move PHY 2049's HUD, practice panel and styles into `packages/shells/physics/`,
-      unchanged, with PHY's tests and gallery identical before and after. PHY 2048 then builds on it.
-- [ ] **Converge the shells on PHY 2049** (D32): once the physics shell exists, bring the math and
+- [x] **Phase 2b:** PHY 2049's page chrome, HUD, units reference, predict card, derivations and
+      practice panel, and its stylesheets, now live in `packages/shells/physics/`. PHY 2049 keeps
+      `main.js`, its scene objects, its electromagnetic styles and one wrapper per module. The
+      practice panel moved whole, so it is still a near copy of the math and engineering panels.
+      `packages/checks` and `npm run compare -w @flux/phy2049` (the before-and-after gate) guard it.
+- [ ] **Converge the shells on PHY 2049** (D32): the physics shell now exists. Start with the three
+      practice panels, which are near copies of one another. Then bring the math and
       engineering shells' header, unit picker, mode switch, notes panel and practice panel to its
       layout, one piece per PR, every course's checks green.
 - [ ] A banner on the frozen flux-phy2049 site pointing to Flux.

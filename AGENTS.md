@@ -40,7 +40,7 @@ saying so in the PR. `docs/history/` is the archive; nothing there is an instruc
    and cite. MIT's name appears only in citations. STA 3032's instructor material stays out (D6).
 5. **Every number on screen is computed, then checked a second way,** in the course's tests. A worked
    case reproduces a printed answer by our own computation.
-6. **A course writes no UI of its own.** It uses a shell (`packages/shells/math` or `engineering`)
+6. **A course writes no UI of its own.** It uses a shell (`packages/shells/math`, `engineering` or `physics`)
    through two thin wrappers. A missing control becomes a shell hook behind a flag, with a test on
    the shell's fixture course. A course never imports another course. A new course starts as a
    copy of `courses/starter`, never of another real course.
@@ -58,7 +58,7 @@ saying so in the PR. `docs/history/` is the archive; nothing there is an instruc
 ```
 packages/core       engine contracts: defineCourse, defineLab, problem, router, storage, tex, plot2d, scene3d
 packages/subjects   shared domain math (math, mechanics, em, stats, thermo, convert.js), pure, each with a selftest
-packages/shells     course-family UI: math, engineering, practice (the loop), notes.js. No course, no chapter.
+packages/shells     course-family UI: math, engineering, physics, practice (the loop), notes.js. No course, no chapter.
 packages/tracks     the hub's track list. Imports nothing.
 packages/checks     deps, raw, storage, prereqs, scorecard
 courses/<id>        one folder per course; courses/starter is the course-neutral one to copy
@@ -89,6 +89,10 @@ Libraries worth knowing before you write your own:
   Numeric `traps` always do.
 - In the engineering shell, a lab of `kind: 'plot2d'` gets a canvas stage (`stage.js`; import
   `styles/stage.css`). A course with notes passes `notes` and imports `@flux/shells/styles/notes.css`.
+- `packages/shells/physics`: PHY 2049's UI. A course calls `renderChrome` first, then `createHUD`,
+  `createUnits`, `createPredict`, `createDerive` and `createPractice`, each with its data (a catalog,
+  a `bank`, its prompts and derivations). It keeps `main.js` and imports the three stylesheets.
+  Rules only its own labs use go in its own stylesheet, loaded after the shell file they came from.
 
 ## Contracts
 
