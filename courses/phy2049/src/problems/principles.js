@@ -462,6 +462,7 @@ export const PRINCIPLE_TAGS = {
   'e6.53.B-from-E': ['em-wave'],
   'e6.53.direction': ['em-wave', 'vectors'],
   'e6.53.wave-eq': ['em-wave'],
+  'e6.53.radar-gun': ['em-wave'],
   // Ch 54 — spectrum
   'e6.54.band': ['em-wave'],
   'e6.54.order': ['em-wave'],
@@ -470,6 +471,7 @@ export const PRINCIPLE_TAGS = {
   'e6.55.E-from-I': ['wave-energy', 'em-wave'],
   'e6.55.point-source': ['wave-energy', 'energy'],
   'e6.55.pressure': ['wave-energy'],
+  'e6.55.solar-sail': ['wave-energy', 'newton'],
   // Ch 56 — polarization
   'e6.56.malus-two': ['polarization'],
   'e6.56.malus-three': ['polarization'],

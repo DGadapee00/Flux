@@ -4,7 +4,7 @@
  * built only from equations in the notes; what that model leaves out is said in each lab's coach.
  * Pure functions in SI units, so selftest.js checks them against closed forms and hand numbers.
  */
-import { MU0, QE } from './constants.js';
+import { MU0, QE, C } from './constants.js';
 
 export const AMU = 1.6605e-27;
 export const G0 = 9.81;
@@ -255,4 +255,45 @@ export function flowMeter({ B, d, v }) {
   const V = B * d * v;
   const A = (Math.PI * d * d) / 4;
   return { V, E: v * B, A, Q: v * A, Lps: v * A * 1e3 };
+}
+
+/**
+ * A police radar gun (Ch 53). The gun sends microwaves at f toward a car moving at v (v > 0 toward
+ * the gun). The car meets the wave as a moving observer and receives f(1 + v/c); it reflects that as
+ * a moving source, so the echo returns at f(1 + v/c)² ≈ f(1 + 2v/c). The shift Δf = 2fv/c is the
+ * course model, and the gun reports v = cΔf/2f. The exact echo, from the relativistic formula
+ * applied twice, is f(1 + β)/(1 − β); for traffic the two differ by about β, a part in ten million.
+ * The pulse to a car a distance d away and back takes 2d/c.
+ */
+export function radarGun({ f, v, d = 0 }) {
+  const beta = v / C;
+  const shift = (2 * f * v) / C;
+  return {
+    lambda: C / f,
+    shift,
+    fEcho: f + shift,
+    exactShift: f * ((1 + beta) / (1 - beta) - 1),
+    vRead: (C * shift) / (2 * f),
+    mph: v / 0.44704,
+    delay: (2 * d) / C,
+    frac: shift / f,
+  };
+}
+
+/**
+ * A solar sail (Ch 53, 55). Sunlight of intensity I = I₁/r² (I₁ = 1367 W/m² at r = 1 AU, the
+ * inverse square law) falls head-on on a perfectly reflecting sail of area A. Reflection reverses
+ * the light's momentum, so the push is twice the absorbed one: p = 2I/c and F = 2IA/c. The craft of
+ * mass m accelerates at F/m; held constant for a year that gives Δv = at. (Course model: a perfect
+ * mirror facing the Sun, the Sun's gravity ignored; a real sail reflects about 90% and is tilted to
+ * steer.)
+ */
+export const SOLAR_CONSTANT = 1367;
+export const YEAR = 3.156e7;
+export function solarSail({ A, m, r = 1 }) {
+  const I = SOLAR_CONSTANT / (r * r);
+  const p = (2 * I) / C;
+  const F = p * A;
+  const a = F / m;
+  return { I, p, F, a, dvYear: a * YEAR, side: Math.sqrt(A) };
 }

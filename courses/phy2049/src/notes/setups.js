@@ -691,6 +691,86 @@ export const SETUPS = {
       },
     ],
   },
+  e6: {
+    s2: [
+      {
+        tag: 'green light at 530 nm',
+        lab: 'emwave',
+        scenario: 'green',
+        setup: (s) => Object.assign(s, { lambda: 530e-9 }),
+        read: (c) => ({ f: [c.em.f, 5.66e14] }),
+      },
+    ],
+    s5: [
+      {
+        tag: 'Application · police radar gun',
+        lab: 'radargun',
+        scenario: 'notes',
+        read: (c) => ({ 'Δf': [c.rg.shift, 4830], 'v read': [c.rg.vRead, 30], 'v (mph)': [c.rg.mph, 67] }),
+      },
+    ],
+    s6: [
+      {
+        tag: 'Application · solar sail',
+        lab: 'solarsail',
+        scenario: 'notes',
+        read: (c) => ({ F: [c.ss.F, 1.79e-3], a: [c.ss.a, 5.95e-6], 'Δv in a year': [c.ss.dvYear, 188] }),
+      },
+    ],
+    s11: [
+      {
+        tag: 'B from E = 400 V/m',
+        lab: 'emwave',
+        scenario: 'green',
+        setup: (s) => Object.assign(s, { E0: 400 }),
+        note: 'The lab sets the amplitude E₀ to 400 V/m. B = E/c holds for amplitudes and rms values alike.',
+        read: (c) => ({ B: [c.em.B0, 1.33e-6] }),
+      },
+    ],
+    s12: [
+      {
+        tag: 'light on a movie screen',
+        lab: 'emwave',
+        scenario: 'green',
+        setup: (s) => Object.assign(s, { E0: 400 * Math.SQRT2 }),
+        note: 'The lab takes the amplitude, so it is set to √2 × 400 = 566 V/m: an rms field of 400 V/m.',
+        read: (c) => ({ I: [c.em.Iavg, 425], 'B (rms)': [c.em.B0 / Math.SQRT2, 1.33e-6] }),
+      },
+      {
+        tag: 'sunlight on a 2 m² solar panel',
+        lab: 'emwave',
+        scenario: 'sun',
+        setup: (s) => Object.assign(s, { E0: 868 }),
+        note: 'The lab takes the amplitude, E₀ = 868 V/m.',
+        read: (c, s) => ({ I: [c.em.Iavg, 1000], 'E (rms)': [s.E0 / Math.SQRT2, 614], B0: [c.em.B0, 2.89e-6] }),
+      },
+    ],
+    s15: [
+      {
+        tag: 'unpolarized light through one polarizer',
+        lab: 'polar',
+        scenario: 'one',
+        setup: (s) => Object.assign(s, { I0: 100 }),
+        read: (c) => ({ I: [c.pol.I, 50] }),
+      },
+    ],
+    s16: [
+      {
+        tag: 'crossed polarizers',
+        lab: 'polar',
+        scenario: 'crossed',
+        setup: (s) => Object.assign(s, { I0: 1200 }),
+        read: (c) => ({ I1: [c.pol.steps[1].I, 600], I3: [c.pol.I, 0] }),
+      },
+      {
+        tag: 'a third polarizer between them',
+        lab: 'polar',
+        scenario: 'three',
+        setup: (s) => Object.assign(s, { I0: 1200, a: 0, b: 30, c: 90 }),
+        read: (c) => ({ I1: [c.pol.steps[1].I, 600], I2: [c.pol.steps[2].I, 450], I3: [c.pol.I, 112.5] }),
+      },
+    ],
+  },
 };
 
 /** An example's tag as the notes write it, without "Worked example · ": '' for an untagged one. */

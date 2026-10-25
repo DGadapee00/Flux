@@ -1,0 +1,962 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Waves of Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<style>
+:root{
+  --paper:#F5F6F8; --sheet:#FFFFFF; --ink:#1A2130; --muted:#5A6476; --rule:#DCE0E7;
+  --field:#2C4BB5; --field-soft:#E8ECFA;
+  --copper:#A8531C; --copper-soft:#F8ECE3;
+  --ok:#1F6B4E; --ok-soft:#E5F2EC;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:"IBM Plex Sans Condensed", "Arial Narrow", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#11141B; --sheet:#171B24; --ink:#E4E7EE; --muted:#9AA3B5; --rule:#2A3040;
+    --field:#93A7FF; --field-soft:#1C2340;
+    --copper:#E79461; --copper-soft:#2E2119;
+    --ok:#6FCBA2; --ok-soft:#16281F;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#11141B; --sheet:#171B24; --ink:#E4E7EE; --muted:#9AA3B5; --rule:#2A3040;
+  --field:#93A7FF; --field-soft:#1C2340;
+  --copper:#E79461; --copper-soft:#2E2119;
+  --ok:#6FCBA2; --ok-soft:#16281F;
+}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.62;padding-inline:16px;padding-block:0 64px}
+main{max-width:720px;margin:0 auto}
+header.top{max-width:720px;margin:0 auto;padding-block:48px 24px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3{font-family:var(--sans);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(34px,6vw,52px);font-weight:700;letter-spacing:-.01em;margin-block:10px 14px}
+.lede{font-size:19px;color:var(--muted);max-width:62ch;margin:0}
+.part{margin-top:64px;padding-top:18px;border-top:2px solid var(--ink)}
+.part .eyebrow{color:var(--field)}
+.part h2{font-size:34px;margin-top:6px}
+section.topic{margin-top:44px}
+section.topic h2{font-size:26px;font-weight:600;display:flex;gap:12px;align-items:baseline}
+section.topic h2 .n{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--field);min-width:2.2em}
+h3{font-size:19px;font-weight:600;margin-top:26px}
+p{margin-block:12px;max-width:68ch}
+ul,ol{padding-left:1.3em;max-width:66ch}
+li{margin-block:4px}
+a{color:var(--field)}
+a:focus-visible{outline:2px solid var(--field);outline-offset:2px}
+.bridge{font-style:italic;color:var(--muted);border-left:2px solid var(--rule);padding-left:14px;margin-top:22px}
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;padding-block:4px;margin:14px 0!important}
+.box{border-radius:6px;padding:14px 18px;margin:20px 0;border:1px solid var(--rule);background:var(--sheet)}
+.box > .tag{font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;display:block;margin-bottom:4px}
+.box p{margin-block:8px}
+.box.ex > .tag{color:var(--field)}
+.box.fix{background:var(--copper-soft);border-color:transparent}
+.box.fix > .tag{color:var(--copper)}
+.box.why{background:var(--field-soft);border-color:transparent}
+.box.why > .tag{color:var(--field)}
+.box.key{background:var(--ok-soft);border-color:transparent}
+.box.key > .tag{color:var(--ok)}
+.ans{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto;margin:18px 0}
+table{border-collapse:collapse;width:100%;font-size:16px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--sans);font-weight:600;font-size:15px;border-bottom:2px solid var(--ink)}
+nav.toc{margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:4px 28px;font-size:16px}
+nav.toc h3{grid-column:1/-1;font-size:14px;font-family:var(--mono);font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+nav.toc a{text-decoration:none;color:var(--ink);display:flex;gap:10px;padding:2px 0}
+nav.toc a span{font-family:var(--mono);font-size:13px;color:var(--field);min-width:2em;padding-top:3px}
+nav.toc a:hover{color:var(--field)}
+@media (max-width:560px){nav.toc{grid-template-columns:1fr} body{font-size:17px} mjx-container[display="true"]{font-size:86%} .box{padding:12px 14px}}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid var(--rule);color:var(--muted);font-size:15px}
+</style>
+
+<header class="top">
+  <div class="eyebrow">PHY 2049 · Calculus Physics II · Week 11 · Lecture notes Ch 53–57, rewritten</div>
+  <h1>Waves of Light</h1>
+  <p class="lede">One continuous set of notes on electromagnetic waves, the spectrum, the energy and momentum a wave carries, polarization, and what light does when it meets matter. The whole thing grows out of one result: a changing electric field makes a magnetic field, a changing magnetic field makes an electric field, and together they travel at the speed of light.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Correction to the original notes</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Electromagnetic waves</h3>
+    <a href="#s1"><span>1</span>Waves and their properties</a>
+    <a href="#s2"><span>2</span>Maxwell's equations and the speed of light</a>
+    <a href="#s3"><span>3</span>Light-years and looking back in time</a>
+    <a href="#s4"><span>4</span>Photons</a>
+    <a href="#s5"><span>5</span>The Doppler shift for light</a>
+    <a href="#s6"><span>6</span>Momentum, radiation pressure and lasers</a>
+    <h3>Part II · The spectrum</h3>
+    <a href="#s7"><span>7</span>The spectrum, band by band</a>
+    <a href="#s8"><span>8</span>Radio waves and microwaves</a>
+    <a href="#s9"><span>9</span>Infrared and visible light</a>
+    <a href="#s10"><span>10</span>Ultraviolet, X-rays and gamma rays</a>
+    <h3>Part III · Energy in the wave</h3>
+    <a href="#s11"><span>11</span>E, B and the Poynting vector</a>
+    <a href="#s12"><span>12</span>Intensity</a>
+    <a href="#s13"><span>13</span>Blackbody radiation</a>
+    <a href="#s14"><span>14</span>Sunlight at Earth</a>
+    <h3>Part IV · Polarization</h3>
+    <a href="#s15"><span>15</span>Polarized and unpolarized light</a>
+    <a href="#s16"><span>16</span>Malus's law and polarizer chains</a>
+    <a href="#s17"><span>17</span>Polarization at work</a>
+    <h3>Part V · Light meets matter</h3>
+    <a href="#s18"><span>18</span>Rays, wave fronts and sources</a>
+    <a href="#s19"><span>19</span>What light does at a surface</a>
+    <a href="#s20"><span>20</span>The law of reflection</a>
+    <a href="#s21"><span>21</span>Absorption and scattering</a>
+    <a href="#s22"><span>22</span>Shadows</a>
+    <a href="#s23"><span>23</span>Formula sheet</a>
+  </nav>
+</header>
+
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Electromagnetic waves</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Waves and their properties</h2>
+<p>A <b>wave</b> is a disturbance that travels. It carries energy from place to place, but it does not carry matter along with it. It takes work to make a wave, so a wave has energy and can do work where it arrives.</p>
+<ul>
+  <li><b>Mechanical waves</b> need a medium: sound, water waves, a wave on a string. The medium's own springiness passes the disturbance along. The energy is in the moving particles of the medium.</li>
+  <li><b>Electromagnetic waves</b> are traveling electric and magnetic fields. They need no medium. That is why we see the Sun and stars across empty space. The energy is in the fields.</li>
+</ul>
+<p>The <b>medium</b> is the material a wave travels through, the stuff that moves as the wave passes. Radio, microwaves, infrared, visible light, ultraviolet, X-rays and gamma rays are all electromagnetic waves. "Light" is the general name for the whole family. <b>Visible light</b> is the part the human eye detects.</p>
+
+<h3>Describing a wave</h3>
+<p>Five quantities describe a repeating wave. Graph the disturbance against time at one place and you read off the period. Graph it against position at one instant and you read off the wavelength.</p>
+<div class="tbl"><table>
+<tr><th>Quantity</th><th>Meaning</th><th>Unit</th></tr>
+<tr><td>Amplitude \(A\)</td><td>Largest displacement from equilibrium</td><td>m (for a field, V/m or T)</td></tr>
+<tr><td>Period \(T\)</td><td>Time for one cycle</td><td>s</td></tr>
+<tr><td>Wavelength \(\lambda\)</td><td>Distance the wave travels in one cycle</td><td>m</td></tr>
+<tr><td>Frequency \(f = 1/T\)</td><td>Cycles per second</td><td>Hz</td></tr>
+<tr><td>Angular frequency \(\omega = 2\pi f\)</td><td>Radians per second</td><td>rad/s</td></tr>
+</table></div>
+<div class="box why"><span class="tag">Derivation · \(v = f\lambda\)</span>
+<p>Watch one crest. In one period \(T\) the next crest takes its place, so the crest has moved one wavelength \(\lambda\). Its speed is distance over time:</p>
+\[v = \frac{\lambda}{T} = f\lambda .\]
+<p>This holds for every wave. It is the wave equation of the notes.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a buoy in the swell</span>
+<p>A buoy rises and falls once every 4.0 s, and the crests passing it are 20 m apart. Then \(T = 4.0\) s, \(f = 1/T = 0.25\) Hz and \(\omega = 2\pi f = 1.57\) rad/s. The waves travel at \(v = f\lambda = (0.25)(20) = 5.0\) m/s.</p>
+</div>
+
+<h3>Kinds of electromagnetic wave</h3>
+<p>An electromagnetic wave is made by <b>accelerating charge</b>. A charge at rest has a steady field. A charge moving at constant velocity carries its field along unchanged. Neither radiates. Shake a charge, though, and the kink in its field spreads outward at the speed of light. That kink is the wave.</p>
+<ul>
+  <li>An electromagnetic wave is <b>transverse</b>. The fields oscillate at right angles to the direction the wave travels.</li>
+  <li>An <b>isotropic source</b> radiates equally in all directions. A light bulb is nearly isotropic. Section 12 uses this to find how brightness falls with distance.</li>
+</ul>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Maxwell's equations and the speed of light</h2>
+<p>James Clerk Maxwell gathered the laws of electricity and magnetism into four equations. You have met all four, one exam at a time. Together they show that electricity and magnetism are two faces of one thing, electromagnetism. They also predict light.</p>
+<div class="tbl"><table>
+<tr><th>Law</th><th>Integral form</th><th>What it says</th></tr>
+<tr><td>Gauss's law</td><td>\(\oint\vec E\cdot d\vec A = Q_{\text{enc}}/\varepsilon_0\)</td><td>Charge makes electric field. The flux out of a closed surface counts the charge inside.</td></tr>
+<tr><td>Gauss's law for magnetism</td><td>\(\oint\vec B\cdot d\vec A = 0\)</td><td>There is no magnetic charge. Field lines close on themselves, so the net flux out of any closed surface is zero.</td></tr>
+<tr><td>Faraday's law</td><td>\(\oint\vec E\cdot d\vec L = -\dfrac{d\Phi_B}{dt}\)</td><td>A changing magnetic field makes an electric field.</td></tr>
+<tr><td>Ampère–Maxwell law</td><td>\(\oint\vec B\cdot d\vec L = \mu_0 I_{\text{enc}} + \mu_0\varepsilon_0\dfrac{d\Phi_E}{dt}\)</td><td>A current, or a changing electric field, makes a magnetic field.</td></tr>
+</table></div>
+<p>The last term is Maxwell's addition. Ampère's law of Exam 4 had only the current. Maxwell saw that a changing electric flux must also make a magnetic field. With that term the four laws feed each other. A changing \(\vec E\) makes \(\vec B\). A changing \(\vec B\) makes \(\vec E\). The pair keeps itself going through empty space. Once launched, the wave no longer needs its source.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>Under Gauss's law the notes say "Electric field lines are not closed, they have a beginning and end." That is true of the field a <i>charge</i> makes: its lines start on positive charge and end on negative. The electric field made by a changing magnetic field (Faraday's law, Exam 5) has no charge to start or end on. Its lines close on themselves. So do the electric field lines of a wave in empty space. If electric field lines had to end on charges, a wave could not cross a vacuum.</p>
+</div>
+
+<div class="box why"><span class="tag">Derivation · the speed comes out of the equations</span>
+<p>Take a wave moving along \(+x\) with \(\vec E\) along \(y\) and \(\vec B\) along \(z\):</p>
+\[E_y = E_0\sin(kx-\omega t), \qquad B_z = B_0\sin(kx-\omega t).\]
+<p>Apply Faraday's law around a thin rectangle in the \(xy\)-plane, and the Ampère–Maxwell law around one in the \(xz\)-plane, in a region with no charge or current. In the limit of a small rectangle they become</p>
+\[\frac{\partial E_y}{\partial x} = -\frac{\partial B_z}{\partial t}, \qquad \frac{\partial B_z}{\partial x} = -\mu_0\varepsilon_0\frac{\partial E_y}{\partial t}.\]
+<p>Put the sine waves in. The first gives \(kE_0 = \omega B_0\). The second gives \(kB_0 = \mu_0\varepsilon_0\,\omega E_0\). So</p>
+\[\frac{E_0}{B_0} = \frac{\omega}{k} = v \quad\text{and}\quad \frac{E_0}{B_0} = \frac{1}{\mu_0\varepsilon_0\,v},\]
+<p>and setting the two equal gives</p>
+\[v^2 = \frac{1}{\mu_0\varepsilon_0}.\]
+<p>The wave must travel at one speed, set by two constants measured with charges and currents on a lab bench:</p>
+\[c = \frac{1}{\sqrt{\mu_0\varepsilon_0}} = \frac{1}{\sqrt{(1.257\times10^{-6})(8.85\times10^{-12})}},\]
+\[c = 3.00\times10^8\ \text{m/s}.\]
+<p>The same steps give \(E_0 = cB_0\), used in Section 11.</p>
+</div>
+<p>The exact value is \(c = 299{,}792{,}458\) m/s. That is about 186,000 miles per second, or 670 million mph.</p>
+<ul>
+  <li>Nothing that carries energy or information travels faster than \(c\).</li>
+  <li>In vacuum every electromagnetic wave travels at \(c\), whatever its frequency.</li>
+  <li>Every observer measures the same \(c\), however they move. This is the starting point of Einstein's relativity.</li>
+  <li>In a material the speed is \(1/\sqrt{\mu\varepsilon}\), which is less than \(c\) (Section 19).</li>
+  <li>A change in any field, electric, magnetic or gravitational, spreads at \(c\).</li>
+</ul>
+<div class="box ex"><span class="tag">Worked example · green light at 530 nm</span>
+<p>Green light of wavelength 530 nm travels in vacuum. From \(c = f\lambda\):</p>
+\[f = \frac{c}{\lambda} = \frac{3.00\times10^8}{530\times10^{-9}} = 5.66\times10^{14}\ \text{Hz} = 566\ \text{THz}.\]
+</div>
+<p>In the wave, the energy is shared equally between the electric and magnetic fields (Section 11). The wave keeps that energy until something absorbs it. Light from distant galaxies has crossed most of the universe.</p>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Light-years and looking back in time</h2>
+<p>A <b>light-year</b> is a distance: how far light travels in one year.</p>
+\[1\ \text{ly} = (3.00\times10^8\ \text{m/s})(3.156\times10^7\ \text{s}) = 9.46\times10^{15}\ \text{m}.\]
+<p>That is 5.88 trillion miles.</p>
+<div class="box ex"><span class="tag">Worked example · sunlight's trip</span>
+<p>The Sun is 93 million miles, \(1.5\times10^{11}\) m, from Earth. Light covers that in</p>
+\[\Delta t = \frac{\Delta x}{c} = \frac{1.5\times10^{11}}{3.0\times10^8} = 500\ \text{s} = 8.3\ \text{min}.\]
+</div>
+<div class="box ex"><span class="tag">Worked example · Alpha Centauri by Apollo</span>
+<p>The nearest star system, Alpha Centauri, is 4.4 ly away:</p>
+\[(4.4\ \text{ly})(9.5\times10^{15}\ \text{m/ly}) = 4.18\times10^{16}\ \text{m},\]
+<p>That is \(2.6\times10^{13}\) miles, or 26 trillion. The Apollo craft reached about 25,000 mph (11,000 m/s) on the way to the Moon. At that speed the trip takes</p>
+\[\Delta t = \frac{2.6\times10^{13}\ \text{mi}}{25{,}000\ \text{mi/h}} = 1.04\times10^9\ \text{h},\]
+\[\frac{1.04\times10^9\ \text{h}}{8760\ \text{h/yr}} = 119{,}000\ \text{years},\]
+<p>about 120,000 years. Crossing a galaxy 200,000 ly wide at the same speed would take \(200{,}000/4.4\) times as long: about 5.4 billion years.</p>
+</div>
+<p>Because light takes time to arrive, we see everything as it was when the light left. We see the Sun as it was about 8 minutes ago and Alpha Centauri as it was 4.4 years ago. Stars on the far side of the Milky Way appear as they were more than 52,000 years ago. The Hubble and Webb telescopes see galaxies whose light left them about 13 billion years ago, a few hundred million years after the Big Bang. The farther they look, the further back in time they see.</p>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Photons</h2>
+<p>For a century physicists argued over whether light is a wave or a stream of particles. Interference (Chapters 63–65) shows it is a wave. The photoelectric effect showed it also comes in lumps. Light behaves as a wave or as particles depending on how it interacts and how it is measured.</p>
+<p>The energy in an electromagnetic field is <b>quantized</b>. It comes in packets, called <b>photons</b>, and the total is a whole number of them. One photon of frequency \(f\) carries</p>
+\[E = hf = \frac{hc}{\lambda}, \qquad h = 6.63\times10^{-34}\ \text{J·s}.\]
+<ul>
+  <li>A photon has no rest mass and always travels at \(c\).</li>
+  <li>Higher frequency means more energy per photon.</li>
+  <li>An electron in an atom can hold only certain energies. When it drops from one allowed level to a lower one, the energy it gives up leaves as one photon: \(hf = E_{\text{upper}} - E_{\text{lower}}\). Absorbing a photon of that energy lifts it back.</li>
+</ul>
+<p>Atomic energies are small in joules, so physicists use the <b>electron-volt</b>: \(1\ \text{eV} = 1.6\times10^{-19}\) J, the energy an electron gains crossing 1 V.</p>
+<div class="box ex"><span class="tag">Worked example · one photon of green light</span>
+\[E = \frac{hc}{\lambda} = \frac{(6.63\times10^{-34})(3.00\times10^8)}{530\times10^{-9}} = 3.75\times10^{-19}\ \text{J}.\]
+<p>In electron-volts, that is 2.35 eV.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · photons from a 5 mW green laser</span>
+<p>A 530 nm laser puts out 5 mW, so it delivers \(5\times10^{-3}\) J each second. The number of photons each second is</p>
+\[\frac{5\times10^{-3}\ \text{J/s}}{3.75\times10^{-19}\ \text{J/photon}} = 1.3\times10^{16}\ \text{photons/s}.\]
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The color of light sets the energy of each photon. The brightness sets how many photons arrive each second.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>The Doppler shift for light</h2>
+<p>When a wave source and an observer move toward or away from each other, the observer measures a frequency different from the one the source emits. This is the <b>Doppler effect</b>.</p>
+<p>For sound, it matters who moves. A <b>moving source</b> crowds the waves ahead of it and spreads them out behind: the wavelength changes. A <b>moving observer</b> runs into the crests faster or slower: the frequency heard changes, but the wavelength in the air does not.</p>
+<p>Light needs no medium, so there is no "moving through the air" to tell apart. Only the relative velocity \(v\) of source and observer counts:</p>
+\[f' = f\sqrt{\frac{1+v/c}{1-v/c}} .\]
+<p>Take \(v\) positive when they approach and negative when they recede.</p>
+<ul>
+  <li><b>Approaching</b>: \(f' > f\). The light shifts toward the blue end, a <b>blue shift</b>.</li>
+  <li><b>Receding</b>: \(f' &lt; f\). A <b>red shift</b>.</li>
+</ul>
+<p>Astronomers compare a known spectrum, such as hydrogen's, with the one they receive from a star. Nearly every distant galaxy is red-shifted. The universe is expanding.</p>
+<div class="box ex"><span class="tag">Worked example · the hydrogen red line from a galaxy</span>
+<p>Hydrogen's red line has \(f = 4.57\times10^{14}\) Hz in the lab. From a galaxy it arrives at \(f' = 4.34\times10^{14}\) Hz. Square the Doppler formula and solve for \(v\):</p>
+\[\left(\frac{f'}{f}\right)^2 = \frac{1+v/c}{1-v/c} \quad\Rightarrow\quad v = \frac{(f'/f)^2-1}{(f'/f)^2+1}\,c .\]
+<p>Here \(f'/f = 0.9497\) and \((f'/f)^2 = 0.9019\):</p>
+\[v = \frac{0.9019-1}{0.9019+1}\,(3.00\times10^8) = -1.55\times10^7\ \text{m/s}.\]
+<p>The minus sign means receding. The galaxy moves away from us at 5.2% of the speed of light.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes solve for \(v\) as \(v = -\left[\dfrac{(f'/f)^2-1}{(f'/f)^2+1}\right]c\). There is no leading minus sign. With it, a red shift (\(f' &lt; f\)) would give a positive \(v\), an approaching galaxy. The notes' answer, \(-1.54\times10^7\) m/s, is what the formula without the minus gives (\(-1.55\times10^7\) m/s, unrounded).</p>
+</div>
+
+<h3>Slow sources and echoes</h3>
+<div class="box why"><span class="tag">Derivation · \(\Delta f = fv/c\), and twice that for an echo</span>
+<p>For \(v \ll c\), write \(\beta = v/c\). To first order, \(\sqrt{1+\beta} \approx 1 + \beta/2\) and \(1/\sqrt{1-\beta} \approx 1 + \beta/2\), so</p>
+\[f' \approx f(1+\beta) \quad\Rightarrow\quad \Delta f \approx f\,\frac{v}{c}.\]
+<p>Now bounce a wave off a moving car. The car meets the wave as a moving observer and receives \(f(1+\beta)\). It sends that back as a moving source, so the echo returns at \(f(1+\beta)^2 \approx f(1+2\beta)\):</p>
+\[\Delta f = 2f\,\frac{v_{\text{object}}}{v_{\text{wave}}}, \qquad v_{\text{object}} = \frac{v_{\text{wave}}\,\Delta f}{2f}.\]
+<p>An object moving toward the source raises the echo's frequency. One moving away lowers it. The same formula works for sound, with \(v_{\text{wave}}\) the speed of sound.</p>
+</div>
+<div class="box ex"><span class="tag">Application · police radar gun</span>
+<p>A traffic radar gun sends out a microwave beam at a known frequency and listens for the echo off a car. The echo is shifted by the car's speed. A K-band gun works at 24.15 GHz. For a car approaching at 30 m/s (67 mph):</p>
+\[\Delta f = 2f\frac{v}{c} = 2(24.15\times10^9)\frac{30}{3.00\times10^8} = 4830\ \text{Hz}.\]
+<p>That is a shift of two parts in ten million. The gun cannot measure the echo's frequency that finely. It mixes the echo with its own signal and counts the 4.83 kHz beat between them, then reports \(v = c\,\Delta f/2f\). Double the speed and the beat doubles.</p>
+</div>
+<p><b>LIDAR</b> (light detection and ranging) sends pulses of infrared or visible light and times their echoes. The pulse goes out and back, so the distance is \(d = c\,\Delta t/2\). An echo after 200 ns means \(d = (3.00\times10^8)(200\times10^{-9})/2 = 30\) m. Self-driving cars and surveyors build 3D maps this way. Doppler ultrasound measures blood flow with the same echo idea, using sound.</p>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Momentum, radiation pressure and lasers</h2>
+<p>Light has no mass, but it carries momentum and can push on what it hits. A photon of energy \(E\) carries momentum</p>
+\[p = \frac{E}{c} = \frac{hf}{c} = \frac{h}{\lambda}.\]
+<div class="box why"><span class="tag">Derivation · radiation pressure</span>
+<p>A beam of power \(P\) delivers energy \(P\) each second, and with it momentum \(P/c\) each second. If a surface absorbs the beam, that rate of momentum delivery is the force: \(F = P/c\). If the surface reflects the beam straight back, the momentum reverses, so the change is twice as large: \(F = 2P/c\). Divide by area, with \(I = P/A\) (Section 12):</p>
+\[p_{\text{rad}} = \frac{I}{c}\ \ \text{(absorbed)}, \qquad p_{\text{rad}} = \frac{2I}{c}\ \ \text{(reflected)}.\]
+<p>Sunlight above the atmosphere, \(I = 1367\) W/m² (Section 14), presses with \(1367/3.00\times10^8 = 4.6\times10^{-6}\) N/m² on a black surface and \(9.1\times10^{-6}\) N/m² on a mirror. The notes' "about \(5\times10^{-6}\) N/m²" is the absorbed value.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes write \(p_{\text{light}} = \varepsilon_0E^2/c = B^2/\mu_0c = hf/c\). The first two are not momenta. \(\varepsilon_0E^2\) is the wave's energy per cubic meter, so \(\varepsilon_0E^2/c\) is momentum per cubic meter of beam, in kg/(m²·s). \(hf/c\) is the momentum of one photon, in kg·m/s. The units do not match, so the three cannot be equal. Use \(p = hf/c\) for a photon and \(I/c\) or \(2I/c\) for the pressure of a beam.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the push of a laser pointer</span>
+<p>One 530 nm photon carries \(p = h/\lambda = (6.63\times10^{-34})/(530\times10^{-9}) = 1.25\times10^{-27}\) kg·m/s. A 5 mW beam absorbed by a wall pushes it with</p>
+\[F = \frac{P}{c} = \frac{5\times10^{-3}}{3.00\times10^8} = 1.7\times10^{-11}\ \text{N}.\]
+<p>That is far too small to feel, which is why light pressure went unnoticed for so long.</p>
+</div>
+<div class="box ex"><span class="tag">Application · solar sail</span>
+<p>A solar sail is a large, thin mirror that sunlight pushes through space. It needs no fuel. Take a square sail 14 m on a side, \(A = 196\) m², facing the Sun at Earth's distance. It reflects, so</p>
+\[F = \frac{2IA}{c} = \frac{2(1367)(196)}{3.00\times10^8} = 1.79\times10^{-3}\ \text{N}.\]
+<p>On a 300 kg craft that is \(a = F/m = 5.95\times10^{-6}\) m/s². Tiny, but it never stops. After a year (\(3.16\times10^7\) s) the craft has gained \(\Delta v = at = 188\) m/s with no propellant. Double the sail's area and the force doubles. Move to twice the distance from the Sun and \(I\) falls to a quarter, and so does the force.</p>
+</div>
+
+<h3>LEDs</h3>
+<p>A <b>light-emitting diode</b> joins two semiconductors with an energy gap between them. Each electron that crosses the junction drops across the gap and emits a photon with about the gap's energy. One gap gives one narrow band of color. Little energy goes into heat, unlike an incandescent bulb, which turns most of its power into infrared. A gap of 1.9 eV gives \(\lambda = hc/E = (1.99\times10^{-25})/(1.9\times1.6\times10^{-19}) = 654\) nm, red light.</p>
+
+<h3>Lasers</h3>
+<p>LASER stands for light amplification by stimulated emission of radiation. A photon passing an excited atom can trigger it to drop and emit a second photon, with the same frequency, direction and phase. That is stimulated emission. In a laser, energy is pumped into a <b>lasing medium</b> until more atoms sit in the excited level than below it, a <b>population inversion</b>. Mirrors at both ends send the light back and forth, and each pass stimulates more photons in step with the first. One mirror lets a little of the light out as the beam.</p>
+<ul>
+  <li><b>Monochromatic</b>: one frequency. Lasers exist at frequencies across the spectrum.</li>
+  <li><b>Coherent</b>: the waves are in phase. In an ordinary source each atom emits on its own, at random phase.</li>
+  <li><b>Collimated</b>: the rays are nearly parallel, so the beam spreads very little over long distances. An ordinary source is hard to collimate.</li>
+</ul>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the laser's waves "add together to produce very large field strengths, this is why Lasers are so powerful," and that incoherent sources "are much less intense" because their fields "do not add constructively." Coherence does not create energy. The power out of a laser is at most the power pumped in. A 5 mW laser pointer puts out 20,000 times less power than a 100 W bulb. What makes a laser beam intense is that its power stays in a narrow beam instead of spreading over a sphere (next example).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · laser pointer versus light bulb</span>
+<p>A 5 mW pointer makes a beam 1 mm across. Its intensity is</p>
+\[I = \frac{P}{\pi r^2} = \frac{5\times10^{-3}}{\pi(0.5\times10^{-3})^2} = 6370\ \text{W/m}^2,\]
+<p>and it stays near that for meters because the beam hardly spreads. A 100 W bulb spreads its power over a sphere. At 1 m it gives \(I = 100/4\pi(1)^2 = 8.0\) W/m² (Section 12). The pointer is about 800 times more intense with 20,000 times less power.</p>
+</div>
+<p>Lasers are everywhere. In medicine they cut and seal tissue, reshape the cornea (LASIK), remove cataracts, break up kidney stones, and light fiber-optic endoscopes. In manufacturing they cut, weld, drill, engrave, harden surfaces and pattern computer chips (photolithography). Fiber-optic cables carry the internet as laser pulses. Lasers read CDs, DVDs and Blu-ray discs, scan barcodes and run laser printers. Scientists use them in spectroscopy. Surveyors use laser levels and LIDAR, and the military uses them to mark targets.</p>
+<p class="bridge">Every one of these waves travels at \(c\) and differs only in frequency. The next part walks through the whole range.</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>The spectrum</h2>
+</div>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>The spectrum, band by band</h2>
+<p>The <b>electromagnetic spectrum</b> is the whole range of electromagnetic waves, ordered by frequency, wavelength or photon energy. Frequencies run from a few hertz to beyond \(10^{24}\) Hz. In vacuum all of them travel at \(c\), so wavelength and frequency are tied by \(\lambda = c/f\). What differs is how they interact with matter.</p>
+<p>The spectrum is continuous. The band names are human labels, and neighboring bands overlap at their edges. From lowest to highest frequency, and so from lowest to highest photon energy:</p>
+<div class="tbl"><table>
+<tr><th>Band</th><th>Wavelength</th><th>Frequency</th><th>Photon energy</th><th>Made by</th></tr>
+<tr><td>Radio</td><td>above 1 m</td><td>below 300 MHz</td><td>below 1.2 µeV</td><td>Electrons accelerated in antennas</td></tr>
+<tr><td>Microwave</td><td>1 mm – 1 m</td><td>300 MHz – 300 GHz</td><td>1.2 µeV – 1.2 meV</td><td>Fast-oscillating electron currents</td></tr>
+<tr><td>Infrared</td><td>700 nm – 1 mm</td><td>300 GHz – 430 THz</td><td>1.2 meV – 1.8 eV</td><td>Molecular vibration; anything warm</td></tr>
+<tr><td>Visible</td><td>400 – 700 nm</td><td>430 – 750 THz</td><td>1.8 – 3.1 eV</td><td>Outer-electron jumps in atoms; very hot objects</td></tr>
+<tr><td>Ultraviolet</td><td>10 – 400 nm</td><td>750 THz – \(3\times10^{16}\) Hz</td><td>3.1 – 124 eV</td><td>Larger electron jumps; hotter objects</td></tr>
+<tr><td>X-ray</td><td>10 pm – 10 nm</td><td>\(3\times10^{16}\) – \(3\times10^{19}\) Hz</td><td>124 eV – 124 keV</td><td>Inner-electron jumps; fast electrons striking metal</td></tr>
+<tr><td>Gamma</td><td>below 10 pm</td><td>above \(3\times10^{19}\) Hz</td><td>above 124 keV</td><td>Atomic nuclei; matter–antimatter annihilation</td></tr>
+</table></div>
+<p>Each row's columns follow from the others: \(f = c/\lambda\) and \(E = hc/\lambda\), with \(hc = 1.24\times10^{-6}\) eV·m. These are the boundaries the lab's spectrum ruler and the practice problems use. The notes put the edge of the visible at 750 nm; the eye's response fades out between 700 and 750 nm.</p>
+<div class="box fix"><span class="tag">Correction to the original notes (Ch 54)</span>
+<p>Several of the notes' band ranges give a frequency range and a wavelength range that do not match through \(\lambda = c/f\):</p>
+<ul>
+  <li>Radio "up to 300 GHz" and "up to 1 cm": 300 GHz is \(\lambda = 1\) mm. 1 cm is 30 GHz.</li>
+  <li>Microwaves "\(10^8\) Hz to \(10^{12}\) Hz" and "1 cm to 25 µm": those frequencies run from 3 m to 0.3 mm.</li>
+  <li>Infrared "\(10^{12}\) Hz to \(10^{14}\) Hz" and "25 µm to 750 nm": those frequencies run from 300 µm to 3 µm. 750 nm is \(4.0\times10^{14}\) Hz.</li>
+  <li>Ultraviolet "\(7.5\times10^{14}\) Hz to \(3\times10^{16}\) Hz" and "400 nm to 1 nm": \(3\times10^{16}\) Hz is 10 nm. 1 nm is \(3\times10^{17}\) Hz.</li>
+  <li>X-rays "\(30\times10^{18}\) Hz to \(30\times10^{15}\) Hz" and "1 nm to 1 pm": those frequencies run from 10 pm to 10 nm.</li>
+  <li>Gamma rays "\(10\times10^{18}\) Hz and up" and "1 pm and smaller": \(10^{19}\) Hz is 30 pm.</li>
+</ul>
+<p>A student converting one column to the other gets a different band. The table above is consistent.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · which band?</span>
+<p>A wave has \(f = 5.0\times10^{15}\) Hz. Its wavelength is \(\lambda = c/f = (3.00\times10^8)/(5.0\times10^{15}) = 60\) nm, between 10 and 400 nm: ultraviolet. Each photon carries \(E = hf = (6.63\times10^{-34})(5.0\times10^{15}) = 3.3\times10^{-18}\) J \(= 21\) eV, enough to ionize atoms (Section 10).</p>
+</div>
+
+<h3>What gets through the atmosphere</h3>
+<p>Earth's atmosphere blocks most of the spectrum. Visible light and near infrared get through, and so does a broad window of radio waves. Ultraviolet, X-rays, gamma rays and most of the infrared do not reach the ground. The radio window carries signals to satellites and lets radio telescopes see the sky. To see the universe in the other bands, telescopes go into orbit above the atmosphere.</p>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Radio waves and microwaves</h2>
+<h3>Radio waves</h3>
+<p>Radio waves have the lowest frequencies and longest wavelengths. Maxwell predicted them. Heinrich Hertz made them in 1887 with a spark across a gap, and detected them with a second gap across the room. They are invisible.</p>
+<p>A radio wave is made by accelerating electrons. Drive an antenna with an AC source:</p>
+<ol>
+  <li>While the source's field points up the antenna, electrons flow down it (they move against \(\vec E\)). That current makes a magnetic field circling the antenna, by right-hand rule 2.</li>
+  <li>Half a cycle later the field points down, the electrons flow up, and the magnetic field reverses.</li>
+  <li>As long as the source oscillates, the changing fields peel off and travel outward as a wave.</li>
+</ol>
+<p>An <b>antenna</b> is a conductor that turns electrical signals into waves, or waves into electrical signals. A receiver can use either field.</p>
+<ul>
+  <li><b>Through \(\vec E\).</b> The wave's electric field pushes the free electrons in a metal rod back and forth at the wave's frequency. That tiny current is amplified. The rod works best lined up with \(\vec E\).</li>
+  <li><b>Through \(\vec B\).</b> The wave's changing magnetic flux through a wire loop induces an emf at the same frequency (Faraday's law). AM radios use loop antennas.</li>
+</ul>
+<div class="box ex"><span class="tag">Worked example · an FM antenna</span>
+<p>An FM station at 100 MHz has \(\lambda = c/f = (3.00\times10^8)/(100\times10^6) = 3.0\) m. An antenna works well when its length matches the wave. A common choice is a half-wave dipole: two rods with a total length \(\lambda/2 = 1.5\) m. A car's single whip is often a quarter wave, 75 cm.</p>
+</div>
+<p>A radio signal rides on a <b>carrier wave</b>. <b>Modulation</b> changes the carrier to carry the information:</p>
+<ul>
+  <li><b>AM</b>, amplitude modulation: the carrier's amplitude follows the signal.</li>
+  <li><b>FM</b>, frequency modulation: the carrier's frequency follows the signal.</li>
+  <li><b>Digital</b>: the signal becomes ones and zeros, sent as pulses of the carrier and gaps.</li>
+</ul>
+<p>In the United States the <b>FCC</b> (Federal Communications Commission) assigns each band to a use: radio, TV, cell phones, satellites, Wi-Fi. That keeps users from interfering with each other.</p>
+<p><b>Ground-penetrating radar</b> sends radio pulses, 10 MHz to 2 GHz, into the ground. Pipes, tunnels, cables and layers of soil reflect part of each pulse wherever the ground changes abruptly. The echo's delay gives the depth, and its strength tells what the reflector is. In air those frequencies have wavelengths from 30 m down to 15 cm. Low frequencies reach deeper. High frequencies show finer detail.</p>
+
+<h3>Microwaves</h3>
+<p>Microwaves lie between radio and infrared. They are the highest frequencies that electronic circuits produce easily, made by electrons oscillating very fast. They too are invisible.</p>
+<p>A <b>microwave oven</b> makes 2.45 GHz waves in a vacuum tube called a magnetron. A rectangular metal waveguide carries them into the box, and a rotating metal stirrer spreads them around to reduce hot spots. The wavelength is \(\lambda = (3.00\times10^8)/(2.45\times10^9) = 12.2\) cm. Water in the food absorbs the waves: the oscillating electric field twists the water molecules back and forth, and they pass the energy to their neighbors as heat. Each photon carries only \(hf = 1.0\times10^{-5}\) eV. That is far too little to break a chemical bond. An oven uses electromagnetic waves, not nuclear energy, and it does not make food radioactive.</p>
+<p><b>Radar</b> (radio detection and ranging) uses radio waves or microwaves. A pulse reflects off a plane or a cloud, and the time for the echo gives the distance. The echo's Doppler shift gives the speed (Section 5). <b>Wireless communication</b>, from cell phones and towers to Wi-Fi and Bluetooth, runs mostly on microwaves, in bands the FCC assigns.</p>
+<p>The <b>cosmic microwave background</b> (CMB) is radiation left over from the early universe. It arrives from every direction. Tiny differences in its brightness across the sky map how matter was spread out shortly after the Big Bang.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say that as the universe cooled, "protons and electrons started to form releasing large amounts of high energy radiation" that later expanded into microwaves. For its first 380,000 years the universe was a hot plasma of free protons and electrons. Light could not travel far, because free electrons scatter it. Near 3000 K the electrons and protons <i>combined</i> into neutral hydrogen atoms, which hardly scatter light. The radiation already present was set free. It was not high-energy: at 3000 K it peaked near 1 µm, in the near infrared (Wien's law, Section 13). The expansion of the universe has since stretched it about 1100 times into microwaves.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the peak of the CMB</span>
+<p>The CMB has the spectrum of a blackbody at 2.725 K. Wien's law (Section 13) puts its peak at</p>
+\[\lambda_{\text{peak}} = \frac{2.898\times10^{-3}\ \text{m·K}}{2.725\ \text{K}} = 1.06\ \text{mm},\]
+<p>at the edge between microwaves and infrared. When it was set free at 3000 K it peaked at 0.97 µm. The ratio, \(1.06\ \text{mm}/0.97\ \mu\text{m} = 1100\), is how much space has stretched since.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Infrared and visible light</h2>
+<h3>Infrared</h3>
+<p>Infrared lies between microwaves and visible light. It comes from the thermal jiggling of charges in atoms and molecules. Every object with a temperature emits infrared. The hotter it is, the more it emits and the shorter the wavelength of its peak (Section 13). The eye cannot see it.</p>
+<ul>
+  <li><b>Remote controls</b> use an infrared LED. Infrared behaves like visible light here: walls and furniture block it, so the remote needs a line of sight.</li>
+  <li><b>Heat lamps</b> keep food warm with infrared, and some ovens cook with it.</li>
+  <li><b>Thermal sensing.</b> A touchless thermometer reads the infrared your forehead emits.</li>
+</ul>
+<div class="box ex"><span class="tag">Worked example · your own glow</span>
+<p>Skin is at about 310 K. Wien's law (Section 13) puts its peak at \(\lambda = 2.898\times10^{-3}/310 = 9.3\ \mu\)m, deep in the infrared. A thermal camera tuned near 10 µm sees people glowing in the dark.</p>
+</div>
+<p>An infrared camera "sees" temperature. Infrared has no color, since color belongs to visible light, so the camera paints warm areas in one color and cool areas in another (false color). In its images a cup of hot liquid glows and a cup of cold liquid looks dark, though they look alike to the eye. A house shows where heat leaks out. People stand out against a cool background, and a car's warm hood shows it was running. Some materials hide things in one band and not another: a thin black trash bag is opaque to visible light but transparent in the infrared.</p>
+<p>An object warmer than its surroundings emits more radiation than it absorbs. It has a net radiant power out and cools.</p>
+<p><b>The greenhouse effect.</b> Sunlight passes through a greenhouse's glass and is absorbed by the plants and soil inside. They warm up and emit infrared. The glass does not let that infrared out, so energy arrives faster than it leaves and the inside heats up. Earth's atmosphere does something similar. Greenhouse gases such as water vapor, carbon dioxide and methane let sunlight through but absorb the infrared the warm ground emits. The more of these gases there are, the more energy is held near the surface and the warmer Earth gets.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say "most of the infrared radiation is reflected by the glass back into the house." Glass does not reflect most thermal infrared. It <i>absorbs</i> it: glass is opaque near 10 µm. The warmed glass then radiates, part inward and part outward. Greenhouse gases work the same way, by absorbing and re-emitting, not by reflecting. (A real greenhouse also stays warm because its walls trap the warm air, which would otherwise rise away.)</p>
+</div>
+
+<h3>Light from atoms and molecules</h3>
+<p>When an electron in an atom drops to a lower energy level, the difference leaves as a photon (Section 4). Bigger drops give higher-frequency photons: visible, ultraviolet, and for the inner electrons of heavy atoms, X-rays. Molecules can also vibrate and rotate, and those energy steps are much smaller. So molecules emit and absorb at longer wavelengths, in the infrared and microwave bands.</p>
+
+<h3>Visible light</h3>
+<p>Visible light is special only because human eyes detect it. If you see something, visible light is coming from it. It runs from about 400 nm (violet) to 700 nm (red), \(7.5\times10^{14}\) Hz down to \(4.3\times10^{14}\) Hz. It comes from electron jumps in atoms and from very hot objects. In daylight the eye is most sensitive near 555 nm, in the green.</p>
+<div class="tbl"><table>
+<tr><th>Color</th><th>Wavelength (nm)</th><th>Photon energy</th></tr>
+<tr><td>Red</td><td>610 – 750</td><td>lowest</td></tr>
+<tr><td>Orange</td><td>590 – 610</td><td></td></tr>
+<tr><td>Yellow</td><td>570 – 590</td><td></td></tr>
+<tr><td>Green</td><td>500 – 570</td><td></td></tr>
+<tr><td>Blue</td><td>450 – 500</td><td></td></tr>
+<tr><td>Indigo</td><td>425 – 450</td><td></td></tr>
+<tr><td>Violet</td><td>400 – 425</td><td>highest</td></tr>
+</table></div>
+<p>A 700 nm red photon carries \(hc/\lambda = 1.78\) eV. A 400 nm violet photon carries 3.11 eV.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>Under the color table the notes say "Decreasing wavelength decreasing energy." It is the reverse. \(E = hc/\lambda\), so a shorter wavelength means <i>more</i> energy per photon. The notes' own table puts violet, the shortest wavelength, at "Higher Energy."</p>
+</div>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Ultraviolet, X-rays and gamma rays</h2>
+<h3>Ultraviolet</h3>
+<p>Ultraviolet lies above violet, from 400 nm down to about 10 nm. It comes from larger electron jumps in atoms and from very hot objects. It is split into three bands:</p>
+<ul>
+  <li><b>UVA</b>, 315–400 nm, and <b>UVB</b>, 280–315 nm, tan and burn skin and can cause cancer. UVB also makes vitamin D in the skin.</li>
+  <li><b>UVC</b>, 100–280 nm, carries the most energy and is the most damaging, but the ozone layer absorbs it before it reaches the ground.</li>
+</ul>
+<p>UV breaks chemical bonds. That is why UVC lamps kill germs in air and water, and why UV light cures (hardens) dental fillings and industrial resins. UV also makes some materials <b>fluoresce</b>: they absorb UV and emit visible light. A blacklight makes white paper and cotton glow this way, and fluorescent dyes mark things in medicine and industry.</p>
+<p><b>Ionizing radiation</b> carries enough energy per photon to knock electrons off atoms or break molecules apart. That makes it dangerous to living tissue. Knocking an electron off takes about 10 eV or more, so the photon's wavelength must be shorter than about \(hc/10\ \text{eV} = 124\) nm.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say twice that UVC "is Ionizing radiation" that can "separate electrons from their atoms." Most of UVC is not ionizing. A germicidal lamp's 254 nm photon carries \(hc/\lambda = 4.9\) eV. Removing an electron from hydrogen takes 13.6 eV, and from water 12.6 eV; that needs \(\lambda\) below about 100 nm. UVC kills germs by breaking bonds in their DNA, which takes only a few eV, not by ionizing. Only the far end of the UV, below about 124 nm, ionizes, and air absorbs it.</p>
+</div>
+
+<h3>X-rays</h3>
+<p>X-rays come second only to gamma rays in energy. The "X" meant that their discoverers did not know what they were. They pass through soft tissue but are stopped by bone, so they image the skeleton. They are ionizing, so each exposure does some harm.</p>
+<p>The usual source is an <b>X-ray tube</b>. A high voltage accelerates electrons into a metal target. As they slam to a stop, their energy comes out as X-rays. Very hot gas in stars and supernovas, at millions of kelvin, emits X-rays too, and so do <b>synchrotrons</b>, where fast electrons are bent around a circle by magnetic fields. Accelerated charge radiates.</p>
+<div class="box ex"><span class="tag">Worked example · a 100 kV X-ray tube</span>
+<p>Each electron falls through 100 kV and arrives with 100 keV. The most energetic X-ray it can make takes all of that:</p>
+\[\lambda_{\min} = \frac{hc}{E} = \frac{1.24\times10^{-6}\ \text{eV·m}}{1.00\times10^{5}\ \text{eV}} = 1.24\times10^{-11}\ \text{m},\]
+<p>or 12.4 pm.</p>
+<p>That is a hard X-ray. Double the voltage and the shortest wavelength halves.</p>
+</div>
+<ul>
+  <li><b>Soft X-rays</b>, 0.2–10 nm, have less energy and sit next to the ultraviolet.</li>
+  <li><b>Hard X-rays</b>, 0.01–0.2 nm, sit next to gamma rays. Medicine uses these.</li>
+</ul>
+<p>How much of an X-ray beam gets through a material depends on its density and its atoms. Measure the X-rays that pass through a body and you get a picture of its density: bone shows bright, soft tissue dark.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say X-rays "go through most nonconductive solid materials" and "can penetrate conducting material if it is thin enough." Electrical conductivity has nothing to do with it. Absorption grows with density and with the number of electrons per atom. Bone, an insulator rich in calcium, blocks X-rays. Aluminum, a conductor, lets them through. Lead stops them. The notes' next paragraph gives the right rule: it depends on density.</p>
+</div>
+<p>A <b>CT scan</b> (computed tomography) sweeps thin X-ray beams around the body. Detectors record how much gets through at each angle, and a computer rebuilds cross-sections and 3D images. It can tell fluid from cartilage from bone.</p>
+
+<h3>Gamma rays</h3>
+<p>Gamma rays have the highest energies and penetrate the most. A radioactive nucleus can give off alpha, beta and gamma radiation. Only gamma is electromagnetic; alpha and beta are particles. Gamma and X-ray energies overlap. The name says where the photon came from: gamma rays come from nuclei (or annihilation), X-rays from electrons.</p>
+<ul>
+  <li><b>Radiotherapy</b> aims gamma rays at tumors to kill cancer cells.</li>
+  <li><b>Tracers</b>: a gamma-emitting isotope in the bloodstream shows where it goes.</li>
+  <li><b>Sterilization</b> of food and medical equipment.</li>
+  <li><b>In nature</b>: exploding stars, neutron stars, black holes, and even lightning.</li>
+</ul>
+<p>A <b>PET scan</b> (positron emission tomography) injects a tracer that decays by emitting a <b>positron</b>, the electron's antiparticle. Within a millimeter or so it meets an electron and the two annihilate into gamma rays. Detectors around the patient record the gamma rays, and a computer maps where the tracer collected.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the positron "annihilates with nearby electrons producing a gamma ray." It produces <i>two</i>, flying apart in opposite directions. The electron and positron are nearly at rest, so their total momentum is zero. One photon always carries momentum \(E/c\), so a single photon would break momentum conservation. Two equal photons back to back carry zero in total. PET depends on this: a ring of detectors catches both photons at once, and the annihilation lies on the line between the two hits.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the annihilation photons</span>
+<p>Each photon carries the rest energy of one electron:</p>
+\[E = mc^2 = (9.11\times10^{-31})(3.00\times10^8)^2 = 8.2\times10^{-14}\ \text{J},\]
+<p>which is 512 keV.</p>
+<p>With more precise constants the figure is 511 keV, the value quoted everywhere.</p>
+<p>Its wavelength is \(\lambda = hc/E = h/mc = 2.43\) pm: a gamma ray.</p>
+</div>
+<p class="bridge">The bands differ in what each photon carries. The next part asks how much energy a whole wave carries, and how it is shared between its fields.</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Energy in the wave</h2>
+</div>
+
+<section class="topic" id="s11">
+<h2><span class="n">11</span>E, B and the Poynting vector</h2>
+<p>An electromagnetic wave carries energy in its fields. Those fields push on charges and do work on them. That is how an antenna picks up a signal and how sunlight warms your skin.</p>
+<p>The two fields are locked together. Section 2 showed that Maxwell's equations allow a wave only if</p>
+\[E = cB, \qquad c = \frac{E}{B} = \frac{1}{\sqrt{\mu_0\varepsilon_0}} .\]
+<p>Squaring gives the notes' other form, \(E^2 = B^2/\mu_0\varepsilon_0\). Know one field and you know the other. In SI units \(B\) looks tiny: an electric field of hundreds of volts per meter comes with a magnetic field of microteslas.</p>
+<div class="box why"><span class="tag">Derivation · the two fields carry equal energy</span>
+<p>The energy per volume of an electric field is \(u_E = \tfrac12\varepsilon_0E^2\) (Exam 3). For a magnetic field it is \(u_B = B^2/2\mu_0\) (Exam 5). Put in \(B = E/c\) and \(c^2 = 1/\mu_0\varepsilon_0\):</p>
+\[u_B = \frac{E^2}{2\mu_0c^2} = \frac{\varepsilon_0E^2}{2} = u_E .\]
+<p>At every point and every instant the energy is split evenly. The total is \(u = u_E + u_B = \varepsilon_0E^2\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · B from E = 400 V/m</span>
+<p>A wave has an electric field of magnitude 400 V/m. Its magnetic field is</p>
+\[B = \frac{E}{c} = \frac{400}{3.00\times10^8} = 1.33\times10^{-6}\ \text{T}.\]
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes (Ch 55)</span>
+<p>The notes say "the higher the frequency of the EM wave the more energy the wave has stored in its electric and magnetic field," and write "Energy in EM waves \(= hf\)." \(hf\) is the energy of one <i>photon</i> (Section 4), not of the wave. The energy a wave carries is set by its field strength, \(u = \varepsilon_0E^2\), and its frequency does not appear. A 1 kW radio transmitter sends out far more energy each second than a 5 mW laser, at a frequency millions of times lower. At equal power, the higher-frequency beam carries the same energy in fewer, bigger photons.</p>
+</div>
+
+<h3>The Poynting vector</h3>
+<p>The <b>Poynting vector</b> gives the power per area a wave carries and the direction it flows:</p>
+\[\vec S = \frac{1}{\mu_0}\,\vec E\times\vec B, \qquad |\vec S| = \frac{1}{\mu_0}EB\sin 90^\circ = \frac{EB}{\mu_0}.\]
+<p>\(\vec E\) and \(\vec B\) are always perpendicular, so the sine is 1. \(\vec S\) is perpendicular to both and points the way the wave travels. Its unit is W/m². To find the direction of travel, point your fingers along \(\vec E\), curl them toward \(\vec B\), and your thumb points along \(\vec S\).</p>
+<div class="box ex"><span class="tag">Worked example · which way is it going?</span>
+<p>At one instant a wave's \(\vec E\) points along \(+y\) and its \(\vec B\) along \(-x\). Then</p>
+\[\hat y\times(-\hat x) = -(\hat y\times\hat x) = -(-\hat z) = +\hat z .\]
+<p>The wave travels along \(+z\). Half a cycle later both fields have reversed, and \((-\hat y)\times(+\hat x) = +\hat z\) still. The direction of travel never flips.</p>
+</div>
+</section>
+
+<section class="topic" id="s12">
+<h2><span class="n">12</span>Intensity</h2>
+<p>The fields oscillate, so \(|\vec S|\) rises and falls twice each cycle. What a detector, a solar panel or your eye responds to is the average. The <b>intensity</b> is the average power per area:</p>
+\[I = |\vec S|_{\text{avg}} = \frac{\text{energy}/\text{time}}{\text{area}} = \frac{P}{A}, \qquad \text{in W/m}^2 .\]
+<div class="box why"><span class="tag">Derivation · intensity from rms fields</span>
+<p>With \(E = E_0\sin(kx-\omega t)\) and \(B = B_0\sin(kx-\omega t)\), \(|\vec S| = (E_0B_0/\mu_0)\sin^2(kx-\omega t)\). The average of \(\sin^2\) over a cycle is \(\tfrac12\), so</p>
+\[I = \frac{E_0B_0}{2\mu_0} = \frac{E_{\text{rms}}B_{\text{rms}}}{\mu_0}, \qquad E_{\text{rms}} = \frac{E_0}{\sqrt2},\ \ B_{\text{rms}} = \frac{B_0}{\sqrt2}.\]
+<p>This is the AC rms of Exam 3 again. Replace \(B_{\text{rms}}\) by \(E_{\text{rms}}/c\), or \(E_{\text{rms}}\) by \(cB_{\text{rms}}\):</p>
+\[I = c\varepsilon_0E_{\text{rms}}^2 = \frac{E_{\text{rms}}^2}{c\mu_0} = \frac{cB_{\text{rms}}^2}{\mu_0}.\]
+</div>
+<p>The lecture notes give field values as rms unless they say peak. The peak is \(\sqrt2\) times larger: \(E_0 = \sqrt2\,E_{\text{rms}}\), \(B_0 = \sqrt2\,B_{\text{rms}}\). The EM wave lab and some practice problems give the amplitude \(E_0\) instead; then \(I = \tfrac12c\varepsilon_0E_0^2\). Always check which one a problem means.</p>
+<div class="box ex"><span class="tag">Worked example · light on a movie screen</span>
+<p>Light reaching a movie screen has \(B = 1.33\times10^{-6}\) T and \(E = 400\) V/m (rms). Its intensity from either field is</p>
+\[I = c\varepsilon_0E^2 = (3.00\times10^8)(8.85\times10^{-12})(400)^2 = 425\ \text{W/m}^2,\]
+\[I = \frac{cB^2}{\mu_0} = \frac{(3.00\times10^8)(1.33\times10^{-6})^2}{1.257\times10^{-6}} = 422\ \text{W/m}^2.\]
+<p>The small gap comes from rounding \(B\): \(400/c = 1.333\times10^{-6}\) T gives 425 W/m² both ways. The notes round to 420 W/m².</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · sunlight on a 2 m² solar panel</span>
+<p>Sunlight of intensity 1000 W/m² falls on a 2 m² panel. The rms fields follow from \(I = c\varepsilon_0E^2\):</p>
+\[E_{\text{rms}} = \sqrt{\frac{I}{c\varepsilon_0}} = \sqrt{\frac{1000}{(3.00\times10^8)(8.85\times10^{-12})}} = 614\ \text{V/m},\]
+\[B_{\text{rms}} = \frac{E_{\text{rms}}}{c} = 2.05\times10^{-6}\ \text{T}.\]
+<p>The peaks are \(\sqrt2\) times larger: \(E_0 = 868\) V/m and \(B_0 = 2.89\times10^{-6}\) T. The panel's area does not change the fields. It sets the power collected: \(P = IA = 2000\) W.</p>
+</div>
+
+<h3>A point source and the inverse square law</h3>
+<p>An isotropic source of power \(P\) spreads its energy evenly over a sphere. At distance \(r\) the sphere's area is \(4\pi r^2\), so</p>
+\[I = \frac{P}{4\pi r^2}.\]
+<p>Intensity falls as \(1/r^2\). At twice the distance it is a quarter as bright; at three times, a ninth. The same power is spread over more area.</p>
+<div class="box ex"><span class="tag">Worked example · a 100 W bulb</span>
+<p>Treat a 100 W bulb as an isotropic source that turns all its power into radiation.</p>
+\[I_{1\,\text{m}} = \frac{100}{4\pi(1)^2} = 7.96 \approx 8\ \text{W/m}^2,\]
+\[I_{2\,\text{m}} = \frac{100}{4\pi(2)^2} = 1.99 \approx 2\ \text{W/m}^2.\]
+<p>Doubling the distance cut the intensity to a quarter.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · sunlight at Earth</span>
+<p>The Sun radiates \(3.9\times10^{26}\) W, and Earth is \(1.5\times10^{11}\) m away:</p>
+\[I = \frac{P}{4\pi r^2} = \frac{3.9\times10^{26}}{4\pi(1.5\times10^{11})^2} = 1380\ \text{W/m}^2 \approx 1400\ \text{W/m}^2 .\]
+</div>
+
+<h3>Power on a tilted surface</h3>
+<p>A surface facing the rays head-on catches the most power. Tilt it, and it presents less area to the beam. If \(\varphi\) is the angle between the rays and the surface's normal,</p>
+\[P = IA\cos\varphi .\]
+<p>This is the flux idea of Exams 2 and 5: only the area seen along the beam counts.</p>
+<p>The <b>efficiency</b> \(\eta\) of a device is useful output over total input, often written as a percent. A solar cell's efficiency is the electrical power out over the light power falling on it:</p>
+\[P_{\text{out}} = \eta\,P_{\text{in}} = \eta\,IA\cos\varphi .\]
+<div class="box ex"><span class="tag">Worked example · a rooftop solar panel</span>
+<p>A 2.0 m² panel with 20% efficiency sits in 1000 W/m² sunlight. The roof tilts it so the rays make 30° with its normal:</p>
+\[P_{\text{out}} = (0.20)(1000)(2.0)\cos30^\circ = 346\ \text{W}.\]
+<p>Facing the Sun head-on it would give 400 W.</p>
+</div>
+</section>
+
+<section class="topic" id="s13">
+<h2><span class="n">13</span>Blackbody radiation</h2>
+<p>Every object with internal energy, that is, any temperature above absolute zero, emits a spectrum of electromagnetic radiation.</p>
+<ul>
+  <li>The hotter the object, the more it emits, and the shorter the wavelength where its spectrum peaks.</li>
+  <li>At high temperature, radiation becomes a large part of how an object loses energy.</li>
+  <li>An object that absorbs more radiation than it emits warms up. One that emits more than it absorbs cools down.</li>
+</ul>
+<p>A <b>blackbody</b> is a perfect absorber and a perfect emitter of every wavelength. The two go together: a good absorber is a good emitter, and a poor absorber is a poor emitter. A blackbody is an ideal, usually pictured as a solid surface.</p>
+<p>The <b>emissivity</b> \(e\) compares an object's radiation with a blackbody's at the same temperature. It runs from 0 to 1. At \(e = 1\) the object is a perfect emitter and absorber. At \(e = 0\) it neither emits nor absorbs; it reflects everything. Emissivity can differ from one part of the spectrum to another.</p>
+
+<h3>Wien's law: where the peak sits</h3>
+<p>The wavelength of a blackbody's peak depends only on its kelvin temperature:</p>
+\[\lambda_{\text{peak}} = \frac{2.898\times10^{-3}\ \text{m·K}}{T}.\]
+<div class="box ex"><span class="tag">Worked example · the Sun's temperature from its peak</span>
+<p>The notes take the Sun's peak to be 550 nm (green). Then</p>
+\[T = \frac{2.898\times10^{-3}\ \text{m·K}}{550\times10^{-9}\ \text{m}} = 5270\ \text{K}.\]
+<p>The Sun's surface is at 5780 K. Run Wien's law forward from that: \(\lambda_{\text{peak}} = 2.898\times10^{-3}/5780 = 501\) nm, blue-green. The calculation is right; the 550 nm input is not (next box).</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the Sun's radiation "is peaked ... green (wavelength of 550 nm)," and also that the Sun is very close to a blackbody at 5,800 K. Wien's law makes those two claims disagree: a 5800 K blackbody peaks at 500 nm, and a 550 nm peak means 5270 K. The Sun's peak is near 500 nm. The 550 nm figure is where the <i>eye</i> is most sensitive (555 nm). A student who takes the peak as 550 nm finds the Sun 500 K too cool.</p>
+</div>
+<div class="tbl"><table>
+<tr><th>Temperature</th><th>Peak, \(2.898\times10^{-3}/T\)</th><th>Example</th></tr>
+<tr><td>250 K (−23 °C)</td><td>11.6 µm</td><td>Ice in a freezer</td></tr>
+<tr><td>300 K (27 °C)</td><td>9.7 µm</td><td>Room temperature; skin is close</td></tr>
+<tr><td>500 K (227 °C)</td><td>5.8 µm</td><td>Hot oven</td></tr>
+<tr><td>800 K (527 °C)</td><td>3.6 µm</td><td>Element starting to glow</td></tr>
+<tr><td>1500 K (1227 °C)</td><td>1.9 µm</td><td>Red glow</td></tr>
+<tr><td>3000 K (2727 °C)</td><td>0.97 µm</td><td>Yellow glow, a bulb filament</td></tr>
+<tr><td>4500 K (4227 °C)</td><td>0.64 µm</td><td>White light</td></tr>
+</table></div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>Two rows of the notes' blackbody table disagree with Wien's law, and one with the Celsius conversion. At 800 K the peak is \(2.898\times10^{-3}/800 = 3.6\ \mu\)m, not 3 microns. At 4500 K it is 0.64 µm, not 0.5 microns. And 4500 K is \(4500 - 273 = 4227\) °C, not 4127 °C. The other rows round correctly.</p>
+</div>
+<p>Even a glowing filament peaks in the infrared. Most of an incandescent bulb's power is infrared, which is why it runs hot and why LEDs (Section 6) save so much energy.</p>
+<p><b>Color temperature</b> describes how white a light looks by the blackbody temperature with the same color: about 2500 K is yellowish, 3400 K whiter, and 5000 K bright white. Bulb packages print it in kelvin.</p>
+
+<h3>The Stefan–Boltzmann law: how much is emitted</h3>
+<p>An object of emissivity \(e\), surface area \(A\) and kelvin temperature \(T\) radiates energy \(Q\) in time \(\Delta t\):</p>
+\[Q = e\sigma T^4A\,\Delta t, \qquad P = \frac{Q}{\Delta t} = e\sigma AT^4,\]
+<p>with the Stefan–Boltzmann constant \(\sigma = 5.67\times10^{-8}\ \text{W/(m}^2\text{·K}^4)\).</p>
+<p>\(T\) must be in kelvin, measured from absolute zero: \(T_K = T_C + 273\). The fourth power is steep. Double the temperature and the radiated power rises 16 times.</p>
+<p>An object also absorbs radiation from its surroundings at temperature \(T_0\). The <b>net radiant power</b> is what it emits minus what it absorbs:</p>
+\[P_{\text{net}} = e\sigma A\left(T^4 - T_0^4\right).\]
+<ul>
+  <li>At the same temperature as its surroundings, an object is in thermal equilibrium: it emits as much as it absorbs, and \(P_{\text{net}} = 0\).</li>
+  <li>Warmer than its surroundings, it emits net infrared and loses energy.</li>
+  <li>Cooler than its surroundings, it absorbs net infrared and gains energy.</li>
+</ul>
+<div class="box ex"><span class="tag">Worked example · Bob's stove element</span>
+<p>Bob turns on a stove element of area 0.02 m² and emissivity 0.9. It glows red at 1000 °C (1273 K) in a 25 °C (298 K) room. Its net radiated power is</p>
+\[P_{\text{net}} = (0.9)(5.67\times10^{-8})(0.02)\left(1273^4 - 298^4\right) = 2670\ \text{W}.\]
+<p>The room's \(298^4\) term is only 0.3% of the element's \(1273^4\). A glowing object's radiation barely depends on its surroundings.</p>
+</div>
+</section>
+
+<section class="topic" id="s14">
+<h2><span class="n">14</span>Sunlight at Earth</h2>
+<p>The Sun is close to a blackbody at about 5800 K. Its spectrum peaks in the visible, and a large share is infrared, which we feel as warmth and which heats the ground.</p>
+<div class="box ex"><span class="tag">Worked example · from the Sun's surface to Earth</span>
+<p>At its surface temperature of 5780 K, the Sun emits (with \(e = 1\))</p>
+\[\frac{P}{A} = \sigma T^4 = (5.67\times10^{-8})(5780)^4 = 6.33\times10^7\ \text{W/m}^2 .\]
+<p>Its total output is \(P_{\text{Sun}} = 3.865\times10^{26}\) W. Its rays are nearly parallel by the time they reach Earth, \(1.5\times10^{11}\) m away, where</p>
+\[I = \frac{P_{\text{Sun}}}{4\pi r^2} = \frac{3.865\times10^{26}}{4\pi(1.5\times10^{11})^2} = 1367\ \text{W/m}^2 .\]
+<p>The notes round this to 1400 W/m². The two numbers agree: the Sun's radius is \(6.96\times10^8\) m, and \(6.33\times10^7\times(6.96\times10^8/1.5\times10^{11})^2 = 1360\) W/m².</p>
+</div>
+<p>The measured value is the <b>solar constant</b>, \(I_{sc} = 1367\) W/m². It is the intensity above the atmosphere, on a surface facing the Sun. The Sun's output is very steady, changing by a fraction of a percent, mostly with sunspots. <b>Sunspots</b> are cooler patches of the Sun's surface, where strong magnetic fields hold back the flow of hot gas from below.</p>
+<p>On the way down, the atmosphere absorbs and scatters some of the light, and clouds and particles reflect more. Roughly 30% is lost, so a clear day at noon gives about \(0.7\times1367 \approx 1000\) W/m² at the surface. That is the standard figure for sizing solar panels.</p>
+<p>The angle matters too, through \(P = IA\cos\varphi\) (Section 12). The Sun is strongest when it is highest in the sky. Over a year the noon Sun climbs and sinks, and how much depends on latitude. In the Northern Hemisphere the most sunlight arrives near the summer solstice in June and the least near the winter solstice in December. The seasons come from this tilt of the rays, not from the distance to the Sun.</p>
+<p>At the Sun's surface, about 43% of the radiation is visible, 49% infrared and 7% ultraviolet. Less than 1% is radio, X-rays and gamma rays. The spectrum that reaches the top of the atmosphere spans roughly 200 nm to 4000 nm. At the ground it spans roughly 300 nm (UVB) to 1800 nm (infrared), with gaps where the air absorbs.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes give the Sun's spectrum above the atmosphere as "approximately 200 nm (UVA) to 4000 nm (IR)." 200 nm is UVC. UVA is 315–400 nm (Section 10). The label matters: the ozone layer removes UVC, which is why the spectrum at the ground starts near 300 nm, in the UVB.</p>
+</div>
+<p class="bridge">Intensity and energy treat the wave's field as a magnitude. The field also has a direction, and that direction is polarization.</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part IV</div>
+  <h2>Polarization</h2>
+</div>
+
+<section class="topic" id="s15">
+<h2><span class="n">15</span>Polarized and unpolarized light</h2>
+<p>An electromagnetic wave is transverse, so its fields can oscillate along any direction perpendicular to its travel. The <b>polarization</b> of a wave is the direction of its electric field. The magnetic field is always perpendicular to \(\vec E\), so it is polarized too, but by convention we name the direction of \(\vec E\).</p>
+<ul>
+  <li><b>Linearly polarized</b> light: \(\vec E\) oscillates along one fixed direction.</li>
+  <li><b>Unpolarized</b> light: the direction of \(\vec E\) changes at random, among all the directions perpendicular to the beam. Most sources, the Sun and bulbs included, are unpolarized, because each atom emits on its own.</li>
+</ul>
+<p>A <b>polarizer</b> has a <b>transmission axis</b>. It passes the component of \(\vec E\) along that axis and absorbs (or reflects) the component perpendicular to it. What comes out is polarized along the axis.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes define a polarizer as a material that "absorbs/reflects/refracts/scatters the components of the electric field that are parallel to the Transmission axis." It removes the <i>perpendicular</i> component and passes the parallel one. The notes' next paragraph, on the transmission axis, says this correctly.</p>
+</div>
+<div class="box why"><span class="tag">Derivation · why a polarizer passes half of unpolarized light</span>
+<p>Take one wave in the beam, with its field at angle \(\theta\) to the axis. The polarizer keeps \(E\cos\theta\). Intensity goes as \(E^2\), so that wave keeps \(\cos^2\theta\) of its intensity. In unpolarized light every angle is equally likely. Over a full turn \(\cos^2\theta\) averages to \(\tfrac12\), so</p>
+\[I = \tfrac12 I_0 .\]
+</div>
+<div class="box ex"><span class="tag">Worked example · unpolarized light through one polarizer</span>
+<p>Unpolarized light of 100 W/m² meets a polarizer with a vertical transmission axis. Half gets through: \(I = \tfrac12(100) = 50\) W/m², polarized vertically.</p>
+</div>
+<p>Rotate a single polarizer in unpolarized light and the transmitted brightness does not change. Only its polarization direction turns with the axis. A polarizer used to test light is called an <b>analyzer</b>. In polarized light, the brightness through it changes as it turns: most when its axis is along \(\vec E\), none when the axis is perpendicular.</p>
+</section>
+
+<section class="topic" id="s16">
+<h2><span class="n">16</span>Malus's law and polarizer chains</h2>
+<div class="box why"><span class="tag">Derivation · Malus's law</span>
+<p>Polarized light of intensity \(I_0\) has field \(E_0\). It meets a polarizer whose axis makes angle \(\theta\) with \(\vec E_0\). Split \(\vec E_0\) into a part along the axis, \(E_\parallel = E_0\cos\theta\), which passes, and a part across it, \(E_\perp = E_0\sin\theta\), which is absorbed. Intensity goes as the square of the field:</p>
+\[I = I_0\cos^2\theta .\]
+</div>
+<p>\(\theta\) is the angle between the light's polarization and the transmission axis. At \(\theta = 0\) everything passes. At \(\theta = 90^\circ\) nothing does. That is <b>crossed polarizers</b>.</p>
+<p>The notes show three cases for unpolarized light through two polarizers, the first vertical:</p>
+<ol>
+  <li><b>Second axis vertical.</b> The light leaving the first is already vertical, so \(\theta = 0\) and the second changes nothing: \(I = \tfrac12I_0\).</li>
+  <li><b>Second axis at an angle \(\theta\).</b> \(I = \tfrac12I_0\cos^2\theta\).</li>
+  <li><b>Second axis horizontal.</b> \(\theta = 90^\circ\), and no light gets through.</li>
+</ol>
+<div class="box ex"><span class="tag">Worked example · crossed polarizers</span>
+<p>Unpolarized light of \(I_0 = 1200\) W/m² meets P1 (vertical axis), then P3 (horizontal axis). After P1: \(I_1 = \tfrac12I_0 = 600\) W/m², polarized vertically. That meets P3 at \(\theta = 90^\circ\):</p>
+\[I_3 = I_1\cos^2 90^\circ = 0 .\]
+</div>
+<div class="box ex"><span class="tag">Worked example · a third polarizer between them</span>
+<p>Now slide P2 between them, with its axis 30° from the vertical. Start again with \(I_0 = 1200\) W/m².</p>
+<ul>
+  <li>After P1: \(I_1 = \tfrac12(1200) = 600\) W/m², vertical.</li>
+  <li>After P2: \(\theta = 30^\circ\), so \(I_2 = (600)\cos^2 30^\circ = (600)(0.75) = 450\) W/m², polarized at 30°.</li>
+  <li>After P3: the light is at 30° and the axis at 90°, so \(\theta = 60^\circ\) and \(I_3 = (450)\cos^2 60^\circ = (450)(0.25) = 112.5\) W/m².</li>
+</ul>
+<p>Adding a polarizer let light through where there was none. Each polarizer resets the polarization to its own axis, so P3 now sees light that has a component along its axis.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The worked lines drop the square in Malus's law. They read \(I_2 = (600\ \text{W/m}^2)(\cos 30^\circ) = 450\) W/m² and \(I_3 = (450\ \text{W/m}^2)(\cos 60^\circ) = 112.5\) W/m², and the crossed case \((600)(\cos 90^\circ)\). As typed, \(600\cos30^\circ = 520\) W/m² and \(450\cos60^\circ = 225\) W/m². The answers 450 and 112.5 W/m² are right because they use \(\cos^2\).</p>
+</div>
+<div class="box why"><span class="tag">Derivation · the best angle for the middle polarizer</span>
+<p>With P1 and P3 crossed and P2 at angle \(\theta\) from P1, P2 is at \(90^\circ - \theta\) from P3:</p>
+\[I_3 = \tfrac12I_0\cos^2\theta\,\cos^2(90^\circ-\theta) = \tfrac12I_0\cos^2\theta\sin^2\theta = \tfrac18I_0\sin^2 2\theta .\]
+<p>The most light gets through at \(\theta = 45^\circ\): \(I_3 = I_0/8\), 150 W/m² for the 1200 W/m² beam. At \(\theta = 0\) or \(90^\circ\), P2 lines up with one of the others and the stack is crossed again.</p>
+</div>
+</section>
+
+<section class="topic" id="s17">
+<h2><span class="n">17</span>Polarization at work</h2>
+<h3>Glare and polarized sunglasses</h3>
+<p>Light reflected from water, a road or a car hood is partly polarized, mostly horizontally. At one angle of incidence, <b>Brewster's angle</b>, the reflected light is completely polarized. For light in a material of index of refraction \(n_1\) (Chapter 58) reflecting off one of index \(n_2\), it satisfies \(\tan\theta_B = n_2/n_1\). At that angle the reflected and refracted rays are 90° apart. From air, \(n_1 = 1\) and \(\tan\theta_B = n_2\).</p>
+<div class="box ex"><span class="tag">Worked example · Brewster's angle for water</span>
+<p>Water has \(n = 1.33\). Glare off a lake is fully polarized at \(\theta_B = \tan^{-1}(1.33) = 53.1^\circ\) from the normal. For glass, \(n = 1.5\) gives 56.3°.</p>
+</div>
+<p>This reflected glare washes out what you are trying to see. Polarized sunglasses have their transmission axes vertical, so they block the horizontally polarized glare and pass most of the rest.</p>
+
+<h3>Liquid crystal displays</h3>
+<p>An LCD sandwiches a layer of liquid crystal between two crossed polarizers. The liquid crystal's molecules form a twisted stack that rotates the polarization of light passing through it. A voltage across the layer lines the molecules up and stops the rotation.</p>
+<ul>
+  <li><b>No voltage:</b> the twisted crystal turns the light's polarization 90°, so it passes the second polarizer. The segment is bright, the same as the background.</li>
+  <li><b>Voltage on:</b> the polarization is not rotated, the crossed second polarizer blocks it, and the segment turns dark.</li>
+</ul>
+<p>That is why a calculator shows dark digits on a light background.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say that with no voltage "the light goes through the LC and is blocked by the other polarizer and there is nothing displayed," and that with voltage "the polarizer rotates the polarization of the light and it goes through the second polarizer and the segment is lit up." In the common twisted-nematic LCD it is the other way round. The <i>liquid crystal</i>, not a polarizer, does the rotating, and it rotates when there is <i>no</i> voltage. The voltage stops the rotation, and the crossed polarizer then blocks the light, so the powered segment goes dark.</p>
+</div>
+<p>An LCD's light leaves through a polarizer, so it is polarized. Through polarized sunglasses a phone or a car's display can look dark, and tilting your head changes it.</p>
+<p><b>DLP projectors</b> form the image with millions of tiny tilting mirrors on a chip, so they need no polarization. They can use it for 3D and to combine light beams.</p>
+<p><b>3D movies</b> project two images of the same scene from slightly different viewpoints, with polarizations perpendicular to each other. Each lens of the glasses passes only one, so each eye sees its own image and the brain fuses them into depth. (Most theaters now use circular polarization, so tilting your head does not mix the images.)</p>
+<p><b>Seeing strain.</b> Stress in a transparent plastic rotates the polarization of light passing through it, by an amount that depends on the color. Between crossed polarizers, a stressed part shows bands of color, densest where the strain is largest. Engineers load plastic models of parts this way to find where stress concentrates.</p>
+<p>Skylight is polarized too, by scattering in the air (Section 21).</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part V</div>
+  <h2>Light meets matter</h2>
+</div>
+
+<section class="topic" id="s18">
+<h2><span class="n">18</span>Rays, wave fronts and sources</h2>
+<p><b>Optics</b> is the study of electromagnetic waves: how they are made, how they behave, and how they interact with matter and with each other. Two models of light run through it.</p>
+<p>In the <b>wave model</b>, a source sends out \(\vec E\) and \(\vec B\) oscillating in three dimensions, described by frequency, wavelength and amplitude. In the <b>ray model</b>, light travels in straight lines from point to point, and we draw those paths as rays. Rays describe how light moves through lenses and mirrors well. They cannot explain interference or diffraction, which need the wave model.</p>
+<ul>
+  <li>A <b>ray</b> is a line perpendicular to the wave fronts, pointing along the wave's velocity and its energy flow.</li>
+  <li>Rays do not affect each other. Two beams cross and carry on unchanged.</li>
+  <li>A ray goes on in a straight line until it meets matter.</li>
+</ul>
+<p>The brain assumes light reaches the eye in straight lines and builds its picture of the world on that. When light bends or reflects on the way, the brain is fooled: it places a mirror image behind the mirror, and a straw in water looks broken.</p>
+<p>A <b>wave front</b> is a surface on which every point of the wave is at the same phase, such as a crest. A point source sends out spherical wave fronts. Far from the source, a small piece of a huge sphere is nearly flat. These are <b>plane waves</b>: flat wave fronts moving perpendicular to parallel rays. Sunlight arrives as plane waves.</p>
+<p>A <b>point source</b> seems to emit from a single point with no size. Any source looks like a point from far enough away; stars are the best example. An <b>extended source</b> has a size that matters compared with the optical system. Treat it as many point sources side by side. A frosted bulb on your desk is extended. Section 22 shows how the two kinds cast different shadows.</p>
+</section>
+
+<section class="topic" id="s19">
+<h2><span class="n">19</span>What light does at a surface</h2>
+<p>When light meets matter, five things can happen, depending on the material and on the part of the spectrum:</p>
+<ol>
+  <li><b>Reflection</b>: the light bounces off the surface (Section 20).</li>
+  <li><b>Refraction</b>: the light bends as it passes into another material, because its speed changes (Chapter 58).</li>
+  <li><b>Absorption</b>: the light's energy becomes thermal energy in the material (Section 21).</li>
+  <li><b>Scattering</b>: small particles send the light off in new directions (Section 21).</li>
+  <li><b>Diffraction</b>: waves bend around edges and through openings, by interference (Chapter 64).</li>
+</ol>
+<p>Underneath, it is one process. The wave's electric field pushes on the electrons in the material and makes them oscillate. Oscillating electrons are accelerating charges, so they radiate a new wave at the same frequency. That new wave combines with the incoming one. Depending on how they combine, the result is reflection, transmission, scattering, diffraction or absorption. Different materials, frequencies, sizes and chemical compounds respond differently.</p>
+<ul>
+  <li><b>Transparent</b>: the light passes through with little absorption. You see clearly through it.</li>
+  <li><b>Translucent</b>: only part of the light passes, scattered on the way. You see blurred shapes or only light and dark.</li>
+  <li><b>Opaque</b>: no light passes. It is all absorbed, turning into thermal energy, or reflected.</li>
+</ul>
+
+<h3>Light in a material</h3>
+<p>The driven electrons delay the wave, so light travels slower in a material than in vacuum. The <b>index of refraction</b> measures how much: \(n = c/v\). The frequency cannot change at the boundary, since each crest arriving makes one crest leaving. So the wavelength shrinks: \(\lambda_n = v/f = \lambda/n\).</p>
+<div class="box ex"><span class="tag">Worked example · green light entering glass</span>
+<p>The 530 nm green light of Section 2 enters glass with \(n = 1.5\). Its speed drops to \(v = c/n = 2.0\times10^8\) m/s. Its frequency stays \(5.66\times10^{14}\) Hz. Its wavelength becomes \(530/1.5 = 353\) nm. Its color is unchanged, because the eye responds to frequency.</p>
+</div>
+
+<h3>Size compared with wavelength</h3>
+<p>What a wave does to an object depends on the object's size \(d\) compared with the wavelength \(\lambda\).</p>
+<ul>
+  <li><b>Object much larger than the wavelength</b>, \(d \gg \lambda\): the wave reflects, refracts, is absorbed, or casts a shadow. Reflected light forms a sharp image. This is the regime of ray optics.</li>
+  <li><b>Object about the size of the wavelength</b>, \(d \approx \lambda\): the wave scatters in all directions or diffracts. The object looks blurred, or like a point of light. Examples: visible light on fine smoke or dust, and X-rays on the atoms of a crystal, about 0.1 nm apart.</li>
+  <li><b>Object much smaller than the wavelength</b>, \(d \ll \lambda\): the wave barely interacts. The object is nearly invisible to it. Long radio waves pass around and through buildings that block light.</li>
+</ul>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes write "Object much larger than the wavelength of the EM wave (\(\lambda_{EM} \gg d_{\text{object}}\))" and "Object much smaller than the wavelength of the EM wave (\(\lambda_{EM} \ll d_{\text{object}}\))." Both inequalities are backwards. An object much larger than the wavelength has \(d \gg \lambda\), so \(\lambda \ll d\). An object much smaller has \(\lambda \gg d\). The words are right; the symbols say the opposite.</p>
+</div>
+</section>
+
+<section class="topic" id="s20">
+<h2><span class="n">20</span>The law of reflection</h2>
+<p>To be seen, an object must emit light or reflect it. Most of what you see reflects light. Reflection sends the light back from the boundary between two materials; the ray changes direction without crossing the boundary.</p>
+<p>The <b>normal</b> is a line perpendicular to the surface at the point where the ray strikes it. Angles in optics are measured from the normal, not from the surface.</p>
+<div class="box key"><span class="tag">Key idea · the law of reflection</span>
+<p>The incident ray, the reflected ray and the normal all lie in one plane, and the angle of reflection equals the angle of incidence:</p>
+\[\theta_r = \theta_i .\]
+</div>
+<p>How rough a surface is decides where the light goes.</p>
+<ul>
+  <li><b>Specular reflection</b>, from a smooth surface: parallel rays leave parallel. This forms an image, as in a mirror.</li>
+  <li><b>Diffuse reflection</b>, from a rough surface: parallel rays leave in many directions. Each ray still obeys \(\theta_r = \theta_i\), but the normals point every which way. No image forms. Paper and walls reflect diffusely, which is why you can see them from any angle.</li>
+</ul>
+<p>"Rough" is measured against the wavelength. A surface whose bumps are much smaller than the wavelength acts as a mirror. A wire-mesh dish with 1 cm holes is a smooth mirror for 12 cm microwaves but useless for light. A green laser beam entering a glass block shows a weak reflection at every surface it meets, each obeying the law.</p>
+<div class="box ex"><span class="tag">Worked example · two mirrors at right angles</span>
+<p>Two plane mirrors meet at 90°. A ray strikes the bottom mirror at \(\theta_1 = 40^\circ\) from its normal.</p>
+<ol>
+  <li>Law of reflection: \(\theta_2 = \theta_1 = 40^\circ\).</li>
+  <li>The ray between the mirrors, the bottom mirror's normal (vertical) and the side mirror's normal (horizontal) form a right triangle. Its angles sum to 180°, so \(\theta_2 + \theta_3 = 90^\circ\) and \(\theta_3 = 50^\circ\).</li>
+  <li>Law of reflection again: \(\theta_4 = \theta_3 = 50^\circ\).</li>
+</ol>
+<p>The ray leaves parallel to the way it came in, heading back. That holds for any incoming angle, because the two reflections reverse both components of the ray's direction. Bicycle reflectors and the reflectors left on the Moon use three mirrors at right angles to send light back to its source.</p>
+</div>
+
+<h3>Fermat's principle</h3>
+<p>Light travels between two points along the path that takes the least time. In one material, with one speed, least time means shortest distance: a straight line. For light that reflects off a mirror on the way from A to B, the least-time path is the one that obeys the law of reflection.</p>
+<div class="box why"><span class="tag">Derivation · the law of reflection from least time</span>
+<p>Put A at height \(a\) and B at height \(b\) above a mirror, a horizontal distance \(D\) apart. Let the light hit the mirror a horizontal distance \(x\) from A. The path length is</p>
+\[L(x) = \sqrt{a^2+x^2} + \sqrt{b^2+(D-x)^2}.\]
+<p>The speed is constant, so least time means least \(L\). Set the derivative to zero:</p>
+\[\frac{dL}{dx} = \frac{x}{\sqrt{a^2+x^2}} - \frac{D-x}{\sqrt{b^2+(D-x)^2}} = \sin\theta_i - \sin\theta_r = 0 .\]
+<p>So \(\sin\theta_i = \sin\theta_r\) and \(\theta_i = \theta_r\). Any other point on the mirror gives a longer path.</p>
+</div>
+<p>Least time is not always shortest distance. When light crosses into a slower material, it saves time by taking a longer route through the faster one. That is refraction (Chapter 58).</p>
+<p>The <b>principle of reversibility</b>: reverse a ray and it retraces its path. A ray from A that reflects to B means a ray from B reflects to A along the same lines. If you can see someone's eyes in a mirror, they can see yours.</p>
+</section>
+
+<section class="topic" id="s21">
+<h2><span class="n">21</span>Absorption and scattering</h2>
+<h3>Absorption and color</h3>
+<p>When light is absorbed, its energy becomes thermal energy: the material's atoms and molecules vibrate faster, and it warms up. Absorption is strongest when the light's frequency matches a natural frequency of the material's charges. A bound electron driven at its own natural frequency soaks up energy, like a child's swing pushed in time.</p>
+<ul>
+  <li><b>Microwaves</b> match the rotations of molecules.</li>
+  <li><b>Infrared</b> matches the vibrations of molecules.</li>
+  <li><b>Visible and ultraviolet</b> light match the electrons in atoms and molecules, lifting them to higher energy levels.</li>
+</ul>
+<p>We see the colors an object reflects, not the ones it absorbs.</p>
+<ul>
+  <li>A white object reflects nearly all visible light.</li>
+  <li>A black object absorbs nearly all of it.</li>
+  <li>Red paper reflects red and absorbs the other colors.</li>
+  <li>Leaves absorb blue and red light for photosynthesis and reflect green.</li>
+</ul>
+<p>A gas absorbs only at the natural frequencies of its atoms. Pass white light through hydrogen and its spectrum shows dark lines at those frequencies, the same ones hydrogen emits when heated. One is the 656 nm red line from Section 5. Each element has its own pattern of lines, so absorption spectra identify what a star or a gas is made of.</p>
+
+<h3>Scattering</h3>
+<p>Tiny particles in the air act as small antennas. The light's oscillating electric field drives their charges up and down at the light's frequency. Each particle becomes an oscillating dipole, an accelerating charge, and it reradiates the energy it takes in, in new directions. There are two main kinds of scattering.</p>
+<p><b>Rayleigh scattering</b> is from particles much smaller than the wavelength, such as the nitrogen and oxygen molecules of air. It is much stronger at high frequency. The scattered power goes as \(1/\lambda^4\).</p>
+<div class="box ex"><span class="tag">Worked example · why the sky is blue</span>
+<p>Compare 450 nm blue light with 700 nm red light:</p>
+\[\frac{\text{blue scattering}}{\text{red scattering}} = \left(\frac{700}{450}\right)^4 = 5.9 .\]
+<p>Air scatters blue sunlight about six times as strongly as red, sending it across the whole sky. At sunset the light crosses so much air that most of the blue and green is scattered out of the beam before it reaches you, leaving red and orange.</p>
+</div>
+<p>Rayleigh scattering also polarizes skylight. Look at the sky 90° away from the Sun. The air molecules there are driven by sunlight whose field lies across the beam, and you see only the part of their radiation sent sideways toward you. That light is strongly polarized. Turn polarized sunglasses and that patch of sky darkens and brightens.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the scattered light "is radiated along the oscillation direction of the dipole." An oscillating dipole sends <i>no</i> radiation along its own axis. It radiates most strongly perpendicular to the direction it oscillates. That is what makes skylight polarized: a viewer at 90° to the sunlight sees only dipoles oscillating across the line of sight.</p>
+</div>
+<p><b>Mie scattering</b> is from particles larger than the wavelength, such as the water droplets of a cloud. It barely depends on color, so the scattered light stays white and only its intensity drops. It depends more on the particles' shape, and it sends most of the light forward. That is why clouds look white and fog looks gray. Rayleigh scattering, by contrast, spreads light in all directions and depends strongly on color.</p>
+<p>No atmosphere, no scattering. On the Moon the daytime sky is black, with Earth and the stars visible beside the Sun.</p>
+
+<h3>Why the ocean is blue</h3>
+<ol>
+  <li><b>Absorption.</b> Water absorbs red, orange, yellow and some green. Blue goes farthest, more than 100 m in clear water, and can reflect off white sand on the bottom. Even so, by about 100 m deep most of the blue is gone too (the notes put the loss at 88%), and the deep ocean is dark.</li>
+  <li><b>Scattering.</b> Water molecules Rayleigh-scatter the blue and blue-green light that survives, sending it out in all directions. The water looks blue from every angle.</li>
+</ol>
+<p>Deep water is blue because of the water itself. It is not reflecting the blue sky, though the sky's own blue comes from the same Rayleigh scattering.</p>
+</section>
+
+<section class="topic" id="s22">
+<h2><span class="n">22</span>Shadows</h2>
+<p>A <b>shadow</b> is a region an object keeps light from reaching. Dark is the absence of light.</p>
+<p>A <b>point source</b> casts a sharp shadow. Rays travel in straight lines from one point, so each point behind the object is either lit or not. The closer the source is to the object, the larger the shadow.</p>
+<div class="box ex"><span class="tag">Worked example · a ball and a bulb</span>
+<p>A ball 5 cm across sits 80 cm in front of a wall, lit by a small bulb a distance \(s\) behind it. By similar triangles the shadow's diameter is \(5\ \text{cm}\times(s + 80)/s\).</p>
+<ul>
+  <li>Bulb 20 cm from the ball: \(5\times100/20 = 25\) cm.</li>
+  <li>Bulb 80 cm from the ball: \(5\times160/80 = 10\) cm.</li>
+  <li>Bulb very far away: the rays are parallel and the shadow is the ball's own size, 5 cm.</li>
+</ul>
+</div>
+<p>An <b>extended source</b> casts a shadow with soft edges. Some points behind the object see none of the source, some see part of it, and some see all of it.</p>
+<ul>
+  <li>The <b>umbra</b> is the full shadow, where no part of the source is visible.</li>
+  <li>The <b>penumbra</b> is the partial shadow, gray, where part of the source is visible.</li>
+</ul>
+<p>The penumbra grows as the source gets larger compared with the object, and as the source moves closer to it.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say "Parallel light (light source far away) will give a perfect shadow with little to no Penumbra." Distance alone does not do it. What matters is how large the source looks from the object, its angular size. The Sun is very far away, but it spans 0.53° of sky, so every shadow it casts has a penumbra. The notes' own figure of Earth's umbra and penumbra shows one. The penumbra's width is about 0.0093 times the distance from the object to the screen: a sunlit pole top 5 m above the ground casts a shadow edge blurred over about 5 cm.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the length of Earth's shadow</span>
+<p>Earth's umbra is a cone that narrows to a point behind Earth. By similar triangles, with Earth's diameter \(D_E = 12{,}742\) km, the Sun's \(D_S = 1.392\times10^6\) km and the distance between them \(r = 1.496\times10^8\) km, the cone's length is</p>
+\[L = \frac{D_E\,r}{D_S - D_E} = \frac{(12{,}742)(1.496\times10^8)}{1.392\times10^6 - 12{,}742} = 1.38\times10^6\ \text{km}.\]
+<p>The Moon orbits 384,000 km away, well inside that length. When it passes through the umbra, we see a total lunar eclipse. When it passes through only the penumbra, it dims a little.</p>
+</div>
+</section>
+
+<section class="topic" id="s23">
+<h2><span class="n">23</span>Formula sheet</h2>
+<div class="tbl"><table>
+<tr><th>Idea</th><th>Result</th></tr>
+<tr><td>Wave speed</td><td>\(v=f\lambda\), \(\;f=1/T\), \(\;\omega=2\pi f\)</td></tr>
+<tr><td>Speed of light</td><td>\(c=1/\sqrt{\mu_0\varepsilon_0}=3.00\times10^8\) m/s</td></tr>
+<tr><td>Light-year</td><td>\(1\ \text{ly}=9.46\times10^{15}\) m</td></tr>
+<tr><td>Photon</td><td>\(E=hf=hc/\lambda\), \(\;p=h/\lambda=E/c\)</td></tr>
+<tr><td>Doppler shift (light)</td><td>\(f'=f\sqrt{(1+v/c)/(1-v/c)}\), \(\;v>0\) approaching</td></tr>
+<tr><td>Echo off a moving object</td><td>\(\Delta f=2f\,v_{\text{object}}/v_{\text{wave}}\)</td></tr>
+<tr><td>Radiation pressure</td><td>\(I/c\) absorbed, \(\;2I/c\) reflected</td></tr>
+<tr><td>Fields in a wave</td><td>\(E=cB\), \(\;u_E=u_B\), \(\;u=\varepsilon_0E^2\)</td></tr>
+<tr><td>Poynting vector</td><td>\(\vec S=\vec E\times\vec B/\mu_0\), \(\;|\vec S|=EB/\mu_0\)</td></tr>
+<tr><td>Intensity</td><td>\(I=P/A=c\varepsilon_0E_{\text{rms}}^2=cB_{\text{rms}}^2/\mu_0=\tfrac12c\varepsilon_0E_0^2\)</td></tr>
+<tr><td>Point source</td><td>\(I=P/4\pi r^2\)</td></tr>
+<tr><td>Tilted surface, efficiency</td><td>\(P=IA\cos\varphi\), \(\;P_{\text{out}}=\eta\,IA\cos\varphi\)</td></tr>
+<tr><td>Wien's law</td><td>\(\lambda_{\text{peak}}=2.898\times10^{-3}\ \text{m·K}/T\)</td></tr>
+<tr><td>Stefan–Boltzmann</td><td>\(P=e\sigma AT^4\), \(\;P_{\text{net}}=e\sigma A(T^4-T_0^4)\)</td></tr>
+<tr><td>Polarizer</td><td>Unpolarized: \(I=\tfrac12I_0\); polarized: \(I=I_0\cos^2\theta\)</td></tr>
+<tr><td>Brewster's angle</td><td>\(\tan\theta_B=n_2/n_1\)</td></tr>
+<tr><td>Light in a material</td><td>\(n=c/v\), \(\;\lambda_n=\lambda/n\), \(f\) unchanged</td></tr>
+<tr><td>Law of reflection</td><td>\(\theta_r=\theta_i\), measured from the normal</td></tr>
+<tr><td>Rayleigh scattering</td><td>Scattered power \(\propto 1/\lambda^4\)</td></tr>
+</table></div>
+</section>
+</main>
+
+<footer>Rewritten from the Fall 2026 PHY 2049 lecture notes, Chapters 53–57. Every worked answer was recomputed. Constants used: \(c = 3.00\times10^8\) m/s, \(h = 6.63\times10^{-34}\) J·s, \(\varepsilon_0 = 8.85\times10^{-12}\) C²/(N·m²), \(\mu_0 = 1.257\times10^{-6}\) T·m/A, \(\sigma = 5.67\times10^{-8}\) W/(m²·K⁴), Wien's constant \(2.898\times10^{-3}\) m·K, \(e = 1.6\times10^{-19}\) C, \(m_e = 9.11\times10^{-31}\) kg.</footer>
+
+</body></html>

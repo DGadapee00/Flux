@@ -4,6 +4,20 @@ const SPECTRUM = 'Radio → microwave → infrared → visible → ultraviolet �
 const SOURCE = 'The frequency is set by the source: the wave crests arrive at the boundary as often as they leave it, so it cannot change.';
 
 export default {
+  'e6.55.solar-sail': {
+    hints: [
+      String.raw`Sunlight spreads over a sphere, so $I = 1367\ \text{W/m}^2/r^2$ with r in AU.`,
+      String.raw`A mirror sends the light back, reversing its momentum: the pressure is $2I/c$, twice the absorbed value.`,
+      String.raw`$F = 2IA/c$, then Newton's second law: $a = F/m$.`,
+    ],
+  },
+  'e6.53.radar-gun': {
+    hints: [
+      String.raw`The gun's own wavelength is $\lambda = c/f$, with f in hertz (1 GHz = 10⁹ Hz).`,
+      String.raw`The car shifts the wave twice: once as a moving observer, once as a moving source. Each shift is $fv/c$.`,
+      String.raw`So $\Delta f = 2fv/c$. A car closing in raises the echo's frequency.`,
+    ],
+  },
   'e6.53.f-from-lambda': {
     hints: [String.raw`In vacuum $c = f\lambda$, so $f = c/\lambda$ with λ in metres (nm × 10⁻⁹).`, String.raw`The period is $T = 1/f$.`],
   },

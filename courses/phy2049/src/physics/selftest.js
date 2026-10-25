@@ -1,5 +1,5 @@
 import { K, EPS0, QE, MU0, C } from './constants.js';
-import { railB, railgunForce, railgunLaunch, thruster, cyclotron, spectrometerRadius, spectrometerMass, AMU, transmission, motor, mriMagnet, transformer, flowMeter } from './devices.js';
+import { railB, railgunForce, railgunLaunch, thruster, cyclotron, spectrometerRadius, spectrometerMass, AMU, transmission, motor, mriMagnet, transformer, flowMeter, radarGun, solarSail } from './devices.js';
 import { QUANTITIES, LAB_UNITS, baseUnits, unitsForLab, prettyUnit } from '../data/quantities.js';
 import { parseUnit } from './units.js';
 import { EXAMS } from '../data/catalog.js';
@@ -689,6 +689,28 @@ console.log('\nApplications: power lines, motor, MRI magnet');
   approx(flowMeter({ B: 0.01, d: 0.1, v: 4 }).V / fm.V, 2, 1e-12, 'flow meter: double the speed, double the reading');
   approx(flowMeter({ B: 0.01, d: 0.2, v: 2 }).Q / fm.Q, 4, 1e-12, 'flow meter: double the pipe at the same speed: twice V, four times Q');
   approx(flowMeter({ B: 0.02, d: 0.006, v: 0.3 }).Q * 6e7, 509, 1e-3, 'flow meter: a 6 mm artery at 0.3 m/s carries about 509 mL/min');
+
+  // Radar gun: the echo off a car at v is shifted by Δf = 2fv/c (moving observer, then moving source).
+  const rg = radarGun({ f: 24.15e9, v: 30, d: 300 });
+  approx(rg.shift, 4830, 2e-3, 'radar gun: 24.15 GHz off a car closing at 30 m/s shifts by 4.83 kHz');
+  approx(rg.vRead, 30, 1e-12, 'radar gun: the gun turns the shift back into the speed, v = cΔf/2f');
+  approx(rg.mph, 67.1, 1e-3, 'radar gun: 30 m/s is 67 mph');
+  approx(rg.lambda, 0.01242, 2e-3, 'radar gun: K band is a 1.24 cm wave');
+  approx(rg.delay, 2.0e-6, 2e-3, 'radar gun: the echo from 300 m returns after 2.0 μs');
+  approx(rg.exactShift / rg.shift, 1, 1e-6, 'radar gun: the relativistic double shift agrees to a part in a million at traffic speeds');
+  approx(radarGun({ f: 24.15e9, v: 60 }).shift / rg.shift, 2, 1e-12, 'radar gun: double the speed, double the beat');
+  approx(radarGun({ f: 12.075e9, v: 30 }).shift / rg.shift, 0.5, 1e-12, 'radar gun: half the frequency, half the beat for the same car');
+  approx(radarGun({ f: 34.7e9, v: -25 }).shift, -5783, 2e-3, 'radar gun: a car going away at 25 m/s lowers a Ka-band echo by 5.78 kHz');
+
+  // Solar sail: a mirror in sunlight feels p = 2I/c, so F = 2IA/c, with I falling as 1/r².
+  const ss = solarSail({ A: 196, m: 300, r: 1 });
+  approx(ss.F, 1.79e-3, 2e-3, 'solar sail: a 14 m square mirror at 1 AU feels 1.79 mN');
+  approx(ss.a, 5.95e-6, 2e-3, 'solar sail: 5.95 μm/s² on a 300 kg craft');
+  approx(ss.dvYear, 188, 2e-3, 'solar sail: 188 m/s gained in a year, no fuel');
+  approx(ss.p, 9.12e-6, 2e-3, 'solar sail: sunlight presses on a mirror with 9.1 μPa');
+  approx(solarSail({ A: 392, m: 300, r: 1 }).F / ss.F, 2, 1e-12, 'solar sail: double the area, double the force');
+  approx(solarSail({ A: 196, m: 300, r: 2 }).F / ss.F, 0.25, 1e-12, 'solar sail: twice as far from the Sun, a quarter of the force');
+  approx(solarSail({ A: 32, m: 5, r: 1 }).a, 5.84e-5, 2e-3, 'solar sail: a 32 m², 5 kg CubeSat sail accelerates ten times faster');
 }
 
 console.log('\nApplications: the cyclotron and relativity');

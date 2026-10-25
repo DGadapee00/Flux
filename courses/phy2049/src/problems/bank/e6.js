@@ -83,6 +83,27 @@ export default [
     cases: [kase('hand', { k: 10, E0: 30 }, { lam: 6.2832e-7, w: 3e15, f: 4.7746e14, B0: 1e-7 })],
   }),
 
+  problem({
+    ...E6, id: 'e6.53.radar-gun', ch: '53', lab: 'radargun', title: 'Application: a police radar gun', kind: 'numeric', level: 2, topics: ['doppler'],
+    vars: { f: choice([10.525, '10.525 GHz (X band)'], [24.15, '24.15 GHz (K band)'], [34.7, '34.7 GHz (Ka band)']), v: range(10, 50, 1, 'm/s') },
+    derive: ($) => ({ df: (2 * $.f * 1e9 * $.v) / C_LIGHT, lam: C_LIGHT / ($.f * 1e9), mph: $.v / 0.44704 }),
+    text: (T) => `A police radar gun sends ${T.f} microwaves at a car driving straight toward it at ${T.v} m/s. The echo comes back shifted in frequency. Find the wavelength the gun sends and the shift Δf between the echo and the gun's own signal.`,
+    parts: [num('lam', ($) => $.lam, 'cm', { scale: 1e-2 }), num('df', ($) => $.df, 'Hz')],
+    steps: ($, f) => [
+      String.raw`$\lambda = \dfrac{c}{f} = \dfrac{${qty(C_LIGHT, 'm/s')}}{${qty($.f * 1e9, 'Hz')}} = ${texNum($.lam)}\ \text{m}$`,
+      String.raw`The car receives $f(1 + v/c)$ as a moving observer and sends it back as a moving source, so the echo returns at $f(1 + v/c)^2 \approx f(1 + 2v/c)$.`,
+      String.raw`$\Delta f = \dfrac{2fv}{c} = \dfrac{2${pq($.f * 1e9, 'Hz')}${pq($.v, 'm/s')}}{${qty(C_LIGHT, 'm/s')}} = ${texNum($.df)}\ \text{Hz}$, a rise, because the car is closing.`,
+    ],
+    sim: {
+      scenario: 'notes',
+      setup(s, $) {
+        Object.assign(s, { f: $.f * 1e9, v: $.v });
+      },
+      read: (c) => ({ lam: c.rg.lambda, df: c.rg.shift }),
+    },
+    cases: [kase('the notes', { f: 24.15, v: 30 }, { lam: 1.242, df: 4830 })],
+  }),
+
   // ================================================================= 54
   problem({
     ...E6, id: 'e6.54.band', ch: '54', lab: 'emwave', title: 'Which part of the spectrum?', kind: 'conceptual', topics: ['spectrum'],
@@ -178,6 +199,31 @@ export default [
       String.raw`$F = pA = ${pq($.p, 'Pa')}${pq($.A, 'm²')} = ${texNum($.F)}\ \text{N}$`,
     ],
     cases: [kase('reflecting', { I: 1360, A: 100, surf: 2 }, { p: 9.067e-6, F: 9.067e-4 })],
+  }),
+
+  problem({
+    ...E6, id: 'e6.55.solar-sail', ch: '55', lab: 'solarsail', title: 'Application: a solar sail', kind: 'numeric', level: 2, topics: ['radiation-pressure'],
+    vars: { A: range(10, 1000, 1, 'm²'), m: range(5, 500, 5, 'kg'), r: choice([1, "Earth's distance from the Sun (1 AU)"], [1.52, "Mars's distance from the Sun (1.52 AU)"]) },
+    derive: ($) => {
+      const I = 1367 / ($.r * $.r);
+      const F = (2 * I * $.A) / C_LIGHT;
+      return { I, F, a: F / $.m };
+    },
+    text: (T) => `A ${T.m} kg spacecraft carries a perfectly reflecting sail of area ${T.A} m², facing the Sun head-on at ${T.r}. Sunlight at Earth's distance has an intensity of 1367 W/m². Find the force sunlight exerts on the sail and the craft's acceleration.`,
+    parts: [num('F', ($) => $.F, 'mN', { scale: 1e-3 }), num('a', ($) => $.a, 'm/s²')],
+    steps: ($, f) => [
+      String.raw`Intensity falls as $1/r^2$: $I = \dfrac{1367\ \text{W/m}^2}{(${$.r})^2} = ${texNum($.I)}\ \text{W/m}^2$`,
+      String.raw`A mirror reverses the light's momentum, so $p = 2I/c$ and $F = \dfrac{2IA}{c} = \dfrac{2${pq($.I, 'W/m²')}${pq($.A, 'm²')}}{${qty(C_LIGHT, 'm/s')}} = ${texNum($.F)}\ \text{N}$`,
+      String.raw`$a = \dfrac{F}{m} = \dfrac{${qty($.F, 'N')}}{${qty($.m, 'kg')}} = ${texNum($.a)}\ \text{m/s}^2$`,
+    ],
+    sim: {
+      scenario: 'notes',
+      setup(s, $) {
+        Object.assign(s, { A: $.A, m: $.m, r: $.r });
+      },
+      read: (c) => ({ F: c.ss.F, a: c.ss.a }),
+    },
+    cases: [kase('the notes', { A: 196, m: 300, r: 1 }, { F: 1.79, a: 5.95e-6 })],
   }),
 
   // ================================================================= 56
