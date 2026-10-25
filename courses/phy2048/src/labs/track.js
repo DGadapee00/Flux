@@ -20,7 +20,7 @@ function placed(state) {
 
 export default defineLab({
   id: 'track',
-  exam: 'u3',
+  exam: 'u4',
   title: 'Energy track',
   hint: 'Move the mass down the track. Friction is left out, so the total energy stays put.',
   scenarios: SCENARIOS,

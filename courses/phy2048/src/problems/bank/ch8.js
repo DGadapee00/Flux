@@ -4,7 +4,7 @@ import { gravitationalEnergy, speedFromEnergy, springEnergy } from '@flux/subjec
 import { speedFromDisplacement } from '@flux/subjects/mechanics/kinematics.js';
 import { kase, num, problem, range, texNum } from '../kit.js';
 
-const U = { exam: 'u3', ch: '8' };
+const U = { exam: 'u4', ch: '8' };
 const DEG = Math.PI / 180;
 
 /** Positive root of (1/2) k x² = mg(h + x). */

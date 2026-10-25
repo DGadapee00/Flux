@@ -4,7 +4,7 @@ import { centerOfMass, collide1D, impulse, momentum } from '@flux/subjects/mecha
 import { v } from '@flux/subjects/mechanics/vectors.js';
 import { kase, num, problem, range, sym, texNum } from '../kit.js';
 
-const U = { exam: 'u4', ch: '9' };
+const U = { exam: 'u5', ch: '9' };
 
 export default [
   problem({

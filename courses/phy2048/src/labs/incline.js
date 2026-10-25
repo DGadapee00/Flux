@@ -11,7 +11,7 @@ const SCENARIOS = [
 
 export default defineLab({
   id: 'incline',
-  exam: 'u2',
+  exam: 'u3',
   title: 'Incline',
   hint: 'Steepen the slope, or raise the friction, and see whether the block still slides.',
   scenarios: SCENARIOS,

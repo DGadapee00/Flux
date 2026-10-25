@@ -11,7 +11,7 @@ const SCENARIOS = [
 
 export default defineLab({
   id: 'collide',
-  exam: 'u4',
+  exam: 'u5',
   title: 'Collisions',
   hint: 'Slide the restitution from 1 (elastic) to 0 (they stick). Momentum is kept either way.',
   scenarios: SCENARIOS,

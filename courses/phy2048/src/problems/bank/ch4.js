@@ -6,7 +6,7 @@ import { add, angle2D, fromAngle2D, mag, v } from '@flux/subjects/mechanics/vect
 import { trapFlight } from '../integrate.js';
 import { kase, num, problem, range, texNum } from '../kit.js';
 
-const U = { exam: 'u1', ch: '4' };
+const U = { exam: 'u2', ch: '4' };
 const DEG = Math.PI / 180;
 
 export default [

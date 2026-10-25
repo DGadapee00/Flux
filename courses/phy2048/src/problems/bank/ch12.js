@@ -4,7 +4,7 @@ import { moment2D, particleEq2D, rigidBody2D } from '@flux/subjects/mechanics/st
 import { v } from '@flux/subjects/mechanics/vectors.js';
 import { kase, num, problem, range, texNum } from '../kit.js';
 
-const U = { exam: 'u6', ch: '12' };
+const U = { exam: 'u8', ch: '12' };
 const DEG = Math.PI / 180;
 
 export default [

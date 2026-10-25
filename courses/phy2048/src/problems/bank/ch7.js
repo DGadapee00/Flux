@@ -4,7 +4,7 @@ import { kineticEnergy, power, speedFromEnergy, work, workVector } from '@flux/s
 import { v } from '@flux/subjects/mechanics/vectors.js';
 import { kase, num, problem, range, sym, texNum } from '../kit.js';
 
-const U = { exam: 'u3', ch: '7' };
+const U = { exam: 'u4', ch: '7' };
 const DEG = Math.PI / 180;
 
 export default [

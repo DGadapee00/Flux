@@ -1,78 +1,132 @@
 /**
- * PHY 2048 course map, from OpenStax University Physics Volume 1.
- * Dates stay empty: this is a review course. Five labs are logic only. The
- * scene is drawn after the physics shell moves. `BANK_CHAPTERS` lists the
- * chapters that have problems.
+ * PHY 2048 course map, from OpenStax University Physics Volume 1 alone (DECISIONS.md, D33).
+ * Thirteen units in the book's order (docs/course-plans/phy2048.md). `labs` are built, as logic
+ * only for now; `coming` is the rest of the unit's labs, still to be written. Dates stay empty:
+ * the course is for personal study. `BANK_CHAPTERS` lists the chapters that have problems.
  */
 
 export const UNITS = [
   {
     id: 'u1',
     n: 1,
-    title: 'Vectors and kinematics',
-    chapters: ['2', '3', '4'],
+    title: 'Units, vectors and motion along a line',
+    chapters: ['1', '2', '3'],
     date: null,
-    labs: ['projectile'],
+    labs: [],
+    coming: ['Vectors', 'Motion graphs', 'Stopping distance'],
   },
   {
     id: 'u2',
     n: 2,
-    title: "Newton's laws and friction",
-    chapters: ['5', '6'],
+    title: 'Motion in two and three dimensions',
+    chapters: ['4'],
     date: null,
-    labs: ['incline'],
+    labs: ['projectile'],
+    coming: ['Circular motion', 'Relative motion', 'Wind triangle'],
   },
   {
     id: 'u3',
     n: 3,
-    title: 'Work and energy',
-    chapters: ['7', '8'],
+    title: "Newton's laws and their applications",
+    chapters: ['5', '6'],
     date: null,
-    labs: ['track'],
+    labs: ['incline'],
+    coming: ['Atwood machine', 'Banked curve', 'Drag', 'Elevator scale', 'Skydiver'],
   },
   {
     id: 'u4',
     n: 4,
-    title: 'Momentum and collisions',
-    chapters: ['9'],
+    title: 'Work, energy and power',
+    chapters: ['7', '8'],
     date: null,
-    labs: ['collide'],
+    labs: ['track'],
+    coming: ['Work and energy', 'Work along a path', 'Energy diagram', 'Automotive power'],
   },
   {
     id: 'u5',
     n: 5,
-    title: 'Rotation, torque and angular momentum',
-    chapters: ['10', '11'],
+    title: 'Momentum and collisions',
+    chapters: ['9'],
     date: null,
-    labs: ['rotor'],
+    labs: ['collide'],
+    coming: ['Impulse', 'Collisions in two dimensions', 'Center of mass', 'Rocket', 'Crumple zone', 'Crash reconstruction'],
   },
   {
     id: 'u6',
     n: 6,
-    title: 'Equilibrium',
-    chapters: ['12'],
+    title: 'Fixed-axis rotation',
+    chapters: ['10'],
     date: null,
-    labs: [],
+    labs: ['rotor'],
+    coming: ['Moment of inertia', 'Massive pulley', 'Helicopter rotor'],
   },
   {
     id: 'u7',
     n: 7,
-    title: 'Gravitation',
-    chapters: ['13'],
+    title: 'Rolling and angular momentum',
+    chapters: ['11'],
     date: null,
     labs: [],
+    coming: ['Rolling', 'Angular momentum of a particle', 'Spinning stool', 'Gyroscope', 'Rover wheel'],
   },
   {
     id: 'u8',
     n: 8,
+    title: 'Static equilibrium and elasticity',
+    chapters: ['12'],
+    date: null,
+    labs: [],
+    coming: ['Beam', 'Ladder', 'Stress and strain', 'Car weight balance'],
+  },
+  {
+    id: 'u9',
+    n: 9,
+    title: 'Gravitation',
+    chapters: ['13'],
+    date: null,
+    labs: [],
+    coming: ['Orbits', "Kepler's laws", 'ISS orbit'],
+  },
+  {
+    id: 'u10',
+    n: 10,
+    title: 'Fluid mechanics',
+    chapters: ['14'],
+    date: null,
+    labs: [],
+    coming: ['Pressure and depth', 'Buoyancy', 'Bernoulli', 'Brake hydraulics', 'Fire hose'],
+  },
+  {
+    id: 'u11',
+    n: 11,
     title: 'Oscillations',
     chapters: ['15'],
     date: null,
     labs: [],
+    coming: ['Spring and mass', 'Pendulum', 'Resonance', 'Skyscraper damper'],
+  },
+  {
+    id: 'u12',
+    n: 12,
+    title: 'Waves',
+    chapters: ['16'],
+    date: null,
+    labs: [],
+    coming: ['Traveling wave', 'Standing wave', 'Guitar string'],
+  },
+  {
+    id: 'u13',
+    n: 13,
+    title: 'Sound',
+    chapters: ['17'],
+    date: null,
+    labs: [],
+    coming: ['Intensity', 'Pipe modes', 'Doppler effect', 'Train horn'],
   },
 ];
 
 export const CHAPTERS = {
+  1: 'Units and measurement',
   2: 'Vectors',
   3: 'Motion along a straight line',
   4: 'Motion in two and three dimensions',
@@ -85,7 +139,10 @@ export const CHAPTERS = {
   11: 'Angular momentum',
   12: 'Static equilibrium and elasticity',
   13: 'Gravitation',
+  14: 'Fluid mechanics',
   15: 'Oscillations',
+  16: 'Waves',
+  17: 'Sound',
 };
 
 /** Chapters whose problems are in the bank. */

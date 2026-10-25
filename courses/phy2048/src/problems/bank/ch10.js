@@ -8,7 +8,7 @@ import { v } from '@flux/subjects/mechanics/vectors.js';
 import { trap1D } from '../integrate.js';
 import { kase, num, problem, range, texNum } from '../kit.js';
 
-const U = { exam: 'u5', ch: '10' };
+const U = { exam: 'u6', ch: '10' };
 const DEG = Math.PI / 180;
 
 export default [

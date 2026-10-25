@@ -5,7 +5,7 @@ import {
 } from '@flux/subjects/mechanics/rotation.js';
 import { kase, mc, num, problem, range, texNum } from '../kit.js';
 
-const U = { exam: 'u5', ch: '11' };
+const U = { exam: 'u7', ch: '11' };
 const DEG = Math.PI / 180;
 
 function faster($) {

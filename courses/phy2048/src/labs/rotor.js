@@ -13,7 +13,7 @@ const SCENARIOS = [
 
 export default defineLab({
   id: 'rotor',
-  exam: 'u5',
+  exam: 'u6',
   title: 'Rotation and torque',
   hint: 'A tangential force spins the disk. On the incline, compare a disk with a hoop.',
   scenarios: SCENARIOS,

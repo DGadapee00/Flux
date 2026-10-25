@@ -7,7 +7,7 @@ import {
 } from '@flux/subjects/mechanics/oscillation.js';
 import { kase, num, problem, range, texNum } from '../kit.js';
 
-const U = { exam: 'u8', ch: '15' };
+const U = { exam: 'u11', ch: '15' };
 
 export default [
   problem({

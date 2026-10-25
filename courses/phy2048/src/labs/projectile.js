@@ -18,7 +18,7 @@ function timeToLand(vy, y0) {
 
 export default defineLab({
   id: 'projectile',
-  exam: 'u1',
+  exam: 'u2',
   title: 'Projectile',
   hint: 'Drag is left out. Change the angle and the launch speed, and watch the range.',
   scenarios: SCENARIOS,

@@ -1,10 +1,10 @@
 /** Ch 5 · Newton's laws. OpenStax University Physics Vol. 1, §§5.3–5.5. */
 import { G } from '@flux/subjects/mechanics/constants.js';
-import { acceleration, newton, weight } from '@flux/subjects/mechanics/dynamics.js';
+import { acceleration, weight } from '@flux/subjects/mechanics/dynamics.js';
 import { v } from '@flux/subjects/mechanics/vectors.js';
 import { kase, mc, num, problem, range, sym, texNum } from '../kit.js';
 
-const U = { exam: 'u2', ch: '5' };
+const U = { exam: 'u3', ch: '5' };
 
 function who($) {
   if (Math.abs($.m1 - $.m2) < 1e-9) return 'same';
@@ -143,38 +143,6 @@ export default [
     ],
     cases: [
       kase('hand', { m1: 2, m2: 4, F: 8 }, { a1: 4, a2: 2, who: 'm1' }),
-    ],
-  }),
-
-  problem({
-    ...U,
-    id: 'ch5.scale',
-    src: 'OpenStax University Physics Vol. 1 §5.4',
-    title: 'Apparent weight in an elevator',
-    topics: ['newton', 'normal'],
-    vars: {
-      m: range(2, 20, 0.5, 'kg'),
-      a: range(-4, 4, 0.5, 'm/s²'),
-    },
-    derive: ($) => {
-      const net = newton($.m, v(0, $.a, 0));
-      const N = net.y - weight($.m, G).y;
-      return { N };
-    },
-    second: ($) => ({ N: $.m * (G + $.a) }),
-    valid: ($) => $.N > 1,
-    text: (T) => `A ${T.m} kg person stands on a scale in an elevator. The elevator's acceleration is ${T.a} m/s², with +y upward. Take g = ${G} m/s². Find the scale reading.`,
-    parts: [
-      num('N', ($) => $.N, 'N', { label: 'scale reading' }),
-    ],
-    hints: [
-      String.raw`The scale pushes up with $N$ and gravity pulls down with $mg$. Their sum is $ma$, with the same sign convention as the acceleration.`,
-    ],
-    steps: ($) => [
-      String.raw`$N - mg = ma$, so $N = m(g+a) = ${texNum($.N)}\ \mathrm{N}$`,
-    ],
-    cases: [
-      kase('hand', { m: 10, a: 1.5 }, { N: 113.1 }),
     ],
   }),
 ];

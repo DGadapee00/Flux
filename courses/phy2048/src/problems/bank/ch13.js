@@ -6,7 +6,7 @@ import {
 } from '@flux/subjects/mechanics/gravitation.js';
 import { kase, num, problem, range, texNum } from '../kit.js';
 
-const U = { exam: 'u7', ch: '13' };
+const U = { exam: 'u9', ch: '13' };
 
 const [mant, exp] = GRAV.toExponential().split('e');
 const GTEX = String.raw`$G = ${mant}\times 10^{${Number(exp)}}$ N·m²/kg²`;

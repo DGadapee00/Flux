@@ -1,11 +1,11 @@
-/** Ch 6 · Applications of Newton's laws. OpenStax University Physics Vol. 1, §§6.2–6.3. */
+/** Ch 6 · Applications of Newton's laws. OpenStax University Physics Vol. 1, §§6.1–6.3. */
 import { G } from '@flux/subjects/mechanics/constants.js';
-import { acceleration, atwood, centripetalForce, incline, weight } from '@flux/subjects/mechanics/dynamics.js';
+import { acceleration, atwood, centripetalForce, incline, newton, weight } from '@flux/subjects/mechanics/dynamics.js';
 import { centripetalAccel } from '@flux/subjects/mechanics/kinematics.js';
 import { v } from '@flux/subjects/mechanics/vectors.js';
 import { kase, mc, num, problem, range, texNum } from '../kit.js';
 
-const U = { exam: 'u2', ch: '6' };
+const U = { exam: 'u3', ch: '6' };
 const DEG = Math.PI / 180;
 
 export default [
@@ -245,6 +245,38 @@ export default [
       kase('hand', { m: 4, theta: 25, mu: 0.6 }, {
         N: 35.5635, f: 16.5835, muMin: 0.46631, holds: 'yes',
       }),
+    ],
+  }),
+
+  problem({
+    ...U,
+    id: 'ch6.scale',
+    src: 'OpenStax University Physics Vol. 1 §6.1',
+    title: 'Apparent weight in an elevator',
+    topics: ['newton', 'normal'],
+    vars: {
+      m: range(2, 20, 0.5, 'kg'),
+      a: range(-4, 4, 0.5, 'm/s²'),
+    },
+    derive: ($) => {
+      const net = newton($.m, v(0, $.a, 0));
+      const N = net.y - weight($.m, G).y;
+      return { N };
+    },
+    second: ($) => ({ N: $.m * (G + $.a) }),
+    valid: ($) => $.N > 1,
+    text: (T) => `A ${T.m} kg person stands on a scale in an elevator. The elevator's acceleration is ${T.a} m/s², with +y upward. Take g = ${G} m/s². Find the scale reading.`,
+    parts: [
+      num('N', ($) => $.N, 'N', { label: 'scale reading' }),
+    ],
+    hints: [
+      String.raw`The scale pushes up with $N$ and gravity pulls down with $mg$. Their sum is $ma$, with the same sign convention as the acceleration.`,
+    ],
+    steps: ($) => [
+      String.raw`$N - mg = ma$, so $N = m(g+a) = ${texNum($.N)}\ \mathrm{N}$`,
+    ],
+    cases: [
+      kase('hand', { m: 10, a: 1.5 }, { N: 113.1 }),
     ],
   }),
 ];
