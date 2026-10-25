@@ -47,17 +47,60 @@ fs.mkdirSync(outDir, { recursive: true });
 
 // grid-tick: the number plane's axis labels, created lazily and moved every frame.
 const IGNORE = ['grid-tick'];
+// Labs animate, so two real-time captures of one commit differ by up to 17% of the pixels. Instead the
+// page gets a virtual clock before any of its code runs: performance.now and Date.now stand still,
+// requestAnimationFrame callbacks queue, and window.__advance(ms) runs them in 16 ms frames. Math.random
+// is seeded. CSS transitions are off. Two captures of one commit then match pixel for pixel.
+const FREEZE = `(() => {
+  let t = 0;
+  let next = 0;
+  let queue = [];
+  window.requestAnimationFrame = (cb) => { queue.push([++next, cb]); return next; };
+  window.cancelAnimationFrame = (id) => { queue = queue.filter(([i]) => i !== id); };
+  performance.now = () => t;
+  Date.now = () => 1.7e12 + t;
+  let seed = 123456789;
+  Math.random = () => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let r = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+  window.__advance = (ms) => {
+    for (let spent = 0; spent < ms; spent += 16) {
+      t += 16;
+      const run = queue;
+      queue = [];
+      for (const [, cb] of run) {
+        try { cb(t); } catch (err) { console.error(err); }
+      }
+    }
+  };
+  document.addEventListener('DOMContentLoaded', () => {
+    const style = document.createElement('style');
+    style.textContent = '*, *::before, *::after { transition: none !important; animation: none !important; caret-color: transparent !important; }';
+    document.head.append(style);
+  });
+})();`;
+const POLL = { polling: 100, timeout: 15000 };
+/** Let async work (imports, fonts) land in real time, then run the page's animation clock. */
+async function settle(page, ms) {
+  await page.waitForTimeout(150);
+  await page.evaluate((n) => window.__advance(n), ms);
+}
+
 const SIGNATURE = `(${domSignature.toString()})(document.getElementById('app'), ${JSON.stringify(IGNORE)})`;
 
 async function open(page, hash) {
   await page.goto('about:blank');
   await page.goto(`${BASE}${hash}`, { waitUntil: 'networkidle' });
-  await page.waitForFunction(() => window.__gauss?.state?.lab, null, { timeout: 15000 });
-  await page.waitForTimeout(500);
+  await page.waitForFunction(() => window.__gauss?.state?.lab, null, POLL);
+  await settle(page, 500);
 }
 
 async function captureViewport(browser, vp, manifest) {
   const page = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
+  await page.addInitScript(FREEZE);
   const errors = [];
   page.on('pageerror', (err) => errors.push(String(err)));
   const rec = { dom: {}, keys: [], overflow: [] };
@@ -69,22 +112,21 @@ async function captureViewport(browser, vp, manifest) {
   await open(page, `#/${COURSE}/e1/vectors`);
   for (const mode of MODES) {
     await page.click(`#btn-${mode}`);
-    await page.waitForTimeout(400);
+    await settle(page, 400);
     rec.dom[mode] = await page.evaluate(SIGNATURE);
     await overflows(mode);
   }
   await page.click('#btn-explore');
-  await page.waitForTimeout(300);
+  await settle(page, 300);
 
   for (const [kind, hash] of Object.entries(DEEP_LINKS)) {
     await open(page, hash);
-    await page.waitForTimeout(500);
     rec.dom[`deep-${kind}`] = await page.evaluate(SIGNATURE);
     await overflows(`deep-${kind}`);
     if (kind === 'practice') {
       // Opening the solution is what writes a student's progress, so it is what the key check needs.
       await page.click('#problems button:has-text("Show solution")');
-      await page.waitForTimeout(600);
+      await settle(page, 600);
       rec.dom['deep-practice-solved'] = await page.evaluate(SIGNATURE);
       rec.keys = await page.evaluate(() => Object.keys(localStorage).sort());
     }
@@ -99,14 +141,14 @@ async function captureViewport(browser, vp, manifest) {
     for (const lab of exam.labs) {
       if (only.size && !only.has(lab)) continue;
       await page.evaluate((h) => (location.hash = h), `#/${COURSE}/${exam.id}/${lab}`);
-      await page.waitForFunction((id) => window.__gauss?.state?.lab === id, lab, { timeout: 10000 });
-      await page.waitForTimeout(400);
+      await page.waitForFunction((id) => window.__gauss?.state?.lab === id, lab, POLL);
+      await settle(page, 400);
       const all = await page.$$eval('#scenario option', (os) => os.map((o) => o.value));
       // __custom and __problem are the lab's own states, not scenarios a student picks.
       const ids = all.filter((id) => !id.startsWith('__'));
       for (const id of ids.length ? ids : ['default']) {
         if (id !== 'default') await page.selectOption('#scenario', id);
-        await page.waitForTimeout(1300);
+        await settle(page, 1300);
         const name = `${vp.name}-${exam.id}-${lab}-${id}.png`;
         await page.screenshot({ path: path.join(outDir, name) });
         manifest.shots.push(name);
