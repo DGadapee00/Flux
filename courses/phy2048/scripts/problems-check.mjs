@@ -134,6 +134,28 @@ async function checkSim(tpl, inst, label) {
   }
 }
 
+/** Every trap must be a number a student could type, and must differ from the answer in some version. */
+function checkTraps(tpl) {
+  if (!STANDARD_UNITS.includes(tpl.exam)) return;
+  for (const part of tpl.parts.filter((p) => p.kind === 'numeric' && p.traps?.length)) {
+    part.traps.forEach(([get, why], i) => {
+      let live = 0;
+      for (let seed = 1; seed <= 40; seed += 1) {
+        const inst = instance(tpl, seed);
+        const value = get(inst.$);
+        if (!Number.isFinite(value)) {
+          err(tpl.id, `${part.id} trap ${i + 1} is not finite at seed ${seed}`);
+          return;
+        }
+        const right = part.get(inst.$);
+        if (Math.abs(value - right) > 0.02 * Math.max(Math.abs(right), 1e-9) + 1e-9) live += 1;
+      }
+      if (!live) err(tpl.id, `${part.id} trap ${i + 1} never differs from the answer, so it can never fire`);
+      if (typeof why !== 'string' || why.length < 15) err(tpl.id, `${part.id} trap ${i + 1} has no explanation`);
+    });
+  }
+}
+
 const seen = new Set();
 const counts = Object.fromEntries(BANK_CHAPTERS.map((ch) => [ch, 0]));
 
@@ -159,6 +181,7 @@ for (const tpl of PROBLEMS) {
   if (!tpl.hints?.length) err(tpl.id, 'missing hints');
   if (typeof tpl.steps !== 'function') err(tpl.id, 'missing steps');
   if (!tpl.cases?.length) err(tpl.id, 'no worked case');
+  checkTraps(tpl);
 
   for (const c of tpl.cases) {
     let inst;

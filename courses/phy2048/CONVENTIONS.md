@@ -13,6 +13,11 @@ These stay in the course. They are not copied into `packages/core` or the shell.
 - **Unit order.** The book's chapters in the book's order (D33), 13 units. The catalog calls a unit
   `unit` and the practice exam is still called a practice exam.
 - **Colour.** The platform's meanings. Force is pink, velocity white. This course adds none.
-- **Labs.** Five labs are logic only: the picture on the canvas is drawn unit by unit, as each unit's
-  PR lands. A lab says its numbers once, as `readoutCells`, and its law as TeX lines.
-- **Notes.** None yet. The Notes mode is hidden until a unit has them.
+- **Labs.** Unit 1's three labs are drawn (graph panels and flat vector scenes, framed by `fit` and the
+  free space). The five older labs in Units 2 to 6 are logic only until their unit's PR draws them.
+  A lab says its numbers once, as `readoutCells`, and its law as TeX lines.
+- **Notes.** One file per unit in `src/notes/content/`, registered in `src/notes/units/`. Unit 1 has
+  them. A worked example's setup in `src/notes/setups/` is checked against the lab within 2%.
+- **Problems.** A unit built to the standard is listed in `STANDARD_UNITS` in `scripts/problems-check.mjs`,
+  which then also requires a level, a declared variety, a cited case, traps that can fire, and a lab
+  that shows the answers the template computes.

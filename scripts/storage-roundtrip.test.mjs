@@ -52,6 +52,15 @@ import {
   WIDTH_KEY as THERMO_WIDTH,
   courseStore as thermoStore,
 } from '../courses/eml3100/src/storage.js';
+import { createProgress as phy1Progress, memoryStorage as phy1Memory } from '../courses/phy2048/src/problems/progress.js';
+import {
+  EXAM_KEY as PHY1_EXAM,
+  FULL_KEY as PHY1_FULL,
+  PREDICT_KEY as PHY1_PREDICT,
+  STORE_KEY as PHY1_STORE,
+  WIDTH_KEY as PHY1_WIDTH,
+  courseStore as phy1Store,
+} from '../courses/phy2048/src/storage.js';
 import { createProgress as materialsProgress, memoryStorage as materialsMemory } from '../courses/egn3331/src/problems/progress.js';
 import {
   EXAM_KEY as MATERIALS_EXAM,
@@ -244,4 +253,29 @@ test('egn3331: export and import with no legacy key', () => {
   const restored = materialsStore(storage, () => 0);
   assert.equal(restored.getItem('notes.width'), '520');
   assert.equal(restored.getItem('notes.full'), '1');
+});
+
+test('phy2048: export and import with no legacy key, predictions and notes settings included', () => {
+  const storage = phy1Memory();
+  const progress = phy1Progress(storage, { now: () => 0 });
+  progress.record('ch3.stop', { correct: true, clean: true, now: 1000 });
+  progress.saveExam({ id: 'u1', n: 1 });
+  const store = phy1Store(storage, () => 0);
+  store.setItem('predict', JSON.stringify({ v: 1, items: { 'kg-top': { right: true } }, seen: { 'kinematics-graphs': true } }));
+  store.setItem('notes.width', '500');
+  store.setItem('notes.full', '1');
+  assert.equal(PHY1_STORE, 'flux.phy2048.problems.v1');
+  assert.match(storage.getItem(PHY1_STORE), /ch3\.stop/);
+
+  const blob = progress.exportJSON();
+  for (const key of [PHY1_STORE, PHY1_EXAM, PHY1_PREDICT, PHY1_WIDTH, PHY1_FULL]) storage.removeItem(key);
+  const cleared = phy1Progress(storage, { now: () => 0 });
+  assert.equal(cleared.get('ch3.stop'), null);
+  cleared.importJSON(blob);
+  assert.equal(cleared.get('ch3.stop').box, 1);
+  assert.deepEqual(cleared.loadExam(), { id: 'u1', n: 1 });
+  const restored = phy1Store(storage, () => 0);
+  assert.equal(restored.getItem('notes.width'), '500');
+  assert.equal(JSON.parse(restored.getItem('predict')).items['kg-top'].right, true);
+  assert.throws(() => cleared.importJSON({ v: 1, courseId: 'other', keys: {} }), /does not match this course/);
 });

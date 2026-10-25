@@ -9,6 +9,7 @@ const LIVE = {};
 
 /** Relative hrefs are the copies in this repo. The rest stay on their own sites until imported. */
 const PLATFORM_HREF = {
+  phy2048: 'phy2048/',
   phy2049: 'phy2049/',
   statics: 'statics/',
   mac2311: 'mac2311/',
@@ -65,7 +66,7 @@ test('the card opens the latest built course, and D5 is on the list', () => {
   assert.equal(latestBuilt(TRACKS[4]).id, 'eml3100');
   assert.deepEqual(
     builtCourses().map((course) => course.id),
-    ['phy2049', 'mac2311', 'mac2312', 'mac2313', 'statics', 'egn3321', 'egn3331', 'sta3032', 'eml3100'],
+    ['phy2048', 'phy2049', 'mac2311', 'mac2312', 'mac2313', 'statics', 'egn3321', 'egn3331', 'sta3032', 'eml3100'],
   );
 });
 

@@ -117,6 +117,8 @@ M = \rho A D = (10^3\ \text{kg/m}^3)(\pi\times10^{14}\ \text{m}^2)(3\times10^{3}
 <div class="box ex"><span class="tag">Worked example · how many digits</span>
 <p>A calculator gives \(0.0620\times8.5 = 0.527\). The fewest significant figures is two, so the result is 0.53. It gives \(125.4+0.62=126.02\). The fewest decimal places is one, so the result is 126.0. For \(120.0-0.46 = 119.54\), one decimal place gives 119.5.</p>
 </div>
+<h3>Solving a problem</h3>
+<p>A method keeps the arithmetic honest. Draw the situation and choose axes. List what is given, with units, and what is asked. Pick the principle or formula that links them. Solve in symbols first, then put the numbers in, and carry the units through. Last, ask whether the answer has the right units, the right sign and a sensible size: a car stopping in 2 mm, or a person walking at 300 m/s, is a mistake somewhere.</p>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Using the whole range as the uncertainty doubles it. Half the range is the convention here. Dividing the uncertainty by the first reading and not the average is the same sort of slip.</p>
 <p>Rounding in the middle of a calculation also costs digits. The book adds \(5.73-6.58+4.00=3.15\) from components it rounded to hundredths, and then prints 3.1. Unrounded, the sum is 3.158, which rounds to 3.2. Keep every digit until the last step, then round once.</p>
@@ -184,6 +186,9 @@ R_y &= 160\sin(-55^\circ) + 200\sin30^\circ + 140\sin145^\circ = -131.1 + 100.0 
 </div>
 <div class="box ex"><span class="tag">Worked example · a difference of vectors</span>
 <p>Let \(\vec A\) have magnitude 10.0 at \(35^\circ\) and \(\vec B\) have magnitude 7.0 at \(-110^\circ\), both in centimeters. Their components are \(\vec A = (8.19, 5.74)\) and \(\vec B = (-2.39, -6.58)\). Then \(\vec A - \vec B = (8.19+2.39,\ 5.74+6.58) = (10.6,\ 12.3)\ \text{cm}\).</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Vectors add component by component. Their lengths add only when they point the same way.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Adding magnitudes gives \(160+200+140 = 500\ \text{N}\) for the three pulls, and the actual resultant is 158 N. The three do not pull the same way. Always add components.</p>
@@ -285,6 +290,9 @@ a(t) = \frac{dv}{dt} = \frac{d^2x}{dt^2}.
 <div class="box ex"><span class="tag">Worked example · a train that speeds up and brakes</span>
 <p>A train starts from rest. It accelerates at \(2\ \text{m/s}^2\) for 1.5 s, then coasts for 3.0 s, then brakes at \(-2\ \text{m/s}^2\) for 1.5 s. In the first stage \(\Delta v = 2\times1.5 = 3\ \text{m/s}\), and the velocity then stays at 3 m/s. The braking removes the same 3 m/s, so it ends at rest. The change in velocity over a stage is the area under the \(a\)–\(t\) graph there. The displacement is the area under the \(v\)–\(t\) graph: \(2.25 + 3\times3.0 + 2.25 = 13.5\ \text{m}\).</p>
 </div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Going up a level takes a slope: position to velocity to acceleration. Going down a level takes an area. Every graph in this unit uses one or the other.</p>
+</div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>A negative acceleration does not mean slowing down. A horse running west at \(-15\ \text{m/s}\) with \(a=-8.3\ \text{m/s}^2\) is speeding up. Compare the signs of \(v\) and \(a\); do not read the sign of \(a\) alone.</p>
 <p>A velocity of zero does not mean an acceleration of zero. A ball at the top of its flight has \(v=0\) for an instant, with \(a=-9.81\ \text{m/s}^2\). Section 10 returns to this.</p>
@@ -323,6 +331,9 @@ d = \frac{v_0^2}{2a} = \frac{30.0^2}{2(7.00)} = 64.3\ \text{m}.
 </div>
 <div class="box ex"><span class="tag">Worked example · a cheetah and a gazelle</span>
 <p>A gazelle runs past a hiding cheetah at a steady 10 m/s. At that instant the cheetah starts from rest at \(4\ \text{m/s}^2\). Each animal has its own position, \(x_g = 10t\) and \(x_c = \tfrac12(4)t^2\). They meet when the positions are equal: \(2t^2 = 10t\), so \(t = 5\ \text{s}\), at \(x = 50\ \text{m}\). The cheetah is then running at \(4\times5 = 20\ \text{m/s}\), twice as fast as the gazelle.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Choose the formula that holds the one unknown you want and no other. If a formula needs a number you do not have, pick another.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Using \(d = v_0^2/a\) leaves out the 2, which comes from the \(\tfrac12\) in the position formula. It makes the braking distance twice too long. And the speed rule has no \(\tfrac12\): it is \(v=v_0+at\).</p>

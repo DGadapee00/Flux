@@ -13,7 +13,7 @@ export const TRACKS = [
     id: 'physics',
     name: 'Physics',
     courses: [
-      { id: 'phy2048', code: 'PHY 2048', title: 'Physics I', term: null, href: null },
+      { id: 'phy2048', code: 'PHY 2048', title: 'Physics I', term: null, href: 'phy2048/' },
       {
         id: 'phy2049',
         code: 'PHY 2049',

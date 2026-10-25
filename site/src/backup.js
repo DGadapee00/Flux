@@ -3,6 +3,7 @@ import { courseStore as calc1Store } from '@flux/mac2311/src/storage.js';
 import { courseStore as calc2Store } from '@flux/mac2312/src/storage.js';
 import { courseStore as macStore } from '@flux/mac2313/src/storage.js';
 import { courseStore as phyStore } from '@flux/phy2049/src/storage.js';
+import { courseStore as phy1Store } from '@flux/phy2048/src/storage.js';
 import { courseStore as staStore } from '@flux/sta3032/src/storage.js';
 import { courseStore as dynamicsStore } from '@flux/egn3321/src/storage.js';
 import { courseStore as materialsStore } from '@flux/egn3331/src/storage.js';
@@ -21,6 +22,7 @@ export function backupParts() {
     { courseId: 'egn3321', store: dynamicsStore() },
     { courseId: 'eml3100', store: thermoStore() },
     { courseId: 'egn3331', store: materialsStore() },
+    { courseId: 'phy2048', store: phy1Store() },
   ];
 }
 

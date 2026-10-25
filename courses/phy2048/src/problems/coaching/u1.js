@@ -137,7 +137,7 @@ export default {
       Rx: [[($) => $.A * Math.sin($.a * DEG) + $.B * Math.sin($.b * DEG) + $.C * Math.sin($.c * DEG), 'That uses the sines. With the angle measured from +x, the x component is the magnitude times the cosine.']],
       Ry: [[($) => $.A * Math.sin($.a * DEG) + $.B * Math.sin(Math.abs($.b) * DEG) + $.C * Math.sin($.c * DEG), 'That drops the minus sign on B’s angle. A vector below the axis has a negative y component.']],
       R: [[($) => $.A + $.B + $.C, 'That adds the magnitudes. The vectors point in different directions, so add components.']],
-      th: [[($) => mod360(deg(Math.atan($.Ry / $.Rx))), 'Check the quadrant: the arctangent alone only gives angles between −90° and 90°.']],
+      th: [[($) => mod360(90 - $.th), 'That measures the angle from the +y axis. The question measures from +x.']],
     },
   },
   'ch2.tug': {
