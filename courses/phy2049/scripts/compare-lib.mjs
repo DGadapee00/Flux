@@ -4,10 +4,11 @@
  */
 
 /**
- * The largest changedRatio accepted between two captures of one commit. Set from a measured run
- * (compare.mjs --save, then --against, on the same commit); WebGL anti-aliasing is not bit-stable.
+ * The largest changedRatio accepted between two captures of one commit. compare.mjs freezes the
+ * page's clock, so captures of one commit match exactly (0.0000% on the animated ac and circuits
+ * labs). This is the floor for anything the GPU still varies, a few pixels in 2,000.
  */
-export const TOLERANCE = 0.001;
+export const TOLERANCE = 0.0005;
 
 /**
  * One line per element in document order: tag#id.class[attr=value,…], indented two spaces per level,
