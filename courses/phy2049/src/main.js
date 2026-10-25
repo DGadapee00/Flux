@@ -1,3 +1,7 @@
+// Before KaTeX's CSS, as the stylesheet links were before it: the cascade order is unchanged.
+import '@flux/shells/physics/styles/main.css';
+import '@flux/shells/physics/styles/practice.css';
+import '@flux/shells/physics/styles/mobile.css';
 import 'katex/dist/katex.min.css';
 import { mountTrackBar } from '@flux/core';
 import * as THREE from 'three';

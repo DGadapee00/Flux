@@ -1,78 +1,10 @@
-const BLUE = '#58C4DD';
-const YELLOW = '#F4D345';
-const GOLD = '#F0AC5F';
-// The scene palette (Q in src/scene/manim.js): current is gold, a capacitor is purple, a marked point (A) purple.
-const CURRENT = GOLD;
-const CAP = '#9A72AC';
-const MARK = '#9A72AC';
-const RED = '#FC6255';
-const WHITE = '#ECE6E2';
-const SERIF = "italic 13px KaTeX_Math, 'Latin Modern Math', 'Cambria Math', serif";
+import { PLOT_COLORS, drawAxes, drawDot, setupCanvas } from '@flux/shells/physics/plot.js';
 
-/** Resize the backing store to CSS size × DPR so strokes stay crisp; returns a context in CSS pixels. */
-function setup(canvas) {
-  const dpr = Math.min(window.devicePixelRatio || 1, 3);
-  const w = canvas.clientWidth || 300;
-  const h = canvas.clientHeight || 96;
-  if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-  }
-  const ctx = canvas.getContext('2d');
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, w, h);
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  return { ctx, w, h };
-}
-
-function axes(ctx, w, h, y0, nTicks) {
-  ctx.strokeStyle = 'rgba(41,171,202,0.22)';
-  ctx.lineWidth = 1;
-  for (let i = 1; i < nTicks; i++) {
-    const X = 12 + (i / nTicks) * (w - 24);
-    ctx.beginPath();
-    ctx.moveTo(X, 6);
-    ctx.lineTo(X, h - 6);
-    ctx.stroke();
-  }
-  ctx.strokeStyle = WHITE;
-  ctx.globalAlpha = 0.75;
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(12, y0);
-  ctx.lineTo(w - 10, y0);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(w - 10, y0);
-  ctx.lineTo(w - 16, y0 - 3.5);
-  ctx.lineTo(w - 16, y0 + 3.5);
-  ctx.closePath();
-  ctx.fillStyle = WHITE;
-  ctx.fill();
-  for (let i = 1; i < nTicks; i++) {
-    const X = 12 + (i / nTicks) * (w - 24);
-    ctx.beginPath();
-    ctx.moveTo(X, y0 - 3);
-    ctx.lineTo(X, y0 + 3);
-    ctx.stroke();
-  }
-  ctx.globalAlpha = 1;
-}
-
-function dot(ctx, x, y, color) {
-  ctx.beginPath();
-  ctx.arc(x, y, 4.5, 0, Math.PI * 2);
-  ctx.fillStyle = color;
-  ctx.fill();
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = '#0b0c0e';
-  ctx.stroke();
-}
+const { BLUE, YELLOW, GOLD, CURRENT, CAP, MARK, RED, WHITE, SERIF } = PLOT_COLORS;
 
 export function drawVx(canvas, xs, Vs, probeX, pathAx) {
   if (!canvas) return;
-  const { ctx, w, h } = setup(canvas);
+  const { ctx, w, h } = setupCanvas(canvas);
   if (!Vs.length) return;
   let vmin = Math.min(...Vs, 0);
   let vmax = Math.max(...Vs, 0);
@@ -84,7 +16,7 @@ export function drawVx(canvas, xs, Vs, probeX, pathAx) {
   const xmax = xs[xs.length - 1];
   const xmap = (x) => ((x - xmin) / (xmax - xmin)) * (w - 24) + 12;
   const ymap = (v) => h - 10 - ((v - vmin) / (vmax - vmin)) * (h - 22);
-  axes(ctx, w, h, ymap(0), 8);
+  drawAxes(ctx, w, h, ymap(0), 8);
 
   ctx.strokeStyle = BLUE;
   ctx.lineWidth = 2.5;
@@ -107,8 +39,8 @@ export function drawVx(canvas, xs, Vs, probeX, pathAx) {
   ctx.lineTo(bx, ymap(0));
   ctx.stroke();
   ctx.setLineDash([]);
-  dot(ctx, bx, by, YELLOW);
-  if (pathAx != null) dot(ctx, xmap(pathAx), ymap(Vs[nearest(xs, pathAx)]), MARK);
+  drawDot(ctx, bx, by, YELLOW);
+  if (pathAx != null) drawDot(ctx, xmap(pathAx), ymap(Vs[nearest(xs, pathAx)]), MARK);
 
   ctx.fillStyle = WHITE;
   ctx.font = SERIF;
@@ -117,13 +49,13 @@ export function drawVx(canvas, xs, Vs, probeX, pathAx) {
 
 export function drawAC(canvas, pwr, t) {
   if (!canvas) return;
-  const { ctx, w, h } = setup(canvas);
+  const { ctx, w, h } = setupCanvas(canvas);
   const Vp = pwr.Vrms * Math.SQRT2;
   const Ip = Vp / pwr.R;
   const f = pwr.f;
   const T = 1 / f;
   const n = 120;
-  axes(ctx, w, h, h / 2, 8);
+  drawAxes(ctx, w, h, h / 2, 8);
 
   const curve = (color, fn) => {
     ctx.strokeStyle = color;
@@ -170,11 +102,11 @@ export function drawAC(canvas, pwr, t) {
 /** One slow-motion cycle of v(t) (blue) and i(t) (gold), current lagging by φ. */
 export function drawVI(canvas, { omega, phi, t }) {
   if (!canvas) return;
-  const { ctx, w, h } = setup(canvas);
+  const { ctx, w, h } = setupCanvas(canvas);
   const f = omega / (2 * Math.PI);
   const T = 1 / f;
   const n = 120;
-  axes(ctx, w, h, h / 2, 8);
+  drawAxes(ctx, w, h, h / 2, 8);
   const curve = (color, fn) => {
     ctx.strokeStyle = color;
     ctx.lineWidth = 2.5;
@@ -218,7 +150,7 @@ function nearest(xs, x) {
  */
 export function drawPaschen(canvas, { curve, pd, V, min, sparks }) {
   if (!canvas || !curve?.length) return;
-  const { ctx, w, h } = setup(canvas);
+  const { ctx, w, h } = setupCanvas(canvas);
   const L = 26;
   const R = 8;
   const T = 8;
@@ -257,11 +189,11 @@ export function drawPaschen(canvas, { curve, pd, V, min, sparks }) {
     ctx.lineTo(X(Math.log10(min.pd)), h - B);
     ctx.stroke();
     ctx.setLineDash([]);
-    dot(ctx, X(Math.log10(min.pd)), Y(Math.log10(min.V)), YELLOW);
+    drawDot(ctx, X(Math.log10(min.pd)), Y(Math.log10(min.V)), YELLOW);
   }
 
   if (Number.isFinite(pd) && pd > 0 && Number.isFinite(V) && V > 0) {
-    dot(ctx, X(Math.log10(pd)), Y(Math.log10(V)), sparks ? RED : WHITE);
+    drawDot(ctx, X(Math.log10(pd)), Y(Math.log10(V)), sparks ? RED : WHITE);
   }
 
   ctx.fillStyle = WHITE;
@@ -302,7 +234,7 @@ function secs(t) {
  */
 export function drawRC(canvas, { curves, n, charging, tau = 1, graph = 'curves' }) {
   if (!canvas || !curves?.length) return;
-  const { ctx, w, h } = setup(canvas);
+  const { ctx, w, h } = setupCanvas(canvas);
   const span = curves[curves.length - 1].x;
   const L = 34;
   const top = 14;
@@ -359,8 +291,8 @@ export function drawRC(canvas, { curves, n, charging, tau = 1, graph = 'curves' 
     for (const v of [0, -2, -4, -6]) if (v >= -span) yLabel(String(v).replace('-', '−'), Y(v));
     dashed([[X(0), Y(0)], [X(span), Y(-span)]], 'rgba(236,230,226,0.35)');
     if (n != null) {
-      for (let x = 0.5; x <= n + 1e-9; x += 0.5) dot(ctx, X(x), Y(-x), CAP);
-      dot(ctx, X(n), Y(-n), CAP);
+      for (let x = 0.5; x <= n + 1e-9; x += 0.5) drawDot(ctx, X(x), Y(-x), CAP);
+      drawDot(ctx, X(n), Y(-n), CAP);
     }
     ctx.font = SERIF;
     ctx.fillStyle = CAP;
@@ -420,6 +352,6 @@ export function drawRC(canvas, { curves, n, charging, tau = 1, graph = 'curves' 
   ctx.moveTo(X(n), top - 4);
   ctx.lineTo(X(n), y0);
   ctx.stroke();
-  dot(ctx, X(n), Y(charging ? 1 - k : k), CAP);
-  dot(ctx, X(n), Y(k), CURRENT);
+  drawDot(ctx, X(n), Y(charging ? 1 - k : k), CAP);
+  drawDot(ctx, X(n), Y(k), CURRENT);
 }
