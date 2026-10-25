@@ -265,8 +265,9 @@ export function createHUD(api, catalog) {
      * Two spans so the phone can drop the first. The exam itself is named in the picker; the
      * chapter range is the part that is not on screen anywhere else.
      */
-    $('brand-sub').innerHTML = exam
-      ? `<span class="sub-course">${escapeHTML(code)} · </span><span class="sub-ch">${escapeHTML(examNote(exam))}</span>`
+    const note = exam ? examNote(exam) : '';
+    $('brand-sub').innerHTML = note
+      ? `<span class="sub-course">${escapeHTML(code)} · </span><span class="sub-ch">${escapeHTML(note)}</span>`
       : `<span class="sub-course">${escapeHTML(code)}</span>`;
     $('setup-hint').innerHTML = mathText(lab?.hint || exam?.coming?.join(' · ') || '');
     mountedLab = lab || null;

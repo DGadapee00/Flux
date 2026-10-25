@@ -122,7 +122,8 @@ EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come las
       practice panel, and its stylesheets, now live in `packages/shells/physics/`. PHY 2049 keeps
       `main.js`, its scene objects, its electromagnetic styles and one wrapper per module. The
       practice panel moved whole, so it is still a near copy of the math and engineering panels.
-      `packages/checks` and `npm run compare -w @flux/phy2049` (the before-and-after gate) guard it.
+      The before-and-after gate guards it: `npm run compare -w @flux/phy2049` and the
+      `scripts/interact-*.mjs` runs, each run on both trees and diffed.
 - [ ] **Converge the shells on PHY 2049** (D32): the physics shell now exists. Start with the three
       practice panels, which are near copies of one another. Then bring the math and
       engineering shells' header, unit picker, mode switch, notes panel and practice panel to its

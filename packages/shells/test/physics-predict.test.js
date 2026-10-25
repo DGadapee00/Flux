@@ -98,3 +98,26 @@ test('predict treats an unreadable tally as empty', () => {
   const predict = createPredict(api(), d);
   assert.deepEqual(predict.tally, { v: 1, items: {}, seen: {} });
 });
+
+test('predict runs with no predictionsFor at all', () => {
+  page();
+  const predict = createPredict(api({ labId: 'a' }), { store: memoryStore() });
+  assert.doesNotThrow(() => predict.sync());
+});
+
+test('predict runs with no deps and no store', () => {
+  page();
+  const predict = createPredict(api({ labId: 'a' }));
+  assert.doesNotThrow(() => predict.sync());
+  assert.deepEqual(predict.tally, { v: 1, items: {}, seen: {} });
+});
+
+test('predict is inert when the page has no predict card', () => {
+  page();
+  document.getElementById('predict').remove();
+  const state = { labId: 'a' };
+  const predict = createPredict(api(state), deps());
+  assert.doesNotThrow(() => predict.sync());
+  state.labId = 'b';
+  assert.doesNotThrow(() => predict.sync());
+});

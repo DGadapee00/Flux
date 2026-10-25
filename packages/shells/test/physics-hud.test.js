@@ -97,11 +97,12 @@ test('the sub-title carries the code and the note', () => {
   assert.equal(document.getElementById('brand-sub').textContent, 'FIX 1000 · Sec 12');
 });
 
-test('the picker and sub-title work with no examNote and no dates', () => {
+test('the picker and sub-title work with no examNote and no dates, with no stray separator', () => {
   page();
   const hud = createHUD(api(), catalog());
   hud.mount(null, exams[1], { examId: 'u2' });
-  assert.equal(document.getElementById('brand-sub').textContent, 'FIX 1000 · ');
+  // No note, so no separator: a stray " · " would hang under the course code.
+  assert.equal(document.getElementById('brand-sub').textContent, 'FIX 1000');
   assert.equal(document.getElementById('exam-select').value, 'u2');
 });
 

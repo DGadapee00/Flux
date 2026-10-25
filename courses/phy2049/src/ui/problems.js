@@ -17,6 +17,13 @@ import { caseIndex, sheetCaseLabel, sheetItems } from '../problems/sheets.js';
  */
 const ASK_PRINCIPLE = false;
 
+/** What a part with no label is called: its id, or the symbol it stands for ("tau" → "τ"). */
+const PART_NAMES = {
+  emf: 'ε', tau: 'τ', Phi: 'Φ', phi: 'φ', lam: 'λ', th: 'θ', mu: 'μ', sigma: 'σ', w: 'ω',
+  Req: 'R_eq', Ceq: 'C_eq', KJ: 'K (J)', KeV: 'K (eV)', vd: 'v_d', dV: 'ΔV', dT: 'ΔT', Irms: 'I_rms', Vp: 'V_p',
+  FL: 'F/L', pct: 'Loss (%)', kWh: 'Energy', cost: 'Cost', dir: 'Direction', type: 'Type', sign: 'Sign',
+};
+
 /** The practice panel over this course's bank, engine, progress and notes. */
 export function createPractice(api) {
   return createPhysicsPractice(api, {
@@ -62,5 +69,8 @@ export function createPractice(api) {
     exprToTex,
     GLYPH,
     paletteConsts: ['k', 'eps0', 'mu0', 'pi'],
+    unitName: 'exam',
+    chapterTag: (ch) => (ch === 'V' ? 'Vec' : `Ch ${ch}`),
+    partNames: PART_NAMES,
   });
 }

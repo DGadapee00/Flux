@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4174 --strictPort",
-    "test": "node scripts/tex-check.mjs && node src/physics/selftest.js && node scripts/problems-check.mjs && node scripts/notes-check.mjs && node scripts/derive-check.mjs && node --test scripts/route.test.mjs && node --test scripts/compare-lib.test.mjs",
+    "test": "node scripts/tex-check.mjs && node src/physics/selftest.js && node scripts/problems-check.mjs && node scripts/notes-check.mjs && node scripts/derive-check.mjs && node --test scripts/route.test.mjs && node --test scripts/compare-lib.test.mjs scripts/compare-freeze.test.mjs",
     "smoke": "node scripts/smoke.mjs",
     "gallery": "node scripts/gallery.mjs",
     "compare": "node scripts/compare.mjs",

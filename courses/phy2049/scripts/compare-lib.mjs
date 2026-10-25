@@ -112,3 +112,25 @@ export function changedRatio(a, b, channelTol = 8) {
   }
   return changed / pixels;
 }
+
+/**
+ * A storage dump as sorted `key=value` lines, so diffLines shows a changed value, not only a changed key.
+ * @param {Record<string, string>} stored
+ * @returns {string[]}
+ */
+export function storedLines(stored) {
+  return Object.keys(stored)
+    .sort()
+    .map((key) => `${key}=${stored[key]}`);
+}
+
+/**
+ * The modules whose served text differs between two captures, by hash. A module only one side has counts.
+ * @param {Record<string, string>} base Path to hash.
+ * @param {Record<string, string>} now Path to hash.
+ * @returns {string[]}
+ */
+export function servedChanges(base, now) {
+  const paths = new Set([...Object.keys(base), ...Object.keys(now)]);
+  return [...paths].filter((p) => base[p] !== now[p]);
+}

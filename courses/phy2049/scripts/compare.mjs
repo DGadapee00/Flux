@@ -11,10 +11,12 @@
  * app writes, and whether the phone layout scrolls sideways. Needs the dev server on port 5174.
  * Exit 2 means a difference: the DOM, the keys, an overflow, or a screenshot over TOLERANCE.
  */
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from './playwright.mjs';
-import { TOLERANCE, changedRatio, diffLines, domSignature } from './compare-lib.mjs';
+import { FREEZE } from './compare-freeze.mjs';
+import { TOLERANCE, changedRatio, diffLines, domSignature, servedChanges, storedLines } from './compare-lib.mjs';
 
 const BASE = process.env.FLUX_URL || 'http://localhost:5174/';
 const COURSE = 'phy2049';
@@ -47,41 +49,8 @@ fs.mkdirSync(outDir, { recursive: true });
 
 // grid-tick: the number plane's axis labels, created lazily and moved every frame.
 const IGNORE = ['grid-tick'];
-// Labs animate, so two real-time captures of one commit differ by up to 17% of the pixels. Instead the
-// page gets a virtual clock before any of its code runs: performance.now and Date.now stand still,
-// requestAnimationFrame callbacks queue, and window.__advance(ms) runs them in 16 ms frames. Math.random
-// is seeded. CSS transitions are off. Two captures of one commit then match pixel for pixel.
-const FREEZE = `(() => {
-  let t = 0;
-  let next = 0;
-  let queue = [];
-  window.requestAnimationFrame = (cb) => { queue.push([++next, cb]); return next; };
-  window.cancelAnimationFrame = (id) => { queue = queue.filter(([i]) => i !== id); };
-  performance.now = () => t;
-  Date.now = () => 1.7e12 + t;
-  let seed = 123456789;
-  Math.random = () => {
-    seed = (seed + 0x6d2b79f5) | 0;
-    let r = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
-    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
-  };
-  window.__advance = (ms) => {
-    for (let spent = 0; spent < ms; spent += 16) {
-      t += 16;
-      const run = queue;
-      queue = [];
-      for (const [, cb] of run) {
-        try { cb(t); } catch (err) { console.error(err); }
-      }
-    }
-  };
-  document.addEventListener('DOMContentLoaded', () => {
-    const style = document.createElement('style');
-    style.textContent = '*, *::before, *::after { transition: none !important; animation: none !important; caret-color: transparent !important; }';
-    document.head.append(style);
-  });
-})();`;
+/** The course's own modules, whose served text changes when a UI piece moves. */
+const SERVED = ['/index.html', '/src/main.js', '/src/ui/hud.js', '/src/ui/problems.js', '/src/ui/predict.js', '/src/ui/derive.js', '/src/ui/units.js'];
 const POLL = { polling: 100, timeout: 15000 };
 /** Let async work (imports, fonts) land in real time, then run the page's animation clock. */
 async function settle(page, ms) {
@@ -103,7 +72,7 @@ async function captureViewport(browser, vp, manifest) {
   await page.addInitScript(FREEZE);
   const errors = [];
   page.on('pageerror', (err) => errors.push(String(err)));
-  const rec = { dom: {}, keys: [], overflow: [] };
+  const rec = { dom: {}, keys: [], stored: {}, overflow: [] };
   const overflows = async (label) => {
     const ok = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
     if (!ok && vp.width <= 400) rec.overflow.push(label);
@@ -128,7 +97,10 @@ async function captureViewport(browser, vp, manifest) {
       await page.click('#problems button:has-text("Show solution")');
       await settle(page, 600);
       rec.dom['deep-practice-solved'] = await page.evaluate(SIGNATURE);
-      rec.keys = await page.evaluate(() => Object.keys(localStorage).sort());
+      // Names and values: a returning student's progress is the values, and a changed value is a change.
+      rec.stored = await page.evaluate(() => Object.fromEntries(Object.keys(localStorage).map((k) => [k, localStorage.getItem(k)])));
+      rec.keys = Object.keys(rec.stored).sort();
+      rec.build = await page.evaluate(() => window.__build || null);
     }
   }
 
@@ -161,7 +133,13 @@ async function captureViewport(browser, vp, manifest) {
 }
 
 const browser = await chromium.launch({ headless: true });
-const manifest = { viewports: {}, shots: [] };
+const manifest = { viewports: {}, shots: [], served: {} };
+// Which modules the dev server is serving right now. Without this, a server left running on another tree
+// would let --against compare a tree with itself and print "No differences".
+for (const p of SERVED) {
+  const text = await fetch(new URL(p, BASE)).then((r) => r.text()).catch(() => '');
+  manifest.served[p] = crypto.createHash('sha1').update(text).digest('hex').slice(0, 12);
+}
 for (const vp of VIEWPORTS) await captureViewport(browser, vp, manifest);
 fs.writeFileSync(path.join(outDir, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 
@@ -183,8 +161,10 @@ for (const vp of VIEWPORTS) {
     const diff = diffLines(a.dom[key] || [], b.dom[key] || []);
     if (diff.length) problems.push(`DOM ${vp.name} ${key}:\n    ${diff.slice(0, 12).join('\n    ')}`);
   }
-  if (JSON.stringify(a.keys) !== JSON.stringify(b.keys)) {
-    problems.push(`localStorage keys ${vp.name}: ${JSON.stringify(a.keys)} -> ${JSON.stringify(b.keys)}`);
+  // A base captured before values were recorded has names only.
+  const stored = a.stored ? diffLines(storedLines(a.stored), storedLines(b.stored || {})) : [];
+  if (stored.length || JSON.stringify(a.keys) !== JSON.stringify(b.keys)) {
+    problems.push(`localStorage ${vp.name} (names, then values):\n    ${stored.slice(0, 12).join('\n    ') || `${JSON.stringify(a.keys)} -> ${JSON.stringify(b.keys)}`}`);
   }
   if (b.overflow.length) problems.push(`sideways scroll at ${vp.name}: ${b.overflow.join(', ')}`);
   if (b.errors?.length) problems.push(`page errors at ${vp.name}: ${b.errors.slice(0, 3).join(' | ')}`);
@@ -229,6 +209,10 @@ for (const name of names) {
 }
 await browser.close();
 
+const builds = (m) => [...new Set(Object.values(m.viewports).map((v) => v.build?.commit))].join(',') || 'unknown';
+console.log(`Base page stamp: ${builds(base)}. This capture: ${builds(manifest)}.`);
+const moved = servedChanges(base.served || {}, manifest.served);
+console.log(moved.length ? `Served modules that differ from the base: ${moved.join(', ')}` : 'WARNING: every served module matches the base capture. That is right for a noise check, and wrong if you meant to compare a changed tree: is the dev server serving the tree you think it is?');
 ratios.sort((x, y) => y.ratio - x.ratio);
 console.log(`Compared ${ratios.length} screenshots. Worst five:`);
 for (const r of ratios.slice(0, 5)) console.log(`  ${(r.ratio * 100).toFixed(4)}%  ${r.name}`);

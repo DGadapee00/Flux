@@ -56,23 +56,18 @@ function fmtDays(days) {
 }
 
 const SUB = { 0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄', 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉' };
-const ID_NAMES = {
-  emf: 'ε', tau: 'τ', Phi: 'Φ', phi: 'φ', lam: 'λ', th: 'θ', mu: 'μ', sigma: 'σ', w: 'ω',
-  Req: 'R_eq', Ceq: 'C_eq', KJ: 'K (J)', KeV: 'K (eV)', vd: 'v_d', dV: 'ΔV', dT: 'ΔT', Irms: 'I_rms', Vp: 'V_p',
-  FL: 'F/L', pct: 'Loss (%)', kWh: 'Energy', cost: 'Cost', dir: 'Direction', type: 'Type', sign: 'Sign',
-};
-/** Part ids double as labels when a template gives none: "I1" → "I₁", "tau" → "τ". */
-function prettyId(id) {
-  if (ID_NAMES[id]) return ID_NAMES[id];
+/** Part ids double as labels when a template gives none: "I1" → "I₁", and the course's own names ("tau" → "τ"). */
+function prettyId(id, names) {
+  if (names[id]) return names[id];
   const m = /^([A-Za-z]+?)([0-9]+)$/.exec(id);
-  return m ? (ID_NAMES[m[1]] || m[1]) + [...m[2]].map((d) => SUB[d]).join('') : id;
+  return m ? (names[m[1]] || m[1]) + [...m[2]].map((d) => SUB[d]).join('') : id;
 }
 
-function partLabel(part, rendered, count) {
+function partLabel(part, rendered, count, names) {
   if (rendered.label) return rendered.label;
   const choose = part.multi ? 'Choose all that apply' : 'Choose one';
   if (count === 1) return part.kind === 'choice' ? choose : 'Answer';
-  return part.kind === 'choice' && part.id === 'ans' ? choose : prettyId(part.id);
+  return part.kind === 'choice' && part.id === 'ans' ? choose : prettyId(part.id, names);
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -116,7 +111,9 @@ function veilNode(el) {
  *   ASK_PRINCIPLE to ask the question), guidanceFor and workedExample (faded worked examples),
  *   sectionForProblem (the notes link), sequenceRank and stageOf (the order inside a chapter),
  *   sheetItems, sheetCaseLabel and caseIndex (the course's sheets), exprToTex and GLYPH (the symbol
- *   palette), paletteConsts (constants offered in it).
+ *   palette), paletteConsts (constants offered in it), unitName and unitNamePlural (what the course
+ *   calls a unit: "unit", or "exam"), chapterTag(ch) (the short tag in a principle's list, "Ch n" by
+ *   default) and partNames (a part id with no label, to its symbol: { w: 'ω' }).
  */
 export function createPractice(api, bank) {
   const {
@@ -162,6 +159,10 @@ export function createPractice(api, bank) {
     exprToTex = (value) => value,
     GLYPH = {},
     paletteConsts = [],
+    unitName = 'unit',
+    unitNamePlural = `${unitName}s`,
+    chapterTag = (ch) => `Ch ${ch}`,
+    partNames = {},
   } = bank;
   const pname = (id) => PRINCIPLES[id]?.name || id;
 
@@ -429,7 +430,7 @@ export function createPractice(api, bank) {
       .map((p, i) => {
         const r = cur.results[p.id];
         if (!r || r.correct || r.empty) return '';
-        return `${spoken(partLabel(p, cur.view.parts[i], cur.tpl.parts.length))}: ${spoken(r.feedback) || 'not right yet'}.`;
+        return `${spoken(partLabel(p, cur.view.parts[i], cur.tpl.parts.length, partNames))}: ${spoken(r.feedback) || 'not right yet'}.`;
       })
       .filter(Boolean);
     el.textContent = cur.finished ? `Solved. ${right} of ${scored} parts right.` : `${right} of ${scored} parts right. ${notes.join(' ')}`;
@@ -731,7 +732,7 @@ export function createPractice(api, bank) {
     const examLabelTxt = running ? `Resume practice exam · ${fmtClock(ex.endsAt - Date.now())} left` : `Practice exam · ${Math.min(EXAM_SIZE, all.length)} problems · ${EXAM_MINUTES} min`;
     const examAct = running ? 'exam-resume' : 'exam-start';
     const mixedLabel = `Mixed set · ${Math.min(MIXED_SIZE, all.length)}`;
-    const reviewTitle = 'Problems from any exam whose review date has come';
+    const reviewTitle = `Problems from any ${unitName} whose review date has come`;
     let actionsHTML;
     if (running) {
       actionsHTML = `<button type="button" class="btn accent" data-act="${examAct}">${examLabelTxt}</button>
@@ -746,7 +747,7 @@ export function createPractice(api, bank) {
     // Every question from the practice sheets, class activities and worksheets, worked in order.
     const nSheets = sheetItems(all).length;
     if (nSheets) {
-      actionsHTML += `<div class="pb-row"><button type="button" class="btn pb-sheets" data-act="sheets" title="Every question from this exam's practice sheets, class activities and worksheets, in order, with the sheets' own numbers">Course sheets, in order · ${nSheets}</button></div>`;
+      actionsHTML += `<div class="pb-row"><button type="button" class="btn pb-sheets" data-act="sheets" title="Every question from this ${unitName}'s practice sheets, class activities and worksheets, in order, with the sheets' own numbers">Course sheets, in order · ${nSheets}</button></div>`;
     }
     const lastResults = ex && ex.done && ex.examId === exam.id ? `<button type="button" class="linkish" data-act="exam-results">Last exam results</button>` : '';
 
@@ -759,7 +760,7 @@ export function createPractice(api, bank) {
       const here = t.lab && t.lab === labId;
       return `<button type="button" class="pb-item" data-open="${esc(t.id)}">
               <span class="pb-dot s-${s}" title="${STATUS_LABEL[s]}"></span>
-              <span class="pb-item-title">${chTag ? `<span class="pb-chtag">${t.ch === 'V' ? 'Vec' : `Ch ${esc(t.ch)}`}</span>` : ''}${esc(t.title)}${t.enrichment ? ' <span class="pb-extra" title="Beyond the practice sheets and worksheets: left out of mixed sets and practice exams">extra</span>' : ''}</span>
+              <span class="pb-item-title">${chTag ? `<span class="pb-chtag">${esc(chapterTag(t.ch))}</span>` : ''}${esc(t.title)}${t.enrichment ? ' <span class="pb-extra" title="Beyond the practice sheets and worksheets: left out of mixed sets and practice exams">extra</span>' : ''}</span>
               <span class="pb-item-meta">${levelDots(t.level)}${labTitle ? `<span class="pb-lab-badge${here ? ' here' : ''}">${esc(labTitle)}</span>` : ''}</span>
             </button>`;
     };
@@ -787,9 +788,9 @@ export function createPractice(api, bank) {
             <span class="pb-ch-meter" title="${cm}% mastery"><i style="width:${cm}%"></i></span>
             <span class="pb-ch-count">${cc.mastered}/${cc.total}</span>
           </div>
-          <p class="pb-pstate">${esc(P.statement)}${tally.asked ? ` <span class="pb-ptally" title="Principle step, every exam">Named right ${tally.ok} of ${tally.asked}</span>` : ''}</p>
+          <p class="pb-pstate">${esc(P.statement)}${tally.asked ? ` <span class="pb-ptally" title="Principle step, every ${unitName}">Named right ${tally.ok} of ${tally.asked}</span>` : ''}</p>
           ${inP.map((t) => itemHTML(t, { chTag: true })).join('')}
-          ${earlier.length ? `<details class="pb-earlier"><summary>From earlier exams · ${earlier.length}</summary>${earlier.map((t) => itemHTML(t, { chTag: true })).join('')}</details>` : ''}
+          ${earlier.length ? `<details class="pb-earlier"><summary>From earlier ${unitNamePlural} · ${earlier.length}</summary>${earlier.map((t) => itemHTML(t, { chTag: true })).join('')}</details>` : ''}
         </section>`);
       }
     }
@@ -831,7 +832,7 @@ export function createPractice(api, bank) {
         <div class="pb-meter-bar"><i style="width:${pct}%"></i></div>
         <div class="pb-meter-text"><span>${c.mastered} of ${c.total} mastered</span><span>${c.seen} tried</span></div>
       </div>`
-          : `<p class="pb-welcome">${c.total} problems for this exam. Pick one below, or let a mixed set choose.</p>`
+          : `<p class="pb-welcome">${c.total} problems for this ${unitName}. Pick one below, or let a mixed set choose.</p>`
       }
       <div class="pb-actions">
         ${actionsHTML}
@@ -872,7 +873,7 @@ export function createPractice(api, bank) {
       const n = PROBLEMS.filter((t) => !t.enrichment && primaryOf(t) === r.id).length;
       return `<div class="pb-weak-row">
           <div><div class="pb-weak-name">${esc(pname(r.id))}</div><div class="pb-dim">${esc(bits.join(' · '))}</div></div>
-          ${n ? `<button type="button" class="btn" data-weak="${esc(r.id)}" title="${Math.min(MIXED_SIZE, n)} problems decided by this principle, from any exam, weakest first">Practice</button>` : ''}
+          ${n ? `<button type="button" class="btn" data-weak="${esc(r.id)}" title="${Math.min(MIXED_SIZE, n)} problems decided by this principle, from any ${unitName}, weakest first">Practice</button>` : ''}
         </div>`;
     });
     const slips = [other.slip ? `slips ${other.slip}×` : '', other.read ? `misread the question ${other.read}×` : ''].filter(Boolean).join(' · ');
@@ -997,7 +998,7 @@ export function createPractice(api, bank) {
     // A box that was locked when Check ran has nothing to report: it has only just opened.
     const res = raw?.held ? null : raw;
     const state = !res ? '' : res.empty ? ' empty' : res.correct ? ' ok' : ' bad';
-    const label = prose(partLabel(part, r, cur.tpl.parts.length));
+    const label = prose(partLabel(part, r, cur.tpl.parts.length, partNames));
     const review = cur.mode === 'review';
     const fb = !res ? '' : res.empty ? (review ? 'No answer given.' : 'Answer this part.') : res.correct ? '' : res.feedback || (review || cur.finished ? 'Incorrect.' : 'Not yet — try again.');
     const mark = !res || res.empty ? '' : res.correct ? '✓' : '✗';

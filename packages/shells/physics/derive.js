@@ -29,14 +29,14 @@ function order(n, seed) {
 
 /**
  * @param {object} api What main.js offers the panel (scene, slice, computed, setScenario, bump, reframe?).
- * @param {object} deps
- * @param {(labId: string) => object[]} deps.derivationsFor The derivations for a lab; empty for a lab with none.
- * @param {(id: string) => object|undefined} deps.derivationById
- * @param {(eq: [number, number][]) => boolean} deps.agrees Whether each pair of an evaluated line agrees.
- * @param {Record<string, number>} deps.colors The scene colours a derivation's picture names: mark, and the course's own.
+ * @param {object} [deps] Everything here is optional: a course with no derivations passes nothing.
+ * @param {(labId: string) => object[]} [deps.derivationsFor] The derivations for a lab; empty for a lab with none.
+ * @param {(id: string) => object|undefined} [deps.derivationById]
+ * @param {(eq: [number, number][]) => boolean} [deps.agrees] Whether each pair of an evaluated line agrees.
+ * @param {Record<string, number>} [deps.colors] The scene colours a derivation's picture names: mark, and the course's own.
  */
-export function createDerive(api, deps) {
-  const { derivationsFor, derivationById, agrees, colors } = deps;
+export function createDerive(api, deps = {}) {
+  const { derivationsFor = () => [], derivationById = () => undefined, agrees = () => true, colors = {} } = deps;
   const $ = (id) => document.getElementById(id);
   const panel = $('eq-panel');
   const host = $('derive');

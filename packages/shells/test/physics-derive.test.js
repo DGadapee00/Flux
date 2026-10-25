@@ -76,3 +76,12 @@ test('derive draws the picture in the colours it is given', () => {
   assert.equal(overlay.children.length, 1);
   assert.equal(overlay.children[0].material.color.getHex(), COLORS.I);
 });
+
+test('derive runs with no derivationsFor, derivationById, agrees or colors', () => {
+  page();
+  const derive = createDerive({ scene: new THREE.Scene(), slice: () => ({}), computed: () => ({}), setScenario() {}, bump() {} }, {});
+  assert.doesNotThrow(() => derive.update({}, {}, { id: 'demo' }));
+  assert.equal(document.getElementById('eq-derive').hidden, true);
+  assert.doesNotThrow(() => derive.open(null));
+  assert.equal(derive.isOpen(), false);
+});

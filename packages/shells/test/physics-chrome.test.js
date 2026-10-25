@@ -9,8 +9,11 @@ import { installDOM } from './dom.js';
 const PHYSICS_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../physics');
 const OPTS = { code: 'FIX 1000', setupHint: 'Drag the block', unitName: 'Unit' };
 
-/** Ids the shell's own modules create, with the reason each is allowed. */
-const OWNED_IDS = [];
+/**
+ * Ids the shell's own modules create, not the chrome, each with the reason it is allowed.
+ *   pb-timer  the practice exam's clock, written into the panel when an exam starts (problems.js)
+ */
+const OWNED_IDS = ['pb-timer'];
 
 function page() {
   installDOM();
@@ -42,11 +45,19 @@ test('renderChrome takes the code, the setup hint and the unit name from the cou
   assert.equal(document.getElementById('exam-select').getAttribute('aria-label'), 'Unit');
 });
 
-test('every getElementById literal in packages/shells/physics is a chrome id or one the shell creates', () => {
+test('every owned id is really written by a shell module', () => {
+  const sources = fs.readdirSync(PHYSICS_DIR).filter((f) => f.endsWith('.js')).map((f) => fs.readFileSync(path.join(PHYSICS_DIR, f), 'utf8'));
+  for (const id of OWNED_IDS) {
+    assert.ok(sources.some((src) => src.includes(`id="${id}"`)), `${id} is listed as owned, but no shell module writes it`);
+  }
+});
+
+test('every id literal read in packages/shells/physics (getElementById or $) is a chrome id or one the shell creates', () => {
   const known = new Set([...CHROME_IDS, ...OWNED_IDS]);
   for (const file of fs.readdirSync(PHYSICS_DIR).filter((f) => f.endsWith('.js'))) {
     const source = fs.readFileSync(path.join(PHYSICS_DIR, file), 'utf8');
-    for (const [, id] of source.matchAll(/getElementById\(\s*['"]([^'"]+)['"]\s*\)/g)) {
+    // Most modules read ids through a local `$('id')` helper, so match that too.
+    for (const [, id] of source.matchAll(/(?:getElementById\(|\$\()\s*['"]([^'"]+)['"]\s*\)/g)) {
       assert.ok(known.has(id), `${file} reads #${id}, which renderChrome never writes`);
     }
   }

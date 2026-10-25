@@ -10,11 +10,11 @@ import { tex, escapeHTML } from './shared.js';
 
 /**
  * @param {object} opts
- * @param {(labId: string) => object[]} opts.unitsForLab The rows for a lab: { sym, name, unit, unitName?, equals?, from?, base?, constant? }.
- * @param {Record<string, { title?: string }>} opts.labMeta
+ * @param {(labId: string) => object[]} [opts.unitsForLab] The rows for a lab (none if omitted): { sym, name, unit, unitName?, equals?, from?, base?, constant? }.
+ * @param {Record<string, { title?: string }>} [opts.labMeta]
  * @param {() => void} [opts.onOpen] Called each time the panel opens.
  */
-export function createUnits({ unitsForLab, labMeta, onOpen } = {}) {
+export function createUnits({ unitsForLab = () => [], labMeta = {}, onOpen } = {}) {
   const panel = document.getElementById('units-ref');
   const btn = document.getElementById('btn-units');
   const body = document.body;
@@ -39,7 +39,7 @@ export function createUnits({ unitsForLab, labMeta, onOpen } = {}) {
 
   function render() {
     if (!panel) return;
-    const rows = unitsForLab(labId);
+    const rows = unitsForLab(labId) || [];
     const title = labMeta[labId]?.title || 'this lab';
     if (!rows.length) {
       panel.innerHTML = `<div class="panel-header"><h2>Units</h2></div><p class="tiny">No units listed for ${escapeHTML(title)}.</p>`;

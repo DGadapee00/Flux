@@ -39,3 +39,19 @@ test('onOpen is optional', () => {
   const units = createUnits({ unitsForLab: () => [], labMeta: {} });
   assert.doesNotThrow(() => units.toggle());
 });
+
+test('the units panel runs with no unitsForLab and no labMeta', () => {
+  page();
+  const units = createUnits({});
+  units.onLab('anything');
+  assert.doesNotThrow(() => units.toggle());
+  assert.ok(document.getElementById('units-ref').innerHTML.includes('No units listed for this lab.'));
+});
+
+test('a unitsForLab that returns nothing is an empty list', () => {
+  page();
+  const units = createUnits({ unitsForLab: () => undefined, labMeta: {} });
+  units.onLab('anything');
+  assert.doesNotThrow(() => units.toggle());
+  assert.ok(document.getElementById('units-ref').innerHTML.includes('No units listed for this lab.'));
+});

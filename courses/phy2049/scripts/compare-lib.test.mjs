@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { changedRatio, diffLines, domSignature } from './compare-lib.mjs';
+import { changedRatio, diffLines, domSignature, servedChanges, storedLines } from './compare-lib.mjs';
 
 const px = (...rgba) => new Uint8ClampedArray(rgba);
 
@@ -72,4 +72,20 @@ test('domSignature drops transform and z-index from style, keeping the rest', ()
   const b = domSignature(label(10.75, 9));
   assert.deepEqual(a, b);
   assert.deepEqual(a, ['div.axis-label[style=color: red; position: absolute]']);
+});
+
+test('storedLines lists key=value in key order, so a changed value shows in diffLines', () => {
+  const a = storedLines({ b: '2', a: '{"x":1}' });
+  assert.deepEqual(a, ['a={"x":1}', 'b=2']);
+  const msgs = diffLines(a, storedLines({ b: '2', a: '{"x":2}' }));
+  assert.equal(msgs.length, 2);
+  assert.ok(msgs.join('\n').includes('{"x":2}'));
+  assert.deepEqual(storedLines({}), []);
+});
+
+test('servedChanges names the modules whose served text differs, including one only a side has', () => {
+  const base = { '/src/main.js': 'aaa', '/src/ui/hud.js': 'bbb', '/src/old.js': 'ccc' };
+  const now = { '/src/main.js': 'aaa', '/src/ui/hud.js': 'xyz', '/src/new.js': 'ddd' };
+  assert.deepEqual(servedChanges(base, now).sort(), ['/src/new.js', '/src/old.js', '/src/ui/hud.js']);
+  assert.deepEqual(servedChanges(base, { ...base }), []);
 });

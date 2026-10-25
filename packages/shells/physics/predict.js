@@ -29,7 +29,7 @@ function readTally(store) {
 }
 
 function writeTally(store, d) {
-  store.setItem('predict', JSON.stringify(d));
+  store?.setItem('predict', JSON.stringify(d));
 }
 
 /** Whether the lab already holds a setup the prompt can start from, or needs its preset loaded. */
@@ -73,19 +73,21 @@ const same = (a, b) => (typeof a === 'number' && typeof b === 'number' ? Math.ab
 
 /**
  * @param {object} api What main.js offers the card (labId, practiceActive, slice, lab, bump, setScenario).
- * @param {object} deps
- * @param {(labId: string) => object[]} deps.predictionsFor The prompts for a lab; empty for a lab with none.
- * @param {{ getItem(key: string): string|null, setItem(key: string, value: string): void }} deps.store The course's storage.
+ * @param {object} [deps] Everything here is optional: a course with no prompts passes nothing.
+ * @param {(labId: string) => object[]} [deps.predictionsFor] The prompts for a lab; empty for a lab with none.
+ * @param {{ getItem(key: string): string|null, setItem(key: string, value: string): void }} [deps.store] The course's storage.
  * @param {Function} deps.run Run a prompt through a lab: (lab, state, prompt) → { before, after }.
  * @param {Function} deps.outcomes What happened to each watched quantity: (prompt, before, after) → { [id]: choice }.
  * @param {Function} deps.choices The choices for a watched quantity: (prompt, watch) → [value, label][].
  * @param {Function} deps.matchesExpect Whether the lab did what the prompt's reasoning expects.
  * @param {(state: object) => object} deps.cloneState A deep copy of a lab state.
  */
-export function createPredict(api, deps) {
-  const { predictionsFor, store, run, outcomes, choices, matchesExpect, cloneState } = deps;
+export function createPredict(api, deps = {}) {
+  const { predictionsFor = () => [], store = null, run, outcomes, choices, matchesExpect, cloneState = (s) => structuredClone(s) } = deps;
   const host = document.getElementById('predict');
   const tally = readTally(store);
+  // A page with no predict card has nothing to follow.
+  if (!host) return { sync() {}, current: () => ({ id: undefined, phase: 'idle', result: null }), tally };
   const st = { labId: null, idx: 0, phase: 'idle', picks: {}, result: null, snapshot: null, hidden: null, setupKey: '', open: true, play: null };
 
   function replaceState(s, next) {
