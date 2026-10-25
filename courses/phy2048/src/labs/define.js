@@ -75,3 +75,20 @@ export function fmt(x, n = 4) {
   const [m, e] = x.toExponential(n - 1).split('e');
   return `${Number(m)}e${Number(e)}`;
 }
+
+/**
+ * A slider over a quantity that spans decades (a radius from 1 m to 2 km). It holds log10 of the
+ * value; the shell's box shows the value itself (`data-log`).
+ */
+export function logSliderRow(id, label, value, min, max) {
+  return `<label class="field"><span>${label}</span><div class="slider-row"><input type="range" id="${id}" min="${Math.log10(min)}" max="${Math.log10(max)}" step="0.001" value="${Math.log10(value)}" data-log="10" /></div></label>`;
+}
+
+/** Bind a log slider: the state gets the value, to three significant figures. */
+export function bindLogSlider(api, id, set) {
+  bindSlider(api, id, (s, x) => set(s, Number((10 ** x).toPrecision(3))));
+}
+
+export function putLogSlider(id, value) {
+  if (value > 0) putSlider(id, Math.log10(value), 4);
+}

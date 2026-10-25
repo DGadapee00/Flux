@@ -158,3 +158,37 @@ export function createGraph(parent, { x, y, w, h, color, name, xName = '', sampl
 
   return { group, set, mark, line, clearLine, clearMark, show, dispose, sx, sy };
 }
+
+/** Point an arrow from (x0, y0) to (x1, y1) in the plane z. A zero-length arrow is hidden. */
+export function placeArrow(arrow, x0, y0, x1, y1, z = 0.04) {
+  const dx = x1 - x0;
+  const dy = y1 - y0;
+  const L = Math.hypot(dx, dy);
+  arrow.position.set(x0, y0, z);
+  arrow.visible = L > 1e-6;
+  if (!arrow.visible) return;
+  arrow.setDirection(new THREE.Vector3(dx / L, dy / L, 0));
+  arrow.setLength(L);
+}
+
+/**
+ * Place a label beside the segment (x0, y0)–(x1, y1), on the side away from the point (xo, yo).
+ * The label renderer centres a label on its point, so the offset grows with the label's half-width
+ * when the segment is steep: about 0.1 scene units per character of its longest line.
+ */
+export function labelBeside(lab, html, x0, y0, x1, y1, xo, yo) {
+  lab.element.innerHTML = html;
+  const L = Math.hypot(x1 - x0, y1 - y0) || 1;
+  let nx = -(y1 - y0) / L;
+  let ny = (x1 - x0) / L;
+  const mx = 0.5 * (x0 + x1);
+  const my = 0.5 * (y0 + y1);
+  if (nx * (xo - mx) + ny * (yo - my) > 0) {
+    nx = -nx;
+    ny = -ny;
+  }
+  const chars = Math.max(...html.replace(/<(?!br)[^>]+>/g, '').split(/<br\s*\/?>/).map((line) => line.length));
+  const lines = html.split(/<br\s*\/?>/).length;
+  const off = 0.3 + Math.abs(nx) * 0.1 * chars + Math.abs(ny) * 0.22 * lines;
+  lab.position.set(mx + nx * off, my + ny * off, 0);
+}

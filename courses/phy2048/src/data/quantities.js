@@ -23,10 +23,19 @@ export const QUANTITIES = {
   tau: { sym: '\\tau', name: 'Torque', unit: 'N*m', unitName: '', from: '\\tau = rF\\sin\\phi' },
   I: { sym: 'I', name: 'Moment of inertia', unit: 'kg*m^2', unitName: '', from: 'I = \\sum m_i r_i^2' },
   alpha: { sym: '\\alpha', name: 'Angular acceleration', unit: 'rad/s^2', unitName: '', from: '\\alpha = \\dfrac{\\tau}{I}' },
+  r: { sym: 'r', name: 'Radius', unit: 'm', unitName: 'metre', from: '' },
+  omega: { sym: '\\omega', name: 'Angular speed', unit: 'rad/s', unitName: '', from: '\\omega = \\dfrac{v}{r} = \\dfrac{2\\pi}{T}' },
+  T: { sym: 'T', name: 'Period, one lap', unit: 's', unitName: 'second', from: 'T = \\dfrac{2\\pi r}{v}' },
+  ac: { sym: 'a_c', name: 'Centripetal acceleration', unit: 'm/s^2', unitName: '', from: 'a_c = \\dfrac{v^2}{r} = \\omega^2 r' },
+  aT: { sym: 'a_T', name: 'Tangential acceleration', unit: 'm/s^2', unitName: '', from: 'a_T = \\dfrac{dv}{dt}' },
+  vrel: { sym: '\\vec v_{PG}', name: 'Velocity over the ground', unit: 'm/s', unitName: '', from: '\\vec v_{PG} = \\vec v_{PF} + \\vec v_{FG}' },
 };
 
 export const LAB_UNITS = {
   projectile: ['v', 'theta', 'x', 't', 'R', 'g'],
+  'circular-motion': ['r', 'v', 'omega', 'T', 'ac', 'aT'],
+  'relative-motion': ['vrel', 'theta', 't', 'x'],
+  'wind-triangle': ['vrel', 'theta', 't'],
   incline: ['m', 'theta', 'mu', 'F', 'N', 'a', 'g'],
   track: ['m', 'x', 'U', 'K', 'v', 'g'],
   collide: ['m', 'v', 'p', 'e', 'K'],
