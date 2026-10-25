@@ -179,7 +179,7 @@ export default defineLab({
   coach(state, c) {
     return {
       title: 'Subtract the vectors',
-      body: String.raw`Seen from A, B moves at $${fig(c.vx)}\,\hat{\imath} + ${fig(c.vy)}\,\hat{\jmath}$ m/s. That direction is neither v_A nor v_B.`,
+      body: String.raw`Seen from A, B moves at $${fig(c.vx)}\,\hat{\imath} + ${fig(c.vy)}\,\hat{\jmath}$ m/s. That direction is neither v_A nor v_B. It is the motion A actually watches: the gap between them opening, closing, or swinging sideways. Ride with A, and every velocity in the scene drops by v_A. B keeps only the motion the two do not share.`,
     };
   },
 });

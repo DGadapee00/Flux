@@ -225,8 +225,8 @@ export default defineLab({
     return {
       title: turned ? 'Distance and displacement split' : 'The areas are the changes',
       body: turned
-        ? String.raw`The probe runs past a stop, so the distance is $${fig(c.distance)}\ \mathrm{m}$ while the displacement is $${fig(c.displacement)}\ \mathrm{m}$.`
-        : 'Velocity is the area under the a–t graph. Position is the area under the v–t graph.',
+        ? String.raw`The probe stops and comes back. The distance counts every metre, $${fig(c.distance)}\ \mathrm{m}$; the displacement nets it out, $${fig(c.displacement)}\ \mathrm{m}$.`
+        : 'Velocity changes by the area under a–t, position by the area under v–t. Area below the time axis counts negative.',
     };
   },
 });

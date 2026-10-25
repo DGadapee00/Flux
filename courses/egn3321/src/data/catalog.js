@@ -13,7 +13,7 @@ export const EXAMS = [
     title: 'Particle kinematics',
     chapters: '1, 12',
     date: 'Ch 12',
-    labs: ['rectilinear', 'path-nt', 'relative', 'boost'],
+    labs: ['rectilinear', 'path-nt', 'relative', 'train'],
     coming: [],
   },
   {
@@ -76,7 +76,7 @@ export const LAB_META = {
   rectilinear: { id: 'rectilinear', exam: 'u1', title: 'Rectilinear' },
   'path-nt': { id: 'path-nt', exam: 'u1', title: 'Path' },
   relative: { id: 'relative', exam: 'u1', title: 'Relative' },
-  boost: { id: 'boost', exam: 'u1', title: 'Boost', app: true },
+  train: { id: 'train', exam: 'u1', title: 'Train', app: true },
   fma: { id: 'fma', exam: 'u2', title: 'F = ma' },
   curve: { id: 'curve', exam: 'u2', title: 'Curve' },
   collar: { id: 'collar', exam: 'u3', title: 'Collar' },

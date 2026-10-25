@@ -21,7 +21,7 @@ const loaders = {
   race: () => import('./race.js'),
   linkage: () => import('./linkage.js'),
   // Application labs, one per unit: 2D labs on the plot stage (define2d.js), app: true.
-  boost: () => import('./boost.js'),
+  train: () => import('./train.js'),
   liftoff: () => import('./liftoff.js'),
   landing: () => import('./landing.js'),
   gearbox: () => import('./gearbox.js'),

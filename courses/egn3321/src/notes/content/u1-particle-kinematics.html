@@ -26,7 +26,7 @@
     <a href="#s5"><span>05</span>Normal and tangential components</a>
     <a href="#s6"><span>06</span>Relative motion, translating axes</a>
     <h3>Part III · An application</h3>
-    <a href="#s7"><span>07</span>Application: a sounding rocket</a>
+    <a href="#s7"><span>07</span>Application: a train between stations</a>
     <h3>Reference</h3>
     <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
@@ -291,7 +291,7 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>These axes translate with A and do not rotate. A rotating frame adds terms this section does not carry: a Coriolis term and a centripetal term. Rotating axes stay out of the course. The model also treats A and B as points with no size.</p>
 </div>
-<p class="bridge">Part III returns to a straight line. A sounding rocket needs only the graphs of Part I, with a burn and a coast.</p>
+<p class="bridge">Part III returns to a straight line. A train between stations needs only the graphs of Part I, with a run under power and a braking run.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/4-3-reference-frames/" target="_blank" rel="noopener">4.3 Reference Frames</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/18-1-relative-velocity/" target="_blank" rel="noopener">18.1 Relative Velocity</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/newton2019s-laws-vectors-and-reference-frames/" target="_blank" rel="noopener">Lecture 1, Newton's Laws, Vectors, and Reference Frames</a>.</p>
 </section>
 <div class="part">
@@ -300,47 +300,47 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 </div>
 
 <section class="topic" id="s7">
-<h2><span class="n">07</span>Application: a sounding rocket</h2>
-<p>A sounding rocket flies straight up. Its motor burns for a few seconds and then the rocket coasts. The whole flight is rectilinear motion in two pieces, each with a constant acceleration. Nothing beyond this unit is needed to find how high it goes.</p>
-<p>During the burn the net acceleration is the thrust less the weight, over the mass: \(a = T/m - g\). Treat the mass as constant for now; Unit 3 lets it fall as propellant burns. After burnout only gravity acts, and the acceleration is \(-g\).</p>
-<div class="box why"><span class="tag">Why the apogee splits into two heights</span>
-<p>From rest, with constant \(a\) for \(t_b\) seconds, section 2 gives the state at burnout:</p>
+<h2><span class="n">07</span>Application: a train between stations</h2>
+<p>A train leaving a station does the same thing in every city. It accelerates away from the platform, perhaps cruises, then brakes to a stop at the next one. The whole trip is rectilinear motion in pieces, each piece with a constant acceleration. Nothing beyond this unit is needed to find how far apart the stations are.</p>
+<p>While it accelerates, the acceleration is the tractive force over the mass, less the pull of any grade: \(a = F/m - g\sin\theta\) on a slope, and \(a = F/m\) on the flat. While it brakes, the acceleration is the braking rate, pointing backward. Between the two pieces the speed peaks.</p>
+<div class="box why"><span class="tag">Why the distance splits into two pieces</span>
+<p>From rest, with constant \(a_1\) for \(t_1\) seconds, section 2 gives the state at the top speed:</p>
 \[
-v_{bo} = a\,t_b, \qquad h_{bo} = \tfrac12 a\,t_b^2.
+v_{top} = a_1\,t_1, \qquad s_1 = \tfrac12 a_1\,t_1^2.
 \]
-<p>Then the rocket coasts with \(a = -g\) until its speed is zero. Time is not needed, so use \(v^2 = v_0^2 + 2a\,\Delta s\) with \(v = 0\):</p>
+<p>Then the train brakes with \(a = -a_2\) until its speed is zero. Time is not needed, so use \(v^2 = v_0^2 + 2a\,\Delta s\) with \(v = 0\):</p>
 \[
-\Delta h_{\text{coast}} = \frac{v_{bo}^2}{2g}.
+\Delta s_{\text{brake}} = \frac{v_{top}^2}{2a_2}.
 \]
-<p>The apogee is the sum, \(h_{\max} = h_{bo} + v_{bo}^2/2g\). It is reached at \(t = t_b + v_{bo}/g\).</p>
-<p>Section 3 gives the same number another way. The \(v\)–\(t\) graph is a triangle: a line rising to \(v_{bo}\), then a line falling at slope \(-g\) to zero. Its area is \(\tfrac12 v_{bo}(t_b + v_{bo}/g)\), which expands to the same sum.</p>
+<p>The distance between the stations is the sum, \(s_1 + v_{top}^2/2a_2\). The trip takes \(t_1 + v_{top}/a_2\).</p>
+<p>Section 3 gives the same number another way. The \(v\)–\(t\) graph is a triangle: a line rising to \(v_{top}\), then a line falling at slope \(-a_2\) to zero. Its area is \(\tfrac12 v_{top}(t_1 + v_{top}/a_2)\), which expands to the same sum. A cruise in the middle turns the triangle into a trapezoid. The area is still the distance.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a student rocket</span>
-<p>A student rocket accelerates at a net 49 m/s², about five times \(g\), for 2.5 s. At burnout \(v_{bo} = 49 \times 2.5 = 122.5\) m/s and \(h_{bo} = \tfrac12(49)(2.5)^2 = 153\) m.</p>
-<p>The coast adds \(122.5^2/(2 \times 9.81) = 765\) m. The apogee is 918 m, reached 15.0 s after launch. The motor is out after the first 17% of the climb. The rest is momentum.</p>
-<p>The area of the \(v\)–\(t\) triangle checks it: \(\tfrac12(122.5)(14.99) = 918\) m.</p>
+<div class="box ex"><span class="tag">Worked example · a metro train</span>
+<p>A metro train accelerates at 1.10 m/s² for 20 s. Its top speed is \(1.10 \times 20 = 22\) m/s, about 79 km/h, and it covers \(\tfrac12(1.10)(20)^2 = 220\) m getting there.</p>
+<p>Braking at 0.80 m/s², it needs \(22/0.80 = 27.5\) s and \(22^2/(2 \times 0.80) = 302.5\) m to stop. The stations are 522.5 m apart, and the trip takes 47.5 s. There is no cruise: the train brakes the moment it reaches top speed.</p>
+<p>The area of the \(v\)–\(t\) triangle checks it: \(\tfrac12(47.5)(22) = 522.5\) m.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · thrust and weight</span>
-<p>A 12 kg rocket has a motor that gives 600 N for 3.0 s. The net acceleration is \(600/12 - 9.81 = 40.2\) m/s². At burnout it is moving at \(40.19 \times 3 = 121\) m/s, at a height of \(\tfrac12(40.19)(9) = 181\) m.</p>
-<p>The coast adds \(120.6^2/19.62 = 741\) m, for an apogee of 922 m. Leaving out the weight would give \(a = 50\) m/s² and an apogee of 1,500 m: an error of 60%.</p>
+<div class="box ex"><span class="tag">Worked example · tractive force on a grade</span>
+<p>A freight train's motors give 400 kN of tractive force, and the train masses 2,500 t. On the flat the acceleration is \(400{,}000/2{,}500{,}000 = 0.16\) m/s².</p>
+<p>On a 1% grade the slope takes \(g \sin\theta \approx 9.81 \times 0.01 = 0.098\) m/s² of that, leaving a net 0.0619 m/s². Reaching 18 m/s takes \(18/0.0619 = 291\) s and 2,617 m. On the flat it would take 112.5 s. Leaving out the grade underestimates the time by about 60%.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a long gentle burn</span>
-<p>The same burnout speed can come from a gentler burn: 20 m/s² for 6 s reaches 120 m/s, about the student rocket's speed. But it reaches it higher, at \(\tfrac12(20)(36) = 360\) m. The coast adds \(120^2/19.62 = 734\) m, and the apogee is 1,094 m.</p>
-<p>Same burnout speed, higher burnout, higher apogee. In this model, with no drag, a longer burn wins. A real rocket that burns long and slowly pays a gravity loss: it holds itself up against \(g\) for longer. Here that is already inside the net \(a\).</p>
+<div class="box ex"><span class="tag">Worked example · the same speed, a gentler start</span>
+<p>The same top speed can come from a gentler start: 0.55 m/s² for 40 s also reaches 22 m/s. But it reaches it farther along, at \(\tfrac12(0.55)(40)^2 = 440\) m.</p>
+<p>The braking adds the same 302.5 m, so the stations sit 742.5 m apart instead of 522.5 m. Same top speed, same brakes: the gentle start spends its extra distance getting up to speed. Between closely spaced stations, most of the trip is spent speeding up and slowing down.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a hop test</span>
-<p>A test vehicle hovers just above its own weight: a net 3 m/s² for 4 s. It reaches 12 m/s at 24 m, coasts up another \(12^2/19.62 = 7.34\) m, and peaks at 31.3 m. With the engine out, it falls back to the pad 7.75 s after lift-off.</p>
-<p>The fall from 31.3 m takes \(\sqrt{2(31.34)/9.81} = 2.53\) s, and the peak came at \(4 + 12/9.81 = 5.22\) s. Their sum is 7.75 s.</p>
+<div class="box ex"><span class="tag">Worked example · a short yard hop</span>
+<p>A yard locomotive shuffles a wagon between two sidings: 0.50 m/s² for 10 s. It reaches 5 m/s at 25 m, then brakes at 0.50 m/s² and stops after another 25 m. The whole move takes 20 s and covers 50 m.</p>
+<p>The \(v\)–\(t\) graph is a small triangle: \(\tfrac12(20)(5) = 50\) m. Short moves never reach a cruise, however strong the locomotive.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Two slips come up often. The first is stopping at burnout: 153 m for the student rocket, when the apogee is 918 m. The second is subtracting \(g\) from an acceleration that is already net, or forgetting it in \(T/m\). Read whether the acceleration given is the thrust's alone or the net one. Hibbeler §12.2–12.3.</p>
+<p>Two slips come up often. The first is stopping at the top speed: 220 m for the metro train, when the stations are 522.5 m apart. The braking piece is longer than the accelerating piece. The second is reading an acceleration as net when it is not: a tractive \(F/m\) on a grade still has gravity taking its share along the slope. Read whether the acceleration given is the motor's alone or the net one. Hibbeler §12.2–12.3.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Split the flight where the acceleration changes. The coast height depends only on the burnout speed: \(v_{bo}^2/2g\). The area under \(v\)–\(t\) is the height.</p>
+<p>Split the trip where the acceleration changes. The braking distance depends only on the top speed and the braking rate: \(v_{top}^2/2a_2\). The area under \(v\)–\(t\) is the distance.</p>
 </div>
-<p>In the Boost lab, move the burn time and the acceleration. The shaded triangle under \(v\)–\(t\) is the apogee, and the column on the left shows where burnout and apogee sit.</p>
+<p>In the Train lab, build the trip as two pieces: the run out of the station, then the braking. The shaded triangle under \(v\)–\(t\) is the distance between the stations, and the track view shows where the braking starts.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Drag is the big omission. At 120 m/s the air pushes back hard, and a real rocket of this size reaches perhaps two-thirds of these heights. The model also keeps the mass constant, when a solid motor may burn a fifth of the rocket's mass; Unit 3 adds that. Thrust is not constant either: a real motor ramps up and tails off. The area rule still holds for any thrust curve. Wind and weathercocking tilt the path, which makes it a projectile problem.</p>
+<p>Constant acceleration is the big simplification. Real drivers and control systems limit jerk, the rate of change of acceleration, so passengers are not thrown about: each piece really ramps in and out. Tractive effort also falls as the speed rises, and rolling and air resistance grow. A grade stretches the accelerating piece and squeezes the braking piece. The area rule still holds for any acceleration curve: the distance is the area under \(v\)–\(t\), whatever its shape.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/2-4-integration/" target="_blank" rel="noopener">2.4 Integration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/1-7-worked-example-derivatives-in-kinematics/" target="_blank" rel="noopener">1.7 Worked Example - Derivatives in Kinematics</a>.</p>
 </section>
