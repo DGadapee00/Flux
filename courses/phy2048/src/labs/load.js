@@ -1,6 +1,9 @@
 import { createLabLoader } from '@flux/core';
 
 const loaders = {
+  vectors: () => import('./vectors.js'),
+  'stopping-distance': () => import('./stopping-distance.js'),
+  'kinematics-graphs': () => import('./kinematics-graphs.js'),
   projectile: () => import('./projectile.js'),
   incline: () => import('./incline.js'),
   track: () => import('./track.js'),

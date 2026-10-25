@@ -24,9 +24,9 @@ test('a bare lab id resolves to its unit', () => {
   assert.equal(short.labId, 'projectile');
 });
 
-test('an empty hash opens Unit 1, which has no lab built yet', () => {
+test('an empty hash opens Unit 1 on its first lab', () => {
   const route = parseRoute('');
   assert.equal(route.legacy, false);
   assert.equal(route.examId, 'u1');
-  assert.equal(route.labId, null);
+  assert.equal(route.labId, 'vectors');
 });

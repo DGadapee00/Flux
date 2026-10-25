@@ -50,10 +50,8 @@ for (const viewport of SIZES) {
           over: document.documentElement.scrollWidth - document.documentElement.clientWidth,
           text: document.body.innerText,
           lawError: !!document.querySelector('#law-line .katex-error'),
-          bad: [...document.querySelectorAll('input')].filter((i) => {
-            const size = parseFloat(getComputedStyle(i).fontSize);
-            return i.offsetParent && size < 16;
-          }).length,
+          // Text boxes at least 16px on a phone, or the browser zooms in on focus (rule 10).
+          bad: window.innerWidth > 720 ? 0 : [...document.querySelectorAll('input:not([type="range"])')].filter((i) => i.offsetParent && parseFloat(getComputedStyle(i).fontSize) < 16).length,
         }));
         if (seen.over > 0) fails.push(`${where}: scrolls sideways by ${seen.over}px`);
         if (/NaN|undefined/.test(seen.text)) fails.push(`${where}: shows NaN or undefined`);

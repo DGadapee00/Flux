@@ -12,8 +12,8 @@ export const UNITS = [
     title: 'Units, vectors and motion along a line',
     chapters: ['1', '2', '3'],
     date: null,
-    labs: [],
-    coming: ['Vectors', 'Motion graphs', 'Stopping distance'],
+    labs: ['vectors', 'kinematics-graphs', 'stopping-distance'],
+    coming: [],
   },
   {
     id: 'u2',
@@ -162,6 +162,9 @@ export const EXAMS = UNITS;
 
 /** The labs built so far (logic only until each unit's scene is drawn). */
 export const LAB_META = {
+  vectors: { id: 'vectors', exam: 'u1', title: 'Vectors' },
+  'stopping-distance': { id: 'stopping-distance', exam: 'u1', title: 'Stopping distance', app: true },
+  'kinematics-graphs': { id: 'kinematics-graphs', exam: 'u1', title: 'Motion graphs' },
   projectile: { id: 'projectile', exam: 'u2', title: 'Projectile' },
   incline: { id: 'incline', exam: 'u3', title: 'Incline' },
   track: { id: 'track', exam: 'u4', title: 'Track' },

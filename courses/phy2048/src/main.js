@@ -2,6 +2,7 @@
 import '@flux/shells/physics/styles/main.css';
 import '@flux/shells/physics/styles/practice.css';
 import '@flux/shells/physics/styles/mobile.css';
+import './styles/labs.css';
 import 'katex/dist/katex.min.css';
 import { mountTrackBar } from '@flux/core';
 import * as THREE from 'three';
@@ -11,6 +12,7 @@ import { defaultView, refit, sceneScale, setFrame, workPlane } from '@flux/core/
 import './engine/frame.js';
 import { EXAMS, examById, examForLab } from './catalog.js';
 import { parseHash, neighborExam, problemQuery, writeHash } from './engine/router.js';
+import { createLabPointer } from './engine/pointer.js';
 import { createViewPool } from './engine/views.js';
 import { loadExamLabs, loadLab } from './labs/load.js';
 import { course } from './manifest.js';
@@ -119,14 +121,74 @@ const hud = createHUD({
   },
 });
 
+const pointer = createLabPointer({
+  canvas,
+  camera,
+  controls,
+  getLab: () => app.lab,
+  getHandle: () => app.handles[app.labId],
+  getState: publicState,
+  bump: () => {
+    app.dirty = true;
+    practice?.noteEdit();
+    markCustom();
+  },
+});
+
 let camTween = null;
 controls.addEventListener('start', () => {
   camTween = null;
 });
 
+const TAN_HALF = Math.tan((camera.fov / 2) * (Math.PI / 180));
+const shown = (el) => !!el && el.offsetParent !== null && !el.hidden && getComputedStyle(el).display !== 'none';
+const PHONE_MAX = 720;
+
+/**
+ * The part of the canvas no panel covers, as an aspect (width over canvas height) and the share of
+ * the canvas height it has. On a laptop that is the strip between the left panels and Setup. On a
+ * phone it is the band between the top bars and the bottom sheet.
+ */
+function freeSpace() {
+  const w = canvas.clientWidth;
+  const h = canvas.clientHeight;
+  if (w <= PHONE_MAX) {
+    const top = shown($id('toggles')) ? $id('toggles').getBoundingClientRect().bottom : $id('brand').getBoundingClientRect().bottom;
+    let bottom = h;
+    for (const id of ['controls', 'eq-panel', 'problems', 'units-ref']) {
+      const el = $id(id);
+      if (shown(el)) bottom = Math.min(bottom, el.getBoundingClientRect().top);
+    }
+    const strip = Math.max(120, bottom - top);
+    return { left: 0, right: w, top, bottom: top + strip, aspect: w / h, hfrac: strip / h };
+  }
+  let left = 0;
+  for (const id of ['eq-panel', 'problems', 'units-ref']) {
+    const el = $id(id);
+    if (shown(el)) left = Math.max(left, el.getBoundingClientRect().right);
+  }
+  const controlsEl = $id('controls');
+  const right = shown(controlsEl) ? controlsEl.getBoundingClientRect().left : w;
+  const free = Math.max(1, right - left);
+  return { left, right: Math.max(left + 1, right), top: 0, bottom: h, aspect: free / h, hfrac: 1 };
+}
+
+/**
+ * A lab that says how big its drawing is (`fit: { w, h }`, in scene units) is framed so that drawing
+ * fills the free space: the camera backs off along its own line of sight until both sides fit.
+ */
+function fitCamera(lab, cam) {
+  if (!lab?.fit) return cam;
+  const free = freeSpace();
+  const need = Math.max((lab.fit.w * 1.05) / (2 * TAN_HALF * free.aspect), (lab.fit.h * 1.05) / (2 * TAN_HALF * free.hfrac));
+  const away = cam.pos.clone().sub(cam.target);
+  return { pos: cam.target.clone().add(away.setLength(Math.max(need, 4.5))), target: cam.target };
+}
+
 function goCamera(lab) {
-  const cam = lab?.cameraFor?.(slice()) || lab?.camera;
+  let cam = lab?.cameraFor?.(slice()) || lab?.camera;
   if (!cam) return;
+  cam = fitCamera(lab, cam);
   camTween = {
     t: 0,
     fromPos: camera.position.clone(),
@@ -152,6 +214,7 @@ function resetCamera() {
 
 function setOrbit(on) {
   controls.enableRotate = on !== false;
+  controls.maxDistance = 90;
 }
 
 function toggleShow(key) {
@@ -350,6 +413,7 @@ function followUrl() {
   else setExam(examId);
 }
 // Typed / bookmarked hashes fire hashchange; Back / Forward over pushState entries fire popstate.
+window.addEventListener('resize', () => goCamera(app.lab));
 window.addEventListener('hashchange', followUrl);
 window.addEventListener('popstate', followUrl);
 
@@ -374,33 +438,25 @@ function syncViews() {
 }
 
 /**
- * The scene is framed into the free space between the panels, not the window: on a wide screen the
- * picture slides to the middle of that space (a projection offset: orbit and labels follow).
+ * The picture is centred in the free space, not the window: a projection offset moves it sideways
+ * past the left panels on a laptop, and up into the band above the bottom sheet on a phone. Orbit
+ * and labels follow the offset.
  */
-const view = { shift: 0, w: 0, h: 0 };
-const shown = (el) => !!el && el.offsetParent !== null && !el.hidden && getComputedStyle(el).display !== 'none';
+const view = { shift: 0, lift: 0, w: 0, h: 0 };
 function stepViewShift() {
   const w = canvas.clientWidth;
   const h = canvas.clientHeight;
-  let left = 0;
-  let right = w;
-  if (w > 720) {
-    for (const id of ['eq-panel', 'problems', 'units-ref']) {
-      const el = $id(id);
-      if (shown(el)) left = Math.max(left, el.getBoundingClientRect().right);
-    }
-    const controlsEl = $id('controls');
-    if (shown(controlsEl)) right = controlsEl.getBoundingClientRect().left;
-  }
-  const target = w > 720 ? Math.round((left + Math.max(left + 1, right)) / 2 - w / 2) : 0;
-  const next = Math.abs(target - view.shift) < 0.5 ? target : view.shift + (target - view.shift) * 0.2;
-  if (next === view.shift && w === view.w && h === view.h) return;
-  view.shift = next;
-  view.w = w;
-  view.h = h;
-  if (Math.abs(next) < 0.5) {
+  const free = freeSpace();
+  const targetShift = w > PHONE_MAX ? Math.round((free.left + free.right) / 2 - w / 2) : 0;
+  const targetLift = w > PHONE_MAX ? 0 : Math.round(h / 2 - (free.top + free.bottom) / 2);
+  const ease = (from, to) => (Math.abs(to - from) < 0.5 ? to : from + (to - from) * 0.2);
+  const next = ease(view.shift, targetShift);
+  const nextLift = ease(view.lift, targetLift);
+  if (next === view.shift && nextLift === view.lift && w === view.w && h === view.h) return;
+  Object.assign(view, { shift: next, lift: nextLift, w, h });
+  if (Math.abs(next) < 0.5 && Math.abs(nextLift) < 0.5) {
     if (camera.view?.enabled) camera.clearViewOffset();
-  } else camera.setViewOffset(w, h, -next, 0, w, h);
+  } else camera.setViewOffset(w, h, -next, nextLift, w, h);
 }
 
 function frame() {
@@ -415,7 +471,7 @@ function frame() {
     if (lab.tick(dt, s, computed, ctx)) app.dirty = true;
   }
 
-  if (app.dirty || s.dirty || !!lab?.live) {
+  if (app.dirty || s.dirty || pointer.dragging || !!lab?.live) {
     recompute();
     syncViews();
     hud.update(publicState(), computed, lab);

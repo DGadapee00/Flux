@@ -26,6 +26,62 @@ export function constAccel1D({ x0 = 0, v0 = 0, a = 0, t }) {
   };
 }
 
+/**
+ * Motion along a line when the acceleration is constant in each piece: `pieces` is a list of
+ * { dt, a }. Within a piece v = v_start + a τ and x = x_start + v_start τ + (1/2) a τ², so the
+ * knots (the piece boundaries) follow by carrying x and v forward. The velocity is continuous
+ * across a knot, and so is the position.
+ *
+ * `distance` is the path length ∫|v| dt, not the displacement. v is linear in a piece, so it
+ * changes sign at most once there, at τ = −v_start / a; the two legs are added as magnitudes.
+ * `at(t)` gives { x, v, a } at a time (the last piece's acceleration holds at the end), and
+ * `turns` lists the times v crosses zero.
+ *
+ * @param {{ x0?: number, v0?: number, pieces: { dt: number, a: number }[] }} spec
+ */
+export function piecewiseMotion({ x0 = 0, v0 = 0, pieces }) {
+  const knots = [{ t: 0, x: x0, v: v0 }];
+  const turns = [];
+  let distance = 0;
+  for (const { dt, a } of pieces) {
+    const k = knots[knots.length - 1];
+    const x1 = k.x + k.v * dt + 0.5 * a * dt * dt;
+    const v1 = k.v + a * dt;
+    if (a !== 0) {
+      const tau = -k.v / a;
+      if (tau > 1e-12 && tau < dt - 1e-12) {
+        const xTurn = k.x + k.v * tau + 0.5 * a * tau * tau;
+        turns.push(k.t + tau);
+        distance += Math.abs(xTurn - k.x) + Math.abs(x1 - xTurn);
+      } else distance += Math.abs(x1 - k.x);
+    } else distance += Math.abs(x1 - k.x);
+    knots.push({ t: k.t + dt, x: x1, v: v1 });
+  }
+  const duration = knots[knots.length - 1].t;
+  const at = (t) => {
+    const time = Math.min(Math.max(t, 0), duration);
+    let i = 0;
+    while (i < pieces.length - 1 && time > knots[i + 1].t) i += 1;
+    const k = knots[i];
+    const a = pieces[i].a;
+    const tau = time - k.t;
+    return { x: k.x + k.v * tau + 0.5 * a * tau * tau, v: k.v + a * tau, a };
+  };
+  const end = knots[knots.length - 1];
+  return { knots, at, duration, turns, distance, displacement: end.x - x0 };
+}
+
+/**
+ * Stopping a vehicle: the driver reacts for `tReact` at the old speed, then brakes at a constant
+ * deceleration `a` (positive). Reaction distance v0 t_r; braking distance v0²/(2a), from
+ * 0 = v0² − 2 a d; braking time v0/a.
+ */
+export function stoppingDistance({ v0, a, tReact = 0 }) {
+  const reaction = v0 * tReact;
+  const braking = (v0 * v0) / (2 * a);
+  return { reaction, braking, total: reaction + braking, tBrake: v0 / a, tTotal: tReact + v0 / a };
+}
+
 /** Positive root of v² = v0² + 2 a Δx. NaN when that root is not real. */
 export function speedFromDisplacement(v0, a, dx) {
   const v2 = v0 * v0 + 2 * a * dx;

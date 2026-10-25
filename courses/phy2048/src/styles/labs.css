@@ -1,0 +1,37 @@
+/* Rules only PHY 2048's labs use. Loaded after the shell's stylesheets. */
+
+.graph-title {
+  font-family: var(--serif);
+  font-size: var(--fs-body);
+  color: var(--text);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.graph-tick {
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 11px;
+  color: var(--text-muted);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+
+
+.graph-axis {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--text-muted);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+
+/* The label renderer centres each label on its point, so no transform here. */
+
+/* Rule 10: a text box under 16px makes a phone zoom in when it takes focus. The shell sets 13px. */
+@media (max-width: 720px) {
+  .hud input[type='number'].slider-num {
+    font-size: 16px;
+  }
+}

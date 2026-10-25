@@ -5,11 +5,12 @@
  *
  *   node src/mechanics/motion-selftest.js
  */
+import assert from 'node:assert/strict';
 import { dot, fromAngle2D, mag, v } from './vectors.js';
 import { momentAbout } from './statics.js';
 import {
   averageVelocity, centripetalAccel, circularPeriod, constAccel1D, constVelocity,
-  flight, landingTime, projectile, relativeVelocity, speedFromDisplacement, timeAtSpeed,
+  flight, landingTime, piecewiseMotion, projectile, relativeVelocity, speedFromDisplacement, stoppingDistance, timeAtSpeed,
 } from './kinematics.js';
 import { atwood, bankedCurve, centripetalForce, hangingIncline, incline, newton, springCollar, verticalLoop } from './dynamics.js';
 import {
@@ -548,6 +549,59 @@ console.log('\nImpulse and momentum');
 
   const L = particleAngularMomentum(2, v(0.4, -0.3, 0), v(1, 3, 0));
   approx(L.z, 2 * (0.4 * 3 - (-0.3) * 1), 1e-12, 'particle angular momentum is m times x vy minus y vx');
+}
+
+console.log('\nPiecewise motion and stopping distance');
+{
+  // Second method: step a(t) with the trapezoid rule, fine enough that the kinks cost ~nothing.
+  const pieces = [{ dt: 2, a: 3 }, { dt: 3, a: -4 }, { dt: 1.5, a: 0 }, { dt: 2, a: 2 }];
+  const spec = { x0: 1, v0: -2, pieces };
+  const m = piecewiseMotion(spec);
+  const N = 100000;
+  let x = spec.x0;
+  let vel = spec.v0;
+  let path = 0;
+  for (const piece of pieces) {
+    const dt = piece.dt / N;
+    for (let i = 0; i < N; i += 1) {
+      const vNext = vel + piece.a * dt;
+      x += 0.5 * (vel + vNext) * dt;
+      path += Math.abs(0.5 * (vel + vNext)) * dt;
+      vel = vNext;
+    }
+  }
+  approx(m.knots[m.knots.length - 1].x, x, 1e-6, 'the last knot position matches a stepped integral of a(t)');
+  approx(m.knots[m.knots.length - 1].v, vel, 1e-9, 'the last knot velocity matches a stepped integral of a(t)');
+  approx(m.distance, path, 1e-4, 'distance is the integral of |v|, not the net displacement');
+  approx(m.displacement, x - spec.x0, 1e-6, 'displacement is the area under v(t)');
+  approx(m.at(4.2).x, constAccel1D({ x0: m.knots[1].x, v0: m.knots[1].v, a: -4, t: 2.2 }).x, 1e-12, 'a time inside a piece follows that piece\'s constant-acceleration law');
+  approx(m.turns[0], 2 / 3, 1e-12, 'v = −2 + 3τ changes sign at τ = 2/3');
+  assert(m.distance > Math.abs(m.displacement), 'a reversal makes the distance exceed the displacement');
+  const one = piecewiseMotion({ x0: 3, v0: 5, pieces: [{ dt: 4, a: -2 }] });
+  approx(one.at(4).x, constAccel1D({ x0: 3, v0: 5, a: -2, t: 4 }).x, 1e-12, 'one piece is plain constant acceleration');
+
+  // Stopping distance against a time-stepped stop, and its scalings.
+  const stop = stoppingDistance({ v0: 30, a: 7, tReact: 1.5 });
+  const dtS = 1e-5;
+  let pos = 0;
+  let speed = 30;
+  let t = 0;
+  while (speed > 0) {
+    const a = t < 1.5 ? 0 : -7;
+    const next = Math.max(0, speed + a * dtS);
+    pos += 0.5 * (speed + next) * dtS;
+    speed = next;
+    t += dtS;
+  }
+  approx(stop.total, pos, 1e-4, 'stopping distance matches a time-stepped stop');
+  const twice = stoppingDistance({ v0: 60, a: 7, tReact: 1.5 });
+  approx(twice.braking / stop.braking, 4, 1e-12, 'doubling the speed quadruples the braking distance');
+  approx(twice.reaction / stop.reaction, 2, 1e-12, 'doubling the speed doubles the reaction distance');
+  const wet = stoppingDistance({ v0: 30, a: 3.5, tReact: 1.5 });
+  approx(wet.braking / stop.braking, 2, 1e-12, 'halving the deceleration doubles the braking distance');
+  const asPieces = piecewiseMotion({ pieces: [{ dt: 1.5, a: 0 }, { dt: stop.tBrake, a: -7 }], v0: 30 });
+  approx(asPieces.displacement, stop.total, 1e-12, 'the same stop built from two pieces agrees');
+  approx(asPieces.knots[2].v, 0, 1e-9, 'and it ends at rest');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);
