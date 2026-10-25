@@ -4,7 +4,7 @@ PHY 2048 is a review course. It has no Canvas drop and no instructor files in th
 
 ## Source
 
-Problems cite OpenStax *University Physics Volume 1* (CC BY 4.0):
+Problems cite OpenStax *University Physics Volume 1* (CC BY-NC-SA 4.0):
 
 https://openstax.org/books/university-physics-volume-1
 

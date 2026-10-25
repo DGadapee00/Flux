@@ -8,7 +8,7 @@ written here, unit by unit. Units 1 and 2 are in.
 | Book | Licence | Used for |
 |---|---|---|
 | Claire Yu Yan, *Introduction to Engineering Thermodynamics*, BCcampus, 2022 (pressbooks.bccampus.ca/thermo1) | CC BY-NC-SA 4.0 | the engineering units, cited by section |
-| Samuel J. Ling, Jeff Sanny and William Moebs, *University Physics Volume 2*, OpenStax, 2016, Ch 1–4 | CC BY 4.0 | the physics background, cited by section |
+| Samuel J. Ling, Jeff Sanny and William Moebs, *University Physics Volume 2*, OpenStax, 2016, Ch 1–4 | CC BY-NC-SA 4.0 | the physics background, cited by section |
 
 Nothing is copied from either book: no prose, figures, tables, worked examples or problems. Flux
 writes its own text. The books appear only as citations: section numbers and titles, all in one

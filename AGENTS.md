@@ -38,6 +38,7 @@ saying so in the PR. `docs/history/` is the archive; nothing there is an instruc
    textbook fills in and is cited by section through `src/data/textbook.js`. A UNF syllabus adds
    exam dates, exam style and any topic OCW lacks. **Copy nothing** from any of them: write fresh
    and cite. MIT's name appears only in citations. STA 3032's instructor material stays out (D6).
+   PHY 2048 uses OpenStax alone for now (D33).
 5. **Every number on screen is computed, then checked a second way,** in the course's tests. A worked
    case reproduces a printed answer by our own computation.
 6. **A course writes no UI of its own.** It uses a shell (`packages/shells/math`, `engineering` or `physics`)

@@ -21,13 +21,13 @@ The plan these came from is archived in `docs/history/PLAN-2026-10-18.md`.
 |---|---|---|
 | D5 | Course codes: Statics is EGN 3311; MAC 2313 was Spring 2026; EGN 3321, EGN 3331 and EML 3100 are the codes on the owner's course packs. Other codes are confirmed when each course starts. | 15 Oct 2026 |
 | D6 | **STA 3032 instructor material is out.** The instructor was not asked, so his notes, review sheets, worked cases and lab presets were removed (`courses/sta3032/PROVENANCE.md`). | 13 Oct 2026 |
-| D7 | Calc I, Calc II and Physics I cite OpenStax by section: *Calculus Volumes 1–2* (CC BY-NC-SA 4.0; the plan said CC BY, corrected 18 Oct 2026) and *University Physics Volume 1* (CC BY 4.0). | 13 Oct 2026 |
+| D7 | Calc I, Calc II and Physics I cite OpenStax by section: *Calculus Volumes 1–2* (CC BY-NC-SA 4.0; the plan said CC BY, corrected 18 Oct 2026) and *University Physics Volume 1* (CC BY-NC-SA 4.0; the plan said CC BY, corrected 25 Oct 2026 from the book's source repo). | 13 Oct 2026 |
 | D8 | EGN 3321, EGN 3331 and EML 3100 are next term's courses (Spring 2027), built as coming courses. Dynamics first. Exam dates go in when the owner has them. | 15 Oct 2026 |
 | D9 | **No numbers copied from copyrighted textbooks.** Worked cases built on Hibbeler, Çengel and similar texts use generated numbers and cite the section. No textbook example or problem number is copied or invented. (D15 adds OCW as the source of printed answers.) | 15 Oct 2026 |
 | D10 | R-134a comes from the Tillner-Roth and Baehr equation of state, in a later thermodynamics PR. Water and air until then. | 15 Oct 2026 |
 | D11 | ~~Course packs and syllabi set coverage and order.~~ **Superseded by D23.** Nothing from a course pack ships. Dynamics keeps the §15.9 rocket lab. | 15 Oct 2026 |
 | D12 | Thermodynamics before Mechanics of Materials, and the property library before its screens. | 18 Oct 2026 |
-| D13 | EML 3100 cites Yan, *Introduction to Engineering Thermodynamics* (BCcampus, CC BY-NC-SA 4.0) and OpenStax *University Physics Volume 2* Ch 1–4 (CC BY 4.0), through `courses/eml3100/src/data/textbook.js`. Topics past Yan Ch 6 are cited by topic. | 18 Oct 2026 |
+| D13 | EML 3100 cites Yan, *Introduction to Engineering Thermodynamics* (BCcampus, CC BY-NC-SA 4.0) and OpenStax *University Physics Volume 2* Ch 1–4 (CC BY-NC-SA 4.0; corrected 25 Oct 2026), through `courses/eml3100/src/data/textbook.js`. Topics past Yan Ch 6 are cited by topic. | 18 Oct 2026 |
 | D14 | EGN 3331 cites Roylance, *Mechanics of Materials* (MIT OCW 3.11, CC BY-NC-SA 4.0), through `courses/egn3331/src/data/textbook.js`. Topics the modules do not treat are cited by topic. | 18 Oct 2026 |
 
 ## Quality and process
@@ -51,6 +51,8 @@ The plan these came from is archived in `docs/history/PLAN-2026-10-18.md`.
 | D31 | **EGN 3331 teaches energy methods** (Hibbeler Ch 14), as 2.001 does. Reverses the course pack's omission under D11. | 18 Oct 2026 (owner) |
 
 | D32 | **PHY 2049 is the benchmark for every course.** Where any course differs from PHY 2049 (notes structure and boxes, lab explainers, the practice loop, layout), PHY 2049's version is the target. Notes group sections into `div.part` with a legend, as PHY's do, and place boxes where the content needs them, not one of each per section. The shells converge on PHY 2049's layout after Phase 2b. The one exception is unit order, which comes from OCW (D23); PHY 2049 keeps its own (D28). | 18 Oct 2026 (owner) |
+| D33 | **PHY 2048 is built from OpenStax *University Physics Volume 1* alone, for now.** OCW 8.01SC is set aside; its index stays and EGN 3321 still uses it. The 13 units follow the book's chapters 1–17 in book order. Difficulty levels come from the book's section, additional and challenge problems. A stated exception to D23 for this course; revisit when the owner brings OCW back. | 25 Oct 2026 (owner) |
+
 ## Open
 
 | # | Question | Default until answered |

@@ -45,7 +45,7 @@ subject libraries (a function written for one course serves the next), and one s
 | Course | Spine | Built | Scorecard | Next |
 |---|---|---|---|---|
 | PHY 2049 Physics II | [phy2049](docs/course-plans/phy2049.md) | reference | not yet scored | weekly drops; on the physics shell |
-| PHY 2048 Physics I | [phy2048](docs/course-plans/phy2048.md) | library and bank, no UI | fails | R5: wire it to the physics shell, units in 8.01SC's order |
+| PHY 2048 Physics I | [phy2048](docs/course-plans/phy2048.md) | library and bank, no UI | fails | R5: wire it to the physics shell, 13 units in OpenStax's order (D33) |
 | MAC 2311–2312 Calculus I and II | [mac2311-2312](docs/course-plans/mac2311-2312.md) | two modules, 4 units each, notes | fails | R4: merge into one (D28) |
 | MAC 2313 Calculus III | [mac2313](docs/course-plans/mac2313.md) | labs and bank, no notes | fails | R4 |
 | EGN 3311 Statics | [statics](docs/course-plans/statics.md) | labs and bank, no notes | fails | R4 |
@@ -111,8 +111,8 @@ EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come las
       Stokes), 18.02SC's order, and the same rework.
 - [ ] **R4c Statics:** notes, and the same rework, with 2.001 Lectures 1–6 setting their topics'
       order (D29).
-- [ ] **R5** PHY 2048 on the physics shell (Phase 2b is done), in 8.01SC's order (momentum before
-      energy), with drag and variable-mass problems added (D29).
+- [ ] **R5** PHY 2048 on the physics shell (Phase 2b is done), from OpenStax *University Physics Volume 1* alone
+      (D33): 13 units in book order, with drag, variable-mass, fluids, waves and sound added.
 - STA 3032: keep its checks passing. Rework only if the owner asks.
 
 ### Platform items that can run beside the list
