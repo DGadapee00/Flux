@@ -17,6 +17,8 @@ const engine = createEngine({
   numbers: 'unit',
   // A wrong option's `why` comes back as its feedback.
   choiceNotes: true,
+  // A part's unit may depend on the version (N or cm, kW or hp).
+  unitFn: true,
   sig: { figures: 4, lo: 0.01, hi: 1e5, tiny: true },
 });
 

@@ -52,8 +52,8 @@ export default defineLab({
   app: true,
   hint: 'Change the speed, the grade and the car. See where the engine’s power goes.',
   orbit: false,
-  fit: { w: 8.4, h: 8.8 },
-  camera: { pos: new THREE.Vector3(0, -0.1, 24), target: new THREE.Vector3(0, -0.1, 0) },
+  fit: { w: 8.4, h: 9.6 },
+  camera: { pos: new THREE.Vector3(0, -0.4, 24), target: new THREE.Vector3(0, -0.4, 0) },
   scenarios: SCENARIOS,
   predictions: [
     {
@@ -136,7 +136,8 @@ export default defineLab({
     const bars = keys.map(([, , color]) => fatLine([0, 0, 0, 0, 1, 0], { color, width: 16 }));
     const barNames = keys.map(([, html]) => label(html, 0, 0, 0, 'graph-axis'));
     const barValues = keys.map(() => label('', 0, 0, 0, 'graph-tick x'));
-    const title = label('power (kW)', 2.4, -0.2, 0, 'graph-title');
+    // Under the bar names, where no bar or value can reach it.
+    const title = label('power (kW)', 0, BASE - 0.95, 0, 'graph-title');
     group.add(road, body, ...wheels, vel, base, title, ...Object.values(arrows), ...Object.values(names), ...bars, ...barNames, ...barValues);
     group.visible = false;
     return { group, road, body, wheels, arrows, vel, names, bars, barNames, barValues, keys };

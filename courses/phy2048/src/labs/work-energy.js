@@ -139,7 +139,8 @@ export default defineLab({
       barNames.push(label(key.replace('_', '<sub>') + (key.includes('_') ? '</sub>' : ''), 0, 0, 0, 'graph-axis'));
       barValues.push(label('', 0, 0, 0, 'graph-tick x'));
     }
-    const title = label('work over the trip (J)', 1.9, -0.1, 0, 'graph-title');
+    // Above the tallest bar's value and below the ramp.
+    const title = label('work over the trip (J)', 1.9, 0.35, 0, 'graph-title');
     group.add(ramp, block, motion, base, title, ...Object.values(arrows), ...Object.values(names), ...bars, ...barNames, ...barValues);
     group.visible = false;
     return { group, ramp, block, arrows, motion, names, bars, barNames, barValues };

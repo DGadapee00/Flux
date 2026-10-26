@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Work, Energy and Power</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">PHY 2048 · Physics I · Unit 4 · OpenStax University Physics Vol. 1, Ch 7–8, rewritten</div>
+  <h1>Work, Energy and Power</h1>
+  <p class="lede">Unit 3 followed forces moment by moment. This unit adds them up along the way. Work is a force acting through a distance, kinetic energy is what that work buys, and potential energy is work stored for later. Often the energy account answers a question without any acceleration at all.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Work</h3>
+    <a href="#s1"><span>1</span>Work by a constant force</a>
+    <a href="#s2"><span>2</span>Work along a path</a>
+    <h3>Part II · Kinetic energy and power</h3>
+    <a href="#s3"><span>3</span>Kinetic energy</a>
+    <a href="#s4"><span>4</span>The work–energy theorem</a>
+    <a href="#s5"><span>5</span>Power</a>
+    <h3>Part III · Potential energy</h3>
+    <a href="#s6"><span>6</span>Potential energy</a>
+    <a href="#s7"><span>7</span>Conservative and non-conservative forces</a>
+    <a href="#s8"><span>8</span>Conservation of energy</a>
+    <a href="#s9"><span>9</span>Potential-energy diagrams</a>
+    <h3>Reference</h3>
+    <a href="#s10"><span>10</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Work</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Work by a constant force</h2>
+<p>A force does <b>work</b> on a body when the body moves while the force acts. Only the part of the force along the motion counts. For a constant force \(\vec F\) and a straight displacement \(\vec d\),</p>
+\[
+W = \vec F\cdot\vec d = Fd\cos\phi,
+\]
+<p>where \(\phi\) is the angle between the force and the displacement. Work is a scalar. Its unit is the <b>joule</b>: \(1\ \text{J} = 1\ \text{N·m}\).</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The sign of the work comes from \(\cos\phi\). A force along the motion does positive work, and one against it negative work. A force at right angles to the motion does none, however large it is.</p>
+</div>
+<p>That last case is common. The normal force on a sliding block is across its path, so it does no work. Neither does the string of a swinging pendulum, nor the pull that turns a car round a curve at a steady speed.</p>
+<div class="box ex"><span class="tag">Worked example · pushing a lawn mower</span>
+<p>A gardener pushes a mower 25.0 m across level grass. The handle pushes with 75.0 N, at \(35^\circ\) below the horizontal. The motion is horizontal, so \(\phi = 35^\circ\):</p>
+\[
+W = (75.0)(25.0)\cos35^\circ = 1536\ \text{J}.
+\]
+<p>The downward part of the push, \(75.0\sin35^\circ = 43\ \text{N}\), does no work. It only presses the mower into the grass.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a crate pushed up a ramp</span>
+<p>A 50 kg crate is pushed 3.0 m up a \(10^\circ\) ramp by 300 N along the ramp, with \(\mu_k = 0.30\). Four forces act. The push does \(300 \times 3.0 = 900\ \text{J}\). Gravity's part down the ramp, \(mg\sin10^\circ = 85.2\ \text{N}\), does \(-255.5\ \text{J}\). Friction, \(\mu_k mg\cos10^\circ = 144.9\ \text{N}\), does \(-434.7\ \text{J}\). The normal force does none. The net work is 209.7 J.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(F\sin\phi\) for the part along the motion. With \(\phi\) measured from the displacement, the part along it is \(F\cos\phi\). Check with \(\phi = 0\): the whole force should count.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Work along a path</h2>
+<p>When the force changes along the way, or the path curves, split the path into small steps \(d\vec r\). Each step contributes \(\vec F\cdot d\vec r\), and the work is the sum:</p>
+\[
+W_{A\to B} = \int_A^B \vec F\cdot d\vec r = \int_A^B (F_x\,dx + F_y\,dy).
+\]
+<p>To do the integral, use the path's equation to write everything in terms of one variable.</p>
+<div class="box ex"><span class="tag">Worked example · a force along a parabola</span>
+<p>A body moves along \(y = (0.5\ \text{m}^{-1})x^2\) from the origin to \((2\ \text{m}, 2\ \text{m})\). The force is \(\vec F = (5\ \text{N/m})y\,\hat i + (10\ \text{N/m})x\,\hat j\). On the path \(dy = x\,dx\), so</p>
+\[
+dW = 5y\,dx + 10x\,dy = 2.5x^2\,dx + 10x^2\,dx = 12.5x^2\,dx,
+\]
+\[
+W = \int_0^2 12.5x^2\,dx = \frac{12.5 \times 8}{3} = 33.3\ \text{J}.
+\]
+<p>Along the cubic \(y = (0.25\ \text{m}^{-2})x^3\), between the same points, the same force does 35.0 J. The ends are the same; the work is not.</p>
+</div>
+<p>A spring is the classic varying force. Stretched by \(x\) from its relaxed length, an ideal spring pulls back with \(F = -kx\), <b>Hooke's law</b>. Its work from stretch \(x_A\) to \(x_B\) is</p>
+\[
+W = \int_{x_A}^{x_B}(-kx)\,dx = \tfrac12k(x_A^2 - x_B^2).
+\]
+<div class="box ex"><span class="tag">Worked example · stretching a spring further</span>
+<p>It takes 0.54 J to stretch a spring 6 cm. Then \(0.54 = \tfrac12k(0.06)^2\), so \(k = 300\ \text{N/m}\), or 3 N/cm. Stretching it from 6 cm to 12 cm takes</p>
+\[
+\tfrac12(300)(0.12^2 - 0.06^2) = 1.62\ \text{J},
+\]
+<p>three times the first 6 cm. The spring already pulls hard at 6 cm, so each further centimetre costs more.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · gravity on three paths</span>
+<p>A 2 kg body goes from A to B, 3.5 m higher, by a straight line, by two legs with a corner, or by a half-circle. Gravity's work is \(-mg\,\Delta y = -(2)(9.81)(3.5) = -68.67\ \text{J}\) on all three. Only the vertical steps count, and they add to the same rise.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · friction on the same paths</span>
+<p>Now slide the 2 kg body over a level floor with \(\mu_k = 0.3\), seen from above. Friction is \(\mu_k mg = 5.886\ \text{N}\), always against the motion, so its work is \(-5.886\) times the path length. The straight line is 7.382 m: \(-43.45\ \text{J}\). The half-circle is \(\pi/2\) times as long: \(-68.26\ \text{J}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Measuring the further stretch from zero. Stretching from 6 to 12 cm is not \(\tfrac12k(0.06)^2\) again. The work depends on both end stretches, through \(x_B^2 - x_A^2\).</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Kinetic energy and power</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Kinetic energy</h2>
+<p>A moving body can do work as it is stopped. That capacity is its <b>kinetic energy</b>:</p>
+\[
+K = \tfrac12mv^2.
+\]
+<p>It depends on the speed, not the direction, and it is never negative. Because \(v\) is squared, twice the speed means four times the energy. An 80 kg runner at 10 m/s has \(\tfrac12(80)(10^2) = 4.0\ \text{kJ}\).</p>
+<p>Speed depends on the frame, and so does kinetic energy. There is no single true value. Choose one frame and keep to it.</p>
+<div class="box ex"><span class="tag">Worked example · walking in a train</span>
+<p>A 75.0 kg passenger walks toward the front of a train car at 1.50 m/s. The train moves at 15.0 m/s. Relative to the car, \(K = \tfrac12(75.0)(1.50^2) = 84.4\ \text{J}\). Relative to the track, the speeds add first: 16.5 m/s, so \(K = \tfrac12(75.0)(16.5^2) = 10.2\ \text{kJ}\). Walking toward the back, it is 13.5 m/s and 6.83 kJ.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding kinetic energies as if they were velocities. The 84.4 J of walking plus the 8.44 kJ of the train is 8.52 kJ, which matches neither answer. Add the velocities, then square.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>The work–energy theorem</h2>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Take the net force along the motion. By the second law it is \(m\,dv/dt\). Over a step \(dx = v\,dt\),</p>
+\[
+F_{\text{net}}\,dx = m\frac{dv}{dt}\,v\,dt = mv\,dv = d\left(\tfrac12mv^2\right).
+\]
+<p>Adding the steps gives the theorem:</p>
+\[
+W_{\text{net}} = K_f - K_i = \Delta K.
+\]
+</div>
+<p>The net work is the sum of every force's work, or the work of the net force. Positive net work speeds a body up; negative net work slows it. The theorem skips the time entirely, so it suits questions about speeds and distances.</p>
+<div class="box ex"><span class="tag">Worked example · the crate at the top</span>
+<p>The crate of section 1 started at rest and received a net 209.7 J. So \(\tfrac12(50)v^2 = 209.7\), and \(v = 2.896\ \text{m/s}\) at the top of the 3.0 m push.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a shove and a stop</span>
+<p>A 2.0 kg box is shoved up a \(20^\circ\) ramp at 4.0 m/s, with \(\mu_k = 0.20\), and left to stop. It has 16.0 J. Gravity takes \(mg\sin20^\circ = 6.71\ \text{N}\) per metre and friction \(\mu_k mg\cos20^\circ = 3.69\ \text{N}\) per metre: 10.40 N in all. It stops after \(16.0/10.40 = 1.539\ \text{m}\). Shoved at 8 m/s, it has four times the energy and goes four times as far.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a bullet in wood</span>
+<p>A 2.60 g bullet at 335 m/s goes 15.2 cm into pine. Its kinetic energy is \(\tfrac12(0.00260)(335^2) = 145.9\ \text{J}\). The wood's average force does \(-F(0.152)\) and takes all of it, so \(F = 145.9/0.152 = 960\ \text{N}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving out a force's work. The theorem needs the <i>net</i> work. On the ramp, the push alone does 900 J, but the crate gains only 209.7 J: gravity and friction take the rest.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Power</h2>
+<p><b>Power</b> is the rate of doing work. Its unit is the <b>watt</b>, \(1\ \text{W} = 1\ \text{J/s}\); one horsepower is 745.7 W.</p>
+\[
+P = \frac{dW}{dt} = \vec F\cdot\vec v.
+\]
+<p>The second form follows from \(dW = \vec F\cdot d\vec r\), divided by \(dt\). The same work done faster takes more power. A kilowatt-hour is energy, not power: 1 kW for an hour, or 3.6 MJ.</p>
+<div class="box ex"><span class="tag">Worked example · a pull-up</span>
+<p>An 80 kg trainee raises his body 0.60 m in 0.8 s. Take the arms, about 10% of the mass, as staying at the bar. The work is \(0.9(80)(9.81)(0.60) = 423.8\ \text{J}\), and the power is \(423.8/0.8 = 530\ \text{W}\): about 0.7 hp.</p>
+</div>
+<p>A car at a steady speed has no change of kinetic energy. The engine's work goes into height and into losses: air drag and the rolling resistance of the tyres. Up a slope at angle \(\theta\), climbing takes \(mgv\sin\theta\).</p>
+<div class="box ex"><span class="tag">Worked example · a car on a hill</span>
+<p>A 1200 kg car climbs a 15% grade, so \(\tan\theta = 0.15\) and \(\theta = 8.53^\circ\), at 90 km/h, or 25 m/s. Climbing takes \((1200)(9.81)(25)\sin8.53^\circ = 43.7\ \text{kW}\). If a quarter of the engine's power goes into losses, \(0.75P = 43.7\ \text{kW}\), and \(P = 58.2\ \text{kW}\), or 78 hp.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · drag on the highway</span>
+<p>A sedan with a drag area \(CA = 0.70\ \text{m}^2\) drives a level road at 100 km/h, 27.8 m/s. Drag is \(\tfrac12(1.21)(0.70)(27.8^2) = 327\ \text{N}\), and its power is \(327 \times 27.8 = 9.08\ \text{kW}\). Drag power is \(\tfrac12\rho CAv^3\). At 200 km/h it is eight times as much, 72.6 kW.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Treating the losses as a fixed share at every speed. The book's 25% fits one hill at one speed. Drag grows as \(v^3\), so a fixed share understates the cost of speed.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Potential energy</h2>
+</div>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Potential energy</h2>
+<p>Lift a book and let it go: gravity gives back the work you did. Work that a force will return can be stored as <b>potential energy</b> \(U\). The change in it is minus the work the force does:</p>
+\[
+\Delta U_{A\to B} = U_B - U_A = -W_{A\to B}.
+\]
+<p>Only changes in \(U\) are defined. Where \(U = 0\) is a free choice, made to keep the arithmetic short. Two cases cover most problems. Near Earth, gravity's is \(U = mgy\), with \(y\) up from the chosen zero. A spring's is \(U = \tfrac12kx^2\), with \(x\) from its relaxed length.</p>
+<div class="box ex"><span class="tag">Worked example · a hiker and the zero of U</span>
+<p>A hill's summit is 147 m above its base, and the base is 48 m above the sea. A 75 kg hiker has \(mg = 735.8\ \text{N}\). With \(U = 0\) at the base, \(U\) is 108.2 kJ at the summit and \(-35.3\ \text{kJ}\) at sea level. With \(U = 0\) at sea level, it is 143.5 kJ at the summit and 35.3 kJ at the base. The values change; the 108.2 kJ climb from base to summit does not.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a block on a hanging spring</span>
+<p>A block weighing 1.2 N hangs from a relaxed spring with \(k = 6.0\ \text{N/m}\), and is let go. It falls until the spring's energy equals the gravitational energy lost: \(\tfrac12ky^2 = mgy\), so \(y = 2mg/k = 0.40\ \text{m}\). Halfway, at 0.20 m, the block has \(K = (1.2)(0.20) - \tfrac12(6.0)(0.20^2) = 0.12\ \text{J}\). Its mass is 0.122 kg, so \(v = 1.40\ \text{m/s}\).</p>
+</div>
+<p>From a force you can build \(U\) by integrating; from \(U\) you get the force back by differentiating:</p>
+\[
+U(x) = -\int F\,dx + \text{const}, \qquad F = -\frac{dU}{dx}.
+\]
+<div class="box ex"><span class="tag">Worked example · potential energy from a force</span>
+<p>A force \(F = -ax^2\), with \(a = 3\ \text{N/m}^2\), acts along \(x\). From 1 m to 2 m, \(\Delta U = \int_1^2 ax^2\,dx = \tfrac13(3)(8 - 1) = 7\ \text{J}\). With \(U(0) = 0.5\ \text{J}\), \(U(x) = x^3 + 0.5\) in joules, and \(U(1\ \text{m}) = 1.5\ \text{J}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Dropping the sign of \(U\) below the zero level. Below it, \(y\) is negative, so \(U = mgy\) is too. A negative potential energy is fine; only its changes matter.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Conservative and non-conservative forces</h2>
+<p>A force is <b>conservative</b> when its work from A to B is the same for every path. Then the work round any closed path is zero:</p>
+\[
+\oint \vec F\cdot d\vec r = 0.
+\]
+<p>Only a conservative force has a potential energy, because only then does \(U_B - U_A\) have one value. Gravity, springs and the electric force are conservative. Kinetic friction and drag are not: they act against the motion on every step, so their work grows with the length of the path.</p>
+<div class="box ex"><span class="tag">Worked example · shelving a book, moving a couch</span>
+<p>A 20 N book comes down 1 m from a shelf, is carried 3 m across, and later goes straight back. Gravity does \(+20\ \text{J}\) on the way down, nothing across, and \(-20\ \text{J}\) on the way back: zero in all. A couch with \(N = 1\ \text{kN}\) and \(\mu_k = 0.6\) is pushed 3 m along a wall, 1 m out, then \(\sqrt{10} = 3.16\ \text{m}\) straight back. Friction does \(-0.6(1000)(3 + 1 + 3.16) = -4.30\ \text{kJ}\), though the couch ends where it began.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a swirl round a closed path</span>
+<p>The force \(\vec F = c(-y\,\hat i + x\,\hat j)\) circles the origin. Round a closed path, \(\oint(x\,dy - y\,dx)\) is twice the area enclosed, so the swirl's work is \(c\) times twice the area. Take \(c = 5\ \text{N/m}\), out along a half-circle of radius 3.69 m counterclockwise, and back across the diameter. The arc gives 217.8 J and the return \(-3.75\ \text{J}\): 214.0 J in all, which is \(c\pi R^2\). It is not zero, so no potential energy describes this force.</p>
+</div>
+<p>For a force in a plane there is a quick test. It is conservative when \(\partial F_y/\partial x = \partial F_x/\partial y\) everywhere. The swirl fails: \(c \ne -c\).</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the straight line when the path is curved. That shortcut works only for a conservative force. The parabola of section 2 gives 33.3 J; the straight line between the same points gives 30 J.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Conservation of energy</h2>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Split the net work into the conservative forces' part and the rest: \(W_{\text{net}} = W_c + W_{nc}\). The conservative part is \(-\Delta U\). The work–energy theorem then reads \(-\Delta U + W_{nc} = \Delta K\), or</p>
+\[
+K_i + U_i + W_{nc} = K_f + U_f.
+\]
+</div>
+<p>When only conservative forces do work, \(W_{nc} = 0\) and the <b>mechanical energy</b> \(E = K + U\) stays the same. Friction and drag make \(W_{nc}\) negative. The mechanical energy they remove becomes thermal energy, \(E_{\text{th}} = fs\) for a steady force \(f\) over a distance \(s\). Counting that too, the total energy never changes.</p>
+<div class="box ex"><span class="tag">Worked example · a pendulum</span>
+<p>A bob on a 1.0 m string is released at \(30^\circ\). The tension is across the motion and does no work. The bob drops \(L(1 - \cos30^\circ) = 0.134\ \text{m}\), so at the bottom \(v = \sqrt{2(9.81)(0.134)} = 1.62\ \text{m/s}\). Moving at 0.81 m/s, it has dropped \(0.81^2/2g = 0.033\ \text{m}\), so it is 0.10 m above the bottom.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a cart over two hills</span>
+<p>A 400 kg cart leaves a 5.0 m crest at 1.0 m/s and rolls over a dip and up a second hill 3.0 m high. Without friction, \(\tfrac12v^2 = \tfrac12(1.0^2) + 9.81(5.0 - 3.0)\), so \(v = 6.34\ \text{m/s}\) at the second top. The mass cancels.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · rolling resistance</span>
+<p>Give the same cart 200 N of rolling resistance. The track to the second top is 11.03 m long, so friction turns \(200 \times 11.03 = 2205\ \text{J}\) into heat. The cart started with 19.82 kJ and has 11.77 kJ of potential energy at the top. That leaves 5.84 kJ of kinetic energy: 5.40 m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a loop of radius 2 m</span>
+<p>A cart starts from rest and runs into a loop of radius \(R\). At the top, the track and gravity both push down: \(N + mg = mv^2/R\). To stay on, \(N \ge 0\), so \(v^2 \ge gR\). Energy from the start, \(mgh = \tfrac12mv^2 + mg(2R)\), then needs \(h \ge 2.5R\). Released from 6.0 m into a 2.0 m loop, a 400 kg cart has \(v^2 = 2g(6.0 - 4.0) = 39.2\ \text{m}^2/\text{s}^2\) at the top, and the track pushes with \(N = 400(39.2/2.0 - 9.81) = 3924\ \text{N}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The book's check on its loop example asks for the speed at the top of a 15 cm loop, with the car released 45 cm up, and prints 3 m/s. That is \(\sqrt{2gh} = 2.97\ \text{m/s}\), the speed at the bottom. At the top the car has climbed 30 cm of the 45, so \(v = \sqrt{2(9.81)(0.15)} = 1.72\ \text{m/s}\).</p>
+<p>Forgetting the dissipated energy. A panel of 15 kg falls 1 km and lands at 45 m/s. It began with 147.2 kJ and lands with 15.2 kJ; the air took 132.0 kJ. Setting \(mgh = \tfrac12mv^2\) here would give 140 m/s.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Potential-energy diagrams</h2>
+<p>For motion along a line, a graph of \(U(x)\) shows the motion at a glance. Draw the total energy \(E\) as a horizontal line. The gap between the line and the curve is \(K = E - U\).</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The body can be only where \(E \ge U\). Where the line meets the curve, \(K = 0\): a <b>turning point</b>. The force is \(F = -dU/dx\), so it points downhill on the curve. Where \(dU/dx = 0\) the body can rest. A minimum of \(U\) is a <b>stable</b> rest point: nudged, the force pushes it back. A maximum is <b>unstable</b>.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a double well</span>
+<p>Take \(U(x) = 2(x^4 - x^2)\), in joules with \(x\) in metres, and \(E = -0.25\ \text{J}\). The turning points solve \(2(x^4 - x^2) = -0.25\): \(x^2 = \tfrac12(1 \pm \sqrt{0.5})\), so \(x = 0.383\) and \(0.924\ \text{m}\), and the same on the negative side. The rest points solve \(8x^3 - 4x = 0\): \(x = 0\), a maximum and unstable, and \(x = \pm0.707\ \text{m}\), minima and stable. The hump at \(x = 0\) has \(U = 0 > E\), so the body stays in the well it starts in.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a quartic well</span>
+<p>Take \(U = \tfrac14cx^4\) with \(c = 8\ \text{N/m}^3\) and \(E = 2\ \text{J}\). The turning points have \(2x^4 = 2\), so \(x = \pm1\ \text{m}\). There \(F = -cx^3 = \mp8\ \text{N}\): toward the origin at both ends.</p>
+</div>
+<p>The period follows from the curve too. From \(\tfrac12mv^2 = E - U\), the time to cross a small step \(dx\) is \(dx/v\), and a round trip is twice the crossing:</p>
+\[
+T = 2\int_a^b \frac{dx}{\sqrt{2(E - U)/m}}.
+\]
+<p>For a spring, \(U = \tfrac12kx^2\), this gives \(T = 2\pi\sqrt{m/k}\) for every energy. A bigger swing is covered faster. For other curves the period changes with \(E\).</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading the force from the height of the curve. The force comes from the slope. At the bottom of a well \(U\) is least, and the force is zero, not largest.</p>
+</div>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Formula sheet</h2>
+\[
+W = \vec F\cdot\vec d = Fd\cos\phi, \qquad W = \int_A^B \vec F\cdot d\vec r, \qquad 1\ \text{J} = 1\ \text{N·m}
+\]
+\[
+K = \tfrac12mv^2, \qquad W_{\text{net}} = \Delta K, \qquad P = \frac{dW}{dt} = \vec F\cdot\vec v, \qquad 1\ \text{hp} = 745.7\ \text{W}
+\]
+\[
+F = -kx, \qquad W_{\text{spring}} = \tfrac12k(x_A^2 - x_B^2), \qquad U_s = \tfrac12kx^2, \qquad U_g = mgy
+\]
+\[
+\Delta U = -W_c, \qquad F = -\frac{dU}{dx}, \qquad \oint \vec F\cdot d\vec r = 0\ \text{(conservative)}
+\]
+\[
+K_i + U_i + W_{nc} = K_f + U_f, \qquad E_{\text{th}} = fs, \qquad h \ge 2.5R\ \text{(loop)}
+\]
+\[
+P = mgv\sin\theta + P_{\text{loss}}, \qquad P_{\text{drag}} = \tfrac12\rho CAv^3, \qquad T = 2\int_a^b \frac{dx}{\sqrt{2(E - U)/m}}
+\]
+</section>
+
+</main>
+</body>
+</html>

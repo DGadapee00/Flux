@@ -50,6 +50,8 @@ function checkRender(tpl, inst) {
   ];
   const blob = strings.join('\n');
   if (/undefined|NaN|\[object/.test(blob)) err(tpl.id, `rendered text contains undefined/NaN:\n${blob.slice(0, 300)}`);
+  for (const p of r.parts) if (p.unit != null && typeof p.unit !== 'string') err(tpl.id, `${p.id}: the rendered unit is not text`);
+  for (const p of r.parts) if (/=>/.test(String(p.unit ?? ''))) err(tpl.id, `${p.id}: the rendered unit is source code`);
   for (const s of strings) {
     if (mathPieces(s).some((piece) => piece.unclosed)) err(tpl.id, `unclosed math: ${s}`);
     if (mathProse(s).includes('katex-error')) err(tpl.id, `KaTeX cannot parse this: ${s}`);
