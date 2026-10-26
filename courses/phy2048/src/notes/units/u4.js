@@ -7,7 +7,7 @@ export default {
   load: () => import('../content/u4-work-energy-power.html?raw').then((m) => m.default),
   sections: [
     { id: 's1', n: 1, title: 'Work by a constant force', lab: 'work-energy', ch: ['7'], topics: ['work'], problems: ['ch7.work', 'ch7.dot', 'ch7.concept-work'], home: true },
-    { id: 's2', n: 2, title: 'Work along a path', lab: 'work-path', ch: ['7'], topics: ['work', 'spring'], problems: ['ch7.path', 'ch7.spring'], home: true },
+    { id: 's2', n: 2, title: 'Work along a path', lab: 'work-path', ch: ['7'], topics: ['work', 'spring'], problems: ['ch7.graph', 'ch7.path', 'ch7.spring'], home: true },
     { id: 's3', n: 3, title: 'Kinetic energy', lab: null, ch: ['7'], topics: ['kinetic'], problems: ['ch7.frames'] },
     { id: 's4', n: 4, title: 'The work–energy theorem', lab: 'work-energy', ch: ['7'], topics: ['kinetic', 'work'], problems: ['ch7.push', 'ch7.bullet', 'ch7.concept-ke'] },
     { id: 's5', n: 5, title: 'Power', lab: 'automotive-power', ch: ['7'], topics: ['power'], problems: ['ch7.pullup', 'ch7.climb', 'ch7.concept-power'], home: true },

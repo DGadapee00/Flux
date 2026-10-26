@@ -34,6 +34,14 @@ export default {
       ],
     },
   },
+  'ch7.graph': {
+    traps: {
+      W: [
+        [($) => $.F1 * $.x2, 'That is the whole rectangle under the peak. The rising part is a triangle: half of base times height.'],
+        [($) => ($.shape === 'ramp' ? 0.5 * $.F1 * $.x2 : $.F1 * $.x1), 'Work is the area under the graph, piece by piece: a triangle for each sloping part, a rectangle for each level part.'],
+      ],
+    },
+  },
   'ch7.spring': {
     traps: {
       k: [
@@ -51,6 +59,7 @@ export default {
       Kt: [
         [($) => 0.5 * $.m * $.u * $.u + 0.5 * $.m * $.V * $.V, 'Kinetic energies do not add like velocities. Add the velocities first, then square.'],
         [($) => 0.5 * $.m * $.V * $.V, 'That is the train’s speed alone. Relative to the track the passenger also walks, so the speed is V ± u.'],
+        [($) => 0.5 * $.m * $.vT, 'The speed is squared: K = ½mv².'],
       ],
     },
   },
@@ -178,6 +187,10 @@ export default {
       F: [
         [($) => -$.F, 'Sign: F = −dU/dx. Past the bottom U rises, so the force points back toward −x.'],
         [($) => $.Eused / $.x, 'Energy over distance is not the force here. The force is minus the slope of U at that point.'],
+      ],
+      v: [
+        [($) => Math.sqrt($.Kmax / $.m), 'The 2 went missing: ½mv² = K, so v = √(2K/m).'],
+        [($) => (2 * $.Kmax) / $.m, 'That is v². Take the square root.'],
       ],
     },
   },

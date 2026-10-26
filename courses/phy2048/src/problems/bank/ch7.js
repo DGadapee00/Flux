@@ -148,6 +148,55 @@ export default [
 
   problem({
     ...U,
+    id: 'ch7.graph',
+    level: 1,
+    variety: ['configuration'],
+    src: 'OpenStax University Physics Vol. 1 §7.1',
+    title: 'Work from a force graph',
+    topics: ['work'],
+    vars: {
+      shape: choice(['ramp', 'ramp'], ['tent', 'tent']),
+      F1: range(5, 50, 1, 'N'),
+      x1: range(1, 4, 0.5, 'm'),
+      extra: range(1, 4, 0.5, 'm'),
+    },
+    derive: ($) => {
+      const x2 = $.x1 + $.extra;
+      // The area under F(x): a triangle, then a rectangle or a second triangle.
+      return { x2, W: $.shape === 'ramp' ? 0.5 * $.F1 * $.x1 + $.F1 * $.extra : 0.5 * $.F1 * x2 };
+    },
+    // The same area by the trapezoid rule on many thin strips.
+    second: ($) => {
+      const x2 = $.x1 + $.extra;
+      const F = (x) => (x <= $.x1 ? ($.F1 * x) / $.x1 : ($.shape === 'ramp' ? $.F1 : ($.F1 * (x2 - x)) / $.extra));
+      const n = 4000;
+      let W = 0;
+      for (let i = 0; i < n; i += 1) W += (0.5 * (F((i * x2) / n) + F(((i + 1) * x2) / n)) * x2) / n;
+      return { W };
+    },
+    text: (T, $, sig) => `A force along x acts on a body as it moves from x = 0 to x = ${sig($.x2)} m. A graph of the force against x ${$.shape === 'ramp'
+      ? `rises in a straight line from zero to ${T.F1} N at x = ${T.x1} m, then stays level at ${T.F1} N`
+      : `rises in a straight line from zero to ${T.F1} N at x = ${T.x1} m, then falls in a straight line back to zero`}. How much work does the force do?`,
+    parts: [
+      num('W', ($) => $.W, 'J', { label: 'work' }),
+    ],
+    hints: [
+      String.raw`For a force along the motion, $W = \int F\,dx$: the area under the graph of $F$ against $x$.`,
+      'Split the area into triangles and rectangles. A triangle is half its base times its height.',
+    ],
+    steps: ($) => [
+      $.shape === 'ramp'
+        ? String.raw`$W = \tfrac12F_1x_1 + F_1(x_2 - x_1) = ${texNum($.W)}\ \mathrm{J}$`
+        : String.raw`$W = \tfrac12F_1x_2 = ${texNum($.W)}\ \mathrm{J}$`,
+    ],
+    cases: [
+      kase('OpenStax University Physics Vol. 1 §7.1: the work of a variable force along a line is the area under its graph against position', { shape: 'ramp', F1: 10, x1: 2, extra: 3 }, { W: 40 }),
+      kase('hand', { shape: 'tent', F1: 20, x1: 1, extra: 3 }, { W: 40 }),
+    ],
+  }),
+
+  problem({
+    ...U,
     id: 'ch7.spring',
     level: 2,
     variety: ['representation'],

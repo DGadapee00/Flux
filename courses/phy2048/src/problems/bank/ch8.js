@@ -498,34 +498,40 @@ export default [
       E: range(-0.45, -0.05, 0.01, 'J'),
       Eq: range(0.5, 4, 0.1, 'J'),
       c: range(2, 10, 1, 'N/m³'),
+      m: range(0.5, 4, 0.5, 'kg'),
     },
     derive: ($) => {
       if ($.curve === 'well') {
         // Outer turning point: 2(x⁴ − x²) = E gives x² = (1 + √(1 + 2E))/2.
         const x = Math.sqrt((1 + Math.sqrt(1 + 2 * $.E)) / 2);
         const inner = Math.sqrt((1 - Math.sqrt(1 + 2 * $.E)) / 2);
-        return { x, inner, F: -2 * (4 * x ** 3 - 2 * x), Eused: $.E };
+        // Fastest at the bottom of the well, x = 1/√2, where U = −0.5 J.
+        return { x, inner, F: -2 * (4 * x ** 3 - 2 * x), Eused: $.E, Kmax: $.E + 0.5, v: Math.sqrt((2 * ($.E + 0.5)) / $.m) };
       }
       const x = ((4 * $.Eq) / $.c) ** 0.25;
-      return { x, inner: null, F: -$.c * x ** 3, Eused: $.Eq };
+      return { x, inner: null, F: -$.c * x ** 3, Eused: $.Eq, Kmax: $.Eq, v: Math.sqrt((2 * $.Eq) / $.m) };
     },
     // Numerically: the largest root of U = E by scanning, and the force as minus the slope there.
     second: ($) => {
       const Ux = $.curve === 'well' ? WELL : (x) => 0.25 * $.c * x ** 4;
       const tps = turningPoints(Ux, $.curve === 'well' ? $.E : $.Eq, -4, 4);
       const x = Math.max(...tps);
-      return { x, F: forceFrom(Ux, x, 1e-6) };
+      // The fastest point by stepping F = ma from rest at the turning point.
+      const run = simulate(Ux, $.m, x, { dt: 2e-5, tMax: 100 });
+      return { x, F: forceFrom(Ux, x, 1e-6), v: run.vMax };
     },
     text: (T, $) => ($.curve === 'well'
-      ? `A particle moves along the x-axis with potential energy U(x) = 2(x⁴ − x²), U in joules and x in metres. No non-conservative force acts, and its energy is E = ${T.E} J. It is in the well on the positive side. Find its outer turning point, and the force on it there.`
-      : `A particle moves along the x-axis with potential energy U(x) = ¼cx⁴, where c = ${T.c} N/m³. No non-conservative force acts, and its energy is ${T.Eq} J. Find the turning point on the positive side, and the force on it there.`),
+      ? `A particle moves along the x-axis with potential energy U(x) = 2(x⁴ − x²), U in joules and x in metres. No non-conservative force acts, and its energy is E = ${T.E} J. It is in the well on the positive side, and its mass is ${T.m} kg. Find its outer turning point, the force on it there, and its greatest speed.`
+      : `A particle moves along the x-axis with potential energy U(x) = ¼cx⁴, where c = ${T.c} N/m³. No non-conservative force acts, its mass is ${T.m} kg, and its energy is ${T.Eq} J. Find the turning point on the positive side, the force on it there, and its greatest speed.`),
     parts: [
       num('x', ($) => $.x, 'm', { label: 'turning point' }),
       num('F', ($) => $.F, 'N', { label: 'force there, + toward +x' }),
+      num('v', ($) => $.v, 'm/s', { label: 'greatest speed' }),
     ],
     hints: [
       String.raw`At a turning point the kinetic energy is zero, so $U(x) = E$. Solve that for $x$.`,
       String.raw`The force is $F = -dU/dx$. Past a well's lowest point $U$ rises, so the force points back toward smaller $x$: negative.`,
+      String.raw`The body is fastest where $U$ is least, since $K = E - U$ is largest there.`,
     ],
     steps: ($) => [
       $.curve === 'well'
@@ -534,20 +540,21 @@ export default [
       $.curve === 'well'
         ? String.raw`$F = -(8x^3 - 4x) = ${texNum($.F)}\ \mathrm{N}$`
         : String.raw`$F = -cx^3 = ${texNum($.F)}\ \mathrm{N}$`,
+      String.raw`Fastest where $U$ is least: $K = ${texNum($.Kmax)}\ \mathrm{J}$, so $v = \sqrt{2K/m} = ${texNum($.v)}\ \mathrm{m/s}$`,
     ],
     sim: {
       scenario: 'well',
       setup: (s, $) => {
-        if ($.curve === 'well') Object.assign(s, { curve: 'well', E: $.E, x0: 0.7, k: 2 });
-        else Object.assign(s, { curve: 'quartic', E: $.Eq, x0: 0, k: $.c });
+        if ($.curve === 'well') Object.assign(s, { curve: 'well', E: $.E, x0: Math.SQRT1_2, k: 2, m: $.m });
+        else Object.assign(s, { curve: 'quartic', E: $.Eq, x0: 0, k: $.c, m: $.m });
       },
-      read: (c) => ({ x: c.b, F: c.Fb }),
+      read: (c) => ({ x: c.b, F: c.Fb, v: c.v }),
     },
     cases: [
-      kase('OpenStax University Physics Vol. 1 §8.4, "Quartic and Quadratic Potential Energy Diagram": U = 2(x⁴ − x²), E = −0.25 J', { curve: 'well', E: -0.25, Eq: 2, c: 8 }, { x: 0.92388, F: -2.6131 }, {
+      kase('OpenStax University Physics Vol. 1 §8.4, "Quartic and Quadratic Potential Energy Diagram": U = 2(x⁴ − x²), E = −0.25 J', { curve: 'well', E: -0.25, Eq: 2, c: 8, m: 1 }, { x: 0.92388, F: -2.6131, v: 0.70711 }, {
         note: 'The book prints the allowed region 0.38 m to 0.92 m.',
       }),
-      kase('OpenStax University Physics Vol. 1 §8.2, "Force due to a Quartic Potential Energy": U = ¼cx⁴, c = 8 N/m³, E = 2 J', { curve: 'quartic', E: -0.25, Eq: 2, c: 8 }, { x: 1, F: -8 }, {
+      kase('OpenStax University Physics Vol. 1 §8.2, "Force due to a Quartic Potential Energy": U = ¼cx⁴, c = 8 N/m³, E = 2 J', { curve: 'quartic', E: -0.25, Eq: 2, c: 8, m: 1 }, { x: 1, F: -8, v: 2 }, {
         note: 'The book prints ±1 m and 8 N toward the origin.',
       }),
     ],
