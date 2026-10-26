@@ -14,7 +14,11 @@ const loaders = {
   drag: () => import('./drag.js'),
   'elevator-scale': () => import('./elevator-scale.js'),
   skydiver: () => import('./skydiver.js'),
+  'work-energy': () => import('./work-energy.js'),
+  'work-path': () => import('./work-path.js'),
   track: () => import('./track.js'),
+  'energy-diagram': () => import('./energy-diagram.js'),
+  'automotive-power': () => import('./automotive-power.js'),
   collide: () => import('./collide.js'),
   rotor: () => import('./rotor.js'),
 };

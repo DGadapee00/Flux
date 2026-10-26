@@ -19,7 +19,7 @@ test('manifest is PHY 2048, first in the physics track', async () => {
     ['vectors', 'kinematics-graphs', 'stopping-distance'],
     ['projectile', 'circular-motion', 'relative-motion', 'wind-triangle'],
     ['incline', 'atwood', 'banked-curve', 'drag', 'elevator-scale', 'skydiver'],
-    ['track'],
+    ['work-energy', 'work-path', 'track', 'energy-diagram', 'automotive-power'],
     ['collide'],
     ['rotor'],
     [],
@@ -32,7 +32,7 @@ test('manifest is PHY 2048, first in the physics track', async () => {
   ]);
   const labs = await course.labs();
   assert.equal(typeof labs.loadLab, 'function');
-  for (const id of ['vectors', 'kinematics-graphs', 'stopping-distance', 'projectile', 'circular-motion', 'relative-motion', 'wind-triangle', 'incline', 'atwood', 'banked-curve', 'drag', 'elevator-scale', 'skydiver', 'track', 'collide', 'rotor']) {
+  for (const id of ['vectors', 'kinematics-graphs', 'stopping-distance', 'projectile', 'circular-motion', 'relative-motion', 'wind-triangle', 'incline', 'atwood', 'banked-curve', 'drag', 'elevator-scale', 'skydiver', 'work-energy', 'work-path', 'track', 'energy-diagram', 'automotive-power', 'collide', 'rotor']) {
     const lab = await labs.loadLab(id);
     assert.equal(lab.id, id);
     assert.equal(lab.kind, 'scene3d');

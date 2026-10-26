@@ -36,6 +36,9 @@ export const QUANTITIES = {
   C: { sym: 'C', name: 'Drag coefficient', unit: '', unitName: '', from: 'F_D = \\tfrac12 \\rho C A v^2' },
   A: { sym: 'A', name: 'Area facing the flow', unit: 'm^2', unitName: '', from: '' },
   vt: { sym: 'v_t', name: 'Terminal speed', unit: 'm/s', unitName: '', from: 'v_t = \\sqrt{2mg/\\rho C A}' },
+  W: { sym: 'W', name: 'Work', unit: 'J', unitName: 'joule', equals: 'N·m', from: 'W = \\int \\vec F\\cdot d\\vec r' },
+  k: { sym: 'k', name: 'Spring constant', unit: 'N/m', unitName: '', from: 'F = -kx' },
+  P: { sym: 'P', name: 'Power', unit: 'W', unitName: 'watt', equals: 'J/s', from: 'P = \\vec F\\cdot\\vec v' },
   vrel: { sym: '\\vec v_{PG}', name: 'Velocity over the ground', unit: 'm/s', unitName: '', from: '\\vec v_{PG} = \\vec v_{PF} + \\vec v_{FG}' },
 };
 
@@ -50,7 +53,11 @@ export const LAB_UNITS = {
   drag: ['m', 'v', 'FD', 'b', 'C', 'A', 'rho', 'vt'],
   'elevator-scale': ['m', 'N', 'a', 'g'],
   skydiver: ['m', 'FD', 'C', 'A', 'rho', 'vt'],
-  track: ['m', 'x', 'U', 'K', 'v', 'g'],
+  'work-energy': ['m', 'theta', 'mu', 'F', 'N', 'W', 'K', 'v'],
+  'work-path': ['F', 'k', 'W', 'x'],
+  track: ['m', 'x', 'U', 'K', 'v', 'g', 'mu'],
+  'energy-diagram': ['x', 'U', 'K', 'F', 'T'],
+  'automotive-power': ['m', 'v', 'P', 'FD', 'C', 'A', 'rho'],
   collide: ['m', 'v', 'p', 'e', 'K'],
   rotor: ['tau', 'I', 'alpha', 'a', 'm'],
 };

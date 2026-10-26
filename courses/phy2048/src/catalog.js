@@ -39,8 +39,8 @@ export const UNITS = [
     title: 'Work, energy and power',
     chapters: ['7', '8'],
     date: null,
-    labs: ['track'],
-    coming: ['Work and energy', 'Work along a path', 'Energy diagram', 'Automotive power'],
+    labs: ['work-energy', 'work-path', 'track', 'energy-diagram', 'automotive-power'],
+    coming: [],
   },
   {
     id: 'u5',
@@ -175,7 +175,11 @@ export const LAB_META = {
   drag: { id: 'drag', exam: 'u3', title: 'Drag' },
   'elevator-scale': { id: 'elevator-scale', exam: 'u3', title: 'Elevator scale', app: true },
   skydiver: { id: 'skydiver', exam: 'u3', title: 'Skydiver', app: true },
-  track: { id: 'track', exam: 'u4', title: 'Track' },
+  'work-energy': { id: 'work-energy', exam: 'u4', title: 'Work and energy' },
+  'work-path': { id: 'work-path', exam: 'u4', title: 'Work along a path' },
+  track: { id: 'track', exam: 'u4', title: 'Energy track' },
+  'energy-diagram': { id: 'energy-diagram', exam: 'u4', title: 'Energy diagram' },
+  'automotive-power': { id: 'automotive-power', exam: 'u4', title: 'Automotive power', app: true },
   collide: { id: 'collide', exam: 'u5', title: 'Collisions' },
   rotor: { id: 'rotor', exam: 'u6', title: 'Rotor' },
 };

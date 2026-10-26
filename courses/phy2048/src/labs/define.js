@@ -92,3 +92,23 @@ export function bindLogSlider(api, id, set) {
 export function putLogSlider(id, value) {
   if (value > 0) putSlider(id, Math.log10(value), 4);
 }
+
+/** A choice among a few named options: [[value, label], ...]. */
+export function selectRow(id, label, options, value) {
+  const opts = options.map(([v, text]) => `<option value="${v}"${v === value ? ' selected' : ''}>${text}</option>`).join('');
+  return `<label class="field"><span>${label}</span><select id="${id}">${opts}</select></label>`;
+}
+
+export function bindSelect(api, id, set) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('change', (e) => {
+    set(api.slice(), e.target.value);
+    api.bump();
+  });
+}
+
+export function putSelect(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.value = value;
+}
