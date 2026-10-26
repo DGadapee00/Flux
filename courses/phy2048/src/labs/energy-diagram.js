@@ -3,7 +3,8 @@
  * round where E = U, the force F = −dU/dx points down the slope, and it can rest where the slope is
  * zero. A minimum is stable; a maximum is not.
  *
- * Two curves: the double well U = 2(x⁴ − x²) J, from OpenStax §8.4, and a spring, U = ½kx². The total
+ * Three curves: the double well U = 2(x⁴ − x²) J, from OpenStax §8.4, a spring, U = ½kx², and the quartic
+ * U = ¼cx⁴ of §8.2's "Force due to a Quartic Potential Energy". The total
  * energy E is a horizontal line. The turning points, the force and the period come from the curve:
  * T = 2∫dx/v with v = √(2(E − U)/m). The check releases the body from rest at a turning point and
  * steps F = ma in time (velocity Verlet), reading off how far it goes and how long a round trip takes.
@@ -16,12 +17,14 @@ import { bindSelect, bindSlider, defineLab, fmt, putSelect, putSlider, selectRow
 const CURVES = {
   well: { name: 'Double well, 2(x⁴ − x²)', span: 1.2, lo: -0.6, hi: 1.2, U: () => (x) => 2 * (x ** 4 - x * x), F: () => (x) => -2 * (4 * x ** 3 - 2 * x) },
   spring: { name: 'Spring, ½kx²', span: 2, lo: -0.4, hi: 4.4, U: (s) => (x) => 0.5 * s.k * x * x, F: (s) => (x) => -s.k * x },
+  quartic: { name: 'Quartic, ¼cx⁴ (c = k)', span: 1.6, lo: -0.4, hi: 4.4, U: (s) => (x) => 0.25 * s.k * x ** 4, F: (s) => (x) => -s.k * x ** 3 },
 };
 
 const SCENARIOS = [
   { id: 'well', name: 'In the right-hand well, E = −0.25 J', curve: 'well', E: -0.25, x0: 0.5, m: 1, k: 2 },
   { id: 'over', name: 'Above the barrier, E = +0.25 J', curve: 'well', E: 0.25, x0: 0.5, m: 1, k: 2 },
   { id: 'spring', name: 'A spring of 2 N/m, E = 1 J', curve: 'spring', E: 1, x0: 0, m: 1, k: 2 },
+  { id: 'quartic', name: 'The book’s quartic, c = 8 N/m³, E = 2 J', curve: 'quartic', E: 2, x0: 0, m: 1, k: 8 },
 ];
 
 /** The search range for turning points: wider than the drawn one, so none is missed. */
@@ -91,7 +94,7 @@ export default defineLab({
   },
   controls() {
     const curves = Object.entries(CURVES).map(([id, c]) => [id, c.name]);
-    return `<div class="lab-block">${selectRow('ed-curve', 'Potential energy', curves, 'well')}${sliderRow('ed-E', 'Total energy E (J)', -0.25, -0.5, 3.5, 0.01)}${sliderRow('ed-x0', 'Where the body is, x (m)', 0.5, -2, 2, 0.01)}${sliderRow('ed-m', 'Mass (kg)', 1, 0.1, 5, 0.1)}${sliderRow('ed-k', 'Spring constant k (N/m)', 2, 0.5, 10, 0.1)}</div>`;
+    return `<div class="lab-block">${selectRow('ed-curve', 'Potential energy', curves, 'well')}${sliderRow('ed-E', 'Total energy E (J)', -0.25, -0.5, 3.5, 0.01)}${sliderRow('ed-x0', 'Where the body is, x (m)', 0.5, -2, 2, 0.01)}${sliderRow('ed-m', 'Mass (kg)', 1, 0.1, 5, 0.1)}${sliderRow('ed-k', 'Spring constant k (N/m), or c for the quartic (N/m³)', 2, 0.5, 10, 0.1)}</div>`;
   },
   bind(api) {
     bindSelect(api, 'ed-curve', (s, v) => { s.curve = v; });
@@ -142,6 +145,7 @@ export default defineLab({
     computed.a = bounded ? r.well.a : null;
     computed.b = bounded ? r.well.b : null;
     computed.T = bounded ? period(r.U, state.E, state.m, r.well.a, r.well.b, 20000) : null;
+    computed.Fb = bounded ? forceFrom(r.U, r.well.b) : null;
     computed.rests = equilibria(r.U, -r.c.span, r.c.span);
   },
   second(state) {
@@ -149,9 +153,9 @@ export default defineLab({
     // derivative, written out, not the numerical slope used above.
     const r = read(state);
     const out = { F: r.c.F(state)(r.x0), K: state.E - r.U(r.x0) };
-    if (!r.well || !Number.isFinite(r.well.a) || !Number.isFinite(r.well.b)) return { ...out, a: null, b: null, T: null };
+    if (!r.well || !Number.isFinite(r.well.a) || !Number.isFinite(r.well.b)) return { ...out, a: null, b: null, T: null, Fb: null };
     const run = simulate(r.U, state.m, r.well.b, { dt: 1e-4, tMax: 200 });
-    return { ...out, a: run.lo, b: run.hi, T: run.period };
+    return { ...out, a: run.lo, b: run.hi, T: run.period, Fb: r.c.F(state)(run.hi) };
   },
   syncViews(state, computed, ctx) {
     const h = ctx.handle;

@@ -100,7 +100,7 @@ function checkSymbolic(tpl, inst) {
 }
 
 /** Units built to the standard. Their templates must meet the unit rules below; the others are reworked as their units are built. */
-const STANDARD_UNITS = ['u1', 'u2', 'u3'];
+const STANDARD_UNITS = ['u1', 'u2', 'u3', 'u4'];
 
 
 /** The lab, set up as the problem sets it up, must show the answers the template computes. */
@@ -151,7 +151,9 @@ function checkTraps(tpl) {
         if (Math.abs(value - right) > 0.02 * Math.max(Math.abs(right), 1e-9) + 1e-9) live += 1;
       }
       if (!live) err(tpl.id, `${part.id} trap ${i + 1} never differs from the answer, so it can never fire`);
-      if (typeof why !== 'string' || why.length < 15) err(tpl.id, `${part.id} trap ${i + 1} has no explanation`);
+      // The engine accepts an explanation that depends on the version; read it on a sample.
+      const text = typeof why === 'function' ? why(instance(tpl, 1).$) : why;
+      if (typeof text !== 'string' || text.length < 15) err(tpl.id, `${part.id} trap ${i + 1} has no explanation`);
     });
   }
 }
