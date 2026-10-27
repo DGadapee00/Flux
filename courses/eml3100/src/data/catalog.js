@@ -41,6 +41,15 @@ export const EXAMS = [
     labs: ['carnot', 'claims', 'ac'],
     coming: [],
   },
+  {
+    id: 'u5',
+    n: 5,
+    title: 'Entropy',
+    chapters: '6',
+    date: 'Yan Ch 6',
+    labs: ['ts', 'efficiency', 'wall'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
@@ -52,6 +61,9 @@ export const LAB_META = {
   carnot: { id: 'carnot', exam: 'u4', title: 'Carnot and Brayton' },
   claims: { id: 'claims', exam: 'u4', title: 'Possible or not' },
   ac: { id: 'ac', exam: 'u4', title: 'Air conditioner', app: true },
+  ts: { id: 'ts', exam: 'u5', title: 'Temperature and entropy' },
+  efficiency: { id: 'efficiency', exam: 'u5', title: 'Isentropic efficiency' },
+  wall: { id: 'wall', exam: 'u5', title: 'Heat through a wall', app: true },
 };
 
 export const CHAPTER_TITLES = {

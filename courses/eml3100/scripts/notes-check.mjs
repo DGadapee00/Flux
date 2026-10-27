@@ -23,7 +23,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const src = fs.readFileSync(path.join(root, 'src/notes/index.js'), 'utf8');
 const topics = new Set(PROBLEMS.flatMap((p) => p.topics || []));
 /** Units reworked to the standard (D32): legend, parts, grouped toc, footer. Units 1 and 2 follow in R3a. */
-const STRUCTURED = new Set(['u3', 'u4']);
+const STRUCTURED = new Set(['u3', 'u4', 'u5']);
 const fails = [];
 const fail = (set, msg) => fails.push(`${set}: ${msg}`);
 

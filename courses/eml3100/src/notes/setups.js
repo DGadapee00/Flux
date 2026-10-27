@@ -322,6 +322,83 @@ export const SETUPS = {
       },
     ],
   },
+  u5: {
+    s2: [
+      {
+        tag: 'liquid water in the tables',
+        lab: 'ts',
+        scenario: 'heat',
+        setup(s) {
+          s.p = 1e5;
+          s.T1 = fromC(20);
+          s.T2 = fromC(80);
+        },
+        read: (c) => ({ q: [c.q / KJ, 251], ds: [c.ds, 778.9] }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'steam from 200 to 400',
+        lab: 'ts',
+        scenario: 'heat',
+        read: (c) => ({ q: [c.q / KJ, 416.4], ds: [c.ds, 734.3] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'still superheated',
+        lab: 'efficiency',
+        scenario: 'turbine',
+        read: (c) => ({ w: [c.w / KJ, 373], sgen: [c.sgen, 143.4], T2: [toC(c.T2), 201.2] }),
+      },
+      {
+        tag: 'into the dome',
+        lab: 'ts',
+        scenario: 'real',
+        read: (c) => ({ w: [c.w / KJ, 882.8], sgen: [c.sgen, 488.4], x2: [c.x2, 0.9017] }),
+      },
+      {
+        tag: 'straight down the isentrope',
+        lab: 'ts',
+        scenario: 'isen',
+        read: (c) => ({ w: [c.w / KJ, 1039], sgen: [c.sgen, 0] }),
+      },
+    ],
+    s5: [
+      {
+        tag: 'air to 800 kPa',
+        lab: 'efficiency',
+        scenario: 'compressor',
+        read: (c) => ({ w: [c.w / KJ, 295], T2: [toC(c.T2), 305.9], sgen: [c.sgen, 107.2] }),
+      },
+      {
+        tag: 'a nozzle at 92 percent',
+        lab: 'efficiency',
+        scenario: 'nozzle',
+        read: (c) => ({ V2: [c.V2, 522.3], sgen: [c.sgen, 45.86] }),
+      },
+    ],
+    s6: [
+      {
+        tag: 'the wood-frame wall',
+        lab: 'wall',
+        scenario: 'wall',
+        read: (c) => ({ q: [c.q, 190.8], sgen: [c.sgen, 0.04987], lost: [c.lost, 14.67] }),
+      },
+      {
+        tag: 'the attic ceiling',
+        lab: 'wall',
+        scenario: 'ceiling',
+        read: (c) => ({ q: [c.q, 159], sgen: [c.sgen, 0.04155], lost: [c.lost, 12.22] }),
+      },
+      {
+        tag: 'a milder day',
+        lab: 'wall',
+        scenario: 'mild',
+        read: (c) => ({ q: [c.q, 99.94], sgen: [c.sgen, 0.0132] }),
+      },
+    ],
+  },
 };
 
 /** An example's tag as the notes write it, without "Worked example · ". */

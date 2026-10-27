@@ -10,6 +10,9 @@ const loaders = {
   carnot: () => import('./carnot.js'),
   claims: () => import('./claims.js'),
   ac: () => import('./ac.js'),
+  ts: () => import('./ts.js'),
+  efficiency: () => import('./efficiency.js'),
+  wall: () => import('./wall.js'),
 };
 
 const labs = createLabLoader(loaders);
