@@ -47,4 +47,7 @@ export const {
   gradeSymbolic,
   evalSymbolic,
   countVersions,
+  choiceOptions,
+  GLYPH,
+  exprToTex,
 } = engine;

@@ -7,6 +7,9 @@ const loaders = {
   nozzle: () => import('./nozzle.js'),
   devices: () => import('./devices.js'),
   heater: () => import('./heater.js'),
+  carnot: () => import('./carnot.js'),
+  claims: () => import('./claims.js'),
+  ac: () => import('./ac.js'),
 };
 
 const labs = createLabLoader(loaders);

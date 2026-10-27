@@ -2,7 +2,7 @@
  * Worked examples the labs can show. `tag` matches the notes after "Worked example · ".
  * `read` pairs a lab value with the number printed in the notes. notes-check allows 2%.
  */
-import { R_WATER, fromC, mixP, toC, waterTP } from '@flux/subjects/thermo';
+import { R_WATER, fromC, fromF, mixP, toC, waterTP } from '@flux/subjects/thermo';
 
 const KJ = 1e3;
 
@@ -234,6 +234,91 @@ export const SETUPS = {
         lab: 'heater',
         scenario: 'two',
         read: (c) => ({ P: [c.elec / KJ, 45.58], Tout: [toC(c.Tout), 41.8], maxGpm: [c.maxGpm, 3.95] }),
+      },
+    ],
+  },
+  u4: {
+    s1: [
+      {
+        tag: 'a fair engine',
+        lab: 'claims',
+        scenario: 'fair',
+        read: (c) => ({ eta: [c.eta, 0.4], QL: [c.QL / KJ, 300] }),
+      },
+    ],
+    s2: [
+      {
+        tag: 'a kitchen freezer',
+        lab: 'carnot',
+        scenario: 'fridge',
+        read: (c) => ({ copR: [c.copR, 6.379], copHP: [c.copHP, 7.379] }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'kelvin, not celsius',
+        lab: 'carnot',
+        scenario: 'engine',
+        read: (c) => ({ eta: [c.eta, 0.6317], etaC: [c.etaC, 0.9455] }),
+      },
+      {
+        tag: 'one kilogram of air',
+        lab: 'carnot',
+        scenario: 'engine',
+        read: (c) => ({ qH: [c.qH / KJ, 163.8], wNet: [c.wNet / KJ, 103.5] }),
+      },
+      {
+        tag: 'five hundred degrees Fahrenheit',
+        lab: 'carnot',
+        scenario: 'engine',
+        setup(s) {
+          s.TH = fromF(500);
+          s.TL = fromF(100);
+        },
+        read: (c) => ({ eta: [c.eta, 0.4168] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'an impossible engine',
+        lab: 'claims',
+        scenario: 'impossible',
+        read: (c) => ({ eta: [c.eta, 0.8], carnot: [c.carnot, 0.625] }),
+      },
+    ],
+    s5: [
+      {
+        tag: 'a pressure ratio of 12',
+        lab: 'carnot',
+        scenario: 'brayton',
+        read: (c) => ({ etaB: [c.etaB, 0.4812], T2: [toC(c.T2), 307.4], wB: [c.wB / KJ, 489.4] }),
+      },
+      {
+        tag: 'cold air at the same ratio',
+        lab: 'carnot',
+        scenario: 'brayton',
+        read: (c) => ({ cold: [c.cold, 0.5085], etaB: [c.etaB, 0.4812] }),
+      },
+      {
+        tag: 'a pressure ratio of 18',
+        lab: 'carnot',
+        scenario: 'brayton',
+        setup(s) { s.rp = 18; },
+        read: (c) => ({ etaB: [c.etaB, 0.5348], T2: [toC(c.T2), 375.2] }),
+      },
+    ],
+    s6: [
+      {
+        tag: 'the rating point',
+        lab: 'ac',
+        scenario: 'rated',
+        read: (c) => ({ copK: [c.copK, 35.98], copE: [c.copE, 3.224], power: [c.power / KJ, 3.273] }),
+      },
+      {
+        tag: 'a hotter afternoon',
+        lab: 'ac',
+        scenario: 'hot',
+        read: (c) => ({ copK: [c.copK, 21.59], ratio: [c.ratio, 0.1493] }),
       },
     ],
   },
