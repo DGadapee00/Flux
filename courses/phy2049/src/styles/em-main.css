@@ -84,9 +84,6 @@
 .legend-bdl {
   background: linear-gradient(90deg, #9a72ac, #2c2e33 50%, #5cd0b3);
 }
-.circuit-label.right-text {
-  text-align: right;
-}
 .charge-label .cl-name,
 .charge-label .cl-val {
   display: block;

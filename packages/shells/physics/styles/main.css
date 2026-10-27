@@ -1119,6 +1119,12 @@ input[type='checkbox'] {
   color: var(--text);
 }
 
+/* A schematic label set to the left of a vertical element is right-aligned against it. */
+
+.circuit-label.right-text {
+  text-align: right;
+}
+
 /* "Bulb A": the name a problem uses for that element, set above its R and I lines. */
 
 .circuit-label small {

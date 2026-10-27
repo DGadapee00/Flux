@@ -11,6 +11,11 @@ class Node {
     this.parentNode = null;
   }
 
+  /** three's CSS2DRenderer asks a label's document for its window's Element class. */
+  get ownerDocument() {
+    return globalThis.document;
+  }
+
   get parentElement() {
     return this.parentNode?.nodeType === 1 ? this.parentNode : null;
   }
@@ -111,7 +116,8 @@ class Element extends Node {
         get(target, key) {
           if (key in target) return target[key];
           if (typeof key !== 'string') return undefined;
-          target[key] = () => {};
+          // A gradient or pattern is an object the caller adds stops to; every other call returns nothing.
+          target[key] = /^create\w*(Gradient|Pattern)$/.test(key) ? () => ({ addColorStop() {} }) : () => {};
           return target[key];
         },
       });
@@ -486,6 +492,7 @@ export function installDOM() {
   const document = new DOMDocument();
   const listeners = new Map();
   const window = {
+    Element,
     innerWidth: 1280,
     devicePixelRatio: 1,
     document,
@@ -508,6 +515,7 @@ export function installDOM() {
   globalThis.cancelAnimationFrame = (id) => clearTimeout(id);
   globalThis.window = window;
   globalThis.document = document;
+  document.defaultView = window;
   globalThis.DOMParser = DOMParser;
   return document;
 }

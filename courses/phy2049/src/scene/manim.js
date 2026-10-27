@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import { ANSWER_LAYER, M } from '@flux/core/scene3d/manim.js';
 
 export * from '@flux/core/scene3d/manim.js';
@@ -33,17 +32,8 @@ export const Q = {
   imageVirtual: 0xc7b3dc,
 };
 
-/**
- * A ramp for readers with red-green colour blindness: dark blue → light blue → pale → amber →
- * orange runs along the blue–yellow axis they do see, with lightness steps between neighbours.
- * The circuit wires use it, since there colour is the only cue for potential.
- */
-const CVD_RAMP = [0x1d4f8c, 0x3f8fd6, 0x8fd0ee, 0xece6b8, 0xf4b942, 0xe07b39].map((h) => new THREE.Color(h));
-export function rampColorCVD(t, out = new THREE.Color()) {
-  const x = Math.max(0, Math.min(1, t)) * (CVD_RAMP.length - 1);
-  const i = Math.min(CVD_RAMP.length - 2, Math.floor(x));
-  return out.copy(CVD_RAMP[i]).lerp(CVD_RAMP[i + 1], x - i);
-}
+// The colour-blind-safe ramp moved to the shell with the schematic that uses it.
+export { rampColorCVD } from '@flux/shells/physics/schematic.js';
 
 /** Put an object on the answer layer or take it off, for things that are an answer only sometimes. */
 export function setAnswer(obj, on) {
