@@ -5,13 +5,13 @@ get a job done, and how to find out why one does not work. It sits beside PHY 20
 what each part is, and before EEL 3111, which analyses circuits formally. Every unit starts from a
 goal ("turn on a light when it gets dark"), not from a component.
 
-Status: **draft** (26 Oct 2026). Not confirmed by the owner.
+Status: **confirmed** (owner, 27 Oct 2026). The owner chose this plan over mapping it to MIT 6.091 (D35).
 
 | | |
 |---|---|
 | Folder and id | `courses/bench` |
 | Port | 5196 (next free after the reserved list in `AGENTS.md`) |
-| Track, order | open question 2: `systems`, before EEL 3111, or a new `projects` track |
+| Track, order | `projects`, 1 (a new track, D35) |
 | Shell | `physics` (PHY 2049's UI), plus two new shell parts behind flags: a breadboard view and a meter probe (see "Shell work") |
 | Subject libraries | reuse `em/mna.js` and `em/circuit.js`; new `em/nonlinear.js` (Newton–Raphson on the MNA system for diodes, LEDs and transistor switches) and `em/parts.js` (part models with datasheet numbers), each with a selftest |
 | When the owner takes it | Not a course. The owner is starting hardware projects now (26 Oct 2026); a parts kit is coming. Built for the screen first, with an "On the bench" list per unit for when the kit arrives. |
@@ -41,20 +41,16 @@ Three habits run through every unit:
 
 ## Sources
 
-D23 puts an OCW program first. This module has no UNF course behind it, so open question 1 asks
-the owner to record how D23 applies.
+This plan sets the units and their order, a stated exception to D23 (D35).
 
-- **OCW program (to confirm):** MIT 6.091, *Hands-On Introduction to Electrical Engineering Lab
-  Skills* (January IAP 2008). Its labs are breadboard builds of this kind. The container that wrote
-  this draft could not reach ocw.mit.edu, so its calendar is not yet mapped; `npm run ocw` fetches
-  it once the slug is added to `tools/ocw/courses.json`. If it does not fit, the textbook orders the
-  units (D29).
 - **Textbook:** Tony Kuphaldt, *Lessons in Electric Circuits*, volumes I–III and VI (free, Design
   Science License). Cited by volume and chapter through `src/data/textbook.js`. Nothing copied.
 - **Datasheets, for every number on screen:** each part's maker's datasheet, cited by maker and part
   number (D25). Typical values below are to be confirmed against the datasheet when the unit is
   built; none ships unconfirmed.
-- **Another view:** PHY 2049's notes on current, resistance, RC circuits and induction.
+- **Another view:** PHY 2049's notes on current, resistance, RC circuits and induction; and MIT
+  6.091, *Hands-On Introduction to EE Lab Skills* (IAP 2008), whose labs build the same circuits on
+  a lab bench with ±15 V supplies. Cited by lab number only; nothing copied.
 
 ## Exam style
 
@@ -262,14 +258,12 @@ PHY 2049 (open question 4).
 - PHY 2049: current and resistance, Kirchhoff's rules, RC circuits, induction, power.
 - Forward: EEL 3111 (nodal analysis, op-amps, first-order circuits).
 
-## Open questions
+## Settled (27 Oct 2026, D35)
 
-1. **D23 for a module with no UNF course.** Proposed: 6.091 is the program if its calendar fits once
-   fetched; otherwise Kuphaldt orders the units. A new decision record is needed either way.
-2. **Track.** `systems`, before EEL 3111, or a new `projects` track for builds outside the degree.
-3. **Microcontroller depth.** Unit 8 models the pins and shows code without running it. Running real
-   Arduino code in the browser is possible but is a much larger build.
-4. **Moving PHY 2049's schematic view into the shell.** Needed for reuse. It changes PHY 2049, so it
-   is its own PR, with PHY 2049's smoke and gallery scripts green.
-5. **Order against the roadmap.** PHY 2048 has units in progress. Rule 7 allows one more course in
-   progress, so Bench can start after confirmation without pausing PHY 2048.
+1. **Sources.** This plan orders the units; Kuphaldt and the datasheets are cited. MIT 6.091 is an
+   Another view.
+2. **Track.** A new `projects` track, for builds outside the degree map.
+3. **Microcontroller depth.** Unit 8 models the pins and shows code without running it.
+4. **PHY 2049's schematic view** moves into the physics shell in its own PR before Bench needs it,
+   with PHY 2049's smoke and gallery scripts green.
+5. **Order.** PHY 2048 has units in progress; Bench is the second course in progress (rule 7).

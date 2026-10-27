@@ -53,6 +53,7 @@ subject libraries (a function written for one course serves the next), and one s
 | EGN 3331 Mechanics of Materials | [egn3331](docs/course-plans/egn3331.md) | Unit 1 of 11 | fails | R3b: confirm the new order, then build |
 | EML 3100 Thermodynamics | [eml3100](docs/course-plans/eml3100.md) | 3 of 5 units (Unit 3 to the standard) | fails | R3a: Units 4–5, then `why` and traps for Units 1–2 |
 | STA 3032 Statistics | [sta3032](docs/course-plans/sta3032.md) | complete, older style | fails | keep passing; no rework |
+| Bench (electronics on the bench) | [bench](docs/course-plans/bench.md) | not started; plan confirmed (D35) | not yet scored | B0: move PHY 2049's schematic into the shell; B1: Unit 1 |
 
 ## 3. The build list, in order
 
@@ -117,6 +118,13 @@ EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come las
 - [ ] **R5** PHY 2048 on the physics shell (Phase 2b is done; R5a catalog, bank and citations, R5b the page and Unit 1 are done, Units 2 to 4 are done, Units 5 to 13 follow, one per PR), from OpenStax *University Physics Volume 1* alone
       (D33): 13 units in book order, with drag, variable-mass, fluids, waves and sound added.
 - STA 3032: keep its checks passing. Rework only if the owner asks.
+
+### Personal projects
+
+- [ ] **Bench**, a breadboard-electronics module beside PHY 2049 (D35,
+      [bench](docs/course-plans/bench.md)). B0: PHY 2049's schematic view moves into
+      `packages/shells/physics/`, in its own PR. B1: the course skeleton and Unit 1 (the breadboard
+      and the meter), with the shell's breadboard and probe parts. Then Units 2 to 9, one per PR.
 
 ### Platform items that can run beside the list
 
