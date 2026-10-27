@@ -8,7 +8,7 @@ import {
   satP, satT, tableInterp, tableInterp2, toC, waterP, waterTP, waterTv,
 } from '@flux/subjects/thermo';
 import { region1Raw, region2Raw } from '@flux/subjects/thermo/if97.js';
-import { celsius, cite, kase, mc, num, problem, range } from '../kit.js';
+import { celsius, choice, cite, kase, mc, num, problem, range } from '../kit.js';
 
 const KPA = 1e3;
 const MPA = 1e6;
@@ -58,9 +58,9 @@ const shV = (p, T) => tableInterp2((pp, TT) => waterTP(TT, pp).v, SUPERHEAT_P_GR
 const shH = (p, T) => tableInterp2((pp, TT) => waterTP(TT, pp).h, SUPERHEAT_P_GRID, SUPERHEAT_T_GRID, p, T);
 
 const PHASES = [
-  ['liquid', 'compressed liquid'],
-  ['mixture', 'saturated mixture'],
-  ['vapour', 'superheated vapour'],
+  ['liquid', 'compressed liquid', 'Below Tsat at this pressure the water is a compressed liquid.'],
+  ['mixture', 'saturated mixture', 'A mixture sits at Tsat. This temperature is off the boiling line, so the two phases are not together.'],
+  ['vapour', 'superheated vapour', 'Above Tsat at this pressure the water is superheated vapour.'],
 ];
 
 const ch2 = [
@@ -72,6 +72,7 @@ const ch2 = [
     lab: 'phase',
     src: cite('phase-diagrams'),
     topics: ['phase'],
+    variety: ['representation'],
     vars: {
       p: range(50, 5000, 50, 'kPa', KPA),
       tC: celsius(20, 400, 5),
@@ -118,6 +119,7 @@ const ch2 = [
     lab: 'phase',
     src: cite('quality'),
     topics: ['quality', 'tables'],
+    variety: ['unknown'],
     vars: {
       V: range(0.1, 2, 0.1, 'm³'),
       m: range(2, 40, 1, 'kg'),
@@ -130,7 +132,16 @@ const ch2 = [
     },
     text: (T) => String.raw`A rigid tank of ${T.V} m³ holds ${T.m} kg of water at ${T.tC} °C, part liquid and part vapour. Find the pressure in the tank and the quality.`,
     parts: [
-      num('p', ($) => satT($.T).p, 'kPa', { scale: KPA, tol: 0.003, label: 'pressure', alt: ($) => satRowT($.T, 'p') / KPA }),
+      num('p', ($) => satT($.T).p, 'kPa', {
+        scale: KPA,
+        tol: 0.003,
+        label: 'pressure',
+        alt: ($) => satRowT($.T, 'p') / KPA,
+        traps: [
+          [($) => satT($.T).p - 101325, 'That is gauge pressure. Saturation pressure in the table is absolute.'],
+          [($) => satT($.T).p / 1000, 'That number is in MPa. The part asks for kPa.'],
+        ],
+      }),
       num('x', ($) => {
         const s = satT($.T);
         return ($.v - s.vf) / (s.vg - s.vf);
@@ -138,6 +149,16 @@ const ch2 = [
         tol: 0.005,
         label: 'quality',
         alt: ($) => ($.v - satRowT($.T, 'vf')) / (satRowT($.T, 'vg') - satRowT($.T, 'vf')),
+        traps: [
+          [($) => {
+            const s = satT($.T);
+            return ($.v - s.vf) / s.vf;
+          }, 'Divide by v_fg = v_g − v_f, not by v_f.'],
+          [($) => {
+            const s = satT($.T);
+            return s.vf / $.v;
+          }, 'That is the liquid volume over the total specific volume, not the vapour mass fraction.'],
+        ],
       }),
     ],
     level: 2,
@@ -178,23 +199,40 @@ const ch2 = [
     lab: 'phase',
     src: cite('property-tables'),
     topics: ['quality', 'tables'],
+    variety: ['unknown'],
     vars: {
       p: range(110, 990, 20, 'kPa', KPA),
       x: range(0.1, 0.9, 0.05, ''),
     },
     text: (T) => String.raw`Water at $P = ${T.p}$ kPa is a saturated mixture with quality $x = ${T.x}$. Find its temperature, specific volume and enthalpy.`,
     parts: [
-      num('T', ($) => toC(mixP($.p, $.x).T), '°C', { tol: 0.002, label: 'temperature', alt: ($) => toC(satRowP($.p, 'T')) }),
+      num('T', ($) => toC(mixP($.p, $.x).T), '°C', {
+        tol: 0.002,
+        label: 'temperature',
+        alt: ($) => toC(satRowP($.p, 'T')),
+        traps: [
+          [($) => toC(mixP($.p, $.x).T) + 273.15, 'That temperature is in kelvin. The part asks for °C.'],
+          [($) => 100, 'Water boils at 100 °C only near 101 kPa. Read Tsat at this pressure.'],
+        ],
+      }),
       num('v', ($) => mixP($.p, $.x).v, 'm³/kg', {
         tol: 0.003,
         label: 'specific volume',
         alt: ($) => satRowP($.p, 'vf') + $.x * (satRowP($.p, 'vg') - satRowP($.p, 'vf')),
+        traps: [
+          [($) => satP($.p).vf, 'That is saturated liquid. This quality sits well to the right of v_f.'],
+          [($) => satP($.p).vg, 'That is saturated vapour. The quality is not 1.'],
+        ],
       }),
       num('h', ($) => mixP($.p, $.x).h, 'kJ/kg', {
         scale: KJ,
         tol: 0.002,
         label: 'enthalpy',
         alt: ($) => (satRowP($.p, 'hf') + $.x * satRowP($.p, 'hfg')) / KJ,
+        traps: [
+          [($) => satP($.p).hf, 'That is h_f. Add x h_fg.'],
+          [($) => satP($.p).hg, 'That is h_g. The quality is not 1.'],
+        ],
       }),
     ],
     level: 1,
@@ -237,6 +275,7 @@ const ch2 = [
     lab: 'phase',
     src: cite('property-tables'),
     topics: ['superheated', 'interpolation'],
+    variety: ['unknown'],
     vars: {
       // From 0.25 MPa up, the pressure blocks are close enough that a straight line in P stays within a few percent.
       p: range(0.25, 4.5, 0.05, 'MPa', MPA),
@@ -246,8 +285,25 @@ const ch2 = [
     valid: ($) => covered($.T, $.p) && $.T > satP($.p).T + 20 && superheatCellsExist($.p, $.T),
     text: (T) => String.raw`Steam is at $P = ${T.p}$ MPa and $T = ${T.tC}$ °C. Find its specific volume and enthalpy.`,
     parts: [
-      num('v', ($) => waterTP($.T, $.p).v, 'm³/kg', { tol: 0.003, label: 'specific volume', alt: ($) => shV($.p, $.T) }),
-      num('h', ($) => waterTP($.T, $.p).h, 'kJ/kg', { scale: KJ, tol: 0.002, label: 'enthalpy', alt: ($) => shH($.p, $.T) / KJ }),
+      num('v', ($) => waterTP($.T, $.p).v, 'm³/kg', {
+        tol: 0.003,
+        label: 'specific volume',
+        alt: ($) => shV($.p, $.T),
+        traps: [
+          [($) => waterTP($.T, $.p).v * 1000, 'That is litres per kilogram. Divide by 1000 for m³/kg.'],
+          [($) => satP($.p).vf, 'That is the saturated-liquid volume. This steam is superheated.'],
+        ],
+      }),
+      num('h', ($) => waterTP($.T, $.p).h, 'kJ/kg', {
+        scale: KJ,
+        tol: 0.002,
+        label: 'enthalpy',
+        alt: ($) => shH($.p, $.T) / KJ,
+        traps: [
+          [($) => waterTP($.T, $.p).u, 'That is u. Enthalpy is u + Pv.'],
+          [($) => satP($.p).hf, 'That is saturated-liquid enthalpy. This state is superheated.'],
+        ],
+      }),
     ],
     level: 2,
     hints: [
@@ -288,6 +344,7 @@ const ch2 = [
     lab: 'phase',
     src: cite('interpolation'),
     topics: ['superheated', 'interpolation'],
+    variety: ['unknown'],
     vars: {
       p: range(0.2, 4, 0.1, 'MPa', MPA),
       tTrue: celsius(215, 705, 10),
@@ -317,6 +374,10 @@ const ch2 = [
           const [p0, p1] = bracket(SUPERHEAT_P_GRID, $.p);
           return toC(lerp(p0, atP(p0), p1, atP(p1), $.p));
         },
+        traps: [
+          [($) => toC(waterP($.p, 'h', $.H).T) + 273.15, 'That temperature is in kelvin. The part asks for °C.'],
+          [($) => toC(satP($.p).T), 'That is Tsat. The enthalpy is above h_g, so the steam is superheated.'],
+        ],
       }),
     ],
     level: 3,
@@ -344,6 +405,68 @@ const ch2 = [
       return { T: toC((lo + hi) / 2) };
     },
     cases: [kase(cite('interpolation'), { p: 1.4, tTrue: 325 }, { T: 325.0 })],
+  }),
+
+  problem({
+    id: 'u1.2.where',
+    title: 'Phase from the specific volume',
+    kind: 'conceptual',
+    exam: 'u1',
+    ch: '2',
+    lab: 'phase',
+    src: cite('quality'),
+    topics: ['phase', 'quality'],
+    variety: ['representation'],
+    vars: {
+      p: range(100, 1500, 50, 'kPa', KPA),
+      place: choice(['left', 'below v_f'], ['inside', 'between v_f and v_g'], ['right', 'above v_g']),
+    },
+    derive: ($) => {
+      const s = satP($.p);
+      const v = $.place === 'left' ? s.vf * 0.995 : $.place === 'inside' ? (s.vf + s.vg) / 2 : s.vg * 1.02;
+      return { v };
+    },
+    text: (T, $, sig) => {
+      const s = satP($.p);
+      return String.raw`At $${T.p}$ kPa, $v_f = ${sig(s.vf)}$ m³/kg and $v_g = ${sig(s.vg)}$ m³/kg. Water with $v = ${sig($.v)}$ m³/kg is`;
+    },
+    parts: [mc('phase', [
+      ['liquid', 'compressed liquid', 'Specific volume below v_f cannot be a mixture. The liquid is compressed.'],
+      ['mixture', 'a saturated mixture', 'Between v_f and v_g the state is inside the dome.'],
+      ['vapour', 'superheated vapour', 'Specific volume above v_g cannot be a mixture. The vapour is superheated.'],
+    ], ($) => ($.place === 'left' ? 'liquid' : $.place === 'inside' ? 'mixture' : 'vapour'), { label: 'phase' })],
+    level: 1,
+    hints: [
+      'At a stated pressure, place the specific volume against the saturation row.',
+      'One side of the dome is liquid, the other side is vapour, and the interior is a mixture.',
+    ],
+    steps: ($, sig) => {
+      const s = satP($.p);
+      const name = $.v < s.vf ? 'compressed liquid' : $.v > s.vg ? 'superheated vapour' : 'a saturated mixture';
+      return [String.raw`$v = ${sig($.v)}$ sits against $v_f = ${sig(s.vf)}$ and $v_g = ${sig(s.vg)}$: ${name}.`];
+    },
+    second: ($) => {
+      const s = satP($.p);
+      return { phase: $.v < s.vf ? 'liquid' : $.v > s.vg ? 'vapour' : 'mixture' };
+    },
+    sim: {
+      scenario: 'boil',
+      setup(s, $) {
+        s.p = $.p;
+        const sat = satP($.p);
+        s.h = $.place === 'left'
+          ? waterTP(sat.T - 10, $.p).h
+          : $.place === 'inside'
+            ? mixP($.p, 0.5).h
+            : waterTP(sat.T + 40, $.p).h;
+      },
+      read: (c) => ({ phase: c.phase }),
+    },
+    cases: [
+      kase(cite('quality'), { p: 500, place: 'left' }, { phase: 'liquid' }),
+      kase(cite('quality'), { p: 500, place: 'inside' }, { phase: 'mixture' }),
+      kase(cite('quality'), { p: 500, place: 'right' }, { phase: 'vapour' }),
+    ],
   }),
 ];
 

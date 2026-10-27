@@ -38,6 +38,7 @@ const ch3 = [
     lab: null,
     src: cite('ideal-gas'),
     topics: ['ideal-gas'],
+    variety: ['unknown'],
     vars: {
       V: range(0.2, 5, 0.2, 'm³'),
       p: range(100, 1000, 25, 'kPa', KPA),
@@ -45,7 +46,14 @@ const ch3 = [
     },
     derive: ($) => ({ T: fromC($.tC) }),
     text: (T) => String.raw`A ${T.V} m³ tank holds air at $${T.p}$ kPa and ${T.tC} °C. Treat the air as an ideal gas. Find its mass.`,
-    parts: [num('m', ($) => ($.p * $.V) / (AIR.R * $.T), 'kg', { tol: 0.005, label: 'mass' })],
+    parts: [num('m', ($) => ($.p * $.V) / (AIR.R * $.T), 'kg', {
+      tol: 0.005,
+      label: 'mass',
+      traps: [
+        [($) => ($.p * $.V) / (AIR.R * $.tC), 'The ideal-gas law needs kelvin. °C was used.'],
+        [($) => (($.p - 101325) * $.V) / (AIR.R * $.T), 'That used gauge pressure. The law needs absolute pressure.'],
+      ],
+    })],
     level: 1,
     hints: [
       String.raw`The ideal-gas law relates pressure, volume, mass and temperature: $PV = mRT$.`,
@@ -68,6 +76,7 @@ const ch3 = [
     lab: null,
     src: cite('ideal-gas'),
     topics: ['ideal-gas', 'english'],
+    variety: ['representation'],
     vars: {
       V: range(5, 100, 5, 'ft³'),
       p: range(20, 200, 5, 'psia', PA_PER_PSI),
@@ -75,7 +84,22 @@ const ch3 = [
     },
     derive: ($) => ({ T: fromF($.tF) }),
     text: (T) => String.raw`A tank of ${T.V} ft³ holds air at ${T.p} psia and ${T.tF} °F. Treat the air as an ideal gas. Find its mass in pounds-mass.`,
-    parts: [num('m', ($) => ($.p * $.V * FT3) / (AIR.R * $.T), 'lbm', { scale: KG_PER_LBM, tol: 0.005, label: 'mass' })],
+    parts: [num('m', ($) => ($.p * $.V * FT3) / (AIR.R * $.T), 'lbm', {
+      scale: KG_PER_LBM,
+      tol: 0.005,
+      label: 'mass',
+      traps: [
+        [($) => {
+          const mLbm = (($.p / PA_PER_PSI) * 144 * $.V) / (R_AIR_ENGLISH * $.tF);
+          return mLbm * KG_PER_LBM;
+        }, 'Temperature in the English gas law is rankine, °F + 459.67.'],
+        [($) => {
+          const psig = $.p / PA_PER_PSI - 101325 / PA_PER_PSI;
+          const mLbm = (psig * 144 * $.V) / (R_AIR_ENGLISH * ($.tF + 459.67));
+          return mLbm * KG_PER_LBM;
+        }, 'psia was treated as gauge. Subtract one atmosphere only when the given pressure is gauge.'],
+      ],
+    })],
     level: 1,
     hints: [
       String.raw`The ideal-gas law $PV = mRT$ holds in any consistent set of units.`,
@@ -102,6 +126,7 @@ const ch3 = [
     lab: null,
     src: cite('ideal-gas'),
     topics: ['ideal-gas', 'english'],
+    variety: ['unknown'],
     vars: {
       p1: range(15, 150, 5, 'psia', PA_PER_PSI),
       t1: fahrenheit(20, 120, 5),
@@ -109,7 +134,15 @@ const ch3 = [
     },
     derive: ($) => ({ T1: fromF($.t1), T2: fromF($.t2) }),
     text: (T) => String.raw`A rigid tank holds air at ${T.p1} psia and ${T.t1} °F. It is heated to ${T.t2} °F. Treat the air as an ideal gas. Find the final pressure.`,
-    parts: [num('p2', ($) => ($.p1 * $.T2) / $.T1, 'psia', { scale: PA_PER_PSI, tol: 0.005, label: 'final pressure' })],
+    parts: [num('p2', ($) => ($.p1 * $.T2) / $.T1, 'psia', {
+      scale: PA_PER_PSI,
+      tol: 0.005,
+      label: 'final pressure',
+      traps: [
+        [($) => $.p1 * ($.t2 / $.t1), 'The ratio uses rankine, not °F. Add 459.67 to each temperature.'],
+        [($) => ($.p1 - 101325) * ($.T2 / $.T1), 'The given pressure is absolute. Subtracting one atmosphere treats it as gauge.'],
+      ],
+    })],
     level: 1,
     hints: [
       'The tank is rigid and closed, so the mass and the volume stay the same.',
@@ -136,6 +169,7 @@ const ch3 = [
     lab: 'phase',
     src: cite('compressibility'),
     topics: ['compressibility', 'superheated'],
+    variety: ['representation'],
     // Pressures on the table grid: the student reads one block and interpolates only in T. Between
     // low-pressure blocks v ∝ 1/P, and a straight line in P would be off by up to 12%.
     vars: {
@@ -151,8 +185,19 @@ const ch3 = [
     },
     text: (T) => String.raw`Steam is at $P = ${T.pMPa}$ MPa and $T = ${T.tC}$ °C. Find its compressibility factor $Z = Pv/RT$, and say whether the ideal-gas law gives $v$ within 1%.`,
     parts: [
-      num('Z', ($) => ($.p * waterTP($.T, $.p).v) / (R_WATER * 1e3 * $.T), '', { tol: 0.002, label: 'compressibility factor Z', alt: ($) => zTable($.p, $.T) }),
-      mc('ideal', [['yes', 'yes, within 1%'], ['no', 'no']], ($) => (Math.abs(1 - ($.p * waterTP($.T, $.p).v) / (R_WATER * 1e3 * $.T)) < 0.01 ? 'yes' : 'no'), {
+      num('Z', ($) => ($.p * waterTP($.T, $.p).v) / (R_WATER * 1e3 * $.T), '', {
+        tol: 0.002,
+        label: 'compressibility factor Z',
+        alt: ($) => zTable($.p, $.T),
+        traps: [
+          [($) => ($.p * waterTP($.T, $.p).v) / (AIR.R * $.T), 'That used air\'s R. For water use 0.4615 kJ/(kg·K).'],
+          [($) => ($.p * waterTP($.T, $.p).v) / (R_WATER * $.T), 'R for water is 0.4615 kJ/(kg·K), which is 461.5 J/(kg·K). The units were short by 1000.'],
+        ],
+      }),
+      mc('ideal', [
+        ['yes', 'yes, within 1%', 'Z is within 1% of 1, so the ideal-gas specific volume is within 1% of the table.'],
+        ['no', 'no', 'Z is more than 1% away from 1, so the ideal-gas law misses the table volume by more than that.'],
+      ], ($) => (Math.abs(1 - ($.p * waterTP($.T, $.p).v) / (R_WATER * 1e3 * $.T)) < 0.01 ? 'yes' : 'no'), {
         label: 'ideal within 1%?',
       }),
     ],
@@ -197,13 +242,21 @@ const ch3 = [
     lab: null,
     src: cite('ideal-gas'),
     topics: ['ideal-gas'],
+    variety: ['unknown'],
     vars: {
       p: range(60, 200, 2, 'kPa', KPA),
       tC: celsius(-50, 60, 2),
     },
     derive: ($) => ({ T: fromC($.tC) }),
     text: (T) => String.raw`Find the density of air at $${T.p}$ kPa and ${T.tC} °C, as an ideal gas.`,
-    parts: [num('rho', ($) => $.p / (AIR.R * $.T), 'kg/m³', { tol: 0.005, label: 'density' })],
+    parts: [num('rho', ($) => $.p / (AIR.R * $.T), 'kg/m³', {
+      tol: 0.005,
+      label: 'density',
+      traps: [
+        [($) => $.p / (AIR.R * $.tC), 'Density from the ideal-gas law needs kelvin. °C was used.'],
+        [($) => ($.p - 101325) / (AIR.R * $.T), 'That used gauge pressure. Density needs the absolute pressure.'],
+      ],
+    })],
     level: 1,
     hints: [
       String.raw`Density is mass per volume, so divide the ideal-gas law by $V$.`,
@@ -215,6 +268,54 @@ const ch3 = [
     // Second route: molar concentration P/(R̄T) times the molar mass.
     second: ($) => ({ rho: ($.p / (R_UNIVERSAL * $.T)) * molarMass('air') }),
     cases: [kase(cite('ideal-gas'), { p: 101, tC: 15 }, { rho: 1.221 })],
+  }),
+
+  problem({
+    id: 'u1.3.slip',
+    title: 'Which way the density moves',
+    kind: 'conceptual',
+    exam: 'u1',
+    ch: '3',
+    lab: null,
+    src: cite('ideal-gas'),
+    topics: ['ideal-gas'],
+    variety: ['representation'],
+    vars: {
+      p: range(120, 300, 10, 'kPa', KPA),
+      tC: celsius(10, 50, 5),
+      fault: choice(['celsius', 'the Celsius temperature'], ['gauge', 'the gauge pressure']),
+    },
+    derive: ($) => ({ T: fromC($.tC) }),
+    text: (T) => (T.fault === 'the Celsius temperature'
+      ? String.raw`Air at $${T.p}$ kPa and ${T.tC} °C. A density is computed from $\rho = P/(RT)$ with $T = ${T.tC}$ instead of the kelvin temperature. Compared with the true density, that result is`
+      : String.raw`Air at $${T.p}$ kPa absolute and ${T.tC} °C. A density is computed with the gauge pressure, $${T.p} - 101.3$ kPa, in place of the absolute pressure. Compared with the true density, that result is`),
+    parts: [mc('dir', [
+      ['higher', 'higher', 'Dividing by a Celsius temperature, far below the kelvin value, inflates the density.'],
+      ['lower', 'lower', 'Gauge pressure is smaller than absolute pressure, so the density comes out low.'],
+      ['same', 'the same', 'The number substituted for T or P is not the absolute value the law uses, so the density moves.'],
+    ], ($) => ($.fault === 'celsius' ? 'higher' : 'lower'), { label: 'the mistaken density is' })],
+    level: 2,
+    hints: [
+      'The ideal-gas density is P/(RT), with absolute pressure and absolute temperature.',
+      'A smaller denominator raises a fraction. A smaller numerator lowers it.',
+    ],
+    steps: ($, sig) => {
+      const truth = $.p / (AIR.R * $.T);
+      const wrong = $.fault === 'celsius' ? $.p / (AIR.R * $.tC) : ($.p - 101325) / (AIR.R * $.T);
+      return [
+        String.raw`True density: ${sig(truth)} kg/m³. The mistaken substitution gives ${sig(wrong)} kg/m³.`,
+        wrong > truth ? 'The mistaken density is higher.' : 'The mistaken density is lower.',
+      ];
+    },
+    second: ($) => {
+      const truth = $.p / (AIR.R * $.T);
+      const wrong = $.fault === 'celsius' ? $.p / (AIR.R * $.tC) : ($.p - 101325) / (AIR.R * $.T);
+      return { dir: wrong > truth ? 'higher' : 'lower' };
+    },
+    cases: [
+      kase(cite('ideal-gas'), { p: 200, tC: 25, fault: 'celsius' }, { dir: 'higher' }),
+      kase(cite('ideal-gas'), { p: 200, tC: 25, fault: 'gauge' }, { dir: 'lower' }),
+    ],
   }),
 ];
 
