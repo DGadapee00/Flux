@@ -53,7 +53,7 @@ subject libraries (a function written for one course serves the next), and one s
 | EGN 3331 Mechanics of Materials | [egn3331](docs/course-plans/egn3331.md) | Unit 1 of 11 | fails | R3b: confirm the new order, then build |
 | EML 3100 Thermodynamics | [eml3100](docs/course-plans/eml3100.md) | 3 of 5 units (Unit 3 to the standard) | fails | R3a: Units 4–5, then `why` and traps for Units 1–2 |
 | STA 3032 Statistics | [sta3032](docs/course-plans/sta3032.md) | complete, older style | fails | keep passing; no rework |
-| Bench (electronics on the bench) | [bench](docs/course-plans/bench.md) | Units 1–2 of 9 built (engineering shell) | fails (Units 1–2 pass) | Unit 3, reading the world |
+| Bench (electronics on the bench) | [bench](docs/course-plans/bench.md) | Units 1–3 of 9 built (engineering shell) | fails (Units 1–3 pass) | Unit 4, switching bigger things |
 
 ## 3. The build list, in order
 
@@ -124,8 +124,8 @@ EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come las
 - [ ] **Bench**, a breadboard-electronics module beside PHY 2049 (D35,
       [bench](docs/course-plans/bench.md)). B0 (PHY 2049's schematic view in the physics shell) and
       B1 (the course on the engineering shell, and Unit 1: breadboard, multimeter, USB power) are
-      done. Unit 2 (LED and resistor, LED strings, indicator LED) is done. Units 3 to 9 follow, one
-      per PR.
+      done. Unit 2 (LED and resistor, LED strings, indicator LED) and Unit 3 (divider, button and
+      pull-up, night light) are done. Units 4 to 9 follow, one per PR.
 
 ### Platform items that can run beside the list
 

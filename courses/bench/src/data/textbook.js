@@ -42,6 +42,33 @@ export const BOOKS = Object.freeze({
     license: 'Standard; the series named, nothing copied',
     url: 'https://webstore.iec.ch/',
   }),
+  gl55: Object.freeze({
+    short: 'GL55 datasheet',
+    author: 'Senba Optical & Electronic',
+    title: 'GL55 Series Photoresistor (GL5528)',
+    publisher: 'Senba',
+    year: null,
+    license: 'Datasheet; figures cited, nothing copied',
+    url: null,
+  }),
+  ntc: Object.freeze({
+    short: 'NTC 3950',
+    author: 'Typical bead thermistor datasheets',
+    title: '10 kΩ NTC thermistor, B25/50 = 3950 K',
+    publisher: 'various makers',
+    year: null,
+    license: 'Typical figures; to be confirmed against one maker’s part',
+    url: null,
+  }),
+  avr: Object.freeze({
+    short: 'ATmega328P datasheet',
+    author: 'Microchip Technology',
+    title: 'ATmega48A/PA/88A/PA/168A/PA/328/P datasheet',
+    publisher: 'Microchip',
+    year: 2020,
+    license: 'Datasheet; figures cited, nothing copied',
+    url: 'https://www.microchip.com/',
+  }),
 });
 
 /** topic → where to read about it. Kuphaldt sections are volume and chapter. */
@@ -61,6 +88,12 @@ export const SECTIONS = Object.freeze({
   power: { book: 'lec', section: 'I.2', title: "Ohm's law: power in electric circuits" },
   colour: { book: 'lec', section: 'V.2', title: 'Color codes: resistor color codes' },
   e12: { book: 'iec', section: 'E12', title: 'The E12 series of preferred values' },
+  divider: { book: 'lec', section: 'I.6', title: "Divider circuits and Kirchhoff's laws" },
+  loading: { book: 'lec', section: 'I.10', title: "DC network analysis: Thevenin's theorem" },
+  ldr: { book: 'gl55', section: 'GL5528', title: 'Light resistance, gamma and dark resistance' },
+  ntc: { book: 'ntc', section: 'B', title: 'The beta equation' },
+  pullup: { book: 'avr', section: 'I/O ports', title: 'Configuring the pin: the internal pull-up' },
+  inputs: { book: 'avr', section: 'DC characteristics', title: 'Input low and high voltages, input leakage' },
 });
 
 export function citation(topic) {

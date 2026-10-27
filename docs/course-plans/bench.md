@@ -5,7 +5,7 @@ get a job done, and how to find out why one does not work. It sits beside PHY 20
 what each part is, and before EEL 3111, which analyses circuits formally. Every unit starts from a
 goal ("turn on a light when it gets dark"), not from a component.
 
-Status: **building** (27 Oct 2026). Confirmed by the owner, who chose this plan over mapping it to MIT 6.091 (D35). Units 1 and 2 are built. Unit 2 adds an `led-strings` lab for its series-versus-parallel family. Its LED figures are typical values for a 5 mm part, not yet one maker's datasheet (see the course's PROVENANCE.md).
+Status: **building** (27 Oct 2026). Confirmed by the owner, who chose this plan over mapping it to MIT 6.091 (D35). Units 1 to 3 are built. Unit 2 adds an `led-strings` lab for its series-versus-parallel family. Its LED figures are typical values for a 5 mm part, not yet one maker's datasheet (see the course's PROVENANCE.md).
 
 | | |
 |---|---|
