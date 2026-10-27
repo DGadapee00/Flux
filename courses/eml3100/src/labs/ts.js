@@ -127,9 +127,12 @@ export default defineLab({
     const P = layout(canvas, { lo: sLo, hi: sHi }, { lo: tLo, hi: tHi });
     axes(P, { xLabel: 's (J/kg·K)', yLabel: 'T (°C)' });
     if (c.mode === 'turbine' && c.s2s != null) {
-      line(P, [[c.s1, toC(c.T1)], [c.s2s, toC(c.T2s)]], { color: alpha(C.teal, 0.7), width: 2, dash: [4, 4] });
+      line(P, [[c.s1, toC(c.T1)], [c.s2s, toC(c.T2s)]], { color: alpha(C.teal, 0.7), width: 3, dash: [4, 4] });
+      // Temperature marks span the plot so a vertical isentrope is still visible on a phone.
+      line(P, [[sLo + 40, toC(c.T1)], [sHi - 40, toC(c.T1)]], { color: alpha(C.gold, 0.85), width: 2 });
+      line(P, [[sLo + 40, toC(c.T2)], [sHi - 40, toC(c.T2)]], { color: alpha(C.gold, 0.85), width: 2 });
     }
-    line(P, [[c.s1, toC(c.T1)], [c.s2, toC(c.T2)]], { color: C.yellow, width: 2.5 });
+    line(P, [[c.s1, toC(c.T1)], [c.s2, toC(c.T2)]], { color: C.yellow, width: 4 });
     dot(P, c.s1, toC(c.T1), { color: C.teal, r: 4 });
     dot(P, c.s2, toC(c.T2), { color: C.gold, r: 4 });
     note(P, '1', c.s1, toC(c.T1), { dx: -12, dy: -6 });
