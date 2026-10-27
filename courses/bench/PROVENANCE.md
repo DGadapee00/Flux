@@ -29,6 +29,13 @@ rest on through `src/data/textbook.js`.
 6. **Resistors:** the E12 series of IEC 60063; carbon-film parts rated ⅛ W or ¼ W at 70 °C. Running
    a resistor at no more than half its rating is common practice, not a standard.
 
+7. **Sensors and the microcontroller (Unit 3):** the Senba GL55 series datasheet for the GL5528 LDR
+   (10–20 kΩ at 10 lux, taken as 15 kΩ; gamma 0.6; at least 1 MΩ dark), checked against the
+   datasheet's table on 27 Oct 2026. A 10 kΩ NTC thermistor with B = 3950 K: typical figures of the
+   common bead part, to be confirmed against one maker's datasheet. The Microchip ATmega328P
+   datasheet for input low and high levels (0.3 and 0.6 of V_CC), pin leakage (1 µA), the internal
+   pull-up (20–50 kΩ) and the ADC (10 bits, V_in·1024/V_ref, sources of 10 kΩ or less).
+
 ## Illustrative values
 
 Each lab says which of its numbers are illustrative rather than measured or specified:
@@ -39,11 +46,14 @@ Each lab says which of its numbers are illustrative rather than measured or spec
 - The power bank's 5.10 V, 0.1 Ω output, 2.1 A port and 85% conversion efficiency, and the laptop
   port's 5.05 V and 0.15 Ω, are illustrative. The bank's 10,000 mAh at 3.7 V (37 Wh) follows how
   banks are labelled.
+- The button lab's stray pickup (half the supply plus 2 V of 60 Hz hum, through 1 MΩ) and its
+  0.1 Ω button contact stand in for leakage and capacitive coupling; they are not measurements.
+- The night light's light levels (1, 10, 300 and 10,000 lux) are typical round figures.
 - The LED model's ideality of 2 and series resistance of 10 Ω are chosen so its curve is as steep as
   a typical datasheet's, about 0.2 V from 10 to 30 mA. The spread in the LED strings lab is a slider.
 
 ## Shared code
 
 The circuit solver (`packages/subjects/src/em/mna.js`) came from PHY 2049. The breadboard model
-(`packages/subjects/src/em/breadboard.js`) and the diode model (`packages/subjects/src/em/diode.js`)
-were written for this course and have their own tests.
+(`packages/subjects/src/em/breadboard.js`) and the diode and sensor models (`packages/subjects/src/em/diode.js`,
+`sensors.js`) were written for this course and have their own tests.

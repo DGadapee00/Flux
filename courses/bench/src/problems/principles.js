@@ -17,6 +17,12 @@ export const PRINCIPLES = {
   'e12-up': { name: 'Round up to a standard part', statement: 'Resistors come in the E12 series; buy the next value up so the current stays at or under the target.', cue: 'Choosing a resistor to buy.', family: 'LEDs' },
   power: { name: 'Power in a resistor', statement: 'A resistor turns I squared R into heat, which must stay within its rating.', cue: 'Will this resistor run hot?', family: 'Power' },
   'parallel-share': { name: 'Parallel shares a voltage', statement: 'Parts in parallel share one voltage, and their currents add.', cue: 'LEDs side by side.', family: 'Circuits' },
+  ratio: { name: 'The ratio sets a divider', statement: 'A divider’s output is the lower part’s share of the supply; scaling both parts changes nothing until a load is attached.', cue: 'Two resistors from a supply.', family: 'Sensing' },
+  'sensor-side': { name: 'Which side the sensor sits', statement: 'A sensor below the output raises it as its resistance grows; above the output it lowers it.', cue: 'An LDR or thermistor in a divider.', family: 'Sensing' },
+  'geo-mean': { name: 'Geometric mean for swing', statement: 'The fixed resistor that gives the largest swing is the geometric mean of the sensor’s two resistances.', cue: 'Choosing a divider’s fixed resistor.', family: 'Sensing' },
+  'loading-div': { name: 'Loading a divider', statement: 'A load is in parallel with the lower part, so it pulls the output down unless it is much larger than the divider.', cue: 'Something reads the divider.', family: 'Sensing' },
+  floating: { name: 'A floating input', statement: 'An input joined to nothing has no voltage of its own and reads stray pickup.', cue: 'A button input that misbehaves.', family: 'Inputs' },
+  'pull-size': { name: 'Sizing a pull resistor', statement: 'A pull resistor must be much smaller than any stray or leakage path, and large enough not to waste power when the button is held.', cue: 'Choosing a pull-up.', family: 'Inputs' },
   energy: { name: 'Stored energy', statement: 'Run time is stored energy, after losses, over the power drawn.', cue: 'How long a battery lasts.', family: 'Power' },
 };
 

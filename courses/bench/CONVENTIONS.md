@@ -20,4 +20,7 @@ These stay in the course. They are not copied into `packages/core` or the shell.
   board is drawn as a schematic (`src/labs/schematic.js`): the triangle points the way current flows.
 - **Resistors to buy.** The next E12 value up from the exact one, so the current lands at or under
   the target. A resistor runs cool at no more than half its rating.
-- **Units of the plan left out.** None yet; Units 3 to 9 follow, one per PR.
+- **Sensors and inputs.** A divider's output is measured from 0 V; "below the output" means between
+  the output and 0 V. Sensor and chip figures live in `src/labs/sensors.js`. On a phone, a
+  schematic too small for its labels is drawn without them; the readout carries the numbers.
+- **Units of the plan left out.** None yet; Units 4 to 9 follow, one per PR.

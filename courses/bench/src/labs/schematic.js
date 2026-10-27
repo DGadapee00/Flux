@@ -29,7 +29,7 @@ function along(P, a, b) {
 }
 
 /** A resistor: a zigzag in the middle of the segment a–b, with leads to its ends. */
-export function resistor(P, a, b, { text = '', color = C.text, side = 1 } = {}) {
+export function resistor(P, a, b, { text = '', color = C.text, side = 1, vary = false, light = false } = {}) {
   const { ctx } = P;
   ctx.save();
   const L = along(P, a, b);
@@ -45,6 +45,35 @@ export function resistor(P, a, b, { text = '', color = C.text, side = 1 } = {}) 
   ctx.lineTo(x0 + body, 0);
   ctx.lineTo(L, 0);
   ctx.stroke();
+  // A sensor: an arrow through the body (its resistance varies); light falling on it for an LDR.
+  if (vary) {
+    ctx.beginPath();
+    ctx.moveTo(x0 - 2, h + 8);
+    ctx.lineTo(x0 + body + 2, -h - 8);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x0 + body + 2, -h - 8);
+    ctx.lineTo(x0 + body - 6, -h - 6);
+    ctx.lineTo(x0 + body - 1, -h + 1);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+  if (light) {
+    ctx.strokeStyle = C.yellow;
+    ctx.lineWidth = 1.5;
+    for (const dx of [0.25, 0.6]) {
+      const x = x0 + body * dx;
+      ctx.beginPath();
+      ctx.moveTo(x - 12, -h - 18);
+      ctx.lineTo(x - 2, -h - 6);
+      ctx.moveTo(x - 2, -h - 6);
+      ctx.lineTo(x - 7, -h - 8);
+      ctx.moveTo(x - 2, -h - 6);
+      ctx.lineTo(x - 3, -h - 11);
+      ctx.stroke();
+    }
+  }
   ctx.restore();
   if (text) {
     const m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];

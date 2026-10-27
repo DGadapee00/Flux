@@ -9,6 +9,9 @@ const loaders = {
   led: () => import('./led.js'),
   'led-strings': () => import('./led-strings.js'),
   indicator: () => import('./indicator.js'),
+  divider: () => import('./divider.js'),
+  button: () => import('./button.js'),
+  nightlight: () => import('./nightlight.js'),
 };
 
 const labs = createLabLoader(loaders);

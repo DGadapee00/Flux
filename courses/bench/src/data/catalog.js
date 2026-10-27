@@ -6,7 +6,7 @@
 export const EXAMS = [
   { id: 'u1', n: 1, title: 'The bench', chapters: '1', date: 'Unit 1', labs: ['breadboard', 'meter', 'usb-rail'], coming: [] },
   { id: 'u2', n: 2, title: 'Light an LED', chapters: '2', date: 'Unit 2', labs: ['led', 'led-strings', 'indicator'], coming: [] },
-  { id: 'u3', n: 3, title: 'Reading the world', chapters: '3', date: 'Unit 3', labs: [], coming: ['Voltage divider', 'Button and pull-up'] },
+  { id: 'u3', n: 3, title: 'Reading the world', chapters: '3', date: 'Unit 3', labs: ['divider', 'button', 'nightlight'], coming: [] },
   { id: 'u4', n: 4, title: 'Switching bigger things', chapters: '4', date: 'Unit 4', labs: [], coming: ['Transistor switch', 'Flyback diode', 'Night light'] },
   { id: 'u5', n: 5, title: 'Timing', chapters: '5', date: 'Unit 5', labs: [], coming: ['RC timer', '555 timer'] },
   { id: 'u6', n: 6, title: 'Deciding', chapters: '6', date: 'Unit 6', labs: [], coming: ['Comparator', 'Temperature alarm'] },
@@ -22,6 +22,9 @@ export const LAB_META = {
   led: { id: 'led', exam: 'u2', title: 'LED and resistor' },
   'led-strings': { id: 'led-strings', exam: 'u2', title: 'LED strings' },
   indicator: { id: 'indicator', exam: 'u2', title: 'Indicator LED', app: true },
+  divider: { id: 'divider', exam: 'u3', title: 'Voltage divider' },
+  button: { id: 'button', exam: 'u3', title: 'Button and pull-up' },
+  nightlight: { id: 'nightlight', exam: 'u3', title: 'Night light', app: true },
 };
 
 /** A unit is a "chapter" here: the problems and notes of one build. */

@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Reading the World</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">BENCH · Electronics on the bench · Unit 3 · Kuphaldt, Lessons in Electric Circuits I.6, I.10; GL55 and ATmega328P datasheets</div>
+  <h1>Reading the World</h1>
+  <p class="lede">A microcontroller reads voltages. The world offers resistances: a sensor that changes with light or heat, a button that is open or closed. This unit turns one into the other with a divider and a pull resistor. It also shows what goes wrong when something reads the divider, or when an input is joined to nothing.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Dividers</h3>
+    <a href="#s1"><span>1</span>The voltage divider</a>
+    <a href="#s2"><span>2</span>Loading a divider</a>
+    <h3>Part II · Sensors</h3>
+    <a href="#s3"><span>3</span>Sensors that change resistance</a>
+    <a href="#s4"><span>4</span>Choosing the fixed resistor</a>
+    <h3>Part III · Buttons</h3>
+    <a href="#s5"><span>5</span>Floating inputs and pull resistors</a>
+    <a href="#s6"><span>6</span>Sizing the pull resistor</a>
+    <h3>Reference</h3>
+    <a href="#s7"><span>7</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Dividers</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>The voltage divider</h2>
+<p>Put two resistors in series across a supply. One current flows through both: \(I = V_s/(R_1 + R_2)\). The output is the node between them. Measured from 0 V, it is the lower resistor's drop:</p>
+\[
+V_{\text{out}} = I R_2 = V_s\,\frac{R_2}{R_1 + R_2}.
+\]
+<p>Each resistor takes a share of the supply in proportion to its resistance. The output is the lower one's share. Only the ratio appears, so scaling both resistors by ten changes nothing.</p>
+<p>A potentiometer is a divider in one part. Its wiper slides along a resistive track and splits it into an upper and a lower piece. At half way, the output is half the supply, whatever the track's total.</p>
+<div class="box ex"><span class="tag">Worked example · a 10 kΩ potentiometer at half way</span>
+<p>A 10 kΩ potentiometer runs from 5 V to 0 V, with its wiper at half way. The two pieces are 5 kΩ each:</p>
+\[
+V_{\text{out}} = 5\ \text{V} \times \frac{5\ \text{k}\Omega}{5\ \text{k}\Omega + 5\ \text{k}\Omega} = 2.50\ \text{V}.
+\]
+<p>The divider draws \(5\ \text{V}/10\ \text{k}\Omega = 0.5\ \text{mA}\) from the supply.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · ratio, not size</span>
+<p>Swap in a 100 kΩ potentiometer, also at half way. The pieces are now 50 kΩ each, and the output is still 2.50 V. The current falls to 50 µA. Nothing else changes until something reads the output.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>A divider's output is a ratio. The size of its resistors sets two other things: how much current it wastes, and how hard it is to pull its output around.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Loading a divider</h2>
+<p>Whatever reads the output draws current from it. A load from the output to 0 V sits in parallel with the lower resistor. Replace \(R_2\) by \(R_2 \parallel R_L\) and divide again:</p>
+\[
+V_{\text{out}} = V_s\,\frac{R_2 \parallel R_L}{R_1 + R_2 \parallel R_L}, \qquad R_2 \parallel R_L = \frac{R_2 R_L}{R_2 + R_L}.
+\]
+<p>Thévenin's theorem says the same thing more usefully. Seen from its output, a divider is a source of its unloaded voltage behind a resistance of \(R_1 \parallel R_2\). A load much larger than that barely moves the output. A load comparable to it pulls the output well down.</p>
+<div class="box ex"><span class="tag">Worked example · a 1 kΩ load on a 100 kΩ divider</span>
+<p>The 100 kΩ potentiometer gives 2.50 V. Connect a 1 kΩ load from the wiper to 0 V. The lower piece becomes \(50\ \text{k}\Omega \parallel 1\ \text{k}\Omega = 980\ \Omega\):</p>
+\[
+V_{\text{out}} = 5\ \text{V} \times \frac{980\ \Omega}{50\ \text{k}\Omega + 980\ \Omega} = 0.096\ \text{V}.
+\]
+<p>The output collapses to 4% of its unloaded value. The divider's own resistance is 25 kΩ, and 1 kΩ is far smaller.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Working out a divider's output and then forgetting what reads it. A meter's 10 MΩ barely matters. An LED driver, a motor controller's input or a 1 kΩ resistor matters a great deal. Compare the load with \(R_1 \parallel R_2\) first.</p>
+</div>
+<p>This is why a divider never powers anything. It only makes a voltage for an input that draws almost nothing.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The load here is a fixed resistance. A microcontroller's analog input is not: it charges a small capacitor each time it samples. A divider of more than about 10 kΩ cannot charge it fully in time, so the reading comes out low.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Sensors</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Sensors that change resistance</h2>
+<p>Many sensors are resistors whose value depends on the world. Put one in a divider with a fixed resistor, and its changes become changes in voltage.</p>
+<p>A <b>light-dependent resistor</b> (LDR) falls in resistance as light rises. On log–log axes its datasheet curve is a straight line. The GL5528 has 10–20 kΩ at 10 lux, taken here as 15 kΩ, and a gamma of 0.6:</p>
+\[
+R = R_{10}\left(\frac{E}{10\ \text{lux}}\right)^{-\gamma}.
+\]
+<p>Ten times the light divides the resistance by \(10^{0.6} = 3.98\). In the dark the line levels off at the cell's dark resistance, at least 1 MΩ.</p>
+<p>An <b>NTC thermistor</b> falls in resistance as it warms. Its beta equation, with temperatures in kelvin, is</p>
+\[
+R = R_{25}\,e^{B\left(1/T - 1/T_{25}\right)}, \qquad T_{25} = 298.15\ \text{K}.
+\]
+<p>A common part has \(R_{25} = 10\ \text{k}\Omega\) and \(B = 3950\ \text{K}\).</p>
+<div class="box ex"><span class="tag">Worked example · an LDR below 10 kΩ in room light</span>
+<p>The LDR sits between the output and 0 V, with 10 kΩ above it. At 300 lux it is about \(15\ \text{k}\Omega \times 30^{-0.6} = 1.95\ \text{k}\Omega\):</p>
+\[
+V_{\text{out}} = 5\ \text{V} \times \frac{1.95\ \text{k}\Omega}{10\ \text{k}\Omega + 1.95\ \text{k}\Omega} = 0.814\ \text{V}.
+\]
+<p>As the room darkens, the LDR's resistance climbs, its share grows, and the output rises.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the LDR above the output</span>
+<p>Swap the two parts. Now the fixed 10 kΩ is the lower part, and in the same light the output is \(5 \times 10/(10 + 1.95) = 4.19\ \text{V}\). As the room darkens, the LDR above takes more of the drop, and the output falls.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Building the divider upside down. The output then moves the wrong way: it falls in the dark when the program expects it to rise. The output is the share of whatever sits below it. Put the sensor below the output if its reading should rise as its resistance does.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a thermistor at 0 °C</span>
+<p>A 10 kΩ NTC sits below a 10 kΩ resistor. At 25 °C the two are equal and the output is 2.50 V. At 0 °C:</p>
+\[
+R = 10\ \text{k}\Omega \times e^{3950\,(1/273.15 - 1/298.15)} = 33.6\ \text{k}\Omega, \qquad V_{\text{out}} = 5 \times \frac{33.6}{10 + 33.6} = 3.87\ \text{V}.
+\]
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Choosing the fixed resistor</h2>
+<p>A sensor must tell two conditions apart: a lit room from a dark one, say. Its resistance goes from \(R_a\) to \(R_b\). With the sensor below and \(R\) above, the output swings by</p>
+\[
+\Delta V = V_s\left(\frac{R_b}{R + R_b} - \frac{R_a}{R + R_a}\right).
+\]
+<p>Too small an \(R\) and both outputs sit near 5 V; too large and both sit near 0 V. Set the derivative in \(R\) to zero: \(R_b/(R + R_b)^2 = R_a/(R + R_a)^2\). Cross-multiplying and simplifying leaves</p>
+\[
+R^2 = R_a R_b, \qquad R_{\text{best}} = \sqrt{R_a R_b}.
+\]
+<p>The geometric mean, not the average. The peak is broad, so the nearest standard value does almost as well.</p>
+<div class="box ex"><span class="tag">Worked example · the night light's fixed resistor</span>
+<p>The LDR is 1.95 kΩ in a lit room at 300 lux and 56.4 kΩ in a dark bedroom at 1 lux. The best fixed resistor is</p>
+\[
+R = \sqrt{1.95\ \text{k}\Omega \times 56.4\ \text{k}\Omega} = 10.5\ \text{k}\Omega.
+\]
+<p>With 10 kΩ, a 10-bit analog input on 5 V reads \(1024\,V/5\): 166 in the room and 869 at night. That is a swing of 703 counts of 1023.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 1 MΩ fixed resistor</span>
+<p>Try 1 MΩ, thinking a bigger resistor makes a more sensitive sensor. Against 1 MΩ the LDR is small in both lights. The readings are 1 in the room and 54 at night: a swing of only 53 counts.</p>
+</div>
+<p>The fixed resistor also sets what the analog input sees. The ATmega328P's ADC is designed for sources of about 10 kΩ or less. With 10 kΩ, the divider looks like \(10\ \text{k}\Omega \parallel 56.4\ \text{k}\Omega = 8.5\ \text{k}\Omega\) at night: within the limit.</p>
+<div class="box out"><span class="tag">What the course model leaves out</span>
+<p>GL5528 parts range from 10 to 20 kΩ at 10 lux, so calibrate the threshold on the bench. An LDR responds slowly, tens of milliseconds to light and seconds to dark. The lamp's own light can reach the sensor, so a real night light turns on at one reading and off at a higher one, or it flickers at dusk. The light levels here are typical round figures.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Buttons</h2>
+</div>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Floating inputs and pull resistors</h2>
+<p>A microcontroller's input draws almost no current, at most 1 µA on the ATmega328P. So it has no voltage of its own. Joined to nothing, it <b>floats</b>: stray fields from nearby wires and hands set its voltage, and it wanders.</p>
+<p>The chip reads below 0.3 of its supply as low and above 0.6 as high. On 5 V that is below 1.5 V and above 3.0 V. Between the two, it may read either.</p>
+<div class="box ex"><span class="tag">Worked example · a floating input</span>
+<p>A button joins an input to 0 V, with nothing else on the pin. Model the stray pickup as half the supply plus 2 V of 60 Hz hum, through 1 MΩ. With the button open, the pin follows it, from 0.50 V to 4.50 V and back, sixty times a second. It crosses the undecided band every cycle, so the program sees presses nobody made.</p>
+</div>
+<div class="box fix"><span class="tag">Fix it · a button that triggers by itself</span>
+<p>The program sees presses with nobody near. A meter on the input reads about half the supply, and the reading drifts. The input is floating. Add a pull-up resistor to the supply, or turn on the chip's own, and wire the button to 0 V.</p>
+</div>
+<p>A <b>pull-up</b> joins the pin to the supply through a resistor. With the button open, the pin sits near the supply and reads high. Pressing the button joins it to 0 V, which wins easily, and it reads low. A <b>pull-down</b> does the reverse for a button to the supply.</p>
+<p>The pin is joined to several voltages through several resistances. By Millman's theorem it settles at their conductance-weighted average:</p>
+\[
+V_{\text{pin}} = \frac{\sum V_k/R_k}{\sum 1/R_k}.
+\]
+<div class="box ex"><span class="tag">Worked example · a 10 kΩ pull-up</span>
+<p>Add 10 kΩ to 5 V. The pin is now joined to 5 V through 10 kΩ and to the stray source through 1 MΩ. The pull-up has a hundred times the conductance, so it dominates. The pin stays between 4.96 V and 5.00 V and reads high every time.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Sizing the pull resistor</h2>
+<p>A pull-up has two jobs, and they pull its size in opposite directions.</p>
+<p>It must hold the pin against every other path. The input's own leakage flows through it, so the pin sits \(I R\) below the supply. To stay above 0.6 of the supply, the pull-up may drop at most 0.4 of it:</p>
+\[
+R_{\max} = \frac{0.4\,V_{cc}}{I_{\text{leak}}}.
+\]
+<p>For the chip's 1 µA on 5 V that is 2 MΩ. Stray pickup is a stronger limit in practice. A pull-up should be much smaller than any stray path.</p>
+<div class="box ex"><span class="tag">Worked example · a 1 MΩ pull-up</span>
+<p>Swap the 10 kΩ pull-up for 1 MΩ to save current. Now it matches the stray path's 1 MΩ, and they share the pin. By Millman, the pin sits at the average of 5 V and the stray voltage. It swings from 2.75 V to 4.75 V and dips below 3.0 V every cycle, so the input misreads.</p>
+</div>
+<p>It must also not waste power. While the button is held, the pull-up has the whole supply across it and wastes</p>
+\[
+P = \frac{V_{cc}^2}{R}.
+\]
+<div class="box ex"><span class="tag">Worked example · a 100 Ω pull-up, held</span>
+<p>A 10 kΩ pull-up wastes \(5^2/10\,000 = 2.5\ \text{mW}\) while held. A 100 Ω pull-up wastes 250 mW: a ¼ W resistor's whole rating, and 50 mA from a battery for as long as the button is down.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Choosing a pull resistor at either extreme. Too large, such as 1 MΩ, and stray pickup wins. Too small, such as 100 Ω, and it wastes power. Between 4.7 kΩ and 47 kΩ suits almost every button. The ATmega328P's own pull-up is 20–50 kΩ.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The stray path is one source behind 1 MΩ, an illustrative stand-in for leakage and capacitive pickup. Real pins have clamp diodes that stop them swinging far past the rails. And a real button bounces: its contacts open and close several times in the first few milliseconds, which a program must ignore.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Formula sheet</h2>
+\[
+V_{\text{out}} = V_s\,\frac{R_2}{R_1 + R_2}, \qquad R_2 \to R_2 \parallel R_L, \qquad R_{\text{th}} = R_1 \parallel R_2
+\]
+\[
+R_{\text{LDR}} = R_{10}\left(\frac{E}{10}\right)^{-\gamma}, \qquad R_{\text{NTC}} = R_{25}\,e^{B(1/T - 1/298.15)}, \qquad R_{\text{best}} = \sqrt{R_a R_b}
+\]
+\[
+V_{\text{pin}} = \frac{\sum V_k/R_k}{\sum 1/R_k}, \qquad R_{\max} = \frac{0.4\,V_{cc}}{I_{\text{leak}}}, \qquad P = \frac{V_{cc}^2}{R}, \qquad \text{reading} = \frac{1024\,V}{V_{\text{ref}}}
+\]
+</section>
+
+</main>
+<footer>Sources: Kuphaldt, Lessons in Electric Circuits, Vol I Ch 6 (divider circuits) and Ch 10 (Thévenin's theorem); the Senba GL55 series datasheet for the GL5528; typical figures for a 10 kΩ, B = 3950 K NTC thermistor; the Microchip ATmega328P datasheet for input thresholds, leakage, pull-ups and the ADC. Nothing is copied.</footer>
+</body>
+</html>
