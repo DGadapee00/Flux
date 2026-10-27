@@ -5,15 +5,15 @@ get a job done, and how to find out why one does not work. It sits beside PHY 20
 what each part is, and before EEL 3111, which analyses circuits formally. Every unit starts from a
 goal ("turn on a light when it gets dark"), not from a component.
 
-Status: **confirmed** (owner, 27 Oct 2026). The owner chose this plan over mapping it to MIT 6.091 (D35).
+Status: **building** (27 Oct 2026). Confirmed by the owner, who chose this plan over mapping it to MIT 6.091 (D35). Unit 1 is built.
 
 | | |
 |---|---|
 | Folder and id | `courses/bench` |
 | Port | 5196 (next free after the reserved list in `AGENTS.md`) |
 | Track, order | `projects`, 1 (a new track, D35) |
-| Shell | `physics` (PHY 2049's UI), plus two new shell parts behind flags: a breadboard view and a meter probe (see "Shell work") |
-| Subject libraries | reuse `em/mna.js` and `em/circuit.js`; new `em/nonlinear.js` (Newton–Raphson on the MNA system for diodes, LEDs and transistor switches) and `em/parts.js` (part models with datasheet numbers), each with a selftest |
+| Shell | `engineering`, the shell `courses/starter` is wired to. Its 2D stage draws a flat breadboard well. The physics shell was planned, but it has no starter, and a course may not copy another real course's wiring. |
+| Subject libraries | `em/mna.js` (nodal analysis) and the new `em/breadboard.js`: holes to nets, parts to a netlist, a nodal-analysis solve, and a relaxation solve with Norton sources as the second method, with tests in `packages/subjects/test/breadboard.test.js`. Units 2 on add diode and transistor models. |
 | When the owner takes it | Not a course. The owner is starting hardware projects now (26 Oct 2026); a parts kit is coming. Built for the screen first, with an "On the bench" list per unit for when the kit arrives. |
 
 ## What it is for
@@ -242,16 +242,12 @@ which link of the chain a part belongs to.
 
 ## Shell work
 
-The breadboard view and the meter probe are new UI. A course writes no UI of its own (rule 6), so
-both go into `packages/shells/physics/` behind flags, with a test on the shell's fixture course:
-
-- `breadboard`: a hole grid with rails, parts with real footprints, and the net each hole belongs to.
-- `probe`: two meter leads the student drags to points; volts, amps or ohms, with the meter's own
-  resistance in the solve.
-
-PHY 2049's schematic view (`courses/phy2049/src/scene/schematic.js`) lives in that course, and one
-course never imports another. Reusing it means moving it into the shell first, which touches
-PHY 2049 (open question 4).
+None for Unit 1. The labs draw the board, its parts and the meter on the engineering shell's 2D stage
+(`src/labs/board.js`), and the meter's leads are placed from the Setup panel, which suits a phone
+better than dragging a lead onto a hole. A later unit that needs dragging adds it to the shell
+behind a flag, with a test on the shell's fixture course (rule 6). PHY 2049's schematic view moved
+into `packages/shells/physics/schematic.js` (B0) before the shell changed; it stays there for any
+physics-shell course.
 
 ## Prerequisite links
 

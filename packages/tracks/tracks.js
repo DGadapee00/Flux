@@ -72,6 +72,12 @@ export const TRACKS = [
     name: 'Thermal-fluids',
     courses: [{ id: 'eml3100', code: 'EML 3100', title: 'Thermodynamics', term: null, href: 'eml3100/' }],
   },
+  {
+    // Personal projects outside the degree map (DECISIONS.md, D35).
+    id: 'projects',
+    name: 'Projects',
+    courses: [{ id: 'bench', code: 'BENCH', title: 'Electronics on the bench', term: null, href: 'bench/' }],
+  },
 ];
 
 /**

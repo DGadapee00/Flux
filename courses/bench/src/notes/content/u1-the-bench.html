@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Bench</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">BENCH · Electronics on the bench · Unit 1 · Kuphaldt, Lessons in Electric Circuits I.5, I.8, VI.1–2; USB 2.0 §7.2</div>
+  <h1>The Bench</h1>
+  <p class="lede">Before a circuit can do anything, it has to be built and checked. This unit is the bench itself: how a breadboard joins parts, how a multimeter reads a circuit without spoiling it, and how USB power reaches the rails. Every later build rests on these three.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The board</h3>
+    <a href="#s1"><span>1</span>What a breadboard joins</a>
+    <a href="#s2"><span>2</span>From a schematic to the board</a>
+    <h3>Part II · Measuring</h3>
+    <a href="#s3"><span>3</span>Volts: across a part</a>
+    <a href="#s4"><span>4</span>Amps: in series</a>
+    <a href="#s5"><span>5</span>Ohms: power off</a>
+    <h3>Part III · Power</h3>
+    <a href="#s6"><span>6</span>Powering the board from USB</a>
+    <h3>Reference</h3>
+    <a href="#s7"><span>7</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The board</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>What a breadboard joins</h2>
+<p>A breadboard is a plastic block full of holes with metal clips underneath. The clips join the holes in strips. On a half-size board each numbered row has ten holes, a to j, split by a channel down the middle. Holes a to e in one row are one strip; f to j are another. Along each long edge run two power rails, + and −, each one strip along its whole length.</p>
+<p>A strip is a <b>node</b>: every lead pushed into it is at the same voltage. That one fact decides every placement. A part does something only when its two legs sit in different strips. A wire is a jumper from one strip to another, and nothing more.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Think in strips, not holes. Before you plug anything in, say which strip each leg goes to. Two legs in one strip means the part is joined to itself.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two resistors in series</span>
+<p>A 5 V supply feeds the top rails. A red jumper joins the + rail to row 10. A 1.0 kΩ resistor runs from row 10 to row 14, a 2.2 kΩ one from row 14 to row 18, and a black jumper joins row 18 to the − rail. One path runs from + to −, so the resistors are in series:</p>
+\[
+I = \frac{5\ \text{V}}{1.0\ \text{k}\Omega + 2.2\ \text{k}\Omega} = 1.56\ \text{mA}.
+\]
+<p>Row 14 sits at what the 2.2 kΩ resistor takes: \(1.5625\ \text{mA} \times 2.2\ \text{k}\Omega = 3.44\ \text{V}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Pushing a resistor in along a row, both legs in holes b14 and e14. It looks placed, but both legs share one strip. Here that also breaks the chain: nothing joins row 14 to row 18, so no current flows anywhere, and every strip on the + side reads the full 5 V.</p>
+</div>
+<p>Some longer boards split each rail in the middle. A circuit on the far half then has no power at all. A short jumper across each gap joins the halves.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The strips here are perfect conductors. Real clips have a few milliohms and a few picofarads between neighbours. That matters only for currents of amps or signals of megahertz, and worn clips can make an intermittent contact.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>From a schematic to the board</h2>
+<p>A schematic shows connections, not positions. To build one, number its nodes, then give each node its own strip. Every part's legs go to the strips of the two nodes it joins. Long nodes, such as the supply and ground, go on the rails, since many parts touch them.</p>
+<p>A resistor's value is printed in colour bands. The first two bands are digits and the third is a power of ten: brown–black–red is 1, 0 and two zeros, 1.0 kΩ. Red–red–red is 2.2 kΩ. The fourth band, gold, is a 5% tolerance. Read from the end with the bands bunched together.</p>
+<div class="box ex"><span class="tag">Worked example · a stray jumper</span>
+<p>In the circuit above, a jumper falls with one end in row 14 and the other in row 18. It joins those two strips into one node at 0 V. The 2.2 kΩ resistor now has no voltage across it: it is shorted out. Only the 1.0 kΩ resistor is left in the path:</p>
+\[
+I = \frac{5\ \text{V}}{1.0\ \text{k}\Omega} = 5.00\ \text{mA},
+\]
+<p>more than three times the current before.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Building from the picture of a circuit instead of its nodes. Two wires that cross on a schematic without a dot are not joined. On the board, two leads in one strip always are.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Measuring</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Volts: across a part</h2>
+<p>A multimeter has a dial and three jacks. The black lead always goes in COM. For volts and ohms the red lead goes in the jack marked V Ω; for milliamps it goes in the mA jack, which has a fuse behind it. The dial and the jack must agree.</p>
+<p>A voltmeter compares two points. Its leads go <b>across</b> the part, red on the side you expect to be higher, with the circuit left as it is. Inside, it is a resistance of about 10 MΩ. It draws a little current, so it is a resistor in parallel with whatever it touches.</p>
+<div class="box ex"><span class="tag">Worked example · volts across R₂</span>
+<p>A 9 V battery, with 1.5 Ω inside, drives two 10 kΩ resistors in series. With no meter, the lower one has \(9 \times 10\,000/20\,001.5 = 4.4997\ \text{V}\) across it. A 10 MΩ voltmeter in parallel makes that side 9.990 kΩ:</p>
+\[
+V = 9\ \text{V} \times \frac{9\,990}{10\,000 + 9\,990 + 1.5} = 4.4974\ \text{V}.
+\]
+<p>The meter reads 0.05% low. That is well inside a display's own accuracy.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a voltmeter on megohm resistors</span>
+<p>Swap both resistors for 1 MΩ ones. The voltage across the lower one is still 4.50 V with no meter. Now 10 MΩ in parallel with 1 MΩ is 0.909 MΩ:</p>
+\[
+V = 9\ \text{V} \times \frac{0.909}{1 + 0.909} = 4.286\ \text{V},
+\]
+<p>4.8% low. A voltmeter reads true only across resistances far below its own.</p>
+</div>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Across a resistance \(R\), a meter of resistance \(R_m\) makes \(R_\parallel = R R_m/(R + R_m)\). For \(R \ll R_m\), \(R_\parallel \approx R(1 - R/R_m)\). So the fractional error is about \(R/R_m\) times the part's share of the circuit: 0.1% per 10 kΩ against a 10 MΩ meter.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Amps: in series</h2>
+<p>An ammeter measures the current through itself, so the current must pass through it. Break the circuit at one point, pull a jumper out, and let the two leads close the gap. Move the red lead to the mA jack. Inside, the meter is a small resistance, a fraction of an ohm, so it changes the circuit very little.</p>
+<div class="box ex"><span class="tag">Worked example · breaking the circuit for amps</span>
+<p>Pull out the red jumper between the + rail and row 10. The red lead goes on the + rail, the black lead in row 10. All the current now runs through the meter's 0.5 Ω:</p>
+\[
+I = \frac{9\ \text{V}}{1.5 + 10\,000 + 10\,000 + 0.5\ \Omega} = 0.450\ \text{mA}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · amps across the battery</span>
+<p>Leave the dial on milliamps and touch the leads straight across the battery. Nothing but the battery's 1.5 Ω and the meter's 0.5 Ω limits the current:</p>
+\[
+I = \frac{9\ \text{V}}{1.5 + 0.5\ \Omega} = 4.5\ \text{A}.
+\]
+<p>That is more than twenty times the mA jack's 0.2 A fuse. The fuse melts, which is its job.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Measuring current like voltage, with the leads across a part. On amps the meter is a near short. Across a resistor, it carries that resistor's current away and changes the circuit; across a source, it blows the fuse. Before every voltage reading, check the red lead is back in the V Ω jack.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Ohms: power off</h2>
+<p>On ohms the meter becomes a source. It pushes a small current of its own through whatever is between its leads, measures the voltage that makes, and divides. That only works when its current is the only one there.</p>
+<div class="box ex"><span class="tag">Worked example · ohms across R₂</span>
+<p>Disconnect the battery and clip the leads across the lower 10 kΩ resistor. The other path, through the upper resistor, leads to the + rail and stops at the empty battery clip, so it carries nothing. The meter reads 10.0 kΩ.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Measuring resistance with the power on. The circuit's own 4.5 V adds to the meter's small test voltage, and its arithmetic returns nonsense, often a negative number. On a larger supply it can damage the meter. Power off first, every time.</p>
+<p>Measuring a part still in a circuit. The meter reads every path between its leads, in parallel. A 10 kΩ resistor with a 4.7 kΩ one across the same two rows reads 3.20 kΩ. Lift one leg out to measure a part alone.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Power</h2>
+</div>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Powering the board from USB</h2>
+<p>USB is the easiest supply on a hobby bench. The USB 2.0 specification promises 4.75 to 5.25 V at the port and up to 500 mA. A charger or a power bank can give more current: 1.5 A under the Battery Charging specification, and 2.1 A or more on many banks.</p>
+<p>The rails do not get the port's voltage. The source has a little resistance inside, and the cable has two wires, out and back, each with its own. The same current flows through all of them, so each takes a drop of \(I R\):</p>
+\[
+V_{\text{rail}} = E - I\,(r + R_{\text{cable}}), \qquad R_{\text{cable}} = 2 L \rho_{\text{wire}}.
+\]
+<p>Copper of 28 AWG, the thin wire in cheap cables, has 0.2129 Ω per metre. A metre of cable is then 0.426 Ω, out and back.</p>
+<div class="box ex"><span class="tag">Worked example · five LEDs on a power bank</span>
+<p>A bank makes 5.10 V behind 0.1 Ω. Five LEDs at 20 mA load the board like 50 Ω. Through a metre of 28 AWG cable:</p>
+\[
+I = \frac{5.10}{50 + 0.1 + 0.426} = 0.1009\ \text{A}, \qquad V_{\text{rail}} = 0.1009 \times 50 = 5.047\ \text{V}.
+\]
+<p>The bank stores 37 Wh: 10,000 mAh at its cell's 3.7 V. At 85% conversion, 31.5 Wh reach the port. The board takes \(5.09\ \text{V} \times 0.1009\ \text{A} = 0.514\ \text{W}\), so the bank lasts about 61 hours.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a motor on a thin cable</span>
+<p>A small motor loads the board like 5 Ω. The same cable now carries almost ten times the current:</p>
+\[
+I = \frac{5.10}{5 + 0.1 + 0.426} = 0.923\ \text{A}, \qquad V_{\text{rail}} = 4.615\ \text{V}.
+\]
+<p>The cable alone loses \(0.923 \times 0.426 = 0.393\ \text{V}\). The rails sit below USB's 4.75 V floor, where some boards reset.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a thicker cable</span>
+<p>Swap in a metre of 22 AWG, at 0.053 Ω per metre: 0.106 Ω out and back. The current rises a little, to 0.980 A, but the drop falls, and the rails come back to 4.898 V.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Measure the supply where it is used: at the rails, under load. A meter at the port, or on an idle board, shows a voltage the circuit never gets.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The load here is a fixed resistance. Real loads change their current with the voltage, and a motor draws several times its running current as it starts. A bank's output also droops as its cell empties, and many banks switch off below about 50 mA. The bank's 0.1 Ω and its 85% efficiency are illustrative values.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Formula sheet</h2>
+\[
+V = IR, \qquad R_{\text{series}} = R_1 + R_2, \qquad \frac{1}{R_\parallel} = \frac{1}{R_1} + \frac{1}{R_2}
+\]
+\[
+V_{\text{read}} = V\,\frac{R_\parallel}{R_\parallel + R_{\text{rest}}}, \qquad R_\parallel = \frac{R R_m}{R + R_m}, \qquad R_m \approx 10\ \text{M}\Omega
+\]
+\[
+V_{\text{rail}} = E - I\,(r + 2L\rho_{\text{wire}}), \qquad t = \frac{0.85 \times \text{mAh} \times 3.7\ \text{V}}{1000\,P}
+\]
+</section>
+
+</main>
+<footer>Sources: Kuphaldt, Lessons in Electric Circuits, Vol I Ch 5 (series circuits) and Ch 8 (DC metering), Vol VI Ch 1–2 (building and test equipment); USB 2.0 §7.2 and USB Battery Charging 1.2 for port limits; the American Wire Gauge table for copper at 20 °C. Meter figures are typical of a handheld meter. Nothing is copied.</footer>
+</body>
+</html>
