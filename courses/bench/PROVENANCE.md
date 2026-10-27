@@ -20,6 +20,15 @@ rest on through `src/data/textbook.js`.
 4. **Another view:** MIT 6.091, *Hands-On Introduction to EE Lab Skills* (IAP 2008). The owner shared
    its handouts on 27 Oct 2026; they were read, not stored, and nothing from them is copied.
 
+5. **LEDs (Unit 2):** typical figures for 5 mm through-hole LEDs: forward voltage 2.0 V (red),
+   2.1 V (yellow) and 3.2 V (InGaN green, blue, white) at 20 mA; 30 mA maximum continuous current;
+   5 V maximum reverse voltage; red forward voltage 1.8 to 2.4 V across parts. These are typical of
+   the type, **not yet confirmed against one maker's datasheet**, as the plan asks. Some current
+   datasheets rate small red LEDs at 10 mA instead (Kingbright's WP7113ID gives 1.9 V at 10 mA), so
+   the part to cite should be chosen with the owner's kit in hand.
+6. **Resistors:** the E12 series of IEC 60063; carbon-film parts rated ⅛ W or ¼ W at 70 °C. Running
+   a resistor at no more than half its rating is common practice, not a standard.
+
 ## Illustrative values
 
 Each lab says which of its numbers are illustrative rather than measured or specified:
@@ -30,8 +39,11 @@ Each lab says which of its numbers are illustrative rather than measured or spec
 - The power bank's 5.10 V, 0.1 Ω output, 2.1 A port and 85% conversion efficiency, and the laptop
   port's 5.05 V and 0.15 Ω, are illustrative. The bank's 10,000 mAh at 3.7 V (37 Wh) follows how
   banks are labelled.
+- The LED model's ideality of 2 and series resistance of 10 Ω are chosen so its curve is as steep as
+  a typical datasheet's, about 0.2 V from 10 to 30 mA. The spread in the LED strings lab is a slider.
 
 ## Shared code
 
 The circuit solver (`packages/subjects/src/em/mna.js`) came from PHY 2049. The breadboard model
-(`packages/subjects/src/em/breadboard.js`) was written for this course and has its own tests.
+(`packages/subjects/src/em/breadboard.js`) and the diode model (`packages/subjects/src/em/diode.js`)
+were written for this course and have their own tests.

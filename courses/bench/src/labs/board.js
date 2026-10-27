@@ -74,6 +74,14 @@ export function bands(ohms) {
   return [Math.floor(two / 10), two % 10, e].map((d) => BAND[Math.max(0, Math.min(9, d))]);
 }
 
+const BAND_NAMES = ['black', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'grey', 'white'];
+/** The same bands as words: brown–green–brown for 150 Ω. */
+export function bandNames(ohms) {
+  const e = Math.floor(Math.log10(ohms)) - 1;
+  const two = Math.round(ohms / 10 ** e);
+  return [Math.floor(two / 10), two % 10, e].map((d) => BAND_NAMES[Math.max(0, Math.min(9, d))]).join('–');
+}
+
 /** A part on the board: its legs to their holes, and its body midway. */
 export function drawPart(P, part, { color = null, faded = false } = {}) {
   const { ctx, X, Y, k } = P;
@@ -125,6 +133,46 @@ export function drawPart(P, part, { color = null, faded = false } = {}) {
     ctx.fillRect(len / 2 - len * 0.2, -wid / 2, len * 0.07, wid);
     ctx.restore();
   }
+  if (part.type === 'D') drawLed(P, a, b, part, op);
+}
+
+/**
+ * An LED seen from above: a round lens in its own colour, a flat on the cathode side, and a glow
+ * that grows with `part.glow` (0 dark, 1 at its rated current). `a` is the anode's hole, `b` the
+ * cathode's; the anode leg is drawn longer, as on the part.
+ */
+function drawLed(P, a, b, part, op) {
+  const { ctx, X, Y, k } = P;
+  const mx = (a[0] + b[0]) / 2;
+  const my = (a[1] + b[1]) / 2;
+  const ang = Math.atan2(-(b[1] - a[1]), b[0] - a[0]);
+  const rad = 0.95 * k;
+  const glow = Math.max(0, Math.min(1.6, part.glow || 0));
+  ctx.save();
+  ctx.globalAlpha = op;
+  seg(P, a, [mx, my], { color: alpha(C.text, 0.75), width: Math.max(1.4, k * 0.1) });
+  seg(P, [mx, my], b, { color: alpha(C.text, 0.55), width: Math.max(1.2, k * 0.08) });
+  ctx.translate(X(mx), Y(my));
+  if (glow > 0.01) {
+    const g = ctx.createRadialGradient(0, 0, rad * 0.5, 0, 0, rad * (1.6 + 2.2 * glow));
+    g.addColorStop(0, alpha(part.color, Math.min(0.85, 0.35 + 0.4 * glow)));
+    g.addColorStop(1, alpha(part.color, 0));
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(0, 0, rad * (1.6 + 2.2 * glow), 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.rotate(ang);
+  ctx.beginPath();
+  // The lens, with its flat on the cathode side (towards b).
+  ctx.arc(0, 0, rad, Math.acos(0.7), Math.PI * 2 - Math.acos(0.7));
+  ctx.closePath();
+  ctx.fillStyle = alpha(part.color, glow > 0.01 ? 0.75 + 0.25 * Math.min(1, glow) : 0.35);
+  ctx.fill();
+  ctx.strokeStyle = alpha(C.text, 0.7);
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+  ctx.restore();
 }
 
 /** The supply, drawn left of the board, with straight leads to its two rail holes. */

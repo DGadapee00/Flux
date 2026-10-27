@@ -1,5 +1,5 @@
 /**
- * The ideas Unit 1's problems turn on. Principle tags are optional (D16); a course that supplies them
+ * The ideas the problems turn on. Principle tags are optional (D16); a course that supplies them
  * gets the deciding principle shown with each solution, "what went wrong" after a miss, the
  * weak-principle list and a group-by-principle view. There is no question about the principle
  * before a problem (D34).
@@ -12,6 +12,11 @@ export const PRINCIPLES = {
   'in-series': { name: 'Amps in series', statement: 'An ammeter carries the current it measures, so it goes in series.', cue: 'Measuring a current.', family: 'Measuring' },
   'parallel-path': { name: 'Every path counts', statement: 'An ohmmeter reads every path between its leads, in parallel.', cue: 'Measuring a part still in a circuit.', family: 'Measuring' },
   'ir-drop': { name: 'I·R drop', statement: 'Every resistance in the supply path costs a voltage of I times R.', cue: 'Rails lower than the source.', family: 'Power' },
+  vf: { name: 'Forward voltage', statement: 'A lit LED keeps about its forward voltage whatever its current; the resistor in series takes the rest and sets the current.', cue: 'An LED with a resistor.', family: 'LEDs' },
+  'one-way': { name: 'One way only', statement: 'A diode conducts from anode to cathode and blocks the other way, taking the whole voltage across it.', cue: 'An LED that will not light.', family: 'LEDs' },
+  'e12-up': { name: 'Round up to a standard part', statement: 'Resistors come in the E12 series; buy the next value up so the current stays at or under the target.', cue: 'Choosing a resistor to buy.', family: 'LEDs' },
+  power: { name: 'Power in a resistor', statement: 'A resistor turns I squared R into heat, which must stay within its rating.', cue: 'Will this resistor run hot?', family: 'Power' },
+  'parallel-share': { name: 'Parallel shares a voltage', statement: 'Parts in parallel share one voltage, and their currents add.', cue: 'LEDs side by side.', family: 'Circuits' },
   energy: { name: 'Stored energy', statement: 'Run time is stored energy, after losses, over the power drawn.', cue: 'How long a battery lasts.', family: 'Power' },
 };
 

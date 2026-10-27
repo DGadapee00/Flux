@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Light an LED</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">BENCH · Electronics on the bench · Unit 2 · Kuphaldt, Lessons in Electric Circuits I.2, I.5, III.3, V.2; IEC 60063</div>
+  <h1>Light an LED</h1>
+  <p class="lede">An LED is the first part that does something you can see. It is also the first part that is not a resistor. It conducts one way, it holds its voltage nearly fixed, and it needs a resistor to set its current. This unit is how to pick that resistor, check its power, and wire several LEDs at once.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · A one-way part</h3>
+    <a href="#s1"><span>1</span>A diode conducts one way</a>
+    <a href="#s2"><span>2</span>The LED's curve</a>
+    <h3>Part II · Choosing the resistor</h3>
+    <a href="#s3"><span>3</span>The resistor sets the current</a>
+    <a href="#s4"><span>4</span>A part you can buy, and its power</a>
+    <h3>Part III · More than one LED</h3>
+    <a href="#s5"><span>5</span>LEDs in series</a>
+    <a href="#s6"><span>6</span>LEDs in parallel</a>
+    <h3>Reference</h3>
+    <a href="#s7"><span>7</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>A one-way part</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>A diode conducts one way</h2>
+<p>A diode is a junction of two kinds of doped semiconductor. Current flows easily from its <b>anode</b> to its <b>cathode</b>, and hardly at all the other way. An LED is a diode whose junction gives off light when current crosses it.</p>
+<p>On the part, the anode is the longer leg. The cathode side of the lens has a flat edge. On a schematic the triangle points the way current flows, and the bar is the cathode.</p>
+<p>Turned backwards, the LED blocks. Only a leakage of picoamps flows. With no current, the resistor in series drops nothing: \(V_R = IR \approx 0\). Kirchhoff's loop then puts the whole supply across the LED.</p>
+<div class="box ex"><span class="tag">Worked example · the LED backwards</span>
+<p>A red LED and 150 Ω run from 5 V, with the LED turned round. The current is the leakage, far below a microamp. The resistor drops \(I \times 150\ \Omega \approx 0\), so a meter across the LED reads the full 5.00 V.</p>
+</div>
+<div class="box fix"><span class="tag">Fix it · an LED that will not light</span>
+<p>The LED stays dark. The meter reads the full supply across the LED and 0 V across the resistor. No current flows, and the LED is where the loop is broken. Check its direction first: long leg to the + side. If it is the right way round and still reads the full supply, the LED is dead.</p>
+</div>
+<p>If instead neither part has any voltage across it, the break is elsewhere: a jumper, a rail, a lead. Where the voltage appears is where the loop is open.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The model's reverse current is the leakage alone. A real LED is rated for about 5 V in reverse. Past that it can break down and be damaged, so never run one backwards from a high supply.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>The LED's curve</h2>
+<p>A resistor's current grows in proportion to its voltage. A diode's does not. The Shockley model gives the junction's current:</p>
+\[
+I = I_s\left(e^{V_j / n V_T} - 1\right), \qquad V_T = \frac{kT}{q} \approx 25.7\ \text{mV at } 25\ ^\circ\text{C}.
+\]
+<p>\(I_s\) is tiny, about \(10^{-17}\) A for a red LED. So almost nothing flows until \(V_j\) nears the <b>forward voltage</b>, \(V_f\). Then the exponential takes over. Solve for the voltage and the curve's shape is plain:</p>
+\[
+V = n V_T \ln\!\left(1 + \frac{I}{I_s}\right) + I R_s.
+\]
+<p>The voltage grows with the log of the current. With \(n = 2\), doubling the current adds only \(2 \times 25.7\ \text{mV} \times \ln 2 = 36\ \text{mV}\) to the junction. The chip's own series resistance \(R_s\), about 10 Ω, adds a little more.</p>
+<p>The forward voltage depends on the colour. Red and yellow LEDs drop about 2.0 V at 20 mA. Green, blue and white ones, made of InGaN, drop about 3.2 V.</p>
+<div class="box ex"><span class="tag">Worked example · halving the resistor</span>
+<p>A red LED runs from 9 V through 680 Ω. The circuit settles at 10.48 mA, with 1.87 V across the LED. Swap in 330 Ω, about half. The current becomes 21.17 mA, about double. The LED's voltage moves only to 2.01 V. The resistor, not the LED, set the current.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · almost no resistor</span>
+<p>Put the same red LED on 5 V through only 10 Ω. Almost nothing limits the current. It climbs to about 155 mA, five times the LED's 30 mA maximum. The LED's voltage rises to 3.45 V, and 1.55 V of that is across its own 10 Ω. A real one would soon burn out.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Past its knee, an LED holds its voltage nearly fixed. So never put one straight across a supply. Something else must set the current: a resistor.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The course model is a Shockley diode with ideality 2 and 10 Ω in series, fitted to pass through the typical \(V_f\) at 20 mA. A real LED's \(V_f\) varies by about ±0.2 V between parts, and falls about 2 mV for each degree it warms.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Choosing the resistor</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>The resistor sets the current</h2>
+<p>Put a resistor in series with the LED. One current flows through both. Kirchhoff's loop says the supply's voltage divides between them:</p>
+\[
+V_s = I R + V_{\text{LED}}.
+\]
+<p>The LED keeps about \(V_f\), almost whatever the current. So the resistor gets the rest, \(V_s - V_f\), and Ohm's law on the resistor alone gives the current. Turn it round to choose the resistor:</p>
+\[
+I = \frac{V_s - V_f}{R}, \qquad R = \frac{V_s - V_f}{I}.
+\]
+<p>On a graph, the resistor is a <b>load line</b>: \(I = (V_s - V)/R\), from \(V_s/R\) at 0 V down to zero at \(V_s\). The circuit runs where the line crosses the LED's curve.</p>
+<div class="box ex"><span class="tag">Worked example · a red LED on 5 V</span>
+<p>You want 20 mA through a red LED from 5 V. The resistor takes \(5.0 - 2.0 = 3.0\ \text{V}\):</p>
+\[
+R = \frac{3.0\ \text{V}}{0.020\ \text{A}} = 150\ \Omega.
+\]
+<p>The lab solves the same loop with the full curve. It lands on 20.0 mA with 2.00 V across the LED.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Picking the resistor as \(V_s/I\). On 5 V at 20 mA that gives 250 Ω, not 150 Ω. It forgets that the LED keeps its 2.0 V, so the resistor never sees the whole supply. The LED runs at about 12 mA, dimmer than planned.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a blue LED with the red LED's resistor</span>
+<p>Swap the red LED for a blue one and keep 150 Ω. The blue LED drops about 3.1 V at this current. The resistor gets only about 1.9 V, so the current falls to 12.6 mA. A resistor is chosen for one colour of LED.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Brightness here follows the current. A real LED's light output is only roughly proportional to its current, and the eye sees brightness on a log scale. Twice the current looks brighter, but not twice as bright.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>A part you can buy, and its power</h2>
+<p>Resistors are sold in standard values, not every number. The <b>E12</b> series has twelve values per decade: 1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8 and 8.2, times a power of ten. Each is about 21% above the last, so a ±10% part of one value meets its neighbour's.</p>
+<p>Buy the next value <b>up</b> from the one you worked out. A larger resistor gives a little less current, which keeps the LED at or under its target.</p>
+<p>The value is printed in colour bands. The first two are digits; the third is the number of zeros. Black 0, brown 1, red 2, orange 3, yellow 4, green 5, blue 6, violet 7, grey 8, white 9. So 390 Ω is orange–white–brown: 3, 9 and one zero.</p>
+<p>A resistor turns power into heat. It carries \(I\) with \(V_R\) across it, so</p>
+\[
+P_R = V_R\, I = I^2 R = \frac{V_R^2}{R}.
+\]
+<p>Common through-hole resistors are rated ⅛ W or ¼ W. Run one at no more than half its rating and it stays cool.</p>
+<div class="box ex"><span class="tag">Worked example · an indicator on 9 V</span>
+<p>A power light on a 9 V battery, at most 20 mA. The exact resistance is \((9 - 2.0)/0.020 = 350\ \Omega\). The next E12 value up is 390 Ω, orange–white–brown. It gives</p>
+\[
+I = \frac{7.0\ \text{V}}{390\ \Omega} = 17.95\ \text{mA}, \qquad P_R = (0.01795)^2 \times 390 = 126\ \text{mW}.
+\]
+<p>That is a little over half a ¼ W rating. It works, but the resistor runs warm.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · 12 V on a ⅛ W resistor</span>
+<p>On 12 V at 20 mA: \((12 - 2.0)/0.020 = 500\ \Omega\); buy 560 Ω. The current is \(10.0/560 = 17.86\ \text{mA}\), and</p>
+\[
+P_R = (0.01786)^2 \times 560 = 179\ \text{mW}.
+\]
+<p>That is over ⅛ W, 125 mW. The resistor would overheat. Use a ¼ W part, or ask for less current: at 10 mA it takes about 103 mW.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Working out the resistor's power as \(V_s \times I\). On 12 V at 17.9 mA that gives 214 mW. That is the power the supply gives the whole circuit. The LED takes about 36 mW of it; the resistor takes the rest, 179 mW. Use the resistor's own voltage.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Rounding down to the nearer standard value. For 350 Ω, 330 Ω is closer than 390 Ω. But it gives 21.2 mA, over the target. Round up.</p>
+</div>
+<div class="box out"><span class="tag">What the course model leaves out</span>
+<p>Common carbon-film resistors are ±5%, which moves the current about as much. A resistor's rating holds at 70 °C in free air and falls above that, so a resistor in a closed box needs more margin. The LED figures are typical of a 5 mm red LED; check the datasheet of the part you buy.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>More than one LED</h2>
+</div>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>LEDs in series</h2>
+<p>LEDs in series share one path, so they carry one current. Their voltages add around the loop. With \(n\) LEDs and one resistor:</p>
+\[
+R = \frac{V_s - n V_f}{I}.
+\]
+<p>The string needs \(V_s\) above \(n V_f\), with a volt or so to spare for the resistor. Below that, almost no current flows.</p>
+<div class="box ex"><span class="tag">Worked example · three red LEDs in series</span>
+<p>Three red LEDs on a 9 V battery take \(3 \times 2.0 = 6.0\ \text{V}\). For 20 mA the resistor needs \((9 - 6.0)/0.020 = 150\ \Omega\). Each LED carries the same 20.0 mA, even when their forward voltages differ by 0.1 V. The supply gives \(9 \times 0.020 = 180\ \text{mW}\), and the LEDs use 120 mW of it: 66.7%.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one LED fails open</span>
+<p>In the same string, LED 2 fails open. The only path is broken, so no current flows. All three go dark.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Series is the efficient way to run several LEDs: the LEDs use the voltage that a resistor would otherwise waste. The price is that one failure darkens the string.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>LEDs in parallel</h2>
+<p>LEDs in parallel share one voltage. Their currents add. That is a problem for parts whose curves are steep. Two LEDs of one type differ in \(V_f\) by 0.1 V or more. At one shared voltage, the one with the lower \(V_f\) carries far more current.</p>
+<p>The cure is a resistor for each LED. Then each LED and its resistor form their own loop across the supply. Each resistor takes most of the voltage and sets its own LED's current.</p>
+<div class="box ex"><span class="tag">Worked example · two LEDs on one resistor</span>
+<p>Two red LEDs share one 180 Ω resistor on 9 V. Their forward voltages differ by 0.1 V. The pair draws 38.9 mA in all, but not evenly: 23.4 mA in one and 15.5 mA in the other. If the first fails open, the second takes nearly all of it, 37.5 mA, past its 30 mA maximum.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a resistor each</span>
+<p>Give each LED its own 390 Ω. The same 0.1 V spread now gives 18.1 mA and 17.9 mA. If one fails, the other carries on unchanged. The supply gives 36.0 mA, almost twice a series string's current, and the resistors waste most of it.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>One resistor for several LEDs in parallel. It looks like it saves parts. But the LEDs share the current badly, the brightest one runs hot, and when one fails the others take its share.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The spread here is a fixed offset in each LED's \(V_f\). In a real pair on one resistor, the LED that takes more current heats up. Its \(V_f\) falls, it takes more current still, and the imbalance grows.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Formula sheet</h2>
+\[
+V_s = I R + V_{\text{LED}}, \qquad R = \frac{V_s - V_f}{I}, \qquad R_{\text{string}} = \frac{V_s - n V_f}{I}
+\]
+\[
+P_R = I^2 R = \frac{V_R^2}{R}, \qquad V(I) = n V_T \ln\!\left(1 + \frac{I}{I_s}\right) + I R_s
+\]
+<p>Typical \(V_f\) at 20 mA: red 2.0 V, yellow 2.1 V, green, blue and white 3.2 V. Most 5 mm LEDs are rated 30 mA maximum.</p>
+</section>
+
+</main>
+<footer>Sources: Kuphaldt, Lessons in Electric Circuits, Vol I Ch 2 (Ohm's law and power) and Ch 5 (series and parallel circuits), Vol III Ch 3 (diodes and LEDs), Vol V Ch 2 (colour codes); IEC 60063 for the E12 series. LED figures are typical of 5 mm parts, not one maker's. Nothing is copied.</footer>
+</body>
+</html>

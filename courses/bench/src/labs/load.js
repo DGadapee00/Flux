@@ -6,6 +6,9 @@ const loaders = {
   breadboard: () => import('./breadboard.js'),
   meter: () => import('./meter.js'),
   'usb-rail': () => import('./usb-rail.js'),
+  led: () => import('./led.js'),
+  'led-strings': () => import('./led-strings.js'),
+  indicator: () => import('./indicator.js'),
 };
 
 const labs = createLabLoader(loaders);

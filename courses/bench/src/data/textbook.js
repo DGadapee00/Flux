@@ -33,6 +33,15 @@ export const BOOKS = Object.freeze({
     license: 'Specification; figures cited, nothing copied',
     url: 'https://www.usb.org/',
   }),
+  iec: Object.freeze({
+    short: 'IEC 60063',
+    author: 'International Electrotechnical Commission',
+    title: 'Preferred number series for resistors and capacitors',
+    publisher: 'IEC',
+    year: 2015,
+    license: 'Standard; the series named, nothing copied',
+    url: 'https://webstore.iec.ch/',
+  }),
 });
 
 /** topic → where to read about it. Kuphaldt sections are volume and chapter. */
@@ -47,6 +56,11 @@ export const SECTIONS = Object.freeze({
   safety: { book: 'lec', section: 'I.3', title: 'Electrical safety' },
   supply: { book: 'lec', section: 'I.11', title: 'Batteries and power systems' },
   usb: { book: 'usb', section: '7.2', title: 'Power distribution' },
+  diode: { book: 'lec', section: 'III.3', title: 'Diodes and rectifiers' },
+  led: { book: 'lec', section: 'III.3', title: 'Diodes and rectifiers: light-emitting diodes' },
+  power: { book: 'lec', section: 'I.2', title: "Ohm's law: power in electric circuits" },
+  colour: { book: 'lec', section: 'V.2', title: 'Color codes: resistor color codes' },
+  e12: { book: 'iec', section: 'E12', title: 'The E12 series of preferred values' },
 });
 
 export function citation(topic) {

@@ -344,8 +344,11 @@ console.log(`wrote ${labFile}`);
 // 2. Catalog entry.
 const catalogFile = join(courseDir, 'src', 'data', 'catalog.js');
 let catalog = readFileSync(catalogFile, 'utf8');
-const metaLine = `  ${labId}: { id: '${labId}', exam: '${unit}', title: '${title}'${isApp ? ", app: true" : ''} },`;
-if (catalog.includes(`${labId}:`)) {
+// A lab id with a hyphen is not a bare identifier, so its object key needs quotes.
+const key = /^[A-Za-z_$][\w$]*$/.test(labId) ? labId : `'${labId}'`;
+const listed = (text) => text.includes(`  ${labId}:`) || text.includes(`'${labId}':`);
+const metaLine = `  ${key}: { id: '${labId}', exam: '${unit}', title: '${title}'${isApp ? ", app: true" : ''} },`;
+if (listed(catalog)) {
   console.log(`catalog already lists ${labId}, skipping`);
 } else {
   catalog = catalog.replace(
@@ -359,12 +362,12 @@ if (catalog.includes(`${labId}:`)) {
 // 3. Loader entry.
 const loadFile = join(courseDir, 'src', 'labs', 'load.js');
 let load = readFileSync(loadFile, 'utf8');
-if (load.includes(`${labId}:`)) {
+if (listed(load)) {
   console.log(`loader already lists ${labId}, skipping`);
 } else {
   load = load.replace(
     /const loaders = \{/,
-    `const loaders = {\n  ${labId}: () => import('./${labId}.js'),`
+    `const loaders = {\n  ${key}: () => import('./${labId}.js'),`
   );
   writeFileSync(loadFile, load);
   console.log(`loader: added ${labId}`);
@@ -373,10 +376,10 @@ if (load.includes(`${labId}:`)) {
 // 4. Prediction stubs.
 const predFile = join(courseDir, 'src', 'labs', 'predictions.js');
 let pred = readFileSync(predFile, 'utf8');
-if (pred.includes(`${labId}:`)) {
+if (listed(pred)) {
   console.log(`predictions already list ${labId}, skipping`);
 } else {
-  const stub = `  ${labId}: [
+  const stub = `  ${key}: [
     {
       id: '${labId}-up',
       scenario: 'a',
