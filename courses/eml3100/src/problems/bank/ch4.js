@@ -6,7 +6,7 @@ import { J_PER_BTU, J_PER_FT_LBF, M_PER_FT, PA_PER_PSI } from '@flux/subjects/co
 import {
   SAT_T_GRID, SUPERHEAT_P_GRID, SUPERHEAT_T_GRID, bracket, covered, fromC, gas, mixP, satP, satT, tableInterp, toC, waterTP, waterTv,
 } from '@flux/subjects/thermo';
-import { celsius, cite, kase, num, problem, range } from '../kit.js';
+import { celsius, choice, cite, kase, mc, num, problem, range } from '../kit.js';
 
 const AIR = gas('air');
 const KPA = 1e3;
@@ -63,6 +63,7 @@ const ch4 = [
     lab: 'piston',
     src: cite('boundary-work'),
     topics: ['boundary-work'],
+    variety: ['unknown'],
     vars: {
       p: range(100, 1000, 25, 'kPa', KPA),
       V1: range(0.02, 0.5, 0.02, 'm³'),
@@ -70,7 +71,15 @@ const ch4 = [
     },
     derive: ($) => ({ V2: $.V1 * $.r }),
     text: (T, $, sig) => String.raw`A gas in a piston–cylinder expands at a constant $${T.p}$ kPa from ${T.V1} m³ to $${sig($.V2)}$ m³. Find the boundary work done by the gas.`,
-    parts: [num('W', ($) => $.p * ($.V2 - $.V1), 'kJ', { scale: KJ, tol: 0.005, label: 'boundary work' })],
+    parts: [num('W', ($) => $.p * ($.V2 - $.V1), 'kJ', {
+      scale: KJ,
+      tol: 0.005,
+      label: 'boundary work',
+      traps: [
+        [($) => $.p * $.V2, 'The work is P times the change in volume, not P times the final volume.'],
+        [($) => $.p * ($.V1 - $.V2), 'Expansion does positive work by the gas. These volumes run backwards.'],
+      ],
+    })],
     level: 1,
     hints: [
       'Boundary work is the area under the process line on a P–V diagram.',
@@ -101,6 +110,7 @@ const ch4 = [
     lab: 'piston',
     src: cite('boundary-work'),
     topics: ['boundary-work', 'first-law'],
+    variety: ['unknown'],
     vars: {
       m: range(0.1, 3, 0.1, 'kg'),
       tC: celsius(0, 200, 10),
@@ -110,8 +120,24 @@ const ch4 = [
     derive: ($) => ({ T: fromC($.tC), p2: $.p1 * $.k }),
     text: (T, $, sig) => String.raw`${T.m} kg of air at ${T.tC} °C is compressed slowly at constant temperature from $${T.p1}$ kPa to $${sig($.p2 / KPA)}$ kPa. Treat it as an ideal gas. Find the boundary work and the heat transfer, both with the sign convention "work done by the gas, heat added to the gas".`,
     parts: [
-      num('W', ($) => $.m * AIR.R * $.T * Math.log($.p1 / $.p2), 'kJ', { scale: KJ, tol: 0.005, label: 'boundary work' }),
-      num('Q', ($) => $.m * AIR.R * $.T * Math.log($.p1 / $.p2), 'kJ', { scale: KJ, tol: 0.005, label: 'heat transfer' }),
+      num('W', ($) => $.m * AIR.R * $.T * Math.log($.p1 / $.p2), 'kJ', {
+        scale: KJ,
+        tol: 0.005,
+        label: 'boundary work',
+        traps: [
+          [($) => $.m * AIR.R * $.T * Math.log($.p2 / $.p1), 'The log is P1/P2 for work done by the gas. This ratio is flipped, so a compression came out positive.'],
+          [($) => $.m * AIR.R * $.tC * Math.log($.p1 / $.p2), 'The temperature in mRT ln(P1/P2) is kelvin, not °C.'],
+        ],
+      }),
+      num('Q', ($) => $.m * AIR.R * $.T * Math.log($.p1 / $.p2), 'kJ', {
+        scale: KJ,
+        tol: 0.005,
+        label: 'heat transfer',
+        traps: [
+          [($) => 0, 'ΔU is zero, so Q equals the boundary work. Zero would mean no work was done.'],
+          [($) => -$.m * AIR.R * $.T * Math.log($.p1 / $.p2), 'Q and W have the same sign here. Flipping Q uses the other sign convention.'],
+        ],
+      }),
     ],
     level: 2,
     hints: [
@@ -153,6 +179,7 @@ const ch4 = [
     lab: 'piston',
     src: cite('polytropic'),
     topics: ['boundary-work', 'polytropic'],
+    variety: ['configuration'],
     vars: {
       p1: range(300, 1500, 50, 'kPa', KPA),
       V1: range(0.01, 0.2, 0.01, 'm³'),
@@ -162,8 +189,23 @@ const ch4 = [
     derive: ($) => ({ p2: $.p1 / $.k, V2: $.V1 * $.k ** (1 / $.n) }),
     text: (T, $, sig) => String.raw`A gas expands in a piston–cylinder from $${T.p1}$ kPa and ${T.V1} m³ to $${sig($.p2 / KPA)}$ kPa, following $PV^{${T.n}} = \text{constant}$. Find the final volume and the boundary work.`,
     parts: [
-      num('V2', ($) => $.V2, 'm³', { tol: 0.005, label: 'final volume' }),
-      num('W', ($) => ($.p2 * $.V2 - $.p1 * $.V1) / (1 - $.n), 'kJ', { scale: KJ, tol: 0.005, label: 'boundary work' }),
+      num('V2', ($) => $.V2, 'm³', {
+        tol: 0.005,
+        label: 'final volume',
+        traps: [
+          [($) => $.V1 * $.k ** $.n, 'The volume ratio is (P1/P2)^(1/n), not (P1/P2)^n.'],
+          [($) => $.V1 * $.k, 'That is the volume for n = 1. This exponent is not 1.'],
+        ],
+      }),
+      num('W', ($) => ($.p2 * $.V2 - $.p1 * $.V1) / (1 - $.n), 'kJ', {
+        scale: KJ,
+        tol: 0.005,
+        label: 'boundary work',
+        traps: [
+          [($) => ($.p1 * $.V1 - $.p2 * $.V2) / (1 - $.n), 'The numerator is P2 V2 − P1 V1. This one is flipped, so the work changed sign.'],
+          [($) => ($.p2 * $.V2 - $.p1 * $.V1) / $.n, 'The denominator is 1 − n, not n.'],
+        ],
+      }),
     ],
     level: 2,
     hints: [
@@ -208,6 +250,7 @@ const ch4 = [
     lab: 'phase',
     src: cite('first-law-closed'),
     topics: ['first-law', 'quality', 'tables'],
+    variety: ['unknown'],
     vars: {
       m: range(1, 10, 0.5, 'kg'),
       tC1: celsius(41, 149, 2),
@@ -222,12 +265,28 @@ const ch4 = [
     },
     text: (T, $) => String.raw`A rigid tank holds ${T.m} kg of water at ${T.tC1} °C with quality ${T.x1}. It is heated until the temperature is ${$.tC2} °C. Find the quality at the end and the heat added.`,
     parts: [
-      num('x2', ($) => tankExact($).two.x, '', { tol: 0.005, label: 'final quality', alt: ($) => tankFromTable($).x2 }),
+      num('x2', ($) => tankExact($).two.x, '', {
+        tol: 0.005,
+        label: 'final quality',
+        alt: ($) => tankFromTable($).x2,
+        traps: [
+          [($) => $.x1, 'The quality changes. Volume is fixed, but v_f and v_g move when the temperature does.'],
+          [($) => {
+            const e = tankExact($);
+            const s = satT($.T2);
+            return (e.v - s.vg) / (s.vg - s.vf);
+          }, 'v and v_g are swapped in the numerator. Quality is (v − v_f)/v_fg.'],
+        ],
+      }),
       num('Q', ($) => $.m * (tankExact($).two.u - tankExact($).u1), 'kJ', {
         scale: KJ,
         tol: 0.005,
         label: 'heat added',
         alt: ($) => ($.m * (tankFromTable($).u2 - tankFromTable($).u1)) / KJ,
+        traps: [
+          [($) => $.m * (tankExact($).two.h - (satT($.T1).hf + $.x1 * satT($.T1).hfg)), 'A rigid tank does no boundary work, so the heat is m Δu, not m Δh.'],
+          [($) => 4184 * $.m * ($.T2 - $.T1), 'That is liquid water, c ΔT. Most of this heat vaporizes liquid, which c ΔT misses.'],
+        ],
       }),
     ],
     level: 3,
@@ -263,6 +322,7 @@ const ch4 = [
     lab: 'piston',
     src: cite('first-law-closed'),
     topics: ['first-law', 'boundary-work', 'superheated'],
+    variety: ['unknown'],
     vars: {
       p: range(200, 1000, 100, 'kPa', KPA),
       m: range(0.2, 2, 0.1, 'kg'),
@@ -282,12 +342,20 @@ const ch4 = [
         tol: 0.005,
         label: 'boundary work',
         alt: ($) => ($.p * $.m * (shRow($, 'v') - mixP($.p, $.x1).v)) / KJ,
+        traps: [
+          [($) => steamPiston($).Q, 'That is the heat, m Δh. The boundary work is P m Δv.'],
+          [($) => -steamPiston($).W, 'Expansion does positive work by the gas. This sign is the work done on the gas.'],
+        ],
       }),
       num('Q', ($) => steamPiston($).Q, 'kJ', {
         scale: KJ,
         tol: 0.005,
         label: 'heat added',
         alt: ($) => ($.m * (shRow($, 'h') - mixP($.p, $.x1).h)) / KJ,
+        traps: [
+          [($) => $.m * (steamPiston($).two.u - steamPiston($).one.u), 'At constant pressure the heat is m Δh. m Δu leaves out the boundary work.'],
+          [($) => 4184 * $.m * ($.T2 - satP($.p).T), 'That warms liquid from the boiling point with c ΔT and skips the vapor already present and the superheat.'],
+        ],
       }),
     ],
     level: 3,
@@ -330,6 +398,7 @@ const ch4 = [
     lab: null,
     src: cite('specific-heats'),
     topics: ['first-law', 'specific-heats'],
+    variety: ['unknown'],
     vars: {
       m: range(0.5, 5, 0.5, 'kg'),
       tC1: celsius(0, 100, 5),
@@ -344,6 +413,10 @@ const ch4 = [
         label: 'heat added',
         // The average-specific-heat method: c_v at the mean temperature, times ΔT.
         alt: ($) => ($.m * AIR.cv(($.T1 + $.T2) / 2) * ($.T2 - $.T1)) / KJ,
+        traps: [
+          [($) => $.m * (AIR.h($.T2) - AIR.h($.T1)), 'The tank is rigid, so Q = m Δu. m Δh is the heat at constant pressure.'],
+          [($) => $.m * AIR.R * ($.T2 - $.T1), 'That is only m R ΔT, the gap between m Δh and m Δu. The heat is the internal-energy change.'],
+        ],
       }),
     ],
     level: 2,
@@ -368,6 +441,7 @@ const ch4 = [
     lab: null,
     src: cite('boundary-work'),
     topics: ['boundary-work', 'english'],
+    variety: ['representation'],
     vars: {
       p: range(20, 200, 5, 'psia', PA_PER_PSI),
       V1: range(1, 20, 0.5, 'ft³', FT3),
@@ -375,7 +449,16 @@ const ch4 = [
     },
     derive: ($) => ({ V2: $.V1 * $.r }),
     text: (T, $, sig) => String.raw`A gas expands at a constant ${T.p} psia from ${T.V1} ft³ to $${sig($.V2 / FT3)}$ ft³. Find the boundary work in Btu.`,
-    parts: [num('W', ($) => $.p * ($.V2 - $.V1), 'Btu', { scale: J_PER_BTU, tol: 0.005, label: 'boundary work' })],
+    parts: [num('W', ($) => $.p * ($.V2 - $.V1), 'Btu', {
+      scale: J_PER_BTU,
+      tol: 0.005,
+      label: 'boundary work',
+      traps: [
+        // Student stops at ft·lbf and types that number in the Btu blank.
+        [($) => $.p * ($.V2 - $.V1) * (J_PER_BTU / J_PER_FT_LBF), 'That is the work in ft·lbf. Divide by 778.17 ft·lbf/Btu.'],
+        [($) => (($.p / PA_PER_PSI) * (($.V2 - $.V1) / FT3)) * J_PER_FT_LBF, 'psia times ft³ is not ft·lbf. Multiply the pressure by 144 lbf/ft² per psi.'],
+      ],
+    })],
     level: 1,
     hints: [
       String.raw`At constant pressure the work is $P\,\Delta V$, whatever the units.`,
@@ -391,6 +474,147 @@ const ch4 = [
     // Second route: the whole calculation in English units.
     second: ($) => ({ W: (($.p / PA_PER_PSI) * 144 * (($.V2 - $.V1) / FT3)) / FT_LBF_PER_BTU }),
     cases: [kase(cite('boundary-work'), { p: 100, V1: 4, r: 2 }, { W: 74.03 })],
+  }),
+
+  problem({
+    id: 'u2.4.sign',
+    title: 'Sign of the boundary work',
+    kind: 'conceptual',
+    exam: 'u2',
+    ch: '4',
+    lab: 'piston',
+    src: cite('boundary-work'),
+    topics: ['boundary-work'],
+    variety: ['configuration'],
+    vars: {
+      proc: choice(
+        ['expand', 'expands at constant pressure to twice the volume'],
+        ['compress', 'is compressed at constant pressure to 80% of the volume'],
+        ['rigid', 'is heated at constant volume'],
+      ),
+      p: range(100, 800, 50, 'kPa', KPA),
+      V1: range(0.05, 0.4, 0.05, 'm³'),
+    },
+    text: (T) => String.raw`Air starts at $${T.p}$ kPa and ${T.V1} m³. It ${T.proc}. Work done by the air is`,
+    parts: [mc('sign', [
+      ['positive', 'positive', 'The air expands, so the area under the path is work done by the air.'],
+      ['negative', 'negative', 'The air is compressed, so the boundary work done by the air is negative.'],
+      ['zero', 'zero', 'The boundary does not move, so the boundary work is zero.'],
+    ], ($) => ($.proc === 'expand' ? 'positive' : $.proc === 'compress' ? 'negative' : 'zero'), { label: 'boundary work' })],
+    level: 1,
+    hints: [
+      'Boundary work is the area under the path on a P–V diagram, positive when the system expands.',
+      'Ask whether the volume grew, shrank, or stayed fixed.',
+    ],
+    steps: ($) => [
+      $.proc === 'expand' ? 'The volume doubles at constant pressure, so the work done by the air is positive.'
+        : $.proc === 'compress' ? 'The volume falls at constant pressure, so the work done by the air is negative.'
+          : 'The volume is fixed, so the boundary work is zero.',
+    ],
+    second: ($) => ({ sign: $.proc === 'expand' ? 'positive' : $.proc === 'compress' ? 'negative' : 'zero' }),
+    sim: {
+      scenario: 'isobaric',
+      setup(s, $) {
+        s.gas = 'air';
+        s.process = 'isobaric';
+        s.p1 = $.p;
+        s.T1 = fromC(27);
+        s.m = ($.p * $.V1) / (AIR.R * s.T1);
+        s.V2 = $.proc === 'expand' ? $.V1 * 2 : $.proc === 'compress' ? $.V1 * 0.8 : $.V1;
+      },
+      read: (c) => ({ sign: c.W > 1 ? 'positive' : c.W < -1 ? 'negative' : 'zero' }),
+    },
+    cases: [
+      kase(cite('boundary-work'), { proc: 'expand', p: 200, V1: 0.1 }, { sign: 'positive' }),
+      kase(cite('boundary-work'), { proc: 'compress', p: 200, V1: 0.1 }, { sign: 'negative' }),
+      kase(cite('boundary-work'), { proc: 'rigid', p: 200, V1: 0.1 }, { sign: 'zero' }),
+    ],
+  }),
+
+  problem({
+    id: 'u2.4.which-heat',
+    title: 'Which heat matches the process',
+    kind: 'conceptual',
+    exam: 'u2',
+    ch: '4',
+    lab: null,
+    src: cite('first-law-closed'),
+    topics: ['first-law'],
+    variety: ['configuration'],
+    vars: {
+      proc: choice(
+        ['rigid', 'heated in a rigid tank'],
+        ['isobaric', 'heated at constant pressure'],
+        ['isothermal', 'compressed slowly at constant temperature'],
+      ),
+      m: range(0.5, 3, 0.5, 'kg'),
+      dT: range(20, 80, 10, '°C'),
+    },
+    text: (T, $) => ($.proc === 'isothermal'
+      ? String.raw`${T.m} kg of air, an ideal gas, is compressed slowly at constant temperature. The heat added to the air equals`
+      : String.raw`${T.m} kg of air, an ideal gas, is ${T.proc}, and the temperature rises ${T.dT} °C. The heat added to the air equals`),
+    parts: [mc('heat', [
+      ['du', 'm Δu', 'A rigid tank does no boundary work, so every joule of heat stays in U.'],
+      ['dh', 'm Δh', 'At constant pressure, Q = ΔU + P ΔV, which is m Δh for a closed system.'],
+      ['work', 'the boundary work', 'An ideal gas at constant temperature has ΔU = 0, so Q = W.'],
+      ['zero', 'zero', 'Heat is zero on an adiabatic path. Each of these processes exchanges heat.'],
+    ], ($) => ($.proc === 'rigid' ? 'du' : $.proc === 'isobaric' ? 'dh' : 'work'), { label: 'heat added' })],
+    level: 2,
+    hints: [
+      'Start from Q − W = ΔU and decide which term is zero.',
+      'For an ideal gas, ΔU depends on temperature only, and ΔH = ΔU + Δ(PV).',
+    ],
+    steps: ($) => [
+      $.proc === 'rigid' ? 'W = 0, so Q = ΔU = m Δu.'
+        : $.proc === 'isobaric' ? 'Q = ΔU + P ΔV = ΔH = m Δh.'
+          : 'ΔU = 0 at constant temperature, so Q = W.',
+    ],
+    second: ($) => ({ heat: $.proc === 'rigid' ? 'du' : $.proc === 'isobaric' ? 'dh' : 'work' }),
+    cases: [
+      kase(cite('first-law-closed'), { proc: 'rigid', m: 1, dT: 40 }, { heat: 'du' }),
+      kase(cite('first-law-closed'), { proc: 'isobaric', m: 1, dT: 40 }, { heat: 'dh' }),
+      kase(cite('first-law-closed'), { proc: 'isothermal', m: 1, dT: 40 }, { heat: 'work' }),
+    ],
+  }),
+
+  problem({
+    id: 'u2.4.exponent',
+    title: 'What the polytropic exponent fixes',
+    kind: 'conceptual',
+    exam: 'u2',
+    ch: '4',
+    lab: 'piston',
+    src: cite('polytropic'),
+    topics: ['polytropic'],
+    variety: ['configuration'],
+    vars: {
+      n: choice(['0', '0'], ['1', '1'], ['k', '1.4']),
+      p: range(100, 800, 50, 'kPa', KPA),
+      V: range(0.05, 0.4, 0.05, 'm³'),
+    },
+    text: (T) => String.raw`An ideal gas with constant specific heats, $k = 1.4$, follows $P V^{${T.n}} = C$ from $${T.p}$ kPa and ${T.V} m³. The process is`,
+    parts: [mc('path', [
+      ['pressure', 'constant pressure', 'n = 0 leaves P as the constant, because V^0 is 1.'],
+      ['temperature', 'constant temperature', 'For an ideal gas, n = 1 means PV is constant, so the temperature is constant.'],
+      ['adiabatic', 'adiabatic', 'With constant specific heats, n = k is the reversible adiabatic path, and Q = 0.'],
+      ['volume', 'constant volume', 'Constant volume is a very large exponent, not 0, 1, or 1.4.'],
+    ], ($) => ($.n === '0' ? 'pressure' : $.n === '1' ? 'temperature' : 'adiabatic'), { label: 'process' })],
+    level: 2,
+    hints: [
+      'The exponent says which feature of the path is held fixed.',
+      'Compare n with 0, with 1, and with k. Each value freezes a different feature of an ideal-gas path.',
+    ],
+    steps: ($) => [
+      $.n === '0' ? 'n = 0 means P is constant.'
+        : $.n === '1' ? 'n = 1 means PV is constant, so an ideal gas stays at one temperature.'
+          : 'n = k = 1.4 means a reversible adiabatic process when the specific heats are constant.',
+    ],
+    second: ($) => ({ path: $.n === '0' ? 'pressure' : $.n === '1' ? 'temperature' : 'adiabatic' }),
+    cases: [
+      kase(cite('polytropic'), { n: '0', p: 200, V: 0.1 }, { path: 'pressure' }),
+      kase(cite('polytropic'), { n: '1', p: 200, V: 0.1 }, { path: 'temperature' }),
+      kase(cite('polytropic'), { n: 'k', p: 200, V: 0.1 }, { path: 'adiabatic' }),
+    ],
   }),
 ];
 

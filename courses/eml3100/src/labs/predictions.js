@@ -49,6 +49,41 @@ export const PREDICTIONS = {
       why: 'This tank holds $v = 0.0015$ m³/kg, less than the critical volume. Heating swells the liquid ($v_f$ grows), so the liquid takes more of the mass: $x$ falls from 0.00508 to 0.00473. Heated further, the tank fills with liquid.',
     },
   ],
+  canner: [
+    {
+      id: 'cn-gauge',
+      scenario: 'sea',
+      ask: 'At sea level, raise the weighted gauge from 10 psi to 15 psi.',
+      apply(s) { s.gaugePsi = 15; },
+      watch: [watch('Tc', 'the boiling temperature', (c) => c.Tc)],
+      mode: 'dir',
+      expect: { Tc: 'bigger' },
+      why: 'Fifteen psi gauge is 204.7 kPa absolute, against 170.3 kPa at 10 psi. The boiling temperature rises from 115.2 °C to 121.0 °C.',
+    },
+    {
+      id: 'cn-alt',
+      scenario: 'sea',
+      ask: 'Keep the gauge at 10 psi and move the canner to 5,000 ft.',
+      apply(s) { s.altitudeFt = 5000; },
+      watch: [watch('Tc', 'the boiling temperature', (c) => c.Tc)],
+      mode: 'dir',
+      expect: { Tc: 'smaller' },
+      why: 'The standard atmosphere at 5,000 ft is 84.3 kPa, not 101.3 kPa. The same 10 psi gauge is then only 153.3 kPa absolute, and the boil falls from 115.2 °C to 112.0 °C.',
+    },
+    {
+      id: 'cn-high',
+      scenario: 'sea',
+      ask: 'Use the weighted-gauge step for above 1,000 ft: 15 psi at 5,000 ft, instead of 10 psi at sea level.',
+      apply(s) {
+        s.altitudeFt = 5000;
+        s.gaugePsi = 15;
+      },
+      watch: [watch('Tc', 'the boiling temperature', (c) => c.Tc)],
+      mode: 'dir',
+      expect: { Tc: 'bigger' },
+      why: 'Fifteen psi at 5,000 ft is 187.7 kPa absolute, still above the sea-level 10 psi state at 170.3 kPa. The boil rises from 115.2 °C to 118.2 °C. The gauge step more than makes up the thinner air.',
+    },
+  ],
   piston: [
     {
       id: 'pi-path',
@@ -88,6 +123,47 @@ export const PREDICTIONS = {
       mode: 'dir',
       expect: { T2: 'same', Q: 'bigger' },
       why: 'Both volumes are inside the dome, so the temperature stays at 151.8 °C, the boiling point at 500 kPa. The quality rises from 0.425 to 0.639, and the heat needed rises from 237 kJ to 463 kJ.',
+    },
+  ],
+  kettle: [
+    {
+      id: 'kt-element',
+      scenario: 'six',
+      ask: 'Move the same 1 kg of water from the 6-inch coil (1250 W) to the 8-inch coil (2100 W).',
+      apply(s) { s.power = 2100; },
+      watch: [
+        watch('q', 'the heat to reach the boil', (c) => c.q),
+        watch('time', 'the time', (c) => c.time),
+      ],
+      mode: 'dir',
+      expect: { q: 'same', time: 'smaller' },
+      why: 'The states do not change, so the heat stays 335.0 kJ. The power into the water rises from 921.3 W to 1548 W, and the time falls from 363.6 s to 216.4 s.',
+    },
+    {
+      id: 'kt-mass',
+      scenario: 'six',
+      ask: 'Boil 0.5 kg on the same 6-inch coil, still starting at 20 °C.',
+      apply(s) { s.m = 0.5; },
+      watch: [
+        watch('q', 'the heat to reach the boil', (c) => c.q),
+        watch('time', 'the time', (c) => c.time),
+      ],
+      mode: 'dir',
+      expect: { q: 'smaller', time: 'smaller' },
+      why: 'Heat and time both scale with mass. Half a kilogram takes 167.5 kJ and 181.8 s, half of 335.0 kJ and 363.6 s.',
+    },
+    {
+      id: 'kt-warm',
+      scenario: 'six',
+      ask: 'Start the 1 kg at 60 °C instead of 20 °C, still on the 6-inch coil.',
+      apply(s) { s.T1 = fromC(60); },
+      watch: [
+        watch('q', 'the heat to reach the boil', (c) => c.q),
+        watch('time', 'the time', (c) => c.time),
+      ],
+      mode: 'dir',
+      expect: { q: 'smaller', time: 'smaller' },
+      why: 'The water is already partway to 99.97 °C. The heat falls from 335.0 kJ to 167.8 kJ, and the time from 363.6 s to 182.1 s.',
     },
   ],
 

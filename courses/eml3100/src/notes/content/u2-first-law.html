@@ -9,16 +9,32 @@
   <p class="eyebrow">EML 3100 · Thermodynamics · Unit 2 · Yan Ch 4</p>
   <h1>First law for closed systems</h1>
   <p class="lede">Energy is conserved. For a closed system that becomes one balance: heat in, minus work out, equals the change in stored energy. These notes derive the boundary work for each process, find the internal energy of air and steam, and close the balance on every example. Each number is computed by the course's property library and checked a second way.</p>
-  <nav class="toc">
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The balance</h3>
     <a href="#s1"><span>01</span>Energy, heat and work</a>
+    <h3>Part II · Boundary work</h3>
     <a href="#s2"><span>02</span>Boundary work</a>
     <a href="#s3"><span>03</span>Polytropic processes</a>
+    <h3>Part III · Heat and internal energy</h3>
     <a href="#s4"><span>04</span>Internal energy and specific heats</a>
     <a href="#s5"><span>05</span>The first law with steam</a>
+    <h3>Reference</h3>
     <a href="#s6"><span>06</span>Formula sheet</a>
   </nav>
 </header>
 <main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The balance</h2>
+</div>
+
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Energy, heat and work</h2>
 <p>A closed system holds a fixed mass. Energy can cross its boundary in two ways: as heat \(Q\), driven by a temperature difference, and as work \(W\), any other transfer, such as a moving piston or a turning shaft. Yan §4.2 treats heat; Yan §4.3 treats work.</p>
@@ -51,7 +67,13 @@ Q - W = \Delta U + \Delta KE + \Delta PE
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The balance holds between equilibrium states. It says nothing about how fast the heat flows or how long the process takes. It also ignores kinetic and potential energy, which matter for a falling or spinning system. Chemical and nuclear energy are left out: nothing here reacts.</p>
 </div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 16.050 Thermal Energy (Fall 2002) reviews the first law in Part 0, before the second-law sessions on its <a href="https://ocw.mit.edu/courses/16-050-thermal-energy-fall-2002/pages/calendar/" target="_blank" rel="noopener">calendar page</a>. The calendar titles start at the second law. Problem sets there carry no printed solutions, so the numbers in these notes are our own.</p>
 </section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Boundary work</h2>
+</div>
 
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Boundary work</h2>
@@ -140,6 +162,11 @@ W_b &= \frac{164.9 \times 0.04 - 1000 \times 0.01}{1 - 1.3}\\
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Heat and internal energy</h2>
+</div>
+
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Internal energy and specific heats</h2>
 <p>The specific heat at constant volume, \(c_v\), is the energy needed to warm one kilogram by one kelvin when no boundary work is done. At constant pressure, \(c_p\) includes the work of expansion. Yan §4.1 defines both; OpenStax UP2 §3.5 does the same per mole.</p>
@@ -210,11 +237,25 @@ Q &= m(u_2 - u_1) = 2 \times (1233 - 631.6)\\
 \]
 <p>A second route uses enthalpy: \(u = h - Pv\), so \(Q = m[(h_2 - h_1) - v(P_2 - P_1)]\). It gives the same 1203 kJ. Here the pressure term is \(2 \times 0.1627 \times 266.7 = 86.8\) kJ: using \(\Delta h\) for a rigid tank would overstate the heat by that much.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · a six-inch coil</span>
+<p>A covered pot holds 1 kg of water at 20 °C and 101.325 kPa, on a 6-inch coil rated 1250 W. DOE's baseline cooking efficiency for an open coil is 73.7%, so 921.3 W enters the water. The water boils at 99.97 °C. From the steam tables, \(h_2 - h_1 = 335.0\) kJ/kg, and</p>
+\[
+Q = 1 \times 335.0 = 335.0\ \text{kJ}.
+\]
+<p>The time is \(335000/921.3 = 363.6\) s. The liquid swells, and the boundary work is \(P m \Delta v = 4.219\) J. That is 0.001% of the heat, so \(m\Delta u\) and \(m\Delta h\) agree for this warm-up. The heat at constant pressure is still \(m\Delta h\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the eight-inch coil</span>
+<p>The same 1 kg on an 8-inch coil, rated 2100 W, still at 73.7%, receives 1548 W. The heat is the same 335.0 kJ, because the states did not change. The time falls to \(335000/1548 = 216.4\) s.</p>
+<p>Half a kilogram on the 6-inch coil takes half the heat, 167.5 kJ, and 181.8 s. Starting the full kilogram at 60 °C instead of 20 °C cuts the heat to 167.8 kJ and the time to 182.1 s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A rigid tank and a constant-pressure piston do not take the same heat between the same temperatures. The piston does boundary work, so its heat is \(m\Delta h\). The tank does none, so its heat is \(m\Delta u\). Using one formula for the other misses \(P\Delta V\). For this pot that term is only 4 J. For steam leaving the dome it is a large share of the heat.</p>
+</div>
 <div class="box key"><span class="tag">The rule</span>
 <p>Fix both states with two properties each. Read \(u\) or \(h\) from the tables. At constant pressure, \(Q = m\,\Delta h\). In a rigid tank, \(Q = m\,\Delta u\).</p>
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Each state is an equilibrium state. Real boiling has bubbles, temperature gradients and a little superheat at the wall. The piston is massless and frictionless, so the gas pressure equals the outside pressure. A heavy or sticking piston changes the work. And the steam tables here stop at 350 °C on the dome and at 800 °C above it.</p>
+<p>Each state is an equilibrium state. Real boiling has bubbles, temperature gradients and a little superheat at the wall. The piston is massless and frictionless, so the gas pressure equals the outside pressure. A heavy or sticking piston changes the work. And the steam tables here stop at 350 °C on the dome and at 800 °C above it. On the coil, 73.7% is a test-load average, the pot and the lid take heat, and evaporating the water would add the latent heat after the warm-up.</p>
 </div>
 </section>
 
@@ -247,5 +288,6 @@ Q = m\,\Delta u\quad (V\ \text{constant})
 <p>Signs: heat added to the system and work done by the system are positive. kPa·m³ = kJ. Air at 300 K: \(c_p = 1.005\), \(c_v = 0.7178\) kJ/(kg·K).</p>
 </section>
 </main>
+<footer>Written for Flux from Yan, Introduction to Engineering Thermodynamics, Yan Ch 4, and from OpenStax UP2 §3.3. The coil ratings, 1250 W and 2100 W, and the 73.7% cooking efficiency are the DOE residential cooking baseline. The water mass and the 20 °C start are assumed. Every worked answer was recomputed.</footer>
 </body>
 </html>

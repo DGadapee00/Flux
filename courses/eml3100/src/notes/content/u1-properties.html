@@ -9,16 +9,32 @@
   <p class="eyebrow">EML 3100 · Thermodynamics · Unit 1 · Yan Ch 2–3</p>
   <h1>Pure substances and ideal gases</h1>
   <p class="lede">Two properties fix the state of a pure substance. Water shows why: below its boiling point it is a liquid, above it a vapour, and on the boiling line it can be any mix of the two. These notes build the saturation dome, read the tables Flux generates from IAPWS-IF97, and find where the ideal-gas law is good enough. Every number is computed by the course's property library and checked by a second method.</p>
-  <nav class="toc">
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Phases and the dome</h3>
     <a href="#s1"><span>01</span>Pure substances and phases</a>
     <a href="#s2"><span>02</span>The saturation dome</a>
+    <h3>Part II · Reading the tables</h3>
     <a href="#s3"><span>03</span>Reading property tables</a>
+    <h3>Part III · Ideal and real gases</h3>
     <a href="#s4"><span>04</span>The ideal-gas law</a>
     <a href="#s5"><span>05</span>When is a gas ideal?</a>
+    <h3>Reference</h3>
     <a href="#s6"><span>06</span>Formula sheet</a>
   </nav>
 </header>
 <main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Phases and the dome</h2>
+</div>
+
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Pure substances and phases</h2>
 <p>A pure substance has one fixed chemical make-up throughout. Water is pure whether it is ice, liquid, steam, or a mix of all three. Air is treated as pure too, as long as it does not condense or react. Yan §2.1 sets out the definition.</p>
@@ -51,9 +67,18 @@ T &> T_{sat}(P):\ \text{vapour}
 <p>Heat it at 500 kPa to 200 °C. Now it is above 151.8 °C: superheated vapour, with \(h = 2856\) kJ/kg and \(v = 0.425\) m³/kg. Its volume grew about 400 times.</p>
 </div>
 <p>Open the Phase diagram lab on the boiling scenario and move the enthalpy slider. The state runs left to right along a horizontal line on the P–v diagram. On the T–v diagram the same path climbs, goes flat across the dome, then climbs again. The flat part is the boiling: heat goes in, and the temperature does not rise.</p>
-<div class="box out"><span class="tag">What the model leaves out</span>
-<p>A pure substance stays one chemical. Dissolved air in tap water, salt, or a reaction breaks that, and the boiling point shifts. The state postulate also counts only heat and boundary work. A magnetic, electric or surface-tension effect would add another independent property, and two would no longer be enough. Ice and the solid phases are not covered here: the library stops at 0 °C.</p>
+<div class="box ex"><span class="tag">Worked example · a pressure canner</span>
+<p>A weighted-gauge canner at sea level reads 10 psi. Absolute pressure is the gauge plus the standard atmosphere, 101.325 kPa. Ten psi is 68.95 kPa, so the absolute pressure is 170.3 kPa. Water boils there at 115.2 °C, which is 239.4 °F.</p>
+<p>The USDA guide states that 10.5 psi gauge at sea level gives 240 °F. The same sum is 173.7 kPa, and the saturation temperature is 115.8 °C, or 240.5 °F. The statement and the formulation agree to about half a degree.</p>
+<p>At 5,000 ft the standard atmosphere is 84.31 kPa. The same 10 psi gauge is then only 153.3 kPa, and the boil falls to 112.0 °C. The guide's step for a weighted gauge above 1,000 ft is 15 psi instead of 10. That reading at 5,000 ft is 187.7 kPa and 118.2 °C, hotter than the sea-level 10 psi boil. The extra gauge pressure more than makes up the thinner air.</p>
 </div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A gauge reads the pressure above the atmosphere. Using 10 psi as if it were absolute looks up a boiling temperature of 89.53 °C, far below the canner. Altitude belongs in the atmosphere term. Leaving it at 101.325 kPa on a mountain overstates the boil.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A pure substance stays one chemical. Dissolved air in tap water, salt, or a reaction breaks that, and the boiling point shifts. The state postulate also counts only heat and boundary work. A magnetic, electric or surface-tension effect would add another independent property, and two would no longer be enough. Ice and the solid phases are not covered here: the library stops at 0 °C. A canner that was not vented still holds air, so the steam is not pure and the temperature at the same gauge reading is lower.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 16.050 Thermal Energy (Fall 2002) reviews properties in Part 0, before the second-law sessions on its <a href="https://ocw.mit.edu/courses/16-050-thermal-energy-fall-2002/pages/calendar/" target="_blank" rel="noopener">calendar page</a>. The calendar titles start at the second law. Problem sets there carry no printed solutions, so the numbers in these notes are our own.</p>
 </section>
 
 <section class="topic" id="s2">
@@ -99,6 +124,11 @@ x = \frac{0.05 - 0.001092}{0.3827 - 0.001092} = 0.1281
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Reading the tables</h2>
+</div>
+
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Reading property tables</h2>
 <p>Property tables list \(v\), \(u\), \(h\) and \(s\) at round values of \(T\) and \(P\). There are three kinds: saturation by temperature, saturation by pressure, and superheated vapour. A fourth lists compressed liquid. Yan §2.4 explains how to read them. Flux prints its own tables from IAPWS-IF97 and copies none.</p>
@@ -122,7 +152,7 @@ y \approx y_0 + \frac{x - x_0}{x_1 - x_0}\,(y_1 - y_0)
 <div class="box ex"><span class="tag">Worked example · a curved row</span>
 <p>Find the saturation pressure at 42.5 °C. The table has rows at 40 °C, 7.384 kPa, and 45 °C, 9.594 kPa. Halfway between gives 8.489 kPa. IF97 at 42.5 °C gives 8.427 kPa. The straight line lands 0.74% high, because \(P_{sat}\) curves upward: it roughly doubles every 12 °C near room temperature. Enthalpy across the same rows is nearly straight, so its interpolation is good to a few hundredths of a percent.</p>
 </div>
-<div class="box fix"><span class="tag">The table value is accepted</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>A problem here grades against the exact IF97 value and also accepts the value interpolated from Flux's table, the way a student reads it. So 0.2770 and 0.2736 m³/kg are both marked right in this example. A different interpolation, for example from a printed book with other row spacing, can land outside both. When an answer is marked wrong by a fraction of a percent, check which rows you used.</p>
 </div>
 <p>Compressed liquid needs care. Its properties barely change with pressure. A good shortcut takes the saturated liquid at the same temperature: \(v \approx v_f(T)\) and \(h \approx h_f(T)\).</p>
@@ -136,6 +166,11 @@ y \approx y_0 + \frac{x - x_0}{x_1 - x_0}\,(y_1 - y_0)
 <p>A straight line between rows is an approximation of the formulation, not the formulation. Near the dome, near the critical point, and between low-pressure blocks it can be off by a percent or more. IF97 itself is a fit to the scientific formulation IAPWS-95, within about 0.1% in most of regions 1 and 2. Tables printed in different books also round differently in the last digit.</p>
 </div>
 </section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Ideal and real gases</h2>
+</div>
 
 <section class="topic" id="s4">
 <h2><span class="n">04</span>The ideal-gas law</h2>
@@ -168,7 +203,7 @@ m &= \frac{PV}{RT} = \frac{400 \times 2}{0.2870 \times 298.15}\\
 <div class="box ex"><span class="tag">Worked example · how fast the molecules move</span>
 <p>Nitrogen at 300 K: \(v_{rms} = \sqrt{3 \times 8.314 \times 300/0.02801} = 517\) m/s, faster than sound in the same air. One mole of any ideal gas at 0 °C and 101.325 kPa fills \(\bar RT/P = 8.314 \times 273.15/101\,325 = 0.02241\) m³, the familiar 22.41 L. Neither number depends on what the gas is made of, only on \(T\) and \(P\).</p>
 </div>
-<div class="box fix"><span class="tag">Absolute temperature and pressure</span>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>The law needs kelvins or rankines, and absolute pressure. Using 25 instead of 298.15 makes the mass twelve times too big. Using a gauge pressure from a tyre gauge leaves out the atmosphere, about 101 kPa.</p>
 </div>
 <p>A closed rigid tank keeps \(m\), \(R\) and \(V\) fixed. So \(P/T\) stays constant when it is heated: \(P_2 = P_1\,T_2/T_1\). Air at 50 psia and 70 °F, heated to 400 °F, reaches \(50 \times 859.67/529.67 = 81.15\) psia.</p>
@@ -226,5 +261,6 @@ Z = Pv/(RT)
 <p>\(\bar R = 8.314\) kJ/(kmol·K). Air: \(R = 0.2870\) kJ/(kg·K), or 53.35 ft·lbf/(lbm·R). Water: \(R = 0.4615\) kJ/(kg·K). Water's critical point: 373.9 °C, 22.06 MPa.</p>
 </section>
 </main>
+<footer>Written for Flux from Yan, Introduction to Engineering Thermodynamics, Yan Ch 2 and Yan Ch 3, and from OpenStax UP2 §2.1. The canner pressures are the USDA Complete Guide to Home Canning (2015): 10 psi and 15 psi on a weighted gauge, and the stated 240 °F at 10.5 psi gauge at sea level. Altitude pressure is the standard atmosphere. Every worked answer was recomputed.</footer>
 </body>
 </html>

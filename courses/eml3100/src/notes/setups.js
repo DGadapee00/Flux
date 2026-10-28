@@ -21,6 +21,12 @@ export const SETUPS = {
         setup: onIsobar(500e3, 120),
         read: (c) => ({ T: [toC(c.T), 120], h: [c.h / 1e3, 504.0] }),
       },
+      {
+        tag: 'a pressure canner',
+        lab: 'canner',
+        scenario: 'sea',
+        read: (c) => ({ Tc: [c.Tc, 115.2], Tf: [c.Tf, 239.4] }),
+      },
     ],
     s2: [
       {
@@ -119,6 +125,18 @@ export const SETUPS = {
           s.V2 = 0.4986;
         },
         read: (c) => ({ W: [c.W / 1e3, 174.0], Q: [c.Q / 1e3, 1530] }),
+      },
+      {
+        tag: 'a six-inch coil',
+        lab: 'kettle',
+        scenario: 'six',
+        read: (c) => ({ Q: [c.q / 1e3, 335.0], t: [c.time, 363.6] }),
+      },
+      {
+        tag: 'the eight-inch coil',
+        lab: 'kettle',
+        scenario: 'eight',
+        read: (c) => ({ Q: [c.q / 1e3, 335.0], t: [c.time, 216.4] }),
       },
     ],
   },
