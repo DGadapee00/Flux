@@ -77,6 +77,8 @@ export const SECTIONS = Object.freeze({
   'thermal-stress': { title: 'Thermal stress' },
   'combined-loading': { title: 'Combined loadings' },
   'buckling': { title: 'Buckling of columns' },
+  'energy': { title: 'Strain energy and Castigliano\'s theorem' },
+  'impact': { title: 'Impact loading' },
 });
 
 function entry(topic) {
