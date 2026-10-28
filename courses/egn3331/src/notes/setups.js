@@ -675,6 +675,82 @@ export const SETUPS = {
       },
     ],
   },
+  u10: {
+    s1: [
+      {
+        tag: 'the 40 kN bar',
+        lab: 'castigliano',
+        scenario: 'bar',
+        read: (c) => ({ U: [c.U, 15], delta: [c.delta * 1e3, 0.75] }),
+      },
+    ],
+    s2: [
+      {
+        tag: 'the 40 by 80 mm cantilever',
+        lab: 'castigliano',
+        scenario: 'tip',
+        read: (c) => ({ delta: [c.delta * 1e3, 6.25], U: [c.U, 2.5] }),
+      },
+      {
+        tag: 'the 40 mm shaft',
+        lab: 'castigliano',
+        scenario: 'shaft',
+        read: (c) => ({ U: [c.U, 7.96], phi: [(c.phi * 180) / Math.PI, 1.824] }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'midspan',
+        lab: 'castigliano',
+        scenario: 'station',
+        read: (c) => ({ delta: [c.delta * 1e3, 1.953] }),
+      },
+      {
+        tag: 'the two bars',
+        lab: 'castigliano',
+        scenario: 'truss',
+        read: (c) => ({ F: [c.F / 1e3, 8.25], delta: [c.delta * 1e3, 3.5] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'the 16 mm rod',
+        lab: 'drop',
+        scenario: 'rod',
+        read: (c) => ({ sigma: [c.stress / 1e6, 62.6], n: [c.n, 8.39] }),
+      },
+      {
+        tag: 'released from contact',
+        lab: 'drop',
+        scenario: 'sudden',
+        read: (c) => ({
+          n: [c.n, 2],
+          sigma: [c.stress / (1000 * PA_PER_PSI), 6.78],
+        }),
+      },
+    ],
+    s5: [
+      {
+        tag: 'the 1 in drop',
+        lab: 'drop',
+        scenario: 'catch',
+        read: (c) => ({
+          n: [c.n, 5.58],
+          force: [c.force / N_PER_LBF, 2230],
+          sigma: [c.stress / (1000 * PA_PER_PSI), 18.92],
+        }),
+      },
+      {
+        tag: '60 ft of rope',
+        lab: 'drop',
+        scenario: 'long',
+        read: (c) => ({
+          force: [c.force / N_PER_LBF, 1726],
+          n: [c.n, 4.32],
+        }),
+      },
+    ],
+  },
 };
 
 /** An example's tag as the notes write it, without "Worked example · ". */

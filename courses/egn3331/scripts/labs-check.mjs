@@ -39,6 +39,8 @@ const LIMIT = {
   torsion: 1e-6,
   twist: 1e-6,
   motor: 1e-6,
+  castigliano: 1e-6,
+  drop: 1e-6,
 };
 
 const fails = [];

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Energy methods</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 10 · Ch 14</p>
+  <h1>Energy methods</h1>
+  <p class="lede">Strain energy is the work stored in a member. For a linear material that work is half the load times the travel. The travel is the slope of the energy. A falling weight stores the same work over a short extra stretch, so the peak force rises. Every number below comes from the course library and is checked a second way.</p>
+  <div class="legend">
+    <span><i class="swatch" style="background: var(--gold)"></i>Energy, deflection, or the static force</span>
+    <span><i class="swatch" style="background: #d147bd"></i>The load, or the peak force</span>
+    <span><i class="swatch" style="background: var(--teal)"></i>A station on the beam</span>
+  </div>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>A uniform bar</a>
+    <a href="#s2"><span>02</span>Bending and torsion</a>
+    <a href="#s3"><span>03</span>A dummy load</a>
+    <a href="#s4"><span>04</span>A falling weight</a>
+    <a href="#s5"><span>05</span>A crane rope</a>
+    <a href="#s6"><span>06</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+<h3>Part 1 · Stored energy <span class="sub">| bar | beam | shaft</span></h3>
+
+<section class="topic" id="s1">
+<h2><span class="n">01</span>A uniform bar</h2>
+<p>An axial force on a uniform bar grows from zero when the load is applied slowly. The elongation grows with the force. The area under that line is the stored energy.</p>
+\[
+U = \frac{N^2 L}{2AE}
+\]
+<p>The same energy is half of N times the elongation. Differentiating with respect to N returns the elongation.</p>
+\[
+\delta = \frac{NL}{AE}
+\]
+<p>E is 200 GPa here, a round value for steel. Doubling N doubles the elongation. The energy multiplies by four, because the force is squared. The gold curve in the lab is that parabola. The pink dot is the present load.</p>
+<div class="box ex"><span class="tag">Worked example · the 40 kN bar</span>
+<p>The bar is 1.5 m long. Its area is 400 mm². The axial force is 40 kN. The energy and the elongation are</p>
+\[
+U = 15\ \mathrm{J}
+\]
+\[
+\delta = 0.75\ \mathrm{mm}
+\]
+<p>Half of 40 kN times 0.75 mm is 15 J. That product is the second path. Doubling the force makes the energy 60 J and the elongation 1.5 mm.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Writing the energy as N times δ forgets the half, and the energy doubles. Dropping E from the elongation leaves a number that is not a length. The energy is not the force times the length over the area.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec24/">2.001 lecture 26</a> builds strain energy and takes its derivative.</p>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Bending and torsion</h2>
+<p>Bending stores energy in the moment. On a cantilever with an end load P, the moment at a section is P times the distance back from the tip. Integrating M squared over 2EI along the length gives</p>
+\[
+U = \frac{P^2 L^3}{6EI}
+\]
+<p>The tip drop is the derivative of that energy with respect to P.</p>
+\[
+\delta = \frac{PL^3}{3EI}
+\]
+<p>Half of P times the tip drop returns the same energy. A rectangle has \(I = bh^3/12\). Shear stores energy as well. For this rectangle the shear energy is about \(0.78(h/L)^2\) times the bending energy. Here \(h/L\) is 0.04, so shear is about 0.125 percent of the bending energy. The lab curve leaves that share out.</p>
+<div class="box ex"><span class="tag">Worked example · the 40 by 80 mm cantilever</span>
+<p>The section is 40 mm wide and 80 mm deep. E is 200 GPa. The end load is 800 N and the length is 2 m. The tip drop and the energy are</p>
+\[
+\delta = 6.25\ \mathrm{mm}
+\]
+\[
+U = 2.5\ \mathrm{J}
+\]
+<p>Doubling the load sends the drop to 12.5 mm and the energy to 10 J. Doubling the length multiplies the drop by eight. The check is a trapezoid of M squared, and the elastic curve from Unit 8.</p>
+</div>
+<p>A round shaft stores energy in the torque. G replaces E, and the polar moment J replaces I.</p>
+\[
+U = \frac{T^2 L}{2GJ}
+\]
+<p>The angle, in radians, is TL/(GJ). Half of T times that angle is the energy again. G in this lab is 75 GPa, the round value from Unit 9. For a solid circle, J is twice I.</p>
+<div class="box ex"><span class="tag">Worked example · the 40 mm shaft</span>
+<p>The shaft is 40 mm in diameter and 1.2 m long. The torque is 500 N·m. The energy and the angle are</p>
+\[
+U = 7.96\ \mathrm{J}
+\]
+\[
+\phi = 1.824^\circ
+\]
+<p>Using E in place of G multiplies both numbers by G/E, which is 0.375. Using I in place of J doubles the angle. Forgetting the half doubles the energy.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The formula with 48 in the denominator is the midspan drop of a beam on two supports. This cantilever uses 3. Shaft energy written with E, or with I, mixes up the section and the modulus.</p>
+</div>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 2 · The derivative <span class="sub">| dummy | truss</span></h3>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>A dummy load</h2>
+<p>The derivative has to name the point you want. If the real load sits somewhere else, add a dummy load at the point, differentiate, and then set the dummy to zero. That step is virtual work. The dummy force times the real displacement equals the change in stored energy.</p>
+\[
+\delta = \frac{\partial U}{\partial Q}
+\]
+<div class="box ex"><span class="tag">Worked example · midspan</span>
+<p>The same cantilever carries 800 N at the tip. The question is the drop at midspan, where no real load acts. A dummy at midspan, removed after the derivative, gives</p>
+\[
+\delta = 1.953\ \mathrm{mm}
+\]
+<p>The tip drop is still 6.25 mm. Half of the tip drop is 3.125 mm, and that is not the midspan value. Moving the dummy out to the tip recovers 6.25 mm. The closed form is P over EI, times L a squared over 2 minus a cubed over 6. The teal dot is that station. The pink dot stays at the tip.</p>
+</div>
+<div class="box why"><span class="tag">Why the dummy sits at the point</span>
+<p>A derivative with respect to the tip load is the tip motion. It cannot name a station the tip load does not mark. Put the dummy on the station you want. Keep it through the derivative. Set it to zero only after that.</p>
+</div>
+<p>Two bars can carry a vertical load the same way. The pins are a span apart. The joint sits a rise above the midpoint. Each bar force is P divided by 2 sin θ, with θ measured from the horizontal. The joint drop is that force times the bar length, divided by AE sin θ. Both bars store energy, so U is the bar force squared times the length, over AE. Half of P times the joint drop matches that energy. The check is a joint solution, and a numerical slope of U.</p>
+<div class="box ex"><span class="tag">Worked example · the two bars</span>
+<p>P is 4 kN. The span is 4 m and the rise is 0.5 m. Each bar's area is 100 mm². E is 200 GPa. The bar force and the joint drop are</p>
+\[
+F = 8.25\ \mathrm{kN}
+\]
+\[
+\delta = 3.5\ \mathrm{mm}
+\]
+<p>The stored energy is 7.01 J. Half of 4 kN times 3.5 mm is that same 7.01 J. Raising the rise to 1 m makes the force 4.47 kN and the drop 1.118 mm. Both get smaller, because the bars stand steeper.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading the midspan drop as the tip drop, or as half the tip drop, skips the dummy. On the truss, P/2 is the answer only for a vertical pair. Cos θ in place of sin θ uses the horizontal projection. One vertical bar carrying all of P is a different structure.</p>
+</div>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 3 · A falling load <span class="sub">| rod | rope | Reference</span></h3>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>A falling weight</h2>
+<p>A weight \(W\) at rest stretches its support by \(\delta_{st} = WL/(AE)\). Released from a height \(h\) above that resting position, it falls and the support stretches farther, then stops. The work done is \(W(h+\delta)\), with \(\delta\) the largest stretch. That work equals \(\tfrac12 k\delta^2\), and \(k = W/\delta_{st}\). Dividing the largest stretch by \(\delta_{st}\) gives the impact factor.</p>
+\[
+n = 1 + \sqrt{1 + \frac{2h}{\delta_{st}}}
+\]
+<p>The peak force is n times W. A height of zero is not the static case. The square root of 1 is 1, so n is 2. The load arrives suddenly, and the peak is twice the static force. The second check integrates the mass on the spring. The factor itself does not contain g.</p>
+<div class="box ex"><span class="tag">Worked example · the 16 mm rod</span>
+<p>A steel rod, 16 mm in diameter and 2 m long, carries 1500 N. E is 200 GPa. The weight is released 2 mm above the resting position. The static stretch is 0.0746 mm. The factor and the peak stress are</p>
+\[
+n = 8.39
+\]
+\[
+\sigma = 62.6\ \mathrm{MPa}
+\]
+<p>The static stress is 7.46 MPa. Holding the peak at 80 MPa requires a drop of 3.49 mm, and then n is 10.72. That height comes from the energy balance solved for h.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · released from contact</span>
+<p>The crane rope of the next section is 30 ft long and holds 400 lbf. Released from contact, the height is zero. The factor is still</p>
+\[
+n = 2
+\]
+<p>The peak stress is 6.78 ksi. The static stress is 3.39 ksi. The peak does not fall to the static value. The static stretch of that rope is 0.1 in.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the static stress on a real drop takes n as 1. Using a factor of 2 for a drop from a height treats every fall as sudden. A longer support stretches more under the same weight, so the same fall produces a smaller peak.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec25/">2.001 lecture 27</a> works energy examples, including loads found from the derivative.</p>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>A crane rope</h2>
+<p>A crane rope is a spring with a published area and a published modulus. The <a href="https://dot.ca.gov/-/media/dot-media/programs/engineering/documents/structureconstruction/falsework/fw-appendixd-ex18-a11y.pdf">Caltrans Falsework Manual, Appendix D, Example 18</a>, lists a new 1/2 in 6×19 IWRC rope. The metallic area is 0.118 in². The nominal strength is 11.5 tons, which is 23000 lbf. The weight is 0.46 lb/ft. That line prints 13.5 million psi and, for loads up to 20 percent of ultimate, 12.2 million psi. The hook loads here stay under that 20 percent, so the model uses 12.2 million psi. The 13.5 million psi figure is not used.</p>
+<div class="box ex"><span class="tag">Worked example · the 1 in drop</span>
+<p>The length is taken as 30 ft, the hook load as 400 lbf, and the drop as 1 in. None of those three is in the example. The static stretch is 0.1 in. The factor, the peak force, and the peak stress are</p>
+\[
+n = 5.58
+\]
+\[
+F = 2230\ \mathrm{lbf}
+\]
+\[
+\sigma = 18.92\ \mathrm{ksi}
+\]
+<p>That force is 0.0971 of the 23000 lbf nominal strength. The static stress is 3.39 ksi. Doubling the drop, to 2 in, raises the factor to 7.4 and the force to 2960 lbf. The static stretch stays 0.1 in. The inch-pound path and the SI path are the same rope.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · 60 ft of rope</span>
+<p>Keep the 400 lbf and the 1 in drop, and set the length to 60 ft. The static stretch doubles, to 0.2 in. The peak force and the factor become</p>
+\[
+F = 1726\ \mathrm{lbf}
+\]
+\[
+n = 4.32
+\]
+<p>The longer rope absorbs the fall with a smaller peak. The stress falls with the force, because the area did not change.</p>
+</div>
+<div class="box out"><span class="tag">What the course model leaves out</span>
+<p>Constructional stretch, the sheave, the hook, and the rope's own weight are not in the energy. A design factor of 5 is not applied. The modulus used is 12.2 million psi. The 13.5 million psi number on the same line is not used. The 30 ft length, the 400 lbf hook load, and the 1 in drop are assumptions.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Formula sheet</h2>
+<p>Axial energy and elongation, with E = 200 GPa in the bar lab:</p>
+\[
+U = \frac{N^2 L}{2AE}
+\]
+\[
+\delta = \frac{NL}{AE}
+\]
+<p>Cantilever tip, end load P. A rectangle has I = bh³/12.</p>
+\[
+U = \frac{P^2 L^3}{6EI}
+\]
+\[
+\delta = \frac{PL^3}{3EI}
+\]
+<p>A dummy load Q at the station, removed after the derivative, gives the drop there. Shaft energy, with J = πd⁴/32 and G = 75 GPa:</p>
+\[
+U = \frac{T^2 L}{2GJ}
+\]
+<p>Two bars under a vertical load: each force is P/(2 sin θ). Impact factor, and a height of zero means n = 2:</p>
+\[
+n = 1 + \sqrt{1 + \frac{2h}{\delta_{st}}}
+\]
+<p>Citations: strain energy and Castigliano's theorem, and impact loading. Those topics are not Roylance sections. Hibbeler's chapter label in the practice list is 14. The rope is Caltrans Falsework Manual, Appendix D, Example 18. The model uses the 12.2 million psi figure from that line. The 30 ft length, the 400 lbf hook load, and the 1 in drop are assumptions. The rod and the cantilever are course sections.</p>
+</section>
+</div>
+</main>
+</body>
+</html>

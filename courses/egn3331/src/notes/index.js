@@ -142,6 +142,21 @@ export const NOTES = {
       { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u10: {
+    exam: 'u10',
+    title: 'Energy methods',
+    chapters: '14',
+    file: 'u10-energy.html',
+    load: () => import('./content/u10-energy.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'A uniform bar', lab: 'castigliano', ch: ['14'], topics: ['energy', 'axial'], home: true },
+      { id: 's2', n: 2, title: 'Bending and torsion', lab: 'castigliano', ch: ['14'], topics: ['energy', 'bending', 'torsion'] },
+      { id: 's3', n: 3, title: 'A dummy load', lab: 'castigliano', ch: ['14'], topics: ['energy', 'dummy', 'truss'] },
+      { id: 's4', n: 4, title: 'A falling weight', lab: 'drop', ch: ['14'], topics: ['impact'] },
+      { id: 's5', n: 5, title: 'A crane rope', lab: 'drop', ch: ['14'], topics: ['impact', 'english'] },
+      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;

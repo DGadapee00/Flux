@@ -30,6 +30,8 @@ const loaders = {
   torsion: () => import('./torsion.js'),
   twist: () => import('./twist.js'),
   motor: () => import('./motor.js'),
+  castigliano: () => import('./castigliano.js'),
+  drop: () => import('./drop.js'),
 };
 
 const labs = createLabLoader(loaders);

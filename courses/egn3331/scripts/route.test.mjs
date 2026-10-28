@@ -28,7 +28,7 @@ test('a bare lab id finds its unit, and a unit still to be built opens with no l
   const bare = parseRoute(`#/${COURSE}/pins`);
   assert.equal(bare.examId, 'u1');
   assert.equal(bare.labId, 'pins');
-  const later = parseRoute(`#/${COURSE}/u10`);
-  assert.equal(later.examId, 'u10');
+  const later = parseRoute(`#/${COURSE}/u11`);
+  assert.equal(later.examId, 'u11');
   assert.ok(!later.labId);
 });
