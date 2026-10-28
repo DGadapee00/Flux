@@ -126,7 +126,29 @@ export default {
       read: (c) => ({ a: [c.a, -14.2] }),
     },
   ],
-  s7: [
+  s6: [
+    { tag: 'the shaper at 30°', lab: 'coriolis', scenario: 'shaper', read: (c) => ({ rho: [c.rho, 0.3122], W: [c.W, 0.9231], vRel: [c.vRel, 0.2774], cor: [c.coriolis, 0.512], Wd: [c.Wd, 1.913], without: [c.WdWithout, 3.553] }) },
+    { tag: 'the top of the stroke', lab: 'coriolis', scenario: 'top', read: (c) => ({ W: [c.W, 0.4 / 0.35] }) },
+    {
+      tag: 'the quick return',
+      lab: 'coriolis',
+      scenario: 'top',
+      setup(s) {
+        s.phi = 270;
+      },
+      read: (c) => ({ W: [Math.abs(c.W), 0.4 / 0.15] }),
+    },
+    {
+      tag: 'walking on a turntable',
+      lab: 'polar',
+      scenario: 'arm',
+      setup(s) {
+        Object.assign(s, { r0: 2, u: 1, ad: 0, w: 1, al: 0, t: 0, tEnd: 1 });
+      },
+      read: (c) => ({ cor: [c.ath, 2], ar: [c.ar, -2] }),
+    },
+  ],
+  s8: [
     {
       tag: 'a two-stage reduction',
       lab: 'gearbox',
@@ -155,7 +177,7 @@ export default {
       read: (c) => ({ w4: [c.w4, 5000], v12: [c.v12, 126] }),
     },
   ],
-  s6: [
+  s7: [
     {
       tag: 'the contact point',
       lab: 'rolling',

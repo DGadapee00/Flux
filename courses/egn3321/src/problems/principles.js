@@ -118,6 +118,12 @@ export const PRINCIPLES = {
     cue: 'An acceleration in a linkage or a rolling body.',
     family: 'Rigid kinematics',
   },
+  'rotating-axes': {
+    name: 'Rotating axes and the Coriolis term',
+    statement: 'Seen from axes that turn at $\\Omega$: $\\vec a_B = \\vec a_A + \\dot{\\vec\\Omega}\\times\\vec r + \\vec\\Omega\\times(\\vec\\Omega\\times\\vec r) + 2\\vec\\Omega\\times\\vec v_{rel} + \\vec a_{rel}$. The Coriolis term needs both turning and sliding.',
+    cue: 'A point that slides along a turning body: a pin in a slot, a collar on a spinning rod.',
+    family: 'Rigid kinematics',
+  },
   rolling: {
     name: 'Rolling without slipping',
     statement: 'The contact point is at rest: $v_G = \\omega r$ and $a_G = \\alpha r$. Friction holds it there only while $F \\le \\mu_s N$.',
@@ -205,6 +211,9 @@ export const PRINCIPLE_TAGS = {
   'u5.16.absolute': ['rel-velocity'],
   'u5.16.bar': ['rel-velocity'],
   'u5.16.ladder': ['rel-velocity'],
+  'u5.16.rocker': ['rotating-axes', 'rel-velocity'],
+  'u5.16.coriolis-dir': ['rotating-axes'],
+  'u5.16.cart-rod': ['rotating-axes'],
   'u5.16.wheel': ['rolling', 'rel-velocity'],
   'u5.16.accel': ['rel-accel', 'rel-velocity'],
   'u5.16.rotor-tip': ['rel-velocity', 'rel-accel'],

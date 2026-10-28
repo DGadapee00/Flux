@@ -49,7 +49,7 @@ export const EXAMS = [
     title: 'Rigid-body kinematics',
     chapters: '16',
     date: 'Ch 16',
-    labs: ['ic', 'slider-crank', 'rolling', 'gearbox'],
+    labs: ['ic', 'slider-crank', 'coriolis', 'rolling', 'gearbox'],
     coming: [],
   },
   {
@@ -89,6 +89,7 @@ export const LAB_META = {
   rocket: { id: 'rocket', exam: 'u4', title: 'Rocket', app: true },
   ic: { id: 'ic', exam: 'u5', title: 'Centre' },
   'slider-crank': { id: 'slider-crank', exam: 'u5', title: 'Slider-crank' },
+  coriolis: { id: 'coriolis', exam: 'u5', title: 'Coriolis' },
   rolling: { id: 'rolling', exam: 'u5', title: 'Rolling' },
   inertia: { id: 'inertia', exam: 'u6', title: 'Inertia' },
   pendulum: { id: 'pendulum', exam: 'u6', title: 'Pendulum' },

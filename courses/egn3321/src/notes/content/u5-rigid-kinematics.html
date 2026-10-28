@@ -24,11 +24,12 @@
     <a href="#s3"><span>03</span>Relative velocity</a>
     <a href="#s4"><span>04</span>Instantaneous centre</a>
     <a href="#s5"><span>05</span>Relative acceleration</a>
+    <a href="#s6"><span>06</span>Rotating axes</a>
     <h3>Part III · Rolling, and an application</h3>
-    <a href="#s6"><span>06</span>Rolling without slip</a>
-    <a href="#s7"><span>07</span>Application: a turbopump gearbox</a>
+    <a href="#s7"><span>07</span>Rolling without slip</a>
+    <a href="#s8"><span>08</span>Application: a turbopump gearbox</a>
     <h3>Reference</h3>
-    <a href="#s8"><span>08</span>Formula sheet</a>
+    <a href="#s9"><span>09</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -204,18 +205,62 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 </div>
 <p>In the Slider-crank lab, set the crank to 0° and then to 180°. The speed reads zero both times. The acceleration does not.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>The centripetal term stays in the acceleration when the velocity is zero. The model leaves out a crank whose length changes, and the Coriolis term that a point sliding along a rotating body would add. That case is rotating axes, §16.8, which the course leaves out.</p>
+<p>Both points here belong to one rigid body, so their distance is fixed. A point that slides along a turning body, a pin in a slot, needs one more term. Section 6 adds it.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/35-3-rolling-wheel-in-the-ground-frame/" target="_blank" rel="noopener">35.3 Rolling Wheel in the Ground Frame</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>.</p>
+</section>
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Rotating axes</h2>
+<p>A pin that slides in the slot of a turning rocker is not a point of the rocker. Its motion is easiest to describe from axes fixed to the rocker: the pin is at distance \(\rho\) along the slot and slides at \(v_{rel}\). Those axes turn at \(\Omega\), so their unit vectors change in time, and that adds a term no translating frame has.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Let the axes x–y turn at \(\Omega\) with origin A. Each unit vector changes as \(d\hat\imath/dt = \vec\Omega\times\hat\imath\). For B at \(\vec r = x\hat\imath + y\hat\jmath\) in those axes, \(d\vec r/dt = (\dot x\hat\imath + \dot y\hat\jmath) + \vec\Omega\times\vec r = \vec v_{rel} + \vec\Omega\times\vec r\).</p>
+<p>Apply the same rule to \(\vec v_{rel}\) and to \(\vec\Omega\times\vec r\). The first gives \(\vec a_{rel} + \vec\Omega\times\vec v_{rel}\). The second gives \(\dot{\vec\Omega}\times\vec r + \vec\Omega\times(\vec v_{rel} + \vec\Omega\times\vec r)\). The term \(\vec\Omega\times\vec v_{rel}\) appears twice.</p>
+</div>
+\[
+\begin{aligned}
+\vec v_B &= \vec v_A + \vec\Omega\times\vec r + \vec v_{rel},\\
+\vec a_B &= \vec a_A + \dot{\vec\Omega}\times\vec r + \vec\Omega\times(\vec\Omega\times\vec r) + 2\vec\Omega\times\vec v_{rel} + \vec a_{rel}.
+\end{aligned}
+\]
+<p>\(2\vec\Omega\times\vec v_{rel}\) is the Coriolis acceleration. It needs both turning and sliding. With the origin fixed and B on a line through it, this is Unit 1's polar result again: \(a_\theta = r\ddot\theta + 2\dot r\dot\theta\).</p>
+<div class="box ex"><span class="tag">Worked example · the shaper at 30°</span>
+<p>A 0.1 m crank turns at a steady 4 rad/s about C, 0.25 m above the rocker's pivot O. At 30° the pin is at \((0.0866, 0.300)\) m, so \(\rho = 0.312\) m. The crank gives the pin 0.4 m/s at right angles to the crank, and 1.6 m/s² toward C.</p>
+<p>Across the slot the pin's velocity is \(0.288\) m/s, so \(\Omega = 0.288/0.312 = 0.923\) rad/s. Along it, \(v_{rel} = 0.277\) m/s. The Coriolis term is \(2(0.923)(0.277) = 0.512\) m/s².</p>
+<p>Across the slot the pin's acceleration is \(1.109\) m/s², and it equals \(\rho\dot\Omega + 2\Omega v_{rel}\). So \(\dot\Omega = (1.109 - 0.512)/0.312 = 1.91\) rad/s².</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the top of the stroke</span>
+<p>Turn the crank to 90°. The pin is straight above C, moving straight across the slot, so \(v_{rel} = 0\) and the Coriolis term vanishes. The rocker turns at \(\Omega = 0.4/0.35 = 1.14\) rad/s, and \(\dot\Omega = 0\): this is the rocker's fastest forward swing.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the quick return</span>
+<p>At 270° the pin is below C, only 0.15 m from O. The same 0.4 m/s swings the rocker back at \(0.4/0.15 = 2.67\) rad/s. The rocker moves forward slowly while the pin is above C and returns fast while it is below. A shaper cuts on the slow stroke and returns quickly.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a rod on a moving cart</span>
+<p>A rod is pinned to a cart that accelerates at 2 m/s² along the rod's present direction. The rod turns at 3 rad/s and speeds up at 2 rad/s². A collar 0.8 m out slides along it at a steady 0.5 m/s.</p>
+<p>Along the rod: \(2 + 0 - 3^2(0.8) = -5.2\) m/s². Across it: \(2(0.8) + 2(3)(0.5) = 4.6\) m/s². The cart's acceleration simply adds; the Coriolis term is 3 m/s² of the 4.6.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · walking on a turntable</span>
+<p>A playground turntable turns at 1 rad/s. A 30 kg child walks straight out at 1 m/s and is 2 m from the centre. The Coriolis term is \(2(1)(1) = 2\) m/s², ahead in the sense of the turn, beside 2 m/s² of centripetal pull inward. The platform must push the child sideways with \(30 \times 2 = 60\) N: that is the sideways shove a child feels walking out.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving out \(2\vec\Omega\times\vec v_{rel}\). For the shaper at 30° that gives \(\dot\Omega = 1.109/0.312 = 3.55\) rad/s² instead of 1.91. Hibbeler §16.8.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Giving the rocker the crank's angular velocity. They are different bodies. The rocker turns at the part of the pin's velocity across the slot divided by \(\rho\): 0.923 rad/s, not 4 rad/s. Hibbeler §16.8.</p>
+</div>
+<p>In the Coriolis lab, play the crank and watch the purple curve against the dashed one: they part most where the pin slides fastest. At 90° and 270° the two meet, because the pin does not slide there.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Everything stays in one plane, so \(\vec\Omega\) keeps its direction. In three dimensions \(\vec\Omega\) can tilt, and \(\dot{\vec\Omega}\) then has a part that changes the axis as well as the rate. The pin is also a point with no clearance in the slot.</p>
 </div>
 <p class="bridge">Part III applies relative motion to a wheel that rolls and to a gear train that meshes.</p>
-<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/35-3-rolling-wheel-in-the-ground-frame/" target="_blank" rel="noopener">35.3 Rolling Wheel in the Ground Frame</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>.</p>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/4-4-non-inertial-reference-frames/" target="_blank" rel="noopener">4.4 Non-inertial Reference Frames</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>, <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/free-body-diagrams-and-fictitious-forces/" target="_blank" rel="noopener">Lecture 4, Free Body Diagrams and Fictitious Forces</a>.</p>
 </section>
 <div class="part">
   <div class="eyebrow">Part III</div>
   <h2>Rolling, and an application</h2>
 </div>
 
-<section class="topic" id="s6">
-<h2><span class="n">06</span>Rolling without slip</h2>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Rolling without slip</h2>
 <p>A wheel that rolls without slip has its contact point instantaneously at rest. That point is the instantaneous centre. The centre of the wheel moves at \(v = R\omega\), and the top moves at \(2v\).</p>
 <div class="box why"><span class="tag">Why</span>
 <p>No slip means the contact point matches the ground, so its velocity is zero. That point is the instantaneous centre. The wheel centre is one radius away, and the top is two.</p>
@@ -251,8 +296,8 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/35-4-rolling-without-slipping-slipping-and-skidding/" target="_blank" rel="noopener">35.4 Rolling Without Slipping, Slipping, and Skidding</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/35-2-rolling-wheel-in-the-center-of-mass-frame/" target="_blank" rel="noopener">35.2 Rolling Wheel in the Center of Mass Frame</a>.</p>
 </section>
-<section class="topic" id="s7">
-<h2><span class="n">07</span>Application: a turbopump gearbox</h2>
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Application: a turbopump gearbox</h2>
 <p>A liquid rocket engine feeds its propellants with a turbopump. A small turbine, driven by hot gas, spins the pumps. The turbine runs best fast. The pumps often run best slower, and not at the same speed as each other. A gearbox between them sets each speed. It is section 1's contact rule, applied mesh by mesh.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Gears that mesh have the same tooth size, the module \(m\). The pitch circle of a gear with \(N\) teeth has circumference \(N\) tooth spacings, so its radius is \(r = mN/2\). At a mesh the pitch circles roll on each other: \(r_1\omega_1 = r_2\omega_2\). The module cancels, and \(\omega_2/\omega_1 = N_1/N_2\). An external mesh reverses the sense.</p>
@@ -288,8 +333,8 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/28-3-review-of-angular-velocity-and-acceleration/" target="_blank" rel="noopener">28.3 Review of Angular Velocity and Acceleration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/10-4-review-of-rotational-kinematics/" target="_blank" rel="noopener">10.4 Review of Rotational Kinematics</a>.</p>
 </section>
-<section class="topic" id="s8">
-<h2><span class="n">08</span>Formula sheet</h2>
+<section class="topic" id="s9">
+<h2><span class="n">09</span>Formula sheet</h2>
 <ul>
 <li>\(v = r\omega\), \(a_t = r\alpha\), \(a_n = r\omega^2\). Constant \(\alpha\): \(\omega^2 = \omega_0^2 + 2\alpha\Delta\theta\).</li>
 <li>Open belt, same sense: \(r_1\omega_1 = r_2\omega_2\). External gears flip the sign.</li>
@@ -301,9 +346,9 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <li>Slider-crank: \(\sin\phi = (r/\ell)\sin\theta\), and \(x = r\cos\theta + \ell\cos\phi\).</li>
 <li>Angles on the sliders are in degrees. The derivatives use radians. 1 rpm is \(2\pi/60\) rad/s.</li>
 <li>A belt may be stated in feet. The speed ratio is the same.</li>
-<li>Rotating axes, §16.8, stay out of this unit.</li>
+<li>Rotating axes: \(\vec a_B = \vec a_A + \dot{\vec\Omega}\times\vec r + \vec\Omega\times(\vec\Omega\times\vec r) + 2\vec\Omega\times\vec v_{rel} + \vec a_{rel}\).</li>
 </ul>
-<p>Rotating frames stay out. So do a slipping belt and a wheel that both rolls and slides.</p>
+<p>A slipping belt and a wheel that both rolls and slides stay out.</p>
 </section>
 </main>
 <footer>Written for Flux from Hibbeler, Engineering Mechanics: Dynamics, Chapter 16, cited by section, with MIT OCW 8.01SC and 2.003SC as Another view. Every worked answer was recomputed.</footer>

@@ -6,12 +6,16 @@
  * Values inside `$` are SI. A trap returns a value in SI, like the part's own `get`.
  */
 import { M_PER_FT } from '@flux/subjects/convert.js';
+import { slottedRocker } from '@flux/subjects/mechanics/rotating.js';
 
 const DEG = Math.PI / 180;
 
 /** The driven sense: +1 when the driven member turns the same way as the driver. */
 const beltSense = ($) => ($.belt === 'crossed' ? -1 : 1);
 const gearSense = ($) => ($.mesh === 'external' ? -1 : 1);
+
+
+const rockerOf = ($) => slottedRocker({ r: $.r, d: $.d, phi: $.phi * DEG, omega: $.w, alpha: 0 });
 
 export default {
   'u5.16.belt': {
@@ -84,6 +88,36 @@ export default {
       accel: [
         [($) => $.r * $.w, 'Acceleration toward the hub is ω²r. That is ωr, a speed, not an acceleration.'],
         [($) => $.w * $.w, 'The centripetal acceleration is ω²r. The radius is missing.'],
+      ],
+    },
+  },
+  'u5.16.rocker': {
+    traps: {
+      p1: [
+        [($) => ($.find === 'rates' ? $.w : rockerOf($).WdWithout), ($) => ($.find === 'rates'
+          ? 'That is the crank’s rate. The rocker turns at its own rate: the part of the pin’s velocity across the slot, divided by ρ.'
+          : 'That leaves out the Coriolis term. Across the slot, a_P·n = ρΩ̇ + 2Ωv_rel: subtract 2Ωv_rel before dividing by ρ.')],
+        [($) => ($.find === 'rates' ? ($.r * $.w) / rockerOf($).rho : rockerOf($).Wd - rockerOf($).coriolis / rockerOf($).rho), ($) => ($.find === 'rates'
+          ? 'That divides the pin’s whole speed by ρ. Only the part across the slot turns the rocker; the part along it slides the pin.'
+          : 'That counts the Coriolis term with the wrong sign, or twice. Across the slot, ρΩ̇ = a_P·n − 2Ωv_rel.')],
+      ],
+      p2: [
+        [($) => ($.find === 'rates' ? $.r * $.w : rockerOf($).W * rockerOf($).vRel), ($) => ($.find === 'rates'
+          ? 'That is the pin’s whole speed. It slides along the slot only with the part of its velocity along the slot.'
+          : 'The Coriolis term is 2Ωv_rel, twice Ωv_rel: half comes from v_rel turning with the slot, half from Ωρ growing as the pin slides.')],
+        [($) => ($.find === 'rates' ? -rockerOf($).vRel : -rockerOf($).coriolis), 'Check the sign: outward along the slot, and counterclockwise across it, are positive.'],
+      ],
+    },
+  },
+  'u5.16.cart-rod': {
+    traps: {
+      ax: [
+        [($) => ($.base === 'cart' ? $.aCart : 0) + $.b, 'That leaves out −Ω²ρ, the inward pull every point of a turning rod needs.'],
+        [($) => ($.base === 'cart' ? 0 : $.aCart) + $.b - $.W * $.W * $.rho, ($) => ($.base === 'cart' ? 'The pin rides the cart, so its acceleration a_A adds to every term.' : 'The pin is fixed here: there is no a_A to add.')],
+      ],
+      ay: [
+        [($) => $.Wd * $.rho + $.W * $.u, 'The Coriolis term is 2Ωv_rel, not Ωv_rel.'],
+        [($) => $.Wd * $.rho, 'That leaves out the Coriolis term, 2Ωv_rel. A collar sliding along a turning rod needs it.'],
       ],
     },
   },

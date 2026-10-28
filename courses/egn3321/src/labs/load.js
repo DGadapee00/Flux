@@ -17,6 +17,7 @@ const loaders = {
   rocket: () => import('./rocket.js'),
   ic: () => import('./ic.js'),
   'slider-crank': () => import('./slider-crank.js'),
+  coriolis: () => import('./coriolis.js'),
   rolling: () => import('./rolling.js'),
   inertia: () => import('./inertia.js'),
   pendulum: () => import('./pendulum.js'),
