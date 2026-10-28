@@ -12,6 +12,8 @@ import {
   principal2, rambergOsgood, rambergStress, requiredArea, requiredDiameter, resilience, shearModulus,
   flexureStress, rectSection, teeSection, flexureFibers, rectFibersReduced, simpleBendingStress,
   flexureBalance, rectBands, teeBands,
+  bandQ, rectShear, iSection, iBands, boxSection, boxBands, stackedBoards,
+  shearBalance, shearShare, shearFlow, fastenerSpacing, fastenerForce,
   taperedElongation, thinCylinder, thinSphere, traction, transform, trescaPlane,
   uniaxialVolumeStrain, volumeChange, vonMisesComponents, vonMisesPlane,
 } from './materials.js';
@@ -346,6 +348,49 @@ console.log('\nFlexure');
     'wL²/8 times 6/(bh²) matches the fiber stress');
   approx(simpleBendingStress(2 * w, 2 * L, b, h), 8 * simpleBendingStress(w, L, b, h), 1e-12,
     'double the span and the load: stress scales with w L²');
+}
+
+console.log('\nTransverse shear');
+{
+  const V = 10e3;
+  const b = 0.04;
+  const h = 0.08;
+  const mid = rectShear(V, b, h, 0);
+  approx(mid.tmax, (3 * V) / (2 * b * h), 1e-12, 'peak rectangle shear is 3V/2A');
+  approx(mid.tau, mid.tmax, 1e-12, 'the peak sits on the neutral axis');
+  approx(mid.tau, 4.6875e6, 1e-12, '10 kN on a 40×80 mm rectangle peaks at 4.6875 MPa');
+  const quarter = rectShear(V, b, h, h / 4);
+  approx(quarter.tau, 0.75 * mid.tmax, 1e-12, 'at h/4 the parabola is three quarters of the peak');
+  approx(rectShear(V, b, h, h / 2).tau, 0, 1e-12, 'the outer fiber carries no shear');
+  approx(rectShear(2 * V, b, h, 0).tau, 2 * mid.tau, 1e-12, 'double the shear, double the stress');
+  approx(rectShear(V, b, 2 * h, 0).tau, mid.tau / 2, 1e-12, 'double the depth, halve the peak shear');
+  const carried = shearBalance(V, mid.I, rectBands(b, h));
+  approx(carried, V, 1e-6, '∫τ dA over the rectangle returns V');
+
+  const eye = iSection(0.12, 0.01, 0.006, 0.16);
+  const bands = iBands(eye);
+  const Qhand = eye.Af * eye.yf + (eye.tw * eye.hw ** 2) / 8;
+  approx(bandQ(bands, 0), Qhand, 1e-12, 'Q at the I neutral axis is flange plus half the web');
+  approx(shearBalance(20e3, eye.I, bands), 20e3, 1e-6, '∫τ dA over the I returns V');
+  const share = shearShare(20e3, eye.I, bands, -eye.hw / 2, eye.hw / 2);
+  ok(share > 0.8, 'the web carries most of the shear');
+  approx(shearShare(20e3, eye.I, bands, -eye.H / 2, eye.H / 2), 1, 1e-6, 'the whole I carries all of V');
+
+  const boards = stackedBoards(0.04, 0.03, 3);
+  const Qboard = 0.04 * 0.03 * 0.03;
+  approx(boards.Q, Qboard, 1e-12, 'the top board first moment is A times its centroid');
+  const q = shearFlow(8e3, boards.Q, boards.I);
+  approx(fastenerSpacing(q, 1200, 2), (2 * 1200) / q, 1e-12, 'spacing is nF/q');
+  approx(fastenerForce(q, 0.02, 2), (q * 0.02) / 2, 1e-12, 'each fastener carries q s / n');
+  approx(shearFlow(16e3, boards.Q, boards.I), 2 * q, 1e-12, 'double the shear, double the flow');
+  approx(fastenerSpacing(2 * q, 1200, 2), fastenerSpacing(q, 1200, 2) / 2, 1e-12, 'double the flow, halve the spacing');
+
+  const box = boxSection(3.5 * 0.0254, 3 * 0.0254, (15 / 32) * 0.0254, 24 * 0.0254);
+  const Qin = 3.5 * 3 * 10.5;
+  const Iin = 2 * (3.5 * 27 / 12 + 10.5 * 10.5 ** 2) + 2 * ((15 / 32) * 24 ** 3 / 12);
+  approx(box.Qf / 0.0254 ** 3, Qin, 1e-9, 'flange Q in inches is A times 10.5 in');
+  approx(box.I / 0.0254 ** 4, Iin, 1e-9, 'box I in inches matches the parallel-axis sum');
+  approx(shearBalance(1000, box.I, boxBands(box)), 1000, 1e-6, '∫τ dA over the box returns V');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);

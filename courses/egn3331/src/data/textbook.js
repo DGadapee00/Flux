@@ -58,6 +58,7 @@ export const SECTIONS = Object.freeze({
   'shear-moment': { book: 'roylance', section: '4.1', title: 'Shear and Bending Moment Diagrams' },
   'flexure': { book: 'roylance', section: '4.2', title: 'Stresses in Beams' },
   'transverse-shear': { book: 'roylance', section: '4.2', title: 'Stresses in Beams' },
+  'shear-flow': { book: 'roylance', section: '4.2', title: 'Stresses in Beams' },
   'deflection': { book: 'roylance', section: '4.3', title: 'Beam Displacements' },
 
   // Chapter 5: General Stress Analysis

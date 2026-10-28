@@ -446,3 +446,128 @@ export function teeBands(section, bf, tf, tw, hw) {
     { y0: hw - section.ybar, y1: hw + tf - section.ybar, width: bf },
   ];
 }
+
+/**
+ * First moment about the neutral axis of every band's area sitting above station y.
+ * Bands are { y0, y1, width }, y positive up from the neutral axis. Side-by-side
+ * bands may share a y range; they must not occupy the same area.
+ */
+export function bandQ(bands, y) {
+  let Q = 0;
+  for (const band of bands) {
+    const bot = Math.max(y, band.y0);
+    const top = band.y1;
+    if (bot >= top) continue;
+    Q += band.width * (top - bot) * ((top + bot) / 2);
+  }
+  return Q;
+}
+
+/** τ = VQ/(I t). t is the width cut by the horizontal line at that station. */
+export const shearStress = (V, Q, I, t) => (V * Q) / (I * t);
+
+/** Shear flow q = VQ/I, the force per length along the beam. */
+export const shearFlow = (V, Q, I) => (V * Q) / I;
+
+/** Fastener spacing when `lines` fasteners, each able to carry `capacity`, share the flow. */
+export const fastenerSpacing = (q, capacity, lines) => (lines * capacity) / q;
+
+/** Force in one fastener when they are `spacing` apart and `lines` share the flow. */
+export const fastenerForce = (q, spacing, lines) => (q * spacing) / lines;
+
+/**
+ * Rectangle. τ(y) = (V/(2I))((h/2)² − y²), so the peak is 3V/(2A) at the neutral axis
+ * and the outer fibers carry none.
+ */
+export function rectShear(V, b, h, y) {
+  const I = (b * h ** 3) / 12;
+  const Q = (b / 2) * ((h / 2) ** 2 - y * y);
+  return { tau: (V * Q) / (I * b), Q, I, tmax: (3 * V) / (2 * b * h) };
+}
+
+/**
+ * Symmetric I. The web height hw is the clear distance between the flanges.
+ * yf is the flange centroid measured from the neutral axis.
+ */
+export function iSection(bf, tf, tw, hw) {
+  const H = hw + 2 * tf;
+  const yf = hw / 2 + tf / 2;
+  const Af = bf * tf;
+  const I = 2 * ((bf * tf ** 3) / 12 + Af * yf ** 2) + (tw * hw ** 3) / 12;
+  return { bf, tf, tw, hw, H, yf, Af, A: 2 * Af + tw * hw, I };
+}
+
+export function iBands(sec) {
+  const half = sec.hw / 2;
+  return [
+    { y0: -(half + sec.tf), y1: -half, width: sec.bf },
+    { y0: -half, y1: half, width: sec.tw },
+    { y0: half, y1: half + sec.tf, width: sec.bf },
+  ];
+}
+
+/**
+ * Box: two lumber flanges of width bf and thickness tf, and two webs of thickness tw
+ * running the full height H beside the flanges. The webs do not overlap the lumber.
+ */
+export function boxSection(bf, tf, tw, H) {
+  const yf = H / 2 - tf / 2;
+  const Af = bf * tf;
+  const Qf = Af * yf;
+  const I = 2 * ((bf * tf ** 3) / 12 + Af * yf ** 2) + 2 * ((tw * H ** 3) / 12);
+  return { bf, tf, tw, H, yf, Af, Qf, I, webs: 2 };
+}
+
+export function boxBands(sec) {
+  const half = sec.H / 2;
+  return [
+    { y0: -half, y1: -(half - sec.tf), width: sec.bf },
+    { y0: half - sec.tf, y1: half, width: sec.bf },
+    { y0: -half, y1: half, width: 2 * sec.tw },
+  ];
+}
+
+/** n boards of width b and thickness t, stacked. Q is the top board about the neutral axis. */
+export function stackedBoards(b, t, n) {
+  const h = n * t;
+  const yf = h / 2 - t / 2;
+  const Q = b * t * yf;
+  const I = (b * h ** 3) / 12;
+  return { b, t, n, h, yf, Q, I, A: b * h };
+}
+
+/**
+ * ∫ VQ/I dy over the section. It returns V when Q is the first moment above each station.
+ * The integral is split at every band edge so a jump in width stays out of a panel.
+ */
+export function shearBalance(V, I, bands, n = 4000) {
+  const ys = new Set();
+  for (const band of bands) {
+    ys.add(band.y0);
+    ys.add(band.y1);
+  }
+  const cuts = [...ys].sort((a, c) => a - c);
+  let carried = 0;
+  for (let k = 0; k < cuts.length - 1; k++) {
+    const y0 = cuts[k];
+    const y1 = cuts[k + 1];
+    const h = (y1 - y0) / n;
+    if (!(h > 0)) continue;
+    for (let i = 0; i < n; i++) {
+      const y = y0 + (i + 0.5) * h;
+      carried += (V * bandQ(bands, y) / I) * h;
+    }
+  }
+  return carried;
+}
+
+/** The share of V carried between y0 and y1, where the slice is one material. */
+export function shearShare(V, I, bands, y0, y1, n = 4000) {
+  const h = (y1 - y0) / n;
+  let carried = 0;
+  for (let i = 0; i < n; i++) {
+    const y = y0 + (i + 0.5) * h;
+    carried += (V * bandQ(bands, y) / I) * h;
+  }
+  return carried / V;
+}

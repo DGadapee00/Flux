@@ -21,6 +21,9 @@ const loaders = {
   diagrams: () => import('./diagrams.js'),
   flexure: () => import('./flexure.js'),
   joist: () => import('./joist.js'),
+  shear: () => import('./shear.js'),
+  nails: () => import('./nails.js'),
+  header: () => import('./header.js'),
 };
 
 const labs = createLabLoader(loaders);

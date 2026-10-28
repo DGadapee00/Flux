@@ -97,6 +97,21 @@ export const NOTES = {
       { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u7: {
+    exam: 'u7',
+    title: 'Transverse shear',
+    chapters: '7',
+    file: 'u7-shear.html',
+    load: () => import('./content/u7-shear.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'A rectangle', lab: 'shear', ch: ['7'], topics: ['transverse-shear'], home: true },
+      { id: 's2', n: 2, title: 'Up the parabola', lab: 'shear', ch: ['7'], topics: ['transverse-shear', 'profile'] },
+      { id: 's3', n: 3, title: 'An I section', lab: 'shear', ch: ['7'], topics: ['transverse-shear', 'web'] },
+      { id: 's4', n: 4, title: 'Nail spacing', lab: 'nails', ch: ['7'], topics: ['shear-flow'] },
+      { id: 's5', n: 5, title: 'A garage header', lab: 'header', ch: ['7'], topics: ['shear-flow', 'english'] },
+      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
