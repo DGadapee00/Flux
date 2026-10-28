@@ -8,7 +8,7 @@ export default {
   sections: [
     { id: 's1', n: 1, title: 'Principle of work and energy', lab: 'collar', ch: ['14'], topics: ['energy'], home: true },
     { id: 's2', n: 2, title: 'Work of a spring', lab: 'collar', ch: ['14'], topics: ['spring'] },
-    { id: 's3', n: 3, title: 'Friction on a slide', lab: 'collar', ch: ['14'], topics: ['friction'] },
+    { id: 's3', n: 3, title: 'Friction on a slide', lab: 'collar', ch: ['14'], topics: ['friction'], problems: ['u3.14.spring-sym'] },
     { id: 's4', n: 4, title: 'Power and efficiency', lab: null, ch: ['14'], topics: ['power'] },
     { id: 's5', n: 5, title: 'Path independence', lab: 'paths', ch: ['14'], topics: ['path'], home: true },
     { id: 's6', n: 6, title: 'Application: stopping sight distance', lab: 'stopping', ch: ['14'], topics: ['energy', 'friction'], problems: ['u3.14.stopping', 'u3.14.brake-scale'], home: true },

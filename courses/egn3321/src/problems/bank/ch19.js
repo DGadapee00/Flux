@@ -210,7 +210,7 @@ const ch19 = [
       ? String.raw`A ${T.m} kg solid-disk flywheel of radius ${T.R} m turns at ${T.w1} rad/s. A motor applies ${T.M} N·m while its bearings resist with a steady ${T.Mf} N·m. Find its speed ${T.t} s later.`
       : String.raw`A ${T.m} kg solid-disk flywheel of radius ${T.R} m turns at ${T.w1} rad/s. A motor applies ${T.M} N·m while its bearings resist with a steady ${T.Mf} N·m. How long until it turns at ${T.wTarget} rad/s?`),
     parts: [
-      num('q', ($) => ($.find === 'w2' ? flywheel($).w2 : flywheel($).tTo), ($) => ($.find === 'w2' ? 'rad/s' : 's'), { label: ($) => ($.find === 'w2' ? 'speed' : 'time') }),
+      num('q', ($) => ($.find === 'w2' ? flywheel($).w2 : flywheel($).tTo), ($) => ($.find === 'w2' ? 'rad/s' : 's'), { label: (T, $) => ($.find === 'w2' ? 'speed' : 'time') }),
     ],
     level: 2,
     hints: [
@@ -273,7 +273,7 @@ const ch19 = [
       ? String.raw`A person on a frictionless turntable, ${T.I0} kg·m² without the weights, holds two ${T.m} kg weights at ${T.r1} m from the axis and turns at ${T.w1} rad/s. They pull the weights in to ${T.r2} m. Find the new rate, and the work their arms do.`
       : String.raw`A person on a frictionless turntable, ${T.I0} kg·m² without the weights, holds two ${T.m} kg weights at ${T.r1} m from the axis and turns at ${T.w1} rad/s. To what radius must they pull the weights to turn at ${T.w2} rad/s, and how much work do their arms do?`),
     parts: [
-      num('q', ($) => ($.find === 'w2' ? spinUp($).w2 : spinUp($).r2), ($) => ($.find === 'w2' ? 'rad/s' : 'm'), { label: ($) => ($.find === 'w2' ? 'new rate' : 'radius') }),
+      num('q', ($) => ($.find === 'w2' ? spinUp($).w2 : spinUp($).r2), ($) => ($.find === 'w2' ? 'rad/s' : 'm'), { label: (T, $) => ($.find === 'w2' ? 'new rate' : 'radius') }),
       num('work', ($) => spinUp($).work, 'J', { label: 'work done by the arms' }),
     ],
     level: 2,

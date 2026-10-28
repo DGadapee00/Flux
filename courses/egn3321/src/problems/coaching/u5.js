@@ -7,6 +7,7 @@
  */
 import { M_PER_FT } from '@flux/subjects/convert.js';
 import { slottedRocker } from '@flux/subjects/mechanics/rotating.js';
+import { linkage } from '../bank/deeper.js';
 
 const DEG = Math.PI / 180;
 
@@ -118,6 +119,41 @@ export default {
       ay: [
         [($) => $.Wd * $.rho + $.W * $.u, 'The Coriolis term is 2Ωv_rel, not Ωv_rel.'],
         [($) => $.Wd * $.rho, 'That leaves out the Coriolis term, 2Ωv_rel. A collar sliding along a turning rod needs it.'],
+      ],
+    },
+  },
+  'u5.16.ladder-sym': {
+    traps: {
+      vp: [
+        [($) => ($.point === 'top' ? $.v * Math.tan($.theta * DEG) : $.v / 2), ($) => ($.point === 'top'
+          ? 'That is v tan θ. The top falls at v/tan θ: a steep ladder’s top moves slowly.'
+          : 'That is the midpoint’s horizontal part alone. It also falls, at half the top’s speed.')],
+        [($) => ($.point === 'top' ? $.v : ($.v + $.v / Math.tan($.theta * DEG)) / 2), ($) => ($.point === 'top'
+          ? 'That is the foot’s speed. The top is a different distance from the instantaneous centre, so it moves at a different speed.'
+          : 'Speeds do not average. The midpoint is L/2 from the instantaneous centre, so it moves at ωL/2.')],
+      ],
+    },
+  },
+  'u5.16.four-bar': {
+    traps: {
+      wab: [
+        [($) => {
+          const r = linkage($);
+          return ($.driver === 'crank' ? r.vA : r.vB) / $.b;
+        }, 'The coupler’s length is not A’s distance from its instantaneous centre. Find the centre where the crank and rocker lines meet.'],
+        [($) => {
+          const r = linkage($);
+          return $.driver === 'crank' ? r.vA / r.icB : r.vB / r.icA;
+        }, 'That divides one end’s speed by the other end’s distance from the centre. Each point moves at ω times its own distance.'],
+      ],
+      wout: [
+        [($) => $.w, 'The links do not share one ω. Each turns at its own rate.'],
+        [($) => {
+          const r = linkage($);
+          return $.driver === 'crank' ? r.vA / $.c : r.vB / $.a;
+        }, ($) => ($.driver === 'crank'
+          ? 'B does not move at A’s speed. Its speed is ω_AB times its own distance from the coupler’s centre.'
+          : 'A does not move at B’s speed. Its speed is ω_AB times its own distance from the coupler’s centre.')],
       ],
     },
   },

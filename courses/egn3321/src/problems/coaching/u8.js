@@ -135,4 +135,12 @@ export default {
       ],
     },
   },
+  'u8.19.embed-sym': {
+    traps: {
+      w: [
+        [($) => ($.m * $.u) / (($.M + $.m) * $.d), 'That keeps linear momentum. The pin pushes on the bar during the impact; keep angular momentum about the pin instead.'],
+        [($) => ($.m * $.u * $.d) / (($.M * $.L * $.L) / 12 + $.m * $.d * $.d), 'That uses I_G = ML²/12. The bar turns about the pin: I_O = ML²/3.'],
+      ],
+    },
+  },
 };

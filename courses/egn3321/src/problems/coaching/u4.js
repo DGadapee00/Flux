@@ -6,6 +6,7 @@
  * the part's own units, like the part's `get`.
  */
 import { G, G_FT } from '@flux/subjects/mechanics/constants.js';
+import { collide1D } from '@flux/subjects/mechanics/momentum.js';
 import { minDuration, stopPulse } from '@flux/subjects/mechanics/impact-pulse.js';
 
 const DEG = Math.PI / 180;
@@ -131,6 +132,36 @@ export default {
         ($) => ($.find === 'tau'
           ? 'The limit is 300 g, not 300 m/s². Set F_pk = 300mg.'
           : 'That is F_pk/m in m/s². Divide by g = 9.81 for the peak in g.')],
+      ],
+    },
+  },
+  'u4.15.collide-sym': {
+    traps: {
+      lost: [
+        [($) => {
+          const out = collide1D($.m1, $.m2, $.u, 0, $.e);
+          return 0.5 * $.m1 * out.v1 ** 2 + 0.5 * $.m2 * out.v2 ** 2;
+        }, 'That is the energy left after the impact, not the energy lost.'],
+        [($) => {
+          const out = collide1D($.m1, $.m2, $.u, 0, $.e);
+          return 0.5 * $.m1 * ($.u ** 2 - out.v1 ** 2);
+        }, 'That is the striker’s loss alone. The struck body gains part of it: subtract its ½m₂v₂² too.'],
+      ],
+    },
+  },
+  'u4.15.cart': {
+    traps: {
+      v: [
+        [($) => ($.m * $.u) / $.M, 'That divides by the cart’s mass alone. Both bodies end at one speed: divide the momentum by m + M.'],
+        [($) => $.u * Math.sqrt($.m / ($.m + $.M)), 'Kinetic energy is not kept: friction turns part of it into heat. Momentum is.'],
+      ],
+      q: [
+        [($) => ($.find === 'time' ? $.u / ($.mu * G) : ($.u * $.u) / (2 * G * $.Lc)), ($) => ($.find === 'time'
+          ? 'That holds the cart still. It speeds up too, so the speeds meet sooner: the gap closes at μg(1 + m/M).'
+          : 'That holds the cart still. The cart moves off too, so the block slides less far along it.')],
+        [($) => ($.find === 'time' ? $.u / ($.mu * G * (1 + $.M / $.m)) : ($.u * $.u) / (G * $.Lc * (1 + $.m / $.M))), ($) => ($.find === 'time'
+          ? 'The mass ratio is upside down. Friction μmg speeds the cart at μmg/M.'
+          : 'The relative slide is u²/2a: the factor of 2 is missing.')],
       ],
     },
   },

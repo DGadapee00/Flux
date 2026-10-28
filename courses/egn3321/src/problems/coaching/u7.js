@@ -114,4 +114,12 @@ export default {
       ],
     },
   },
+  'u7.18.roll-sym': {
+    traps: {
+      v: [
+        [($) => Math.sqrt(2 * G * $.h), 'That is a block sliding without friction. A rolling body also spins: divide by 1 + k.'],
+        [($) => Math.sqrt((2 * G * $.h) / (1 + 2 * { hoop: 1, disk: 0.5, sphere: 0.4, shell: 2 / 3 }[$.shape])), 'The spin term is ½I_Gω² once, with I_G = kmR². It was counted twice.'],
+      ],
+    },
+  },
 };

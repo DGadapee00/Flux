@@ -172,4 +172,12 @@ export default {
       ],
     },
   },
+  'u2.13.pulley-sym': {
+    traps: {
+      T: [
+        [($) => $.m2 * G, 'That is m₂’s weight. The string carries a hanging weight only when nothing accelerates.'],
+        [($) => $.m2 * (G + pulley($).a), 'Check the sign. Taking a positive with m₂ descending, its weight beats the string: T = m₂(g − a).'],
+      ],
+    },
+  },
 };

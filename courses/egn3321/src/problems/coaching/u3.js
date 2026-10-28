@@ -9,6 +9,7 @@ import { convert, FT_LBF_PER_S_PER_HP } from '@flux/subjects/convert.js';
 import { G, G_FT } from '@flux/subjects/mechanics/constants.js';
 import { pathReport } from '../../labs/pathwork.js';
 import { contactSpeed } from '../bank/ch14.js';
+import { offRod } from '../bank/deeper.js';
 
 const DEG = Math.PI / 180;
 
@@ -140,6 +141,38 @@ export default {
       lost: [
         [($) => 0.5 * ($.m1 + $.m2) * ($.v1 + $.v2) ** 2, 'That uses the total mass. The loss is ½μv², with the reduced mass μ = m₁m₂/(m₁ + m₂) and v the closing speed.'],
         [($) => frameT($).after, 'That is the energy left, not the energy lost.'],
+      ],
+    },
+  },
+  'u3.14.spring-sym': {
+    traps: {
+      x: [
+        [($) => ($.how === 'slide' ? $.v * Math.sqrt($.m / $.k) : Math.sqrt((2 * $.m * G * $.h) / $.k)), ($) => ($.how === 'slide'
+          ? 'That leaves out friction. It works against the block through the compression as well.'
+          : 'That counts the fall as h alone. The block keeps falling while it squeezes the spring: it drops h + x.')],
+        [($) => {
+          if ($.how === 'slide') {
+            const f = $.mu * $.m * G;
+            return (Math.sqrt(f * f + 2 * $.k * $.m * $.v * $.v) - f) / (2 * $.k);
+          }
+          const w = $.m * G;
+          return (w + Math.sqrt(w * w + 4 * $.k * w * $.h)) / (2 * $.k);
+        }, 'The spring stores ½kx², not kx². The factor of one half is missing.'],
+      ],
+    },
+  },
+  'u3.14.off-rod': {
+    traps: {
+      q: [
+        [($) => ($.find === 'v' ? Math.sqrt(2 * G * $.y) : (2 * $.m * G) / $.y), ($) => ($.find === 'v'
+          ? 'That leaves out the spring. It is longer at the bottom, so it takes energy from the collar.'
+          : 'That takes the stretch as the drop y. The stretch is the spring’s length less L₀, from Pythagoras at each end.')],
+        [($) => {
+          const r = offRod($);
+          return $.find === 'v' ? Math.sqrt(2 * G * $.y + ($.k / $.m) * r.ds2) : ($.m * G * $.y) / r.ds2;
+        }, ($) => ($.find === 'v'
+          ? 'Check the spring’s sign. It stretches as the collar drops, so its work is negative.'
+          : 'The spring stores ½k s², not k s². The factor of one half is missing.')],
       ],
     },
   },

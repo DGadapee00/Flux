@@ -18,7 +18,10 @@ import {
 
 const engine = createEngine({
   consts: { pi: Math.PI, g: G, gft: G_FT },
-  greek: { 'π': 'pi', 'θ': 'th', 'ρ': 'rho' },
+  greek: { 'π': 'pi', 'θ': 'th', 'ρ': 'rho', 'μ': 'mu', 'α': 'alpha', 'ω': 'w', 'm₁': 'm1', 'm₂': 'm2' },
+  // The palette shows the symbols as written in the problem, and the preview typesets them.
+  glyph: { pi: 'π', th: 'θ', mu: 'μ', alpha: 'α', w: 'ω', m1: 'm₁', m2: 'm₂' },
+  texSym: { pi: '\\pi', th: '\\theta', mu: '\\mu', alpha: '\\alpha', w: '\\omega', m1: 'm_1', m2: 'm_2' },
   units: { ZERO, CONST_DIMS, parseUnit, formatDim, dimEqual, isDimensionless, dimMul, dimDiv, dimScale },
   prose: 'none',
   steps: 'sig',

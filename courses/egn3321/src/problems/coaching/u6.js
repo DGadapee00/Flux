@@ -7,6 +7,7 @@
  */
 import { G, G_FT } from '@flux/subjects/mechanics/constants.js';
 import { centralInertia, diskWithHole } from '@flux/subjects/mechanics/inertia.js';
+import { pulledWheel } from '../bank/deeper.js';
 
 const DEG = Math.PI / 180;
 const rodG = ($) => ($.m * $.L * $.L) / 12;
@@ -107,6 +108,44 @@ export default {
         roll: 'It rolls when the friction rolling needs, mg sin θ·k/(1 + k), is within μN.',
         slip: 'It slips when rolling would need more friction than μN can supply.',
       },
+    },
+  },
+  'u6.17.pin-sym': {
+    traps: {
+      O: [
+        [($) => ($.comp === 'along' ? $.m * G : $.m * G * Math.sin($.theta * DEG)), ($) => ($.comp === 'along'
+          ? 'That is the whole weight. Along the bar the pin balances only the weight’s component, mg cos θ.'
+          : 'That treats G as still. Across the bar G accelerates at (L/2)α, so the pin carries only a quarter of mg sin θ.')],
+        [($) => ($.comp === 'along' ? $.m * G * Math.sin($.theta * DEG) : 2 * $.m * G * Math.sin($.theta * DEG)), ($) => ($.comp === 'along'
+          ? 'Sine and cosine are swapped. θ is from the downward vertical, so the weight’s part along the bar is mg cos θ.'
+          : 'That uses I_G = mL²/12 for the moment about the pin. The bar turns about its end: I_O = mL²/3.')],
+      ],
+    },
+  },
+  'u6.17.pulled-wheel': {
+    traps: {
+      q: [
+        [($) => ($.find === 'f' ? -pulledWheel($).f : $.mu * $.m * G), ($) => {
+          if ($.find === 'P') return 'That is the pull that would slide a block. The wheel slips when the friction rolling needs reaches μmg: solve for P.';
+          return $.at === 'centre'
+            ? 'Check the direction. Pulled at the centre, the pull has no moment about G, so friction alone spins the wheel up: it points back.'
+            : 'Check the direction. The cord over the top would spin the wheel faster than it rolls, so friction points forward.';
+        }],
+        [($) => ($.find === 'f' ? Math.sign(pulledWheel($).f) * $.mu * $.m * G : $.mu * $.m * G * (1 + $.kr * $.kr)), ($) => ($.find === 'f'
+          ? 'μN is the most friction can give. Rolling needs only the friction that turns the wheel at α = a/R.'
+          : ($.at === 'centre'
+            ? 'Friction is k/(1 + k) of the pull at the centre, not 1/(1 + k). Set kP/(1 + k) = μmg.'
+            : 'Friction is (1 − k)/(1 + k) of the pull over the top. Set that equal to μmg.'))],
+      ],
+      a: [
+        [($) => ($.find === 'f' ? $.P : pulledWheel($).Pmax) / $.m, 'That is a block sliding without friction. Part of the push goes into spinning the wheel.'],
+        [($) => {
+          const P = $.find === 'f' ? $.P : pulledWheel($).Pmax;
+          return $.at === 'centre' ? (2 * P) / ($.m * (1 + $.kr * $.kr)) : P / ($.m * (1 + $.kr * $.kr));
+        }, ($) => ($.at === 'centre'
+          ? 'That gives the pull a moment about G. At the centre it has none: only friction turns the wheel.'
+          : 'The cord over the top also turns the wheel. Its moment PR adds to the spin, and the centre gains 2P/(m(1 + k)).')],
+      ],
     },
   },
 };
