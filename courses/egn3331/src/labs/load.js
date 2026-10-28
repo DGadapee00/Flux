@@ -27,6 +27,9 @@ const loaders = {
   curve: () => import('./curve.js'),
   propped: () => import('./propped.js'),
   shelf: () => import('./shelf.js'),
+  torsion: () => import('./torsion.js'),
+  twist: () => import('./twist.js'),
+  motor: () => import('./motor.js'),
 };
 
 const labs = createLabLoader(loaders);

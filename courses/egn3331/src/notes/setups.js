@@ -562,6 +562,119 @@ export const SETUPS = {
       },
     ],
   },
+  u9: {
+    s1: [
+      {
+        tag: 'the 40 mm shaft',
+        lab: 'torsion',
+        scenario: 'solid',
+        read: (c) => ({
+          tau: [c.tauMax / 1e6, 39.8],
+          phi: [(c.phi * 180) / Math.PI, 1.824],
+        }),
+      },
+    ],
+    s2: [
+      {
+        tag: 'the 30 mm bore',
+        lab: 'torsion',
+        scenario: 'hollow',
+        read: (c) => ({
+          tau: [c.tauMax / 1e6, 58.2],
+          inner: [c.tauIn / 1e6, 43.7],
+          phi: [(c.phi * 180) / Math.PI, 2.67],
+          strength: [c.strength, 0.684],
+          area: [c.areaFrac, 0.438],
+        }),
+      },
+      {
+        tag: 'the 5 mm wall',
+        lab: 'torsion',
+        scenario: 'tube',
+        read: (c) => ({
+          tau: [c.tauMax / 1e6, 34.5],
+          inner: [c.tauIn / 1e6, 27.6],
+          strength: [c.strength, 0.59],
+          area: [c.areaFrac, 0.36],
+        }),
+      },
+    ],
+    s3: [
+      {
+        tag: '20 kW at 1800 rpm',
+        lab: 'twist',
+        scenario: 'power',
+        read: (c) => ({
+          T: [c.T, 106.1],
+          tau: [c.tau / 1e6, 20],
+          phi: [(c.phi * 180) / Math.PI, 0.815],
+        }),
+      },
+      {
+        tag: 'the 2 to 1 gears',
+        lab: 'twist',
+        scenario: 'gear',
+        read: (c) => ({
+          fast: [c.T, 53.1],
+          slow: [c.T2, 106.1],
+          tauFast: [c.tau / 1e6, 10.01],
+          tauSlow: [c.tau2 / 1e6, 20],
+        }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'two diameters',
+        lab: 'twist',
+        scenario: 'step',
+        read: (c) => ({
+          phi: [(c.phi * 180) / Math.PI, 4.16],
+          right: [(c.phi2 * 180) / Math.PI, 3.19],
+          left: [c.tau2 / 1e6, 31.8],
+          thin: [c.tau / 1e6, 130.4],
+        }),
+      },
+      {
+        tag: 'the two walls',
+        lab: 'twist',
+        scenario: 'fixed',
+        read: (c) => ({
+          left: [c.Tleft, 400],
+          right: [c.Tright, 200],
+          phi: [(c.phi * 180) / Math.PI, 0.608],
+        }),
+      },
+    ],
+    s5: [
+      {
+        tag: 'the nameplate stub',
+        lab: 'motor',
+        scenario: 'stub',
+        read: (c) => ({
+          tau: [c.tau / (1000 * PA_PER_PSI), 0.644],
+          phi: [(c.phi * 180) / Math.PI, 0.01618],
+        }),
+      },
+      {
+        tag: '36 in of the same shaft',
+        lab: 'motor',
+        scenario: 'long',
+        read: (c) => ({
+          phi: [(c.phi * 180) / Math.PI, 0.212],
+          tau: [c.tau / (1000 * PA_PER_PSI), 0.644],
+        }),
+      },
+      {
+        tag: 'a 0.75 in diameter',
+        lab: 'motor',
+        scenario: 'slender',
+        read: (c) => ({
+          tau: [c.tau / (1000 * PA_PER_PSI), 2.17],
+          phi: [(c.phi * 180) / Math.PI, 0.0819],
+        }),
+      },
+    ],
+  },
 };
 
 /** An example's tag as the notes write it, without "Worked example · ". */

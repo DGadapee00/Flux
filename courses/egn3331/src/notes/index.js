@@ -127,6 +127,21 @@ export const NOTES = {
       { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u9: {
+    exam: 'u9',
+    title: 'Torsion',
+    chapters: '5',
+    file: 'u9-torsion.html',
+    load: () => import('./content/u9-torsion.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'A solid shaft', lab: 'torsion', ch: ['5'], topics: ['torsion', 'solid'], home: true },
+      { id: 's2', n: 2, title: 'A hollow shaft', lab: 'torsion', ch: ['5'], topics: ['torsion', 'hollow'] },
+      { id: 's3', n: 3, title: 'Power and gears', lab: 'twist', ch: ['5'], topics: ['torsion', 'power'] },
+      { id: 's4', n: 4, title: 'Stepped and fixed', lab: 'twist', ch: ['5'], topics: ['torsion', 'stepped', 'fixed'] },
+      { id: 's5', n: 5, title: 'A motor shaft', lab: 'motor', ch: ['5'], topics: ['torsion', 'english'] },
+      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
