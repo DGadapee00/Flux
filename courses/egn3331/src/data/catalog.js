@@ -13,7 +13,7 @@ export const EXAMS = [
   { id: 'u6', n: 6, title: 'Bending', chapters: '6', date: 'Ch 6', labs: ['diagrams', 'flexure', 'joist'], coming: [] },
   { id: 'u7', n: 7, title: 'Transverse shear', chapters: '7', date: 'Ch 7', labs: ['shear', 'nails', 'header'], coming: [] },
   { id: 'u8', n: 8, title: 'Beam deflection', chapters: '12', date: 'Ch 12', labs: ['curve', 'propped', 'shelf'], coming: [] },
-  { id: 'u9', n: 9, title: 'Torsion', chapters: '5', date: 'Ch 5', labs: [], coming: ['Torsion', 'Twist'] },
+  { id: 'u9', n: 9, title: 'Torsion', chapters: '5', date: 'Ch 5', labs: ['torsion', 'twist', 'motor'], coming: [] },
   { id: 'u10', n: 10, title: 'Energy methods', chapters: '14', date: 'Ch 14', labs: [], coming: ['Castigliano', 'Drop load'] },
   { id: 'u11', n: 11, title: 'Buckling of columns', chapters: '13', date: 'Ch 13', labs: [], coming: ['Buckling'] },
 ];
@@ -43,6 +43,9 @@ export const LAB_META = {
   curve: { id: 'curve', exam: 'u8', title: 'Elastic curve' },
   propped: { id: 'propped', exam: 'u8', title: 'Propped cantilever' },
   shelf: { id: 'shelf', exam: 'u8', title: 'Pine shelf', app: true },
+  torsion: { id: 'torsion', exam: 'u9', title: 'Torsion' },
+  twist: { id: 'twist', exam: 'u9', title: 'Twist' },
+  motor: { id: 'motor', exam: 'u9', title: 'Motor shaft', app: true },
 };
 
 export const CHAPTER_TITLES = {
@@ -55,6 +58,7 @@ export const CHAPTER_TITLES = {
   8: 'Pressure vessels',
   9: 'Stress transformation',
   10: 'Multiaxial strain',
+  5: 'Torsion',
   12: 'Deflection',
 };
 

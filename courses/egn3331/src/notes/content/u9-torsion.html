@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Torsion</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 9 · Ch 5</p>
+  <h1>Torsion</h1>
+  <p class="lede">A circular shaft twists, and a radius line stays straight. The shear strain is therefore linear in the radius, and so is the shear stress. The angle follows the torque, the length, and the polar moment. Every number below comes from the course library and is checked a second way.</p>
+  <div class="legend">
+    <span><i class="swatch" style="background: var(--teal)"></i>Shear stress</span>
+    <span><i class="swatch" style="background: var(--gold)"></i>Rotation, or the station being read</span>
+    <span><i class="swatch" style="background: #d147bd"></i>Outside radius, step, or applied torque</span>
+  </div>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>A solid shaft</a>
+    <a href="#s2"><span>02</span>A hollow shaft</a>
+    <a href="#s3"><span>03</span>Power and gears</a>
+    <a href="#s4"><span>04</span>Stepped and fixed</a>
+    <a href="#s5"><span>05</span>A motor shaft</a>
+    <a href="#s6"><span>06</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+<h3>Part 1 · The section <span class="sub">| solid | hollow | Reference</span></h3>
+
+<section class="topic" id="s1">
+<h2><span class="n">01</span>A solid shaft</h2>
+<p>Equilibrium of moments on the cut is the torque. With stress linear in the radius, that balance fixes the scale:</p>
+\[
+\tau = \frac{T\rho}{J}
+\]
+<p>J is the polar moment, the integral of ρ squared over the area. For a solid circle it is πd⁴/32. The outside is the largest stress, because that is the largest ρ. The center carries none. The angle of a prismatic piece follows from γ = ρ dφ/dx = τ/G:</p>
+\[
+\phi = \frac{TL}{GJ}
+\]
+<p>G here is 75 GPa, a round value for steel in this unit. Length is in the angle and not in the stress. Roylance §2.3 is the reading.</p>
+<div class="box ex"><span class="tag">Worked example · the 40 mm shaft</span>
+<p>The lab shaft is 40 mm in diameter and 1.2 m long, with a torque of 500 N·m. The outside stress and the angle are</p>
+\[
+\tau = 39.8\ \mathrm{MPa}
+\]
+\[
+\phi = 1.824^\circ
+\]
+<p>The teal curve is the stress. It starts at zero on the axis and ends at the pink line, the outside. The gold dot is the station the slider is reading. Doubling the torque doubles both numbers. Doubling the length doubles only the angle.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A circle's second moment I is half of J. Using I in place of J doubles the stress and doubles the angle. Dropping one power of the diameter, and writing 16T over πd², is not a stress of this kind. Using E in place of G makes the angle too small, in the ratio G/E.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec22/">2.001 lecture 24</a> builds the linear shear stress from the geometry of the twist.</p>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>A hollow shaft</h2>
+<p>A tube is the solid circle of the outside diameter with the solid circle of the bore taken out. The polar moment follows at once:</p>
+\[
+J = \frac{\pi}{32}(d_o^4 - d_i^4)
+\]
+<p>The material that was removed sat at small ρ, where the stress was small and the lever arm was short. The area falls faster than J. Stress at the bore is not zero. It is the outside stress times di/do, because the distribution is still a straight line through the center.</p>
+<div class="box ex"><span class="tag">Worked example · the 30 mm bore</span>
+<p>The same 500 N·m and the same 40 mm outside diameter, with a 30 mm bore. The outside and the bore read</p>
+\[
+\tau_o = 58.2\ \mathrm{MPa}
+\]
+\[
+\tau_i = 43.7\ \mathrm{MPa}
+\]
+<p>The angle is 2.67°. Against a solid shaft of the same outside diameter, this tube keeps 0.684 of J and 0.438 of the area. Most of the torsional strength is still there. A good deal of the weight is gone.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the 5 mm wall</span>
+<p>A 50 mm tube with a 40 mm bore has a 5 mm wall. At the same 500 N·m the outside is 34.5 MPa and the bore is 27.6 MPa. Compared with a solid 50 mm shaft, the tube keeps 0.590 of J and 0.36 of the area. The check on both sections is a trapezoid of ρ² dA, and of τρ dA, which has to return the torque.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Ignoring the bore uses the solid J of the outside diameter, and the stress comes out low. Treating the wall thickness as the diameter of a solid shaft goes the other way, and the stress comes out far too high. The bore stress is not the outside stress, and it is not zero.</p>
+</div>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 2 · Along the shaft <span class="sub">| power | series | fixed ends | Reference</span></h3>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Power and gears</h2>
+<p>Power is torque times angular speed. The speed has to be in radians per second, so a shaft at n revolutions per minute has ω = 2πn/60.</p>
+\[
+T = \frac{P}{\omega}
+\]
+<p>The same power at a higher speed is a smaller torque, and the shaft that carries it can be smaller. An ideal gear pair does not consume power. The tooth ratio is the torque ratio, and the speeds go the other way.</p>
+<div class="box ex"><span class="tag">Worked example · 20 kW at 1800 rpm</span>
+<p>A 30 mm solid shaft, 0.8 m long, transmits 20 kW at 1800 rpm. G is again 75 GPa. The torque, the outside stress, and the angle are</p>
+\[
+T = 106.1\ \mathrm{N\cdot m}
+\]
+\[
+\tau = 20\ \mathrm{MPa}
+\]
+<p>The shaft twists 0.815°. The second path for the torque is mechanical horsepower, 550 ft·lbf/s, converted only at the end. It matches the watt calculation. Doubling the speed at the same power halves the torque. Doubling the power at the same speed doubles it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the 2 to 1 gears</span>
+<p>10 kW at 1800 rpm enters a 20-tooth gear that drives a 40-tooth gear. The input torque is 53.1 N·m and the output torque is 106.1 N·m. Both shafts are 30 mm solid bars, 0.6 m long. The fast shaft sees 10.01 MPa. The slow shaft sees 20 MPa, twice that, because the torque doubled and the diameter did not. The slow shaft also twists twice as far, 0.612° against 0.306°.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using revolutions per second as if they were radians per second drops a factor of 2π, and the torque is high by that factor. Multiplying power by speed, instead of dividing, is not a torque. On a gear pair the two torques are not equal unless the tooth counts are.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec23/">2.001 lecture 25</a> works torsion examples, including shafts that carry power.</p>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Stepped and fixed</h2>
+<p>Segments in series carry the same torque when nothing else feeds a torque in between them. Each segment has its own J, so each has its own twist rate. The angles add.</p>
+\[
+\phi = \sum \frac{TL}{GJ}
+\]
+<p>A shaft fixed at both ends is two springs sharing one rotation. Stiffness is GJ over the segment length. The shorter side is stiffer, so it takes more of the torque. With a constant J the left reaction is T times (L − a) over L, where a is the distance from the left wall out to the applied torque.</p>
+<div class="box ex"><span class="tag">Worked example · two diameters</span>
+<p>400 N·m runs through a 40 mm segment 0.8 m long and then a 25 mm segment 0.4 m long. The whole shaft twists</p>
+\[
+\phi = 4.16^\circ
+\]
+<p>The right segment contributes 3.19° of that. The left segment contributes 0.973°. The left stress is 31.8 MPa. The right stress is 130.4 MPa. J fell with the fourth power of the diameter, and the torque did not change. Using either diameter for both segments misses the sum.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the two walls</span>
+<p>A 40 mm shaft, 1.5 m long, is fixed at both ends. 600 N·m is applied 0.5 m from the left wall. The walls carry</p>
+\[
+T_L = 400\ \mathrm{N\cdot m}
+\]
+\[
+T_R = 200\ \mathrm{N\cdot m}
+\]
+<p>The rotation at the torque is 0.608°. The left side is the short one, so it is the stiff one. Moving the torque closer to the left wall raises the left reaction further. The check is the same split written as two springs, k = GJ/L, whose torques add up to the applied torque.</p>
+</div>
+<div class="box why"><span class="tag">Why the short side wins</span>
+<p>Both sides rotate through the same angle at the load, because the shaft is continuous and the walls do not move. The side with the larger GJ/L reaches that angle at a larger torque. Length is in the denominator, so the short side wins.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Splitting the applied torque in half is right only at midspan. Giving the longer side the larger share reverses the springs. Running the whole torque through the whole length, as if the shaft were free at the far end, overstates the angle.</p>
+</div>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 3 · A real shaft <span class="sub">| motor | Reference</span></h3>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>A motor shaft</h2>
+<p>A nameplate gives power and speed, which is a torque, and a frame size gives the shaft diameter. The <a href="https://www.baldor.com/catalog/EM3615T-5">Baldor EM3615T-5</a> is 5 hp at 1750 rpm, with a shaft diameter of 1.125 in. Frame 184T in NEMA MG 1 has a usable extension N-W of 2.75 in. The catalog does not name the steel. E is taken as 29000 ksi, the AISC value. Poisson's ratio is taken as 0.30, so G is E over 2(1+ν).</p>
+<div class="box ex"><span class="tag">Worked example · the nameplate stub</span>
+<p>At the nameplate the torque is 20.3 N·m. On the 1.125 in shaft the shear stress and the angle of the 2.75 in extension are</p>
+\[
+\tau = 0.644\ \mathrm{ksi}
+\]
+\[
+\phi = 0.01618^\circ
+\]
+<p>The stub barely twists. The stress is small beside a typical shear yield for steel. The shaft is sized for the key, the fillet, and the belt load, none of which is in Tc/J. The inch-pound calculation and the SI calculation are the same shaft. Doubling the horsepower doubles both numbers. Doubling the speed, at the same horsepower, halves them.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · 36 in of the same shaft</span>
+<p>Keep the nameplate torque and the 1.125 in diameter, and set the length to 36 in. That length is a comparison, not the motor. The stress is still 0.644 ksi. The angle rises to 0.212°. It scaled with the length, 36/2.75. Nothing in the stress formula moved.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 0.75 in diameter</span>
+<p>The same torque on a 0.75 in shaft, still 2.75 in long, is another comparison. The diameter ratio is 1.5. Stress follows the inverse cube, so it becomes 2.17 ksi. The angle follows the inverse fourth power, so it becomes 0.0819°. This is not the Baldor shaft.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading the horsepower number as kilowatts raises the torque, because one horsepower is 745.7 W. Using the diameter as the radius doubles the stress. Using E in place of G divides the angle by 2.6.</p>
+</div>
+<div class="box out"><span class="tag">What the course model leaves out</span>
+<p>The keyway, the shoulder fillet, and a belt pulling on the stub are not in this stress. NEMA general-purpose motors carry a service factor the nameplate states. It is not applied here. The 2.75 in length stops at the bearing. It is not the twist length of the rotor. Grade of the shaft steel is not on the catalog page, so 29000 ksi and ν = 0.30 are assumptions.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Formula sheet</h2>
+<p>Shear stress and angle on a circular shaft:</p>
+\[
+\tau = \frac{T\rho}{J}
+\]
+\[
+\phi = \frac{TL}{GJ}
+\]
+<p>Solid and hollow polar moments:</p>
+\[
+J = \frac{\pi d^4}{32}
+\]
+<p>For a tube, replace d⁴ with do⁴ − di⁴. Torque from power, with ω in radians per second:</p>
+\[
+T = \frac{P}{\omega}
+\]
+<p>Fixed at both ends, torque applied a distance a from the left wall. The left reaction is T(L−a)/L. Series segments add their angles. Citations: Roylance §2.3. The motor is the Baldor EM3615T-5 nameplate and the NEMA 184T extension. E is the AISC value for steel. G of 75 GPa in the other labs is a round course value. The 36 in length and the 0.75 in diameter are comparisons.</p>
+</section>
+</div>
+</main>
+</body>
+</html>

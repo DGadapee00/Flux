@@ -35,6 +35,9 @@ const LIMIT = {
   curve: 1e-6,
   propped: 2e-4,
   shelf: 2e-4,
+  torsion: 1e-6,
+  twist: 1e-6,
+  motor: 1e-6,
 };
 
 const fails = [];
