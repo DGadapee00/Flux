@@ -19,6 +19,21 @@ export const NOTES = {
       { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u2: {
+    exam: 'u2',
+    title: 'Strain and material behaviour',
+    chapters: '2, 3',
+    file: 'u2-strain.html',
+    load: () => import('./content/u2-strain.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'Strain', lab: 'tension-test', ch: ['2'], topics: ['strain'], home: true },
+      { id: 's2', n: 2, title: "Hooke's law", lab: 'brace', ch: ['2'], topics: ['hooke', 'english'] },
+      { id: 's3', n: 3, title: "Poisson's ratio", lab: 'poisson', ch: ['3'], topics: ['poisson'] },
+      { id: 's4', n: 4, title: 'The tension curve', lab: 'tension-test', ch: ['3'], topics: ['stress-strain-curve', 'yield'] },
+      { id: 's5', n: 5, title: 'Creep and fatigue', lab: null, ch: ['3'], topics: ['creep', 'fatigue'] },
+      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;

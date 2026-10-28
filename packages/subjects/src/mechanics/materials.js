@@ -86,3 +86,77 @@ export const requiredArea = (F, failure, FS = 1) => (Math.abs(F) * FS) / failure
 
 /** The smallest pin diameter whose shear stays at failure/FS across `planes` planes. */
 export const requiredDiameter = (V, failure, FS = 1, planes = 1) => Math.sqrt((4 * requiredArea(V, failure, FS)) / (Math.PI * planes));
+
+/** Engineering normal strain: the change of length divided by the original length. */
+export const normalStrain = (delta, L) => delta / L;
+
+/** Uniaxial Hooke's law. Stress and modulus in Pa, strain dimensionless. */
+export const hookeStress = (E, eps) => E * eps;
+export const hookeStrain = (stress, E) => stress / E;
+
+/**
+ * Lateral strain under uniaxial stress. The material contracts sideways when it is stretched,
+ * so ε_lat = −ν ε_axial.
+ */
+export const lateralStrain = (nu, epsAxial) => -nu * epsAxial;
+
+/** Isotropic shear modulus, G = E / 2(1 + ν), from requiring the shear form of Hooke's law. */
+export const shearModulus = (E, nu) => E / (2 * (1 + nu));
+
+/**
+ * Linear volume strain under uniaxial stress. The three edge strains are ε, −ν ε and −ν ε,
+ * and their sum is ε(1 − 2ν). At ν = 1/2 the linear volume change is zero.
+ */
+export const uniaxialVolumeStrain = (eps, nu) => eps * (1 - 2 * nu);
+
+/** Exact change of volume from three engineering edge strains: (1+εx)(1+εy)(1+εz) − 1. */
+export const volumeChange = (ex, ey, ez) => (1 + ex) * (1 + ey) * (1 + ez) - 1;
+
+/** Elastic energy per volume stored up to yield: the triangle σ_Y² / 2E. */
+export const resilience = (sigY, E) => (sigY * sigY) / (2 * E);
+
+/**
+ * Bilinear tension curve. Slope E up to σ_Y, then tangent modulus E_t. Returns the stress at
+ * engineering strain eps, and whether the point is past yield.
+ */
+export function bilinear(eps, E, sigY, Et) {
+  const ey = sigY / E;
+  if (eps <= ey) return { stress: E * Math.max(eps, 0), ey, plastic: false };
+  return { stress: sigY + Et * (eps - ey), ey, plastic: true };
+}
+
+/** Area under the bilinear curve from 0 to eps, energy per volume. */
+export function bilinearEnergy(eps, E, sigY, Et) {
+  if (eps <= 0) return 0;
+  const ey = sigY / E;
+  if (eps <= ey) return 0.5 * E * eps * eps;
+  const stress = sigY + Et * (eps - ey);
+  return 0.5 * sigY * ey + 0.5 * (sigY + stress) * (eps - ey);
+}
+
+/**
+ * Ramberg–Osgood tension curve, ε = σ/E + 0.002 (σ/σ_Y)^n.
+ * σ_Y is the 0.2% offset yield by construction: at σ = σ_Y the plastic strain is 0.002.
+ */
+export function rambergOsgood(stress, E, sigY, n) {
+  return stress / E + 0.002 * (stress / sigY) ** n;
+}
+
+/** Stress on a Ramberg–Osgood curve at a given strain, by bisection. */
+export function rambergStress(eps, E, sigY, n) {
+  if (eps <= 0) return 0;
+  let lo = 0;
+  let hi = Math.max(sigY * 3, E * eps);
+  for (let i = 0; i < 80; i++) {
+    const mid = (lo + hi) / 2;
+    if (rambergOsgood(mid, E, sigY, n) < eps) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+/**
+ * Strain left after the stress is removed along modulus E.
+ * In the elastic range this is zero. Past yield it is the permanent set.
+ */
+export const permanentSet = (eps, stress, E) => Math.max(0, eps - stress / E);

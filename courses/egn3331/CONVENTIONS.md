@@ -19,5 +19,5 @@
 - **Labs** are plot2d. `compute` is pure; `draw` paints a to-scale drawing and a chart inside the
   space the panels leave (`labs/diagram.js`). Each lab declares `sweep(state)`, and labs-check
   moves that slider end to end.
-- **Left out for now.** Units 2–10 are listed as coming. Phase R stopped new units until the shells
-  carry the practice loop.
+- **Order.** The eleven units follow the spine the owner confirmed (2.001, then Hibbeler for
+  transverse shear and buckling). Units 3–11 are still listed as coming.

@@ -18,12 +18,14 @@ export const num = (id, get, unit, o = {}) => ({
   abs: o.abs ?? 1e-6,
   label: o.label ?? null,
   ...(o.alt ? { alt: o.alt } : {}),
+  // A trap returns SI, like `get`. The grader compares in the part's display unit.
+  ...(o.traps ? { traps: o.traps.map(([fn, msg]) => [($) => fn($) / (o.scale ?? 1), msg]) } : {}),
 });
 
 export const mc = (id, options, correct, o = {}) => ({
   id,
   kind: 'choice',
-  options: options.map(([value, label]) => ({ value, label })),
+  options: options.map(([value, label, why]) => ({ value, label, ...(why ? { why } : {}) })),
   correct,
   multi: !!o.multi,
   label: o.label ?? null,

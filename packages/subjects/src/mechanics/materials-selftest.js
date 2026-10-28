@@ -4,8 +4,10 @@
  *   node src/mechanics/materials-selftest.js
  */
 import {
-  axialStress, bearing, circleArea, factorOfSafety, inclined, inclinedByCut, pinSegments, pinShear,
-  requiredArea, requiredDiameter, transform,
+  axialStress, bearing, bilinear, bilinearEnergy, circleArea, factorOfSafety, hookeStrain, hookeStress,
+  inclined, inclinedByCut, lateralStrain, normalStrain, permanentSet, pinSegments, pinShear,
+  rambergOsgood, rambergStress, requiredArea, requiredDiameter, resilience, shearModulus, transform,
+  uniaxialVolumeStrain, volumeChange,
 } from './materials.js';
 import { solveTruss, memberForce, methodOfSections } from './truss.js';
 
@@ -143,6 +145,41 @@ console.log('Truss member stress');
     supports: { A: 'pin', C: 'rollerY' },
   });
   for (const c of sec.cut) approx(c.force, full.forces[c.member], 1e-9, `${c.member}: sections equal joints`);
+}
+
+console.log('Strain and Hooke');
+{
+  approx(normalStrain(0.2e-3, 0.2), 0.001, 1e-12, '0.20 mm on 200 mm is strain 0.001');
+  approx(hookeStress(200e9, 0.0005), 100e6, 1e-12, 'strain 0.0005 at 200 GPa is 100 MPa');
+  approx(hookeStrain(100e6, 200e9), 0.0005, 1e-12, '100 MPa over 200 GPa is strain 0.0005');
+  // Doubling the strain doubles the stress while the response stays elastic.
+  approx(hookeStress(200e9, 0.001) / hookeStress(200e9, 0.0005), 2, 1e-12, 'double the elastic strain, double the stress');
+  approx(lateralStrain(0.3, 0.001), -0.0003, 1e-12, 'ν = 0.3 gives lateral strain −0.0003');
+  approx(shearModulus(200e9, 0.3), 200e9 / 2.6, 1e-12, 'G = E/2(1+ν)');
+  approx(uniaxialVolumeStrain(0.001, 0.3), 0.0004, 1e-12, 'linear volume strain ε(1−2ν)');
+  approx(uniaxialVolumeStrain(0.001, 0.5), 0, 1e-15, 'ν = 1/2 cancels the linear volume change');
+  const ex = 0.004;
+  const ey = lateralStrain(0.3, ex);
+  const exact = volumeChange(ex, ey, ey);
+  const series = ex * (1 - 2 * 0.3) + ex * ex * (0.3 * 0.3 - 2 * 0.3) + 0.3 * 0.3 * ex ** 3;
+  approx(series, exact, 1e-12, 'the cubic expansion matches the exact volume change');
+  approx(resilience(250e6, 200e9), 156250, 1e-12, 'resilience of 250 MPa at 200 GPa is 156.25 kJ/m³');
+  // The triangle σ_Y²/2E against a trapezoid sum under the elastic line.
+  let area = 0;
+  const n = 4000;
+  const eyld = 250e6 / 200e9;
+  for (let i = 0; i < n; i++) {
+    const e0 = (eyld * i) / n;
+    const e1 = (eyld * (i + 1)) / n;
+    area += 0.5 * (200e9 * e0 + 200e9 * e1) * (e1 - e0);
+  }
+  approx(area, resilience(250e6, 200e9), 1e-9, 'trapezoids under the elastic line match σ_Y²/2E');
+  const past = bilinear(0.01, 200e9, 250e6, 10e9);
+  approx(past.stress, 337.5e6, 1e-12, 'bilinear stress at strain 0.01');
+  approx(permanentSet(0.01, past.stress, 200e9), 0.0083125, 1e-12, 'permanent set after unloading from strain 0.01');
+  approx(bilinearEnergy(0.01, 200e9, 250e6, 10e9), 0.5 * 250e6 * eyld + 0.5 * (250e6 + past.stress) * (0.01 - eyld), 1e-9, 'bilinear energy is the triangle plus the plastic trapezoid');
+  approx(rambergOsgood(276e6, 68.9e9, 276e6, 10), 276e6 / 68.9e9 + 0.002, 1e-12, 'at the offset yield the plastic strain is 0.002');
+  approx(rambergStress(276e6 / 68.9e9 + 0.002, 68.9e9, 276e6, 10), 276e6, 1e-9, 'bisection recovers the offset yield');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);

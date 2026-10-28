@@ -10,7 +10,14 @@ import { LAB_META } from '../src/data/catalog.js';
 import { loadLab } from '../src/labs/load.js';
 import { mathProse } from '../src/ui/shared.js';
 
-const LIMIT = { cut: 1e-9, 'truss-stress': 1e-9, pins: 1e-12 };
+const LIMIT = {
+  cut: 1e-9,
+  'truss-stress': 1e-9,
+  pins: 1e-12,
+  'tension-test': 1e-6,
+  poisson: 1e-9,
+  brace: 1e-9,
+};
 
 const fails = [];
 let checks = 0;

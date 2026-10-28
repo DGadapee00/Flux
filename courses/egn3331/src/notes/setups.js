@@ -2,6 +2,7 @@
  * Worked examples the labs can show. `tag` matches the notes after "Worked example · ".
  * `read` pairs a lab value with the number printed in the notes. notes-check allows 2%.
  */
+import { M_PER_IN } from '@flux/subjects/convert.js';
 const ROD = (Math.PI * 0.02 ** 2) / 4;
 
 export const SETUPS = {
@@ -60,6 +61,83 @@ export const SETUPS = {
         lab: 'truss-stress',
         scenario: 'even',
         read: (c) => ({ A: [c.AcNeed * 1e6, 377.1] }),
+      },
+    ],
+  },
+  u2: {
+    s1: [
+      {
+        tag: 'a measured stretch',
+        lab: 'tension-test',
+        scenario: 'steel',
+        setup(s) {
+          s.material = 'steel';
+          s.eps = 0.001;
+          s.unload = 0;
+        },
+        read: (c) => ({ eps: [c.eps * 1e3, 1] }),
+      },
+    ],
+    s2: [
+      {
+        tag: 'on the elastic line',
+        lab: 'tension-test',
+        scenario: 'steel',
+        setup(s) {
+          s.material = 'steel';
+          s.eps = 0.0005;
+          s.unload = 0;
+        },
+        read: (c) => ({ stress: [c.stress / 1e6, 100] }),
+      },
+      {
+        tag: 'the brace at 8 kip',
+        lab: 'brace',
+        scenario: 'service',
+        read: (c) => ({ delta: [c.delta / M_PER_IN, 0.0749] }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'steel at one millistrain',
+        lab: 'poisson',
+        scenario: 'steel',
+        read: (c) => ({ lat: [c.lateral * 1e6, -300], vol: [c.linear * 1e6, 400] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'the offset yield',
+        lab: 'tension-test',
+        scenario: 'alum',
+        setup(s) {
+          s.material = 'alum';
+          s.eps = 276e6 / 68.9e9 + 0.002;
+          s.unload = 0;
+        },
+        read: (c) => ({ stress: [c.stress / 1e6, 276] }),
+      },
+      {
+        tag: 'energy up to yield',
+        lab: 'tension-test',
+        scenario: 'steel',
+        setup(s) {
+          s.material = 'steel';
+          s.eps = 250e6 / 200e9;
+          s.unload = 0;
+        },
+        read: (c) => ({ energy: [c.energy / 1e3, 156.3] }),
+      },
+      {
+        tag: 'unloading from 10 millistrain',
+        lab: 'tension-test',
+        scenario: 'yielded',
+        setup(s) {
+          s.material = 'steel';
+          s.eps = 0.01;
+          s.unload = 0;
+        },
+        read: (c) => ({ set: [c.set * 1e6, 8310], stress: [c.stress / 1e6, 338] }),
       },
     ],
   },
