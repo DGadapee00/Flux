@@ -49,7 +49,7 @@ export const EXAMS = [
     title: 'Rigid-body kinematics',
     chapters: '16',
     date: 'Ch 16',
-    labs: ['ic', 'slider-crank', 'coriolis', 'rolling', 'gearbox'],
+    labs: ['ic', 'slider-crank', 'coriolis', 'rolling', 'gearbox', 'bike'],
     coming: [],
   },
   {
@@ -108,7 +108,8 @@ export const LAB_META = {
   linkage: { id: 'linkage', exam: 'u7', title: 'Linkage' },
   highway: { id: 'highway', exam: 'u2', title: 'Highway', app: true },
   stopping: { id: 'stopping', exam: 'u3', title: 'Stopping', app: true },
-  gearbox: { id: 'gearbox', exam: 'u5', title: 'Gearbox', app: true },
+  gearbox: { id: 'gearbox', exam: 'u5', title: 'Gears' },
+  bike: { id: 'bike', exam: 'u5', title: 'Bike', app: true },
   spinup: { id: 'spinup', exam: 'u6', title: 'Spin-up', app: true },
   tipover: { id: 'tipover', exam: 'u7', title: 'Tip-over', app: true },
   spin: { id: 'spin', exam: 'u8', title: 'Spin' },

@@ -7,14 +7,15 @@ import { bindSlider, showField, slider, leavesOut } from './widgets.js';
 const RPM = (2 * Math.PI) / 60;
 
 /**
- * Application: a turbopump gearbox (Hibbeler §16.3). A turbine drives pinion 1. Pinion 1 meshes
- * with gear 2 on the oxidiser pump shaft. Gear 3 rides on that shaft and meshes with gear 4 on the
- * fuel pump shaft: a compound train. With `idler` on, gear 2 meshes with gear 4 directly and gear 3
+ * A compound gear train (Hibbeler §16.3). A fast motor drives pinion 1. Pinion 1 meshes with gear 2
+ * on shaft 2. Gear 3 rides on that shaft and meshes with gear 4 on the output shaft. Shows that
+ * meshing gears share a pitch-line speed while gears on one shaft share ω, and that an idler's
+ * teeth cancel. With `idler` on, gear 2 meshes with gear 4 directly and gear 3
  * is not used. Every gear has the same module m, so its pitch radius is m N / 2. Speeds are in rpm.
  */
 const SCENARIOS = [
   { id: 'reduction', name: 'Two-stage reduction', N1: 20, N2: 60, N3: 25, N4: 50, rpm: 30000, m: 2, idler: false },
-  { id: 'step-up', name: 'Fuel pump faster than the oxidiser pump', N1: 20, N2: 60, N3: 40, N4: 20, rpm: 30000, m: 2, idler: false },
+  { id: 'step-up', name: 'A second stage that steps up', N1: 20, N2: 60, N3: 40, N4: 20, rpm: 30000, m: 2, idler: false },
   { id: 'idler', name: 'Gear 2 as an idler', N1: 20, N2: 40, N3: 25, N4: 50, rpm: 30000, m: 2, idler: true },
 ];
 
@@ -93,12 +94,13 @@ const rel = (a, b) => Math.abs(a - b) / Math.max(1e-12, Math.abs(b));
 const sense = (w) => (w > 0 ? 'ccw' : 'cw');
 
 /** What the real device has that the model ignores (D30). */
-const OUT = String.raw`The model treats each mesh as two pitch circles rolling without slip. That gives speeds and senses and nothing else. A real train has backlash, the play between teeth, and its shafts twist under load. It says nothing about torque, or about which gear carries the load: that is Unit 6. Many turbopumps carry the turbine and both pumps on one shaft and need no gearbox. A gearbox earns its weight when the pumps want different speeds.`;
+const OUT = String.raw`The model treats each mesh as two pitch circles rolling without slip. That gives speeds and senses and nothing else. A real train has backlash, the play between teeth, and its shafts twist under load. It says nothing about torque, or about which gear carries the load: that is Unit 6. Real teeth have involute profiles, cut so the speed ratio holds steady while each pair of teeth is in contact; the pitch circles stand in for that.`;
 
 export default defineLab({
   id: 'gearbox',
   exam: 'u5',
-  title: 'Turbopump gearbox',
+  title: 'Gear train',
+  app: false,
   hint: 'Change the teeth. Meshing gears share a pitch-line speed, so ω scales as 1/N, and each mesh reverses the sense.',
   gapLimit: 1e-9,
   scenarios: SCENARIOS,
@@ -111,11 +113,11 @@ export default defineLab({
   sweep: () => ({ key: 'N2', lo: 24, hi: 120 }),
   controls() {
     return `
-      ${slider('gb-rpm', 'turbine speed (rpm)', 30000, 5000, 60000, 1000)}
+      ${slider('gb-rpm', 'motor speed (rpm)', 30000, 5000, 60000, 1000)}
       ${slider('gb-n1', 'pinion 1 teeth N₁', 20, 12, 40, 1)}
-      ${slider('gb-n2', 'gear 2 teeth N₂ (oxidiser pump)', 60, 24, 120, 1)}
+      ${slider('gb-n2', 'gear 2 teeth N₂ (shaft 2)', 60, 24, 120, 1)}
       ${slider('gb-n3', 'gear 3 teeth N₃ (on shaft 2)', 25, 12, 60, 1)}
-      ${slider('gb-n4', 'gear 4 teeth N₄ (fuel pump)', 50, 12, 120, 1)}
+      ${slider('gb-n4', 'gear 4 teeth N₄ (output)', 50, 12, 120, 1)}
       ${slider('gb-m', 'module m (mm)', 2, 1, 5, 0.5)}
       <p class="tiny">Pitch radius r = mN/2. Counterclockwise is positive. No slip at a mesh. Gear 4 meshes with gear 3, in a plane behind gear 2.</p>`;
   },
@@ -205,9 +207,9 @@ export default defineLab({
     circle(O2, c.r2, C.teal, state.N2, c.w2);
     if (!c.idler) circle(O2, c.r3, C.blue, state.N3, c.w3);
     circle(O4, c.r4, C.pink, state.N4, c.w4);
-    label(S, small ? '1' : 'turbine 1', O1, { dy: c.r1 * S.k + 12, color: C.gold });
-    label(S, small ? (c.idler ? '2' : '2 + 3') : c.idler ? 'idler 2' : 'oxidiser 2 + 3', O2, { dy: -c.r2 * S.k - 10, color: C.teal });
-    label(S, small ? '4' : 'fuel 4', O4, { dy: c.r4 * S.k + 12, color: C.pink });
+    label(S, small ? '1' : 'motor 1', O1, { dy: c.r1 * S.k + 12, color: C.gold });
+    label(S, small ? (c.idler ? '2' : '2 + 3') : c.idler ? 'idler 2' : 'shaft 2: gears 2 + 3', O2, { dy: -c.r2 * S.k - 10, color: C.teal });
+    label(S, small ? '4' : 'output 4', O4, { dy: c.r4 * S.k + 12, color: C.pink });
 
     // Shaft speeds, rpm, signed: up is counterclockwise.
     const ws = [['1', c.w1, C.gold], ['2', c.w2, C.teal], ['4', c.w4, C.pink]];
@@ -231,8 +233,8 @@ export default defineLab({
   },
   readout(state, c) {
     return cells([
-      ['ox pump', `${fig(Math.abs(c.w2))} rpm`],
-      ['fuel pump', `${fig(Math.abs(c.w4))} rpm`],
+      ['shaft 2', `${fig(Math.abs(c.w2))} rpm`],
+      ['output', `${fig(Math.abs(c.w4))} rpm`],
       ['ω₁/ω₄', fig(c.ratio)],
       ['pitch v', `${fig(c.v12)} m/s`],
     ]);
@@ -241,27 +243,27 @@ export default defineLab({
     if (c.idler) {
       return {
         title: 'The idler cancels out',
-        body: String.raw`Gear 2 meshes on both sides. Its teeth cancel from the ratio: $\omega_4 = (N_1/N_4)\,\omega_1 = ${fig(c.w4)}$ rpm. It only sets the sense: shaft 4 turns the same way as the turbine.`,
+        body: String.raw`Gear 2 meshes on both sides. Its teeth cancel from the ratio: $\omega_4 = (N_1/N_4)\,\omega_1 = ${fig(c.w4)}$ rpm. It only sets the sense: shaft 4 turns the same way as the motor.`,
       };
     }
     return {
       title: 'Each mesh reverses the sense',
-      body: String.raw`Two external meshes: shaft 4 turns the same way as the turbine, at $${fig(Math.abs(c.w4))}$ rpm. The pitch line of mesh 1–2 moves at $${fig(c.v12)}$ m/s.`,
+      body: String.raw`Two external meshes: shaft 4 turns the same way as the motor, at $${fig(Math.abs(c.w4))}$ rpm. The pitch line of mesh 1–2 moves at $${fig(c.v12)}$ m/s.`,
     };
   }),
   predictions: [
     {
       id: 'gb-faster',
       scenario: 'reduction',
-      ask: 'Double the turbine speed, from 30,000 rpm to 60,000 rpm. Leave the teeth alone.',
+      ask: 'Double the motor speed, from 30,000 rpm to 60,000 rpm. Leave the teeth alone.',
       apply(s) { s.rpm = 60000; },
       watch: [
-        { id: 'w4', label: 'the fuel pump speed', get: (c) => c.w4 },
+        { id: 'w4', label: 'the output speed', get: (c) => c.w4 },
         { id: 'v12', label: 'the pitch-line speed at mesh 1–2', get: (c) => c.v12 },
       ],
       mode: 'factor',
       expect: { w4: 2, v12: 2 },
-      why: 'Every ratio is fixed by the teeth, so every shaft speeds up by the same factor. The fuel pump goes from 5,000 rpm to 10,000 rpm. The pitch line of mesh 1–2 goes from 62.8 m/s to 126 m/s.',
+      why: 'Every ratio is fixed by the teeth, so every shaft speeds up by the same factor. The output goes from 5,000 rpm to 10,000 rpm. The pitch line of mesh 1–2 goes from 62.8 m/s to 126 m/s.',
     },
     {
       id: 'gb-idler',
@@ -270,7 +272,7 @@ export default defineLab({
       apply(s) { s.N2 = 80; },
       watch: [
         { id: 'w2', label: 'the idler speed', get: (c) => c.w2 },
-        { id: 'w4', label: 'the fuel pump speed', get: (c) => c.w4 },
+        { id: 'w4', label: 'the output speed', get: (c) => c.w4 },
       ],
       mode: 'dir',
       expect: { w2: 'smaller', w4: 'same' },
@@ -282,12 +284,12 @@ export default defineLab({
       ask: 'Double the module, from 2 mm to 4 mm. Same tooth counts, bigger teeth.',
       apply(s) { s.m = 4; },
       watch: [
-        { id: 'w4', label: 'the fuel pump speed', get: (c) => c.w4 },
+        { id: 'w4', label: 'the output speed', get: (c) => c.w4 },
         { id: 'v12', label: 'the pitch-line speed at mesh 1–2', get: (c) => c.v12 },
       ],
       mode: 'factor',
       expect: { w4: 1, v12: 2 },
-      why: 'Every radius doubles, so every ratio $r_1/r_2 = N_1/N_2$ stays: the fuel pump stays at 5,000 rpm. The pinion radius goes from 20 mm to 40 mm, so its teeth move twice as fast, 126 m/s instead of 62.8 m/s.',
+      why: 'Every radius doubles, so every ratio $r_1/r_2 = N_1/N_2$ stays: the output stays at 5,000 rpm. The pinion radius goes from 20 mm to 40 mm, so its teeth move twice as fast, 126 m/s instead of 62.8 m/s.',
     },
   ],
 });

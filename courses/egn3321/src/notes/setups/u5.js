@@ -156,7 +156,7 @@ export default {
       read: (c) => ({ w2: [c.w2, -10000], w4: [c.w4, 5000], v12: [c.v12, 62.8], v34: [c.v34, 26.2] }),
     },
     {
-      tag: 'a fuel pump that runs faster',
+      tag: 'a second stage that steps up',
       lab: 'gearbox',
       scenario: 'step-up',
       read: (c) => ({ w2: [c.w2, -10000], w4: [c.w4, 20000], v34: [c.v34, 41.9] }),
@@ -175,6 +175,44 @@ export default {
         s.m = 4;
       },
       read: (c) => ({ w4: [c.w4, 5000], v12: [c.v12, 126] }),
+    },
+  ],
+  s9: [
+    {
+      tag: 'cruising, 34/17',
+      lab: 'bike',
+      scenario: 'cruise',
+      read: (c) => ({ wheel: [c.wheelRpm, 180], v: [c.v, 6.33], kmh: [c.kmh, 22.8], chain: [c.chain, 0.648] }),
+    },
+    {
+      tag: 'the same ratio on the big ring',
+      lab: 'bike',
+      scenario: 'cruise',
+      setup(s) {
+        Object.assign(s, { Nf: 50, Nr: 25 });
+      },
+      read: (c) => ({ wheel: [c.wheelRpm, 180], kmh: [c.kmh, 22.8], chain: [c.chain, 0.953] }),
+    },
+    {
+      tag: 'top gear, 50/11',
+      lab: 'bike',
+      scenario: 'sprint',
+      read: (c) => ({ wheel: [c.wheelRpm, 454.5], v: [c.v, 16.0], kmh: [c.kmh, 57.6], chain: [c.chain, 1.06], rr: [c.rr * 1000, 22.5], surge: [c.surge, 0.0405] }),
+    },
+    {
+      tag: 'climbing, 34/28',
+      lab: 'bike',
+      scenario: 'climb',
+      read: (c) => ({ wheel: [c.wheelRpm, 97.1], kmh: [c.kmh, 12.3], dev: [c.development, 2.56] }),
+    },
+    {
+      tag: 'the cadence for 30 km/h',
+      lab: 'bike',
+      scenario: 'cruise',
+      setup(s) {
+        Object.assign(s, { Nf: 50, Nr: 17, cadence: 80.5 });
+      },
+      read: (c) => ({ kmh: [c.kmh, 30], wheel: [c.wheelRpm, 237] }),
     },
   ],
   s7: [

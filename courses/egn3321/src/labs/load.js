@@ -32,6 +32,7 @@ const loaders = {
   highway: () => import('./highway.js'),
   stopping: () => import('./stopping.js'),
   gearbox: () => import('./gearbox.js'),
+  bike: () => import('./bike.js'),
   spinup: () => import('./spinup.js'),
   tipover: () => import('./tipover.js'),
   bat: () => import('./bat.js'),

@@ -13,7 +13,8 @@ export default {
     { id: 's5', n: 5, title: 'Relative acceleration', lab: 'slider-crank', ch: ['16'], topics: ['acceleration'] },
     { id: 's6', n: 6, title: 'Rotating axes', lab: 'coriolis', ch: ['16'], topics: ['rotating'], problems: ['u5.16.rocker', 'u5.16.coriolis-dir', 'u5.16.cart-rod'], home: true },
     { id: 's7', n: 7, title: 'Rolling without slip', lab: 'rolling', ch: ['16'], topics: ['rolling'], home: true },
-    { id: 's8', n: 8, title: 'Application: a turbopump gearbox', lab: 'gearbox', ch: ['16'], topics: ['gears'], problems: ['u5.16.turbopump', 'u5.16.train-sense'], home: true },
-    { id: 's9', n: 9, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's8', n: 8, title: 'Gear trains', lab: 'gearbox', ch: ['16'], topics: ['gears'], problems: ['u5.16.train', 'u5.16.train-sense'], home: true },
+    { id: 's9', n: 9, title: 'Application: a road bike\'s drivetrain', lab: 'bike', ch: ['16'], topics: ['gears', 'belt'], problems: ['u5.16.bike'], home: true },
+    { id: 's10', n: 10, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };
