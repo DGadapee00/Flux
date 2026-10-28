@@ -31,7 +31,7 @@ export const EXAMS = [
     title: 'Impulse and momentum',
     chapters: '15',
     date: 'Ch 15',
-    labs: ['impulse', 'impact', 'rocket'],
+    labs: ['impulse', 'impact', 'rocket', 'helmet'],
     coming: [],
   },
   {
@@ -95,7 +95,8 @@ export const LAB_META = {
   paths: { id: 'paths', exam: 'u3', title: 'Paths' },
   impulse: { id: 'impulse', exam: 'u4', title: 'Impulse' },
   impact: { id: 'impact', exam: 'u4', title: 'Impact' },
-  rocket: { id: 'rocket', exam: 'u4', title: 'Rocket', app: true },
+  rocket: { id: 'rocket', exam: 'u4', title: 'Rocket' },
+  helmet: { id: 'helmet', exam: 'u4', title: 'Helmet', app: true },
   ic: { id: 'ic', exam: 'u5', title: 'Centre' },
   'slider-crank': { id: 'slider-crank', exam: 'u5', title: 'Slider-crank' },
   coriolis: { id: 'coriolis', exam: 'u5', title: 'Coriolis' },

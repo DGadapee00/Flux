@@ -12,7 +12,7 @@ export default {
     { id: 's4', n: 4, title: 'Oblique impact', lab: 'impact', ch: ['15'], topics: ['oblique', 'impact'] },
     { id: 's5', n: 5, title: 'Angular momentum', lab: null, ch: ['15'], topics: ['angular'] },
     { id: 's6', n: 6, title: 'A rocket', lab: 'rocket', ch: ['15'], topics: ['rocket'], home: true },
-    { id: 's7', n: 7, title: 'Application: an upper stage', lab: 'rocket', ch: ['15'], topics: ['rocket'], problems: ['u4.15.stage'], home: true },
+    { id: 's7', n: 7, title: 'Application: a bicycle helmet', lab: 'helmet', ch: ['15'], topics: ['impulse'], problems: ['u4.15.helmet'], home: true },
     { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

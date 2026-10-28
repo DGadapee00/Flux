@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 3 · Hibbeler Ch 15</p>
   <h1>Impulse and momentum</h1>
-  <p class="lede">Impulse is the area under a force. A collision conserves momentum for every restitution. A rocket's gain follows the mass ratio. Each of these is \(\sum F = ma\) integrated over time, and each is derived below. The numbers are recomputed.</p>
+  <p class="lede">Impulse is the area under a force. A collision conserves momentum for every restitution. A rocket's gain follows the mass ratio. A helmet spreads a fixed impulse over time. Each of these is \(\sum F = ma\) integrated over time, and each is derived below. The numbers are recomputed.</p>
   <div class="legend">
     <span><i style="background:var(--field)"></i>Worked example</span>
     <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
@@ -23,10 +23,10 @@
     <h3>Part II · Collisions</h3>
     <a href="#s3"><span>03</span>Impact</a>
     <a href="#s4"><span>04</span>Oblique impact</a>
-    <h3>Part III · Angular momentum and rockets</h3>
+    <h3>Part III · Angular momentum, rockets and a helmet</h3>
     <a href="#s5"><span>05</span>Angular momentum</a>
     <a href="#s6"><span>06</span>A rocket</a>
-    <a href="#s7"><span>07</span>Application: an upper stage</a>
+    <a href="#s7"><span>07</span>Application: a bicycle helmet</a>
     <h3>Reference</h3>
     <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
@@ -170,12 +170,12 @@ v_{n2} - v_{n1} = e(u_{n1} - u_{n2}).
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The faces are smooth, so there is no tangent impulse. A rough collision would change the tangent speeds, and set a ball spinning. That model is left out, as is any rotation the impact gives the bodies.</p>
 </div>
-<p class="bridge">Part II kept the mass fixed and the motion on a line. Part III takes moments about a point, and then lets the mass leave.</p>
+<p class="bridge">Part II kept the mass fixed and the motion on a line. Part III takes moments about a point, and then lets the mass leave. Last, it opens up a collision to see the force inside it.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-9-collision-theory/27-6-2d-collisions/" target="_blank" rel="noopener">27.6 2D Collisions</a>.</p>
 </section>
 <div class="part">
   <div class="eyebrow">Part III</div>
-  <h2>Angular momentum and rockets</h2>
+  <h2>Angular momentum, rockets and a helmet</h2>
 </div>
 
 <section class="topic" id="s5">
@@ -242,38 +242,49 @@ m\,dv = -v_e\,dm - mg\,dt.
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/19-1-rocket-problem-1-set-up-the-problem/" target="_blank" rel="noopener">19.1 Rocket Problem 1 - Set up the Problem</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/19-6-rocket-problem-6-solution-for-no-external-forces/" target="_blank" rel="noopener">19.6 Rocket Problem 6 - Solution for No External Forces</a>.</p>
 </section>
 <section class="topic" id="s7">
-<h2><span class="n">07</span>Application: an upper stage</h2>
-<p>An engine data sheet gives thrust, burn rate and specific impulse. The rocket equation needs the exhaust speed. All three are the same fact, written three ways.</p>
-<div class="box why"><span class="tag">Why</span>
-<p>The thrust is the momentum the exhaust carries away each second: \(F = \dot m\,v_e\). So \(v_e = F/\dot m\). Specific impulse is the impulse per unit weight of propellant: \(I_{sp} = F/(\dot m g_0) = v_e/g_0\). It is quoted in seconds. Multiply by \(g_0 = 9.81\) m/s² to get back to a speed.</p>
-</div>
+<h2><span class="n">07</span>Application: a bicycle helmet</h2>
+<p>Every bicycle helmet sold in the US passes a drop test, 16 CFR 1203. The helmet sits on a 5.0 kg headform. It falls onto a flat steel anvil at 6.2 m/s, about a 2 m drop. A helmet fails if the headform's peak acceleration passes 300 g.</p>
+<p>The drop fixes the momentum the anvil must remove. The liner cannot change it. The liner chooses only how long the anvil takes, and how the force is spread over that time.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Take up as positive. The headform lands at \(-v_0\), with \(v_0 = \sqrt{2gh}\), and leaves at \(+e\,v_0\). During the pulse of length \(\tau\), the anvil pushes up and the weight pulls down:</p>
 \[
-v_e = \frac{F}{\dot m} = I_{sp}\,g_0, \qquad \Delta v = v_e\ln\frac{m_0}{m_f} - g\,t_b.
+\int_0^\tau F\,dt - mg\tau = m(1 + e)\,v_0 .
 \]
-<p>A stage must also lift itself. At ignition the thrust must beat the weight: \(F &gt; m_0 g\). The ratio \(F/(m_0 g)\) is the thrust-to-weight ratio.</p>
-<div class="box ex"><span class="tag">Worked example · a methane–oxygen stage</span>
-<p>A 500 kg stage burns 5 kg/s and makes 15,000 N. Then \(v_e = 15000/5 = 3000\) m/s, and \(I_{sp} = 3000/9.81 = 306\) s. At ignition the thrust-to-weight ratio is \(15000/4905 = 3.06\).</p>
-<p>It burns down to 200 kg, a mass ratio of 2.5. The burn takes \(300/5 = 60\) s. The ideal gain is \(3000\ln 2.5 = 2749\) m/s. Gravity takes \(9.81 \times 60 = 589\) m/s. The speed at burnout is 2160 m/s.</p>
+<p>For a half-sine pulse, \(F = F_{pk}\sin(\pi t/\tau)\), and its area is \(2F_{pk}\tau/\pi\). For a flat pulse, the area is \(F_{pk}\tau\). Write the area as \(kF_{pk}\tau\), with \(k = 2/\pi\) or 1. The peak acceleration in g is \(F_{pk}/(mg)\).</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · the same stage, throttled up</span>
-<p>Double the burn rate to 10 kg/s at the same exhaust speed. The thrust doubles to 30,000 N. The mass ratio is still 2.5, so the ideal gain is still 2749 m/s. The burn now takes 30 s, and gravity takes only 294 m/s. The speed at burnout rises to 2455 m/s.</p>
-<p>A faster burn spends less time holding itself up. That is why launch stages start with a thrust-to-weight ratio well above 1.</p>
+<div class="box ex"><span class="tag">Worked example · the CPSC drop</span>
+<p>The headform falls 1.96 m, so \(v_0 = \sqrt{2(9.81)(1.96)} = 6.20\) m/s. The liner gives a 6 ms half-sine pulse, and the headform rebounds at \(e = 0.1\).</p>
+<p>The anvil's impulse is \(5(1.1)(6.20) + 5(9.81)(0.006) = 34.1 + 0.29 = 34.4\) N·s. The weight adds under 1%. The mean force is \(34.4/0.006 = 5730\) N, or 117 g. The half-sine peaks \(\pi/2\) higher: 9010 N, or 184 g. The helmet passes.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a stage that barely lifts</span>
-<p>Fit the same 15,000 N engine to a 1500 kg stage that burns down to 600 kg. The mass ratio is again 2.5, and the ideal gain again 2749 m/s. But the thrust-to-weight ratio is \(15000/14715 = 1.02\). The burn lasts \(900/5 = 180\) s. Gravity takes 1766 m/s, and only 983 m/s is left.</p>
-<p>At ignition the net acceleration is \(15000/1500 - 9.81 = 0.19\) m/s². The stage creeps off the pad and spends its first minute fighting its own weight.</p>
+<div class="box ex"><span class="tag">Worked example · no helmet</span>
+<p>Drop the bare headform from the same height. Steel on a hard headform gives a pulse near 1 ms, and a livelier rebound, \(e = 0.5\). These two numbers are illustrative.</p>
+<p>The impulse grows to \(5(1.5)(6.20) + 0.05 = 46.6\) N·s, because the bounce asks for more momentum. Spread over a sixth of the time, the peak is \((\pi/2)(46.6/0.001)/49.05 = 1490\) g. That is five times the limit.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an ideal liner</span>
+<p>Keep the CPSC drop, but give the liner a flat 6 ms pulse. The impulse is still 34.4 N·s. Now the peak equals the mean: 117 g, down 36% from the half-sine.</p>
+<p>The liner crushes about the same depth either way. The lab finds 16.9 mm for the flat pulse and 17.2 mm for the half-sine. A good foam holds a steady force as it crushes, and spends its depth evenly.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the shortest pulse that passes</span>
+<p>How short may the CPSC pulse be? Set \(F_{pk} = 300\,mg\) in the impulse equation and solve for \(\tau\):</p>
+\[
+\tau_{min} = \frac{(1 + e)\,v_0}{g\,(300k - 1)} .
+\]
+<p>For the half-sine, \(\tau_{min} = 1.1(6.20)/(9.81(190.99 - 1)) = 3.66\) ms. For a flat pulse, \(1.1(6.20)/(9.81 \times 299) = 2.33\) ms. A flatter pulse passes in less time, and so in a thinner liner.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>The burn time is the propellant over the burn rate, \((m_0 - m_f)/\dot m\). It is not the whole mass over the burn rate. For the first stage, \(500/5 = 100\) s would put the gravity loss at 981 m/s instead of 589 m/s. The dry mass never leaves the nozzle. Hibbeler §15.9.</p>
+<p>Impulse over time is the mean force, not the peak. For the CPSC drop, 117 g is the mean; the half-sine's peak is 184 g. The test limits the peak, so use \(F_{pk} = J/(k\tau)\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The anvil reverses the headform; it does not only stop it. The momentum change is \(m(1 + e)v_0\). Leaving out the rebound gives 31.3 N·s for the CPSC drop instead of 34.4 N·s, 9% low.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>The mass ratio sets the ideal gain. The thrust-to-weight ratio sets how much of it gravity takes. Read \(v_e\) from \(F/\dot m\) or \(I_{sp}g_0\).</p>
+<p>The drop sets the impulse. The liner sets the time and the shape. The peak is the impulse over \(k\tau\), so a longer, flatter pulse means a lower peak.</p>
 </div>
-<p>In the Rocket lab, the burn-in-gravity scenario takes all three stages above. Move the burn rate and watch \(t_b\) and the gravity loss fall together.</p>
+<p>In the Helmet lab, the three scenarios are the first three examples. Sweep the pulse length and watch the impulse hold while the peak falls under the 300 g line.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>A real engine's thrust grows as the outside pressure falls, so sea-level and vacuum specific impulse differ. The model holds \(v_e\) constant. It also leaves out drag, which is largest low and slow, and the turn toward horizontal flight.</p>
+<p>The pulse shape is fixed. Real foam stiffens as it compacts, so its force climbs at the end of the crush. A liner too thin for the drop bottoms out with a spike. The headform is rigid and falls straight. Real tests also use hemispherical and kerbstone anvils, after hot, cold and wet conditioning. Rotation of the head, and of the brain inside it, is left out.</p>
 </div>
-<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/19-5-rocket-problem-5-thrust-and-external-forces/" target="_blank" rel="noopener">19.5 Rocket Problem 5 - Thrust and External Forces</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/19-7-rocket-problem-7-solution-with-external-forces/" target="_blank" rel="noopener">19.7 Rocket Problem 7 - Solution with External Forces</a>.</p>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/15-1-momentum-and-impulse/" target="_blank" rel="noopener">15.1 Momentum and Impulse</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/15-3-worked-example-bouncing-ball/" target="_blank" rel="noopener">15.3 Worked Example - Bouncing Ball</a>.</p>
 </section>
 <section class="topic" id="s8">
 <h2><span class="n">08</span>Formula sheet</h2>
@@ -285,6 +296,7 @@ v_e = \frac{F}{\dot m} = I_{sp}\,g_0, \qquad \Delta v = v_e\ln\frac{m_0}{m_f} - 
 <li>Oblique impact: the tangent components stay as they were.</li>
 <li>\(L_z = m(xv_y - yv_x)\). \(\sum M_O = \dot H_O\).</li>
 <li>Rocket: \(\Delta v = v_e\ln(m_0/m_f) - gt_b\), with \(t_b = (m_0 - m_f)/\dot m\).</li>
+<li>Drop on an anvil: \(\int F\,dt - mg\tau = m(1 + e)v_0\). The area is \(kF_{pk}\tau\), \(k = 2/\pi\) for a half-sine, 1 for a flat pulse.</li>
 <li>This unit uses \(g = 9.81\) m/s², or \(32.2\) ft/s². The slug is the US mass.</li>
 <li>Steady flow, §15.8, stays out.</li>
 </ul>

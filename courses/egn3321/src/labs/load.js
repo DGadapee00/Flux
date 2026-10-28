@@ -15,6 +15,7 @@ const loaders = {
   impulse: () => import('./impulse.js'),
   impact: () => import('./impact.js'),
   rocket: () => import('./rocket.js'),
+  helmet: () => import('./helmet.js'),
   ic: () => import('./ic.js'),
   'slider-crank': () => import('./slider-crank.js'),
   coriolis: () => import('./coriolis.js'),

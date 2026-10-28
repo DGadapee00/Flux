@@ -220,6 +220,7 @@ export const PRINCIPLE_TAGS = {
   'u4.15.angular': ['angular-momentum'],
   'u4.15.rocket': ['variable-mass'],
   'u4.15.rocket-ft': ['variable-mass', 'units'],
+  'u4.15.helmet': ['impulse'],
   'u5.16.belt': ['fixed-axis'],
   'u5.16.gears': ['fixed-axis'],
   'u5.16.pulley-ft': ['fixed-axis', 'units'],

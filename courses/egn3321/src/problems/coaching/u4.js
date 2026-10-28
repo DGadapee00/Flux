@@ -6,6 +6,7 @@
  * the part's own units, like the part's `get`.
  */
 import { G, G_FT } from '@flux/subjects/mechanics/constants.js';
+import { minDuration, stopPulse } from '@flux/subjects/mechanics/impact-pulse.js';
 
 const DEG = Math.PI / 180;
 
@@ -108,4 +109,29 @@ export default {
   },
   'u4.15.rocket': { traps: { dv: rocketTraps(G) } },
   'u4.15.rocket-ft': { traps: { dv: rocketTraps(G_FT) } },
+  'u4.15.helmet': {
+    traps: {
+      J: [
+        [($) => 5 * $.v0, 'That stops the headform but does not throw it back. The rebound adds e·v0: the change is (1 + e)v0.'],
+        [($) => 5 * Math.sqrt(2 * $.h), 'Find the impact speed from the drop: v0 = √(2gh), not √(2h).'],
+      ],
+      q: [
+        // The shape factor misplaced: a half-sine read as flat, a flat pulse given the half-sine's π/2.
+        [($) => {
+          const k = $.shape === 'square' ? 2 / Math.PI : 1;
+          if ($.find === 'tau') return minDuration({ v0: $.v0, e: $.e, shape: k === 1 ? 'square' : 'half-sine', limitG: 300 }) * 1000;
+          return stopPulse({ m: 5, v0: $.v0, e: $.e, tau: $.tau / 1000, shape: k === 1 ? 'square' : 'half-sine' }).gPeak;
+        }, ($) => ($.shape === 'square'
+          ? 'A flat pulse uses its whole height: ∫F dt = F_pk τ, with no π/2.'
+          : 'That is the mean force, as if the pulse were flat. A half-sine’s ∫F dt is 2F_pk τ/π, so its peak is π/2 times its mean.')],
+        // 300 g read as 300 m/s², or the peak left in m/s².
+        [($) => ($.find === 'tau'
+          ? ((1 + $.e) * $.v0) / ((($.shape === 'square' ? 1 : 2 / Math.PI) * 300) - G) * 1000
+          : stopPulse({ m: 5, v0: $.v0, e: $.e, tau: $.tau / 1000, shape: $.shape }).gPeak * G),
+        ($) => ($.find === 'tau'
+          ? 'The limit is 300 g, not 300 m/s². Set F_pk = 300mg.'
+          : 'That is F_pk/m in m/s². Divide by g = 9.81 for the peak in g.')],
+      ],
+    },
+  },
 };
