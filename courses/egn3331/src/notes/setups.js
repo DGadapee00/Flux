@@ -2,7 +2,7 @@
  * Worked examples the labs can show. `tag` matches the notes after "Worked example · ".
  * `read` pairs a lab value with the number printed in the notes. notes-check allows 2%.
  */
-import { M_PER_IN, PA_PER_PSI } from '@flux/subjects/convert.js';
+import { M_PER_FT, M_PER_IN, N_PER_LBF, PA_PER_PSI } from '@flux/subjects/convert.js';
 const ROD = (Math.PI * 0.02 ** 2) / 4;
 
 export const SETUPS = {
@@ -352,6 +352,80 @@ export const SETUPS = {
         lab: 'combined',
         scenario: 'torque',
         read: (c) => ({ tresca: [c.tresca / 1e6, 63.7], vm: [c.vm / 1e6, 55.1] }),
+      },
+    ],
+  },
+  u6: {
+    s1: [
+      {
+        tag: 'the midspan load',
+        lab: 'diagrams',
+        scenario: 'point',
+        read: (c) => ({ Vmax: [c.Vmax / 1000, 5], Mmax: [c.Mmax / 1000, 10] }),
+      },
+    ],
+    s2: [
+      {
+        tag: 'the uniform load',
+        lab: 'diagrams',
+        scenario: 'uniform',
+        read: (c) => ({ Mmax: [c.Mmax / 1000, 10], V: [c.V / 1000, 0], Vmax: [c.Vmax / 1000, 10] }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'the tip load',
+        lab: 'diagrams',
+        scenario: 'cantilever',
+        read: (c) => ({ Mmax: [c.Mmax / 1000, -16], Vmax: [c.Vmax / 1000, 8] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'the 40 by 80 mm rectangle',
+        lab: 'flexure',
+        scenario: 'rect',
+        read: (c) => ({ top: [c.top / 1e6, -46.9], bot: [c.bot / 1e6, 46.9] }),
+      },
+      {
+        tag: 'twice the depth',
+        lab: 'flexure',
+        scenario: 'deep',
+        read: (c) => ({ top: [c.top / 1e6, -11.72], bot: [c.bot / 1e6, 11.72] }),
+      },
+    ],
+    s5: [
+      {
+        tag: 'the tee at 2 kN·m',
+        lab: 'flexure',
+        scenario: 'tee',
+        read: (c) => ({ top: [c.top / 1e6, -20.5], bot: [c.bot / 1e6, 52.5], yBar: [c.yBar * 1000, 80.5] }),
+      },
+    ],
+    s6: [
+      {
+        tag: 'the table span',
+        lab: 'joist',
+        scenario: 'table',
+        read: (c) => ({
+          stress: [c.stress / PA_PER_PSI, 916],
+          moment: [c.moment / N_PER_LBF / M_PER_FT, 1633],
+        }),
+      },
+      {
+        tag: 'a 10 ft span',
+        lab: 'joist',
+        scenario: 'short',
+        read: (c) => ({
+          stress: [c.stress / PA_PER_PSI, 467],
+          moment: [c.moment / N_PER_LBF / M_PER_FT, 833],
+        }),
+      },
+      {
+        tag: 'the nominal rectangle',
+        lab: 'joist',
+        scenario: 'nominal',
+        read: (c) => ({ stress: [c.stress / PA_PER_PSI, 588] }),
       },
     ],
   },

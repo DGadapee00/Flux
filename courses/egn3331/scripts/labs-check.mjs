@@ -27,6 +27,9 @@ const LIMIT = {
   mohr: 1e-9,
   combined: 1e-9,
   hitch: 1e-9,
+  diagrams: 1e-9,
+  flexure: 1e-6,
+  joist: 1e-9,
 };
 
 const fails = [];

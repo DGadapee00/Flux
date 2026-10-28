@@ -10,6 +10,8 @@ import {
   hooke3, hooke3Deviator, hookeStrain, hookeStress, hoopFromSplit, sphereFromCap,
   inclined, inclinedByCut, lateralStrain, normalStrain, permanentSet, pinSegments, pinShear,
   principal2, rambergOsgood, rambergStress, requiredArea, requiredDiameter, resilience, shearModulus,
+  flexureStress, rectSection, teeSection, flexureFibers, rectFibersReduced, simpleBendingStress,
+  flexureBalance, rectBands, teeBands,
   taperedElongation, thinCylinder, thinSphere, traction, transform, trescaPlane,
   uniaxialVolumeStrain, volumeChange, vonMisesComponents, vonMisesPlane,
 } from './materials.js';
@@ -304,6 +306,46 @@ console.log('Principals, yield, combined stress');
   approx(shank.compression, axial - bend, 1e-12, 'compression side is axial minus bending');
   approx(shank.peak, shank.compression, 1e-12, 'the compression side has the larger magnitude');
   approx(hitchSides(600 * 4.4482216152605, 0, 0.0254, 0.0254).peak, axial, 1e-12, 'no horizontal force leaves only the axial stress');
+}
+
+console.log('\nFlexure');
+{
+  const M = 2000;
+  const b = 0.04;
+  const h = 0.08;
+  const rect = rectSection(b, h);
+  const fibers = flexureFibers(M, rect);
+  const reduced = rectFibersReduced(M, b, h);
+  approx(fibers.top, reduced.top, 1e-12, 'rectangle top stress matches 6M/(bh²)');
+  approx(fibers.bot, -fibers.top, 1e-12, 'a rectangle has equal tension and compression');
+  approx(fibers.top, -46.875e6, 1e-12, '2 kN·m on a 40×80 mm rectangle is 46.875 MPa');
+  const deep = flexureFibers(M, rectSection(b, 2 * h));
+  approx(deep.top, fibers.top / 4, 1e-12, 'double the depth, quarter the bending stress');
+  const wide = flexureFibers(M, rectSection(2 * b, h));
+  approx(wide.top, fibers.top / 2, 1e-12, 'double the width, halve the bending stress');
+  const bal = flexureBalance(M, rect.I, rectBands(b, h));
+  approx(bal.axial, 0, 1e-9, '∫σ dA over the rectangle is zero');
+  approx(bal.moment, M, 1e-6, '−∫y σ dA returns the moment');
+
+  const bf = 0.12;
+  const tf = 0.012;
+  const tw = 0.012;
+  const hw = 0.1;
+  const tee = teeSection(bf, tf, tw, hw);
+  ok(tee.ybar > tee.height / 2, 'the tee neutral axis sits above mid-height');
+  const tfib = flexureFibers(M, tee);
+  ok(Math.abs(tfib.bot) > Math.abs(tfib.top), 'the bottom fiber, farther from the axis, carries more stress');
+  const tbal = flexureBalance(M, tee.I, teeBands(tee, bf, tf, tw, hw));
+  approx(tbal.axial, 0, 1e-6, '∫σ dA over the tee is zero');
+  approx(tbal.moment, M, 1e-4, '−∫y σ dA returns the tee moment');
+  approx(flexureStress(M, tee.topY, tee.I), tfib.top, 1e-12, 'top fiber is −M y / I');
+  const w = 5000;
+  const L = 4;
+  const beamM = (w * L * L) / 8;
+  approx(simpleBendingStress(w, L, b, h), flexureFibers(beamM, rectSection(b, h)).bot, 1e-12,
+    'wL²/8 times 6/(bh²) matches the fiber stress');
+  approx(simpleBendingStress(2 * w, 2 * L, b, h), 8 * simpleBendingStress(w, L, b, h), 1e-12,
+    'double the span and the load: stress scales with w L²');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);

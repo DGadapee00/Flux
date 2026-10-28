@@ -18,6 +18,9 @@ const loaders = {
   mohr: () => import('./mohr.js'),
   combined: () => import('./combined.js'),
   hitch: () => import('./hitch.js'),
+  diagrams: () => import('./diagrams.js'),
+  flexure: () => import('./flexure.js'),
+  joist: () => import('./joist.js'),
 };
 
 const labs = createLabLoader(loaders);

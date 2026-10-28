@@ -52,6 +52,87 @@ export function shearMomentDiagram(L, setup, n = 400) {
   return pts;
 }
 
+/**
+ * Simply supported beam, downward point load P at distance a from the left.
+ * `at(x)` uses the same inclusion rule as internalAt: a force at the cut is on the left segment.
+ * Moment is sagging-positive. Shear is positive when the left segment is pushed up.
+ */
+export function simplePoint(P, L, a) {
+  const left = (P * (L - a)) / L;
+  const right = P - left;
+  const setup = {
+    reactions: [{ x: 0, Fy: left }, { x: L, Fy: right }],
+    loads: [{ x: a, Fy: -P }],
+  };
+  const at = (x) => {
+    let V = left;
+    let M = left * x;
+    if (a <= x + 1e-12) {
+      V -= P;
+      M -= P * (x - a);
+    }
+    if (L <= x + 1e-12) V += right;
+    return { V, M };
+  };
+  return { L, setup, at, left, right, Mmax: left * a, Vmax: Math.max(left, right), xM: a };
+}
+
+/** Simply supported beam, uniform downward load w (force per length). */
+export function simpleUniform(w, L) {
+  const left = (w * L) / 2;
+  const setup = {
+    reactions: [{ x: 0, Fy: left }, { x: L, Fy: left }],
+    dist: [{ w: () => -w, a: 0, b: L }],
+  };
+  const at = (x) => {
+    const end = Math.min(Math.max(x, 0), L);
+    const F = -w * end;
+    let V = left + F;
+    let M = left * x + F * (x - end / 2);
+    if (L <= x + 1e-12) V += left;
+    return { V, M };
+  };
+  return { L, setup, at, left, right: left, Mmax: (w * L * L) / 8, Vmax: left, xM: L / 2 };
+}
+
+/** Cantilever fixed at x = 0, downward tip load P. The wall moment is hogging. */
+export function cantileverTip(P, L) {
+  const setup = {
+    reactions: [{ x: 0, Fy: P, M: P * L }],
+    loads: [{ x: L, Fy: -P }],
+  };
+  const at = (x) => {
+    let V = P;
+    let M = P * x - P * L;
+    if (L <= x + 1e-12) V -= P;
+    return { V, M };
+  };
+  return { L, setup, at, left: P, right: 0, Mmax: -P * L, Vmax: P, xM: 0 };
+}
+
+/**
+ * Largest gap between a closed-form beam and internalAt, on a uniform grid.
+ * The scale is the beam's peak shear and moment. A support station closes to zero,
+ * and the distributed-load sum leaves a few nanonewtons there. Dividing by 1 N·m
+ * would call that leftover a failure.
+ */
+export function beamGap(model, n = 40) {
+  const scaleV = Math.max(Math.abs(model.Vmax), 1);
+  const scaleM = Math.max(Math.abs(model.Mmax), 1);
+  let gap = 0;
+  for (let i = 0; i <= n; i++) {
+    const x = (model.L * i) / n;
+    const closed = model.at(x);
+    const cut = internalAt(x, model.setup);
+    gap = Math.max(
+      gap,
+      Math.abs(closed.V - cut.V) / scaleV,
+      Math.abs(closed.M - cut.M) / scaleM,
+    );
+  }
+  return gap;
+}
+
 // ---------------------------------------------------------------- Ch 9: centroids
 
 /**
