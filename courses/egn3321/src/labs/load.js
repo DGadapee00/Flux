@@ -33,7 +33,7 @@ const loaders = {
   stopping: () => import('./stopping.js'),
   gearbox: () => import('./gearbox.js'),
   bike: () => import('./bike.js'),
-  spinup: () => import('./spinup.js'),
+  hoist: () => import('./hoist.js'),
   tipover: () => import('./tipover.js'),
   bat: () => import('./bat.js'),
 };

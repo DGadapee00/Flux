@@ -138,21 +138,31 @@ export default {
   ],
   s6: [
     {
-      tag: 'a small turbopump',
-      lab: 'spinup',
-      scenario: 'pump',
-      read: (c) => ({ I: [c.I, 9.1e-5], alpha0: [c.alpha0, 5270], wInf: [c.wInfRpm, 50600], t: [c.tRated, 1.08] }),
+      tag: 'full load, going up',
+      lab: 'hoist',
+      scenario: 'full',
+      setup(s) {
+        s.t = 0.8;
+      },
+      read: (c) => ({ T1: [c.T1, 21620], T2: [c.T2, 12775], M: [c.Mup, 2868], cruise: [c.Mcruise, 1727] }),
     },
     {
-      tag: 'bearing friction only',
-      lab: 'spinup',
-      scenario: 'pump',
-      setup(s) {
-        s.Mr = 0;
-      },
-      read: (c) => ({ alpha0: [c.alpha0, 5270], t: [c.tRated, 0.794] }),
+      tag: 'balanced, 450 kg',
+      lab: 'hoist',
+      scenario: 'balanced',
+      read: (c) => ({ cruise: [c.Mcruise + 1000, 1000], M: [c.Mup, 966] }),
     },
-    { tag: 'twice the impeller mass', lab: 'spinup', scenario: 'heavy', read: (c) => ({ I: [c.I, 1.81e-4], alpha0: [c.alpha0, 2650], wInf: [c.wInfRpm, 50600], t: [c.tRated, 2.14] }) },
-    { tag: 'a weak starter', lab: 'spinup', scenario: 'weak', read: (c) => ({ wInf: [c.wInfRpm, 42000], t: [c.tRated, 2.26] }) },
+    {
+      tag: 'the empty car, going up',
+      lab: 'hoist',
+      scenario: 'empty',
+      read: (c) => ({ cruise: [c.Mcruise, -1413], M: [c.Mup, -591] }),
+    },
+    {
+      tag: 'the sheave and the power',
+      lab: 'hoist',
+      scenario: 'full',
+      read: (c) => ({ w: [c.wRated, 5], rpm: [c.rpmRated, 47.7], t: [c.tRated, 1.6], P: [c.Pcruise, 8630] }),
+    },
   ],
 };

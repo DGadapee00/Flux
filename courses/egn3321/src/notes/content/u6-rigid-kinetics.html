@@ -25,7 +25,7 @@
     <a href="#s4"><span>04</span>Rotation about a fixed axis</a>
     <a href="#s5"><span>05</span>General plane motion</a>
     <h3>Part III · An application</h3>
-    <a href="#s6"><span>06</span>Application: turbopump spin-up</a>
+    <a href="#s6"><span>06</span>Application: a traction elevator</a>
     <h3>Reference</h3>
     <a href="#s7"><span>07</span>Formula sheet</a>
   </nav>
@@ -220,47 +220,51 @@
 </div>
 
 <section class="topic" id="s6">
-<h2><span class="n">06</span>Application: turbopump spin-up</h2>
-<p>A pump-fed rocket engine cannot start until its turbopump is turning. A small starter turbine spins the rotor up from rest to its rated speed. The rotor turns about a fixed axis, so section 4 governs it: \(\Sigma M = I\alpha\).</p>
-<p>The rotor is an impeller disk on a thin shaft. Both are solid cylinders about the axis, so \(I = \tfrac12 m_d R^2 + \tfrac12 m_s r_s^2\). The starter gives a steady torque \(M\). The bearings take a steady friction torque \(M_f\). The pump itself takes a torque that grows as the square of the speed, \(k\omega^2\). Call its value at the rated speed \(M_r\), so \(k = M_r/\omega_r^2\).</p>
-<div class="box why"><span class="tag">Why the speed levels off</span>
-<p>Moments about the axis give one equation:</p>
+<h2><span class="n">06</span>Application: a traction elevator</h2>
+<p>A traction elevator hangs its car and a counterweight from one set of ropes. The ropes pass over a drive sheave, turned by the motor. Elevator makers size the counterweight as the empty car plus 40 to 50% of the rated load. Then the motor works least near half load.</p>
+<p>Take a 1,000 kg car rated for 1,000 kg, with a counterweight at 45%: 1,450 kg. The sheave has radius 0.32 m. With the motor's rotor, its \(I\) is 12 kg·m². The car starts and stops at 1.0 m/s², under the 1.5 m/s² that would excite the ropes, and runs at 1.6 m/s.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The rope does not slip, so the car rises at \(a\), the counterweight falls at \(a\), and the sheave turns at \(\alpha = a/r\). Draw three free-body diagrams. The car, \(m_1\), and the counterweight, \(m_2\), translate; the sheave rotates about a fixed axis, section 4:</p>
 \[
-I\,\frac{d\omega}{dt} = M - M_f - k\omega^2 = A - k\omega^2, \qquad A = M - M_f.
+T_1 - m_1 g = m_1 a, \qquad m_2 g - T_2 = m_2 a, \qquad M - (T_1 - T_2)\,r = I\,\frac{a}{r}.
 \]
-<p>At the start \(\omega = 0\), so the pump takes nothing and \(\alpha_0 = A/I\). As \(\omega\) grows, the pump takes more, and \(\alpha\) falls. It reaches zero at the free-run speed, where the torques balance: \(\omega_\infty = \sqrt{A/k}\).</p>
-<p>Separate the variables. \(dt = I\,d\omega/(A - k\omega^2)\). The integral of \(1/(A - k\omega^2)\) is an inverse hyperbolic tangent:</p>
+<p>Eliminate the tensions:</p>
 \[
-\omega(t) = \omega_\infty \tanh\frac{t}{\tau}, \qquad \tau = \frac{I}{\sqrt{Ak}}, \qquad t_r = \tau\,\tanh^{-1}\frac{\omega_r}{\omega_\infty}.
+M = r\,(m_1 - m_2)\,g + \left(m_1 + m_2 + \frac{I}{r^2}\right) a\,r .
 \]
-<p>The rated speed is reached only if \(\omega_\infty > \omega_r\). That is \(A > M_r\): the starter must beat the bearings and the pump at rated speed.</p>
+<p>The first term holds the out-of-balance weight. The second accelerates every mass, and the sheave. \(I/r^2\) is the sheave's inertia seen at the rope.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a small turbopump</span>
-<p>The impeller is 0.2 kg with a 30 mm radius. The shaft is 0.08 kg with a 5 mm radius. Then \(I = \tfrac12(0.2)(0.03)^2 + \tfrac12(0.08)(0.005)^2 = 9.10\times10^{-5}\ \mathrm{kg\cdot m^2}\). The shaft adds only 1.4%.</p>
-<p>The starter gives 0.5 N·m and the bearings take 0.02 N·m, so \(A = 0.48\) N·m. At the start, \(\alpha_0 = 0.48/9.10\times10^{-5} = 5{,}270\ \mathrm{rad/s^2}\).</p>
-<p>Rated speed is 40,000 rpm, which is 4,189 rad/s. The pump takes 0.3 N·m there, so \(k = 0.3/4189^2 = 1.71\times10^{-8}\ \mathrm{N\cdot m\cdot s^2}\). Then \(\omega_\infty = \sqrt{0.48/1.71\times10^{-8}} = 5{,}298\) rad/s, or 50,600 rpm. And \(\tau = 9.10\times10^{-5}/\sqrt{0.48 \times 1.71\times10^{-8}} = 1.00\) s.</p>
-<p>The time to rated speed is \(1.00 \tanh^{-1}(4189/5298) = 1.08\) s. Stepping the equation forward in small steps gives the same 1.08 s.</p>
+<div class="box ex"><span class="tag">Worked example · full load, going up</span>
+<p>With 1,000 kg aboard, \(m_1 = 2{,}000\) kg. Speeding up at 1.0 m/s², the car's rope pulls \(T_1 = 2000(9.81 + 1.0) = 21{,}620\) N. The counterweight's pulls \(T_2 = 1450(9.81 - 1.0) = 12{,}775\) N.</p>
+<p>On the sheave, \(M = (21{,}620 - 12{,}775)(0.32) + 12(1.0/0.32) = 2{,}830 + 38 = 2{,}868\) N·m. Cruising, \(a = 0\), and \(M = 0.32(550)(9.81) = 1{,}727\) N·m. The start costs 1,141 N·m more.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · bearing friction only</span>
-<p>Take the same rotor with the pump disconnected. Only the bearings resist, so \(\alpha\) stays at 5,270 rad/s². The time to 4,189 rad/s is \(4189/5275 = 0.794\) s. The pump load costs 0.28 s, about a quarter of the start.</p>
+<div class="box ex"><span class="tag">Worked example · balanced, 450 kg</span>
+<p>With 450 kg aboard, the car side is 1,450 kg, the same as the counterweight. Cruising, both ropes pull 14,225 N, and the motor needs no torque at all.</p>
+<p>Speeding up still costs \((1450 + 1450 + 117)(1.0)(0.32) = 966\) N·m. Balance removes the weight, not the inertia. Every mass must still be accelerated, and here the counterweight is half of it.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · twice the impeller mass</span>
-<p>Double the impeller to 0.4 kg. Now \(I = 1.81\times10^{-4}\ \mathrm{kg\cdot m^2}\), and \(\alpha_0\) halves, nearly, to 2,650 rad/s². The free-run speed stays at 50,600 rpm: no torque depends on the mass. \(\tau\) doubles to 2.00 s, and the time to rated speed doubles too, to 2.14 s.</p>
-<p>Inertia sets how fast the rotor gets there. The torques set where it can get.</p>
+<div class="box ex"><span class="tag">Worked example · the empty car, going up</span>
+<p>Empty, the car is 450 kg lighter than its counterweight. Cruising, \(M = 0.32(-450)(9.81) = -1{,}413\) N·m: the motor holds the car back. Even speeding up, \(M = -1{,}413 + (1000 + 1450 + 117)(1.0)(0.32) = -591\) N·m.</p>
+<p>Released, the counterweight would lift the car at \(4{,}415/2{,}567 = 1.72\) m/s². A modern drive returns that braking energy to the building.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a weak starter</span>
-<p>Go back to the 0.2 kg impeller, with a starter of only 0.35 N·m. Then \(A = 0.33\) N·m, just above the 0.3 N·m the pump takes at rated speed. The free-run speed is \(4189\sqrt{0.33/0.3} = 4{,}393\) rad/s, or 42,000 rpm. Rated speed is now 95% of free-run.</p>
-<p>\(\tau = 1.21\) s, and \(t_r = 1.21\tanh^{-1}(0.9535) = 2.26\) s. The starter is 30% weaker, but the start takes more than twice as long. The last few percent of the climb are slow, because there the net torque is nearly zero.</p>
+<div class="box ex"><span class="tag">Worked example · the sheave and the power</span>
+<p>At 1.6 m/s, the sheave turns at \(1.6/0.32 = 5.0\) rad/s, or 47.7 rpm. At 1.0 m/s², the car reaches that speed in 1.6 s, over 1.28 m.</p>
+<p>Full and cruising, the motor gives \(M\omega = 1{,}727 \times 5.0 = 8.6\) kW. At the end of the start, \(2{,}868 \times 5.0 = 14.3\) kW. The peak comes from accelerating, not from lifting.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · no counterweight</span>
+<p>Hang the full 2,000 kg car alone. Cruising, \(M = 0.32(2000)(9.81) = 6{,}278\) N·m, 3.6 times the counterweighted 1,727 N·m. Starting, \(M = 0.32(21{,}620) + 38 = 6{,}956\) N·m. The counterweight adds mass to accelerate, but it removes far more weight to hold.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Using \(\alpha_0\) for the whole climb. That gives \(t = I\omega_r/A = 0.794\) s for the small turbopump. The answer is 1.08 s. The pump load is zero only at the start. The constant-\(\alpha\) formula from section 4 holds only when every moment is constant. Hibbeler §17.4.</p>
+<p>Taking each rope's pull as the weight below it. That gives \(M = 1{,}727 + 38 = 1{,}764\) N·m for the full start, 38% short. While the car speeds up, \(T_1 = m_1(g + a)\) and \(T_2 = m_2(g - a)\). The ropes accelerate their loads.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving the counterweight out of the inertia. It is not only a weight; it speeds up too, downward. Using \((m_1 + I/r^2)\,a\,r\) gives 2,404 N·m for the full start instead of 2,868 N·m. Hibbeler §17.4.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Write \(\Sigma M = I\,d\omega/dt\) with every moment as it really depends on \(\omega\). A moment that grows with speed sets a top speed. The inertia sets only the time scale.</p>
+<p>The counterweight cancels weight, not inertia. Cruising torque goes as \(m_1 - m_2\). Starting torque adds \((m_1 + m_2 + I/r^2)\,a\,r\), whatever the load.</p>
 </div>
-<p>In the Spin-up lab, move the impeller mass and watch the curve stretch in time but keep its top. Move the pump load and watch the top come down toward the rated line.</p>
+<p>In the Elevator lab, the three scenarios are the first three examples. Sweep the load and watch the cruising line cross zero at 450 kg. Play the run and watch the rope tensions change as the car speeds up and slows.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>A real starter turbine's torque falls as it speeds up, and the pump's torque follows \(\omega^2\) only near its design point. The shaft is rigid here: a real shaft twists, and a long one has critical speeds to pass through. Bearing friction is taken as constant. Fluid in the impeller adds inertia that this \(I\) leaves out.</p>
+<p>The rope is massless, inextensible and never slips. Real hoist ropes stretch, so the car bounces a little at each start. In a tall building the ropes weigh as much as a load and shift the balance as the car climbs; chains under the car cancel that. Real drives also limit the jerk, the rate of change of acceleration. Rail friction and motor losses are left out.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/31-1-relationship-between-torque-and-angular-acceleration/" target="_blank" rel="noopener">31.1 Relationship between Torque and Angular Acceleration</a>.</p>
 </section>
@@ -276,7 +280,7 @@ I\,\frac{d\omega}{dt} = M - M_f - k\omega^2 = A - k\omega^2, \qquad A = M - M_f.
 <li>Horizontal bar, released from rest: the pin holds \(mg/4\). At the bottom of the swing: \(5mg/2\).</li>
 <li>Rolling without slip: \(a = g\sin\theta/(1+k_G^2/R^2)\).</li>
 <li>That roll needs \(f = mg\sin\theta\cdot k/(1+k)\), with \(k = k_G^2/R^2\). It slips when this \(f\) exceeds \(\mu N\).</li>
-<li>Spin-up against a load \(k\omega^2\): \(\omega = \omega_\infty\tanh(t/\tau)\), \(\omega_\infty = \sqrt{(M - M_f)/k}\), \(\tau = I/\sqrt{(M - M_f)k}\).</li>
+<li>Car, counterweight and sheave: \(M = r(m_1 - m_2)g + (m_1 + m_2 + I/r^2)\,a\,r\), with \(T_1 = m_1(g + a)\) and \(T_2 = m_2(g - a)\).</li>
 <li>\(g = 9.81\ \mathrm{m/s^2}\). A US problem uses \(g = 32.2\ \mathrm{ft/s^2}\).</li>
 </ul>
 <p>Bearing friction and rolling resistance are left out of every line above. A body that is not uniform needs a different \(I_G\).</p>

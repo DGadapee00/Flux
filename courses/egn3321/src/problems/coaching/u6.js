@@ -7,13 +7,8 @@
  */
 import { G, G_FT } from '@flux/subjects/mechanics/constants.js';
 import { centralInertia, diskWithHole } from '@flux/subjects/mechanics/inertia.js';
-import { rotorInertia } from '../../labs/spinup.js';
 
 const DEG = Math.PI / 180;
-const RPM = (2 * Math.PI) / 60;
-const SHAFT_M = 0.08;
-const SHAFT_R = 0.005;
-const SHAFT_MF = 0.02;
 const rodG = ($) => ($.m * $.L * $.L) / 12;
 
 /** The plate-and-disk moment with one piece of it done wrong. */
@@ -112,29 +107,6 @@ export default {
         roll: 'It rolls when the friction rolling needs, mg sin θ·k/(1 + k), is within μN.',
         slip: 'It slips when rolling would need more friction than μN can supply.',
       },
-    },
-  },
-  'u6.17.spinup': {
-    traps: {
-      I: [
-        [($) => $.md * $.R * $.R + 0.5 * SHAFT_M * SHAFT_R * SHAFT_R, 'mR² is a thin ring. A solid disk keeps much of its mass near the axis: ½mR².'],
-        [($) => rotorInertia($.md, $.R * 1000, SHAFT_M, SHAFT_R * 1000), 'The radii are in millimetres. Convert them to metres before squaring.'],
-      ],
-      alpha0: [[($) => $.M / rotorInertia($.md, $.R, SHAFT_M, SHAFT_R), 'The bearings take 0.02 N·m from the start: α₀ = (M − M_f)/I.']],
-      t: [
-        [
-          ($) => (rotorInertia($.md, $.R, SHAFT_M, SHAFT_R) * ($.load === 'pump' ? $.rpm * RPM : $.rpm)) / ($.M - SHAFT_MF),
-          ($) => ($.load === 'pump'
-            ? 'That holds α at its starting value. The pump load grows with ω and slows the climb: separate the variables.'
-            : 'Convert rpm to rad/s: multiply by 2π/60.'),
-        ],
-        [
-          ($) => (rotorInertia($.md, $.R, SHAFT_M, SHAFT_R) * ($.load === 'pump' ? $.rpm * RPM : $.rpm / 60)) / ($.M - SHAFT_MF - ($.load === 'pump' ? $.Mr : 0)),
-          ($) => ($.load === 'pump'
-            ? 'That charges the pump’s rated torque the whole way. It starts at zero and grows as ω².'
-            : 'rpm/60 is in revolutions per second. One revolution is 2π rad.'),
-        ],
-      ],
     },
   },
 };

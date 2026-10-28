@@ -1,13 +1,11 @@
 /**
  * Unit 6 beyond the original drills: four conceptual questions, each option with its own reason,
- * and the unit's application, a turbopump rotor's spin-up (the `spinup` lab).
+ * and the unit's application, a traction elevator's car, counterweight and sheave (the `hoist` lab).
  */
 import { barPin, centralInertia, diskInertiaIntegral } from '@flux/subjects/mechanics/inertia.js';
 import { inertiaRodCenter, inertiaRodEnd } from '@flux/subjects/mechanics/rotation.js';
-import { rotorInertia, spinup, spinupByStepping } from '../../labs/spinup.js';
+import { accelFrom, counterweight, hoist, hoistBySystem } from '@flux/subjects/mechanics/hoist.js';
 import { G, choice, kase, num, problem, range } from '../kit.js';
-
-const SHAFT = { ms: 0.08, rs: 0.005, Mf: 0.02 };
 
 /** A choice part whose options each carry a `why` (a string, or a function of $). */
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
@@ -68,13 +66,6 @@ const factorOf = (c) => {
   const r = CHANGE[c].I / CHANGE[c].M;
   return { 4: '4', 2: '2', 1: '1', 0.5: 'half' }[r] ?? String(r);
 };
-
-/** The application problem's numbers: the rotor, then the spin-up. */
-function rotor($) {
-  const I = rotorInertia($.md, $.R, SHAFT.ms, SHAFT.rs);
-  const sp = spinup({ I, M: $.M, Mf: SHAFT.Mf, Mr: $.load === 'pump' ? $.Mr : 0, rpm: $.rpm });
-  return { I, ...sp };
-}
 
 const more = [
   problem({
@@ -227,7 +218,7 @@ const more = [
     exam: 'u6',
     ch: '17',
     kind: 'conceptual',
-    lab: 'spinup',
+    lab: 'inertia',
     src: 'Hibbeler §17.4',
     topics: ['pin'],
     vars: {
@@ -268,64 +259,104 @@ const more = [
   }),
 
   problem({
-    id: 'u6.17.spinup',
-    title: 'Application: turbopump spin-up',
+    id: 'u6.17.hoist',
+    title: 'Application: a traction elevator',
     exam: 'u6',
     ch: '17',
-    lab: 'spinup',
+    lab: 'hoist',
     src: 'Hibbeler §17.4',
     topics: ['pin'],
-    // Structure: the load is bearing friction alone (constant α), or friction plus a pump load
-    // that grows as ω² (separate the variables).
+    // Structure: the torque a start needs, or the start a torque gives; the car above or below balance.
+    // Designed numbers: the acceleration is picked, and the torque is stated to four figures.
     vars: {
-      md: range(0.1, 0.5, 0.05, 'kg'),
-      R: range(20, 50, 5, 'mm', 1e-3),
-      M: range(0.3, 0.8, 0.05, 'N·m'),
-      Mr: range(0.1, 0.25, 0.05, 'N·m'),
-      rpm: range(20000, 40000, 5000, 'rpm'),
-      load: choice(['bearing', 'only a steady bearing friction'], ['pump', 'a steady bearing friction and a pump load that grows as ω²']),
+      find: choice(['torque', 'the torque'], ['accel', 'the acceleration']),
+      car: range(800, 1200, 100, 'kg'),
+      load: range(0, 1000, 125, 'kg'),
+      a: range(0.5, 1.5, 0.25, 'm/s²'),
+      r: range(0.25, 0.4, 0.05, 'm'),
+      I: range(8, 16, 2, 'kg·m²'),
     },
-    text: (T, $) => String.raw`A turbopump rotor is an impeller disk of mass ${T.md} kg and radius ${T.R} mm on a shaft of mass 0.08 kg and radius 5 mm; treat both as solid cylinders. From rest, a starter turbine gives a steady torque of ${T.M} N·m. The rotor feels ${T.load}: the bearings take 0.02 N·m${$.load === 'pump' ? `, and the pump takes ${T.Mr} N·m at the rated speed` : ''}. Find the mass moment, the angular acceleration at the start, and the time to reach the rated ${T.rpm} rpm.`,
+    derive: ($) => {
+      const m1 = $.car + $.load;
+      const m2 = counterweight($.car, 1000, 0.45);
+      const spec = { m1, m2, r: $.r, I: $.I };
+      const Mgiven = Number(hoist({ ...spec, a: $.a }).M.toPrecision(4));
+      const acc = $.find === 'torque' ? $.a : accelFrom({ ...spec, M: Mgiven });
+      return { m1, m2, spec, Mgiven, acc, h: hoist({ ...spec, a: acc }) };
+    },
+    valid: ($) => Math.abs($.Mgiven) > 50,
+    text: (T, $) => ($.find === 'torque'
+      ? String.raw`A traction elevator's ${T.car} car carries ${T.load}. It is rated for 1,000 kg, and its counterweight is the empty car plus 45% of that. The rope runs over a drive sheave of radius ${T.r}; the sheave and the motor's rotor have $I = ${$.I}$ kg·m². The rope does not slip. Find the motor torque that starts the car upward at ${T.a}, and the tension in the car's rope while it does.`
+      : String.raw`A traction elevator's ${T.car} car carries ${T.load}. It is rated for 1,000 kg, and its counterweight is the empty car plus 45% of that. The rope runs over a drive sheave of radius ${T.r}; the sheave and the motor's rotor have $I = ${$.I}$ kg·m². The rope does not slip. From rest, the motor applies $${$.Mgiven}$ N·m to the sheave, turning it to lift the car. Find the car's acceleration and the tension in the counterweight's rope.`),
     parts: [
-      num('I', ($) => rotor($).I, 'kg·m²', { label: 'mass moment I', abs: 1e-10 }),
-      num('alpha0', ($) => rotor($).alpha0, 'rad/s²', { label: 'angular acceleration at the start' }),
-      num('t', ($) => rotor($).tRated, 's', { label: 'time to rated speed' }),
+      num('q', ($) => ($.find === 'torque' ? $.h.M : $.acc), ($) => ($.find === 'torque' ? 'N·m' : 'm/s²'), {
+        label: ($) => ($.find === 'torque' ? 'motor torque' : 'car acceleration'),
+        traps: [
+          [($) => ($.find === 'torque' ? $.h.M - ($.I * $.acc) / $.r : (($.Mgiven / $.r) - ($.m1 - $.m2) * G) / ($.m1 + $.m2)),
+            'The sheave and the rotor turn faster too. Their I α = I a/r is part of the torque.'],
+          [($) => ($.find === 'torque' ? $.r * ($.m1 - $.m2) * G + ($.I * $.acc) / $.r : (($.Mgiven / $.r) - ($.m1 - $.m2) * G) / ($.m1 + $.I / ($.r * $.r))),
+            ($) => ($.find === 'torque'
+              ? 'That takes each rope’s pull as its weight. While the car speeds up, T₁ = m₁(g + a) and T₂ = m₂(g − a).'
+              : 'The counterweight speeds up too, downward. Its mass belongs in the sum m₁ + m₂ + I/r².')],
+        ],
+      }),
+      num('T', ($) => ($.find === 'torque' ? $.h.T1 : $.h.T2), 'N', {
+        label: ($) => ($.find === 'torque' ? 'car rope tension' : 'counterweight rope tension'),
+        traps: [
+          [($) => ($.find === 'torque' ? $.m1 * G : $.m2 * G), 'That is the weight. The rope must also accelerate the body hanging from it.'],
+          [($) => ($.find === 'torque' ? $.m1 * (G - $.acc) : $.m2 * (G + $.acc)),
+            ($) => ($.find === 'torque'
+              ? 'The car speeds up upward, so the rope pulls more than the weight: T₁ = m₁(g + a).'
+              : 'The counterweight speeds up downward, so its rope pulls less than its weight: T₂ = m₂(g − a).')],
+        ],
+      }),
     ],
     level: 3,
-    hints: ['I is the sum of ½mr² for the disk and for the shaft. At the start ω = 0, so the pump takes no torque yet.',
-      String.raw`Write $I\,d\omega/dt = M - M_f - k\omega^2$, with $k = M_r/\omega_r^2$. With no pump load, α is constant.`,
-      String.raw`With the pump, separate: $\int_0^{\omega_r} d\omega/(A - k\omega^2) = t/I$, with $A = M - M_f$. The integral is an inverse hyperbolic tangent.`,
+    hints: ['Draw three free-body diagrams: the car, the counterweight, and the sheave. The rope links them: a = α r.',
+      String.raw`Car: $T_1 - m_1 g = m_1 a$. Counterweight: $m_2 g - T_2 = m_2 a$. Sheave: $M - (T_1 - T_2)\,r = I a/r$.`,
+      String.raw`Eliminate the tensions: $M = r(m_1 - m_2)g + (m_1 + m_2 + I/r^2)\,a\,r$.`,
     ],
     steps: ($, sig) => {
-      const r = rotor($);
-      const out = [
-        String.raw`$I = \tfrac12(${sig($.md)})(${sig($.R)})^2 + \tfrac12(0.08)(0.005)^2 = ${sig(r.I)}\ \mathrm{kg\cdot m^2}$.`,
-        String.raw`$\alpha_0 = (M - M_f)/I = ${sig(r.A)}/${sig(r.I)} = ${sig(r.alpha0)}\ \mathrm{rad/s^2}$.`,
-        String.raw`Rated speed: $\omega_r = ${sig($.rpm)}\times 2\pi/60 = ${sig(r.wr)}\ \mathrm{rad/s}$.`,
-      ];
-      if ($.load === 'bearing') out.push(String.raw`α stays constant, so $t = \omega_r/\alpha_0 = ${sig(r.tRated)}\ \mathrm{s}$.`);
-      else {
-        out.push(String.raw`$k = M_r/\omega_r^2 = ${sig(r.k)}$, $\omega_\infty = \sqrt{A/k} = ${sig(r.wInf)}\ \mathrm{rad/s}$, $\tau = I/\sqrt{Ak} = ${sig(r.tau)}\ \mathrm{s}$.`);
-        out.push(String.raw`$t = \tau\,\tanh^{-1}(\omega_r/\omega_\infty) = ${sig(r.tRated)}\ \mathrm{s}$.`);
+      const { h } = $;
+      const out = [String.raw`$m_1 = ${$.car} + ${$.load} = ${$.m1}$ kg, $m_2 = ${$.car} + 0.45(1000) = ${$.m2}$ kg, $I/r^2 = ${sig($.I / ($.r * $.r))}$ kg.`];
+      if ($.find === 'torque') {
+        out.push(String.raw`$M = (${sig($.r)})(${$.m1} - ${$.m2})(9.81) + (${$.m1} + ${$.m2} + ${sig($.I / ($.r * $.r))})(${$.a})(${sig($.r)}) = ${sig(h.M)}$ N·m.`);
+        out.push(String.raw`$T_1 = m_1(g + a) = ${$.m1}(9.81 + ${$.a}) = ${sig(h.T1)}$ N.`);
+      } else {
+        out.push(String.raw`$a = \dfrac{M/r - (m_1 - m_2)g}{m_1 + m_2 + I/r^2} = ${sig($.acc)}$ m/s².`);
+        out.push(String.raw`$T_2 = m_2(g - a) = ${$.m2}(9.81 - ${sig($.acc)}) = ${sig(h.T2)}$ N.`);
       }
       return out;
     },
-    // Second: I by integration over the disk and shaft; α₀ and t from the RK4 spin-up.
+    // Second: the three free-body equations as one linear system.
     second: ($) => {
-      const I = diskInertiaIntegral($.md, $.R) + diskInertiaIntegral(SHAFT.ms, SHAFT.rs);
-      const args = { I, M: $.M, Mf: SHAFT.Mf, Mr: $.load === 'pump' ? $.Mr : 0, rpm: $.rpm };
-      return { I, alpha0: ($.M - SHAFT.Mf) / I, t: spinupByStepping(args) };
+      if ($.find === 'torque') {
+        // Bisect on the torque until the system gives the asked acceleration.
+        let lo = -2e4;
+        let hi = 2e4;
+        for (let i = 0; i < 80; i++) {
+          const mid = 0.5 * (lo + hi);
+          if (hoistBySystem({ ...$.spec, M: mid }).a < $.a) lo = mid;
+          else hi = mid;
+        }
+        const M = 0.5 * (lo + hi);
+        return { q: M, T: hoistBySystem({ ...$.spec, M }).T1 };
+      }
+      const s = hoistBySystem({ ...$.spec, M: $.Mgiven });
+      return { q: s.a, T: s.T2 };
     },
     sim: {
-      scenario: 'pump',
+      scenario: 'full',
       setup(s, $) {
-        Object.assign(s, { md: $.md, R: $.R, M: $.M, Mr: $.load === 'pump' ? $.Mr : 0, rpm: $.rpm, ...SHAFT });
+        Object.assign(s, { car: $.car, load: $.load, a: $.acc, q: 0.45, r: $.r, I: $.I, t: 0.01 });
       },
-      read: (c) => ({ I: c.I, alpha0: c.alpha0, t: c.tRated }),
+      read: (c, s, $) => ($.find === 'torque' ? { q: c.Mup, T: c.T1up } : { q: s.a, T: c.T2up }),
     },
     cases: [
-      kase('Hibbeler §17.4', { md: 0.2, R: 30, M: 0.5, Mr: 0.25, rpm: 40000, load: 'bearing' }, { I: 9.1e-5, alpha0: 5274.725274725275, t: 0.7941248096574198 }),
-      kase('Hibbeler §17.4', { md: 0.2, R: 30, M: 0.5, Mr: 0.25, rpm: 40000, load: 'pump' }, { I: 9.1e-5, alpha0: 5274.725274725275, t: 1.0026129577141054 }),
+      kase('Hibbeler §17.4', { find: 'torque', car: 1000, load: 1000, a: 1, r: 0.3, I: 12 }, {
+        q: hoist({ m1: 2000, m2: 1450, r: 0.3, I: 12, a: 1 }).M,
+        T: 2000 * (G + 1),
+      }),
     ],
   }),
 ];

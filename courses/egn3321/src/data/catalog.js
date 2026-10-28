@@ -58,7 +58,7 @@ export const EXAMS = [
     title: 'Rigid-body kinetics',
     chapters: '17',
     date: 'Ch 17',
-    labs: ['inertia', 'pendulum', 'roll-slip', 'spinup'],
+    labs: ['inertia', 'pendulum', 'roll-slip', 'hoist'],
     coming: [],
   },
   {
@@ -110,7 +110,7 @@ export const LAB_META = {
   stopping: { id: 'stopping', exam: 'u3', title: 'Stopping', app: true },
   gearbox: { id: 'gearbox', exam: 'u5', title: 'Gears' },
   bike: { id: 'bike', exam: 'u5', title: 'Bike', app: true },
-  spinup: { id: 'spinup', exam: 'u6', title: 'Spin-up', app: true },
+  hoist: { id: 'hoist', exam: 'u6', title: 'Elevator', app: true },
   tipover: { id: 'tipover', exam: 'u7', title: 'Tip-over', app: true },
   spin: { id: 'spin', exam: 'u8', title: 'Spin' },
   strike: { id: 'strike', exam: 'u8', title: 'Strike' },

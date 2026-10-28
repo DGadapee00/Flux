@@ -244,6 +244,7 @@ export const PRINCIPLE_TAGS = {
   'u6.17.pin': ['rigid-newton', 'inertia'],
   'u6.17.pin-ft': ['rigid-newton', 'units'],
   'u6.17.roll': ['rigid-newton', 'rolling'],
+  'u6.17.hoist': ['rigid-newton', 'inertia'],
   'u7.18.ke': ['rigid-energy', 'inertia'],
   'u7.18.race': ['rigid-energy', 'rolling'],
   'u7.18.race-ft': ['rigid-energy', 'units'],
