@@ -6,13 +6,25 @@ import {
   relativeVelocity,
   rollingPoint,
 } from '@flux/subjects/mechanics/rigid2d.js';
-import { M, makeArrow, makeDot, makeLine, setArrow, setLine } from '../scene/draw.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { THREE, defineLab } from './define.js';
+import { C, alpha, axes, begin, chartIn, circle, dot, hidden, label, line, poly, sceneIn, seg, split, vec } from './diagram.js';
+import { defineLab } from './define2d.js';
+import { PLAY, playing } from './motion.js';
 import { bindSlider, showField, slider } from './widgets.js';
 
 const DEG = Math.PI / 180;
+
+/**
+ * The instantaneous centre of zero velocity (Hibbeler §16.6): a ladder sliding down a wall, a wheel
+ * rolling, and a four-bar linkage's coupler. Shows that the centre is where the perpendiculars to two
+ * known velocities meet, that every point of the body then moves as if it turned about it, and that
+ * the centre itself moves: play any of the three and watch it travel. For the ladder it rides a
+ * circle about the corner.
+ *
+ * Recompute: the centre from two velocity directions, then ω = v/r. Check: the motion differentiated
+ * numerically.
+ */
 const LINK = { crank: 1, coupler: 2.5, rocker: 2, ground: 3 };
 
 const SCENARIOS = [
@@ -190,36 +202,42 @@ function poseOf(state) {
   return ladderPose(state);
 }
 
-function frame(cx, cy, span) {
-  const z = Math.max(span, 0.4) * 1.7;
-  return { pos: new THREE.Vector3(cx, cy, z), target: new THREE.Vector3(cx, cy, 0) };
+/** Velocities along a body, each ω × r from the centre: the field the student should picture. */
+function field(S, pts, c, k, color) {
+  for (const p of pts) {
+    const rx = p[0] - c.icx;
+    const ry = p[1] - c.icy;
+    vec(S, p, [-c.omega * ry, c.omega * rx], k, { color, width: 1.5 });
+  }
+}
+
+/** The dashed line from a point to the centre: the perpendicular to that point's velocity. */
+function guide(S, a, c) {
+  seg(S, a, [c.icx, c.icy], { color: alpha(C.gold, 0.55), width: 1, dash: [5, 4] });
 }
 
 export default defineLab({
   id: 'ic',
   exam: 'u5',
   title: 'Centre',
+  app: false,
+  gapLimit: 1e-3,
+  keys: { ' ': 'sweep' },
+  toggles: [PLAY],
   hint: 'The instantaneous centre is the point with zero velocity. It moves as the body moves.',
   scenarios: SCENARIOS,
-  cameraFor(state) {
-    if (state.mode === 'wheel') {
-      const R = Math.max(Number(state.radius) || 0.4, 0.15);
-      return frame(0, R, R * 3.2);
-    }
-    if (state.mode === 'link') {
-      const row = linkPose(state);
-      const y = Math.min(Math.max(row.icy, 1.2), 12);
-      return frame(1.5, y * 0.42, Math.max(4.2, y + 1.5));
-    }
-    const L = Math.max(Number(state.length) || 4, 1);
-    return frame(L * 0.42, L * 0.42, L * 1.15);
-  },
   defaultState() {
     const s = {};
     apply('ladder', s);
     return s;
   },
-  applyScenario: apply,
+  applyScenario: (id, state) => {
+    apply(id, state);
+    state.anim = { playing: false };
+    state.show = { play: false };
+    state.spin = 0;
+  },
+  sweep: (state) => (state.mode === 'wheel' ? { key: 'speed', lo: 0.4, hi: 6 } : state.mode === 'link' ? { key: 'linkTheta', lo: 0, hi: 100 } : { key: 'theta', lo: 20, hi: 75 }),
   controls() {
     return `
       ${slider('ic-length', 'length (m)', 4, 2, 8, 0.1)}
@@ -229,7 +247,7 @@ export default defineLab({
       ${slider('ic-speed', 'centre (m/s)', 2, 0.4, 6, 0.1)}
       ${slider('ic-link-theta', 'crank (deg)', 60, 0, 100, 1)}
       ${slider('ic-link-omega', 'crank (rad/s)', 2, 0.5, 6, 0.1)}
-      <p class="tiny">Gold is the instantaneous centre. White arrows are velocities. The four-bar is a 1 m crank, a 2.5 m coupler, a 2 m rocker, and a 3 m ground.</p>`;
+      <p class="tiny">Gold is the instantaneous centre; the dashed gold lines are the perpendiculars that find it. White arrows are the two known velocities, faint ones the rest of the body's. The four-bar is a 1 m crank, a 2.5 m coupler, a 2 m rocker, and a 3 m ground. Play moves each at a quarter of real speed.</p>`;
   },
   bind(api) {
     const link = (id, key) => bindSlider(id, (s, val) => { s[key] = val; }, api);
@@ -244,7 +262,7 @@ export default defineLab({
   syncControls(state) {
     const set = (id, val) => {
       const el = document.getElementById(id);
-      if (el && document.activeElement !== el) el.value = String(val);
+      if (el && document.activeElement !== el) el.value = String(Math.round(Number(val) * 100) / 100);
     };
     set('ic-length', state.length);
     set('ic-theta', state.theta);
@@ -263,88 +281,156 @@ export default defineLab({
     showField('ic-link-theta', state.mode === 'link');
     showField('ic-link-omega', state.mode === 'link');
   },
-  init(ctx) {
-    const group = new THREE.Group();
-    const wall = makeLine(M.grey);
-    const floor = makeLine(M.grey);
-    const bar = makeLine(M.teal);
-    const guideA = makeLine(M.greyDark);
-    const guideB = makeLine(M.greyDark);
-    const wheel = makeLine(M.teal);
-    const ground = makeLine(M.grey);
-    const spoke = makeLine(M.greyDark);
-    const crank = makeLine(M.teal);
-    const coupler = makeLine(M.white);
-    const rocker = makeLine(M.blue);
-    const base = makeLine(M.grey);
-    const icDot = makeDot(M.gold, 0.06);
-    const mark = makeDot(M.white, 0.05);
-    const v1 = makeArrow(M.white);
-    const v2 = makeArrow(M.white);
-    group.add(wall, floor, bar, guideA, guideB, wheel, ground, spoke, crank, coupler, rocker, base, icDot, mark, v1, v2);
-    ctx.scene.add(group);
-    return { group, wall, floor, bar, guideA, guideB, wheel, ground, spoke, crank, coupler, rocker, base, icDot, mark, v1, v2 };
-  },
-  enter(ctx, handle) {
-    handle.group.visible = true;
-  },
-  exit(ctx, handle) {
-    handle.group.visible = false;
-  },
-  recompute(state, computed) {
-    Object.assign(computed, poseOf(state));
-  },
-  syncViews(state, c, ctx) {
-    const h = ctx.handle;
-    const ladder = state.mode === 'ladder';
-    const wheel = state.mode === 'wheel';
-    const link = state.mode === 'link';
-    h.wall.visible = ladder;
-    h.floor.visible = ladder;
-    h.bar.visible = ladder;
-    h.wheel.visible = wheel;
-    h.ground.visible = wheel;
-    h.spoke.visible = wheel;
-    h.crank.visible = link;
-    h.coupler.visible = link;
-    h.rocker.visible = link;
-    h.base.visible = link;
-    h.mark.visible = wheel;
-    const near = Math.hypot(c.icx, c.icy) < 14 || ladder;
-    h.guideA.visible = (ladder || link) && near;
-    h.guideB.visible = (ladder || link) && near;
-    h.icDot.visible = near;
-    if (ladder) {
-      const L = Math.max(state.length, 1);
-      setLine(h.wall, [{ x: 0, y: 0 }, { x: 0, y: L * 1.05 }]);
-      setLine(h.floor, [{ x: 0, y: 0 }, { x: L * 1.05, y: 0 }]);
-      setLine(h.bar, [{ x: c.ax, y: c.ay }, { x: c.bx, y: c.by }]);
-      setLine(h.guideA, [{ x: c.ax, y: c.ay }, { x: c.icx, y: c.icy }]);
-      setLine(h.guideB, [{ x: c.bx, y: c.by }, { x: c.icx, y: c.icy }]);
-      h.icDot.scale.setScalar(Math.max(1.4, L * 0.55));
-      setArrow(h.v1, { x: c.ax, y: c.ay }, { x: c.vx, y: c.vy }, L * 0.35);
-      setArrow(h.v2, { x: c.bx, y: c.by }, { x: c.ux, y: c.uy }, L * 0.35);
-    } else if (wheel) {
-      const R = Math.max(state.radius, 0.15);
-      setLine(h.wheel, circle(0, R, R));
-      setLine(h.ground, [{ x: -R * 1.8, y: 0 }, { x: R * 1.8, y: 0 }]);
-      setLine(h.spoke, [{ x: 0, y: R }, { x: c.icx, y: c.icy }]);
-      h.mark.position.set(0, 2 * R, 0);
-      h.icDot.scale.setScalar(Math.max(0.7, R * 2.2));
-      setArrow(h.v1, { x: 0, y: R }, { x: c.vx, y: c.vy }, R * 1.6);
-      setArrow(h.v2, { x: 0, y: 2 * R }, { x: c.ux, y: c.uy }, R * 1.6);
+  tick(dt, state) {
+    if (!playing(state)) return false;
+    const slow = 0.25 * dt;
+    if (state.mode === 'ladder') {
+      // The foot slides out at its set speed: θ̇ = −v/(L sin θ). Back to the top at the floor.
+      const L = Math.max(Number(state.length) || 4, 0.5);
+      const th = (Number(state.theta) || 60) * DEG;
+      let next = (th - (slow * (Number(state.foot) || 0)) / (L * Math.sin(th))) / DEG;
+      if (next < 20) next = 75;
+      state.theta = next;
+    } else if (state.mode === 'wheel') {
+      state.spin = ((Number(state.spin) || 0) + (slow * (Number(state.speed) || 0)) / Math.max(Number(state.radius) || 0.4, 0.05)) % (2 * Math.PI);
     } else {
-      setLine(h.base, [{ x: 0, y: 0 }, { x: c.cx, y: c.cy }]);
-      setLine(h.crank, [{ x: 0, y: 0 }, { x: c.ax, y: c.ay }]);
-      setLine(h.coupler, [{ x: c.ax, y: c.ay }, { x: c.bx, y: c.by }]);
-      setLine(h.rocker, [{ x: c.bx, y: c.by }, { x: c.cx, y: c.cy }]);
-      setLine(h.guideA, [{ x: 0, y: 0 }, { x: c.icx, y: c.icy }]);
-      setLine(h.guideB, [{ x: c.cx, y: c.cy }, { x: c.icx, y: c.icy }]);
-      h.icDot.scale.setScalar(1.3);
-      setArrow(h.v1, { x: c.ax, y: c.ay }, { x: c.vx, y: c.vy }, 1.3);
-      setArrow(h.v2, { x: c.bx, y: c.by }, { x: c.ux, y: c.uy }, 1.3);
+      let next = (Number(state.linkTheta) || 0) + (slow * (Number(state.linkOmega) || 0)) / DEG;
+      if (next > 100) next = 0;
+      state.linkTheta = next;
     }
-    h.icDot.position.set(c.icx, c.icy, 0);
+    return true;
+  },
+  compute(state) {
+    const c = poseOf(state);
+    const extra = {};
+    if (state.mode === 'ladder') {
+      // The centre's path: a circle of radius L about the corner. And the top's speed with angle.
+      extra.series = Array.from({ length: 56 }, (_, i) => {
+        const th = 20 + i;
+        return [th, ladderPose({ ...state, theta: th }).speed];
+      });
+    } else if (state.mode === 'link') {
+      const trail = [];
+      const series = [];
+      for (let th = 0; th <= 100; th += 2) {
+        const q = linkPose({ ...state, linkTheta: th });
+        if (Number.isFinite(q.icx) && Math.hypot(q.icx, q.icy) < 40 && (q.omega !== 0 || q.speed !== 0)) trail.push([q.icx, q.icy]);
+        series.push([th, q.omega]);
+      }
+      extra.trail = trail;
+      extra.series = series;
+    } else {
+      const R = Number(state.radius) || 0;
+      extra.series = [[0, 0], [2 * R, 2 * Math.abs(Number(state.speed) || 0)]];
+    }
+    return { ...c, ...extra };
+  },
+  draw(canvas, state, c) {
+    const B = begin(canvas);
+    const veiled = hidden();
+    const [left, right] = veiled ? [B.free, null] : split(B.free, 0.58);
+    const white = C.text;
+    const faint = alpha(C.text, 0.3);
+    if (state.mode === 'ladder') {
+      const L = Math.max(Number(state.length) || 4, 1);
+      const S = sceneIn(B, left, { x0: -0.35 * L, x1: 1.12 * L, y0: -0.12 * L, y1: 1.1 * L });
+      poly(S, [[-0.08 * L, -0.06 * L], [1.1 * L, -0.06 * L], [1.1 * L, 0], [0, 0], [0, 1.08 * L], [-0.08 * L, 1.08 * L]], { fill: alpha(C.text, 0.12), stroke: alpha(C.text, 0.6), width: 1.5 });
+      // The centre's path: every centre is L from the corner.
+      const arc = Array.from({ length: 31 }, (_, i) => {
+        const a = (i / 30) * (Math.PI / 2);
+        return [L * Math.cos(a), L * Math.sin(a)];
+      });
+      line(S, arc, { color: alpha(C.gold, 0.3), width: 1, dash: [3, 5] });
+      seg(S, [c.ax, c.ay], [c.bx, c.by], { color: C.teal, width: 6 });
+      guide(S, [c.ax, c.ay], c);
+      guide(S, [c.bx, c.by], c);
+      const vmax = Math.max(Math.abs(c.vx), Math.hypot(c.ux, c.uy), 1e-9);
+      const k = (0.3 * L * S.k) / vmax;
+      field(S, [0.2, 0.4, 0.6, 0.8].map((f) => [c.ax + (c.bx - c.ax) * f, c.ay + (c.by - c.ay) * f]), c, k, faint);
+      vec(S, [c.ax, c.ay], [c.vx, c.vy], k, { color: white, label: veiled ? 'v_A' : `${fig(c.vx)} m/s` });
+      vec(S, [c.bx, c.by], [c.ux, c.uy], k, { color: white, label: veiled ? 'v_B' : `${fig(c.speed)} m/s` });
+      dot(S, c.icx, c.icy, { color: C.gold, r: 6 });
+      label(S, 'IC', [c.icx, c.icy], { color: C.gold, dx: 14, dy: -10 });
+    } else if (state.mode === 'wheel') {
+      const R = Math.max(Number(state.radius) || 0.4, 0.15);
+      const S = sceneIn(B, left, { x0: -2.2 * R, x1: 2.2 * R, y0: -0.3 * R, y1: 2.6 * R });
+      seg(S, [-2.2 * R, 0], [2.2 * R, 0], { color: C.dim, width: 2 });
+      circle(S, [0, R], R, { stroke: C.teal, width: 3 });
+      const spin = -(Number(state.spin) || 0);
+      for (let i = 0; i < 4; i++) {
+        const a = spin + (i * Math.PI) / 2;
+        seg(S, [0, R], [R * Math.cos(a), R + R * Math.sin(a)], { color: alpha(C.text, 0.3), width: 1 });
+      }
+      const v = Number(state.speed) || 0;
+      const k = (0.5 * R * S.k) / Math.max(Math.abs(v), 1e-9);
+      if (Math.abs(c.omega) > 1e-9) {
+        const rim = Array.from({ length: 12 }, (_, i) => {
+          const a = (i * Math.PI) / 6;
+          return [R * Math.cos(a), R + R * Math.sin(a)];
+        }).filter((p) => p[1] > 0.05 * R && Math.abs(p[0]) + Math.abs(p[1] - 2 * R) > 0.05 * R);
+        field(S, rim, c, k, faint);
+      }
+      guide(S, [0, 2 * R], c);
+      vec(S, [0, R], [c.vx, c.vy], k, { color: white, label: veiled ? 'v_G' : `${fig(v)} m/s` });
+      vec(S, [0, 2 * R], [c.ux, c.uy], k, { color: white, label: veiled ? 'v_top' : `${fig(c.speed)} m/s` });
+      dot(S, c.icx, c.icy, { color: C.gold, r: 6 });
+      label(S, 'IC', [c.icx, c.icy], { color: C.gold, dy: 14 });
+    } else {
+      const far = Math.hypot(c.icx, c.icy) > 14;
+      const ys = [0, c.ay, c.by, c.cy, ...(far ? [] : [c.icy])];
+      const xs = [0, c.ax, c.bx, c.cx, ...(far ? [] : [c.icx])];
+      const pad = 0.6;
+      const S = sceneIn(B, left, { x0: Math.min(...xs) - pad, x1: Math.max(...xs) + pad, y0: Math.min(...ys) - pad, y1: Math.max(...ys) + pad });
+      if (c.trail && !far) line(S, c.trail, { color: alpha(C.gold, 0.3), width: 1, dash: [3, 5] });
+      seg(S, [0, 0], [c.cx, c.cy], { color: C.dim, width: 2, dash: [6, 4] });
+      seg(S, [0, 0], [c.ax, c.ay], { color: C.teal, width: 5 });
+      seg(S, [c.ax, c.ay], [c.bx, c.by], { color: white, width: 4 });
+      seg(S, [c.bx, c.by], [c.cx, c.cy], { color: C.blue, width: 5 });
+      for (const p of [[0, 0], [c.cx, c.cy]]) dot(S, p[0], p[1], { color: C.gold, r: 4 });
+      if (!far) {
+        guide(S, [0, 0], c);
+        guide(S, [c.cx, c.cy], c);
+      }
+      const vmax = Math.max(Math.hypot(c.vx, c.vy), Math.hypot(c.ux, c.uy), 1e-9);
+      const k = (0.9 * S.k) / vmax;
+      if (!far) field(S, [0.25, 0.5, 0.75].map((f) => [c.ax + (c.bx - c.ax) * f, c.ay + (c.by - c.ay) * f]), c, k, faint);
+      vec(S, [c.ax, c.ay], [c.vx, c.vy], k, { color: white, label: 'A' });
+      vec(S, [c.bx, c.by], [c.ux, c.uy], k, { color: white, label: veiled ? 'B' : `B ${fig(c.speed)} m/s` });
+      if (!far) {
+        dot(S, c.icx, c.icy, { color: C.gold, r: 6 });
+        label(S, 'IC', [c.icx, c.icy], { color: C.gold, dx: 14, dy: -10 });
+      } else {
+        label(S, 'the centre is far off: crank and rocker nearly parallel', [(Math.min(...xs) + Math.max(...xs)) / 2, Math.max(...ys) + pad / 2], { color: C.gold });
+      }
+    }
+    if (veiled) return;
+
+    // One chart per case: how a speed or ω changes as the body moves.
+    if (state.mode === 'ladder') {
+      const top = Math.max(...c.series.map((q) => q[1])) * 1.1;
+      const P = chartIn(B, right, { lo: 20, hi: 75 }, { lo: 0, hi: top });
+      axes(P, { xLabel: 'ladder angle θ (deg)', yLabel: 'top falls at (m/s)' });
+      line(P, c.series, { color: white, width: 2.5 });
+      dot(P, Number(state.theta), c.speed, { color: C.yellow, r: 5 });
+    } else if (state.mode === 'link') {
+      const ws = c.series.map((q) => q[1]);
+      // Round limits keep the zero tick clean.
+      const m = Math.ceil((Math.max(...ws.map(Math.abs)) * 1.1) / 0.2) * 0.2 || 0.2;
+      const lo = Math.min(...ws) < 0 ? -m : 0;
+      const hi = Math.max(...ws) > 0 ? m : 0.2;
+      const P = chartIn(B, right, { lo: 0, hi: 100 }, { lo, hi });
+      axes(P, { xLabel: 'crank angle (deg)', yLabel: 'coupler ω (rad/s)' });
+      line(P, [[0, 0], [100, 0]], { color: alpha(C.text, 0.4), width: 1 });
+      line(P, c.series, { color: white, width: 2.5 });
+      dot(P, Number(state.linkTheta), c.omega, { color: C.yellow, r: 5 });
+    } else {
+      const R = Number(state.radius) || 0;
+      const P = chartIn(B, right, { lo: 0, hi: 2 * R }, { lo: 0, hi: 2.2 * Math.abs(Number(state.speed) || 1) });
+      axes(P, { xLabel: 'height above the ground, on the vertical diameter (m)', yLabel: 'speed (m/s)' });
+      line(P, c.series, { color: white, width: 2.5 });
+      dot(P, R, Math.abs(Number(state.speed) || 0), { color: C.yellow, r: 5 });
+      dot(P, 2 * R, c.speed, { color: C.yellow, r: 5 });
+    }
   },
   law: () => [String.raw`\vec v_B=\vec v_A+\omega\times\vec r`, String.raw`\omega=v/r_{IC}`],
   liveRows(state, c) {
@@ -384,11 +470,3 @@ export default defineLab({
   },
 });
 
-function circle(cx, cy, radius, n = 72) {
-  const pts = [];
-  for (let i = 0; i <= n; i++) {
-    const a = (2 * Math.PI * i) / n;
-    pts.push({ x: cx + radius * Math.cos(a), y: cy + radius * Math.sin(a) });
-  }
-  return pts;
-}
