@@ -104,7 +104,7 @@ export default defineLab({
     const d = Math.max(state.d, 0.05);
     const ksiAt = (P, planes) => (P * N_PER_LBF) / (planes * Math.PI * (d * M_PER_IN) ** 2 / 4) / KSI;
     const hi = Math.max(ksiAt(Pmax, 1), 1);
-    const plot = plotIn(B, bottom, { x0: 0, x1: Pmax, y0: 0, y1: hi * 1.05 });
+    const plot = plotIn(B, bottom, { lo: 0, hi: Pmax }, { lo: 0, hi: hi * 1.05 });
     axes(plot, { xLabel: 'load (lbf)', yLabel: 'shear (ksi)' });
     const two = [];
     const one = [];
