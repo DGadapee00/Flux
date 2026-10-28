@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rigid-body impulse and momentum</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3321 · Dynamics · Unit 8 · Hibbeler Ch 19</p>
+  <h1>Rigid-body impulse and momentum</h1>
+  <p class="lede">Unit 3 gave a particle's momentum and angular momentum. This unit adds them up over a rigid body in the plane. A body's angular momentum is its spin about the mass centre plus the moment of its linear momentum. Moments acting over a time change it. Where nothing outside has a moment, it is kept: through a blow on a pinned bar, or while a spinning skater pulls in. Every number below is recomputed.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Angular momentum and impulse</h3>
+    <a href="#s1"><span>01</span>Angular momentum of a rigid body</a>
+    <a href="#s2"><span>02</span>Angular impulse</a>
+    <h3>Part II · Conservation and impact</h3>
+    <a href="#s3"><span>03</span>Conservation of angular momentum</a>
+    <a href="#s4"><span>04</span>Eccentric impact</a>
+    <h3>Part III · An application</h3>
+    <a href="#s5"><span>05</span>Application: a baseball bat</a>
+    <h3>Reference</h3>
+    <a href="#s6"><span>06</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Angular momentum and impulse</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Angular momentum of a rigid body</h2>
+<p>A body in plane motion has two kinds of momentum. Its linear momentum is \(m\vec v_G\), as if all its mass moved with the mass centre. Its angular momentum about a point P is the moment of that linear momentum about P, plus its spin about G.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Add up the particles. Particle \(i\) is at \(\vec r_G + \vec\rho_i\) from P and moves at \(\vec v_G + \vec\omega\times\vec\rho_i\). Its angular momentum about P is \((\vec r_G + \vec\rho_i)\times m_i(\vec v_G + \vec\omega\times\vec\rho_i)\).</p>
+<p>Sum over \(i\). The cross terms carry \(\sum m_i\vec\rho_i\), which is zero about the mass centre. What is left is \(\vec r_G\times m\vec v_G\) and \(\sum m_i\vec\rho_i\times(\vec\omega\times\vec\rho_i) = \sum m_i\rho_i^2\,\vec\omega = I_G\vec\omega\).</p>
+</div>
+\[
+H_G = I_G\,\omega, \qquad H_P = \vec r_{G/P}\times m\vec v_G + I_G\,\omega.
+\]
+<p>For a body turning about a fixed pin O, \(v_G = \omega r_G\), and the two terms combine by the parallel-axis theorem: \(H_O = (I_G + mr_G^2)\omega = I_O\,\omega\).</p>
+<div class="box ex"><span class="tag">Worked example · a rolling disk</span>
+<p>A 4 kg disk of radius 0.25 m rolls at 2 m/s, so \(\omega = 8\) rad/s and \(I_G = \tfrac12(4)(0.0625) = 0.125\) kg·m². About its centre, \(H_G = 0.125 \times 8 = 1\) kg·m²/s.</p>
+<p>About the contact point, the mass centre is 0.25 m up and moving sideways: \(mvR = 4(2)(0.25) = 2\). So \(H_P = 2 + 1 = 3\) kg·m²/s. That is also \(I_P\omega = (0.125 + 0.25)(8)\): the contact point is the instantaneous centre.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a swinging bar</span>
+<p>A 3 kg bar 1.2 m long swings about a pin at one end at 2.33 rad/s. Then \(I_O = 3(1.44)/3 = 1.44\) kg·m², and \(H_O = 3.36\) kg·m²/s. Split the other way: \(m v_G (L/2) = 3(1.40)(0.6) = 2.52\), and \(I_G\omega = 0.36(2.33) = 0.84\). The two add to 3.36.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Writing \(H_P = I_G\omega\) about a point that is not the mass centre. For the rolling disk that gives 1 kg·m²/s about the contact point instead of 3. The moment of the linear momentum, \(mvR\), is the larger part. Hibbeler §19.1.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The body moves in one plane, so \(\vec\omega\) and \(\vec H\) both stay square to it. In three dimensions \(\vec H\) need not point along \(\vec\omega\): a tilted wheel's angular momentum leans away from its axle. That is EML 4312's subject.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/37-3-angular-momentum-of-translation-and-rotation/" target="_blank" rel="noopener">37.3 Angular Momentum of Translation and Rotation</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-11-angular-momentum/33-2-angular-momentum-of-a-symmetric-object/" target="_blank" rel="noopener">33.2 Angular Momentum of a Symmetric Object</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/angular-momentum-and-torque/" target="_blank" rel="noopener">Lecture 3, Angular Momentum and Torque</a>.</p>
+</section>
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Angular impulse</h2>
+<p>Unit 6 wrote \(\Sigma M_G = I_G\alpha\) at an instant. Integrated over a time, it says a moment acting for a while changes the angular momentum by its time integral, the angular impulse. That form suits a motor that runs for seconds, and a blow too short to time.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>For a body turning about a fixed axle, \(\Sigma M_O = I_O\,d\omega/dt\). Multiply by \(dt\) and integrate from \(t_1\) to \(t_2\): \(\int\Sigma M_O\,dt = I_O\omega_2 - I_O\omega_1\). In general plane motion the same holds about G, beside the linear form \(\int\Sigma\vec F\,dt = m\vec v_{G2} - m\vec v_{G1}\).</p>
+</div>
+\[
+I_O\,\omega_1 + \sum\int M_O\,dt = I_O\,\omega_2, \qquad m\vec v_{G1} + \sum\int\vec F\,dt = m\vec v_{G2}.
+\]
+<div class="box ex"><span class="tag">Worked example · a flywheel spun up</span>
+<p>A 40 kg solid-disk flywheel of radius 0.5 m turns at 10 rad/s. A motor applies 30 N·m while the bearings resist with 5 N·m. Then \(I = \tfrac12(40)(0.25) = 5\) kg·m², and after 4 s, \(\omega = 10 + (30 - 5)(4)/5 = 30\) rad/s.</p>
+<p>To reach 50 rad/s from 10 rad/s takes \(5(40)/25 = 8\) s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · coasting down</span>
+<p>Switch the motor off at 30 rad/s. Only the bearings act, so the flywheel stops after \(5(30)/5 = 30\) s. Its angular momentum, 150 kg·m²/s, is what the bearings' 5 N·m must remove.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving out the bearing friction. It acts for the whole interval, so its impulse counts as fully as the motor's. Without it the flywheel above would reach 34 rad/s in 4 s instead of 30. Hibbeler §19.2.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-11-angular-momentum/34-3-angular-impulse/" target="_blank" rel="noopener">34.3 Angular Impulse</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-11-angular-momentum/34-2-torque-causes-angular-momentum-to-change-system-of-particles/" target="_blank" rel="noopener">34.2 Torque Causes Angular Momentum to Change - System of Particles</a>.</p>
+</section>
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Conservation and impact</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Conservation of angular momentum</h2>
+<p>When no outside force has a moment about a point during an interval, the angular momentum about that point does not change. Inside forces may be large: they come in equal and opposite pairs along one line, so their moments cancel.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Set \(\sum\int M_O\,dt = 0\) in section 2: \(H_{O1} = H_{O2}\). For a body whose mass moves in and out, \(I\) changes, so \(I_1\omega_1 = I_2\omega_2\).</p>
+<p>The kinetic energy is a separate question. Write it as \(T = \tfrac12 I\omega^2 = H^2/2I\). With \(H\) fixed, \(T\) grows as \(I\) shrinks. Whatever pulls the mass inward does that work.</p>
+</div>
+\[
+I_1\omega_1 = I_2\omega_2, \qquad \frac{T_2}{T_1} = \frac{I_1}{I_2}.
+\]
+<div class="box ex"><span class="tag">Worked example · pulling in two weights</span>
+<p>A person on a frictionless turntable, 2 kg·m² without the weights, holds two 2 kg weights at 0.8 m and turns at 3 rad/s. So \(I_1 = 2 + 2(2)(0.64) = 4.56\) kg·m² and \(H = 13.7\) kg·m²/s.</p>
+<p>Pull the weights in to 0.4 m: \(I_2 = 2.64\) kg·m², and \(\omega_2 = 13.68/2.64 = 5.18\) rad/s. The kinetic energy rises from 20.5 J to 35.4 J. The arms did 14.9 J of work.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an office chair</span>
+<p>A chair and rider, 3 kg·m², turn at 2 rad/s with two 3 kg dumbbells at 0.7 m. Pulled in to 0.15 m, \(I\) falls from 5.94 to 3.14 kg·m², and the chair speeds up to 3.79 rad/s. On a chair twice as hard to turn, the same pull gives only 2.91 rad/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · masses on a light rod</span>
+<p>Two 1 kg masses at 0.8 m on a rod of negligible mass turn at 2 rad/s. Pull both to 0.4 m. \(I \approx 2mr^2\) falls to a quarter, so \(\omega\) rises fourfold, to 8 rad/s, and so does the kinetic energy.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a bullet into a hanging bar</span>
+<p>A 30 g bullet at 200 m/s embeds in the end of a 5 kg bar 1.2 m long hanging from a pin at its top. The pin pushes back during the blow, so linear momentum is not kept. About the pin it has no moment: \(0.03(200)(1.2) = (2.4 + 0.03(1.44))\omega\), so \(\omega = 2.95\) rad/s.</p>
+<p>Then energy carries the swing: \(\tfrac12(2.443)(2.947)^2 = 10.6\) J lifts the bar's centre and the bullet. With \(29.8(1 - \cos\theta) = 10.6\), the bar swings to \(\theta = 49.9^\circ\). Of the bullet's 600 J, all but 10.6 J went into the embedding.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Assuming the kinetic energy is kept too. For the turntable it rises from 20.5 J to 35.4 J. Angular momentum is kept because no torque acts; energy is not, because the arms do work. Hibbeler §19.3.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Keeping linear momentum through a blow on a pinned body. For the bullet that gives \(\omega = mu/((M + m)d) = 0.994\) rad/s instead of 2.95. The pin's impulse is large and outside; only its moment about the pin vanishes. Hibbeler §19.3.</p>
+</div>
+<p>In the Spin lab, press Play. The masses go in and out: the teal line for \(H\) stays flat while \(\omega\) and the kinetic energy rise together.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The turntable has no bearing friction, and the masses are points on light arms. A real skater's arms carry mass along their length, and the ice exerts a small friction torque, so the spin slowly decays.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-11-angular-momentum/33-1-worked-example-angular-momentum-of-2-rotating-point-particles/" target="_blank" rel="noopener">33.1 Worked Example - Angular Momentum of 2 Rotating Point Particles</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-11-angular-momentum/34-4-demo-bicycle-wheel/" target="_blank" rel="noopener">34.4 Demo: Bicycle Wheel</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/angular-momentum-and-rotating-masses/" target="_blank" rel="noopener">Lecture 6, Angular Momentum and Rotating Masses</a>.</p>
+</section>
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Eccentric impact</h2>
+<p>When the line of impact misses a body's mass centre, the blow both pushes and spins it. Unit 3's restitution still relates the separation speed to the closing speed, now at the contact point, which moves with the body's rotation.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Take a bar hanging from a pin O, struck by a ball \(d\) below the pin. Through the short blow, the pin's impulse has no moment about O. So angular momentum about O is kept: \(mud = mvd + I_O\omega\).</p>
+<p>The contact point moves at \(\omega d\) after the blow. Restitution: \(\omega d - v = eu\). Solve the two together.</p>
+<p>The pin's impulse is whatever the linear momentum of ball and bar did not keep: \(J = M\omega\bar r + mv - mu\). It vanishes where the blow alone gives the mass centre its speed and the bar its spin: \(P = M\bar r\omega\) and \(Pd = I_O\omega\), so \(d = I_O/(M\bar r)\). That is the centre of percussion, \(2L/3\) for a uniform bar.</p>
+</div>
+\[
+\omega = \frac{mud(1+e)}{I_O + md^2}, \qquad v = \omega d - eu, \qquad d_{cp} = \frac{I_O}{M\bar r}.
+\]
+<div class="box ex"><span class="tag">Worked example · a bar struck at its end</span>
+<p>A 0.5 kg ball at 6 m/s strikes the end of a 3 kg bar 1.2 m long, hanging from a pin, with \(e = 0.4\). Then \(\omega = 0.5(6)(1.2)(1.4)/(1.44 + 0.72) = 2.33\) rad/s and \(v = 2.8 - 2.4 = 0.4\) m/s: the ball goes on forward, slowly.</p>
+<p>The pin's impulse is \(3(2.33)(0.6) + 0.5(0.4) - 3 = 1.4\) N·s, forward. The kinetic energy falls from 9 J to 3.96 J.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · at the centre of percussion</span>
+<p>Strike the same bar 0.8 m below the pin, two-thirds of its length. Now \(\omega = 1.91\) rad/s, the bar's centre moves at 1.15 m/s, and the pin's impulse is zero. A batter's hands feel no sting at this point of a bat.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an elastic blow</span>
+<p>Make the first blow elastic, \(e = 1\). Then \(\omega = 3.33\) rad/s, the end moves at 4 m/s, and the ball must separate at 6 m/s: it bounces back at 2 m/s. The kinetic energy, 9 J, is kept.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a bar on ice</span>
+<p>A 0.3 kg puck at 5 m/s strikes the end of a free 2 kg bar 1 m long on smooth ice, with \(e = 0.6\). Nothing outside acts, so linear momentum and angular momentum about G are both kept. The bar acts at its end like a mass \(1/(1/M + a^2/I_G) = 1/(0.5 + 1.5) = 0.5\) kg. The contact impulse is \(1.6(5)/(1/0.3 + 2) = 1.5\) N·s.</p>
+<p>So \(v_G = 0.75\) m/s, \(\omega = 1.5(0.5)/0.1667 = 4.5\) rad/s, and the puck stops dead. Struck at its centre, the bar cannot turn: it takes 2.09 N·s, moves off at 1.04 m/s, and the puck bounces back at 1.96 m/s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Writing restitution with the bar's mass-centre speed. The contact point moves at \(\omega d\), not \(\omega L/2\). For the end strike that slip gives \(v = 1.4 - 2.4 = -1.0\) m/s, a bounce that does not happen. Hibbeler §19.4.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Placing the centre of percussion at the mass centre. Struck at \(L/2\), the bar would try to translate, and the pin must hold its top back. The point with no pin impulse is \(I_O/(M\bar r)\), farther out. Hibbeler §19.4.</p>
+</div>
+<p>In the Strike lab, slide the strike point along the bar. The teal curve, the pin's impulse, crosses zero at two-thirds. Switch to the free bar and the chart shows its spin instead.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The blow is instantaneous and the bar rigid. A real bar flexes, and the ball's contact lasts a millisecond or so. Gravity's impulse over that time is negligible, which is why only the pin's impulse matters during the blow. The ball is a point with no spin and no friction at the contact.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-11-angular-momentum/34-5-worked-example-particle-hits-pivoted-ring/" target="_blank" rel="noopener">34.5 Worked Example - Particle Hits Pivoted Ring</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/angular-momentum-and-motion-of-rotating-rigid-bodies/" target="_blank" rel="noopener">Lecture 7, Angular Momentum and Motion of Rotating Rigid Bodies</a>.</p>
+</section>
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>An application</h2>
+</div>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Application: a baseball bat</h2>
+<p>A bat meets a pitch for about a millisecond. In that time the hands cannot move the bat much, so they act like a pin, and section 4 applies with the bat already turning. Baseball's rules fix the pieces: the ball weighs 5 to 5¼ oz (MLB Official Baseball Rules, 3.01), and the bat is at most 42 in long and 2.61 in thick (3.02). College bats are certified to a ball–bat coefficient of restitution, BBCOR, of at most 0.50 (NCAA).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Take the bat as a uniform rod of mass \(M\) and length \(L\), turning about the hands at \(\omega_0\) toward a pitch at \(u\). It meets the 0.145 kg ball \(d\) from the hands. About the hands: \(I\omega_0 - mud = I\omega_1 + mvd\), with \(I = ML^2/3\).</p>
+<p>The bat's contact point closes at \(\omega_0 d + u\). Restitution: \(v - \omega_1 d = e(\omega_0 d + u)\). The hands' impulse is the change in linear momentum, \(J = M(L/2)(\omega_1 - \omega_0) + m(v + u)\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 90 mph pitch, squared up</span>
+<p>A 31 oz (0.88 kg) bat 33 in (0.84 m) long swings at 55 rad/s. It meets a 90 mph (40.2 m/s) pitch 0.56 m from the hands, its centre of percussion, where it moves at 69 mph. With \(I = 0.207\) kg·m² and \(e = 0.50\), the bat slows to 20.7 rad/s and the ball leaves at 47.1 m/s, 105 mph. The hands feel no impulse.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · off the end</span>
+<p>Meet the same pitch at the very end, where the bat moves at 103 mph. The ball leaves at 104 mph, slower. Out at the end less of the bat's inertia backs the contact, so it gives way. And the hands now take an impulse of 6.3 N·s against the swing.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the best contact</span>
+<p>Scan the contact point along the bat. The exit speed peaks at about 0.8 of the length, 0.67 m from the hands, at 107 mph. That is past the centre of percussion, where the bat moves faster, and short of the end, where it gives way. The hands there take 2.6 N·s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a heavier bat</span>
+<p>Swing a 34 oz bat at the same 55 rad/s and meet the pitch two-thirds out. The ball leaves at 108 mph instead of 105. A real hitter swings a heavier bat more slowly, which is why bat weight is a trade-off.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Treating the bat as a wall: \(v = e(\omega_0 d + u)\). At the centre of percussion that gives 35.5 m/s, 79 mph, instead of 105 mph. The bat is still moving after the blow, at \(\omega_1 d = 11.6\) m/s, and the ball leaves faster than that by the rebound. Hibbeler §19.4.</p>
+</div>
+<p>In the Bat lab, move the contact point along the bat and watch the exit speed. The dashed teal line marks the centre of percussion, where the hands feel nothing.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real bat carries more of its mass in the barrel and is gripped a few inches up the handle, which moves its centre of percussion outward. It also flexes: struck away from its vibration nodes it rings, and the ringing stings more than the rigid-body impulse. The ball compresses, so \(e\) falls as the impact speed rises. Spin, contact friction and the tilt of the swing are left out.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/37-4-summary-of-angular-momentum-and-kinetic-energy/" target="_blank" rel="noopener">37.4 Summary of Angular Momentum and Kinetic Energy</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/angular-momentum-and-motion-of-rotating-rigid-bodies/" target="_blank" rel="noopener">Lecture 7, Angular Momentum and Motion of Rotating Rigid Bodies</a>.</p>
+</section>
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Formula sheet</h2>
+<ul>
+<li>\(H_G = I_G\omega\). About any point P: \(H_P = \vec r_{G/P}\times m\vec v_G + I_G\omega\). About a fixed pin: \(H_O = I_O\omega\).</li>
+<li>Angular impulse: \(I_O\omega_1 + \sum\int M_O\,dt = I_O\omega_2\), beside \(m\vec v_{G1} + \sum\int\vec F\,dt = m\vec v_{G2}\).</li>
+<li>No moment about O: \(I_1\omega_1 = I_2\omega_2\), and \(T = H^2/2I\), so \(T_2/T_1 = I_1/I_2\).</li>
+<li>Pinned bar struck at \(d\): \(\omega = mud(1+e)/(I_O + md^2)\), \(v = \omega d - eu\), pin impulse \(J = M\omega\bar r + mv - mu\).</li>
+<li>Centre of percussion: \(d = I_O/(M\bar r)\). Uniform bar: \(2L/3\).</li>
+<li>Free bar struck at \(a\) from G: \(P = (1+e)u/(1/m + 1/M + a^2/I_G)\), \(v_G = P/M\), \(\omega = Pa/I_G\).</li>
+<li>Bat about the hands: \(I\omega_0 - mud = I\omega_1 + mvd\), \(v - \omega_1 d = e(\omega_0 d + u)\).</li>
+</ul>
+<p>The blows are instantaneous and the bodies rigid and planar. Flexing, contact friction and three-dimensional spin are left out.</p>
+</section>
+</main>
+<footer>Written for Flux from Hibbeler, Engineering Mechanics: Dynamics, Chapter 19, cited by section, with MIT OCW 8.01SC and 2.003SC as Another view, and the Official Baseball Rules and the NCAA BBCOR standard for the bat. Every worked answer was recomputed.</footer>
+</body>
+</html>

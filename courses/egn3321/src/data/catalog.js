@@ -70,6 +70,15 @@ export const EXAMS = [
     labs: ['race', 'linkage', 'tipover'],
     coming: [],
   },
+  {
+    id: 'u8',
+    n: 8,
+    title: 'Rigid-body impulse and momentum',
+    chapters: '19',
+    date: 'Ch 19',
+    labs: ['spin', 'strike', 'bat'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
@@ -101,6 +110,9 @@ export const LAB_META = {
   gearbox: { id: 'gearbox', exam: 'u5', title: 'Gearbox', app: true },
   spinup: { id: 'spinup', exam: 'u6', title: 'Spin-up', app: true },
   tipover: { id: 'tipover', exam: 'u7', title: 'Tip-over', app: true },
+  spin: { id: 'spin', exam: 'u8', title: 'Spin' },
+  strike: { id: 'strike', exam: 'u8', title: 'Strike' },
+  bat: { id: 'bat', exam: 'u8', title: 'Bat', app: true },
 };
 
 export const CHAPTER_TITLES = {
@@ -112,6 +124,7 @@ export const CHAPTER_TITLES = {
   16: 'Planar kinematics of a rigid body',
   17: 'Planar kinetics of a rigid body: force and acceleration',
   18: 'Planar kinetics of a rigid body: work and energy',
+  19: 'Planar kinetics of a rigid body: impulse and momentum',
 };
 
 export function examById(id) {

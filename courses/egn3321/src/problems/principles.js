@@ -151,6 +151,20 @@ export const PRINCIPLES = {
     family: 'Rigid kinetics',
   },
 
+  // --- Impulse and momentum of a rigid body (Ch 19)
+  'rigid-momentum': {
+    name: 'Impulse and momentum of a rigid body',
+    statement: '$H_G = I_G\\omega$, and about any point $H_P = \\vec r_{G/P}\\times m\\vec v_G + I_G\\omega$. The angular impulse changes it: $H_1 + \\sum\\int M\\,dt = H_2$.',
+    cue: 'Moments acting over a time on a turning body, or its angular momentum about a point.',
+    family: 'Rigid kinetics',
+  },
+  'angular-cons': {
+    name: 'Conservation of angular momentum',
+    statement: 'With no moment about a point during an interval, $H$ about it is kept: $I_1\\omega_1 = I_2\\omega_2$, and through a blow on a pinned body, about the pin.',
+    cue: 'Mass moves in or out on a free spinner, or a blow lands on a pinned body.',
+    family: 'Rigid kinetics',
+  },
+
   // --- Tools
   units: {
     name: 'Units and dimensions',
@@ -233,4 +247,15 @@ export const PRINCIPLE_TAGS = {
   'u7.18.slots': ['rigid-energy', 'rel-velocity'],
   'u7.18.spring': ['rigid-energy'],
   'u7.18.wheel-hill': ['rigid-energy', 'rolling'],
+  'u8.19.momentum': ['rigid-momentum'],
+  'u8.19.angular-impulse': ['rigid-momentum'],
+  'u8.19.spin': ['angular-cons', 'rigid-energy'],
+  'u8.19.ballistic-bar': ['angular-cons', 'rigid-energy'],
+  'u8.19.strike': ['angular-cons', 'restitution'],
+  'u8.19.percussion': ['rigid-momentum'],
+  'u8.19.free-bar': ['momentum-cons', 'angular-cons', 'restitution'],
+  'u8.19.bat': ['angular-cons', 'restitution'],
+  'u8.19.spin-ask': ['angular-cons'],
+  'u8.19.impact-ask': ['angular-cons'],
+  'u8.19.sweet-ask': ['angular-cons'],
 };

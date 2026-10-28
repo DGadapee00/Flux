@@ -16,6 +16,7 @@ import u5More from './bank/u5-more.js';
 import u5D36 from './bank/u5-d36.js';
 import u6More from './bank/u6-more.js';
 import u7More from './bank/u7-more.js';
+import ch19 from './bank/ch19.js';
 import { foldCoaching } from '@flux/shells/practice/coaching.js';
 import { applyPrincipleTags } from '@flux/shells/practice/principles.js';
 import coaching from './coaching/index.js';
@@ -26,7 +27,7 @@ import { PRINCIPLE_TAGS } from './principles.js';
  * one file per unit, and are folded in here so the app and the checker see the same thing. Each
  * template's principle tags come from src/problems/principles.js.
  */
-export const PROBLEMS = foldCoaching(applyPrincipleTags([...units, ...ch12, ...u1Polar, ...u1More, ...ch13, ...u2D36, ...u2More, ...ch15, ...u4More, ...ch14, ...u3More, ...ch16, ...u5D36, ...u5More, ...ch17, ...u6More, ...ch18, ...u7More], PRINCIPLE_TAGS), coaching);
+export const PROBLEMS = foldCoaching(applyPrincipleTags([...units, ...ch12, ...u1Polar, ...u1More, ...ch13, ...u2D36, ...u2More, ...ch15, ...u4More, ...ch14, ...u3More, ...ch16, ...u5D36, ...u5More, ...ch17, ...u6More, ...ch18, ...u7More, ...ch19], PRINCIPLE_TAGS), coaching);
 
 const byIdMap = new Map(PROBLEMS.map((p) => [p.id, p]));
 
@@ -34,7 +35,7 @@ export const problemById = (id) => byIdMap.get(id) || null;
 export const problemsForExam = (examId) => PROBLEMS.filter((p) => p.exam === examId);
 export const problemsForLab = (labId) => PROBLEMS.filter((p) => p.lab === labId);
 
-export const CHAPTER_ORDER = ['1', '12', '13', '15', '14', '16', '17', '18'];
+export const CHAPTER_ORDER = ['1', '12', '13', '15', '14', '16', '17', '18', '19'];
 
 export const CHAPTER_TITLES = {
   1: 'Units and significant figures',
@@ -45,4 +46,5 @@ export const CHAPTER_TITLES = {
   16: 'Planar kinematics of a rigid body',
   17: 'Planar kinetics of a rigid body: force and acceleration',
   18: 'Planar kinetics of a rigid body: work and energy',
+  19: 'Planar kinetics of a rigid body: impulse and momentum',
 };

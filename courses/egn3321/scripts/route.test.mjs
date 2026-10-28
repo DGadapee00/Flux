@@ -37,7 +37,7 @@ test('an empty hash is not legacy and opens Unit 1 on rectilinear motion', () =>
   assert.equal(courseHash(route.examId, route.labId), `#/${COURSE}/u1/rectilinear`);
 });
 
-test('Unit 5 opens on the instant centre, Unit 6 on inertia, and Unit 7 on the race', () => {
+test('Unit 5 opens on the instant centre, Unit 6 on inertia, Unit 7 on the race, and Unit 8 on spin', () => {
   const u3 = parseRoute(`#/${COURSE}/u3`);
   assert.equal(u3.legacy, false);
   assert.equal(u3.examId, 'u3');
@@ -58,6 +58,9 @@ test('Unit 5 opens on the instant centre, Unit 6 on inertia, and Unit 7 on the r
   assert.equal(last.legacy, false);
   assert.equal(last.examId, 'u7');
   assert.equal(last.labId, 'race');
+  const eighth = parseRoute(`#/${COURSE}/u8`);
+  assert.equal(eighth.examId, 'u8');
+  assert.equal(eighth.labId, 'spin');
   const old = parseRoute('#/u1/rectilinear');
   assert.equal(old.legacy, true);
   assert.equal(old.examId, 'u1');
@@ -66,8 +69,8 @@ test('Unit 5 opens on the instant centre, Unit 6 on inertia, and Unit 7 on the r
 
 test('momentum comes before energy (D29), and both keep their ids', async () => {
   const { EXAMS, examById } = await import('../src/data/catalog.js');
-  assert.deepEqual(EXAMS.map((e) => e.id), ['u1', 'u2', 'u4', 'u3', 'u5', 'u6', 'u7']);
-  assert.deepEqual(EXAMS.map((e) => e.n), [1, 2, 3, 4, 5, 6, 7]);
+  assert.deepEqual(EXAMS.map((e) => e.id), ['u1', 'u2', 'u4', 'u3', 'u5', 'u6', 'u7', 'u8']);
+  assert.deepEqual(EXAMS.map((e) => e.n), [1, 2, 3, 4, 5, 6, 7, 8]);
   assert.equal(examById('u4').title, 'Impulse and momentum');
   assert.equal(examById('u3').title, 'Work and energy');
   assert.equal(parseRoute(`#/${COURSE}/u3`).labId, 'collar');
