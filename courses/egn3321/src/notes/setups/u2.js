@@ -201,18 +201,27 @@ export default {
     },
   ],
   s10: [
-    { tag: 'a student rocket', lab: 'liftoff', scenario: 'student', read: (c) => ({ T: [c.T, 392.4], a0: [c.a0, 9.81], aBo: [c.aBo, 14.7], vBo: [c.vBo, 60.4], hBo: [c.hBo, 141] }) },
+    { tag: 'a 60 mph rural highway', lab: 'highway', scenario: 'r60', read: (c) => ({ R: [c.Rdesign, 1200], Rm: [c.Rm, 365.76], vLim: [c.vLimMph, 60.21] }) },
+    { tag: 'an interstate at 70 mph', lab: 'highway', scenario: 'r70', read: (c) => ({ R: [c.Rdesign, 1815] }) },
+    { tag: 'a gentler bank at 50 mph', lab: 'highway', scenario: 'r50', read: (c) => ({ R: [c.Rdesign, 925.9] }) },
     {
-      tag: 'the clamps',
-      lab: 'liftoff',
-      scenario: 'student',
+      tag: 'the same curve, half the bank',
+      lab: 'highway',
+      scenario: 'r60',
       setup(s) {
-        s.m0 = 20;
-        s.tw = (10 + 9.81) / 9.81;
+        s.Rfix = 1200;
+        s.e = 0.04;
       },
-      read: (c) => ({ T: [c.T, 396.2], a0: [c.a0, 10.0] }),
+      read: (c) => ({ need: [c.need, 0.1592] }),
     },
-    { tag: 'an under-powered rocket', lab: 'liftoff', scenario: 'sits', read: (c) => ({ tLift: [c.tLift, 5], aBo: [c.aBo, 4.91], vBo: [c.vBo, 31.8], hBo: [c.hBo, 148] }) },
-    { tag: 'a heavy lifter', lab: 'liftoff', scenario: 'heavy', read: (c) => ({ a0: [c.a0, 1.96], aBo: [c.aBo, 5.68], vBo: [c.vBo, 219], hBo: [c.hBo, 5465] }) },
+    {
+      tag: 'a driver over the limit',
+      lab: 'highway',
+      scenario: 'r60',
+      setup(s) {
+        s.drive = 75;
+      },
+      read: (c) => ({ need: [c.need, 0.2276] }),
+    },
   ],
 };

@@ -5,7 +5,9 @@
  * Values inside `$` are SI, or US customary for the -ft template. A trap returns a value in the
  * part's own unit, like its `get`.
  */
+import { M_PER_FT } from '@flux/subjects/convert.js';
 import { G, G_FT } from '@flux/subjects/mechanics/constants.js';
+import { MPH, aashtoFmax, minRadiusFt } from '@flux/subjects/mechanics/highway.js';
 import { hangingIncline } from '@flux/subjects/mechanics/dynamics.js';
 import { inclineBlock, loopVb, pulley } from '../bank/ch13.js';
 
@@ -147,6 +149,26 @@ export default {
       N: [
         [($) => $.m * ($.r * ($.arm === 'speeding' ? $.alpha : 0) + ($.cord === 'in' ? -$.u : $.u) * $.w), 'The cross term is 2ṙθ̇, not ṙθ̇: it arrives twice when you differentiate.'],
         [($) => $.m * $.r * ($.arm === 'speeding' ? $.alpha : 0), 'That leaves out 2ṙθ̇. A collar sliding along a turning arm needs a sideways push even when the arm turns steadily.'],
+      ],
+    },
+  },
+  'u2.13.highway': {
+    traps: {
+      q: [
+        [($) => ($.find === 'R' ? ($.V * $.V) / (15 * aashtoFmax($.V)) : (($.drive * MPH) ** 2) / (G * minRadiusFt($.V, $.e, aashtoFmax($.V)) * M_PER_FT)), ($) => ($.find === 'R'
+          ? 'That leaves out the bank. The superelevation e carries part of the sideways push: R = V²/(15(e + f)).'
+          : 'That is v²/gR, what a flat road would need. The bank carries part of the push: subtract e, then divide by 1 + e v²/gR.')],
+        [($) => {
+          if ($.find === 'R') return ($.V * $.V) / ($.e + aashtoFmax($.V));
+          const q = (($.drive * MPH) ** 2) / (G * minRadiusFt($.V, $.e, aashtoFmax($.V)) * M_PER_FT);
+          return (q + $.e) / (1 - $.e * q);
+        }, ($) => ($.find === 'R'
+          ? 'That drops the 15. With V in mph and R in feet, g and the mph-to-ft/s factor make the 15: R = V²/(15(e + f)).'
+          : 'The bank helps the car round, so it lowers the friction needed: subtract e, do not add it.')],
+      ],
+      vLim: [
+        [($) => Math.sqrt((minRadiusFt($.V, $.e, aashtoFmax($.V)) * G * ($.e + aashtoFmax($.V))) / (1 - $.e * aashtoFmax($.V))) / MPH, 'That puts R in feet beside g in m/s². Convert the radius to metres first: 1 ft = 0.3048 m.'],
+        [($) => Math.sqrt(minRadiusFt($.V, $.e, aashtoFmax($.V)) * M_PER_FT * G * aashtoFmax($.V)) / MPH, 'That uses friction alone, √(Rgf). The bank adds its own share: v² = Rg(e + f)/(1 − ef).'],
       ],
     },
   },

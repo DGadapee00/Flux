@@ -28,7 +28,7 @@ const loaders = {
   strike: () => import('./strike.js'),
   // Application labs, one per unit: 2D labs on the plot stage (define2d.js), app: true.
   train: () => import('./train.js'),
-  liftoff: () => import('./liftoff.js'),
+  highway: () => import('./highway.js'),
   landing: () => import('./landing.js'),
   gearbox: () => import('./gearbox.js'),
   spinup: () => import('./spinup.js'),

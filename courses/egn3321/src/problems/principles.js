@@ -202,6 +202,7 @@ export const PRINCIPLE_TAGS = {
   'u2.13.terminal': ['drag', 'newton'],
   'u2.13.polar-eom': ['newton', 'polar-kin'],
   'u2.13.drag-ask': ['drag'],
+  'u2.13.highway': ['newton', 'curv-kin'],
   'u3.14.speed': ['energy'],
   'u3.14.rough': ['energy'],
   'u3.14.stop': ['energy'],

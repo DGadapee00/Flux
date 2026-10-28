@@ -22,7 +22,7 @@ export const EXAMS = [
     title: 'Force and acceleration',
     chapters: '13',
     date: 'Ch 13',
-    labs: ['fma', 'pulleys', 'drag', 'curve', 'liftoff'],
+    labs: ['fma', 'pulleys', 'drag', 'curve', 'highway'],
     coming: [],
   },
   {
@@ -105,7 +105,7 @@ export const LAB_META = {
   'roll-slip': { id: 'roll-slip', exam: 'u6', title: 'Roll or slip' },
   race: { id: 'race', exam: 'u7', title: 'Race' },
   linkage: { id: 'linkage', exam: 'u7', title: 'Linkage' },
-  liftoff: { id: 'liftoff', exam: 'u2', title: 'Liftoff', app: true },
+  highway: { id: 'highway', exam: 'u2', title: 'Highway', app: true },
   landing: { id: 'landing', exam: 'u3', title: 'Landing', app: true },
   gearbox: { id: 'gearbox', exam: 'u5', title: 'Gearbox', app: true },
   spinup: { id: 'spinup', exam: 'u6', title: 'Spin-up', app: true },

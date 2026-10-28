@@ -29,7 +29,7 @@
     <a href="#s8"><span>08</span>Polar equations of motion</a>
     <a href="#s9"><span>09</span>Spring on a collar</a>
     <h3>Part III · An application</h3>
-    <a href="#s10"><span>10</span>Application: leaving the pad</a>
+    <a href="#s10"><span>10</span>Application: the curve of a highway</a>
     <h3>Reference</h3>
     <a href="#s11"><span>11</span>Formula sheet</a>
   </nav>
@@ -350,7 +350,7 @@ a = g\sin\theta - \frac{k}{m}\,x, \qquad N_{\text{rod}} = mg\cos\theta.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The spring lies along the rod, so the stretch equals the coordinate measured down the rod. A spring anchored off the rod stretches by a Pythagorean length, and its force has a component into the rod. This section also leaves out friction. The rod force does no work along the rod.</p>
 </div>
-<p class="bridge">Part III puts the equation of motion to work on a rocket that loses mass as it climbs.</p>
+<p class="bridge">Part III puts the banked curve to work on a highway, where the radius is what the designer solves for.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/7-4-hookes-law/" target="_blank" rel="noopener">7.4 Hooke's Law</a>.</p>
 </section>
 <div class="part">
@@ -359,47 +359,41 @@ a = g\sin\theta - \frac{k}{m}\,x, \qquad N_{\text{rod}} = mg\cos\theta.
 </div>
 
 <section class="topic" id="s10">
-<h2><span class="n">10</span>Application: leaving the pad</h2>
-<p>A rocket on its pad is a particle with three forces: thrust up, weight down, and the pad or its clamps. Section 1's equation of motion is all it takes to say whether it lifts, and how hard it accelerates once it does.</p>
-<p>The ratio that matters is thrust to weight, \(T/W = T/(mg)\). Above 1 the rocket can leave. At or below 1 the pad holds it. The net acceleration is</p>
-\[
-a = \frac{T}{m} - g = g\left(\frac{T}{W} - 1\right).
-\]
+<h2><span class="n">10</span>Application: the curve of a highway</h2>
+<p>A highway engineer turns section 6 around. The design speed is set, and so are the bank and the side friction drivers find comfortable. The curve's radius follows. AASHTO's design policy (<em>A Policy on Geometric Design of Highways and Streets</em>, 2011) allows superelevation up to 8% on most rural highways. Its side friction factor falls with speed: 0.14 at 50 mph, 0.12 at 60 mph, 0.10 at 70 mph.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>Take up as positive. On the pad, before it moves, \(\sum F = 0\): \(T - mg - F_{\text{clamp}} = 0\), so the clamps hold \(F_{\text{clamp}} = T - mg\). Once they let go that force is gone, and \(T - mg = ma\). Divide by \(m\) and factor \(g\) out.</p>
-<p>Thrust stays roughly constant through a burn, but the mass does not. Propellant leaves at a rate \(\dot m\), so \(m = m_0 - \dot m\,t\) and \(a\) climbs as the rocket gets lighter. Integrate \(dv = (T/m - g)\,dt\) with \(dt = -dm/\dot m\):</p>
+<p>Section 6 found the top speed on a bank with friction \(f\) down the slope: \(v^2 = Rg(\sin\theta + f\cos\theta)/(\cos\theta - f\sin\theta)\). Divide top and bottom by \(\cos\theta\) and write the bank as its slope, \(e = \tan\theta\): \(v^2 = Rg(e + f)/(1 - ef)\).</p>
+<p>The product \(ef\) is about 0.01, so AASHTO drops it: \(R = v^2/(g(e + f))\). In US units, with \(V\) in mph and \(R\) in feet, \(v^2/g = (1.4667V)^2/32.2 = V^2/15.0\).</p>
+</div>
 \[
-v_{bo} = \frac{T}{\dot m}\ln\frac{m_0}{m_{bo}} - g\,t_b.
+R_{min} = \frac{V^2}{15(e + f)}\quad(\text{mph, ft}), \qquad v^2 = Rg\,\frac{e + f}{1 - ef}\quad(\text{exact}).
 \]
-<p>Unit 3 reaches the same result from momentum, with \(T/\dot m\) as the exhaust speed.</p>
+<div class="box ex"><span class="tag">Worked example · a 60 mph rural highway</span>
+<p>With \(e = 0.08\) and AASHTO's \(f = 0.12\), \(R = 60^2/(15 \times 0.20) = 1200\) ft, 366 m. The exact balance on that curve allows 60.2 mph before the car needs all of \(f\): the dropped \(ef\) term is a small margin.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a student rocket</span>
-<p>A 20 kg rocket has \(T/W = 2\) at ignition, so \(T = 2(20)(9.81) = 392.4\) N. It lifts at \(a = 9.81(2 - 1) = 9.81\) m/s². It burns 4 kg of propellant in 5 s, \(\dot m = 0.8\) kg/s.</p>
-<p>At burnout it weighs 16 kg, and \(a = 392.4/16 - 9.81 = 14.7\) m/s². The speed is \(490.5\ln(20/16) - 9.81(5) = 109.5 - 49.1 = 60.4\) m/s, at 141 m. The lab's RK4 steps give the same speed.</p>
+<div class="box ex"><span class="tag">Worked example · an interstate at 70 mph</span>
+<p>At 70 mph AASHTO allows only \(f = 0.10\). Then \(R = 4900/(15 \times 0.18) = 1815\) ft. The speed is a sixth higher, and the curve half again as wide.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · the clamps</span>
-<p>A 20 kg rocket is clamped to its pad while the motor comes up to full thrust, 396.2 N. Its weight is 196.2 N. Before release the clamps hold \(396.2 - 196.2 = 200\) N. At release, \(a = 200/20 = 10.0\) m/s².</p>
-<p>The tower is 20 m tall. From rest, \(t = \sqrt{2(20)/10} = 2.00\) s to clear it. Over those 2 s the mass changes by a few percent, so treating it as constant is fair.</p>
+<div class="box ex"><span class="tag">Worked example · a gentler bank at 50 mph</span>
+<p>A 50 mph road banked at only 4% has \(e + f = 0.04 + 0.14 = 0.18\), so \(R = 2500/2.7 = 926\) ft. At 8% it could have been 758 ft.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · an under-powered rocket</span>
-<p>A 50 kg rocket has \(T/W = 0.9\) at ignition: \(T = 441.5\) N against a 490.5 N weight. It burns 1 kg/s for 20 s. It sits on the pad until its weight falls to the thrust, at \(m = 441.5/9.81 = 45\) kg. That takes 5 s.</p>
-<p>Then it flies for the last 15 s. At burnout it weighs 30 kg and accelerates at \(441.5/30 - 9.81 = 4.91\) m/s². Its speed is \(441.5\ln(45/30) - 9.81(15) = 179.0 - 147.2 = 31.8\) m/s, at 148 m. The first 5 s of propellant bought nothing.</p>
+<div class="box ex"><span class="tag">Worked example · the same curve, half the bank</span>
+<p>Keep the 1,200 ft curve built for 60 mph, but bank it at 4%. At 60 mph, \(v^2/gR = 26.82^2/(9.81 \times 365.8) = 0.200\). The car needs \(f = (0.200 - 0.04)/(1 + 0.04 \times 0.200) = 0.159\), a third more than the design's 0.12.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a heavy lifter</span>
-<p>A 1,000 kg vehicle has \(T/W = 1.2\): \(T = 11{,}772\) N. It leaves the pad at only \(0.2g = 1.96\) m/s². Over a 60 s burn it uses 240 kg of propellant, \(\dot m = 4\) kg/s.</p>
-<p>At burnout, 760 kg, \(a = 11{,}772/760 - 9.81 = 5.68\) m/s², nearly three times the lift-off value. The speed is \(2943\ln(1000/760) - 9.81(60) = 807.7 - 588.6 = 219\) m/s, at 5.47 km.</p>
+<div class="box ex"><span class="tag">Worked example · a driver over the limit</span>
+<p>Take the 60 mph curve, banked at 8%, at 75 mph. Now \(v^2/gR = 0.313\), and the car needs \(f = (0.313 - 0.08)/(1 + 0.08 \times 0.313) = 0.228\). That is nearly twice the design value. Dry tyres can still supply it, which is why most such drivers get round; wet ones may not.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Taking \(T/m\) as the acceleration. For the student rocket that gives 19.6 m/s², twice the true 9.81 m/s². The weight acts the whole time, on the pad and in flight. A second slip is to stop at \(T/W - 1 = 1\): that is the acceleration in units of \(g\), and it still needs the 9.81. Hibbeler §13.4.</p>
+<p>Leaving out the bank: \(R = V^2/(15f)\). At 60 mph that gives 2,000 ft instead of 1,200. The superelevation carries two fifths of the sideways push. Hibbeler §13.5.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>\(a = g(T/W - 1)\). Below \(T/W = 1\) the pad holds the rocket. As propellant burns, \(m\) falls and \(a\) rises.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Mixing units in \(v^2/(g(e + f))\): the speed in mph or the radius in feet with \(g\) in m/s². The 15 in AASHTO's formula is \(g\) and the mph-to-ft/s factor together. Use it only with mph and feet. Hibbeler §13.5.</p>
 </div>
-<p>In the Liftoff lab, move the thrust-to-weight slider below 1 and watch the lift-off line move right. The shaded area under \(a(t)\) is the burnout speed.</p>
+<p>In the Highway lab, raise the design speed and watch the radius curve climb. Then lower the bank and drive the old curve: the friction readout turns red.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Drag, which grows with speed squared and matters long before burnout. Thrust also changes with altitude, as the outside pressure falls. The model keeps the rocket vertical: a real one pitches over, and part of its thrust then goes sideways.</p>
+<p>The car is a point, so load shifting onto the outer tyres is left out, and so is the spiral that eases a real curve in from the straight. AASHTO's friction factor is a comfort limit, not what tyres can grip. Snow and ice also cap \(e\) in cold regions, so a car crawling round does not slide inward.</p>
 </div>
-<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/19-5-rocket-problem-5-thrust-and-external-forces/" target="_blank" rel="noopener">19.5 Rocket Problem 5 - Thrust and External Forces</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/4-1-newtons-first-and-second-laws/" target="_blank" rel="noopener">4.1 Newton's First and Second Laws</a>.</p>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/11-1-newtons-2nd-law-and-circular-motion/" target="_blank" rel="noopener">11.1 Newton's 2nd Law and Circular Motion</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/4-1-newtons-first-and-second-laws/" target="_blank" rel="noopener">4.1 Newton's First and Second Laws</a>.</p>
 </section>
 <section class="topic" id="s11">
 <h2><span class="n">11</span>Formula sheet</h2>
@@ -416,7 +410,7 @@ v_{bo} = \frac{T}{\dot m}\ln\frac{m_0}{m_{bo}} - g\,t_b.
 <li>Pulley constraint: \(-s_A + n s_B = L\), so \(v_A = n v_B\). Load on \(n\) segments: \(a_B = (m_B g - nf)/(m_B + n^2 m_A)\).</li>
 <li>Drag \(kv^2\), \(k = \tfrac12\rho C A\): \(v_t = \sqrt{mg/k}\), \(v = v_t\tanh(gt/v_t)\). Drag \(bv\): \(v_t = mg/b\), \(\tau = m/b\).</li>
 <li>Polar: \(\Sigma F_r = m(\ddot r - r\dot\theta^2)\), \(\Sigma F_\theta = m(r\ddot\theta + 2\dot r\dot\theta)\).</li>
-<li>Rocket on the pad: clamp force \(T - mg\). Lift-off \(a = g(T/W - 1)\). Burnout speed \(v_{bo} = (T/\dot m)\ln(m_0/m_{bo}) - g\,t_b\).</li>
+<li>Highway curve: \(v^2 = Rg(e + f)/(1 - ef)\). AASHTO: \(R = V^2/(15(e + f))\), mph and ft.</li>
 </ul>
 <p>Left out of this course: central-force motion (§13.7). Polar coordinates (§13.6), dependent motion (§12.9) and drag are taught above.</p>
 <p>Each line above is the model for this unit. A heavy pulley and a stretch that is not along the rod are left out.</p>
