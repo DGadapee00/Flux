@@ -25,7 +25,7 @@
     <a href="#s4"><span>04</span>Power and efficiency</a>
     <a href="#s5"><span>05</span>Path independence</a>
     <h3>Part III · An application</h3>
-    <a href="#s6"><span>06</span>Application: crush pads on a lander</a>
+    <a href="#s6"><span>06</span>Application: stopping sight distance</a>
     <h3>Reference</h3>
     <a href="#s7"><span>07</span>Formula sheet</a>
   </nav>
@@ -204,7 +204,7 @@ U_{\text{cons}} = V_1 - V_2, \qquad T_1 + V_1 = T_2 + V_2.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The friction model on these paths has size \(\mu_k mg\), the horizontal-surface case. On a curved surface \(N\) depends on the curvature and the speed, and the friction work would need them both. The potential \(mgy\) also assumes uniform gravity, fine near the ground and wrong for orbits.</p>
 </div>
-<p class="bridge">Part III uses a force that is nearly constant, a crushing pad, to stop a lander.</p>
+<p class="bridge">Part III uses a force that is nearly constant, a car's brakes, to size a road's sight line.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/22-1-path-independence-gravity/" target="_blank" rel="noopener">22.1 Path Independence - Gravity</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/22-3-conservative-forces/" target="_blank" rel="noopener">22.3 Conservative Forces</a>.</p>
 </section>
 <div class="part">
@@ -213,40 +213,50 @@ U_{\text{cons}} = V_1 - V_2, \qquad T_1 + V_1 = T_2 + V_2.
 </div>
 
 <section class="topic" id="s6">
-<h2><span class="n">06</span>Application: crush pads on a lander</h2>
-<p>A lander's legs end in crushable pads. Aluminium honeycomb crushes at a nearly constant force once it starts to buckle. The pad turns the lander's motion into bent metal over a short stroke. Work and energy give that stroke without any time history.</p>
-<p>Two forces work on the lander between touchdown and rest. The pads push up with \(F\) over the stroke \(s\): their work is \(-F s\). The weight pulls down over the same stroke: its work is \(+mg\,s\). The final kinetic energy is zero.</p>
-<div class="box why"><span class="tag">Why the stroke has \(F - mg\) in it</span>
-<p>Write \(T_1 + \sum U_{1-2} = T_2\) from touchdown at \(v_0\) to rest:</p>
+<h2><span class="n">06</span>Application: stopping sight distance</h2>
+<p>Every US highway is built so a driver can see far enough ahead to stop. AASHTO's design policy calls that length the stopping sight distance. The driver sees an object, reacts, then brakes to rest. Work and energy give the braking part without any time history.</p>
+<p>AASHTO takes a reaction time of 2.5 s and a braking rate of 11.2 ft/s² on a level road. About 90% of drivers brake harder than that. The rate is a friction factor \(f = a/g = 11.2/32.2 = 0.348\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>During the reaction the car keeps its speed \(v\) and covers \(v\,t\). Then it brakes on a grade with \(\tan\theta = G\), up positive. The normal force is \(mg\cos\theta\), so friction is \(f\,mg\cos\theta\), acting back along the road. The weight's part along the road, \(mg\sin\theta\), also acts back when the road climbs. Write \(T_1 + \sum U_{1-2} = T_2\) from \(v\) to rest:</p>
 \[
-\tfrac12 m v_0^2 + mg\,s - F\,s = 0 \quad\Rightarrow\quad s = \frac{m v_0^2}{2(F - mg)}.
+\tfrac12 mv^2 - (f\,mg\cos\theta + mg\sin\theta)\,d_b = 0 \quad\Rightarrow\quad d_b = \frac{v^2}{2g(f\cos\theta + \sin\theta)} .
 \]
-<p>The weight is on the energy side. It keeps doing positive work while the pad crushes, so the pad must absorb more than the touchdown energy. Only \(F - mg\) stops the lander. The same net force gives the deceleration, \(a = F/m - g\), and it is constant while the pad crushes. Check: \(v_0^2 = 2as\) with that \(a\) gives the same \(s\).</p>
+<p>The mass cancels. On a downgrade \(\sin\theta\) is negative, so the weight does positive work and the stop grows. AASHTO sets \(\cos\theta \approx 1\) and \(\sin\theta \approx G\), and works in mph: \(d_b = V^2/[30(a/32.2 + G)]\). The 30 is \(2g\) over \(1.467^2\), the square of the ft/s in one mph.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a hop-test vehicle</span>
-<p>A 250 kg test vehicle touches down at 3 m/s on Earth. Its pads crush at a total of 6,952.5 N, and they are 0.30 m long. The weight is \(250 \times 9.81 = 2{,}452.5\) N, so \(F - mg = 4{,}500\) N. The touchdown energy is \(\tfrac12(250)(3^2) = 1{,}125\) J. The stroke is \(1{,}125/4{,}500 = 0.25\) m, inside the pad.</p>
-<p>The deceleration is \(4{,}500/250 = 18\) m/s², or 1.83 g. The stop takes \(3/18 = 0.167\) s. The pad pushes with 2.83 times the weight: the payload feels \(F/m = 27.8\) m/s².</p>
+<div class="box ex"><span class="tag">Worked example · 60 mph on the level</span>
+<p>The speed is \(60 \times 1.467 = 88\) ft/s. The reaction distance is \(88 \times 2.5 = 220\) ft. The braking distance is \(88^2/(2 \times 11.2) = 346\) ft. The stopping sight distance is 566 ft, and AASHTO rounds it up to 570 ft for design.</p>
+<p>Check the energy for a 4,000 lb car. Its mass is \(4000/32.2 = 124.2\) slug, so \(T_1 = \tfrac12(124.2)(88^2) = 481{,}000\) ft·lb. The braking force is \(ma = 1{,}391\) lb. Over 345.7 ft it does 481,000 ft·lb of work.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a lunar touchdown</span>
-<p>A 1,200 kg lander touches down on the Moon at 2 m/s, where \(g = 1.62\) m/s². Its pads crush at 13,944 N. The weight is only 1,944 N, so \(F - mg = 12{,}000\) N. The energy is \(\tfrac12(1{,}200)(2^2) = 2{,}400\) J, and the stroke is \(2{,}400/12{,}000 = 0.20\) m. The deceleration is \(12{,}000/1{,}200 = 10\) m/s², about 1.02 g.</p>
-<p>Fly the same lander, pad and speed on Earth. The weight becomes 11,772 N and leaves only 2,172 N to stop it. The stroke grows to \(2{,}400/2{,}172 = 1.10\) m. A pad sized for the Moon bottoms out on Earth.</p>
+<div class="box ex"><span class="tag">Worked example · 30 mph in town</span>
+<p>Halve the speed to 44 ft/s. The reaction distance halves, to 110 ft. The braking distance falls by four, to \(44^2/22.4 = 86\) ft. The total is 196 ft, and AASHTO designs for 200 ft.</p>
+<p>At 30 mph the reaction is more than half the stop. At 60 mph braking is. The brakes take kinetic energy at a fixed rate per foot, and the energy grows as \(v^2\).</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a hard landing</span>
-<p>The hop-test vehicle comes down at 4.5 m/s, half as fast again. The deceleration is still 18 m/s², because the crush force is the same. The stroke it needs is \(4.5^2/(2 \times 18) = 0.5625\) m: 2.25 times as long, the square of 1.5. The pad has 0.30 m.</p>
-<p>Over the full pad the lander loses \(2as = 2(18)(0.30) = 10.8\) m²/s² of \(v^2\). It reaches the hard stop at \(\sqrt{20.25 - 10.8} = 3.07\) m/s. To stop it inside 0.30 m, the pads would need \(F = m(v_0^2/2s + g) = 250(33.75 + 9.81) = 10{,}890\) N.</p>
+<div class="box ex"><span class="tag">Worked example · the same sight line on a 6% downgrade</span>
+<p>Now \(\theta = \tan^{-1} 0.06 = 3.43°\). The deceleration is \(11.2\cos\theta - 32.2\sin\theta = 11.18 - 1.93 = 9.25\) ft/s². From 88 ft/s, the braking distance is \(88^2/(2 \times 9.25) = 419\) ft. AASHTO's shortcut gives 417 ft.</p>
+<p>The stop needs 639 ft, but the sight line is 570 ft. Braking starts at 220 ft and has 350 ft left. At the object, \(v^2 = 88^2 - 2(9.25)(350) = 1{,}268\), so the car hits it at 35.6 ft/s, or 24 mph.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the speed a sight line allows</span>
+<p>Turn the question round: how fast may a car go on the downgrade and still stop in 570 ft? The sight line holds both parts, \(S = v\,t + v^2/2a\). Solve the quadratic for \(v\):</p>
+\[
+v = a\left(-t + \sqrt{t^2 + 2S/a}\right) = 9.25\left(-2.5 + \sqrt{6.25 + 1140/9.25}\right) = 82.1\ \text{ft/s}.
+\]
+<p>That is 56 mph. On the level the same 570 ft allows 60.3 mph. A downgrade needs a longer sight line or a lower speed.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Leaving the weight out: \(F s = \tfrac12 mv_0^2\). For the hop-test vehicle that gives \(1{,}125/6{,}952.5 = 0.162\) m, a stroke 35% short. The weight does positive work over the whole crush. On Earth, with a gentle pad, it is most of the load. Hibbeler §14.3.</p>
+<p>Squaring the speed in mph. \(60^2/(2 \times 11.2) = 161\) "ft" is less than half the true 346 ft. Convert first: 1 mph is 1.467 ft/s.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Halving the crush force does not double the stroke. The stroke goes as \(1/(F - mg)\). Halving \(F\) on the hop-test vehicle takes \(F - mg\) from 4,500 N to 1,024 N, and the stroke from 0.25 m to 1.10 m: 4.4 times.</p>
+<p>Getting the weight's sign wrong on a grade. Downhill, the weight pulls the car along the road while it brakes. Treating the 6% downgrade as an upgrade gives 295 ft instead of 419 ft.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving out the reaction. At 60 mph the car covers 220 ft before the brakes come on. The braking distance alone, 346 ft, is 39% short of the stop.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>The pad absorbs the touchdown energy and the weight's work over the stroke. The stroke goes as \(v_0^2\) and as \(1/(F - mg)\). A constant crush force gives a constant deceleration, whatever the speed.</p>
+<p>The reaction distance grows as \(v\). The braking distance grows as \(v^2\), because the kinetic energy does and the braking force does not. A downgrade adds the weight's work to the energy the brakes must take.</p>
 </div>
-<p>In the Touchdown lab, the gold line is the pad's work \(F s\) and the white line is \(\tfrac12 mv_0^2 + mg\,s\). They cross at the stroke that stops the lander. The dashed line is the end of the pad. A time-stepped crush gives the same stroke and the same speed at the stop.</p>
+<p>In the Stopping lab, the three scenarios are the first three examples. On the chart the kinetic energy falls in a straight line with distance. The speed lags: halfway through the braking distance, half the energy is gone but only 29% of the speed.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>A real honeycomb pad has a peak force before it starts to crush, then a plateau, then a steep rise when it is fully crushed. The model keeps only the plateau. It treats the lander as one rigid mass: no leg flex, no rebound, and all legs touching at once. A lander that lands on one leg first, or with sideways speed, is a Unit 7 problem.</p>
+<p>The deceleration is one steady number. AASHTO's rate is a design value most drivers beat on dry pavement; wet pavement and worn tyres do worse. The car is a point, so the load shifting onto the front wheels is left out. AASHTO measures the sight line from a driver's eye 3.5 ft up to an object 2.0 ft tall. That height sets how long a crest curve must be.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/20-2-work-by-a-constant-force/" target="_blank" rel="noopener">20.2 Work by a Constant Force</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/22-4-non-conservative-forces/" target="_blank" rel="noopener">22.4 Non-Conservative Forces</a>.</p>
 </section>
@@ -256,7 +266,7 @@ U_{\text{cons}} = V_1 - V_2, \qquad T_1 + V_1 = T_2 + V_2.
 <li>\(T_1 + \sum U_{1-2} = T_2\), with \(T = \tfrac{1}{2}mv^2\) and \(U = \int \vec F \cdot d\vec r\).</li>
 <li>Spring: \(U_s = \tfrac{1}{2}k(s_1^2 - s_2^2)\). Weight: \(U_g = -mg\,\Delta y\), with \(y\) upward.</li>
 <li>Kinetic friction on a rod: \(U_f = -\mu_k (mg\cos\theta)\, s\), with \(s\) the distance traveled.</li>
-<li>Crush pad from touchdown to rest: \(\tfrac12 mv_0^2 + mg\,s = F s\), so \(s = mv_0^2/[2(F - mg)]\) and \(a = F/m - g\).</li>
+<li>Stopping sight distance: \(\text{SSD} = v\,t + v^2/[2g(f\cos\theta + \sin\theta)]\), with \(\tan\theta = G\), up positive. AASHTO: \(t = 2.5\) s, \(a = fg = 11.2\) ft/s².</li>
 <li>Power: \(P = \vec F \cdot \vec v\). Efficiency \(\eta = P_\mathrm{out}/P_\mathrm{in}\). One horsepower is 550 ft·lb/s, or 746 W.</li>
 <li>Conservative: \(V = mgy + \tfrac12 ks^2\), and \(T_1 + V_1 = T_2 + V_2\) when nothing else works.</li>
 <li>This unit uses \(g = 9.81\) m/s², or \(32.2\) ft/s². The slug is the US mass.</li>

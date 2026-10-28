@@ -40,7 +40,7 @@ export const EXAMS = [
     title: 'Work and energy',
     chapters: '14',
     date: 'Ch 14',
-    labs: ['collar', 'paths', 'landing'],
+    labs: ['collar', 'paths', 'stopping'],
     coming: [],
   },
   {
@@ -107,7 +107,7 @@ export const LAB_META = {
   race: { id: 'race', exam: 'u7', title: 'Race' },
   linkage: { id: 'linkage', exam: 'u7', title: 'Linkage' },
   highway: { id: 'highway', exam: 'u2', title: 'Highway', app: true },
-  landing: { id: 'landing', exam: 'u3', title: 'Landing', app: true },
+  stopping: { id: 'stopping', exam: 'u3', title: 'Stopping', app: true },
   gearbox: { id: 'gearbox', exam: 'u5', title: 'Gearbox', app: true },
   spinup: { id: 'spinup', exam: 'u6', title: 'Spin-up', app: true },
   tipover: { id: 'tipover', exam: 'u7', title: 'Tip-over', app: true },

@@ -75,5 +75,5 @@ test('momentum comes before energy (D29), and both keep their ids', async () => 
   assert.equal(examById('u3').title, 'Work and energy');
   assert.equal(parseRoute(`#/${COURSE}/u3`).labId, 'collar');
   assert.equal(parseRoute(`#/${COURSE}/u4`).labId, 'impulse');
-  assert.equal(parseRoute(`#/${COURSE}/u3/landing`).examId, 'u3');
+  assert.equal(parseRoute(`#/${COURSE}/u3/stopping`).examId, 'u3');
 });
