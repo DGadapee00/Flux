@@ -80,6 +80,22 @@ export const NOTES = {
       { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u6: {
+    exam: 'u6',
+    title: 'Bending',
+    chapters: '6',
+    file: 'u6-bending.html',
+    load: () => import('./content/u6-bending.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'A point load', lab: 'diagrams', ch: ['6'], topics: ['shear-moment'], home: true },
+      { id: 's2', n: 2, title: 'A uniform load', lab: 'diagrams', ch: ['6'], topics: ['shear-moment', 'uniform'] },
+      { id: 's3', n: 3, title: 'A cantilever', lab: 'diagrams', ch: ['6'], topics: ['shear-moment', 'cantilever'] },
+      { id: 's4', n: 4, title: 'A rectangular section', lab: 'flexure', ch: ['6'], topics: ['flexure'] },
+      { id: 's5', n: 5, title: 'A tee', lab: 'flexure', ch: ['6'], topics: ['flexure', 'tee'] },
+      { id: 's6', n: 6, title: 'A floor joist', lab: 'joist', ch: ['6'], topics: ['flexure', 'english'] },
+      { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;

@@ -3,7 +3,7 @@
  * recompute says after `apply`, checked by labs-check. The panel grades the same way.
  */
 
-import { PA_PER_PSI } from '@flux/subjects/convert.js';
+import { M_PER_IN, PA_PER_PSI } from '@flux/subjects/convert.js';
 
 const watch = (id, label, get, o = {}) => ({ id, label, get, ...o });
 
@@ -480,6 +480,129 @@ export const PREDICTIONS = {
       mode: 'dir',
       expect: { peak: 'bigger', bend: 'smaller' },
       why: 'The bending stress drops to zero. The remaining stress is the small compressive tongue load, so the signed peak rises toward zero.',
+    },
+  ],
+  diagrams: [
+    {
+      id: 'dg-double',
+      scenario: 'point',
+      ask: 'The midspan load is 10 kN. Double it to 20 kN.',
+      apply(s) { s.P = 20e3; },
+      watch: [
+        watch('Mmax', 'the peak moment', (c) => c.Mmax),
+        watch('Vmax', 'the larger shear', (c) => c.Vmax),
+      ],
+      mode: 'factor',
+      expect: { Mmax: 2, Vmax: 2 },
+      why: 'A determinate beam is linear in the load. Both the 10 kN·m moment and the 5 kN shear double.',
+    },
+    {
+      id: 'dg-quarter',
+      scenario: 'point',
+      ask: 'The 10 kN load is at midspan of the 4 m beam. Move it to 1 m from the left.',
+      apply(s) { s.a = 1; },
+      watch: [
+        watch('Mmax', 'the peak moment', (c) => c.Mmax),
+        watch('Vmax', 'the larger shear', (c) => c.Vmax),
+      ],
+      mode: 'dir',
+      expect: { Mmax: 'smaller', Vmax: 'bigger' },
+      why: 'At midspan the moment is $PL/4 = 10$ kN·m and each shear is 5 kN. At 1 m the moment is $Pa(L-a)/L = 7.5$ kN·m, and the left reaction rises to 7.5 kN.',
+    },
+    {
+      id: 'dg-span',
+      scenario: 'uniform',
+      ask: 'The uniform load stays at 5 kN/m. Double the span, from 4 m to 8 m.',
+      apply(s) { s.L = 8; },
+      watch: [
+        watch('Mmax', 'the peak moment', (c) => c.Mmax),
+        watch('Vmax', 'the larger shear', (c) => c.Vmax),
+      ],
+      mode: 'factor',
+      expect: { Mmax: 4, Vmax: 2 },
+      why: 'Support shear is $wL/2$, so it doubles. Midspan moment is $wL^2/8$, so it quadruples, from 10 kN·m to 40 kN·m.',
+    },
+  ],
+  flexure: [
+    {
+      id: 'fx-depth',
+      scenario: 'rect',
+      ask: 'The rectangle is 40 mm by 80 mm, at 2 kN·m. Double the height to 160 mm.',
+      apply(s) { s.h = 0.16; },
+      watch: [
+        watch('top', 'the top-fiber stress', (c) => c.top),
+        watch('bot', 'the bottom-fiber stress', (c) => c.bot),
+      ],
+      mode: 'factor',
+      expect: { top: 0.25, bot: 0.25 },
+      why: 'Section modulus grows with $h^2$. Twice the depth cuts the stress to a quarter, from 46.9 MPa to 11.72 MPa.',
+    },
+    {
+      id: 'fx-width',
+      scenario: 'rect',
+      ask: 'Keep the 80 mm height. Double the width, from 40 mm to 80 mm.',
+      apply(s) { s.b = 0.08; },
+      watch: [
+        watch('top', 'the top-fiber stress', (c) => c.top),
+        watch('bot', 'the bottom-fiber stress', (c) => c.bot),
+      ],
+      mode: 'factor',
+      expect: { top: 0.5, bot: 0.5 },
+      why: 'Bending stress is $6M/(bh^2)$. Twice the width halves it, from 46.9 MPa to 23.4 MPa. Depth would have mattered more.',
+    },
+    {
+      id: 'fx-sign',
+      scenario: 'rect',
+      ask: 'The 2 kN·m moment sags. Reverse it, so the beam hogs.',
+      apply(s) { s.M = -s.M; },
+      watch: [
+        watch('top', 'the top-fiber stress', (c) => c.top, { signed: true }),
+        watch('bot', 'the bottom-fiber stress', (c) => c.bot, { signed: true }),
+      ],
+      mode: 'dir',
+      expect: { top: 'bigger', bot: 'smaller' },
+      why: 'Sagging compresses the top. Hogging tensions it, so the signed top stress rises through zero and the bottom stress falls through zero.',
+    },
+  ],
+  joist: [
+    {
+      id: 'jt-span',
+      scenario: 'table',
+      ask: 'Keep the floor load and the dressed 2×10. Double the span, from 14 ft to 28 ft.',
+      apply(s) { s.L *= 2; },
+      watch: [
+        watch('stress', 'the bending stress', (c) => c.stress),
+        watch('moment', 'the midspan moment', (c) => c.moment),
+      ],
+      mode: 'factor',
+      expect: { stress: 4, moment: 4 },
+      why: 'Moment is $wL^2/8$ and the section does not change, so both the moment and the stress become four times the 14 ft values. The table itself stops at 14 ft.',
+    },
+    {
+      id: 'jt-space',
+      scenario: 'table',
+      ask: 'Keep the 14 ft span. Halve the spacing, from 16 in to 8 in.',
+      apply(s) { s.space /= 2; },
+      watch: [
+        watch('stress', 'the bending stress', (c) => c.stress),
+        watch('moment', 'the midspan moment', (c) => c.moment),
+      ],
+      mode: 'factor',
+      expect: { stress: 0.5, moment: 0.5 },
+      why: 'The joist carries the strip of floor out to the neighboring joists. Half the spacing is half the line load, so 916 psi becomes 458 psi.',
+    },
+    {
+      id: 'jt-nominal',
+      scenario: 'table',
+      ask: 'Keep the span and the load. Use the nominal 2 in by 10 in rectangle instead of the dressed size.',
+      apply(s) { s.b = 2 * M_PER_IN; s.h = 10 * M_PER_IN; },
+      watch: [
+        watch('stress', 'the bending stress', (c) => c.stress),
+        watch('moment', 'the midspan moment', (c) => c.moment),
+      ],
+      mode: 'dir',
+      expect: { stress: 'smaller', moment: 'same' },
+      why: 'The moment depends on the load and the span, not on the section. The nominal rectangle is larger than 1.5 in by 9.25 in, so the same moment is a lower stress, 588 psi instead of 916.',
     },
   ],
 };

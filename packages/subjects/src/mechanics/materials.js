@@ -363,3 +363,86 @@ export function hitchSides(W, H, d, arm) {
   const peak = Math.abs(compression) >= Math.abs(tension) ? compression : tension;
   return { axial, bend, tension, compression, peak, vm: Math.abs(peak) };
 }
+
+/**
+ * Bending stress σ = −M y / I. y is positive upward from the neutral axis.
+ * A sagging moment (M > 0) compresses the top fiber.
+ */
+export const flexureStress = (M, y, I) => (-M * y) / I;
+
+/** Rectangle of width b and height h, bent about the horizontal centroidal axis. */
+export function rectSection(b, h) {
+  const I = (b * h ** 3) / 12;
+  const c = h / 2;
+  return { A: b * h, I, c, ybar: 0, S: I / c, topY: c, botY: -c };
+}
+
+/**
+ * T section, flange on top. Widths and thicknesses are bf, tf, tw, hw (web height
+ * below the flange). ybar is measured up from the bottom of the web.
+ */
+export function teeSection(bf, tf, tw, hw) {
+  const Af = bf * tf;
+  const Aw = tw * hw;
+  const yf = hw + tf / 2;
+  const yw = hw / 2;
+  const A = Af + Aw;
+  const ybar = (Af * yf + Aw * yw) / A;
+  const I = (bf * tf ** 3) / 12 + Af * (yf - ybar) ** 2 + (tw * hw ** 3) / 12 + Aw * (yw - ybar) ** 2;
+  const topY = hw + tf - ybar;
+  const botY = -ybar;
+  return { A, I, ybar, topY, botY, cTop: topY, cBot: -botY, height: hw + tf };
+}
+
+/** Top and bottom fiber stresses for a sagging-positive moment. */
+export function flexureFibers(M, section) {
+  return {
+    top: flexureStress(M, section.topY, section.I),
+    bot: flexureStress(M, section.botY, section.I),
+    I: section.I,
+  };
+}
+
+/**
+ * The rectangle formula 6M/(b h²), both fibers equal in magnitude.
+ * Top is compression when M sags.
+ */
+export function rectFibersReduced(M, b, h) {
+  const mag = (6 * M) / (b * h * h);
+  return { top: -mag, bot: mag };
+}
+
+/** Tensile bending stress on a simple span with uniform load w: (w L²/8) times 6/(b h²). */
+export const simpleBendingStress = (w, L, b, h) => (3 * w * L * L) / (4 * b * h * h);
+
+/**
+ * Integrate σ dA and −y σ dA over horizontal bands { y0, y1, width } measured
+ * from the neutral axis. The axial force should be 0 and the moment should return M.
+ */
+export function flexureBalance(M, I, bands, n = 4000) {
+  let axial = 0;
+  let moment = 0;
+  for (const band of bands) {
+    const h = (band.y1 - band.y0) / n;
+    for (let i = 0; i < n; i++) {
+      const y = band.y0 + (i + 0.5) * h;
+      const dA = band.width * Math.abs(h);
+      const s = flexureStress(M, y, I);
+      axial += s * dA;
+      moment += -y * s * dA;
+    }
+  }
+  return { axial, moment };
+}
+
+/** Bands of a rectangle centered on the neutral axis, and of a tee, for the integral check. */
+export function rectBands(b, h) {
+  return [{ y0: -h / 2, y1: h / 2, width: b }];
+}
+
+export function teeBands(section, bf, tf, tw, hw) {
+  return [
+    { y0: -section.ybar, y1: hw - section.ybar, width: tw },
+    { y0: hw - section.ybar, y1: hw + tf - section.ybar, width: bf },
+  ];
+}

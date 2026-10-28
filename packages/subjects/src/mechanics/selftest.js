@@ -15,7 +15,8 @@ import { solveTruss, memberForce, zeroForceMembers, sectionCheck, stateOf, metho
 import { inclineState, inclineRange, tipOrSlip, beltTension } from './friction.js';
 import { solveFrame, solveLinear } from './frames.js';
 import {
-  internalAt, shearMomentDiagram, composite, centroidUnderCurve, centroidOfLine, rect, tri, semi,
+  internalAt, shearMomentDiagram, simplePoint, simpleUniform, cantileverTip, beamGap,
+  composite, centroidUnderCurve, centroidOfLine, rect, tri, semi,
   quarter, pappusArea, pappusVolume, parallelAxis, rectI, triI, circI, compositeI, IxUnderCurve,
   IyUnderCurve, radiusOfGyration,
 } from './sections.js';
@@ -234,6 +235,25 @@ console.log('\nInternal loads (Ch 7)');
   };
   approx(internalAt(L / 2, uni).M, (w0 * L * L) / 8, 1e-4, 'uniformly loaded beam: M_max = wL²/8');
   approx(internalAt(L / 2, uni).V, 0, 1e-6, 'and the shear is zero there');
+
+  const point = simplePoint(P, L, L / 2);
+  approx(point.Mmax, (P * L) / 4, 1e-12, 'closed form: central load, M = PL/4');
+  approx(beamGap(point), 0, 1e-9, 'simple point load matches internalAt along the span');
+  const off = simplePoint(P, L, L / 4);
+  approx(off.Mmax, (P * (L / 4) * (3 * L / 4)) / L, 1e-12, 'off-center moment is P a (L−a)/L');
+  approx(off.Vmax, (3 * P) / 4, 1e-12, 'the near reaction is the larger shear');
+  approx(beamGap(off), 0, 1e-9, 'off-center point load matches internalAt');
+  const spread = simpleUniform(w0, L);
+  approx(spread.Mmax, (w0 * L * L) / 8, 1e-12, 'closed form: uniform load, M = wL²/8');
+  approx(spread.at(L / 2).V, 0, 1e-12, 'and V is zero at midspan');
+  approx(beamGap(spread), 0, 1e-9, 'uniform load matches internalAt along the span');
+  approx(beamGap(simpleUniform(20e3, 4)), 0, 1e-9, 'a heavy uniform load still matches internalAt');
+  const tip = cantileverTip(P, L);
+  approx(tip.Mmax, -P * L, 1e-12, 'cantilever wall moment is −PL');
+  approx(beamGap(tip), 0, 1e-9, 'cantilever matches internalAt along the span');
+  const heavy = simplePoint(2 * P, L, L / 2);
+  approx(heavy.Mmax, 2 * point.Mmax, 1e-12, 'double the point load, double the moment');
+  approx(beamGap(heavy), 0, 1e-9, 'and the doubled load still matches internalAt');
 }
 
 console.log('\nCentroids and Pappus (Ch 9)');
