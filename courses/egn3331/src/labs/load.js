@@ -11,6 +11,9 @@ const loaders = {
   axial: () => import('./axial.js'),
   indeterminate: () => import('./indeterminate.js'),
   rail: () => import('./rail.js'),
+  strain3: () => import('./strain3.js'),
+  vessel: () => import('./vessel.js'),
+  tank: () => import('./tank.js'),
 };
 
 const labs = createLabLoader(loaders);

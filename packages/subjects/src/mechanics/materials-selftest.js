@@ -5,10 +5,11 @@
  */
 import {
   axialStress, axialStiffness, barElongation, bearing, bilinear, bilinearEnergy, circleArea,
-  constrainedThermal, factorOfSafety, fixedFixed, fixedFixedByStiffness, hookeStrain, hookeStress,
+  constrainedThermal, cylinderSplitForce, factorOfSafety, fixedFixed, fixedFixedByStiffness,
+  hooke3, hooke3Deviator, hookeStrain, hookeStress, hoopFromSplit, sphereFromCap,
   inclined, inclinedByCut, lateralStrain, normalStrain, permanentSet, pinSegments, pinShear,
   rambergOsgood, rambergStress, requiredArea, requiredDiameter, resilience, shearModulus,
-  taperedElongation, transform, uniaxialVolumeStrain, volumeChange,
+  taperedElongation, thinCylinder, thinSphere, transform, uniaxialVolumeStrain, volumeChange,
 } from './materials.js';
 import { solveTruss, memberForce, methodOfSections } from './truss.js';
 
@@ -220,6 +221,40 @@ console.log('Axial deformation');
   const shut = constrainedThermal(200e9, 12e-6, 50, { L: 2, gap: 0.0005 });
   approx(shut.stress, -200e9 * (12e-6 * 50 - 0.0005 / 2), 1e-6, 'after the gap closes, only the extra expansion stresses the bar');
   approx(axialStiffness(200e-6, 200e9, 1), 40e6, 1e-12, 'AE/L for a 200 mm² bar one metre long is 40 MN/m');
+}
+
+console.log('Thin wall and three-dimensional Hooke');
+{
+  const cyl = thinCylinder(2e6, 0.2, 0.005);
+  approx(cyl.hoop, 80e6, 1e-12, 'hoop stress pr/t is 80 MPa');
+  approx(cyl.axial, 40e6, 1e-12, 'longitudinal stress is half the hoop');
+  approx(hoopFromSplit(2e6, 0.2, 0.005), cyl.hoop, 1e-12, 'the half-cylinder balance returns pr/t');
+  approx(thinCylinder(4e6, 0.2, 0.005).hoop, 2 * cyl.hoop, 1e-12, 'double the pressure, double the hoop stress');
+  let split = 0;
+  const n = 8000;
+  const dth = Math.PI / n;
+  for (let i = 0; i < n; i++) {
+    const th = (i + 0.5) * dth;
+    split += 2e6 * Math.sin(th) * 0.2 * 1 * dth;
+  }
+  approx(split, cylinderSplitForce(2e6, 0.2, 1), 1e-6, '∫ p sinθ r dθ matches 2prL');
+  const sph = thinSphere(2e6, 0.2, 0.005);
+  approx(sph.hoop, 40e6, 1e-12, 'a sphere membrane stress is pr/2t');
+  approx(sph.hoop, sph.axial, 1e-12, 'the two sphere stresses match');
+  approx(sphereFromCap(2e6, 0.2, 0.005), sph.hoop, 1e-12, 'the cap balance returns pr/2t');
+  const E = 200e9;
+  const nu = 0.3;
+  const uni = hooke3(100e6, 0, 0, E, nu);
+  approx(uni.ex, hookeStrain(100e6, E), 1e-12, 'one stress reduces to σ/E');
+  approx(uni.ey, lateralStrain(nu, uni.ex), 1e-12, 'the side strain is −ν times the axial strain');
+  const dev = hooke3Deviator(80e6, -20e6, 40e6, E, nu);
+  const dir = hooke3(80e6, -20e6, 40e6, E, nu);
+  approx(dev.ex, dir.ex, 1e-12, 'the deviator split matches generalized Hooke in x');
+  approx(dev.ey, dir.ey, 1e-12, 'the deviator split matches generalized Hooke in y');
+  approx(dev.ez, dir.ez, 1e-12, 'the deviator split matches generalized Hooke in z');
+  const hydro = hooke3(50e6, 50e6, 50e6, E, nu);
+  approx(hydro.vol, (150e6 * (1 - 2 * nu)) / E, 1e-12, 'hydrostatic volume strain is (1−2ν) times the stress sum over E');
+  approx(hooke3(100e6, 100e6, 0, E, nu).ex, 0.7 * uni.ex, 1e-12, 'an equal transverse tension cuts the axial strain to 0.7');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);

@@ -3,6 +3,8 @@
  * recompute says after `apply`, checked by labs-check. The panel grades the same way.
  */
 
+import { PA_PER_PSI } from '@flux/subjects/convert.js';
+
 const watch = (id, label, get, o = {}) => ({ id, label, get, ...o });
 
 export const PREDICTIONS = {
@@ -310,6 +312,90 @@ export const PREDICTIONS = {
       mode: 'dir',
       expect: { stress: 'smaller', free: 'bigger' },
       why: 'At +20 °C the rail has not yet closed a 6 mm gap, so the stress is zero. At +40 °C the gap is shut and the extra expansion is compression.',
+    },
+  ],
+  vessel: [
+    {
+      id: 'vs-pressure',
+      scenario: 'cylinder',
+      ask: 'The closed cylinder is at 2 MPa. Raise the pressure to 4 MPa.',
+      apply(s) { s.p = 4e6; },
+      watch: [
+        watch('hoop', 'the hoop stress', (c) => c.hoop),
+        watch('axial', 'the longitudinal stress', (c) => c.axial),
+      ],
+      mode: 'factor',
+      expect: { hoop: 2, axial: 2 },
+      why: 'Both stresses are proportional to pressure. Doubling $p$ doubles $pr/t$ and $pr/(2t)$.',
+    },
+    {
+      id: 'vs-thick',
+      scenario: 'cylinder',
+      ask: 'Stay at 2 MPa. Double the wall from 5 mm to 10 mm.',
+      apply(s) { s.t = 0.01; },
+      watch: [
+        watch('hoop', 'the hoop stress', (c) => c.hoop),
+        watch('axial', 'the longitudinal stress', (c) => c.axial),
+      ],
+      mode: 'factor',
+      expect: { hoop: 0.5, axial: 0.5 },
+      why: 'Both stresses have the thickness in the denominator. Twice the wall carries the same pressure at half the stress.',
+    },
+  ],
+  strain3: [
+    {
+      id: 's3-bi',
+      scenario: 'uni',
+      ask: 'The only stress is σx = 100 MPa. Add an equal tension σy = 100 MPa.',
+      apply(s) { s.sy = 100e6; },
+      watch: [
+        watch('ex', 'the strain along x', (c) => c.ex),
+        watch('ey', 'the strain along y', (c) => c.ey, { signed: true }),
+      ],
+      mode: 'dir',
+      expect: { ex: 'smaller', ey: 'bigger' },
+      why: 'An equal transverse tension subtracts $\\nu\\sigma$ from the axial strain, so $\\varepsilon_x$ falls from $\\sigma/E$ to $(1-\\nu)\\sigma/E$. The y strain was a contraction and becomes a stretch.',
+    },
+    {
+      id: 's3-hydro',
+      scenario: 'uni',
+      ask: 'From uniaxial tension, set σy and σz equal to σx as well.',
+      apply(s) { s.sy = 100e6; s.sz = 100e6; },
+      watch: [
+        watch('ex', 'the strain along x', (c) => c.ex),
+        watch('vol', 'the volume strain', (c) => c.vol),
+      ],
+      mode: 'dir',
+      expect: { ex: 'smaller', vol: 'bigger' },
+      why: 'Each new tension reduces εx through Poisson. The volume strain grows because two more tensile strains are added, and at ν = 0.3 tension still increases the volume.',
+    },
+  ],
+  tank: [
+    {
+      id: 'tk-half',
+      scenario: 'service',
+      ask: 'The cylinder is at its 240 psi service pressure. Drop the pressure to 120 psi.',
+      apply(s) { s.p = s.p / 2; },
+      watch: [
+        watch('hoop', 'the hoop stress', (c) => c.hoop),
+        watch('axial', 'the longitudinal stress', (c) => c.axial),
+      ],
+      mode: 'factor',
+      expect: { hoop: 0.5, axial: 0.5 },
+      why: 'The radius and the wall stay fixed, so both stresses are proportional to pressure.',
+    },
+    {
+      id: 'tk-warm',
+      scenario: 'service',
+      ask: 'Leave the geometry. Drop the pressure from 240 psi to 40 psi.',
+      apply(s) { s.p = 40 * PA_PER_PSI; },
+      watch: [
+        watch('hoop', 'the hoop stress', (c) => c.hoop),
+        watch('axial', 'the longitudinal stress', (c) => c.axial),
+      ],
+      mode: 'dir',
+      expect: { hoop: 'smaller', axial: 'smaller' },
+      why: '40 psi is a sixth of the service pressure, so both stresses fall. The ratio is not one of the factor choices, but the direction is down.',
     },
   ],
 };

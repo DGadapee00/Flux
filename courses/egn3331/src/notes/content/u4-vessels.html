@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Multiaxial stress and pressure vessels</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 4 · Ch 8, 10</p>
+  <h1>Multiaxial stress and pressure vessels</h1>
+  <p class="lede">A thin closed cylinder carries twice as much stress around the wall as along it. A sphere carries only the smaller of those two. A stress in a second direction changes the strain along the first. Every number below is computed by the course library and checked a second way.</p>
+  <div class="legend">
+    <span><i class="swatch" style="background: var(--gold)"></i>Hoop stress, and \(\sigma_x/E\)</span>
+    <span><i class="swatch" style="background: var(--teal)"></i>Longitudinal stress, and \(\varepsilon_x\)</span>
+    <span><i class="swatch" style="background: var(--yellow)"></i>The point you are on</span>
+  </div>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>A closed thin cylinder</a>
+    <a href="#s2"><span>02</span>A thin sphere</a>
+    <a href="#s3"><span>03</span>A propane cylinder</a>
+    <a href="#s4"><span>04</span>Hooke's law in three directions</a>
+    <a href="#s5"><span>05</span>The stress a gauge does not name</a>
+    <a href="#s6"><span>06</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+<h3>Part 1 · Pressure in a thin wall <span class="sub">| cylinder | sphere | Reference</span></h3>
+
+<section class="topic" id="s1">
+<h2><span class="n">01</span>A closed thin cylinder</h2>
+<p>Cut a closed cylinder lengthwise and look at one half. The pressure acts on a projected rectangle of width \(2r\) and length \(L\). The force is \(2prL\). Two walls, each of thickness \(t\), carry that force. The stress around the wall is the hoop stress:</p>
+\[
+\sigma_h = \frac{pr}{t}
+\]
+<p>A second cut, across the cylinder, exposes a circle of radius \(r\). The pressure on that circle is \(\pi r^{2}p\). The wall around the rim has area \(2\pi rt\). The stress along the cylinder is half the hoop stress:</p>
+\[
+\sigma_l = \frac{pr}{2t}
+\]
+<p>Roylance §2.2 derives both from these free bodies. The radius is the inside radius. The wall is thin when \(r/t\) is large, so the stress is nearly the same through the thickness. Double the pressure or the radius and both stresses double. Double the thickness and both halve. The ratio of hoop to longitudinal stays 2.</p>
+<div class="box why"><span class="tag">Why the hoop is the larger one</span>
+<p>The lengthwise split sees the pressure on a diameter. The cross cut sees the pressure on a circle, and the circle's area grows with \(r^{2}\) while the rim grows with \(r\). Those two balances differ by exactly a factor of two for a closed tube. An open tube has no longitudinal stress from the pressure, because nothing closes the ends.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a closed cylinder at 2 MPa</span>
+<p>The Thin-walled vessel lab's cylinder has an inside radius of 200 mm and a wall of 5 mm. The pressure is 2 MPa. Then \(r/t = 40\), which is thin. With pressure in MPa and radius and thickness in mm, \(pr/t\) is the hoop stress in MPa:</p>
+\[
+\sigma_h = 80\ \mathrm{MPa}
+\]
+<p>The longitudinal stress is half of that:</p>
+\[
+\sigma_l = 40\ \mathrm{MPa}
+\]
+<p>The gold line on the lab chart is the hoop stress. The teal line is the longitudinal stress. Both pass through the origin, because a gauge pressure of zero leaves both stresses at zero.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the thinner cylinder</span>
+<p>The same pressure and radius with a wall of 2 mm gives \(r/t = 100\). Then \(pr/t\) is 2 MPa times \(200/2\):</p>
+\[
+\sigma_h = 200\ \mathrm{MPa}
+\]
+<p>The longitudinal stress is</p>
+\[
+\sigma_l = 100\ \mathrm{MPa}
+\]
+<p>Only the thickness changed. The hoop stress is still twice the longitudinal stress.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the diameter in place of the radius doubles both answers. Reporting the longitudinal stress when the hoop was asked, or the hoop when the longitudinal was asked, swaps the factor of two. The two stresses are equal only in a sphere.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec14/">2.001 lecture 15</a> cuts the same cylinder and the same sphere.</p>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>A thin sphere</h2>
+<p>Cut a sphere through a great circle and keep one hemisphere. The pressure on the flat circle is \(\pi r^{2}p\). The wall around the rim has area \(2\pi rt\). Every membrane direction is that same cut, so there is one stress:</p>
+\[
+\sigma = \frac{pr}{2t}
+\]
+<p>That is the cylinder's longitudinal stress, and half of the cylinder's hoop stress, at the same pressure, radius and thickness. A sphere has no direction that carries \(pr/t\).</p>
+<div class="box ex"><span class="tag">Worked example · the sphere at the same pressure</span>
+<p>The lab's sphere uses the cylinder's numbers: 2 MPa, inside radius 200 mm, wall 5 mm. The cap balance \(\pi r^{2}p = \sigma(2\pi rt)\) gives</p>
+\[
+\sigma = 40\ \mathrm{MPa}
+\]
+<p>The hoop and longitudinal readouts match. On the chart the two lines lie on top of each other.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The cylinder hoop formula \(pr/t\) is twice the sphere stress. Using the diameter and also forgetting the 2 in the denominator is four times the sphere stress. A sphere does not have a larger hoop and a smaller longitudinal stress.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The wall is thin, the pressure is uniform, and the vessel has no nozzle, weld or head. A thick wall varies through the thickness, and that needs a different solution. A cylinder with domed ends is a cylinder in the long shell and a different shape near the head.</p>
+</div>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 2 · A tank, then three stresses <span class="sub">| propane | Hooke | gauge | Reference</span></h3>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>A propane cylinder</h2>
+<p>A grill tank is a closed thin cylinder. Manchester Tank model 10504 is 12.2 in in outside diameter and is marked DOT-4BA240. The 240 in that mark is the service pressure in psig. 49 CFR 178.51 requires a wall of at least 0.078 in when the outside diameter exceeds 6 in. This lab uses that minimum, not a measured wall.</p>
+<p>The inside radius is half the outside diameter, minus the wall. In inches that is \(6.1 - 0.078\):</p>
+\[
+r = 6.022\ \mathrm{in}
+\]
+<p>The ratio \(r/t\) is about 77, so the thin-wall formulas apply. With pressure in psi and radius and thickness in inches, \(pr/t\) is the hoop stress in psi. Divide by 1000 for ksi. The longitudinal stress is half.</p>
+<div class="box ex"><span class="tag">Worked example · service pressure on the minimum wall</span>
+<p>At 240 psi the hoop stress is pressure times 6.022 in, divided by 0.078 in, then divided by 1000:</p>
+\[
+\sigma_h = 18.53\ \mathrm{ksi}
+\]
+<p>The longitudinal stress is half:</p>
+\[
+\sigma_l = 9.26\ \mathrm{ksi}
+\]
+<p>Half the service pressure halves both stresses. The chart is a straight line through the origin. The same arithmetic in pascals and metres is the second method, and it agrees.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The outside diameter is not the radius. Putting 12.2 in into \(pr/t\) is about twice the hoop stress. Leaving the answer in psi and labeling it ksi is a factor of 1000. Using the outside radius instead of the inside radius misses by only about one percent, which is inside the grading tolerance, so it is not a useful check.</p>
+</div>
+<div class="box out"><span class="tag">What the course model leaves out</span>
+<p>The shell is a long closed cylinder at the service pressure. A real cylinder has domed heads, a weld, and a wall that may be thicker than the 0.078 in minimum. The regulation computes a wall stress with \(S = P(1.3D^{2} + 0.4d^{2})/(D^{2} - d^{2})\) and applies it at the test pressure. The course answer stays \(pr/t\) at the pressure in hand. The lab prints the regulation formula beside the thin-wall stresses so the two can be compared. It is not the answer.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Hooke's law in three directions</h2>
+<p>One normal stress produces a strain \(\sigma/E\) along itself and a strain \(-\nu\sigma/E\) on the sides. When all three normal stresses are present, each strain takes its own stress directly and subtracts Poisson's share of the other two. Roylance §2.2 writes the three equations. With \(E = 200\) GPa and \(\nu = 0.30\) in the lab:</p>
+\[
+\varepsilon_x = \frac{1}{E}\left[\sigma_x - \nu(\sigma_y + \sigma_z)\right]
+\]
+<p>Swap the labels for \(\varepsilon_y\) and \(\varepsilon_z\). The volume change per unit volume is the sum of the three normal strains. A pure pressure, with \(\sigma_x = \sigma_y = \sigma_z\), gives a volume strain \((1 - 2\nu)\) times \(3\sigma/E\). Shear strains follow the shear stresses and do not appear in these three.</p>
+<div class="box why"><span class="tag">The same law, split another way</span>
+<p>Write the stress as a hydrostatic piece, the average of the three normal stresses, plus whatever is left. The average changes the volume through \((1-2\nu)/E\). The leftover changes the shape through \((1+\nu)/E\). Adding those two pieces returns the same three strains. The lab checks the two writings against each other at every slider stop.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · uniaxial tension at 100 MPa</span>
+<p>The Three-dimensional Hooke lab's uniaxial case is \(\sigma_x = 100\) MPa and the other two stresses zero. Then \(\varepsilon_x = \sigma_x/E\):</p>
+\[
+\varepsilon_x = 0.5\ \text{millistrain}
+\]
+<p>The side strains are \(-\nu\) times that:</p>
+\[
+\varepsilon_y = -0.15\ \text{millistrain}
+\]
+<p>The gold dashed line on the chart is \(\sigma_x/E\). With \(\sigma_y = 0\) the teal curve crosses it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · equal biaxial tension</span>
+<p>Add \(\sigma_y = 100\) MPa and keep \(\sigma_z = 0\). The axial strain loses \(\nu\sigma_y\):</p>
+\[
+\varepsilon_x = 0.35\ \text{millistrain}
+\]
+<p>That is \((1-\nu)\sigma_x/E\). The strain along \(y\) equals it. An equal transverse tension makes the axial strain smaller than \(\sigma_x/E\). An equal transverse compression makes it larger, because the minus sign in front of \(\nu\) flips.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · hydrostatic tension</span>
+<p>Set all three stresses to 100 MPa. Each strain subtracts \(\nu\) times the other two, which is \(0.6\) times 100 MPa:</p>
+\[
+\varepsilon_x = 0.2\ \text{millistrain}
+\]
+<p>The three normal strains are equal, so the volume strain is three times 0.2 millistrain:</p>
+\[
+\frac{\Delta V}{V} = 600\ \mu\varepsilon
+\]
+<p>A second tensile stress does not have to increase \(\varepsilon_x\). Here two of them cut it from 0.5 millistrain to 0.2.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(\sigma_x/E\) while a transverse stress is present drops the Poisson terms. Adding \(\nu\sigma_y\) instead of subtracting it reverses the effect of a transverse tension. The side strain of a uniaxial bar, \(-\nu\sigma_x/E\), is not \(\varepsilon_y\) once \(\sigma_y\) has its own term.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec13/">2.001 lecture 14</a> writes the same three strain equations from the hydrostatic part and the deviator.</p>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>The stress a gauge does not name</h2>
+<p>A single gauge reads \(\varepsilon_x\). If the only stress were \(\sigma_x\), that reading would be \(\sigma_x/E\). When the reading is different, a stress the gauge does not point along is still in the equation. With \(\sigma_z = 0\), solve the strain equation for the unknown:</p>
+\[
+\sigma_y = \frac{\sigma_x - E\varepsilon_x}{\nu}
+\]
+<p>\(\sigma_x - E\varepsilon_x\) is not yet the stress. Poisson's ratio still divides it. A reading equal to \(\sigma_x/E\) sends \(\sigma_y\) to zero, which is the uniaxial bar.</p>
+<div class="box ex"><span class="tag">Worked example · the gauge that reads 0.35 millistrain</span>
+<p>Take \(E = 200\) GPa, \(\nu = 0.30\) and \(\sigma_x = 100\) MPa. The gauge reads 0.35 millistrain, and \(\sigma_z = 0\). Then \(E\varepsilon_x = 70\) MPa. The numerator is \(100 - 70\):</p>
+\[
+\sigma_y = 100\ \mathrm{MPa}
+\]
+<p>That is the lab's equal biaxial case. The axial strain is 0.35 millistrain, smaller than the 0.5 millistrain of \(\sigma_x/E\), because the hidden stress is tension.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Stopping at \(\sigma_x - E\varepsilon_x\) leaves the answer short by the factor \(\nu\). Reporting zero assumes the gauge matches \(\sigma_x/E\). If it does not, a transverse stress is present.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The material is isotropic and still on the elastic line. One gauge cannot separate \(\sigma_y\) from \(\sigma_z\). The lab sets \(\sigma_z\) to zero so the remaining unknown is one number. A real rosette reads three strains and solves for the three surface stresses.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Formula sheet</h2>
+<p>Closed thin cylinder, inside radius:</p>
+\[
+\sigma_h = \frac{pr}{t}
+\]
+\[
+\sigma_l = \frac{pr}{2t}
+\]
+<p>Thin sphere, the same in every membrane direction:</p>
+\[
+\sigma = \frac{pr}{2t}
+\]
+<p>Normal strain when all three normal stresses act:</p>
+\[
+\varepsilon_x = \frac{\sigma_x - \nu(\sigma_y + \sigma_z)}{E}
+\]
+<p>The transverse stress hidden in a measured \(\varepsilon_x\), when \(\sigma_z = 0\):</p>
+\[
+\sigma_y = \frac{\sigma_x - E\varepsilon_x}{\nu}
+\]
+<p>Citations: Roylance §2.2 for pressure vessels and for Poisson's ratio in three dimensions. The propane cylinder is Manchester Tank model 10504, 12.2 in outside diameter, DOT-4BA240, with the 0.078 in minimum wall from 49 CFR 178.51. The modulus in the strain lab is a round 200 GPa. The vessel radius and thickness in the first lab are assumed.</p>
+</section>
+</div>
+</main>
+</body>
+</html>

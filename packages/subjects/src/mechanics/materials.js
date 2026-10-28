@@ -210,3 +210,55 @@ export function constrainedThermal(E, alpha, dT, { L = 1, gap = 0 } = {}) {
   const mechanical = -(free - (fastened ? 0 : gap));
   return { stress: (E * mechanical) / L, free, closed: true, mechanical };
 }
+
+/**
+ * Thin-walled closed cylinder. The hoop stress is pr/t and the longitudinal stress is half of that.
+ * r is the inside radius. The half-cylinder force balance is 2σ t L = 2 p r L.
+ */
+export function thinCylinder(p, r, t) {
+  const hoop = (p * r) / t;
+  return { hoop, axial: hoop / 2 };
+}
+
+/** Force across a longitudinal cut of a cylinder of length L: ∫ p sinθ · r dθ L from 0 to π. */
+export const cylinderSplitForce = (p, r, L) => 2 * p * r * L;
+
+/** Hoop stress recovered from that split force and the two wall thicknesses. */
+export const hoopFromSplit = (p, r, t) => cylinderSplitForce(p, r, 1) / (2 * t);
+
+/**
+ * Thin-walled sphere. Both membrane stresses are pr/(2t).
+ * A cap balance is π r² p = σ (2 π r t).
+ */
+export function thinSphere(p, r, t) {
+  const membrane = (p * r) / (2 * t);
+  return { hoop: membrane, axial: membrane };
+}
+
+/** Membrane stress from the cap balance π r² p = σ · 2 π r t, left unsimplified. */
+export const sphereFromCap = (p, r, t) => (p * Math.PI * r * r) / (2 * Math.PI * r * t);
+
+/**
+ * Isotropic Hooke's law for three normal stresses.
+ * εx = [σx − ν(σy + σz)] / E, and the two cyclic partners.
+ */
+export function hooke3(sx, sy, sz, E, nu) {
+  const ex = (sx - nu * (sy + sz)) / E;
+  const ey = (sy - nu * (sx + sz)) / E;
+  const ez = (sz - nu * (sx + sy)) / E;
+  return { ex, ey, ez, vol: ex + ey + ez };
+}
+
+/**
+ * The same strains split into a hydrostatic part and a deviator.
+ * Mean stress σm uses bulk response (1−2ν)/E. The remainder uses (1+ν)/E.
+ */
+export function hooke3Deviator(sx, sy, sz, E, nu) {
+  const sm = (sx + sy + sz) / 3;
+  const bulk = (1 - 2 * nu) / E;
+  const shear = (1 + nu) / E;
+  const ex = bulk * sm + shear * (sx - sm);
+  const ey = bulk * sm + shear * (sy - sm);
+  const ez = bulk * sm + shear * (sz - sm);
+  return { ex, ey, ez, vol: ex + ey + ez };
+}

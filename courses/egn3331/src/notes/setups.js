@@ -215,6 +215,72 @@ export const SETUPS = {
       },
     ],
   },
+  u4: {
+    s1: [
+      {
+        tag: 'a closed cylinder at 2 MPa',
+        lab: 'vessel',
+        scenario: 'cylinder',
+        read: (c) => ({ hoop: [c.hoop / 1e6, 80], axial: [c.axial / 1e6, 40] }),
+      },
+      {
+        tag: 'the thinner cylinder',
+        lab: 'vessel',
+        scenario: 'thin',
+        read: (c) => ({ hoop: [c.hoop / 1e6, 200], axial: [c.axial / 1e6, 100] }),
+      },
+    ],
+    s2: [
+      {
+        tag: 'the sphere at the same pressure',
+        lab: 'vessel',
+        scenario: 'sphere',
+        read: (c) => ({ hoop: [c.hoop / 1e6, 40] }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'service pressure on the minimum wall',
+        lab: 'tank',
+        scenario: 'service',
+        read: (c) => ({ hoop: [c.hoop / (1000 * PA_PER_PSI), 18.53], axial: [c.axial / (1000 * PA_PER_PSI), 9.26] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'uniaxial tension at 100 MPa',
+        lab: 'strain3',
+        scenario: 'uni',
+        read: (c) => ({ ex: [c.ex * 1e3, 0.5], ey: [c.ey * 1e3, -0.15] }),
+      },
+      {
+        tag: 'equal biaxial tension',
+        lab: 'strain3',
+        scenario: 'bi',
+        read: (c) => ({ ex: [c.ex * 1e3, 0.35] }),
+      },
+      {
+        tag: 'hydrostatic tension',
+        lab: 'strain3',
+        scenario: 'hydro',
+        read: (c) => ({ ex: [c.ex * 1e3, 0.2], vol: [c.vol * 1e6, 600] }),
+      },
+    ],
+    s5: [
+      {
+        tag: 'the gauge that reads 0.35 millistrain',
+        lab: 'strain3',
+        scenario: 'uni',
+        setup(s) {
+          s.sx = 100e6;
+          s.sy = 100e6;
+          s.sz = 0;
+          s.nu = 0.3;
+        },
+        read: (c) => ({ sy: [c.sy / 1e6, 100], ex: [c.ex * 1e3, 0.35] }),
+      },
+    ],
+  },
 };
 
 /** An example's tag as the notes write it, without "Worked example · ". */
