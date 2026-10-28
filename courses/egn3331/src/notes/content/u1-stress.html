@@ -8,18 +8,29 @@
 <header class="top">
   <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 1 · Ch 1</p>
   <h1>Stress</h1>
-  <p class="lede">Statics finds the forces on a body. Mechanics of materials asks what those forces do inside it. The first answer is stress: force per unit area, on a chosen plane, at a chosen point. These notes cut bodies open, find the internal loads, and turn them into normal and shear stress in bars, trusses and pinned joints. They end with the factor of safety, which turns a stress into a design. Every number is computed by the course's library and checked a second way.</p>
+  <p class="lede">Statics finds the forces on a body. Mechanics of materials asks what those forces do inside it. The first answer is stress: force per unit area, on a chosen plane, at a chosen point. These notes cut bodies open, find the internal loads, and turn them into normal and shear stress in bars, trusses and pinned joints. A catalog shackle puts the pin equation on a rated part. They end with the factor of safety, which turns a stress into a design. Every number is computed by the course's library and checked a second way.</p>
+  <div class="legend">
+    <span><i class="swatch" style="background: var(--gold)"></i>Normal stress</span>
+    <span><i class="swatch" style="background: var(--teal)"></i>Shear stress</span>
+    <span><i class="swatch" style="background: #d147bd"></i>The load</span>
+    <span><i class="swatch" style="background: #f4d345"></i>The cut</span>
+  </div>
   <nav class="toc">
     <a href="#s1"><span>01</span>Internal loads</a>
     <a href="#s2"><span>02</span>Average normal stress</a>
     <a href="#s3"><span>03</span>Stress on an inclined plane</a>
     <a href="#s4"><span>04</span>Stress in truss members</a>
     <a href="#s5"><span>05</span>Shear and bearing in connections</a>
-    <a href="#s6"><span>06</span>Allowable stress and the factor of safety</a>
-    <a href="#s7"><span>07</span>Formula sheet</a>
+    <a href="#s6"><span>06</span>A rated shackle</a>
+    <a href="#s7"><span>07</span>Allowable stress and the factor of safety</a>
+    <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
+
+<div class="part">
+<h3>Part 1 · Cutting a body open <span class="sub">| internal loads | average stress</span></h3>
+
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Internal loads</h2>
 <p>A body in equilibrium is in equilibrium in every part. Cut it anywhere, and each piece must still balance. The forces that hold a piece together across the cut are the internal loads. They are invisible until the cut is made. Roylance §4.1 cuts beams this way to draw their shear and moment diagrams.</p>
@@ -58,6 +69,7 @@
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The method treats each piece as rigid while it balances the forces. Real pieces deform, and for a statically determinate body that makes no difference to the loads. For an indeterminate body, deformation decides how the load splits, and Unit 3 adds it. The internal loads are also resultants. They say nothing yet about how the force spreads over the cut. That is what stress does.</p>
 </div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec1/">2.001 lecture 1</a> and <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec2/">lecture 2</a> review forces, moments and equilibrium.</p>
 </section>
 
 <section class="topic" id="s2">
@@ -96,7 +108,15 @@
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>\(\sigma = P/A\) is an average. It is exact only away from the ends, holes and changes of section. Near a point load, a pin hole or a fillet, the stress piles up. Saint-Venant's principle says the disturbance fades within about one width of its cause. The local peak can be several times the average, and Roylance §5.1 computes the factor for a hole. A brittle part or a part in fatigue cares about that peak.</p>
 </div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The area of a round rod is \(\pi d^2/4\). Using \(\pi d^2\) drops the 4, so the stress is a quarter of the true value. Leaving \(\pi\) out multiplies the stress by \(\pi\).</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec7/">2.001 lecture 7</a> puts force and deformation together. Average stress is the force side of that pair.</p>
 </section>
+</div>
+
+<div class="part">
+<h3>Part 2 · Where the stress acts <span class="sub">| a slanted cut | a truss | a pin | a shackle</span></h3>
 
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Stress on an inclined plane</h2>
@@ -149,6 +169,9 @@ P_\tau = \frac{5 \times 400}{\sin 60^\circ \cos 60^\circ} = 4.62\ \text{kN}
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The formulas assume uniform stress on the cut, so they hold away from the ends. They cover a uniaxial load only. A body under several loads has a general plane stress state, and Unit 8 rotates that with the full transformation and Mohr's circle. The formulas also say nothing about strength. Whether a plane fails depends on the material, and a glue, a weld or a grain boundary can be weaker on one plane than the rest.</p>
 </div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The cut is longer than the cross-section. Dividing the force by the cross-section leaves out that extra area, and the stress comes out high.</p>
+</div>
 </section>
 
 <section class="topic" id="s4">
@@ -182,6 +205,7 @@ P_\tau = \frac{5 \times 400}{\sin 60^\circ \cos 60^\circ} = 4.62\ \text{kN}
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>Real joints are bolted or welded, not frictionless pins, so members carry some bending near the joints. The members' own weight acts along their length, not at the joints. Both effects are usually small for a slender truss. A compression member can also buckle long before it yields. FD at 118 MPa may be safe against yield yet still too slender, and Unit 10 checks that.</p>
 </div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec3/">2.001 lecture 3</a> applies the equilibrium equations to planar trusses.</p>
 </section>
 
 <section class="topic" id="s5">
@@ -223,10 +247,44 @@ P_\tau = \frac{5 \times 400}{\sin 60^\circ \cos 60^\circ} = 4.62\ \text{kN}
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>Both stresses are averages. The shear on a pin's cross-section is not uniform: it peaks at the middle, about a third above the average for a round section. Bearing pressure peaks where the pin and the hole meet first. The pin also bends between the plates, which adds normal stress. And the plate can tear out behind the pin, or fail in tension across the net section beside the hole. Design codes add checks for each, with allowables chosen to cover the averages' error.</p>
 </div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A clevis pin crosses two gaps. Counting one plane doubles the shear stress. Bearing uses the projected rectangle \(d\,t\), not the pin's round area.</p>
+</div>
 </section>
 
 <section class="topic" id="s6">
-<h2><span class="n">06</span>Allowable stress and the factor of safety</h2>
+<h2><span class="n">06</span>A rated shackle</h2>
+<p>A screw-pin anchor shackle is a rated lifting part. The pin passes through the bow and the two ears. In the bow the pin is in double shear, the same count as a clevis. Roylance §2.3 defines that average shear stress. The same count sizes any clevis pin. The next section works one in inches.</p>
+<p>The maker publishes a working load, a jaw opening and a pin diameter. The working load is a force. The jaw opening does not enter the pin's shear stress.</p>
+<div class="box ex"><span class="tag">Worked example · the 1/2 in shackle</span>
+<p>The part is a Crosby G-209, stock 1018455. The catalog row for a 1/2 in nominal size lists a working load of 2 t, a jaw opening of 0.81 in and a pin diameter of 0.63 in. A listing of that stock number prints 4400 lbf beside the 2 t, so this model takes 2200 lbf for each catalog tonne.</p>
+<p>The pin area is</p>
+\[
+A = \frac{\pi(0.63)^2}{4} = 0.3117\ \text{in}^2
+\]
+<p>Two planes share 4400 lbf:</p>
+\[
+\tau = \frac{4400}{2 \times 0.3117} = 7.06\ \text{ksi}
+\]
+<p>The jaw is 0.81 in and does not appear. Walk the pin. Each ear pushes 2200 lbf, and the bow pushes 4400 lbf the other way. The shear on each gap is 2200 lbf. That force on the same area is again 7.06 ksi.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the proof load</span>
+<p>A proof load of twice the working load is 8800 lbf. Stress follows the load, so the pin carries 14.12 ksi. Counting one plane at the working load puts all 4400 lbf on one area and gives the same 14.12 ksi.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The jaw opening is not the pin diameter. Using the 0.81 in jaw as the diameter understates the stress. Counting one plane doubles it.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The bow bears on the round pin. That contact is not a flat rectangle, and no catalog dimension is used here as a bearing thickness. The screw thread, side loading and fatigue are left out. A design factor of 6, where a listing states one, is not applied as a stress. The 2200 lbf per catalog tonne is the rounded figure that makes 2 t equal 4400 lbf.</p>
+</div>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 3 · A margin on that stress <span class="sub">| factor of safety</span></h3>
+
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Allowable stress and the factor of safety</h2>
 <p>A stress means nothing until it is compared with what the material can take. The failure stress comes from a test: the yield stress for a ductile metal, the ultimate stress for a brittle one, a shear strength for a pin. Roylance §1.4 shows how these numbers come from a stress–strain curve.</p>
 <p>A design keeps the working stress below the failure stress by a margin. The factor of safety is the ratio:</p>
 \[
@@ -267,10 +325,13 @@ d = \sqrt{\frac{4(0.2)}{\pi}} = 0.505\ \text{in}
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>A single factor of safety lumps every uncertainty together. Modern codes split it: one factor on each kind of load, another on the material's strength. Failure is also not only yielding. A part under many cycles can fail by fatigue far below the yield stress, Roylance §6.5. A compression member can buckle. A crack can grow. Each needs its own check against its own allowable.</p>
 </div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The factor of safety is the failure stress divided by the working stress. The reciprocal is the fraction of the failure stress already in use. It is not the margin.</p>
+</div>
 </section>
 
-<section class="topic" id="s7">
-<h2><span class="n">07</span>Formula sheet</h2>
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Formula sheet</h2>
 \[
 \Sigma F_x = 0,\quad \Sigma F_y = 0,\quad \Sigma M = 0
 \]
@@ -296,6 +357,8 @@ d = \sqrt{\frac{4(0.2)}{\pi}} = 0.505\ \text{in}
 1\ \text{MPa} = 1\ \text{N/mm}^2,\quad 1\ \text{ksi} = 6.895\ \text{MPa}
 \]
 </section>
+</div>
 </main>
+<footer>Written for Flux. Readings are Roylance, Mechanics of Materials, cited by section, with MIT OCW 2.001 (Fall 2006) as another view. The shackle is a Crosby G-209 catalog row. Every worked answer was recomputed.</footer>
 </body>
 </html>

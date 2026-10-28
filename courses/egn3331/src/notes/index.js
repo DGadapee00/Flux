@@ -15,8 +15,9 @@ export const NOTES = {
       { id: 's3', n: 3, title: 'Stress on an inclined plane', lab: 'cut', ch: ['1'], topics: ['inclined-plane'], home: true },
       { id: 's4', n: 4, title: 'Stress in truss members', lab: 'truss-stress', ch: ['1'], topics: ['trusses'] },
       { id: 's5', n: 5, title: 'Shear and bearing in connections', lab: 'pins', ch: ['1'], topics: ['shear-stress', 'bearing'] },
-      { id: 's6', n: 6, title: 'Allowable stress and the factor of safety', lab: 'truss-stress', ch: ['1'], topics: ['factor-of-safety'] },
-      { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
+      { id: 's6', n: 6, title: 'A rated shackle', lab: 'shackle', ch: ['1'], topics: ['shear-stress', 'english'] },
+      { id: 's7', n: 7, title: 'Allowable stress and the factor of safety', lab: 'truss-stress', ch: ['1'], topics: ['factor-of-safety'] },
+      { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
 };

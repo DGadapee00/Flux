@@ -56,6 +56,20 @@ export const SETUPS = {
     ],
     s6: [
       {
+        tag: 'the 1/2 in shackle',
+        lab: 'shackle',
+        scenario: 'wll',
+        read: (c) => ({ tau: [c.tauKsi, 7.06] }),
+      },
+      {
+        tag: 'the proof load',
+        lab: 'shackle',
+        scenario: 'proof',
+        read: (c) => ({ tau: [c.tauKsi, 14.12] }),
+      },
+    ],
+    s7: [
+      {
         tag: 'sizing the chords',
         lab: 'truss-stress',
         scenario: 'even',

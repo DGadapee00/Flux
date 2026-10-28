@@ -4,8 +4,9 @@
   and notes write the same strings, which notes-check verifies. The "Ch" numbers in the practice
   list are the course pack's (D11), not Roylance's.
 - **Units.** Values inside a problem are SI base units. English problems go through
-  `subjects/src/convert.js`; Unit 1 has two in kip and inches (problems-check requires one per unit
-  with problems).
+  `subjects/src/convert.js`. Unit 1 has two in kip and inches, and the shackle pin in pounds and
+  inches (problems-check requires one per unit with problems). The shackle takes 2200 lbf for each
+  catalog tonne.
 - **Figures.** Three significant figures, four when the leading digit is 1, as in Dynamics.
   Grading accepts 2%.
 - **Signs.** Tension is positive. On an inclined plane, θ is the angle between the bar's axis and
@@ -19,5 +20,5 @@
 - **Labs** are plot2d. `compute` is pure; `draw` paints a to-scale drawing and a chart inside the
   space the panels leave (`labs/diagram.js`). Each lab declares `sweep(state)`, and labs-check
   moves that slider end to end.
-- **Left out for now.** Units 2–10 are listed as coming. Phase R stopped new units until the shells
-  carry the practice loop.
+- **Left out for now.** On this branch Units 2–10 are still listed as coming, in the pack order.
+  The confirmed eleven-unit order is the table in the spine. This branch does not renumber them.

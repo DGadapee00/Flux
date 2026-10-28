@@ -6,6 +6,7 @@
  */
 import { M_PER_IN, N_PER_LBF, PA_PER_PSI } from '@flux/subjects/convert.js';
 import { axialStress, circleArea, inclined, pinSegments, pinShear, requiredArea, transform } from '@flux/subjects/mechanics/materials.js';
+import { SIZES, shackleLoad } from '../../data/shackle.js';
 import { internalAt } from '@flux/subjects/mechanics/sections.js';
 import { memberTable } from '../../labs/truss-stress.js';
 import { modes } from '../../labs/pins.js';
@@ -53,6 +54,54 @@ function smallest(ok, lo, hi) {
   return hi;
 }
 
+/** Which of three planes carries the larger normal stress, or the larger shear, on a bar in tension. */
+function planeClass(P, A, ask) {
+  const planes = [
+    ['square', inclined(P, A, 0)],
+    ['mid', inclined(P, A, 45)],
+    ['along', inclined(P, A, 80)],
+  ];
+  const key = ask === 'shear' ? 'tau' : 'sigma';
+  return planes.reduce((best, row) => (Math.abs(row[1][key]) > Math.abs(best[1][key]) ? row : best))[0];
+}
+
+/** Shear in a lap joint or a clevis, compared with one shear plane at the same load and diameter. */
+function shearClass(joint) {
+  return joint === 'clevis' ? 'half' : 'same';
+}
+
+function nearRatio(ratio, target) {
+  return Math.abs(ratio - target) < 0.02;
+}
+
+/** What a determinate truss does to member force and stress when areas are halved or loads double. */
+function trussChange($) {
+  const F = sectionForce($.P, 'BC');
+  const F2 = $.change === 'load' ? sectionForce(2 * $.P, 'BC') : F;
+  const A2 = $.change === 'area' ? $.Ac / 2 : $.Ac;
+  const stress = axialStress(F2, A2) / axialStress(F, $.Ac);
+  return {
+    force: nearRatio(F2 / F, 1) ? 'same' : 'double',
+    stress: nearRatio(stress, 2) ? 'double' : 'same',
+  };
+}
+
+const ROD_P = 40 * KN;
+const ROD_SY = 250e6;
+
+/** How the factor of safety moves when the load doubles or the diameter doubles. */
+function marginClass(change) {
+  return change === 'load' ? 'half' : 'four';
+}
+
+/** Average shear in a catalog shackle pin. Diameter defaults to the pin, not the jaw. */
+function shackleTau(size, frac, planes, diameterIn) {
+  const row = SIZES[size];
+  const P = shackleLoad(size, frac) * N_PER_LBF;
+  const d = (diameterIn ?? row.d) * M_PER_IN;
+  return pinShear(P, d, planes);
+}
+
 /** The two ways a glued scarf joint can fail, as the largest load each allows. */
 function scarf($) {
   const t = ($.th * Math.PI) / 180;
@@ -77,12 +126,20 @@ const ch1 = [
     lab: 'cut',
     src: cite('normal-stress'),
     topics: ['normal-stress'],
+    variety: ['representation'],
     vars: {
       P: range(5, 80, 1, 'kN', KN),
       d: range(8, 40, 1, 'mm', MM),
     },
     text: (T) => String.raw`A solid round rod of diameter $${T.d}$ mm carries an axial tension of $${T.P}$ kN. Find the average normal stress in the rod.`,
-    parts: [num('sigma', ($) => axialStress($.P, circleArea($.d)), 'MPa', { scale: MPA, label: 'normal stress' })],
+    parts: [num('sigma', ($) => axialStress($.P, circleArea($.d)), 'MPa', {
+      scale: MPA,
+      label: 'normal stress',
+      traps: [
+        [($) => $.P / (Math.PI * $.d * $.d), 'The area was taken as πd², which drops the 4.'],
+        [($) => (4 * $.P) / ($.d * $.d), 'π was left out of the area.'],
+      ],
+    })],
     level: 1,
     hints: [
       'Average normal stress is the internal force divided by the cross-section it acts on.',
@@ -117,12 +174,20 @@ const ch1 = [
     lab: null,
     src: cite('normal-stress'),
     topics: ['normal-stress', 'english'],
+    variety: ['units'],
     vars: {
       P: range(1, 30, 0.5, 'kip', KIP),
       d: range(0.25, 2, 0.125, 'in', M_PER_IN),
     },
     text: (T) => String.raw`A steel tie rod of diameter $${T.d}$ in carries an axial tension of $${T.P}$ kip. Find the average normal stress in ksi.`,
-    parts: [num('sigma', ($) => axialStress($.P, circleArea($.d)), 'ksi', { scale: KSI, label: 'normal stress' })],
+    parts: [num('sigma', ($) => axialStress($.P, circleArea($.d)), 'ksi', {
+      scale: KSI,
+      label: 'normal stress',
+      traps: [
+        [($) => $.P / (Math.PI * $.d * $.d), 'The area was taken as πd², which drops the 4.'],
+        [($) => (4 * $.P) / ($.d * $.d), 'π was left out of the area.'],
+      ],
+    })],
     level: 1,
     hints: [
       'Stress is force over area in any consistent units. Kip over square inches is ksi.',
@@ -153,15 +218,35 @@ const ch1 = [
     lab: 'cut',
     src: cite('inclined-plane'),
     topics: ['inclined-plane'],
+    variety: ['representation'],
     vars: {
       P: range(5, 60, 1, 'kN', KN),
       A: range(100, 800, 10, 'mm²', MM2),
       th: range(5, 80, 5, '°'),
     },
+    valid: ($) => {
+      const c = Math.cos(($.th * Math.PI) / 180);
+      const steep = $.th <= 35 || $.th >= 55;
+      return steep && c < 0.93 && Math.abs(1 / c - 2) > 0.08;
+    },
     text: (T) => String.raw`A bar of cross-sectional area $${T.A}\ \mathrm{mm^2}$ carries an axial tension of $${T.P}$ kN. A plane is cut through it, with its normal at $\theta = ${T.th}^\circ$ to the bar's axis. Find the normal and shear stress on that plane.`,
     parts: [
-      num('sigma', ($) => inclined($.P, $.A, $.th).sigma, 'MPa', { scale: MPA, label: 'normal stress σ' }),
-      num('tau', ($) => inclined($.P, $.A, $.th).tau, 'MPa', { scale: MPA, label: 'shear stress τ' }),
+      num('sigma', ($) => inclined($.P, $.A, $.th).sigma, 'MPa', {
+        scale: MPA,
+        label: 'normal stress σ',
+        traps: [
+          [($) => ($.P / $.A) * Math.cos(($.th * Math.PI) / 180), 'The force was divided by the cross-section, not by the longer cut.'],
+          [($) => ($.P / $.A) * Math.sin(($.th * Math.PI) / 180) ** 2, 'θ was measured from the cut face instead of from the normal.'],
+        ],
+      }),
+      num('tau', ($) => inclined($.P, $.A, $.th).tau, 'MPa', {
+        scale: MPA,
+        label: 'shear stress τ',
+        traps: [
+          [($) => ($.P / $.A) * Math.sin(($.th * Math.PI) / 180), 'The sliding force was divided by the cross-section, not by the longer cut.'],
+          [($) => ($.P / $.A) * Math.sin((2 * $.th * Math.PI) / 180), 'The half in front of (P/A) sin 2θ was dropped.'],
+        ],
+      }),
     ],
     level: 2,
     hints: [
@@ -201,6 +286,7 @@ const ch1 = [
     lab: null,
     src: cite('inclined-plane'),
     topics: ['inclined-plane', 'factor-of-safety'],
+    variety: ['goal'],
     vars: {
       A: range(200, 1000, 50, 'mm²', MM2),
       th: range(20, 70, 5, '°'),
@@ -209,12 +295,22 @@ const ch1 = [
     },
     valid: ($) => {
       const s = scarf($);
-      return Math.abs(s.Psig - s.Ptau) > 0.03 * s.P;
+      return Math.abs(s.Psig - s.Ptau) > 0.08 * s.P;
     },
     text: (T) => String.raw`Two pieces of a bar of area $${T.A}\ \mathrm{mm^2}$ are glued on a plane whose normal is $${T.th}^\circ$ from the bar's axis. The glue allows $${T.sa}$ MPa in tension and $${T.ta}$ MPa in shear. Find the largest axial tension the joint can carry, and say which allowable governs.`,
     parts: [
-      num('P', ($) => scarf($).P, 'kN', { scale: KN, label: 'largest load' }),
-      mc('governs', [['normal', 'the normal stress'], ['shear', 'the shear stress']], ($) => scarf($).governs, { label: 'governs' }),
+      num('P', ($) => scarf($).P, 'kN', {
+        scale: KN,
+        label: 'largest load',
+        traps: [
+          [($) => Math.max(scarf($).Psig, scarf($).Ptau), 'The larger of the two allowable loads was kept.'],
+          [($) => scarf($).Psig + scarf($).Ptau, 'The two allowable loads were added.'],
+        ],
+      }),
+      mc('governs', [
+        ['normal', 'the normal stress', 'The normal allowable limits the joint when its load is the smaller of the two.'],
+        ['shear', 'the shear stress', 'The shear allowable limits the joint when its load is the smaller of the two.'],
+      ], ($) => scarf($).governs, { label: 'governs' }),
     ],
     level: 3,
     hints: [
@@ -249,6 +345,7 @@ const ch1 = [
     lab: null,
     src: cite('internal-loads'),
     topics: ['internal-loads'],
+    variety: ['position'],
     vars: {
       L: range(3, 10, 0.5, 'm'),
       F: range(5, 50, 1, 'kN', KN),
@@ -256,11 +353,33 @@ const ch1 = [
       T: range(0, 20, 2, 'kN', KN),
     },
     derive: ($) => ({ a: $.L * $.f, x: ($.L * $.f) / 2 }),
+    valid: ($) => $.T >= 4 * KN && Math.abs($.f - 0.5) >= 0.1,
     text: (T, $, sig) => String.raw`A beam of span $${T.L}$ m is pinned at its left end A and rests on a roller at its right end B. A downward load of $${T.F}$ kN acts $${sig($.a)}$ m from A, and a horizontal pull of $${T.T}$ kN acts at B, away from A. Find the normal force, shear force and bending moment on the section $${sig($.x)}$ m from A.`,
     parts: [
-      num('N', ($) => $.T, 'kN', { scale: KN, label: 'normal force N' }),
-      num('V', ($) => ($.F * ($.L - $.a)) / $.L, 'kN', { scale: KN, label: 'shear force V' }),
-      num('M', ($) => (($.F * ($.L - $.a)) / $.L) * $.x, 'kN·m', { scale: KN, label: 'bending moment M' }),
+      num('N', ($) => $.T, 'kN', {
+        scale: KN,
+        label: 'normal force N',
+        traps: [
+          [() => 0, 'The horizontal pull was left off the cut.'],
+          [($) => -$.T, 'The pull was taken as compression.'],
+        ],
+      }),
+      num('V', ($) => ($.F * ($.L - $.a)) / $.L, 'kN', {
+        scale: KN,
+        label: 'shear force V',
+        traps: [
+          [($) => $.F, 'The whole downward load was used, not the left reaction.'],
+          [($) => ($.F * $.a) / $.L, 'The right-hand reaction was put on the left piece.'],
+        ],
+      }),
+      num('M', ($) => (($.F * ($.L - $.a)) / $.L) * $.x, 'kN·m', {
+        scale: KN,
+        label: 'bending moment M',
+        traps: [
+          [($) => $.F * $.x, 'The moment used the full load instead of the left reaction.'],
+          [($) => (($.F * ($.L - $.a)) / $.L) * $.a, 'The moment arm was taken out to the load, not to the cut.'],
+        ],
+      }),
     ],
     level: 2,
     hints: [
@@ -293,14 +412,32 @@ const ch1 = [
     lab: 'truss-stress',
     src: cite('trusses'),
     topics: ['trusses', 'normal-stress'],
+    variety: ['configuration'],
     vars: {
       P: range(10, 40, 1, 'kN', KN),
       Ac: range(200, 800, 50, 'mm²', MM2),
       Aw: range(200, 800, 50, 'mm²', MM2),
       m: choice(['BC', 'BC'], ['EF', 'EF'], ['BF', 'BF']),
     },
+    valid: ($) => {
+      const F = sectionForce($.P, $.m);
+      const A = CHORDS.includes($.m) ? $.Ac : $.Aw;
+      const usedP = axialStress($.P, A);
+      const asKip = F * 1e3;
+      const trueS = axialStress(F, A);
+      return Math.abs(usedP - trueS) > 0.08 * Math.abs(trueS)
+        && Math.abs(asKip - trueS) > 0.08 * Math.abs(trueS)
+        && Math.abs(usedP - asKip) > 0.08 * Math.max(Math.abs(usedP), Math.abs(asKip));
+    },
     text: (T) => String.raw`The Pratt truss in the lab has 2 m panels and is 2 m deep: A, B, C, D along the bottom, E above B and F above C. It is pinned at A, rests on a roller at D, and carries $${T.P}$ kN down at B and twice that at C. The chords (AB, BC, CD, AE, EF, FD) have area $${T.Ac}\ \mathrm{mm^2}$, and the web (BE, CF, BF) has $${T.Aw}\ \mathrm{mm^2}$. Find the normal stress in member ${T.m}, positive in tension.`,
-    parts: [num('sigma', ($) => axialStress(sectionForce($.P, $.m), CHORDS.includes($.m) ? $.Ac : $.Aw), 'MPa', { scale: MPA, label: `stress` })],
+    parts: [num('sigma', ($) => axialStress(sectionForce($.P, $.m), CHORDS.includes($.m) ? $.Ac : $.Aw), 'MPa', {
+      scale: MPA,
+      label: 'stress',
+      traps: [
+        [($) => axialStress($.P, CHORDS.includes($.m) ? $.Ac : $.Aw), 'The joint load was used instead of the member force.'],
+        [($) => sectionForce($.P, $.m) * 1e3, 'The force in kN was entered as the stress in MPa.'],
+      ],
+    })],
     level: 2,
     hints: [
       'Find the reactions at A and D from the whole truss. Then cut through BC, BF and EF, and keep the left part.',
@@ -340,13 +477,24 @@ const ch1 = [
     lab: 'truss-stress',
     src: cite('factor-of-safety'),
     topics: ['trusses', 'factor-of-safety'],
+    variety: ['goal'],
     vars: {
       P: range(10, 40, 1, 'kN', KN),
       sY: range(200, 350, 10, 'MPa', MPA),
       FS: range(1.5, 3, 0.25, ''),
     },
     text: (T) => String.raw`The lab's Pratt truss (2 m panels, 2 m deep, pinned at A and on a roller at D) carries $${T.P}$ kN down at B and twice that at C. Every chord (AB, BC, CD, AE, EF, FD) is to have the same area. The steel yields at $${T.sY}$ MPa. Find the smallest chord area for a factor of safety of ${T.FS} against yield.`,
-    parts: [num('A', ($) => requiredArea(Math.max(...memberTable({ P: $.P, Ac: 1, Aw: 1 }).rows.filter((r) => r.group === 'chord').map((r) => Math.abs(r.F))), $.sY, $.FS), 'mm²', { scale: MM2, label: 'chord area' })],
+    parts: [num('A', ($) => requiredArea(Math.max(...memberTable({ P: $.P, Ac: 1, Aw: 1 }).rows.filter((r) => r.group === 'chord').map((r) => Math.abs(r.F))), $.sY, $.FS), 'mm²', {
+      scale: MM2,
+      label: 'chord area',
+      traps: [
+        [($) => {
+          const F = Math.max(...memberTable({ P: $.P, Ac: 1, Aw: 1 }).rows.filter((r) => r.group === 'chord').map((r) => Math.abs(r.F)));
+          return F / $.sY;
+        }, 'The factor of safety was left out of the area.'],
+        [($) => requiredArea($.P, $.sY, $.FS), 'The joint load was used instead of the largest chord force.'],
+      ],
+    })],
     level: 3,
     hints: [
       'The areas do not change the member forces in a determinate truss. Find each chord force first.',
@@ -383,12 +531,20 @@ const ch1 = [
     lab: 'pins',
     src: cite('shear-stress'),
     topics: ['shear-stress'],
+    variety: ['representation'],
     vars: {
       P: range(2, 40, 0.5, 'kN', KN),
       d: range(6, 25, 1, 'mm', MM),
     },
     text: (T) => String.raw`A bar carrying $${T.P}$ kN is held between the two legs of a clevis by a pin of diameter $${T.d}$ mm. Find the average shear stress in the pin.`,
-    parts: [num('tau', ($) => pinShear($.P, $.d, 2), 'MPa', { scale: MPA, label: 'shear stress' })],
+    parts: [num('tau', ($) => pinShear($.P, $.d, 2), 'MPa', {
+      scale: MPA,
+      label: 'shear stress',
+      traps: [
+        [($) => pinShear($.P, $.d, 1), 'The pin was counted on one plane.'],
+        [($) => $.P / (2 * $.d * $.d), 'π was left out of the two areas.'],
+      ],
+    })],
     level: 1,
     hints: [
       'Count the planes on which the pin would have to shear through to let the bar go.',
@@ -419,6 +575,7 @@ const ch1 = [
     lab: 'pins',
     src: cite('bearing'),
     topics: ['shear-stress', 'bearing', 'factor-of-safety'],
+    variety: ['configuration'],
     vars: {
       d: range(8, 20, 1, 'mm', MM),
       t: range(4, 20, 1, 'mm', MM),
@@ -427,13 +584,30 @@ const ch1 = [
       ba: range(150, 250, 25, 'MPa', MPA),
     },
     valid: ($) => {
-      const loads = clevis($).list.map((m) => 1 / m.use).sort((a, b) => a - b);
-      return loads[1] - loads[0] > 0.03 * loads[0];
+      const c = clevis($);
+      const loads = c.list.map((m) => 1 / m.use).sort((a, b) => a - b);
+      if (loads[1] - loads[0] <= 0.08 * loads[0]) return false;
+      const sum = c.list.reduce((s, m) => s + 1 / m.use, 0);
+      const square = $.ba * $.d * $.d;
+      return Math.abs(sum - c.P) > 0.08 * c.P
+        && Math.abs(square - c.P) > 0.08 * c.P
+        && Math.abs(sum - square) > 0.08 * Math.max(sum, square);
     },
     text: (T) => String.raw`A bar of thickness $${T.t}$ mm sits between the two legs of a clevis, each $${T.tc}$ mm thick, joined by a pin of diameter $${T.d}$ mm. The pin's allowable shear stress is $${T.ta}$ MPa, and the allowable bearing stress on every plate is $${T.ba}$ MPa. Find the largest load the joint may carry, and what limits it.`,
     parts: [
-      num('P', ($) => clevis($).P, 'kN', { scale: KN, label: 'allowable load' }),
-      mc('governs', [['shear', 'shear in the pin'], ['bar', 'bearing on the bar'], ['leg', 'bearing on a leg']], ($) => clevis($).governs, { label: 'governs' }),
+      num('P', ($) => clevis($).P, 'kN', {
+        scale: KN,
+        label: 'allowable load',
+        traps: [
+          [($) => clevis($).list.reduce((s, m) => s + 1 / m.use, 0), 'The three allowable loads were added.'],
+          [($) => $.ba * $.d * $.d, 'Bearing used the diameter twice, not the thickness.'],
+        ],
+      }),
+      mc('governs', [
+        ['shear', 'shear in the pin', 'Shear in the pin governs when its allowable load is below both bearing loads.'],
+        ['bar', 'bearing on the bar', 'Bearing on the bar governs when that load is the smallest of the three.'],
+        ['leg', 'bearing on a leg', 'Bearing on a leg governs when the two legs together give the smallest load.'],
+      ], ($) => clevis($).governs, { label: 'governs' }),
     ],
     level: 2,
     hints: [
@@ -475,13 +649,21 @@ const ch1 = [
     lab: null,
     src: cite('factor-of-safety'),
     topics: ['shear-stress', 'factor-of-safety', 'english'],
+    variety: ['units'],
     vars: {
       P: range(1, 20, 0.5, 'kip', KIP),
       tf: range(20, 60, 5, 'ksi', KSI),
       FS: range(1.5, 3, 0.25, ''),
     },
     text: (T) => String.raw`A clevis pin in double shear carries $${T.P}$ kip. The pin's steel fails in shear at $${T.tf}$ ksi, and the design calls for a factor of safety of ${T.FS}. Find the smallest pin diameter, in inches.`,
-    parts: [num('d', ($) => Math.sqrt((4 * requiredArea($.P, $.tf, $.FS)) / (2 * Math.PI)), 'in', { scale: M_PER_IN, label: 'pin diameter' })],
+    parts: [num('d', ($) => Math.sqrt((4 * requiredArea($.P, $.tf, $.FS)) / (2 * Math.PI)), 'in', {
+      scale: M_PER_IN,
+      label: 'pin diameter',
+      traps: [
+        [($) => Math.sqrt((4 * requiredArea($.P, $.tf, $.FS)) / Math.PI), 'Only one shear plane was counted.'],
+        [($) => Math.sqrt((4 * requiredArea($.P, $.tf, 1)) / (2 * Math.PI)), 'The factor of safety was left out.'],
+      ],
+    })],
     level: 2,
     hints: [
       'First turn the failure stress into an allowable stress with the factor of safety.',
@@ -513,14 +695,21 @@ const ch1 = [
     lab: 'cut',
     src: cite('factor-of-safety'),
     topics: ['normal-stress', 'factor-of-safety'],
+    variety: ['goal'],
     vars: {
       P: range(10, 100, 5, 'kN', KN),
       d: range(10, 40, 1, 'mm', MM),
       sY: choice([250e6, '250'], [345e6, '345'], [275e6, '275'], [505e6, '505']),
     },
-    valid: ($) => $.sY / axialStress($.P, circleArea($.d)) > 0.8,
+    valid: ($) => $.sY / axialStress($.P, circleArea($.d)) >= 1.3,
     text: (T) => String.raw`A round rod of diameter $${T.d}$ mm carries $${T.P}$ kN in tension. Its material yields at $${T.sY}$ MPa. Find the factor of safety against yield.`,
-    parts: [num('FS', ($) => $.sY / axialStress($.P, circleArea($.d)), '', { label: 'factor of safety' })],
+    parts: [num('FS', ($) => $.sY / axialStress($.P, circleArea($.d)), '', {
+      label: 'factor of safety',
+      traps: [
+        [($) => axialStress($.P, circleArea($.d)) / $.sY, 'The factor of safety was inverted.'],
+        [($) => $.P / $.d, 'The load was divided by the diameter, not by the area.'],
+      ],
+    })],
     level: 1,
     hints: [
       'Find the working stress in the rod first.',
@@ -545,6 +734,303 @@ const ch1 = [
       read: (c, s, $) => ({ FS: $.sY / c.sigma }),
     },
     cases: [kase(cite('factor-of-safety'), { P: 50, d: 20, sY: 250e6 }, { FS: 1.5707963267948966 })],
+  }),
+
+  problem({
+    id: 'u1.1.plane',
+    title: 'Which plane carries it?',
+    exam: 'u1',
+    ch: '1',
+    lab: 'cut',
+    src: cite('inclined-plane'),
+    kind: 'conceptual',
+    topics: ['inclined-plane'],
+    variety: ['configuration'],
+    vars: {
+      ask: choice(['shear', 'shear stress'], ['normal', 'normal stress']),
+      P: range(10, 60, 5, 'kN', KN),
+      A: range(100, 500, 20, 'mm²', MM2),
+    },
+    text: (T) => String.raw`A bar of area $${T.A}\ \mathrm{mm^2}$ carries $${T.P}$ kN in tension. Three planes can be cut: the cross-section, the 45° plane, and a plane nearly along the bar. Which one carries the larger ${T.ask}?`,
+    parts: [
+      mc('plane', [
+        ['square', 'the cross-section', 'The cross-section carries P/A as tension and no shear. That is the largest normal stress, and the smallest shear.'],
+        ['mid', 'the 45° plane', 'Shear on a bar in tension peaks on the 45° plane. The normal stress there is half of P/A, so it is not the largest normal stress.'],
+        ['along', 'a plane nearly along the bar', 'A cut nearly parallel to the bar is a long plane. Both stresses on it are smaller than their peaks.'],
+      ], ($) => planeClass($.P, $.A, $.ask), { label: 'plane' }),
+    ],
+    level: 1,
+    hints: [
+      'One of these stresses is largest on the cross-section. The other is largest on a slanted plane.',
+      String.raw`Shear follows $(P/2A)\sin 2\theta$. It peaks when the normal is $45^\circ$ from the axis.`,
+    ],
+    steps: ($) => [
+      $.ask === 'shear'
+        ? 'Shear is zero on the cross-section and peaks at 45°. The plane nearly along the bar carries less.'
+        : 'Normal stress is P/A on the cross-section and falls as the cut turns. The 45° plane carries half of that.',
+    ],
+    second: ($) => ({ plane: planeClass($.P, $.A, $.ask) }),
+    sim: {
+      scenario: 'tension',
+      setup(s, $) {
+        s.P = $.P;
+        s.A = $.A;
+        s.theta = 0;
+      },
+      read: (c, s, $) => {
+        const square = inclined($.P, $.A, 0).sigma;
+        const agree = Math.abs(c.sigma - square) <= 1e-6 * Math.max(1, Math.abs(square));
+        return { plane: agree ? planeClass($.P, $.A, $.ask) : 'along' };
+      },
+    },
+    cases: [
+      kase(cite('inclined-plane'), { ask: 'shear', P: 20, A: 200 }, { plane: 'mid' }),
+      kase(cite('inclined-plane'), { ask: 'normal', P: 20, A: 200 }, { plane: 'square' }),
+    ],
+  }),
+
+  problem({
+    id: 'u1.1.planes',
+    title: 'One plane or two?',
+    exam: 'u1',
+    ch: '1',
+    lab: 'pins',
+    src: cite('shear-stress'),
+    kind: 'conceptual',
+    topics: ['shear-stress'],
+    variety: ['configuration'],
+    vars: {
+      joint: choice(['lap', 'a lap joint, one plate against one lug'], ['clevis', 'a clevis, the bar between two legs']),
+      P: range(4, 30, 2, 'kN', KN),
+      d: range(8, 24, 1, 'mm', MM),
+    },
+    text: (T) => String.raw`A pin of diameter $${T.d}$ mm carries $${T.P}$ kN in ${T.joint}. Compare its average shear stress with a pin of the same size that is sheared on one plane only.`,
+    parts: [
+      mc('tau', [
+        ['same', 'the same shear stress', 'A lap joint shears the pin on one plane, the same count as the comparison pin.'],
+        ['half', 'half the shear stress', 'A clevis crosses two gaps. Each plane carries half the load of a single plane.'],
+        ['double', 'twice the shear stress', 'A second plane shares the load. It does not raise the stress.'],
+        ['zero', 'no shear stress', 'The pin still carries the load across each gap between the plates.'],
+      ], ($) => shearClass($.joint), { label: 'shear stress' }),
+    ],
+    level: 1,
+    hints: [
+      'Count the gaps the pin crosses. Each gap is one shear plane, and the planes share the load.',
+      'One plane carries the whole load. Two planes carry half each, on the same area.',
+    ],
+    steps: ($) => [
+      $.joint === 'clevis'
+        ? 'The clevis puts the pin in double shear, so the stress is half the single-plane value.'
+        : 'The lap joint shears the pin once, so the stress matches the single-plane comparison.',
+    ],
+    second: ($) => ({ tau: shearClass($.joint) }),
+    sim: {
+      scenario: 'double',
+      setup(s, $) {
+        s.P = $.P;
+        s.d = $.d;
+        s.planes = $.joint === 'clevis' ? 2 : 1;
+      },
+      read: (c, s) => {
+        const ratio = c.tau / pinShear(s.P, s.d, 1);
+        const tau = nearRatio(ratio, 1) ? 'same' : nearRatio(ratio, 0.5) ? 'half' : nearRatio(ratio, 2) ? 'double' : 'zero';
+        return { tau };
+      },
+    },
+    cases: [
+      kase(cite('shear-stress'), { joint: 'lap', P: 10, d: 12 }, { tau: 'same' }),
+      kase(cite('shear-stress'), { joint: 'clevis', P: 10, d: 12 }, { tau: 'half' }),
+    ],
+  }),
+
+  problem({
+    id: 'u1.1.area-force',
+    title: 'Force or stress?',
+    exam: 'u1',
+    ch: '1',
+    lab: 'truss-stress',
+    src: cite('trusses'),
+    kind: 'conceptual',
+    topics: ['trusses', 'normal-stress'],
+    variety: ['representation'],
+    level: 2,
+    vars: {
+      change: choice(['area', 'halve every member area'], ['load', 'double both joint loads']),
+      P: range(10, 40, 1, 'kN', KN),
+      Ac: range(200, 800, 100, 'mm²', MM2),
+    },
+    text: (T) => String.raw`The lab's Pratt truss has 2 m panels and is 2 m deep. It carries $${T.P}$ kN down at B and twice that at C, and every member starts at $${T.Ac}\ \mathrm{mm^2}$. You ${T.change}. What happens to the member forces, and to the stresses?`,
+    parts: [
+      mc('force', [
+        ['same', 'The forces stay the same.', 'A determinate truss gets its forces from equilibrium. Member areas never enter, so halving them leaves every force.'],
+        ['double', 'The forces double.', 'Member forces scale with the joint loads. Doubling both loads doubles every force.'],
+        ['half', 'The forces fall to half.', 'Neither change reduces a force. Areas are absent from equilibrium, and a larger load raises the forces.'],
+      ], ($) => trussChange($).force, { label: 'forces' }),
+      mc('stress', [
+        ['same', 'The stresses stay the same.', 'Stress is force over area. A change in the force or in the area changes the stress.'],
+        ['double', 'The stresses double.', 'Halving the area at a fixed force doubles the stress. Doubling the force at a fixed area does the same.'],
+        ['half', 'The stresses fall to half.', 'Both changes raise the stress. Neither cuts it.'],
+      ], ($) => trussChange($).stress, { label: 'stresses' }),
+    ],
+    hints: [
+      'In a determinate truss, member forces come from equilibrium. Stress is that force divided by the member area.',
+      'Halving an area does not change a force. Doubling the joint loads does. Either change doubles F/A.',
+    ],
+    steps: ($) => [
+      $.change === 'area'
+        ? 'The areas drop out of the joint equations, so the forces stay. Half the area doubles every stress.'
+        : 'Every load doubles, so every member force doubles. The areas are unchanged, so the stresses double too.',
+    ],
+    second: ($) => trussChange($),
+    sim: {
+      scenario: 'even',
+      setup(s, $) {
+        s.P = $.P;
+        s.Ac = $.Ac;
+        s.Aw = $.Ac;
+        if ($.change === 'area') {
+          s.Ac = $.Ac / 2;
+          s.Aw = $.Ac / 2;
+        } else {
+          s.P = 2 * $.P;
+        }
+      },
+      read: (c, s, $) => {
+        const baseF = sectionForce($.P, 'BC');
+        const baseS = axialStress(baseF, $.Ac);
+        return {
+          force: nearRatio(c.forces.BC / baseF, 1) ? 'same' : nearRatio(c.forces.BC / baseF, 2) ? 'double' : 'half',
+          stress: nearRatio(c.stresses.BC / baseS, 2) ? 'double' : nearRatio(c.stresses.BC / baseS, 1) ? 'same' : 'half',
+        };
+      },
+    },
+    cases: [
+      kase(cite('trusses'), { change: 'area', P: 20, Ac: 400 }, { force: 'same', stress: 'double' }),
+      kase(cite('trusses'), { change: 'load', P: 20, Ac: 400 }, { force: 'double', stress: 'double' }),
+    ],
+  }),
+
+  problem({
+    id: 'u1.1.shackle',
+    title: 'Shear in a catalog shackle pin',
+    exam: 'u1',
+    ch: '1',
+    lab: 'shackle',
+    src: cite('shear-stress'),
+    topics: ['shear-stress', 'english'],
+    variety: ['units'],
+    vars: {
+      size: choice(['3/8', '3/8'], ['1/2', '1/2'], ['5/8', '5/8'], ['3/4', '3/4']),
+      frac: range(0.25, 1, 0.05, ''),
+    },
+    text: (T, $) => {
+      const row = SIZES[$.size];
+      return String.raw`A Crosby G-209 screw-pin anchor shackle, stock ${row.stock}, has a nominal size of ${T.size} in. The catalog lists a working load of ${row.wll} t, a jaw opening of ${row.jaw} in and a pin diameter of ${row.d} in. Take 2200 lbf for each catalog tonne. The shackle carries $${T.frac}$ of that working load, and the pin is in double shear in the bow. Find the average shear stress in the pin, in ksi.`;
+    },
+    parts: [num('tau', ($) => shackleTau($.size, $.frac, 2), 'ksi', {
+      scale: KSI,
+      label: 'shear stress',
+      traps: [
+        [($) => shackleTau($.size, $.frac, 1), 'The pin was counted on one plane.'],
+        [($) => shackleTau($.size, $.frac, 2, SIZES[$.size].jaw), 'The jaw opening was used as the pin diameter.'],
+      ],
+    })],
+    level: 2,
+    hints: [
+      'The pin in the bow is in double shear. Two planes share the working load.',
+      String.raw`Average shear is the load on one plane over the pin area, $\pi d^2/4$. Take 2200 lbf for each catalog tonne.`,
+    ],
+    steps: ($, sig) => {
+      const row = SIZES[$.size];
+      const lbf = shackleLoad($.size, $.frac);
+      const A = (Math.PI * row.d * row.d) / 4;
+      return [
+        String.raw`Load in use $= ${sig(lbf)}\ \mathrm{lbf}$. Pin area $= \pi(${row.d})^2/4 = ${sig(A)}\ \mathrm{in^2}$.`,
+        String.raw`Two planes: $\tau = (P/2)/A = ${sig(lbf / (2 * A) / 1e3)}$ ksi.`,
+      ];
+    },
+    // The same load and pin diameter, worked entirely in pounds and inches.
+    second: ($) => {
+      const row = SIZES[$.size];
+      const lbf = shackleLoad($.size, $.frac);
+      const A = (Math.PI * row.d * row.d) / 4;
+      return { tau: lbf / (2 * A) / 1e3 };
+    },
+    sim: {
+      scenario: 'wll',
+      setup(s, $) {
+        const row = SIZES[$.size];
+        s.P = shackleLoad($.size, $.frac);
+        s.d = row.d;
+        s.jaw = row.jaw;
+        s.planes = 2;
+      },
+      read: (c) => ({ tau: c.tau }),
+    },
+    cases: [kase(cite('shear-stress'), { size: '1/2', frac: 1 }, { tau: 7.057513223525721 })],
+  }),
+
+  problem({
+    id: 'u1.1.margin',
+    title: 'What happens to the margin?',
+    exam: 'u1',
+    ch: '1',
+    lab: 'cut',
+    src: cite('factor-of-safety'),
+    kind: 'conceptual',
+    topics: ['normal-stress', 'factor-of-safety'],
+    variety: ['configuration'],
+    level: 1,
+    vars: {
+      change: choice(['load', 'double the axial load'], ['diameter', 'double the diameter']),
+      d: range(10, 40, 1, 'mm', MM),
+    },
+    text: (T) => String.raw`A round rod of diameter $${T.d}$ mm carries 40 kN in tension and yields at 250 MPa. You ${T.change}. What happens to the factor of safety against yield?`,
+    parts: [
+      mc('FS', [
+        ['half', 'It falls to half.', 'Doubling the load doubles the stress, so the factor of safety falls to half.'],
+        ['double', 'It doubles.', 'Doubling the diameter multiplies the area by four, not by two.'],
+        ['four', 'It rises by a factor of four.', 'Area follows the square of the diameter. Doubling the diameter multiplies the area, and the factor of safety, by four.'],
+        ['same', 'It stays the same.', 'The working stress changes in both cases, so the factor of safety changes.'],
+      ], ($) => marginClass($.change), { label: 'factor of safety' }),
+    ],
+    hints: [
+      'The factor of safety is the yield stress divided by the working stress. See whether the change alters the load or the area.',
+      'Stress is load over area, and the area of a round rod follows the square of the diameter.',
+    ],
+    steps: ($) => [
+      $.change === 'load'
+        ? 'The load doubles and the area does not, so the stress doubles and the factor of safety halves.'
+        : 'Doubling the diameter multiplies the area by four. The load is unchanged, so the factor of safety rises by four.',
+    ],
+    second: ($) => {
+      const A = circleArea($.d);
+      const base = ROD_SY / axialStress(ROD_P, A);
+      const next = $.change === 'load' ? ROD_SY / axialStress(2 * ROD_P, A) : ROD_SY / axialStress(ROD_P, 4 * A);
+      const ratio = next / base;
+      const FS = nearRatio(ratio, 0.5) ? 'half' : nearRatio(ratio, 4) ? 'four' : nearRatio(ratio, 2) ? 'double' : 'same';
+      return { FS };
+    },
+    sim: {
+      scenario: 'square',
+      setup(s, $) {
+        s.theta = 0;
+        s.A = circleArea($.d);
+        s.P = ROD_P;
+        if ($.change === 'load') s.P = 2 * ROD_P;
+        else s.A = 4 * circleArea($.d);
+      },
+      read: (c, s, $) => {
+        const base = ROD_SY / axialStress(ROD_P, circleArea($.d));
+        const ratio = (ROD_SY / c.sigma) / base;
+        const FS = nearRatio(ratio, 0.5) ? 'half' : nearRatio(ratio, 4) ? 'four' : nearRatio(ratio, 2) ? 'double' : 'same';
+        return { FS };
+      },
+    },
+    cases: [
+      kase(cite('factor-of-safety'), { change: 'load', d: 20 }, { FS: 'half' }),
+      kase(cite('factor-of-safety'), { change: 'diameter', d: 20 }, { FS: 'four' }),
+    ],
   }),
 ];
 
