@@ -230,7 +230,12 @@ export function tickValues(map, count = 5) {
   const m = raw / p;
   const step = (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p;
   const out = [];
-  for (let v = Math.ceil(lo / step - 1e-9) * step; v <= hi + step * 1e-9; v += step) out.push(Number(v.toPrecision(10)));
+  const start = Math.ceil(lo / step - 1e-9);
+  const end = Math.floor((hi + step * 1e-9) / step);
+  for (let i = start; i <= end; i++) {
+    const v = i * step;
+    out.push(Math.abs(v) <= step * 1e-8 ? 0 : Number(v.toPrecision(10)));
+  }
   return out;
 }
 
