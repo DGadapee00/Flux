@@ -4,10 +4,11 @@
  *   node src/mechanics/materials-selftest.js
  */
 import {
-  axialStress, bearing, bilinear, bilinearEnergy, circleArea, factorOfSafety, hookeStrain, hookeStress,
+  axialStress, axialStiffness, barElongation, bearing, bilinear, bilinearEnergy, circleArea,
+  constrainedThermal, factorOfSafety, fixedFixed, fixedFixedByStiffness, hookeStrain, hookeStress,
   inclined, inclinedByCut, lateralStrain, normalStrain, permanentSet, pinSegments, pinShear,
-  rambergOsgood, rambergStress, requiredArea, requiredDiameter, resilience, shearModulus, transform,
-  uniaxialVolumeStrain, volumeChange,
+  rambergOsgood, rambergStress, requiredArea, requiredDiameter, resilience, shearModulus,
+  taperedElongation, transform, uniaxialVolumeStrain, volumeChange,
 } from './materials.js';
 import { solveTruss, memberForce, methodOfSections } from './truss.js';
 
@@ -180,6 +181,45 @@ console.log('Strain and Hooke');
   approx(bilinearEnergy(0.01, 200e9, 250e6, 10e9), 0.5 * 250e6 * eyld + 0.5 * (250e6 + past.stress) * (0.01 - eyld), 1e-9, 'bilinear energy is the triangle plus the plastic trapezoid');
   approx(rambergOsgood(276e6, 68.9e9, 276e6, 10), 276e6 / 68.9e9 + 0.002, 1e-12, 'at the offset yield the plastic strain is 0.002');
   approx(rambergStress(276e6 / 68.9e9 + 0.002, 68.9e9, 276e6, 10), 276e6, 1e-9, 'bisection recovers the offset yield');
+}
+
+console.log('Axial deformation');
+{
+  const segs = [
+    { N: 20e3, L: 0.4, A: 200e-6, E: 200e9 },
+    { N: 8e3, L: 0.6, A: 100e-6, E: 200e9 },
+  ];
+  const byHand = (20e3 * 0.4) / (200e-6 * 200e9) + (8e3 * 0.6) / (100e-6 * 200e9);
+  approx(barElongation(segs), byHand, 1e-12, 'two segments add as NL/AE');
+  // Doubling every force doubles the elongation.
+  approx(barElongation(segs.map((s) => ({ ...s, N: 2 * s.N }))), 2 * byHand, 1e-12, 'double the forces, double the elongation');
+  const d0 = 0.04;
+  const d1 = 0.02;
+  const closed = taperedElongation(30e3, 0.8, 70e9, d0, d1);
+  let quad = 0;
+  const n = 8000;
+  const dx = 0.8 / n;
+  for (let i = 0; i < n; i++) {
+    const x = (i + 0.5) * dx;
+    const d = d0 + (d1 - d0) * (x / 0.8);
+    const A = (Math.PI * d * d) / 4;
+    quad += (30e3 / (A * 70e9)) * dx;
+  }
+  approx(quad, closed, 1e-6, 'a linear taper matches ∫ P/(AE) dx');
+  const ff = fixedFixed(12e3, 2, 0.5);
+  const stiff = fixedFixedByStiffness(12e3, 2, 0.5, 400e-6, 200e9);
+  approx(ff.left, 9e3, 1e-12, 'the left wall of a fixed-fixed bar carries P(L−a)/L');
+  approx(ff.left, stiff.left, 1e-12, 'the force method matches the two springs');
+  approx(ff.left + ff.right, 12e3, 1e-12, 'the two reactions sum to P');
+  // A shorter left side is stiffer, so it carries more than half.
+  ok(fixedFixed(10e3, 2, 0.4).left > 5e3, 'the shorter segment carries more than half');
+  const hot = constrainedThermal(200e9, 12e-6, 40, { L: 3, gap: 0 });
+  approx(hot.stress, -200e9 * 12e-6 * 40, 1e-9, 'a fully held bar stresses at −EαΔT');
+  const open = constrainedThermal(200e9, 12e-6, 10, { L: 2, gap: 0.001 });
+  ok(open.stress === 0 && open.free < 0.001, 'a gap that is still open carries no stress');
+  const shut = constrainedThermal(200e9, 12e-6, 50, { L: 2, gap: 0.0005 });
+  approx(shut.stress, -200e9 * (12e-6 * 50 - 0.0005 / 2), 1e-6, 'after the gap closes, only the extra expansion stresses the bar');
+  approx(axialStiffness(200e-6, 200e9, 1), 40e6, 1e-12, 'AE/L for a 200 mm² bar one metre long is 40 MN/m');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);

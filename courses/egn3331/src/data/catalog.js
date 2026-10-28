@@ -7,7 +7,7 @@
 export const EXAMS = [
   { id: 'u1', n: 1, title: 'Stress', chapters: '1', date: 'Ch 1', labs: ['cut', 'truss-stress', 'pins', 'shackle'], coming: [] },
   { id: 'u2', n: 2, title: 'Strain and material behaviour', chapters: '2, 3', date: 'Ch 2–3', labs: ['tension-test', 'poisson', 'brace'], coming: [] },
-  { id: 'u3', n: 3, title: 'Axial load', chapters: '4', date: 'Ch 4', labs: [], coming: ['Axial bar', 'Indeterminate', 'Thermal'] },
+  { id: 'u3', n: 3, title: 'Axial load', chapters: '4', date: 'Ch 4', labs: ['axial', 'indeterminate', 'rail'], coming: [] },
   { id: 'u4', n: 4, title: 'Multiaxial stress and pressure vessels', chapters: '8, 10', date: 'Ch 8, 10', labs: [], coming: ['Vessel', 'Multiaxial'] },
   { id: 'u5', n: 5, title: 'Stress transformation and failure', chapters: '8, 9', date: 'Ch 8–9', labs: [], coming: ['Mohr', 'Combined'] },
   { id: 'u6', n: 6, title: 'Bending', chapters: '6', date: 'Ch 6', labs: [], coming: ['Diagrams', 'Flexure'] },
@@ -26,12 +26,16 @@ export const LAB_META = {
   'tension-test': { id: 'tension-test', exam: 'u2', title: 'Tension test' },
   poisson: { id: 'poisson', exam: 'u2', title: 'Poisson' },
   brace: { id: 'brace', exam: 'u2', title: 'Brace rod', app: true },
+  axial: { id: 'axial', exam: 'u3', title: 'Axial bar' },
+  indeterminate: { id: 'indeterminate', exam: 'u3', title: 'Indeterminate bar' },
+  rail: { id: 'rail', exam: 'u3', title: 'Welded rail', app: true },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Stress',
   2: 'Strain',
   3: 'Mechanical properties',
+  4: 'Axial load',
 };
 
 export function examById(id) {

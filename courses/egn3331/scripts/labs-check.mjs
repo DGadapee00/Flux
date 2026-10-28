@@ -18,6 +18,9 @@ const LIMIT = {
   'tension-test': 1e-6,
   poisson: 1e-9,
   brace: 1e-9,
+  axial: 1e-8,
+  indeterminate: 1e-12,
+  rail: 1e-9,
 };
 
 const fails = [];
