@@ -24,10 +24,11 @@
     <a href="#s3"><span>03</span>Rolling without slip</a>
     <a href="#s4"><span>04</span>The instantaneous centre</a>
     <a href="#s5"><span>05</span>Conservation of energy</a>
-    <h3>Part III · An application</h3>
-    <a href="#s6"><span>06</span>Application: a lander tipping over</a>
+    <h3>Part III · Tipping, and an application</h3>
+    <a href="#s6"><span>06</span>Tipping about a pad</a>
+    <a href="#s7"><span>07</span>Application: a wheelchair on a ramp</a>
     <h3>Reference</h3>
-    <a href="#s7"><span>07</span>Formula sheet</a>
+    <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -208,62 +209,109 @@
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>Energy gives speeds at positions, not times, and not forces. The pulley's cord tension above came from a separate force equation. Every "no work" item depends on its constraint holding: a slipping wheel, a stretching cable, or a pin with friction turns a non-working force into a lossy one.</p>
 </div>
-<p class="bridge">Part III asks whether a landed vehicle has the energy to tip over.</p>
+<p class="bridge">Part III asks whether a machine rocked on one pad has the energy to tip over, then rolls a wheelchair down a ramp.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/37-2-worked-example-wheel-rolling-without-slipping-down-inclined-plane/" target="_blank" rel="noopener">37.2 Worked Example - Wheel Rolling Without Slipping Down Inclined Plane</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-8-potential-energy-and-energy-conservation/24-1-mechanical-energy-and-energy-conservation/" target="_blank" rel="noopener">24.1 Mechanical Energy and Energy Conservation</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/finding-equations-of-motion-for-rigid-body-rotation/" target="_blank" rel="noopener">Lecture 8, Finding Equations of Motion for Rigid Body Rotation</a>.</p>
 </section>
 <div class="part">
   <div class="eyebrow">Part III</div>
-  <h2>An application</h2>
+  <h2>Tipping, and an application</h2>
 </div>
 
 <section class="topic" id="s6">
-<h2><span class="n">06</span>Application: a lander tipping over</h2>
-<p>A vehicle that lands on legs can tip over. A gust, a sideways drift at touchdown, or a pad on a rock starts it turning about one footpad. It either rocks back or goes over. Energy decides which, in one line.</p>
-<p>Take the outer pad as O. The vehicle turns about O as a rigid body. The pad's force acts at a point that does not move, so it does no work. Only the weight does. Section 5 applies: \(T_1 + V_1 = T_2 + V_2\).</p>
+<h2><span class="n">06</span>Tipping about a pad</h2>
+<p>A tall machine on footpads can tip over. A bump from a forklift, a shove, or a pad on a ledge starts it turning about one pad. It either rocks back or goes over. Energy decides which, in one line.</p>
+<p>Take the outer pad as O. The machine turns about O as a rigid body. The pad's force acts at a point that does not move, so it does no work. Only the weight does. Section 5 applies: \(T_1 + V_1 = T_2 + V_2\).</p>
 <div class="box why"><span class="tag">Why the tip-over speed is what it is</span>
-<p>Let G sit a height \(h\) above the pads and a distance \(b\) in from O. Then G is \(r = \sqrt{b^2 + h^2}\) from O. As the vehicle tilts by \(\theta\), G swings on a circle of radius \(r\) about O. Its height is \(r\cos(\varphi_0 - \theta)\), with \(\tan\varphi_0 = b/h\).</p>
-<p>That height is largest, \(r\), at \(\theta = \varphi_0\): G straight above the pad. Past that point the weight's moment about O changes sign and pulls the vehicle over. So the vehicle tips if and only if its kinetic energy can lift G by \(\Delta h = r - h\).</p>
+<p>Let G sit a height \(h\) above the pads and a distance \(b\) in from O. Then G is \(r = \sqrt{b^2 + h^2}\) from O. As the machine tilts by \(\theta\), G swings on a circle of radius \(r\) about O. Its height is \(r\cos(\varphi_0 - \theta)\), with \(\tan\varphi_0 = b/h\).</p>
+<p>That height is largest, \(r\), at \(\theta = \varphi_0\): G straight above the pad. Past that point the weight's moment about O changes sign and pulls the machine over. So the machine tips if and only if its kinetic energy can lift G by \(\Delta h = r - h\).</p>
 <p>About the fixed pad, \(T = \tfrac12 I_O\omega^2\), with \(I_O = m(k_G^2 + r^2)\) by the parallel-axis theorem. Set \(\tfrac12 I_O\omega_c^2 = mg\,\Delta h\):</p>
 \[
 \omega_c = \sqrt{\frac{2g\,(r - h)}{k_G^2 + r^2}}.
 \]
 <p>The mass cancels. Only the geometry is left: where G is, and how the mass is spread about it.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a squat lander</span>
-<p>A 600 kg lander has G 1.5 m above its pads and 2.0 m in from each pad. Its radius of gyration about G is 1.5 m. A gust rocks it about one pad at 1.0 rad/s.</p>
-<p>Here \(r = \sqrt{2^2 + 1.5^2} = 2.5\) m, so G must rise \(2.5 - 1.5 = 1.0\) m. The barrier is \(600(9.81)(1.0) = 5{,}890\) J. With \(I_O = 600(1.5^2 + 2.5^2) = 5{,}100\ \mathrm{kg\cdot m^2}\), the vehicle has \(\tfrac12(5100)(1.0)^2 = 2{,}550\) J. It rocks back.</p>
+<div class="box ex"><span class="tag">Worked example · a squat machine</span>
+<p>A 600 kg machine has G 1.5 m above its pads and 2.0 m in from each pad. Its radius of gyration about G is 1.5 m. A bump rocks it about one pad at 1.0 rad/s.</p>
+<p>Here \(r = \sqrt{2^2 + 1.5^2} = 2.5\) m, so G must rise \(2.5 - 1.5 = 1.0\) m. The barrier is \(600(9.81)(1.0) = 5{,}890\) J. With \(I_O = 600(1.5^2 + 2.5^2) = 5{,}100\ \mathrm{kg\cdot m^2}\), the machine has \(\tfrac12(5100)(1.0)^2 = 2{,}550\) J. It rocks back.</p>
 <p>It stops where \(\cos(\varphi_0 - \theta) = h/r + T_1/(mgr) = 0.6 + 2550/14{,}715 = 0.773\). That is \(\varphi_0 - \theta = 39.4^\circ\). With \(\varphi_0 = 53.1^\circ\), the largest tilt is 13.8°.</p>
 <p>The tip-over speed is \(\omega_c = \sqrt{2(9.81)(1.0)/8.5} = 1.52\) rad/s.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a harder gust</span>
-<p>The same lander rocked at 1.6 rad/s has \(\tfrac12(5100)(1.6)^2 = 6{,}530\) J, more than the 5,890 J barrier. It goes over. At the balance point it still turns at \(\sqrt{1.6^2 - 1.519^2} = 0.502\) rad/s.</p>
+<div class="box ex"><span class="tag">Worked example · a harder bump</span>
+<p>The same machine rocked at 1.6 rad/s has \(\tfrac12(5100)(1.6)^2 = 6{,}530\) J, more than the 5,890 J barrier. It goes over. At the balance point it still turns at \(\sqrt{1.6^2 - 1.519^2} = 0.502\) rad/s.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a tall vehicle on narrow legs</span>
-<p>A 1,200 kg hop-test vehicle is tall and slim. G is 4.0 m up, the pads 1.5 m out, and \(k_G = 2.5\) m. Then \(r = \sqrt{1.5^2 + 4^2} = 4.27\) m. G need rise only \(4.272 - 4 = 0.272\) m.</p>
+<div class="box ex"><span class="tag">Worked example · a tall cabinet on a narrow base</span>
+<p>A 1,200 kg cabinet is tall and slim. G is 4.0 m up, the pads 1.5 m out, and \(k_G = 2.5\) m. Then \(r = \sqrt{1.5^2 + 4^2} = 4.27\) m. G need rise only \(4.272 - 4 = 0.272\) m.</p>
 <p>\(I_O/m = 2.5^2 + 4.272^2 = 24.5\ \mathrm{m^2}\), so \(\omega_c = \sqrt{2(9.81)(0.272)/24.5} = 0.467\) rad/s. A rock of 0.5 rad/s tips it: it has 3,680 J against a barrier of 3,200 J.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · spreading the legs</span>
-<p>Give the same vehicle legs that reach 3.0 m out. Now \(r = 5.0\) m and the climb is a full 1.0 m. \(I_O/m = 6.25 + 25 = 31.25\ \mathrm{m^2}\), so \(\omega_c = \sqrt{19.62/31.25} = 0.792\) rad/s.</p>
-<p>Doubling the stance raised \(\omega_c\) by 70%. The 0.5 rad/s rock now lifts G to a tilt of only 8.5° before it falls back.</p>
+<div class="box ex"><span class="tag">Worked example · widening the base</span>
+<p>Give the same cabinet a base whose pads reach 3.0 m out. Now \(r = 5.0\) m and the climb is a full 1.0 m. \(I_O/m = 6.25 + 25 = 31.25\ \mathrm{m^2}\), so \(\omega_c = \sqrt{19.62/31.25} = 0.792\) rad/s.</p>
+<p>Doubling the base raised \(\omega_c\) by 70%. The 0.5 rad/s rock now lifts G to a tilt of only 8.5° before it falls back.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · a uniform box</span>
-<p>A cargo module is a uniform box 4.0 m wide and 3.0 m tall, on pads at its bottom corners. For a box, \(k_G^2 = (w^2 + H^2)/12 = 25/12 = 2.08\ \mathrm{m^2}\). G is 1.5 m up and 2.0 m in, so \(r = 2.5\) m again.</p>
+<p>A crate is a uniform box 4.0 m wide and 3.0 m tall, on pads at its bottom corners. For a box, \(k_G^2 = (w^2 + H^2)/12 = 25/12 = 2.08\ \mathrm{m^2}\). G is 1.5 m up and 2.0 m in, so \(r = 2.5\) m again.</p>
 <p>\(I_O/m = 2.08 + 6.25 = 8.33\ \mathrm{m^2}\), which is \(\tfrac43 r^2\), the box's moment about its corner. Then \(\omega_c = \sqrt{19.62/8.333} = 1.53\) rad/s.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Using \(I_G\) for the spin. The vehicle turns about the pad, not about G. For the squat lander, \(I_G\) alone gives \(\omega_c = \sqrt{19.62/2.25} = 2.95\) rad/s, nearly twice the true 1.52 rad/s. A designer who trusted it would think the lander twice as safe as it is. Hibbeler §18.5.</p>
+<p>Using \(I_G\) for the spin. The machine turns about the pad, not about G. For the squat machine, \(I_G\) alone gives \(\omega_c = \sqrt{19.62/2.25} = 2.95\) rad/s, nearly twice the true 1.52 rad/s. A designer who trusted it would think the machine twice as safe as it is. Hibbeler §18.5.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Tipping is an energy barrier. G must climb \(\sqrt{b^2 + h^2} - h\) to get above the pad. Wide pads and a low G make the climb long. Mass does not matter.</p>
 </div>
-<p>In the Tip-over lab, the chart plots the rise of G against tilt, per kilogram, with the starting kinetic energy as a dashed line. Where the line meets the curve, the vehicle stops. A time-stepped integration of \(I_O\ddot\theta = -mgr\sin(\varphi_0 - \theta)\) gives the same largest tilt as the energy equation.</p>
+<p>In the Tip-over lab, the chart plots the rise of G against tilt, per kilogram, with the starting kinetic energy as a dashed line. Where the line meets the curve, the machine stops. A time-stepped integration of \(I_O\ddot\theta = -mgr\sin(\varphi_0 - \theta)\) gives the same largest tilt as the energy equation.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>The model starts with the vehicle already turning about the pad. The snag that starts it is an impact, which needs angular momentum, not energy. It also assumes the pad does not slide, the ground is level, and the legs are rigid. A leg that crushes lowers G as it tilts and helps. A slope tilts the vehicle before the gust arrives and shrinks the climb.</p>
+<p>The model starts with the machine already turning about the pad. The snag that starts it is an impact, which needs angular momentum, not energy. It also assumes the pad does not slide, the ground is level, and the feet are rigid. A foot that crushes lowers G as it tilts and helps. A slope tilts the machine before the bump arrives and shrinks the climb.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-8-potential-energy-and-energy-conservation/24-1-mechanical-energy-and-energy-conservation/" target="_blank" rel="noopener">24.1 Mechanical Energy and Energy Conservation</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/29-1-kinetic-energy-of-rotation/" target="_blank" rel="noopener">29.1 Kinetic Energy of Rotation</a>.</p>
 </section>
 <section class="topic" id="s7">
-<h2><span class="n">07</span>Formula sheet</h2>
+<h2><span class="n">07</span>Application: a wheelchair on a ramp</h2>
+<p>An accessible ramp lets a wheelchair user change level without steps. The 2010 ADA Standards set its limits: a running slope no steeper than 1:12 (§405.2), and no more than 30 in of rise in one run (§405.6). Released at the top, how fast does a chair arrive at the foot?</p>
+<p>Take a 15 kg manual chair and an 80 kg rider, 95 kg in all. The two 24 in rear wheels are 1.2 kg each, spoked, with most of their mass at the rim: \(k = 0.9R\). The two 6 in casters are 0.3 kg solid disks: \(k^2 = R^2/2\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Every wheel's axle moves with the chair at \(v\). A wheel that rolls without slipping spins at \(\omega = v/R\), so it carries</p>
+\[
+\tfrac12 m_w v^2 + \tfrac12 m_w k^2\omega^2 = \tfrac12\Big(m_w + \frac{m_w k^2}{R^2}\Big)v^2 .
+\]
+<p>Sum over the chair: \(T = \tfrac12 m_{eff} v^2\), with \(m_{eff} = m + \sum m_w k^2/R^2\) and \(m\) the total mass. The ground's forces act at contact points that are at rest, so they do no work. The weight does \(mgH\). Rolling resistance, \(c\,mg\cos\theta\) along the ramp, does \(-c\,mg\cos\theta\,L\) over the length \(L = H/\sin\theta\). From rest:</p>
+\[
+\tfrac12 m_{eff}v^2 = mgH - c\,mg\cos\theta\,L .
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · the ADA limit</span>
+<p>A 30 in rise is 0.762 m. At 1:12, \(\theta = \tan^{-1}(1/12) = 4.76^\circ\), and the ramp is \(0.762/\sin 4.76^\circ = 9.18\) m long. The wheels add \(2(1.2)(0.81) + 2(0.3)(0.5) = 2.24\) kg, so \(m_{eff} = 97.2\) kg.</p>
+<p>The weight does \(95(9.81)(0.762) = 710\) J. With no resistance, \(v = \sqrt{2(710)/97.2} = 3.82\) m/s, or 8.5 mph. That is a fast run, faster than most people walk. The chair takes 4.8 s to get there.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the wheels' share</span>
+<p>The rear wheels spin at \(3.82/0.305 = 12.5\) rad/s; the casters at \(3.82/0.0762 = 50.2\) rad/s. Together their spin holds \(\tfrac12(2.24)(3.82^2) = 16.4\) J, 2.3% of the 710 J.</p>
+<p>The wheels are light next to the rider, so their spin barely matters. A hoop rolling alone keeps half its energy in spin; here the chair's frame and rider carry nearly all of it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · with rolling resistance</span>
+<p>Take \(c = 0.012\), an assumed value. Resistance works over the whole 9.18 m: \(0.012(95)(9.81)\cos 4.76^\circ(9.18) = 102\) J, 14% of the drop. The chair arrives at \(\sqrt{2(710 - 102)/97.2} = 3.54\) m/s.</p>
+<p>The share is \(c\cot\theta = 12c\) on a 1:12 ramp. A gentle ramp is long, and resistance acts over all of it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · too steep, same rise</span>
+<p>Build the same 30 in rise at 1:8, which ADA forbids for new work. With no resistance only the rise matters, so the chair still arrives at 3.82 m/s. The ramp is 6.14 m long, and it gets there in 3.2 s instead of 4.8 s. A steep ramp does not make the chair faster at the foot; it makes the run harder to control.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · arriving at a walk</span>
+<p>To arrive at 1.0 m/s on the ADA ramp, the rider's hands must take \(710 - \tfrac12(97.2)(1.0^2) = 662\) J through the rims. Spread over 9.18 m, that is 72 N of braking along the ramp, all the way down. That load on the palms is why ramps get handrails and level landings.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the ramp's length for the drop. The weight works through the change in height: \(mgH\), not \(mgL\). For the ADA ramp, \(L = 9.18\) m in place of 0.762 m gives 13.3 m/s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Giving every wheel the rear wheel's \(\omega\). Each wheel spins at its own \(v/R\). The 6 in casters spin four times as fast as the 24 in wheels, sixteen times the \(\omega^2\).</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Rolling wheels add \(\sum I/R^2\) to the mass that moves. The rise sets the energy; the slope sets the time and how long resistance has to act. The mass cancels, apart from the wheels' small share.</p>
+</div>
+<p>In the Wheelchair lab, the three scenarios are the first, third and fourth examples. Play the run, and watch the chart split the weight's work into the chair's motion, the wheels' spin and rolling resistance.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The rolling resistance coefficient is assumed. Real values depend on the tyres, their pressure, the casters and the floor, and on how the rider's weight splits between casters and rear wheels. Bearing friction and air drag are left out. Above all, a real rider brakes with the hand rims; the model releases the chair and lets it run.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-8-potential-energy-and-energy-conservation/24-1-mechanical-energy-and-energy-conservation/" target="_blank" rel="noopener">24.1 Mechanical Energy and Energy Conservation</a>.</p>
+</section>
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Formula sheet</h2>
 <ul>
 <li>Hoop \(k = 1\). Disk \(k = 1/2\). Solid sphere \(k = 2/5\). Here \(k = I_G/(mR^2) = k_G^2/R^2\).</li>
 <li>Rolling from rest: \(v = \sqrt{2gs\sin\theta/(1+k)}\). Rotational share: \(k/(1 + k)\).</li>
@@ -272,6 +320,7 @@
 <li>Couple: \(U = \int M\,d\theta\), \(P = M\omega\).</li>
 <li>Torsional spring, unstretched at \(\theta_0\): \(U = \tfrac{1}{2}\kappa\big((\theta_1-\theta_0)^2 - (\theta_2-\theta_0)^2\big)\), with the angles in radians.</li>
 <li>Rod in two slots: \(I_{IC} = mL^2/3\), \(T = \tfrac{1}{2}I_{IC}\omega^2\), and \(\omega^2 = 3g(\sin\theta_1 - \sin\theta_2)/L\).</li>
+<li>Rolling wheels: \(T = \tfrac12\big(m + \sum I/R^2\big)v^2\). Down a ramp from rest: \(\tfrac12 m_{eff}v^2 = mgH - c\,mg\cos\theta\,L\).</li>
 <li>Tip-over about a pad: \(r = \sqrt{b^2 + h^2}\), \(I_O = m(k_G^2 + r^2)\), \(\omega_c = \sqrt{2g(r - h)/(k_G^2 + r^2)}\).</li>
 <li>\(g = 9.81\ \mathrm{m/s^2}\). A US problem uses \(g = 32.2\ \mathrm{ft/s^2}\).</li>
 </ul>

@@ -67,7 +67,7 @@ export const EXAMS = [
     title: 'Rigid-body energy',
     chapters: '18',
     date: 'Ch 18',
-    labs: ['race', 'linkage', 'tipover'],
+    labs: ['race', 'linkage', 'tipover', 'wheelchair'],
     coming: [],
   },
   {
@@ -111,7 +111,8 @@ export const LAB_META = {
   gearbox: { id: 'gearbox', exam: 'u5', title: 'Gears' },
   bike: { id: 'bike', exam: 'u5', title: 'Bike', app: true },
   hoist: { id: 'hoist', exam: 'u6', title: 'Elevator', app: true },
-  tipover: { id: 'tipover', exam: 'u7', title: 'Tip-over', app: true },
+  tipover: { id: 'tipover', exam: 'u7', title: 'Tip-over' },
+  wheelchair: { id: 'wheelchair', exam: 'u7', title: 'Wheelchair', app: true },
   spin: { id: 'spin', exam: 'u8', title: 'Spin' },
   strike: { id: 'strike', exam: 'u8', title: 'Strike' },
   bat: { id: 'bat', exam: 'u8', title: 'Bat', app: true },

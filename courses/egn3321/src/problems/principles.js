@@ -253,6 +253,7 @@ export const PRINCIPLE_TAGS = {
   'u7.18.slots': ['rigid-energy', 'rel-velocity'],
   'u7.18.spring': ['rigid-energy'],
   'u7.18.wheel-hill': ['rigid-energy', 'rolling'],
+  'u7.18.wheelchair': ['rigid-energy', 'rolling'],
   'u8.19.momentum': ['rigid-momentum'],
   'u8.19.angular-impulse': ['rigid-momentum'],
   'u8.19.spin': ['angular-cons', 'rigid-energy'],

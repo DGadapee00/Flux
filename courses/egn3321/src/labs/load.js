@@ -35,6 +35,7 @@ const loaders = {
   bike: () => import('./bike.js'),
   hoist: () => import('./hoist.js'),
   tipover: () => import('./tipover.js'),
+  wheelchair: () => import('./wheelchair.js'),
   bat: () => import('./bat.js'),
 };
 

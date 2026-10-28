@@ -165,8 +165,9 @@ conceptual, 83% structural variety; every practice-loop feature on; coaching per
   vibration, which belong to EML 4312. Units 1–4 map to 8.01SC weeks 1–9; Units 5–7 map to 2.003SC
   lectures 3–8. 8.01SC puts momentum before energy; Dynamics puts energy first. Under D29
   Units 3 and 4 swap.
-- Application labs include rocket and turbopump labs (`liftoff`, `rocket`, `spinup`). They are
-  generic rocket physics, not the methalox engine, so D25 does not require removing them.
+- Application labs were rocket, lander and turbopump labs. Under D36 each became an everyday or
+  industrial device with cited numbers: `highway`, `helmet`, `stopping`, `bike`, `hoist`,
+  `wheelchair`, and `bat` for Unit 8. `rocket`, `gearbox` and `tipover` stay as concept labs.
 
 ### 4.2 EML 3100 Thermodynamics
 

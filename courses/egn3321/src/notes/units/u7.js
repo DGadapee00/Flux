@@ -11,7 +11,8 @@ export default {
     { id: 's3', n: 3, title: 'Rolling without slip', lab: 'race', ch: ['18'], topics: ['race'], home: true },
     { id: 's4', n: 4, title: 'The instantaneous centre', lab: 'linkage', ch: ['18'], topics: ['linkage', 'spring'], home: true },
     { id: 's5', n: 5, title: 'Conservation of energy', lab: null, ch: ['18'], topics: ['energy'] },
-    { id: 's6', n: 6, title: 'Application: a lander tipping over', lab: 'tipover', ch: ['18'], topics: ['tipover'], problems: ['u7.18.tipover', 'u7.18.tip-change'], home: true },
-    { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's6', n: 6, title: 'Tipping about a pad', lab: 'tipover', ch: ['18'], topics: ['tipover'], problems: ['u7.18.tipover', 'u7.18.tip-change'], home: true },
+    { id: 's7', n: 7, title: 'Application: a wheelchair on a ramp', lab: 'wheelchair', ch: ['18'], topics: ['energy', 'race'], problems: ['u7.18.wheelchair'], home: true },
+    { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

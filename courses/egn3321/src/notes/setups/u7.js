@@ -128,26 +128,52 @@ export default {
     },
   ],
   s6: [
-    { tag: 'a squat lander', lab: 'tipover', scenario: 'lander', read: (c) => ({ dh: [c.dh, 1.0], IO: [c.IO, 5100], omegaC: [c.omegaC, 1.52], tilt: [c.thetaMaxDeg, 13.8] }) },
+    { tag: 'a squat machine', lab: 'tipover', scenario: 'squat', read: (c) => ({ dh: [c.dh, 1.0], IO: [c.IO, 5100], omegaC: [c.omegaC, 1.52], tilt: [c.thetaMaxDeg, 13.8] }) },
     {
-      tag: 'a harder gust',
+      tag: 'a harder bump',
       lab: 'tipover',
-      scenario: 'lander',
+      scenario: 'squat',
       setup(s) {
         s.w0 = 1.6;
       },
       read: (c) => ({ T0: [c.T0, 6530], wTop: [c.wTop, 0.502] }),
     },
-    { tag: 'a tall vehicle on narrow legs', lab: 'tipover', scenario: 'tall', read: (c) => ({ r: [c.r, 4.27], dh: [c.dh, 0.272], omegaC: [c.omegaC, 0.467], T0: [c.T0, 3680], barrier: [c.barrier, 3200] }) },
-    { tag: 'spreading the legs', lab: 'tipover', scenario: 'wide', read: (c) => ({ omegaC: [c.omegaC, 0.792], tilt: [c.thetaMaxDeg, 8.5] }) },
+    { tag: 'a tall cabinet on a narrow base', lab: 'tipover', scenario: 'tall', read: (c) => ({ r: [c.r, 4.27], dh: [c.dh, 0.272], omegaC: [c.omegaC, 0.467], T0: [c.T0, 3680], barrier: [c.barrier, 3200] }) },
+    { tag: 'widening the base', lab: 'tipover', scenario: 'wide', read: (c) => ({ omegaC: [c.omegaC, 0.792], tilt: [c.thetaMaxDeg, 8.5] }) },
     {
       tag: 'a uniform box',
       lab: 'tipover',
-      scenario: 'lander',
+      scenario: 'squat',
       setup(s) {
         s.kG = Math.sqrt(25 / 12);
       },
       read: (c) => ({ IOm: [c.IOm, 8.333], omegaC: [c.omegaC, 1.53] }),
+    },
+  ],
+  s7: [
+    {
+      tag: 'the ADA limit',
+      lab: 'wheelchair',
+      scenario: 'ada',
+      read: (c) => ({ L: [c.L, 9.18], mEff: [c.mEff, 97.2], drop: [c.drop, 710], v: [c.v, 3.82], t: [c.t, 4.8] }),
+    },
+    {
+      tag: 'the wheels\' share',
+      lab: 'wheelchair',
+      scenario: 'ada',
+      read: (c) => ({ rear: [c.rear.omega, 12.5], caster: [c.caster.omega, 50.2], spin: [c.Trot, 16.4], share: [c.Trot / c.drop, 0.023] }),
+    },
+    {
+      tag: 'with rolling resistance',
+      lab: 'wheelchair',
+      scenario: 'resist',
+      read: (c) => ({ lost: [c.lost, 102], v: [c.v, 3.54] }),
+    },
+    {
+      tag: 'too steep, same rise',
+      lab: 'wheelchair',
+      scenario: 'steep',
+      read: (c) => ({ v: [c.v, 3.82], L: [c.L, 6.14], t: [c.t, 3.2] }),
     },
   ],
 };

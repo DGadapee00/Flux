@@ -8,8 +8,8 @@ const G = 9.81;
 const DEG = Math.PI / 180;
 
 /**
- * Application: a landed vehicle tipping about one footpad (Hibbeler §18.4, §18.5). It touches down
- * with a sideways rock and turns about the outer pad O at ω₀. Only the weight does work: the pad's
+ * A tall machine tipping about one footpad (Hibbeler §18.4, §18.5). A bump sets it turning about the
+ * outer pad O at ω₀. Only the weight does work: the pad's
  * force acts at a point that does not move. It tips over when its kinetic energy can lift the mass
  * centre to the top of its arc, straight above O.
  *
@@ -18,9 +18,9 @@ const DEG = Math.PI / 180;
  * Δh = r − h.
  */
 const SCENARIOS = [
-  { id: 'lander', name: 'Squat lander', m: 600, h: 1.5, b: 2, kG: 1.5, w0: 1 },
-  { id: 'tall', name: 'Tall hop vehicle, narrow legs', m: 1200, h: 4, b: 1.5, kG: 2.5, w0: 0.5 },
-  { id: 'wide', name: 'Tall hop vehicle, wide legs', m: 1200, h: 4, b: 3, kG: 2.5, w0: 0.5 },
+  { id: 'squat', name: 'Squat machine', m: 600, h: 1.5, b: 2, kG: 1.5, w0: 1 },
+  { id: 'tall', name: 'Tall cabinet, narrow base', m: 1200, h: 4, b: 1.5, kG: 2.5, w0: 0.5 },
+  { id: 'wide', name: 'Tall cabinet, wide base', m: 1200, h: 4, b: 3, kG: 2.5, w0: 0.5 },
 ];
 
 function apply(id, state) {
@@ -101,18 +101,19 @@ export function omegaCNumeric(geom) {
 }
 
 /** What the real device has that the model ignores (D30). */
-const OUT = String.raw`The model starts with the vehicle already turning about the pad. What starts it is an impact, which needs angular momentum, not energy. It also assumes the pad does not slide, the ground is level, and the legs are rigid. A leg that crushes lowers $G$ as the vehicle tilts and helps. A slope tilts the vehicle before the gust arrives and shrinks the climb.`;
+const OUT = String.raw`The model starts with the machine already turning about the pad. What starts it is an impact, which needs angular momentum, not energy. It also assumes the pad does not slide, the ground is level, and the feet are rigid. A foot that crushes lowers $G$ as the machine tilts and helps. A slope tilts the machine before the bump arrives and shrinks the climb.`;
 
 export default defineLab({
   id: 'tipover',
   exam: 'u7',
   title: 'Tip-over',
-  hint: 'Rock the vehicle on one pad. It goes over only if its kinetic energy lifts G above the pad.',
+  app: false,
+  hint: 'Rock the machine on one pad. It goes over only if its kinetic energy lifts G above the pad.',
   gapLimit: 1e-4,
   scenarios: SCENARIOS,
   defaultState() {
     const s = {};
-    apply('lander', s);
+    apply('squat', s);
     return s;
   },
   applyScenario: apply,
@@ -124,7 +125,7 @@ export default defineLab({
       ${slider('tp-h', 'height of G, h (m)', 1.5, 0.5, 5, 0.1)}
       ${slider('tp-kG', 'radius of gyration k_G (m)', 1.5, 0.3, 3, 0.1)}
       ${slider('tp-m', 'mass m (kg)', 600, 100, 3000, 50)}
-      <p class="tiny">The vehicle turns about the outer pad O. The pad force does no work; only the weight does.</p>`;
+      <p class="tiny">The machine turns about the outer pad O. The pad force does no work; only the weight does.</p>`;
   },
   bind(api) {
     bindSlider('tp-w0', (s, v) => { s.w0 = v; }, api);
@@ -164,11 +165,11 @@ export default defineLab({
     const left = wide ? { ...B.free, x1: B.free.x0 + W * 0.5 } : { ...B.free, y1: B.free.y0 + H * 0.55 };
     const right = wide ? { ...B.free, x0: B.free.x0 + W * 0.5 } : { ...B.free, y0: B.free.y0 + H * 0.55 };
 
-    // The vehicle, tilted to its largest angle about the pad O at (0, 0). G starts at (−b, h).
+    // The machine, tilted to its largest angle about the pad O at (0, 0). G starts at (−b, h).
     const { b, h } = state;
     const th = c.tips ? c.phi0 : c.thetaMax;
     const S = sceneIn(B, left, { x0: -2.2 * b - 0.3, x1: Math.max(0.6, 0.9 * c.r), y0: -0.3, y1: Math.max(c.r, h * 1.6) + 0.3 }, 20);
-    // Rotate about O by −θ (the vehicle leans outward, to +x).
+    // Rotate about O by −θ (the machine leans outward, to +x).
     const rot = ([x, y]) => [x * Math.cos(th) + y * Math.sin(th), -x * Math.sin(th) + y * Math.cos(th)];
     seg(S, [-2.4 * b, 0], [Math.max(0.6, c.r), 0], { color: C.dim, width: 2 });
     const bw = Math.min(0.55 * b, 0.45 * h + 0.3);
@@ -255,7 +256,7 @@ export default defineLab({
     {
       id: 'tp-legs',
       scenario: 'tall',
-      ask: 'The tall vehicle tips at 0.5 rad/s. Double the pad offset, from 1.5 m to 3 m.',
+      ask: 'The tall cabinet tips at 0.5 rad/s. Double the pad offset, from 1.5 m to 3 m.',
       apply(s) { s.b = 3; },
       watch: [
         { id: 'omegaC', label: 'the tip-over speed $\\omega_c$', get: (c) => c.omegaC },
@@ -267,8 +268,8 @@ export default defineLab({
     },
     {
       id: 'tp-mass',
-      scenario: 'lander',
-      ask: 'Load the lander from 600 kg to 1,200 kg, with G and $k_G$ where they were.',
+      scenario: 'squat',
+      ask: 'Load the machine from 600 kg to 1,200 kg, with G and $k_G$ where they were.',
       apply(s) { s.m = 1200; },
       watch: [
         { id: 'omegaC', label: 'the tip-over speed $\\omega_c$', get: (c) => c.omegaC },
@@ -280,8 +281,8 @@ export default defineLab({
     },
     {
       id: 'tp-cg',
-      scenario: 'lander',
-      ask: 'Raise the lander’s mass centre from 1.5 m to 3 m above the pads.',
+      scenario: 'squat',
+      ask: 'Raise the machine’s mass centre from 1.5 m to 3 m above the pads.',
       apply(s) { s.h = 3; },
       watch: [
         { id: 'dh', label: 'the rise $\\Delta h$ of G', get: (c) => c.dh },
