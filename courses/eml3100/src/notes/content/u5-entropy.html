@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Entropy</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EML 3100 · Thermodynamics · Unit 5 · Yan Ch 6</p>
+  <h1>Entropy</h1>
+  <p class="lede">Entropy measures how much of a heat transfer can still become work. A reversible path stores that limit in a property. An irreversible device generates more, and the extra is lost. Every number below is recomputed by the course's property library and checked a second way.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Entropy of a state change</h3>
+    <a href="#s1"><span>01</span>The ideal-gas change</a>
+    <a href="#s2"><span>02</span>An incompressible liquid</a>
+    <a href="#s3"><span>03</span>Steam heated at constant pressure</a>
+    <h3>Part II · Devices that should be isentropic</h3>
+    <a href="#s4"><span>04</span>A turbine</a>
+    <a href="#s5"><span>05</span>A compressor and a nozzle</a>
+    <h3>Part III · Heat and lost work</h3>
+    <a href="#s6"><span>06</span>Heat through a wall</a>
+    <h3>Reference</h3>
+    <a href="#s7"><span>07</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Entropy of a state change</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">01</span>The ideal-gas change</h2>
+<p>Entropy is a property. The change between two states does not depend on the path the gas took. The convenient path is reversible, because along it \(T\,ds = \delta q\).</p>
+<div class="box why"><span class="tag">Why the pressure term is subtracted</span>
+<p>Start from the first law for a closed reversible step, written per kilogram. \(\delta q - \delta w = du\), and the work is \(p\,dv\), so \(T\,ds = du + p\,dv\). Enthalpy is \(h = u + pv\), which differentiates to \(dh = du + p\,dv + v\,dp\). Swap \(du + p\,dv\) for \(T\,ds\):</p>
+\[
+T\,ds = dh - v\,dp.
+\]
+<p>Divide by \(T\). For an ideal gas, \(dh = c_p\,dT\) and \(v/T = R/p\), so</p>
+\[
+ds = c_p\frac{dT}{T} - R\frac{dp}{p}.
+\]
+<p>Integrate between the two states. The temperature piece is what the NASA polynomial stores as \(s^\circ(T)\). The pressure piece is exact:</p>
+\[
+\Delta s = s^\circ(T_2) - s^\circ(T_1) - R\ln\frac{p_2}{p_1}.
+\]
+<p>OpenStax UP2 §3.5 gives \(c_p - c_v = R\), which is why the same change can be written with \(c_v\) and the volume instead. Yan Ch 6 uses the pressure form above.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · air from 300 K to 500 K</span>
+<p>Air goes from 300 K and 100 kPa to 500 K and 400 kPa. The temperature part of \(\Delta s\) is 517.8 J/(kg·K). The pressure part, \(R\ln 4\), is 397.9 J/(kg·K). The change is \(517.8 - 397.9 = 119.9\) J/(kg·K). Heating raised the entropy. The compression gave a large share of it back.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Dropping the pressure term leaves 517.8 J/(kg·K), more than four times the real change. Adding the pressure term instead of subtracting it gives 915.7 J/(kg·K). A common log, base 10, is smaller than \(\ln\) by the factor 2.303 and is the wrong function here. Celsius temperatures do not belong in the ratio \(T_2/T_1\).</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Isothermal compression lowers the entropy, because only the pressure term survives and \(p_2 > p_1\). Isobaric heating raises it, because only the temperature term survives and \(T_2 > T_1\). Neither change is zero.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The NASA polynomial is an ideal gas. Near the saturation dome a real gas needs a departure chart, and this unit does not add one. Air is dry air. Humidity would add a mixture term. The fit itself runs from 200 K to 3500 K, and a state outside that range is refused rather than extrapolated.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>An incompressible liquid</h2>
+<p>A liquid model takes the volume as constant and the internal energy as a function of temperature alone. Then \(du = c\,dT\), and the Gibbs relation \(T\,ds = du + p\,dv\) loses the pressure term because \(dv = 0\).</p>
+<div class="box why"><span class="tag">Why pressure drops out of the entropy</span>
+<p>Divide \(c\,dT = T\,ds\) by \(T\) and integrate:</p>
+\[
+\Delta s = c\ln\frac{T_2}{T_1}.
+\]
+<p>The same statement in derivatives is \((\partial s/\partial p)_T = -(\partial v/\partial T)_p\). A constant \(v\) makes the right side zero, so entropy does not feel the pressure. Enthalpy still does. \(h = u + pv\) gives</p>
+\[
+\Delta h = c(T_2 - T_1) + v(p_2 - p_1).
+\]
+<p>At constant pressure the second term vanishes and the heat into the liquid is \(c\Delta T\). Yan Ch 6 is the source of this model. The specific heat used below is a stated 4.184 kJ/(kg·K), not a copied table entry.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · liquid water in the tables</span>
+<p>The steam tables, at 100 kPa, take liquid water from 20 °C to 80 °C. The enthalpy rises by 251.0 kJ/kg and the entropy rises by 778.9 J/(kg·K). The constant-heat model with 4.184 kJ/(kg·K) gives \(4.184 \times 60 = 251.04\) kJ/kg and \(4184\ln(353.15/293.15) = 779.1\) J/(kg·K). The two answers differ by a fraction of a percent. For this span the model is enough, and the tables remain the check.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The logarithm has to see kelvin. \(\ln(80/20) = 1.386\), and \(4184 \times 1.386 = 5795\) J/(kg·K), about seven times the real change. Replacing the logarithm by \((T_2 - T_1)/T_1\) is the first term of the series. Over a 60 K rise it is already several percent low. The heat is \(c\Delta T\). Multiplying \(\Delta s\) by one of the two temperatures is a different number.</p>
+</div>
+<p>In the Temperature and entropy lab, set the isobar to 100 kPa and the two temperatures to 20 °C and 80 °C. The heat reads 251.0 kJ/kg and \(\Delta s\) reads 778.9 J/(kg·K). The integral of \(dh/T\) agrees with the table difference.</p>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Steam heated at constant pressure</h2>
+<p>Superheated steam is not an incompressible liquid and it is not ideal air. The heat and the entropy come from the steam tables. The path still has a picture: on the T-s diagram a reversible isobar is a curve, and the area under it is the heat.</p>
+<div class="box why"><span class="tag">Why the area equals the heat</span>
+<p>At constant pressure, \(dh = \delta q\) for a reversible step, because the flow work is already inside \(h\) and no shaft work is taken. Divide by \(T\):</p>
+\[
+ds = \frac{dh}{T}.
+\]
+<p>Integrate along the isobar. The left side is \(s_2 - s_1\), which the tables list. The right side is the quadrature of \(dh/T\). They are the same number when the path stays in one region. The heat is the enthalpy change, not the internal-energy change:</p>
+\[
+q = h_2 - h_1 = (u_2 - u_1) + p(v_2 - v_1).
+\]
+<p>The second term is small in a liquid and large in a vapour. Yan Ch 6.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · steam from 200 to 400</span>
+<p>Steam at 0.5 MPa is heated from 200 °C to 400 °C. Both states are superheated. The enthalpy change is 416.4 kJ/kg, so that is the heat. The entropy change from the tables is 734.3 J/(kg·K). A Simpson integral of \((\partial h/\partial T)_p / T\) along the same isobar returns 734.3 J/(kg·K). The internal-energy change is only 320.3 kJ/kg. Using it as the heat would drop 96 kJ/kg of flow work on the floor.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The liquid formula does not belong on this path. With \(c = 4.184\) kJ/(kg·K) the heat would be \(4.184 \times 200 = 836.8\) kJ/kg, about double the steam value, and the entropy change would be far from 734.3 J/(kg·K). Dividing the real heat by the exit temperature alone, \(416400/673.15 = 618.6\) J/(kg·K), misses the integral. The arithmetic mean of the two temperatures happens to land close, and it is still not the definition.</p>
+</div>
+<p>The heat scenario of the Temperature and entropy lab is this state. The readout shows 416.4 kJ/kg for the heat and 734.3 J/(kg·K) for both the table change and the integral.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The quadrature assumes the path never crosses the dome. A heating process that starts as liquid and ends as vapour has to be split at saturation, with \(h_{fg}/T_\mathrm{sat}\) added for the boil. The lab's isobar slider stays in the superheat so that split is not required. Real pipes also lose heat to the room and drop pressure to friction. Neither loss is in \(q = \Delta h\).</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Devices that should be isentropic</h2>
+</div>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>A turbine</h2>
+<p>An adiabatic turbine has no heat term in the entropy balance. Per kilogram, \(s_\mathrm{gen} = s_2 - s_1\). The generation is zero only when the expansion is reversible, which for an adiabatic device means \(s_2 = s_1\). That exit is the isentropic exit, state 2s.</p>
+<div class="box why"><span class="tag">Why the real exit is not state 2s</span>
+<p>The isentropic work is the whole enthalpy drop, \(h_1 - h_{2s}\). A real turbine delivers a fraction \(\eta\) of it. Solve for the real exit enthalpy:</p>
+\[
+h_2 = h_1 - \eta(h_1 - h_{2s}).
+\]
+<p>State 2 is then the state at the exhaust pressure with that enthalpy. If it is still superheated, it is hotter than state 2s, because it kept some enthalpy. If both states fall inside the dome, they share the saturation temperature and the real quality is higher. Either way \(s_2 > s_1\) when \(\eta < 1\). Yan Ch 6.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · still superheated</span>
+<p>Steam enters at 3 MPa and 400 °C and leaves at 500 kPa. The isentropic exit is 171.1 °C. At \(\eta = 0.85\) the real exit is 201.2 °C. The work is 373 kJ/kg, against an isentropic drop of 438.9 kJ/kg. The entropy generation is 143.4 J/(kg·K). The isentropic machine would have generated none.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · into the dome</span>
+<p>The same inlet expanded to 10 kPa lands in the dome. The temperature is 45.81 °C for both the real exit and the isentropic exit, because the pressure fixes the saturation temperature. At \(\eta = 0.85\) the work is 882.8 kJ/kg and the quality is 0.9017. The isentropic quality is 0.8366, so the real stream is drier, not wetter. It still generates 488.4 J/(kg·K).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · straight down the isentrope</span>
+<p>At \(\eta = 1\) the 10 kPa expansion produces 1039 kJ/kg and the entropy generation reads zero. The exit quality is 0.8366, the same state the dashed line was pointing at. Raising the efficiency from 0.85 to 1 does not change the exit temperature inside the dome. It lowers the quality and it erases the generation.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Dividing the isentropic drop by \(\eta\) is the compressor formula. A turbine multiplies. Forgetting \(\eta\) entirely reports the isentropic work as if the machine were perfect. Reporting the exit entropy \(s_2\) as the generation forgets to subtract \(s_1\). Inside the dome, expecting the real exit to be hotter than the isentropic exit is also wrong: the temperature cannot leave \(T_\mathrm{sat}\) until the steam is dry.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 16.050 Thermal Energy (Fall 2002) treats entropy inside the second-law sessions on its <a href="https://ocw.mit.edu/courses/16-050-thermal-energy-fall-2002/pages/calendar/" target="_blank" rel="noopener">calendar page</a>. The session titles are The Second Law of Thermodynamics and Applications of the Second Law. Problem sets there carry no printed solutions, so the numbers in these notes are our own.</p>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>A compressor and a nozzle</h2>
+<p>A compressor is the turbine turned around, with one change of algebra. The isentropic machine is the one that needs the least work. A real compressor needs more, so the efficiency divides:</p>
+\[
+h_2 = h_1 + \frac{h_{2s} - h_1}{\eta}.
+\]
+<p>A nozzle has no shaft. The enthalpy drop becomes kinetic energy. With \(h\) in J/kg,</p>
+\[
+V_2 = \sqrt{V_1^2 + 2(h_1 - h_2)}.
+\]
+<p>The isentropic efficiency again keeps only a fraction of the isentropic drop, using the turbine form of the exit enthalpy because a nozzle expands. OpenStax UP2 §3.6 is the ideal-gas adiabat that locates state 2s. The efficiency itself is Yan Ch 6.</p>
+<div class="box ex"><span class="tag">Worked example · air to 800 kPa</span>
+<p>Air enters a compressor at 290 K and 100 kPa. The pressure ratio is 8 and the efficiency is 0.80. The isentropic exit is 249.2 °C. The real exit is 305.9 °C. The work is 295 kJ/kg, larger than the isentropic work of 236 kJ/kg. The entropy generation is 107.2 J/(kg·K). An integral of \(c_p\,dT\) from the inlet temperature to the real exit recovers the same 295 kJ/kg, which is the check that \(w = \Delta h\) for an ideal gas.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a nozzle at 92 percent</span>
+<p>Air enters a nozzle at 400 K and 500 kPa with negligible speed and leaves at 100 kPa. At \(\eta = 0.92\) the exit speed is 522.3 m/s. The isentropic speed would have been 544.5 m/s. The entropy generation is 45.86 J/(kg·K). The square root sees joules, not kilojoules. Using the drop in kJ/kg without the factor 1000 under the radical cuts the speed by \(\sqrt{1000}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The compressor formula and the turbine formula are reciprocals of each other. Using \(\eta(h_{2s} - h_1)\) on a compressor understates the work and can even change its sign. On a nozzle, \(\sqrt{h_1 - h_2}\) without the 2 is the speed divided by \(\sqrt{2}\). And \(s_\mathrm{gen} = 0\) is the reversible device only. An efficiency of 0.80 is not that device, for a compressor or a turbine.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The compressor model ignores the kinetic energy at both flanges and any heat the casing sheds. A real nozzle can shock, separate, or hand heat to the wall. The isentropic exit used here is the ideal-gas state from \(s^\circ(T)\), not a cold-air \(T_2 = T_1 r^{(k-1)/k}\) with a single \(k\). Those two exits differ once the temperature rise is large. Inlet kinetic energy was set to zero in the examples. A fast inlet would add \(V_1^2/2\) inside the radical.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Heat and lost work</h2>
+</div>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Heat through a wall</h2>
+<p>Heat leaving a warm room and entering cold air generates entropy even when the wall itself stores none. The room loses \(Q/T_H\). The outdoors gains \(Q/T_L\). Because \(T_L < T_H\), the gain is larger than the loss.</p>
+<div class="box why"><span class="tag">Why the generation is Q times a difference of reciprocals</span>
+<p>Steady state means the wall's entropy is not changing, so the balance closes on the two reservoirs:</p>
+\[
+\dot S_\mathrm{gen} = \dot Q\left(\frac{1}{T_L} - \frac{1}{T_H}\right).
+\]
+<p>The heat itself is conduction through a layer of resistance \(R\):</p>
+\[
+\dot Q = \frac{A(T_H - T_L)}{R}.
+\]
+<p>\(R\) in the building tables is in h·ft²·°F/Btu. The SI resistance, in m²·K/W, multiplies by the square of the foot, by the kelvin-per-rankine factor, and by 3600, then divides by the joule-per-Btu factor. Those constants come from the unit library, not from a rounded 0.176. The work made unavailable against the room is the Gouy-Stodola product \(T_H \dot S_\mathrm{gen}\). Yan Ch 6.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the wood-frame wall</span>
+<p>The DOE summary of the 2021 IECC, climate zone 4 except marine, meets an uninsulated 2×4 wall with R-20 plus R-5 continuous insulation, which is R-25. Take 40 m², 21 °C indoors and 0 °C outdoors. The last two temperatures and the area are assumed. The SI resistance is 4.403 m²·K/W. The heat loss is 190.8 W. The entropy generation is 0.04987 W/K. Against the room, the lost work is \(294.15 \times 0.04987 = 14.67\) W. The same heat computed from square feet and Fahrenheit agrees to the last digit the readout shows.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the attic ceiling</span>
+<p>The same DOE page sets an uninsulated attic ceiling at R-60. At 80 m², with the same assumed 21 °C and 0 °C, the heat loss is 159 W and the generation is 0.04155 W/K. The lost work against the room is 12.22 W. In IP units the same ceiling, at 800 ft² with 70 °F inside and 32 °F outside, loses \(800 \times 38/60 = 506.7\) Btu/h. The generation in rankine is 0.07393 Btu/(h·R).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a milder day</span>
+<p>Hold the R-25 wall and the 40 m², and warm the outdoors from 0 °C to 10 °C. The heat falls to 99.94 W and the generation falls to 0.01320 W/K. The lost work against the room falls to 3.882 W. Two effects stack. The heat is smaller, and \(1/T_L - 1/T_H\) is smaller because the reservoirs are closer. A colder night does the opposite.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Fahrenheit and Celsius do not go in the reciprocals. Rankine is Fahrenheit plus 459.67, and kelvin is the SI absolute scale. Using \(1/T\) on the outdoor Celsius reading blows the generation up by orders of magnitude, and it is undefined at 0 °C. \(Q/T_L\) alone is the outdoor entropy rise, not the generation. The generation subtracts \(Q/T_H\). The lost work uses the temperature of the environment you measure it against. Against the room that factor is \(T_H\), not \(T_L\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The R-value is a layer sum. Studs, plates and a window are a parallel path with a lower R, so the real heat loss is larger. Air leaks through the same wall and carries enthalpy the conduction model never sees. The outdoor temperature also moves through the day, and the wall itself stores heat while it does. The indoor temperature, the outdoor temperature and the areas in the examples are assumed. The R-values are the cited DOE figures.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Formula sheet</h2>
+<ul>
+<li>Ideal gas: \(\Delta s = s^\circ(T_2) - s^\circ(T_1) - R\ln(p_2/p_1)\). The same integral is \(\int c_p\,dT/T - R\ln(p_2/p_1)\).</li>
+<li>Incompressible liquid: \(\Delta s = c\ln(T_2/T_1)\) and \(q = c(T_2 - T_1)\) at constant pressure. Temperatures are absolute.</li>
+<li>Reversible isobar: \(q = h_2 - h_1\) and \(\Delta s = \int dh/T\).</li>
+<li>Adiabatic turbine or nozzle: \(h_2 = h_1 - \eta(h_1 - h_{2s})\) and \(s_\mathrm{gen} = s_2 - s_1\).</li>
+<li>Adiabatic compressor: \(h_2 = h_1 + (h_{2s} - h_1)/\eta\). The generation is zero only at \(\eta = 1\).</li>
+<li>Nozzle speed, with enthalpy in J/kg: \(V_2 = \sqrt{V_1^2 + 2(h_1 - h_2)}\).</li>
+<li>Wall: \(\dot Q = A\Delta T/R\) and \(\dot S_\mathrm{gen} = \dot Q(1/T_L - 1/T_H)\). Lost work against the room is \(T_H\dot S_\mathrm{gen}\).</li>
+<li>Rankine is Fahrenheit plus 459.67. The SI resistance is the IP R-value times the exact foot, rankine and Btu factors.</li>
+</ul>
+<p>A steam power cycle and a full exergy balance belong to the next thermodynamics course. This unit stops at the entropy change, the isentropic efficiency and the heat crossing one wall.</p>
+</section>
+</main>
+<footer>Written for Flux from Yan, Introduction to Engineering Thermodynamics, Yan Ch 6, and from OpenStax UP2 §3.5 and OpenStax UP2 §3.6. The wall resistances are the US DOE summary of the 2021 IECC, climate zone 4 except marine. The indoor temperature, the outdoor temperature and the areas are assumed. Every worked answer was recomputed.</footer>
+</body>
+</html>

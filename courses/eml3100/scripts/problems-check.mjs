@@ -164,7 +164,7 @@ function checkHints(tpl) {
 }
 
 /** Units reworked to the standard (docs/COURSE-STANDARD.md): coaching is checked here. Units 1 and 2 follow in R3a. */
-const COACHED = new Set(['u3', 'u4']);
+const COACHED = new Set(['u3', 'u4', 'u5']);
 
 /** Every option of every choice part carries a `why`. */
 function checkWhy(tpl, inst) {

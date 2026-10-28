@@ -66,6 +66,22 @@ export const NOTES = {
       { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u5: {
+    exam: 'u5',
+    title: 'Entropy',
+    chapters: '6',
+    file: 'u5-entropy.html',
+    load: () => import('./content/u5-entropy.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'The ideal-gas change', lab: null, ch: ['6'], topics: ['entropy-gas'], home: true },
+      { id: 's2', n: 2, title: 'An incompressible liquid', lab: 'ts', ch: ['6'], topics: ['entropy-liquid'] },
+      { id: 's3', n: 3, title: 'Steam heated at constant pressure', lab: 'ts', ch: ['6'], topics: ['entropy-steam'] },
+      { id: 's4', n: 4, title: 'A turbine', lab: 'efficiency', ch: ['6'], topics: ['turbine-efficiency'] },
+      { id: 's5', n: 5, title: 'A compressor and a nozzle', lab: 'efficiency', ch: ['6'], topics: ['compressor-efficiency', 'nozzle-efficiency'] },
+      { id: 's6', n: 6, title: 'Heat through a wall', lab: 'wall', ch: ['6'], topics: ['lost-work', 'english'] },
+      { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
