@@ -24,6 +24,9 @@ const LIMIT = {
   strain3: 1e-9,
   vessel: 1e-12,
   tank: 1e-12,
+  mohr: 1e-9,
+  combined: 1e-9,
+  hitch: 1e-9,
 };
 
 const fails = [];

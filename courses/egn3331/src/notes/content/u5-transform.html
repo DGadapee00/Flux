@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Stress transformation and failure</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 5 · Ch 8–9</p>
+  <h1>Stress transformation and failure</h1>
+  <p class="lede">Turning an element moves the normal stress and the shear between the two axes. The principals are the normals with the shear gone. Bending and torque meet at one fiber, and two yield rules read that pair differently. Every number below is computed by the course library and checked a second way.</p>
+  <div class="legend">
+    <span><i class="swatch" style="background: var(--gold)"></i>Normal stress</span>
+    <span><i class="swatch" style="background: var(--teal)"></i>Shear, and von Mises</span>
+    <span><i class="swatch" style="background: var(--red)"></i>Tension side of the shank</span>
+    <span><i class="swatch" style="background: var(--blue)"></i>Compression side of the shank</span>
+  </div>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>Turning the element</a>
+    <a href="#s2"><span>02</span>Principal stresses</a>
+    <a href="#s3"><span>03</span>The largest in-plane shear</a>
+    <a href="#s4"><span>04</span>Bending and torque together</a>
+    <a href="#s5"><span>05</span>A trailer-ball shank</a>
+    <a href="#s6"><span>06</span>Tresca and von Mises</a>
+    <a href="#s7"><span>07</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+<h3>Part 1 · The plane <span class="sub">| angle | principals | shear | Reference</span></h3>
+
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Turning the element</h2>
+<p>A plane-stress element carries \(\sigma_x\), \(\sigma_y\) and \(\tau_{xy}\). Cut it on a new pair of axes, turned by \(\theta\) counterclockwise. Equilibrium of the wedge gives the stress on the new face. The angle that appears is \(2\theta\), because the two cutting faces of a wedge add their projections. Roylance §3.3 writes \(\sigma_{x'}\) as the average plus \((\sigma_x-\sigma_y)/2\) times \(\cos 2\theta\), plus \(\tau_{xy}\sin 2\theta\). The shear is \(-(\sigma_x-\sigma_y)/2\) times \(\sin 2\theta\), plus \(\tau_{xy}\cos 2\theta\).</p>
+<p>The same numbers come from the traction. The force on a unit area of the plane is the stress matrix times the normal. Its part along the normal is \(\sigma_{x'}\). Its part along the tangent is the shear. The two routes agree at every angle.</p>
+<div class="box ex"><span class="tag">Worked example · turned to 45°</span>
+<p>The Mohr's circle lab starts at \(\sigma_x = 80\) MPa, \(\sigma_y = 20\) MPa and \(\tau_{xy} = 30\) MPa. Turn it to 45°. Then \(2\theta = 90^\circ\), so the cosine term drops out and the sine is 1. The average is 50 MPa, and the shear term adds all of 30 MPa:</p>
+\[
+\sigma_{x'} = 80\ \mathrm{MPa}
+\]
+<p>The shear loses the whole \((\sigma_x-\sigma_y)/2\) term, which is 30 MPa, and the original shear is multiplied by \(\cos 90^\circ = 0\):</p>
+\[
+\tau_{x'y'} = -30\ \mathrm{MPa}
+\]
+<p>The gold curve on the lab is the normal stress. The teal curve is the shear. The dots sit on both at 45°.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(\theta\) where the formula wants \(2\theta\) moves the element to the wrong station. Dropping \(\tau_{xy}\sin 2\theta\) from the normal stress, or dropping \((\sigma_x-\sigma_y)\) from the shear, each leaves one of the two contributions out.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec15/">2.001 lecture 16</a> turns the same element and plots the circle.</p>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Principal stresses</h2>
+<p>There is an angle where the shear formula gives zero. The normal stresses there are the principals. They are the average, plus and minus the radius of the circle:</p>
+\[
+R = \sqrt{\left(\frac{\sigma_x-\sigma_y}{2}\right)^2 + \tau_{xy}^2}
+\]
+<p>\(\sigma_1\) is the average plus \(R\). \(\sigma_2\) is the average minus \(R\). The angle to \(\sigma_1\) satisfies \(\tan 2\theta_p = 2\tau_{xy}/(\sigma_x-\sigma_y)\). The eigenvalues of the \(2\times 2\) stress matrix are the same two numbers. The lab checks that identity at every slider stop.</p>
+<div class="box ex"><span class="tag">Worked example · the principal stresses</span>
+<p>For 80 MPa, 20 MPa and 30 MPa the center is 50 MPa. Half the difference of the normals is 30 MPa, and the shear is 30 MPa, so the radius is \(30\sqrt{2}\):</p>
+\[
+R = 42.4\ \mathrm{MPa}
+\]
+<p>The principals are 50 plus that radius and 50 minus it:</p>
+\[
+\sigma_1 = 92.4\ \mathrm{MPa}
+\]
+\[
+\sigma_2 = 7.57\ \mathrm{MPa}
+\]
+<p>And \(2\theta_p = 45^\circ\), so the element turns</p>
+\[
+\theta_p = 22.5^\circ
+\]
+<p>On that plane the lab's shear readout is zero.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reporting the average as a principal leaves the radius off. Swapping \(\sigma_1\) and \(\sigma_2\) assigns the larger stress to the smaller plane. The radius uses both \((\sigma_x-\sigma_y)/2\) and \(\tau_{xy}\). Either one alone is short.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>The largest in-plane shear</h2>
+<p>The shear reaches \(R\), and \(-\,R\), forty-five degrees of \(\theta\) away from the principals. That is ninety degrees of \(2\theta\), half a turn of the circle. The normal stress there is the average. So the largest in-plane shear is not a new length. It is the radius already computed for the principals, and it is half of \(\sigma_1-\sigma_2\).</p>
+<div class="box ex"><span class="tag">Worked example · the circle radius</span>
+<p>The same element has \(R = 42.4\) MPa. That is the largest in-plane shear. It sits at \(22.5^\circ + 45^\circ = 67.5^\circ\). The normal stress there has fallen from 92.4 MPa to the average, 50 MPa. Scanning every angle and keeping the biggest \(|\tau|\) returns this same radius. That scan is the check.</p>
+</div>
+<div class="box why"><span class="tag">In-plane is not the whole story</span>
+<p>Plane stress has a third principal, equal to zero, on the face of the element. If \(\sigma_1\) and \(\sigma_2\) have the same sign, the biggest difference may be between \(\sigma_1\) and zero, not between \(\sigma_1\) and \(\sigma_2\). The in-plane shear is still \(R\). The absolute maximum shear can be larger. Tresca, below, uses the absolute maximum.</p>
+</div>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 2 · One fiber, two rules <span class="sub">| combined | shank | yield | Reference</span></h3>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Bending and torque together</h2>
+<p>On a solid circular bar the bending stress \(Mc/I\) is largest at the outer fiber, and the torsion stress \(Tc/J\) is largest there too. They occupy the same point. The axial force, if there is one, adds \(P/A\) to the normal stress and does not make shear. With \(J = 2I\) for a circle the shear at that fiber is</p>
+\[
+\tau_{xy} = \frac{16T}{\pi d^3}
+\]
+<p>\(\sigma_y = 0\) in this orientation. The principal is not \(\sigma_x\), because the shear is still there. Combined loading is not a Roylance section. The stress transformation that reads the pair is Roylance §3.3. The normal stress is the sum of those two contributions:</p>
+\[
+\sigma_x = \frac{4P}{\pi d^2}+\frac{32M}{\pi d^3}
+\]
+<div class="box ex"><span class="tag">Worked example · axial, bending and torque</span>
+<p>The lab's combined case is a 40 mm bar with 10 kN of tension, 400 N·m of bending and 300 N·m of torque. Axial stress and bending stress add:</p>
+\[
+\sigma_x = 71.6\ \mathrm{MPa}
+\]
+<p>The torsion stress at the same fiber is</p>
+\[
+\tau_{xy} = 23.9\ \mathrm{MPa}
+\]
+<p>von Mises for this pair, \(\sqrt{\sigma_x^2 + 3\tau^2}\), is</p>
+\[
+\sigma_{vm} = 82.7\ \mathrm{MPa}
+\]
+<p>The gold line on the chart is \(\sigma_x\). It does not change when the torque changes. The teal line is von Mises, and it climbs with the torque. Doubling the torque doubles the shear and leaves \(\sigma_x\) alone.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving out \(P/A\), or leaving out \(Mc/I\), reports only half of the normal stress. Dividing the torque by \(I\) instead of \(J\) doubles the shear, because \(J = 2I\). Calling \(\sigma_x\) the principal ignores the shear.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>A trailer-ball shank</h2>
+<p>CURT trailer ball 40004 has a 2 in ball, a 1 in shank, a 2-1/8 in shank length, 0 rise and a 6000 lb gross trailer weight. The gross rating is not a tongue load, and the catalog does not give the flange height. This lab takes the moment arm as the ball radius, 1 in. A tongue load \(W\) compresses every fiber. A horizontal force \(H\) bends the shank. The two sides are</p>
+\[
+\sigma = -\frac{W}{A} \pm \frac{Mc}{I}
+\]
+<p>With the diameter at 1 in, the inch-pound forms are \(-4W/(\pi d^2)\) and \(32(H\cdot 1)/(\pi d^3)\), then divided by 1000 for ksi. The compression side is always the larger magnitude while the tongue load is compression. A pull through the ball center bends the shank. It does not twist it about the shank axis.</p>
+<div class="box ex"><span class="tag">Worked example · 600 lbf on each</span>
+<p>At 600 lbf of tongue load and 600 lbf horizontal, the axial stress and the bending stress are</p>
+\[
+\sigma_{\mathrm{axial}} = -0.764\ \mathrm{ksi}
+\]
+\[
+\sigma_{\mathrm{bend}} = 6.11\ \mathrm{ksi}
+\]
+<p>Adding and subtracting:</p>
+\[
+\sigma_{\mathrm{tension}} = 5.35\ \mathrm{ksi}
+\]
+\[
+\sigma_{\mathrm{compression}} = -6.88\ \mathrm{ksi}
+\]
+<p>The red curve is the tension side. The blue curve is the compression side. Doubling the horizontal force doubles the bending stress and does not double the peak, because the tongue load stays put.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · tongue load only</span>
+<p>With the horizontal force removed, bending is zero and both sides carry the axial stress:</p>
+\[
+\sigma = -0.764\ \mathrm{ksi}
+\]
+<p>The 600 lbf figure is an assumed tongue load. It is a tenth of the catalog's gross rating, and that tenth is a planning habit, not a number CURT prints.</p>
+</div>
+<div class="box out"><span class="tag">What the course model leaves out</span>
+<p>The shank is treated as a smooth 1 in circle. Threads, the nut and the fillet under the flange are real and are not in the stress. The moment arm is the ball radius because the flange height is not published. The 6000 lb mark is gross trailer weight. The catalog does not give a yield strength, so this lab reports stress and does not claim a factor of safety.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Tresca and von Mises</h2>
+<p>Two rules turn a stress state into one number to compare with a tensile yield. von Mises uses all three principal differences. In plane stress, with \(\sigma_y = 0\) at the fiber of interest, it reduces to</p>
+\[
+\sigma_{vm} = \sqrt{\sigma_x^2 + 3\tau_{xy}^2}
+\]
+<p>Tresca uses the largest gap between principals, and the third principal is zero. Under uniaxial tension both rules return the tensile stress. In pure shear, principals \(+\tau\) and \(-\tau\), Tresca is \(2\tau\) and von Mises is \(\tau\sqrt{3}\). Tresca is the larger one. Roylance §6.1 is the reading on yield. The two equivalent stresses are the comparison drawn here.</p>
+<div class="box ex"><span class="tag">Worked example · torque alone</span>
+<p>The lab's torque-only bar is 40 mm in diameter and carries 400 N·m. The shear at the outer fiber is 31.8 MPa, and the normal stress is zero. Then</p>
+\[
+\sigma_{\mathrm{Tresca}} = 63.7\ \mathrm{MPa}
+\]
+\[
+\sigma_{vm} = 55.1\ \mathrm{MPa}
+\]
+<p>The same bar with bending and torque, in the section above, gave 82.7 MPa von Mises against a larger Tresca. Whenever shear is present in these states, Tresca governs first.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Setting the shear equal to the allowable, as if no normal stress were already there, overstates the torque the fiber can take. Leaving the 3 out of \(\sigma^2 + 3\tau^2\) makes the shear \(\sqrt{3}\) times too large. Treating uniaxial tension as if the two rules disagreed is the opposite miss: there they match.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec17/">2.001 lecture 18</a> compares the two yield rules on combined stress.</p>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Formula sheet</h2>
+<p>Plane stress, axes turned by \(\theta\):</p>
+\[
+\sigma_{1,2} = \frac{\sigma_x+\sigma_y}{2} \pm R
+\]
+\[
+\tau_{\max} = R
+\]
+<p>Solid circle, outer fiber, axial force plus bending plus torque:</p>
+\[
+\sigma_x = \frac{4P}{\pi d^2}+\frac{32M}{\pi d^3}
+\]
+\[
+\tau = \frac{16T}{\pi d^3}
+\]
+<p>von Mises when \(\sigma_y = 0\):</p>
+\[
+\sigma_{vm} = \sqrt{\sigma_x^2+3\tau^2}
+\]
+<p>Citations: Roylance §3.3 for the transformation and for Mohr's circle. Roylance §6.1 for yield. Combined loading on a bar, and the trailer-ball shank, are not Roylance sections. The ball is CURT 40004. The 40 mm bar and its loads are assumed. The tongue loads in the hitch lab are assumed.</p>
+</section>
+</div>
+</main>
+</body>
+</html>

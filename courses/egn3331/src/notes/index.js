@@ -65,6 +65,22 @@ export const NOTES = {
       { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u5: {
+    exam: 'u5',
+    title: 'Stress transformation and failure',
+    chapters: '8, 9',
+    file: 'u5-transform.html',
+    load: () => import('./content/u5-transform.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'Turning the element', lab: 'mohr', ch: ['9'], topics: ['stress-transformation'], home: true },
+      { id: 's2', n: 2, title: 'Principal stresses', lab: 'mohr', ch: ['9'], topics: ['mohr'] },
+      { id: 's3', n: 3, title: 'The largest in-plane shear', lab: 'mohr', ch: ['9'], topics: ['max-shear'] },
+      { id: 's4', n: 4, title: 'Bending and torque together', lab: 'combined', ch: ['9'], topics: ['combined-loading'] },
+      { id: 's5', n: 5, title: 'A trailer-ball shank', lab: 'hitch', ch: ['9'], topics: ['combined-loading', 'english'] },
+      { id: 's6', n: 6, title: 'Tresca and von Mises', lab: 'combined', ch: ['9'], topics: ['yield'] },
+      { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
@@ -74,7 +90,9 @@ export const allNotes = () => Object.values(NOTES);
 /** The section a practice problem draws on, by shared topics, then by lab. */
 export function sectionForProblem(tpl) {
   const topics = new Set(tpl.topics || []);
-  for (const set of allNotes()) {
+  const own = NOTES[tpl.exam];
+  const sets = own ? [own, ...allNotes().filter((s) => s !== own)] : allNotes();
+  for (const set of sets) {
     const named = set.sections.find((s) => s.problems?.includes(tpl.id));
     if (named) return { set, section: named };
     const inCh = set.sections.filter((s) => s.ch.includes(tpl.ch));

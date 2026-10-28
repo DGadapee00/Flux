@@ -5,11 +5,13 @@
  */
 import {
   axialStress, axialStiffness, barElongation, bearing, bilinear, bilinearEnergy, circleArea,
-  constrainedThermal, cylinderSplitForce, factorOfSafety, fixedFixed, fixedFixedByStiffness,
+  circleSection, combinedCircle, combinedReduced, constrainedThermal, cylinderSplitForce,
+  eigen2, factorOfSafety, fixedFixed, fixedFixedByStiffness, hitchSides,
   hooke3, hooke3Deviator, hookeStrain, hookeStress, hoopFromSplit, sphereFromCap,
   inclined, inclinedByCut, lateralStrain, normalStrain, permanentSet, pinSegments, pinShear,
-  rambergOsgood, rambergStress, requiredArea, requiredDiameter, resilience, shearModulus,
-  taperedElongation, thinCylinder, thinSphere, transform, uniaxialVolumeStrain, volumeChange,
+  principal2, rambergOsgood, rambergStress, requiredArea, requiredDiameter, resilience, shearModulus,
+  taperedElongation, thinCylinder, thinSphere, traction, transform, trescaPlane,
+  uniaxialVolumeStrain, volumeChange, vonMisesComponents, vonMisesPlane,
 } from './materials.js';
 import { solveTruss, memberForce, methodOfSections } from './truss.js';
 
@@ -255,6 +257,53 @@ console.log('Thin wall and three-dimensional Hooke');
   const hydro = hooke3(50e6, 50e6, 50e6, E, nu);
   approx(hydro.vol, (150e6 * (1 - 2 * nu)) / E, 1e-12, 'hydrostatic volume strain is (1−2ν) times the stress sum over E');
   approx(hooke3(100e6, 100e6, 0, E, nu).ex, 0.7 * uni.ex, 1e-12, 'an equal transverse tension cuts the axial strain to 0.7');
+}
+
+console.log('Principals, yield, combined stress');
+{
+  const sx = 80e6;
+  const sy = 20e6;
+  const txy = 30e6;
+  const p = principal2(sx, sy, txy);
+  const e = eigen2(sx, sy, txy);
+  approx(p.s1, e.s1, 1e-12, 'the larger principal matches the eigenvalue');
+  approx(p.s2, e.s2, 1e-12, 'the smaller principal matches the eigenvalue');
+  const turned = transform(sx / 1e6, sy / 1e6, txy / 1e6, (p.theta * 180) / Math.PI);
+  approx(turned.sx, p.s1 / 1e6, 1e-12, 'rotating to θp returns σ1');
+  approx(turned.txy, 0, 1e-9, 'shear is zero on the principal plane');
+  const face = traction(sx, sy, txy, 35);
+  const eq = transform(sx, sy, txy, 35);
+  approx(face.sx, eq.sx, 1e-12, 'the traction normal matches the double-angle formula');
+  approx(face.txy, eq.txy, 1e-12, 'the traction shear matches the double-angle formula');
+  let maxShear = 0;
+  for (let th = -90; th <= 90; th += 0.25) maxShear = Math.max(maxShear, Math.abs(transform(sx, sy, txy, th).txy));
+  approx(maxShear, p.R, 1e-6, 'the largest |τ| on a scan is the circle radius');
+  approx(vonMisesPlane(sx, sy, txy), vonMisesComponents(sx, sy, txy), 1e-12, 'von Mises from principals matches the component form');
+  approx(trescaPlane(100e6, 0, 0), 100e6, 1e-12, 'uniaxial Tresca equals the stress');
+  approx(vonMisesPlane(100e6, 0, 0), 100e6, 1e-12, 'uniaxial von Mises equals the stress');
+  approx(trescaPlane(0, 0, 40e6), 80e6, 1e-12, 'pure shear: Tresca is 2τ');
+  approx(vonMisesPlane(0, 0, 40e6), 40e6 * Math.sqrt(3), 1e-12, 'pure shear: von Mises is τ√3');
+  ok(trescaPlane(0, 0, 40e6) > vonMisesPlane(0, 0, 40e6), 'Tresca is the larger of the two in pure shear');
+
+  const d = 0.04;
+  const bar = combinedCircle(10e3, 400, 300, d);
+  const red = combinedReduced(10e3, 400, 300, d);
+  approx(bar.sx, red.sx, 1e-12, 'Mc/I + P/A matches 32M/(πd³) + 4P/(πd²)');
+  approx(bar.txy, red.txy, 1e-12, 'Tc/J matches 16T/(πd³)');
+  approx(bar.vm, vonMisesComponents(red.sx, 0, red.txy), 1e-12, 'the bar von Mises matches the components');
+  const twice = combinedCircle(10e3, 800, 300, d);
+  approx(twice.sx - red.axial, 2 * (bar.sx - red.axial), 1e-12, 'double the moment, double the bending stress');
+  const sec = circleSection(d);
+  approx(sec.J, 2 * sec.I, 1e-12, 'J of a circle is 2I');
+
+  const shank = hitchSides(600 * 4.4482216152605, 600 * 4.4482216152605, 0.0254, 0.0254);
+  const bend = (32 * (600 * 4.4482216152605 * 0.0254)) / (Math.PI * 0.0254 ** 3);
+  const axial = -(4 * (600 * 4.4482216152605)) / (Math.PI * 0.0254 ** 2);
+  approx(shank.bend, bend, 1e-12, 'the shank bending stress is 32M/(πd³)');
+  approx(shank.axial, axial, 1e-12, 'the tongue load is 4W/(πd²) in compression');
+  approx(shank.compression, axial - bend, 1e-12, 'compression side is axial minus bending');
+  approx(shank.peak, shank.compression, 1e-12, 'the compression side has the larger magnitude');
+  approx(hitchSides(600 * 4.4482216152605, 0, 0.0254, 0.0254).peak, axial, 1e-12, 'no horizontal force leaves only the axial stress');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);
