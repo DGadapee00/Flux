@@ -20,4 +20,4 @@
   space the panels leave (`labs/diagram.js`). Each lab declares `sweep(state)`, and labs-check
   moves that slider end to end.
 - **Order.** The eleven units follow the spine the owner confirmed (2.001, then Hibbeler for
-  transverse shear and buckling). Unit 4 is at the standard. Units 5–11 are still listed as coming.
+  transverse shear and buckling). Unit 5 is at the standard. Units 6–11 are still listed as coming.

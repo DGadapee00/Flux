@@ -14,6 +14,9 @@ const loaders = {
   strain3: () => import('./strain3.js'),
   vessel: () => import('./vessel.js'),
   tank: () => import('./tank.js'),
+  mohr: () => import('./mohr.js'),
+  combined: () => import('./combined.js'),
+  hitch: () => import('./hitch.js'),
 };
 
 const labs = createLabLoader(loaders);

@@ -262,3 +262,104 @@ export function hooke3Deviator(sx, sy, sz, E, nu) {
   const ez = bulk * sm + shear * (sz - sm);
   return { ex, ey, ez, vol: ex + ey + ez };
 }
+
+/**
+ * Principal values of a plane-stress element.
+ * σ_avg ± R, with R = hypot((σx−σy)/2, τxy). θ is the angle to σ1, in radians.
+ */
+export function principal2(sx, sy, txy) {
+  const avg = (sx + sy) / 2;
+  const R = Math.hypot((sx - sy) / 2, txy);
+  const theta = 0.5 * Math.atan2(2 * txy, sx - sy);
+  return { s1: avg + R, s2: avg - R, avg, R, theta };
+}
+
+/**
+ * The same principals from the eigenvalues of [[σx, τ], [τ, σy]].
+ * The discriminant is (σx+σy)²/4 − (σx σy − τ²), not the hypot form.
+ */
+export function eigen2(sx, sy, txy) {
+  const avg = (sx + sy) / 2;
+  const det = sx * sy - txy * txy;
+  const R = Math.sqrt(Math.max(0, avg * avg - det));
+  return { s1: avg + R, s2: avg - R, avg, R };
+}
+
+/**
+ * Traction on a plane whose normal is θ from x.
+ * The shear uses the tangent (−sin θ, cos θ), which matches transform().
+ */
+export function traction(sx, sy, txy, thetaDeg) {
+  const t = thetaDeg * DEG;
+  const c = Math.cos(t);
+  const s = Math.sin(t);
+  const fx = sx * c + txy * s;
+  const fy = txy * c + sy * s;
+  return { sx: fx * c + fy * s, txy: fx * -s + fy * c };
+}
+
+/** Tresca stress in plane stress. The third principal is 0. */
+export function trescaPlane(sx, sy, txy) {
+  const { s1, s2 } = principal2(sx, sy, txy);
+  return Math.max(s1, s2, 0) - Math.min(s1, s2, 0);
+}
+
+/** von Mises stress from the in-plane principals, with the third principal 0. */
+export function vonMisesPlane(sx, sy, txy) {
+  const { s1, s2 } = principal2(sx, sy, txy);
+  return Math.sqrt(s1 * s1 - s1 * s2 + s2 * s2);
+}
+
+/** The same von Mises stress from the components, σx² − σx σy + σy² + 3 τ². */
+export function vonMisesComponents(sx, sy, txy) {
+  return Math.sqrt(sx * sx - sx * sy + sy * sy + 3 * txy * txy);
+}
+
+/** Area, centroidal I and J of a solid circular cross-section of diameter d. */
+export function circleSection(d) {
+  const A = (Math.PI * d * d) / 4;
+  const I = (Math.PI * d ** 4) / 64;
+  const J = (Math.PI * d ** 4) / 32;
+  return { A, I, J, c: d / 2 };
+}
+
+/**
+ * Axial force, bending moment and torque on a solid circular bar.
+ * The point is the outer fiber where bending and torsion both peak.
+ * Tension is positive. sy is 0.
+ */
+export function combinedCircle(P, M, T, d) {
+  const { A, I, J, c } = circleSection(d);
+  const sx = P / A + (M * c) / I;
+  const txy = (T * c) / J;
+  const p = principal2(sx, 0, txy);
+  return {
+    sx, sy: 0, txy, ...p,
+    vm: vonMisesComponents(sx, 0, txy),
+    tresca: trescaPlane(sx, 0, txy),
+  };
+}
+
+/** The reduced forms 4P/(πd²), 32M/(πd³) and 16T/(πd³). */
+export function combinedReduced(P, M, T, d) {
+  const axial = (4 * P) / (Math.PI * d * d);
+  const bend = (32 * M) / (Math.PI * d ** 3);
+  const txy = (16 * T) / (Math.PI * d ** 3);
+  return { sx: axial + bend, txy, axial, bend };
+}
+
+/**
+ * A shank under a compressive tongue load W and a horizontal force H.
+ * The moment arm is `arm`. Bending adds on one side and subtracts on the other.
+ * Peak is the normal stress of larger magnitude. von Mises equals that magnitude,
+ * because the stress at that fiber is uniaxial.
+ */
+export function hitchSides(W, H, d, arm) {
+  const { A, I, c } = circleSection(d);
+  const axial = -Math.abs(W) / A;
+  const bend = (Math.abs(H) * arm * c) / I;
+  const tension = axial + bend;
+  const compression = axial - bend;
+  const peak = Math.abs(compression) >= Math.abs(tension) ? compression : tension;
+  return { axial, bend, tension, compression, peak, vm: Math.abs(peak) };
+}

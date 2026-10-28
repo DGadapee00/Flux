@@ -281,6 +281,66 @@ export const SETUPS = {
       },
     ],
   },
+  u5: {
+    s1: [
+      {
+        tag: 'turned to 45°',
+        lab: 'mohr',
+        scenario: 'general',
+        setup(s) { s.theta = 45; },
+        read: (c) => ({ sx: [c.sx / 1e6, 80], txy: [c.txy / 1e6, -30] }),
+      },
+    ],
+    s2: [
+      {
+        tag: 'the principal stresses',
+        lab: 'mohr',
+        scenario: 'general',
+        read: (c) => ({ s1: [c.s1 / 1e6, 92.4], s2: [c.s2 / 1e6, 7.57], thetaP: [c.thetaP, 22.5] }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'the circle radius',
+        lab: 'mohr',
+        scenario: 'general',
+        read: (c) => ({ R: [c.R / 1e6, 42.4] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'axial, bending and torque',
+        lab: 'combined',
+        scenario: 'both',
+        read: (c) => ({ sx: [c.sx / 1e6, 71.6], txy: [c.txy / 1e6, 23.9], vm: [c.vm / 1e6, 82.7] }),
+      },
+    ],
+    s5: [
+      {
+        tag: '600 lbf on each',
+        lab: 'hitch',
+        scenario: 'plan',
+        read: (c) => ({
+          tension: [c.tension / (1000 * PA_PER_PSI), 5.35],
+          compression: [c.compression / (1000 * PA_PER_PSI), -6.88],
+        }),
+      },
+      {
+        tag: 'tongue load only',
+        lab: 'hitch',
+        scenario: 'straight',
+        read: (c) => ({ axial: [c.axial / (1000 * PA_PER_PSI), -0.764] }),
+      },
+    ],
+    s6: [
+      {
+        tag: 'torque alone',
+        lab: 'combined',
+        scenario: 'torque',
+        read: (c) => ({ tresca: [c.tresca / 1e6, 63.7], vm: [c.vm / 1e6, 55.1] }),
+      },
+    ],
+  },
 };
 
 /** An example's tag as the notes write it, without "Worked example · ". */

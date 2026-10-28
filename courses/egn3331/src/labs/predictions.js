@@ -398,4 +398,88 @@ export const PREDICTIONS = {
       why: '40 psi is a sixth of the service pressure, so both stresses fall. The ratio is not one of the factor choices, but the direction is down.',
     },
   ],
+  mohr: [
+    {
+      id: 'mh-principal',
+      scenario: 'general',
+      ask: 'The element is at 0°. Turn it to the principal angle, 22.5°.',
+      apply(s) { s.theta = 22.5; },
+      watch: [
+        watch('sx', 'the normal stress on the plane', (c) => c.sx),
+        watch('txy', 'the shear stress on the plane', (c) => c.txy),
+      ],
+      mode: 'dir',
+      expect: { sx: 'bigger', txy: 'smaller' },
+      why: 'On the principal plane the shear is zero, down from 30 MPa. The normal stress rises from 80 MPa to $\\sigma_1$, about 92.4 MPa.',
+    },
+    {
+      id: 'mh-shear',
+      scenario: 'principal',
+      ask: 'The element is on the principal plane. Turn it another 45°.',
+      apply(s) { s.theta = 67.5; },
+      watch: [
+        watch('txy', 'the shear stress', (c) => c.txy),
+        watch('sx', 'the normal stress', (c) => c.sx),
+      ],
+      mode: 'dir',
+      expect: { txy: 'bigger', sx: 'smaller' },
+      why: 'Forty-five degrees from the principals, the shear equals the circle radius and the normal stress falls to the average, 50 MPa.',
+    },
+  ],
+  combined: [
+    {
+      id: 'cb-torque',
+      scenario: 'both',
+      ask: 'The bar already carries axial force and bending. Double the torque, from 300 N·m to 600 N·m.',
+      apply(s) { s.T = 600; },
+      watch: [
+        watch('txy', 'the shear stress', (c) => c.txy),
+        watch('sx', 'the normal stress', (c) => c.sx),
+      ],
+      mode: 'factor',
+      expect: { txy: 2, sx: 1 },
+      why: 'Shear is proportional to torque, so it doubles. The normal stress has no torque in it, so it stays put. von Mises still grows, because of the $3\\tau^2$ term, but it is not one of these factors.',
+    },
+    {
+      id: 'cb-nomoment',
+      scenario: 'both',
+      ask: 'Put the bending moment back to zero. Leave the axial force and the torque.',
+      apply(s) { s.M = 0; },
+      watch: [
+        watch('sx', 'the normal stress', (c) => c.sx),
+        watch('vm', 'the von Mises stress', (c) => c.vm),
+      ],
+      mode: 'dir',
+      expect: { sx: 'smaller', vm: 'smaller' },
+      why: 'The bending term drops out of $\\sigma_x$, and von Mises falls with it. The torque is still there, so von Mises does not fall all the way to the axial stress.',
+    },
+  ],
+  hitch: [
+    {
+      id: 'ht-double',
+      scenario: 'plan',
+      ask: 'Keep the 600 lbf tongue load. Double the horizontal force, from 600 lbf to 1200 lbf.',
+      apply(s) { s.H *= 2; },
+      watch: [
+        watch('bend', 'the bending stress', (c) => c.bend),
+        watch('axial', 'the axial stress', (c) => c.axial),
+      ],
+      mode: 'factor',
+      expect: { bend: 2, axial: 1 },
+      why: 'Bending is proportional to the horizontal force, so it doubles. The tongue load did not change, so the axial stress stays put and the peak stress does not double.',
+    },
+    {
+      id: 'ht-straight',
+      scenario: 'plan',
+      ask: 'Take the horizontal force off. Leave the 600 lbf tongue load.',
+      apply(s) { s.H = 0; },
+      watch: [
+        watch('peak', 'the larger-magnitude normal stress', (c) => c.peak, { signed: true }),
+        watch('bend', 'the bending stress', (c) => c.bend),
+      ],
+      mode: 'dir',
+      expect: { peak: 'bigger', bend: 'smaller' },
+      why: 'The bending stress drops to zero. The remaining stress is the small compressive tongue load, so the signed peak rises toward zero.',
+    },
+  ],
 };
