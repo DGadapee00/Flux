@@ -20,5 +20,6 @@
 - **Labs** are plot2d. `compute` is pure; `draw` paints a to-scale drawing and a chart inside the
   space the panels leave (`labs/diagram.js`). Each lab declares `sweep(state)`, and labs-check
   moves that slider end to end.
-- **Left out for now.** On this branch Units 2–10 are still listed as coming, in the pack order.
-  The confirmed eleven-unit order is the table in the spine. This branch does not renumber them.
+- **Order.** The eleven units follow the spine the owner confirmed (2.001, then Hibbeler for
+  transverse shear and buckling). Units 1 and 2 are at the standard. Units 3–11 are still
+  listed as coming.

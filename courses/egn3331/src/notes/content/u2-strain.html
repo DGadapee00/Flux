@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Strain and material behaviour</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 2 · Ch 2–3</p>
+  <h1>Strain and material behaviour</h1>
+  <p class="lede">Stress says how hard the material is pushed. Strain says how much it moves. These notes connect the two for a bar pulled along its axis, then read a tension curve through yield, unloading, creep and fatigue. Every number is computed by the course's library and checked a second way.</p>
+  <div class="legend">
+    <span><i class="swatch" style="background: var(--gold)"></i>Normal stress and the elastic slope</span>
+    <span><i class="swatch" style="background: var(--teal)"></i>Strain, lateral contraction, volume change</span>
+    <span><i class="swatch" style="background: var(--yellow)"></i>The point you are on</span>
+    <span><i class="swatch" style="background: var(--pink)"></i>The axial load</span>
+  </div>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>Strain</a>
+    <a href="#s2"><span>02</span>Hooke's law</a>
+    <a href="#s3"><span>03</span>Poisson's ratio</a>
+    <a href="#s4"><span>04</span>The tension curve</a>
+    <a href="#s5"><span>05</span>Creep and fatigue</a>
+    <a href="#s6"><span>06</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+<h3>Part 1 · Strain and Hooke's law <span class="sub">| how much it moves | a straight line | Reference</span></h3>
+
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Strain</h2>
+<p>Strain is a change of length compared with the length the body had. It has no units. A stretch of 0.2 mm in a 200 mm bar is the same strain as a stretch of 2 mm in a 2 m bar.</p>
+<div class="box why"><span class="tag">Where the definition comes from</span>
+<p>Take a line of original length \(L_0\). After the load it is \(L\). The change is \(\Delta L = L - L_0\). The engineering normal strain uses the original length as the yardstick:</p>
+\[
+\varepsilon = \frac{\Delta L}{L_0}
+\]
+<p>A positive \(\varepsilon\) is a stretch. A negative one is a shortening. The definition uses the original length, so two bars of different size can be compared.</p>
+</div>
+<p>Shear strain is the change of a right angle. For a small angle, in radians,</p>
+\[
+\gamma \approx \tan\gamma = \frac{\delta}{h}
+\]
+<p>where \(\delta\) is the sideways slide of a face and \(h\) is the height of that face. The small-angle step is the idealisation. A large rotation needs the tangent left in.</p>
+<div class="box ex"><span class="tag">Worked example · a measured stretch</span>
+<p>A bar 200 mm long stretches 0.20 mm. The engineering strain is</p>
+\[
+\varepsilon = \frac{0.20}{200} = 0.001
+\]
+<p>That is 1 millistrain, or 0.1%. The Tension test lab plots this strain on the horizontal axis.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Percent and decimal strain are not the same number. 0.1% is a strain of 0.001. Reporting 0.1 when the question asks for millistrain, or 0.001 when it asks for a percent, is off by a factor of 100.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Engineering strain divides by the original length. Once the stretch is large, the current length is the better yardstick, and that is true strain. These notes stay with engineering strain. It matches the small-strain Hooke's law in the next section.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Hooke's law</h2>
+<p>In the straight part of a tension curve, stress and strain stay in proportion. The slope is Young's modulus \(E\):</p>
+\[
+\sigma = E\varepsilon, \qquad \varepsilon = \frac{\sigma}{E}
+\]
+<p>Roylance §1.1 introduces this as the elastic response. \(E\) is a property of the material. A stiffer material has a larger \(E\), so the same stress produces less strain.</p>
+<div class="box why"><span class="tag">From the bar to the elongation</span>
+<p>On a uniform bar the stress is \(P/A\) and the strain is the same at every cross-section. The stretch of a length \(L\) is strain times length:</p>
+\[
+\delta = \varepsilon L = \frac{PL}{AE}
+\]
+<p>Double the load, or the length, and the elongation doubles. Double the area, or the modulus, and it halves. The stress itself does not depend on \(L\) or \(E\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · on the elastic line</span>
+<p>A mild-steel model uses \(E = 200\) GPa. At a strain of 0.0005 the stress is</p>
+\[
+\sigma = (200\times 10^{9})(0.0005) = 100\ \mathrm{MPa}
+\]
+<p>The point is still under the 250 MPa yield of that model, so unloading would walk back down the same line.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the brace at 8 kip</span>
+<p>An A36 brace is 3/4 in in diameter and 10 ft long. The AISC specification takes \(E = 29{,}000\) ksi for structural steel. ASTM A36 requires a minimum yield of 36 ksi. The diameter and the length are assumed. The area is</p>
+\[
+A = \pi(0.75)^{2}/4 = 0.442\ \mathrm{in}^{2}
+\]
+<p>At 8 kip the stress is \(8/0.442 = 18.1\) ksi, under 36 ksi, so the elastic formula applies. The length in inches is 120.</p>
+\[
+\delta = \frac{(8)(120)}{(0.442)(29000)} = 0.0749\ \mathrm{in}
+\]
+<p>The Brace rod lab draws this elongation against the load. The gold line on that chart is the yield load.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Feet and inches do not mix inside \(PL/AE\). If \(E\) is in ksi and \(A\) is in square inches, \(L\) has to be in inches and \(P\) in kip. Leaving a 10 ft length as 10 makes the elongation twelve times too small.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Hooke's law here is one-dimensional and linear. It stops being the right description once the stress passes yield, and it says nothing about temperature, rate or a stress in a second direction. Poisson's ratio, in the next section, is the first of those extra directions.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec8/">2.001 lecture 8</a> treats uniaxial loading and the measured shape of a tension curve.</p>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 2 · Sideways strain and the curve <span class="sub">| Poisson | yield | unloading | Reference</span></h3>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Poisson's ratio</h2>
+<p>A bar pulled along its axis gets thinner. Poisson's ratio \(\nu\) is the size of that sideways strain compared with the axial strain:</p>
+\[
+\varepsilon_{\mathrm{lat}} = -\nu\,\varepsilon
+\]
+<p>The minus sign is the contraction. For most metals \(\nu\) is near 0.3. Roylance §2.2 meets the same ratio in the wall of a pressure vessel.</p>
+<div class="box why"><span class="tag">The volume change</span>
+<p>The three edge strains are \(\varepsilon\), \(-\nu\varepsilon\) and \(-\nu\varepsilon\). Add them. That sum is the linear volume strain:</p>
+\[
+\frac{\Delta V}{V} \approx \varepsilon(1 - 2\nu)
+\]
+<p>At \(\nu = 1/2\) the factor is zero. The shape changes and, in this small-strain count, the volume does not. Rubber is close to that. Steel is not: with \(\nu = 0.3\) a tensile strain increases the volume.</p>
+<p>The exact volume change keeps the products of the stretches, \((1+\varepsilon_x)(1+\varepsilon_y)(1+\varepsilon_z) - 1\). The linear formula drops the terms in \(\varepsilon^{2}\) and \(\varepsilon^{3}\). They are small while the strain is small. The Poisson lab plots both.</p>
+</div>
+<p>The same two constants fix the shear modulus. An isotropic linear material cannot have an independent \(G\):</p>
+\[
+G = \frac{E}{2(1+\nu)}
+\]
+<div class="box ex"><span class="tag">Worked example · steel at one millistrain</span>
+<p>Axial strain 0.001, \(\nu = 0.30\).</p>
+\[
+\varepsilon_{\mathrm{lat}} = -0.30\times 0.001 = -0.000300
+\]
+\[
+\frac{\Delta V}{V} \approx 0.001(1 - 0.60) = 0.000400
+\]
+<p>For \(E = 200\) GPa the shear modulus is</p>
+\[
+G = \frac{200}{2(1.30)} = 76.9\ \mathrm{GPa}
+\]
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Two slips are common. Dropping the minus sign makes a stretched bar thicker. Writing \(\varepsilon(1-\nu)\) instead of \(\varepsilon(1-2\nu)\) counts only one sideways strain. There are two lateral directions.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Poisson's ratio here is a constant. In a plastic metal it moves toward 1/2, because plastic flow changes shape much more than volume. The linear formula is also a small-strain formula. The lab's exact curve peels away once the strain is no longer small.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>The tension curve</h2>
+<p>A tension test pulls a coupon and records stress against strain. The first slope is \(E\). The stress at which a permanent strain remains is the yield strength. A mild steel shows a sharp corner. An aluminium alloy does not, so yield is defined by a line.</p>
+<div class="box why"><span class="tag">The 0.2% offset</span>
+<p>Draw a line of slope \(E\) that crosses the strain axis at 0.002 instead of at the origin:</p>
+\[
+\sigma = E(\varepsilon - 0.002)
+\]
+<p>The stress where that line meets the measured curve is the 0.2% offset yield. A Ramberg–Osgood fit is built so the meeting happens at a chosen stress \(\sigma_Y\):</p>
+\[
+\varepsilon = \frac{\sigma}{E} + 0.002\left(\frac{\sigma}{\sigma_Y}\right)^{n}
+\]
+<p>At \(\sigma = \sigma_Y\) the second term is exactly 0.002. The offset line and the curve meet there by construction. The exponent \(n\) is a fit, not a specification.</p>
+</div>
+<div class="box why"><span class="tag">Energy and the permanent set</span>
+<p>Up to a sharp yield the area under the curve is a triangle. That energy per volume is the modulus of resilience:</p>
+\[
+U_r = \frac{\sigma_Y^{2}}{2E}
+\]
+<p>Past yield, unload along a line of slope \(E\), not along the new shallow slope. The line hits zero stress at a strain above zero. That leftover strain is the permanent set:</p>
+\[
+\varepsilon_p = \varepsilon - \frac{\sigma}{E}
+\]
+<p>Below yield, \(\sigma = E\varepsilon\), so the set is zero.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the offset yield</span>
+<p>Take a typical 6061-T6 card: \(E = 68.9\) GPa and an offset yield of 276 MPa. The exponent \(n = 10\) is assumed. The strain at that stress is</p>
+\[
+\varepsilon = \frac{276}{68900} + 0.002 = 0.00601
+\]
+<p>The Tension test lab, on the aluminium scenario, sits on this point. The dashed line is the offset line.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · energy up to yield</span>
+<p>The mild-steel model yields at 250 MPa with \(E = 200\) GPa. The resilience is</p>
+\[
+U_r = \frac{(250\times 10^{6})^{2}}{2\times 200\times 10^{9}} = 156.3\ \mathrm{kJ/m}^{3}
+\]
+<p>The yield strain is \(250/200000 = 0.00125\), which is 1.25 millistrain. The lab's energy readout at that strain is this triangle.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · unloading from 10 millistrain</span>
+<p>The same steel is pulled to a strain of 0.010 and released. The stress on the bilinear curve, with a tangent modulus of 10 GPa, is</p>
+\[
+\sigma = 250 + 10(10 - 1.25) = 338\ \mathrm{MPa}
+\]
+<p>The recovered strain is \(338/200000 = 0.00169\). The permanent set is</p>
+\[
+\varepsilon_p = 0.010 - 0.00169 = 0.00831
+\]
+<p>That is 8310 µε. Release the load in the lab and the point slides down the gold line to this strain.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Unloading does not follow the shallow slope past yield. That slope is the tangent modulus while the load is still increasing. Take the load off and the slope returns to \(E\). Using the tangent modulus for the recovery leaves almost the whole strain behind.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The steel curve here is two straight lines. A real mild steel has a yield plateau and then a rounded rise, and the yield stress depends on the rate and on the heat treatment. The aluminium curve is one Ramberg–Osgood fit with an assumed exponent. Neither curve knows about a neck, where the stress the engineer computes from the original area stops matching the stress in the material.</p>
+</div>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 3 · Time, cycles, and the sheet <span class="sub">| creep | fatigue | formulas | Reference</span></h3>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Creep and fatigue</h2>
+<p>The tension curve is a short test at room temperature. Two other ways a metal fails sit outside that picture. Creep is strain that grows with time under a steady load, usually when the metal is hot. Fatigue is a crack that grows under a stress that keeps reversing, even when the peak is under yield.</p>
+<p>An S-N curve plots stress amplitude against the number of cycles to failure. Some steels show an endurance limit: a stress amplitude below which the stated curve does not predict a failure, however many cycles you add. Aluminium alloys generally do not. The curve in a problem is the one the problem states. There is no lab for it. The reading is the skill.</p>
+<div class="box ex"><span class="tag">Worked example · a stated endurance limit</span>
+<p>A problem states an endurance limit of 180 MPa for fully reversed bending. A part cycles at 120 MPa. 120 is under 180, so this S-N model predicts no fatigue failure. The same part at 220 MPa is over the limit, so the model assigns a finite life. The life itself comes from the curve the problem draws. The limit alone does not give the number of cycles.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a bolt at room temperature</span>
+<p>A steel bolt at room temperature holds 60% of yield. In this course the strain is the elastic strain \(\sigma/E\), and it does not grow with time. Creep would be a second term that increases while the load sits there. That term is left out for room-temperature steel. Roylance §6.2 is the place to read what the term looks like when the metal is hot.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>An endurance limit is not a promise that the part lasts forever. It is a feature of the S-N model you were given, for that surface, that size and that fully reversed stress. A mean stress, a corrosive environment or a scratch moves the curve. Creep is the opposite confusion: it is not the cause of a room-temperature bolt loaded once.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>No creep rate and no crack-growth law are computed in this unit. The problems only ask you to read a curve they state, and to remember which phenomenon belongs to time at temperature and which belongs to cycles. A design against either one needs the data for that alloy, not the room-temperature modulus.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Formula sheet</h2>
+<p>Engineering normal strain, and small shear strain:</p>
+\[
+\varepsilon = \frac{\Delta L}{L_0}, \qquad \gamma \approx \frac{\delta}{h}
+\]
+<p>Hooke's law, elongation of a uniform bar, and the shear modulus:</p>
+\[
+\sigma = E\varepsilon, \qquad \delta = \frac{PL}{AE}, \qquad G = \frac{E}{2(1+\nu)}
+\]
+<p>Lateral strain and the linear volume change:</p>
+\[
+\varepsilon_{\mathrm{lat}} = -\nu\varepsilon, \qquad \frac{\Delta V}{V} \approx \varepsilon(1-2\nu)
+\]
+<p>Resilience, and the permanent set after unloading along \(E\):</p>
+\[
+U_r = \frac{\sigma_Y^{2}}{2E}, \qquad \varepsilon_p = \varepsilon - \frac{\sigma}{E}
+\]
+<p>Citations: Roylance §1.1 (elastic response), §1.4 (the tension curve), §2.2 (Poisson's ratio), §3.1 (strain), §6.1 (yield), §6.2 (creep), §6.5 (fatigue). The AISC modulus and the ASTM A36 yield are specifications, not Roylance sections. Buckling of a long brace is Unit 11.</p>
+</section>
+</div>
+</main>
+</body>
+</html>

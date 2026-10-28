@@ -6,6 +6,9 @@ const loaders = {
   'truss-stress': () => import('./truss-stress.js'),
   pins: () => import('./pins.js'),
   shackle: () => import('./shackle.js'),
+  'tension-test': () => import('./tension-test.js'),
+  poisson: () => import('./poisson.js'),
+  brace: () => import('./brace.js'),
 };
 
 const labs = createLabLoader(loaders);
