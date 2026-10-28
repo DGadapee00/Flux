@@ -22,6 +22,7 @@ const engine = createEngine({
   prose: 'none',
   steps: 'sig',
   numbers: 'unit',
+  optionWhy: true,
   sig: { figures: 3, lo: 0.01, hi: 1e5, tiny: true, leadingOne: true },
 });
 

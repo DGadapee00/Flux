@@ -5,7 +5,7 @@
  */
 
 export const EXAMS = [
-  { id: 'u1', n: 1, title: 'Stress', chapters: '1', date: 'Ch 1', labs: ['cut', 'truss-stress', 'pins'], coming: [] },
+  { id: 'u1', n: 1, title: 'Stress', chapters: '1', date: 'Ch 1', labs: ['cut', 'truss-stress', 'pins', 'shackle'], coming: [] },
   { id: 'u2', n: 2, title: 'Strain and material behaviour', chapters: '2, 3', date: 'Ch 2–3', labs: [], coming: ['Tension test', 'Poisson'] },
   { id: 'u3', n: 3, title: 'Axial load', chapters: '4', date: 'Ch 4', labs: [], coming: ['Axial', 'Indeterminate', 'Thermal'] },
   { id: 'u4', n: 4, title: 'Torsion', chapters: '5', date: 'Ch 5', labs: [], coming: ['Torsion', 'Twist'] },
@@ -21,6 +21,7 @@ export const LAB_META = {
   cut: { id: 'cut', exam: 'u1', title: 'Inclined cut' },
   'truss-stress': { id: 'truss-stress', exam: 'u1', title: 'Truss stress' },
   pins: { id: 'pins', exam: 'u1', title: 'Pins' },
+  shackle: { id: 'shackle', exam: 'u1', title: 'Shackle', app: true },
 };
 
 export const CHAPTER_TITLES = {

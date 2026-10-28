@@ -108,4 +108,42 @@ export const PREDICTIONS = {
       why: 'The pin\'s shear does not change: 44.2 MPa, 0.44 of its allowable. The bar\'s bearing stress rises to $10\\ \\mathrm{kN}/(12 \\times 5\\ \\mathrm{mm^2}) = 167$ MPa, 0.83 of its allowable. The factor of safety falls from 2.26 to 1.20.',
     },
   ],
+  shackle: [
+    {
+      id: 'sh-proof',
+      scenario: 'wll',
+      ask: 'Raise the load from the working load to the proof load, twice that.',
+      apply(s) { s.P = 8800; },
+      watch: [
+        watch('tau', 'the shear stress in the pin', (c) => c.tau),
+        watch('planes', 'the number of shear planes', (c) => c.planes),
+      ],
+      mode: 'factor',
+      expect: { tau: 2, planes: 1 },
+      why: 'Average shear follows the load. 7.06 ksi at 4400 lbf becomes 14.12 ksi at 8800 lbf.',
+    },
+    {
+      id: 'sh-one',
+      scenario: 'wll',
+      ask: 'Count the pin on one shear plane instead of two.',
+      apply(s) { s.planes = 1; },
+      watch: [
+        watch('tau', 'the shear stress in the pin', (c) => c.tau),
+        watch('planes', 'the number of shear planes', (c) => c.planes),
+      ],
+      mode: 'factor',
+      expect: { tau: 2, planes: 0.5 },
+      why: 'One plane carries the whole 4400 lbf. The stress doubles, from 7.06 ksi to 14.12 ksi.',
+    },
+    {
+      id: 'sh-jaw',
+      scenario: 'wll',
+      ask: 'Open the jaw from 0.81 in to 1.25 in. Keep the pin and the load.',
+      apply(s) { s.jaw = 1.25; },
+      watch: [watch('tau', 'the shear stress in the pin', (c) => c.tau)],
+      mode: 'dir',
+      expect: { tau: 'same' },
+      why: 'The jaw opening is not in the shear formula. The pin area and the load are unchanged, so the stress stays 7.06 ksi.',
+    },
+  ],
 };
