@@ -12,7 +12,7 @@ export const EXAMS = [
   { id: 'u5', n: 5, title: 'Stress transformation and failure', chapters: '8, 9', date: 'Ch 8–9', labs: ['mohr', 'combined', 'hitch'], coming: [] },
   { id: 'u6', n: 6, title: 'Bending', chapters: '6', date: 'Ch 6', labs: ['diagrams', 'flexure', 'joist'], coming: [] },
   { id: 'u7', n: 7, title: 'Transverse shear', chapters: '7', date: 'Ch 7', labs: ['shear', 'nails', 'header'], coming: [] },
-  { id: 'u8', n: 8, title: 'Beam deflection', chapters: '12', date: 'Ch 12', labs: [], coming: ['Deflection', 'Propped'] },
+  { id: 'u8', n: 8, title: 'Beam deflection', chapters: '12', date: 'Ch 12', labs: ['curve', 'propped', 'shelf'], coming: [] },
   { id: 'u9', n: 9, title: 'Torsion', chapters: '5', date: 'Ch 5', labs: [], coming: ['Torsion', 'Twist'] },
   { id: 'u10', n: 10, title: 'Energy methods', chapters: '14', date: 'Ch 14', labs: [], coming: ['Castigliano', 'Drop load'] },
   { id: 'u11', n: 11, title: 'Buckling of columns', chapters: '13', date: 'Ch 13', labs: [], coming: ['Buckling'] },
@@ -41,6 +41,9 @@ export const LAB_META = {
   shear: { id: 'shear', exam: 'u7', title: 'Shear stress' },
   nails: { id: 'nails', exam: 'u7', title: 'Nail spacing' },
   header: { id: 'header', exam: 'u7', title: 'Garage header', app: true },
+  curve: { id: 'curve', exam: 'u8', title: 'Elastic curve' },
+  propped: { id: 'propped', exam: 'u8', title: 'Propped cantilever' },
+  shelf: { id: 'shelf', exam: 'u8', title: 'Pine shelf', app: true },
 };
 
 export const CHAPTER_TITLES = {
@@ -53,6 +56,7 @@ export const CHAPTER_TITLES = {
   8: 'Pressure vessels',
   9: 'Stress transformation',
   10: 'Multiaxial strain',
+  12: 'Deflection',
 };
 
 export function examById(id) {

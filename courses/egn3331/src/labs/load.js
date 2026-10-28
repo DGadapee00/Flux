@@ -24,6 +24,9 @@ const loaders = {
   shear: () => import('./shear.js'),
   nails: () => import('./nails.js'),
   header: () => import('./header.js'),
+  curve: () => import('./curve.js'),
+  propped: () => import('./propped.js'),
+  shelf: () => import('./shelf.js'),
 };
 
 const labs = createLabLoader(loaders);

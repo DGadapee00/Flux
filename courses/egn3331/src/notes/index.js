@@ -112,6 +112,21 @@ export const NOTES = {
       { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u8: {
+    exam: 'u8',
+    title: 'Beam deflection',
+    chapters: '12',
+    file: 'u8-deflection.html',
+    load: () => import('./content/u8-deflection.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'A cantilever tip', lab: 'curve', ch: ['12'], topics: ['deflection', 'cantilever'], home: true },
+      { id: 's2', n: 2, title: 'A uniform simple span', lab: 'curve', ch: ['12'], topics: ['deflection', 'uniform'] },
+      { id: 's3', n: 3, title: 'An off-center load', lab: 'curve', ch: ['12'], topics: ['deflection', 'offset'] },
+      { id: 's4', n: 4, title: 'A propped cantilever', lab: 'propped', ch: ['12'], topics: ['deflection', 'propped'] },
+      { id: 's5', n: 5, title: 'A pine shelf', lab: 'shelf', ch: ['12'], topics: ['deflection', 'english'] },
+      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;

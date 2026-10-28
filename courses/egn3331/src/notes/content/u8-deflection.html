@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Beam deflection</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 8 · Ch 12</p>
+  <h1>Beam deflection</h1>
+  <p class="lede">The moment tells the curvature. Integrate twice and the supports fix the two constants. The beam is lowest where the slope is zero. That station is the peak moment only when the two land on the same point. Every number below is computed by the course library and checked a second way.</p>
+  <div class="legend">
+    <span><i class="swatch" style="background: var(--gold)"></i>Deflection, upward positive</span>
+    <span><i class="swatch" style="background: var(--teal)"></i>Where the slope is zero</span>
+    <span><i class="swatch" style="background: #d147bd"></i>The load, or the prop</span>
+  </div>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>A cantilever tip</a>
+    <a href="#s2"><span>02</span>A uniform simple span</a>
+    <a href="#s3"><span>03</span>An off-center load</a>
+    <a href="#s4"><span>04</span>A propped cantilever</a>
+    <a href="#s5"><span>05</span>A pine shelf</a>
+    <a href="#s6"><span>06</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+<h3>Part 1 · The curve <span class="sub">| cantilever | uniform | off center | Reference</span></h3>
+
+<section class="topic" id="s1">
+<h2><span class="n">01</span>A cantilever tip</h2>
+<p>Take y upward and the sagging moment as positive, the same sign as the shear and moment labs. A sagging span has a local minimum of y, so y'' is positive where the moment is positive. The two signs agree:</p>
+\[
+EI y'' = M
+\]
+<p>A tip load P downward on a cantilever fixed at x = 0 has M = −P(L − x). The wall requires y = 0 and y' = 0. Two integrations then give the tip. Roylance §4.3 is the reading.</p>
+<div class="box ex"><span class="tag">Worked example · the tip load</span>
+<p>The lab's rectangle is 40 mm by 80 mm, E is 200 GPa, the span is 2 m, and the tip load is 2 kN. The tip drops, and the tip slope is</p>
+\[
+\delta = 15.62\ \mathrm{mm}
+\]
+\[
+\theta = 0.01172\ \mathrm{rad}
+\]
+<p>Up is positive on the chart, so the gold curve hangs below the axis. The gold dot is the tip. The slope there is not zero. The teal line is the wall, where both the slope and the deflection are zero. A free end can be the lowest point. An interior peak cannot: there the slope has to cross zero.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>PL³/48EI is a simple span with a midspan load. wL⁴/8EI is this cantilever with a uniform load, not a point load. Doubling the depth divides the drop by 8, because I grows with h³. Doubling the width only halves it. Bending stress, from the previous unit, would have fallen to a quarter when the depth doubles. Deflection falls further.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec20/">2.001 lecture 22</a> integrates the moment to the elastic curve.</p>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>A uniform simple span</h2>
+<p>A uniform downward load w on a beam supported at both ends has M = (wL/2)x − wx²/2. The moment is largest at midspan, and the shear is zero there, so the slope is zero there too. The midspan drop comes out five times wL⁴ over 384EI.</p>
+<div class="box ex"><span class="tag">Worked example · the uniform load</span>
+<p>The same 40 mm by 80 mm section, over 4 m, carries 5 kN/m. Midspan drops</p>
+\[
+\delta = 48.8\ \mathrm{mm}
+\]
+<p>The teal line is midspan. Double the load and the drop doubles. Double the span and it grows with L⁴, sixteen times, which is not the eight times of a tip load. The check is a trapezoid integral of M/EI with the end deflections put back to zero.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving out the 5 makes the drop five times too small, and the load that reaches a deflection limit five times too large. Using the cantilever formula wL⁴/8EI on a simple span overshoots by 384/40.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>An off-center load</h2>
+<p>A point load at distance a from the left, with a less than L/2, peaks the moment at the load. The longer half still has room for the slope to reach zero. That station is</p>
+\[
+x = L - \sqrt{(L^2 - a^2)/3}
+\]
+<p>measured from the left. The drop under the load is smaller than the drop at that station.</p>
+<div class="box ex"><span class="tag">Worked example · quarter span</span>
+<p>A 10 kN load stands at 1 m on a 4 m span, on the same section. The beam is lowest at 1.764 m, and that point drops</p>
+\[
+\delta = 27.3\ \mathrm{mm}
+\]
+<p>The teal line is 1.764 m. The pink line is the load, at 1 m. They are not the same line.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · under the load</span>
+<p>The beam under the load itself drops 22 mm. That is Pa²b² over 3EIL, with b the longer piece. It is a real deflection. It is not the largest one. Slide the load to midspan and the two stations meet, and the drop becomes PL³/48EI, which is 39.1 mm for this load.</p>
+</div>
+<div class="box why"><span class="tag">Why the peaks separate</span>
+<p>dM/dx = V, so the moment peaks where the shear changes sign. dy/dx = 0 is a different sentence. It concerns the slope of the curve, not the shear. Only a symmetric load puts both zeros at midspan.</p>
+</div>
+</section>
+
+</div>
+<div class="part">
+<h3>Part 2 · A redundant support <span class="sub">| prop | shelf | Reference</span></h3>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>A propped cantilever</h2>
+<p>Fix the left end and hold the right end up, and a uniform load has one support too many for equilibrium. Release the prop in your mind. The tip would drop wL⁴/8EI, and the wall moment would be −wL²/2. An upward force R at the tip of that cantilever raises the tip by RL³/3EI. Set the sum to zero.</p>
+\[
+R = \frac{3wL}{8}
+\]
+<p>The wall moment that remains is −wL²/8, a quarter of the free value. The lowest point is not at midspan. Its distance back from the prop is L(1 + √33)/16.</p>
+<div class="box ex"><span class="tag">Worked example · the prop</span>
+<p>The lab's beam is again 40 mm by 80 mm, E is 200 GPa, the span is 3 m, and the load is 4 kN/m. The prop, the wall moment, and the largest drop are</p>
+\[
+R = 4.5\ \mathrm{kN}
+\]
+\[
+M = -4.5\ \mathrm{kN \cdot m}
+\]
+\[
+\delta = 5.14\ \mathrm{mm}
+\]
+<p>The lowest point is at 1.735 m, not at 1.5 m. The pink line is the prop, which does not move. The check is a finite-difference solution of EI y'' = M with R kept as an unknown.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · twice the span</span>
+<p>The same load on a 6 m span doubles the prop, to 9 kN, because R grows with L. The wall moment grows with L², from −4.5 kN·m to −18 kN·m. The drop grows with L⁴. It is not another doubling.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the prop removed</span>
+<p>Take the prop away on the 3 m beam. The tip drops 118.7 mm and the wall moment is −18 kN·m, which is wL²/2. The prop had been holding that whole tip drop, and it had been carrying three quarters of that wall moment away.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>wL/2 is a simple-span reaction, not this prop. wL is the whole load, which the wall carries only when the tip is free. wL²/12 is the end moment of a beam fixed at both ends. This far end is pinned, so its moment is zero and the wall keeps wL²/8.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec21/">2.001 lecture 23</a> uses superposition on a statically indeterminate beam.</p>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>A pine shelf</h2>
+<p>A dressed 1×12 lies flat: 0.75 in thick and 11.25 in wide, the PS 20 dry size, not the nominal 1 by 12. Eastern white pine, clear wood at 12 percent moisture, has a bending modulus of 1.24 million psi in the Forest Products Laboratory tables. That published modulus already includes shear deflection. A row of books is taken as 40 lb/ft. The span below is a chosen 72 in, not a rated shelf length.</p>
+<div class="box ex"><span class="tag">Worked example · the 72 in span</span>
+<p>With a support at each end and no bracket in the middle, midspan drops</p>
+\[
+\delta = 2.38\ \mathrm{in}
+\]
+<p>Each end carries half the books, 120 lbf. The inch-pound formula and the SI formula agree. The board is deep the wrong way: the 0.75 in thickness is the h in bh³/12.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 48 in span</span>
+<p>Shorten the span from 72 in to 48 in and keep the books. The sag multiplies by (48/72)⁴:</p>
+\[
+\delta = 0.47\ \mathrm{in}
+\]
+<p>The load did not change. The span did, and deflection listens to the fourth power.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the center bracket</span>
+<p>A bracket at midspan of the 72 in shelf holds the center. Each half is a propped cantilever. The ends carry 45 lbf each, the center carries 150 lbf, and the largest sag falls to</p>
+\[
+\delta = 0.0618\ \mathrm{in}
+\]
+<p>The open-span sag was 2.38 in. The pink line is the bracket. Turn the same board on edge and I grows by 225, because 11.25/0.75 is 15 and I follows the square of that ratio. The open-span sag would fall to 0.01057 in. The end reactions would not change.</p>
+</div>
+<div class="box out"><span class="tag">What the course model leaves out</span>
+<p>2.38 in is this EI, not a published shelf rating. The 40 lb/ft is an assumed row of books. Grade, knots, creep, and a bracket that itself flexes are outside the model. The handbook modulus already contains shear, so this bending formula does not add a second shear deflection on top. The nominal 1 by 12 is the wrong rectangle.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Formula sheet</h2>
+<p>Curvature, with y upward and sagging moment positive:</p>
+\[
+EI y'' = M
+\]
+<p>Cantilever, downward tip load. The tip drop and the tip slope:</p>
+\[
+\delta = \frac{PL^3}{3EI}
+\]
+<p>Cantilever, uniform load. The tip drop is wL⁴/8EI. Simple span, uniform load, midspan:</p>
+\[
+\delta = \frac{5wL^4}{384EI}
+\]
+<p>Simple span, load P at midspan: PL³/48EI. Propped cantilever, uniform load:</p>
+\[
+R = \frac{3wL}{8}
+\]
+<p>The wall moment is then −wL²/8. Citations: Roylance §4.3. The shelf modulus is the Forest Products Laboratory value for eastern white pine, and the dressed size is PS 20. The 40 mm by 80 mm section and the book load are assumed.</p>
+</section>
+</div>
+</main>
+</body>
+</html>

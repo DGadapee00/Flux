@@ -33,6 +33,9 @@ const LIMIT = {
   shear: 1e-6,
   nails: 1e-9,
   header: 1e-9,
+  curve: 1e-6,
+  propped: 2e-4,
+  shelf: 2e-4,
 };
 
 const fails = [];
