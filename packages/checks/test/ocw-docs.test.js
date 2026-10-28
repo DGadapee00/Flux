@@ -33,7 +33,9 @@ test('Dynamics maps the lectures it uses and leaves Lagrange and vibration to EM
   const unit = (lesson) => eight.find((r) => r.title.startsWith(`${lesson} `)).units;
   assert.equal(unit('19.4'), 'Unit 3');
   assert.equal(unit('20.5'), 'Unit 4');
-  assert.equal(unit('14.3'), 'unmapped');
+  assert.equal(unit('14.3'), 'Unit 2');
+  assert.equal(unit('37.3'), 'Unit 8');
+  assert.equal(unit('13.2'), 'unmapped');
 });
 
 test('every Another view link in the Dynamics notes is a page the OCW indexes list', () => {

@@ -49,7 +49,7 @@ subject libraries (a function written for one course serves the next), and one s
 | MAC 2311–2312 Calculus I and II | [mac2311-2312](docs/course-plans/mac2311-2312.md) | two modules, 4 units each, notes | fails | R4: merge into one (D28) |
 | MAC 2313 Calculus III | [mac2313](docs/course-plans/mac2313.md) | labs and bank, no notes | fails | R4 |
 | EGN 3311 Statics | [statics](docs/course-plans/statics.md) | labs and bank, no notes | fails | R4 |
-| EGN 3321 Dynamics | [egn3321](docs/course-plans/egn3321.md) | 7 units, notes | **passes** | owner review (R2b follow-ups done) |
+| EGN 3321 Dynamics | [egn3321](docs/course-plans/egn3321.md) | 7 units, notes; Unit 8 and the D36 topics in progress | passes | R2c: the owner's review findings (D36) |
 | EGN 3331 Mechanics of Materials | [egn3331](docs/course-plans/egn3331.md) | 11 units at the standard | passes | owner review (`standard` stays false) |
 | EML 3100 Thermodynamics | [eml3100](docs/course-plans/eml3100.md) | 5 of 5 units to the standard | passes | owner review (`standard` stays false) |
 | STA 3032 Statistics | [sta3032](docs/course-plans/sta3032.md) | complete, older style | fails | keep passing; no rework |
@@ -62,9 +62,15 @@ subject libraries (a function written for one course serves the next), and one s
 - [x] **R0** Scorecard (`npm run scorecard`), `standard: false` in every manifest.
 - [x] **R1** The practice loop in the shells (`packages/shells/practice`).
 - [x] **R2** Dynamics to the standard.
-- [ ] **R2b Dynamics follow-ups:** ~~swap Units 3 and 4 so momentum comes before energy (D29)~~ (done); ~~end
+- [x] **R2b Dynamics follow-ups:** ~~swap Units 3 and 4 so momentum comes before energy (D29)~~ (done); ~~end
       each application lab's explainer with **What the course model leaves out.** (D30)~~ (done); the Hibbeler citation map,
       the Flux-units columns and the Another view links (done); the notes' parts, legend and footer (D32, done); OCW worked cases for every unit (done, from 2.003SC solutions; see `courses/egn3321/ERRATA.md`). Then the owner's review.
+- [ ] **R2c Dynamics, the owner's review (28 Oct 2026, D36):** (1) scope: polar coordinates in Unit 1,
+      pulley constraints and drag in Unit 2, rotating axes in Unit 5, Chapter 19 as Unit 8; (2) the
+      five rocket-themed application labs replaced by everyday and industrial devices (D25); (3) a
+      printed-answer worked case for every template (blocked until ocw.mit.edu and openstax.org are
+      reachable); (4) the labs drawn flat, playing their motion, with kinetic diagrams; (5) notes boxes
+      by content, predictions someone could get wrong, and a bank that varies the unknown.
 - [x] **Reference guide** (AGENTS.md, this roadmap, DECISIONS.md, the standard, a spine for every
       course, the skills).
 - [x] **Inventory** of every course against the outline: `docs/INVENTORY.md`.
