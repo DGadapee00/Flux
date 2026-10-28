@@ -2,7 +2,7 @@
  * Predict first, two or three prompts per lab. `expect` is what the lab's own
  * recompute says after `apply`, checked by labs-check. The panel grades the same way.
  */
-import { satP, fromC } from '@flux/subjects/thermo';
+import { fromC, fromF, satP } from '@flux/subjects/thermo';
 
 const watch = (id, label, get) => ({ id, label, get });
 
@@ -195,6 +195,103 @@ export const PREDICTIONS = {
       mode: 'dir',
       expect: { elec: 'bigger', maxGpm: 'smaller' },
       why: 'The rise grows from 33.9 K to 43.9 K, so one gallon needs more energy. The shower needs 29.6 kW instead of 22.8, and the 27 kW heater now serves only 2.28 gal/min.',
+    },
+  ],
+  carnot: [
+    {
+      id: 'cy-hot',
+      scenario: 'engine',
+      ask: 'Raise the hot reservoir from 550 °C to 727 °C. The cold reservoir stays at 30 °C.',
+      apply(s) { s.TH = 1000; },
+      watch: [
+        watch('eta', 'the Carnot efficiency', (c) => c.eta),
+        watch('copR', 'the refrigerator COP between the same two temperatures', (c) => c.copR),
+      ],
+      mode: 'dir',
+      expect: { eta: 'bigger', copR: 'smaller' },
+      why: 'The efficiency is $1 - T_L/T_H$. A hotter source raises it from 0.632 to 0.697. The refrigerator COP is $T_L/(T_H - T_L)$, and the gap between the reservoirs grew, so it falls from 0.583 to 0.435.',
+    },
+    {
+      id: 'cy-kitchen',
+      scenario: 'fridge',
+      ask: 'Warm the kitchen from 22 °C to 37 °C. The freezer stays at −18 °C.',
+      apply(s) { s.TH = fromC(37); },
+      watch: [
+        watch('copR', 'the refrigerator COP', (c) => c.copR),
+        watch('copHP', 'the heat-pump COP', (c) => c.copHP),
+      ],
+      mode: 'dir',
+      expect: { copR: 'smaller', copHP: 'smaller' },
+      why: 'Both coefficients have $T_H - T_L$ in the denominator. The kitchen warming from 22 °C to 37 °C drops COP_R from 6.38 to 4.64 and COP_HP from 7.38 to 5.64. They still differ by 1.',
+    },
+    {
+      id: 'cy-rp',
+      scenario: 'brayton',
+      ask: 'Raise the pressure ratio from 12 to 18. The turbine inlet stays at 1200 °C.',
+      apply(s) { s.rp = 18; },
+      watch: [
+        watch('etaB', 'the Brayton efficiency', (c) => c.etaB),
+        watch('T2', 'the compressor exit temperature', (c) => c.T2),
+      ],
+      mode: 'dir',
+      expect: { etaB: 'bigger', T2: 'bigger' },
+      why: 'A harder compression raises $T_2$ from 307 °C to 375 °C and the efficiency from 0.481 to 0.535. The cold-air formula depends on the pressure ratio alone, so this move is the one that helps.',
+    },
+  ],
+  claims: [
+    {
+      id: 'cl-more-work',
+      scenario: 'fair',
+      ask: 'Keep the energy balance and raise the work from 200 kJ to 250 kJ. The hot heat stays at 500 kJ, so the cold heat falls to 250 kJ.',
+      apply(s) { s.W = 250; s.QL = 250; },
+      watch: [
+        watch('eta', 'the efficiency', (c) => c.eta),
+        watch('carnot', 'the Carnot limit', (c) => c.carnot),
+      ],
+      mode: 'dir',
+      expect: { eta: 'bigger', carnot: 'same' },
+      why: 'Efficiency is $W/Q_H$, so it rises from 0.400 to 0.500. The limit $1 - T_L/T_H = 0.625$ depends only on the two reservoirs, which did not move.',
+    },
+    {
+      id: 'cl-back',
+      scenario: 'impossible',
+      ask: 'Cut the claimed work from 400 kJ to 250 kJ and set the cold heat to 250 kJ, so the first law holds again.',
+      apply(s) { s.W = 250; s.QL = 250; },
+      watch: [
+        watch('eta', 'the efficiency', (c) => c.eta),
+        watch('copR', 'Q_L/W, read as a refrigerator COP', (c) => c.copR),
+      ],
+      mode: 'dir',
+      expect: { eta: 'smaller', copR: 'bigger' },
+      why: 'The claim was at 0.800, above the Carnot limit of 0.625, so it was impossible. At 0.500 it sits below the limit and becomes possible. $Q_L/W$ rises from 0.250 to 1.00 because the cold heat grew and the work fell.',
+    },
+  ],
+  ac: [
+    {
+      id: 'ac-hot',
+      scenario: 'rated',
+      ask: 'The afternoon heats up: the outdoor air rises from 95 °F to 105 °F. The nameplate stays at EER 11.',
+      apply(s) { s.Tout = fromF(105); },
+      watch: [
+        watch('copK', 'the Carnot COP', (c) => c.copK),
+        watch('ratio', 'the nameplate COP divided by the Carnot COP', (c) => c.ratio),
+      ],
+      mode: 'dir',
+      expect: { copK: 'smaller', ratio: 'bigger' },
+      why: 'The Carnot COP is $T_L/(T_H - T_L)$. A hotter outdoors shrinks it from 36.0 to 21.6. The nameplate COP stays 3.22, so it is a larger share of a lower ceiling: 9.0% becomes 14.9%.',
+    },
+    {
+      id: 'ac-eer',
+      scenario: 'rated',
+      ask: 'Swap in a unit rated EER 14 instead of EER 11, at the same 95 °F test.',
+      apply(s) { s.eer = 14; },
+      watch: [
+        watch('copE', 'the nameplate COP', (c) => c.copE),
+        watch('copK', 'the Carnot COP', (c) => c.copK),
+      ],
+      mode: 'dir',
+      expect: { copE: 'bigger', copK: 'same' },
+      why: 'COP = EER × (Btu/h)/W, so 14 instead of 11 raises the nameplate from 3.22 to 4.10. The Carnot COP depends only on the two air temperatures, which did not change.',
     },
   ],
 };

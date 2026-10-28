@@ -1,6 +1,7 @@
 /**
  * Thermodynamic properties: water and steam (IAPWS-IF97 regions 1, 2 and 4), ideal gases (NASA
- * polynomials from GRI-Mech 3.0 and NASA Glenn), isentropic flow, and generated property tables.
+ * polynomials from GRI-Mech 3.0 and NASA Glenn), isentropic flow, Carnot and Brayton cycles,
+ * entropy changes, and generated property tables.
  *
  * Pure functions, no DOM. The only import outside this folder is ../convert.js, for the exact unit
  * definitions. SI base units throughout: K, Pa, m³/kg, J/kg, J/(kg·K). units.js converts to kPa,
@@ -24,6 +25,15 @@ export {
   integrateVdp, isentropicVdp, jouleThomsonWater, throttleByJouleThomson,
 } from './flow.js';
 export { temperatureRatio, pressureRatio, densityRatio, areaRatio, machFromArea, chokedMassFlux } from './isentropic.js';
+export {
+  carnotEfficiency, copRefrigerator, copHeatPump, clausiusSum, classifyClaim, classifyByLimit,
+  idealGasCarnot, carnotWorkIntegral, braytonColdAir, brayton, heatByCp,
+} from './cycles.js';
+export {
+  idealGasDeltaS, idealGasDeltaSIntegral, incompressibleDeltaS, incompressibleDeltaU, incompressibleDeltaH,
+  reservoirGeneration, lostWork, expansionEfficiency, expansionExit, compressionEfficiency, compressionExit,
+  flowGeneration,
+} from './entropy.js';
 export {
   SAT_T_GRID, SAT_P_GRID, SUPERHEAT_P_GRID, SUPERHEAT_T_GRID, COMPRESSED_P_GRID, COMPRESSED_T_GRID,
   satTableT, satTableP, superheatTable, compressedTable, bracket, lerp, tableInterp, tableInterp2, printed,

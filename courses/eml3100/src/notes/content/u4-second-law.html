@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cycles and the second law</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EML 3100 · Thermodynamics · Unit 4 · Yan Ch 6</p>
+  <h1>Cycles and the second law</h1>
+  <p class="lede">A cycle returns a device to its starting state. The first law then ties the heats and the work together. The second law says how much of that heat can become work, and it rules out claims that would destroy entropy. Every number below is recomputed by the course's property library and checked a second way.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key</span>
+    <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Engines and refrigerators</h3>
+    <a href="#s1"><span>01</span>Heat engines</a>
+    <a href="#s2"><span>02</span>Refrigerators and heat pumps</a>
+    <h3>Part II · The Carnot limit</h3>
+    <a href="#s3"><span>03</span>The Carnot limit</a>
+    <a href="#s4"><span>04</span>Reversible or impossible</a>
+    <h3>Part III · Cycles in use</h3>
+    <a href="#s5"><span>05</span>The Brayton cycle</a>
+    <a href="#s6"><span>06</span>A unitary air conditioner</a>
+    <h3>Reference</h3>
+    <a href="#s7"><span>07</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Engines and refrigerators</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Heat engines</h2>
+<p>A heat engine takes heat from a hot place, does work, and rejects the rest to a cold place. A power plant, a car engine and a gas turbine are all of this kind. Over one cycle the fluid inside is back where it started, so its internal energy is unchanged.</p>
+<div class="box why"><span class="tag">Why the efficiency is W over Q_H</span>
+<p>The first law for any process is \(Q - W = \Delta U\). Around a cycle, \(\Delta U = 0\), so the net heat equals the net work. Write the heats as positive magnitudes. \(Q_H\) enters from the hot reservoir and \(Q_L\) leaves to the cold one. The engine's work \(W\) leaves as well. Then</p>
+\[
+Q_H = Q_L + W.
+\]
+<p>The thermal efficiency asks what fraction of the heat you paid for comes back as work:</p>
+\[
+\eta = \frac{W}{Q_H} = 1 - \frac{Q_L}{Q_H}.
+\]
+<p>OpenStax UP2 §4.2 defines the engine this way. Yan Ch 6 uses the same balance.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a fair engine</span>
+<p>An engine draws 500 kJ from a reservoir at 800 K and rejects 300 kJ to a reservoir at 300 K. The work is \(500 - 300 = 200\) kJ. The efficiency is \(200/500 = 0.400\). The Carnot engine between the same reservoirs would reach \(1 - 300/800 = 0.625\), and would turn the same 500 kJ into 312.5 kJ of work. This engine falls short of that, so it is possible. The Clausius sum is \(500/800 - 300/300 = -0.375\) kJ/K, which is negative, as an irreversible cycle requires.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Efficiency is not \(Q_L/W\), and it is not \(W/Q_L\). The denominator is the heat taken from the hot reservoir. The rejected heat is \(Q_H - W\), not the work and not \(Q_H\) itself. OpenStax UP2 §4.2.</p>
+</div>
+<p>In the Possible or not lab, the fair-engine scenario shows this claim. The efficiency reads 0.400 and the cold heat reads 300 kJ.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real engine does not run on two reservoirs alone. The hot side is a flame or a reactor, the cold side is a river or a cooling tower, and both ends have temperature drops the cycle formula never sees. Friction, leaks and incomplete combustion sit outside \(Q_H = Q_L + W\).</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Refrigerators and heat pumps</h2>
+<p>A refrigerator moves heat from a cold space to a warm room. Work goes in. A heat pump is the same machine, judged by the heat it delivers to the warm side rather than by the heat it lifts from the cold side.</p>
+<div class="box why"><span class="tag">Why the two COPs differ by one</span>
+<p>The cycle balance is unchanged, because the device still returns to its start. With magnitudes positive,</p>
+\[
+Q_H = Q_L + W.
+\]
+<p>The refrigerator's coefficient of performance divides the heat you wanted by the work you paid:</p>
+\[
+\mathrm{COP_R} = \frac{Q_L}{W}.
+\]
+<p>The heat pump wanted \(Q_H\) instead:</p>
+\[
+\mathrm{COP_{HP}} = \frac{Q_H}{W} = \frac{Q_L + W}{W}.
+\]
+\[
+\mathrm{COP_{HP}} = \mathrm{COP_R} + 1.
+\]
+<p>OpenStax UP2 §4.3 records both definitions.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a kitchen freezer</span>
+<p>A reversible freezer holds its cabinet at \(-18\) °C and rejects heat to a kitchen at 22 °C. In kelvin those are 255.15 K and 295.15 K, a span of 40 K. The refrigerator COP is \(255.15/40 = 6.379\). The heat-pump COP is \(295.15/40 = 7.379\), which is one more. For every 1 kJ of work the freezer can lift 6.379 kJ, and it dumps 7.379 kJ into the kitchen.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a stated refrigerator</span>
+<p>A refrigerator removes 400 kJ and is supplied with 80 kJ of work. The COP is \(400/80 = 5\). The kitchen receives \(400 + 80 = 480\) kJ. Using \(Q_H/W = 6\) would be the heat-pump COP of this same machine. Using \(400/480 = 0.833\) would be a heat fraction, not a COP.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(\mathrm{COP_R}\) uses \(Q_L\). \(\mathrm{COP_{HP}}\) uses \(Q_H\). They are not interchangeable, and neither one is \(Q_L/Q_H\). The denominator of both is the work. OpenStax UP2 §4.3.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>One device, two questions. Cooling asks for \(Q_L/W\). Heating asks for \(Q_H/W\). The first law makes the second answer one larger than the first.</p>
+</div>
+<p>In the Carnot and Brayton lab, the refrigerator scenario is this freezer. The two COPs read 6.379 and 7.379.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The cabinet air is not the refrigerant. The evaporator is colder than \(-18\) °C and the condenser is hotter than 22 °C, so a real freezer needs a larger temperature span than the air on each side. Fans, defrost and door openings add work the COP formula does not carry.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>The Carnot limit</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>The Carnot limit</h2>
+<p>Among all engines running between two temperatures, a reversible one produces the most work. Its efficiency depends on those two temperatures and on nothing else. The temperatures must be absolute.</p>
+<div class="box why"><span class="tag">Why the limit is one minus T_L over T_H</span>
+<p>A reversible cycle has \(\oint \delta Q/T = 0\). The engine absorbs \(Q_H\) at a single temperature \(T_H\) and rejects \(Q_L\) at a single temperature \(T_L\). Heat in is positive and heat out is negative, so</p>
+\[
+\frac{Q_H}{T_H} - \frac{Q_L}{T_L} = 0.
+\]
+<p>Therefore \(Q_L/Q_H = T_L/T_H\). The efficiency becomes</p>
+\[
+\eta = 1 - \frac{T_L}{T_H}.
+\]
+<p>The same cycle run backwards is a refrigerator, and the same ratio fixes its COP:</p>
+\[
+\mathrm{COP_R} = \frac{T_L}{T_H - T_L}.
+\]
+\[
+\mathrm{COP_{HP}} = \frac{T_H}{T_H - T_L}.
+\]
+<p>OpenStax UP2 §4.5 derives the engine. The two COP formulas are the same relation read for the other two jobs.</p>
+</div>
+<p>An ideal gas makes the same engine out of two isotherms and two isentropes. On the hot isotherm \(\Delta u = 0\), so the heat per kilogram equals the boundary work, \(q_H = RT_H\ln(v_2/v_1)\). The isentropes share one pressure ratio, so the cold isotherm has the same volume ratio and \(q_L = RT_L\ln(v_2/v_1)\). Their ratio is \(T_L/T_H\) again, with no assumption that \(c_p\) is constant.</p>
+<div class="box ex"><span class="tag">Worked example · kelvin, not celsius</span>
+<p>A Carnot engine runs between 550 °C and 30 °C. In kelvin those are 823.15 K and 303.15 K. The efficiency is \(1 - 303.15/823.15 = 0.6317\). The Celsius ratio \(1 - 30/550 = 0.9455\) is a different number. It treats the freezing point of water as if it were absolute zero. A 200 kJ heat input then produces \(0.6317\times 200 = 126.3\) kJ of work, not \(0.9455\times 200\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one kilogram of air</span>
+<p>One kilogram of air follows that same pair of temperatures, and the hot isotherm doubles the volume. Air's gas constant in this course is 0.28705 kJ/(kg·K). The heat absorbed is</p>
+\[
+q_H = 0.28705\times 823.15\times\ln 2
+\]
+<p>which is 163.8 kJ/kg.</p>
+<p>The net work is \(163.8\times 0.6317 = 103.5\) kJ/kg. The rejected heat is \(163.8 - 103.5 = 60.3\) kJ/kg, which is also \(RT_L\ln 2\). Integrating \(P\,dv\) around the four paths returns the same net work.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · five hundred degrees Fahrenheit</span>
+<p>A source at 500 °F and a sink at 100 °F are 959.67 R and 559.67 R. The efficiency is \(1 - 559.67/959.67 = 0.4168\). From 200 Btu absorbed, the work is \(0.4168\times 200 = 83.36\) Btu. The Fahrenheit ratio \(1 - 100/500 = 0.800\) is not the efficiency. Rankine and kelvin give the same ratio, because one is a constant multiple of the other.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A Celsius or Fahrenheit reading cannot stand in for \(T\) in \(T_L/T_H\). Add 273.15 to a Celsius reading, or 459.67 to a Fahrenheit reading, before the division. The other slip is to report \(T_L/T_H\) itself as the efficiency. That ratio is the rejected fraction. OpenStax UP2 §4.5.</p>
+</div>
+<p>In the Carnot and Brayton lab, the engine scenario is the 550 °C case. The efficiency reads 0.6317. The Celsius ratio, shown beside it, reads 0.9455. With one kilogram and a volume ratio of 2, the heat and the work read 163.8 kJ and 103.5 kJ.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>No reservoir stays at one temperature while a finite heat transfer crosses it. A reversible engine also needs every process inside the fluid to be reversible, which means it runs infinitely slowly. The formula is a ceiling, not a design.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Reversible or impossible</h2>
+<p>A claimed engine comes with three magnitudes and two temperatures. The first law is a check that they add up. The second law is a check that the claim does not beat the Carnot limit.</p>
+<div class="box why"><span class="tag">Why the two tests agree</span>
+<p>Once \(Q_H = Q_L + W\), the Clausius sum for an engine is</p>
+\[
+\oint\frac{\delta Q}{T} = \frac{Q_H}{T_H} - \frac{Q_L}{T_L} = \frac{Q_H}{T_L}\left(\eta - \eta_C\right),
+\]
+<p>where \(\eta = W/Q_H\) and \(\eta_C = 1 - T_L/T_H\). The sum is zero when \(\eta = \eta_C\), negative when the engine is worse than Carnot, and positive when the claim is better than Carnot. A positive sum is impossible. Yan Ch 6 states the inequality. The efficiency test is the same fact written as one comparison.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an impossible engine</span>
+<p>The same 500 kJ and the same reservoirs, 800 K and 300 K, are now paired with 400 kJ of work and 100 kJ rejected. The first law holds: \(100 + 400 = 500\). The efficiency is \(400/500 = 0.800\). The Carnot limit is still 0.625. The Clausius sum is \(500/800 - 100/300 = 0.2917\) kJ/K, which is positive. The claim is impossible. No change of working fluid removes a positive sum.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a reversible engine</span>
+<p>Set the work to the Carnot value, 312.5 kJ. The rejected heat is \(500 - 312.5 = 187.5\) kJ. Then \(187.5/300 = 0.625\) and \(500/800 = 0.625\), so the sum is zero. The efficiency is 0.625. The claim is reversible. Any real device, with friction or a finite temperature difference, lands below this line and produces a negative sum.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A first-law balance is not a second-law clearance. Heats and work can add up and the device can still be impossible. Compare \(\eta\) with \(1 - T_L/T_H\) after the balance holds, and use absolute temperatures in that comparison. Yan Ch 6.</p>
+</div>
+<p>In the Possible or not lab, the impossible scenario reads efficiency 0.800 against a Carnot limit of 0.625. Moving the work slider walks the claim from irreversible, through reversible, into impossible.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The test uses two reservoirs, each at one temperature. A cycle that exchanges heat over a range of temperatures needs \(\int\delta Q/T\) along the actual path. Irreversibilities inside the device also add entropy that a reservoir-only sum does not locate.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 16.050 Thermal Energy (Fall 2002) builds the second law and then the gas-turbine cycle on its <a href="https://ocw.mit.edu/courses/16-050-thermal-energy-fall-2002/pages/calendar/" target="_blank" rel="noopener">calendar page</a>. The sessions are the second-law block and the gas power cycles. Problem sets there carry no printed solutions, so the numbers in these notes are our own.</p>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Cycles in use</h2>
+</div>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>The Brayton cycle</h2>
+<p>A gas turbine runs the Brayton cycle: isentropic compression, heat addition at the high pressure, isentropic expansion, and heat rejection at the low pressure. Jet engines and many power turbines are this pattern. The cold-air model holds \(c_p\) fixed. The air tables let \(c_p\) rise with temperature.</p>
+<div class="box why"><span class="tag">Why the cold-air efficiency depends only on the pressure ratio</span>
+<p>With constant \(k = c_p/c_v\), an isentropic compression of pressure ratio \(r_p\) raises the temperature by</p>
+\[
+\frac{T_2}{T_1} = r_p^{(k-1)/k}.
+\]
+<p>The heat added per kilogram is \(c_p(T_3 - T_2)\) and the heat rejected is \(c_p(T_4 - T_1)\). The two isentropes share the same pressure ratio, so \(T_1/T_2 = T_4/T_3\). The \(c_p\) cancels and</p>
+\[
+\eta = 1 - \frac{T_1}{T_2} = 1 - r_p^{(1-k)/k}.
+\]
+<p>The turbine inlet \(T_3\) drops out. Raising it adds work and adds heat in the same proportion. Raising \(r_p\) is what lifts the efficiency. Warming \(T_1\) does nothing to this formula.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · cold air at a ratio of 8</span>
+<p>Take \(k = 1.40\), \(r_p = 8\) and \(T_1 = 300\) K. The temperature ratio is \(8^{0.4/1.4} = 1.8114\), so \(T_2 = 543.4\) K. The efficiency is \(1 - 300/543.4 = 0.4479\). Using the pressure ratio itself as a temperature ratio, or flipping the exponent, gives a different and wrong exit temperature.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a pressure ratio of 12</span>
+<p>Air enters at 15 °C and 100 kPa. The pressure ratio is 12 and the turbine inlet is 1200 °C. The NASA polynomials give \(T_2 = 307.4\) °C and \(T_4 = 521.1\) °C. The heat added is \(h_3 - h_2 = 1016.9\) kJ/kg and the heat rejected is \(h_4 - h_1 = 527.6\) kJ/kg. The efficiency is 0.4812 and the net work is 489.4 kJ/kg. Integrating \(c_p\,dT\) between the same temperatures reproduces both heats.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · cold air at the same ratio</span>
+<p>Hold \(k\) at the inlet value, 1.400, and keep the pressure ratio at 12. The cold-air efficiency is \(1 - 12^{(1-1.4)/1.4} = 0.5085\). The variable-\(c_p\) result was 0.4812. The constant-\(c_p\) model is high, because the real \(c_p\) rises through the combustor and the turbine. The Carnot limit between 15 °C and 1200 °C is \(1 - 288.15/1473.15 = 0.8044\). The Brayton cycle stays under it: heat is rejected at 521 °C, not at 15 °C.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a pressure ratio of 18</span>
+<p>The same inlet and the same 1200 °C turbine inlet, with the pressure ratio raised from 12 to 18, give \(T_2 = 375.2\) °C and an efficiency of 0.5348. The efficiency rose. The cold-air formula predicts that rise. A hotter turbine inlet, at fixed pressure ratio, would add net work and would leave the cold-air efficiency unchanged.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The cold-air efficiency is not \(T_2/T_1\) and it is not \(T_1/T_2\). It is \(1 - T_1/T_2\). The net work is not the turbine work, and it is not the heat added. Subtract the compressor work, or subtract the rejected heat. The cold-air number is also not the variable-\(c_p\) number once the temperature rise is large.</p>
+</div>
+<p>In the Carnot and Brayton lab, the gas-turbine scenario is the ratio of 12. The efficiency reads 0.4812, the compressor exit reads 307.4 °C, and the net work reads 489.4 kJ/kg. The cold-air value beside it reads 0.5085. Raising the ratio to 18 moves the efficiency to 0.5348 and the compressor exit to 375.2 °C.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real compressor and a real turbine are not isentropic. The combustor is not a reversible heater, and the exhaust carries kinetic energy a turbojet uses as thrust. Those losses are the isentropic efficiencies of the next unit. This unit keeps the four processes ideal so the pressure ratio stands alone.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>A unitary air conditioner</h2>
+<p>A unitary air conditioner is rated by a cooling capacity and an energy-efficiency ratio. The rating point used here is a public test condition. The capacity and the EER are assumed, so the lesson is the gap between the nameplate and the Carnot ceiling, not the merit of one model.</p>
+<p>AHRI 210/240 condition AFull, for equipment under 65,000 Btu/h, tests cooling at 95 °F outdoor dry-bulb and 80 °F indoor dry-bulb. The indoor wet-bulb of that test is left out. The lab assumes 36,000 Btu/h and an EER of 11 at that point.</p>
+<div class="box why"><span class="tag">Why an EER becomes a COP</span>
+<p>EER is cooling in Btu/h divided by electric power in watts. One Btu/h is \(1055.06/3600 = 0.29307\) W. So</p>
+\[
+\mathrm{COP} = \mathrm{EER}\times 0.29307.
+\]
+<p>The same COP is the cooling rate in watts divided by the electric power in watts. Both routes have to agree. The Carnot COP between the indoor air and the outdoor air is \(T_\mathrm{in}/(T_\mathrm{out} - T_\mathrm{in})\), with both temperatures absolute. Rankine and kelvin give the same value.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the rating point</span>
+<p>Indoors, 80 °F is 299.82 K. Outdoors, 95 °F is 308.15 K. The span is 8.333 K, so the Carnot COP is \(299.82/8.333 = 35.98\). An EER of 11 is a nameplate COP of \(11\times 0.29307 = 3.224\). The cooling rate is 10.55 kW, and the electric power is \(36000/11 = 3273\) W, or 3.273 kW. The nameplate is \(3.224/35.98 = 0.0896\) of the Carnot COP between the two air streams.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a hotter afternoon</span>
+<p>The outdoors rises to 105 °F, which is 313.71 K. The span grows to 13.89 K and the Carnot COP falls to \(299.82/13.89 = 21.59\). The nameplate does not move, so the ratio of nameplate to Carnot rises to \(3.224/21.59 = 0.1493\). A hotter day lowers the ceiling. It does not rewrite the EER printed for the 95 °F test.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The Carnot COP uses the absolute indoor and outdoor temperatures, not the Fahrenheit readings and not their difference alone. An EER is not already a COP. The factor 0.29307 converts Btu/h per watt into a dimensionless COP. Leaving it out makes the nameplate look about three times too large.</p>
+</div>
+<p>In the Air conditioner lab, the rating scenario reads a Carnot COP of 35.98, a nameplate COP of 3.224 and a power of 3.273 kW. The hotter-afternoon scenario reads a Carnot COP of 21.59 and a ratio of 0.1493.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The air temperatures are not the refrigerant temperatures. The evaporator is colder than the room and the condenser is hotter than the outdoors, so the Carnot COP between the two air streams is a generous ceiling. The test also fixes a wet-bulb temperature, and the cooling load is partly latent. Fans, cycling and a dirty coil move the power. The nameplate EER is one test point, not a constant.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Formula sheet</h2>
+<ul>
+<li>Cycle: \(Q_H = Q_L + W\) when every term is a positive magnitude. Engine: \(\eta = W/Q_H = 1 - Q_L/Q_H\).</li>
+<li>Refrigerator: \(\mathrm{COP_R} = Q_L/W\). Heat pump: \(\mathrm{COP_{HP}} = Q_H/W = \mathrm{COP_R} + 1\).</li>
+<li>Carnot: \(\eta = 1 - T_L/T_H\), \(\mathrm{COP_R} = T_L/(T_H - T_L)\), \(\mathrm{COP_{HP}} = T_H/(T_H - T_L)\). Temperatures are kelvin or rankine.</li>
+<li>Ideal-gas Carnot, per kilogram: \(q_H = RT_H\ln(v_2/v_1)\), \(q_L = RT_L\ln(v_2/v_1)\), \(w_\mathrm{net} = q_H - q_L\).</li>
+<li>Clausius, engine: \(Q_H/T_H - Q_L/T_L\). Zero is reversible, negative is irreversible, positive is impossible.</li>
+<li>Cold-air Brayton: \(\eta = 1 - r_p^{(1-k)/k} = 1 - T_1/T_2\). With \(c_p(T)\): \(q_\mathrm{in} = h_3 - h_2\), \(w_\mathrm{net} = q_\mathrm{in} - q_\mathrm{out}\).</li>
+<li>EER to COP: multiply by 0.29307, which is one Btu/h expressed in watts. Rankine is Fahrenheit plus 459.67.</li>
+</ul>
+<p>Entropy changes, isentropic efficiency and lost work are the next unit. A steam power cycle is a later course. This unit stops at the limit and at the ideal gas turbine.</p>
+</section>
+</main>
+<footer>Written for Flux from Yan, Introduction to Engineering Thermodynamics, Yan Ch 6, and from OpenStax UP2 §4.2, OpenStax UP2 §4.3 and OpenStax UP2 §4.5. The air-conditioner dry-bulb temperatures are AHRI 210/240 condition AFull. The capacity and the EER are assumed and labelled. Every worked answer was recomputed.</footer>
+</body>
+</html>

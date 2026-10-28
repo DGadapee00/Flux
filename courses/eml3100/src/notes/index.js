@@ -50,23 +50,52 @@ export const NOTES = {
       { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u4: {
+    exam: 'u4',
+    title: 'Cycles and the second law',
+    chapters: '6',
+    file: 'u4-second-law.html',
+    load: () => import('./content/u4-second-law.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'Heat engines', lab: 'claims', ch: ['6'], topics: ['heat-engine', 'second-law'], home: true },
+      { id: 's2', n: 2, title: 'Refrigerators and heat pumps', lab: 'carnot', ch: ['6'], topics: ['refrigerator'] },
+      { id: 's3', n: 3, title: 'The Carnot limit', lab: 'carnot', ch: ['6'], topics: ['carnot', 'english'] },
+      { id: 's4', n: 4, title: 'Reversible or impossible', lab: 'claims', ch: ['6'], topics: ['claim', 'second-law'] },
+      { id: 's5', n: 5, title: 'The Brayton cycle', lab: 'carnot', ch: ['6'], topics: ['brayton'] },
+      { id: 's6', n: 6, title: 'A unitary air conditioner', lab: 'ac', ch: ['6'], topics: ['refrigerator'] },
+      { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
 
 export const allNotes = () => Object.values(NOTES);
 
-/** The section a practice problem draws on, by shared topics, then by lab. */
+/**
+ * The section a practice problem draws on. An explicit `problems` list wins. Otherwise the best
+ * shared topics in the unit the problem names, so two units can share a textbook chapter.
+ */
 export function sectionForProblem(tpl) {
   const topics = new Set(tpl.topics || []);
-  for (const set of allNotes()) {
+  const sets = allNotes();
+  for (const set of sets) {
     const named = set.sections.find((s) => s.problems?.includes(tpl.id));
     if (named) return { set, section: named };
-    const inCh = set.sections.filter((s) => s.ch.includes(tpl.ch));
-    if (!inCh.length) continue;
-    const score = (s) => 10 * (s.topics || []).filter((t) => topics.has(t)).length + (s.lab && s.lab === tpl.lab ? 1 : 0);
-    const best = inCh.reduce((a, s) => (score(s) > score(a) ? s : a), inCh[0]);
-    return { set, section: best };
   }
-  return null;
+  let best = null;
+  let bestScore = -1;
+  for (const set of sets) {
+    for (const s of set.sections) {
+      if (!s.ch.includes(tpl.ch)) continue;
+      const score = 100 * (set.exam === tpl.exam ? 1 : 0)
+        + 10 * (s.topics || []).filter((t) => topics.has(t)).length
+        + (s.lab && s.lab === tpl.lab ? 1 : 0);
+      if (score > bestScore) {
+        bestScore = score;
+        best = { set, section: s };
+      }
+    }
+  }
+  return best;
 }

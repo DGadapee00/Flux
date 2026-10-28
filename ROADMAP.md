@@ -51,7 +51,7 @@ subject libraries (a function written for one course serves the next), and one s
 | EGN 3311 Statics | [statics](docs/course-plans/statics.md) | labs and bank, no notes | fails | R4 |
 | EGN 3321 Dynamics | [egn3321](docs/course-plans/egn3321.md) | 7 units, notes | **passes** | owner review (R2b follow-ups done) |
 | EGN 3331 Mechanics of Materials | [egn3331](docs/course-plans/egn3331.md) | Unit 1 of 11 | fails | R3b: confirm the new order, then build |
-| EML 3100 Thermodynamics | [eml3100](docs/course-plans/eml3100.md) | 3 of 5 units (Unit 3 to the standard) | fails | R3a: Units 4–5, then `why` and traps for Units 1–2 |
+| EML 3100 Thermodynamics | [eml3100](docs/course-plans/eml3100.md) | 4 of 5 units (Units 3 and 4 to the standard) | fails | R3a: Unit 5, then `why` and traps for Units 1–2 |
 | STA 3032 Statistics | [sta3032](docs/course-plans/sta3032.md) | complete, older style | fails | keep passing; no rework |
 | Bench (electronics on the bench) | [bench](docs/course-plans/bench.md) | Units 1–3 of 9 built (engineering shell) | fails (Units 1–3 pass) | Unit 4, switching bigger things |
 
@@ -76,10 +76,10 @@ subject libraries (a function written for one course serves the next), and one s
 - [ ] **A math-shell starter** before MAP 2302 starts: `courses/starter` is on the engineering
       shell. Add the math-shell wiring to it (or a second starter) with the same example unit.
 - [ ] **R3a EML 3100.** The five-unit order in its spine (16.050 Part 0–1, then Yan; D29), confirmed
-      by the owner. Unit 3 (control volumes) is built to the standard: three labs, a tankless-heater
-      application lab, 16 templates, notes in PHY 2049's layout. Still to do: Units 4–5 (cycles and
-      the second law, entropy) to the standard, an application lab for each, and `why`, traps,
-      conceptual problems and the notes layout for Units 1–2.
+      by the owner. Unit 3 (control volumes) and Unit 4 (cycles and the second law) are built to the
+      standard, each with an application lab and notes in PHY 2049's layout. Still to do: Unit 5
+      (entropy) to the standard, and `why`, traps, conceptual problems and the notes layout for
+      Units 1–2.
 - [ ] **R3b EGN 3331.** The eleven-unit order in its spine (2.001, energy methods back; D29, D31).
       Owner confirms. Then Unit 1's gaps, and Units 2–11 to the standard.
 

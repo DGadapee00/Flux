@@ -32,6 +32,15 @@ export const EXAMS = [
     labs: ['nozzle', 'devices', 'heater'],
     coming: [],
   },
+  {
+    id: 'u4',
+    n: 4,
+    title: 'Cycles and the second law',
+    chapters: '6',
+    date: 'Yan Ch 6',
+    labs: ['carnot', 'claims', 'ac'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
@@ -40,6 +49,9 @@ export const LAB_META = {
   nozzle: { id: 'nozzle', exam: 'u3', title: 'Nozzle and diffuser' },
   devices: { id: 'devices', exam: 'u3', title: 'Steady-flow devices' },
   heater: { id: 'heater', exam: 'u3', title: 'Water heater', app: true },
+  carnot: { id: 'carnot', exam: 'u4', title: 'Carnot and Brayton' },
+  claims: { id: 'claims', exam: 'u4', title: 'Possible or not' },
+  ac: { id: 'ac', exam: 'u4', title: 'Air conditioner', app: true },
 };
 
 export const CHAPTER_TITLES = {
@@ -47,6 +59,7 @@ export const CHAPTER_TITLES = {
   3: 'Ideal and real gases',
   4: 'The first law for closed systems',
   5: 'Control volumes: mass and energy',
+  6: 'Entropy and the second law',
 };
 
 export function examById(id) {

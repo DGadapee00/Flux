@@ -163,8 +163,8 @@ function checkHints(tpl) {
   if (leaked / tried > 0.25) err(tpl.id, `the first hint gives the answer away in ${leaked} of ${tried} versions (${example})`);
 }
 
-/** Units reworked to the standard (docs/COURSE-STANDARD.md): coaching is checked here. The rest follow in R3a. */
-const COACHED = new Set(['u3']);
+/** Units reworked to the standard (docs/COURSE-STANDARD.md): coaching is checked here. Units 1 and 2 follow in R3a. */
+const COACHED = new Set(['u3', 'u4']);
 
 /** Every option of every choice part carries a `why`. */
 function checkWhy(tpl, inst) {

@@ -14,6 +14,8 @@ import { R_WATER, psat, region1Raw, region2Raw, tsat } from './if97.js';
 import { AIR, R_UNIVERSAL, cpMolar, gas, hMolar, isentropicT, molarMass, s0Molar } from './idealgas.js';
 import { NASA7 } from './nasa7-data.js';
 import { exitEnthalpy, exitVelocity, flowArea, idealGasNozzle, isentropicVdp, jouleThomsonWater, massFlow, mixing, steadyEnergy, tFromH, throttleByJouleThomson } from './flow.js';
+import { brayton, braytonColdAir, carnotEfficiency, carnotWorkIntegral, classifyByLimit, classifyClaim, clausiusSum, copHeatPump, copRefrigerator, heatByCp, idealGasCarnot } from './cycles.js';
+import { compressionEfficiency, compressionExit, expansionEfficiency, expansionExit, flowGeneration, idealGasDeltaS, idealGasDeltaSIntegral, incompressibleDeltaH, incompressibleDeltaS, lostWork, reservoirGeneration } from './entropy.js';
 import { areaRatio, chokedMassFlux, densityRatio, machFromArea, pressureRatio, temperatureRatio } from './isentropic.js';
 import { FACTORS, fromC, fromF } from './units.js';
 import { mixP, satP, satT, waterP, waterTP, waterTv } from './water.js';
@@ -323,6 +325,81 @@ approx(FACTORS.psia, 6894.757293168361, 1e-12, '1 psia in Pa');
 approx(FACTORS['ft³/lbm'], 0.028316846592 / 0.45359237, 1e-12, '1 ft³/lbm in m³/kg');
 approx(fromF(32), 273.15, 1e-12, '32 °F = 273.15 K');
 approx(fromF(212), 373.15, 1e-12, '212 °F = 373.15 K');
+
+// ---------- Cycles: Carnot limits, the ideal-gas cycle, Brayton ----------
+
+console.log('Carnot limits and claims');
+{
+  approx(carnotEfficiency(300, 600), 0.5, 1e-12, 'η = 1 − 300/600');
+  approx(copRefrigerator(300, 600), 1, 1e-12, 'COP_R = 300/300');
+  approx(copHeatPump(300, 600), 2, 1e-12, 'COP_HP = 600/300');
+  approx(copHeatPump(300, 600) - copRefrigerator(300, 600), 1, 1e-12, 'COP_HP = COP_R + 1');
+  // Doubling the temperature ratio's complement: T_L/T_H from 1/2 to 1/4 doubles nothing linear,
+  // but Q_H doubles when the volume ratio is squared, because q_H ∝ ln(v2/v1).
+  const hot = idealGasCarnot('air', { TH: 600, TL: 300, v1: 0.5, v2: 1 });
+  const wider = idealGasCarnot('air', { TH: 600, TL: 300, v1: 0.5, v2: 2 });
+  approx(wider.qH, 2 * hot.qH, 1e-12, 'squaring v2/v1 doubles ln and doubles q_H');
+  approx(hot.eta, 0.5, 1e-12, 'ideal-gas Carnot efficiency is 1 − T_L/T_H');
+  approx(hot.v3 / hot.v4, hot.v2 / hot.v1, 1e-12, 'the cold isotherm has the same volume ratio');
+  const integrated = carnotWorkIntegral('air', { TH: 600, TL: 300, v1: 0.5, v2: 1 }, 40);
+  approx(integrated.wNet, hot.wNet, 1e-4, '∮ P dv agrees with q_H − q_L');
+  const rev = classifyClaim({ kind: 'engine', TH: 600, TL: 300, QH: 200, QL: 100, W: 100 });
+  ok(rev.verdict === 'reversible' && Math.abs(rev.clausius) < 1e-12, 'QH/TH = QL/TL is reversible');
+  const irr = classifyClaim({ kind: 'engine', TH: 600, TL: 300, QH: 200, QL: 120, W: 80 });
+  ok(irr.verdict === 'irreversible' && irr.clausius < 0, 'a lower efficiency has a negative Clausius sum');
+  const bad = classifyClaim({ kind: 'engine', TH: 600, TL: 300, QH: 200, QL: 80, W: 120 });
+  ok(bad.verdict === 'impossible' && bad.clausius > 0, 'past the Carnot limit the Clausius sum is positive');
+  const broken = classifyClaim({ kind: 'engine', TH: 600, TL: 300, QH: 200, QL: 50, W: 100 });
+  ok(broken.verdict === 'impossible' && !broken.firstLaw, 'QH ≠ QL + W is impossible');
+  ok(classifyByLimit({ kind: 'engine', TH: 600, TL: 300, QH: 200, QL: 120, W: 80 }) === 'irreversible', 'the efficiency test agrees with the Clausius sum');
+  ok(classifyByLimit({ kind: 'refrigerator', TH: 600, TL: 300, QH: 200, QL: 120, W: 80 }) === 'impossible', 'COP_R = 1.5 beats the Carnot COP of 1');
+  approx(clausiusSum({ kind: 'refrigerator', TH: 600, TL: 300, QH: 200, QL: 80 }), 80 / 300 - 200 / 600, 1e-12, 'a refrigerator reverses the heats in the sum');
+}
+
+console.log('Brayton');
+{
+  const k = 1.4;
+  const rp = 8;
+  const byRatio = 1 - rp ** ((1 - k) / k);
+  const byTemps = 1 - 1 / rp ** ((k - 1) / k);
+  approx(braytonColdAir(rp, k), byRatio, 1e-12, 'cold-air η = 1 − r_p^{(1−k)/k}');
+  approx(braytonColdAir(rp, k), byTemps, 1e-12, 'the same η is 1 − T1/T2');
+  const air = gas('air');
+  const b = brayton(air, { T1: 300, p1: 1e5, rp: 8, T3: 1200 });
+  approx(b.wnet, b.qin - b.qout, 1e-12, 'w_net = q_in − q_out');
+  approx(b.wnet, b.wt - b.wc, 1e-12, 'w_net = w_t − w_c');
+  approx(b.qin, heatByCp(air, b.T2, b.T3), 1e-6, 'q_in = ∫ c_p dT');
+  approx(b.qout, heatByCp(air, b.T1, b.T4), 1e-6, 'q_out = ∫ c_p dT');
+  ok(b.eta > 0 && b.eta < carnotEfficiency(300, 1200), 'a Brayton engine stays under the Carnot limit between T1 and T3');
+  ok(b.T2 > 300 && b.T4 < 1200 && b.T4 > 300, 'compression heats the air and expansion cools it');
+}
+
+console.log('Entropy, efficiency and lost work');
+{
+  const air = gas('air');
+  const ends = { T1: 300, p1: 1e5, T2: 500, p2: 4e5 };
+  approx(idealGasDeltaS(air, ends), idealGasDeltaSIntegral(air, ends), 1e-6, 'Δs from s° against ∫ c_p dT/T − R ln(p2/p1)');
+  const twice = { T1: 300, p1: 1e5, T2: 300, p2: 4e5 };
+  const squared = { T1: 300, p1: 1e5, T2: 300, p2: 16e5 };
+  approx(idealGasDeltaS(air, squared), 2 * idealGasDeltaS(air, twice), 1e-12, 'squaring the pressure ratio doubles Δs at constant T');
+  const c = 4180;
+  approx(incompressibleDeltaS(c, 300, 600), c * Math.log(2), 1e-12, 'Δs = c ln 2 when T doubles');
+  approx(incompressibleDeltaS(2 * c, 300, 330), 2 * incompressibleDeltaS(c, 300, 330), 1e-12, 'doubling c doubles Δs');
+  approx(incompressibleDeltaH(c, 300, 301, 0.001, 1e5, 2e5), c * 1 + 0.001 * 1e5, 1e-12, 'Δh = c ΔT + v Δp');
+  approx(reservoirGeneration(1000, 600, 300), 1000 * (1 / 300 - 1 / 600), 1e-12, 'S_gen = Q (1/T_L − 1/T_H)');
+  approx(reservoirGeneration(2000, 600, 300), 2 * reservoirGeneration(1000, 600, 300), 1e-12, 'doubling Q doubles S_gen');
+  approx(lostWork(300, 2), 600, 1e-12, 'W_lost = T0 S_gen');
+  const h1 = 3000e3;
+  const h2s = 2200e3;
+  const h2 = expansionExit(h1, h2s, 0.85);
+  approx(expansionEfficiency(h1, h2, h2s), 0.85, 1e-12, 'turbine η round trip');
+  approx(h2, h1 - 0.85 * (h1 - h2s), 1e-12, 'h2 = h1 − η (h1 − h2s)');
+  const c2 = compressionExit(300e3, 500e3, 0.8);
+  approx(compressionEfficiency(300e3, c2, 500e3), 0.8, 1e-12, 'compressor η round trip');
+  approx(flowGeneration({ s1: 1, s2: 1.4 }), 0.4, 1e-12, 'adiabatic s_gen = s2 − s1');
+  approx(flowGeneration({ s1: 1, s2: 1.4, q: 100, Tb: 500 }), 0.4 - 0.2, 1e-12, 's_gen = s2 − s1 − q/T_b');
+  ok(reservoirGeneration(0, 600, 300) === 0, 'no heat, no entropy generated');
+}
 
 console.log(`\n${passed} passed, ${failed} failed`);
 if (failed) process.exit(1);
