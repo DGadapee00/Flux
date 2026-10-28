@@ -83,7 +83,8 @@ function checkAnswers(tpl, inst, label) {
       if (!(Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(b)))) err(tpl.id, `${label} symbolic ${p.id}: key gives ${a}, get() gives ${b}`);
       if (p.unit && p.units) {
         try {
-          const got = dimensionOf(parseExpr(p.expr, p.vars, p.alias), p.units);
+          const key = typeof p.expr === 'function' ? p.expr(inst.$) : p.expr;
+          const got = dimensionOf(parseExpr(key, p.vars, p.alias), p.units);
           if (!dimEqual(got, parseUnit(p.unit))) err(tpl.id, `symbolic ${p.id}: the key is in ${formatDim(got)}, but the part says ${p.unit}`);
         } catch (e) {
           err(tpl.id, `symbolic ${p.id}: units — ${e.message}`);
@@ -252,8 +253,10 @@ for (const tpl of PROBLEMS) {
     }
     if (seed <= 3) {
       for (const p of tpl.parts.filter((q) => q.kind === 'symbolic')) {
-        if (!gradeSymbolic(p, p.expr).correct) err(tpl.id, `grader rejects its own key for ${p.id}`);
-        if (gradeSymbolic(p, `(${p.expr})*1.1`).correct) err(tpl.id, `grader accepts a wrong answer for ${p.id}`);
+        // A key may depend on the version (a function of $), as the core engine allows.
+        const key = typeof p.expr === 'function' ? p.expr(inst.$) : p.expr;
+        if (!gradeSymbolic(p, key, inst.$).correct) err(tpl.id, `grader rejects its own key for ${p.id}`);
+        if (gradeSymbolic(p, `(${key})*1.1`, inst.$).correct) err(tpl.id, `grader accepts a wrong answer for ${p.id}`);
       }
     }
     checkSecond(tpl, inst, `seed ${seed}`);

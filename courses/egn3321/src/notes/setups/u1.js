@@ -72,6 +72,46 @@ export default {
     },
   ],
   s6: [
+    { tag: 'a collar on a turning arm', lab: 'polar', scenario: 'arm', read: (c) => ({ v: [c.v, Math.hypot(0.3, 1.1)], ar: [c.ar, -2.2], ath: [c.ath, 1.2] }) },
+    {
+      tag: 'laws in time',
+      lab: 'polar',
+      scenario: 'arm',
+      setup(s) {
+        Object.assign(s, { r0: 0, u: 0, ad: 1, w: 0, al: 1, t: 2, tEnd: 2.5 });
+      },
+      read: (c) => ({ v: [c.v, Math.hypot(2, 4)], ar: [c.ar, -7], ath: [c.ath, 10], a: [c.a, Math.hypot(7, 10)] }),
+    },
+    { tag: 'a cam follower', lab: 'polar', scenario: 'cam', read: (c) => ({ r: [c.r, 0.35], rd: [c.rd, -0.188], rdd: [c.rdd, -0.448], ar: [c.ar, -3.6], ath: [c.ath, -1.128] }) },
+    {
+      tag: 'a radar gun',
+      lab: 'polar',
+      scenario: 'radar',
+      setup(s) {
+        Object.assign(s, { d: 10, u: 20, x0: -10 / Math.tan(Math.PI / 6), t: 0, tEnd: 2 });
+      },
+      read: (c) => ({ r: [c.r, 20], rd: [c.rd, -17.32], thd: [Math.abs(c.thd), 0.5], rdd: [c.rdd, 5] }),
+    },
+    {
+      tag: 'the closest point',
+      lab: 'polar',
+      scenario: 'radar',
+      setup(s) {
+        s.t = 4;
+      },
+      read: (c) => ({ thd: [Math.abs(c.thd), 0.625], rdd: [c.rdd, 15.625] }),
+    },
+    {
+      tag: 'a circle in polar',
+      lab: 'polar',
+      scenario: 'arm',
+      setup(s) {
+        Object.assign(s, { r0: 0.8, u: 0, ad: 0, w: 3, al: 0, t: 0 });
+      },
+      read: (c) => ({ v: [c.v, 2.4], ar: [c.ar, -7.2] }),
+    },
+  ],
+  s7: [
     {
       tag: 'two velocities',
       lab: 'relative',
@@ -89,7 +129,7 @@ export default {
       read: (c) => ({ vx: [c.vx, -2], vy: [c.vy, 3], speed: [c.speed, 3.61] }),
     },
   ],
-  s7: [
+  s8: [
     { tag: 'a metro train', lab: 'train', scenario: 'metro', read: (c) => ({ vTop: [c.vTop, 22], s1: [c.s1, 220], brake: [c.sBrake, 302.5], total: [c.total, 522.5] }) },
     {
       tag: 'tractive force on a grade',

@@ -4,6 +4,7 @@ import { PREDICTIONS } from './predictions.js';
 const loaders = {
   rectilinear: () => import('./rectilinear.js'),
   'path-nt': () => import('./path-nt.js'),
+  polar: () => import('./polar.js'),
   relative: () => import('./relative.js'),
   fma: () => import('./fma.js'),
   curve: () => import('./curve.js'),

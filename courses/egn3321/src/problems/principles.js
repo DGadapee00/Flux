@@ -24,6 +24,12 @@ export const PRINCIPLES = {
     cue: 'A curved path: a projectile, a radius of curvature, or a normal acceleration.',
     family: 'Kinematics',
   },
+  'polar-kin': {
+    name: 'Polar coordinates',
+    statement: 'Measured from a fixed point, $v_r = \\dot r$, $v_\\theta = r\\dot\\theta$, $a_r = \\ddot r - r\\dot\\theta^2$ and $a_\\theta = r\\ddot\\theta + 2\\dot r\\dot\\theta$: the unit vectors turn with the line.',
+    cue: 'A distance and an angle from a fixed point: a slotted arm, a radar, a cam.',
+    family: 'Kinematics',
+  },
   'rel-motion': {
     name: 'Relative motion',
     statement: 'Positions, velocities and accelerations add as vectors: $\\vec v_B = \\vec v_A + \\vec v_{B/A}$, seen from translating axes.',
@@ -148,6 +154,10 @@ export const PRINCIPLE_TAGS = {
   'u1.12.projectile': ['curv-kin'],
   'u1.12.path': ['curv-kin'],
   'u1.12.relative': ['rel-motion', 'rect-kin'],
+  'u1.12.polar': ['polar-kin'],
+  'u1.12.radar': ['polar-kin', 'rel-motion'],
+  'u1.12.polar-dir': ['polar-kin'],
+  'u1.12.polar-sym': ['polar-kin'],
   'u2.13.atwood': ['newton'],
   'u2.13.incline': ['newton'],
   'u2.13.tow': ['newton'],

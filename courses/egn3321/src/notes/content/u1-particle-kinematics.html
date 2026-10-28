@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 1 · Hibbeler Ch 12</p>
   <h1>Particle kinematics</h1>
-  <p class="lede">Position, velocity, and acceleration, before any force law. Every relation below is derived from the two definitions \(v = ds/dt\) and \(a = dv/dt\), then used on a worked case. The numbers are recomputed. Sections the course pack does not name stay out.</p>
+  <p class="lede">Position, velocity, and acceleration, before any force law. Every relation below is derived from the two definitions \(v = ds/dt\) and \(a = dv/dt\), then used on a worked case. The numbers are recomputed. Dependent motion of pulleys, §12.9, waits for Unit 2, where it meets forces.</p>
   <div class="legend">
     <span><i style="background:var(--field)"></i>Worked example</span>
     <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
@@ -24,11 +24,12 @@
     <h3>Part II · Motion in a plane</h3>
     <a href="#s4"><span>04</span>Projectile motion</a>
     <a href="#s5"><span>05</span>Normal and tangential components</a>
-    <a href="#s6"><span>06</span>Relative motion, translating axes</a>
+    <a href="#s6"><span>06</span>Polar coordinates</a>
+    <a href="#s7"><span>07</span>Relative motion, translating axes</a>
     <h3>Part III · An application</h3>
-    <a href="#s7"><span>07</span>Application: a train between stations</a>
+    <a href="#s8"><span>08</span>Application: a train between stations</a>
     <h3>Reference</h3>
-    <a href="#s8"><span>08</span>Formula sheet</a>
+    <a href="#s9"><span>09</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -257,7 +258,56 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/10-1-circular-motion-2013-acceleration/" target="_blank" rel="noopener">10.1 Circular Motion - Acceleration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/9-2-uniform-circular-motion-direction-of-the-acceleration/" target="_blank" rel="noopener">9.2 Uniform Circular Motion - Direction of the Acceleration</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>.</p>
 </section>
 <section class="topic" id="s6">
-<h2><span class="n">06</span>Relative motion, translating axes</h2>
+<h2><span class="n">06</span>Polar coordinates</h2>
+<p>Some motions are easiest to describe by a distance \(r\) from a fixed point and an angle \(\theta\): a collar on a turning arm, a cam follower, a target seen by a radar. The unit vectors \(\hat{u}_r\) and \(\hat{u}_\theta\) then turn with the line. That turning adds two terms to the acceleration that \(\ddot r\) and \(\ddot\theta\) alone miss.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Write \(\hat{u}_r = (\cos\theta, \sin\theta)\) and \(\hat{u}_\theta = (-\sin\theta, \cos\theta)\). Differentiate each in time: \(\dot{\hat{u}}_r = \dot\theta\,\hat{u}_\theta\) and \(\dot{\hat{u}}_\theta = -\dot\theta\,\hat{u}_r\).</p>
+<p>The position is \(\vec r = r\,\hat{u}_r\). One derivative, by the product rule, gives \(\vec v = \dot r\,\hat{u}_r + r\dot\theta\,\hat{u}_\theta\).</p>
+<p>Differentiate again. \(\dot r\,\hat{u}_r\) gives \(\ddot r\,\hat{u}_r + \dot r\dot\theta\,\hat{u}_\theta\). \(r\dot\theta\,\hat{u}_\theta\) gives \(\dot r\dot\theta\,\hat{u}_\theta + r\ddot\theta\,\hat{u}_\theta - r\dot\theta^2\,\hat{u}_r\). Collect the terms along each unit vector.</p>
+</div>
+\[
+\begin{aligned}
+v_r &= \dot r, & v_\theta &= r\dot\theta,\\
+a_r &= \ddot r - r\dot\theta^2, & a_\theta &= r\ddot\theta + 2\dot r\dot\theta.
+\end{aligned}
+\]
+<p>\(-r\dot\theta^2\) is the inward pull any point turning at \(\dot\theta\) needs; on a circle it is \(v^2/r\), the normal acceleration of section 5. \(2\dot r\dot\theta\) appears only when the point slides along a turning line. Half of it comes from \(\hat{u}_r\) turning while \(\dot r\) points along it. The other half comes from \(r\dot\theta\) growing because \(r\) grows.</p>
+<div class="box ex"><span class="tag">Worked example · a collar on a turning arm</span>
+<p>An arm turns at a steady 2 rad/s. A collar on it is 0.55 m from the pivot and slides outward at a steady 0.3 m/s. Then \(v_r = 0.3\) m/s and \(v_\theta = 1.1\) m/s, a speed of 1.14 m/s.</p>
+<p>Nothing changes at a steady rate, yet \(a_r = 0 - 0.55(2)^2 = -2.2\) m/s², toward the pivot, and \(a_\theta = 0 + 2(0.3)(2) = 1.2\) m/s², ahead. The arm must push the collar sideways with \(m\) times 1.2 m/s².</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · laws in time</span>
+<p>A collar moves along a slotted arm with \(r = 0.5t^2\) m while the arm turns as \(\theta = 0.5t^2\) rad. At \(t = 2\) s: \(r = 2\) m, \(\dot r = 2\) m/s, \(\ddot r = 1\) m/s², \(\dot\theta = 2\) rad/s, \(\ddot\theta = 1\) rad/s².</p>
+<p>So \(v = \sqrt{2^2 + 4^2} = 4.47\) m/s. \(a_r = 1 - 2(2)^2 = -7\) m/s² and \(a_\theta = 2(1) + 2(2)(2) = 10\) m/s², so \(|a| = 12.2\) m/s².</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a cam follower</span>
+<p>A follower rides a cam with \(r = 0.3 + 0.08\cos\theta\) m while the cam turns at 3 rad/s. At \(\theta = 0.9\) rad, \(r = 0.350\) m, \(\dot r = -0.08(3)\sin 0.9 = -0.188\) m/s and \(\ddot r = -0.08(9)\cos 0.9 = -0.448\) m/s².</p>
+<p>The radial acceleration is \(a_r = -0.448 - 0.350(9) = -3.60\) m/s², eight times \(\ddot r\). The steady turn gives \(\ddot\theta = 0\), so \(a_\theta = 2(-0.188)(3) = -1.13\) m/s².</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a radar gun</span>
+<p>A radar gun stands 10 m from a straight road. A car approaches at a steady 20 m/s. When the line of sight makes 30° with the road, the range is \(r = 10/\sin 30^\circ = 20\) m.</p>
+<p>Along the line of sight the car's velocity has \(20\cos 30^\circ = 17.3\) m/s, so the gun reads \(\dot r = -17.3\) m/s: 13% low, the cosine error. Across it, \(r\dot\theta = 20\sin 30^\circ = 10\) m/s, so \(\dot\theta = 0.5\) rad/s. The car does not accelerate, so \(a_r = 0\) gives \(\ddot r = r\dot\theta^2 = 5\) m/s².</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the closest point</span>
+<p>A car drives at a steady 25 m/s along a road 40 m from a radar. At the closest point \(\dot r = 0\) and \(\dot\theta = 25/40 = 0.625\) rad/s. There \(\ddot r = r\dot\theta^2 = 40(0.625)^2 = 15.6\) m/s², the largest of the pass, while the car's acceleration is zero.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a circle in polar</span>
+<p>Clamp the collar 0.8 m from the pivot and turn the arm at 3 rad/s. Then \(\dot r = 0\), \(v = 2.4\) m/s and \(a_r = -0.8(3)^2 = -7.2\) m/s². That is \(v^2/\rho = 5.76/0.8\): on a circle, polar and normal–tangential components are the same thing.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking \(\ddot r\) for the radial acceleration. In the radar example \(\ddot r = 5\) m/s² while the car does not accelerate at all. The turning term \(r\dot\theta^2\) cancels it. Hibbeler §12.8.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Writing \(a_\theta = r\ddot\theta + \dot r\dot\theta\). The cross term arrives twice, once from each product-rule step, so it is \(2\dot r\dot\theta\). For the collar on the arm the slip gives 0.6 m/s² instead of 1.2 m/s². Hibbeler §12.8.</p>
+</div>
+<p>In the Polar lab, the dashed gold line is \(\ddot r\) and the purple line is \(a_r\). Play the radar pass: the gold peak is the car's closest point, and the purple line never leaves zero.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The angle is measured from axes that do not turn, and the motion stays in one plane. Cylindrical coordinates add a third direction, \(z\), whose components are simply \(\dot z\) and \(\ddot z\).</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/10-2-angular-acceleration/" target="_blank" rel="noopener">10.2 Angular Acceleration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/10-4-review-of-rotational-kinematics/" target="_blank" rel="noopener">10.4 Review of Rotational Kinematics</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>.</p>
+</section>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Relative motion, translating axes</h2>
 <p>Axes fixed to A, and not rotating, see B by subtraction. The positions are not needed for the relative velocity or the relative acceleration.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Positions add as vectors: \(\vec{r}_B = \vec{r}_A + \vec{r}_{B/A}\). Differentiate in time. Because the axes on A translate and do not rotate, their unit vectors are constant, and each term differentiates directly. One derivative gives the velocities. A second gives the accelerations.</p>
@@ -289,7 +339,7 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 </div>
 <p>In the Relative lab, drag either velocity. The relative arrow is drawn from A, and its components are the differences.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>These axes translate with A and do not rotate. A rotating frame adds terms this section does not carry: a Coriolis term and a centripetal term. Rotating axes stay out of the course. The model also treats A and B as points with no size.</p>
+<p>These axes translate with A and do not rotate. A rotating frame adds a centripetal term and a Coriolis term, the same two that section 6 found for a turning radial line. Unit 5 builds them for rotating axes. The model also treats A and B as points with no size.</p>
 </div>
 <p class="bridge">Part III returns to a straight line. A train between stations needs only the graphs of Part I, with a run under power and a braking run.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/4-3-reference-frames/" target="_blank" rel="noopener">4.3 Reference Frames</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/18-1-relative-velocity/" target="_blank" rel="noopener">18.1 Relative Velocity</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/newton2019s-laws-vectors-and-reference-frames/" target="_blank" rel="noopener">Lecture 1, Newton's Laws, Vectors, and Reference Frames</a>.</p>
@@ -299,8 +349,8 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
   <h2>An application</h2>
 </div>
 
-<section class="topic" id="s7">
-<h2><span class="n">07</span>Application: a train between stations</h2>
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Application: a train between stations</h2>
 <p>A train leaving a station does the same thing in every city. It accelerates away from the platform, perhaps cruises, then brakes to a stop at the next one. The whole trip is rectilinear motion in pieces, each piece with a constant acceleration. Nothing beyond this unit is needed to find how far apart the stations are.</p>
 <p>While it accelerates, the acceleration is the tractive force over the mass, less the pull of any grade: \(a = F/m - g\sin\theta\) on a slope, and \(a = F/m\) on the flat. While it brakes, the acceleration is the braking rate, pointing backward. Between the two pieces the speed peaks.</p>
 <div class="box why"><span class="tag">Why the distance splits into two pieces</span>
@@ -344,8 +394,8 @@ v_{top} = a_1\,t_1, \qquad s_1 = \tfrac12 a_1\,t_1^2.
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/2-4-integration/" target="_blank" rel="noopener">2.4 Integration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/1-7-worked-example-derivatives-in-kinematics/" target="_blank" rel="noopener">1.7 Worked Example - Derivatives in Kinematics</a>.</p>
 </section>
-<section class="topic" id="s8">
-<h2><span class="n">08</span>Formula sheet</h2>
+<section class="topic" id="s9">
+<h2><span class="n">09</span>Formula sheet</h2>
 <ul>
 <li>1 ft = 0.3048 m. 1 lbf = 4.4482216152605 N, from 0.45359237 kg times 9.80665 m/s². 1 slug = 14.594 kg.</li>
 <li>Three significant figures. Four when the first significant digit is 1.</li>
@@ -355,11 +405,12 @@ v_{top} = a_1\,t_1, \qquad s_1 = \tfrac12 a_1\,t_1^2.
 <li>Graphs: \(\Delta v\) is the area under \(a\)–\(t\). \(\Delta s\) is the area under \(v\)–\(t\). On \(v\)–\(s\), \(a = v\,dv/ds\).</li>
 <li>Projectile: \(g = 9.81\) m/s² downward. \(v_x\) is constant. Level-ground range \(v_0^2\sin 2\theta/g\).</li>
 <li>\(a_t = \dot{v}\), \(a_n = v^2/\rho\), \(\rho = (1+y'^2)^{3/2}/|y''|\).</li>
+<li>Polar: \(v_r = \dot r\), \(v_\theta = r\dot\theta\), \(a_r = \ddot r - r\dot\theta^2\), \(a_\theta = r\ddot\theta + 2\dot r\dot\theta\).</li>
 <li>\(\vec{v}_{B/A} = \vec{v}_B - \vec{v}_A\) for translating axes.</li>
 <li>\(a = -kv\): \(v = v_0 - ks\) in distance, \(v = v_0e^{-kt}\) in time.</li>
-<li>Boost and coast: \(v_{bo} = at_b\), \(h_{bo} = \tfrac12 at_b^2\), \(h_{\max} = h_{bo} + v_{bo}^2/2g\), with \(a = T/m - g\).</li>
+<li>Train: \(v_{top} = a_1 t_1\), and the distance between stations \(\tfrac12 a_1 t_1^2 + v_{top}^2/2a_2\).</li>
 </ul>
-<p>Left out of this course, because the pack does not name them: cylindrical coordinates (§12.8 and §13.6), dependent motion (§12.9), central-force motion (§13.7), steady flow (§15.8), and rotating axes (§16.8). The rocket, §15.9, is Unit 3.</p>
+<p>Left out of this course: central-force motion (§13.7) and steady flow (§15.8). Dependent motion (§12.9) and polar kinetics (§13.6) are Unit 2, rotating axes (§16.8) Unit 5, and the rocket (§15.9) Unit 3.</p>
 <p>Each line above is the model for this unit. Drag, a flexible part, and a coefficient that changes with speed are left out.</p>
 </section>
 </main>
