@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Buckling of columns</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 11 · Ch 13</p>
+  <h1>Buckling of columns</h1>
+  <p class="lede">A slender column can bow sideways under a load far below yield. That Euler load falls with the square of the effective length, and it follows the weak axis. It is the failure load only while its stress stays under yield. Every number below comes from the course library and is checked a second way.</p>
+  <div class="legend">
+    <span><i class="swatch" style="background: var(--gold)"></i>Euler load, weak axis</span>
+    <span><i class="swatch" style="background: #d147bd"></i>The column on the screen</span>
+    <span><i class="swatch" style="background: var(--teal)"></i>Strong axis, or the inner wall</span>
+    <span><i class="swatch" style="background: #f4d345"></i>Yield</span>
+  </div>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>Euler and effective length</a>
+    <a href="#s2"><span>02</span>Weak axis and yield</a>
+    <a href="#s3"><span>03</span>A basement column</a>
+    <a href="#s4"><span>04</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+<h3>Part 1 · Effective length <span class="sub">| pinned | free | fixed</span></h3>
+
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Euler and effective length</h2>
+<p>A straight elastic column, pinned at both ends, bows in a half sine. The load that balances that shape is</p>
+\[
+P_{cr} = \frac{\pi^2 EI}{L^2}
+\]
+<p>Other ends use the same formula on an effective length KL.</p>
+\[
+P_{cr} = \frac{\pi^2 EI}{(KL)^2}
+\]
+<p>Doubling E doubles the load. Doubling I does the same. Doubling the length divides the load by four.</p>
+<p>Fixed-free is a quarter sine. It matches a pinned column of length 2L, so K = 2. Fixed-fixed is a half sine packed into half the length, so K = 1/2. Fixed-pinned solves \(\tan\mu = \mu\). The first root gives K = 0.699. The lab rounds that root to 0.7.</p>
+<p>For a rectangle, \(I = bh^3/12\). The depth h is the side the column bows about. The stress is the load divided by the area. The lab checks the pinned formula against a finite-difference eigenvalue on the effective length. The drawing uses the closed form.</p>
+<p>The gold curve is the weak-axis load the course model uses, Euler until yield. The teal curve is the strong axis. The yellow line is the yield load. The pink dot is the column on the screen.</p>
+<div class="box ex"><span class="tag">Worked example · the 2 m column</span>
+<p>The bar is steel, with E = 200 GPa and a yield stress of 250 MPa. The section is 20 mm by 60 mm. The length is 2 m. Both ends are pinned, so K = 1. The weak depth is the 20 mm side.</p>
+\[
+I = 4.00\times 10^{-8}\ \mathrm{m}^4
+\]
+\[
+P_{cr} = 19.74\ \mathrm{kN}
+\]
+\[
+\sigma_{cr} = 16.45\ \mathrm{MPa}
+\]
+<p>The yield load is 300 kN. The Euler stress is under 250 MPa, so Euler still governs. Doubling the length divides the load by four, to 4.93 kN. The stress falls to 4.11 MPa.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the flagpole end</span>
+<p>The same bar is fixed at the base and free at the top. K = 2. The load and the stress are a quarter of the pinned values.</p>
+\[
+P_{cr} = 4.93\ \mathrm{kN}
+\]
+\[
+\sigma_{cr} = 4.11\ \mathrm{MPa}
+\]
+<p>Fixed at both ends, K = 1/2, the load is 79 kN and the stress is 65.8 MPa. That is still under 250 MPa. Treating the flagpole as pinned multiplies the load by four.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The square sits on KL, the whole effective length. Dropping it, or swapping K with 1/K, moves the load by a large factor. A free end is K = 2. Both pins are K = 1.</p>
+</div>
+<p class="view">Another view: 2.001 does not teach column buckling. Hibbeler's chapter label in the practice list is 13.</p>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 2 · The section <span class="sub">| weak axis | yield</span></h3>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Weak axis and yield</h2>
+<p>The bar can bow about either axis. The weak axis is the smaller depth. I follows the cube of the depth, and the width only once. Turn the 20 mm by 60 mm section and the sides swap. The side ratio is 3. The load ratio is 3 squared, which is 9. The width shrinks by that same 3, so the cube does not all survive.</p>
+<p>Set the Euler stress equal to yield and solve for the length. The weak-axis radius of gyration is the depth over the square root of 12. The width cancels.</p>
+\[
+r = \frac{h}{\sqrt{12}}
+\]
+\[
+L = \frac{\pi r}{K}\sqrt{\frac{E}{\sigma_Y}}
+\]
+<p>Shorter than that length, the Euler stress is above yield. The course model then stops at the yield load, the area times 250 MPa. It does not report the Euler load as the failure load.</p>
+<div class="box ex"><span class="tag">Worked example · the strong axis</span>
+<p>The same 2 m bar stays pinned. The depth is now the 60 mm side.</p>
+\[
+P_{cr} = 177.7\ \mathrm{kN}
+\]
+\[
+\sigma_{cr} = 148\ \mathrm{MPa}
+\]
+<p>That load is nine times the weak-axis load. The stress is still under 250 MPa, so Euler still governs. A factor of 3 is the side ratio, not the load ratio.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the short column</span>
+<p>The weak bar stays pinned and the length becomes 0.3 m.</p>
+\[
+P_{cr} = 877\ \mathrm{kN}
+\]
+\[
+\sigma_{cr} = 731\ \mathrm{MPa}
+\]
+<p>The yield load is still 300 kN. The Euler stress is above 250 MPa, so the course model uses 300 kN. The weak-axis transition length at K = 1 is 0.513 m. Shorter than that, yield is first.</p>
+</div>
+<div class="box why"><span class="tag">Why the width cancels</span>
+<p>I is \(bh^3/12\) and the area is \(bh\). Their ratio is \(h^2/12\). The radius of gyration is the square root of that ratio, so only the depth remains. A wider bar of the same depth buckles at the same stress.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The first buckle is the weak axis. A factor of 3 is the side ratio. The load ratio is 9. On a short column the Euler load can sit far above yield. That number is not the failure load in this model.</p>
+</div>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 3 · A listed column <span class="sub">| tube | allowable</span></h3>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>A basement column</h2>
+<p>ICC-ES ESR-1767, Table 2, lists an Akron 3 in adjustable column. The tube is ASTM A500 Grade B, and Fy is 42 ksi. The design wall is 0.112 in, not the nominal 0.120 in. The nominal wall raises I by 6.28 percent. The report does not print E. This model uses 29000 ksi.</p>
+<p>The ends are held against translation and left free to rotate, so K = 1. The listed length includes up to 4 in of adjusting screw. The screw is not the tube.</p>
+<p>The design-wall area is 1.016 in². I is 1.061 in⁴. The yield load is 42.7 kip. The gold curve is the Euler load. The yellow line is that yield load. The pink dot is the length on the screen. The teal ring is the inside of the tube.</p>
+<div class="box ex"><span class="tag">Worked example · the 124 in column</span>
+<p>At 124 in the Euler load and the Euler stress are</p>
+\[
+P_{cr} = 19.75\ \mathrm{kip}
+\]
+\[
+\sigma_{cr} = 19.44\ \mathrm{ksi}
+\]
+<p>The stress is under 42 ksi, so Euler still governs. The report lists an ASD of 8.7 kip at this length. The Euler load is 2.27 times that allowable. The published ASD is not this Euler load.</p>
+<p>At 145 in the Euler load is 14.44 kip and the stress is 14.21 ksi. The report lists an ASD of 6.6 kip. Both lengths are still elastic.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the 76 in column</span>
+<p>At 76 in the Euler load and the Euler stress are</p>
+\[
+P_{cr} = 52.6\ \mathrm{kip}
+\]
+\[
+\sigma_{cr} = 51.7\ \mathrm{ksi}
+\]
+<p>The stress is above 42 ksi. The course model stops at the yield load, 42.7 kip. The report still lists an ASD of 13.5 kip. Those two loads answer different questions.</p>
+<p>Leave the screw out and the tube alone is 72 in. Its Euler load is 58.6 kip and its stress is 57.6 ksi. That is still over yield. K = 2 at 124 in quarters the elastic load, to 4.94 kip and 4.86 ksi.</p>
+</div>
+<div class="box out"><span class="tag">What the course model leaves out</span>
+<p>The AISC column curve and the factors on the allowable are not in this formula. Eccentricity and the end plates are left out. E of 29000 ksi is assumed, because the report does not print a modulus. The design wall is 0.112 in, not the nominal 0.120 in. The listed length includes up to 4 in of adjusting screw, and the screw is not the tube. The ends are free to rotate, so K is 1. The model stops at yield. The published ASD is not the Euler load.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Formula sheet</h2>
+<p>Pinned Euler load. Other ends replace L with KL. K is 1 for both pins, 2 for fixed-free, and 1/2 for both ends fixed. The fixed-pinned root is 0.699, and the lab rounds it to 0.7.</p>
+\[
+P_{cr} = \frac{\pi^2 EI}{(KL)^2}
+\]
+<p>A rectangle uses the depth h perpendicular to the axis. The weak axis is the smaller side.</p>
+\[
+I = \frac{bh^3}{12}
+\]
+<p>The transition length is where the Euler stress equals yield. Shorter than this, stop at the yield load \(\sigma_Y A\).</p>
+\[
+L = \frac{\pi r}{K}\sqrt{\frac{E}{\sigma_Y}}
+\]
+<p>The adjustable column uses that same Euler expression. With E in ksi and I in in⁴, the load is already in kip. The citation for this unit is the topic Buckling of columns. The modules do not number a section for it. Hibbeler's chapter label in the practice list is 13. 2.001 does not teach column buckling. The column is ICC-ES ESR-1767, Table 2. E of 29000 ksi is assumed. The design wall is 0.112 in. The ends are free to rotate.</p>
+</section>
+</div>
+</main>
+</body>
+</html>

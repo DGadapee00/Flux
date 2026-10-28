@@ -5,8 +5,8 @@
   list are the course pack's (D11), not Roylance's.
 - **Units.** Values inside a problem are SI base units. English problems go through
   `subjects/src/convert.js`. Unit 1 has two in kip and inches, and the shackle pin in pounds and
-  inches (problems-check requires one per unit with problems). The shackle takes 2200 lbf for each
-  catalog tonne.
+  inches. The shackle takes 2200 lbf for each catalog tonne. Unit 11 works the adjustable column
+  in kip and inches (problems-check requires one per unit with problems).
 - **Figures.** Three significant figures, four when the leading digit is 1, as in Dynamics.
   Grading accepts 2%.
 - **Signs.** Tension is positive. On an inclined plane, θ is the angle between the bar's axis and
@@ -21,5 +21,4 @@
   space the panels leave (`labs/diagram.js`). Each lab declares `sweep(state)`, and labs-check
   moves that slider end to end.
 - **Order.** The eleven units follow the spine the owner confirmed (2.001, then Hibbeler for
-  transverse shear and buckling). Units 1–10 are at the standard. Unit 11 is still
-  listed as coming.
+  transverse shear and buckling). Units 1–11 are at the standard.

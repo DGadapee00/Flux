@@ -13,9 +13,10 @@ test('no course is marked yet, so the scorecard passes and prints every course',
 });
 
 test('a course marked standard: true that falls short fails, and names what it misses', () => {
-  const r = run('--quiet', '--mark', 'egn3331');
+  // Statics has no application lab. Marking it standard must fail and name that miss.
+  const r = run('--quiet', '--mark', 'statics');
   assert.equal(r.status, 1);
-  assert.match(r.stderr, /EGN 3331 is marked standard: true but misses .*app labs\/unit/);
+  assert.match(r.stderr, /EGN 3311 is marked standard: true but misses .*app labs\/unit 0/);
 });
 
 test('the Markdown table has a header row and one row per course', () => {

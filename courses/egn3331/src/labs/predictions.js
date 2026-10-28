@@ -1094,4 +1094,90 @@ export const PREDICTIONS = {
       why: 'The static stretch stays 0.1 in. The peak force rises from 2230 lbf to 2960 lbf. The factor goes from 5.58 to 7.4.',
     },
   ],
+  buckling: [
+    {
+      id: 'bk-length',
+      scenario: 'weak',
+      ask: 'Double the length, from 2 m to 4 m.',
+      apply(s) { s.L = 4; },
+      watch: [
+        watch('euler', 'the Euler load', (c) => c.euler),
+        watch('stress', 'the Euler stress', (c) => c.stress),
+      ],
+      mode: 'factor',
+      expect: { euler: 0.25, stress: 0.25 },
+      why: 'The load follows 1/L squared. It falls from 19.74 kN to 4.93 kN, and the stress from 16.45 MPa to 4.11 MPa.',
+    },
+    {
+      id: 'bk-axis',
+      scenario: 'weak',
+      ask: 'Turn the section. Put the 60 mm side into the depth.',
+      apply(s) {
+        s.axis = 'strong';
+        s.b = 0.02;
+        s.h = 0.06;
+      },
+      watch: [
+        watch('euler', 'the Euler load', (c) => c.euler),
+        watch('stress', 'the Euler stress', (c) => c.stress),
+      ],
+      mode: 'dir',
+      expect: { euler: 'bigger', stress: 'bigger' },
+      why: 'I follows the cube of the depth. The load rises from 19.74 kN to 177.7 kN, and the stress from 16.45 MPa to 148 MPa. Both multiply by 9.',
+    },
+    {
+      id: 'bk-short',
+      scenario: 'weak',
+      ask: 'Shorten the column, from 2 m to 0.3 m.',
+      apply(s) { s.L = 0.3; },
+      watch: [
+        watch('euler', 'the Euler load', (c) => c.euler),
+        watch('yielded', 'whether yield is reached first', (c) => c.yielded, { mode: 'bool' }),
+      ],
+      mode: 'dir',
+      expect: { euler: 'bigger', yielded: true },
+      why: 'The Euler load rises from 19.74 kN to 877 kN. The stress is 731 MPa, above 250 MPa, so the yield load of 300 kN governs.',
+    },
+  ],
+  column: [
+    {
+      id: 'col-long',
+      scenario: 'elastic',
+      ask: 'Lengthen the column, from 124 in to 145 in.',
+      apply(s) { s.L = 145; },
+      watch: [
+        watch('euler', 'the Euler load', (c) => c.eulerKip),
+        watch('stress', 'the Euler stress', (c) => c.stressKsi),
+      ],
+      mode: 'dir',
+      expect: { euler: 'smaller', stress: 'smaller' },
+      why: 'The Euler load falls from 19.75 kip to 14.44 kip, and the stress from 19.44 ksi to 14.21 ksi. Both stay under 42 ksi.',
+    },
+    {
+      id: 'col-yield',
+      scenario: 'elastic',
+      ask: 'Shorten the column, from 124 in to 76 in.',
+      apply(s) { s.L = 76; },
+      watch: [
+        watch('euler', 'the Euler load', (c) => c.eulerKip),
+        watch('yielded', 'whether yield is reached first', (c) => c.yielded, { mode: 'bool' }),
+      ],
+      mode: 'dir',
+      expect: { euler: 'bigger', yielded: true },
+      why: 'The Euler load rises from 19.75 kip to 52.6 kip, and the stress from 19.44 ksi to 51.7 ksi. That is above 42 ksi, so yield governs.',
+    },
+    {
+      id: 'col-end',
+      scenario: 'elastic',
+      ask: 'Treat the column as fixed-free. Change K from 1 to 2.',
+      apply(s) { s.K = 2; },
+      watch: [
+        watch('euler', 'the Euler load', (c) => c.eulerKip),
+        watch('stress', 'the Euler stress', (c) => c.stressKsi),
+      ],
+      mode: 'factor',
+      expect: { euler: 0.25, stress: 0.25 },
+      why: 'The load follows 1/K squared. It falls from 19.75 kip to 4.94 kip, and the stress from 19.44 ksi to 4.86 ksi.',
+    },
+  ],
 };

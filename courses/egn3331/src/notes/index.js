@@ -157,6 +157,19 @@ export const NOTES = {
       { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u11: {
+    exam: 'u11',
+    title: 'Buckling of columns',
+    chapters: '13',
+    file: 'u11-buckling.html',
+    load: () => import('./content/u11-buckling.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'Euler and effective length', lab: 'buckling', ch: ['13'], topics: ['buckling'], home: true, problems: ['u11.13.euler', 'u11.13.ends', 'u11.13.length'] },
+      { id: 's2', n: 2, title: 'Weak axis and yield', lab: 'buckling', ch: ['13'], topics: ['buckling'], problems: ['u11.13.weak', 'u11.13.transition', 'u11.13.axis', 'u11.13.support'] },
+      { id: 's3', n: 3, title: 'A basement column', lab: 'column', ch: ['13'], topics: ['buckling', 'english'], problems: ['u11.13.column'] },
+      { id: 's4', n: 4, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;

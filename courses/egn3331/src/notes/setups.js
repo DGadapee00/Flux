@@ -751,6 +751,74 @@ export const SETUPS = {
       },
     ],
   },
+  u11: {
+    s1: [
+      {
+        tag: 'the 2 m column',
+        lab: 'buckling',
+        scenario: 'weak',
+        read: (c) => ({
+          P: [c.euler / 1e3, 19.74],
+          stress: [c.stress / 1e6, 16.45],
+          Py: [c.Py / 1e3, 300],
+          I: [c.I, 4e-8],
+        }),
+      },
+      {
+        tag: 'the flagpole end',
+        lab: 'buckling',
+        scenario: 'free',
+        read: (c) => ({
+          P: [c.euler / 1e3, 4.93],
+          stress: [c.stress / 1e6, 4.11],
+        }),
+      },
+    ],
+    s2: [
+      {
+        tag: 'the strong axis',
+        lab: 'buckling',
+        scenario: 'strong',
+        read: (c) => ({
+          P: [c.euler / 1e3, 177.7],
+          stress: [c.stress / 1e6, 148],
+        }),
+      },
+      {
+        tag: 'the short column',
+        lab: 'buckling',
+        scenario: 'short',
+        read: (c) => ({
+          P: [c.euler / 1e3, 877],
+          stress: [c.stress / 1e6, 731],
+          Py: [c.Py / 1e3, 300],
+        }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'the 124 in column',
+        lab: 'column',
+        scenario: 'elastic',
+        read: (c) => ({
+          P: [c.eulerKip, 19.75],
+          stress: [c.stressKsi, 19.44],
+          asd: [c.asd, 8.7],
+        }),
+      },
+      {
+        tag: 'the 76 in column',
+        lab: 'column',
+        scenario: 'yield',
+        read: (c) => ({
+          P: [c.eulerKip, 52.6],
+          stress: [c.stressKsi, 51.7],
+          Py: [c.Py, 42.7],
+          asd: [c.asd, 13.5],
+        }),
+      },
+    ],
+  },
 };
 
 /** An example's tag as the notes write it, without "Worked example · ". */

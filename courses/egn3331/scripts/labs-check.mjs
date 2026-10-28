@@ -41,6 +41,8 @@ const LIMIT = {
   motor: 1e-6,
   castigliano: 1e-6,
   drop: 1e-6,
+  buckling: 1e-3,
+  column: 1e-9,
 };
 
 const fails = [];

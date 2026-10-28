@@ -15,7 +15,7 @@ export const EXAMS = [
   { id: 'u8', n: 8, title: 'Beam deflection', chapters: '12', date: 'Ch 12', labs: ['curve', 'propped', 'shelf'], coming: [] },
   { id: 'u9', n: 9, title: 'Torsion', chapters: '5', date: 'Ch 5', labs: ['torsion', 'twist', 'motor'], coming: [] },
   { id: 'u10', n: 10, title: 'Energy methods', chapters: '14', date: 'Ch 14', labs: ['castigliano', 'drop'], coming: [] },
-  { id: 'u11', n: 11, title: 'Buckling of columns', chapters: '13', date: 'Ch 13', labs: [], coming: ['Buckling'] },
+  { id: 'u11', n: 11, title: 'Buckling of columns', chapters: '13', date: 'Ch 13', labs: ['buckling', 'column'], coming: [] },
 ];
 
 export const LAB_META = {
@@ -49,6 +49,8 @@ export const LAB_META = {
   motor: { id: 'motor', exam: 'u9', title: 'Motor shaft', app: true },
   castigliano: { id: 'castigliano', exam: 'u10', title: 'Castigliano' },
   drop: { id: 'drop', exam: 'u10', title: 'Crane rope', app: true },
+  buckling: { id: 'buckling', exam: 'u11', title: 'Buckling' },
+  column: { id: 'column', exam: 'u11', title: 'Steel column', app: true },
 };
 
 export const CHAPTER_TITLES = {
@@ -63,6 +65,7 @@ export const CHAPTER_TITLES = {
   10: 'Multiaxial strain',
   5: 'Torsion',
   12: 'Deflection',
+  13: 'Buckling of columns',
   14: 'Energy methods',
 };
 
