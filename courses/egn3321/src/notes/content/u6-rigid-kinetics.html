@@ -58,14 +58,14 @@
 </div>
 <p>The radius of gyration makes shapes easy to compare. The hoop has \(k = R\). The disk has \(k = 0.707R\). The solid sphere has \(k = 0.632R\). The smaller \(k\) is, the easier the body is to spin up for its mass and size.</p>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>The parallel-axis shift starts at the mass centre. Adding \(md^2\) to a moment about some other point counts the distance twice. Hibbeler §17.1.</p>
+<p>Shifting from an axis that is not through \(G\). Take the 6 kg rod to a point 0.5 m in from its end. From \(G\), \(I = 2 + 6(0.5)^2 = 3.5\) kg·m². From the end, \(8 + 6(0.5)^2 = 9.5\) kg·m², almost three times too much. The theorem needs \(\int\vec\rho\,dm = 0\), true only about \(G\). Hibbeler §17.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>A slender rod is \(mL^2/12\) about its centre and \(mL^2/3\) about one end. Shift from \(G\), never between two other axes.</p>
 </div>
 <p>In the Inertia lab, slide the axis along the rod. \(I\) is smallest at the centre and grows with the square of the offset.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>The parallel-axis shift starts at the mass centre. These shapes are the standard rod, hoop, disk, and solid sphere, each uniform. A different mass distribution needs its own integral. In the plane only one axis matters. In three dimensions a body has a full inertia tensor, which this course leaves out.</p>
+<p>These shapes are the standard rod, hoop, disk, and solid sphere, each uniform. A different mass distribution needs its own integral. In the plane only one axis matters. In three dimensions a body has a full inertia tensor, which this course leaves out.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/29-2-moment-of-inertia-of-a-rod/" target="_blank" rel="noopener">29.2 Moment of Inertia of a Rod</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/29-3-moment-of-inertia-of-a-disc/" target="_blank" rel="noopener">29.3 Moment of Inertia of a Disc</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/angular-momentum-and-rotating-masses/" target="_blank" rel="noopener">Lecture 6, Angular Momentum and Rotating Masses</a>.</p>
 </section>
@@ -87,11 +87,11 @@
 <p>A 2 kg rod 1 m long swings about one end. A 1 kg solid sphere of radius 0.1 m is fixed at the far end, its centre 1.1 m from the pin. The rod gives \(2(1)^2/3 = 0.667\). The sphere gives \(0.4(1)(0.01) + 1(1.21) = 1.214\). The total is \(1.88\ \mathrm{kg\cdot m^2}\), and \(k = \sqrt{1.88/3} = 0.792\) m.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>The hole keeps its own centre moment and the parallel-axis term. Dropping \(md^2\) understates the piece being subtracted. Hibbeler §17.1.</p>
+<p>Subtracting only the hole's centre moment. The hole's share is \(0.0067 + 0.0192 = 0.0259\) kg·m², and most of it is \(md^2\). Dropping that leaves 0.533 kg·m² instead of 0.514. The hole is off the axis, and its offset counts as much as anyone's. Hibbeler §17.1.</p>
 </div>
 <p>In the Inertia lab, the composite scenario moves the disk across the plate. Its \(md^2\) term dominates once it is far from the axis.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Every part is moved onto one axis, perpendicular to the plate. A hole keeps its centre moment and its \(md^2\). An axis in some other direction is left out. So are fillets, bolts, and every small feature a drawing would show.</p>
+<p>Every part is moved onto one axis, perpendicular to the plate. An axis in some other direction is left out. So are fillets, bolts, and every small feature a drawing would show.</p>
 </div>
 <p class="bridge">Inertia measures how the mass is spread about an axis. Part II puts it into the equations of motion.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/29-4-parallel-axis-theorem/" target="_blank" rel="noopener">29.4 Parallel Axis Theorem</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/17-4-center-of-mass-of-a-system-of-extended-objects/" target="_blank" rel="noopener">17.4 Center of Mass of a System of Extended Objects</a>.</p>
@@ -125,13 +125,16 @@
 <p>Accelerating at 3 m/s² needs 4500 N of drive at the road. That force acts 0.5 m below \(G\), so \(\Sigma M_G = 0\) shifts \(ma h/L = 865\) N of load onto the rear axle. The rear now carries 7660 N, and the front 7060 N.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Check the friction limit and the corner moment. The smaller force is the one that happens. And take moments about \(G\), not about a corner, unless you include the \(ma_G\) term: about any other point, \(\Sigma M\) is not zero in accelerated translation. Hibbeler §17.3.</p>
+<p>Checking only the slide. The tall crate's friction limit is 98.1 N, but it tips at 49.05 N and never slides. Find both forces; the smaller one happens. Hibbeler §17.3.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Giving the weight an arm of \(b\) about the corner. The weight acts at the centre, \(b/2\) from the corner. For the tall crate the full width doubles the tipping force to 98.1 N.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>\(\Sigma M_G = 0\) while the body is still translating. The normal reaches the front corner at the tip. Acceleration moves load toward the back of a car and the front of a braking one.</p>
+<p>\(\Sigma M_G = 0\) while the body is still translating. About any other point, \(\Sigma M\) equals the moment of \(m\vec a_G\), not zero. The normal reaches the front corner at the tip. Acceleration moves load toward the back of a car and the front of a braking one.</p>
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Until the crate tips it translates, so the moment about the mass centre is zero. The force is at the top edge, and a lower force changes the tipping value. The car is rigid: suspension, which lets the body pitch, is left out, so the load shift happens at once instead of after a short settling.</p>
+<p>The crate and the car are rigid. The car's suspension, which lets the body pitch, is left out. So the load shifts at once, not after a short settling. The crate's corner is sharp; a real one rounds and crushes a little.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/17-6-velocity-and-acceleration-of-the-center-of-mass/" target="_blank" rel="noopener">17.6 Velocity and Acceleration of the Center of Mass</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/15-5-force-on-a-system-of-particles/" target="_blank" rel="noopener">15.5 Force on a System of Particles</a>.</p>
 </section>
@@ -164,14 +167,17 @@
 <p>A bar weighs 32.2 lb and is 4 ft long. Released from rest while horizontal, the pin holds 8.05 lb. \(\alpha = 12.08\ \mathrm{rad/s^2}\). Here \(g = 32.2\ \mathrm{ft/s^2}\).</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>At the horizontal release the pin holds \(mg/4\). Putting the whole weight on the pin is the wrong free-body result. At the bottom of the swing, the reverse mistake gives \(mg\) instead of \(2.5mg\). Hibbeler §17.4.</p>
+<p>Putting the whole weight on the pin at release. The bar's centre falls at \(3g/4\), so the pin holds only \(mg/4\): 9.81 N for the 4 kg bar, not 39.2 N. Hibbeler §17.4.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the pin force as the weight at the bottom of the swing. \(\alpha\) is zero there, but \(G\) is on a circle and accelerates toward the pin at \((L/2)\omega^2\). The pin holds 98.1 N, not 39.2 N.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Moments about the pin give \(\alpha\). The pin components then come from the motion of \(G\): \(r\alpha\) along the path and \(r\omega^2\) toward the pin.</p>
 </div>
 <p>In the Pendulum lab, set the angle and the angular speed. The pin components are split into the part that holds the weight and the part that turns \(G\).</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>At release from rest, \(\omega = 0\), so the mass centre has no normal acceleration yet. Friction in the pin bearing is left out, and so is air drag on the swinging body. Both would slowly drain the swing. The pin is also rigid: it does not deflect under load.</p>
+<p>Friction in the pin bearing is left out, and so is air drag on the swinging body. Both would slowly drain the swing. The pin is also rigid: it does not deflect under load.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/31-1-relationship-between-torque-and-angular-acceleration/" target="_blank" rel="noopener">31.1 Relationship between Torque and Angular Acceleration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/31-3-worked-example-find-the-moment-of-inertia-of-a-disc-from-a-falling-mass/" target="_blank" rel="noopener">31.3 Worked Example - Find the Moment of Inertia of a Disc from a Falling Mass</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/angular-momentum-and-motion-of-rotating-rigid-bodies/" target="_blank" rel="noopener">Lecture 7, Angular Momentum and Motion of Rotating Rigid Bodies</a>.</p>
 </section>
@@ -202,16 +208,19 @@
 <p>A 10 lb solid sphere rolls down a 20° ramp. With \(k = 2/5\), \(a = (5/7)(32.2)\sin 20^\circ = 7.87\) ft/s². The weight cancels. Rolling needs \(f/N = (2/7)\tan 20^\circ = 0.104\), so any \(\mu_s\) above that keeps it rolling.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>A rolling body is slower than a sliding block on the same incline. Divide \(g\sin\theta\) by \(1 + k_G^2/R^2\). A hoop needs more friction than a disk. And friction's direction is whatever the rolling needs, not always against the motion: on the pulled disk it points backward, on a driven wheel it points forward. Hibbeler §17.5.</p>
+<p>Using \(g\sin\theta\) for a rolling body. That is a block sliding without friction: 4.91 m/s² on the 30° incline. The disk rolls down at 3.27 m/s², because a third of the pull goes into its spin. Divide by \(1 + k\). Hibbeler §17.5.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Drawing friction against the motion by habit. Its direction is whatever the rolling needs. On the disk pulled at its centre it points backward, to spin the disk up. On a driven wheel it points forward, and it is what moves the car.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Compare the friction rolling needs with \(\mu N\). Under the limit, it rolls. Over the limit, it slips.</p>
 </div>
 <p>In the Roll or slip lab, lower \(\mu\) until the hoop slips. The readout switches from the rolling formula to \(\mu N\), and \(a\) jumps up.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Friction is Coulomb, and rolling resistance is left out. Past the friction limit the no-slip constraint is dropped, and the body both slides and spins. Rolling without slip does no work at the contact, so energy is conserved while it rolls. Unit 7 uses exactly that.</p>
+<p>Friction is Coulomb: one static limit, then a constant kinetic value. Rolling resistance is left out. The body and the incline are rigid, so they touch at a point. A real tyre flattens into a patch, and the road's push sits a little ahead of the centre, which slowly drains the roll.</p>
 </div>
-<p class="bridge">Part III applies the fixed-axis equation to a rotor that spins up.</p>
+<p class="bridge">Part III applies the fixed-axis equation to an elevator's drive sheave, with a car on one side and a counterweight on the other.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/36-5-analyze-force-and-torque-in-translation-and-rotation-problems/" target="_blank" rel="noopener">36.5 Analyze Force and Torque in Translation and Rotation Problems</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/36-2-worked-example-wheel-rolling-without-slipping-down-inclined-plane-torque-method/" target="_blank" rel="noopener">36.2 Worked Example - Wheel Rolling Without Slipping Down Inclined Plane - Torque Method</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/finding-equations-of-motion-for-rigid-body-rotation/" target="_blank" rel="noopener">Lecture 8, Finding Equations of Motion for Rigid Body Rotation</a>.</p>
 </section>
 <div class="part">

@@ -69,7 +69,10 @@ a = \frac{m_2 - m_1}{m_1 + m_2}\, g, \qquad T = \frac{2 m_1 m_2}{m_1 + m_2}\, g.
 <p>From rest, after 1 s, the masses move at 3.27 m/s and have each travelled 1.64 m.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>The tension equals the hanging weight only when the acceleration is zero. While the system accelerates, the rope force and the weight differ. Hibbeler §13.3.</p>
+<p>Taking the tension as the hanging weight. That holds only when nothing accelerates. In the 2 kg and 4 kg machine the string carries 26.2 N, not 39.2 N: the 4 kg mass falls because its weight beats the string. Hibbeler §13.3.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Dividing the net force by the falling mass alone. The string drags the 2 kg mass along, so both masses take the same acceleration. \(19.6/4 = 4.91\) m/s² is too big; \(19.6/6 = 3.27\) m/s² is right.</p>
 </div>
 <p>In the F = ma lab, the Two masses scenario draws both free bodies. The work–energy check in the readout must agree with the acceleration.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
@@ -100,10 +103,10 @@ a = g(\sin\theta - \mu_k\cos\theta).
 <p>At the stop, friction must be re-tested. \(\tan 30^\circ = 0.577\) exceeds \(\mu_s = 0.2\), so the block does not stay. It slides back down at 3.63 m/s², the case above. The trip up and the trip down have different accelerations because friction flips direction.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Friction is not \(\mu N\) just because a coefficient is printed. At rest, and not on the verge, the friction force is smaller than \(\mu_s N\). On the 10° slope it is 5.11 N, not 5.80 N. Hibbeler §13.4.</p>
+<p>Friction is not \(\mu N\) whenever a coefficient is printed. At rest, and not on the verge, the friction force is smaller than \(\mu_s N\). On the 10° slope it is 5.11 N, not 5.80 N. Hibbeler §13.4.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Test \(\mu_s\) first. Use \(\mu_k\) only after the block is sliding. While it holds, friction is whatever equilibrium needs.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking \(N\) as the weight on a slope. For the 3 kg block on 30°, that gives 29.4 N instead of 25.5 N. Friction grows to 4.41 N, and the block's acceleration drops from 3.63 to 3.43 m/s². Only \(mg\cos\theta\) presses into the plane.</p>
 </div>
 <p>In the F = ma lab, the Block on a rough incline scenario reports the regime, static or kinetic. Raise the angle past 11.3° and watch it change.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
@@ -135,9 +138,6 @@ a = \frac{Mg - mg\sin\theta - \mu_k mg\cos\theta}{m + M}.
 <p>At rest, the tension equals the hanging weight. In motion, \(T = M(g - a)\) when \(a\) is the downward acceleration of that mass.</p>
 </div>
 <p>In the F = ma lab, the Incline tied to a hanging mass scenario shows both free bodies. Lower the hanging mass until the regime turns static.</p>
-<div class="box out"><span class="tag">What the model leaves out</span>
-<p>The string is light, so one tension serves both bodies. A heavy rope would make the tension vary along its length. The pulley is frictionless and massless, and the block does not tip.</p>
-</div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/7-3-solving-pulley-systems/" target="_blank" rel="noopener">7.3 Solving Pulley Systems</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-4-drag-forces-constraints-and-continuous-systems/12-5-worked-example-2-blocks-and-2-pulleys/" target="_blank" rel="noopener">12.5 Worked Example - 2 Blocks and 2 Pulleys</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/free-body-diagrams-and-fictitious-forces/" target="_blank" rel="noopener">Lecture 4, Free Body Diagrams and Fictitious Forces</a>.</p>
 </section>
 <section class="topic" id="s4">
@@ -257,6 +257,9 @@ v_{\max}^2 = \rho g\,\frac{\sin\theta + \mu\cos\theta}{\cos\theta - \mu\sin\thet
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The no-friction speed is \(\sqrt{\rho g\tan\theta}\), not \(\sqrt{\rho g\sin\theta}\). The sine belongs in the horizontal equation, and the cosine in the vertical one. Hibbeler §13.5.</p>
 </div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking \(N\) as the weight on a bank. With no friction, \(N\cos\theta = mg\), so \(N = mg/\cos\theta\). A 1000 kg car on the 20° bank presses with 10.4 kN, not 9.81 kN. The extra is what tilts \(N\) enough to supply \(mv^2/\rho\).</p>
+</div>
 <div class="box key"><span class="tag">Key</span>
 <p>Friction down the bank raises the maximum speed. Friction up the bank lowers the minimum. Together they make a band.</p>
 </div>
@@ -288,8 +291,8 @@ v_{\max}^2 = \rho g\,\frac{\sin\theta + \mu\cos\theta}{\cos\theta - \mu\sin\thet
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The normal force is not the weight, and it is smallest at the top, not the bottom. At the top the weight points toward the centre, so it helps supply \(mv^2/\rho\). Hibbeler §13.5.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>A car on the inside of the track leaves when \(N\) would have to be negative. On a full loop that happens first at the top. The entry speed needs \(v_b^2 \ge 5g\rho\).</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the entry speed at the top. The particle climbed \(2\rho\) to get there and lost speed doing it. With 5 m/s at the top, \(N = 0.5(62.5 - 9.81) = 26.3\) N, four times the true 6.73 N. Find the speed by energy first.</p>
 </div>
 <p>In the Curve lab, the Vertical loop scenario reports the regime: on track, leaves, or short. Sweep \(\phi\) and watch \(N\) fall toward the top.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
@@ -348,7 +351,7 @@ a = g\sin\theta - \frac{k}{m}\,x, \qquad N_{\text{rod}} = mg\cos\theta.
 <p>Measuring the stretch from the equilibrium point instead of the unstretched point. The spring force is \(kx\) with \(x\) from where the spring has its natural length. Measured from 0.224 m, the 0.1 m position has \(x = -0.124\) m, and the force comes out with the wrong size. Hibbeler §13.4.</p>
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>The spring lies along the rod, so the stretch equals the coordinate measured down the rod. A spring anchored off the rod stretches by a Pythagorean length, and its force has a component into the rod. This section also leaves out friction. The rod force does no work along the rod.</p>
+<p>The spring lies along the rod, so the stretch equals the coordinate measured down the rod. A spring anchored off the rod stretches by a Pythagorean length, and its force has a component into the rod. Friction on the rod is also left out.</p>
 </div>
 <p class="bridge">Part III puts the banked curve to work on a highway, where the radius is what the designer solves for.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/7-4-hookes-law/" target="_blank" rel="noopener">7.4 Hooke's Law</a>.</p>

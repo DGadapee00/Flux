@@ -60,6 +60,9 @@
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>The pound-force uses 9.80665 m/s². Projectile motion in this unit uses \(g = 9.81\) m/s². A student who uses one of those values for both jobs changes the third figure. Hibbeler Statics §1.3 and Dynamics §12.6.</p>
 </div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Converting the force and leaving the arm in feet. For 50 lbf through 4 ft that gives \(222 \times 4 = 890\), a number in N·ft. The arm is 1.219 m, and the moment is 271 N·m.</p>
+</div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The conversion uses the exact foot and the defined pound-force. It leaves out a local value of \(g\). A scale that reads pounds already used standard gravity. Measurement uncertainty is also left out: three figures is a reporting rule, not a statement about how well a quantity is known.</p>
 </div>
@@ -107,6 +110,9 @@ v = v_0 - ks.
 <p>Check in time. The speed halves when \(e^{-0.5t} = 0.5\), at \(t = \ln 2/0.5 = 1.39\) s. The distance by then is \(\int_0^t 6e^{-0.5\tau}\,d\tau = 12(1 - 0.5) = 6\) m. The distance law agrees: \(v = 6 - 0.5(6) = 3\) m/s, half the start.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(v^2 = v_0^2 + 2a\,\Delta s\) when \(a\) depends on \(s\). Take the pull \(a = -4s\) and its value at \(s = 0.5\) m, \(-2\) m/s². Held constant, it gives \(v^2 = 4 - 2 = 2\), so 1.41 m/s. The integral gives \(v^2 = 4 - 4(0.25) = 3\), so 1.73 m/s. The constant-acceleration equations need a constant \(a\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
 <p>Distance is 13 m. Displacement is \(-5\) m. Reporting the absolute value of the displacement as the distance drops the leg after the stop. Hibbeler §12.2.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
@@ -114,7 +120,7 @@ v = v_0 - ks.
 </div>
 <p>In the Rectilinear lab, the plot shows \(a\), \(v\), and \(s\) against time. Move the probe through the stop and watch the distance and the displacement separate.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Constant acceleration leaves out drag, which grows with speed, and a brake whose grip fades as it heats. Either makes \(a\) a function of \(v\), which needs \(dt = dv/a(v)\) instead. A curve needs the normal acceleration of section 5.</p>
+<p>The laws here are exact, but real ones are rarely this tidy. Air drag grows as \(v^2\), not \(v\), and a brake's grip fades as it heats. Each still separates: \(v\,dv = a(v)\,ds\) for distance, and \(dt = dv/a(v)\) for time. Only the integrals get harder.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/1-5-instantaneous-velocity-in-1d/" target="_blank" rel="noopener">1.5 Instantaneous Velocity in 1D</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-1-kinematics/2-2-acceleration-in-1d/" target="_blank" rel="noopener">2.2 Acceleration in 1D</a>.</p>
 </section>
@@ -126,10 +132,11 @@ v = v_0 - ks.
 </div>
 <p>An \(a\)–\(t\) graph made of steps has a constant acceleration on each step. The area of a step is that step's change in velocity. Then step the position forward with the average velocity on the interval.</p>
 <div class="box ex"><span class="tag">Worked example · three steps</span>
-<p>Start from rest. Accelerate at 2 m/s² for 3 s, then at \(-1\) m/s² for 2 s, then at 0 for 1 s. The velocity ends at 4 m/s. The position ends at 23 m.</p>
+<p>Start from rest. Accelerate at 2 m/s² for 3 s, then at \(-1\) m/s² for 2 s, then at 0 for 1 s.</p>
+<p>The first area is \(2 \times 3 = 6\) m/s, so \(v = 6\) m/s and \(s = 9\) m. The next area is \(-2\) m/s, so \(v = 4\) m/s and \(s = 19\) m. The last step holds \(v\) and adds 4 m. The velocity ends at 4 m/s, the position at 23 m.</p>
 </div>
-<div class="box why"><span class="tag">Why</span>
-<p>The first area is \(2 \times 3 = 6\) m/s, so \(v = 6\) m/s and \(s = 9\) m. The next area is \(-2\) m/s, so \(v = 4\) m/s and \(s = 19\) m. The last step holds \(v\) and adds 4 m. End at 23 m.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Stepping the position with the speed at the end of the step. The first step then gives \(6 \times 3 = 18\) m, not 9 m. The speed rose from 0 to 6 m/s through the step, so its average, 3 m/s, is the one that multiplies the time.</p>
 </div>
 <p>A graph need not be steps. If \(a\) is linear in time, \(v\) is a parabola and \(s\) a cubic. Integrate term by term.</p>
 <div class="box ex"><span class="tag">Worked example · a ramp in acceleration</span>
@@ -248,13 +255,13 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Acceleration is not tangent to the path. In the parabola example \(a_t = 0\), and \(a_n = 0.805\) m/s². A student who reports \(a = a_t\) misses the turn. Hibbeler §12.7.</p>
 </div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking \(\rho = 1/|y''|\) where the path is not level. On the parabola at \(x = 2\) m that gives 1 m, not 11.18 m, and \(a_n = 9\) m/s² instead of 0.805 m/s². The slope there is 2, and \((1 + y'^2)^{3/2} = 11.18\) is the whole difference.</p>
+</div>
 <div class="box key"><span class="tag">Key</span>
 <p>\(a_t\) changes speed. \(a_n\) changes direction. Either one can be zero while the other is not.</p>
 </div>
 <p>In the Path lab, the gold arrow is \(a_t\) and the normal arrow points to the concave side. A numerical second derivative gives the same \(\rho\) as the formula.</p>
-<div class="box out"><span class="tag">What the model leaves out</span>
-<p>The curvature formula is for a plane curve \(y = f(x)\). A space curve needs a binormal direction and a different radius. The model also takes \(a_t\) as given, rather than from a force. Unit 2 supplies the force.</p>
-</div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/10-1-circular-motion-2013-acceleration/" target="_blank" rel="noopener">10.1 Circular Motion - Acceleration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/9-2-uniform-circular-motion-direction-of-the-acceleration/" target="_blank" rel="noopener">9.2 Uniform Circular Motion - Direction of the Acceleration</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>.</p>
 </section>
 <section class="topic" id="s6">
@@ -301,9 +308,6 @@ a_r &= \ddot r - r\dot\theta^2, & a_\theta &= r\ddot\theta + 2\dot r\dot\theta.
 <p>Writing \(a_\theta = r\ddot\theta + \dot r\dot\theta\). The cross term arrives twice, once from each product-rule step, so it is \(2\dot r\dot\theta\). For the collar on the arm the slip gives 0.6 m/s² instead of 1.2 m/s². Hibbeler §12.8.</p>
 </div>
 <p>In the Polar lab, the dashed gold line is \(\ddot r\) and the purple line is \(a_r\). Play the radar pass: the gold peak is the car's closest point, and the purple line never leaves zero.</p>
-<div class="box out"><span class="tag">What the model leaves out</span>
-<p>The angle is measured from axes that do not turn, and the motion stays in one plane. Cylindrical coordinates add a third direction, \(z\), whose components are simply \(\dot z\) and \(\ddot z\).</p>
-</div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/10-2-angular-acceleration/" target="_blank" rel="noopener">10.2 Angular Acceleration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/10-4-review-of-rotational-kinematics/" target="_blank" rel="noopener">10.4 Review of Rotational Kinematics</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>.</p>
 </section>
 <section class="topic" id="s7">

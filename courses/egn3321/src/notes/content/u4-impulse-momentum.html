@@ -96,7 +96,7 @@
 <p>For two bodies with no outside impulse, \(m_1 u_1 + m_2 u_2 = m_1 v_1 + m_2 v_2\). Conservation can hold in one direction and fail in another.</p>
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Internal impulses cancel in pairs. An outside force that acts through the interval does not. Recoil here also leaves out the powder gas. It leaves the muzzle faster than the bullet, and for a rifle it carries roughly a third of the recoil momentum. The boat ignores water drag during the jump.</p>
+<p>Recoil here leaves out the powder gas. It leaves the muzzle faster than the bullet, and for a rifle it carries roughly a third of the recoil momentum. The boat ignores water drag during the jump.</p>
 </div>
 <p class="bridge">Impulse and momentum give the speeds after a push. A collision is a push too short to measure, so Part II uses momentum and a coefficient of restitution in place of the force.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/16-1-conservation-of-momentum/" target="_blank" rel="noopener">16.1 Conservation of Momentum</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/18-2-set-up-a-recoil-problem/" target="_blank" rel="noopener">18.2 Set up a Recoil Problem</a>.</p>
@@ -141,7 +141,10 @@ v_{n2} - v_{n1} = e(u_{n1} - u_{n2}).
 <p>Two special cases follow from the formulas. Equal masses with \(e = 1\) exchange velocities: \(v_1 = u_2\) and \(v_2 = u_1\). That is why a row of steel balls passes one swing down the line. With \(e = 0\), both leave at the centre-of-mass speed, \((m_1 u_1 + m_2 u_2)/M\).</p>
 <p>Restitution can be measured with a drop. A ball dropped from 2 m reaches the floor at 6.26 m/s. If it bounces to 1.28 m, it left at 5.01 m/s. The floor does not move, so \(e = 5.01/6.26 = 0.8\). In general, \(e = \sqrt{h_2/h_1}\).</p>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Momentum is conserved for every coefficient of restitution. Kinetic energy is conserved only when \(e = 1\). Hibbeler §15.4.</p>
+<p>Conserving kinetic energy in a collision that is not elastic. When the 1 kg body sticks to the 3 kg body, energy gives \(\tfrac12(1)(8^2) = \tfrac12(4)v^2\), so 4 m/s. Momentum gives 2 m/s, the true value. Momentum holds for every \(e\); kinetic energy only for \(e = 1\). Hibbeler §15.4.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reversing the restitution equation. Separation is \(v_2 - v_1\); approach is \(u_1 - u_2\). In the direct collision, writing \(v_2 - v_1 = -e(4)\) gives 3 m/s for the striker and 1 m/s for the target. The striker would pass through the body ahead of it.</p>
 </div>
 <p>In the Impact lab, slide \(e\) from 0 to 1. The final velocities move, the total momentum does not, and the lost energy falls to zero.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
@@ -199,10 +202,10 @@ L_z = m(xv_y - yv_x), \qquad \sum M_O = \dot H_O.
 <p>A 0.5 kg particle sits at the end of a light 1.2 m arm, pivoted at the other end, on a horizontal table. A motor at the pivot applies a 2 N·m moment for 3 s. The angular impulse is 6 N·m·s, which equals the change in \(H = mrv\). From rest, \(v = 6/(0.5 \times 1.2) = 10\) m/s.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>The moment arm runs from the chosen point to the particle. It is not the distance measured along the velocity. Hibbeler §15.5.</p>
+<p>Writing \(\mathbf{v}\times\mathbf{r}\). The order sets the sign. For the passing particle it gives \(-3\) kg·m²/s, the wrong sense of turning. The position comes first: \(\mathbf{r}\times m\mathbf{v}\). Hibbeler §15.5.</p>
 </div>
-<div class="box out"><span class="tag">What the model leaves out</span>
-<p>This is the angular momentum of a particle. It is not yet the spin of a rigid body, which Unit 6 builds by adding up particles. Central-force orbits, where this conservation does most of its work, are left out of the course.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(|\mathbf{r}|\) as the moment arm. The arm is the perpendicular distance from the point to the line of the velocity. For the passing particle, \(|\mathbf{r}| = 0.5\) m, but the arm is \(H/(mv) = 3/(2 \times 3.16) = 0.474\) m. Only when \(\mathbf{v}\) is square to \(\mathbf{r}\), as on a circle, are the two the same.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-11-angular-momentum/32-1-angular-momentum-for-a-point-particle/" target="_blank" rel="noopener">32.1 Angular Momentum for a Point Particle</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-11-angular-momentum/34-1-torque-causes-angular-momentum-to-change-point-particle/" target="_blank" rel="noopener">34.1 Torque Causes Angular Momentum to Change - Point Particle</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/angular-momentum-and-torque/" target="_blank" rel="noopener">Lecture 3, Angular Momentum and Torque</a>.</p>
 </section>

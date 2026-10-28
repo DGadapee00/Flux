@@ -69,7 +69,10 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <p>A motor turns a pulley of 3 in radius at 1800 rpm. In radians per second, \(\omega = 1800 \times 2\pi/60 = 188.5\) rad/s. The radius is 0.25 ft, so the belt runs at 47.1 ft/s. The ratio of radii carries over unchanged in any unit.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>An open belt does not reverse the rotation. External gears do. The pitch line still has one speed. And \(v = r\omega\) needs \(\omega\) in rad/s: 1800 rpm times 0.25 ft is not a speed. Hibbeler §16.3.</p>
+<p>Turning the ratio upside down. The contact speed is shared, so the larger wheel turns slower. For the open belt, \(\omega_2 = (0.15/0.3)(20) = 10\) rad/s. Inverted, it gives 40 rad/s. A belt leaves the sense alone; external gears reverse it. Hibbeler §16.3.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Multiplying rpm by a radius. \(v = r\omega\) needs \(\omega\) in rad/s. For the motor pulley, \(1800 \times 0.25 = 450\) is not a speed in any unit. Convert first: 188.5 rad/s, and 47.1 ft/s.</p>
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The belt does not slip, and the gear teeth stay in mesh. The model leaves out belt creep, the small slip as a loaded belt stretches around the pulley, and a tooth leaving contact. It also treats the axis as fixed, with no bearing play.</p>
@@ -132,7 +135,10 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <p>A wheel of radius \(R\) rolls with its centre at \(v\) and \(\omega = -v/R\) (clockwise). Take A at the centre. The top is at \(\vec r_{B/A} = (0, R)\). Then \(\omega\mathbf{k}\times(0, R) = (-\omega R, 0) = (v, 0)\). So the top moves at \(v + v = 2v\). The bottom, at \((0, -R)\), gets \(v - v = 0\). Section 4 reaches both from the instantaneous centre.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>\(\omega\times\vec r\) is perpendicular to the bar. It is not a component along the bar. Hibbeler §16.5.</p>
+<p>Dropping the minus sign in \(\omega\mathbf{k}\times(x, y) = (-\omega y,\ \omega x)\). For the bar, the rotation adds \((-0.6, 0.8)\) m/s. With the sign lost it adds \((0.6, 0.8)\), and B moves at \((1.6, 1.3)\) m/s instead of \((0.4, 1.3)\). That arrow is not perpendicular to the bar, which a rigid bar forbids. Hibbeler §16.5.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving out \(\vec v_A\). The rotation term is B's velocity relative to A. On its own it gives \((-0.6, 0.8)\) m/s for the bar, the velocity B would have if A were pinned.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Positive \(\omega\) is counterclockwise: \(\omega\mathbf{k}\times(x, y) = (-\omega y,\ \omega x)\). Each constraint, such as a guide or a pin, gives one scalar equation.</p>
@@ -166,7 +172,7 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <p>Extend the crank line and the rocker line. They meet at (2.44, 4.22) m, the coupler's instantaneous centre. A is 3.88 m from it, so the coupler turns at \(2/3.88 = 0.516\) rad/s, clockwise. B is 2.26 m from it, so B moves at \(0.516 \times 2.26 = 1.17\) m/s. The rocker turns at \(1.17/2 = 0.583\) rad/s.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>The instantaneous centre is the point with zero velocity. It is not the mass centre, and it moves as the body moves. Hibbeler §16.6.</p>
+<p>Swapping the distances. On the ladder at 60°, the foot is 3.46 m from the centre and the top 2 m. Dividing the foot speed by 2 m gives \(\omega = 1\) rad/s, and the top then falls at 3.46 m/s instead of 1.155 m/s. Measure each distance from the centre to that point. Hibbeler §16.6.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Draw the lines through two points, each perpendicular to that point's velocity. They meet at the centre. If they are parallel, the body is translating, and \(\omega = 0\).</p>
@@ -201,13 +207,10 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Zero velocity does not mean zero acceleration. The \(-\omega^2 r\) term remains at a dead centre. Hibbeler §16.7.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Keep the centripetal term even when the point you care about is stopped. Two constraint directions give two scalar equations for \(\alpha\) and one unknown acceleration.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the crank pin's acceleration for the slider's. At the outer dead centre the pin accelerates at \(r\omega^2 = 20\) m/s² toward the crank centre. The slider's is 25 m/s². The rod turns too, at \(\omega_{AB} = r\omega/\ell = 2.5\) rad/s, and its \(\omega_{AB}^2\ell = 5\) m/s² adds the rest.</p>
 </div>
 <p>In the Slider-crank lab, set the crank to 0° and then to 180°. The speed reads zero both times. The acceleration does not.</p>
-<div class="box out"><span class="tag">What the model leaves out</span>
-<p>Both points here belong to one rigid body, so their distance is fixed. A point that slides along a turning body, a pin in a slot, needs one more term. Section 6 adds it.</p>
-</div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/35-3-rolling-wheel-in-the-ground-frame/" target="_blank" rel="noopener">35.3 Rolling Wheel in the Ground Frame</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>.</p>
 </section>
 <section class="topic" id="s6">
@@ -237,7 +240,7 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 </div>
 <div class="box ex"><span class="tag">Worked example · a rod on a moving cart</span>
 <p>A rod is pinned to a cart that accelerates at 2 m/s² along the rod's present direction. The rod turns at 3 rad/s and speeds up at 2 rad/s². A collar 0.8 m out slides along it at a steady 0.5 m/s.</p>
-<p>Along the rod: \(2 + 0 - 3^2(0.8) = -5.2\) m/s². Across it: \(2(0.8) + 2(3)(0.5) = 4.6\) m/s². The cart's acceleration simply adds; the Coriolis term is 3 m/s² of the 4.6.</p>
+<p>Along the rod: \(2 + 0 - 3^2(0.8) = -5.2\) m/s². Across it: \(2(0.8) + 2(3)(0.5) = 4.6\) m/s². The cart's acceleration adds unchanged; the Coriolis term is 3 m/s² of the 4.6.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · walking on a turntable</span>
 <p>A playground turntable turns at 1 rad/s. A 30 kg child walks straight out at 1 m/s and is 2 m from the centre. The Coriolis term is \(2(1)(1) = 2\) m/s², ahead in the sense of the turn, beside 2 m/s² of centripetal pull inward. The platform must push the child sideways with \(30 \times 2 = 60\) N: that is the sideways shove a child feels walking out.</p>

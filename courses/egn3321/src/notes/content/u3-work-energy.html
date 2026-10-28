@@ -68,11 +68,17 @@ T_1 + \sum U_{1-2} = T_2, \qquad U_{1-2} = \int_1^2 \vec F \cdot d\vec r.
 </div>
 <p>Two bodies joined by an inextensible cable form one system. The cable's tension does positive work on one body and equal negative work on the other, so it drops out. For Unit 2's Atwood machine, released from rest, after 1.635 m: \((4 - 2)(9.81)(1.635) = \tfrac12(6)v^2\), so \(v = 3.27\) m/s. That matches the constant-acceleration result.</p>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>The spring work is not \(\tfrac{1}{2}ks_2^2\) by itself. Both end stretches enter: \(\tfrac{1}{2}k(s_1^2 - s_2^2)\). Hibbeler §14.1.</p>
+<p>Writing the spring work as \(\tfrac{1}{2}ks^2\) at one end. Both end stretches enter: \(\tfrac{1}{2}k(s_1^2 - s_2^2)\). Stopped halfway up, the collar above has 7.5 J of spring work. The far end alone gives 2.5 J, and a speed of 0.22 m/s instead of 2.25 m/s. Hibbeler §14.1.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Giving the weight positive work while the body climbs. The released collar rises \(0.5\sin 30^\circ = 0.25\) m, so gravity takes 4.9 J. With the sign flipped, the speed comes out 3.86 m/s instead of 2.26 m/s. Work is positive only when the force and the motion point the same way.</p>
 </div>
 <p>In the Collar lab, the readout lists each force's work separately. A step-by-step integration of \(\sum F = ma\) along the rod arrives at the same speed.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Work and energy give the speed at two positions and leave out the time between them. They also cannot find a force that does no work, such as the rod's normal force. For those, return to \(\sum F = ma\) in the normal direction. Measure \(x\) down the rod from the unstretched point: the spring lies along the rod, so the stretch equals \(x\).</p>
+<p>The collar, the crate and the sled are particles. Each has one speed, and none spins. A rolling body also stores energy in its spin, and Unit 7 adds that.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Work and energy give speeds at positions. They give neither the time between positions nor a force that does no work, such as the rod's normal force. For those, return to \(\sum F = ma\).</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/20-5-work-kinetic-energy-theorem/" target="_blank" rel="noopener">20.5 Work-Kinetic Energy Theorem</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/20-1-kinetic-energy/" target="_blank" rel="noopener">20.1 Kinetic Energy</a>.</p>
 </section>
@@ -98,7 +104,7 @@ U_s = \tfrac{1}{2}k(s_1^2 - s_2^2).
 <p>A spring with \(k = 100\) N/m and natural length 0.3 m is anchored 0.4 m above a horizontal rod. The collar moves from 0.3 m along the rod to the point directly below the anchor. The spring's length goes from \(\sqrt{0.3^2 + 0.4^2} = 0.5\) m to 0.4 m. Its stretch goes from 0.2 m to 0.1 m. The spring does \(\tfrac12(100)(0.04 - 0.01) = 1.5\) J on the collar.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Going past the end and coming back does not add spring work. The extra stretch is undone on the way back. Hibbeler §14.1.</p>
+<p>Counting the spring work of a trip out and back leg by leg, and keeping only one leg. In the out-and-back example, the spring takes 8 J going out to 0.6 m and returns 8 J coming back. Keep only the first and the return speed is 2.27 m/s instead of 3.63 m/s. Use the end stretches: the round trip does nothing. Hibbeler §14.1.</p>
 </div>
 <p>In the Collar lab, the Out and back scenario prints the spring work and the direct end-to-end value side by side. They agree to the joule.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
@@ -126,7 +132,7 @@ U_s = \tfrac{1}{2}k(s_1^2 - s_2^2).
 <p>A 10 lb box slides across a floor at 12 ft/s. \(\mu_k = 0.3\). Friction is \(0.3 \times 10 = 3\) lb, and its work over a distance \(d\) is \(-3d\). The kinetic energy is \(\tfrac12(10/32.2)(12^2) = 22.4\) ft·lb. So the box stops after \(d = 7.45\) ft. The weight cancels in \(d = v^2/(2\mu_k g)\).</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Do not drop the friction term because a spring is also in the problem. Friction removes energy on the way in, and again on the way out. Hibbeler §14.1.</p>
+<p>Dropping friction because a spring is in the problem. For the block hitting the spring at 3 m/s, \(9 = 20x^2\) gives a compression of 0.671 m. With friction's 1.96 N over the same slide, it is 0.624 m. Friction removes energy on the way in, and again on the way out. Hibbeler §14.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>\(U_f = -\mu_k N\, s\), with \(s\) the distance traveled, not the net displacement. The energy friction removes becomes heat.</p>
@@ -163,7 +169,10 @@ P = \vec F \cdot \vec v, \qquad \eta = \frac{P_{\text{out}}}{P_{\text{in}}}.
 <p>An elevator car and its load weigh 2000 lb and rise at a steady 3 ft/s. The cable tension equals the weight, so the output power is \(2000 \times 3 = 6000\) ft·lb/s, or 10.9 hp. With a motor efficiency of 0.75, the motor draws \(10.9/0.75 = 14.5\) hp. A counterweight would cut both, because it pays back what the car's weight costs.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Power is not force times distance. That product is work. Divide by time, or multiply the force by the speed. Hibbeler §14.4.</p>
+<p>Power is not force times distance. That product is work. Raising the 2000 lb elevator 30 ft takes 60,000 ft·lb in 10 s or in 20 s. Its power is 6000 or 3000 ft·lb/s. Divide by time, or multiply the force by the speed. Hibbeler §14.4.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Multiplying by the efficiency to get the input. The motor draws more than it delivers. For the climbing block, \(43.8 \times 0.8 = 35.0\) W is less than the output, which is impossible. The input is \(43.8/0.8 = 54.8\) W.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>One horsepower is 550 ft·lb/s, or 746 W. Efficiency is always below 1 for a real machine, so the input is the larger power. Efficiencies in series multiply: a 0.9 motor through a 0.95 gearbox gives 0.855.</p>
@@ -198,7 +207,7 @@ U_{\text{cons}} = V_1 - V_2, \qquad T_1 + V_1 = T_2 + V_2.
 </div>
 <p>A closed loop tells conservative and non-conservative forces apart. Around any closed path, gravity and a spring do zero total work, because the ends coincide. Friction does negative work on every leg, so its total around a loop is never zero. That is why no potential exists for it.</p>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Do not cancel friction because the ends match. Matching ends cancel the weight and the spring. They do not cancel friction. Hibbeler §14.5.</p>
+<p>Cancelling friction because the ends match. Go out along the straight path and back the same way. The weight and the spring do zero work in all. Friction does \(-3.95\) J each way, \(-7.90\) J in all. Hibbeler §14.5.</p>
 </div>
 <p>In the Paths lab, drag the arch higher. The conservative work stays at −3.74 J. The friction work grows with the length of the path.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>

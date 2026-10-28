@@ -61,11 +61,14 @@
 <p>A 50 kg steel disk of radius 0.3 m spins at 3000 rpm, which is 314 rad/s, about a fixed axis. Its centre does not move. \(I = 2.25\ \mathrm{kg\cdot m^2}\), and \(T = \tfrac12(2.25)(314^2) = 111\) kJ, all of it rotational.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Reporting only \(\tfrac{1}{2}I_G\omega^2\) drops the translation of the mass centre. Both terms belong in \(T\). Hibbeler §18.1.</p>
+<p>Reporting only \(\tfrac{1}{2}I_G\omega^2\). The rolling disk holds 4.5 J in spin and 9 J in translation. The spin alone misses two thirds of its 13.5 J. Both terms belong in \(T\). Hibbeler §18.1.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Writing \(\omega = v\) for a rolling wheel. Rolling sets \(\omega = v/R\). For the car's wheel, \(\omega = 20\) in place of 66.7 rad/s gives 135 J of spin instead of 1500 J. The units warn: \(v\) is in m/s, \(\omega\) in rad/s.</p>
 </div>
 <p>In the Race lab, the readout splits each body's energy into translation and spin at the finish line.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Energy uses the speed of the mass centre and the spin about that centre. It does not give a friction force or a pin force. Those still need the force and moment equations of Unit 6. The bodies are rigid, so no energy goes into flexing or vibrating.</p>
+<p>The bodies are rigid, so no energy goes into flexing or vibrating.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/37-1-kinetic-energy-of-translation-and-rotation/" target="_blank" rel="noopener">37.1 Kinetic Energy of Translation and Rotation</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/29-1-kinetic-energy-of-rotation/" target="_blank" rel="noopener">29.1 Kinetic Energy of Rotation</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/finding-equations-of-motion-for-rigid-body-rotation/" target="_blank" rel="noopener">Lecture 8, Finding Equations of Motion for Rigid Body Rotation</a>.</p>
 </section>
@@ -74,10 +77,10 @@
 <p>A couple does work through the angle it turns. The angle is in radians.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>A couple is two equal, opposite forces \(F\) a distance \(r\) apart. Turn the body by \(d\theta\) about a point midway. Each force's point of application moves \((r/2)\,d\theta\) along its own line, so each does \(F(r/2)\,d\theta\). The pair does \(Fr\,d\theta = M\,d\theta\). The same holds about any point.</p>
-<p>For a torsional spring, \(M = -\kappa(\theta-\theta_0)\). Its work is the drop in \(\tfrac{1}{2}\kappa(\theta-\theta_0)^2\), just as a linear spring's work is the drop in \(\tfrac12 ks^2\).</p>
+<p>For a torsional spring, \(M = -\kappa(\theta-\theta_0)\). Its work is the drop in \(\tfrac{1}{2}\kappa(\theta-\theta_0)^2\), as a linear spring's work is the drop in \(\tfrac12 ks^2\).</p>
 </div>
 \[ U = \int_{\theta_1}^{\theta_2} M\,d\theta \]
-<p>A torsional spring has \(M = -\kappa(\theta - \theta_0)\). Between two angles its work equals the drop in \(\tfrac{1}{2}\kappa(\theta-\theta_0)^2\). The rate of work of a couple is its power: \(P = M\omega\).</p>
+<p>The rate of work of a couple is its power: \(P = M\omega\).</p>
 <div class="box ex"><span class="tag">Worked example · a bar released from horizontal</span>
 <p>A 4 kg bar, 2 m long, is pinned at one end and released from rest while horizontal. At the bottom, \(\omega = 3.84\) rad/s and \(v_G = 3.84\) m/s. They match because the centre is 1 m from the pin. The kinetic energy is \(mgL/2\), which reads 39.2 J.</p>
 <p>About the pin, \(T = \tfrac12(mL^2/3)\omega^2\). Setting it equal to \(mgL/2\) gives \(\omega^2 = 3g/L\). Unit 6 used this \(\omega\) to find the pin force at the bottom.</p>
@@ -94,11 +97,11 @@
 <p>A steady 50 lb·ft torque turns a shaft through 3 revolutions. The angle is \(3 \times 2\pi = 18.85\) rad, so the work is \(50 \times 18.85 = 942\) ft·lb. Revolutions must become radians before multiplying.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>The work of a couple is \(\int M\,d\theta\). A force times an arc length is a different job, and it misses this moment. Hibbeler §18.3.</p>
+<p>Taking a torsional spring's work as \(\kappa\theta\), the final moment times the angle. The moment grows from zero as the spring twists, so the work is a triangle's area, \(\tfrac12\kappa\theta^2\). For the bar, \(15(\pi/2) = 23.6\) J is too large; the spring does 18.5 J. Hibbeler §18.3.</p>
 </div>
 <p>In the Linkage lab, the bar scenario sets \(\kappa = 0\), and the couple scenario adds the spring. The readout lists each work term.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>The angle in a couple is in radians. The model leaves out a spring that hits a stop, and a moment that depends on the speed, such as a motor whose torque falls as it speeds up. Bearing friction would add a small negative couple to every swing.</p>
+<p>The model leaves out a spring that hits a stop, and a moment that depends on the speed, such as a motor whose torque falls as it speeds up. Bearing friction would add a small negative couple to every swing.</p>
 </div>
 <p class="bridge">Part I found the energy of a body and the work done on it. Part II applies the principle to rolling bodies and linkages.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/31-7-worked-example-two-blocks-and-a-pulley-using-energy/" target="_blank" rel="noopener">31.7 Worked Example - Two Blocks and a Pulley Using Energy</a>.</p>
@@ -131,7 +134,7 @@
 <p>Race a frictionless block down the same 2 m at 30°. It has no spin to feed, so \(k = 0\), and it arrives at \(\sqrt{2(9.81)(1)} = 4.43\) m/s. The sphere arrives at 3.74 m/s. Every rolling body loses this race to a sliding one, because rolling stores energy in spin.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Putting \(k_G\) in the denominator counts the radius of gyration once. The factor is \(k_G^2/R^2\). Mass cancels, so only \(k\) orders the race. Hibbeler §18.5.</p>
+<p>Dropping the square in \(k\). For the sphere, \(k_G/R = 0.632\), but \(k = k_G^2/R^2 = 0.4\). With the square lost, the sphere finishes at 3.47 m/s instead of 3.74 m/s. Mass cancels, so only \(k\) orders the race. Hibbeler §18.5.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Hoop \(k = 1\), disk \(k = 1/2\), solid sphere \(k = 2/5\). The sphere finishes first.</p>
