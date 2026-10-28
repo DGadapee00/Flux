@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 2 · Hibbeler Ch 13</p>
   <h1>Force and acceleration</h1>
-  <p class="lede">Newton's second law for a particle, in rectangular axes and in n–t. Each special formula below is derived from \(\sum \vec F = m\vec a\) and a free-body diagram, then checked on a worked case. The numbers are recomputed. Cylindrical coordinates and central-force motion stay out.</p>
+  <p class="lede">Newton's second law for a particle, in rectangular axes and in n–t. Each special formula below is derived from \(\sum \vec F = m\vec a\) and a free-body diagram, then checked on a worked case. The numbers are recomputed. Central-force motion stays out.</p>
   <div class="legend">
     <span><i style="background:var(--field)"></i>Worked example</span>
     <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
@@ -21,14 +21,17 @@
     <a href="#s1"><span>01</span>Equations of motion</a>
     <a href="#s2"><span>02</span>Friction on an incline</a>
     <a href="#s3"><span>03</span>Connected bodies</a>
+    <a href="#s4"><span>04</span>Pulley constraints</a>
+    <a href="#s5"><span>05</span>Drag</a>
     <h3>Part II · Curves and springs</h3>
-    <a href="#s4"><span>04</span>Banked curve</a>
-    <a href="#s5"><span>05</span>Vertical loop</a>
-    <a href="#s6"><span>06</span>Spring on a collar</a>
+    <a href="#s6"><span>06</span>Banked curve</a>
+    <a href="#s7"><span>07</span>Vertical loop</a>
+    <a href="#s8"><span>08</span>Polar equations of motion</a>
+    <a href="#s9"><span>09</span>Spring on a collar</a>
     <h3>Part III · An application</h3>
-    <a href="#s7"><span>07</span>Application: leaving the pad</a>
+    <a href="#s10"><span>10</span>Application: leaving the pad</a>
     <h3>Reference</h3>
-    <a href="#s8"><span>08</span>Formula sheet</a>
+    <a href="#s11"><span>11</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -135,16 +138,102 @@ a = \frac{Mg - mg\sin\theta - \mu_k mg\cos\theta}{m + M}.
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The string is light, so one tension serves both bodies. A heavy rope would make the tension vary along its length. The pulley is frictionless and massless, and the block does not tip.</p>
 </div>
-<p class="bridge">Part II adds two things the straight-path problems lacked: a path that bends, and a force that depends on position.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/7-3-solving-pulley-systems/" target="_blank" rel="noopener">7.3 Solving Pulley Systems</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-4-drag-forces-constraints-and-continuous-systems/12-5-worked-example-2-blocks-and-2-pulleys/" target="_blank" rel="noopener">12.5 Worked Example - 2 Blocks and 2 Pulleys</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/free-body-diagrams-and-fictitious-forces/" target="_blank" rel="noopener">Lecture 4, Free Body Diagrams and Fictitious Forces</a>.</p>
+</section>
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Pulley constraints</h2>
+<p>When one rope runs through several pulleys, the bodies on it do not move at the same speed. The rope's length is fixed. That one fact ties their positions, then their speeds, then their accelerations.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Measure the block A on the table by \(s_A\), toward the pulley, and the load B by its depth \(s_B\). If B hangs from \(n\) segments of the rope, lowering B by \(ds_B\) lengthens each segment by \(ds_B\). The rope's free end must give up \(n\,ds_B\), so A moves \(n\,ds_B\) toward the pulley.</p>
+<p>The length is \(-s_A + n s_B + \text{constant} = L\). Differentiate it once and twice: \(v_A = n v_B\) and \(a_A = n a_B\).</p>
+<p>One light rope over light, smooth pulleys carries one tension \(T\). On the block, \(T - f = m_A a_A\). The load hangs from \(n\) segments, so \(m_B g - nT = m_B a_B\). Put \(a_A = n a_B\) into the first and eliminate \(T\).</p>
+</div>
+\[
+a_B = \frac{m_B g - n f}{m_B + n^2 m_A}, \qquad T = m_A\,n\,a_B + f.
+\]
+<p>The block counts \(n^2\) times its mass. It moves \(n\) times as far as the load, and its resistance reaches the load multiplied by \(n\). A block and tackle trades speed for force in exactly that ratio.</p>
+<div class="box ex"><span class="tag">Worked example · a table-top Atwood</span>
+<p>A 4 kg block on a smooth table is tied to a 2 kg load hanging on one segment. Then \(a_B = 2(9.81)/6 = 3.27\) m/s², the same for both bodies, and \(T = 4(3.27) = 13.1\) N, less than the load's 19.6 N weight.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a movable pulley</span>
+<p>Hang the same 2 kg load from a movable pulley, so two segments hold it. Now the load sees \(2 + 4(4) = 18\) kg, and \(a_B = 19.62/18 = 1.09\) m/s². The block moves at twice that, 2.18 m/s².</p>
+<p>The tension falls to \(4(2.18) = 8.72\) N. The load feels \(2T = 17.4\) N up against its 19.6 N weight. Two segments double what one tension does to the load. They do not double the tension.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · with friction</span>
+<p>A 4 kg block on a rough table, \(\mu_k = 0.2\), drags a 6 kg load on two segments. Friction is \(0.2(4)(9.81) = 7.85\) N. Then \(a_B = (58.86 - 2(7.85))/(6 + 16) = 1.96\) m/s², and \(T = 4(3.92) + 7.85 = 23.5\) N.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the same drop by energy</span>
+<p>Let that load drop 0.5 m from rest. The weight does \(58.86(0.5) = 29.4\) J. Friction takes \(7.85\) N over the block's \(2(0.5) = 1\) m, 7.85 J. The block moves twice as fast as the load, so the kinetic energy is \(\tfrac12(6 + 4\cdot 2^2)v_B^2\).</p>
+<p>Then \(11 v_B^2 = 21.6\), and \(v_B = 1.40\) m/s. The kinematics agree: \(\sqrt{2(1.96)(0.5)} = 1.40\) m/s, after 0.714 s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a load the block can hold</span>
+<p>A 10 kg block on a table with \(\mu_s = 0.3\) holds a 6 kg load. With one segment the rope must carry the full 58.9 N, more than the 29.4 N static friction can give, and the load falls at 2.15 m/s². Reeve it on three segments. Holding needs only \(58.86/3 = 19.6\) N, and friction holds it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · speeds only</span>
+<p>The block is pulled toward the pulley at 2 m/s and speeds up at 1 m/s². The load hangs on two segments, so it sinks at \(2/2 = 1\) m/s and speeds up at 0.5 m/s². The constraint alone gives that. No force was needed.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting a movable pulley to double the tension. In the second example the tension falls from 13.1 N to 8.72 N. What doubles is the pull of that one tension on the load, \(2T\). Hibbeler §12.9.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Writing the effective mass as \(m_B + n\,m_A\). The block enters twice: its acceleration is \(n\) times larger, and its force reaches the load \(n\) times larger. For the movable pulley that slip gives 1.96 m/s² instead of 1.09 m/s². Hibbeler §13.4.</p>
+</div>
+<p>In the Pulleys lab, change \(n\) and play the motion. The block's velocity arrow stays \(n\) times the load's, and the readout checks \(v_B\) against work and energy at every instant.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The rope is light and does not stretch, and the pulleys are light and frictionless. A pulley with mass needs its own \(\Sigma M = I\alpha\) (Unit 6), and the tension then differs on its two sides. Real tackle also loses a few percent at each sheave to bearing friction.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-4-drag-forces-constraints-and-continuous-systems/12-2-pulley-problem-part-ii-constraint-condition/" target="_blank" rel="noopener">12.2 Pulley Problem - Part II, Constraint Condition</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-4-drag-forces-constraints-and-continuous-systems/12-5-worked-example-2-blocks-and-2-pulleys/" target="_blank" rel="noopener">12.5 Worked Example - 2 Blocks and 2 Pulleys</a>.</p>
+</section>
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Drag</h2>
+<p>A body moving through air feels a force against its velocity that grows with speed. For a person, a ball or a car it grows as the square of the speed: \(F = \tfrac12\rho C A v^2 = kv^2\), with \(\rho\) the air's density, \(A\) the frontal area and \(C\) a drag coefficient. Sea-level air is 1.225 kg/m³. The weight does not grow, so a falling body levels off at the speed where drag matches it.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Down positive: \(m\,dv/dt = mg - kv^2\). The acceleration vanishes at the terminal speed, \(kv_t^2 = mg\), so \(v_t = \sqrt{mg/k}\).</p>
+<p>Write the law as \(dv/dt = g(1 - v^2/v_t^2)\) and separate: \(dv/(1 - v^2/v_t^2) = g\,dt\). The left side integrates to \(v_t \tanh^{-1}(v/v_t)\). From rest, \(v = v_t\tanh(gt/v_t)\). Integrate once more for the distance: \(y = (v_t^2/g)\ln\cosh(gt/v_t)\).</p>
+<p>Early on, \(\tanh x \approx x\), so \(v \approx gt\): every body starts at \(g\). Late, \(\tanh x \to 1\). The speed reaches 90% of \(v_t\) at \(gt/v_t = \tanh^{-1}0.9 = 1.47\).</p>
+</div>
+\[
+v_t = \sqrt{\frac{mg}{k}}, \qquad v = v_t\tanh\frac{gt}{v_t}, \qquad k = \tfrac12\rho C A.
+\]
+<p>The mass sits under the root. Four times the mass with the same shape doubles \(v_t\). That is why a heavy body of the same size falls faster, and why it falls with a light one for the first moments.</p>
+<div class="box ex"><span class="tag">Worked example · one coffee filter</span>
+<p>A 1.0 g coffee filter has a drag area \(C\!\cdot\!A = 0.0132\) m², so \(k = 0.5(1.225)(0.0132) = 0.00809\) kg/m. Then \(v_t = \sqrt{0.00981/0.00809} = 1.10\) m/s. It reaches 95% of that in \((1.10/9.81)\tanh^{-1}0.95 = 0.206\) s, after falling only 0.144 m.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · four filters nested</span>
+<p>Nest four filters: four times the mass, the same shape. Then \(v_t = \sqrt{4} \times 1.10 = 2.20\) m/s. Dropped together from 2 m, the stack lands first, although for the first few centimetres the two fall side by side.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a skydiver</span>
+<p>An 80 kg skydiver falls belly down with \(C\!\cdot\!A = 0.5\) m², so \(k = 0.306\) kg/m and \(v_t = \sqrt{784.8/0.306} = 50.6\) m/s, about 182 km/h. Five seconds after the jump the speed is \(50.6\tanh(0.969) = 37.9\) m/s and the acceleration \(9.81(1 - 0.560) = 4.32\) m/s². The diver reaches 90% of \(v_t\) after 7.60 s and 217 m.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a baseball</span>
+<p>A 145 g baseball has \(C\!\cdot\!A \approx 0.0015\) m², so \(v_t = 39.3\) m/s. One second after release it moves at 9.61 m/s against 9.81 m/s with no air: drag has hardly started. A steel ball of the same size, eight times as heavy, has \(v_t = 111\) m/s and 9.78 m/s at one second.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · thrown up</span>
+<p>Throw the baseball straight up at 30 m/s. On the way up drag and weight both point down: \(mv\,dv/dy = -(mg + kv^2)\). Separate and integrate from 30 m/s to rest: \(h = (m/2k)\ln(1 + kv_0^2/mg) = 78.9\ln 1.581 = 36.2\) m, against 45.9 m with no air.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · slow and small</span>
+<p>A small bead settling in syrup feels drag that grows as \(v\), not \(v^2\): \(F = bv\). Then \(m\,dv/dt = mg - bv\), \(v_t = mg/b\), and from rest \(v = v_t(1 - e^{-t/\tau})\) with \(\tau = m/b\). A 2 g bead with \(b = 0.04\) kg/s has \(\tau = 0.05\) s and \(v_t = 0.49\) m/s. It reaches 63% of \(v_t\) in one \(\tau\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Dropping the \(\tfrac12\) in \(\tfrac12\rho C A\). For the skydiver that gives \(v_t = 35.8\) m/s instead of 50.6 m/s. The \(\tfrac12\) is part of the definition of \(C\), not a choice. Hibbeler §13.4.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the acceleration as \(g\) all the way down. With drag it falls as the speed grows: 4.32 m/s² for the skydiver after five seconds, and zero at \(v_t\). Hibbeler §13.4.</p>
+</div>
+<p>In the Drag lab, nest more filters and watch \(v_t\) grow as the root of the mass. The faint outline falls with no air. Play the skydiver and compare the curve with the dashed line \(v = gt\).</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>\(C\) is held constant. Real drag coefficients change with speed (the Reynolds number), and a spinning ball also feels lift. Air thins with height, so a skydiver's \(v_t\) is higher at altitude. Buoyancy, the weight of displaced air, is ignored. For a coffee filter it is under 0.2% of the weight.</p>
+</div>
+<p class="bridge">Part II adds two things the straight-path problems lacked: a path that bends, and a force that depends on position.</p>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-4-drag-forces-constraints-and-continuous-systems/14-1-intro-to-resistive-forces/" target="_blank" rel="noopener">14.1 Intro to Resistive Forces</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-4-drag-forces-constraints-and-continuous-systems/14-2-resistive-forces-low-speed-case/" target="_blank" rel="noopener">14.2 Resistive Forces - Low Speed Case</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-4-drag-forces-constraints-and-continuous-systems/14-3-resistive-forces-high-speed-case/" target="_blank" rel="noopener">14.3 Resistive Forces - High Speed Case</a>.</p>
 </section>
 <div class="part">
   <div class="eyebrow">Part II</div>
   <h2>Curves and springs</h2>
 </div>
 
-<section class="topic" id="s4">
-<h2><span class="n">04</span>Banked curve</h2>
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Banked curve</h2>
 <p>The path is a horizontal circle, so \(a_n = v^2/\rho\) points toward the centre and \(a_t = 0\) at constant speed. Resolve the normal force and the friction along the bank, then check the same forces horizontally and vertically.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>With no friction the two equations are \(N\sin\theta = mv^2/\rho\) and \(N\cos\theta = mg\). Divide them. The mass cancels, and \(\tan\theta = v^2/(\rho g)\).</p>
@@ -177,8 +266,8 @@ v_{\max}^2 = \rho g\,\frac{\sin\theta + \mu\cos\theta}{\cos\theta - \mu\sin\thet
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/11-2-worked-example-car-on-a-banked-turn/" target="_blank" rel="noopener">11.2 Worked Example - Car on a Banked Turn</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/11-1-newtons-2nd-law-and-circular-motion/" target="_blank" rel="noopener">11.1 Newton's 2nd Law and Circular Motion</a>.</p>
 </section>
-<section class="topic" id="s5">
-<h2><span class="n">05</span>Vertical loop</h2>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Vertical loop</h2>
 <p>Measure \(\phi\) from the bottom. The height above the bottom is \(\rho(1-\cos\phi)\). Energy gives the speed. The normal force, positive toward the centre, is \(N = m(v^2/\rho + g\cos\phi)\).</p>
 <div class="box why"><span class="tag">Why</span>
 <p>The height above the bottom is \(\rho(1-\cos\phi)\). A smooth track does no work, so energy turns that height into lost speed: \(v^2 = v_b^2 - 2g\rho(1 - \cos\phi)\). Toward the centre, the track pushes with \(N\), and the weight contributes \(-mg\cos\phi\): at the bottom it points away from the centre, at the top toward it. So \(N - mg\cos\phi = mv^2/\rho\), which rearranges to the formula above.</p>
@@ -208,8 +297,37 @@ v_{\max}^2 = \rho g\,\frac{\sin\theta + \mu\cos\theta}{\cos\theta - \mu\sin\thet
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/11-1-newtons-2nd-law-and-circular-motion/" target="_blank" rel="noopener">11.1 Newton's 2nd Law and Circular Motion</a>.</p>
 </section>
-<section class="topic" id="s6">
-<h2><span class="n">06</span>Spring on a collar</h2>
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Polar equations of motion</h2>
+<p>Unit 1 found the polar components of the acceleration. Newton's law holds along each of them: the forces along the radial line give \(m a_r\), and the forces across it give \(m a_\theta\). A collar on a turning arm is the standard case: a cord through the pivot pulls along the arm, and the arm pushes across it.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>\(\Sigma\vec F = m\vec a\) is one vector equation. Resolve both sides along \(\hat u_r\) and \(\hat u_\theta\). Unit 1, section 6, gave \(a_r = \ddot r - r\dot\theta^2\) and \(a_\theta = r\ddot\theta + 2\dot r\dot\theta\).</p>
+</div>
+\[
+\Sigma F_r = m(\ddot r - r\dot\theta^2), \qquad \Sigma F_\theta = m(r\ddot\theta + 2\dot r\dot\theta).
+\]
+<p>On a smooth arm in a horizontal plane the cord is the only radial force, pulling in, and the arm's push \(N\) the only transverse one. So \(-T = m(\ddot r - r\dot\theta^2)\) and \(N = m(r\ddot\theta + 2\dot r\dot\theta)\).</p>
+<div class="box ex"><span class="tag">Worked example · a cord drawing a collar in</span>
+<p>An arm turns at a steady 4 rad/s. A cord draws a 1 kg collar in at a steady 1 m/s. At 0.5 m from the pivot, \(\ddot r = 0\), so \(T = mr\dot\theta^2 = 1(0.5)(16) = 8\) N.</p>
+<p>Across the arm, \(N = m(2\dot r\dot\theta) = 1(2)(-1)(4) = -8\) N. The arm pushes against the turn: the collar arrives with more sideways speed than the arm has at its new radius, and the arm holds it back.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · letting out on a speeding arm</span>
+<p>A 2 kg collar 0.8 m out is let slide at a steady 0.5 m/s while the arm turns at 3 rad/s and speeds up at 2 rad/s². Then \(T = 2(0.8)(9) = 14.4\) N, and \(N = 2[0.8(2) + 2(0.5)(3)] = 9.2\) N, ahead.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a free bead</span>
+<p>Take the cord away. Nothing pulls along the smooth arm, so \(\ddot r - r\dot\theta^2 = 0\). A bead 0.3 m out on an arm turning at 5 rad/s accelerates outward along it at \(\ddot r = 0.3(25) = 7.5\) m/s², although its radial acceleration in space is zero.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Setting the cord's pull to \(m\ddot r\). A cord moving at a steady speed has \(\ddot r = 0\), yet in the first example it carries 8 N: the radial acceleration is \(\ddot r - r\dot\theta^2\). Hibbeler §13.6.</p>
+</div>
+<p>In the Polar lab, set the arm to the first example: \(r_0 = 0.5\) m, \(\dot r = -1\) m/s, \(\dot\theta = 4\) rad/s. The purple parts of \(\vec a\) are \(-8\) m/s² along the arm and \(-8\) m/s² across it, which is \(T\) and \(N\) divided by the mass.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The arm is smooth and horizontal. Friction on the arm would add a radial force proportional to \(N\), and a vertical arm would add a component of the weight to each equation.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>, <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/free-body-diagrams-and-fictitious-forces/" target="_blank" rel="noopener">Lecture 4, Free Body Diagrams and Fictitious Forces</a>.</p>
+</section>
+<section class="topic" id="s9">
+<h2><span class="n">09</span>Spring on a collar</h2>
 <p>A collar on a smooth rod has one axis, along the rod. The spring force is \(kx\), from the unstretched point. The rod's force is the part of the weight perpendicular to the rod. It does no work, and it does not enter \(\sum F = ma\) along the rod.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Along the rod the forces are \(mg\sin\theta\) downhill and \(kx\) toward the unstretched point. Their difference is \(ma\). Perpendicular to the rod nothing accelerates, so the rod cancels \(mg\cos\theta\). That component is the rod force.</p>
@@ -240,8 +358,8 @@ a = g\sin\theta - \frac{k}{m}\,x, \qquad N_{\text{rod}} = mg\cos\theta.
   <h2>An application</h2>
 </div>
 
-<section class="topic" id="s7">
-<h2><span class="n">07</span>Application: leaving the pad</h2>
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Application: leaving the pad</h2>
 <p>A rocket on its pad is a particle with three forces: thrust up, weight down, and the pad or its clamps. Section 1's equation of motion is all it takes to say whether it lifts, and how hard it accelerates once it does.</p>
 <p>The ratio that matters is thrust to weight, \(T/W = T/(mg)\). Above 1 the rocket can leave. At or below 1 the pad holds it. The net acceleration is</p>
 \[
@@ -283,8 +401,8 @@ v_{bo} = \frac{T}{\dot m}\ln\frac{m_0}{m_{bo}} - g\,t_b.
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-6-continuous-mass-transfer/19-5-rocket-problem-5-thrust-and-external-forces/" target="_blank" rel="noopener">19.5 Rocket Problem 5 - Thrust and External Forces</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/4-1-newtons-first-and-second-laws/" target="_blank" rel="noopener">4.1 Newton's First and Second Laws</a>.</p>
 </section>
-<section class="topic" id="s8">
-<h2><span class="n">08</span>Formula sheet</h2>
+<section class="topic" id="s11">
+<h2><span class="n">11</span>Formula sheet</h2>
 <ul>
 <li>\(\sum \vec F = m\vec a\). Draw the free-body before writing a component.</li>
 <li>Atwood: \(a = (m_2-m_1)g/(m_1+m_2)\), \(T = 2 m_1 m_2 g/(m_1+m_2)\).</li>
@@ -295,10 +413,13 @@ v_{bo} = \frac{T}{\dot m}\ln\frac{m_0}{m_{bo}} - g\,t_b.
 <li>Flat curve: \(v_{\max} = \sqrt{\mu\rho g}\).</li>
 <li>Loop, \(\phi\) from the bottom: \(v^2 = v_b^2 - 2g\rho(1-\cos\phi)\), \(N = m(v^2/\rho + g\cos\phi)\). Full loop: \(v_b^2 \ge 5g\rho\).</li>
 <li>Collar: \(a = g\sin\theta - (k/m)x\) along the rod. Rest point \(x = mg\sin\theta/k\).</li>
+<li>Pulley constraint: \(-s_A + n s_B = L\), so \(v_A = n v_B\). Load on \(n\) segments: \(a_B = (m_B g - nf)/(m_B + n^2 m_A)\).</li>
+<li>Drag \(kv^2\), \(k = \tfrac12\rho C A\): \(v_t = \sqrt{mg/k}\), \(v = v_t\tanh(gt/v_t)\). Drag \(bv\): \(v_t = mg/b\), \(\tau = m/b\).</li>
+<li>Polar: \(\Sigma F_r = m(\ddot r - r\dot\theta^2)\), \(\Sigma F_\theta = m(r\ddot\theta + 2\dot r\dot\theta)\).</li>
 <li>Rocket on the pad: clamp force \(T - mg\). Lift-off \(a = g(T/W - 1)\). Burnout speed \(v_{bo} = (T/\dot m)\ln(m_0/m_{bo}) - g\,t_b\).</li>
 </ul>
-<p>Left out, because the pack does not name them: cylindrical coordinates (§13.6) and central-force motion (§13.7). The same list as Unit 1 still stands for the later chapters.</p>
-<p>Each line above is the model for this unit. A heavy pulley, drag, and a stretch that is not along the rod are left out.</p>
+<p>Left out of this course: central-force motion (§13.7). Polar coordinates (§13.6), dependent motion (§12.9) and drag are taught above.</p>
+<p>Each line above is the model for this unit. A heavy pulley and a stretch that is not along the rod are left out.</p>
 </section>
 </main>
 <footer>Written for Flux from Hibbeler, Engineering Mechanics: Dynamics, Chapter 13, cited by section, with MIT OCW 8.01SC and 2.003SC as Another view. Every worked answer was recomputed.</footer>

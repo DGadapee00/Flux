@@ -96,4 +96,58 @@ export default {
       N: [[($) => $.m * G, 'That is the weight. The rod carries only the part across it, mg cos θ.']],
     },
   },
+  'u2.13.constraint': {
+    traps: {
+      v: [
+        [($) => ($.given === 'A' ? $.v * $.n : $.v / $.n), 'The ratio is upside down. The load hangs on n segments, so it moves 1/n as far as the rope’s free end: v_A = n v_B.'],
+        [($) => $.v, 'One rope does not mean one speed. Each of the n segments must shorten for the load to rise, so the speeds differ by n.'],
+      ],
+      a: [
+        [($) => ($.given === 'A' ? $.a * $.n : $.a / $.n), 'The ratio is upside down: a_A = n a_B, as for the speeds.'],
+        [($) => $.a, 'The accelerations differ by the same factor n as the speeds.'],
+      ],
+    },
+  },
+  'u2.13.tackle': {
+    traps: {
+      aB: [
+        [($) => ($.mB * G - $.mu * $.mA * G) / ($.mA + $.mB), 'That treats the system as a one-segment Atwood. With n segments the block moves n times as far: the load sees m_B + n² m_A.'],
+        [($) => ($.mB * G - $.n * $.mu * $.mA * G) / ($.mB + $.n * $.mA), 'The block enters as n² m_A, not n m_A: it moves n times as fast, and its resisting force reaches the load multiplied by n.'],
+      ],
+      T: [
+        [($) => ($.mB * G) / $.n, 'That is the tension that would hold the load still. While the load falls the rope carries less.'],
+        [($) => $.mB * G, 'That is the load’s weight. n segments share it, and the load is accelerating, so the rope carries far less.'],
+      ],
+    },
+  },
+  'u2.13.terminal': {
+    traps: {
+      q: [
+        [($) => ($.find === 'CA' ? ($.m * G) / (1.225 * $.vtGiven ** 2) : Math.sqrt(($.m * G) / (1.225 * $.CA))), 'The drag is ½ρC A v². That answer drops the ½.'],
+        [($) => ($.find === 'CA' ? ($.m * G) / (0.5 * 1.225 * $.vtGiven) : ($.m * G) / (0.5 * 1.225 * $.CA)), 'That uses a drag that grows as v, not v². Air drag on a person goes as v², so v_t = √(mg/k).'],
+      ],
+      t90: [
+        [($) => {
+          const vt = $.find === 'CA' ? $.vtGiven : Math.sqrt(($.m * G) / (0.5 * 1.225 * $.CA));
+          return (0.9 * vt) / G;
+        }, 'That is the time with no drag, v = gt. Drag slows the climb, so it takes longer.'],
+        [($) => {
+          const vt = $.find === 'CA' ? $.vtGiven : Math.sqrt(($.m * G) / (0.5 * 1.225 * $.CA));
+          return (vt / G) * Math.log(10);
+        }, 'That uses the linear-drag form, v = v_t(1 − e^(−t/τ)). With drag ∝ v² the speed follows v_t tanh(gt/v_t).'],
+      ],
+    },
+  },
+  'u2.13.polar-eom': {
+    traps: {
+      T: [
+        [() => 0, 'The cord’s speed is steady, so r̈ = 0, but the radial acceleration is not: a_r = r̈ − rθ̇².'],
+        [($) => $.m * $.r * $.w, 'Square the turning rate: the inward acceleration is rθ̇², not rθ̇.'],
+      ],
+      N: [
+        [($) => $.m * ($.r * ($.arm === 'speeding' ? $.alpha : 0) + ($.cord === 'in' ? -$.u : $.u) * $.w), 'The cross term is 2ṙθ̇, not ṙθ̇: it arrives twice when you differentiate.'],
+        [($) => $.m * $.r * ($.arm === 'speeding' ? $.alpha : 0), 'That leaves out 2ṙθ̇. A collar sliding along a turning arm needs a sideways push even when the arm turns steadily.'],
+      ],
+    },
+  },
 };

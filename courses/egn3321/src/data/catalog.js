@@ -22,7 +22,7 @@ export const EXAMS = [
     title: 'Force and acceleration',
     chapters: '13',
     date: 'Ch 13',
-    labs: ['fma', 'curve', 'liftoff'],
+    labs: ['fma', 'pulleys', 'drag', 'curve', 'liftoff'],
     coming: [],
   },
   {
@@ -79,6 +79,8 @@ export const LAB_META = {
   relative: { id: 'relative', exam: 'u1', title: 'Relative' },
   train: { id: 'train', exam: 'u1', title: 'Train', app: true },
   fma: { id: 'fma', exam: 'u2', title: 'F = ma' },
+  pulleys: { id: 'pulleys', exam: 'u2', title: 'Pulleys' },
+  drag: { id: 'drag', exam: 'u2', title: 'Drag' },
   curve: { id: 'curve', exam: 'u2', title: 'Curve' },
   collar: { id: 'collar', exam: 'u3', title: 'Collar' },
   paths: { id: 'paths', exam: 'u3', title: 'Paths' },
