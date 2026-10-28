@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Axial load</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 3 · Ch 4</p>
+  <h1>Axial load</h1>
+  <p class="lede">A bar pulled along its axis gets longer by the sum of \(NL/AE\). When both ends are held, statics is one equation short, and a temperature change produces stress even though the length does not change. Every number below is computed by the course library and checked a second way.</p>
+  <div class="legend">
+    <span><i class="swatch" style="background: var(--teal)"></i>Displacement, and the right-wall reaction</span>
+    <span><i class="swatch" style="background: var(--gold)"></i>The step, and the left-wall reaction</span>
+    <span><i class="swatch" style="background: var(--yellow)"></i>The point you are on</span>
+    <span><i class="swatch" style="background: var(--pink)"></i>The axial load</span>
+  </div>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>Elongation of a uniform bar</a>
+    <a href="#s2"><span>02</span>Steps and tapers</a>
+    <a href="#s3"><span>03</span>A bar between two walls</a>
+    <a href="#s4"><span>04</span>Thermal stress</a>
+    <a href="#s5"><span>05</span>A joint that must close</a>
+    <a href="#s6"><span>06</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+<h3>Part 1 · How far the end moves <span class="sub">| uniform | step | taper | Reference</span></h3>
+
+<section class="topic" id="s1">
+<h2><span class="n">01</span>Elongation of a uniform bar</h2>
+<p>On a uniform bar the internal force \(N\) is the same at every cross-section, and so is the area. The strain is \(N/AE\). Multiply by the length and the end has moved:</p>
+\[
+\delta = \frac{NL}{AE}
+\]
+<p>Roylance §1.1 introduces this as the elastic elongation. Double the force or the length and the elongation doubles. Double the area or the modulus and it halves. The stress \(N/A\) does not contain \(L\) or \(E\).</p>
+<div class="box why"><span class="tag">Where the sum comes from</span>
+<p>Slice the bar into short pieces of length \(dx\). Each piece sees the internal force at that station and stretches by \(N\,dx/AE\). Add the pieces:</p>
+\[
+\delta = \int_0^L \frac{N(x)}{A(x)\,E}\,dx
+\]
+<p>When \(N\), \(A\) and \(E\) are constant the integral is the fraction above. When they jump, split the integral at the jump and add the pieces. That is the whole of this unit's deformation work.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a uniform bar at 20 kN</span>
+<p>The Axial bar lab's uniform case is a steel bar with \(E = 200\) GPa, area 200 mm² and a tension of 20 kN. The first segment is 0.8 m and the second is 0.6 m, with the same area and no load at the join, so the bar is 1.4 m of one cross-section. The stress is 100 MPa. With \(P\) in kN, \(L\) in m, \(A\) in mm² and \(E\) in GPa, \(PL/(AE)\) equals 0.000700 m, which is</p>
+\[
+\delta = 0.700\ \mathrm{mm}
+\]
+<p>The lab's end dot sits on that displacement.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one truss member</span>
+<p>The same fraction is the change of length of a truss member, once the method of joints has given the force. A member carrying 30 kN in tension, 2 m long, with area 200 mm² and \(E = 200\) GPa, lengthens by \(PL/AE\):</p>
+\[
+\delta = 1.50\ \mathrm{mm}
+\]
+<p>A joint moves by whatever displacement makes every member's \(NL/AE\) fit together. Unit 1 found the forces. This unit supplies the change of length. The fitting of the joints is the truss deformation in 2.001 lecture 9. This unit's lab draws one bar, which is the member.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Feet, inches, millimetres and metres do not mix inside \(NL/AE\). Leaving a length in millimetres while \(A\) is in square metres multiplies the elongation by 1000. Reporting the stress, in MPa, as if it were the elongation forgets the factor \(L/E\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The bar is straight, the load is along the axis, and the material is still on the elastic line. A load off the axis adds bending. Past yield the modulus in this fraction is no longer \(E\). A truss joint is taken as a pin, so a member carries force and no moment.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec9/">2.001 lecture 9</a> puts \(NL/AE\) on each member of a truss and finds how the joints move.</p>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Steps and tapers</h2>
+<p>A step in the load, or in the area, is a corner in the integral. Cut the bar there. On each side \(N\) and \(A\) are constant, so each side contributes its own \(NL/AE\). The end displacement is the sum. The internal-force diagram, not the external load alone, is what enters \(N\).</p>
+<div class="box why"><span class="tag">A taper is not the average area</span>
+<p>A circular bar whose diameter runs linearly from \(d_0\) to \(d_1\) has a constant force and a changing area. Put \(A = \pi d(x)^{2}/4\) into the integral. The result is</p>
+\[
+\delta = \frac{4PL}{\pi E d_0 d_1}
+\]
+<p>The product \(d_0 d_1\) is not the square of the average diameter, and it is not the average of the two end areas. Those two shortcuts both miss, because \(1/d^{2}\) is not a straight line.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the stepped bar</span>
+<p>The lab's stepped bar has \(E = 200\) GPa. The first segment is 0.4 m long and 300 mm². The second is 0.6 m long and 150 mm². A tension of 12 kN pulls at the step and 20 kN pulls the free end. The first segment carries both loads, so \(N_1 = 32\) kN and \(\delta_1 = 0.213\) mm. The second segment carries only the end load, so \(N_2 = 20\) kN and \(\delta_2 = 0.400\) mm. The free end moves</p>
+\[
+\delta = 0.613\ \mathrm{mm}
+\]
+<p>The largest internal force is 32 kN. The gold line on the lab chart is the step, and the slope of the displacement changes there.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the tapered bar</span>
+<p>The lab's taper runs from 40 mm diameter to 20 mm over 0.6 m, with a tension of 30 kN and \(E = 200\) GPa. The closed form gives</p>
+\[
+\delta = 0.1432\ \mathrm{mm}
+\]
+<p>An average of the two end areas gives a different number, and so does a constant bar at the 30 mm mean diameter. The lab checks the closed form against a numerical integral of \(P/(AE)\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The step load does not run through the whole bar. It joins \(N\) only on the side between the step and the support. Using the end load on both segments drops \(Q\). Using the smaller area for the whole length, or averaging the two end areas of a taper, answers a different bar.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real step has a fillet. The stress at the fillet is higher than \(N/A\), which is the stress-concentration problem and not this integral. The taper formula assumes the diameter changes in a straight line and the force stays on the axis. A shoulder that is abrupt is a step, not a taper.</p>
+</div>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 2 · Held ends <span class="sub">| two walls | temperature | Reference</span></h3>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>A bar between two walls</h2>
+<p>Fix both ends of a bar and apply a load somewhere in the span. Equilibrium says the two wall reactions add to the load. That is one equation and two unknowns. The bar is statically indeterminate. The extra fact is kinematic: the walls do not move, so the shortening of one segment equals the lengthening of the other.</p>
+<div class="box why"><span class="tag">Stiffness splits the load</span>
+<p>Call the load \(P\) and put it a distance \(a\) from the left wall. The bar length is \(L\). The left segment is a spring of stiffness \(AE/a\), and the right segment is a spring of stiffness \(AE/(L-a)\). The load splits in proportion to those stiffnesses:</p>
+\[
+R_L = P\frac{L-a}{L}
+\]
+\[
+R_R = P\frac{a}{L}
+\]
+<p>The shorter side is the stiffer side, so it carries more of \(P\). At midspan the two lengths match and each wall carries \(P/2\). The area and the modulus cancel, as long as both segments are the same bar.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the load near the left wall</span>
+<p>The lab's bar is 2 m long, 400 mm², \(E = 200\) GPa, with \(P = 20\) kN. Place the load at \(a = 0.4\) m. The product \(AE\) is 80 MN, so the left stiffness is \(80/0.4\):</p>
+\[
+k_L = 200\ \mathrm{MN/m}
+\]
+<p>Divided by the 1.6 m right-hand length, the right stiffness is 50 MN/m. The left wall carries \(20\times 200/(200+50)\):</p>
+\[
+R_L = 16\ \mathrm{kN}
+\]
+<p>and the right wall carries the remaining 4 kN. The force method \(P(L-a)/L = 20\times 1.6/2\) gives the same 16 kN. The two methods are the lab's check.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the load at midspan</span>
+<p>Move the same 20 kN to \(a = 1\) m. Each segment is 1 m long and each stiffness is 80 MN/m. The reactions are 10 kN and 10 kN. Sliding the load off centre is what makes the shares unequal. Doubling \(P\) doubles both reactions and leaves the shares alone.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Half the load is the answer only at midspan. Using the near length in the numerator assigns the larger share to the longer, softer side. The two reactions have to add to \(P\). If they do not, one of them was copied from the other.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The walls are rigid and the bar is uniform. A support that sinks, or a second bar of a different area, changes the stiffnesses and the split. Temperature is not in this section. A temperature change on a bar that is already held at both ends is the next section, and it produces reactions with no external \(P\) at all.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec7/">2.001 lecture 7</a> treats static indeterminacy as one equation short, closed by a displacement condition.</p>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Thermal stress</h2>
+<p>A free bar of length \(L\) grows by \(\alpha\Delta T\, L\) when the temperature rises. Fasten the ends so the length cannot change. The anchors have to push that growth back. The mechanical strain is \(-\alpha\Delta T\), and the stress is</p>
+\[
+\sigma = -E\alpha\Delta T
+\]
+<p>Heating gives compression. Cooling gives tension. The length cancelled: a longer rail grows more, and the stretch that undoes that growth is larger by the same factor. The area cancelled too. A larger rail carries a larger force at the same stress.</p>
+<div class="box why"><span class="tag">The spring check</span>
+<p>Treat the rail as a spring \(k = AE/L\). The displacement the anchors impose is \(-\alpha\Delta T\, L\). The force is \(k\) times that displacement, and the stress is the force divided by \(A\):</p>
+\[
+\sigma = \frac{1}{A}\left(\frac{AE}{L}\right)(-\alpha\Delta T\, L) = -E\alpha\Delta T
+\]
+<p>The two paths agree. Neither one contains \(L\) or \(A\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a held rail at +30 °C</span>
+<p>The AISC specification takes \(E = 29{,}000\) ksi for structural steel, and a thermal coefficient of \(6.5\times 10^{-6}\) per °F. That coefficient is \(11.7\times 10^{-6}\) per °C. The 20 m length in the Welded rail lab is assumed. At a rise of 30 °C the free expansion \(\alpha\Delta T L\) is</p>
+\[
+7.02\ \mathrm{mm}
+\]
+<p>The stress, with \(E\alpha = 2.34\) MPa/°C, is \(-(2.34)(30)\):</p>
+\[
+\sigma = -70.2\ \mathrm{MPa}
+\]
+<p>The minus sign is compression. The same rise on a 40 m rail still gives \(-70.2\) MPa. The free expansion doubles, and the stress does not.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the same rail in ksi</span>
+<p>Work the product in the units AISC publishes. A rise of 50 °F uses \(6.5\times 10^{-6}\) per °F, not the per-°C figure. The product \(-E\alpha\Delta T\) is</p>
+\[
+\sigma = -9.43\ \mathrm{ksi}
+\]
+<p>Fifty degrees Fahrenheit is \(50/1.8\) degrees Celsius. The lab, which is drawn in °C, reaches the same stress when the slider sits there. A per-°C coefficient used on a Fahrenheit number is too large by 1.8.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The sign follows the temperature. A rise is compression in a held bar, not tension. The coefficient has to match the degree: \(6.5\times 10^{-6}\) belongs with °F, and \(11.7\times 10^{-6}\) belongs with °C. Multiplying by the length puts a length into an answer that does not have one.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>\(\alpha\) and \(E\) are taken as constant. A large swing in temperature moves both. The rail is not allowed to buckle, and the anchors are rigid. A real continuously welded rail is laid at a neutral temperature, can lift off the ties, and sheds some force into the ballast. The lab states that limit in its own words.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec14/">2.001 lecture 15</a> adds temperature to the stress-strain relation. The per-°C form of the stress is the one-dimensional case.</p>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 3 · A gap, then the sheet <span class="sub">| closure | formulas | Reference</span></h3>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>A joint that must close</h2>
+<p>A gap changes the story. The rail expands freely until the free expansion equals the gap. Up to that temperature the stress is zero. Past it, only the extra expansion is pushed back. The closing temperature is</p>
+\[
+\Delta T_{\mathrm{close}} = \frac{\mathrm{gap}}{\alpha L}
+\]
+<p>and the stress after that is \(-E\) times the extra shortening over \(L\). A gap is one-sided. Cooling opens it further and does not pull on the joint.</p>
+<div class="box ex"><span class="tag">Worked example · the gap still open</span>
+<p>The lab's joint is a 20 m rail with a 6 mm gap. At a rise of 20 °C the free expansion \(\alpha\Delta T L\) is</p>
+\[
+4.68\ \mathrm{mm}
+\]
+<p>4.68 mm is less than 6 mm, so the ends have not met. The stress is 0. Using \(-E\alpha\Delta T\) here invents a compression the joint cannot carry yet.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · past the closing temperature</span>
+<p>The same gap closes at \(\mathrm{gap}/(\alpha L)\):</p>
+\[
+\Delta T_{\mathrm{close}} = 25.6^\circ\mathrm{C}
+\]
+<p>At a rise of 40 °C the free expansion is 9.36 mm. The extra 3.36 mm is what the anchors shorten. Then \(-E\) times that shortening over the length is</p>
+\[
+\sigma = -33.6\ \mathrm{MPa}
+\]
+<p>The no-gap stress at 40 °C would be \(-93.6\) MPa. The gap has removed the part of the expansion that was free. The dashed line on the lab chart is the closing temperature.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Ignoring the gap reports \(-E\alpha\Delta T\) while the joint is still open, which is zero, or past closure, where only the extra expansion counts. A per-°F coefficient on a Celsius rise is a second, separate miss. The free expansion in millimetres is a length, not a stress in MPa.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The gap is a clean opening that closes all at once. A real joint has play, friction and a fastener that is not rigid. The section and the 6 mm gap in the lab are assumed. Buckling under the compression, and the neutral temperature the rail was laid at, are outside this one-dimensional bar.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Formula sheet</h2>
+<p>Elongation of one piece, and the sum along the bar:</p>
+\[
+\delta = \frac{NL}{AE}
+\]
+\[
+\delta = \int_0^L \frac{N}{AE}\,dx
+\]
+<p>A linear taper of a circular bar:</p>
+\[
+\delta = \frac{4PL}{\pi E d_0 d_1}
+\]
+<p>A bar fixed at both ends, load \(P\) a distance \(a\) from the left:</p>
+\[
+R_L = P\frac{L-a}{L}
+\]
+\[
+R_R = P - R_L
+\]
+<p>A fastened bar with a temperature change, and the temperature that closes a gap:</p>
+\[
+\sigma = -E\alpha\Delta T
+\]
+\[
+\Delta T_{\mathrm{close}} = \frac{\mathrm{gap}}{\alpha L}
+\]
+<p>Citations: Roylance §1.1 for the elastic elongation. Statically indeterminate axial members and thermal stress are not Roylance sections. They are cited by those topic names. The modulus and the thermal coefficient are the AISC values for structural steel. The lengths, areas and the joint gap drawn in the labs are assumed.</p>
+</section>
+</div>
+</main>
+</body>
+</html>

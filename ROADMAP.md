@@ -50,7 +50,7 @@ subject libraries (a function written for one course serves the next), and one s
 | MAC 2313 Calculus III | [mac2313](docs/course-plans/mac2313.md) | labs and bank, no notes | fails | R4 |
 | EGN 3311 Statics | [statics](docs/course-plans/statics.md) | labs and bank, no notes | fails | R4 |
 | EGN 3321 Dynamics | [egn3321](docs/course-plans/egn3321.md) | 7 units, notes | **passes** | owner review (R2b follow-ups done) |
-| EGN 3331 Mechanics of Materials | [egn3331](docs/course-plans/egn3331.md) | Unit 2 of 11 at the standard; Unit 1 still short | fails | R3b: Units 3–11, and Unit 1's gaps |
+| EGN 3331 Mechanics of Materials | [egn3331](docs/course-plans/egn3331.md) | Units 2–3 of 11 at the standard; Unit 1 still short | fails | R3b: Units 4–11, and Unit 1's gaps |
 | EML 3100 Thermodynamics | [eml3100](docs/course-plans/eml3100.md) | 5 of 5 units to the standard | passes | owner review (`standard` stays false) |
 | STA 3032 Statistics | [sta3032](docs/course-plans/sta3032.md) | complete, older style | fails | keep passing; no rework |
 | Bench (electronics on the bench) | [bench](docs/course-plans/bench.md) | Units 1–3 of 9 built (engineering shell) | fails (Units 1–3 pass) | Unit 4, switching bigger things |
@@ -81,8 +81,8 @@ subject libraries (a function written for one course serves the next), and one s
       in PHY 2049's layout. The course scorecard passes. `standard` stays false until the owner
       works a unit as a student.
 - [ ] **R3b EGN 3331.** The eleven-unit order in its spine (2.001, energy methods back; D29, D31).
-      The owner confirmed the order on 28 Oct 2026. Unit 2 is at the standard. Unit 1 still lacks
-      an application lab, conceptual problems, `why` and traps. Units 3–11 are still to be built.
+      The owner confirmed the order on 28 Oct 2026. Units 2 and 3 are at the standard. Unit 1 still
+      lacks an application lab, conceptual problems, `why` and traps. Units 4–11 are still to be built.
 
 ### New courses, back to back (D24)
 

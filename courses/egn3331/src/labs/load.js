@@ -8,6 +8,9 @@ const loaders = {
   'tension-test': () => import('./tension-test.js'),
   poisson: () => import('./poisson.js'),
   brace: () => import('./brace.js'),
+  axial: () => import('./axial.js'),
+  indeterminate: () => import('./indeterminate.js'),
+  rail: () => import('./rail.js'),
 };
 
 const labs = createLabLoader(loaders);

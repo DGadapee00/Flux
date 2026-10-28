@@ -34,6 +34,21 @@ export const NOTES = {
       { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u3: {
+    exam: 'u3',
+    title: 'Axial load',
+    chapters: '4',
+    file: 'u3-axial.html',
+    load: () => import('./content/u3-axial.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'Elongation of a uniform bar', lab: 'axial', ch: ['4'], topics: ['axial-deformation'], home: true },
+      { id: 's2', n: 2, title: 'Steps and tapers', lab: 'axial', ch: ['4'], topics: ['stepped', 'taper'] },
+      { id: 's3', n: 3, title: 'A bar between two walls', lab: 'indeterminate', ch: ['4'], topics: ['indeterminate-axial'] },
+      { id: 's4', n: 4, title: 'Thermal stress', lab: 'rail', ch: ['4'], topics: ['thermal-stress', 'english'] },
+      { id: 's5', n: 5, title: 'A joint that must close', lab: 'rail', ch: ['4'], topics: ['gap'] },
+      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;

@@ -2,7 +2,7 @@
  * Worked examples the labs can show. `tag` matches the notes after "Worked example · ".
  * `read` pairs a lab value with the number printed in the notes. notes-check allows 2%.
  */
-import { M_PER_IN } from '@flux/subjects/convert.js';
+import { M_PER_IN, PA_PER_PSI } from '@flux/subjects/convert.js';
 const ROD = (Math.PI * 0.02 ** 2) / 4;
 
 export const SETUPS = {
@@ -138,6 +138,80 @@ export const SETUPS = {
           s.unload = 0;
         },
         read: (c) => ({ set: [c.set * 1e6, 8310], stress: [c.stress / 1e6, 338] }),
+      },
+    ],
+  },
+  u3: {
+    s1: [
+      {
+        tag: 'a uniform bar at 20 kN',
+        lab: 'axial',
+        scenario: 'uniform',
+        read: (c) => ({ delta: [c.delta * 1e3, 0.7] }),
+      },
+    ],
+    s2: [
+      {
+        tag: 'the stepped bar',
+        lab: 'axial',
+        scenario: 'step',
+        read: (c) => ({ delta: [c.delta * 1e3, 0.613], Nmax: [c.Nmax / 1e3, 32] }),
+      },
+      {
+        tag: 'the tapered bar',
+        lab: 'axial',
+        scenario: 'taper',
+        read: (c) => ({ delta: [c.delta * 1e3, 0.1432] }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'the load near the left wall',
+        lab: 'indeterminate',
+        scenario: 'left',
+        read: (c) => ({ left: [c.left / 1e3, 16], right: [c.right / 1e3, 4] }),
+      },
+      {
+        tag: 'the load at midspan',
+        lab: 'indeterminate',
+        scenario: 'mid',
+        read: (c) => ({ left: [c.left / 1e3, 10], right: [c.right / 1e3, 10] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'a held rail at +30 °C',
+        lab: 'rail',
+        scenario: 'summer',
+        read: (c) => ({ stress: [c.stress / 1e6, -70.2], free: [c.free * 1e3, 7.02] }),
+      },
+      {
+        tag: 'the same rail in ksi',
+        lab: 'rail',
+        scenario: 'summer',
+        setup(s) {
+          s.gap = 0;
+          s.L = 20;
+          s.dT = 50 / 1.8;
+        },
+        read: (c) => ({ stress: [c.stress / (1000 * PA_PER_PSI), -9.43] }),
+      },
+    ],
+    s5: [
+      {
+        tag: 'the gap still open',
+        lab: 'rail',
+        scenario: 'joint',
+        read: (c) => ({ stress: [c.stress / 1e6, 0], free: [c.free * 1e3, 4.68] }),
+      },
+      {
+        tag: 'past the closing temperature',
+        lab: 'rail',
+        scenario: 'joint',
+        setup(s) {
+          s.dT = 40;
+        },
+        read: (c) => ({ stress: [c.stress / 1e6, -33.6], closeAt: [c.closeAt, 25.6] }),
       },
     ],
   },

@@ -160,3 +160,53 @@ export function rambergStress(eps, E, sigY, n) {
  * In the elastic range this is zero. Past yield it is the permanent set.
  */
 export const permanentSet = (eps, stress, E) => Math.max(0, eps - stress / E);
+
+/** Elongation of one uniform segment, δ = NL/AE. Tension positive. */
+export const segmentElongation = (N, L, A, E) => (N * L) / (A * E);
+
+/** Sum of NL/AE over segments, each { N, L, A, E }. */
+export const barElongation = (segments) => segments.reduce((sum, s) => sum + segmentElongation(s.N, s.L, s.A, s.E), 0);
+
+/**
+ * A circular bar whose diameter varies linearly from d0 to d1, under a constant axial force.
+ * δ = ∫ P/(AE) dx = 4PL / (π E d0 d1).
+ */
+export const taperedElongation = (P, L, E, d0, d1) => (4 * P * L) / (Math.PI * E * d0 * d1);
+
+/** Axial stiffness AE/L of a uniform segment. */
+export const axialStiffness = (A, E, L) => (A * E) / L;
+
+/**
+ * A bar fixed at both ends with an axial load P a distance `a` from the left end.
+ * The left reaction is P (L − a) / L. The shorter side is stiffer and carries more.
+ */
+export function fixedFixed(P, L, a) {
+  const left = (P * (L - a)) / L;
+  return { left, right: P - left };
+}
+
+/**
+ * The same reactions from two springs. k_left = AE/a, k_right = AE/(L−a),
+ * and the joint load splits in proportion to stiffness.
+ */
+export function fixedFixedByStiffness(P, L, a, A, E) {
+  const kL = axialStiffness(A, E, a);
+  const kR = axialStiffness(A, E, L - a);
+  const left = (P * kL) / (kL + kR);
+  return { left, right: P - left, kL, kR };
+}
+
+/**
+ * Stress in a bar held between rigid walls. Heating (ΔT > 0) puts it in compression.
+ * A gap delays the stress until the free expansion closes it. Returns zero when the
+ * gap is still open.
+ */
+export function constrainedThermal(E, alpha, dT, { L = 1, gap = 0 } = {}) {
+  const free = alpha * dT * L;
+  // No gap means the ends are fastened, so cooling tensions the bar as heating compresses it.
+  // A gap is a one-way joint: no force until the free expansion exceeds it, and no tension after.
+  const fastened = gap <= 0;
+  if (!fastened && free <= gap) return { stress: 0, free, closed: false, mechanical: 0 };
+  const mechanical = -(free - (fastened ? 0 : gap));
+  return { stress: (E * mechanical) / L, free, closed: true, mechanical };
+}
