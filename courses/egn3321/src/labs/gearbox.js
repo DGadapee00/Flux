@@ -2,6 +2,7 @@ import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
 import { C, alpha, axes, begin, label, plotIn, poly, sceneIn, seg, split } from './diagram.js';
 import { defineLab } from './define2d.js';
+import { PLAY, advance } from './motion.js';
 import { bindSlider, showField, slider, leavesOut } from './widgets.js';
 
 const RPM = (2 * Math.PI) / 60;
@@ -22,7 +23,7 @@ const SCENARIOS = [
 function apply(id, state) {
   const sc = SCENARIOS.find((s) => s.id === id) || SCENARIOS[0];
   const { name, ...rest } = sc;
-  Object.assign(state, { scenarioId: sc.id, ...rest });
+  Object.assign(state, { scenarioId: sc.id, ...rest, t: 0, anim: { playing: false }, show: { play: false } });
 }
 
 /** The train from tooth counts alone: the ratios a designer writes down. Counterclockwise is positive. */
@@ -103,6 +104,11 @@ export default defineLab({
   app: false,
   hint: 'Change the teeth. Meshing gears share a pitch-line speed, so ω scales as 1/N, and each mesh reverses the sense.',
   gapLimit: 1e-9,
+  keys: { ' ': 'sweep' },
+  toggles: [PLAY],
+  tick(dt, state) {
+    return advance(state, dt, { lo: 0, hi: 120, rate: 1 });
+  },
   scenarios: SCENARIOS,
   defaultState() {
     const s = {};
@@ -119,7 +125,7 @@ export default defineLab({
       ${slider('gb-n3', 'gear 3 teeth N₃ (on shaft 2)', 25, 12, 60, 1)}
       ${slider('gb-n4', 'gear 4 teeth N₄ (output)', 50, 12, 120, 1)}
       ${slider('gb-m', 'module m (mm)', 2, 1, 5, 0.5)}
-      <p class="tiny">Pitch radius r = mN/2. Counterclockwise is positive. No slip at a mesh. Gear 4 meshes with gear 3, in a plane behind gear 2.</p>`;
+      <p class="tiny">Pitch radius r = mN/2. Counterclockwise is positive. No slip at a mesh. Gear 4 meshes with gear 3, in a plane behind gear 2. Play turns the train, slowed so the motor turns at 1.5 rad/s; the teeth at a mesh move together.</p>`;
   },
   bind(api) {
     bindSlider('gb-rpm', (s, v) => { s.rpm = v; }, api);
@@ -167,7 +173,10 @@ export default defineLab({
     const ys = [O1[1] + c.r1, O2[1] + c.r2, O4[1] - c.r4];
     const S = sceneIn(B, left, { x0: Math.min(...xs) * 1.05, x1: Math.max(...xs) * 1.05, y0: Math.min(...ys) * 1.1, y1: Math.max(...ys) * 1.1 + Math.max(...rs) * 0.1 });
     const { ctx } = S;
+    // Play turns the motor at 1.5 rad/s on screen; every other gear keeps its true ratio to it.
+    const spinOf = (w) => (1.5 * (Number(state.t) || 0) * w) / Math.max(Math.abs(c.w1), 1e-9);
     const circle = (O, r, col, N, w) => {
+      const phase = spinOf(w);
       ctx.save();
       ctx.strokeStyle = col;
       ctx.lineWidth = 2;
@@ -177,7 +186,7 @@ export default defineLab({
       // One tick per tooth, so the tooth count is visible.
       const n = Math.round(N);
       for (let i = 0; i < n; i++) {
-        const a = (2 * Math.PI * i) / n;
+        const a = (2 * Math.PI * i) / n + phase;
         seg(S, [O[0] + 0.92 * r * Math.cos(a), O[1] + 0.92 * r * Math.sin(a)], [O[0] + 1.06 * r * Math.cos(a), O[1] + 1.06 * r * Math.sin(a)], { color: alpha(col, 0.7), width: 1 });
       }
       // The sense of rotation: an arc with a head.

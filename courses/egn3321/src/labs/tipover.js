@@ -2,6 +2,7 @@ import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
 import { C, alpha, arrow, axes, begin, dot, label, line, note, plotIn, poly, sceneIn, seg } from './diagram.js';
 import { defineLab } from './define2d.js';
+import { PLAY, advance } from './motion.js';
 import { bindSlider, slider, leavesOut } from './widgets.js';
 
 const G = 9.81;
@@ -25,7 +26,7 @@ const SCENARIOS = [
 
 function apply(id, state) {
   const sc = SCENARIOS.find((s) => s.id === id) || SCENARIOS[0];
-  Object.assign(state, { scenarioId: sc.id, m: sc.m, h: sc.h, b: sc.b, kG: sc.kG, w0: sc.w0 });
+  Object.assign(state, { scenarioId: sc.id, m: sc.m, h: sc.h, b: sc.b, kG: sc.kG, w0: sc.w0, t: 0, anim: { playing: false }, show: { play: false } });
 }
 
 /**
@@ -100,6 +101,27 @@ export function omegaCNumeric(geom) {
   return 0.5 * (lo + hi);
 }
 
+/**
+ * The tilt at time t from the bump, by the same equation stepped in time. A machine that rocks back
+ * settles on its pads; one that goes over keeps falling until it lies at 90°.
+ */
+function tiltAt({ h, b, kG, w0 }, t) {
+  const r = Math.hypot(b, h);
+  const phi0 = Math.atan2(b, h);
+  const IOm = kG * kG + r * r;
+  const dt = 2e-3;
+  let th = 0;
+  let w = w0;
+  for (let u = 0; u < t; u += dt) {
+    const a = (-G * r * Math.sin(phi0 - th)) / IOm;
+    w += a * dt;
+    th += w * dt;
+    if (th <= 0 && w < 0) return 0;
+    if (th >= Math.PI / 2) return Math.PI / 2;
+  }
+  return th;
+}
+
 /** What the real device has that the model ignores (D30). */
 const OUT = String.raw`The model starts with the machine already turning about the pad. What starts it is an impact, which needs angular momentum, not energy. It also assumes the pad does not slide, the ground is level, and the feet are rigid. A foot that crushes lowers $G$ as the machine tilts and helps. A slope tilts the machine before the bump arrives and shrinks the climb.`;
 
@@ -110,6 +132,11 @@ export default defineLab({
   app: false,
   hint: 'Rock the machine on one pad. It goes over only if its kinetic energy lifts G above the pad.',
   gapLimit: 1e-4,
+  keys: { ' ': 'sweep' },
+  toggles: [PLAY],
+  tick(dt, state) {
+    return advance(state, dt, { lo: 0, hi: 6, rate: 1 });
+  },
   scenarios: SCENARIOS,
   defaultState() {
     const s = {};
@@ -125,7 +152,7 @@ export default defineLab({
       ${slider('tp-h', 'height of G, h (m)', 1.5, 0.5, 5, 0.1)}
       ${slider('tp-kG', 'radius of gyration k_G (m)', 1.5, 0.3, 3, 0.1)}
       ${slider('tp-m', 'mass m (kg)', 600, 100, 3000, 50)}
-      <p class="tiny">The machine turns about the outer pad O. The pad force does no work; only the weight does.</p>`;
+      <p class="tiny">The machine turns about the outer pad O. The pad force does no work; only the weight does. Play rocks it from ω₀; the faint outline is its largest tilt.</p>`;
   },
   bind(api) {
     bindSlider('tp-w0', (s, v) => { s.w0 = v; }, api);
@@ -167,13 +194,17 @@ export default defineLab({
 
     // The machine, tilted to its largest angle about the pad O at (0, 0). G starts at (−b, h).
     const { b, h } = state;
-    const th = c.tips ? c.phi0 : c.thetaMax;
+    const thMax = c.tips ? c.phi0 : c.thetaMax;
+    const th = Number(state.t) > 0 ? tiltAt(state, Number(state.t)) : 0;
     const S = sceneIn(B, left, { x0: -2.2 * b - 0.3, x1: Math.max(0.6, 0.9 * c.r), y0: -0.3, y1: Math.max(c.r, h * 1.6) + 0.3 }, 20);
     // Rotate about O by −θ (the machine leans outward, to +x).
-    const rot = ([x, y]) => [x * Math.cos(th) + y * Math.sin(th), -x * Math.sin(th) + y * Math.cos(th)];
+    const turn = (a) => ([x, y]) => [x * Math.cos(a) + y * Math.sin(a), -x * Math.sin(a) + y * Math.cos(a)];
+    const rot = turn(th);
     seg(S, [-2.4 * b, 0], [Math.max(0.6, c.r), 0], { color: C.dim, width: 2 });
     const bw = Math.min(0.55 * b, 0.45 * h + 0.3);
-    const body = [[-b - bw, 0.45 * h], [-b + bw, 0.45 * h], [-b + bw, 1.55 * h], [-b - bw, 1.55 * h]].map(rot);
+    const outline = [[-b - bw, 0.45 * h], [-b + bw, 0.45 * h], [-b + bw, 1.55 * h], [-b - bw, 1.55 * h]];
+    poly(S, outline.map(turn(thMax)), { fill: null, stroke: alpha(C.text, 0.25), width: 1, dash: [4, 4] });
+    const body = outline.map(rot);
     poly(S, body, { fill: alpha(C.text, 0.12), stroke: alpha(C.text, 0.8), width: 1.5 });
     for (const pad of [[0, 0], [-2 * b, 0]]) seg(S, rot([-b + Math.sign(pad[0] + b) * bw * 0.8, 0.5 * h]), rot(pad), { color: alpha(C.text, 0.8), width: 2 });
     const Gp = rot([-b, h]);
@@ -218,7 +249,8 @@ export default defineLab({
     note(P2, `T₀/m = ${fig(ke)}`, 0, ke, { color: C.gold });
     note(P2, `barrier g·Δh = ${fig(G * c.dh)}`, c.phi0 / DEG, G * c.dh, { color: C.teal, align: 'center', dx: 0, dy: -8 });
     line(P2, [[c.phi0 / DEG, 0], [c.phi0 / DEG, G * c.dh]], { color: alpha(C.teal, 0.5), width: 1, dash: [3, 3] });
-    if (!c.tips) dot(P2, c.thetaMaxDeg, V(c.thetaMax), { color: C.yellow, r: 5 });
+    if (!c.tips) dot(P2, c.thetaMaxDeg, V(c.thetaMax), { color: alpha(C.yellow, 0.5), r: 5 });
+    if (th <= top) dot(P2, th / DEG, V(th), { color: C.yellow, r: 5 });
   },
   law: () => [String.raw`\omega_c=\sqrt{\dfrac{2g\,(r-h)}{k_G^2+r^2}},\quad r=\sqrt{b^2+h^2}`],
   liveRows(state, c) {
