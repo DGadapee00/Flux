@@ -415,6 +415,58 @@ export const SETUPS = {
       },
     ],
   },
+  u7: {
+    s1: [
+      {
+        tag: 'the 40 by 80 mm rectangle',
+        lab: 'shear',
+        scenario: 'rect',
+        read: (c) => ({ tmax: [c.tmax / 1e6, 4.69] }),
+      },
+    ],
+    s2: [
+      {
+        tag: '20 mm up',
+        lab: 'shear',
+        scenario: 'high',
+        read: (c) => ({ tau: [c.tau / 1e6, 3.52] }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'the web at 20 kN',
+        lab: 'shear',
+        scenario: 'eye',
+        read: (c) => ({ tau: [c.tau / 1e6, 20.8], webShare: [c.webShare * 100, 94.6] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'three boards',
+        lab: 'nails',
+        scenario: 'pair',
+        read: (c) => ({ q: [c.q / 1000, 118.5], spacing: [c.spacing * 1000, 20.3] }),
+      },
+    ],
+    s5: [
+      {
+        tag: 'the 18 ft header',
+        lab: 'header',
+        scenario: 'design',
+        read: (c) => ({
+          V: [c.V / N_PER_LBF, 3270],
+          q: [(c.q * M_PER_IN) / N_PER_LBF, 105.6],
+          nail: [c.nail / N_PER_LBF, 39.6],
+        }),
+      },
+      {
+        tag: 'a 12 ft opening',
+        lab: 'header',
+        scenario: 'short',
+        read: (c) => ({ nail: [c.nail / N_PER_LBF, 26.4] }),
+      },
+    ],
+  },
 };
 
 /** An example's tag as the notes write it, without "Worked example · ". */

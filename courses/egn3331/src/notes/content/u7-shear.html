@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Transverse shear</title>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 7 · Ch 7</p>
+  <h1>Transverse shear</h1>
+  <p class="lede">Bending stress is zero on the neutral axis. The shear stress is largest there. It is VQ over I t. The same Q, without the thickness, is the shear flow the fasteners must carry. Every number below is computed by the course library and checked a second way.</p>
+  <div class="legend">
+    <span><i class="swatch" style="background: var(--gold)"></i>Shear stress, and shear flow</span>
+    <span><i class="swatch" style="background: var(--teal)"></i>The neutral axis</span>
+    <span><i class="swatch" style="background: var(--red)"></i>Tension from bending</span>
+    <span><i class="swatch" style="background: var(--blue)"></i>Compression from bending</span>
+  </div>
+  <nav class="toc">
+    <a href="#s1"><span>01</span>A rectangle</a>
+    <a href="#s2"><span>02</span>Up the parabola</a>
+    <a href="#s3"><span>03</span>An I section</a>
+    <a href="#s4"><span>04</span>Nail spacing</a>
+    <a href="#s5"><span>05</span>A garage header</a>
+    <a href="#s6"><span>06</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+<h3>Part 1 · The stress <span class="sub">| rectangle | parabola | I | Reference</span></h3>
+
+<section class="topic" id="s1">
+<h2><span class="n">01</span>A rectangle</h2>
+<p>Cut the beam on a horizontal line at height y above the neutral axis. The area above that line has a first moment Q about the axis. Equilibrium of a short length of beam then gives the shear stress on the cut:</p>
+\[
+\tau = \frac{VQ}{It}
+\]
+<p>t is the width of the section at that line. For a rectangle of width b and height h, I is bh³/12 and Q at the axis is b(h/2)²/2. The peak comes out three halves of the average shear:</p>
+\[
+\tau_{\max} = \frac{3V}{2A}
+\]
+<p>The check is the integral of τ over the area. It has to return V. Roylance §4.2 is the reading.</p>
+<div class="box ex"><span class="tag">Worked example · the 40 by 80 mm rectangle</span>
+<p>The lab's rectangle is 40 mm wide and 80 mm deep, with 10 kN of shear. The peak, at the axis, is</p>
+\[
+\tau = 4.69\ \mathrm{MPa}
+\]
+<p>The gold curve is this stress against y. It is a parabola. The teal line is the neutral axis, where the curve is highest. Bending stress on that line is zero.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reporting V/A leaves out the three-halves factor. Using two times V/A overshoots the peak. Doubling the depth halves this stress. It does not cut it to a quarter. That quarter belongs to bending.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">02</span>Up the parabola</h2>
+<p>Away from the axis, Q is the first moment of a shorter piece. For the rectangle the stress at station y is the peak times one minus (2y/h) squared. At the outer fiber, y is h/2 and the stress is zero. There is no area left above the cut, so Q is zero.</p>
+<div class="box ex"><span class="tag">Worked example · 20 mm up</span>
+<p>On the same 40 mm by 80 mm rectangle, 20 mm is a quarter of the height and half of the way to the top fiber. The stress falls to three quarters of the peak:</p>
+\[
+\tau = 3.52\ \mathrm{MPa}
+\]
+<p>Move the station up the slider. The stress drops, and the peak readout does not. The peak is a property of the section and the shear, not of the station you happen to be reading.</p>
+</div>
+<div class="box why"><span class="tag">Why the outer fiber is idle</span>
+<p>A horizontal cut at the very top has no area above it. Q is zero, so τ is zero. The vertical shear still has to cross the section somewhere. The parabola puts that somewhere at the axis.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>An I section</h2>
+<p>An I is wide in the flanges and narrow in the web. At the neutral axis the horizontal cut passes through the web only, so t is the web thickness. Q is the flange's area times the flange centroid, plus the first moment of the upper half of the web. The web is thin, so the same force crosses a small thickness and the stress is high. Most of V is the integral of that web stress.</p>
+<div class="box ex"><span class="tag">Worked example · the web at 20 kN</span>
+<p>The lab's I is assumed: a 6 mm by 160 mm web and two 120 mm by 10 mm flanges. The whole depth is 180 mm. At 20 kN the web stress at the axis, and the share of V in the web, are</p>
+\[
+\tau = 20.8\ \mathrm{MPa}
+\]
+\[
+\frac{V_{\mathrm{web}}}{V} = 94.6\%
+\]
+<p>The flanges are wide, so the stress in them stays small even though Q is not small. Using the flange width as t at the axis understates the web stress by the ratio of those widths.</p>
+</div>
+<div class="box why"><span class="tag">Why the web does the work</span>
+<p>τ dA is the force on a strip. The web is tall and its stress is high, so its strips add up to nearly all of V. The flanges sit where the parabola would already be falling, and they are short in the y direction.</p>
+</div>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 2 · The fasteners <span class="sub">| boards | header | Reference</span></h3>
+
+<section class="topic" id="s4">
+<h2><span class="n">04</span>Nail spacing</h2>
+<p>Drop the thickness from the shear formula and what remains is a force per length along the beam. That is the shear flow:</p>
+\[
+q = \frac{VQ}{I}
+\]
+<p>Q is the first moment of the piece the fasteners are holding on, not of the whole section. The whole section has its centroid on the axis, so its first moment is zero and it would say the flow is zero. That is the wrong area.</p>
+<p>If n fasteners at one station can each carry a force F, they can be spaced at</p>
+\[
+s = \frac{nF}{q}
+\]
+<p>A second reading of the same flow is the change in the board's axial force. That force is MQ/I. Over a short dx it changes by VQ/I times dx, which is q dx.</p>
+<div class="box ex"><span class="tag">Worked example · three boards</span>
+<p>Three boards, each 40 mm by 30 mm, are stacked. The sizes are assumed, and so is a nail that can carry 1.2 kN. Two nails share each station. Under 8 kN of shear the flow and the spacing are</p>
+\[
+q = 118.5\ \mathrm{kN/m}
+\]
+\[
+s = 20.3\ \mathrm{mm}
+\]
+<p>The gold curve is the spacing against the shear. It falls as 1/V. Double the shear and the nails must sit twice as close. Double the nail, or add a second nail, and they may sit twice as far apart.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Dividing q by the board width produces a stress, not a spacing. Using one nail when two share the joint cuts the spacing in half. Inverting F and q gives a number with the wrong units and the wrong size.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>A garage header</h2>
+<p>APA form Z416T, revised February 2009, is a nailed box beam of lumber flanges and structural-panel webs. The design example is a header over an 18 ft garage door. The roof is 25 psf of snow plus 10 psf dead, carried by 20 ft trusses, so the header sees 350 lb/ft. The table's own beam weight for this section is 13 lb/ft. The line load used here is 363 lb/ft.</p>
+<p>The section that clears 363 plf at 18 ft is 24 in deep, cross section B, with 15/32 in webs. The table allowable is 413 plf, and that number already includes a 15% increase for snow. Each flange is two dressed 2×4s stacked, 3.5 in wide and 3 in deep. The nails are 8d common, 0.131 in by 2.5 in, at 1.5 in on center on each side of each flange lamination. Four lines share the flange.</p>
+<p>Q of one flange is its area times 10.5 in, the distance from the neutral axis to the flange centroid. The support shear is wL/2. The flow is that shear times Q/I, and one nail's force is the flow times 1.5 in, divided by four.</p>
+<div class="box ex"><span class="tag">Worked example · the 18 ft header</span>
+<p>At the support the shear, the flange flow, and the force in one nail are</p>
+\[
+V = 3270\ \mathrm{lbf}
+\]
+\[
+q = 105.6\ \mathrm{lb/in}
+\]
+\[
+F = 39.6\ \mathrm{lbf}
+\]
+<p>The gold curve is that nail force along the span. It is highest at the two supports and zero at midspan. The teal line marks 18 ft, the span in the example. The moment is largest where this curve is zero.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 12 ft opening</span>
+<p>The same 363 lb/ft on a 12 ft span multiplies the support shear, and the nail force, by 12/18:</p>
+\[
+F = 26.4\ \mathrm{lbf}
+\]
+<p>The nail force follows the shear, so it follows the span once. It does not follow the span squared. That square belongs to the moment, and to the bending stress of the joist in the previous unit.</p>
+</div>
+<div class="box out"><span class="tag">What the course model leaves out</span>
+<p>39.6 lbf is the force in one nail at the support under 363 lb/ft. It is not a published nail capacity, and 413 plf is not this calculation. The webs are taken as 15/32 in for the full 24 in depth, beside the flanges. Wood and the panel do not share a modulus, so the section is not transformed. Deflection limited to L/240, the stiffeners, the bearing length, and the nail yield modes are all outside this force. The published schedule doubles the nail spacing in the middle half of the span, where the shear is smaller. The 13 lb/ft is the table's approximate weight, not a weighed beam.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Formula sheet</h2>
+<p>Shear stress on a horizontal cut. Q is the first moment of the area beyond the cut. t is the width at the cut:</p>
+\[
+\tau = \frac{VQ}{It}
+\]
+<p>Rectangle, peak at the neutral axis:</p>
+\[
+\tau_{\max} = \frac{3V}{2bh}
+\]
+<p>Shear flow, and the spacing of n fasteners that each carry F:</p>
+\[
+q = \frac{VQ}{I}
+\]
+\[
+s = \frac{nF}{q}
+\]
+<p>Citations: Roylance §4.2 for the shear stress and the flow. The header is APA form Z416T, February 2009, and the dressed 2×4 is PS 20. The rectangle, the I, and the three boards are assumed.</p>
+</section>
+</div>
+</main>
+</body>
+</html>

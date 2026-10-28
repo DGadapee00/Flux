@@ -29,6 +29,9 @@ const LIMIT = {
   diagrams: 1e-9,
   flexure: 1e-6,
   joist: 1e-9,
+  shear: 1e-6,
+  nails: 1e-9,
+  header: 1e-9,
 };
 
 const fails = [];
