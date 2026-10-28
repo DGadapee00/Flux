@@ -1,10 +1,10 @@
 import { kineticEnergy } from '@flux/subjects/mechanics/energy.js';
 import { collideOblique, impactLoss } from '@flux/subjects/mechanics/momentum.js';
-import { forceArrow, placeIncomingArrow } from '@flux/shells/engineering/fbd.js';
-import { M, makeArrow, makeDot, makeLine, setArrow, setLine } from '../scene/draw.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { THREE, defineLab } from './define.js';
+import { C, alpha, axes, begin, chartIn, circle, hidden, label, line, poly, sceneIn, seg, split, vec } from './diagram.js';
+import { defineLab } from './define2d.js';
+import { PLAY, advance } from './motion.js';
 import { bindSlider, slider } from './widgets.js';
 
 const SCENARIOS = [
@@ -40,8 +40,6 @@ const SCENARIOS = [
   },
 ];
 
-const X1 = -1.2;
-const X2 = 1.2;
 
 function apply(id, state) {
   const sc = SCENARIOS.find((s) => s.id === id) || SCENARIOS[0];
@@ -52,7 +50,20 @@ function apply(id, state) {
   state.u2 = sc.u2;
   state.e = sc.e;
   state.theta = sc.theta;
+  state.t = -1;
+  state.anim = { playing: false };
+  state.show = { play: false };
 }
+
+/**
+ * Impact (Hibbeler §15.4): two balls collide, head on or at an angle. Shows that momentum along the
+ * line of impact holds for every coefficient of restitution, that e alone sets how much kinetic energy
+ * is lost, and that in an oblique impact the tangent velocity passes through unchanged. Play runs the
+ * collision: the bars show the momentum before and after, and the energy that went missing.
+ *
+ * Recompute: momentum and restitution along the line. Check: the energy lost against its closed form,
+ * and the mass centre's velocity, which the impact cannot change.
+ */
 
 function parts(state) {
   const th = (state.theta * Math.PI) / 180;
@@ -68,8 +79,12 @@ export default defineLab({
   id: 'impact',
   exam: 'u4',
   title: 'Impact',
+  app: false,
+  gapLimit: 1e-6,
+  keys: { ' ': 'sweep' },
+  toggles: [PLAY],
+  sweep: () => ({ key: 'e', lo: 0, hi: 1 }),
   hint: 'Momentum holds for every e. The tangent velocity does not change.',
-  camera: { pos: new THREE.Vector3(0, 0.35, 6.6), target: new THREE.Vector3(0, 0.35, 0) },
   scenarios: SCENARIOS,
   defaultState() {
     const s = {};
@@ -85,7 +100,7 @@ export default defineLab({
       ${slider('ip-u2', 'u₂ (m/s)', 0, -4, 4, 0.1)}
       ${slider('ip-e', 'e', 0.5, 0, 1, 0.05)}
       ${slider('ip-theta', 'θ (deg)', 0, 0, 60, 1)}
-      <p class="tiny">White is the first body, gold is the second. The line of impact is the normal. θ is measured from that line.</p>`;
+      <p class="tiny">White is the first body, gold is the second. The dashed line is the line of impact; θ is measured from it. Play runs the collision; the bars compare momentum along the line, and kinetic energy, before and after.</p>`;
   },
   bind(api) {
     bindSlider('ip-m1', (s, v) => { s.m1 = v; }, api);
@@ -107,31 +122,12 @@ export default defineLab({
     set('ip-e', state.e);
     set('ip-theta', state.theta);
   },
-  init(ctx) {
-    const group = new THREE.Group();
-    const line = makeLine(M.grey);
-    const b1 = makeDot(M.white, 0.14);
-    const b2 = makeDot(M.gold, 0.14);
-    const mk = (color) => forceArrow(new THREE.Vector3(1, 0, 0), color, 0.025, 0.16, 0.12);
-    const in1 = mk(M.grey);
-    const in2 = mk(M.grey);
-    const out1 = makeArrow(M.white);
-    const out2 = makeArrow(M.gold);
-    group.add(line, b1, b2, in1, in2, out1, out2);
-    ctx.scene.add(group);
-    return { group, line, b1, b2, in1, in2, out1, out2 };
+  tick(dt, state) {
+    return advance(state, dt, { lo: -1, hi: 1.2, rate: 0.5 });
   },
-  enter(ctx, handle) {
-    handle.group.visible = true;
-  },
-  exit(ctx, handle) {
-    handle.group.visible = false;
-  },
-  recompute(state, computed) {
-    if (!(state.m1 > 0) || !(state.m2 > 0)) {
-      Object.assign(computed, { vn1: 0, vn2: 0, vt1: 0, vt2: 0, loss: 0, vcm: 0, gap: 0 });
-      return;
-    }
+  compute(state) {
+    const computed = {};
+    if (!(state.m1 > 0) || !(state.m2 > 0)) return { vn1: 0, vn2: 0, vt1: 0, vt2: 0, loss: 0, vcm: 0, gap: 0, T0: 0 };
     const incoming = parts(state);
     const hit = collideOblique({
       m1: state.m1,
@@ -160,25 +156,60 @@ export default defineLab({
       loss,
       vcm: hit.vcm,
       gap: Math.max(gapLoss, gapCm),
+      T0,
+      in: incoming,
     });
+    return computed;
   },
-  syncViews(state, computed, ctx) {
-    const h = ctx.handle;
-    const incoming = parts(state);
-    setLine(h.line, [{ x: -2.5, y: 0 }, { x: 2.5, y: 0 }]);
-    h.b1.position.set(X1, 0, 0);
-    h.b2.position.set(X2, 0, 0);
-    const peak = Math.max(
-      Math.abs(incoming.un1), Math.abs(incoming.ut1), Math.abs(incoming.un2),
-      Math.abs(computed.vn1), Math.abs(computed.vn2), Math.abs(computed.vt1), 1,
-    );
-    const scale = 1.15 / peak;
-    const at1 = new THREE.Vector3(X1, 0, 0);
-    const at2 = new THREE.Vector3(X2, 0, 0);
-    placeIncomingArrow(h.in1, at1, incoming.un1, incoming.ut1, { scale, minLength: 0, gap: 0.18 });
-    placeIncomingArrow(h.in2, at2, incoming.un2, incoming.ut2, { scale, minLength: 0, gap: 0.18 });
-    setArrow(h.out1, { x: X1, y: 0 }, { x: computed.vn1 * scale, y: computed.vt1 * scale }, 1.3);
-    setArrow(h.out2, { x: X2, y: 0 }, { x: computed.vn2 * scale, y: computed.vt2 * scale }, 1.3);
+  draw(canvas, state, c) {
+    const B = begin(canvas);
+    const veiled = hidden();
+    const [left, right] = veiled ? [B.free, null] : split(B.free, 0.55);
+    const r1 = 0.25 * Math.cbrt(state.m1);
+    const r2 = 0.25 * Math.cbrt(state.m2);
+    const t = Number(state.t) || 0;
+    const inc = c.in || { un1: 0, ut1: 0, un2: 0, ut2: 0 };
+    // At t = 0 the balls touch on the line of impact; before, they approach; after, they leave.
+    const c1 = t < 0 ? [-r1 + inc.un1 * t * 0.5, inc.ut1 * t * 0.5] : [-r1 + c.vn1 * t * 0.5, c.vt1 * t * 0.5];
+    const c2 = t < 0 ? [r2 + inc.un2 * t * 0.5, inc.ut2 * t * 0.5] : [r2 + c.vn2 * t * 0.5, c.vt2 * t * 0.5];
+    const reach = Math.max(2.5, 0.6 * Math.max(Math.abs(inc.un1), Math.abs(c.vn1), Math.abs(c.vn2), Math.abs(inc.ut1)) + 0.8);
+    const S = sceneIn(B, left, { x0: -reach, x1: reach, y0: -0.7 * reach, y1: 0.7 * reach });
+    seg(S, [-reach, 0], [reach, 0], { color: alpha(C.text, 0.3), width: 1, dash: [6, 4] });
+    label(S, 'line of impact', [reach, 0], { color: C.muted, align: 'right', dy: -8 });
+    circle(S, c1, r1, { stroke: C.text, width: 2.5, fill: alpha(C.text, 0.15) });
+    circle(S, c2, r2, { stroke: C.gold, width: 2.5, fill: alpha(C.gold, 0.15) });
+    const peak = Math.max(1, Math.abs(inc.un1), Math.abs(inc.ut1), Math.abs(inc.un2), Math.abs(c.vn1), Math.abs(c.vn2));
+    const k = (0.35 * reach * S.k) / peak;
+    const v1 = t < 0 ? [inc.un1, inc.ut1] : [c.vn1, c.vt1];
+    const v2 = t < 0 ? [inc.un2, inc.ut2] : [c.vn2, c.vt2];
+    if (Math.hypot(...v1) > 1e-6) vec(S, c1, v1, k, { color: C.text, label: veiled ? 'v₁' : `${fig(Math.hypot(...v1))} m/s` });
+    if (Math.hypot(...v2) > 1e-6) vec(S, c2, v2, k, { color: C.gold, label: veiled ? 'v₂' : `${fig(Math.hypot(...v2))} m/s` });
+    label(S, t < 0 ? 'before' : 'after', [-reach, 0.7 * reach], { color: C.muted, align: 'left', dy: 12 });
+    if (veiled) return;
+
+    // Momentum along the line, and kinetic energy, before and after.
+    const p1b = state.m1 * inc.un1;
+    const p2b = state.m2 * inc.un2;
+    const p1a = state.m1 * c.vn1;
+    const p2a = state.m2 * c.vn2;
+    const Ta = c.T0 - c.loss;
+    const pTop = Math.max(1, Math.abs(p1b) + Math.abs(p2b), Math.abs(p1a) + Math.abs(p2a)) * 1.2;
+    const P = chartIn(B, right, { lo: 0, hi: 4 }, { lo: -pTop * 0.15, hi: pTop });
+    axes(P, { xLabel: 'momentum along the line: before | after', yLabel: 'kg·m/s', xFmt: () => '' });
+    const stack = (x, a, b2) => {
+      poly(P, [[x, 0], [x + 0.7, 0], [x + 0.7, a], [x, a]], { fill: alpha(C.text, 0.7), stroke: null });
+      poly(P, [[x, a], [x + 0.7, a], [x + 0.7, a + b2], [x, a + b2]], { fill: alpha(C.gold, 0.7), stroke: null });
+      label(P, fig(a + b2), [x + 0.35, a + b2], { color: C.text, dy: -8 });
+    };
+    stack(0.35, p1b, p2b);
+    stack(1.35, p1a, p2a);
+    // Kinetic energy, on its own scale at the right: the gap is what the impact took.
+    const eScale = (pTop * 0.85) / Math.max(c.T0, 1e-9);
+    poly(P, [[2.6, 0], [3.0, 0], [3.0, c.T0 * eScale], [2.6, c.T0 * eScale]], { fill: alpha(C.teal, 0.55), stroke: null });
+    poly(P, [[3.25, 0], [3.65, 0], [3.65, Ta * eScale], [3.25, Ta * eScale]], { fill: alpha(C.teal, 0.55), stroke: null });
+    if (c.loss > 1e-6) poly(P, [[3.25, Ta * eScale], [3.65, Ta * eScale], [3.65, c.T0 * eScale], [3.25, c.T0 * eScale]], { fill: null, stroke: C.pink, width: 1.5 });
+    label(P, `T: ${fig(c.T0)} → ${fig(Ta)} J`, [3.1, c.T0 * eScale], { color: C.teal, dy: -8 });
+    line(P, [[2.3, -pTop * 0.15], [2.3, pTop]], { color: alpha(C.text, 0.25), width: 1 });
   },
   law() {
     return [
