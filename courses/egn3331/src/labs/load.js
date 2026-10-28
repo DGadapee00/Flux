@@ -31,6 +31,8 @@ const loaders = {
   motor: () => import('./motor.js'),
   castigliano: () => import('./castigliano.js'),
   drop: () => import('./drop.js'),
+  buckling: () => import('./buckling.js'),
+  column: () => import('./column.js'),
 };
 
 const labs = createLabLoader(loaders);

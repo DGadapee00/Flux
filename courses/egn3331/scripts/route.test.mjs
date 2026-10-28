@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { EXAMS } from '../src/data/catalog.js';
 import { COURSE, courseHash, parseRoute } from '../src/engine/router.js';
 
 test('a prefixed hash is the same route as the old one, and the old one is legacy', () => {
@@ -24,11 +25,13 @@ test('an empty hash opens Unit 1 on the inclined cut', () => {
   assert.equal(route.labId, 'cut');
 });
 
-test('a bare lab id finds its unit, and a unit still to be built opens with no lab', () => {
+test('a bare lab id finds its unit, and every unit opens on its first lab', () => {
   const bare = parseRoute(`#/${COURSE}/pins`);
   assert.equal(bare.examId, 'u1');
   assert.equal(bare.labId, 'pins');
-  const later = parseRoute(`#/${COURSE}/u11`);
-  assert.equal(later.examId, 'u11');
-  assert.ok(!later.labId);
+  for (const exam of EXAMS) {
+    const route = parseRoute(`#/${COURSE}/${exam.id}`);
+    assert.equal(route.examId, exam.id);
+    assert.equal(route.labId, exam.labs[0]);
+  }
 });
