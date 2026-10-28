@@ -1,10 +1,10 @@
 import { G } from '@flux/subjects/mechanics/constants.js';
 import { rocketDeltaV } from '@flux/subjects/mechanics/momentum.js';
-import { forceArrow, placeIncomingArrow } from '@flux/shells/engineering/fbd.js';
-import { M, makeLine, setLine } from '../scene/draw.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { THREE, defineLab } from './define.js';
+import { C, alpha, axes, begin, chartIn, dot, hidden, label, line, poly, sceneIn, seg, split, vec } from './diagram.js';
+import { defineLab } from './define2d.js';
+import { PLAY, advance } from './motion.js';
 import { bindSlider, slider, leavesOut } from './widgets.js';
 
 const SCENARIOS = [
@@ -45,7 +45,19 @@ function apply(id, state) {
   state.ve = sc.ve;
   state.mdot = sc.mdot;
   state.g = sc.g;
+  state.t = 0;
+  state.anim = { playing: false };
+  state.show = { play: false };
 }
+
+/**
+ * A rocket burning its propellant (Hibbeler §15.9). Shows that the speed it gains follows the mass
+ * ratio m₀/m_f, not the mass burned, so the same 120 kg burned from a heavier rocket gives less, and
+ * that in gravity a slow burn loses g t_b. Play runs the burn: the propellant drains, the speed climbs
+ * along v_e ln(m₀/m) − g t.
+ *
+ * Recompute: the rocket equation. Check: m dv/dt = ṁ v_e − m g integrated by the midpoint rule.
+ */
 
 function clamped(state) {
   const m0 = Math.max(Number(state.m0) || 0, 1);
@@ -73,21 +85,6 @@ function integrated(spec) {
   return speed;
 }
 
-const BODY = [
-  { x: 0, y: 1.55 },
-  { x: -0.28, y: 1.05 },
-  { x: -0.28, y: -0.15 },
-  { x: -0.55, y: -0.55 },
-  { x: -0.28, y: -0.28 },
-  { x: -0.28, y: -0.48 },
-  { x: 0.28, y: -0.48 },
-  { x: 0.28, y: -0.28 },
-  { x: 0.55, y: -0.55 },
-  { x: 0.28, y: -0.15 },
-  { x: 0.28, y: 1.05 },
-  { x: 0, y: 1.55 },
-];
-
 /** What the real device has that the model ignores (D30). */
 const OUT = String.raw`The exhaust speed and the burn rate are constant. A real engine's thrust grows as the outside pressure falls, so its exhaust speed differs between the ground and a vacuum. Drag, which is largest low and slow, is left out, and so is the turn from vertical toward horizontal flight, which changes the gravity loss from $g t_b$ to the sum of $g\sin\gamma$ over the burn, with $\gamma$ the climb angle above horizontal. Gravity is taken as constant over the burn.`;
 
@@ -95,8 +92,12 @@ export default defineLab({
   id: 'rocket',
   exam: 'u4',
   title: 'Rocket',
+  app: false,
+  gapLimit: 1e-3,
+  keys: { ' ': 'sweep' },
+  toggles: [PLAY],
+  sweep: () => ({ key: 'mdot', lo: 5, hi: 80 }),
   hint: 'Δv follows the mass ratio, not the mass burned.',
-  camera: { pos: new THREE.Vector3(0, 0.35, 6.2), target: new THREE.Vector3(0, 0.35, 0) },
   scenarios: SCENARIOS,
   defaultState() {
     const s = {};
@@ -110,7 +111,7 @@ export default defineLab({
       ${slider('rk-mf', 'm_f (kg)', 80, 10, 700, 10)}
       ${slider('rk-ve', 'v_e (m/s)', 1500, 200, 3000, 10)}
       ${slider('rk-mdot', 'ṁ (kg/s)', 40, 5, 80, 1)}
-      <p class="tiny">Gold is the thrust and the flame. Grey is the weight, and it appears only when the scenario includes gravity.</p>`;
+      <p class="tiny">Gold is the thrust, ṁ v_e, and the flame. Grey is the weight, shown only when the scenario includes gravity. The teal fill is the propellant left. Play runs the burn.</p>`;
   },
   bind(api) {
     bindSlider('rk-m0', (s, v) => { s.m0 = v; }, api);
@@ -128,51 +129,72 @@ export default defineLab({
     set('rk-ve', state.ve);
     set('rk-mdot', state.mdot);
   },
-  init(ctx) {
-    const group = new THREE.Group();
-    const body = makeLine(M.white);
-    const flame = makeLine(M.gold);
-    const ground = makeLine(M.greyDark);
-    const mk = (dir, color) => forceArrow(dir, color, 0.03, 0.18, 0.14);
-    const thrust = mk(new THREE.Vector3(0, 1, 0), M.gold);
-    const weight = mk(new THREE.Vector3(0, -1, 0), M.grey);
-    group.add(body, flame, ground, thrust, weight);
-    ctx.scene.add(group);
-    setLine(body, BODY);
-    return { group, body, flame, ground, thrust, weight };
+  tick(dt, state) {
+    const spec = clamped(state);
+    const tb = (spec.m0 - spec.mf) / spec.mdot;
+    // The whole burn in about four seconds, whatever its length, with a pause at burnout.
+    return advance(state, dt, { lo: 0, hi: tb * 1.2, rate: tb / 4 });
   },
-  enter(ctx, handle) {
-    handle.group.visible = true;
-  },
-  exit(ctx, handle) {
-    handle.group.visible = false;
-  },
-  recompute(state, computed) {
+  compute(state) {
     const spec = clamped(state);
     const row = rocketDeltaV({ ...spec, v0: 0 });
     const speed = integrated(spec);
-    Object.assign(computed, {
+    return {
+      spec,
       dv: row.dv,
       tb: row.tb,
       burned: row.burned,
       ratio: row.ratio,
       speed: row.speed,
       gap: Math.abs(row.dv - speed) / Math.max(1, Math.abs(row.dv)),
-    });
+    };
   },
-  syncViews(state, computed, ctx) {
-    const h = ctx.handle;
-    const flame = Math.min(1.15, 0.35 + state.mdot / 70);
-    setLine(h.flame, [
-      { x: -0.1, y: -0.48 },
-      { x: 0, y: -0.48 - flame },
-      { x: 0.1, y: -0.48 },
-    ]);
-    setLine(h.ground, [{ x: -1.6, y: -1.85 }, { x: 1.6, y: -1.85 }]);
-    const at = new THREE.Vector3(0, 0.2, 0);
-    placeIncomingArrow(h.thrust, at, 0, 1, { scale: 1.15, minLength: 1.15, gap: 0.05 });
-    if (state.g > 0) placeIncomingArrow(h.weight, at, 0, -1, { scale: 0.72, minLength: 0.72, gap: 0.05 });
-    else h.weight.visible = false;
+  draw(canvas, state, c) {
+    const B = begin(canvas);
+    const veiled = hidden();
+    const [left, right] = veiled ? [B.free, null] : split(B.free, 0.42);
+    const { m0, mf, ve, mdot, g } = c.spec;
+    const tb = c.tb;
+    const t = Math.min(Math.max(Number(state.t) || 0, 0), tb);
+    const m = m0 - mdot * t;
+    const vAt = (u) => ve * Math.log(m0 / (m0 - mdot * u)) - g * u;
+    // The rocket: its body, the propellant left as a fill, the flame while it burns.
+    const S = sceneIn(B, left, { x0: -1.4, x1: 1.4, y0: -1.9, y1: 1.9 });
+    const body = [[0, 1.55], [-0.28, 1.05], [-0.28, -0.48], [0.28, -0.48], [0.28, 1.05]];
+    const share = (m - mf) / Math.max(m0 - mf, 1e-9);
+    const top = -0.48 + 1.45 * share;
+    poly(S, [[-0.26, -0.46], [0.26, -0.46], [0.26, top], [-0.26, top]], { fill: alpha(C.teal, 0.45), stroke: null });
+    poly(S, body, { fill: null, stroke: C.text, width: 2 });
+    poly(S, [[-0.28, -0.28], [-0.55, -0.6], [-0.28, -0.48]], { fill: alpha(C.text, 0.3), stroke: C.text, width: 1.5 });
+    poly(S, [[0.28, -0.28], [0.55, -0.6], [0.28, -0.48]], { fill: alpha(C.text, 0.3), stroke: C.text, width: 1.5 });
+    if (t < tb) {
+      const fl = Math.min(1.1, 0.3 + mdot / 70);
+      poly(S, [[-0.13, -0.48], [0, -0.48 - fl], [0.13, -0.48]], { fill: alpha(C.gold, 0.6), stroke: C.gold, width: 1.5 });
+    }
+    const thrust = t < tb ? mdot * ve : 0;
+    const W = m * g;
+    const k = (1.1 * S.k) / Math.max(mdot * ve, W, 1);
+    if (thrust > 0) vec(S, [0.55, 0.2], [0, thrust], k, { color: C.gold, label: veiled ? 'thrust' : `${fig(thrust / 1000)} kN` });
+    if (g > 0) vec(S, [-0.55, 0.2], [0, -W], k, { color: C.dim, label: veiled ? 'mg' : `${fig(W / 1000)} kN` });
+    if (!veiled) label(S, `m = ${fig(m)} kg`, [0, -1.75], { color: C.muted });
+    if (veiled) return;
+
+    // Speed through the burn, and the line it would follow with no gravity.
+    const n = 60;
+    const pts = Array.from({ length: n + 1 }, (_, i) => [(tb * i) / n, vAt((tb * i) / n)]);
+    const ideal = Array.from({ length: n + 1 }, (_, i) => [(tb * i) / n, ve * Math.log(m0 / (m0 - (mdot * tb * i) / n))]);
+    const hi = Math.max(1, ...ideal.map((q) => q[1])) * 1.12;
+    const lo = Math.min(0, ...pts.map((q) => q[1]));
+    const P = chartIn(B, right, { lo: 0, hi: tb }, { lo, hi });
+    axes(P, { xLabel: 'time in the burn (s)', yLabel: 'speed (m/s)' });
+    if (g > 0) {
+      line(P, ideal, { color: alpha(C.text, 0.4), width: 1.5, dash: [5, 4] });
+      label(P, 'no gravity', ideal[n], { color: C.muted, align: 'right', dy: -8 });
+      seg(P, [tb, vAt(tb)], [tb, ideal[n][1]], { color: C.pink, width: 1.5 });
+      label(P, `g t_b = ${fig(g * tb)} m/s`, [tb, (vAt(tb) + ideal[n][1]) / 2], { color: C.pink, align: 'right', dx: -6 });
+    }
+    line(P, pts, { color: C.gold, width: 2.5 });
+    dot(P, t, vAt(t), { color: C.yellow, r: 5 });
   },
   law() {
     return [
