@@ -50,6 +50,21 @@ export const NOTES = {
       { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
+  u4: {
+    exam: 'u4',
+    title: 'Multiaxial stress and pressure vessels',
+    chapters: '8, 10',
+    file: 'u4-vessels.html',
+    load: () => import('./content/u4-vessels.html?raw').then((m) => m.default),
+    sections: [
+      { id: 's1', n: 1, title: 'A closed thin cylinder', lab: 'vessel', ch: ['8'], topics: ['pressure-vessels'], home: true },
+      { id: 's2', n: 2, title: 'A thin sphere', lab: 'vessel', ch: ['8'], topics: ['sphere'] },
+      { id: 's3', n: 3, title: 'A propane cylinder', lab: 'tank', ch: ['8'], topics: ['pressure-vessels', 'english'] },
+      { id: 's4', n: 4, title: "Hooke's law in three directions", lab: 'strain3', ch: ['10'], topics: ['poisson'] },
+      { id: 's5', n: 5, title: 'The stress a gauge does not name', lab: 'strain3', ch: ['10'], topics: ['hidden'] },
+      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+  },
 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;

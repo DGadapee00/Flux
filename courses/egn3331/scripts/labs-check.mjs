@@ -21,6 +21,9 @@ const LIMIT = {
   axial: 1e-8,
   indeterminate: 1e-12,
   rail: 1e-9,
+  strain3: 1e-9,
+  vessel: 1e-12,
+  tank: 1e-12,
 };
 
 const fails = [];
