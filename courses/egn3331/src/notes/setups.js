@@ -467,6 +467,87 @@ export const SETUPS = {
       },
     ],
   },
+  u8: {
+    s1: [
+      {
+        tag: 'the tip load',
+        lab: 'curve',
+        scenario: 'cantilever',
+        read: (c) => ({ drop: [c.drop * 1000, 15.62], slope: [-c.slopeTip, 0.01172] }),
+      },
+    ],
+    s2: [
+      {
+        tag: 'the uniform load',
+        lab: 'curve',
+        scenario: 'uniform',
+        read: (c) => ({ drop: [c.drop * 1000, 48.8] }),
+      },
+    ],
+    s3: [
+      {
+        tag: 'quarter span',
+        lab: 'curve',
+        scenario: 'offset',
+        read: (c) => ({ xMax: [c.xMax, 1.764], drop: [c.drop * 1000, 27.3] }),
+      },
+      {
+        tag: 'under the load',
+        lab: 'curve',
+        scenario: 'offset',
+        read: (c) => ({ under: [c.under * 1000, 22] }),
+      },
+    ],
+    s4: [
+      {
+        tag: 'the prop',
+        lab: 'propped',
+        scenario: 'held',
+        read: (c) => ({
+          R: [c.R / 1000, 4.5],
+          M: [c.Mwall / 1000, -4.5],
+          drop: [c.drop * 1000, 5.14],
+          xMax: [c.xMax, 1.735],
+        }),
+      },
+      {
+        tag: 'twice the span',
+        lab: 'propped',
+        scenario: 'long',
+        read: (c) => ({ R: [c.R / 1000, 9], M: [c.Mwall / 1000, -18] }),
+      },
+      {
+        tag: 'the prop removed',
+        lab: 'propped',
+        scenario: 'free',
+        read: (c) => ({ drop: [c.drop * 1000, 118.7], M: [c.Mwall / 1000, -18], R: [c.R / 1000, 0] }),
+      },
+    ],
+    s5: [
+      {
+        tag: 'the 72 in span',
+        lab: 'shelf',
+        scenario: 'open',
+        read: (c) => ({ sag: [c.drop / M_PER_IN, 2.38] }),
+      },
+      {
+        tag: 'a 48 in span',
+        lab: 'shelf',
+        scenario: 'short',
+        read: (c) => ({ sag: [c.drop / M_PER_IN, 0.47] }),
+      },
+      {
+        tag: 'the center bracket',
+        lab: 'shelf',
+        scenario: 'braced',
+        read: (c) => ({
+          sag: [c.drop / M_PER_IN, 0.0618],
+          end: [c.Rend / N_PER_LBF, 45],
+          center: [c.Rmid / N_PER_LBF, 150],
+        }),
+      },
+    ],
+  },
 };
 
 /** An example's tag as the notes write it, without "Worked example · ". */
