@@ -9,7 +9,7 @@ import { flexureFibers, rectFibersReduced, rectSection, simpleBendingStress, tee
 import { generalBeam, internalAt, simplePoint, simpleUniform } from '@flux/subjects/mechanics/sections.js';
 import { bentStripStress, compositeSection, tiltedRect } from '@flux/subjects/mechanics/bending.js';
 import { JOIST_B, JOIST_DEAD, JOIST_H, PA_PER_PSF, joistLine } from '../../data/joist.js';
-import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
+import { choice, cite, kase, mc, num, problem, range, sym } from '../kit.js';
 
 const KN = 1000;
 const MPA = 1e6;
@@ -46,12 +46,13 @@ const ch6 = [
       L: range(3, 6, 0.5, 'm', 1),
       aFrac: range(0.2, 0.35, 0.05, '', 1),
     },
+    derive: ($) => ({ a: $.aFrac * $.L }),
     valid: ($) => {
       const left = $.P * (1 - $.aFrac);
       const M = left * $.aFrac * $.L;
       return rel(M, ($.P * $.L) / 4) && rel(left, $.P) && rel(left, $.P * $.aFrac);
     },
-    text: (T) => String.raw`A simple beam of length ${T.L} m carries ${T.P} kN downward at ${T.aFrac} of the span from the left. Find the left reaction and the largest moment. Sagging is positive.`,
+    text: (T) => String.raw`A simple beam of length ${T.L} m carries ${T.P} kN downward at ${T.aFrac} of the span from the left. Find the left reaction and the largest moment. Sagging is positive. Then write the largest moment as a formula in $P$, the load's distance $a$ from the left, and $L$.`,
     parts: [
       num('V', ($) => $.P * (1 - $.aFrac), 'kN', {
         scale: KN,
@@ -69,6 +70,7 @@ const ch6 = [
           [($) => $.P * $.L, 'That is $P$ times the whole span. The other support carries part of the load.'],
         ],
       }),
+      sym('Msym', 'P*a*(L-a)/L', { P: 'N', a: 'm', L: 'm' }, ($) => ($.P * $.a * ($.L - $.a)) / $.L, { unit: 'N*m', label: 'largest moment, as a formula' }),
     ],
     hints: [
       'The left support carries the share of the load set by the distance that remains on the right. The moment is largest at the load.',
@@ -114,7 +116,7 @@ const ch6 = [
       w: range(2, 12, 1, 'kN/m', KN),
       L: range(2, 8, 0.5, 'm', 1),
     },
-    text: (T) => String.raw`A simple beam of length ${T.L} m carries ${T.w} kN/m downward, uniform along the span. Find the shear at the left support and the largest moment.`,
+    text: (T) => String.raw`A simple beam of length ${T.L} m carries ${T.w} kN/m downward, uniform along the span. Find the shear at the left support and the largest moment. Then write that moment as a formula in $w$ and $L$.`,
     parts: [
       num('V', ($) => ($.w * $.L) / 2, 'kN', {
         scale: KN,
@@ -132,6 +134,7 @@ const ch6 = [
           [($) => ($.w * $.L * $.L) / 2, 'That is the wall moment of a cantilever with this same uniform load.'],
         ],
       }),
+      sym('Msym', 'w*L^2/8', { w: 'N/m', L: 'm' }, ($) => ($.w * $.L * $.L) / 8, { unit: 'N*m', label: 'largest moment, as a formula' }),
     ],
     hints: [
       'The two supports split a uniform load in half. The moment at midspan is the load times the span squared, over eight.',
@@ -173,7 +176,7 @@ const ch6 = [
       b: range(20, 80, 10, 'mm', 1e-3),
       h: range(40, 160, 20, 'mm', 1e-3),
     },
-    text: (T) => String.raw`A rectangular section ${T.b} mm wide and ${T.h} mm deep carries a sagging moment of ${T.M} kN·m. Find the top and bottom fiber stresses. Tension is positive.`,
+    text: (T) => String.raw`A rectangular section ${T.b} mm wide and ${T.h} mm deep carries a sagging moment of ${T.M} kN·m. Find the top and bottom fiber stresses. Tension is positive. Then write the size of either outer-fiber stress as a formula in $M$, $b$ and $h$.`,
     parts: [
       num('top', ($) => flexureFibers($.M, rectSection($.b, $.h)).top, 'MPa', {
         scale: MPA,
@@ -191,6 +194,7 @@ const ch6 = [
           [($) => 2 * flexureFibers($.M, rectSection($.b, $.h)).bot, 'Using $c = h$ instead of $h/2$ doubles the stress.'],
         ],
       }),
+      sym('ssym', '6*M/(b*h^2)', { M: 'N*m', b: 'm', h: 'm' }, ($) => (6 * $.M) / ($.b * $.h * $.h), { unit: 'Pa', label: 'outer-fiber stress, as a formula' }),
     ],
     hints: [
       'The section modulus of a rectangle is the width times the height squared, over six. Sagging compression is on top.',
@@ -233,7 +237,7 @@ const ch6 = [
     vars: {
       M: range(0.4, 6, 0.1, 'kN·m', KN),
     },
-    text: (T) => String.raw`A tee has a 120 mm by 12 mm flange on top of a 12 mm by 100 mm web. The sagging moment is ${T.M} kN·m. Find the top and bottom fiber stresses. Tension is positive.`,
+    text: (T) => String.raw`A tee has a 120 mm by 12 mm flange on top of a 12 mm by 100 mm web. The sagging moment is ${T.M} kN·m. Find the top and bottom fiber stresses. Tension is positive. Then write the size of either outer-fiber stress as a formula in $M$, $b$ and $h$.`,
     parts: [
       num('top', ($) => teeFibers($.M).top, 'MPa', {
         scale: MPA,

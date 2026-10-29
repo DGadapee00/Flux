@@ -10,7 +10,7 @@ import {
 } from '@flux/subjects/mechanics/torsion.js';
 import { bredt, openThin, rectTorsion, rectTorsionDouble } from '@flux/subjects/mechanics/noncircular.js';
 import { HP_WATT, MOTOR_D_IN, MOTOR_L_IN, motorInches, motorShaft } from '../../data/motor.js';
-import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
+import { choice, cite, kase, mc, num, problem, range, sym } from '../kit.js';
 
 const G = 75e9;
 const E_STEEL = 200e9;
@@ -59,7 +59,7 @@ const ch5 = [
       d: range(25, 60, 5, 'mm', MM),
       L: range(0.4, 2, 0.2, 'm'),
     },
-    text: (T) => String.raw`A solid steel shaft, ${T.d} mm in diameter and ${T.L} m long, carries ${T.T} N·m. G is 75 GPa. Find the shear stress at the outside and the angle of twist in degrees.`,
+    text: (T) => String.raw`A solid steel shaft, ${T.d} mm in diameter and ${T.L} m long, carries ${T.T} N·m. G is 75 GPa. Find the shear stress at the outside and the angle of twist in degrees. Then write the outside stress as a formula in $T$ and $d$.`,
     parts: [
       num('tau', ($) => roundShaft($.T, $.L, G, $.d, 0).tauMax, 'MPa', {
         scale: MPA,
@@ -77,6 +77,7 @@ const ch5 = [
           [($) => ($.T * $.L) / (E_STEEL * polarJ($.d / 2, 0)), 'E was used in place of G. The angle of twist is TL/GJ.'],
         ],
       }),
+      sym('tsym', '16*T/(pi*d^3)', { T: 'N*m', d: 'm' }, ($) => (16 * $.T) / (Math.PI * $.d ** 3), { unit: 'Pa', label: 'outside stress, as a formula' }),
     ],
     hints: [
       'Shear stress at a radius is torque times that radius over the polar moment. The angle is torque times length over G J.',

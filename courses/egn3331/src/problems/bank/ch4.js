@@ -11,7 +11,7 @@ import {
 import {
   holeInStrip, jointFromElongations, kirsch, ktEllipse, ktStrip, ktTip, pinJoint, threeBar,
 } from '@flux/subjects/mechanics/deformation.js';
-import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
+import { choice, cite, kase, mc, num, problem, range, sym } from '../kit.js';
 
 const KN = 1e3;
 const MM = 1e-3;
@@ -63,8 +63,9 @@ const ch4 = [
       L: range(0.9, 1.6, 0.1, 'm', 1),
       A: range(150, 400, 25, 'mm²', 1e-6),
     },
+    derive: () => ({ E }),
     valid: ($) => $.P / $.A < 180e6,
-    text: (T) => String.raw`A uniform steel bar, fixed at the left, is $${T.L}$ m long and has area $${T.A}$ mm². The modulus is 200 GPa. An axial tension of $${T.P}$ kN pulls the free end. Find the elongation.`,
+    text: (T) => String.raw`A uniform steel bar, fixed at the left, is $${T.L}$ m long and has area $${T.A}$ mm². The modulus is 200 GPa. An axial tension of $${T.P}$ kN pulls the free end. Find the elongation, then write it as a formula in $P$, $L$, $A$ and $E$.`,
     parts: [
       num('delta', ($) => ($.P * $.L) / ($.A * E), 'mm', {
         scale: MM,
@@ -74,6 +75,7 @@ const ch4 = [
           [($) => $.P / $.A, 'That is the stress. The elongation is still the stress times $L/E$.'],
         ],
       }),
+      sym('dsym', 'P*L/(A*E)', { P: 'N', L: 'm', A: 'm^2', E: 'Pa' }, ($) => ($.P * $.L) / ($.A * $.E), { unit: 'm', label: 'elongation, as a formula' }),
     ],
     hints: [
       'For a uniform bar in tension the elongation is the load times the length, divided by the area times the modulus.',

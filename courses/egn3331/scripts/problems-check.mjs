@@ -130,6 +130,8 @@ function checkSecond(tpl, inst, label) {
     return err(tpl.id, `${label} second() threw: ${e.message}`);
   }
   for (const part of tpl.parts) {
+    // A symbolic key is checked against get() by value, in checkAnswers.
+    if (part.kind === 'symbolic') continue;
     if (!(part.id in got)) {
       err(tpl.id, `${label} second() has no ${part.id}`);
       continue;

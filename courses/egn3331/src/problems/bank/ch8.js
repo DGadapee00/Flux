@@ -12,7 +12,7 @@ import {
   deltaRosette, planeStressFromStrain, principalStrains, rectangularRosette, rosette, strainTransform,
 } from '@flux/subjects/mechanics/strain.js';
 import { TANK_OD_IN, TANK_R, TANK_T } from '../../data/tank.js';
-import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
+import { choice, cite, kase, mc, num, problem, range, sym } from '../kit.js';
 
 const MPA = 1e6;
 const MM = 1e-3;
@@ -41,7 +41,7 @@ const ch8 = [
       t: range(2, 12, 0.5, 'mm', MM),
     },
     valid: ($) => $.r / $.t >= 10 && thinCylinder($.p, $.r, $.t).hoop < 400e6,
-    text: (T) => String.raw`A closed thin-walled cylinder has an inside radius of $${T.r}$ mm and a wall of $${T.t}$ mm. The internal pressure is $${T.p}$ MPa. Find the hoop stress and the longitudinal stress.`,
+    text: (T) => String.raw`A closed thin-walled cylinder has an inside radius of $${T.r}$ mm and a wall of $${T.t}$ mm. The internal pressure is $${T.p}$ MPa. Find the hoop stress and the longitudinal stress. Then write the hoop stress as a formula in $p$, $r$ and $t$.`,
     parts: [
       num('hoop', ($) => thinCylinder($.p, $.r, $.t).hoop, 'MPa', {
         scale: MPA,
@@ -59,6 +59,7 @@ const ch8 = [
           [($) => ($.p * 2 * $.r) / $.t, 'The diameter was put into the hoop formula $pr/t$. Longitudinal stress is $pr/(2t)$ with the radius.'],
         ],
       }),
+      sym('hsym', 'p*r/t', { p: 'Pa', r: 'm', t: 'm' }, ($) => ($.p * $.r) / $.t, { unit: 'Pa', label: 'hoop stress, as a formula' }),
     ],
     hints: [
       'Split the cylinder along its length. The pressure on the projected diameter is carried by two walls, and that stress is the hoop stress.',

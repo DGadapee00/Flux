@@ -10,7 +10,7 @@ import {
 } from '@flux/subjects/mechanics/elastic.js';
 import { fixedUniform, simpleMacaulay } from '@flux/subjects/mechanics/macaulay.js';
 import { SHELF_B_IN, SHELF_H_IN, shelfOpen, shelfOpenInches } from '../../data/shelf.js';
-import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
+import { choice, cite, kase, mc, num, problem, range, sym } from '../kit.js';
 
 const KN = 1000;
 const E = 200e9;
@@ -52,7 +52,8 @@ const ch12 = [
       b: range(20, 60, 20, 'mm', 1e-3),
       h: range(40, 120, 20, 'mm', 1e-3),
     },
-    text: (T) => String.raw`A cantilever of length ${T.L} m has a rectangular section ${T.b} mm by ${T.h} mm and E of 200 GPa. A downward tip load of ${T.P} kN is applied. How far does the tip drop?`,
+    derive: ($) => ({ E, I: rectInertia($.b, $.h) }),
+    text: (T) => String.raw`A cantilever of length ${T.L} m has a rectangular section ${T.b} mm by ${T.h} mm and E of 200 GPa. A downward tip load of ${T.P} kN is applied. How far does the tip drop? Then write the drop as a formula in $P$, $L$, $E$ and $I$.`,
     parts: [
       num('drop', ($) => cantileverTipDeflection($.P, $.L, ei($.b, $.h)).drop, 'mm', {
         scale: 1e-3,
@@ -62,6 +63,7 @@ const ch12 = [
           [($) => ($.P * $.L ** 3) / (48 * ei($.b, $.h)), 'PL^3/48EI is the midspan drop of a simple span. This beam is fixed at one end.'],
         ],
       }),
+      sym('dsym', 'P*L^3/(3*E*I)', { P: 'N', L: 'm', E: 'Pa', I: 'm^4' }, ($) => ($.P * $.L ** 3) / (3 * $.E * $.I), { unit: 'm', label: 'tip drop, as a formula' }),
     ],
     hints: [
       'Integrate EI y\'\' = M from the fixed end. The wall kills both the deflection and the slope.',
@@ -100,7 +102,8 @@ const ch12 = [
       b: range(20, 60, 20, 'mm', 1e-3),
       h: range(40, 120, 20, 'mm', 1e-3),
     },
-    text: (T) => String.raw`A beam ${T.L} m long is supported at both ends and carries ${T.w} kN/m downward. The section is ${T.b} mm by ${T.h} mm and E is 200 GPa. How far does midspan drop?`,
+    derive: ($) => ({ E, I: rectInertia($.b, $.h) }),
+    text: (T) => String.raw`A beam ${T.L} m long is supported at both ends and carries ${T.w} kN/m downward. The section is ${T.b} mm by ${T.h} mm and E is 200 GPa. How far does midspan drop? Then write the drop as a formula in $w$, $L$, $E$ and $I$.`,
     parts: [
       num('drop', ($) => simpleUniformDeflection($.w, $.L, ei($.b, $.h)).drop, 'mm', {
         scale: 1e-3,
@@ -110,6 +113,7 @@ const ch12 = [
           [($) => ($.w * $.L ** 4) / (384 * ei($.b, $.h)), 'The 5 in the numerator is missing. The midspan drop is five times that.'],
         ],
       }),
+      sym('dsym', '5*w*L^4/(384*E*I)', { w: 'N/m', L: 'm', E: 'Pa', I: 'm^4' }, ($) => (5 * $.w * $.L ** 4) / (384 * $.E * $.I), { unit: 'm', label: 'midspan drop, as a formula' }),
     ],
     hints: [
       'The moment is sagging. Integrate EI y\'\' = M and set the deflection to zero at both supports.',
