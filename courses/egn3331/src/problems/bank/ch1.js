@@ -1032,6 +1032,70 @@ const ch1 = [
       kase(cite('factor-of-safety'), { change: 'diameter', d: 20 }, { FS: 'four' }),
     ],
   }),
+  problem({
+    id: 'u1.1.lug',
+    title: 'Sizing a lifting lug and its pin',
+    exam: 'u1',
+    ch: '1',
+    lab: 'pins',
+    src: cite('bearing'),
+    topics: ['shear-stress', 'bearing', 'factor-of-safety'],
+    variety: ['goal'],
+    level: 3,
+    vars: {
+      P: range(20, 80, 5, 'kN', KN),
+      ta: range(80, 140, 10, 'MPa', MPA),
+      sb: range(150, 300, 25, 'MPa', MPA),
+      w: range(40, 90, 5, 'mm', MM),
+    },
+    derive: ($) => {
+      const d = Math.sqrt((2 * $.P) / (Math.PI * $.ta));
+      const t = $.P / ($.sb * d);
+      return { d, t, net: $.P / (($.w - d) * t) };
+    },
+    valid: ($) => $.w > 2.5 * $.d && $.net < 250 * MPA,
+    text: (T) => String.raw`A lifting lug, a steel plate $${T.w}$ mm wide, hangs a load of $${T.P}$ kN from a pin through a clevis, so the pin is in double shear. The allowable shear in the pin is $${T.ta}$ MPa and the allowable bearing on the lug is $${T.sb}$ MPa. Find the smallest pin diameter, then the smallest lug thickness for bearing on that pin, then the average tension on the lug's net section through the hole.`,
+    parts: [
+      num('d', ($) => $.d, 'mm', {
+        scale: MM,
+        label: 'pin diameter',
+        traps: [
+          [($) => Math.sqrt((4 * $.P) / (Math.PI * $.ta)), 'That puts the whole load on one shear plane. The clevis pin has two.'],
+        ],
+      }),
+      num('t', ($) => $.t, 'mm', {
+        scale: MM,
+        label: 'lug thickness',
+        traps: [
+          [($) => $.t / 2, 'The lug bears on the pin over one contact, $d$ by $t$, not two.'],
+        ],
+      }),
+      num('net', ($) => $.net, 'MPa', {
+        scale: MPA,
+        label: 'net-section tension',
+        traps: [
+          [($) => $.P / ($.w * $.t), 'That uses the full width. Through the hole only $w - d$ is left to carry the load.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Treat the three failure modes one at a time: the pin shearing, the lug crushing against the pin, and the lug tearing across the hole.',
+      String.raw`The pin's diameter comes first, from shear on its two planes. Bearing then uses that $d$, and the net section loses a strip $d$ wide.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Double shear: $P/2 = \tau_a\pi d^2/4$, so $d = \sqrt{2P/\pi\tau_a} = ${sig($.d / MM)}$ mm.`,
+      String.raw`Bearing: $P = \sigma_b\,d\,t$, so $t = ${sig($.t / MM)}$ mm.`,
+      String.raw`Net section: $P/((w - d)t) = ${sig($.net / MPA)}$ MPa.`,
+    ],
+    second: ($) => {
+      // Check each mode back: the stresses at the chosen sizes equal the allowables.
+      const d = Math.sqrt((4 * ($.P / 2)) / (Math.PI * $.ta));
+      const t = ($.P / d) / $.sb;
+      return { d: d / MM, t: t / MM, net: $.P / ($.w * t - d * t) / MPA };
+    },
+    cases: [kase(cite('bearing'), { P: 40, ta: 100, sb: 200, w: 60 }, { d: 15.957691216057311, t: 12.533141373154999, net: 72.46528012116976 })],
+  }),
+
 ];
 
 export default ch1;

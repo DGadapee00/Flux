@@ -942,6 +942,78 @@ const ch5 = [
     },
     cases: [kase(cite('shaft-kt'), { d: 30, step: 1.2, Kt: 1.6, T: 200 }, { peak: 60.36098582848079 })],
   }),
+  problem({
+    id: 'u9.5.fixed-step',
+    title: 'A two-diameter shaft held at both ends',
+    exam: 'u9',
+    ch: '5',
+    lab: 'twist',
+    src: cite('torsion'),
+    topics: ['torsion', 'fixed', 'stepped'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      T: range(200, 1200, 50, 'N·m', 1),
+      d1: range(30, 60, 5, 'mm', MM),
+      d2: range(20, 45, 5, 'mm', MM),
+      a: range(0.4, 1.2, 0.1, 'm', 1),
+      b: range(0.4, 1.2, 0.1, 'm', 1),
+    },
+    derive: ($) => {
+      const k1 = (G * polarJ($.d1 / 2, 0)) / $.a;
+      const k2 = (G * polarJ($.d2 / 2, 0)) / $.b;
+      const TL = ($.T * k1) / (k1 + k2);
+      const TR = $.T - TL;
+      const t1 = (16 * TL) / (Math.PI * $.d1 ** 3);
+      const t2 = (16 * TR) / (Math.PI * $.d2 ** 3);
+      return { k1, k2, TL, TR, phi: TL / k1 / DEG, tmax: Math.max(t1, t2) };
+    },
+    valid: ($) => $.d1 > $.d2 && $.tmax < 150 * MPA && rel($.TL, ($.T * $.b) / ($.a + $.b)),
+    text: (T) => String.raw`A steel shaft ($G = 75$ GPa) is fixed to walls at both ends. From the left wall it is $${T.d1}$ mm in diameter for $${T.a}$ m, then $${T.d2}$ mm for $${T.b}$ m to the right wall. A torque of $${T.T}$ N·m is applied at the step. Find the torque each wall carries, the rotation of the step, and the largest shear stress in the shaft.`,
+    parts: [
+      num('TL', ($) => $.TL, 'N·m', {
+        label: 'left wall',
+        traps: [
+          [($) => ($.T * $.b) / ($.a + $.b), 'That splits the torque by length alone, as if both pieces had one diameter. Each piece is a spring $GJ/L$.'],
+          [($) => $.T / 2, 'An even split needs equal stiffnesses.'],
+        ],
+      }),
+      num('TR', ($) => $.TR, 'N·m', { label: 'right wall' }),
+      num('phi', ($) => $.phi, '°', { abs: 1e-3, label: 'rotation of the step' }),
+      num('tmax', ($) => $.tmax, 'MPa', {
+        scale: MPA,
+        label: 'largest shear stress',
+        traps: [
+          [($) => Math.min((16 * $.TL) / (Math.PI * $.d1 ** 3), (16 * $.TR) / (Math.PI * $.d2 ** 3)), 'That is the less-stressed piece. Check both: the thin piece carries less torque on a smaller diameter.'],
+        ],
+      }),
+    ],
+    hints: [
+      'One equilibrium equation, two wall torques. The step turns by a single angle, seen from either wall.',
+      String.raw`Each piece is a torsional spring $k = GJ/L$. Equal angles mean the torques divide in proportion to the two $k$ values.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$k_1 = GJ_1/a = ${sig($.k1)}$ and $k_2 = GJ_2/b = ${sig($.k2)}$ N·m/rad.`,
+      String.raw`$T_L = Tk_1/(k_1 + k_2) = ${sig($.TL)}$ N·m and $T_R = ${sig($.TR)}$ N·m. The step turns $T_L/k_1 = ${sig($.phi)}^\circ$.`,
+      String.raw`Stresses: $16T/\pi d^3$ in each piece; the larger is $${sig($.tmax / MPA)}$ MPa.`,
+    ],
+    second: ($) => {
+      // Release the right wall: the free twist T a/GJ1 must be undone by T_R through both pieces in series.
+      const J1 = polarJ($.d1 / 2, 0);
+      const J2 = polarJ($.d2 / 2, 0);
+      const free = ($.T * $.a) / (G * J1);
+      const flex = $.a / (G * J1) + $.b / (G * J2);
+      const TR = free / flex;
+      const TL = $.T - TR;
+      return {
+        TL, TR,
+        phi: (TR * $.b) / (G * J2) / DEG,
+        tmax: Math.max((16 * TL) / (Math.PI * $.d1 ** 3), (16 * TR) / (Math.PI * $.d2 ** 3)) / MPA,
+      };
+    },
+    cases: [kase(cite('torsion'), { T: 600, d1: 40, d2: 30, a: 0.6, b: 0.9 }, { TL: 495.48387096774195, TR: 104.51612903225805, phi: 0.9036542210785016, tmax: 39.42935364341149 })],
+  }),
+
 ];
 
 export default ch5;

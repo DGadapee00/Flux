@@ -15,6 +15,7 @@ import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
 const MPA = 1e6;
 const KSI = 1000 * PA_PER_PSI;
 const DEG = Math.PI / 180;
+const MM9 = 1e-3;
 
 /** The in-plane radius from the eigenvalues, a second route to R. */
 const eigenR = ($) => {
@@ -896,6 +897,76 @@ const ch9 = [
       kase(cite('brittle'), { mat: 'steel', d: 20 }, { surface: 'flat' }),
     ],
   }),
+  problem({
+    id: 'u5.9.shaft-size',
+    title: 'Sizing a shaft for bending and torque',
+    exam: 'u5',
+    ch: '9',
+    lab: 'combined',
+    src: cite('yield'),
+    topics: ['yield', 'combined-loading'],
+    variety: ['goal'],
+    level: 3,
+    vars: {
+      M: range(200, 1500, 50, 'N·m', 1),
+      T: range(200, 2000, 100, 'N·m', 1),
+      sa: range(80, 200, 10, 'MPa', MPA),
+    },
+    derive: ($) => ({
+      dvm: Math.cbrt((16 * Math.sqrt(4 * $.M * $.M + 3 * $.T * $.T)) / (Math.PI * $.sa)),
+      dtr: Math.cbrt((32 * Math.sqrt($.M * $.M + $.T * $.T)) / (Math.PI * $.sa)),
+    }),
+    // Torque at least 1.5 times the moment, so the two rules differ by more than the grading tolerance.
+    valid: ($) => rel(Math.cbrt((32 * $.M) / (Math.PI * $.sa)), $.dvm) && $.T >= 1.5 * $.M && $.M >= 0.2 * $.T,
+    text: (T) => String.raw`A solid steel shaft carries a bending moment of $${T.M}$ N·m and a torque of $${T.T}$ N·m at the same section. The allowable equivalent stress is $${T.sa}$ MPa. Find the smallest diameter by von Mises, and by Tresca.`,
+    parts: [
+      num('dvm', ($) => $.dvm, 'mm', {
+        scale: MM9,
+        label: 'von Mises',
+        traps: [
+          [($) => Math.cbrt((32 * $.M) / (Math.PI * $.sa)), 'That sizes for bending alone. The torque adds shear at the same fiber.'],
+          [($) => Math.cbrt((16 * Math.sqrt(4 * $.M * $.M + $.T * $.T)) / (Math.PI * $.sa)), 'The 3 in $\\sigma^2 + 3\\tau^2$ was left out.'],
+        ],
+      }),
+      num('dtr', ($) => $.dtr, 'mm', {
+        scale: MM9,
+        label: 'Tresca',
+        traps: [
+          [($) => $.dvm, 'That is the von Mises size. Tresca uses $\\sqrt{\\sigma^2 + 4\\tau^2}$, which needs a slightly larger shaft.'],
+        ],
+      }),
+    ],
+    hints: [
+      'At the outer fiber the bending stress and the torsion shear both scale with $1/d^3$. Write the equivalent stress in terms of $d$ and set it equal to the allowable.',
+      String.raw`With $\sigma = 32M/\pi d^3$ and $\tau = 16T/\pi d^3$, $\sqrt{\sigma^2 + 3\tau^2}$ and $\sqrt{\sigma^2 + 4\tau^2}$ each factor into a constant over $d^3$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`von Mises: $\sqrt{\sigma^2 + 3\tau^2} = \dfrac{16}{\pi d^3}\sqrt{4M^2 + 3T^2}$. Set it to $${sig($.sa / MPA)}$ MPa: $d = ${sig($.dvm / MM9)}$ mm.`,
+      String.raw`Tresca: $\sqrt{\sigma^2 + 4\tau^2} = \dfrac{32}{\pi d^3}\sqrt{M^2 + T^2}$, so $d = ${sig($.dtr / MM9)}$ mm.`,
+      String.raw`Tresca asks for the larger shaft, by at most 5%, because it is the more conservative rule.`,
+    ],
+    second: ($) => {
+      // Bisect on d until the outer fiber's equivalent stress meets the allowable.
+      const solve = (f) => {
+        let lo = 1e-3;
+        let hi = 1;
+        for (let i = 0; i < 200; i++) {
+          const mid = Math.sqrt(lo * hi);
+          if (f(mid) > $.sa) lo = mid;
+          else hi = mid;
+        }
+        return Math.sqrt(lo * hi);
+      };
+      const sx = (d) => (32 * $.M) / (Math.PI * d ** 3);
+      const tx = (d) => (16 * $.T) / (Math.PI * d ** 3);
+      return {
+        dvm: solve((d) => vonMisesPlane(sx(d), 0, tx(d))) / MM9,
+        dtr: solve((d) => trescaPlane(sx(d), 0, tx(d))) / MM9,
+      };
+    },
+    cases: [kase(cite('yield'), { M: 800, T: 1200, sa: 120 }, { dvm: 48.10545879730037, dtr: 49.65353533024425 })],
+  }),
+
 ];
 
 export default ch9;

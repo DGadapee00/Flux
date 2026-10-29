@@ -738,6 +738,70 @@ const ch12 = [
     },
     cases: [kase(cite('fixed-ends'), { L: 4, w: 5, h: 120 }, { Me: 6.666666666666667, Mmid: 3.3333333333333335, drop: (5e3 * 256) / (384 * 200e9 * (0.05 * 0.12 ** 3) / 12) / 1e-3 })],
   }),
+  problem({
+    id: 'u8.12.prop-point',
+    title: 'A propped cantilever with a point load',
+    exam: 'u8',
+    ch: '12',
+    lab: 'propped',
+    src: cite('superposition'),
+    topics: ['deflection', 'propped', 'superposition'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      P: range(4, 30, 1, 'kN', KN),
+      L: range(2, 6, 0.5, 'm', 1),
+    },
+    text: (T) => String.raw`A beam $${T.L}$ m long is fixed to a wall at its left end and rests on a prop at its right end. It carries $${T.P}$ kN at midspan. Find the prop reaction, the size of the wall moment, and the moment under the load.`,
+    parts: [
+      num('R', ($) => (5 * $.P) / 16, 'kN', {
+        scale: KN,
+        label: 'prop reaction',
+        traps: [
+          [($) => $.P / 2, 'Half the load is the simple-span share. The wall is stiffer than a pin, so it takes more and the prop less.'],
+        ],
+      }),
+      num('Mw', ($) => (3 * $.P * $.L) / 16, 'kN·m', {
+        scale: KN,
+        label: 'wall moment',
+        traps: [
+          [($) => ($.P * $.L) / 8, 'That is the end moment of a beam fixed at both ends. This far end is pinned, so the wall keeps more.'],
+          [($) => ($.P * $.L) / 2, 'That is the cantilever with no prop.'],
+        ],
+      }),
+      num('Mload', ($) => (5 * $.P * $.L) / 32, 'kN·m', {
+        scale: KN,
+        label: 'moment under the load',
+        traps: [
+          [($) => ($.P * $.L) / 4, 'That is the simple span. The wall\'s hogging moment lowers the whole diagram.'],
+        ],
+      }),
+    ],
+    hints: [
+      'One support too many: take the prop force as the redundant. Remove the prop, find how far the tip would drop under the load, and how far the prop force alone lifts it.',
+      String.raw`A cantilever with $P$ at $L/2$ drops at its tip by $5PL^3/48EI$. A tip force $R$ lifts it by $RL^3/3EI$. The real tip does not move.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Compatibility: $5PL^3/48EI = RL^3/3EI$, so $R = 5P/16 = ${sig((5 * $.P) / 16 / KN)}$ kN.`,
+      String.raw`Wall moment: $P(L/2) - RL = 3PL/16 = ${sig((3 * $.P * $.L) / 16 / KN)}$ kN·m, hogging.`,
+      String.raw`Under the load, from the prop side: $R(L/2) = 5PL/32 = ${sig((5 * $.P * $.L) / 32 / KN)}$ kN·m, sagging.`,
+    ],
+    second: ($) => {
+      // Integrate from the wall with the prop force unknown; pick it so the far end does not move.
+      const EI = 1e6;
+      const tip = (R) => {
+        const M = (x) => R * ($.L - x) - $.P * Math.max(0, $.L / 2 - x);
+        const c = integrateFixed(M, $.L, EI, 4000, [$.L / 2]);
+        return c.y[c.y.length - 1];
+      };
+      const y0 = tip(0);
+      const y1 = tip(1000);
+      const R = (-y0 * 1000) / (y1 - y0);
+      return { R: R / KN, Mw: ($.P * ($.L / 2) - R * $.L) / KN, Mload: (R * ($.L / 2)) / KN };
+    },
+    cases: [kase(cite('superposition'), { P: 10, L: 4 }, { R: 3.125, Mw: 7.5, Mload: 6.25 })],
+  }),
+
 ];
 
 export default ch12;

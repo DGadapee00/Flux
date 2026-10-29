@@ -19,6 +19,7 @@ const G = 75e9;
 const KSI = 1000 * PA_PER_PSI;
 const DEG = Math.PI / 180;
 const MM = 1e-3;
+const MPA = 1e6;
 
 const rel = (a, b) => Math.abs(a - b) > 0.08 * Math.max(Math.abs(a), Math.abs(b), 1e-12);
 const area = (d) => Math.PI * (d / 2) ** 2;
@@ -838,6 +839,67 @@ const ch14 = [
     },
     cases: [kase(cite('unit-load'), { L: 4, w: 5, h: 80 }, { slope: 0.0390625, quarter: (19 * 5e3 * 256) / (2048 * 341333.3333333333) / MM })],
   }),
+  problem({
+    id: 'u10.14.beam-drop',
+    title: 'A weight dropped on a beam',
+    exam: 'u10',
+    ch: '14',
+    lab: 'drop',
+    src: cite('impact'),
+    topics: ['impact'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      W: range(100, 800, 50, 'N', 1),
+      h: range(10, 100, 10, 'mm', MM),
+      L: range(1.5, 3, 0.25, 'm', 1),
+      hs: range(80, 160, 20, 'mm', MM),
+    },
+    derive: ($) => {
+      const I = (0.05 * $.hs ** 3) / 12;
+      const k = (48 * E * I) / $.L ** 3;
+      const st = $.W / k;
+      const n = 1 + Math.sqrt(1 + (2 * $.h) / st);
+      return { I, k, st, n, peak: (n * $.W * $.L * ($.hs / 2)) / (4 * I) };
+    },
+    valid: ($) => $.peak < 220 * MPA && $.peak > 20 * MPA,
+    text: (T) => String.raw`A steel beam ($E = 200$ GPa), 50 mm wide and $${T.hs}$ mm deep, spans $${T.L}$ m on two supports. A weight of $${T.W}$ N is dropped from $${T.h}$ mm above the beam onto its midspan. Find the static deflection the weight would cause at rest, the impact factor, and the largest bending stress.`,
+    parts: [
+      num('st', ($) => $.st, 'mm', { scale: MM, label: 'static deflection' }),
+      num('n', ($) => $.n, '', {
+        label: 'impact factor',
+        traps: [
+          [() => 2, 'Two is a load released from contact, $h = 0$. This one falls first.'],
+        ],
+      }),
+      num('peak', ($) => $.peak, 'MPa', {
+        scale: MPA,
+        label: 'largest stress',
+        traps: [
+          [($) => ($.W * $.L * ($.hs / 2)) / (4 * $.I), 'That is the static stress. The impact multiplies it by $n$.'],
+        ],
+      }),
+    ],
+    hints: [
+      'At midspan the beam is a spring. Its stiffness is the load over the deflection a midspan load causes.',
+      String.raw`$k = 48EI/L^3$. The impact factor uses the static deflection $W/k$, and the peak load $nW$ bends the beam like any midspan load.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$I = ${sig($.I / 1e-12 / 1e6)}\times 10^6$ mm⁴ and $k = 48EI/L^3 = ${sig($.k / 1e6)}$ N/mm, so $\delta_{st} = W/k = ${sig($.st / MM)}$ mm.`,
+      String.raw`$n = 1 + \sqrt{1 + 2h/\delta_{st}} = ${sig($.n)}$.`,
+      String.raw`The peak load $nW = ${sig($.n * $.W)}$ N at midspan gives $M = nWL/4$ and $\sigma = Mc/I = ${sig($.peak / MPA)}$ MPa.`,
+    ],
+    second: ($) => {
+      // Energy balance solved directly: W(h + δ) = kδ²/2, the positive root.
+      const I = (0.05 * $.hs ** 3) / 12;
+      const k = (48 * E * I) / $.L ** 3;
+      const d = ($.W + Math.sqrt($.W * $.W + 2 * k * $.W * $.h)) / k;
+      const F = k * d;
+      return { st: ($.W / k) / MM, n: F / $.W, peak: (F * $.L * ($.hs / 2)) / (4 * I) / 1e6 };
+    },
+    cases: [kase(cite('impact'), { W: 500, h: 50, L: 2, hs: 100 }, { st: 0.09999999999999998, n: 32.63858403911276, peak: 97.91575211733824 })],
+  }),
+
 ];
 
 export default ch14;

@@ -151,6 +151,7 @@ export const PRINCIPLE_TAGS = {
   'u1.1.area-force': ['avg-stress', 'sections'],
   'u1.1.shackle': ['avg-stress'],
   'u1.1.margin': ['design'],
+  'u1.1.lug': ['design', 'avg-stress'],
   // Unit 2
   'u2.2.normal-strain': ['hooke'],
   'u2.2.hooke': ['hooke'],
@@ -161,6 +162,8 @@ export const PRINCIPLE_TAGS = {
   'u2.2.unload': ['material-curve'],
   'u2.3.incompressible': ['hooke'],
   'u2.3.fatigue': ['material-curve'],
+  'u2.2.rigid-bar': ['hooke', 'sections', 'axial'],
+  'u2.3.squeeze': ['hooke'],
   // Unit 3
   'u3.4.uniform': ['axial'],
   'u3.4.stepped': ['axial', 'sections'],
@@ -190,6 +193,7 @@ export const PRINCIPLE_TAGS = {
   'u4.10.strain-circle': ['transform'],
   'u4.10.rosette': ['transform', 'hooke'],
   'u4.10.gauge45': ['transform'],
+  'u4.10.tank-gauge': ['vessel', 'hooke', 'transform'],
   // Unit 5
   'u5.9.rotate': ['transform'],
   'u5.9.principal': ['transform'],
@@ -204,6 +208,7 @@ export const PRINCIPLE_TAGS = {
   'u5.9.abs-shear': ['transform', 'failure'],
   'u5.9.brittle': ['failure', 'transform'],
   'u5.9.twist-break': ['failure', 'transform'],
+  'u5.9.shaft-size': ['failure', 'design'],
   // Unit 6
   'u6.6.point': ['sections'],
   'u6.6.uniform': ['sections'],
@@ -245,6 +250,7 @@ export const PRINCIPLE_TAGS = {
   'u8.12.two-loads': ['deflection'],
   'u8.12.superpose': ['deflection'],
   'u8.12.fixed': ['compatibility', 'deflection'],
+  'u8.12.prop-point': ['compatibility', 'deflection'],
   // Unit 9
   'u9.5.solid': ['torsion'],
   'u9.5.hollow': ['torsion'],
@@ -260,6 +266,7 @@ export const PRINCIPLE_TAGS = {
   'u9.5.rect-bar': ['torsion'],
   'u9.5.slit': ['torsion'],
   'u9.5.shoulder': ['concentration', 'torsion'],
+  'u9.5.fixed-step': ['compatibility', 'torsion'],
   // Unit 10
   'u10.14.axial': ['energy', 'axial'],
   'u10.14.beam': ['energy', 'deflection'],
@@ -274,6 +281,7 @@ export const PRINCIPLE_TAGS = {
   'u10.14.dummy': ['energy'],
   'u10.14.truss-unit': ['energy', 'axial'],
   'u10.14.beam-unit': ['energy', 'deflection'],
+  'u10.14.beam-drop': ['impact', 'deflection'],
   // Unit 11
   'u11.13.euler': ['buckling'],
   'u11.13.ends': ['buckling'],

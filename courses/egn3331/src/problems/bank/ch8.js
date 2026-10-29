@@ -19,6 +19,14 @@ const MM = 1e-3;
 const KSI = 1000 * PA_PER_PSI;
 const E = 200e9;
 const UE = 1e-6;
+const DEG = Math.PI / 180;
+
+/** Hoop and axial strains of a closed thin cylinder: its two stresses through Hooke with Poisson. */
+const tankStrains = (p, r, t) => {
+  const sh = (p * r) / t;
+  const sl = sh / 2;
+  return { eh: (sh - 0.3 * sl) / E, el: (sl - 0.3 * sh) / E };
+};
 const RI_IN = 12.2 / 2 - 0.078;
 const T_IN = 0.078;
 
@@ -802,6 +810,67 @@ const ch8 = [
       kase(cite('strain-transformation'), { state: 'opposite', m: 300 }, { reads: 'zero' }),
     ],
   }),
+  problem({
+    id: 'u4.10.tank-gauge',
+    title: 'Reading a tank pressure from a gauge at an angle',
+    exam: 'u4',
+    ch: '10',
+    lab: 'vessel',
+    src: cite('strain-transformation'),
+    topics: ['pressure-vessels', 'strain-transformation'],
+    variety: ['unknown'],
+    level: 3,
+    vars: {
+      p: range(0.5, 3, 0.1, 'MPa', MPA),
+      r: range(150, 400, 25, 'mm', MM),
+      t: range(4, 10, 1, 'mm', MM),
+      th: range(15, 75, 5, '°', 1),
+    },
+    derive: ($) => {
+      // The reading a real gauge would print, rounded to 1 µε; the answer works back from it.
+      const unit = tankStrains(1, $.r, $.t);
+      const reading = Math.round(strainTransform(unit.el * $.p, unit.eh * $.p, 0, $.th).e / UE);
+      const perP = strainTransform(unit.el, unit.eh, 0, $.th).e;
+      const pp = (reading * UE) / perP;
+      return { reading, pp, hoop: (pp * $.r) / $.t };
+    },
+    valid: ($) => $.hoop < 200 * MPA && $.reading >= 80,
+    text: (T, $) => String.raw`A closed steel cylinder ($E = 200$ GPa, $\nu = 0.30$) has an inside radius of $${T.r}$ mm and a $${T.t}$ mm wall. A strain gauge on its outside, turned $${T.th}^\circ$ from the cylinder's axis, reads $${$.reading}\ \mu\varepsilon$ under pressure. Find the pressure and the hoop stress.`,
+    parts: [
+      num('p', ($) => $.pp, 'MPa', {
+        scale: MPA,
+        label: 'pressure',
+        traps: [
+          [($) => ($.reading * UE * E * $.t) / $.r, 'That treats the reading as the hoop strain with no Poisson effect. The gauge reads a mix of the hoop and axial strains, each reduced by the other stress.'],
+          [($) => ($.reading * UE * $.t * E) / ($.r * (Math.cos($.th * DEG) ** 2 * 0.5 + Math.sin($.th * DEG) ** 2)), 'That left Poisson\'s ratio out of the two strains.'],
+        ],
+      }),
+      num('hoop', ($) => $.hoop, 'MPa', { scale: MPA, label: 'hoop stress' }),
+    ],
+    hints: [
+      'Write the hoop and axial strains of the cylinder per unit pressure, from its two stresses and Hooke\'s law with Poisson. Then turn them to the gauge.',
+      String.raw`The axis and the hoop are principal directions, so the gauge reads $\varepsilon_l\cos^2\theta + \varepsilon_h\sin^2\theta$, with $\theta$ from the axis. That is linear in $p$.`,
+    ],
+    steps: ($, sig) => {
+      const u = tankStrains(1e6, $.r, $.t);
+      return [
+        String.raw`Per MPa: $\sigma_h = r/t = ${sig($.r / $.t)}$ MPa and $\sigma_l$ half that, so $\varepsilon_h = ${sig(u.eh / UE)}$ and $\varepsilon_l = ${sig(u.el / UE)}\ \mu\varepsilon$.`,
+        String.raw`The gauge at $${sig($.th)}^\circ$ reads $\varepsilon_l\cos^2\theta + \varepsilon_h\sin^2\theta = ${sig(strainTransform(u.el, u.eh, 0, $.th).e / UE)}\ \mu\varepsilon$ per MPa.`,
+        String.raw`$p = ${$.reading}/${sig(strainTransform(u.el, u.eh, 0, $.th).e / UE)} = ${sig($.pp / MPA)}$ MPa, so $\sigma_h = pr/t = ${sig($.hoop / MPA)}$ MPa.`,
+      ];
+    },
+    second: ($) => {
+      // Run a trial pressure through the vessel, Hooke in three directions and the gauge, then scale.
+      const trial = 1e6;
+      const s = thinCylinder(trial, $.r, $.t);
+      const h = hooke3(s.axial, s.hoop, 0, E, 0.3);
+      const per = strainTransform(h.ex, h.ey, 0, $.th).e;
+      const p = (($.reading * UE) / per) * trial;
+      return { p: p / MPA, hoop: thinCylinder(p, $.r, $.t).hoop / MPA };
+    },
+    cases: [kase(cite('strain-transformation'), { p: 2, r: 200, t: 5, th: 30 }, { p: 2, hoop: 80 })],
+  }),
+
 ];
 
 export default ch8;

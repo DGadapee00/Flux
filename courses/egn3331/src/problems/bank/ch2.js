@@ -503,6 +503,122 @@ const ch2 = [
       kase(cite('creep'), { limit: 180, side: 'above' }, { life: 'fails', creep: 'holds' }),
     ],
   }),
+  problem({
+    id: 'u2.2.rigid-bar',
+    title: 'A rigid bar hung on a wire',
+    exam: 'u2',
+    ch: '2',
+    lab: 'brace',
+    src: cite('hooke'),
+    topics: ['hooke'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      P: range(2, 10, 0.5, 'kN', KN),
+      a: range(0.5, 1.2, 0.1, 'm', 1),
+      b: range(1.5, 2.5, 0.25, 'm', 1),
+      L: range(1, 2.5, 0.25, 'm', 1),
+      dw: range(8, 14, 1, 'mm', MM),
+    },
+    derive: ($) => {
+      const A = circleArea($.dw);
+      const T = ($.P * $.b) / $.a;
+      const stretch = (T * $.L) / (A * E_STEEL);
+      return { A, T, sigma: T / A, stretch, drop: stretch * ($.b / $.a) };
+    },
+    valid: ($) => $.sigma < 200 * MPA,
+    text: (T) => String.raw`A rigid horizontal bar is pinned to a wall at A. A vertical steel wire ($E = 200$ GPa), $${T.L}$ m long and $${T.dw}$ mm in diameter, holds it up at C, $${T.a}$ m from A. A load of $${T.P}$ kN hangs at the bar's end B, $${T.b}$ m from A. Find the stress in the wire, its stretch, and how far B drops.`,
+    parts: [
+      num('sigma', ($) => $.sigma, 'MPa', {
+        scale: MPA,
+        label: 'wire stress',
+        traps: [
+          [($) => $.P / $.A, 'That gives the wire the load itself. The bar is a lever: moments about A set the wire force.'],
+        ],
+      }),
+      num('stretch', ($) => $.stretch, 'mm', { scale: MM, label: 'wire stretch' }),
+      num('drop', ($) => $.drop, 'mm', {
+        scale: MM,
+        label: 'drop at B',
+        traps: [
+          [($) => $.stretch, 'That is the wire\'s stretch, at C. The bar turns about A, so B, farther out, drops more.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Three facts: equilibrium of the bar about its pin, Hooke\'s law for the wire, and the geometry of a rigid bar turning about A.',
+      'The bar turns through one small angle. Every point drops in proportion to its distance from A.',
+    ],
+    steps: ($, sig) => [
+      String.raw`Moments about A: $T a = P b$, so $T = ${sig($.T / KN)}$ kN and $\sigma = T/A = ${sig($.sigma / MPA)}$ MPa.`,
+      String.raw`The wire stretches $\sigma L/E = ${sig($.stretch / MM)}$ mm, so C drops that much.`,
+      String.raw`The bar turns about A: B drops $(b/a)$ times as much, $${sig($.drop / MM)}$ mm.`,
+    ],
+    second: ($) => {
+      // Energy: the load's work, P δ_B / 2, equals the wire's stored T²L/(2AE).
+      const A = circleArea($.dw);
+      const T = ($.P * $.b) / $.a;
+      const U = (T * T * $.L) / (2 * A * E_STEEL);
+      return { sigma: T / A / MPA, stretch: (T * $.L) / (A * E_STEEL) / MM, drop: (2 * U) / $.P / MM };
+    },
+    cases: [kase(cite('hooke'), { P: 5, a: 0.8, b: 2, L: 1.5, dw: 10 }, { sigma: 159.15494309189535, stretch: 1.1936620731892151, drop: 2.983155182973038 })],
+  }),
+
+  problem({
+    id: 'u2.3.squeeze',
+    title: 'Pulling a rod thin enough to pass',
+    exam: 'u2',
+    ch: '3',
+    lab: 'poisson',
+    src: cite('poisson'),
+    topics: ['poisson'],
+    variety: ['unknown'],
+    level: 3,
+    vars: {
+      mat: choice(['steel', 'steel (E = 200 GPa, ν = 0.30)'], ['al', 'aluminium (E = 70 GPa, ν = 0.33)']),
+      d: range(10, 30, 2, 'mm', MM),
+      shrink: range(2, 8, 0.5, 'µm', 1e-6),
+      L: range(0.5, 2, 0.25, 'm', 1),
+    },
+    derive: ($) => {
+      const [E, nu] = $.mat === 'steel' ? [200e9, 0.3] : [70e9, 0.33];
+      const A = circleArea($.d);
+      const P = ($.shrink * Math.PI * $.d * E) / (4 * nu);
+      return { E, nu, A, P, sigma: P / A, stretch: (P * $.L) / (A * E) };
+    },
+    valid: ($) => $.sigma < ($.mat === 'steel' ? 220e6 : 200e6) && $.sigma > 30e6,
+    text: (T) => String.raw`A round ${T.mat} rod, $${T.d}$ mm in diameter and $${T.L}$ m long, must be pulled until its diameter shrinks by $${T.shrink}\ \mu$m. What axial tension does that take, what is the axial stress, and how much does the rod lengthen?`,
+    parts: [
+      num('P', ($) => $.P, 'kN', {
+        scale: KN,
+        label: 'tension',
+        traps: [
+          [($) => ($.shrink / $.d) * $.E * $.A, 'That treats the diameter change as the axial strain. The axial strain is the lateral one divided by $\\nu$.'],
+          [($) => ($.shrink / ($.d / 2) / $.nu) * $.E * $.A, 'That divides the change in diameter by the radius. Strain is the change over the original diameter.'],
+        ],
+      }),
+      num('sigma', ($) => $.sigma, 'MPa', { scale: MPA, label: 'axial stress' }),
+      num('stretch', ($) => $.stretch, 'mm', { scale: MM, label: 'lengthening' }),
+    ],
+    hints: [
+      'Turn the diameter change into a lateral strain. Poisson\'s ratio links it to the axial strain that a tension produces.',
+      String.raw`$\varepsilon_{\text{lat}} = -\Delta d/d$ and $\varepsilon_{\text{lat}} = -\nu\varepsilon_{\text{ax}}$. Hooke's law then gives the stress, and the area gives the force.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Lateral strain: $\Delta d/d = ${sig(($.shrink / $.d) / 1e-6)}\times 10^{-6}$. Axial strain: that over $\nu$, $${sig(($.shrink / $.d / $.nu) / 1e-6)}\times 10^{-6}$.`,
+      String.raw`$\sigma = E\varepsilon = ${sig($.sigma / MPA)}$ MPa, and $P = \sigma A = ${sig($.P / KN)}$ kN.`,
+      String.raw`Lengthening: $\varepsilon L = ${sig($.stretch / MM)}$ mm.`,
+    ],
+    second: ($) => {
+      // Forward check: this tension, through Hooke and Poisson, shrinks the diameter by exactly the target.
+      const P = ($.shrink * Math.PI * $.d * $.E) / (4 * $.nu);
+      const A = circleArea($.d);
+      const epsAx = hookeStrain(P / A, $.E);
+      return { P: P / KN, sigma: (P / A) / MPA, stretch: (epsAx * $.L) / MM };
+    },
+    cases: [kase(cite('poisson'), { mat: 'steel', d: 20, shrink: 6, L: 1 }, { P: 62.83185307179587, sigma: 200, stretch: 1 })],
+  }),
+
 ];
 
 export default ch2;
