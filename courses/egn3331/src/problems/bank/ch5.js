@@ -1,13 +1,14 @@
 /**
  * Torsion of circular shafts: stress and angle, a hollow section, power,
- * a stepped shaft, fixed ends, a motor shaft in English units, and the
- * diameter set by stress and by twist together.
+ * a stepped shaft, fixed ends, a motor shaft in English units, the diameter set by stress and by
+ * twist together, a rectangular tube by Bredt, a rectangular bar, a slit tube, and a shoulder's Kt.
  */
 import { PA_PER_PSI } from '@flux/subjects/convert.js';
 import {
   fixedFixedTorsion, polarJ, roundShaft, seriesTwist, solidDiameterForShear,
   solidDiameterRequired, torqueFromHorsepower, torqueFromPower,
 } from '@flux/subjects/mechanics/torsion.js';
+import { bredt, openThin, rectTorsion, rectTorsionDouble } from '@flux/subjects/mechanics/noncircular.js';
 import { HP_WATT, MOTOR_D_IN, MOTOR_L_IN, motorInches, motorShaft } from '../../data/motor.js';
 import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
 
@@ -694,6 +695,237 @@ const ch5 = [
       },
     },
     cases: [kase(cite('torsion'), { change: 'speed', P: 20, rpm: 1800 }, { which: 'half' })],
+  }),
+  problem({
+    id: 'u9.5.box-tube',
+    title: 'Torsion of a rectangular tube',
+    exam: 'u9',
+    ch: '5',
+    lab: null,
+    src: cite('closed-tube'),
+    topics: ['closed-tube'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      a: range(60, 160, 10, 'mm', MM),
+      b: range(40, 100, 10, 'mm', MM),
+      t1: range(3, 8, 1, 'mm', MM),
+      t2: range(3, 8, 1, 'mm', MM),
+      T: range(1, 8, 0.5, 'kN·m', 1000),
+    },
+    derive: ($) => {
+      const walls = [{ len: $.a, t: $.t2 }, { len: $.b, t: $.t1 }, { len: $.a, t: $.t2 }, { len: $.b, t: $.t1 }];
+      const r = bredt($.T, $.a * $.b, walls, G);
+      return { tau: r.tauMax, rate: r.rate / DEG, q: r.q };
+    },
+    valid: ($) => $.a > $.b && $.tau < 150 * MPA && $.tau > 20 * MPA && $.t1 !== $.t2,
+    text: (T) => String.raw`A steel tube ($G = 75$ GPa) measures $${T.a}$ mm by $${T.b}$ mm on its wall's centreline. Its two long walls are $${T.t2}$ mm thick and its two short walls $${T.t1}$ mm thick. It carries a torque of $${T.T}$ kN·m. Find the shear flow, the largest shear stress, and the angle of twist per metre.`,
+    parts: [
+      num('q', ($) => $.q, 'N/mm', {
+        scale: 1000,
+        label: 'shear flow',
+        traps: [
+          [($) => $.T / (2 * ($.a + Math.max($.t1, $.t2)) * ($.b + Math.max($.t1, $.t2))), 'That uses the outside area. $A_m$ is the area inside the wall\'s centreline.'],
+        ],
+      }),
+      num('tau', ($) => $.tau, 'MPa', {
+        scale: MPA,
+        label: 'largest stress',
+        traps: [
+          [($) => $.q / Math.max($.t1, $.t2), 'That divides by the thicker wall. The same flow on the thinnest wall gives the largest stress.'],
+        ],
+      }),
+      num('rate', ($) => $.rate, '°/m', {
+        label: 'twist per metre',
+        traps: [
+          [($) => ($.T * (2 * $.a) / $.t2) / (4 * ($.a * $.b) ** 2 * G) / DEG, 'Only the long walls went into $\\oint ds/t$. The short walls add to it too.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Along the shaft, a small block of wall balances only if the shear flow $q = \\tau t$ is the same all the way round.',
+      String.raw`$T = 2A_m q$ with $A_m$ inside the centreline. $\tau = q/t$, largest where $t$ is smallest. $d\phi/dx = T\oint(ds/t)/(4A_m^2G)$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$A_m = ${sig($.a / MM)}\times ${sig($.b / MM)} = ${sig(($.a * $.b) / 1e-6)}$ mm², so $q = T/2A_m = ${sig($.q / 1000)}$ N/mm.`,
+      String.raw`The thinnest wall is $${sig(Math.min($.t1, $.t2) / MM)}$ mm: $\tau = ${sig($.tau / MPA)}$ MPa.`,
+      String.raw`$\oint ds/t = 2(${sig($.a / MM)}/${sig($.t2 / MM)} + ${sig($.b / MM)}/${sig($.t1 / MM)}) = ${sig(2 * ($.a / $.t2 + $.b / $.t1))}$, so $d\phi/dx = ${sig($.rate)}^\circ$/m.`,
+    ],
+    second: ($) => {
+      // The twist rate from energy: T θ/2 equals Σ q² L/(2 G t) round the wall.
+      const q = $.T / (2 * $.a * $.b);
+      const U = 2 * ((q * q * $.a) / (2 * G * $.t2) + (q * q * $.b) / (2 * G * $.t1));
+      return { q: q / 1000, tau: q / Math.min($.t1, $.t2) / MPA, rate: (2 * U) / $.T / DEG };
+    },
+    cases: [kase(cite('closed-tube'), { a: 100, b: 50, t1: 6, t2: 4, T: 3 }, { q: 300, tau: 75, rate: 1.5278874536821951 })],
+  }),
+
+  problem({
+    id: 'u9.5.rect-bar',
+    title: 'A rectangular bar in torsion',
+    exam: 'u9',
+    ch: '5',
+    lab: null,
+    src: cite('noncircular'),
+    topics: ['noncircular'],
+    variety: ['representation'],
+    level: 2,
+    vars: {
+      ratio: choice(['1', '1'], ['2', '2'], ['3', '3'], ['4', '4']),
+      t: range(10, 30, 2, 'mm', MM),
+      T: range(50, 600, 25, 'N·m', 1),
+      L: range(0.5, 2, 0.25, 'm', 1),
+    },
+    derive: ($) => {
+      const b = Number($.ratio) * $.t;
+      const r = rectTorsion($.T, b, $.t, G);
+      return { bb: b, alpha: r.alpha, beta: r.beta, tau: r.tauMax, phi: (r.rate * $.L) / DEG };
+    },
+    valid: ($) => $.tau < 150 * MPA && $.tau > 15 * MPA,
+    text: (T, $) => String.raw`A steel bar ($G = 75$ GPa) of solid rectangular section, $${Math.round($.bb / MM)}$ mm by $${T.t}$ mm and $${T.L}$ m long, carries a torque of $${T.T}$ N·m. For this aspect ratio $\alpha = ${$.alpha.toFixed(3)}$ and $\beta = ${$.beta.toFixed(3)}$. Find the largest shear stress and the angle of twist.`,
+    parts: [
+      num('tau', ($) => $.tau, 'MPa', {
+        scale: MPA,
+        label: 'largest stress',
+        traps: [
+          [($) => ($.T * Math.hypot($.bb, $.t) / 2) / (($.bb * $.t * ($.bb ** 2 + $.t ** 2)) / 12), 'That is $Tc/J$ with the rectangle\'s polar moment. A rectangle warps, so that formula does not hold.'],
+          [($) => $.T / ($.alpha * $.t * $.bb ** 2), 'The short side is squared, not the long one.'],
+        ],
+      }),
+      num('phi', ($) => $.phi, '°', {
+        label: 'angle of twist',
+        traps: [
+          [($) => ($.T * $.L) / ($.beta * $.t * $.bb ** 3 * G) / DEG, 'The short side is cubed, not the long one.'],
+        ],
+      }),
+    ],
+    hints: [
+      'A rectangle warps as it twists, so $T\\rho/J$ does not apply. Use the coefficients for its aspect ratio.',
+      String.raw`$\tau_{\max} = T/(\alpha bt^2)$ and $\phi = TL/(\beta bt^3G)$, with $b$ the long side and $t$ the short side.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$b = ${sig($.bb / MM)}$ mm, $t = ${sig($.t / MM)}$ mm.`,
+      String.raw`$\tau_{\max} = T/(\alpha bt^2) = ${sig($.tau / MPA)}$ MPa, at the middle of the long faces.`,
+      String.raw`$\phi = TL/(\beta bt^3G) = ${sig($.phi)}^\circ$.`,
+    ],
+    second: ($) => {
+      // The double sine series of the stress function, a second route to α and β.
+      const c = rectTorsionDouble($.bb, $.t);
+      return { tau: $.T / (c.alpha * $.bb * $.t ** 2) / MPA, phi: (($.T * $.L) / (c.beta * $.bb * $.t ** 3 * G)) / DEG };
+    },
+    cases: [kase(cite('noncircular'), { ratio: '2', t: 20, T: 200, L: 1 }, { tau: 50.838149863484, phi: 2.087901555072853 })],
+  }),
+
+  problem({
+    id: 'u9.5.slit',
+    title: 'A tube slit along its length',
+    exam: 'u9',
+    ch: '5',
+    lab: null,
+    src: cite('noncircular'),
+    topics: ['noncircular', 'closed-tube'],
+    variety: ['configuration'],
+    level: 2,
+    vars: {
+      d: range(30, 80, 5, 'mm', MM),
+      t: range(1.5, 4, 0.5, 'mm', MM),
+      T: range(5, 40, 5, 'N·m', 1),
+    },
+    derive: ($) => {
+      const r = $.d / 2;
+      const closed = bredt($.T, Math.PI * r * r, [{ len: Math.PI * $.d, t: $.t }], G);
+      const open = openThin($.T, [{ len: Math.PI * $.d, t: $.t }], G);
+      return { closedTau: closed.tauMax, openTau: open.tauMax, stiff: closed.J / open.J };
+    },
+    valid: ($) => $.openTau < 250 * MPA && $.d / $.t >= 12,
+    text: (T) => String.raw`A steel tube has a mean diameter of $${T.d}$ mm and a $${T.t}$ mm wall. It carries $${T.T}$ N·m. Find the shear stress in the closed tube, then the largest shear stress after the tube is slit along its whole length, and the factor by which the slit cuts the torsional stiffness.`,
+    parts: [
+      num('closedTau', ($) => $.closedTau, 'MPa', { scale: MPA, label: 'closed' }),
+      num('openTau', ($) => $.openTau, 'MPa', {
+        scale: MPA,
+        label: 'slit',
+        traps: [
+          [($) => $.closedTau, 'The slit stops the flow from going round. The open strip has $J = \\pi d t^3/3$.'],
+        ],
+      }),
+      num('stiff', ($) => $.stiff, '', {
+        label: 'stiffness factor',
+        traps: [
+          [($) => (3 * $.d) / 2 / $.t, 'That is the stress ratio $3r/t$. The stiffness ratio is $3(r/t)^2$.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Closed, the wall carries one flow round the loop. Slit, it is a thin strip of length $\\pi d$ that twists on its own.',
+      String.raw`Closed: $\tau = T/(2tA_m)$ and $J = 4A_m^2 t/(\pi d)$. Open: $J = \pi d t^3/3$ and $\tau = Tt/J$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Closed: $A_m = \pi d^2/4$, so $\tau = ${sig($.closedTau / MPA)}$ MPa.`,
+      String.raw`Slit: $J = \pi d t^3/3$, so $\tau = Tt/J = ${sig($.openTau / MPA)}$ MPa.`,
+      String.raw`The stiffness falls by $3(r/t)^2 = ${sig($.stiff)}$.`,
+    ],
+    second: ($) => {
+      const r = $.d / 2;
+      return {
+        closedTau: $.T / (2 * Math.PI * r * r * $.t) / MPA,
+        openTau: (3 * $.T) / (2 * Math.PI * r * $.t * $.t) / MPA,
+        stiff: 3 * (r / $.t) ** 2,
+      };
+    },
+    cases: [kase(cite('noncircular'), { d: 50, t: 2, T: 20 }, { closedTau: 2.5464790894703255, openTau: 95.49296585513721, stiff: 468.75 })],
+  }),
+
+  problem({
+    id: 'u9.5.shoulder',
+    title: 'The peak stress at a shaft shoulder',
+    exam: 'u9',
+    ch: '5',
+    lab: 'torsion',
+    src: cite('shaft-kt'),
+    topics: ['shaft-kt'],
+    variety: ['unknown'],
+    level: 1,
+    vars: {
+      d: range(20, 50, 2, 'mm', MM),
+      step: range(1.1, 1.5, 0.1, '', 1),
+      Kt: range(1.2, 2, 0.1, '', 1),
+      T: range(50, 600, 25, 'N·m', 1),
+    },
+    derive: ($) => {
+      const nom = (16 * $.T) / (Math.PI * $.d ** 3);
+      return { D: $.d * $.step, nom, peak: $.Kt * nom };
+    },
+    valid: ($) => $.peak < 200 * MPA && $.peak > 15 * MPA,
+    text: (T, $) => String.raw`A shaft steps from $${Math.round($.D / MM)}$ mm down to $${T.d}$ mm at a filleted shoulder, and carries $${T.T}$ N·m. A chart gives $K_t = ${T.Kt}$ for this step and fillet, on the nominal stress of the smaller diameter. Find the peak shear stress at the fillet.`,
+    parts: [
+      num('peak', ($) => $.peak, 'MPa', {
+        scale: MPA,
+        label: 'peak',
+        traps: [
+          [($) => $.nom, 'That is the nominal stress. The fillet multiplies it by $K_t$.'],
+          [($) => $.Kt * (16 * $.T) / (Math.PI * $.D ** 3), 'That takes the nominal stress on the larger diameter. $K_t$ is defined on the smaller one.'],
+        ],
+      }),
+    ],
+    hints: [
+      'A stress-concentration factor multiplies the nominal stress it was defined on.',
+      String.raw`Nominal: $16T/(\pi d^3)$ on the smaller diameter. Then multiply by $K_t$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Nominal on $d$: $16T/\pi d^3 = ${sig($.nom / MPA)}$ MPa.`,
+      String.raw`Peak: $K_t\times ${sig($.nom / MPA)} = ${sig($.peak / MPA)}$ MPa.`,
+    ],
+    second: ($) => ({ peak: ($.Kt * $.T * ($.d / 2)) / polarJ($.d / 2, 0) / MPA }),
+    sim: {
+      scenario: 'solid',
+      setup(s, $) {
+        s.T = $.T;
+        s.d = $.d;
+        s.di = 0;
+      },
+      read: (c, state, $) => ({ peak: $.Kt * c.tauMax }),
+    },
+    cases: [kase(cite('shaft-kt'), { d: 30, step: 1.2, Kt: 1.6, T: 200 }, { peak: 60.36098582848079 })],
   }),
 ];
 
