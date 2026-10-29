@@ -37,24 +37,24 @@
 <h2><span class="n">01</span>Turning the element</h2>
 <p>A plane-stress element carries \(\sigma_x\), \(\sigma_y\) and \(\tau_{xy}\). Cut it on a plane whose normal \(x'\) is turned \(\theta\) counterclockwise from \(x\). The stresses on that plane follow from equilibrium of the small wedge the cut leaves.</p>
 <div class="box why"><span class="tag">Equilibrium of the wedge</span>
-<p>Give the slanted face an area \(dA\). The face normal to \(x\) then has area \(dA\cos\theta\), and the face normal to \(y\) has \(dA\sin\theta\). Each face's force is its stress times its area. Add the forces along \(x'\), whose direction is \((\cos\theta, \sin\theta)\):</p>
+<p>Give the slanted face an area \(dA\). The face normal to \(x\) then has area \(dA\cos\theta\), and the face normal to \(y\) has \(dA\sin\theta\). Each face's force is its stress times its area. Add the forces along \(x'\), whose direction is \((\cos\theta, \sin\theta)\), and divide by \(dA\):</p>
 \[
-\sigma_{x'}\,dA = (\sigma_x\cos\theta + \tau_{xy}\sin\theta)\,dA\cos\theta + (\tau_{xy}\cos\theta + \sigma_y\sin\theta)\,dA\sin\theta
+\begin{aligned}\sigma_{x'} = {} & (\sigma_x\cos\theta + \tau_{xy}\sin\theta)\cos\theta \\ & + (\tau_{xy}\cos\theta + \sigma_y\sin\theta)\sin\theta\end{aligned}
 \]
-<p>Cancel \(dA\) and gather the terms:</p>
+<p>Gather the terms:</p>
 \[
-\sigma_{x'} = \sigma_x\cos^{2}\theta + \sigma_y\sin^{2}\theta + 2\tau_{xy}\sin\theta\cos\theta
+\begin{aligned}\sigma_{x'} = {} & \sigma_x\cos^{2}\theta + \sigma_y\sin^{2}\theta \\ & + 2\tau_{xy}\sin\theta\cos\theta\end{aligned}
 \]
 <p>The same forces along \(y'\), whose direction is \((-\sin\theta, \cos\theta)\), give the shear:</p>
 \[
-\tau_{x'y'} = -(\sigma_x - \sigma_y)\sin\theta\cos\theta + \tau_{xy}(\cos^{2}\theta - \sin^{2}\theta)
+\begin{aligned}\tau_{x'y'} = {} & -(\sigma_x - \sigma_y)\sin\theta\cos\theta \\ & + \tau_{xy}(\cos^{2}\theta - \sin^{2}\theta)\end{aligned}
 \]
 <p>The double-angle identities turn the squares into \(2\theta\):</p>
 \[
-\sigma_{x'} = \frac{\sigma_x+\sigma_y}{2} + \frac{\sigma_x-\sigma_y}{2}\cos 2\theta + \tau_{xy}\sin 2\theta
+\begin{aligned}\sigma_{x'} = {} & \frac{\sigma_x+\sigma_y}{2} + \frac{\sigma_x-\sigma_y}{2}\cos 2\theta \\ & + \tau_{xy}\sin 2\theta\end{aligned}
 \]
 \[
-\tau_{x'y'} = -\frac{\sigma_x-\sigma_y}{2}\sin 2\theta + \tau_{xy}\cos 2\theta
+\begin{aligned}\tau_{x'y'} = {} & -\frac{\sigma_x-\sigma_y}{2}\sin 2\theta \\ & + \tau_{xy}\cos 2\theta\end{aligned}
 \]
 <p>The angle doubles because each face's force is projected twice: once to find the force from the stress, and once onto the new direction. Roylance §3.3 writes the same pair as a tensor turned by a rotation matrix.</p>
 </div>
@@ -82,7 +82,7 @@
 <div class="box why"><span class="tag">Why it is a circle</span>
 <p>Move the average to the left of the \(\sigma_{x'}\) equation. Square it, square the \(\tau_{x'y'}\) equation, and add. The cross terms cancel and \(\cos^{2}2\theta + \sin^{2}2\theta = 1\):</p>
 \[
-\left(\sigma_{x'} - \frac{\sigma_x+\sigma_y}{2}\right)^{2} + \tau_{x'y'}^{2} = \left(\frac{\sigma_x-\sigma_y}{2}\right)^{2} + \tau_{xy}^{2}
+\begin{aligned}& \left(\sigma_{x'} - \frac{\sigma_x+\sigma_y}{2}\right)^{2} + \tau_{x'y'}^{2} \\ & \quad = \left(\frac{\sigma_x-\sigma_y}{2}\right)^{2} + \tau_{xy}^{2}\end{aligned}
 \]
 <p>That is a circle with its centre on the \(\sigma\) axis at the average stress. Its radius \(R\) is the square root of the right side.</p>
 </div>
@@ -281,7 +281,7 @@ R = 20\ \mathrm{MPa}
 <div class="box why"><span class="tag">von Mises: all three circles at once</span>
 <p>von Mises weighs all three principal differences. It is the distortion energy, the part of the strain energy that changes shape and not volume. Fitted to the tension test it reads</p>
 \[
-\sigma_{vm} = \sqrt{\tfrac12\left[(\sigma_1-\sigma_2)^{2} + (\sigma_2-\sigma_3)^{2} + (\sigma_3-\sigma_1)^{2}\right]}
+\begin{aligned}\sigma_{vm}^{2} = {} & \tfrac12\left[(\sigma_1-\sigma_2)^{2} + (\sigma_2-\sigma_3)^{2}\right. \\ & \left. + (\sigma_3-\sigma_1)^{2}\right]\end{aligned}
 \]
 <p>Put \(\sigma_3 = 0\) and expand: \(\sigma_{vm}^{2} = \sigma_1^{2} - \sigma_1\sigma_2 + \sigma_2^{2}\). Write the principals as the average plus and minus \(R\) from Section 3, and the components return:</p>
 \[
@@ -345,10 +345,10 @@ n = 2.55
 <h2><span class="n">10</span>Formula sheet</h2>
 <p>Plane stress, axes turned by \(\theta\), and the circle:</p>
 \[
-\sigma_{x'} = \frac{\sigma_x+\sigma_y}{2} + \frac{\sigma_x-\sigma_y}{2}\cos 2\theta + \tau_{xy}\sin 2\theta
+\begin{aligned}\sigma_{x'} = {} & \frac{\sigma_x+\sigma_y}{2} + \frac{\sigma_x-\sigma_y}{2}\cos 2\theta \\ & + \tau_{xy}\sin 2\theta\end{aligned}
 \]
 \[
-\tau_{x'y'} = -\frac{\sigma_x-\sigma_y}{2}\sin 2\theta + \tau_{xy}\cos 2\theta
+\begin{aligned}\tau_{x'y'} = {} & -\frac{\sigma_x-\sigma_y}{2}\sin 2\theta \\ & + \tau_{xy}\cos 2\theta\end{aligned}
 \]
 \[
 R = \sqrt{\left(\frac{\sigma_x-\sigma_y}{2}\right)^{2} + \tau_{xy}^{2}}

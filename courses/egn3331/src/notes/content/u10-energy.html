@@ -225,9 +225,9 @@ n = 4.32
 <p>Two statics solutions, one with the real loads and one with the unit load, give every term. No geometry of the moved joint is needed. Roylance §2.1 finds the same displacements from the stiffness of the bars.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · the bracket again</span>
-<p>Unit 3's bracket has a level bar in 40 kN compression, 2 m long, and a slanted bar in 50 kN tension, 2.5 m long, both with \(AE = 80\) MN. A unit load down at the joint gives \(n = -1.333\) in the level bar and \(+1.667\) in the slanted one. Then</p>
+<p>Unit 3's bracket has a level bar in 40 kN compression, 2 m long, and a slanted bar in 50 kN tension, 2.5 m long, both with \(AE = 80\) MN. A unit load down at the joint gives \(n = -1.333\) in the level bar and \(+1.667\) in the slanted one. With forces in kN, lengths in m and \(AE\) in kN, each term is in metres:</p>
 \[
-\Delta = \frac{(-1.333)(-40)(2) + (1.667)(50)(2.5)}{80{,}000}\ \mathrm{m} = 3.94\ \mathrm{mm}
+\begin{aligned}\Delta &= \frac{(-1.333)(-40)(2)}{80{,}000} \\ &\quad + \frac{(1.667)(50)(2.5)}{80{,}000} \\ &= 3.94\ \mathrm{mm}\end{aligned}
 \]
 <p>That is Unit 3's drop, found without solving for the joint's position. A unit load across, outward, puts \(n = 1\) in the level bar and 0 in the slanted one, which returns the 1.00 mm move toward the wall.</p>
 </div>
@@ -256,7 +256,7 @@ n = 4.32
 <div class="box ex"><span class="tag">Worked example · the cantilever at midspan</span>
 <p>The 2 m cantilever of Section 3 carries 800 N at the tip, so \(M = -800(2 - x)\). A unit load down at \(a = 1\) m gives \(m = -(1 - x)\) for \(x &lt; 1\) and zero beyond. Then</p>
 \[
-\Delta = \frac{800}{EI}\int_0^1 (1 - x)(2 - x)\,dx = \frac{800}{EI}\cdot\frac{5}{6}
+\begin{aligned}\Delta &= \frac{800}{EI}\int_0^1 (1 - x)(2 - x)\,dx \\ &= \frac{800}{EI}\cdot\frac{5}{6}\end{aligned}
 \]
 <p>With \(EI = 341{,}333\) N·m² that is 1.95 mm, Section 3's dummy-load answer. The unit load did not need a derivative.</p>
 </div>
