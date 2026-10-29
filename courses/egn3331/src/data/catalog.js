@@ -13,9 +13,9 @@ export const EXAMS = [
   { id: 'u6', n: 6, title: 'Bending', chapters: '6', date: 'Ch 6', labs: ['diagrams', 'flexure', 'joist', 'flitch', 'purlin', 'bandsaw'], coming: [] },
   { id: 'u7', n: 7, title: 'Transverse shear', chapters: '7', date: 'Ch 7', labs: ['shear', 'nails', 'header', 'strut'], coming: [] },
   { id: 'u8', n: 8, title: 'Beam deflection', chapters: '12', date: 'Ch 12', labs: ['curve', 'propped', 'shelf', 'crossing'], coming: [] },
-  { id: 'u9', n: 9, title: 'Torsion', chapters: '5', date: 'Ch 5', labs: ['torsion', 'twist', 'motor'], coming: [] },
-  { id: 'u10', n: 10, title: 'Energy methods', chapters: '14', date: 'Ch 14', labs: ['castigliano', 'drop'], coming: [] },
-  { id: 'u11', n: 11, title: 'Buckling of columns', chapters: '13', date: 'Ch 13', labs: ['buckling', 'column'], coming: [] },
+  { id: 'u9', n: 9, title: 'Torsion', chapters: '5', date: 'Ch 5', labs: ['torsion', 'twist', 'motor', 'tubes'], coming: [] },
+  { id: 'u10', n: 10, title: 'Energy methods', chapters: '14', date: 'Ch 14', labs: ['castigliano', 'drop', 'rooftruss'], coming: [] },
+  { id: 'u11', n: 11, title: 'Buckling of columns', chapters: '13', date: 'Ch 13', labs: ['buckling', 'column', 'posts'], coming: [] },
 ];
 
 export const LAB_META = {
@@ -60,6 +60,9 @@ export const LAB_META = {
   bandsaw: { id: 'bandsaw', exam: 'u6', title: 'Band-saw blade', app: true },
   strut: { id: 'strut', exam: 'u7', title: 'Strut channel', app: true },
   crossing: { id: 'crossing', exam: 'u8', title: 'Car on a bridge', app: true },
+  tubes: { id: 'tubes', exam: 'u9', title: 'Tubes in torsion', app: true },
+  rooftruss: { id: 'rooftruss', exam: 'u10', title: 'Roof truss sag', app: true },
+  posts: { id: 'posts', exam: 'u11', title: 'Real columns', app: true },
 };
 
 export const CHAPTER_TITLES = {

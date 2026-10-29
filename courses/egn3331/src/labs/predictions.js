@@ -1403,6 +1403,113 @@ export const PREDICTIONS = {
       why: 'Backing up puts the heavy axle at midspan but pushes the rear axle almost onto the support, where it barely bends the beam. In the worst spot, front 3.1 ft past midspan, both axles are well onto the span and their sags add to 0.352 in; with the front at midspan it is 0.311 in.',
     },
   ],
+  tubes: [
+    {
+      id: 'tb-slit',
+      scenario: 'pipe',
+      ask: 'Run a saw cut along the full length of the NPS 3 pipe, through one side of the wall, and apply the same 5 kip·in.',
+      apply(s) { s.shape = 'slit'; },
+      watch: [
+        watch('tenfold', 'does it get more than ten times easier to twist?', (c) => c.all.pipe.J / c.J > 10, { mode: 'bool' }),
+        watch('tau', 'the peak shear stress', (c) => c.tau),
+      ],
+      mode: 'dir',
+      expect: { tenfold: true, tau: 'bigger' },
+      why: 'Closed, the flow runs round the whole wall with a lever arm of the radius: J = 6.03 in⁴. Slit, it must turn back within the 0.216 in thickness: J = 2πr t³/3 = 0.0347 in⁴, 174 times less. The stress rises from 1.45 to 31 ksi, past shear yield.',
+    },
+    {
+      id: 'tb-solid',
+      scenario: 'pipe',
+      ask: 'Melt the pipe down and draw it into a solid round bar of the same weight, 1.68 in across. Same 5 kip·in.',
+      apply(s) { s.shape = 'solid'; },
+      watch: [
+        watch('tau', 'the peak shear stress', (c) => c.tau),
+        watch('phi', 'the twist over 6 ft', (c) => c.phiDeg),
+      ],
+      mode: 'dir',
+      expect: { tau: 'bigger', phi: 'bigger' },
+      why: 'J grows with the fourth power of radius, so steel far from the axis counts most. The bar\'s J is 0.79 in⁴ against the pipe\'s 6.03: the twist goes up 7.6 times, and the stress from 1.45 to 5.3 ksi.',
+    },
+  ],
+  rooftruss: [
+    {
+      id: 'rt-steep',
+      scenario: 'ceiling',
+      ask: 'Same 24 ft span and the same loads, but build the truss to an 8:12 pitch instead of 4:12. Its members get longer.',
+      apply(s) { s.pitch = 8; },
+      watch: [
+        watch('delta', 'the ceiling sag at midspan', (c) => c.delta),
+      ],
+      mode: 'dir',
+      expect: { delta: 'smaller' },
+      why: 'Steeper rafters hold the ridge load with less force: 757 lb each instead of 1,328, and the bottom chord drops from 1,260 to 630 lb. Both N and n shrink, so the products shrink faster than the lengths grow. The sag falls from 0.103 to 0.033 in.',
+    },
+    {
+      id: 'rt-heel',
+      scenario: 'ceiling',
+      ask: 'The right heel sits on a roller and slides outward as the roof loads up. Move the 1 lb unit load to that heel, pointing outward, to find the slide.',
+      apply(s) { s.at = 'C'; },
+      watch: [
+        watch('rafters', 'do the rafters add to the heel\'s slide?', (c) => c.rows.some((r) => (r.member === 'AB' || r.member === 'BC') && Math.abs(r.term) > 1e-12), { mode: 'bool' }),
+      ],
+      mode: 'dir',
+      expect: { rafters: false },
+      why: 'A 1 lb outward pull at the heels is resisted by the bottom chord alone; the rafters and king post feel nothing, n = 0. So only the bottom chord\'s stretch, 2 × 1,260 lb × 144 in / AE = 0.031 in, moves the heel. That is why the bottom chord is the truss\'s tie.',
+    },
+    {
+      id: 'rt-span',
+      scenario: 'ceiling',
+      ask: 'Keep the 4:12 pitch and the loads per square foot, but stretch the span from 24 ft to 36 ft.',
+      apply(s) { s.span = 36; },
+      watch: [
+        watch('delta', 'the ceiling sag', (c) => c.delta),
+      ],
+      mode: 'factor',
+      factors: [1.5, 2.25, 3.375, 5.06],
+      expect: { delta: 2.25 },
+      why: 'The load grows with the span, so every N grows 1.5 times; the unit forces n stay the same at the same pitch; every length grows 1.5 times. n N L/AE grows 1.5² = 2.25 times: 0.231 in.',
+    },
+  ],
+  posts: [
+    {
+      id: 'po-cap',
+      scenario: 'side',
+      ask: 'The deck beam is bolted to the side of the 4×4 post. Rebuild it so the beam sits on top of the post in a steel post cap, centred.',
+      apply(s) { s.e = 0; },
+      watch: [
+        watch('sigma', 'the peak stress in the post', (c) => c.sigma),
+        watch('Pcr', 'the Euler buckling load', (c) => c.Pcr),
+      ],
+      mode: 'dir',
+      expect: { sigma: 'smaller', Pcr: 'same' },
+      why: 'Euler\'s load depends only on E, I and L: 18,750 lb either way. But the 3.25 in offset bent the post from the first pound: its peak stress was 1,486 psi, 7.6 times P/A. Centred, it is 196 psi. The detail, not the post, set the stress.',
+    },
+    {
+      id: 'po-tall',
+      scenario: 'side',
+      ask: 'Raise the deck: make the side-bolted post 12 ft tall instead of 8 ft, same load.',
+      apply(s) { s.H = 12; },
+      watch: [
+        watch('ratio', 'the peak stress as a multiple of P/A', (c) => c.ratio),
+      ],
+      mode: 'dir',
+      expect: { ratio: 'bigger' },
+      why: 'P/A is the same 196 psi, but the taller post is closer to buckling: 29% of its Euler load instead of 13%. The secant factor grows, the bow almost triples to 1.6 in, and the peak climbs to 9.4 times P/A.',
+    },
+    {
+      id: 'po-stocky',
+      scenario: 'tubelong',
+      ask: 'Cut the 8 ft aluminium tube down to 3 ft, so its slenderness falls from 145 to 54.',
+      apply(s) { s.L = 36; },
+      watch: [
+        watch('over', 'does Euler\'s formula now overstate the buckling stress?', (c) => c.over > 1.05, { mode: 'bool' }),
+        watch('sigma', 'the buckling stress', (c) => c.sigma),
+      ],
+      mode: 'dir',
+      expect: { over: true, sigma: 'bigger' },
+      why: 'At KL/r = 145 the tube buckles at 4.7 ksi, still elastic, so Euler is right. At 54, Euler would give 33.6 ksi, near the 35 ksi yield, where the alloy has already softened to E_t = 8,400 ksi. The tube buckles at 28.2 ksi, 16% below Euler.',
+    },
+  ],
   bridle: [
     {
       id: 'bd-flat',

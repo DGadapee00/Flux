@@ -43,6 +43,9 @@ const loaders = {
   bandsaw: () => import('./bandsaw.js'),
   strut: () => import('./strut.js'),
   crossing: () => import('./crossing.js'),
+  tubes: () => import('./tubes.js'),
+  rooftruss: () => import('./rooftruss.js'),
+  posts: () => import('./posts.js'),
 };
 
 const labs = createLabLoader(loaders);

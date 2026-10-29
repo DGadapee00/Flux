@@ -52,6 +52,9 @@ const LIMIT = {
   bandsaw: 1e-9,
   strut: 1e-5,
   crossing: 1e-3,
+  tubes: 1e-6,
+  rooftruss: 1e-9,
+  posts: 1e-6,
 };
 
 const fails = [];
