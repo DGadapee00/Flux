@@ -674,7 +674,7 @@ const ch8 = [
     steps: ($, sig) => [
       String.raw`Centre $C = ${sig($.C / UE)}\ \mu\varepsilon$. Radius $R = \sqrt{${sig(($.ex - $.ey) / 2 / UE)}^2 + ${sig($.g / 2 / UE)}^2} = ${sig($.R / UE)}\ \mu\varepsilon$.`,
       String.raw`$\varepsilon_1 = C + R = ${sig($.e1 / UE)}$ and $\varepsilon_2 = C - R = ${sig($.e2 / UE)}\ \mu\varepsilon$.`,
-      String.raw`$2\theta_p = ${sig(2 * $.thetaP)}^\circ$, so $\theta_p = ${sig($.thetaP)}^\circ$. The largest shear strain is $2R = ${sig($.gmax / UE)}\ \mu\mathrm{rad}$.`,
+      String.raw`$2\theta_p = ${sig(2 * $.thetaP)}^\circ$, so $\theta_p = ${sig($.thetaP)}$°. The largest shear strain is $2R = ${sig($.gmax / UE)}\ \mu\mathrm{rad}$.`,
     ],
     second: ($) => {
       // Eigenvalues of the strain tensor [[εx, γ/2], [γ/2, εy]], and a gauge turned to θp.
@@ -855,7 +855,7 @@ const ch8 = [
       const u = tankStrains(1e6, $.r, $.t);
       return [
         String.raw`Per MPa: $\sigma_h = r/t = ${sig($.r / $.t)}$ MPa and $\sigma_l$ half that, so $\varepsilon_h = ${sig(u.eh / UE)}$ and $\varepsilon_l = ${sig(u.el / UE)}\ \mu\varepsilon$.`,
-        String.raw`The gauge at $${sig($.th)}^\circ$ reads $\varepsilon_l\cos^2\theta + \varepsilon_h\sin^2\theta = ${sig(strainTransform(u.el, u.eh, 0, $.th).e / UE)}\ \mu\varepsilon$ per MPa.`,
+        String.raw`The gauge at $${sig($.th)}$° reads $\varepsilon_l\cos^2\theta + \varepsilon_h\sin^2\theta = ${sig(strainTransform(u.el, u.eh, 0, $.th).e / UE)}\ \mu\varepsilon$ per MPa.`,
         String.raw`$p = ${$.reading}/${sig(strainTransform(u.el, u.eh, 0, $.th).e / UE)} = ${sig($.pp / MPA)}$ MPa, so $\sigma_h = pr/t = ${sig($.hoop / MPA)}$ MPa.`,
       ];
     },

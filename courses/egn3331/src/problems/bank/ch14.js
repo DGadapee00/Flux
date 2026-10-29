@@ -74,11 +74,12 @@ const ch14 = [
       'For a linear bar the energy is half the axial force times the elongation.',
       'The elongation is NL/AE. The energy is N²L over 2AE.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const bar = axialBar($.N, $.L, $.A, E);
       return [
-        `δ = NL/AE = ${bar.delta * 1e3} mm.`,
-        `U = ½ Nδ = ${bar.U} J.`,
+        String.raw`$\delta = NL/AE = ${sig(bar.delta * 1e3)}$ mm.`,
+        String.raw`The force rises from zero as the bar stretches, so the work is the triangle under that line.`,
+        String.raw`$U = \tfrac12N\delta = N^2L/2AE = ${sig(bar.U)}$ J.`,
       ];
     },
     second: barSecond,
@@ -136,12 +137,13 @@ const ch14 = [
       'The tip drop of a cantilever is PL³ over 3EI, and the energy is half the load times that drop.',
       'I for a rectangle is bh³/12. Differentiate the energy with respect to P and the tip drop comes back.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const EI = beamEI($.b, $.h);
       const delta = ($.P * $.L ** 3) / (3 * EI);
       return [
-        `δ = PL³/(3EI) = ${delta * 1e3} mm.`,
-        `U = ½ Pδ = ${(0.5 * $.P * delta)} J.`,
+        String.raw`$EI = ${sig(EI)}$ N·m². The moment is $P$ times the distance back from the tip, so $U = \int M^2/2EI\,dx = P^2L^3/6EI$.`,
+        String.raw`$U = ${sig(0.5 * $.P * delta)}$ J.`,
+        String.raw`$\delta = \partial U/\partial P = PL^3/3EI = ${sig(delta * 1e3)}$ mm, and $\tfrac12P\delta$ returns the same energy.`,
       ];
     },
     second: ($) => {
@@ -277,11 +279,12 @@ const ch14 = [
       'Each bar force is the load over twice the sine of the angle to the horizontal.',
       'Castigliano differentiates the energy of both bars with respect to the joint load. The bar shortening divided by sin θ is the same joint drop.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const t = twoBarTruss($.P, $.span, $.rise, $.A, E);
       return [
-        `Each bar carries ${t.F / 1000} kN.`,
-        `The joint drops ${t.delta * 1e3} mm.`,
+        String.raw`Each bar is $${sig(t.len)}$ m long at $\sin\theta = ${sig(t.sin)}$; the joint gives $F = P/(2\sin\theta) = ${sig(t.F / 1000)}$ kN.`,
+        String.raw`Energy: $U = 2\cdot F^2L/2AE = ${sig(t.U)}$ J, with $F$ proportional to $P$.`,
+        String.raw`$\delta = \partial U/\partial P = 2U/P = ${sig(t.delta * 1e3)}$ mm.`,
       ];
     },
     second: ($) => {
@@ -340,11 +343,12 @@ const ch14 = [
       'Torsion energy is half the torque times the angle, and the angle is TL over GJ.',
       'J for a solid circle is πd⁴/32. G here is 75 GPa, not the 200 GPa tensile modulus.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const s = torsionStrain($.T, $.L, G, polarJ($.d / 2, 0));
       return [
-        `φ = ${s.phi * 180 / Math.PI}°.`,
-        `U = ½ Tφ = ${s.U} J.`,
+        String.raw`$J = \pi d^4/32$ and $\phi = TL/GJ = ${sig(s.phi)}$ rad $= ${sig((s.phi * 180) / Math.PI)}$°.`,
+        String.raw`The torque rises from zero with the twist, so the stored energy is half the product.`,
+        String.raw`$U = \tfrac12T\phi = T^2L/2GJ = ${sig(s.U)}$ J.`,
       ];
     },
     second: ($) => {
@@ -404,11 +408,12 @@ const ch14 = [
       'The factor is one plus the square root of one plus twice the drop over the static stretch.',
       'The static stretch is WL/AE. The maximum stress is the factor times W/A.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const hit = impactDrop($.W, $.L, area($.d), E, $.h);
       return [
-        `δ_st = ${hit.deltaSt * 1e3} mm and the factor is ${hit.n}.`,
-        `The maximum stress is ${hit.stress / 1e6} MPa.`,
+        String.raw`At rest the weight would stretch the rod $\delta_{st} = WL/AE = ${sig(hit.deltaSt * 1e3)}$ mm.`,
+        String.raw`$n = 1 + \sqrt{1 + 2h/\delta_{st}} = ${sig(hit.n)}$.`,
+        String.raw`The peak force is $nW$, so $\sigma = nW/A = ${sig(hit.stress / 1e6)}$ MPa.`,
       ];
     },
     second: ($) => {
@@ -466,11 +471,12 @@ const ch14 = [
       'Work the stretch in inches: load times length over area times modulus, with the length in inches.',
       'The factor uses that static stretch and the drop, both in inches. Stress is the factor times the load over the area.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const inch = ropeInches($.W, $.L, $.h);
       return [
-        `The static stretch is ${inch.deltaIn} in and the factor is ${inch.n}.`,
-        `The maximum stress is ${inch.stressPsi / 1000} ksi.`,
+        String.raw`$\delta_{st} = WL/AE$ with $A = 0.118$ in² and $E = 12.2\times 10^6$ psi: $${sig(inch.deltaIn)}$ in.`,
+        String.raw`$n = 1 + \sqrt{1 + 2h/\delta_{st}} = ${sig(inch.n)}$.`,
+        String.raw`$\sigma = nW/A = ${sig(inch.stressPsi / 1000)}$ ksi.`,
       ];
     },
     second: ($) => {
@@ -527,11 +533,12 @@ const ch14 = [
       'Turn the allowable stress into a factor on the static stress, then solve the impact factor for the height.',
       'With n = σA/W and δ_st = WL/AE, the height is (δ_st/2) times ((n − 1)² − 1).',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const r = dropHeightForStress($.W, $.L, area($.d), E, $.sig);
       return [
-        `The factor at the allowable is ${r.n}.`,
-        `The greatest drop is ${r.h * 1e3} mm.`,
+        String.raw`The allowable stress allows a peak force $\sigma A$, so $n = \sigma A/W = ${sig(r.n)}$.`,
+        String.raw`$\delta_{st} = WL/AE = ${sig(r.deltaSt * 1e3)}$ mm.`,
+        String.raw`Solve $n = 1 + \sqrt{1 + 2h/\delta_{st}}$ for $h$: $h = \tfrac12\delta_{st}[(n-1)^2 - 1] = ${sig(r.h * 1e3)}$ mm.`,
       ];
     },
     second: ($) => {

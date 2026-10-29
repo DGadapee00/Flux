@@ -416,8 +416,9 @@ const ch9 = [
     steps: ($, sig) => {
       const s = hitchSides($.W, $.H, HITCH_D, HITCH_ARM);
       return [
-        String.raw`Axial ${sig(s.axial / KSI)} ksi, bending ${sig(s.bend / KSI)} ksi.`,
-        String.raw`Tension side ${sig(s.tension / KSI)} ksi. Compression side ${sig(s.compression / KSI)} ksi.`,
+        String.raw`Axial, on the 1 in shank: $-4W/\pi d^2 = ${sig(s.axial / KSI)}$ ksi.`,
+        String.raw`Bending, with a 1 in arm: $32(H\cdot 1)/\pi d^3 = ${sig(s.bend / KSI)}$ ksi.`,
+        String.raw`Tension side $= ${sig(s.tension / KSI)}$ ksi; compression side $= ${sig(s.compression / KSI)}$ ksi.`,
       ];
     },
     second: ($) => {

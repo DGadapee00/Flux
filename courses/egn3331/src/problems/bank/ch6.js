@@ -79,9 +79,11 @@ const ch6 = [
     steps: ($, sig) => {
       const left = $.P * (1 - $.aFrac);
       const M = left * $.aFrac * $.L;
+      const a = $.aFrac * $.L;
       return [
-        String.raw`Left reaction ${sig(left / KN)} kN.`,
-        String.raw`Largest moment ${sig(M / KN)} kN·m.`,
+        String.raw`The load sits $a = ${sig(a)}$ m from the left. Moments about the right support: $R_L = P(L-a)/L = ${sig(left / KN)}$ kN.`,
+        String.raw`The shear is $R_L$ up to the load and changes sign there, so the moment peaks at the load.`,
+        String.raw`$M = R_L a = ${sig(M / KN)}$ kN·m, which is $Pa(L-a)/L$.`,
       ];
     },
     second: ($) => {
@@ -141,8 +143,9 @@ const ch6 = [
       'By symmetry each support carries half the load. The moment peaks where the shear is zero: add up the area under the shear from the support to there.',
     ],
     steps: ($, sig) => [
-      String.raw`Left shear ${sig(($.w * $.L) / 2 / KN)} kN.`,
-      String.raw`Midspan moment ${sig(($.w * $.L * $.L) / 8 / KN)} kN·m.`,
+      String.raw`The total load is $wL = ${sig(($.w * $.L) / KN)}$ kN; by symmetry each support takes half, $${sig(($.w * $.L) / 2 / KN)}$ kN.`,
+      String.raw`The shear falls at $w$ per metre and is zero at midspan.`,
+      String.raw`The area under the shear to midspan is $\tfrac12(wL/2)(L/2) = wL^2/8 = ${sig(($.w * $.L * $.L) / 8 / KN)}$ kN·m.`,
     ],
     second: ($) => {
       const m = simpleUniform($.w, $.L);
@@ -203,8 +206,9 @@ const ch6 = [
     steps: ($, sig) => {
       const f = flexureFibers($.M, rectSection($.b, $.h));
       return [
-        String.raw`Top ${sig(f.top / MPA)} MPa.`,
-        String.raw`Bottom ${sig(f.bot / MPA)} MPa.`,
+        String.raw`$I = bh^3/12 = ${sig(f.I / 1e-12 / 1e6)}\times 10^6$ mm⁴, and the outer fibers are $h/2 = ${sig($.h / 2 / 1e-3)}$ mm out.`,
+        String.raw`Top, $y = +h/2$: $\sigma = -My/I = ${sig(f.top / MPA)}$ MPa.`,
+        String.raw`Bottom, $y = -h/2$: $\sigma = ${sig(f.bot / MPA)}$ MPa.`,
       ];
     },
     second: ($) => {
@@ -268,9 +272,11 @@ const ch6 = [
     ],
     steps: ($, sig) => {
       const f = teeFibers($.M);
+      const s = teeSection(TEE.bf, TEE.tf, TEE.tw, TEE.hw);
       return [
-        String.raw`Top ${sig(f.top / MPA)} MPa.`,
-        String.raw`Bottom ${sig(f.bot / MPA)} MPa.`,
+        String.raw`Centroid: $(1440\times 106 + 1200\times 50)/2640 = ${sig(s.ybar / 1e-3)}$ mm up. By parallel axes, $I = ${sig(s.I / 1e-12 / 1e6)}\times 10^6$ mm⁴.`,
+        String.raw`Top fiber, $${sig(s.topY / 1e-3)}$ mm above the axis: $\sigma = ${sig(f.top / MPA)}$ MPa.`,
+        String.raw`Bottom fiber, $${sig(-s.botY / 1e-3)}$ mm below: $\sigma = ${sig(f.bot / MPA)}$ MPa, the larger because it is farther.`,
       ];
     },
     second: ($) => {
@@ -840,7 +846,7 @@ const ch6 = [
       return [
         String.raw`$M_z = ${sig(($.M * Math.cos($.th * DEG)) / KN)}$ kN·m and $M_y = ${sig(($.M * Math.sin($.th * DEG)) / KN)}$ kN·m. $I_z = ${sig(Iz / 1e-12 / 1e6)}\times 10^6$ mm⁴, $I_y = ${sig(Iy / 1e-12 / 1e6)}\times 10^6$ mm⁴.`,
         String.raw`Worst corner: $${sig((($.M * Math.cos($.th * DEG)) * $.h) / 2 / Iz / MPA)} + ${sig((($.M * Math.sin($.th * DEG)) * $.b) / 2 / Iy / MPA)} = ${sig($.smax / MPA)}$ MPa.`,
-        String.raw`$\tan\alpha = ${sig(Iz / Iy)}\tan ${sig($.th)}^\circ$, so $\alpha = ${sig($.alpha)}^\circ$.`,
+        String.raw`$\tan\alpha = ${sig(Iz / Iy)}\tan ${sig($.th)}^\circ$, so $\alpha = ${sig($.alpha)}$°.`,
       ];
     },
     second: ($) => {

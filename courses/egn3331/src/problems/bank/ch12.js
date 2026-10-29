@@ -189,9 +189,11 @@ const ch12 = [
     ],
     steps: ($, sig) => {
       const beam = simplePointDeflection($.P, $.L, $.aFrac * $.L, ei(0.04, 0.08));
+      const a = $.aFrac * $.L;
       return [
-        String.raw`Lowest at ${sig(beam.xMax)} m.`,
-        String.raw`That point drops ${sig(beam.drop * 1000)} mm.`,
+        String.raw`The load is at $a = ${sig(a)}$ m, so the longer side runs from the load to the right support.`,
+        String.raw`Setting the slope of that side's curve to zero gives $x = L - \sqrt{(L^2 - a^2)/3} = ${sig(beam.xMax)}$ m.`,
+        String.raw`There the curve drops $${sig(beam.drop * 1000)}$ mm, more than the $${sig(beam.under * 1000)}$ mm under the load.`,
       ];
     },
     second: ($) => {
@@ -261,8 +263,9 @@ const ch12 = [
     steps: ($, sig) => {
       const beam = proppedUniform($.w, $.L, ei(0.04, 0.08));
       return [
-        String.raw`Prop ${sig(beam.R / KN)} kN upward.`,
-        String.raw`Wall moment ${sig(beam.Mwall / KN)} kN·m.`,
+        String.raw`Remove the prop: the tip would drop $wL^4/8EI$. A tip force $R$ lifts it $RL^3/3EI$.`,
+        String.raw`The tip does not move: $R = 3wL/8 = ${sig(beam.R / KN)}$ kN upward.`,
+        String.raw`Wall moment: $RL - wL^2/2 = -wL^2/8 = ${sig(beam.Mwall / KN)}$ kN·m, hogging.`,
       ];
     },
     second: ($) => ({

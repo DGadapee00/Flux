@@ -85,9 +85,11 @@ const ch5 = [
     ],
     steps: ($, sig) => {
       const shaft = roundShaft($.T, $.L, G, $.d, 0);
+      const J = polarJ($.d / 2, 0);
       return [
-        String.raw`Outer stress ${sig(shaft.tauMax / MPA)} MPa.`,
-        String.raw`Angle ${sig((shaft.phi * 180) / Math.PI)}°.`,
+        String.raw`$J = \pi d^4/32 = ${sig(J / 1e-12 / 1e3)}\times 10^3$ mm⁴.`,
+        String.raw`At the outside, $\rho = d/2$: $\tau = T\rho/J = ${sig(shaft.tauMax / MPA)}$ MPa.`,
+        String.raw`$\phi = TL/GJ = ${sig(shaft.phi)}$ rad $= ${sig((shaft.phi * 180) / Math.PI)}$°.`,
       ];
     },
     second: ($) => {
@@ -161,9 +163,11 @@ const ch5 = [
     ],
     steps: ($, sig) => {
       const shaft = roundShaft($.T, 1, G, $.d, $.di);
+      const J = polarJ($.d / 2, $.di / 2);
       return [
-        String.raw`Outside ${sig(shaft.tauMax / MPA)} MPa.`,
-        String.raw`Bore ${sig(shaft.tauIn / MPA)} MPa.`,
+        String.raw`$J = \pi(d_o^4 - d_i^4)/32 = ${sig(J / 1e-12 / 1e3)}\times 10^3$ mm⁴.`,
+        String.raw`Outside, $\rho = ${sig($.d / 2 / MM)}$ mm: $\tau = T\rho/J = ${sig(shaft.tauMax / MPA)}$ MPa.`,
+        String.raw`Bore, $\rho = ${sig($.di / 2 / MM)}$ mm: $\tau = ${sig(shaft.tauIn / MPA)}$ MPa, the outside stress times $d_i/d_o$.`,
       ];
     },
     second: ($) => {
@@ -238,8 +242,9 @@ const ch5 = [
       const T = torqueFromPower($.P, $.rpm).T;
       const tau = roundShaft(T, $.L, G, $.d, 0).tauMax;
       return [
-        String.raw`Torque ${sig(T)} N·m.`,
-        String.raw`Outer stress ${sig(tau / MPA)} MPa.`,
+        String.raw`$\omega = 2\pi n/60 = ${sig((2 * Math.PI * $.rpm) / 60)}$ rad/s.`,
+        String.raw`$T = P/\omega = ${sig(T)}$ N·m.`,
+        String.raw`$\tau = 16T/\pi d^3 = ${sig(tau / MPA)}$ MPa.`,
       ];
     },
     second: ($) => {
@@ -308,9 +313,9 @@ const ch5 = [
       const p1 = ($.T * $.L1) / (G * J1);
       const p2 = ($.T * $.L2) / (G * J2);
       return [
-        String.raw`Both segments carry the same $T$. Segment 1: $J_1 = ${sig(J1 / 1e-12 / 1e3)}\times 10^3$ mm⁴, $\phi_1 = TL_1/GJ_1 = ${sig(p1 / DEG)}^\circ$.`,
-        String.raw`Segment 2: $J_2 = ${sig(J2 / 1e-12 / 1e3)}\times 10^3$ mm⁴, $\phi_2 = ${sig(p2 / DEG)}^\circ$.`,
-        String.raw`The angles add: $\phi = ${sig((stepShaft($).phi * 180) / Math.PI)}^\circ$.`,
+        String.raw`Both segments carry the same $T$. Segment 1: $J_1 = ${sig(J1 / 1e-12 / 1e3)}\times 10^3$ mm⁴, $\phi_1 = TL_1/GJ_1 = ${sig(p1 / DEG)}$°.`,
+        String.raw`Segment 2: $J_2 = ${sig(J2 / 1e-12 / 1e3)}\times 10^3$ mm⁴, $\phi_2 = ${sig(p2 / DEG)}$°.`,
+        String.raw`The angles add: $\phi = ${sig((stepShaft($).phi * 180) / Math.PI)}$°.`,
       ];
     },
     second: ($) => ({
@@ -379,8 +384,9 @@ const ch5 = [
     steps: ($, sig) => {
       const ends = fixedFixedTorsion($.T, $.L, $.a * $.L, G, polarJ($.d / 2, 0));
       return [
-        String.raw`Left reaction ${sig(ends.Tleft)} N·m.`,
-        String.raw`Rotation ${sig((ends.phi * 180) / Math.PI)}°.`,
+        String.raw`Each side is a spring $GJ/\text{length}$: $k_L = ${sig(ends.kL)}$ and $k_R = ${sig(ends.kR)}$ N·m/rad.`,
+        String.raw`Both turn through one angle: $\phi = T/(k_L + k_R) = ${sig(ends.phi)}$ rad $= ${sig((ends.phi * 180) / Math.PI)}$°.`,
+        String.raw`$T_L = k_L\phi = ${sig(ends.Tleft)}$ N·m, the short side's larger share.`,
       ];
     },
     second: ($) => {
@@ -443,8 +449,9 @@ const ch5 = [
     steps: ($, sig) => {
       const inch = motorInches($.hp / HP_WATT, $.rpm);
       return [
-        String.raw`Shear stress ${sig(inch.tauKsi)} ksi.`,
-        String.raw`Angle ${sig(inch.phiDeg)}°.`,
+        String.raw`$T = 63{,}025\,\mathrm{hp}/n = ${sig(inch.TLbfIn)}$ lb·in.`,
+        String.raw`On the 1.125 in shaft, $\tau = 16T/\pi d^3 = ${sig(inch.tauKsi)}$ ksi.`,
+        String.raw`Over 2.75 in with $G = 29{,}000/2.6$ ksi, $\phi = TL/GJ = ${sig(inch.phiDeg)}$°.`,
       ];
     },
     second: ($) => {
@@ -764,7 +771,7 @@ const ch5 = [
     steps: ($, sig) => [
       String.raw`$A_m = ${sig($.a / MM)}\times ${sig($.b / MM)} = ${sig(($.a * $.b) / 1e-6)}$ mm², so $q = T/2A_m = ${sig($.q / 1000)}$ N/mm.`,
       String.raw`The thinnest wall is $${sig(Math.min($.t1, $.t2) / MM)}$ mm: $\tau = ${sig($.tau / MPA)}$ MPa.`,
-      String.raw`$\oint ds/t = 2(${sig($.a / MM)}/${sig($.t2 / MM)} + ${sig($.b / MM)}/${sig($.t1 / MM)}) = ${sig(2 * ($.a / $.t2 + $.b / $.t1))}$, so $d\phi/dx = ${sig($.rate)}^\circ$/m.`,
+      String.raw`$\oint ds/t = 2(${sig($.a / MM)}/${sig($.t2 / MM)} + ${sig($.b / MM)}/${sig($.t1 / MM)}) = ${sig(2 * ($.a / $.t2 + $.b / $.t1))}$, so $d\phi/dx = ${sig($.rate)}$°/m.`,
     ],
     second: ($) => {
       // The twist rate from energy: T θ/2 equals Σ q² L/(2 G t) round the wall.
@@ -821,7 +828,7 @@ const ch5 = [
     steps: ($, sig) => [
       String.raw`$b = ${sig($.bb / MM)}$ mm, $t = ${sig($.t / MM)}$ mm.`,
       String.raw`$\tau_{\max} = T/(\alpha bt^2) = ${sig($.tau / MPA)}$ MPa, at the middle of the long faces.`,
-      String.raw`$\phi = TL/(\beta bt^3G) = ${sig($.phi)}^\circ$.`,
+      String.raw`$\phi = TL/(\beta bt^3G) = ${sig($.phi)}$°.`,
     ],
     second: ($) => {
       // The double sine series of the stress function, a second route to α and β.
@@ -994,7 +1001,7 @@ const ch5 = [
     ],
     steps: ($, sig) => [
       String.raw`$k_1 = GJ_1/a = ${sig($.k1)}$ and $k_2 = GJ_2/b = ${sig($.k2)}$ N·m/rad.`,
-      String.raw`$T_L = Tk_1/(k_1 + k_2) = ${sig($.TL)}$ N·m and $T_R = ${sig($.TR)}$ N·m. The step turns $T_L/k_1 = ${sig($.phi)}^\circ$.`,
+      String.raw`$T_L = Tk_1/(k_1 + k_2) = ${sig($.TL)}$ N·m and $T_R = ${sig($.TR)}$ N·m. The step turns $T_L/k_1 = ${sig($.phi)}$°.`,
       String.raw`Stresses: $16T/\pi d^3$ in each piece; the larger is $${sig($.tmax / MPA)}$ MPa.`,
     ],
     second: ($) => {

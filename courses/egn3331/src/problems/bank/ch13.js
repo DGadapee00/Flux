@@ -67,11 +67,12 @@ const ch13 = [
       'The pinned Euler load is pi squared times EI over L squared. The weak axis uses the smaller depth.',
       'I = b h cubed over 12, with h the 20 mm side. The stress is that load over the area.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const c = weak($.L);
       return [
-        `I = bh^3/12 = ${c.I} m^4 with h = 20 mm.`,
-        `P = π²EI/L² = ${c.euler / 1000} kN. The stress is ${c.stress / 1e6} MPa.`,
+        String.raw`The bar bows across its 20 mm side: $I = 60(20)^3/12 = ${sig(c.I / 1e-12 / 1e3)}\times 10^3$ mm⁴.`,
+        String.raw`$P_{cr} = \pi^2EI/L^2 = ${sig(c.euler / 1000)}$ kN.`,
+        String.raw`Its stress, $P/A$ on 1200 mm², is $${sig(c.stress / 1e6)}$ MPa, ${c.stress < SY ? 'below' : 'above'} the 250 MPa yield.`,
       ];
     },
     second: ($) => {
@@ -186,11 +187,12 @@ const ch13 = [
       'The weak axis is the smaller depth. Turning the section multiplies I by the square of the side ratio.',
       'I_weak uses h = 20 mm. The ratio of the loads is (60/20) squared, and it does not depend on the length.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const c = weak($.L);
       return [
-        `Weak-axis P = ${c.euler / 1000} kN.`,
-        'The side ratio is 3. The load ratio is 3 squared, which is 9.',
+        String.raw`The weak axis bends across the 20 mm side: $I = 60(20)^3/12 = 4.00\times 10^4$ mm⁴, so $P = \pi^2EI/L^2 = ${sig(c.euler / 1000)}$ kN.`,
+        String.raw`The strong axis uses $I = 20(60)^3/12$, nine times larger.`,
+        'The load follows I, so the ratio is 3 squared, 9, at any length.',
       ];
     },
     second: ($) => {
@@ -336,11 +338,12 @@ const ch13 = [
       'Use the design wall, not a solid circle. The report leaves the ends free to rotate.',
       'P = π²EI/L² in kip when E is in ksi and I is in in⁴. Compare the stress with 42 ksi.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const c = tubeColumn($.L / M_PER_IN, COLUMN_OD_IN, COLUMN_T_IN, COLUMN_E_KSI, COLUMN_FY_KSI, 1);
       return [
-        `I = ${c.I} in^4 and A = ${c.A} in^2 for a 3 in tube with a 0.112 in design wall.`,
-        `Euler load = ${c.eulerKip} kip, stress = ${c.stressKsi} ksi. ${c.yielded ? 'Yield is first.' : 'Euler is still below yield.'}`,
+        String.raw`For a 3 in tube with a 0.112 in design wall: $I = ${sig(c.I)}$ in⁴ and $A = ${sig(c.A)}$ in².`,
+        String.raw`$P = \pi^2EI/L^2$, with $E$ in ksi and $I$ in in⁴, is in kip: $${sig(c.eulerKip)}$ kip, a stress of $${sig(c.stressKsi)}$ ksi.`,
+        c.yielded ? 'That is above the 42 ksi yield, so yield comes first.' : 'That is below the 42 ksi yield, so Euler governs.',
       ];
     },
     second: ($) => {
