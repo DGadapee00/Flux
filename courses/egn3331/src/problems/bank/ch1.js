@@ -1096,6 +1096,59 @@ const ch1 = [
     cases: [kase(cite('bearing'), { P: 40, ta: 100, sb: 200, w: 60 }, { d: 15.957691216057311, t: 12.533141373154999, net: 72.46528012116976 })],
   }),
 
+  problem({
+    id: 'u1.1.which-area',
+    title: 'Which area resists the load',
+    exam: 'u1',
+    ch: '1',
+    lab: 'pins',
+    src: cite('shear-stress'),
+    kind: 'conceptual',
+    topics: ['shear-stress', 'bearing'],
+    variety: ['configuration'],
+    level: 2,
+    vars: {
+      sit: choice(
+        ['single', 'a bolt of diameter d joining two plates that overlap once, shearing across the bolt'],
+        ['double', 'a pin of diameter d through a clevis, shearing on both sides of the middle plate'],
+        ['bearing', 'a plate of thickness t pressing on the side of a pin of diameter d'],
+        ['punch', 'a punch of diameter d driven through a plate of thickness t'],
+      ),
+      d: range(6, 30, 1, 'mm', MM),
+    },
+    text: (T) => String.raw`The load passes through ${T.sit}. Here $d = ${T.d}$ mm. Which area does the average stress divide the load by?`,
+    parts: [
+      mc('area', [
+        ['circle', 'One circle, $\\pi d^2/4$.', 'One cross-section of the bolt is cut, once. That is a single shear plane.'],
+        ['two', 'Two circles, $2\\pi d^2/4$.', 'The pin is cut on two planes, each one cross-section. The load splits between them.'],
+        ['rect', 'The projected rectangle, $d\\,t$.', 'Contact pressure on a curved pin face is averaged over its projection, the diameter times the thickness.'],
+        ['cyl', 'The cylinder wall, $\\pi d\\,t$.', 'A punch shears a plug out of the plate along its whole edge: the circumference times the thickness.'],
+      ], ($) => ({ single: 'circle', double: 'two', bearing: 'rect', punch: 'cyl' }[$.sit])),
+    ],
+    hints: [
+      'Picture the surface that would fail and ask which way the load crosses it.',
+      'Shear across a pin cuts its circular section once per plane. Bearing presses on its projected side. A punched slug tears around its rim.',
+    ],
+    steps: ($) => [
+      {
+        single: 'One plane cuts the bolt: the area is one circle.',
+        double: 'Two planes cut the pin: two circles share the load.',
+        bearing: 'The plate presses on the pin\'s side: the projected area is d by t.',
+        punch: 'The slug shears around its rim: the area is the circumference times t.',
+      }[$.sit],
+    ],
+    second: ($) => {
+      // The pins lab's own segment count: one plane for single shear, two for double.
+      const planes = pinSegments(1, $.sit === 'double' ? 2 : 1).shears.length;
+      return { area: { single: planes === 1 ? 'circle' : 'two', double: planes === 2 ? 'two' : 'circle', bearing: 'rect', punch: 'cyl' }[$.sit] };
+    },
+    cases: [
+      kase(cite('shear-stress'), { sit: 'double', d: 12 }, { area: 'two' }),
+      kase(cite('bearing'), { sit: 'bearing', d: 12 }, { area: 'rect' }),
+      kase(cite('shear-stress'), { sit: 'punch', d: 12 }, { area: 'cyl' }),
+    ],
+  }),
+
 ];
 
 export default ch1;

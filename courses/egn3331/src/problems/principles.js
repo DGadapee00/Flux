@@ -152,6 +152,7 @@ export const PRINCIPLE_TAGS = {
   'u1.1.shackle': ['avg-stress'],
   'u1.1.margin': ['design'],
   'u1.1.lug': ['design', 'avg-stress'],
+  'u1.1.which-area': ['avg-stress'],
   // Unit 2
   'u2.2.normal-strain': ['hooke'],
   'u2.2.hooke': ['hooke'],
@@ -224,6 +225,7 @@ export const PRINCIPLE_TAGS = {
   'u6.6.bandsaw': ['flexure'],
   'u6.6.tilted': ['flexure'],
   'u6.6.composite': ['flexure', 'hooke'],
+  'u6.6.where-max': ['sections'],
   // Unit 7
   'u7.7.rect': ['beam-shear'],
   'u7.7.profile': ['beam-shear'],
@@ -251,6 +253,7 @@ export const PRINCIPLE_TAGS = {
   'u8.12.superpose': ['deflection'],
   'u8.12.fixed': ['compatibility', 'deflection'],
   'u8.12.prop-point': ['compatibility', 'deflection'],
+  'u8.12.can-add': ['deflection'],
   // Unit 9
   'u9.5.solid': ['torsion'],
   'u9.5.hollow': ['torsion'],
@@ -267,6 +270,7 @@ export const PRINCIPLE_TAGS = {
   'u9.5.slit': ['torsion'],
   'u9.5.shoulder': ['concentration', 'torsion'],
   'u9.5.fixed-step': ['compatibility', 'torsion'],
+  'u9.5.what-raises': ['torsion'],
   // Unit 10
   'u10.14.axial': ['energy', 'axial'],
   'u10.14.beam': ['energy', 'deflection'],
@@ -282,6 +286,7 @@ export const PRINCIPLE_TAGS = {
   'u10.14.truss-unit': ['energy', 'axial'],
   'u10.14.beam-unit': ['energy', 'deflection'],
   'u10.14.beam-drop': ['impact', 'deflection'],
+  'u10.14.unit-where': ['energy'],
   // Unit 11
   'u11.13.euler': ['buckling'],
   'u11.13.ends': ['buckling'],

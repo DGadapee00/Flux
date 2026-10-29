@@ -805,6 +805,73 @@ const ch12 = [
     cases: [kase(cite('superposition'), { P: 10, L: 4 }, { R: 3.125, Mw: 7.5, Mload: 6.25 })],
   }),
 
+  problem({
+    id: 'u8.12.can-add',
+    title: 'When two deflections may be added',
+    exam: 'u8',
+    ch: '12',
+    lab: 'curve',
+    src: cite('superposition'),
+    kind: 'conceptual',
+    topics: ['superposition'],
+    variety: ['representation'],
+    level: 2,
+    vars: {
+      sit: choice(
+        ['same', 'both deflections are taken at midspan of the same simple span'],
+        ['peaks', 'each deflection is that load\'s own largest one, and the two largest sit at different points'],
+        ['yield', 'the combined load takes the beam past yield'],
+        ['supports', 'one deflection is for the beam as a cantilever and the other as a simple span'],
+      ),
+      L: range(2, 6, 0.25, 'm', 1),
+    },
+    text: (T) => String.raw`A beam $${T.L}$ m long carries two loads. A student finds each load's deflection alone and adds them, where ${T.sit}. Is the sum the deflection under both loads?`,
+    parts: [
+      mc('verdict', [
+        ['yes', 'Yes.', 'With the same supports, the same station and an elastic beam, $EIy\'\' = M$ is linear in the loads, so deflections add.'],
+        ['over', 'No: it overstates the largest deflection.', 'Each case\'s largest deflection sits at its own point. At any one point the sum is smaller than the sum of the two peaks.'],
+        ['yield', 'No: the beam is no longer linear.', 'Past yield, stiffness falls with load, so the response to both loads is not the sum of the responses.'],
+        ['supports', 'No: the two cases are different beams.', 'Superposition adds solutions of one structure. A cantilever and a simple span have different boundary conditions.'],
+      ], ($) => ({ same: 'yes', peaks: 'over', yield: 'yield', supports: 'supports' }[$.sit])),
+    ],
+    hints: [
+      'Superposition rests on one equation, $EIy\'\' = M$, being linear, on one structure.',
+      'Check three things: the same supports, the same station, and a material still on its elastic line.',
+    ],
+    steps: ($) => [
+      {
+        same: 'Same beam, same station, elastic: the deflections add.',
+        peaks: 'The peaks sit at different points, so adding them overstates the true largest deflection.',
+        yield: 'Past yield the beam is not linear, so superposition fails.',
+        supports: 'Different supports make different structures; their solutions do not add.',
+      }[$.sit],
+    ],
+    second: ($) => {
+      if ($.sit !== 'same' && $.sit !== 'peaks') return { verdict: $.sit };
+      // Two point loads on one span: compare the sum of peaks with the true peak.
+      const EI = 1e6;
+      const one = simpleMacaulay({ L: $.L, EI, points: [{ a: 0.2 * $.L, P: 1000 }] });
+      const two = simpleMacaulay({ L: $.L, EI, points: [{ a: 0.8 * $.L, P: 1000 }] });
+      const both = simpleMacaulay({ L: $.L, EI, points: [{ a: 0.2 * $.L, P: 1000 }, { a: 0.8 * $.L, P: 1000 }] });
+      let p1 = 0;
+      let p2 = 0;
+      let pb = 0;
+      for (let i = 0; i <= 400; i++) {
+        const x = ($.L * i) / 400;
+        p1 = Math.max(p1, -one.y(x));
+        p2 = Math.max(p2, -two.y(x));
+        pb = Math.max(pb, -both.y(x));
+      }
+      const mid = Math.abs(-one.y($.L / 2) - two.y($.L / 2) + both.y($.L / 2)) < 1e-12;
+      return { verdict: $.sit === 'same' ? (mid ? 'yes' : 'over') : (p1 + p2 > pb * (1 + 1e-6) ? 'over' : 'yes') };
+    },
+    cases: [
+      kase(cite('superposition'), { sit: 'same', L: 4 }, { verdict: 'yes' }),
+      kase(cite('superposition'), { sit: 'peaks', L: 4 }, { verdict: 'over' }),
+      kase(cite('superposition'), { sit: 'supports', L: 4 }, { verdict: 'supports' }),
+    ],
+  }),
+
 ];
 
 export default ch12;

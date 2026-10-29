@@ -1021,6 +1021,65 @@ const ch5 = [
     cases: [kase(cite('torsion'), { T: 600, d1: 40, d2: 30, a: 0.6, b: 0.9 }, { TL: 495.48387096774195, TR: 104.51612903225805, phi: 0.9036542210785016, tmax: 39.42935364341149 })],
   }),
 
+  problem({
+    id: 'u9.5.what-raises',
+    title: 'What a change does to the shaft stress',
+    exam: 'u9',
+    ch: '5',
+    lab: 'torsion',
+    src: cite('torsion'),
+    kind: 'conceptual',
+    topics: ['torsion', 'hollow'],
+    variety: ['representation'],
+    level: 2,
+    vars: {
+      change: choice(
+        ['long', 'the shaft is made twice as long'],
+        ['torque', 'the torque is doubled'],
+        ['thick', 'the diameter is doubled'],
+        ['bore', 'a bore half the outside diameter is drilled down its centre'],
+      ),
+      d: range(20, 60, 2, 'mm', MM),
+    },
+    text: (T) => String.raw`A solid steel shaft $${T.d}$ mm across carries a steady torque. Then ${T.change}. What happens to the shear stress at the outside?`,
+    parts: [
+      mc('effect', [
+        ['same', 'It stays the same.', 'The stress $T\\rho/J$ has no length in it. Length changes the angle, not the stress.'],
+        ['little', 'It rises a little, by under 10%.', 'The core carried little torque, so removing it costs only a small part of $J$.'],
+        ['double', 'It doubles.', 'The stress is proportional to the torque.'],
+        ['eighth', 'It falls to an eighth.', 'The stress goes as $1/d^3$, so twice the diameter gives an eighth.'],
+      ], ($) => ({ long: 'same', torque: 'double', thick: 'eighth', bore: 'little' }[$.change])),
+    ],
+    hints: [
+      'Write the outside stress as $\\tau = Tc/J$ and see which symbol the change touches.',
+      String.raw`For a solid shaft that is $16T/\pi d^3$. A bore of $d/2$ removes $1/16$ of $J$.`,
+    ],
+    steps: ($) => [
+      {
+        long: 'Length is not in Tc/J, so the stress stays the same; the angle doubles.',
+        torque: 'The stress is proportional to T, so it doubles.',
+        thick: 'With d doubled, d³ grows eightfold, so the stress falls to an eighth.',
+        bore: 'J loses (1/2)⁴ = 1/16 of itself, so the stress rises by 16/15, about 7%.',
+      }[$.change],
+    ],
+    second: ($) => {
+      const base = roundShaft(100, 1, G, $.d, 0).tauMax;
+      const next = {
+        long: roundShaft(100, 2, G, $.d, 0),
+        torque: roundShaft(200, 1, G, $.d, 0),
+        thick: roundShaft(100, 1, G, 2 * $.d, 0),
+        bore: roundShaft(100, 1, G, $.d, $.d / 2),
+      }[$.change].tauMax;
+      const r = next / base;
+      return { effect: Math.abs(r - 1) < 1e-9 ? 'same' : Math.abs(r - 2) < 1e-9 ? 'double' : Math.abs(r - 0.125) < 1e-9 ? 'eighth' : 'little' };
+    },
+    cases: [
+      kase(cite('torsion'), { change: 'long', d: 40 }, { effect: 'same' }),
+      kase(cite('torsion'), { change: 'bore', d: 40 }, { effect: 'little' }),
+      kase(cite('torsion'), { change: 'thick', d: 40 }, { effect: 'eighth' }),
+    ],
+  }),
+
 ];
 
 export default ch5;

@@ -50,7 +50,7 @@ subject libraries (a function written for one course serves the next), and one s
 | MAC 2313 Calculus III | [mac2313](docs/course-plans/mac2313.md) | labs and bank, no notes | fails | R4 |
 | EGN 3311 Statics | [statics](docs/course-plans/statics.md) | labs and bank, no notes | fails | R4 |
 | EGN 3321 Dynamics | [egn3321](docs/course-plans/egn3321.md) | 7 units, notes; Unit 8 and the D36 topics in progress | passes | R2c: the owner's review findings (D36) |
-| EGN 3331 Mechanics of Materials | [egn3331](docs/course-plans/egn3331.md) | 11 units, rework under way (R3c, D37) | passes | owner review (`standard` stays false) |
+| EGN 3331 Mechanics of Materials | [egn3331](docs/course-plans/egn3331.md) | 11 units, reworked (R3c, D37); printed-answer cases pending | passes | owner review (`standard` stays false) |
 | EML 3100 Thermodynamics | [eml3100](docs/course-plans/eml3100.md) | 5 of 5 units to the standard | passes | owner review (`standard` stays false) |
 | STA 3032 Statistics | [sta3032](docs/course-plans/sta3032.md) | complete, older style | fails | keep passing; no rework |
 | Bench (electronics on the bench) | [bench](docs/course-plans/bench.md) | Units 1–3 of 9 built (engineering shell) | fails (Units 1–3 pass) | Unit 4, switching bigger things |
@@ -95,6 +95,8 @@ subject libraries (a function written for one course serves the next), and one s
       moment diagrams rebuilt), animate and ask predictions a student can miss; notes that derive
       every formula and add the D37 topics; problems with worked steps, structural variety,
       symbolic answers and more level 3. Printed-answer cases wait on OCW access.
+      Status 29 Oct: everything but the printed-answer cases is done. The D37 topics have notes,
+      templates and selftested subjects code in every unit; the item closes when the cases land.
 
 ### New courses, back to back (D24)
 

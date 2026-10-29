@@ -920,6 +920,70 @@ const ch6 = [
     },
     cases: [kase(cite('composite'), { b: 100, h: 200, tp: 10, M: 20 }, { ybar: 63.33333333333335, steel: 122.97734627831717, wood: 17.799352750809057 })],
   }),
+  problem({
+    id: 'u6.6.where-max',
+    title: 'Where the largest moment sits',
+    exam: 'u6',
+    ch: '6',
+    lab: 'diagrams',
+    src: cite('graphical-method'),
+    kind: 'conceptual',
+    topics: ['graphical-method', 'shear-moment'],
+    variety: ['configuration'],
+    level: 2,
+    vars: {
+      beam: choice(
+        ['offset', 'a simple span with one point load a quarter of the way across'],
+        ['uniform', 'a simple span under a uniform load'],
+        ['cantilever', 'a cantilever with a load at its free end'],
+        ['overhang', 'a beam on two supports that overhangs one of them, loaded only at the overhang\'s tip'],
+      ),
+      L: range(2, 8, 0.25, 'm', 1),
+    },
+    text: (T) => String.raw`A beam $${T.L}$ m long is ${T.beam}. Where is the bending moment largest in size?`,
+    parts: [
+      mc('where', [
+        ['load', 'Under the point load.', 'Between point loads the shear is constant, so the moment is straight and its peak is at a corner, under a load.'],
+        ['mid', 'At midspan.', 'A symmetric uniform load puts the zero of shear, and so the peak of $M$, at midspan.'],
+        ['wall', 'At the fixed end.', 'A cantilever\'s shear never changes sign, so the moment grows all the way to the wall.'],
+        ['support', 'Over the support next to the overhang.', 'The overhang is a short cantilever: its moment grows from the tip to that support, then falls back to zero across the span.'],
+      ], ($) => ({ offset: 'load', uniform: 'mid', cantilever: 'wall', overhang: 'support' }[$.beam])),
+    ],
+    hints: [
+      'The moment peaks where the shear changes sign, or at a support or load where the diagram has a corner.',
+      'Sketch the shear: find where it crosses zero or jumps through zero.',
+    ],
+    steps: ($) => [
+      {
+        offset: 'The shear jumps through zero under the load, so the moment peaks there.',
+        uniform: 'The shear falls linearly and crosses zero at midspan, where the moment peaks.',
+        cantilever: 'The shear has one sign everywhere, so the largest moment is at the wall.',
+        overhang: 'The span carries no load; the moment rises from the tip to the support and falls linearly to zero at the far end.',
+      }[$.beam],
+    ],
+    second: ($) => {
+      // Build the beam and read where the largest |M| is.
+      const L = $.L;
+      const b = {
+        offset: generalBeam({ L, points: [{ x: L / 4, P: 1000 }] }),
+        uniform: generalBeam({ L, udl: { w: 1000, a: 0, b: L } }),
+        cantilever: generalBeam({ L, support: 'cantilever', points: [{ x: L, P: 1000 }] }),
+        overhang: generalBeam({ L, b: 0.7 * L, points: [{ x: L, P: 1000 }] }),
+      }[$.beam];
+      const x = b.xM;
+      const where = Math.abs(x - L / 4) < 1e-6 && $.beam === 'offset' ? 'load'
+        : Math.abs(x - L / 2) < 0.02 * L ? 'mid'
+          : x < 1e-6 ? 'wall'
+            : Math.abs(x - 0.7 * L) < 1e-6 ? 'support' : 'load';
+      return { where };
+    },
+    cases: [
+      kase(cite('graphical-method'), { beam: 'offset', L: 4 }, { where: 'load' }),
+      kase(cite('graphical-method'), { beam: 'cantilever', L: 2 }, { where: 'wall' }),
+      kase(cite('graphical-method'), { beam: 'overhang', L: 6 }, { where: 'support' }),
+    ],
+  }),
+
 ];
 
 export default ch6;

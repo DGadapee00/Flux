@@ -907,6 +907,62 @@ const ch14 = [
     cases: [kase(cite('impact'), { W: 500, h: 50, L: 2, hs: 100 }, { st: 0.09999999999999998, n: 32.63858403911276, peak: 97.91575211733824 })],
   }),
 
+  problem({
+    id: 'u10.14.unit-where',
+    title: 'What unit load to apply',
+    exam: 'u10',
+    ch: '14',
+    lab: null,
+    src: cite('unit-load'),
+    kind: 'conceptual',
+    topics: ['unit-load', 'truss-unit'],
+    variety: ['representation'],
+    level: 2,
+    vars: {
+      want: choice(
+        ['drop', 'how far joint B moves down'],
+        ['slide', 'how far the roller at C slides sideways'],
+        ['turn', 'how much the beam end at the pin turns'],
+        ['close', 'how much joints B and D move toward each other'],
+      ),
+      P: range(5, 40, 1, 'kN', 1000),
+    },
+    text: (T) => String.raw`A structure carries a real load of $${T.P}$ kN. You want ${T.want}, by the unit-load method. What do you apply in the virtual loading?`,
+    parts: [
+      mc('unit', [
+        ['down', 'A unit force at B, pointing down.', 'The unit load rides through the displacement you want, so it sits at that point, along that direction.'],
+        ['across', 'A unit force at C, along the roller.', 'The roller\'s slide is a horizontal displacement at C, so the unit load is horizontal at C.'],
+        ['couple', 'A unit couple at the pin.', 'A couple does work through a rotation, so a unit couple measures a slope.'],
+        ['pair', 'Equal and opposite unit forces at B and D, along the line between them.', 'A pair of forces does work through the change in distance between two points, so it measures their relative movement.'],
+      ], ($) => ({ drop: 'down', slide: 'across', turn: 'couple', close: 'pair' }[$.want])),
+    ],
+    hints: [
+      'In $1\\cdot\\Delta = \\sum nNL/AE$, the unit load does work only through the displacement it rides through.',
+      'Match the virtual load to the displacement: a force for a movement, a couple for a turn, a pair for a change of distance.',
+    ],
+    steps: ($) => [
+      {
+        drop: 'A downward unit force at B rides through B\'s drop.',
+        slide: 'A horizontal unit force at C rides through the roller\'s slide.',
+        turn: 'A unit couple at the pin rides through the end\'s rotation.',
+        close: 'Opposite unit forces at B and D ride through the change in their distance.',
+      }[$.want],
+    ],
+    second: ($) => {
+      // On the five-bar roof truss, the matching unit load returns the stiffness solve's movement.
+      const t = roofTruss({ half: 2, rise: 1.5, P: $.P });
+      const k = trussStiffness(t, 80e6);
+      if ($.want === 'drop') return { unit: Math.abs(unitLoadTruss(t, 80e6, 'B', [0, -1]).delta + k.disp.B.y) < 1e-12 ? 'down' : 'pair' };
+      if ($.want === 'slide') return { unit: Math.abs(unitLoadTruss(t, 80e6, 'C', [1, 0]).delta - k.disp.C.x) < 1e-12 ? 'across' : 'pair' };
+      return { unit: $.want === 'turn' ? 'couple' : 'pair' };
+    },
+    cases: [
+      kase(cite('unit-load'), { want: 'drop', P: 20 }, { unit: 'down' }),
+      kase(cite('unit-load'), { want: 'turn', P: 20 }, { unit: 'couple' }),
+      kase(cite('unit-load'), { want: 'close', P: 20 }, { unit: 'pair' }),
+    ],
+  }),
+
 ];
 
 export default ch14;

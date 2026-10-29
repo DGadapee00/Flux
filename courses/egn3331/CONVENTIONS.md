@@ -24,6 +24,14 @@
   (`long` members stack over their chart on a phone). Labs that move (the shear and moment cut,
   Mohr's element, the axial load, the tension coupon, the torque, the crane rope's catch) keep
   their clock in the state and take Play and Space from the engineering shell's `motion.js`.
+- **Problems.** Every template carries principle tags from `src/problems/principles.js` (tags
+  only, D34), a second method by another route, and steps that show the working, not just the
+  results. Every numeric template has traps, and problems-check requires each trap to catch its
+  own mistake in three versions of four. Every choice option has a `why`. Core results also ask
+  for a symbolic answer (`sym` in `kit.js`), checked by value, units and grading. Each unit has at
+  least three level-3 templates. Loads are realistic for the material: the built-up beam is three
+  dressed 2×6 boards at 3 kN, not a stress no timber carries.
 - **Order.** The eleven units follow the spine the owner confirmed (2.001, then Hibbeler for
   transverse shear and buckling), with the topics D37 adds. All eleven units pass the
-  scorecard; Units 4–11 are being reworked to PHY 2049's depth (R3c).
+  scorecard. The R3c rework is done except the printed-answer worked cases, which wait on OCW
+  access.
