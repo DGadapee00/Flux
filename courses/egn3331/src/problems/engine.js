@@ -23,6 +23,8 @@ const engine = createEngine({
   steps: 'sig',
   numbers: 'unit',
   optionWhy: true,
+  // A wrong option's `why` comes back as its feedback.
+  choiceNotes: true,
   sig: { figures: 3, lo: 0.01, hi: 1e5, tiny: true, leadingOne: true },
 });
 

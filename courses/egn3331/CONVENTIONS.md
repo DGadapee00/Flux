@@ -17,8 +17,11 @@
 - **Second methods.** Every answer has one: the stress transformation against the inclined-plane
   formulas, the method of joints against the method of sections, a pin's segments against
   V = P/n, bisection on an allowable, and English problems worked in English units.
-- **Labs** are plot2d. `compute` is pure; `draw` paints a to-scale drawing and a chart inside the
+- **Labs** are plot2d. `compute` is pure; `draw` paints the member (bar, beam, shaft, element or
+  column, to scale where the geometry allows, with its loads and supports) and a chart inside the
   space the panels leave (`labs/diagram.js`). Each lab declares `sweep(state)`, and labs-check
-  moves that slider end to end.
+  moves that slider end to end. In October 2026 only seven labs drew the member; the rest are
+  being brought to this rule under R3c.
 - **Order.** The eleven units follow the spine the owner confirmed (2.001, then Hibbeler for
-  transverse shear and buckling). Units 1–11 are at the standard.
+  transverse shear and buckling), with the topics D37 adds. All eleven units pass the
+  scorecard; Units 4–11 are being reworked to PHY 2049's depth (R3c).

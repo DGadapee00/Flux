@@ -172,7 +172,7 @@ const ch14 = [
       const delta = cantileverStation($.P, $.L, $.a * $.L, EI).delta;
       return rel(delta, tip) && rel(delta, tip / 2);
     },
-    text: (T) => String.raw`The same 40 mm by 80 mm cantilever, length ${T.L} m, carries ${T.P} N at the tip. E is 200 GPa. Find the downward deflection at ${T.a} of the length, measured from the wall. No load acts at that station.`,
+    text: (T) => String.raw`A steel cantilever with a 40 mm by 80 mm rectangular section, 80 mm deep, length ${T.L} m, carries ${T.P} N at the tip. E is 200 GPa. Find the downward deflection at ${T.a} of the length, measured from the wall. No load acts at that station.`,
     parts: [
       num('delta', ($) => cantileverStation($.P, $.L, $.a * $.L, beamEI(0.04, 0.08)).delta, 'mm', {
         scale: MM,

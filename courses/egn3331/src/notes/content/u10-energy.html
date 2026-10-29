@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 10 · Ch 14</p>
   <h1>Energy methods</h1>
-  <p class="lede">Strain energy is the work stored in a member. For a linear material that work is half the load times the travel. The travel is the slope of the energy. A falling weight stores the same work over a short extra stretch, so the peak force rises. Every number below comes from the course library and is checked a second way.</p>
+  <p class="lede">Strain energy is the work stored in a member. For a linear material that work is half the load times the travel. The travel is the slope of the energy. A falling weight stores the same work over a short extra stretch, so the peak force rises.</p>
   <div class="legend">
     <span><i class="swatch" style="background: var(--gold)"></i>Energy, deflection, or the static force</span>
     <span><i class="swatch" style="background: #d147bd"></i>The load, or the peak force</span>
@@ -138,13 +138,13 @@ F = 8.25\ \mathrm{kN}
 
 <section class="topic" id="s4">
 <h2><span class="n">04</span>A falling weight</h2>
-<p>A weight \(W\) at rest stretches its support by \(\delta_{st} = WL/(AE)\). Released from a height \(h\) above that resting position, it falls and the support stretches farther, then stops. The work done is \(W(h+\delta)\), with \(\delta\) the largest stretch. That work equals \(\tfrac12 k\delta^2\), and \(k = W/\delta_{st}\). Dividing the largest stretch by \(\delta_{st}\) gives the impact factor.</p>
+<p>A weight \(W\) hung slowly on a support stretches it by \(\delta_{st} = WL/(AE)\). Now drop it instead. It is released from rest a height \(h\) above the point where it first touches the unloaded support, such as a collar at the end of a rod. It falls \(h\), then stretches the support until it stops. The work done is \(W(h+\delta)\), with \(\delta\) the largest stretch. That work equals \(\tfrac12 k\delta^2\), and \(k = W/\delta_{st}\). Dividing the largest stretch by \(\delta_{st}\) gives the impact factor.</p>
 \[
 n = 1 + \sqrt{1 + \frac{2h}{\delta_{st}}}
 \]
 <p>The peak force is n times W. A height of zero is not the static case. The square root of 1 is 1, so n is 2. The load arrives suddenly, and the peak is twice the static force. The second check integrates the mass on the spring. The factor itself does not contain g.</p>
 <div class="box ex"><span class="tag">Worked example · the 16 mm rod</span>
-<p>A steel rod, 16 mm in diameter and 2 m long, carries 1500 N. E is 200 GPa. The weight is released 2 mm above the resting position. The static stretch is 0.0746 mm. The factor and the peak stress are</p>
+<p>A steel rod, 16 mm in diameter and 2 m long, carries 1500 N. E is 200 GPa. The weight is a collar released 2 mm above the rod's end stop, with the rod unloaded. The static stretch is 0.0746 mm. The factor and the peak stress are</p>
 \[
 n = 8.39
 \]
@@ -154,7 +154,7 @@ n = 8.39
 <p>The static stress is 7.46 MPa. Holding the peak at 80 MPa requires a drop of 3.49 mm, and then n is 10.72. That height comes from the energy balance solved for h.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · released from contact</span>
-<p>The crane rope of the next section is 30 ft long and holds 400 lbf. Released from contact, the height is zero. The factor is still</p>
+<p>The crane rope of the next section is 30 ft long, and the hook load is 400 lbf. Let the rope be just taut but carrying nothing, then let go of the load. The load is released from contact, so the height is zero. The factor is still</p>
 \[
 n = 2
 \]
@@ -221,7 +221,7 @@ U = \frac{T^2 L}{2GJ}
 \[
 n = 1 + \sqrt{1 + \frac{2h}{\delta_{st}}}
 \]
-<p>Citations: strain energy and Castigliano's theorem, and impact loading. Those topics are not Roylance sections. Hibbeler's chapter label in the practice list is 14. The rope is Caltrans Falsework Manual, Appendix D, Example 18. The model uses the 12.2 million psi figure from that line. The 30 ft length, the 400 lbf hook load, and the 1 in drop are assumptions. The rod and the cantilever are course sections.</p>
+<p>Citations: strain energy and Castigliano's theorem, and impact loading. The rope is Caltrans Falsework Manual, Appendix D, Example 18. The model uses the 12.2 million psi figure from that line. The 30 ft length, the 400 lbf hook load, and the 1 in drop are assumptions. The rod and the cantilever are course sections.</p>
 </section>
 </div>
 </main>

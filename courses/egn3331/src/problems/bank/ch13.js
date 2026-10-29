@@ -105,7 +105,7 @@ const ch13 = [
         [0.7, 'fixed at the base and pinned at the top'],
       ),
     },
-    text: (T) => String.raw`The same 20 mm by 60 mm steel bar is ${T.L} m long and ${T.K}. E is 200 GPa. K is 1, 2, 0.5, or 0.7 in that order. The 0.7 is the fixed-pinned root rounded. Find the weak-axis Euler load.`,
+    text: (T) => String.raw`A 20 mm by 60 mm steel bar is ${T.L} m long and ${T.K}. E is 200 GPa. For fixed-pinned ends take K = 0.7, the exact root 0.699 rounded. Find the weak-axis Euler load.`,
     parts: [
       num('P', ($) => weak($.L, $.K).euler, 'kN', {
         scale: 1000,

@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 5 · Ch 8–9</p>
   <h1>Stress transformation and failure</h1>
-  <p class="lede">Turning an element moves the normal stress and the shear between the two axes. The principals are the normals with the shear gone. Bending and torque meet at one fiber, and two yield rules read that pair differently. Every number below is computed by the course library and checked a second way.</p>
+  <p class="lede">Turning an element moves the normal stress and the shear between the two axes. The principals are the normals with the shear gone. Bending and torque meet at one fiber, and two yield rules read that pair differently.</p>
   <div class="legend">
     <span><i class="swatch" style="background: var(--gold)"></i>Normal stress</span>
     <span><i class="swatch" style="background: var(--teal)"></i>Shear, and von Mises</span>
@@ -102,7 +102,7 @@ R = 42.4\ \mathrm{MPa}
 \[
 \tau_{xy} = \frac{16T}{\pi d^3}
 \]
-<p>\(\sigma_y = 0\) in this orientation. The principal is not \(\sigma_x\), because the shear is still there. Combined loading is not a Roylance section. The stress transformation that reads the pair is Roylance §3.3. The normal stress is the sum of those two contributions:</p>
+<p>\(\sigma_y = 0\) in this orientation. The principal is not \(\sigma_x\), because the shear is still there. The stress transformation that reads the pair is Roylance §3.3. The normal stress is the sum of those two contributions:</p>
 \[
 \sigma_x = \frac{4P}{\pi d^2}+\frac{32M}{\pi d^3}
 \]
@@ -180,7 +180,7 @@ R = 42.4\ \mathrm{MPa}
 <p>The same bar with bending and torque, in the section above, gave 82.7 MPa von Mises against a larger Tresca. Whenever shear is present in these states, Tresca governs first.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Setting the shear equal to the allowable, as if no normal stress were already there, overstates the torque the fiber can take. Leaving the 3 out of \(\sigma^2 + 3\tau^2\) makes the shear \(\sqrt{3}\) times too large. Treating uniaxial tension as if the two rules disagreed is the opposite miss: there they match.</p>
+<p>Setting the shear equal to the allowable, as if no normal stress were already there, overstates the torque the fiber can take. Leaving the 3 out of \(\sigma^2 + 3\tau^2\) counts the shear \(\sqrt{3}\) times too small, so the equivalent stress comes out low. Treating uniaxial tension as if the two rules disagreed is the opposite miss: there they match.</p>
 </div>
 <p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec17/">2.001 lecture 18</a> compares the two yield rules on combined stress.</p>
 </section>
@@ -205,7 +205,7 @@ R = 42.4\ \mathrm{MPa}
 \[
 \sigma_{vm} = \sqrt{\sigma_x^2+3\tau^2}
 \]
-<p>Citations: Roylance §3.3 for the transformation and for Mohr's circle. Roylance §6.1 for yield. Combined loading on a bar, and the trailer-ball shank, are not Roylance sections. The ball is CURT 40004. The 40 mm bar and its loads are assumed. The tongue loads in the hitch lab are assumed.</p>
+<p>Citations: Roylance §3.3 for the transformation and for Mohr's circle. Roylance §6.1 for yield. The ball is CURT 40004. The 40 mm bar and its loads are assumed. The tongue loads in the hitch lab are assumed.</p>
 </section>
 </div>
 </main>

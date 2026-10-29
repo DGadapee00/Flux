@@ -243,7 +243,7 @@ const ch7 = [
       V: range(4, 16, 1, 'kN', KN),
       F: range(0.6, 2.4, 0.2, 'kN', KN),
     },
-    text: (T) => String.raw`The same three boards carry ${T.V} kN of shear. Two nails share the joint at each station, and each nail can carry ${T.F} kN. How far apart may the stations be?`,
+    text: (T) => String.raw`Three boards, each 40 mm by 30 mm, are stacked flat and nailed into one beam that carries ${T.V} kN of shear. Two nails share the joint at each station, and each nail can carry ${T.F} kN. How far apart may the stations be?`,
     parts: [
       num('s', ($) => fastenerSpacing(boardFlow($.V), $.F, 2), 'mm', {
         scale: 1e-3,
