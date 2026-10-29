@@ -34,6 +34,8 @@ const loaders = {
   drop: () => import('./drop.js'),
   buckling: () => import('./buckling.js'),
   column: () => import('./column.js'),
+  bridle: () => import('./bridle.js'),
+  crack: () => import('./crack.js'),
 };
 
 const labs = createLabLoader(loaders);

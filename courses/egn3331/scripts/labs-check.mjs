@@ -43,6 +43,8 @@ const LIMIT = {
   drop: 1e-6,
   buckling: 1e-3,
   column: 1e-9,
+  bridle: 1e-9,
+  crack: 1e-9,
 };
 
 const fails = [];
