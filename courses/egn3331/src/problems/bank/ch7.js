@@ -1,5 +1,5 @@
 /**
- * Transverse shear in a rectangle and an I, nail spacing on three boards,
+ * Transverse shear in a rectangle and an I, nail spacing on three dressed 2×6 boards,
  * the force in one nail of the APA garage-door header, the flow around a flange, and the shear
  * centre of a channel.
  */
@@ -64,9 +64,13 @@ const ch7 = [
     ],
     hints: [
       'On a rectangle the peak is three halves of the average shear. The average is the shear divided by the area.',
-      String.raw`$\tau_{\max} = 3V/(2bh)$, at the neutral axis.`,
+      String.raw`At the neutral axis $Q$ is the first moment of the upper half, and the width at the cut is $b$.`,
     ],
-    steps: ($, sig) => [String.raw`Peak shear ${sig(rectShear($.V, $.b, $.h, 0).tau / MPA)} MPa.`],
+    steps: ($, sig) => [
+      String.raw`At the neutral axis $Q = b(h/2)(h/4) = ${sig(($.b * $.h * $.h) / 8 / 1e-9 / 1e3)}\times 10^3$ mm³ and $I = bh^3/12 = ${sig(($.b * $.h ** 3) / 12 / 1e-12 / 1e6)}\times 10^6$ mm⁴.`,
+      String.raw`$\tau = VQ/(Ib)$, which simplifies to $3V/(2bh)$ on a rectangle.`,
+      String.raw`$\tau_{\max} = ${sig(rectShear($.V, $.b, $.h, 0).tau / MPA)}$ MPa.`,
+    ],
     second: ($) => ({ tau: (3 * $.V) / (2 * $.b * $.h) / MPA }),
     sim: {
       scenario: 'rect',
@@ -115,11 +119,16 @@ const ch7 = [
     ],
     hints: [
       'The shear stress on a rectangle falls as a parabola from the axis to the outer fiber. The outer fiber is zero.',
-      String.raw`$\tau = \tau_{\max}(1 - (2y/h)^2)$, with $y$ measured from the neutral axis.`,
+      String.raw`$Q$ is the first moment of the area above the cut. Write it for a cut at height $y$; it shrinks to zero at the top.`,
     ],
     steps: ($, sig) => {
       const tau = rectShear($.V, $.b, $.h, $.f * $.h / 2).tau / MPA;
-      return [String.raw`Shear stress ${sig(tau)} MPa.`];
+      const peak = rectShear($.V, $.b, $.h, 0).tau / MPA;
+      return [
+        String.raw`The peak, at the axis, is $3V/(2bh) = ${sig(peak)}$ MPa.`,
+        String.raw`At $${sig($.f)}$ of the way up, $2y/h = ${sig($.f)}$, so the parabola keeps $1 - ${sig($.f)}^2 = ${sig(1 - $.f * $.f)}$ of the peak.`,
+        String.raw`$\tau = ${sig(tau)}$ MPa.`,
+      ];
     },
     second: ($) => {
       const peak = (3 * $.V) / (2 * $.b * $.h);
@@ -164,9 +173,18 @@ const ch7 = [
     ],
     hints: [
       'Q at the axis is the first moment of the flange plus the first moment of the upper half of the web. Divide by I and by the web thickness.',
-      String.raw`$\tau = VQ/(I t_w)$ at the neutral axis.`,
+      String.raw`At the axis the cut runs through the web, so $t$ is the web. $Q$ counts the flange and the upper half of the web.`,
     ],
-    steps: ($, sig) => [String.raw`Web stress ${sig(eyeTau($.V) / MPA)} MPa.`],
+    steps: ($, sig) => {
+      const sec = eye();
+      const Qf = sec.Af * sec.yf;
+      const Qw = (sec.tw * (sec.hw / 2) ** 2) / 2;
+      return [
+        String.raw`$I = ${sig(sec.I / 1e-12 / 1e6)}\times 10^6$ mm⁴. Above the axis: the flange gives $120\times 10\times 85 = ${sig(Qf / 1e-9 / 1e3)}\times 10^3$ mm³ and half the web $${sig(Qw / 1e-9 / 1e3)}\times 10^3$ mm³.`,
+        String.raw`$Q = ${sig((Qf + Qw) / 1e-9 / 1e3)}\times 10^3$ mm³, and the cut at the axis is the 6 mm web.`,
+        String.raw`$\tau = VQ/(It_w) = ${sig(eyeTau($.V) / MPA)}$ MPa.`,
+      ];
+    },
     second: ($) => {
       const sec = eye();
       const Q = sec.Af * sec.yf + (sec.tw * sec.hw * sec.hw) / 8;
@@ -194,9 +212,9 @@ const ch7 = [
     topics: ['shear-flow'],
     level: 2,
     vars: {
-      V: range(4, 16, 0.2, 'kN', KN),
+      V: range(1, 8, 0.1, 'kN', KN),
     },
-    text: (T) => String.raw`Three boards, each 40 mm by 30 mm, are stacked and carry ${T.V} kN of shear. Find the shear flow that the fasteners must carry at the top joint.`,
+    text: (T) => String.raw`Three dressed 2×6 boards, each 5.5 in wide and 1.5 in thick, are laid flat and stacked into one beam that carries ${T.V} kN of shear. Find the shear flow that the fasteners must carry at the top joint, in kN/m.`,
     parts: [
       num('q', ($) => boardFlow($.V), 'kN/m', {
         scale: KN,
@@ -208,10 +226,17 @@ const ch7 = [
       }),
     ],
     hints: [
-      'The top board is the piece the joint is holding. Its first moment is its area times the distance from the neutral axis up to its own centroid.',
-      String.raw`q = VQ/I. Q is the top board alone.`,
+      'Cut along the top joint. The top board is the piece the joint holds, so its first moment is the $Q$ that matters.',
+      String.raw`The stack is three board thicknesses deep, and the top board's centroid sits one thickness above the stack's neutral axis.`,
     ],
-    steps: ($, sig) => [String.raw`Shear flow ${sig(boardFlow($.V) / KN)} kN/m.`],
+    steps: ($, sig) => {
+      const s = stackedBoards(BOARD_B, BOARD_T, BOARD_N);
+      return [
+        String.raw`The stack is $${sig((3 * BOARD_T) / 1e-3)}$ mm deep: $I = b(3t)^3/12 = ${sig(s.I / 1e-12 / 1e6)}\times 10^6$ mm⁴.`,
+        String.raw`The top board's area is $bt$ and its centroid is $t$ above the axis: $Q = bt^2 = ${sig(s.Q / 1e-9 / 1e3)}\times 10^3$ mm³.`,
+        String.raw`$q = VQ/I = ${sig(boardFlow($.V) / KN)}$ kN/m.`,
+      ];
+    },
     second: ($) => {
       const yf = (3 * BOARD_T) / 2 - BOARD_T / 2;
       const Q = BOARD_B * BOARD_T * yf;
@@ -225,11 +250,11 @@ const ch7 = [
         s.b = BOARD_B;
         s.t = BOARD_T;
         s.lines = 2;
-        s.F = 1200;
+        s.F = 500;
       },
       read: (c) => ({ q: c.q }),
     },
-    cases: [kase(cite('shear-flow'), { V: 8 }, { q: 118.5185185185185 })],
+    cases: [kase(cite('shear-flow'), { V: 3 }, { q: 34.99562554680665 })],
   }),
 
   problem({
@@ -243,10 +268,10 @@ const ch7 = [
     variety: ['goal'],
     level: 3,
     vars: {
-      V: range(4, 16, 1, 'kN', KN),
-      F: range(0.6, 2.4, 0.2, 'kN', KN),
+      V: range(1, 8, 0.5, 'kN', KN),
+      F: range(0.3, 1.2, 0.05, 'kN', KN),
     },
-    text: (T) => String.raw`Three boards, each 40 mm by 30 mm, are stacked flat and nailed into one beam that carries ${T.V} kN of shear. Two nails share the joint at each station, and each nail can carry ${T.F} kN. How far apart may the stations be?`,
+    text: (T) => String.raw`Three dressed 2×6 boards, each 5.5 in wide and 1.5 in thick, are laid flat and nailed into one beam that carries ${T.V} kN of shear. Two nails share the joint at each station, and each nail can carry ${T.F} kN. How far apart may the stations be?`,
     parts: [
       num('s', ($) => fastenerSpacing(boardFlow($.V), $.F, 2), 'mm', {
         scale: 1e-3,
@@ -258,10 +283,17 @@ const ch7 = [
       }),
     ],
     hints: [
-      'Find the shear flow first. The two nails together can carry twice one nail. Divide that capacity by the flow.',
-      String.raw`s = nF/q, with two nails at each station.`,
+      'Find the shear flow at the top joint first. It is a force per length the nails must carry along the beam.',
+      String.raw`One station of nails holds the flow over the length from it to the next station. Two nails share that load.`,
     ],
-    steps: ($, sig) => [String.raw`Spacing ${sig(fastenerSpacing(boardFlow($.V), $.F, 2) * 1e3)} mm.`],
+    steps: ($, sig) => {
+      const q = boardFlow($.V);
+      return [
+        String.raw`Top joint: $q = VQ/I = ${sig(q / KN)}$ kN/m, the same section as the shear-flow problem.`,
+        String.raw`Two nails at a station carry $2F = ${sig((2 * $.F) / KN)}$ kN.`,
+        String.raw`$s = 2F/q = ${sig(fastenerSpacing(q, $.F, 2) * 1e3)}$ mm.`,
+      ];
+    },
     second: ($) => {
       const q = boardFlow($.V);
       return { s: (2 * $.F) / q * 1e3 };
@@ -277,7 +309,7 @@ const ch7 = [
       },
       read: (c) => ({ s: c.spacing }),
     },
-    cases: [kase(cite('shear-flow'), { V: 8, F: 1.2 }, { s: 20.25 })],
+    cases: [kase(cite('shear-flow'), { V: 3, F: 0.5 }, { s: 28.574999999999996 })],
   }),
 
   problem({
@@ -315,7 +347,15 @@ const ch7 = [
       'The support shear on a simple span is the line load times half the span. The flange flow is that shear times Q/I, and four nails share each spacing.',
       'Work in inches. Q of one flange is its area times 10.5 in. Divide the flow by four lines and multiply by the 1.5 in spacing.',
     ],
-    steps: ($, sig) => [String.raw`One nail carries ${sig(headerNail($.load, $.span, 0).nail / N_PER_LBF)} lbf.`],
+    steps: ($, sig) => {
+      const V = ($.load / PLF_TO_NPM) * ($.span / M_PER_FT) / 2;
+      const nail = headerNail($.load, $.span, 0).nail / N_PER_LBF;
+      return [
+        String.raw`At the support $V = wL/2 = ${sig(V)}$ lbf.`,
+        String.raw`One flange is two 2×4s, 3.5 in by 3 in, centred 10.5 in from the axis: $Q = 3.5(3)(10.5) = 110.3$ in³. The flow is $q = VQ/I = ${sig((nail * 4) / 1.5)}$ lb/in.`,
+        String.raw`Four nail lines share each 1.5 in: one nail carries $q(1.5)/4 = ${sig(nail)}$ lbf.`,
+      ];
+    },
     second: ($) => ({ nail: headerInchForce($.load / PLF_TO_NPM, $.span / M_PER_FT) }),
     sim: {
       scenario: 'design',

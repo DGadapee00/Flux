@@ -82,7 +82,9 @@ const ch4 = [
       String.raw`Keep one unit system. With $P$ in kN, $L$ in m, $A$ in mm² and $E$ in GPa, $\delta$ in metres is $PL/(AE)$.`,
     ],
     steps: ($, sig) => [
-      String.raw`$\delta = PL/AE = ${sig($.P / KN)}\times ${sig($.L)} / (${sig($.A / 1e-6)}\times 200) = ${sig(($.P * $.L) / ($.A * E) / MM)}$ mm.`,
+      String.raw`No load acts between the ends, so $N = P$ all along. The stress is $P/A = ${sig($.P / $.A / 1e6)}$ MPa.`,
+      String.raw`The strain is $\sigma/E = ${sig($.P / $.A / E / 1e-3)}\times 10^{-3}$.`,
+      String.raw`$\delta = \varepsilon L = ${sig(($.P * $.L) / ($.A * E) / MM)}$ mm.`,
     ],
     second: ($) => ({ delta: (($.P / KN) * $.L) / (($.A / 1e-6) * 200) * 1e3 }),
     sim: {
@@ -220,10 +222,12 @@ const ch4 = [
     ],
     hints: [
       'The force is constant, but the area changes. The elongation is the integral of $P/(AE)$ along the bar.',
-      String.raw`For a linear taper the integral closes: $\delta = 4PL/(\pi E d_0 d_1)$.`,
+      String.raw`Write the area at $x$ as $\pi d(x)^2/4$, with $d$ linear in $x$, and integrate $dx/d^2$. The integral of one over a linear term squared closes neatly.`,
     ],
     steps: ($, sig) => [
-      String.raw`$\delta = 4PL/(\pi E d_0 d_1) = ${sig(taperedElongation($.P, $.L, E, $.d0, $.d1) / MM)}$ mm.`,
+      String.raw`The force is $P$ everywhere; the area is $\pi d(x)^2/4$, with $d$ running linearly from $${sig($.d0 / MM)}$ to $${sig($.d1 / MM)}$ mm.`,
+      String.raw`For a linear $d$, $\int_0^L dx/d^2 = L/(d_0 d_1)$, so $\delta = 4PL/(\pi E d_0 d_1)$.`,
+      String.raw`$\delta = ${sig(taperedElongation($.P, $.L, E, $.d0, $.d1) / MM)}$ mm.`,
     ],
     second: ($) => ({ delta: simpsonTaper($) / MM }),
     sim: {
@@ -277,7 +281,7 @@ const ch4 = [
     ],
     hints: [
       'Statics gives one equation for two reactions. The walls do not move, so the two segments change length by the same amount and the stiffer side carries more.',
-      String.raw`The left reaction is $P(L-a)/L$. The right reaction is the rest of $P$.`,
+      String.raw`The left segment shortens by as much as the right segment stretches. Write each change as its force times its length over $AE$, and solve that with equilibrium.`,
     ],
     steps: ($, sig) => {
       const r = fixedFixed($.P, 2, $.a);
@@ -330,10 +334,12 @@ const ch4 = [
     ],
     hints: [
       'A fastened bar cannot change length, so the mechanical strain cancels the thermal strain. The length drops out.',
-      String.raw`The stress is $-E\alpha\Delta T$. Heating is compression, so the sign is negative for a positive temperature change.`,
+      'Write the strain the rail would take if it were free. The anchors must put back exactly that strain, and the stress follows from it.',
     ],
     steps: ($, sig) => [
-      String.raw`$\sigma = -E\alpha\Delta T = -(${sig(E_RAIL * ALPHA / MPA)})\times ${sig($.dT)} = ${sig(constrainedThermal(E_RAIL, ALPHA, $.dT, { L: 1, gap: 0 }).stress / MPA)}$ MPa.`,
+      String.raw`Free, the rail would strain $\alpha\Delta T = ${sig(ALPHA * $.dT / 1e-6)}\times 10^{-6}$.`,
+      String.raw`Held, the mechanical strain must cancel it: $\varepsilon = ${sig(-ALPHA * $.dT / 1e-6)}\times 10^{-6}$.`,
+      String.raw`$\sigma = E\varepsilon = ${sig(constrainedThermal(E_RAIL, ALPHA, $.dT, { L: 1, gap: 0 }).stress / MPA)}$ MPa, ${$.dT > 0 ? 'compression' : 'tension'}.`,
     ],
     second: ($) => {
       const free = ALPHA * $.dT * 1;
@@ -444,7 +450,8 @@ const ch4 = [
       String.raw`$\sigma = -E\alpha\Delta T$ with $E$ in ksi and $\alpha$ per °F gives the stress in ksi.`,
     ],
     steps: ($, sig) => [
-      String.raw`$\sigma = -29000\times 6.5\times 10^{-6}\times ${sig($.dT)} = ${sig(-29000 * 6.5e-6 * $.dT)}$ ksi.`,
+      String.raw`The coefficient per °F is $6.5\times 10^{-6}$, so the blocked strain is $\alpha\Delta T = ${sig(6.5 * $.dT)}\times 10^{-6}$.`,
+      String.raw`$\sigma = -E\alpha\Delta T = -29{,}000\times ${sig(6.5e-6 * $.dT)} = ${sig(-29000 * 6.5e-6 * $.dT)}$ ksi, compression.`,
     ],
     second: ($) => ({
       stress: constrainedThermal(E_RAIL, ALPHA, $.dT / 1.8, { L: 1, gap: 0 }).stress / KSI,

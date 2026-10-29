@@ -533,7 +533,7 @@ export const SETUPS = {
         tag: 'three boards',
         lab: 'nails',
         scenario: 'pair',
-        read: (c) => ({ q: [c.q / 1000, 118.5], spacing: [c.spacing * 1000, 20.3] }),
+        read: (c) => ({ q: [c.q / 1000, 35.0], spacing: [c.spacing * 1000, 28.6] }),
       },
     ],
     s5: [

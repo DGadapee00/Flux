@@ -198,7 +198,9 @@ const ch9 = [
       String.raw`$\tau_{max} = \sqrt{[(\sigma_x-\sigma_y)/2]^2 + \tau_{xy}^2}$.`,
     ],
     steps: ($, sig) => [
-      String.raw`$\tau_{max} = ${sig(principal2($.sx, $.sy, $.txy).R / MPA)}$ MPa.`,
+      String.raw`Half the difference of the normals: $(\sigma_x - \sigma_y)/2 = ${sig(($.sx - $.sy) / 2 / MPA)}$ MPa.`,
+      String.raw`The circle's radius combines it with $\tau_{xy}$: $R = \sqrt{${sig(($.sx - $.sy) / 2 / MPA)}^2 + ${sig($.txy / MPA)}^2}$.`,
+      String.raw`$\tau_{max} = R = ${sig(principal2($.sx, $.sy, $.txy).R / MPA)}$ MPa, on planes 45° from the principal ones.`,
     ],
     second: ($) => {
       const avg = ($.sx + $.sy) / 2;

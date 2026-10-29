@@ -4,7 +4,7 @@
  * an overhang and a couple drawn by areas, a band-saw blade's curvature, a tilted moment, and a
  * timber with a steel plate.
  */
-import { M_PER_FT, M_PER_IN, PA_PER_PSI } from '@flux/subjects/convert.js';
+import { M_PER_FT, M_PER_IN, N_PER_LBF, PA_PER_PSI } from '@flux/subjects/convert.js';
 import { flexureFibers, rectFibersReduced, rectSection, simpleBendingStress, teeSection } from '@flux/subjects/mechanics/materials.js';
 import { generalBeam, internalAt, simplePoint, simpleUniform } from '@flux/subjects/mechanics/sections.js';
 import { bentStripStress, compositeSection, tiltedRect } from '@flux/subjects/mechanics/bending.js';
@@ -74,7 +74,7 @@ const ch6 = [
     ],
     hints: [
       'The left support carries the share of the load set by the distance that remains on the right. The moment is largest at the load.',
-      String.raw`Left reaction $= P(L-a)/L$. Moment $= P a (L-a)/L$.`,
+      'Take moments about the right support for the left reaction. The moment peaks under the load, where the shear changes sign.',
     ],
     steps: ($, sig) => {
       const left = $.P * (1 - $.aFrac);
@@ -138,7 +138,7 @@ const ch6 = [
     ],
     hints: [
       'The two supports split a uniform load in half. The moment at midspan is the load times the span squared, over eight.',
-      String.raw`Shear at the support $= wL/2$. Moment $= wL^2/8$. The shear is zero at that same midspan station.`,
+      'By symmetry each support carries half the load. The moment peaks where the shear is zero: add up the area under the shear from the support to there.',
     ],
     steps: ($, sig) => [
       String.raw`Left shear ${sig(($.w * $.L) / 2 / KN)} kN.`,
@@ -198,7 +198,7 @@ const ch6 = [
     ],
     hints: [
       'The section modulus of a rectangle is the width times the height squared, over six. Sagging compression is on top.',
-      String.raw`$\sigma = 6M/(bh^2)$. The top stress is the negative of the bottom stress.`,
+      String.raw`The outer fibers are $h/2$ from the neutral axis. Put that and the rectangle's $I$ into $-My/I$, and keep the sign.`,
     ],
     steps: ($, sig) => {
       const f = flexureFibers($.M, rectSection($.b, $.h));
@@ -327,7 +327,14 @@ const ch6 = [
     ],
     steps: ($, sig) => {
       const psi = simpleBendingStress(joistLine($.live, $.space), $.span, JOIST_B, JOIST_H) / PA_PER_PSI;
-      return [String.raw`Bending stress ${sig(psi)} psi.`];
+      const wLbFt = joistLine($.live, $.space) / (N_PER_LBF / M_PER_FT);
+      const ft = $.span / M_PER_FT;
+      const M = (wLbFt * ft * ft) / 8;
+      return [
+        String.raw`The joist carries live plus dead load on its ${sig($.space / M_PER_IN)} in strip: $w = ${sig(wLbFt)}$ lb/ft.`,
+        String.raw`$M = wL^2/8 = ${sig(M)}$ lb·ft $= ${sig(M * 12)}$ lb·in.`,
+        String.raw`On the dressed 1.5 in by 9.25 in section, $S = bh^2/6 = 21.4$ in³, so $\sigma = M/S = ${sig(psi)}$ psi.`,
+      ];
     },
     second: ($) => {
       const spanFt = $.span / M_PER_FT;
@@ -382,9 +389,16 @@ const ch6 = [
     ],
     hints: [
       'Turn the allowable stress into a moment with the section modulus, then turn that moment into a uniform load on a simple span.',
-      String.raw`Section modulus $= bh^2/6$. Then $w = 8M/L^2$.`,
+      'The allowable stress fixes the largest moment the section can carry. Then ask what uniform load makes that the peak moment on this span.',
     ],
-    steps: ($, sig) => [String.raw`Uniform load ${sig(allowW($) / KN)} kN/m.`],
+    steps: ($, sig) => {
+      const S = ($.b * $.h * $.h) / 6;
+      return [
+        String.raw`The largest moment the section allows is $\sigma S$, with $S = bh^2/6 = ${sig(S / 1e-9 / 1e3)}\times 10^3$ mm³: $M = ${sig(($.sig * S) / KN)}$ kN·m.`,
+        String.raw`A uniform load on a simple span peaks at $wL^2/8$.`,
+        String.raw`$w = 8M/L^2 = ${sig(allowW($) / KN)}$ kN/m.`,
+      ];
+    },
     second: ($) => {
       const moment = ($.sig * $.b * $.h * $.h) / 6;
       return { w: ((8 * moment) / ($.L * $.L)) / KN };

@@ -498,7 +498,7 @@ const ch1 = [
     level: 3,
     hints: [
       'The areas do not change the member forces in a determinate truss. Find each chord force first.',
-      String.raw`The chord with the largest force sets the size: $A = |F|_{\max}\,\mathrm{FS}/\sigma_Y$.`,
+      'The member with the largest force sets the size. Divide the yield stress by the factor of safety before you divide the force by it.',
     ],
     steps: ($, sig) => {
       const Dy = (10 * $.P) / 6;
@@ -548,7 +548,7 @@ const ch1 = [
     level: 1,
     hints: [
       'Count the planes on which the pin would have to shear through to let the bar go.',
-      String.raw`Each of the two planes carries half the load: $\tau = (P/2)/(\pi d^2/4)$.`,
+      'Count the planes the pin must shear through. The load divides among them, and each plane is one pin cross-section.',
     ],
     steps: ($, sig) => [
       String.raw`$V = P/2 = ${sig($.P / 2 / KN)}$ kN on each plane.`,
@@ -667,7 +667,7 @@ const ch1 = [
     level: 2,
     hints: [
       'First turn the failure stress into an allowable stress with the factor of safety.',
-      String.raw`Double shear: $P = 2\,\tau_{\mathrm{allow}}\,\pi d^2/4$. Solve for $d$.`,
+      'In double shear the load crosses two pin areas. Set the stress on them equal to the allowable and solve for the diameter.',
     ],
     steps: ($, sig) => {
       const ta = $.tf / $.FS / KSI;
@@ -713,7 +713,7 @@ const ch1 = [
     level: 1,
     hints: [
       'Find the working stress in the rod first.',
-      String.raw`The factor of safety compares the stress that fails the part with the stress it carries: $\mathrm{FS} = \sigma_Y/\sigma$.`,
+      'Find the working stress first. Then ask how many times it fits into the stress that yields the rod.',
     ],
     steps: ($, sig) => {
       const s = axialStress($.P, circleArea($.d));

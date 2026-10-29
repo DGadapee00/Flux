@@ -63,7 +63,7 @@ const ch8 = [
     ],
     hints: [
       'Split the cylinder along its length. The pressure on the projected diameter is carried by two walls, and that stress is the hoop stress.',
-      String.raw`Hoop stress is $pr/t$. The stress along a closed cylinder is half of that.`,
+      'Cut along the length for the hoop stress and across for the longitudinal one. Each cut balances the pressure on a projected area against the wall that carries it.',
     ],
     steps: ($, sig) => {
       const s = thinCylinder($.p, $.r, $.t);
@@ -121,7 +121,9 @@ const ch8 = [
       String.raw`The balance is $\pi r^{2} p = \sigma (2\pi r t)$, so $\sigma = pr/(2t)$.`,
     ],
     steps: ($, sig) => [
-      String.raw`$\sigma = pr/(2t) = ${sig(thinSphere($.p, $.r, $.t).hoop / MPA)}$ MPa.`,
+      String.raw`Cut through a great circle. The pressure pushes on $\pi r^2$: $${sig((Math.PI * $.p * $.r * $.r) / 1000)}$ kN.`,
+      String.raw`The wall's rim has area $2\pi rt = ${sig((2 * Math.PI * $.r * $.t) / 1e-6)}$ mm².`,
+      String.raw`$\sigma = pr/2t = ${sig(thinSphere($.p, $.r, $.t).hoop / MPA)}$ MPa, the same in every direction.`,
     ],
     second: ($) => ({ hoop: sphereFromCap($.p, $.r, $.t) / MPA }),
     sim: {
@@ -169,7 +171,9 @@ const ch8 = [
       String.raw`The largest pressure is $\sigma t/r$.`,
     ],
     steps: ($, sig) => [
-      String.raw`$p = \sigma t/r = ${sig(($.sig * $.t) / ($.r * MPA))}$ MPa.`,
+      String.raw`The hoop stress, $pr/t$, is the larger of the two, so it reaches the allowable first.`,
+      String.raw`Set $pr/t = \sigma_{\text{allow}}$ and solve: $p = \sigma t/r$.`,
+      String.raw`$p = ${sig($.sig / MPA)}\times ${sig($.t / MM)}/${sig($.r / MM)} = ${sig(($.sig * $.t) / ($.r * MPA))}$ MPa.`,
     ],
     second: ($) => ({ p: ($.sig / MPA) * ($.t / MM) / ($.r / MM) }),
     sim: {

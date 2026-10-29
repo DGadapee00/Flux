@@ -81,7 +81,7 @@ const ch5 = [
     ],
     hints: [
       'Shear stress at a radius is torque times that radius over the polar moment. The angle is torque times length over G J.',
-      String.raw`For a solid circle, $\tau = 16T/(\pi d^3)$ and $\phi = TL/(GJ)$ with $J = \pi d^4/32$.`,
+      String.raw`The stress is largest where $\rho$ is largest, at the outside. For the angle use the polar moment of the solid circle and $G$, not $E$.`,
     ],
     steps: ($, sig) => {
       const shaft = roundShaft($.T, $.L, G, $.d, 0);
@@ -157,7 +157,7 @@ const ch5 = [
     ],
     hints: [
       'Stress is still linear in the radius. The polar moment of a tube is the solid moment of the outside minus the solid moment of the bore.',
-      String.raw`$\tau = T\rho/J$ with $J = \pi(d_o^4 - d_i^4)/32$. At the bore, $\rho$ is the inside radius.`,
+      String.raw`A tube's polar moment is the outer circle's less the bore's. The bore stress uses $\rho$ at the bore, on the same straight line through the centre.`,
     ],
     steps: ($, sig) => {
       const shaft = roundShaft($.T, 1, G, $.d, $.di);
@@ -232,7 +232,7 @@ const ch5 = [
     ],
     hints: [
       'Torque is power divided by the angular speed in radians per second. A revolution is one full turn.',
-      String.raw`$\omega = 2\pi n/60$ and $T = P/\omega$. Then $\tau = 16T/(\pi d^3)$.`,
+      String.raw`Power is torque times angular speed. Turn the speed into radians per second before you divide.`,
     ],
     steps: ($, sig) => {
       const T = torqueFromPower($.P, $.rpm).T;
@@ -300,9 +300,19 @@ const ch5 = [
     ],
     hints: [
       'Each segment twists by its own torque times length over G J. The angles add.',
-      String.raw`$\phi = T L_1/(G J_1) + T L_2/(G J_2)$, with $J = \pi d^4/32$ for each solid segment.`,
+      'Each segment twists on its own, with its own polar moment. The angles add.',
     ],
-    steps: ($, sig) => [String.raw`Total angle ${sig((stepShaft($).phi * 180) / Math.PI)}°.`],
+    steps: ($, sig) => {
+      const J1 = polarJ($.d1 / 2, 0);
+      const J2 = polarJ($.d2 / 2, 0);
+      const p1 = ($.T * $.L1) / (G * J1);
+      const p2 = ($.T * $.L2) / (G * J2);
+      return [
+        String.raw`Both segments carry the same $T$. Segment 1: $J_1 = ${sig(J1 / 1e-12 / 1e3)}\times 10^3$ mm⁴, $\phi_1 = TL_1/GJ_1 = ${sig(p1 / DEG)}^\circ$.`,
+        String.raw`Segment 2: $J_2 = ${sig(J2 / 1e-12 / 1e3)}\times 10^3$ mm⁴, $\phi_2 = ${sig(p2 / DEG)}^\circ$.`,
+        String.raw`The angles add: $\phi = ${sig((stepShaft($).phi * 180) / Math.PI)}^\circ$.`,
+      ];
+    },
     second: ($) => ({
       phi: (
         ($.T * $.L1) / (G * polarJ($.d1 / 2, 0))
@@ -364,7 +374,7 @@ const ch5 = [
     ],
     hints: [
       'The two walls share one rotation at the load. The shorter segment is the stiffer spring, so it carries more of the torque.',
-      String.raw`The left reaction is $T(L-a)/L$. The rotation is that reaction times $a$, over $GJ$.`,
+      String.raw`The section where the torque acts turns by one angle, seen from either wall. Write that angle from each side and use equilibrium of the two wall torques.`,
     ],
     steps: ($, sig) => {
       const ends = fixedFixedTorsion($.T, $.L, $.a * $.L, G, polarJ($.d / 2, 0));
@@ -502,12 +512,16 @@ const ch5 = [
     ],
     hints: [
       'The allowable stress sets one diameter and the allowable angle sets another. The shaft has to meet the larger of the two.',
-      String.raw`From $\tau = 16T/(\pi d^3)$, and from $J = TL/(G\phi)$ with $J = \pi d^4/32$. Take the larger d.`,
+      'Each limit sets its own diameter. Solve the stress limit and the twist limit for the diameter separately, then keep the one that satisfies both.',
     ],
     steps: ($, sig) => {
       const T = torqueFromPower($.P, $.rpm).T;
       const need = solidDiameterRequired(T, $.L, G, $.tau, $.ang);
-      return [String.raw`Required diameter ${sig(need.d * 1000)} mm. Stress alone wants ${sig(need.dShear * 1000)} mm. Twist alone wants ${sig(need.dTwist * 1000)} mm.`];
+      return [
+        String.raw`$\omega = 2\pi n/60 = ${sig((2 * Math.PI * $.rpm) / 60)}$ rad/s, so $T = P/\omega = ${sig(T)}$ N·m.`,
+        String.raw`Stress: $d = (16T/\pi\tau)^{1/3} = ${sig(need.dShear * 1000)}$ mm.`,
+        String.raw`Twist: $d = (32TL/\pi G\phi)^{1/4} = ${sig(need.dTwist * 1000)}$ mm. The shaft needs the larger, $${sig(need.d * 1000)}$ mm.`,
+      ];
     },
     second: ($) => ({ d: searchDiameter($) }),
     sim: {

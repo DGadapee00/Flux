@@ -69,7 +69,11 @@ const ch12 = [
       'Integrate EI y\'\' = M from the fixed end. The wall kills both the deflection and the slope.',
       String.raw`The tip moves down by $PL^3/(3EI)$.`,
     ],
-    steps: ($, sig) => [String.raw`Tip drop ${sig(cantileverTipDeflection($.P, $.L, ei($.b, $.h)).drop * 1000)} mm.`],
+    steps: ($, sig) => [
+      String.raw`$I = bh^3/12 = ${sig(rectInertia($.b, $.h) / 1e-12 / 1e6)}\times 10^6$ mm⁴, so $EI = ${sig(ei($.b, $.h))}$ N·m².`,
+      String.raw`Integrating $EIy'' = -P(L - x)$ from the wall, with $y = y' = 0$ there, gives $\delta = PL^3/3EI$.`,
+      String.raw`$\delta = ${sig(cantileverTipDeflection($.P, $.L, ei($.b, $.h)).drop * 1000)}$ mm.`,
+    ],
     second: ($) => ({ drop: ($.P * $.L ** 3) / (3 * ei($.b, $.h)) * 1000 }),
     sim: {
       scenario: 'cantilever',
@@ -119,7 +123,11 @@ const ch12 = [
       'The moment is sagging. Integrate EI y\'\' = M and set the deflection to zero at both supports.',
       String.raw`Midspan drops $5wL^4/(384EI)$.`,
     ],
-    steps: ($, sig) => [String.raw`Midspan drop ${sig(simpleUniformDeflection($.w, $.L, ei($.b, $.h)).drop * 1000)} mm.`],
+    steps: ($, sig) => [
+      String.raw`$I = bh^3/12 = ${sig(rectInertia($.b, $.h) / 1e-12 / 1e6)}\times 10^6$ mm⁴, so $EI = ${sig(ei($.b, $.h))}$ N·m².`,
+      String.raw`With $y = 0$ at both supports and zero slope at midspan by symmetry, $\delta = 5wL^4/384EI$.`,
+      String.raw`$\delta = ${sig(simpleUniformDeflection($.w, $.L, ei($.b, $.h)).drop * 1000)}$ mm.`,
+    ],
     second: ($) => ({ drop: (5 * $.w * $.L ** 4) / (384 * ei($.b, $.h)) * 1000 }),
     sim: {
       scenario: 'uniform',
@@ -306,7 +314,11 @@ const ch12 = [
       'The shelf is a simple span with a uniform load. Stay in inches and pounds, and use the dressed thickness as the depth.',
       String.raw`Midspan drops $5wL^4/(384EI)$. I is $bh^3/12$ with h equal to 0.75 in.`,
     ],
-    steps: ($, sig) => [String.raw`Midspan sag ${sig(shelfOpenInches($.span, $.load))} in.`],
+    steps: ($, sig) => [
+      String.raw`The 1×12 lies flat, so $h = 0.75$ in: $I = 11.25(0.75)^3/12 = 0.396$ in⁴, and $E = 1.24\times 10^6$ psi.`,
+      String.raw`$w = ${sig($.load)}$ lb/ft $= ${sig($.load / 12)}$ lb/in.`,
+      String.raw`$\delta = 5wL^4/384EI = ${sig(shelfOpenInches($.span, $.load))}$ in.`,
+    ],
     second: ($) => ({ sag: shelfOpenInches($.span, $.load) }),
     sim: {
       scenario: 'open',
@@ -353,7 +365,11 @@ const ch12 = [
       'Set the simple-span midspan drop equal to the span divided by 360, then solve for w.',
       String.raw`$5wL^4/(384EI) = L/360$, so $w = 16EI/(75L^3)$.`,
     ],
-    steps: ($, sig) => [String.raw`Allowable load ${sig(allowLoad($) / KN)} kN/m.`],
+    steps: ($, sig) => [
+      String.raw`The limit is $L/360 = ${sig(($.L / 360) * 1000)}$ mm at midspan.`,
+      String.raw`Set $5wL^4/384EI = L/360$ and solve: $w = 384EI/(1800L^3)$, with $EI = ${sig(ei($.b, $.h))}$ N·m².`,
+      String.raw`$w = ${sig(allowLoad($) / KN)}$ kN/m.`,
+    ],
     second: ($) => ({ w: allowByIntegral($) / KN }),
     sim: {
       scenario: 'uniform',

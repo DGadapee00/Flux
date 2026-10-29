@@ -51,6 +51,8 @@ function checkRender(tpl, inst) {
   const blob = strings.join('\n');
   if (/undefined|NaN|\[object/.test(blob)) err(tpl.id, `rendered text contains undefined/NaN:\n${blob.slice(0, 300)}`);
   for (const s of strings) if (mathProse(s).includes('katex-error')) err(tpl.id, `KaTeX cannot parse this: ${s}`);
+  // A tab or other control character means a backslash was eaten (\t of \times, \f of \frac).
+  for (const s of strings) if (/[\x00-\x08\x09\x0b\x0c\x0e-\x1f]/.test(s)) err(tpl.id, `control character in: ${JSON.stringify(s).slice(0, 80)}`);
 }
 
 function checkAnswers(tpl, inst, label) {

@@ -126,9 +126,13 @@ const ch13 = [
       'Replace L with KL in the pinned formula. Fixed-free is the longest of these.',
       'P = π²EI/(KL)² about the 20 mm depth. K = 0.7 is rounded from the root of tan μ = μ.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const c = weak($.L, $.K);
-      return [`K = ${$.K}. P = π²EI/(KL)² = ${c.euler / 1000} kN.`];
+      return [
+        String.raw`These ends give $K = ${$.K}$, so $KL = ${sig($.K * $.L)}$ m.`,
+        String.raw`The weak axis uses the 20 mm side: $I = 60(20)^3/12 = 4.00\times 10^4$ mm⁴.`,
+        String.raw`$P_{cr} = \pi^2EI/(KL)^2 = ${sig(c.euler / 1000)}$ kN.`,
+      ];
     },
     second: ($) => {
       const I = B * H ** 3 / 12;
@@ -255,10 +259,14 @@ const ch13 = [
       'Set π squared E over (KL/r) squared equal to the yield stress, and solve for L. The weak-axis r uses the smaller side.',
       'r = h / sqrt(12). Then L = π r sqrt(E/σY) / K.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const depth = Math.min($.b, $.h);
       const L = transitionLength(Math.max($.b, $.h), depth, E, SY, $.K);
-      return [`The weak depth is ${depth * 1000} mm. L = π r sqrt(E/σY) / K = ${L} m.`];
+      return [
+        String.raw`The weak depth is the smaller side, $${sig(depth * 1000)}$ mm, so $r = h/\sqrt{12} = ${sig((depth / Math.sqrt(12)) * 1000)}$ mm.`,
+        String.raw`Set $\pi^2E/(KL/r)^2 = \sigma_Y$: $L = (\pi r/K)\sqrt{E/\sigma_Y}$, with $\sqrt{E/\sigma_Y} = ${sig(Math.sqrt(E / SY))}$.`,
+        String.raw`$L = ${sig(L)}$ m. Shorter than that, yield comes first.`,
+      ];
     },
     second: ($) => {
       const depth = Math.min($.b, $.h);

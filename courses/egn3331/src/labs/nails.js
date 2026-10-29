@@ -68,10 +68,10 @@ export default defineLab({
   sweep: () => ({ key: 'V', lo: 2e3, hi: 20e3 }),
   controls() {
     return `
-      ${slider('nl-v', 'shear (kN)', 8, 2, 20, 0.5)}
-      ${slider('nl-f', 'one nail (kN)', 1.2, 0.4, 3, 0.1)}
+      ${slider('nl-v', 'shear (kN)', 3, 1, 10, 0.25)}
+      ${slider('nl-f', 'one nail (kN)', 0.5, 0.2, 1.5, 0.05)}
       ${slider('nl-n', 'nails at a station', 2, 1, 4, 1)}
-      <p class="tiny">Three boards, each 40 mm by 30 mm, stacked. The sizes and the nail capacity are assumed. The spacing is along the beam.</p>`;
+      <p class="tiny">Three dressed 2×6 boards laid flat, 5.5 in by 1.5 in each. The shear and the nail capacity are assumed. The spacing is along the beam.</p>`;
   },
   bind(api) {
     bindSlider('nl-v', (s, v) => { s.V = v * KN; }, api);

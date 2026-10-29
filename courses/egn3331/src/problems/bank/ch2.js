@@ -222,10 +222,12 @@ const ch2 = [
     ],
     hints: [
       'For an isotropic linear material the shear modulus is fixed once E and Poisson\'s ratio are known.',
-      String.raw`The relation is $G = E/2(1+\nu)$.`,
+      String.raw`For an isotropic solid only two of $E$, $G$ and $\nu$ are independent. The link between them has $1+\nu$ in it.`,
     ],
     steps: ($, sig) => [
-      String.raw`$G = E / 2(1+\nu) = ${sig($.E / GPA)} / 2(1+${sig($.nu)}) = ${sig(shearModulus($.E, $.nu) / GPA)}$ GPa.`,
+      String.raw`An isotropic material has only two independent constants, so $G = E/2(1+\nu)$.`,
+      String.raw`$2(1+\nu) = 2(1 + ${sig($.nu)}) = ${sig(2 * (1 + $.nu))}$.`,
+      String.raw`$G = ${sig($.E / GPA)}/${sig(2 * (1 + $.nu))} = ${sig(shearModulus($.E, $.nu) / GPA)}$ GPa.`,
     ],
     second: ($) => ({ G: ($.E / GPA) / (2 * (1 + $.nu)) }),
     sim: {

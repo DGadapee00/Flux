@@ -665,8 +665,8 @@ export const PREDICTIONS = {
     {
       id: 'nl-thick',
       scenario: 'pair',
-      ask: 'Keep 8 kN of shear and the nails. Use boards 40 mm thick instead of 30 mm.',
-      apply(s) { s.t = 0.04; },
+      ask: 'Keep 3 kN of shear and the nails. Use boards 2 in thick instead of 1.5 in.',
+      apply(s) { s.t = 2 * 0.0254; },
       watch: [
         watch('q', 'the shear flow at the top joint', (c) => c.q),
         watch('spacing', 'the nail spacing', (c) => c.spacing),
@@ -678,8 +678,8 @@ export const PREDICTIONS = {
     {
       id: 'nl-force',
       scenario: 'pair',
-      ask: 'Keep the shear. Double what one nail can carry, from 1.2 kN to 2.4 kN.',
-      apply(s) { s.F = 2400; },
+      ask: 'Keep the shear. Double what one nail can carry, from 0.5 kN to 1 kN.',
+      apply(s) { s.F = 1000; },
       watch: [
         watch('spacing', 'the nail spacing', (c) => c.spacing),
         watch('q', 'the shear flow', (c) => c.q),

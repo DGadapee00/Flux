@@ -197,9 +197,14 @@ const ch14 = [
       'A dummy load at the station, set to zero after differentiating, finds a deflection where no real load acts.',
       'With the tip load P and a dummy Q at distance a from the wall, ∂M/∂Q is (a − x) on the wall side of the station and zero beyond it.',
     ],
-    steps: ($) => {
-      const delta = cantileverStation($.P, $.L, $.a * $.L, beamEI(0.04, 0.08)).delta;
-      return [`δ = ${delta * 1e3} mm at ${$.a} of the span.`];
+    steps: ($, sig) => {
+      const x = $.a * $.L;
+      const delta = cantileverStation($.P, $.L, x, beamEI(0.04, 0.08)).delta;
+      return [
+        String.raw`Put a dummy load $Q$ at $x = ${sig(x)}$ m. For a cut nearer the wall, $M = -P(L - s) - Q(x - s)$, so $\partial M/\partial Q = -(x - s)$; beyond $x$ it is zero.`,
+        String.raw`Set $Q = 0$ after differentiating: $\delta = \frac{1}{EI}\int_0^x P(L - s)(x - s)\,ds = \frac{P}{EI}\left(\frac{Lx^2}{2} - \frac{x^3}{6}\right)$.`,
+        String.raw`With $EI = ${sig(beamEI(0.04, 0.08))}$ N·m², $\delta = ${sig(delta * 1e3)}$ mm.`,
+      ];
     },
     second: ($) => {
       const EI = beamEI(0.04, 0.08);
