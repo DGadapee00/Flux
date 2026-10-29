@@ -824,6 +824,14 @@ export const SETUPS = {
         }),
       },
     ],
+    s7: [
+      {
+        tag: 'the cantilever at midspan',
+        lab: 'castigliano',
+        scenario: 'station',
+        read: (c) => ({ delta: [c.delta * 1000, 1.953] }),
+      },
+    ],
   },
   u11: {
     s1: [

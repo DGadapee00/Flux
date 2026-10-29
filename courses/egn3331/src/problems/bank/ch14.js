@@ -1,13 +1,16 @@
 /**
  * Strain energy, Castigliano's theorem, and impact.
  * The crane rope is the English problem. The level-3 problem solves for the
- * drop height that reaches an allowable stress.
+ * drop height that reaches an allowable stress. Unit loads find a roof truss's joint movements and
+ * a beam's slope and quarter-point drop.
  */
 import { PA_PER_PSI } from '@flux/subjects/convert.js';
 import { polarJ } from '@flux/subjects/mechanics/torsion.js';
 import {
   axialBar, cantileverStation, dropHeightForStress, impactDrop, torsionStrain, twoBarTruss,
 } from '@flux/subjects/mechanics/strain-energy.js';
+import { simpleUniformDeflection } from '@flux/subjects/mechanics/elastic.js';
+import { trussStiffness, unitLoadBeam, unitLoadTruss } from '@flux/subjects/mechanics/virtualwork.js';
 import { ROPE_A_IN2, ROPE_E_PSI, ropeDrop, ropeInches } from '../../data/rope.js';
 import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
 
@@ -20,6 +23,14 @@ const MM = 1e-3;
 const rel = (a, b) => Math.abs(a - b) > 0.08 * Math.max(Math.abs(a), Math.abs(b), 1e-12);
 const area = (d) => Math.PI * (d / 2) ** 2;
 const beamEI = (b, h) => E * b * h ** 3 / 12;
+
+/** The five-bar roof truss: chord A–B–C, apex D above B, hanger BD. */
+const roofTruss = ($) => ({
+  joints: { A: { x: 0, y: 0 }, B: { x: $.half, y: 0 }, C: { x: 2 * $.half, y: 0 }, D: { x: $.half, y: $.rise } },
+  members: [['A', 'B'], ['B', 'C'], ['A', 'D'], ['D', 'C'], ['B', 'D']],
+  loads: { B: { y: -$.P } },
+  supports: { A: 'pin', C: 'rollerY' },
+});
 
 function barSecond($) {
   const delta = ($.N * $.L) / ($.A * E);
@@ -697,6 +708,130 @@ const ch14 = [
       },
     },
     cases: [kase(cite('energy'), { want: 'midspan', P: 800, L: 2 }, { which: 'dummy' })],
+  }),
+  problem({
+    id: 'u10.14.truss-unit',
+    title: 'Joint movement by unit loads',
+    exam: 'u10',
+    ch: '14',
+    lab: null,
+    src: cite('unit-load'),
+    topics: ['unit-load', 'truss-unit'],
+    variety: ['unknown'],
+    level: 3,
+    vars: {
+      half: range(1.5, 3, 0.25, 'm', 1),
+      rise: range(1, 2.5, 0.25, 'm', 1),
+      P: range(10, 40, 2, 'kN', 1000),
+      A: range(200, 600, 50, 'mm²', 1e-6),
+    },
+    derive: ($) => {
+      const t = roofTruss($);
+      const AE = $.A * E;
+      const v = unitLoadTruss(t, AE, 'B', [0, -1]);
+      const slide = unitLoadTruss(t, AE, 'C', [1, 0]).delta;
+      const stretches = v.rows.reduce((s, r) => s + Math.abs((r.N * r.L) / AE), 0);
+      return { dropB: v.delta, slide, stretches, hanger: ($.P * $.rise) / AE };
+    },
+    valid: ($) => ($.P * Math.hypot($.half, $.rise)) / (2 * $.rise * $.A) < 200e6,
+    text: (T) => String.raw`A roof truss spans $2\times ${T.half}$ m on a pin at A and a roller at C. Its bottom chord meets a hanger at midspan B, and the hanger rises $${T.rise}$ m to the apex D, which the rafters AD and DC join. Every bar is steel, $E = 200$ GPa, with area $${T.A}$ mm². $${T.P}$ kN hangs at B. By the unit-load method, find how far B drops and how far the roller C slides.`,
+    parts: [
+      num('dropB', ($) => $.dropB, 'mm', {
+        scale: MM,
+        label: 'drop at B',
+        traps: [
+          [($) => $.stretches, 'That adds the bars\' changes of length. Each must be weighted by the force a unit load at B puts in that bar.'],
+          [($) => $.dropB - $.hanger, 'That leaves out the hanger. It carries the load, and its stretch moves B too.'],
+        ],
+      }),
+      num('slide', ($) => $.slide, 'mm', {
+        scale: MM,
+        label: 'roller slide',
+        traps: [
+          [($) => 2 * $.slide, 'A horizontal unit load at C loads only the bottom chord, with $n = 1$ in each chord bar.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Solve the truss twice: once for the real load, once for a unit load at the joint along the direction you want. Then $\\Delta = \\sum nNL/AE$.',
+      String.raw`A unit load down at B gives each bar $n = N/P$. A unit load across at C puts tension 1 in both chord bars and nothing in the others.`,
+    ],
+    steps: ($, sig) => {
+      const Lr = Math.hypot($.half, $.rise);
+      const Nr = -($.P * Lr) / (2 * $.rise);
+      const Nc = ($.P * $.half) / (2 * $.rise);
+      return [
+        String.raw`Real forces: chords $${sig(Nc / 1000)}$ kN, rafters $${sig(Nr / 1000)}$ kN, hanger $${sig($.P / 1000)}$ kN. Rafter length $${sig(Lr)}$ m.`,
+        String.raw`Unit load at B: $n = N/P$ in every bar, so $\Delta_B = \sum N^2L/(P\,AE) = ${sig($.dropB / MM)}$ mm.`,
+        String.raw`Unit load across at C: $n = 1$ in the two chord bars, so the slide is $2N_cL_c/AE = ${sig($.slide / MM)}$ mm.`,
+      ];
+    },
+    second: ($) => {
+      // Direct stiffness on the whole truss: assemble K, solve for every joint.
+      const k = trussStiffness(roofTruss($), $.A * E);
+      return { dropB: -k.disp.B.y / MM, slide: k.disp.C.x / MM };
+    },
+    cases: [kase(cite('unit-load'), { half: 2, rise: 1.5, P: 20, A: 400 }, { dropB: 1.6875, slide: 0.6666666666666663 })],
+  }),
+
+  problem({
+    id: 'u10.14.beam-unit',
+    title: 'A slope and a deflection by unit loads',
+    exam: 'u10',
+    ch: '14',
+    lab: 'castigliano',
+    src: cite('unit-load'),
+    topics: ['unit-load', 'beam-unit'],
+    variety: ['unknown'],
+    level: 2,
+    vars: {
+      L: range(2, 6, 0.5, 'm', 1),
+      w: range(1, 8, 0.5, 'kN/m', 1000),
+      h: range(80, 200, 20, 'mm', MM),
+    },
+    derive: ($) => {
+      const EI = beamEI(0.04, $.h);
+      const M = (x) => ($.w * $.L * x) / 2 - ($.w * x * x) / 2;
+      return {
+        EI,
+        slope: unitLoadBeam(M, (x) => 1 - x / $.L, $.L, EI),
+        quarter: unitLoadBeam(M, (x) => (x < $.L / 4 ? 0.75 * x : 0.25 * ($.L - x)), $.L, EI, 4000),
+      };
+    },
+    valid: ($) => $.quarter > 1e-3 && $.quarter < 0.06,
+    text: (T) => String.raw`A steel beam ($E = 200$ GPa), 40 mm wide and $${T.h}$ mm deep, spans $${T.L}$ m on a pin and a roller under a uniform $${T.w}$ kN/m. Using unit loads, find the slope at the pin and the deflection at a quarter of the span from the pin.`,
+    parts: [
+      num('slope', ($) => $.slope, 'rad', {
+        abs: 1e-6,
+        label: 'slope at the pin',
+        traps: [
+          [($) => ((5 * $.w * $.L ** 4) / (384 * $.EI)) / ($.L / 2), 'That is the midspan drop over half the span, as if the beam ran straight from the pin. It curves, so the end is steeper.'],
+        ],
+      }),
+      num('quarter', ($) => $.quarter, 'mm', {
+        scale: MM,
+        label: 'quarter-span drop',
+        traps: [
+          [($) => (5 * $.w * $.L ** 4) / (384 * $.EI), 'That is the midspan drop. The quarter point moves less.'],
+          [($) => (5 * $.w * $.L ** 4) / (384 * $.EI) / 2, 'Half the midspan drop is not the quarter-point drop; the curve is not a triangle.'],
+        ],
+      }),
+    ],
+    hints: [
+      'For a slope, put a unit couple at the station; for a deflection, a unit force. Then $\\int mM/EI\\,dx$.',
+      String.raw`$M = wLx/2 - wx^2/2$. A unit couple at the pin gives $m = 1 - x/L$. A unit force at $L/4$ gives $m = 3x/4$ before it and $(L-x)/4$ after.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$EI = ${sig($.EI)}$ N·m².`,
+      String.raw`Slope: $\int_0^L (1 - x/L)M\,dx/EI = wL^3/24EI = ${sig($.slope)}$ rad.`,
+      String.raw`Quarter point: $\int m M/EI\,dx = 19wL^4/2048EI = ${sig($.quarter / MM)}$ mm.`,
+    ],
+    second: ($) => {
+      // The elastic curve of Unit 8 at the same stations.
+      const c = simpleUniformDeflection($.w, $.L, $.EI);
+      return { slope: -c.at(0).slope, quarter: -c.at($.L / 4).y / MM };
+    },
+    cases: [kase(cite('unit-load'), { L: 4, w: 5, h: 80 }, { slope: 0.0390625, quarter: (19 * 5e3 * 256) / (2048 * 341333.3333333333) / MM })],
   }),
 ];
 

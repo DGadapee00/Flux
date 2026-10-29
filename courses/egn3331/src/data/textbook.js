@@ -96,6 +96,7 @@ export const SECTIONS = Object.freeze({
   'closed-tube': { title: 'Thin-walled closed tubes in torsion' },
   'noncircular': { title: 'Torsion of non-circular shafts' },
   'shaft-kt': { title: 'Stress concentration in shafts' },
+  'unit-load': { title: 'The unit-load (virtual work) method' },
   'buckling': { title: 'Buckling of columns' },
   'energy': { title: 'Strain energy and Castigliano\'s theorem' },
   'impact': { title: 'Impact loading' },
