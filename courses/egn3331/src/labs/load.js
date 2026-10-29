@@ -41,6 +41,8 @@ const loaders = {
   flitch: () => import('./flitch.js'),
   purlin: () => import('./purlin.js'),
   bandsaw: () => import('./bandsaw.js'),
+  strut: () => import('./strut.js'),
+  crossing: () => import('./crossing.js'),
 };
 
 const labs = createLabLoader(loaders);

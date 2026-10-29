@@ -2,10 +2,11 @@
  * Second methods for thinwall.js.
  *   node src/mechanics/thinwall-selftest.js
  */
-import { channel, iFlow } from './thinwall.js';
+import { channel, iFlow, lippedChannel, openShearCentre } from './thinwall.js';
 
 let passed = 0;
 let failed = 0;
+const ok = (c, name) => (c ? (passed += 1) : (failed += 1, console.error(`FAIL ${name}`)));
 function approx(got, want, tol, name) {
   const ok = Number.isFinite(got) && Math.abs(got - want) <= tol * Math.max(1e-12, Math.abs(want));
   if (ok) passed += 1;
@@ -57,6 +58,29 @@ function approx(got, want, tol, name) {
   }
   approx(Vw, V, 1e-6, 'the thin-wall I web carries all of V');
   approx(iFlow(2 * V, 0.12, 0.01, 0.006, 0.17).tauFlange, 2 * s.tauFlange, 1e-12, 'double V, double the flange stress');
+}
+
+// Lipped channel: the closed form against the general open-section solver, and the plain channel.
+{
+  const t = 0.105;
+  const h = 1.52;
+  const b = 1.52;
+  const d = 0.3225;
+  const c = lippedChannel(1, b, h, d, t);
+  // Web at x = 0, flanges toward +x, lips turned in: free end to free end.
+  const pts = [[b, h / 2 - d], [b, h / 2], [0, h / 2], [0, -h / 2], [b, -h / 2], [b, -h / 2 + d]];
+  const o = openShearCentre(pts, t, 1, 4000);
+  approx(o.I, c.I, 1e-12, 'lipped: I by segments matches the closed form');
+  approx(Math.abs(o.Fy), 1, 1e-6, 'lipped: the flow adds up to V');
+  approx(Math.abs(o.Fx) + 1, 1, 1e-9, 'lipped: no net sideways force');
+  approx(Math.abs(o.Qend) + 1, 1, 1e-9, 'lipped: Q returns to zero at the far free end');
+  approx(-o.xs, c.e, 1e-6, 'lipped: the solver puts the shear centre e behind the web');
+  ok(c.e > channel(1, b, h, t, t).e, 'lips push the shear centre farther out');
+  const plain = openShearCentre([[b, h / 2], [0, h / 2], [0, -h / 2], [b, -h / 2]], t, 1, 4000);
+  approx(-plain.xs, channel(1, b, h, t, t).e, 1e-6, 'no lips: back to 3b²t/(ht + 6bt)');
+  approx(lippedChannel(1, b, h, 0, t).e, channel(1, b, h, t, t).e, 1e-12, 'd = 0 in the closed form gives the channel');
+  approx(c.J, ((h + 2 * b + 2 * d) * t ** 3) / 3, 1e-12, 'open-wall J = Σ L t³/3');
+  approx(openShearCentre(pts, 2 * t, 1, 400).xs, o.xs, 1e-3, 'e does not depend on a uniform t');
 }
 
 if (failed) {

@@ -50,6 +50,8 @@ const LIMIT = {
   flitch: 1e-9,
   purlin: 1e-9,
   bandsaw: 1e-9,
+  strut: 1e-5,
+  crossing: 1e-3,
 };
 
 const fails = [];

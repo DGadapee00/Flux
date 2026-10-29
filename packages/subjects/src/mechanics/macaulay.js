@@ -60,3 +60,24 @@ export function fixedPoint(P, L, EI) {
   const Me = (P * L) / 8;
   return { Me, Mmid: (P * L) / 8, drop: (P * L ** 3) / (192 * EI), simpleDrop: (P * L ** 3) / (48 * EI) };
 }
+
+/**
+ * Both ends fixed, P down at a from the left (b = L − a). Release the ends: a simple span turns
+ * them by Pab(L + b)/6LEI and Pab(L + a)/6LEI. End moments M_A, M_B turn them back by
+ * (2M_A + M_B)L/6EI and (M_A + 2M_B)L/6EI. Setting both turns to zero gives the hogging end
+ * moments M_A = Pab²/L², M_B = Pa²b/L², and the reactions R_A = Pb²(3a + b)/L³. Under the load
+ * the moment sags 2Pa²b²/L³. The drop for x ≤ a is Pb²x²(3aL − 3ax − bx)/(6EIL³); the far side
+ * by symmetry. Returns drops positive down.
+ */
+export function fixedPointAt(P, L, a, EI) {
+  const b = L - a;
+  const MA = (P * a * b * b) / (L * L);
+  const MB = (P * a * a * b) / (L * L);
+  const RA = (P * b * b * (3 * a + b)) / L ** 3;
+  const RB = P - RA;
+  const drop = (x) => (x <= a
+    ? (P * b * b * x * x * (3 * a * L - 3 * a * x - b * x)) / (6 * EI * L ** 3)
+    : (P * a * a * (L - x) ** 2 * (3 * b * L - 3 * b * (L - x) - a * (L - x))) / (6 * EI * L ** 3));
+  const M = (x) => -MA + RA * x - (x > a ? P * (x - a) : 0);
+  return { MA, MB, RA, RB, Mload: (2 * P * a * a * b * b) / L ** 3, M, drop };
+}

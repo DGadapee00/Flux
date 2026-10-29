@@ -1335,6 +1335,74 @@ export const PREDICTIONS = {
       why: 'Tension and bending add. The bending part depends only on t and ρ, so it stays 51.7 ksi; the outer fibre goes from 66.7 to 71.7 ksi. The inner fibre, compressed by bending, is relieved from −36.7 to −31.7 ksi.',
     },
   ],
+  strut: [
+    {
+      id: 'st-back',
+      scenario: 'wall',
+      ask: 'The pipe clamps hang the load at the slot face. Move the load line back so it passes right through the channel\'s back, the web.',
+      apply(s) { s.x = 0; },
+      watch: [
+        watch('none', 'does the channel stop twisting?', (c) => Math.abs(c.phiDeg) < 0.05, { mode: 'bool' }),
+        watch('phi', 'the size of the twist', (c) => Math.abs(c.phiDeg)),
+      ],
+      mode: 'dir',
+      expect: { none: false, phi: 'smaller' },
+      why: 'The flanges and lips carry their shear flow sideways, and those flows make a couple. Only a load 0.84 in behind the back, at the shear centre, balances it. Through the web the arm falls from 2.36 to 0.84 in, so the twist drops to about a third, but not to zero.',
+    },
+    {
+      id: 'st-lips',
+      scenario: 'wall',
+      ask: 'Use a plain channel of the same size, with no lips turned in at the slot.',
+      apply(s) { s.d = 0; },
+      watch: [
+        watch('e', 'how far the shear centre sits behind the back', (c) => c.e),
+      ],
+      mode: 'dir',
+      expect: { e: 'smaller' },
+      why: 'The lips carry flow in the same sense as the web\'s couple, far from the back, so they push the shear centre out: 0.84 in with lips, 0.65 in without. The plain channel twists a little more anyway, because it also loses wall and so J.',
+    },
+    {
+      id: 'st-span',
+      scenario: 'wall',
+      ask: 'Space the wall anchors 96 in apart instead of 48 in, same load per foot.',
+      apply(s) { s.L = 96; },
+      watch: [
+        watch('phi', 'the midspan twist', (c) => c.phiDeg),
+      ],
+      mode: 'factor',
+      factors: [1, 2, 4, 8],
+      expect: { phi: 4 },
+      why: 'The torque per inch stays the same, the anchors\' torque doubles with the length, and the twist builds over twice the length: φ = mL²/(8GJ) goes up 4 times, from 7.1° to 28°.',
+    },
+  ],
+  crossing: [
+    {
+      id: 'cx-fixed',
+      scenario: 'mid',
+      ask: 'The Civic\'s front axle sits at midspan of the 12 ft bridge, rear axle still off it. Weld the stringer ends so they cannot turn.',
+      apply(s) { s.fixed = 1; },
+      watch: [
+        watch('mid', 'the midspan sag', (c) => c.mid),
+        watch('M', 'the largest bending moment', (c) => c.Mmax),
+      ],
+      mode: 'factor',
+      factors: [1, 0.5, 0.25, 0.125],
+      expect: { mid: 0.25, M: 0.5 },
+      why: 'Fixed ends push back with PL/8 at each wall, so the moment under the wheel drops from PL/4 to PL/8: half. The sag drops further, from PL³/48EI to PL³/192EI, a quarter, because the ends now leave the supports level instead of tilted.',
+    },
+    {
+      id: 'cx-roll',
+      scenario: 'long',
+      ask: 'On the 20 ft bridge, back the car up until the front axle sits right at midspan.',
+      apply(s) { s.pos = 10; },
+      watch: [
+        watch('mid', 'the midspan sag', (c) => c.mid),
+      ],
+      mode: 'dir',
+      expect: { mid: 'smaller' },
+      why: 'Backing up puts the heavy axle at midspan but pushes the rear axle almost onto the support, where it barely bends the beam. In the worst spot, front 3.1 ft past midspan, both axles are well onto the span and their sags add to 0.352 in; with the front at midspan it is 0.311 in.',
+    },
+  ],
   bridle: [
     {
       id: 'bd-flat',

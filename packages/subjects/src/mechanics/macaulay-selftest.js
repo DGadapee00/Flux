@@ -3,7 +3,7 @@
  *   node src/mechanics/macaulay-selftest.js
  */
 import { integrateFixed, integrateSimple, simplePointDeflection, simpleUniformDeflection } from './elastic.js';
-import { fixedPoint, fixedUniform, simpleMacaulay } from './macaulay.js';
+import { fixedPoint, fixedPointAt, fixedUniform, simpleMacaulay } from './macaulay.js';
 
 let passed = 0;
 let failed = 0;
@@ -82,6 +82,29 @@ const at = (curve, x) => {
   const m1 = sl(1000);
   approx((-m0 * 1000) / (m1 - m0), p.Me, 1e-6, 'fixed ends, point load: PL/8');
   approx(p.simpleDrop / p.drop, 4, 1e-12, 'fixing the ends cuts the point-load drop to a quarter');
+}
+
+// Fixed ends, P off centre: integrate EI y'' = M from the left with the closed-form end moment and
+// reaction, and the right end must come out level and back at zero.
+{
+  const P = 4000;
+  const L = 3.6;
+  const a = 1.0;
+  const EI = 2.5e6;
+  const f = fixedPointAt(P, L, a, EI);
+  const r = integrateFixed(f.M, L, EI, 8000, [a]);
+  const end = r.x.length - 1;
+  approx(Math.abs(r.y[end]) / f.drop(a) + 1, 1, 1e-6, 'fixed off centre: the right end does not drop');
+  approx(Math.abs(r.slope[end]) * L / f.drop(a) + 1, 1, 1e-6, 'fixed off centre: the right end stays level');
+  for (const k of [1000, 2222, 4000, 6500]) approx(-r.y[k], f.drop(r.x[k]), 1e-5, `fixed off centre: drop at x = ${r.x[k].toFixed(3)}`);
+  approx(f.M(L), -f.MB, 1e-9, 'fixed off centre: the moment ends at −M_B');
+  approx(f.RA + f.RB, P, 1e-12, 'fixed off centre: reactions carry P');
+  const mid = fixedPointAt(P, L, L / 2, EI);
+  const fp = fixedPoint(P, L, EI);
+  approx(mid.MA, fp.Me, 1e-12, 'fixed at midspan: M_A = PL/8');
+  approx(mid.drop(L / 2), fp.drop, 1e-12, 'fixed at midspan: drop PL³/192EI');
+  approx(mid.Mload, fp.Mmid, 1e-12, 'fixed at midspan: PL/8 under the load');
+  approx(fixedPointAt(2 * P, L, a, EI).drop(2), 2 * f.drop(2), 1e-12, 'double P, double the drop');
 }
 
 if (failed) {
