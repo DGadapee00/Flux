@@ -7,6 +7,9 @@ import { PA_PER_PSI } from '@flux/subjects/convert.js';
 import {
   barElongation, circleArea, constrainedThermal, fixedFixed, taperedElongation,
 } from '@flux/subjects/mechanics/materials.js';
+import {
+  holeInStrip, jointFromElongations, kirsch, ktEllipse, ktStrip, ktTip, pinJoint, threeBar,
+} from '@flux/subjects/mechanics/deformation.js';
 import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
 
 const KN = 1e3;
@@ -36,6 +39,12 @@ function simpsonTaper($) {
   for (let i = 1; i < n; i++) sum += (i % 2 ? 4 : 2) * f(i * h);
   return (sum * h) / 3;
 }
+
+/** The bracket's two bars, wall pins to joint B at the origin: the level bar, then the slanted one. */
+const bracketBars = ($) => [
+  { from: [-$.Lh, 0], A: $.A1, E },
+  { from: [-$.Lh, $.brace === 'tie' ? $.rise : -$.rise], A: $.A2, E },
+];
 
 const ch4 = [
   problem({
@@ -624,6 +633,256 @@ const ch4 = [
       kase(cite('thermal-stress'), { change: 'length', dT: 15 }, { effect: 'same' }),
       kase(cite('thermal-stress'), { change: 'area', dT: 15 }, { effect: 'same' }),
       kase(cite('thermal-stress'), { change: 'hotter', dT: 15 }, { effect: 'doubles' }),
+    ],
+  }),
+
+  problem({
+    id: 'u3.4.joint',
+    title: 'How far a bracket joint moves',
+    exam: 'u3',
+    ch: '4',
+    lab: null,
+    src: cite('truss-deformation'),
+    topics: ['truss-deformation'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      brace: choice(['tie', 'above'], ['strut', 'below']),
+      P: range(10, 40, 2, 'kN', KN),
+      Lh: range(1.5, 3, 0.25, 'm', 1),
+      rise: range(1, 2.5, 0.25, 'm', 1),
+      A1: range(300, 800, 50, 'mm²', 1e-6),
+      A2: range(300, 800, 50, 'mm²', 1e-6),
+    },
+    derive: ($) => {
+      const s = pinJoint([0, 0], bracketBars($), [0, -$.P]);
+      return { drop: -s.v, out: s.u, Nh: s.members[0].N, Ns: s.members[1].N, dh: s.members[0].delta, ds: s.members[1].delta };
+    },
+    valid: ($) => Math.abs($.Nh) / $.A1 < 200e6 && Math.abs($.Ns) / $.A2 < 200e6 && $.rise / $.Lh > 0.45,
+    text: (T) => String.raw`A level steel bar AB, $${T.Lh}$ m long with area $${T.A1}$ mm², is pinned to a wall at A. A second steel bar runs from a pin C on the wall, $${T.rise}$ m ${T.brace} A, to the free end B, with area $${T.A2}$ mm². $E = 200$ GPa. Pin B carries $${T.P}$ kN downward. How far does B drop, and how far does it move horizontally (positive away from the wall)?`,
+    parts: [
+      num('drop', ($) => $.drop, 'mm', {
+        scale: MM,
+        label: 'drop of B',
+        traps: [
+          [($) => Math.abs($.ds) * Math.hypot($.Lh, $.rise) / $.rise, 'That divides the slanted bar\'s change of length by $\\sin\\theta$ and ignores the level bar. The level bar\'s change of length moves B too.'],
+          [($) => Math.abs($.ds), 'That is the slanted bar\'s change of length. B moves farther than that, because the bar swings as well as stretching.'],
+        ],
+      }),
+      num('out', ($) => $.out, 'mm', {
+        scale: MM,
+        label: 'horizontal move of B',
+        abs: 1e-3,
+        traps: [
+          [($) => -$.out, 'The sign is backwards. A level bar in compression lets B move toward the wall, and one in tension pulls it away.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Find both bar forces from equilibrium at B. Each bar changes length by $NL/AE$, and that change equals the move of B projected on the bar.',
+      String.raw`The level bar gives the horizontal move directly: $u = \delta_{AB}$. Put $u$ into the slanted bar's equation, $\delta_{CB} = u\cos\theta + v\sin\theta$, with $\theta$ measured from the wall pin to B.`,
+      'Watch the signs: a compressed bar has a negative change of length, and a pin below A gives the slanted bar a positive $\\sin\\theta$ toward B.',
+    ],
+    steps: ($, sig) => {
+      const Ls = Math.hypot($.Lh, $.rise);
+      return [
+        String.raw`The slanted bar is $${sig(Ls)}$ m long. Equilibrium at B: $N_{CB} = ${sig($.Ns / KN)}$ kN and $N_{AB} = ${sig($.Nh / KN)}$ kN (tension positive).`,
+        String.raw`Changes of length: $\delta_{AB} = ${sig($.dh / MM)}$ mm and $\delta_{CB} = ${sig($.ds / MM)}$ mm.`,
+        String.raw`The level bar fixes $u = ${sig($.out / MM)}$ mm. The slanted bar then gives $v = ${sig(-$.drop / MM)}$ mm, so B drops $${sig($.drop / MM)}$ mm.`,
+      ];
+    },
+    second: ($) => {
+      // Statics first, then compatibility alone: the hand method, with no stiffness matrix.
+      const up = $.brace === 'tie' ? 1 : -1;
+      const Ls = Math.hypot($.Lh, $.rise);
+      const sin = (-up * $.rise) / Ls;
+      const cos = $.Lh / Ls;
+      const Ns = -$.P / sin;
+      const Nh = -Ns * cos;
+      const j = jointFromElongations([0, 0], [[-$.Lh, 0], [-$.Lh, up * $.rise]], [(Nh * $.Lh) / ($.A1 * E), (Ns * Ls) / ($.A2 * E)]);
+      return { drop: -j.v / MM, out: j.u / MM };
+    },
+    cases: [kase(cite('truss-deformation'), { brace: 'tie', P: 30, Lh: 2, rise: 1.5, A1: 400, A2: 400 }, { drop: 3.9375, out: -1 })],
+  }),
+
+  problem({
+    id: 'u3.4.three-bar',
+    title: 'Three hangers share a load',
+    exam: 'u3',
+    ch: '4',
+    lab: null,
+    src: cite('indeterminate-truss'),
+    topics: ['indeterminate-truss'],
+    variety: ['unknown'],
+    level: 3,
+    vars: {
+      P: range(20, 90, 5, 'kN', KN),
+      L: range(0.8, 2, 0.1, 'm', 1),
+      th: range(20, 60, 5, '°', 1),
+      A: range(200, 600, 50, 'mm²', 1e-6),
+    },
+    derive: ($) => threeBar($.P, $.L, $.th, $.A, E),
+    valid: ($) => $.sm < 220e6,
+    text: (T) => String.raw`A joint hangs from a rigid ceiling on three steel bars, each of area $${T.A}$ mm², with $E = 200$ GPa. The middle bar is vertical and $${T.L}$ m long. The two side bars are pinned to the ceiling so that each leans $${T.th}^\circ$ from the vertical. The joint carries $${T.P}$ kN downward. Find the force in the middle bar, the force in each side bar, and how far the joint drops.`,
+    parts: [
+      num('Nm', ($) => $.Nm, 'kN', {
+        scale: KN,
+        label: 'middle bar',
+        traps: [
+          [($) => $.P / 3, 'An even split holds only for parallel bars. The leaning bars are longer and pull at an angle.'],
+          [($) => $.P / (1 + 2 * Math.cos(($.th * Math.PI) / 180)), 'That keeps only the equilibrium cosine. The side bar\'s stretch is the drop times $\\cos\\theta$, and its length is $L/\\cos\\theta$, which add two more.'],
+        ],
+      }),
+      num('Ns', ($) => $.Ns, 'kN', {
+        scale: KN,
+        label: 'each side bar',
+        traps: [
+          [($) => $.P / 3, 'An even split holds only for parallel bars.'],
+          [($) => $.Nm / Math.cos(($.th * Math.PI) / 180) ** 2, 'The side bar carries less than the middle one, by $\\cos^2\\theta$, not more.'],
+        ],
+      }),
+      num('drop', ($) => $.drop, 'mm', {
+        scale: MM,
+        label: 'drop of the joint',
+        traps: [
+          [($) => ($.P / 3) * $.L / ($.A * E), 'That uses an even split for the middle bar.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Two equilibrium equations, three bar forces: add one compatibility condition. By symmetry the joint only drops.',
+      String.raw`If the joint drops $\Delta$, the middle bar stretches $\Delta$ and a side bar stretches $\Delta\cos\theta$ over a length $L/\cos\theta$. Compare their strains.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Compatibility: $N_s = N_m\cos^2\theta = ${sig($.cos ** 2)}\,N_m$.`,
+      String.raw`Equilibrium: $N_m + 2N_s\cos\theta = P$, so $N_m = P/(1+2\cos^3\theta) = ${sig($.P / KN)}/${sig(1 + 2 * $.cos ** 3)} = ${sig($.Nm / KN)}$ kN.`,
+      String.raw`Each side bar: $N_s = ${sig($.Ns / KN)}$ kN. The drop is $N_mL/AE = ${sig($.drop / MM)}$ mm.`,
+    ],
+    second: ($) => {
+      const t = ($.th * Math.PI) / 180;
+      const side = $.L / Math.cos(t);
+      const s = pinJoint([0, 0], [
+        { from: [-side * Math.sin(t), $.L], A: $.A, E },
+        { from: [0, $.L], A: $.A, E },
+        { from: [side * Math.sin(t), $.L], A: $.A, E },
+      ], [0, -$.P]);
+      return { Nm: s.members[1].N / KN, Ns: s.members[0].N / KN, drop: -s.v / MM };
+    },
+    cases: [
+      kase(cite('indeterminate-truss'), { P: 60, L: 1.2, th: 30, A: 300 }, { Nm: 26.09787104087197, Ns: 19.573403280653977, drop: 0.5219574208174393 }),
+      kase(cite('indeterminate-truss'), { P: 60, L: 1.2, th: 60, A: 300 }, { Nm: 48, Ns: 12, drop: 0.96 }),
+    ],
+  }),
+
+  problem({
+    id: 'u3.4.hole',
+    title: 'Peak stress at a bolt hole',
+    exam: 'u3',
+    ch: '4',
+    lab: null,
+    src: cite('stress-concentration'),
+    topics: ['stress-concentration'],
+    variety: ['unknown'],
+    level: 2,
+    vars: {
+      w: range(40, 100, 5, 'mm', MM),
+      d: range(6, 30, 2, 'mm', MM),
+      t: range(6, 16, 2, 'mm', MM),
+      P: range(10, 60, 2, 'kN', KN),
+    },
+    derive: ($) => holeInStrip($.P, $.w, $.d, $.t),
+    valid: ($) => $.d / $.w >= 0.1 && $.d / $.w <= 0.5 && $.peak < 250e6 && $.peak > 60e6,
+    text: (T) => String.raw`A flat steel bar $${T.w}$ mm wide and $${T.t}$ mm thick has a centred hole $${T.d}$ mm in diameter. It carries an axial tension of $${T.P}$ kN. On the net-section stress, the stress-concentration factor is $K_t = 2 + (1 - d/w)^3$. Find $K_t$ and the peak stress at the edge of the hole.`,
+    parts: [
+      num('Kt', ($) => $.Kt, '', {
+        label: 'K_t',
+        traps: [
+          [() => 3, 'Three is the wide-plate value. This hole takes a real fraction of the width, so use the given fit.'],
+        ],
+      }),
+      num('peak', ($) => $.peak, 'MPa', {
+        scale: MPA,
+        label: 'peak stress',
+        traps: [
+          [($) => $.Kt * $.gross, 'That puts $K_t$ on the gross stress $P/(wt)$. This $K_t$ was measured on the net stress $P/((w-d)t)$.'],
+          [($) => $.net, 'That is the net-section average. The edge of the hole sees $K_t$ times it.'],
+          [($) => 3 * $.net, 'That uses the wide-plate 3 on the net stress.'],
+        ],
+      }),
+    ],
+    hints: [
+      'A stress-concentration factor multiplies the nominal stress it was defined on. Find which area this one uses.',
+      String.raw`The net area is $(w-d)t$. Find $K_t$ from $d/w$, then multiply.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Net area $(w-d)t = ${sig(($.w - $.d) / MM)}\times ${sig($.t / MM)} = ${sig((($.w - $.d) * $.t) / 1e-6)}$ mm², so $\sigma_{\mathrm{net}} = ${sig($.net / MPA)}$ MPa.`,
+      String.raw`$d/w = ${sig($.d / $.w)}$, so $K_t = 2 + ${sig(1 - $.d / $.w)}^3 = ${sig($.Kt)}$.`,
+      String.raw`Peak $= K_t\sigma_{\mathrm{net}} = ${sig($.peak / MPA)}$ MPa.`,
+    ],
+    second: ($) => ({
+      Kt: 2 + (($.w - $.d) / $.w) ** 3,
+      // The same peak from the gross stress and the ratio of the areas.
+      peak: (ktStrip($.d, $.w) * ($.P / ($.w * $.t)) * ($.w / ($.w - $.d))) / MPA,
+    }),
+    cases: [kase(cite('stress-concentration'), { w: 60, d: 12, t: 10, P: 30 }, { Kt: 2.512, peak: 157 })],
+  }),
+
+  problem({
+    id: 'u3.4.notch',
+    title: 'What a change to a hole does to its peak',
+    exam: 'u3',
+    ch: '4',
+    lab: null,
+    src: cite('stress-concentration'),
+    kind: 'conceptual',
+    topics: ['stress-concentration'],
+    variety: ['configuration'],
+    level: 2,
+    vars: {
+      change: choice(
+        ['bigger', 'a round hole in a very wide plate is drilled out to twice its diameter'],
+        ['turn', 'an elliptical slot that ran along the load is turned to run across it'],
+        ['stop', 'a small round hole is drilled at the tip of a sharp crack'],
+        ['strip', 'the round hole in a narrow strip is drilled larger, at the same load'],
+      ),
+      S: range(20, 60, 2, 'MPa', MPA),
+    },
+    text: (T) => String.raw`A steel plate carries a far-field tension of $${T.S}$ MPa. Then ${T.change}. What happens to the peak stress at the edge of the opening?`,
+    parts: [
+      mc('effect', [
+        ['same', 'It stays the same.', 'In a wide plate a round hole gives three times the far stress at any size. Size sets how far the bump reaches, not its height.'],
+        ['rises', 'It rises.', 'The peak rises when the opening gets sharper across the load, or when the net section shrinks faster than the factor falls.'],
+        ['falls', 'It falls.', 'The peak falls when the tip radius grows. A blunter tip spreads the crowded force lines.'],
+      ], ($) => ($.change === 'bigger' ? 'same' : $.change === 'stop' ? 'falls' : 'rises')),
+    ],
+    hints: [
+      'The peak depends on the shape of the opening across the load, through its tip radius, and on the nominal stress.',
+      String.raw`Wide plate: $K_t = 1 + 2a/b = 1 + 2\sqrt{a/\rho}$, with no size alone in it. Strip: the net stress $P/((w-d)t)$ grows as $d$ grows.`,
+    ],
+    steps: ($) => [
+      {
+        bigger: 'A round hole in a wide plate has $K_t = 3$ at any diameter, and the far stress is unchanged. The peak stays the same.',
+        turn: 'Across the load, $a > b$ and $K_t = 1 + 2a/b$ grows past 3. The peak rises.',
+        stop: 'The hole raises the tip radius from near zero to the hole radius, and $1 + 2\\sqrt{a/\\rho}$ falls. The peak falls.',
+        strip: 'In a strip the net stress rises as the ligament shrinks, faster than $K_t$ falls. The peak rises.',
+      }[$.change],
+    ],
+    second: ($) => {
+      const S = $.S;
+      const peaks = {
+        bigger: [kirsch(S, 0.004, 0.004, 90).st, kirsch(S, 0.008, 0.008, 90).st],
+        turn: [S * ktEllipse(0.002, 0.01), S * ktEllipse(0.01, 0.002)],
+        stop: [S * ktTip(0.01, 1e-5), S * ktTip(0.0115, 0.0015)],
+        strip: [holeInStrip(30e3, 0.06, 0.012, 0.01).peak, holeInStrip(30e3, 0.06, 0.024, 0.01).peak],
+      }[$.change];
+      const r = peaks[1] / peaks[0];
+      return { effect: Math.abs(r - 1) < 1e-9 ? 'same' : r > 1 ? 'rises' : 'falls' };
+    },
+    cases: [
+      kase(cite('stress-concentration'), { change: 'bigger', S: 40 }, { effect: 'same' }),
+      kase(cite('stress-concentration'), { change: 'turn', S: 40 }, { effect: 'rises' }),
+      kase(cite('stress-concentration'), { change: 'stop', S: 40 }, { effect: 'falls' }),
+      kase(cite('stress-concentration'), { change: 'strip', S: 40 }, { effect: 'rises' }),
     ],
   }),
 ];

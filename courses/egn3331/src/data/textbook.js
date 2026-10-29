@@ -41,6 +41,8 @@ export const SECTIONS = Object.freeze({
 
   // Chapter 2: Simple Tensile and Shear Structures
   'trusses': { book: 'roylance', section: '2.1', title: 'Trusses' },
+  'truss-deformation': { book: 'roylance', section: '2.1', title: 'Trusses' },
+  'indeterminate-truss': { book: 'roylance', section: '2.1', title: 'Trusses' },
   'pressure-vessels': { book: 'roylance', section: '2.2', title: 'Pressure Vessels' },
   'poisson': { book: 'roylance', section: '2.2', title: 'Pressure Vessels' },
   'shear-stress': { book: 'roylance', section: '2.3', title: 'Shear and Torsion' },

@@ -178,7 +178,7 @@ export const SETUPS = {
         read: (c) => ({ delta: [c.delta * 1e3, 0.1432] }),
       },
     ],
-    s3: [
+    s4: [
       {
         tag: 'the load near the left wall',
         lab: 'indeterminate',
@@ -192,7 +192,7 @@ export const SETUPS = {
         read: (c) => ({ left: [c.left / 1e3, 10], right: [c.right / 1e3, 10] }),
       },
     ],
-    s4: [
+    s6: [
       {
         tag: 'a held rail at +30 °C',
         lab: 'rail',
@@ -211,7 +211,7 @@ export const SETUPS = {
         read: (c) => ({ stress: [c.stress / (1000 * PA_PER_PSI), -9.43] }),
       },
     ],
-    s5: [
+    s7: [
       {
         tag: 'the gap still open',
         lab: 'rail',

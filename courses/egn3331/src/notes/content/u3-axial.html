@@ -18,16 +18,19 @@
   <nav class="toc">
     <a href="#s1"><span>01</span>Elongation of a uniform bar</a>
     <a href="#s2"><span>02</span>Steps and tapers</a>
-    <a href="#s3"><span>03</span>A bar between two walls</a>
-    <a href="#s4"><span>04</span>Thermal stress</a>
-    <a href="#s5"><span>05</span>A joint that must close</a>
-    <a href="#s6"><span>06</span>Formula sheet</a>
+    <a href="#s3"><span>03</span>How a truss joint moves</a>
+    <a href="#s4"><span>04</span>A bar between two walls</a>
+    <a href="#s5"><span>05</span>Three bars and one joint</a>
+    <a href="#s6"><span>06</span>Thermal stress</a>
+    <a href="#s7"><span>07</span>A joint that must close</a>
+    <a href="#s8"><span>08</span>Stress at a hole</a>
+    <a href="#s9"><span>09</span>Formula sheet</a>
   </nav>
 </header>
 <main>
 
 <div class="part">
-<h3>Part 1 · How far the end moves <span class="sub">| uniform | step | taper | Reference</span></h3>
+<h3>Part 1 · How far the end moves <span class="sub">| uniform | step | taper | truss joint</span></h3>
 
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Elongation of a uniform bar</h2>
@@ -55,7 +58,7 @@
 \[
 \delta = 1.50\ \mathrm{mm}
 \]
-<p>A joint moves by whatever displacement makes every member's \(NL/AE\) fit together. Unit 1 found the forces. This unit supplies the change of length. The fitting of the joints is the truss deformation in 2.001 lecture 9. This unit's lab draws one bar, which is the member.</p>
+<p>A joint moves by whatever displacement makes every member's \(NL/AE\) fit together. Unit 1 found the forces. This unit supplies the change of length. Section 3 fits the joints together. This unit's lab draws one bar, which is the member.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Feet, inches, millimetres and metres do not mix inside \(NL/AE\). Leaving a length in millimetres while \(A\) is in square metres multiplies the elongation by 1000. Reporting the stress, in MPa, as if it were the elongation forgets the factor \(L/E\).</p>
@@ -63,7 +66,6 @@
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The bar is straight, the load is along the axis, and the material is still on the elastic line. A load off the axis adds bending. Past yield the modulus in this fraction is no longer \(E\). A truss joint is taken as a pin, so a member carries force and no moment.</p>
 </div>
-<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec9/">2.001 lecture 9</a> puts \(NL/AE\) on each member of a truss and finds how the joints move.</p>
 </section>
 
 <section class="topic" id="s2">
@@ -97,13 +99,53 @@
 <p>A real step has a fillet. The stress at the fillet is higher than \(N/A\), which is the stress-concentration problem and not this integral. The taper formula assumes the diameter changes in a straight line and the force stays on the axis. A shoulder that is abrupt is a step, not a taper.</p>
 </div>
 </section>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>How a truss joint moves</h2>
+<p>A truss joint hangs on two bars. Statics gives each bar its force, and \(NL/AE\) gives each bar its change of length. The joint has to land where both bars, changed, still reach it. That condition fixes how far it moves.</p>
+<div class="box why"><span class="tag">One projection per bar</span>
+<p>Let the joint move by \(u\) across and \(v\) up. Bar \(i\) points from its fixed pin to the joint along the unit vector \(\mathbf{e}_i = (\cos\theta_i, \sin\theta_i)\). For a small move, the bar's change of length is the part of the move along the bar:</p>
+\[
+\delta_i = u\cos\theta_i + v\sin\theta_i
+\]
+<p>The part of the move across the bar only swings it about its pin. To first order that does not change its length. Two bars give two equations, and \(u\) and \(v\) follow. A bar in compression has a negative \(\delta\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 3-4-5 bracket</span>
+<p>A level bar 2 m long and a slanted bar from a pin 1.5 m up the wall meet at a joint 2 m out. The slanted bar is 2.5 m long. Both are steel, 400 mm², and the joint carries 30 kN down. Vertical equilibrium at the joint gives the slanted bar \(30/0.6\), so 50 kN in tension. Horizontal equilibrium gives the level bar \(50\times 0.8\), so 40 kN in compression. Their changes of length are</p>
+\[
+\delta_h = -1.00\ \mathrm{mm}
+\]
+\[
+\delta_s = +1.56\ \mathrm{mm}
+\]
+<p>The level bar lies along \(x\), so \(u = -1.00\) mm: the joint moves toward the wall. The slanted bar points along \((0.8, -0.6)\) from its pin, so \(0.8u - 0.6v = 1.5625\) mm. Then \(-0.6v = 2.3625\) mm, and the joint drops</p>
+\[
+v = -3.94\ \mathrm{mm}
+\]
+<p>The drop is larger than either bar's change of length. A slanted bar swings, so a small stretch along it becomes a larger move across it.</p>
+</div>
+<div class="box why"><span class="tag">The energy check</span>
+<p>The load rises from zero, so it does work \(\tfrac12 P|v|\). The bars store \(N^{2}L/2AE\) each. The two must match:</p>
+\[
+\tfrac12 (30\ \mathrm{kN})(3.94\ \mathrm{mm}) = 59.1\ \mathrm{J}
+\]
+<p>The level bar stores 20.0 J and the slanted bar 39.1 J, which add to 59.1 J. Unit 10 turns this balance into a method that finds a displacement without drawing the joint at all.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The drop is not the slanted bar's stretch. Dividing that stretch by \(\sin\theta\) alone gives 2.60 mm, which leaves out the level bar's shortening. A bar in compression shortens, so its \(\delta\) carries a minus sign into the equations. Mixing that sign up moves the joint the wrong way.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The moves are small next to the bars, so statics uses the undeformed shape and each bar's length change is one projection. The pins turn without friction. A slender bar in compression could buckle first, which is Unit 11.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec9/">2.001 lecture 9</a> finds truss joint displacements the same way, bar by bar. Roylance §2.1 writes the same solve as a stiffness matrix.</p>
+</section>
 </div>
 
 <div class="part">
-<h3>Part 2 · Held ends <span class="sub">| two walls | temperature | Reference</span></h3>
+<h3>Part 2 · Held ends <span class="sub">| two walls | three bars | temperature | gap</span></h3>
 
-<section class="topic" id="s3">
-<h2><span class="n">03</span>A bar between two walls</h2>
+<section class="topic" id="s4">
+<h2><span class="n">04</span>A bar between two walls</h2>
 <p>Fix both ends of a bar and apply a load somewhere in the span. Equilibrium says the two wall reactions add to the load. That is one equation and two unknowns. The bar is statically indeterminate. The extra fact is kinematic: the walls do not move, so the shortening of one segment equals the lengthening of the other.</p>
 <div class="box why"><span class="tag">Stiffness splits the load</span>
 <p>Call the load \(P\) and put it a distance \(a\) from the left wall. The bar length is \(L\). The left segment is a spring of stiffness \(AE/a\), and the right segment is a spring of stiffness \(AE/(L-a)\). The load splits in proportion to those stiffnesses:</p>
@@ -133,13 +175,53 @@ R_L = 16\ \mathrm{kN}
 <p>Half the load is the answer only at midspan. Using the near length in the numerator assigns the larger share to the longer, softer side. The two reactions have to add to \(P\). If they do not, one of them was copied from the other.</p>
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>The walls are rigid and the bar is uniform. A support that sinks, or a second bar of a different area, changes the stiffnesses and the split. Temperature is not in this section. A temperature change on a bar that is already held at both ends is the next section, and it produces reactions with no external \(P\) at all.</p>
+<p>The walls are rigid and the bar is uniform. A support that sinks, or a second bar of a different area, changes the stiffnesses and the split. Temperature is not in this section. A temperature change on a bar already held at both ends is Section 6. It produces reactions with no external \(P\) at all.</p>
 </div>
 <p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec7/">2.001 lecture 7</a> treats static indeterminacy as one equation short, closed by a displacement condition.</p>
 </section>
 
-<section class="topic" id="s4">
-<h2><span class="n">04</span>Thermal stress</h2>
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Three bars and one joint</h2>
+<p>Give the joint a third bar. A pin joint has two equilibrium equations, and now there are three bar forces. The truss is statically indeterminate, like the bar between two walls. The fix is the same: ask how the joint moves, and make every bar agree with that one move.</p>
+<div class="box why"><span class="tag">The stiffer path takes more</span>
+<p>Hang a joint from a ceiling on three bars of the same area and modulus. The middle bar is vertical and \(L\) long. The two side bars lean out at \(\theta\) from the vertical, so each is \(L/\cos\theta\) long. By symmetry the joint only drops, by \(\Delta\). The middle bar stretches by \(\Delta\). A side bar stretches by the part of the drop along it, \(\Delta\cos\theta\), over its longer length. Its strain is \(\cos^{2}\theta\) times the middle bar's, and so is its force:</p>
+\[
+N_s = N_m\cos^{2}\theta
+\]
+<p>Vertical equilibrium is \(N_m + 2N_s\cos\theta = P\). Put the compatibility in and solve:</p>
+\[
+N_m = \frac{P}{1 + 2\cos^{3}\theta}
+\]
+<p>At \(\theta = 0\) the bars are parallel and each carries \(P/3\). As the sides lean out they get longer and point away from the load, and the middle bar takes more.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · three hangers at 30°</span>
+<p>The middle bar is 1.2 m, the sides lean 30°, every bar is 300 mm² of steel, and \(P = 60\) kN. Then \(\cos^{3}30^\circ = 0.650\) and</p>
+\[
+N_m = 26.1\ \mathrm{kN}
+\]
+<p>Each side carries \(0.75\times 26.1 = 19.6\) kN. The check is equilibrium: \(26.1 + 2(19.6)(0.866) = 60.0\) kN. The stresses are 87.0 MPa in the middle and 65.2 MPa at the sides. The joint drops \(N_mL/AE = 0.522\) mm.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · splay the sides to 60°</span>
+<p>Lean the side bars out to 60°. Now \(\cos^{3}60^\circ = 0.125\), so the middle bar carries \(60/1.25 = 48\) kN. Each side carries \(0.25\times 48 = 12\) kN. The middle bar's stress rises to 160 MPa. Wide-splayed side bars barely help hold a vertical load.</p>
+</div>
+<div class="box why"><span class="tag">Any number of bars</span>
+<p>Section 3's projection works for every bar at once. Bar \(i\) pulls with \(N_i = k_i\,\mathbf{e}_i\cdot\mathbf{d}\), where \(k_i = AE/L\). Equilibrium of the joint is then</p>
+\[
+\Big(\sum_i k_i\,\mathbf{e}_i\mathbf{e}_i^{\mathsf T}\Big)\mathbf{d} = \mathbf{F}
+\]
+<p>That is a 2×2 solve for the joint move, however many bars there are. Two bars or ten, determinate or not, it is the same step. The course's checks solve the bracket and the three hangers this way and reach the same forces.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>An even split, \(P/3\), holds only when the bars are parallel. Writing \(1 + 2\cos\theta\) forgets that the side bar is longer and that its force acts at an angle: the three cosines come from the projection, the length and the equilibrium. Saying the side bar stretches \(\Delta/\cos\theta\) projects the wrong way.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The ceiling is rigid, the bars are elastic, and they share one \(A\) and \(E\). Different bars change each \(k_i\) and break the symmetry, so the joint moves sideways too. If the middle bar yields first, the side bars pick up the rest. That plastic story is outside this course (D37).</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec7/">2.001 lecture 7</a> closes indeterminate problems with one displacement condition per extra unknown.</p>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Thermal stress</h2>
 <p>A free bar of length \(L\) grows by \(\alpha\Delta T\, L\) when the temperature rises. Fasten the ends so the length cannot change. The anchors have to push that growth back. The mechanical strain is \(-\alpha\Delta T\), and the stress is</p>
 \[
 \sigma = -E\alpha\Delta T
@@ -178,13 +260,9 @@ R_L = 16\ \mathrm{kN}
 </div>
 <p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec14/">2.001 lecture 15</a> adds temperature to the stress-strain relation. The per-°C form of the stress is the one-dimensional case.</p>
 </section>
-</div>
 
-<div class="part">
-<h3>Part 3 · A gap, then the sheet <span class="sub">| closure | formulas | Reference</span></h3>
-
-<section class="topic" id="s5">
-<h2><span class="n">05</span>A joint that must close</h2>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>A joint that must close</h2>
 <p>A gap changes the story. The rail expands freely until the free expansion equals the gap. Up to that temperature the stress is zero. Past it, only the extra expansion is pushed back. The closing temperature is</p>
 \[
 \Delta T_{\mathrm{close}} = \frac{\mathrm{gap}}{\alpha L}
@@ -216,8 +294,70 @@ R_L = 16\ \mathrm{kN}
 </div>
 </section>
 
-<section class="topic" id="s6">
-<h2><span class="n">06</span>Formula sheet</h2>
+</div>
+
+<div class="part">
+<h3>Part 3 · Where the stress gathers <span class="sub">| hole | slot | strip | formulas</span></h3>
+
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Stress at a hole</h2>
+<p>\(N/A\) is an average. Near a hole the lines of force bend around the opening and crowd its edge. The stress there is a multiple of the average. The multiple is the stress-concentration factor:</p>
+\[
+K_t = \frac{\sigma_{\max}}{\sigma_{\mathrm{nom}}}
+\]
+<p>\(K_t\) is defined on a stated nominal stress. Change which area the nominal uses and \(K_t\) changes with it.</p>
+<div class="box why"><span class="tag">The circular hole</span>
+<p>Pull a wide plate with a stress \(S\) along \(x\). Drill a hole of radius \(a\). The elastic solution, due to Kirsch and worked in Roylance §5.1, gives the hoop stress on the hole's edge as</p>
+\[
+\sigma_\theta = S\,(1 - 2\cos 2\theta)
+\]
+<p>with \(\theta\) measured from the load axis. Across the load, at \(\theta = 90^\circ\), that is \(3S\). On the load axis it is \(-S\), a compression. Along the line across the load the stress is</p>
+\[
+\sigma = S\left(1 + \frac{a^{2}}{2r^{2}} + \frac{3a^{4}}{2r^{4}}\right)
+\]
+<p>It is \(3S\) at the edge, \(1.22S\) one radius out and \(1.07S\) two radii out. The peak is local. The extra stress under that bump adds up to \(S\,a\) per unit thickness. That is exactly the force the hole removed from the section. Equilibrium still holds.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a pinhole and a large hole</span>
+<p>A wide steel plate carries 40 MPa. A 2 mm hole and a 20 mm hole both see 120 MPa at the edge. The 3 contains no size. The size sets how far the bump reaches: 1.22 times the far stress sits 2 mm from the small hole's centre and 20 mm from the large one's.</p>
+</div>
+<div class="box why"><span class="tag">Sharpness, not size</span>
+<p>Inglis solved the elliptical hole. With half-axis \(a\) across the load and \(b\) along it, the peak is</p>
+\[
+K_t = 1 + \frac{2a}{b}
+\]
+<p>A circle has \(a = b\) and gives 3 again. The tip radius of the ellipse is \(\rho = b^{2}/a\), so the same result reads \(1 + 2\sqrt{a/\rho}\). A crack has a tip radius near zero and a very large \(K_t\). Drilling a small hole at a crack tip raises \(\rho\). That is why a stop hole slows a crack in a windshield or a skin panel.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one slot, two ways round</span>
+<p>An elliptical slot 20 mm long and 4 mm wide sits in a wide plate at 40 MPa. Across the load, \(a = 10\) mm and \(b = 2\) mm, so \(K_t = 11\) and the edge sees</p>
+\[
+\sigma_{\max} = 440\ \mathrm{MPa}
+\]
+<p>That is past the 250 MPa yield of A36 steel. Turn the slot to run along the load. Now \(a = 2\) mm and \(b = 10\) mm, so \(K_t = 1.4\) and the edge sees 56 MPa. The same cut differs by a factor of 7.9 with its orientation.</p>
+</div>
+<div class="box why"><span class="tag">A hole in a strip</span>
+<p>A real bar is not infinitely wide. A hole of diameter \(d\) in a strip of width \(w\) and thickness \(t\) leaves the net area \((w-d)t\). Measured \(K_t\) curves, on the net stress \(P/((w-d)t)\), follow Heywood's fit closely:</p>
+\[
+K_t = 2 + \left(1 - \frac{d}{w}\right)^{3}
+\]
+<p>As \(d/w\) goes to zero it returns to 3. A wider hole lowers \(K_t\) on the net stress. The net stress itself rises faster, so the peak still grows.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a bolt hole in a flat bar</span>
+<p>A steel bar 60 mm wide and 10 mm thick has a 12 mm hole and carries 30 kN. The net area is 480 mm², so the net stress is 62.5 MPa. With \(d/w = 0.2\), \(K_t = 2 + 0.8^{3} = 2.51\), and</p>
+\[
+\sigma_{\max} = 157\ \mathrm{MPa}
+\]
+<p>The second view is the wide-plate estimate: the gross stress is 50 MPa, and three times that is 150 MPa. The finite width adds about 5%.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(K_t\) multiplies the nominal stress it was measured on. Heywood's factor on the gross stress gives 126 MPa here, which is low. Three is the wide-plate circle only. A slot across the load is far worse, and the same slot along the load is milder. In a wide plate a bigger round hole does not raise the peak.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The plate is elastic and thin. Under one steady load a ductile metal yields in a small zone at the edge and spreads the load, so the peak matters most for fatigue and for brittle materials. Shoulder fillets and grooves have their own \(K_t\) charts, which this course does not reproduce. Plastic redistribution is outside the course (D37).</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">09</span>Formula sheet</h2>
 <p>Elongation of one piece, and the sum along the bar:</p>
 \[
 \delta = \frac{NL}{AE}
@@ -236,6 +376,13 @@ R_L = P\frac{L-a}{L}
 \[
 R_R = P - R_L
 \]
+<p>A truss joint: each bar's change of length is the joint move projected on the bar. Three symmetric hangers:</p>
+\[
+\delta_i = u\cos\theta_i + v\sin\theta_i
+\]
+\[
+N_m = \frac{P}{1+2\cos^{3}\theta}
+\]
 <p>A fastened bar with a temperature change, and the temperature that closes a gap:</p>
 \[
 \sigma = -E\alpha\Delta T
@@ -243,7 +390,17 @@ R_R = P - R_L
 \[
 \Delta T_{\mathrm{close}} = \frac{\mathrm{gap}}{\alpha L}
 \]
-<p>Citations: Roylance §1.1 for the elastic elongation. They are cited by those topic names. The modulus and the thermal coefficient are the AISC values for structural steel. The lengths, areas and the joint gap drawn in the labs are assumed.</p>
+<p>Stress concentration: a circular hole in a wide plate, an elliptical hole, and a hole in a strip on the net stress:</p>
+\[
+K_t = 3
+\]
+\[
+K_t = 1 + \frac{2a}{b}
+\]
+\[
+K_t = 2 + \left(1 - \frac{d}{w}\right)^{3}
+\]
+<p>Citations: Roylance §1.1 for the elastic elongation, Roylance §2.1 for truss joints, and Roylance §5.1 for the hole. Indeterminate bars and thermal stress are cited by those topic names. The modulus and the thermal coefficient are the AISC values for structural steel. The lengths, areas and the joint gap drawn in the labs are assumed.</p>
 </section>
 </div>
 </main>
