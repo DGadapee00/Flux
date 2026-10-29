@@ -54,6 +54,9 @@ export const SECTIONS = Object.freeze({
   'inclined-plane': { book: 'roylance', section: '3.3', title: 'Tensor Transformations' },
   'stress-transformation': { book: 'roylance', section: '3.3', title: 'Tensor Transformations' },
   'mohr': { book: 'roylance', section: '3.3', title: 'Tensor Transformations' },
+  'strain-transformation': { book: 'roylance', section: '3.3', title: 'Tensor Transformations' },
+  'strain-circle': { book: 'roylance', section: '3.3', title: 'Tensor Transformations' },
+  'rosette': { book: 'roylance', section: '3.3', title: 'Tensor Transformations' },
 
   // Chapter 4: Bending
   'internal-loads': { book: 'roylance', section: '4.1', title: 'Shear and Bending Moment Diagrams' },

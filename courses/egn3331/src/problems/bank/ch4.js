@@ -1,6 +1,7 @@
 /**
  * Axial load. Elongation of a uniform bar, a step, a taper, a bar fixed at both ends,
- * thermal stress in a held rail, a joint gap, and the same rail in ksi and °F.
+ * thermal stress in a held rail, a joint gap, and the same rail in ksi and °F; a bracket joint
+ * that moves, three hangers sharing a load, and the peak stress at a hole.
  * Each numeric answer is computed again a second way.
  */
 import { PA_PER_PSI } from '@flux/subjects/convert.js';

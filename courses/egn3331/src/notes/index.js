@@ -65,7 +65,10 @@ export const NOTES = {
       { id: 's3', n: 3, title: 'A propane cylinder', lab: 'tank', ch: ['8'], topics: ['pressure-vessels', 'english'] },
       { id: 's4', n: 4, title: "Hooke's law in three directions", lab: 'strain3', ch: ['10'], topics: ['poisson'] },
       { id: 's5', n: 5, title: 'The stress a gauge does not name', lab: 'strain3', ch: ['10'], topics: ['hidden'] },
-      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
+      { id: 's6', n: 6, title: 'Strain on a turned axis', lab: null, ch: ['10'], topics: ['strain-transformation'] },
+      { id: 's7', n: 7, title: "Mohr's circle for strain", lab: null, ch: ['10'], topics: ['strain-circle'] },
+      { id: 's8', n: 8, title: 'Strain rosettes', lab: null, ch: ['10'], topics: ['rosette'] },
+      { id: 's9', n: 9, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
   u5: {
