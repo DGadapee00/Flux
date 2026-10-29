@@ -2,7 +2,7 @@ import { M_PER_FT, M_PER_IN, N_PER_LBF, PA_PER_PSI } from '@flux/subjects/conver
 import { circleArea, permanentSet } from '@flux/subjects/mechanics/materials.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, alpha, axes, begin, dot, line, plotIn } from './diagram.js';
+import { C, alpha, arrow, axes, begin, chartIn, dot, hidden, label, line, panes, poly, sceneIn, wall } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, leavesOut, showField, slider } from './widgets.js';
 
@@ -101,9 +101,31 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [top, rest] = panes(B, 0.38, { long: true });
+    // The rod between its anchor and the pull, stretched in the drawing so 24 kip moves the end
+    // a tenth of the length. Past yield it turns red, and the faint rod is where it would come
+    // back to if released.
+    const Lr = 10;
+    const dTop = elongation(24 * 1000 * N_PER_LBF, c.L).delta;
+    const kx = (0.1 * Lr) / Math.max(dTop / c.L * Lr, 1e-12);
+    const S = sceneIn(B, top, { x0: -0.8, x1: Lr * 1.22, y0: -1.2, y1: 1.2 }, 8);
+    wall(S, 0, -0.9, 0.9, { side: -1 });
+    const end = Lr + kx * (c.delta / c.L) * Lr;
+    const setEnd = Lr + kx * c.set * Lr;
+    const over = c.stress > c.Fy;
+    if (over) poly(S, [[0, -0.12], [setEnd, -0.12], [setEnd, 0.12], [0, 0.12]], { fill: null, stroke: alpha(C.gold, 0.7), dash: [4, 4] });
+    poly(S, [[0, -0.12], [end, -0.12], [end, 0.12], [0, 0.12]], { fill: alpha(over ? C.red : C.text, over ? 0.35 : 0.15), stroke: over ? C.red : C.text, width: 1.5 });
+    if (c.P > 0) arrow(S, [end, 0], 0, 18 + 30 * Math.min(1, c.P / (24 * 1000 * N_PER_LBF)), { color: C.pink });
+    if (!veiled) {
+      label(S, `${fig(c.P / (1000 * N_PER_LBF))} kip`, [end, 0], { color: C.pink, dx: 26, dy: -14 });
+      label(S, `3/4 in rod, 10 ft · stretch ×${fig(kx / 1)}`, [0, -0.5], { color: C.dim, align: 'left', dy: 10 });
+      if (over) label(S, 'set if released', [setEnd, 0.12], { color: C.gold, dy: -12, align: 'right' });
+    }
+    if (veiled) return;
     const pHi = 24 * 1000 * N_PER_LBF;
     const dHi = elongation(pHi, c.L).delta / M_PER_IN;
-    const P = plotIn(B, B.free, { lo: 0, hi: 24 }, { lo: 0, hi: Math.max(dHi, 0.2) });
+    const P = chartIn(B, rest, { lo: 0, hi: 24 }, { lo: 0, hi: Math.max(dHi, 0.2) });
     axes(P, { xLabel: 'load (kip)', yLabel: 'elongation (in)' });
     const pts = [];
     for (let i = 0; i <= 48; i++) {

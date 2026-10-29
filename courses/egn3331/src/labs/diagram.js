@@ -591,3 +591,38 @@ export function couple(P, at, { r = 16, ccw = true, color = C.pink, label: text 
   ctx.restore();
   if (text) label(P, text, at, { color, dy: -r - 9 });
 }
+
+/**
+ * The drawing and the chart: side by side when the space is wider than tall (a desktop, or a
+ * phone's short band), stacked otherwise; `long` members prefer stacking. `share` is the drawing's part.
+ */
+export function panes(B, share = 0.42, { long = false } = {}) {
+  const f = B.free;
+  const W = f.x1 - f.x0;
+  const H = f.y1 - f.y0;
+  // A long member (a bar or a beam) reads better stacked over its chart unless the space is wide.
+  const side = long ? W > 1.6 * H && W > 560 : W > 1.15 * H;
+  if (side) {
+    const xm = f.x0 + W * share;
+    return [{ ...f, x1: xm }, { ...f, x0: xm }];
+  }
+  const ym = f.y0 + H * share;
+  return [{ ...f, y1: ym }, { ...f, y0: ym }];
+}
+
+/**
+ * A straight member along x from 0 to L, `half(x)` its half-depth, drawn twice: faint where it
+ * started, and solid where it went, every point moved by `u(x)` times the exaggeration `k`.
+ * Vertical ticks every L/n mark material points, so a stretch shows as ticks spreading apart.
+ */
+export function stretchedBar(S, L, half, u, { k = 1, n = 8, fill = alpha(C.text, 0.1), stroke = C.text, tick = C.gold } = {}) {
+  const xs = Array.from({ length: 41 }, (_, i) => (L * i) / 40);
+  const outline = (shift) => [...xs.map((x) => [x + shift(x), half(x)]), ...xs.slice().reverse().map((x) => [x + shift(x), -half(x)])];
+  poly(S, outline(() => 0), { fill: null, stroke: alpha(C.text, 0.25), dash: [4, 4] });
+  poly(S, outline((x) => k * u(x)), { fill, stroke, width: 1.5 });
+  for (let i = 0; i <= n; i++) {
+    const x = (L * i) / n;
+    const X = x + k * u(x);
+    seg(S, [X, -half(x)], [X, half(x)], { color: tick, width: 1.5 });
+  }
+}

@@ -1,7 +1,8 @@
 import { barElongation, taperedElongation } from '@flux/subjects/mechanics/materials.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, alpha, axes, begin, dot, line, plotIn } from './diagram.js';
+import { PLAY, advance, playing } from '@flux/shells/engineering/motion.js';
+import { C, alpha, arrow, axes, begin, chartIn, dot, hidden, label, line, panes, sceneIn, stretchedBar, wall } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, showField, slider } from './widgets.js';
 
@@ -25,6 +26,7 @@ function apply(id, state) {
   const sc = SCENARIOS.find((s) => s.id === id) || SCENARIOS[0];
   Object.assign(state, {
     scenarioId: sc.id, kind: sc.kind, P: sc.P, Q: sc.Q, L1: sc.L1, A1: sc.A1, A2: sc.A2,
+    vis: 1, anim: { playing: false }, show: { play: false },
   });
 }
 
@@ -87,6 +89,12 @@ export default defineLab({
   exam: 'u3',
   title: 'Axial bar',
   hint: 'The free end moves by the sum of NL/AE. A step in the force, or in the area, changes the slope of that sum.',
+  keys: { ' ': 'sweep' },
+  toggles: [PLAY],
+  // Play applies the load in the drawing, from nothing to its full value; the numbers stay at full load.
+  tick(dt, state) {
+    return advance(state, dt, { lo: 0, hi: 1.25, rate: 0.5, key: 'vis' });
+  },
   scenarios: SCENARIOS,
   defaultState() {
     const s = {};
@@ -101,7 +109,7 @@ export default defineLab({
     return `
       ${slider('ax-P', 'end load P (kN)', 20, 0, 60, 1)}
       ${slider('ax-Q', 'step load Q (kN)', 12, 0, 40, 1)}
-      <p class="tiny">The bar is fixed at the left. P pulls the free end. Q pulls at the step. E = 200 GPa. On the taper, the two diameters replace the two areas.</p>`;
+      <p class="tiny">The bar is fixed at the left. P pulls the free end. Q pulls at the step. E = 200 GPa. On the taper, the two diameters replace the two areas. The drawing exaggerates the stretch; gold ticks are fixed points of the material, and they spread most where N/AE is largest. Play applies the load.</p>`;
   },
   bind(api) {
     bindSlider('ax-P', (s, v) => { s.P = v * 1e3; }, api);
@@ -122,11 +130,45 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [top, bottom] = panes(B, 0.5, { long: true });
+    const lam = playing(state) ? Math.min(1, Number(state.vis) || 0) : 1;
+    const taper = state.kind === 'taper';
+    // Depth drawn from the size of the section: the square root of the area, or the diameter.
+    const size = taper
+      ? (x) => (state.A1 + (state.A2 - state.A1) * (x / c.L))
+      : (x) => Math.sqrt(x <= state.L1 ? state.A1 : state.A2);
+    const big = taper ? Math.max(state.A1, state.A2) : Math.sqrt(Math.max(state.A1, state.A2));
+    const half = (x) => (0.16 * c.L * size(x)) / big;
+    // Displacement along the bar, from the samples; drawn so the free end moves a tenth of L.
+    const u = (x) => {
+      const s = c.samples;
+      const i = Math.min(s.length - 2, Math.max(0, Math.floor((x / c.L) * (s.length - 1))));
+      const [x0, u0] = s[i];
+      const [x1, u1] = s[i + 1];
+      return lam * (u0 + ((u1 - u0) * (x - x0)) / Math.max(x1 - x0, 1e-12));
+    };
+    const k = c.delta > 0 ? (0.1 * c.L) / c.delta : 1;
+    const S = sceneIn(B, top, { x0: -0.06 * c.L, x1: 1.3 * c.L, y0: -0.24 * c.L, y1: 0.24 * c.L }, 8);
+    wall(S, 0, -0.22 * c.L, 0.22 * c.L, { side: -1 });
+    stretchedBar(S, c.L, half, u, { k, n: 10 });
+    const end = c.L + k * u(c.L);
+    if (state.P > 0) arrow(S, [end, 0], 0, 26 + 18 * lam, { color: C.pink });
+    if (!taper && state.Q > 0) {
+      const xs = state.L1 + k * u(state.L1);
+      arrow(S, [xs, half(state.L1) + 0.03 * c.L], 0, 16 + 12 * lam, { color: C.pink });
+      arrow(S, [xs, -half(state.L1) - 0.03 * c.L], 0, 16 + 12 * lam, { color: C.pink });
+      if (!veiled) label(S, `Q ${fig((lam * state.Q) / 1e3)} kN`, [xs, half(state.L1)], { color: C.pink, dy: -16 });
+    }
+    if (!veiled) label(S, `P ${fig((lam * state.P) / 1e3)} kN`, [end, 0], { color: C.pink, dx: 30, dy: -14 });
+    if (S.k * c.L > 240) label(S, `stretch drawn ×${fig(k)}`, [0, -0.22 * c.L], { color: C.dim, align: 'left', dy: 6 });
+    if (veiled) return;
+
     const yHi = Math.max(...c.samples.map((p) => p[1]), 1e-6) * 1.15;
-    const P = plotIn(B, B.free, { lo: 0, hi: c.L }, { lo: 0, hi: yHi * 1e3 });
+    const P = chartIn(B, bottom, { lo: 0, hi: c.L }, { lo: 0, hi: yHi * 1e3 });
     axes(P, { xLabel: 'x (m)', yLabel: 'displacement (mm)' });
-    line(P, c.samples.map(([x, u]) => [x, u * 1e3]), { color: C.teal, width: 3 });
-    if (state.kind !== 'taper') {
+    line(P, c.samples.map(([x, v]) => [x, v * 1e3]), { color: C.teal, width: 3 });
+    if (!taper) {
       line(P, [[state.L1, 0], [state.L1, yHi * 1e3]], { color: alpha(C.gold, 0.8), width: 2, dash: [5, 4] });
     }
     dot(P, c.L, c.delta * 1e3, { color: C.yellow, r: 5 });

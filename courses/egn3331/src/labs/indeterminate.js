@@ -1,7 +1,7 @@
 import { fixedFixed, fixedFixedByStiffness } from '@flux/subjects/mechanics/materials.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, alpha, axes, begin, dot, line, plotIn } from './diagram.js';
+import { C, alpha, arrow, axes, begin, chartIn, dot, hidden, label, line, panes, poly, sceneIn, wall } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, slider } from './widgets.js';
 
@@ -66,7 +66,33 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const B = begin(canvas);
-    const P = plotIn(B, B.free, { lo: 0.2, hi: 1.8 }, { lo: 0, hi: c.P / 1e3 * 1.05 });
+    const veiled = hidden();
+    const [top, rest] = panes(B, 0.4, { long: true });
+    // The bar between two walls, the load on a collar at a. The left piece stretches (red,
+    // tension) and the right piece shortens (blue, compression) by the same amount: the collar
+    // moves δ = R_L a/AE, drawn exaggerated.
+    const S = sceneIn(B, top, { x0: -0.25, x1: L + 0.25, y0: -0.75, y1: 0.75 }, 8);
+    wall(S, 0, -0.45, 0.45, { side: -1 });
+    wall(S, L, -0.45, 0.45, { side: 1 });
+    const dA = (c.left * c.a) / (A * E);
+    const xa = c.a + Math.min(0.12, 2e3 * dA);
+    const h = 0.09;
+    poly(S, [[0, -h], [xa, -h], [xa, h], [0, h]], { fill: alpha(C.red, 0.3), stroke: C.red, width: 1.5 });
+    poly(S, [[xa, -h], [L, -h], [L, h], [xa, h]], { fill: alpha(C.blue, 0.3), stroke: C.blue, width: 1.5 });
+    poly(S, [[xa - 0.03, -0.2], [xa + 0.03, -0.2], [xa + 0.03, 0.2], [xa - 0.03, 0.2]], { fill: C.text, stroke: null });
+    arrow(S, [xa + 0.03, 0.2], 0, 20 + 20 * Math.min(1, c.P / 80e3), { color: C.pink });
+    const kR = 40 / Math.max(c.P, 1);
+    if (c.left > 1) arrow(S, [0, -0.28], Math.PI, Math.max(14, kR * c.left), { color: C.text, width: 2, tail: false });
+    if (c.right > 1) arrow(S, [L, -0.28], Math.PI, Math.max(14, kR * c.right), { color: C.text, width: 2, tail: true });
+    if (!veiled) {
+      label(S, `P ${fig(c.P / 1e3)} kN`, [xa, 0.2], { color: C.pink, dy: -12, dx: 18 });
+      label(S, `${fig(c.left / 1e3)} kN`, [0, -0.28], { color: C.text, dy: 16, align: 'left', dx: 6 });
+      label(S, `${fig(c.right / 1e3)} kN`, [L, -0.28], { color: C.text, dy: 16, align: 'right', dx: -6 });
+      label(S, 'tension', [xa / 2, h], { color: C.red, dy: -10 });
+      label(S, 'compression', [(xa + L) / 2, h], { color: C.blue, dy: -10 });
+    }
+    if (veiled) return;
+    const P = chartIn(B, rest, { lo: 0.2, hi: 1.8 }, { lo: 0, hi: c.P / 1e3 * 1.05 });
     axes(P, { xLabel: 'load position a (m)', yLabel: 'wall reaction (kN)' });
     const left = [];
     const right = [];
