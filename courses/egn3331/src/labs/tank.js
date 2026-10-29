@@ -3,7 +3,8 @@ import { hoopFromSplit, thinCylinder } from '@flux/subjects/mechanics/materials.
 import { TANK_OD_IN, TANK_P, TANK_P_PSI, TANK_R, TANK_T, TANK_T_IN } from '../data/tank.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { C, alpha, axes, begin, chartIn, dot, hidden, label, line, panes, poly, sceneIn, seg } from './diagram.js';
+import { stressElement } from './elements.js';
 import { defineLab } from './define.js';
 import { bindSlider, leavesOut, slider } from './widgets.js';
 
@@ -36,6 +37,32 @@ function apply(id, state) {
 /** The DOT 4BA cylindrical wall-stress formula, evaluated at the pressure in hand. */
 function dotShell(pPsi) {
   return (pPsi * (1.3 * D * D + 0.4 * d * d)) / (D * D - d * d);
+}
+
+/**
+ * The 20 lb cylinder standing on its foot ring, its collar round the valve, and an element of the
+ * wall: hoop stress across the page, longitudinal stress up it.
+ */
+function member(B, rect, state, c, veiled) {
+  const S = sceneIn(B, rect, { x0: -1.1, x1: 2.1, y0: -1.25, y1: 1.4 }, 8);
+  const r = 0.62;
+  poly(S, [[-r, -0.75], [r, -0.75], [r, 0.75], [-r, 0.75]], { fill: alpha(C.text, 0.08), stroke: C.text, width: 2 });
+  for (const [y, s] of [[0.75, 1], [-0.75, -1]]) {
+    const pts = Array.from({ length: 25 }, (_, i) => {
+      const a = Math.PI * (i / 24);
+      return [r * Math.cos(a), y + s * 0.28 * Math.sin(a)];
+    });
+    for (let i = 1; i < pts.length; i++) seg(S, pts[i - 1], pts[i], { color: C.text, width: 2 });
+  }
+  poly(S, [[-0.5, -1.03], [0.5, -1.03], [0.5, -1.18], [-0.5, -1.18]], { fill: alpha(C.muted, 0.3), stroke: C.muted });
+  poly(S, [[-0.3, 1.0], [0.3, 1.0], [0.3, 1.3], [-0.3, 1.3]], { fill: null, stroke: C.muted });
+  stressElement(S, [0, 0], { half: 0.22, sx: c.hoop, sy: c.axial, scale: (TANK_P * TANK_R) / TANK_T, full: 30, names: false });
+  if (!veiled) {
+    label(S, `hoop ${fig(c.hoop / KSI)}`, [r, 0], { color: C.gold, dx: 8, align: 'left', dy: -8 });
+    label(S, `long. ${fig(c.axial / KSI)}`, [r, 0], { color: C.gold, dx: 8, align: 'left', dy: 8 });
+    label(S, 'ksi', [r, 0], { color: C.dim, dx: 8, align: 'left', dy: 22 });
+    label(S, `${fig(c.pPsi)} psi`, [0, -0.75], { color: C.dim, dy: -14 });
+  }
 }
 
 export default defineLab({
@@ -73,8 +100,12 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.42);
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const yHi = ((TANK_P * TANK_R) / TANK_T) / KSI * 1.1;
-    const P = plotIn(B, B.free, { lo: 0, hi: TANK_P_PSI }, { lo: 0, hi: yHi });
+    const P = chartIn(B, R, { lo: 0, hi: TANK_P_PSI }, { lo: 0, hi: yHi });
     axes(P, { xLabel: 'pressure (psi)', yLabel: 'stress (ksi)' });
     const hoop = [];
     const axial = [];

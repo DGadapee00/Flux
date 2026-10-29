@@ -1,7 +1,8 @@
 import { hooke3, hooke3Deviator } from '@flux/subjects/mechanics/materials.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { C, axes, begin, chartIn, circle, dot, hidden, label, line, panes, poly, sceneIn } from './diagram.js';
+import { stressElement } from './elements.js';
 import { defineLab } from './define.js';
 import { bindSlider, slider } from './widgets.js';
 
@@ -23,6 +24,30 @@ const SCENARIOS = [
 function apply(id, state) {
   const sc = SCENARIOS.find((s) => s.id === id) || SCENARIOS[0];
   Object.assign(state, { scenarioId: sc.id, sx: sc.sx, sy: sc.sy, sz: sc.sz, nu: 0.3 });
+}
+
+/**
+ * The element in the x–y plane: dashed as it was, solid as it strains, drawn so the largest strain
+ * shows as 15 % of a side. σz acts out of the page; it is drawn as a dot in a circle.
+ */
+function member(B, rect, state, c, veiled) {
+  const S = sceneIn(B, rect, { x0: -1.7, x1: 1.7, y0: -1.35, y1: 1.35 }, 8);
+  const big = Math.max(Math.abs(c.ex), Math.abs(c.ey), 1e-12);
+  const k = 0.15 / big;
+  const hx = 0.5 * (1 + k * c.ex);
+  const hy = 0.5 * (1 + k * c.ey);
+  stressElement(S, [0, 0], { half: 0.5, sx: state.sx, sy: state.sy, scale: 150e6, full: 34 });
+  poly(S, [[-hx, -hy], [hx, -hy], [hx, hy], [-hx, hy]], { fill: null, stroke: C.teal, width: 2 });
+  if (Math.abs(state.sz) > 1e3) {
+    circle(S, [-1.25, 0.95], 0.12, { stroke: C.gold, width: 2 });
+    circle(S, [-1.25, 0.95], 0.03, { stroke: null, fill: C.gold });
+    label(S, 'σz', [-1.25, 0.95], { color: C.gold, dx: 18 });
+  }
+  if (!veiled) {
+    label(S, `εx ${fig(c.ex * 1e3)}‰`, [0, -1.15], { color: C.teal, dx: -48 });
+    label(S, `εy ${fig(c.ey * 1e3)}‰`, [0, -1.15], { color: C.teal, dx: 48 });
+    label(S, `εz ${fig(c.ez * 1e3)}‰`, [1.25, 0.95], { color: C.dim });
+  }
 }
 
 export default defineLab({
@@ -72,8 +97,12 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.45);
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const span = Math.max(Math.abs(c.ex), Math.abs(c.ey), Math.abs(c.ez), Math.abs(c.uni), 1e-6) * 1.3;
-    const P = plotIn(B, B.free, { lo: -50, hi: 200 }, { lo: -span * 1e3, hi: span * 1e3 });
+    const P = chartIn(B, R, { lo: -50, hi: 200 }, { lo: -span * 1e3, hi: span * 1e3 });
     axes(P, { xLabel: 'σy (MPa)', yLabel: 'strain (millistrain)' });
     const ex = [];
     const uni = [];
