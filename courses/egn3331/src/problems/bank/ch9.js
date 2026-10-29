@@ -1,18 +1,27 @@
 /**
  * Plane-stress transformation, principals, combined stress on a circular bar,
- * a trailer-ball shank in ksi, and Tresca against von Mises.
+ * a trailer-ball shank in ksi, Tresca against von Mises, the circle read backwards, the largest
+ * shear of all, and brittle fracture by Coulomb–Mohr.
  */
 import { N_PER_LBF, PA_PER_PSI } from '@flux/subjects/convert.js';
 import {
   circleSection, combinedCircle, combinedReduced, hitchSides, principal2, traction, transform,
   trescaPlane, vonMisesPlane,
 } from '@flux/subjects/mechanics/materials.js';
+import { absMaxShear, coulombMohrFS, maxNormalFS } from '@flux/subjects/mechanics/failure.js';
 import { HITCH_ARM, HITCH_D } from '../../data/hitch.js';
 import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
 
 const MPA = 1e6;
 const KSI = 1000 * PA_PER_PSI;
 const DEG = Math.PI / 180;
+
+/** The in-plane radius from the eigenvalues, a second route to R. */
+const eigenR = ($) => {
+  const avg = ($.sx + $.sy) / 2;
+  const det = $.sx * $.sy - $.txy * $.txy;
+  return Math.sqrt(Math.max(0, avg * avg - det)) / MPA;
+};
 
 const rel = (a, b) => Math.abs(a - b) > 0.05 * Math.max(Math.abs(a), Math.abs(b), 1e-9);
 
@@ -617,6 +626,272 @@ const ch9 = [
     cases: [
       kase(cite('combined-loading'), { W: 600, H: 600 }, { which: 'tension' }),
       kase(cite('combined-loading'), { W: 800, H: 40 }, { which: 'compression' }),
+    ],
+  }),
+  problem({
+    id: 'u5.9.from-principals',
+    title: 'Back from the principal axes',
+    exam: 'u5',
+    ch: '9',
+    lab: 'mohr',
+    src: cite('mohr-construction'),
+    topics: ['mohr-construction'],
+    variety: ['representation'],
+    level: 2,
+    vars: {
+      s1: range(40, 140, 5, 'MPa', MPA),
+      s2: range(-80, 60, 5, 'MPa', MPA),
+      th: range(-60, 60, 5, '°', 1),
+    },
+    derive: ($) => transform($.s1, $.s2, 0, -$.th),
+    valid: ($) => $.s1 - $.s2 >= 30 * MPA && Math.abs($.th) >= 10 && Math.abs(Math.abs($.th) - 45) >= 5
+      && Math.abs($.sx) <= 150 * MPA && Math.abs($.sy) <= 100 * MPA && $.sy >= -100 * MPA,
+    text: (T) => String.raw`An element's principal stresses are $\sigma_1 = ${T.s1}$ MPa and $\sigma_2 = ${T.s2}$ MPa. The axis of $\sigma_1$ is turned $${T.th}^\circ$ counterclockwise from $x$ (a negative angle is clockwise). Find $\sigma_x$, $\sigma_y$ and $\tau_{xy}$.`,
+    parts: [
+      num('sx', ($) => $.sx, 'MPa', {
+        scale: MPA,
+        abs: 0.2,
+        label: 'σx',
+        traps: [
+          [($) => ($.s1 + $.s2) / 2 + (($.s1 - $.s2) / 2) * Math.cos($.th * DEG), 'The circle turns $2\\theta$, not $\\theta$. That reads a plane half as far round.'],
+        ],
+      }),
+      num('sy', ($) => $.sy, 'MPa', { scale: MPA, abs: 0.2, label: 'σy' }),
+      num('txy', ($) => $.txy, 'MPa', {
+        scale: MPA,
+        abs: 0.2,
+        label: 'τxy',
+        traps: [
+          [($) => -$.txy, 'Right size, wrong sign. The x axis is turned $-\\theta$ from the $\\sigma_1$ axis, so the shear takes the sign of $\\sin(-2\\theta)$ times $-(\\sigma_1-\\sigma_2)/2$.'],
+        ],
+      }),
+    ],
+    hints: [
+      'On the principal axes the circle\'s point sits at $\\sigma_1$ on the axis. The x face is the same circle, turned back by twice the angle.',
+      String.raw`Centre $(\sigma_1+\sigma_2)/2$, radius $(\sigma_1-\sigma_2)/2$. The x axis is $-\theta$ from the $\sigma_1$ axis, so use the transformation from the principal element with angle $-\theta$.`,
+    ],
+    steps: ($, sig) => {
+      const C = ($.s1 + $.s2) / 2;
+      const R = ($.s1 - $.s2) / 2;
+      return [
+        String.raw`Centre $${sig(C / MPA)}$ MPa, radius $${sig(R / MPA)}$ MPa.`,
+        String.raw`Turn by $2(-${sig($.th)}^\circ)$: $\sigma_x = C + R\cos 2\theta = ${sig($.sx / MPA)}$ MPa and $\sigma_y = C - R\cos 2\theta = ${sig($.sy / MPA)}$ MPa.`,
+        String.raw`$\tau_{xy} = R\sin 2\theta = ${sig($.txy / MPA)}$ MPa, with $\theta$ the angle from x to $\sigma_1$.`,
+      ];
+    },
+    second: ($) => {
+      // Rebuild the matrix R diag(σ1, σ2) Rᵀ, with the σ1 axis at θ.
+      const c = Math.cos($.th * DEG);
+      const s = Math.sin($.th * DEG);
+      return {
+        sx: ($.s1 * c * c + $.s2 * s * s) / MPA,
+        sy: ($.s1 * s * s + $.s2 * c * c) / MPA,
+        txy: (($.s1 - $.s2) * s * c) / MPA,
+      };
+    },
+    sim: {
+      scenario: 'principal',
+      setup(s, $) {
+        s.sx = $.s1;
+        s.sy = $.s2;
+        s.txy = 0;
+        s.theta = -$.th;
+      },
+      read: (c) => ({ sx: c.sx, sy: c.sy, txy: c.txy }),
+    },
+    cases: [kase(cite('mohr-construction'), { s1: 92.4264, s2: 7.5736, th: 22.5 }, { sx: 80, sy: 20, txy: 30 })],
+  }),
+
+  problem({
+    id: 'u5.9.abs-shear',
+    title: 'The largest shear in the part',
+    exam: 'u5',
+    ch: '9',
+    lab: 'mohr',
+    src: cite('abs-max-shear'),
+    topics: ['abs-max-shear'],
+    variety: ['configuration'],
+    level: 2,
+    vars: {
+      sx: range(-100, 140, 10, 'MPa', MPA),
+      sy: range(-100, 140, 10, 'MPa', MPA),
+      txy: range(-50, 50, 5, 'MPa', MPA),
+    },
+    derive: ($) => absMaxShear($.sx, $.sy, $.txy),
+    valid: ($) => Math.abs($.sx - $.sy) >= 20 * MPA || Math.abs($.txy) >= 10 * MPA,
+    text: (T) => String.raw`A point on the free surface of a part carries $\sigma_x = ${T.sx}$ MPa, $\sigma_y = ${T.sy}$ MPa and $\tau_{xy} = ${T.txy}$ MPa. Find the largest in-plane shear stress and the largest shear stress on any plane through the point.`,
+    parts: [
+      num('inPlane', ($) => $.inPlane, 'MPa', {
+        scale: MPA,
+        label: 'in-plane',
+        traps: [
+          [($) => $.s1 - $.s2, 'That is $\\sigma_1 - \\sigma_2$, the diameter. The largest shear is the radius.'],
+        ],
+      }),
+      num('abs', ($) => $.abs, 'MPa', {
+        scale: MPA,
+        label: 'absolute',
+        traps: [
+          [($) => $.inPlane, 'That is the in-plane radius. With both principals of one sign, the circle through zero is larger.'],
+          [($) => 2 * $.abs, 'That is the whole spread of the principals. The shear is half of it.'],
+        ],
+      }),
+    ],
+    hints: [
+      'A free surface has a third principal stress, zero. Each pair of the three principals draws a circle.',
+      String.raw`Find $\sigma_1$ and $\sigma_2$ from the centre and radius. The largest shear of all is half the spread of $\sigma_1$, $\sigma_2$ and 0.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Centre $${sig(($.sx + $.sy) / 2 / MPA)}$ MPa, radius $R = ${sig($.inPlane / MPA)}$ MPa, so $\sigma_1 = ${sig($.s1 / MPA)}$ and $\sigma_2 = ${sig($.s2 / MPA)}$ MPa.`,
+      ($.outOfPlane
+        ? String.raw`Both principals share a sign, so zero lies outside them. The largest circle runs from 0 to $${sig((Math.abs($.s1) > Math.abs($.s2) ? $.s1 : $.s2) / MPA)}$ MPa.`
+        : String.raw`Zero lies between $\sigma_2$ and $\sigma_1$, so the in-plane circle is the largest.`),
+      String.raw`$\tau_{\mathrm{abs}} = ${sig($.abs / MPA)}$ MPa.`,
+    ],
+    second: ($) => ({ inPlane: eigenR($), abs: trescaPlane($.sx, $.sy, $.txy) / 2 / MPA }),
+    sim: {
+      scenario: 'general',
+      setup(s, $) {
+        s.sx = $.sx;
+        s.sy = $.sy;
+        s.txy = $.txy;
+      },
+      read: (c) => ({ inPlane: c.R, abs: c.tauAbs }),
+    },
+    cases: [
+      kase(cite('abs-max-shear'), { sx: 80, sy: 40, txy: 0 }, { inPlane: 20, abs: 40 }),
+      kase(cite('abs-max-shear'), { sx: 0, sy: 0, txy: 50 }, { inPlane: 50, abs: 50 }),
+    ],
+  }),
+
+  problem({
+    id: 'u5.9.brittle',
+    title: 'Factor of safety for cast iron',
+    exam: 'u5',
+    ch: '9',
+    lab: 'mohr',
+    src: cite('brittle'),
+    topics: ['brittle'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      sut: range(150, 250, 10, 'MPa', MPA),
+      ratio: range(3, 4, 0.5, '', 1),
+      sx: range(-100, 100, 10, 'MPa', MPA),
+      sy: range(-100, 60, 10, 'MPa', MPA),
+      txy: range(-60, 60, 5, 'MPa', MPA),
+    },
+    derive: ($) => {
+      const suc = $.ratio * $.sut;
+      const p = principal2($.sx, $.sy, $.txy);
+      return {
+        suc,
+        p1: p.s1,
+        p2: p.s2,
+        cm: coulombMohrFS($.sx, $.sy, $.txy, $.sut, suc),
+        mns: maxNormalFS($.sx, $.sy, $.txy, $.sut, suc),
+      };
+    },
+    // Mixed signs only: there the two rules part company.
+    valid: ($) => $.p1 > 10 * MPA && $.p2 < -10 * MPA && $.cm > 1 && $.cm < 6 && rel($.cm, $.mns),
+    text: (T, $) => String.raw`A gray-iron bracket has an ultimate tensile strength of $${T.sut}$ MPa and an ultimate compressive strength of $${Math.round($.suc / MPA)}$ MPa. At its critical point $\sigma_x = ${T.sx}$ MPa, $\sigma_y = ${T.sy}$ MPa and $\tau_{xy} = ${T.txy}$ MPa. Find the factor of safety against fracture by Coulomb–Mohr, and by the maximum normal stress.`,
+    parts: [
+      num('cm', ($) => $.cm, '', {
+        label: 'Coulomb–Mohr',
+        traps: [
+          [($) => 1 / ($.p1 / $.sut + $.p2 / $.suc), 'The compressive principal entered with the wrong sign. In $\\sigma_{\\max}/\\sigma_{ut} - \\sigma_{\\min}/\\sigma_{uc}$ a negative $\\sigma_{\\min}$ adds.'],
+          [($) => $.sut / vonMisesPlane($.sx, $.sy, $.txy), 'That is von Mises against the tensile strength, a ductile yield rule. Cast iron breaks; it does not yield.'],
+        ],
+      }),
+      num('mns', ($) => $.mns, '', {
+        label: 'maximum normal stress',
+        traps: [
+          [($) => $.sut / Math.abs($.p2), 'That compares the compressive principal with the tensile strength. Compression is limited by $\\sigma_{uc}$.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Cast iron is brittle and much stronger in compression. Find the principal stresses first; both rules use them.',
+      String.raw`With $\sigma_1 > 0 > \sigma_2$: Coulomb–Mohr gives $n = 1/(\sigma_1/\sigma_{ut} - \sigma_2/\sigma_{uc})$. The maximum normal stress takes the smaller of $\sigma_{ut}/\sigma_1$ and $\sigma_{uc}/|\sigma_2|$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$\sigma_1 = ${sig($.p1 / MPA)}$ MPa and $\sigma_2 = ${sig($.p2 / MPA)}$ MPa.`,
+      String.raw`Coulomb–Mohr: $n = 1/(${sig($.p1 / MPA)}/${sig($.sut / MPA)} + ${sig(-$.p2 / MPA)}/${sig($.suc / MPA)}) = ${sig($.cm)}$.`,
+      String.raw`Maximum normal stress: the smaller of $${sig($.sut / $.p1)}$ and $${sig($.suc / -$.p2)}$, so $n = ${sig($.mns)}$.`,
+    ],
+    second: ($) => {
+      // Scale the stress until its circle touches the straight envelope through the two test circles.
+      const beta = ($.sut - $.suc) / ($.sut + $.suc);
+      const alpha = ($.sut * $.suc) / ($.sut + $.suc);
+      const c = ($.p1 + $.p2) / 2;
+      const r = ($.p1 - $.p2) / 2;
+      return { cm: alpha / (r - beta * c), mns: Math.min($.sut / $.p1, $.suc / -$.p2) };
+    },
+    sim: {
+      scenario: 'general',
+      setup(s, $) {
+        s.sx = $.sx;
+        s.sy = $.sy;
+        s.txy = $.txy;
+      },
+      read: (c, state, $) => ({ mns: Math.min($.sut / c.s1, ($.ratio * $.sut) / -c.s2) }),
+    },
+    cases: [kase(cite('brittle'), { sut: 200, ratio: 3.5, sx: 50, sy: -100, txy: 0 }, { cm: 2.5454545454545454, mns: 4 })],
+  }),
+
+  problem({
+    id: 'u5.9.twist-break',
+    title: 'Where a twisted bar breaks',
+    exam: 'u5',
+    ch: '9',
+    lab: 'mohr',
+    src: cite('brittle'),
+    kind: 'conceptual',
+    topics: ['brittle', 'yield'],
+    variety: ['representation'],
+    level: 1,
+    vars: {
+      mat: choice(
+        ['chalk', 'a stick of chalk'],
+        ['iron', 'a gray cast-iron rod'],
+        ['steel', 'a mild-steel rod'],
+        ['al', 'an annealed aluminium rod'],
+      ),
+      d: range(8, 30, 1, 'mm', 1e-3),
+    },
+    text: (T) => String.raw`${T.mat} of diameter $${T.d}$ mm is twisted until it breaks. Along which surface does it break?`,
+    parts: [
+      mc('surface', [
+        ['helix', 'A helix at 45° to the axis.', 'A brittle material breaks across its largest tension. In torsion σ1 acts at 45° to the axis, so the crack runs as a 45° helix.'],
+        ['flat', 'Flat, straight across the bar.', 'A ductile metal yields in shear first. The largest shear in torsion acts on the cross-section, so it slides apart flat.'],
+        ['split', 'Lengthwise, along the axis.', 'The lengthwise planes carry the same shear as the cross-section but no tension. A ductile bar can slip there too, but fails across the section first; a brittle one cracks across σ1.'],
+      ], ($) => ($.mat === 'chalk' || $.mat === 'iron' ? 'helix' : 'flat')),
+    ],
+    hints: [
+      'Ask first whether the material breaks across tension or yields in shear.',
+      'In pure torsion, the largest shear is on the cross-section and the largest tension is on a plane at 45°.',
+    ],
+    steps: ($) => [
+      $.mat === 'chalk' || $.mat === 'iron'
+        ? 'It is brittle, so it breaks across σ1, which is at 45° in torsion: a helix.'
+        : 'It is ductile, so it yields on the plane of largest shear, the cross-section: a flat break.',
+    ],
+    second: ($) => {
+      // Pure shear: σ1 sits 45° from the axis, and the largest shear on the 0° plane.
+      const tr = transform(0, 0, 1, 45);
+      const brittle = $.mat === 'chalk' || $.mat === 'iron';
+      return { surface: brittle && Math.abs(tr.sx - 1) < 1e-12 ? 'helix' : 'flat' };
+    },
+    sim: {
+      scenario: 'shear',
+      setup(s) {
+        s.theta = 0;
+      },
+      read: (c, state, $) => ({ surface: ($.mat === 'chalk' || $.mat === 'iron') && Math.abs(c.thetaP - 45) < 1e-9 ? 'helix' : 'flat' }),
+    },
+    cases: [
+      kase(cite('brittle'), { mat: 'chalk', d: 10 }, { surface: 'helix' }),
+      kase(cite('brittle'), { mat: 'steel', d: 20 }, { surface: 'flat' }),
     ],
   }),
 ];
