@@ -157,6 +157,13 @@ x = L - \sqrt{(L^2 - a^2)/3}
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Superposition adds deflections at one station on one set of supports. Adding each case's largest deflection, wherever it sits, overstates the total. It also needs the material to stay elastic and the slopes to stay small, or the sum is no longer the answer.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · both axles on a 20 ft bridge</span>
+<p>On a 20 ft span the Civic's 9 ft wheelbase fits with room to spare. Put the front axle 13.1 ft from the left support, so the rear axle is at 4.1 ft. Each wheel line adds its own sag at midspan, from the table's case for a load a distance b from the nearer support:</p>
+\[
+\Delta_{mid} = \frac{Pb(3L^{2} - 4b^{2})}{48EI}
+\]
+<p>The front wheel, 877 lb with \(b = 6.9\) ft, gives 0.246 in. The rear wheel, 561 lb with \(b = 4.1\) ft, gives 0.106 in. Together they sag the stringer 0.352 in. Back the car up until the front axle is at midspan and the total is only 0.311 in, because the rear axle then sits almost on the support.</p>
+</div>
 </section>
 </div>
 
@@ -226,6 +233,13 @@ M_e = -6.67\ \mathrm{kN\cdot m}
 <p>A real fixed end is never perfectly rigid. A beam bolted to a column turns a little, and its end moment falls between zero and \(wL^{2}/12\). Design tables treat that as a semi-rigid connection.</p>
 </div>
 <p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec21/">2.001 lecture 23</a> uses symmetry and superposition on statically indeterminate beams.</p>
+<div class="box ex"><span class="tag">Worked example · a car on a fixed-end bridge</span>
+<p>A 2024 Civic LX weighs 2,877 lb, 61% on the front axle. Two W8×10 stringers span 12 ft, one under each wheel line, so each takes 877 lb from the front wheels. With the front axle at midspan and the rear still off the bridge, a pinned stringer sags</p>
+\[
+\begin{aligned}\Delta &= \frac{PL^{3}}{48EI} = \frac{877(144)^{3}}{48(29\times10^{6})(30.8)} \\ &= 0.0611\ \mathrm{in}\end{aligned}
+\]
+<p>Weld the ends so they cannot turn. Each end now takes \(PL/8\), and the sag is \(PL^{3}/192EI\), a quarter: 0.0153 in. The moment under the wheel halves, from 2,632 to 1,316 lbf·ft.</p>
+</div>
 </section>
 
 <section class="topic" id="s8">

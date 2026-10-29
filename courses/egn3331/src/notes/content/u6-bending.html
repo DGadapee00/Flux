@@ -154,11 +154,11 @@ M = -4.5\ \mathrm{kN\cdot m}
 <p>A stiffer material or a deeper section bends less under the same moment. \(EI\) is the beam's bending stiffness, and Unit 8 integrates this curvature to find deflections.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · a band-saw blade</span>
-<p>A common blade for a 14 in band saw is 0.025 in thick. It runs over wheels 14 in in diameter, so it bends to a 7 in radius at every pass. The blade is steel, \(E = 29{,}000\) ksi. The outer fiber is \(t/2\) from the middle, so its stress is \(E\,t/(2\rho)\):</p>
+<p>A common blade for a 14 in band saw is 0.025 in thick and runs on 14 in wheels. Its mid-thickness bends to \(\rho = 7.0125\) in at every pass, and its outer fiber strains \((t/2)/\rho = 1{,}783\ \mu\varepsilon\). The blade is steel, \(E = 29{,}000\) ksi:</p>
 \[
-\sigma = 51.8\ \mathrm{ksi}
+\sigma = E\,\frac{t/2}{\rho} = 51.7\ \mathrm{ksi}
 \]
-<p>That is 357 MPa, from bending alone, before any tension or cut. On a 10 in wheel it would be 72.5 ksi. That is why small saws take thin blades, and why blades fail in fatigue at the wheels.</p>
+<p>A 1/2 in wide blade has \(I = 6.51\times10^{-7}\ \mathrm{in}^4\), so the moment that holds it round the wheel is \(EI/\rho = 2.69\) lbf·in. The moment is small and the stress large, because the wheel fixed the curvature, not the moment. With its 15 ksi set tension the outer fiber reaches 66.7 ksi. On a 10 in wheel the bending alone would be 72.3 ksi. That is why small saws take thin blades, and why blades fail in fatigue at the wheels.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · the lab's rectangle, curved</span>
 <p>The flexure lab's rectangle is 40 mm by 80 mm, steel at 200 GPa, carrying 2 kN·m. \(I = 1.707\times 10^{6}\) mm⁴. The curvature \(M/EI\) gives a radius</p>
@@ -300,6 +300,17 @@ M = 833\ \mathrm{lb\cdot ft}
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The section here has two axes of symmetry, so its principal axes are known. A Z or angle section has no axis of symmetry. Its principal axes come from the product of inertia, by a Mohr's circle for \(I\), and the same formula then applies on those axes.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · a purlin on a 4:12 roof</span>
+<p>A 2×6 purlin, 1.5 × 5.5 in, spans 8 ft between trusses, set square to a 4:12 roof: \(\theta = 18.4^\circ\). It carries 25 psf on a 2 ft strip, 50 lb/ft, so \(M = wL^{2}/8 = 4{,}800\) lbf·in. Split it on the board's own axes:</p>
+\[
+\begin{aligned}M_z &= 4800\cos 18.4^\circ = 4554\ \mathrm{lbf\cdot in} \\ M_y &= 4800\sin 18.4^\circ = 1518\ \mathrm{lbf\cdot in}\end{aligned}
+\]
+<p>With \(I_z = 20.8\) and \(I_y = 1.55\ \mathrm{in}^4\), the corner where both add carries</p>
+\[
+\begin{aligned}\sigma &= \frac{4554(2.75)}{20.8} + \frac{1518(0.75)}{1.55} \\ &= 602 + 736 = 1338\ \mathrm{psi}\end{aligned}
+\]
+<p>Upright the same purlin sees \(6M/bh^{2} = 635\) psi. The neutral axis sits \(\tan^{-1}[(I_z/I_y)\tan\theta] = 77.4^\circ\) from the board's width, almost along its depth.</p>
+</div>
 </section>
 
 <section class="topic" id="s9">
@@ -324,6 +335,17 @@ I_t = 164.8\times 10^{6}\ \mathrm{mm}^{4}
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The two materials are perfectly joined, so they share one strain at the interface. Real bolts slip a little, and a glued joint can creep. Reinforced concrete adds cracking: the concrete below the axis carries no tension. That cracked section is outside this course.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a flitch beam</span>
+<p>Two No. 2 Southern Pine 2×10s, 1.5 × 9.25 in, sandwich a 3/8 × 9.25 in A36 plate, bolted through. The beam spans 14 ft and carries 8 ft of floor at 50 psf: 400 lb/ft, so \(M = 9{,}800\) lbf·ft. All three parts bend to one curvature, so they add their stiffness:</p>
+\[
+\begin{aligned}\textstyle\sum EI &= (1.4\times10^{6})(197.9) \\ &\quad + (29\times10^{6})(24.7) \\ &= 994\times10^{6}\ \mathrm{lbf\cdot in^{2}}\end{aligned}
+\]
+<p>The plate carries \(717/994 = 72\%\) of the moment. At the top fiber, 4.625 in from the axis:</p>
+\[
+\begin{aligned}\sigma_w &= \frac{E_w M c}{\sum EI} = 766\ \mathrm{psi} \\ \sigma_s &= n\,\sigma_w = 20.7(766) = 15.9\ \mathrm{ksi}\end{aligned}
+\]
+<p>Without the plate the two boards would carry 2,749 psi, three times their 920 psi Fb.</p>
 </div>
 </section>
 
@@ -364,7 +386,7 @@ M = -PL
 \[
 \sigma_2 = -n\frac{My}{I_t}
 \]
-<p>Citations: Roylance §4.1 for the diagrams. Roylance §4.2 for curvature and the bending stress, and for composite beams. The joist size is PS 20. The 14 ft span is the SFPA Southern Pine table of 1 June 2013, No. 2 grade. The band-saw blade and wheel sizes are typical values, assumed. The 4 m beams, the tee, the timber and the plate are assumed.</p>
+<p>Citations: Roylance §4.1 for the diagrams. Roylance §4.2 for curvature and the bending stress, and for composite beams. The joist size is PS 20. The 14 ft span is the SFPA Southern Pine table of 1 June 2013, No. 2 grade. Blade tension of 15–20 ksi for carbon blades is from Fine Woodworking (2012); 0.025 in blades want wheels of 12 in or more (Amana Tool). The blade and wheel sizes are assumed. The 4 m beams, the tee, the timber and the plate are assumed.</p>
 </section>
 </div>
 </main>

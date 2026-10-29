@@ -97,6 +97,10 @@ subject libraries (a function written for one course serves the next), and one s
       symbolic answers and more level 3. Printed-answer cases wait on OCW access.
       Status 29 Oct: everything but the printed-answer cases is done. The D37 topics have notes,
       templates and selftested subjects code in every unit; the item closes when the cases land.
+      17 application labs on cited devices now back the D37 sections (Units 3–11): a rope bridle,
+      a stop-drilled crack, strain gauges, cast iron or steel, a flitch beam, a roof purlin, a
+      band-saw blade, strut channel, a car on a bridge, tubes in torsion, a roof truss and real
+      columns. Each section links its lab and has a worked example that opens it.
 
 ### New courses, back to back (D24)
 

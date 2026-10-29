@@ -37,16 +37,20 @@ const SCENARIOS = [
 
 function apply(id, state) {
   const sc = SCENARIOS.find((s) => s.id === id) || SCENARIOS[0];
-  Object.assign(state, { scenarioId: sc.id, mode: sc.mode, S: sc.S, a: sc.a, rho: sc.rho, P: sc.P ?? 10 * KIP });
+  Object.assign(state, { scenarioId: sc.id, mode: sc.mode, S: sc.S, a: sc.a, rho: sc.rho, P: sc.P ?? 10 * KIP, bar: null });
 }
 
 /** The flat bar: 2 in by 1/4 in A36, a 13/16 in standard hole for a 3/4 in bolt. */
 const BAR = { w: 2 * IN, t: 0.25 * IN, d: (13 / 16) * IN };
 
+/** The bar in use: the cited one, unless a problem has set its own as state.bar. */
+const barOf = (state) => state.bar || BAR;
+
 export function peakAt(state) {
   if (state.mode === 'bolt') {
-    const h = holeInStrip(state.P, BAR.w, BAR.d, BAR.t);
-    const second = ktStrip(BAR.d, BAR.w) * (state.P / ((BAR.w - BAR.d) * BAR.t));
+    const b = barOf(state);
+    const h = holeInStrip(state.P, b.w, b.d, b.t);
+    const second = ktStrip(b.d, b.w) * (state.P / ((b.w - b.d) * b.t));
     return { Kt: h.Kt, nominal: h.net, peak: h.peak, gap: Math.abs(second - h.peak) / h.peak, gross: h.gross };
   }
   const a = Math.max(state.a, 1e-6);
@@ -60,15 +64,16 @@ export function peakAt(state) {
 function member(B, rect, state, c, veiled) {
   if (state.mode === 'bolt') {
     const S = sceneIn(B, rect, { x0: -2.6, x1: 2.6, y0: -1.6, y1: 1.6 }, 14);
-    const w = BAR.w / IN;
+    const bar = barOf(state);
+    const w = bar.w / IN;
     poly(S, [[-1.8, -w / 2], [1.8, -w / 2], [1.8, w / 2], [-1.8, w / 2]], { fill: alpha(C.text, 0.1), stroke: C.text, width: 1.5 });
-    circle(S, [0, 0], BAR.d / IN / 2, { stroke: C.text, width: 1.5 });
+    circle(S, [0, 0], bar.d / IN / 2, { stroke: C.text, width: 1.5 });
     arrow(S, [1.8, 0], 0, 24, { color: C.pink });
     arrow(S, [-1.8, 0], Math.PI, 24, { color: C.pink });
     if (!veiled) {
-      dot(S, 0, BAR.d / IN / 2, { color: C.gold, r: 5 });
+      dot(S, 0, bar.d / IN / 2, { color: C.gold, r: 5 });
       label(S, `peak ${fig(c.peak / KSI)} ksi`, [0, w / 2], { color: C.gold, dy: -12 });
-      label(S, '2 in × 1/4 in bar, 13/16 in hole', [0, -w / 2], { color: C.dim, dy: 16 });
+      label(S, state.bar ? `${fig(bar.w * 1000)} × ${fig(bar.t * 1000)} mm bar, ${fig(bar.d * 1000)} mm hole` : '2 in × 1/4 in bar, 13/16 in hole', [0, -w / 2], { color: C.dim, dy: 16 });
     }
     return;
   }
@@ -158,7 +163,7 @@ export default defineLab({
         pts.push([r, ktStrip(r, 1)]);
       }
       line(P, pts, { color: C.gold, width: 3 });
-      dot(P, BAR.d / BAR.w, c.Kt, { color: C.gold, r: 5 });
+      dot(P, barOf(state).d / barOf(state).w, c.Kt, { color: C.gold, r: 5 });
       return;
     }
     // Kt against the tip radius, for this crack length, on a log-like scale of ρ/a.
@@ -198,7 +203,7 @@ export default defineLab({
   coach: leavesOut(OUT, (state, c) => ({
     title: state.mode === 'bolt' ? 'A bolt hole in a flat bar' : state.mode === 'hole' ? 'A round hole: always 3' : 'Sharpness sets the peak',
     body: state.mode === 'bolt'
-      ? String.raw`The hole takes ${fig((100 * BAR.d) / BAR.w)}% of the width. On the net section the stress is ${fig(c.nominal / KSI)} ksi and Kt is ${fig(c.Kt)}, so the edge of the hole sees ${fig(c.peak / KSI)} ksi.`
+      ? String.raw`The hole takes ${fig((100 * barOf(state).d) / barOf(state).w)}% of the width. On the net section the stress is ${fig(c.nominal / KSI)} ksi and Kt is ${fig(c.Kt)}, so the edge of the hole sees ${fig(c.peak / KSI)} ksi.`
       : state.mode === 'hole'
         ? String.raw`A round hole of any size in a wide plate triples the stress at its edge: ${fig(c.peak / KSI)} ksi from ${fig(state.S / KSI)} ksi. Size only sets how far the raised stress reaches.`
         : String.raw`A crack ${fig((2 * state.a) / IN)} in long with a tip radius of ${fig(c.rhoIn)} in has Kt = ${fig(c.Kt)}: the tip sees ${fig(c.peak / KSI)} ksi. A #40 drill at each tip makes the radius 0.049 in and Kt ${fig(ktTip(state.a, DRILL40 / 2))}.`,

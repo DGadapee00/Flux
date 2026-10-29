@@ -681,7 +681,7 @@ const ch12 = [
     title: 'A beam fixed at both ends',
     exam: 'u8',
     ch: '12',
-    lab: null,
+    lab: 'crossing',
     src: cite('fixed-ends'),
     topics: ['fixed-ends'],
     variety: ['unknown'],

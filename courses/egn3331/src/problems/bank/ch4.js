@@ -651,7 +651,7 @@ const ch4 = [
     title: 'How far a bracket joint moves',
     exam: 'u3',
     ch: '4',
-    lab: null,
+    lab: 'bridle',
     src: cite('truss-deformation'),
     topics: ['truss-deformation'],
     variety: ['configuration'],
@@ -720,7 +720,7 @@ const ch4 = [
     title: 'Three hangers share a load',
     exam: 'u3',
     ch: '4',
-    lab: null,
+    lab: 'bridle',
     src: cite('indeterminate-truss'),
     topics: ['indeterminate-truss'],
     variety: ['unknown'],
@@ -789,7 +789,7 @@ const ch4 = [
     title: 'Peak stress at a bolt hole',
     exam: 'u3',
     ch: '4',
-    lab: null,
+    lab: 'crack',
     src: cite('stress-concentration'),
     topics: ['stress-concentration'],
     variety: ['unknown'],
@@ -834,6 +834,14 @@ const ch4 = [
       // The same peak from the gross stress and the ratio of the areas.
       peak: (ktStrip($.d, $.w) * ($.P / ($.w * $.t)) * ($.w / ($.w - $.d))) / MPA,
     }),
+    sim: {
+      scenario: 'bolt',
+      setup(s, $) {
+        s.P = $.P;
+        s.bar = { w: $.w, t: $.t, d: $.d };
+      },
+      read: (c) => ({ Kt: c.Kt, peak: c.peak }),
+    },
     cases: [kase(cite('stress-concentration'), { w: 60, d: 12, t: 10, P: 30 }, { Kt: 2.512, peak: 157 })],
   }),
 
@@ -842,7 +850,7 @@ const ch4 = [
     title: 'What a change to a hole does to its peak',
     exam: 'u3',
     ch: '4',
-    lab: null,
+    lab: 'crack',
     src: cite('stress-concentration'),
     kind: 'conceptual',
     topics: ['stress-concentration'],

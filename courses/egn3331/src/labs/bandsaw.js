@@ -148,8 +148,8 @@ export default defineLab({
     return [
       kv('bending stress', `${fig(c.bend / 1000)} ksi`),
       kv('set tension', `${fig(c.T0 / 1000)} ksi`),
-      kv('outer fibre on the wheel', `${fig(c.outer / 1000)} ksi`),
-      kv('inner fibre on the wheel', `${fig(c.inner / 1000)} ksi`),
+      kv('outer fiber on the wheel', `${fig(c.outer / 1000)} ksi`),
+      kv('inner fiber on the wheel', `${fig(c.inner / 1000)} ksi`),
       kv('moment to bend it', `${fig(c.M)} lbf·in`),
       kv('surface strain', `${fig(c.strain * 1e6)} µε`),
       kv('bends per hour', fig(c.perHour)),
@@ -165,6 +165,6 @@ export default defineLab({
   },
   coach: leavesOut(OUT, (state, c) => ({
     title: c.bend > c.T0 ? 'The wheel, not the tension, sets the stress' : 'Tension dominates',
-    body: String.raw`Wrapped on ${fig(c.D)} in wheels, the ${fig(c.t)} in blade bends to ${fig(c.rho)} in radius. Its surface strains ${fig(c.strain * 1e6)} µε, so E times that is ${fig(c.bend / 1000)} ksi, ${fig(c.ratio)} times the ${fig(c.T0 / 1000)} ksi set tension. Only ${fig(c.M)} lbf·in does it: a thin strip is easy to bend but highly stressed. The outer fibre cycles from ${fig(c.T0 / 1000)} to ${fig(c.outer / 1000)} ksi ${fig(c.perHour)} times an hour.`,
+    body: String.raw`Wrapped on ${fig(c.D)} in wheels, the ${fig(c.t)} in blade bends to ${fig(c.rho)} in radius. Its surface strains ${fig(c.strain * 1e6)} µε, so E times that is ${fig(c.bend / 1000)} ksi, ${fig(c.ratio)} times the ${fig(c.T0 / 1000)} ksi set tension. Only ${fig(c.M)} lbf·in does it: a thin strip is easy to bend but highly stressed. The outer fiber cycles from ${fig(c.T0 / 1000)} to ${fig(c.outer / 1000)} ksi ${fig(c.perHour)} times an hour.`,
   })),
 });

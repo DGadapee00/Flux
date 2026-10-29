@@ -138,6 +138,17 @@ v = -3.94\ \mathrm{mm}
 <p>The moves are small next to the bars, so statics uses the undeformed shape and each bar's length change is one projection. The pins turn without friction. A slender bar in compression could buckle first, which is Unit 11.</p>
 </div>
 <p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec9/">2.001 lecture 9</a> finds truss joint displacements the same way, bar by bar. Roylance §2.1 writes the same solve as a stiffness matrix.</p>
+<div class="box ex"><span class="tag">Worked example · a two-leg rope bridle</span>
+<p>A hoist hangs 2,000 lb from a beam on two legs of 1/2 in wire rope. Each leg leans 60° from the beam, and the hook sits 4 ft below it. The rope's metallic area is 0.118 in², and \(E = 12.2\times10^{6}\) psi. By symmetry each leg holds half the load vertically:</p>
+\[
+T = \frac{P}{2\sin 60^\circ} = 1155\ \mathrm{lb}
+\]
+<p>Each leg is \(4/\sin 60^\circ = 4.62\) ft long, so it stretches \(TL/AE = 0.0445\) in. The hook moves straight down, and a leg's stretch is the part of that drop along it, \(\delta = v\sin 60^\circ\). The hook drops</p>
+\[
+v = \frac{0.0445}{\sin 60^\circ} = 0.0513\ \mathrm{in}
+\]
+<p>Each leg works at a quarter of the rope's 4,600 lb rated load.</p>
+</div>
 </section>
 </div>
 
@@ -218,6 +229,13 @@ N_m = 26.1\ \mathrm{kN}
 <p>The ceiling is rigid, the bars are elastic, and they share one \(A\) and \(E\). Different bars change each \(k_i\) and break the symmetry, so the joint moves sideways too. If the middle bar yields first, the side bars pick up the rest. That plastic story is outside this course (D37).</p>
 </div>
 <p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec10/">2.001 lecture 10</a> closes indeterminate trusses with one displacement condition per extra bar.</p>
+<div class="box ex"><span class="tag">Worked example · a third leg on the bridle</span>
+<p>Add a vertical leg of the same rope from the beam straight down to the bridle's hook. It is 4 ft long, and the side legs lean 30° from it. The three-bar result applies with \(\theta = 30^\circ\):</p>
+\[
+N_m = \frac{2000}{1 + 2\cos^{3}30^\circ} = 870\ \mathrm{lb}
+\]
+<p>Each side carries \(\cos^{2}30^\circ\) of that, 652 lb. The short vertical leg takes 43% of the load, not a third. The hook now drops \(N_mL/AE = 0.0290\) in, a little over half its two-leg drop.</p>
+</div>
 </section>
 
 <section class="topic" id="s6">
@@ -353,6 +371,17 @@ K_t = 2 + \left(1 - \frac{d}{w}\right)^{3}
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The plate is elastic and thin. Under one steady load a ductile metal yields in a small zone at the edge and spreads the load, so the peak matters most for fatigue and for brittle materials. Shoulder fillets and grooves have their own \(K_t\) charts, which this course does not reproduce. Plastic redistribution is outside the course (D37).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · stop-drilling a crack</span>
+<p>A fatigue crack 2 in long runs across an aluminium skin panel stressed to 10 ksi. Its tip radius is about 0.001 in. Treat it as a thin ellipse with \(a = 1\) in:</p>
+\[
+K_t = 1 + 2\sqrt{\frac{1}{0.001}} = 64.2
+\]
+<p>Elastically the tip would see 642 ksi. A mechanic drills a 0.098 in hole, a number 40 drill, at each tip. Now \(\rho = 0.049\) in:</p>
+\[
+K_t = 1 + 2\sqrt{\frac{1}{0.049}} = 10.0
+\]
+<p>The peak falls sixfold, to 100 ksi. That still yields a small zone, but a blunt notch grows a fatigue crack far more slowly than a sharp one.</p>
 </div>
 </section>
 

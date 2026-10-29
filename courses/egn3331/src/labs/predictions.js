@@ -1328,11 +1328,11 @@ export const PREDICTIONS = {
       apply(s) { s.T0 = 20; },
       watch: [
         watch('bend', 'the bending stress on the wheel', (c) => c.bend),
-        watch('outer', 'the outer fibre\'s stress on the wheel', (c) => c.outer),
+        watch('outer', 'the outer fiber\'s stress on the wheel', (c) => c.outer),
       ],
       mode: 'dir',
       expect: { bend: 'same', outer: 'bigger' },
-      why: 'Tension and bending add. The bending part depends only on t and ρ, so it stays 51.7 ksi; the outer fibre goes from 66.7 to 71.7 ksi. The inner fibre, compressed by bending, is relieved from −36.7 to −31.7 ksi.',
+      why: 'Tension and bending add. The bending part depends only on t and ρ, so it stays 51.7 ksi; the outer fiber goes from 66.7 to 71.7 ksi. The inner fiber, compressed by bending, is relieved from −36.7 to −31.7 ksi.',
     },
   ],
   strut: [

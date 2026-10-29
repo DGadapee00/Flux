@@ -220,6 +220,16 @@ q = 300\ \mathrm{N/mm}
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The wall is thin and the corners are sharp. A real square tube has rounded corners, which help, and a weld seam. Inside a sharp corner the stress rises above \(T/(2tA_m)\), which is a stress concentration.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · an HSS 4×4×1/4 in torsion</span>
+<p>AISC designs a 1/4 in HSS with a wall of 0.233 in, 93% of nominal. The centreline square is \(4 - 0.233 = 3.767\) in on a side, so \(A_m = 14.19\ \mathrm{in}^{2}\). Under 5 kip·in:</p>
+\[
+\begin{aligned}\tau &= \frac{T}{2A_m t} = \frac{5}{2(14.19)(0.233)} \\ &= 0.756\ \mathrm{ksi}\end{aligned}
+\]
+\[
+\begin{aligned}J &= \frac{4A_m^{2}}{\oint ds/t} = \frac{4(14.19)^{2}}{4(3.767)/0.233} \\ &= 12.5\ \mathrm{in}^{4}\end{aligned}
+\]
+<p>That is twice the J of an NPS 3 pipe, 6.03 in⁴, for a section only a little larger.</p>
+</div>
 </section>
 
 <section class="topic" id="s7">
@@ -251,6 +261,16 @@ q = 300\ \mathrm{N/mm}
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>\(Tc/J\) with a rectangle's polar moment \(b t(b^{2}+t^{2})/12\) is not the stress: the section warps and the corners carry nothing. In \(\alpha bt^{2}\) the long side is \(b\) and the short side, squared, is \(t\). Swapping them understates the stress. An open section is not a closed one with a gap: its \(J\) falls with the cube of the wall.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a slit pipe</span>
+<p>NPS 3 Schedule 40 pipe is 3.500 in across with a 0.216 in wall. Closed, \(J = \tfrac{\pi}{2}(1.75^{4} - 1.534^{4}) = 6.03\ \mathrm{in}^4\), and 5 kip·in gives 1.45 ksi. Saw it open along its length. Its wall is now a strip \(2\pi r_m = 10.32\) in wide, with \(r_m = 1.642\) in:</p>
+\[
+J = \frac{b\,t^{3}}{3} = \frac{10.32(0.216)^{3}}{3} = 0.0347\ \mathrm{in}^{4}
+\]
+\[
+\tau = \frac{T\,t}{J} = \frac{5(0.216)}{0.0347} = 31.2\ \mathrm{ksi}
+\]
+<p>One cut made the pipe 174 times more flexible and raised its stress 21 times. Mild steel yields in shear well before 31 ksi.</p>
 </div>
 </section>
 

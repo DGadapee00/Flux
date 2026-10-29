@@ -911,6 +911,79 @@ export const SETUPS = {
   },
 };
 
+/**
+ * Worked examples on real devices, shown in the application labs. Each reads the lab in the units
+ * its notes print: lbf, in, psi or ksi, µε.
+ */
+const LBF = N_PER_LBF;
+const KSI = 1000 * PA_PER_PSI;
+const DEVICE_SETUPS = {
+  u3: {
+    s3: [{ tag: 'a two-leg rope bridle', lab: 'bridle', scenario: 'two', read: (c) => ({ T: [c.side / LBF, 1155], drop: [c.drop / M_PER_IN, 0.0513] }) }],
+    s5: [{ tag: 'a third leg on the bridle', lab: 'bridle', scenario: 'three', read: (c) => ({ mid: [c.middle / LBF, 870], side: [c.side / LBF, 652], drop: [c.drop / M_PER_IN, 0.029] }) }],
+    s8: [{ tag: 'stop-drilling a crack', lab: 'crack', scenario: 'drill40', read: (c) => ({ Kt: [c.Kt, 10.0], peak: [c.peak / KSI, 100] }) }],
+  },
+  u4: {
+    s6: [{ tag: 'a rosette glued 20° off', lab: 'gauges', scenario: 'tilted', read: (c) => ({ a: [c.ra * 1e6, 176], hoop: [c.hoop / 1000, 18.5] }) }],
+    s7: [{ tag: 'torque gauges on a motor shaft', lab: 'gauges', scenario: 'shaft', read: (c) => ({ T: [c.T, 180], tau: [c.txy, 644], c: [c.rc * 1e6, 28.9] }) }],
+    s8: [{
+      tag: 'a rosette on a propane cylinder',
+      lab: 'gauges',
+      scenario: 'tank',
+      read: (c) => ({
+        a: [c.ra * 1e6, 128], b: [c.rb * 1e6, 335], c: [c.rc * 1e6, 543], hoop: [c.hoop / 1000, 18.5], axial: [c.axial / 1000, 9.26], naive: [c.naive / 1000, 3.71],
+      }),
+    }],
+  },
+  u5: {
+    s9: [
+      { tag: 'a twisted gray-iron bar', lab: 'fracture', scenario: 'iron', read: (c) => ({ tau: [c.txy, 12.2], n: [c.fs, 1.93], rankine: [c.rankine, 2.45] }) },
+      { tag: 'the same bar, pushed', lab: 'fracture', scenario: 'push', read: (c) => ({ s1: [c.s1, 8.15], s2: [c.s2, -18.3], n: [c.fs, 2.28] }) },
+    ],
+  },
+  u6: {
+    s4: [{ tag: 'a band-saw blade', lab: 'bandsaw', scenario: 'saw14', read: (c) => ({ sigma: [c.bend / 1000, 51.7], M: [c.M, 2.69], strain: [c.strain * 1e6, 1783], outer: [c.outer / 1000, 66.7] }) }],
+    s8: [{ tag: 'a purlin on a 4:12 roof', lab: 'purlin', scenario: 'p4', read: (c) => ({ Mz: [c.Mz, 4554], My: [c.My, 1518], peak: [c.peak, 1338], upright: [c.upright, 635], alpha: [c.alpha, 77.4] }) }],
+    s9: [{ tag: 'a flitch beam', lab: 'flitch', scenario: 'flitch', read: (c) => ({ EI: [c.EI / 1e6, 994], share: [100 * c.share, 72], wood: [c.wood, 766], steel: [c.steel / 1000, 15.9] }) }],
+  },
+  u7: {
+    s7: [{ tag: 'a strut channel on a wall', lab: 'strut', scenario: 'wall', read: (c) => ({ I: [c.I, 0.241], e: [c.e, 0.836], arm: [c.arm, 2.36], torque: [c.m * 12, 118] }) }],
+  },
+  u8: {
+    s5: [{ tag: 'both axles on a 20 ft bridge', lab: 'crossing', scenario: 'long', read: (c) => ({ mid: [c.mid, 0.352] }) }],
+    s7: [{ tag: 'a car on a fixed-end bridge', lab: 'crossing', scenario: 'fixed', read: (c) => ({ mid: [c.mid, 0.0153], M: [c.Mmax / 12, 1316] }) }],
+  },
+  u9: {
+    s6: [{ tag: 'an HSS 4×4×1/4 in torsion', lab: 'tubes', scenario: 'hss', read: (c) => ({ tau: [c.tau, 0.756], J: [c.J, 12.5], pipe: [c.all.pipe.J, 6.03] }) }],
+    s7: [{ tag: 'a slit pipe', lab: 'tubes', scenario: 'slit', read: (c) => ({ J: [c.J, 0.0347], tau: [c.tau, 31.2], closed: [c.all.pipe.J, 6.03], closedTau: [c.all.pipe.tau, 1.45] }) }],
+  },
+  u10: {
+    s6: [{
+      tag: 'a king-post roof truss',
+      lab: 'rooftruss',
+      scenario: 'ceiling',
+      read: (c) => ({
+        delta: [c.delta, 0.103], rafter: [c.rows[0].N, -1328], chord: [c.rows[2].N, 1260], n: [c.rows[0].n, -1.58],
+      }),
+    }],
+  },
+  u11: {
+    s4: [{ tag: 'a deck post with a side-bolted beam', lab: 'posts', scenario: 'side', read: (c) => ({ sigma: [c.sigma, 1486], ratio: [c.ratio, 7.6], Pcr: [c.Pcr, 18750], plain: [c.plain, 196] }) }],
+    s5: [{
+      tag: 'a 6061-T6 tube column',
+      lab: 'posts',
+      scenario: 'tube',
+      read: (c) => ({
+        slender: [c.slender, 54.2], euler: [c.euler / 1000, 33.6], sigma: [c.sigma / 1000, 28.2], Et: [c.Et / 1000, 8400], P: [c.Pcr / 1000, 20.8], Peuler: [c.Peuler / 1000, 24.7],
+      }),
+    }],
+  },
+};
+for (const [exam, sections] of Object.entries(DEVICE_SETUPS)) {
+  SETUPS[exam] ??= {};
+  for (const [id, list] of Object.entries(sections)) SETUPS[exam][id] = [...(SETUPS[exam][id] || []), ...list];
+}
+
 /** An example's tag as the notes write it, without "Worked example · ". */
 export function exampleTag(tagText) {
   return tagText.replace(/^\s*Worked examples?\s*(·\s*)?/, '').trim();

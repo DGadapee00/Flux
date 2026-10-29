@@ -186,6 +186,16 @@ y_{\max} + e = e\sec\frac{kL}{2}
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The offset is the same at both ends and the material stays elastic. Design codes fold eccentricity and initial crookedness into a column curve rather than using the secant formula directly.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · a deck post with a side-bolted beam</span>
+<p>An 8 ft 4×4 post, 3.5 in square, carries 48 ft² of deck at 50 psf: 2,400 lb. Its beam, two 2×10s 3 in thick, is bolted to one face, so the load acts \(e = 1.75 + 1.5 = 3.25\) in off the axis. Here \(A = 12.25\ \mathrm{in}^{2}\), \(r^{2} = I/A = 1.02\ \mathrm{in}^{2}\) and \(E = 1.4\times10^{6}\) psi:</p>
+\[
+\begin{aligned}\frac{L}{2r}\sqrt{\frac{P}{EA}} &= 47.5\sqrt{\frac{2400}{1.715\times10^{7}}} = 0.562 \\ \sec 0.562 &= 1.18\end{aligned}
+\]
+\[
+\begin{aligned}\sigma_{\max} &= 196\left[1 + \frac{3.25(1.75)}{1.02}(1.18)\right] \\ &= 1486\ \mathrm{psi}\end{aligned}
+\]
+<p>That is 7.6 times \(P/A\), though the load is only 13% of the 18,750 lb Euler load. On a post cap the same post sees 196 psi.</p>
+</div>
 </section>
 
 <section class="topic" id="s5">
@@ -210,6 +220,13 @@ y_{\max} + e = e\sec\frac{kL}{2}
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>Engesser's rule ignores the unloading on the convex side of the bow, which a reduced-modulus theory adds; tests fall close to the tangent-modulus value. Residual stresses from rolling or welding soften steel columns the same way, and design curves include them. Inelastic behaviour beyond this rule is outside the course (D37).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 6061-T6 tube column</span>
+<p>A 6061-T6 tube, 2 in across with a 0.125 in wall, stands 36 in tall with pinned ends. Its \(r = 0.664\) in, so \(KL/r = 54.2\). Euler gives \(\pi^{2}(10{,}000)/54.2^{2} = 33.6\) ksi, close to the 35 ksi yield, where the alloy has already softened. Take the Ramberg–Osgood curve with \(n = 20\). The stress that satisfies</p>
+\[
+\sigma = \frac{\pi^{2}E_t(\sigma)}{(KL/r)^{2}}
+\]
+<p>is 28.2 ksi, where \(E_t = 8{,}400\) ksi. The tube buckles at 20.8 kip, not Euler's 24.7.</p>
 </div>
 </section>
 

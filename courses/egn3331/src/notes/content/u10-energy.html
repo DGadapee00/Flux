@@ -244,6 +244,14 @@ n = 4.32
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The truss is determinate, so both statics solutions exist. For an indeterminate truss the unit load still works but needs a compatibility step, and the direct stiffness solve is simpler. Pins are frictionless and the bars stay elastic.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · a king-post roof truss</span>
+<p>A 24 ft truss of 2×6s rises to a ridge 4 ft up, a 4:12 pitch. Trusses at 2 ft carry 20 psf live and 10 psf dead, so 720 lb reaches the ridge. A 5 psf ceiling hangs 120 lb at the king post's foot, and the post lifts it to the ridge. With 840 lb at the ridge, each rafter carries \(840/(2\sin 18.4^\circ) = 1{,}328\) lb of compression and the bottom chord 1,260 lb of tension.</p>
+<p>For the ceiling sag, put 1 lb down at the king post's foot. It gives \(n = -1.58\) in each rafter, 1.50 in each half of the chord, and 1 in the post. With \(AE = 11.55\times10^{6}\) lb:</p>
+\[
+\begin{aligned}\Delta &= \sum\frac{nNL}{AE} \\ &= 2(0.0276) + 2(0.0236) + 0.0005 \\ &= 0.103\ \mathrm{in}\end{aligned}
+\]
+<p>The king post adds almost nothing. A built truss sags several times more, because its plate joints slip.</p>
+</div>
 </section>
 
 <section class="topic" id="s7">

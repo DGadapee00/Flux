@@ -230,6 +230,13 @@ r = 6.022\ \mathrm{in}
 <p>Strains are small, so a line's turn does not feed back into its stretch. The gauge reads the average strain under its grid, which is fine where the strain changes slowly. Near a hole the strain changes over a gauge length, and a small gauge or a field method is needed.</p>
 </div>
 <p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec16/">2.001 lecture 17</a> turns the strain axes and draws the strain circle.</p>
+<div class="box ex"><span class="tag">Worked example · a rosette glued 20° off</span>
+<p>Glue the cylinder's rosette 20° off the axis. Gauge a now reads the strain along a line at 20°:</p>
+\[
+\begin{aligned}\varepsilon(20^\circ) &= 128\cos^{2}20^\circ + 543\sin^{2}20^\circ \\ &= 176\ \mu\varepsilon\end{aligned}
+\]
+<p>The wall's stress has not changed, only the line the gauge reads. Solved at their true angles, 20°, 65° and 110°, the three readings give back 18.5 ksi of hoop stress.</p>
+</div>
 </section>
 
 <section class="topic" id="s7">
@@ -257,6 +264,13 @@ R = 361\ \mu\varepsilon
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>This is the circle for the surface plane. The third principal strain, normal to a free surface, is not zero even though the stress there is. For an isotropic part in plane stress it is \(-\nu(\varepsilon_x+\varepsilon_y)/(1-\nu)\). The largest shear strain in three dimensions can use it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · torque gauges on a motor shaft</span>
+<p>The Baldor motor delivers 5 hp at 1750 rpm through its 1.125 in shaft, so \(T = 63{,}025(5)/1750 = 180\) lbf·in. The surface shear stress is \(16T/\pi d^{3} = 644\) psi. With \(G = E/2(1+\nu) = 11{,}150\) ksi, the shear strain is 57.7 µ. The strain circle is centred at zero with radius \(\gamma/2\):</p>
+\[
+\varepsilon_{\pm45^\circ} = \pm\frac{\gamma}{2} = \pm 28.9\ \mu\varepsilon
+\]
+<p>A gauge along the axis sits at the centre and reads zero. The two 45° gauges sit at the ends of the circle. Their difference is \(\gamma\), which gives the torque back.</p>
 </div>
 </section>
 
@@ -292,6 +306,20 @@ R = 361\ \mu\varepsilon
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The surface is free and the material is isotropic and elastic. Each gauge has a small cross-sensitivity to strain across its grid, and a temperature change adds an apparent strain unless the gauge is matched to the metal. Those corrections belong to the lab bench, not to this algebra.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a rosette on a propane cylinder</span>
+<p>A 0-45-90 rosette sits on the 20 lb cylinder, gauge a along the axis and gauge c around it. At 240 psi it reads \(\varepsilon_a = 128\), \(\varepsilon_b = 335\) and \(\varepsilon_c = 543\ \mu\varepsilon\). The rectangular rosette gives</p>
+\[
+\begin{aligned}\gamma_{xy} &= 2\varepsilon_b - \varepsilon_a - \varepsilon_c \\ &= 2(335) - 128 - 543 = 0\end{aligned}
+\]
+<p>There is no shear strain, so the axis and the hoop are principal. With \(E = 29{,}000\) ksi and \(\nu = 0.3\):</p>
+\[
+\sigma_y = \frac{E}{1-\nu^{2}}(\varepsilon_c + \nu\varepsilon_a) = 18.5\ \mathrm{ksi}
+\]
+\[
+\sigma_x = \frac{E}{1-\nu^{2}}(\varepsilon_a + \nu\varepsilon_c) = 9.26\ \mathrm{ksi}
+\]
+<p>They match \(pr/t\) and \(pr/2t\). Gauge a alone, times \(E\), would claim 3.71 ksi along the axis. The hoop stress squeezes the axis by \(\nu\).</p>
 </div>
 </section>
 

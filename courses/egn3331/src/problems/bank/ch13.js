@@ -597,7 +597,7 @@ const ch13 = [
     title: 'A stocky strut by the tangent modulus',
     exam: 'u11',
     ch: '13',
-    lab: null,
+    lab: 'posts',
     src: cite('tangent-modulus'),
     topics: ['tangent-modulus'],
     variety: ['unknown'],
