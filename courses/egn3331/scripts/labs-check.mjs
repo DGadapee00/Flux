@@ -43,6 +43,18 @@ const LIMIT = {
   drop: 1e-6,
   buckling: 1e-3,
   column: 1e-9,
+  bridle: 1e-9,
+  crack: 1e-9,
+  gauges: 1e-9,
+  fracture: 1e-9,
+  flitch: 1e-9,
+  purlin: 1e-9,
+  bandsaw: 1e-9,
+  strut: 1e-5,
+  crossing: 1e-3,
+  tubes: 1e-6,
+  rooftruss: 1e-9,
+  posts: 1e-6,
 };
 
 const fails = [];

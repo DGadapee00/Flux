@@ -1,8 +1,9 @@
 /**
  * Impulse and momentum (id u4, Unit 3), beyond the numeric drills: four conceptual questions, each wrong option with its own
- * reason, and the unit's application, an upper stage's vertical burn (the `rocket` lab).
+ * reason, and the unit's application, a bicycle helmet's drop test (the `helmet` lab, 16 CFR 1203).
  */
 import { collide1D, rocketDeltaV } from '@flux/subjects/mechanics/momentum.js';
+import { minDuration, stopPulse, stopPulseNumeric } from '@flux/subjects/mechanics/impact-pulse.js';
 import { G, choice, kase, num, problem, range } from '../kit.js';
 
 /** A choice part whose options each carry a `why`. */
@@ -228,92 +229,75 @@ const more = [
   }),
 
   problem({
-    id: 'u4.15.stage',
-    title: 'Application: an upper stage',
+    id: 'u4.15.helmet',
+    title: 'Application: a helmet’s drop test',
     exam: 'u4',
     ch: '15',
-    lab: 'rocket',
-    src: 'Hibbeler §15.9',
-    topics: ['rocket'],
-    // Designed numbers: the exhaust speed, burn rate, start mass and mass ratio are picked; the
-    // thrust, specific impulse and final mass follow, so every given is a number an engine sheet prints.
+    lab: 'helmet',
+    src: 'Hibbeler §15.1',
+    topics: ['impulse'],
+    // Structure: the peak of a given pulse, or the shortest pulse that passes; the pulse is a half-sine or flat.
     vars: {
-      given: choice(['thrust', 'its thrust and burn rate'], ['isp', 'its specific impulse']),
-      ve: range(2400, 3000, 200, 'm/s'),
-      mdot: range(3, 8, 1, 'kg/s'),
-      m0: range(300, 800, 100, 'kg'),
-      r: range(2, 3, 0.5, ''),
+      find: choice(['peak', 'peak'], ['tau', 'shortest']),
+      shape: choice(['half-sine', 'a half-sine'], ['square', 'flat (square)']),
+      h: range(1.2, 2.4, 0.2, 'm'),
+      tau: range(3, 12, 1, 'ms'),
+      e: range(0, 0.4, 0.1, ''),
     },
-    derive: ($) => ({ mf: $.m0 / $.r, F: $.ve * $.mdot, isp: $.ve / G }),
-    valid: ($) => {
-      const tb = ($.m0 - $.m0 / $.r) / $.mdot;
-      return $.ve * $.mdot >= 1.3 * $.m0 * G && G * tb >= 0.05 * $.ve * Math.log($.r);
-    },
-    text: (T, $, sig) => {
-      const engine = $.given === 'thrust'
-        ? String.raw`Its engine gives ${sig($.F)} N of thrust while burning ${T.mdot} kg/s of propellant.`
-        : String.raw`Its engine has a specific impulse of ${sig($.isp)} s, with $g_0 = 9.81$ m/s², and burns ${T.mdot} kg/s.`;
-      return String.raw`A small methane–oxygen upper stage of ${T.m0} kg is released from rest and fires straight up. ${engine} It burns down to ${sig($.mf)} kg. Ignore drag; take $g = 9.81$ m/s². Find the exhaust speed and the speed at burnout.`;
-    },
+    derive: ($) => ({ v0: Math.sqrt(2 * G * $.h) }),
+    text: (T, $) => ($.find === 'peak'
+      ? String.raw`In a drop test like CPSC's, a helmet on a 5.0 kg headform falls ${T.h} m onto a steel anvil. The liner stops it in ${T.tau} ms with a force pulse shaped like ${T.shape}, and it rebounds at ${T.e} of its impact speed. Find the impulse the anvil gives and the peak acceleration in g.`
+      : String.raw`In a drop test like CPSC's, a helmet on a 5.0 kg headform falls ${T.h} m onto a steel anvil and rebounds at ${T.e} of its impact speed. Its liner gives a force pulse shaped like ${T.shape}. The standard fails it above 300 g. Find the impulse the anvil gives over a 6 ms pulse, and the shortest pulse that keeps the peak at 300 g.`),
     parts: [
-      num('ve', ($) => $.ve, 'm/s', {
-        label: 'exhaust speed',
-        traps: [[
-          ($) => ($.given === 'thrust' ? $.F / ($.mdot * G) : $.isp),
-          ($) => ($.given === 'thrust'
-            ? 'That is the specific impulse, in seconds. The exhaust speed is thrust over burn rate, F/ṁ.'
-            : 'Specific impulse is in seconds. Multiply by g₀ = 9.81 m/s² for the exhaust speed.'),
-        ]],
-      }),
-      num('dv', ($) => stage($).dv, 'm/s', {
-        label: 'speed at burnout',
-        traps: [
-          [($) => $.ve * Math.log($.r), 'Gravity acts for the whole burn. Subtract g·t_b, the gravity loss.'],
-          [($) => $.ve * Math.log($.r) - G * ($.m0 / $.mdot), 'The burn time is the propellant burned over the burn rate, (m₀ − m_f)/ṁ, not the whole mass.'],
-        ],
-      }),
+      num('J', ($) => stopPulse({ m: 5, v0: $.v0, e: $.e, tau: ($.find === 'peak' ? $.tau : 6) / 1000, shape: $.shape }).J, 'N·s', { label: 'impulse from the anvil' }),
+      num('q', ($) => ($.find === 'peak'
+        ? stopPulse({ m: 5, v0: $.v0, e: $.e, tau: $.tau / 1000, shape: $.shape }).gPeak
+        : minDuration({ v0: $.v0, e: $.e, shape: $.shape, limitG: 300 }) * 1000), ($) => ($.find === 'peak' ? 'g' : 'ms'), { label: ($) => ($.find === 'peak' ? 'peak acceleration' : 'shortest pulse') }),
     ],
-    level: 3,
+    level: 2,
     hints: [
-      'Thrust is the burn rate times the exhaust speed. Specific impulse is the exhaust speed in units of g₀.',
-      String.raw`Then the rocket equation, with gravity: $\Delta v = v_e\ln(m_0/m_f) - g t_b$ and $t_b = (m_0 - m_f)/\dot m$.`,
+      'The drop fixes the momentum change: from v0 = √(2gh) down to e·v0 up. The anvil’s impulse supplies it, and the weight’s too.',
+      '∫F dt − mgτ = m(1 + e)v0. For a half-sine, ∫F dt = 2F_pk τ/π; for a flat pulse, F_pk τ.',
+      'The peak in g is F_pk/(mg).',
     ],
     steps: ($, sig) => {
-      const row = stage($);
+      const tau = ($.find === 'peak' ? $.tau : 6) / 1000;
+      const p = stopPulse({ m: 5, v0: $.v0, e: $.e, tau, shape: $.shape });
+      const k = $.shape === 'square' ? '' : String.raw`\pi/2\ \times\ `;
       return [
-        $.given === 'thrust'
-          ? String.raw`$v_e = F/\dot m = ${sig($.F)}/${sig($.mdot)} = ${sig($.ve)}\ \mathrm{m/s}$.`
-          : String.raw`$v_e = I_{sp}\,g_0 = ${sig($.isp)} \times 9.81 = ${sig($.ve)}\ \mathrm{m/s}$.`,
-        String.raw`$t_b = (m_0 - m_f)/\dot m = ${sig(row.tb)}\ \mathrm{s}$. Gravity loss $g t_b = ${sig(G * row.tb)}\ \mathrm{m/s}$.`,
-        String.raw`$\Delta v = v_e\ln(${sig($.r)}) - g t_b = ${sig(row.dv)}\ \mathrm{m/s}$.`,
+        String.raw`$v_0 = \sqrt{2gh} = ${sig($.v0)}$ m/s. Over ${sig(tau * 1000)} ms, $\int F\,dt = m(1 + e)v_0 + mg\tau = ${sig(p.J)}$ N·s.`,
+        $.find === 'peak'
+          ? String.raw`$F_{pk} = ${k}\int F\,dt/\tau = ${sig(p.Fpk)}$ N, so the peak is $F_{pk}/mg = ${sig(p.gPeak)}$ g.`
+          : String.raw`Set $F_{pk} = 300mg$: $\tau \ge (1 + e)v_0/(g(k \cdot 300 - 1))$ with $k = ${$.shape === 'square' ? '1' : '2/\\pi'}$, so $\tau = ${sig(minDuration({ v0: $.v0, e: $.e, shape: $.shape, limitG: 300 }) * 1000)}$ ms.`,
       ];
     },
-    // Second: step the momentum balance m dv = ṁ v_e dt − m g dt through the burn.
     second: ($) => {
-      const steps = 4000;
-      const tb = ($.m0 - $.mf) / $.mdot;
-      const dt = tb / steps;
-      let m = $.m0;
-      let v = 0;
-      for (let i = 0; i < steps; i++) {
-        const mid = m - 0.5 * $.mdot * dt;
-        v += (($.F / $.mdot) * $.mdot / mid - G) * dt;
-        m -= $.mdot * dt;
+      // Step the fall through the pulse: the impulse is what changes the speed from −v0 to e·v0.
+      const tau = ($.find === 'peak' ? $.tau : 6) / 1000;
+      const n = stopPulseNumeric({ m: 5, v0: $.v0, e: $.e, tau, shape: $.shape });
+      const J = 5 * (n.vEnd + $.v0) + 5 * G * tau;
+      if ($.find === 'peak') return { J, q: J / ((($.shape === 'square' ? 1 : 2 / Math.PI) * tau) * 5 * G) };
+      // The shortest pulse by bisection on the peak.
+      let lo = 1e-4;
+      let hi = 0.05;
+      for (let i = 0; i < 80; i++) {
+        const mid = 0.5 * (lo + hi);
+        if (stopPulse({ m: 5, v0: $.v0, e: $.e, tau: mid, shape: $.shape }).gPeak > 300) lo = mid;
+        else hi = mid;
       }
-      return { ve: $.F / $.mdot, dv: v };
+      return { J, q: 0.5 * (lo + hi) * 1000 };
     },
     sim: {
-      scenario: 'gravity',
+      scenario: 'cpsc',
       setup(s, $) {
-        s.m0 = $.m0;
-        s.mf = $.mf;
-        s.ve = $.ve;
-        s.mdot = $.mdot;
-        s.g = G;
+        Object.assign(s, { h: $.h, e: $.e, shape: $.shape, tau: $.find === 'peak' ? $.tau : 6 });
       },
-      read: (c) => ({ dv: c.dv }),
+      read: (c, s, $) => ({ J: c.J, q: $.find === 'peak' ? c.gPeak : c.tauMin }),
     },
-    cases: [kase('Hibbeler §15.9', { given: 'thrust', ve: 3000, mdot: 5, m0: 500, r: 2.5 }, { ve: 3000, dv: 2160.2721956224655 })],
+    cases: [kase('Hibbeler §15.1', { find: 'peak', shape: 'half-sine', h: 2, tau: 6, e: 0.1 }, {
+      J: stopPulse({ m: 5, v0: Math.sqrt(2 * G * 2), e: 0.1, tau: 0.006 }).J,
+      q: stopPulse({ m: 5, v0: Math.sqrt(2 * G * 2), e: 0.1, tau: 0.006 }).gPeak,
+    })],
   }),
 ];
 

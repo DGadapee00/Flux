@@ -25,7 +25,7 @@
     <a href="#s4"><span>04</span>Rotation about a fixed axis</a>
     <a href="#s5"><span>05</span>General plane motion</a>
     <h3>Part III · An application</h3>
-    <a href="#s6"><span>06</span>Application: turbopump spin-up</a>
+    <a href="#s6"><span>06</span>Application: a traction elevator</a>
     <h3>Reference</h3>
     <a href="#s7"><span>07</span>Formula sheet</a>
   </nav>
@@ -58,14 +58,14 @@
 </div>
 <p>The radius of gyration makes shapes easy to compare. The hoop has \(k = R\). The disk has \(k = 0.707R\). The solid sphere has \(k = 0.632R\). The smaller \(k\) is, the easier the body is to spin up for its mass and size.</p>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>The parallel-axis shift starts at the mass centre. Adding \(md^2\) to a moment about some other point counts the distance twice. Hibbeler §17.1.</p>
+<p>Shifting from an axis that is not through \(G\). Take the 6 kg rod to a point 0.5 m in from its end. From \(G\), \(I = 2 + 6(0.5)^2 = 3.5\) kg·m². From the end, \(8 + 6(0.5)^2 = 9.5\) kg·m², almost three times too much. The theorem needs \(\int\vec\rho\,dm = 0\), true only about \(G\). Hibbeler §17.1.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>A slender rod is \(mL^2/12\) about its centre and \(mL^2/3\) about one end. Shift from \(G\), never between two other axes.</p>
 </div>
 <p>In the Inertia lab, slide the axis along the rod. \(I\) is smallest at the centre and grows with the square of the offset.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>The parallel-axis shift starts at the mass centre. These shapes are the standard rod, hoop, disk, and solid sphere, each uniform. A different mass distribution needs its own integral. In the plane only one axis matters. In three dimensions a body has a full inertia tensor, which this course leaves out.</p>
+<p>These shapes are the standard rod, hoop, disk, and solid sphere, each uniform. A different mass distribution needs its own integral. In the plane only one axis matters. In three dimensions a body has a full inertia tensor, which this course leaves out.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/29-2-moment-of-inertia-of-a-rod/" target="_blank" rel="noopener">29.2 Moment of Inertia of a Rod</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/29-3-moment-of-inertia-of-a-disc/" target="_blank" rel="noopener">29.3 Moment of Inertia of a Disc</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/angular-momentum-and-rotating-masses/" target="_blank" rel="noopener">Lecture 6, Angular Momentum and Rotating Masses</a>.</p>
 </section>
@@ -87,11 +87,11 @@
 <p>A 2 kg rod 1 m long swings about one end. A 1 kg solid sphere of radius 0.1 m is fixed at the far end, its centre 1.1 m from the pin. The rod gives \(2(1)^2/3 = 0.667\). The sphere gives \(0.4(1)(0.01) + 1(1.21) = 1.214\). The total is \(1.88\ \mathrm{kg\cdot m^2}\), and \(k = \sqrt{1.88/3} = 0.792\) m.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>The hole keeps its own centre moment and the parallel-axis term. Dropping \(md^2\) understates the piece being subtracted. Hibbeler §17.1.</p>
+<p>Subtracting only the hole's centre moment. The hole's share is \(0.0067 + 0.0192 = 0.0259\) kg·m², and most of it is \(md^2\). Dropping that leaves 0.533 kg·m² instead of 0.514. The hole is off the axis, and its offset counts as much as anyone's. Hibbeler §17.1.</p>
 </div>
 <p>In the Inertia lab, the composite scenario moves the disk across the plate. Its \(md^2\) term dominates once it is far from the axis.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Every part is moved onto one axis, perpendicular to the plate. A hole keeps its centre moment and its \(md^2\). An axis in some other direction is left out. So are fillets, bolts, and every small feature a drawing would show.</p>
+<p>Every part is moved onto one axis, perpendicular to the plate. An axis in some other direction is left out. So are fillets, bolts, and every small feature a drawing would show.</p>
 </div>
 <p class="bridge">Inertia measures how the mass is spread about an axis. Part II puts it into the equations of motion.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/29-4-parallel-axis-theorem/" target="_blank" rel="noopener">29.4 Parallel Axis Theorem</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/17-4-center-of-mass-of-a-system-of-extended-objects/" target="_blank" rel="noopener">17.4 Center of Mass of a System of Extended Objects</a>.</p>
@@ -125,13 +125,16 @@
 <p>Accelerating at 3 m/s² needs 4500 N of drive at the road. That force acts 0.5 m below \(G\), so \(\Sigma M_G = 0\) shifts \(ma h/L = 865\) N of load onto the rear axle. The rear now carries 7660 N, and the front 7060 N.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Check the friction limit and the corner moment. The smaller force is the one that happens. And take moments about \(G\), not about a corner, unless you include the \(ma_G\) term: about any other point, \(\Sigma M\) is not zero in accelerated translation. Hibbeler §17.3.</p>
+<p>Checking only the slide. The tall crate's friction limit is 98.1 N, but it tips at 49.05 N and never slides. Find both forces; the smaller one happens. Hibbeler §17.3.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Giving the weight an arm of \(b\) about the corner. The weight acts at the centre, \(b/2\) from the corner. For the tall crate the full width doubles the tipping force to 98.1 N.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>\(\Sigma M_G = 0\) while the body is still translating. The normal reaches the front corner at the tip. Acceleration moves load toward the back of a car and the front of a braking one.</p>
+<p>\(\Sigma M_G = 0\) while the body is still translating. About any other point, \(\Sigma M\) equals the moment of \(m\vec a_G\), not zero. The normal reaches the front corner at the tip. Acceleration moves load toward the back of a car and the front of a braking one.</p>
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Until the crate tips it translates, so the moment about the mass centre is zero. The force is at the top edge, and a lower force changes the tipping value. The car is rigid: suspension, which lets the body pitch, is left out, so the load shift happens at once instead of after a short settling.</p>
+<p>The crate and the car are rigid. The car's suspension, which lets the body pitch, is left out. So the load shifts at once, not after a short settling. The crate's corner is sharp; a real one rounds and crushes a little.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/17-6-velocity-and-acceleration-of-the-center-of-mass/" target="_blank" rel="noopener">17.6 Velocity and Acceleration of the Center of Mass</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-5-momentum-and-impulse/15-5-force-on-a-system-of-particles/" target="_blank" rel="noopener">15.5 Force on a System of Particles</a>.</p>
 </section>
@@ -164,14 +167,17 @@
 <p>A bar weighs 32.2 lb and is 4 ft long. Released from rest while horizontal, the pin holds 8.05 lb. \(\alpha = 12.08\ \mathrm{rad/s^2}\). Here \(g = 32.2\ \mathrm{ft/s^2}\).</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>At the horizontal release the pin holds \(mg/4\). Putting the whole weight on the pin is the wrong free-body result. At the bottom of the swing, the reverse mistake gives \(mg\) instead of \(2.5mg\). Hibbeler §17.4.</p>
+<p>Putting the whole weight on the pin at release. The bar's centre falls at \(3g/4\), so the pin holds only \(mg/4\): 9.81 N for the 4 kg bar, not 39.2 N. Hibbeler §17.4.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the pin force as the weight at the bottom of the swing. \(\alpha\) is zero there, but \(G\) is on a circle and accelerates toward the pin at \((L/2)\omega^2\). The pin holds 98.1 N, not 39.2 N.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Moments about the pin give \(\alpha\). The pin components then come from the motion of \(G\): \(r\alpha\) along the path and \(r\omega^2\) toward the pin.</p>
 </div>
 <p>In the Pendulum lab, set the angle and the angular speed. The pin components are split into the part that holds the weight and the part that turns \(G\).</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>At release from rest, \(\omega = 0\), so the mass centre has no normal acceleration yet. Friction in the pin bearing is left out, and so is air drag on the swinging body. Both would slowly drain the swing. The pin is also rigid: it does not deflect under load.</p>
+<p>Friction in the pin bearing is left out, and so is air drag on the swinging body. Both would slowly drain the swing. The pin is also rigid: it does not deflect under load.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/31-1-relationship-between-torque-and-angular-acceleration/" target="_blank" rel="noopener">31.1 Relationship between Torque and Angular Acceleration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/31-3-worked-example-find-the-moment-of-inertia-of-a-disc-from-a-falling-mass/" target="_blank" rel="noopener">31.3 Worked Example - Find the Moment of Inertia of a Disc from a Falling Mass</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/angular-momentum-and-motion-of-rotating-rigid-bodies/" target="_blank" rel="noopener">Lecture 7, Angular Momentum and Motion of Rotating Rigid Bodies</a>.</p>
 </section>
@@ -202,16 +208,19 @@
 <p>A 10 lb solid sphere rolls down a 20° ramp. With \(k = 2/5\), \(a = (5/7)(32.2)\sin 20^\circ = 7.87\) ft/s². The weight cancels. Rolling needs \(f/N = (2/7)\tan 20^\circ = 0.104\), so any \(\mu_s\) above that keeps it rolling.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>A rolling body is slower than a sliding block on the same incline. Divide \(g\sin\theta\) by \(1 + k_G^2/R^2\). A hoop needs more friction than a disk. And friction's direction is whatever the rolling needs, not always against the motion: on the pulled disk it points backward, on a driven wheel it points forward. Hibbeler §17.5.</p>
+<p>Using \(g\sin\theta\) for a rolling body. That is a block sliding without friction: 4.91 m/s² on the 30° incline. The disk rolls down at 3.27 m/s², because a third of the pull goes into its spin. Divide by \(1 + k\). Hibbeler §17.5.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Drawing friction against the motion by habit. Its direction is whatever the rolling needs. On the disk pulled at its centre it points backward, to spin the disk up. On a driven wheel it points forward, and it is what moves the car.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Compare the friction rolling needs with \(\mu N\). Under the limit, it rolls. Over the limit, it slips.</p>
 </div>
 <p>In the Roll or slip lab, lower \(\mu\) until the hoop slips. The readout switches from the rolling formula to \(\mu N\), and \(a\) jumps up.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>Friction is Coulomb, and rolling resistance is left out. Past the friction limit the no-slip constraint is dropped, and the body both slides and spins. Rolling without slip does no work at the contact, so energy is conserved while it rolls. Unit 7 uses exactly that.</p>
+<p>Friction is Coulomb: one static limit, then a constant kinetic value. Rolling resistance is left out. The body and the incline are rigid, so they touch at a point. A real tyre flattens into a patch, and the road's push sits a little ahead of the centre, which slowly drains the roll.</p>
 </div>
-<p class="bridge">Part III applies the fixed-axis equation to a rotor that spins up.</p>
+<p class="bridge">Part III applies the fixed-axis equation to an elevator's drive sheave, with a car on one side and a counterweight on the other.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/36-5-analyze-force-and-torque-in-translation-and-rotation-problems/" target="_blank" rel="noopener">36.5 Analyze Force and Torque in Translation and Rotation Problems</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/36-2-worked-example-wheel-rolling-without-slipping-down-inclined-plane-torque-method/" target="_blank" rel="noopener">36.2 Worked Example - Wheel Rolling Without Slipping Down Inclined Plane - Torque Method</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/finding-equations-of-motion-for-rigid-body-rotation/" target="_blank" rel="noopener">Lecture 8, Finding Equations of Motion for Rigid Body Rotation</a>.</p>
 </section>
 <div class="part">
@@ -220,47 +229,51 @@
 </div>
 
 <section class="topic" id="s6">
-<h2><span class="n">06</span>Application: turbopump spin-up</h2>
-<p>A pump-fed rocket engine cannot start until its turbopump is turning. A small starter turbine spins the rotor up from rest to its rated speed. The rotor turns about a fixed axis, so section 4 governs it: \(\Sigma M = I\alpha\).</p>
-<p>The rotor is an impeller disk on a thin shaft. Both are solid cylinders about the axis, so \(I = \tfrac12 m_d R^2 + \tfrac12 m_s r_s^2\). The starter gives a steady torque \(M\). The bearings take a steady friction torque \(M_f\). The pump itself takes a torque that grows as the square of the speed, \(k\omega^2\). Call its value at the rated speed \(M_r\), so \(k = M_r/\omega_r^2\).</p>
-<div class="box why"><span class="tag">Why the speed levels off</span>
-<p>Moments about the axis give one equation:</p>
+<h2><span class="n">06</span>Application: a traction elevator</h2>
+<p>A traction elevator hangs its car and a counterweight from one set of ropes. The ropes pass over a drive sheave, turned by the motor. Elevator makers size the counterweight as the empty car plus 40 to 50% of the rated load. Then the motor works least near half load.</p>
+<p>Take a 1,000 kg car rated for 1,000 kg, with a counterweight at 45%: 1,450 kg. The sheave has radius 0.32 m. With the motor's rotor, its \(I\) is 12 kg·m². The car starts and stops at 1.0 m/s², under the 1.5 m/s² that would excite the ropes, and runs at 1.6 m/s.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The rope does not slip, so the car rises at \(a\), the counterweight falls at \(a\), and the sheave turns at \(\alpha = a/r\). Draw three free-body diagrams. The car, \(m_1\), and the counterweight, \(m_2\), translate; the sheave rotates about a fixed axis, section 4:</p>
 \[
-I\,\frac{d\omega}{dt} = M - M_f - k\omega^2 = A - k\omega^2, \qquad A = M - M_f.
+T_1 - m_1 g = m_1 a, \qquad m_2 g - T_2 = m_2 a, \qquad M - (T_1 - T_2)\,r = I\,\frac{a}{r}.
 \]
-<p>At the start \(\omega = 0\), so the pump takes nothing and \(\alpha_0 = A/I\). As \(\omega\) grows, the pump takes more, and \(\alpha\) falls. It reaches zero at the free-run speed, where the torques balance: \(\omega_\infty = \sqrt{A/k}\).</p>
-<p>Separate the variables. \(dt = I\,d\omega/(A - k\omega^2)\). The integral of \(1/(A - k\omega^2)\) is an inverse hyperbolic tangent:</p>
+<p>Eliminate the tensions:</p>
 \[
-\omega(t) = \omega_\infty \tanh\frac{t}{\tau}, \qquad \tau = \frac{I}{\sqrt{Ak}}, \qquad t_r = \tau\,\tanh^{-1}\frac{\omega_r}{\omega_\infty}.
+M = r\,(m_1 - m_2)\,g + \left(m_1 + m_2 + \frac{I}{r^2}\right) a\,r .
 \]
-<p>The rated speed is reached only if \(\omega_\infty > \omega_r\). That is \(A > M_r\): the starter must beat the bearings and the pump at rated speed.</p>
+<p>The first term holds the out-of-balance weight. The second accelerates every mass, and the sheave. \(I/r^2\) is the sheave's inertia seen at the rope.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a small turbopump</span>
-<p>The impeller is 0.2 kg with a 30 mm radius. The shaft is 0.08 kg with a 5 mm radius. Then \(I = \tfrac12(0.2)(0.03)^2 + \tfrac12(0.08)(0.005)^2 = 9.10\times10^{-5}\ \mathrm{kg\cdot m^2}\). The shaft adds only 1.4%.</p>
-<p>The starter gives 0.5 N·m and the bearings take 0.02 N·m, so \(A = 0.48\) N·m. At the start, \(\alpha_0 = 0.48/9.10\times10^{-5} = 5{,}270\ \mathrm{rad/s^2}\).</p>
-<p>Rated speed is 40,000 rpm, which is 4,189 rad/s. The pump takes 0.3 N·m there, so \(k = 0.3/4189^2 = 1.71\times10^{-8}\ \mathrm{N\cdot m\cdot s^2}\). Then \(\omega_\infty = \sqrt{0.48/1.71\times10^{-8}} = 5{,}298\) rad/s, or 50,600 rpm. And \(\tau = 9.10\times10^{-5}/\sqrt{0.48 \times 1.71\times10^{-8}} = 1.00\) s.</p>
-<p>The time to rated speed is \(1.00 \tanh^{-1}(4189/5298) = 1.08\) s. Stepping the equation forward in small steps gives the same 1.08 s.</p>
+<div class="box ex"><span class="tag">Worked example · full load, going up</span>
+<p>With 1,000 kg aboard, \(m_1 = 2{,}000\) kg. Speeding up at 1.0 m/s², the car's rope pulls \(T_1 = 2000(9.81 + 1.0) = 21{,}620\) N. The counterweight's pulls \(T_2 = 1450(9.81 - 1.0) = 12{,}775\) N.</p>
+<p>On the sheave, \(M = (21{,}620 - 12{,}775)(0.32) + 12(1.0/0.32) = 2{,}830 + 38 = 2{,}868\) N·m. Cruising, \(a = 0\), and \(M = 0.32(550)(9.81) = 1{,}727\) N·m. The start costs 1,141 N·m more.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · bearing friction only</span>
-<p>Take the same rotor with the pump disconnected. Only the bearings resist, so \(\alpha\) stays at 5,270 rad/s². The time to 4,189 rad/s is \(4189/5275 = 0.794\) s. The pump load costs 0.28 s, about a quarter of the start.</p>
+<div class="box ex"><span class="tag">Worked example · balanced, 450 kg</span>
+<p>With 450 kg aboard, the car side is 1,450 kg, the same as the counterweight. Cruising, both ropes pull 14,225 N, and the motor needs no torque at all.</p>
+<p>Speeding up still costs \((1450 + 1450 + 117)(1.0)(0.32) = 966\) N·m. Balance removes the weight, not the inertia. Every mass must still be accelerated, and here the counterweight is half of it.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · twice the impeller mass</span>
-<p>Double the impeller to 0.4 kg. Now \(I = 1.81\times10^{-4}\ \mathrm{kg\cdot m^2}\), and \(\alpha_0\) halves, nearly, to 2,650 rad/s². The free-run speed stays at 50,600 rpm: no torque depends on the mass. \(\tau\) doubles to 2.00 s, and the time to rated speed doubles too, to 2.14 s.</p>
-<p>Inertia sets how fast the rotor gets there. The torques set where it can get.</p>
+<div class="box ex"><span class="tag">Worked example · the empty car, going up</span>
+<p>Empty, the car is 450 kg lighter than its counterweight. Cruising, \(M = 0.32(-450)(9.81) = -1{,}413\) N·m: the motor holds the car back. Even speeding up, \(M = -1{,}413 + (1000 + 1450 + 117)(1.0)(0.32) = -591\) N·m.</p>
+<p>Released, the counterweight would lift the car at \(4{,}415/2{,}567 = 1.72\) m/s². A modern drive returns that braking energy to the building.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a weak starter</span>
-<p>Go back to the 0.2 kg impeller, with a starter of only 0.35 N·m. Then \(A = 0.33\) N·m, just above the 0.3 N·m the pump takes at rated speed. The free-run speed is \(4189\sqrt{0.33/0.3} = 4{,}393\) rad/s, or 42,000 rpm. Rated speed is now 95% of free-run.</p>
-<p>\(\tau = 1.21\) s, and \(t_r = 1.21\tanh^{-1}(0.9535) = 2.26\) s. The starter is 30% weaker, but the start takes more than twice as long. The last few percent of the climb are slow, because there the net torque is nearly zero.</p>
+<div class="box ex"><span class="tag">Worked example · the sheave and the power</span>
+<p>At 1.6 m/s, the sheave turns at \(1.6/0.32 = 5.0\) rad/s, or 47.7 rpm. At 1.0 m/s², the car reaches that speed in 1.6 s, over 1.28 m.</p>
+<p>Full and cruising, the motor gives \(M\omega = 1{,}727 \times 5.0 = 8.6\) kW. At the end of the start, \(2{,}868 \times 5.0 = 14.3\) kW. The peak comes from accelerating, not from lifting.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · no counterweight</span>
+<p>Hang the full 2,000 kg car alone. Cruising, \(M = 0.32(2000)(9.81) = 6{,}278\) N·m, 3.6 times the counterweighted 1,727 N·m. Starting, \(M = 0.32(21{,}620) + 38 = 6{,}956\) N·m. The counterweight adds mass to accelerate, but it removes far more weight to hold.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Using \(\alpha_0\) for the whole climb. That gives \(t = I\omega_r/A = 0.794\) s for the small turbopump. The answer is 1.08 s. The pump load is zero only at the start. The constant-\(\alpha\) formula from section 4 holds only when every moment is constant. Hibbeler §17.4.</p>
+<p>Taking each rope's pull as the weight below it. That gives \(M = 1{,}727 + 38 = 1{,}764\) N·m for the full start, 38% short. While the car speeds up, \(T_1 = m_1(g + a)\) and \(T_2 = m_2(g - a)\). The ropes accelerate their loads.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving the counterweight out of the inertia. It is not only a weight; it speeds up too, downward. Using \((m_1 + I/r^2)\,a\,r\) gives 2,404 N·m for the full start instead of 2,868 N·m. Hibbeler §17.4.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Write \(\Sigma M = I\,d\omega/dt\) with every moment as it really depends on \(\omega\). A moment that grows with speed sets a top speed. The inertia sets only the time scale.</p>
+<p>The counterweight cancels weight, not inertia. Cruising torque goes as \(m_1 - m_2\). Starting torque adds \((m_1 + m_2 + I/r^2)\,a\,r\), whatever the load.</p>
 </div>
-<p>In the Spin-up lab, move the impeller mass and watch the curve stretch in time but keep its top. Move the pump load and watch the top come down toward the rated line.</p>
+<p>In the Elevator lab, the three scenarios are the first three examples. Sweep the load and watch the cruising line cross zero at 450 kg. Play the run and watch the rope tensions change as the car speeds up and slows.</p>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>A real starter turbine's torque falls as it speeds up, and the pump's torque follows \(\omega^2\) only near its design point. The shaft is rigid here: a real shaft twists, and a long one has critical speeds to pass through. Bearing friction is taken as constant. Fluid in the impeller adds inertia that this \(I\) leaves out.</p>
+<p>The rope is massless, inextensible and never slips. Real hoist ropes stretch, so the car bounces a little at each start. In a tall building the ropes weigh as much as a load and shift the balance as the car climbs; chains under the car cancel that. Real drives also limit the jerk, the rate of change of acceleration. Rail friction and motor losses are left out.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/31-1-relationship-between-torque-and-angular-acceleration/" target="_blank" rel="noopener">31.1 Relationship between Torque and Angular Acceleration</a>.</p>
 </section>
@@ -276,7 +289,7 @@ I\,\frac{d\omega}{dt} = M - M_f - k\omega^2 = A - k\omega^2, \qquad A = M - M_f.
 <li>Horizontal bar, released from rest: the pin holds \(mg/4\). At the bottom of the swing: \(5mg/2\).</li>
 <li>Rolling without slip: \(a = g\sin\theta/(1+k_G^2/R^2)\).</li>
 <li>That roll needs \(f = mg\sin\theta\cdot k/(1+k)\), with \(k = k_G^2/R^2\). It slips when this \(f\) exceeds \(\mu N\).</li>
-<li>Spin-up against a load \(k\omega^2\): \(\omega = \omega_\infty\tanh(t/\tau)\), \(\omega_\infty = \sqrt{(M - M_f)/k}\), \(\tau = I/\sqrt{(M - M_f)k}\).</li>
+<li>Car, counterweight and sheave: \(M = r(m_1 - m_2)g + (m_1 + m_2 + I/r^2)\,a\,r\), with \(T_1 = m_1(g + a)\) and \(T_2 = m_2(g - a)\).</li>
 <li>\(g = 9.81\ \mathrm{m/s^2}\). A US problem uses \(g = 32.2\ \mathrm{ft/s^2}\).</li>
 </ul>
 <p>Bearing friction and rolling resistance are left out of every line above. A body that is not uniform needs a different \(I_G\).</p>

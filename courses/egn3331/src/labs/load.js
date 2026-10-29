@@ -34,6 +34,18 @@ const loaders = {
   drop: () => import('./drop.js'),
   buckling: () => import('./buckling.js'),
   column: () => import('./column.js'),
+  bridle: () => import('./bridle.js'),
+  crack: () => import('./crack.js'),
+  gauges: () => import('./gauges.js'),
+  fracture: () => import('./fracture.js'),
+  flitch: () => import('./flitch.js'),
+  purlin: () => import('./purlin.js'),
+  bandsaw: () => import('./bandsaw.js'),
+  strut: () => import('./strut.js'),
+  crossing: () => import('./crossing.js'),
+  tubes: () => import('./tubes.js'),
+  rooftruss: () => import('./rooftruss.js'),
+  posts: () => import('./posts.js'),
 };
 
 const labs = createLabLoader(loaders);

@@ -1,8 +1,10 @@
 /**
  * Unit 2 beyond the original drills: four conceptual questions, each wrong option with its own
- * reason, and the unit's application, a rocket leaving the pad (the `liftoff` lab).
+ * reason, and the unit's application, the curve of a highway (the `highway` lab, AASHTO 2011).
  */
-import { burn } from '../../labs/liftoff.js';
+import { M_PER_FT } from '@flux/subjects/convert.js';
+import { bankedCurve } from '@flux/subjects/mechanics/dynamics.js';
+import { MPH, aashtoFmax, frictionNeed, limitSpeed, minRadiusFt } from '@flux/subjects/mechanics/highway.js';
 import { G, choice, kase, num, problem, range } from '../kit.js';
 
 /** A choice part whose options each carry a `why`. */
@@ -188,83 +190,72 @@ const more = [
   }),
 
   problem({
-    id: 'u2.13.liftoff',
-    title: 'Application: leaving the pad',
+    id: 'u2.13.highway',
+    title: 'Application: the curve of a highway',
     exam: 'u2',
     ch: '13',
-    lab: 'liftoff',
-    src: 'Hibbeler §13.4',
-    topics: ['newton'],
-    // Designed numbers: the lift-off acceleration and the time to clear the tower are picked; the
-    // thrust and the tower height follow.
+    lab: 'highway',
+    src: 'Hibbeler §13.5',
+    topics: ['bank'],
+    // Structure: design the radius for a speed, or check a driver's friction need on a built curve.
     vars: {
-      a0: range(2, 20, 1, 'm/s²'),
-      m: range(10, 60, 5, 'kg'),
-      tc: range(1, 4, 0.5, 's'),
-      given: choice(['tw', 'its thrust-to-weight ratio'], ['thrust', 'its thrust']),
+      find: choice(['R', 'design'], ['f', 'check']),
+      V: range(50, 70, 5, 'mph'),
+      e: range(0.04, 0.1, 0.02, ''),
+      drive: range(45, 80, 5, 'mph'),
     },
-    derive: ($) => {
-      const T = $.m * ($.a0 + G);
-      return { T, tw: T / ($.m * G), h: 0.5 * $.a0 * $.tc * $.tc };
-    },
-    text: (T, $, sig) => {
-      const motor = $.given === 'thrust'
-        ? String.raw`Its motor gives $${sig($.T)}\ \mathrm{N}$ of thrust`
-        : String.raw`Its thrust-to-weight ratio at ignition is $${sig($.tw)}$`;
-      return String.raw`A $${T.m}\ \mathrm{kg}$ rocket stands on its pad, held down by clamps. ${motor}. The clamps let go once the motor is at full thrust. Over the first few seconds the mass barely changes; ignore drag. Find the acceleration at release, the clamp force just before release, and the time to clear the $${sig($.h)}\ \mathrm{m}$ tower.`;
-    },
+    derive: ($) => ({ f: aashtoFmax($.V), Rft: minRadiusFt($.V, $.e, aashtoFmax($.V)) }),
+    valid: ($) => $.find === 'R' || Math.abs($.drive - $.V) >= 5,
+    text: (T, $, sig) => ($.find === 'R'
+      ? String.raw`A rural highway is designed for ${T.V} mph with a superelevation of $e = ${T.e}$. AASHTO allows a side friction factor of ${sig($.f)} at that speed. Find the minimum radius by AASHTO's formula, and the speed at which a car on that curve would need all of the allowed friction, from the exact force balance.`
+      : String.raw`A highway curve of radius ${sig($.Rft)} ft is banked at $e = ${T.e}$. A driver takes it at ${T.drive} mph. Find the side friction factor the car needs, from the force balance on the bank, and the speed at which it would need AASHTO's ${sig($.f)}.`),
     parts: [
-      num('a0', ($) => $.T / $.m - G, 'm/s²', {
-        label: 'acceleration at release',
-        traps: [
-          [($) => $.T / $.m, 'That is thrust over mass. The weight still acts: subtract g.'],
-          [($) => $.tw - 1, 'T/W − 1 is the acceleration in units of g. Multiply by 9.81 m/s².'],
-        ],
-      }),
-      num('F', ($) => $.T - $.m * G, 'N', {
-        label: 'clamp force before release',
-        traps: [[($) => $.T, 'The weight already holds the rocket down by mg. The clamps hold back only the rest: T − mg.']],
-      }),
-      num('t', ($) => Math.sqrt((2 * $.h) / ($.T / $.m - G)), 's', {
-        label: 'time to clear the tower',
-        traps: [[($) => Math.sqrt($.h / ($.T / $.m - G)), 'From rest, h = ½at². Keep the ½: t = √(2h/a).']],
-      }),
+      num('q', ($) => ($.find === 'R' ? $.Rft : frictionNeed($.drive * MPH, $.Rft * M_PER_FT, $.e)), ($) => ($.find === 'R' ? 'ft' : ''), { label: ($) => ($.find === 'R' ? 'minimum radius' : 'side friction factor needed') }),
+      num('vLim', ($) => limitSpeed($.Rft * M_PER_FT, $.e, $.f) / MPH, 'mph', { label: 'speed that needs all the allowed friction' }),
     ],
     level: 2,
-    hints: ['Draw the rocket on the pad: thrust up, weight down, clamp force down. Before release it does not move.',
-      String.raw`At release the clamp force is gone: $T - mg = ma$. Then the climb is constant acceleration from rest.`,
+    hints: [
+      'Draw the car on the bank: weight, the road’s normal push, and side friction along the surface. The net force points to the curve’s centre.',
+      'Vertical: N cos θ − F sin θ = mg. Toward the centre: N sin θ + F cos θ = mv²/R, with tan θ = e and F = f N.',
+      'AASHTO drops the small e f term and works in mph and feet: R = V²/(15(e + f)).',
     ],
-    steps: ($, sig) => [
-      ...($.given === 'tw' ? [String.raw`Thrust: $T = (T/W)\,mg = ${sig($.tw)} \times ${sig($.m * G)} = ${sig($.T)}\ \mathrm{N}$.`] : []),
-      String.raw`Before release, $\Sigma F = 0$: $F = T - mg = ${sig($.T - $.m * G)}\ \mathrm{N}$.`,
-      String.raw`After release, $a = T/m - g = ${sig($.a0)}\ \mathrm{m/s^2}$.`,
-      String.raw`$t = \sqrt{2h/a} = \sqrt{2 \times ${sig($.h)}/${sig($.a0)}} = ${sig($.tc)}\ \mathrm{s}$.`,
-    ],
-    // Second: the lab's own burn, with a vanishing propellant share, and the tower by small steps.
+    steps: ($, sig) => {
+      const R = $.Rft * M_PER_FT;
+      const v = limitSpeed(R, $.e, $.f);
+      return [
+        $.find === 'R'
+          ? String.raw`$R = V^2/15(e + f) = ${sig($.V)}^2/15(${sig($.e)} + ${sig($.f)}) = ${sig($.Rft)}$ ft.`
+          : String.raw`At ${sig($.drive)} mph, $v^2/gR = ${sig(($.drive * MPH) ** 2 / (G * R))}$, so $f = (v^2/gR - e)/(1 + e\,v^2/gR) = ${sig(frictionNeed($.drive * MPH, R, $.e))}$.`,
+        String.raw`The exact limit on ${sig($.Rft)} ft $= ${sig(R)}$ m: $v^2 = Rg(e + f)/(1 - ef)$, so $v = ${sig(v)}$ m/s $= ${sig(v / MPH)}$ mph.`,
+      ];
+    },
+    // Second: the vector force balance of bankedCurve, independent of the closed forms.
     second: ($) => {
-      const b = burn($.m, $.tw, 10, 1e-9);
-      let s = 0;
-      let v = 0;
-      let t = 0;
-      const dt = 1e-5;
-      while (s + v * dt + 0.5 * b.a0 * dt * dt < $.h) {
-        s += v * dt + 0.5 * b.a0 * dt * dt;
-        v += b.a0 * dt;
-        t += dt;
+      const R = $.Rft * M_PER_FT;
+      const th = (Math.atan($.e) * 180) / Math.PI;
+      const vMax = bankedCurve({ mass: 1, radius: R, thetaDeg: th, mu: $.f }).vMax;
+      if ($.find === 'R') {
+        // Recover the radius from AASHTO's own speed–radius rule by bisection on R.
+        let lo = 10;
+        let hi = 1e5;
+        for (let i = 0; i < 100; i++) {
+          const mid = 0.5 * (lo + hi);
+          if ((15 * (($.e + $.f) * mid)) < $.V * $.V) lo = mid;
+          else hi = mid;
+        }
+        return { q: 0.5 * (lo + hi), vLim: vMax / MPH };
       }
-      t += ($.h - s) / Math.max(v, 1e-12);
-      return { a0: b.a0, F: b.T - $.m * G, t };
+      const b = bankedCurve({ mass: 1, radius: R, thetaDeg: th, speed: $.drive * MPH });
+      return { q: b.f / b.N, vLim: vMax / MPH };
     },
     sim: {
-      scenario: 'student',
+      scenario: 'r60',
       setup(s, $) {
-        s.m0 = $.m;
-        s.tw = $.tw;
-        s.t = 0;
+        Object.assign(s, { V: $.V, e: $.e, f: $.f, drive: $.find === 'R' ? $.V : $.drive, Rfix: null });
       },
-      read: (c) => ({ a0: c.a0, F: c.T - c.m0 * G }),
+      read: (c, s, $) => ({ q: $.find === 'R' ? c.Rdesign : c.need, vLim: c.vLimMph }),
     },
-    cases: [kase('Hibbeler §13.4', { a0: 10, m: 20, tc: 2, given: 'tw' }, { a0: 10, F: 200, t: 2 })],
+    cases: [kase('Hibbeler §13.5', { find: 'R', V: 60, e: 0.08, drive: 60 }, { q: 1200, vLim: limitSpeed(1200 * M_PER_FT, 0.08, 0.12) / MPH })],
   }),
 ];
 

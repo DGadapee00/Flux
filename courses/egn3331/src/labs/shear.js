@@ -1,10 +1,11 @@
+import { sectionSketch } from './elements.js';
 import {
   bandQ, iBands, iSection, rectBands, rectSection, shearBalance, shearShare, shearStress,
 } from '@flux/subjects/mechanics/materials.js';
 import { EYE_BF, EYE_HW, EYE_TF, EYE_TW, EYE_V, RECT_B, RECT_H, RECT_V } from '../data/shear.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { axes, begin, C, chartIn, dot, hidden, label, line, panes, plotIn, sceneIn, seg } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, showField, slider } from './widgets.js';
 
@@ -55,6 +56,27 @@ function sectionOf(state) {
 function clampY(y, half) {
   const limit = Math.max(half - 1e-6, 0);
   return Math.min(Math.max(y, -limit), limit);
+}
+
+/**
+ * The section with its neutral axis, the cut at height y, and the area above the cut shaded: that
+ * area's first moment about the axis is Q. The width t is the section's width along the cut.
+ */
+function member(B, rect, state, c, veiled) {
+  const eye = state.scenarioId === 'eye';
+  const half = eye ? (EYE_HW / 2 + EYE_TF) : state.h / 2;
+  const rects = eye
+    ? [[-EYE_BF / 2, EYE_BF / 2, EYE_HW / 2, EYE_HW / 2 + EYE_TF], [-EYE_TW / 2, EYE_TW / 2, -EYE_HW / 2, EYE_HW / 2], [-EYE_BF / 2, EYE_BF / 2, -EYE_HW / 2 - EYE_TF, -EYE_HW / 2]]
+    : [[-state.b / 2, state.b / 2, -half, half]];
+  const W = eye ? EYE_BF : state.b;
+  const S = sceneIn(B, rect, { x0: -W * 1.6, x1: W * 1.6, y0: -half * 1.25, y1: half * 1.25 }, 8);
+  sectionSketch(S, rects, { na: 0, above: c.y });
+  const t = eye ? (Math.abs(c.y) <= EYE_HW / 2 ? EYE_TW : EYE_BF) : state.b;
+  seg(S, [-t / 2 - W * 0.15, c.y], [t / 2 + W * 0.15, c.y], { color: C.teal, width: 2.5 });
+  if (!veiled) {
+    label(S, `τ ${fig(c.tau / MPA)} MPa`, [-W / 2, c.y], { color: C.teal, dx: -8, dy: -7, align: 'right' });
+    label(S, `t = ${fig(t * 1e3)} mm`, [-W / 2, c.y], { color: C.teal, dx: -8, dy: 8, align: 'right' });
+  }
 }
 
 export default defineLab({
@@ -116,6 +138,10 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.42);
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const sec = sectionOf(state);
     const pts = [];
     let xHi = 1;
@@ -126,7 +152,7 @@ export default defineLab({
       pts.push([tau, yc * 1e3]);
       xHi = Math.max(xHi, tau);
     }
-    const P = plotIn(B, B.free, { lo: 0, hi: xHi * 1.08 }, { lo: -sec.half * 1e3, hi: sec.half * 1e3 });
+    const P = chartIn(B, R, { lo: 0, hi: xHi * 1.08 }, { lo: -sec.half * 1e3, hi: sec.half * 1e3 });
     axes(P, { xLabel: 'shear stress (MPa)', yLabel: 'y from the axis (mm)' });
     line(P, pts, { color: C.gold, width: 3 });
     line(P, [[0, 0], [xHi * 1.08, 0]], { color: C.teal, width: 2, dash: [5, 4] });

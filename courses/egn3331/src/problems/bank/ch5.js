@@ -1,15 +1,16 @@
 /**
  * Torsion of circular shafts: stress and angle, a hollow section, power,
- * a stepped shaft, fixed ends, a motor shaft in English units, and the
- * diameter set by stress and by twist together.
+ * a stepped shaft, fixed ends, a motor shaft in English units, the diameter set by stress and by
+ * twist together, a rectangular tube by Bredt, a rectangular bar, a slit tube, and a shoulder's Kt.
  */
 import { PA_PER_PSI } from '@flux/subjects/convert.js';
 import {
   fixedFixedTorsion, polarJ, roundShaft, seriesTwist, solidDiameterForShear,
   solidDiameterRequired, torqueFromHorsepower, torqueFromPower,
 } from '@flux/subjects/mechanics/torsion.js';
+import { bredt, openThin, rectTorsion, rectTorsionDouble } from '@flux/subjects/mechanics/noncircular.js';
 import { HP_WATT, MOTOR_D_IN, MOTOR_L_IN, motorInches, motorShaft } from '../../data/motor.js';
-import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
+import { choice, cite, kase, mc, num, problem, range, sym } from '../kit.js';
 
 const G = 75e9;
 const E_STEEL = 200e9;
@@ -58,7 +59,7 @@ const ch5 = [
       d: range(25, 60, 5, 'mm', MM),
       L: range(0.4, 2, 0.2, 'm'),
     },
-    text: (T) => String.raw`A solid steel shaft, ${T.d} mm in diameter and ${T.L} m long, carries ${T.T} N·m. G is 75 GPa. Find the shear stress at the outside and the angle of twist in degrees.`,
+    text: (T) => String.raw`A solid steel shaft, ${T.d} mm in diameter and ${T.L} m long, carries ${T.T} N·m. G is 75 GPa. Find the shear stress at the outside and the angle of twist in degrees. Then write the outside stress as a formula in $T$ and $d$.`,
     parts: [
       num('tau', ($) => roundShaft($.T, $.L, G, $.d, 0).tauMax, 'MPa', {
         scale: MPA,
@@ -76,16 +77,19 @@ const ch5 = [
           [($) => ($.T * $.L) / (E_STEEL * polarJ($.d / 2, 0)), 'E was used in place of G. The angle of twist is TL/GJ.'],
         ],
       }),
+      sym('tsym', '16*T/(pi*d^3)', { T: 'N*m', d: 'm' }, ($) => (16 * $.T) / (Math.PI * $.d ** 3), { unit: 'Pa', label: 'outside stress, as a formula' }),
     ],
     hints: [
       'Shear stress at a radius is torque times that radius over the polar moment. The angle is torque times length over G J.',
-      String.raw`For a solid circle, $\tau = 16T/(\pi d^3)$ and $\phi = TL/(GJ)$ with $J = \pi d^4/32$.`,
+      String.raw`The stress is largest where $\rho$ is largest, at the outside. For the angle use the polar moment of the solid circle and $G$, not $E$.`,
     ],
     steps: ($, sig) => {
       const shaft = roundShaft($.T, $.L, G, $.d, 0);
+      const J = polarJ($.d / 2, 0);
       return [
-        String.raw`Outer stress ${sig(shaft.tauMax / MPA)} MPa.`,
-        String.raw`Angle ${sig((shaft.phi * 180) / Math.PI)}°.`,
+        String.raw`$J = \pi d^4/32 = ${sig(J / 1e-12 / 1e3)}\times 10^3$ mm⁴.`,
+        String.raw`At the outside, $\rho = d/2$: $\tau = T\rho/J = ${sig(shaft.tauMax / MPA)}$ MPa.`,
+        String.raw`$\phi = TL/GJ = ${sig(shaft.phi)}$ rad $= ${sig((shaft.phi * 180) / Math.PI)}$°.`,
       ];
     },
     second: ($) => {
@@ -155,13 +159,15 @@ const ch5 = [
     ],
     hints: [
       'Stress is still linear in the radius. The polar moment of a tube is the solid moment of the outside minus the solid moment of the bore.',
-      String.raw`$\tau = T\rho/J$ with $J = \pi(d_o^4 - d_i^4)/32$. At the bore, $\rho$ is the inside radius.`,
+      String.raw`A tube's polar moment is the outer circle's less the bore's. The bore stress uses $\rho$ at the bore, on the same straight line through the centre.`,
     ],
     steps: ($, sig) => {
       const shaft = roundShaft($.T, 1, G, $.d, $.di);
+      const J = polarJ($.d / 2, $.di / 2);
       return [
-        String.raw`Outside ${sig(shaft.tauMax / MPA)} MPa.`,
-        String.raw`Bore ${sig(shaft.tauIn / MPA)} MPa.`,
+        String.raw`$J = \pi(d_o^4 - d_i^4)/32 = ${sig(J / 1e-12 / 1e3)}\times 10^3$ mm⁴.`,
+        String.raw`Outside, $\rho = ${sig($.d / 2 / MM)}$ mm: $\tau = T\rho/J = ${sig(shaft.tauMax / MPA)}$ MPa.`,
+        String.raw`Bore, $\rho = ${sig($.di / 2 / MM)}$ mm: $\tau = ${sig(shaft.tauIn / MPA)}$ MPa, the outside stress times $d_i/d_o$.`,
       ];
     },
     second: ($) => {
@@ -230,14 +236,15 @@ const ch5 = [
     ],
     hints: [
       'Torque is power divided by the angular speed in radians per second. A revolution is one full turn.',
-      String.raw`$\omega = 2\pi n/60$ and $T = P/\omega$. Then $\tau = 16T/(\pi d^3)$.`,
+      String.raw`Power is torque times angular speed. Turn the speed into radians per second before you divide.`,
     ],
     steps: ($, sig) => {
       const T = torqueFromPower($.P, $.rpm).T;
       const tau = roundShaft(T, $.L, G, $.d, 0).tauMax;
       return [
-        String.raw`Torque ${sig(T)} N·m.`,
-        String.raw`Outer stress ${sig(tau / MPA)} MPa.`,
+        String.raw`$\omega = 2\pi n/60 = ${sig((2 * Math.PI * $.rpm) / 60)}$ rad/s.`,
+        String.raw`$T = P/\omega = ${sig(T)}$ N·m.`,
+        String.raw`$\tau = 16T/\pi d^3 = ${sig(tau / MPA)}$ MPa.`,
       ];
     },
     second: ($) => {
@@ -298,9 +305,19 @@ const ch5 = [
     ],
     hints: [
       'Each segment twists by its own torque times length over G J. The angles add.',
-      String.raw`$\phi = T L_1/(G J_1) + T L_2/(G J_2)$, with $J = \pi d^4/32$ for each solid segment.`,
+      'Each segment twists on its own, with its own polar moment. The angles add.',
     ],
-    steps: ($, sig) => [String.raw`Total angle ${sig((stepShaft($).phi * 180) / Math.PI)}°.`],
+    steps: ($, sig) => {
+      const J1 = polarJ($.d1 / 2, 0);
+      const J2 = polarJ($.d2 / 2, 0);
+      const p1 = ($.T * $.L1) / (G * J1);
+      const p2 = ($.T * $.L2) / (G * J2);
+      return [
+        String.raw`Both segments carry the same $T$. Segment 1: $J_1 = ${sig(J1 / 1e-12 / 1e3)}\times 10^3$ mm⁴, $\phi_1 = TL_1/GJ_1 = ${sig(p1 / DEG)}$°.`,
+        String.raw`Segment 2: $J_2 = ${sig(J2 / 1e-12 / 1e3)}\times 10^3$ mm⁴, $\phi_2 = ${sig(p2 / DEG)}$°.`,
+        String.raw`The angles add: $\phi = ${sig((stepShaft($).phi * 180) / Math.PI)}$°.`,
+      ];
+    },
     second: ($) => ({
       phi: (
         ($.T * $.L1) / (G * polarJ($.d1 / 2, 0))
@@ -362,13 +379,14 @@ const ch5 = [
     ],
     hints: [
       'The two walls share one rotation at the load. The shorter segment is the stiffer spring, so it carries more of the torque.',
-      String.raw`The left reaction is $T(L-a)/L$. The rotation is that reaction times $a$, over $GJ$.`,
+      String.raw`The section where the torque acts turns by one angle, seen from either wall. Write that angle from each side and use equilibrium of the two wall torques.`,
     ],
     steps: ($, sig) => {
       const ends = fixedFixedTorsion($.T, $.L, $.a * $.L, G, polarJ($.d / 2, 0));
       return [
-        String.raw`Left reaction ${sig(ends.Tleft)} N·m.`,
-        String.raw`Rotation ${sig((ends.phi * 180) / Math.PI)}°.`,
+        String.raw`Each side is a spring $GJ/\text{length}$: $k_L = ${sig(ends.kL)}$ and $k_R = ${sig(ends.kR)}$ N·m/rad.`,
+        String.raw`Both turn through one angle: $\phi = T/(k_L + k_R) = ${sig(ends.phi)}$ rad $= ${sig((ends.phi * 180) / Math.PI)}$°.`,
+        String.raw`$T_L = k_L\phi = ${sig(ends.Tleft)}$ N·m, the short side's larger share.`,
       ];
     },
     second: ($) => {
@@ -431,8 +449,9 @@ const ch5 = [
     steps: ($, sig) => {
       const inch = motorInches($.hp / HP_WATT, $.rpm);
       return [
-        String.raw`Shear stress ${sig(inch.tauKsi)} ksi.`,
-        String.raw`Angle ${sig(inch.phiDeg)}°.`,
+        String.raw`$T = 63{,}025\,\mathrm{hp}/n = ${sig(inch.TLbfIn)}$ lb·in.`,
+        String.raw`On the 1.125 in shaft, $\tau = 16T/\pi d^3 = ${sig(inch.tauKsi)}$ ksi.`,
+        String.raw`Over 2.75 in with $G = 29{,}000/2.6$ ksi, $\phi = TL/GJ = ${sig(inch.phiDeg)}$°.`,
       ];
     },
     second: ($) => {
@@ -500,12 +519,16 @@ const ch5 = [
     ],
     hints: [
       'The allowable stress sets one diameter and the allowable angle sets another. The shaft has to meet the larger of the two.',
-      String.raw`From $\tau = 16T/(\pi d^3)$, and from $J = TL/(G\phi)$ with $J = \pi d^4/32$. Take the larger d.`,
+      'Each limit sets its own diameter. Solve the stress limit and the twist limit for the diameter separately, then keep the one that satisfies both.',
     ],
     steps: ($, sig) => {
       const T = torqueFromPower($.P, $.rpm).T;
       const need = solidDiameterRequired(T, $.L, G, $.tau, $.ang);
-      return [String.raw`Required diameter ${sig(need.d * 1000)} mm. Stress alone wants ${sig(need.dShear * 1000)} mm. Twist alone wants ${sig(need.dTwist * 1000)} mm.`];
+      return [
+        String.raw`$\omega = 2\pi n/60 = ${sig((2 * Math.PI * $.rpm) / 60)}$ rad/s, so $T = P/\omega = ${sig(T)}$ N·m.`,
+        String.raw`Stress: $d = (16T/\pi\tau)^{1/3} = ${sig(need.dShear * 1000)}$ mm.`,
+        String.raw`Twist: $d = (32TL/\pi G\phi)^{1/4} = ${sig(need.dTwist * 1000)}$ mm. The shaft needs the larger, $${sig(need.d * 1000)}$ mm.`,
+      ];
     },
     second: ($) => ({ d: searchDiameter($) }),
     sim: {
@@ -695,6 +718,368 @@ const ch5 = [
     },
     cases: [kase(cite('torsion'), { change: 'speed', P: 20, rpm: 1800 }, { which: 'half' })],
   }),
+  problem({
+    id: 'u9.5.box-tube',
+    title: 'Torsion of a rectangular tube',
+    exam: 'u9',
+    ch: '5',
+    lab: 'tubes',
+    src: cite('closed-tube'),
+    topics: ['closed-tube'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      a: range(60, 160, 10, 'mm', MM),
+      b: range(40, 100, 10, 'mm', MM),
+      t1: range(3, 8, 1, 'mm', MM),
+      t2: range(3, 8, 1, 'mm', MM),
+      T: range(1, 8, 0.5, 'kN·m', 1000),
+    },
+    derive: ($) => {
+      const walls = [{ len: $.a, t: $.t2 }, { len: $.b, t: $.t1 }, { len: $.a, t: $.t2 }, { len: $.b, t: $.t1 }];
+      const r = bredt($.T, $.a * $.b, walls, G);
+      return { tau: r.tauMax, rate: r.rate / DEG, q: r.q };
+    },
+    valid: ($) => $.a > $.b && $.tau < 150 * MPA && $.tau > 20 * MPA && $.t1 !== $.t2,
+    text: (T) => String.raw`A steel tube ($G = 75$ GPa) measures $${T.a}$ mm by $${T.b}$ mm on its wall's centreline. Its two long walls are $${T.t2}$ mm thick and its two short walls $${T.t1}$ mm thick. It carries a torque of $${T.T}$ kN·m. Find the shear flow, the largest shear stress, and the angle of twist per metre.`,
+    parts: [
+      num('q', ($) => $.q, 'N/mm', {
+        scale: 1000,
+        label: 'shear flow',
+        traps: [
+          [($) => $.T / (2 * ($.a + Math.max($.t1, $.t2)) * ($.b + Math.max($.t1, $.t2))), 'That uses the outside area. $A_m$ is the area inside the wall\'s centreline.'],
+        ],
+      }),
+      num('tau', ($) => $.tau, 'MPa', {
+        scale: MPA,
+        label: 'largest stress',
+        traps: [
+          [($) => $.q / Math.max($.t1, $.t2), 'That divides by the thicker wall. The same flow on the thinnest wall gives the largest stress.'],
+        ],
+      }),
+      num('rate', ($) => $.rate, '°/m', {
+        label: 'twist per metre',
+        traps: [
+          [($) => ($.T * (2 * $.a) / $.t2) / (4 * ($.a * $.b) ** 2 * G) / DEG, 'Only the long walls went into $\\oint ds/t$. The short walls add to it too.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Along the shaft, a small block of wall balances only if the shear flow $q = \\tau t$ is the same all the way round.',
+      String.raw`$T = 2A_m q$ with $A_m$ inside the centreline. $\tau = q/t$, largest where $t$ is smallest. $d\phi/dx = T\oint(ds/t)/(4A_m^2G)$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$A_m = ${sig($.a / MM)}\times ${sig($.b / MM)} = ${sig(($.a * $.b) / 1e-6)}$ mm², so $q = T/2A_m = ${sig($.q / 1000)}$ N/mm.`,
+      String.raw`The thinnest wall is $${sig(Math.min($.t1, $.t2) / MM)}$ mm: $\tau = ${sig($.tau / MPA)}$ MPa.`,
+      String.raw`$\oint ds/t = 2(${sig($.a / MM)}/${sig($.t2 / MM)} + ${sig($.b / MM)}/${sig($.t1 / MM)}) = ${sig(2 * ($.a / $.t2 + $.b / $.t1))}$, so $d\phi/dx = ${sig($.rate)}$°/m.`,
+    ],
+    second: ($) => {
+      // The twist rate from energy: T θ/2 equals Σ q² L/(2 G t) round the wall.
+      const q = $.T / (2 * $.a * $.b);
+      const U = 2 * ((q * q * $.a) / (2 * G * $.t2) + (q * q * $.b) / (2 * G * $.t1));
+      return { q: q / 1000, tau: q / Math.min($.t1, $.t2) / MPA, rate: (2 * U) / $.T / DEG };
+    },
+    cases: [kase(cite('closed-tube'), { a: 100, b: 50, t1: 6, t2: 4, T: 3 }, { q: 300, tau: 75, rate: 1.5278874536821951 })],
+  }),
+
+  problem({
+    id: 'u9.5.rect-bar',
+    title: 'A rectangular bar in torsion',
+    exam: 'u9',
+    ch: '5',
+    lab: 'tubes',
+    src: cite('noncircular'),
+    topics: ['noncircular'],
+    variety: ['representation'],
+    level: 2,
+    vars: {
+      ratio: choice(['1', '1'], ['2', '2'], ['3', '3'], ['4', '4']),
+      t: range(10, 30, 2, 'mm', MM),
+      T: range(50, 600, 25, 'N·m', 1),
+      L: range(0.5, 2, 0.25, 'm', 1),
+    },
+    derive: ($) => {
+      const b = Number($.ratio) * $.t;
+      const r = rectTorsion($.T, b, $.t, G);
+      return { bb: b, alpha: r.alpha, beta: r.beta, tau: r.tauMax, phi: (r.rate * $.L) / DEG };
+    },
+    valid: ($) => $.tau < 150 * MPA && $.tau > 15 * MPA,
+    text: (T, $) => String.raw`A steel bar ($G = 75$ GPa) of solid rectangular section, $${Math.round($.bb / MM)}$ mm by $${T.t}$ mm and $${T.L}$ m long, carries a torque of $${T.T}$ N·m. For this aspect ratio $\alpha = ${$.alpha.toFixed(3)}$ and $\beta = ${$.beta.toFixed(3)}$. Find the largest shear stress and the angle of twist.`,
+    parts: [
+      num('tau', ($) => $.tau, 'MPa', {
+        scale: MPA,
+        label: 'largest stress',
+        traps: [
+          [($) => ($.T * Math.hypot($.bb, $.t) / 2) / (($.bb * $.t * ($.bb ** 2 + $.t ** 2)) / 12), 'That is $Tc/J$ with the rectangle\'s polar moment. A rectangle warps, so that formula does not hold.'],
+          [($) => $.T / ($.alpha * $.t * $.bb ** 2), 'The short side is squared, not the long one.'],
+        ],
+      }),
+      num('phi', ($) => $.phi, '°', {
+        label: 'angle of twist',
+        traps: [
+          [($) => ($.T * $.L) / ($.beta * $.t * $.bb ** 3 * G) / DEG, 'The short side is cubed, not the long one.'],
+        ],
+      }),
+    ],
+    hints: [
+      'A rectangle warps as it twists, so $T\\rho/J$ does not apply. Use the coefficients for its aspect ratio.',
+      String.raw`$\tau_{\max} = T/(\alpha bt^2)$ and $\phi = TL/(\beta bt^3G)$, with $b$ the long side and $t$ the short side.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$b = ${sig($.bb / MM)}$ mm, $t = ${sig($.t / MM)}$ mm.`,
+      String.raw`$\tau_{\max} = T/(\alpha bt^2) = ${sig($.tau / MPA)}$ MPa, at the middle of the long faces.`,
+      String.raw`$\phi = TL/(\beta bt^3G) = ${sig($.phi)}$°.`,
+    ],
+    second: ($) => {
+      // The double sine series of the stress function, a second route to α and β.
+      const c = rectTorsionDouble($.bb, $.t);
+      return { tau: $.T / (c.alpha * $.bb * $.t ** 2) / MPA, phi: (($.T * $.L) / (c.beta * $.bb * $.t ** 3 * G)) / DEG };
+    },
+    cases: [kase(cite('noncircular'), { ratio: '2', t: 20, T: 200, L: 1 }, { tau: 50.838149863484, phi: 2.087901555072853 })],
+  }),
+
+  problem({
+    id: 'u9.5.slit',
+    title: 'A tube slit along its length',
+    exam: 'u9',
+    ch: '5',
+    lab: 'tubes',
+    src: cite('noncircular'),
+    topics: ['noncircular', 'closed-tube'],
+    variety: ['configuration'],
+    level: 2,
+    vars: {
+      d: range(30, 80, 5, 'mm', MM),
+      t: range(1.5, 4, 0.5, 'mm', MM),
+      T: range(5, 40, 5, 'N·m', 1),
+    },
+    derive: ($) => {
+      const r = $.d / 2;
+      const closed = bredt($.T, Math.PI * r * r, [{ len: Math.PI * $.d, t: $.t }], G);
+      const open = openThin($.T, [{ len: Math.PI * $.d, t: $.t }], G);
+      return { closedTau: closed.tauMax, openTau: open.tauMax, stiff: closed.J / open.J };
+    },
+    valid: ($) => $.openTau < 250 * MPA && $.d / $.t >= 12,
+    text: (T) => String.raw`A steel tube has a mean diameter of $${T.d}$ mm and a $${T.t}$ mm wall. It carries $${T.T}$ N·m. Find the shear stress in the closed tube, then the largest shear stress after the tube is slit along its whole length, and the factor by which the slit cuts the torsional stiffness.`,
+    parts: [
+      num('closedTau', ($) => $.closedTau, 'MPa', { scale: MPA, label: 'closed' }),
+      num('openTau', ($) => $.openTau, 'MPa', {
+        scale: MPA,
+        label: 'slit',
+        traps: [
+          [($) => $.closedTau, 'The slit stops the flow from going round. The open strip has $J = \\pi d t^3/3$.'],
+        ],
+      }),
+      num('stiff', ($) => $.stiff, '', {
+        label: 'stiffness factor',
+        traps: [
+          [($) => (3 * $.d) / 2 / $.t, 'That is the stress ratio $3r/t$. The stiffness ratio is $3(r/t)^2$.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Closed, the wall carries one flow round the loop. Slit, it is a thin strip of length $\\pi d$ that twists on its own.',
+      String.raw`Closed: $\tau = T/(2tA_m)$ and $J = 4A_m^2 t/(\pi d)$. Open: $J = \pi d t^3/3$ and $\tau = Tt/J$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Closed: $A_m = \pi d^2/4$, so $\tau = ${sig($.closedTau / MPA)}$ MPa.`,
+      String.raw`Slit: $J = \pi d t^3/3$, so $\tau = Tt/J = ${sig($.openTau / MPA)}$ MPa.`,
+      String.raw`The stiffness falls by $3(r/t)^2 = ${sig($.stiff)}$.`,
+    ],
+    second: ($) => {
+      const r = $.d / 2;
+      return {
+        closedTau: $.T / (2 * Math.PI * r * r * $.t) / MPA,
+        openTau: (3 * $.T) / (2 * Math.PI * r * $.t * $.t) / MPA,
+        stiff: 3 * (r / $.t) ** 2,
+      };
+    },
+    cases: [kase(cite('noncircular'), { d: 50, t: 2, T: 20 }, { closedTau: 2.5464790894703255, openTau: 95.49296585513721, stiff: 468.75 })],
+  }),
+
+  problem({
+    id: 'u9.5.shoulder',
+    title: 'The peak stress at a shaft shoulder',
+    exam: 'u9',
+    ch: '5',
+    lab: 'torsion',
+    src: cite('shaft-kt'),
+    topics: ['shaft-kt'],
+    variety: ['unknown'],
+    level: 1,
+    vars: {
+      d: range(20, 50, 2, 'mm', MM),
+      step: range(1.1, 1.5, 0.1, '', 1),
+      Kt: range(1.2, 2, 0.1, '', 1),
+      T: range(50, 600, 25, 'N·m', 1),
+    },
+    derive: ($) => {
+      const nom = (16 * $.T) / (Math.PI * $.d ** 3);
+      return { D: $.d * $.step, nom, peak: $.Kt * nom };
+    },
+    valid: ($) => $.peak < 200 * MPA && $.peak > 15 * MPA,
+    text: (T, $) => String.raw`A shaft steps from $${Math.round($.D / MM)}$ mm down to $${T.d}$ mm at a filleted shoulder, and carries $${T.T}$ N·m. A chart gives $K_t = ${T.Kt}$ for this step and fillet, on the nominal stress of the smaller diameter. Find the peak shear stress at the fillet.`,
+    parts: [
+      num('peak', ($) => $.peak, 'MPa', {
+        scale: MPA,
+        label: 'peak',
+        traps: [
+          [($) => $.nom, 'That is the nominal stress. The fillet multiplies it by $K_t$.'],
+          [($) => $.Kt * (16 * $.T) / (Math.PI * $.D ** 3), 'That takes the nominal stress on the larger diameter. $K_t$ is defined on the smaller one.'],
+        ],
+      }),
+    ],
+    hints: [
+      'A stress-concentration factor multiplies the nominal stress it was defined on.',
+      String.raw`Nominal: $16T/(\pi d^3)$ on the smaller diameter. Then multiply by $K_t$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Nominal on $d$: $16T/\pi d^3 = ${sig($.nom / MPA)}$ MPa.`,
+      String.raw`Peak: $K_t\times ${sig($.nom / MPA)} = ${sig($.peak / MPA)}$ MPa.`,
+    ],
+    second: ($) => ({ peak: ($.Kt * $.T * ($.d / 2)) / polarJ($.d / 2, 0) / MPA }),
+    sim: {
+      scenario: 'solid',
+      setup(s, $) {
+        s.T = $.T;
+        s.d = $.d;
+        s.di = 0;
+      },
+      read: (c, state, $) => ({ peak: $.Kt * c.tauMax }),
+    },
+    cases: [kase(cite('shaft-kt'), { d: 30, step: 1.2, Kt: 1.6, T: 200 }, { peak: 60.36098582848079 })],
+  }),
+  problem({
+    id: 'u9.5.fixed-step',
+    title: 'A two-diameter shaft held at both ends',
+    exam: 'u9',
+    ch: '5',
+    lab: 'twist',
+    src: cite('torsion'),
+    topics: ['torsion', 'fixed', 'stepped'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      T: range(200, 1200, 50, 'N·m', 1),
+      d1: range(30, 60, 5, 'mm', MM),
+      d2: range(20, 45, 5, 'mm', MM),
+      a: range(0.4, 1.2, 0.1, 'm', 1),
+      b: range(0.4, 1.2, 0.1, 'm', 1),
+    },
+    derive: ($) => {
+      const k1 = (G * polarJ($.d1 / 2, 0)) / $.a;
+      const k2 = (G * polarJ($.d2 / 2, 0)) / $.b;
+      const TL = ($.T * k1) / (k1 + k2);
+      const TR = $.T - TL;
+      const t1 = (16 * TL) / (Math.PI * $.d1 ** 3);
+      const t2 = (16 * TR) / (Math.PI * $.d2 ** 3);
+      return { k1, k2, TL, TR, phi: TL / k1 / DEG, tmax: Math.max(t1, t2) };
+    },
+    valid: ($) => $.d1 > $.d2 && $.tmax < 150 * MPA && rel($.TL, ($.T * $.b) / ($.a + $.b)),
+    text: (T) => String.raw`A steel shaft ($G = 75$ GPa) is fixed to walls at both ends. From the left wall it is $${T.d1}$ mm in diameter for $${T.a}$ m, then $${T.d2}$ mm for $${T.b}$ m to the right wall. A torque of $${T.T}$ N·m is applied at the step. Find the torque each wall carries, the rotation of the step, and the largest shear stress in the shaft.`,
+    parts: [
+      num('TL', ($) => $.TL, 'N·m', {
+        label: 'left wall',
+        traps: [
+          [($) => ($.T * $.b) / ($.a + $.b), 'That splits the torque by length alone, as if both pieces had one diameter. Each piece is a spring $GJ/L$.'],
+          [($) => $.T / 2, 'An even split needs equal stiffnesses.'],
+        ],
+      }),
+      num('TR', ($) => $.TR, 'N·m', { label: 'right wall' }),
+      num('phi', ($) => $.phi, '°', { abs: 1e-3, label: 'rotation of the step' }),
+      num('tmax', ($) => $.tmax, 'MPa', {
+        scale: MPA,
+        label: 'largest shear stress',
+        traps: [
+          [($) => Math.min((16 * $.TL) / (Math.PI * $.d1 ** 3), (16 * $.TR) / (Math.PI * $.d2 ** 3)), 'That is the less-stressed piece. Check both: the thin piece carries less torque on a smaller diameter.'],
+        ],
+      }),
+    ],
+    hints: [
+      'One equilibrium equation, two wall torques. The step turns by a single angle, seen from either wall.',
+      String.raw`Each piece is a torsional spring $k = GJ/L$. Equal angles mean the torques divide in proportion to the two $k$ values.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$k_1 = GJ_1/a = ${sig($.k1)}$ and $k_2 = GJ_2/b = ${sig($.k2)}$ N·m/rad.`,
+      String.raw`$T_L = Tk_1/(k_1 + k_2) = ${sig($.TL)}$ N·m and $T_R = ${sig($.TR)}$ N·m. The step turns $T_L/k_1 = ${sig($.phi)}$°.`,
+      String.raw`Stresses: $16T/\pi d^3$ in each piece; the larger is $${sig($.tmax / MPA)}$ MPa.`,
+    ],
+    second: ($) => {
+      // Release the right wall: the free twist T a/GJ1 must be undone by T_R through both pieces in series.
+      const J1 = polarJ($.d1 / 2, 0);
+      const J2 = polarJ($.d2 / 2, 0);
+      const free = ($.T * $.a) / (G * J1);
+      const flex = $.a / (G * J1) + $.b / (G * J2);
+      const TR = free / flex;
+      const TL = $.T - TR;
+      return {
+        TL, TR,
+        phi: (TR * $.b) / (G * J2) / DEG,
+        tmax: Math.max((16 * TL) / (Math.PI * $.d1 ** 3), (16 * TR) / (Math.PI * $.d2 ** 3)) / MPA,
+      };
+    },
+    cases: [kase(cite('torsion'), { T: 600, d1: 40, d2: 30, a: 0.6, b: 0.9 }, { TL: 495.48387096774195, TR: 104.51612903225805, phi: 0.9036542210785016, tmax: 39.42935364341149 })],
+  }),
+
+  problem({
+    id: 'u9.5.what-raises',
+    title: 'What a change does to the shaft stress',
+    exam: 'u9',
+    ch: '5',
+    lab: 'torsion',
+    src: cite('torsion'),
+    kind: 'conceptual',
+    topics: ['torsion', 'hollow'],
+    variety: ['representation'],
+    level: 2,
+    vars: {
+      change: choice(
+        ['long', 'the shaft is made twice as long'],
+        ['torque', 'the torque is doubled'],
+        ['thick', 'the diameter is doubled'],
+        ['bore', 'a bore half the outside diameter is drilled down its centre'],
+      ),
+      d: range(20, 60, 2, 'mm', MM),
+    },
+    text: (T) => String.raw`A solid steel shaft $${T.d}$ mm across carries a steady torque. Then ${T.change}. What happens to the shear stress at the outside?`,
+    parts: [
+      mc('effect', [
+        ['same', 'It stays the same.', 'The stress $T\\rho/J$ has no length in it. Length changes the angle, not the stress.'],
+        ['little', 'It rises a little, by under 10%.', 'The core carried little torque, so removing it costs only a small part of $J$.'],
+        ['double', 'It doubles.', 'The stress is proportional to the torque.'],
+        ['eighth', 'It falls to an eighth.', 'The stress goes as $1/d^3$, so twice the diameter gives an eighth.'],
+      ], ($) => ({ long: 'same', torque: 'double', thick: 'eighth', bore: 'little' }[$.change])),
+    ],
+    hints: [
+      'Write the outside stress as $\\tau = Tc/J$ and see which symbol the change touches.',
+      String.raw`For a solid shaft that is $16T/\pi d^3$. A bore of $d/2$ removes $1/16$ of $J$.`,
+    ],
+    steps: ($) => [
+      {
+        long: 'Length is not in Tc/J, so the stress stays the same; the angle doubles.',
+        torque: 'The stress is proportional to T, so it doubles.',
+        thick: 'With d doubled, d³ grows eightfold, so the stress falls to an eighth.',
+        bore: 'J loses (1/2)⁴ = 1/16 of itself, so the stress rises by 16/15, about 7%.',
+      }[$.change],
+    ],
+    second: ($) => {
+      const base = roundShaft(100, 1, G, $.d, 0).tauMax;
+      const next = {
+        long: roundShaft(100, 2, G, $.d, 0),
+        torque: roundShaft(200, 1, G, $.d, 0),
+        thick: roundShaft(100, 1, G, 2 * $.d, 0),
+        bore: roundShaft(100, 1, G, $.d, $.d / 2),
+      }[$.change].tauMax;
+      const r = next / base;
+      return { effect: Math.abs(r - 1) < 1e-9 ? 'same' : Math.abs(r - 2) < 1e-9 ? 'double' : Math.abs(r - 0.125) < 1e-9 ? 'eighth' : 'little' };
+    },
+    cases: [
+      kase(cite('torsion'), { change: 'long', d: 40 }, { effect: 'same' }),
+      kase(cite('torsion'), { change: 'bore', d: 40 }, { effect: 'little' }),
+      kase(cite('torsion'), { change: 'thick', d: 40 }, { effect: 'eighth' }),
+    ],
+  }),
+
 ];
 
 export default ch5;

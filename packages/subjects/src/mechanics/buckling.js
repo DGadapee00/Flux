@@ -162,3 +162,52 @@ export function tubeColumn(LIn, outerIn, wallIn, EKsi, FyKsi, K = 1) {
   const gap = Math.abs(fromSi - eulerKip) / Math.max(Math.abs(eulerKip), 1e-30);
   return { inner, I, A, eulerKip, stressKsi, Py, yielded, P: Math.min(eulerKip, Py), eulerN, gap };
 }
+
+/**
+ * Eccentric load P at offset e on a pinned column. With y the bow, EI y″ = −P(y + e). Put
+ * k² = P/EI: y + e = e[cos kx + tan(kL/2) sin kx], whose middle value is e sec(kL/2). The largest
+ * moment is P e sec(kL/2), and the outer fiber, c from the axis, carries
+ *   σ_max = (P/A)[1 + (e c/r²) sec((KL/2r)√(P/(EA)))]
+ * The bow grows without bound as P → P_cr, where kL/2 → π/2.
+ */
+export function secantColumn(P, e, c, A, I, E, L, K = 1) {
+  const r2 = I / A;
+  const half = ((K * L) / 2) * Math.sqrt(P / (E * I));
+  if (half >= PI / 2) return { sigma: Infinity, Mmax: Infinity, bow: Infinity, half };
+  const sec = 1 / Math.cos(half);
+  return { sigma: (P / A) * (1 + ((e * c) / r2) * sec), Mmax: P * e * sec, bow: e * (sec - 1), half, sec };
+}
+
+/** The load at which the secant formula's peak stress reaches σ_max, by bisection below P_cr. */
+export function secantLoad(sigMax, e, c, A, I, E, L, K = 1) {
+  let lo = 0;
+  let hi = eulerLoad(E, I, L, K) * (1 - 1e-12);
+  for (let i = 0; i < 200; i++) {
+    const mid = 0.5 * (lo + hi);
+    if (secantColumn(mid, e, c, A, I, E, L, K).sigma < sigMax) lo = mid;
+    else hi = mid;
+  }
+  return 0.5 * (lo + hi);
+}
+
+/** Tangent modulus of a Ramberg–Osgood curve, ε = σ/E + 0.002(σ/σ_Y)ⁿ: E_t = dσ/dε. */
+export function tangentModulus(sigma, E, sigY, n) {
+  return 1 / (1 / E + (0.002 * n * sigma ** (n - 1)) / sigY ** n);
+}
+
+/**
+ * Engesser: past the proportional limit a column buckles when σ = π² E_t(σ)/(KL/r)². The left side
+ * rises and the right side falls with σ, so one root lies between 0 and the Euler stress.
+ */
+export function tangentModulusStress(slender, E, sigY, n) {
+  const euler = (PI * PI * E) / slender ** 2;
+  let lo = 0;
+  let hi = euler;
+  for (let i = 0; i < 200; i++) {
+    const mid = 0.5 * (lo + hi);
+    if (mid < (PI * PI * tangentModulus(mid, E, sigY, n)) / slender ** 2) lo = mid;
+    else hi = mid;
+  }
+  const sigma = 0.5 * (lo + hi);
+  return { sigma, Et: tangentModulus(sigma, E, sigY, n), euler };
+}

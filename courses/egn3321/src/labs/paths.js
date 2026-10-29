@@ -1,9 +1,9 @@
 import { G } from '@flux/subjects/mechanics/constants.js';
-import { forceArrow, placeIncomingArrow } from '@flux/shells/engineering/fbd.js';
-import { M, makeDot, makeLine, setLine } from '../scene/draw.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { THREE, defineLab } from './define.js';
+import { C, alpha, axes, begin, chartIn, dot, hidden, label, line, sceneIn, seg, split, vec } from './diagram.js';
+import { defineLab } from './define2d.js';
+import { PLAY, advance } from './motion.js';
 import { archMotion, cornerMotion, lineMotion, pathReport } from './pathwork.js';
 import { bindSlider, slider } from './widgets.js';
 
@@ -57,23 +57,57 @@ function apply(id, state) {
   state.ay = sc.ay;
   state.bx = sc.bx;
   state.by = sc.by;
+  state.u = 0;
+  state.anim = { playing: false };
+  state.show = { play: false };
 }
+
+/**
+ * Path independence (Hibbeler §14.5): one body carried from A to B three ways, straight, round a
+ * corner, and over an arch, with gravity and a spring anchored at the origin. Shows that the
+ * conservative works depend only on the ends, so all three paths agree, while friction's work grows
+ * with the path's length and splits them. Play carries three copies along the three paths at once;
+ * the chart books the work done so far on each.
+ *
+ * Recompute: U = −ΔV, plus friction over each path's length. Check: the work integrated along each
+ * path (pathwork.js).
+ */
 
 function samples(motion, n = 40) {
   const pts = [];
   for (let i = 0; i <= n; i++) {
     const p = motion(i / n);
-    pts.push({ x: p.x, y: p.y });
+    pts.push([p.x, p.y]);
   }
   return pts;
+}
+
+/** The work done so far along a path, by the weight, the spring and friction: −ΔV − μ m g s. */
+function running(state, motion, n = 60) {
+  const V = (p) => state.mass * G * p.y + 0.5 * state.k * (p.x * p.x + p.y * p.y);
+  const A = motion(0);
+  let s = 0;
+  let prev = A;
+  const out = [[0, 0]];
+  for (let i = 1; i <= n; i++) {
+    const p = motion(i / n);
+    s += Math.hypot(p.x - prev.x, p.y - prev.y);
+    prev = p;
+    out.push([i / n, V(A) - V(p) - state.mu * state.mass * G * s]);
+  }
+  return out;
 }
 
 export default defineLab({
   id: 'paths',
   exam: 'u3',
   title: 'Paths',
+  app: false,
+  gapLimit: 1e-3,
+  keys: { ' ': 'sweep' },
+  toggles: [PLAY],
+  sweep: () => ({ key: 'rise', lo: 0, hi: 0.8 }),
   hint: 'Turn on friction. Only that work changes from path to path.',
-  camera: { pos: new THREE.Vector3(0.8, 0.55, 4.4), target: new THREE.Vector3(0.8, 0.55, 0) },
   scenarios: SCENARIOS,
   defaultState() {
     const s = {};
@@ -89,7 +123,7 @@ export default defineLab({
       ${slider('pa-rise', 'arch rise (m)', 0.35, 0, 0.8, 0.01)}
       ${slider('pa-ay', 'start height (m)', 1, 0.2, 1.6, 0.05)}
       ${slider('pa-by', 'end height (m)', 0.4, 0.2, 1.6, 0.05)}
-      <p class="tiny">White is straight, gold turns a corner, teal arches. The spring is anchored at the origin.</p>`;
+      <p class="tiny">White is straight, gold turns a corner, teal arches. The spring, anchored at the origin, pulls each body. Play carries all three from A to B at once; the chart books the work done so far on each.</p>`;
   },
   bind(api) {
     bindSlider('pa-mass', (s, v) => { s.mass = v; }, api);
@@ -111,29 +145,10 @@ export default defineLab({
     set('pa-ay', state.ay);
     set('pa-by', state.by);
   },
-  init(ctx) {
-    const group = new THREE.Group();
-    const line = makeLine(M.white);
-    const corner = makeLine(M.gold);
-    const arch = makeLine(M.teal);
-    const spring = makeLine(M.gold);
-    const anchor = makeDot(M.grey, 0.05);
-    const start = makeDot(M.white, 0.07);
-    const end = makeDot(M.red, 0.07);
-    const mk = (color) => forceArrow(new THREE.Vector3(0, -1, 0), color, 0.025, 0.16, 0.1);
-    const weight = mk(M.grey);
-    const pull = mk(M.gold);
-    group.add(line, corner, arch, spring, anchor, start, end, weight, pull);
-    ctx.scene.add(group);
-    return { group, line, corner, arch, spring, anchor, start, end, weight, pull };
+  tick(dt, state) {
+    return advance(state, dt, { lo: 0, hi: 1.2, rate: 0.3, key: 'u' });
   },
-  enter(ctx, handle) {
-    handle.group.visible = true;
-  },
-  exit(ctx, handle) {
-    handle.group.visible = false;
-  },
-  recompute(state, computed) {
+  compute(state) {
     const row = pathReport({
       mass: state.mass,
       k: state.k,
@@ -145,27 +160,56 @@ export default defineLab({
       by: state.by,
       g: G,
     });
-    Object.assign(computed, row);
-  },
-  syncViews(state, computed, ctx) {
-    void computed;
-    const h = ctx.handle;
     const A = [state.ax, state.ay];
     const B = [state.bx, state.by];
-    setLine(h.line, samples(lineMotion(A, B)));
-    setLine(h.corner, samples(cornerMotion(A, B)));
-    setLine(h.arch, samples(archMotion(A, B, state.rise)));
-    setLine(h.spring, [{ x: 0, y: 0 }, { x: A[0], y: A[1] }]);
-    h.anchor.position.set(0, 0, 0);
-    h.start.position.set(A[0], A[1], 0);
-    h.end.position.set(B[0], B[1], 0);
-    const len = Math.hypot(A[0], A[1]);
-    const scale = 0.9 / Math.max(state.mass * G, state.k * len, 1);
-    placeIncomingArrow(h.weight, new THREE.Vector3(A[0], A[1], 0), 0, -state.mass * G, { scale, minLength: 0.08, gap: 0.02 });
-    const stretch = len;
-    const fx = len > 1e-9 ? -state.k * stretch * (A[0] / len) : 0;
-    const fy = len > 1e-9 ? -state.k * stretch * (A[1] / len) : 0;
-    placeIncomingArrow(h.pull, new THREE.Vector3(A[0], A[1], 0), fx, fy, { scale, minLength: 0.08, gap: 0.02 });
+    const motions = [lineMotion(A, B), cornerMotion(A, B), archMotion(A, B, state.rise)];
+    return { ...row, books: motions.map((m) => running(state, m)), tracks: motions.map((m) => samples(m)) };
+  },
+  draw(canvas, state, c) {
+    const B0 = begin(canvas);
+    const veiled = hidden();
+    const [left, right] = veiled ? [B0.free, null] : split(B0.free, 0.5);
+    const A = [state.ax, state.ay];
+    const B = [state.bx, state.by];
+    const S = sceneIn(B0, left, { x0: -0.2, x1: Math.max(A[0], B[0]) + 0.3, y0: -0.15, y1: Math.max(A[1], B[1]) + state.rise + 0.25 });
+    seg(S, [-0.2, 0], [Math.max(A[0], B[0]) + 0.3, 0], { color: alpha(C.text, 0.25), width: 1 });
+    const colors = [C.text, C.gold, C.teal];
+    const motions = [lineMotion(A, B), cornerMotion(A, B), archMotion(A, B, state.rise)];
+    c.tracks.forEach((pts, i) => line(S, pts, { color: alpha(colors[i], 0.7), width: 2 }));
+    dot(S, 0, 0, { color: C.dim, r: 5 });
+    dot(S, A[0], A[1], { color: C.text, r: 5 });
+    dot(S, B[0], B[1], { color: C.red, r: 5 });
+    label(S, 'A', A, { color: C.text, dx: -10, dy: -10 });
+    label(S, 'B', B, { color: C.red, dx: 10, dy: -10 });
+    const u = Math.min(Number(state.u) || 0, 1);
+    const big = Math.max(state.mass * G, state.k * Math.hypot(A[0], A[1]), 1);
+    const k = (0.25 * S.k) / big;
+    motions.forEach((m, i) => {
+      const p = m(u);
+      seg(S, [0, 0], [p.x, p.y], { color: alpha(C.gold, 0.35), width: 1, dash: [3, 3] });
+      dot(S, p.x, p.y, { color: colors[i], r: 6 });
+      if (i === 0) {
+        // The forces on one body: its weight, and the spring's pull toward the anchor.
+        vec(S, [p.x, p.y], [0, -state.mass * G], k, { color: C.dim, label: 'mg' });
+        vec(S, [p.x, p.y], [-state.k * p.x, -state.k * p.y], k, { color: C.gold, label: 'ks' });
+      }
+    });
+    if (veiled) return;
+
+    // Work done so far on each path, against the fraction of the way travelled.
+    const vals = c.books.flat().map((q) => q[1]);
+    const lo = Math.min(0, ...vals) * 1.15 - 0.1;
+    const hi = Math.max(0, ...vals) * 1.15 + 0.1;
+    const P = chartIn(B0, right, { lo: 0, hi: 1 }, { lo, hi });
+    axes(P, { xLabel: 'fraction of the way from A to B', yLabel: 'work done so far (J)' });
+    line(P, [[0, 0], [1, 0]], { color: alpha(C.text, 0.35), width: 1 });
+    line(P, [[0, c.potential], [1, c.potential]], { color: alpha(C.text, 0.4), width: 1, dash: [4, 4] });
+    label(P, '−ΔV', [0.02, c.potential], { color: C.muted, align: 'left', dy: -8 });
+    c.books.forEach((pts, i) => {
+      line(P, pts, { color: colors[i], width: 2.2 });
+      const here = pts[Math.round(u * (pts.length - 1))];
+      dot(P, here[0], here[1], { color: colors[i], r: 4 });
+    });
   },
   law() {
     return [String.raw`U=-\Delta V`, String.raw`U_f=-\mu mg\,s`];
@@ -192,18 +236,18 @@ export default defineLab({
     if (state.mu > 1e-9) {
       return {
         title: same ? 'These paths happen to match' : 'Friction follows the length',
-        body: String.raw`$-\Delta V = ${fig(c.potential)}\ \mathrm{J}$ on every path. Friction makes the arch ${fig(c.workArch)}\ \mathrm{J} and the straight path ${fig(c.workLine)}\ \mathrm{J}.`,
+        body: String.raw`$-\Delta V = ${fig(c.potential)}\ \mathrm{J}$ on every path. Friction makes the arch ${fig(c.workArch)} J and the straight path ${fig(c.workLine)} J.`,
       };
     }
     if (Math.abs(state.ay - state.by) < 1e-9) {
       return {
         title: 'The weight does no work',
-        body: String.raw`The ends share a height, so gravity drops out. The spring still does ${fig(c.potential)}\ \mathrm{J} on every path.`,
+        body: String.raw`The ends share a height, so gravity drops out. The spring still does ${fig(c.potential)} J on every path.`,
       };
     }
     return {
       title: 'The path does not enter',
-      body: String.raw`Straight, corner, and arch each do ${fig(c.workLine)}\ \mathrm{J}. That is $-\Delta V$.`,
+      body: String.raw`Straight, corner, and arch each do ${fig(c.workLine)} J. That is $-\Delta V$.`,
     };
   },
 });

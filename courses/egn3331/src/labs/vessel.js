@@ -1,7 +1,8 @@
 import { hoopFromSplit, sphereFromCap, thinCylinder, thinSphere } from '@flux/subjects/mechanics/materials.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { C, alpha, axes, begin, chartIn, circle, dot, hidden, label, line, panes, poly, sceneIn, seg } from './diagram.js';
+import { stressElement } from './elements.js';
 import { defineLab } from './define.js';
 import { bindSlider, slider } from './widgets.js';
 
@@ -26,6 +27,32 @@ function apply(id, state) {
 
 function stresses(state) {
   return state.kind === 'sphere' ? thinSphere(state.p, state.r, state.t) : thinCylinder(state.p, state.r, state.t);
+}
+
+/**
+ * The vessel and an element of its wall. On the cylinder the hoop stress runs around (up the page
+ * on the near side) and the longitudinal stress along it; a sphere's two arrows match.
+ */
+function member(B, rect, state, c, veiled) {
+  const S = sceneIn(B, rect, { x0: -2, x1: 2, y0: -1.2, y1: 1.2 }, 8);
+  const sphere = state.kind === 'sphere';
+  if (sphere) circle(S, [0, 0], 1, { stroke: C.text, fill: alpha(C.text, 0.08), width: 2 });
+  else {
+    poly(S, [[-1.5, -0.8], [1.5, -0.8], [1.5, 0.8], [-1.5, 0.8]], { fill: alpha(C.text, 0.08), stroke: C.text, width: 2 });
+    for (const x of [-1.5, 1.5]) {
+      const pts = Array.from({ length: 25 }, (_, i) => {
+        const a = -Math.PI / 2 + (Math.PI * i) / 24;
+        return [x + Math.sign(x) * 0.28 * Math.cos(a), 0.8 * Math.sin(a)];
+      });
+      for (let i = 1; i < pts.length; i++) seg(S, pts[i - 1], pts[i], { color: C.text, width: 2 });
+    }
+  }
+  stressElement(S, [0, 0], { half: 0.28, sx: c.axial, sy: c.hoop, scale: Math.max(c.hoop, 1), full: 30, names: false });
+  if (!veiled) {
+    label(S, `hoop ${fig(c.hoop / 1e6)} MPa`, [0, 0.28], { color: C.gold, dy: -42 });
+    label(S, `${sphere ? 'other way' : 'longitudinal'} ${fig(c.axial / 1e6)} MPa`, [0.28, 0], { color: C.gold, dx: 40, align: 'left' });
+    label(S, `p = ${fig(state.p / 1e6)} MPa, r/t = ${fig(c.rt)}`, [0, sphere ? -1 : -0.8], { color: C.dim, dy: 14 });
+  }
 }
 
 export default defineLab({
@@ -70,8 +97,12 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.45);
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const yHi = Math.max(c.hoop, c.axial, 1) / 1e6 * 1.15;
-    const P = plotIn(B, B.free, { lo: 0, hi: 4 }, { lo: 0, hi: yHi * (4e6 / c.p) });
+    const P = chartIn(B, R, { lo: 0, hi: 4 }, { lo: 0, hi: yHi * (4e6 / c.p) });
     axes(P, { xLabel: 'pressure (MPa)', yLabel: 'stress (MPa)' });
     const hoop = [];
     const axial = [];

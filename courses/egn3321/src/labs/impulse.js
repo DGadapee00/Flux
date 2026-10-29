@@ -1,8 +1,9 @@
 import { impulse, impulseRamp } from '@flux/subjects/mechanics/momentum.js';
-import { M, makeArrow, makeDot, makeLine, setArrow, setLine } from '../scene/draw.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { THREE, defineLab } from './define.js';
+import { C, alpha, axes, begin, chartIn, dot, hidden, label, line, poly, sceneIn, seg, vec } from './diagram.js';
+import { defineLab } from './define2d.js';
+import { PLAY, advance } from './motion.js';
 import { bindSlider, showField, slider } from './widgets.js';
 
 const SCENARIOS = [
@@ -51,6 +52,28 @@ function apply(id, state) {
   state.t1 = sc.t1;
   state.f2 = sc.f2;
   state.t2 = sc.t2;
+  state.t = 0;
+  state.anim = { playing: false };
+  state.show = { play: false };
+}
+
+/**
+ * Linear impulse and momentum (Hibbeler §15.1): a force on a block, as two pieces in time. Shows that
+ * the change in speed is the area under F–t, whatever the shape: a short hard push and a long gentle
+ * one with the same area give the same Δv. Play runs the push on the block, with the area filling in
+ * and the speed rising by it.
+ *
+ * Recompute: each piece's area in closed form. Check: m dv/dt = F integrated by the midpoint rule.
+ */
+
+const forceAt = (state, t) => (t < 0 ? 0 : t <= state.t1 ? state.f1 + state.s1 * t : t <= state.t1 + state.t2 ? state.f2 : 0);
+/** The speed and position at t, by the areas so far. */
+function stateAt(state, t) {
+  const m = Math.max(state.mass, 1e-9);
+  const a1 = Math.min(Math.max(t, 0), state.t1);
+  const a2 = Math.min(Math.max(t - state.t1, 0), state.t2);
+  const J = state.f1 * a1 + 0.5 * state.s1 * a1 * a1 + state.f2 * a2;
+  return { v: state.v0 + J / m, J };
 }
 
 /** Midpoint integration of m dv/dt = F, split at the break so each piece is linear. */
@@ -112,8 +135,12 @@ export default defineLab({
   id: 'impulse',
   exam: 'u4',
   title: 'Impulse',
+  app: false,
+  gapLimit: 1e-3,
+  keys: { ' ': 'sweep' },
+  toggles: [PLAY],
+  sweep: () => ({ key: 'f1', lo: 0, hi: 500 }),
   hint: 'Two shapes with the same area give the same change in speed.',
-  camera: { pos: new THREE.Vector3(0, 0.15, 8), target: new THREE.Vector3(0, 0.15, 0) },
   scenarios: SCENARIOS,
   defaultState() {
     const s = {};
@@ -130,7 +157,7 @@ export default defineLab({
       ${slider('im-s1', 'slope (N/s)', 0, -20, 80, 1)}
       ${slider('im-f2', 'F₂ (N)', 40, 0, 200, 1)}
       ${slider('im-t2', 't₂ (s)', 1, 0, 3, 0.05)}
-      <p class="tiny">Gold is the force. The grey break is where the second piece starts.</p>`;
+      <p class="tiny">Gold is the first piece of the force, teal the second; their shaded areas are the impulses. White is the block's speed. Play runs the push.</p>`;
   },
   bind(api) {
     bindSlider('im-mass', (s, v) => { s.mass = v; }, api);
@@ -158,45 +185,64 @@ export default defineLab({
     showField('im-f2', !ramp);
     showField('im-t2', !ramp);
   },
-  init(ctx) {
-    const group = new THREE.Group();
-    const curve = makeLine(M.gold);
-    const axis = makeLine(M.grey);
-    const upright = makeLine(M.grey);
-    const brk = makeLine(M.greyDark);
-    const mass = makeDot(M.white, 0.1);
-    const vel = makeArrow(M.white);
-    group.add(curve, axis, upright, brk, mass, vel);
-    ctx.scene.add(group);
-    return { group, curve, axis, upright, brk, mass, vel };
+  tick(dt, state) {
+    return advance(state, dt, { lo: 0, hi: Math.max(state.t1 + state.t2, 0.2) * 1.2, rate: 0.5 });
   },
-  enter(ctx, handle) {
-    handle.group.visible = true;
-  },
-  exit(ctx, handle) {
-    handle.group.visible = false;
-  },
-  recompute(state, computed) {
-    if (!(state.mass > 0)) {
-      Object.assign(computed, { j1: 0, j2: 0, J: 0, dv: 0, v: state.v0 || 0, gap: 0 });
-      return;
-    }
+  compute(state) {
+    if (!(state.mass > 0)) return { j1: 0, j2: 0, J: 0, dv: 0, v: state.v0 || 0, gap: 0 };
     const row = areas(state);
     const speed = integratedSpeed(state);
-    Object.assign(computed, row, {
-      gap: Math.abs(row.v - speed) / Math.max(1, Math.abs(row.v)),
-    });
+    return { ...row, gap: Math.abs(row.v - speed) / Math.max(1, Math.abs(row.v)) };
   },
-  syncViews(state, computed, ctx) {
-    const h = ctx.handle;
-    const g = graph(state);
-    setLine(h.curve, g.pts);
-    setLine(h.axis, g.axis);
-    setLine(h.upright, g.upright);
-    setLine(h.brk, g.brk);
-    h.mass.position.set(-2.15, -1.7, 0);
-    const scale = 1.3 / Math.max(Math.abs(computed.v), 1);
-    setArrow(h.vel, { x: -2.15, y: -1.7 }, { x: computed.v * scale, y: 0 }, 1.5);
+  draw(canvas, state, c) {
+    const B = begin(canvas);
+    const veiled = hidden();
+    const T = Math.max(state.t1 + state.t2, 0.2) * 1.2;
+    const t = Math.min(Math.max(Number(state.t) || 0, 0), T);
+    const now = stateAt(state, t);
+    const H = B.free.y1 - B.free.y0;
+    const trackRect = { ...B.free, y1: B.free.y0 + Math.min(120, 0.24 * H) };
+    // The block, pushed by the force, carrying its speed.
+    const S = sceneIn(B, trackRect, { x0: -0.2, x1: 4.2, y0: -0.12, y1: 0.75 });
+    seg(S, [-0.2, 0], [4.2, 0], { color: C.dim, width: 2 });
+    const xb = 0.3 + (3.4 * t) / T;
+    poly(S, [[xb - 0.2, 0], [xb + 0.2, 0], [xb + 0.2, 0.32], [xb - 0.2, 0.32]], { fill: alpha(C.blue, 0.35), stroke: C.blue, width: 1.5 });
+    const Fnow = forceAt(state, t);
+    const Fmax = Math.max(1, state.f1, state.f1 + state.s1 * state.t1, state.f2);
+    if (Fnow > 1e-9) vec(S, [xb - 0.2 - (0.5 * Fnow) / Fmax, 0.16], [Fnow, 0], (0.5 * S.k) / Fmax, { color: t <= state.t1 ? C.gold : C.teal, label: 'F' });
+    const vMax = Math.max(1, Math.abs(c.v), Math.abs(state.v0));
+    if (Math.abs(now.v) > 1e-9) vec(S, [xb, 0.45], [now.v, 0], (0.9 * S.k) / vMax, { color: C.text, label: veiled ? 'v' : `${fig(now.v)} m/s` });
+    if (veiled) return;
+
+    const rest = { ...B.free, y0: trackRect.y1 };
+    const mid = (rest.y0 + rest.y1) / 2;
+    // F–t: each piece's area shaded up to the cursor.
+    const Ftop = Fmax * 1.15;
+    const P1 = chartIn(B, { ...rest, y1: mid }, { lo: 0, hi: T }, { lo: Math.min(0, state.f1 + state.s1 * state.t1) * 1.1, hi: Ftop });
+    axes(P1, { xLabel: '', yLabel: 'force F (N)' });
+    const piece1 = Array.from({ length: 31 }, (_, i) => {
+      const u = (state.t1 * i) / 30;
+      return [u, state.f1 + state.s1 * u];
+    });
+    const filled1 = piece1.filter((q) => q[0] <= t + 1e-9);
+    if (filled1.length > 1) poly(P1, [[0, 0], ...filled1, [filled1[filled1.length - 1][0], 0]], { fill: alpha(C.gold, 0.3), stroke: null });
+    if (state.t2 > 0 && t > state.t1) poly(P1, [[state.t1, 0], [state.t1, state.f2], [Math.min(t, state.t1 + state.t2), state.f2], [Math.min(t, state.t1 + state.t2), 0]], { fill: alpha(C.teal, 0.3), stroke: null });
+    line(P1, piece1, { color: C.gold, width: 2.5 });
+    if (state.t2 > 0) line(P1, [[state.t1, state.f2], [state.t1 + state.t2, state.f2]], { color: C.teal, width: 2.5 });
+    line(P1, [[t, 0], [t, Ftop]], { color: alpha(C.yellow, 0.5), width: 1, dash: [4, 4] });
+    label(P1, `J₁ = ${fig(c.j1)} N·s`, [state.t1 / 2, Ftop * 0.92], { color: C.gold });
+    if (state.t2 > 0) label(P1, `J₂ = ${fig(c.j2)} N·s`, [state.t1 + state.t2 / 2, Ftop * 0.92], { color: C.teal });
+    // v–t: the speed rises by exactly the area so far.
+    const vs = Array.from({ length: 61 }, (_, i) => {
+      const u = (T * i) / 60;
+      return [u, stateAt(state, u).v];
+    });
+    const vlo = Math.min(0, ...vs.map((q) => q[1])) * 1.1;
+    const vhi = Math.max(0.5, ...vs.map((q) => q[1])) * 1.1;
+    const P2 = chartIn(B, { ...rest, y0: mid }, { lo: 0, hi: T }, { lo: vlo, hi: vhi });
+    axes(P2, { xLabel: 'time (s)', yLabel: 'speed v (m/s)' });
+    line(P2, vs, { color: C.text, width: 2.5 });
+    dot(P2, t, now.v, { color: C.yellow, r: 5 });
   },
   law() {
     return [

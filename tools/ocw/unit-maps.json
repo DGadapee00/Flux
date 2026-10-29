@@ -37,8 +37,8 @@
    "24": "Unit 4",
    "25": "Unit 4",
    "32": "Units 3, 6",
-   "33": "Unit 6",
-   "34": "Unit 6",
+   "33": "Units 6, 8",
+   "34": "Units 6, 8",
    "28": "Unit 5",
    "29": "Unit 6",
    "30": "Unit 6",
@@ -46,23 +46,24 @@
    "35": "Unit 5",
    "36": "Unit 6",
    "37": "Unit 7",
-   "4.4": "unmapped",
-   "27.5": "unmapped",
-   "37.3": "unmapped",
-   "37.4": "unmapped"
+   "4.4": "Unit 5",
+   "37.3": "Unit 8",
+   "37.4": "Unit 8",
+   "14": "Unit 2",
+   "27.5": "unmapped"
   },
-  "note": "From docs/course-plans/egn3321.md (OCW map, D29), refined by lesson. Lessons 4.4, 5.1, 5.2, 13, 14, 27.5, 37.3 and 37.4 stay unmapped: Dynamics does not teach them (it leaves out drag, continuous systems and rigid-body angular momentum)."
+  "note": "From docs/course-plans/egn3321.md (OCW map, D29, D36), refined by lesson. Lessons 5.1, 5.2, 13 and 27.5 stay unmapped: Dynamics does not teach universal gravitation, continuous systems or the gravitational slingshot. Drag (14) is Unit 2, non-inertial frames (4.4) Unit 5, and rigid-body angular momentum (33, 34, 37.3, 37.4) Unit 8 (D36)."
  },
  "2-003sc": {
   "bySession": {
    "1": "Unit 2",
    "2": "Units 1, 5",
-   "3": "Unit 6",
-   "4": "Unit 2",
-   "6": "Unit 6",
-   "7": "Unit 6",
+   "3": "Units 6, 8",
+   "4": "Units 2, 5",
+   "6": "Units 6, 8",
+   "7": "Units 6, 8",
    "8": "Units 6, 7"
   },
-  "note": "From docs/course-plans/egn3321.md. Quizzes (5, 11) and lectures 9-15 (Lagrange, vibration: EML 4312) are unmapped."
+  "note": "From docs/course-plans/egn3321.md (D29, D36). Quizzes (5, 11) and lectures 9-15 (Lagrange, vibration: EML 4312) are unmapped."
  }
 }

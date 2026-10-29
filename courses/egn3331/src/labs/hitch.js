@@ -3,7 +3,7 @@ import { combinedReduced, hitchSides } from '@flux/subjects/mechanics/materials.
 import { HITCH_ARM, HITCH_BALL_IN, HITCH_D, HITCH_D_IN, HITCH_GTW_LBF, HITCH_LEN_IN } from '../data/hitch.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { C, alpha, arrow, axes, begin, chartIn, circle, dot, hidden, label, line, panes, poly, sceneIn } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, leavesOut, slider } from './widgets.js';
 
@@ -33,6 +33,32 @@ const SCENARIOS = [
 function apply(id, state) {
   const sc = SCENARIOS.find((s) => s.id === id) || SCENARIOS[0];
   Object.assign(state, { scenarioId: sc.id, W: sc.W, H: sc.H });
+}
+
+/**
+ * The ball on its shank through the hitch bar, drawn to the catalog's inches. The tongue load W
+ * presses the ball down; the horizontal pull H bends the shank about the bar. The side H pulls away
+ * from is in tension (red), the other in compression (blue), and W compresses both.
+ */
+function member(B, rect, state, c, veiled) {
+  const R = HITCH_BALL_IN / 2;
+  const d = HITCH_D_IN;
+  const Ls = HITCH_LEN_IN;
+  const S = sceneIn(B, rect, { x0: -3.2, x1: 3.2, y0: -Ls - 0.9, y1: 2 * R + 2.6 }, 8);
+  poly(S, [[-2.6, -0.55], [2.6, -0.55], [2.6, 0], [-2.6, 0]], { fill: alpha(C.muted, 0.3), stroke: C.muted });
+  const tone = (s) => (s < 0 ? C.blue : C.red);
+  poly(S, [[-d / 2, 0.2], [0, 0.2], [0, -Ls], [-d / 2, -Ls]], { fill: alpha(tone(c.tension), 0.35), stroke: tone(c.tension) });
+  poly(S, [[0, 0.2], [d / 2, 0.2], [d / 2, -Ls], [0, -Ls]], { fill: alpha(tone(c.compression), 0.35), stroke: tone(c.compression) });
+  poly(S, [[-0.8, 0.2], [0.8, 0.2], [0.8, 0.45], [-0.8, 0.45]], { fill: alpha(C.text, 0.2), stroke: C.text });
+  circle(S, [0, 0.45 + R], R, { stroke: C.text, fill: alpha(C.text, 0.12), width: 2 });
+  if (Math.abs(state.W) > 1) arrow(S, [0, 0.45 + 2 * R], -Math.PI / 2, 30, { color: C.pink, tail: true });
+  if (Math.abs(state.H) > 1) arrow(S, [0, 0.45 + R], Math.PI, 20 + 30 * Math.min(1, state.H / (1500 * LBF)), { color: C.pink });
+  if (!veiled) {
+    label(S, `W ${fig(state.W / LBF)} lbf`, [0, 0.45 + 2 * R], { color: C.pink, dy: -40 });
+    if (Math.abs(state.H) > 1) label(S, `H ${fig(state.H / LBF)} lbf`, [-R, 0.45 + R], { color: C.pink, dx: -40, dy: -12 });
+    label(S, `${fig(c.tension / KSI)} ksi`, [-d / 2, -Ls], { color: tone(c.tension), dy: 14, align: 'right' });
+    label(S, `${fig(c.compression / KSI)} ksi`, [d / 2, -Ls], { color: tone(c.compression), dy: 14, align: 'left' });
+  }
 }
 
 export default defineLab({
@@ -76,6 +102,10 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.42);
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const tension = [];
     const compression = [];
     let yHi = 1;
@@ -86,7 +116,7 @@ export default defineLab({
       compression.push([H / LBF, s.compression / KSI]);
       yHi = Math.max(yHi, Math.abs(s.tension / KSI), Math.abs(s.compression / KSI));
     }
-    const P = plotIn(B, B.free, { lo: 0, hi: 2000 }, { lo: -yHi * 1.1, hi: yHi * 1.1 });
+    const P = chartIn(B, R, { lo: 0, hi: 2000 }, { lo: -yHi * 1.1, hi: yHi * 1.1 });
     axes(P, { xLabel: 'horizontal force (lbf)', yLabel: 'stress (ksi)' });
     line(P, tension, { color: C.red, width: 3 });
     line(P, compression, { color: C.blue, width: 3 });

@@ -15,7 +15,7 @@ import { solveTruss, memberForce, zeroForceMembers, sectionCheck, stateOf, metho
 import { inclineState, inclineRange, tipOrSlip, beltTension } from './friction.js';
 import { solveFrame, solveLinear } from './frames.js';
 import {
-  internalAt, shearMomentDiagram, simplePoint, simpleUniform, cantileverTip, beamGap,
+  internalAt, shearMomentDiagram, simplePoint, simpleUniform, cantileverTip, beamGap, generalBeam, graphicalGap,
   composite, centroidUnderCurve, centroidOfLine, rect, tri, semi,
   quarter, pappusArea, pappusVolume, parallelAxis, rectI, triI, circI, compositeI, IxUnderCurve,
   IyUnderCurve, radiusOfGyration,
@@ -458,6 +458,24 @@ console.log('\nFriction (Ch 8)');
   const beta = 200 * DEG;
   for (let i = 0; i < n; i++) T += 0.3 * T * (beta / n);
   approx(beltTension(50, 0.3, 200), T, 1e-4, 'T2 = T1·e^(μβ) matches integrating dT = μT dθ');
+}
+
+{
+  // A general beam: the graphical method (integrate the load) against the method of sections.
+  const p = generalBeam({ L: 4, points: [{ x: 1, P: 10e3 }] });
+  const ref = simplePoint(10e3, 4, 1);
+  approx(p.reactions[0].Fy, ref.left, 1e-9, 'general beam: left reaction matches simplePoint');
+  approx(p.Mmax, ref.Mmax, 1e-6, 'general beam: peak moment Pab/L under the load');
+  // An overhang, a partial uniform load and a couple: reactions 7 kN and 14 kN by hand.
+  const o = generalBeam({ L: 6, b: 4, points: [{ x: 6, P: 5e3 }], udl: { w: 4e3, a: 0, b: 4 }, couples: [{ x: 2, M: 6e3 }] });
+  approx(o.reactions[1].Fy, 14e3, 1e-9, 'overhang: roller reaction from moments about the pin');
+  approx(o.Mmax, -10e3, 1e-6, 'overhang: the moment over the roller is −P·(overhang)');
+  ok(graphicalGap(o) < 1e-6, 'overhang: integrating the load matches the method of sections');
+  // Scaling: doubling every load doubles V and M everywhere.
+  const o2 = generalBeam({ L: 6, b: 4, points: [{ x: 6, P: 10e3 }], udl: { w: 8e3, a: 0, b: 4 }, couples: [{ x: 2, M: 12e3 }] });
+  approx(o2.Mmax / o.Mmax, 2, 1e-9, 'general beam: doubling the loads doubles the moment');
+  const c = generalBeam({ L: 2, support: 'cantilever', points: [{ x: 2, P: 8e3 }] });
+  approx(c.Mmax, cantileverTip(8e3, 2).Mmax, 1e-6, 'cantilever: wall moment −PL');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);

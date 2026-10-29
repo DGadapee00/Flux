@@ -7,13 +7,9 @@
  */
 import { G, G_FT } from '@flux/subjects/mechanics/constants.js';
 import { centralInertia, diskWithHole } from '@flux/subjects/mechanics/inertia.js';
-import { rotorInertia } from '../../labs/spinup.js';
+import { pulledWheel } from '../bank/deeper.js';
 
 const DEG = Math.PI / 180;
-const RPM = (2 * Math.PI) / 60;
-const SHAFT_M = 0.08;
-const SHAFT_R = 0.005;
-const SHAFT_MF = 0.02;
 const rodG = ($) => ($.m * $.L * $.L) / 12;
 
 /** The plate-and-disk moment with one piece of it done wrong. */
@@ -114,26 +110,41 @@ export default {
       },
     },
   },
-  'u6.17.spinup': {
+  'u6.17.pin-sym': {
     traps: {
-      I: [
-        [($) => $.md * $.R * $.R + 0.5 * SHAFT_M * SHAFT_R * SHAFT_R, 'mR² is a thin ring. A solid disk keeps much of its mass near the axis: ½mR².'],
-        [($) => rotorInertia($.md, $.R * 1000, SHAFT_M, SHAFT_R * 1000), 'The radii are in millimetres. Convert them to metres before squaring.'],
+      O: [
+        [($) => ($.comp === 'along' ? $.m * G : $.m * G * Math.sin($.theta * DEG)), ($) => ($.comp === 'along'
+          ? 'That is the whole weight. Along the bar the pin balances only the weight’s component, mg cos θ.'
+          : 'That treats G as still. Across the bar G accelerates at (L/2)α, so the pin carries only a quarter of mg sin θ.')],
+        [($) => ($.comp === 'along' ? $.m * G * Math.sin($.theta * DEG) : 2 * $.m * G * Math.sin($.theta * DEG)), ($) => ($.comp === 'along'
+          ? 'Sine and cosine are swapped. θ is from the downward vertical, so the weight’s part along the bar is mg cos θ.'
+          : 'That uses I_G = mL²/12 for the moment about the pin. The bar turns about its end: I_O = mL²/3.')],
       ],
-      alpha0: [[($) => $.M / rotorInertia($.md, $.R, SHAFT_M, SHAFT_R), 'The bearings take 0.02 N·m from the start: α₀ = (M − M_f)/I.']],
-      t: [
-        [
-          ($) => (rotorInertia($.md, $.R, SHAFT_M, SHAFT_R) * ($.load === 'pump' ? $.rpm * RPM : $.rpm)) / ($.M - SHAFT_MF),
-          ($) => ($.load === 'pump'
-            ? 'That holds α at its starting value. The pump load grows with ω and slows the climb: separate the variables.'
-            : 'Convert rpm to rad/s: multiply by 2π/60.'),
-        ],
-        [
-          ($) => (rotorInertia($.md, $.R, SHAFT_M, SHAFT_R) * ($.load === 'pump' ? $.rpm * RPM : $.rpm / 60)) / ($.M - SHAFT_MF - ($.load === 'pump' ? $.Mr : 0)),
-          ($) => ($.load === 'pump'
-            ? 'That charges the pump’s rated torque the whole way. It starts at zero and grows as ω².'
-            : 'rpm/60 is in revolutions per second. One revolution is 2π rad.'),
-        ],
+    },
+  },
+  'u6.17.pulled-wheel': {
+    traps: {
+      q: [
+        [($) => ($.find === 'f' ? -pulledWheel($).f : $.mu * $.m * G), ($) => {
+          if ($.find === 'P') return 'That is the pull that would slide a block. The wheel slips when the friction rolling needs reaches μmg: solve for P.';
+          return $.at === 'centre'
+            ? 'Check the direction. Pulled at the centre, the pull has no moment about G, so friction alone spins the wheel up: it points back.'
+            : 'Check the direction. The cord over the top would spin the wheel faster than it rolls, so friction points forward.';
+        }],
+        [($) => ($.find === 'f' ? Math.sign(pulledWheel($).f) * $.mu * $.m * G : $.mu * $.m * G * (1 + $.kr * $.kr)), ($) => ($.find === 'f'
+          ? 'μN is the most friction can give. Rolling needs only the friction that turns the wheel at α = a/R.'
+          : ($.at === 'centre'
+            ? 'Friction is k/(1 + k) of the pull at the centre, not 1/(1 + k). Set kP/(1 + k) = μmg.'
+            : 'Friction is (1 − k)/(1 + k) of the pull over the top. Set that equal to μmg.'))],
+      ],
+      a: [
+        [($) => ($.find === 'f' ? $.P : pulledWheel($).Pmax) / $.m, 'That is a block sliding without friction. Part of the push goes into spinning the wheel.'],
+        [($) => {
+          const P = $.find === 'f' ? $.P : pulledWheel($).Pmax;
+          return $.at === 'centre' ? (2 * P) / ($.m * (1 + $.kr * $.kr)) : P / ($.m * (1 + $.kr * $.kr));
+        }, ($) => ($.at === 'centre'
+          ? 'That gives the pull a moment about G. At the centre it has none: only friction turns the wheel.'
+          : 'The cord over the top also turns the wheel. Its moment PR adds to the spin, and the centre gains 2P/(m(1 + k)).')],
       ],
     },
   },

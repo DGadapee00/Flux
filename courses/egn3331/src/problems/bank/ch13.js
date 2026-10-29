@@ -1,14 +1,20 @@
 /**
- * Euler buckling, effective length, and the load at which yield takes over.
- * The adjustable column is the English problem. 2.001 does not teach this
- * chapter, so the worked cases are original.
+ * Euler buckling, effective length, the load at which yield takes over, an off-centre load by the
+ * secant formula, and a stocky strut by the tangent modulus. The adjustable column is the English
+ * problem. 2.001 does not teach this chapter, so the worked cases are original.
  */
 import { M_PER_IN, N_PER_LBF, PA_PER_PSI } from '@flux/subjects/convert.js';
-import { eulerLoad, rectColumn, rectI, transitionLength, tubeColumn, tubeSection } from '@flux/subjects/mechanics/buckling.js';
+import {
+  eulerLoad, rectColumn, rectI, secantColumn, tangentModulus, tangentModulusStress, transitionLength, tubeColumn,
+  tubeSection,
+} from '@flux/subjects/mechanics/buckling.js';
 import { COLUMN_E_KSI, COLUMN_FY_KSI, COLUMN_OD_IN, COLUMN_T_IN } from '../../data/column.js';
 import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
 
 const E = 200e9;
+const E_AL = 70e9;
+const MM = 1e-3;
+const MPA = 1e6;
 const SY = 250e6;
 const B = 0.06;
 const H = 0.02;
@@ -61,11 +67,12 @@ const ch13 = [
       'The pinned Euler load is pi squared times EI over L squared. The weak axis uses the smaller depth.',
       'I = b h cubed over 12, with h the 20 mm side. The stress is that load over the area.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const c = weak($.L);
       return [
-        `I = bh^3/12 = ${c.I} m^4 with h = 20 mm.`,
-        `P = π²EI/L² = ${c.euler / 1000} kN. The stress is ${c.stress / 1e6} MPa.`,
+        String.raw`The bar bows across its 20 mm side: $I = 60(20)^3/12 = ${sig(c.I / 1e-12 / 1e3)}\times 10^3$ mm⁴.`,
+        String.raw`$P_{cr} = \pi^2EI/L^2 = ${sig(c.euler / 1000)}$ kN.`,
+        String.raw`Its stress, $P/A$ on 1200 mm², is $${sig(c.stress / 1e6)}$ MPa, ${c.stress < SY ? 'below' : 'above'} the 250 MPa yield.`,
       ];
     },
     second: ($) => {
@@ -105,7 +112,7 @@ const ch13 = [
         [0.7, 'fixed at the base and pinned at the top'],
       ),
     },
-    text: (T) => String.raw`The same 20 mm by 60 mm steel bar is ${T.L} m long and ${T.K}. E is 200 GPa. K is 1, 2, 0.5, or 0.7 in that order. The 0.7 is the fixed-pinned root rounded. Find the weak-axis Euler load.`,
+    text: (T) => String.raw`A 20 mm by 60 mm steel bar is ${T.L} m long and ${T.K}. E is 200 GPa. For fixed-pinned ends take K = 0.7, the exact root 0.699 rounded. Find the weak-axis Euler load.`,
     parts: [
       num('P', ($) => weak($.L, $.K).euler, 'kN', {
         scale: 1000,
@@ -120,9 +127,13 @@ const ch13 = [
       'Replace L with KL in the pinned formula. Fixed-free is the longest of these.',
       'P = π²EI/(KL)² about the 20 mm depth. K = 0.7 is rounded from the root of tan μ = μ.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const c = weak($.L, $.K);
-      return [`K = ${$.K}. P = π²EI/(KL)² = ${c.euler / 1000} kN.`];
+      return [
+        String.raw`These ends give $K = ${$.K}$, so $KL = ${sig($.K * $.L)}$ m.`,
+        String.raw`The weak axis uses the 20 mm side: $I = 60(20)^3/12 = 4.00\times 10^4$ mm⁴.`,
+        String.raw`$P_{cr} = \pi^2EI/(KL)^2 = ${sig(c.euler / 1000)}$ kN.`,
+      ];
     },
     second: ($) => {
       const I = B * H ** 3 / 12;
@@ -176,11 +187,12 @@ const ch13 = [
       'The weak axis is the smaller depth. Turning the section multiplies I by the square of the side ratio.',
       'I_weak uses h = 20 mm. The ratio of the loads is (60/20) squared, and it does not depend on the length.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const c = weak($.L);
       return [
-        `Weak-axis P = ${c.euler / 1000} kN.`,
-        'The side ratio is 3. The load ratio is 3 squared, which is 9.',
+        String.raw`The weak axis bends across the 20 mm side: $I = 60(20)^3/12 = 4.00\times 10^4$ mm⁴, so $P = \pi^2EI/L^2 = ${sig(c.euler / 1000)}$ kN.`,
+        String.raw`The strong axis uses $I = 20(60)^3/12$, nine times larger.`,
+        'The load follows I, so the ratio is 3 squared, 9, at any length.',
       ];
     },
     second: ($) => {
@@ -249,10 +261,14 @@ const ch13 = [
       'Set π squared E over (KL/r) squared equal to the yield stress, and solve for L. The weak-axis r uses the smaller side.',
       'r = h / sqrt(12). Then L = π r sqrt(E/σY) / K.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const depth = Math.min($.b, $.h);
       const L = transitionLength(Math.max($.b, $.h), depth, E, SY, $.K);
-      return [`The weak depth is ${depth * 1000} mm. L = π r sqrt(E/σY) / K = ${L} m.`];
+      return [
+        String.raw`The weak depth is the smaller side, $${sig(depth * 1000)}$ mm, so $r = h/\sqrt{12} = ${sig((depth / Math.sqrt(12)) * 1000)}$ mm.`,
+        String.raw`Set $\pi^2E/(KL/r)^2 = \sigma_Y$: $L = (\pi r/K)\sqrt{E/\sigma_Y}$, with $\sqrt{E/\sigma_Y} = ${sig(Math.sqrt(E / SY))}$.`,
+        String.raw`$L = ${sig(L)}$ m. Shorter than that, yield comes first.`,
+      ];
     },
     second: ($) => {
       const depth = Math.min($.b, $.h);
@@ -322,11 +338,12 @@ const ch13 = [
       'Use the design wall, not a solid circle. The report leaves the ends free to rotate.',
       'P = π²EI/L² in kip when E is in ksi and I is in in⁴. Compare the stress with 42 ksi.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const c = tubeColumn($.L / M_PER_IN, COLUMN_OD_IN, COLUMN_T_IN, COLUMN_E_KSI, COLUMN_FY_KSI, 1);
       return [
-        `I = ${c.I} in^4 and A = ${c.A} in^2 for a 3 in tube with a 0.112 in design wall.`,
-        `Euler load = ${c.eulerKip} kip, stress = ${c.stressKsi} ksi. ${c.yielded ? 'Yield is first.' : 'Euler is still below yield.'}`,
+        String.raw`For a 3 in tube with a 0.112 in design wall: $I = ${sig(c.I)}$ in⁴ and $A = ${sig(c.A)}$ in².`,
+        String.raw`$P = \pi^2EI/L^2$, with $E$ in ksi and $I$ in in⁴, is in kip: $${sig(c.eulerKip)}$ kip, a stress of $${sig(c.stressKsi)}$ ksi.`,
+        c.yielded ? 'That is above the 42 ksi yield, so yield comes first.' : 'That is below the 42 ksi yield, so Euler governs.',
       ];
     },
     second: ($) => {
@@ -512,6 +529,131 @@ const ch13 = [
       },
     },
     cases: [kase(cite('buckling'), { L: 2 }, { which: 'free' })],
+  }),
+  problem({
+    id: 'u11.13.secant',
+    title: 'A column loaded off centre',
+    exam: 'u11',
+    ch: '13',
+    lab: 'buckling',
+    src: cite('secant'),
+    topics: ['secant'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      L: range(1, 3, 0.25, 'm', 1),
+      h: range(20, 50, 5, 'mm', MM),
+      e: range(2, 12, 1, 'mm', MM),
+      f: range(0.2, 0.7, 0.05, '', 1),
+    },
+    derive: ($) => {
+      const b = 0.06;
+      const A = b * $.h;
+      const I = rectI(b, $.h);
+      const Pcr = eulerLoad(E, I, $.L);
+      const P = Math.round(($.f * Pcr) / 100) * 100;
+      const s = secantColumn(P, $.e, $.h / 2, A, I, E, $.L);
+      return { A, I, Pcr, P, peak: s.sigma, bow: s.bow, sec: s.sec };
+    },
+    valid: ($) => $.peak < 300 * MPA && $.P >= 1000,
+    text: (T, $) => String.raw`A steel bar ($E = 200$ GPa) 60 mm wide and $${T.h}$ mm deep, $${T.L}$ m long and pinned at both ends, carries $${($.P / 1000).toFixed(1)}$ kN applied $${T.e}$ mm off its axis, in the direction of the $${T.h}$ mm depth. Find the extra bow at mid-height and the largest compressive stress.`,
+    parts: [
+      num('bow', ($) => $.bow, 'mm', {
+        scale: MM,
+        label: 'bow at mid-height',
+        traps: [
+          [() => 0, 'An off-centre load bends the column from the start. The bow is $e(\\sec(kL/2) - 1)$.'],
+        ],
+      }),
+      num('peak', ($) => $.peak, 'MPa', {
+        scale: MPA,
+        label: 'largest stress',
+        traps: [
+          [($) => $.P / $.A + ($.P * $.e * ($.h / 2)) / $.I, 'That uses the moment $Pe$ and leaves out the bow. The moment grows by $\\sec(kL/2)$.'],
+          [($) => $.P / $.A, 'That is the average stress. The offset adds bending.'],
+        ],
+      }),
+    ],
+    hints: [
+      'The moment at mid-height is $P(e + y_{\\max})$, and the bow depends on the load through $k = \\sqrt{P/EI}$.',
+      String.raw`$y_{\max} = e(\sec(kL/2) - 1)$ and $\sigma_{\max} = (P/A)[1 + (ec/r^2)\sec(kL/2)]$, with $r^2 = I/A$ and $c = h/2$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$I = ${sig($.I / 1e-12 / 1e6)}\times 10^6$ mm⁴, $A = ${sig($.A / 1e-6)}$ mm². $k = \sqrt{P/EI}$, so $kL/2 = ${sig(Math.acos(1 / $.sec))}$ rad and $\sec(kL/2) = ${sig($.sec)}$.`,
+      String.raw`Bow: $e(\sec - 1) = ${sig($.bow / MM)}$ mm.`,
+      String.raw`Peak: $P/A + P(e + y_{\max})c/I = ${sig($.peak / MPA)}$ MPa.`,
+    ],
+    second: ($) => {
+      // The moment at mid-height from the bowed shape, then P/A + Mc/I.
+      const k = Math.sqrt($.P / (E * $.I));
+      const ymid = $.e / Math.cos((k * $.L) / 2) - $.e;
+      return { bow: ymid / MM, peak: ($.P / $.A + ($.P * ($.e + ymid) * ($.h / 2)) / $.I) / MPA };
+    },
+    cases: [kase(cite('secant'), { L: 2, h: 20, e: 5, f: 0.5066 }, { bow: 6.429846065865277, peak: 36.907948497996524 })],
+  }),
+
+  problem({
+    id: 'u11.13.tangent',
+    title: 'A stocky strut by the tangent modulus',
+    exam: 'u11',
+    ch: '13',
+    lab: 'posts',
+    src: cite('tangent-modulus'),
+    topics: ['tangent-modulus'],
+    variety: ['unknown'],
+    level: 3,
+    vars: {
+      slender: range(25, 60, 5, '', 1),
+      sy: range(200, 300, 20, 'MPa', MPA),
+      n: range(10, 30, 5, '', 1),
+    },
+    derive: ($) => {
+      const t = tangentModulusStress($.slender, E_AL, $.sy, $.n);
+      return { scr: t.sigma, Et: t.Et, euler: t.euler };
+    },
+    valid: ($) => $.euler > 1.05 * $.sy && rel($.scr, $.sy),
+    text: (T) => String.raw`An aluminium strut ($E = 70$ GPa) has a slenderness $KL/r = ${T.slender}$. Its tension curve is $\varepsilon = \sigma/E + 0.002(\sigma/\sigma_Y)^n$ with $\sigma_Y = ${T.sy}$ MPa and $n = ${T.n}$. Find the buckling stress by the tangent modulus, and the tangent modulus at that stress.`,
+    parts: [
+      num('scr', ($) => $.scr, 'MPa', {
+        scale: MPA,
+        label: 'buckling stress',
+        traps: [
+          [($) => $.euler, 'That is the Euler stress with the elastic $E$. It lies above yield, where the material is no longer that stiff.'],
+          [($) => $.sy, 'Capping at yield overstates a column whose curve has already bent over.'],
+        ],
+      }),
+      num('Et', ($) => $.Et, 'GPa', {
+        scale: 1e9,
+        label: 'tangent modulus',
+        traps: [
+          [() => E_AL, 'That is the elastic modulus. At the buckling stress the curve is flatter.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Replace $E$ in the Euler stress with the slope of the stress–strain curve at the buckling stress. That slope depends on the stress, so try values.',
+      String.raw`$1/E_t = 1/E + 0.002\,n\,\sigma^{n-1}/\sigma_Y^n$. Find $\sigma$ with $\sigma = \pi^2E_t(\sigma)/(KL/r)^2$, by bisection between 0 and the Euler stress.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Euler with $E$: $\pi^2E/(KL/r)^2 = ${sig($.euler / MPA)}$ MPa, above yield, so the curve's slope governs.`,
+      String.raw`Bisect on $\sigma - \pi^2E_t(\sigma)/(KL/r)^2 = 0$: $\sigma_{cr} = ${sig($.scr / MPA)}$ MPa.`,
+      String.raw`There $E_t = ${sig($.Et / 1e9)}$ GPa.`,
+    ],
+    second: ($) => {
+      // Turn it round: each stress has the slenderness π√(Et/σ) that buckles at it. Find the stress
+      // whose slenderness is this strut's, by bisection on that decreasing curve.
+      const lam = (s) => Math.PI * Math.sqrt(tangentModulus(s, E_AL, $.sy, $.n) / s);
+      let lo = 1e3;
+      let hi = $.euler;
+      for (let i = 0; i < 200; i++) {
+        const mid = Math.sqrt(lo * hi);
+        if (lam(mid) > $.slender) lo = mid;
+        else hi = mid;
+      }
+      const s = Math.sqrt(lo * hi);
+      return { scr: s / MPA, Et: tangentModulus(s, E_AL, $.sy, $.n) / 1e9 };
+    },
+    cases: [kase(cite('tangent-modulus'), { slender: 40, sy: 240, n: 20 }, { scr: 211.35748589472033, Et: 34.26398502803481 })],
   }),
 ];
 

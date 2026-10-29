@@ -1,9 +1,10 @@
+import { beamSketch } from './elements.js';
 import {
   cantileverUniformDeflection, deflectionGap, integrateFixed, proppedGap, proppedUniform, rectInertia,
 } from '@flux/subjects/mechanics/elastic.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { arrow, axes, begin, C, chartIn, dot, hidden, label, line, panes, plotIn, sceneIn } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, slider } from './widgets.js';
 
@@ -51,6 +52,27 @@ function shape(state) {
   }
   const beam = proppedUniform(state.w, L, EI);
   return { ...beam, tipDrop: 0, L, EI, released: false };
+}
+
+/** The beam on its supports, bent so its largest drop is an eighth of the span, and its loads. */
+
+function member(B, rect, state, c, veiled) {
+  const beam = shape(state);
+  const L = beam.L;
+  let low = 1e-12;
+  for (let i = 0; i <= 40; i++) low = Math.max(low, Math.abs(beam.at((L * i) / 40).y));
+  const k = (0.12 * L) / low;
+  const S = sceneIn(B, rect, { x0: -0.08 * L, x1: 1.1 * L, y0: -0.3 * L, y1: 0.18 * L }, 8);
+  beamSketch(S, L, {
+    yAt: (x) => k * beam.at(x).y,
+    supports: beam.released ? [['fixed', 0]] : [['fixed', 0], ['roller', L]],
+    udl: [0, L],
+  });
+  if (!beam.released) arrow(S, [L, -0.07 * L], Math.PI / 2, 26, { color: C.text, width: 2, tail: true });
+  if (!veiled) {
+    if (!beam.released) label(S, `R ${fig(c.R / 1e3)} kN`, [L, -0.07 * L], { color: C.text, dy: 14, dx: -6, align: 'right' });
+    label(S, `wall ${fig(c.Mwall / 1e3)} kN·m`, [0, 0.1 * L], { color: C.dim, align: 'left', dx: 8, dy: -6 });
+  }
 }
 
 export default defineLab({
@@ -104,8 +126,12 @@ export default defineLab({
       gap,
     };
   },
-  draw(canvas, state) {
+  draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.4, { long: true });
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const beam = shape(state);
     const pts = [];
     let yLo = 0;
@@ -118,7 +144,7 @@ export default defineLab({
       yHi = Math.max(yHi, y);
     }
     const pad = Math.max(yHi - yLo, 1) * 0.12;
-    const P = plotIn(B, B.free, { lo: 0, hi: beam.L }, { lo: yLo - pad, hi: yHi + pad });
+    const P = chartIn(B, R, { lo: 0, hi: beam.L }, { lo: yLo - pad, hi: yHi + pad });
     axes(P, { xLabel: 'x (m)', yLabel: 'deflection (mm)' });
     line(P, pts, { color: C.gold, width: 3 });
     const mark = beam.released ? 0 : beam.xMax;

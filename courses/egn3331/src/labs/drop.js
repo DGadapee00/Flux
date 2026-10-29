@@ -1,10 +1,12 @@
+import { M_PER_IN } from '@flux/subjects/convert.js';
+import { PLAY, advance, playing } from '@flux/shells/engineering/motion.js';
 import { impactDrop, impactFactor } from '@flux/subjects/mechanics/strain-energy.js';
 import {
   ROPE_A_IN2, ROPE_BREAK_LBF, ROPE_E_PSI, ROPE_H_IN, ROPE_L_FT, ROPE_LOAD_LBF, ropeDrop, ropeInches,
 } from '../data/rope.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { alpha, arrow, axes, begin, C, dot, hidden, label, line, panes, plotIn, poly, sceneIn, seg } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, leavesOut, showField, slider } from './widgets.js';
 
@@ -29,7 +31,47 @@ const SCENARIOS = [
 
 function apply(id, state) {
   const sc = SCENARIOS.find((s) => s.id === id) || SCENARIOS[0];
-  Object.assign(state, { scenarioId: sc.id, load: sc.load, length: sc.length, drop: sc.drop, d: sc.d });
+  Object.assign(state, { scenarioId: sc.id, load: sc.load, length: sc.length, drop: sc.drop, d: sc.d, t: 0, anim: { playing: false }, show: { play: false } });
+}
+
+/**
+ * The catch, played: the load falls h, meets the support, and stretches it past the static stretch
+ * to n times that, then springs back. Fall: y = ½gt². After contact the load is a mass on a spring
+ * of k = W/δst: the stretch is δst − δst cos ωt + (v₁/ω) sin ωt, with ω = √(g/δst) and v₁ = √(2gh).
+ * Its peak is δst + √(δst² + 2hδst), the n·δst of the readout. Times are slowed for the eye.
+ */
+function catchAt(t, h, dst) {
+  const g = 9.81;
+  const t1 = h > 0 ? Math.sqrt((2 * h) / g) : 0;
+  if (t < t1) return { y: h - 0.5 * g * t * t - h, stretch: 0 };
+  const w = Math.sqrt(g / Math.max(dst, 1e-12));
+  const v1 = Math.sqrt(2 * g * h);
+  const s = t - t1;
+  return { y: 0, stretch: dst - dst * Math.cos(w * s) + (v1 / w) * Math.sin(w * s) };
+}
+
+function member(B, rect, state, c, veiled) {
+  const rod = state.scenarioId === 'rod';
+  const h = rod ? Math.max(state.drop, 0) : Math.max(state.drop, 0) * M_PER_IN;
+  const dst = c.deltaSt;
+  const dmax = c.delta;
+  // Drawn so the largest stretch is a quarter of the support's length, and the fall to match.
+  const Ls = 6;
+  const k = (0.25 * Ls) / Math.max(dmax, 1e-12);
+  const now = playing(state) ? catchAt(Number(state.t) || 0, h, dst) : { y: 0, stretch: dmax };
+  const S = sceneIn(B, rect, { x0: -3, x1: 3, y0: -Ls - 0.25 * Ls - k * h - 1.2, y1: 1 }, 8);
+  poly(S, [[-2, 0], [2, 0], [2, 0.5], [-2, 0.5]], { fill: alpha(C.muted, 0.4), stroke: C.muted });
+  const bottom = -Ls - k * now.stretch;
+  seg(S, [0, 0], [0, bottom], { color: rod ? C.text : C.gold, width: rod ? 5 : 3 });
+  seg(S, [-1.6, -Ls - k * dst], [1.6, -Ls - k * dst], { color: alpha(C.teal, 0.7), width: 1.5, dash: [4, 4] });
+  seg(S, [-1.6, -Ls - k * dmax], [1.6, -Ls - k * dmax], { color: alpha(C.pink, 0.7), width: 1.5, dash: [4, 4] });
+  const top = bottom + k * now.y;
+  poly(S, [[-0.9, top], [0.9, top], [0.9, top - 1.1], [-0.9, top - 1.1]], { fill: alpha(C.pink, 0.3), stroke: C.pink, width: 1.5 });
+  if (!veiled) {
+    label(S, 'static stretch', [1.6, -Ls - k * dst], { color: C.teal, align: 'left', dx: 4 });
+    label(S, `peak, ${fig(c.n)}×`, [1.6, -Ls - k * dmax], { color: C.pink, align: 'left', dx: 4 });
+    label(S, rod ? 'steel rod' : 'crane rope', [0, -Ls / 2], { color: C.dim, align: 'left', dx: 8 });
+  }
 }
 
 export default defineLab({
@@ -37,6 +79,17 @@ export default defineLab({
   exam: 'u10',
   title: 'Crane rope',
   hint: 'A drop of zero still doubles the static force. A longer rope catches the same drop with less force.',
+  keys: { ' ': 'sweep' },
+  toggles: [PLAY],
+  // Play drops the load and lets it ring, slowed so the overshoot can be seen, then drops it again.
+  tick(dt, state, computed) {
+    // One swing of the caught load lasts about 1.2 s on screen, whatever its real period.
+    const dst = Math.max(computed?.deltaSt || 1e-3, 1e-9);
+    const period = 2 * Math.PI * Math.sqrt(dst / 9.81);
+    const h = state.scenarioId === 'rod' ? Math.max(state.drop, 0) : Math.max(state.drop, 0) * M_PER_IN;
+    const fall = Math.sqrt((2 * h) / 9.81);
+    return advance(state, dt, { lo: 0, hi: fall + 3 * period, rate: period / 1.2, key: 't' });
+  },
   scenarios: SCENARIOS,
   defaultState() {
     const s = {};
@@ -109,9 +162,14 @@ export default defineLab({
       gap: c.gap,
     };
   },
-  draw(canvas, state) {
+  draw(canvas, state, c) {
     const B = begin(canvas);
-    if (state.scenarioId === 'rod') return drawRod(B, state);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.42);
+    member(B, D, state, c, veiled);
+    if (veiled) return;
+    const Bc = { ...B, free: R };
+    if (state.scenarioId === 'rod') return drawRod(Bc, state);
     const inch = ropeInches(state.load, state.length, state.drop);
     const pts = [];
     const hMax = Math.max(state.drop * 2, 2);
@@ -121,7 +179,7 @@ export default defineLab({
       pts.push([h, n * state.load]);
     }
     const yHi = Math.max(pts[pts.length - 1][1], state.load * 2, 1);
-    const P = plotIn(B, B.free, { lo: 0, hi: hMax }, { lo: 0, hi: yHi * 1.12 });
+    const P = plotIn(B, R, { lo: 0, hi: hMax }, { lo: 0, hi: yHi * 1.12 });
     axes(P, { xLabel: 'drop (in)', yLabel: 'peak force (lbf)' });
     line(P, pts, { color: C.pink, width: 3 });
     line(P, [[0, state.load], [hMax, state.load]], { color: C.gold, width: 2, dash: [5, 4] });

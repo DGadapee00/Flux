@@ -8,98 +8,184 @@
 <header class="top">
   <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 6 · Ch 6</p>
   <h1>Bending</h1>
-  <p class="lede">Shear and moment are the internal loads that bending leaves on a cut. The moment peaks where the shear changes sign. Stress at a fiber is the moment times its distance from the centroid, over I. Every number below is computed by the course library and checked a second way.</p>
+  <p class="lede">Shear and moment are the internal loads that bending leaves on a cut. The load fixes their slopes, so the diagrams can be drawn from the loads alone. A moment curves the beam, and the curvature sets the strain in every fiber. Stress is the moment times the distance from the neutral axis, over I. A tilted load or a second material moves that axis.</p>
   <div class="legend">
     <span><i class="swatch" style="background: var(--gold)"></i>Moment, and bending stress</span>
-    <span><i class="swatch" style="background: var(--teal)"></i>Where the shear changes sign</span>
+    <span><i class="swatch" style="background: var(--teal)"></i>Shear, and where it changes sign</span>
+    <span><i class="swatch" style="background: var(--pink)"></i>Applied loads</span>
     <span><i class="swatch" style="background: var(--red)"></i>Tension</span>
     <span><i class="swatch" style="background: var(--blue)"></i>Compression</span>
   </div>
   <nav class="toc">
-    <a href="#s1"><span>01</span>A point load</a>
-    <a href="#s2"><span>02</span>A uniform load</a>
-    <a href="#s3"><span>03</span>A cantilever</a>
-    <a href="#s4"><span>04</span>A rectangular section</a>
-    <a href="#s5"><span>05</span>A tee</a>
-    <a href="#s6"><span>06</span>A floor joist</a>
-    <a href="#s7"><span>07</span>Formula sheet</a>
+    <a href="#s1"><span>01</span>Shear and moment by sections</a>
+    <a href="#s2"><span>02</span>How load, shear and moment are linked</a>
+    <a href="#s3"><span>03</span>Diagrams by areas and jumps</a>
+    <a href="#s4"><span>04</span>Moment and curvature</a>
+    <a href="#s5"><span>05</span>The flexure formula</a>
+    <a href="#s6"><span>06</span>A neutral axis off the middle</a>
+    <a href="#s7"><span>07</span>A floor joist</a>
+    <a href="#s8"><span>08</span>A moment off the principal axes</a>
+    <a href="#s9"><span>09</span>Beams of two materials</a>
+    <a href="#s10"><span>10</span>Formula sheet</a>
   </nav>
 </header>
 <main>
 
 <div class="part">
-<h3>Part 1 · The diagrams <span class="sub">| point | uniform | cantilever | Reference</span></h3>
+<h3>Part 1 · The diagrams <span class="sub">| sections | slopes | areas and jumps</span></h3>
 
 <section class="topic" id="s1">
-<h2><span class="n">01</span>A point load</h2>
-<p>Cut a simple beam and keep the left piece. The shear on the cut balances the vertical forces on that piece. The moment balances their moments about the cut. Sign: shear is positive when those forces push the left piece up. Moment is positive when they sag the beam, which puts compression on top.</p>
-<p>A single downward load P at distance a from the left has two reactions. The left one is P times (L − a) over L. Between the left support and the load, the shear is that reaction and the moment is the reaction times x. The moment is largest at the load:</p>
+<h2><span class="n">01</span>Shear and moment by sections</h2>
+<p>Cut a beam and keep the left piece. The cut face carries a shear \(V\) and a moment \(M\) that hold that piece in equilibrium. \(V\) balances the vertical forces on it. \(M\) balances their moments about the cut. The sign convention is the course's. Shear is positive when the forces on the left piece push it up. Moment is positive when it sags the beam, which puts compression on top.</p>
+<div class="box why"><span class="tag">One load, two pieces</span>
+<p>A simple beam of length \(L\) carries a downward load \(P\) a distance \(a\) from the left. Moments about the right support give the left reaction \(P(L-a)/L\). Cut at \(x &lt; a\). The left piece holds only that reaction, so \(V = P(L-a)/L\) and \(M = P(L-a)x/L\). Cut at \(x &gt; a\). The piece now holds the load too, so \(V\) drops by \(P\). The moment is largest at the load:</p>
 \[
-M = \frac{Pa(L-a)}{L}
+M_{\max} = \frac{Pa(L-a)}{L}
 \]
-<p>At midspan, a is L/2 and the moment is PL/4. Each shear is P/2. Roylance §4.1 draws these diagrams. The check is the same cut, done by summing the left-hand forces one station at a time.</p>
+<p>At midspan \(a = L/2\), which gives \(PL/4\). Roylance §4.1 draws these diagrams.</p>
+</div>
 <div class="box ex"><span class="tag">Worked example · the midspan load</span>
-<p>The lab's point-load beam is 4 m long and carries 10 kN at midspan. Each reaction is 5 kN. The peak moment is</p>
+<p>The Shear and moment lab's point-load beam is 4 m long and carries 10 kN at midspan. Each reaction is 5 kN. The peak moment is</p>
 \[
 M = 10\ \mathrm{kN\cdot m}
 \]
-<p>The gold curve is the moment. It rises as a straight line to midspan and falls as a straight line after it. The teal line marks the load, which is where the shear jumps from +5 kN to −5 kN.</p>
+<p>The gold curve is the moment. It rises as a straight line to midspan and falls as a straight line after it. The shear jumps from +5 kN to −5 kN under the load.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the load moved off centre</span>
+<p>Slide the same 10 kN to 1 m from the left. The left reaction is \(10\times 3/4 = 7.5\) kN, and the right is 2.5 kN. The peak moment, at the load, is \(10\times 1\times 3/4\):</p>
+\[
+M = 7.5\ \mathrm{kN\cdot m}
+\]
+<p>Moving the load toward a support shortens one lever arm faster than the other grows, so the peak falls.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Using PL/4 when the load is not at midspan overstates the moment. Reporting the whole load as the left reaction forgets the right support. The moment is P times a, only if the right support carries nothing, and it does not.</p>
+<p>Using \(PL/4\) when the load is not at midspan overstates the moment: 10 kN·m instead of 7.5. Reporting the whole load as the left reaction forgets the right support. \(Pa\) alone is the moment only if the right support carries nothing, and it does not.</p>
 </div>
 <p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec5/">2.001 lecture 5</a> builds the same diagrams from the load.</p>
 </section>
 
 <section class="topic" id="s2">
-<h2><span class="n">02</span>A uniform load</h2>
-<p>A uniform downward load w is a force per length. On a simple span the two reactions are each wL/2. Shear then falls as a straight line, from +wL/2 at the left support to −wL/2 at the right, so dV/dx = −w. It is zero at midspan. The moment is a parabola:</p>
+<h2><span class="n">02</span>How load, shear and moment are linked</h2>
+<p>Cutting at every station works, but the diagrams have a shortcut. The load sets the slope of the shear, and the shear sets the slope of the moment.</p>
+<div class="box why"><span class="tag">A slice of beam</span>
+<p>Take a slice of length \(dx\) with a downward load \(w\) per length on it. The left face carries \(V\) and \(M\). The right face carries \(V + dV\) and \(M + dM\). Vertical equilibrium: \(V - w\,dx - (V + dV) = 0\). Moments about the right face, keeping first-order terms: \(M + V\,dx - (M + dM) = 0\). So</p>
 \[
-M = \frac{wL^2}{8}
+\frac{dV}{dx} = -w
 \]
-<p>That value is the peak, and it sits at the same station where the shear is zero. The relation is dM/dx = V. A smooth peak inside the span can occur only where V crosses zero. Doubling the span doubles the support shear and quadruples the moment, because the moment carries L squared.</p>
+\[
+\frac{dM}{dx} = V
+\]
+<p>A downward load makes the shear fall. A positive shear makes the moment rise. A smooth peak of \(M\) inside a span sits where \(V\) crosses zero.</p>
+</div>
 <div class="box ex"><span class="tag">Worked example · the uniform load</span>
-<p>The lab's uniform case is 5 kN/m on a 4 m span. The support shear is 10 kN. At midspan the shear is zero and the moment is</p>
+<p>The lab's uniform case is 5 kN/m on a 4 m simple span. Each reaction is \(wL/2 = 10\) kN. The shear falls at 5 kN per metre, from +10 kN to −10 kN, and crosses zero at midspan. The moment there is the area under the shear from the left support, a triangle of base 2 m and height 10 kN:</p>
 \[
 M = 10\ \mathrm{kN\cdot m}
 \]
-<p>Move the cut along the beam. The moment readout is largest exactly where the shear readout passes through zero.</p>
+<p>That is \(wL^{2}/8\). Move the cut along the beam: the moment readout is largest exactly where the shear readout passes zero. Doubling the span quadruples the moment, because the moment carries \(L^{2}\).</p>
 </div>
-<div class="box why"><span class="tag">Why the peak and the crossing coincide</span>
-<p>Between two nearby cuts the moment changes by V times the step. If V is positive the moment is still rising. If V is negative the moment has started to fall. The turn from rising to falling is the zero of V. A diagram that puts the peak somewhere else has broken dM/dx = V.</p>
+<div class="box ex"><span class="tag">Worked example · the tip load</span>
+<p>The lab's cantilever is 2 m long, fixed at the left, with 8 kN at the tip. The wall pushes up 8 kN and applies a counterclockwise couple. The shear is +8 kN everywhere and never crosses zero. The moment rises at a slope of 8 kN·m per metre and reaches zero at the tip, so at the wall it is</p>
+\[
+M = -16\ \mathrm{kN\cdot m}
+\]
+<p>The sign is negative: the top is in tension. This is hogging. Since \(V\) never crosses zero, the extreme moment sits at the end of the member, at the wall.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A peak placed anywhere but at a zero of \(V\), a point load or a support has broken \(dM/dx = V\). Reporting the cantilever moment as positive puts compression on the top, which is the simple-beam sign. \(PL/4\) has no place on a cantilever: the tip load's arm about the wall is the whole length.</p>
 </div>
 </section>
 
 <section class="topic" id="s3">
-<h2><span class="n">03</span>A cantilever</h2>
-<p>A cantilever fixed at the left and loaded downward at the tip has a different shape. The wall pushes up with P and applies a counterclockwise couple PL. Shear is +P at every cut. It never changes sign. The moment is zero at the tip and</p>
+<h2><span class="n">03</span>Diagrams by areas and jumps</h2>
+<p>Integrate the two slope rules from one station to the next. The change in shear is minus the load between them. The change in moment is the area under the shear between them:</p>
 \[
-M = -PL
+V_2 - V_1 = -\int_{x_1}^{x_2} w\,dx
 \]
-<p>at the wall. The sign is negative: the top fiber is in tension. This is hogging. Because the shear does not cross zero, the extreme moment is at the end of the member, not in the span. dM/dx = V still holds. V is constant, so the moment is a straight line.</p>
-<div class="box ex"><span class="tag">Worked example · the tip load</span>
-<p>The lab's cantilever is 2 m long with 8 kN at the tip. The shear is 8 kN everywhere along the span. The wall moment is</p>
 \[
-M = -16\ \mathrm{kN\cdot m}
+M_2 - M_1 = \int_{x_1}^{x_2} V\,dx
 \]
-<p>The gold curve starts at −16 kN·m and reaches zero at the tip. The teal line is at the wall, the only station that can hold the peak.</p>
+<div class="box why"><span class="tag">What a concentrated load does</span>
+<p>A point force \(P\) down is a load packed into no length. Across it the shear drops by \(P\), and the moment only bends a corner. A couple \(M_0\) is a moment packed into no length. Across it the moment jumps and the shear does not change. A clockwise couple raises \(M\) by \(M_0\). A counterclockwise couple lowers it. Walk the beam from the left end, where \(V\) and \(M\) start at the end conditions, and apply these rules load by load. The diagrams close at zero at a free or pinned right end; that is the check on the reactions.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an overhang</span>
+<p>The lab's overhang is 6 m long, pinned at the left and on a roller at 4 m. A uniform 4 kN/m covers the first 4 m, and 5 kN hangs at the free tip. Moments about the pin: \(4R_B = 16(2) + 5(6)\), so \(R_B = 15.5\) kN and the left reaction is 5.5 kN. The shear starts at +5.5 kN and falls 4 kN per metre. It crosses zero at 1.375 m, where the area under it gives</p>
+\[
+M = 3.78\ \mathrm{kN\cdot m}
+\]
+<p>The shear reaches \(-10.5\) kN at the roller and jumps up 15.5 kN to +5 kN. The area under it from 1.375 m to 4 m is \(-13.78\) kN·m, so the moment over the roller is</p>
+\[
+M = -10\ \mathrm{kN\cdot m}
+\]
+<p>Over the overhang the shear is a flat +5 kN, and its area, 10 kN·m, brings the moment back to zero at the tip. The beam sags in the span and hogs over the roller.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a couple on the span</span>
+<p>The lab's couple case is a 4 m simple span with a 6 kN·m counterclockwise couple at 1 m. Moments about the left pin give the right reaction \(-1.5\) kN, a pull down, and the left reaction +1.5 kN. The shear is +1.5 kN everywhere. The moment rises to 1.5 kN·m at 1 m, then drops by 6 to</p>
+\[
+M = -4.5\ \mathrm{kN\cdot m}
+\]
+<p>and climbs at 1.5 kN·m per metre back to zero at the right support. The shear diagram never shows the couple. Only the moment does.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Reporting the cantilever moment as positive puts compression on the top, which is the simple-beam sign. Using PL/4 here has no basis: there is no second support, and the moment arm of the tip load about the wall is the whole length.</p>
+<p>A couple does not change the shear, so a diagram that steps \(V\) at a couple is wrong. The direction of the moment jump follows the couple's sense: counterclockwise lowers \(M\) in this convention. Forgetting the roller's reaction on an overhang makes the shear jump the wrong way, and the moment then fails to close at the tip.</p>
 </div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Loads act on the beam's axis, supports are points, and the beam is straight. A real support spreads its reaction over a bearing length, which rounds the corner in \(M\). Axial force is a separate diagram and does not enter these two.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec6/">2.001 lecture 6</a> draws the diagrams from the load by the same two rules.</p>
 </section>
 </div>
 
 <div class="part">
-<h3>Part 2 · The fibers <span class="sub">| rectangle | tee | joist | Reference</span></h3>
+<h3>Part 2 · The fibers <span class="sub">| curvature | flexure | off-centre axis | joist</span></h3>
 
 <section class="topic" id="s4">
-<h2><span class="n">04</span>A rectangular section</h2>
-<p>Plane sections are assumed to stay plane, so the strain is linear in y. For elastic bending the stress is linear too. Equilibrium of the axial force puts the zero-stress line through the centroid. Equilibrium of the moment then gives</p>
+<h2><span class="n">04</span>Moment and curvature</h2>
+<p>A moment bends a beam into an arc. Two cross-sections a length \(dx\) apart stay plane and turn toward each other. The fiber on the neutral axis keeps its length. A fiber a distance \(y\) above it lies on a smaller arc.</p>
+<div class="box why"><span class="tag">From geometry to stress</span>
+<p>Let the neutral axis bend to a radius \(\rho\). The two faces meet at an angle \(d\theta = dx/\rho\). A fiber \(y\) above the axis has length \((\rho - y)\,d\theta\), so its strain is</p>
+\[
+\varepsilon = -\frac{y}{\rho}
+\]
+<p>That is pure geometry. Add Hooke's law: \(\sigma = -Ey/\rho\). Sum the stress over the section for its moment about the axis: \(M = \int -y\sigma\,dA = (E/\rho)\int y^{2}\,dA\). The integral is \(I\), so</p>
+\[
+\frac{1}{\rho} = \frac{M}{EI}
+\]
+<p>A stiffer material or a deeper section bends less under the same moment. \(EI\) is the beam's bending stiffness, and Unit 8 integrates this curvature to find deflections.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a band-saw blade</span>
+<p>A common blade for a 14 in band saw is 0.025 in thick and runs on 14 in wheels. Its mid-thickness bends to \(\rho = 7.0125\) in at every pass, and its outer fiber strains \((t/2)/\rho = 1{,}783\ \mu\varepsilon\). The blade is steel, \(E = 29{,}000\) ksi:</p>
+\[
+\sigma = E\,\frac{t/2}{\rho} = 51.7\ \mathrm{ksi}
+\]
+<p>A 1/2 in wide blade has \(I = 6.51\times10^{-7}\ \mathrm{in}^4\), so the moment that holds it round the wheel is \(EI/\rho = 2.69\) lbf·in. The moment is small and the stress large, because the wheel fixed the curvature, not the moment. With its 15 ksi set tension the outer fiber reaches 66.7 ksi. On a 10 in wheel the bending alone would be 72.3 ksi. That is why small saws take thin blades, and why blades fail in fatigue at the wheels.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the lab's rectangle, curved</span>
+<p>The flexure lab's rectangle is 40 mm by 80 mm, steel at 200 GPa, carrying 2 kN·m. \(I = 1.707\times 10^{6}\) mm⁴. The curvature \(M/EI\) gives a radius</p>
+\[
+\rho = 171\ \mathrm{m}
+\]
+<p>The outer fiber, 40 mm out, has strain \(0.040/171 = 2.34\times 10^{-4}\). Times \(E\), that is 46.9 MPa. Section 5 reaches the same stress from the flexure formula.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The strain uses the distance from the neutral axis, not from the bottom of the section. The radius is that of the neutral axis. Using the wheel's diameter in place of its radius halves the stress.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Plane sections stay plane, which is exact under a constant moment and close otherwise. The material is elastic, so the stress follows the strain on a straight line. A deep curve, with \(\rho\) near the depth, is a curved beam, which is outside this course (D37).</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec19/">2.001 lecture 21</a> builds moment and curvature from the same plane sections.</p>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>The flexure formula</h2>
+<p>Section 4 gave \(\sigma = -Ey/\rho\) and \(1/\rho = M/EI\). Put the second into the first, and \(E\) and \(\rho\) leave together:</p>
 \[
 \sigma = -\frac{My}{I}
 \]
-<p>y is positive upward from that axis. A positive, sagging moment compresses the top. For a rectangle of width b and height h, I is bh³/12 and the outer fiber is at h/2, so the magnitude is 6M/(bh²). The top and bottom stresses are equal and opposite. The integral check is ∫σ dA = 0 and −∫y σ dA = M.</p>
+<div class="box why"><span class="tag">Where the neutral axis sits</span>
+<p>Pure bending carries no axial force: \(\int\sigma\,dA = 0\). With \(\sigma = -Ey/\rho\) that is \(\int y\,dA = 0\), so \(y\) is measured from the centroid. The neutral axis passes through the centroid of the section, whatever its shape, as long as there is one material.</p>
+</div>
+<p>For a rectangle of width \(b\) and depth \(h\), \(I = bh^{3}/12\) and the outer fiber is \(h/2\) out. The outer stresses are equal and opposite, of size \(6M/(bh^{2})\). Roylance §4.2 derives the same formula.</p>
 <div class="box ex"><span class="tag">Worked example · the 40 by 80 mm rectangle</span>
 <p>The lab's rectangle is 40 mm wide and 80 mm deep, with a sagging moment of 2 kN·m. The two fibers are</p>
 \[
@@ -108,7 +194,7 @@ M = -16\ \mathrm{kN\cdot m}
 \[
 \sigma_{\mathrm{bot}} = 46.9\ \mathrm{MPa}
 \]
-<p>The gold line on the chart runs from compression at the top, through zero at mid-height, to tension at the bottom. Blue is compression. Red is tension.</p>
+<p>The gold line runs from compression at the top, through zero at mid-height, to tension at the bottom.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · twice the depth</span>
 <p>The same moment on a section 40 mm by 160 mm drops both stresses to a quarter:</p>
@@ -118,39 +204,39 @@ M = -16\ \mathrm{kN\cdot m}
 \[
 \sigma_{\mathrm{bot}} = 11.72\ \mathrm{MPa}
 \]
-<p>I grows with the cube of the depth and the fiber distance only with the depth, so the stress goes with 1/h². Doubling the width, instead, would only halve the stress.</p>
+<p>\(I\) grows with the cube of the depth and the fiber distance only with the depth, so the stress goes as \(1/h^{2}\). Doubling the width would only halve it. That is why joists stand on edge.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Using the full height as the fiber distance doubles the stress. Dropping the sign reports compression as tension. Reversing the moment swaps the fibers: hogging tensions the top.</p>
+<p>Using the full depth as the fiber distance doubles the stress. Dropping the sign reports compression as tension. Reversing the moment swaps the fibers: hogging puts the top in tension.</p>
 </div>
 <p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec18/">2.001 lecture 20</a> derives the same linear stress from the plane-sections assumption.</p>
 </section>
 
-<section class="topic" id="s5">
-<h2><span class="n">05</span>A tee</h2>
-<p>A tee is not symmetric. The flange adds area near the top, so the centroid sits above mid-height. The two outer fibers are then different distances from the axis, and the stresses differ. The farther fiber carries the larger stress. The formula is still σ = −My/I. Only y and I have changed. I is the sum of each rectangle's own bh³/12 plus the parallel-axis shift to the centroid.</p>
+<section class="topic" id="s6">
+<h2><span class="n">06</span>A neutral axis off the middle</h2>
+<p>A section with no horizontal axis of symmetry has its centroid off mid-height. The two outer fibers then sit at different distances from the neutral axis, and their stresses differ. The farther fiber carries the larger stress. The formula is still \(-My/I\). Only \(y\) and \(I\) change. \(I\) is the sum of each rectangle's own \(bh^{3}/12\) plus its area times the square of its shift to the centroid.</p>
 <div class="box ex"><span class="tag">Worked example · the tee at 2 kN·m</span>
-<p>The lab's tee has a 120 mm by 12 mm flange on a 12 mm by 100 mm web. The section is 112 mm deep. The centroid is 80.5 mm up from the bottom, not at the 56 mm mid-height. At 2 kN·m sagging,</p>
+<p>The lab's tee has a 120 mm by 12 mm flange on a 12 mm by 100 mm web. The section is 112 mm deep. The flange's area is 1440 mm² at 106 mm up, and the web's is 1200 mm² at 50 mm. The centroid is \((1440\times 106 + 1200\times 50)/2640\), 80.5 mm up from the bottom, not at the 56 mm mid-height. At 2 kN·m sagging,</p>
 \[
 \sigma_{\mathrm{top}} = -20.5\ \mathrm{MPa}
 \]
 \[
 \sigma_{\mathrm{bot}} = 52.5\ \mathrm{MPa}
 \]
-<p>The bottom of the web is the farther fiber, so it carries the larger stress. The chart is no longer symmetric about the origin of y.</p>
+<p>The bottom of the web is 80.5 mm out, against 31.5 mm for the top. It carries the larger stress in the ratio of those distances.</p>
 </div>
-<div class="box why"><span class="tag">Why the stresses refuse to match</span>
-<p>Equal top and bottom stress needs equal fiber distances, and that needs a centroid at mid-height. The flange pulls the centroid up. Using one c = h/2 for both fibers invents a symmetry the area does not have.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking \(c = h/2\) for both fibers invents a symmetry the area does not have. Leaving out the parallel-axis terms gives a far smaller \(I\). A cast-iron tee belongs with its flange on the tension side, because the farther fiber carries more and iron is weak in tension.</p>
 </div>
 </section>
 
-<section class="topic" id="s6">
-<h2><span class="n">06</span>A floor joist</h2>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>A floor joist</h2>
 <p>A nominal 2×10 is not 2 in by 10 in. The American Softwood Lumber Standard, PS 20, dresses it to 1.5 in by 9.25 in. Southern Pine No. 2, spaced 16 in on center, is listed at a 14 ft maximum span for 40 psf live load and 10 psf dead load when deflection is limited to the span over 360. That span is Table 2 of the Southern Forest Products Association maximum spans, 1 June 2013. The joist carries the strip of floor between its neighbors, so the line load is 50 psf times 16/12 ft.</p>
 \[
 w = 66.7\ \mathrm{lb/ft}
 \]
-<p>On a simple span the moment is wL²/8. The bending stress is that moment times half the dressed depth, over I. The section modulus is 21.4 in³.</p>
+<p>On a simple span the moment is \(wL^{2}/8\). The bending stress is that moment times half the dressed depth, over \(I\). The section modulus is 21.4 in³.</p>
 <div class="box ex"><span class="tag">Worked example · the table span</span>
 <p>At 14 ft the moment and the bending stress are</p>
 \[
@@ -159,10 +245,10 @@ M = 1633\ \mathrm{lb\cdot ft}
 \[
 \sigma = 916\ \mathrm{psi}
 \]
-<p>The gold curve is this stress against the span. It bends upward because of L squared. The teal line marks 14 ft, the span the table allows. The stress at that line is the number above.</p>
+<p>The gold curve is this stress against the span. It bends upward because of \(L^{2}\). The teal line marks 14 ft, the span the table allows.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · a 10 ft span</span>
-<p>The same floor on a 10 ft span multiplies the moment by (10/14)². The stress and the moment become</p>
+<p>The same floor on a 10 ft span multiplies the moment by \((10/14)^{2}\). The stress and the moment become</p>
 \[
 \sigma = 467\ \mathrm{psi}
 \]
@@ -179,33 +265,128 @@ M = 833\ \mathrm{lb\cdot ft}
 <p>The nominal name is larger than the dressed board, so it understates the stress. The moment does not care which rectangle was assumed.</p>
 </div>
 <div class="box out"><span class="tag">What the course model leaves out</span>
-<p>916 psi is the elastic bending stress on the dressed section. It is not a published allowable Fb. The 14 ft listing can be set by the deflection limit L/360 rather than by bending. Shear, bearing at the supports, the repetitive-member factor, and load duration are all outside this calculation. The dead load is the 10 psf in the span table, not a measured floor.</p>
+<p>916 psi is the elastic bending stress on the dressed section. It is not a published allowable \(F_b\). The 14 ft listing can be set by the deflection limit \(L/360\) rather than by bending. Shear, bearing at the supports, the repetitive-member factor, and load duration are all outside this calculation. The dead load is the 10 psf in the span table, not a measured floor.</p>
+</div>
+</section>
+</div>
+
+<div class="part">
+<h3>Part 3 · Off the simple case <span class="sub">| tilted moment | two materials | formulas</span></h3>
+
+<section class="topic" id="s8">
+<h2><span class="n">08</span>A moment off the principal axes</h2>
+<p>The flexure formula assumed the moment turns about an axis of symmetry. A load that leans, like the weight on a roof purlin laid on a slope, puts the moment at an angle. Split it into parts about the two principal axes of the section. Each part bends about its own axis, and the stresses add.</p>
+<div class="box why"><span class="tag">Two bendings at once</span>
+<p>Take \(y\) up and \(z\) across, both through the centroid and both axes of symmetry. A moment \(M\) tilted \(\theta\) from the \(z\) axis has parts \(M_z = M\cos\theta\) and \(M_y = M\sin\theta\). Each obeys the flexure formula about its own axis:</p>
+\[
+\sigma = -\frac{M_z\,y}{I_z} + \frac{M_y\,z}{I_y}
+\]
+<p>The sign of the second term follows the right-hand rule for \(M_y\). The neutral axis is where \(\sigma = 0\). It is a line through the centroid at an angle \(\alpha\) from \(z\), with</p>
+\[
+\tan\alpha = \frac{I_z}{I_y}\tan\theta
+\]
+<p>Unless \(I_z = I_y\), the neutral axis does not line up with the moment. It swings toward the weak axis, so a small tilt of the load makes a large tilt of the axis.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the rectangle with a 10° lean</span>
+<p>Turn the 2 kN·m on the 40 by 80 mm rectangle 10° off vertical. Then \(M_z = 1.970\) kN·m and \(M_y = 0.347\) kN·m. \(I_z = 1.707\times 10^{6}\) mm⁴ and \(I_y = 0.427\times 10^{6}\) mm⁴, a quarter. At the worst corner the strong-axis part gives 46.2 MPa and the weak-axis part adds 16.3 MPa:</p>
+\[
+\sigma_{\max} = 62.4\ \mathrm{MPa}
+\]
+<p>Upright, the same moment gave 46.9 MPa. A 10° lean raised the peak by a third. The neutral axis turns to \(\arctan(4\tan 10^\circ) = 35.2^\circ\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Putting the whole moment into \(Mc/I_z\) misses the weak-axis bending, which is the larger danger on a deep narrow section. The neutral axis is not perpendicular to the load unless the section's two \(I\) values match. Both corner stresses have to be checked: the worst one is where both terms have the same sign.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The section here has two axes of symmetry, so its principal axes are known. A Z or angle section has no axis of symmetry. Its principal axes come from the product of inertia, by a Mohr's circle for \(I\), and the same formula then applies on those axes.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a purlin on a 4:12 roof</span>
+<p>A 2×6 purlin, 1.5 × 5.5 in, spans 8 ft between trusses, set square to a 4:12 roof: \(\theta = 18.4^\circ\). It carries 25 psf on a 2 ft strip, 50 lb/ft, so \(M = wL^{2}/8 = 4{,}800\) lbf·in. Split it on the board's own axes:</p>
+\[
+\begin{aligned}M_z &= 4800\cos 18.4^\circ = 4554\ \mathrm{lbf\cdot in} \\ M_y &= 4800\sin 18.4^\circ = 1518\ \mathrm{lbf\cdot in}\end{aligned}
+\]
+<p>With \(I_z = 20.8\) and \(I_y = 1.55\ \mathrm{in}^4\), the corner where both add carries</p>
+\[
+\begin{aligned}\sigma &= \frac{4554(2.75)}{20.8} + \frac{1518(0.75)}{1.55} \\ &= 602 + 736 = 1338\ \mathrm{psi}\end{aligned}
+\]
+<p>Upright the same purlin sees \(6M/bh^{2} = 635\) psi. The neutral axis sits \(\tan^{-1}[(I_z/I_y)\tan\theta] = 77.4^\circ\) from the board's width, almost along its depth.</p>
 </div>
 </section>
 
-<section class="topic" id="s7">
-<h2><span class="n">07</span>Formula sheet</h2>
-<p>Simple span, point load at distance a from the left. Left reaction P(L − a)/L. Peak moment:</p>
+<section class="topic" id="s9">
+<h2><span class="n">09</span>Beams of two materials</h2>
+<p>A timber beam with a steel plate bolted under it bends as one piece. Plane sections still stay plane, so the strain is still linear in \(y\). The stress is not: at the same strain steel carries \(E_s/E_w\) times the stress wood does. The trick is to replace the steel by wood that carries the same force.</p>
+<div class="box why"><span class="tag">The transformed section</span>
+<p>Let \(n = E_s/E_w\). A strip of steel of width \(b\) carries the force of a strip of wood of width \(nb\) at the same strain and the same height. So widen every steel part by \(n\) and treat the whole section as wood. The force balance puts the neutral axis at the centroid of this transformed section. Its \(I\) gives the curvature. The stress in the wood is \(-My/I_t\). The stress in the steel is \(n\) times that at its height, because the real steel is narrower and carries the force on less area.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a timber with a steel plate</span>
+<p>A timber 100 mm wide and 200 mm deep, \(E_w = 12.5\) GPa, has a steel plate 100 mm by 10 mm under it, \(E_s = 200\) GPa. Then \(n = 16\), and the plate becomes 1600 mm of wood 10 mm deep. The transformed centroid is \((20{,}000\times 110 + 16{,}000\times 5)/36{,}000 = 63.3\) mm above the bottom. Parallel-axis sums give</p>
+\[
+I_t = 164.8\times 10^{6}\ \mathrm{mm}^{4}
+\]
+<p>Under 20 kN·m sagging, the top of the wood is 146.7 mm up from the axis and sees \(-17.8\) MPa. The bottom of the steel is 63.3 mm down and sees \(16\times 7.69\):</p>
+\[
+\sigma_s = 123\ \mathrm{MPa}
+\]
+<p>The timber alone would see \(6M/bh^{2} = 30\) MPa at each face. The plate cut the wood's peak by 41%.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading the steel stress straight off the transformed section misses the factor \(n\): it gives 7.7 MPa, not 123. Widening the wood instead of the steel, or using \(1/n\) on the wrong part, moves the neutral axis the wrong way. The axis is at the transformed centroid, not the geometric one.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The two materials are perfectly joined, so they share one strain at the interface. Real bolts slip a little, and a glued joint can creep. Reinforced concrete adds cracking: the concrete below the axis carries no tension. That cracked section is outside this course.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a flitch beam</span>
+<p>Two No. 2 Southern Pine 2×10s, 1.5 × 9.25 in, sandwich a 3/8 × 9.25 in A36 plate, bolted through. The beam spans 14 ft and carries 8 ft of floor at 50 psf: 400 lb/ft, so \(M = 9{,}800\) lbf·ft. All three parts bend to one curvature, so they add their stiffness:</p>
+\[
+\begin{aligned}\textstyle\sum EI &= (1.4\times10^{6})(197.9) \\ &\quad + (29\times10^{6})(24.7) \\ &= 994\times10^{6}\ \mathrm{lbf\cdot in^{2}}\end{aligned}
+\]
+<p>The plate carries \(717/994 = 72\%\) of the moment. At the top fiber, 4.625 in from the axis:</p>
+\[
+\begin{aligned}\sigma_w &= \frac{E_w M c}{\sum EI} = 766\ \mathrm{psi} \\ \sigma_s &= n\,\sigma_w = 20.7(766) = 15.9\ \mathrm{ksi}\end{aligned}
+\]
+<p>Without the plate the two boards would carry 2,749 psi, three times their 920 psi Fb.</p>
+</div>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Formula sheet</h2>
+<p>Simple span, point load \(a\) from the left; uniform load; cantilever tip load:</p>
 \[
 M = \frac{Pa(L-a)}{L}
 \]
-<p>Simple span, uniform load. Support shear wL/2. Peak moment, where the shear is zero:</p>
 \[
-M = \frac{wL^2}{8}
+M = \frac{wL^{2}}{8}
 \]
-<p>Cantilever, tip load. Wall moment, hogging:</p>
 \[
 M = -PL
 \]
-<p>Bending stress, y positive up from the centroid, sagging M positive:</p>
+<p>Load, shear and moment:</p>
+\[
+\frac{dV}{dx} = -w
+\]
+\[
+\frac{dM}{dx} = V
+\]
+<p>Curvature and stress, \(y\) up from the centroid, sagging \(M\) positive:</p>
+\[
+\frac{1}{\rho} = \frac{M}{EI}
+\]
 \[
 \sigma = -\frac{My}{I}
 \]
-<p>Rectangle, outer-fiber magnitude:</p>
+<p>A moment tilted \(\theta\) off the strong axis, and the neutral axis:</p>
 \[
-\sigma = \frac{6M}{bh^2}
+\sigma = -\frac{M_z\,y}{I_z} + \frac{M_y\,z}{I_y}
 \]
-<p>Citations: Roylance §4.1 for the diagrams. Roylance §4.2 for the bending stress. The joist size is PS 20. The 14 ft span is the SFPA Southern Pine table of 1 June 2013, No. 2 grade. The 4 m beams and the tee dimensions are assumed.</p>
+\[
+\tan\alpha = \frac{I_z}{I_y}\tan\theta
+\]
+<p>Two materials: widen the stiffer one by \(n = E_2/E_1\); its real stress is \(n\) times the transformed stress.</p>
+\[
+\sigma_2 = -n\frac{My}{I_t}
+\]
+<p>Citations: Roylance §4.1 for the diagrams. Roylance §4.2 for curvature and the bending stress, and for composite beams. The joist size is PS 20. The 14 ft span is the SFPA Southern Pine table of 1 June 2013, No. 2 grade. Blade tension of 15–20 ksi for carbon blades is from Fine Woodworking (2012); 0.025 in blades want wheels of 12 in or more (Amana Tool). The blade and wheel sizes are assumed. The 4 m beams, the tee, the timber and the plate are assumed.</p>
 </section>
 </div>
 </main>

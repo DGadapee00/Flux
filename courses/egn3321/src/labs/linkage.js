@@ -1,10 +1,10 @@
 import { G } from '@flux/subjects/mechanics/constants.js';
 import { pinnedRelease, slotRelease } from '@flux/subjects/mechanics/rigid-energy.js';
-import { forceArrow, placeIncomingArrow } from '@flux/shells/engineering/fbd.js';
-import { M, makeArrow, makeDot, makeLine, setArrow, setLine } from '../scene/draw.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { THREE, defineLab } from './define.js';
+import { C, alpha, axes, begin, chartIn, dot, hidden, label, line, poly, sceneIn, seg, split, vec } from './diagram.js';
+import { defineLab } from './define2d.js';
+import { PLAY, playing } from './motion.js';
 import { bindSlider, showField, slider } from './widgets.js';
 
 const SCENARIOS = [
@@ -26,7 +26,20 @@ function apply(id, state) {
   state.restDeg = sc.restDeg;
   state.k = sc.k;
   state.springRest = sc.springRest;
+  state.anim = { playing: false };
+  state.show = { play: false };
 }
+
+/**
+ * Work and energy for rigid bodies (Hibbeler §18.1–18.5): a bar released about a pin, with or without
+ * a torsional spring, and a rod sliding down two slots, with or without a spring at its foot. Shows
+ * that T = ½ I ω² about the pin, or about the instantaneous centre when the body has no fixed point,
+ * gives ω at any position from the release, without a moment equation. Play swings the body from its
+ * release, and the chart gives ω at every position.
+ *
+ * Recompute: T₁ + V₁ + ΣU = T₂ + V₂. Check: the same position reached by the equation of motion,
+ * stepped in time (rigid-energy.js).
+ */
 
 function clamp(x, lo, hi, fallback) {
   const n = Number(x);
@@ -34,59 +47,12 @@ function clamp(x, lo, hi, fallback) {
   return Math.min(hi, Math.max(lo, n));
 }
 
-function frame(cx, cy, span) {
-  const z = Math.max(span, 0.35) * 1.9;
-  return { pos: new THREE.Vector3(cx, cy, z), target: new THREE.Vector3(cx, cy, 0) };
-}
-
-function boxFrame(pts, pad) {
-  let minX = Infinity;
-  let minY = Infinity;
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  for (const p of pts) {
-    minX = Math.min(minX, p.x);
-    maxX = Math.max(maxX, p.x);
-    minY = Math.min(minY, p.y);
-    maxY = Math.max(maxY, p.y);
-  }
-  const half = 0.5 * Math.max(maxX - minX, maxY - minY, 0.4) + pad;
-  return frame((minX + maxX) / 2, (minY + maxY) / 2, half / 0.52);
-}
-
 function barEnd(length, deg) {
   const th = deg * Math.PI / 180;
   return { x: length * Math.sin(th), y: -length * Math.cos(th) };
 }
 
-function sweep(fromDeg, toDeg, radius) {
-  const a0 = -Math.PI / 2 + (fromDeg * Math.PI) / 180;
-  const a1 = -Math.PI / 2 + (toDeg * Math.PI) / 180;
-  const steps = 32;
-  const pts = [];
-  for (let i = 0; i <= steps; i++) {
-    const a = a0 + (a1 - a0) * (i / steps);
-    pts.push({ x: radius * Math.cos(a), y: radius * Math.sin(a) });
-  }
-  return pts;
-}
-
 /** A narrow outline, so a bar that lies on a grid axis is still a bar. */
-function rod(x0, y0, x1, y1, half) {
-  const dx = x1 - x0;
-  const dy = y1 - y0;
-  const len = Math.hypot(dx, dy) || 1;
-  const px = (-dy / len) * half;
-  const py = (dx / len) * half;
-  return [
-    { x: x0 + px, y: y0 + py },
-    { x: x1 + px, y: y1 + py },
-    { x: x1 - px, y: y1 - py },
-    { x: x0 - px, y: y0 - py },
-    { x: x0 + px, y: y0 + py },
-  ];
-}
-
 function zigzag(x0, y0, x1, y1, amp) {
   const pts = [];
   const n = 8;
@@ -98,13 +64,9 @@ function zigzag(x0, y0, x1, y1, amp) {
   for (let i = 0; i <= n; i++) {
     const u = i / n;
     const side = i === 0 || i === n ? 0 : (i % 2 === 0 ? -amp : amp);
-    pts.push({ x: x0 + dx * u + px * side, y: y0 + dy * u + py * side });
+    pts.push([x0 + dx * u + px * side, y0 + dy * u + py * side]);
   }
   return pts;
-}
-
-function fitDot(dot, length) {
-  dot.scale.setScalar((Math.max(length, 0.4) * 0.035) / 0.02);
 }
 
 const QUIET = {
@@ -117,26 +79,13 @@ export default defineLab({
   id: 'linkage',
   exam: 'u7',
   title: 'Linkage',
+  app: false,
+  gapLimit: 1e-3,
+  keys: { ' ': 'sweep' },
+  toggles: [PLAY],
+  sweep: (state) => (state.mode === 'slots' ? { key: 'theta2', lo: 5, hi: 80 } : { key: 'theta2', lo: 0, hi: 180 }),
   hint: 'Write T about the instantaneous centre when that point carries the kinematics.',
   scenarios: SCENARIOS,
-  cameraFor(state) {
-    const L = Math.max(Number(state.length) || 1.5, 0.4);
-    if (state.mode === 'slots') {
-      return boxFrame([
-        { x: -0.06 * L, y: -0.16 * L },
-        { x: L * 1.08, y: L * 1.06 },
-      ], 0.04 * L);
-    }
-    const a = barEnd(L, Number(state.theta1) || 0);
-    const b = barEnd(L, Number(state.theta2) || 0);
-    return boxFrame([
-      { x: 0, y: 0 },
-      a,
-      b,
-      { x: a.x / 2, y: a.y / 2 },
-      { x: b.x / 2, y: b.y / 2 },
-    ], 0.22 * L);
-  },
   defaultState() {
     const s = {};
     apply('bar', s);
@@ -151,7 +100,7 @@ export default defineLab({
       ${slider('lk-theta2', 'position (deg)', 0, 0, 180, 1)}
       ${slider('lk-kappa', 'κ (N·m/rad)', 0, 0, 30, 0.5)}
       ${slider('lk-k', 'k (N/m)', 0, 0, 80, 1)}
-      <p class="tiny">For the pinned bar, 0 hangs straight down. For the rod in the slots, 0 lies on the floor. Gold is the instantaneous centre.</p>`;
+      <p class="tiny">For the pinned bar, 0 hangs straight down. For the rod in the slots, 0 lies on the floor. Gold is the instantaneous centre; the faint bar is the release. Play swings the body from its release; the chart gives ω at every position.</p>`;
   },
   bind(api) {
     const link = (id, key) => bindSlider(id, (s, val) => { s[key] = val; }, api);
@@ -184,47 +133,20 @@ export default defineLab({
     showField('lk-kappa', !slots);
     showField('lk-k', slots);
   },
-  init(ctx) {
-    const group = new THREE.Group();
-    const bar = new THREE.Group();
-    const slots = new THREE.Group();
-    const barGhost = makeLine(M.grey);
-    const barBody = makeLine(M.teal);
-    const barArc = makeLine(M.gold);
-    const barPin = makeDot(M.gold, 0.02);
-    const barG = makeDot(M.white, 0.02);
-    const barWeight = forceArrow(new THREE.Vector3(0, -1, 0), M.grey, 0.028, 0.18, 0.12);
-    const barVel = makeArrow(M.white);
-    bar.add(barGhost, barBody, barArc, barPin, barG, barWeight, barVel);
-
-    const floor = makeLine(M.grey);
-    const wall = makeLine(M.grey);
-    const slotGhost = makeLine(M.grey);
-    const slotBody = makeLine(M.teal);
-    const icVert = makeLine(M.gold);
-    const icHoriz = makeLine(M.gold);
-    const spring = makeLine(M.pink);
-    const ic = makeDot(M.gold, 0.02);
-    const slotG = makeDot(M.white, 0.02);
-    const slotWeight = forceArrow(new THREE.Vector3(0, -1, 0), M.grey, 0.028, 0.18, 0.12);
-    const slotVel = makeArrow(M.white);
-    slots.add(floor, wall, slotGhost, spring, icVert, icHoriz, slotBody, ic, slotG, slotWeight, slotVel);
-
-    group.add(bar, slots);
-    ctx.scene.add(group);
-    return {
-      group, bar, slots,
-      barGhost, barBody, barArc, barPin, barG, barWeight, barVel,
-      floor, wall, slotGhost, slotBody, icVert, icHoriz, spring, ic, slotG, slotWeight, slotVel,
-    };
+  tick(dt, state) {
+    if (!playing(state)) return false;
+    // From the release toward the bottom (bar) or the floor (slots), then back to the release.
+    const slots = state.mode === 'slots';
+    const end = slots ? 5 : 0;
+    const start = Number(state.theta1) || 0;
+    let th = (Number(state.theta2) || 0) - Math.sign(start - end || 1) * 40 * dt;
+    if ((start > end && th < end) || (start < end && th > end) || Math.abs(th - start) > Math.abs(end - start) + 1) th = start;
+    state.theta2 = th;
+    return true;
   },
-  enter(ctx, handle) {
-    handle.group.visible = true;
-  },
-  exit(ctx, handle) {
-    handle.group.visible = false;
-  },
-  recompute(state, computed) {
+  compute(state) {
+    state = { ...state };
+    const computed = {};
     const slots = state.mode === 'slots';
     state.mass = clamp(state.mass, 1, 10, 4);
     state.length = clamp(state.length, 0.6, 3, 2);
@@ -261,7 +183,14 @@ export default defineLab({
         icx: row.icx,
         icy: row.icy,
       });
-      return;
+      computed.series = [];
+      for (let th = 5; th <= 80; th += 1) {
+        const q = slotRelease({ mass: state.mass, length: state.length, theta1Deg: state.theta1, theta2Deg: th, k: state.k, rest });
+        computed.series.push([th, q.reaches ? q.omega : NaN]);
+      }
+      computed.theta2 = state.theta2;
+      computed.theta1 = state.theta1;
+      return computed;
     }
     state.theta1 = clamp(state.theta1, 0, 180, 90);
     state.theta2 = clamp(state.theta2, 0, 180, 0);
@@ -287,54 +216,70 @@ export default defineLab({
       vx: row.vx,
       vy: row.vy,
     });
+    computed.series = [];
+    for (let th = 0; th <= 180; th += 2) {
+      const q = pinnedRelease({ mass: state.mass, length: state.length, theta1Deg: state.theta1, theta2Deg: th, kappa: state.kappa, restDeg: state.restDeg });
+      computed.series.push([th, q.reaches ? q.omega : NaN]);
+    }
+    computed.theta2 = state.theta2;
+    computed.theta1 = state.theta1;
+    return computed;
   },
-  syncViews(state, c, ctx) {
-    const h = ctx.handle;
+  draw(canvas, state, c) {
+    const B = begin(canvas);
+    const veiled = hidden();
+    const [left, right] = veiled ? [B.free, null] : split(B.free, 0.55);
     const L = Math.max(Number(state.length) || 1, 0.4);
     const slots = state.mode === 'slots';
-    h.bar.visible = !slots;
-    h.slots.visible = slots;
-    fitDot(h.barPin, L);
-    fitDot(h.barG, L);
-    fitDot(h.ic, L);
-    fitDot(h.slotG, L);
-    const weight = (Number(state.mass) || 0) * G;
-    const scale = (0.28 * L) / Math.max(weight, 1e-6);
+    const W = (Number(state.mass) || 0) * G;
     const speed = Math.hypot(c.vx, c.vy);
-    const show = speed > 1e-6 ? Math.min(0.38 * L, 0.1 * L * speed) : 0;
     if (!slots) {
-      const half = Math.max(0.04, 0.028 * L);
-      const ghost = barEnd(L, Number(state.theta1) || 0);
-      setLine(h.barGhost, rod(0, 0, ghost.x, ghost.y, half * 0.7));
-      setLine(h.barBody, rod(0, 0, c.ex, c.ey, half));
-      const wound = Number(state.kappa) > 0 && Math.abs((Number(state.theta1) || 0) - (Number(state.theta2) || 0)) > 1;
-      h.barArc.visible = wound;
-      if (wound) setLine(h.barArc, sweep(Number(state.theta2) || 0, Number(state.theta1) || 0, 0.22 * L));
-      h.barPin.position.set(0, 0, 0);
-      h.barG.position.set(c.gx, c.gy, 0);
-      placeIncomingArrow(h.barWeight, new THREE.Vector3(c.gx, c.gy, 0), 0, -weight, { scale, minLength: 0, gap: L * 0.03 });
-      if (show > 0) setArrow(h.barVel, { x: c.gx, y: c.gy }, { x: (c.vx / speed) * show, y: (c.vy / speed) * show }, show);
-      else h.barVel.visible = false;
-      return;
+      const S = sceneIn(B, left, { x0: -1.2 * L, x1: 1.2 * L, y0: -1.2 * L, y1: 1.2 * L });
+      const ghost = barEnd(L, Number(c.theta1) || 0);
+      seg(S, [0, 0], [ghost.x, ghost.y], { color: alpha(C.text, 0.25), width: 5 });
+      if (Number(state.kappa) > 0) {
+        // The torsional spring, unwound when the bar hangs down: a coil at the pin.
+        const pts = Array.from({ length: 60 }, (_, i) => {
+          const a = (i / 59) * 4 * Math.PI;
+          const r = 0.05 * L + (0.1 * L * i) / 59;
+          return [r * Math.cos(a), r * Math.sin(a)];
+        });
+        line(S, pts, { color: C.pink, width: 1.5 });
+      }
+      seg(S, [0, 0], [c.ex, c.ey], { color: C.teal, width: 7 });
+      dot(S, 0, 0, { color: C.gold, r: 6 });
+      dot(S, c.gx, c.gy, { color: C.text, r: 3 });
+      const k = (0.3 * L * S.k) / Math.max(W, 1e-6);
+      vec(S, [c.gx, c.gy], [0, -W], k, { color: C.dim, label: 'mg' });
+      if (speed > 1e-6) vec(S, [c.gx, c.gy], [c.vx, c.vy], (0.35 * L * S.k) / Math.max(speed, 1), { color: C.text, label: veiled ? 'v_G' : `${fig(speed)} m/s` });
+    } else {
+      const S = sceneIn(B, left, { x0: -0.15 * L, x1: 1.15 * L, y0: -0.2 * L, y1: 1.12 * L });
+      poly(S, [[-0.08 * L, -0.06 * L], [1.12 * L, -0.06 * L], [1.12 * L, 0], [0, 0], [0, 1.1 * L], [-0.08 * L, 1.1 * L]], { fill: alpha(C.text, 0.12), stroke: alpha(C.text, 0.6), width: 1.5 });
+      const th1 = ((Number(c.theta1) || 0) * Math.PI) / 180;
+      seg(S, [L * Math.cos(th1), 0], [0, L * Math.sin(th1)], { color: alpha(C.text, 0.25), width: 4 });
+      if (Number(state.k) > 0) line(S, zigzag(0, 0.02 * L, c.ax, 0.02 * L, 0.04 * L), { color: C.pink, width: 1.5 });
+      seg(S, [c.ax, c.ay], [c.bx, c.by], { color: C.teal, width: 6 });
+      seg(S, [c.ax, c.ay], [c.icx, c.icy], { color: alpha(C.gold, 0.55), width: 1, dash: [5, 4] });
+      seg(S, [c.bx, c.by], [c.icx, c.icy], { color: alpha(C.gold, 0.55), width: 1, dash: [5, 4] });
+      dot(S, c.icx, c.icy, { color: C.gold, r: 6 });
+      label(S, 'IC', [c.icx, c.icy], { color: C.gold, dx: 12, dy: -10 });
+      dot(S, c.gx, c.gy, { color: C.text, r: 3 });
+      const k = (0.25 * L * S.k) / Math.max(W, 1e-6);
+      vec(S, [c.gx, c.gy], [0, -W], k, { color: C.dim, label: 'mg' });
+      if (speed > 1e-6) vec(S, [c.gx, c.gy], [c.vx, c.vy], (0.3 * L * S.k) / Math.max(speed, 1), { color: C.text, label: veiled ? 'v_G' : `${fig(speed)} m/s` });
     }
-    const th1 = (Number(state.theta1) || 0) * Math.PI / 180;
-    setLine(h.floor, [{ x: -0.04 * L, y: 0 }, { x: L * 1.08, y: 0 }]);
-    setLine(h.wall, [{ x: 0, y: -0.04 * L }, { x: 0, y: L * 1.06 }]);
-    setLine(h.slotGhost, [
-      { x: L * Math.cos(th1), y: 0 },
-      { x: 0, y: L * Math.sin(th1) },
-    ]);
-    setLine(h.slotBody, [{ x: c.ax, y: c.ay }, { x: c.bx, y: c.by }]);
-    setLine(h.icVert, [{ x: c.ax, y: c.ay }, { x: c.icx, y: c.icy }]);
-    setLine(h.icHoriz, [{ x: c.bx, y: c.by }, { x: c.icx, y: c.icy }]);
-    const sprung = Number(state.k) > 0;
-    h.spring.visible = sprung;
-    if (sprung) setLine(h.spring, zigzag(0, 0, c.ax, 0, 0.055 * L));
-    h.ic.position.set(c.icx, c.icy, 0);
-    h.slotG.position.set(c.gx, c.gy, 0);
-    placeIncomingArrow(h.slotWeight, new THREE.Vector3(c.gx, c.gy, 0), 0, -weight, { scale, minLength: 0, gap: L * 0.03 });
-    if (show > 0) setArrow(h.slotVel, { x: c.gx, y: c.gy }, { x: (c.vx / speed) * show, y: (c.vy / speed) * show }, show);
-    else h.slotVel.visible = false;
+    if (veiled) return;
+    // ω at every position from this release.
+    const fin = c.series.filter((q) => Number.isFinite(q[1]));
+    const hi = Math.max(0.5, ...fin.map((q) => q[1])) * 1.15;
+    const lo0 = slots ? 5 : 0;
+    const hi0 = slots ? 80 : 180;
+    const P = chartIn(B, right, { lo: lo0, hi: hi0 }, { lo: 0, hi });
+    axes(P, { xLabel: slots ? 'angle from the floor (deg)' : 'angle from hanging (deg)', yLabel: 'ω (rad/s)' });
+    line(P, fin, { color: C.teal, width: 2.5 });
+    line(P, [[Number(c.theta1), 0], [Number(c.theta1), hi]], { color: alpha(C.text, 0.35), width: 1, dash: [4, 4] });
+    label(P, 'release', [Number(c.theta1), hi], { color: C.muted, dy: 10 });
+    if (c.reaches) dot(P, Number(c.theta2), c.omega, { color: C.yellow, r: 5 });
   },
   law(state) {
     if (state.mode === 'slots') return [String.raw`T=\tfrac{1}{2}I_{IC}\omega^2`];

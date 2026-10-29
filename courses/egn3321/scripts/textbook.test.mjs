@@ -8,7 +8,7 @@ import { PROBLEMS } from '../src/problems/index.js';
 test('every entry names a known book and a numbered section', () => {
   for (const [topic, e] of Object.entries(SECTIONS)) {
     assert.ok(BOOKS[e.book], `${topic}: unknown book ${e.book}`);
-    assert.match(e.section, e.book === 'statics' ? /^1\.[3-6]$/ : /^1[2-8]\.\d{1,2}$/, `${topic}: ${e.section}`);
+    assert.match(e.section, e.book === 'statics' ? /^1\.[3-6]$/ : /^1[2-9]\.\d{1,2}$/, `${topic}: ${e.section}`);
     assert.ok(e.title, topic);
   }
   const numbers = Object.values(SECTIONS).map((e) => `${e.book}:${e.section}`);
@@ -24,7 +24,7 @@ test('citations read the same way everywhere', () => {
 
 test('the sections the course leaves out are marked, and only those', () => {
   const left = Object.values(SECTIONS).filter((e) => e.leftOut).map((e) => e.section).sort();
-  assert.deepEqual(left, ['12.8', '12.9', '13.6', '13.7', '15.8', '16.8']);
+  assert.deepEqual(left, ['13.7', '15.8']);
 });
 
 test('every section a template or a worked case cites is in the map', () => {

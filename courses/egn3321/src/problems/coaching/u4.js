@@ -6,6 +6,8 @@
  * the part's own units, like the part's `get`.
  */
 import { G, G_FT } from '@flux/subjects/mechanics/constants.js';
+import { collide1D } from '@flux/subjects/mechanics/momentum.js';
+import { minDuration, stopPulse } from '@flux/subjects/mechanics/impact-pulse.js';
 
 const DEG = Math.PI / 180;
 
@@ -108,4 +110,59 @@ export default {
   },
   'u4.15.rocket': { traps: { dv: rocketTraps(G) } },
   'u4.15.rocket-ft': { traps: { dv: rocketTraps(G_FT) } },
+  'u4.15.helmet': {
+    traps: {
+      J: [
+        [($) => 5 * $.v0, 'That stops the headform but does not throw it back. The rebound adds e·v0: the change is (1 + e)v0.'],
+        [($) => 5 * Math.sqrt(2 * $.h), 'Find the impact speed from the drop: v0 = √(2gh), not √(2h).'],
+      ],
+      q: [
+        // The shape factor misplaced: a half-sine read as flat, a flat pulse given the half-sine's π/2.
+        [($) => {
+          const k = $.shape === 'square' ? 2 / Math.PI : 1;
+          if ($.find === 'tau') return minDuration({ v0: $.v0, e: $.e, shape: k === 1 ? 'square' : 'half-sine', limitG: 300 }) * 1000;
+          return stopPulse({ m: 5, v0: $.v0, e: $.e, tau: $.tau / 1000, shape: k === 1 ? 'square' : 'half-sine' }).gPeak;
+        }, ($) => ($.shape === 'square'
+          ? 'A flat pulse uses its whole height: ∫F dt = F_pk τ, with no π/2.'
+          : 'That is the mean force, as if the pulse were flat. A half-sine’s ∫F dt is 2F_pk τ/π, so its peak is π/2 times its mean.')],
+        // 300 g read as 300 m/s², or the peak left in m/s².
+        [($) => ($.find === 'tau'
+          ? ((1 + $.e) * $.v0) / ((($.shape === 'square' ? 1 : 2 / Math.PI) * 300) - G) * 1000
+          : stopPulse({ m: 5, v0: $.v0, e: $.e, tau: $.tau / 1000, shape: $.shape }).gPeak * G),
+        ($) => ($.find === 'tau'
+          ? 'The limit is 300 g, not 300 m/s². Set F_pk = 300mg.'
+          : 'That is F_pk/m in m/s². Divide by g = 9.81 for the peak in g.')],
+      ],
+    },
+  },
+  'u4.15.collide-sym': {
+    traps: {
+      lost: [
+        [($) => {
+          const out = collide1D($.m1, $.m2, $.u, 0, $.e);
+          return 0.5 * $.m1 * out.v1 ** 2 + 0.5 * $.m2 * out.v2 ** 2;
+        }, 'That is the energy left after the impact, not the energy lost.'],
+        [($) => {
+          const out = collide1D($.m1, $.m2, $.u, 0, $.e);
+          return 0.5 * $.m1 * ($.u ** 2 - out.v1 ** 2);
+        }, 'That is the striker’s loss alone. The struck body gains part of it: subtract its ½m₂v₂² too.'],
+      ],
+    },
+  },
+  'u4.15.cart': {
+    traps: {
+      v: [
+        [($) => ($.m * $.u) / $.M, 'That divides by the cart’s mass alone. Both bodies end at one speed: divide the momentum by m + M.'],
+        [($) => $.u * Math.sqrt($.m / ($.m + $.M)), 'Kinetic energy is not kept: friction turns part of it into heat. Momentum is.'],
+      ],
+      q: [
+        [($) => ($.find === 'time' ? $.u / ($.mu * G) : ($.u * $.u) / (2 * G * $.Lc)), ($) => ($.find === 'time'
+          ? 'That holds the cart still. It speeds up too, so the speeds meet sooner: the gap closes at μg(1 + m/M).'
+          : 'That holds the cart still. The cart moves off too, so the block slides less far along it.')],
+        [($) => ($.find === 'time' ? $.u / ($.mu * G * (1 + $.M / $.m)) : ($.u * $.u) / (G * $.Lc * (1 + $.m / $.M))), ($) => ($.find === 'time'
+          ? 'The mass ratio is upside down. Friction μmg speeds the cart at μmg/M.'
+          : 'The relative slide is u²/2a: the factor of 2 is missing.')],
+      ],
+    },
+  },
 };

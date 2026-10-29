@@ -1,9 +1,11 @@
+import { PLAY, advance, playing } from '@flux/shells/engineering/motion.js';
+import { shaftSketch } from './elements.js';
 import {
   polarJ, roundShaft, solidDiameterRequired, torsionShear,
 } from '@flux/subjects/mechanics/torsion.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { alpha, arrow, axes, begin, C, chartIn, circle, dot, hidden, label, line, panes, plotIn, sceneIn } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, slider } from './widgets.js';
 
@@ -29,7 +31,7 @@ function apply(id, state) {
   const sc = SCENARIOS.find((s) => s.id === id) || SCENARIOS[0];
   Object.assign(state, {
     scenarioId: sc.id, T: sc.T, d: sc.d, di: sc.di, L: sc.L, rho: sc.rho, G,
-    tauAllow: 0, phiAllow: 0,
+    tauAllow: 0, phiAllow: 0, vis: 1, anim: { playing: false }, show: { play: false },
   });
 }
 
@@ -54,11 +56,55 @@ function geometry(state) {
   };
 }
 
+/**
+ * The shaft from the side, fixed at the left wall and turned by T at the right, with a surface line
+ * that slants as the sections turn; and its end, where the shear grows from zero on the axis (or
+ * from the bore) to its largest value at the outside. Play applies the torque.
+ */
+function member(B, rect, state, c, veiled) {
+  const geo = geometry(state);
+  const lam = playing(state) ? Math.min(1, Number(state.vis) || 0) : 1;
+  const W = rect.x1 - rect.x0;
+  const Hh = rect.y1 - rect.y0;
+  const wide = W > 1.6 * Hh;
+  const side = wide ? { ...rect, x1: rect.x0 + 0.66 * W } : { ...rect, y1: rect.y0 + 0.5 * Hh };
+  const end = wide ? { ...rect, x0: rect.x0 + 0.66 * W } : { ...rect, y0: rect.y0 + 0.5 * Hh };
+  const r = 0.12 * geo.L;
+  const S = sceneIn(B, side, { x0: -0.06 * geo.L, x1: 1.18 * geo.L, y0: -2.2 * r, y1: 2.2 * r }, 8);
+  const k = 1.1 / Math.max(c.phi, 1e-9);
+  shaftSketch(S, [{ x0: 0, x1: geo.L, r }], {
+    walls: [0],
+    torques: [{ x: geo.L, T: Math.sign(state.T || 1) * lam, text: veiled ? '' : `T ${fig(lam * state.T)} N·m` }],
+    phi: (x) => (lam * c.phi * x) / geo.L,
+    k,
+  });
+  if (!veiled) label(S, `twist ${fig(lam * c.phi * 180 / Math.PI)}°, drawn ×${fig(k)}`, [geo.L / 2, -r], { color: C.gold, dy: 14 });
+  const E = sceneIn(B, end, { x0: -1.4, x1: 1.4, y0: -1.3, y1: 1.3 }, 8);
+  circle(E, [0, 0], 1, { stroke: C.text, fill: alpha(C.text, 0.12), width: 1.5 });
+  const fi = geo.ri / geo.ro;
+  if (fi > 0) circle(E, [0, 0], fi, { stroke: C.text, fill: C.bg, width: 1.5 });
+  for (let i = 0; i <= 5; i++) {
+    const rr = fi + ((1 - fi) * i) / 5;
+    if (rr < 0.05) continue;
+    for (const a of [Math.PI / 2, -Math.PI / 6, Math.PI * 7 / 6]) {
+      const p = [rr * Math.cos(a), rr * Math.sin(a)];
+      arrow(E, p, a + Math.sign(state.T || 1) * Math.PI / 2, lam * 28 * rr, { color: C.teal, width: 1.8, head: 6 });
+    }
+  }
+  if (!veiled) label(E, `τ ${fig((lam * c.tauMax) / 1e6)} MPa at the outside`, [0, -1], { color: C.teal, dy: 14 });
+}
+
 export default defineLab({
   id: 'torsion',
   exam: 'u9',
   title: 'Torsion',
   hint: 'Shear stress is zero on the axis and largest at the outside. Boring the core removes area that was carrying little torque.',
+  keys: { ' ': 'sweep' },
+  toggles: [PLAY],
+  // Play applies the torque in the drawing, from nothing to its full value; the numbers stay at full torque.
+  tick(dt, state) {
+    return advance(state, dt, { lo: 0, hi: 1.25, rate: 0.5, key: 'vis' });
+  },
   scenarios: SCENARIOS,
   defaultState() {
     const s = {};
@@ -116,8 +162,12 @@ export default defineLab({
       gap: shaft.gap,
     };
   },
-  draw(canvas, state) {
+  draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.45, { long: true });
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const geo = geometry(state);
     const pts = [];
     const n = 40;
@@ -126,7 +176,7 @@ export default defineLab({
       pts.push([rho * 1000, torsionShear(geo.T, rho, geo.J) / 1e6]);
     }
     const yHi = Math.max(pts[pts.length - 1][1], 1);
-    const P = plotIn(B, B.free, { lo: 0, hi: geo.ro * 1000 * 1.05 }, { lo: 0, hi: yHi * 1.12 });
+    const P = chartIn(B, R, { lo: 0, hi: geo.ro * 1000 * 1.05 }, { lo: 0, hi: yHi * 1.12 });
     axes(P, { xLabel: 'radius (mm)', yLabel: 'shear stress (MPa)' });
     line(P, pts, { color: C.teal, width: 3 });
     line(P, [[geo.ro * 1000, 0], [geo.ro * 1000, yHi * 1.12]], { color: C.pink, width: 2, dash: [5, 4] });

@@ -254,7 +254,8 @@ export function axes(P, { xLabel = '', yLabel = '', xFmt = fmtTick, yFmt = fmtTi
   const { ctx, box, X, Y } = P;
   ctx.font = FONT;
   ctx.lineWidth = 1;
-  for (const v of tickValues(Y, 5)) {
+  // A short chart gets fewer ticks, so the labels never touch.
+  for (const v of tickValues(Y, Math.max(2, Math.min(5, Math.floor((box.y1 - box.y0) / 30))))) {
     const py = Y(v);
     ctx.strokeStyle = C.grid;
     ctx.beginPath();
@@ -370,4 +371,258 @@ export function note(P, text, x, y, { color = C.muted, dx = 6, dy = -6, align = 
   if (align === 'right') px = Math.max(px, box.x0 + wText + 2);
   const py = Math.min(Math.max(Y(y) + dy, box.y0 + 10), box.y1 - 4);
   ctx.fillText(text, px, py);
+}
+/**
+ * A vector drawn to a scale: `v` is [vx, vy] in model units, `k` pixels per unit. Nothing is drawn
+ * for a vector shorter than two pixels. `label` is written just past the head.
+ */
+export function vec(P, at, v, k, { color = C.text, width = 2.5, head = 8, label: text = null, dash = null } = {}) {
+  const len = Math.hypot(v[0], v[1]) * k;
+  if (!(len > 2)) return;
+  const ang = Math.atan2(v[1], v[0]);
+  if (dash) {
+    const { ctx, X, Y } = P;
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width - 0.5;
+    ctx.setLineDash(dash);
+    ctx.beginPath();
+    ctx.moveTo(X(at[0]), Y(at[1]));
+    ctx.lineTo(X(at[0]) + Math.cos(ang) * len, Y(at[1]) - Math.sin(ang) * len);
+    ctx.stroke();
+    ctx.restore();
+  } else {
+    arrow(P, at, ang, len, { color, width, head: Math.min(head, len * 0.6) });
+  }
+  if (text) {
+    const { ctx, X, Y } = P;
+    ctx.save();
+    ctx.font = FONT;
+    ctx.fillStyle = color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, X(at[0]) + Math.cos(ang) * (len + 11), Y(at[1]) - Math.sin(ang) * (len + 11));
+    ctx.restore();
+  }
+}
+
+/** A circle of radius `r` model units about a model point. */
+export function circle(P, at, r, { stroke = C.text, fill = null, width = 1.5, dash = null } = {}) {
+  const { ctx, X, Y, k } = P;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(X(at[0]), Y(at[1]), Math.max(0.5, r * k), 0, 2 * Math.PI);
+  if (fill) {
+    ctx.fillStyle = fill;
+    ctx.fill();
+  }
+  if (stroke) {
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = width;
+    ctx.setLineDash(dash || []);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/** A chart in `rect` whose margins shrink when the space is short, as on a phone. */
+export function chartIn(B, rect, x, y) {
+  const H = rect.y1 - rect.y0;
+  const pad = H < 220 ? { left: 40, right: 10, top: 14, bottom: 26 } : { left: 52, right: 14, top: 26, bottom: 40 };
+  return plotIn(B, rect, x, y, pad);
+}
+
+/**
+ * Whether the lab's numbers are hidden: a practice problem not yet solved, or "Work it first".
+ * A 2D lab leaves its value-bearing charts and labels out while this is true.
+ */
+export function hidden() {
+  if (typeof document === 'undefined') return false;
+  const b = document.body.classList;
+  return b.contains('problem-blind') || b.contains('work-first');
+}
+
+/*
+ * Structural symbols for the member drawings. Sizes are in pixels, so a support reads the same
+ * whatever the member's scale; positions are model points.
+ */
+
+/** A pin: a triangle under the point, on a hatched ground line. */
+export function pinSupport(P, at, { size = 12, color = C.muted } = {}) {
+  const { ctx, X, Y } = P;
+  const x = X(at[0]);
+  const y = Y(at[1]);
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.fillStyle = alpha(color, 0.18);
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x - size * 0.75, y + size);
+  ctx.lineTo(x + size * 0.75, y + size);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  hatch(ctx, x - size, x + size, y + size, color);
+  ctx.restore();
+}
+
+/** A roller: a triangle on two wheels, free to slide along the ground. */
+export function rollerSupport(P, at, { size = 12, color = C.muted } = {}) {
+  const { ctx, X, Y } = P;
+  const x = X(at[0]);
+  const y = Y(at[1]);
+  const h = size * 0.7;
+  const r = size * 0.18;
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.fillStyle = alpha(color, 0.18);
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x - size * 0.7, y + h);
+  ctx.lineTo(x + size * 0.7, y + h);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  for (const dx of [-size * 0.4, size * 0.4]) {
+    ctx.beginPath();
+    ctx.arc(x + dx, y + h + r, r, 0, 2 * Math.PI);
+    ctx.stroke();
+  }
+  hatch(ctx, x - size, x + size, y + h + 2 * r, color);
+  ctx.restore();
+}
+
+/** A fixed wall: a thick line from y0 to y1 at x, hatched on the side away from the member. */
+export function wall(P, x, y0, y1, { side = -1, color = C.muted } = {}) {
+  const { ctx, X, Y } = P;
+  const px = X(x);
+  const a = Y(y0);
+  const b = Y(y1);
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(px, a);
+  ctx.lineTo(px, b);
+  ctx.stroke();
+  ctx.lineWidth = 1;
+  const top = Math.min(a, b);
+  const bot = Math.max(a, b);
+  for (let y = top; y <= bot; y += 7) {
+    ctx.beginPath();
+    ctx.moveTo(px, y);
+    ctx.lineTo(px + side * 7, y + 7);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function hatch(ctx, x0, x1, y, color) {
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(x0, y);
+  ctx.lineTo(x1, y);
+  ctx.stroke();
+  ctx.lineWidth = 1;
+  for (let x = x0 + 2; x < x1; x += 6) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x - 5, y + 5);
+    ctx.stroke();
+  }
+}
+
+/**
+ * A distributed load from x0 to x1 resting on a line at height y: arrows `px` pixels long,
+ * pointing down for a positive load, joined along their tails.
+ */
+export function spread(P, x0, x1, y, { px = 22, color = C.pink, label: text = null, n = null } = {}) {
+  const { ctx, X, Y } = P;
+  const a = X(x0);
+  const b = X(x1);
+  if (!(b - a > 2)) return;
+  const count = n ?? Math.max(3, Math.round((b - a) / 26));
+  const base = Y(y);
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(a, base - px);
+  ctx.lineTo(b, base - px);
+  ctx.stroke();
+  ctx.restore();
+  for (let i = 0; i <= count; i++) {
+    const x = x0 + ((x1 - x0) * i) / count;
+    arrow(P, [x, y], -Math.PI / 2, px, { color, width: 1.5, head: 6, tail: true });
+  }
+  if (text) label(P, text, [(x0 + x1) / 2, y], { color, dy: -px - 9 });
+}
+
+/** A couple: an arc of radius `r` pixels about a model point, counterclockwise when ccw. */
+export function couple(P, at, { r = 16, ccw = true, color = C.pink, label: text = null } = {}) {
+  const { ctx, X, Y } = P;
+  const x = X(at[0]);
+  const y = Y(at[1]);
+  const a0 = Math.PI * 0.15;
+  const a1 = Math.PI * 1.55;
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(x, y, r, -a1, -a0, false);
+  ctx.stroke();
+  // The head sits at the end the rotation runs toward.
+  const end = ccw ? -a1 : -a0;
+  const hx = x + r * Math.cos(end);
+  const hy = y + r * Math.sin(end);
+  const tang = ccw ? end - Math.PI / 2 : end + Math.PI / 2;
+  const tx = Math.cos(tang);
+  const ty = Math.sin(tang);
+  ctx.beginPath();
+  ctx.moveTo(hx + tx * 7, hy + ty * 7);
+  ctx.lineTo(hx - ty * 4, hy + tx * 4);
+  ctx.lineTo(hx + ty * 4, hy - tx * 4);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+  if (text) label(P, text, at, { color, dy: -r - 9 });
+}
+
+/**
+ * The drawing and the chart: side by side when the space is wider than tall (a desktop, or a
+ * phone's short band), stacked otherwise; `long` members prefer stacking. `share` is the drawing's part.
+ */
+export function panes(B, share = 0.42, { long = false } = {}) {
+  const f = B.free;
+  const W = f.x1 - f.x0;
+  const H = f.y1 - f.y0;
+  // A long member (a bar or a beam) reads better stacked over its chart unless the space is wide.
+  const side = long ? W > 1.6 * H && W > 560 : W > 1.15 * H;
+  if (side) {
+    const xm = f.x0 + W * share;
+    return [{ ...f, x1: xm }, { ...f, x0: xm }];
+  }
+  const ym = f.y0 + H * share;
+  return [{ ...f, y1: ym }, { ...f, y0: ym }];
+}
+
+/**
+ * A straight member along x from 0 to L, `half(x)` its half-depth, drawn twice: faint where it
+ * started, and solid where it went, every point moved by `u(x)` times the exaggeration `k`.
+ * Vertical ticks every L/n mark material points, so a stretch shows as ticks spreading apart.
+ */
+export function stretchedBar(S, L, half, u, { k = 1, n = 8, fill = alpha(C.text, 0.1), stroke = C.text, tick = C.gold } = {}) {
+  const xs = Array.from({ length: 41 }, (_, i) => (L * i) / 40);
+  const outline = (shift) => [...xs.map((x) => [x + shift(x), half(x)]), ...xs.slice().reverse().map((x) => [x + shift(x), -half(x)])];
+  poly(S, outline(() => 0), { fill: null, stroke: alpha(C.text, 0.25), dash: [4, 4] });
+  poly(S, outline((x) => k * u(x)), { fill, stroke, width: 1.5 });
+  for (let i = 0; i <= n; i++) {
+    const x = (L * i) / n;
+    const X = x + k * u(x);
+    seg(S, [X, -half(x)], [X, half(x)], { color: tick, width: 1.5 });
+  }
 }

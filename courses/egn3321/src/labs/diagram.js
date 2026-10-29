@@ -366,3 +366,73 @@ export function note(P, text, x, y, { color = C.muted, dx = 6, dy = -6, align = 
   const py = Math.min(Math.max(Y(y) + dy, box.y0 + 10), box.y1 - 4);
   ctx.fillText(text, px, py);
 }
+
+/**
+ * A vector drawn to a scale: `v` is [vx, vy] in model units, `k` pixels per unit. Nothing is drawn
+ * for a vector shorter than two pixels. `label` is written just past the head.
+ */
+export function vec(P, at, v, k, { color = C.text, width = 2.5, head = 8, label: text = null, dash = null } = {}) {
+  const len = Math.hypot(v[0], v[1]) * k;
+  if (!(len > 2)) return;
+  const ang = Math.atan2(v[1], v[0]);
+  if (dash) {
+    const { ctx, X, Y } = P;
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width - 0.5;
+    ctx.setLineDash(dash);
+    ctx.beginPath();
+    ctx.moveTo(X(at[0]), Y(at[1]));
+    ctx.lineTo(X(at[0]) + Math.cos(ang) * len, Y(at[1]) - Math.sin(ang) * len);
+    ctx.stroke();
+    ctx.restore();
+  } else {
+    arrow(P, at, ang, len, { color, width, head: Math.min(head, len * 0.6) });
+  }
+  if (text) {
+    const { ctx, X, Y } = P;
+    ctx.save();
+    ctx.font = FONT;
+    ctx.fillStyle = color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, X(at[0]) + Math.cos(ang) * (len + 11), Y(at[1]) - Math.sin(ang) * (len + 11));
+    ctx.restore();
+  }
+}
+
+/** A circle of radius `r` model units about a model point. */
+export function circle(P, at, r, { stroke = C.text, fill = null, width = 1.5, dash = null } = {}) {
+  const { ctx, X, Y, k } = P;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(X(at[0]), Y(at[1]), Math.max(0.5, r * k), 0, 2 * Math.PI);
+  if (fill) {
+    ctx.fillStyle = fill;
+    ctx.fill();
+  }
+  if (stroke) {
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = width;
+    ctx.setLineDash(dash || []);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/** A chart in `rect` whose margins shrink when the space is short, as on a phone. */
+export function chartIn(B, rect, x, y) {
+  const H = rect.y1 - rect.y0;
+  const pad = H < 220 ? { left: 40, right: 10, top: 14, bottom: 26 } : { left: 52, right: 14, top: 26, bottom: 40 };
+  return plotIn(B, rect, x, y, pad);
+}
+
+/**
+ * Whether the lab's numbers are hidden: a practice problem not yet solved, or "Work it first".
+ * A 2D lab leaves its value-bearing charts and labels out while this is true.
+ */
+export function hidden() {
+  if (typeof document === 'undefined') return false;
+  const b = document.body.classList;
+  return b.contains('problem-blind') || b.contains('work-first');
+}

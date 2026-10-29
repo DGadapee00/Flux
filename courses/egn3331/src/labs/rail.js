@@ -2,7 +2,7 @@ import { PA_PER_PSI } from '@flux/subjects/convert.js';
 import { axialStiffness, constrainedThermal } from '@flux/subjects/mechanics/materials.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, alpha, axes, begin, dot, line, plotIn } from './diagram.js';
+import { C, alpha, arrow, axes, begin, chartIn, dot, hidden, label, line, panes, poly, sceneIn } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, leavesOut, slider } from './widgets.js';
 
@@ -91,8 +91,36 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [top, rest] = panes(B, 0.38, { long: true });
+    // A length of rail between two anchors. The dashed rail is where it would sit if nothing held
+    // it; the joint gap, drawn to the same exaggeration, is what it may grow into for free.
+    const S = sceneIn(B, top, { x0: -1.2, x1: 12.4, y0: -1.3, y1: 1.3 }, 8);
+    // Drawn so the chart's hottest rail, +60 °C, would grow 1.5 units on its 10.
+    const k = 1.5 / (10 * ALPHA * 60);
+    const gapD = (c.gapMm / 1e3 / c.L) * 10 * k;
+    const freeD = (c.free / c.L) * 10 * k;
+    const xr = 10 + gapD;
+    poly(S, [[-0.7, -0.9], [0, -0.9], [0, 0.9], [-0.7, 0.9]], { fill: alpha(C.muted, 0.35), stroke: C.muted });
+    poly(S, [[xr, -0.9], [xr + 0.7, -0.9], [xr + 0.7, 0.9], [xr, 0.9]], { fill: alpha(C.muted, 0.35), stroke: C.muted });
+    const lenNow = c.gapMm > 0 ? 10 + Math.max(-10, Math.min(freeD, gapD)) : 10;
+    if (Math.abs(freeD) > 0.02) poly(S, [[0, -0.22], [10 + freeD, -0.22], [10 + freeD, 0.22], [0, 0.22]], { fill: null, stroke: alpha(C.text, 0.4), dash: [4, 4] });
+    const tone = c.stress < -1 ? C.blue : c.stress > 1 ? C.red : C.text;
+    poly(S, [[0, -0.22], [lenNow, -0.22], [lenNow, 0.22], [0, 0.22]], { fill: alpha(tone, 0.3), stroke: tone, width: 1.5 });
+    if (Math.abs(c.stress) > 1e5) {
+      const comp = c.stress < 0;
+      const len = 14 + 26 * Math.min(1, Math.abs(c.stress) / 150e6);
+      arrow(S, [0, 0.55], comp ? 0 : Math.PI, len, { color: tone, tail: comp });
+      arrow(S, [lenNow, 0.55], comp ? Math.PI : 0, len, { color: tone, tail: comp });
+    }
+    if (!veiled) {
+      label(S, `ΔT = ${fig(c.dT)} °C`, [5, 0.22], { color: C.yellow, dy: -26 });
+      label(S, c.gapMm > 0 ? `gap ${fig(c.gapMm)} mm` : 'held at both ends', [10, -0.9], { color: C.dim, dy: 12, align: 'right' });
+      label(S, `free growth ${fig(c.free * 1e3)} mm, dashed`, [0, -0.9], { color: C.dim, dy: 12, align: 'left' });
+    }
+    if (veiled) return;
     const hi = E * ALPHA * 60 / 1e6;
-    const P = plotIn(B, B.free, { lo: -40, hi: 60 }, { lo: -hi, hi });
+    const P = chartIn(B, rest, { lo: -40, hi: 60 }, { lo: -hi, hi });
     axes(P, { xLabel: 'ΔT (°C)', yLabel: 'stress (MPa)' });
     const pts = [];
     for (let i = 0; i <= 50; i++) {

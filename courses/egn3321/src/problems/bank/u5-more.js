@@ -1,8 +1,10 @@
 /**
  * Unit 5, beyond the numeric drills: four conceptual questions, each option with its own reason,
- * and the unit's application, a turbopump gearbox (the `gearbox` lab).
+ * a compound gear train (the `gearbox` lab), and the unit's application, a road bike's drivetrain (the `bike` lab).
  */
 import { instantCenter, rollingPoint, sliderCrank } from '@flux/subjects/mechanics/rigid2d.js';
+import { cadenceFor, chordalChainSpeed, drive, tyreDiameter } from '@flux/subjects/mechanics/drivetrain.js';
+import { CASSETTE } from '../../labs/bike.js';
 import { train } from '../../labs/gearbox.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
@@ -239,8 +241,8 @@ const more = [
   }),
 
   problem({
-    id: 'u5.16.turbopump',
-    title: 'Application: a turbopump gearbox',
+    id: 'u5.16.train',
+    title: 'A compound gear train',
     exam: 'u5',
     ch: '16',
     lab: 'gearbox',
@@ -260,11 +262,11 @@ const more = [
     derive: ($) => ({ N2: $.N1 * $.k2, N4: $.N3 * $.k4, idler: $.layout === 'idler' }),
     valid: ($) => Math.abs($.N2 - $.N4) > 1e-9,
     text: (T, $) => ($.layout === 'idler'
-      ? String.raw`A turbine spins pinion 1 (${T.N1} teeth) at ${T.rpm} rpm. Pinion 1 meshes with idler gear 2 (${$.N2} teeth), and gear 2 meshes with gear 4 (${$.N4} teeth) on the fuel pump shaft. Every gear has module ${T.m} mm, so its pitch radius is $mN/2$. Find the fuel pump's speed and the pitch-line speed at mesh 1–2.`
-      : String.raw`A turbine spins pinion 1 (${T.N1} teeth) at ${T.rpm} rpm. Pinion 1 meshes with gear 2 (${$.N2} teeth) on the oxidiser pump shaft. Gear 3 (${T.N3} teeth) on that shaft meshes with gear 4 (${$.N4} teeth) on the fuel pump shaft. Every gear has module ${T.m} mm, so its pitch radius is $mN/2$. Find the fuel pump's speed and the pitch-line speed at mesh 1–2.`),
+      ? String.raw`A motor spins pinion 1 (${T.N1} teeth) at ${T.rpm} rpm. Pinion 1 meshes with idler gear 2 (${$.N2} teeth), and gear 2 meshes with gear 4 (${$.N4} teeth) on the output shaft. Every gear has module ${T.m} mm, so its pitch radius is $mN/2$. Find the output shaft's speed and the pitch-line speed at mesh 1–2.`
+      : String.raw`A motor spins pinion 1 (${T.N1} teeth) at ${T.rpm} rpm. Pinion 1 meshes with gear 2 (${$.N2} teeth) on shaft 2. Gear 3 (${T.N3} teeth) on that shaft meshes with gear 4 (${$.N4} teeth) on the output shaft. Every gear has module ${T.m} mm, so its pitch radius is $mN/2$. Find the output shaft's speed and the pitch-line speed at mesh 1–2.`),
     parts: [
       num('w4', ($) => Math.abs(train($).w4), 'rpm', {
-        label: 'fuel pump speed',
+        label: 'output speed',
         traps: [
           [($) => ($.rpm * $.N1) / $.N2, 'That is shaft 2’s speed. Carry on through the next mesh to shaft 4.'],
           [($) => ($.rpm * $.rpm) / Math.abs(train($).w4), 'The ratio is upside down. Each mesh slows the larger gear: ω_driven = (N_driver/N_driven) ω_driver.'],
@@ -290,7 +292,7 @@ const more = [
         $.layout === 'idler'
           ? String.raw`Through the idler: $\omega_4 = \frac{N_1}{N_2}\cdot\frac{N_2}{N_4}\,\omega_1 = \frac{${$.N1}}{${$.N4}}(${sig($.rpm)}) = ${sig(Math.abs(t.w4))}\ \mathrm{rpm}$.`
           : String.raw`Two stages: $\omega_4 = \frac{N_1 N_3}{N_2 N_4}\,\omega_1 = \frac{${$.N1}\cdot${$.N3}}{${$.N2}\cdot${$.N4}}(${sig($.rpm)}) = ${sig(Math.abs(t.w4))}\ \mathrm{rpm}$.`,
-        String.raw`Two external meshes: shaft 4 turns the same way as the turbine.`,
+        String.raw`Two external meshes: shaft 4 turns the same way as the motor.`,
         String.raw`$r_1 = mN_1/2 = ${sig(t.r1 * 1000)}\ \mathrm{mm}$, $\omega_1 = ${sig($.rpm * RPM)}\ \mathrm{rad/s}$, so $v = r_1\omega_1 = ${sig(t.v12)}\ \mathrm{m/s}$.`,
       ];
     },
@@ -311,6 +313,104 @@ const more = [
       read: (c) => ({ w4: Math.abs(c.w4), v12: c.v12 }),
     },
     cases: [kase('Hibbeler §16.3', { layout: 'compound', rpm: 30000, N1: 20, k2: 3, N3: 20, k4: 2.5, m: 2 }, { w4: 4000, v12: 20 * Math.PI })],
+  }),
+  problem({
+    id: 'u5.16.bike',
+    title: 'Application: a road bike’s drivetrain',
+    exam: 'u5',
+    ch: '16',
+    lab: 'bike',
+    src: 'Hibbeler §16.3',
+    topics: ['gears', 'belt'],
+    // Structure: the speed a cadence gives, or the cadence a speed needs; small or big ring, any cog.
+    // Designed numbers: the cadence is picked, and the speed is stated to three figures.
+    vars: {
+      find: choice(['speed', 'the speed'], ['cadence', 'the cadence']),
+      Nf: range(34, 50, 16, 'teeth'),
+      k: range(0, 10, 1, ''),
+      n: range(70, 100, 5, 'rpm'),
+      w: range(25, 28, 3, 'mm'),
+    },
+    derive: ($) => {
+      const Nr = CASSETTE[$.k];
+      const D = tyreDiameter(0.622, $.w / 1000);
+      const kmh = Number(drive({ cadence: $.n, Nf: $.Nf, Nr, D }).kmh.toPrecision(3));
+      // The cadence the stated speed needs: the designed one, to within the rounding.
+      const n = $.find === 'speed' ? $.n : cadenceFor({ v: kmh / 3.6, Nf: $.Nf, Nr, D });
+      return { Nr, D, kmh, cad: n, d: drive({ cadence: n, Nf: $.Nf, Nr, D }) };
+    },
+    text: (T, $) => ($.find === 'speed'
+      ? String.raw`A road bike has a Shimano 105 drivetrain: a ${$.Nf}-tooth chainring, an 11–28 cassette, and a 12.7 mm chain. Its 700×${$.w} tyre on a 622 mm rim is ${Math.round($.D * 1000)} mm across. The rider pedals at ${T.n} in the ${$.Nr}-tooth cog. Find the bike’s speed, in km/h, and the rear wheel’s speed in rpm.`
+      : String.raw`A road bike has a Shimano 105 drivetrain: a ${$.Nf}-tooth chainring, an 11–28 cassette, and a 12.7 mm chain. Its 700×${$.w} tyre on a 622 mm rim is ${Math.round($.D * 1000)} mm across. The rider holds ${$.kmh} km/h in the ${$.Nr}-tooth cog. Find the cadence, in rpm, and the chain’s speed.`),
+    parts: [
+      num('q', ($) => ($.find === 'speed' ? $.d.kmh : $.cad), ($) => ($.find === 'speed' ? 'km/h' : 'rpm'), {
+        label: ($) => ($.find === 'speed' ? 'bike speed' : 'cadence'),
+        traps: [
+          [($) => ($.find === 'speed'
+            ? drive({ cadence: $.n, Nf: $.Nr, Nr: $.Nf, D: $.D }).kmh
+            : cadenceFor({ v: $.kmh / 3.6, Nf: $.Nr, Nr: $.Nf, D: $.D })),
+          'The ratio is upside down. The chain passes the same number of links over both sprockets, so the smaller cog turns faster: ω_wheel = (N_f/N_r) ω_crank.'],
+          [($) => ($.find === 'speed'
+            ? drive({ cadence: $.n, Nf: $.Nf, Nr: $.Nr, D: 0.622 }).kmh
+            : cadenceFor({ v: $.kmh / 3.6, Nf: $.Nf, Nr: $.Nr, D: 0.622 })),
+          'That uses the rim’s 622 mm. The road meets the tyre: use the tyre’s outside diameter.'],
+        ],
+      }),
+      num('w', ($) => ($.find === 'speed' ? $.d.wheelRpm : $.d.chain), ($) => ($.find === 'speed' ? 'rpm' : 'm/s'), {
+        label: ($) => ($.find === 'speed' ? 'rear wheel speed' : 'chain speed'),
+        traps: [
+          [($) => ($.find === 'speed' ? ($.n * $.Nr) / $.Nf : ($.Nr * 0.0127 * $.cad) / 60),
+            ($) => ($.find === 'speed'
+              ? 'The ratio is upside down. In one crank turn N_f links reach a cog of N_r teeth, so it turns N_f/N_r times.'
+              : 'The chain’s speed is the same at both ends, but the cog turns faster than the crank. Use the ring’s teeth with the crank’s turns.')],
+          [($) => ($.find === 'speed' ? $.d.wWheel : $.Nf * 0.0127 * $.cad),
+            ($) => ($.find === 'speed'
+              ? 'That is ω in rad/s. The question asks for rpm.'
+              : 'The cadence is per minute. Divide by 60 for links per second.')],
+        ],
+      }),
+    ],
+    level: 2,
+    hints: ['The chain carries one speed from ring to cog. The cog and the wheel share one ω.',
+      String.raw`In one crank turn, $N_f$ links leave the ring and $N_f$ teeth of the cog pass: the wheel turns $N_f/N_r$ times.`,
+      String.raw`The bike moves $\pi D$ per wheel turn. The chain moves $N_f\,p$ per crank turn.`,
+    ],
+    steps: ($, sig) => {
+      const { d } = $;
+      if ($.find === 'speed') {
+        return [
+          String.raw`Wheel: $n_w = (N_f/N_r)\,n_c = (${$.Nf}/${$.Nr})(${$.n}) = ${sig(d.wheelRpm)}$ rpm.`,
+          String.raw`$v = \pi D\,n_w = \pi(${sig($.D)})(${sig(d.wheelRpm)}/60) = ${sig(d.v)}$ m/s $= ${sig(d.kmh)}$ km/h.`,
+        ];
+      }
+      return [
+        String.raw`$v = ${$.kmh}/3.6 = ${sig(d.v)}$ m/s. The wheel turns $v/(\pi D) = ${sig(d.wheelRpm / 60)}$ times a second, ${sig(d.wheelRpm)} rpm.`,
+        String.raw`Crank: $n_c = (N_r/N_f)\,n_w = (${$.Nr}/${$.Nf})(${sig(d.wheelRpm)}) = ${sig($.cad)}$ rpm.`,
+        String.raw`Chain: $N_f\,p\,n_c = ${$.Nf}(0.0127)(${sig($.cad)}/60) = ${sig(d.chain)}$ m/s.`,
+      ];
+    },
+    // Second: the chain's speed averaged along each sprocket's pitch polygon, ω r cos φ over a tooth.
+    second: ($) => {
+      const perRing = chordalChainSpeed($.Nf, 1);
+      const perCog = chordalChainSpeed($.Nr, 1);
+      if ($.find === 'speed') {
+        const wc = ($.n * 2 * Math.PI) / 60;
+        const ww = (perRing * wc) / perCog;
+        return { q: ww * ($.D / 2) * 3.6, w: (ww * 60) / (2 * Math.PI) };
+      }
+      const ww = $.kmh / 3.6 / ($.D / 2);
+      const chain = perCog * ww;
+      return { q: ((chain / perRing) * 60) / (2 * Math.PI), w: chain };
+    },
+    sim: {
+      scenario: 'cruise',
+      setup(s, $) {
+        Object.assign(s, { cadence: $.cad, Nf: $.Nf, Nr: $.Nr, width: $.w, crank: 172.5 });
+      },
+      // For the cadence, the lab's speed at that cadence must be the stated speed.
+      read: (c, s, $) => ($.find === 'speed' ? { q: c.kmh, w: c.wheelRpm } : { q: s.cadence * ($.kmh / c.kmh), w: c.chain }),
+    },
+    cases: [kase('Hibbeler §16.3', { find: 'speed', Nf: 34, k: 5, n: 90, w: 25 }, { q: 22.8, w: 180 })],
   }),
 ];
 

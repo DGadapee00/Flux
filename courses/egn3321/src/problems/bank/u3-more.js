@@ -1,13 +1,12 @@
 /**
  * Work and energy (id u3, Unit 4), beyond the numeric drills: three conceptual questions, each wrong option with its own
- * reason, and the unit's application, a lander's crushable pads (the `landing` lab).
+ * reason, and the unit's application, a road's stopping sight distance (the `stopping` lab).
  */
+import { FPS_PER_MPH, aashtoSSD, stepStop, stopDistance } from '@flux/subjects/mechanics/stopping.js';
 import { G, choice, kase, num, problem, range } from '../kit.js';
 
 /** A choice part whose options each carry a `why`. */
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
-
-const G_MOON = 1.62;
 
 /** For each described force: the force and the displacement of its point, as vectors (x right, y up). */
 const SCENES = {
@@ -37,29 +36,6 @@ function liftRatio(asked) {
   return run(2)[asked] / run(4)[asked];
 }
 const ratioKey = (r) => (Math.abs(r - 1) < 1e-9 ? 'same' : `x${Math.round(r * 1000) / 1000}`);
-
-/** The lander's pad stroke by stepping the crush in time, and the deceleration from the stop time. */
-function crushSteps(m, v0, F, g) {
-  const n = 20000;
-  const a = F / m - g;
-  const dt = v0 / a / n;
-  let v = v0;
-  let s = 0;
-  let t = 0;
-  while (v > 0) {
-    const v1 = v - (F / m - g) * dt;
-    if (v1 <= 0) {
-      const h = v / a;
-      s += 0.5 * v * h;
-      t += h;
-      break;
-    }
-    s += 0.5 * (v + v1) * dt;
-    t += dt;
-    v = v1;
-  }
-  return { stroke: s, decel: v0 / t };
-}
 
 const more = [
   problem({
@@ -101,7 +77,7 @@ const more = [
     exam: 'u3',
     ch: '14',
     kind: 'conceptual',
-    lab: 'landing',
+    lab: 'stopping',
     src: 'Hibbeler §14.3',
     topics: ['energy', 'friction'],
     vars: { change: choice(['speed', 'its speed'], ['mass', 'its mass (same tyres, same road)'], ['mu', 'the friction coefficient']) },
@@ -158,69 +134,89 @@ const more = [
   }),
 
   problem({
-    id: 'u3.14.landing',
-    title: 'Application: a lander’s crush pads',
+    id: 'u3.14.stopping',
+    title: 'Application: a road’s stopping sight distance',
     exam: 'u3',
     ch: '14',
-    lab: 'landing',
+    lab: 'stopping',
     src: 'Hibbeler §14.3',
-    topics: ['energy', 'landing'],
-    // Designed numbers: the stroke and touchdown speed are picked, and the crush force follows.
+    topics: ['energy', 'friction'],
+    // Structure: the sight line a speed needs, or the speed a sight line allows; level, uphill or downhill.
+    // Designed numbers: the speed is picked, and the sight line follows.
     vars: {
-      m: range(150, 400, 50, 'kg'),
-      v0: range(2, 4, 0.5, 'm/s'),
-      sd: range(0.15, 0.4, 0.05, 'm'),
-      planet: choice(['earth', 'Earth'], ['moon', 'the Moon']),
+      find: choice(['ssd', 'the sight distance'], ['speed', 'the speed']),
+      V: range(30, 70, 5, 'mph'),
+      t: range(1.5, 2.5, 0.5, 's'),
+      gr: range(-6, 6, 2, '%'),
     },
     derive: ($) => {
-      const gl = $.planet === 'moon' ? G_MOON : G;
-      const a = ($.v0 * $.v0) / (2 * $.sd);
-      return { gl, a, F: $.m * (a + gl) };
+      const d = stopDistance({ Vmph: $.V, t: $.t, grade: $.gr / 100 });
+      const road = $.gr === 0 ? 'a level road' : $.gr < 0 ? `a ${-$.gr}% downgrade` : `a ${$.gr}% upgrade`;
+      return { d, road, S: d.total };
     },
-    text: (T, $, sig) => String.raw`A ${T.m} kg lander touches down on ${T.planet} at ${T.v0} m/s, straight down. Its legs end in crushable pads that crush at a constant total force of $${sig($.F)}$ N. Take $g = ${$.gl}$ m/s². Ignore any rebound. Find the pad stroke that stops the lander, and its deceleration while the pads crush.`,
+    text: (T, $, sig) => ($.find === 'ssd'
+      ? String.raw`A driver doing ${T.V} on ${$.road} sees a stalled truck. It takes ${T.t} to react; then the car brakes with friction factor $f = 11.2/32.2$, AASHTO’s design rate of 11.2 ft/s² on the level. Take $g = 32.2$ ft/s² and $\tan\theta = ${$.gr / 100}$ (up positive). Find the braking distance and the stopping sight distance, the whole distance from where the driver sees the truck.`
+      : String.raw`On ${$.road}, a hill crest lets a driver see $${sig($.S)}$ ft ahead. A driver takes ${T.t} to react, then brakes with friction factor $f = 11.2/32.2$. Take $g = 32.2$ ft/s² and $\tan\theta = ${$.gr / 100}$ (up positive). Find the highest speed, in mph, that stops within the sight line, and the braking distance at that speed.`),
     parts: [
-      num('stroke', ($) => (0.5 * $.m * $.v0 * $.v0) / ($.F - $.m * $.gl), 'm', {
-        label: 'stroke',
+      num('db', ($) => $.d.braking, 'ft', {
+        label: 'braking distance',
         traps: [
-          [($) => (0.5 * $.m * $.v0 * $.v0) / $.F, 'The weight keeps working on the lander while the pads crush. The pad must take ½mv₀² plus mg times the stroke.'],
-          [($) => (0.5 * $.m * $.v0 * $.v0) / ($.F + $.m * $.gl), 'The weight pushes the lander down into the pads. It adds to the energy the pads must take; it does not help them.'],
+          [($) => ($.V * $.V) / (2 * 11.2), 'Convert the speed first: 1 mph = 1.467 ft/s. In mph, v² is 2.15 times too small.'],
+          [($) => $.d.v ** 2 / (2 * (11.2 * Math.cos(Math.atan($.gr / 100)) - 32.2 * Math.sin(Math.atan($.gr / 100)))), 'Check the weight’s sign. Downhill it does positive work and lengthens the stop; uphill it helps the brakes.'],
         ],
       }),
-      num('decel', ($) => $.F / $.m - $.gl, 'm/s²', {
-        label: 'deceleration',
+      num('q', ($) => ($.find === 'ssd' ? $.d.total : $.V), ($) => ($.find === 'ssd' ? 'ft' : 'mph'), {
+        label: ($) => ($.find === 'ssd' ? 'stopping sight distance' : 'highest speed'),
         traps: [
-          [($) => $.F / $.m, 'F/m is the pad’s push per kilogram. The weight acts the other way: the net deceleration is F/m − g.'],
-          [($) => ($.v0 * $.v0) / $.sd, 'From v² = v₀² − 2as, a = v₀²/(2s). The factor of 2 is missing.'],
+          [($) => ($.find === 'ssd' ? $.V * $.t + $.d.braking : Math.sqrt(2 * $.d.decel * $.S) / FPS_PER_MPH),
+            ($) => ($.find === 'ssd' ? 'The reaction distance is v t with v in ft/s, not mph.' : 'The car covers v t before the brakes come on. The sight line holds the reaction distance and the braking distance: S = v t + v²/2a.')],
+          [($) => ($.find === 'ssd' ? $.d.braking : $.d.v),
+            ($) => ($.find === 'ssd' ? 'That is the braking distance alone. The car travels v t at full speed while the driver reacts.' : 'That is the speed in ft/s. Divide by 1.467 for mph.')],
         ],
       }),
     ],
-    level: 2,
-    hints: ['Use work and energy from touchdown to rest. Two forces work over the stroke: the pads and the weight.',
-      String.raw`$0 = \tfrac12 mv_0^2 + mg\,s - F\,s$. Solve for $s$. The net force on the lander is $F - mg$.`,
+    level: 3,
+    hints: ['Two stages: full speed for the reaction time, then work and energy from v to rest while braking.',
+      String.raw`While braking, friction $f\,mg\cos\theta$ and the weight’s part along the road, $mg\sin\theta$, do work over $d_b$: $\tfrac12 mv^2 = (f\,mg\cos\theta + mg\sin\theta)\,d_b$. The mass cancels.`,
+      'For the speed, the sight line is v t + v²/(2a): a quadratic in v.',
     ],
     steps: ($, sig) => {
-      const s = (0.5 * $.m * $.v0 * $.v0) / ($.F - $.m * $.gl);
-      return [
-        String.raw`$T_1 = \tfrac12 mv_0^2 = ${sig(0.5 * $.m * $.v0 * $.v0)}$ J. The weight is $mg = ${sig($.m * $.gl)}$ N.`,
-        String.raw`$\tfrac12 mv_0^2 + mg\,s - F\,s = 0$ gives $s = \dfrac{\tfrac12 mv_0^2}{F - mg} = ${sig(s)}$ m.`,
-        String.raw`Net force $F - mg$ over the mass: $a = ${sig($.F / $.m - $.gl)}$ m/s², or $${sig(($.F / $.m - $.gl) / G)}$ g.`,
+      const { d } = $;
+      const out = [
+        String.raw`$v = ${$.V}\times 1.467 = ${sig(d.v)}$ ft/s. Along the road the brakes and the weight slow the car at $g(f\cos\theta + \sin\theta) = ${sig(d.decel)}$ ft/s².`,
+        String.raw`Work and energy: $d_b = v^2/(2 \times ${sig(d.decel)}) = ${sig(d.braking)}$ ft.`,
       ];
+      if ($.find === 'ssd') out.push(String.raw`Reaction: $vt = ${sig(d.reaction)}$ ft. SSD $= ${sig(d.reaction)} + ${sig(d.braking)} = ${sig(d.total)}$ ft.`);
+      else out.push(String.raw`$${sig($.S)} = ${$.t}\,v + v^2/(2 \times ${sig(d.decel)})$ gives $v = ${sig(d.v)}$ ft/s $= ${sig($.V)}$ mph.`);
+      return out;
     },
-    second: ($) => crushSteps($.m, $.v0, $.F, $.gl),
+    second: ($) => {
+      // Step the stop in time; for the speed, bisect on the stepped stop.
+      if ($.find === 'ssd') {
+        const n = stepStop({ Vmph: $.V, t: $.t, grade: $.gr / 100 });
+        return { db: n.braking, q: n.total };
+      }
+      let lo = 1;
+      let hi = 150;
+      for (let i = 0; i < 60; i++) {
+        const mid = 0.5 * (lo + hi);
+        if (stepStop({ Vmph: mid, t: $.t, grade: $.gr / 100 }, 2000).total > $.S) hi = mid;
+        else lo = mid;
+      }
+      const V = 0.5 * (lo + hi);
+      return { db: stepStop({ Vmph: V, t: $.t, grade: $.gr / 100 }).braking, q: V };
+    },
     sim: {
-      scenario: 'hopper',
+      scenario: 'design60',
       setup(s, $) {
-        s.m = $.m;
-        s.v0 = $.v0;
-        s.F = $.F;
-        s.g = $.gl;
-        s.L = 2;
+        Object.assign(s, { V: $.V, t: $.t, a: 11.2, grade: $.gr / 100, sight: Math.round($.S) });
       },
-      read: (c) => ({ stroke: c.need, decel: c.a }),
+      read: (c, s, $) => ({ db: c.braking, q: $.find === 'ssd' ? c.total : c.vMax }),
     },
     cases: [
-      kase('Hibbeler §14.3', { m: 250, v0: 3, sd: 0.25, planet: 'earth' }, { stroke: 0.25, decel: 18 }),
-      kase('Hibbeler §14.3', { m: 300, v0: 2, sd: 0.2, planet: 'moon' }, { stroke: 0.2, decel: 10 }),
+      // AASHTO's own rounding, 1.47 V t + 1.075 V²/a, against the exact 22/15: within 0.1%.
+      kase('AASHTO Green Book (2011), Table 3-1', { find: 'ssd', V: 60, t: 2.5, gr: 0 }, { db: (1.075 * 3600) / 11.2, q: aashtoSSD(60) }),
+      kase('AASHTO Green Book (2011), Table 3-1', { find: 'ssd', V: 30, t: 2.5, gr: 0 }, { db: (1.075 * 900) / 11.2, q: aashtoSSD(30) }),
     ],
   }),
 ];

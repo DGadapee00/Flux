@@ -11,8 +11,9 @@ export default {
     { id: 's3', n: 3, title: 'Erratic graphs', lab: 'rectilinear', ch: ['12'], topics: ['erratic'] },
     { id: 's4', n: 4, title: 'Projectile motion', lab: null, ch: ['12'], topics: ['projectile'] },
     { id: 's5', n: 5, title: 'Normal and tangential components', lab: 'path-nt', ch: ['12'], topics: ['normal-tangential'], home: true },
-    { id: 's6', n: 6, title: 'Relative motion, translating axes', lab: 'relative', ch: ['12'], topics: ['relative'], home: true },
-    { id: 's7', n: 7, title: 'Application: a train between stations', lab: 'train', ch: ['12'], topics: ['erratic'], problems: ['u1.12.train', 'u1.12.at-top'], home: true },
-    { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's6', n: 6, title: 'Polar coordinates', lab: 'polar', ch: ['12'], topics: ['polar'], problems: ['u1.12.polar', 'u1.12.radar', 'u1.12.polar-dir', 'u1.12.polar-sym'], home: true },
+    { id: 's7', n: 7, title: 'Relative motion, translating axes', lab: 'relative', ch: ['12'], topics: ['relative'], home: true },
+    { id: 's8', n: 8, title: 'Application: a train between stations', lab: 'train', ch: ['12'], topics: ['erratic'], problems: ['u1.12.train', 'u1.12.at-top'], home: true },
+    { id: 's9', n: 9, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

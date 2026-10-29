@@ -102,8 +102,29 @@ export default {
     },
   ],
   s6: [
-    { tag: 'a hop-test vehicle', lab: 'landing', scenario: 'hopper', read: (c) => ({ need: [c.need, 0.25], a: [c.a, 18], t: [c.tStop, 0.167] }) },
-    { tag: 'a lunar touchdown', lab: 'landing', scenario: 'lunar', read: (c) => ({ need: [c.need, 0.2], a: [c.a, 10] }) },
-    { tag: 'a hard landing', lab: 'landing', scenario: 'hard', read: (c) => ({ need: [c.need, 0.5625], hit: [c.vHit, 3.07] }) },
+    {
+      tag: '60 mph on the level',
+      lab: 'stopping',
+      scenario: 'design60',
+      read: (c) => ({ reaction: [c.reaction, 220], braking: [c.braking, 346], total: [c.total, 566] }),
+    },
+    {
+      tag: '30 mph in town',
+      lab: 'stopping',
+      scenario: 'city30',
+      read: (c) => ({ reaction: [c.reaction, 110], braking: [c.braking, 86], total: [c.total, 196] }),
+    },
+    {
+      tag: 'the same sight line on a 6% downgrade',
+      lab: 'stopping',
+      scenario: 'down6',
+      read: (c) => ({ decel: [c.decel, 9.25], braking: [c.braking, 419], left: [c.vLeft, 24.3] }),
+    },
+    {
+      tag: 'the speed a sight line allows',
+      lab: 'stopping',
+      scenario: 'down6',
+      read: (c) => ({ vMax: [c.vMax, 56] }),
+    },
   ],
 };

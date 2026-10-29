@@ -24,11 +24,13 @@
     <a href="#s3"><span>03</span>Relative velocity</a>
     <a href="#s4"><span>04</span>Instantaneous centre</a>
     <a href="#s5"><span>05</span>Relative acceleration</a>
-    <h3>Part III · Rolling, and an application</h3>
-    <a href="#s6"><span>06</span>Rolling without slip</a>
-    <a href="#s7"><span>07</span>Application: a turbopump gearbox</a>
+    <a href="#s6"><span>06</span>Rotating axes</a>
+    <h3>Part III · Rolling, gears and an application</h3>
+    <a href="#s7"><span>07</span>Rolling without slip</a>
+    <a href="#s8"><span>08</span>Gear trains</a>
+    <a href="#s9"><span>09</span>Application: a road bike's drivetrain</a>
     <h3>Reference</h3>
-    <a href="#s8"><span>08</span>Formula sheet</a>
+    <a href="#s10"><span>10</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -67,7 +69,10 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <p>A motor turns a pulley of 3 in radius at 1800 rpm. In radians per second, \(\omega = 1800 \times 2\pi/60 = 188.5\) rad/s. The radius is 0.25 ft, so the belt runs at 47.1 ft/s. The ratio of radii carries over unchanged in any unit.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>An open belt does not reverse the rotation. External gears do. The pitch line still has one speed. And \(v = r\omega\) needs \(\omega\) in rad/s: 1800 rpm times 0.25 ft is not a speed. Hibbeler §16.3.</p>
+<p>Turning the ratio upside down. The contact speed is shared, so the larger wheel turns slower. For the open belt, \(\omega_2 = (0.15/0.3)(20) = 10\) rad/s. Inverted, it gives 40 rad/s. A belt leaves the sense alone; external gears reverse it. Hibbeler §16.3.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Multiplying rpm by a radius. \(v = r\omega\) needs \(\omega\) in rad/s. For the motor pulley, \(1800 \times 0.25 = 450\) is not a speed in any unit. Convert first: 188.5 rad/s, and 47.1 ft/s.</p>
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
 <p>The belt does not slip, and the gear teeth stay in mesh. The model leaves out belt creep, the small slip as a loaded belt stretches around the pulley, and a tooth leaving contact. It also treats the axis as fixed, with no bearing play.</p>
@@ -127,10 +132,13 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <p>B has no horizontal velocity, so \(2 - 3.46\omega = 0\), and \(\omega = 0.577\) rad/s. Then \(v_{B,y} = -2(0.577) = -1.155\) m/s. Geometry and relative velocity agree.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · a wheel's top, relatively</span>
-<p>A wheel of radius \(R\) rolls with its centre at \(v\) and \(\omega = -v/R\) (clockwise). Take A at the centre. The top is at \(\vec r_{B/A} = (0, R)\). Then \(\omega\mathbf{k}\times(0, R) = (-\omega R, 0) = (v, 0)\). So the top moves at \(v + v = 2v\). The bottom, at \((0, -R)\), gets \(v - v = 0\). Section 6 reaches both from the instantaneous centre.</p>
+<p>A wheel of radius \(R\) rolls with its centre at \(v\) and \(\omega = -v/R\) (clockwise). Take A at the centre. The top is at \(\vec r_{B/A} = (0, R)\). Then \(\omega\mathbf{k}\times(0, R) = (-\omega R, 0) = (v, 0)\). So the top moves at \(v + v = 2v\). The bottom, at \((0, -R)\), gets \(v - v = 0\). Section 4 reaches both from the instantaneous centre.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>\(\omega\times\vec r\) is perpendicular to the bar. It is not a component along the bar. Hibbeler §16.5.</p>
+<p>Dropping the minus sign in \(\omega\mathbf{k}\times(x, y) = (-\omega y,\ \omega x)\). For the bar, the rotation adds \((-0.6, 0.8)\) m/s. With the sign lost it adds \((0.6, 0.8)\), and B moves at \((1.6, 1.3)\) m/s instead of \((0.4, 1.3)\). That arrow is not perpendicular to the bar, which a rigid bar forbids. Hibbeler §16.5.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving out \(\vec v_A\). The rotation term is B's velocity relative to A. On its own it gives \((-0.6, 0.8)\) m/s for the bar, the velocity B would have if A were pinned.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Positive \(\omega\) is counterclockwise: \(\omega\mathbf{k}\times(x, y) = (-\omega y,\ \omega x)\). Each constraint, such as a guide or a pin, gives one scalar equation.</p>
@@ -164,7 +172,7 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <p>Extend the crank line and the rocker line. They meet at (2.44, 4.22) m, the coupler's instantaneous centre. A is 3.88 m from it, so the coupler turns at \(2/3.88 = 0.516\) rad/s, clockwise. B is 2.26 m from it, so B moves at \(0.516 \times 2.26 = 1.17\) m/s. The rocker turns at \(1.17/2 = 0.583\) rad/s.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>The instantaneous centre is the point with zero velocity. It is not the mass centre, and it moves as the body moves. Hibbeler §16.6.</p>
+<p>Swapping the distances. On the ladder at 60°, the foot is 3.46 m from the centre and the top 2 m. Dividing the foot speed by 2 m gives \(\omega = 1\) rad/s, and the top then falls at 3.46 m/s instead of 1.155 m/s. Measure each distance from the centre to that point. Hibbeler §16.6.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
 <p>Draw the lines through two points, each perpendicular to that point's velocity. They meet at the centre. If they are parallel, the body is translating, and \(\omega = 0\).</p>
@@ -199,23 +207,64 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Zero velocity does not mean zero acceleration. The \(-\omega^2 r\) term remains at a dead centre. Hibbeler §16.7.</p>
 </div>
-<div class="box key"><span class="tag">Key</span>
-<p>Keep the centripetal term even when the point you care about is stopped. Two constraint directions give two scalar equations for \(\alpha\) and one unknown acceleration.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the crank pin's acceleration for the slider's. At the outer dead centre the pin accelerates at \(r\omega^2 = 20\) m/s² toward the crank centre. The slider's is 25 m/s². The rod turns too, at \(\omega_{AB} = r\omega/\ell = 2.5\) rad/s, and its \(\omega_{AB}^2\ell = 5\) m/s² adds the rest.</p>
 </div>
 <p>In the Slider-crank lab, set the crank to 0° and then to 180°. The speed reads zero both times. The acceleration does not.</p>
-<div class="box out"><span class="tag">What the model leaves out</span>
-<p>The centripetal term stays in the acceleration when the velocity is zero. The model leaves out a crank whose length changes, and the Coriolis term that a point sliding along a rotating body would add. That case is rotating axes, §16.8, which the course leaves out.</p>
-</div>
-<p class="bridge">Part III applies relative motion to a wheel that rolls and to a gear train that meshes.</p>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/35-3-rolling-wheel-in-the-ground-frame/" target="_blank" rel="noopener">35.3 Rolling Wheel in the Ground Frame</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>.</p>
+</section>
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Rotating axes</h2>
+<p>A pin that slides in the slot of a turning rocker is not a point of the rocker. Its motion is easiest to describe from axes fixed to the rocker: the pin is at distance \(\rho\) along the slot and slides at \(v_{rel}\). Those axes turn at \(\Omega\), so their unit vectors change in time, and that adds a term no translating frame has.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Let the axes x–y turn at \(\Omega\) with origin A. Each unit vector changes as \(d\hat\imath/dt = \vec\Omega\times\hat\imath\). For B at \(\vec r = x\hat\imath + y\hat\jmath\) in those axes, \(d\vec r/dt = (\dot x\hat\imath + \dot y\hat\jmath) + \vec\Omega\times\vec r = \vec v_{rel} + \vec\Omega\times\vec r\).</p>
+<p>Apply the same rule to \(\vec v_{rel}\) and to \(\vec\Omega\times\vec r\). The first gives \(\vec a_{rel} + \vec\Omega\times\vec v_{rel}\). The second gives \(\dot{\vec\Omega}\times\vec r + \vec\Omega\times(\vec v_{rel} + \vec\Omega\times\vec r)\). The term \(\vec\Omega\times\vec v_{rel}\) appears twice.</p>
+</div>
+\[
+\begin{aligned}
+\vec v_B &= \vec v_A + \vec\Omega\times\vec r + \vec v_{rel},\\
+\vec a_B &= \vec a_A + \dot{\vec\Omega}\times\vec r + \vec\Omega\times(\vec\Omega\times\vec r) + 2\vec\Omega\times\vec v_{rel} + \vec a_{rel}.
+\end{aligned}
+\]
+<p>\(2\vec\Omega\times\vec v_{rel}\) is the Coriolis acceleration. It needs both turning and sliding. With the origin fixed and B on a line through it, this is Unit 1's polar result again: \(a_\theta = r\ddot\theta + 2\dot r\dot\theta\).</p>
+<div class="box ex"><span class="tag">Worked example · the shaper at 30°</span>
+<p>A 0.1 m crank turns at a steady 4 rad/s about C, 0.25 m above the rocker's pivot O. At 30° the pin is at \((0.0866, 0.300)\) m, so \(\rho = 0.312\) m. The crank gives the pin 0.4 m/s at right angles to the crank, and 1.6 m/s² toward C.</p>
+<p>Across the slot the pin's velocity is \(0.288\) m/s, so \(\Omega = 0.288/0.312 = 0.923\) rad/s. Along it, \(v_{rel} = 0.277\) m/s. The Coriolis term is \(2(0.923)(0.277) = 0.512\) m/s².</p>
+<p>Across the slot the pin's acceleration is \(1.109\) m/s², and it equals \(\rho\dot\Omega + 2\Omega v_{rel}\). So \(\dot\Omega = (1.109 - 0.512)/0.312 = 1.91\) rad/s².</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the top of the stroke</span>
+<p>Turn the crank to 90°. The pin is straight above C, moving straight across the slot, so \(v_{rel} = 0\) and the Coriolis term vanishes. The rocker turns at \(\Omega = 0.4/0.35 = 1.14\) rad/s, and \(\dot\Omega = 0\): this is the rocker's fastest forward swing.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the quick return</span>
+<p>At 270° the pin is below C, only 0.15 m from O. The same 0.4 m/s swings the rocker back at \(0.4/0.15 = 2.67\) rad/s. The rocker moves forward slowly while the pin is above C and returns fast while it is below. A shaper cuts on the slow stroke and returns quickly.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a rod on a moving cart</span>
+<p>A rod is pinned to a cart that accelerates at 2 m/s² along the rod's present direction. The rod turns at 3 rad/s and speeds up at 2 rad/s². A collar 0.8 m out slides along it at a steady 0.5 m/s.</p>
+<p>Along the rod: \(2 + 0 - 3^2(0.8) = -5.2\) m/s². Across it: \(2(0.8) + 2(3)(0.5) = 4.6\) m/s². The cart's acceleration adds unchanged; the Coriolis term is 3 m/s² of the 4.6.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · walking on a turntable</span>
+<p>A playground turntable turns at 1 rad/s. A 30 kg child walks straight out at 1 m/s and is 2 m from the centre. The Coriolis term is \(2(1)(1) = 2\) m/s², ahead in the sense of the turn, beside 2 m/s² of centripetal pull inward. The platform must push the child sideways with \(30 \times 2 = 60\) N: that is the sideways shove a child feels walking out.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving out \(2\vec\Omega\times\vec v_{rel}\). For the shaper at 30° that gives \(\dot\Omega = 1.109/0.312 = 3.55\) rad/s² instead of 1.91. Hibbeler §16.8.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Giving the rocker the crank's angular velocity. They are different bodies. The rocker turns at the part of the pin's velocity across the slot divided by \(\rho\): 0.923 rad/s, not 4 rad/s. Hibbeler §16.8.</p>
+</div>
+<p>In the Coriolis lab, play the crank and watch the purple curve against the dashed one: they part most where the pin slides fastest. At 90° and 270° the two meet, because the pin does not slide there.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Everything stays in one plane, so \(\vec\Omega\) keeps its direction. In three dimensions \(\vec\Omega\) can tilt, and \(\dot{\vec\Omega}\) then has a part that changes the axis as well as the rate. The pin is also a point with no clearance in the slot.</p>
+</div>
+<p class="bridge">Part III applies relative motion to a wheel that rolls, to a gear train that meshes, and to a bicycle that does both.</p>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-2-newtons-laws/4-4-non-inertial-reference-frames/" target="_blank" rel="noopener">4.4 Non-inertial Reference Frames</a>; 2.003SC (Fall 2011), <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/velocity-acceleration-and-rotational-motion/" target="_blank" rel="noopener">Lecture 2, Velocity, Acceleration, and Rotational Motion</a>, <a href="https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/free-body-diagrams-and-fictitious-forces/" target="_blank" rel="noopener">Lecture 4, Free Body Diagrams and Fictitious Forces</a>.</p>
 </section>
 <div class="part">
   <div class="eyebrow">Part III</div>
-  <h2>Rolling, and an application</h2>
+  <h2>Rolling, gears and an application</h2>
 </div>
 
-<section class="topic" id="s6">
-<h2><span class="n">06</span>Rolling without slip</h2>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Rolling without slip</h2>
 <p>A wheel that rolls without slip has its contact point instantaneously at rest. That point is the instantaneous centre. The centre of the wheel moves at \(v = R\omega\), and the top moves at \(2v\).</p>
 <div class="box why"><span class="tag">Why</span>
 <p>No slip means the contact point matches the ground, so its velocity is zero. That point is the instantaneous centre. The wheel centre is one radius away, and the top is two.</p>
@@ -251,9 +300,9 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/35-4-rolling-without-slipping-slipping-and-skidding/" target="_blank" rel="noopener">35.4 Rolling Without Slipping, Slipping, and Skidding</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/35-2-rolling-wheel-in-the-center-of-mass-frame/" target="_blank" rel="noopener">35.2 Rolling Wheel in the Center of Mass Frame</a>.</p>
 </section>
-<section class="topic" id="s7">
-<h2><span class="n">07</span>Application: a turbopump gearbox</h2>
-<p>A liquid rocket engine feeds its propellants with a turbopump. A small turbine, driven by hot gas, spins the pumps. The turbine runs best fast. The pumps often run best slower, and not at the same speed as each other. A gearbox between them sets each speed. It is section 1's contact rule, applied mesh by mesh.</p>
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Gear trains</h2>
+<p>A small electric motor runs best fast. The machine it drives often wants a lower speed, or two shafts at different speeds. A gear train between them sets each speed. It is section 1's contact rule, applied mesh by mesh.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Gears that mesh have the same tooth size, the module \(m\). The pitch circle of a gear with \(N\) teeth has circumference \(N\) tooth spacings, so its radius is \(r = mN/2\). At a mesh the pitch circles roll on each other: \(r_1\omega_1 = r_2\omega_2\). The module cancels, and \(\omega_2/\omega_1 = N_1/N_2\). An external mesh reverses the sense.</p>
 <p>Two gears keyed to one shaft share one \(\omega\), not one pitch-line speed. So a compound train multiplies its stage ratios:</p>
@@ -262,20 +311,20 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 \]
 <p>An idler meshes on both sides. Its teeth appear once on top and once below, and cancel: \(\omega_4/\omega_1 = N_1/N_4\).</p>
 </div>
-<p>In the Gearbox lab, pinion 1 is on the turbine. Gear 2 is on the oxidiser pump shaft. Gear 3 rides on the same shaft and drives gear 4 on the fuel pump. All four gears have a 2 mm module, so a 20-tooth pinion has a 20 mm pitch radius.</p>
+<p>In the Gear train lab, pinion 1 is on the motor. Gear 2 is on shaft 2. Gear 3 rides on the same shaft and drives gear 4 on the output shaft. All four gears have a 2 mm module, so a 20-tooth pinion has a 20 mm pitch radius.</p>
 <div class="box ex"><span class="tag">Worked example · a two-stage reduction</span>
-<p>The turbine spins pinion 1, 20 teeth, at 30,000 rpm. Gear 2 has 60 teeth, so the oxidiser pump turns at \(30{,}000 \times 20/60 = 10{,}000\) rpm, the other way. Gear 3 has 25 teeth and gear 4 has 50, so the fuel pump turns at \(10{,}000 \times 25/50 = 5{,}000\) rpm. Two reversals: it turns the same way as the turbine.</p>
+<p>The motor spins pinion 1, 20 teeth, at 30,000 rpm. Gear 2 has 60 teeth, so shaft 2 turns at \(30{,}000 \times 20/60 = 10{,}000\) rpm, the other way. Gear 3 has 25 teeth and gear 4 has 50, so the output turns at \(10{,}000 \times 25/50 = 5{,}000\) rpm. Two reversals: it turns the same way as the motor.</p>
 <p>The pinion's pitch radius is 20 mm. In rad/s, \(\omega_1 = 30{,}000 \times 2\pi/60 = 3{,}142\) rad/s. The teeth of mesh 1–2 move at \(0.020 \times 3{,}142 = 62.8\) m/s. At mesh 3–4 they move at \(0.025 \times 1{,}047 = 26.2\) m/s.</p>
 </div>
-<div class="box ex"><span class="tag">Worked example · a fuel pump that runs faster</span>
-<p>Swap the second stage: gear 3 has 40 teeth and gear 4 has 20. The oxidiser pump still turns at 10,000 rpm. The fuel pump turns at \(10{,}000 \times 40/20 = 20{,}000\) rpm. One train sets two pump speeds, one below the turbine's and one above the oxidiser pump's. At mesh 3–4 the teeth move at \(0.040 \times 1{,}047 = 41.9\) m/s.</p>
+<div class="box ex"><span class="tag">Worked example · a second stage that steps up</span>
+<p>Swap the second stage: gear 3 has 40 teeth and gear 4 has 20. Shaft 2 still turns at 10,000 rpm. The output turns at \(10{,}000 \times 40/20 = 20{,}000\) rpm. One train sets two shaft speeds, one below the motor's and one above shaft 2's. At mesh 3–4 the teeth move at \(0.040 \times 1{,}047 = 41.9\) m/s.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · an idler</span>
 <p>Now gear 2, 40 teeth, meshes with pinion 1 and with gear 4, 50 teeth. Gear 2 turns at \(30{,}000 \times 20/40 = 15{,}000\) rpm. Gear 4 turns at \(15{,}000 \times 40/50 = 12{,}000\) rpm. That is \(30{,}000 \times 20/50\): the idler's 40 teeth cancel.</p>
 <p>Check with the pitch lines. Gear 2's pitch radius is 40 mm, and \(15{,}000\) rpm is \(1{,}571\) rad/s. Its teeth move at \(0.040 \times 1{,}571 = 62.8\) m/s at both meshes. An idler passes one pitch-line speed straight through.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · bigger teeth</span>
-<p>Go back to the two-stage reduction and double the module to 4 mm. Every radius doubles, every ratio stays, and the fuel pump still turns at 5,000 rpm. The pinion's radius is now 40 mm, so its teeth move at \(0.040 \times 3{,}142 = 126\) m/s. Bigger teeth carry more load, but they move faster at the same rpm.</p>
+<p>Go back to the two-stage reduction and double the module to 4 mm. Every radius doubles, every ratio stays, and the output still turns at 5,000 rpm. The pinion's radius is now 40 mm, so its teeth move at \(0.040 \times 3{,}142 = 126\) m/s. Bigger teeth carry more load, but they move faster at the same rpm.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Matching pitch-line speeds across a shaft. Gears 2 and 3 share \(\omega\), not \(r\omega\). In the reduction, gear 2's teeth move at 62.8 m/s and gear 3's at 26.2 m/s. Carrying 62.8 m/s on to gear 4 would give \(62.8/0.050 = 1{,}257\) rad/s, or 12,000 rpm, instead of 5,000. Hibbeler §16.3.</p>
@@ -284,16 +333,62 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <p>Across a mesh, match \(r\omega\), so \(\omega\) goes as \(1/N\). Along a shaft, match \(\omega\). Count the external meshes for the sense.</p>
 </div>
 <div class="box out"><span class="tag">What the model leaves out</span>
-<p>The model treats each mesh as two pitch circles rolling without slip. It leaves out backlash, the play between teeth, and the twist of a shaft under load. It says nothing about torque: which gear carries the load, and how fast the turbine can spin the pumps up, is Unit 6. Many turbopumps put the turbine and both pumps on one shaft and need no gearbox. The gearbox earns its weight when the pumps want different speeds.</p>
+<p>The model treats each mesh as two pitch circles rolling without slip. It leaves out backlash, the play between teeth, and the twist of a shaft under load. It says nothing about torque: which gear carries the load, and how fast the motor can spin the train up, is Unit 6. Real teeth have involute profiles, cut so the speed ratio holds steady while each pair of teeth is in contact. The pitch circles stand in for that.</p>
 </div>
 <p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/28-3-review-of-angular-velocity-and-acceleration/" target="_blank" rel="noopener">28.3 Review of Angular Velocity and Acceleration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/10-4-review-of-rotational-kinematics/" target="_blank" rel="noopener">10.4 Review of Rotational Kinematics</a>.</p>
 </section>
-<section class="topic" id="s8">
-<h2><span class="n">08</span>Formula sheet</h2>
+<section class="topic" id="s9">
+<h2><span class="n">09</span>Application: a road bike's drivetrain</h2>
+<p>A road bike turns pedalling into speed with a chain. Take a Shimano 105 groupset: a 50/34-tooth crankset with 172.5 mm cranks and an 11–28 cassette. Its cogs have 11, 12, 13, 14, 15, 17, 19, 21, 23, 25 and 28 teeth. The chain has the ISO 606 pitch, 12.7 mm. The tyre is a 700×25, a 25 mm tyre on a 622 mm rim, about 672 mm across.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A chain is a belt with teeth. Every link that leaves the chainring enters the cog. In one crank turn, \(N_f\) links leave the ring, so \(N_f\) teeth of the cog pass: the cog turns \(N_f/N_r\) times. The cog is fixed to the wheel's hub, so they share one \(\omega\):</p>
+\[
+n_w = \frac{N_f}{N_r}\,n_c, \qquad v = \pi D\,n_w, \qquad v_{chain} = N_f\,p\,n_c .
+\]
+<p>Each \(n\) is in turns per second. Relative to the frame, the rim moves at \(v\). Section 7 says the same rim rolls on the road, so the bike moves at \(v\) too.</p>
+<p>The chain wraps a sprocket as a polygon of side \(p\), not a circle. Its links sit on the pitch circle, \(r = p/[2\sin(\pi/N)]\). While one tooth carries the chain, its line runs along a chord, at \(\omega r\cos\phi\), with \(\phi\) from \(-\pi/N\) to \(\pi/N\). Averaged over the tooth, that is \(\omega N p/2\pi\): the tooth count again.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · cruising, 34/17</span>
+<p>The rider pedals at 90 rpm in the small ring and the 17-tooth cog. The ratio is \(34/17 = 2\), so the wheel turns at 180 rpm, 3 turns a second. One turn carries the bike \(\pi(0.672) = 2.111\) m. The speed is \(3 \times 2.111 = 6.33\) m/s, or 22.8 km/h.</p>
+<p>The chain moves \(34 \times 0.0127 = 0.432\) m per crank turn, so \(0.432 \times 1.5 = 0.648\) m/s. That is a tenth of the bike's speed.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the same ratio on the big ring</span>
+<p>Shift to 50/25. The ratio is again 2, so the wheel still turns at 180 rpm and the bike still rides at 22.8 km/h. Only the chain changes: 50 links per crank turn instead of 34, so it moves at 0.953 m/s.</p>
+<p>The bike's speed depends on the ratio alone. The sprocket sizes set the chain's speed. For the same power, a faster chain pulls with less tension. That is a Unit 6 question.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · top gear, 50/11</span>
+<p>At 100 rpm in 50/11, the wheel turns \(100 \times 50/11 = 454.5\) rpm. The bike moves at \(2.111 \times 454.5/60 = 16.0\) m/s, or 57.6 km/h. The chain moves at \(50 \times 0.0127 \times 100/60 = 1.06\) m/s, a fifteenth of the bike's speed.</p>
+<p>The 11-tooth cog's pitch radius is \(12.7/[2\sin(\pi/11)] = 22.5\) mm. The average-radius rule, \(Np/2\pi\), gives 22.2 mm. That 1.4% is the polygon. The chain surges by \(1 - \cos(\pi/11) = 4\%\) at every tooth.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · climbing, 34/28</span>
+<p>At 80 rpm in 34/28, the wheel turns \(80 \times 34/28 = 97.1\) rpm. The bike climbs at \(2.111 \times 97.1/60 = 3.42\) m/s, or 12.3 km/h.</p>
+<p>One crank turn now carries the bike \(2.111 \times 34/28 = 2.56\) m. In 50/11 it carries it 9.60 m. The groupset spans a factor of 3.74.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the cadence for 30 km/h</span>
+<p>Run the chain backwards. In 50/17, 30 km/h is 8.33 m/s. The wheel turns \(8.33/2.111 = 3.95\) times a second, 237 rpm. The crank turns \(17/50\) as fast: 80.5 rpm.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Turning the ratio upside down. The small cog turns faster than the ring, not slower. In 34/17 the wheel turns twice per crank turn, not half.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the rim's 622 mm. The road touches the tyre, not the rim. For 34/17 at 90 rpm, 622 mm gives 21.1 km/h instead of 22.8 km/h: 7% slow.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>The chain carries one speed from ring to cog. The cog and the wheel share one \(\omega\). The bike's speed is \(\pi D\,(N_f/N_r)\,n_c\), whatever the sprocket sizes.</p>
+</div>
+<p>In the Bike lab, the three scenarios are the first, third and fourth examples. Play it slowly to watch the pedal, the chain and the spokes. The chart shows all 22 gears: a gear is a line through the origin, and its slope is its ratio.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The chain's speed is an average; the polygon makes it surge at every tooth. The tyre's diameter is the rim plus twice its width. A real tyre is a little shorter than it is wide, and it flattens under the rider, so it rolls a few millimetres smaller. The model says nothing about torque, the rider's power, or the 2% or so the chain loses.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 8.01SC (Fall 2016), <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-10-rotational-motion/28-3-review-of-angular-velocity-and-acceleration/" target="_blank" rel="noopener">28.3 Review of Angular Velocity and Acceleration</a>, <a href="https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-3-circular-motion/10-4-review-of-rotational-kinematics/" target="_blank" rel="noopener">10.4 Review of Rotational Kinematics</a>.</p>
+</section>
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Formula sheet</h2>
 <ul>
 <li>\(v = r\omega\), \(a_t = r\alpha\), \(a_n = r\omega^2\). Constant \(\alpha\): \(\omega^2 = \omega_0^2 + 2\alpha\Delta\theta\).</li>
 <li>Open belt, same sense: \(r_1\omega_1 = r_2\omega_2\). External gears flip the sign.</li>
 <li>Gears: \(r = mN/2\), so \(\omega_2/\omega_1 = N_1/N_2\). A compound train multiplies its stages. An idler's teeth cancel.</li>
+<li>Chain drive: \(\omega_r/\omega_f = N_f/N_r\); chain speed \(N_f\,p\,n_f\). A wheel on the cog's axle moves its rim at \(\omega_r D/2\).</li>
 <li>\(\vec v_B = \vec v_A + \omega\times\vec r_{B/A}\).</li>
 <li>\(\vec a_B = \vec a_A + \alpha\times\vec r - \omega^2\vec r\).</li>
 <li>The instantaneous centre is where the perpendiculars to two velocities meet. Use it for velocities only.</li>
@@ -301,9 +396,9 @@ v = r\omega, \qquad a_t = r\alpha, \qquad a_n = r\omega^2.
 <li>Slider-crank: \(\sin\phi = (r/\ell)\sin\theta\), and \(x = r\cos\theta + \ell\cos\phi\).</li>
 <li>Angles on the sliders are in degrees. The derivatives use radians. 1 rpm is \(2\pi/60\) rad/s.</li>
 <li>A belt may be stated in feet. The speed ratio is the same.</li>
-<li>Rotating axes, §16.8, stay out of this unit.</li>
+<li>Rotating axes: \(\vec a_B = \vec a_A + \dot{\vec\Omega}\times\vec r + \vec\Omega\times(\vec\Omega\times\vec r) + 2\vec\Omega\times\vec v_{rel} + \vec a_{rel}\).</li>
 </ul>
-<p>Rotating frames stay out. So do a slipping belt and a wheel that both rolls and slides.</p>
+<p>A slipping belt and a wheel that both rolls and slides stay out.</p>
 </section>
 </main>
 <footer>Written for Flux from Hibbeler, Engineering Mechanics: Dynamics, Chapter 16, cited by section, with MIT OCW 8.01SC and 2.003SC as Another view. Every worked answer was recomputed.</footer>

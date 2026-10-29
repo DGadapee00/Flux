@@ -8,37 +8,45 @@
 <header class="top">
   <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 9 · Ch 5</p>
   <h1>Torsion</h1>
-  <p class="lede">A circular shaft twists, and a radius line stays straight. The shear strain is therefore linear in the radius, and so is the shear stress. The angle follows the torque, the length, and the polar moment. Every number below comes from the course library and is checked a second way.</p>
+  <p class="lede">A circular shaft twists, and a radius line stays straight. The shear strain is therefore linear in the radius, and so is the shear stress. The angle follows the torque, the length, and the polar moment. A thin closed tube carries a constant shear flow, any other shape warps, and a shoulder raises the stress.</p>
   <div class="legend">
     <span><i class="swatch" style="background: var(--teal)"></i>Shear stress</span>
     <span><i class="swatch" style="background: var(--gold)"></i>Rotation, or the station being read</span>
     <span><i class="swatch" style="background: #d147bd"></i>Outside radius, step, or applied torque</span>
   </div>
   <nav class="toc">
-    <a href="#s1"><span>01</span>A solid shaft</a>
-    <a href="#s2"><span>02</span>A hollow shaft</a>
+    <a href="#s1"><span>01</span>Twist of a circular shaft</a>
+    <a href="#s2"><span>02</span>Taking out the core</a>
     <a href="#s3"><span>03</span>Power and gears</a>
-    <a href="#s4"><span>04</span>Stepped and fixed</a>
+    <a href="#s4"><span>04</span>Shafts in series, and held at both ends</a>
     <a href="#s5"><span>05</span>A motor shaft</a>
-    <a href="#s6"><span>06</span>Formula sheet</a>
+    <a href="#s6"><span>06</span>Thin-walled closed tubes</a>
+    <a href="#s7"><span>07</span>Shafts that are not round</a>
+    <a href="#s8"><span>08</span>Stress raisers in shafts</a>
+    <a href="#s9"><span>09</span>Formula sheet</a>
   </nav>
 </header>
 <main>
 
 <div class="part">
-<h3>Part 1 · The section <span class="sub">| solid | hollow | Reference</span></h3>
+<h3>Part 1 · The section <span class="sub">| solid | hollow</span></h3>
 
 <section class="topic" id="s1">
-<h2><span class="n">01</span>A solid shaft</h2>
-<p>Equilibrium of moments on the cut is the torque. With stress linear in the radius, that balance fixes the scale:</p>
+<h2><span class="n">01</span>Twist of a circular shaft</h2>
+<p>A circular shaft twisted by a torque \(T\) keeps its cross-sections plane and its radii straight. Symmetry forces that: a circle has no preferred direction to warp toward. Three steps then give the stress and the angle.</p>
+<div class="box why"><span class="tag">Geometry, material, equilibrium</span>
+<p>Geometry. Two sections \(dx\) apart turn by \(d\phi\) relative to each other. A line on the surface at radius \(\rho\) tilts by \(\rho\,d\phi\) over \(dx\), so the shear strain is \(\gamma = \rho\,d\phi/dx\). It grows linearly from the axis.</p>
+<p>Material. Hooke's law in shear, \(\tau = G\gamma\), makes the stress linear in \(\rho\) too: \(\tau = G\rho\,d\phi/dx\).</p>
+<p>Equilibrium. The stresses on the cut must add up to the torque: \(T = \int \tau\rho\,dA = G\,(d\phi/dx)\int\rho^{2}\,dA\). The integral is the polar moment \(J\). Eliminate \(d\phi/dx\):</p>
 \[
 \tau = \frac{T\rho}{J}
 \]
-<p>J is the polar moment, the integral of ρ squared over the area. For a solid circle it is πd⁴/32. The outside is the largest stress, because that is the largest ρ. The center carries none. The angle of a prismatic piece follows from γ = ρ dφ/dx = τ/G:</p>
 \[
 \phi = \frac{TL}{GJ}
 \]
-<p>G here is 75 GPa, a round value for steel in this unit. Length is in the angle and not in the stress. Roylance §2.3 is the reading.</p>
+<p>For a solid circle \(J = \pi d^{4}/32\). The outside carries the largest stress and the centre carries none. Roylance §2.3 is the reading.</p>
+</div>
+<p>\(G\) here is 75 GPa, a round value for steel in this unit. Length is in the angle and not in the stress.</p>
 <div class="box ex"><span class="tag">Worked example · the 40 mm shaft</span>
 <p>The lab shaft is 40 mm in diameter and 1.2 m long, with a torque of 500 N·m. The outside stress and the angle are</p>
 \[
@@ -56,7 +64,7 @@
 </section>
 
 <section class="topic" id="s2">
-<h2><span class="n">02</span>A hollow shaft</h2>
+<h2><span class="n">02</span>Taking out the core</h2>
 <p>A tube is the solid circle of the outside diameter with the solid circle of the bore taken out. The polar moment follows at once:</p>
 \[
 J = \frac{\pi}{32}(d_o^4 - d_i^4)
@@ -82,7 +90,7 @@ J = \frac{\pi}{32}(d_o^4 - d_i^4)
 </div>
 
 <div class="part">
-<h3>Part 2 · Along the shaft <span class="sub">| power | series | fixed ends | Reference</span></h3>
+<h3>Part 2 · Along the shaft <span class="sub">| power | series | fixed ends | motor</span></h3>
 
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Power and gears</h2>
@@ -111,12 +119,16 @@ T = 106.1\ \mathrm{N\cdot m}
 </section>
 
 <section class="topic" id="s4">
-<h2><span class="n">04</span>Stepped and fixed</h2>
+<h2><span class="n">04</span>Shafts in series, and held at both ends</h2>
 <p>Segments in series carry the same torque when nothing else feeds a torque in between them. Each segment has its own J, so each has its own twist rate. The angles add.</p>
 \[
 \phi = \sum \frac{TL}{GJ}
 \]
-<p>A shaft fixed at both ends is two springs sharing one rotation. Stiffness is GJ over the segment length. The shorter side is stiffer, so it takes more of the torque. With a constant J the left reaction is T times (L − a) over L, where a is the distance from the left wall out to the applied torque.</p>
+<p>A shaft fixed at both ends is statically indeterminate: one equation, \(T_L + T_R = T\), for two wall torques. Compatibility closes it. The section where \(T\) acts turns by one angle, seen from both walls: \(T_La/GJ = T_R(L-a)/GJ\). Solve the two:</p>
+\[
+T_L = T\,\frac{L-a}{L}
+\]
+<p>Here \(a\) is the distance from the left wall to the applied torque. Each side is a spring of stiffness \(GJ\) over its length, and the shorter, stiffer side takes more.</p>
 <div class="box ex"><span class="tag">Worked example · two diameters</span>
 <p>400 N·m runs through a 40 mm segment 0.8 m long and then a 25 mm segment 0.4 m long. The whole shaft twists</p>
 \[
@@ -141,10 +153,6 @@ T_R = 200\ \mathrm{N\cdot m}
 <p>Splitting the applied torque in half is right only at midspan. Giving the longer side the larger share reverses the springs. Running the whole torque through the whole length, as if the shaft were free at the far end, overstates the angle.</p>
 </div>
 </section>
-</div>
-
-<div class="part">
-<h3>Part 3 · A real shaft <span class="sub">| motor | Reference</span></h3>
 
 <section class="topic" id="s5">
 <h2><span class="n">05</span>A motor shaft</h2>
@@ -173,8 +181,123 @@ T_R = 200\ \mathrm{N\cdot m}
 </div>
 </section>
 
+</div>
+
+<div class="part">
+<h3>Part 3 · Beyond the round shaft <span class="sub">| closed tube | other shapes | stress raisers | formulas</span></h3>
+
 <section class="topic" id="s6">
-<h2><span class="n">06</span>Formula sheet</h2>
+<h2><span class="n">06</span>Thin-walled closed tubes</h2>
+<p>A tube that is not round, such as a square or rectangular steel section, does not keep plane sections plane. Section 1's derivation fails. A thin closed wall has its own simple answer, found from equilibrium alone.</p>
+<div class="box why"><span class="tag">The flow is constant</span>
+<p>Cut a small block out of the wall, bounded by two cuts across the wall and two along the shaft. Along the shaft, the only forces are the shears on the two cross cuts, \(\tau_1 t_1\) and \(\tau_2 t_2\) per length. They must balance, so the shear flow \(q = \tau t\) is the same everywhere round the wall. A thin spot carries the same flow on less metal, so its stress is higher.</p>
+<p>The flow on a piece \(ds\) of wall makes a moment about any point equal to \(q\) times twice the area of the thin triangle it sweeps. Round the whole wall that is \(q\) times twice the area \(A_m\) enclosed by the wall's centreline:</p>
+\[
+T = 2A_m q
+\]
+\[
+\tau = \frac{T}{2tA_m}
+\]
+<p>The twist comes from the energy. The torque's work per length, \(\tfrac12 T\,d\phi/dx\), equals the strain energy in the wall, \(\oint q^{2}/(2Gt)\,ds\):</p>
+\[
+\frac{d\phi}{dx} = \frac{T}{4A_m^{2}G}\oint\frac{ds}{t}
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · a rectangular steel tube</span>
+<p>A tube 100 mm by 50 mm on its wall's centreline, with a 4 mm wall, carries 3 kN·m. \(A_m = 5000\) mm², so the flow is \(3\times 10^{6}/10{,}000\):</p>
+\[
+q = 300\ \mathrm{N/mm}
+\]
+<p>The stress is \(300/4 = 75\) MPa. Round the wall \(\oint ds/t = 300/4 = 75\). With \(G = 75\) GPa the twist rate is \(3\times 10^{6}\times 75/(4\times 25\times 10^{6}\times 75{,}000)\) per mm:</p>
+\[
+\frac{d\phi}{dx} = 1.72^\circ/\mathrm{m}
+\]
+<p>On a thin round tube the same two formulas give \(\tau = T\rho/J\) with \(J \approx 2\pi r^{3}t\), so Bredt agrees with Section 2 where both apply.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(A_m\) is the area inside the wall's centreline, not the metal's area and not the outside area. The peak stress is at the thinnest wall, where the same flow has the least metal. \(\oint ds/t\) runs all the way round: leaving out the short sides understates the twist.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The wall is thin and the corners are sharp. A real square tube has rounded corners, which help, and a weld seam. Inside a sharp corner the stress rises above \(T/(2tA_m)\), which is a stress concentration.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an HSS 4×4×1/4 in torsion</span>
+<p>AISC designs a 1/4 in HSS with a wall of 0.233 in, 93% of nominal. The centreline square is \(4 - 0.233 = 3.767\) in on a side, so \(A_m = 14.19\ \mathrm{in}^{2}\). Under 5 kip·in:</p>
+\[
+\begin{aligned}\tau &= \frac{T}{2A_m t} = \frac{5}{2(14.19)(0.233)} \\ &= 0.756\ \mathrm{ksi}\end{aligned}
+\]
+\[
+\begin{aligned}J &= \frac{4A_m^{2}}{\oint ds/t} = \frac{4(14.19)^{2}}{4(3.767)/0.233} \\ &= 12.5\ \mathrm{in}^{4}\end{aligned}
+\]
+<p>That is twice the J of an NPS 3 pipe, 6.03 in⁴, for a section only a little larger.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Shafts that are not round</h2>
+<p>A non-circular section warps: its cross-sections bulge out of their plane as it twists. The stress no longer grows with distance from the centre. In a rectangle it peaks at the middle of the long side and is zero at the corners, which are the points farthest out.</p>
+<div class="box why"><span class="tag">The results to use</span>
+<p>The exact solution for a solid rectangle \(b\) by \(t\), with \(b \ge t\), comes from a stress function solved as a series. It reduces to two coefficients that depend only on \(b/t\):</p>
+\[
+\tau_{\max} = \frac{T}{\alpha bt^{2}}
+\]
+\[
+\frac{d\phi}{dx} = \frac{T}{\beta bt^{3}G}
+\]
+<p>A square has \(\alpha = 0.208\) and \(\beta = 0.141\). A 2 to 1 bar has 0.246 and 0.229. As the bar thins, both tend to 1/3. A thin open section, made of strips, is the sum of its strips: \(J = \sum bt^{3}/3\), and the largest stress is \(Tt_{\max}/J\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 40 by 20 mm bar</span>
+<p>A steel bar 40 mm by 20 mm carries 200 N·m. With \(\alpha = 0.246\):</p>
+\[
+\tau_{\max} = 50.8\ \mathrm{MPa}
+\]
+<p>It acts at the middle of the 40 mm faces. A round bar of the same area, 31.9 mm across, sees 31.3 MPa. The rectangle puts metal in its corners, where it carries almost nothing.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a tube slit along its length</span>
+<p>Take a steel tube 50 mm across its wall's centreline with a 2 mm wall, and slit it lengthwise. Closed, it carries 20 N·m at 2.55 MPa. Slit, it is a thin strip 157 mm long and 2 mm thick, with \(J = 157\times 2^{3}/3 = 419\) mm⁴. Under the same torque</p>
+\[
+\tau = 95.5\ \mathrm{MPa}
+\]
+<p>That is \(3r/t = 37.5\) times the closed value. The stiffness falls by \(3(r/t)^{2}\), 469 times. Slit a cardboard tube and twist it: the closed wall is what made it stiff.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(Tc/J\) with a rectangle's polar moment \(b t(b^{2}+t^{2})/12\) is not the stress: the section warps and the corners carry nothing. In \(\alpha bt^{2}\) the long side is \(b\) and the short side, squared, is \(t\). Swapping them understates the stress. An open section is not a closed one with a gap: its \(J\) falls with the cube of the wall.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a slit pipe</span>
+<p>NPS 3 Schedule 40 pipe is 3.500 in across with a 0.216 in wall. Closed, \(J = \tfrac{\pi}{2}(1.75^{4} - 1.534^{4}) = 6.03\ \mathrm{in}^4\), and 5 kip·in gives 1.45 ksi. Saw it open along its length. Its wall is now a strip \(2\pi r_m = 10.32\) in wide, with \(r_m = 1.642\) in:</p>
+\[
+J = \frac{b\,t^{3}}{3} = \frac{10.32(0.216)^{3}}{3} = 0.0347\ \mathrm{in}^{4}
+\]
+\[
+\tau = \frac{T\,t}{J} = \frac{5(0.216)}{0.0347} = 31.2\ \mathrm{ksi}
+\]
+<p>One cut made the pipe 174 times more flexible and raised its stress 21 times. Mild steel yields in shear well before 31 ksi.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Stress raisers in shafts</h2>
+<p>A shoulder, a keyway or a groove changes the section abruptly. As at a hole in Unit 3, the stress there is a multiple of the nominal \(Tc/J\):</p>
+\[
+\tau_{\max} = K_t\,\frac{Tc}{J}
+\]
+<p>\(K_t\) for a shoulder fillet comes from charts, in terms of the step ratio \(D/d\) and the fillet radius over the small diameter, \(r/d\). The nominal stress is taken on the smaller diameter. A sharper fillet raises \(K_t\); a generous one brings it toward 1.</p>
+<div class="box ex"><span class="tag">Worked example · a shoulder on a 30 mm shaft</span>
+<p>A shaft steps from 36 mm down to 30 mm with a small fillet, and carries 200 N·m. Take \(K_t = 1.6\) from a chart for this step. The nominal stress on the 30 mm section is \(16T/\pi d^{3}\), 37.7 MPa, and the fillet sees</p>
+\[
+\tau_{\max} = 60.4\ \mathrm{MPa}
+\]
+<p>Doubling the fillet radius would lower \(K_t\) toward 1.3 on most charts. The diameter did not change, only the corner.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(K_t\) multiplies the nominal stress on the smaller diameter. Using the larger one understates the peak. A static torque on a ductile shaft yields the fillet slightly and redistributes, so \(K_t\) matters most for a shaft that turns under a fluctuating torque, which is fatigue.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The 1.6 is assumed for this example, not read from a named chart. Keyways add their own concentration and a reduced section. Fatigue design adds a notch-sensitivity factor that lowers the effective \(K_t\) for soft steels.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">09</span>Formula sheet</h2>
 <p>Shear stress and angle on a circular shaft:</p>
 \[
 \tau = \frac{T\rho}{J}
@@ -190,7 +313,14 @@ J = \frac{\pi d^4}{32}
 \[
 T = \frac{P}{\omega}
 \]
-<p>Fixed at both ends, torque applied a distance a from the left wall. The left reaction is T(L−a)/L. Series segments add their angles. Citations: Roylance §2.3. The motor is the Baldor EM3615T-5 nameplate and the NEMA 184T extension. E is the AISC value for steel. G of 75 GPa in the other labs is a round course value. The 36 in length and the 0.75 in diameter are comparisons.</p>
+<p>Fixed at both ends, torque applied a distance \(a\) from the left wall: \(T_L = T(L-a)/L\). Series segments add their angles. A thin closed tube, and a solid rectangle:</p>
+\[
+\tau = \frac{T}{2tA_m}
+\]
+\[
+\tau_{\max} = \frac{T}{\alpha bt^{2}}
+\]
+<p>At a shoulder, \(\tau_{\max} = K_t\,Tc/J\) on the smaller diameter. Citations: Roylance §2.3. Closed tubes, non-circular sections and shaft stress concentration are cited by those topic names. The motor is the Baldor EM3615T-5 nameplate and the NEMA 184T extension. E is the AISC value for steel. G of 75 GPa in the other labs is a round course value. The 36 in length and the 0.75 in diameter are comparisons.</p>
 </section>
 </div>
 </main>

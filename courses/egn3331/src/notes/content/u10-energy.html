@@ -8,19 +8,21 @@
 <header class="top">
   <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 10 · Ch 14</p>
   <h1>Energy methods</h1>
-  <p class="lede">Strain energy is the work stored in a member. For a linear material that work is half the load times the travel. The travel is the slope of the energy. A falling weight stores the same work over a short extra stretch, so the peak force rises. Every number below comes from the course library and is checked a second way.</p>
+  <p class="lede">Strain energy is the work stored in a member. For a linear material that work is half the load times the travel. The travel is the slope of the energy. A falling weight stores the same work over a short extra stretch, so the peak force rises. A unit load, carried through the real deformation, gives any displacement by one sum.</p>
   <div class="legend">
     <span><i class="swatch" style="background: var(--gold)"></i>Energy, deflection, or the static force</span>
     <span><i class="swatch" style="background: #d147bd"></i>The load, or the peak force</span>
     <span><i class="swatch" style="background: var(--teal)"></i>A station on the beam</span>
   </div>
   <nav class="toc">
-    <a href="#s1"><span>01</span>A uniform bar</a>
-    <a href="#s2"><span>02</span>Bending and torsion</a>
-    <a href="#s3"><span>03</span>A dummy load</a>
-    <a href="#s4"><span>04</span>A falling weight</a>
+    <a href="#s1"><span>01</span>Strain energy in a bar</a>
+    <a href="#s2"><span>02</span>Energy in bending and torsion</a>
+    <a href="#s3"><span>03</span>Castigliano and the dummy load</a>
+    <a href="#s4"><span>04</span>Impact: a falling weight</a>
     <a href="#s5"><span>05</span>A crane rope</a>
-    <a href="#s6"><span>06</span>Formula sheet</a>
+    <a href="#s6"><span>06</span>Unit loads on a truss</a>
+    <a href="#s7"><span>07</span>Unit loads on a beam</a>
+    <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -29,12 +31,15 @@
 <h3>Part 1 · Stored energy <span class="sub">| bar | beam | shaft</span></h3>
 
 <section class="topic" id="s1">
-<h2><span class="n">01</span>A uniform bar</h2>
-<p>An axial force on a uniform bar grows from zero when the load is applied slowly. The elongation grows with the force. The area under that line is the stored energy.</p>
+<h2><span class="n">01</span>Strain energy in a bar</h2>
+<p>An axial force on a uniform bar grows from zero when the load is applied slowly. The elongation grows with the force. The work done is the area under that line, and an elastic bar stores all of it.</p>
+<div class="box why"><span class="tag">Energy per volume, then per bar</span>
+<p>A small cube under a stress that rises to \(\sigma\) stretches to a strain \(\varepsilon\). The force on a face is \(\sigma\,dA\), and it moves through \(\varepsilon\,dx\), rising linearly, so it does \(\tfrac12\sigma\varepsilon\) of work per unit volume. In a bar \(\sigma = N/A\) and \(\varepsilon = N/AE\) everywhere, and the volume is \(AL\):</p>
+</div>
 \[
 U = \frac{N^2 L}{2AE}
 \]
-<p>The same energy is half of N times the elongation. Differentiating with respect to N returns the elongation.</p>
+<p>The same energy is half of \(N\) times the elongation. Differentiating with respect to \(N\) returns the elongation, which Section 3 turns into a method.</p>
 \[
 \delta = \frac{NL}{AE}
 \]
@@ -56,8 +61,12 @@ U = 15\ \mathrm{J}
 </section>
 
 <section class="topic" id="s2">
-<h2><span class="n">02</span>Bending and torsion</h2>
-<p>Bending stores energy in the moment. On a cantilever with an end load P, the moment at a section is P times the distance back from the tip. Integrating M squared over 2EI along the length gives</p>
+<h2><span class="n">02</span>Energy in bending and torsion</h2>
+<p>Bending stores energy in the moment. The bending stress is \(My/I\), so the energy per volume is \(\sigma^{2}/2E = M^{2}y^{2}/(2EI^{2})\). Integrate over the section: \(\int y^{2}\,dA = I\). That leaves \(M^{2}/2EI\) per length of beam:</p>
+\[
+U = \int_0^L \frac{M^{2}}{2EI}\,dx
+\]
+<p>On a cantilever with an end load \(P\), the moment at a section is \(P\) times the distance back from the tip. The integral gives</p>
 \[
 U = \frac{P^2 L^3}{6EI}
 \]
@@ -76,7 +85,7 @@ U = 2.5\ \mathrm{J}
 \]
 <p>Doubling the load sends the drop to 12.5 mm and the energy to 10 J. Doubling the length multiplies the drop by eight. The check is a trapezoid of M squared, and the elastic curve from Unit 8.</p>
 </div>
-<p>A round shaft stores energy in the torque. G replaces E, and the polar moment J replaces I.</p>
+<p>A round shaft stores energy in the torque. The same step with \(\tau = T\rho/J\) and \(\tau^{2}/2G\) per volume gives \(T^{2}/2GJ\) per length: \(G\) replaces \(E\), and \(J\) replaces \(I\).</p>
 \[
 U = \frac{T^2 L}{2GJ}
 \]
@@ -101,7 +110,10 @@ U = 7.96\ \mathrm{J}
 <h3>Part 2 · The derivative <span class="sub">| dummy | truss</span></h3>
 
 <section class="topic" id="s3">
-<h2><span class="n">03</span>A dummy load</h2>
+<h2><span class="n">03</span>Castigliano and the dummy load</h2>
+<div class="box why"><span class="tag">Why the slope of the energy is the deflection</span>
+<p>Load a linear structure with \(P\), and let the point under \(P\) move \(\delta = P/k\). The energy is \(U = \tfrac12P\delta = P^{2}/2k\). Its derivative is \(dU/dP = P/k = \delta\). With several loads the same holds load by load: raising one load by \(dP\) adds \(\delta\,dP\) of work at its own point, to first order, so \(\partial U/\partial P_i\) is the displacement under \(P_i\), along it. That is Castigliano's theorem.</p>
+</div>
 <p>The derivative has to name the point you want. If the real load sits somewhere else, add a dummy load at the point, differentiate, and then set the dummy to zero. That step is virtual work. The dummy force times the real displacement equals the change in stored energy.</p>
 \[
 \delta = \frac{\partial U}{\partial Q}
@@ -134,17 +146,17 @@ F = 8.25\ \mathrm{kN}
 </div>
 
 <div class="part">
-<h3>Part 3 · A falling load <span class="sub">| rod | rope | Reference</span></h3>
+<h3>Part 3 · A falling load <span class="sub">| rod | rope</span></h3>
 
 <section class="topic" id="s4">
-<h2><span class="n">04</span>A falling weight</h2>
-<p>A weight \(W\) at rest stretches its support by \(\delta_{st} = WL/(AE)\). Released from a height \(h\) above that resting position, it falls and the support stretches farther, then stops. The work done is \(W(h+\delta)\), with \(\delta\) the largest stretch. That work equals \(\tfrac12 k\delta^2\), and \(k = W/\delta_{st}\). Dividing the largest stretch by \(\delta_{st}\) gives the impact factor.</p>
+<h2><span class="n">04</span>Impact: a falling weight</h2>
+<p>A weight \(W\) hung slowly on a support stretches it by \(\delta_{st} = WL/(AE)\). Now drop it instead. It is released from rest a height \(h\) above the point where it first touches the unloaded support, such as a collar at the end of a rod. It falls \(h\), then stretches the support until it stops. The work done is \(W(h+\delta)\), with \(\delta\) the largest stretch. That work equals \(\tfrac12 k\delta^2\), and \(k = W/\delta_{st}\). Dividing the largest stretch by \(\delta_{st}\) gives the impact factor.</p>
 \[
 n = 1 + \sqrt{1 + \frac{2h}{\delta_{st}}}
 \]
 <p>The peak force is n times W. A height of zero is not the static case. The square root of 1 is 1, so n is 2. The load arrives suddenly, and the peak is twice the static force. The second check integrates the mass on the spring. The factor itself does not contain g.</p>
 <div class="box ex"><span class="tag">Worked example · the 16 mm rod</span>
-<p>A steel rod, 16 mm in diameter and 2 m long, carries 1500 N. E is 200 GPa. The weight is released 2 mm above the resting position. The static stretch is 0.0746 mm. The factor and the peak stress are</p>
+<p>A steel rod, 16 mm in diameter and 2 m long, carries 1500 N. E is 200 GPa. The weight is a collar released 2 mm above the rod's end stop, with the rod unloaded. The static stretch is 0.0746 mm. The factor and the peak stress are</p>
 \[
 n = 8.39
 \]
@@ -154,7 +166,7 @@ n = 8.39
 <p>The static stress is 7.46 MPa. Holding the peak at 80 MPa requires a drop of 3.49 mm, and then n is 10.72. That height comes from the energy balance solved for h.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · released from contact</span>
-<p>The crane rope of the next section is 30 ft long and holds 400 lbf. Released from contact, the height is zero. The factor is still</p>
+<p>The crane rope of the next section is 30 ft long, and the hook load is 400 lbf. Let the rope be just taut but carrying nothing, then let go of the load. The load is released from contact, so the height is zero. The factor is still</p>
 \[
 n = 2
 \]
@@ -197,8 +209,79 @@ n = 4.32
 </div>
 </section>
 
+</div>
+
+<div class="part">
+<h3>Part 4 · Virtual work <span class="sub">| unit load on a truss | unit load on a beam | formulas</span></h3>
+
 <section class="topic" id="s6">
-<h2><span class="n">06</span>Formula sheet</h2>
+<h2><span class="n">06</span>Unit loads on a truss</h2>
+<p>Castigliano needs the energy written with a load at the point of interest. The unit-load method reaches the same answer by a shorter road, and it is how truss displacements are found by hand.</p>
+<div class="box why"><span class="tag">Two loadings, one structure</span>
+<p>First put a single unit load at the joint, along the direction you want, and nothing else. It sets up member forces \(n\). Keep it there. Now apply the real loads. The joint moves by \(\Delta\) and each member stretches by \(NL/AE\). The unit load rides through \(\Delta\), doing work \(1\cdot\Delta\). Each member's force \(n\), already present, rides through its real stretch, storing \(n\,NL/AE\). Those two works balance:</p>
+\[
+1\cdot\Delta = \sum \frac{n\,N\,L}{AE}
+\]
+<p>Two statics solutions, one with the real loads and one with the unit load, give every term. No geometry of the moved joint is needed. Roylance §2.1 finds the same displacements from the stiffness of the bars.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the bracket again</span>
+<p>Unit 3's bracket has a level bar in 40 kN compression, 2 m long, and a slanted bar in 50 kN tension, 2.5 m long, both with \(AE = 80\) MN. A unit load down at the joint gives \(n = -1.333\) in the level bar and \(+1.667\) in the slanted one. With forces in kN, lengths in m and \(AE\) in kN, each term is in metres:</p>
+\[
+\begin{aligned}\Delta &= \frac{(-1.333)(-40)(2)}{80{,}000} \\ &\quad + \frac{(1.667)(50)(2.5)}{80{,}000} \\ &= 3.94\ \mathrm{mm}\end{aligned}
+\]
+<p>That is Unit 3's drop, found without solving for the joint's position. A unit load across, outward, puts \(n = 1\) in the level bar and 0 in the slanted one, which returns the 1.00 mm move toward the wall.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a five-bar roof truss</span>
+<p>A truss spans 4 m with a 1.5 m apex. Bottom chord AB and BC are 2 m each, the rafters AD and DC are 2.5 m, and a hanger BD is 1.5 m. Every bar has \(AE = 80\) MN. 20 kN hangs at B. Statics gives 13.3 kN in each chord, \(-16.7\) kN in each rafter and 20 kN in the hanger. A unit load at B gives the same forces divided by 20 kN. Summing \(nNL/AE\) over the five bars:</p>
+\[
+\Delta_B = 1.69\ \mathrm{mm}
+\]
+<p>A unit load at the apex gives 1.31 mm there; the difference is the hanger's own 0.375 mm stretch. A unit load across at the roller shows it slides out 0.667 mm. A direct stiffness solve of the whole truss returns the same three numbers.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The signs of \(n\) and \(N\) both matter. A rafter in compression under both loadings contributes a positive term. Using the real force twice, \(N^{2}L/AE\), gives the energy, not the displacement, unless the unit load points along the only real load and is scaled by it. A negative \(\Delta\) means the joint moves opposite to the unit load, not that the work is wrong.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The truss is determinate, so both statics solutions exist. For an indeterminate truss the unit load still works but needs a compatibility step, and the direct stiffness solve is simpler. Pins are frictionless and the bars stay elastic.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a king-post roof truss</span>
+<p>A 24 ft truss of 2×6s rises to a ridge 4 ft up, a 4:12 pitch. Trusses at 2 ft carry 20 psf live and 10 psf dead, so 720 lb reaches the ridge. A 5 psf ceiling hangs 120 lb at the king post's foot, and the post lifts it to the ridge. With 840 lb at the ridge, each rafter carries \(840/(2\sin 18.4^\circ) = 1{,}328\) lb of compression and the bottom chord 1,260 lb of tension.</p>
+<p>For the ceiling sag, put 1 lb down at the king post's foot. It gives \(n = -1.58\) in each rafter, 1.50 in each half of the chord, and 1 in the post. With \(AE = 11.55\times10^{6}\) lb:</p>
+\[
+\begin{aligned}\Delta &= \sum\frac{nNL}{AE} \\ &= 2(0.0276) + 2(0.0236) + 0.0005 \\ &= 0.103\ \mathrm{in}\end{aligned}
+\]
+<p>The king post adds almost nothing. A built truss sags several times more, because its plate joints slip.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">07</span>Unit loads on a beam</h2>
+<p>A beam's virtual work replaces the bars' sum with an integral along the length. A unit load at the station sets up a moment \(m(x)\). The real loads bend each slice through an angle \(M\,dx/EI\), and \(m\) rides through it:</p>
+\[
+1\cdot\Delta = \int_0^L \frac{m\,M}{EI}\,dx
+\]
+<p>For a slope, use a unit couple at the station instead of a unit force. The same integral returns the rotation in radians.</p>
+<div class="box ex"><span class="tag">Worked example · the cantilever at midspan</span>
+<p>The 2 m cantilever of Section 3 carries 800 N at the tip, so \(M = -800(2 - x)\). A unit load down at \(a = 1\) m gives \(m = -(1 - x)\) for \(x &lt; 1\) and zero beyond. Then</p>
+\[
+\begin{aligned}\Delta &= \frac{800}{EI}\int_0^1 (1 - x)(2 - x)\,dx \\ &= \frac{800}{EI}\cdot\frac{5}{6}\end{aligned}
+\]
+<p>With \(EI = 341{,}333\) N·m² that is 1.95 mm, Section 3's dummy-load answer. The unit load did not need a derivative.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the end slope of a simple span</span>
+<p>The 4 m simple span carries 5 kN/m. A unit couple at the left support gives \(m = 1 - x/L\). The integral of \(m\,M/EI\) is</p>
+\[
+\theta = \frac{wL^{3}}{24EI} = 0.0391\ \mathrm{rad}
+\]
+<p>That is the end rotation Unit 8 released when it fixed the ends.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(m\) and \(M\) must use the same sign convention and the same origin of \(x\). Integrating over only the part where \(M\) is nonzero is fine; integrating \(m\) beyond the unit load's reach is not, because \(m\) is zero there for a cantilever but not for a simple span. A unit force gives a displacement, a unit couple a slope.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Formula sheet</h2>
 <p>Axial energy and elongation, with E = 200 GPa in the bar lab:</p>
 \[
 U = \frac{N^2 L}{2AE}
@@ -221,7 +304,14 @@ U = \frac{T^2 L}{2GJ}
 \[
 n = 1 + \sqrt{1 + \frac{2h}{\delta_{st}}}
 \]
-<p>Citations: strain energy and Castigliano's theorem, and impact loading. Those topics are not Roylance sections. Hibbeler's chapter label in the practice list is 14. The rope is Caltrans Falsework Manual, Appendix D, Example 18. The model uses the 12.2 million psi figure from that line. The 30 ft length, the 400 lbf hook load, and the 1 in drop are assumptions. The rod and the cantilever are course sections.</p>
+<p>Unit loads, on a truss and on a beam:</p>
+\[
+\Delta = \sum \frac{n\,N\,L}{AE}
+\]
+\[
+\Delta = \int_0^L \frac{m\,M}{EI}\,dx
+\]
+<p>Citations: strain energy and Castigliano's theorem, impact loading, and the unit-load method, by those topic names; Roylance §2.1 for truss displacements. The rope is Caltrans Falsework Manual, Appendix D, Example 18. The model uses the 12.2 million psi figure from that line. The 30 ft length, the 400 lbf hook load, and the 1 in drop are assumptions. The rod and the cantilever are course sections.</p>
 </section>
 </div>
 </main>

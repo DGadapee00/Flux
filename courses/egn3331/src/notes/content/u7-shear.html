@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 7 · Ch 7</p>
   <h1>Transverse shear</h1>
-  <p class="lede">Bending stress is zero on the neutral axis. The shear stress is largest there. It is VQ over I t. The same Q, without the thickness, is the shear flow the fasteners must carry. Every number below is computed by the course library and checked a second way.</p>
+  <p class="lede">Bending stress is zero on the neutral axis. The shear stress is largest there. It is \(VQ/It\), from the balance of a piece cut along the beam. The same balance without the thickness is the shear flow the fasteners carry. In a thin wall the flow runs along the wall, and in a channel it sets where a load must act to avoid a twist.</p>
   <div class="legend">
     <span><i class="swatch" style="background: var(--gold)"></i>Shear stress, and shear flow</span>
     <span><i class="swatch" style="background: var(--teal)"></i>The neutral axis</span>
@@ -16,30 +16,38 @@
     <span><i class="swatch" style="background: var(--blue)"></i>Compression from bending</span>
   </div>
   <nav class="toc">
-    <a href="#s1"><span>01</span>A rectangle</a>
-    <a href="#s2"><span>02</span>Up the parabola</a>
-    <a href="#s3"><span>03</span>An I section</a>
-    <a href="#s4"><span>04</span>Nail spacing</a>
+    <a href="#s1"><span>01</span>The shear formula</a>
+    <a href="#s2"><span>02</span>How shear varies over the depth</a>
+    <a href="#s3"><span>03</span>Where the web carries the shear</a>
+    <a href="#s4"><span>04</span>Shear flow and fasteners</a>
     <a href="#s5"><span>05</span>A garage header</a>
-    <a href="#s6"><span>06</span>Formula sheet</a>
+    <a href="#s6"><span>06</span>Shear flow around a thin wall</a>
+    <a href="#s7"><span>07</span>The shear centre</a>
+    <a href="#s8"><span>08</span>Formula sheet</a>
   </nav>
 </header>
 <main>
 
 <div class="part">
-<h3>Part 1 · The stress <span class="sub">| rectangle | parabola | I | Reference</span></h3>
+<h3>Part 1 · The stress <span class="sub">| formula | depth | web</span></h3>
 
 <section class="topic" id="s1">
-<h2><span class="n">01</span>A rectangle</h2>
-<p>Cut the beam on a horizontal line at height y above the neutral axis. The area above that line has a first moment Q about the axis. Equilibrium of a short length of beam then gives the shear stress on the cut:</p>
+<h2><span class="n">01</span>The shear formula</h2>
+<p>A beam whose moment changes along its length carries a shear \(V\). That shear is spread over the section as a shear stress. It is not uniform. The way to find it is to cut the beam along its length, not across.</p>
+<div class="box why"><span class="tag">A horizontal cut</span>
+<p>Take a slice of beam of length \(dx\). Cut it on a horizontal line at height \(y_1\) above the neutral axis, and keep the piece above the line. Call that piece's area \(A'\). On the slice's left face, the bending stress \(-My/I\) pushes on \(A'\) with a force \(-MQ/I\), where \(Q = \int_{A'} y\,dA\) is the first moment of \(A'\) about the neutral axis. On the right face the moment is \(M + dM\), so the force there differs by \(dM\,Q/I\). Nothing else acts along the beam on that piece except the shear on the horizontal cut, \(\tau t\,dx\), where \(t\) is the width of the cut. Balance them and use \(dM/dx = V\) from Unit 6:</p>
 \[
 \tau = \frac{VQ}{It}
 \]
-<p>t is the width of the section at that line. For a rectangle of width b and height h, I is bh³/12 and Q at the axis is b(h/2)²/2. The peak comes out three halves of the average shear:</p>
+<p>Shear stresses on perpendicular planes are equal, so the same \(\tau\) acts vertically on the cross-section at that height.</p>
+</div>
+<div class="box why"><span class="tag">The rectangle</span>
+<p>For a rectangle \(b\) wide and \(h\) deep, the area above \(y\) is \(b(h/2 - y)\), with its centroid halfway up it. So \(Q = \tfrac{b}{2}\left(h^{2}/4 - y^{2}\right)\) and \(t = b\). With \(I = bh^{3}/12\), the stress is a parabola that peaks at the axis:</p>
 \[
 \tau_{\max} = \frac{3V}{2A}
 \]
-<p>The check is the integral of τ over the area. It has to return V. Roylance §4.2 is the reading.</p>
+<p>Integrating \(\tau\) over the area returns \(V\). That is the check. Roylance §4.2 is the reading.</p>
+</div>
 <div class="box ex"><span class="tag">Worked example · the 40 by 80 mm rectangle</span>
 <p>The lab's rectangle is 40 mm wide and 80 mm deep, with 10 kN of shear. The peak, at the axis, is</p>
 \[
@@ -48,13 +56,17 @@
 <p>The gold curve is this stress against y. It is a parabola. The teal line is the neutral axis, where the curve is highest. Bending stress on that line is zero.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Reporting V/A leaves out the three-halves factor. Using two times V/A overshoots the peak. Doubling the depth halves this stress. It does not cut it to a quarter. That quarter belongs to bending.</p>
+<p>Reporting \(V/A\) leaves out the three-halves factor. Using \(2V/A\) overshoots the peak. Doubling the depth halves this stress. It does not cut it to a quarter. That quarter belongs to bending. \(Q\) is the first moment of the area beyond the cut, not of the whole section, which is zero about its own centroid.</p>
 </div>
 </section>
 
 <section class="topic" id="s2">
-<h2><span class="n">02</span>Up the parabola</h2>
-<p>Away from the axis, Q is the first moment of a shorter piece. For the rectangle the stress at station y is the peak times one minus (2y/h) squared. At the outer fiber, y is h/2 and the stress is zero. There is no area left above the cut, so Q is zero.</p>
+<h2><span class="n">02</span>How shear varies over the depth</h2>
+<p>Away from the axis, \(Q\) is the first moment of a shorter piece. For the rectangle, Section 1's \(Q\) gives the stress at height \(y\) as</p>
+\[
+\tau = \tau_{\max}\left[1 - \left(\frac{2y}{h}\right)^{2}\right]
+\]
+<p>At the outer fiber \(y = h/2\) and the stress is zero. There is no area left above the cut, so \(Q\) is zero. Bending stress does the opposite: it is largest at the outer fiber and zero on the axis.</p>
 <div class="box ex"><span class="tag">Worked example · 20 mm up</span>
 <p>On the same 40 mm by 80 mm rectangle, 20 mm is a quarter of the height and half of the way to the top fiber. The stress falls to three quarters of the peak:</p>
 \[
@@ -68,8 +80,8 @@
 </section>
 
 <section class="topic" id="s3">
-<h2><span class="n">03</span>An I section</h2>
-<p>An I is wide in the flanges and narrow in the web. At the neutral axis the horizontal cut passes through the web only, so t is the web thickness. Q is the flange's area times the flange centroid, plus the first moment of the upper half of the web. The web is thin, so the same force crosses a small thickness and the stress is high. Most of V is the integral of that web stress.</p>
+<h2><span class="n">03</span>Where the web carries the shear</h2>
+<p>An I is wide in the flanges and narrow in the web. At the neutral axis the horizontal cut passes through the web only, so \(t\) is the web thickness. \(Q\) is the flange's area times its centroid distance, plus the first moment of the upper half of the web. The web is thin, so the same force crosses a small width and the stress is high. Where the web meets the flange, \(t\) jumps from the web to the flange width, and the vertical stress drops by the same ratio.</p>
 <div class="box ex"><span class="tag">Worked example · the web at 20 kN</span>
 <p>The lab's I is assumed: a 6 mm by 160 mm web and two 120 mm by 10 mm flanges. The whole depth is 180 mm. At 20 kN the web stress at the axis, and the share of V in the web, are</p>
 \[
@@ -78,7 +90,10 @@
 \[
 \frac{V_{\mathrm{web}}}{V} = 94.6\%
 \]
-<p>The flanges are wide, so the stress in them stays small even though Q is not small. Using the flange width as t at the axis understates the web stress by the ratio of those widths.</p>
+<p>The flanges are wide, so the vertical stress in them stays small even though \(Q\) is not. Using the flange width as \(t\) at the axis understates the web stress by the ratio of those widths, 20 to 1 here.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(t\) is the width at the cut, so at the axis of an I it is the web, 6 mm, not the flange. \(Q\) at the axis includes the flange and half the web. Leaving the flange out drops most of \(Q\), because the flange sits farthest from the axis.</p>
 </div>
 <div class="box why"><span class="tag">Why the web does the work</span>
 <p>τ dA is the force on a strip. The web is tall and its stress is high, so its strips add up to nearly all of V. The flanges sit where the parabola would already be falling, and they are short in the y direction.</p>
@@ -87,29 +102,29 @@
 </div>
 
 <div class="part">
-<h3>Part 2 · The fasteners <span class="sub">| boards | header | Reference</span></h3>
+<h3>Part 2 · The fasteners <span class="sub">| flow | header</span></h3>
 
 <section class="topic" id="s4">
-<h2><span class="n">04</span>Nail spacing</h2>
-<p>Drop the thickness from the shear formula and what remains is a force per length along the beam. That is the shear flow:</p>
+<h2><span class="n">04</span>Shear flow and fasteners</h2>
+<p>Section 1's balance on the piece above a cut gave a force \(VQ/I\) per length of beam, before it was divided by \(t\). That force per length is the shear flow:</p>
 \[
 q = \frac{VQ}{I}
 \]
-<p>Q is the first moment of the piece the fasteners are holding on, not of the whole section. The whole section has its centroid on the axis, so its first moment is zero and it would say the flow is zero. That is the wrong area.</p>
+<p>When the piece above the cut is a separate board, glue or nails have to carry that flow. \(Q\) is the first moment of the piece the fasteners hold on, not of the whole section. The whole section has its centroid on the axis, so its first moment is zero.</p>
 <p>If n fasteners at one station can each carry a force F, they can be spaced at</p>
 \[
 s = \frac{nF}{q}
 \]
 <p>A second reading of the same flow is the change in the board's axial force. That force is MQ/I. Over a short dx it changes by VQ/I times dx, which is q dx.</p>
 <div class="box ex"><span class="tag">Worked example · three boards</span>
-<p>Three boards, each 40 mm by 30 mm, are stacked. The sizes are assumed, and so is a nail that can carry 1.2 kN. Two nails share each station. Under 8 kN of shear the flow and the spacing are</p>
+<p>Three dressed 2×6 boards, each 5.5 in wide and 1.5 in thick by PS 20, are laid flat and stacked into a beam 114 mm deep. The stack's \(I\) is \(17.4\times 10^{6}\) mm⁴. The top board's \(Q\) is its area times 38.1 mm, \(203\times 10^{3}\) mm³. Under 3 kN of shear, an assumed load, the flow and the spacing for two nails of an assumed 0.5 kN each are</p>
 \[
-q = 118.5\ \mathrm{kN/m}
+q = 35.0\ \mathrm{kN/m}
 \]
 \[
-s = 20.3\ \mathrm{mm}
+s = 28.6\ \mathrm{mm}
 \]
-<p>The gold curve is the spacing against the shear. It falls as 1/V. Double the shear and the nails must sit twice as close. Double the nail, or add a second nail, and they may sit twice as far apart.</p>
+<p>The peak shear stress in the wood is \(1.5V/A = 0.28\) MPa, a realistic working level for timber. The gold curve is the spacing against the shear. It falls as \(1/V\). Double the shear and the nails must sit twice as close. Double the nail, or add a second nail, and they may sit twice as far apart. Spacing this tight is why built-up beams are often glued or bolted.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Dividing q by the board width produces a stress, not a spacing. Using one nail when two share the joint cuts the spacing in half. Inverting F and q gives a number with the wrong units and the wrong size.</p>
@@ -146,8 +161,74 @@ F = 26.4\ \mathrm{lbf}
 </div>
 </section>
 
+</div>
+
+<div class="part">
+<h3>Part 3 · Thin walls <span class="sub">| flow around the wall | shear centre | formulas</span></h3>
+
 <section class="topic" id="s6">
-<h2><span class="n">06</span>Formula sheet</h2>
+<h2><span class="n">06</span>Shear flow around a thin wall</h2>
+<p>In a thin-walled section the shear runs along the wall, like water in a pipe. Cut the wall across its thickness instead of horizontally. The same balance as Section 1 holds on the piece beyond the cut, so the flow at a point is \(q = VQ/I\). Now \(Q\) is the first moment of the wall from the free edge to the cut. The stress across the wall is \(q/t\), along the wall.</p>
+<div class="box why"><span class="tag">A flange from its tip</span>
+<p>Start at a flange tip and walk toward the web. At a distance \(s\) the piece beyond the cut is a strip \(t_f\) thick and \(s\) long, at the flange's distance \(y_f\) from the neutral axis. So \(Q = t_f s\,y_f\), and the flow grows in a straight line from zero at the tip:</p>
+\[
+q(s) = \frac{V t_f\,y_f}{I}\,s
+\]
+<p>Where two flange halves meet the web, their flows add and turn down into the web. Flow is conserved at a junction: what arrives from the two halves leaves through the web. Down the web the flow keeps growing, as a parabola, to its peak at the neutral axis.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the flanges of the lab's I</span>
+<p>The I of Section 3 has 120 mm by 10 mm flanges whose centroids are 85 mm from the axis, and \(I = 19.41\times 10^{6}\) mm⁴. At 20 kN, each half-flange of 60 mm has \(Q = 60\times 10\times 85 = 51{,}000\) mm³ at the web. Its flow there is</p>
+\[
+q = 52.6\ \mathrm{N/mm}
+\]
+<p>That is 5.26 MPa across the 10 mm flange, running horizontally. The two halves bring \(2\times 52.6 = 105\) N/mm into the web. Across the 6 mm web that is 17.5 MPa, the web's stress just below the flange.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The flange flow uses half the flange, from one tip to the web. Using the whole width doubles it. The flange stress divides by the flange thickness, not the web's. The flange shear is horizontal: a vertical cut through the flange, not a horizontal one, is where it acts.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The wall is thin, so the stress is taken as uniform across it and directed along it. Corners are sharp and the flow turns them without loss. In a thick flange the stress varies across the thickness, and the vertical part in the flange is the small value Section 3 found.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">07</span>The shear centre</h2>
+<p>Load a channel through its web and it twists as it bends. The flange flows of Section 6 are the reason. In a channel both flanges point the same way, so their flows run in opposite directions in the top and bottom flanges. The two flange forces make a couple. The load has to supply an equal couple, or the section turns.</p>
+<div class="box why"><span class="tag">Where the load must act</span>
+<p>Take a channel with flanges \(b\) long from the web centreline, \(t_f\) thick, a web \(h\) between flange centrelines, \(t_w\) thick. The flange flow is \(q = V t_f s\,(h/2)/I\). Each flange carries \(F = \int_0^b q\,ds = V t_f b^{2}h/(4I)\). The pair \(F\) at \(\pm h/2\) is a couple \(Fh\). The web carries \(V\). Moments about the web balance only if \(V\) acts a distance \(e\) behind the web, with \(Ve = Fh\). Put in the thin-wall \(I = t_w h^{3}/12 + b t_f h^{2}/2\):</p>
+\[
+e = \frac{3b^{2}t_f}{h\,t_w + 6b\,t_f}
+\]
+<p>That point is the shear centre. A load through it bends the channel without twisting it. It lies outside the channel, on the side away from the flanges. A section with two axes of symmetry, such as an I or a box, has its shear centre at the centroid. An angle has it at the corner, where both legs' flows meet.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a bent-steel channel</span>
+<p>A channel bent from 3 mm sheet has 50 mm flanges and 150 mm between flange centrelines. Then \(e = 3(50)^{2}(3)/(150\times 3 + 6\times 50\times 3)\):</p>
+\[
+e = 16.7\ \mathrm{mm}
+\]
+<p>The thin-wall \(I\) is \(2.53\times 10^{6}\) mm⁴. Under 5 kN each flange carries 556 N, and \(556\times 150/5000\) returns the same 16.7 mm. A 5 kN load through the web centreline is 16.7 mm off the shear centre, so it adds a twisting moment</p>
+\[
+T = 83.3\ \mathrm{N\cdot m}
+\]
+<p>An open thin section is weak in torsion, so that twist can matter more than the bending. Shelf brackets and purlins of channel section twist this way under a load on the web.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The shear centre is not the centroid. The centroid of this channel lies between the web and the flange tips; the shear centre lies on the other side of the web. Putting \(e\) at \(b/2\), or on the flange side, reverses the twist. The formula's \(b\) and \(h\) are centreline dimensions, not outside ones.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The walls are thin and the corners sharp. A rolled channel has tapered flanges and fillets, which move \(e\) a little. The twist the off-centre load causes, and the warping of an open section, are beyond the torsion of round shafts in Unit 9.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a strut channel on a wall</span>
+<p>A Unistrut P1000 is 1-5/8 in square in 0.105 in steel. On its centreline the back is \(h = 1.52\) in, each side \(b = 1.52\) in, and each lip \(d = 0.363\) in. About its symmetry axis \(I = 0.241\ \mathrm{in}^4\), and the shear centre sits</p>
+\[
+e = \frac{tb}{I}\left(\frac{h^{2}b}{4} + \frac{h^{2}d}{2} - \frac{2d^{3}}{3}\right) = 0.836\ \mathrm{in}
+\]
+<p>behind the back. Bolted to a wall with the slot out, it carries pipe clamps at the slot, 1.52 in in front of the back. The arm about the shear centre is 2.36 in. At 50 lb/ft that is a torque of 118 lbf·in on every foot. The open wall's \(J = \sum bt^{3}/3 = 0.0020\ \mathrm{in}^4\) resists it poorly.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Formula sheet</h2>
 <p>Shear stress on a horizontal cut. Q is the first moment of the area beyond the cut. t is the width at the cut:</p>
 \[
 \tau = \frac{VQ}{It}
@@ -163,7 +244,14 @@ q = \frac{VQ}{I}
 \[
 s = \frac{nF}{q}
 \]
-<p>Citations: Roylance §4.2 for the shear stress and the flow. The header is APA form Z416T, February 2009, and the dressed 2×4 is PS 20. The rectangle, the I, and the three boards are assumed.</p>
+<p>Thin wall: flow from a free edge, and the shear centre of a channel behind its web:</p>
+\[
+q(s) = \frac{V t_f\,y_f}{I}\,s
+\]
+\[
+e = \frac{3b^{2}t_f}{h\,t_w + 6b\,t_f}
+\]
+<p>Citations: Roylance §4.2 for the shear stress and the flow. Thin-walled flow and the shear centre are cited by those topic names. The header is APA form Z416T, February 2009, and the dressed 2×4 is PS 20. The rectangle, the I, and the three boards are assumed.</p>
 </section>
 </div>
 </main>

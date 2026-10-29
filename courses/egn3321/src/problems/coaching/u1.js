@@ -26,6 +26,13 @@ function landing($, vx, vy) {
   return { t, range: vx * t };
 }
 
+
+/** r, ṙ, r̈, θ̇, θ̈ at the instant, as u1.12.polar gives them. */
+function polarRates($) {
+  if ($.given === 'laws') return { r: $.c * $.t * $.t, rd: 2 * $.c * $.t, rdd: 2 * $.c, thd: 2 * $.k * $.t, thdd: 2 * $.k };
+  return { r: $.R, rd: $.u, rdd: $.b, thd: $.w, thdd: $.al };
+}
+
 export default {
   'u1.1.convert': {
     traps: {
@@ -97,6 +104,38 @@ export default {
       speed: [[($) => Math.abs(Math.hypot($.vbx, $.vby) - Math.hypot($.vax, $.vay)), 'Subtracting the two speeds loses the directions. Subtract the vectors, then take the size.']],
       vx: [[($) => $.vax - $.vbx, 'That is A relative to B. B relative to A is v_B − v_A.']],
       ax: [[($) => $.aax - $.abx, 'That is A relative to B. B relative to A is a_B − a_A.']],
+    },
+  },
+  'u1.12.polar': {
+    traps: {
+      v: [
+        [($) => Math.abs(polarRates($).rd) + Math.abs(polarRates($).r * polarRates($).thd), 'Add the components as vectors: v = √(v_r² + v_θ²), not v_r + v_θ.'],
+        [($) => Math.abs(polarRates($).r * polarRates($).thd), 'That is v_θ alone. The collar also slides along the arm: v_r = ṙ.'],
+      ],
+      ar: [
+        [($) => polarRates($).rdd, 'That is r̈ alone. The radial line turns, and that adds −rθ̇².'],
+        [($) => polarRates($).rdd + polarRates($).r * polarRates($).thd ** 2, 'Check the sign: turning pulls toward the pivot, so a_r = r̈ − rθ̇².'],
+      ],
+      ath: [
+        [($) => polarRates($).r * polarRates($).thdd + polarRates($).rd * polarRates($).thd, 'The ṙθ̇ term comes in twice: once from differentiating rθ̇, once from the turning e_r. It is 2ṙθ̇.'],
+        [($) => polarRates($).r * polarRates($).thdd, 'That leaves out 2ṙθ̇, the part that comes from sliding along a turning line.'],
+      ],
+    },
+  },
+  'u1.12.radar': {
+    traps: {
+      rd: [
+        [($) => ($.way === 'away' ? 1 : -1) * $.u, 'That is the car’s speed. The gun reads only the part along its line of sight, u cos φ.'],
+        [($) => ($.way === 'away' ? 1 : -1) * $.u * Math.sin($.phi * DEG), 'That uses sin φ. The line of sight makes φ with the road, so the part along it is u cos φ.'],
+      ],
+      thd: [
+        [($) => $.u / ($.d / Math.sin($.phi * DEG)), 'That turns the line with the whole speed. Only the part across the line of sight, u sin φ, turns it: θ̇ = u sin φ / r.'],
+        [($) => ($.u * Math.cos($.phi * DEG)) / ($.d / Math.sin($.phi * DEG)), 'That uses u cos φ, the part along the line of sight, which only changes the range. The part across it, u sin φ, turns the line.'],
+      ],
+      rdd: [
+        [() => 0, 'The car does not accelerate, but r̈ is not its acceleration. a_r = r̈ − rθ̇² = 0 gives r̈ = rθ̇².'],
+        [($) => ($.u * $.u * Math.sin($.phi * DEG)) / $.d, 'That is u²/r. Only the speed across the line of sight counts: r̈ = rθ̇² = (u sin φ)²/r.'],
+      ],
     },
   },
 };

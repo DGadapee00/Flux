@@ -50,8 +50,8 @@ export const SECTIONS = Object.freeze({
   'components': { book: 'dynamics', section: '12.5', title: 'Curvilinear Motion: Rectangular Components' },
   'projectile': { book: 'dynamics', section: '12.6', title: 'Motion of a Projectile' },
   'normal-tangential': { book: 'dynamics', section: '12.7', title: 'Curvilinear Motion: Normal and Tangential Components' },
-  'cylindrical-kinematics': { book: 'dynamics', section: '12.8', title: 'Curvilinear Motion: Cylindrical Components', leftOut: true },
-  'dependent-motion': { book: 'dynamics', section: '12.9', title: 'Dependent Motion of Two Particles', leftOut: true },
+  'cylindrical-kinematics': { book: 'dynamics', section: '12.8', title: 'Curvilinear Motion: Cylindrical Components' },
+  'dependent-motion': { book: 'dynamics', section: '12.9', title: 'Dependent Motion of Two Particles' },
   'relative-motion': { book: 'dynamics', section: '12.10', title: 'Relative Motion of Two Particles Using Translating Axes' },
 
   // Chapter 13: Force and acceleration
@@ -60,7 +60,7 @@ export const SECTIONS = Object.freeze({
   'system-of-particles': { book: 'dynamics', section: '13.3', title: 'Equation of Motion for a System of Particles' },
   'rectangular-motion': { book: 'dynamics', section: '13.4', title: 'Equations of Motion: Rectangular Coordinates' },
   'normal-tangential-motion': { book: 'dynamics', section: '13.5', title: 'Equations of Motion: Normal and Tangential Coordinates' },
-  'cylindrical-motion': { book: 'dynamics', section: '13.6', title: 'Equations of Motion: Cylindrical Coordinates', leftOut: true },
+  'cylindrical-motion': { book: 'dynamics', section: '13.6', title: 'Equations of Motion: Cylindrical Coordinates' },
   'central-force': { book: 'dynamics', section: '13.7', title: 'Central-Force Motion and Space Mechanics', leftOut: true },
 
   // Chapter 14: Work and energy
@@ -90,7 +90,7 @@ export const SECTIONS = Object.freeze({
   'relative-velocity': { book: 'dynamics', section: '16.5', title: 'Relative-Motion Analysis: Velocity' },
   'instantaneous-center': { book: 'dynamics', section: '16.6', title: 'Instantaneous Center of Zero Velocity' },
   'relative-acceleration': { book: 'dynamics', section: '16.7', title: 'Relative-Motion Analysis: Acceleration' },
-  'rotating-axes': { book: 'dynamics', section: '16.8', title: 'Relative-Motion Analysis Using Rotating Axes', leftOut: true },
+  'rotating-axes': { book: 'dynamics', section: '16.8', title: 'Relative-Motion Analysis Using Rotating Axes' },
 
   // Chapter 17: Planar kinetics of a rigid body
   'moment-of-inertia': { book: 'dynamics', section: '17.1', title: 'Mass Moment of Inertia' },
@@ -105,6 +105,12 @@ export const SECTIONS = Object.freeze({
   'couple-work': { book: 'dynamics', section: '18.3', title: 'The Work of a Couple Moment' },
   'rigid-work-energy': { book: 'dynamics', section: '18.4', title: 'Principle of Work and Energy' },
   'rigid-conservation-of-energy': { book: 'dynamics', section: '18.5', title: 'Conservation of Energy' },
+
+  // Chapter 19: Impulse and momentum of a rigid body (Unit 8, D36)
+  'rigid-momentum': { book: 'dynamics', section: '19.1', title: 'Linear and Angular Momentum' },
+  'rigid-impulse-momentum': { book: 'dynamics', section: '19.2', title: 'Principle of Impulse and Momentum' },
+  'rigid-conservation-of-momentum': { book: 'dynamics', section: '19.3', title: 'Conservation of Momentum' },
+  'eccentric-impact': { book: 'dynamics', section: '19.4', title: 'Eccentric Impact' },
 });
 
 function entry(topic) {

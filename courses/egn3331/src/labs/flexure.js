@@ -1,9 +1,10 @@
+import { sectionSketch } from './elements.js';
 import {
   flexureBalance, flexureFibers, rectBands, rectFibersReduced, rectSection, teeBands, teeSection,
 } from '@flux/subjects/mechanics/materials.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { axes, begin, C, chartIn, couple, dot, hidden, label, line, panes, plotIn, sceneIn, seg } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, showField, slider } from './widgets.js';
 
@@ -38,6 +39,42 @@ function sectionOf(state) {
   }
   const sec = rectSection(state.b, state.h);
   return { sec, bands: rectBands(state.b, state.h), yBar: state.h / 2, height: state.h };
+}
+
+/**
+ * The section, drawn to scale with its neutral axis through the centroid, and a short side view of
+ * the beam bending under M: the top fiber shortens (blue) and the bottom stretches (red) when it sags.
+ */
+function member(B, rect, state, c, veiled) {
+  const tee = state.scenarioId === 'tee';
+  const rects = tee
+    ? [[-TEE_TW / 2, TEE_TW / 2, 0, TEE_HW], [-TEE_BF / 2, TEE_BF / 2, TEE_HW, TEE_HW + TEE_TF]]
+    : [[-state.b / 2, state.b / 2, 0, state.h]];
+  const H = c.height;
+  const W = tee ? TEE_BF : state.b;
+  const span = Math.max(H, W) * 1.5;
+  const S = sceneIn(B, rect, { x0: -span * 1.25, x1: span * 1.1, y0: -0.2 * H, y1: 1.25 * H }, 8);
+  sectionSketch(S, rects.map(([x0, x1, y0, y1]) => [x0 + 0.55 * span, x1 + 0.55 * span, y0, y1]), { na: c.yBar });
+  // The side view: a beam segment curved by the moment, sagging when M > 0.
+  const sag = state.M >= 0 ? 1 : -1;
+  const x0 = -1.15 * span;
+  const x1 = -0.05 * span;
+  // Sagging bends the segment concave up: its middle sits lowest.
+  const bow = (x) => -sag * 0.12 * H * (1 - ((2 * (x - (x0 + x1) / 2)) / (x1 - x0)) ** 2);
+  for (let i = 1; i <= 24; i++) {
+    const xa = x0 + ((x1 - x0) * (i - 1)) / 24;
+    const xb = x0 + ((x1 - x0) * i) / 24;
+    seg(S, [xa, H + bow(xa) - 0.12 * H], [xb, H + bow(xb) - 0.12 * H], { color: c.top < 0 ? C.blue : C.red, width: 2.5 });
+    seg(S, [xa, bow(xa) + 0.12 * H], [xb, bow(xb) + 0.12 * H], { color: c.bot < 0 ? C.blue : C.red, width: 2.5 });
+  }
+  // A sagging moment turns the left end clockwise and the right end counterclockwise.
+  couple(S, [x0, 0.55 * H], { ccw: state.M < 0, r: 13, color: C.pink });
+  couple(S, [x1, 0.55 * H], { ccw: state.M >= 0, r: 13, color: C.pink });
+  if (!veiled) {
+    label(S, `${fig(c.top / MPA)} MPa`, [0.55 * span + W / 2, H], { color: c.top < 0 ? C.blue : C.red, dx: 8, align: 'left' });
+    label(S, `${fig(c.bot / MPA)} MPa`, [0.55 * span + W / 2, 0], { color: c.bot < 0 ? C.blue : C.red, dx: 8, align: 'left' });
+    label(S, `M ${fig(state.M / 1e3)} kN·m`, [(x0 + x1) / 2, 0.55 * H], { color: C.pink });
+  }
 }
 
 export default defineLab({
@@ -98,6 +135,10 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.42);
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const { sec } = sectionOf(state);
     const y0 = sec.botY * 1e3;
     const y1 = sec.topY * 1e3;
@@ -107,7 +148,7 @@ export default defineLab({
     const yHi = Math.max(y0, y1);
     const sLo = Math.min(s0, s1, 0);
     const sHi = Math.max(s0, s1, 0);
-    const P = plotIn(B, B.free, { lo: sLo - Math.abs(sHi - sLo) * 0.08 - 1, hi: sHi + Math.abs(sHi - sLo) * 0.08 + 1 }, { lo: yLo, hi: yHi });
+    const P = chartIn(B, R, { lo: sLo - Math.abs(sHi - sLo) * 0.08 - 1, hi: sHi + Math.abs(sHi - sLo) * 0.08 + 1 }, { lo: yLo, hi: yHi });
     axes(P, { xLabel: 'stress (MPa)', yLabel: 'y from the neutral axis (mm)' });
     line(P, [[s0, y0], [0, 0], [s1, y1]], { color: C.gold, width: 3 });
     dot(P, s1, y1, { color: s1 <= 0 ? C.blue : C.red, r: 5 });

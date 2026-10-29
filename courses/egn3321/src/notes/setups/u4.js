@@ -148,43 +148,40 @@ export default {
   ],
   s7: [
     {
-      tag: 'a methane–oxygen stage',
-      lab: 'rocket',
-      scenario: 'gravity',
+      tag: 'the CPSC drop',
+      lab: 'helmet',
+      scenario: 'cpsc',
       setup(s) {
-        s.m0 = 500;
-        s.mf = 200;
-        s.ve = 3000;
-        s.mdot = 5;
-        s.g = 9.81;
+        Object.assign(s, { m: 5, h: 1.96, tau: 6, e: 0.1, shape: 'half-sine' });
       },
-      read: (c) => ({ dv: [c.dv, 3000 * Math.log(2.5) - 9.81 * 60], tb: [c.tb, 60], ratio: [c.ratio, 2.5] }),
+      read: (c) => ({ v0: [c.v0, 6.20], J: [c.J, 34.4], gMean: [c.gMean, 117], gPeak: [c.gPeak, 184] }),
     },
     {
-      tag: 'the same stage, throttled up',
-      lab: 'rocket',
-      scenario: 'gravity',
+      tag: 'no helmet',
+      lab: 'helmet',
+      scenario: 'bare',
       setup(s) {
-        s.m0 = 500;
-        s.mf = 200;
-        s.ve = 3000;
-        s.mdot = 10;
-        s.g = 9.81;
+        Object.assign(s, { m: 5, h: 1.96, tau: 1, e: 0.5, shape: 'half-sine' });
       },
-      read: (c) => ({ dv: [c.dv, 3000 * Math.log(2.5) - 9.81 * 30], tb: [c.tb, 30] }),
+      read: (c) => ({ J: [c.J, 46.6], gPeak: [c.gPeak, 1490] }),
     },
     {
-      tag: 'a stage that barely lifts',
-      lab: 'rocket',
-      scenario: 'gravity',
+      tag: 'an ideal liner',
+      lab: 'helmet',
+      scenario: 'ideal',
       setup(s) {
-        s.m0 = 1500;
-        s.mf = 600;
-        s.ve = 3000;
-        s.mdot = 5;
-        s.g = 9.81;
+        Object.assign(s, { m: 5, h: 1.96, tau: 6, e: 0.1, shape: 'square' });
       },
-      read: (c) => ({ dv: [c.dv, 3000 * Math.log(2.5) - 9.81 * 180], tb: [c.tb, 180], burned: [c.burned, 900] }),
+      read: (c) => ({ J: [c.J, 34.4], gPeak: [c.gPeak, 117], crush: [c.crush * 1000, 16.9] }),
+    },
+    {
+      tag: 'the shortest pulse that passes',
+      lab: 'helmet',
+      scenario: 'cpsc',
+      setup(s) {
+        Object.assign(s, { m: 5, h: 1.96, tau: 6, e: 0.1, shape: 'half-sine' });
+      },
+      read: (c) => ({ tauMin: [c.tauMin, 3.66] }),
     },
   ],
 };

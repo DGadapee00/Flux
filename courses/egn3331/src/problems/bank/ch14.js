@@ -1,13 +1,16 @@
 /**
  * Strain energy, Castigliano's theorem, and impact.
  * The crane rope is the English problem. The level-3 problem solves for the
- * drop height that reaches an allowable stress.
+ * drop height that reaches an allowable stress. Unit loads find a roof truss's joint movements and
+ * a beam's slope and quarter-point drop.
  */
 import { PA_PER_PSI } from '@flux/subjects/convert.js';
 import { polarJ } from '@flux/subjects/mechanics/torsion.js';
 import {
   axialBar, cantileverStation, dropHeightForStress, impactDrop, torsionStrain, twoBarTruss,
 } from '@flux/subjects/mechanics/strain-energy.js';
+import { simpleUniformDeflection } from '@flux/subjects/mechanics/elastic.js';
+import { trussStiffness, unitLoadBeam, unitLoadTruss } from '@flux/subjects/mechanics/virtualwork.js';
 import { ROPE_A_IN2, ROPE_E_PSI, ropeDrop, ropeInches } from '../../data/rope.js';
 import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
 
@@ -16,10 +19,19 @@ const G = 75e9;
 const KSI = 1000 * PA_PER_PSI;
 const DEG = Math.PI / 180;
 const MM = 1e-3;
+const MPA = 1e6;
 
 const rel = (a, b) => Math.abs(a - b) > 0.08 * Math.max(Math.abs(a), Math.abs(b), 1e-12);
 const area = (d) => Math.PI * (d / 2) ** 2;
 const beamEI = (b, h) => E * b * h ** 3 / 12;
+
+/** The five-bar roof truss: chord A–B–C, apex D above B, hanger BD. */
+const roofTruss = ($) => ({
+  joints: { A: { x: 0, y: 0 }, B: { x: $.half, y: 0 }, C: { x: 2 * $.half, y: 0 }, D: { x: $.half, y: $.rise } },
+  members: [['A', 'B'], ['B', 'C'], ['A', 'D'], ['D', 'C'], ['B', 'D']],
+  loads: { B: { y: -$.P } },
+  supports: { A: 'pin', C: 'rollerY' },
+});
 
 function barSecond($) {
   const delta = ($.N * $.L) / ($.A * E);
@@ -62,11 +74,12 @@ const ch14 = [
       'For a linear bar the energy is half the axial force times the elongation.',
       'The elongation is NL/AE. The energy is N²L over 2AE.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const bar = axialBar($.N, $.L, $.A, E);
       return [
-        `δ = NL/AE = ${bar.delta * 1e3} mm.`,
-        `U = ½ Nδ = ${bar.U} J.`,
+        String.raw`$\delta = NL/AE = ${sig(bar.delta * 1e3)}$ mm.`,
+        String.raw`The force rises from zero as the bar stretches, so the work is the triangle under that line.`,
+        String.raw`$U = \tfrac12N\delta = N^2L/2AE = ${sig(bar.U)}$ J.`,
       ];
     },
     second: barSecond,
@@ -124,12 +137,13 @@ const ch14 = [
       'The tip drop of a cantilever is PL³ over 3EI, and the energy is half the load times that drop.',
       'I for a rectangle is bh³/12. Differentiate the energy with respect to P and the tip drop comes back.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const EI = beamEI($.b, $.h);
       const delta = ($.P * $.L ** 3) / (3 * EI);
       return [
-        `δ = PL³/(3EI) = ${delta * 1e3} mm.`,
-        `U = ½ Pδ = ${(0.5 * $.P * delta)} J.`,
+        String.raw`$EI = ${sig(EI)}$ N·m². The moment is $P$ times the distance back from the tip, so $U = \int M^2/2EI\,dx = P^2L^3/6EI$.`,
+        String.raw`$U = ${sig(0.5 * $.P * delta)}$ J.`,
+        String.raw`$\delta = \partial U/\partial P = PL^3/3EI = ${sig(delta * 1e3)}$ mm, and $\tfrac12P\delta$ returns the same energy.`,
       ];
     },
     second: ($) => {
@@ -172,7 +186,7 @@ const ch14 = [
       const delta = cantileverStation($.P, $.L, $.a * $.L, EI).delta;
       return rel(delta, tip) && rel(delta, tip / 2);
     },
-    text: (T) => String.raw`The same 40 mm by 80 mm cantilever, length ${T.L} m, carries ${T.P} N at the tip. E is 200 GPa. Find the downward deflection at ${T.a} of the length, measured from the wall. No load acts at that station.`,
+    text: (T) => String.raw`A steel cantilever with a 40 mm by 80 mm rectangular section, 80 mm deep, length ${T.L} m, carries ${T.P} N at the tip. E is 200 GPa. Find the downward deflection at ${T.a} of the length, measured from the wall. No load acts at that station.`,
     parts: [
       num('delta', ($) => cantileverStation($.P, $.L, $.a * $.L, beamEI(0.04, 0.08)).delta, 'mm', {
         scale: MM,
@@ -186,9 +200,14 @@ const ch14 = [
       'A dummy load at the station, set to zero after differentiating, finds a deflection where no real load acts.',
       'With the tip load P and a dummy Q at distance a from the wall, ∂M/∂Q is (a − x) on the wall side of the station and zero beyond it.',
     ],
-    steps: ($) => {
-      const delta = cantileverStation($.P, $.L, $.a * $.L, beamEI(0.04, 0.08)).delta;
-      return [`δ = ${delta * 1e3} mm at ${$.a} of the span.`];
+    steps: ($, sig) => {
+      const x = $.a * $.L;
+      const delta = cantileverStation($.P, $.L, x, beamEI(0.04, 0.08)).delta;
+      return [
+        String.raw`Put a dummy load $Q$ at $x = ${sig(x)}$ m. For a cut nearer the wall, $M = -P(L - s) - Q(x - s)$, so $\partial M/\partial Q = -(x - s)$; beyond $x$ it is zero.`,
+        String.raw`Set $Q = 0$ after differentiating: $\delta = \frac{1}{EI}\int_0^x P(L - s)(x - s)\,ds = \frac{P}{EI}\left(\frac{Lx^2}{2} - \frac{x^3}{6}\right)$.`,
+        String.raw`With $EI = ${sig(beamEI(0.04, 0.08))}$ N·m², $\delta = ${sig(delta * 1e3)}$ mm.`,
+      ];
     },
     second: ($) => {
       const EI = beamEI(0.04, 0.08);
@@ -260,11 +279,12 @@ const ch14 = [
       'Each bar force is the load over twice the sine of the angle to the horizontal.',
       'Castigliano differentiates the energy of both bars with respect to the joint load. The bar shortening divided by sin θ is the same joint drop.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const t = twoBarTruss($.P, $.span, $.rise, $.A, E);
       return [
-        `Each bar carries ${t.F / 1000} kN.`,
-        `The joint drops ${t.delta * 1e3} mm.`,
+        String.raw`Each bar is $${sig(t.len)}$ m long at $\sin\theta = ${sig(t.sin)}$; the joint gives $F = P/(2\sin\theta) = ${sig(t.F / 1000)}$ kN.`,
+        String.raw`Energy: $U = 2\cdot F^2L/2AE = ${sig(t.U)}$ J, with $F$ proportional to $P$.`,
+        String.raw`$\delta = \partial U/\partial P = 2U/P = ${sig(t.delta * 1e3)}$ mm.`,
       ];
     },
     second: ($) => {
@@ -323,11 +343,12 @@ const ch14 = [
       'Torsion energy is half the torque times the angle, and the angle is TL over GJ.',
       'J for a solid circle is πd⁴/32. G here is 75 GPa, not the 200 GPa tensile modulus.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const s = torsionStrain($.T, $.L, G, polarJ($.d / 2, 0));
       return [
-        `φ = ${s.phi * 180 / Math.PI}°.`,
-        `U = ½ Tφ = ${s.U} J.`,
+        String.raw`$J = \pi d^4/32$ and $\phi = TL/GJ = ${sig(s.phi)}$ rad $= ${sig((s.phi * 180) / Math.PI)}$°.`,
+        String.raw`The torque rises from zero with the twist, so the stored energy is half the product.`,
+        String.raw`$U = \tfrac12T\phi = T^2L/2GJ = ${sig(s.U)}$ J.`,
       ];
     },
     second: ($) => {
@@ -387,11 +408,12 @@ const ch14 = [
       'The factor is one plus the square root of one plus twice the drop over the static stretch.',
       'The static stretch is WL/AE. The maximum stress is the factor times W/A.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const hit = impactDrop($.W, $.L, area($.d), E, $.h);
       return [
-        `δ_st = ${hit.deltaSt * 1e3} mm and the factor is ${hit.n}.`,
-        `The maximum stress is ${hit.stress / 1e6} MPa.`,
+        String.raw`At rest the weight would stretch the rod $\delta_{st} = WL/AE = ${sig(hit.deltaSt * 1e3)}$ mm.`,
+        String.raw`$n = 1 + \sqrt{1 + 2h/\delta_{st}} = ${sig(hit.n)}$.`,
+        String.raw`The peak force is $nW$, so $\sigma = nW/A = ${sig(hit.stress / 1e6)}$ MPa.`,
       ];
     },
     second: ($) => {
@@ -449,11 +471,12 @@ const ch14 = [
       'Work the stretch in inches: load times length over area times modulus, with the length in inches.',
       'The factor uses that static stretch and the drop, both in inches. Stress is the factor times the load over the area.',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const inch = ropeInches($.W, $.L, $.h);
       return [
-        `The static stretch is ${inch.deltaIn} in and the factor is ${inch.n}.`,
-        `The maximum stress is ${inch.stressPsi / 1000} ksi.`,
+        String.raw`$\delta_{st} = WL/AE$ with $A = 0.118$ in² and $E = 12.2\times 10^6$ psi: $${sig(inch.deltaIn)}$ in.`,
+        String.raw`$n = 1 + \sqrt{1 + 2h/\delta_{st}} = ${sig(inch.n)}$.`,
+        String.raw`$\sigma = nW/A = ${sig(inch.stressPsi / 1000)}$ ksi.`,
       ];
     },
     second: ($) => {
@@ -510,11 +533,12 @@ const ch14 = [
       'Turn the allowable stress into a factor on the static stress, then solve the impact factor for the height.',
       'With n = σA/W and δ_st = WL/AE, the height is (δ_st/2) times ((n − 1)² − 1).',
     ],
-    steps: ($) => {
+    steps: ($, sig) => {
       const r = dropHeightForStress($.W, $.L, area($.d), E, $.sig);
       return [
-        `The factor at the allowable is ${r.n}.`,
-        `The greatest drop is ${r.h * 1e3} mm.`,
+        String.raw`The allowable stress allows a peak force $\sigma A$, so $n = \sigma A/W = ${sig(r.n)}$.`,
+        String.raw`$\delta_{st} = WL/AE = ${sig(r.deltaSt * 1e3)}$ mm.`,
+        String.raw`Solve $n = 1 + \sqrt{1 + 2h/\delta_{st}}$ for $h$: $h = \tfrac12\delta_{st}[(n-1)^2 - 1] = ${sig(r.h * 1e3)}$ mm.`,
       ];
     },
     second: ($) => {
@@ -698,6 +722,247 @@ const ch14 = [
     },
     cases: [kase(cite('energy'), { want: 'midspan', P: 800, L: 2 }, { which: 'dummy' })],
   }),
+  problem({
+    id: 'u10.14.truss-unit',
+    title: 'Joint movement by unit loads',
+    exam: 'u10',
+    ch: '14',
+    lab: 'rooftruss',
+    src: cite('unit-load'),
+    topics: ['unit-load', 'truss-unit'],
+    variety: ['unknown'],
+    level: 3,
+    vars: {
+      half: range(1.5, 3, 0.25, 'm', 1),
+      rise: range(1, 2.5, 0.25, 'm', 1),
+      P: range(10, 40, 2, 'kN', 1000),
+      A: range(200, 600, 50, 'mm²', 1e-6),
+    },
+    derive: ($) => {
+      const t = roofTruss($);
+      const AE = $.A * E;
+      const v = unitLoadTruss(t, AE, 'B', [0, -1]);
+      const slide = unitLoadTruss(t, AE, 'C', [1, 0]).delta;
+      const stretches = v.rows.reduce((s, r) => s + Math.abs((r.N * r.L) / AE), 0);
+      return { dropB: v.delta, slide, stretches, hanger: ($.P * $.rise) / AE };
+    },
+    valid: ($) => ($.P * Math.hypot($.half, $.rise)) / (2 * $.rise * $.A) < 200e6,
+    text: (T) => String.raw`A roof truss spans $2\times ${T.half}$ m on a pin at A and a roller at C. Its bottom chord meets a hanger at midspan B, and the hanger rises $${T.rise}$ m to the apex D, which the rafters AD and DC join. Every bar is steel, $E = 200$ GPa, with area $${T.A}$ mm². $${T.P}$ kN hangs at B. By the unit-load method, find how far B drops and how far the roller C slides.`,
+    parts: [
+      num('dropB', ($) => $.dropB, 'mm', {
+        scale: MM,
+        label: 'drop at B',
+        traps: [
+          [($) => $.stretches, 'That adds the bars\' changes of length. Each must be weighted by the force a unit load at B puts in that bar.'],
+          [($) => $.dropB - $.hanger, 'That leaves out the hanger. It carries the load, and its stretch moves B too.'],
+        ],
+      }),
+      num('slide', ($) => $.slide, 'mm', {
+        scale: MM,
+        label: 'roller slide',
+        traps: [
+          [($) => 2 * $.slide, 'A horizontal unit load at C loads only the bottom chord, with $n = 1$ in each chord bar.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Solve the truss twice: once for the real load, once for a unit load at the joint along the direction you want. Then $\\Delta = \\sum nNL/AE$.',
+      String.raw`A unit load down at B gives each bar $n = N/P$. A unit load across at C puts tension 1 in both chord bars and nothing in the others.`,
+    ],
+    steps: ($, sig) => {
+      const Lr = Math.hypot($.half, $.rise);
+      const Nr = -($.P * Lr) / (2 * $.rise);
+      const Nc = ($.P * $.half) / (2 * $.rise);
+      return [
+        String.raw`Real forces: chords $${sig(Nc / 1000)}$ kN, rafters $${sig(Nr / 1000)}$ kN, hanger $${sig($.P / 1000)}$ kN. Rafter length $${sig(Lr)}$ m.`,
+        String.raw`Unit load at B: $n = N/P$ in every bar, so $\Delta_B = \sum N^2L/(P\,AE) = ${sig($.dropB / MM)}$ mm.`,
+        String.raw`Unit load across at C: $n = 1$ in the two chord bars, so the slide is $2N_cL_c/AE = ${sig($.slide / MM)}$ mm.`,
+      ];
+    },
+    second: ($) => {
+      // Direct stiffness on the whole truss: assemble K, solve for every joint.
+      const k = trussStiffness(roofTruss($), $.A * E);
+      return { dropB: -k.disp.B.y / MM, slide: k.disp.C.x / MM };
+    },
+    cases: [kase(cite('unit-load'), { half: 2, rise: 1.5, P: 20, A: 400 }, { dropB: 1.6875, slide: 0.6666666666666663 })],
+  }),
+
+  problem({
+    id: 'u10.14.beam-unit',
+    title: 'A slope and a deflection by unit loads',
+    exam: 'u10',
+    ch: '14',
+    lab: 'castigliano',
+    src: cite('unit-load'),
+    topics: ['unit-load', 'beam-unit'],
+    variety: ['unknown'],
+    level: 2,
+    vars: {
+      L: range(2, 6, 0.5, 'm', 1),
+      w: range(1, 8, 0.5, 'kN/m', 1000),
+      h: range(80, 200, 20, 'mm', MM),
+    },
+    derive: ($) => {
+      const EI = beamEI(0.04, $.h);
+      const M = (x) => ($.w * $.L * x) / 2 - ($.w * x * x) / 2;
+      return {
+        EI,
+        slope: unitLoadBeam(M, (x) => 1 - x / $.L, $.L, EI),
+        quarter: unitLoadBeam(M, (x) => (x < $.L / 4 ? 0.75 * x : 0.25 * ($.L - x)), $.L, EI, 4000),
+      };
+    },
+    valid: ($) => $.quarter > 1e-3 && $.quarter < 0.06,
+    text: (T) => String.raw`A steel beam ($E = 200$ GPa), 40 mm wide and $${T.h}$ mm deep, spans $${T.L}$ m on a pin and a roller under a uniform $${T.w}$ kN/m. Using unit loads, find the slope at the pin and the deflection at a quarter of the span from the pin.`,
+    parts: [
+      num('slope', ($) => $.slope, 'rad', {
+        abs: 1e-6,
+        label: 'slope at the pin',
+        traps: [
+          [($) => ((5 * $.w * $.L ** 4) / (384 * $.EI)) / ($.L / 2), 'That is the midspan drop over half the span, as if the beam ran straight from the pin. It curves, so the end is steeper.'],
+        ],
+      }),
+      num('quarter', ($) => $.quarter, 'mm', {
+        scale: MM,
+        label: 'quarter-span drop',
+        traps: [
+          [($) => (5 * $.w * $.L ** 4) / (384 * $.EI), 'That is the midspan drop. The quarter point moves less.'],
+          [($) => (5 * $.w * $.L ** 4) / (384 * $.EI) / 2, 'Half the midspan drop is not the quarter-point drop; the curve is not a triangle.'],
+        ],
+      }),
+    ],
+    hints: [
+      'For a slope, put a unit couple at the station; for a deflection, a unit force. Then $\\int mM/EI\\,dx$.',
+      String.raw`$M = wLx/2 - wx^2/2$. A unit couple at the pin gives $m = 1 - x/L$. A unit force at $L/4$ gives $m = 3x/4$ before it and $(L-x)/4$ after.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$EI = ${sig($.EI)}$ N·m².`,
+      String.raw`Slope: $\int_0^L (1 - x/L)M\,dx/EI = wL^3/24EI = ${sig($.slope)}$ rad.`,
+      String.raw`Quarter point: $\int m M/EI\,dx = 19wL^4/2048EI = ${sig($.quarter / MM)}$ mm.`,
+    ],
+    second: ($) => {
+      // The elastic curve of Unit 8 at the same stations.
+      const c = simpleUniformDeflection($.w, $.L, $.EI);
+      return { slope: -c.at(0).slope, quarter: -c.at($.L / 4).y / MM };
+    },
+    cases: [kase(cite('unit-load'), { L: 4, w: 5, h: 80 }, { slope: 0.0390625, quarter: (19 * 5e3 * 256) / (2048 * 341333.3333333333) / MM })],
+  }),
+  problem({
+    id: 'u10.14.beam-drop',
+    title: 'A weight dropped on a beam',
+    exam: 'u10',
+    ch: '14',
+    lab: 'drop',
+    src: cite('impact'),
+    topics: ['impact'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      W: range(100, 800, 50, 'N', 1),
+      h: range(10, 100, 10, 'mm', MM),
+      L: range(1.5, 3, 0.25, 'm', 1),
+      hs: range(80, 160, 20, 'mm', MM),
+    },
+    derive: ($) => {
+      const I = (0.05 * $.hs ** 3) / 12;
+      const k = (48 * E * I) / $.L ** 3;
+      const st = $.W / k;
+      const n = 1 + Math.sqrt(1 + (2 * $.h) / st);
+      return { I, k, st, n, peak: (n * $.W * $.L * ($.hs / 2)) / (4 * I) };
+    },
+    valid: ($) => $.peak < 220 * MPA && $.peak > 20 * MPA,
+    text: (T) => String.raw`A steel beam ($E = 200$ GPa), 50 mm wide and $${T.hs}$ mm deep, spans $${T.L}$ m on two supports. A weight of $${T.W}$ N is dropped from $${T.h}$ mm above the beam onto its midspan. Find the static deflection the weight would cause at rest, the impact factor, and the largest bending stress.`,
+    parts: [
+      num('st', ($) => $.st, 'mm', { scale: MM, label: 'static deflection' }),
+      num('n', ($) => $.n, '', {
+        label: 'impact factor',
+        traps: [
+          [() => 2, 'Two is a load released from contact, $h = 0$. This one falls first.'],
+        ],
+      }),
+      num('peak', ($) => $.peak, 'MPa', {
+        scale: MPA,
+        label: 'largest stress',
+        traps: [
+          [($) => ($.W * $.L * ($.hs / 2)) / (4 * $.I), 'That is the static stress. The impact multiplies it by $n$.'],
+        ],
+      }),
+    ],
+    hints: [
+      'At midspan the beam is a spring. Its stiffness is the load over the deflection a midspan load causes.',
+      String.raw`$k = 48EI/L^3$. The impact factor uses the static deflection $W/k$, and the peak load $nW$ bends the beam like any midspan load.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$I = ${sig($.I / 1e-12 / 1e6)}\times 10^6$ mm⁴ and $k = 48EI/L^3 = ${sig($.k / 1e6)}$ N/mm, so $\delta_{st} = W/k = ${sig($.st / MM)}$ mm.`,
+      String.raw`$n = 1 + \sqrt{1 + 2h/\delta_{st}} = ${sig($.n)}$.`,
+      String.raw`The peak load $nW = ${sig($.n * $.W)}$ N at midspan gives $M = nWL/4$ and $\sigma = Mc/I = ${sig($.peak / MPA)}$ MPa.`,
+    ],
+    second: ($) => {
+      // Energy balance solved directly: W(h + δ) = kδ²/2, the positive root.
+      const I = (0.05 * $.hs ** 3) / 12;
+      const k = (48 * E * I) / $.L ** 3;
+      const d = ($.W + Math.sqrt($.W * $.W + 2 * k * $.W * $.h)) / k;
+      const F = k * d;
+      return { st: ($.W / k) / MM, n: F / $.W, peak: (F * $.L * ($.hs / 2)) / (4 * I) / 1e6 };
+    },
+    cases: [kase(cite('impact'), { W: 500, h: 50, L: 2, hs: 100 }, { st: 0.09999999999999998, n: 32.63858403911276, peak: 97.91575211733824 })],
+  }),
+
+  problem({
+    id: 'u10.14.unit-where',
+    title: 'What unit load to apply',
+    exam: 'u10',
+    ch: '14',
+    lab: 'rooftruss',
+    src: cite('unit-load'),
+    kind: 'conceptual',
+    topics: ['unit-load', 'truss-unit'],
+    variety: ['representation'],
+    level: 2,
+    vars: {
+      want: choice(
+        ['drop', 'how far joint B moves down'],
+        ['slide', 'how far the roller at C slides sideways'],
+        ['turn', 'how much the beam end at the pin turns'],
+        ['close', 'how much joints B and D move toward each other'],
+      ),
+      P: range(5, 40, 1, 'kN', 1000),
+    },
+    text: (T) => String.raw`A structure carries a real load of $${T.P}$ kN. You want ${T.want}, by the unit-load method. What do you apply in the virtual loading?`,
+    parts: [
+      mc('unit', [
+        ['down', 'A unit force at B, pointing down.', 'The unit load rides through the displacement you want, so it sits at that point, along that direction.'],
+        ['across', 'A unit force at C, along the roller.', 'The roller\'s slide is a horizontal displacement at C, so the unit load is horizontal at C.'],
+        ['couple', 'A unit couple at the pin.', 'A couple does work through a rotation, so a unit couple measures a slope.'],
+        ['pair', 'Equal and opposite unit forces at B and D, along the line between them.', 'A pair of forces does work through the change in distance between two points, so it measures their relative movement.'],
+      ], ($) => ({ drop: 'down', slide: 'across', turn: 'couple', close: 'pair' }[$.want])),
+    ],
+    hints: [
+      'In $1\\cdot\\Delta = \\sum nNL/AE$, the unit load does work only through the displacement it rides through.',
+      'Match the virtual load to the displacement: a force for a movement, a couple for a turn, a pair for a change of distance.',
+    ],
+    steps: ($) => [
+      {
+        drop: 'A downward unit force at B rides through B\'s drop.',
+        slide: 'A horizontal unit force at C rides through the roller\'s slide.',
+        turn: 'A unit couple at the pin rides through the end\'s rotation.',
+        close: 'Opposite unit forces at B and D ride through the change in their distance.',
+      }[$.want],
+    ],
+    second: ($) => {
+      // On the five-bar roof truss, the matching unit load returns the stiffness solve's movement.
+      const t = roofTruss({ half: 2, rise: 1.5, P: $.P });
+      const k = trussStiffness(t, 80e6);
+      if ($.want === 'drop') return { unit: Math.abs(unitLoadTruss(t, 80e6, 'B', [0, -1]).delta + k.disp.B.y) < 1e-12 ? 'down' : 'pair' };
+      if ($.want === 'slide') return { unit: Math.abs(unitLoadTruss(t, 80e6, 'C', [1, 0]).delta - k.disp.C.x) < 1e-12 ? 'across' : 'pair' };
+      return { unit: $.want === 'turn' ? 'couple' : 'pair' };
+    },
+    cases: [
+      kase(cite('unit-load'), { want: 'drop', P: 20 }, { unit: 'down' }),
+      kase(cite('unit-load'), { want: 'turn', P: 20 }, { unit: 'couple' }),
+      kase(cite('unit-load'), { want: 'close', P: 20 }, { unit: 'pair' }),
+    ],
+  }),
+
 ];
 
 export default ch14;

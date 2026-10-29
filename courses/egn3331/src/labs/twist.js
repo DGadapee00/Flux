@@ -1,11 +1,9 @@
+import { shaftSketch } from './elements.js';
 import { FT_LBF_PER_S_PER_HP, M_PER_FT, N_PER_LBF } from '@flux/subjects/convert.js';
-import {
-  fixedFixedTorsion, gearPair, polarJ, roundShaft, seriesTwist, torqueFromHorsepower,
-  torqueFromPower,
-} from '@flux/subjects/mechanics/torsion.js';
+import { fixedFixedTorsion, gearPair, polarJ, roundShaft, seriesTwist, torqueFromHorsepower, torqueFromPower } from '@flux/subjects/mechanics/torsion.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { alpha, axes, begin, C, circle, dot, hidden, label, line, panes, plotIn, poly, sceneIn } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, showField, slider } from './widgets.js';
 
@@ -131,6 +129,73 @@ function model(state) {
   return powerOf(state);
 }
 
+/** The shafts, their supports and torques, with a surface line slanting as each section turns. */
+function member(B, rect, state, c, veiled) {
+  const Gm = state.G || G;
+  const id = state.scenarioId;
+  if (id === 'gear') {
+    const L = Math.max(state.L1, 0.05);
+    const r1 = 0.05 * L * Math.sqrt(state.teeth1 / 20);
+    const r2 = r1 * (Math.max(state.teeth2, state.teeth1) / state.teeth1);
+    const S = sceneIn(B, rect, { x0: -0.1 * L, x1: 1.3 * L, y0: -r2 - 0.2 * L, y1: r1 + 0.25 * L }, 8);
+    const rs = 0.025 * L;
+    shaftSketch(S, [{ x0: 0, x1: L, r: rs }], { torques: [{ x: 0, T: 1, text: veiled ? '' : `T₁ ${fig(c.T)} N·m` }] });
+    const S2y = -(r1 + r2);
+    poly(S, [[0.2 * L, S2y - rs], [L, S2y - rs], [L, S2y + rs], [0.2 * L, S2y + rs]], { fill: alpha(C.text, 0.1), stroke: C.text });
+    circle(S, [L, 0], r1, { stroke: C.gold, fill: alpha(C.gold, 0.15), width: 2 });
+    circle(S, [L, S2y], r2, { stroke: C.teal, fill: alpha(C.teal, 0.12), width: 2 });
+    if (!veiled) {
+      label(S, `${state.teeth1} teeth`, [L, r1], { color: C.gold, dy: -10 });
+      label(S, `${Math.max(state.teeth2, state.teeth1)} teeth, T₂ ${fig(c.T2)} N·m`, [L, S2y - r2], { color: C.teal, dy: 12 });
+    }
+    return;
+  }
+  let segs;
+  let walls = [0];
+  let torques;
+  let phi;
+  if (id === 'step') {
+    const L1 = Math.max(state.L1, 0.05);
+    const L2 = Math.max(state.L2, 0.05);
+    const J1 = polarJ(Math.max(state.d1, 0.008) / 2, 0);
+    const J2 = polarJ(Math.max(state.d2, 0.008) / 2, 0);
+    const big = Math.max(state.d1, state.d2);
+    const sc = (0.1 * (L1 + L2)) / big;
+    segs = [{ x0: 0, x1: L1, r: sc * state.d1 }, { x0: L1, x1: L1 + L2, r: sc * state.d2 }];
+    torques = [{ x: L1 + L2, T: 1, text: veiled ? '' : `T ${fig(state.T)} N·m` }];
+    phi = (x) => (x <= L1 ? (state.T * x) / (Gm * J1) : (state.T * L1) / (Gm * J1) + (state.T * (x - L1)) / (Gm * J2));
+  } else if (id === 'fixed') {
+    const L = Math.max(state.L, 0.3);
+    const a = Math.min(Math.max(state.a, 0.05 * L), 0.95 * L);
+    const J = polarJ(Math.max(state.d, 0.008) / 2, 0);
+    segs = [{ x0: 0, x1: L, r: 0.07 * L }];
+    walls = [0, L];
+    torques = [{ x: a, T: 1, text: veiled ? '' : `T ${fig(state.T)} N·m` }];
+    phi = (x) => (x <= a ? (c.Tleft * x) / (Gm * J) : (c.Tright * (L - x)) / (Gm * J));
+    if (!veiled) {
+      const S0 = sceneIn(B, rect, { x0: -0.1 * L, x1: 1.1 * L, y0: -0.3 * L, y1: 0.3 * L }, 8);
+      label(S0, `${fig(c.Tleft)} N·m`, [0, -0.07 * L], { color: C.purple, dy: 26, align: 'left', dx: 6 });
+      label(S0, `${fig(c.Tright)} N·m`, [L, -0.07 * L], { color: C.purple, dy: 26, align: 'right', dx: -6 });
+    }
+  } else {
+    const L = Math.max(state.L, 0.05);
+    const J = polarJ(Math.max(state.d, 0.008) / 2, 0);
+    segs = [{ x0: 0, x1: L, r: 0.07 * L }];
+    walls = [];
+    torques = [
+      { x: 0, T: 1, text: veiled ? '' : `motor, ${fig(state.P / 1e3)} kW at ${fig(state.rpm)} rpm` },
+      { x: L, T: -1, text: veiled ? '' : `load, T ${fig(c.T)} N·m` },
+    ];
+    phi = (x) => (c.T * x) / (Gm * J);
+  }
+  const L = Math.max(...segs.map((s) => s.x1));
+  const rmax = Math.max(...segs.map((s) => s.r));
+  const S = sceneIn(B, rect, { x0: -0.1 * L, x1: 1.1 * L, y0: -Math.max(0.3 * L, 2.5 * rmax), y1: Math.max(0.3 * L, 2.5 * rmax) }, 8);
+  let top = 1e-12;
+  for (let i = 0; i <= 20; i++) top = Math.max(top, Math.abs(phi((L * i) / 20)));
+  shaftSketch(S, segs, { walls, torques, phi, k: 1.1 / top });
+}
+
 export default defineLab({
   id: 'twist',
   exam: 'u9',
@@ -211,12 +276,18 @@ export default defineLab({
       gap: m.gap,
     };
   },
-  draw(canvas, state) {
+  draw(canvas, state, c) {
     const B = begin(canvas);
-    if (state.scenarioId === 'gear') return drawGear(B, state);
-    if (state.scenarioId === 'fixed') return drawFixed(B, state);
-    if (state.scenarioId === 'step') return drawStep(B, state);
-    return drawPower(B, state);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.42, { long: true });
+    member(B, D, state, c, veiled);
+    if (veiled) return;
+    // The chart keeps the space below (or beside) the drawing.
+    const Bc = { ...B, free: R };
+    if (state.scenarioId === 'gear') return drawGear(Bc, state);
+    if (state.scenarioId === 'fixed') return drawFixed(Bc, state);
+    if (state.scenarioId === 'step') return drawStep(Bc, state);
+    return drawPower(Bc, state);
   },
   law(state) {
     if (state.scenarioId === 'step') return [String.raw`\phi=\sum\frac{TL}{GJ}`];

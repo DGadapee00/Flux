@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 5 · Ch 8–9</p>
   <h1>Stress transformation and failure</h1>
-  <p class="lede">Turning an element moves the normal stress and the shear between the two axes. The principals are the normals with the shear gone. Bending and torque meet at one fiber, and two yield rules read that pair differently. Every number below is computed by the course library and checked a second way.</p>
+  <p class="lede">Turning an element moves the normal stress and the shear between the two axes. Mohr's circle holds every turned plane at once. The principals are the normals with the shear gone, and the largest shear may tilt out of the surface. Bending and torque meet at one fiber. Ductile metals yield by shear and brittle ones break across tension, so they need different rules.</p>
   <div class="legend">
     <span><i class="swatch" style="background: var(--gold)"></i>Normal stress</span>
     <span><i class="swatch" style="background: var(--teal)"></i>Shear, and von Mises</span>
@@ -17,23 +17,48 @@
   </div>
   <nav class="toc">
     <a href="#s1"><span>01</span>Turning the element</a>
-    <a href="#s2"><span>02</span>Principal stresses</a>
-    <a href="#s3"><span>03</span>The largest in-plane shear</a>
-    <a href="#s4"><span>04</span>Bending and torque together</a>
-    <a href="#s5"><span>05</span>A trailer-ball shank</a>
-    <a href="#s6"><span>06</span>Tresca and von Mises</a>
-    <a href="#s7"><span>07</span>Formula sheet</a>
+    <a href="#s2"><span>02</span>Drawing Mohr's circle</a>
+    <a href="#s3"><span>03</span>Principal stresses</a>
+    <a href="#s4"><span>04</span>The largest in-plane shear</a>
+    <a href="#s5"><span>05</span>The largest shear of all</a>
+    <a href="#s6"><span>06</span>Bending and torque together</a>
+    <a href="#s7"><span>07</span>A trailer-ball shank</a>
+    <a href="#s8"><span>08</span>Tresca and von Mises</a>
+    <a href="#s9"><span>09</span>Brittle fracture</a>
+    <a href="#s10"><span>10</span>Formula sheet</a>
   </nav>
 </header>
 <main>
 
 <div class="part">
-<h3>Part 1 · The plane <span class="sub">| angle | principals | shear | Reference</span></h3>
+<h3>Part 1 · The plane <span class="sub">| wedge | circle | principals | shear</span></h3>
 
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Turning the element</h2>
-<p>A plane-stress element carries \(\sigma_x\), \(\sigma_y\) and \(\tau_{xy}\). Cut it on a new pair of axes, turned by \(\theta\) counterclockwise. Equilibrium of the wedge gives the stress on the new face. The angle that appears is \(2\theta\), because the two cutting faces of a wedge add their projections. Roylance §3.3 writes \(\sigma_{x'}\) as the average plus \((\sigma_x-\sigma_y)/2\) times \(\cos 2\theta\), plus \(\tau_{xy}\sin 2\theta\). The shear is \(-(\sigma_x-\sigma_y)/2\) times \(\sin 2\theta\), plus \(\tau_{xy}\cos 2\theta\).</p>
-<p>The same numbers come from the traction. The force on a unit area of the plane is the stress matrix times the normal. Its part along the normal is \(\sigma_{x'}\). Its part along the tangent is the shear. The two routes agree at every angle.</p>
+<p>A plane-stress element carries \(\sigma_x\), \(\sigma_y\) and \(\tau_{xy}\). Cut it on a plane whose normal \(x'\) is turned \(\theta\) counterclockwise from \(x\). The stresses on that plane follow from equilibrium of the small wedge the cut leaves.</p>
+<div class="box why"><span class="tag">Equilibrium of the wedge</span>
+<p>Give the slanted face an area \(dA\). The face normal to \(x\) then has area \(dA\cos\theta\), and the face normal to \(y\) has \(dA\sin\theta\). Each face's force is its stress times its area. Add the forces along \(x'\), whose direction is \((\cos\theta, \sin\theta)\), and divide by \(dA\):</p>
+\[
+\begin{aligned}\sigma_{x'} = {} & (\sigma_x\cos\theta + \tau_{xy}\sin\theta)\cos\theta \\ & + (\tau_{xy}\cos\theta + \sigma_y\sin\theta)\sin\theta\end{aligned}
+\]
+<p>Gather the terms:</p>
+\[
+\begin{aligned}\sigma_{x'} = {} & \sigma_x\cos^{2}\theta + \sigma_y\sin^{2}\theta \\ & + 2\tau_{xy}\sin\theta\cos\theta\end{aligned}
+\]
+<p>The same forces along \(y'\), whose direction is \((-\sin\theta, \cos\theta)\), give the shear:</p>
+\[
+\begin{aligned}\tau_{x'y'} = {} & -(\sigma_x - \sigma_y)\sin\theta\cos\theta \\ & + \tau_{xy}(\cos^{2}\theta - \sin^{2}\theta)\end{aligned}
+\]
+<p>The double-angle identities turn the squares into \(2\theta\):</p>
+\[
+\begin{aligned}\sigma_{x'} = {} & \frac{\sigma_x+\sigma_y}{2} + \frac{\sigma_x-\sigma_y}{2}\cos 2\theta \\ & + \tau_{xy}\sin 2\theta\end{aligned}
+\]
+\[
+\begin{aligned}\tau_{x'y'} = {} & -\frac{\sigma_x-\sigma_y}{2}\sin 2\theta \\ & + \tau_{xy}\cos 2\theta\end{aligned}
+\]
+<p>The angle doubles because each face's force is projected twice: once to find the force from the stress, and once onto the new direction. Roylance §3.3 writes the same pair as a tensor turned by a rotation matrix.</p>
+</div>
+<p>The traction gives the same numbers. The force per unit area on the plane is the stress matrix times the unit normal. Its part along the normal is \(\sigma_{x'}\), and its part along the plane is the shear. The two routes agree at every angle. Unit 4 met the same algebra for strain, with \(\gamma/2\) in place of \(\tau\).</p>
 <div class="box ex"><span class="tag">Worked example · turned to 45°</span>
 <p>The Mohr's circle lab starts at \(\sigma_x = 80\) MPa, \(\sigma_y = 20\) MPa and \(\tau_{xy} = 30\) MPa. Turn it to 45°. Then \(2\theta = 90^\circ\), so the cosine term drops out and the sine is 1. The average is 50 MPa, and the shear term adds all of 30 MPa:</p>
 \[
@@ -52,12 +77,52 @@
 </section>
 
 <section class="topic" id="s2">
-<h2><span class="n">02</span>Principal stresses</h2>
+<h2><span class="n">02</span>Drawing Mohr's circle</h2>
+<p>As \(\theta\) runs, the pair \((\sigma_{x'}, \tau_{x'y'})\) traces a circle. Drawing it turns every question about turned planes into reading a picture. The construction takes four steps, and each one comes from Section 1.</p>
+<div class="box why"><span class="tag">Why it is a circle</span>
+<p>Move the average to the left of the \(\sigma_{x'}\) equation. Square it, square the \(\tau_{x'y'}\) equation, and add. The cross terms cancel and \(\cos^{2}2\theta + \sin^{2}2\theta = 1\):</p>
+\[
+\begin{aligned}& \left(\sigma_{x'} - \frac{\sigma_x+\sigma_y}{2}\right)^{2} + \tau_{x'y'}^{2} \\ & \quad = \left(\frac{\sigma_x-\sigma_y}{2}\right)^{2} + \tau_{xy}^{2}\end{aligned}
+\]
+<p>That is a circle with its centre on the \(\sigma\) axis at the average stress. Its radius \(R\) is the square root of the right side.</p>
+</div>
+<div class="box why"><span class="tag">The construction</span>
+<p>First, draw \(\sigma\) to the right and \(\tau\) positive downward. Second, plot the \(x\) face at \(X = (\sigma_x, \tau_{xy})\) and the \(y\) face at \(Y = (\sigma_y, -\tau_{xy})\). Third, join them. The line crosses the \(\sigma\) axis at the centre, and half its length is \(R\). Fourth, to read a plane turned \(\theta\) counterclockwise, turn the radius to \(X\) by \(2\theta\) counterclockwise. With \(\tau\) drawn downward, the point and the element turn the same way.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the 30° plane from the circle</span>
+<p>The Mohr's circle lab starts at 80 MPa, 20 MPa and 30 MPa. \(X = (80, 30)\) sits 30 MPa below the axis. \(Y = (20, -30)\) sits 30 MPa above it. The centre is 50 MPa and the radius is \(\sqrt{30^{2}+30^{2}} = 42.4\) MPa. The radius to \(X\) points 45° below the axis. Turn the element 30°, so turn the radius 60° counterclockwise. It now points 15° above the axis:</p>
+\[
+\sigma_{x'} = 50 + 42.4\cos 15^\circ = 91.0\ \mathrm{MPa}
+\]
+<p>A point above the axis is a negative shear, of size \(42.4\sin 15^\circ\):</p>
+\[
+\tau_{x'y'} = -11.0\ \mathrm{MPa}
+\]
+<p>The equations of Section 1 give the same pair: \(50 + 30(0.5) + 30(0.866) = 91.0\) MPa and \(-30(0.866) + 30(0.5) = -11.0\) MPa.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Turning the radius by \(\theta\) instead of \(2\theta\) reads the 15° plane, not the 30° one. Plotting \(Y\) at \(+\tau_{xy}\) puts both faces on the same side, and the line no longer passes through the centre. With \(\tau\) drawn upward the point turns opposite to the element. Keep one convention and say which.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>This circle holds the planes that contain the \(z\) axis. Planes tilted out of the paper have their own circles, which Section 5 draws. The construction is exact; a hand sketch is only as good as its scale, so read numbers from the geometry, not a ruler.</p>
+</div>
+<p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec15/">2.001 lecture 16</a> builds the circle from the same two face points.</p>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">03</span>Principal stresses</h2>
 <p>There is an angle where the shear formula gives zero. The normal stresses there are the principals. They are the average, plus and minus the radius of the circle:</p>
 \[
 R = \sqrt{\left(\frac{\sigma_x-\sigma_y}{2}\right)^2 + \tau_{xy}^2}
 \]
 <p>\(\sigma_1\) is the average plus \(R\). \(\sigma_2\) is the average minus \(R\). The angle to \(\sigma_1\) satisfies \(\tan 2\theta_p = 2\tau_{xy}/(\sigma_x-\sigma_y)\). The eigenvalues of the \(2\times 2\) stress matrix are the same two numbers. The lab checks that identity at every slider stop.</p>
+<div class="box why"><span class="tag">Where the shear vanishes</span>
+<p>Set \(\tau_{x'y'} = 0\) in Section 1's shear equation. Then \((\sigma_x-\sigma_y)\sin 2\theta = 2\tau_{xy}\cos 2\theta\), so</p>
+\[
+\tan 2\theta_p = \frac{2\tau_{xy}}{\sigma_x - \sigma_y}
+\]
+<p>Two angles 90° apart satisfy it. On the circle they are the two ends of the horizontal diameter, at the centre plus and minus \(R\). The derivative of \(\sigma_{x'}\) with respect to \(\theta\) is \(2\tau_{x'y'}\). So the normal stress is largest or smallest exactly where the shear is zero.</p>
+</div>
 <div class="box ex"><span class="tag">Worked example · the principal stresses</span>
 <p>For 80 MPa, 20 MPa and 30 MPa the center is 50 MPa. Half the difference of the normals is 30 MPa, and the shear is 30 MPa, so the radius is \(30\sqrt{2}\):</p>
 \[
@@ -81,28 +146,65 @@ R = 42.4\ \mathrm{MPa}
 </div>
 </section>
 
-<section class="topic" id="s3">
-<h2><span class="n">03</span>The largest in-plane shear</h2>
+<section class="topic" id="s4">
+<h2><span class="n">04</span>The largest in-plane shear</h2>
 <p>The shear reaches \(R\), and \(-\,R\), forty-five degrees of \(\theta\) away from the principals. That is ninety degrees of \(2\theta\), half a turn of the circle. The normal stress there is the average. So the largest in-plane shear is not a new length. It is the radius already computed for the principals, and it is half of \(\sigma_1-\sigma_2\).</p>
 <div class="box ex"><span class="tag">Worked example · the circle radius</span>
 <p>The same element has \(R = 42.4\) MPa. That is the largest in-plane shear. It sits at \(22.5^\circ + 45^\circ = 67.5^\circ\). The normal stress there has fallen from 92.4 MPa to the average, 50 MPa. Scanning every angle and keeping the biggest \(|\tau|\) returns this same radius. That scan is the check.</p>
 </div>
-<div class="box why"><span class="tag">In-plane is not the whole story</span>
-<p>Plane stress has a third principal, equal to zero, on the face of the element. If \(\sigma_1\) and \(\sigma_2\) have the same sign, the biggest difference may be between \(\sigma_1\) and zero, not between \(\sigma_1\) and \(\sigma_2\). The in-plane shear is still \(R\). The absolute maximum shear can be larger. Tresca, below, uses the absolute maximum.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The largest in-plane shear is \(R\), half of \(\sigma_1 - \sigma_2\). Reporting the full difference doubles it. The plane of largest shear is not free of normal stress: it carries the average, here 50 MPa. Its angle is 45° from the principal planes, not 90°.</p>
+</div>
+<p>This is the largest shear on planes that contain the \(z\) axis. Section 5 asks whether a plane tilted out of the surface does better.</p>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>The largest shear of all</h2>
+<p>Plane stress has three principal stresses: \(\sigma_1\) and \(\sigma_2\) in the plane, and zero on the free face. Every pair of principals draws its own circle. The in-plane circle joins \(\sigma_1\) and \(\sigma_2\). Two more join each of them to zero. The largest shear anywhere in the material is the radius of the biggest of the three:</p>
+\[
+\tau_{\mathrm{abs}} = \frac{\sigma_{\max} - \sigma_{\min}}{2}
+\]
+<p>Here \(\sigma_{\max}\) and \(\sigma_{\min}\) are the largest and smallest of \(\sigma_1\), \(\sigma_2\) and 0.</p>
+<div class="box why"><span class="tag">When the in-plane radius is not enough</span>
+<p>If \(\sigma_1\) and \(\sigma_2\) have opposite signs, zero lies between them. The in-plane circle is the biggest, and \(\tau_{\mathrm{abs}} = R\). If they share a sign, zero lies outside them. The circle from zero to the larger one is bigger, and the largest shear acts on a plane tilted 45° out of the surface. A crack or a slip band can start there.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a pressurised cylinder</span>
+<p>Unit 4's cylinder carries 80 MPa of hoop stress and 40 MPa along its length, with no shear. The in-plane radius is \((80-40)/2\):</p>
+\[
+R = 20\ \mathrm{MPa}
+\]
+<p>Both principals are tension, so zero lies outside them. The biggest circle runs from 0 to 80 MPa:</p>
+\[
+\tau_{\mathrm{abs}} = 40\ \mathrm{MPa}
+\]
+<p>It is twice the in-plane value. It acts on planes at 45° through the wall's thickness. The dashed circles in the lab are these out-of-plane circles.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the lab's element and pure shear</span>
+<p>The lab's element has \(\sigma_1 = 92.4\) MPa and \(\sigma_2 = 7.57\) MPa, both tension. The in-plane radius is 42.4 MPa, but the circle from 0 to 92.4 is larger:</p>
+\[
+\tau_{\mathrm{abs}} = 46.2\ \mathrm{MPa}
+\]
+<p>Pure shear of 50 MPa has principals of \(+50\) and \(-50\) MPa. Zero lies between them, so the in-plane circle wins and \(\tau_{\mathrm{abs}} = 50\) MPa.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reporting \(R\) as the largest shear is right only when the principals have opposite signs. For the cylinder it gives 20 MPa and misses the 40. Forgetting to halve the spread reports \(\sigma_{\max} - \sigma_{\min}\), which is Tresca's equivalent stress, not a shear stress.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The face is free, so the third principal is zero. Inside a thick part \(\sigma_z\) need not vanish. Then all three principals come from a 3×3 eigenvalue problem, and the same half-spread rule applies to them.</p>
 </div>
 </section>
 </div>
 
 <div class="part">
-<h3>Part 2 · One fiber, two rules <span class="sub">| combined | shank | yield | Reference</span></h3>
+<h3>Part 2 · One fiber, several loads <span class="sub">| combined | shank</span></h3>
 
-<section class="topic" id="s4">
-<h2><span class="n">04</span>Bending and torque together</h2>
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Bending and torque together</h2>
 <p>On a solid circular bar the bending stress \(Mc/I\) is largest at the outer fiber, and the torsion stress \(Tc/J\) is largest there too. They occupy the same point. The axial force, if there is one, adds \(P/A\) to the normal stress and does not make shear. With \(J = 2I\) for a circle the shear at that fiber is</p>
 \[
 \tau_{xy} = \frac{16T}{\pi d^3}
 \]
-<p>\(\sigma_y = 0\) in this orientation. The principal is not \(\sigma_x\), because the shear is still there. Combined loading is not a Roylance section. The stress transformation that reads the pair is Roylance §3.3. The normal stress is the sum of those two contributions:</p>
+<p>\(\sigma_y = 0\) in this orientation. The principal is not \(\sigma_x\), because the shear is still there. The stress transformation that reads the pair is Roylance §3.3. The normal stress is the sum of those two contributions:</p>
 \[
 \sigma_x = \frac{4P}{\pi d^2}+\frac{32M}{\pi d^3}
 \]
@@ -126,8 +228,8 @@ R = 42.4\ \mathrm{MPa}
 </div>
 </section>
 
-<section class="topic" id="s5">
-<h2><span class="n">05</span>A trailer-ball shank</h2>
+<section class="topic" id="s7">
+<h2><span class="n">07</span>A trailer-ball shank</h2>
 <p>CURT trailer ball 40004 has a 2 in ball, a 1 in shank, a 2-1/8 in shank length, 0 rise and a 6000 lb gross trailer weight. The gross rating is not a tongue load, and the catalog does not give the flange height. This lab takes the moment arm as the ball radius, 1 in. A tongue load \(W\) compresses every fiber. A horizontal force \(H\) bends the shank. The two sides are</p>
 \[
 \sigma = -\frac{W}{A} \pm \frac{Mc}{I}
@@ -162,13 +264,32 @@ R = 42.4\ \mathrm{MPa}
 </div>
 </section>
 
-<section class="topic" id="s6">
-<h2><span class="n">06</span>Tresca and von Mises</h2>
-<p>Two rules turn a stress state into one number to compare with a tensile yield. von Mises uses all three principal differences. In plane stress, with \(\sigma_y = 0\) at the fiber of interest, it reduces to</p>
+</div>
+
+<div class="part">
+<h3>Part 3 · When it fails <span class="sub">| yield | fracture | formulas</span></h3>
+
+<section class="topic" id="s8">
+<h2><span class="n">08</span>Tresca and von Mises</h2>
+<p>A ductile metal fails by yielding, and yielding is slip on planes of high shear. Two rules turn a stress state into one equivalent stress to compare with the tensile yield \(\sigma_Y\). Each is fitted so a tension test gives back its own stress.</p>
+<div class="box why"><span class="tag">Tresca: the largest shear</span>
+<p>Tresca says yield starts when the largest shear anywhere reaches the largest shear of a tension test at yield, \(\sigma_Y/2\). Section 5 found that largest shear, half the spread of the three principals. Doubling both sides gives the equivalent stress:</p>
 \[
-\sigma_{vm} = \sqrt{\sigma_x^2 + 3\tau_{xy}^2}
+\sigma_{\mathrm{Tresca}} = \sigma_{\max} - \sigma_{\min} = 2\tau_{\mathrm{abs}}
 \]
-<p>Tresca uses the largest gap between principals, and the third principal is zero. Under uniaxial tension both rules return the tensile stress. In pure shear, principals \(+\tau\) and \(-\tau\), Tresca is \(2\tau\) and von Mises is \(\tau\sqrt{3}\). Tresca is the larger one. Roylance §6.1 is the reading on yield. The two equivalent stresses are the comparison drawn here.</p>
+</div>
+<div class="box why"><span class="tag">von Mises: all three circles at once</span>
+<p>von Mises weighs all three principal differences. It is the distortion energy, the part of the strain energy that changes shape and not volume. Fitted to the tension test it reads</p>
+\[
+\begin{aligned}\sigma_{vm}^{2} = {} & \tfrac12\left[(\sigma_1-\sigma_2)^{2} + (\sigma_2-\sigma_3)^{2}\right. \\ & \left. + (\sigma_3-\sigma_1)^{2}\right]\end{aligned}
+\]
+<p>Put \(\sigma_3 = 0\) and expand: \(\sigma_{vm}^{2} = \sigma_1^{2} - \sigma_1\sigma_2 + \sigma_2^{2}\). Write the principals as the average plus and minus \(R\) from Section 3, and the components return:</p>
+\[
+\sigma_{vm} = \sqrt{\sigma_x^{2} - \sigma_x\sigma_y + \sigma_y^{2} + 3\tau_{xy}^{2}}
+\]
+<p>On a shaft's outer fiber \(\sigma_y = 0\), which leaves \(\sqrt{\sigma_x^{2} + 3\tau_{xy}^{2}}\).</p>
+</div>
+<p>Under uniaxial tension both rules return the tensile stress. In pure shear, principals \(+\tau\) and \(-\tau\), Tresca is \(2\tau\) and von Mises is \(\tau\sqrt{3}\). Tresca's number is never below von Mises's. The two differ most in pure shear, by \(2/\sqrt{3}\), which is 15%. Roylance §6.1 is the reading on yield.</p>
 <div class="box ex"><span class="tag">Worked example · torque alone</span>
 <p>The lab's torque-only bar is 40 mm in diameter and carries 400 N·m. The shear at the outer fiber is 31.8 MPa, and the normal stress is zero. Then</p>
 \[
@@ -177,22 +298,84 @@ R = 42.4\ \mathrm{MPa}
 \[
 \sigma_{vm} = 55.1\ \mathrm{MPa}
 \]
-<p>The same bar with bending and torque, in the section above, gave 82.7 MPa von Mises against a larger Tresca. Whenever shear is present in these states, Tresca governs first.</p>
+<p>The ratio is 1.155, the pure-shear gap. The bar of Section 6, with bending as well, gave 82.7 MPa von Mises and 86.1 MPa Tresca. The normal stress narrows the gap.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
-<p>Setting the shear equal to the allowable, as if no normal stress were already there, overstates the torque the fiber can take. Leaving the 3 out of \(\sigma^2 + 3\tau^2\) makes the shear \(\sqrt{3}\) times too large. Treating uniaxial tension as if the two rules disagreed is the opposite miss: there they match.</p>
+<p>Setting the shear equal to the allowable, as if no normal stress were already there, overstates the torque the fiber can take. Leaving the 3 out of \(\sigma^2 + 3\tau^2\) counts the shear \(\sqrt{3}\) times too small, so the equivalent stress comes out low. Treating uniaxial tension as if the two rules disagreed is the opposite miss: there they match.</p>
 </div>
 <p class="view">Another view: <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec17/">2.001 lecture 18</a> compares the two yield rules on combined stress.</p>
 </section>
 
-<section class="topic" id="s7">
-<h2><span class="n">07</span>Formula sheet</h2>
-<p>Plane stress, axes turned by \(\theta\):</p>
+<section class="topic" id="s9">
+<h2><span class="n">09</span>Brittle fracture</h2>
+<p>A brittle material, such as cast iron, glass or chalk, does not yield. It breaks, and it breaks across the largest tension. It is also much stronger in compression than in tension. A rule for it needs two strengths: the ultimate tension \(\sigma_{ut}\) and the ultimate compression \(\sigma_{uc}\).</p>
+<div class="box why"><span class="tag">Maximum normal stress</span>
+<p>The simplest rule says the part breaks when the largest principal reaches \(\sigma_{ut}\), or the most compressive one reaches \(-\sigma_{uc}\). Shear plays no part. It matches tests well when both principals are tensile. It overstates the strength when one principal is tension and the other compression.</p>
+</div>
+<div class="box why"><span class="tag">Coulomb–Mohr</span>
+<p>Draw the circle of a tension test that broke, from 0 to \(\sigma_{ut}\). Draw the circle of a compression test that broke, from \(-\sigma_{uc}\) to 0. Draw the straight line tangent to both. A state is safe while its largest circle stays inside that line. The distance from a centre to a fixed line grows linearly as the centre slides, so a circle tangent to the line has a radius linear in its centre. Fit that line to the two test circles and solve. With \(\sigma_{\max} \ge 0 \ge \sigma_{\min}\), fracture occurs when</p>
+\[
+\frac{\sigma_{\max}}{\sigma_{ut}} - \frac{\sigma_{\min}}{\sigma_{uc}} = 1
+\]
+<p>When both principals are tension, the rule reduces to \(\sigma_{\max} = \sigma_{ut}\). When both are compression, it reduces to \(\sigma_{\min} = -\sigma_{uc}\). Only the mixed case differs from the maximum normal stress.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a gray-iron shaft in torsion</span>
+<p>Take \(\sigma_{ut} = 200\) MPa and \(\sigma_{uc} = 700\) MPa, assumed values in the range of gray cast iron. A shaft in pure torsion has principals \(+\tau\) and \(-\tau\). The maximum normal stress says it breaks at \(\tau = 200\) MPa. Coulomb–Mohr says \(\tau/200 + \tau/700 = 1\):</p>
+\[
+\tau = 156\ \mathrm{MPa}
+\]
+<p>For a 30 mm shaft, \(T = \tau\pi d^{3}/16\) gives 825 N·m at fracture. The crack runs across \(\sigma_1\), which is at 45° to the axis. That is the helix a stick of chalk shows when you twist it apart. A steel bar twisted to failure shears off flat, across the shaft, because it yields in shear first.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · mixed tension and compression</span>
+<p>The same iron carries \(\sigma_x = 50\) MPa and \(\sigma_y = -100\) MPa, with no shear. The maximum normal stress gives the smaller of \(200/50\) and \(700/100\), a factor of safety of 4.00. Coulomb–Mohr gives \(1/(50/200 + 100/700)\):</p>
+\[
+n = 2.55
+\]
+<p>The compression weakens the part against the tension. The maximum normal stress cannot see that, so it claims 57% more margin than there is.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Tresca and von Mises are yield rules for ductile metals. On cast iron they treat tension and compression alike and miss the weak tension. In Coulomb–Mohr the compressive principal enters with its sign: \(-\sigma_{\min}/\sigma_{uc}\) is positive. Dropping the sign subtracts the term and inflates the factor of safety.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Brittle strengths scatter widely from part to part, because they depend on the largest flaw. A design uses a large factor of safety or a statistical strength. Real envelopes curve, and the modified Mohr rule bends the line in the mixed quadrant. Fracture mechanics, which sizes the flaw itself, is beyond this course.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a twisted gray-iron bar</span>
+<p>A 1 in bar of Class 30 gray iron takes 200 lbf·ft of torque. Its surface shear is \(16T/\pi d^{3} = 12.2\) ksi, so \(\sigma_1 = 12.2\) and \(\sigma_2 = -12.2\) ksi on lines at 45°. Coulomb–Mohr, with 30 ksi in tension and 110 ksi in compression, gives</p>
+\[
+\frac{1}{n} = \frac{12.2}{30} + \frac{12.2}{110} = 0.519,\qquad n = 1.93
+\]
+<p>Tension alone would give \(30/12.2 = 2.45\). The compression on the other diagonal also counts. The crack runs across \(\sigma_1\): a helix at 45° to the axis.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the same bar, pushed</span>
+<p>Keep the 200 lbf·ft and push the ends with 8 kip. Now \(\sigma_x = -10.2\) ksi, the circle's centre moves to \(-5.09\) ksi, and its radius grows to 13.2 ksi. The principals are 8.15 and \(-18.3\) ksi:</p>
+\[
+\frac{1}{n} = \frac{8.15}{30} + \frac{18.3}{110} = 0.438,\qquad n = 2.28
+\]
+<p>More load, yet a larger factor of safety. The push lowers the tension that cracks the iron, and iron is almost four times stronger in compression.</p>
+</div>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Formula sheet</h2>
+<p>Plane stress, axes turned by \(\theta\), and the circle:</p>
+\[
+\begin{aligned}\sigma_{x'} = {} & \frac{\sigma_x+\sigma_y}{2} + \frac{\sigma_x-\sigma_y}{2}\cos 2\theta \\ & + \tau_{xy}\sin 2\theta\end{aligned}
+\]
+\[
+\begin{aligned}\tau_{x'y'} = {} & -\frac{\sigma_x-\sigma_y}{2}\sin 2\theta \\ & + \tau_{xy}\cos 2\theta\end{aligned}
+\]
+\[
+R = \sqrt{\left(\frac{\sigma_x-\sigma_y}{2}\right)^{2} + \tau_{xy}^{2}}
+\]
 \[
 \sigma_{1,2} = \frac{\sigma_x+\sigma_y}{2} \pm R
 \]
 \[
 \tau_{\max} = R
+\]
+<p>The largest shear of all, with the third principal 0:</p>
+\[
+\tau_{\mathrm{abs}} = \frac{\sigma_{\max} - \sigma_{\min}}{2}
 \]
 <p>Solid circle, outer fiber, axial force plus bending plus torque:</p>
 \[
@@ -201,11 +384,14 @@ R = 42.4\ \mathrm{MPa}
 \[
 \tau = \frac{16T}{\pi d^3}
 \]
-<p>von Mises when \(\sigma_y = 0\):</p>
+<p>Plane-stress von Mises, and Coulomb–Mohr for a brittle material:</p>
 \[
-\sigma_{vm} = \sqrt{\sigma_x^2+3\tau^2}
+\sigma_{vm} = \sqrt{\sigma_x^{2} - \sigma_x\sigma_y + \sigma_y^{2} + 3\tau_{xy}^{2}}
 \]
-<p>Citations: Roylance §3.3 for the transformation and for Mohr's circle. Roylance §6.1 for yield. Combined loading on a bar, and the trailer-ball shank, are not Roylance sections. The ball is CURT 40004. The 40 mm bar and its loads are assumed. The tongue loads in the hitch lab are assumed.</p>
+\[
+\frac{\sigma_{\max}}{\sigma_{ut}} - \frac{\sigma_{\min}}{\sigma_{uc}} = 1
+\]
+<p>Citations: Roylance §3.3 for the transformation and for Mohr's circle. Roylance §6.1 for yield. Brittle fracture is cited by its topic name, and the cast-iron strengths are assumed. The ball is CURT 40004. The 40 mm bar and its loads are assumed. The tongue loads in the hitch lab are assumed.</p>
 </section>
 </div>
 </main>

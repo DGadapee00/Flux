@@ -1,9 +1,9 @@
-import { M_PER_IN, PA_PER_PSI } from '@flux/subjects/convert.js';
+import { M_PER_IN, N_PER_LBF, PA_PER_PSI } from '@flux/subjects/convert.js';
 import { polarJ, torqueFromHorsepower, torsionShear } from '@flux/subjects/mechanics/torsion.js';
 import { motorShaft, MOTOR_D_IN, MOTOR_HP, MOTOR_L_IN, MOTOR_RPM } from '../data/motor.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { alpha, axes, begin, C, chartIn, couple, dot, hidden, label, line, panes, plotIn, poly, sceneIn, seg } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, leavesOut, slider } from './widgets.js';
 
@@ -29,6 +29,23 @@ const SCENARIOS = [
 function apply(id, state) {
   const sc = SCENARIOS.find((s) => s.id === id) || SCENARIOS[0];
   Object.assign(state, { scenarioId: sc.id, hp: sc.hp, rpm: sc.rpm, dIn: sc.dIn, lIn: sc.lIn });
+}
+
+/** The motor's frame and the shaft stub it drives the load through, drawn in its catalog inches. */
+function member(B, rect, state, c, veiled) {
+  const dIn = c.dIn;
+  const lIn = c.lIn;
+  const S = sceneIn(B, rect, { x0: -7.5, x1: Math.max(lIn, 3) + 3, y0: -4.6, y1: 4.6 }, 8);
+  poly(S, [[-7, -3.8], [0, -3.8], [0, 3.8], [-7, 3.8]], { fill: alpha(C.blue, 0.15), stroke: C.text, width: 1.5 });
+  for (let x = -6.3; x < -0.4; x += 0.9) seg(S, [x, -3.8], [x, 3.8], { color: alpha(C.text, 0.25), width: 1 });
+  poly(S, [[0, -dIn / 2], [lIn, -dIn / 2], [lIn, dIn / 2], [0, dIn / 2]], { fill: alpha(C.gold, 0.25), stroke: C.text, width: 1.5 });
+  poly(S, [[lIn * 0.25, dIn / 2 - 0.12], [lIn * 0.85, dIn / 2 - 0.12], [lIn * 0.85, dIn / 2], [lIn * 0.25, dIn / 2]], { fill: C.bg, stroke: C.text, width: 1 });
+  couple(S, [lIn, 0], { r: 16, ccw: true, color: C.purple });
+  if (!veiled) {
+    label(S, `${fig(state.hp)} hp, ${fig(state.rpm)} rpm`, [-3.5, 0], { color: C.text });
+    label(S, `T ${fig(c.T / (N_PER_LBF * M_PER_IN))} lb·in`, [lIn, dIn / 2], { color: C.purple, dy: -28 });
+    label(S, `${fig(dIn)} in × ${fig(lIn)} in`, [lIn / 2, -dIn / 2], { color: C.dim, dy: 14 });
+  }
 }
 
 export default defineLab({
@@ -79,8 +96,12 @@ export default defineLab({
       dIn, lIn,
     };
   },
-  draw(canvas, state) {
+  draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.4, { long: true });
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const dIn = Math.max(state.dIn, 0.25);
     const ro = (dIn * M_PER_IN) / 2;
     const J = polarJ(ro, 0);
@@ -91,7 +112,7 @@ export default defineLab({
       pts.push([(rho / M_PER_IN), torsionShear(T, rho, J) / KSI]);
     }
     const yHi = Math.max(pts[pts.length - 1][1], 0.1);
-    const P = plotIn(B, B.free, { lo: 0, hi: (dIn / 2) * 1.08 }, { lo: 0, hi: yHi * 1.15 });
+    const P = chartIn(B, R, { lo: 0, hi: (dIn / 2) * 1.08 }, { lo: 0, hi: yHi * 1.15 });
     axes(P, { xLabel: 'radius (in)', yLabel: 'shear stress (ksi)' });
     line(P, pts, { color: C.teal, width: 3 });
     dot(P, dIn / 2, pts[pts.length - 1][1], { color: C.gold, r: 5 });

@@ -178,7 +178,7 @@ export const SETUPS = {
         read: (c) => ({ delta: [c.delta * 1e3, 0.1432] }),
       },
     ],
-    s3: [
+    s4: [
       {
         tag: 'the load near the left wall',
         lab: 'indeterminate',
@@ -192,7 +192,7 @@ export const SETUPS = {
         read: (c) => ({ left: [c.left / 1e3, 10], right: [c.right / 1e3, 10] }),
       },
     ],
-    s4: [
+    s6: [
       {
         tag: 'a held rail at +30 °C',
         lab: 'rail',
@@ -211,7 +211,7 @@ export const SETUPS = {
         read: (c) => ({ stress: [c.stress / (1000 * PA_PER_PSI), -9.43] }),
       },
     ],
-    s5: [
+    s7: [
       {
         tag: 'the gap still open',
         lab: 'rail',
@@ -307,13 +307,22 @@ export const SETUPS = {
     ],
     s2: [
       {
+        tag: 'the 30° plane from the circle',
+        lab: 'mohr',
+        scenario: 'general',
+        setup(s) { s.theta = 30; },
+        read: (c) => ({ sx: [c.sx / 1e6, 91.0], txy: [c.txy / 1e6, -11.0] }),
+      },
+    ],
+    s3: [
+      {
         tag: 'the principal stresses',
         lab: 'mohr',
         scenario: 'general',
         read: (c) => ({ s1: [c.s1 / 1e6, 92.4], s2: [c.s2 / 1e6, 7.57], thetaP: [c.thetaP, 22.5] }),
       },
     ],
-    s3: [
+    s4: [
       {
         tag: 'the circle radius',
         lab: 'mohr',
@@ -321,7 +330,26 @@ export const SETUPS = {
         read: (c) => ({ R: [c.R / 1e6, 42.4] }),
       },
     ],
-    s4: [
+    s5: [
+      {
+        tag: 'a pressurised cylinder',
+        lab: 'mohr',
+        scenario: 'general',
+        setup(s) {
+          s.sx = 80e6;
+          s.sy = 40e6;
+          s.txy = 0;
+        },
+        read: (c) => ({ R: [c.R / 1e6, 20], tauAbs: [c.tauAbs / 1e6, 40] }),
+      },
+      {
+        tag: "the lab's element and pure shear",
+        lab: 'mohr',
+        scenario: 'general',
+        read: (c) => ({ R: [c.R / 1e6, 42.4], tauAbs: [c.tauAbs / 1e6, 46.2] }),
+      },
+    ],
+    s6: [
       {
         tag: 'axial, bending and torque',
         lab: 'combined',
@@ -329,7 +357,7 @@ export const SETUPS = {
         read: (c) => ({ sx: [c.sx / 1e6, 71.6], txy: [c.txy / 1e6, 23.9], vm: [c.vm / 1e6, 82.7] }),
       },
     ],
-    s5: [
+    s7: [
       {
         tag: '600 lbf on each',
         lab: 'hitch',
@@ -346,12 +374,25 @@ export const SETUPS = {
         read: (c) => ({ axial: [c.axial / (1000 * PA_PER_PSI), -0.764] }),
       },
     ],
-    s6: [
+    s8: [
       {
         tag: 'torque alone',
         lab: 'combined',
         scenario: 'torque',
         read: (c) => ({ tresca: [c.tresca / 1e6, 63.7], vm: [c.vm / 1e6, 55.1] }),
+      },
+    ],
+    s9: [
+      {
+        tag: 'mixed tension and compression',
+        lab: 'mohr',
+        scenario: 'general',
+        setup(s) {
+          s.sx = 50e6;
+          s.sy = -100e6;
+          s.txy = 0;
+        },
+        read: (c) => ({ s1: [c.s1 / 1e6, 50], s2: [c.s2 / 1e6, -100] }),
       },
     ],
   },
@@ -363,6 +404,16 @@ export const SETUPS = {
         scenario: 'point',
         read: (c) => ({ Vmax: [c.Vmax / 1000, 5], Mmax: [c.Mmax / 1000, 10] }),
       },
+      {
+        tag: 'the load moved off centre',
+        lab: 'diagrams',
+        scenario: 'point',
+        setup(s) {
+          s.a = 1;
+          s.x = 1;
+        },
+        read: (c) => ({ left: [c.left / 1000, 7.5], right: [c.right / 1000, 2.5], Mmax: [c.Mmax / 1000, 7.5] }),
+      },
     ],
     s2: [
       {
@@ -371,8 +422,6 @@ export const SETUPS = {
         scenario: 'uniform',
         read: (c) => ({ Mmax: [c.Mmax / 1000, 10], V: [c.V / 1000, 0], Vmax: [c.Vmax / 1000, 10] }),
       },
-    ],
-    s3: [
       {
         tag: 'the tip load',
         lab: 'diagrams',
@@ -380,7 +429,32 @@ export const SETUPS = {
         read: (c) => ({ Mmax: [c.Mmax / 1000, -16], Vmax: [c.Vmax / 1000, 8] }),
       },
     ],
+    s3: [
+      {
+        tag: 'an overhang',
+        lab: 'diagrams',
+        scenario: 'overhang',
+        setup(s) {
+          s.x = 1.375;
+        },
+        read: (c) => ({ left: [c.left / 1000, 5.5], right: [c.right / 1000, 15.5], M: [c.M / 1000, 3.78], Mhog: [c.Mhog / 1000, 10] }),
+      },
+      {
+        tag: 'a couple on the span',
+        lab: 'diagrams',
+        scenario: 'couple',
+        read: (c) => ({ left: [c.left / 1000, 1.5], right: [c.right / 1000, -1.5], Mhog: [c.Mhog / 1000, 4.5] }),
+      },
+    ],
     s4: [
+      {
+        tag: "the lab's rectangle, curved",
+        lab: 'flexure',
+        scenario: 'rect',
+        read: (c) => ({ bot: [c.bot / 1e6, 46.9] }),
+      },
+    ],
+    s5: [
       {
         tag: 'the 40 by 80 mm rectangle',
         lab: 'flexure',
@@ -394,7 +468,7 @@ export const SETUPS = {
         read: (c) => ({ top: [c.top / 1e6, -11.72], bot: [c.bot / 1e6, 11.72] }),
       },
     ],
-    s5: [
+    s6: [
       {
         tag: 'the tee at 2 kN·m',
         lab: 'flexure',
@@ -402,7 +476,7 @@ export const SETUPS = {
         read: (c) => ({ top: [c.top / 1e6, -20.5], bot: [c.bot / 1e6, 52.5], yBar: [c.yBar * 1000, 80.5] }),
       },
     ],
-    s6: [
+    s7: [
       {
         tag: 'the table span',
         lab: 'joist',
@@ -459,7 +533,7 @@ export const SETUPS = {
         tag: 'three boards',
         lab: 'nails',
         scenario: 'pair',
-        read: (c) => ({ q: [c.q / 1000, 118.5], spacing: [c.spacing * 1000, 20.3] }),
+        read: (c) => ({ q: [c.q / 1000, 35.0], spacing: [c.spacing * 1000, 28.6] }),
       },
     ],
     s5: [
@@ -512,7 +586,7 @@ export const SETUPS = {
         read: (c) => ({ under: [c.under * 1000, 22] }),
       },
     ],
-    s4: [
+    s6: [
       {
         tag: 'the prop',
         lab: 'propped',
@@ -537,7 +611,7 @@ export const SETUPS = {
         read: (c) => ({ drop: [c.drop * 1000, 118.7], M: [c.Mwall / 1000, -18], R: [c.R / 1000, 0] }),
       },
     ],
-    s5: [
+    s8: [
       {
         tag: 'the 72 in span',
         lab: 'shelf',
@@ -750,6 +824,14 @@ export const SETUPS = {
         }),
       },
     ],
+    s7: [
+      {
+        tag: 'the cantilever at midspan',
+        lab: 'castigliano',
+        scenario: 'station',
+        read: (c) => ({ delta: [c.delta * 1000, 1.953] }),
+      },
+    ],
   },
   u11: {
     s1: [
@@ -818,8 +900,89 @@ export const SETUPS = {
         }),
       },
     ],
+    s4: [
+      {
+        tag: 'the 2 m bar, 5 mm off centre',
+        lab: 'buckling',
+        scenario: 'weak',
+        read: (c) => ({ P: [c.euler / 1e3, 19.7] }),
+      },
+    ],
   },
 };
+
+/**
+ * Worked examples on real devices, shown in the application labs. Each reads the lab in the units
+ * its notes print: lbf, in, psi or ksi, µε.
+ */
+const LBF = N_PER_LBF;
+const KSI = 1000 * PA_PER_PSI;
+const DEVICE_SETUPS = {
+  u3: {
+    s3: [{ tag: 'a two-leg rope bridle', lab: 'bridle', scenario: 'two', read: (c) => ({ T: [c.side / LBF, 1155], drop: [c.drop / M_PER_IN, 0.0513] }) }],
+    s5: [{ tag: 'a third leg on the bridle', lab: 'bridle', scenario: 'three', read: (c) => ({ mid: [c.middle / LBF, 870], side: [c.side / LBF, 652], drop: [c.drop / M_PER_IN, 0.029] }) }],
+    s8: [{ tag: 'stop-drilling a crack', lab: 'crack', scenario: 'drill40', read: (c) => ({ Kt: [c.Kt, 10.0], peak: [c.peak / KSI, 100] }) }],
+  },
+  u4: {
+    s6: [{ tag: 'a rosette glued 20° off', lab: 'gauges', scenario: 'tilted', read: (c) => ({ a: [c.ra * 1e6, 176], hoop: [c.hoop / 1000, 18.5] }) }],
+    s7: [{ tag: 'torque gauges on a motor shaft', lab: 'gauges', scenario: 'shaft', read: (c) => ({ T: [c.T, 180], tau: [c.txy, 644], c: [c.rc * 1e6, 28.9] }) }],
+    s8: [{
+      tag: 'a rosette on a propane cylinder',
+      lab: 'gauges',
+      scenario: 'tank',
+      read: (c) => ({
+        a: [c.ra * 1e6, 128], b: [c.rb * 1e6, 335], c: [c.rc * 1e6, 543], hoop: [c.hoop / 1000, 18.5], axial: [c.axial / 1000, 9.26], naive: [c.naive / 1000, 3.71],
+      }),
+    }],
+  },
+  u5: {
+    s9: [
+      { tag: 'a twisted gray-iron bar', lab: 'fracture', scenario: 'iron', read: (c) => ({ tau: [c.txy, 12.2], n: [c.fs, 1.93], rankine: [c.rankine, 2.45] }) },
+      { tag: 'the same bar, pushed', lab: 'fracture', scenario: 'push', read: (c) => ({ s1: [c.s1, 8.15], s2: [c.s2, -18.3], n: [c.fs, 2.28] }) },
+    ],
+  },
+  u6: {
+    s4: [{ tag: 'a band-saw blade', lab: 'bandsaw', scenario: 'saw14', read: (c) => ({ sigma: [c.bend / 1000, 51.7], M: [c.M, 2.69], strain: [c.strain * 1e6, 1783], outer: [c.outer / 1000, 66.7] }) }],
+    s8: [{ tag: 'a purlin on a 4:12 roof', lab: 'purlin', scenario: 'p4', read: (c) => ({ Mz: [c.Mz, 4554], My: [c.My, 1518], peak: [c.peak, 1338], upright: [c.upright, 635], alpha: [c.alpha, 77.4] }) }],
+    s9: [{ tag: 'a flitch beam', lab: 'flitch', scenario: 'flitch', read: (c) => ({ EI: [c.EI / 1e6, 994], share: [100 * c.share, 72], wood: [c.wood, 766], steel: [c.steel / 1000, 15.9] }) }],
+  },
+  u7: {
+    s7: [{ tag: 'a strut channel on a wall', lab: 'strut', scenario: 'wall', read: (c) => ({ I: [c.I, 0.241], e: [c.e, 0.836], arm: [c.arm, 2.36], torque: [c.m * 12, 118] }) }],
+  },
+  u8: {
+    s5: [{ tag: 'both axles on a 20 ft bridge', lab: 'crossing', scenario: 'long', read: (c) => ({ mid: [c.mid, 0.352] }) }],
+    s7: [{ tag: 'a car on a fixed-end bridge', lab: 'crossing', scenario: 'fixed', read: (c) => ({ mid: [c.mid, 0.0153], M: [c.Mmax / 12, 1316] }) }],
+  },
+  u9: {
+    s6: [{ tag: 'an HSS 4×4×1/4 in torsion', lab: 'tubes', scenario: 'hss', read: (c) => ({ tau: [c.tau, 0.756], J: [c.J, 12.5], pipe: [c.all.pipe.J, 6.03] }) }],
+    s7: [{ tag: 'a slit pipe', lab: 'tubes', scenario: 'slit', read: (c) => ({ J: [c.J, 0.0347], tau: [c.tau, 31.2], closed: [c.all.pipe.J, 6.03], closedTau: [c.all.pipe.tau, 1.45] }) }],
+  },
+  u10: {
+    s6: [{
+      tag: 'a king-post roof truss',
+      lab: 'rooftruss',
+      scenario: 'ceiling',
+      read: (c) => ({
+        delta: [c.delta, 0.103], rafter: [c.rows[0].N, -1328], chord: [c.rows[2].N, 1260], n: [c.rows[0].n, -1.58],
+      }),
+    }],
+  },
+  u11: {
+    s4: [{ tag: 'a deck post with a side-bolted beam', lab: 'posts', scenario: 'side', read: (c) => ({ sigma: [c.sigma, 1486], ratio: [c.ratio, 7.6], Pcr: [c.Pcr, 18750], plain: [c.plain, 196] }) }],
+    s5: [{
+      tag: 'a 6061-T6 tube column',
+      lab: 'posts',
+      scenario: 'tube',
+      read: (c) => ({
+        slender: [c.slender, 54.2], euler: [c.euler / 1000, 33.6], sigma: [c.sigma / 1000, 28.2], Et: [c.Et / 1000, 8400], P: [c.Pcr / 1000, 20.8], Peuler: [c.Peuler / 1000, 24.7],
+      }),
+    }],
+  },
+};
+for (const [exam, sections] of Object.entries(DEVICE_SETUPS)) {
+  SETUPS[exam] ??= {};
+  for (const [id, list] of Object.entries(sections)) SETUPS[exam][id] = [...(SETUPS[exam][id] || []), ...list];
+}
 
 /** An example's tag as the notes write it, without "Worked example · ". */
 export function exampleTag(tagText) {

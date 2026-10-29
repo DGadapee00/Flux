@@ -1,13 +1,11 @@
+import { sectionSketch } from './elements.js';
 import { M_PER_FT, M_PER_IN, N_PER_LBF, PA_PER_PSI } from '@flux/subjects/convert.js';
 import { simpleBendingStress } from '@flux/subjects/mechanics/materials.js';
 import { beamGap, simpleUniform } from '@flux/subjects/mechanics/sections.js';
-import {
-  JOIST_B, JOIST_B_IN, JOIST_DEAD_PSF, JOIST_H, JOIST_H_IN, JOIST_LIVE,
-  JOIST_SPACE, JOIST_SPAN, JOIST_SPAN_FT, PA_PER_PSF, joistLine,
-} from '../data/joist.js';
+import { JOIST_B, JOIST_B_IN, JOIST_DEAD, JOIST_DEAD_PSF, JOIST_H, JOIST_H_IN, JOIST_LIVE, JOIST_SPACE, JOIST_SPAN, JOIST_SPAN_FT, joistLine, PA_PER_PSF } from '../data/joist.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { alpha, axes, begin, C, chartIn, dot, hidden, label, line, panes, pinSupport, plotIn, poly, rollerSupport, sceneIn, spread } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, leavesOut, slider } from './widgets.js';
 
@@ -40,6 +38,30 @@ function stressOf(state) {
   const fromCut = (cut * (state.h / 2)) / ((state.b * state.h ** 3) / 12);
   const gapS = Math.abs(fromCut - closed) / Math.max(Math.abs(closed), 1);
   return { w, moment: model.Mmax, stress: closed, gap: Math.max(beamGap(model), gapS) };
+}
+
+/**
+ * The joist on its two bearings carrying its strip of floor, and its section: the dressed
+ * 1.5 × 9.25 in board, with the nominal 2 × 10 in rectangle dashed around it.
+ */
+function member(B, rect, state, c, veiled) {
+  const W = rect.x1 - rect.x0;
+  const elev = { ...rect, x1: rect.x0 + 0.72 * W };
+  const side = { ...rect, x0: rect.x0 + 0.72 * W };
+  const Lft = state.L / M_PER_FT;
+  const S = sceneIn(B, elev, { x0: -0.8, x1: Lft + 0.8, y0: -0.18 * Lft, y1: 0.2 * Lft }, 8);
+  const d = state.h / M_PER_FT;
+  poly(S, [[0, 0], [Lft, 0], [Lft, d], [0, d]], { fill: alpha(C.gold, 0.18), stroke: C.text, width: 1.5 });
+  pinSupport(S, [0.2, 0], { size: 10 });
+  rollerSupport(S, [Lft - 0.2, 0], { size: 10 });
+  spread(S, 0, Lft, d, { px: 16, color: C.pink, label: veiled ? null : `${fig((state.live + JOIST_DEAD) / PA_PER_PSF)} psf × ${fig(state.space / M_PER_IN)} in` });
+  if (!veiled) label(S, `${fig(Lft)} ft`, [Lft / 2, 0], { color: C.dim, dy: 16 });
+  const T = sceneIn(B, side, { x0: -2, x1: 2, y0: -6, y1: 6 }, 8);
+  const b = state.b / M_PER_IN;
+  const h = state.h / M_PER_IN;
+  poly(T, [[-1, -5], [1, -5], [1, 5], [-1, 5]], { fill: null, stroke: alpha(C.text, 0.45), dash: [4, 4] });
+  sectionSketch(T, [[-b / 2, b / 2, -h / 2, h / 2]], { fill: alpha(C.gold, 0.25) });
+  if (!veiled) label(T, `${fig(b)} × ${fig(h)}`, [0, -h / 2], { color: C.text, dy: 14 });
 }
 
 export default defineLab({
@@ -83,6 +105,10 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.4);
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const pts = [];
     let yHi = 1;
     for (let i = 0; i <= 40; i++) {
@@ -92,7 +118,7 @@ export default defineLab({
       pts.push([ft, psi]);
       yHi = Math.max(yHi, psi);
     }
-    const P = plotIn(B, B.free, { lo: 6, hi: 28 }, { lo: 0, hi: yHi * 1.1 });
+    const P = chartIn(B, R, { lo: 6, hi: 28 }, { lo: 0, hi: yHi * 1.1 });
     axes(P, { xLabel: 'span (ft)', yLabel: 'bending stress (psi)' });
     line(P, pts, { color: C.gold, width: 3 });
     dot(P, state.L / M_PER_FT, c.stress / PSI, { color: C.gold, r: 5 });
