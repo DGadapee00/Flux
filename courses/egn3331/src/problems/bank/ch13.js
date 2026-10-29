@@ -1,14 +1,20 @@
 /**
- * Euler buckling, effective length, and the load at which yield takes over.
- * The adjustable column is the English problem. 2.001 does not teach this
- * chapter, so the worked cases are original.
+ * Euler buckling, effective length, the load at which yield takes over, an off-centre load by the
+ * secant formula, and a stocky strut by the tangent modulus. The adjustable column is the English
+ * problem. 2.001 does not teach this chapter, so the worked cases are original.
  */
 import { M_PER_IN, N_PER_LBF, PA_PER_PSI } from '@flux/subjects/convert.js';
-import { eulerLoad, rectColumn, rectI, transitionLength, tubeColumn, tubeSection } from '@flux/subjects/mechanics/buckling.js';
+import {
+  eulerLoad, rectColumn, rectI, secantColumn, tangentModulus, tangentModulusStress, transitionLength, tubeColumn,
+  tubeSection,
+} from '@flux/subjects/mechanics/buckling.js';
 import { COLUMN_E_KSI, COLUMN_FY_KSI, COLUMN_OD_IN, COLUMN_T_IN } from '../../data/column.js';
 import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
 
 const E = 200e9;
+const E_AL = 70e9;
+const MM = 1e-3;
+const MPA = 1e6;
 const SY = 250e6;
 const B = 0.06;
 const H = 0.02;
@@ -512,6 +518,131 @@ const ch13 = [
       },
     },
     cases: [kase(cite('buckling'), { L: 2 }, { which: 'free' })],
+  }),
+  problem({
+    id: 'u11.13.secant',
+    title: 'A column loaded off centre',
+    exam: 'u11',
+    ch: '13',
+    lab: 'buckling',
+    src: cite('secant'),
+    topics: ['secant'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      L: range(1, 3, 0.25, 'm', 1),
+      h: range(20, 50, 5, 'mm', MM),
+      e: range(2, 12, 1, 'mm', MM),
+      f: range(0.2, 0.7, 0.05, '', 1),
+    },
+    derive: ($) => {
+      const b = 0.06;
+      const A = b * $.h;
+      const I = rectI(b, $.h);
+      const Pcr = eulerLoad(E, I, $.L);
+      const P = Math.round(($.f * Pcr) / 100) * 100;
+      const s = secantColumn(P, $.e, $.h / 2, A, I, E, $.L);
+      return { A, I, Pcr, P, peak: s.sigma, bow: s.bow, sec: s.sec };
+    },
+    valid: ($) => $.peak < 300 * MPA && $.P >= 1000,
+    text: (T, $) => String.raw`A steel bar ($E = 200$ GPa) 60 mm wide and $${T.h}$ mm deep, $${T.L}$ m long and pinned at both ends, carries $${($.P / 1000).toFixed(1)}$ kN applied $${T.e}$ mm off its axis, in the direction of the $${T.h}$ mm depth. Find the extra bow at mid-height and the largest compressive stress.`,
+    parts: [
+      num('bow', ($) => $.bow, 'mm', {
+        scale: MM,
+        label: 'bow at mid-height',
+        traps: [
+          [() => 0, 'An off-centre load bends the column from the start. The bow is $e(\\sec(kL/2) - 1)$.'],
+        ],
+      }),
+      num('peak', ($) => $.peak, 'MPa', {
+        scale: MPA,
+        label: 'largest stress',
+        traps: [
+          [($) => $.P / $.A + ($.P * $.e * ($.h / 2)) / $.I, 'That uses the moment $Pe$ and leaves out the bow. The moment grows by $\\sec(kL/2)$.'],
+          [($) => $.P / $.A, 'That is the average stress. The offset adds bending.'],
+        ],
+      }),
+    ],
+    hints: [
+      'The moment at mid-height is $P(e + y_{\\max})$, and the bow depends on the load through $k = \\sqrt{P/EI}$.',
+      String.raw`$y_{\max} = e(\sec(kL/2) - 1)$ and $\sigma_{\max} = (P/A)[1 + (ec/r^2)\sec(kL/2)]$, with $r^2 = I/A$ and $c = h/2$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$I = ${sig($.I / 1e-12 / 1e6)}\times 10^6$ mm⁴, $A = ${sig($.A / 1e-6)}$ mm². $k = \sqrt{P/EI}$, so $kL/2 = ${sig(Math.acos(1 / $.sec))}$ rad and $\sec(kL/2) = ${sig($.sec)}$.`,
+      String.raw`Bow: $e(\sec - 1) = ${sig($.bow / MM)}$ mm.`,
+      String.raw`Peak: $P/A + P(e + y_{\max})c/I = ${sig($.peak / MPA)}$ MPa.`,
+    ],
+    second: ($) => {
+      // The moment at mid-height from the bowed shape, then P/A + Mc/I.
+      const k = Math.sqrt($.P / (E * $.I));
+      const ymid = $.e / Math.cos((k * $.L) / 2) - $.e;
+      return { bow: ymid / MM, peak: ($.P / $.A + ($.P * ($.e + ymid) * ($.h / 2)) / $.I) / MPA };
+    },
+    cases: [kase(cite('secant'), { L: 2, h: 20, e: 5, f: 0.5066 }, { bow: 6.429846065865277, peak: 36.907948497996524 })],
+  }),
+
+  problem({
+    id: 'u11.13.tangent',
+    title: 'A stocky strut by the tangent modulus',
+    exam: 'u11',
+    ch: '13',
+    lab: null,
+    src: cite('tangent-modulus'),
+    topics: ['tangent-modulus'],
+    variety: ['unknown'],
+    level: 3,
+    vars: {
+      slender: range(25, 60, 5, '', 1),
+      sy: range(200, 300, 20, 'MPa', MPA),
+      n: range(10, 30, 5, '', 1),
+    },
+    derive: ($) => {
+      const t = tangentModulusStress($.slender, E_AL, $.sy, $.n);
+      return { scr: t.sigma, Et: t.Et, euler: t.euler };
+    },
+    valid: ($) => $.euler > 1.05 * $.sy && rel($.scr, $.sy),
+    text: (T) => String.raw`An aluminium strut ($E = 70$ GPa) has a slenderness $KL/r = ${T.slender}$. Its tension curve is $\varepsilon = \sigma/E + 0.002(\sigma/\sigma_Y)^n$ with $\sigma_Y = ${T.sy}$ MPa and $n = ${T.n}$. Find the buckling stress by the tangent modulus, and the tangent modulus at that stress.`,
+    parts: [
+      num('scr', ($) => $.scr, 'MPa', {
+        scale: MPA,
+        label: 'buckling stress',
+        traps: [
+          [($) => $.euler, 'That is the Euler stress with the elastic $E$. It lies above yield, where the material is no longer that stiff.'],
+          [($) => $.sy, 'Capping at yield overstates a column whose curve has already bent over.'],
+        ],
+      }),
+      num('Et', ($) => $.Et, 'GPa', {
+        scale: 1e9,
+        label: 'tangent modulus',
+        traps: [
+          [() => E_AL, 'That is the elastic modulus. At the buckling stress the curve is flatter.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Replace $E$ in the Euler stress with the slope of the stress–strain curve at the buckling stress. That slope depends on the stress, so try values.',
+      String.raw`$1/E_t = 1/E + 0.002\,n\,\sigma^{n-1}/\sigma_Y^n$. Find $\sigma$ with $\sigma = \pi^2E_t(\sigma)/(KL/r)^2$, by bisection between 0 and the Euler stress.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Euler with $E$: $\pi^2E/(KL/r)^2 = ${sig($.euler / MPA)}$ MPa, above yield, so the curve's slope governs.`,
+      String.raw`Bisect on $\sigma - \pi^2E_t(\sigma)/(KL/r)^2 = 0$: $\sigma_{cr} = ${sig($.scr / MPA)}$ MPa.`,
+      String.raw`There $E_t = ${sig($.Et / 1e9)}$ GPa.`,
+    ],
+    second: ($) => {
+      // Turn it round: each stress has the slenderness π√(Et/σ) that buckles at it. Find the stress
+      // whose slenderness is this strut's, by bisection on that decreasing curve.
+      const lam = (s) => Math.PI * Math.sqrt(tangentModulus(s, E_AL, $.sy, $.n) / s);
+      let lo = 1e3;
+      let hi = $.euler;
+      for (let i = 0; i < 200; i++) {
+        const mid = Math.sqrt(lo * hi);
+        if (lam(mid) > $.slender) lo = mid;
+        else hi = mid;
+      }
+      const s = Math.sqrt(lo * hi);
+      return { scr: s / MPA, Et: tangentModulus(s, E_AL, $.sy, $.n) / 1e9 };
+    },
+    cases: [kase(cite('tangent-modulus'), { slender: 40, sy: 240, n: 20 }, { scr: 211.35748589472033, Et: 34.26398502803481 })],
   }),
 ];
 

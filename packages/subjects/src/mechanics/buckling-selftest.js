@@ -2,7 +2,11 @@
  * Second methods for buckling.js.
  *   node src/mechanics/buckling-selftest.js
  */
-import { fixedPinnedRoot, pinnedEulerDiscrete, pinnedEulerFD, rectColumn, rectI, transitionLength, tubeColumn, tubeSection } from './buckling.js';
+import {
+  eulerLoad, fixedPinnedRoot, pinnedEulerDiscrete, pinnedEulerFD, rectColumn, rectI, secantColumn, secantLoad,
+  tangentModulus, tangentModulusStress, transitionLength, tubeColumn, tubeSection,
+} from './buckling.js';
+import { rambergOsgood } from './materials.js';
 
 let passed = 0;
 let failed = 0;
@@ -79,6 +83,58 @@ approx(tube.yielded, false, 0, '124 in is still elastic against 42 ksi');
 const stub = tubeColumn(76, 3, 0.112, 29000, 42, 1);
 approx(stub.yielded, true, 0, '76 in yields before the Euler load');
 approx(tubeColumn(248, 3, 0.112, 29000, 42, 1).eulerKip, tube.eulerKip / 4, 1e-12, 'doubling the tube length divides the load by four');
+
+// Secant formula: the bow by integrating EI y'' = −P(y + e), and the Euler limit.
+{
+  const E = 200e9;
+  const b = 0.06;
+  const h = 0.02;
+  const A = b * h;
+  const I = rectI(b, h);
+  const L = 2;
+  const e = 0.005;
+  const P = 10e3;
+  const s = secantColumn(P, e, h / 2, A, I, E, L);
+  // Shooting: march y'' = −P(y + e)/EI from y(0) = 0 with the symmetric slope, read the middle.
+  const k2 = P / (E * I);
+  const slope0 = e * Math.sqrt(k2) * Math.tan((Math.sqrt(k2) * L) / 2);
+  let y = 0;
+  let v = slope0;
+  const n = 200000;
+  const dx = L / 2 / n;
+  for (let i = 0; i < n; i++) {
+    const a1 = -k2 * (y + e);
+    const vm = v + 0.5 * dx * a1;
+    const ym = y + 0.5 * dx * v;
+    const a2 = -k2 * (ym + e);
+    y += dx * vm;
+    v += dx * a2;
+  }
+  approx(y, s.bow, 1e-6, 'secant: middle bow by integrating the bent column');
+  approx(Math.abs(v), 0, 1, 'secant: zero slope at the middle');
+  approx(s.sigma, (P / A) * (1 + (e * (h / 2) * A / I) / Math.cos((L / 2) * Math.sqrt(P / (E * I)))), 1e-12, 'secant: the stress formula');
+  approx(secantColumn(eulerLoad(E, I, L) * 0.999999, e, h / 2, A, I, E, L).bow > 100 * e ? 1 : 0, 1, 0, 'secant: the bow runs away near P_cr');
+  const Pa = secantLoad(250e6, e, h / 2, A, I, E, L);
+  approx(secantColumn(Pa, e, h / 2, A, I, E, L).sigma, 250e6, 1e-9, 'secant: the load that reaches yield');
+  approx(secantColumn(1e-3, 0, h / 2, A, I, E, L).sigma, 1e-3 / A, 1e-12, 'secant: no offset, P/A');
+}
+
+// Tangent modulus: Et against a numerical slope of the curve, and Euler where the curve is still straight.
+{
+  const E = 70e9;
+  const sy = 240e6;
+  const n = 20;
+  const s0 = 200e6;
+  const ds = 1e3;
+  const slope = (2 * ds) / (rambergOsgood(s0 + ds, E, sy, n) - rambergOsgood(s0 - ds, E, sy, n));
+  approx(tangentModulus(s0, E, sy, n), slope, 1e-6, 'tangent modulus matches dσ/dε');
+  const slender = 120;
+  const t = tangentModulusStress(slender, E, sy, n);
+  approx(t.sigma, t.euler, 2e-3, 'slender column: tangent modulus is Euler');
+  const stocky = tangentModulusStress(40, E, sy, n);
+  approx(stocky.sigma, (Math.PI ** 2 * stocky.Et) / 1600, 1e-9, 'stocky column: σ = π²Et/(KL/r)²');
+  approx(stocky.sigma < stocky.euler && stocky.sigma < 1.1 * sy ? 1 : 0, 1, 0, 'stocky column: below Euler and near yield');
+}
 
 if (failed) {
   console.error(`buckling-selftest: ${failed} failed, ${passed} passed`);

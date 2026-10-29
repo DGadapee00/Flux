@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3331 · Mechanics of Materials · Unit 11 · Ch 13</p>
   <h1>Buckling of columns</h1>
-  <p class="lede">A slender column can bow sideways under a load far below yield. That Euler load falls with the square of the effective length, and it follows the weak axis. It is the failure load only while its stress stays under yield.</p>
+  <p class="lede">A slender column can bow sideways under a load far below yield. That Euler load falls with the square of the effective length, and it follows the weak axis. It is the failure load only while its stress stays under yield. A load off centre bends the column from the start, and a stocky column buckles on the softened part of its stress–strain curve.</p>
   <div class="legend">
     <span><i class="swatch" style="background: var(--gold)"></i>Euler load, weak axis</span>
     <span><i class="swatch" style="background: #d147bd"></i>The column on the screen</span>
@@ -19,7 +19,9 @@
     <a href="#s1"><span>01</span>Euler and effective length</a>
     <a href="#s2"><span>02</span>Weak axis and yield</a>
     <a href="#s3"><span>03</span>A basement column</a>
-    <a href="#s4"><span>04</span>Formula sheet</a>
+    <a href="#s4"><span>04</span>An off-centre load: the secant formula</a>
+    <a href="#s5"><span>05</span>Past the elastic line: the tangent modulus</a>
+    <a href="#s6"><span>06</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -29,10 +31,14 @@
 
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Euler and effective length</h2>
-<p>A straight elastic column, pinned at both ends, bows in a half sine. The load that balances that shape is</p>
+<p>A straight elastic column, pinned at both ends, carries its load with no bending at all, until one load where a bowed shape is also in equilibrium. That load is the critical load.</p>
+<div class="box why"><span class="tag">When a bowed shape can stand</span>
+<p>Suppose the column has bowed by \(y(x)\). The axial load \(P\) then has a lever arm \(y\), so the moment at a section is \(-Py\), and Unit 8's curve equation reads \(EI\,y'' = -Py\). With \(k^{2} = P/EI\) the solutions are \(y = A\sin kx + B\cos kx\). The pin at \(x = 0\) gives \(B = 0\). The pin at \(x = L\) gives \(A\sin kL = 0\). Either \(A = 0\), the straight column, or \(kL = \pi\), a half sine of any size:</p>
 \[
 P_{cr} = \frac{\pi^2 EI}{L^2}
 \]
+<p>Below that load only the straight shape balances. At it, the column can hold a bow, and the smallest push sets one off.</p>
+</div>
 <p>Other ends use the same formula on an effective length KL.</p>
 \[
 P_{cr} = \frac{\pi^2 EI}{(KL)^2}
@@ -148,8 +154,67 @@ P_{cr} = 52.6\ \mathrm{kip}
 </div>
 </section>
 
+</div>
+
+<div class="part">
+<h3>Part 4 · Real columns <span class="sub">| eccentric load | tangent modulus | formulas</span></h3>
+
 <section class="topic" id="s4">
-<h2><span class="n">04</span>Formula sheet</h2>
+<h2><span class="n">04</span>An off-centre load: the secant formula</h2>
+<p>Euler's column is perfectly straight and loaded exactly on its axis. A real column carries its load a little off centre, from a bracket, a bolt hole or a crooked end. Then it bends from the first newton, and the bending grows faster than the load.</p>
+<div class="box why"><span class="tag">The bent column's equation</span>
+<p>Let the load \(P\) act a distance \(e\) off the axis of a pinned column. At a section that has bowed by \(y\), the moment is \(P(y + e)\), so \(EI\,y'' = -P(y + e)\). With \(k^{2} = P/EI\), the solution that is zero at both pins bows at the middle to</p>
+\[
+y_{\max} + e = e\sec\frac{kL}{2}
+\]
+<p>The largest moment is \(Pe\sec(kL/2)\). Add the axial stress and the bending stress at the outer fiber, \(c\) from the axis, and write \(I = Ar^{2}\):</p>
+\[
+\sigma_{\max} = \frac{P}{A}\left[1 + \frac{ec}{r^{2}}\sec\left(\frac{KL}{2r}\sqrt{\frac{P}{EA}}\right)\right]
+\]
+<p>As \(P\) nears the Euler load, \(kL/2\) nears \(\pi/2\) and the secant runs to infinity. The stress is not proportional to the load, so a factor of safety goes on \(P\), inside the formula, not on the stress.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the 2 m bar, 5 mm off centre</span>
+<p>Section 1's 20 by 60 mm steel bar, 2 m and pinned, carries 10 kN placed 5 mm off its weak axis. Then \(kL/2 = 1.118\) rad and \(\sec(kL/2) = 2.29\). The middle bows 6.43 mm more, and the peak stress is</p>
+\[
+\sigma_{\max} = 36.9\ \mathrm{MPa}
+\]
+<p>The average \(P/A\) is only 8.33 MPa. Raise the load until the peak reaches the 250 MPa yield: that happens at 17.5 kN, below the 19.7 kN Euler load. The small offset cost 11% of the load, and far more of the margin.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(P/A + Pec/I\) leaves out the bow: the moment grows by \(\sec(kL/2)\), here 2.29 times. The \(r\) and \(c\) belong to the axis the column bends about, set by where the offset is. Halving the load does not halve the peak stress, so an allowable load is found by solving the formula for \(P\), not by scaling.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The offset is the same at both ends and the material stays elastic. Design codes fold eccentricity and initial crookedness into a column curve rather than using the secant formula directly.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">05</span>Past the elastic line: the tangent modulus</h2>
+<p>A stocky column reaches a stress where the material's curve is already bending over. Euler's \(E\) is the slope of the straight part of that curve. Near yield the column resists a small bow with the local slope instead, the tangent modulus \(E_t = d\sigma/d\varepsilon\).</p>
+<div class="box why"><span class="tag">Engesser's rule</span>
+<p>Replace \(E\) by \(E_t\) in the Euler stress:</p>
+\[
+\sigma_{cr} = \frac{\pi^{2}E_t}{(KL/r)^{2}}
+\]
+<p>\(E_t\) itself depends on \(\sigma_{cr}\), so the equation is solved by trying stresses. A smooth curve such as Ramberg–Osgood, \(\varepsilon = \sigma/E + 0.002(\sigma/\sigma_Y)^{n}\), gives \(1/E_t = 1/E + 0.002\,n\,\sigma^{n-1}/\sigma_Y^{n}\). For slender columns \(E_t = E\) and the rule is Euler. For stocky ones it bends the curve down toward yield instead of letting it climb.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an aluminium strut</span>
+<p>Take an aluminium alloy with \(E = 70\) GPa, a 0.2% yield of 240 MPa and \(n = 20\), assumed values typical of a heat-treated grade. At a slenderness \(KL/r = 40\), Euler gives 432 MPa, far above yield. Solving Engesser's rule gives</p>
+\[
+\sigma_{cr} = 211\ \mathrm{MPa}
+\]
+<p>with \(E_t = 34.3\) GPa there, about half of \(E\). At \(KL/r = 60\) the two are close, 182 against 192 MPa. At 80 they agree at 108 MPa: the column buckles while the material is still on its straight line.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Capping Euler at yield, as Section 2 does, overstates a column near the transition, where the curve has already softened. Using \(E_t\) at the yield stress rather than at the buckling stress answers a different column. The slenderness is \(KL/r\), with \(r\) on the weak axis.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Engesser's rule ignores the unloading on the convex side of the bow, which a reduced-modulus theory adds; tests fall close to the tangent-modulus value. Residual stresses from rolling or welding soften steel columns the same way, and design curves include them. Inelastic behaviour beyond this rule is outside the course (D37).</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">06</span>Formula sheet</h2>
 <p>Pinned Euler load. Other ends replace L with KL. K is 1 for both pins, 2 for fixed-free, and 1/2 for both ends fixed. The fixed-pinned root is 0.699, and the lab rounds it to 0.7.</p>
 \[
 P_{cr} = \frac{\pi^2 EI}{(KL)^2}
@@ -162,7 +227,14 @@ I = \frac{bh^3}{12}
 \[
 L = \frac{\pi r}{K}\sqrt{\frac{E}{\sigma_Y}}
 \]
-<p>The adjustable column uses that same Euler expression. With E in ksi and I in in⁴, the load is already in kip. The citation for this unit is the topic Buckling of columns. The modules do not number a section for it. 2.001 does not teach column buckling. The column is ICC-ES ESR-1767, Table 2. E of 29000 ksi is assumed. The design wall is 0.112 in. The ends are free to rotate.</p>
+<p>An eccentric load, and the tangent modulus:</p>
+\[
+\sigma_{\max} = \frac{P}{A}\left[1 + \frac{ec}{r^{2}}\sec\left(\frac{KL}{2r}\sqrt{\frac{P}{EA}}\right)\right]
+\]
+\[
+\sigma_{cr} = \frac{\pi^{2}E_t}{(KL/r)^{2}}
+\]
+<p>The adjustable column uses that same Euler expression. With E in ksi and I in in⁴, the load is already in kip. The citation for this unit is the topic Buckling of columns; the secant formula and the tangent modulus are cited by those topic names. The column is ICC-ES ESR-1767, Table 2. E of 29000 ksi is assumed. The design wall is 0.112 in. The ends are free to rotate.</p>
 </section>
 </div>
 </main>

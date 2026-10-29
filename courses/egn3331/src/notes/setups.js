@@ -900,6 +900,14 @@ export const SETUPS = {
         }),
       },
     ],
+    s4: [
+      {
+        tag: 'the 2 m bar, 5 mm off centre',
+        lab: 'buckling',
+        scenario: 'weak',
+        read: (c) => ({ P: [c.euler / 1e3, 19.7] }),
+      },
+    ],
   },
 };
 

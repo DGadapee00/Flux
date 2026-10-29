@@ -189,7 +189,9 @@ export const NOTES = {
       { id: 's1', n: 1, title: 'Euler and effective length', lab: 'buckling', ch: ['13'], topics: ['buckling'], home: true, problems: ['u11.13.euler', 'u11.13.ends', 'u11.13.length'] },
       { id: 's2', n: 2, title: 'Weak axis and yield', lab: 'buckling', ch: ['13'], topics: ['buckling'], problems: ['u11.13.weak', 'u11.13.transition', 'u11.13.axis', 'u11.13.support'] },
       { id: 's3', n: 3, title: 'A basement column', lab: 'column', ch: ['13'], topics: ['buckling', 'english'], problems: ['u11.13.column'] },
-      { id: 's4', n: 4, title: 'Formula sheet', lab: null, ch: [] },
+      { id: 's4', n: 4, title: 'An off-centre load: the secant formula', lab: 'buckling', ch: ['13'], topics: ['secant'] },
+      { id: 's5', n: 5, title: 'Past the elastic line: the tangent modulus', lab: null, ch: ['13'], topics: ['tangent-modulus'] },
+      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
     ],
   },
 };

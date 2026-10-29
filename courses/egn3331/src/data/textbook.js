@@ -97,6 +97,8 @@ export const SECTIONS = Object.freeze({
   'noncircular': { title: 'Torsion of non-circular shafts' },
   'shaft-kt': { title: 'Stress concentration in shafts' },
   'unit-load': { title: 'The unit-load (virtual work) method' },
+  'secant': { title: 'Eccentric loading and the secant formula' },
+  'tangent-modulus': { title: 'Inelastic buckling and the tangent modulus' },
   'buckling': { title: 'Buckling of columns' },
   'energy': { title: 'Strain energy and Castigliano\'s theorem' },
   'impact': { title: 'Impact loading' },
