@@ -36,6 +36,8 @@ const loaders = {
   column: () => import('./column.js'),
   bridle: () => import('./bridle.js'),
   crack: () => import('./crack.js'),
+  gauges: () => import('./gauges.js'),
+  fracture: () => import('./fracture.js'),
 };
 
 const labs = createLabLoader(loaders);

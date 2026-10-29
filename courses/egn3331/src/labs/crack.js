@@ -4,7 +4,7 @@ import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
 import { C, alpha, arrow, axes, begin, chartIn, circle, dot, hidden, label, line, panes, poly, sceneIn, seg } from './diagram.js';
 import { defineLab } from './define.js';
-import { bindSlider, leavesOut, slider } from './widgets.js';
+import { bindSlider, leavesOut, showField, slider } from './widgets.js';
 
 /**
  * Shows that the peak stress at an opening is set by how sharp it is across the load, not by its
@@ -134,6 +134,10 @@ export default defineLab({
     set('ck-a', state.a / IN);
     set('ck-r', state.rho / IN);
     set('ck-p', state.P / KIP);
+    showField('ck-s', state.mode !== 'bolt');
+    showField('ck-a', state.mode !== 'bolt');
+    showField('ck-r', state.mode === 'crack');
+    showField('ck-p', state.mode === 'bolt');
   },
   compute(state) {
     const r = peakAt(state);

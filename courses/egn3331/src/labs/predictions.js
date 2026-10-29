@@ -1144,6 +1144,75 @@ export const PREDICTIONS = {
       why: 'The load follows 1/K squared. It falls from 19.75 kip to 4.94 kip, and the stress from 19.44 ksi to 4.86 ksi.',
     },
   ],
+  gauges: [
+    {
+      id: 'gg-tilt',
+      scenario: 'tank',
+      ask: 'The rosette on the propane cylinder was glued square to the axis. Peel it off and glue it back 30° crooked.',
+      apply(s) { s.phi = 30; },
+      watch: [
+        watch('ra', 'what gauge a reads', (c) => c.ra),
+        watch('hoop', 'the hoop stress the rosette reports', (c) => c.hoop),
+      ],
+      mode: 'dir',
+      expect: { ra: 'bigger', hoop: 'same' },
+      why: 'Gauge a now leans toward the hoop direction, which stretches more, so it reads 232 µε instead of 128. The wall stress has not changed. Solved at their true angles, the three readings still give 18.5 ksi hoop and 9.27 ksi axial.',
+    },
+    {
+      id: 'gg-speed',
+      scenario: 'shaft',
+      ask: 'The motor still delivers 5 hp, but a gearbox change halves the shaft speed to 875 rpm.',
+      apply(s) { s.rpm = 875; },
+      watch: [
+        watch('rc', 'what the +45° gauge reads', (c) => c.rc),
+      ],
+      mode: 'factor',
+      factors: [4, 2, 1, 0.5],
+      expect: { rc: 2 },
+      why: 'Power is torque times speed, so the same 5 hp at half the speed is twice the torque: 360 lbf·in. Shear stress and shear strain both double, and the gauge reads 57.8 µε instead of 28.9.',
+    },
+    {
+      id: 'gg-pair',
+      scenario: 'shaft',
+      ask: 'The two ±45° torque gauges were installed 10° off line. Compare the torque from that pair alone with the torque from all three gauges.',
+      apply(s) { s.phi = 10; },
+      watch: [
+        watch('pairT', 'torque from the ±45° pair', (c) => c.pairT),
+        watch('rosT', 'torque from the full rosette', (c) => c.rosT),
+      ],
+      mode: 'dir',
+      expect: { pairT: 'smaller', rosT: 'same' },
+      why: 'The pair measures εc − εa = γ cos 2φ, so 10° off it reads cos 20° = 0.94 of the torque: 169 lbf·in, not 180. The third gauge supplies the missing equation, and the full solve gives 180 lbf·in at any tilt.',
+    },
+  ],
+  fracture: [
+    {
+      id: 'fr-push',
+      scenario: 'iron',
+      ask: 'The gray-iron bar is twisted with 200 lbf·ft. Keep the torque and also push on its ends with 8 kip.',
+      apply(s) { s.N = -8; },
+      watch: [
+        watch('fs', 'the factor of safety against fracture', (c) => c.fs),
+        watch('hi', 'the largest tension in the bar', (c) => c.hi),
+      ],
+      mode: 'dir',
+      expect: { fs: 'bigger', hi: 'smaller' },
+      why: 'The push slides the stress circle toward compression, where cast iron is almost four times stronger. The largest tension falls from 12.2 to 8.15 ksi, and n rises from 1.93 to 2.28. Adding load made the part safer.',
+    },
+    {
+      id: 'fr-steel',
+      scenario: 'iron',
+      ask: 'Make the same 1 in bar from A36 steel instead of gray iron, with the same 200 lbf·ft.',
+      apply(s) { s.mat = 'steel'; },
+      watch: [
+        watch('angle', 'the angle of the failure plane to the axis', (c) => c.angle),
+        watch('fs', 'the factor of safety', (c) => c.fs),
+      ],
+      mode: 'dir',
+      expect: { angle: 'bigger', fs: 'smaller' },
+      why: 'Steel fails by slip, on the plane of largest shear: flat across the bar, 90° to the axis, not on the 45° helix. It yields when the 12.2 ksi shear reaches 18 ksi, so n = 1.47, below the iron\'s 1.93. But that is first yield. The steel bar twists on and warns you; the iron one snaps.',
+    },
+  ],
   bridle: [
     {
       id: 'bd-flat',

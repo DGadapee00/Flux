@@ -45,6 +45,8 @@ const LIMIT = {
   column: 1e-9,
   bridle: 1e-9,
   crack: 1e-9,
+  gauges: 1e-9,
+  fracture: 1e-9,
 };
 
 const fails = [];

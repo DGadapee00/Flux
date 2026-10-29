@@ -8,8 +8,8 @@ export const EXAMS = [
   { id: 'u1', n: 1, title: 'Stress', chapters: '1', date: 'Ch 1', labs: ['cut', 'truss-stress', 'pins', 'shackle'], coming: [] },
   { id: 'u2', n: 2, title: 'Strain and material behaviour', chapters: '2, 3', date: 'Ch 2–3', labs: ['tension-test', 'poisson', 'brace'], coming: [] },
   { id: 'u3', n: 3, title: 'Axial load', chapters: '4', date: 'Ch 4', labs: ['axial', 'indeterminate', 'rail', 'bridle', 'crack'], coming: [] },
-  { id: 'u4', n: 4, title: 'Multiaxial stress and pressure vessels', chapters: '8, 10', date: 'Ch 8, 10', labs: ['strain3', 'vessel', 'tank'], coming: [] },
-  { id: 'u5', n: 5, title: 'Stress transformation and failure', chapters: '8, 9', date: 'Ch 8–9', labs: ['mohr', 'combined', 'hitch'], coming: [] },
+  { id: 'u4', n: 4, title: 'Multiaxial stress and pressure vessels', chapters: '8, 10', date: 'Ch 8, 10', labs: ['strain3', 'vessel', 'tank', 'gauges'], coming: [] },
+  { id: 'u5', n: 5, title: 'Stress transformation and failure', chapters: '8, 9', date: 'Ch 8–9', labs: ['mohr', 'combined', 'hitch', 'fracture'], coming: [] },
   { id: 'u6', n: 6, title: 'Bending', chapters: '6', date: 'Ch 6', labs: ['diagrams', 'flexure', 'joist'], coming: [] },
   { id: 'u7', n: 7, title: 'Transverse shear', chapters: '7', date: 'Ch 7', labs: ['shear', 'nails', 'header'], coming: [] },
   { id: 'u8', n: 8, title: 'Beam deflection', chapters: '12', date: 'Ch 12', labs: ['curve', 'propped', 'shelf'], coming: [] },
@@ -53,6 +53,8 @@ export const LAB_META = {
   column: { id: 'column', exam: 'u11', title: 'Steel column', app: true },
   bridle: { id: 'bridle', exam: 'u3', title: 'Hoist bridle', app: true },
   crack: { id: 'crack', exam: 'u3', title: 'Stop-drilled crack', app: true },
+  gauges: { id: 'gauges', exam: 'u4', title: 'Strain gauges', app: true },
+  fracture: { id: 'fracture', exam: 'u5', title: 'Cast iron or steel', app: true },
 };
 
 export const CHAPTER_TITLES = {
