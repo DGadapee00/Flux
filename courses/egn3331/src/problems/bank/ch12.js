@@ -1,12 +1,14 @@
 /**
  * Slope and deflection by integrating M/EI, an off-center load whose lowest
- * point is not under the load, a propped cantilever, and a pine shelf.
+ * point is not under the load, a propped cantilever, a pine shelf, two loads in one bracketed
+ * equation, superposition from the table, and a beam fixed at both ends.
  */
 import { M_PER_IN } from '@flux/subjects/convert.js';
 import {
-  cantileverTipDeflection, integrateSimple, proppedUniform, rectInertia,
+  cantileverTipDeflection, integrateFixed, integrateSimple, proppedUniform, rectInertia,
   simplePointDeflection, simpleUniformDeflection,
 } from '@flux/subjects/mechanics/elastic.js';
+import { fixedUniform, simpleMacaulay } from '@flux/subjects/mechanics/macaulay.js';
 import { SHELF_B_IN, SHELF_H_IN, shelfOpen, shelfOpenInches } from '../../data/shelf.js';
 import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
 
@@ -525,6 +527,196 @@ const ch12 = [
       read: (c) => ({ which: c.tipDrop < 1e-9 ? 'none' : 'full' }),
     },
     cases: [kase(cite('deflection'), { support: 'held', mag: 4 }, { which: 'none' })],
+  }),
+  problem({
+    id: 'u8.12.two-loads',
+    title: 'Two loads in one equation',
+    exam: 'u8',
+    ch: '12',
+    lab: 'curve',
+    src: cite('discontinuity'),
+    topics: ['discontinuity'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      L: range(3, 6, 0.5, 'm', 1),
+      f1: range(0.15, 0.4, 0.05, '', 1),
+      f2: range(0.6, 0.85, 0.05, '', 1),
+      P1: range(2, 10, 1, 'kN', KN),
+      P2: range(2, 10, 1, 'kN', KN),
+      h: range(80, 160, 20, 'mm', 1e-3),
+    },
+    derive: ($) => {
+      const a1 = Math.round($.L * $.f1 * 10) / 10;
+      const a2 = Math.round($.L * $.f2 * 10) / 10;
+      const EI = ei(0.04, $.h);
+      const b = simpleMacaulay({ L: $.L, EI, points: [{ a: a1, P: $.P1 }, { a: a2, P: $.P2 }] });
+      return { a1, a2, EI, RA: b.RA, C1: b.C1, mid: -b.y($.L / 2), slope0: -b.slope(0) };
+    },
+    valid: ($) => $.a2 - $.a1 >= 1 && $.mid > 1e-3 && $.mid < 0.08,
+    text: (T, $) => String.raw`A steel beam ($E = 200$ GPa), 40 mm wide and $${T.h}$ mm deep, spans $${T.L}$ m on a pin and a roller. It carries $${T.P1}$ kN down at $${$.a1}$ m and $${T.P2}$ kN down at $${$.a2}$ m from the pin. Using one moment expression with discontinuity functions, find the left reaction, the midspan deflection, and the slope at the pin (as a magnitude).`,
+    parts: [
+      num('RA', ($) => $.RA, 'kN', { scale: KN, label: 'left reaction' }),
+      num('mid', ($) => $.mid, 'mm', {
+        scale: 1e-3,
+        label: 'midspan drop',
+        traps: [
+          [($) => -(($.RA * ($.L / 2) ** 3) / 6 - ($.P1 * ($.L / 2 - $.a1) ** 3) / 6 - ($.P2 * ($.L / 2 - $.a2) ** 3) / 6 + $.C1 * ($.L / 2)) / $.EI, 'The second bracket was kept before its load. At midspan $\\langle x - a_2\\rangle$ is zero, not a negative cube.'],
+          [($) => -simpleMacaulay({ L: $.L, EI: $.EI, points: [{ a: $.a1, P: $.P1 }] }).y($.L / 2), 'That is the first load alone. Both loads deflect midspan.'],
+        ],
+      }),
+      num('slope0', ($) => $.slope0, 'rad', {
+        abs: 1e-5,
+        label: 'slope at the pin',
+        traps: [
+          [() => 0, 'A pin lets the beam turn. Its slope is $C_1/EI$, not zero.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Write one moment for the whole span: the left reaction times $x$, minus each load times its bracket $\\langle x - a\\rangle$. Integrate twice and use the two supports.',
+      String.raw`$EI\,y = R_Ax^3/6 - P_1\langle x-a_1\rangle^3/6 - P_2\langle x-a_2\rangle^3/6 + C_1x$. $y(L) = 0$ fixes $C_1$, and the slope at the pin is $C_1/EI$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Moments about the pin: $R_A = ${sig($.RA / KN)}$ kN. $EI = ${sig($.EI)}$ N·m².`,
+      String.raw`$y(L) = 0$ gives $C_1 = ${sig($.C1)}$ N·m², so the pin turns by $|C_1|/EI = ${sig($.slope0)}$ rad.`,
+      String.raw`At midspan only the first bracket is on${$.a2 < $.L / 2 ? ' (and the second, since it is left of midspan)' : ''}: $\delta = ${sig($.mid * 1000)}$ mm.`,
+    ],
+    second: ($) => {
+      // Superpose the two single-load closed forms.
+      const one = simplePointDeflection($.P1, $.L, $.a1, $.EI);
+      const two = simplePointDeflection($.P2, $.L, $.a2, $.EI);
+      return {
+        RA: ($.P1 * ($.L - $.a1) + $.P2 * ($.L - $.a2)) / $.L / KN,
+        mid: -(one.at($.L / 2).y + two.at($.L / 2).y) / 1e-3,
+        slope0: -(one.at(0).slope + two.at(0).slope),
+      };
+    },
+    cases: [kase(cite('discontinuity'), { L: 4, f1: 0.25, f2: 0.75, P1: 6, P2: 4, h: 80 }, { RA: 5.5, mid: 26.85546875, slope0: 7750 / 341333.3333333333 })],
+  }),
+
+  problem({
+    id: 'u8.12.superpose',
+    title: 'Two loads by superposition',
+    exam: 'u8',
+    ch: '12',
+    lab: 'curve',
+    src: cite('superposition'),
+    topics: ['superposition'],
+    variety: ['configuration'],
+    level: 2,
+    vars: {
+      kind: choice(['simple', 'a simple span, with the point load at midspan'], ['cantilever', 'a cantilever, with the point load at the free end']),
+      L: range(2, 5, 0.5, 'm', 1),
+      w: range(1, 6, 0.5, 'kN/m', KN),
+      P: range(2, 12, 1, 'kN', KN),
+      h: range(100, 200, 20, 'mm', 1e-3),
+    },
+    derive: ($) => {
+      const EI = ei(0.04, $.h);
+      const [dw, dp] = $.kind === 'simple'
+        ? [(5 * $.w * $.L ** 4) / (384 * EI), ($.P * $.L ** 3) / (48 * EI)]
+        : [($.w * $.L ** 4) / (8 * EI), ($.P * $.L ** 3) / (3 * EI)];
+      return { EI, dw, dp, total: dw + dp };
+    },
+    valid: ($) => $.total < 0.1 && $.total > 2e-3 && rel($.dw, $.dp),
+    text: (T) => String.raw`A steel beam ($E = 200$ GPa), 40 mm wide and $${T.h}$ mm deep and $${T.L}$ m long, is ${T.kind}. It carries a uniform $${T.w}$ kN/m and a point load of $${T.P}$ kN. Find the largest deflection.`,
+    parts: [
+      num('total', ($) => $.total, 'mm', {
+        scale: 1e-3,
+        label: 'largest drop',
+        traps: [
+          [($) => $.dw, 'That is the uniform load alone. The point load adds its own deflection at the same station.'],
+          [($) => $.dp, 'That is the point load alone.'],
+          [($) => ($.kind === 'simple' ? ($.w * $.L ** 4) / (8 * $.EI) + ($.P * $.L ** 3) / (3 * $.EI) : (5 * $.w * $.L ** 4) / (384 * $.EI) + ($.P * $.L ** 3) / (48 * $.EI)), 'Those are the other support\'s formulas.'],
+        ],
+      }),
+    ],
+    hints: [
+      'The deflection equation is linear in the loads. Find each load\'s deflection alone, at the same station, on the same supports, and add.',
+      String.raw`Simple span, midspan: $5wL^4/384EI$ and $PL^3/48EI$. Cantilever, tip: $wL^4/8EI$ and $PL^3/3EI$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$EI = ${sig($.EI)}$ N·m². The uniform load alone: $${sig($.dw * 1000)}$ mm.`,
+      String.raw`The point load alone: $${sig($.dp * 1000)}$ mm. Both peak at the same station.`,
+      String.raw`Sum: $${sig($.total * 1000)}$ mm.`,
+    ],
+    second: ($) => {
+      // One moment expression with both loads, integrated numerically.
+      const M = $.kind === 'simple'
+        ? (x) => ($.w * $.L / 2 + $.P / 2) * x - ($.w * x * x) / 2 - $.P * Math.max(0, x - $.L / 2)
+        : (x) => -($.w * ($.L - x) ** 2) / 2 - $.P * ($.L - x);
+      const curve = $.kind === 'simple' ? integrateSimple(M, $.L, $.EI, 4000, [$.L / 2]) : integrateFixed(M, $.L, $.EI, 4000);
+      const i = $.kind === 'simple' ? curve.x.findIndex((x) => x >= $.L / 2 - 1e-12) : curve.x.length - 1;
+      return { total: -curve.y[i] / 1e-3 };
+    },
+    cases: [kase(cite('superposition'), { kind: 'simple', L: 4, w: 5, P: 10, h: 80 }, { total: 87.890625 })],
+  }),
+
+  problem({
+    id: 'u8.12.fixed',
+    title: 'A beam fixed at both ends',
+    exam: 'u8',
+    ch: '12',
+    lab: null,
+    src: cite('fixed-ends'),
+    topics: ['fixed-ends'],
+    variety: ['unknown'],
+    level: 2,
+    vars: {
+      L: range(3, 8, 0.5, 'm', 1),
+      w: range(2, 12, 1, 'kN/m', KN),
+      h: range(120, 240, 20, 'mm', 1e-3),
+    },
+    derive: ($) => ({ EI: ei(0.05, $.h), ...fixedUniform($.w, $.L, ei(0.05, $.h)) }),
+    valid: ($) => $.drop > 1e-3 && $.drop < 0.05,
+    text: (T) => String.raw`A steel beam ($E = 200$ GPa), 50 mm wide and $${T.h}$ mm deep, spans $${T.L}$ m between two rigid walls that it is fixed to. It carries a uniform $${T.w}$ kN/m. Find the size of the end moment, the midspan moment, and the midspan deflection.`,
+    parts: [
+      num('Me', ($) => $.Me, 'kN·m', {
+        scale: KN,
+        label: 'end moment',
+        traps: [
+          [($) => ($.w * $.L * $.L) / 8, 'That is the simple span\'s midspan moment. Fixed ends take $wL^2/12$.'],
+        ],
+      }),
+      num('Mmid', ($) => $.Mmid, 'kN·m', {
+        scale: KN,
+        label: 'midspan moment',
+        traps: [
+          [($) => ($.w * $.L * $.L) / 8, 'That ignores the end moments, which lower the whole diagram by $wL^2/12$.'],
+        ],
+      }),
+      num('drop', ($) => $.drop, 'mm', {
+        scale: 1e-3,
+        label: 'midspan drop',
+        traps: [
+          [($) => $.simpleDrop, 'That is the simple span. The fixed ends lift midspan by $M_eL^2/8EI$.'],
+        ],
+      }),
+    ],
+    hints: [
+      'By symmetry the end moments are equal. Free the ends: the load turns each by $wL^3/24EI$, and the end moments must turn them back.',
+      String.raw`Equal end moments turn each end of a simple span by $M_eL/2EI$, so $M_e = wL^2/12$. Midspan: $wL^2/8 - M_e$, and $\delta = 5wL^4/384EI - M_eL^2/8EI$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$wL^3/24EI = M_eL/2EI$ gives $M_e = wL^2/12 = ${sig($.Me / KN)}$ kN·m, hogging.`,
+      String.raw`Midspan: $wL^2/8 - M_e = ${sig($.Mmid / KN)}$ kN·m.`,
+      String.raw`$\delta = wL^4/384EI = ${sig($.drop * 1000)}$ mm, a fifth of the simple span's.`,
+    ],
+    second: ($) => {
+      // Integrate from the left wall with the end moment unknown; pick it to leave the right end level.
+      const slopeAt = (Me) => {
+        const c = integrateFixed((x) => ($.w * $.L / 2) * x - ($.w * x * x) / 2 - Me, $.L, $.EI, 2000);
+        return c.slope[c.slope.length - 1];
+      };
+      const s0 = slopeAt(0);
+      const s1 = slopeAt(1000);
+      const Me = (-s0 * 1000) / (s1 - s0);
+      const c = integrateFixed((x) => ($.w * $.L / 2) * x - ($.w * x * x) / 2 - Me, $.L, $.EI, 2000);
+      const mid = c.x.findIndex((x) => x >= $.L / 2 - 1e-12);
+      return { Me: Me / KN, Mmid: (($.w * $.L * $.L) / 8 - Me) / KN, drop: -c.y[mid] / 1e-3 };
+    },
+    cases: [kase(cite('fixed-ends'), { L: 4, w: 5, h: 120 }, { Me: 6.666666666666667, Mmid: 3.3333333333333335, drop: (5e3 * 256) / (384 * 200e9 * (0.05 * 0.12 ** 3) / 12) / 1e-3 })],
   }),
 ];
 

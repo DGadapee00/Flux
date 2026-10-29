@@ -586,7 +586,7 @@ export const SETUPS = {
         read: (c) => ({ under: [c.under * 1000, 22] }),
       },
     ],
-    s4: [
+    s6: [
       {
         tag: 'the prop',
         lab: 'propped',
@@ -611,7 +611,7 @@ export const SETUPS = {
         read: (c) => ({ drop: [c.drop * 1000, 118.7], M: [c.Mwall / 1000, -18], R: [c.R / 1000, 0] }),
       },
     ],
-    s5: [
+    s8: [
       {
         tag: 'the 72 in span',
         lab: 'shelf',

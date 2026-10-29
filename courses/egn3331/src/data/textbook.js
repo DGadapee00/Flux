@@ -70,6 +70,9 @@ export const SECTIONS = Object.freeze({
   'transverse-shear': { book: 'roylance', section: '4.2', title: 'Stresses in Beams' },
   'shear-flow': { book: 'roylance', section: '4.2', title: 'Stresses in Beams' },
   'deflection': { book: 'roylance', section: '4.3', title: 'Beam Displacements' },
+  'discontinuity': { book: 'roylance', section: '4.3', title: 'Beam Displacements' },
+  'superposition': { book: 'roylance', section: '4.3', title: 'Beam Displacements' },
+  'fixed-ends': { book: 'roylance', section: '4.3', title: 'Beam Displacements' },
 
   // Chapter 5: General Stress Analysis
   'stress-concentration': { book: 'roylance', section: '5.1', title: 'Closed-Form Solutions' },
