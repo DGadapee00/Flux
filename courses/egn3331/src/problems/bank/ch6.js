@@ -1,16 +1,24 @@
 /**
  * Shear and moment diagrams, bending stress in a rectangle and a tee,
- * a Southern Pine floor joist in psi, and the uniform load that reaches
- * an allowable bending stress.
+ * a Southern Pine floor joist in psi, the uniform load that reaches an allowable bending stress,
+ * an overhang and a couple drawn by areas, a band-saw blade's curvature, a tilted moment, and a
+ * timber with a steel plate.
  */
 import { M_PER_FT, M_PER_IN, PA_PER_PSI } from '@flux/subjects/convert.js';
 import { flexureFibers, rectFibersReduced, rectSection, simpleBendingStress, teeSection } from '@flux/subjects/mechanics/materials.js';
-import { simplePoint, simpleUniform } from '@flux/subjects/mechanics/sections.js';
+import { generalBeam, internalAt, simplePoint, simpleUniform } from '@flux/subjects/mechanics/sections.js';
+import { bentStripStress, compositeSection, tiltedRect } from '@flux/subjects/mechanics/bending.js';
 import { JOIST_B, JOIST_DEAD, JOIST_H, PA_PER_PSF, joistLine } from '../../data/joist.js';
 import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
 
 const KN = 1000;
 const MPA = 1e6;
+const MM = 1e-3;
+const DEG = Math.PI / 180;
+const KSI = 1000 * PA_PER_PSI;
+const E_STEEL = 29000 * KSI;
+const E_STEEL_SI = 200e9;
+const E_WOOD = 12.5e9;
 const TEE = { bf: 0.12, tf: 0.012, tw: 0.012, hw: 0.1 };
 
 const rel = (a, b) => Math.abs(a - b) > 0.05 * Math.max(Math.abs(a), Math.abs(b), 1e-9);
@@ -555,6 +563,339 @@ const ch6 = [
       kase(cite('flexure'), { shape: 'rect', mag: 2 }, { which: 'middle' }),
       kase(cite('flexure'), { shape: 'tee', mag: 2 }, { which: 'high' }),
     ],
+  }),
+  problem({
+    id: 'u6.6.overhang',
+    title: 'Diagrams for an overhanging beam',
+    exam: 'u6',
+    ch: '6',
+    lab: 'diagrams',
+    src: cite('graphical-method'),
+    topics: ['graphical-method'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      b: range(3, 6, 0.5, 'm', 1),
+      c: range(1, 2.5, 0.5, 'm', 1),
+      w: range(2, 10, 1, 'kN/m', KN),
+      P: range(2, 12, 1, 'kN', KN),
+    },
+    derive: ($) => {
+      const L = $.b + $.c;
+      const beam = generalBeam({ L, b: $.b, udl: { w: $.w, a: 0, b: $.b }, points: [{ x: L, P: $.P }] });
+      const RA = beam.reactions[0].Fy;
+      const x0 = RA / $.w;
+      return { L, RA, RB: beam.reactions[1].Fy, x0, sag: RA * x0 - ($.w * x0 * x0) / 2, hog: $.P * $.c };
+    },
+    valid: ($) => $.RA > 0.2 * $.w * $.b && rel($.sag, ($.w * $.b * $.b) / 8) && $.L <= 8,
+    text: (T) => String.raw`A beam is pinned at A and rests on a roller at B, $${T.b}$ m to the right. It overhangs B by $${T.c}$ m to a free end C. A uniform $${T.w}$ kN/m acts downward on AB, and $${T.P}$ kN hangs at C. Find the roller reaction, the largest sagging moment in AB, and the size of the hogging moment over B.`,
+    parts: [
+      num('RB', ($) => $.RB, 'kN', {
+        scale: KN,
+        label: 'roller reaction',
+        traps: [
+          [($) => ($.w * $.b) / 2 + $.P, 'Half the span load plus the tip load ignores the overhang\'s lever. Take moments about A.'],
+        ],
+      }),
+      num('sag', ($) => $.sag, 'kN·m', {
+        scale: KN,
+        label: 'largest sagging moment',
+        traps: [
+          [($) => ($.w * $.b * $.b) / 8, 'That is $wL^2/8$ for a simple span. The tip load lifts the span and moves the zero of shear.'],
+        ],
+      }),
+      num('hog', ($) => $.hog, 'kN·m', {
+        scale: KN,
+        label: 'hogging moment over B',
+        traps: [
+          [($) => $.P * ($.b + $.c), 'The arm is the overhang only, from B to C.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Find the reactions by moments about A. Then walk from the left: the shear falls with the load, and the moment grows by the area under the shear.',
+      String.raw`The sagging peak is where the shear crosses zero, $x_0 = R_A/w$. Over B, the overhang alone gives the moment: cut there and look right.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Moments about A: $R_B = (w b^2/2 + P(b+c))/b = ${sig($.RB / KN)}$ kN, and $R_A = wb + P - R_B = ${sig($.RA / KN)}$ kN.`,
+      String.raw`The shear $R_A - wx$ is zero at $x_0 = ${sig($.x0)}$ m. The area under it there is $R_A x_0/2 = ${sig($.sag / KN)}$ kN·m.`,
+      String.raw`Cut just right of B and keep C: $|M_B| = Pc = ${sig($.hog / KN)}$ kN·m.`,
+    ],
+    second: ($) => {
+      // Closed-form equilibrium, then the method of sections at the zero of shear.
+      const RB = ($.w * $.b * $.b / 2 + $.P * ($.b + $.c)) / $.b;
+      const RA = $.w * $.b + $.P - RB;
+      const x0 = RA / $.w;
+      const cut = internalAt(x0, {
+        reactions: [{ x: 0, Fy: RA }, { x: $.b, Fy: RB }],
+        loads: [{ x: $.b + $.c, Fy: -$.P }],
+        dist: [{ a: 0, b: $.b, w: () => -$.w }],
+      });
+      return { RB: RB / KN, sag: cut.M / KN, hog: ($.P * $.c) / KN };
+    },
+    sim: {
+      scenario: 'overhang',
+      setup(s, $) {
+        s.L = $.b + $.c;
+        s.b = $.b;
+        s.w = $.w;
+        s.P = $.P;
+        s.x = $.RA / $.w;
+      },
+      read: (c) => ({ RB: c.right, sag: c.M, hog: c.Mhog }),
+    },
+    cases: [kase(cite('graphical-method'), { b: 4, c: 2, w: 4, P: 5 }, { RB: 15.5, sag: 3.78125, hog: 10 })],
+  }),
+
+  problem({
+    id: 'u6.6.couple',
+    title: 'A couple on a simple span',
+    exam: 'u6',
+    ch: '6',
+    lab: 'diagrams',
+    src: cite('graphical-method'),
+    topics: ['graphical-method'],
+    variety: ['unknown'],
+    level: 2,
+    vars: {
+      L: range(3, 8, 0.5, 'm', 1),
+      f: range(0.2, 0.8, 0.05, '', 1),
+      M0: range(4, 20, 1, 'kN·m', KN),
+    },
+    derive: ($) => {
+      const a = Math.round($.L * $.f * 10) / 10;
+      const R = $.M0 / $.L;
+      return { a, R, before: R * a, after: R * a - $.M0 };
+    },
+    valid: ($) => $.a > 0.5 && $.L - $.a > 0.5,
+    text: (T, $) => String.raw`A simple beam $${T.L}$ m long, pinned at the left and on a roller at the right, carries only a counterclockwise couple of $${T.M0}$ kN·m at $${$.a}$ m from the left. Find the left reaction (positive up), the shear in the span, and the moment just left and just right of the couple.`,
+    parts: [
+      num('R', ($) => $.R, 'kN', {
+        scale: KN,
+        label: 'left reaction',
+        traps: [
+          [() => 0, 'With no force on the beam the reactions still form a couple. They are $M_0/L$, equal and opposite.'],
+          [($) => -$.R, 'Right size, wrong direction. A counterclockwise couple needs a clockwise pair: up at the left, down at the right.'],
+        ],
+      }),
+      num('before', ($) => $.before, 'kN·m', {
+        scale: KN,
+        label: 'moment just left',
+        traps: [
+          [($) => $.M0 * $.a / $.L - $.M0, 'That is the moment just right of the couple.'],
+        ],
+      }),
+      num('after', ($) => $.after, 'kN·m', {
+        scale: KN,
+        label: 'moment just right',
+        traps: [
+          [($) => $.before + $.M0, 'A counterclockwise couple lowers the moment in this convention, it does not raise it.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Moments about one support give the other reaction. A couple has no net force, so the two reactions are equal and opposite.',
+      String.raw`The shear is the left reaction everywhere. The moment rises by the area under the shear, then drops by $M_0$ across a counterclockwise couple.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`Moments about the right support: $R_A L = M_0$, so $R_A = ${sig($.R / KN)}$ kN up and the right reaction is the same, down.`,
+      String.raw`The shear is $${sig($.R / KN)}$ kN all along. Just left of the couple $M = R_A a = ${sig($.before / KN)}$ kN·m.`,
+      String.raw`Across the couple $M$ drops by $M_0$: just right, $M = ${sig($.after / KN)}$ kN·m. It then climbs back to zero at the roller.`,
+    ],
+    second: ($) => {
+      // The method of sections, cutting just either side of the couple.
+      const beam = generalBeam({ L: $.L, couples: [{ x: $.a, M: $.M0 }] });
+      return { R: beam.reactions[0].Fy / KN, before: beam.at($.a - 1e-9).M / KN, after: beam.at($.a + 1e-9).M / KN };
+    },
+    sim: {
+      scenario: 'couple',
+      setup(s, $) {
+        s.L = $.L;
+        s.a = $.a;
+        s.M0 = $.M0;
+        s.x = $.a;
+      },
+      read: (c) => ({ R: c.left }),
+    },
+    cases: [kase(cite('graphical-method'), { L: 4, f: 0.25, M0: 6 }, { R: 1.5, before: 1.5, after: -4.5 })],
+  }),
+
+  problem({
+    id: 'u6.6.bandsaw',
+    title: 'A band-saw blade on its wheels',
+    exam: 'u6',
+    ch: '6',
+    lab: 'flexure',
+    src: cite('curvature'),
+    topics: ['curvature', 'english'],
+    variety: ['unknown'],
+    level: 2,
+    vars: {
+      D: range(9, 20, 1, 'in', M_PER_IN),
+      t: range(0.014, 0.035, 0.001, 'in', M_PER_IN),
+      lim: range(30, 60, 5, 'ksi', KSI),
+    },
+    derive: ($) => ({ sig: bentStripStress(E_STEEL, $.t, $.D / 2), Dmin: (E_STEEL * $.t) / $.lim }),
+    valid: ($) => $.sig < 90 * KSI,
+    text: (T) => String.raw`A steel band-saw blade, $E = 29{,}000$ ksi, is $${T.t}$ in thick. It runs over wheels $${T.D}$ in in diameter. Find the bending stress at the blade's outer surface as it wraps a wheel. Then find the smallest wheel diameter that keeps that stress at $${T.lim}$ ksi.`,
+    parts: [
+      num('sig', ($) => $.sig, 'ksi', {
+        scale: KSI,
+        label: 'bending stress',
+        traps: [
+          [($) => bentStripStress(E_STEEL, $.t, $.D), 'The wheel\'s diameter was used as the radius of curvature. That halves the stress.'],
+          [($) => bentStripStress(E_STEEL, 2 * $.t, $.D / 2), 'The whole thickness was used as the fiber distance. The surface is $t/2$ from the middle.'],
+        ],
+      }),
+      num('Dmin', ($) => $.Dmin, 'in', {
+        scale: M_PER_IN,
+        label: 'smallest wheel',
+        traps: [
+          [($) => $.Dmin / 2, 'That is the radius. The question asks for the diameter.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Wrapped on a wheel, the blade bends to the wheel\'s radius. The strain at a fiber is its distance from the middle over that radius.',
+      String.raw`$\sigma = E\,(t/2)/\rho$, with $\rho = D/2$. Turn it round for $D$: $D = Et/\sigma$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$\rho = D/2 = ${sig($.D / 2 / M_PER_IN)}$ in. Surface strain $= (t/2)/\rho = ${sig($.t / $.D)}$.`,
+      String.raw`$\sigma = E t/D = 29{,}000\times ${sig($.t / M_PER_IN)}/${sig($.D / M_PER_IN)} = ${sig($.sig / KSI)}$ ksi.`,
+      String.raw`For $\sigma = ${sig($.lim / KSI)}$ ksi, $D = Et/\sigma = ${sig($.Dmin / M_PER_IN)}$ in.`,
+    ],
+    second: ($) => {
+      // In inches and ksi throughout.
+      const t = $.t / M_PER_IN;
+      const D = $.D / M_PER_IN;
+      return { sig: (29000 * t) / D, Dmin: (29000 * t) / ($.lim / KSI) };
+    },
+    cases: [kase(cite('curvature'), { D: 14, t: 0.025, lim: 40 }, { sig: 51.78571428571429, Dmin: 18.125 })],
+  }),
+
+  problem({
+    id: 'u6.6.tilted',
+    title: 'A beam loaded off its strong axis',
+    exam: 'u6',
+    ch: '6',
+    lab: 'flexure',
+    src: cite('unsymmetric-bending'),
+    topics: ['unsymmetric-bending'],
+    variety: ['representation'],
+    level: 3,
+    vars: {
+      b: range(40, 100, 10, 'mm', MM),
+      ratio: range(1.5, 3, 0.5, '', 1),
+      M: range(2, 20, 1, 'kN·m', KN),
+      th: range(5, 30, 5, '°', 1),
+    },
+    derive: ($) => {
+      const h = $.b * $.ratio;
+      const r = tiltedRect($.b, h, $.M, $.th);
+      return { h, smax: r.max, alpha: r.alpha, upright: r.upright };
+    },
+    valid: ($) => $.smax < 250 * MPA && $.smax > 20 * MPA,
+    text: (T, $) => String.raw`A rectangular beam $${T.b}$ mm wide and $${Math.round($.h / MM)}$ mm deep carries a bending moment of $${T.M}$ kN·m. The load that causes it leans $${T.th}^\circ$ from the vertical, so the moment vector is turned $${T.th}^\circ$ from the section's horizontal axis. Find the largest bending stress and the angle of the neutral axis from the horizontal.`,
+    parts: [
+      num('smax', ($) => $.smax, 'MPa', {
+        scale: MPA,
+        label: 'largest stress',
+        traps: [
+          [($) => $.upright, 'That is the stress with no lean. The lean adds bending about the weak axis.'],
+          [($) => ($.M * Math.cos($.th * DEG) * 6) / ($.b * $.h * $.h), 'That keeps only the strong-axis part. The weak-axis part adds at the worst corner.'],
+        ],
+      }),
+      num('alpha', ($) => $.alpha, '°', {
+        abs: 0.3,
+        label: 'neutral axis angle',
+        traps: [
+          [($) => $.th, 'The neutral axis does not follow the moment unless the two I values match. It swings toward the weak axis.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Split the moment into parts about the two axes of symmetry. Each bends about its own axis, and the stresses add.',
+      String.raw`$M_z = M\cos\theta$, $M_y = M\sin\theta$. At the worst corner $\sigma = M_z(h/2)/I_z + M_y(b/2)/I_y$. The neutral axis has $\tan\alpha = (I_z/I_y)\tan\theta$.`,
+    ],
+    steps: ($, sig) => {
+      const Iz = ($.b * $.h ** 3) / 12;
+      const Iy = ($.h * $.b ** 3) / 12;
+      return [
+        String.raw`$M_z = ${sig(($.M * Math.cos($.th * DEG)) / KN)}$ kN·m and $M_y = ${sig(($.M * Math.sin($.th * DEG)) / KN)}$ kN·m. $I_z = ${sig(Iz / 1e-12 / 1e6)}\times 10^6$ mm⁴, $I_y = ${sig(Iy / 1e-12 / 1e6)}\times 10^6$ mm⁴.`,
+        String.raw`Worst corner: $${sig((($.M * Math.cos($.th * DEG)) * $.h) / 2 / Iz / MPA)} + ${sig((($.M * Math.sin($.th * DEG)) * $.b) / 2 / Iy / MPA)} = ${sig($.smax / MPA)}$ MPa.`,
+        String.raw`$\tan\alpha = ${sig(Iz / Iy)}\tan ${sig($.th)}^\circ$, so $\alpha = ${sig($.alpha)}^\circ$.`,
+      ];
+    },
+    second: ($) => {
+      // The two section moduli, bh²/6 and hb²/6, one per axis.
+      const Sz = ($.b * $.h * $.h) / 6;
+      const Sy = ($.h * $.b * $.b) / 6;
+      const smax = ($.M * Math.cos($.th * DEG)) / Sz + ($.M * Math.sin($.th * DEG)) / Sy;
+      return { smax: smax / MPA, alpha: Math.atan(($.h / $.b) ** 2 * Math.tan($.th * DEG)) / DEG };
+    },
+    cases: [kase(cite('unsymmetric-bending'), { b: 40, ratio: 2, M: 2, th: 10 }, { smax: 62.44238007872195, alpha: 35.195620072110245 })],
+  }),
+
+  problem({
+    id: 'u6.6.composite',
+    title: 'A timber with a steel plate',
+    exam: 'u6',
+    ch: '6',
+    lab: 'flexure',
+    src: cite('composite'),
+    topics: ['composite'],
+    variety: ['configuration'],
+    level: 3,
+    vars: {
+      b: range(80, 150, 10, 'mm', MM),
+      h: range(150, 300, 25, 'mm', MM),
+      tp: range(6, 16, 2, 'mm', MM),
+      M: range(10, 40, 2, 'kN·m', KN),
+    },
+    derive: ($) => {
+      const sec = compositeSection([{ b: $.b, h: $.tp, E: E_STEEL_SI }, { b: $.b, h: $.h, E: E_WOOD }], E_WOOD);
+      return { ybar: sec.ybar, It: sec.I, steel: sec.stress($.M, 0), wood: -sec.stress($.M, sec.H) };
+    },
+    valid: ($) => $.steel < 250 * MPA && $.wood < 30 * MPA && $.wood > 3 * MPA,
+    text: (T) => String.raw`A timber $${T.b}$ mm wide and $${T.h}$ mm deep ($E_w = 12.5$ GPa) has a steel plate of the same width and $${T.tp}$ mm thick bonded under it ($E_s = 200$ GPa). It carries a sagging moment of $${T.M}$ kN·m. Find the neutral axis height above the bottom of the plate, the largest stress in the steel, and the largest compressive stress in the wood (as a magnitude).`,
+    parts: [
+      num('ybar', ($) => $.ybar, 'mm', {
+        scale: MM,
+        label: 'neutral axis',
+        traps: [
+          [($) => ($.tp + $.h) / 2, 'That is the geometric middle. The stiff plate pulls the neutral axis down to the transformed centroid.'],
+        ],
+      }),
+      num('steel', ($) => $.steel, 'MPa', {
+        scale: MPA,
+        label: 'steel',
+        traps: [
+          [($) => $.steel / 16, 'That is the transformed stress. The real steel carries $n = 16$ times it.'],
+        ],
+      }),
+      num('wood', ($) => $.wood, 'MPa', {
+        scale: MPA,
+        label: 'wood',
+        traps: [
+          [($) => (6 * $.M) / ($.b * $.h * $.h), 'That is the timber alone. The plate moves the neutral axis and adds stiffness.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Turn the steel into wood that carries the same force: widen it by $n = E_s/E_w$. The new section bends as one material.',
+      String.raw`Find the transformed centroid and $I_t$. Wood: $\sigma = My/I_t$. Steel: $n$ times $My/I_t$ at its height.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$n = 16$, so the plate becomes $${sig((16 * $.b) / MM)}$ mm wide. Centroid $\bar y = ${sig($.ybar / MM)}$ mm above the bottom.`,
+      String.raw`$I_t = ${sig($.It / 1e-12 / 1e6)}\times 10^6$ mm⁴.`,
+      String.raw`Steel, $${sig($.ybar / MM)}$ mm below: $16\,M\bar y/I_t = ${sig($.steel / MPA)}$ MPa. Wood top, $${sig(($.tp + $.h - $.ybar) / MM)}$ mm above: $${sig($.wood / MPA)}$ MPa.`,
+    ],
+    second: ($) => {
+      // Shrink the wood instead: transform to steel with n = 1/16, and the stresses must agree.
+      const sec = compositeSection([{ b: $.b, h: $.tp, E: E_STEEL_SI }, { b: $.b, h: $.h, E: E_WOOD }], E_STEEL_SI);
+      return { ybar: sec.ybar / MM, steel: sec.stress($.M, 0) / MPA, wood: -sec.stress($.M, sec.H) / MPA };
+    },
+    cases: [kase(cite('composite'), { b: 100, h: 200, tp: 10, M: 20 }, { ybar: 63.33333333333335, steel: 122.97734627831717, wood: 17.799352750809057 })],
   }),
 ];
 

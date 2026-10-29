@@ -404,6 +404,16 @@ export const SETUPS = {
         scenario: 'point',
         read: (c) => ({ Vmax: [c.Vmax / 1000, 5], Mmax: [c.Mmax / 1000, 10] }),
       },
+      {
+        tag: 'the load moved off centre',
+        lab: 'diagrams',
+        scenario: 'point',
+        setup(s) {
+          s.a = 1;
+          s.x = 1;
+        },
+        read: (c) => ({ left: [c.left / 1000, 7.5], right: [c.right / 1000, 2.5], Mmax: [c.Mmax / 1000, 7.5] }),
+      },
     ],
     s2: [
       {
@@ -412,8 +422,6 @@ export const SETUPS = {
         scenario: 'uniform',
         read: (c) => ({ Mmax: [c.Mmax / 1000, 10], V: [c.V / 1000, 0], Vmax: [c.Vmax / 1000, 10] }),
       },
-    ],
-    s3: [
       {
         tag: 'the tip load',
         lab: 'diagrams',
@@ -421,7 +429,32 @@ export const SETUPS = {
         read: (c) => ({ Mmax: [c.Mmax / 1000, -16], Vmax: [c.Vmax / 1000, 8] }),
       },
     ],
+    s3: [
+      {
+        tag: 'an overhang',
+        lab: 'diagrams',
+        scenario: 'overhang',
+        setup(s) {
+          s.x = 1.375;
+        },
+        read: (c) => ({ left: [c.left / 1000, 5.5], right: [c.right / 1000, 15.5], M: [c.M / 1000, 3.78], Mhog: [c.Mhog / 1000, 10] }),
+      },
+      {
+        tag: 'a couple on the span',
+        lab: 'diagrams',
+        scenario: 'couple',
+        read: (c) => ({ left: [c.left / 1000, 1.5], right: [c.right / 1000, -1.5], Mhog: [c.Mhog / 1000, 4.5] }),
+      },
+    ],
     s4: [
+      {
+        tag: "the lab's rectangle, curved",
+        lab: 'flexure',
+        scenario: 'rect',
+        read: (c) => ({ bot: [c.bot / 1e6, 46.9] }),
+      },
+    ],
+    s5: [
       {
         tag: 'the 40 by 80 mm rectangle',
         lab: 'flexure',
@@ -435,7 +468,7 @@ export const SETUPS = {
         read: (c) => ({ top: [c.top / 1e6, -11.72], bot: [c.bot / 1e6, 11.72] }),
       },
     ],
-    s5: [
+    s6: [
       {
         tag: 'the tee at 2 kN·m',
         lab: 'flexure',
@@ -443,7 +476,7 @@ export const SETUPS = {
         read: (c) => ({ top: [c.top / 1e6, -20.5], bot: [c.bot / 1e6, 52.5], yBar: [c.yBar * 1000, 80.5] }),
       },
     ],
-    s6: [
+    s7: [
       {
         tag: 'the table span',
         lab: 'joist',

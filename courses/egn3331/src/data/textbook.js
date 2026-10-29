@@ -63,7 +63,10 @@ export const SECTIONS = Object.freeze({
   // Chapter 4: Bending
   'internal-loads': { book: 'roylance', section: '4.1', title: 'Shear and Bending Moment Diagrams' },
   'shear-moment': { book: 'roylance', section: '4.1', title: 'Shear and Bending Moment Diagrams' },
+  'graphical-method': { book: 'roylance', section: '4.1', title: 'Shear and Bending Moment Diagrams' },
   'flexure': { book: 'roylance', section: '4.2', title: 'Stresses in Beams' },
+  'curvature': { book: 'roylance', section: '4.2', title: 'Stresses in Beams' },
+  'composite': { book: 'roylance', section: '4.2', title: 'Stresses in Beams' },
   'transverse-shear': { book: 'roylance', section: '4.2', title: 'Stresses in Beams' },
   'shear-flow': { book: 'roylance', section: '4.2', title: 'Stresses in Beams' },
   'deflection': { book: 'roylance', section: '4.3', title: 'Beam Displacements' },
@@ -84,6 +87,7 @@ export const SECTIONS = Object.freeze({
   'thermal-stress': { title: 'Thermal stress' },
   'combined-loading': { title: 'Combined loadings' },
   'brittle': { title: 'Brittle fracture criteria' },
+  'unsymmetric-bending': { title: 'Unsymmetric bending' },
   'buckling': { title: 'Buckling of columns' },
   'energy': { title: 'Strain energy and Castigliano\'s theorem' },
   'impact': { title: 'Impact loading' },
