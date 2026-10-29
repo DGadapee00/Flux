@@ -463,6 +463,19 @@ export const PREDICTIONS = {
       expect: { txy: 'bigger', sx: 'smaller' },
       why: 'Forty-five degrees from the principals, the shear equals the circle radius and the normal stress falls to the average, 50 MPa.',
     },
+    {
+      id: 'mh-abs',
+      scenario: 'general',
+      ask: 'σx = 80 MPa, σy = 20 MPa, τxy = 30 MPa. Raise σy to 60 MPa.',
+      apply(s) { s.sy = 60e6; },
+      watch: [
+        watch('R', 'the largest in-plane shear', (c) => c.R),
+        watch('abs', 'the largest shear on any plane', (c) => c.tauAbs),
+      ],
+      mode: 'dir',
+      expect: { R: 'smaller', abs: 'bigger' },
+      why: 'The in-plane circle shrinks: $R = \\sqrt{10^2 + 30^2} = 31.6$ MPa, down from 42.4. But both principals are tension, and $\\sigma_1$ rises from 92.4 to 101.6 MPa. The third principal is zero, so the biggest circle runs from 0 to $\\sigma_1$: its radius grows from 46.2 to 50.8 MPa. Tresca reads that radius, not $R$.',
+    },
   ],
   combined: [
     {
@@ -522,19 +535,6 @@ export const PREDICTIONS = {
   ],
   diagrams: [
     {
-      id: 'dg-double',
-      scenario: 'point',
-      ask: 'The midspan load is 10 kN. Double it to 20 kN.',
-      apply(s) { s.P = 20e3; },
-      watch: [
-        watch('Mmax', 'the peak moment', (c) => c.Mmax),
-        watch('Vmax', 'the larger shear', (c) => c.Vmax),
-      ],
-      mode: 'factor',
-      expect: { Mmax: 2, Vmax: 2 },
-      why: 'A determinate beam is linear in the load. Both the 10 kN·m moment and the 5 kN shear double.',
-    },
-    {
       id: 'dg-quarter',
       scenario: 'point',
       ask: 'The 10 kN load is at midspan of the 4 m beam. Move it to 1 m from the left.',
@@ -548,17 +548,30 @@ export const PREDICTIONS = {
       why: 'At midspan the moment is $PL/4 = 10$ kN·m and each shear is 5 kN. At 1 m the moment is $Pa(L-a)/L = 7.5$ kN·m, and the left reaction rises to 7.5 kN.',
     },
     {
-      id: 'dg-span',
-      scenario: 'uniform',
-      ask: 'The uniform load stays at 5 kN/m. Double the span, from 4 m to 8 m.',
-      apply(s) { s.L = 8; },
+      id: 'dg-tip',
+      scenario: 'overhang',
+      ask: 'The beam overhangs its roller by 2 m. Raise the load on the tip from 5 kN to 15 kN.',
+      apply(s) { s.P = 15e3; },
       watch: [
-        watch('Mmax', 'the peak moment', (c) => c.Mmax),
-        watch('Vmax', 'the larger shear', (c) => c.Vmax),
+        watch('left', 'the left reaction', (c) => c.left),
+        watch('hog', 'the size of the moment over the roller', (c) => c.Mhog),
       ],
-      mode: 'factor',
-      expect: { Mmax: 4, Vmax: 2 },
-      why: 'Support shear is $wL/2$, so it doubles. Midspan moment is $wL^2/8$, so it quadruples, from 10 kN·m to 40 kN·m.',
+      mode: 'dir',
+      expect: { left: 'smaller', hog: 'bigger' },
+      why: 'The roller is a fulcrum. Moments about it: the tip load pushes the left end up. $R_A = (16 \\times 2 - P \\times 2)/4$ falls from 5.5 kN to 0.5 kN. Over the roller $M = -P \\times 2$ grows from −10 to −30 kN·m.',
+    },
+    {
+      id: 'dg-couple',
+      scenario: 'couple',
+      ask: 'A 6 kN·m couple acts 1 m from the left end of the 4 m beam. Slide it to 3 m.',
+      apply(s) { s.a = 3; },
+      watch: [
+        watch('left', 'the left reaction', (c) => c.left),
+        watch('Mabs', 'the largest moment, in size', (c) => Math.abs(c.Mmax)),
+      ],
+      mode: 'dir',
+      expect: { left: 'same', Mabs: 'same' },
+      why: 'The reactions must cancel a couple, so they form one: $M_0/L = 1.5$ kN, wherever the couple sits. M jumps by 6 kN·m at the couple, from $1.5a$ to $1.5a - 6$. At $a = 1$ that is 1.5 to −4.5; at $a = 3$, 4.5 to −1.5. The largest size is 4.5 kN·m both times.',
     },
   ],
   flexure: [

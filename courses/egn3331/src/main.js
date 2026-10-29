@@ -151,7 +151,13 @@ const hud = createHUD({
     s.show = { ...(s.show || {}), [key]: !s.show?.[key] };
     bump(false);
   },
-  toggleSweep: () => {},
+  // Space plays or pauses a lab that moves (labs/motion.js keeps the clock in the state).
+  toggleSweep() {
+    const s = slice();
+    if (!s.anim) return;
+    s.anim.playing = !s.anim.playing;
+    bump(false);
+  },
   handleKey: () => {},
   togglePractice: () => practice.toggle(),
   escape: () => practice.escape(),
@@ -243,7 +249,13 @@ function draw() {
   stage.show(lab, slice());
 }
 
+let lastFrame = 0;
 function frame(now = 0) {
+  const dt = lastFrame ? Math.min(0.05, (now - lastFrame) / 1000) : 0;
+  lastFrame = now;
+  const lab = app.lab;
+  const s = lab ? slice() : null;
+  if (lab?.tick && s?.anim && dt > 0 && lab.tick(dt, s, computed)) app.dirty = true;
   const relayout = layoutChanged(now);
   if (app.dirty) {
     recompute();

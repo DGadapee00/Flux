@@ -111,6 +111,120 @@ export function cantileverTip(P, L) {
 }
 
 /**
+ * A statically determinate beam of length L under any mix of loads, solved two ways.
+ *
+ * `support` is 'simple' (a pin at x = 0 and a roller at `b`, which may sit short of L to leave an
+ * overhang) or 'cantilever' (fixed at x = 0, free at L). `points` are downward point loads
+ * { x, P }; `udl` is an optional downward uniform load { w, a, b }; `couples` are applied couples
+ * { x, M }, counterclockwise-positive.
+ *
+ * Reactions come from equilibrium. Taking moments about x = 0, counterclockwise-positive, with
+ * every load written as an upward force Fy = −P:
+ *   simple:     R_b · b + Σ Fy·x + F_w x_w + Σ M = 0,   R_a = −(R_b + Σ Fy + F_w)
+ *   cantilever: R_a = −(Σ Fy + F_w),   M_a = −(Σ Fy·x + F_w x_w + Σ M)
+ *
+ * `graphical(n)` builds V and M the way the diagrams are drawn by hand: V jumps by each point force
+ * and falls by the load's area, dV/dx = −w; M rises by the area under V, dM/dx = V, and jumps down
+ * by each counterclockwise couple. Across a uniform load V is linear, so the trapezoid on V is
+ * exact. internalAt, the method of sections, is the second method.
+ */
+export function generalBeam({ L, support = 'simple', b = L, points = [], udl = null, couples = [] }) {
+  const loads = [
+    ...points.map((p) => ({ x: p.x, Fy: -p.P })),
+    ...couples.map((c) => ({ x: c.x, M: c.M })),
+  ];
+  const dist = udl && udl.w && udl.b > udl.a ? [{ w: () => -udl.w, a: udl.a, b: udl.b }] : [];
+  const Fw = dist.length ? -udl.w * (udl.b - udl.a) : 0;
+  const xw = dist.length ? (udl.a + udl.b) / 2 : 0;
+  const sumF = points.reduce((s, p) => s - p.P, 0) + Fw;
+  const sumM0 = points.reduce((s, p) => s - p.P * p.x, 0) + Fw * xw + couples.reduce((s, c) => s + c.M, 0);
+  let reactions;
+  if (support === 'cantilever') {
+    reactions = [{ x: 0, Fy: -sumF, M: -sumM0 }];
+  } else {
+    const Rb = -sumM0 / b;
+    reactions = [{ x: 0, Fy: -(Rb + sumF) }, { x: b, Fy: Rb }];
+  }
+  const setup = { reactions, loads, dist };
+  const at = (x) => internalAt(x, setup);
+
+  // Stations: every place the load changes, so each interval has a constant w and no jump inside.
+  const breaks = new Set([0, L]);
+  for (const f of [...reactions, ...loads]) breaks.add(f.x);
+  if (dist.length) {
+    breaks.add(udl.a);
+    breaks.add(udl.b);
+  }
+  const marks = [...breaks].filter((x) => x >= 0 && x <= L).sort((p, q) => p - q);
+  const wAt = (x) => (dist.length && x > udl.a && x < udl.b ? udl.w : 0);
+
+  /** V and M from the load, by integration, on n points per unit of the span (at least). */
+  function graphical(n = 200) {
+    const out = [];
+    let V = 0;
+    let M = 0;
+    const jumpAt = (x) => {
+      for (const f of reactions) if (Math.abs(f.x - x) < 1e-12) {
+        V += f.Fy || 0;
+        M -= f.M || 0;
+      }
+      for (const f of loads) if (Math.abs(f.x - x) < 1e-12) {
+        V += f.Fy || 0;
+        M -= f.M || 0;
+      }
+    };
+    for (let i = 0; i < marks.length; i++) {
+      const x0 = marks[i];
+      out.push({ x: x0, V, M, side: 'left' });
+      jumpAt(x0);
+      out.push({ x: x0, V, M, side: 'right' });
+      if (i === marks.length - 1) break;
+      const x1 = marks[i + 1];
+      const w = wAt((x0 + x1) / 2);
+      const steps = Math.max(2, Math.ceil(((x1 - x0) / L) * n));
+      const h = (x1 - x0) / steps;
+      for (let k = 1; k <= steps; k++) {
+        const V1 = V - w * h;
+        M += 0.5 * (V + V1) * h;
+        V = V1;
+        if (k < steps) out.push({ x: x0 + k * h, V, M });
+      }
+    }
+    return out;
+  }
+
+  const pts = graphical();
+  let Vmax = 0;
+  let Mmax = 0;
+  let xM = 0;
+  for (const p of pts) {
+    // Equal and opposite peaks keep the first one met, so a symmetric span reports +V.
+    if (Math.abs(p.V) > Math.abs(Vmax) * (1 + 1e-9) + 1e-9) Vmax = p.V;
+    if (Math.abs(p.M) > Math.abs(Mmax) * (1 + 1e-9) + 1e-9) {
+      Mmax = p.M;
+      xM = p.x;
+    }
+  }
+  return { L, support, b, setup, reactions, at, graphical, marks, Vmax, Mmax, xM };
+}
+
+/** Largest gap between the graphical diagram and the method of sections, scaled by the peaks. */
+export function graphicalGap(beam, n = 200) {
+  const sV = Math.max(Math.abs(beam.Vmax), 1);
+  const sM = Math.max(Math.abs(beam.Mmax), 1);
+  let gap = 0;
+  for (const p of beam.graphical(n)) {
+    // Each side of a jump is compared with a cut on that side. internalAt counts a force at the
+    // cut as on the left segment, so the right side is the station itself.
+    const x = p.side === 'left' ? p.x - 1e-11 : p.x;
+    if (x < 0 || x > beam.L) continue;
+    const s = internalAt(x, beam.setup);
+    gap = Math.max(gap, Math.abs(s.V - p.V) / sV, Math.abs(s.M - p.M) / sM);
+  }
+  return gap;
+}
+
+/**
  * Largest gap between a closed-form beam and internalAt, on a uniform grid.
  * The scale is the beam's peak shear and moment. A support station closes to zero,
  * and the distributed-load sum leaves a few nanonewtons there. Dividing by 1 N·m
