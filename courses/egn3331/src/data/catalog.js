@@ -10,7 +10,7 @@ export const EXAMS = [
   { id: 'u3', n: 3, title: 'Axial load', chapters: '4', date: 'Ch 4', labs: ['axial', 'indeterminate', 'rail', 'bridle', 'crack'], coming: [] },
   { id: 'u4', n: 4, title: 'Multiaxial stress and pressure vessels', chapters: '8, 10', date: 'Ch 8, 10', labs: ['strain3', 'vessel', 'tank', 'gauges'], coming: [] },
   { id: 'u5', n: 5, title: 'Stress transformation and failure', chapters: '8, 9', date: 'Ch 8–9', labs: ['mohr', 'combined', 'hitch', 'fracture'], coming: [] },
-  { id: 'u6', n: 6, title: 'Bending', chapters: '6', date: 'Ch 6', labs: ['diagrams', 'flexure', 'joist'], coming: [] },
+  { id: 'u6', n: 6, title: 'Bending', chapters: '6', date: 'Ch 6', labs: ['diagrams', 'flexure', 'joist', 'flitch', 'purlin', 'bandsaw'], coming: [] },
   { id: 'u7', n: 7, title: 'Transverse shear', chapters: '7', date: 'Ch 7', labs: ['shear', 'nails', 'header'], coming: [] },
   { id: 'u8', n: 8, title: 'Beam deflection', chapters: '12', date: 'Ch 12', labs: ['curve', 'propped', 'shelf'], coming: [] },
   { id: 'u9', n: 9, title: 'Torsion', chapters: '5', date: 'Ch 5', labs: ['torsion', 'twist', 'motor'], coming: [] },
@@ -55,6 +55,9 @@ export const LAB_META = {
   crack: { id: 'crack', exam: 'u3', title: 'Stop-drilled crack', app: true },
   gauges: { id: 'gauges', exam: 'u4', title: 'Strain gauges', app: true },
   fracture: { id: 'fracture', exam: 'u5', title: 'Cast iron or steel', app: true },
+  flitch: { id: 'flitch', exam: 'u6', title: 'Flitch beam', app: true },
+  purlin: { id: 'purlin', exam: 'u6', title: 'Roof purlin', app: true },
+  bandsaw: { id: 'bandsaw', exam: 'u6', title: 'Band-saw blade', app: true },
 };
 
 export const CHAPTER_TITLES = {

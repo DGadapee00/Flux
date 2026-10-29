@@ -38,6 +38,9 @@ const loaders = {
   crack: () => import('./crack.js'),
   gauges: () => import('./gauges.js'),
   fracture: () => import('./fracture.js'),
+  flitch: () => import('./flitch.js'),
+  purlin: () => import('./purlin.js'),
+  bandsaw: () => import('./bandsaw.js'),
 };
 
 const labs = createLabLoader(loaders);

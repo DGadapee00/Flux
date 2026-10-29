@@ -8,6 +8,11 @@
  * 40 psf live load, 10 psf dead load, deflection limited to the span over 360.
  * Those spans use SPIB Supplement No. 13 design values. The table does not
  * print the bending stress, and the span may be set by deflection.
+ *
+ * Design values for a No. 2 Southern Pine 2×10: E = 1,400,000 psi, and Fb = 920 psi at normal
+ * load duration as tabulated for joists and rafters (American Wood Council, 2012 Design Values for
+ * Joists and Rafters, addendum for the 1 June 2013 Southern Pine values). That Fb includes the
+ * repetitive-member factor of 1.15 (NDS), so a single member gets 920/1.15 = 800 psi.
  */
 import { M_PER_FT, M_PER_IN, N_PER_LBF } from '@flux/subjects/convert.js';
 
@@ -17,6 +22,9 @@ export const JOIST_SPAN_FT = 14;
 export const JOIST_SPACE_IN = 16;
 export const JOIST_LIVE_PSF = 40;
 export const JOIST_DEAD_PSF = 10;
+export const JOIST_E_PSI = 1.4e6;
+export const JOIST_FB_PSI = 920;
+export const JOIST_FB_SINGLE_PSI = JOIST_FB_PSI / 1.15;
 
 export const JOIST_B = JOIST_B_IN * M_PER_IN;
 export const JOIST_H = JOIST_H_IN * M_PER_IN;

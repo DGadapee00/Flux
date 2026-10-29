@@ -47,6 +47,9 @@ const LIMIT = {
   crack: 1e-9,
   gauges: 1e-9,
   fracture: 1e-9,
+  flitch: 1e-9,
+  purlin: 1e-9,
+  bandsaw: 1e-9,
 };
 
 const fails = [];

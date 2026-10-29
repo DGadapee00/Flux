@@ -2,7 +2,7 @@
  * Second methods for bending.js.
  *   node src/mechanics/bending-selftest.js
  */
-import { bentStripStress, compositeSection, curvature, tiltedRect } from './bending.js';
+import { bentStripStress, compositeRects, compositeSection, curvature, tiltedRect } from './bending.js';
 
 let passed = 0;
 let failed = 0;
@@ -89,6 +89,43 @@ function approx(got, want, tol, name) {
   approx(sec.stress(M, 0), 123.0e6, 2e-3, 'steel bottom 123 MPa');
   const one = compositeSection([{ b: 0.1, h: 0.2, E: 12.5e9 }], 12.5e9);
   approx(one.stress(M, 0.2), -(6 * M) / (0.1 * 0.04), 1e-12, 'one material: back to 6M/bh²');
+}
+
+// Side by side: a flitch beam, two 1.5 × 9.25 in boards and a 0.375 in plate, in inch-pound units.
+{
+  const Ew = 1.4e6;
+  const Es = 29e6;
+  const h = 9.25;
+  const sec = compositeRects([{ b: 3, h, E: Ew }, { b: 0.375, h, E: Es }], Ew);
+  const EI = Ew * (3 * h ** 3) / 12 + Es * (0.375 * h ** 3) / 12;
+  approx(sec.EI, EI, 1e-12, 'flitch: EI is the sum of the parts about one axis');
+  approx(sec.ybar, h / 2, 1e-12, 'flitch: same depth, so the axis is at mid-depth');
+  approx(sec.parts[1].share, (Es * 0.375) / (Es * 0.375 + Ew * 3), 1e-12, 'flitch: the plate\'s share is its EI over the total');
+  const M = 117600;
+  approx(sec.stress(M, 0, h), -(M * Ew * (h / 2)) / EI, 1e-12, 'flitch: wood top stress from the shared curvature');
+  // Balance by strips: no net force, and the real stresses carry M.
+  let F = 0;
+  let Mr = 0;
+  const n = 2000;
+  sec.parts.forEach((p, i) => {
+    for (let j = 0; j < n; j++) {
+      const y = p.y0 + ((j + 0.5) * p.h) / n;
+      const s = sec.stress(M, i, y);
+      F += s * p.b * (p.h / n);
+      Mr += -(y - sec.ybar) * s * p.b * (p.h / n);
+    }
+  });
+  approx(Math.abs(F) + M, M, 1e-9, 'flitch: no net force');
+  approx(Mr, M, 1e-6, 'flitch: the real stresses carry M');
+  // Stacked layers give the same answer through either routine.
+  const a = compositeSection([{ b: 0.1, h: 0.01, E: 200e9 }, { b: 0.1, h: 0.2, E: 12.5e9 }], 12.5e9);
+  const b = compositeRects([{ b: 0.1, h: 0.01, E: 200e9, y0: 0 }, { b: 0.1, h: 0.2, E: 12.5e9, y0: 0.01 }], 12.5e9);
+  approx(b.I, a.I, 1e-12, 'stacked: compositeRects agrees with compositeSection');
+  approx(b.stress(20e3, 0, 0), a.stress(20e3, 0), 1e-12, 'stacked: same steel stress');
+  // Scaling: double the plate's E, and the wood's stress falls but not by half.
+  const s2 = compositeRects([{ b: 3, h, E: Ew }, { b: 0.375, h, E: 2 * Es }], Ew);
+  const relief = s2.stress(M, 0, h) / sec.stress(M, 0, h);
+  approx(relief, EI / (EI + Es * (0.375 * h ** 3) / 12), 1e-12, 'a stiffer plate relieves the wood by EI/(EI + ΔEI), less than half');
 }
 
 if (failed) {

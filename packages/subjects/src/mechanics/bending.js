@@ -55,3 +55,26 @@ export function compositeSection(layers, Eref) {
   };
   return { parts, A, ybar, I, H, stress, EI: Eref * I };
 }
+
+/**
+ * Rectangles side by side or overlapping in height, each { b, h, E, y0 } with y0 its bottom: a
+ * flitch beam's plate between two boards, or any section bolted to bend as one. All share one
+ * curvature, so the transformed-section rule still holds: scale each width by n = E/Eref, find the
+ * centroid, and the real stress in a part at height y is −n M (y − ȳ)/I. Each part carries the
+ * moment share EiIi/ΣEI about the common axis.
+ */
+export function compositeRects(rects, Eref) {
+  const parts = rects.map((r) => {
+    const n = r.E / Eref;
+    const y0 = r.y0 ?? 0;
+    return { ...r, n, y0, y1: y0 + r.h, A: n * r.b * r.h, yc: y0 + r.h / 2 };
+  });
+  const A = parts.reduce((s, p) => s + p.A, 0);
+  const ybar = parts.reduce((s, p) => s + p.A * p.yc, 0) / A;
+  for (const p of parts) p.I = (p.n * p.b * p.h ** 3) / 12 + p.A * (p.yc - ybar) ** 2;
+  const I = parts.reduce((s, p) => s + p.I, 0);
+  for (const p of parts) p.share = p.I / I;
+  /** Real stress in part i at height y, under a sagging moment M. */
+  const stress = (M, i, y) => (-parts[i].n * M * (y - ybar)) / I;
+  return { parts, A, ybar, I, stress, EI: Eref * I };
+}
