@@ -1,3 +1,4 @@
+import { beamSketch } from './elements.js';
 import { M_PER_IN, N_PER_LBF } from '@flux/subjects/convert.js';
 import { deflectionGap, integrateSimple, proppedGap } from '@flux/subjects/mechanics/elastic.js';
 import {
@@ -6,7 +7,7 @@ import {
 } from '../data/shelf.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { alpha, axes, begin, C, chartIn, dot, hidden, label, line, panes, plotIn, poly, sceneIn } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, leavesOut, slider } from './widgets.js';
 
@@ -86,6 +87,29 @@ function gapOf(state, beam) {
   return Math.max(conv, deflectionGap(beam.at, curve));
 }
 
+/** The beam on its supports, bent so its largest drop is an eighth of the span, and its loads. */
+
+function member(B, rect, state, c, veiled) {
+  const beam = curveOf(state);
+  const L = beam.L;
+  let low = 1e-12;
+  for (let i = 0; i <= 40; i++) low = Math.max(low, Math.abs(beam.yAt((L * i) / 40)));
+  const k = (0.12 * L) / low;
+  const S = sceneIn(B, rect, { x0: -0.06 * L, x1: 1.06 * L, y0: -0.3 * L, y1: 0.2 * L }, 8);
+  // A row of books, then the board bending on its brackets.
+  for (let i = 0; i < 18; i++) {
+    const x0 = (L * (i + 0.1)) / 18;
+    const hgt = 0.08 * L * (0.8 + 0.25 * Math.sin(i * 2.1));
+    const y = k * beam.yAt(x0 + L / 36);
+    poly(S, [[x0, y + 0.01 * L], [x0 + L / 22, y + 0.01 * L], [x0 + L / 22, y + 0.01 * L + hgt], [x0, y + 0.01 * L + hgt]], { fill: alpha([C.gold, C.teal, C.pink][i % 3], 0.25), stroke: null });
+  }
+  beamSketch(S, L, {
+    yAt: (x) => k * beam.yAt(x),
+    supports: beam.brace ? [['pin', 0], ['roller', L / 2], ['roller', L]] : [['pin', 0], ['roller', L]],
+  });
+  if (!veiled) label(S, `sag ${fig(c.drop / M_PER_IN)} in · drawn ×${fig(k)}`, [L / 2, -0.22 * L], { color: C.dim });
+}
+
 export default defineLab({
   id: 'shelf',
   exam: 'u8',
@@ -130,8 +154,12 @@ export default defineLab({
       gap: gapOf(state, beam),
     };
   },
-  draw(canvas, state) {
+  draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.42, { long: true });
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const beam = curveOf(state);
     const pts = [];
     let yLo = 0;
@@ -145,7 +173,7 @@ export default defineLab({
       yHi = Math.max(yHi, y);
     }
     const pad = Math.max(yHi - yLo, 0.05) * 0.12;
-    const P = plotIn(B, B.free, { lo: 0, hi: span }, { lo: yLo - pad, hi: yHi + pad });
+    const P = chartIn(B, R, { lo: 0, hi: span }, { lo: yLo - pad, hi: yHi + pad });
     axes(P, { xLabel: 'x (in)', yLabel: 'deflection (in)' });
     line(P, pts, { color: C.gold, width: 3 });
     const xMark = beam.xMax / M_PER_IN;

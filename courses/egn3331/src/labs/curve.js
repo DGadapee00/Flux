@@ -1,10 +1,11 @@
+import { beamSketch } from './elements.js';
 import {
   cantileverTipDeflection, deflectionGap, integrateFixed, integrateSimple, rectInertia,
   simplePointDeflection, simpleUniformDeflection,
 } from '@flux/subjects/mechanics/elastic.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { axes, begin, C, chartIn, dot, hidden, label, line, panes, plotIn, sceneIn } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, showField, slider } from './widgets.js';
 
@@ -44,6 +45,26 @@ function shape(state) {
   }
   const beam = cantileverTipDeflection(state.P, L, EI);
   return { ...beam, L, EI, a: L, under: beam.drop, kind: 'fixed', loadAt: L, slopeTip: beam.slopeTip };
+}
+
+/** The beam on its supports, bent so its largest drop is an eighth of the span, and its loads. */
+
+function member(B, rect, state, c, veiled) {
+  const beam = shape(state);
+  const L = beam.L;
+  let low = 1e-12;
+  for (let i = 0; i <= 40; i++) low = Math.max(low, Math.abs(beam.at((L * i) / 40).y));
+  const k = (0.12 * L) / low;
+  const S = sceneIn(B, rect, { x0: -0.08 * L, x1: 1.08 * L, y0: -0.3 * L, y1: 0.16 * L }, 8);
+  const fixed = beam.kind === 'fixed';
+  beamSketch(S, L, {
+    yAt: (x) => k * beam.at(x).y,
+    supports: fixed ? [['fixed', 0]] : [['pin', 0], ['roller', L]],
+    points: state.scenarioId === 'uniform' ? [] : [beam.loadAt],
+    udl: state.scenarioId === 'uniform' ? [0, L] : null,
+  });
+  dot(S, c.xMax, k * beam.at(c.xMax).y, { color: C.gold, r: 5 });
+  if (!veiled) label(S, `lowest ${fig(c.drop * 1e3)} mm at ${fig(c.xMax)} m · drawn ×${fig(k)}`, [L / 2, -0.24 * L], { color: C.dim });
 }
 
 export default defineLab({
@@ -110,8 +131,12 @@ export default defineLab({
       gap: deflectionGap(beam.at, curve),
     };
   },
-  draw(canvas, state) {
+  draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.4, { long: true });
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const beam = shape(state);
     const pts = [];
     let yLo = 0;
@@ -124,7 +149,7 @@ export default defineLab({
       yHi = Math.max(yHi, y);
     }
     const pad = Math.max(yHi - yLo, 1) * 0.12;
-    const P = plotIn(B, B.free, { lo: 0, hi: beam.L }, { lo: yLo - pad, hi: yHi + pad });
+    const P = chartIn(B, R, { lo: 0, hi: beam.L }, { lo: yLo - pad, hi: yHi + pad });
     axes(P, { xLabel: 'x (m)', yLabel: 'deflection (mm)' });
     line(P, pts, { color: C.gold, width: 3 });
     const zero = beam.kind === 'fixed' ? 0 : beam.xMax;

@@ -1,12 +1,10 @@
+import { sectionSketch } from './elements.js';
 import { M_PER_FT, M_PER_IN, N_PER_LBF } from '@flux/subjects/convert.js';
 import { shearFlow } from '@flux/subjects/mechanics/materials.js';
-import {
-  HEADER_LINES, HEADER_LOAD_PLF, HEADER_NAIL_IN, HEADER_ROOF_PLF, HEADER_SPAN_FT,
-  HEADER_TABLE_PLF, HEADER_WEIGHT_PLF, PLF_TO_NPM, headerInchForce, headerNail,
-} from '../data/header.js';
+import { HEADER_BF_IN, HEADER_DEPTH_IN, HEADER_LINES, HEADER_LOAD_PLF, HEADER_NAIL_IN, HEADER_ROOF_PLF, HEADER_SPAN_FT, HEADER_TABLE_PLF, HEADER_TF_IN, HEADER_TW_IN, HEADER_WEIGHT_PLF, headerInchForce, headerNail, PLF_TO_NPM } from '../data/header.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { alpha, axes, begin, C, chartIn, dot, hidden, label, line, panes, plotIn, poly, sceneIn, seg, spread } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, leavesOut, slider } from './widgets.js';
 
@@ -28,6 +26,35 @@ const SCENARIOS = [
 function apply(id, state) {
   const sc = SCENARIOS.find((s) => s.id === id) || SCENARIOS[0];
   Object.assign(state, { scenarioId: sc.id, L: sc.L, w: sc.w, x: sc.x });
+}
+
+/**
+ * The header across the opening with its roof load, the station marked, and its section: two
+ * dressed 2×4 flanges on a plywood web. The nails that hold each flange to the web work hardest at
+ * the supports, where the shear is largest.
+ */
+function member(B, rect, state, c, veiled) {
+  const W = rect.x1 - rect.x0;
+  const elev = { ...rect, x1: rect.x0 + 0.7 * W };
+  const side = { ...rect, x0: rect.x0 + 0.7 * W };
+  const Lft = state.L / M_PER_FT;
+  const S = sceneIn(B, elev, { x0: -0.6, x1: Lft + 0.6, y0: -0.25 * Lft, y1: 0.22 * Lft }, 8);
+  const d = HEADER_DEPTH_IN / 12;
+  poly(S, [[0, 0], [Lft, 0], [Lft, d], [0, d]], { fill: alpha(C.text, 0.1), stroke: C.text, width: 1.5 });
+  for (const x of [-0.4, Lft]) poly(S, [[x, -0.22 * Lft], [x + 0.4, -0.22 * Lft], [x + 0.4, 0], [x, 0]], { fill: alpha(C.muted, 0.3), stroke: C.muted });
+  spread(S, 0, Lft, d, { px: 16, color: C.pink, label: veiled ? null : `${fig(state.w / PLF_TO_NPM)} plf` });
+  const xf = c.x / M_PER_FT;
+  seg(S, [xf, -0.05 * Lft], [xf, d + 0.05 * Lft], { color: C.yellow, width: 1.5, dash: [4, 4] });
+  if (!veiled) label(S, `${fig(c.nail / N_PER_LBF)} lbf per nail here`, [xf, -0.05 * Lft], { color: C.gold, dy: 12, align: xf > Lft / 2 ? 'right' : 'left' });
+  const bf = HEADER_BF_IN;
+  const tf = HEADER_TF_IN;
+  const tw = HEADER_TW_IN;
+  const H = HEADER_DEPTH_IN;
+  const T = sceneIn(B, side, { x0: -bf, x1: bf, y0: -H * 0.6, y1: H * 0.6 }, 8);
+  sectionSketch(T, [[-bf / 2, bf / 2, H / 2 - tf, H / 2], [-tw / 2, tw / 2, -H / 2 + tf, H / 2 - tf], [-bf / 2, bf / 2, -H / 2, -H / 2 + tf]], { na: 0 });
+  for (const s of [1, -1]) {
+    for (const dx of [-0.6, 0.6]) seg(T, [dx * bf / 2, s * (H / 2 - tf)], [dx * bf / 2, s * (H / 2 - tf * 0.4)], { color: C.gold, width: 2 });
+  }
 }
 
 export default defineLab({
@@ -91,6 +118,10 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.42);
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const pts = [];
     let yHi = 1;
     for (let i = 0; i <= 40; i++) {
@@ -99,7 +130,7 @@ export default defineLab({
       pts.push([x / M_PER_FT, nail]);
       yHi = Math.max(yHi, nail);
     }
-    const P = plotIn(B, B.free, { lo: 0, hi: state.L / M_PER_FT }, { lo: 0, hi: yHi * 1.1 });
+    const P = chartIn(B, R, { lo: 0, hi: state.L / M_PER_FT }, { lo: 0, hi: yHi * 1.1 });
     axes(P, { xLabel: 'x (ft)', yLabel: 'force in one nail (lbf)' });
     line(P, pts, { color: C.gold, width: 3 });
     dot(P, c.x / M_PER_FT, c.nail / N_PER_LBF, { color: C.gold, r: 5 });

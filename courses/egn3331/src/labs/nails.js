@@ -3,7 +3,7 @@ import { beamGap, simpleUniform } from '@flux/subjects/mechanics/sections.js';
 import { BOARD_B, BOARD_F, BOARD_LINES, BOARD_N, BOARD_T, BOARD_V } from '../data/shear.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { alpha, arrow, axes, begin, C, chartIn, dot, hidden, label, line, panes, plotIn, poly, sceneIn, seg } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, slider } from './widgets.js';
 
@@ -25,6 +25,32 @@ const SCENARIOS = [
 function apply(id, state) {
   const sc = SCENARIOS.find((s) => s.id === id) || SCENARIOS[0];
   Object.assign(state, { scenarioId: sc.id, V: sc.V, F: sc.F, lines: sc.lines, b: BOARD_B, t: BOARD_T });
+}
+
+/**
+ * A metre of the beam from the side: three boards stacked, the top one held on by nails at the
+ * spacing the lab computes, and the shear flow q (teal) that the nails must carry along the joint.
+ */
+function member(B, rect, state, c, veiled) {
+  const t = state.t;
+  const Lw = 0.6;
+  const S = sceneIn(B, rect, { x0: -0.03, x1: Lw + 0.03, y0: -0.6 * t, y1: 3 * t + 0.08 }, 8);
+  for (let i = 0; i < BOARD_N; i++) {
+    poly(S, [[0, i * t], [Lw, i * t], [Lw, (i + 1) * t], [0, (i + 1) * t]], { fill: alpha(C.gold, 0.12 + 0.06 * i), stroke: C.text, width: 1.2 });
+  }
+  const s = Math.max(c.spacing, 0.004);
+  const n = Math.min(150, Math.floor(Lw / s));
+  for (let i = 0; i <= n; i++) {
+    const x = i * s + Math.min(s, Lw) * 0.25;
+    if (x > Lw) break;
+    seg(S, [x, 3 * t + 0.004], [x, 1.35 * t], { color: C.text, width: 1.5 });
+    seg(S, [x - 0.004, 3 * t + 0.004], [x + 0.004, 3 * t + 0.004], { color: C.text, width: 2 });
+  }
+  for (let i = 0; i < 4; i++) arrow(S, [0.05 + i * 0.14, 2 * t], 0, 22, { color: C.teal, width: 2, head: 6 });
+  if (!veiled) {
+    label(S, `q ${fig(c.q / 1e3)} kN/m along the joint`, [0, 2 * t], { color: C.teal, align: 'left', dy: 12, dx: 4 });
+    label(S, `${state.lines} nail${state.lines > 1 ? 's' : ''} every ${fig(c.spacing * 1e3)} mm`, [Lw, 3 * t], { color: C.text, align: 'right', dy: -14 });
+  }
 }
 
 export default defineLab({
@@ -80,6 +106,10 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const B = begin(canvas);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.42, { long: true });
+    member(B, D, state, c, veiled);
+    if (veiled) return;
     const boards = stackedBoards(state.b, state.t, BOARD_N);
     const pts = [];
     let yHi = 1;
@@ -89,7 +119,7 @@ export default defineLab({
       pts.push([V / KN, s]);
       yHi = Math.max(yHi, s);
     }
-    const P = plotIn(B, B.free, { lo: 2, hi: 20 }, { lo: 0, hi: yHi * 1.1 });
+    const P = chartIn(B, R, { lo: 2, hi: 20 }, { lo: 0, hi: yHi * 1.1 });
     axes(P, { xLabel: 'shear (kN)', yLabel: 'spacing (mm)' });
     line(P, pts, { color: C.gold, width: 3 });
     dot(P, c.V / KN, c.spacing * 1e3, { color: C.gold, r: 5 });
