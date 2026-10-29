@@ -3,7 +3,7 @@
  * x faces and σy on its y faces (gold, out of the face for tension) and τxy along every face (teal),
  * each arrow's length in proportion to `scale`, the stress that draws a full-length arrow.
  */
-import { C, alpha, arrow, label, pinSupport, poly, rollerSupport, seg, wall } from './diagram.js';
+import { C, alpha, arrow, couple, label, pinSupport, poly, rollerSupport, seg, wall } from './diagram.js';
 
 export function stressElement(S, at, { half = 0.3, sx = 0, sy = 0, txy = 0, scale = 1, full = 30, names = true } = {}) {
   const [x, y] = at;
@@ -83,5 +83,31 @@ export function beamSketch(S, L, { yAt = () => 0, supports = [], points = [], ud
       const x = a + ((b - a) * i) / n;
       arrow(S, [x, yAt(x)], -Math.PI / 2, 18, { color: C.pink, width: 1.5, head: 6, tail: true });
     }
+  }
+}
+
+/**
+ * A shaft from the side: segments { x0, x1, r } (model units), fixed walls at the listed x, and a
+ * line along its surface that twists by φ(x), drawn as a slant (exaggerated by `k`) so the angle
+ * of twist reads as the line's drop. Torques are drawn as purple turning arrows.
+ */
+export function shaftSketch(S, segs, { walls = [], torques = [], phi = () => 0, k = 1 } = {}) {
+  for (const { x0, x1, r } of segs) poly(S, [[x0, -r], [x1, -r], [x1, r], [x0, r]], { fill: alpha(C.text, 0.1), stroke: C.text, width: 1.5 });
+  const L0 = Math.min(...segs.map((s) => s.x0));
+  const L1 = Math.max(...segs.map((s) => s.x1));
+  const rAt = (x) => (segs.find((s) => x >= s.x0 - 1e-12 && x <= s.x1 + 1e-12) || segs[0]).r;
+  let prev = null;
+  for (let i = 0; i <= 60; i++) {
+    const x = L0 + ((L1 - L0) * i) / 60;
+    const r = rAt(x);
+    // A generator that starts on top drifts down as the section turns: r·sin(kφ), kept on the face.
+    const y = r * Math.cos(Math.max(-1.4, Math.min(1.4, k * phi(x))));
+    if (prev) seg(S, prev, [x, y], { color: C.gold, width: 2 });
+    prev = [x, y];
+  }
+  for (const x of walls) wall(S, x, -1.6 * rAt(x), 1.6 * rAt(x), { side: x <= L0 + 1e-9 ? -1 : 1 });
+  for (const { x, T, text } of torques) {
+    couple(S, [x, 0], { r: 14 + 6 * Math.min(1, Math.abs(T)), ccw: T > 0, color: C.purple });
+    if (text) label(S, text, [x, rAt(x)], { color: C.purple, dy: -30 });
   }
 }

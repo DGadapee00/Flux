@@ -1,3 +1,4 @@
+import { beamSketch, shaftSketch } from './elements.js';
 import { cantileverTipDeflection } from '@flux/subjects/mechanics/elastic.js';
 import { polarJ } from '@flux/subjects/mechanics/torsion.js';
 import {
@@ -5,7 +6,7 @@ import {
 } from '@flux/subjects/mechanics/strain-energy.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, begin, dot, line, plotIn } from './diagram.js';
+import { alpha, arrow, axes, begin, C, dot, hidden, label, line, panes, pinSupport, plotIn, poly, sceneIn, seg, wall } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, showField, slider } from './widgets.js';
 
@@ -72,6 +73,49 @@ function trussClosed(state) {
   const U = (F * F * len) / (state.A * E);
   const delta = (F * len) / (state.A * E * sin);
   return { span, rise, len, sin, F, U, delta, P: state.P, A: state.A };
+}
+
+/** The structure the energy is stored in, with its real load, and the dummy load where one is used. */
+function member(B, rect, state, c, veiled) {
+  const id = state.scenarioId;
+  if (id === 'bar') {
+    const L = Math.max(state.L, 0.2);
+    const S = sceneIn(B, rect, { x0: -0.08 * L, x1: 1.3 * L, y0: -0.2 * L, y1: 0.2 * L }, 8);
+    wall(S, 0, -0.12 * L, 0.12 * L, { side: -1 });
+    poly(S, [[0, -0.04 * L], [L, -0.04 * L], [L, 0.04 * L], [0, 0.04 * L]], { fill: alpha(C.gold, 0.2), stroke: C.text });
+    arrow(S, [L, 0], 0, 34, { color: C.pink });
+    if (!veiled) label(S, `${fig(state.P / 1e3)} kN, U = ${fig(c.U)} J`, [L, 0], { color: C.pink, dx: 40, dy: -14 });
+    return;
+  }
+  if (id === 'truss') {
+    const t = trussClosed(state);
+    const S = sceneIn(B, rect, { x0: -0.1 * t.span, x1: 1.1 * t.span, y0: -0.2 * t.span, y1: t.rise + 0.25 * t.span }, 8);
+    const J = [t.span / 2, t.rise];
+    for (const p of [[0, 0], [t.span, 0]]) {
+      seg(S, p, J, { color: C.blue, width: 3 });
+      pinSupport(S, p, { size: 10 });
+    }
+    arrow(S, J, -Math.PI / 2, 34, { color: C.pink, tail: false });
+    if (!veiled) label(S, `${fig(t.P / 1e3)} kN; each bar ${fig(t.F / 1e3)} kN`, J, { color: C.pink, dy: -14 });
+    return;
+  }
+  if (id === 'shaft') {
+    const s = shaftClosed(state);
+    const S = sceneIn(B, rect, { x0: -0.1 * s.L, x1: 1.2 * s.L, y0: -0.3 * s.L, y1: 0.3 * s.L }, 8);
+    shaftSketch(S, [{ x0: 0, x1: s.L, r: 0.07 * s.L }], { walls: [0], torques: [{ x: s.L, T: 1, text: veiled ? '' : `T ${fig(s.T)} N·m` }], phi: (x) => (s.phi * x) / s.L, k: 1.1 / Math.max(s.phi, 1e-9) });
+    return;
+  }
+  const b = beamClosed(state);
+  const L = b.L;
+  const at = (x) => -(b.P / b.EI) * (L * x * x / 2 - x ** 3 / 6);
+  const k = (0.12 * L) / Math.max(Math.abs(at(L)), 1e-12);
+  const S = sceneIn(B, rect, { x0: -0.08 * L, x1: 1.1 * L, y0: -0.3 * L, y1: 0.18 * L }, 8);
+  beamSketch(S, L, { yAt: (x) => k * at(x), supports: [['fixed', 0]], points: [L] });
+  if (id === 'station') {
+    arrow(S, [b.a, k * at(b.a)], -Math.PI / 2, 30, { color: C.teal, width: 2, tail: true });
+    if (!veiled) label(S, 'dummy Q, then Q → 0', [b.a, k * at(b.a)], { color: C.teal, dy: -38 });
+  }
+  if (!veiled) label(S, `${fig(b.P)} N`, [L, k * at(L)], { color: C.pink, dy: -38 });
 }
 
 export default defineLab({
@@ -157,12 +201,18 @@ export default defineLab({
     const delta = state.scenarioId === 'tip' ? tip.delta : station.delta;
     return { U: tip.U, delta, phi: 0, F: c.P, gap: Math.max(tip.gap, station.gap) };
   },
-  draw(canvas, state) {
+  draw(canvas, state, c) {
     const B = begin(canvas);
-    if (state.scenarioId === 'bar') return drawBar(B, state);
-    if (state.scenarioId === 'truss') return drawTruss(B, state);
-    if (state.scenarioId === 'shaft') return drawShaft(B, state);
-    return drawBeam(B, state);
+    const veiled = hidden();
+    const [D, R] = panes(B, 0.42, { long: true });
+    member(B, D, state, c, veiled);
+    if (veiled) return;
+    // The chart keeps the space below (or beside) the drawing.
+    const Bc = { ...B, free: R };
+    if (state.scenarioId === 'bar') return drawBar(Bc, state);
+    if (state.scenarioId === 'truss') return drawTruss(Bc, state);
+    if (state.scenarioId === 'shaft') return drawShaft(Bc, state);
+    return drawBeam(Bc, state);
   },
   law(state) {
     if (state.scenarioId === 'bar') return [String.raw`U=\frac{N^2 L}{2AE}`];
