@@ -310,7 +310,7 @@ const ch9 = [
       const T = (tau * Math.PI * $.d ** 3) / 16;
       const forgot = (Math.sqrt($.allow ** 2 - sx ** 2) * Math.PI * $.d ** 3) / 16;
       const ignore = ($.allow * Math.PI * $.d ** 3) / 16;
-      return rel(T, forgot) && rel(T, ignore);
+      return rel(T, forgot) && rel(T, ignore) && rel(forgot, ignore);
     },
     text: (T) => String.raw`A solid circular bar of diameter ${T.d} mm already carries an axial tension of ${T.P} kN and a bending moment of ${T.M} N·m. How much torque brings the von Mises stress at the outer fiber to ${T.allow} MPa? $\sigma_y = 0$ at that fiber.`,
     parts: [
@@ -732,7 +732,7 @@ const ch9 = [
         scale: MPA,
         label: 'absolute',
         traps: [
-          [($) => $.inPlane, 'That is the in-plane radius. With both principals of one sign, the circle through zero is larger.'],
+          [($) => ($.outOfPlane ? $.inPlane : Math.max(Math.abs($.s1), Math.abs($.s2)) / 2), 'That uses only two of the three principals. The largest shear is half the spread of $\\sigma_1$, $\\sigma_2$ and 0 together.'],
           [($) => 2 * $.abs, 'That is the whole spread of the principals. The shear is half of it.'],
         ],
       }),

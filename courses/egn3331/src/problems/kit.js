@@ -31,6 +31,22 @@ export const mc = (id, options, correct, o = {}) => ({
   label: o.label ?? null,
 });
 
+/**
+ * A symbolic part: the student types a formula in the named symbols. `vars` maps each symbol to its
+ * unit, so the checker can confirm the key has the part's dimension; `get` is the same quantity in SI.
+ */
+export const sym = (id, expr, vars, get, o = {}) => ({
+  id,
+  kind: 'symbolic',
+  expr,
+  vars: Object.keys(vars),
+  units: vars,
+  unit: o.unit ?? null,
+  get,
+  alias: o.alias ?? {},
+  label: o.label ?? null,
+});
+
 export function problem(spec) {
   return {
     level: 1,

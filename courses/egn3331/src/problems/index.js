@@ -9,8 +9,11 @@ import ch9 from './bank/ch9.js';
 import ch12 from './bank/ch12.js';
 import ch13 from './bank/ch13.js';
 import ch14 from './bank/ch14.js';
+import { applyPrincipleTags } from '@flux/shells/practice/principles.js';
+import { PRINCIPLE_TAGS } from './principles.js';
 
-export const PROBLEMS = [...ch1, ...ch2, ...ch4, ...ch5, ...ch6, ...ch7, ...ch8, ...ch9, ...ch12, ...ch13, ...ch14];
+/** Each template's principle tags come from src/problems/principles.js. */
+export const PROBLEMS = applyPrincipleTags([...ch1, ...ch2, ...ch4, ...ch5, ...ch6, ...ch7, ...ch8, ...ch9, ...ch12, ...ch13, ...ch14], PRINCIPLE_TAGS);
 
 const byIdMap = new Map(PROBLEMS.map((p) => [p.id, p]));
 

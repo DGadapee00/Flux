@@ -802,7 +802,6 @@ const ch6 = [
         label: 'largest stress',
         traps: [
           [($) => $.upright, 'That is the stress with no lean. The lean adds bending about the weak axis.'],
-          [($) => ($.M * Math.cos($.th * DEG) * 6) / ($.b * $.h * $.h), 'That keeps only the strong-axis part. The weak-axis part adds at the worst corner.'],
         ],
       }),
       num('alpha', ($) => $.alpha, '°', {

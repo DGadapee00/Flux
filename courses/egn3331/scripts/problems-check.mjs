@@ -19,10 +19,15 @@ import { LAB_META, EXAMS } from '../src/data/catalog.js';
 import { SECTIONS, cite } from '../src/data/textbook.js';
 import { loadLab } from '../src/labs/load.js';
 import { CHAPTER_ORDER, CHAPTER_TITLES, PROBLEMS, problemsForExam } from '../src/problems/index.js';
-import { build, countVersions, expected, grade, instance, parseNumber, render, withinTol } from '../src/problems/engine.js';
+import {
+  build, checkUnits, countVersions, dimensionOf, evalSymbolic, expected, grade, gradeSymbolic, instance, parseExpr, parseNumber, render,
+  withinTol,
+} from '../src/problems/engine.js';
+import { dimEqual, formatDim, parseUnit } from '@flux/subjects/mechanics/units.js';
 import { INTERVAL_DAYS, createProgress, memoryStorage, pickSet } from '../src/problems/progress.js';
 import { applyProblem } from '../src/problems/simbridge.js';
 import { mathProse } from '../src/ui/shared.js';
+import { PRINCIPLES } from '../src/problems/principles.js';
 
 const args = process.argv.slice(2);
 const opt = (name, dflt) => {
@@ -55,6 +60,44 @@ function checkAnswers(tpl, inst, label) {
     if (p.kind === 'choice') {
       const opts = new Set(p.options.map((o) => o.value));
       for (const w of [].concat(want)) if (!opts.has(w)) err(tpl.id, `${label} part ${p.id} answer ${w} not among options`);
+    }
+    if (p.kind === 'symbolic') {
+      const a = evalSymbolic(p, inst.$);
+      const b = p.get(inst.$);
+      if (!(Math.abs(a - b) <= 1e-9 * Math.max(1e-12, Math.abs(b)))) err(tpl.id, `${label} symbolic ${p.id}: key gives ${a}, get() gives ${b}`);
+      if (p.unit && p.units) {
+        try {
+          const got = dimensionOf(parseExpr(p.expr, p.vars, p.alias), p.units);
+          if (!dimEqual(got, parseUnit(p.unit))) err(tpl.id, `symbolic ${p.id}: the key is in ${formatDim(got)}, but the part says ${p.unit}`);
+        } catch (e) {
+          err(tpl.id, `symbolic ${p.id}: units — ${e.message}`);
+        }
+      }
+    }
+  }
+}
+
+/** Every option of a choice part says why: a wrong pick gets that note as its feedback. */
+function checkWhy(tpl) {
+  for (const p of tpl.parts.filter((q) => q.kind === 'choice')) {
+    for (const o of p.options) if (!o.why) err(tpl.id, `option "${o.label ?? o.value}" of ${p.id} has no why`);
+  }
+}
+
+/** Each trap must catch its own mistake, with its own message, in at least 3 of 4 versions. */
+const trapStats = new Map();
+function checkTraps(tpl, inst) {
+  for (const p of tpl.parts.filter((q) => q.kind === 'numeric')) {
+    for (const [fn, msg] of p.traps || []) {
+      const key = `${tpl.id}:${p.id}:${msg}`;
+      const st = trapStats.get(key) || { tried: 0, fired: 0 };
+      st.tried++;
+      const v = fn(inst.$);
+      if (Number.isFinite(v)) {
+        const r = grade(p, inst.$, String(v));
+        if (!r.correct && r.feedback === msg) st.fired++;
+      }
+      trapStats.set(key, st);
     }
   }
 }
@@ -182,6 +225,10 @@ for (const tpl of PROBLEMS) {
   for (const c of tpl.cases) if (!CITATIONS.has(c.src)) err(tpl.id, `case src "${c.src}" is not a citation from textbook.js`);
   if ((tpl.topics || []).includes('english')) englishByUnit[tpl.exam] = (englishByUnit[tpl.exam] || 0) + 1;
   checkHints(tpl);
+  checkWhy(tpl);
+  if (!(tpl.principles || []).length) err(tpl.id, 'no principle tag');
+  for (const pid of tpl.principles || []) if (!PRINCIPLES[pid]) err(tpl.id, `unknown principle ${pid}`);
+  if (tpl.parts.some((p) => p.kind === 'numeric') && !tpl.parts.some((p) => (p.traps || []).length)) err(tpl.id, 'a numeric template needs traps');
   const versions = countVersions(tpl, { need: MIN_VERSIONS });
   if (versions < MIN_VERSIONS) err(tpl.id, `${versions} distinct versions; need at least ${MIN_VERSIONS}`);
 
@@ -225,6 +272,13 @@ for (const tpl of PROBLEMS) {
       break;
     }
     checkAnswers(tpl, inst, `seed ${seed}`);
+    checkTraps(tpl, inst);
+    if (seed <= 3) {
+      for (const p of tpl.parts.filter((q) => q.kind === 'symbolic')) {
+        if (!gradeSymbolic(p, p.expr, inst.$).correct) err(tpl.id, `grader rejects its own key for ${p.id}`);
+        if (gradeSymbolic(p, `(${p.expr})*1.1`, inst.$).correct) err(tpl.id, `grader accepts a wrong answer for ${p.id}`);
+      }
+    }
     try {
       checkRender(tpl, inst);
     } catch (e) {
@@ -239,6 +293,10 @@ for (const tpl of PROBLEMS) {
       break;
     }
   }
+}
+
+for (const [key, st] of trapStats) {
+  if (st.fired < 0.75 * st.tried) err(key.split(':')[0], `trap "${key.split(':').slice(2).join(':')}" fires in ${st.fired} of ${st.tried} versions`);
 }
 
 if (!ONLY) for (const e of EXAMS) if (problemsForExam(e.id).length && !englishByUnit[e.id]) err(e.id, 'no problem in English units');

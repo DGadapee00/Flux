@@ -17,7 +17,10 @@ import {
 
 const engine = createEngine({
   consts: { pi: Math.PI },
-  greek: { 'π': 'pi', 'θ': 'th' },
+  greek: { 'π': 'pi', 'θ': 'th', 'ν': 'nu', 'ρ': 'rho' },
+  // The palette shows the symbols as written in the problem, and the preview typesets them.
+  glyph: { pi: 'π', th: 'θ', nu: 'ν', rho: 'ρ' },
+  texSym: { pi: '\\pi', th: '\\theta', nu: '\\nu', rho: '\\rho' },
   units: { ZERO, CONST_DIMS, parseUnit, formatDim, dimEqual, isDimensionless, dimMul, dimDiv, dimScale },
   prose: 'none',
   steps: 'sig',
@@ -49,4 +52,7 @@ export const {
   gradeSymbolic,
   evalSymbolic,
   countVersions,
+  choiceOptions,
+  exprToTex,
+  GLYPH,
 } = engine;
