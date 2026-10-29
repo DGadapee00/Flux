@@ -1,7 +1,7 @@
 import { eulerLoad, rectColumn, rectI } from '@flux/subjects/mechanics/buckling.js';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, arrow, axes, begin, dot, label, line, plotIn, sceneIn, seg, split } from './diagram.js';
+import { C, alpha, arrow, axes, begin, chartIn, circle, dot, hidden, label, line, panes, pinSupport, poly, sceneIn, seg } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, slider } from './widgets.js';
 
@@ -99,19 +99,49 @@ export default defineLab({
     const c = rectColumn(state.L, b, h, state.E || E, SY, state.K);
     return { ...c, b, h, K: state.K, L: state.L, axis: state.axis };
   },
-  draw(canvas, state) {
+  draw(canvas, state, c) {
     const B = begin(canvas);
-    const [top, bottom] = split(B.free, 0.42);
-    const S = sceneIn(B, top, { x0: -1.2, x1: 1.2, y0: -1.3, y1: 1.3 });
-    seg(S, [0, -1], [0, 1], { color: C.gold, width: 8 });
-    seg(S, [-0.35, -1], [0.35, -1], { color: C.teal, width: 3 });
-    seg(S, [-0.35, 1], [0.35, 1], { color: C.teal, width: 3 });
-    arrow(S, [0, 1], Math.PI / 2, 36, { color: C.pink, width: 3, tail: true });
-    label(S, state.K === 1 ? 'pinned' : `K = ${state.K}`, [0.45, 0], { align: 'left', color: C.teal });
-    label(S, state.axis === 'strong' ? 'strong axis' : 'weak axis', [0, -1.2], { color: C.gold });
+    const veiled = hidden();
+    const [top, bottom] = panes(B, 0.4);
+    // The column, its ends, and the shape it buckles into: a half sine between pins, a quarter
+    // sine standing free, a full cosine wave between fixed ends, and the tan(kL) = kL root for
+    // fixed and pinned. The dashed shape is drawn, not computed to scale.
+    const S = sceneIn(B, top, { x0: -1.3, x1: 1.3, y0: -1.35, y1: 1.45 }, 8);
+    const K = Number(state.K) || 1;
+    const shape = (u) => {
+      if (K === 2) return 1 - Math.cos((Math.PI * u) / 2);
+      if (K === 0.5) return (1 - Math.cos(2 * Math.PI * u)) / 2;
+      if (Math.abs(K - 0.7) < 0.01) {
+        const kL = 4.4934;
+        const f = (x) => kL * (1 - Math.cos(kL * x)) - (kL * x - Math.sin(kL * x));
+        return f(u) / 6.2;
+      }
+      return Math.sin(Math.PI * u);
+    };
+    seg(S, [0, -1], [0, 1], { color: alpha(C.gold, 0.35), width: 6 });
+    let prev = null;
+    for (let i = 0; i <= 40; i++) {
+      const u = i / 40;
+      const p = [0.45 * shape(u), -1 + 2 * u];
+      if (prev) seg(S, prev, p, { color: C.gold, width: 3, dash: [6, 4] });
+      prev = p;
+    }
+    const pinBase = K === 1;
+    if (pinBase) pinSupport(S, [0, -1], { size: 11 });
+    else poly(S, [[-0.5, -1.12], [0.5, -1.12], [0.5, -1], [-0.5, -1]], { fill: alpha(C.muted, 0.4), stroke: C.muted });
+    if (K === 0.5) poly(S, [[-0.5, 1], [0.5, 1], [0.5, 1.12], [-0.5, 1.12]], { fill: alpha(C.muted, 0.4), stroke: C.muted });
+    else if (K !== 2) circle(S, [0, 1], 0.05, { stroke: C.muted, fill: C.bg, width: 2 });
+    arrow(S, [0, K === 0.5 ? 1.12 : 1], Math.PI / 2, 30, { color: C.pink, width: 3, tail: true });
+    if (!veiled) {
+      const ends = { 1: 'pinned–pinned', 2: 'fixed–free', 0.5: 'fixed–fixed', 0.7: 'fixed–pinned' }[K] || `K = ${K}`;
+      label(S, `${ends}, K = ${K}`, [0.55, 0.15], { align: 'left', color: C.teal });
+      label(S, `KL = ${fig(K * state.L)} m`, [0.55, -0.15], { align: 'left', color: C.teal });
+      label(S, state.axis === 'strong' ? 'strong axis' : 'weak axis', [0, -1.12], { color: C.gold, dy: 12 });
+    }
+    if (veiled) return;
 
     const yHi = (SY * WEAK.b * WEAK.h) / 1e3 * 1.15;
-    const P = plotIn(B, bottom, { lo: 0.2, hi: 4.2 }, { lo: 0, hi: yHi });
+    const P = chartIn(B, bottom, { lo: 0.2, hi: 4.2 }, { lo: 0, hi: yHi });
     axes(P, { xLabel: 'length (m)', yLabel: 'governing load (kN)' });
     const weak = [];
     const strong = [];

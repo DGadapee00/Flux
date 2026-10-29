@@ -20,8 +20,10 @@
 - **Labs** are plot2d. `compute` is pure; `draw` paints the member (bar, beam, shaft, element or
   column, to scale where the geometry allows, with its loads and supports) and a chart inside the
   space the panels leave (`labs/diagram.js`). Each lab declares `sweep(state)`, and labs-check
-  moves that slider end to end. In October 2026 only seven labs drew the member; the rest are
-  being brought to this rule under R3c.
+  moves that slider end to end. The drawing and the chart share the space through `panes`
+  (`long` members stack over their chart on a phone). Labs that move (the shear and moment cut,
+  Mohr's element, the axial load, the tension coupon, the torque, the crane rope's catch) keep
+  their clock in the state and take Play and Space from the engineering shell's `motion.js`.
 - **Order.** The eleven units follow the spine the owner confirmed (2.001, then Hibbeler for
   transverse shear and buckling), with the topics D37 adds. All eleven units pass the
   scorecard; Units 4–11 are being reworked to PHY 2049's depth (R3c).
