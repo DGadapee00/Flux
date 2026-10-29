@@ -88,6 +88,8 @@ export const SECTIONS = Object.freeze({
   'combined-loading': { title: 'Combined loadings' },
   'brittle': { title: 'Brittle fracture criteria' },
   'unsymmetric-bending': { title: 'Unsymmetric bending' },
+  'thin-wall-flow': { title: 'Shear flow in thin-walled members' },
+  'shear-centre': { title: 'The shear centre' },
   'buckling': { title: 'Buckling of columns' },
   'energy': { title: 'Strain energy and Castigliano\'s theorem' },
   'impact': { title: 'Impact loading' },

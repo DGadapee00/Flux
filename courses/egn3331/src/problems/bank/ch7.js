@@ -1,11 +1,13 @@
 /**
  * Transverse shear in a rectangle and an I, nail spacing on three boards,
- * and the force in one nail of the APA garage-door header.
+ * the force in one nail of the APA garage-door header, the flow around a flange, and the shear
+ * centre of a channel.
  */
 import { M_PER_FT, N_PER_LBF } from '@flux/subjects/convert.js';
 import {
   bandQ, fastenerSpacing, iBands, iSection, rectShear, shearFlow, stackedBoards,
 } from '@flux/subjects/mechanics/materials.js';
+import { channel } from '@flux/subjects/mechanics/thinwall.js';
 import {
   PLF_TO_NPM, headerInchForce, headerNail,
 } from '../../data/header.js';
@@ -16,6 +18,7 @@ import { choice, cite, kase, mc, num, problem, range } from '../kit.js';
 
 const KN = 1000;
 const MPA = 1e6;
+const MM = 1e-3;
 
 const rel = (a, b) => Math.abs(a - b) > 0.05 * Math.max(Math.abs(a), Math.abs(b), 1e-9);
 
@@ -479,6 +482,173 @@ const ch7 = [
     cases: [
       kase(cite('shear-flow'), { station: 'support', load: 363 }, { which: 'full' }),
       kase(cite('shear-flow'), { station: 'middle', load: 363 }, { which: 'none' }),
+    ],
+  }),
+  problem({
+    id: 'u7.7.flange',
+    title: 'Shear flow in a flange',
+    exam: 'u7',
+    ch: '7',
+    lab: 'shear',
+    src: cite('thin-wall-flow'),
+    topics: ['thin-wall-flow'],
+    variety: ['unknown'],
+    level: 3,
+    vars: {
+      bf: range(100, 200, 10, 'mm', MM),
+      tf: range(8, 16, 1, 'mm', MM),
+      tw: range(5, 10, 1, 'mm', MM),
+      hw: range(150, 300, 10, 'mm', MM),
+      V: range(10, 60, 5, 'kN', KN),
+    },
+    derive: ($) => {
+      const sec = iSection($.bf, $.tf, $.tw, $.hw);
+      const qJoin = ($.V * ($.bf / 2) * $.tf * sec.yf) / sec.I;
+      return { I: sec.I, yf: sec.yf, qJoin, tauF: qJoin / $.tf, tauW: (2 * qJoin) / $.tw };
+    },
+    valid: ($) => $.tauW < 120 * MPA && $.bf / $.tw >= 12,
+    text: (T) => String.raw`A wide-flange beam has flanges $${T.bf}$ mm by $${T.tf}$ mm and a web $${T.tw}$ mm thick and $${T.hw}$ mm tall between the flanges. It carries a shear of $${T.V}$ kN. Find the shear flow in one half of the top flange where it meets the web, the shear stress in the flange there, and the shear stress in the web just below the flange.`,
+    parts: [
+      num('qJoin', ($) => $.qJoin, 'N/mm', {
+        scale: 1000,
+        label: 'flow at the web',
+        traps: [
+          [($) => 2 * $.qJoin, 'That uses the whole flange. Each half flows from its own tip to the web.'],
+        ],
+      }),
+      num('tauF', ($) => $.tauF, 'MPa', {
+        scale: MPA,
+        label: 'flange stress',
+        traps: [
+          [($) => $.qJoin / $.tw, 'That divides the flange flow by the web thickness. Across the flange the wall is $t_f$ thick.'],
+        ],
+      }),
+      num('tauW', ($) => $.tauW, 'MPa', {
+        scale: MPA,
+        label: 'web stress below the flange',
+        traps: [
+          [($) => $.qJoin / $.tw, 'That counts one flange half. Both halves feed the web.'],
+          [($) => (2 * $.qJoin) / $.bf, 'That divides by the flange width. Just below the flange the cut runs through the web.'],
+        ],
+      }),
+    ],
+    hints: [
+      'Walk in from a flange tip. The flow at a cut is $VQ/I$, with $Q$ the first moment of the flange strip between the tip and the cut.',
+      String.raw`At the web, one half-flange has $Q = (b_f/2)\,t_f\,y_f$, with $y_f = h_w/2 + t_f/2$. Two halves meet there and turn into the web.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$I = ${sig($.I / 1e-12 / 1e6)}\times 10^6$ mm⁴ and $y_f = ${sig($.yf / MM)}$ mm.`,
+      String.raw`$Q = ${sig($.bf / 2 / MM)}\times ${sig($.tf / MM)}\times ${sig($.yf / MM)}$ mm³, so $q = VQ/I = ${sig($.qJoin / 1000)}$ N/mm, and $\tau_f = q/t_f = ${sig($.tauF / MPA)}$ MPa.`,
+      String.raw`The web takes $2q$: $\tau_w = 2q/t_w = ${sig($.tauW / MPA)}$ MPa.`,
+    ],
+    second: ($) => {
+      // The web just below the flange, by VQ/It with the whole flange as Q.
+      const sec = iSection($.bf, $.tf, $.tw, $.hw);
+      const Qflange = bandQ(iBands(sec), $.hw / 2);
+      const tauW = ($.V * Qflange) / (sec.I * $.tw);
+      return { qJoin: (tauW * $.tw) / 2 / 1000, tauF: (tauW * $.tw) / 2 / $.tf / MPA, tauW: tauW / MPA };
+    },
+    cases: [kase(cite('thin-wall-flow'), { bf: 120, tf: 10, tw: 6, hw: 160, V: 20 }, { qJoin: 52.555647155812025, tauF: 5.255564715581202, tauW: 17.51854905193734 })],
+  }),
+
+  problem({
+    id: 'u7.7.shear-centre',
+    title: 'The shear centre of a channel',
+    exam: 'u7',
+    ch: '7',
+    lab: null,
+    src: cite('shear-centre'),
+    topics: ['shear-centre'],
+    variety: ['unknown'],
+    level: 3,
+    vars: {
+      b: range(30, 80, 5, 'mm', MM),
+      h: range(100, 250, 10, 'mm', MM),
+      t: range(2, 6, 0.5, 'mm', MM),
+      V: range(2, 10, 1, 'kN', KN),
+    },
+    derive: ($) => channel($.V, $.b, $.h, $.t, $.t),
+    valid: ($) => $.h >= 1.5 * $.b,
+    text: (T) => String.raw`A channel bent from $${T.t}$ mm sheet has flanges $${T.b}$ mm long and $${T.h}$ mm between flange centrelines (all centreline dimensions). Find the distance from the web centreline to the shear centre. If a vertical shear of $${T.V}$ kN is applied through the web centreline instead, what twisting moment does that add?`,
+    parts: [
+      num('e', ($) => $.e, 'mm', {
+        scale: MM,
+        label: 'e',
+        traps: [
+          [($) => $.b / 2, 'Half the flange length is a guess, not a balance. Set the couple of the flange forces equal to $Ve$.'],
+          [($) => ($.b * $.b) / (2 * $.b + $.h), 'That is the centroid\'s distance from the web, on the flange side. The shear centre is behind the web.'],
+        ],
+      }),
+      num('T', ($) => $.twist, 'N·m', {
+        label: 'twisting moment',
+        traps: [
+          [($) => $.V * ($.b / 2), 'That uses half the flange as the offset.'],
+        ],
+      }),
+    ],
+    hints: [
+      'The flange flows run opposite ways in the two flanges, so their forces make a couple. The load must make an equal and opposite couple about the web.',
+      String.raw`Each flange carries $F = V t b^2 h/(4I)$, with the thin-wall $I = t h^3/12 + b t h^2/2$. Then $Ve = Fh$.`,
+    ],
+    steps: ($, sig) => [
+      String.raw`$I = t h^3/12 + b t h^2/2 = ${sig($.I / 1e-12 / 1e6)}\times 10^6$ mm⁴.`,
+      String.raw`Each flange carries $F = V t b^2 h/(4I) = ${sig($.F)}$ N. Then $e = Fh/V = ${sig($.e / MM)}$ mm behind the web.`,
+      String.raw`Through the web the load is $e$ off the shear centre: $T = Ve = ${sig($.twist)}$ N·m.`,
+    ],
+    second: ($) => ({ e: ((3 * $.b * $.b) / ($.h + 6 * $.b)) / MM, T: ($.V * 3 * $.b * $.b) / ($.h + 6 * $.b) }),
+    cases: [kase(cite('shear-centre'), { b: 50, h: 150, t: 3, V: 5 }, { e: 16.666666666666668, T: 83.33333333333334 })],
+  }),
+
+  problem({
+    id: 'u7.7.load-where',
+    title: 'Where to load a section so it does not twist',
+    exam: 'u7',
+    ch: '7',
+    lab: null,
+    src: cite('shear-centre'),
+    kind: 'conceptual',
+    topics: ['shear-centre'],
+    variety: ['representation'],
+    level: 2,
+    vars: {
+      sec: choice(
+        ['channel', 'a thin channel, flanges pointing right'],
+        ['eye', 'a symmetric I'],
+        ['angle', 'an equal-leg angle'],
+        ['box', 'a closed square tube'],
+      ),
+      V: range(1, 20, 1, 'kN', KN),
+    },
+    text: (T) => String.raw`A vertical load of $${T.V}$ kN acts on ${T.sec}. Through which point must the load pass for the member to bend without twisting?`,
+    parts: [
+      mc('where', [
+        ['centroid', 'The centroid.', 'A section with two axes of symmetry has its shear centre at the centroid; the flows balance by symmetry.'],
+        ['behind', 'A point behind the web, on the side away from the flanges.', 'A channel\'s two flange forces make a couple, so the load must sit behind the web to balance it.'],
+        ['corner', 'The corner where the legs meet.', 'An angle\'s flow runs along its two legs, and both legs\' forces pass through the corner.'],
+        ['web', 'The web centreline.', 'The web carries the vertical shear, but in an open section the flange flows add a moment about it.'],
+      ], ($) => ({ channel: 'behind', eye: 'centroid', angle: 'corner', box: 'centroid' }[$.sec])),
+    ],
+    hints: [
+      'Follow the shear flow around the wall and ask where the resultant of all the wall forces acts.',
+      'Symmetry about both axes cancels any twist at the centroid. In a channel the flange flows form a couple. In an angle every wall force passes through one point.',
+    ],
+    steps: ($) => [
+      {
+        channel: 'The flange forces form a couple, so the load must act a distance e behind the web.',
+        eye: 'Two axes of symmetry: the shear centre is the centroid.',
+        angle: 'Both legs\' forces pass through the corner, so the shear centre is there.',
+        box: 'Two axes of symmetry: the shear centre is the centroid.',
+      }[$.sec],
+    ],
+    second: ($) => {
+      // A channel with real flanges has e > 0; with no flanges it collapses onto the web.
+      if ($.sec === 'channel') return { where: channel($.V, 0.05, 0.15, 0.003, 0.003).e > 0 ? 'behind' : 'web' };
+      return { where: $.sec === 'angle' ? 'corner' : 'centroid' };
+    },
+    cases: [
+      kase(cite('shear-centre'), { sec: 'channel', V: 5 }, { where: 'behind' }),
+      kase(cite('shear-centre'), { sec: 'eye', V: 5 }, { where: 'centroid' }),
+      kase(cite('shear-centre'), { sec: 'angle', V: 5 }, { where: 'corner' }),
     ],
   }),
 ];
