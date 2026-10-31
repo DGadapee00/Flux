@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fixed-axis rotation</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">PHY 2048 · Physics I · Unit 6 · OpenStax University Physics Vol. 1, Ch 10, rewritten</div>
+  <h1>Fixed-axis rotation</h1>
+  <p class="lede">A rigid body can turn while every point stays at its own distance from one fixed line. The angle of that turn is one number for the whole body. Force still decides the motion, but the useful form is a torque and a moment of inertia.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+    <span><i style="background:transparent;outline:1px dashed var(--border-hover)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Kinematics</h3>
+    <a href="#s1"><span>1</span>Rotational variables</a>
+    <a href="#s2"><span>2</span>Constant angular acceleration</a>
+    <a href="#s3"><span>3</span>Angular and linear acceleration</a>
+    <h3>Part II · Moment of inertia</h3>
+    <a href="#s4"><span>4</span>Moment of inertia</a>
+    <a href="#s5"><span>5</span>Calculating a moment of inertia</a>
+    <h3>Part III · Dynamics</h3>
+    <a href="#s6"><span>6</span>Torque</a>
+    <a href="#s7"><span>7</span>Newton's second law for rotation</a>
+    <a href="#s8"><span>8</span>Rotational work and power</a>
+    <h3>Reference</h3>
+    <a href="#s9"><span>9</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Kinematics</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Rotational variables</h2>
+<p>Pick an axis and a sense of rotation. Counterclockwise is positive when you look along the axis so that it points toward you. That is the right-hand rule: fingers curl with the turn, and the thumb points along the axis.</p>
+<p>The <b>angular position</b> \(\theta\) is the angle the body has turned from a reference line, in radians. A full turn is \(2\pi\) radians. The <b>angular velocity</b> and the <b>angular acceleration</b> are the first and second rates:</p>
+\[
+\omega = \frac{d\theta}{dt}, \qquad \alpha = \frac{d\omega}{dt}.
+\]
+<p>Over a finite interval the averages are the changes divided by the time:</p>
+\[
+\bar\omega = \frac{\Delta\theta}{\Delta t}, \qquad \bar\alpha = \frac{\Delta\omega}{\Delta t}.
+\]
+<p>Every point of a rigid body on a fixed axis shares one \(\theta\), one \(\omega\), and one \(\alpha\). A point farther from the axis moves faster through space. The angle does not care how far out the point sits.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Radians are the angle measure these formulas use. A revolution, a degree, and an rpm each have to be converted before they enter \(\theta = \omega t\) or \(K = \tfrac12 I\omega^2\).</p>
+</div>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Suppose a rotor coasts to a stop in a time \(T\), and the angular velocity falls as the square of the time that remains:</p>
+\[
+\omega(t) = \omega_0\left(1 - \frac{t}{T}\right)^2.
+\]
+<p>At \(t = 0\) the spin is \(\omega_0\). At \(t = T\) it is zero. The average angular acceleration over the whole stop is the change divided by the time:</p>
+\[
+\bar\alpha = \frac{0 - \omega_0}{T} = -\frac{\omega_0}{T}.
+\]
+<p>The instantaneous \(\alpha\) is the derivative. Let \(u = 1 - t/T\). Then \(\omega = \omega_0 u^2\) and \(du/dt = -1/T\), so</p>
+\[
+\alpha = \omega_0 \cdot 2u \cdot \left(-\frac{1}{T}\right) = -\frac{2\omega_0}{T}\left(1 - \frac{t}{T}\right).
+\]
+<p>At the start, \(\alpha\) is twice the average. At the midpoint it equals the average. At the stop it is zero. A constant-\(\alpha\) formula cannot draw this curve.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a turbine that slows as a square</span>
+<p>A wind turbine has \(\omega(t) = (t - 30)^2/100\), with \(t\) in seconds and \(\omega\) in rad/s. That is the square form with \(\omega_0 = 9.0\ \text{rad/s}\) and \(T = 30\ \text{s}\). The average angular acceleration over the shutdown is</p>
+\[
+\bar\alpha = \frac{0 - 9.0}{30} = -0.300\ \text{rad/s}^2.
+\]
+<p>The instantaneous value is \(\alpha = -0.600\,(1 - t/30)\). At the start, \(\alpha(0) = -0.600\ \text{rad/s}^2\). At 15 s, \(\alpha = -0.300\ \text{rad/s}^2\) and \(\omega = 9.0 \times (1/2)^2 = 2.25\ \text{rad/s}\). At 30 s the turbine is at rest and \(\alpha = 0\). The book prints \(-0.30\ \text{rad/s}^2\) for the average and \(-0.60\ \text{rad/s}^2\) at the start.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reporting the starting \(\alpha\) as if it were the average. For this shutdown the start is twice the average, and the average is negative because the spin is decreasing. Leaving the square off \(\omega(t)\) is the same family of slip: the time that remains is squared.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The axis is fixed, and the body is rigid, so one angle describes the whole object. A real turbine bends, and its shaft sits in bearings that can move a little. The \(\omega(t)\) here is a given function. It does not say which wind or which brake produced it.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Constant angular acceleration</h2>
+<p>When \(\alpha\) is constant, the angle and the angular velocity obey the same rules as \(x\) and \(v\) under a constant linear acceleration. Replace \(x\) with \(\theta\), \(v\) with \(\omega\), and \(a\) with \(\alpha\). Radians stay radians.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Start from \(\alpha = d\omega/dt\) with \(\alpha\) constant, and integrate from \(0\) to \(t\):</p>
+\[
+\omega = \omega_0 + \alpha t.
+\]
+<p>Then \(\omega = d\theta/dt\). Integrate again:</p>
+\[
+\theta = \theta_0 + \omega_0 t + \tfrac12\alpha t^2.
+\]
+<p>Eliminate \(t\) between the two results. From the first, \(t = (\omega - \omega_0)/\alpha\). Put that into the second. The algebra leaves</p>
+\[
+\omega^2 = \omega_0^2 + 2\alpha\,(\theta - \theta_0).
+\]
+<p>From rest, \(\omega_0 = 0\) and \(\theta_0 = 0\), so \(\theta = \tfrac12\alpha t^2\) and \(\omega = \alpha t\). A revolution is still \(2\pi\) radians, so the turn count is \(\theta/(2\pi)\).</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Opposite signs mean the spin is slowing. A positive \(\omega\) and a negative \(\alpha\) move \(\omega\) toward zero. The wheel reverses only if that \(\alpha\) is still acting after \(\omega\) has passed through zero.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a fishing reel spun up from rest</span>
+<p>A fishing reel starts from rest. Its angular acceleration is constant at \(110\ \text{rad/s}^2\) for \(2.00\ \text{s}\). The radius of the reel is \(4.50\ \text{cm}\). Then</p>
+\[
+\omega = (110)(2.00) = 220\ \text{rad/s},
+\]
+\[
+\theta = \tfrac12(110)(2.00)^2 = 220\ \text{rad}.
+\]
+<p>The number of revolutions is \(220/(2\pi) = 35.01\). The book prints \(35.0\ \text{rev}\). The lab shows this \(\alpha\), this time, and this radius on a disk of \(2\ \text{kg}\). The example does not give the reel's mass, so that \(2\ \text{kg}\) is a stand-in that produces the same \(\alpha\) under a tangent force.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a reel brought to a stop</span>
+<p>The same reel is turning at \(220\ \text{rad/s}\) when a brake applies \(\alpha = -300\ \text{rad/s}^2\). Set the later angular velocity to zero:</p>
+\[
+0 = 220 + (-300)\,t, \qquad t = \frac{220}{300} = 0.733\ \text{s}.
+\]
+<p>The book prints \(0.733\ \text{s}\). The angle turned during the stop is \(\omega_0^2/(2|\alpha|) = 220^2/(600) = 80.67\ \text{rad}\). The lab's \(2\ \text{kg}\) disk is again a stand-in. A force of \(-60\ \text{N}\) at a radius of \(0.20\ \text{m}\) gives this \(\alpha\) for that disk, and the wheel is at rest when the time runs out.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(\tfrac12\alpha t^2\) for the angular velocity, or \(\alpha t^2\) for the angle. The factor \(\tfrac12\) belongs to the angle, as it does for \(x = \tfrac12 a t^2\). Dividing a radian angle by \(360\) to count revolutions treats radians as degrees. Divide by \(2\pi\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Constant \(\alpha\) is a model of the interval you were given, not a law the machine obeys forever. The turbine in the previous section has an \(\alpha\) that changes. A brake also fades, and a bearing adds a torque the constant-\(\alpha\) line does not show.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Angular and linear acceleration</h2>
+<p>A point at distance \(r\) from the axis moves on a circle of that radius. Its arc length is \(s = r\theta\), so its speed and its two accelerations follow by differentiating, with \(r\) fixed:</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Differentiate \(s = r\theta\) twice. The radius does not change on a rigid body, so</p>
+\[
+v = r\omega, \qquad a_t = r\alpha.
+\]
+<p>The speed is perpendicular to the radius. There is also a centripetal acceleration, toward the axis, of size \(v^2/r\). Write \(v = r\omega\):</p>
+\[
+a_c = \frac{v^2}{r} = r\omega^2.
+\]
+<p>\(a_t\) and \(a_c\) are perpendicular. The magnitude of the total acceleration is</p>
+\[
+|a| = \sqrt{a_t^2 + a_c^2}.
+\]
+<p>\(a_t\) carries the sign of \(\alpha\). Slowing down makes \(a_t\) negative when \(\omega\) is positive. \(a_c\) is a size, and it uses the \(\omega\) at that instant, not the \(\omega\) from the start of the problem.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a centrifuge one second from rest</span>
+<p>A centrifuge rotor has radius \(0.20\ \text{m}\). It spins at \(10\,000\ \text{rpm}\) and is brought to rest in \(30\ \text{s}\) at constant \(\alpha\). The question asks for the rim at \(t = 29\ \text{s}\), one second before the stop. First convert the spin:</p>
+\[
+\omega_0 = 10000 \times \frac{2\pi}{60} = 1047\ \text{rad/s}.
+\]
+<p>Then \(\alpha = -\omega_0/30 = -34.91\ \text{rad/s}^2\). One second before the stop the rotor still has \(\omega_0/30\):</p>
+\[
+\omega = 34.91\ \text{rad/s}.
+\]
+<p>The rim accelerations are</p>
+\[
+a_t = (0.20)(-34.91) = -6.981\ \text{m/s}^2,
+\]
+\[
+a_c = (0.20)(34.91)^2 = 243.7\ \text{m/s}^2,
+\]
+\[
+|a| = \sqrt{(-6.981)^2 + (243.7)^2} = 243.8\ \text{m/s}^2.
+\]
+<p>The book prints \(|a_t| = 7.0\ \text{m/s}^2\), \(a_c = 245\ \text{m/s}^2\), and \(|a| = 245.1\ \text{m/s}^2\), with \(\alpha = -34.9\ \text{rad/s}^2\) and \(\omega = 35.1\ \text{rad/s}\). The sign on \(a_t\) is the slowing. The lab disk has a mass of \(2\ \text{kg}\) only so a tangent force can produce this \(\alpha\). The example's answers do not use that mass.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving \(10\,000\ \text{rpm}\) in the formula as if it were rad/s. Using \(\omega_0\) for the centripetal acceleration after the rotor has already slowed. Adding \(a_t\) and \(a_c\) as ordinary numbers. They are perpendicular, so the magnitude is the square root of the sum of the squares.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The rim is a rigid circle at one radius. A tube in a real centrifuge sits in a bucket, and the sample is a fluid, not a point glued to the rim. Gravity and the stress in the rotor are left out of \(a_t\) and \(a_c\). Those two numbers describe the motion of a point, not the force that point feels.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Moment of inertia</h2>
+</div>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Moment of inertia</h2>
+<p>Newton's second law for a point is \(F = ma\). For a rigid body on a fixed axis, the same idea is a torque on one side and a resistance to angular acceleration on the other. That resistance is the <b>moment of inertia</b>.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Break the body into small masses \(dm\). A piece at distance \(r\) from the axis has \(a_t = r\alpha\), so the tangent force on it is \(dF = a_t\,dm = r\alpha\,dm\). The torque of that force about the axis is \(r\,dF\):</p>
+\[
+d\tau = r^2\alpha\,dm.
+\]
+<p>Sum over the body. \(\alpha\) is the same for every piece, so it factors out:</p>
+\[
+\tau = \alpha\int r^2\,dm = I\alpha, \qquad I = \int r^2\,dm.
+\]
+<p>The rotational kinetic energy is the sum of \(\tfrac12 v^2\,dm\). With \(v = r\omega\),</p>
+\[
+K = \tfrac12\omega^2\int r^2\,dm = \tfrac12 I\omega^2.
+\]
+<p>A thin hoop of mass \(m\) and radius \(R\), about its center, has every bit at \(r = R\), so \(I = mR^2\). A solid disk is \(\tfrac12 mR^2\). A solid sphere is \(\tfrac25 mR^2\). A thin rod of length \(L\) is \(\tfrac{1}{12}mL^2\) about its center and \(\tfrac13 mL^2\) about one end. The same mass, farther from the axis, means a larger \(I\) and a smaller \(\alpha\) under one torque.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Among a hoop, a disk, and a solid sphere of equal mass and equal outer radius, the sphere has the smallest \(I\) and the largest \(\alpha\) under one torque. The hoop has the largest \(I\). Doubling the radius of a disk, with the same mass and with the force kept at the rim, halves \(\alpha\): \(I\) grows by four and the torque only doubles.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the blades of a rescue helicopter</span>
+<p>A rescue helicopter has four blades. Each blade is a rod of mass \(50.0\ \text{kg}\) and length \(4.00\ \text{m}\), taken about the hub at one end. The rotor turns at \(300\ \text{rpm}\). The helicopter has mass \(1000\ \text{kg}\) and flies at \(20.0\ \text{m/s}\). One blade has</p>
+\[
+I_1 = \tfrac13(50.0)(4.00)^2 = \tfrac{800}{3}\ \text{kg·m}^2.
+\]
+<p>Four blades have \(I = 3200/3 = 1067\ \text{kg·m}^2\). The angular velocity is</p>
+\[
+\omega = 300 \times \frac{2\pi}{60} = 10\pi = 31.42\ \text{rad/s}.
+\]
+<p>The two kinetic energies are</p>
+\[
+K_{\text{rot}} = \tfrac12\left(\frac{3200}{3}\right)(10\pi)^2 = 5.264\times 10^{5}\ \text{J},
+\]
+\[
+K_{\text{trans}} = \tfrac12(1000)(20.0)^2 = 2.000\times 10^{5}\ \text{J}.
+\]
+<p>The ratio of flight energy to blade energy is \(0.380\). The book prints \(I = 1067\ \text{kg·m}^2\), \(K_{\text{rot}} = 5.26\times 10^{5}\ \text{J}\), \(K_{\text{trans}} = 2.00\times 10^{5}\ \text{J}\), and the ratio \(0.380\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(mL^2/12\) for a blade. That is the rod about its center. The hub is at the end, so the moment is \(mL^2/3\). Squaring the spin while it is still in rpm is the other common slip. \(300\ \text{rpm}\) is \(10\pi\ \text{rad/s}\), not \(300\ \text{rad/s}\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A blade is not a rigid rod, and the hub and the hinges have mass of their own. The \(1000\ \text{kg}\) already includes the blades, so their share of the flight energy is inside \(K_{\text{trans}}\) and is not added again. Air loads the rotor. The engine replaces the energy the air takes. The \(4.00\ \text{m}\), \(50.0\ \text{kg}\), \(300\ \text{rpm}\), and \(20.0\ \text{m/s}\) are the book's figures for this example.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Calculating a moment of inertia</h2>
+<p>The integral \(I = \int r^2\,dm\) is the definition. For a uniform body the density comes out, and the integral is a geometry problem. When you already know \(I\) about a parallel axis through the center of mass, you do not start over.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Let the new axis be parallel to the center-of-mass axis and a distance \(d\) away. Write the distance of a piece from the new axis as a center-of-mass distance plus a shift. The cross term sums to zero because the center of mass is the balance point of the mass. What remains is</p>
+\[
+I = I_{\text{cm}} + md^2.
+\]
+<p>This is the parallel-axis theorem. The added term is never negative. Moving the axis off the center of mass raises \(I\). For a thin rod, \(d = L/2\) takes the center to one end:</p>
+\[
+I_{\text{end}} = \frac{1}{12}mL^2 + m\left(\frac{L}{2}\right)^2 = \frac{1}{3}mL^2.
+\]
+<p>The end is four times the center. A composite body is the sum of the pieces, each about the same axis. A sphere whose center is a distance \(d\) from the axis contributes \(\tfrac25 mR^2 + md^2\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a rod about its end</span>
+<p>A uniform rod has mass \(2.0\ \text{kg}\) and length \(0.50\ \text{m}\). About a perpendicular axis through the center,</p>
+\[
+I_{\text{cm}} = \frac{1}{12}(2.0)(0.50)^2 = 0.04167\ \text{kg·m}^2.
+\]
+<p>About one end,</p>
+\[
+I_{\text{end}} = \frac{1}{3}(2.0)(0.50)^2 = 0.1667\ \text{kg·m}^2.
+\]
+<p>The book prints \(0.167\ \text{kg·m}^2\) for the end. The center value is the same rod before the axis moves. Check the shift: \(0.04167 + (2.0)(0.25)^2 = 0.1667\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a rod with a sphere on the end</span>
+<p>The rod above carries a solid sphere on one end. The sphere has mass \(1.0\ \text{kg}\) and radius \(0.20\ \text{m}\). Its own moment about its center is</p>
+\[
+I_{\text{sphere}} = \tfrac25(1.0)(0.20)^2 = 0.01600\ \text{kg·m}^2.
+\]
+<p>The rod is taken about one end, \(0.1667\ \text{kg·m}^2\). On the far axis the sphere's center is \(0.50 + 0.20 = 0.70\ \text{m}\) from the pivot:</p>
+\[
+I_{\text{far}} = 0.1667 + 0.01600 + (1.0)(0.70)^2 = 0.6727\ \text{kg·m}^2.
+\]
+<p>On the near axis the pivot is at the end the sphere sits on, so the sphere's center is \(0.20\ \text{m}\) from the axis:</p>
+\[
+I_{\text{near}} = 0.1667 + 0.01600 + (1.0)(0.20)^2 = 0.2227\ \text{kg·m}^2.
+\]
+<p>The book prints \(0.673\ \text{kg·m}^2\) and \(0.223\ \text{kg·m}^2\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Subtracting \(md^2\), or using \(mL^2/12\) when the axis is at the end. The shift adds. Forgetting the sphere's own \(\tfrac25 mR^2\), or measuring \(d\) to the end of the rod instead of to the sphere's center, changes the composite answer by a real amount.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The rod is thin and uniform, and the sphere is a uniform solid. A hollow ball, a rod with a thick end, or a density that varies along the length needs the integral again. The theorem also needs the two axes to be parallel. An axis at an angle to the first is a different problem.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Dynamics</h2>
+</div>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Torque</h2>
+<p>A force changes the rotation only to the extent that it does not point along the lever arm. The lever arm is the line from the axis to the point where the force is applied.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Let \(\phi\) be the angle between the lever arm \(\vec r\) and the force \(\vec F\). The cross product \(\vec r\times\vec F\) has size \(rF\sin\phi\), and its direction is along the axis by the right-hand rule. The scalar torque about that axis is the signed size:</p>
+\[
+\tau = rF\sin\phi.
+\]
+<p>A perpendicular force has \(\sin 90^\circ = 1\), so \(\tau = rF\). A force along the lever arm has \(\sin 0 = 0\) and does not turn the body. Several forces add as signed numbers once a positive sense is chosen. Counterclockwise is positive here. A clockwise force contributes a negative torque.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a force perpendicular to its lever arm</span>
+<p>A \(40\ \text{N}\) force is applied \(4.0\ \text{m}\) from the axis, perpendicular to the lever arm, and counterclockwise. Then</p>
+\[
+\tau = (4.0)(40)\sin 90^\circ = 160\ \text{N·m}.
+\]
+<p>The book prints \(160\ \text{N·m}\) for this force. The lab can show it on a disk: the radius is the lever arm, and the angle between the radius and the force is \(90^\circ\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a force at 53 degrees</span>
+<p>A \(30\ \text{N}\) force is applied \(5.0\ \text{m}\) from the axis. The angle between the lever arm and the force is \(53^\circ\). Then</p>
+\[
+\tau = (5.0)(30)\sin 53^\circ = 119.8\ \text{N·m}.
+\]
+<p>The book prints \(120\ \text{N·m}\). The sine, not the cosine, is the factor. \(\sin 53^\circ = 0.7986\), and \(150 \times 0.7986 = 119.8\).</p>
+<p>The same figure has two more forces. A \(20\ \text{N}\) force at \(3.0\ \text{m}\), perpendicular and clockwise, contributes \(-60\ \text{N·m}\). A \(20\ \text{N}\) force at \(1.0\ \text{m}\) and \(30^\circ\), counterclockwise, contributes \((1.0)(20)\sin 30^\circ = 10\ \text{N·m}\). The net torque is</p>
+\[
+160 - 60 + 119.8 + 10 = 229.8\ \text{N·m}.
+\]
+<p>The book prints \(230\ \text{N·m}\), using \(120\) for the \(53^\circ\) piece. One force in the lab cannot show all four at once. The net is the sum of the signed pieces.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(\cos\phi\) instead of \(\sin\phi\). Dropping the lever arm and reporting the force. Making every torque positive, so a clockwise force is added instead of subtracted. Multiplying by the angle in radians instead of by the sine of the angle. At \(90^\circ\) the sine is \(1\), and the radian measure \(\pi/2\) is not.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The force is applied at a point on a rigid body, and the axis does not move. A real push is spread over a contact patch. If the body bends, the lever arm changes while the force acts. The sign convention is a choice. The physics is the same if clockwise is the positive sense, as long as every torque uses that same choice.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Newton's second law for rotation</h2>
+<p>The torque equation is the rotational form of \(\vec F = m\vec a\):</p>
+\[
+\tau_{\text{net}} = I\alpha.
+\]
+<p>\(I\) and \(\tau\) must be about the same axis. \(\alpha\) comes out in rad/s² when \(\tau\) is in N·m and \(I\) is in kg·m².</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Two masses hang from a string over a pulley of moment \(I\) and radius \(R\). The string does not slip, so the linear acceleration \(a\) and the angular acceleration are tied by \(a = R\alpha\). Take \(m_2\) as the descending mass. Its equation is \(m_2 g - T_2 = m_2 a\). The rising mass has \(T_1 - m_1 g = m_1 a\). The pulley has \((T_2 - T_1)R = I\alpha = Ia/R\).</p>
+<p>Solve the three equations. The tensions are \(T_1 = m_1(g + a)\) and \(T_2 = m_2(g - a)\), and the acceleration is</p>
+\[
+a = \frac{(m_2 - m_1)g}{m_1 + m_2 + I/R^2}.
+\]
+<p>A light pulley has \(I = 0\), and the two tensions become one tension. A uniform disk has \(I = \tfrac12 m_p R^2\), so \(I/R^2 = \tfrac12 m_p\). The radius cancels. Doubling the disk's radius at fixed pulley mass does not change \(a\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two masses on a disk pulley</span>
+<p>A \(1.00\ \text{kg}\) mass and a \(3.00\ \text{kg}\) mass hang from a uniform disk pulley of mass \(2.00\ \text{kg}\) and radius \(0.100\ \text{m}\). Take \(g = 9.81\ \text{m/s}^2\). Then \(I/R^2 = \tfrac12(2.00) = 1.00\ \text{kg}\), and</p>
+\[
+a = \frac{(3.00 - 1.00)(9.81)}{1.00 + 3.00 + 1.00} = 3.924\ \text{m/s}^2.
+\]
+<p>The tensions are</p>
+\[
+T_1 = (1.00)(9.81 + 3.924) = 13.73\ \text{N},
+\]
+\[
+T_2 = (3.00)(9.81 - 3.924) = 17.66\ \text{N}.
+\]
+<p>Their difference is \(3.93\ \text{N}\), and \((T_2 - T_1)R = I\alpha\). The section derives this machine and does not print this set of numbers. They are fixed here so the lab and the notes name one case. A light pulley with the same two masses would have \(a = (2)(9.81)/4 = 4.905\ \text{m/s}^2\), and one tension.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a child on a merry-go-round</span>
+<p>A merry-go-round is a uniform disk of mass \(50.0\ \text{kg}\) and radius \(1.50\ \text{m}\). A \(250\ \text{N}\) force is applied at the rim, perpendicular to the radius. The moment and the torque are</p>
+\[
+I = \tfrac12(50.0)(1.50)^2 = 56.25\ \text{kg·m}^2, \qquad \tau = (1.50)(250) = 375\ \text{N·m}.
+\]
+<p>With nobody on it,</p>
+\[
+\alpha = \frac{375}{56.25} = 6.667\ \text{rad/s}^2.
+\]
+<p>An \(18.0\ \text{kg}\) child stands \(1.25\ \text{m}\) from the center. The child is a point mass, \(I_{\text{child}} = (18.0)(1.25)^2 = 28.13\ \text{kg·m}^2\). The total is \(84.38\ \text{kg·m}^2\), and</p>
+\[
+\alpha = \frac{375}{84.38} = 4.444\ \text{rad/s}^2.
+\]
+<p>The book prints \(6.67\ \text{rad/s}^2\) and \(4.44\ \text{rad/s}^2\). The child is not a second disk. Using \(\tfrac12 mr^2\) for the child would make \(\alpha\) too large.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Treating a massive pulley as light, so \(a = (m_2 - m_1)g/(m_1 + m_2)\) and the two tensions are equal. Adding the whole pulley mass instead of \(I/R^2\). For a disk that share is half the pulley mass. On the merry-go-round, using \(I = mR^2\) for the disk, or leaving the child out, or giving the child a factor of \(\tfrac12\), each produces a different \(\alpha\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The string does not slip, and the bearing is frictionless. A real pulley has axle friction, and the string stretches. The child is a point mass at one radius, not a person who can shift their weight. The merry-go-round's motor and its bearings are left out. The push is a constant force at the rim for as long as the problem says.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Rotational work and power</h2>
+<p>A torque that turns a body through an angle does work. If the torque is constant and the angle is in radians,</p>
+\[
+W = \tau\theta.
+\]
+<div class="box why"><span class="tag">Derivation</span>
+<p>A tangent force \(F\) moves through an arc \(s = r\theta\). Its work is \(Fs = Fr\theta\). The product \(Fr\) is the torque when the force is perpendicular to the radius, so \(W = \tau\theta\). The work–energy theorem still holds. With no other work,</p>
+\[
+W = \Delta K = \tfrac12 I\omega^2 - \tfrac12 I\omega_0^2.
+\]
+<p>From rest, \(\tau\theta = \tfrac12 I\omega^2\). Differentiate a constant torque's work with respect to time. \(d\theta/dt = \omega\), so the power is</p>
+\[
+P = \tau\omega.
+\]
+<p>Solve for the torque when the power and the spin are the data: \(\tau = P/\omega\), with \(\omega\) in rad/s. A count of revolutions is not yet an angle. Multiply by \(2\pi\) before you use \(\theta\) in \(W = \tau\theta\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a rope pulled through one metre</span>
+<p>A pulley has moment of inertia \(2.5\times 10^{-3}\ \text{kg·m}^2\) and radius \(0.10\ \text{m}\). A rope is pulled with a steady \(50\ \text{N}\), tangent to the rim, through \(1.0\ \text{m}\), from rest. The work is</p>
+\[
+W = (50)(1.0) = 50\ \text{J}.
+\]
+<p>The torque is \(\tau = (50)(0.10) = 5.0\ \text{N·m}\), and the angle is \(\theta = 1.0/0.10 = 10\ \text{rad}\), so \(\tau\theta = 50\ \text{J}\) as well. Then</p>
+\[
+\omega = \sqrt{\frac{2W}{I}} = \sqrt{\frac{100}{2.5\times 10^{-3}}} = 200\ \text{rad/s}.
+\]
+<p>The book prints \(200\ \text{rad/s}\). The lab shows this on a disk of mass \(0.50\ \text{kg}\) and radius \(0.10\ \text{m}\), which has \(I = \tfrac12(0.50)(0.10)^2 = 2.5\times 10^{-3}\ \text{kg·m}^2\). The pull lasts \(0.10\ \text{s}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a flywheel spun from rest</span>
+<p>A flywheel has \(I = 30.0\ \text{kg·m}^2\). A constant torque of \(12.0\ \text{N·m}\) turns it through \(8.00\) revolutions from rest. The angle is \(8.00 \times 2\pi = 16\pi\ \text{rad}\). The work is</p>
+\[
+W = (12.0)(16\pi) = 603.2\ \text{J}.
+\]
+<p>That equals the kinetic energy at the end, so</p>
+\[
+\omega = \sqrt{\frac{2\times 603.2}{30.0}} = 6.341\ \text{rad/s}.
+\]
+<p>The book prints \(6.3\ \text{rad/s}\). The lab uses a disk of radius \(1.00\ \text{m}\) and mass \(60.0\ \text{kg}\), so \(I = \tfrac12(60)(1)^2 = 30\ \text{kg·m}^2\), and a tangent force of \(12\ \text{N}\). Those stand-in numbers are not in the example. The example gives \(\tau\) and \(I\), not a radius.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a propeller shaft</span>
+<p>A boat propeller delivers \(9.0\times 10^{4}\ \text{W}\) at \(300\ \text{rev/min}\). The angular velocity is \(300 \times 2\pi/60 = 10\pi = 31.42\ \text{rad/s}\). The torque is</p>
+\[
+\tau = \frac{9.0\times 10^{4}}{10\pi} = 2864.8\ \text{N·m}.
+\]
+<p>The book prints \(31.4\ \text{rad/s}\) and \(2864.8\ \text{N·m}\). The torque matches \(10\pi\), not a division by the rounded \(31.4\). There is no radius in the data, so this shaft is not drawn on the rotor lab. Dividing the power by \(300\ \text{rpm}\) instead of by \(31.42\ \text{rad/s}\) gives \(300\ \text{N·m}\), which is short by a factor of \(2\pi/60\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the revolution count as the angle in \(\tau\theta\). Eight revolutions are \(16\pi\) radians, and dropping the \(2\pi\) makes the work too small. Dropping the square root in \(\omega = \sqrt{2W/I}\). Dividing power by rpm. Reporting \(\tfrac12 I\omega^2\) as the work when the body was already turning: the work is the gain, not the energy sitting there at the end.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The bearing is frictionless, and the torque is constant over the angle you were given. A propeller also pushes water, and that load is why a shaft needs a torque in the first place. The formula \(P = \tau\omega\) does not say where the power came from. An engine, a motor, or a falling mass can supply it. The fixed axis itself does no work, because the point on the axis does not move.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Formula sheet</h2>
+\[
+\omega = \frac{d\theta}{dt}, \qquad \alpha = \frac{d\omega}{dt}, \qquad \bar\alpha = \frac{\Delta\omega}{\Delta t}
+\]
+\[
+\omega = \omega_0 + \alpha t, \qquad \theta = \theta_0 + \omega_0 t + \tfrac12\alpha t^2, \qquad \omega^2 = \omega_0^2 + 2\alpha\Delta\theta
+\]
+\[
+v = r\omega, \qquad a_t = r\alpha, \qquad a_c = r\omega^2, \qquad |a| = \sqrt{a_t^2 + a_c^2}
+\]
+\[
+I = \int r^2\,dm, \qquad K = \tfrac12 I\omega^2, \qquad \tau = I\alpha
+\]
+\[
+\text{hoop } mR^2, \quad \text{disk } \tfrac12 mR^2, \quad \text{sphere } \tfrac25 mR^2, \quad \text{rod center } \tfrac{1}{12}mL^2, \quad \text{rod end } \tfrac13 mL^2
+\]
+\[
+I = I_{\text{cm}} + md^2, \qquad \tau = rF\sin\phi
+\]
+\[
+a = \frac{(m_2 - m_1)g}{m_1 + m_2 + I/R^2}, \qquad T_1 = m_1(g + a), \qquad T_2 = m_2(g - a)
+\]
+\[
+W = \tau\theta = \Delta K, \qquad P = \tau\omega
+\]
+</section>
+
+</main>
+</body>
+</html>
