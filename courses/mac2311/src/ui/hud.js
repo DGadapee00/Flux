@@ -17,5 +17,6 @@ export function createHUD(api) {
     track: trackSiblings(course.id),
     homeId,
     notes: notesDeps,
+    predictions: true,
   });
 }

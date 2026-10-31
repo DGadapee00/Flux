@@ -10,6 +10,8 @@ const engine = createEngine({
   glyph: { pi: 'π', th: 'θ', eps: 'ε', delta: 'δ', e: 'e' },
   texSym: { pi: '\\pi', th: '\\theta', eps: '\\varepsilon', delta: '\\delta' },
   prose: 'none',
+  optionWhy: true,
+  choiceNotes: true,
   steps: 'sig',
   numbers: 'unit',
   sig: { figures: 3, lo: 0.01, hi: 1e5, tiny: true },
