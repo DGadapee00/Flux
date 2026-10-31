@@ -37,3 +37,9 @@ audit remain outstanding; this change establishes the merged module and migratio
 Original explanations and statements follow 18.01SC (Fall 2010), Unit 1. Symbolic worked cases reproduce the published answer formulas for exercises 1C-1, 1E-1, 1F-1, 1F-3, 1I-1 and 1J-1. Numeric cases check 1B-1, 1C-5 and the Secants and Tangents activity. Rounded printed secant values are identified as rounded. Conceptual families cite the relevant exercise or OpenStax definition; these are reasoning checks, not claims of a new printed numeric answer.
 
 Camera inputs: Nikon AF NIKKOR 50mm f/1.8D nominal focal length 50 mm and minimum focus 0.45 m; AF NIKKOR 85mm f/1.8D nominal focal length 85 mm. Other subject distances are stated teaching inputs. The thin-lens idealisation does not claim a product calibration. No source text or figures are copied. Raw references remain outside the shipped course.
+
+## Unit 2 content rework
+
+Original explanations follow 18.01SC Unit 2, including Session 40’s first differential equations. Worked cases check solutions 2A-1, 2A-2, 2A-8, 2A-10, 2G-1 and the nonconvergent Newton cases in 2F-5. The open-cylinder ratio agrees with 2C-5; that source fixes area and maximizes volume, while the lab solves the inverse fixed-volume/least-area problem. The identical stationary proportions are identified explicitly. Antiderivative cases use Unit 1 solution 1E-2 with the stated integration constant. Conceptual transfers and definition-based cases are identified as such.
+
+The can application uses the 330 mL capacity in the Coca-Cola GB-linked can listing, https://www.yourcoca-cola.co.uk/coca-cola-lemon-24-x-330ml/15227578.html (linked from the manufacturer’s Coca-Cola Original Taste page). All radii, flat-end shapes and the 500 mL alternative are teaching inputs, not product measurements. No source text or images are copied.

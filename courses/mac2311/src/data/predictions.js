@@ -94,3 +94,81 @@ export const PREDICTIONS = {
   ],
 };
 export const predictionsFor = (id) => PREDICTIONS[id] || [];
+
+PREDICTIONS.rates = [
+  {
+    id: 'near-floor',
+    scenario: 'mid',
+    ask: 'The base keeps the same speed. Move it from 6 to 8 ft out on a 10 ft ladder. Does the top keep the same speed?',
+    apply: (s) => {
+      s.x = 8;
+    },
+    watch: [{ id: 'top', label: 'Top speed magnitude', get: (c) => c.dy, mode: 'trend' }],
+    expect: { top: 'bigger' },
+    why: 'The constraint gives |y′|=(x/y)|x′|. The horizontal-to-vertical ratio grows as the ladder flattens.',
+  },
+  {
+    id: 'base-speed',
+    scenario: 'mid',
+    prep: (s) => {
+      s.v = 1;
+    },
+    ask: 'At the same position, double the base speed. What happens to the top’s speed?',
+    apply: (s) => {
+      s.v *= 2;
+    },
+    watch: [{ id: 'top', label: 'Top speed magnitude', get: (c) => c.dy, mode: 'factor' }],
+    expect: { top: 2 },
+    why: 'Position fixes x/y. The instantaneous relation is linear in the base speed, even though it is nonlinear in position.',
+  },
+];
+PREDICTIONS.box = [
+  {
+    id: 'deeper-cut',
+    scenario: 'short',
+    ask: 'Raise the cut from 1 to 4 inches on a 12 inch sheet. Does the taller box hold more?',
+    apply: (s) => {
+      s.x = 4;
+    },
+    watch: [{ id: 'volume', label: 'Volume', get: (c) => c.v, mode: 'trend' }],
+    expect: { volume: 'smaller' },
+    why: 'The height quadruples, but both base dimensions shrink. Volume drops from 100 to 64 cubic inches.',
+  },
+  {
+    id: 'scale-sheet',
+    scenario: 'short',
+    ask: 'Double the sheet side and the cut. How does volume scale?',
+    apply: (s) => {
+      s.side *= 2;
+      s.x *= 2;
+    },
+    watch: [{ id: 'volume', label: 'Volume', get: (c) => c.v, mode: 'factor' }],
+    factors: [8, 4, 2, 1, 0.5],
+    expect: { volume: 8 },
+    why: 'All three lengths double. Their product is eight times as large.',
+  },
+];
+PREDICTIONS.can = [
+  {
+    id: 'radius-height',
+    scenario: 'closed',
+    ask: 'Hold capacity fixed and double the radius. Does height halve or quarter?',
+    apply: (s) => {
+      s.r *= 2;
+    },
+    watch: [{ id: 'height', label: 'Height', get: (c) => c.h, mode: 'factor' }],
+    expect: { height: 0.25 },
+    why: 'The circular cross-section grows by four. Fixed volume requires one quarter of the height.',
+  },
+  {
+    id: 'remove-lid',
+    scenario: 'closed',
+    ask: 'Remove the lid, then redesign for least area at the same volume. Is the new optimum taller or shorter?',
+    apply: (s) => {
+      s.k = 1;
+    },
+    watch: [{ id: 'height', label: 'Optimal height', get: (c) => c.optH, mode: 'trend' }],
+    expect: { height: 'smaller' },
+    why: 'Removing a circular end allows a larger optimal radius. The optimum changes from h=2r to h=r, so its height decreases despite the larger radius.',
+  },
+];

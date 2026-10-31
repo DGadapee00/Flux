@@ -202,7 +202,7 @@ review course; nothing is planned. Technical electives are planned when the owne
 ### Calculus unit PRs (R4a)
 
 - [x] Unit 1: differentiation content rework; owner review pending.
-- [ ] Unit 2: applications of differentiation.
+- [x] Unit 2: applications of differentiation content rework; owner review pending.
 - [ ] Unit 3: definite integral and applications.
 - [ ] Unit 4: integration techniques.
 - [ ] Unit 5: parametric and polar.
