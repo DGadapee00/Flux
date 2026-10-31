@@ -225,6 +225,12 @@ export const TOPICS = Object.freeze({
   damper: '15.4',
   damping: '15.5',
   resonance: '15.6',
+  wave: '16.1',
+  'wave-math': '16.2',
+  'wave-speed': '16.3',
+  'wave-power': '16.4',
+  interference: '16.5',
+  standing: '16.6',
 });
 
 /** The citation for a section number, such as '5.4', or null when the book has no such section. */
