@@ -134,7 +134,8 @@ export function axes(P, { xLabel = '', yLabel = '', xFmt = fmtTick, yFmt = fmtTi
   const { ctx, box, X, Y } = P;
   ctx.font = FONT;
   ctx.lineWidth = 1;
-  for (const v of tickValues(Y, yCount)) {
+  const ys = yCount < 1 ? [] : tickValues(Y, yCount);
+  for (const v of ys) {
     const py = Y(v);
     ctx.strokeStyle = C.grid;
     ctx.beginPath();
