@@ -44,6 +44,10 @@ export const QUANTITIES = {
   sigma: { sym: '\\sigma', name: 'Stress', unit: 'Pa', unitName: 'pascal', equals: 'N/m²', from: '\\sigma = F/A' },
   eps: { sym: '\\varepsilon', name: 'Strain', unit: '', unitName: '', from: '\\varepsilon = \\Delta L/L_0' },
   Y: { sym: 'Y', name: "Young's modulus", unit: 'Pa', unitName: 'pascal', equals: 'N/m²', from: '\\sigma = Y\\varepsilon' },
+  rhoL: { sym: '\\rho', name: 'Fluid density', unit: 'kg/m^3', unitName: '', from: 'p = \\rho g h' },
+  press: { sym: 'p', name: 'Pressure', unit: 'Pa', unitName: 'pascal', equals: 'N/m²', from: 'p = F/A' },
+  depth: { sym: 'h', name: 'Depth', unit: 'm', unitName: 'metre', from: 'p = \\rho g h' },
+  Qflow: { sym: 'Q', name: 'Volume flow', unit: 'm^3/s', unitName: '', from: 'Q = A v' },
 };
 
 export const LAB_UNITS = {
@@ -85,6 +89,11 @@ export const LAB_UNITS = {
   orbit: ['v', 'T', 'r', 'm', 'K', 'U'],
   kepler: ['T', 'r', 'L', 'm'],
   'iss-orbit': ['v', 'T', 'g', 'r', 'm'],
+  'pressure-depth': ['press', 'F', 'rhoL', 'depth'],
+  buoyancy: ['F', 'rhoL', 'm', 'g'],
+  bernoulli: ['press', 'v', 'Qflow', 'rhoL'],
+  'brake-hydraulics': ['F', 'press', 'A'],
+  'fire-hose': ['press', 'v', 'Qflow', 'depth'],
 };
 
 const BASE = ['kg', 'm', 's', 'A'];

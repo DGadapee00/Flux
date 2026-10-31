@@ -93,8 +93,8 @@ export const UNITS = [
     title: 'Fluid mechanics',
     chapters: ['14'],
     date: null,
-    labs: [],
-    coming: ['Pressure and depth', 'Buoyancy', 'Bernoulli', 'Brake hydraulics', 'Fire hose'],
+    labs: ['pressure-depth', 'buoyancy', 'bernoulli', 'brake-hydraulics', 'fire-hose'],
+    coming: [],
   },
   {
     id: 'u11',
@@ -146,7 +146,7 @@ export const CHAPTERS = {
 };
 
 /** Chapters whose problems are in the bank. */
-export const BANK_CHAPTERS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '15'];
+export const BANK_CHAPTERS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'];
 
 export function unitForChapter(ch) {
   const id = String(ch);
@@ -203,6 +203,11 @@ export const LAB_META = {
   orbit: { id: 'orbit', exam: 'u9', title: 'Orbit' },
   kepler: { id: 'kepler', exam: 'u9', title: "Kepler's laws" },
   'iss-orbit': { id: 'iss-orbit', exam: 'u9', title: 'ISS orbit', app: true },
+  'pressure-depth': { id: 'pressure-depth', exam: 'u10', title: 'Pressure and depth' },
+  buoyancy: { id: 'buoyancy', exam: 'u10', title: 'Buoyancy' },
+  bernoulli: { id: 'bernoulli', exam: 'u10', title: 'Bernoulli' },
+  'brake-hydraulics': { id: 'brake-hydraulics', exam: 'u10', title: 'Brake hydraulics', app: true },
+  'fire-hose': { id: 'fire-hose', exam: 'u10', title: 'Fire hose', app: true },
 };
 
 export function examById(id) {
