@@ -1,0 +1,290 @@
+<header class="top">
+  <div class="eyebrow">EGN 3311 · Statics · U3</div>
+  <h1>Rigid bodies, trusses and machines</h1>
+  <p class="lede">Draw the body. Resolve the forces. Derive the result and check it another way.</p>
+  <div class="legend">
+    <span><i style="background: var(--field)"></i>Worked example</span
+    ><span><i style="background: var(--field-soft)"></i>Derivation</span
+    ><span><i style="background: var(--copper)"></i>Common mistake</span><span>Key idea</span
+    ><span>Model limits</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <a href="#s1"><span>1</span>Supports and rigid-body equilibrium</a
+    ><a href="#s2"><span>2</span>Trusses: joints, sections and stability</a
+    ><a href="#s3"><span>3</span>Frames and machines</a
+    ><a href="#s4"><span>4</span>A sign gantry and a scissor jack</a
+    ><a href="#s5"><span>5</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+  <div class="part">
+    <div class="eyebrow">Part I</div>
+    <h2>Build the model</h2>
+    <section class="topic" id="s1">
+      <h2><span class="n">1</span>Supports and rigid-body equilibrium</h2>
+      <p>
+        A rigid body must satisfy force balance and moment balance. In a plane these are \(\sum F_x=0\),
+        \(\sum F_y=0\), and \(\sum M_O=0\). Choose a moment point that eliminates inconvenient unknown forces.
+        A pin supplies two force components. A smooth roller supplies one normal force. A fixed wall also
+        supplies a couple.
+      </p>
+      <p>
+        For a point load P at a on a simply supported span L, moments about A give \(B_yL=Pa\). Hence
+        \(B_y=Pa/L\), then \(A_y=P-B_y\). Equal reactions occur only at midspan. A negative roller reaction
+        means an unrestrained contact would lift off.
+      </p>
+      <p>
+        A distributed load is replaced by equal total force and equal first moment: \(W=\int w(x)\,dx\),
+        \(\bar x=\int xw(x)\,dx/W\). A uniform load has resultant wL at L/2. A triangular load increasing from
+        zero has resultant wL/2 at 2L/3. These replacements preserve external reactions, but not internal
+        forces at an arbitrary cut.
+      </p>
+      <h3>Spatial rigid-body equilibrium</h3>
+      <p>
+        In three dimensions, zero acceleration requires six scalar balances: three force components and three
+        moment components. A ball-and-socket support restrains translation and supplies three forces, but no
+        moment. A smooth bearing supplies forces perpendicular to its shaft; axial thrust requires a
+        thrust-bearing constraint. A cable supplies one force along its known direction. Model the restraint
+        before choosing the unknowns.
+      </p>
+      <p>
+        Write every reaction with its point of application and unit direction. Its moment column is \(\mathbf
+        r\times\hat{\mathbf u}\). A reaction couple enters the moment equations directly. These columns form a
+        six-row equilibrium matrix. Six reaction unknowns are sufficient only when those columns are
+        independent. A support layout can leave rotation unrestrained even when the count looks correct.
+      </p>
+      <div class="box ex">
+        <span class="tag">Worked example · spatial support check</span>
+        <p>
+          A rigid plate has a socket at A(0,0,0) m, a smooth x-directed bearing at B(2,0,0), and a vertical
+          cable at C(0,1,0). A 100 N weight acts at (0.8,0.4,0). The bearing supplies only By and Bz. Moments
+          about x give T − 40 = 0. Moments about y give −2Bz + 80 = 0. Thus T = 40 N and Bz = 40 N. Moments
+          about z give 2By = 0, hence By = 0. Force balance gives Ax = Ay = 0 and Az = 20 N. The six equations
+          close without inventing a reaction moment.
+        </p>
+        <p>
+          This supplementary spatial example is a free-body calculation. The reaction lab shows planar beams
+          only.
+        </p>
+      </div>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          A pin cannot supply a reaction couple. A fixed support must supply one when the applied loads have a
+          net moment.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Offset load</span>
+        <p>
+          For L = 10 ft, P = 600 lb and a = 4 ft, \(B_y=600(4)/10=240\) lb and \(A_y=360\) lb. Check about B:
+          \(360(10)=600(6)\).
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Triangular loading</span>
+        <p>
+          On a 6 ft span, a triangular load rises from zero to 90 lb/ft. Its area is 270 lb and its centroid
+          is 4 ft from A. Thus \(B_y=180\) lb and \(A_y=90\) lb. The larger reaction lies near the deeper part
+          of the loading.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Fixed wall</span>
+        <p>
+          An 8 ft cantilever carries 250 lb at its tip and 50 lb/ft throughout. Vertical balance gives
+          \(A_y=250+400=650\) lb. Moments give \(M_A=250(8)+400(4)=3600\) lb·ft counterclockwise.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          Rigid-body equilibrium cannot predict support deflection or resolve redundant reactions without
+          deformation information.
+        </p>
+      </div>
+    </section>
+    <section class="topic" id="s2">
+      <h2><span class="n">2</span>Trusses: joints, sections and stability</h2>
+      <p>
+        A pin-connected truss member has two end forces and no other load. Its moment balance forces the two
+        forces to be collinear. Force balance makes them equal and opposite. Each member therefore carries
+        axial force. Assume tension initially; a negative solution means compression.
+      </p>
+      <p>
+        At an unloaded joint with two noncollinear members, each is zero by component balance. With three
+        members, two collinear, the noncollinear member is zero. Applied loads or support reactions can
+        invalidate either shortcut. A zero-force member for one load case may stabilise another.
+      </p>
+      <p>
+        The method of joints writes two equations at each joint. Start where at most two member forces remain
+        unknown. The method of sections cuts the truss and balances one retained part. Choose a moment centre
+        where unwanted cut-force lines intersect. Parallel cut forces cannot be eliminated by a finite
+        intersection point; use a force equation instead.
+      </p>
+      <div class="box key">
+        <span class="tag">Key idea · count is necessary, geometry decides</span>
+        <p>
+          The count \(m+r=2j\) is necessary for a statically determinate plane truss. It is not sufficient.
+          Collinear members, dependent restraints or an unbraced mechanism can leave the equation matrix
+          singular. Check geometry and independence as well.
+        </p>
+      </div>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          A negative member force does not mean the truss solver failed. It reverses the assumed tensile
+          arrows and means compression.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Three members</span>
+        <p>
+          A triangular truss has 4 ft span, 3 ft rise and 1000 lb downward at the apex. Each reaction is 500
+          lb. With diagonal length \(\sqrt{13}\) ft, \(F_{AC}=-500\sqrt{13}/3=-600.925\) lb. Horizontal joint
+          balance gives \(F_{AB}=333.333\) lb tension.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Pratt section</span>
+        <p>
+          The lab truss carries 900 lb at B and 300 lb at C. Whole-truss moments give \(A_y=700\) lb. Retain
+          A, B and E. Moments about E give \(F_{BC}=700\) lb; about C give \(F_{EF}=-500\) lb. Vertical
+          balance gives \(F_{EC}=\sqrt2(700-900)=-282.843\) lb.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          Joints are frictionless pins, loads enter only at joints, and members are straight. Buckling,
+          connection eccentricity and self-weight need additional models.
+        </p>
+      </div>
+    </section>
+  </div>
+  <div class="part">
+    <div class="eyebrow">Part II</div>
+    <h2>Use and check the model</h2>
+    <section class="topic" id="s3">
+      <h2><span class="n">3</span>Frames and machines</h2>
+      <p>
+        A frame member can carry loads between its end pins, so it need not be a two-force member. First
+        isolate the whole assembly to find external reactions. Then separate its members. Draw the interaction
+        at an internal pin equal and opposite on the two free bodies. Those forces disappear only when the
+        members are recombined.
+      </p>
+      <p>
+        A two-force member still helps inside a frame. Its end-force direction is fixed along the line between
+        its pins. A three-force body in equilibrium has concurrent force lines, unless all three are parallel.
+        Both statements follow by taking moments about the intersection of two lines.
+      </p>
+      <p>
+        For pliers, isolate one handle-and-jaw member. With perpendicular hand lever b and jaw lever a, moment
+        balance gives \(N=Pb/a\). Vertical force balance then determines the pivot force. The pivot carries
+        the jaw force and the applied hand force. It is not unloaded merely because its moment about itself
+        vanishes.
+      </p>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          Do not put an internal pin force on the whole-assembly free-body diagram. Put it on each separated
+          member with opposite arrows.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · A-frame</span>
+        <p>
+          The 600 lb load acts halfway along AB, at (1,1.5) ft. About A, \(4C_y=600(1)\), giving 150 lb. BC is
+          a two-force member with slope −3/2, so \(C_x=-100\) lb and \(A_x=100\) lb. The apex pin carries
+          \(\sqrt{100^2+150^2}=180.278\) lb.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Pliers</span>
+        <p>
+          Each handle sees 50 N at 3 in from the pin. The jaw acts 1 in away. Moments give 150 N on each jaw,
+          then force balance gives 200 N at the pin. Equal and opposite jaw forces act on opposite faces of
+          the bolt.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          Ideal pins have no friction or moment resistance. Grip compliance, yielding and handle bending are
+          excluded.
+        </p>
+      </div>
+    </section>
+    <section class="topic" id="s4">
+      <h2><span class="n">4</span>A sign gantry and a scissor jack</h2>
+      <p>
+        The gantry lab models a triangular panel in plan view. Transverse sign force is \(W=pA\). Symmetry
+        gives half to each support. Apex equilibrium gives diagonal compression \(C=W\ell/(2h)\), with
+        \(\ell=\sqrt{(L/2)^2+h^2}\). Horizontal equilibrium gives chord tension \(WL/(4h)\). A section moment
+        gives the same result directly: chord force times depth balances support force times half-span.
+      </p>
+      <p>
+        The jack has four equal arms of length a, height H and horizontal screw span x. Geometry gives
+        \(x^2+H^2=4a^2\). At the upper joint, \(2C(H/2a)=W\), hence \(C=Wa/H\). At a side joint,
+        \(Q=2C(x/2a)=Wx/H\). As the jack collapses, force grows even though its supported weight is unchanged.
+      </p>
+      <p>
+        Check the jack a second way by virtual work. Differentiating the geometry gives \(dH/dx=-x/H\). For an
+        ideal mechanism, \(Q\,|dx|=W\,dH\), recovering \(Q=Wx/H\).
+      </p>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          The screw tension is not the hand force. Thread pitch and friction are needed to relate axial force
+          to input torque.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Shallow gantry</span>
+        <p>
+          A 30 in square sign has area \(0.762^2=0.580644\) m². At an assumed 600 Pa, \(W=348.3864\) N. For L
+          = 4 m and h = 1 m, chord tension is 348.386 N and each reaction is 174.193 N. Halving depth doubles
+          chord force.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Raised jack</span>
+        <p>
+          Use the nominal 1.5 US ton load as 3000 lbf, or 13344.665 N. For assumed 0.25 m arms at H = 0.30 m,
+          x = 0.40 m. Each arm carries 11120.554 N compression and screw tension is 17792.886 N. A lower jack
+          requires greater force.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          Neither application computes strength, fatigue, buckling or a safe capacity. Manufacturer ratings
+          are context for load scale, not validation of the assumed structure.
+        </p>
+      </div>
+    </section>
+    <section class="topic" id="s5">
+      <h2><span class="n">5</span>Formula sheet</h2>
+      <p>
+        Each result is derived above. Draw the free body, state the axis and check the assumptions before
+        using it.
+      </p>
+      <p>
+        \(\sum F_x=\sum F_y=\sum M=0\), \(W=\int w\,dx\), \(\bar x=\int xw\,dx/W\), \(m+r=2j\) (count only),
+        \(N=Pb/a\), \(Q=Wx/H\).
+      </p>
+    </section>
+  </div>
+</main>
+<footer>
+  <p>
+    Textbook: Hibbeler, <i>Engineering Mechanics: Statics</i>, chapters 5, 6. Original Flux prose and
+    diagrams.
+  </p>
+  <p>
+    <b>Another view:</b>
+    <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/pages/lecture-notes/"
+      >2.001 Mechanics and Materials I, Fall 2006, lectures 2–3</a
+    >. Frames, spatial equilibrium and area geometry supplement that sequence through Hibbeler.
+  </p>
+</footer>

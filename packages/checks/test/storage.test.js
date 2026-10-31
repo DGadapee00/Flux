@@ -21,6 +21,8 @@ test('the repo does not share a storage key across courses', () => {
     'flux-statics.exam.v1',
     'flux-statics.problems.v1',
     'flux.statics.exam.v1',
+    'flux.statics.notes.full.v1',
+    'flux.statics.notes.width.v1',
     'flux.statics.problems.v1',
   ]);
   const mac = keys.filter((key) => key.course === 'mac2313').map((key) => key.value).sort();

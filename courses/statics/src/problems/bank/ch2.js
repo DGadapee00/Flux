@@ -28,8 +28,9 @@ export default [
     ],
     steps: ($, f) => [
       String.raw`$R = \sqrt{F_1^2 + F_2^2 + 2F_1F_2\cos\theta} = ${texNum($.R)}\ \text{lb}$`,
-      String.raw`$\phi = \sin^{-1}\left(\dfrac{F_2\sin\theta}{R}\right) = ${texNum($.phi)}^\circ$`,
+      String.raw`$\phi = \operatorname{atan2}(F_2\sin\theta,F_1+F_2\cos\theta) = ${texNum($.phi)}^\circ$`,
     ],
+    sim: { scenario: 'two', setup: (s,$) => Object.assign(s,{F1:[ $.F1,0,0],F2:[ $.F2*Math.cos($.th*Math.PI/180),$.F2*Math.sin($.th*Math.PI/180),0],F3:null}), read:c=>({R:mag(c.vec.R),phi:angle2D(c.vec.R)}) },
     cases: [kase('hand', { F1: 3000, F2: 2000, th: 60 }, { R: 4358.9, phi: 23.413 })],
   }),
   problem({
@@ -61,8 +62,8 @@ export default [
       setup: (s, $) => void Object.assign(s, {
         mode: 'components',
         F1: [$.F1 * Math.cos($.a1 * DEG), $.F1 * Math.sin($.a1 * DEG), 0],
-        F2: [$.F2 * Math.cos($.a2 * DEG) + $.F3 * Math.cos($.a3 * DEG), $.F2 * Math.sin($.a2 * DEG) + $.F3 * Math.sin($.a3 * DEG), 0],
-        F3: null,
+        F2: [$.F2 * Math.cos($.a2 * DEG), $.F2 * Math.sin($.a2 * DEG), 0],
+        F3: [$.F3 * Math.cos($.a3 * DEG), $.F3 * Math.sin($.a3 * DEG), 0],
         showResultant: true,
       }),
       read: (c) => ({ Rx: c.vec.R.x, Ry: c.vec.R.y, R: mag(c.vec.R) }),
@@ -130,10 +131,11 @@ export default [
       String.raw`$|\vec{r}_{AB}| = ${texNum($.L)}\ \text{m}$`,
       String.raw`$\vec{F} = F\hat{u} = (${texNum($.Fx)})\hat{i} + (${texNum($.Fy)})\hat{j} + (${texNum($.Fz)})\hat{k}\ \text{N}$`,
     ],
+    sim: {scenario:'two',setup:(s,$)=>Object.assign(s,{F1:[$.Fx,$.Fy,$.Fz],F2:[0,0,0],F3:null}),read:c=>({Fx:c.vec.F1.x,Fy:c.vec.F1.y,Fz:c.vec.F1.z})},
     cases: [kase('2-3-6', { F: 700, ax: 0, ay: 0, az: 0, bx: 2, by: 3, bz: 0 }, { Fx: 388.1, Fy: 582.2, Fz: 0 })],
   }),
   problem({
-    ...U1, id: 'ch2.projection', ch: '2', src: 'Part 1 · dot product', title: 'Component of a force along a line', kind: 'numeric', level: 2, topics: ['vectors', 'dot-product'],
+    ...U1, id: 'ch2.projection', ch: '2', lab: 'vectors', src: 'Part 1 · dot product', title: 'Component of a force along a line', kind: 'numeric', level: 2, topics: ['vectors', 'dot-product'],
     vars: {
       Fx: range(-300, 300, 10, 'N'), Fy: range(-300, 300, 10, 'N'), Fz: range(-300, 300, 10, 'N'),
       ux: range(-3, 3, 1, ''), uy: range(-3, 3, 1, ''), uz: range(-3, 3, 1, ''),
@@ -159,14 +161,15 @@ export default [
       String.raw`$F_\parallel = \vec{F}\cdot\hat{u} = ${texNum($.par)}\ \text{N}$`,
       String.raw`$F_\perp = \sqrt{F^2 - F_\parallel^2} = ${texNum($.perp)}\ \text{N}$`,
     ],
+    sim: { scenario: 'two', setup: (s,$) => Object.assign(s,{F1:[$.Fx,$.Fy,$.Fz],F2:[$.ux,$.uy,$.uz],F3:null}), read:c=>({par:c.vec.proj12,theta:c.vec.between}) },
     cases: [kase('hand', { Fx: 100, Fy: 200, Fz: 0, ux: 2, uy: 0, uz: 0 }, { par: 100, perp: 200, theta: 63.435 })],
   }),
   problem({
     ...U1, id: 'ch2.concepts', ch: '2', title: 'What the unit vector does', kind: 'conceptual', topics: ['vectors'],
     vars: {
       ask: choice(
-        ['unit', 'What is the magnitude of a unit vector?'],
-        ['cos', 'For any Cartesian vector, cos²α + cos²β + cos²γ equals'],
+        ['unit', 'What does a unit vector carry?'],
+        ['cos', 'For any nonzero Cartesian vector, cos²α + cos²β + cos²γ equals'],
         ['scalar', 'The dot product of two vectors is'],
         ['cross', 'The cross product of two vectors is'],
       ),
@@ -174,7 +177,7 @@ export default [
     text: (T) => T.ask,
     parts: [
       mc('ans', [
-        ['one', 'Exactly 1, with no units'],
+        ['one', 'Direction, with dimensionless magnitude one'],
         ['unity', '1, always'],
         ['scalar', 'A scalar'],
         ['vector', 'A vector perpendicular to both'],

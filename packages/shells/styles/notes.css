@@ -171,6 +171,7 @@ body.notes-resizing {
     display: none;
   }
 
+  body.notes-open #btn-sheet,
   body.notes-open .toggles,
   body.notes-open .controls,
   body.notes-open .readout,

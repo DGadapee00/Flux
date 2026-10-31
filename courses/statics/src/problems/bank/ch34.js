@@ -138,7 +138,7 @@ export default [
       return { ulen: mag(u), Maxis: Mx };
     },
     valid: ($) => $.ulen > 1.2 && Math.abs($.Maxis) > 20,
-    text: (T) => `An axis runs from the origin along the direction (${T.ax}, ${T.ay}, ${T.az}). A force F = ${T.Fx}i + ${T.Fy}j + ${T.Fz}k N acts at the point (${T.rx}, ${T.ry}, ${T.rz}) m. Find the magnitude of the moment of F about that axis.`,
+    text: (T) => `An axis runs from the origin along the direction (${T.ax}, ${T.ay}, ${T.az}). A force F = ${T.Fx}i + ${T.Fy}j + ${T.Fz}k N acts at the point (${T.rx}, ${T.ry}, ${T.rz}) m. Find the signed moment of F about the positively directed axis.`,
     parts: [
       sym('M_sym', 'ax*(ry*Fz - rz*Fy)/sqrt(ax^2+ay^2+az^2) + ay*(rz*Fx - rx*Fz)/sqrt(ax^2+ay^2+az^2) + az*(rx*Fy - ry*Fx)/sqrt(ax^2+ay^2+az^2)', { ax: 'm', ay: 'm', az: 'm', rx: 'm', ry: 'm', rz: 'm', Fx: 'N', Fy: 'N', Fz: 'N' }, ($) => $.Maxis, { unit: 'N·m', label: 'the axis moment as a formula' }),
       num('Maxis', ($) => $.Maxis, 'N·m', { label: String.raw`$M_{axis}$`, abs: 0.5 }),
