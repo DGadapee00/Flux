@@ -63,7 +63,7 @@ try {
     assert.equal(data.exam.items[0].inputs.V, '8*pi');
     await page.goto(`${base}#/mac2311/u2/secant?n=s7`, { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('#notes .nt-show');
-    assert.ok(page.url().includes('/c1/secant?n=s12'));
+    assert.ok(page.url().includes('/c1/secant?n=s12'), page.url());
     assert.equal(await page.locator('#notes .katex-error').count(), 0);
     await page.goto(`${legacy}#/mac2312/u2/improper?n=s6`, { waitUntil: 'domcontentloaded' });
     await page.waitForURL((url) => url.hash.includes('/c6/improper?n=s2'));

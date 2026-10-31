@@ -265,7 +265,8 @@ async function openProblemInApp(inst, { push = true, query = true } = {}) {
 practice = createPractice({
   openInLab: openProblemInApp,
   clearQuery({ push = false } = {}) {
-    if (!app.query) return;
+    // A practice teardown must not replace an incoming notes or exploration URL.
+    if (!app.query || !parseHash().problemId) return;
     app.query = '';
     writeHash(app.examId, app.labId, { replace: !push });
   },
@@ -282,17 +283,19 @@ practice = createPractice({
   openNotes: where=>hud.notes?.open(where),
 });
 
-function followUrl() {
+async function followUrl() {
   const route = parseHash();
   const { examId, labId, problemId, seed } = route;
-  if(problemId)hud.notes?.close();
+  if (problemId) hud.notes?.close();
   if (practice.followUrl(problemId, seed)) return;
-  app.query=route.query||'';
-  if(!route.notes)hud.notes?.close();
+  app.query = route.query || '';
+  if (!route.notes) hud.notes?.close();
+  if (examId !== app.examId || labId !== app.labId) {
+    if (labId) await setLab(labId);
+    else await setExam(examId);
+  }
+  // Mounting the destination lab replaces its notes context. Open the requested section afterward.
   openNotesFromRoute(hud.notes, route);
-  if (examId === app.examId && labId === app.labId) return;
-  if (labId) setLab(labId);
-  else setExam(examId);
 }
 window.addEventListener('hashchange', followUrl);
 window.addEventListener('popstate', followUrl);
