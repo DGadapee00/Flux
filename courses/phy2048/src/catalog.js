@@ -48,8 +48,8 @@ export const UNITS = [
     title: 'Momentum and collisions',
     chapters: ['9'],
     date: null,
-    labs: ['collide'],
-    coming: ['Impulse', 'Collisions in two dimensions', 'Center of mass', 'Rocket', 'Crumple zone', 'Crash reconstruction'],
+    labs: ['impulse', 'collide', 'collide-2d', 'center-of-mass', 'rocket', 'crumple-zone', 'crash-reconstruction'],
+    coming: [],
   },
   {
     id: 'u6',
@@ -180,7 +180,13 @@ export const LAB_META = {
   track: { id: 'track', exam: 'u4', title: 'Energy track' },
   'energy-diagram': { id: 'energy-diagram', exam: 'u4', title: 'Energy diagram' },
   'automotive-power': { id: 'automotive-power', exam: 'u4', title: 'Automotive power', app: true },
+  impulse: { id: 'impulse', exam: 'u5', title: 'Impulse' },
   collide: { id: 'collide', exam: 'u5', title: 'Collisions' },
+  'collide-2d': { id: 'collide-2d', exam: 'u5', title: 'Collisions in two dimensions' },
+  'center-of-mass': { id: 'center-of-mass', exam: 'u5', title: 'Center of mass' },
+  rocket: { id: 'rocket', exam: 'u5', title: 'Rocket' },
+  'crumple-zone': { id: 'crumple-zone', exam: 'u5', title: 'Crumple zone', app: true },
+  'crash-reconstruction': { id: 'crash-reconstruction', exam: 'u5', title: 'Crash reconstruction', app: true },
   rotor: { id: 'rotor', exam: 'u6', title: 'Rotor' },
 };
 

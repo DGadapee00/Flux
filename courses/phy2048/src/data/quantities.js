@@ -58,7 +58,13 @@ export const LAB_UNITS = {
   track: ['m', 'x', 'U', 'K', 'v', 'g', 'mu'],
   'energy-diagram': ['x', 'U', 'K', 'F', 'T'],
   'automotive-power': ['m', 'v', 'P', 'FD', 'C', 'A', 'rho'],
+  impulse: ['m', 'v', 'F', 'p'],
   collide: ['m', 'v', 'p', 'e', 'K'],
+  'collide-2d': ['m', 'v', 'p', 'e', 'K'],
+  'center-of-mass': ['m', 'x'],
+  rocket: ['m', 'v', 'F', 'a'],
+  'crumple-zone': ['m', 'v', 'F', 'K'],
+  'crash-reconstruction': ['m', 'v', 'mu', 'x', 'K'],
   rotor: ['tau', 'I', 'alpha', 'a', 'm'],
 };
 
