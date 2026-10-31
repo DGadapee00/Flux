@@ -276,7 +276,7 @@ export const NOTES = {
         topics: ['polar'],
         home: true,
       },
-      { id: 's5', n: 5, title: 'Conic sections', lab: null, ch: ['v2.7'] },
+      { id: 's5', n: 5, title: 'Conic sections', lab: null, ch: ['v2.7'], topics:['conics'] },
       { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
     ],
     load: () => import('./content/c5.html?raw').then((m) => m.default),
