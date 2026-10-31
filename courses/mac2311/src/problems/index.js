@@ -1,3 +1,4 @@
+import { citeCases } from './sources.js';
 import c1 from './bank/c1.js';
 import u1 from './bank/u1.js';
 import u2 from './bank/u2.js';
@@ -21,7 +22,8 @@ export const LEGACY_PROBLEMS = [
   ...[...u1, ...u2, ...u3, ...u4].map((t) => merge(t, 'mac2311')),
   ...[...ii1, ...ii2, ...ii3, ...iiSeries, ...ii4].map((t) => merge(t, 'mac2312')),
 ];
-export const PROBLEMS = [...LEGACY_PROBLEMS.filter((t) => t.exam !== 'c1'), ...c1];
+const ACTIVE_PROBLEMS = [...LEGACY_PROBLEMS.filter((t) => t.exam !== 'c1'), ...c1];
+export const PROBLEMS = ACTIVE_PROBLEMS.map(citeCases);
 const byId = new Map([...LEGACY_PROBLEMS, ...PROBLEMS].map((t) => [t.id, t]));
 export const problemById = (id) => byId.get(id) || null;
 export const problemsForExam = (id) => PROBLEMS.filter((t) => t.exam === id);
