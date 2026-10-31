@@ -130,11 +130,11 @@ export function fmtTick(v) {
 }
 
 /** Grid, axes and tick labels. */
-export function axes(P, { xLabel = '', yLabel = '', xFmt = fmtTick, yFmt = fmtTick } = {}) {
+export function axes(P, { xLabel = '', yLabel = '', xFmt = fmtTick, yFmt = fmtTick, yCount = 5 } = {}) {
   const { ctx, box, X, Y } = P;
   ctx.font = FONT;
   ctx.lineWidth = 1;
-  for (const v of tickValues(Y, 5)) {
+  for (const v of tickValues(Y, yCount)) {
     const py = Y(v);
     ctx.strokeStyle = C.grid;
     ctx.beginPath();
@@ -250,4 +250,73 @@ export function note(P, text, x, y, { color = C.muted, dx = 6, dy = -6, align = 
   if (align === 'right') px = Math.max(px, box.x0 + wText + 2);
   const py = Math.min(Math.max(Y(y) + dy, box.y0 + 10), box.y1 - 4);
   ctx.fillText(text, px, py);
+}
+
+/**
+ * Open the stage once: size the canvas, record the free rectangle for the smoke check, and shade it.
+ * A later chart must not call `layout`, which clears the canvas again.
+ */
+export function stage(canvas) {
+  const { ctx, w, h } = setup(canvas);
+  const free = freeRect(w, h);
+  if (canvas.dataset) canvas.dataset.box = [free.x0, free.y0, free.x1, free.y1].map(Math.round).join(',');
+  ctx.save();
+  ctx.fillStyle = alpha(C.bg, 0.55);
+  ctx.fillRect(free.x0, free.y0, free.x1 - free.x0, free.y1 - free.y0);
+  ctx.restore();
+  return { ctx, w, h, free };
+}
+
+/** Machine on the left when the free rectangle is wide, otherwise the machine above the chart. */
+export function panes(free, share = 0.62) {
+  const W = free.x1 - free.x0;
+  const H = free.y1 - free.y0;
+  const gap = 8;
+  if (W > H * 1.35 && W > 680) {
+    const xm = free.x0 + W * share;
+    return [{ ...free, x1: xm - gap / 2 }, { ...free, x0: xm + gap / 2 }];
+  }
+  const ym = free.y0 + H * share;
+  return [{ ...free, y1: ym - gap / 2 }, { ...free, y0: ym + gap / 2 }];
+}
+
+/** One scale for both axes, y up, so a drawn machine keeps its shape. */
+export function fit(ctx, rect, bounds, pad = 10) {
+  const box = {
+    x0: rect.x0 + pad,
+    x1: rect.x1 - pad,
+    y0: rect.y0 + pad,
+    y1: rect.y1 - pad,
+  };
+  const bw = Math.max(1, box.x1 - box.x0);
+  const bh = Math.max(1, box.y1 - box.y0);
+  const k = Math.min(bw / (bounds.x1 - bounds.x0), bh / (bounds.y1 - bounds.y0));
+  const cx = (box.x0 + box.x1) / 2;
+  const cy = (box.y0 + box.y1) / 2;
+  const mx = (bounds.x0 + bounds.x1) / 2;
+  const my = (bounds.y0 + bounds.y1) / 2;
+  const X = (v) => cx + (v - mx) * k;
+  const Y = (v) => cy - (v - my) * k;
+  return { ctx, box, rect, X, Y, k };
+}
+
+/** A chart inside `rect`. The return value is what `axes`, `line` and `dot` already take. */
+export function chart(ctx, rect, x, y, pad = { left: 46, right: 12, top: 16, bottom: 34 }) {
+  const box = {
+    x0: rect.x0 + pad.left,
+    x1: Math.max(rect.x0 + pad.left + 8, rect.x1 - pad.right),
+    y0: rect.y0 + pad.top,
+    y1: Math.max(rect.y0 + pad.top + 8, rect.y1 - pad.bottom),
+  };
+  const X = axisMap(x.lo, x.hi, box.x0, box.x1, !!x.log);
+  const Y = axisMap(y.lo, y.hi, box.y1, box.y0, !!y.log);
+  return { ctx, box, X, Y, free: rect };
+}
+
+/** Clip following draws to a pane. */
+export function clip(ctx, rect) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(rect.x0, rect.y0, Math.max(0, rect.x1 - rect.x0), Math.max(0, rect.y1 - rect.y0));
+  ctx.clip();
 }
