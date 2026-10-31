@@ -2,7 +2,7 @@ import { M3_PER_GAL_US } from '@flux/subjects/convert.js';
 import { fromC, toC, waterP, waterTP } from '@flux/subjects/thermo';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, axes, dot, layout, line, note } from './diagram.js';
+import { C, alpha, axes, chart, clip, dot, fit, line, note, panes, stage } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, leavesOut, showField, slider } from './widgets.js';
 
@@ -66,9 +66,13 @@ export default defineLab({
   gapLimit: 1e-6,
   scenarios: SCENARIOS,
   defaultState() {
-    const s = {};
+    const s = { t: 0 };
     apply('shower', s);
     return s;
+  },
+  tick(dt, state) {
+    state.t = (state.t || 0) + dt;
+    return true;
   },
   applyScenario: apply,
   sweep: () => ({ key: 'gpm', lo: 0.5, hi: 6 }),
@@ -110,13 +114,24 @@ export default defineLab({
   },
   draw(canvas, state, c) {
     const top = Math.max(state.rated, c.curve.at(-1)[1], c.elec / KW) * 1.1;
-    const P = layout(canvas, { lo: 0.5, hi: 6, log: false }, { lo: 0, hi: top, log: false }, { left: 52, right: 14, top: 26, bottom: 40 });
-    axes(P, { xLabel: 'flow (gal/min)', yLabel: 'electric power (kW)' });
+    const B = stage(canvas);
+    const [machine, plot] = panes(B.free, 0.62);
+    drawHeater(B.ctx, machine, state, c);
+    const P = chart(B.ctx, plot, { lo: 0.5, hi: 6 }, { lo: 0, hi: top }, {
+      left: 46, right: 12, top: 22, bottom: 40,
+    });
+    clip(B.ctx, plot);
+    axes(P, { xLabel: 'flow (gal/min)', yLabel: '', yCount: P.box.y1 - P.box.y0 < 130 ? 3 : 5 });
+    B.ctx.font = '13px Inter, system-ui, sans-serif';
+    B.ctx.fillStyle = C.muted;
+    B.ctx.textAlign = 'left';
+    B.ctx.textBaseline = 'top';
+    B.ctx.fillText('electric power (kW)', P.box.x0, plot.y0 + 3);
     line(P, c.curve.map(([g, kw]) => [g, kw]), { color: C.teal });
     line(P, [[0.5, state.rated], [6, state.rated]], { color: C.gold, dash: [6, 4] });
-    note(P, `rating ${fig(state.rated)} kW`, 0.6, state.rated, { color: C.gold, dy: -8 });
-    dot(P, state.gpm, c.elec / KW, { color: c.serves ? C.yellow : C.red });
-    note(P, `${fig(c.elec / KW)} kW`, state.gpm, c.elec / KW, { dx: 8, dy: -8, color: C.text });
+    note(P, `${fig(state.rated)} kW`, 0.7, state.rated, { color: C.gold, dy: -8 });
+    dot(P, state.gpm, c.elec / KW, { color: c.serves ? C.yellow : C.red, r: 4 });
+    B.ctx.restore();
   },
   law: () => [String.raw`\dot Q=\dot m\,(h_{out}-h_{in})`, String.raw`\dot m=\rho\,\dot V`],
   liveRows: (state, c) => [
@@ -140,3 +155,108 @@ export default defineLab({
     return { title: 'Power is flow times rise', body: String.raw`$\dot Q=\dot m(h_{out}-h_{in})=${fig(c.Q / KW)}$ kW into the water, ${fig(c.elec / KW)} kW from the wall. Halve the flow and the power halves. A colder inlet raises the rise and the power.` };
   }),
 });
+
+/** A tankless heater: cold pipe in, element, hot pipe out to a shower. */
+function drawHeater(ctx, rect, state, c) {
+  clip(ctx, rect);
+  const S = fit(ctx, rect, { x0: -2.3, x1: 2.3, y0: -0.15, y1: 1.7 }, 8);
+  const t = state.t || 0;
+  const flow = Math.max(0.3, state.gpm);
+  const hot = Math.max(0, Math.min(1, (toC(c.Tout) - toC(state.Tin)) / 40));
+  const load = Math.max(0, Math.min(1, (c.elec / KW) / Math.max(state.rated, 1)));
+
+  pipe(S, -2.15, -0.72, 0.72, C.blue, 0.55);
+  pipe(S, 0.72, 1.85, 0.72, hot > 0.35 ? C.gold : C.blue, 0.45 + 0.4 * hot);
+  droplets(S, t, flow, -2.05, -0.72, 0.72, C.blue);
+  droplets(S, t, flow, 0.8, 1.75, 0.72, hot > 0.35 ? C.gold : C.blue);
+
+  rounded(S, -0.72, 0.28, 1.44, 0.95, 0.06, alpha(C.text, 0.1), alpha(C.text, 0.75));
+  // The element glows harder as the heater uses more of its rating.
+  ctx.strokeStyle = alpha(C.red, 0.25 + 0.7 * load);
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  for (let i = 0; i <= 16; i++) {
+    const x = -0.5 + (1 * i) / 16;
+    const y = 0.72 + Math.sin(i * 1.4 + t * 6) * 0.08 * (0.4 + load);
+    const px = S.X(x);
+    const py = S.Y(y);
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+
+  // Shower head and a stream whose spacing follows the flow.
+  ctx.fillStyle = alpha(C.text, 0.8);
+  ctx.fillRect(S.X(1.72), S.Y(0.82), 0.22 * S.k, 0.1 * S.k);
+  const drops = 3 + Math.round(flow);
+  for (let i = 0; i < drops; i++) {
+    const phase = (t * (0.4 + flow * 0.15) + i / drops) % 1;
+    ctx.fillStyle = alpha(hot > 0.35 ? C.gold : C.blue, 0.35 + 0.45 * (1 - phase));
+    ctx.beginPath();
+    ctx.arc(S.X(1.82 + (i % 3 - 1) * 0.06), S.Y(0.62 - phase * 0.55), 0.025 * S.k, 0, 2 * Math.PI);
+    ctx.fill();
+  }
+
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.font = '13px Inter, system-ui, sans-serif';
+  ctx.fillStyle = C.blue;
+  ctx.fillText(`${fig(toC(state.Tin))} °C in`, rect.x0 + 8, rect.y0 + 4);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = c.serves ? C.yellow : C.red;
+  ctx.font = '600 15px Inter, system-ui, sans-serif';
+  ctx.fillText(`${fig(toC(c.Tout))} °C`, rect.x1 - 8, rect.y0 + 4);
+  ctx.font = '13px Inter, system-ui, sans-serif';
+  ctx.fillStyle = C.muted;
+  ctx.fillText(c.serves ? `${fig(state.gpm)} gal/min` : `limited to ${fig(c.maxGpm)} gal/min`, rect.x1 - 8, rect.y0 + 24);
+  ctx.restore();
+}
+
+function pipe(S, x0, x1, y, color, a) {
+  const { ctx, X, Y, k } = S;
+  ctx.strokeStyle = alpha(color, a);
+  ctx.lineWidth = Math.max(6, 0.1 * k);
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(X(x0), Y(y));
+  ctx.lineTo(X(x1), Y(y));
+  ctx.stroke();
+}
+
+function droplets(S, t, flow, x0, x1, y, color) {
+  const { ctx, X, Y, k } = S;
+  const n = 4;
+  for (let i = 0; i < n; i++) {
+    const phase = (t * (0.25 + flow * 0.08) + i / n) % 1;
+    const x = x0 + (x1 - x0) * phase;
+    ctx.fillStyle = alpha(color, 0.85);
+    ctx.beginPath();
+    ctx.arc(X(x), Y(y), 0.035 * k, 0, 2 * Math.PI);
+    ctx.fill();
+  }
+}
+
+function rounded(S, x, y, w, h, r, fill, stroke) {
+  const { ctx, X, Y, k } = S;
+  const px = X(x);
+  const py = Y(y + h);
+  const pw = w * k;
+  const ph = h * k;
+  const radius = Math.min(r * k, Math.abs(pw) / 2, Math.abs(ph) / 2);
+  ctx.beginPath();
+  ctx.moveTo(px + radius, py);
+  ctx.arcTo(px + pw, py, px + pw, py + ph, radius);
+  ctx.arcTo(px + pw, py + ph, px, py + ph, radius);
+  ctx.arcTo(px, py + ph, px, py, radius);
+  ctx.arcTo(px, py, px + pw, py, radius);
+  ctx.closePath();
+  if (fill) {
+    ctx.fillStyle = fill;
+    ctx.fill();
+  }
+  if (stroke) {
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+}
