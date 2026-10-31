@@ -53,6 +53,24 @@ Q - W = \Delta U + \Delta KE + \Delta PE
 \Delta U = Q - W = -5 - (-20) = 15\ \text{kJ}
 \]
 <p>With \(c_v = 0.7178\) kJ/(kg·K), the air warms by \(15/(0.5 \times 0.7178) = 41.8\) K. The paddle does work, yet the air ends hotter, exactly as if it had been heated.</p>
+<p>The same 20 kJ and 5 kJ can be spread evenly over 60 s. Integrating \(\dot Q - \dot W\) over that minute stores 15 kJ again.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a heater and a paddle</span>
+<p>A heater adds 30 kJ to the air in a rigid tank. Heat of 8 kJ leaks out. A paddle does 20 kJ of work on the air. Heat into the system is \(Q = 30 - 8 = 22\) kJ. Work done by the system is \(W = -20\) kJ.</p>
+\[
+\Delta U = Q - W = 22 - (-20) = 42\ \text{kJ}
+\]
+<p>Over 120 s those totals are constant rates. The integral of \(\dot Q - \dot W\) stores 42 kJ as well. Counting the paddle as work done by the system would give \(22 - 20 = 2\) kJ instead.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a motor and a pump</span>
+<p>A motor of efficiency 0.90 drives a pump of efficiency 0.80. The motor draws 2.5 kW. Devices in series pass the same power, so the overall efficiency is the product.</p>
+\[
+\eta = 0.90 \times 0.80 = 0.72
+\]
+<p>The shaft power is \(0.90 \times 2.5 = 2.25\) kW. The fluid power is \(0.80 \times 2.25 = 1.8\) kW, which is also \(0.72 \times 2.5\). The average of the two efficiencies is 0.85. That would claim 2.125 kW at the fluid, and it counts the shaft power twice.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Work done on the system is negative in \(Q - W = \Delta U\). A heat leak is negative heat. On two devices in series, multiply the efficiencies. Adding them, or averaging them, treats the shaft power as if it were delivered twice.</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · two paths, one change of state</span>
 <p>Take 0.05 m³ of air at 200 kPa to 0.10 m³ at 100 kPa, two ways. Path 1: expand at 200 kPa to 0.10 m³, then cool at constant volume to 100 kPa. The work is \(200 \times 0.05 = 10\) kJ. Path 2: cool at constant volume to 100 kPa, then expand at 100 kPa. The work is \(100 \times 0.05 = 5\) kJ.</p>
@@ -297,6 +315,9 @@ Q = m\,\Delta h\quad (P\ \text{constant})
 \]
 \[
 Q = m\,\Delta u\quad (V\ \text{constant})
+\]
+\[
+\eta = \eta_1\eta_2
 \]
 <p>Signs: heat added to the system and work done by the system are positive. kPa·m³ = kJ. Air at 300 K: \(c_p = 1.005\), \(c_v = 0.7178\) kJ/(kg·K).</p>
 </section>

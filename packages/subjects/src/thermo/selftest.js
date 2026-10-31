@@ -18,6 +18,7 @@ import { brayton, braytonColdAir, carnotEfficiency, carnotWorkIntegral, classify
 import { compressionEfficiency, compressionExit, expansionEfficiency, expansionExit, flowGeneration, idealGasDeltaS, idealGasDeltaSIntegral, incompressibleDeltaH, incompressibleDeltaS, lostWork, reservoirGeneration } from './entropy.js';
 import { areaRatio, chokedMassFlux, densityRatio, machFromArea, pressureRatio, temperatureRatio } from './isentropic.js';
 import { FACTORS, fromC, fromF } from './units.js';
+import { G_STANDARD, closedEnergy, integratedBalance, manometerGauge, manometerResidual, seriesEfficiency } from './balances.js';
 import { mixP, satP, satT, waterP, waterTP, waterTv } from './water.js';
 
 let passed = 0;
@@ -399,6 +400,22 @@ console.log('Entropy, efficiency and lost work');
   approx(flowGeneration({ s1: 1, s2: 1.4 }), 0.4, 1e-12, 'adiabatic s_gen = s2 − s1');
   approx(flowGeneration({ s1: 1, s2: 1.4, q: 100, Tb: 500 }), 0.4 - 0.2, 1e-12, 's_gen = s2 − s1 − q/T_b');
   ok(reservoirGeneration(0, 600, 300) === 0, 'no heat, no entropy generated');
+}
+
+{
+  const g = G_STANDARD;
+  const water = [{ rho: 1000, drop: 0.2 }];
+  approx(manometerGauge(water, g), 1000 * g * 0.2, 1e-12, 'one manometer leg is ρ g h');
+  approx(manometerGauge([{ rho: 1000, drop: 0.4 }], g), 2 * manometerGauge(water, g), 1e-12, 'doubling the drop doubles the gauge pressure');
+  const legs = [{ rho: 13545.854, drop: 0.04 }, { rho: 998, drop: -0.12 }];
+  const gauge = manometerGauge(legs, g);
+  approx(manometerResidual(gauge, legs, g), 0, 1e-12, 'walking a manometer backward returns to the open end');
+  approx(gauge, 13545.854 * g * 0.04 - 998 * g * 0.12, 1e-12, 'a rising leg subtracts ρ g h');
+  approx(closedEnergy({ Q: 22e3, W: -20e3 }), 42e3, 1e-12, 'ΔE = Q − W');
+  approx(closedEnergy({ Q: 44e3, W: 0 }), 2 * closedEnergy({ Q: 22e3, W: 0 }), 1e-12, 'doubling the heat doubles the stored energy when W = 0');
+  approx(integratedBalance({ Qdot: 220, Wdot: -200, t: 100 }), closedEnergy({ Q: 22e3, W: -20e3 }), 1e-12, 'a constant rate integrated over t matches Q − W');
+  approx(seriesEfficiency([0.9, 0.8]), 0.72, 1e-12, 'efficiencies in series multiply');
+  approx(seriesEfficiency([0.5, 0.8]), 0.5 * seriesEfficiency([1, 0.8]), 1e-12, 'halving one efficiency halves the product');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);

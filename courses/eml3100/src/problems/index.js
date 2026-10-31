@@ -5,8 +5,9 @@ import ch4 from './bank/ch4.js';
 import ch5 from './bank/ch5.js';
 import ch6 from './bank/ch6.js';
 import ch6entropy from './bank/ch6entropy.js';
+import instruments from './bank/instruments.js';
 
-export const PROBLEMS = [...ch2, ...ch3, ...u1concepts, ...ch4, ...ch5, ...ch6, ...ch6entropy];
+export const PROBLEMS = [...ch2, ...ch3, ...u1concepts, ...ch4, ...ch5, ...ch6, ...ch6entropy, ...instruments];
 
 const byIdMap = new Map(PROBLEMS.map((p) => [p.id, p]));
 
