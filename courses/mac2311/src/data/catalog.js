@@ -6,7 +6,7 @@ export const EXAMS = [
     title: 'Differentiation',
     chapters: 'Vol 1 Ch 1\u20133',
     date: null,
-    labs: ['limits', 'secant'],
+    labs: ['limits', 'secant', 'focus'],
   },
   {
     id: 'c2',
@@ -50,6 +50,7 @@ export const EXAMS = [
   },
 ];
 export const LAB_META = {
+  focus: { id: 'focus', exam: 'c1', title: 'Camera focus', app: true },
   limits: {
     id: 'limits',
     exam: 'c1',

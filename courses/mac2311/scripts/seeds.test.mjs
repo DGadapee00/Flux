@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import fs from 'node:fs';
-import { PROBLEMS, problemById } from '../src/problems/index.js';
+import { LEGACY_PROBLEMS as PROBLEMS, problemById } from '../src/problems/index.js';
 import { instance, expected } from '../src/problems/engine.js';
 import { calculusProblemId } from '@flux/tracks/calculus';
 const originals = JSON.parse(

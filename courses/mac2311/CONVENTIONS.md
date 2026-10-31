@@ -10,3 +10,7 @@
 - Generated teaching numbers are verification cases, not newly verified printed answers.
 - Notes use the shared shell's parts, legend, worked examples and model-limit boxes.
 - `flux.mac2312.*` keys are retained for compatibility and old hub backups.
+
+- Reworked units use finite designed function/configuration families. Retired templates remain in the legacy lookup so old review records and in-progress exams retain their exact questions.
+- New symbolic worked cases check the published answer expression, including an equivalent rewrite and a named wrong expression. Definitions used by conceptual cases are identified separately from printed numeric answers.
+- The prediction panel is an opt-in shared math-shell control. Its outcomes come from the actual lab recompute function.

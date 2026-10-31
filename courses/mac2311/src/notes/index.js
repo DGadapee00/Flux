@@ -55,7 +55,7 @@ export const NOTES = {
       {
         id: 's11',
         title: 'Implicit differentiation',
-        lab: null,
+        lab: 'focus',
         ch: ['3'],
         topics: ['derivatives'],
         problems: ['u2.implicit'],

@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Differentiation</title></head><body><header class="top"><p class="eyebrow">MAC 2311–2312 · Calculus I and II · Unit 1 · OpenStax Vol 1 Ch 1–3</p><h1>Differentiation</h1><p class="lede">One course from differentiation to infinite series. Derive each result, work an example, then open its lab.</p><div class="legend"><span>Worked example</span><span>Derivation</span><span>Common mistake</span><span>Key idea</span><span>Model limits</span></div><nav class="toc"><a href="#s1"><span>01</span>Functions, briefly</a><a href="#s2"><span>02</span>The idea of a limit</a><a href="#s3"><span>03</span>Limit laws and the 0/0 form</a><a href="#s4"><span>04</span>Continuity</a><a href="#s5"><span>05</span>The precise definition</a><a href="#s6"><span>06</span>The derivative as a limit</a><a href="#s7"><span>07</span>Power, product, and quotient rules</a><a href="#s8"><span>08</span>Rates of change on a line</a><a href="#s9"><span>09</span>Sine and cosine</a><a href="#s10"><span>10</span>The chain rule</a><a href="#s11"><span>11</span>Implicit differentiation</a><a href="#s12"><span>12</span>Inverses, exponentials, and logarithms</a><a href="#s13"><span>13</span>Formula sheet</a></nav></header><main><div class="part"><div class="eyebrow">Calculus Volume 1</div><h2>Functions and limits</h2><section class="topic" id="s1">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Differentiation</title></head><body><header class="top"><p class="eyebrow">MAC 2311–2312 · Calculus I and II · Unit 1 · OpenStax Vol 1 Ch 1–3</p><h1>Differentiation</h1><p class="lede">A derivative is a local rate, built from a limit. Learn when that limit exists, derive the rules, then use them to focus a camera.</p><div class="legend"><span>Worked example</span><span>Derivation</span><span>Common mistake</span><span>Key idea</span><span>Model limits</span></div><nav class="toc"><a href="#s1"><span>01</span>Functions, briefly</a><a href="#s2"><span>02</span>The idea of a limit</a><a href="#s3"><span>03</span>Limit laws and the 0/0 form</a><a href="#s4"><span>04</span>Continuity</a><a href="#s5"><span>05</span>The precise definition</a><a href="#s6"><span>06</span>The derivative as a limit</a><a href="#s7"><span>07</span>Power, product, and quotient rules</a><a href="#s8"><span>08</span>Rates of change on a line</a><a href="#s9"><span>09</span>Sine and cosine</a><a href="#s10"><span>10</span>The chain rule</a><a href="#s11"><span>11</span>Implicit differentiation</a><a href="#s12"><span>12</span>Inverses, exponentials, and logarithms</a><a href="#s13"><span>13</span>Formula sheet</a></nav></header><main><div class="part"><div class="eyebrow">Calculus Volume 1</div><h2>Functions and limits</h2><section class="topic" id="s1">
 <h2><span class="n">01</span>Functions, briefly</h2>
 <p>A function is a rule that gives each input exactly one output. The set of allowed inputs is the domain. The set of outputs it actually produces is the range. A graph passes the vertical line test when no vertical line meets it twice. That is the same statement: one output per input.</p>
 <p>Chapter 1 of the text reviews the families this course uses: polynomials, rational functions, roots, trigonometric functions, exponentials, and logarithms. This section keeps only the three ideas the limit sections lean on: composition, inverses, and radians.</p>
@@ -23,8 +23,8 @@
 <div class="box key"><span class="tag">Key</span>
 <p>A function gives one output per input. An inverse exists only for a one-to-one function, and it is found by solving for the input. Angles are in radians from here on.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
-<p>This review skips the catalogue of function families, graph transformations, and the inverse trigonometric functions of §1.4. The text treats them in full. They return when the derivative rules need them.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>These are exact definitions for ideal real-valued functions. A measured input has uncertainty. A graph or table cannot reveal every discontinuity between its samples. Inverse trigonometric branches return in Section 12.</p>
 </div>
 </section><section class="topic" id="s2">
 <h2><span class="n">02</span>The idea of a limit</h2>
@@ -61,7 +61,7 @@
 <p>A limit looks near the point and ignores the point itself. The two-sided limit exists exactly when both one-sided limits exist and agree.</p>
 </div>
 <p>In the Limits lab, the Jump and One-sided scenarios draw both sides. Move \(h\) toward zero and watch the two sample points. They approach different heights.</p>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>This is the informal definition. "Close enough" has no number attached yet. Section 5 supplies one. Limits as \(x \to \infty\) wait for the graphing work in Unit 2.</p>
 </div>
 </section><section class="topic" id="s3">
@@ -118,7 +118,7 @@
 <p>Substitute first. If the result is a number, that is the limit. If it is \(0/0\), rewrite: factor, use the conjugate, or squeeze. Then substitute again.</p>
 </div>
 <p>In the Limits lab, the Hole scenario plots \((x^2 - a^2)/(x - a)\) with an open circle at \(x = a\). The readout gives the limit \(2a\). The two probes a tiny step either side agree with it.</p>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The laws are stated, not proved in full. The product and quotient proofs are in §2.5 of the text. L'Hôpital's rule, a faster route through \(0/0\), needs derivatives and comes in Unit 3.</p>
 </div>
 </section><section class="topic" id="s4">
@@ -166,7 +166,7 @@
 <p>Continuous means the limit equals the value. Removable, jump, and infinite name which condition fails. On a closed interval, a continuous function takes every value between its end values.</p>
 </div>
 <p>In the Limits lab, the Hole scenario shows a removable discontinuity, with the missing value drawn as an open circle. The Jump scenario shows a filled dot on the right branch and an open one on the left.</p>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The theorem is used, not proved. Its proof needs the completeness of the real numbers, which belongs to an analysis course. The theorem also finds a root without saying how many there are.</p>
 </div>
 </section><section class="topic" id="s5">
@@ -204,8 +204,8 @@
 <p>\(\varepsilon\) is the demand on the output. \(\delta\) is the answer on the input. For a line, \(\delta = \varepsilon/|m|\). For a curve, first bound the factor that changes, then divide.</p>
 </div>
 <p>In the Limits lab, the ε–δ line scenario draws the band \(L \pm \varepsilon\) and the window \(a \pm \delta\). The readout's \(\delta\) is \(\varepsilon/|m|\). A bisection that tests the inequality directly finds the same number.</p>
-<div class="box out"><span class="tag">What it leaves out</span>
-<p>The one-sided and infinite versions of the definition change only the conditions: one side of \(a\), or "\(f(x) \gt M\)" in place of the \(\varepsilon\) band. They are in §2.5 of the text. The same idea for sequences, with \(N\) in place of \(\delta\), opens Calculus II.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The one-sided and infinite versions of the definition change only the conditions: one side of \(a\), or "\(f(x) \gt M\)" in place of the \(\varepsilon\) band. They are in §2.5 of the text. The same idea for sequences, with \(N\) in place of \(\delta\), opens Unit 6.</p>
 </div>
 </section></div><div class="part"><div class="eyebrow">Calculus Volume 1</div><h2>Derivatives</h2><section class="topic" id="s6">
 <h2><span class="n">06</span>The derivative as a limit</h2>
@@ -236,7 +236,7 @@ f(a + h) - f(a) = h \cdot \frac{f(a + h) - f(a)}{h}.
 <p>\(f'(a)\) is the limit of secant slopes. Differentiable implies continuous. Continuous does not imply differentiable.</p>
 </div>
 <p>In the Secant lab, slide \(h\) toward zero. The secant slope in the readout approaches \(f'(x_0)\), which the lab also computes by a second route.</p>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>A function can also fail to be differentiable at a vertical tangent, such as \(\sqrt[3]{x}\) at \(0\), where the quotient grows without bound. This section shows only the corner.</p>
 </div>
 </section><section class="topic" id="s7">
@@ -289,10 +289,10 @@ f(a + h) - f(a) = h \cdot \frac{f(a + h) - f(a)}{h}.
 <p>Power rule: bring the exponent down and lower it by one. Product rule: differentiate one factor at a time and add. Quotient rule: bottom times top-prime, minus top times bottom-prime, over the bottom squared.</p>
 </div>
 <p>In the Secant lab, the \(x^3\) scenario shows the secant slope above \(3\) at \(x_0 = 1\). It falls toward \(3\) as \(h\) shrinks.</p>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The power rule is proved here only for whole-number exponents. Negative and fractional exponents, such as \(x^{-1}\) and \(\sqrt{x}\), wait for logarithmic differentiation in Section 12.</p>
 </div>
-</section><section class="topic" id="s8">
+<h3>A tangent through a point is a constraint</h3><div class="box ex"><span class="tag">Worked example · two tangents through the origin</span><p>Take \(f(x)=1+(x-1)^2\). A line through the origin has equation \(y=mx\). If it touches the curve at \(a\), then \(f(a)=ma\) and \(m=f'(a)=2(a-1)\). Eliminate \(m\): \(1+(a-1)^2=2a(a-1)\). Expanding leaves \(a^2=2\), so \(a=\pm\sqrt2\).</p><p>The positive contact gives slope \(2(\sqrt2-1)\approx0.828427\). The other gives \(-2(\sqrt2+1)\approx-4.828427\). Both lines pass through the origin, but neither touches there. Substituting each line into the curve produces a quadratic with a repeated root. That is an independent check of tangency.</p><p>Source for the checked answers: 18.01SC, Fall 2010, Unit 1 exercises, solution 1C-5. The statement and derivation here are original.</p></div><div class="box fix"><span class="tag">Common mistake</span><p>The point a tangent passes through need not lie on the curve. Setting the contact coordinate to zero here would put it at height two. Solve the passage and slope conditions together.</p></div></section><section class="topic" id="s8">
 <h2><span class="n">08</span>Rates of change on a line</h2>
 <p>A derivative is a rate. If \(s(t)\) is a position on a line at time \(t\), then \(v(t) = s'(t)\) is the velocity, and \(a(t) = v'(t) = s''(t)\) is the acceleration. The sign of \(v\) gives the direction. Speed is \(|v|\).</p>
 <div class="box why"><span class="tag">Why</span>
@@ -310,7 +310,7 @@ f(a + h) - f(a) = h \cdot \frac{f(a + h) - f(a)}{h}.
 <p>\(v = s'\) and \(a = v'\). The particle turns where \(v\) changes sign. Distance adds the pieces between turns.</p>
 </div>
 <p>The same reading applies outside motion. A marginal cost is the derivative of cost with respect to quantity. A growth rate is the derivative of a population with respect to time.</p>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>This section starts from a known \(s(t)\). Going the other way, from \(v(t)\) back to \(s(t)\), is integration, in Unit 4. Why a body has a particular acceleration is a question about force. That belongs to physics.</p>
 </div>
 </section><section class="topic" id="s9">
@@ -344,10 +344,10 @@ f(a + h) - f(a) = h \cdot \frac{f(a + h) - f(a)}{h}.
 <p>Sine's derivative is cosine. Cosine's derivative is minus sine. Both depend on the limit \(\sin h / h \to 1\), which holds in radians.</p>
 </div>
 <p>In the Secant lab, the sin x scenario puts the tangent and the secant on the same curve. At the top of a hump the tangent is flat and \(f'(x_0) = 0\).</p>
-<div class="box out"><span class="tag">What it leaves out</span>
-<p>The other three functions, secant, cosecant, and cotangent, follow from the quotient rule and are listed in §3.5 of the text. They are not derived again here.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The identities below use ideal exact angles. A measured angle has uncertainty; a derivative predicts how that uncertainty changes the output locally.</p>
 </div>
-</section><section class="topic" id="s10">
+<h3>The remaining trigonometric rules</h3><p>Apply the quotient rule to \(\tan x=\sin x/\cos x\). Its numerator becomes \(\cos^2x+\sin^2x=1\). Thus \((\tan x)'=1/\cos^2x=\sec^2x\), wherever \(\cos x\ne0\). Differentiating the reciprocal \(\sec x=1/\cos x\) gives \(\sec x\tan x\). The same calculation with sine gives \((\csc x)'=-\csc x\cot x\) and \((\cot x)'=-\csc^2x\), wherever \(\sin x\ne0\).</p></section><section class="topic" id="s10">
 <h2><span class="n">10</span>The chain rule</h2>
 <p>A composition \(y = f(g(x))\) changes because \(g\) changes, and \(f\) responds to that change. The rates multiply.</p>
 \[
@@ -376,7 +376,7 @@ f(a + h) - f(a) = h \cdot \frac{f(a + h) - f(a)}{h}.
 <div class="box key"><span class="tag">Key</span>
 <p>Differentiate the outside, leave the inside alone, then multiply by the derivative of the inside. For a chain of three, multiply three rates.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The \(\Delta u = 0\) case of the proof is only named here. Chains of partial derivatives, where the inside has several variables, come in Calculus III.</p>
 </div>
 </section><section class="topic" id="s11"><h2><span class="n">11</span>Implicit differentiation</h2>
@@ -385,7 +385,35 @@ f(a + h) - f(a) = h \cdot \frac{f(a + h) - f(a)}{h}.
 <p>Differentiate \(x^2 + y^2 = 25\) in \(x\). The term \(y^2\) gives \(2y\,y'\) by the chain rule. So \(2x + 2y\,y' = 0\), and \(y' = -x/y\). At \((3, 4)\) the slope is \(-3/4 = -0.75\).</p>
 <p>Check with the upper half written out: \(y = \sqrt{25 - x^2}\), so \(y' = -x/\sqrt{25 - x^2}\). At \(x = 3\): \(-3/4\).</p>
 </div>
-<div class="box key"><span class="tag">Key</span><p>Differentiate every occurrence of y through the chain rule. Solve for y′ only after differentiating the whole constraint.</p></div><div class="box out"><span class="tag">What the model leaves out</span><p>The formula \(y'=-x/y\) assumes y is nonzero. At the circle's left and right ends the tangent is vertical, so y cannot be represented there by a differentiable function of x.</p></div></section><section class="topic" id="s12">
+<div class="box key"><span class="tag">Key</span><p>Differentiate every occurrence of y through the chain rule. Solve for y′ only after differentiating the whole constraint.</p></div><div class="box out"><span class="tag">What the model leaves out</span><p>The formula \(y'=-x/y\) assumes y is nonzero. At the circle's left and right ends the tangent is vertical, so y cannot be represented there by a differentiable function of x.</p></div>
+<div class="box why"><span class="tag">Why a local graph can fail</span>
+<p>For a constraint \(F(x,y)=0\), differentiating gives \(F_x+F_y y'=0\). If \(F_y\ne0\), solve for \(y'=-F_x/F_y\). If that coefficient vanishes, division is unavailable. The curve can have a vertical tangent, multiple branches, or a singular point. A zero denominator alone does not distinguish them.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Do not differentiate \(y^2\) as \(2y\) when the independent variable is \(x\). The omitted factor \(y'\) is the unknown slope. At \((3,4)\), writing \(2x+2y=0\) gives a false equation, not a derivative.</p>
+</div>
+<h3>A camera lens is an implicit constraint</h3>
+<p>A subject at distance \(u\) forms a sharp image at distance \(v\). A thin lens of focal length \(f\) satisfies \(1/f=1/u+1/v\). Distances are positive for a real object and real image. Hold the lens fixed and move the subject. The image distance must change to preserve the equation.</p>
+\[
+0=-\frac{1}{u^2}-\frac{1}{v^2}\frac{dv}{du},\qquad
+\frac{dv}{du}=-\frac{v^2}{u^2}=-\frac{f^2}{(u-f)^2}.
+\]
+<p>The minus sign has a physical meaning. A more distant subject forms its image closer to the lens. Solving the original equation also gives \(v=fu/(u-f)=f+f^2/(u-f)\). Differentiating that explicit function provides a second route.</p>
+<div class="box ex"><span class="tag">Worked example · a close camera subject</span>
+<p>Use a nominal \(50\) mm lens with \(u=450\) mm. Then \(v=50(450)/(450-50)=56.25\) mm and \(dv/du=-2500/400^2=-0.015625\). A \(1\) mm outward subject motion needs about \(0.0156\) mm inward image motion. The derivative is a ratio of distances, so it is dimensionless.</p>
+<p>The actual lens specification supplies the focal length and its \(0.45\) m minimum focusing distance. The thin-lens prediction is a teaching model, not a manufacturer's focus calibration.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · sensitivity is not image distance</span>
+<p>Move that subject to \(u=850\) mm. Now \(u-f\) doubles. The image distance becomes \(53.125\) mm, which is not half its previous value. The sensitivity becomes \(-0.00390625\), exactly one quarter as large in magnitude. Distinguish a function's value from its derivative.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the tangent makes a local prediction</span>
+<p>Start with \(u=1000\) mm and \(f=50\) mm. The sharp image is at \(52.63158\) mm. Its sensitivity is \(-1/361=-0.00277008\). Moving the subject outward by \(100\) mm gives the tangent prediction \(52.35457\) mm. The full function gives \(52.38095\) mm. The \(0.02638\) mm disagreement comes from using a local slope over a finite interval. Unit 2 develops this approximation and its error.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The camera model treats a compound lens as one thin element. It ignores moving principal planes, aberrations, focus breathing and the focus mechanism. Object distance is measured from the model's principal plane. A real product's distance marking uses a different physical reference. The close preset motivates the scale; it does not claim identical calibration.</p>
+</div>
+<p><a href="https://imaging.nikon.com/imaging/lineup/lens/f-mount/singlefocal/normal/af_50mmf_18d/">Nikon AF NIKKOR 50mm f/1.8D specifications</a>: nominal focal length and minimum focus. The plotted camera setups otherwise use stated teaching inputs.</p>
+</section><section class="topic" id="s12">
 <h2><span class="n">12</span>Inverses, exponentials, and logarithms</h2>
 <p>If \(f\) has an inverse, the inverse's slope is the reciprocal of \(f\)'s slope at the matching point. Reflecting a graph in \(y = x\) swaps rise and run.</p>
 <div class="box why"><span class="tag">Why</span>
@@ -419,7 +447,7 @@ f(a + h) - f(a) = h \cdot \frac{f(a + h) - f(a)}{h}.
 <div class="box key"><span class="tag">Key</span>
 <p>An inverse's slope is the reciprocal of the original slope at the matching point. \(e^x\) is its own derivative. \(\ln x\) has derivative \(1/x\). When a variable sits in an exponent, take logarithms first.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
-<p>This section assumes that \(e\) exists: a base with \(\lim (e^h - 1)/h = 1\). The text defines \(e\) through a limit and makes that precise. Hyperbolic functions, also in Chapter 3, are not covered.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>This section assumes that \(e\) exists: a base with \(\lim (e^h - 1)/h = 1\). The text defines \(e\) through a limit and makes that precise. Hyperbolic functions follow from their exponential definitions: sinh x=(e^x−e^(−x))/2 and cosh x=(e^x+e^(−x))/2. Differentiating each term gives (sinh x)′=cosh x and (cosh x)′=sinh x. They are not inverse trigonometric functions.</p>
 </div>
-</section><section class="topic" id="s13"><h2><span class="n">13</span>Formula sheet</h2><p>These results are derived in the sections above. Check each result's hypotheses before applying it.</p><p>\(f\prime(x)=\lim_{h\to0}[f(x+h)-f(x)]/h\), \((fg)\prime=f\prime g+fg\prime\), \((f/g)\prime=(f\prime g-fg\prime)/g^2\), \((f\circ g)\prime=(f\prime\circ g)g\prime\), \((\ln x)\prime=1/x\).</p></section></div></main><footer><p>Original Flux notes. OpenStax Calculus Volumes 1 and 2, sections identified in the notes and textbook map.</p><p><b>Another view:</b> <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/">18.01SC Single Variable Calculus, Fall 2010</a>, Unit 1.</p></footer></body></html>
+<h3>Inverse branches carry the sign</h3><p>Let \(y=\arccos x\) with \(0\le y\le\pi\). From \(x=\cos y\), obtain \(1=-\sin y\,y'\). Sine is nonnegative on that branch, so \(y'=-1/\sqrt{1-x^2}\) for \(|x|\lt1\). For \(y=\arctan x\), differentiate \(x=\tan y\): \(1=\sec^2y\,y'\). Since \(\sec^2y=1+x^2\), the derivative is \(1/(1+x^2)\).</p><div class="box ex"><span class="tag">Worked example · inverse slopes have different signs</span><p>At \(x=1/2\), arcsine has derivative \(2/\sqrt3\), while arccosine has derivative \(-2/\sqrt3\). Their sum is zero, as it must be: \(\arcsin x+\arccos x=\pi/2\). Arctangent at \(x=1\) instead has derivative \(1/2\).</p></div><div class="box fix"><span class="tag">Common mistake</span><p>Reciprocal slope means \(1/f'(f^{-1}(x))\), not \(1/f'(x)\). The argument must be the matching input on the original curve. At a zero original slope, the inverse need not have a finite derivative.</p></div></section><section class="topic" id="s13"><h2><span class="n">13</span>Formula sheet</h2><p>These results are derived in the sections above. Check each result's hypotheses before applying it.</p><p>\(f\prime(x)=\lim_{h\to0}[f(x+h)-f(x)]/h\), \((fg)\prime=f\prime g+fg\prime\), \((f/g)\prime=(f\prime g-fg\prime)/g^2\), \((f\circ g)\prime=(f\prime\circ g)g\prime\), \((\ln x)\prime=1/x\).</p></section></div></main><footer><p>Original Flux notes. OpenStax Calculus Volumes 1 and 2, sections identified in the notes and textbook map.</p><p><b>Another view:</b> <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/">18.01SC Single Variable Calculus, Fall 2010</a>, Unit 1: Definition and Basic Rules; Implicit Differentiation and Inverse Functions. <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/pages/1.-differentiation/">Unit lectures and worked solutions</a>.</p></footer></body></html>
