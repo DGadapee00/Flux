@@ -11,7 +11,7 @@ export const EXAMS = [
     title: 'Pure substances and ideal gases',
     chapters: '2, 3',
     date: 'Yan Ch 2–3',
-    labs: ['phase', 'canner'],
+    labs: ['phase', 'manometer', 'canner'],
     coming: [],
   },
   {
@@ -20,7 +20,7 @@ export const EXAMS = [
     title: 'First law for closed systems',
     chapters: '4',
     date: 'Yan Ch 4',
-    labs: ['piston', 'kettle'],
+    labs: ['piston', 'balance', 'kettle'],
     coming: [],
   },
   {
@@ -54,8 +54,10 @@ export const EXAMS = [
 
 export const LAB_META = {
   phase: { id: 'phase', exam: 'u1', title: 'Phase diagram' },
+  manometer: { id: 'manometer', exam: 'u1', title: 'Manometer' },
   canner: { id: 'canner', exam: 'u1', title: 'Pressure canner', app: true },
   piston: { id: 'piston', exam: 'u2', title: 'Boundary work' },
+  balance: { id: 'balance', exam: 'u2', title: 'Energy balance' },
   kettle: { id: 'kettle', exam: 'u2', title: 'Boiling on a coil', app: true },
   nozzle: { id: 'nozzle', exam: 'u3', title: 'Nozzle and diffuser' },
   devices: { id: 'devices', exam: 'u3', title: 'Steady-flow devices' },

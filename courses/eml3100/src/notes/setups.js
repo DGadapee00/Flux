@@ -15,6 +15,26 @@ const onIsobar = (p, tC) => (s) => {
 
 export const SETUPS = {
   u1: {
+    s0: [
+      {
+        tag: 'a water U-tube',
+        lab: 'manometer',
+        scenario: 'utube',
+        read: (c) => ({ gauge: [c.gauge / 1e3, 1.958], p: [c.pAbs / 1e3, 103.3] }),
+      },
+      {
+        tag: 'water and mercury',
+        lab: 'manometer',
+        scenario: 'multi',
+        read: (c) => ({ gauge: [c.gauge / 1e3, 4.139], p: [c.pAbs / 1e3, 105.5] }),
+      },
+      {
+        tag: 'an inclined tube',
+        lab: 'manometer',
+        scenario: 'inclined',
+        read: (c) => ({ gauge: [c.gauge / 1e3, 1.468], p: [c.pAbs / 1e3, 102.8] }),
+      },
+    ],
     s1: [
       {
         tag: 'which phase',
@@ -88,6 +108,26 @@ export const SETUPS = {
     ],
   },
   u2: {
+    s1: [
+      {
+        tag: 'a paddle wheel in a tank',
+        lab: 'balance',
+        scenario: 'paddle',
+        read: (c) => ({ dU: [c.dU / 1e3, 15] }),
+      },
+      {
+        tag: 'a heater and a paddle',
+        lab: 'balance',
+        scenario: 'heater',
+        read: (c) => ({ dU: [c.dU / 1e3, 42] }),
+      },
+      {
+        tag: 'a motor and a pump',
+        lab: 'balance',
+        scenario: 'chain',
+        read: (c) => ({ overall: [c.overall, 0.72], fluid: [c.fluid / 1e3, 1.8] }),
+      },
+    ],
     s2: [
       {
         tag: 'expansion at constant pressure',

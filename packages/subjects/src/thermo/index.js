@@ -39,6 +39,9 @@ export {
   satTableT, satTableP, superheatTable, compressedTable, bracket, lerp, tableInterp, tableInterp2, printed,
 } from './tables.js';
 export { FACTORS, SYSTEMS, toBase, fromBase, fromC, toC, fromF, toF, inUnits } from './units.js';
+export {
+  G_STANDARD, manometerGauge, manometerResidual, closedEnergy, integratedBalance, seriesEfficiency,
+} from './balances.js';
 
 import { covered as coveredIF97 } from './if97.js';
 

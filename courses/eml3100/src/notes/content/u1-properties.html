@@ -17,26 +17,62 @@
     <span><i style="background:transparent;outline:1px dashed var(--text-muted)"></i>What the model leaves out</span>
   </div>
   <nav class="toc" aria-label="Contents">
-    <h3>Part I · Phases and the dome</h3>
-    <a href="#s1"><span>01</span>Pure substances and phases</a>
-    <a href="#s2"><span>02</span>The saturation dome</a>
+    <h3>Part I · Pressure and the dome</h3>
+    <a href="#s0"><span>01</span>Pressure and manometers</a>
+    <a href="#s1"><span>02</span>Pure substances and phases</a>
+    <a href="#s2"><span>03</span>The saturation dome</a>
     <h3>Part II · Reading the tables</h3>
-    <a href="#s3"><span>03</span>Reading property tables</a>
+    <a href="#s3"><span>04</span>Reading property tables</a>
     <h3>Part III · Ideal and real gases</h3>
-    <a href="#s4"><span>04</span>The ideal-gas law</a>
-    <a href="#s5"><span>05</span>When is a gas ideal?</a>
+    <a href="#s4"><span>05</span>The ideal-gas law</a>
+    <a href="#s5"><span>06</span>When is a gas ideal?</a>
     <h3>Reference</h3>
-    <a href="#s6"><span>06</span>Formula sheet</a>
+    <a href="#s6"><span>07</span>Formula sheet</a>
   </nav>
 </header>
 <main>
 <div class="part">
   <div class="eyebrow">Part I</div>
-  <h2>Phases and the dome</h2>
+  <h2>Pressure and the dome</h2>
 </div>
 
+<section class="topic" id="s0">
+<h2><span class="n">01</span>Pressure and manometers</h2>
+<p>Pressure is force divided by area. A manometer measures it with a still column of liquid. Yan §2.2 lists pressure as a property of the state.</p>
+<p>Start at the open end, where the pressure is the atmosphere, and walk to the point you want. A leg that descends adds \(\rho g z\). A leg that rises subtracts it. \(z\) is the vertical drop, and downward is positive.</p>
+\[
+P = P_\mathrm{atm} + \sum \rho g z
+\]
+<p>The distance along the glass is not \(z\). On a tube at an angle \(\theta\) above the horizontal, the vertical drop is \(L \sin\theta\). The bore does not appear either. A wider tube holds more liquid at the same height, and the pressure stays the same.</p>
+<div class="box why"><span class="tag">Why the width drops out</span>
+<p>The weight of a column is \(\rho g\) times its volume, and the volume is the area times the height. Pressure is that weight divided by the area. The area cancels, and \(\rho g z\) is left. An inclined tube is the same idea. Only the vertical drop is left.</p>
+</div>
+<p>Water's density here is IAPWS-IF97 at 20 °C and 101.325 kPa: 998.2 kg/m³. Mercury is 13545.854 kg/m³ at 20 °C and 1 atm. Holman and ten Seldam (1994) give Cook's value. Standard gravity is 9.80665 m/s².</p>
+<div class="box ex"><span class="tag">Worked example · a water U-tube</span>
+<p>The open side of a water manometer stands 20 cm above the tank side. The gauge pressure is \(\rho g z = 1.958\) kPa. Adding the standard atmosphere, 101.325 kPa, gives an absolute pressure of 103.3 kPa.</p>
+<p>Check by walking back. Start at the tank and subtract the same column. The open end lands on the atmosphere, so the two walks agree. Simpson's rule on \(\int \rho g\,dz\) gives the same 1.958 kPa. The density does not change along the column.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · water and mercury</span>
+<p>From the open end the path descends 40 mm of mercury, then rises 12 cm of water. The mercury head is 5.314 kPa. The water head is 1.175 kPa, and it is subtracted because the path climbs.</p>
+\[
+P_\mathrm{gauge} = 5.314 - 1.175 = 4.139\ \text{kPa}
+\]
+<p>The absolute pressure is 101.325 kPa + 4.139 kPa = 105.5 kPa. Adding the water head instead of subtracting it would report an absolute pressure of 107.8 kPa.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an inclined tube</span>
+<p>Water fills 30 cm of tube inclined 30° above the horizontal. The vertical drop is \(30\sin 30^\circ = 15\) cm, not 30 cm. The gauge pressure is 1.468 kPa, and the absolute pressure is 102.8 kPa.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the length along an incline, instead of \(L\sin\theta\), doubles this last reading, to 2.937 kPa. Adding a rising leg, instead of subtracting it, raises the multi-fluid reading. And a wider bore does not raise the pressure. The area canceled when the weight was divided by the area.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The fluid is still, and each density is taken as constant. A narrow bore adds a capillary rise that this sum ignores. A warmer liquid is less dense, so the same height reads a lower pressure. The manometer says nothing about a flowing stream.</p>
+</div>
+<p class="another-view"><strong>Another view.</strong> MIT OCW 16.050 Thermal Energy (Fall 2002) reviews properties in Part 0, before the second-law sessions on its <a href="https://ocw.mit.edu/courses/16-050-thermal-energy-fall-2002/pages/calendar/" target="_blank" rel="noopener">calendar page</a>. Those sessions do not post manometer solutions. The column heights here are chosen for the lab.</p>
+</section>
+
 <section class="topic" id="s1">
-<h2><span class="n">01</span>Pure substances and phases</h2>
+<h2><span class="n">02</span>Pure substances and phases</h2>
 <p>A pure substance has one fixed chemical make-up throughout. Water is pure whether it is ice, liquid, steam, or a mix of all three. Air is treated as pure too, as long as it does not condense or react. Yan §2.1 sets out the definition.</p>
 <p>A property is anything measured at a state: pressure \(P\), temperature \(T\), specific volume \(v\), internal energy \(u\), enthalpy \(h\), entropy \(s\). Specific means per unit mass. A specific property is intensive: it does not depend on how much substance there is. Yan §1.3 draws that line.</p>
 <div class="box why"><span class="tag">Why two properties are enough</span>
@@ -82,7 +118,7 @@ T &> T_{sat}(P):\ \text{vapour}
 </section>
 
 <section class="topic" id="s2">
-<h2><span class="n">02</span>The saturation dome</h2>
+<h2><span class="n">03</span>The saturation dome</h2>
 <p>Plot the saturated liquid and saturated vapour states for every pressure. On a T–v or P–v diagram they trace a dome. The left side is saturated liquid, \(v_f\). The right side is saturated vapour, \(v_g\). They meet at the top, the critical point: 373.9 °C and 22.06 MPa for water. Yan §2.3 draws the diagrams.</p>
 <p>Inside the dome the substance is a mixture. A horizontal line across it is one temperature and one pressure. Where the state sits along that line says how much of the mass is vapour.</p>
 <div class="box why"><span class="tag">Why the lever rule holds</span>
@@ -130,7 +166,7 @@ x = \frac{0.05 - 0.001092}{0.3827 - 0.001092} = 0.1281
 </div>
 
 <section class="topic" id="s3">
-<h2><span class="n">03</span>Reading property tables</h2>
+<h2><span class="n">04</span>Reading property tables</h2>
 <p>Property tables list \(v\), \(u\), \(h\) and \(s\) at round values of \(T\) and \(P\). There are three kinds: saturation by temperature, saturation by pressure, and superheated vapour. A fourth lists compressed liquid. Yan §2.4 explains how to read them. Flux prints its own tables from IAPWS-IF97 and copies none.</p>
 <p>A state rarely falls exactly on a printed row. Between two rows, a student draws a straight line.</p>
 <div class="box why"><span class="tag">Why linear interpolation works, and where it fails</span>
@@ -173,7 +209,7 @@ y \approx y_0 + \frac{x - x_0}{x_1 - x_0}\,(y_1 - y_0)
 </div>
 
 <section class="topic" id="s4">
-<h2><span class="n">04</span>The ideal-gas law</h2>
+<h2><span class="n">05</span>The ideal-gas law</h2>
 <p>A gas whose molecules are far apart obeys \(Pv = RT\). Here \(R\) is the gas constant of that gas, and \(T\) is absolute. Yan §3.1 states the law; OpenStax UP2 §2.1 derives it from the motion of molecules.</p>
 <div class="box why"><span class="tag">Why Pv = RT</span>
 <p>A molecule of mass \(m_1\) moving at \(v_x\) hits a wall and reverses. It hands the wall momentum \(2m_1v_x\). In a box of length \(L\) it returns every \(2L/v_x\). So its average force is \(m_1v_x^2/L\). Sum over \(N\) molecules and divide by the wall's area \(A\):</p>
@@ -216,7 +252,7 @@ m &= \frac{PV}{RT} = \frac{400 \times 2}{0.2870 \times 298.15}\\
 </section>
 
 <section class="topic" id="s5">
-<h2><span class="n">05</span>When is a gas ideal?</h2>
+<h2><span class="n">06</span>When is a gas ideal?</h2>
 <p>The compressibility factor compares the real specific volume with the ideal one at the same \(P\) and \(T\). Yan §3.2 defines it:</p>
 \[
 Z = \frac{Pv}{RT}
@@ -239,7 +275,10 @@ Z = \frac{Pv}{RT}
 </section>
 
 <section class="topic" id="s6">
-<h2><span class="n">06</span>Formula sheet</h2>
+<h2><span class="n">07</span>Formula sheet</h2>
+\[
+P = P_\mathrm{atm} + \sum \rho g z
+\]
 \[
 x = \frac{m_g}{m} = \frac{v - v_f}{v_g - v_f}
 \]
@@ -261,6 +300,6 @@ Z = Pv/(RT)
 <p>\(\bar R = 8.314\) kJ/(kmol·K). Air: \(R = 0.2870\) kJ/(kg·K), or 53.35 ft·lbf/(lbm·R). Water: \(R = 0.4615\) kJ/(kg·K). Water's critical point: 373.9 °C, 22.06 MPa.</p>
 </section>
 </main>
-<footer>Written for Flux from Yan, Introduction to Engineering Thermodynamics, Yan Ch 2 and Yan Ch 3, and from OpenStax UP2 §2.1. The canner pressures are the USDA Complete Guide to Home Canning (2015): 10 psi and 15 psi on a weighted gauge, and the stated 240 °F at 10.5 psi gauge at sea level. Altitude pressure is the standard atmosphere. Every worked answer was recomputed.</footer>
+<footer>Written for Flux from Yan, Introduction to Engineering Thermodynamics, Yan Ch 2 and Yan Ch 3, and from OpenStax UP2 §2.1. The canner pressures are the USDA Complete Guide to Home Canning (2015): 10 psi and 15 psi on a weighted gauge, and the stated 240 °F at 10.5 psi gauge at sea level. Altitude pressure is the standard atmosphere. Mercury at 20 °C and 1 atm is Cook's 13545.854 kg/m³, as given by Holman and ten Seldam (1994). Manometer heights are lab choices. Every worked answer was recomputed.</footer>
 </body>
 </html>
