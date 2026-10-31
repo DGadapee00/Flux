@@ -65,7 +65,10 @@ export const LAB_UNITS = {
   rocket: ['m', 'v', 'F', 'a'],
   'crumple-zone': ['m', 'v', 'F', 'K'],
   'crash-reconstruction': ['m', 'v', 'mu', 'x', 'K'],
-  rotor: ['tau', 'I', 'alpha', 'a', 'm'],
+  rotor: ['tau', 'I', 'alpha', 'omega', 'aT', 'ac'],
+  inertia: ['I', 'm', 'r'],
+  'massive-pulley': ['m', 'a', 'tension', 'I', 'alpha'],
+  'helicopter-rotor': ['I', 'omega', 'K', 'v'],
 };
 
 const BASE = ['kg', 'm', 's', 'A'];
