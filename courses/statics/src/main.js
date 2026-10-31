@@ -1,3 +1,8 @@
+import '@flux/shells/engineering/styles/stage.css';
+import '@flux/shells/styles/notes.css';
+import { openNotesFromRoute } from '@flux/shells/notes.js';
+import { createStage } from '@flux/shells/engineering/stage.js';
+import { applyExample } from './notes/setups.js';
 import '@flux/shells/engineering/styles/main.css';
 import '@flux/shells/engineering/styles/practice.css';
 import 'katex/dist/katex.min.css';
@@ -22,6 +27,7 @@ mountTrackBar(brand);
 
 const canvas = document.getElementById('c');
 const { renderer, scene, camera, controls, labels, grid } = createScene(canvas);
+const stage = createStage(canvas);
 const pool = createViewPool(scene);
 const clock = new THREE.Clock();
 camera.layers.enable(ANSWER_LAYER);
@@ -68,6 +74,16 @@ function publicState() {
 }
 
 const hud = createHUD({
+  examId: () => app.examId,
+  explore: (id) => setLab(id),
+  showLab: (id) => setLab(id),
+  practiceChapter: (id) => Promise.resolve(id && id !== app.examId ? setExam(id) : null).then(() => practice.open()),
+  setupExample: async (id, ex) => {
+    await setLab(ex.lab);
+    applyExample(app.lab, slice(), ex);
+    applyFrame(); goCamera(app.lab); bump(false);
+  },
+  reframe: () => goCamera(app.lab),
   setLab,
   setExam,
   setScenario,
@@ -387,11 +403,17 @@ practice = createPractice({
   slice,
   computed,
   labelLayer: labels.domElement,
+  openNotes: (where) => hud.notes?.open(where),
 });
 
 function followUrl() {
-  const { examId, labId, problemId, seed } = parseHash();
+  const route = parseHash();
+  const { examId, labId, problemId, seed } = route;
+  if (problemId) hud.notes?.close();
   if (practice.followUrl(problemId, seed)) return;
+  app.query = route.notes ? `?n=${encodeURIComponent(route.notes)}` : '';
+  if (!route.notes) hud.notes?.close();
+  openNotesFromRoute(hud.notes, route);
   if (examId === app.examId && labId === app.labId) return;
   if (labId) setLab(labId);
   else setExam(examId);
@@ -430,8 +452,9 @@ function stepViewShift() {
   const w = canvas.clientWidth;
   const h = canvas.clientHeight;
   let target = 0;
-  if (document.body.classList.contains('practice-open') && w > 720) {
-    const left = document.getElementById('problems').getBoundingClientRect().right;
+  if ((document.body.classList.contains('practice-open') || document.body.classList.contains('notes-open')) && w > 720) {
+    const panel = document.getElementById(document.body.classList.contains('notes-open') ? 'notes' : 'problems');
+    const left = panel.getBoundingClientRect().right;
     const controlsEl = document.getElementById('controls');
     const right = controlsEl.offsetParent ? controlsEl.getBoundingClientRect().left : w;
     target = Math.max(0, Math.round((left + right) / 2 - w / 2));
@@ -443,6 +466,41 @@ function stepViewShift() {
   view.h = h;
   if (Math.abs(next) < 0.5) camera.clearViewOffset();
   else camera.setViewOffset(w, h, -next, 0, w, h);
+}
+
+let stageKind = 'scene3d';
+let layoutKey = '';
+let layoutAt = 0;
+function layoutChanged(now) {
+  if (now - layoutAt < 200) return false;
+  layoutAt = now;
+  const parts = [window.innerWidth, window.innerHeight, document.body.className];
+  for (const id of ['brand', 'eq-panel', 'controls', 'readout', 'problems', 'btn-sheet', 'notes']) {
+    const el = document.getElementById(id);
+    const r = el && !el.hidden ? el.getBoundingClientRect() : null;
+    parts.push(r ? `${Math.round(r.left)},${Math.round(r.top)},${Math.round(r.width)},${Math.round(r.height)}` : '-');
+  }
+  const key = parts.join('|');
+  if (key === layoutKey) return false;
+  layoutKey = key;
+  return true;
+}
+
+function drawStage(changed) {
+  const lab = app.lab;
+  const plot = lab?.kind === 'plot2d';
+  labels.domElement.hidden = plot;
+  document.body.classList.toggle('plot-lab', plot);
+  if (!plot) {
+    if (stageKind !== 'scene3d') stage.show(null, {});
+    stageKind = 'scene3d';
+    return;
+  }
+  const relayout = layoutChanged(performance.now());
+  if (changed || relayout || stageKind !== lab.id) {
+    stage.show(lab, slice());
+    stageKind = lab.id;
+  }
 }
 
 function frame() {
@@ -458,7 +516,8 @@ function frame() {
   }
 
   const live = !!lab?.live;
-  if (app.dirty || s.dirty || pointer.dragging || live) {
+  const changed = app.dirty || s.dirty || pointer.dragging || live;
+  if (changed) {
     recompute();
     syncViews();
     hud.update(publicState(), computed, lab);
@@ -467,6 +526,7 @@ function frame() {
     if (s.dirty !== undefined) s.dirty = false;
   }
   if (lab?.afterFrame) lab.afterFrame(dt, s, computed, ctx);
+  drawStage(changed);
   practice.frame();
 
   renderer.render(scene, camera);
@@ -480,15 +540,18 @@ window.__gauss = {
   },
   computed,
   app,
+  stage,
   camera,
   controls,
   practice,
 };
 
 const boot = parseHash();
+if (boot.notes && !boot.problemId) app.query = `?n=${encodeURIComponent(boot.notes)}`;
 setExam(boot.examId, boot.labId).then(() => {
   booting = false;
   if (boot.problemId) practice.followUrl(boot.problemId, boot.seed);
+  else openNotesFromRoute(hud.notes, boot);
   recompute();
   syncViews();
   hud.update(publicState(), computed, app.lab);

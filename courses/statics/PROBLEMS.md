@@ -20,8 +20,21 @@ here:
 | `bank/ch34.js` | 3 particle equilibrium, 4 moments |
 | `bank/ch56.js` | 5 rigid bodies, 6 trusses |
 | `bank/ch7910.js` | 7 internal loads, 9 centroids, 10 moments of inertia |
-| `bank/ch8.js` | 8 friction (written from the chapter's standard cases — not in the decks) |
+| `bank/ch8.js` | 8 friction (written from the chapter's standard cases, not in the decks) |
+| `bank/concepts.js` | Eight conceptual templates spanning all four units |
+| `bank/vector-design.js` | Answer-first cable/resultant design, level 3 |
 
-34 templates, sourced from the four problem decks (Ch 8 aside). `npm test` confirms each worked case, resamples
-every template, and — where a problem drives a lab — compares the lab's own answer with the
-problem's.
+43 templates. The original deck cases remain under PROVENANCE.md. New cases are original
+computational checks, not purported printed numerical answers. The complete printed-answer audit
+remains outstanding.
+
+`coaching.js` supplies per-option explanations, named numeric mistakes and second hints.
+`inverse.js` changes the unknown in nineteen numeric templates. It back-solves a known response
+from the chosen load or dimension, then asks the student to recover that input. Its lab still
+checks the forward balance against the stated response. The cable-design template independently
+chooses the tension first and computes the known horizontal force backward.
+
+Every numeric template opens its lab. Pappus uses the revolution lab and checks volume by washers,
+with a separate surface integral. `npm test` reproduces the cases, generates seeded samples,
+checks symbolic dimensions and compares the problems with their labs. `content-check.mjs` also
+checks staged hints, choice explanations, trap values, notes setups and computed predictions.

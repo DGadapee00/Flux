@@ -74,7 +74,7 @@ export default [
     cases: [kase('hand', { w1: 6, h1: 2, w2: 2, h2: 4 }, { A: 20, xbar: 2.2, ybar: 2.2 })],
   }),
   problem({
-    ...U4, id: 'ch9.pappus', ch: '9', src: 'Part 4 · 9.9–9.11', title: 'Pappus–Guldinus', kind: 'numeric', level: 2, topics: ['centroids', 'pappus'],
+    ...U4, id: 'ch9.pappus', ch: '9', lab: 'pappus', src: 'Part 4 · 9.9–9.11', title: 'Pappus–Guldinus', kind: 'numeric', level: 2, topics: ['centroids', 'pappus'],
     vars: { R: range(2, 12, 1, 'in'), a: range(1, 5, 0.5, 'in'), shape: choice(['torus', 'a torus'], ['sphere', 'a sphere']) },
     derive: ($) => {
       if ($.shape === 'sphere') {
@@ -98,6 +98,7 @@ export default [
       String.raw`$S = \theta\bar{r}L = ${texNum($.S)}\ \text{in}^2$`,
       String.raw`$V = \theta\bar{r}A = ${texNum($.V)}\ \text{in}^3$`,
     ],
+    sim: { scenario: 'torus', setup:(s,$)=>Object.assign(s,{shape:$.shape,R:$.R,a:$.a}), read:c=>({S:c.S,V:c.V,'@washers':[c.Vnum,c.V],'@surface integration':[c.Snum,c.S]}) },
     cases: [kase('torus', { R: 5, a: 1, shape: 'torus' }, { S: 197.39, V: 98.696 })],
   }),
   problem({
@@ -141,7 +142,7 @@ export default [
     vars: {
       ask: choice(
         ['from', 'The parallel-axis theorem I = Ī + Ad² starts from which axis?'],
-        ['min', 'For a given shape, the moment of inertia is smallest about'],
+        ['min', 'For a given shape and fixed axis direction, the moment of inertia is smallest about'],
         ['units', 'The units of an area moment of inertia are'],
       ),
     },
@@ -150,10 +151,9 @@ export default [
       mc('ans', [
         ['centroid', 'An axis through the centroid — Ī must be the centroidal value'],
         ['any', 'Any axis at all'],
-        ['centroidal', 'The centroidal axis'],
-        ['len4', 'Length to the fourth power'],
+                ['len4', 'Length to the fourth power'],
         ['len3', 'Length cubed'],
-      ], ($) => ({ from: 'centroid', min: 'centroidal', units: 'len4' })[$.ask]),
+      ], ($) => ({ from: 'centroid', min: 'centroid', units: 'len4' })[$.ask]),
     ],
     hints: [String.raw`$Ad^2$ is never negative, so moving away from the centroid can only increase $I$.`],
     steps: ($) => [

@@ -1,0 +1,245 @@
+<header class="top">
+  <div class="eyebrow">EGN 3311 · Statics · U2</div>
+  <h1>Equilibrium and moments</h1>
+  <p class="lede">Draw the body. Resolve the forces. Derive the result and check it another way.</p>
+  <div class="legend">
+    <span><i style="background: var(--field)"></i>Worked example</span
+    ><span><i style="background: var(--field-soft)"></i>Derivation</span
+    ><span><i style="background: var(--copper)"></i>Common mistake</span><span>Key idea</span
+    ><span>Model limits</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <a href="#s1"><span>1</span>Particle equilibrium and the free-body diagram</a
+    ><a href="#s2"><span>2</span>Three-dimensional equilibrium</a
+    ><a href="#s3"><span>3</span>Moments, couples and equivalent systems</a
+    ><a href="#s4"><span>4</span>The wall shelf</a><a href="#s5"><span>5</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+  <div class="part">
+    <div class="eyebrow">Part I</div>
+    <h2>Build the model</h2>
+    <section class="topic" id="s1">
+      <h2><span class="n">1</span>Particle equilibrium and the free-body diagram</h2>
+      <p>
+        Isolate one ring or particle. Replace every attachment by the force it exerts on that body. A cable
+        pulls away from the ring. Weight points vertically downward. A spring pulls along its axis when
+        stretched. Do not include the reaction force on a different body.
+      </p>
+      <p>
+        Newton's second law becomes \(\sum\mathbf F=\mathbf0\) when acceleration is zero. Resolving a planar
+        ring gives \(T_1\cos a_1+T_2\cos a_2=0\) and \(T_1\sin a_1+T_2\sin a_2=W\). These are simultaneous
+        equations. Solving either alone leaves an arbitrary family of tensions. For symmetric cables at angle
+        theta above horizontal, horizontal balance gives equal tensions, and vertical balance gives
+        \(T=W/(2\sin\theta)\).
+      </p>
+      <p>
+        A spring's force must first satisfy equilibrium. Hooke's law then gives its extension \(s=F/k\),
+        measured from its unloaded length. It does not give the total length. A negative computed cable
+        tension means the assumed taut-cable model is impossible.
+      </p>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          The two tensions need not be equal. They are equal only when the geometry and loading provide the
+          required symmetry.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Unequal cables</span>
+        <p>
+          A 100 lb weight has cable directions 150° and 45° from positive x. Horizontal balance gives
+          \(T_2=\sqrt{3/2}T_1\). Vertical balance gives \(T_1=73.2051\) lb and \(T_2=89.6575\) lb.
+          Substitution closes both component equations.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Spring extension</span>
+        <p>
+          A 200 N weight is supported by a horizontal tie and a spring at 30°. Only the spring has a vertical
+          component, so \(F\sin30°=200\), giving 400 N. At \(k=500\) N/m, extension is 0.800 m.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          A particle has no size and cannot resist a couple. Use rigid-body equilibrium when attachment
+          spacing matters.
+        </p>
+      </div>
+    </section>
+    <section class="topic" id="s2">
+      <h2><span class="n">2</span>Three-dimensional equilibrium</h2>
+      <p>
+        A spatial ring needs three force equations. Write every cable as its tension times a unit direction
+        from the ring toward its anchor. Put those direction components into columns of a matrix: \(U\mathbf
+        T=-\mathbf W\). Three unknown tensions require three independent directions. Merely counting equations
+        does not guarantee an invertible matrix.
+      </p>
+      <p>
+        Symmetry can remove unknowns before elimination. If two anchors reflect across a plane containing the
+        load, their tensions are equal. Resolve perpendicular to that plane to prove it. Check the remaining
+        two directions independently. Nearly parallel cables make the system ill-conditioned: small changes in
+        geometry may demand large changes in tension.
+      </p>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>Use a unit direction for every cable. Anchor coordinates alone are not force components.</p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Spatial ring</span>
+        <p>
+          The ring supports 600 lb. Anchors are (3,0,4), (−2,3,4), and (−2,−3,4) ft. Symmetry gives equal
+          forces in the last two cables. Their y components cancel. Solving x and z balance gives
+          \(T_{AB}=300\) lb and \(T_{AC}=T_{AD}=242.332\) lb.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          Real attachments may move under load. This model fixes anchor locations and ignores cable extension.
+        </p>
+      </div>
+    </section>
+  </div>
+  <div class="part">
+    <div class="eyebrow">Part II</div>
+    <h2>Use and check the model</h2>
+    <section class="topic" id="s3">
+      <h2><span class="n">3</span>Moments, couples and equivalent systems</h2>
+      <p>
+        A force can have zero resultant torque about a point only if its line of action passes through that
+        point, or its magnitude vanishes. Resolve its tendency to rotate with the cross product \(\mathbf
+        M_O=\mathbf r\times\mathbf F\). In a plane, expansion gives \(M_z=xF_y-yF_x\). Counterclockwise is
+        positive. Magnitude is also \(Fd_\perp\), because the component of r parallel to F contributes no
+        cross product.
+      </p>
+      <p>
+        Moving a force along its line of action adds \(\lambda\mathbf F\) to r. Its added moment is zero.
+        Moving it to a different parallel line requires a compensating couple. Two equal opposite forces have
+        zero net force but a couple \(\mathbf M=\mathbf r_{BA}\times\mathbf F_A\). Shifting the origin adds
+        opposite terms that cancel, so a couple is independent of the moment point.
+      </p>
+      <div class="box why">
+        <span class="tag">Derivation · moment about an axis</span>
+        <p>
+          First form the moment vector about any point on the axis. Then extract its component along the unit
+          axis direction.
+        </p>
+        \[M_{axis}=\hat{\mathbf u}\cdot(\mathbf r\times\mathbf F).\]
+        <p>
+          The scalar is signed. Reversing the axis direction reverses it. Moment components perpendicular to
+          the axis do not turn the body about that axis.
+        </p>
+      </div>
+      <h3>Reducing a force system</h3>
+      <p>
+        Choose one reference point O. Translate each applied force to O and add its original moment as a
+        couple. The equivalent system is \(\mathbf R=\sum\mathbf F_i\) and \(\mathbf M_O=\sum\mathbf
+        r_i\times\mathbf F_i+\sum\mathbf C_i\). The couples C are included once. They do not need a lever arm.
+      </p>
+      <p>
+        To move the reference from O to P, substitute \(\mathbf r_{Pi}=\mathbf r_{Oi}-\mathbf r_{OP}\).
+        Summing gives \(\mathbf M_P=\mathbf M_O-\mathbf r_{OP}\times\mathbf R\). When R is zero, moment is
+        independent of the point. When R is nonzero in a plane, a single force at a suitable perpendicular
+        offset can reproduce the force and moment. In three dimensions, a component of moment parallel to R
+        cannot be created by shifting R. That residual component remains a couple.
+      </p>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          The distance in Fd is perpendicular distance to the line of action. Position-vector length is
+          generally the wrong lever arm.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Off-axis force</span>
+        <p>
+          A 50 N force at 30° acts at (4,3) m. Its components are (43.3013,25) N. Thus
+          \(M_z=4(25)-3(43.3013)=-29.9038\) N·m. The perpendicular distance is \(|M_z|/50=0.598076\) m. The
+          moment is clockwise.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Cross product</span>
+        <p>
+          For r = (1,2,3) m and F = (40,50,60) N, expand the determinant to obtain \(\mathbf M=(-30,60,-30)\)
+          N·m. Its dot product with both r and F is zero, checking perpendicularity.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Free couple</span>
+        <p>
+          At A(−1.5,0) m, apply 80 N upward. At B(1.5,0), apply 80 N downward. About P(0,2), each force
+          contributes −120 N·m. Total couple is −240 N·m. Moving P changes the individual terms but not their
+          sum.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          Rigid-body force equivalence preserves external motion, not local stress near the loading point.
+        </p>
+      </div>
+    </section>
+    <section class="topic" id="s4">
+      <h2><span class="n">4</span>The wall shelf</h2>
+      <p>
+        A wall attachment often carries forces much larger than the payload. Model a rigid bracket with a
+        lower pin and an upper horizontal tie. The upper tie has moment arm h about the lower pin. A payload
+        at distance x gives moment Wx. Moment balance requires \(H=Wx/h\). Horizontal balance gives an
+        opposite force H at the lower pin. Vertical balance gives W there, so its resultant is
+        \(\sqrt{H^2+W^2}\).
+      </p>
+      <p>
+        These three equations explain why attachment spacing matters. Moving the load toward the wall reduces
+        the couple. It does not reduce the total vertical reaction. Doubling the attachment spacing halves the
+        upper pull without changing the load.
+      </p>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          Weight divided between two anchors is not a complete model. The load also creates a moment that
+          requires a force couple.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Shelf edge load</span>
+        <p>
+          The cited shelf has 20 cm depth and a published 10 kg payload limit. Put that payload at the edge
+          and assume 10 cm anchor spacing. Then \(W=98.1\) N and \(H=98.1(0.20)/0.10=196.2\) N. The lower-pin
+          resultant is \(219.358\) N. This is an illustrative load case, not a fastener rating.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          Wall material, screw pull-out strength and shelf bending are outside this rigid-body calculation.
+        </p>
+      </div>
+    </section>
+    <section class="topic" id="s5">
+      <h2><span class="n">5</span>Formula sheet</h2>
+      <p>
+        Each result is derived above. Draw the free body, state the axis and check the assumptions before
+        using it.
+      </p>
+      <p>
+        \(\sum\mathbf F=0\), \(F=ks\), \(\mathbf M=\mathbf r\times\mathbf F\), \(M_z=xF_y-yF_x\),
+        \(M_{axis}=\hat{\mathbf u}\cdot\mathbf M\), \(H=Wx/h\).
+      </p>
+    </section>
+  </div>
+</main>
+<footer>
+  <p>
+    Textbook: Hibbeler, <i>Engineering Mechanics: Statics</i>, chapters 3, 4. Original Flux prose and
+    diagrams.
+  </p>
+  <p>
+    <b>Another view:</b>
+    <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/pages/lecture-notes/"
+      >2.001 Mechanics and Materials I, Fall 2006, lectures 1–2</a
+    >. Frames, spatial equilibrium and area geometry supplement that sequence through Hibbeler.
+  </p>
+</footer>

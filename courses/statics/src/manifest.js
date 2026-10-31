@@ -1,5 +1,5 @@
 import { defineCourse } from '@flux/core';
-import { EXAMS } from './data/catalog.js';
+import { EXAMS, CHAPTER_TITLES } from './data/catalog.js';
 
 export const course = defineCourse({
   id: 'statics',
@@ -12,15 +12,16 @@ export const course = defineCourse({
   units: EXAMS.map((exam) => ({
     id: exam.id,
     title: exam.title,
-    chapters: [exam.chapters],
+    chapters: { u1: ['2'], u2: ['3', '4'], u3: ['5', '6'], u4: ['8', '7', '9', '10'] }[exam.id],
     date: exam.date,
     labs: exam.labs,
   })),
-  chapters: {},
+  chapters: CHAPTER_TITLES,
   // Measured by `npm run scorecard` against docs/COURSE-STANDARD.md. Set true only once it passes.
   standard: false,
   review: true,
   labs: () => import('./labs/load.js'),
   problems: () => import('./problems/index.js'),
+  notes: () => import('./notes/index.js'),
   prereqs: [],
 });
