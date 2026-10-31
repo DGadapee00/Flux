@@ -6,7 +6,7 @@ import { createEngine } from '@flux/core';
 
 const engine = createEngine({
   consts: { pi: Math.PI, e: Math.E },
-  greek: { 'π': 'pi', 'θ': 'th', 'ε': 'eps', 'δ': 'delta' },
+  greek: { π: 'pi', θ: 'th', ε: 'eps', δ: 'delta' },
   glyph: { pi: 'π', th: 'θ', eps: 'ε', delta: 'δ', e: 'e' },
   texSym: { pi: '\\pi', th: '\\theta', eps: '\\varepsilon', delta: '\\delta' },
   prose: 'none',
@@ -21,7 +21,6 @@ export const {
   build,
   sampleValues,
   countVersions,
-  instance,
   sig,
   render,
   expected,
@@ -39,3 +38,9 @@ export const {
   gradeSymbolic,
   evalSymbolic,
 } = engine;
+
+/** Keep the original seed identity when the course namespace changes. */
+export function instance(tpl, seed, options) {
+  const sampled = engine.instance(tpl.legacyId ? { ...tpl, id: tpl.legacyId } : tpl, seed, options);
+  return { ...sampled, tpl };
+}

@@ -27,8 +27,7 @@ export const TRACKS = [
     id: 'math',
     name: 'Math',
     courses: [
-      { id: 'mac2311', code: 'MAC 2311', title: 'Calculus I', term: null, href: 'mac2311/' },
-      { id: 'mac2312', code: 'MAC 2312', title: 'Calculus II', term: null, href: 'mac2312/' },
+      { id: 'mac2311', code: 'MAC 2311–2312', title: 'Calculus I and II', term: null, href: 'mac2311/' },
       {
         id: 'mac2313',
         code: 'MAC 2313',
@@ -125,7 +124,8 @@ export function siblingHref(href) {
  * @returns {{ id: string, code: string, title: string, href: string|null }[]}
  */
 export function trackSiblings(courseId, tracks = TRACKS) {
-  const track = tracks.find((item) => item.courses.some((course) => course.id === courseId));
+  const id = courseId === 'mac2312' ? 'mac2311' : courseId;
+  const track = tracks.find((item) => item.courses.some((course) => course.id === id));
   if (!track) return [];
   return track.courses.map((course) => ({
     id: course.id,

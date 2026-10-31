@@ -1,6 +1,15 @@
 import { createLabLoader } from '@flux/core';
 
 const loaders = {
+  solids: () => import('./solids.js'),
+  numint: () => import('./numint.js'),
+  arc: () => import('./arc.js'),
+  parametric: () => import('./parametric.js'),
+  polar: () => import('./polar.js'),
+  improper: () => import('./improper.js'),
+  taylor: () => import('./taylor.js'),
+  series: () => import('./series.js'),
+
   limits: () => import('./limits.js'),
   secant: () => import('./secant.js'),
   rates: () => import('./rates.js'),

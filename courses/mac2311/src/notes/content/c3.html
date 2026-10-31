@@ -1,0 +1,335 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>The definite integral and its applications</title></head><body><header class="top"><p class="eyebrow">MAC 2311–2312 · Calculus I and II · Unit 3 · OpenStax Vol 1 Ch 5–6; Vol 2 Ch 2</p><h1>The definite integral and its applications</h1><p class="lede">One course from differentiation to infinite series. Derive each result, work an example, then open its lab.</p><div class="legend"><span>Worked example</span><span>Derivation</span><span>Common mistake</span><span>Key idea</span><span>Model limits</span></div><nav class="toc"><a href="#s1"><span>01</span>Area as a limit of sums</a><a href="#s2"><span>02</span>The definite integral</a><a href="#s3"><span>03</span>The Fundamental Theorem</a><a href="#s4"><span>04</span>Net change</a><a href="#s5"><span>05</span>Substitution</a><a href="#s6"><span>06</span>Area between curves</a><a href="#s7"><span>07</span>Volumes by slicing</a><a href="#s8"><span>08</span>Volumes by shells</a><a href="#s9"><span>09</span>Work</a><a href="#s10"><span>10</span>Centres of mass</a><a href="#s11"><span>11</span>Numerical integration</a><a href="#s12"><span>12</span>Formula sheet</a></nav></header><main><div class="part"><div class="eyebrow">Calculus Volume 1</div><h2>Integration</h2><section class="topic" id="s1">
+<h2><span class="n">01</span>Area as a limit of sums</h2>
+<p>To find the area under a positive \(f\) on \([a, b]\), cut the interval into \(n\) strips of width \(\Delta x = (b - a)/n\). Over each strip, build a rectangle whose height is \(f\) at a sample point. Add the rectangles.</p>
+\[
+R_n = \sum_{i=1}^{n} f(x_i^*)\,\Delta x.
+\]
+<p>A left sum samples each strip at its left edge. A right sum uses the right edge. A midpoint sum uses the centre. As \(n\) grows, all three approach the same number, the area.</p>
+<div class="box ex"><span class="tag">Worked example · four left rectangles</span>
+<p>Take \(f(x) = x^2\) on \([0, 1]\) with \(n = 4\), so \(\Delta x = 1/4\). The left edges are \(0, 1/4, 1/2, 3/4\). The heights are \(0, 1/16, 4/16, 9/16\). The sum is \((14/16)(1/4) = 0.21875\).</p>
+<p>The right sum uses \(1/4, 1/2, 3/4, 1\), and gives \(0.46875\). The exact area is \(1/3\). It lies between them, because \(x^2\) is increasing.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · four midpoints</span>
+<p>The same function, with each strip sampled at its centre: \(1/8, 3/8, 5/8, 7/8\). The sum is \(0.328125\). With only four strips it is already within \(0.0052\) of \(1/3\).</p>
+</div>
+<div class="box why"><span class="tag">Why</span>
+<p>The right sum for \(x^2\) can be summed exactly. With \(x_i = i/n\), it is \(\tfrac{1}{n^3}\sum_{i=1}^{n} i^2\). The sum of the first \(n\) squares is \(n(n + 1)(2n + 1)/6\). So</p>
+\[
+R_n = \frac{(n + 1)(2n + 1)}{6n^2} \to \frac{2}{6} = \frac13.
+\]
+<p>At \(n = 100\), \(R_n = 0.33835\). The formula for \(\sum i\) comes from pairing: \(1 + n\), \(2 + (n - 1)\), and so on. There are \(n/2\) pairs, each worth \(n + 1\), so \(\sum_{i=1}^{n} i = n(n + 1)/2\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A Riemann sum with a fixed \(n\) is an estimate, not the area. Four left rectangles give \(0.219\), off by a third. The area is the limit as \(n \to \infty\).</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Height at a sample point, times width, summed over the strips. The area is the limit as the strips get thin. For an increasing \(f\), the left sum is low and the right sum is high.</p>
+</div>
+<p>In the Riemann lab, raise \(n\) and switch between left, right, and midpoint samples. The readout tracks the sum against the exact value. Simpson's rule gives the second opinion.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Closed forms for sums of powers exist only for simple integrands. For most functions, the limit is not taken by hand. The next sections find it another way.</p>
+</div>
+</section><section class="topic" id="s2">
+<h2><span class="n">02</span>The definite integral</h2>
+<p>The definite integral is the limit of Riemann sums, for any choice of sample points, as the widest strip shrinks to zero.</p>
+\[
+\int_a^b f(x)\,dx = \lim_{n \to \infty} \sum_{i=1}^{n} f(x_i^*)\,\Delta x.
+\]
+<p>A continuous function on \([a, b]\) always has one. Where \(f\) is negative, the rectangles have negative height. So the integral is a signed area: area above the axis minus area below.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The properties come straight from the sums. A constant factor comes out of every term, so \(\int cf = c\int f\). Sums split, so \(\int (f + g) = \int f + \int g\). Strips on \([a, b]\) and on \([b, c]\) together make strips on \([a, c]\). Reversing the limits makes every \(\Delta x\) negative, so \(\int_b^a f = -\int_a^b f\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a trapezoid by geometry</span>
+<p>\(\int_0^2 (2x + 1)\,dx\) is the area of a trapezoid with parallel sides \(f(0) = 1\) and \(f(2) = 5\), and width \(2\). So it is \(\tfrac12(1 + 5)(2) = 6\).</p>
+<p>The left sum with \(n = 4\) samples \(1, 2, 3, 4\), at width \(1/2\). It gives \(5\). For a line, the left sum misses one triangle per strip. Together they make \(\tfrac12 \cdot (5 - 1) \cdot \tfrac12 = 1\).</p>
+</div>
+<p>The average value of \(f\) on \([a, b]\) is the height of the rectangle with the same area:</p>
+\[
+f_{\text{avg}} = \frac{1}{b - a}\int_a^b f(x)\,dx.
+\]
+<p>For \(\sin x\) on \([0, \pi]\), the integral is \(2\), found in the next section. So the average is \(2/\pi = 0.637\). The peak is \(1\).</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A definite integral is not always an area. \(\int_0^{2\pi} \sin x\,dx = 0\), because the hump below cancels the hump above. The total area between the curve and the axis is \(4\). For area, integrate \(|f|\).</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>The definite integral is a limit of sums. It is a signed area. It is linear, it splits at interior points, and it changes sign when the limits swap.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The proof that every continuous function is integrable is in an analysis course. Functions with infinitely many jumps, or unbounded ones, need more care. Improper integrals come in Calculus II.</p>
+</div>
+</section><section class="topic" id="s3">
+<h2><span class="n">03</span>The Fundamental Theorem</h2>
+<p>Let the upper limit vary. \(A(x) = \int_a^x f(t)\,dt\) is the area accumulated from \(a\) up to \(x\). The theorem has two parts. The first says how fast \(A\) grows. The second turns that into a way to compute integrals.</p>
+<div class="box why"><span class="tag">Why</span>
+<p><strong>Part 1.</strong> For a small \(h \gt 0\), \(A(x + h) - A(x)\) is the area of a thin strip over \([x, x + h]\). Divided by \(h\), it is the average height of \(f\) on that strip. As \(h \to 0\), a continuous \(f\) has average height \(f(x)\) on the strip. So \(A'(x) = f(x)\).</p>
+<p><strong>Part 2.</strong> Let \(F\) be any antiderivative of \(f\). Part 1 says \(A\) is one too. So \(A = F + C\). At \(x = a\), \(A(a) = 0\), so \(C = -F(a)\). At \(x = b\), \(A(b) = F(b) - F(a)\).</p>
+</div>
+\[
+\begin{aligned}
+\frac{d}{dx}\int_a^x f(t)\,dt &= f(x),\\
+\int_a^b f(x)\,dx &= F(b) - F(a).
+\end{aligned}
+\]
+<div class="box ex"><span class="tag">Worked example · the area up to 1</span>
+<p>Let \(A(x) = \int_0^x t^2\,dt\). An antiderivative of \(t^2\) is \(t^3/3\). So \(A(1) = 1/3 - 0 = 1/3\). That is the limit the Riemann sums of Section 1 were approaching. Part 1 gives \(A'(1) = 1^2 = 1\) without integrating.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one hump of sine</span>
+<p>\(\int_0^{\pi} \sin x\,dx = [-\cos x]_0^{\pi} = -\cos\pi + \cos 0 = 2\). Halfway, \(A(\pi/2) = 1 - \cos(\pi/2) = 1\), and the height there is \(\sin(\pi/2) = 1\).</p>
+</div>
+<p>When the upper limit is a function of \(x\), the chain rule joins in. \(\tfrac{d}{dx}\int_0^{x^2}\cos t\,dt = \cos(x^2) \cdot 2x\). At \(x = 1\) that is \(2\cos 1 = 1.081\).</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The order is upper minus lower: \(F(b) - F(a)\). Reversing it flips the sign. For \(\int_0^{\pi}\sin x\,dx\), the reverse order gives \(-2\) for an area that is plainly positive.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Accumulated area grows at the rate \(f\). To integrate \(f\) from \(a\) to \(b\), find any antiderivative, and subtract its value at \(a\) from its value at \(b\).</p>
+</div>
+<p>In the FTC lab, drag \(x\). The shaded area is \(A(x)\), and the readout's height is \(f(x)\). A short step in \(x\) shows the area growing at that height.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Part 1 needs \(f\) continuous at \(x\). At a jump, \(A\) still exists, but it has a corner and no derivative there.</p>
+</div>
+</section><section class="topic" id="s4">
+<h2><span class="n">04</span>Net change</h2>
+<p>Part 2 of the theorem, applied to \(F'\), says the integral of a rate is the net change:</p>
+\[
+\int_a^b F'(t)\,dt = F(b) - F(a).
+\]
+<p>The integral of velocity is displacement. The integral of a flow rate is the volume that flowed. Each is a net change, with gains and losses cancelling.</p>
+<div class="box ex"><span class="tag">Worked example · displacement and distance</span>
+<p>A particle has \(v(t) = t^2 - 4\) m/s on \([0, 3]\). An antiderivative is \(t^3/3 - 4t\). The displacement is \((9 - 12) - 0 = -3\) m.</p>
+<p>The velocity is negative until \(t = 2\), then positive. The distance adds the two legs as positive amounts: \(16/3\) m on \([0, 2]\), and \(7/3\) m on \([2, 3]\). The total is \(23/3 = 7.67\) m.</p>
+</div>
+<div class="box why"><span class="tag">Why</span>
+<p>Distance is \(\int_a^b |v(t)|\,dt\). Speed is never negative, so no leg cancels another. Split the interval where \(v\) changes sign, and integrate each piece with the sign that makes it positive.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(|{-3}| = 3\) m is not the distance. That misses the back-and-forth: the particle went \(16/3\) m one way and \(7/3\) m back. Split at the sign change first.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a tank that turns to draining</span>
+<p>Water enters a tank at \(r(t) = 10 - 2t\) litres per minute. Over the first \(5\) minutes the rate is positive. The net change is \(\int_0^5 (10 - 2t)\,dt = 50 - 25 = 25\) L gained.</p>
+<p>Run it to \(t = 8\). The rate turns negative at \(t = 5\), and the tank drains. The net change from \(0\) to \(8\) is \(80 - 64 = 16\) L. So \(9\) L drained out in the last \(3\) minutes. The integral already subtracted them.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Integrate a rate to get a net change. Integrate its absolute value to get a total.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The net change needs a starting value to become a position or an amount. The integral only gives the difference. Physical applications such as work and pressure come in Calculus II.</p>
+</div>
+</section><section class="topic" id="s5">
+<h2><span class="n">05</span>Substitution</h2>
+<p>Substitution is the chain rule read backwards. When the integrand holds a function and its derivative, rename the inside.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The chain rule says \(\tfrac{d}{dx}F(g(x)) = f(g(x))\,g'(x)\), where \(F' = f\). So \(F(g(x))\) is an antiderivative of \(f(g(x))\,g'(x)\). With \(u = g(x)\) and \(du = g'(x)\,dx\):</p>
+\[
+\int f(g(x))\,g'(x)\,dx = \int f(u)\,du.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · a definite substitution</span>
+<p>\(\int_0^1 2x(x^2 + 1)^3\,dx\). Let \(u = x^2 + 1\), so \(du = 2x\,dx\). At \(x = 0\), \(u = 1\). At \(x = 1\), \(u = 2\). The integral becomes \(\int_1^2 u^3\,du = (16 - 1)/4 = 3.75\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a missing constant</span>
+<p>\(\int x\cos(x^2)\,dx\). Let \(u = x^2\), so \(du = 2x\,dx\), and \(x\,dx = \tfrac12\,du\). The integral is \(\tfrac12\int\cos u\,du = \tfrac12\sin(x^2) + C\). Differentiate to check: \(\tfrac12\cos(x^2) \cdot 2x\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an inside of 3x</span>
+<p>\(\int_0^{\pi/3}\sin(3x)\,dx\). Let \(u = 3x\), so \(dx = du/3\), and \(u\) runs from \(0\) to \(\pi\). The integral is \(\tfrac13\int_0^{\pi}\sin u\,du = \tfrac13 \cdot 2 = 2/3\). A linear inside always costs one division by its slope.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · solving back for x</span>
+<p>\(\int_0^3 x\sqrt{x + 1}\,dx\). Let \(u = x + 1\). Then \(du = dx\), but an \(x\) is left over. Solve the substitution for it: \(x = u - 1\). The integral becomes \(\int_1^4 (u - 1)u^{1/2}\,du = \int_1^4 (u^{3/2} - u^{1/2})\,du\).</p>
+<p>That is \(\tfrac25(32 - 1) - \tfrac23(8 - 1) = 12.4 - 4.667 = 7.733\). Simpson's rule on the original integral gives the same four figures.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Keeping the old limits after substituting. \(\int_0^1 u^3\,du = 0.25\), not \(3.75\). Either change the limits to \(u\) values, or return to \(x\) before evaluating. Do not mix the two.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Pick \(u\) as the inside function whose derivative is also present. Convert \(dx\), and convert the limits. A constant factor that is off can be divided out. A missing \(x\) cannot.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Substitution works only when the derivative of the inside is present, up to a constant. Integrals like \(\int x\sin x\,dx\) need integration by parts, the first topic of Calculus II.</p>
+</div>
+</section></div><div class="part"><div class="eyebrow">Calculus Volume 2</div><h2>Applications of integration</h2><section class="topic" id="s6">
+<h2><span class="n">06</span>Area between curves</h2>
+<p>Suppose \(f(x) \ge g(x)\) on \([a, b]\). A thin vertical strip at \(x\) has height \(f(x) - g(x)\) and width \(dx\). Adding the strips gives the area.</p>
+\[
+A = \int_a^b \bigl(f(x) - g(x)\bigr)\,dx.
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>Over a strip of width \(\Delta x\), the region is almost a rectangle of height \(f(x_i) - g(x_i)\). The sum of those rectangles is a Riemann sum for \(f - g\). As \(\Delta x \to 0\), it becomes the integral. The formula does not care whether either curve is above the axis. Only the difference counts.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a line over a parabola</span>
+<p>On \([0, 1]\), \(x \ge x^2\). The area between them is \(\int_0^1 (x - x^2)\,dx = 1/2 - 1/3 = 1/6\).</p>
+</div>
+<p>When the curves cross, the top one changes. Split the interval at each crossing, or integrate \(|f - g|\).</p>
+<div class="box ex"><span class="tag">Worked example · curves that cross</span>
+<p>\(y = x\) and \(y = x^3\) cross at \(-1\), \(0\), and \(1\). On \([0, 1]\), \(x\) is on top, and the area is \(1/2 - 1/4 = 1/4\). On \([-1, 0]\), \(x^3\) is on top, and the area is also \(1/4\). The total is \(1/2\).</p>
+<p>Integrating \(x - x^3\) straight across \([-1, 1]\) gives \(0\). The two pieces cancel. That number is not an area.</p>
+</div>
+<p>Some regions are easier in horizontal strips. Then the right curve minus the left curve is the length, and \(dy\) is the width.</p>
+<div class="box ex"><span class="tag">Worked example · horizontal strips</span>
+<p>The region between \(x = y^2\) and \(x = y + 2\). They meet where \(y^2 = y + 2\), at \(y = -1\) and \(y = 2\). The line is on the right. The area is \(\int_{-1}^{2} (y + 2 - y^2)\,dy = 10/3 + 7/6 = 4.5\).</p>
+<p>Vertical strips would need two integrals here, because the bottom boundary changes at \(x = 1\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Subtracting in the wrong order gives a negative area. For the line over the parabola, \(\int_0^1 (x^2 - x)\,dx = -1/6\). Sketch first, and subtract the lower curve from the upper.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Top minus bottom, in \(dx\). Right minus left, in \(dy\). Split where the curves cross.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The intersections are found by algebra here. For most pairs of curves they need a numerical root finder, such as Newton's method. The area formula is unchanged.</p>
+</div>
+</section><section class="topic" id="s7">
+<h2><span class="n">07</span>Volumes by slicing</h2>
+<p>Cut a solid into thin slabs across an axis. If the slab at \(x\) has cross-sectional area \(A(x)\) and thickness \(dx\), its volume is about \(A(x)\,dx\). Add them.</p>
+\[
+V = \int_a^b A(x)\,dx.
+\]
+<p>A solid of revolution has circular slices. Rotating the region under \(y = f(x)\) about the \(x\)-axis makes disks of radius \(f(x)\), so \(A(x) = \pi f(x)^2\).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>A cone of radius \(r\) and height \(h\) checks the method. Lay it along the \(x\)-axis with its tip at \(0\). The radius grows linearly, so at \(x\) it is \(rx/h\). Then</p>
+\[
+\begin{aligned}
+V &= \int_0^h \pi\Bigl(\frac{rx}{h}\Bigr)^2 dx\\
+&= \frac{\pi r^2}{h^2}\cdot\frac{h^3}{3} = \frac{\pi r^2 h}{3}.
+\end{aligned}
+\]
+<p>That is the cone formula from geometry, now derived. With \(r = 3\) and \(h = 4\) it gives \(12\pi = 37.7\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · disks under a root</span>
+<p>Rotate the region under \(y = \sqrt{x}\) on \([0, 4]\) about the \(x\)-axis. Each disk has area \(\pi(\sqrt{x})^2 = \pi x\). So \(V = \int_0^4 \pi x\,dx = 8\pi = 25.1\). Dividing out \(\pi\) leaves \(8\).</p>
+</div>
+<p>A region with a hole in the middle makes washers. The area of a washer is the outer disk minus the inner one: \(\pi(R^2 - r^2)\).</p>
+<div class="box ex"><span class="tag">Worked example · a washer</span>
+<p>Rotate the region between \(y = x\) and \(y = x^2\) on \([0, 1]\) about the \(x\)-axis. The outer radius is \(x\), the inner \(x^2\). So \(V = \pi\int_0^1 (x^2 - x^4)\,dx = \pi(1/3 - 1/5) = 2\pi/15 = 0.419\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(\pi(R^2 - r^2)\) is not \(\pi(R - r)^2\). For the washer above, squaring the difference gives \(\pi\int_0^1 (x - x^2)^2\,dx = \pi/30 = 0.105\). That is a quarter of the true volume. Square each radius, then subtract.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Volume is the integral of cross-sectional area. Disks: \(\pi R^2\). Washers: \(\pi(R^2 - r^2)\). Radii are measured from the axis of rotation.</p>
+</div>
+<p>In the Solids lab, the Disks scenario stacks slices under \(\sqrt{x}\). The readout gives the volume by the antiderivative and by Simpson's rule.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Rotation about a line other than an axis shifts every radius. About \(y = -1\), for instance, a disk's radius becomes \(f(x) + 1\). The text works those cases in §2.2.</p>
+</div>
+</section><section class="topic" id="s8">
+<h2><span class="n">08</span>Volumes by shells</h2>
+<p>Instead of slicing across the axis, cut the solid into thin cylindrical shells around it. A shell of radius \(r\), height \(h\), and thickness \(dr\) has volume about \(2\pi r h\,dr\): unroll it into a thin slab of length \(2\pi r\).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The exact volume of a shell is the outer cylinder minus the inner one: \(\pi h\bigl((r + dr)^2 - r^2\bigr) = 2\pi r h\,dr + \pi h\,dr^2\). The second term is a thin slab times a thin slab. In the Riemann sum it vanishes faster than \(dr\), so only \(2\pi r h\,dr\) survives the limit.</p>
+</div>
+\[
+V = \int 2\pi\,(\text{radius})(\text{height})\,d(\text{radius}).
+\]
+<div class="box ex"><span class="tag">Worked example · the same solid by shells</span>
+<p>The solid under \(\sqrt{x}\) on \([0, 4]\), rotated about the \(x\)-axis. Shells around that axis are horizontal. At height \(y\), a shell has radius \(y\), and it runs from \(x = y^2\) to \(x = 4\). So</p>
+\[
+\begin{aligned}
+V &= \int_0^2 2\pi y\,(4 - y^2)\,dy\\
+&= 2\pi\,(8 - 4) = 8\pi.
+\end{aligned}
+\]
+<p>Disks gave \(8\pi\) too. Two slicings of one solid must agree.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · around the y-axis</span>
+<p>Rotate the region under \(y = x - x^2\) on \([0, 1]\) about the \(y\)-axis. A vertical strip at \(x\) sweeps a shell of radius \(x\) and height \(x - x^2\). So \(V = 2\pi\int_0^1 (x^2 - x^3)\,dx = 2\pi(1/3 - 1/4) = \pi/6 = 0.524\).</p>
+<p>Washers here would need \(x\) as a function of \(y\) on both sides of the hump. Shells avoid that.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The radius is the distance to the axis, not the coordinate. Around the line \(x = 2\), a strip at \(x\) has radius \(2 - x\). Using \(x\) builds the solid around the wrong line.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Shells: \(2\pi \times\) radius \(\times\) height \(\times\) thickness. Slice parallel to the axis for shells and across it for disks. Pick the one whose integrand needs no solving.</p>
+</div>
+<p>In the Solids lab, the Both ways scenario shows disks and shells for one solid. The two readouts agree for every right end \(b\).</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The shell argument assumes the height is a single segment for each radius. A region that folds back on itself needs to be split first.</p>
+</div>
+</section><section class="topic" id="s9">
+<h2><span class="n">09</span>Work</h2>
+<p>A constant force \(F\) over a distance \(d\) does work \(W = Fd\). A force that varies is constant over a short enough step. Add the steps.</p>
+\[
+W = \int_a^b F(x)\,dx.
+\]
+<div class="box ex"><span class="tag">Worked example · a spring</span>
+<p>A spring pulls back with force \(kx\) when stretched \(x\) from rest (Hooke's law). With \(k = 4\) lb/ft, stretching it \(2\) ft takes \(\int_0^2 4x\,dx = 8\) ft·lb.</p>
+<p>The second foot costs three times the first: \(\int_1^2 4x\,dx = 6\), against \(\int_0^1 4x\,dx = 2\). The force grows as the spring stretches.</p>
+</div>
+<p>When different parts of a body move different distances, slice the body instead of the path. Each slice has its own weight and its own lift.</p>
+<div class="box ex"><span class="tag">Worked example · pumping out a tank</span>
+<p>A cylindrical tank has radius \(2\) m and height \(5\) m, full of water. Pump it all out over the top. A slab at height \(y\) has volume \(4\pi\,dy\), weight \(\rho g \cdot 4\pi\,dy\), and must rise \(5 - y\) m.</p>
+\[
+\begin{aligned}
+W &= \int_0^5 \rho g\,(4\pi)(5 - y)\,dy\\
+&= \rho g \cdot 4\pi \cdot 12.5.
+\end{aligned}
+\]
+<p>With \(\rho = 1000\) kg/m³ and \(g = 9.81\) m/s², \(W = 1.54 \times 10^6\) J.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · winding up a chain</span>
+<p>A chain \(20\) m long, of mass \(2\) kg per metre, hangs from a winch. Winding it in lifts the piece \(y\) m below the winch by \(y\) m. That piece weighs \(2 \cdot 9.81\,dy\) N. So \(W = \int_0^{20} 19.62\,y\,dy = 19.62 \cdot 200 = 3920\) J.</p>
+<p>The answer equals the chain's whole weight, \(392\) N, lifted \(10\) m. That is the distance its centre of mass rises, which Section 10 explains.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Lifting the whole tank's weight the full \(5\) m doubles the answer, to \(3.08 \times 10^6\) J. The top slab barely moves. Only the bottom slab rises the full height. The integral weighs each slab by its own distance.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Work is force integrated over distance. When the distance varies through the body, slice the body and integrate weight times lift.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The water is lifted slowly, so it gains no speed and no kinetic energy. Friction in the pipe and the pump's efficiency are ignored. A real pump does more work than this integral.</p>
+</div>
+</section><section class="topic" id="s10">
+<h2><span class="n">10</span>Centres of mass</h2>
+<p>The centre of mass is the balance point. For point masses \(m_i\) at positions \(x_i\), it is the weighted average \(\bar{x} = \sum m_i x_i / \sum m_i\). A thin plate of uniform density is the limit of many small masses.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Cut the region under \(y = f(x)\) into strips. A strip at \(x\) has area \(f(x)\,dx\), so its mass is proportional to that. Its own centre is at \(x\) across and at \(f(x)/2\) up. Weight each position by the strip's area and add.</p>
+</div>
+\[
+\bar{x} = \frac{\int x f(x)\,dx}{\int f(x)\,dx},
+\]
+\[
+\bar{y} = \frac{\int \tfrac12 f(x)^2\,dx}{\int f(x)\,dx}.
+\]
+<div class="box ex"><span class="tag">Worked example · under a parabola</span>
+<p>The region under \(y = x^2\) on \([0, 1]\) has area \(1/3\). Then \(\bar{x} = (1/4)/(1/3) = 0.75\), and \(\bar{y} = (1/10)/(1/3) = 0.3\). The balance point sits toward the tall end, and low, because most of the area is near the axis there.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The centroid is not the midpoint of the interval. For the parabola it is at \(0.75\), not \(0.5\). The tall end carries more area, and the average leans toward it.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>A centre of mass is a weighted average. Weight each strip by its area, and place it at the strip's own centre.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The plate is uniform. A density that varies across it enters each integral as a weight. Pappus's theorem, which links centroids to volumes of revolution, is in §2.6 of the text.</p>
+</div>
+</section></div><div class="part"><div class="eyebrow">Calculus Volume 2</div><h2>Techniques of integration</h2><section class="topic" id="s11">
+<h2><span class="n">11</span>Numerical integration</h2>
+<p>Most integrals have no antiderivative in closed form. Numerical rules estimate them from samples of the integrand. Split \([a, b]\) into \(n\) panels of width \(h = (b - a)/n\).</p>
+<p>The trapezoidal rule joins neighbouring samples with straight lines. Simpson's rule fits a parabola through each pair of panels, and needs \(n\) even.</p>
+\[
+\begin{aligned}
+T_n &= \tfrac{h}{2}\,(f_0 + 2f_1 + \cdots + 2f_{n-1} + f_n),\\
+S_n &= \tfrac{h}{3}\,(f_0 + 4f_1 + 2f_2 + \cdots + 4f_{n-1} + f_n).
+\end{aligned}
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>A trapezoid over one panel has area \(\tfrac{h}{2}(f_i + f_{i+1})\). Adding them counts every interior sample twice. That is also the average of the left and right Riemann sums.</p>
+<p>The parabola through three equally spaced points has area \(\tfrac{h}{3}(f_0 + 4f_1 + f_2)\). Integrate it with its vertex at the middle sample to check. Chaining those blocks gives the weights \(1, 4, 2, 4, \ldots, 4, 1\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · four panels on sine</span>
+<p>Estimate \(\int_0^{\pi}\sin x\,dx = 2\) with \(n = 4\). The trapezoidal rule gives \(1.8961\), off by \(0.1039\). Simpson's rule gives \(2.00456\), off by \(0.00456\). The same five samples feed both.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · doubling the panels</span>
+<p>With \(n = 8\), the trapezoid error falls to \(0.0258\), about a quarter. Simpson's falls to \(0.000269\), about a sixteenth. The trapezoid error shrinks like \(1/n^2\). Simpson's shrinks like \(1/n^4\).</p>
+</div>
+<p>Error bounds make that precise. If \(|f''| \le M\) on \([a, b]\), then \(|E_T| \le M(b - a)^3/(12n^2)\). If \(|f^{(4)}| \le K\), then \(|E_S| \le K(b - a)^5/(180n^4)\). For sine with \(n = 4\), both \(M\) and \(K\) are \(1\). The bounds are \(0.162\) and \(0.0066\). The true errors sit under them.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Simpson's rule with an odd \(n\) is not defined. The parabolas pair the panels. With \(n = 5\), the last panel has no partner, and the weights do not close with a \(1\).</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Trapezoid: weights \(1, 2, \ldots, 2, 1\), times \(h/2\), with error like \(1/n^2\). Simpson: weights \(1, 4, 2, \ldots, 4, 1\), times \(h/3\), with error like \(1/n^4\).</p>
+</div>
+<p>In the Numerical lab, step from \(4\) to \(8\) to \(16\) panels. The readout shows both errors falling at their own rates.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Both bounds need a bound on a derivative, which is often unknown. In practice, the estimate is recomputed with \(n\) doubled, and the change between the two is taken as the error.</p>
+</div>
+</section><section class="topic" id="s12"><h2><span class="n">12</span>Formula sheet</h2><p>These results are derived in the sections above. Check each result's hypotheses before applying it.</p><p>\(\int_a^b f=F(b)-F(a)\), \(A\prime(x)=f(x)\) for \(A(x)=\int_a^x f(t)\,dt\), \(V=\pi\int(R^2-r^2)\,dx\), \(V=2\pi\int rh\,dx\), \(W=\int F\,dx\).</p></section></div></main><footer><p>Original Flux notes. OpenStax Calculus Volumes 1 and 2, sections identified in the notes and textbook map.</p><p><b>Another view:</b> <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/">18.01SC Single Variable Calculus, Fall 2010</a>, Unit 3.</p></footer></body></html>
