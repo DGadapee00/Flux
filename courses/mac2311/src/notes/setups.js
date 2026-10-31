@@ -193,3 +193,50 @@ SETUPS.c1.s11 = [
   },
   read: (c) => ({ total: [c.exact, 32 / 3] }),
 });
+
+for (const [section, tag, scenario, value] of [
+  ['s1', 'x times e to the x', 'exp', 1],
+  ['s1', 'a logarithm alone', 'log', 1],
+  ['s1', 'closing the cycle', 'cycle', 1.3780246135473637],
+  ['s2', 'an odd power of sine', 'odd', 2 / 15],
+  ['s2', 'an even power', 'even', Math.PI / 2],
+  ['s3', 'part of a circle', 'circle', Math.PI / 3 + Math.sqrt(3) / 2],
+  ['s4', 'two linear factors', 'fractions', Math.log(2) + 2 * Math.log(4 / 3)],
+  ['s4', 'integrating the repeated factor', 'repeated', 2 * Math.log(4 / 3) + 1 / 6],
+  ['s5', 'one line makes two cones', 'cone', (Math.PI * Math.sqrt(5)) / 2],
+])
+  (SETUPS.c4[section] ??= []).push({
+    tag,
+    lab: 'technique',
+    scenario,
+    read: (c) => ({ integral: [c.integral, value] }),
+  });
+(SETUPS.c4.s5 ??= []).push(
+  {
+    tag: 'main span with assumed shallow sag',
+    lab: 'bridge',
+    scenario: 'shallow',
+    read: (c) => ({ length: [c.length, 1285.3487802963207], extra: [c.extra, 5.188780296320601] }),
+  },
+  {
+    tag: 'doubling assumed sag',
+    lab: 'bridge',
+    scenario: 'deep',
+    read: (c) => ({ length: [c.length, 1300.6958269151703], extra: [c.extra, 20.53582691517022] }),
+  },
+  {
+    tag: 'refining cable chords',
+    lab: 'bridge',
+    scenario: 'deep',
+    setup: (s) => {
+      s.n = 32;
+    },
+    read: (c) => ({ length: [c.length, 1300.6958269151703] }),
+  },
+  {
+    tag: 'a geometrically similar small model',
+    lab: 'bridge',
+    scenario: 'model',
+    read: (c) => ({ length: [c.length, 10.260606304268446] }),
+  },
+);
