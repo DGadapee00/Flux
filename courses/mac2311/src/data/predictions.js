@@ -436,3 +436,95 @@ PREDICTIONS.bridge = [
     why: 'For this smooth curve, each chord loses a third-order amount; twice as many half-width pieces reduce total error about fourfold.',
   },
 ];
+
+PREDICTIONS.parametric = [
+  {
+    id: 'circle-time',
+    scenario: 'circle',
+    prep: (s) => {
+      s.k = 2;
+    },
+    ask: 'Move the unit-circle point from π/2 to π. What happens to distance travelled and instantaneous speed?',
+    apply: (s) => {
+      s.k = 4;
+    },
+    watch: [watch('distance', 'Distance so far', (c) => c.length), watch('speed', 'Speed', (c) => c.speed)],
+    expect: { distance: 2, speed: 1 },
+    why: 'The parameter runs twice as far at constant unit speed. A longer trip need not mean a faster moving point.',
+  },
+  {
+    id: 'parabola-velocity',
+    scenario: 'para',
+    prep: (s) => {
+      s.k = 2;
+    },
+    ask: 'Move from t=1/2 to t=1 on (t,t²). Does the slope double while the speed also doubles?',
+    apply: (s) => {
+      s.k = 4;
+    },
+    watch: [watch('slope', 'Slope', (c) => c.slope), watch('speed', 'Speed', (c) => c.speed)],
+    factors: [1, 1.58, 2, 4],
+    tol: 0.01,
+    expect: { slope: 2, speed: 1.58 },
+    why: 'Slope is 2t, but speed is √(1+4t²). The unchanged horizontal velocity prevents proportional speed scaling.',
+  },
+];
+PREDICTIONS.polar = [
+  {
+    id: 'repeat-area',
+    scenario: 'disk',
+    ask: 'Sweep a second full revolution around r=1. Does the integral count the same disk again?',
+    apply: (s) => {
+      s.k = 8;
+    },
+    watch: [watch('area', 'Accumulated area', (c) => c.area)],
+    expect: { area: 2 },
+    why: 'The sector integral counts traversal multiplicity. It doubles even though the geometric disk has not changed.',
+  },
+  {
+    id: 'translate-circle',
+    scenario: 'disk',
+    ask: 'Replace the unit disk by r=2 cosθ traced once. Does its area increase because its maximum r doubles?',
+    apply: (s) => {
+      s.kind = 'shift';
+      s.k = 4;
+    },
+    watch: [watch('area', 'Area', (c) => c.area, 'trend')],
+    expect: { area: 'same' },
+    why: 'The new curve is still a circle of radius one, translated one unit. Its distance from the polar origin is not its geometric radius.',
+  },
+];
+PREDICTIONS.record = [
+  {
+    id: 'record-inner',
+    scenario: 'lp',
+    ask: 'Move the mark halfway inward at unchanged RPM. What happens to linear speed and revolution time?',
+    apply: (s) => {
+      s.r /= 2;
+    },
+    watch: [
+      watch('speed', 'Linear speed', (c) => c.speed),
+      watch('period', 'Revolution time', (c) => c.period),
+    ],
+    expect: { speed: 0.5, period: 1 },
+    why: 'All material points on a rigid record share angular speed. Linear speed is rω, but the revolution period is 2π/ω.',
+  },
+  {
+    id: 'record-speed',
+    scenario: 'lp',
+    prep: (s) => {
+      s.t = 0.3;
+    },
+    ask: 'Switch from 33⅓ to 45 RPM and compare at the same angle. Does the tangent slope change?',
+    apply: (s) => {
+      s.t *= s.rpm / 45;
+      s.rpm = 45;
+    },
+    watch: [
+      watch('slope', 'Tangent slope', (c) => c.slope, 'trend'),
+      watch('speed', 'Linear speed', (c) => c.speed, 'trend'),
+    ],
+    expect: { slope: 'same', speed: 'bigger' },
+    why: 'The factor ω cancels from dy/dx. It remains in the time derivatives, so the same geometric tangent can carry a different speed.',
+  },
+];
