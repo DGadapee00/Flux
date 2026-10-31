@@ -6,6 +6,7 @@
  * close. A residual that is not zero is the check failing, and it should be visible.
  */
 
+import { G } from './constants.js';
 import { v, add, sub, scale, dot, cross, mag, unit, unitAB, resultant, DEG } from './vectors.js';
 
 // ---------------------------------------------------------------- Ch 3: particle equilibrium
@@ -161,6 +162,101 @@ export function rigidBody2D({ loads, unknowns, about = v(0, 0, 0) }) {
     Mo += (r.x * d.y - r.y * d.x) * s;
   });
   return { reactions: sol, residual: { Fx, Fy, M: Mo } };
+}
+
+/**
+ * A horizontal board of length L. Its weight acts at midspan. An extra downward load acts at
+ * distance `at` from the left end. The supports sit `inset` in from each end and can only push up.
+ * Moments about the left support give the right force. A negative force means that support would
+ * have to pull, so the board has tipped.
+ */
+export function boardReactions({ length, inset = 0, weight, load = 0, at = 0 }) {
+  const leftAt = inset;
+  const span = length - 2 * inset;
+  const right = (weight * (length / 2 - leftAt) + load * (at - leftAt)) / span;
+  const left = weight + load - right;
+  return { left, right };
+}
+
+/** The same board, with moments taken about the right support. */
+export function boardReactionsAboutRight({ length, inset = 0, weight, load = 0, at = 0 }) {
+  const rightAt = length - inset;
+  const span = length - 2 * inset;
+  const left = (weight * (rightAt - length / 2) + load * (rightAt - at)) / span;
+  const right = weight + load - left;
+  return { left, right };
+}
+
+/**
+ * A uniform ladder at thetaDeg to a rough floor, against a frictionless wall.
+ * The ladder's weight acts at its center. A person stands a fraction `frac` of the length up from
+ * the floor. The wall's push is horizontal. Friction at the floor matches it, and the floor's
+ * normal carries both weights. The length cancels.
+ */
+export function smoothLadder({ ladderW, personW = 0, frac = 0, thetaDeg }) {
+  const th = (thetaDeg * Math.PI) / 180;
+  const wall = (ladderW * 0.5 + personW * frac) / Math.tan(th);
+  const normal = ladderW + personW;
+  return { normal, wall, friction: wall, mu: normal > 0 ? wall / normal : 0 };
+}
+
+/**
+ * Axle loads of a car. `frontShare` is the fraction of the weight on the front axle when the car
+ * is at rest, so the center of mass is that fraction of the wheelbase ahead of the rear axle.
+ * A deceleration `decel` (slowing, taken positive) shifts load forward by W a h / (g d).
+ */
+export function axleSplit({ wheelbase, weight, frontShare, height = 0, decel = 0, g = G }) {
+  const xRear = frontShare * wheelbase;
+  const transfer = (weight * decel * height) / (g * wheelbase);
+  const front = frontShare * weight + transfer;
+  const rear = weight - front;
+  return { xRear, front, rear, transfer };
+}
+
+/**
+ * A knot held by a steep string (one unit across, two up) and a shallow string (two across, one up).
+ * The steep tension is twice the shallow one. Both are set by the weight they carry.
+ */
+export function steepShallow(weight) {
+  const root = Math.sqrt(5);
+  return { steep: (2 * weight) / root, shallow: weight / root };
+}
+
+/**
+ * A forearm held by a vertical muscle force a distance `near` from the elbow, with the load a
+ * distance `far` from the elbow. The elbow force is opposite the muscle and larger than the load
+ * by the amount the muscle exceeds the load.
+ */
+export function verticalForearm({ weight, near, far }) {
+  const tension = weight * (far / near);
+  return { tension, elbow: tension - weight };
+}
+
+/**
+ * Masses on one side of a fulcrum, each { m, arm }, plus the stick's own mass at `stickArm`.
+ * The unknown mass sits on the other side at `unknownArm`. g cancels in the mass and returns in
+ * the support force when the caller multiplies by g.
+ */
+export function stickBalance({ masses, stickMass, stickArm, unknownArm }) {
+  const moment = masses.reduce((sum, part) => sum + part.m * part.arm, 0) + stickMass * stickArm;
+  const m3 = moment / unknownArm;
+  const supported = masses.reduce((sum, part) => sum + part.m, 0) + stickMass + m3;
+  return { m3, supported };
+}
+
+/**
+ * A horizontal strut of weight strutW, hinged at the wall, with a sign of weight signW at the
+ * outer end. A cable runs from that end to a point `rise` above the hinge. The hinge's vertical
+ * force is half the strut's weight. The sign and the rest of the strut hang from the cable.
+ */
+export function cableStrut({ strutW, signW, length, rise }) {
+  const hyp = Math.hypot(length, rise);
+  const share = strutW / 2 + signW;
+  return {
+    tension: (share * hyp) / rise,
+    hingeX: (share * length) / rise,
+    hingeY: strutW / 2,
+  };
 }
 
 /** A distributed load w(x) over [a, b] as an equivalent point force and its location. */

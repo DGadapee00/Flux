@@ -75,8 +75,8 @@ export const UNITS = [
     title: 'Static equilibrium and elasticity',
     chapters: ['12'],
     date: null,
-    labs: [],
-    coming: ['Beam', 'Ladder', 'Stress and strain', 'Car weight balance'],
+    labs: ['beam', 'ladder', 'stress-strain', 'car-balance'],
+    coming: [],
   },
   {
     id: 'u9',
@@ -196,6 +196,10 @@ export const LAB_META = {
   spinner: { id: 'spinner', exam: 'u7', title: 'Spinning stool' },
   gyro: { id: 'gyro', exam: 'u7', title: 'Gyroscope' },
   'rover-wheel': { id: 'rover-wheel', exam: 'u7', title: 'Rover wheel', app: true },
+  beam: { id: 'beam', exam: 'u8', title: 'Beam' },
+  ladder: { id: 'ladder', exam: 'u8', title: 'Ladder' },
+  'stress-strain': { id: 'stress-strain', exam: 'u8', title: 'Stress and strain' },
+  'car-balance': { id: 'car-balance', exam: 'u8', title: 'Car weight balance', app: true },
 };
 
 export function examById(id) {

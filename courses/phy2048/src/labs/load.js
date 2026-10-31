@@ -35,6 +35,10 @@ const loaders = {
   spinner: () => import('./spinner.js'),
   gyro: () => import('./gyro.js'),
   'rover-wheel': () => import('./rover-wheel.js'),
+  beam: () => import('./beam.js'),
+  ladder: () => import('./ladder.js'),
+  'stress-strain': () => import('./stress-strain.js'),
+  'car-balance': () => import('./car-balance.js'),
 };
 
 const labs = createLabLoader(loaders);

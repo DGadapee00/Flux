@@ -41,6 +41,9 @@ export const QUANTITIES = {
   k: { sym: 'k', name: 'Spring constant', unit: 'N/m', unitName: '', from: 'F = -kx' },
   P: { sym: 'P', name: 'Power', unit: 'W', unitName: 'watt', equals: 'J/s', from: 'P = \\vec F\\cdot\\vec v' },
   vrel: { sym: '\\vec v_{PG}', name: 'Velocity over the ground', unit: 'm/s', unitName: '', from: '\\vec v_{PG} = \\vec v_{PF} + \\vec v_{FG}' },
+  sigma: { sym: '\\sigma', name: 'Stress', unit: 'Pa', unitName: 'pascal', equals: 'N/m²', from: '\\sigma = F/A' },
+  eps: { sym: '\\varepsilon', name: 'Strain', unit: '', unitName: '', from: '\\varepsilon = \\Delta L/L_0' },
+  Y: { sym: 'Y', name: "Young's modulus", unit: 'Pa', unitName: 'pascal', equals: 'N/m²', from: '\\sigma = Y\\varepsilon' },
 };
 
 export const LAB_UNITS = {
@@ -75,6 +78,10 @@ export const LAB_UNITS = {
   spinner: ['I', 'omega', 'L', 'K'],
   gyro: ['omega', 'L', 'tau', 'm', 'g'],
   'rover-wheel': ['v', 'K', 'I', 'm', 'g'],
+  beam: ['F', 'm', 'g'],
+  ladder: ['F', 'N', 'f', 'mu'],
+  'car-balance': ['F', 'm', 'x'],
+  'stress-strain': ['F', 'sigma', 'eps', 'Y'],
 };
 
 const BASE = ['kg', 'm', 's', 'A'];
