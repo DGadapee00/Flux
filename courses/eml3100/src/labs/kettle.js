@@ -1,7 +1,7 @@
 import { fromC, satP, toC, waterTP } from '@flux/subjects/thermo';
 import { fig } from '../ui/format.js';
 import { cells, kv } from '../ui/shared.js';
-import { C, alpha, axes, dot, layout, line } from './diagram.js';
+import { C, alpha, axes, chart, clip, dot, fit, line, panes, stage } from './diagram.js';
 import { defineLab } from './define.js';
 import { bindSlider, leavesOut, showField, slider } from './widgets.js';
 
@@ -58,9 +58,13 @@ export default defineLab({
   gapLimit: 1e-6,
   scenarios: SCENARIOS,
   defaultState() {
-    const s = {};
+    const s = { t: 0 };
     apply('six', s);
     return s;
+  },
+  tick(dt, state) {
+    state.t = (state.t || 0) + dt;
+    return true;
   },
   applyScenario: apply,
   sweep: () => ({ key: 'm', lo: 0.25, hi: 2 }),
@@ -103,11 +107,23 @@ export default defineLab({
       samples.push([m, t]);
       peak = Math.max(peak, t);
     }
-    const P = layout(canvas, { lo: 0.25, hi: 2 }, { lo: 0, hi: peak * 1.08 });
-    axes(P, { xLabel: 'mass (kg)', yLabel: 'time (s)' });
-    line(P, samples, { color: C.teal, width: 3 });
+    const B = stage(canvas);
+    const [machine, plot] = panes(B.free, 0.64);
+    drawKettle(B.ctx, machine, state, c);
+    const P = chart(B.ctx, plot, { lo: 0.25, hi: 2 }, { lo: 0, hi: peak * 1.08 }, {
+      left: 48, right: 12, top: 22, bottom: 40,
+    });
+    clip(B.ctx, plot);
+    axes(P, { xLabel: 'mass (kg)', yLabel: '', yCount: P.box.y1 - P.box.y0 < 130 ? 3 : 5 });
+    B.ctx.font = '13px Inter, system-ui, sans-serif';
+    B.ctx.fillStyle = C.muted;
+    B.ctx.textAlign = 'left';
+    B.ctx.textBaseline = 'top';
+    B.ctx.fillText('time (s)', P.box.x0, plot.y0 + 3);
+    line(P, samples, { color: C.teal, width: 2.5 });
     line(P, [[0.25, c.time], [2, c.time]], { color: alpha(C.gold, 0.85), width: 2, dash: [5, 4] });
-    dot(P, state.m, c.time, { color: C.yellow, r: 5 });
+    dot(P, state.m, c.time, { color: C.yellow, r: 4 });
+    B.ctx.restore();
   },
   law: () => [String.raw`Q = m(h_2 - h_1)`, String.raw`t = Q/(\eta \dot W)`],
   liveRows(state, c) {
@@ -131,3 +147,127 @@ export default defineLab({
     body: String.raw`The element is rated ${fig(state.power)} W. At 73.7% cooking efficiency, ${fig(c.into)} W enters the water. Heating ${fig(state.m)} kg from ${fig(toC(c.T1))} °C to ${fig(toC(c.T2))} °C takes ${fig(c.q / 1000)} kJ and ${fig(c.time)} s. The liquid swells a little, and that boundary work is only ${fig(c.Wb)} J, so Q and m Δu agree to a fraction of a percent. The heat at constant pressure is m Δh.`,
   })),
 });
+
+/** A covered kettle on an open coil. One visual cycle stands for the whole warm-up. */
+function drawKettle(ctx, rect, state, c) {
+  clip(ctx, rect);
+  const S = fit(ctx, rect, { x0: -1.9, x1: 1.9, y0: -0.55, y1: 2.15 }, 8);
+  const t = state.t || 0;
+  const frac = (t % 8) / 8;
+  const glow = Math.max(0, Math.min(1, (state.power - 800) / 1400));
+  const level = 0.28 + ((Math.min(2, Math.max(0.25, state.m)) - 0.25) / 1.75) * 0.72;
+  const Tnow = c.T1 + frac * (c.T2 - c.T1);
+  const hot = Math.max(0, Math.min(1, (toC(Tnow) - 20) / 80));
+
+  // Coil: two rings, brighter as the element rating rises.
+  for (const rad of [0.85, 0.55]) {
+    ctx.strokeStyle = alpha(C.red, 0.25 + 0.65 * glow);
+    ctx.lineWidth = 4 + 2 * glow;
+    ctx.beginPath();
+    ctx.ellipse(S.X(0), S.Y(-0.05), rad * S.k, 0.14 * S.k, 0, 0, 2 * Math.PI);
+    ctx.stroke();
+  }
+  ctx.fillStyle = alpha(C.gold, 0.15 + 0.45 * glow);
+  ctx.beginPath();
+  ctx.ellipse(S.X(0), S.Y(-0.02), 0.35 * S.k, 0.08 * S.k, 0, 0, 2 * Math.PI);
+  ctx.fill();
+
+  rounded(S, -0.85, 0.08, 1.7, 1.35, 0.16, alpha(C.text, 0.12), alpha(C.text, 0.75));
+  // Water, higher when the mass slider rises, warmer as the cycle approaches the boil.
+  ctx.beginPath();
+  ctx.moveTo(S.X(-0.78), S.Y(0.16));
+  for (let i = 0; i <= 24; i++) {
+    const x = -0.78 + (1.56 * i) / 24;
+    const y = 0.16 + level + Math.sin(t * 3 + i * 0.5) * (0.01 + 0.015 * hot);
+    ctx.lineTo(S.X(x), S.Y(y));
+  }
+  ctx.lineTo(S.X(0.78), S.Y(0.16));
+  ctx.closePath();
+  ctx.fillStyle = alpha(C.blue, 0.28 + 0.4 * hot);
+  ctx.fill();
+
+  const n = Math.round(hot * 8);
+  ctx.fillStyle = alpha(C.text, 0.6);
+  for (let i = 0; i < n; i++) {
+    const phase = (t * 0.6 + i * 0.13) % 1;
+    const x = -0.55 + ((i * 0.22) % 1.1);
+    const y = 0.22 + phase * level * 0.85;
+    ctx.beginPath();
+    ctx.arc(S.X(x), S.Y(y), (0.03 + 0.02 * phase) * S.k, 0, 2 * Math.PI);
+    ctx.fill();
+  }
+
+  // Lid, spout, handle. Steam leaves the spout near the end of the warm-up.
+  rounded(S, -0.98, 1.32, 1.96, 0.14, 0.05, alpha(C.text, 0.22), C.text);
+  ctx.fillStyle = C.gold;
+  ctx.beginPath();
+  ctx.arc(S.X(0), S.Y(1.5), 0.07 * S.k, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.fillStyle = alpha(C.text, 0.16);
+  ctx.strokeStyle = C.text;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(S.X(0.7), S.Y(0.9));
+  ctx.lineTo(S.X(1.22), S.Y(1.12));
+  ctx.lineTo(S.X(1.22), S.Y(1.26));
+  ctx.lineTo(S.X(0.74), S.Y(1.08));
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(S.X(-1.02), S.Y(0.72), 0.34 * S.k, Math.PI * 0.55, Math.PI * 1.5);
+  ctx.stroke();
+
+  if (hot > 0.55) {
+    const puff = 3 + Math.round(hot * 3);
+    for (let i = 0; i < puff; i++) {
+      const phase = (t * 0.7 + i / puff) % 1;
+      ctx.fillStyle = alpha(C.text, 0.15 + (1 - phase) * 0.45 * hot);
+      ctx.beginPath();
+      ctx.ellipse(
+        S.X(1.28 + Math.sin(t * 2 + i) * 0.06),
+        S.Y(1.4 + phase * 0.45),
+        (0.05 + 0.06 * phase) * S.k,
+        (0.035 + 0.04 * phase) * S.k,
+        0, 0, 2 * Math.PI,
+      );
+      ctx.fill();
+    }
+  }
+
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'top';
+  ctx.font = '600 15px Inter, system-ui, sans-serif';
+  ctx.fillStyle = C.yellow;
+  ctx.fillText(`${fig(toC(Tnow))} °C`, rect.x1 - 8, rect.y0 + 4);
+  ctx.font = '13px Inter, system-ui, sans-serif';
+  ctx.fillStyle = C.muted;
+  ctx.fillText(`${fig(frac * c.time)} s of ${fig(c.time)} s`, rect.x1 - 8, rect.y0 + 24);
+  ctx.fillText(`${fig(state.power)} W coil`, rect.x1 - 8, rect.y0 + 42);
+  ctx.restore();
+}
+
+function rounded(S, x, y, w, h, r, fill, stroke) {
+  const { ctx, X, Y, k } = S;
+  const px = X(x);
+  const py = Y(y + h);
+  const pw = w * k;
+  const ph = h * k;
+  const radius = Math.min(r * k, Math.abs(pw) / 2, Math.abs(ph) / 2);
+  ctx.beginPath();
+  ctx.moveTo(px + radius, py);
+  ctx.arcTo(px + pw, py, px + pw, py + ph, radius);
+  ctx.arcTo(px + pw, py + ph, px, py + ph, radius);
+  ctx.arcTo(px, py + ph, px, py, radius);
+  ctx.arcTo(px, py, px + pw, py, radius);
+  ctx.closePath();
+  if (fill) {
+    ctx.fillStyle = fill;
+    ctx.fill();
+  }
+  if (stroke) {
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+}
