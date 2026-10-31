@@ -66,8 +66,8 @@ export const UNITS = [
     title: 'Rolling and angular momentum',
     chapters: ['11'],
     date: null,
-    labs: [],
-    coming: ['Rolling', 'Angular momentum of a particle', 'Spinning stool', 'Gyroscope', 'Rover wheel'],
+    labs: ['rolling', 'particle-l', 'spinner', 'gyro', 'rover-wheel'],
+    coming: [],
   },
   {
     id: 'u8',
@@ -191,6 +191,11 @@ export const LAB_META = {
   inertia: { id: 'inertia', exam: 'u6', title: 'Moment of inertia' },
   'massive-pulley': { id: 'massive-pulley', exam: 'u6', title: 'Massive pulley' },
   'helicopter-rotor': { id: 'helicopter-rotor', exam: 'u6', title: 'Helicopter rotor', app: true },
+  rolling: { id: 'rolling', exam: 'u7', title: 'Rolling' },
+  'particle-l': { id: 'particle-l', exam: 'u7', title: 'Angular momentum of a particle' },
+  spinner: { id: 'spinner', exam: 'u7', title: 'Spinning stool' },
+  gyro: { id: 'gyro', exam: 'u7', title: 'Gyroscope' },
+  'rover-wheel': { id: 'rover-wheel', exam: 'u7', title: 'Rover wheel', app: true },
 };
 
 export function examById(id) {
