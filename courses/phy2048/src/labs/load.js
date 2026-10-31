@@ -19,7 +19,13 @@ const loaders = {
   track: () => import('./track.js'),
   'energy-diagram': () => import('./energy-diagram.js'),
   'automotive-power': () => import('./automotive-power.js'),
+  impulse: () => import('./impulse.js'),
   collide: () => import('./collide.js'),
+  'collide-2d': () => import('./collide-2d.js'),
+  'center-of-mass': () => import('./center-of-mass.js'),
+  rocket: () => import('./rocket.js'),
+  'crumple-zone': () => import('./crumple-zone.js'),
+  'crash-reconstruction': () => import('./crash-reconstruction.js'),
   rotor: () => import('./rotor.js'),
 };
 

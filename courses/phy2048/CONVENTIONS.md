@@ -16,15 +16,17 @@ These stay in the course. They are not copied into `packages/core` or the shell.
   relative-motion and wind-triangle labs: the velocity of the moving frame (a current, a wind, minus
   an observer's velocity) is teal, and the resulting velocity over the ground is gold. In Unit 3's
   force diagrams every force is pink and labelled, so the acceleration there is a thin yellow arrow,
-  and a reference line on a graph (free fall, a weight, a terminal speed) is yellow too.
-- **Labs.** Units 1 to 4 are drawn (graph panels and flat vector scenes, framed by `fit` and the
+  and a reference line on a graph (free fall, a weight, a terminal speed) is yellow too. Unit 5
+  draws momentum bars in teal and marks the centre of mass in yellow. A second body is gold.
+- **Labs.** Units 1 to 5 are drawn (graph panels and flat vector scenes, framed by `fit` and the
   free space). The projectile lab draws the world at one scale on both axes, so angles are true. The
-  two older labs in Units 5 and 6 are logic only until their unit's PR draws them. The free space
+  older rotor lab in Unit 6 is logic only until that unit's PR draws it. The free space
   between the panels is taller than wide on a laptop, so a lab with a picture and a bar chart stacks
   them (Unit 4). Energy bars: potential blue, kinetic white, thermal and work pink, a total yellow.
+  Momentum bars are teal.
   A choice between a few named options is a `selectRow` (`define.js`).
   A lab says its numbers once, as `readoutCells`, and its law as TeX lines.
-- **Notes.** One file per unit in `src/notes/content/`, registered in `src/notes/units/`. Units 1 to 4
+- **Notes.** One file per unit in `src/notes/content/`, registered in `src/notes/units/`. Units 1 to 5
   have them. A worked example's setup in `src/notes/setups/` is checked against the lab within 2%.
 - **Problems.** A unit built to the standard is listed in `STANDARD_UNITS` in `scripts/problems-check.mjs`,
   which then also requires a level, a declared variety, a cited case, traps that can fire, and a lab
