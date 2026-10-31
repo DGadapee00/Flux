@@ -43,3 +43,11 @@ Camera inputs: Nikon AF NIKKOR 50mm f/1.8D nominal focal length 50 mm and minimu
 Original explanations follow 18.01SC Unit 2, including Session 40’s first differential equations. Worked cases check solutions 2A-1, 2A-2, 2A-8, 2A-10, 2G-1 and the nonconvergent Newton cases in 2F-5. The open-cylinder ratio agrees with 2C-5; that source fixes area and maximizes volume, while the lab solves the inverse fixed-volume/least-area problem. The identical stationary proportions are identified explicitly. Antiderivative cases use Unit 1 solution 1E-2 with the stated integration constant. Conceptual transfers and definition-based cases are identified as such.
 
 The can application uses the 330 mL capacity in the Coca-Cola GB-linked can listing, https://www.yourcoca-cola.co.uk/coca-cola-lemon-24-x-330ml/15227578.html (linked from the manufacturer’s Coca-Cola Original Taste page). All radii, flat-end shapes and the 500 mL alternative are teaching inputs, not product measurements. No source text or images are copied.
+
+## Unit 3 content rework
+
+Original statements and explanations follow 18.01SC Unit 3. Cases check exercise solutions 3B-3, 3C-1, 3C-3, 3D-1, 3A-3, 3C-6(b), 3G-1 and 3G-5; Exam 3 solutions 1 and 3(b); and Sessions 55, 58, 60 and 61. Where a formula uses a selected parameter or a generated variant, the case identifies that use. The numerical bank retains the unrounded value when a posted answer rounds. A verified arithmetic error in the published solution 3B-3(a), PDF page 4, is recorded in ERRATA.md and visibly corrected in the notes.
+
+Spring-work data and the 6.25 J check come from OpenStax Calculus Volume 2, §2.5, Example 2.25, The Work Required to Stretch or Compress a Spring. The complementary restoring-force question is an original force-agency variant.
+
+The rain-barrel application cites Good Ideas, Rain Wizard 50 (https://goodideasinc.com/products/rain-wizard-50), for nominal 50 US gallon capacity. The exact gallon conversion uses the shared convert module. Storm profiles, peak flows, durations and initial storage are generated teaching setups. The diagram is schematic and makes no dimensional product claim. Closed forms, independent quadrature, time stepping and water conservation check these examples. No source text or figures are copied.

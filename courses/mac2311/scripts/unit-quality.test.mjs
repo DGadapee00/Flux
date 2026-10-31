@@ -25,7 +25,14 @@ for (const unit of REWORKED_UNITS)
       for (const seed of [0, 7, 19, 41]) {
         const inst = instance(t, seed),
           out = render(inst);
-      assert.ok(out.steps.some(step=>step.includes('Sources for this family:')),`${t.id}: citations must be visible in the solution`);
+        assert.ok(
+          out.steps.every((step) => typeof step === 'string'),
+          `${t.id}: worked steps must be text`,
+        );
+        assert.ok(
+          out.steps.some((step) => step.includes('Sources for this family:')),
+          `${t.id}: citations must be visible in the solution`,
+        );
         for (const p of t.parts) {
           if (p.kind === 'choice') {
             const options = typeof p.options === 'function' ? p.options(inst.$) : p.options;

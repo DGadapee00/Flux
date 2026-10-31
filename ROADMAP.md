@@ -46,7 +46,7 @@ subject libraries (a function written for one course serves the next), and one s
 |---|---|---|---|---|
 | PHY 2049 Physics II | [phy2049](docs/course-plans/phy2049.md) | reference | not yet scored | weekly drops; on the physics shell |
 | PHY 2048 Physics I | [phy2048](docs/course-plans/phy2048.md) | on the physics shell; Units 1–13 of 13 built | passes | owner review (`standard` stays false) |
-| MAC 2311–2312 Calculus I and II | [mac2311-2312](docs/course-plans/mac2311-2312.md) | merged: 6 units, 14 labs, 87 templates, notes | fails | R4a: unit-by-unit content rework |
+| MAC 2311–2312 Calculus I and II | [mac2311-2312](docs/course-plans/mac2311-2312.md) | 6 units; Units 1–3 reworked; legacy progress retained | fails | R4a: unit-by-unit content rework |
 | MAC 2313 Calculus III | [mac2313](docs/course-plans/mac2313.md) | labs and bank, no notes | fails | R4 |
 | EGN 3311 Statics | [statics](docs/course-plans/statics.md) | 4 units with notes, 15 lab routes, 43 templates | passes | printed-answer audit and owner review |
 | EGN 3321 Dynamics | [egn3321](docs/course-plans/egn3321.md) | 7 units, notes; Unit 8 and the D36 topics in progress | passes | R2c: the owner's review findings (D36) |
@@ -203,7 +203,7 @@ review course; nothing is planned. Technical electives are planned when the owne
 
 - [x] Unit 1: differentiation content rework; owner review pending.
 - [x] Unit 2: applications of differentiation content rework; owner review pending.
-- [ ] Unit 3: definite integral and applications.
+- [x] Unit 3: definite integral and applications content rework; owner review pending.
 - [ ] Unit 4: integration techniques.
 - [ ] Unit 5: parametric and polar.
 - [ ] Unit 6: exploring the infinite.
