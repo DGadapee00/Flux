@@ -1,34 +1,16 @@
-import { defineCourse } from '@flux/core';
-import { EXAMS } from './data/catalog.js';
-
-export const course = defineCourse({
+/** Compatibility route only. Course content and scoring live in mac2311 after D28. */
+export const course = {
   id: 'mac2312',
   code: 'MAC 2312',
-  title: 'Calculus II',
+  title: 'Calculus II (moved)',
   subject: 'math',
   track: 'math',
   order: 2,
   term: null,
-  text: 'OpenStax, Calculus Volume 2',
-  units: EXAMS.map((exam) => ({
-    id: exam.id,
-    title: exam.title,
-    chapters: [exam.chapters],
-    date: exam.date,
-    labs: exam.labs,
-  })),
-  chapters: {
-    2: 'Applications of integration',
-    3: 'Techniques of integration',
-    5: 'Sequences and series',
-    6: 'Power series',
-    7: 'Parametric and polar',
-  },
-  // Measured by `npm run scorecard` against docs/COURSE-STANDARD.md. Set true only once it passes.
   standard: false,
   review: true,
-  labs: () => import('./labs/load.js'),
-  problems: () => import('./problems/index.js'),
-  notes: () => import('./notes/index.js'),
+  redirectTo: 'mac2311',
+  units: [],
+  chapters: {},
   prereqs: [],
-});
+};

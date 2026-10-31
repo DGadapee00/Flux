@@ -1,3 +1,4 @@
+import { LAB_META } from '../data/catalog.js';
 import * as THREE from 'three';
 import { defineLab as checkLab } from '@flux/core';
 
@@ -33,6 +34,7 @@ export function defineLab(spec) {
     plot: () => null,
     pointer: null,
     ...spec,
+    exam: LAB_META[spec.id]?.exam || spec.exam,
     kind: 'scene3d',
   });
 }

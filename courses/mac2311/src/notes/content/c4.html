@@ -1,0 +1,148 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Techniques of integration</title></head><body><header class="top"><p class="eyebrow">MAC 2311–2312 · Calculus I and II · Unit 4 · OpenStax Vol 2 Ch 2–3</p><h1>Techniques of integration</h1><p class="lede">One course from differentiation to infinite series. Derive each result, work an example, then open its lab.</p><div class="legend"><span>Worked example</span><span>Derivation</span><span>Common mistake</span><span>Key idea</span><span>Model limits</span></div><nav class="toc"><a href="#s1"><span>01</span>Integration by parts</a><a href="#s2"><span>02</span>Trigonometric integrals</a><a href="#s3"><span>03</span>Trigonometric substitution</a><a href="#s4"><span>04</span>Partial fractions</a><a href="#s5"><span>05</span>Arc length and surface area</a><a href="#s6"><span>06</span>Formula sheet</a></nav></header><main><div class="part"><div class="eyebrow">Calculus Volume 2</div><h2>Techniques of integration</h2><section class="topic" id="s1">
+<h2><span class="n">01</span>Integration by parts</h2>
+<p>The product rule says \((uv)' = u'v + uv'\). Integrate both sides and rearrange. One integral trades for another.</p>
+\[
+\int u\,dv = uv - \int v\,du.
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>Integrating \((uv)' = u'v + uv'\) gives \(uv = \int v\,du + \int u\,dv\), since \(du = u'\,dx\) and \(dv = v'\,dx\). Solve for \(\int u\,dv\). For a definite integral, the \(uv\) term is evaluated at the two limits.</p>
+</div>
+<p>The choice of \(u\) decides whether the new integral is easier. Choose for \(u\) the factor that gets simpler when differentiated. A common order of preference is: logarithms, inverse trig functions, algebraic powers, trig functions, exponentials.</p>
+<div class="box ex"><span class="tag">Worked example · x times e to the x</span>
+<p>\(\int_0^1 x e^x\,dx\). Take \(u = x\) and \(dv = e^x\,dx\). Then \(du = dx\) and \(v = e^x\). So the integral is \([x e^x]_0^1 - \int_0^1 e^x\,dx = e - (e - 1) = 1\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a logarithm alone</span>
+<p>\(\int_1^e \ln x\,dx\). There seems to be one factor, but \(dv = dx\) is the other. Take \(u = \ln x\), so \(du = dx/x\) and \(v = x\). The integral is \([x\ln x]_1^e - \int_1^e dx = e - (e - 1) = 1\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · x sin x over one hump</span>
+<p>\(\int_0^{\pi} x\sin x\,dx\). Take \(u = x\), \(dv = \sin x\,dx\), so \(v = -\cos x\). The integral is \([-x\cos x]_0^{\pi} + \int_0^{\pi}\cos x\,dx = \pi + 0 = \pi\).</p>
+</div>
+<p>Sometimes parts returns the original integral. Then solve for it like an unknown. Two rounds on \(\int e^x \sin x\,dx\) give \(e^x\sin x - e^x\cos x - \int e^x\sin x\,dx\). Moving the integral across gives \(\tfrac12 e^x(\sin x - \cos x) + C\).</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Choosing \(u = e^x\) and \(dv = x\,dx\) for \(\int x e^x\,dx\) makes it worse. The new integral is \(\int \tfrac12 x^2 e^x\,dx\), with a higher power. If the new integral is harder, swap the roles.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>\(\int u\,dv = uv - \int v\,du\). Let \(u\) be the factor that simplifies when differentiated. If the original integral comes back, solve for it.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Repeated parts on \(x^n e^x\) can be organised in a table, the tabular method. It is a bookkeeping shortcut for the same formula, and the text shows it.</p>
+</div>
+</section><section class="topic" id="s2">
+<h2><span class="n">02</span>Trigonometric integrals</h2>
+<p>Integrals of products of powers of \(\sin x\) and \(\cos x\) yield to two identities: \(\sin^2 x + \cos^2 x = 1\), and the half-angle forms</p>
+\[
+\begin{aligned}
+\sin^2 x &= \tfrac12(1 - \cos 2x),\\
+\cos^2 x &= \tfrac12(1 + \cos 2x).
+\end{aligned}
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>If either power is odd, save one factor of that function for \(du\). Convert the rest with \(\sin^2 + \cos^2 = 1\). The integral becomes a polynomial in the other function. If both powers are even, nothing can be saved. Lower the powers with the half-angle forms instead.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an odd power of sine</span>
+<p>\(\int_0^{\pi/2} \sin^3 x\cos^2 x\,dx\). Save one \(\sin x\). Write \(\sin^2 x = 1 - \cos^2 x\). With \(u = \cos x\), \(du = -\sin x\,dx\), and \(u\) runs from \(1\) to \(0\). The integral is \(\int_0^1 (u^2 - u^4)\,du = 1/3 - 1/5 = 2/15\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an even power</span>
+<p>\(\int_0^{\pi} \sin^2 x\,dx = \tfrac12\int_0^{\pi}(1 - \cos 2x)\,dx = \tfrac12\bigl[x - \tfrac12\sin 2x\bigr]_0^{\pi} = \pi/2\). That is half the interval's length, since \(\sin^2\) and \(\cos^2\) share it equally.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Substituting \(u = \sin x\) in \(\int \sin^2 x\,dx\) needs a \(\cos x\,dx\) that is not there. Even powers of a single function do not reduce by substitution. Use the half-angle form.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Odd power: save one factor and convert the rest. Even powers: half-angle formulas. Check the answer by differentiating.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Powers of \(\tan\) and \(\sec\) follow the same idea, with \(\sec^2 x = 1 + \tan^2 x\) and \(du = \sec^2 x\,dx\). The text's §3.2 lists those cases.</p>
+</div>
+</section><section class="topic" id="s3">
+<h2><span class="n">03</span>Trigonometric substitution</h2>
+<p>A root of a quadratic is a side of a right triangle in disguise. Substituting a trigonometric function turns the root into a single trig term.</p>
+<ul>
+<li>\(\sqrt{a^2 - x^2}\): let \(x = a\sin\theta\). Then the root is \(a\cos\theta\).</li>
+<li>\(\sqrt{a^2 + x^2}\): let \(x = a\tan\theta\). Then the root is \(a\sec\theta\).</li>
+<li>\(\sqrt{x^2 - a^2}\): let \(x = a\sec\theta\). Then the root is \(a\tan\theta\).</li>
+</ul>
+<div class="box why"><span class="tag">Why</span>
+<p>Each choice makes an identity do the work. With \(x = a\sin\theta\), \(a^2 - x^2 = a^2(1 - \sin^2\theta) = a^2\cos^2\theta\). On \(-\pi/2 \le \theta \le \pi/2\), \(\cos\theta \ge 0\), so the root is \(a\cos\theta\) with no sign trouble. The other two use \(1 + \tan^2 = \sec^2\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · part of a circle</span>
+<p>\(\int_0^1 \sqrt{4 - x^2}\,dx\). Let \(x = 2\sin\theta\), \(dx = 2\cos\theta\,d\theta\). Then \(\theta\) runs from \(0\) to \(\pi/6\), and the integrand becomes \(4\cos^2\theta\). The half-angle form gives \([2\theta + \sin 2\theta]_0^{\pi/6} = \pi/3 + \sqrt{3}/2 = 1.913\).</p>
+<p>Geometry agrees. The region is a sector of angle \(\pi/6\) in a circle of radius \(2\), with area \(\pi/3\), plus a triangle of area \(\sqrt{3}/2\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the arcsine</span>
+<p>\(\int dx/\sqrt{1 - x^2}\). With \(x = \sin\theta\), \(dx = \cos\theta\,d\theta\) and the root is \(\cos\theta\). The integrand becomes \(1\), so the integral is \(\theta = \arcsin x\), plus \(C\). From \(0\) to \(1/2\) it is \(\pi/6 = 0.524\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Forgetting \(dx = a\cos\theta\,d\theta\). For part of the circle, dropping it leaves \(\int_0^{\pi/6} 2\cos\theta\,d\theta = 1\), far from \(1.913\). Every substitution converts \(dx\), not only the integrand.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Match the root to a Pythagorean identity. Convert \(x\), \(dx\), and the limits. Read the answer back in \(x\) from a right triangle.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>A quadratic that is not in one of the three forms needs completing the square first. \(\sqrt{x^2 + 2x + 5}\) becomes \(\sqrt{(x + 1)^2 + 4}\), and then the tangent substitution applies.</p>
+</div>
+</section><section class="topic" id="s4">
+<h2><span class="n">04</span>Partial fractions</h2>
+<p>A rational function whose bottom factors can be split into simpler fractions. Each piece integrates to a logarithm or an arctangent.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>For distinct linear factors, write</p>
+\[
+\frac{p(x)}{(x - r_1)(x - r_2)} = \frac{A}{x - r_1} + \frac{B}{x - r_2}.
+\]
+<p>Multiply through by \((x - r_1)\) and let \(x \to r_1\). The \(B\) term vanishes, leaving \(A = p(r_1)/(r_1 - r_2)\). This is the cover-up rule: cover the factor, and evaluate the rest at its root.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two linear factors</span>
+<p>\(\int_0^1 \dfrac{3x + 5}{(x + 1)(x + 3)}\,dx\). Cover \(x + 1\) and set \(x = -1\): \(A = 2/2 = 1\). Cover \(x + 3\) and set \(x = -3\): \(B = -4/(-2) = 2\). The integral is \([\ln(x + 1) + 2\ln(x + 3)]_0^1 = \ln 2 + 2\ln(4/3) = 1.269\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a difference of squares</span>
+<p>\(\int_2^3 dx/(x^2 - 1)\). The bottom is \((x - 1)(x + 1)\). The cover-up gives \(A = 1/2\) and \(B = -1/2\). The integral is \(\tfrac12[\ln|x - 1| - \ln|x + 1|]_2^3 = \tfrac12(\ln\tfrac24 - \ln\tfrac13) = \tfrac12\ln 1.5 = 0.203\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a constant on top</span>
+<p>\(\int_0^1 \dfrac{dx}{(x + 1)(x + 2)}\). The cover-up gives \(A = 1\) and \(B = -1\). The integral is \([\ln(x + 1) - \ln(x + 2)]_0^1 = \ln\tfrac23 - \ln\tfrac12 = \ln\tfrac43 = 0.288\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Partial fractions need the top's degree below the bottom's. For \(x^2/(x^2 - 1)\), divide first: \(1 + 1/(x^2 - 1)\). Splitting without dividing produces constants that do not exist.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Divide if the top's degree is not lower. Factor the bottom. Find each constant by cover-up. Integrate each piece as a logarithm.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>A repeated factor \((x - r)^2\) needs both \(A/(x - r)\) and \(B/(x - r)^2\). An irreducible quadratic needs \((Ax + B)/(x^2 + c^2)\), which integrates to a logarithm plus an arctangent. Both are in §3.4 of the text.</p>
+</div>
+</section></div><div class="part"><div class="eyebrow">Calculus Volume 2</div><h2>Applications of integration</h2><section class="topic" id="s5">
+<h2><span class="n">05</span>Arc length and surface area</h2>
+<p>Cut a curve into short pieces. Each piece is nearly a straight segment. Its length is \(\sqrt{\Delta x^2 + \Delta y^2}\).</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Over a step \(\Delta x\), the Mean Value Theorem gives a point where \(\Delta y = f'(x_i^*)\,\Delta x\). So the segment's length is \(\sqrt{1 + f'(x_i^*)^2}\,\Delta x\). The sum of the segments is a Riemann sum.</p>
+</div>
+\[
+L = \int_a^b \sqrt{1 + f'(x)^2}\,dx.
+\]
+<div class="box ex"><span class="tag">Worked example · a parabola to x = 1</span>
+<p>For \(y = x^2\) from \(0\) to \(1\), \(f'(x) = 2x\), so \(L = \int_0^1 \sqrt{1 + 4x^2}\,dx\). The antiderivative is \(\tfrac{x}{2}\sqrt{1 + 4x^2} + \tfrac14\ln\bigl(2x + \sqrt{1 + 4x^2}\bigr)\). At \(1\) that is \(1.118 + 0.361 = 1.479\).</p>
+<p>The straight chord from \((0, 0)\) to \((1, 1)\) is \(\sqrt{2} = 1.414\). The curve is longer, as it must be.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a line, by both routes</span>
+<p>For \(y = x\) from \(0\) to \(1\), \(f' = 1\), and the integrand is the constant \(\sqrt{2}\). So \(L = \sqrt{2}\). The distance formula gives the same number. A formula that works must agree with geometry on a line.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a parabola to x = 2</span>
+<p>Run the same parabola to \(x = 2\). The antiderivative gives \(L = 4.647\). The chord to \((2, 4)\) is \(\sqrt{20} = 4.472\). The gap has grown from \(0.065\) to \(0.175\), because the curve bends more over the longer run.</p>
+</div>
+<p>Rotating the curve about the \(x\)-axis sweeps a surface. Each short piece sweeps a band of radius \(f(x)\) and slant width \(\sqrt{1 + f'^2}\,dx\).</p>
+\[
+S = \int_a^b 2\pi f(x)\sqrt{1 + f'(x)^2}\,dx.
+\]
+<div class="box ex"><span class="tag">Worked example · a sphere</span>
+<p>Take \(f(x) = \sqrt{r^2 - x^2}\) on \([-r, r]\). Then \(f' = -x/f\), so \(f\sqrt{1 + f'^2} = \sqrt{f^2 + x^2} = r\). The integrand is the constant \(2\pi r\). So \(S = 2\pi r \cdot 2r = 4\pi r^2\). For \(r = 2\) that is \(50.3\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(2\pi f(x)\,dx\) for the band, without the slant factor, treats each band as a flat ring. For a sphere that gives \(\int_{-r}^{r} 2\pi\sqrt{r^2 - x^2}\,dx = \pi^2 r^2\), which is \(39.5\) for \(r = 2\) instead of \(50.3\). The slant is not small where the curve is steep.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Arc length: \(\int\sqrt{1 + f'^2}\,dx\). Surface area: \(\int 2\pi f\sqrt{1 + f'^2}\,dx\). The square root is the slant of each piece.</p>
+</div>
+<p>In the Arc length lab, the readout gives the length by the antiderivative and by Simpson's rule, next to the chord. Push the right end out and watch the gap grow.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Most arc-length integrals have no closed form. \(\int\sqrt{1 + \cos^2 x}\,dx\), the length of a sine wave, is one. They are evaluated numerically, as in Unit 2.</p>
+</div>
+</section><section class="topic" id="s6"><h2><span class="n">06</span>Formula sheet</h2><p>These results are derived in the sections above. Check each result's hypotheses before applying it.</p><p>\(\int u\,dv=uv-\int v\,du\), \(\sin^2x=(1-\cos2x)/2\), \(L=\int\sqrt{1+[f\prime(x)]^2}\,dx\), \(S=2\pi\int f(x)\sqrt{1+[f\prime(x)]^2}\,dx\) for rotation about the x axis with f nonnegative.</p></section></div></main><footer><p>Original Flux notes. OpenStax Calculus Volumes 1 and 2, sections identified in the notes and textbook map.</p><p><b>Another view:</b> <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/">18.01SC Single Variable Calculus, Fall 2010</a>, Unit 4A–B.</p></footer></body></html>

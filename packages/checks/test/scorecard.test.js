@@ -24,5 +24,5 @@ test('the Markdown table has a header row and one row per course', () => {
   assert.equal(r.status, 0, r.stderr);
   const rows = r.stdout.trim().split('\n');
   assert.match(rows[0], /^\| course \| std \|/);
-  assert.equal(rows.length, 2 + 11);
+  assert.equal(rows.length, 2 + 10);
 });

@@ -1,15 +1,15 @@
 import { defineCourse } from '@flux/core';
-import { EXAMS } from './data/catalog.js';
+import { EXAMS, CHAPTER_TITLES } from './data/catalog.js';
 
 export const course = defineCourse({
   id: 'mac2311',
-  code: 'MAC 2311',
-  title: 'Calculus I',
+  code: 'MAC 2311–2312',
+  title: 'Calculus I and II',
   subject: 'math',
   track: 'math',
   order: 1,
   term: null,
-  text: 'OpenStax, Calculus Volume 1',
+  text: 'OpenStax, Calculus Volumes 1 and 2',
   units: EXAMS.map((exam) => ({
     id: exam.id,
     title: exam.title,
@@ -17,12 +17,7 @@ export const course = defineCourse({
     date: exam.date,
     labs: exam.labs,
   })),
-  chapters: {
-    2: 'Limits',
-    3: 'Derivatives',
-    4: 'Applications of differentiation',
-    5: 'Integration',
-  },
+  chapters: CHAPTER_TITLES,
   // Measured by `npm run scorecard` against docs/COURSE-STANDARD.md. Set true only once it passes.
   standard: false,
   review: true,

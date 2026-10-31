@@ -33,8 +33,8 @@ camera.layers.enable(ANSWER_LAYER);
 const ctx = { scene, camera, controls, grid, clock, renderer };
 
 const app = {
-  examId: 'u2',
-  labId: 'secant',
+  examId: 'c1',
+  labId: 'limits',
   lab: null,
   handles: {},
   slices: {},
@@ -279,12 +279,16 @@ practice = createPractice({
   slice,
   computed,
   labelLayer: labels.domElement,
+  openNotes: where=>hud.notes?.open(where),
 });
 
 function followUrl() {
   const route = parseHash();
   const { examId, labId, problemId, seed } = route;
+  if(problemId)hud.notes?.close();
   if (practice.followUrl(problemId, seed)) return;
+  app.query=route.query||'';
+  if(!route.notes)hud.notes?.close();
   openNotesFromRoute(hud.notes, route);
   if (examId === app.examId && labId === app.labId) return;
   if (labId) setLab(labId);
@@ -353,6 +357,7 @@ window.__flux = {
 };
 
 const boot = parseHash();
+app.query=boot.query||'';
 setExam(boot.examId, boot.labId).then(() => {
   booting = false;
   if (boot.problemId) practice.followUrl(boot.problemId, boot.seed);

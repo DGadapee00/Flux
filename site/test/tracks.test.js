@@ -13,7 +13,6 @@ const PLATFORM_HREF = {
   phy2049: 'phy2049/',
   statics: 'statics/',
   mac2311: 'mac2311/',
-  mac2312: 'mac2312/',
   mac2313: 'mac2313/',
   sta3032: 'sta3032/',
   egn3321: 'egn3321/',
@@ -68,7 +67,7 @@ test('the card opens the latest built course, and D5 is on the list', () => {
   assert.equal(latestBuilt(TRACKS[5]).id, 'bench');
   assert.deepEqual(
     builtCourses().map((course) => course.id),
-    ['phy2048', 'phy2049', 'mac2311', 'mac2312', 'mac2313', 'statics', 'egn3321', 'egn3331', 'sta3032', 'eml3100', 'bench'],
+    ['phy2048', 'phy2049', 'mac2311', 'mac2313', 'statics', 'egn3321', 'egn3331', 'sta3032', 'eml3100', 'bench'],
   );
 });
 
@@ -101,7 +100,7 @@ test('a course header gets its track, in hub order, with unbuilt siblings unlink
   );
   assert.deepEqual(
     trackSiblings('mac2312').map((course) => course.href),
-    ['../mac2311/', '../mac2312/', '../mac2313/', null],
+    ['../mac2311/', '../mac2313/', null],
   );
   assert.deepEqual(trackSiblings('sta3032').map((course) => course.code), ['STA 3032']);
   assert.deepEqual(trackSiblings('missing'), []);

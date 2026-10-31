@@ -1,92 +1,318 @@
-/**
- * Calculus I notes, one file per unit, rewritten from the section list of OpenStax Calculus Volume 1.
- * Math is \( \) and \[ \]. A dollar sign is not a delimiter in these files.
- */
 export const NOTES = {
-  u1: {
-    exam: 'u1',
-    title: 'Functions and limits',
-    chapters: '1–2',
-    file: 'u1-limits.html',
-    load: () => import('./content/u1-limits.html?raw').then((m) => m.default),
+  c1: {
+    exam: 'c1',
+    title: 'Differentiation',
+    chapters: 'Vol 1 Ch 1–3',
+    file: 'c1.html',
     sections: [
       { id: 's1', n: 1, title: 'Functions, briefly', lab: null, ch: [] },
-      { id: 's2', n: 2, title: 'The idea of a limit', lab: 'limits', ch: ['2'], topics: ['limits'], home: true },
+      {
+        id: 's2',
+        n: 2,
+        title: 'The idea of a limit',
+        lab: 'limits',
+        ch: ['2'],
+        topics: ['limits'],
+        home: true,
+      },
       { id: 's3', n: 3, title: 'Limit laws and the 0/0 form', lab: 'limits', ch: ['2'], topics: ['limits'] },
       { id: 's4', n: 4, title: 'Continuity', lab: 'limits', ch: ['2'], topics: ['continuity'] },
-      { id: 's5', n: 5, title: 'The precise definition', lab: 'limits', ch: ['2'], topics: ['epsilon-delta'] },
-      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
+      {
+        id: 's5',
+        n: 5,
+        title: 'The precise definition',
+        lab: 'limits',
+        ch: ['2'],
+        topics: ['epsilon-delta'],
+      },
+      {
+        id: 's6',
+        n: 6,
+        title: 'The derivative as a limit',
+        lab: 'secant',
+        ch: ['3'],
+        topics: ['derivatives'],
+        home: true,
+      },
+      {
+        id: 's7',
+        n: 7,
+        title: 'Power, product, and quotient rules',
+        lab: 'secant',
+        ch: ['3'],
+        topics: ['derivatives', 'symbolic'],
+      },
+      { id: 's8', n: 8, title: 'Rates of change on a line', lab: null, ch: ['3'], topics: ['derivatives'] },
+      { id: 's9', n: 9, title: 'Sine and cosine', lab: 'secant', ch: ['3'], topics: ['derivatives'] },
+      {
+        id: 's10',
+        n: 10,
+        title: 'The chain rule',
+        lab: null,
+        ch: ['3'],
+        topics: ['derivatives', 'symbolic'],
+      },
+      {
+        id: 's11',
+        title: 'Implicit differentiation',
+        lab: null,
+        ch: ['3'],
+        topics: ['derivatives'],
+        problems: ['u2.implicit'],
+        n: 11,
+      },
+      {
+        id: 's12',
+        n: 12,
+        title: 'Inverses, exponentials, and logarithms',
+        lab: null,
+        ch: ['3'],
+        topics: ['derivatives'],
+      },
+      { id: 's13', n: 13, title: 'Formula sheet', lab: null, ch: [] },
     ],
+    load: () => import('./content/c1.html?raw').then((m) => m.default),
   },
-  u2: {
-    exam: 'u2',
-    title: 'Derivatives',
-    chapters: '3',
-    file: 'u2-derivatives.html',
-    load: () => import('./content/u2-derivatives.html?raw').then((m) => m.default),
+  c2: {
+    exam: 'c2',
+    title: 'Applications of differentiation',
+    chapters: 'Vol 1 Ch 4',
+    file: 'c2.html',
     sections: [
-      { id: 's1', n: 1, title: 'The derivative as a limit', lab: 'secant', ch: ['3'], topics: ['derivatives'], home: true },
-      { id: 's2', n: 2, title: 'Power, product, and quotient rules', lab: 'secant', ch: ['3'], topics: ['derivatives', 'symbolic'] },
-      { id: 's3', n: 3, title: 'Rates of change on a line', lab: null, ch: ['3'], topics: ['derivatives'] },
-      { id: 's4', n: 4, title: 'Sine and cosine', lab: 'secant', ch: ['3'], topics: ['derivatives'] },
-      { id: 's5', n: 5, title: 'The chain rule', lab: null, ch: ['3'], topics: ['derivatives', 'symbolic'] },
-      { id: 's6', n: 6, title: 'Implicit differentiation and related rates', lab: 'rates', ch: ['3'], topics: ['related rates'], problems: ['u2.rates', 'u2.implicit'], home: true },
-      { id: 's7', n: 7, title: 'Inverses, exponentials, and logarithms', lab: null, ch: ['3'], topics: ['derivatives'] },
-      { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
-    ],
-  },
-  u3: {
-    exam: 'u3',
-    title: 'Applications of derivatives',
-    chapters: '4',
-    file: 'u3-applications.html',
-    load: () => import('./content/u3-applications.html?raw').then((m) => m.default),
-    sections: [
-      { id: 's1', n: 1, title: 'Linear approximation', lab: null, ch: ['4'], topics: ['linear approximation'] },
+      {
+        id: 's1',
+        n: 1,
+        title: 'Linear approximation',
+        lab: null,
+        ch: ['4'],
+        topics: ['linear approximation'],
+      },
       { id: 's2', n: 2, title: 'Extreme values', lab: null, ch: ['4'], topics: ['extrema'] },
-      { id: 's3', n: 3, title: 'The Mean Value Theorem', lab: null, ch: ['4'], topics: ['mean value theorem'] },
+      {
+        id: 's3',
+        n: 3,
+        title: 'The Mean Value Theorem',
+        lab: null,
+        ch: ['4'],
+        topics: ['mean value theorem'],
+      },
       { id: 's4', n: 4, title: 'The shape of a graph', lab: null, ch: ['4'], topics: ['curve sketching'] },
       { id: 's5', n: 5, title: 'Limits at infinity', lab: null, ch: ['4'], topics: ['curve sketching'] },
       { id: 's6', n: 6, title: 'Optimization', lab: 'box', ch: ['4'], topics: ['optimization'], home: true },
-      { id: 's7', n: 7, title: "L'Hôpital's rule", lab: null, ch: ['4'], topics: ["l'hôpital"] },
-      { id: 's8', n: 8, title: "Newton's method", lab: null, ch: ['4'], topics: ["newton's method"] },
-      { id: 's9', n: 9, title: 'Formula sheet', lab: null, ch: [] },
+      { id: 's7', n: 7, title: "Newton's method", lab: null, ch: ['4'], topics: ["newton's method"] },
+      {
+        id: 's8',
+        n: 8,
+        title: 'Related rates',
+        lab: 'rates',
+        ch: ['3'],
+        topics: ['related rates'],
+        problems: ['u2.rates'],
+        home: true,
+      },
+      { id: 's9', n: 9, title: 'Antiderivatives', lab: null, ch: ['5'], topics: ['antiderivatives'] },
+      {
+        id: 's10',
+        n: 10,
+        title: 'Exponentials and logarithms',
+        lab: null,
+        ch: ['5'],
+        topics: ['antiderivatives'],
+      },
+      { id: 's11', n: 11, title: 'Formula sheet', lab: null, ch: [] },
     ],
+    load: () => import('./content/c2.html?raw').then((m) => m.default),
   },
-  u4: {
-    exam: 'u4',
-    title: 'Integration',
-    chapters: '5',
-    file: 'u4-integration.html',
-    load: () => import('./content/u4-integration.html?raw').then((m) => m.default),
+  c3: {
+    exam: 'c3',
+    title: 'The definite integral and its applications',
+    chapters: 'Vol 1 Ch 5–6; Vol 2 Ch 2',
+    file: 'c3.html',
     sections: [
-      { id: 's1', n: 1, title: 'Antiderivatives', lab: null, ch: ['5'], topics: ['antiderivatives'] },
-      { id: 's2', n: 2, title: 'Area as a limit of sums', lab: 'riemann', ch: ['5'], topics: ['integration'], home: true },
-      { id: 's3', n: 3, title: 'The definite integral', lab: 'riemann', ch: ['5'], topics: ['definite integral'] },
-      { id: 's4', n: 4, title: 'The Fundamental Theorem', lab: 'accum', ch: ['5'], topics: ['fundamental theorem'], home: true },
-      { id: 's5', n: 5, title: 'Net change', lab: null, ch: ['5'], topics: ['definite integral'] },
-      { id: 's6', n: 6, title: 'Substitution', lab: null, ch: ['5'], topics: ['substitution', 'symbolic'] },
-      { id: 's7', n: 7, title: 'Exponentials and logarithms', lab: null, ch: ['5'], topics: ['antiderivatives'] },
-      { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
+      {
+        id: 's1',
+        n: 1,
+        title: 'Area as a limit of sums',
+        lab: 'riemann',
+        ch: ['5'],
+        topics: ['integration'],
+        home: true,
+      },
+      {
+        id: 's2',
+        n: 2,
+        title: 'The definite integral',
+        lab: 'riemann',
+        ch: ['5'],
+        topics: ['definite integral'],
+      },
+      {
+        id: 's3',
+        n: 3,
+        title: 'The Fundamental Theorem',
+        lab: 'accum',
+        ch: ['5'],
+        topics: ['fundamental theorem'],
+        home: true,
+      },
+      { id: 's4', n: 4, title: 'Net change', lab: null, ch: ['5'], topics: ['definite integral'] },
+      { id: 's5', n: 5, title: 'Substitution', lab: null, ch: ['5'], topics: ['substitution', 'symbolic'] },
+      { id: 's6', n: 6, title: 'Area between curves', lab: null, ch: ['v2.2'], topics: ['area'] },
+      {
+        id: 's7',
+        n: 7,
+        title: 'Volumes by slicing',
+        lab: 'solids',
+        ch: ['v2.2'],
+        topics: ['volumes'],
+        home: true,
+      },
+      { id: 's8', n: 8, title: 'Volumes by shells', lab: 'solids', ch: ['v2.2'], topics: ['volumes'] },
+      { id: 's9', n: 9, title: 'Work', lab: null, ch: ['v2.2'], topics: ['work'] },
+      { id: 's10', n: 10, title: 'Centres of mass', lab: null, ch: ['v2.2'] },
+      {
+        id: 's11',
+        n: 11,
+        title: 'Numerical integration',
+        lab: 'numint',
+        ch: ['v2.3'],
+        topics: ['numerical'],
+        home: true,
+      },
+      { id: 's12', n: 12, title: 'Formula sheet', lab: null, ch: [] },
     ],
+    load: () => import('./content/c3.html?raw').then((m) => m.default),
+  },
+  c4: {
+    exam: 'c4',
+    title: 'Techniques of integration',
+    chapters: 'Vol 2 Ch 2–3',
+    file: 'c4.html',
+    sections: [
+      {
+        id: 's1',
+        n: 1,
+        title: 'Integration by parts',
+        lab: null,
+        ch: ['v2.3'],
+        topics: ['parts', 'symbolic'],
+      },
+      {
+        id: 's2',
+        n: 2,
+        title: 'Trigonometric integrals',
+        lab: null,
+        ch: ['v2.3'],
+        topics: ['trig integrals'],
+      },
+      { id: 's3', n: 3, title: 'Trigonometric substitution', lab: null, ch: ['v2.3'], topics: ['trig sub'] },
+      { id: 's4', n: 4, title: 'Partial fractions', lab: null, ch: ['v2.3'], topics: ['partial fractions'] },
+      {
+        id: 's5',
+        n: 5,
+        title: 'Arc length and surface area',
+        lab: 'arc',
+        ch: ['v2.2'],
+        topics: ['arc length'],
+        home: true,
+      },
+      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+    load: () => import('./content/c4.html?raw').then((m) => m.default),
+  },
+  c5: {
+    exam: 'c5',
+    title: 'Parametric equations and polar coordinates',
+    chapters: 'Vol 2 Ch 7',
+    file: 'c5.html',
+    sections: [
+      {
+        id: 's1',
+        n: 1,
+        title: 'Parametric curves',
+        lab: 'parametric',
+        ch: ['v2.7'],
+        topics: ['parametric'],
+        home: true,
+      },
+      {
+        id: 's2',
+        n: 2,
+        title: 'Calculus on parametric curves',
+        lab: 'parametric',
+        ch: ['v2.7'],
+        topics: ['parametric'],
+      },
+      { id: 's3', n: 3, title: 'Polar coordinates', lab: null, ch: ['v2.7'], topics: ['polar'] },
+      {
+        id: 's4',
+        n: 4,
+        title: 'Area and length in polar',
+        lab: 'polar',
+        ch: ['v2.7'],
+        topics: ['polar'],
+        home: true,
+      },
+      { id: 's5', n: 5, title: 'Conic sections', lab: null, ch: ['v2.7'] },
+      { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+    load: () => import('./content/c5.html?raw').then((m) => m.default),
+  },
+  c6: {
+    exam: 'c6',
+    title: 'Exploring the infinite',
+    chapters: 'Vol 1 §4.8; Vol 2 Ch 3, 5–6',
+    file: 'c6.html',
+    sections: [
+      { id: 's1', n: 1, title: "L'Hôpital's rule", lab: null, ch: ['4'], topics: ["l'hôpital"] },
+      {
+        id: 's2',
+        n: 2,
+        title: 'Improper integrals',
+        lab: 'improper',
+        ch: ['v2.3'],
+        topics: ['improper'],
+        home: true,
+      },
+      { id: 's3', n: 3, title: 'Sequences', lab: null, ch: ['v2.5'] },
+      {
+        id: 's4',
+        n: 4,
+        title: 'Series and the geometric series',
+        lab: 'series',
+        ch: ['v2.5'],
+        topics: ['series'],
+        home: true,
+      },
+      { id: 's5', n: 5, title: 'The integral test', lab: 'series', ch: ['v2.5'], topics: ['series'] },
+      { id: 's6', n: 6, title: 'Comparison and ratio tests', lab: null, ch: ['v2.5'], topics: ['series'] },
+      { id: 's7', n: 7, title: 'Alternating series', lab: 'series', ch: ['v2.5'], topics: ['series'] },
+      { id: 's8', n: 8, title: 'Power series', lab: null, ch: ['v2.6'], topics: ['series'] },
+      {
+        id: 's9',
+        n: 9,
+        title: 'Taylor polynomials',
+        lab: 'taylor',
+        ch: ['v2.6'],
+        topics: ['taylor', 'symbolic'],
+        home: true,
+      },
+      { id: 's10', n: 10, title: 'Working with power series', lab: null, ch: ['v2.6'], topics: ['taylor'] },
+      { id: 's11', n: 11, title: 'Formula sheet', lab: null, ch: [] },
+    ],
+    load: () => import('./content/c6.html?raw').then((m) => m.default),
   },
 };
-
-export const notesForExam = (examId) => NOTES[examId] || null;
-
+export const notesForExam = (id) => NOTES[id] || null;
 export const allNotes = () => Object.values(NOTES);
-
-/** The section a practice problem draws on, by shared topics, then by lab. */
 export function sectionForProblem(tpl) {
-  const topics = new Set(tpl.topics || []);
-  for (const set of allNotes()) {
-    const named = set.sections.find((s) => s.problems?.includes(tpl.id));
-    if (named) return { set, section: named };
-    const inCh = set.sections.filter((s) => s.ch.includes(tpl.ch));
-    if (!inCh.length) continue;
-    const score = (s) => 10 * (s.topics || []).filter((t) => topics.has(t)).length + (s.lab && s.lab === tpl.lab ? 1 : 0);
-    const best = inCh.reduce((a, s) => (score(s) > score(a) ? s : a), inCh[0]);
-    return { set, section: best };
-  }
-  return null;
+  const set = NOTES[tpl.exam];
+  if (!set) return null;
+  const named = set.sections.find((s) => s.problems?.includes(tpl.id));
+  if (named) return { set, section: named };
+  const candidates = set.sections.filter((s) => s.ch.includes(tpl.ch));
+  if (!candidates.length) return null;
+  const score = (s) =>
+    10 * (s.topics || []).filter((t) => tpl.topics.includes(t)).length + (s.lab === tpl.lab && s.lab ? 1 : 0);
+  return { set, section: candidates.reduce((a, b) => (score(b) > score(a) ? b : a)) };
 }
