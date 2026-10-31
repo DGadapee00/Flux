@@ -41,7 +41,7 @@ for (const unit of REWORKED_UNITS)
             for (const [value, message] of p.traps) {
               const wrong = value(inst.$);
               assert.ok(Number.isFinite(wrong), t.id);
-              assert.ok(message.length > 20);
+              assert.ok((typeof message === 'function' ? message(inst.$) : message).length > 20);
               if (Math.abs(wrong - p.get(inst.$)) > Math.max(1e-6, Math.abs(p.get(inst.$)) * 0.01)) {
                 const g = grade(p, inst.$, String(wrong));
                 assert.equal(g.correct, false, t.id);

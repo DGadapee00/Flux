@@ -14,7 +14,7 @@ export const EXAMS = [
     title: 'Applications of differentiation',
     chapters: 'Vol 1 Ch 4',
     date: null,
-    labs: ['rates', 'box'],
+    labs: ['rates', 'box', 'can'],
   },
   {
     id: 'c3',
@@ -50,6 +50,7 @@ export const EXAMS = [
   },
 ];
 export const LAB_META = {
+  can: { id: 'can', exam: 'c2', title: 'Drink can', app: true },
   focus: { id: 'focus', exam: 'c1', title: 'Camera focus', app: true },
   limits: {
     id: 'limits',
