@@ -48,6 +48,8 @@ export const QUANTITIES = {
   press: { sym: 'p', name: 'Pressure', unit: 'Pa', unitName: 'pascal', equals: 'N/m²', from: 'p = F/A' },
   depth: { sym: 'h', name: 'Depth', unit: 'm', unitName: 'metre', from: 'p = \\rho g h' },
   Qflow: { sym: 'Q', name: 'Volume flow', unit: 'm^3/s', unitName: '', from: 'Q = A v' },
+  freq: { sym: 'f', name: 'Frequency', unit: 'Hz', unitName: 'hertz', from: 'f = 1/T' },
+  amp: { sym: 'A', name: 'Amplitude', unit: 'm', unitName: 'metre', from: 'x = A\\cos(\\omega t)' },
 };
 
 export const LAB_UNITS = {
@@ -94,6 +96,10 @@ export const LAB_UNITS = {
   bernoulli: ['press', 'v', 'Qflow', 'rhoL'],
   'brake-hydraulics': ['F', 'press', 'A'],
   'fire-hose': ['press', 'v', 'Qflow', 'depth'],
+  'spring-mass': ['m', 'k', 'T', 'omega', 'amp', 'v', 'x'],
+  pendulum: ['T', 'g', 'omega', 'theta'],
+  resonance: ['m', 'k', 'b', 'omega', 'amp', 'F'],
+  'skyscraper-damper': ['freq', 'T', 'm', 'I', 'g'],
 };
 
 const BASE = ['kg', 'm', 's', 'A'];

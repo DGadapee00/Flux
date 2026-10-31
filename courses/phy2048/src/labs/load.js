@@ -47,6 +47,10 @@ const loaders = {
   bernoulli: () => import('./bernoulli.js'),
   'brake-hydraulics': () => import('./brake-hydraulics.js'),
   'fire-hose': () => import('./fire-hose.js'),
+  'spring-mass': () => import('./spring-mass.js'),
+  pendulum: () => import('./pendulum.js'),
+  resonance: () => import('./resonance.js'),
+  'skyscraper-damper': () => import('./skyscraper-damper.js'),
 };
 
 const labs = createLabLoader(loaders);

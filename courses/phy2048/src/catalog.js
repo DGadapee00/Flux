@@ -102,8 +102,8 @@ export const UNITS = [
     title: 'Oscillations',
     chapters: ['15'],
     date: null,
-    labs: [],
-    coming: ['Spring and mass', 'Pendulum', 'Resonance', 'Skyscraper damper'],
+    labs: ['spring-mass', 'pendulum', 'resonance', 'skyscraper-damper'],
+    coming: [],
   },
   {
     id: 'u12',
@@ -208,6 +208,10 @@ export const LAB_META = {
   bernoulli: { id: 'bernoulli', exam: 'u10', title: 'Bernoulli' },
   'brake-hydraulics': { id: 'brake-hydraulics', exam: 'u10', title: 'Brake hydraulics', app: true },
   'fire-hose': { id: 'fire-hose', exam: 'u10', title: 'Fire hose', app: true },
+  'spring-mass': { id: 'spring-mass', exam: 'u11', title: 'Spring and mass' },
+  pendulum: { id: 'pendulum', exam: 'u11', title: 'Pendulum' },
+  resonance: { id: 'resonance', exam: 'u11', title: 'Resonance' },
+  'skyscraper-damper': { id: 'skyscraper-damper', exam: 'u11', title: 'Skyscraper damper', app: true },
 };
 
 export function examById(id) {

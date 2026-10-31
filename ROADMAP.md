@@ -45,7 +45,7 @@ subject libraries (a function written for one course serves the next), and one s
 | Course | Spine | Built | Scorecard | Next |
 |---|---|---|---|---|
 | PHY 2049 Physics II | [phy2049](docs/course-plans/phy2049.md) | reference | not yet scored | weekly drops; on the physics shell |
-| PHY 2048 Physics I | [phy2048](docs/course-plans/phy2048.md) | on the physics shell; Units 1–10 of 13 built | fails (Units 1–10 pass) | R5: Unit 11, oscillations |
+| PHY 2048 Physics I | [phy2048](docs/course-plans/phy2048.md) | on the physics shell; Units 1–11 of 13 built | fails (Units 1–11 pass) | R5: Unit 12, waves |
 | MAC 2311–2312 Calculus I and II | [mac2311-2312](docs/course-plans/mac2311-2312.md) | two modules, 4 units each, notes | fails | R4: merge into one (D28) |
 | MAC 2313 Calculus III | [mac2313](docs/course-plans/mac2313.md) | labs and bank, no notes | fails | R4 |
 | EGN 3311 Statics | [statics](docs/course-plans/statics.md) | 4 units with notes, 15 lab routes, 43 templates | passes | printed-answer audit and owner review |
@@ -137,7 +137,7 @@ EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come las
       setups, five cited applications, 30 computed predictions, 43 coached templates and the shared
       header/practice loop. Browser layout and interaction checks cover 380 and 1280. The complete
       printed-answer case audit and owner review remain; `standard` stays false.
-- [ ] **R5** PHY 2048 on the physics shell (Phase 2b is done; R5a catalog, bank and citations, R5b the page and Unit 1 are done, Units 2 to 10 are done, Units 11 to 13 follow, one per PR), from OpenStax *University Physics Volume 1* alone
+- [ ] **R5** PHY 2048 on the physics shell (Phase 2b is done; R5a catalog, bank and citations, R5b the page and Unit 1 are done, Units 2 to 11 are done, Units 12 to 13 follow, one per PR), from OpenStax *University Physics Volume 1* alone
       (D33): 13 units in book order, with drag, variable-mass, fluids, waves and sound added.
 - STA 3032: keep its checks passing. Rework only if the owner asks.
 
