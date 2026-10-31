@@ -57,8 +57,8 @@ export const UNITS = [
     title: 'Fixed-axis rotation',
     chapters: ['10'],
     date: null,
-    labs: ['rotor'],
-    coming: ['Moment of inertia', 'Massive pulley', 'Helicopter rotor'],
+    labs: ['rotor', 'inertia', 'massive-pulley', 'helicopter-rotor'],
+    coming: [],
   },
   {
     id: 'u7',
@@ -188,6 +188,9 @@ export const LAB_META = {
   'crumple-zone': { id: 'crumple-zone', exam: 'u5', title: 'Crumple zone', app: true },
   'crash-reconstruction': { id: 'crash-reconstruction', exam: 'u5', title: 'Crash reconstruction', app: true },
   rotor: { id: 'rotor', exam: 'u6', title: 'Rotor' },
+  inertia: { id: 'inertia', exam: 'u6', title: 'Moment of inertia' },
+  'massive-pulley': { id: 'massive-pulley', exam: 'u6', title: 'Massive pulley' },
+  'helicopter-rotor': { id: 'helicopter-rotor', exam: 'u6', title: 'Helicopter rotor', app: true },
 };
 
 export function examById(id) {

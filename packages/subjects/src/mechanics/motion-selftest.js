@@ -14,7 +14,7 @@ import {
   speedFromDisplacement, stoppingDistance, timeAtSpeed,
 } from './kinematics.js';
 import {
-  apparentWeight, atwood, bankedCurve, centripetalForce, crateOnTruck, hangingIncline, incline, newton, springCollar, verticalLoop,
+  apparentWeight, atwood, atwoodPulley, bankedCurve, centripetalForce, crateOnTruck, hangingIncline, incline, newton, springCollar, verticalLoop,
 } from './dynamics.js';
 import {
   collarPath, collarTrip, conservativeWork, gravitationalEnergy, kineticEnergy, pathPotential,
@@ -251,6 +251,18 @@ console.log('\nDynamics');
   approx(machine.T - m1 * g, m1 * machine.a, 1e-12, 'm1 equation closes');
   approx(atwood(2, 2, g).a, 0, 1e-12, 'equal masses do not accelerate');
   approx(atwood(2, 2, g).T, 2 * g, 1e-12, 'equal masses hang at their weight');
+
+  // A massive pulley: energy over a drop s gives the same a as the force equations.
+  const pulley = atwoodPulley({ m1: 1, m2: 3, I: 0.01, R: 0.1, g });
+  const sDrop = 0.4;
+  const v2 = 2 * pulley.a * sDrop;
+  const left = (3 - 1) * g * sDrop;
+  const right = 0.5 * (1 + 3 + 0.01 / 0.01) * v2;
+  approx(left, right, 1e-12, 'pulley energy matches the acceleration');
+  approx(pulley.T2 - pulley.T1, 0.01 * pulley.a / 0.01, 1e-12, 'the pulley torque is (T2 − T1) R');
+  approx(atwoodPulley({ m1: 1, m2: 3, I: 0, R: 0.1, g }).a, atwood(1, 3, g).a, 1e-12, 'a massless pulley is the plain Atwood machine');
+  const doubled = atwoodPulley({ m1: 2, m2: 6, I: 0.02, R: 0.1, g });
+  approx(doubled.a, pulley.a, 1e-12, 'doubling every mass, including the pulley, leaves a unchanged');
 
   const aC = v(centripetalAccel(3, 1), 0, 0);
   approx(mag(newton(4, aC)), centripetalForce(4, 3, 1), 1e-12, 'F = ma gives mv²/r');
