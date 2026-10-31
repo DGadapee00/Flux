@@ -2,7 +2,9 @@
  * Worked examples the labs can show. `tag` matches the notes after "Worked example · ".
  * `read` pairs a lab value with the number printed in the notes. notes-check allows 2%.
  */
-import { R_WATER, fromC, fromF, mixP, toC, waterTP } from '@flux/subjects/thermo';
+import { R_WATER, fromC, fromF, gas, mixP, toC, waterTP } from '@flux/subjects/thermo';
+
+const AIR = gas('air');
 
 const KJ = 1e3;
 
@@ -99,6 +101,18 @@ export const SETUPS = {
         scenario: 'isothermal',
         read: (c) => ({ W: [c.W / 1e3, 8.789], Q: [c.Q / 1e3, 8.789] }),
       },
+      {
+        tag: 'a compression',
+        lab: 'piston',
+        scenario: 'isothermal',
+        setup(s) {
+          s.p1 = 100e3;
+          s.T1 = fromC(30);
+          s.m = 1;
+          s.V2 = (s.m * AIR.R * s.T1) / (s.p1 * 3);
+        },
+        read: (c) => ({ W: [c.W / 1e3, -95.6], Q: [c.Q / 1e3, -95.6] }),
+      },
     ],
     s3: [
       {
@@ -106,6 +120,25 @@ export const SETUPS = {
         lab: 'piston',
         scenario: 'polytropic',
         read: (c) => ({ p2: [c.p2 / 1e3, 164.9], W: [c.W / 1e3, 11.34], T2: [toC(c.T2), 122.8], Q: [c.Q / 1e3, 2.534] }),
+      },
+      {
+        tag: 'polytropic with n = 1.4',
+        lab: 'piston',
+        scenario: 'polytropic',
+        setup(s) {
+          const T1 = fromC(200);
+          s.p1 = 800e3;
+          s.T1 = T1;
+          s.n = 1.4;
+          s.m = (s.p1 * 0.02) / (AIR.R * T1);
+          s.V2 = 0.05;
+        },
+        read: (c) => ({
+          p2: [c.p2 / 1e3, 221.8],
+          W: [c.W / 1e3, 12.27],
+          T2: [toC(c.T2), 54.81],
+          Q: [c.Q / 1e3, -0.1627],
+        }),
       },
     ],
     s5: [
@@ -137,6 +170,19 @@ export const SETUPS = {
         lab: 'kettle',
         scenario: 'eight',
         read: (c) => ({ Q: [c.q / 1e3, 335.0], t: [c.time, 216.4] }),
+      },
+      {
+        tag: 'half a kilogram',
+        lab: 'kettle',
+        scenario: 'half',
+        read: (c) => ({ Q: [c.q / 1e3, 167.5], t: [c.time, 181.8] }),
+      },
+      {
+        tag: 'a warmer start',
+        lab: 'kettle',
+        scenario: 'six',
+        setup(s) { s.T1 = fromC(60); },
+        read: (c) => ({ Q: [c.q / 1e3, 167.8], t: [c.time, 182.1] }),
       },
     ],
   },
