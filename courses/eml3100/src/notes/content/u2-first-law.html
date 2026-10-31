@@ -150,6 +150,14 @@ W_b &= \frac{164.9 \times 0.04 - 1000 \times 0.01}{1 - 1.3}\\
 \]
 <p>Both forms give 395.9 K in the example above. A slow adiabatic process of an ideal gas with constant specific heats is polytropic with \(n = k = c_p/c_v\), 1.4 for air near room temperature. OpenStax UP2 §3.6 derives that case.</p>
 </div>
+<div class="box ex"><span class="tag">Worked example · polytropic with n = 1.4</span>
+<p>Air at 800 kPa and 200 °C fills 0.02 m³. It expands to 0.05 m³ with \(n = 1.4\). The mass is \(PV/(RT) = 0.1178\) kg.</p>
+<p>The end pressure is 221.8 kPa, and the end temperature is 54.81 °C.</p>
+\[
+W_b = \frac{P_2V_2 - P_1V_1}{1-n} = 12.27\ \text{kJ}.
+\]
+<p>The polynomials give \(\Delta U = -12.44\) kJ, so \(Q = -0.1627\) kJ. Almost no heat crosses the boundary. Here \(n\) sits close to \(c_p/c_v\) for cool air, which is the adiabatic path.</p>
+</div>
 <div class="box ex"><span class="tag">Worked example · compressing air tenfold</span>
 <p>Air at 100 kPa and 300 K is compressed adiabatically and slowly to 1 MPa. With \(k = 1.4\), \(T_2 = 300 \times 10^{0.4/1.4} = 579.2\) K. With \(c_p\) varying with temperature, as the NASA polynomials give it, the same compression ends at 574.0 K. The constant-\(k\) answer is 5 K, about 2%, too hot in the temperature rise, because \(k\) falls as air warms.</p>
 </div>
@@ -246,7 +254,12 @@ Q = 1 \times 335.0 = 335.0\ \text{kJ}.
 </div>
 <div class="box ex"><span class="tag">Worked example · the eight-inch coil</span>
 <p>The same 1 kg on an 8-inch coil, rated 2100 W, still at 73.7%, receives 1548 W. The heat is the same 335.0 kJ, because the states did not change. The time falls to \(335000/1548 = 216.4\) s.</p>
-<p>Half a kilogram on the 6-inch coil takes half the heat, 167.5 kJ, and 181.8 s. Starting the full kilogram at 60 °C instead of 20 °C cuts the heat to 167.8 kJ and the time to 182.1 s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · half a kilogram</span>
+<p>Half a kilogram on the 6-inch coil takes half the heat, 167.5 kJ, and 181.8 s. The end states match the full kilogram, so \(h_2 - h_1\) does not change. Only the mass does.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a warmer start</span>
+<p>Start the full kilogram at 60 °C instead of 20 °C, still on the 6-inch coil. The heat falls to 167.8 kJ, and the time to 182.1 s. The boil is still 99.97 °C. Less of the enthalpy rise remains.</p>
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>A rigid tank and a constant-pressure piston do not take the same heat between the same temperatures. The piston does boundary work, so its heat is \(m\Delta h\). The tank does none, so its heat is \(m\Delta u\). Using one formula for the other misses \(P\Delta V\). For this pot that term is only 4 J. For steam leaving the dome it is a large share of the heat.</p>
