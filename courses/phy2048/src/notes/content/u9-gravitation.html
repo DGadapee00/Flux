@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gravitation</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">PHY 2048 · Physics I · Unit 9 · OpenStax University Physics Vol. 1, Ch 13, rewritten</div>
+  <h1>Gravitation</h1>
+  <p class="lede">Every mass attracts every other mass. The force falls as the square of the distance between centers. Near a planet that force looks like a constant weight. Farther out it is the force that holds an orbit, and the same law decides which launches return and which do not.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+    <span><i style="background:transparent;outline:1px dashed var(--border-hover)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The force</h3>
+    <a href="#s1"><span>1</span>Newton's law of gravitation</a>
+    <a href="#s2"><span>2</span>Gravitation near Earth's surface</a>
+    <h3>Part II · Energy and orbits</h3>
+    <a href="#s3"><span>3</span>Potential energy and escape</a>
+    <a href="#s4"><span>4</span>Orbits and their energy</a>
+    <a href="#s5"><span>5</span>Kepler's laws</a>
+    <h3>Reference</h3>
+    <a href="#s6"><span>6</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The force</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Newton's law of gravitation</h2>
+<p>Two point masses attract each other along the line that joins them. The magnitude is</p>
+\[
+F = \frac{G m_1 m_2}{r^2}.
+\]
+<p>Here \(r\) is the distance between the masses, and</p>
+\[
+G = 6.6743 \times 10^{-11}\ \mathrm{N \cdot m^2/kg^2}.
+\]
+<p>The book’s examples use \(6.67 \times 10^{-11}\). The two values differ in the fourth figure. A printed answer from the book still grades as correct here. The force on each mass has the same size. The directions are opposite. That is Newton’s third law, and it does not need the masses to be equal.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Newton compared a falling apple with the Moon. At Earth’s surface the acceleration is \(g\). The Moon sits about 60 Earth radii out, and its centripetal acceleration is about \(60^2\) times smaller. An inverse-square force produces that ratio. The same \(G\) then has to serve for the apple, the Moon, and a pair of lead spheres. Cavendish measured \(G\) with a torsion balance. Two 1.0 kg masses, 1.0 m apart, attract each other with \(6.67 \times 10^{-11}\ \mathrm{N}\). That is a very small force. Gravity dominates only when at least one mass is huge, or when the other forces have been cancelled.</p>
+<p>The law is exact for point masses. It is also exact for a spherically symmetric body, with \(r\) measured from the center. A planet can be replaced by a point at its center when you are outside it. Inside it, only the mass closer to the center than you are still pulls. The shell outside you pulls every way at once and adds nothing.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The distance in the law is center to center. Square it. The two masses enter as a product, so swapping them does not change the force.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two vehicles</span>
+<p>Two vehicles, each of mass \(9000\ \mathrm{kg}\), are at rest relative to each other. Their centers are \(10.0\ \mathrm{m}\) apart. The force is</p>
+\[
+F = \frac{(6.6743 \times 10^{-11})(9000)(9000)}{10.0^2} = 5.406 \times 10^{-5}\ \mathrm{N}.
+\]
+<p>The initial acceleration of either vehicle is</p>
+\[
+a = \frac{F}{9000} = 6.007 \times 10^{-9}\ \mathrm{m/s^2}.
+\]
+<p>The book prints \(5.4 \times 10^{-5}\ \mathrm{N}\) and \(6.0 \times 10^{-9}\ \mathrm{m/s^2}\), with its rounder \(G\). The vehicles are \(4.0\ \mathrm{m}\) across, so each must drift \(3.0\ \mathrm{m}\) before they touch. The force grows as they close, and a constant-acceleration estimate of the impact is only a sketch. The lab draws the force at the initial separation. The circular speed it also shows is the speed one vehicle would need to orbit the other. The example itself has them at rest.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Dividing by \(r\) once. The denominator is \(r^2\). Halving a separation that was already given center to center. The \(10.0\ \mathrm{m}\) is not a diameter. Dividing the force by the sum of the masses. Each mass is accelerated by \(F\) divided by itself.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Real vehicles are not spheres, and the estimate in the section says so. At galaxy scales the point-mass step is better: a galaxy’s diameter is about a twenty-fifth of the gap to its neighbor, so the centers carry the force. The same law does not include dark matter as a separate kind of pull. Whatever mass is there, spherical or not, enters as \(m\).</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Gravitation near Earth's surface</h2>
+<p>At the surface of a spherical planet the distance in the force law is the planet’s radius \(R\). The acceleration of a test mass is</p>
+\[
+g = \frac{GM}{R^2}.
+\]
+<p>The test mass cancelled. That is why a feather and a hammer, with air removed, fall together. Solving for the planet gives</p>
+\[
+M = \frac{g R^2}{G}.
+\]
+<p>Above the surface, at a height \(h\), the distance from the center is \(R + h\), not \(h\) and not \(R\):</p>
+\[
+g(h) = \frac{GM}{(R + h)^2}.
+\]
+<div class="box why"><span class="tag">Derivation</span>
+<p>Start from \(F = GMm/r^2\) and Newton’s second law, \(F = ma\). The \(m\) divides out and \(a\) is \(g\). Near the surface, \(h\) is a few kilometres and \(R\) is thousands, so \((R + h)^2\) and \(R^2\) differ by a fraction of about \(2h/R\). A building does not need a new \(g\). At \(400\ \mathrm{km}\), \(h/R\) is about \(0.06\), and the fraction is no longer a rounding error.</p>
+<p>Inside a uniform sphere the mass that pulls is the mass within your radius \(r\). That mass is the full mass times \((r/R)^3\). Put it into the field formula with distance \(r\):</p>
+\[
+g(r) = \frac{GM}{R^3}\, r, \qquad r \lt R.
+\]
+<p>The field grows in proportion to \(r\). It is zero at the center, where every direction is outward. Earth’s density is not uniform, so the real profile bends away from that straight line. The straight line is the uniform model.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Outside, measure \(r\) from the center and add the height to the radius. Inside a uniform sphere, \(g\) is proportional to \(r\). It is not zero in a mine, and it is not the outside formula either.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · surface gravity</span>
+<p>The book takes Earth’s mass as \(5.96 \times 10^{24}\ \mathrm{kg}\) and its radius as \(6.37 \times 10^{6}\ \mathrm{m}\). With this bank’s \(G\),</p>
+\[
+g = \frac{(6.6743 \times 10^{-11})(5.96 \times 10^{24})}{(6.37 \times 10^{6})^2} = 9.803\ \mathrm{m/s^2}.
+\]
+<p>The standard value used for the surface is \(9.80\ \mathrm{m/s^2}\). Turn that around. A planet with \(g = 9.80\ \mathrm{m/s^2}\) and this radius has mass</p>
+\[
+M = \frac{(9.80)(6.37 \times 10^{6})^2}{6.6743 \times 10^{-11}} = 5.958 \times 10^{24}\ \mathrm{kg}.
+\]
+<p>The book prints \(5.95 \times 10^{24}\ \mathrm{kg}\) from \(G = 6.67 \times 10^{-11}\). The lab’s surface scenario uses the book’s \(5.96 \times 10^{24}\ \mathrm{kg}\), so the field on the readout is \(9.803\ \mathrm{m/s^2}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · 400 km up</span>
+<p>The station’s altitude in the section is \(400\ \mathrm{km} = 4.00 \times 10^{5}\ \mathrm{m}\). The distance from Earth’s center is</p>
+\[
+r = 6.37 \times 10^{6} + 4.00 \times 10^{5} = 6.77 \times 10^{6}\ \mathrm{m}.
+\]
+\[
+g = \frac{(6.6743 \times 10^{-11})(5.96 \times 10^{24})}{(6.77 \times 10^{6})^2} = 8.679\ \mathrm{m/s^2}.
+\]
+<p>The book prints \(8.67\ \mathrm{m/s^2}\). That is still \(89\%\) of \(9.80\). An astronaut there is not past Earth’s gravity. A scale under the astronaut’s feet reads zero because the astronaut and the station fall together. The force has not gone.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a weightless day</span>
+<p>Apparent weight at the equator is zero when the whole of \(g\) is used as centripetal acceleration. With \(g = 9.80\ \mathrm{m/s^2}\) and \(R = 6.37 \times 10^{6}\ \mathrm{m}\),</p>
+\[
+v = \sqrt{gR} = \sqrt{(9.80)(6.37 \times 10^{6})} = 7901\ \mathrm{m/s}.
+\]
+<p>The length of that day is one full turn:</p>
+\[
+T = \frac{2\pi R}{v} = 5066\ \mathrm{s},
+\]
+<p>about \(84.4\) minutes. The book prints \(7.91 \times 10^{3}\ \mathrm{m/s}\) and \(5.06 \times 10^{3}\ \mathrm{s}\). The same pair is the speed and the period of a circular orbit at the surface. Air makes that orbit impossible. A few hundred kilometres up, the same idea is how the station flies. The lab’s surface scenario is that orbit, with the planet’s mass set so the surface field is \(9.80\ \mathrm{m/s^2}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Putting the height in as \(r\), and leaving the radius out. Putting \(R\) in and ignoring a height of hundreds of kilometres. Doubling the height and expecting \(r\) to double. The center was already one radius away. Treating \(g\) as \(9.80\ \mathrm{m/s^2}\) all the way to the station. Calling the astronaut weightless because the force vanished. The scale vanished. The force did not. Using the outside formula in a tunnel. Inside, \(g\) grows with \(r\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Earth rotates, and the equator moves at about \(460\ \mathrm{m/s}\). The centripetal acceleration is about \(0.034\ \mathrm{m/s^2}\), a third of a percent of \(g\). Earth is also fatter at the equator by about \(30\ \mathrm{km}\). Both effects make a person weigh less in the tropics than at a pole. The spherical, non-rotating planet in this section is the first model. The zero-apparent-weight day ignores the air that would strip the surface long before the spin reached orbital speed.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Energy and orbits</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Potential energy and escape</h2>
+<p>Near the ground, \(\Delta U = mgh\) is enough, because \(g\) hardly changes. Over a distance comparable to \(R\), integrate the force. Move a mass \(m\) from \(r_1\) to \(r_2\), radially, so the force is opposite the step. The arc that follows does no work, because the force is perpendicular to it. The change is</p>
+\[
+\Delta U = GMm \left(\frac{1}{r_1} - \frac{1}{r_2}\right).
+\]
+<p>Choose \(U = 0\) at infinity. Then</p>
+\[
+U = -\frac{GMm}{r}.
+\]
+<p>Closer in, \(U\) is more negative. Separating the masses takes positive work. The total mechanical energy is \(E = K + U\). If \(E\) is negative, the mass is bound: \(K\) runs out while \(r\) is still finite. If \(E\) is zero, the mass arrives at infinity with \(K = 0\). If \(E\) is positive, it arrives with speed to spare.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Set \(E = 0\) at the surface, with the launch speed called the escape speed, and with the far end at rest:</p>
+\[
+\frac{1}{2} m v_{\mathrm{esc}}^2 - \frac{GMm}{R} = 0.
+\]
+<p>The mass cancels. </p>
+\[
+v_{\mathrm{esc}} = \sqrt{\frac{2GM}{R}}.
+\]
+<p>The same formula works from any starting \(r\), not only from the surface. Compare it with the circular-orbit speed derived in the next section, \(\sqrt{GM/r}\). Escape is larger by \(\sqrt{2}\), about \(41\%\), not by a factor of two. Twice the speed would be four times the kinetic energy. Escape only needs twice the kinetic energy of the circle, because the circle’s total energy is already \(-\,GMm/(2r)\) and escape only has to climb to zero.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Potential energy is zero at infinity and negative everywhere else. Escape is the launch whose total energy is zero. It is \(\sqrt{2}\) times the circular speed at the same place.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · escape from Earth</span>
+<p>From the surface, with \(M = 5.96 \times 10^{24}\ \mathrm{kg}\) and \(R = 6.37 \times 10^{6}\ \mathrm{m}\),</p>
+\[
+v_{\mathrm{esc}} = \sqrt{\frac{2(6.6743 \times 10^{-11})(5.96 \times 10^{24})}{6.37 \times 10^{6}}} = 1.118 \times 10^{4}\ \mathrm{m/s}.
+\]
+<p>The book prints \(1.12 \times 10^{4}\ \mathrm{m/s}\). From Earth’s orbit, the Sun has mass \(1.99 \times 10^{30}\ \mathrm{kg}\) and the distance is \(1.50 \times 10^{11}\ \mathrm{m}\):</p>
+\[
+v_{\mathrm{esc}} = 4.208 \times 10^{4}\ \mathrm{m/s}.
+\]
+<p>The book prints \(4.21 \times 10^{4}\ \mathrm{m/s}\). Earth already moves around the Sun at about \(30\ \mathrm{km/s}\), so a probe that leaves along Earth’s motion needs much less than \(42\ \mathrm{km/s}\) of extra speed. The lab’s escape scenario is the Earth-surface number. The launch factor on the slider is \(1\) at a circle and \(\sqrt{2}\) at escape.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the Soyuz</span>
+<p>A \(9000\ \mathrm{kg}\) craft starts at rest on the surface and ends in the \(400\ \mathrm{km}\) orbit, where \(r = 6.77 \times 10^{6}\ \mathrm{m}\). The potential energy rises by</p>
+\[
+\Delta U = GMm\left(\frac{1}{R} - \frac{1}{r}\right) = 3.321 \times 10^{10}\ \mathrm{J}.
+\]
+<p>The book prints \(3.32 \times 10^{10}\ \mathrm{J}\). In the circular orbit the total energy and the kinetic energy have the same size:</p>
+\[
+E = -\frac{GMm}{2r} = -2.644 \times 10^{11}\ \mathrm{J}, \qquad K = 2.644 \times 10^{11}\ \mathrm{J}.
+\]
+<p>The book prints \(\pm 2.65 \times 10^{11}\ \mathrm{J}\). The craft started at rest, so its surface energy was the surface potential, \(-GMm/R\). The energy that must be supplied is</p>
+\[
+\Delta E = E - U_{\mathrm{surface}} = 2.976 \times 10^{11}\ \mathrm{J}.
+\]
+<p>The book prints \(2.98 \times 10^{11}\ \mathrm{J}\). Most of that supply is kinetic energy. The climb in \(U\) is about an eighth of it. The orbit lab’s first scenario is this craft.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(mgh\) with \(g = 9.81\ \mathrm{m/s^2}\) out to the station. Over \(400\ \mathrm{km}\) the field drops, and the integral is the \(1/r\) difference. Using the altitude as if it were \(r\). Forgetting the factor \(2\) under the escape square root, which reports the circular speed. Doubling the circular speed instead of multiplying by \(\sqrt{2}\). Dropping the minus sign on the orbital energy. A bound orbit is negative. Counting only \(\Delta U\), or only \(K\), as the energy that must be supplied. Both belong in \(\Delta E\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Escape here ignores the atmosphere. A real launch spends a large share of its energy on drag and on lifting the fuel, not only on the payload. Earth’s spin gives the equator a free \(460\ \mathrm{m/s}\), which is why many launch sites sit at low latitude. The Sun’s escape speed from Earth’s orbit ignores the help of Earth’s own \(30\ \mathrm{km/s}\) and the gravity assists the section describes. Those are extra, on top of the one-body energy.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Orbits and their energy</h2>
+<p>A satellite in a circular orbit has one force on it, the attraction of the planet. That force is the centripetal force:</p>
+\[
+\frac{GMm}{r^2} = \frac{m v^2}{r}.
+\]
+<p>Cancel \(m\), and multiply through by \(r\):</p>
+\[
+v = \sqrt{\frac{GM}{r}}.
+\]
+<p>The satellite’s mass is not in the speed. A heavier station in the same orbit is not slower. The period is the circumference divided by that speed,</p>
+\[
+T = \frac{2\pi r}{v} = 2\pi \sqrt{\frac{r^3}{GM}}.
+\]
+<p>Square it and Kepler’s third law for a circle is already there: \(T^2\) is proportional to \(r^3\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The kinetic energy of the circle follows at once. Multiply the force equation by \(r/2\):</p>
+\[
+K = \frac{1}{2} m v^2 = \frac{GMm}{2r}.
+\]
+<p>Add the potential energy:</p>
+\[
+E = K + U = \frac{GMm}{2r} - \frac{GMm}{r} = -\frac{GMm}{2r}.
+\]
+<p>The total energy is negative, and it equals \(-K\). The potential energy is \(-2K\). Raising the orbit, to a larger \(r\), makes \(E\) less negative. You must supply energy to climb, even though the satellite ends up slower. A lower orbit is faster and more tightly bound.</p>
+<p>Launch from one point with a tangential speed. Call the circular speed at that point \(v_c\), and write the launch as \(f\, v_c\). The specific energy and the specific angular momentum fix a conic. Its eccentricity is \(|1 - f^2|\). At \(f = 1\) the path is a circle. Below that, the launch point is the far end of an ellipse. Above it, and still below \(\sqrt{2}\), the launch point is the near end. At \(f = \sqrt{2}\) the energy is zero and the path does not close.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Circular speed is \(\sqrt{GM/r}\). The period grows faster than the radius: double \(r\) and \(T\) grows by \(2^{3/2} = 2.828\). The satellite’s mass cancels.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the station</span>
+<p>Use the \(400\ \mathrm{km}\) radius from the previous section, \(r = 6.77 \times 10^{6}\ \mathrm{m}\), and \(M = 5.96 \times 10^{24}\ \mathrm{kg}\).</p>
+\[
+v = \sqrt{\frac{GM}{r}} = 7665\ \mathrm{m/s}, \qquad T = 2\pi \sqrt{\frac{r^3}{GM}} = 5549\ \mathrm{s}.
+\]
+<p>The book prints \(7.67 \times 10^{3}\ \mathrm{m/s}\) and \(5.55 \times 10^{3}\ \mathrm{s}\), about \(92\) minutes. The station’s mass is not in the example, because the speed does not use it. The lab carries \(4.20 \times 10^{5}\ \mathrm{kg}\) so you can double it and watch the speed stay put. The drawing is to scale. A \(400\ \mathrm{km}\) shell sits close to the surface, which is the point of the \(8.679\ \mathrm{m/s^2}\) field.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving the satellite’s mass in the speed. Using the altitude as the circumference, so the period wraps around \(h\) instead of around \(r\). Using the surface speed for a high orbit. Expecting a higher orbit to be faster. The higher orbit is slower, and its period is longer by more than the extra path length. Calling the orbit a place with no gravity. The acceleration toward Earth is \(g(h)\), and it is the centripetal acceleration.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A low orbit drags on the upper atmosphere, so a real station reboosts. The orbit is not a perfect circle, and Earth is not a perfect sphere. GPS satellites, which the section places at about \(20\,000\ \mathrm{km}\), are high enough that the drag is gone and the timing corrections are about Earth’s shape and about relativity. Those corrections are outside this model. The one-body circle is the skeleton they correct.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Kepler's laws</h2>
+<p>An inverse-square force produces a conic. Negative energy is an ellipse, or a circle, which is an ellipse of eccentricity zero. Zero energy is a parabola. Positive energy is a hyperbola. The star, when it is much heavier than the planet, sits at one focus.</p>
+<p>The closest point is perihelion. The farthest is aphelion. The semi-major axis \(a\) is half the long axis:</p>
+\[
+a = \frac{1}{2}(r_{\mathrm{peri}} + r_{\mathrm{aph}}).
+\]
+<p>Kepler’s second law is equal areas in equal times. The force is radial, so the angular momentum \(L\) about the star is constant. A thin triangle swept in \(\Delta t\) has area \(L\,\Delta t /(2m)\). The areal velocity does not depend on where the planet is. Near the star the wedge is a long thin arc. Far away it is a short wide one. The planet is fastest at perihelion.</p>
+<p>Kepler’s third law extends the circular period. Replace \(r\) with \(a\):</p>
+\[
+T^2 = \frac{4\pi^2}{GM}\, a^3.
+\]
+<p>The eccentricity is not in it. A long comet and a round planet with the same \(a\) share a period. The energy of the ellipse is the circular formula with \(a\) in place of \(r\),</p>
+\[
+E = -\frac{GMm}{2a}.
+\]
+<p>The speed at a distance \(r\) then follows from \(E = K + U\):</p>
+\[
+v = \sqrt{GM\left(\frac{2}{r} - \frac{1}{a}\right)}.
+\]
+<p>On a circle, \(r = a\) and \(K = -E\). On an ellipse that equality holds only as an average over the orbit. At one point, \(K = E - U\), and it is largest at perihelion.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Solve the third law for the central mass, which is how a moon weighs its planet:</p>
+\[
+M = \frac{4\pi^2 a^3}{G T^2}.
+\]
+<p>The moon’s mass never enters, as long as it is small. Solve the same law for \(a\) when the period is the thing you measured. Halley’s comet returns every \(75.3\) years. Convert the year as \(365\) days before you cube-root, because \(T\) in the formula is in seconds when \(G\) is in SI.</p>
+<p>A transfer between two circular orbits uses an ellipse whose perihelion is the inner radius and whose aphelion is the outer one. Then \(a\) is the average of the two radii, and the trip from one end to the other is half a period. At the inner end the ellipse is faster than the inner circle. The difference is the boost. At the outer end the ellipse is slower than the outer circle, and a second boost has to make up the gap. The section describes that path and leaves the arithmetic as a challenge. The lab will draw any such ellipse.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Equal times sweep equal areas, not equal arcs. The period follows \(a\) and \(M\), not the eccentricity. Double \(a\) and the period grows by \(2.828\). Double \(M\) and it falls by \(0.707\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · equal areas</span>
+<p>Take an ellipse with \(a = 1.50 \times 10^{11}\ \mathrm{m}\), one astronomical unit, and eccentricity \(0.60\). A wedge that lasts \(8\%\) of the period has area</p>
+\[
+A = \pi a b \times 0.08 = 4.524 \times 10^{21}\ \mathrm{m^2},
+\]
+<p>with \(b = a\sqrt{1 - e^2}\). The area does not depend on where the wedge sits. The arc does. Starting at aphelion the arc is \(3.828 \times 10^{10}\ \mathrm{m}\). Starting at perihelion the same time covers \(1.303 \times 10^{11}\ \mathrm{m}\), about \(3.4\) times longer. The lab draws both wedges. They are the same time and the same area. The white one is the one the readout measures.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · Halley's comet</span>
+<p>The period is \(75.3\) years and the Sun’s mass is \(2.00 \times 10^{30}\ \mathrm{kg}\). One year is \(365\) days. The semi-major axis is</p>
+\[
+a = 2.672 \times 10^{12}\ \mathrm{m} = 17.81\ \mathrm{AU}.
+\]
+<p>The book prints \(2.67 \times 10^{12}\ \mathrm{m}\), or \(17.8\ \mathrm{AU}\), with \(1\ \mathrm{AU} = 1.50 \times 10^{11}\ \mathrm{m}\). Perihelion is \(0.586\ \mathrm{AU}\). Aphelion is</p>
+\[
+r_{\mathrm{aph}} = 2a - r_{\mathrm{peri}} = 35.03\ \mathrm{AU}.
+\]
+<p>The book prints \(35.0\ \mathrm{AU}\). The eccentricity is \(0.967\). The comet spends most of the period far out and slow, and a short time close in and fast. The speeds follow the vis-viva formula: about \(5.47 \times 10^{4}\ \mathrm{m/s}\) at perihelion and \(914\ \mathrm{m/s}\) at aphelion. The section stops at the aphelion. The speeds are the same orbit.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting equal arcs, or equal angles, from equal times. The areas are equal. The arcs are not, unless the orbit is a circle. Putting the period in as a number of years. The formula wants seconds. Using the perihelion as \(a\). The period fixes \(a\), and the perihelion only splits \(a\) into a near end and a far end. Forgetting the half when you add the two radii of a transfer. Reporting the full ellipse period as the one-way trip. Subtracting the speeds in the wrong order, or quoting the escape increment instead of the transfer increment.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The star was fixed, which is fair when it is far heavier than the planet. Earth and the Moon both orbit their common center, and the section’s Moon-mass discussion says so. A transfer to Mars also has to meet Mars, not only Mars’s orbit, and it has to climb out of Earth’s gravity and land. The one-body ellipse is the middle of that trip. Other planets, drag, and the rocket’s own mass are left out of the wedge and the period.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Formula sheet</h2>
+\[
+F = \frac{G m_1 m_2}{r^2}, \qquad G = 6.6743 \times 10^{-11}\ \mathrm{N \cdot m^2/kg^2}
+\]
+\[
+g = \frac{GM}{r^2}, \qquad M = \frac{g R^2}{G}, \qquad g(r) = \frac{GM}{R^3}\, r \quad (r \lt R,\ \text{uniform})
+\]
+\[
+U = -\frac{GMm}{r}, \qquad \Delta U = GMm\left(\frac{1}{r_1} - \frac{1}{r_2}\right)
+\]
+\[
+v_{\mathrm{esc}} = \sqrt{\frac{2GM}{r}}, \qquad v = \sqrt{\frac{GM}{r}}, \qquad T = 2\pi\sqrt{\frac{r^3}{GM}}
+\]
+\[
+E = -\frac{GMm}{2a}, \qquad K = -E \quad (\text{a circle; an ellipse only on average})
+\]
+\[
+T^2 = \frac{4\pi^2}{GM}\, a^3, \qquad \frac{dA}{dt} = \frac{L}{2m}, \qquad v = \sqrt{GM\left(\frac{2}{r} - \frac{1}{a}\right)}
+\]
+</section>
+
+</main>
+</body>
+</html>

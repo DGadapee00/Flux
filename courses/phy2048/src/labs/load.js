@@ -39,6 +39,9 @@ const loaders = {
   ladder: () => import('./ladder.js'),
   'stress-strain': () => import('./stress-strain.js'),
   'car-balance': () => import('./car-balance.js'),
+  orbit: () => import('./orbit.js'),
+  kepler: () => import('./kepler.js'),
+  'iss-orbit': () => import('./iss-orbit.js'),
 };
 
 const labs = createLabLoader(loaders);

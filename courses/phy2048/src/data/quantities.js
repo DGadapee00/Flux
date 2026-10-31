@@ -82,6 +82,9 @@ export const LAB_UNITS = {
   ladder: ['F', 'N', 'f', 'mu'],
   'car-balance': ['F', 'm', 'x'],
   'stress-strain': ['F', 'sigma', 'eps', 'Y'],
+  orbit: ['v', 'T', 'r', 'm', 'K', 'U'],
+  kepler: ['T', 'r', 'L', 'm'],
+  'iss-orbit': ['v', 'T', 'g', 'r', 'm'],
 };
 
 const BASE = ['kg', 'm', 's', 'A'];

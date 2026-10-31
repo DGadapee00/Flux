@@ -33,7 +33,9 @@ import {
   pendulumPeriod, physicalPendulumPeriod, shm, shmEnergy, springOmega, springPeriod,
 } from './oscillation.js';
 import {
-  circularOrbitEnergy, circularOrbitPeriod, circularOrbitSpeed, escapeSpeed, gravityEnergy,
+  circularOrbitEnergy, circularOrbitPeriod, circularOrbitSpeed, conic, eccentricFromMean,
+  eccentricFromTrue, ellipseRadius, escapeSpeed, gravityEnergy, massFromPeriod, massFromSurface,
+  rk4Central, semiMajorAxis, sweptArea, trueFromEccentric, wedgeArc, wedgeArcChord, wedgeArea,
   gravityField, gravityForce,
 } from './gravitation.js';
 
@@ -451,6 +453,36 @@ console.log('\nGravitation');
   approx(vCirc * vCirc / r, gravityField(M, r), 1e-12, 'a circular orbit falls at the field strength');
   approx(circularOrbitPeriod(M, r), (2 * Math.PI * r) / vCirc, 1e-12, 'the period is one lap at the orbital speed');
   approx(circularOrbitEnergy(m, M, r), kineticEnergy(m, vCirc) + u, 1e-9, 'orbit energy is kinetic plus potential');
+
+  const launched = conic(M, r, vCirc);
+  approx(launched.e, 0, 1e-12, 'a circular launch has zero eccentricity');
+  approx(launched.a, r, 1e-9, 'a circular orbit’s semi-major axis is the radius');
+  const escape = conic(M, r, vEsc);
+  approx(escape.specE, 0, 1e-6, 'escape is the zero of specific energy');
+  ok(!escape.bound, 'escape is not bound');
+
+  const T = circularOrbitPeriod(M, r);
+  approx(massFromPeriod(T, r), M, 1e-9 * M, 'Kepler’s third law returns the central mass');
+  approx(semiMajorAxis(M, T), r, 1e-6, 'the semi-major axis comes back from the period');
+  approx(massFromSurface(gravityField(M, r), r), M, 1e-9 * M, 'surface gravity returns the mass');
+
+  const end = rk4Central({ M, x: r, y: 0, vx: 0, vy: vCirc, dt: T / 8000, steps: 1600 });
+  approx(end.specE, launched.specE, 1e-9 * Math.abs(launched.specE), 'RK4 keeps the specific energy');
+  approx(end.h, launched.h, 1e-9 * launched.h, 'RK4 keeps the specific angular momentum');
+
+  const ecc = 0.4;
+  const nu = 1.2;
+  const E = eccentricFromTrue(nu, ecc);
+  approx(trueFromEccentric(E, ecc), nu, 1e-12, 'true anomaly round-trips');
+  approx(eccentricFromMean(E - ecc * Math.sin(E), ecc), E, 1e-12, 'Kepler’s equation round-trips');
+  const frac = 0.15;
+  approx(wedgeArea(r, 0, frac), Math.PI * r * r * frac, 1e-9 * r * r, 'a circular wedge is a sector');
+  approx(wedgeArea(2 * r, ecc, frac), 4 * wedgeArea(r, ecc, frac), 1e-9 * r * r, 'area scales with a squared');
+  approx(wedgeArc(r, 0, 0, 0.25), (Math.PI * r) / 2, 1e-8 * r, 'a quarter circle has the right arc');
+  approx(wedgeArcChord(r, ecc, nu, frac), wedgeArc(r, ecc, nu, frac), 1e-8 * r, 'chord and speed arcs agree');
+  approx(wedgeArc(2 * r, ecc, nu, frac), 2 * wedgeArc(r, ecc, nu, frac), 1e-8 * r, 'arc length doubles with a');
+  const area = sweptArea(M, r, ecc, nu, frac);
+  approx(area, wedgeArea(r, ecc, frac), 1e-6 * wedgeArea(r, ecc, frac), 'RK4 sweeps the Kepler area');
 }
 
 console.log('\nParticle kinetics');
