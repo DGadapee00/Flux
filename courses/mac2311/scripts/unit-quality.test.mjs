@@ -1,8 +1,9 @@
+import { citeCases } from '../src/problems/sources.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { REWORKED_UNITS } from '../src/data/rework.js';
 import { EXAMS, LAB_META } from '../src/data/catalog.js';
-import { PROBLEMS } from '../src/problems/index.js';
+import { PROBLEMS, LEGACY_PROBLEMS } from '../src/problems/index.js';
 import { instance, grade, render } from '../src/problems/engine.js';
 import { SETUPS } from '../src/notes/setups.js';
 import { predictionsFor } from '../src/data/predictions.js';
@@ -54,3 +55,5 @@ for (const unit of REWORKED_UNITS)
       }
     }
   });
+
+test('legacy setup labels are not promoted to published citations',()=>{assert.equal(citeCases(LEGACY_PROBLEMS[0]),LEGACY_PROBLEMS[0]);});
