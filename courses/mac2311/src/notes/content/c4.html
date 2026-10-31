@@ -27,6 +27,14 @@
 <div class="box out"><span class="tag">What it leaves out</span>
 <p>Repeated parts on \(x^n e^x\) can be organised in a table, the tabular method. It is a bookkeeping shortcut for the same formula, and the text shows it.</p>
 </div>
+
+<h3>Choosing a useful reduction</h3>
+<p>Parts needs differentiable factors and an integrable remaining product. It never promises shorter work. For \(I_n=\int x^ne^x\,dx\), taking \(u=x^n\) and \(dv=e^x dx\) gives \(I_n=x^ne^x-nI_{n-1}\). The exponent falls by one. Repeating eventually reaches \(I_0=e^x\). This reduction explains the alternating coefficients instead of asking you to memorize a table.</p>
+<div class="box ex"><span class="tag">Worked example · repeated parts</span><p>For \(n=2\), substitute \(I_1=(x-1)e^x\). Then \(I_2=x^2e^x-2(x-1)e^x=(x^2-2x+2)e^x+C\). Differentiation produces \((2x-2)e^x+(x^2-2x+2)e^x=x^2e^x\). This reproduces 18.01SC, Fall 2010, exercise solutions 5F-2(b).</p></div>
+<div class="box ex"><span class="tag">Worked example · closing the cycle</span><p>Let \(I=\int e^x\cos x\,dx\). First take \(u=e^x\), \(dv=\cos x\,dx\). Then \(I=e^x\sin x-\int e^x\sin x\,dx\). Parts on the remaining integral gives \(-e^x\cos x+I\). Thus \(I=e^x\sin x+e^x\cos x-I\), and \(2I=e^x(\sin x+\cos x)\). One primitive is half this expression.</p><p>On \([0,1]\), subtract its value \(1/2\) at zero. The definite integral is \(e(\sin1+\cos1)/2-1/2\), approximately \(1.378\). The integral workbench independently integrates the original function. This is exercise 5F-4, followed by a chosen definite-interval check.</p></div>
+<div class="box fix"><span class="tag">Common mistake</span><p>A returning integral cannot disappear into the integration constant. Its derivative is the original integrand, usually nonzero. Keep it as an algebraic unknown until both copies have been collected.</p></div>
+<p>For definite integrals, write \(\int_a^b u v'\,dx=[uv]_a^b-\int_a^b vu'\,dx\). Both endpoint terms belong to the boundary product. Subtracting only the upper product can silently change an otherwise correct calculation.</p>
+<div class="box out"><span class="tag">What the method leaves out</span><p>An elementary integrand may have no elementary primitive. Repeating parts forever is not a proof of failure. Numerical integration still evaluates definite integrals; special functions can name primitives beyond this course.</p></div>
 </section><section class="topic" id="s2">
 <h2><span class="n">02</span>Trigonometric integrals</h2>
 <p>Integrals of products of powers of \(\sin x\) and \(\cos x\) yield to two identities: \(\sin^2 x + \cos^2 x = 1\), and the half-angle forms</p>
@@ -52,8 +60,16 @@
 <p>Odd power: save one factor and convert the rest. Even powers: half-angle formulas. Check the answer by differentiating.</p>
 </div>
 <div class="box out"><span class="tag">What it leaves out</span>
-<p>Powers of \(\tan\) and \(\sec\) follow the same idea, with \(\sec^2 x = 1 + \tan^2 x\) and \(du = \sec^2 x\,dx\). The text's §3.2 lists those cases.</p>
+<p>Powers of \(\tan\) and \(\sec\) follow the same idea, with \(\sec^2 x = 1 + \tan^2 x\) and \(du = \sec^2 x\,dx\). These cases follow from the derivative pairs developed below.</p>
 </div>
+
+<h3>Tangent and secant powers</h3>
+<p>The useful derivative pairs are \((\tan x)'=\sec^2x\) and \((\sec x)'=\sec x\tan x\). If a secant power is even, save \(\sec^2x\,dx\), then replace the remaining \(\sec^2x\) by \(1+\tan^2x\). For example, \(\int\sec^4x\,dx=\int(1+u^2)\,du=\tan x+\tan^3x/3+C\). This agrees with exercise 5C-6.</p>
+<p>If the tangent power is odd and a secant factor is available, save \(\sec x\tan x\,dx\). With \(u=\sec x\), the leftover \(\tan^2x=u^2-1\). The rule follows from a derivative, not a checklist divorced from the differential. When neither pattern fits, split identities or use a reduction formula.</p>
+<div class="box ex"><span class="tag">Worked example · reducing twice</span><p>Squaring \(\sin^2x=(1-\cos2x)/2\) gives \(\sin^4x=(1-2\cos2x+\cos^22x)/4\). Reduce \(\cos^22x\) again. The result is \(3/8-\cos2x/2+\cos4x/8\). Integrating gives \(3x/8-\sin2x/4+\sin4x/32+C\), the posted answer to exercise 5C-3.</p></div>
+<div class="box fix"><span class="tag">Common mistake</span><p>The angle multiplier matters twice. An identity changes \(x\) to \(2x\), and integration contributes another factor \(1/2\). Writing \(-\sin2x/2\) instead of \(-\sin2x/4\) fails a derivative check.</p></div>
+<p>On \([0,\pi/2]\), the odd-power example gives \(2/15\). The workbench can show the original trigonometric integrand while the substitution uses a polynomial. These are two descriptions of one integral. The transformed limits reverse because \(\cos x\) decreases; its negative differential reverses the sign as well.</p>
+<div class="box out"><span class="tag">Domain limits</span><p>Tangent, secant and their primitives have poles. Apply identities on intervals where every expression exists. A logarithmic primitive needs an absolute value unless the chosen interval fixes its argument positive. Never integrate through a pole by subtracting two finite endpoint formulas.</p></div>
 </section><section class="topic" id="s3">
 <h2><span class="n">03</span>Trigonometric substitution</h2>
 <p>A root of a quadratic is a side of a right triangle in disguise. Substituting a trigonometric function turns the root into a single trig term.</p>
@@ -81,9 +97,17 @@
 <div class="box out"><span class="tag">What it leaves out</span>
 <p>A quadratic that is not in one of the three forms needs completing the square first. \(\sqrt{x^2 + 2x + 5}\) becomes \(\sqrt{(x + 1)^2 + 4}\), and then the tangent substitution applies.</p>
 </div>
+
+<h3>Completing the square and choosing the inverse branch</h3>
+<p>Write \(x^2+4x+13=(x+2)^2+9\). Translation comes first; scaling comes second. With \(x+2=3\tan\theta\), \(dx=3\sec^2\theta\,d\theta\). Choose \(-\pi/2\lt\theta\lt\pi/2\), where secant is positive. Then \(\sqrt{(x+2)^2+9}=3\sec\theta\). The same interval lets us return to \(\theta=\arctan((x+2)/3)\) without ambiguity.</p>
+<div class="box ex"><span class="tag">Worked example · a shifted quadratic power</span><p>Evaluate \(\int (x^2+4x+13)^{-3/2}\,dx\). The transformation above gives \(\int\cos\theta\,d\theta/9=\sin\theta/9+C\). A right triangle gives \(\sin\theta=(x+2)/\sqrt{x^2+4x+13}\). Thus the primitive is \((x+2)/(9\sqrt{x^2+4x+13})+C\). Differentiation returns the entire original integrand. This checks exercise 5D-10.</p></div>
+<p>For \(\sqrt{x^2-a^2}\), work on one connected branch at a time. On \(x\ge a>0\), let \(x=a\sec\theta\) with \(0\le\theta\lt\pi/2\). The root is \(a\tan\theta\). Negative \(x\) requires a different branch and sign analysis. The triangle alone does not establish those signs.</p>
+<div class="box ex"><span class="tag">Worked example · two pieces of one numerator</span><p>Split \((x+1)/(x^2+4)\) into \(x/(x^2+4)+1/(x^2+4)\). The first primitive is \(\tfrac12\ln(x^2+4)\), since the numerator is half the denominator's derivative. For the second, use \(x=2\tan\theta\); it becomes \(d\theta/2\). The combined answer is \(\tfrac12\ln(x^2+4)+\tfrac12\arctan(x/2)+C\). This is exercise 5D-3.</p></div>
+<div class="box fix"><span class="tag">Common mistake</span><p>Changing the algebra but keeping the original limits mixes two coordinates. Either transform both limits into angles, or return the primitive to \(x\) before evaluating. Both routes agree when used consistently.</p></div>
+<p>The inverse substitutions are useful because their derivatives restore the necessary differential. A hyperbolic route also exists: \(x=a\sinh u\) turns \(\sqrt{a^2+x^2}\) into \(a\cosh u\). From the exponential definitions, \(\cosh^2u-\sinh^2u=1\). Integrating \(a^2\cosh^2u\) gives \(a^2(\sinh2u+2u)/4\). In \(x\), this is \(\tfrac12x\sqrt{a^2+x^2}+\tfrac12a^2\operatorname{arsinh}(x/a)\). Both terms have positive signs. Differentiate before trusting a remembered formula.</p>
 </section><section class="topic" id="s4">
 <h2><span class="n">04</span>Partial fractions</h2>
-<p>A rational function whose bottom factors can be split into simpler fractions. Each piece integrates to a logarithm or an arctangent.</p>
+<p>A proper rational function can be split after its denominator is factored. Each piece integrates to a logarithm or an arctangent.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>For distinct linear factors, write</p>
 \[
@@ -107,8 +131,18 @@
 <p>Divide if the top's degree is not lower. Factor the bottom. Find each constant by cover-up. Integrate each piece as a logarithm.</p>
 </div>
 <div class="box out"><span class="tag">What it leaves out</span>
-<p>A repeated factor \((x - r)^2\) needs both \(A/(x - r)\) and \(B/(x - r)^2\). An irreducible quadratic needs \((Ax + B)/(x^2 + c^2)\), which integrates to a logarithm plus an arctangent. Both are in §3.4 of the text.</p>
+<p>A repeated factor \((x - r)^2\) needs both \(A/(x - r)\) and \(B/(x - r)^2\). An irreducible quadratic needs \((Ax + B)/(x^2 + c^2)\), which integrates to a logarithm plus an arctangent. Both are developed below and in OpenStax §3.4.</p>
 </div>
+
+<h3>Repeated factors need a full basis</h3>
+<p>The denominator \(x(x+1)^2\) requires \(A/x+B/(x+1)+C/(x+1)^2\). Multiplying through gives \(3x+2=A(x+1)^2+Bx(x+1)+Cx\). Setting \(x=0\) gives \(A=2\). Setting \(x=-1\) gives \(C=1\). Matching the squared term gives \(B=-2\). Substituting these values back checks every coefficient.</p>
+<div class="box ex"><span class="tag">Worked example · integrating the repeated factor</span><p>For \(x>0\), the primitive of \((3x+2)/[x(x+1)^2]\) is \(2\ln x-2\ln(x+1)-1/(x+1)+C\). The last term comes from the power rule, not a logarithm. On the chosen interval \([1,2]\), its difference is \(2\ln(4/3)+1/6\), approximately \(0.742\). This follows the printed primitive in exercise 5E-5, with a new definite-interval check.</p></div>
+<h3>Irreducible quadratics need linear numerators</h3>
+<p>Over the real numbers, \(x^2+9\) has no linear factors. Use \((Ax+B)/(x^2+9)+C/(x+2)\). The general linear numerator lets one term integrate as a logarithm and another as an arctangent. A constant alone cannot represent every proper rational function with this denominator.</p>
+<div class="box ex"><span class="tag">Worked example · a quadratic factor</span><p>For \((2x-9)/[(x^2+9)(x+2)]\), clearing denominators gives \(2x-9=(Ax+B)(x+2)+C(x^2+9)\). Substituting \(x=-2\) gives \(C=-1\). Then the squared coefficient gives \(A=1\), and the constant gives \(B=0\). The primitive is \(\tfrac12\ln(x^2+9)-\ln|x+2|+C_0\). This reproduces exercise 5E-6.</p></div>
+<div class="box fix"><span class="tag">Common mistake</span><p>Cover-up isolates coefficients at simple roots. At a repeated root it finds only the highest-power coefficient directly. Solve the remaining identity as well. Omitting the lower power can produce a decomposition that agrees at selected inputs but fails everywhere else.</p></div>
+<p>Long division remains necessary when the numerator degree is too large. For \(x^3/(x^2-1)\), divide to get \(x+x/(x^2-1)\). The polynomial part integrates separately. Factorization and decomposition are algebraic steps; the integral still inherits every excluded denominator root.</p>
+<div class="box out"><span class="tag">What algebra leaves out</span><p>A primitive is valid separately on each connected interval excluding poles. Its integration constant can differ between intervals. An absolute-value logarithm does not make the original rational function continuous through a pole.</p></div>
 </section></div><div class="part"><div class="eyebrow">Calculus Volume 2</div><h2>Applications of integration</h2><section class="topic" id="s5">
 <h2><span class="n">05</span>Arc length and surface area</h2>
 <p>Cut a curve into short pieces. Each piece is nearly a straight segment. Its length is \(\sqrt{\Delta x^2 + \Delta y^2}\).</p>
@@ -143,6 +177,21 @@ S = \int_a^b 2\pi f(x)\sqrt{1 + f'(x)^2}\,dx.
 </div>
 <p>In the Arc length lab, the readout gives the length by the antiderivative and by Simpson's rule, next to the chord. Push the right end out and watch the gap grow.</p>
 <div class="box out"><span class="tag">What it leaves out</span>
-<p>Most arc-length integrals have no closed form. \(\int\sqrt{1 + \cos^2 x}\,dx\), the length of a sine wave, is one. They are evaluated numerically, as in Unit 2.</p>
+<p>Many arc-length integrals have no elementary primitive. \(\int\sqrt{1 + \cos^2 x}\,dx\), the length of a sine wave, is one. They are evaluated numerically, as in Unit 3.</p>
 </div>
+
+<h3>A suspension cable uses the same arc-length integral</h3>
+<p>Consider one cable above a level bridge deck. Let the support spacing be \(L\), and let the midpoint lie \(d\) below the supports. Under a uniformly distributed deck load per horizontal metre, an ideal flexible cable is parabolic. With the midpoint at horizontal zero, \(y=y_0+4dx^2/L^2\). The vertical offset \(y_0\) changes the drawing but not the cable length.</p>
+<p>Differentiate: \(y'=8dx/L^2\). Set \(u=8dx/L^2\), so the endpoints become \(\pm k\), where \(k=4d/L\). Then \(\ell=L^2/(8d)\int_{-k}^k\sqrt{1+u^2}\,du\). The integrand is even. A tangent or hyperbolic substitution gives the primitive \([u\sqrt{1+u^2}+\operatorname{arsinh}u]/2\). Therefore</p>
+\[\ell=\frac L2\left(\sqrt{1+k^2}+\frac{\operatorname{arsinh}k}{k}\right),\qquad k=4d/L.\]
+<p>As \(d\) tends to zero, the quotient tends to one, giving \(\ell=L\). Expanding both terms for small \(k\) gives \(\ell=L+8d^2/(3L)+O(d^4/L^3)\). This predicts the excess length's approximate quadratic dependence on sag.</p>
+<div class="box ex"><span class="tag">Worked example · main span with assumed shallow sag</span><p>The Golden Gate Bridge district lists a main span of 4,200 ft, also rounded to 1,280 m. Exact foot conversion gives \(L=1280.16\) m. Choose an illustrative sag of 50 m. The formula gives \(\ell=1285.349\) m, only \(5.189\) m beyond the span. The lab draws a cable, deck, supports and hangers. Its shape is schematic.</p><p><a href="https://www.goldengate.org/bridge/history-research/statistics-data/design-construction-stats/">Official span specification</a>. The sag is an assumption, not a measured Golden Gate dimension.</p></div>
+<div class="box ex"><span class="tag">Worked example · doubling assumed sag</span><p>Keep the same span but choose \(d=100\) m. The length is \(1300.696\) m, with excess \(20.536\) m. Total length rises only about 1.19%, while the excess nearly quadruples. Applying the quadratic approximation to the whole length would confuse a small correction with the dominant term.</p></div>
+<div class="box ex"><span class="tag">Worked example · refining cable chords</span><p>Use the 100 m sag and sixteen straight segments. Each chord has length \(\sqrt{\Delta x^2+\Delta y^2}\). Their sum is below \(1300.696\) m. Doubling the segment count reduces the shortfall to about one quarter. The readout computes the polygon from its actual vertices; the smooth value comes from the antiderivative.</p></div>
+<div class="box ex"><span class="tag">Worked example · a geometrically similar small model</span><p>A 10 m teaching span with 1 m sag has length \(10.2606\) m. Doubling both dimensions doubles the length. Doubling sag alone changes the slopes and does not have that scaling. Similarity preserves \(d/L\), which is why the dimensionless bracket stays fixed.</p></div>
+<div class="box fix"><span class="tag">Common mistake</span><p>The bridge's total length, suspension length and main span are different specifications. The cable model uses the distance between its two towers. Do not substitute the full bridge length, which also includes approaches.</p></div>
+<div class="box out"><span class="tag">What the course model leaves out</span><p>Equal support heights, a flexible inextensible cable and uniform deck load per horizontal metre are assumptions. Cable self-weight instead produces a catenary. This model ignores temperature, stretch, wind, uneven traffic, anchors and material strength. Geometric cable length cannot establish a safe cable size or allowable load.</p></div>
+<h3>Surface bands measure a different quantity</h3>
+<div class="box ex"><span class="tag">Worked example · one line makes two cones</span><p>Rotate \(y=1-2x\), \(0\le x\le1/2\), about the \(x\) axis. Since \(ds=\sqrt5 dx\), the lateral area is \(2\pi\sqrt5\int_0^{1/2}(1-2x)dx=\pi\sqrt5/2\). Rotation about the \(y\) axis uses radius \(x\), giving \(2\pi\sqrt5\int_0^{1/2}x dx=\pi\sqrt5/4\). These agree with the final values in exercises 4G-2 and 4G-3. End caps are excluded.</p></div>
+<p>For a sphere, the generating derivative becomes unbounded at the poles. Interpret the displayed cancellation first on an interior interval. Its area integral has a finite endpoint limit. The band radius is a distance: use \(|f(x)|\) if the graph lies below the rotation axis. A self-overlapping parametrization can count a surface more than once.</p>
 </section><section class="topic" id="s6"><h2><span class="n">06</span>Formula sheet</h2><p>These results are derived in the sections above. Check each result's hypotheses before applying it.</p><p>\(\int u\,dv=uv-\int v\,du\), \(\sin^2x=(1-\cos2x)/2\), \(L=\int\sqrt{1+[f\prime(x)]^2}\,dx\), \(S=2\pi\int f(x)\sqrt{1+[f\prime(x)]^2}\,dx\) for rotation about the x axis with f nonnegative.</p></section></div></main><footer><p>Original Flux notes. OpenStax Calculus Volumes 1 and 2, sections identified in the notes and textbook map.</p><p><b>Another view:</b> <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/">18.01SC Single Variable Calculus, Fall 2010</a>, Unit 4A–B.</p></footer></body></html>

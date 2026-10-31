@@ -17,3 +17,5 @@
 
 - Rain-barrel time is minutes and flow is litres/minute. Nominal capacity uses US gallons through the shared exact conversion. The drawn water level is a capacity fraction; the schematic barrel is not a dimensional product drawing.
 - Source corrections are labeled separately from common student mistakes and recorded in ERRATA.md. Generated notes examples are checked teaching cases, not claimed as printed source answers.
+
+The Unit 4 cable uses metres and equal-height supports. Published span is distinguished from assumed sag. Surface area excludes end caps unless stated; radius is distance from the rotation axis. Arc length stays nonnegative, while an oriented slant integral can change sign under reversed limits.

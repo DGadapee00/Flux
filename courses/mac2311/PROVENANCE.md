@@ -51,3 +51,23 @@ Original statements and explanations follow 18.01SC Unit 3. Cases check exercise
 Spring-work data and the 6.25 J check come from OpenStax Calculus Volume 2, §2.5, Example 2.25, The Work Required to Stretch or Compress a Spring. The complementary restoring-force question is an original force-agency variant.
 
 The rain-barrel application cites Good Ideas, Rain Wizard 50 (https://goodideasinc.com/products/rain-wizard-50), for nominal 50 US gallon capacity. The exact gallon conversion uses the shared convert module. Storm profiles, peak flows, durations and initial storage are generated teaching setups. The diagram is schematic and makes no dimensional product claim. Closed forms, independent quadrature, time stepping and water conservation check these examples. No source text or figures are copied.
+
+### Unit 4 content rework
+
+Original derivations and figures follow 18.01SC Fall 2010 Unit 4A–B. The resource PDFs
+are numbered by the underlying exercise collection: integration techniques are in
+*Solutions to 18.01 Exercises*, Unit 5, 5C-1/3/4/5/6/13, 5D-1/2/3/10,
+5E-1/2/5/6 and 5F-2/4/5. Arc and surface geometry use collection Unit 4, 4G-1/2/3.
+Symbolic primitives are checked by differentiation; definite values use independent
+quadrature. Parameter substitutions, method interpretations and new definite-interval
+checks are labeled. We use the final surface values of 4G-2/3 with original x-based
+parameterizations, rather than copying the source's intermediate notation.
+
+The bridge district's official design statistics give a 4,200 ft main span:
+https://www.goldengate.org/bridge/history-research/statistics-data/design-construction-stats/.
+The shared exact foot conversion yields 1,280.16 m; the source's 1,280 m is rounded.
+The 50 m/100 m sags, 10 m model and discretization inputs are teaching assumptions.
+The drawn cable, supports, deck and hangers are original schematic geometry. No
+as-built cable shape, strength, tension or design adequacy is asserted.
+
+OpenStax Calculus Volume 2 §§3.1–3.4 and §2.4 fill in the textbook treatment.

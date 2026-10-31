@@ -30,7 +30,7 @@ export const EXAMS = [
     title: 'Techniques of integration',
     chapters: 'Vol 2 Ch 2\u20133',
     date: null,
-    labs: ['arc'],
+    labs: ['arc', 'technique', 'bridge'],
   },
   {
     id: 'c5',
@@ -50,6 +50,8 @@ export const EXAMS = [
   },
 ];
 export const LAB_META = {
+  technique: { id: 'technique', exam: 'c4', title: 'Integral workbench' },
+  bridge: { id: 'bridge', exam: 'c4', title: 'Bridge cable', app: true },
   spheroid: { id: 'spheroid', exam: 'c3', title: 'Spheroid slices' },
   barrel: { id: 'barrel', exam: 'c3', title: 'Rain barrel', app: true },
   can: { id: 'can', exam: 'c2', title: 'Drink can', app: true },
