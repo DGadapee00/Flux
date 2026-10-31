@@ -112,3 +112,84 @@ SETUPS.c1.s11 = [
   scenario: 'closed',
   read: (c) => ({ height: [c.h, 9.645754126781537], sensitivity: [c.heightSlope, -5.84591159198881] }),
 });
+
+(SETUPS.c3.s1 ??= []).push(
+  {
+    tag: 'checking the cubic right sum',
+    lab: 'riemann',
+    scenario: 'cube',
+    setup: (s) => {
+      s.n = 4;
+      s.sample = 'right';
+    },
+    read: (c) => ({ sum: [c.sum, 25 / 64], integral: [c.exact, 0.25] }),
+  },
+  {
+    tag: 'checking the cubic left sum',
+    lab: 'riemann',
+    scenario: 'cube',
+    setup: (s) => {
+      s.n = 4;
+      s.sample = 'left';
+    },
+    read: (c) => ({ sum: [c.sum, 9 / 64] }),
+  },
+);
+(SETUPS.c3.s4 ??= []).push(
+  {
+    tag: 'a rising inlet is a triangular area',
+    lab: 'barrel',
+    scenario: 'ramp',
+    read: (c) => ({ rate: [c.flow, 10], delivered: [c.delivered, 50], stored: [c.stored, 50] }),
+  },
+  {
+    tag: 'doubling time can quadruple delivery',
+    lab: 'barrel',
+    scenario: 'ramp',
+    setup: (s) => {
+      s.t = 5;
+    },
+    read: (c) => ({ delivered: [c.delivered, 12.5] }),
+  },
+  {
+    tag: 'a full barrel still receives rain',
+    lab: 'barrel',
+    scenario: 'full',
+    read: (c) => ({
+      delivered: [c.delivered, 300],
+      stored: [c.stored, 189.2705892],
+      spill: [c.spill, 110.7294108],
+      rate: [c.storageRate, 0],
+    }),
+  },
+  {
+    tag: 'integrating a curved storm profile',
+    lab: 'barrel',
+    scenario: 'sine',
+    read: (c) => ({ delivered: [c.delivered, 800 / Math.PI], spill: [c.spill, 800 / Math.PI - 189.2705892] }),
+  },
+  {
+    tag: 'average inflow is not the peak',
+    lab: 'barrel',
+    scenario: 'sine',
+    read: (c, s) => ({ average: [c.delivered / s.T, 40 / Math.PI] }),
+  },
+);
+(SETUPS.c3.s7 ??= []).push({
+  tag: 'slicing an oblate spheroid',
+  lab: 'spheroid',
+  scenario: 'oblate',
+  read: (c) => ({ volume: [c.volume, (16 * Math.PI) / 3] }),
+});
+(SETUPS.c3.s10 ??= []).push({
+  tag: 'two weighted-coordinate profiles',
+  lab: 'riemann',
+  scenario: 'quad',
+  setup: (s) => {
+    s.graphId = 'weightParabola';
+    s.a = -1;
+    s.b = 3;
+    s.n = 8;
+  },
+  read: (c) => ({ total: [c.exact, 32 / 3] }),
+});

@@ -22,7 +22,7 @@ export const EXAMS = [
     title: 'The definite integral and its applications',
     chapters: 'Vol 1 Ch 5\u20136; Vol 2 Ch 2',
     date: null,
-    labs: ['riemann', 'accum', 'solids', 'numint'],
+    labs: ['riemann', 'accum', 'solids', 'numint', 'barrel', 'spheroid'],
   },
   {
     id: 'c4',
@@ -50,6 +50,8 @@ export const EXAMS = [
   },
 ];
 export const LAB_META = {
+  spheroid: { id: 'spheroid', exam: 'c3', title: 'Spheroid slices' },
+  barrel: { id: 'barrel', exam: 'c3', title: 'Rain barrel', app: true },
   can: { id: 'can', exam: 'c2', title: 'Drink can', app: true },
   focus: { id: 'focus', exam: 'c1', title: 'Camera focus', app: true },
   limits: {
