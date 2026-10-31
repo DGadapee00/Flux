@@ -21,8 +21,8 @@ import {
   power, speedFromEnergy, springEnergy, springStop, springWork, work, workVector,
 } from './energy.js';
 import {
-  centerOfMass, collide1D, collideOblique, impactLoss, impulse, impulseRamp, momentum,
-  particleAngularMomentum, rocketDeltaV,
+  centerOfMass, collide1D, collideOblique, discCollision, impactLoss, impulse, impulseRamp, momentum,
+  particleAngularMomentum, pulseForce, pulseImpulse, rocketDeltaV,
 } from './momentum.js';
 import { inclineState } from './friction.js';
 import {
@@ -640,6 +640,35 @@ console.log('\nImpulse and momentum');
   approx(rocketDeltaV(gravity).dv, burn(gravity), 1e-6, 'a rocket in gravity matches the midpoint burn');
   const heavy = { m0: 400, mf: 280, ve: 1500, mdot: 40, g: 0 };
   approx(rocketDeltaV(heavy).dv, burn(heavy), 1e-6, 'a smaller mass ratio matches the midpoint burn');
+  approx(rocketDeltaV({ ...coast, ve: 3000 }).dv, 2 * rocketDeltaV(coast).dv, 1e-9, 'doubling the exhaust speed doubles a coasting change of velocity');
+
+  approx(pulseImpulse('rect', 10, 2), 20, 1e-12, 'a rectangular pulse impulse is the peak times the duration');
+  approx(pulseImpulse('tri', 10, 2), 10, 1e-12, 'a triangular pulse has half the rectangular area');
+  approx(pulseImpulse('sine', 10, 2), 40 / Math.PI, 1e-12, 'a half-sine pulse integrates to 2FT/pi');
+  approx(pulseImpulse('rect', 20, 2), 2 * pulseImpulse('rect', 10, 2), 1e-12, 'doubling the peak doubles the impulse');
+  {
+    const n = 4000;
+    const dt = 2 / n;
+    let area = 0;
+    for (let i = 0; i < n; i += 1) area += pulseForce('sine', 10, 2, (i + 0.5) * dt) * dt;
+    approx(pulseImpulse('sine', 10, 2), area, 1e-6, 'the half-sine area matches a midpoint sum');
+    // The tent is linear on each half. The midpoint rule is exact on a linear piece, so split at the peak.
+    let tri = 0;
+    for (const [a, b] of [[0, 1], [1, 2]]) {
+      const h = (b - a) / n;
+      for (let i = 0; i < n; i += 1) tri += pulseForce('tri', 10, 2, a + (i + 0.5) * h) * h;
+    }
+    approx(pulseImpulse('tri', 10, 2), tri, 1e-12, 'the tent area matches the midpoint rule on each linear half');
+  }
+
+  const disc = discCollision({ m1: 2, m2: 2, u1x: 4, thetaDeg: 35, e: 1 });
+  approx(disc.v1x * disc.v2x + disc.v1y * disc.v2y, 0, 1e-9, 'equal masses, one at rest, elastic: the paths are perpendicular');
+  approx(2 * disc.v1x + 2 * disc.v2x, 8, 1e-9, 'a disc collision keeps the x momentum');
+  approx(2 * disc.v1y + 2 * disc.v2y, 0, 1e-9, 'a disc collision keeps the y momentum');
+  const Kd = kineticEnergy(2, Math.hypot(disc.v1x, disc.v1y)) + kineticEnergy(2, Math.hypot(disc.v2x, disc.v2y));
+  approx(Kd, kineticEnergy(2, 4), 1e-9, 'an elastic disc collision keeps the kinetic energy');
+  const fast = discCollision({ m1: 2, m2: 2, u1x: 8, thetaDeg: 35, e: 1 });
+  approx(fast.v2x, 2 * disc.v2x, 1e-9, 'doubling the incoming speed doubles each disc velocity');
 
   const L = particleAngularMomentum(2, v(0.4, -0.3, 0), v(1, 3, 0));
   approx(L.z, 2 * (0.4 * 3 - (-0.3) * 1), 1e-12, 'particle angular momentum is m times x vy minus y vx');

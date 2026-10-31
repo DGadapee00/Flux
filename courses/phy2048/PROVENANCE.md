@@ -14,7 +14,7 @@ The units follow that volume's chapters in the book's order (D33), as set in `do
 
 ## What is in this folder
 
-The catalog of 13 units, the page wiring, the citation map `src/data/textbook.js` (section titles only), and a problem bank for the chapters 2–13 and 15. Chapters 1, 14, 16 and 17 have no problems yet. Two older labs are logic only: collide and rotor. Their numbers are computed in this folder. The course runs on the physics shell (`npm run dev`, port 5180) with Practice, Notes, the units reference and Predict first. Unit 1 (Ch 1–3) is built: three labs, notes, and 34 problems. Unit 2 (Ch 4) is built: four labs, notes, and 17 problems. Unit 3 (Ch 5–6) is built: six labs, notes, and 25 problems. Unit 4 (Ch 7–8) is built: five labs, notes, and 27 problems. The other units' canvases show only the grid until each unit's PR draws its labs. The hub links the course.
+The catalog of 13 units, the page wiring, the citation map `src/data/textbook.js` (section titles only), and a problem bank for the chapters 2–13 and 15. Chapters 1, 14, 16 and 17 have no problems yet. The older rotor lab is logic only until Unit 6 draws it. The course runs on the physics shell (`npm run dev`, port 5180) with Practice, Notes, the units reference and Predict first. Unit 1 (Ch 1–3) is built: three labs, notes, and 34 problems. Unit 2 (Ch 4) is built: four labs, notes, and 17 problems. Unit 3 (Ch 5–6) is built: six labs, notes, and 25 problems. Unit 4 (Ch 7–8) is built: five labs, notes, and 27 problems. Unit 5 (Ch 9) is built: seven labs, notes, and 18 problems. The other units' canvases show only the grid until each unit's PR draws its labs. The hub links the course.
 
 ## Application lab numbers
 
@@ -24,6 +24,9 @@ The catalog of 13 units, the page wiring, the citation map `src/data/textbook.js
 - `elevator-scale` (Unit 3): OpenStax §6.1, "What Does the Bathroom Scale Read in an Elevator?" (75.0 kg, 1.20 m/s²).
 - `skydiver` (Unit 3): OpenStax §6.4, "Terminal Velocity of a Skydiver" (85 kg, 0.70 m², C = 1.0, ρ = 1.21 kg/m³), the same section's head-first figures (75 kg, 0.18 m², C = 0.70) and its 50 kg Check Your Understanding. The canopy's drag area, C·A = 25 m², is an illustrative value, not a manufacturer's, and the lab says so.
 - `automotive-power` (Unit 4): OpenStax §7.4, "Automotive Power Driving Uphill" (1200 kg, a 15% grade, 90 km/h, 25% lost). Drag areas from §6.4's problems: a Toyota Camry, 0.70 m², and a Hummer H2, 2.44 m²; air at 1.21 kg/m³ as in §6.4. The rolling-resistance coefficient, 0.010, and the two highway cars' masses, 1500 kg and 2900 kg, are illustrative values, and the lab says so.
+- `crumple-zone` (Unit 5): OpenStax §9.2, "The Benefits of Impulse" (27 m/s, weight 860 N, 2.5 s in a seatbelt, 0.20 s against a steering wheel). The spine's "about 1 s" is the book's rough first estimate; the worked comparison uses 2.5 s and 0.20 s.
+- `crash-reconstruction` (Unit 5): OpenStax §9.4, "Analyzing a Car Crash" (1200 kg car that stops, 3000 kg truck, 10 m skid, μ = 0.62).
+- `rocket` (Unit 5): OpenStax §9.7, "Thrust on a Spacecraft" (20 000 kg down to 14 000 kg, exhaust 250 m/s, 200 kg/s). That thruster cannot lift its own weight. The liftoff scenario (exhaust 2800 m/s, 20 000 kg down to 8000 kg) is illustrative, and the lab says so.
 
 The book's source text was read from the public `openstax/osbooks-university-physics-bundle` repository, in a clone outside this repo. Nothing from it is committed.
 
