@@ -113,3 +113,85 @@ export function conceptFamily({ id, exam, ch, title, topics, forms, hints }) {
       .map(([form, v]) => kase(v.source, { form, order: 0 }, { reason: v.correct ?? 0 })),
   });
 }
+
+/** A requested formula need not be a derivative. The family supplies an independent value check. */
+export function formulaFamily({ id, exam, ch, title, topics, forms, hints, level = 2 }) {
+  const ids = Object.keys(forms);
+  return problem({
+    id,
+    exam,
+    ch,
+    title,
+    topics,
+    kind: 'symbolic',
+    level,
+    minVersions: ids.length,
+    variety: ['function family', 'representation'],
+    vars: { form: choose(ids) },
+    derive: ($) => ({ v: forms[$.form], x: forms[$.form].at ?? 0.6 }),
+    text: (T, $) => $.v.ask,
+    parts: [
+      sym(
+        'formula',
+        ($) => $.v.key,
+        ['x'],
+        ($) => $.v.get($.x),
+        { label: 'requested formula' },
+      ),
+    ],
+    hints,
+    steps: ($) => [
+      $.v.reason,
+      String.raw`The formula is $${exprToTex($.v.key, ['x'])}$.`,
+      $.v.check || 'Substitute a nearby admissible input to check the expression.',
+    ],
+    second: ($) => {
+      const got = $.v.second($.x),
+        want = $.v.get($.x);
+      if (Math.abs(got - want) > 1e-4 * Math.max(1, Math.abs(want)))
+        throw Error('Independent formula check disagrees');
+      return { formula: $.v.key };
+    },
+    cases: Object.entries(forms)
+      .filter(([, v]) => v.source)
+      .map(([form, v]) =>
+        kase(
+          v.source,
+          { form },
+          { formula: v.key },
+          { accept: { formula: [v.alt] }, reject: { formula: [v.wrong] } },
+        ),
+      ),
+  });
+}
+export function numericFamily({ id, exam, ch, title, topics, forms, hints, level = 2, lab, sim }) {
+  const ids = Object.keys(forms);
+  return problem({
+    id,
+    exam,
+    ch,
+    title,
+    topics,
+    kind: 'numeric',
+    level,
+    lab,
+    sim,
+    minVersions: ids.length,
+    variety: ['configuration', 'unknown'],
+    vars: { form: choose(ids) },
+    derive: ($) => ({ v: forms[$.form] }),
+    text: (T, $) => $.v.ask,
+    parts: [
+      numeric('answer', ($) => $.v.answer, 'requested value', [
+        [($) => $.v.traps[0][0], ($) => $.v.traps[0][1]],
+        [($) => $.v.traps[1][0], ($) => $.v.traps[1][1]],
+      ]),
+    ],
+    hints,
+    steps: ($) => [$.v.reason, `The result is ${$.v.answer}${$.v.unit ? ' ' + $.v.unit : ''}.`],
+    second: ($) => ({ answer: $.v.second() }),
+    cases: Object.entries(forms)
+      .filter(([, v]) => v.source)
+      .map(([form, v]) => kase(v.source, { form }, { answer: v.printed ?? v.answer }, { note: v.note })),
+  });
+}

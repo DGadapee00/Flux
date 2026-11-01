@@ -83,7 +83,7 @@ export const NOTES = {
         id: 's1',
         n: 1,
         title: 'Linear approximation',
-        lab: null,
+        lab: 'can',
         ch: ['4'],
         topics: ['linear approximation'],
       },
@@ -110,7 +110,7 @@ export const NOTES = {
         problems: ['u2.rates'],
         home: true,
       },
-      { id: 's9', n: 9, title: 'Antiderivatives', lab: null, ch: ['5'], topics: ['antiderivatives'] },
+      { id: 's9', n: 9, title: 'Antiderivatives', lab: null, ch: ['5'], topics: ['antiderivatives','differential equations'] },
       {
         id: 's10',
         n: 10,
