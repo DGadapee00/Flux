@@ -57,7 +57,7 @@ const seriesForm = (fn, c, what) => {
       reason: `The added integrand term is ${fr(terms[2][0])}x^${terms[2][1]}, whose integral is ${I(terms[2]).toPrecision(3)}.`,
       traps: [
         [two + raw(terms[2]), `The new power needs division by ${terms[2][1] + 1} when integrated.`],
-        [two - I(terms[2]), 'The third nonzero term has the opposite sign to the second.'],
+        [two - I(terms[2]), `The third nonzero term is ${terms[2][0] > 0 ? 'positive' : 'negative'}, the opposite sign to the second.`],
       ],
     };
   return {

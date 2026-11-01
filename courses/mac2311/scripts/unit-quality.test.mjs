@@ -79,9 +79,10 @@ test('the sign of a small integrated series correction is still graded', () => {
   const t = PROBLEMS.find((p) => p.id === 'c6.integrate-series');
   if (!t) return;
   let found = false;
-  for (let seed = 0; seed < 30; seed++) {
+  for (let seed = 0; seed < 3000; seed++) {
     const q = instance(t, seed);
-    if (q.$.form !== 'three') continue;
+    // The cited version, ∫₀¹ sin(x²) dx, whose numbers this test writes out.
+    if (q.$.form !== 'three' || q.$.pick !== 0) continue;
     const g = grade(t.parts[0], q.$, String(13 / 42 - 1 / 1320));
     assert.equal(g.correct, false);
     assert.ok(g.feedback.includes('positive'));
