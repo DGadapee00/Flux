@@ -79,8 +79,8 @@ subject libraries (a function written for one course serves the next), and one s
 - [x] **Course-neutral references:** content exemplars are PHY 2049 only; `courses/starter` is the
       course to copy; course plans live in `docs/course-plans/`; the shell notes CSS styles parts and
       the legend; the word floor and the fixed end-of-section box are gone from every notes-check.
-- [ ] **A math-shell starter** before MAP 2302 starts: `courses/starter` is on the engineering
-      shell. Add the math-shell wiring to it (or a second starter) with the same example unit.
+- [x] **A math-shell starter** before MAP 2302 starts: `courses/starter` is on the engineering
+      shell. `courses/mathstarter` supplies the math-shell wiring with the same tank example unit, a drawn animated tank and a secondary plot.
 - [x] **R3a EML 3100.** The five-unit order in its spine (16.050 Part 0–1, then Yan; D29), confirmed
       by the owner. Units 3, 4 and 5 were already at the standard. Units 1 and 2 now have `why`,
       traps, conceptual problems, application labs (a pressure canner and a coil burner) and notes

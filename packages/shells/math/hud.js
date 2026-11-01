@@ -128,7 +128,7 @@ export function createHUD(api, catalog) {
         .map((w) => {
           const right = pred.got[w.id] === pred.picks[w.id];
           const label = choices(prompt, w).find(([value]) => value === pred.got[w.id]);
-          return `<p class="pred-grade ${right ? 'ok' : 'bad'}">${prose(w.label)}: ${right ? 'right' : `the lab says ${label ? label[1] : pred.got[w.id]}`}.</p>`;
+          return `<p class="pred-grade ${right ? 'ok' : 'bad'}">${mathText(w.label)}: ${right ? 'right' : `the lab says ${label ? label[1] : pred.got[w.id]}`}.</p>`;
         })
         .join('');
       const note = matchesExpect(prompt, pred.got)
