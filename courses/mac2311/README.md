@@ -30,6 +30,6 @@ The migration combines review histories without deleting old keys or adding atte
 twice. Existing hub backups keep both source-course entries. The complete contract is
 in `docs/course-plans/mac2311-2312.md`.
 
-Unit 1 has been reworked with a camera-focus application, predictions, and a new active bank. Original Unit 1 templates remain accessible by saved ID and keep their seed identity. Unit 2 now adds constrained can design, approximation error, Newton failures and first differential equations. Unit 3 adds rain-barrel accumulation, spheroid slices, probability, weighted means and a checked source correction. The remaining three units still need the same treatment. This completes the module merge within R4a. The merged course still fails the content
+Unit 1 has been reworked with a camera-focus application, predictions, and a new active bank. Original Unit 1 templates remain accessible by saved ID and keep their seed identity. Unit 2 now adds constrained can design, approximation error, Newton failures and first differential equations. Unit 3 adds rain-barrel accumulation, spheroid slices, probability, weighted means and a checked source correction. Unit 4 adds an integral workbench and suspension-cable geometry. The remaining two units still need the same treatment. This completes the module merge within R4a. The merged course still fails the content
 scorecard: predictions, cited applications, feedback and problem variety need the planned
 unit-by-unit rework. `standard` remains false.

@@ -1,6 +1,8 @@
 import { createLabLoader } from '@flux/core';
 
 const loaders = {
+  technique: () => import('./technique.js'),
+  bridge: () => import('./bridge.js'),
   spheroid: () => import('./spheroid.js'),
   barrel: () => import('./barrel.js'),
   can: () => import('./can.js'),
