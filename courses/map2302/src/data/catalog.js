@@ -6,14 +6,8 @@ export const EXAMS = [
     "title": "First-order equations",
     "chapters": "1",
     "date": null,
-    "labs": [],
-    "coming": [
-      "slope-field",
-      "euler",
-      "phase-line",
-      "first-order-response",
-      "coffee"
-    ]
+    "labs": ["slope-field","euler","phase-line","first-order-response","coffee"],
+    "coming": []
   },
   {
     "id": "u2",
@@ -59,7 +53,12 @@ export const EXAMS = [
     ]
   }
 ];
-export const LAB_META = {};
+export const LAB_META = {
+  coffee: { id: 'coffee', exam: 'u1', title: 'Cooling coffee', app: true },
+  'first-order-response': { id: 'first-order-response', exam: 'u1', title: 'First-order response' },
+  'phase-line': { id: 'phase-line', exam: 'u1', title: 'Phase line' },
+  euler: { id: 'euler', exam: 'u1', title: 'Euler steps' },
+  'slope-field': { id: 'slope-field', exam: 'u1', title: 'Slope field' },};
 export const CHAPTER_TITLES = Object.fromEntries(EXAMS.map(e=>[e.chapters,e.title]));
 export function examById(id){return EXAMS.find(e=>e.id===id)||EXAMS[0];}
 export function examForLab(){return EXAMS[0];}

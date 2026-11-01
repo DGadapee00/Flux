@@ -149,7 +149,7 @@ function handleKey(e) {
 }
 
 function applyFrame() {
-  setFrame(null);
+  setFrame(app.lab?.frame?.(slice()) || null);
   grid.setScale(sceneScale());
   grid.setPlane(workPlane());
 }

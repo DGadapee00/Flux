@@ -393,3 +393,15 @@ test('math scaffold can describe its content gate without claiming practice is r
   hud.mount(null,unit,{examId:unit.id});
   assert.equal(document.getElementById('lab-controls').textContent,'Awaiting spine confirmation.');
 });
+
+test('math active-tab reveal is opt-in and limited to phone width',()=>{
+ page();const proto=window.Element.prototype,previous=proto.scrollIntoView,calls=[];
+ proto.scrollIntoView=function(options){calls.push([this.dataset.lab,options]);};
+ const lab={id:'diagram',scenarios:[],controls:()=>'',bind(){},toggles:[]};
+ try{
+  window.innerWidth=380;let hud=createMathHUD(api(),catalog);hud.mount(lab,catalog.exams[0],{});assert.equal(calls.length,0);
+  page();window.innerWidth=380;hud=createMathHUD(api(),{...catalog,revealActiveLab:true});hud.mount(lab,catalog.exams[0],{});
+  assert.deepEqual(calls,[['diagram',{block:'nearest',inline:'nearest'}]]);
+  page();window.innerWidth=1280;hud=createMathHUD(api(),{...catalog,revealActiveLab:true});hud.mount(lab,catalog.exams[0],{});assert.equal(calls.length,1);
+ }finally{if(previous)proto.scrollIntoView=previous;else delete proto.scrollIntoView;}
+});

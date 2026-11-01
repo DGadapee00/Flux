@@ -120,7 +120,7 @@ MAC 2312 5179, PHY 2048 5180, EGN 3321 5181, EGN 3331 5182, EML 3100 5183. Reser
 ahead (spines): MAP 2302 5184, EEL 3111 5185, EML 3015 5186, EML 3101 5187, EGN 3203 5188, EML 4140
 5189, EML 4312 5190, EML 4301C 5191, EML 4501 5192, EML 4507C 5193, EML 4320C 5194, EMA 3010 5195.
 `courses/starter` (engineering) is 5199; `courses/mathstarter` (math) is 5198. Both are tested
-but never built into the site. MAP 2302 has a draft scaffold on 5184; its spine awaits confirmation.
+but never built into the site. MAP 2302 uses 5184; Dalton confirmed its spine and Lebl on 1 Nov 2026.
 
 Deploy: a push to `main` publishes. Cloudflare Pages project `flux-study` is connected to this repo
 and runs `npm test && npm run build` into `site/dist`, so a failing test blocks the deploy. `npm run
