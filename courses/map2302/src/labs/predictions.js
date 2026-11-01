@@ -1,2 +1,2 @@
-// No unit content before Dalton confirms docs/course-plans/map2302.md.
-export const PREDICTIONS = {};
+import u1 from './predictions/u1.js';
+export const PREDICTIONS = {...u1};

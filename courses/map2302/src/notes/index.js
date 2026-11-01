@@ -4,7 +4,8 @@
  */
 
 /** One file per unit in ./units/, so each unit's sections change without touching the others. */
-export const NOTES = {};
+import u1 from './units/u1.js';
+export const NOTES = {u1};
 
 export const notesForExam = (examId) => NOTES[examId] || null;
 

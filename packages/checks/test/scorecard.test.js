@@ -24,7 +24,7 @@ test('the Markdown table has a header row and one row per course', () => {
   assert.equal(r.status, 0, r.stderr);
   const rows = r.stdout.trim().split('\n');
   assert.match(rows[0], /^\| course \| std \|/);
-  assert.equal(rows.length, 2 + 10);
+  assert.equal(rows.length, 2 + 11);
 });
 
 test('Statics meets the measured floor without changing its manifest standard flag', () => {
@@ -45,10 +45,10 @@ test('course selection rejects traversal and unknown folders', () => {
   for (const id of ['../starter', 'nosuchcourse']) assert.notEqual(run('--course', id).status, 0);
 });
 
-test('the MAP scaffold exposes four empty units and fails a forced content gate',()=>{
+test('MAP exposes its unbuilt units honestly during the unit stack',()=>{
  const r=run('--course','map2302','--units');assert.equal(r.status,0,r.stderr);
  assert.match(r.stdout,/MAP 2302/);
- for(const id of ['u1','u2','u3','u4'])assert.match(r.stdout,new RegExp(id+'\\s+0'));
+ for(const id of ['u2','u3','u4'])assert.match(r.stdout,new RegExp(id+'\\s+0'));
  const gate=run('--course','map2302','--mark','map2302');
  assert.equal(gate.status,1);assert.match(gate.stderr,/misses/);
 });

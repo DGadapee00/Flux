@@ -5,7 +5,8 @@
 
 
 /** One file per unit in ./setups/, so each unit's examples change without touching the others. */
-export const SETUPS = {};
+import u1 from './setups/u1.js';
+export const SETUPS = {u1};
 
 /** An example's tag as the notes write it, without "Worked example · ". */
 export function exampleTag(tagText) {
