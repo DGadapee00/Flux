@@ -24,13 +24,8 @@ export const EXAMS = [
     "title": "Fourier series and Laplace transforms",
     "chapters": "3",
     "date": null,
-    "labs": [],
-    "coming": [
-      "fourier",
-      "laplace",
-      "convolution",
-      "radio-tuner"
-    ]
+    "labs": ["fourier","laplace","convolution","radio-tuner"],
+    "coming": []
   },
   {
     "id": "u4",
@@ -49,6 +44,10 @@ export const EXAMS = [
   }
 ];
 export const LAB_META = {
+  'radio-tuner': { id: 'radio-tuner', exam: 'u3', title: 'Radio clock tuner', app: true },
+  convolution: { id: 'convolution', exam: 'u3', title: 'Convolution memory' },
+  laplace: { id: 'laplace', exam: 'u3', title: 'Steps, impulses and poles' },
+  fourier: { id: 'fourier', exam: 'u3', title: 'Fourier synthesis' },
   rlc: { id: 'rlc', exam: 'u2', title: 'Series RLC' },
   suspension: { id: 'suspension', exam: 'u2', title: 'Car suspension', app: true },
   resonance: { id: 'resonance', exam: 'u2', title: 'Forced response' },

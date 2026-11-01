@@ -15,9 +15,9 @@ test('the approved spine retains four units and the first unit has no starter co
  assert.deepEqual(EXAMS.map(u=>u.id),['u1','u2','u3','u4']);
  assert.deepEqual(EXAMS.map(u=>u.title),['First-order equations','Second-order linear equations','Fourier series and Laplace transforms','First-order systems']);
  assert.deepEqual(EXAMS[0].labs,['slope-field','euler','phase-line','first-order-response','coffee']);
- for(const unit of EXAMS.slice(2)){assert.equal(unit.date,null);assert.deepEqual(unit.labs,[]);assert.ok(unit.coming.length>=4);for(const id of unit.coming)assert.equal(hasLab(id),false);}
+ for(const unit of EXAMS.slice(3)){assert.equal(unit.date,null);assert.deepEqual(unit.labs,[]);assert.ok(unit.coming.length>=4);for(const id of unit.coming)assert.equal(hasLab(id),false);}
  assert.equal(hasLab('tank'),false);
- assert.ok(PROBLEMS.length>=20);assert.deepEqual(Object.keys(NOTES),['u1','u2']);
+ assert.ok(PROBLEMS.length>=20);assert.deepEqual(Object.keys(NOTES),['u1','u2','u3']);
  assert.equal(LAB_META.coffee.app,true);assert.ok(SETUPS.u1);assert.equal(PREDICTIONS.coffee.length,2);
 });
 test('OCW is primary and the confirmed textbook is selected',()=>{

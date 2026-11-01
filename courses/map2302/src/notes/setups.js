@@ -1,3 +1,4 @@
+import u3 from './setups/u3.js';
 /**
  * Worked examples the labs can show. `tag` matches the notes after "Worked example · ".
  * `read` pairs a lab value with the number printed in the notes. notes-check allows 2%.
@@ -7,7 +8,7 @@
 /** One file per unit in ./setups/, so each unit's examples change without touching the others. */
 import u1 from './setups/u1.js';
 import u2 from './setups/u2.js';
-export const SETUPS = {u1,u2};
+export const SETUPS = {u1,u2,u3};
 
 /** An example's tag as the notes write it, without "Worked example · ". */
 export function exampleTag(tagText) {
