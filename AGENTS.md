@@ -44,7 +44,7 @@ saying so in the PR. `docs/history/` is the archive; nothing there is an instruc
 6. **A course writes no UI of its own.** It uses a shell (`packages/shells/math`, `engineering` or `physics`)
    through two thin wrappers. A missing control becomes a shell hook behind a flag, with a test on
    the shell's fixture course. A course never imports another course. A new course starts as a
-   copy of `courses/starter`, never of another real course.
+   copy of `courses/starter` (engineering) or `courses/mathstarter` (math), never of another real course.
 7. **Spine before code** (D18). A new course starts with its spine confirmed by the owner. At most
    two courses have units in progress at once, besides Phase R rework.
 8. **One unit per PR.** Every course's checks stay green on every PR. A failing check does not ship.
@@ -62,7 +62,7 @@ packages/subjects   shared domain math (math, mechanics, em, stats, thermo, conv
 packages/shells     course-family UI: math, engineering, physics, practice (the loop), notes.js. No course, no chapter.
 packages/tracks     the hub's track list. Imports nothing.
 packages/checks     deps, raw, storage, prereqs, scorecard
-courses/<id>        one folder per course; courses/starter is the course-neutral one to copy
+courses/<id>        one folder per course; starter (engineering) and mathstarter are neutral copies
 site                the Vite hub
 ```
 
@@ -119,7 +119,8 @@ Dev ports: hub 5173, PHY 2049 5174, MAC 2313 5175, Statics 5176, STA 3032 5177, 
 MAC 2312 5179, PHY 2048 5180, EGN 3321 5181, EGN 3331 5182, EML 3100 5183. Reserved for the courses
 ahead (spines): MAP 2302 5184, EEL 3111 5185, EML 3015 5186, EML 3101 5187, EGN 3203 5188, EML 4140
 5189, EML 4312 5190, EML 4301C 5191, EML 4501 5192, EML 4507C 5193, EML 4320C 5194, EMA 3010 5195.
-`courses/starter`, the course to copy, is 5199; it is tested but never built into the site.
+`courses/starter` (engineering) is 5199; `courses/mathstarter` (math) is 5198. Both are tested
+but never built into the site. MAP 2302 has a draft scaffold on 5184; its spine awaits confirmation.
 
 Deploy: a push to `main` publishes. Cloudflare Pages project `flux-study` is connected to this repo
 and runs `npm test && npm run build` into `site/dist`, so a failing test blocks the deploy. `npm run

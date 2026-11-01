@@ -18,6 +18,7 @@ import { setLawEl, prose, mathText } from './shared.js';
  * @param {string} [catalog.courseId] Marks this course in the track row.
  * @param {{ id?: string, code?: string, title?: string, href?: string|null }[]} [catalog.track] Sibling courses, hub order.
  * @param {string} catalog.homeId Unit shown before one is mounted.
+ * @param {string} [catalog.unbuiltMessage] Plain text for a scaffold without unit content.
  * @param {object} [catalog.notes] Core `createNotes` dependencies. Omit when the manifest has no notes.
  */
 export function createHUD(api, catalog) {
@@ -278,7 +279,9 @@ export function createHUD(api, catalog) {
     const host = $('lab-controls');
     if (!lab) {
       const coming = (exam?.coming || []).join(', ') || 'coming next';
-      host.innerHTML = `<p class="tiny">The ${coming} labs aren’t built yet. The practice problems for this unit are ready: press <b>P</b> or use Practice.</p>`;
+      host.innerHTML = catalog.unbuiltMessage
+        ? `<p class="tiny">${mathText(catalog.unbuiltMessage)}</p>`
+        : `<p class="tiny">The ${coming} labs aren’t built yet. The practice problems for this unit are ready: press <b>P</b> or use Practice.</p>`;
       mountedId = '';
       renderToggles(null);
       renderLegend(null);
