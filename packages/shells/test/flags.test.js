@@ -381,3 +381,15 @@ test('math prediction hook is opt-in and grades with the fixture lab computation
   assert.ok(host.querySelector('.pred-grade').textContent.includes('the lab says ×4'));
   assert.doesNotMatch(host.querySelector('.pred-grade').innerHTML, /<p[ >]/);
 });
+
+test('math scaffold can describe its content gate without claiming practice is ready',()=>{
+  page();
+  const unit={...catalog.exams[0],labs:[],coming:['Future lab']};
+  let hud=createMathHUD(api(),{...catalog,exams:[unit]});
+  hud.mount(null,unit,{examId:unit.id});
+  assert.ok(document.getElementById('lab-controls').textContent.includes('practice problems for this unit are ready'));
+  page();
+  hud=createMathHUD(api(),{...catalog,exams:[unit],unbuiltMessage:'Awaiting spine confirmation.'});
+  hud.mount(null,unit,{examId:unit.id});
+  assert.equal(document.getElementById('lab-controls').textContent,'Awaiting spine confirmation.');
+});
