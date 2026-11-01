@@ -378,4 +378,6 @@ test('math prediction hook is opt-in and grades with the fixture lab computation
   host.dispatchEvent({type:'click',target:host.querySelector('[data-act="apply"]')});
   assert.equal(state.n,4);
   assert.ok(host.textContent.includes('the lab says ×4'));
+  assert.ok(host.querySelector('.pred-grade').textContent.includes('the lab says ×4'));
+  assert.doesNotMatch(host.querySelector('.pred-grade').innerHTML, /<p[ >]/);
 });
