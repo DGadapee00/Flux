@@ -10,6 +10,18 @@ export function fmtNum(n, d = 3) {
   return String(Number(n.toFixed(d)));
 }
 
+/**
+ * The same number for a plain row, outside any math: 51,000 prints as 5.1×10<sup>4</sup>. A row
+ * whose value is not wrapped in $…$ must use this, or fmtNum's TeX shows as text.
+ */
+export function fmtPlain(n, d = 3) {
+  if (!Number.isFinite(n)) return '—';
+  const a = Math.abs(n);
+  if (a < 1e-10) return '0';
+  if (a >= 1e4 || a < 0.001) return sciHTML(n, 2);
+  return String(Number(n.toFixed(d)));
+}
+
 export function sciHTML(x, digits = 2) {
   if (!Number.isFinite(x)) return '—';
   if (Math.abs(x) < 1e-18) return '0';

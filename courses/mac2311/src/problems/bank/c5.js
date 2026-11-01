@@ -289,7 +289,7 @@ const B = [
         ],
       },
       arc: {
-        ask: 'On the same cardioid, find the mean distance to the x axis for a point uniform by arc length.',
+        ask: 'On the cardioid r=1−cosθ, find the mean distance to the x axis for a point uniform by arc length.',
         answer: 0.8,
         second: () => simpson((t) => (1 - Math.cos(t)) * Math.sin(t) * 2 * Math.sin(t / 2), 0, Math.PI) / 4,
         reason: 'The upper half has length four. Weight y by ds=2sin(θ/2)dθ before dividing by that length.',

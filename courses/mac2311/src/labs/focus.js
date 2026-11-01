@@ -1,7 +1,7 @@
 /** Shows that moving the subject twice as far does not halve the lens-to-sensor distance.
  * A 50 mm camera lens supplies a real inverse-function and implicit-derivative application. */
 import { cells, kv } from '@flux/shells/math/shared.js';
-import { fmtNum as fmt } from '@flux/shells/math/format.js';
+import { fmtNum as fmt, fmtPlain } from '@flux/shells/math/format.js';
 import { focus } from '@flux/subjects/math/focus.js';
 import { CSS2DObject } from '../scene/createScene.js';
 import { GraphView } from '../scene/graph.js';
@@ -67,13 +67,13 @@ export default defineLab({
   },
   law: () => ['1/f=1/u+1/v', 'dv/du=-f^2/(u-f)^2'],
   liveRows: (s, c) =>
-    kv('f', `${fmt(s.f)} mm`) +
-    kv('u', `${fmt(s.u)} mm`) +
-    kv('v', `${fmt(c.v)} mm`) +
+    kv('f', `${fmtPlain(s.f)} mm`) +
+    kv('u', `${fmtPlain(s.u)} mm`) +
+    kv('v', `${fmtPlain(c.v)} mm`) +
     kv('dv/du', fmt(c.sensitivity)),
   readout: (s, c) =>
     cells([
-      ['image distance', `${fmt(c.v)} mm`],
+      ['image distance', `${fmtPlain(c.v)} mm`],
       ['sensitivity', fmt(c.sensitivity)],
       ['image scale', fmt(c.magnification)],
     ]),

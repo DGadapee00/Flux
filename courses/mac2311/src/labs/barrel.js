@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { M3_PER_GAL_US } from '@flux/subjects/convert.js';
 import { rainBarrel } from '@flux/subjects/math/rain-barrel.js';
 import { cells, kv } from '@flux/shells/math/shared.js';
-import { fmtNum as fmt } from '@flux/shells/math/format.js';
+import { fmtNum as fmt, fmtPlain } from '@flux/shells/math/format.js';
 import { defineLab } from './define.js';
 const CAPACITY = 50 * M3_PER_GAL_US * 1000;
 const SCENARIOS = [
@@ -94,17 +94,17 @@ export default defineLab({
   },
   law: () => ['V_{in}(t)=\\int_0^t q(s)\\,ds', 'V=\\min(C,V_0+V_{in})', 'V_{spill}=\\max(0,V_0+V_{in}-C)'],
   liveRows: (s, c) =>
-    kv('capacity', `${fmt(s.capacity)} L`) +
-    kv('inflow now', `${fmt(c.flow)} L/min`) +
-    kv('delivered', `${fmt(c.delivered)} L`) +
-    kv('stored', `${fmt(c.stored)} L`) +
-    kv('overflow', `${fmt(c.spill)} L`),
+    kv('capacity', `${fmtPlain(s.capacity)} L`) +
+    kv('inflow now', `${fmtPlain(c.flow)} L/min`) +
+    kv('delivered', `${fmtPlain(c.delivered)} L`) +
+    kv('stored', `${fmtPlain(c.stored)} L`) +
+    kv('overflow', `${fmtPlain(c.spill)} L`),
   readout: (s, c) =>
     cells([
-      ['inflow', `${fmt(c.flow)} L/min`],
-      ['stored', `${fmt(c.stored)} L`],
-      ['storage rate', `${fmt(c.storageRate)} L/min`],
-      ['overflow', `${fmt(c.spill)} L`],
+      ['inflow', `${fmtPlain(c.flow)} L/min`],
+      ['stored', `${fmtPlain(c.stored)} L`],
+      ['storage rate', `${fmtPlain(c.storageRate)} L/min`],
+      ['overflow', `${fmtPlain(c.spill)} L`],
     ]),
   coach: (s, c) => ({
     title: 'A rate is not the water already collected',

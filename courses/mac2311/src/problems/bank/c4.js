@@ -355,7 +355,7 @@ const B = [
         ],
       },
       yaxis: {
-        ask: 'Rotate the same segment y=1−2x about the y axis. Find the lateral surface area without an end cap.',
+        ask: 'Rotate y=1−2x, 0≤x≤1/2, about the y axis. Find the lateral surface area without an end cap.',
         answer: (Math.PI * Math.sqrt(5)) / 4,
         second: () => Math.PI * 0.5 * Math.hypot(0.5, 1),
         half: true,

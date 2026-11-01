@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { turntable } from '@flux/subjects/math/turntable.js';
 import { cells, kv } from '@flux/shells/math/shared.js';
-import { fmtNum as fmt } from '@flux/shells/math/format.js';
+import { fmtNum as fmt, fmtPlain } from '@flux/shells/math/format.js';
 import { sceneScale } from '../engine/frame.js';
 import { defineLab } from './define.js';
 const SCENARIOS = [
@@ -119,18 +119,18 @@ export default defineLab({
     String.raw`v=r\omega,\quad T=2\pi/\omega`,
   ],
   liveRows: (s, c) =>
-    kv('angle', `${fmt(c.theta)} rad`) +
-    kv('speed', `${fmt(c.speed)} m/s`) +
-    kv('period', `${fmt(c.period)} s`) +
-    kv('path distance', `${fmt(c.distance)} m`) +
-    kv('swept area', `${fmt(c.area)} m²`) +
+    kv('angle', `${fmtPlain(c.theta)} rad`) +
+    kv('speed', `${fmtPlain(c.speed)} m/s`) +
+    kv('period', `${fmtPlain(c.period)} s`) +
+    kv('path distance', `${fmtPlain(c.distance)} m`) +
+    kv('swept area', `${fmtPlain(c.area)} m²`) +
     kv('tangent slope', c.slope == null ? 'vertical' : fmt(c.slope)),
   readout: (s, c) =>
     cells([
-      ['speed', `${fmt(c.speed)} m/s`],
-      ['period', `${fmt(c.period)} s`],
-      ['distance', `${fmt(c.distance)} m`],
-      ['area', `${fmt(c.area)} m²`],
+      ['speed', `${fmtPlain(c.speed)} m/s`],
+      ['period', `${fmtPlain(c.period)} s`],
+      ['distance', `${fmtPlain(c.distance)} m`],
+      ['area', `${fmtPlain(c.area)} m²`],
     ]),
   coach: () => ({
     title: 'One angular speed, many linear speeds',

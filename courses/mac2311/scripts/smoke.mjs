@@ -9,6 +9,18 @@ const shots = process.env.SMOKE_SHOTS;
 const options = { headless: true };
 if (process.env.CHROMIUM_EXECUTABLE)
   Object.assign(options, { executablePath: process.env.CHROMIUM_EXECUTABLE, args: ['--no-sandbox'] });
+/** Text on screen that should have been typeset: a TeX command, ^{ or _{, or a stray $. */
+const rawTex = (page) =>
+  page.evaluate(() => {
+    const out = [];
+    const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    let n;
+    while ((n = walk.nextNode())) {
+      if (n.parentElement.closest('.katex, script, style, [hidden], textarea')) continue;
+      if (/\\[a-zA-Z]+|\^\{|_\{|\$/.test(n.textContent)) out.push(n.textContent.trim().slice(0, 60));
+    }
+    return out;
+  });
 const browser = await chromium.launch(options);
 const errors = [];
 let views = 0,
@@ -44,6 +56,7 @@ try {
           const text = await page.locator('#readout').innerText();
           assert.ok(text.length > 0, `${lab} empty readout`);
           assert.ok(!/NaN|\[object Object\]/.test(text), `${lab}: ${text}`);
+          assert.deepEqual(await rawTex(page), [], `${exam.id}/${lab}/${scenario}: raw TeX on screen`);
           views++;
         }
         if (shots) await page.screenshot({ path: `${shots}/${lab}-${width}.png` });
@@ -81,7 +94,7 @@ try {
   }
   assert.deepEqual(errors, []);
   console.log(
-    `smoke: ${views} scenario views, ${examples} notes example buttons at 380 and 1280; all 14 labs and six notes units work`,
+    `smoke: ${views} scenario views, ${examples} notes example buttons at 380 and 1280; all ${EXAMS.flatMap((e) => e.labs).length} labs and ${EXAMS.length} notes units work, with no raw TeX on screen`,
   );
 } finally {
   await browser.close();

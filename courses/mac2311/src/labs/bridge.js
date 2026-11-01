@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { parabolicCable } from '@flux/subjects/math/parabolic-cable.js';
 import { M_PER_FT } from '@flux/subjects/convert.js';
 import { cells, kv } from '@flux/shells/math/shared.js';
-import { fmtNum as fmt } from '@flux/shells/math/format.js';
+import { fmtNum as fmt, fmtPlain } from '@flux/shells/math/format.js';
 import { GraphView } from '../scene/graph-integral.js';
 import { defineLab } from './define.js';
 const L = 4200 * M_PER_FT;
@@ -94,17 +94,17 @@ export default defineLab({
   },
   law: () => [String.raw`y=y_0+4dx^2/L^2`, String.raw`\ell=\int_{-L/2}^{L/2}\sqrt{1+(8dx/L^2)^2}\,dx`],
   liveRows: (s, c) =>
-    kv('span', `${fmt(s.L)} m`) +
-    kv('assumed sag', `${fmt(s.d)} m`) +
-    kv('cable length', `${fmt(c.length)} m`) +
-    kv('extra beyond span', `${fmt(c.extra)} m`) +
-    kv('polygon shortfall', `${fmt(c.error)} m`),
+    kv('span', `${fmtPlain(s.L)} m`) +
+    kv('assumed sag', `${fmtPlain(s.d)} m`) +
+    kv('cable length', `${fmtPlain(c.length)} m`) +
+    kv('extra beyond span', `${fmtPlain(c.extra)} m`) +
+    kv('polygon shortfall', `${fmtPlain(c.error)} m`),
   readout: (s, c) =>
     cells([
-      ['cable', `${fmt(c.length)} m`],
-      ['extra', `${fmt(c.extra)} m`],
-      ['polygon', `${fmt(c.polygon)} m`],
-      ['shortfall', `${fmt(c.error)} m`],
+      ['cable', `${fmtPlain(c.length)} m`],
+      ['extra', `${fmtPlain(c.extra)} m`],
+      ['polygon', `${fmtPlain(c.polygon)} m`],
+      ['shortfall', `${fmtPlain(c.error)} m`],
     ]),
   coach: () => ({
     title: 'Sag adds a slant, not another vertical leg',

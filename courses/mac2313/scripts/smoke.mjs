@@ -1,6 +1,18 @@
 import { chromium } from './playwright.mjs';
 import { EXAMS } from '../src/data/catalog.js';
 
+/** Text on screen that should have been typeset: a TeX command, ^{ or _{, or a stray $. */
+const rawTex = (page) =>
+  page.evaluate(() => {
+    const out = [];
+    const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    let n;
+    while ((n = walk.nextNode())) {
+      if (n.parentElement.closest('.katex, script, style, [hidden], textarea')) continue;
+      if (/\\[a-zA-Z]+|\^\{|_\{|\$/.test(n.textContent)) out.push(n.textContent.trim().slice(0, 60));
+    }
+    return out;
+  });
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 const errors = [];
@@ -85,6 +97,8 @@ for (const { exam, id } of catalogLabs) {
     computed: window.__flux?.computed || {},
   }));
   if (snap.lab !== id) mismatches.push({ name: `${id}.lab`, got: snap.lab, exp: id });
+  const raw = await rawTex(page);
+  if (raw.length) mismatches.push({ name: `${id}.rawTex`, got: raw, exp: [] });
   const ok = CHECK[id];
   if (!ok) mismatches.push({ name: `${id}.check`, got: 'missing', exp: 'defined' });
   else if (!ok(snap.computed)) mismatches.push({ name: `${id}.routes`, got: false, exp: true });

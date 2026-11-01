@@ -31,7 +31,7 @@ const prod = [
       return { h, c, a, m: 2 * (a - h) };
     },
     text: (T, $) =>
-      String.raw`The curve is $y=(x-${$.h})^2+${$.c}$. Find the ${$.branch > 0 ? 'positive' : 'negative'} contact coordinate $a$ of a tangent passing through the origin, then its slope. The origin is not a contact point.`,
+      String.raw`The curve is $y=${$.h ? `(x-${$.h})^2` : 'x^2'}+${$.c}$. Find the ${$.branch > 0 ? 'positive' : 'negative'} contact coordinate $a$ of a tangent passing through the origin, then its slope. The origin is not a contact point.`,
     parts: [
       numeric('a', ($) => $.a, 'contact coordinate a', [
         [
@@ -51,8 +51,8 @@ const prod = [
       'Eliminate m, solve for the contact coordinate, then keep the requested sign.',
     ],
     steps: ($) => [
-      String.raw`$f(a)=af'(a)$ gives $(a-${$.h})^2+${$.c}=2a(a-${$.h})$.`,
-      String.raw`The linear terms cancel: $a^2=${$.h ** 2 + $.c}$. Choose the requested branch, then use $m=2(a-${$.h})$.`,
+      String.raw`$f(a)=af'(a)$ gives $${$.h ? `(a-${$.h})^2` : 'a^2'}+${$.c}=2a${$.h ? `(a-${$.h})` : '\cdot a'}$.`,
+      String.raw`The linear terms cancel: $a^2=${$.h ** 2 + $.c}$. Choose the requested branch, then use $m=${$.h ? `2(a-${$.h})` : '2a'}$.`,
     ],
     second: ($) => {
       let lo = 0,

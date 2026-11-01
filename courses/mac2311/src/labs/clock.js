@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { G_STANDARD, RAD_PER_DEG } from '@flux/subjects/convert.js';
 import { pendulumSeries } from '@flux/subjects/math/pendulum-series.js';
 import { cells, kv } from '@flux/shells/math/shared.js';
-import { fmtNum as fmt } from '@flux/shells/math/format.js';
+import { fmtNum as fmt, fmtPlain } from '@flux/shells/math/format.js';
 import { defineLab } from './define.js';
 const BASE_LENGTH = G_STANDARD * (4 / (2 * Math.PI)) ** 2;
 const SCENARIOS = [
@@ -121,12 +121,12 @@ export default defineLab({
     String.raw`c_0=1,\quad c_j/c_{j-1}=((2j-1)/(2j))^2`,
   ],
   liveRows: (s, c) =>
-    kv('effective L', `${fmt(s.L)} m`) +
+    kv('effective L', `${fmtPlain(s.L)} m`) +
     kv('small-angle T₀', seconds(c.T0)) +
     kv('nonlinear period', seconds(c.period)) +
     kv('series approximation', seconds(c.series)) +
     kv('error bound', seconds(c.tailBound)) +
-    kv('slow-clock loss', `${fmt(c.lossPerDay)} s/day`),
+    kv('slow-clock loss', `${fmtPlain(c.lossPerDay)} s/day`),
   readout: (s, c) =>
     cells([
       ['period', seconds(c.period)],

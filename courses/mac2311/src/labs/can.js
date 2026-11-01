@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { cylinderDesign } from '@flux/subjects/math/containers.js';
 import { sceneScale } from '../engine/frame.js';
 import { cells, kv } from '@flux/shells/math/shared.js';
-import { fmtNum as fmt } from '@flux/shells/math/format.js';
+import { fmtNum as fmt, fmtPlain } from '@flux/shells/math/format.js';
 import { defineLab } from './define.js';
 const SCENARIOS = [
   { id: 'closed', name: '330 mL drink can · two ends', V: 330, r: 3.3, k: 2 },
@@ -83,15 +83,15 @@ export default defineLab({
   },
   law: () => ['h=V/(\\pi r^2)', 'A=2V/r+k\\pi r^2', "A'=-2V/r^2+2k\\pi r"],
   liveRows: (s, c) =>
-    kv('capacity', `${fmt(s.V)} cm³`) +
-    kv('height', `${fmt(c.h)} cm`) +
-    kv('area', `${fmt(c.area)} cm²`) +
-    kv('dA/dr', `${fmt(c.slope)} cm`),
+    kv('capacity', `${fmtPlain(s.V)} cm³`) +
+    kv('height', `${fmtPlain(c.h)} cm`) +
+    kv('area', `${fmtPlain(c.area)} cm²`) +
+    kv('dA/dr', `${fmtPlain(c.slope)} cm`),
   readout: (s, c) =>
     cells([
-      ['height', `${fmt(c.h)} cm`],
-      ['least-area radius', `${fmt(c.optR)} cm`],
-      ['area excess', `${fmt(c.excess)}%`],
+      ['height', `${fmtPlain(c.h)} cm`],
+      ['least-area radius', `${fmtPlain(c.optR)} cm`],
+      ['area excess', `${fmtPlain(c.excess)}%`],
     ]),
   coach: (s, c) => ({
     title: 'A constraint changes the optimization',

@@ -410,7 +410,7 @@ const B = [
           'Integrate e^(−t) from one to x. The antiderivative is −e^(−t), so endpoint subtraction gives a positive probability.',
       },
       crossing: {
-        ask: String.raw`Use the same density. For $x>0$, express $P(-1<X<x)$ in x.`,
+        ask: String.raw`A waiting time has density $e^{-t}$ for $t\ge0$, and zero elsewhere. For $x>0$, express $P(-1<X<x)$ in x.`,
         key: '1-exp(-x)',
         alt: '(exp(x)-1)/exp(x)',
         wrong: 'exp(1)-exp(-x)',
@@ -514,7 +514,7 @@ B.push(
         ],
       },
       restoring: {
-        ask: 'Use the same Hooke-law spring: force magnitude 10 N at 0.2 m extension. Find the work done by the spring itself while it is stretched from equilibrium to 0.5 m.',
+        ask: 'A Hooke-law spring needs a force magnitude of 10 N at 0.2 m extension. Find the work done by the spring itself while it is stretched from equilibrium to 0.5 m.',
         answer: -6.25,
         second: () => simpson((x) => -50 * x, 0, 0.5),
         reason:

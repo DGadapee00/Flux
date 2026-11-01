@@ -209,7 +209,7 @@ const B = [
         ],
       },
       three: {
-        ask: 'Use the first three nonzero sine-series terms for the same integral.',
+        ask: 'Use the first three nonzero sine-series terms to approximate ∫₀¹ sin(x²) dx.',
         answer: 13 / 42 + 1 / 1320,
         second: () => simpson((x) => x * x - x ** 6 / 6 + x ** 10 / 120, 0, 1),
         reason: 'The added integrand term is x¹⁰/120, whose integral is 1/1320.',
