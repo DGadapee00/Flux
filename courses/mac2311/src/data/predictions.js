@@ -172,3 +172,179 @@ PREDICTIONS.can = [
     why: 'Removing a circular end allows a larger optimal radius. The optimum changes from h=2r to h=r, so its height decreases despite the larger radius.',
   },
 ];
+
+PREDICTIONS.riemann = [
+  {
+    id: 'endpoint-switch',
+    scenario: 'quad',
+    prep: (s) => {
+      s.sample = 'left';
+      s.n = 4;
+    },
+    ask: 'Keep four intervals for x² on [0,1], but switch left endpoints to right endpoints. Does the estimate stay the same?',
+    apply: (s) => {
+      s.sample = 'right';
+    },
+    watch: [{ id: 'sum', label: 'Sum', get: (c) => c.sum, mode: 'trend' }],
+    expect: { sum: 'bigger' },
+    why: 'Each right endpoint has a larger height on an increasing curve. The number and widths of rectangles stay fixed.',
+  },
+  {
+    id: 'midpoint-error',
+    scenario: 'quad',
+    prep: (s) => {
+      s.sample = 'mid';
+      s.n = 4;
+    },
+    ask: 'Double the midpoint panels for x². What happens to the approximation error?',
+    apply: (s) => {
+      s.n *= 2;
+    },
+    watch: [{ id: 'error', label: 'Error magnitude', get: (c) => c.err, mode: 'factor' }],
+    expect: { error: 0.25 },
+    why: 'For this quadratic, the midpoint error is proportional to 1/n². Twice as many panels gives one quarter of the error.',
+  },
+];
+PREDICTIONS.accum = [
+  {
+    id: 'quadratic-volume',
+    scenario: 'quad',
+    prep: (s) => {
+      s.x = 1;
+      s.a = 0;
+    },
+    ask: 'Move the upper limit of the x² accumulation from one to two. Does the accumulated value quadruple or grow eightfold?',
+    apply: (s) => {
+      s.x = 2;
+    },
+    watch: [{ id: 'area', label: 'Accumulated integral', get: (c) => c.area, mode: 'factor' }],
+    factors: [8, 4, 2, 1],
+    expect: { area: 8 },
+    why: 'The integral from zero is x³/3. Both the integration width and the growing height matter.',
+  },
+  {
+    id: 'declining-rate',
+    scenario: 'sine',
+    prep: (s) => {
+      s.x = Math.PI / 2;
+      s.a = 0;
+    },
+    ask: 'Move from π/2 to π under sin x. The current height falls to zero. Does the accumulated integral fall too?',
+    apply: (s) => {
+      s.x = Math.PI;
+    },
+    watch: [{ id: 'area', label: 'Accumulated integral', get: (c) => c.area, mode: 'trend' }],
+    expect: { area: 'bigger' },
+    why: 'The integrand remains positive, so the accumulated total keeps increasing even while its slope decreases.',
+  },
+];
+PREDICTIONS.solids = [
+  {
+    id: 'partition-not-volume',
+    scenario: 'disks',
+    prep: (s) => {
+      s.n = 6;
+    },
+    ask: 'Double the number of drawn slices without changing the solid. What happens to its exact volume?',
+    apply: (s) => {
+      s.n *= 2;
+    },
+    watch: [{ id: 'volume', label: 'Exact volume', get: (c) => c.disk, mode: 'factor' }],
+    expect: { volume: 1 },
+    why: 'The slicing is a representation. The integration domain and the solid remain the same.',
+  },
+  {
+    id: 'endpoint-scale',
+    scenario: 'both',
+    prep: (s) => {
+      s.b = 2;
+    },
+    ask: 'Double b from two to four under y=√x, rotating about the x-axis. Is the volume doubled, quadrupled, or eightfold?',
+    apply: (s) => {
+      s.b *= 2;
+    },
+    watch: [{ id: 'volume', label: 'Volume', get: (c) => c.disk, mode: 'factor' }],
+    factors: [8, 4, 2, 1],
+    expect: { volume: 4 },
+    why: 'Disk area is πx. Integrating to b gives πb²/2. Doubling b does not double every length of the solid.',
+  },
+];
+PREDICTIONS.numint = [
+  {
+    id: 'trap-refine',
+    scenario: 'coarse',
+    ask: 'For the sine integral, double trapezoidal panels from four to eight. Approximately how does its error change?',
+    apply: (s) => {
+      s.n *= 2;
+    },
+    watch: [{ id: 'error', label: 'Trapezoidal error', get: (c) => c.trapErr, mode: 'factor' }],
+    tol: 0.02,
+    expect: { error: 0.25 },
+    why: 'For a smooth integrand, trapezoidal error is second order in panel width. The quarter factor is an asymptotic estimate, not an exact identity.',
+  },
+  {
+    id: 'simpson-refine',
+    scenario: 'mid',
+    ask: 'Double Simpson panels from eight to sixteen. Approximately what fraction of the old error remains?',
+    apply: (s) => {
+      s.n *= 2;
+    },
+    watch: [{ id: 'error', label: 'Simpson error', get: (c) => c.simpErr, mode: 'factor' }],
+    factors: [0.5, 0.25, 0.0625, 1],
+    tol: 0.02,
+    expect: { error: 0.0625 },
+    why: 'Simpson error is fourth order for this smooth function. Halving panel width leaves about one sixteenth of the error.',
+  },
+];
+PREDICTIONS.barrel = [
+  {
+    id: 'rising-storm',
+    scenario: 'ramp',
+    prep: (s) => {
+      s.t = 5;
+    },
+    ask: 'The inlet rate rises linearly. Double elapsed time from five to ten minutes. How does delivered water change?',
+    apply: (s) => {
+      s.t *= 2;
+    },
+    watch: [{ id: 'water', label: 'Delivered water', get: (c) => c.delivered, mode: 'factor' }],
+    expect: { water: 4 },
+    why: 'The area under a ramp is a triangle. Doubling time doubles both its base and its endpoint height.',
+  },
+  {
+    id: 'full-storage',
+    scenario: 'full',
+    ask: 'The barrel is already full. Double inlet flow while leaving capacity fixed. Does the stored water double?',
+    apply: (s) => {
+      s.peak *= 2;
+    },
+    watch: [{ id: 'stored', label: 'Stored water', get: (c) => c.stored, mode: 'trend' }],
+    expect: { stored: 'same' },
+    why: 'The additional delivered water spills. Capacity limits stored volume, while total inflow still increases.',
+  },
+];
+PREDICTIONS.spheroid = [
+  {
+    id: 'midpoint-refine',
+    scenario: 'oblate',
+    ask: 'Double the midpoint disk count. How does its excess over the exact volume change?',
+    apply: (s) => {
+      s.n *= 2;
+    },
+    watch: [{ id: 'error', label: 'Excess volume', get: (c) => c.error, mode: 'factor' }],
+    expect: { error: 0.25 },
+    why: 'The disk-area profile is quadratic. Its midpoint error is exactly proportional to 1/n².',
+  },
+  {
+    id: 'radial-scale',
+    scenario: 'sphere',
+    ask: 'Double the equatorial radius while keeping the axial half-height fixed. Does volume grow fourfold or eightfold?',
+    apply: (s) => {
+      s.a *= 2;
+    },
+    watch: [{ id: 'volume', label: 'Volume', get: (c) => c.volume, mode: 'factor' }],
+    factors: [8, 4, 2, 1],
+    expect: { volume: 4 },
+    why: 'The equatorial radius enters disk area twice. The axial interval has not doubled, so this is not an eightfold uniform scaling.',
+  },
+];

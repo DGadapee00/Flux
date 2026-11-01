@@ -7,6 +7,11 @@ import { riemann1d } from '@flux/subjects/math/riemann.js';
 import { simpson } from '@flux/subjects/math/quadrature.js';
 
 export const GRAPHS = {
+ weightParabola:{id:'weightParabola',name:'4−(x−1)²',tex:'4-(x-1)^2',f:x=>4-(x-1)**2,fp:x=>-2*(x-1),F:x=>4*x-(x-1)**3/3},
+ weightRoot:{id:'weightRoot',name:'2√x',tex:'2\\sqrt{x}',f:x=>2*Math.sqrt(x),fp:x=>1/Math.sqrt(x),F:x=>4*x**1.5/3},
+ normalizedForce:{id:'normalizedForce',name:'Normalized external spring force F/k',tex:'F_{ext}/k=x',f:x=>x,fp:()=>1,F:x=>x*x/2},
+ strip:{id:'strip',name:'6x−2x²',tex:'6x-2x^2',f:x=>6*x-2*x*x,fp:x=>6-4*x,F:x=>3*x*x-2*x**3/3},
+ cap:{id:'cap',name:'1−x²',tex:'1-x^2',f:x=>1-x*x,fp:x=>-2*x,F:x=>x-x**3/3},
   tangent1: {id:'tangent1',name:'(x−1)²+1',tex:'(x-1)^2+1',f:x=>(x-1)**2+1,fp:x=>2*(x-1),F:x=>(x-1)**3/3+x},
   tangent2: {id:'tangent2',name:'x²+4',tex:'x^2+4',f:x=>x*x+4,fp:x=>2*x,F:x=>x**3/3+4*x},
   fall: {id:'fall',name:'Height 400−16t² (ft)',tex:'400-16x^2',f:x=>400-16*x*x,fp:x=>-32*x,F:x=>400*x-16*x**3/3},
