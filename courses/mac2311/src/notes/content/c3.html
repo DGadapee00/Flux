@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>The definite integral and its applications</title></head><body><header class="top"><p class="eyebrow">MAC 2311–2312 · Calculus I and II · Unit 3 · OpenStax Vol 1 Ch 5–6; Vol 2 Ch 2</p><h1>The definite integral and its applications</h1><p class="lede">One course from differentiation to infinite series. Derive each result, work an example, then open its lab.</p><div class="legend"><span>Worked example</span><span>Derivation</span><span>Common mistake</span><span>Key idea</span><span>Model limits</span></div><nav class="toc"><a href="#s1"><span>01</span>Area as a limit of sums</a><a href="#s2"><span>02</span>The definite integral</a><a href="#s3"><span>03</span>The Fundamental Theorem</a><a href="#s4"><span>04</span>Net change</a><a href="#s5"><span>05</span>Substitution</a><a href="#s6"><span>06</span>Area between curves</a><a href="#s7"><span>07</span>Volumes by slicing</a><a href="#s8"><span>08</span>Volumes by shells</a><a href="#s9"><span>09</span>Work</a><a href="#s10"><span>10</span>Centres of mass</a><a href="#s11"><span>11</span>Numerical integration</a><a href="#s12"><span>12</span>Formula sheet</a></nav></header><main><div class="part"><div class="eyebrow">Calculus Volume 1</div><h2>Integration</h2><section class="topic" id="s1">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>The definite integral and its applications</title></head><body><header class="top"><p class="eyebrow">MAC 2311–2312 · Calculus I and II · Unit 3 · OpenStax Vol 1 Ch 5–6; Vol 2 Ch 2</p><h1>The definite integral and its applications</h1><p class="lede">An integral turns local contributions into totals. Keep track of signs, dimensions and the quantity that each strip represents, from accumulated water to volume and probability.</p><div class="legend"><span>Worked example</span><span>Derivation</span><span>Common mistake</span><span>Key idea</span><span>Model limits</span></div><nav class="toc"><a href="#s1"><span>01</span>Area as a limit of sums</a><a href="#s2"><span>02</span>The definite integral</a><a href="#s3"><span>03</span>The Fundamental Theorem</a><a href="#s4"><span>04</span>Net change, averages, and probability</a><a href="#s5"><span>05</span>Substitution</a><a href="#s6"><span>06</span>Area between curves</a><a href="#s7"><span>07</span>Volumes by slicing</a><a href="#s8"><span>08</span>Volumes by shells</a><a href="#s9"><span>09</span>Work</a><a href="#s10"><span>10</span>Centres of mass</a><a href="#s11"><span>11</span>Numerical integration</a><a href="#s12"><span>12</span>Formula sheet</a></nav></header><main><div class="part"><div class="eyebrow">Calculus Volume 1</div><h2>Integration</h2><section class="topic" id="s1">
 <h2><span class="n">01</span>Area as a limit of sums</h2>
 <p>To find the area under a positive \(f\) on \([a, b]\), cut the interval into \(n\) strips of width \(\Delta x = (b - a)/n\). Over each strip, build a rectangle whose height is \(f\) at a sample point. Add the rectangles.</p>
 \[
@@ -26,9 +26,16 @@ R_n = \frac{(n + 1)(2n + 1)}{6n^2} \to \frac{2}{6} = \frac13.
 <p>Height at a sample point, times width, summed over the strips. The area is the limit as the strips get thin. For an increasing \(f\), the left sum is low and the right sum is high.</p>
 </div>
 <p>In the Riemann lab, raise \(n\) and switch between left, right, and midpoint samples. The readout tracks the sum against the exact value. Simpson's rule gives the second opinion.</p>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>Closed forms for sums of powers exist only for simple integrands. For most functions, the limit is not taken by hand. The next sections find it another way.</p>
 </div>
+
+<div class="box fix"><span class="tag">Correction to source · 18.01SC 3B-3(a)</span><p>The posted Unit 3 solutions, PDF page 4, display the four-strip sums for \(x^3\) correctly but simplify them to incorrect fractions. The right sum is printed as \(15/128\), and the left as \(7/128\). Recompute the actual terms:</p>
+\[R_4=\frac{1+8+27+64}{256}=\frac{25}{64},\qquad L_4=\frac{0+1+8+27}{256}=\frac9{64}.\]
+<p>The exact integral \(1/4\) lies between these corrected values. Their difference is \(1/4\), which also follows from the telescoping identity \(R_n-L_n=\Delta x[f(b)-f(a)]\). This is an arithmetic correction to the published answer, not a change to the method.</p>
+<p><a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/resources/mit18_01sc_pset3sol/">Published solutions, 3B-3(a)</a>. Flux records the checked discrepancy in ERRATA.md.</p></div>
+<div class="box ex"><span class="tag">Worked example · checking the cubic right sum</span><p>Four right rectangles under \(x^3\) on \([0,1]\) give \(25/64=0.390625\). Sum the heights before multiplying by \(1/4\). The approximation is above the exact integral \(0.25\), because the function increases.</p></div>
+<div class="box ex"><span class="tag">Worked example · checking the cubic left sum</span><p>Using left endpoints instead gives \(9/64=0.140625\), below the exact integral. The two sums bound the integral, but neither is the integral itself. A limit requires refining the partition.</p></div>
 </section><section class="topic" id="s2">
 <h2><span class="n">02</span>The definite integral</h2>
 <p>The definite integral is the limit of Riemann sums, for any choice of sample points, as the widest strip shrinks to zero.</p>
@@ -54,7 +61,7 @@ f_{\text{avg}} = \frac{1}{b - a}\int_a^b f(x)\,dx.
 <div class="box key"><span class="tag">Key</span>
 <p>The definite integral is a limit of sums. It is a signed area. It is linear, it splits at interior points, and it changes sign when the limits swap.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The proof that every continuous function is integrable is in an analysis course. Functions with infinitely many jumps, or unbounded ones, need more care. Improper integrals come in Calculus II.</p>
 </div>
 </section><section class="topic" id="s3">
@@ -84,11 +91,15 @@ f_{\text{avg}} = \frac{1}{b - a}\int_a^b f(x)\,dx.
 <p>Accumulated area grows at the rate \(f\). To integrate \(f\) from \(a\) to \(b\), find any antiderivative, and subtract its value at \(a\) from its value at \(b\).</p>
 </div>
 <p>In the FTC lab, drag \(x\). The shaded area is \(A(x)\), and the readout's height is \(f(x)\). A short step in \(x\) shows the area growing at that height.</p>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>Part 1 needs \(f\) continuous at \(x\). At a jump, \(A\) still exists, but it has a corner and no derivative there.</p>
 </div>
+
+<h3>Recover an unknown rate from a measured accumulation</h3><div class="box ex"><span class="tag">Worked example · the moving endpoint cannot be ignored</span><p>Suppose \(\int_0^{x^2}f(t)\,dt=x\sin(\pi x)\) for positive \(x\), with continuous \(f\). Differentiate both sides:</p>
+\[2x f(x^2)=\sin(\pi x)+\pi x\cos(\pi x).\]
+<p>To find \(f(4)\), use \(x=2\), not \(x=4\). The sine term vanishes and the cosine is one, so \(4f(4)=2\pi\). Hence \(f(4)=\pi/2\). This reproduces the posted answer to 18.01SC Exam 3, solution 3(b).</p></div><div class="box fix"><span class="tag">Common mistake</span><p>Evaluating the integrand at the upper endpoint is only the first step when that endpoint moves nonuniformly. Its derivative supplies another factor. Here omitting \(2x\) would give \(2\pi\) instead of \(\pi/2\) at the requested point.</p></div>
 </section><section class="topic" id="s4">
-<h2><span class="n">04</span>Net change</h2>
+<h2><span class="n">04</span>Net change, averages, and probability</h2>
 <p>Part 2 of the theorem, applied to \(F'\), says the integral of a rate is the net change:</p>
 \[
 \int_a^b F'(t)\,dt = F(b) - F(a).
@@ -111,9 +122,29 @@ f_{\text{avg}} = \frac{1}{b - a}\int_a^b f(x)\,dx.
 <div class="box key"><span class="tag">Key</span>
 <p>Integrate a rate to get a net change. Integrate its absolute value to get a total.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
-<p>The net change needs a starting value to become a position or an amount. The integral only gives the difference. Physical applications such as work and pressure come in Calculus II.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The net change needs a starting value to become a position or an amount. The integral only gives the difference. Work and weighted quantities appear later in this unit. A real tank also has capacity and cannot contain a negative volume.</p>
 </div>
+
+<h3>A barrel distinguishes inlet flow, stored water and overflow</h3><p>The rain-barrel application uses a nominal \(50\) US gallon capacity. The exact US-gallon definition converts this to \(189.2705892\) L. The manufacturer supplies capacity; the storm profiles are chosen inputs. Let \(q(t)\) be inlet flow in litres per minute. With a closed valve, cumulative delivery is \(I(t)=\int_0^t q(s)\,ds\).</p>
+\[V(t)=\min(C,V_0+I(t)),\qquad S(t)=\max(0,V_0+I(t)-C).\]
+<p>Here \(V\) is stored water and \(S\) is spilled water. The identity \(V+S=V_0+I\) checks conservation. Because these inlet profiles are nonnegative, delivered volume never decreases. With outflow or evaporation, the balance would need extra terms.</p>
+<div class="box ex"><span class="tag">Worked example · a rising inlet is a triangular area</span><p>For \(q(t)=t\) L/min during a \(20\) minute storm, the inlet rate at \(t=10\) is \(10\) L/min. Delivery is \(\int_0^{10}t\,dt=50\) L. An initially empty barrel stores all \(50\) L. Multiplying the final rate by elapsed time would give \(100\) L, twice the correct total.</p></div>
+<div class="box ex"><span class="tag">Worked example · doubling time can quadruple delivery</span><p>The same ramp delivers \(12.5\) L by five minutes and \(50\) L by ten minutes. Doubling time doubles both the base and height of the flow triangle. This changes the total fourfold, not twofold.</p></div>
+<div class="box ex"><span class="tag">Worked example · a full barrel still receives rain</span><p>A steady \(20\) L/min inflow runs for \(15\) minutes. Delivery is \(300\) L. The barrel holds \(189.27059\) L and spills \(110.72941\) L. Once full, its stored-volume rate is zero even while inlet flow remains \(20\) L/min. The excess is not missing water; it is a separate part of the balance.</p></div>
+<div class="box ex"><span class="tag">Worked example · integrating a curved storm profile</span><p>Choose \(q(t)=20\sin(\pi t/20)\) for \(0\le t\le20\). An antiderivative gives</p>
+\[I(t)=\frac{400}{\pi}[1-\cos(\pi t/20)].\]
+<p>At ten minutes, the inlet rate is \(20\) L/min and delivery is \(400/\pi=127.32395\) L. At twenty minutes, total delivery is \(800/\pi=254.64791\) L. The barrel then spills \(65.37732\) L. The peak rate and the total storm volume describe different features of the profile.</p></div>
+<div class="box fix"><span class="tag">Common mistake</span><p>The derivative of delivered volume is inlet flow, but the derivative of stored volume changes when capacity becomes active. At the instant of first filling, the stored-volume curve generally has a corner. The lab reports its right-hand storage rate there.</p></div>
+<div class="box out"><span class="tag">What the model leaves out</span><p>The barrel has a closed valve and unlimited instantaneous overflow. Roof absorption, gutter limits, filters, leakage, evaporation and withdrawals are omitted. Its drawn cylinder is schematic. Only the nominal capacity comes from the cited product; no measured storm is claimed.</p></div><p><a href="https://goodideasinc.com/products/rain-wizard-50">Good Ideas Rain Wizard 50 specifications</a>.</p>
+<h3>An average is the height of an equal-area rectangle</h3><p>A constant value \(f_{avg}\) over \([a,b]\) accumulates \(f_{avg}(b-a)\). Make that match the integral of a varying function and solve:</p>
+\[f_{avg}=\frac{1}{b-a}\int_a^b f(x)\,dx.\]
+<p>If \(f\) is continuous, its minimum and maximum bound this average. The intermediate value theorem then guarantees an input where \(f\) equals the average. The input need not be the midpoint. This integral mean-value result differs from the derivative Mean Value Theorem in Unit 2.</p>
+<div class="box ex"><span class="tag">Worked example · average inflow is not the peak</span><p>Over the full twenty-minute sine storm, delivery is \(800/\pi\) L. Average inlet flow is therefore \(40/\pi=12.73240\) L/min. That lies below the \(20\) L/min peak. The average describes an equal-area constant profile.</p></div>
+<h3>A density assigns probabilities by area</h3><p>A continuous probability density is nonnegative and integrates to one over its support. The density's height is not itself a probability. A waiting-time density has inverse-time units; multiplying by a time interval gives a dimensionless probability. A narrow distribution can have height above one; its total area still must equal one.</p>
+<p>For a constant-rate waiting model, take \(f(t)=\lambda e^{-\lambda t}\) for \(t\ge0\), with \(\lambda>0\), and zero otherwise. Integrating from zero to \(b\) gives \(1-e^{-\lambda b}\). As \(b\) grows, that approaches one. For \(0\le a\lt b\), subtraction gives</p>
+\[P(a\lt X\lt b)=e^{-\lambda a}-e^{-\lambda b}.\]
+<div class="box ex"><span class="tag">Worked example · clipping to the support</span><p>With \(\lambda=1\), the probability between one and two is \(e^{-1}-e^{-2}=0.232544\). For the interval from \(-1\) to two, the negative-time portion contributes zero, so the probability is \(1-e^{-2}=0.864665\). Extending the exponential formula into negative time would produce a value above one and violate the stated support.</p></div><div class="box fix"><span class="tag">Common mistake</span><p>A density height and a point probability are different. One exact point has zero interval width and zero probability under a continuous density. The exponential waiting-time distribution also differs from the discrete Poisson distribution for a count.</p></div><div class="box out"><span class="tag">What the model leaves out</span><p>The waiting-time formula assumes a constant rate and independent occurrences. The calculus evaluates that model; it does not establish that a measured process satisfies those assumptions. Improper-integral normalization is treated systematically in Unit 6.</p></div><p>Checked formulas: 18.01SC Session 55, <em>Probability Function</em>, solutions (a)–(c).</p>
 </section><section class="topic" id="s5">
 <h2><span class="n">05</span>Substitution</h2>
 <p>Substitution is the chain rule read backwards. When the integrand holds a function and its derivative, rename the inside.</p>
@@ -142,7 +173,7 @@ f_{\text{avg}} = \frac{1}{b - a}\int_a^b f(x)\,dx.
 <div class="box key"><span class="tag">Key</span>
 <p>Pick \(u\) as the inside function whose derivative is also present. Convert \(dx\), and convert the limits. A constant factor that is off can be divided out. A missing \(x\) cannot.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>Substitution works only when the derivative of the inside is present, up to a constant. Integrals like \(\int x\sin x\,dx\) need integration by parts, the first topic of Calculus II.</p>
 </div>
 </section></div><div class="part"><div class="eyebrow">Calculus Volume 2</div><h2>Applications of integration</h2><section class="topic" id="s6">
@@ -173,7 +204,7 @@ A = \int_a^b \bigl(f(x) - g(x)\bigr)\,dx.
 <div class="box key"><span class="tag">Key</span>
 <p>Top minus bottom, in \(dx\). Right minus left, in \(dy\). Split where the curves cross.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The intersections are found by algebra here. For most pairs of curves they need a numerical root finder, such as Newton's method. The area formula is unchanged.</p>
 </div>
 </section><section class="topic" id="s7">
@@ -207,9 +238,13 @@ V &= \int_0^h \pi\Bigl(\frac{rx}{h}\Bigr)^2 dx\\
 <p>Volume is the integral of cross-sectional area. Disks: \(\pi R^2\). Washers: \(\pi(R^2 - r^2)\). Radii are measured from the axis of rotation.</p>
 </div>
 <p>In the Solids lab, the Disks scenario stacks slices under \(\sqrt{x}\). The readout gives the volume by the antiderivative and by Simpson's rule.</p>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>Rotation about a line other than an axis shifts every radius. About \(y = -1\), for instance, a disk's radius becomes \(f(x) + 1\). The text works those cases in §2.2.</p>
 </div>
+
+<div class="box ex"><span class="tag">Worked example · slicing an oblate spheroid</span><p>Rotate the ellipse \(x^2+4z^2\le4\) about the \(z\)-axis. A disk at height \(z\) has squared radius \(4-4z^2\). Therefore</p>
+\[V=\pi\int_{-1}^{1}(4-4z^2)\,dz=\frac{16\pi}{3}=16.75516.\]
+<p>The general axis lengths \(a\) and \(c\) give \(V=4\pi a^2c/3\). Doubling the equatorial radius alone multiplies volume by four. Doubling all lengths multiplies it by eight. The spheroid lab shows the distinction with disks and an independently computed radial-shell check.</p><p>Source: 18.01SC Session 58, <em>Volume of a Spheroid</em>.</p></div>
 </section><section class="topic" id="s8">
 <h2><span class="n">08</span>Volumes by shells</h2>
 <p>Instead of slicing across the axis, cut the solid into thin cylindrical shells around it. A shell of radius \(r\), height \(h\), and thickness \(dr\) has volume about \(2\pi r h\,dr\): unroll it into a thin slab of length \(2\pi r\).</p>
@@ -240,7 +275,7 @@ V &= \int_0^2 2\pi y\,(4 - y^2)\,dy\\
 <p>Shells: \(2\pi \times\) radius \(\times\) height \(\times\) thickness. Slice parallel to the axis for shells and across it for disks. Pick the one whose integrand needs no solving.</p>
 </div>
 <p>In the Solids lab, the Both ways scenario shows disks and shells for one solid. The two readouts agree for every right end \(b\).</p>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The shell argument assumes the height is a single segment for each radius. A region that folds back on itself needs to be split first.</p>
 </div>
 </section><section class="topic" id="s9">
@@ -274,7 +309,7 @@ W &= \int_0^5 \rho g\,(4\pi)(5 - y)\,dy\\
 <div class="box key"><span class="tag">Key</span>
 <p>Work is force integrated over distance. When the distance varies through the body, slice the body and integrate weight times lift.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The water is lifted slowly, so it gains no speed and no kinetic energy. Friction in the pipe and the pump's efficiency are ignored. A real pump does more work than this integral.</p>
 </div>
 </section><section class="topic" id="s10">
@@ -298,9 +333,14 @@ W &= \int_0^5 \rho g\,(4\pi)(5 - y)\,dy\\
 <div class="box key"><span class="tag">Key</span>
 <p>A centre of mass is a weighted average. Weight each strip by its area, and place it at the strip's own centre.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The plate is uniform. A density that varies across it enters each integral as a weight. Pappus's theorem, which links centroids to volumes of revolution, is in §2.6 of the text.</p>
 </div>
+
+<h3>Upper and lower boundaries both enter a vertical moment</h3><p>For a uniform lamina between \(g(x)\) and \(f(x)\), a vertical strip has area \([f-g]dx\). Its vertical center is \((f+g)/2\). Multiplying these factors gives \(\tfrac12(f^2-g^2)dx\). Thus</p>
+\[\bar x=\frac{\int x(f-g)dx}{\int(f-g)dx},\qquad\bar y=\frac{\tfrac12\int(f^2-g^2)dx}{\int(f-g)dx}.\]
+<p>A varying material density must enter the mass and both moments. For a nonuniform lamina, a strip's vertical center also depends on how density varies through that strip. A purely geometric strip center is then insufficient.</p>
+<div class="box ex"><span class="tag">Worked example · two weighted-coordinate profiles</span><p>Consider the region above \(y=(x-1)^2\) and below \(y=4\). Its horizontal strip-weight profile for an \(x\) moment is \(4-(x-1)^2\) on \([-1,3]\). Symmetry gives \(\bar x=1\). Direct integration gives total area \(32/3\) and first moment \(32/3\), confirming the ratio.</p><p>For a \(y\) moment, a horizontal strip at height \(y\) has width \(2\sqrt y\), for \(0\le y\le4\). The first moment is \(\int_0^4 2y\sqrt y\,dy=128/5\). Dividing by \(32/3\) gives \(\bar y=12/5=2.4\). The Riemann lab displays each weight profile separately. These reproduce the posted answers to 18.01SC Session 61, <em>Weighted Average</em>.</p></div>
 </section></div><div class="part"><div class="eyebrow">Calculus Volume 2</div><h2>Techniques of integration</h2><section class="topic" id="s11">
 <h2><span class="n">11</span>Numerical integration</h2>
 <p>Most integrals have no antiderivative in closed form. Numerical rules estimate them from samples of the integrand. Split \([a, b]\) into \(n\) panels of width \(h = (b - a)/n\).</p>
@@ -329,7 +369,7 @@ S_n &= \tfrac{h}{3}\,(f_0 + 4f_1 + 2f_2 + \cdots + 4f_{n-1} + f_n).
 <p>Trapezoid: weights \(1, 2, \ldots, 2, 1\), times \(h/2\), with error like \(1/n^2\). Simpson: weights \(1, 4, 2, \ldots, 4, 1\), times \(h/3\), with error like \(1/n^4\).</p>
 </div>
 <p>In the Numerical lab, step from \(4\) to \(8\) to \(16\) panels. The readout shows both errors falling at their own rates.</p>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>Both bounds need a bound on a derivative, which is often unknown. In practice, the estimate is recomputed with \(n\) doubled, and the change between the two is taken as the error.</p>
 </div>
-</section><section class="topic" id="s12"><h2><span class="n">12</span>Formula sheet</h2><p>These results are derived in the sections above. Check each result's hypotheses before applying it.</p><p>\(\int_a^b f=F(b)-F(a)\), \(A\prime(x)=f(x)\) for \(A(x)=\int_a^x f(t)\,dt\), \(V=\pi\int(R^2-r^2)\,dx\), \(V=2\pi\int rh\,dx\), \(W=\int F\,dx\).</p></section></div></main><footer><p>Original Flux notes. OpenStax Calculus Volumes 1 and 2, sections identified in the notes and textbook map.</p><p><b>Another view:</b> <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/">18.01SC Single Variable Calculus, Fall 2010</a>, Unit 3.</p></footer></body></html>
+</section><section class="topic" id="s12"><h2><span class="n">12</span>Formula sheet</h2><p>These results are derived in the sections above. Check each result's hypotheses before applying it.</p><p>\(\int_a^b f=F(b)-F(a)\), \(A\prime(x)=f(x)\) for \(A(x)=\int_a^x f(t)\,dt\), \(V=\pi\int(R^2-r^2)\,dx\), \(V=2\pi\int rh\,dx\), \(W=\int F\,dx\).</p></section></div></main><footer><p>Original Flux notes. OpenStax Calculus Volumes 1 and 2, sections identified in the notes and textbook map.</p><p><b>Another view:</b> <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/">18.01SC Single Variable Calculus, Fall 2010</a>, Unit 3. <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/pages/unit-3-the-definite-integral-and-its-applications/">Definitions, the two Fundamental Theorems, volume, average value, probability and numerical integration</a>.</p></footer></body></html>

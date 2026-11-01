@@ -14,3 +14,6 @@
 - Reworked units use finite designed function/configuration families. Retired templates remain in the legacy lookup so old review records and in-progress exams retain their exact questions.
 - New symbolic worked cases check the published answer expression, including an equivalent rewrite and a named wrong expression. Definitions used by conceptual cases are identified separately from printed numeric answers.
 - The prediction panel is an opt-in shared math-shell control. Its outcomes come from the actual lab recompute function.
+
+- Rain-barrel time is minutes and flow is litres/minute. Nominal capacity uses US gallons through the shared exact conversion. The drawn water level is a capacity fraction; the schematic barrel is not a dimensional product drawing.
+- Source corrections are labeled separately from common student mistakes and recorded in ERRATA.md. Generated notes examples are checked teaching cases, not claimed as printed source answers.
