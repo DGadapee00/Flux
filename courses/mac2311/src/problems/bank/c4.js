@@ -327,6 +327,7 @@ const B = [
   }),
   numericFamily({
     id: 'c4.surface',
+    level: 1,
     exam,
     ch: 'v2.2',
     title: 'A radius times a slant',
