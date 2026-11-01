@@ -13,6 +13,12 @@ export const UNIT_SECTIONS = Object.freeze({
 });
 // Topic → section entries begin with the first confirmed unit, not with invented citations.
 export const SECTIONS = Object.freeze({
+ 'characteristic':{section:'2.2',url:'sec_ccsol.html'},
+ 'vibrations':{section:'2.4',url:'sec_mv.html'},
+ 'exponential-response':{section:'2.5',url:'sec_nonhom.html'},
+ 'undetermined':{section:'2.5',url:'sec_nonhom.html'},
+ 'frequency-response':{section:'2.6',url:'forcedo_section.html'},
+ 'rlc':{section:'2.4',url:'sec_mv.html'},
  'integral-solutions':{section:'1.1',url:'integralsols_section.html'},
  'slope-field':{section:'1.2',url:'slopefields_section.html'},
  'separation':{section:'1.3',url:'separable_section.html'},

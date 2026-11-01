@@ -1,6 +1,6 @@
 # MAP 2302 provenance
 
-This course contains original Unit 1 notes, problem templates and labs, and a four-unit catalog. It was copied from the course-neutral math starter,
+This course contains original Units 1–2 notes, problem templates and labs, and a four-unit catalog. It was copied from the course-neutral math starter,
 not another real course. No source wording, problem statements, figures or PDFs ship.
 
 1. MIT OCW 18.03SC Differential Equations, Fall 2011, CC BY-NC-SA 4.0:
@@ -15,4 +15,4 @@ not another real course. No source wording, problem statements, figures or PDFs 
 
 Application data sources and their assumptions are in the spine: HARIO server
 external dimensions, Eibach ERS spring rate, NIST WWVB carrier, Parliament clock facts.
-No product imagery is copied; application objects will be drawn and animated in Flux.
+No product imagery is copied; application objects are drawn and animated in Flux.

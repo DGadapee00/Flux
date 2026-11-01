@@ -123,7 +123,8 @@ first slice, then one unit per PR. At most two courses in progress at once (D18)
 
 **MAP 2302 progress:** Dalton confirmed Lebl, the spine and application choices on 1 Nov 2026.
 Unit 1 is built with five labs, 25 templates, ten predictions and fifteen notes setups.
-Units 2–4 follow in stacked PRs; `standard` stays false.
+Unit 2 adds four labs, 25 templates, eight predictions and eleven notes setups.
+Units 3–4 follow in stacked PRs; `standard` stays false.
 
 The order follows prerequisites: MAP 2302 and EEL 3111 feed most of what follows; EML 4140 needs
 EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come last.

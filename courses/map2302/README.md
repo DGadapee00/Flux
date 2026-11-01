@@ -1,8 +1,8 @@
 # MAP 2302 Differential Equations
 
 OCW 18.03SC Fall 2011 sets the four-unit sequence. Dalton confirmed Lebl,
-the spine and all four application objects on 1 Nov 2026. Unit 1 is built;
-Units 2–4 stay visible as planned. `standard: false` until Dalton reviews.
+the spine and all four application objects on 1 Nov 2026. Units 1–2 are built;
+Units 3–4 stay visible as planned. `standard: false` until Dalton reviews.
 
 Unit 1 has five labs (including a drawn, animated HARIO coffee server),
 25 original templates, ten computed predictions, and eleven notes sections
@@ -17,3 +17,6 @@ The checks cover 380×820 and 1280×800; the PR includes reviewed screenshots.
 honestly. All course progress participates in the hub backup.
 
 One unit per stacked PR, based on the previous branch. Never set standard true.
+
+Unit 2 adds four drawn/animated labs, including the Eibach-spring quarter-car,
+25 templates (36% conceptual), eight predictions and eleven checked notes setups.
