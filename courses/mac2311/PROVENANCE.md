@@ -71,3 +71,25 @@ The drawn cable, supports, deck and hangers are original schematic geometry. No
 as-built cable shape, strength, tension or design adequacy is asserted.
 
 OpenStax Calculus Volume 2 §§3.1–3.4 and §2.4 fill in the textbook treatment.
+
+### Unit 5 content rework
+
+Original derivations and diagrams follow 18.01SC Fall 2010 Unit 4C. Checked cases use
+*Solutions to 18.01 Exercises*, collection Unit 4: 4E-2/3/7, 4H-1/2/3,
+4I-1/3/4/6/7, and Session 80, *Parametric Equations of a Spiral*, part (b).
+The source's simplified speed integrand is checked by independently differentiating
+both Cartesian coordinates. Radius parameters, inverse conversions, branch choices
+and method interpretations are labeled. Uniform angle and uniform arc-length means
+reproduce 4I-6's distinct printed answers. No source figures are copied.
+
+Audio-Technica's AT-LP60X manufacturer specifications list nominal 33⅓ and 45 RPM:
+https://www.audio-technica.com/en-us/at-lp60x. The 0.14 m and 0.07 m marked radii
+are teaching inputs, not measured groove positions. The original top-view disk and
+arm are schematic. Positive counterclockwise rotation is a mathematical convention,
+not a statement about the product's direction. The mark is not a stylus. Shared exact
+RPM conversion supplies angular speed. Position derivatives, circumference, sector
+geometry and timing/scaling identities independently check the model.
+
+OpenStax Calculus Volume 2 §§7.1–7.5 supply parameter restrictions, tangent conditions,
+polar intersections and eccentricity. The notes explicitly retain the directrix
+absolute value until choosing a branch.

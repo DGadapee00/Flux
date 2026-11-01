@@ -115,7 +115,7 @@ export function conceptFamily({ id, exam, ch, title, topics, forms, hints }) {
 }
 
 /** A requested formula need not be a derivative. The family supplies an independent value check. */
-export function formulaFamily({ id, exam, ch, title, topics, forms, hints, level = 2 }) {
+export function formulaFamily({ id, exam, ch, title, topics, forms, hints, level = 2, variable = 'x' }) {
   const ids = Object.keys(forms);
   return problem({
     id,
@@ -128,13 +128,13 @@ export function formulaFamily({ id, exam, ch, title, topics, forms, hints, level
     minVersions: ids.length,
     variety: ['function family', 'representation'],
     vars: { form: choose(ids) },
-    derive: ($) => ({ v: forms[$.form], x: forms[$.form].at ?? 0.6 }),
+    derive: ($) => ({ v: forms[$.form], x: forms[$.form].at ?? 0.6, [variable]: forms[$.form].at ?? 0.6 }),
     text: (T, $) => $.v.ask,
     parts: [
       sym(
         'formula',
         ($) => $.v.key,
-        ['x'],
+        [variable],
         ($) => $.v.get($.x),
         { label: 'requested formula' },
       ),
@@ -142,7 +142,7 @@ export function formulaFamily({ id, exam, ch, title, topics, forms, hints, level
     hints,
     steps: ($) => [
       $.v.reason,
-      String.raw`The formula is $${exprToTex($.v.key, ['x'])}$.`,
+      String.raw`The formula is $${exprToTex($.v.key, [variable])}$.`,
       $.v.check || 'Substitute a nearby admissible input to check the expression.',
     ],
     second: ($) => {
