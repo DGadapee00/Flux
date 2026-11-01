@@ -1,12 +1,11 @@
 import { predictionsFor } from '../data/predictions.js';
 import { LAB_META } from '../data/catalog.js';
-import * as THREE from 'three';
 import { defineLab as checkLab } from '@flux/core';
+import { planeFit } from './camera.js';
 
-const XY_CAMERA = { pos: new THREE.Vector3(0, 0, 14), target: new THREE.Vector3(0, 0, 0) };
-
+/** A flat lab's camera: straight on, fitted to the content box. */
 export function planeCamera(state) {
-  return state?.view?.plane === 'xy' ? XY_CAMERA : null;
+  return state?.view?.plane === 'xy' ? planeFit(state) : null;
 }
 
 export function defineLab(spec) {

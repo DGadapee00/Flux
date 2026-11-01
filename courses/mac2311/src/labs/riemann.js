@@ -28,7 +28,7 @@ export default defineLab({
   exam: 'u4',
   title: 'Riemann',
   hint: 'Change $n$ and the sample. The rectangles approach the area.',
-  orbit: true,
+  orbit: false,
   probe: false,
   frame: true,
   cameraFor: planeCamera,

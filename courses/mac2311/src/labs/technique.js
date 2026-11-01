@@ -4,7 +4,7 @@ import { cells, kv } from '@flux/shells/math/shared.js';
 import { fmtNum as fmt } from '@flux/shells/math/format.js';
 import { GraphView } from '../scene/graph-integral.js';
 import { TECHNIQUES } from '../math/techniques.js';
-import { fitArcCamera, plotWindow } from './arc.js';
+import { fitPlaneCamera, plotWindow } from './camera.js';
 import { defineLab } from './define.js';
 const SCENARIOS = Object.entries(TECHNIQUES).map(([id, v]) => ({ id, name: v.name }));
 /** The profile in use: a problem's own { name, tex, f, F, a, b } when it set one, else the scenario's. */
@@ -39,7 +39,7 @@ export default defineLab({
     Object.assign(s,{xMin:v.a-.1*(v.b-v.a),xMax:v.b+.1*(v.b-v.a),yMin:low-pad,yMax:high+pad});
     return Math.max(Math.abs(s.xMin),Math.abs(s.xMax),Math.abs(s.yMin),Math.abs(s.yMax));
   },
-  cameraFor(s) { const c=fitArcCamera(s,plotWindow()); return {pos:c.pos,target:c.target}; },
+  cameraFor(s) { const c=fitPlaneCamera(s,plotWindow()); return {pos:c.pos,target:c.target}; },
   controls: () =>
     `<div class="lab-block"><label class="field"><span>Fraction of interval</span><div class="slider-row"><input id="technique-fraction" type="range" min="0.1" max="1" step="0.05"></div></label></div>`,
   bind(api) {

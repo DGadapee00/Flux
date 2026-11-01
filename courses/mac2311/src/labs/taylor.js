@@ -1,4 +1,4 @@
-import { fitArcCamera, plotWindow } from './arc.js';
+import { fitPlaneCamera, plotWindow } from './camera.js';
 import { cells, eq, kv } from '@flux/shells/math/shared.js';
 import { fmtNum as fmt } from '@flux/shells/math/format.js';
 import { sampleFn, taylorError, taylorHorner, taylorSum } from '../math/calc2.js';
@@ -18,7 +18,7 @@ function keepXy(state) {
 }
 
 function taylorCamera(state) {
-  const c = fitArcCamera(state, plotWindow());
+  const c = fitPlaneCamera(state, plotWindow());
   return { pos: c.pos, target: c.target };
 }
 
@@ -43,7 +43,7 @@ export default defineLab({
   exam: 'u3',
   title: 'Taylor',
   hint: 'Change order and centre. Compare the polynomial and its error.',
-  orbit: true,
+  orbit: false,
   probe: false,
   frame: true,
   cameraFor: taylorCamera,

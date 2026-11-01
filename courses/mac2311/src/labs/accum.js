@@ -42,7 +42,7 @@ export default defineLab({
   exam: 'u4',
   title: 'FTC',
   hint: 'Slide $x$. The area grows at the height of the curve.',
-  orbit: true,
+  orbit: false,
   probe: false,
   frame: true,
   cameraFor: planeCamera,

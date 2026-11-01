@@ -30,7 +30,7 @@ export default defineLab({
   exam: 'u2',
   title: 'Secant',
   hint: 'Slide $x_0$ and $h$. The secant becomes the tangent.',
-  orbit: true,
+  orbit: false,
   probe: false,
   frame: true,
   cameraFor: planeCamera,

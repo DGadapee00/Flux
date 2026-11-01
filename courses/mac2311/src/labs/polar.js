@@ -1,4 +1,4 @@
-import { fitArcCamera, plotWindow } from './arc.js';
+import { fitPlaneCamera, plotWindow } from './camera.js';
 import { cells, eq, kv } from '@flux/shells/math/shared.js';
 import { fmtNum as fmt } from '@flux/shells/math/format.js';
 import {
@@ -30,7 +30,7 @@ function keepXy(state) {
 }
 
 function polarCamera(state) {
-  const c = fitArcCamera(state, plotWindow());
+  const c = fitPlaneCamera(state, plotWindow());
   return { pos: c.pos, target: c.target };
 }
 
@@ -97,7 +97,7 @@ export default defineLab({
   exam: 'u4',
   title: 'Polar',
   hint: 'Sweep the angle. The area grows with r squared, not with r.',
-  orbit: true,
+  orbit: false,
   probe: false,
   frame: true,
   cameraFor: polarCamera,

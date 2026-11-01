@@ -1,9 +1,8 @@
-import * as THREE from 'three';
 import { cells, eq, kv } from '@flux/shells/math/shared.js';
 import { fmtNum as fmt } from '@flux/shells/math/format.js';
 import { boxBestCut, boxVolume, boxVolumeRate, boxVolumeStep } from '../math/calc1.js';
 import { GraphView } from '../scene/graph.js';
-import { defineLab } from './define.js';
+import { defineLab, planeCamera } from './define.js';
 
 const SIDE = 12;
 
@@ -24,20 +23,6 @@ function frameOf(side) {
     yMin: -2,
     yMax: 0.62 * side,
   };
-}
-
-function boxCamera(state) {
-  const u = state?.view?.upm > 0 ? state.view.upm : 1;
-  const xMin = Number.isFinite(state?.xMin) ? state.xMin : -1;
-  const xMax = Number.isFinite(state?.xMax) ? state.xMax : 18;
-  const yMin = Number.isFinite(state?.yMin) ? state.yMin : -2;
-  const yMax = Number.isFinite(state?.yMax) ? state.yMax : 8;
-  const cx = ((xMin + xMax) / 2) * u;
-  const cy = ((yMin + yMax) / 2) * u;
-  const halfW = ((xMax - xMin) / 2) * u;
-  // 40° fov. Width is the tight axis on a 380×780 phone, so the distance comes from that.
-  const z = (halfW * 1.2) / (Math.tan(Math.PI / 9) * (380 / 780));
-  return { pos: new THREE.Vector3(cx, cy, z), target: new THREE.Vector3(cx, cy, 0) };
 }
 
 function boxEdges(w, h) {
@@ -64,10 +49,11 @@ export default defineLab({
   exam: 'u3',
   title: 'Open box',
   hint: 'Slide the cut. The biggest box is not the biggest cut.',
-  orbit: true,
+  orbit: false,
+  axes: false,
   probe: false,
   frame: true,
-  cameraFor: boxCamera,
+  cameraFor: planeCamera,
   toggles: [
     { key: 'box', label: 'Box' },
     { key: 'best', label: 'Best' },

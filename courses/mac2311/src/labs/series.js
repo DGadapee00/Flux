@@ -1,4 +1,4 @@
-import { fitArcCamera, plotWindow } from './arc.js';
+import { fitPlaneCamera, plotWindow } from './camera.js';
 import { cells, eq, kv } from '@flux/shells/math/shared.js';
 import { fmtNum as fmt } from '@flux/shells/math/format.js';
 import {
@@ -30,7 +30,7 @@ function keepXy(state) {
 }
 
 function seriesCamera(state) {
-  const c = fitArcCamera(state, plotWindow());
+  const c = fitPlaneCamera(state, plotWindow());
   return { pos: c.pos, target: c.target };
 }
 
@@ -82,7 +82,8 @@ export default defineLab({
   exam: 'u3',
   title: 'Series',
   hint: 'Watch the partial sums. A term going to 0 is not enough.',
-  orbit: true,
+  orbit: false,
+  axes: { x: 'n', y: 'Sₙ' },
   probe: false,
   frame: true,
   cameraFor: seriesCamera,

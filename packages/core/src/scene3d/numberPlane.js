@@ -114,7 +114,8 @@ export class NumberPlane {
     this.off.rotation.x = floor ? 0 : Math.PI / 2;
     const b = spec.labelStyle === 'math' ? (id === 'xz' ? 'z' : 'y') : floor ? 'z' : 'y';
     const off = spec.labelStyle === 'math' ? (id === 'xz' ? 'y' : 'z') : floor ? 'y' : 'z';
-    this.nameB.element.textContent = b;
+    this.defaultB = b;
+    if (!this.names) this.nameB.element.textContent = b;
     if (this.nearB) this.nearB.element.textContent = floor ? '+z' : '+y';
     this.nameOff.element.textContent = off;
     this.nameOff.position.set(0, floor ? 5.2 : 0, floor ? 0 : 5.2);
@@ -122,6 +123,33 @@ export class NumberPlane {
       this.off.visible = floor;
       this.nameOff.visible = floor;
     }
+  }
+
+  /**
+   * Name the two in-plane axes where the student is looking. `names` gives each name's text and
+   * the plane coordinate it sits at along its axis: `{ a, b, at: [ax, by], showA, showB }`.
+   * The x-axis name sits under its axis, the y-axis name to the right of its axis, so neither
+   * meets a tick label. `null` restores the default names at the grid's far ends.
+   */
+  setNames(names) {
+    this.names = names || null;
+    const lim = this.half - 0.3;
+    const clamp = (v) => Math.max(-lim, Math.min(lim, v));
+    if (!names) {
+      this.nameA.element.textContent = 'x';
+      this.nameB.element.textContent = this.defaultB || 'y';
+      this.nameA.position.set(this.half + 0.4, 0, 0);
+      this.nameB.position.set(0, this.half + 0.35, 0);
+      this.nameA.visible = true;
+      this.nameB.visible = true;
+      return;
+    }
+    this.nameA.element.textContent = names.a;
+    this.nameB.element.textContent = names.b;
+    this.nameA.position.set(clamp(names.at[0]), -0.38, 0);
+    this.nameB.position.set(0.38, clamp(names.at[1]), 0);
+    this.nameA.visible = names.showA !== false;
+    this.nameB.visible = names.showB !== false;
   }
 
   get visible() {

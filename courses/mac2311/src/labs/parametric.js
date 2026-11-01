@@ -1,4 +1,4 @@
-import { fitArcCamera, plotWindow } from './arc.js';
+import { fitPlaneCamera, plotWindow } from './camera.js';
 import { cells, eq, kv } from '@flux/shells/math/shared.js';
 import { fmtNum as fmt } from '@flux/shells/math/format.js';
 import {
@@ -31,7 +31,7 @@ function keepXy(state) {
 }
 
 function paramCamera(state) {
-  const c = fitArcCamera(state, plotWindow());
+  const c = fitPlaneCamera(state, plotWindow());
   return { pos: c.pos, target: c.target };
 }
 
@@ -135,7 +135,7 @@ export default defineLab({
   exam: 'u4',
   title: 'Parametric',
   hint: 'Move the point. The slope changes. The speed is a different number.',
-  orbit: true,
+  orbit: false,
   probe: false,
   frame: true,
   cameraFor: paramCamera,

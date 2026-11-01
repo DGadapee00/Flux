@@ -231,11 +231,13 @@ async function setLab(labId) {
   }
   const s = app.slices[labId];
   s.lab = labId;
-  applyFrame();
+  // A flat lab refits on entry, so its graph fills the space its camera fit leaves.
+  applyFrame({ force: lab.orbit === false });
   lab.enter(ctx, app.handles[labId], s);
   setOrbit(lab.orbit);
-  goCamera(lab);
   hud.mount(lab, examById(app.examId), s);
+  // After the panels mount, so a flat lab fits its graph into the space they leave.
+  goCamera(lab);
   practice?.onMount({ byProblem: loadingProblem });
   writeHash(app.examId, labId, { replace: booting, query: app.query });
   app.dirty = true;
@@ -308,6 +310,24 @@ function recompute() {
   ctx.handle = app.handles[app.labId];
   lab.recompute(s, computed, ctx);
   computed.coach = lab.coach(s, computed);
+  grid.setNames(axisNames(lab, s));
+}
+
+/** A flat lab names its axes at the far edge of its content box; a 3D lab keeps the defaults. */
+function axisNames(lab, s) {
+  if (!lab.frame || lab.orbit || s.view?.plane !== 'xy') return null;
+  const box = [s.xMin, s.xMax, s.yMin, s.yMax];
+  if (!box.every(Number.isFinite)) return null;
+  const [x0, x1, y0, y1] = box;
+  const u = sceneScale();
+  const names = lab.axes === false ? null : { x: 'x', y: 'y', ...lab.axes };
+  return {
+    a: names?.x ?? '',
+    b: names?.y ?? '',
+    at: [(x1 - 0.07 * (x1 - x0)) * u, (y1 - 0.1 * (y1 - y0)) * u],
+    showA: Boolean(names) && y0 < 0 && y1 > 0,
+    showB: Boolean(names) && x0 < 0 && x1 > 0,
+  };
 }
 
 function syncViews() {

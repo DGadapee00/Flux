@@ -31,7 +31,7 @@ export default defineLab({
   exam: 'u1',
   title: 'Limits',
   hint: 'Slide $a$ and $h$. Watch the two sides.',
-  orbit: true,
+  orbit: false,
   probe: false,
   frame: true,
   cameraFor: planeCamera,

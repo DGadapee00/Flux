@@ -1,9 +1,8 @@
-import * as THREE from 'three';
 import { cells, eq, kv } from '@flux/shells/math/shared.js';
 import { fmtNum as fmt } from '@flux/shells/math/format.js';
 import { sinExact, sinSimpson, sinSimpsonPanels, sinTrap, sinTrapPanels } from '../math/calc2.js';
 import { GraphView } from '../scene/graph-integral.js';
-import { defineLab } from './define.js';
+import { defineLab, planeCamera } from './define.js';
 
 const SCENARIOS = [
   { id: 'coarse', name: '4 panels', n: 4 },
@@ -15,19 +14,6 @@ const FRAME = { xMin: -0.3, xMax: 3.5, yMin: -0.35, yMax: 1.45 };
 
 function keepXy(state) {
   state.view = { ...(state.view || {}), plane: 'xy', upm: state.view?.upm || 1 };
-}
-
-function numCamera(state) {
-  const u = state?.view?.upm > 0 ? state.view.upm : 1;
-  const xMin = Number.isFinite(state?.xMin) ? state.xMin : FRAME.xMin;
-  const xMax = Number.isFinite(state?.xMax) ? state.xMax : FRAME.xMax;
-  const yMin = Number.isFinite(state?.yMin) ? state.yMin : FRAME.yMin;
-  const yMax = Number.isFinite(state?.yMax) ? state.yMax : FRAME.yMax;
-  const cx = ((xMin + xMax) / 2) * u;
-  const cy = ((yMin + yMax) / 2) * u;
-  const halfW = ((xMax - xMin) / 2) * u;
-  const z = (halfW * 1.25) / (Math.tan(Math.PI / 9) * (380 / 780));
-  return { pos: new THREE.Vector3(cx, cy, z), target: new THREE.Vector3(cx, cy, 0) };
 }
 
 function evenCount(n) {
@@ -52,10 +38,10 @@ export default defineLab({
   exam: 'u2',
   title: 'Numerical',
   hint: 'Add panels. Simpson should pull ahead of the trapezoid.',
-  orbit: true,
+  orbit: false,
   probe: false,
   frame: true,
-  cameraFor: numCamera,
+  cameraFor: planeCamera,
   toggles: [
     { key: 'curve', label: 'Sine' },
     { key: 'chords', label: 'Chords' },
