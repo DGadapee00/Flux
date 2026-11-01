@@ -27,6 +27,9 @@ const loaders = {
   'crumple-zone': () => import('./crumple-zone.js'),
   'crash-reconstruction': () => import('./crash-reconstruction.js'),
   rotor: () => import('./rotor.js'),
+  inertia: () => import('./inertia.js'),
+  'massive-pulley': () => import('./massive-pulley.js'),
+  'helicopter-rotor': () => import('./helicopter-rotor.js'),
 };
 
 const labs = createLabLoader(loaders);

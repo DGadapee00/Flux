@@ -8,9 +8,10 @@ import u2 from './setups/u2.js';
 import u3 from './setups/u3.js';
 import u4 from './setups/u4.js';
 import u5 from './setups/u5.js';
+import u6 from './setups/u6.js';
 
 /** One file per unit in ./setups/, so each unit's examples change without touching the others. */
-export const SETUPS = { u1, u2, u3, u4, u5 };
+export const SETUPS = { u1, u2, u3, u4, u5, u6 };
 
 /** An example's tag as the notes write it, without "Worked example · ". */
 export function exampleTag(tagText) {
