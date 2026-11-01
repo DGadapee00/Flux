@@ -1,6 +1,25 @@
 import { problem, kase, range } from '../kit.js';
-import { numeric, choose, citation, symbolicFamily, conceptFamily } from './rework-kit.js';
+import { numeric, choose, citation, symbolicFamily, conceptFamily, cf, shift } from './rework-kit.js';
 const S = (p) => citation(1, p);
+/** x^{m/n} through its constraint y^n = x^m. */
+const root = (n, m) => ({
+  tex: `x^{${m}/${n}}`,
+  key: `(${m}/${n})*x^(${m}/${n}-1)`,
+  alt: `${m}*x^((${m}-${n})/${n})/${n}`,
+  wrong: `x^(${m}/${n}-1)`,
+  domain: 'x>0',
+  fn: (x) => x ** (m / n),
+  df: (x) => (m / n) * x ** (m / n - 1),
+  reason: `From $y^{${n}}=x^{${m}}$ obtain $${n}y^{${n - 1}}y'=${m}x^{${m - 1}}$. Solve for $y'$, then substitute $y=x^{${m}/${n}}$.`,
+});
+/** A measure k·x^p of a figure of size x: the derivative is the rate the measure grows. */
+const measure = (p, g) => ({
+  ...g,
+  domain: 'x>0',
+  fn: (x) => g.k * x ** p,
+  df: (x) => p * g.k * x ** (p - 1),
+  reason: `f is the ${p === 2 ? 'area' : 'volume'} of ${g.what}. Expand the change ${p === 2 ? 'k[(x+h)^2−x^2]' : 'k[(x+h)^3−x^3]'}, divide by h, and let h tend to zero: only ${p}kx^${p - 1} survives.`,
+});
 const algebra = [
   'Identify the operation joining the functions before differentiating.',
   'Write the derivative of each component separately, then assemble the rule.',
@@ -21,17 +40,15 @@ const prod = [
     kind: 'numeric',
     topics: ['derivatives'],
     level: 3,
-    minVersions: 4,
-    variety: ['configuration', 'solution branch'],
-    vars: { shape: choose(['shifted', 'centered']), branch: choose([-1, 1]) },
+    minVersions: 24,
+    variety: ['configuration', 'solution branch', 'coefficients'],
+    vars: { h: choose([1, 0, 2, -1, -2]), c: choose([1, 4, 2, 3, 5, 9]), branch: choose([-1, 1]) },
     derive: ($) => {
-      const h = $.shape === 'shifted' ? 1 : 0,
-        c = $.shape === 'shifted' ? 1 : 4,
-        a = $.branch * Math.sqrt(h * h + c);
-      return { h, c, a, m: 2 * (a - h) };
+      const a = $.branch * Math.sqrt($.h * $.h + $.c);
+      return { a, m: 2 * (a - $.h) };
     },
     text: (T, $) =>
-      String.raw`The curve is $y=${$.h ? `(x-${$.h})^2` : 'x^2'}+${$.c}$. Find the ${$.branch > 0 ? 'positive' : 'negative'} contact coordinate $a$ of a tangent passing through the origin, then its slope. The origin is not a contact point.`,
+      String.raw`The curve is $y=${shift($.h)}^2+${$.c}$. Find the ${$.branch > 0 ? 'positive' : 'negative'} contact coordinate $a$ of a tangent passing through the origin, then its slope. The origin is not a contact point.`,
     parts: [
       numeric('a', ($) => $.a, 'contact coordinate a', [
         [
@@ -51,8 +68,8 @@ const prod = [
       'Eliminate m, solve for the contact coordinate, then keep the requested sign.',
     ],
     steps: ($) => [
-      String.raw`$f(a)=af'(a)$ gives $${$.h ? `(a-${$.h})^2` : 'a^2'}+${$.c}=2a${$.h ? `(a-${$.h})` : '\cdot a'}$.`,
-      String.raw`The linear terms cancel: $a^2=${$.h ** 2 + $.c}$. Choose the requested branch, then use $m=${$.h ? `2(a-${$.h})` : '2a'}$.`,
+      String.raw`$f(a)=af'(a)$ gives $${shift($.h, 'a')}^2+${$.c}=2a${$.h ? shift($.h, 'a') : '\cdot a'}$.`,
+      String.raw`The linear terms cancel: $a^2=${$.h ** 2 + $.c}$. Choose the requested branch, then use $m=2${shift($.h, 'a')}$.`,
     ],
     second: ($) => {
       let lo = 0,
@@ -70,9 +87,9 @@ const prod = [
     sim: {
       scenario: 'tangent1',
       setup(s, $) {
-        s.graphId = $.shape === 'shifted' ? 'tangent1' : 'tangent2';
-        s.a = -3;
-        s.b = 3;
+        s.graphId = `parabola:${$.h}:${$.c}`;
+        s.a = -Math.ceil(Math.abs($.a) + 1);
+        s.b = Math.ceil(Math.abs($.a) + 1);
         s.x0 = $.a;
         s.h = 0.05;
       },
@@ -81,12 +98,12 @@ const prod = [
     cases: [
       kase(
         S('1C-5, positive contact'),
-        { shape: 'shifted', branch: 1 },
+        { h: 1, c: 1, branch: 1 },
         { a: Math.sqrt(2), m: 2 * (Math.sqrt(2) - 1) },
       ),
       kase(
         S('1C-5, negative contact'),
-        { shape: 'shifted', branch: -1 },
+        { h: 1, c: 1, branch: -1 },
         { a: -Math.sqrt(2), m: -2 * (Math.sqrt(2) + 1) },
       ),
     ],
@@ -101,24 +118,31 @@ const prod = [
     hints: chain,
     forms: {
       square: {
-        tex: '(x^2+2)^2',
-        key: '4*x*(x^2+2)',
-        alt: '4*x^3+8*x',
-        wrong: '2*(x^2+2)',
-        fn: (x) => (x * x + 2) ** 2,
-        df: (x) => 4 * x * (x * x + 2),
         source: S('1F-1(a)'),
-        reason: 'Differentiate the outer square, then multiply by the inner derivative 2x.',
+        params: { a: [2, 1, 3, 4, 5, 7], n: [2, 3, 4, 5] },
+        make: ({ a, n }) => ({
+          tex: `(x^2+${a})^{${n}}`,
+          key: n === 2 ? `${2 * n}*x*(x^2+${a})` : `${2 * n}*x*(x^2+${a})^${n - 1}`,
+          alt: n === 2 ? `4*x^3+${4 * a}*x` : `2*x*${n}*(x^2+${a})^${n - 1}`,
+          wrong: `${n}*(x^2+${a})^${n - 1}`,
+          fn: (x) => (x * x + a) ** n,
+          df: (x) => 2 * n * x * (x * x + a) ** (n - 1),
+          reason: `Differentiate the outer power, ${n}(x^2+${a})^${n - 1}, then multiply by the inner derivative 2x.`,
+        }),
       },
       power: {
-        tex: '(x^2+2)^{100}',
-        key: '200*x*(x^2+2)^99',
-        alt: '2*x*100*(x^2+2)^99',
-        wrong: '100*(x^2+2)^99',
-        fn: (x) => (x * x + 2) ** 100,
-        df: (x) => 200 * x * (x * x + 2) ** 99,
         source: S('1F-1(b)'),
-        reason: 'The exponent changes the outer derivative. The inner derivative remains 2x.',
+        params: { a: [2, 1, 3, 5], n: [100, 50, 20, 30, 40, 60] },
+        make: ({ a, n }) => ({
+          tex: `(x^2+${a})^{${n}}`,
+          key: `${2 * n}*x*(x^2+${a})^${n - 1}`,
+          alt: `2*x*${n}*(x^2+${a})^${n - 1}`,
+          wrong: `${n}*(x^2+${a})^${n - 1}`,
+          at: 0.3,
+          fn: (x) => (x * x + a) ** n,
+          df: (x) => 2 * n * x * (x * x + a) ** (n - 1),
+          reason: `A large exponent changes only the outer derivative, ${n}(x^2+${a})^${n - 1}. The inner derivative remains 2x.`,
+        }),
       },
     },
   }),
@@ -131,25 +155,30 @@ const prod = [
     hints: algebra,
     forms: {
       polynomials: {
-        tex: '(x^3+x)(x^5+x^2)',
-        key: '(3*x^2+1)*(x^5+x^2)+(x^3+x)*(5*x^4+2*x)',
-        alt: '8*x^7+6*x^5+5*x^4+3*x^2',
-        wrong: '(3*x^2+1)*(5*x^4+2*x)',
-        fn: (x) => (x ** 3 + x) * (x ** 5 + x * x),
-        df: (x) => 8 * x ** 7 + 6 * x ** 5 + 5 * x ** 4 + 3 * x * x,
         source: S('1E-1(d)'),
-        reason:
-          'One term differentiates the first factor; the other differentiates the second. Expanding first gives four powers.',
+        params: { a: [3, 2, 4], b: [5, 3, 4, 6], c: [1, 2] },
+        make: ({ a, b, c }) => ({
+          tex: `(x^{${a}}+${cf(c)}x)(x^{${b}}+x^2)`,
+          key: `(${a}*x^${a - 1}+${c})*(x^${b}+x^2)+(x^${a}+${c}*x)*(${b}*x^${b - 1}+2*x)`,
+          alt: `${a + b}*x^${a + b - 1}+${a + 2}*x^${a + 1}+${c * (b + 1)}*x^${b}+${3 * c}*x^2`,
+          wrong: `(${a}*x^${a - 1}+${c})*(${b}*x^${b - 1}+2*x)`,
+          fn: (x) => (x ** a + c * x) * (x ** b + x * x),
+          df: (x) => (a + b) * x ** (a + b - 1) + (a + 2) * x ** (a + 1) + c * (b + 1) * x ** b + 3 * c * x * x,
+          reason: 'One term differentiates the first factor; the other differentiates the second. Expanding first gives four powers to check against.',
+        }),
       },
       exponential: {
-        tex: 'xe^x',
-        key: '(x+1)*exp(x)',
-        alt: 'x*exp(x)+exp(x)',
-        wrong: 'exp(x)',
-        fn: (x) => x * Math.exp(x),
-        df: (x) => (x + 1) * Math.exp(x),
         source: S('1I-1(a)'),
-        reason: 'Both the linear factor and the exponential change. Add the two product-rule terms.',
+        params: { m: [1, 2, 3, 4], k: [1, 2, 3, -1, -2, -3] },
+        make: ({ m, k }) => ({
+          tex: `${m === 1 ? 'x' : `x^{${m}}`}e^{${cf(k)}x}`,
+          key: `(${m}*x^${m - 1}+${k}*x^${m})*exp(${k}*x)`,
+          alt: `${m}*x^${m - 1}*exp(${k}*x)+${k}*x^${m}*exp(${k}*x)`,
+          wrong: `${m}*x^${m - 1}*${k}*exp(${k}*x)`,
+          fn: (x) => x ** m * Math.exp(k * x),
+          df: (x) => (m * x ** (m - 1) + k * x ** m) * Math.exp(k * x),
+          reason: `Both factors change. The power gives ${m}x^${m - 1}e^{${k}x}; the exponential gives its own factor ${k}. Add the two product-rule terms.`,
+        }),
       },
     },
   }),
@@ -162,39 +191,47 @@ const prod = [
     hints: algebra,
     forms: {
       reciprocal: {
-        tex: String.raw`1/\ln x`,
-        key: '-1/(x*ln(x)^2)',
-        alt: '-ln(x)^(-2)/x',
-        wrong: '1/(x*ln(x)^2)',
-        domain: 'x>0, x≠1',
-        at: 2,
-        fn: (x) => 1 / Math.log(x),
-        df: (x) => -1 / (x * Math.log(x) ** 2),
         source: S('1I-1(l)'),
-        reason:
-          'Use the reciprocal rule on ln x, then its derivative 1/x. Squaring the denominator does not remove the minus sign.',
+        params: { k: [1, 2, 3, 4], a: [1, 2, 3, 5, 10] },
+        make: ({ k, a }) => ({
+          tex: `${k}/\\ln ${a === 1 ? 'x' : `(${a}x)`}`,
+          key: `-${k}/(x*ln(${a}*x)^2)`,
+          alt: `-${k}*ln(${a}*x)^(-2)/x`,
+          wrong: `${k}/(x*ln(${a}*x)^2)`,
+          domain: `x>0, x≠${a === 1 ? '1' : `1/${a}`}`,
+          at: 2,
+          fn: (x) => k / Math.log(a * x),
+          df: (x) => -k / (x * Math.log(a * x) ** 2),
+          reason: `Use the reciprocal rule on ln(${a}x), whose derivative is 1/x whatever the constant ${a}. Squaring the denominator does not remove the minus sign.`,
+        }),
       },
       logarithm: {
-        tex: String.raw`\ln(1/x)`,
-        key: '-1/x',
-        alt: '(-1)*x^(-1)',
-        wrong: '1/x',
-        domain: 'x>0',
-        fn: (x) => Math.log(1 / x),
-        df: (x) => -1 / x,
         source: S('1I-1(k)'),
-        reason: 'On x>0, ln(1/x)=−ln x. Differentiate that equivalent form.',
+        params: { c: [1, 2, 3, 5], n: [1, 2, 3] },
+        make: ({ c, n }) => ({
+          tex: `\\ln(${c}/x${n === 1 ? '' : `^{${n}}`})`,
+          key: `-${n}/x`,
+          alt: `(-${n})*x^(-1)`,
+          wrong: `${n}/x`,
+          domain: 'x>0',
+          fn: (x) => Math.log(c / x ** n),
+          df: (x) => -n / x,
+          reason: `On x>0, ln(${c}/x^${n})=ln ${c}−${n} ln x. The constant term has derivative zero.`,
+        }),
       },
       variablePower: {
-        tex: 'x^x',
-        key: 'x^x*(1+ln(x))',
-        alt: 'x^x+x^x*ln(x)',
-        wrong: 'x*x^(x-1)',
-        domain: 'x>0',
-        fn: (x) => x ** x,
-        df: (x) => x ** x * (1 + Math.log(x)),
         source: S('1I-1(h)'),
-        reason: 'Set y=x^x and take logarithms. Differentiating ln y=x ln x gives y′/y=ln x+1.',
+        params: { k: [1, 2, 3, 4] },
+        make: ({ k }) => ({
+          tex: `x^{${cf(k)}x}`,
+          key: `x^(${k}*x)*(${k}*ln(x)+${k})`,
+          alt: `${k}*x^(${k}*x)+${k}*x^(${k}*x)*ln(x)`,
+          wrong: `${k}*x*x^(${k}*x-1)`,
+          domain: 'x>0',
+          fn: (x) => x ** (k * x),
+          df: (x) => x ** (k * x) * (k * Math.log(x) + k),
+          reason: `Set y=x^{${k}x} and take logarithms. Differentiating ln y=${k}x ln x gives y′/y=${k} ln x+${k}.`,
+        }),
       },
     },
   }),
@@ -207,25 +244,37 @@ const prod = [
     hints: chain,
     forms: {
       square: {
-        tex: String.raw`\sin(5x^2)`,
-        key: '10*x*cos(5*x^2)',
-        alt: 'cos(5*x^2)*2*x*5',
-        wrong: 'cos(5*x^2)',
-        fn: (x) => Math.sin(5 * x * x),
-        df: (x) => 10 * x * Math.cos(5 * x * x),
         source: S('1J-1(a)'),
-        reason: 'The derivative of the sine is cosine at the same argument. The inner derivative is 10x.',
+        params: { a: [5, 2, 3, 4, 6, 7], n: [2, 3], fn: ['sin', 'cos'] },
+        make: ({ a, n, fn }) => {
+          const s = fn === 'sin';
+          return {
+            tex: `\\${fn}(${a}x^{${n}})`,
+            key: `${s ? '' : '-'}${a * n}*x^${n - 1}*${s ? 'cos' : 'sin'}(${a}*x^${n})`,
+            alt: `${s ? '' : '-'}${s ? 'cos' : 'sin'}(${a}*x^${n})*${n}*x^${n - 1}*${a}`,
+            wrong: `${s ? '' : '-'}${s ? 'cos' : 'sin'}(${a}*x^${n})`,
+            fn: (x) => Math[fn](a * x ** n),
+            df: (x) => (s ? 1 : -1) * a * n * x ** (n - 1) * (s ? Math.cos : Math.sin)(a * x ** n),
+            reason: `The derivative of ${fn} is ${s ? 'cosine' : 'minus sine'} at the same argument. The inner derivative is ${a * n}x^${n - 1}.`,
+          };
+        },
       },
       sineSquare: {
-        tex: String.raw`\sin^2(3x)`,
-        key: '6*sin(3*x)*cos(3*x)',
-        alt: '3*sin(6*x)',
-        wrong: '2*sin(3*x)*cos(3*x)',
-        fn: (x) => Math.sin(3 * x) ** 2,
-        df: (x) => 6 * Math.sin(3 * x) * Math.cos(3 * x),
         source: S('1J-1(b)'),
-        reason:
-          'First differentiate the square, then the sine, then the linear argument. The double-angle identity gives an independent rewrite.',
+        params: { b: [3, 2, 4, 5, 6, 7], p: [2, 3], fn: ['sin', 'cos'] },
+        make: ({ b, p, fn }) => {
+          const s = fn === 'sin',
+            other = s ? 'cos' : 'sin';
+          return {
+            tex: `\\${fn}^{${p}}(${b}x)`,
+            key: `${s ? '' : '-'}${p * b}*${fn}(${b}*x)^${p - 1}*${other}(${b}*x)`,
+            alt: p === 2 && s ? `${b}*sin(${2 * b}*x)` : `${s ? '' : '-'}${other}(${b}*x)*${p}*${b}*${fn}(${b}*x)^${p - 1}`,
+            wrong: `${s ? '' : '-'}${p}*${fn}(${b}*x)^${p - 1}*${other}(${b}*x)`,
+            fn: (x) => Math[fn](b * x) ** p,
+            df: (x) => (s ? 1 : -1) * p * b * Math[fn](b * x) ** (p - 1) * Math[other](b * x),
+            reason: `First differentiate the power, then the ${fn}, then the linear argument ${b}x. Each layer contributes a factor.`,
+          };
+        },
       },
     },
   }),
@@ -242,26 +291,29 @@ const prod = [
     ],
     forms: {
       disk: {
-        tex: String.raw`\pi x^2`,
-        key: '2*pi*x',
-        alt: 'pi*(x+x)',
-        wrong: 'pi*x',
-        domain: 'x>0',
-        fn: (x) => Math.PI * x * x,
-        df: (x) => 2 * Math.PI * x,
         source: S('1C-1(a)'),
-        reason: 'The area increment is π(2xh+h²). Divide by h, then let h tend to zero.',
+        params: { shape: ['disk', 'square', 'semicircle', 'triangle', 'sector', 'hexagon'] },
+        make: ({ shape }) =>
+          measure(2, {
+            disk: { tex: '\\pi x^2', key: '2*pi*x', alt: 'pi*(x+x)', wrong: 'pi*x', k: Math.PI, what: 'a disk of radius x' },
+            square: { tex: 'x^2', key: '2*x', alt: 'x+x', wrong: 'x', k: 1, what: 'a square of side x' },
+            semicircle: { tex: '\\pi x^2/2', key: 'pi*x', alt: '2*pi*x/2', wrong: 'pi*x/2', k: Math.PI / 2, what: 'a half disk of radius x' },
+            triangle: { tex: '\\sqrt{3}x^2/4', key: 'sqrt(3)*x/2', alt: '2*sqrt(3)*x/4', wrong: 'sqrt(3)*x/4', k: Math.sqrt(3) / 4, what: 'an equilateral triangle of side x' },
+            sector: { tex: '\\pi x^2/6', key: 'pi*x/3', alt: '2*pi*x/6', wrong: 'pi*x/6', k: Math.PI / 6, what: 'a 60° sector of radius x' },
+            hexagon: { tex: '3\\sqrt{3}x^2/2', key: '3*sqrt(3)*x', alt: '6*sqrt(3)*x/2', wrong: '3*sqrt(3)*x/2', k: (3 * Math.sqrt(3)) / 2, what: 'a regular hexagon of side x' },
+          }[shape]),
       },
       sphere: {
-        tex: String.raw`4\pi x^3/3`,
-        key: '4*pi*x^2',
-        alt: '(4*pi/3)*3*x^2',
-        wrong: '4*pi*x^3',
-        domain: 'x>0',
-        fn: (x) => (4 * Math.PI * x ** 3) / 3,
-        df: (x) => 4 * Math.PI * x * x,
         source: S('1C-1(b)'),
-        reason: 'The cubic expansion leaves 4πx² after dividing the volume change by h and taking the limit.',
+        params: { solid: ['sphere', 'cube', 'cylinder', 'cone', 'hemisphere'] },
+        make: ({ solid }) =>
+          measure(3, {
+            sphere: { tex: '4\\pi x^3/3', key: '4*pi*x^2', alt: '(4*pi/3)*3*x^2', wrong: '4*pi*x^3', k: (4 * Math.PI) / 3, what: 'a ball of radius x' },
+            cube: { tex: 'x^3', key: '3*x^2', alt: 'x^2+x^2+x^2', wrong: 'x^2', k: 1, what: 'a cube of side x' },
+            cylinder: { tex: '2\\pi x^3', key: '6*pi*x^2', alt: '2*pi*3*x^2', wrong: '2*pi*x^2', k: 2 * Math.PI, what: 'a cylinder of radius x and height 2x' },
+            cone: { tex: '\\pi x^3/3', key: 'pi*x^2', alt: '(pi/3)*3*x^2', wrong: 'pi*x^3', k: Math.PI / 3, what: 'a cone of radius x and height x' },
+            hemisphere: { tex: '2\\pi x^3/3', key: '2*pi*x^2', alt: '(2*pi/3)*3*x^2', wrong: '2*pi*x^3/3', k: (2 * Math.PI) / 3, what: 'a half ball of radius x' },
+          }[solid]),
       },
     },
   }),
@@ -278,28 +330,17 @@ const prod = [
     ],
     forms: {
       square: {
-        tex: 'x^{1/2}',
-        key: '1/(2*sqrt(x))',
-        alt: '0.5*x^(-0.5)',
-        wrong: '2*sqrt(x)',
-        domain: 'x>0',
-        fn: (x) => Math.sqrt(x),
-        df: (x) => 1 / (2 * Math.sqrt(x)),
         source: S('1F-3, n=2'),
-        reason: 'From y²=x obtain 2yy′=1, so y′=1/(2y). The positive branch gives y=√x.',
+        params: { m: [1, 3, 5, 7, 9] },
+        make: ({ m }) => root(2, m),
       },
       cube: {
-        tex: 'x^{1/3}',
-        key: '1/(3*x^(2/3))',
-        alt: '(1/3)*x^(-2/3)',
-        wrong: '3*x^(2/3)',
-        domain: 'x>0',
-        fn: (x) => Math.cbrt(x),
-        df: (x) => 1 / (3 * x ** (2 / 3)),
         source: S('1F-3, n=3'),
-        reason:
-          'From y³=x obtain 3y²y′=1. The inverse derivative is the reciprocal of the original slope at the matching point.',
+        params: { m: [1, 2, 4, 5, 7, 8] },
+        make: ({ m }) => root(3, m),
       },
+      fourth: { params: { m: [1, 3, 5, 7] }, make: ({ m }) => root(4, m) },
+      fifth: { params: { m: [1, 2, 3, 4, 6] }, make: ({ m }) => root(5, m) },
     },
   }),
   problem({
@@ -311,12 +352,12 @@ const prod = [
     kind: 'numeric',
     topics: ['derivatives'],
     level: 1,
-    minVersions: 4,
-    variety: ['unknown', 'representation'],
-    vars: { mode: choose(['average', 'instant']), end: choose([2, 5]) },
+    minVersions: 24,
+    variety: ['unknown', 'representation', 'coefficients'],
+    vars: { mode: choose(['average', 'instant']), end: choose([2, 5, 3, 4]), drop: choose([400, 576, 784]) },
     derive: ($) => ({ answer: $.mode === 'average' ? -16 * (2 * ($.end - 2) + 2) : -32 * $.end }),
     text: (T, $) =>
-      `A height record is h(t)=400−16t² ft for 0≤t≤5 s. ${$.mode === 'average' ? `Find the average vertical velocity during the two seconds ending at t=${$.end} s.` : `Find the instantaneous vertical velocity at t=${$.end} s.`} Upward is positive.`,
+      `A height record is h(t)=${$.drop}−16t² ft for 0≤t≤${Math.sqrt($.drop / 16)} s. ${$.mode === 'average' ? `Find the average vertical velocity during the two seconds ending at t=${$.end} s.` : `Find the instantaneous vertical velocity at t=${$.end} s.`} Upward is positive.`,
     parts: [
       numeric(
         'v',
@@ -343,7 +384,7 @@ const prod = [
       `The signed velocity is ${$.answer} ft/s.`,
     ],
     second: ($) => {
-      const h = (t) => 400 - 16 * t * t,
+      const h = (t) => $.drop - 16 * t * t,
         d = 1e-5;
       return {
         v: $.mode === 'average' ? (h($.end) - h($.end - 2)) / 2 : (h($.end + d) - h($.end - d)) / (2 * d),
@@ -359,9 +400,9 @@ const prod = [
       read: (c, s) => ({ v: s.h === 2 ? c.msec : c.fp }),
     },
     cases: [
-      kase(S('1B-1(a)'), { mode: 'average', end: 2 }, { v: -32 }),
-      kase(S('1B-1(b)'), { mode: 'average', end: 5 }, { v: -128 }),
-      kase(S('1B-1(c)'), { mode: 'instant', end: 5 }, { v: -160 }),
+      kase(S('1B-1(a)'), { mode: 'average', end: 2, drop: 400 }, { v: -32 }),
+      kase(S('1B-1(b)'), { mode: 'average', end: 5, drop: 400 }, { v: -128 }),
+      kase(S('1B-1(c)'), { mode: 'instant', end: 5, drop: 400 }, { v: -160 }),
     ],
   }),
   problem({

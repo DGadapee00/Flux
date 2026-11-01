@@ -1,7 +1,7 @@
 import { problem, kase } from '../kit.js';
 import { simpson } from '@flux/subjects/math/quadrature.js';
 import { cylinderDesign } from '@flux/subjects/math/containers.js';
-import { choose, citation, numeric, formulaFamily, numericFamily, conceptFamily } from './rework-kit.js';
+import { choose, citation, numeric, formulaFamily, numericFamily, conceptFamily, cf, fr, frTex, pw, sum, shiftExpr } from './rework-kit.js';
 const S = (p) => citation(2, p),
   E = (p) => `MIT OCW 18.01SC, Fall 2010, ${p}`;
 const approx = [
@@ -27,25 +27,30 @@ const B = [
     hints: approx,
     forms: {
       root: {
-        ask: String.raw`Find the linear approximation to $\sqrt{4+x}$ at $x=0$.`,
-        key: '2+x/4',
-        alt: '(8+x)/4',
-        wrong: '2+x/2',
-        get: (x) => 2 + x / 4,
-        second: (x) => 2 + ((Math.sqrt(4 + 1e-5) - Math.sqrt(4 - 1e-5)) / 2e-5) * x,
         source: S('2A-1, a=4, b=1'),
-        reason:
-          'The value at zero is 2 and the derivative there is 1/4. Multiply that slope by the displacement x.',
+        params: { a: [2, 1, 3, 4, 5, 10], b: [1, 2, 3, 4] },
+        make: ({ a, b }) => ({
+          ask: String.raw`Find the linear approximation to $\sqrt{${a * a}+${cf(b)}x}$ at $x=0$.`,
+          key: sum([a, ''], [b / (2 * a), 'x']),
+          alt: `(${2 * a * a}+${b}*x)/${2 * a}`,
+          wrong: sum([a, ''], [b / a, 'x']),
+          get: (x) => a + (b * x) / (2 * a),
+          second: (x) => a + ((Math.sqrt(a * a + b * 1e-5) - Math.sqrt(a * a - b * 1e-5)) / 2e-5) * x,
+          reason: `The value at zero is ${a}. The derivative there is ${fr(b)}/(2·${a}) = ${fr(b / (2 * a))}. Multiply that slope by the displacement x.`,
+        }),
       },
       reciprocal: {
-        ask: String.raw`Find the linear approximation to $1/(2+x)$ at $x=0$.`,
-        key: '1/2-x/4',
-        alt: '(2-x)/4',
-        wrong: '1/2+x/4',
-        get: (x) => 0.5 - x / 4,
-        second: (x) => 0.5 + ((1 / (2 + 1e-5) - 1 / (2 - 1e-5)) / 2e-5) * x,
         source: S('2A-2, a=2, b=1'),
-        reason: 'The reciprocal is decreasing. Its derivative at zero is −1/4, not +1/4.',
+        params: { a: [2, 1, 3, 4, 5, 10], b: [1, 2, 3, -1] },
+        make: ({ a, b }) => ({
+          ask: String.raw`Find the linear approximation to $1/(${a}${b < 0 ? '-' : '+'}${cf(Math.abs(b))}x)$ at $x=0$.`,
+          key: sum([1 / a, ''], [-b / (a * a), 'x']),
+          alt: `(${a}-${b}*x)/${a * a}`,
+          wrong: sum([1 / a, ''], [b / (a * a), 'x']),
+          get: (x) => 1 / a - (b * x) / (a * a),
+          second: (x) => 1 / a + ((1 / (a + b * 1e-5) - 1 / (a - b * 1e-5)) / 2e-5) * x,
+          reason: `The value at zero is ${fr(1 / a)}. The derivative of 1/(${a}+${b}x) is −${b}/(${a}+${b}x)², so at zero the slope is ${fr(-b / (a * a))}.`,
+        }),
       },
     },
   }),
@@ -58,34 +63,69 @@ const B = [
     hints: approx,
     forms: {
       shifted: {
-        ask: String.raw`Find the quadratic approximation to $1/(1-x)$ centered at $x=1/2$.`,
-        key: '2+4*(x-0.5)+8*(x-0.5)^2',
-        alt: '8*x^2-4*x+2',
-        wrong: '2+4*x+8*x^2',
-        get: (x) => 2 + 4 * (x - 0.5) + 8 * (x - 0.5) ** 2,
-        second: (x) => {
-          const f = (t) => 1 / (1 - t),
-            h = 1e-4,
-            d = x - 0.5;
-          return (
-            f(0.5) +
-            ((f(0.5 + h) - f(0.5 - h)) / (2 * h)) * d +
-            ((f(0.5 + h) - 2 * f(0.5) + f(0.5 - h)) / (2 * h * h)) * d * d
-          );
-        },
         source: S('2A-8'),
-        reason: 'At the center, f=2, f′=4 and f″=16. The quadratic coefficient is f″/2=8.',
+        params: { c: [0.5, 0, -1, 2, -0.5, 3] },
+        make: ({ c }) => {
+          const u = 1 - c,
+            f0 = 1 / u,
+            f1 = 1 / u ** 2,
+            f2 = 1 / u ** 3,
+            centre = shiftExpr(c);
+          return {
+            ask: String.raw`Find the quadratic approximation to $1/(1-x)$ centered at $x=${frTex(c)}$.`,
+            key: sum([f0, ''], [f1, centre], [f2, `${centre}^2`]),
+            alt: sum([f2, 'x^2'], [f1 - 2 * c * f2, 'x'], [f0 - c * f1 + c * c * f2, '']),
+            wrong: sum([f0, ''], [f1, 'x'], [f2, 'x^2']),
+            get: (x) => f0 + f1 * (x - c) + f2 * (x - c) ** 2,
+            second: (x) => {
+              const f = (t) => 1 / (1 - t),
+                h = 1e-4,
+                d = x - c;
+              return f(c) + ((f(c + h) - f(c - h)) / (2 * h)) * d + ((f(c + h) - 2 * f(c) + f(c - h)) / (2 * h * h)) * d * d;
+            },
+            at: c + 0.1,
+            reason: `At the center, f=${fr(f0)}, f′=${fr(f1)} and f″=${fr(2 * f2)}. The quadratic coefficient is f″/2=${fr(f2)}, and every term uses the displacement ${centre.replace(/[()]/g, '')}.`,
+          };
+        },
       },
       binomial: {
-        ask: String.raw`Find the quadratic approximation to $(1+x)^3$ centered at zero.`,
-        key: '1+3*x+3*x^2',
-        alt: '3*x*(1+x)+1',
-        wrong: '1+3*x+6*x^2',
-        get: (x) => 1 + 3 * x + 3 * x * x,
-        second: (x) => (1 + x) ** 3 - x ** 3,
         source: S('2A-10, r=3'),
-        reason:
-          'The binomial expansion is 1+3x+3x²+x³. Discard terms of degree above two, not the factor 1/2 in the Taylor coefficient.',
+        params: { r: [3, 2, 4, 5, -1, -2, 0.5, -0.5], b: [1, 2, 3] },
+        make: ({ r, b }) => {
+          const c1 = r * b,
+            c2 = (r * (r - 1) * b * b) / 2;
+          return {
+            ask: String.raw`Find the quadratic approximation to $(1+${cf(b)}x)^{${fr(r)}}$ centered at zero.`,
+            key: sum([1, ''], [c1, 'x'], [c2, 'x^2']),
+            alt: sum([c2, 'x^2'], [c1, 'x'], [1, '']),
+            wrong: sum([1, ''], [c1, 'x'], [2 * c2, 'x^2']),
+            get: (x) => 1 + c1 * x + c2 * x * x,
+            second: (x) => {
+              const f = (t) => (1 + b * t) ** r,
+                h = 1e-4;
+              return 1 + ((f(h) - f(-h)) / (2 * h)) * x + ((f(h) - 2 + f(-h)) / (2 * h * h)) * x * x;
+            },
+            at: 0.05,
+            reason: `f(0)=1, f′(0)=${fr(r)}·${b}=${fr(c1)} and f″(0)=${fr(r)}(${fr(r - 1)})·${b * b}. Half of f″(0) is ${fr(c2)}.`,
+          };
+        },
+      },
+      exponential: {
+        params: { k: [1, 2, 3, -1, -2, -3] },
+        make: ({ k }) => ({
+          ask: String.raw`Find the quadratic approximation to $e^{${cf(k)}x}$ centered at zero.`,
+          key: sum([1, ''], [k, 'x'], [(k * k) / 2, 'x^2']),
+          alt: sum([(k * k) / 2, 'x^2'], [k, 'x'], [1, '']),
+          wrong: sum([1, ''], [k, 'x'], [k * k, 'x^2']),
+          get: (x) => 1 + k * x + ((k * k) / 2) * x * x,
+          second: (x) => {
+            const f = (t) => Math.exp(k * t),
+              h = 1e-4;
+            return 1 + ((f(h) - f(-h)) / (2 * h)) * x + ((f(h) - 2 + f(-h)) / (2 * h * h)) * x * x;
+          },
+          at: 0.05,
+          reason: `Each derivative brings down a factor ${k}: f(0)=1, f′(0)=${k}, f″(0)=${k * k}. The quadratic coefficient is half of ${k * k}.`,
+        }),
       },
     },
   }),
@@ -103,38 +143,57 @@ const B = [
     ],
     forms: {
       square: {
-        ask: 'For f(x)=x² on [0,1], find the Mean Value Theorem point c.',
-        answer: 0.5,
-        second: () => root((x) => 2 * x - 1, 0, 1),
         source: S('2G-1(a)'),
-        reason: 'The secant slope is one. Solve 2c=1.',
-        traps: [
-          [1, 'That is the secant slope. The question asks for its contact coordinate.'],
-          [0, 'An endpoint is not an interior Mean Value Theorem point.'],
-        ],
+        params: { iv: [[0, 1], [1, 5], [0, 3], [-1, 2], [2, 4], [1, 4]], p: [1, 2, 3, -1] },
+        make: ({ iv: [a, b], p }) => {
+          const f = (x) => p * x * x,
+            slope = (f(b) - f(a)) / (b - a);
+          return {
+            ask: `For f(x)=${cf(p)}x² on [${a},${b}], find the Mean Value Theorem point c.`,
+            answer: (a + b) / 2,
+            second: () => (Math.abs(p) > 0 ? root((x) => Math.sign(p) * (2 * p * x - slope), a, b) : 0),
+            reason: `The secant slope is ${fr(slope)}. Solve ${2 * p}c=${fr(slope)}: for any parabola the point is the midpoint.`,
+            traps: [
+              [slope, 'That is the secant slope. The question asks for its contact coordinate.'],
+              [a, 'An endpoint is not an interior Mean Value Theorem point.'],
+            ],
+          };
+        },
       },
       logarithm: {
-        ask: 'For f(x)=ln x on [1,2], find the Mean Value Theorem point c.',
-        answer: 1 / Math.log(2),
-        second: () => root((x) => Math.log(2) - 1 / x, 1, 2),
         source: S('2G-1(b)'),
-        reason: 'The secant slope is ln 2. Solve 1/c=ln 2 and check 1<c<2.',
-        traps: [
-          [Math.log(2), 'That is the secant slope. Invert it to solve 1/c=ln 2.'],
-          [1.5, 'The theorem does not require the interval midpoint.'],
-        ],
+        params: { iv: [[1, 2], [1, 3], [1, 4], [2, 3], [2, 5], [1, 5], [3, 6], [1, 10]] },
+        make: ({ iv: [a, b] }) => {
+          const slope = Math.log(b / a) / (b - a);
+          return {
+            ask: `For f(x)=ln x on [${a},${b}], find the Mean Value Theorem point c.`,
+            answer: 1 / slope,
+            second: () => root((x) => slope - 1 / x, a, b),
+            reason: `The secant slope is ln(${b}/${a})/${b - a}. Solve 1/c equal to it, and check ${a}<c<${b}.`,
+            traps: [
+              [slope, 'That is the secant slope. Invert it to solve 1/c=slope.'],
+              [(a + b) / 2, 'The theorem does not require the interval midpoint; that holds only for parabolas.'],
+            ],
+          };
+        },
       },
       cubic: {
-        ask: 'For f(x)=x³−x on [−2,2], find the positive Mean Value Theorem point c.',
-        answer: 2 / Math.sqrt(3),
-        second: () => root((x) => 3 * x * x - 4, 0, 2),
         source: S('2G-1(c), positive root'),
-        reason:
-          'The secant slope is three. Thus 3c²−1=3. Two interior roots exist; the question selects the positive one.',
-        traps: [
-          [-2 / Math.sqrt(3), 'That is the negative branch. Read the sign requested for c.'],
-          [Math.sqrt(3), 'The derivative equation is 3c²=4, not c²=3.'],
-        ],
+        params: { iv: [[-2, 2], [-1, 2], [0, 2], [0, 3], [-1, 3], [1, 3]], k: [-1, 1, 2, -3] },
+        make: ({ iv: [a, b], k }) => {
+          const c = Math.sqrt((a * a + a * b + b * b) / 3),
+            slope = a * a + a * b + b * b + k;
+          return {
+            ask: `For f(x)=x³${k < 0 ? '−' : '+'}${Math.abs(k) === 1 ? '' : Math.abs(k)}x on [${a},${b}], find the positive Mean Value Theorem point c.`,
+            answer: c,
+            second: () => root((x) => 3 * x * x + k - slope, Math.max(a, 0), b),
+            reason: `The secant slope is ${slope}. Thus 3c²${k < 0 ? '−' : '+'}${Math.abs(k)}=${slope}, so c²=${fr((a * a + a * b + b * b) / 3)}. The term in x cancels, and the positive root lies inside the interval.`,
+            traps: [
+              [-c, 'That is the negative branch. Read the sign requested for c.'],
+              [Math.sqrt(Math.abs(slope)), 'The derivative is 3c² plus the constant; solve 3c²+k equal to the slope.'],
+            ],
+          };
+        },
       },
     },
   }),
@@ -152,27 +211,32 @@ const B = [
     ],
     forms: {
       stationary: {
-        ask: 'For f(x)=x−x³, find the positive starting value where the first Newton update divides by zero.',
-        answer: 1 / Math.sqrt(3),
-        second: () => root((x) => 3 * x * x - 1, 0, 1),
         source: S('2F-5(a)'),
-        reason: 'The derivative 1−3x² vanishes at the requested starting value, while f is not zero.',
-        traps: [
-          [1 / Math.sqrt(5), 'That produces a two-cycle, rather than division by zero.'],
-          [1, 'This is already a root. Its nonzero derivative makes the update valid.'],
-        ],
+        params: { a: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15] },
+        make: ({ a }) => ({
+          ask: `For f(x)=${cf(a)}x−x³, find the positive starting value where the first Newton update divides by zero.`,
+          answer: Math.sqrt(a / 3),
+          second: () => root((x) => 3 * x * x - a, 0, Math.sqrt(a) + 1),
+          reason: `The derivative ${a}−3x² vanishes at x=√(${a}/3), where f is not zero.`,
+          traps: [
+            [Math.sqrt(a / 5), 'That produces a two-cycle, rather than division by zero.'],
+            [Math.sqrt(a), 'This is already a root. Its nonzero derivative makes the update valid.'],
+          ],
+        }),
       },
       cycle: {
-        ask: 'For f(x)=x−x³, find the positive nonzero starting value whose Newton iterates alternate between x and −x.',
-        answer: 1 / Math.sqrt(5),
-        second: () => root((x) => 5 * x * x - 1, 0.1, 0.55),
         source: S('2F-5(b)'),
-        reason:
-          'The map is N(x)=−2x³/(1−3x²). Set N(x)=−x, cancel the nonzero x and solve 5x²=1. Neither point is a root.',
-        traps: [
-          [1 / Math.sqrt(3), 'That makes the map not defined. A cycle requires both updates to exist.'],
-          [0, 'Zero is a fixed root, not a nonzero two-cycle.'],
-        ],
+        params: { a: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15] },
+        make: ({ a }) => ({
+          ask: `For f(x)=${cf(a)}x−x³, find the positive nonzero starting value whose Newton iterates alternate between x and −x.`,
+          answer: Math.sqrt(a / 5),
+          second: () => root((x) => 5 * x * x - a, 0.01, Math.sqrt(a / 3)),
+          reason: `The map is N(x)=−2x³/(${a}−3x²). Set N(x)=−x, cancel the nonzero x and solve 5x²=${a}. Neither point is a root.`,
+          traps: [
+            [Math.sqrt(a / 3), 'That makes the map not defined. A cycle requires both updates to exist.'],
+            [0, 'Zero is a fixed root, not a nonzero two-cycle.'],
+          ],
+        }),
       },
     },
   }),
@@ -186,11 +250,11 @@ const B = [
     level: 3,
     topics: ['optimization'],
     variety: ['boundary configuration', 'unknown'],
-    minVersions: 2,
-    vars: { k: choose([1, 2]) },
-    derive: ($) => ({ V: 330, r: Math.cbrt(330 / ($.k * Math.PI)) }),
+    minVersions: 12,
+    vars: { k: choose([1, 2]), V: choose([330, 355, 473, 250, 500, 750]) },
+    derive: ($) => ({ r: Math.cbrt($.V / ($.k * Math.PI)) }),
     text: (T, $) =>
-      `An ideal cylindrical container holds 330 cm³. Its wall and ${$.k === 1 ? 'one flat bottom' : 'two flat ends'} use equal-thickness sheet. Find the height/radius ratio that minimizes sheet area.`,
+      `An ideal cylindrical container holds ${$.V} cm³. Its wall and ${$.k === 1 ? 'one flat bottom' : 'two flat ends'} use equal-thickness sheet. Find the height/radius ratio that minimizes sheet area.`,
     parts: [
       numeric('ratio', ($) => $.k, 'optimal h/r', [
         [
@@ -215,16 +279,16 @@ const B = [
       for (let n = 0; n < 80; n++) {
         const a = lo + (hi - lo) / 3,
           b = hi - (hi - lo) / 3;
-        if (cylinderDesign(330, a, $.k).area < cylinderDesign(330, b, $.k).area) hi = b;
+        if (cylinderDesign($.V, a, $.k).area < cylinderDesign($.V, b, $.k).area) hi = b;
         else lo = a;
       }
       const r = (lo + hi) / 2;
-      return { ratio: cylinderDesign(330, r, $.k).h / r };
+      return { ratio: cylinderDesign($.V, r, $.k).h / r };
     },
     sim: {
       scenario: 'closed',
       setup(s, $) {
-        s.V = 330;
+        s.V = $.V;
         s.k = $.k;
         s.r = $.r;
       },
@@ -235,7 +299,7 @@ const B = [
         S(
           '2C-5, h=r at the open-cylinder optimum; same stationary proportions under the inverse area/volume problem',
         ),
-        { k: 1 },
+        { k: 1, V: 330 },
         { ratio: 1 },
       ),
     ],
@@ -253,24 +317,30 @@ const B = [
     ],
     forms: {
       expanded: {
-        ask: String.raw`Find $F(x)$ with $F'(x)=(x^3+1)^2$ and $F(0)=0$.`,
-        key: 'x^7/7+x^4/2+x',
-        alt: '(2*x^7+7*x^4+14*x)/14',
-        wrong: '(x^3+1)^3/3',
-        get: (x) => x ** 7 / 7 + x ** 4 / 2 + x,
-        second: (x) => simpson((t) => (t ** 3 + 1) ** 2, 0, x),
         source: citation(1, '1E-2(c), with C=0'),
-        reason: 'Expand (x³+1)²=x⁶+2x³+1. Integrate each term. The initial condition makes C zero.',
+        params: { m: [3, 1, 2, 4], c: [1, 2, 3, -1, -2, 4] },
+        make: ({ m, c }) => ({
+          ask: String.raw`Find $F(x)$ with $F'(x)=(${pw('x', m)}${c < 0 ? '-' : '+'}${Math.abs(c)})^2$ and $F(0)=0$.`,
+          key: sum([1 / (2 * m + 1), `x^${2 * m + 1}`], [(2 * c) / (m + 1), `x^${m + 1}`], [c * c, 'x']),
+          alt: `(x^${2 * m + 1})/${2 * m + 1}+${2 * c}*x^${m + 1}/${m + 1}+${c * c}*x`,
+          wrong: `(x^${m}+${c})^3/3`,
+          get: (x) => x ** (2 * m + 1) / (2 * m + 1) + ((2 * c) / (m + 1)) * x ** (m + 1) + c * c * x,
+          second: (x) => simpson((t) => (t ** m + c) ** 2, 0, x),
+          reason: `Expand the square: x^${2 * m}+${2 * c}x^${m}+${c * c}. Integrate each term. The initial condition makes C zero.`,
+        }),
       },
       sum: {
-        ask: String.raw`Find $F(x)$ with $F'(x)=2x+3$ and $F(0)=0$.`,
-        key: 'x^2+3*x',
-        alt: 'x*(x+3)',
-        wrong: '2*x^2+3*x',
-        get: (x) => x * x + 3 * x,
-        second: (x) => simpson((t) => 2 * t + 3, 0, x),
         source: citation(1, '1E-2(a), a=2, b=3, C=0'),
-        reason: 'The antiderivative of 2x is x², not 2x². Fix C from the stated starting value.',
+        params: { a: [2, 4, 6, 3, 1], b: [3, 1, -2, 5], F0: [0, 1, -3] },
+        make: ({ a, b, F0 }) => ({
+          ask: String.raw`Find $F(x)$ with $F'(x)=${cf(a)}x${b < 0 ? '-' : '+'}${Math.abs(b)}$ and $F(0)=${F0}$.`,
+          key: sum([a / 2, 'x^2'], [b, 'x'], [F0, '']),
+          alt: `${F0}+${b}*x+${a}*x^2/2`,
+          wrong: sum([a, 'x^2'], [b, 'x'], [F0, '']),
+          get: (x) => (a / 2) * x * x + b * x + F0,
+          second: (x) => F0 + simpson((t) => a * t + b, 0, x),
+          reason: `The antiderivative of ${a}x is ${fr(a / 2)}x², not ${a}x². The starting value fixes C=${F0}.`,
+        }),
       },
     },
   }),
@@ -287,38 +357,46 @@ const B = [
     ],
     forms: {
       exponential: {
-        ask: String.raw`Solve $y'=2y$ with $y(0)=3$. Write $y(x)$.`,
-        key: '3*exp(2*x)',
-        alt: 'exp(2*x)*3',
-        wrong: '3+2*x',
-        get: (x) => 3 * Math.exp(2 * x),
-        second: (x) => {
-          let y = 3;
-          const h = x / 10000;
-          for (let i = 0; i < 10000; i++) y *= 1 + 2 * h + 2 * h * h;
-          return y;
-        },
         source: E('Session 40, Exponential Growth and Inhibited Growth, solution (a), a=3, r=2'),
-        reason: 'Separation gives ln|y|=2x+C. The initial value picks y=3e^(2x).',
+        params: { A: [3, 1, 2, 5, 10], r: [2, 1, 3, -1, -2, -3] },
+        make: ({ A, r }) => ({
+          ask: String.raw`Solve $y'=${cf(r)}y$ with $y(0)=${A}$. Write $y(x)$.`,
+          key: `${A}*exp(${r}*x)`,
+          alt: `exp(${r}*x)*${A}`,
+          wrong: `${A}+${r}*x`,
+          get: (x) => A * Math.exp(r * x),
+          second: (x) => {
+            let y = A;
+            const h = x / 10000;
+            for (let i = 0; i < 10000; i++) y *= 1 + r * h + (r * r * h * h) / 2;
+            return y;
+          },
+          reason: `Separation gives ln|y|=${r}x+C. The initial value picks y=${A}e^(${r}x).`,
+        }),
       },
       inhibited: {
-        ask: String.raw`Solve $y'=y(1-y)$ with $y(0)=1/2$. Write $y(x)$.`,
-        key: '1/(1+exp(-x))',
-        alt: 'exp(x)/(1+exp(x))',
-        wrong: 'exp(x)/2',
-        get: (x) => 1 / (1 + Math.exp(-x)),
-        second: (x) => {
-          let y = 0.5;
-          const h = x / 10000;
-          for (let i = 0; i < 10000; i++) {
-            const mid = y + 0.5 * h * y * (1 - y);
-            y += h * mid * (1 - mid);
-          }
-          return y;
-        },
         source: E('Session 40, Exponential Growth and Inhibited Growth, solution (b), s=r=a=1'),
-        reason:
-          'Partial fractions give ln|y/(1−y)|=x+C. The initial value makes C zero. Solving gives y=1/(1+e^(−x)).',
+        params: { y0: [0.5, 0.25, 0.2, 0.75, 0.1, 0.8], k: [1, 2, 3, 4] },
+        make: ({ y0, k }) => {
+          const B = (1 - y0) / y0;
+          return {
+            ask: String.raw`Solve $y'=${cf(k)}y(1-y)$ with $y(0)=${frTex(y0)}$. Write $y(x)$.`,
+            key: `1/(1+(${fr(B)})*exp(-${k}*x))`,
+            alt: `exp(${k}*x)/(exp(${k}*x)+(${fr(B)}))`,
+            wrong: `(${fr(y0)})*exp(${k}*x)`,
+            get: (x) => 1 / (1 + B * Math.exp(-k * x)),
+            second: (x) => {
+              let y = y0;
+              const h = x / 10000;
+              for (let i = 0; i < 10000; i++) {
+                const mid = y + 0.5 * h * k * y * (1 - y);
+                y += h * k * mid * (1 - mid);
+              }
+              return y;
+            },
+            reason: `Partial fractions give ln|y/(1−y)|=${k}x+C. At x=0, y/(1−y)=${fr(y0 / (1 - y0))}. Solving gives y=1/(1+(${fr(B)})e^(−${k}x)).`,
+          };
+        },
       },
     },
   }),

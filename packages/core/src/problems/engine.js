@@ -723,7 +723,12 @@ export function createEngine(options = {}) {
           return n.name === 'sqrt' ? `\\sqrt{${go(n.arg)}}` : `\\operatorname{${n.name}}\\left(${go(n.arg)}\\right)`;
         case 'op': {
           if (n.op === '/') return `\\dfrac{${go(n.l)}}{${go(n.r)}}`;
-          if (n.op === '^') return `${go(n.l, 5)}^{${go(n.r)}}`;
+          if (n.op === '^') {
+            // A power or a fraction as the base needs brackets: (x^2)^3, not x^{2}^{3}.
+            const base = go(n.l, 5);
+            const boxed = n.l.t === 'op' && (n.l.op === '^' || n.l.op === '/');
+            return `${boxed ? `\\left(${base}\\right)` : base}^{${go(n.r)}}`;
+          }
           const prec = P[n.op];
           const l = go(n.l, prec);
           const r = go(n.r, prec + 1);

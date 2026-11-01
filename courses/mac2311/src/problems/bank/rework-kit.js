@@ -16,6 +16,40 @@ export const numeric = (id, get, label, traps, unit = '') => ({
   abs: 1e-7,
   traps,
 });
+/**
+ * A form may be a recipe: `params` lists each coefficient's values, the first value of each being
+ * the cited exercise's, and `make(p)` returns the form's fields for one choice. Combination 0 is
+ * always the cited one, so the printed answer stays a worked case. `pick` walks the combinations
+ * in mixed radix; a form with fewer than PICKS combinations rejects the picks past its count, so
+ * the version count is exact and every version reads differently.
+ */
+export const PICKS = 24;
+const comboCount = (f) => (f.params ? Object.values(f.params).reduce((n, list) => n * list.length, 1) : 1);
+const paramsAt = (f, k) => {
+  const out = {};
+  let r = k;
+  for (const [name, list] of Object.entries(f.params)) {
+    out[name] = list[r % list.length];
+    r = Math.floor(r / list.length);
+  }
+  return out;
+};
+/** Drop unit coefficients and first powers from a recipe's expression keys: 1*x → x, x^1 → x. */
+export const tidy = (e) =>
+  typeof e !== 'string'
+    ? e
+    : e
+        .replace(/\^\(1\)(?![\d.])/g, '')
+        .replace(/\^1(?![\d./])/g, '')
+        .replace(/\(1\)\*/g, '')
+        .replace(/(^|[^\d.)a-zA-Z^])1\*/g, '$1')
+        .replace(/\*1(?![\d.^/])/g, '');
+const tidied = (v) => ({ ...v, key: tidy(v.key), alt: tidy(v.alt), wrong: tidy(v.wrong) });
+export const formAt = (f, k = 0) => (f.make ? tidied({ ...f, ...f.make(paramsAt(f, k)) }) : f);
+const picks = (forms) => Math.min(PICKS, Math.max(...Object.values(forms).map(comboCount)));
+const versionsOf = (forms) => Object.values(forms).reduce((n, f) => n + Math.min(comboCount(f), PICKS), 0);
+const pickVar = (forms) => choose([...Array(picks(forms)).keys()]);
+const pickValid = (forms) => ($) => $.pick < Math.min(comboCount(forms[$.form]), PICKS);
 /** Symbolic families keep function and representation changes explicit, never a numeric range alone.
  * The second method differentiates the original function numerically before returning its equivalent key. */
 export function symbolicFamily({ id, exam, ch, title, topics, forms, hints, level = 2 }) {
@@ -29,10 +63,14 @@ export function symbolicFamily({ id, exam, ch, title, topics, forms, hints, leve
     topics,
     kind: 'symbolic',
     level,
-    minVersions: ids.length,
-    variety: ['function family'],
-    vars: { form: choose(ids) },
-    derive: ($) => ({ v: forms[$.form], x: forms[$.form].at ?? 0.7 }),
+    minVersions: versionsOf(forms),
+    variety: ['function family', 'coefficients'],
+    vars: { form: choose(ids), pick: pickVar(forms) },
+    valid: pickValid(forms),
+    derive: ($) => {
+      const v = formAt(forms[$.form], $.pick);
+      return { v, x: v.at ?? 0.7 };
+    },
     text: (T, $) =>
       String.raw`Differentiate $f(x)=${$.v.tex}$. Give an expression valid on ${$.v.domain || 'its differentiable domain'}.`,
     parts: [
@@ -61,14 +99,15 @@ export function symbolicFamily({ id, exam, ch, title, topics, forms, hints, leve
     },
     cases: Object.entries(forms)
       .filter(([, v]) => v.source)
-      .map(([form, v]) =>
-        kase(
+      .map(([form, f]) => {
+        const v = formAt(f, 0);
+        return kase(
           v.source,
-          { form },
+          { form, pick: 0 },
           { formula: v.key },
           { accept: { formula: [v.alt] }, reject: { formula: [v.wrong] } },
-        ),
-      ),
+        );
+      }),
   });
 }
 export function conceptFamily({ id, exam, ch, title, topics, forms, hints }) {
@@ -125,10 +164,14 @@ export function formulaFamily({ id, exam, ch, title, topics, forms, hints, level
     topics,
     kind: 'symbolic',
     level,
-    minVersions: ids.length,
-    variety: ['function family', 'representation'],
-    vars: { form: choose(ids) },
-    derive: ($) => ({ v: forms[$.form], x: forms[$.form].at ?? 0.6, [variable]: forms[$.form].at ?? 0.6 }),
+    minVersions: versionsOf(forms),
+    variety: ['function family', 'representation', 'coefficients'],
+    vars: { form: choose(ids), pick: pickVar(forms) },
+    valid: pickValid(forms),
+    derive: ($) => {
+      const v = formAt(forms[$.form], $.pick);
+      return { v, x: v.at ?? 0.6, [variable]: v.at ?? 0.6 };
+    },
     text: (T, $) => $.v.ask,
     parts: [
       sym(
@@ -154,14 +197,15 @@ export function formulaFamily({ id, exam, ch, title, topics, forms, hints, level
     },
     cases: Object.entries(forms)
       .filter(([, v]) => v.source)
-      .map(([form, v]) =>
-        kase(
+      .map(([form, f]) => {
+        const v = formAt(f, 0);
+        return kase(
           v.source,
-          { form },
+          { form, pick: 0 },
           { formula: v.key },
           { accept: { formula: [v.alt] }, reject: { formula: [v.wrong] } },
-        ),
-      ),
+        );
+      }),
   });
 }
 export function numericFamily({
@@ -188,10 +232,11 @@ export function numericFamily({
     level,
     lab,
     sim,
-    minVersions: ids.length,
-    variety: ['configuration', 'unknown'],
-    vars: { form: choose(ids) },
-    derive: ($) => ({ v: forms[$.form] }),
+    minVersions: versionsOf(forms),
+    variety: ['configuration', 'unknown', 'coefficients'],
+    vars: { form: choose(ids), pick: pickVar(forms) },
+    valid: pickValid(forms),
+    derive: ($) => ({ v: formAt(forms[$.form], $.pick) }),
     text: (T, $) => $.v.ask,
     parts: [
       {
@@ -207,6 +252,49 @@ export function numericFamily({
     second: ($) => ({ answer: $.v.second() }),
     cases: Object.entries(forms)
       .filter(([, v]) => v.source)
-      .map(([form, v]) => kase(v.source, { form }, { answer: v.printed ?? v.answer }, { note: v.note })),
+      .map(([form, f]) => {
+        const v = formAt(f, 0);
+        return kase(v.source, { form, pick: 0 }, { answer: v.printed ?? v.answer }, { note: v.note });
+      }),
   });
 }
+
+/** A coefficient in TeX or an expression: 1 prints nothing, −1 prints a minus sign. */
+export const cf = (c) => (c === 1 ? '' : c === -1 ? '-' : String(c));
+/** x shifted by h: x, (x−h) or (x+|h|). */
+export const shift = (h, v = 'x') => (h === 0 ? v : h > 0 ? `(${v}-${h})` : `(${v}+${-h})`);
+/** A rational number as exact text, for answers and keys: 0.25 → 1/4, −1.5 → −3/2. */
+export const fr = (x) => {
+  if (Math.abs(x - Math.round(x)) < 1e-9) return String(Math.round(x));
+  for (let d = 2; d <= 2000; d++) {
+    const n = Math.round(x * d);
+    if (Math.abs(n / d - x) < 1e-12) return `${n}/${d}`;
+  }
+  return String(x);
+};
+/** The same as TeX: \tfrac{1}{4}, −\tfrac{3}{2}. */
+export const frTex = (x) => {
+  const t = fr(x);
+  if (!t.includes('/')) return t;
+  const [n, d] = t.split('/');
+  return `${n.startsWith('-') ? '-' : ''}\\tfrac{${n.replace('-', '')}}{${d}}`;
+};
+/** A power in TeX that drops a first exponent: pw('x', 1) is x, pw('x', 3) is x^{3}. */
+export const pw = (v, n) => (n === 1 ? v : `${v}^{${n}}`);
+/**
+ * A sum of terms as an expression key, signs joined properly and zero terms dropped:
+ * sum([2, ''], [-1/8, '(x-3)^2']) is 2-(1/8)*(x-3)^2. A coefficient of ±1 multiplies nothing.
+ */
+export const sum = (...terms) => {
+  let out = '';
+  for (const [c, body] of terms) {
+    if (Math.abs(c) < 1e-12) continue;
+    const mag = Math.abs(c),
+      m = fr(mag),
+      piece = body ? (Math.abs(mag - 1) < 1e-12 ? body : `${m.includes('/') ? `(${m})` : m}*${body}`) : m;
+    out += c < 0 ? `-${piece}` : `${out ? '+' : ''}${piece}`;
+  }
+  return out || '0';
+};
+/** x shifted by a rational c, as an expression: x, (x-1/2) or (x+3). */
+export const shiftExpr = (c) => (c === 0 ? 'x' : c > 0 ? `(x-${fr(c)})` : `(x+${fr(-c)})`);

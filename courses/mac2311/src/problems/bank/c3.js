@@ -2,9 +2,66 @@ import { problem, kase, sym } from '../kit.js';
 import { simpson } from '@flux/subjects/math/quadrature.js';
 import { riemann1d } from '@flux/subjects/math/riemann.js';
 import { spheroid } from '@flux/subjects/math/spheroid.js';
-import { choose, citation, numeric, numericFamily, formulaFamily, conceptFamily } from './rework-kit.js';
+import { choose, citation, numeric, numericFamily, formulaFamily, conceptFamily, cf, fr, frTex, pw, sum } from './rework-kit.js';
 const S = (p) => citation(3, p),
   E = (p) => `MIT OCW 18.01SC, Fall 2010, ${p}`;
+/** Riemann sum of g on [a,b] with n strips at left, right or mid samples, by an explicit loop. */
+const strips = (g, a, b, n, sample) => {
+  const w = (b - a) / n,
+    off = sample === 'left' ? 0 : sample === 'right' ? 1 : 0.5;
+  let total = 0;
+  for (let i = 0; i < n; i++) total += g(a + (i + off) * w);
+  return total * w;
+};
+/** An interval end as TeX-friendly text. */
+const end = (x) => (x < 0 ? `−${Math.abs(x)}` : String(x));
+/** sin on [0,π] by the trapezoidal rule and Simpson's rule, n strips. */
+const trapSine = (n) => {
+  let t = 0;
+  for (let i = 1; i < n; i++) t += Math.sin((i * Math.PI) / n);
+  return (Math.PI / n) * t;
+};
+const simpsonSine = (n) => {
+  let t = 0;
+  for (let i = 1; i < n; i++) t += (i % 2 ? 4 : 2) * Math.sin((i * Math.PI) / n);
+  return (Math.PI / (3 * n)) * t;
+};
+/** The exponential density λe^{−λt} in TeX. */
+const density = (lam) => (lam === 1 ? 'e^{-t}' : `${frTex(lam)}e^{-${lam === 0.5 ? 't/2' : `${lam}t`}}`);
+/** x shifted by m in TeX, for a weight profile. */
+const shiftTexFn = (m) => (m > 0 ? `(x-${m})` : `(x+${-m})`);
+/** The ellipse x²/a²+y²/c² ≤ 1 turned about the y axis: a spheroid of volume 4πa²c/3. */
+const spheroidForm = (a, c) => ({
+  ask: String.raw`Rotate $${a === 1 ? 'x^2' : `\\dfrac{x^2}{${a * a}}`}+${c === 1 ? 'y^2' : `\\dfrac{y^2}{${c * c}}`}\le1$ about the y-axis. Find the volume.`,
+  answer: (4 * Math.PI * a * a * c) / 3,
+  second: () => simpson((y) => Math.PI * a * a * (1 - (y * y) / (c * c)), -c, c),
+  reason: `At height y the disk radius squared is ${a * a}(1−y²/${c * c}). Integrate π times that from −${c} to ${c}.`,
+  a,
+  c,
+  traps: [
+    [(2 * Math.PI * a * a * c) / 3, 'That counts only one axial half.'],
+    [(4 * Math.PI * c * c * a) / 3, 'That interchanges the equatorial and axial radii; only the equatorial radius is squared.'],
+  ],
+});
+/** Work on a Hooke spring that needs F newtons at d metres, stretched from 0 to L: sign +1 external, −1 the spring's own. */
+const springForm = (F, d, L, sign) => {
+  const k = F / d;
+  return {
+    ask:
+      sign > 0
+        ? `A spring needs a force magnitude of ${F} N at ${d} m extension. Assume Hooke’s law. Find the work done by a slow external force in stretching it from equilibrium to ${L} m.`
+        : `A Hooke-law spring needs a force magnitude of ${F} N at ${d} m extension. Find the work done by the spring itself while it is stretched from equilibrium to ${L} m.`,
+    answer: (sign * k * L * L) / 2,
+    second: () => simpson((x) => sign * k * x, 0, L),
+    reason: `The constant is k=${F}/${d}=${fr(k)} N/m. Integrating ${sign > 0 ? '' : '−'}${fr(k)}x from 0 to ${L} gives ${fr((sign * k * L * L) / 2)} J.${sign < 0 ? ' The restoring force opposes the displacement, so its work is negative.' : ''}`,
+    multiplier: sign * k,
+    L,
+    traps: [
+      [sign * k * L * L, 'That applies the final force over the whole interval. The spring force rises from zero.'],
+      [(-sign * k * L * L) / 2, sign > 0 ? 'That is the work done by the restoring spring, not the external force.' : 'That is the external stretching work. The restoring force opposes the displacement.'],
+    ],
+  };
+};
 const B = [
   numericFamily({
     id: 'c3.riemann',
@@ -20,61 +77,63 @@ const B = [
     ],
     forms: {
       cubeRight: {
-        ask: 'Use four equal subintervals and right endpoints to approximate the integral of x³ on [0,1].',
-        answer: 25 / 64,
-        second: () => riemann1d((x) => x ** 3, 0, 1, { n: 4, sample: 'right' }).sum,
-        graphId: 'cube',
-        a: 0,
-        b: 1,
-        n: 4,
-        sample: 'right',
-        reason: 'Add the four right-end heights 1/64, 8/64, 27/64 and 64/64, then multiply by 1/4.',
         source: S('3B-3(a), corrected arithmetic; see ERRATA.md'),
-        note: 'The printed 15/128 contradicts the displayed sum. Direct addition gives 25/64.',
-        traps: [
-          [25 / 16, 'That is the sum of the heights. Multiply by the subinterval width 1/4.'],
-          [9 / 64, 'That uses left endpoints rather than the requested right endpoints.'],
-        ],
+        params: { n: [4, 2, 3, 5, 6, 8], b: [1, 2] },
+        make: ({ n, b }) => ({
+          ask: `Use ${n} equal subintervals and right endpoints to approximate the integral of x³ on [0,${b}].`,
+          answer: (b ** 4 * ((n * (n + 1)) / 2) ** 2) / n ** 4,
+          second: () => riemann1d((x) => x ** 3, 0, b, { n, sample: 'right' }).sum,
+          graphId: 'cube',
+          a: 0,
+          b,
+          n,
+          sample: 'right',
+          note: n === 4 && b === 1 ? 'The printed 15/128 contradicts the displayed sum. Direct addition gives 25/64.' : undefined,
+          reason: `The strips are ${fr(b / n)} wide. The right ends are ${fr(b / n)}, ${fr((2 * b) / n)}, …, ${b}. Add their cubes, then multiply by the width: Σi³=(n(n+1)/2)² does the adding.`,
+          traps: [
+            [(b ** 3 * ((n * (n + 1)) / 2) ** 2) / n ** 3, 'That is the sum of the heights. Multiply by the subinterval width.'],
+            [(b ** 4 * ((n * (n - 1)) / 2) ** 2) / n ** 4, 'That uses left endpoints rather than the requested right endpoints.'],
+          ],
+        }),
       },
       cubeLeft: {
-        ask: 'Use four equal subintervals and left endpoints to approximate the integral of x³ on [0,1].',
-        answer: 9 / 64,
-        second: () => riemann1d((x) => x ** 3, 0, 1, { n: 4, sample: 'left' }).sum,
-        graphId: 'cube',
-        a: 0,
-        b: 1,
-        n: 4,
-        sample: 'left',
-        reason: 'Add the four left-end heights 0, 1/64, 8/64 and 27/64, then multiply by 1/4.',
         source: S('3B-3(a), corrected arithmetic; see ERRATA.md'),
-        note: 'The printed 7/128 contradicts the displayed sum. Direct addition gives 9/64.',
-        traps: [
-          [
-            9 / 16,
-            'The strip width is missing. Summing heights alone does not give the integral approximation.',
+        params: { n: [4, 2, 3, 5, 6, 8], b: [1, 2] },
+        make: ({ n, b }) => ({
+          ask: `Use ${n} equal subintervals and left endpoints to approximate the integral of x³ on [0,${b}].`,
+          answer: (b ** 4 * ((n * (n - 1)) / 2) ** 2) / n ** 4,
+          second: () => riemann1d((x) => x ** 3, 0, b, { n, sample: 'left' }).sum,
+          graphId: 'cube',
+          a: 0,
+          b,
+          n,
+          sample: 'left',
+          note: n === 4 && b === 1 ? 'The printed 7/128 contradicts the displayed sum. Direct addition gives 9/64.' : undefined,
+          reason: `The left ends are 0, ${fr(b / n)}, …, ${fr(((n - 1) * b) / n)}. Add their cubes, then multiply by the width ${fr(b / n)}.`,
+          traps: [
+            [(b ** 3 * ((n * (n - 1)) / 2) ** 2) / n ** 3, 'The strip width is missing. Summing heights alone does not give the integral approximation.'],
+            [(b ** 4 * ((n * (n + 1)) / 2) ** 2) / n ** 4, 'That is the right-endpoint sum.'],
           ],
-          [25 / 64, 'That is the right-endpoint sum.'],
-        ],
+        }),
       },
       squareLeft: {
-        ask: 'Use four equal subintervals and left endpoints for x² on [−1,3].',
-        answer: 6,
-        second: () => riemann1d((x) => x * x, -1, 3, { n: 4, sample: 'left' }).sum,
-        graphId: 'quad',
-        a: -1,
-        b: 3,
-        n: 4,
-        sample: 'left',
-        reason:
-          'The samples are −1, zero, one and two, with unit strip width. Their squared heights sum to six.',
         source: S('3B-3(b), left sum'),
-        traps: [
-          [
-            5,
-            'That is the lower sum. The curve decreases and then increases, so the left sum is not the lower sum.',
+        params: { iv: [[-1, 3], [-2, 2], [-1, 1], [-3, 1], [-2, 4], [-1, 2]], n: [4, 2, 6, 8] },
+        make: ({ iv: [a, b], n }) => ({
+          ask: `Use ${n} equal subintervals and left endpoints for x² on [${end(a)},${b}].`,
+          answer: strips((x) => x * x, a, b, n, 'left'),
+          second: () => riemann1d((x) => x * x, a, b, { n, sample: 'left' }).sum,
+          graphId: 'quad',
+          a,
+          b,
+          n,
+          sample: 'left',
+          reason: `The width is ${fr((b - a) / n)} and the samples start at ${end(a)}. The curve falls and then rises, so the left sum is neither the upper nor the lower sum.`,
+          traps: [
+            [strips((x) => x * x, a, b, n, 'right'), 'That uses right endpoints rather than left endpoints.'],
+            [strips((x) => x * x, a, b, n, 'left') / ((b - a) / n), 'That adds the heights without the strip width.'],
           ],
-          [14, 'That uses right endpoints rather than left endpoints.'],
-        ],
+        }),
       },
     },
     sim: {
@@ -99,29 +158,32 @@ const B = [
     ],
     forms: {
       shiftedRoot: {
-        ask: String.raw`Evaluate $\int_3^6 (x-2)^{-1/2}\,dx$.`,
-        answer: 2,
-        second: () => simpson((x) => 1 / Math.sqrt(x - 2), 3, 6),
         source: S('3C-1'),
-        reason: 'An antiderivative is 2√(x−2). Subtract its values at 6 and 3.',
-        traps: [
-          [4, 'That is the upper-end antiderivative value alone.'],
-          [-2, 'The upper and lower endpoints were subtracted in reverse order.'],
-        ],
+        params: { c: [2, 1, 0, 3, -1], u: [[1, 4], [1, 9], [4, 9], [1, 16], [4, 16]] },
+        make: ({ c, u: [u1, u2] }) => ({
+          ask: String.raw`Evaluate $\int_{${c + u1}}^{${c + u2}} ${c === 0 ? 'x' : `(x${c < 0 ? '+' : '-'}${Math.abs(c)})`}^{-1/2}\,dx$.`,
+          answer: 2 * (Math.sqrt(u2) - Math.sqrt(u1)),
+          second: () => simpson((x) => 1 / Math.sqrt(x - c), c + u1, c + u2),
+          reason: `An antiderivative is 2√(x${c < 0 ? '+' : '−'}${Math.abs(c)}). Subtract its values: 2√${u2}−2√${u1}.`,
+          traps: [
+            [2 * Math.sqrt(u2), 'That is the upper-end antiderivative value alone.'],
+            [-2 * (Math.sqrt(u2) - Math.sqrt(u1)), 'The upper and lower endpoints were subtracted in reverse order.'],
+          ],
+        }),
       },
       rational: {
-        ask: String.raw`Evaluate $\int_1^2 x/(1+x^2)\,dx$.`,
-        answer: 0.5 * Math.log(2.5),
-        second: () => simpson((x) => x / (1 + x * x), 1, 2),
         source: S('3C-3(a)'),
-        reason: 'Set u=1+x². The missing factor two in du requires one half outside the logarithm.',
-        traps: [
-          [Math.log(2.5), 'The substitution needs the factor 1/2 because du=2x dx.'],
-          [
-            0.5 * Math.log(10),
-            'Endpoint evaluation subtracts logarithms. Adding them multiplies the endpoint arguments instead.',
+        params: { k: [1, 2, 3, 4], iv: [[1, 2], [0, 1], [0, 2], [1, 3], [2, 3], [0, 3]] },
+        make: ({ k, iv: [a, b] }) => ({
+          ask: String.raw`Evaluate $\int_${a}^${b} x/(${k}+x^2)\,dx$.`,
+          answer: 0.5 * Math.log((k + b * b) / (k + a * a)),
+          second: () => simpson((x) => x / (k + x * x), a, b),
+          reason: `Set u=${k}+x². The missing factor two in du=2x dx leaves one half outside the logarithm: ½ ln(${k + b * b}/${k + a * a}).`,
+          traps: [
+            [Math.log((k + b * b) / (k + a * a)), 'The substitution needs the factor 1/2 because du=2x dx.'],
+            [0.5 * Math.log((k + b * b) * (k + a * a)), 'Endpoint evaluation subtracts logarithms. Adding them multiplies the endpoint arguments instead.'],
           ],
-        ],
+        }),
       },
     },
   }),
@@ -138,33 +200,51 @@ const B = [
     ],
     forms: {
       root: {
-        ask: String.raw`Let $F(x)=\int_0^x(1+t^2)^{-1/2}\,dt$. Find $F'(x)$.`,
-        key: '1/sqrt(1+x^2)',
-        alt: '(1+x^2)^(-0.5)',
-        wrong: '1/(1+x^2)',
-        get: (x) => 1 / Math.sqrt(1 + x * x),
-        second: (x) => {
-          const F = (z) => simpson((t) => 1 / Math.sqrt(1 + t * t), 0, z),
-            h = 1e-5;
-          return (F(x + h) - F(x - h)) / (2 * h);
-        },
         source: S('3D-1(a), a=1'),
-        reason:
-          'For a continuous integrand, an extra interval contributes approximately its endpoint height times its width.',
+        params: { p: [-0.5, 0.5, -1, 1.5], a: [1, 2, 3, 4, 5, 9] },
+        make: ({ p, a }) => ({
+          ask: String.raw`Let $F(x)=\int_0^x(${a}+t^2)^{${fr(p)}}\,dt$. Find $F'(x)$.`,
+          key: `(${a}+x^2)^(${fr(p)})`,
+          alt: `(x^2+${a})^(${fr(p)})`,
+          wrong: `(${a}+x^2)^(${fr(p + 1)})/(${fr(p + 1)})`,
+          get: (x) => (a + x * x) ** p,
+          second: (x) => {
+            const F = (z) => simpson((t) => (a + t * t) ** p, 0, z),
+              h = 1e-5;
+            return (F(x + h) - F(x - h)) / (2 * h);
+          },
+          reason: 'For a continuous integrand, an extra sliver of interval adds about its endpoint height times its width. So F′ is the integrand at the upper end. Nothing needs integrating.',
+        }),
       },
       composite: {
-        ask: String.raw`Let $G(x)=\int_0^{x^2}\sin(t^3)\,dt$. Find $G'(x)$.`,
-        key: '2*x*sin(x^6)',
-        alt: 'sin((x^2)^3)*2*x',
-        wrong: 'sin(x^6)',
-        get: (x) => 2 * x * Math.sin(x ** 6),
-        second: (x) => {
-          const G = (z) => simpson((t) => Math.sin(t ** 3), 0, z * z),
-            h = 1e-5;
-          return (G(x + h) - G(x - h)) / (2 * h);
+        params: {
+          g: [
+            ['\\sin(t^3)', 'sin(U^3)', (u) => Math.sin(u ** 3)],
+            ['\\cos(t^2)', 'cos(U^2)', (u) => Math.cos(u * u)],
+            ['e^{-t^2}', 'exp(-(U)^2)', (u) => Math.exp(-u * u)],
+            ['\\sqrt{1+t^4}', 'sqrt(1+(U)^4)', (u) => Math.sqrt(1 + u ** 4)],
+          ],
+          up: [
+            ['x^2', 'x^2', '2*x', (x) => x * x, (x) => 2 * x],
+            ['x^3', 'x^3', '3*x^2', (x) => x ** 3, (x) => 3 * x * x],
+            ['2x', '2*x', '2', (x) => 2 * x, () => 2],
+            ['\\sin x', 'sin(x)', 'cos(x)', Math.sin, Math.cos],
+          ],
         },
-        reason:
-          'The endpoint integrand is sin((x²)³). Its interval endpoint moves at rate 2x. This is an original composite-boundary variant.',
+        make: ({ g: [gTex, gExpr, gFn], up: [uTex, uExpr, duExpr, uFn, duFn] }) => ({
+          ask: String.raw`Let $G(x)=\int_0^{${uTex}}${gTex}\,dt$. Find $G'(x)$.`,
+          key: `${duExpr}*${gExpr.replace(/U/g, `(${uExpr})`)}`,
+          alt: `${gExpr.replace(/U/g, `(${uExpr})`)}*${duExpr}`,
+          wrong: gExpr.replace(/U/g, `(${uExpr})`),
+          at: 0.6,
+          get: (x) => duFn(x) * gFn(uFn(x)),
+          second: (x) => {
+            const G = (z) => simpson((t) => gFn(t), 0, uFn(z)),
+              h = 1e-5;
+            return (G(x + h) - G(x - h)) / (2 * h);
+          },
+          reason: `The integrand at the moving end is ${gTex.replace(/t/g, `(${uTex})`)}. The end itself moves at rate ${duExpr.replace('*', '')}, so multiply by it.`,
+        }),
       },
     },
   }),
@@ -176,20 +256,23 @@ const B = [
     kind: 'numeric',
     level: 3,
     topics: ['fundamental theorem'],
-    minVersions: 2,
-    vars: { point: choose([1, 2]) },
-    derive: ($) => ({
-      answer: Math.sin(Math.PI * $.point) / (2 * $.point) + (Math.PI * Math.cos(Math.PI * $.point)) / 2,
-    }),
+    minVersions: 12,
+    vars: { point: choose([1, 2, 3, 0.5, 1.5, 2.5]), rhs: choose(['sin', 'cos']) },
+    derive: ($) => {
+      const x = $.point,
+        s = $.rhs === 'sin',
+        d = s ? Math.sin(Math.PI * x) + Math.PI * x * Math.cos(Math.PI * x) : Math.cos(Math.PI * x) - Math.PI * x * Math.sin(Math.PI * x);
+      return { answer: d / (2 * x) };
+    },
     text: (T, $) =>
-      String.raw`A continuous $f$ satisfies $\int_0^{x^2}f(t)\,dt=x\sin(\pi x)$ for $x>0$. Find $f(${$.point ** 2})$.`,
+      String.raw`A continuous $f$ satisfies $\int_0^{x^2}f(t)\,dt=x${'\\' + $.rhs}(\pi x)$ for $x>0$. Find $f(${frTex($.point ** 2)})$.`,
     parts: [
       numeric('value', ($) => $.answer, 'integrand value', [
         [
           ($) => 2 * $.point * $.answer,
           'That differentiates the right side but omits division by the moving endpoint rate 2x.',
         ],
-        [($) => -$.answer, 'Check the cosine at this integer multiple of π before assigning its sign.'],
+        [($) => -$.answer, 'Check the sign of each trigonometric value at this multiple of π.'],
       ]),
     ],
     hints: [
@@ -198,15 +281,17 @@ const B = [
       'Solve for f(x²) before substituting the requested point.',
     ],
     steps: ($) => [
-      String.raw`$2x f(x^2)=\sin(\pi x)+\pi x\cos(\pi x)$.`,
-      String.raw`At $x=${$.point}$, the sine term vanishes. Divide by $2x$.`,
+      $.rhs === 'sin'
+        ? String.raw`$2x f(x^2)=\sin(\pi x)+\pi x\cos(\pi x)$.`
+        : String.raw`$2x f(x^2)=\cos(\pi x)-\pi x\sin(\pi x)$.`,
+      String.raw`Substitute $x=${frTex($.point)}$, so $x^2=${frTex($.point ** 2)}$, then divide by $2x=${frTex(2 * $.point)}$.`,
     ],
     second: ($) => {
-      const H = (x) => x * Math.sin(Math.PI * x),
+      const H = (x) => x * Math[$.rhs](Math.PI * x),
         h = 1e-6;
       return { value: (H($.point + h) - H($.point - h)) / (2 * h) / (2 * $.point) };
     },
-    cases: [kase(E('Exam 3, solution 3(b)'), { point: 2 }, { value: Math.PI / 2 })],
+    cases: [kase(E('Exam 3, solution 3(b)'), { point: 2, rhs: 'sin' }, { value: Math.PI / 2 })],
   }),
   formulaFamily({
     id: 'c3.substitution',
@@ -221,24 +306,32 @@ const B = [
     ],
     forms: {
       sine: {
-        ask: String.raw`Find $F$ with $F'(x)=\sin(5x)$ and $F(0)=-1/5$.`,
-        key: '-cos(5*x)/5',
-        alt: '-0.2*cos(5*x)',
-        wrong: '-5*cos(5*x)',
-        get: (x) => -Math.cos(5 * x) / 5,
-        second: (x) => -0.2 + simpson((t) => Math.sin(5 * t), 0, x),
         source: S('3A-3(a), C=0'),
-        reason: 'Set u=5x, so dx=du/5. The factor one fifth remains outside the antiderivative.',
+        params: { k: [5, 2, 3, 4, 6, 7], fn: ['sin', 'cos'] },
+        make: ({ k, fn }) => {
+          const s = fn === 'sin';
+          return {
+            ask: String.raw`Find $F$ with $F'(x)=${'\\' + fn}(${k}x)$ and $F(0)=${s ? `-${frTex(1 / k)}` : '0'}$.`,
+            key: s ? `-cos(${k}*x)/${k}` : `sin(${k}*x)/${k}`,
+            alt: s ? `-(${fr(1 / k)})*cos(${k}*x)` : `(${fr(1 / k)})*sin(${k}*x)`,
+            wrong: s ? `-${k}*cos(${k}*x)` : `${k}*sin(${k}*x)`,
+            get: (x) => (s ? -Math.cos(k * x) : Math.sin(k * x)) / k,
+            second: (x) => (s ? -1 / k : 0) + simpson((t) => Math[fn](k * t), 0, x),
+            reason: `Set u=${k}x, so dx=du/${k}. The factor 1/${k} stays outside the antiderivative, and the starting value makes C zero.`,
+          };
+        },
       },
       compound: {
-        ask: String.raw`Find $F$ with $F'(x)=2xe^{x^2}$ and $F(0)=1$.`,
-        key: 'exp(x^2)',
-        alt: 'e^(x*x)',
-        wrong: 'exp(x^2)/(2*x)',
-        get: (x) => Math.exp(x * x),
-        second: (x) => 1 + simpson((t) => 2 * t * Math.exp(t * t), 0, x),
-        reason:
-          'Set u=x². The factor 2x dx is exactly du; no extra variable may remain in the substituted integral. This is an original exponential variant.',
+        params: { m: [2, 3], c: [2, 1, 3, 4, 6] },
+        make: ({ m, c }) => ({
+          ask: String.raw`Find $F$ with $F'(x)=${cf(c)}${pw('x', m - 1)}e^{x^{${m}}}$ and $F(0)=${frTex(c / m)}$.`,
+          key: `(${fr(c / m)})*exp(x^${m})`,
+          alt: `${c}*exp(x^${m})/${m}`,
+          wrong: `${c}*exp(x^${m})`,
+          get: (x) => (c / m) * Math.exp(x ** m),
+          second: (x) => c / m + simpson((t) => c * t ** (m - 1) * Math.exp(t ** m), 0, x),
+          reason: `Set u=x^${m}, so du=${m}${pw('x', m - 1).replace(/[{}]/g, '')} dx. The integrand is ${fr(c / m)} times du·e^u, and the starting value makes C zero.`,
+        }),
       },
     },
   }),
@@ -256,34 +349,38 @@ const B = [
     ],
     forms: {
       horizontal: {
-        ask: String.raw`A planar region has horizontal strip width $6y-2y^2$ for $0\le y\le3$. Find its area.`,
-        answer: 9,
-        second: () => simpson((y) => 6 * y - 2 * y * y, 0, 3),
         source: E('Exam 3, solution 1, horizontal-strip width'),
-        reason:
-          'The width is the right boundary minus the left boundary. Its integral is [3y²−2y³/3] from zero to three. The lab plots strip width against the integration variable.',
-        graphId: 'strip',
-        a: 0,
-        b: 3,
-        traps: [
-          [18, 'That omits the quadratic part of the strip width when integrating.'],
-          [-9, 'Reverse the boundary order to obtain a nonnegative strip width.'],
-        ],
+        params: { b: [3, 2, 4, 5, 6], k: [2, 1, 3] },
+        make: ({ b, k }) => ({
+          ask: String.raw`A planar region has horizontal strip width $${sum([k * b, 'y'], [-k, 'y^2']).replace(/\*/g, '')}$ for $0\le y\le${b}$. Find its area.`,
+          answer: (k * b ** 3) / 6,
+          second: () => simpson((y) => k * (b * y - y * y), 0, b),
+          reason: `The width is the right boundary minus the left one. Its integral is [${fr((k * b) / 2)}y²−${fr(k / 3)}y³] from 0 to ${b}.`,
+          graphId: `poly:0,${k * b},${-k}`,
+          a: 0,
+          b,
+          traps: [
+            [(k * b ** 3) / 2, 'That integrates only the linear part of the width and drops the y² term.'],
+            [-(k * b ** 3) / 6, 'Reverse the boundary order to obtain a nonnegative strip width.'],
+          ],
+        }),
       },
       symmetric: {
-        ask: String.raw`Find the area under $1-x^2$ and above zero on $[-1,1]$.`,
-        answer: 4 / 3,
-        second: () => simpson((x) => 1 - x * x, -1, 1),
         source: S('3C-6(b), a=1'),
-        reason:
-          'Use symmetry, or evaluate x−x³/3 at both endpoints. The positive width gives geometric area.',
-        graphId: 'cap',
-        a: -1,
-        b: 1,
-        traps: [
-          [2 / 3, 'That is one half of the symmetric region.'],
-          [-4 / 3, 'The graph lies above zero here, so its geometric area cannot be negative.'],
-        ],
+        params: { c: [1, 2, 3], a: [1, 2, 3, 4] },
+        make: ({ c, a }) => ({
+          ask: String.raw`Find the area under $${a === 1 ? '' : `${a}(`}${c * c}-x^2${a === 1 ? '' : ')'}$ and above zero on $[-${c},${c}]$.`,
+          answer: (4 * a * c ** 3) / 3,
+          second: () => simpson((x) => a * (c * c - x * x), -c, c),
+          reason: `Evaluate ${a === 1 ? '' : `${a}(`}${c * c}x−x³/3${a === 1 ? '' : ')'} at ±${c}, or use symmetry and double the right half. The positive width gives geometric area.`,
+          graphId: `poly:${a * c * c},0,${-a}`,
+          a: -c,
+          b: c,
+          traps: [
+            [(2 * a * c ** 3) / 3, 'That is one half of the symmetric region.'],
+            [-(4 * a * c ** 3) / 3, 'The graph lies above zero here, so its geometric area cannot be negative.'],
+          ],
+        }),
       },
     },
     sim: {
@@ -308,33 +405,13 @@ const B = [
     ],
     forms: {
       oblate: {
-        ask: String.raw`Rotate $x^2+4y^2\le4$ about the y-axis. Find the volume.`,
-        answer: (16 * Math.PI) / 3,
-        second: () => simpson((t) => 16 * Math.PI * Math.sin(t) * Math.cos(t) ** 2, 0, Math.PI / 2),
         source: E('Session 58, Volume of a Spheroid, solution'),
-        reason: 'At height y, disk radius squared is 4−4y². Integrate π(4−4y²) from −1 to one.',
-        a: 2,
-        c: 1,
-        traps: [
-          [(8 * Math.PI) / 3, 'That counts only one axial half.'],
-          [8 * Math.PI, 'That uses the containing cylinder instead of the changing cross-section.'],
-        ],
+        params: { ac: [[2, 1], [3, 1], [3, 2], [4, 1], [4, 3], [5, 2], [5, 4], [6, 5]] },
+        make: ({ ac: [a, c] }) => spheroidForm(a, c),
       },
       prolate: {
-        ask: String.raw`Rotate $x^2+y^2/4\le1$ about the y-axis. Find the volume.`,
-        answer: (8 * Math.PI) / 3,
-        second: () => simpson((y) => Math.PI * (1 - (y * y) / 4), -2, 2),
-        reason:
-          'The disk area is π(1−y²/4), and the axis now runs from −2 to two. This is an original axis-configuration variant.',
-        a: 1,
-        c: 2,
-        traps: [
-          [
-            (16 * Math.PI) / 3,
-            'That interchanges the equatorial and axial radii; only the equatorial radius is squared.',
-          ],
-          [(4 * Math.PI) / 3, 'That omits one half of the axial interval.'],
-        ],
+        params: { ac: [[1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [2, 5], [4, 5], [5, 6]] },
+        make: ({ ac: [a, c] }) => spheroidForm(a, c),
       },
     },
     sim: {
@@ -360,28 +437,33 @@ const B = [
     ],
     forms: {
       bank: {
-        ask: 'A balance is A(t)=100 exp(0.05t) for 0≤t≤1 year. Find its average value over that year.',
-        answer: (100 * Math.expm1(0.05)) / 0.05,
-        printed: 102.5,
-        second: () => simpson((t) => 100 * Math.exp(0.05 * t), 0, 1),
         source: E('Session 60, Average Bank Balance, solution (b)'),
-        note: 'The source rounds the average to 102.5; the computation retains the unrounded value.',
-        reason: 'The average is 100(e^0.05−1)/0.05, about 102.54219 currency units.',
-        traps: [
-          [100 * Math.exp(0.05), 'That is the final value, not the time average.'],
-          [100, 'That is the initial value and ignores the growing balance.'],
-        ],
+        params: { P: [100, 500, 1000, 2500], r: [0.05, 0.03, 0.04, 0.06], T: [1, 2, 5] },
+        make: ({ P, r, T }) => ({
+          ask: `A balance is A(t)=${P} exp(${r}t) for 0≤t≤${T} year${T === 1 ? '' : 's'}. Find its average value over that time.`,
+          answer: (P * Math.expm1(r * T)) / (r * T),
+          printed: P === 100 && r === 0.05 && T === 1 ? 102.5 : undefined,
+          note: P === 100 && r === 0.05 && T === 1 ? 'The source rounds the average to 102.5; the computation retains the unrounded value.' : undefined,
+          second: () => simpson((t) => P * Math.exp(r * t), 0, T) / T,
+          reason: `The average is the integral divided by ${T}: ${P}(e^${fr(r * T)}−1)/${fr(r * T)}.`,
+          traps: [
+            [P * Math.exp(r * T), 'That is the final value, not the time average.'],
+            [P, 'That is the initial value and ignores the growing balance.'],
+          ],
+        }),
       },
       parabola: {
-        ask: 'Find the average value of x² on [0,3].',
-        answer: 3,
-        second: () => simpson((x) => x * x, 0, 3) / 3,
-        reason:
-          'The integral is nine and the interval length is three. This is an original polynomial variant.',
-        traps: [
-          [9, 'That is the integral. Divide it by the interval length to obtain an average height.'],
-          [4.5, 'Averaging endpoint values works for a line, not an arbitrary curve.'],
-        ],
+        params: { n: [2, 1, 3, 4], b: [3, 1, 2, 4, 6, 10] },
+        make: ({ n, b }) => ({
+          ask: `Find the average value of ${n === 1 ? 'x' : `x${['', '', '²', '³', '⁴'][n]}`} on [0,${b}].`,
+          answer: b ** n / (n + 1),
+          second: () => simpson((x) => x ** n, 0, b) / b,
+          reason: `The integral is ${fr(b ** (n + 1) / (n + 1))} and the interval length is ${b}. Their ratio is the average height.`,
+          traps: [
+            [b ** (n + 1) / (n + 1), 'That is the integral. Divide it by the interval length to obtain an average height.'],
+            [b ** n / 2, 'Averaging endpoint values works for a line, not an arbitrary curve.'],
+          ],
+        }),
       },
     },
   }),
@@ -398,26 +480,31 @@ const B = [
     ],
     forms: {
       positive: {
-        ask: String.raw`A waiting time has density $e^{-t}$ for $t\ge0$, and zero elsewhere. For $x>1$, express $P(1<X<x)$ in x.`,
-        key: 'exp(-1)-exp(-x)',
-        alt: '1/e-1/exp(x)',
-        wrong: 'exp(-x)-exp(-1)',
-        at: 2,
-        get: (x) => Math.exp(-1) - Math.exp(-x),
-        second: (x) => simpson((t) => Math.exp(-t), 1, x),
         source: E('Session 55, Probability Function, solution (a), λ=a=1'),
-        reason:
-          'Integrate e^(−t) from one to x. The antiderivative is −e^(−t), so endpoint subtraction gives a positive probability.',
+        params: { lam: [1, 2, 3, 0.5], a: [1, 2, 3] },
+        make: ({ lam, a }) => ({
+          ask: String.raw`A waiting time has density $${density(lam)}$ for $t\ge0$, and zero elsewhere. For $x>${a}$, express $P(${a}<X<x)$ in x.`,
+          key: `exp(-${fr(lam * a)})-exp(-(${fr(lam)})*x)`,
+          alt: `exp(-(${fr(lam)})*x)*(exp((${fr(lam)})*(x-${a}))-1)`,
+          wrong: `exp(-(${fr(lam)})*x)-exp(-${fr(lam * a)})`,
+          at: a + 1,
+          get: (x) => Math.exp(-lam * a) - Math.exp(-lam * x),
+          second: (x) => simpson((t) => lam * Math.exp(-lam * t), a, x),
+          reason: `Integrate the density from ${a} to x. The antiderivative is −e^(−${fr(lam)}t), so endpoint subtraction gives a positive probability.`,
+        }),
       },
       crossing: {
-        ask: String.raw`A waiting time has density $e^{-t}$ for $t\ge0$, and zero elsewhere. For $x>0$, express $P(-1<X<x)$ in x.`,
-        key: '1-exp(-x)',
-        alt: '(exp(x)-1)/exp(x)',
-        wrong: 'exp(1)-exp(-x)',
-        get: (x) => -Math.expm1(-x),
-        second: (x) => simpson((t) => Math.exp(-t), 0, x),
         source: E('Session 55, Probability Function, solution (b), λ=1'),
-        reason: 'The density vanishes from −1 to zero. Only the integral from zero to x contributes.',
+        params: { lam: [1, 2, 3, 0.5], c: [1, 2, 5] },
+        make: ({ lam, c }) => ({
+          ask: String.raw`A waiting time has density $${density(lam)}$ for $t\ge0$, and zero elsewhere. For $x>0$, express $P(-${c}<X<x)$ in x.`,
+          key: `1-exp(-(${fr(lam)})*x)`,
+          alt: `(exp((${fr(lam)})*x)-1)/exp((${fr(lam)})*x)`,
+          wrong: `exp(${fr(lam * c)})-exp(-(${fr(lam)})*x)`,
+          get: (x) => -Math.expm1(-lam * x),
+          second: (x) => simpson((t) => lam * Math.exp(-lam * t), 0, x),
+          reason: `The density vanishes from −${c} to zero. Only the integral from zero to x contributes.`,
+        }),
       },
     },
   }),
@@ -435,51 +522,46 @@ const B = [
     ],
     forms: {
       simpson: {
-        ask: String.raw`Use four equal subintervals and Simpson's rule for $\int_0^\pi\sin x\,dx$.`,
-        answer: (Math.PI * (2 + 4 * Math.sqrt(2))) / 12,
-        printed: 2.005,
-        second: () => {
-          let sum = 0;
-          for (let i = 0; i <= 4; i++)
-            sum += (i === 0 || i === 4 ? 1 : i % 2 ? 4 : 2) * Math.sin((i * Math.PI) / 4);
-          return (Math.PI / 12) * sum;
-        },
         source: S('3G-1(b), Simpson rule'),
-        note: 'The source rounds to 2.005.',
-        reason: 'The heights are 0, √2/2, 1, √2/2 and zero. Apply weights 1,4,2,4,1 and multiply by π/12.',
-        method: 'simp',
-        traps: [
-          [(Math.PI * (1 + Math.sqrt(2))) / 4, 'That applies trapezoidal weights, not Simpson weights.'],
-          [(2 + 4 * Math.sqrt(2)) / 3, 'That drops the subinterval width π/4.'],
-        ],
+        params: { n: [4, 2, 6, 8, 10, 12] },
+        make: ({ n }) => ({
+          ask: String.raw`Use ${n} equal subintervals and Simpson's rule for $\int_0^\pi\sin x\,dx$.`,
+          answer: simpsonSine(n),
+          printed: n === 4 ? 2.005 : undefined,
+          note: n === 4 ? 'The source rounds to 2.005.' : undefined,
+          second: () => (4 * trapSine(n) - trapSine(n / 2)) / 3,
+          reason: `The width is π/${n}. Weight the heights 1, 4, 2, 4, …, 4, 1 and multiply by π/${3 * n}.`,
+          method: 'simp',
+          n,
+          traps: [
+            [trapSine(n), 'That applies trapezoidal weights, not Simpson weights.'],
+            [(simpsonSine(n) * n) / Math.PI, 'That drops the subinterval width.'],
+          ],
+        }),
       },
       trapezoid: {
-        ask: String.raw`Use four equal subintervals and the trapezoidal rule for $\int_0^\pi\sin x\,dx$.`,
-        answer: (Math.PI * (1 + Math.sqrt(2))) / 4,
-        printed: 1.896,
-        second: () => {
-          let sum = 0;
-          for (let i = 0; i < 4; i++)
-            sum += ((Math.sin((i * Math.PI) / 4) + Math.sin(((i + 1) * Math.PI) / 4)) * Math.PI) / 8;
-          return sum;
-        },
         source: S('3G-1(b), trapezoidal rule'),
-        note: 'The source rounds to 1.896.',
-        reason: 'Use half weight at the two endpoints and full weight at the interior samples.',
-        method: 'trap',
-        traps: [
-          [
-            (Math.PI * (2 + 4 * Math.sqrt(2))) / 12,
-            'That applies Simpson weights instead of trapezoidal weights.',
+        params: { n: [4, 2, 6, 8, 10, 12] },
+        make: ({ n }) => ({
+          ask: String.raw`Use ${n} equal subintervals and the trapezoidal rule for $\int_0^\pi\sin x\,dx$.`,
+          answer: trapSine(n),
+          printed: n === 4 ? 1.896 : undefined,
+          note: n === 4 ? 'The source rounds to 1.896.' : undefined,
+          second: () => (strips(Math.sin, 0, Math.PI, n, 'left') + strips(Math.sin, 0, Math.PI, n, 'right')) / 2,
+          reason: 'Use half weight at the two endpoints and full weight at the interior samples. Here the endpoints of sin x are zero.',
+          method: 'trap',
+          n,
+          traps: [
+            [n % 2 ? strips(Math.sin, 0, Math.PI, n, 'mid') : simpsonSine(n), n % 2 ? 'That is the midpoint rule, not the trapezoidal rule.' : 'That applies Simpson weights instead of trapezoidal weights.'],
+            [(trapSine(n) * n) / Math.PI, 'That adds heights without multiplying by the subinterval width.'],
           ],
-          [1 + Math.sqrt(2), 'That adds heights without multiplying by the subinterval width.'],
-        ],
+        }),
       },
     },
     sim: {
       scenario: 'coarse',
-      setup(s) {
-        s.n = 4;
+      setup(s, $) {
+        s.n = $.v.n;
       },
       read: (c, s, $) => ({ answer: c[$.v.method] }),
     },
@@ -500,41 +582,21 @@ B.push(
     ],
     forms: {
       external: {
-        ask: 'A spring needs a force magnitude of 10 N at 0.2 m extension. Assume Hooke’s law. Find the work done by a slow external force in stretching it from equilibrium to 0.5 m.',
-        answer: 6.25,
-        second: () => simpson((x) => 50 * x, 0, 0.5),
-        source:
-          'OpenStax Calculus Volume 2, §2.5, Example 2.25, The Work Required to Stretch or Compress a Spring',
-        reason:
-          'The constant is k=10/0.2=50 N/m. Integrating 50x from zero to 0.5 gives 6.25 J. The lab plots the normalized external force F/k=x; multiply its integral by k.',
-        multiplier: 50,
-        traps: [
-          [12.5, 'That applies the final force over the whole interval. The spring force rises from zero.'],
-          [-6.25, 'That is the work done by the restoring spring, not the external force.'],
-        ],
+        source: 'OpenStax Calculus Volume 2, §2.5, Example 2.25, The Work Required to Stretch or Compress a Spring',
+        params: { spring: [[10, 0.2], [20, 0.1], [15, 0.3], [8, 0.2], [30, 0.5], [12, 0.4]], L: [0.5, 0.3, 0.6, 0.8] },
+        make: ({ spring: [F, d], L }) => springForm(F, d, L, 1),
       },
       restoring: {
-        ask: 'A Hooke-law spring needs a force magnitude of 10 N at 0.2 m extension. Find the work done by the spring itself while it is stretched from equilibrium to 0.5 m.',
-        answer: -6.25,
-        second: () => simpson((x) => -50 * x, 0, 0.5),
-        reason:
-          'The restoring force is −50x while displacement is positive. Its work is negative. The lab plots normalized external-force magnitude; change the sign for the spring’s work. This is an original force-agency variant.',
-        multiplier: -50,
-        traps: [
-          [
-            6.25,
-            'That is the external stretching work. The spring’s restoring force opposes the displacement.',
-          ],
-          [-12.5, 'That uses the final restoring force as if it acted throughout the interval.'],
-        ],
+        params: { spring: [[10, 0.2], [20, 0.1], [15, 0.3], [8, 0.2], [30, 0.5], [12, 0.4]], L: [0.5, 0.3, 0.6, 0.8] },
+        make: ({ spring: [F, d], L }) => springForm(F, d, L, -1),
       },
     },
     sim: {
       scenario: 'line',
-      setup(s) {
+      setup(s, $) {
         s.graphId = 'normalizedForce';
         s.a = 0;
-        s.b = 0.5;
+        s.b = $.v.L;
         s.n = 8;
         s.sample = 'mid';
       },
@@ -558,34 +620,42 @@ B.push(
     ],
     forms: {
       horizontal: {
-        ask: String.raw`On $[-1,3]$, weights have density $w(x)=4-(x-1)^2$. Find the weighted mean coordinate.`,
-        answer: 1,
-        second: () => simpson((x) => x * (4 - (x - 1) ** 2), -1, 3) / simpson((x) => 4 - (x - 1) ** 2, -1, 3),
         source: E('Session 61, Weighted Average, x-coordinate calculation'),
-        reason:
-          'The weight profile is symmetric about one. Its first moment and total weight are both 32/3, so their ratio is one. The lab plots that weight profile.',
-        graphId: 'weightParabola',
-        a: -1,
-        b: 3,
-        traps: [
-          [0, 'That forgets the horizontal shift: the symmetry axis is x=1.'],
-          [32 / 3, 'That is the first moment before division by total weight.'],
-        ],
+        params: { m: [1, 2, -1, 3, -2], A: [4, 1, 9] },
+        make: ({ m, A }) => {
+          const r = Math.sqrt(A),
+            W = (4 * r ** 3) / 3;
+          return {
+            ask: String.raw`On $[${m - r},${m + r}]$, weights have density $w(x)=${A}-${shiftTexFn(m)}^2$. Find the weighted mean coordinate.`,
+            answer: m,
+            second: () => simpson((x) => x * (A - (x - m) ** 2), m - r, m + r) / simpson((x) => A - (x - m) ** 2, m - r, m + r),
+            reason: `The weight profile is symmetric about ${m}. Its total weight is ${fr(W)} and its first moment ${fr(m * W)}, so their ratio is ${m}.`,
+            graphId: `poly:${A - m * m},${2 * m},-1`,
+            a: m - r,
+            b: m + r,
+            traps: [
+              [0, 'That forgets the horizontal shift: the symmetry axis is the vertex of the weight.'],
+              [m * W, 'That is the first moment before division by total weight.'],
+            ],
+          };
+        },
       },
       vertical: {
-        ask: String.raw`On $[0,4]$, weights have density $w(y)=2\sqrt y$. Find the weighted mean coordinate.`,
-        answer: 12 / 5,
-        second: () => simpson((y) => 2 * y * Math.sqrt(y), 0, 4) / simpson((y) => 2 * Math.sqrt(y), 0, 4),
         source: E('Session 61, Weighted Average, y-coordinate calculation'),
-        reason:
-          'The total weight is 32/3. Its first moment is 128/5, so the ratio is 12/5. The lab plots the weight density against its coordinate.',
-        graphId: 'weightRoot',
-        a: 0,
-        b: 4,
-        traps: [
-          [2, 'That is an unweighted interval midpoint. More weight lies toward the larger coordinate.'],
-          [128 / 5, 'That is the first moment. Divide it by total weight before calling it a mean.'],
-        ],
+        params: { p: [0.5, 1, 2, 3], b: [4, 1, 9, 2], c: [2, 3] },
+        make: ({ p, b, c }) => ({
+          ask: String.raw`On $[0,${b}]$, weights have density $w(y)=${c}${p === 0.5 ? '\\sqrt y' : pw('y', p)}$. Find the weighted mean coordinate.`,
+          answer: ((p + 1) / (p + 2)) * b,
+          second: () => simpson((y) => c * y ** (p + 1), 0, b) / simpson((y) => c * y ** p, 0, b),
+          reason: `Total weight is ${c}·${b}^${fr(p + 1)}/${fr(p + 1)} and the first moment ${c}·${b}^${fr(p + 2)}/${fr(p + 2)}. Their ratio is ${fr((p + 1) / (p + 2))}·${b}; the constant ${c} cancels.`,
+          graphId: `pow:${c}:${p}`,
+          a: 0,
+          b,
+          traps: [
+            [b / 2, 'That is an unweighted interval midpoint. More weight lies toward the larger coordinate.'],
+            [(c * b ** (p + 2)) / (p + 2), 'That is the first moment. Divide it by total weight before calling it a mean.'],
+          ],
+        }),
       },
     },
     sim: {

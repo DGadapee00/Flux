@@ -58,8 +58,59 @@ export const GRAPHS = {
   },
 };
 
+/** A shifted parabola (x−h)²+c named 'parabola:h:c', so a problem can open the lab at its own curve. */
+function parabola(h, c) {
+  const sh = h === 0 ? 'x' : h > 0 ? `(x-${h})` : `(x+${-h})`;
+  return {
+    id: `parabola:${h}:${c}`,
+    name: `${sh.replace('-', '−')}²+${c}`,
+    tex: `${sh}^2+${c}`,
+    f: (x) => (x - h) ** 2 + c,
+    fp: (x) => 2 * (x - h),
+    F: (x) => (x - h) ** 3 / 3 + c * x,
+  };
+}
+
+/** A polynomial 'poly:c0,c1,c2,...' (ascending coefficients), with its derivative and antiderivative. */
+function poly(cs) {
+  const terms = cs
+    .map((c, k) => (c === 0 ? '' : `${c < 0 ? '−' : '+'}${Math.abs(c) === 1 && k ? '' : Math.abs(c)}${k ? 'x' : ''}${k > 1 ? `^${k}` : ''}`))
+    .filter(Boolean)
+    .reverse()
+    .join('')
+    .replace(/^\+/, '');
+  return {
+    id: `poly:${cs.join(',')}`,
+    name: terms || '0',
+    tex: (terms || '0').replace(/−/g, '-'),
+    f: (x) => cs.reduce((s, c, k) => s + c * x ** k, 0),
+    fp: (x) => cs.reduce((s, c, k) => s + (k ? k * c * x ** (k - 1) : 0), 0),
+    F: (x) => cs.reduce((s, c, k) => s + (c * x ** (k + 1)) / (k + 1), 0),
+  };
+}
+
+/** A power 'pow:c:p', c·x^p for x ≥ 0. */
+function power(c, p) {
+  return {
+    id: `pow:${c}:${p}`,
+    name: `${c}x^${p}`,
+    tex: `${c}x^{${p}}`,
+    f: (x) => c * x ** p,
+    fp: (x) => c * p * x ** (p - 1),
+    F: (x) => (c * x ** (p + 1)) / (p + 1),
+  };
+}
+
 export function graphById(id) {
-  return GRAPHS[id] || GRAPHS.quad;
+  if (GRAPHS[id]) return GRAPHS[id];
+  const num = '(-?[\\d.]+(?:e-?\\d+)?)';
+  let m = new RegExp(`^parabola:${num}:${num}$`).exec(id || '');
+  if (m) return parabola(Number(m[1]), Number(m[2]));
+  m = /^poly:([-\d.,e]+)$/.exec(id || '');
+  if (m) return poly(m[1].split(',').map(Number));
+  m = new RegExp(`^pow:${num}:${num}$`).exec(id || '');
+  if (m) return power(Number(m[1]), Number(m[2]));
+  return GRAPHS.quad;
 }
 
 export function secantSlope(f, x, h) {
