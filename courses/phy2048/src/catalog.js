@@ -111,8 +111,8 @@ export const UNITS = [
     title: 'Waves',
     chapters: ['16'],
     date: null,
-    labs: [],
-    coming: ['Traveling wave', 'Standing wave', 'Guitar string'],
+    labs: ['traveling-wave', 'standing-wave', 'guitar-string'],
+    coming: [],
   },
   {
     id: 'u13',
@@ -146,7 +146,7 @@ export const CHAPTERS = {
 };
 
 /** Chapters whose problems are in the bank. */
-export const BANK_CHAPTERS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'];
+export const BANK_CHAPTERS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'];
 
 export function unitForChapter(ch) {
   const id = String(ch);
@@ -212,6 +212,9 @@ export const LAB_META = {
   pendulum: { id: 'pendulum', exam: 'u11', title: 'Pendulum' },
   resonance: { id: 'resonance', exam: 'u11', title: 'Resonance' },
   'skyscraper-damper': { id: 'skyscraper-damper', exam: 'u11', title: 'Skyscraper damper', app: true },
+  'traveling-wave': { id: 'traveling-wave', exam: 'u12', title: 'Traveling wave' },
+  'standing-wave': { id: 'standing-wave', exam: 'u12', title: 'Standing wave' },
+  'guitar-string': { id: 'guitar-string', exam: 'u12', title: 'Guitar string', app: true },
 };
 
 export function examById(id) {

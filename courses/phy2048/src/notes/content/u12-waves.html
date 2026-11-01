@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Waves</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">PHY 2048 · Physics I · Unit 12 · OpenStax University Physics Vol. 1, Ch 16, rewritten</div>
+  <h1>Waves</h1>
+  <p class="lede">A wave moves a pattern through a medium. The pieces of the medium do not travel with the pattern. On a rope, each point moves across the rope. The speed of the pattern is set by the rope, not by how hard you shake it. Two such patterns on one rope add. Fixed ends then allow only a few shapes.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+    <span><i style="background:transparent;outline:1px dashed var(--border-hover)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The pattern</h3>
+    <a href="#s1"><span>1</span>Traveling waves</a>
+    <a href="#s2"><span>2</span>The wave function</a>
+    <h3>Part II · The string</h3>
+    <a href="#s3"><span>3</span>Speed on a string</a>
+    <a href="#s4"><span>4</span>Power of a wave</a>
+    <a href="#s5"><span>5</span>Standing waves</a>
+    <h3>Reference</h3>
+    <a href="#s6"><span>6</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The pattern</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Traveling waves</h2>
+<p>A pulse on a rope has a shape, and that shape moves. Watch one crest. In one period \(T\) it advances one wavelength \(\lambda\). The speed of the pattern is therefore</p>
+\[
+v = \frac{\lambda}{T} = f\lambda.
+\]
+<p>The frequency \(f = 1/T\) is how often you shake the end. It is not a property of the rope. If the rope and the tension stay the same, \(v\) stays the same. A faster shake shortens the wavelength so that \(f\lambda\) does not change. A larger shake raises the height. It does not raise the speed.</p>
+<p>A marked point of the rope moves up and down. It does not follow the crest down the rope. The motion of the point is transverse. The motion of the pattern is along the rope. Those two speeds are different numbers, and the next section gives both.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The wave speed is how fast the pattern moves. On a given rope it does not depend on frequency or amplitude. \(v = f\lambda\) then tells you the wavelength.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the rope</span>
+<p>A pulse travels \(30.0\ \mathrm{m}\) along a rope in \(6.00\ \mathrm{s}\). The end is shaken at \(2.00\ \mathrm{Hz}\).</p>
+\[
+v = \frac{30.0}{6.00} = 5.00\ \mathrm{m/s}, \qquad T = \frac{1}{2.00} = 0.500\ \mathrm{s}, \qquad \lambda = \frac{5.00}{2.00} = 2.50\ \mathrm{m}.
+\]
+<p>Section 16.1 prints those three numbers. The lab rope has mass per length \(0.200\ \mathrm{kg/m}\). The tension that makes this speed is \(\mu v^{2} = 5.00\ \mathrm{N}\). Four times that tension doubles the speed. Twice the frequency leaves the speed alone and halves the wavelength.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the snapshot</span>
+<p>A wave has wavelength \(8.00\ \mathrm{cm}\) and amplitude \(6.00\ \mathrm{cm}\). A crest moves \(6.00\ \mathrm{cm}\) in \(3.00\ \mathrm{s}\).</p>
+\[
+v = \frac{0.0600}{3.00} = 0.0200\ \mathrm{m/s}, \qquad T = \frac{0.0800}{0.0200} = 4.00\ \mathrm{s}, \qquad f = 0.250\ \mathrm{Hz}.
+\]
+<p>The section states the same result as \(2.00\ \mathrm{cm/s}\). The answer in metres per second is a hundred times smaller. The amplitude is the height of the wave. It is not in \(v\), \(T\), or \(f\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the particle speed as the wave speed. Thinking a higher frequency, or a larger amplitude, makes the wave travel faster. On a given rope the speed is set by the tension and the mass per length. Frequency sets the wavelength through \(v = f\lambda\). It does not set \(v\). Reporting a speed in centimetres per second as if the unit were metres per second.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The rope is uniform, flexible, and straight. A real rope sags under its weight, and it has some stiffness. The picture stretches the height so the wave can be seen. The plot under it is the true height, in metres. The model is one transverse wave. It leaves out motion along the rope, and friction with the air.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>The wave function</h2>
+<p>A sine wave that travels toward \(+x\) is</p>
+\[
+y(x,t) = A\sin(kx - \omega t).
+\]
+<p>\(A\) is the amplitude. The wave number and the angular frequency count radians, not cycles:</p>
+\[
+k = \frac{2\pi}{\lambda}, \qquad \omega = \frac{2\pi}{T} = 2\pi f.
+\]
+<p>One crest is the set of points where the phase \(kx - \omega t\) equals \(\pi/2\), plus multiples of \(2\pi\). As \(t\) grows, \(x\) must grow to keep that phase fixed. The crest moves toward \(+x\) at</p>
+\[
+v = \frac{\omega}{k} = f\lambda.
+\]
+<p>A wave written \(\sin(kx + \omega t)\) travels toward \(-x\). The calculator has to be in radians. Degree mode answers a different function.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Hold \(x\) fixed and differentiate in time. The chain rule brings a factor of \(-\omega\), and the derivative of sine is cosine:</p>
+\[
+v_y = \frac{\partial y}{\partial t} = -A\omega\cos(kx - \omega t).
+\]
+<p>This is the velocity of the point, across the rope. Its largest size is \(A\omega\), where the cosine is \(\pm 1\). That happens as the rope crosses the rest line, where \(y = 0\). At a crest the sine is \(\pm 1\), so the cosine is \(0\), and \(v_y = 0\). The point is turning around. None of this is the wave speed \(\omega/k\).</p>
+<p>Two waves of equal amplitude on the same rope add. One travels each way:</p>
+\[
+y = A\sin(kx - \omega t) + A\sin(kx + \omega t) = 2A\sin(kx)\cos(\omega t).
+\]
+<p>The sum does not travel. Its shape, \(\sin(kx)\), stands still, and the height breathes in time. The largest height is \(2A\), and only at the antinodes, where \(\sin(kx) = \pm 1\). Each of the two waves still travels at \(\omega/k\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the wave function</span>
+<p>Take \(y = 0.200\sin(6.28x - 1.57t)\), with \(x\) and \(y\) in metres and \(t\) in seconds.</p>
+\[
+\lambda = \frac{2\pi}{6.28} = 1.001\ \mathrm{m}, \qquad T = \frac{2\pi}{1.57} = 4.002\ \mathrm{s}, \qquad v = \frac{1.57}{6.28} = 0.2500\ \mathrm{m/s}.
+\]
+<p>Section 16.2 prints \(1.0\ \mathrm{m}\) and \(4\ \mathrm{s}\). Both grade. The speed is exact. The constants \(6.28\) and \(1.57\) are the section's stand-ins for \(2\pi\) and \(\pi/2\), so the wavelength is not exactly \(1\ \mathrm{m}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a crest</span>
+<p>On that same wave, a crest at \(t = 0\) sits where \(6.28x = \pi/2\), so \(x = 0.250\ \mathrm{m}\). There \(y = 0.200\ \mathrm{m}\) and the transverse velocity is zero. The largest transverse speed, at the rest line, is</p>
+\[
+A\omega = (0.200)(1.57) = 0.314\ \mathrm{m/s}.
+\]
+<p>The wave speed is \(0.250\ \mathrm{m/s}\). The point never moves that fast. The section prints the wavelength, the period, and the wave speed. It does not print \(0.314\ \mathrm{m/s}\). That number is \(A\omega\) on the same wave.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two waves</span>
+<p>Let each wave have amplitude \(0.200\ \mathrm{m}\), with \(k = \pi\ \mathrm{rad/m}\) and \(\omega = \pi\ \mathrm{rad/s}\). At \(x = 0.500\ \mathrm{m}\) and \(t = 0\),</p>
+\[
+y = 2(0.200)\sin(\pi/2)\cos(0) = 0.400\ \mathrm{m}.
+\]
+<p>That is an antinode at full height. Section 16.5 writes the sum and does not print this sample. The standing-wave lab draws the sum, with amplitude \(0.400\ \mathrm{m}\). Each traveling piece still moves at \(\omega/k = 1.00\ \mathrm{m/s}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading \(k\) as the wavelength, or \(\omega\) as the frequency in hertz. \(\lambda = 2\pi/k\) and \(f = \omega/(2\pi)\). Using a calculator in degrees on \(kx - \omega t\). Quoting the maximum particle speed at a crest. The transverse speed is zero there. It is largest where the rope crosses the rest line. Adding the two amplitudes at every \(x\), instead of \(2A\sin(kx)\cos(\omega t)\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The sine wave has been running forever, and it has no ends. A real pulse starts and stops. The slope is assumed small, so the tension stays along the rope. A steep slope changes the tension, and the shape does not travel unchanged. The sum of two waves is exact only while the rope stays linear.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>The string</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Speed on a string</h2>
+<p>The speed \(v = f\lambda\) does not say why one rope is faster than another. The tension and the mass per length do.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Take a short piece of string, length \(dx\), mass \(\mu\, dx\). The tension \(F\) pulls tangent to the string at each end. For a small slope the along-string parts cancel, and the net force across the string is</p>
+\[
+F\frac{\partial y}{\partial x}\bigg|_{x+dx} - F\frac{\partial y}{\partial x}\bigg|_{x} = F\frac{\partial^{2} y}{\partial x^{2}}\, dx.
+\]
+<p>Newton's second law on that piece is \(\mu\, dx\ \partial^{2} y/\partial t^{2}\) equal to that force. Cancel \(dx\):</p>
+\[
+\frac{\partial^{2} y}{\partial t^{2}} = \frac{F}{\mu}\frac{\partial^{2} y}{\partial x^{2}}.
+\]
+<p>A traveling wave \(f(x - vt)\) satisfies the same equation when \(v^{2} = F/\mu\). So</p>
+\[
+v = \sqrt{\frac{F}{\mu}}.
+\]
+<p>Four times the tension doubles the speed. Twice the mass per length, at the same tension, divides the speed by \(\sqrt{2}\). Frequency and amplitude never entered.</p>
+<p>A string fixed at both ends holds a standing wave whose lowest shape is half a wavelength. Then \(\lambda/2 = L\), and the open frequency is</p>
+\[
+f_1 = \frac{v}{2L}.
+\]
+<p>A shorter vibrating length is a higher pitch. A finger on a guitar does that. It does not change \(\mu\), and it does not change the tension by much.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The rope sets the speed, \(v = \sqrt{F/\mu}\). The pitch of an open string then follows the length, \(f_1 = v/(2L)\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the high E</span>
+<p>The high E string has \(\mu = 3.09 \times 10^{-4}\ \mathrm{kg/m}\) and tension \(56.40\ \mathrm{N}\).</p>
+\[
+v = \sqrt{\frac{56.40}{3.09 \times 10^{-4}}} = 427.2\ \mathrm{m/s}.
+\]
+<p>Section 16.3 prints \(427.23\ \mathrm{m/s}\). That print grades. The open pitch in the same section is \(329.63\ \mathrm{Hz}\), so the vibrating length is</p>
+\[
+L = \frac{427.23}{2 \times 329.63} = 0.6480\ \mathrm{m}.
+\]
+<p>The section does not print \(L\). It is \(v/(2f)\) on the printed speed and the printed pitch. Four times the tension would double this speed, and the open pitch would rise with it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the low E</span>
+<p>The low E has \(\mu = 5.78 \times 10^{-3}\ \mathrm{kg/m}\), \(18.7\) times the high E. The tension that keeps the high-E speed is</p>
+\[
+F = (5.78 \times 10^{-3})(427.23)^{2} = 1055\ \mathrm{N}.
+\]
+<p>The section prints \(1055\ \mathrm{N}\) and calls the string about \(20\) times heavier. A real guitar does not put \(1055\ \mathrm{N}\) on the low E. It tunes that string to \(82.41\ \mathrm{Hz}\), the section's open pitch, at the same length. The wave speed is \(2Lf = 106.8\ \mathrm{m/s}\). The tension that produces that speed, before the speed is rounded, is \(65.94\ \mathrm{N}\).</p>
+<p>Those two numbers are computed here. The section prints the pitch and does not print the tuned speed or this tension. The slower wave is the whole of the lower pitch.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving the square root off \(v = \sqrt{F/\mu}\), or inverting the ratio. Using the high-E tension on the low E and expecting the high-E pitch. The low E is tuned near \(82\ \mathrm{Hz}\), so its tension stays ordinary. Forgetting the \(2\) in \(L = v/(2f)\) for a string fixed at both ends. That missing \(2\) doubles the length.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real guitar string has stiffness, so the higher frets run a little sharp. The body, the frets, and the finger are not in \(v = \sqrt{F/\mu}\). The \(2.00\ \mathrm{mm}\) pluck in the lab is an illustrative amplitude. The picture vibrates once a second, not at the real pitch, and the swing is enlarged. The plot is the true midpoint height.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Power of a wave</h2>
+<p>The wave carries energy. The hand, or a vibrator, has to supply it.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>At a fixed \(x\), the left-hand part of the string pulls across the cut with a force \(-F\,\partial y/\partial x\), for a small slope. That force moves at the transverse velocity \(\partial y/\partial t\), so the power delivered across the cut is</p>
+\[
+P = -F\frac{\partial y}{\partial x}\frac{\partial y}{\partial t}.
+\]
+<p>Put in \(y = A\sin(kx - \omega t)\). Both derivatives bring a cosine of the same phase, and \(F = \mu v^{2}\) with \(v = \omega/k\). The product averages, over one period, to</p>
+\[
+P_{\mathrm{av}} = \frac{1}{2}\mu A^{2}\omega^{2} v.
+\]
+<p>The amplitude is squared. Doubling \(A\) multiplies the power by four. So is \(\omega\). Doubling the frequency, at the same amplitude and the same wave speed, also multiplies the power by four. The wave speed itself appears once.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the vibrator</span>
+<p>A string of mass \(0.0700\ \mathrm{kg}\) and length \(2.00\ \mathrm{m}\) is under \(90.0\ \mathrm{N}\). A vibrator drives it at \(60.0\ \mathrm{Hz}\) with amplitude \(0.0400\ \mathrm{m}\).</p>
+\[
+\mu = \frac{0.0700}{2.00} = 0.0350\ \mathrm{kg/m}, \qquad v = \sqrt{\frac{90.0}{0.0350}} = 50.71\ \mathrm{m/s}.
+\]
+<p>With \(\omega = 2\pi \times 60.0 = 377.0\ \mathrm{rad/s}\),</p>
+\[
+P_{\mathrm{av}} = \frac{1}{2}(0.0350)(0.0400)^{2}(377.0)^{2}(50.71) = 201.8\ \mathrm{W}.
+\]
+<p>Section 16.4 uses \(\omega = 376.80\ \mathrm{rad/s}\) and prints \(201.59\ \mathrm{W}\). It also prints the speed \(50.71\ \mathrm{m/s}\). The print grades. Doubling the amplitude, and nothing else, makes \(807.2\ \mathrm{W}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the power proportional to \(A\), rather than \(A^{2}\). Doubling the amplitude multiplies the power by four. Using \(\omega\) in place of \(\omega^{2}\), so a doubled frequency is counted once. Dropping the one half in the average. The average of a squared cosine over a period is one half, and the formula already contains it.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The formula is the time average for a pure sine that never dies. A pluck is not a pure sine, and its amplitude falls as the body radiates the energy. The vibrator in the example holds the amplitude fixed, so it must keep supplying \(P_{\mathrm{av}}\). A free string does not have that supply.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Standing waves</h2>
+<p>Tie both ends. The displacement there is zero at every time. Those ends are nodes.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The standing shape \(y = A\sin(kx)\cos(\omega t)\) is already zero at \(x = 0\). It is also zero at \(x = L\) when \(\sin(kL) = 0\), so</p>
+\[
+kL = n\pi, \qquad k = \frac{n\pi}{L}, \qquad n = 1, 2, 3, \ldots
+\]
+<p>The wavelength is \(2\pi/k = 2L/n\). With \(v = \omega/k\), the frequencies are</p>
+\[
+f_n = \frac{nv}{2L} = nf_1, \qquad f_1 = \frac{v}{2L}.
+\]
+<p>Every whole number \(n\) is allowed. The odd-only series belongs to a tube closed at one end, not to this string. The period of mode \(n\) is \(1/f_n = 2L/(nv)\). It is not \(2/f_n\).</p>
+<p>A reflection at a fixed end comes back inverted. The inverted pulse and the incident pulse cancel at the end, which is why the end can stay a node. A free end reflects upright, and that end is an antinode.</p>
+<p>Between the nodes the string swings. Those peaks are antinodes. Mode \(n\) has \(n\) antinodes and \(n - 1\) nodes in the interior. The wavelength is still \(2L/n\), which you can read off as twice the distance from one node to the next.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the hanger</span>
+<p>The string is \(2.00\ \mathrm{m}\) long, with \(\mu = 0.00600\ \mathrm{kg/m}\). A \(2.00\ \mathrm{kg}\) hanger sets the tension. This course uses \(g = 9.81\ \mathrm{m/s^{2}}\), so the tension is \(19.62\ \mathrm{N}\).</p>
+\[
+v = \sqrt{\frac{19.62}{0.00600}} = 57.18\ \mathrm{m/s}.
+\]
+\[
+f_1 = \frac{57.18}{4.00} = 14.30\ \mathrm{Hz}, \qquad f_2 = 28.59\ \mathrm{Hz}, \qquad f_3 = 42.89\ \mathrm{Hz}.
+\]
+<p>The wavelengths are \(4.00\ \mathrm{m}\), \(2.00\ \mathrm{m}\), and \(1.333\ \mathrm{m}\). They do not use \(g\). Section 16.6 uses \(g = 9.80\ \mathrm{m/s^{2}}\) and prints \(57.15\ \mathrm{m/s}\), \(14.29\ \mathrm{Hz}\), \(28.58\ \mathrm{Hz}\), and \(42.87\ \mathrm{Hz}\). Those prints grade. Half the length, with the same hanger, doubles every frequency.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Putting an antinode at a fixed end. The end does not move, so it is a node. Giving a string fixed at both ends only the odd harmonics. Those are the closed-pipe frequencies. This string has every whole multiple of the fundamental. Using \(v/L\) for the fundamental, which forgets the half-wavelength, or using \(v/(4L)\), which is the closed pipe. Taking the period of mode \(n\) as \(2/f_n\). The period is \(1/f_n\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The ends are perfectly fixed. A real bridge moves a little, which is how a string instrument radiates. The hanger is a point mass in a uniform field. The picture is slowed to one cycle per second, and the height is stretched. The plot is the true antinode. Air, stiffness, and the sag of a long string are outside \(f_n = nv/(2L)\).</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Formula sheet</h2>
+\[
+v = f\lambda = \frac{\omega}{k}, \qquad k = \frac{2\pi}{\lambda}, \qquad \omega = 2\pi f, \qquad T = \frac{1}{f}
+\]
+\[
+y = A\sin(kx - \omega t), \qquad v_y = -A\omega\cos(kx - \omega t), \qquad v_{y,\max} = A\omega
+\]
+\[
+v = \sqrt{\frac{F}{\mu}}, \qquad f_1 = \frac{v}{2L}, \qquad f_n = \frac{nv}{2L}, \qquad \lambda_n = \frac{2L}{n}
+\]
+\[
+y = 2A\sin(kx)\cos(\omega t), \qquad P_{\mathrm{av}} = \frac{1}{2}\mu A^{2}\omega^{2} v
+\]
+<p>The argument of every sine and cosine is in radians. A wave \(\sin(kx - \omega t)\) travels toward \(+x\). Both ends fixed: every whole number \(n\), and a node at each end. The course takes \(g = 9.81\ \mathrm{m/s^{2}}\). The hanger prints use \(9.80\), and those prints grade. The high E prints as \(427.23\ \mathrm{m/s}\). The scale length \(0.6480\ \mathrm{m}\) is computed from that print and from \(329.63\ \mathrm{Hz}\). The power print \(201.59\ \mathrm{W}\) uses \(\omega = 376.80\ \mathrm{rad/s}\). With \(2\pi \times 60\) the same string gives \(201.8\ \mathrm{W}\), and the print grades.</p>
+</section>
+
+</main>
+</body>
+</html>

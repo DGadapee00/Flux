@@ -51,6 +51,9 @@ const loaders = {
   pendulum: () => import('./pendulum.js'),
   resonance: () => import('./resonance.js'),
   'skyscraper-damper': () => import('./skyscraper-damper.js'),
+  'traveling-wave': () => import('./traveling-wave.js'),
+  'standing-wave': () => import('./standing-wave.js'),
+  'guitar-string': () => import('./guitar-string.js'),
 };
 
 const labs = createLabLoader(loaders);

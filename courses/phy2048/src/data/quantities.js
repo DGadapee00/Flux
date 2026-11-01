@@ -50,6 +50,8 @@ export const QUANTITIES = {
   Qflow: { sym: 'Q', name: 'Volume flow', unit: 'm^3/s', unitName: '', from: 'Q = A v' },
   freq: { sym: 'f', name: 'Frequency', unit: 'Hz', unitName: 'hertz', from: 'f = 1/T' },
   amp: { sym: 'A', name: 'Amplitude', unit: 'm', unitName: 'metre', from: 'x = A\\cos(\\omega t)' },
+  muS: { sym: '\\mu', name: 'Mass per length', unit: 'kg/m', unitName: '', from: 'v = \\sqrt{F/\\mu}' },
+  len: { sym: 'L', name: 'Length', unit: 'm', unitName: 'metre', from: 'f = v/(2L)' },
 };
 
 export const LAB_UNITS = {
@@ -100,6 +102,9 @@ export const LAB_UNITS = {
   pendulum: ['T', 'g', 'omega', 'theta'],
   resonance: ['m', 'k', 'b', 'omega', 'amp', 'F'],
   'skyscraper-damper': ['freq', 'T', 'm', 'I', 'g'],
+  'traveling-wave': ['v', 'freq', 'T', 'amp', 'tension', 'muS', 'P'],
+  'standing-wave': ['v', 'freq', 'len', 'tension', 'muS', 'P'],
+  'guitar-string': ['v', 'freq', 'len', 'tension', 'muS'],
 };
 
 const BASE = ['kg', 'm', 's', 'A'];
