@@ -5,6 +5,7 @@
  *   npm run scorecard              every course, one row each
  *   npm run scorecard -- --units   one row per unit as well
  *   npm run scorecard -- --md      the table as Markdown, for a PR
+ *   --course <id>                  measure a scaffold or starter outside the hub
  *   --quiet                        only the verdict (npm test runs it this way)
  *   --mark <id>                    treat that course as marked, to see what CI would say
  *
@@ -233,8 +234,10 @@ function unitTable(r) {
   return [`${r.code}`, line(head), ...body.map(line)].join('\n');
 }
 
+const selected = argv.flatMap((arg,i)=>arg==='--course'?[argv[i+1]]:[]);
+for(const id of selected){if(!/^[a-z][a-z0-9]*$/.test(id||'')||!exists(`courses/${id}/src/manifest.js`))throw Error(`Unknown course: ${id}`);}
 const results = [];
-for (const id of COURSES) {
+for (const id of (selected.length ? selected : COURSES)) {
   if (!exists(`courses/${id}/src/manifest.js`)) continue;
   results.push(await measure(id));
 }

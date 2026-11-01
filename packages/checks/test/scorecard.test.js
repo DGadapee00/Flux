@@ -31,3 +31,16 @@ test('Statics meets the measured floor without changing its manifest standard fl
   const r = run('--quiet', '--mark', 'statics');
   assert.equal(r.status, 0, r.stderr);
 });
+
+// The starter is intentionally below the content floor; it can still be measured explicitly.
+
+test('an unlisted starter can be measured explicitly without claiming it passes', () => {
+  const r = run('--course', 'mathstarter', '--units');
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stdout, /MATH STARTER/);
+  assert.doesNotMatch(r.stdout, /PHY 2049/);
+  assert.equal(run('--course', 'mathstarter', '--mark', 'mathstarter').status, 1);
+});
+test('course selection rejects traversal and unknown folders', () => {
+  for (const id of ['../starter', 'nosuchcourse']) assert.notEqual(run('--course', id).status, 0);
+});
