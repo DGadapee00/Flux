@@ -195,3 +195,12 @@ review course; nothing is planned. Technical electives are planned when the owne
   drops.
 - **A reference module.** An engineering-formula cheat sheet as notes only, linked from the courses
   whose formulas it covers.
+
+### Calculus unit PRs (R4a)
+
+- [x] Unit 1: differentiation content rework; owner review pending.
+- [ ] Unit 2: applications of differentiation.
+- [ ] Unit 3: definite integral and applications.
+- [ ] Unit 4: integration techniques.
+- [ ] Unit 5: parametric and polar.
+- [ ] Unit 6: exploring the infinite.

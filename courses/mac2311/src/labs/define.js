@@ -1,3 +1,4 @@
+import { predictionsFor } from '../data/predictions.js';
 import { LAB_META } from '../data/catalog.js';
 import * as THREE from 'three';
 import { defineLab as checkLab } from '@flux/core';
@@ -34,6 +35,7 @@ export function defineLab(spec) {
     plot: () => null,
     pointer: null,
     ...spec,
+    predictions: predictionsFor(spec.id),
     exam: LAB_META[spec.id]?.exam || spec.exam,
     kind: 'scene3d',
   });

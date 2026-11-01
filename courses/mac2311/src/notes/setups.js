@@ -24,3 +24,11 @@ export function matchExamples(unit, section, tags) {
     return list.findIndex((ex) => (tag ? ex.tag === tag : ex.tag == null && ex.n === untagged));
   });
 }
+
+SETUPS.c1.s11 = [
+ {tag:'a close camera subject',lab:'focus',scenario:'close',read:c=>({v:[c.v,56.25],sensitivity:[c.sensitivity,-.015625]})},
+ {tag:'sensitivity is not image distance',lab:'focus',scenario:'close',setup:s=>{s.u=850;},read:c=>({v:[c.v,53.125],sensitivity:[c.sensitivity,-.00390625]})},
+ {tag:'the tangent makes a local prediction',lab:'focus',scenario:'portrait',read:c=>({v:[c.v,52.63157894736842],sensitivity:[c.sensitivity,-1/361]})},
+];
+
+(SETUPS.c1.s7??=[]).push({tag:'two tangents through the origin',lab:'secant',scenario:'tangent1',setup:s=>{s.x0=Math.sqrt(2);},read:c=>({slope:[c.fp,2*(Math.sqrt(2)-1)]})});

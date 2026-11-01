@@ -7,6 +7,10 @@ import { riemann1d } from '@flux/subjects/math/riemann.js';
 import { simpson } from '@flux/subjects/math/quadrature.js';
 
 export const GRAPHS = {
+  tangent1: {id:'tangent1',name:'(x−1)²+1',tex:'(x-1)^2+1',f:x=>(x-1)**2+1,fp:x=>2*(x-1),F:x=>(x-1)**3/3+x},
+  tangent2: {id:'tangent2',name:'x²+4',tex:'x^2+4',f:x=>x*x+4,fp:x=>2*x,F:x=>x**3/3+4*x},
+  fall: {id:'fall',name:'Height 400−16t² (ft)',tex:'400-16x^2',f:x=>400-16*x*x,fp:x=>-32*x,F:x=>400*x-16*x**3/3},
+  mathlet: {id:'mathlet',name:'0.5x³−x',tex:'x^3/2-x',f:x=>.5*x**3-x,fp:x=>1.5*x*x-1,F:x=>x**4/8-x*x/2},
   quad: {
     id: 'quad',
     name: 'x²',

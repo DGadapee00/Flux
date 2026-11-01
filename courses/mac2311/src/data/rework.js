@@ -1,0 +1,2 @@
+/** Units completed by the content rework; owner review still controls standard:true. */
+export const REWORKED_UNITS = ['c1'];

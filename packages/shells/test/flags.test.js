@@ -358,3 +358,24 @@ for (const [name, makeHUD] of [['engineering', createHUD], ['math', createMathHU
     assert.equal(openNotesFromRoute(null, { examId: 'u1', notes: 's1' }), false);
   });
 }
+
+test('math prediction hook is opt-in and grades with the fixture lab computation', () => {
+  page();
+  const state={scenarioId:'start',n:2,show:{}};
+  const prompt={id:'square',scenario:'start',ask:'Double n. Does its square double?',apply:s=>{s.n*=2;},watch:[{id:'q',label:'square',get:c=>c.q,mode:'factor'}],expect:{q:4},why:'Squaring doubles both factors.'};
+  const lab={id:'diagram',title:'Square',scenarios:[{id:'start',name:'Start'}],predictions:[prompt],controls:()=>'',bind(){},syncControls(){},defaultState:()=>({n:2}),applyScenario(id,s){s.scenarioId=id;},recompute(s,c){c.q=s.n*s.n;},toggles:[],law:()=>[],liveRows:()=>'',readout:()=>'',coach:()=>({}),plot:()=>null};
+  let hud=createMathHUD(api({slice:()=>state,bump(){}}),catalog);
+  hud.mount(lab,catalog.exams[0],state);
+  assert.equal(document.getElementById('predict'),null);
+  page();
+  const hooked={...catalog,predictions:true};
+  hud=createMathHUD(api({slice:()=>state,bump(){hud.update(state,{},lab);}}),hooked);
+  hud.mount(lab,catalog.exams[0],state);
+  const host=document.getElementById('predict');
+  assert.ok(host.textContent.includes('Predict first'));
+  const pick=host.querySelector('[data-value="2"]');
+  host.dispatchEvent({type:'click',target:pick});
+  host.dispatchEvent({type:'click',target:host.querySelector('[data-act="apply"]')});
+  assert.equal(state.n,4);
+  assert.ok(host.textContent.includes('the lab says ×4'));
+});
