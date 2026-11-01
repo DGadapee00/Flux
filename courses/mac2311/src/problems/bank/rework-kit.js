@@ -79,7 +79,7 @@ export function symbolicFamily({ id, exam, ch, title, topics, forms, hints, leve
         ($) => $.v.key,
         ['x'],
         ($) => $.v.df($.x),
-        { label: "$f'(x)$" },
+        { label: "$f'(x)$", sample: ($) => $.v.sample },
       ),
     ],
     hints,
@@ -179,7 +179,7 @@ export function formulaFamily({ id, exam, ch, title, topics, forms, hints, level
         ($) => $.v.key,
         [variable],
         ($) => $.v.get($.x),
-        { label: 'requested formula' },
+        { label: 'requested formula', sample: ($) => $.v.sample },
       ),
     ],
     hints,
@@ -291,7 +291,14 @@ export const sum = (...terms) => {
     if (Math.abs(c) < 1e-12) continue;
     const mag = Math.abs(c),
       m = fr(mag),
-      piece = body ? (Math.abs(mag - 1) < 1e-12 ? body : `${m.includes('/') ? `(${m})` : m}*${body}`) : m;
+      coef = m.includes('/') ? `(${m})` : m,
+      piece = !body
+        ? m
+        : Math.abs(mag - 1) < 1e-12
+          ? body
+          : body.startsWith('1/')
+            ? `${coef}${body.slice(1)}`
+            : `${coef}*${body}`;
     out += c < 0 ? `-${piece}` : `${out ? '+' : ''}${piece}`;
   }
   return out || '0';

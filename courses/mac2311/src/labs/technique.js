@@ -7,9 +7,11 @@ import { TECHNIQUES } from '../math/techniques.js';
 import { fitArcCamera, plotWindow } from './arc.js';
 import { defineLab } from './define.js';
 const SCENARIOS = Object.entries(TECHNIQUES).map(([id, v]) => ({ id, name: v.name }));
+/** The profile in use: a problem's own { name, tex, f, F, a, b } when it set one, else the scenario's. */
+const prof = (s) => s.custom || TECHNIQUES[s.scenarioId] || TECHNIQUES.exp;
 function apply(id, s) {
-  const v = TECHNIQUES[id] || TECHNIQUES.exp;
   Object.assign(s, {
+    custom: null,
     scenarioId: TECHNIQUES[id] ? id : 'exp',
     fraction: 1,
     view: { plane: 'xy', upm: 1 },
@@ -31,7 +33,7 @@ export default defineLab({
   },
   applyScenario: apply,
   extent(s) {
-    const v=TECHNIQUES[s.scenarioId]; let low=0,high=0;
+    const v=prof(s); let low=0,high=0;
     for(let i=0;i<=80;i++){const y=v.f(v.a+(v.b-v.a)*i/80);low=Math.min(low,y);high=Math.max(high,y);}
     const pad=.12*Math.max(1,high-low);
     Object.assign(s,{xMin:v.a-.1*(v.b-v.a),xMax:v.b+.1*(v.b-v.a),yMin:low-pad,yMax:high+pad});
@@ -50,7 +52,7 @@ export default defineLab({
     document.getElementById('technique-fraction').value = s.fraction;
   },
   recompute(s, c) {
-    const v = TECHNIQUES[s.scenarioId];
+    const v = prof(s);
     c.a = v.a;
     c.b = v.a + (v.b - v.a) * s.fraction;
     c.integral = v.F(c.b) - v.F(c.a);
@@ -68,13 +70,13 @@ export default defineLab({
     h.view.setVisible(false);
   },
   syncViews(s, c, ctx) {
-    const v = TECHNIQUES[s.scenarioId],
+    const v = prof(s),
       g = ctx.handle.view;
     g.syncCurve('curve', v.f, v.a, v.b);
     g.syncHatch(v.f, c.a, c.b, true);
     g.syncBound(c.b, c.height);
   },
-  law: (s) => [String.raw`f(x)=${TECHNIQUES[s.scenarioId].tex}`, String.raw`I(b)=F(b)-F(a),\quad F'=f`],
+  law: (s) => [String.raw`f(x)=${prof(s).tex}`, String.raw`I(b)=F(b)-F(a),\quad F'=f`],
   liveRows: (s, c) =>
     kv('lower', fmt(c.a)) +
     kv('upper', fmt(c.b)) +

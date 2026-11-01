@@ -858,7 +858,10 @@ export function createEngine(options = {}) {
     }
     const r = rng(12345);
     const scopes = [];
-    for (let n = 0; n < 8; n++) scopes.push(Object.fromEntries(part.vars.map((v) => [v, 0.3 + 2.7 * r()])));
+    // A part may sample its own interval, [lo, hi] or a function of the problem's values, when the
+    // answer only exists on part of the default 0.3 to 3.
+    const [lo, hi] = (typeof part.sample === 'function' ? part.sample($) : part.sample) || [0.3, 3];
+    for (let n = 0; n < 8; n++) scopes.push(Object.fromEntries(part.vars.map((v) => [v, lo + (hi - lo) * r()])));
     let sum = 0;
     const wants = [];
     for (const sc of scopes) {

@@ -1,14 +1,15 @@
 import { simpson } from '@flux/subjects/math/quadrature.js';
-import { formulaFamily, numericFamily, conceptFamily, citation } from './rework-kit.js';
+import { formulaFamily, numericFamily, conceptFamily, citation, cf, fr, frTex, pw, sum } from './rework-kit.js';
 const S = (p) => citation(5, p),
   A = (p) => citation(4, p),
   ch = 'v2.3',
   exam = 'c4';
 /** Integral identity checked independently by differentiating the proposed primitive. */
-function primitive(ask, key, F, f, reason, source, alt, wrong, at = 0.6) {
+function primitive(ask, key, F, f, reason, source, alt, wrong, at = 0.6, sample) {
   return {
     ask: 'Find one antiderivative; omit the arbitrary constant. ' + ask,
     key,
+    sample,
     get: F,
     second: (x) => {
       const h = 1e-5,
@@ -18,13 +19,88 @@ function primitive(ask, key, F, f, reason, source, alt, wrong, at = 0.6) {
       return F(x);
     },
     reason,
-    source,
+    ...(source ? { source } : {}),
     alt,
     wrong,
     at,
     check: 'Differentiate this result to recover the entire integrand, including its scale factors.',
   };
 }
+/**
+ * Arc length of y=ln(sin x), y=ln(cos x) or y=(2/3)x^{3/2} between two ends, as a recipe. The
+ * slant √(1+y′²) is csc x, sec x or √(1+x); each has a closed antiderivative, and the lab's
+ * Simpson check integrates the slant itself. Reversed limits give the oriented integral.
+ */
+function arcForm([kind, a, b, aTex, bTex], reversed) {
+  const lnTanHalf = (x) => Math.log(Math.tan(x / 2)),
+    lnSecTan = (x) => Math.log(1 / Math.cos(x) + Math.tan(x));
+  const curves = {
+    sin: { y: 'y=ln(sin x)', slant: (x) => 1 / Math.sin(x), F: lnTanHalf, rise: (x) => Math.log(Math.sin(x)), tex: String.raw`\csc x`, why: 'The slant is csc x, whose antiderivative is ln tan(x/2).' },
+    cos: { y: 'y=ln(cos x)', slant: (x) => 1 / Math.cos(x), F: lnSecTan, rise: (x) => Math.log(Math.cos(x)), tex: String.raw`\sec x`, why: 'The slant is sec x, whose antiderivative is ln(sec x+tan x).' },
+    pow: { y: 'y=(2/3)x^{3/2}', slant: (x) => Math.sqrt(1 + x), F: (x) => (2 / 3) * (1 + x) ** 1.5, rise: (x) => (2 / 3) * x ** 1.5, tex: String.raw`\sqrt{1+x}`, why: 'The slant is √(1+x), whose antiderivative is (2/3)(1+x)^{3/2}.' },
+  };
+  const c = curves[kind],
+    L = c.F(b) - c.F(a),
+    span = b - a,
+    profile = { name: `Slant of ${c.y}`, tex: c.tex, f: c.slant, F: c.F, a, b };
+  return reversed
+    ? {
+        ask: `Evaluate the integral of the slant √(1+(y′)²) for ${c.y} from x=${bTex} down to ${aTex}. This is an oriented integral, not a physical length.`,
+        answer: -L,
+        second: () => simpson(c.slant, b, a),
+        reversed: true,
+        profile,
+        reason: `${c.why} The limits run backward, so the value is the negative of the length.`,
+        traps: [
+          [L, 'Those are the opposite limits. A definite integral changes sign under reversal.'],
+          [-span, 'That omits the slant factor. The magnitude exceeds the horizontal span.'],
+        ],
+      }
+    : {
+        ask: `Find the length of ${c.y} from x=${aTex} to ${bTex}.`,
+        answer: L,
+        second: () => simpson(c.slant, a, b),
+        profile,
+        reason: `${c.why} Subtract its values at the two ends.`,
+        traps: [
+          [Math.abs(c.rise(b) - c.rise(a)) || span / 2, 'That is only the vertical change in the graph, not its path length.'],
+          [span, 'That is the horizontal span. The slant factor exceeds one.'],
+        ],
+      };
+}
+/** The segment y=b−mx from x=0 to b/m turned about the x or y axis: a cone, lateral area π·r·ℓ. */
+function coneForm(b, m, axis) {
+  const run = b / m,
+    slant = Math.hypot(1, m),
+    ell = run * slant,
+    onX = axis === 'x',
+    r = onX ? b : run,
+    f = onX ? (x) => 2 * Math.PI * (b - m * x) * slant : (x) => 2 * Math.PI * x * slant,
+    F = onX ? (x) => 2 * Math.PI * slant * (b * x - (m * x * x) / 2) : (x) => Math.PI * slant * x * x;
+  return {
+    ask: `Rotate y=${b}−${m === 1 ? '' : m}x, 0≤x≤${fr(run)}, about the ${axis} axis. Find the lateral surface area without an end cap.`,
+    answer: Math.PI * r * ell,
+    second: () => simpson(f, 0, run),
+    profile: { name: `Surface integrand, y=${b}−${m}x about ${axis}`, tex: String.raw`2\pi ${onX ? 'y' : 'x'}\sqrt{${1 + m * m}}`, f, F, a: 0, b: run },
+    reason: `The radius is ${onX ? 'y' : 'x'} and ds=√${1 + m * m} dx. Integrate 2π·${onX ? 'y' : 'x'}·√${1 + m * m}, or use the cone area πrℓ with r=${fr(r)} and ℓ=${fr(run)}√${1 + m * m}.`,
+    traps: [
+      [Math.PI * r * run, `That omits the slant factor √${1 + m * m}.`],
+      [Math.PI * (onX ? run : b) * ell, `That uses ${onX ? 'x' : 'y'} as the radius, so it rotates about the other axis.`],
+    ],
+  };
+}
+/** Partial fractions as text: [[2,'x'],[-2,'(x+1)']] reads 2/x−2/(x+1). */
+const fracSum = (...terms) =>
+  terms
+    .filter(([c]) => c)
+    .map(([c, d], i) => `${c < 0 ? '−' : i ? '+' : ''}${Math.abs(c)}/${d}`)
+    .join('');
+/** A linear numerator px+q in TeX, signs joined. */
+const linTex = (p, q) => {
+  const lead = p === 0 ? '' : `${cf(p)}x`;
+  if (!q) return lead || '0';
+  return `${lead}${lead ? (q < 0 ? '-' : '+') : q < 0 ? '-' : ''}${Math.abs(q)}`;
+};
 const sym = (id, title, topics, forms, hints, level = 2) =>
   formulaFamily({ id: 'c4.' + id, exam, ch, title, topics, forms, hints, level });
 const B = [
@@ -33,26 +109,67 @@ const B = [
     'Simplify one factor',
     ['parts', 'symbolic'],
     {
-      linear: primitive(
-        String.raw`$\int xe^x\,dx$.`,
-        '(x-1)*exp(x)',
-        (x) => (x - 1) * Math.exp(x),
-        (x) => x * Math.exp(x),
-        'Set u=x and dv=eˣdx. Subtract the remaining exponential integral.',
-        S('5F-2(a)'),
-        'x*exp(x)-exp(x)',
-        'x*exp(x)',
-      ),
-      quadratic: primitive(
-        String.raw`$\int x^2e^x\,dx$.`,
-        '(x^2-2*x+2)*exp(x)',
-        (x) => (x * x - 2 * x + 2) * Math.exp(x),
-        (x) => x * x * Math.exp(x),
-        'Apply parts twice; the first reduction leaves twice the linear-exponential integral.',
-        S('5F-2(b)'),
-        'exp(x)*x^2-2*x*exp(x)+2*exp(x)',
-        '(x^2+2*x+2)*exp(x)',
-      ),
+      linear: {
+        source: S('5F-2(a)'),
+        params: { k: [1, 2, 3, -1, -2, -3], b: [0, 1, 2, -1] },
+        make: ({ k, b }) =>
+          primitive(
+            String.raw`$\int ${b === 0 ? 'x' : `(x${b < 0 ? '-' : '+'}${Math.abs(b)})`}e^{${cf(k)}x}\,dx$.`,
+            `exp(${k}*x)*(${sum([1 / k, 'x'], [b / k - 1 / (k * k), ''])})`,
+            (x) => Math.exp(k * x) * ((x + b) / k - 1 / (k * k)),
+            (x) => (x + b) * Math.exp(k * x),
+            `Set u=x${b ? (b < 0 ? b : `+${b}`) : ''} and dv=e^(${k}x)dx, so v=e^(${k}x)/${k}. Subtract the remaining exponential integral, which brings a second factor 1/${k}.`,
+            undefined,
+            `(x${b ? (b < 0 ? b : `+${b}`) : ''})*exp(${k}*x)/${k}-exp(${k}*x)/${k * k}`,
+            `(x${b ? (b < 0 ? b : `+${b}`) : ''})*exp(${k}*x)/${k}`,
+          ),
+      },
+      quadratic: {
+        source: S('5F-2(b)'),
+        params: { k: [1, 2, 3, -1, -2, -3] },
+        make: ({ k }) =>
+          primitive(
+            String.raw`$\int x^2e^{${cf(k)}x}\,dx$.`,
+            `exp(${k}*x)*(${sum([1 / k, 'x^2'], [-2 / (k * k), 'x'], [2 / k ** 3, ''])})`,
+            (x) => Math.exp(k * x) * (x * x / k - (2 * x) / (k * k) + 2 / k ** 3),
+            (x) => x * x * Math.exp(k * x),
+            `Apply parts twice. Each round lowers the power of x and divides by another ${k}.`,
+            undefined,
+            `x^2*exp(${k}*x)/${k}-2*x*exp(${k}*x)/${k * k}+2*exp(${k}*x)/${k ** 3}`,
+            `exp(${k}*x)*(${sum([1 / k, 'x^2'], [2 / (k * k), 'x'], [2 / k ** 3, ''])})`,
+          ),
+      },
+      trig: {
+        params: { fn: ['sin', 'cos'], k: [1, 2, 3, 4, 5, 6] },
+        make: ({ fn, k }) => {
+          const s = fn === 'sin';
+          return primitive(
+            String.raw`$\int x\,${'\\' + fn}(${cf(k)}x)\,dx$.`,
+            s ? `-x*cos(${k}*x)/${k}+sin(${k}*x)/${k * k}` : `x*sin(${k}*x)/${k}+cos(${k}*x)/${k * k}`,
+            (x) => (s ? -x * Math.cos(k * x) / k + Math.sin(k * x) / (k * k) : x * Math.sin(k * x) / k + Math.cos(k * x) / (k * k)),
+            (x) => x * Math[fn](k * x),
+            `Set u=x and dv=${fn}(${k}x)dx. Then v=${s ? '−cos' : 'sin'}(${k}x)/${k}, and the remaining integral of v gives the 1/${k * k} term.`,
+            undefined,
+            s ? `(sin(${k}*x)-${k}*x*cos(${k}*x))/${k * k}` : `(cos(${k}*x)+${k}*x*sin(${k}*x))/${k * k}`,
+            s ? `-x*cos(${k}*x)/${k}` : `x*sin(${k}*x)/${k}`,
+          );
+        },
+      },
+      log: {
+        params: { n: [1, 2, 3, 4, 0] },
+        make: ({ n }) =>
+          primitive(
+            String.raw`$\int ${n === 0 ? '' : pw('x', n)}\ln x\,dx$, $x>0$.`,
+            `x^${n + 1}*ln(x)/${n + 1}-x^${n + 1}/${(n + 1) ** 2}`,
+            (x) => (x ** (n + 1) * Math.log(x)) / (n + 1) - x ** (n + 1) / (n + 1) ** 2,
+            (x) => x ** n * Math.log(x),
+            `Take u=ln x, which simplifies, and dv=${n === 0 ? 'dx' : `x^${n}dx`}. Then v=x^${n + 1}/${n + 1} and v du=x^${n}/${n + 1} dx.`,
+            undefined,
+            `x^${n + 1}*(${n + 1}*ln(x)-1)/${(n + 1) ** 2}`,
+            `x^${n + 1}*ln(x)/${n + 1}`,
+            1.4,
+          ),
+      },
     },
     [
       'Reverse the product rule. Choose u to become simpler under differentiation.',
@@ -64,26 +181,43 @@ const B = [
     'Solve for an integral that returns',
     ['parts', 'symbolic'],
     {
-      exponential: primitive(
-        String.raw`$\int e^x\cos x\,dx$.`,
-        'exp(x)*(sin(x)+cos(x))/2',
-        (x) => (Math.exp(x) * (Math.sin(x) + Math.cos(x))) / 2,
-        (x) => Math.exp(x) * Math.cos(x),
-        'Two integrations by parts return the negative of the original integral. Move it left and divide by two.',
-        S('5F-4'),
-        '(exp(x)*sin(x)+exp(x)*cos(x))/2',
-        'exp(x)*(sin(x)+cos(x))',
-      ),
-      log: primitive(
-        String.raw`$\int\cos(\ln x)\,dx$, $x>0$.`,
-        'x*(cos(ln(x))+sin(ln(x)))/2',
-        (x) => (x * (Math.cos(Math.log(x)) + Math.sin(Math.log(x)))) / 2,
-        (x) => Math.cos(Math.log(x)),
-        'Take dv=dx twice. The second round returns the original integral with a minus sign.',
-        S('5F-5'),
-        '(x*cos(ln(x))+x*sin(ln(x)))/2',
-        'x*cos(ln(x))',
-      ),
+      exponential: {
+        source: S('5F-4'),
+        params: { fn: ['cos', 'sin'], a: [1, 2, -1, 3], b: [1, 2, 3] },
+        make: ({ fn, a, b }) => {
+          const c = fn === 'cos',
+            d = a * a + b * b;
+          return primitive(
+            String.raw`$\int e^{${cf(a)}x}${'\\' + fn}(${cf(b)}x)\,dx$.`,
+            c ? `exp(${a}*x)*(${a}*cos(${b}*x)+${b}*sin(${b}*x))/${d}` : `exp(${a}*x)*(${a}*sin(${b}*x)-${b}*cos(${b}*x))/${d}`,
+            (x) => (Math.exp(a * x) * (c ? a * Math.cos(b * x) + b * Math.sin(b * x) : a * Math.sin(b * x) - b * Math.cos(b * x))) / d,
+            (x) => Math.exp(a * x) * Math[fn](b * x),
+            `Two integrations by parts return the original integral times −${fr((b * b) / (a * a))}. Collect both copies: the factor is ${a * a}/(${a * a}+${b * b}).`,
+            undefined,
+            c ? `(${a}*exp(${a}*x)*cos(${b}*x)+${b}*exp(${a}*x)*sin(${b}*x))/${d}` : `(${a}*exp(${a}*x)*sin(${b}*x)-${b}*exp(${a}*x)*cos(${b}*x))/${d}`,
+            c ? `exp(${a}*x)*(${a}*cos(${b}*x)+${b}*sin(${b}*x))` : `exp(${a}*x)*(${a}*sin(${b}*x)-${b}*cos(${b}*x))`,
+          );
+        },
+      },
+      log: {
+        source: S('5F-5'),
+        params: { fn: ['cos', 'sin'], b: [1, 2, 3] },
+        make: ({ fn, b }) => {
+          const c = fn === 'cos',
+            d = 1 + b * b;
+          return primitive(
+            String.raw`$\int${'\\' + fn}(${cf(b)}\ln x)\,dx$, $x>0$.`,
+            c ? `x*(cos(${b}*ln(x))+${b}*sin(${b}*ln(x)))/${d}` : `x*(sin(${b}*ln(x))-${b}*cos(${b}*ln(x)))/${d}`,
+            (x) => (x * (c ? Math.cos(b * Math.log(x)) + b * Math.sin(b * Math.log(x)) : Math.sin(b * Math.log(x)) - b * Math.cos(b * Math.log(x)))) / d,
+            (x) => Math[fn](b * Math.log(x)),
+            `Take dv=dx twice. The second round returns the original integral times −${b * b}. Move it across and divide by ${d}.`,
+            undefined,
+            c ? `(x*cos(${b}*ln(x))+${b}*x*sin(${b}*ln(x)))/${d}` : `(x*sin(${b}*ln(x))-${b}*x*cos(${b}*ln(x)))/${d}`,
+            c ? `x*cos(${b}*ln(x))` : `x*sin(${b}*ln(x))`,
+            1.4,
+          );
+        },
+      },
     },
     [
       'A repeated integral can be treated as an unknown in an equation.',
@@ -96,26 +230,41 @@ const B = [
     'Save the differential factor',
     ['trig integrals'],
     {
-      sine: primitive(
-        String.raw`$\int\sin^3x\cos^2x\,dx$.`,
-        '-cos(x)^3/3+cos(x)^5/5',
-        (x) => -(Math.cos(x) ** 3) / 3 + Math.cos(x) ** 5 / 5,
-        (x) => Math.sin(x) ** 3 * Math.cos(x) ** 2,
-        'Save sin x dx, set u=cos x, and integrate −u²+u⁴.',
-        S('5C-5'),
-        'cos(x)^5/5-cos(x)^3/3',
-        'cos(x)^3/3-cos(x)^5/5',
-      ),
-      cosine: primitive(
-        String.raw`$\int\cos^3(3x)\,dx$.`,
-        'sin(3*x)/3-sin(3*x)^3/9',
-        (x) => Math.sin(3 * x) / 3 - Math.sin(3 * x) ** 3 / 9,
-        (x) => Math.cos(3 * x) ** 3,
-        'Save cos(3x)dx and use u=sin(3x). The differential contributes a factor 1/3.',
-        S('5C-4'),
-        '(3*sin(3*x)-sin(3*x)^3)/9',
-        'sin(3*x)-sin(3*x)^3/3',
-      ),
+      sine: {
+        source: S('5C-5'),
+        params: { m: [2, 0, 1, 3, 4, 6], k: [1, 2, 3, 4] },
+        make: ({ m, k }) => {
+          const kx = k === 1 ? 'x' : `${k}*x`;
+          return primitive(
+            String.raw`$\int\sin^3${k === 1 ? 'x' : `(${k}x)`}${m === 0 ? '' : `\\cos${m === 1 ? '' : `^{${m}}`}${k === 1 ? 'x' : `(${k}x)`}`}\,dx$.`,
+            `-cos(${kx})^${m + 1}/${(m + 1) * k}+cos(${kx})^${m + 3}/${(m + 3) * k}`,
+            (x) => -(Math.cos(k * x) ** (m + 1)) / ((m + 1) * k) + Math.cos(k * x) ** (m + 3) / ((m + 3) * k),
+            (x) => Math.sin(k * x) ** 3 * Math.cos(k * x) ** m,
+            `Save sin(${k}x)dx and set u=cos(${k}x), so du=−${k}sin(${k}x)dx. Write sin² as 1−u² and integrate −(u^${m}−u^${m + 2})/${k}.`,
+            undefined,
+            `cos(${kx})^${m + 3}/${(m + 3) * k}-cos(${kx})^${m + 1}/${(m + 1) * k}`,
+            `cos(${kx})^${m + 1}/${(m + 1) * k}-cos(${kx})^${m + 3}/${(m + 3) * k}`,
+          );
+        },
+      },
+      cosine: {
+        source: S('5C-4'),
+        params: { k: [3, 1, 2, 4, 5, 6], m: [0, 1, 2, 4] },
+        make: ({ k, m }) => {
+          const kx = k === 1 ? 'x' : `${k}*x`,
+            arg = k === 1 ? 'x' : `(${k}x)`;
+          return primitive(
+            String.raw`$\int\cos^3${arg}${m === 0 ? '' : `\\sin${m === 1 ? '' : `^{${m}}`}${arg}`}\,dx$.`,
+            `sin(${kx})^${m + 1}/${(m + 1) * k}-sin(${kx})^${m + 3}/${(m + 3) * k}`,
+            (x) => Math.sin(k * x) ** (m + 1) / ((m + 1) * k) - Math.sin(k * x) ** (m + 3) / ((m + 3) * k),
+            (x) => Math.cos(k * x) ** 3 * Math.sin(k * x) ** m,
+            `Save cos(${k}x)dx and use u=sin(${k}x). The differential contributes a factor 1/${k}; write cos² as 1−u².`,
+            undefined,
+            `(${m + 3}*sin(${kx})^${m + 1}-${m + 1}*sin(${kx})^${m + 3})/${(m + 1) * (m + 3) * k}`,
+            `sin(${kx})^${m + 1}/${m + 1}-sin(${kx})^${m + 3}/${m + 3}`,
+          );
+        },
+      },
     },
     [
       'Save one factor whose partner has a convenient derivative.',
@@ -127,26 +276,42 @@ const B = [
     'Lower an even power',
     ['trig integrals'],
     {
-      square: primitive(
-        String.raw`$\int\sin^2x\,dx$.`,
-        'x/2-sin(2*x)/4',
-        (x) => x / 2 - Math.sin(2 * x) / 4,
-        (x) => Math.sin(x) ** 2,
-        'Use sin²x=(1−cos2x)/2, then integrate the doubled angle.',
-        S('5C-1'),
-        '(2*x-sin(2*x))/4',
-        'x/2-sin(2*x)/2',
-      ),
-      fourth: primitive(
-        String.raw`$\int\sin^4x\,dx$.`,
-        '3*x/8-sin(2*x)/4+sin(4*x)/32',
-        (x) => (3 * x) / 8 - Math.sin(2 * x) / 4 + Math.sin(4 * x) / 32,
-        (x) => Math.sin(x) ** 4,
-        'Square the half-angle identity; lower cos²2x once more.',
-        S('5C-3'),
-        '(12*x-8*sin(2*x)+sin(4*x))/32',
-        '3*x/8-sin(2*x)/4+sin(4*x)/8',
-      ),
+      square: {
+        source: S('5C-1'),
+        params: { fn: ['sin', 'cos'], k: [1, 2, 3, 4, 5, 6] },
+        make: ({ fn, k }) => {
+          const sg = fn === 'sin' ? '-' : '+',
+            arg = k === 1 ? 'x' : `(${k}x)`;
+          return primitive(
+            String.raw`$\int${'\\' + fn}^2${arg}\,dx$.`,
+            `x/2${sg}sin(${2 * k}*x)/${4 * k}`,
+            (x) => x / 2 + ((fn === 'sin' ? -1 : 1) * Math.sin(2 * k * x)) / (4 * k),
+            (x) => Math[fn](k * x) ** 2,
+            `Use ${fn}²θ=(1${sg}cos2θ)/2 with θ=${k}x, then integrate the angle ${2 * k}x, which divides by ${2 * k}.`,
+            undefined,
+            `(${2 * k}*x${sg}sin(${2 * k}*x))/${4 * k}`,
+            `x/2${sg}sin(${2 * k}*x)/${2 * k}`,
+          );
+        },
+      },
+      fourth: {
+        source: S('5C-3'),
+        params: { fn: ['sin', 'cos'], k: [1, 2, 3, 4, 5, 6] },
+        make: ({ fn, k }) => {
+          const sg = fn === 'sin' ? '-' : '+',
+            arg = k === 1 ? 'x' : `(${k}x)`;
+          return primitive(
+            String.raw`$\int${'\\' + fn}^4${arg}\,dx$.`,
+            `3*x/8${sg}sin(${2 * k}*x)/${4 * k}+sin(${4 * k}*x)/${32 * k}`,
+            (x) => (3 * x) / 8 + ((fn === 'sin' ? -1 : 1) * Math.sin(2 * k * x)) / (4 * k) + Math.sin(4 * k * x) / (32 * k),
+            (x) => Math[fn](k * x) ** 4,
+            `Square the half-angle identity, then lower cos²(${2 * k}x) once more. Each angle multiplier divides its sine.`,
+            undefined,
+            `(${12 * k}*x${sg}${8}*sin(${2 * k}*x)+sin(${4 * k}*x))/${32 * k}`,
+            `3*x/8${sg}sin(${2 * k}*x)/${4 * k}+sin(${4 * k}*x)/${8 * k}`,
+          );
+        },
+      },
     },
     [
       'An even power needs an identity before a differential appears.',
@@ -158,26 +323,60 @@ const B = [
     'Choose a branch before removing a root',
     ['trig sub', 'symbolic'],
     {
-      inverse: primitive(
-        String.raw`$\int(16-x^2)^{-3/2}\,dx$, $|x|<4$.`,
-        'x/(16*sqrt(16-x^2))',
-        (x) => x / (16 * Math.sqrt(16 - x * x)),
-        (x) => (16 - x * x) ** -1.5,
-        'Let x=4sinθ on the principal sine branch. The transformed integral is sec²θ/16.',
-        S('5D-1, a=4 parameter substitution'),
-        'x/16/(sqrt(16-x^2))',
-        'x/sqrt(16-x^2)',
-      ),
-      cubic: primitive(
-        String.raw`$\int x^3/\sqrt{16-x^2}\,dx$, $|x|<4$.`,
-        '-16*sqrt(16-x^2)+(16-x^2)^(3/2)/3',
-        (x) => -16 * Math.sqrt(16 - x * x) + (16 - x * x) ** 1.5 / 3,
-        (x) => x ** 3 / Math.sqrt(16 - x * x),
-        'The root substitution u=16−x² also works. Express x² as 16−u before integrating.',
-        S('5D-2, a=4 parameter substitution'),
-        '(16-x^2)^(3/2)/3-16*sqrt(16-x^2)',
-        '4*sqrt(16-x^2)-(16-x^2)^(3/2)/3',
-      ),
+      inverse: {
+        source: S('5D-1, a=4 parameter substitution'),
+        params: { a: [4, 1, 2, 3, 5, 6], sign: ['-', '+'] },
+        make: ({ a, sign }) => {
+          const q = a * a,
+            m = sign === '-';
+          return primitive(
+            m ? String.raw`$\int(${q}-x^2)^{-3/2}\,dx$, $|x|<${a}$.` : String.raw`$\int(${q}+x^2)^{-3/2}\,dx$.`,
+            `x/(${q}*sqrt(${q}${sign}x^2))`,
+            (x) => x / (q * Math.sqrt(q + (m ? -1 : 1) * x * x)),
+            (x) => (q + (m ? -1 : 1) * x * x) ** -1.5,
+            m
+              ? `Let x=${a}sinθ on the principal branch, so the root is ${a}cosθ. The integral becomes sec²θ/${q}, giving tanθ/${q}.`
+              : `Let x=${a}tanθ, so the root is ${a}secθ. The integral becomes cosθ/${q}, giving sinθ/${q}.`,
+            undefined,
+            `x/${q}/(sqrt(${q}${sign}x^2))`,
+            `x/sqrt(${q}${sign}x^2)`,
+            0.3 * a,
+            m ? [0.05 * a, 0.9 * a] : undefined,
+          );
+        },
+      },
+      cubic: {
+        source: S('5D-2, a=4 parameter substitution'),
+        params: { a: [4, 1, 2, 3, 5, 6], power: [3, 2] },
+        make: ({ a, power }) => {
+          const q = a * a;
+          return power === 3
+            ? primitive(
+                String.raw`$\int x^3/\sqrt{${q}-x^2}\,dx$, $|x|<${a}$.`,
+                `-${q}*sqrt(${q}-x^2)+(${q}-x^2)^(3/2)/3`,
+                (x) => -q * Math.sqrt(q - x * x) + (q - x * x) ** 1.5 / 3,
+                (x) => x ** 3 / Math.sqrt(q - x * x),
+                `The substitution u=${q}−x² also works. Express x² as ${q}−u before integrating.`,
+                undefined,
+                `(${q}-x^2)^(3/2)/3-${q}*sqrt(${q}-x^2)`,
+                `${a}*sqrt(${q}-x^2)-(${q}-x^2)^(3/2)/3`,
+                0.3 * a,
+                [0.05 * a, 0.9 * a],
+              )
+            : primitive(
+                String.raw`$\int x^2/\sqrt{${q}-x^2}\,dx$, $|x|<${a}$.`,
+                `${q}*asin(x/${a})/2-x*sqrt(${q}-x^2)/2`,
+                (x) => (q * Math.asin(x / a)) / 2 - (x * Math.sqrt(q - x * x)) / 2,
+                (x) => (x * x) / Math.sqrt(q - x * x),
+                `Let x=${a}sinθ. The integral becomes ${q}sin²θ dθ; lower the power, then return to x with sinθ=x/${a}.`,
+                undefined,
+                `(${q}*asin(x/${a})-x*sqrt(${q}-x^2))/2`,
+                `${q}*asin(x/${a})/2`,
+                0.3 * a,
+                [0.05 * a, 0.9 * a],
+              );
+        },
+      },
     },
     [
       'Match a root to a Pythagorean identity and restrict the angle.',
@@ -189,26 +388,39 @@ const B = [
     'A numerator can split into two methods',
     ['trig sub'],
     {
-      mixed: primitive(
-        String.raw`$\int (x+1)/(x^2+4)\,dx$.`,
-        'ln(x^2+4)/2+atan(x/2)/2',
-        (x) => Math.log(x * x + 4) / 2 + Math.atan(x / 2) / 2,
-        (x) => (x + 1) / (x * x + 4),
-        'The x numerator gives a logarithm by substitution; the constant gives a scaled arctangent.',
-        S('5D-3'),
-        '(ln(x^2+4)+atan(x/2))/2',
-        'ln(x^2+4)/2+atan(x/2)',
-      ),
-      shifted: primitive(
-        String.raw`$\int (x^2+4x+13)^{-3/2}\,dx$.`,
-        '(x+2)/(9*sqrt(x^2+4*x+13))',
-        (x) => (x + 2) / (9 * Math.sqrt(x * x + 4 * x + 13)),
-        (x) => (x * x + 4 * x + 13) ** -1.5,
-        'Complete the square: (x+2)²+9. Set x+2=3tanθ; the remaining integral is cosθ/9.',
-        S('5D-10'),
-        '(x+2)/9/sqrt((x+2)^2+9)',
-        '(x+2)/sqrt(x^2+4*x+13)',
-      ),
+      mixed: {
+        source: S('5D-3'),
+        params: { a: [2, 1, 3, 4, 5], c: [1, 2, 3, -1, -2] },
+        make: ({ a, c }) =>
+          primitive(
+            String.raw`$\int (x${c < 0 ? '-' : '+'}${Math.abs(c)})/(x^2+${a * a})\,dx$.`,
+            `ln(x^2+${a * a})/2+(${fr(c / a)})*atan(x/${a})`,
+            (x) => Math.log(x * x + a * a) / 2 + (c / a) * Math.atan(x / a),
+            (x) => (x + c) / (x * x + a * a),
+            `The x part gives a logarithm by substitution; the constant ${c} gives a scaled arctangent, ${fr(c / a)}·atan(x/${a}).`,
+            undefined,
+            `(${a}*ln(x^2+${a * a})+${2 * c}*atan(x/${a}))/${2 * a}`,
+            `ln(x^2+${a * a})/2+${c}*atan(x/${a})`,
+          ),
+      },
+      shifted: {
+        source: S('5D-10'),
+        params: { p: [2, 1, 3, -1, -2], b: [3, 1, 2, 4] },
+        make: ({ p, b }) => {
+          const q = p * p + b * b,
+            lin = `${p < 0 ? '-' : '+'}${Math.abs(2 * p)}x`;
+          return primitive(
+            String.raw`$\int (x^2${lin}+${q})^{-3/2}\,dx$.`,
+            `(x${p < 0 ? '-' : '+'}${Math.abs(p)})/(${b * b}*sqrt(x^2${p < 0 ? '-' : '+'}${Math.abs(2 * p)}*x+${q}))`,
+            (x) => (x + p) / (b * b * Math.sqrt(x * x + 2 * p * x + q)),
+            (x) => (x * x + 2 * p * x + q) ** -1.5,
+            `Complete the square: (x${p < 0 ? '−' : '+'}${Math.abs(p)})²+${b * b}. Set x${p < 0 ? '−' : '+'}${Math.abs(p)}=${b}tanθ; the remaining integral is cosθ/${b * b}.`,
+            undefined,
+            `(x${p < 0 ? '-' : '+'}${Math.abs(p)})/${b * b}/sqrt((x${p < 0 ? '-' : '+'}${Math.abs(p)})^2+${b * b})`,
+            `(x${p < 0 ? '-' : '+'}${Math.abs(p)})/sqrt(x^2${p < 0 ? '-' : '+'}${Math.abs(2 * p)}*x+${q})`,
+          );
+        },
+      },
     },
     [
       'Complete the square before choosing a trigonometric substitution.',
@@ -220,28 +432,40 @@ const B = [
     'Decompose before integrating',
     ['partial fractions'],
     {
-      constant: primitive(
-        String.raw`$\int dx/[(x-2)(x+3)]$, on $x>2$.`,
-        'ln(abs(x-2))/5-ln(x+3)/5',
-        (x) => (Math.log(Math.abs(x - 2)) - Math.log(x + 3)) / 5,
-        (x) => 1 / ((x - 2) * (x + 3)),
-        'The coefficients are 1/5 and −1/5. Their sum must cancel the x term in the numerator.',
-        S('5E-1'),
-        'ln(abs((x-2)/(x+3)))/5',
-        'ln(abs(x-2))-ln(x+3)',
-        3,
-      ),
-      linear: primitive(
-        String.raw`$\int x\,dx/[(x-2)(x+3)]$, on $x>2$.`,
-        '2*ln(abs(x-2))/5+3*ln(x+3)/5',
-        (x) => (2 * Math.log(Math.abs(x - 2)) + 3 * Math.log(x + 3)) / 5,
-        (x) => x / ((x - 2) * (x + 3)),
-        'Cover each factor: the coefficients are 2/5 and 3/5. Recombine to check the numerator.',
-        S('5E-2'),
-        '(2*ln(abs(x-2))+3*ln(x+3))/5',
-        '2*ln(abs(x-2))/5-3*ln(x+3)/5',
-        3,
-      ),
+      constant: {
+        source: S('5E-1'),
+        params: { r: [2, 1, 3, 4], t: [3, 1, 2, 5, 4] },
+        make: ({ r, t }) =>
+          primitive(
+            String.raw`$\int dx/[(x-${r})(x+${t})]$, on $x>${r}$.`,
+            `ln(abs(x-${r}))/${r + t}-ln(x+${t})/${r + t}`,
+            (x) => (Math.log(Math.abs(x - r)) - Math.log(x + t)) / (r + t),
+            (x) => 1 / ((x - r) * (x + t)),
+            `Cover each factor: the coefficients are 1/${r + t} and −1/${r + t}. Their sum must cancel the x term in the numerator.`,
+            undefined,
+            `ln(abs((x-${r})/(x+${t})))/${r + t}`,
+            `ln(abs(x-${r}))-ln(x+${t})`,
+            r + 1,
+            [r + 0.1, r + 3],
+          ),
+      },
+      linear: {
+        source: S('5E-2'),
+        params: { r: [2, 1, 3, 4], t: [3, 1, 2, 5, 4] },
+        make: ({ r, t }) =>
+          primitive(
+            String.raw`$\int x\,dx/[(x-${r})(x+${t})]$, on $x>${r}$.`,
+            `${r}*ln(abs(x-${r}))/${r + t}+${t}*ln(x+${t})/${r + t}`,
+            (x) => (r * Math.log(Math.abs(x - r)) + t * Math.log(x + t)) / (r + t),
+            (x) => x / ((x - r) * (x + t)),
+            `Cover each factor: the coefficients are ${r}/${r + t} and ${t}/${r + t}. Recombine to check the numerator.`,
+            undefined,
+            `(${r}*ln(abs(x-${r}))+${t}*ln(x+${t}))/${r + t}`,
+            `${r}*ln(abs(x-${r}))/${r + t}-${t}*ln(x+${t})/${r + t}`,
+            r + 1,
+            [r + 0.1, r + 3],
+          ),
+      },
     },
     [
       'A proper rational function can be decomposed after factoring its denominator.',
@@ -253,26 +477,36 @@ const B = [
     'Include every power and numerator degree',
     ['partial fractions'],
     {
-      repeat: primitive(
-        String.raw`$\int (3x+2)/[x(x+1)^2]\,dx$, $x>0$.`,
-        '2*ln(x)-2*ln(x+1)-1/(x+1)',
-        (x) => 2 * Math.log(x) - 2 * Math.log(x + 1) - 1 / (x + 1),
-        (x) => (3 * x + 2) / (x * (x + 1) ** 2),
-        'Use 2/x−2/(x+1)+1/(x+1)². The final power integrates to a negative reciprocal, not another logarithm.',
-        S('5E-5'),
-        '2*ln(x/(x+1))-1/(x+1)',
-        '2*ln(x)-2*ln(x+1)+1/(x+1)',
-      ),
-      irreducible: primitive(
-        String.raw`$\int (2x-9)/[(x^2+9)(x+2)]\,dx$, $x>0$.`,
-        'ln(x^2+9)/2-ln(x+2)',
-        (x) => Math.log(x * x + 9) / 2 - Math.log(x + 2),
-        (x) => (2 * x - 9) / ((x * x + 9) * (x + 2)),
-        'Allow (Ax+B)/(x²+9). Recombination gives A=1, B=0, and the simple-factor coefficient −1.',
-        S('5E-6'),
-        'ln((x^2+9)/(x+2)^2)/2',
-        'ln(x^2+9)-ln(x+2)',
-      ),
+      repeat: {
+        source: S('5E-5'),
+        params: { P: [2, 1, 3, -1, 4], R: [1, 2, -1, 3, -2] },
+        make: ({ P, R }) =>
+          primitive(
+            String.raw`$\int (${linTex(P + R, P)})/[x(x+1)^2]\,dx$, $x>0$.`,
+            sum([P, 'ln(x)'], [-P, 'ln(x+1)'], [-R, '1/(x+1)']),
+            (x) => P * Math.log(x) - P * Math.log(x + 1) - R / (x + 1),
+            (x) => ((P + R) * x + P) / (x * (x + 1) ** 2),
+            `Use ${fracSum([P, 'x'], [-P, '(x+1)'], [R, '(x+1)²'])}. The squared power integrates to a negative reciprocal, not another logarithm.`,
+            undefined,
+            sum([P, 'ln(x/(x+1))'], [-R, '1/(x+1)']),
+            sum([P, 'ln(x)'], [-P, 'ln(x+1)'], [R, '1/(x+1)']),
+          ),
+      },
+      irreducible: {
+        source: S('5E-6'),
+        params: { A: [1, 2], B: [0, 1, 3, -2], a: [3, 1, 2], c: [2, 1, 3] },
+        make: ({ A, B, a, c }) =>
+          primitive(
+            String.raw`$\int (${linTex(A * c + B, B * c - A * a * a)})/[(x^2+${a * a})(x+${c})]\,dx$, $x>0$.`,
+            sum([A / 2, `ln(x^2+${a * a})`], [B / a, `atan(${a === 1 ? 'x' : `x/${a}`})`], [-A, `ln(x+${c})`]),
+            (x) => (A * Math.log(x * x + a * a)) / 2 + (B / a) * Math.atan(x / a) - A * Math.log(x + c),
+            (x) => ((A * c + B) * x + (B * c - A * a * a)) / ((x * x + a * a) * (x + c)),
+            `Allow (Ax+B)/(x²+${a * a}) plus C/(x+${c}). Matching the numerator gives A=${A}, B=${B} and C=−${A}.`,
+            undefined,
+            sum([A / 2, `ln((x^2+${a * a})/(x+${c})^2)`], [B / a, `atan(${a === 1 ? 'x' : `x/${a}`})`]),
+            sum([A, `ln(x^2+${a * a})`], [-A, `ln(x+${c})`]),
+          ),
+      },
     },
     [
       'A repeated linear factor needs every power up to its multiplicity.',
@@ -287,41 +521,52 @@ const B = [
     title: 'Length uses slant, not height',
     topics: ['arc length'],
     lab: 'technique',
-    sim: ($) => ({
-      lab: 'technique',
+    sim: {
       scenario: 'arcLog',
-      read: (c) => ({ answer: $.v.reversed ? -c.integral : c.integral }),
-    }),
+      setup(s, $) {
+        s.custom = $.v.profile;
+      },
+      read: (c, s, $) => ({ answer: $.v.reversed ? -c.check : c.check }),
+    },
     hints: [
       'Derive ds from the distance formula.',
-      'For y=ln(sin x), use 1+cot²x=csc²x on an interval where sin x is positive.',
+      'For a logarithm of a sine or cosine, a Pythagorean identity turns 1+(y′)² into a perfect square.',
     ],
     forms: {
       length: {
-        ask: 'Find the length of y=ln(sin x) from x=π/4 to π/2.',
-        answer: Math.log(1 + Math.SQRT2),
-        second: () => simpson((x) => Math.hypot(1, Math.cos(x) / Math.sin(x)), Math.PI / 4, Math.PI / 2),
-        reason: 'The positive slant is csc x. Integrating it gives ln tan(x/2); subtract endpoint values.',
         source: S('5C-13'),
-        traps: [
-          [Math.log(Math.SQRT2), 'That is only the vertical change in the graph, not its path length.'],
-          [Math.PI / 4, 'That is the horizontal span. The slant factor exceeds one.'],
-        ],
+        params: {
+          curve: [
+            ['sin', Math.PI / 4, Math.PI / 2, 'π/4', 'π/2'],
+            ['sin', Math.PI / 6, Math.PI / 2, 'π/6', 'π/2'],
+            ['sin', Math.PI / 3, Math.PI / 2, 'π/3', 'π/2'],
+            ['sin', Math.PI / 6, Math.PI / 3, 'π/6', 'π/3'],
+            ['sin', Math.PI / 3, (2 * Math.PI) / 3, 'π/3', '2π/3'],
+            ['cos', 0, Math.PI / 4, '0', 'π/4'],
+            ['cos', 0, Math.PI / 3, '0', 'π/3'],
+            ['cos', -Math.PI / 4, Math.PI / 4, '−π/4', 'π/4'],
+            ['cos', Math.PI / 6, Math.PI / 3, 'π/6', 'π/3'],
+            ['pow', 0, 3, '0', '3'],
+            ['pow', 0, 8, '0', '8'],
+            ['pow', 3, 8, '3', '8'],
+            ['pow', 0, 15, '0', '15'],
+            ['pow', 8, 24, '8', '24'],
+          ],
+        },
+        make: ({ curve }) => arcForm(curve, false),
       },
       oriented: {
-        ask: 'Evaluate the signed integral of √(1+cot²x) from π/2 down to π/4. This is an oriented integral, not a physical length.',
-        answer: -Math.log(1 + Math.SQRT2),
-        second: () => simpson((x) => 1 / Math.sin(x), Math.PI / 2, Math.PI / 4),
-        reversed: true,
-        reason:
-          'The integrand stays positive but the limits are reversed. A physical length would keep the positive value.',
-        traps: [
-          [
-            Math.log(1 + Math.SQRT2),
-            'Those are the opposite limits. A definite integral changes sign under reversal.',
+        params: {
+          curve: [
+            ['sin', Math.PI / 4, Math.PI / 2, 'π/4', 'π/2'],
+            ['sin', Math.PI / 6, Math.PI / 2, 'π/6', 'π/2'],
+            ['cos', 0, Math.PI / 4, '0', 'π/4'],
+            ['cos', 0, Math.PI / 3, '0', 'π/3'],
+            ['pow', 0, 3, '0', '3'],
+            ['pow', 0, 8, '0', '8'],
           ],
-          [-Math.PI / 4, 'That omits the slant factor. The magnitude exceeds the horizontal span.'],
-        ],
+        },
+        make: ({ curve }) => arcForm(curve, true),
       },
     },
   }),
@@ -333,38 +578,27 @@ const B = [
     title: 'A radius times a slant',
     topics: ['arc length', 'surface area'],
     lab: 'technique',
-    sim: ($) => ({
-      lab: 'technique',
-      scenario: $.v.half ? 'coneY' : 'cone',
-      read: (c) => ({ answer: c.integral }),
-    }),
+    sim: {
+      scenario: 'cone',
+      setup(s, $) {
+        s.custom = $.v.profile;
+      },
+      read: (c) => ({ answer: c.check }),
+    },
     hints: [
       'A narrow band has area circumference times slant width.',
-      'For y=1−2x, the slant multiplier is √5. Determine the radius from the chosen axis.',
+      'For a line of slope −m, the slant multiplier is √(1+m²). Determine the radius from the chosen axis.',
     ],
     forms: {
       xaxis: {
-        ask: 'Rotate y=1−2x, 0≤x≤1/2, about the x axis. Find the lateral surface area without an end cap.',
-        answer: (Math.PI * Math.sqrt(5)) / 2,
-        second: () => simpson((x) => 2 * Math.PI * (1 - 2 * x) * Math.hypot(1, -2), 0, 0.5),
-        reason: 'The radius is y and ds=√5 dx. Integrate 2π(1−2x)√5.',
         source: A('4G-2'),
-        traps: [
-          [Math.PI / 2, 'That omits the slant factor √5.'],
-          [Math.PI * Math.sqrt(5), 'That doubles a surface already traced once.'],
-        ],
+        params: { b: [1, 2, 3], m: [2, 1, 3, 4] },
+        make: ({ b, m }) => coneForm(b, m, 'x'),
       },
       yaxis: {
-        ask: 'Rotate y=1−2x, 0≤x≤1/2, about the y axis. Find the lateral surface area without an end cap.',
-        answer: (Math.PI * Math.sqrt(5)) / 4,
-        second: () => Math.PI * 0.5 * Math.hypot(0.5, 1),
-        half: true,
-        reason: 'The radius is x. Integrate 2πx√5 from zero to 1/2, or use cone area πrℓ.',
         source: A('4G-3, final value; rewritten using x as parameter'),
-        traps: [
-          [(Math.PI * Math.sqrt(5)) / 2, 'That uses y as the radius, so it rotates about the other axis.'],
-          [Math.PI / 4, 'That uses the horizontal differential without its slant multiplier.'],
-        ],
+        params: { b: [1, 2, 3], m: [2, 1, 3, 4] },
+        make: ({ b, m }) => coneForm(b, m, 'y'),
       },
     },
   }),

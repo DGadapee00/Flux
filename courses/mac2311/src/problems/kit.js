@@ -48,6 +48,7 @@ export const sym = (id, expr, vars, get, o = {}) => ({
   get,
   alias: o.alias ?? {},
   label: o.label ?? null,
+  sample: o.sample ?? null,
 });
 
 function gcd(a, b) {
