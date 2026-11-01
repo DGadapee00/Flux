@@ -437,6 +437,22 @@ const C = [
           ['Only the midpoint and endpoints.', 'An interior extremum need not lie at the midpoint.'],
         ],
       },
+      endpoint: {
+        ask: "A function is continuous on [a,b] and its derivative exists and is nonzero everywhere inside. Where is its maximum?",
+        options: [
+          ["At an endpoint.", "With no interior critical point, the extreme values must sit at a or b."],
+          ["Nowhere, since there is no critical point.", "The extreme value theorem guarantees a maximum on a closed interval."],
+          ["At the midpoint.", "Nothing singles out the midpoint."],
+        ],
+      },
+      corner: {
+        ask: "For f(x)=|x−2| on [0,5], which point must be checked although f′ does not exist there?",
+        options: [
+          ["x=2, the corner.", "Critical points include points without a derivative. The minimum is there."],
+          ["None: only zeros of f′ count.", "A corner can hold an extreme value."],
+          ["Only x=5.", "The endpoints are checked too, but the corner holds the minimum."],
+        ],
+      },
     },
   }),
   conceptFamily({
@@ -475,6 +491,22 @@ const C = [
           ],
           ['Its first derivative changes sign there.', 'The first derivative 3x² does not change sign.'],
           ['Its value happens to be zero.', 'Vertical translation would not change concavity.'],
+        ],
+      },
+      undefined: {
+        ask: "For f(x)=x^(1/3), f″(0) does not exist. Is zero an inflection point?",
+        options: [
+          ["Yes: the concavity changes sign across zero.", "f″ is positive for x<0 and negative for x>0. The sign change is what matters."],
+          ["No: f″(0) would have to be zero.", "Inflection needs a change of concavity, not a zero of f″."],
+          ["No: the tangent there is vertical.", "A vertical tangent does not prevent a change of concavity."],
+        ],
+      },
+      change: {
+        ask: "The second derivative changes from negative to positive at c. What is c?",
+        options: [
+          ["An inflection point.", "The graph turns from concave down to concave up."],
+          ["A local minimum.", "That needs f′ to change sign, not f″."],
+          ["A critical point.", "f′(c) need not be zero there."],
         ],
       },
     },
@@ -523,6 +555,22 @@ const C = [
           ['The matching point must be the midpoint.', 'The theorem does not prescribe a location.'],
         ],
       },
+      pole: {
+        ask: "Does the Mean Value Theorem apply to f(x)=1/x on [−1,1]?",
+        options: [
+          ["No: f is not continuous on [−1,1].", "The interval contains the pole at zero."],
+          ["Yes: f is differentiable wherever it is defined.", "The theorem needs continuity on the whole closed interval."],
+          ["Yes, with c=0.", "f is not even defined at zero."],
+        ],
+      },
+      rolle: {
+        ask: "A differentiable f has f(0)=f(3)=5. What must happen somewhere in (0,3)?",
+        options: [
+          ["f′(c)=0 for some c.", "Rolle's theorem: equal end values force a horizontal tangent."],
+          ["f(c)=0 for some c.", "Equal end values give a zero slope, not a zero value."],
+          ["f is constant.", "One horizontal tangent does not make f constant."],
+        ],
+      },
     },
   }),
   conceptFamily({
@@ -564,6 +612,22 @@ const C = [
             'The chain rule can be omitted because the length is fixed.',
             'A fixed total still relates changing coordinates.',
           ],
+        ],
+      },
+      ladder: {
+        ask: "A 10 ft ladder slides with x²+y²=100. When x=6, which equation links the rates?",
+        options: [
+          ["2x·dx/dt+2y·dy/dt=0.", "Differentiate the constraint in time, then substitute x=6 and y=8."],
+          ["dx/dt+dy/dt=0.", "The squares carry the factors x and y into the rates."],
+          ["2x+2y=0.", "That differentiates with respect to x, not time."],
+        ],
+      },
+      cone: {
+        ask: "Water in a cone has V=πr²h/3 with r=h/2 at every depth. What comes first?",
+        options: [
+          ["Replace r by h/2, then differentiate V in time.", "With one variable left, the chain rule ties dV/dt to dh/dt."],
+          ["Put in the current depth, then differentiate.", "A frozen depth has no rate."],
+          ["Differentiate h only and hold r fixed.", "r changes with the water level."],
         ],
       },
     },

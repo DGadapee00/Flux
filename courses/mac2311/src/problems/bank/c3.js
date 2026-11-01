@@ -710,6 +710,22 @@ const C = [
           ['The absolute value doubles.', 'No region is added by reversing orientation.'],
         ],
       },
+      adjacent: {
+        ask: "If ∫₀² f=5 and ∫₂⁵ f=−3, what is ∫₀⁵ f?",
+        options: [
+          ["2.", "Integrals over adjacent intervals add, signs included."],
+          ["8.", "Adding magnitudes ignores the negative signed area."],
+          ["−15.", "Integrals over pieces add; they do not multiply."],
+        ],
+      },
+      even: {
+        ask: "An even function has ∫₀^a f=4. What is ∫₋ₐ^a f?",
+        options: [
+          ["8.", "An even function has equal areas on the two sides."],
+          ["0.", "That is the odd-function result."],
+          ["4.", "That counts only one side."],
+        ],
+      },
     },
   }),
   conceptFamily({
@@ -750,6 +766,22 @@ const C = [
           ['It must cross zero.', 'The accumulated total depends on the whole preceding interval.'],
         ],
       },
+      maximum: {
+        ask: "F(x)=∫₀^x f(t)dt, and f changes from positive to negative at c. What is F at c?",
+        options: [
+          ["A local maximum.", "F′=f is positive before c and negative after it."],
+          ["A local minimum.", "That needs f to change from negative to positive."],
+          ["Zero.", "F(c) is the area so far; it need not vanish."],
+        ],
+      },
+      start: {
+        ask: "If F(x)=∫₂^x f(t)dt, what is F(2)?",
+        options: [
+          ["0.", "An integral over an interval of zero width is zero."],
+          ["f(2).", "f(2) is F′(2), the slope, not the value."],
+          ["It cannot be known without f.", "The value at the lower limit is always zero."],
+        ],
+      },
     },
   }),
   conceptFamily({
@@ -779,6 +811,22 @@ const C = [
           [String.raw`$\pi(R^2-r^2)$.`, 'Subtract the two disk areas.'],
           [String.raw`$\pi(R-r)^2$.`, 'The square of the wall thickness is not the annular area.'],
           [String.raw`$2\pi(R-r)$.`, 'That has units of length rather than area.'],
+        ],
+      },
+      shell: {
+        ask: "A thin shell at radius x has height h(x) and thickness dx. What is its volume?",
+        options: [
+          ["2πx·h(x)·dx.", "Unroll it: circumference times height times thickness."],
+          ["πx²h(x)dx.", "That is a disk-like volume, not a thin shell."],
+          ["2πh(x)dx.", "The circumference needs the radius x."],
+        ],
+      },
+      axis: {
+        ask: "A region between f(x)>g(x)≥−1 turns about the line y=−1. What is a washer’s outer radius?",
+        options: [
+          ["f(x)+1.", "Radius is distance from the axis y=−1."],
+          ["f(x).", "That measures from y=0, not from the axis."],
+          ["f(x)−1.", "The axis is below zero, so the distance grows by one."],
         ],
       },
     },
@@ -827,6 +875,22 @@ const C = [
           ],
         ],
       },
+      total: {
+        ask: "A density on [0,4] is never negative and has ∫₀⁴ f=2. Is it a valid probability density?",
+        options: [
+          ["No: the total probability must be one.", "Halving it would make it valid."],
+          ["Yes: a density only needs f≥0.", "It also needs total area one."],
+          ["Yes, provided f≤1 everywhere.", "Height is not the condition; area is."],
+        ],
+      },
+      median: {
+        ask: "For a density on [0,∞), what defines the median m?",
+        options: [
+          ["∫₀^m f=1/2.", "Half of the probability lies below m."],
+          ["f(m)=1/2.", "The density height at m is not a probability."],
+          ["m is where f is largest.", "That is the mode."],
+        ],
+      },
     },
   }),
   conceptFamily({
@@ -868,6 +932,22 @@ const C = [
             'A quadratic interpolant does not match every smooth curve.',
           ],
           ['Yes, if the endpoint values are zero.', 'Interior behavior still controls the integral.'],
+        ],
+      },
+      midpoint: {
+        ask: "For a concave-up function, how does the midpoint rule compare with the integral?",
+        options: [
+          ["It underestimates.", "Each midpoint rectangle equals the trapezoid under the tangent there, and that tangent lies below the curve."],
+          ["It overestimates.", "That is the trapezoidal rule’s behaviour for concave-up functions."],
+          ["It is exact.", "Exactness holds for lines, not curves."],
+        ],
+      },
+      halve: {
+        ask: "Halving the step in Simpson’s rule for a smooth function divides the error by about what?",
+        options: [
+          ["16.", "Simpson’s error shrinks like h⁴."],
+          ["2.", "That is a first-order method."],
+          ["4.", "That is the trapezoidal rule."],
         ],
       },
     },

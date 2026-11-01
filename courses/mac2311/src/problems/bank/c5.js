@@ -466,6 +466,22 @@ const C = {
           ],
         ],
       },
+      speed: {
+        ask: "x=cos2t, y=sin2t and x=cos t, y=sin t trace the same circle. What differs?",
+        options: [
+          ["The speed: the first runs twice as fast.", "Its derivatives carry a factor two."],
+          ["The radius.", "Both satisfy x²+y²=1."],
+          ["Nothing.", "Timing is part of a parametrization."],
+        ],
+      },
+      ray: {
+        ask: "What does x=t², y=t² trace for all real t?",
+        options: [
+          ["The ray y=x with x≥0, traced twice.", "t² is never negative, and t and −t give the same point."],
+          ["The whole line y=x.", "x=t² cannot be negative."],
+          ["A parabola.", "y equals x exactly."],
+        ],
+      },
     },
   },
   tangents: {
@@ -505,6 +521,22 @@ const C = {
           ],
         ],
       },
+      horizontal: {
+        ask: "Where is the tangent horizontal on x=t³−3t, y=t²?",
+        options: [
+          ["At t=0, where y′=0 and x′≠0.", "The slope y′/x′ is zero when only the numerator vanishes."],
+          ["At t=±1, where x′=0.", "There the tangent is vertical."],
+          ["Where both derivatives vanish.", "They never vanish together on this curve."],
+        ],
+      },
+      second: {
+        ask: "For a parametric curve, is d²y/dx² equal to y″/x″?",
+        options: [
+          ["No: it is the t-derivative of dy/dx divided by x′.", "Differentiate the slope in t, then convert with dt/dx."],
+          ["Yes, by analogy with dy/dx.", "A ratio of second derivatives is not a second derivative."],
+          ["Only for circles.", "It fails for circles too: d²y/dx² is −csc³t there, not tan t."],
+        ],
+      },
     },
   },
   signedradius: {
@@ -533,6 +565,22 @@ const C = {
             'Two polar curves must share the same angle at every intersection.',
             'A point can have several polar coordinate representations.',
           ],
+        ],
+      },
+      opposite: {
+        ask: "Which (r,θ) names the same point as (3,π/6)?",
+        options: [
+          ["(−3,7π/6).", "A negative radius points opposite its angle; adding π turns it back."],
+          ["(−3,π/6).", "That reflects the point through the origin."],
+          ["(3,−π/6).", "That reflects it across the x axis."],
+        ],
+      },
+      origin: {
+        ask: "Which angle describes the origin in polar coordinates?",
+        options: [
+          ["Any angle, with r=0.", "At r=0 the angle carries no information."],
+          ["Only θ=0.", "Every θ gives the origin when r=0."],
+          ["None: the origin has no polar form.", "r=0 with any θ names it."],
         ],
       },
     },
@@ -571,6 +619,22 @@ const C = {
           ],
         ],
       },
+      rose: {
+        ask: "r=cos3θ traces its whole rose once on [0,π]. Why not integrate the area over [0,2π]?",
+        options: [
+          ["That traces every petal twice.", "An area integral counts each visit."],
+          ["cos3θ is not defined past π.", "It is defined for every θ."],
+          ["The answer would be negative.", "r² is never negative."],
+        ],
+      },
+      ring: {
+        ask: "Which integrand gives the area inside r=2 and outside r=1?",
+        options: [
+          ["½(2²−1²)dθ over [0,2π].", "Subtract the inner sector area from the outer."],
+          ["½(2−1)²dθ.", "Square each radius before subtracting."],
+          ["(2−1)dθ.", "Sector area grows with r², not r."],
+        ],
+      },
     },
   },
   conics: {
@@ -596,6 +660,22 @@ const C = {
           ['No; b/a=√(1−e²)=√3/2.', 'Eccentricity is c/a, not b/a.'],
           ['Yes; e always equals b/a.', 'That confuses the focal distance with a semiaxis.'],
           ['No; b/a=2.', 'With a defined as the major semiaxis, b/a cannot exceed one.'],
+        ],
+      },
+      focus: {
+        ask: "In r=ed/(1+e cosθ), where is a focus?",
+        options: [
+          ["At the origin.", "This polar form measures distance from a focus."],
+          ["At the centre of the conic.", "The centre is not the pole of this form."],
+          ["On the directrix.", "The directrix is a line at distance d from the focus."],
+        ],
+      },
+      hyperbola: {
+        ask: "For r=2/(1+2cosθ), what is the conic, and what happens at cosθ=−1/2?",
+        options: [
+          ["A hyperbola; r is not defined there: an asymptote direction.", "The denominator vanishes when cosθ=−1/e."],
+          ["An ellipse; r is largest there.", "e=2>1 gives a hyperbola."],
+          ["A parabola; r=0 there.", "r=0 would need the numerator to vanish."],
         ],
       },
     },

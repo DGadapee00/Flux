@@ -503,6 +503,22 @@ const concepts = [
           ],
         ],
       },
+      smooth: {
+        ask: "A function is continuous at a. Must it be differentiable there?",
+        options: [
+          ["No: |x| is continuous at zero but has no derivative there.", "Continuity allows a corner, where the two one-sided slopes differ."],
+          ["Yes: continuity implies differentiability.", "That reverses the true implication. Differentiability implies continuity."],
+          ["Only if the function value at a is zero.", "The value at a says nothing about whether a slope exists."],
+        ],
+      },
+      jump: {
+        ask: "A function jumps at a: its one-sided limits differ. Can its derivative at a exist?",
+        options: [
+          ["No: a function with a derivative at a is continuous at a.", "If f′(a) existed, f(a+h)−f(a) would equal h times a bounded quotient and tend to zero."],
+          ["Yes, once a value f(a) is defined.", "Defining one value does not close the gap between the one-sided limits."],
+          ["Yes, if both sides are flat.", "Flat pieces still leave a jump, and the difference quotient grows without bound near a."],
+        ],
+      },
     },
   }),
   conceptFamily({
@@ -543,6 +559,22 @@ const concepts = [
           ],
         ],
       },
+      factor: {
+        ask: "Differentiate a·x² with respect to x, where a is a fixed number.",
+        options: [
+          ["2ax.", "A constant factor stays in front: (af)′=af′."],
+          ["2x.", "The factor a does not vanish. Only an added constant has derivative zero."],
+          ["x²+2ax.", "That treats a as a second variable to differentiate."],
+        ],
+      },
+      sum: {
+        ask: "Differentiate π²+ln 5 with respect to x.",
+        options: [
+          ["0.", "Both terms are fixed numbers, so neither changes with x."],
+          ["2π+1/5.", "That differentiates π and 5 as if each were the variable."],
+          ["2π.", "π is a number, not a function of x."],
+        ],
+      },
     },
   }),
   conceptFamily({
@@ -572,6 +604,22 @@ const concepts = [
           ['Even.', 'Differentiating f(−x)=−f(x) cancels both minus signs.'],
           ['Odd.', 'The chain-rule sign changes the parity.'],
           ['Its derivative must be zero.', 'The derivative of x is a nonzero even function.'],
+        ],
+      },
+      second: {
+        ask: "A twice-differentiable function is even. What symmetry does its second derivative have?",
+        options: [
+          ["Even.", "f′ is odd, and the derivative of an odd function is even. Two flips restore the parity."],
+          ["Odd.", "That counts only one of the two derivatives."],
+          ["None in general.", "The symmetry equation can be differentiated twice."],
+        ],
+      },
+      origin: {
+        ask: "A function is even and differentiable at zero. What is its derivative at zero?",
+        options: [
+          ["Zero.", "f′ is odd, so f′(0)=−f′(0)."],
+          ["f(0).", "A value and a slope are different quantities."],
+          ["Any number.", "Odd symmetry of f′ forces f′(0)=−f′(0)."],
         ],
       },
     },
@@ -612,6 +660,22 @@ const concepts = [
           ],
           ['Yes, otherwise the limit is not proved.', 'The definition asks for existence, not optimization.'],
           ['A window of zero is always sufficient.', 'The definition explicitly requires δ>0.'],
+        ],
+      },
+      order: {
+        ask: "In an ε–δ proof, which number is chosen first?",
+        options: [
+          ["ε, by the challenger. Then δ is found in response.", "The definition says: for every ε>0 there is a δ>0."],
+          ["δ, and then ε is computed from it.", "That reverses the quantifiers. One fixed δ cannot meet every tolerance."],
+          ["Both together, as equal numbers.", "δ usually differs from ε. For a slope of three it is ε/3."],
+        ],
+      },
+      linear: {
+        ask: "For f(x)=3x+1 near x=2, which δ works for a given ε?",
+        options: [
+          ["δ=ε/3.", "|f(x)−7|=3|x−2| is below ε whenever |x−2|<ε/3."],
+          ["δ=3ε.", "That window lets |f(x)−7| reach 9ε."],
+          ["δ=ε.", "The slope three magnifies the window threefold."],
         ],
       },
     },

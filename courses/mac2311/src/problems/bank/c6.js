@@ -560,7 +560,23 @@ B.push(
         ],
       ],
     },
-  }),
+      difference: {
+        ask: "Is ∞−∞ a form L’Hôpital’s rule applies to directly?",
+        options: [
+          ["No: rewrite it as one quotient first.", "The rule applies only to 0/0 and ∞/∞."],
+          ["Yes: differentiate both terms.", "Differentiating a difference does not compute its limit."],
+          ["It always equals zero.", "x²−x tends to infinity."],
+        ],
+      },
+      cycle: {
+        ask: "For x/√(x²+1) as x→∞, L’Hôpital returns √(x²+1)/x. What then?",
+        options: [
+          ["Use algebra instead: dividing by x gives 1.", "The rule can cycle; it is a tool, not a guarantee."],
+          ["The limit does not exist.", "It exists and equals one."],
+          ["Keep applying the rule.", "The quotients alternate and never settle."],
+        ],
+      },
+    }),
   conceptual('singular', 'v2.3', 'Cancellation is not ordinary convergence', ['improper'], {
     pole: {
       ask: 'Does the ordinary improper integral ∫₋₁¹ dx/x equal zero by symmetry?',
@@ -598,7 +614,23 @@ B.push(
         ],
       ],
     },
-  }),
+      tail: {
+        ask: "For which p does ∫₁^∞ dx/x^p converge?",
+        options: [
+          ["p>1.", "x^(1−p)/(1−p) vanishes at infinity only when 1−p<0."],
+          ["p≥1.", "p=1 gives ln x, which grows without bound."],
+          ["p<1.", "That is the condition near zero, not at infinity."],
+        ],
+      },
+      nearzero: {
+        ask: "For which p does ∫₀¹ dx/x^p converge?",
+        options: [
+          ["p<1.", "Near zero x^(1−p) vanishes only when 1−p>0."],
+          ["p>1.", "That condition belongs to the infinite tail."],
+          ["Every p.", "p=1 gives ln x, which falls to −∞ at zero."],
+        ],
+      },
+    }),
   conceptual('termlimit', 'v2.5', 'A necessary condition is not sufficient', ['series'], {
     harmonic: {
       ask: 'The terms 1/n tend to zero. Does ∑1/n converge?',
@@ -630,7 +662,23 @@ B.push(
         ],
       ],
     },
-  }),
+      nonzero: {
+        ask: "aₙ=n/(n+1). What does the term test say about ∑aₙ?",
+        options: [
+          ["It diverges: the terms tend to one, not zero.", "Terms that do not shrink to zero cannot add to a finite total."],
+          ["It converges: the terms are bounded.", "Bounded terms can still add without limit."],
+          ["The test is inconclusive.", "A nonzero term limit is conclusive."],
+        ],
+      },
+      pseries: {
+        ask: "The terms of ∑1/n² tend to zero. What proves the series converges?",
+        options: [
+          ["A comparison or integral test: p=2>1.", "The term test can only prove divergence."],
+          ["The terms tending to zero.", "That also holds for ∑1/n, which diverges."],
+          ["The ratio test.", "Its limit is one, which decides nothing."],
+        ],
+      },
+    }),
   conceptual('tests', 'v2.5', 'A test can be inconclusive', ['series'], {
     one: {
       ask: 'The absolute term-ratio limit is one. What does the ratio test establish?',
@@ -662,7 +710,23 @@ B.push(
         ],
       ],
     },
-  }),
+      rootratio: {
+        ask: "For ∑n(2/3)ⁿ, which test decides quickly?",
+        options: [
+          ["Ratio or root: the limit is 2/3<1.", "The factor n tends to one in both tests."],
+          ["The term test.", "The terms do tend to zero, so it decides nothing."],
+          ["The alternating series test.", "The terms are all positive."],
+        ],
+      },
+      compare: {
+        ask: "For ∑1/(n²+n), which test is natural?",
+        options: [
+          ["Comparison with ∑1/n².", "Each term is smaller than 1/n², a convergent p-series."],
+          ["The ratio test.", "Its limit is one: inconclusive."],
+          ["The term test.", "Terms tending to zero prove nothing."],
+        ],
+      },
+    }),
   conceptual('endpoints', 'v2.6', 'Endpoints are separate series', ['series'], {
     logarithmic: {
       ask: 'For ∑xⁿ/n with radius one, what happens at the endpoints?',
@@ -694,7 +758,23 @@ B.push(
         ],
       ],
     },
-  }),
+      left: {
+        ask: "At x=−1, which series does ∑xⁿ/n become?",
+        options: [
+          ["∑(−1)ⁿ/n, which converges by the alternating test.", "The terms alternate and shrink to zero."],
+          ["∑1/n, which diverges.", "That is the right endpoint, x=1."],
+          ["It cannot be decided.", "The alternating test decides it."],
+        ],
+      },
+      geometric: {
+        ask: "∑xⁿ has radius one. What happens at x=1 and x=−1?",
+        options: [
+          ["Both diverge.", "The terms 1 and (−1)ⁿ do not tend to zero."],
+          ["Both converge.", "Neither has terms tending to zero."],
+          ["x=−1 converges by alternation.", "Alternation needs terms tending to zero."],
+        ],
+      },
+    }),
   conceptual('equality', 'v2.6', 'A remainder proves Taylor equality', ['taylor'], {
     remainder: {
       ask: 'What proves equality between a function and its Taylor series at x?',
@@ -732,6 +812,22 @@ B.push(
         ],
       ],
     },
-  }),
+      flat: {
+        ask: "f(x)=e^(−1/x²) with f(0)=0 has every Maclaurin coefficient zero. Does its series equal f?",
+        options: [
+          ["No: the series is zero, but f(x)>0 for x≠0.", "A Taylor series can converge to a different function."],
+          ["Yes: every smooth function equals its series.", "Smoothness alone is not enough."],
+          ["The series diverges.", "The zero series converges everywhere."],
+        ],
+      },
+      factorial: {
+        ask: "For eˣ on [0,1], why does the Taylor remainder vanish as the degree n grows?",
+        options: [
+          ["|Rₙ|≤e/(n+1)!, and the factorial outgrows the fixed constant.", "The derivative bound stays e while (n+1)! grows."],
+          ["Because every term is positive.", "Positivity says nothing about the remainder’s size."],
+          ["Because the radius is one.", "The exponential series has infinite radius."],
+        ],
+      },
+    }),
 );
 export default B;

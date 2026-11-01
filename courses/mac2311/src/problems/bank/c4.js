@@ -641,6 +641,22 @@ const concepts = {
           ],
         ],
       },
+      log: {
+        ask: "For ∫x ln x dx, which choice finishes?",
+        options: [
+          ["u=ln x and dv=x dx.", "ln x simplifies when differentiated, and x is easy to integrate."],
+          ["u=x and dv=ln x dx.", "That needs ∫ln x first and leaves a harder integral."],
+          ["The substitution u=x².", "No factor 2x dx is left to absorb."],
+        ],
+      },
+      substitute: {
+        ask: "For ∫x e^(x²) dx, which method finishes fastest?",
+        options: [
+          ["The substitution u=x².", "The factor x dx is half of du."],
+          ["Parts with u=x.", "That leaves ∫e^(x²)dx, which has no elementary antiderivative."],
+          ["Partial fractions.", "Nothing here is a rational function."],
+        ],
+      },
     },
   },
   differential: {
@@ -677,6 +693,22 @@ const concepts = {
           ],
         ],
       },
+      tangent: {
+        ask: "With x=3tanθ, what replaces dx?",
+        options: [
+          ["3sec²θ dθ.", "Differentiate the substitution itself."],
+          ["3tanθ dθ.", "That copies x instead of differentiating it."],
+          ["dθ.", "dx changes by the derivative factor."],
+        ],
+      },
+      limits: {
+        ask: "After u=x²+1 in ∫₀² 2x/(x²+1) dx, what are the new limits?",
+        options: [
+          ["1 and 5.", "Map each x limit through u=x²+1."],
+          ["0 and 2.", "Those limits belong to x, not u."],
+          ["0 and 4.", "The added one shifts both limits."],
+        ],
+      },
     },
   },
   decomposition: {
@@ -705,6 +737,22 @@ const concepts = {
           ],
           ['A constant must always suffice.', 'A linear term may be required by the original numerator.'],
           ['Ax²+Bx+C.', 'A quadratic numerator is not proper and duplicates a polynomial component.'],
+        ],
+      },
+      improper: {
+        ask: "Why divide before decomposing (x³+1)/(x²−1)?",
+        options: [
+          ["The numerator’s degree is not below the denominator’s.", "Partial fractions need a proper fraction; division leaves a polynomial plus a proper remainder."],
+          ["Because x²−1 does not factor.", "It factors as (x−1)(x+1)."],
+          ["Division is never needed.", "An improper fraction cannot match a proper ansatz."],
+        ],
+      },
+      cubed: {
+        ask: "What form fits a proper fraction over (x−2)³?",
+        options: [
+          ["A/(x−2)+B/(x−2)²+C/(x−2)³.", "A repeated factor needs every power up to its multiplicity."],
+          ["A/(x−2)³.", "One term cannot match a general quadratic numerator."],
+          ["(Ax+B)/(x−2)³.", "A cubed linear factor takes a constant over each power."],
         ],
       },
     },
@@ -744,6 +792,22 @@ const concepts = {
             'Cable length equals horizontal span for every sag.',
             'A nonzero slope gives a slant multiplier greater than one.',
           ],
+        ],
+      },
+      span: {
+        ask: "Why is the arc length ∫√(1+(y′)²)dx never less than the horizontal span?",
+        options: [
+          ["The integrand is at least one.", "Slope only adds to the length element."],
+          ["Because y≥0.", "Height plays no part; slope does."],
+          ["It can be less.", "A path between two x positions is never shorter than their separation."],
+        ],
+      },
+      radius: {
+        ask: "Turning y=f(x)≥0 about the x axis, what is a band’s radius?",
+        options: [
+          ["f(x).", "Each point turns about the x axis at distance y=f(x)."],
+          ["x.", "x is the distance from the y axis."],
+          ["√(1+(f′)²).", "That is the slant factor, not the radius."],
         ],
       },
     },
