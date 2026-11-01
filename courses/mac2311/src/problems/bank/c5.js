@@ -45,6 +45,7 @@ const B = [
       'Use radius as distance and angle as direction.',
       'A one-argument arctangent loses the sign information needed to choose a quadrant.',
     ],
+    1,
   ),
   num(
     'elimination',
