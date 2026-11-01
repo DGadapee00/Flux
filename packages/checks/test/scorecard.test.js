@@ -44,3 +44,11 @@ test('an unlisted starter can be measured explicitly without claiming it passes'
 test('course selection rejects traversal and unknown folders', () => {
   for (const id of ['../starter', 'nosuchcourse']) assert.notEqual(run('--course', id).status, 0);
 });
+
+test('the MAP scaffold exposes four empty units and fails a forced content gate',()=>{
+ const r=run('--course','map2302','--units');assert.equal(r.status,0,r.stderr);
+ assert.match(r.stdout,/MAP 2302/);
+ for(const id of ['u1','u2','u3','u4'])assert.match(r.stdout,new RegExp(id+'\\s+0'));
+ const gate=run('--course','map2302','--mark','map2302');
+ assert.equal(gate.status,1);assert.match(gate.stderr,/misses/);
+});
