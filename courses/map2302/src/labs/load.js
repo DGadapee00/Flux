@@ -3,6 +3,10 @@ import { PREDICTIONS } from './predictions.js';
 
 /** One entry per lab. Add each new lab here and in src/data/catalog.js (LAB_META). */
 const loaders = {
+  rlc: () => import('./rlc.js'),
+  suspension: () => import('./suspension.js'),
+  resonance: () => import('./resonance.js'),
+  oscillator: () => import('./oscillator.js'),
   coffee: () => import('./coffee.js'),
   'first-order-response': () => import('./first-order-response.js'),
   'phase-line': () => import('./phase-line.js'),

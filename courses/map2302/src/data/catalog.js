@@ -15,13 +15,8 @@ export const EXAMS = [
     "title": "Second-order linear equations",
     "chapters": "2",
     "date": null,
-    "labs": [],
-    "coming": [
-      "oscillator",
-      "resonance",
-      "suspension",
-      "rlc"
-    ]
+    "labs": ["oscillator","resonance","suspension","rlc"],
+    "coming": []
   },
   {
     "id": "u3",
@@ -54,6 +49,10 @@ export const EXAMS = [
   }
 ];
 export const LAB_META = {
+  rlc: { id: 'rlc', exam: 'u2', title: 'Series RLC' },
+  suspension: { id: 'suspension', exam: 'u2', title: 'Car suspension', app: true },
+  resonance: { id: 'resonance', exam: 'u2', title: 'Forced response' },
+  oscillator: { id: 'oscillator', exam: 'u2', title: 'Free oscillator' },
   coffee: { id: 'coffee', exam: 'u1', title: 'Cooling coffee', app: true },
   'first-order-response': { id: 'first-order-response', exam: 'u1', title: 'First-order response' },
   'phase-line': { id: 'phase-line', exam: 'u1', title: 'Phase line' },
