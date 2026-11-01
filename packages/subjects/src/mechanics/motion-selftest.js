@@ -26,8 +26,8 @@ import {
 } from './momentum.js';
 import { inclineState } from './friction.js';
 import {
-  angularAcceleration, angularMomentum, constAlpha, inertiaDisk, inertiaPoint, inertiaRodCenter,
-  inertiaRodEnd, parallelAxisMass, rollingIncline, rotationalKE, torqueMag,
+  angularAcceleration, angularMomentum, constAlpha, inertiaDisk, inertiaHoop, inertiaPoint, inertiaRodCenter,
+  inertiaRodEnd, parallelAxisMass, precessionRate, rollingIncline, rollingSlip, rollingSpeed, rotationalKE, spinAfter, torqueMag,
 } from './rotation.js';
 import {
   pendulumPeriod, physicalPendulumPeriod, shm, shmEnergy, springOmega, springPeriod,
@@ -359,6 +359,36 @@ console.log('\nRotation');
   approx(roll.a, aFromEnergy, 1e-12, 'rolling acceleration matches energy');
   approx(roll.alpha, roll.a / radius, 1e-12, 'no slip: α = a / R');
   approx(roll.k, 0.5, 1e-12, 'a disk has k = 1/2');
+  approx(roll.muMin, Math.tan(30 * DEG) / 3, 1e-12, 'a disk needs μ ≥ (1/3) tan θ');
+  approx(roll.f, (1 / 3) * m * 10 * Math.sin(30 * DEG), 1e-12, 'static friction is (k/(1+k)) mg sin θ');
+
+  const hoop = rollingIncline({ mass: m, radius, I: inertiaHoop(m, radius), thetaDeg: 60, g: 9.8 });
+  approx(hoop.muMin, 0.5 * Math.tan(60 * DEG), 1e-12, 'a hoop needs half of tan θ');
+  const dropped = rollingSpeed({ mass: m, radius, I: inertiaHoop(m, radius), height: 25, g: 3.71 });
+  approx(dropped.v, Math.sqrt(3.71 * 25), 1e-12, 'a hoop drops at √(gh)');
+
+  const slip = rollingSlip({ mass: 2, radius: 0.2, I: inertiaDisk(2, 0.2), thetaDeg: 30, mu: 0.1, g: 9.81 });
+  const aSlide = 9.81 * (Math.sin(30 * DEG) - 0.1 * Math.cos(30 * DEG));
+  approx(slip.a, aSlide, 1e-12, 'slipping acceleration is the sliding formula');
+  approx(slip.alpha, (slip.f * 0.2) / inertiaDisk(2, 0.2), 1e-12, 'slipping α is fR/I');
+
+  const gyro = precessionRate({ mass: 0.3, r: 0.05, I: 3.75e-4, omega: 20 * 2 * Math.PI, g: 9.8 });
+  let Lx = gyro.L;
+  let Ly = 0;
+  const tau = 0.3 * 9.8 * 0.05;
+  const steps = 5000;
+  const dphi = (tau / gyro.L) * 0.2 / steps;
+  for (let i = 0; i < steps; i += 1) {
+    const c = Math.cos(dphi);
+    const s = Math.sin(dphi);
+    const nx = Lx * c - Ly * s;
+    const ny = Lx * s + Ly * c;
+    Lx = nx;
+    Ly = ny;
+  }
+  approx(Math.atan2(Ly, Lx) / 0.2, gyro.omegaP, 1e-9, 'precession is the turning of L under a steady torque');
+  approx(spinAfter(4, 10, 1), 40, 1e-12, 'a smaller moment spins faster at fixed L');
+  approx(0.5 * 1 * spinAfter(4, 10, 1) ** 2, 4 * (0.5 * 4 * 100), 1e-9, 'pulling in multiplies the kinetic energy by I1/I2');
 }
 
 console.log('\nOscillation');

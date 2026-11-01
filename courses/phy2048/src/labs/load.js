@@ -30,6 +30,11 @@ const loaders = {
   inertia: () => import('./inertia.js'),
   'massive-pulley': () => import('./massive-pulley.js'),
   'helicopter-rotor': () => import('./helicopter-rotor.js'),
+  rolling: () => import('./rolling.js'),
+  'particle-l': () => import('./particle-l.js'),
+  spinner: () => import('./spinner.js'),
+  gyro: () => import('./gyro.js'),
+  'rover-wheel': () => import('./rover-wheel.js'),
 };
 
 const labs = createLabLoader(loaders);

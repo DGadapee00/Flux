@@ -19,6 +19,7 @@ export const QUANTITIES = {
   U: { sym: 'U', name: 'Potential energy', unit: 'J', unitName: 'joule', equals: 'N·m', from: 'U = mgh' },
   K: { sym: 'K', name: 'Kinetic energy', unit: 'J', unitName: 'joule', equals: 'N·m', from: 'K = \\tfrac12 m v^2' },
   p: { sym: 'p', name: 'Momentum', unit: 'kg*m/s', unitName: '', equals: 'N·s', from: '\\vec p = m\\vec v' },
+  L: { sym: 'L', name: 'Angular momentum', unit: 'kg*m^2/s', unitName: '', equals: 'N·m·s', from: '\\vec L = \\vec r \\times \\vec p' },
   e: { sym: 'e', name: 'Restitution', unit: '', unitName: '', from: 'e = \\dfrac{v_{2}-v_{1}}{u_{1}-u_{2}}' },
   tau: { sym: '\\tau', name: 'Torque', unit: 'N*m', unitName: '', from: '\\tau = rF\\sin\\phi' },
   I: { sym: 'I', name: 'Moment of inertia', unit: 'kg*m^2', unitName: '', from: 'I = \\sum m_i r_i^2' },
@@ -69,6 +70,11 @@ export const LAB_UNITS = {
   inertia: ['I', 'm', 'r'],
   'massive-pulley': ['m', 'a', 'tension', 'I', 'alpha'],
   'helicopter-rotor': ['I', 'omega', 'K', 'v'],
+  rolling: ['a', 'v', 'alpha', 'f', 'mu'],
+  'particle-l': ['L', 'tau', 'm', 'v', 'p'],
+  spinner: ['I', 'omega', 'L', 'K'],
+  gyro: ['omega', 'L', 'tau', 'm', 'g'],
+  'rover-wheel': ['v', 'K', 'I', 'm', 'g'],
 };
 
 const BASE = ['kg', 'm', 's', 'A'];

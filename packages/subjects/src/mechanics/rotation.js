@@ -60,6 +60,45 @@ export function angularMomentum(I, omega) {
  */
 export function rollingIncline({ mass, radius, I, thetaDeg, g = G }) {
   const k = I / (mass * radius * radius);
-  const a = (g * Math.sin(thetaDeg * DEG)) / (1 + k);
-  return { a, alpha: a / radius, k };
+  const th = thetaDeg * DEG;
+  const sin = Math.sin(th);
+  const cos = Math.cos(th);
+  const a = (g * sin) / (1 + k);
+  const f = (k / (1 + k)) * mass * g * sin;
+  const N = mass * g * cos;
+  const muMin = Math.abs(cos) > 1e-12 ? (k / (1 + k)) * Math.tan(th) : Infinity;
+  return { a, alpha: radius > 0 ? a / radius : NaN, k, f, N, muMin };
+}
+
+/**
+ * The same body, sliding, with kinetic friction μ up the plane.
+ * a is down the plane. α = f R / I about the center. v and ω are not tied by v = ωR.
+ */
+export function rollingSlip({ mass, radius, I, thetaDeg, mu, g = G }) {
+  const th = thetaDeg * DEG;
+  const a = g * (Math.sin(th) - mu * Math.cos(th));
+  const f = mu * mass * g * Math.cos(th);
+  const alpha = I > 0 && radius > 0 ? (f * radius) / I : NaN;
+  return { a, alpha, f };
+}
+
+/** Speed after a drop h, rolling from rest without slipping. v = √(2gh / (1 + k)). */
+export function rollingSpeed({ mass, radius, I, height, g = G }) {
+  const k = I / (mass * radius * radius);
+  const v = Math.sqrt((2 * g * height) / (1 + k));
+  return { v, omega: radius > 0 ? v / radius : NaN, k };
+}
+
+/** Steady precession of a spinning disk whose center is a distance r from the pivot. Ω = mgr / (Iω). */
+export function precessionRate({ mass, r, I, omega, g = G }) {
+  const L = I * omega;
+  if (!(Math.abs(L) > 0)) return { omegaP: NaN, period: NaN, L };
+  const omegaP = (mass * g * r) / L;
+  return { omegaP, period: (2 * Math.PI) / Math.abs(omegaP), L };
+}
+
+/** ω after I changes, with no outside torque about the axis. L = Iω stays fixed. */
+export function spinAfter(I1, omega1, I2) {
+  if (!(I2 > 0)) return NaN;
+  return (I1 * omega1) / I2;
 }
