@@ -22,6 +22,14 @@ x = r(t - \sin t), \qquad y = r(1 - \cos t).
 <div class="box out"><span class="tag">What it leaves out</span>
 <p>Curves in space need a third coordinate, \(z(t)\). That is the start of Calculus III, where these formulas gain one more term.</p>
 </div>
+
+<h3>A locus is not a traversal</h3>
+<p>For \(x=t+1/t\), \(y=t-1/t\), expand the squares. Their difference is \(x^2-y^2=4\). This reproduces exercise 4E-2 in the 18.01SC Fall 2010 collection. The parameter excludes zero. Positive \(t\) traces the right branch, while negative \(t\) traces the left branch. The Cartesian hyperbola does not retain this separation or the rate of travel.</p>
+<div class="box ex"><span class="tag">Worked example · a circle with a displaced centre</span><p>For \(x=1+\sin t\), \(y=4+\cos t\), subtract the centre coordinates before squaring. Then \((x-1)^2+(y-4)^2=1\). At \(t=0\), the point is \((1,5)\), and its velocity is \((1,0)\). The traversal is clockwise, even though the usual \((\cos t,\sin t)\) circle is counterclockwise. This checks the locus in exercise 4E-3 and adds an orientation check.</p></div>
+<h3>An everyday rotating object</h3>
+<p>A marked point on a rigid record supplies a physical parameter: time. Put the spindle at the origin and set the mark's initial angle to zero. For constant angular speed \(\omega\), its angle is \(\theta=\omega t\). Thus \(x=r\cos(\omega t)\) and \(y=r\sin(\omega t)\). Eliminating time gives a circle, but the circle cannot tell you the playback speed.</p>
+<div class="box ex"><span class="tag">Worked example · a quarter turn on an LP</span><p>Audio-Technica's AT-LP60X supports nominal 33⅓ and 45 RPM. At 33⅓ RPM, one turn takes \(60/(100/3)=1.8\) seconds. Choose a mark \(r=0.14\) m from the spindle. At \(t=0.45\) s, the angle is \(\pi/2\), so the point is \((0,0.14)\) m. Its path distance is \(r\pi/2=0.219911\) m.</p><p><a href="https://www.audio-technica.com/en-us/at-lp60x">Manufacturer speed specifications</a>. Marked radii are chosen teaching inputs, not measured groove positions. The lab draws a top view with a gold mark and tangent arrow. Counterclockwise angle is the mathematical convention used here; it does not assert the product's playing direction.</p></div>
+<div class="box out"><span class="tag">What the course model leaves out</span><p>The mark is a material point, not the stylus. A stylus drifts inward as the record plays, creating a different path relative to the record. Constant-speed rigid motion omits belt compliance, startup, eccentricity, wow and flutter. The drawn tonearm and disk have schematic dimensions.</p></div>
 </section><section class="topic" id="s2">
 <h2><span class="n">02</span>Calculus on parametric curves</h2>
 <p>Where \(dx/dt \ne 0\), a parametric curve is locally a graph, and the chain rule gives its slope.</p>
@@ -41,7 +49,7 @@ x = r(t - \sin t), \qquad y = r(1 - \cos t).
 L = \int_a^b \sqrt{\Bigl(\frac{dx}{dt}\Bigr)^2 + \Bigl(\frac{dy}{dt}\Bigr)^2}\,dt.
 \]
 <div class="box ex"><span class="tag">Worked example · a parabola traced to t = 1</span>
-<p>\(x = t\), \(y = t^2\), from \(t = 0\) to \(1\). The speed is \(\sqrt{1 + 4t^2}\). The length is \(1.479\), as Unit 1 found for the graph \(y = x^2\). At \(t = 1\) the slope is \(2t/1 = 2\), and the speed is \(\sqrt{5} = 2.236\).</p>
+<p>\(x = t\), \(y = t^2\), from \(t = 0\) to \(1\). The speed is \(\sqrt{1 + 4t^2}\). The length is \(1.479\), as Unit 4 found for the graph \(y = x^2\). At \(t = 1\) the slope is \(2t/1 = 2\), and the speed is \(\sqrt{5} = 2.236\).</p>
 </div>
 <div class="box ex"><span class="tag">Worked example · one arch of a cycloid</span>
 <p>With \(r = 1\), the speed is \(\sqrt{(1 - \cos t)^2 + \sin^2 t} = \sqrt{2 - 2\cos t} = 2\sin(t/2)\). One arch runs from \(t = 0\) to \(2\pi\). Its length is \(\int_0^{2\pi} 2\sin(t/2)\,dt = 8\). The arch is \(8\) times the wheel's radius, a result known since 1658.</p>
@@ -57,6 +65,18 @@ L = \int_a^b \sqrt{\Bigl(\frac{dx}{dt}\Bigr)^2 + \Bigl(\frac{dy}{dt}\Bigr)^2}\,d
 <div class="box out"><span class="tag">What it leaves out</span>
 <p>Where both \(dx/dt\) and \(dy/dt\) vanish, the curve can have a cusp, as the cycloid does where it touches the ground. The slope formula gives \(0/0\) there and needs a limit.</p>
 </div>
+
+<h3>The second derivative needs another chain rule</h3>
+<p>Write \(m(t)=y'(t)/x'(t)\). Concavity is \(dm/dx\), so \(d^2y/dx^2=m'(t)/x'(t)\). Differentiating \(m\) only with respect to time misses the final division. This calculation requires \(x'(t)\ne0\) on the neighborhood being considered.</p>
+<div class="box ex"><span class="tag">Worked example · a different clock on the same parabola</span><p>Let \(x=t^2\), \(y=t^4\), for \(t>0\). The locus is still \(y=x^2\). Now \(dy/dx=4t^3/(2t)=2t^2\). Differentiate with respect to \(t\), then divide by \(2t\): the second derivative is \(4t/(2t)=2\). The Cartesian result agrees. At \(t=0\), both first coordinate derivatives vanish, but the locus still has a horizontal tangent. The singular clock does not by itself imply a cusp.</p></div>
+<div class="box fix"><span class="tag">Common mistake</span><p>Second derivatives are not \(y''(t)/x''(t)\). For \(x=t\), \(y=t^2\), that quotient has a zero denominator everywhere, while the graph's second derivative is two. Apply the chain rule to the first slope.</p></div>
+<p>At a point with \(x'=0\) but \(y'\ne0\), the velocity is vertical and nonzero. A vertical tangent does not mean infinite speed. When both derivatives vanish, examine the nearby curve or a limiting direction. For a cycloid, the limiting tangent at a ground contact is vertical. For a reparametrized parabola, it can instead be horizontal.</p>
+<div class="box ex"><span class="tag">Worked example · a faster record at the same point</span><p>For the 0.14 m mark, \(v=r\omega\). At 33⅓ RPM this is \(0.488692\) m/s. At 45 RPM it is \(0.659734\) m/s. The factor is \(45/(100/3)=1.35\). A quarter turn now takes \(1/3\) s, but the mark reaches the same position and horizontal tangent.</p></div>
+<div class="box ex"><span class="tag">Worked example · moving the mark inward</span><p>Keep 33⅓ RPM and use \(r=0.07\) m. Linear speed becomes \(0.244346\) m/s, half the outer mark's speed. Revolution time remains \(1.8\) s. After \(0.45\) s, path distance is \(0.109956\) m. Smaller circumference and smaller speed cancel in the quotient distance/speed.</p></div>
+<div class="box ex"><span class="tag">Worked example · a tangent at sixty degrees</span><p>At \(t=0.3\) s and 33⅓ RPM, \(\theta=\pi/3\). The 0.14 m mark is at \((0.07,0.121244)\) m. The velocity components are \((-0.42322,0.244346)\) m/s. Their ratio is \(-1/\sqrt3\), approximately \(-0.57735\). The radial slope is \(\sqrt3\); the tangent is perpendicular. The factor \(\omega\) cancels from the slope ratio but remains in each velocity component.</p></div>
+<h3>Length can be easier than either coordinate derivative</h3>
+<div class="box ex"><span class="tag">Worked example · a spiral's speed</span><p>For \(P(t)=(t\cos t,t\sin t)\), differentiate both products. Squaring gives mixed terms \(-2t\sin t\cos t\) and \(+2t\sin t\cos t\). They cancel. The remaining squares sum to \(1+t^2\), so speed is \(\sqrt{1+t^2}\). Length from zero to \(4\pi\) is \(\int_0^{4\pi}\sqrt{1+t^2}\,dt\). This reproduces the simplified setup in 18.01SC Session 80, <i>Parametric Equations of a Spiral</i>.</p></div>
+<p>With increasing time, length adds nonnegative speed and counts repeated visits. Signed area \(\int y\,dx=\int y(t)x'(t)\,dt\) instead changes sign with orientation. Before applying it, check which portions form the desired boundary. A self-crossing path can cancel areas that a geometric union would retain.</p>
 </section><section class="topic" id="s3">
 <h2><span class="n">03</span>Polar coordinates</h2>
 <p>A point can be located by its distance \(r\) from the origin and its angle \(\theta\) from the positive \(x\)-axis. The conversions come from a right triangle:</p>
@@ -81,8 +101,15 @@ x = r\cos\theta, \quad y = r\sin\theta, \quad r^2 = x^2 + y^2.
 <p>\(x = r\cos\theta\), \(y = r\sin\theta\). To recognise a polar curve, multiply by \(r\) and convert. For slopes, treat \(\theta\) as a parameter.</p>
 </div>
 <div class="box out"><span class="tag">What it leaves out</span>
-<p>Negative values of \(r\) are allowed in the text: they point the opposite way. A curve like \(r = \cos 2\theta\), a four-petal rose, uses them. This section keeps \(r \ge 0\).</p>
+<p>Negative values of \(r\) are allowed in the text: they point the opposite way. A curve like \(r = \cos 2\theta\), a four-petal rose, uses them. Signed radii are developed below.</p>
 </div>
+
+<h3>Negative radius is a coordinate instruction</h3>
+<p>A negative \(r\) reverses the ray. Hence \((r,\theta)\) and \((-r,\theta+\pi)\) describe the same point. Adding \(2\pi\) to the angle also changes no position. At \(r=0\), every angle describes the origin. These equivalences matter when plotting and finding intersections.</p>
+<div class="box ex"><span class="tag">Worked example · the opposite ray</span><p>For \((r,\theta)=(-2,\pi/3)\), direct conversion gives \((-1,-\sqrt3)\). A nonnegative-radius representation is \((2,4\pi/3)\). Removing the negative sign without changing the angle reaches the opposite point. A signed radius is not a negative physical distance.</p></div>
+<p>The ray angle may increase while the point moves into an apparently opposite petal. For \(r=\cos2\theta\), some angle ranges have negative radius. Plot the resulting Cartesian points before deciding how many petals have been covered. Squaring a polar equation may merge distinct sign branches; test the original equation afterward.</p>
+<div class="box fix"><span class="tag">Common mistake</span><p>Matching radii at one angle is sufficient for some intersections, but not necessary for all. Two curves can reach the origin at different angles. They can also describe a nonzero intersection using radii of opposite signs. Check coordinate equivalence in addition to solving \(r_1(\theta)=r_2(\theta)\).</p></div>
+<p>Inverse conversion uses a quadrant-aware angle such as \(\operatorname{atan2}(y,x)\), followed by the requested angle range. Radius is nonnegative for this inverse convention. The angle of the origin is not uniquely determined, so a calculation that divides by its radius needs special treatment there.</p>
 </section><section class="topic" id="s4">
 <h2><span class="n">04</span>Area and length in polar</h2>
 <p>In polar coordinates the natural slice is a thin sector, not a strip. A sector of radius \(r\) and angle \(\Delta\theta\) has area \(\tfrac12 r^2\Delta\theta\).</p>
@@ -113,10 +140,22 @@ L = \int_\alpha^\beta \sqrt{r^2 + \Bigl(\frac{dr}{d\theta}\Bigr)^2}\,d\theta.
 <div class="box key"><span class="tag">Key</span>
 <p>Polar area: \(\tfrac12\int r^2\,d\theta\). Between curves: \(\tfrac12\int (r_{\text{out}}^2 - r_{\text{in}}^2)\,d\theta\). Length: \(\int\sqrt{r^2 + r'^2}\,d\theta\).</p>
 </div>
-<p>In the Polar lab, sweep the angle around the disk, the cardioid, or the shifted circle. The readout compares the sector formula with the naive \(\int r\,d\theta\). They disagree for every sweep.</p>
+<p>In the Polar lab, sweep the angle around the disk, the cardioid, or the shifted circle. The readout compares the sector formula with the naive \(\int r\,d\theta\). They measure different geometric quantities.</p>
 <div class="box out"><span class="tag">What it leaves out</span>
 <p>Finding where two polar curves meet can miss points. The origin can lie on both curves at different angles, which setting \(r_1 = r_2\) never finds. Sketch both curves before integrating.</p>
 </div>
+
+<h3>Deriving the polar length element</h3>
+<p>Differentiate \(x=r\cos\theta\) and \(y=r\sin\theta\). Their derivatives are \(r'\cos\theta-r\sin\theta\) and \(r'\sin\theta+r\cos\theta\). In the sum of squares, the mixed terms cancel. The remaining \(r'^2\) and \(r^2\) each multiply \(\sin^2\theta+\cos^2\theta=1\). Thus radial motion and angular motion add as perpendicular contributions.</p>
+<div class="box ex"><span class="tag">Worked example · a straight line in polar clothing</span><p>For \(r=\sec\theta\), \(x=1\), \(y=\tan\theta\), with \(-\pi/2\lt\theta\lt\pi/2\). The Cartesian speed is \(\sec^2\theta\). The polar formula gives \(\sqrt{\sec^2\theta+\sec^2\theta\tan^2\theta}=\sec^2\theta\), agreeing with exercise 4I-1(a). Using \(r\) alone would omit radial motion, even though the Cartesian path is straight.</p></div>
+<div class="box ex"><span class="tag">Worked example · the mark sweeps a sector</span><p>The outer 0.14 m mark at 33⅓ RPM travels through \(\pi/2\) in \(0.45\) s. Its accumulated sector area is \(r^2\theta/2=0.0153938\) m². Moving the mark halfway inward reduces this area to \(0.00384845\) m², one quarter. Linear speed halves, but area depends on the radius squared.</p></div>
+<div class="box ex"><span class="tag">Worked example · one complete revolution</span><p>After \(1.8\) s at 33⅓ RPM, the outer mark has travelled \(2\pi r=0.879646\) m and accumulated sector area \(\pi r^2=0.0615752\) m². Doubling the elapsed time counts both values twice. It does not create a larger disk. At 45 RPM the same one-turn distance and area occur earlier, after \(4/3\) s.</p></div>
+<p>For \(r^2=\sin2\theta\), choose \(0\le\theta\le\pi/2\) to trace the northeast loop. Its area is \(\tfrac12\int_0^{\pi/2}\sin2\theta\,d\theta=1/2\), agreeing with exercise 4I-4 at \(a=1\). Adding the opposite loop doubles the geometric area. Extending a traversal beyond its first complete pass can count the same loop again.</p>
+<h3>An average needs a measure</h3>
+<p>For the cardioid \(r=1-\cos\theta\), uniform angle and uniform arc length choose different random points. On the upper half, distance to the \(x\) axis is \(h=r\sin\theta\). Equal angles weight it by \(d\theta\), giving mean \(\pi^{-1}\int_0^\pi(1-\cos\theta)\sin\theta\,d\theta=2/\pi\). Equal arc lengths weight it by \(ds\).</p>
+<p>Here \(ds=2\sin(\theta/2)d\theta\) on \([0,\pi]\), whose total length is four. The mean is \(\tfrac14\int_0^\pi(1-\cos\theta)\sin\theta\,2\sin(\theta/2)d\theta=4/5\). These are the answers in exercise 4I-6(a,b) at \(a=1\). The positive distance is essential: a signed-height average over the whole symmetric curve would be zero.</p>
+<div class="box fix"><span class="tag">Common mistake</span><p>Uniform angle is not generally uniform arc length. Normalize with the measure used in the numerator: divide \(\int h\,ds\) by \(\int ds\), or \(\int h\,d\theta\) by the angle interval. Mixing these choices changes the question.</p></div>
+<div class="box out"><span class="tag">What a polar integral leaves out</span><p>The usual sector formula assumes the requested region is swept once with the intended inner and outer boundaries. It does not automatically compute a geometric union or remove overlap. Length counts repeated visits too. The record lab labels area as accumulated sector area for this reason.</p></div>
 </section><section class="topic" id="s5">
 <h2><span class="n">05</span>Conic sections</h2>
 <p>A parabola, an ellipse, and a hyperbola are the curves cut from a cone by a plane. Each has a definition by distances.</p>
@@ -127,7 +166,7 @@ L = \int_\alpha^\beta \sqrt{r^2 + \Bigl(\frac{dr}{d\theta}\Bigr)^2}\,d\theta.
 </ul>
 <p>All three share one description. Let \(e \gt 0\). The points whose distance to a focus is \(e\) times their distance to a directrix form an ellipse if \(e \lt 1\), a parabola if \(e = 1\), and a hyperbola if \(e \gt 1\). The number \(e\) is the eccentricity.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>Put the focus at the origin and the directrix at \(x = d\). A point at polar \((r, \theta)\) is \(r\) from the focus and \(d - r\cos\theta\) from the directrix. Setting \(r = e(d - r\cos\theta)\) and solving for \(r\):</p>
+<p>Put the focus at the origin and the directrix at \(x = d\). For nonnegative radius on the focus side of the directrix, the distances are \(r\) and \(d-r\cos\theta\). Setting \(r = e(d - r\cos\theta)\) and solving for \(r\):</p>
 \[
 r = \frac{ed}{1 + e\cos\theta}.
 \]
@@ -145,4 +184,11 @@ r = \frac{ed}{1 + e\cos\theta}.
 <div class="box out"><span class="tag">What it leaves out</span>
 <p>Rotated conics, whose equations have an \(xy\) term, are not covered. Orbits are the main application: a planet's path is a conic with the sun at a focus. That result is Newton's, and it belongs to physics.</p>
 </div>
+
+<h3>Which side of the directrix?</h3>
+<p>The distance to \(x=d\) is \(|d-r\cos\theta|\). The derivation above chooses the side where \(r\cos\theta\le d\), with \(r\ge0\). On that side, the absolute value is \(d-r\cos\theta\). Solving gives \(r=ed/(1+e\cos\theta)\) only where its denominator and sign match this branch. Hyperbolic branches need particular care near a zero denominator.</p>
+<p>For an ellipse centred at the origin, let the major semiaxis be \(a\), minor semiaxis \(b\), and focal distance \(c\). At the top point \((0,b)\), each focal distance is \(\sqrt{b^2+c^2}\). Their sum is \(2a\), so \(a^2=b^2+c^2\). With \(e=c/a\), the aspect ratio is \(b/a=\sqrt{1-e^2}\). This derives why eccentricity differs from the aspect ratio.</p>
+<div class="box ex"><span class="tag">Worked example · recovering an ellipse's dimensions</span><p>For \(r=1/(1+\tfrac12\cos\theta)\), the two axial distances from the focus are \(2/3\) and \(2\). Therefore \(a=4/3\), \(c=2/3\), and \(b=\sqrt{a^2-c^2}=2/\sqrt3\). The complete axes are \(8/3\) and \(4/\sqrt3\), approximately \(2.667\) and \(2.309\). The ratio is \(\sqrt3/2\), not \(1/2\).</p></div>
+<p>Classification concerns distances, not merely the appearance of a polar denominator. For \(0\lt e\lt1\), the focus-directrix construction yields an ellipse. At \(e=1\), it gives a parabola. For \(e>1\), separate allowed branches yield a hyperbola. A circle arises as a limiting case with focal separation tending to zero; a finite directrix formula at fixed \(d\) degenerates when \(e=0\).</p>
+<div class="box out"><span class="tag">What the conic geometry leaves out</span><p>A conic equation specifies a locus, not the timing of an orbit or motion along it. Forces, energy and angular momentum determine physical timing. This unit supplies geometric derivatives and lengths; it does not infer an orbital period from a sketch alone.</p></div>
 </section><section class="topic" id="s6"><h2><span class="n">06</span>Formula sheet</h2><p>These results are derived in the sections above. Check each result's hypotheses before applying it.</p><p>\(dy/dx=y\prime(t)/x\prime(t)\), \(L=\int\sqrt{x\prime(t)^2+y\prime(t)^2}\,dt\), \(A=\tfrac12\int r^2\,d\theta\), \(L=\int\sqrt{r^2+(dr/d\theta)^2}\,d\theta\).</p></section></div></main><footer><p>Original Flux notes. OpenStax Calculus Volumes 1 and 2, sections identified in the notes and textbook map.</p><p><b>Another view:</b> <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/">18.01SC Single Variable Calculus, Fall 2010</a>, Unit 4C.</p></footer></body></html>

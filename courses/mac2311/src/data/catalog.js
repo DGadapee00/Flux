@@ -38,7 +38,7 @@ export const EXAMS = [
     title: 'Parametric equations and polar coordinates',
     chapters: 'Vol 2 Ch 7',
     date: null,
-    labs: ['parametric', 'polar'],
+    labs: ['parametric', 'polar', 'record'],
   },
   {
     id: 'c6',
@@ -50,6 +50,7 @@ export const EXAMS = [
   },
 ];
 export const LAB_META = {
+  record: { id: 'record', exam: 'c5', title: 'Record player', app: true },
   technique: { id: 'technique', exam: 'c4', title: 'Integral workbench' },
   bridge: { id: 'bridge', exam: 'c4', title: 'Bridge cable', app: true },
   spheroid: { id: 'spheroid', exam: 'c3', title: 'Spheroid slices' },
