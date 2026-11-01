@@ -15,6 +15,7 @@ import ch13 from './bank/ch13.js';
 import ch14 from './bank/ch14.js';
 import ch15 from './bank/ch15.js';
 import ch16 from './bank/ch16.js';
+import ch17 from './bank/ch17.js';
 import { foldCoaching } from '@flux/shells/practice/coaching.js';
 import { BANK_CHAPTERS, CHAPTERS } from '../catalog.js';
 import coaching from './coaching/index.js';
@@ -36,6 +37,7 @@ export const BY_CHAPTER = {
   14: ch14,
   15: ch15,
   16: ch16,
+  17: ch17,
 };
 
 /*
@@ -44,7 +46,7 @@ export const BY_CHAPTER = {
  */
 export const PROBLEMS = foldCoaching([
   ...ch1, ...ch2, ...ch3, ...ch4, ...ch5, ...ch6, ...ch7, ...ch8,
-  ...ch9, ...ch10, ...ch11, ...ch12, ...ch13, ...ch14, ...ch15, ...ch16,
+  ...ch9, ...ch10, ...ch11, ...ch12, ...ch13, ...ch14, ...ch15, ...ch16, ...ch17,
 ], coaching);
 
 const byId = new Map(PROBLEMS.map((p) => [p.id, p]));

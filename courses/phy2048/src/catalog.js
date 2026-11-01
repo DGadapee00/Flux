@@ -120,8 +120,8 @@ export const UNITS = [
     title: 'Sound',
     chapters: ['17'],
     date: null,
-    labs: [],
-    coming: ['Intensity', 'Pipe modes', 'Doppler effect', 'Train horn'],
+    labs: ['intensity', 'pipe-modes', 'doppler', 'train-horn'],
+    coming: [],
   },
 ];
 
@@ -146,7 +146,7 @@ export const CHAPTERS = {
 };
 
 /** Chapters whose problems are in the bank. */
-export const BANK_CHAPTERS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'];
+export const BANK_CHAPTERS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'];
 
 export function unitForChapter(ch) {
   const id = String(ch);
@@ -215,6 +215,10 @@ export const LAB_META = {
   'traveling-wave': { id: 'traveling-wave', exam: 'u12', title: 'Traveling wave' },
   'standing-wave': { id: 'standing-wave', exam: 'u12', title: 'Standing wave' },
   'guitar-string': { id: 'guitar-string', exam: 'u12', title: 'Guitar string', app: true },
+  intensity: { id: 'intensity', exam: 'u13', title: 'Intensity' },
+  'pipe-modes': { id: 'pipe-modes', exam: 'u13', title: 'Pipe modes' },
+  doppler: { id: 'doppler', exam: 'u13', title: 'Doppler effect' },
+  'train-horn': { id: 'train-horn', exam: 'u13', title: 'Train horn', app: true },
 };
 
 export function examById(id) {

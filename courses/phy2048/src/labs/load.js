@@ -54,6 +54,10 @@ const loaders = {
   'traveling-wave': () => import('./traveling-wave.js'),
   'standing-wave': () => import('./standing-wave.js'),
   'guitar-string': () => import('./guitar-string.js'),
+  intensity: () => import('./intensity.js'),
+  'pipe-modes': () => import('./pipe-modes.js'),
+  doppler: () => import('./doppler.js'),
+  'train-horn': () => import('./train-horn.js'),
 };
 
 const labs = createLabLoader(loaders);
