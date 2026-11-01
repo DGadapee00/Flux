@@ -121,6 +121,10 @@ first slice, then one unit per PR. At most two courses in progress at once (D18)
 | 10 | EML 4507C Finite Element Modeling and Analysis | [eml4507c](docs/course-plans/eml4507c.md) | 2.092 (Fall 2009) |
 | 11 | EML 4301C Control of Machinery | [eml4301c](docs/course-plans/eml4301c.md) | 2.004 (Spring 2008) |
 
+**MAP 2302 progress:** Dalton confirmed Lebl, the spine and application choices on 1 Nov 2026.
+Unit 1 is built with five labs, 25 templates, ten predictions and fifteen notes setups.
+Units 2–4 follow in stacked PRs; `standard` stays false.
+
 The order follows prerequisites: MAP 2302 and EEL 3111 feed most of what follows; EML 4140 needs
 EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come last.
 

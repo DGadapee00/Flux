@@ -18,6 +18,7 @@ import { setLawEl, prose, mathText } from './shared.js';
  * @param {string} [catalog.courseId] Marks this course in the track row.
  * @param {{ id?: string, code?: string, title?: string, href?: string|null }[]} [catalog.track] Sibling courses, hub order.
  * @param {string} catalog.homeId Unit shown before one is mounted.
+ * @param {boolean} [catalog.revealActiveLab] Keep the active phone tab in its scroll row.
  * @param {string} [catalog.unbuiltMessage] Plain text for a scaffold without unit content.
  * @param {object} [catalog.notes] Core `createNotes` dependencies. Omit when the manifest has no notes.
  */
@@ -183,6 +184,7 @@ export function createHUD(api, catalog) {
       .map((t) => `<button type="button" class="tab soon" disabled title="Coming soon">${t}</button>`)
       .join('');
     $('lab-tabs').innerHTML = built + soon;
+    if(catalog.revealActiveLab && window.innerWidth<=720) $('lab-tabs').querySelector('.tab.active')?.scrollIntoView?.({block:'nearest',inline:'nearest'});
   }
 
   function renderToggles(lab, state) {

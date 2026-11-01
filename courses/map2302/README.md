@@ -1,17 +1,19 @@
-# MAP 2302 scaffold
+# MAP 2302 Differential Equations
 
-Awaiting Dalton's confirmation of `docs/course-plans/map2302.md`. No units are built.
-This is copied from `courses/mathstarter` with the example tank, notes and bank removed.
-The four units and planned labs follow MIT OCW 18.03SC Fall 2011. `standard: false`.
+OCW 18.03SC Fall 2011 sets the four-unit sequence. Dalton confirmed Lebl,
+the spine and all four application objects on 1 Nov 2026. Unit 1 is built;
+Units 2–4 stay visible as planned. `standard: false` until Dalton reviews.
 
-Run `npm run dev -w @flux/map2302` (5184), `npm test -w @flux/map2302`, and
-`npm run build -w @flux/map2302`. For production layouts, from this folder run
+Unit 1 has five labs (including a drawn, animated HARIO coffee server),
+25 original templates, ten computed predictions, and eleven notes sections
+with fifteen lab-linked worked examples. Sources and model limits are in
+the notes and PROVENANCE.md. All textbook citations use src/data/textbook.js.
+
+Run `npm run dev -w @flux/map2302` (5184), `npm test -w @flux/map2302`,
+and the root build. For production browser checks, from this course folder run
 `CHROMIUM_EXECUTABLE=/path/to/chromium node scripts/browser-checks.mjs`.
-The layout runner checks all four empty units at 380×820 and 1280×800.
-Measure honestly with `npm run scorecard -- --course map2302 --units`.
+The checks cover 380×820 and 1280×800; the PR includes reviewed screenshots.
+`npm run scorecard -- --course map2302 --units` reports built and unbuilt units
+honestly. All course progress participates in the hub backup.
 
-The scaffold's test gate proves content is empty and metadata/routes are consistent.
-After confirmation, replace that gate with the normal problems/labs/notes checkers
-(`npm run check:content`), build Unit 1 to every scorecard floor, and publish its
-hub route, root build, track href and backup registration together (D19). Never
-set `standard: true`. One unit per stacked PR, based on the previous branch.
+One unit per stacked PR, based on the previous branch. Never set standard true.
