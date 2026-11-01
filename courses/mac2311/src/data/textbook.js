@@ -8,6 +8,20 @@ export const textbook = (volume, section, slug) => ({
   url: `${books[volume]}${section.replace('.', '-')}-${slug}`,
 });
 export const TEXTBOOK = {
+  c6: [
+    textbook(1, '4.8', 'lhopitals-rule'),
+    textbook(2, '3.7', 'improper-integrals'),
+    textbook(2, '5.1', 'sequences'),
+    textbook(2, '5.2', 'infinite-series'),
+    textbook(2, '5.3', 'the-divergence-and-integral-tests'),
+    textbook(2, '5.4', 'comparison-tests'),
+    textbook(2, '5.5', 'alternating-series'),
+    textbook(2, '5.6', 'ratio-and-root-tests'),
+    textbook(2, '6.1', 'power-series-and-functions'),
+    textbook(2, '6.2', 'properties-of-power-series'),
+    textbook(2, '6.3', 'taylor-and-maclaurin-series'),
+    textbook(2, '6.4', 'working-with-taylor-series'),
+  ],
   c5: [
     textbook(2, '7.1', 'parametric-equations'),
     textbook(2, '7.2', 'calculus-of-parametric-curves'),

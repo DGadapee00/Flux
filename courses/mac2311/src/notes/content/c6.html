@@ -30,6 +30,11 @@
 <div class="box out"><span class="tag">What it leaves out</span>
 <p>The general proof uses Cauchy's Mean Value Theorem and handles \(g'(a) = 0\) and infinite limits. The text gives it. The exponent forms \(1^\infty\), \(0^0\), and \(\infty^0\) need logarithms first.</p>
 </div>
+
+<h3>Hypotheses belong to the calculation</h3>
+<p>On a punctured one-sided neighborhood, require differentiability of both functions and \(g'\ne0\). Establish the indeterminate form before using the derivative ratio. The theorem also needs that derivative ratio to have the relevant finite or extended limit. For a finite endpoint, Cauchy's Mean Value Theorem connects a quotient of increments to a derivative ratio at an intermediate point. This extends the simple tangent-line argument above.</p>
+<div class="box ex"><span class="tag">Worked example · a root whose index also grows</span><p>For \(y=x^{1/x}\), take \(\ln y=(\ln x)/x\). Its derivative ratio is \((1/x)/1\), tending to zero as \(x\) increases. Continuity of the exponential then gives \(y\to e^0=1\). This checks 18.01SC, Fall 2010, Session 90. The sequence \(n^{1/n}\) inherits the same limit by sampling integer inputs.</p></div>
+<p>The rule does not differentiate a quotient as a whole. Nor does it apply directly to a product or variable power. Transform those expressions first. If the derivative ratio has no limit, the theorem is inconclusive; this does not by itself prove the original limit fails.</p>
 </section></div><div class="part"><div class="eyebrow">Calculus Volume 2</div><h2>Techniques of integration</h2><section class="topic" id="s2">
 <h2><span class="n">02</span>Improper integrals</h2>
 <p>An integral over an infinite interval, or of an unbounded function, is defined as a limit of ordinary integrals. If the limit is finite, the integral converges. Otherwise it diverges.</p>
@@ -58,8 +63,15 @@
 </div>
 <p>In the Improper lab, push the bound from \(2\) to \(8\). The area climbs toward \(1\), and the tail shrinks like \(1/b\).</p>
 <div class="box out"><span class="tag">What it leaves out</span>
-<p>A limit comparison test, which compares the ratio \(f/g\) rather than \(f\) and \(g\) directly, is in the text. The same convergence ideas return for series in Unit 3.</p>
+<p>A limit comparison test, which compares the ratio \(f/g\) rather than \(f\) and \(g\) directly, is in the text. The same convergence ideas return for series later in this unit.</p>
 </div>
+
+<h3>Separate two infinite ends or an interior pole</h3>
+<p>For \(\int_{-\infty}^{\infty}f\), split at a finite point and require both tails to converge. For an interior singularity \(c\), require both one-sided integrals separately. A symmetric cutoff is a different definition, called principal value. It may exist even when the ordinary integral diverges.</p>
+<div class="box ex"><span class="tag">Worked example · symmetry cannot cancel two divergences</span><p>The integral of \(1/x\) from \(-1\) to \(1\) has a pole at zero. Its positive side grows like \(-\ln\varepsilon\); its negative side tends to negative infinity. Setting the two cutoffs equal cancels them, but independent cutoffs need not. The ordinary improper integral does not converge.</p></div>
+<div class="box ex"><span class="tag">Worked example · a shifted inverse square</span><p>For \(\int_1^b(5x+2)^{-2}\,dx\), use \(u=5x+2\). The result is \(1/35-1/[5(5b+2)]\). The tail vanishes, leaving \(1/35\). This is the printed answer to 18.01SC Session 91. An independent substitution \(u=1/x\) changes the infinite interval into \([0,1]\), with integrand \(1/(5+2u)^2\).</p></div>
+<p>Limit comparison works for eventually positive functions whose ratio tends to \(C\) with \(0\lt C\lt\infty\). For the shifted inverse square and \(1/x^2\), the ratio tends to \(1/25\). Multiplying a convergent integral by a positive constant changes its value but not its convergence. Session 92 demonstrates the same argument with a normalized comparison ratio of one.</p>
+<div class="box fix"><span class="tag">Common mistake</span><p>A function approaching zero need not have a finite integral. Both \(1/x\) and \(1/x^2\) approach zero. Their tails accumulate differently. Use a tail estimate or convergence theorem, not only the limiting height.</p></div>
 </section></div><div class="part"><div class="eyebrow">Calculus Volume 2</div><h2>Sequences and series</h2><section class="topic" id="s3">
 <h2><span class="n">03</span>Sequences</h2>
 <p>A sequence is a list \(a_1, a_2, a_3, \ldots\), one term for each whole number. It converges to \(L\) when its terms get and stay as close to \(L\) as we like. Precisely: for every \(\varepsilon \gt 0\) there is an \(N\) with \(|a_n - L| \lt \varepsilon\) for all \(n \gt N\). This is Unit 1's \(\varepsilon\)–\(\delta\), with \(N\) in place of \(\delta\).</p>
@@ -80,6 +92,11 @@
 <div class="box out"><span class="tag">What it leaves out</span>
 <p>Sequences defined by recursion, such as \(a_{n+1} = \sqrt{2 + a_n}\), need the monotone bounded theorem with an induction argument. The text works one in §5.1.</p>
 </div>
+
+<h3>Monotone and bounded: existence before a candidate value</h3>
+<div class="box ex"><span class="tag">Worked example · a recursive sequence</span><p>Let \(a_1=\sqrt2\) and \(a_{n+1}=\sqrt{2+a_n}\). If \(0\lt a_n\lt2\), then \(0\lt a_{n+1}\lt2\). Also \(2+a_n-a_n^2=(2-a_n)(a_n+1)>0\), so \(a_{n+1}>a_n\). Induction proves the sequence is increasing and bounded above. It therefore converges. Only now pass to its limit: \(L=\sqrt{2+L}\), whose admissible solution is \(L=2\).</p></div>
+<p>Solving a fixed-point equation gives candidates, not convergence. A recursive sequence can oscillate, or approach a different root depending on its initial value. Check the invariant interval and monotonicity before using continuity to pass a limit through its defining function.</p>
+<p>At the geometric boundary, \(1^n=1\) converges, while \((-1)^n\) oscillates. These are sequence statements. The corresponding series fail the zero-term condition. The object being limited determines which theorem applies.</p>
 </section><section class="topic" id="s4">
 <h2><span class="n">04</span>Series and the geometric series</h2>
 <p>A series \(\sum_{k=1}^{\infty} a_k\) is defined by its partial sums \(S_n = a_1 + \cdots + a_n\). The series converges to \(S\) when \(S_n \to S\). Otherwise it diverges.</p>
@@ -105,6 +122,11 @@ S_n = \frac{1 - r^n}{1 - r} \quad (r \ne 1).
 <div class="box out"><span class="tag">What it leaves out</span>
 <p>Few series have closed partial sums. The geometric and telescoping cases are the exceptions. For the rest, the tests below decide convergence without finding the sum.</p>
 </div>
+
+<h3>A finite algebraic identity controls the infinite tail</h3>
+<p>For \(S_N=1+r+\cdots+r^{N-1}\), subtraction gives \((1-r)S_N=1-r^N\). Thus \(S_N=(1-r^N)/(1-r)\) for \(r\ne1\). When \(|r|\lt1\), the remainder to \(1/(1-r)\) is \(r^N/(1-r)\). When \(|r|\ge1\), first examine the terms; they do not approach zero unless the whole series is trivial.</p>
+<p>The halving-series lab uses \(N\) terms beginning with one. Its missing tail is \(2^{1-N}\). Going from eight terms to sixteen multiplies the tail by \(2^{-8}=1/256\). Doubling the term count is not the same as adding one term. Session 94 proves the geometric identity by induction and takes its infinite limit.</p>
+<div class="box fix"><span class="tag">Common mistake</span><p>Indexing changes the remainder. A sum from zero through \(N\) has \(N+1\) terms, while a sum of the first \(N\) terms ends at \(N-1\). Write the first and last retained powers before quoting a tail formula.</p></div>
 </section><section class="topic" id="s5">
 <h2><span class="n">05</span>The integral test</h2>
 <p>If \(f\) is positive, continuous, and decreasing, and \(a_k = f(k)\), then \(\sum a_k\) and \(\int_1^{\infty} f(x)\,dx\) converge or diverge together.</p>
@@ -115,7 +137,7 @@ S_n = \frac{1 - r^n}{1 - r} \quad (r \ne 1).
 <p>\(\sum 1/k\) with \(f(x) = 1/x\). The bound gives \(H_n \ge \ln(n + 1)\), and \(\ln(n + 1) \to \infty\). So the harmonic series diverges. At \(n = 8\), \(H_8 = 2.718\), above \(\ln 9 = 2.197\).</p>
 <p>It diverges very slowly. Passing \(10\) takes over \(12{,}000\) terms.</p>
 </div>
-<p>The test settles the \(p\)-series at once. \(\sum 1/k^p\) converges exactly when \(p \gt 1\), because \(\int_1^{\infty} x^{-p}\,dx\) does. That was Unit 2's improper-integral test.</p>
+<p>The test settles the \(p\)-series at once. \(\sum 1/k^p\) converges exactly when \(p \gt 1\), because \(\int_1^{\infty} x^{-p}\,dx\) does. This is the improper-integral test from Section 2.</p>
 <div class="box ex"><span class="tag">Worked example · bounding a sum</span>
 <p>\(\sum 1/k^2\). Four terms give \(S_4 = 1.4236\). The rest of the sum lies between \(\int_5^{\infty} x^{-2}\,dx = 1/5\) and \(\int_4^{\infty} x^{-2}\,dx = 1/4\). So the sum is between \(1.6236\) and \(1.6736\). The true value is \(\pi^2/6 = 1.6449\).</p>
 </div>
@@ -129,6 +151,11 @@ S_n = \frac{1 - r^n}{1 - r} \quad (r \ne 1).
 <div class="box out"><span class="tag">What it leaves out</span>
 <p>The test needs \(f\) decreasing, at least eventually. A series whose terms wobble needs another test.</p>
 </div>
+
+<h3>The integral test also bounds the remainder</h3>
+<p>For positive decreasing \(f\), after \(N\) terms the tail satisfies \(\int_{N+1}^{\infty}f(x)dx\le R_N\le\int_N^{\infty}f(x)dx\). This compares the omitted rectangles directly with the tail area. It does not claim the series equals the integral.</p>
+<p>For \(\sum1/n^2\), the upper bound is \(1/N\). To guarantee remainder at most \(0.01\), one hundred terms suffice. A smaller count might work, but this bound alone does not prove it. A rigorous estimate says what its inequality guarantees, rather than treating a sufficient count as the unique minimum.</p>
+<div class="box out"><span class="tag">Limits of a convergence test</span><p>A finite partial sum cannot prove an infinite sum converges. Harmonic sums can look nearly flat over a short plotted interval. The proof needs a bound independent of the number of later terms.</p></div>
 </section><section class="topic" id="s6">
 <h2><span class="n">06</span>Comparison and ratio tests</h2>
 <p><strong>Comparison.</strong> If \(0 \le a_k \le b_k\) and \(\sum b_k\) converges, so does \(\sum a_k\). If \(\sum a_k\) diverges, so does \(\sum b_k\). The smaller series cannot outgrow the larger.</p>
@@ -149,8 +176,15 @@ S_n = \frac{1 - r^n}{1 - r} \quad (r \ne 1).
 <p>Compare positive terms with a known series. Use the ratio test for factorials and powers. A ratio limit of \(1\) decides nothing.</p>
 </div>
 <div class="box out"><span class="tag">What it leaves out</span>
-<p>The limit comparison test and the root test are in §5.4 and §5.6 of the text. They handle the same cases more conveniently, with the same logic.</p>
+<p>Limit comparison and the root test are developed below. They reveal simpler comparisons in some configurations.</p>
 </div>
+
+<h3>Limit comparison and the root test</h3>
+<p>If positive terms satisfy \(a_n/b_n\to C\), with \(0\lt C\lt\infty\), each is eventually trapped between positive constant multiples of the other. They therefore share a convergence verdict. Ratios tending to zero or infinity need directional inequalities; the two-way conclusion no longer follows automatically.</p>
+<p>The root test uses \(\rho=\lim\sqrt[n]{|a_n|}\), when this limit exists. For \(\rho\lt1\), choose \(r\) between \(\rho\) and one. Eventually \(|a_n|\le r^n\), giving geometric domination. For \(\rho\gt1\), terms do not tend to zero. At \(\rho=1\), this test is inconclusive.</p>
+<div class="box ex"><span class="tag">Worked example · an outer nth power</span><p>For \(a_n=(n/(2n+1))^n\), the nth root is \(n/(2n+1)\to1/2\). The root test proves convergence. Expanding a ratio of adjacent terms would introduce an unnecessary moving exponent. Choose the test that exposes a simple comparison.</p></div>
+<div class="box ex"><span class="tag">Worked example · a doubled factorial</span><p>For \(a_n=(n!)^2/(2n)!\), cancel common factors in \(a_{n+1}/a_n\). The result is \((n+1)^2/[(2n+2)(2n+1)]\to1/4\). Hence the series converges. This checks Session 95(b). The two new denominator factors are both essential.</p></div>
+<p>Finite prefixes do not affect convergence. Eventual positivity or decrease is enough once all earlier terms have been separated. Tests establish convergence; they usually do not supply the sum.</p>
 </section><section class="topic" id="s7">
 <h2><span class="n">07</span>Alternating series</h2>
 <p>An alternating series flips sign every term: \(b_1 - b_2 + b_3 - \cdots\) with every \(b_k \gt 0\). If the \(b_k\) decrease to \(0\), the series converges. The error after \(n\) terms is less than the first term left out.</p>
@@ -174,6 +208,11 @@ S_n = \frac{1 - r^n}{1 - r} \quad (r \ne 1).
 <div class="box out"><span class="tag">What it leaves out</span>
 <p>Rearranging a conditionally convergent series can change its sum. Riemann proved it can be made to sum to any number. Only absolutely convergent series are safe to reorder.</p>
 </div>
+
+<h3>Absolute and conditional convergence answer different questions</h3>
+<p>Absolute convergence controls every signed partial sum because \(|\sum a_n|\le\sum|a_n|\). An absolutely convergent tail can be made uniformly small. Conditional convergence instead depends on cancellation in the specified order. The alternating harmonic sum is a central example.</p>
+<p>In the alternating test, magnitudes must eventually decrease and tend to zero. The error lies on the side of the first omitted term and has magnitude at most that term. Counting nonzero terms matters when a power series has missing coefficients. For sine through degree five at \(x=1/2\), the next nonzero term has degree seven, not six.</p>
+<div class="box fix"><span class="tag">Common mistake</span><p>A small last retained term is not the theorem's error bound. Use the first omitted term, after checking decreasing magnitudes. Alternating signs without those hypotheses do not justify an estimate.</p></div>
 </section><section class="topic" id="s8">
 <h2><span class="n">08</span>Power series</h2>
 <p>A power series about \(a\) is \(\sum_{k=0}^{\infty} c_k (x - a)^k\). It is a polynomial with no last term. For each \(x\) it is a numerical series that may or may not converge.</p>
@@ -193,9 +232,13 @@ S_n = \frac{1 - r^n}{1 - r} \quad (r \ne 1).
 <div class="box out"><span class="tag">What it leaves out</span>
 <p>The radius can be \(0\), when only the centre works, or infinite, when every \(x\) works. Both occur. \(\sum k!\,x^k\) has \(R = 0\), and \(\sum x^k/k!\) has \(R = \infty\).</p>
 </div>
+
+<h3>A change of variable moves the interval</h3>
+<p>For \(\sum [(x-2)/3]^n/n\), apply the standard radius-one result to \(u=(x-2)/3\). The strict condition becomes \(|x-2|\lt3\). Test \(x=-1\) and \(x=5\) separately. The first gives an alternating harmonic series; the second gives a harmonic series. The final interval is \([-1,5)\).</p>
+<p>Termwise differentiation and integration preserve a power series' radius, though endpoints can change. A substitution instead requires transforming the convergence condition. For \(\sum(-1)^nx^{2n}\), the requirement is \(|x^2|\lt1\), again giving \(|x|\lt1\) for real \(x\). A scale such as \(5x\) would change the radius to \(1/5\).</p>
 </section><section class="topic" id="s9">
 <h2><span class="n">09</span>Taylor polynomials</h2>
-<p>A Taylor polynomial matches \(f\) and its first \(n\) derivatives at a centre \(a\). The more derivatives it matches, the longer it follows the curve.</p>
+<p>A Taylor polynomial matches \(f\) and its first \(n\) derivatives at a centre \(a\). A remainder bound controls where the approximation is accurate.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Write \(p(x) = \sum c_k (x - a)^k\). Differentiating \(k\) times and setting \(x = a\) kills every term but one, leaving \(p^{(k)}(a) = k!\,c_k\). To match \(f^{(k)}(a)\), take \(c_k = f^{(k)}(a)/k!\).</p>
 </div>
@@ -220,12 +263,18 @@ P_n(x) = \sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!}\,(x - a)^k.
 <p>Forgetting the factorial. Writing \(f''(a)(x - a)^2\) without the \(\tfrac12\) gives \(1 - 0.16 = 0.84\) at the last point. The \(k!\) is what makes the \(k\)-th derivative match.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>\(c_k = f^{(k)}(a)/k!\). A higher order follows the curve further. The error is bounded by the next derivative's size times \(|x - a|^{n+1}/(n + 1)!\).</p>
+<p>\(c_k = f^{(k)}(a)/k!\). Higher order can improve accuracy; the remainder controls the claim. The error is bounded by the next derivative's size times \(|x - a|^{n+1}/(n + 1)!\).</p>
 </div>
 <p>In the Taylor lab, raise the order and watch the polynomial hug the sine curve over a wider stretch. Horner's nesting computes the same value, a second route.</p>
 <div class="box out"><span class="tag">What it leaves out</span>
-<p>A Taylor series may converge to something other than \(f\). The standard example is \(e^{-1/x^2}\), whose derivatives at \(0\) are all \(0\). For \(\sin\), \(\cos\), and \(e^x\), the bound shows the error goes to \(0\) for every \(x\).</p>
+<p>A Taylor series may converge to something other than \(f\). One example defines \(f(0)=0\) and \(f(x)=e^{-1/x^2}\) elsewhere; every derivative at zero vanishes. For \(\sin\), \(\cos\), and \(e^x\), the bound shows the error goes to \(0\) for every \(x\).</p>
 </div>
+
+<h3>A polynomial approximation needs a remainder statement</h3>
+<p>Matching derivatives at the centre determines the coefficients uniquely. It does not guarantee that errors decrease at every distant point as order increases. Taylor's theorem writes \(f(x)=P_N(x)+f^{(N+1)}(\xi)(x-a)^{N+1}/(N+1)!\), for some intermediate \(\xi\), under its smoothness hypotheses. An interval-wide bound on this derivative turns that representation into a usable inequality.</p>
+<p>For \(e^x\) on \([-d,d]\), every derivative is bounded by \(e^d\). Thus the remainder is at most \(e^d d^{N+1}/(N+1)!\), tending to zero for fixed \(d\). This proves equality to its Taylor series on every bounded interval, and hence at every real input. Session 98 develops this argument.</p>
+<div class="box ex"><span class="tag">Worked example · a loose bound can still be correct</span><p>The degree-two polynomial for \(\ln(1+x)\) at zero gives \(P_2(1/2)=3/8\). On the symmetric interval \([-1/2,1/2]\), \(|f^{(3)}|=2/(1+x)^3\le16\). Taylor's inequality gives error at most \(16(1/2)^3/3!=1/3\). The actual error is \(\ln(3/2)-3/8\), about \(0.030465\), well below this loose bound. These reproduce the final exam solutions, problem 14(c,d). A tighter interval can improve the bound without changing the approximation.</p></div>
+<p>A smooth function need not equal its Taylor series. Define \(f(0)=0\) and \(f(x)=e^{-1/x^2}\) elsewhere. Every derivative at zero is zero, yet \(f(x)>0\) for nonzero \(x\). Its zero Taylor series converges everywhere but represents the function only at zero. The missing ingredient is a remainder tending to zero at the chosen input.</p>
 </section><section class="topic" id="s10">
 <h2><span class="n">10</span>Working with power series</h2>
 <p>Inside its interval, a power series can be differentiated and integrated term by term. The radius does not change. This builds new series from known ones without computing derivatives.</p>
@@ -253,9 +302,27 @@ P_n(x) = \sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!}\,(x - a)^k.
 <p>Using a series outside its interval. \(\ln(1 + x) = x - x^2/2 + \cdots\) holds only for \(-1 \lt x \le 1\). At \(x = 2\) the terms grow, and the series diverges, though \(\ln 3\) is perfectly finite.</p>
 </div>
 <div class="box key"><span class="tag">Key</span>
-<p>Differentiate, integrate, and substitute known series. The radius stays the same. Check the endpoints again.</p>
+<p>Differentiate, integrate, and substitute known series. Differentiation and integration preserve radius; substitutions transform its condition. Check endpoints again.</p>
 </div>
 <div class="box out"><span class="tag">What it leaves out</span>
 <p>Term-by-term work at the endpoints themselves needs a separate argument, Abel's theorem. It is why the alternating harmonic series sums to \(\ln 2\), and it is beyond this course.</p>
 </div>
+
+<h3>Integrate a non-elementary function through its series</h3>
+<p>Substitute \(x^2\) into the sine series, giving \(x^2-x^6/3!+x^{10}/5!-\cdots\). Integrating from zero to one yields \(1/3-1/42+1/1320-\cdots\). The first two terms give \(13/42\), the printed approximation in Session 100, question 2. The first omitted integral contribution bounds its alternating error by \(1/1320\). Three terms improve the approximation and give the next bound \(1/(15\cdot7!)\).</p>
+<h3>A clock pendulum needs a nonlinear period</h3>
+<p>For a point mass on a massless rigid rod of length \(L\), energy conservation gives \(\dot\theta^2=(2g/L)(\cos\theta-\cos\theta_0)\). One quarter-cycle runs from the bottom to the turning point. Substitute \(\sin(\theta/2)=k\sin\phi\), with \(k=\sin(\theta_0/2)\), to remove the endpoint square root. Then</p>
+\[T=4\sqrt{L/g}\int_0^{\pi/2}\frac{d\phi}{\sqrt{1-k^2\sin^2\phi}}=4\sqrt{L/g}\,K(k).\]
+<p>Let \(m=k^2\). Expand \((1-z)^{-1/2}=\sum_{j=0}^{\infty}\binom{2j}{j}z^j/4^j\). Integrating \(\sin^{2j}\phi\) contributes another factor \(\binom{2j}{j}/4^j\). Thus</p>
+\[\frac{T}{T_0}=\sum_{j=0}^{\infty}c_jm^j,\quad T_0=2\pi\sqrt{L/g},\quad c_0=1,\quad \frac{c_j}{c_{j-1}}=\left(\frac{2j-1}{2j}\right)^2.\]
+<p>The first coefficients are \(1,1/4,9/64,25/256\). For amplitude below \(\pi\), \(0\le m\lt1\), so the ratio test proves convergence. Each term is positive. Because the coefficient ratio is below one, the omitted tail after \(N\) terms is bounded by \(c_Nm^N/(1-m)\). Multiply by \(T_0\) to obtain a time bound. Near \(m=1\), this bound can be large; positivity alone does not imply fast convergence.</p>
+<p><a href="https://dlmf.nist.gov/19.2">NIST DLMF §19.2</a> defines the complete elliptic integral. <a href="https://dlmf.nist.gov/19.5">§19.5</a> gives its hypergeometric power series. The lab uses the arithmetic-geometric mean to evaluate the full integral separately; tests check that value against quadrature.</p>
+<div class="box ex"><span class="tag">Worked example · calibrating an effective length</span><p>Parliament lists the Great Clock's pendulum beat as two seconds and overall length as 4.4 m. A beat is half a complete cycle, so use \(T_0=4\) s as this teaching model's calibration reference. At conventional standard gravity \(g=9.80665\) m/s², the equivalent point-mass length is \(L=g(T_0/(2\pi))^2=3.974486\) m. At zero amplitude, understood as the small-amplitude limit, the lab returns four seconds.</p><p><a href="https://www.parliament.uk/about/living-heritage/building/palace/big-ben/facts-figures/great-clock-facts/">Parliament's Great Clock facts</a>. The inferred effective length is not the published 4.4 m overall dimension. A real distributed pendulum has a different relation between dimensions and period.</p></div>
+<div class="box ex"><span class="tag">Worked example · a small assumed swing</span><p>Choose an illustrative amplitude of 5°. The nonlinear model gives \(T=4.001904690\) s. Four series terms agree to about \(4\times10^{-12}\) s in ideal arithmetic. The leading small-amplitude correction is \(T/T_0-1\approx\theta_0^2/16\), with angle in radians. Doubling a sufficiently small amplitude nearly quadruples this correction, while total period changes little.</p></div>
+<div class="box ex"><span class="tag">Worked example · a wide assumed swing</span><p>At 90°, \(m=1/2\). The full period is \(4.721362396\) s, while four terms give \(4.689453125\) s. Actual truncation error is about \(0.0319093\) s. The geometric tail bound is \(0.0373841\) s, safely above it. The drawing shows a turning point rather than claiming uniform angular speed.</p></div>
+<div class="box ex"><span class="tag">Worked example · improving the calculation</span><p>Keep the same 90° swing and use eight terms. The approximation rises to \(4.720267184\) s. Its error is \(0.00109522\) s, below the bound \(0.00120517\) s. The physical period stays fixed: only the calculation changed. A displayed zero error at very high order can reflect floating-point rounding.</p></div>
+<div class="box ex"><span class="tag">Worked example · near the upright limit</span><p>At an assumed 170°, \(m\approx0.992404\). The full period is \(9.757450879\) s. Twelve terms give only \(7.305015657\) s, and the conservative bound is about \(12.484\) s. A convergent series can converge too slowly for a small truncation to help. At the excluded 180° limit, the ideal period diverges.</p></div>
+<div class="box ex"><span class="tag">Worked example · quartering effective length</span><p>Keep the 90° amplitude but reduce \(L\) to one quarter of the calibrated length. Both full period and its series approximation halve: \(T=2.360681198\) s. Their relative discrepancy is unchanged, because the same dimensionless bracket multiplies \(\sqrt L\). Amplitude controls that bracket; length controls a separate scale.</p></div>
+<div class="box fix"><span class="tag">Common mistake</span><p>The small-angle formula is not exactly amplitude-independent at finite swings. It is a limit. Nor does increasing the series term count physically change the clock. Separate model parameters from approximation settings.</p></div>
+<div class="box out"><span class="tag">What the course model leaves out</span><p>This is a calibrated point-mass pendulum, not a timing prediction for the actual Great Clock. It omits distributed mass, escapement forces, damping, thermal compensation and local gravity. Amplitudes are assumptions, not observed clock swings. The schematic rod scales with effective length, while the clock face stays schematic. Any displayed seconds lost per day assume a mechanism calibrated to the small-angle period, giving \(86400(1-T_0/T)\).</p></div>
 </section><section class="topic" id="s11"><h2><span class="n">11</span>Formula sheet</h2><p>These results are derived in the sections above. Check each result's hypotheses before applying it.</p><p>\(\sum_{n=0}^\infty ar^n=a/(1-r)\) when \(|r|<1\). \(P_N(x)=\sum_{n=0}^N f^{(n)}(a)(x-a)^n/n!\). Improper integrals are limits; a convergent sequence of terms alone does not prove its series converges.</p></section></div></main><footer><p>Original Flux notes. OpenStax Calculus Volumes 1 and 2, sections identified in the notes and textbook map.</p><p><b>Another view:</b> <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/">18.01SC Single Variable Calculus, Fall 2010</a>, Unit 5; OpenStax Vol 2 Ch 5–6 for sequence and convergence tests.</p></footer></body></html>

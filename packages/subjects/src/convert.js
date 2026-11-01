@@ -53,6 +53,10 @@ export const M_PER_KM = 1000;
 export const S_PER_MIN = 60;
 export const S_PER_H = 3600;
 
+/** Seconds per conventional 24-hour day; radians per degree. */
+export const S_PER_DAY = 24 * S_PER_H;
+export const RAD_PER_DEG = Math.PI / 180;
+
 /** Metres in one international nautical mile, exactly. A knot is one nautical mile per hour. */
 export const M_PER_NMI = 1852;
 
