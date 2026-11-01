@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Applications of differentiation</title></head><body><header class="top"><p class="eyebrow">MAC 2311–2312 · Calculus I and II · Unit 2 · OpenStax Vol 1 Ch 4</p><h1>Applications of differentiation</h1><p class="lede">One course from differentiation to infinite series. Derive each result, work an example, then open its lab.</p><div class="legend"><span>Worked example</span><span>Derivation</span><span>Common mistake</span><span>Key idea</span><span>Model limits</span></div><nav class="toc"><a href="#s1"><span>01</span>Linear approximation</a><a href="#s2"><span>02</span>Extreme values</a><a href="#s3"><span>03</span>The Mean Value Theorem</a><a href="#s4"><span>04</span>The shape of a graph</a><a href="#s5"><span>05</span>Limits at infinity</a><a href="#s6"><span>06</span>Optimization</a><a href="#s7"><span>07</span>Newton's method</a><a href="#s8"><span>08</span>Related rates</a><a href="#s9"><span>09</span>Antiderivatives</a><a href="#s10"><span>10</span>Exponentials and logarithms</a><a href="#s11"><span>11</span>Formula sheet</a></nav></header><main><div class="part"><div class="eyebrow">Calculus Volume 1</div><h2>Applications of derivatives</h2><section class="topic" id="s1">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Applications of differentiation</title></head><body><header class="top"><p class="eyebrow">MAC 2311–2312 · Calculus I and II · Unit 2 · OpenStax Vol 1 Ch 4</p><h1>Applications of differentiation</h1><p class="lede">A local slope can approximate, constrain, or optimize a design. The derivative supplies candidates; hypotheses and physical boundaries decide which candidates matter.</p><div class="legend"><span>Worked example</span><span>Derivation</span><span>Common mistake</span><span>Key idea</span><span>Model limits</span></div><nav class="toc"><a href="#s1"><span>01</span>Linear approximation</a><a href="#s2"><span>02</span>Extreme values</a><a href="#s3"><span>03</span>The Mean Value Theorem</a><a href="#s4"><span>04</span>The shape of a graph</a><a href="#s5"><span>05</span>Limits at infinity</a><a href="#s6"><span>06</span>Optimization</a><a href="#s7"><span>07</span>Newton's method</a><a href="#s8"><span>08</span>Related rates</a><a href="#s9"><span>09</span>Antiderivatives</a><a href="#s10"><span>10</span>Exponentials and logarithms</a><a href="#s11"><span>11</span>Formula sheet</a></nav></header><main><div class="part"><div class="eyebrow">Calculus Volume 1</div><h2>Applications of derivatives</h2><section class="topic" id="s1">
 <h2><span class="n">01</span>Linear approximation</h2>
 <p>Near a point where \(f\) is differentiable, its graph is almost straight. The tangent line is the best straight stand-in. Using it in place of \(f\) is linear approximation.</p>
 \[
@@ -22,9 +22,18 @@ L(x) = f(a) + f'(a)(x - a).
 <div class="box key"><span class="tag">Key</span>
 <p>Near \(a\), \(f(x) \approx f(a) + f'(a)(x - a)\). The sign of \(f''\) says whether the estimate is high or low.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The size of the error is estimated here only by example. A bound on it, in terms of \(f''\), comes with Taylor polynomials in Calculus II.</p>
 </div>
+
+<h3>Include curvature when a slope is not enough</h3>
+<p>The tangent model matches \(f(a)\) and \(f'(a)\). To match curvature too, seek \(Q(x)=f(a)+f'(a)(x-a)+b(x-a)^2\). Differentiating twice gives \(Q''(a)=2b\). Thus \(b=f''(a)/2\). The factor one half follows from matching derivatives, not a convention.</p>
+\[Q(x)=f(a)+f'(a)(x-a)+\tfrac12 f''(a)(x-a)^2.\]
+<p>If the next derivative is bounded by \(M\) between the center and the input, repeated integration bounds the quadratic error by \(M|x-a|^3/6\). Unit 6 develops this remainder argument. Without a bound or a direct comparison, “small displacement” alone does not certify accuracy.</p>
+<div class="box ex"><span class="tag">Worked example · a can-area approximation</span>
+<p>An ideal closed can holds \(330\) cm³. Its sheet area is \(A(r)=660/r+2\pi r^2\). At \(r=3\) cm, \(A=276.54867\) cm², \(A'=-35.63422\) cm and \(A''=61.45526\). A radius increase of \(0.1\) cm gives the tangent estimate \(272.98525\) cm². Adding the quadratic term gives \(273.29252\) cm². Direct substitution gives \(273.28464\) cm². The quadratic estimate improves this case; it is not an automatic guarantee over every radius interval.</p>
+</div><div class="box fix"><span class="tag">Common mistake</span><p>A derivative and a finite change have different units. Here \(A'\) is measured in centimetres. Multiply by a radius change in centimetres before treating it as an area change.</p></div>
+<div class="box out"><span class="tag">What the model leaves out</span><p>The can calculation assumes a perfect cylinder with uniform sheet thickness. Its radius interval represents a family of designs. The derivative does not describe the mechanics of stretching an actual sealed can.</p></div>
 </section><section class="topic" id="s2">
 <h2><span class="n">02</span>Extreme values</h2>
 <p>An absolute maximum is the largest value \(f\) takes on its domain. A local maximum is the largest value nearby. Minimums are the same with "smallest".</p>
@@ -44,7 +53,7 @@ L(x) = f(a) + f'(a)(x - a).
 <div class="box key"><span class="tag">Key</span>
 <p>On a closed interval, list the critical points and the endpoints. Evaluate \(f\) at each. The largest is the maximum. The smallest is the minimum.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The Extreme Value Theorem is used without proof. Like the Intermediate Value Theorem, it rests on the completeness of the real numbers. On an open interval or an unbounded one, the method needs a separate argument.</p>
 </div>
 </section><section class="topic" id="s3">
@@ -71,9 +80,13 @@ f'(c) = \frac{f(b) - f(a)}{b - a}.
 <div class="box key"><span class="tag">Key</span>
 <p>Somewhere inside, the slope equals the average slope. Positive derivative means increasing. Zero derivative means constant.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The theorem says a \(c\) exists. It does not say where, or how many. For most functions, finding \(c\) means solving \(f'(c) = \text{slope}\), which may need Newton's method.</p>
 </div>
+
+<h3>Existence does not mean uniqueness</h3><p>For \(f(x)=x^3-x\) on \([-2,2]\), the secant slope is \(3\). Solving \(3c^2-1=3\) gives \(c=\pm2/\sqrt3\). Both lie inside the interval. A theorem guaranteeing one point does not forbid two. For a function whose derivative is strictly increasing, however, the matching point is unique.</p>
+<div class="box ex"><span class="tag">Worked example · a matching design sensitivity</span>
+<p>For the closed-can area, compare radii \(3\) and \(4\) cm. The secant slope is -11.017703 cm. The derivative increases strictly because \(A''=1320/r^3+4\pi\) is positive. Solving \(A'(c)=\text{-11.017703}\) gives \(c=3.474312\) cm. This is where the instantaneous material sensitivity matches the average sensitivity across the design interval.</p></div>
 </section><section class="topic" id="s4">
 <h2><span class="n">04</span>The shape of a graph</h2>
 <p>The first derivative says where \(f\) rises and falls. The second says which way it bends.</p>
@@ -93,7 +106,7 @@ f'(c) = \frac{f(b) - f(a)}{b - a}.
 <div class="box key"><span class="tag">Key</span>
 <p>Sign of \(f'\): rising or falling. Sign of \(f''\): bending up or down. An extreme needs \(f'\) to change sign. An inflection needs \(f''\) to change sign.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>A full sketch also needs intercepts, symmetry, and asymptotes. The next section gives the asymptotes. The rest is in the text's curve-sketching checklist, §4.6.</p>
 </div>
 </section><section class="topic" id="s5">
@@ -113,7 +126,7 @@ f'(c) = \frac{f(b) - f(a)}{b - a}.
 <div class="box key"><span class="tag">Key</span>
 <p>At infinity, divide by the highest power in the bottom. Compare degrees. Exponentials beat powers, and powers beat logarithms.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>Slant asymptotes, which appear when the top's degree is one more than the bottom's, are in the text. So is the precise \(\varepsilon\)–\(N\) definition of a limit at infinity.</p>
 </div>
 </section><section class="topic" id="s6">
@@ -144,9 +157,21 @@ f'(c) = \frac{f(b) - f(a)}{b - a}.
 <p>Reduce to one variable, find its interval, and compare the critical points with the endpoints. The answer is a value of the quantity, with units.</p>
 </div>
 <p>In the Open box lab, slide the cut. The readout's \(dV/dx\) changes sign at \(2\) in. A centred difference in the lab gives the same rate as the product rule.</p>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The sheet has no thickness and the folds cost nothing. A real box needs flaps to hold its corners, and a real fence has a gate. Each changes the constraint, and the optimum moves with it.</p>
 </div>
+
+<h3>Designing a real package under an ideal constraint</h3>
+<p>A \(330\) mL drink package motivates the volume. Since one millilitre equals one cubic centimetre, take \(V=330\) cm³. A cylindrical sidewall has area circumference times height: \(2\pi rh\). Let \(k\) count flat circular ends. A closed can has \(k=2\); an open cup has \(k=1\).</p>
+\[V=\pi r^2h,\quad h=\frac{V}{\pi r^2},\quad A(r)=\frac{2V}{r}+k\pi r^2.\]
+<p>Only radius remains free. Its derivative balances the area saved in the wall against area added in the ends:</p>
+\[A'(r)=-\frac{2V}{r^2}+2k\pi r=0\quad\Longrightarrow\quad r^3=\frac{V}{k\pi},\qquad h=kr.\]
+<p>For positive radius, \(A''=4V/r^3+2k\pi\) is positive. The area grows without bound as radius approaches zero or infinity. The stationary point is therefore the unique global minimum on the unconstrained positive domain. A manufacturing radius bound could move the constrained minimum to an endpoint.</p>
+<div class="box ex"><span class="tag">Worked example · the least-area closed can</span><p>With \(k=2\), the best radius is \((330/(2\pi))^{1/3}=3.74494\) cm. Height is \(7.48988\) cm, equal to the diameter. The sheet area is \(264.35681\) cm². At a teaching radius of \(3.3\) cm, height becomes \(9.64575\) cm and area becomes \(268.42389\) cm², about \(1.53848\)% above the ideal minimum.</p></div>
+<div class="box ex"><span class="tag">Worked example · removing one end changes the answer</span><p>An open cup of the same capacity has optimum radius \((330/\pi)^{1/3}=4.71833\) cm and height \(4.71833\) cm. Its minimum area is \(209.82014\) cm². Removing the lid changes the objective before differentiation. It does not mean halving the closed can's area or keeping its optimum radius.</p></div>
+<div class="box fix"><span class="tag">Common mistake</span><p>Do not differentiate \(2\pi rh+k\pi r^2\) while treating height as constant. Capacity, rather than height, is fixed. Substitute the volume constraint first, or include the changing height through the chain rule.</p></div>
+<div class="box out"><span class="tag">What the model leaves out</span><p>Real drink cans need rolled rims, a concave base, an opening, strength and stackability. The side and ends can have different thicknesses. Those requirements change the objective and constraints. The model explains an area tradeoff; it does not claim commercial cans are designed badly.</p></div>
+<p>Package-size citation: <a href="https://www.yourcoca-cola.co.uk/coca-cola-lemon-24-x-330ml/15227578.html">Coca-Cola GB's linked 330 mL can listing</a>. Radius and flat-end geometry are stated teaching assumptions. The open-cylinder proportions also agree with 18.01SC, Unit 2, solution 2C-5, whose original objective fixes area and maximizes volume.</p>
 </section><section class="topic" id="s7">
 <h2><span class="n">07</span>Newton's method</h2>
 <p>To solve \(f(x) = 0\), start at a guess \(x_0\). Replace \(f\) by its tangent line there, and solve that line instead. Its root is the next guess.</p>
@@ -165,9 +190,13 @@ x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}.
 <div class="box key"><span class="tag">Key</span>
 <p>Each step solves the tangent line. Close to a simple root it converges very fast. Far away, or where \(f'\) is small, it can wander.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The convergence rate is stated, not proved. Its proof uses the second derivative. Bisection, from Unit 1, is slower but cannot run away from a root it has bracketed.</p>
 </div>
+
+<h3>Convergence can fail without a coding error</h3><p>For \(f(x)=x-x^3\), the Newton map simplifies to \(N(x)=-2x^3/(1-3x^2)\). Starting at \(x=1/\sqrt3\) divides by zero although the starting value is not a root. Starting at \(x=1/\sqrt5\) gives \(N(x)=-x\), then returns to \(x\). The sequence cycles instead of converging. These are the posted answers to 18.01SC exercise 2F-5, recomputed from the map.</p><div class="box fix"><span class="tag">Common mistake</span><p>A small update does not by itself prove a root has been found. Check the residual \(|f(x)|\), the derivative and the permitted domain. A two-cycle can repeat forever while both residuals remain nonzero.</p></div>
+<div class="box ex"><span class="tag">Worked example · Newton searches for the best radius</span><p>To optimize the closed can, solve \(g(r)=A'(r)=0\). Start at \(r_0=3\) cm. Since \(g=-35.63422\) and \(g'=61.45526\), Newton gives \(r_1=3.579840\) cm. Two further updates give \(3.737451\) and \(3.744924\) cm. The derivative there is about \(-0.0005651\) cm. The exact stationary radius, derived in Section 6, is \(3.744939\) cm. The separate closed form checks the iteration.</p></div>
+<div class="box out"><span class="tag">What the model leaves out</span><p>Newton's method supplies no global convergence guarantee. A practical optimizer also guards the positive-radius domain and retains a bracket or fallback method. A floating-point iterate cannot certify an exact zero.</p></div>
 </section></div><div class="part"><div class="eyebrow">Calculus Volume 1</div><h2>Derivatives</h2><section class="topic" id="s8"><h2><span class="n">08</span>Related rates</h2><p>This is implicit differentiation with time as the independent variable. <a href="../mac2311/#/mac2311/c1/secant?n=s11">Review implicit differentiation in Unit 1.</a></p><p>Related rates use the same move with time as the variable. Two quantities are tied by an equation. Differentiate the equation in \(t\). The result ties their rates.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>The method has four steps:</p>
@@ -193,14 +222,16 @@ x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}.
 <p>Implicit differentiation is the chain rule on an equation. Related rates are implicit differentiation in time. Substitute after differentiating.</p>
 </div>
 <p>In the Ladder lab, move the foot from \(2\) ft to \(8\) ft at a fixed speed. The readout shows \(y'\) growing in size. A finite step in time gives the same rate as the formula.</p>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The model says \(y' = -x\,x'/y\) grows without bound as \(y \to 0\). A real ladder does not do that. It leaves the wall first, because nothing holds the top against it. The geometry knows no forces. Physics does.</p>
 </div>
+
+<div class="box ex"><span class="tag">Worked example · sensitivity along a fixed-volume family</span><p>Differentiating \(\pi r^2h=V\) gives \(2rh+r^2\,dh/dr=0\), so \(dh/dr=-2h/r\). At \(r=3.3\) cm in the \(330\) cm³ family, \(h=9.64575\) cm and \(dh/dr=-5.84591\). A small \(0.1\) cm radius increase predicts a height reduction of about \(0.58459\) cm. If a parameter \(t\) drives the design, multiply by \(dr/dt\) to obtain \(dh/dt\). The constraint couples rates; it does not prescribe the driving rate.</p></div><div class="box fix"><span class="tag">Common mistake</span><p>A negative height rate is not a negative height. The sign describes the direction of change. The positive dimensions and the signed sensitivities have different meanings.</p></div>
 </section></div><div class="part"><div class="eyebrow">Calculus Volume 1</div><h2>Integration</h2><section class="topic" id="s9">
 <h2><span class="n">09</span>Antiderivatives</h2>
 <p>\(F\) is an antiderivative of \(f\) when \(F' = f\). Every derivative rule, read backwards, is an antiderivative rule.</p>
 <div class="box why"><span class="tag">Why</span>
-<p>Two antiderivatives of the same \(f\) differ by a constant. Let \(F\) and \(G\) both have derivative \(f\) on an interval. Then \((F - G)' = 0\) there. Unit 3's Mean Value Theorem says a function with zero derivative on an interval is constant. So \(G = F + C\).</p>
+<p>Two antiderivatives of the same \(f\) differ by a constant. Let \(F\) and \(G\) both have derivative \(f\) on an interval. Then \((F - G)' = 0\) there. Section 3's Mean Value Theorem says a function with zero derivative on an interval is constant. So \(G = F + C\).</p>
 </div>
 <p>The whole family is written \(\int f(x)\,dx = F(x) + C\), the indefinite integral. Reversing the power rule gives the most-used entry:</p>
 \[
@@ -217,9 +248,17 @@ x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}.
 <div class="box key"><span class="tag">Key</span>
 <p>An antiderivative undoes a derivative. All antiderivatives of \(f\) differ by constants. A starting value picks one.</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
-<p>Most functions have antiderivatives that no formula writes down. \(e^{-x^2}\) is the standard example. Its integrals are found numerically, as in Calculus II.</p>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Most functions have antiderivatives that no formula writes down. \(e^{-x^2}\) is the standard example. Its integrals are found numerically, in Unit 3.</p>
 </div>
+
+<h3>An equation for a rate is a differential equation</h3><p>Consider \(y'=ry\), with constant \(r\). On an interval where \(y\ne0\), divide by \(y\), integrate, and obtain \(\ln|y|=rx+C\). Exponentiation gives \(y=ae^{rx}\). The initial value is \(a=y(0)\). The zero solution was excluded by division and must be restored separately. Differentiating the solution checks the original rate equation.</p>
+<div class="box ex"><span class="tag">Worked example · growth from a starting population</span><p>Let \(y'=2y\) and \(y(0)=3\). Then \(y=3e^{2x}\). At \(x=0.5\), the value is \(3e\approx8.15485\). Its derivative is \(6e^{2x}=2y\). The initial value and the rate equation both hold. A constant rate of \(2\) would instead give a line; that would solve \(y'=2\), a different equation.</p></div>
+<h3>A limiting population changes the equation</h3><p>For \(y'=y(1-y)\), two equilibria are \(y=0\) and \(y=1\). Between them the rate is positive; above one it is negative. Separate variables away from either equilibrium. The algebraic identity \(1/[y(1-y)]=1/y+1/(1-y)\) gives</p>
+\[\ln\left|\frac{y}{1-y}\right|=x+C.\]
+<p>For \(y(0)=1/2\), the constant is zero and \(y=1/(1+e^{-x})\). The solution rises toward one while its rate declines. This checks the direction predicted from the differential equation. Partial fractions return as a general integration method in Unit 4.</p>
+<div class="box fix"><span class="tag">Common mistake</span><p>Dividing by \(y(1-y)\) removes both equilibrium solutions from the algebra. They still solve the original equation. Check any factor you divide by before describing the complete solution set.</p></div><div class="box out"><span class="tag">What the model leaves out</span><p>These population equations use continuous values and constant parameters. Actual counts are discrete, and resources and rates can change. The equations describe assumed feedback laws, not forecasts without fitted data.</p></div>
+<p>Source for the checked solution families: 18.01SC, Fall 2010, Session 40, <em>Exponential Growth and Inhibited Growth</em>, solutions (a) and (b). All explanations and selected initial values here are original.</p>
 </section><section class="topic" id="s10">
 <h2><span class="n">10</span>Exponentials and logarithms</h2>
 <p>Each derivative rule from Unit 2 gives an integral rule.</p>
@@ -248,7 +287,7 @@ x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}.
 <div class="box key"><span class="tag">Key</span>
 <p>\(e^x\) integrates to itself. \(1/x\) integrates to \(\ln|x|\). Other bases follow from \(a^x = e^{x\ln a}\): \(\int a^x\,dx = a^x/\ln a + C\).</p>
 </div>
-<div class="box out"><span class="tag">What it leaves out</span>
+<div class="box out"><span class="tag">What the model leaves out</span>
 <p>The text can also define \(\ln x\) as \(\int_1^x dt/t\) and build \(e^x\) as its inverse. That route proves the exponential's properties rather than assuming them. It is in §6.6 of the text.</p>
 </div>
-</section><section class="topic" id="s11"><h2><span class="n">11</span>Formula sheet</h2><p>These results are derived in the sections above. Check each result's hypotheses before applying it.</p><p>\(L(x)=f(a)+f\prime(a)(x-a)\), \(f\prime(c)=[f(b)-f(a)]/(b-a)\), \(x_{n+1}=x_n-f(x_n)/f\prime(x_n)\), \(F\prime=f\) for an antiderivative F.</p></section></div></main><footer><p>Original Flux notes. OpenStax Calculus Volumes 1 and 2, sections identified in the notes and textbook map.</p><p><b>Another view:</b> <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/">18.01SC Single Variable Calculus, Fall 2010</a>, Unit 2.</p></footer></body></html>
+</section><section class="topic" id="s11"><h2><span class="n">11</span>Formula sheet</h2><p>These results are derived in the sections above. Check each result's hypotheses before applying it.</p><p>\(L(x)=f(a)+f\prime(a)(x-a)\), \(f\prime(c)=[f(b)-f(a)]/(b-a)\), \(x_{n+1}=x_n-f(x_n)/f\prime(x_n)\), \(F\prime=f\) for an antiderivative F.</p></section></div></main><footer><p>Original Flux notes. OpenStax Calculus Volumes 1 and 2, sections identified in the notes and textbook map.</p><p><b>Another view:</b> <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/">18.01SC Single Variable Calculus, Fall 2010</a>, Unit 2. <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/pages/unit-2-applications-of-differentiation/">Approximation, optimization, rates, Newton iteration and first differential equations</a>.</p></footer></body></html>

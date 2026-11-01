@@ -8,6 +8,14 @@ export const textbook = (volume, section, slug) => ({
   url: `${books[volume]}${section.replace('.', '-')}-${slug}`,
 });
 export const TEXTBOOK = {
+  c2: [
+    textbook(1, '4.1', 'related-rates'),
+    textbook(1, '4.2', 'linear-approximations-and-differentials'),
+    textbook(1, '4.4', 'the-mean-value-theorem'),
+    textbook(1, '4.7', 'applied-optimization-problems'),
+    textbook(1, '4.9', 'newtons-method'),
+    textbook(1, '4.10', 'antiderivatives'),
+  ],
   c1: [
     textbook(1, '2.2', 'the-limit-of-a-function'),
     textbook(1, '3.1', 'defining-the-derivative'),
