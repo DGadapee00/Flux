@@ -218,8 +218,13 @@ export const TOPICS = Object.freeze({
   bernoulli: '14.6',
   viscosity: '14.7',
   shm: '15.1',
+  'shm-energy': '15.2',
   pendulum: '15.4',
   physical: '15.4',
+  torsion: '15.4',
+  damper: '15.4',
+  damping: '15.5',
+  resonance: '15.6',
 });
 
 /** The citation for a section number, such as '5.4', or null when the book has no such section. */

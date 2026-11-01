@@ -101,7 +101,7 @@ const hud = createHUD({
   shiftExam,
   resetCamera,
   toggleShow,
-  toggleSweep: () => {},
+  toggleSweep,
   handleKey,
   userEdit: () => {
     practice?.noteEdit();
@@ -237,10 +237,22 @@ function toggleShow(key) {
   app.dirty = true;
 }
 
+function toggleSweep() {
+  const s = slice();
+  if (!s.anim) return;
+  s.anim.playing = !s.anim.playing;
+  app.dirty = true;
+}
+
 function handleKey(e) {
   const lab = app.lab;
   if (!lab) return;
-  if (lab.keys[e.key] === 'reset') resetCamera();
+  const action = lab.keys[e.key];
+  if (action === 'sweep') {
+    e.preventDefault();
+    toggleSweep();
+  }
+  if (action === 'reset') resetCamera();
 }
 
 function applyLabScenario(lab, id, s) {

@@ -28,14 +28,16 @@ These stay in the course. They are not copied into `packages/core` or the shell.
   The orbit path is grey.
   Unit 10 keeps force pink and velocity white. Water is blue. The pistons, the floating block, and
   the fire-hose nozzle are gold. The dam wall is grey.
-- **Labs.** Units 1 to 10 are drawn (graph panels and flat vector scenes, framed by `fit` and the
+  Unit 11 keeps force pink and velocity white. The spring and the pendulum arm are gold. The block
+  and the bob are blue. The equilibrium mark is yellow. The tower is grey, and the damper beam is gold.
+- **Labs.** Units 1 to 11 are drawn (graph panels and flat vector scenes, framed by `fit` and the
   free space). The projectile lab draws the world at one scale on both axes, so angles are true. The
   free space between the panels is taller than wide on a laptop, so a lab with a picture and a bar chart stacks
   them (Unit 4). Energy bars: potential blue, kinetic white, thermal and work pink, a total yellow.
   Momentum bars are teal.
   A choice between a few named options is a `selectRow` (`define.js`).
   A lab says its numbers once, as `readoutCells`, and its law as TeX lines.
-- **Notes.** One file per unit in `src/notes/content/`, registered in `src/notes/units/`. Units 1 to 10
+- **Notes.** One file per unit in `src/notes/content/`, registered in `src/notes/units/`. Units 1 to 11
   have them. A worked example's setup in `src/notes/setups/` is checked against the lab within 2%.
 - **Problems.** A unit built to the standard is listed in `STANDARD_UNITS` in `scripts/problems-check.mjs`,
   which then also requires a level, a declared variety, a cited case, traps that can fire, and a lab
