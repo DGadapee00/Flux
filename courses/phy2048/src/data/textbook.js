@@ -231,6 +231,14 @@ export const TOPICS = Object.freeze({
   'wave-power': '16.4',
   interference: '16.5',
   standing: '16.6',
+  sound: '17.1',
+  'sound-speed': '17.2',
+  'sound-level': '17.3',
+  pipe: '17.4',
+  musical: '17.5',
+  beats: '17.6',
+  doppler: '17.7',
+  shock: '17.8',
 });
 
 /** The citation for a section number, such as '5.4', or null when the book has no such section. */
