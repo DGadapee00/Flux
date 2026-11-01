@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';import fs from 'node:fs';
-import { chromium } from './playwright.mjs';import { EXAMS } from '../src/data/catalog.js';import { course } from '../src/manifest.js';
+import { EXAM_KEY } from '../src/storage.js';import { chromium } from './playwright.mjs';import { EXAMS } from '../src/data/catalog.js';import { course } from '../src/manifest.js';
 const base=process.env.LAYOUT_URL||'http://127.0.0.1:5184/',shots=process.env.SMOKE_SHOTS||'../../work/map2302-u1-shots';fs.mkdirSync(shots,{recursive:true});
 const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_EXECUTABLE?{executablePath:process.env.CHROMIUM_EXECUTABLE,args:['--no-sandbox']}: {})});let views=0,predictions=0;const errors=[];
 try{for(const width of (process.env.LAYOUT_WIDTHS?process.env.LAYOUT_WIDTHS.split(',').map(Number):[380,1280])){
@@ -26,7 +26,15 @@ try{for(const width of (process.env.LAYOUT_WIDTHS?process.env.LAYOUT_WIDTHS.spli
    await finite();await page.screenshot({path:`${shots}/${unit.id}-${id}-${width}.png`});
   }
   await ready(unit,unit.labs[0]);await page.locator('#btn-notes').click();await page.locator('#notes .nt-show').first().waitFor();assert.equal(await page.locator('#notes .katex-error').count(),0);await page.screenshot({path:`${shots}/${unit.id}-notes-${width}.png`});await page.locator('#notes .nt-show').first().click();await page.waitForTimeout(1000);await page.keyboard.press('Escape');
-  await page.locator('#btn-practice').click();const problemIds=await page.locator('.pb-item').evaluateAll(es=>es.slice(0,5).map(e=>e.dataset.open));for(const pid of problemIds){await page.locator(`[data-open="${pid}"]`).click();await page.locator('.pb-part').first().waitFor();assert.equal(await page.locator('.katex-error').count(),0);await finite();await page.locator('[data-act="list"]').click();}await page.screenshot({path:`${shots}/${unit.id}-practice-${width}.png`});await page.keyboard.press('Escape');
+  await page.locator('#btn-practice').click();const problemIds=await page.locator('.pb-item').evaluateAll(es=>es.slice(0,5).map(e=>e.dataset.open));for(const pid of problemIds){await page.locator(`[data-open="${pid}"]`).click();await page.locator('.pb-part').first().waitFor();assert.equal(await page.locator('.katex-error').count(),0);await finite();await page.locator('[data-act="list"]').click();}await page.screenshot({path:`${shots}/${unit.id}-practice-${width}.png`});if(unit.id==='u4'){
+   assert.doesNotMatch(await page.locator('.pb-kicker').innerText(),/Exam 4/);
+   assert.match(await page.locator('[data-act="exam-start"]').innerText(),/Cumulative final/);
+   await page.locator('[data-act="exam-start"]').click();await page.locator('.pb-examnav').waitFor();
+   const ids=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)).items.map(x=>x.id),EXAM_KEY);
+   assert.deepEqual([...new Set(ids.map(id=>id.split('.')[0]))].sort(),['u1','u2','u3','u4']);
+   await page.screenshot({path:`${shots}/${unit.id}-cumulative-final-${width}.png`});
+  }
+  await page.keyboard.press('Escape');
  }
  await page.close();
 }assert.deepEqual(errors,[]);console.log(`layout: ${views} scenario/unit views; ${predictions} deliberately wrong predictions graded; both widths; no overflow or runtime/TeX errors`);

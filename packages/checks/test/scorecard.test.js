@@ -45,10 +45,8 @@ test('course selection rejects traversal and unknown folders', () => {
   for (const id of ['../starter', 'nosuchcourse']) assert.notEqual(run('--course', id).status, 0);
 });
 
-test('MAP exposes its unbuilt units honestly during the unit stack',()=>{
+test('MAP meets every measured floor while retaining its owner-review flag',()=>{
  const r=run('--course','map2302','--units');assert.equal(r.status,0,r.stderr);
- assert.match(r.stdout,/MAP 2302/);
- for(const id of ['u4'])assert.match(r.stdout,new RegExp(id+'\\s+0'));
- const gate=run('--course','map2302','--mark','map2302');
- assert.equal(gate.status,1);assert.match(gate.stderr,/misses/);
+ assert.match(r.stdout,/MAP 2302/);assert.match(r.stdout,/u4\s+25/);
+ const gate=run('--course','map2302','--mark','map2302');assert.equal(gate.status,0,gate.stderr);
 });
