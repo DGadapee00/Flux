@@ -46,10 +46,11 @@ export const EXAMS = [
     title: 'Exploring the infinite',
     chapters: 'Vol 1 \u00a74.8; Vol 2 Ch 3, 5\u20136',
     date: null,
-    labs: ['improper', 'taylor', 'series'],
+    labs: ['improper', 'taylor', 'series', 'clock'],
   },
 ];
 export const LAB_META = {
+  clock: { id: 'clock', exam: 'c6', title: 'Pendulum clock', app: true },
   record: { id: 'record', exam: 'c5', title: 'Record player', app: true },
   technique: { id: 'technique', exam: 'c4', title: 'Integral workbench' },
   bridge: { id: 'bridge', exam: 'c4', title: 'Bridge cable', app: true },

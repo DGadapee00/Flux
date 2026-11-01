@@ -5,8 +5,9 @@ Six units follow 18.01SC: differentiation, its applications, definite integrals,
 integration techniques, parametric/polar curves, and the infinite. OpenStax adds
 sequences and convergence tests.
 
-All 14 existing labs, 87 problem templates and 38 lab-linked notes examples remain.
-The eight notes files are recut into six. Calculus II's entry path redirects here.
+The active course has 22 labs, 83 problem families and 82 lab-linked notes examples.
+All 87 original templates remain accessible by saved ID and seed. Six note files follow
+the merged spine. Calculus II's entry path redirects here.
 
 From the repo root:
 
@@ -30,6 +31,6 @@ The migration combines review histories without deleting old keys or adding atte
 twice. Existing hub backups keep both source-course entries. The complete contract is
 in `docs/course-plans/mac2311-2312.md`.
 
-Unit 1 has been reworked with a camera-focus application, predictions, and a new active bank. Original Unit 1 templates remain accessible by saved ID and keep their seed identity. Unit 2 now adds constrained can design, approximation error, Newton failures and first differential equations. Unit 3 adds rain-barrel accumulation, spheroid slices, probability, weighted means and a checked source correction. Unit 4 adds an integral workbench and suspension-cable geometry. Unit 5 adds record-player motion, signed polar coordinates and weighted arc averages. Unit 6 still needs the same treatment. This completes the module merge within R4a. The merged course still fails the content
-scorecard: predictions, cited applications, feedback and problem variety need the planned
-unit-by-unit rework. `standard` remains false.
+Unit 1 has been reworked with a camera-focus application, predictions, and a new active bank. Original Unit 1 templates remain accessible by saved ID and keep their seed identity. Unit 2 now adds constrained can design, approximation error, Newton failures and first differential equations. Unit 3 adds rain-barrel accumulation, spheroid slices, probability, weighted means and a checked source correction. Unit 4 adds an integral workbench and suspension-cable geometry. Unit 5 adds record-player motion, signed polar coordinates and weighted arc averages. Unit 6 adds nonlinear clock-pendulum timing, rigorous convergence and remainder bounds.
+All six units pass the content scorecard; the merge and content rework are complete within R4a.
+Owner review remains pending, and `standard` remains false.

@@ -63,4 +63,30 @@ for (const unit of REWORKED_UNITS)
     }
   });
 
-test('legacy setup labels are not promoted to published citations',()=>{assert.equal(citeCases(LEGACY_PROBLEMS[0]),LEGACY_PROBLEMS[0]);});
+test('legacy setup labels are not promoted to published citations', () => {
+  assert.equal(citeCases(LEGACY_PROBLEMS[0]), LEGACY_PROBLEMS[0]);
+});
+
+test('every completed unit has introductory, intermediate and advanced practice', () => {
+  for (const unit of REWORKED_UNITS)
+    for (const level of [1, 2, 3])
+      assert.ok(
+        PROBLEMS.some((t) => t.exam === unit && t.level === level),
+        `${unit}: difficulty ${level} has no problems`,
+      );
+});
+test('the sign of a small integrated series correction is still graded', () => {
+  const t = PROBLEMS.find((p) => p.id === 'c6.integrate-series');
+  if (!t) return;
+  let found = false;
+  for (let seed = 0; seed < 30; seed++) {
+    const q = instance(t, seed);
+    if (q.$.form !== 'three') continue;
+    const g = grade(t.parts[0], q.$, String(13 / 42 - 1 / 1320));
+    assert.equal(g.correct, false);
+    assert.ok(g.feedback.includes('positive'));
+    found = true;
+    break;
+  }
+  assert.ok(found);
+});

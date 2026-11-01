@@ -528,3 +528,111 @@ PREDICTIONS.record = [
     why: 'The factor ω cancels from dy/dx. It remains in the time derivatives, so the same geometric tangent can carry a different speed.',
   },
 ];
+
+PREDICTIONS.improper = [
+  {
+    id: 'tail-half',
+    scenario: 'mid',
+    ask: 'Double the cutoff from 4 to 8 in the integral of 1/x². What happens to the missing tail?',
+    apply: (s) => {
+      s.b *= 2;
+    },
+    watch: [watch('tail', 'Tail beyond cutoff', (c) => c.tail)],
+    expect: { tail: 0.5 },
+    why: 'The tail is exactly 1/b. Doubling a cutoff halves this missing area; it does not make it zero.',
+  },
+  {
+    id: 'area-tail',
+    scenario: 'near',
+    ask: 'Double the cutoff from 2 to 4. Do the collected area and missing tail both double?',
+    apply: (s) => {
+      s.b *= 2;
+    },
+    watch: [watch('area', 'Area from 1', (c) => c.area), watch('tail', 'Tail', (c) => c.tail)],
+    factors: [0.5, 1, 1.5, 2],
+    expect: { area: 1.5, tail: 0.5 },
+    why: 'Collected area is 1−1/b, while the tail is 1/b. They add to one and move in opposite directions.',
+  },
+];
+PREDICTIONS.taylor = [
+  {
+    id: 'zero-coefficient',
+    scenario: 'line',
+    ask: 'Raise the Maclaurin order for sin x from one to two. Must the approximation change?',
+    apply: (s) => {
+      s.n = 2;
+    },
+    watch: [watch('error', 'Error at the probe', (c) => c.err, 'trend')],
+    expect: { error: 'same' },
+    why: 'The quadratic coefficient of sine at zero vanishes. Increasing the allowed degree need not add a nonzero term.',
+  },
+  {
+    id: 'distance-error',
+    scenario: 'line',
+    prep: (s) => {
+      s.x = 0.25;
+    },
+    ask: 'Keep the tangent approximation to sin x at zero and double the probe distance from 0.25 to 0.5. Approximately how does its error change?',
+    apply: (s) => {
+      s.x *= 2;
+    },
+    watch: [watch('error', 'Error', (c) => c.err)],
+    factors: [2, 4, 8, 1],
+    tol: 0.02,
+    expect: { error: 8 },
+    why: 'The first missing nonzero term is −x³/6. Near the centre its cubic scaling dominates the error.',
+  },
+];
+PREDICTIONS.series = [
+  {
+    id: 'harmonic-limit',
+    scenario: 'harm',
+    ask: 'Double the number of harmonic terms. Their individual size falls. Does this make the infinite sum convergent?',
+    apply: (s) => {
+      s.n *= 2;
+    },
+    watch: [watch('converges', 'Infinite series converges', (c) => c.converges, 'bool')],
+    expect: { converges: false },
+    why: 'A zero term limit is necessary but not sufficient. Blocks from n+1 through 2n retain at least one-half of added sum.',
+  },
+  {
+    id: 'geometric-tail',
+    scenario: 'geom',
+    ask: 'Increase the halving series from eight terms to sixteen. What fraction of the old missing tail remains?',
+    apply: (s) => {
+      s.n *= 2;
+    },
+    watch: [watch('tail', 'Missing tail', (c) => 2 - c.sn)],
+    factors: [0.5, 0.25, 1 / 256, 1],
+    expect: { tail: 1 / 256 },
+    why: 'Each new term advances the geometric tail by another factor one-half. Eight extra terms multiply it by 2⁻⁸, not one-half.',
+  },
+];
+PREDICTIONS.clock = [
+  {
+    id: 'amplitude-correction',
+    scenario: 'small',
+    ask: 'Double assumed amplitude from 5° to 10°. Approximately how does the excess period beyond the small-angle limit change?',
+    apply: (s) => {
+      s.angle *= 2;
+    },
+    watch: [watch('excess', 'Period beyond T₀', (c) => c.period - c.T0)],
+    tol: 0.02,
+    expect: { excess: 4 },
+    why: 'The leading correction is θ₀²/16. Total period hardly changes, while its small amplitude correction nearly quadruples.',
+  },
+  {
+    id: 'more-terms',
+    scenario: 'wide',
+    ask: 'Double the number of series terms. Does the pendulum speed up, or does only the calculation improve?',
+    apply: (s) => {
+      s.n *= 2;
+    },
+    watch: [
+      watch('period', 'Nonlinear period', (c) => c.period, 'trend'),
+      watch('error', 'Series error', (c) => c.error, 'trend'),
+    ],
+    expect: { period: 'same', error: 'smaller' },
+    why: 'The physical period depends on length, gravity and amplitude. The truncation count controls the approximation, not the pendulum.',
+  },
+];

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { fitArcCamera, plotWindow } from './arc.js';
 import { cells, eq, kv } from '@flux/shells/math/shared.js';
 import { fmtNum as fmt } from '@flux/shells/math/format.js';
 import { sampleFn, taylorError, taylorHorner, taylorSum } from '../math/calc2.js';
@@ -18,27 +18,31 @@ function keepXy(state) {
 }
 
 function taylorCamera(state) {
-  const u = state?.view?.upm > 0 ? state.view.upm : 1;
-  const xMin = Number.isFinite(state?.xMin) ? state.xMin : FRAME.xMin;
-  const xMax = Number.isFinite(state?.xMax) ? state.xMax : FRAME.xMax;
-  const yMin = Number.isFinite(state?.yMin) ? state.yMin : FRAME.yMin;
-  const yMax = Number.isFinite(state?.yMax) ? state.yMax : FRAME.yMax;
-  const cx = ((xMin + xMax) / 2) * u;
-  const cy = ((yMin + yMax) / 2) * u;
-  const halfW = ((xMax - xMin) / 2) * u;
-  const z = (halfW * 1.25) / (Math.tan(Math.PI / 9) * (380 / 780));
-  return { pos: new THREE.Vector3(cx, cy, z), target: new THREE.Vector3(cx, cy, 0) };
+  const c = fitArcCamera(state, plotWindow());
+  return { pos: c.pos, target: c.target };
 }
 
 function clamp(v, lo, hi) {
   return Math.min(hi, Math.max(lo, v));
 }
 
+function taylorFrame(s) {
+  let low = -1,
+    high = 1;
+  for (let i = 0; i <= 80; i++) {
+    const x = FRAME.xMin + ((FRAME.xMax - FRAME.xMin) * i) / 80,
+      y = taylorSum('sin', s.a, s.n, x);
+    low = Math.min(low, y);
+    high = Math.max(high, y);
+  }
+  const pad = 0.12 * (high - low);
+  return { ...FRAME, yMin: low - pad, yMax: high + pad };
+}
 export default defineLab({
   id: 'taylor',
   exam: 'u3',
   title: 'Taylor',
-  hint: 'Raise the order. The match should reach farther from the centre.',
+  hint: 'Change order and centre. Compare the polynomial and its error.',
   orbit: true,
   probe: false,
   frame: true,
@@ -86,11 +90,11 @@ export default defineLab({
   bind(api) {
     document.getElementById('tay-n').addEventListener('input', (e) => {
       api.slice().n = Number(e.target.value);
-      api.bump();
+      api.fitView?.();
     });
     document.getElementById('tay-a').addEventListener('input', (e) => {
       api.slice().a = Number(e.target.value);
-      api.bump();
+      api.fitView?.();
     });
     document.getElementById('tay-x').addEventListener('input', (e) => {
       api.slice().x = Number(e.target.value);
@@ -112,11 +116,13 @@ export default defineLab({
     state.n = s.n;
     state.a = s.a;
     state.x = s.x;
-    Object.assign(state, FRAME);
+    Object.assign(state, taylorFrame(state));
     keepXy(state);
   },
-  extent() {
-    return Math.max(Math.abs(FRAME.xMin), FRAME.xMax, Math.abs(FRAME.yMin), FRAME.yMax);
+  extent(s) {
+    const f = taylorFrame(s);
+    Object.assign(s, f);
+    return Math.max(Math.abs(f.xMin), f.xMax, Math.abs(f.yMin), f.yMax);
   },
   recompute(state, computed) {
     keepXy(state);
@@ -128,7 +134,7 @@ export default defineLab({
     state.n = n;
     state.a = a;
     state.x = x;
-    Object.assign(state, FRAME);
+    Object.assign(state, taylorFrame(state));
     const poly = taylorSum(kind, a, n, x);
     const horner = taylorHorner(kind, a, n, x);
     computed.poly = poly;
@@ -152,7 +158,13 @@ export default defineLab({
     const view = ctx.handle.view;
     const kind = state.kind || 'sin';
     view.syncCurve('curve', (x) => sampleFn(kind, x), state.xMin, state.xMax, show.curve !== false);
-    view.syncCurve('poly', (x) => taylorSum(kind, state.a, state.n, x), state.xMin, state.xMax, show.poly !== false);
+    view.syncCurve(
+      'poly',
+      (x) => taylorSum(kind, state.a, state.n, x),
+      state.xMin,
+      state.xMax,
+      show.poly !== false,
+    );
     view.syncMark(state.x, computed.f, true);
   },
   law() {
@@ -184,9 +196,9 @@ export default defineLab({
     ];
     if (Math.abs(state.x - state.a) < 1e-9) body.push('At the centre the polynomial matches sine.');
     else if (state.n <= 1) body.push('Order 1 is the tangent line. The gap grows as you leave the centre.');
-    else body.push('A higher order holds the curve farther from the centre.');
+    else body.push('Remainder estimates determine where the polynomial is accurate.');
     if (computed.agree) body.push('Term-by-term addition and Horner form agree.');
-    return { title: 'Order buys reach', body };
+    return { title: 'Order changes the approximation', body };
   },
   plot() {
     return null;
