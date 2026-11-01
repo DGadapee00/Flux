@@ -1,3 +1,4 @@
+@import "../../styles/predict.css";
 /* 3Blue1Brown / Manim look: near-black ground, flat panels, Computer Modern math, Manim palette. */
 :root {
   --bg: #0b0c0e;

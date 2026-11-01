@@ -31,3 +31,9 @@ pre-merge questions and answers to verify that saved work remains reproducible.
 18.01SC Single Variable Calculus (Fall 2010) sets the merged order. Its downloaded references
 remain in the ignored `reference/` tree. The content scorecard rework and printed-answer
 audit remain outstanding; this change establishes the merged module and migration.
+
+## Unit 1 content rework
+
+Original explanations and statements follow 18.01SC (Fall 2010), Unit 1. Symbolic worked cases reproduce the published answer formulas for exercises 1C-1, 1E-1, 1F-1, 1F-3, 1I-1 and 1J-1. Numeric cases check 1B-1, 1C-5 and the Secants and Tangents activity. Rounded printed secant values are identified as rounded. Conceptual families cite the relevant exercise or OpenStax definition; these are reasoning checks, not claims of a new printed numeric answer.
+
+Camera inputs: Nikon AF NIKKOR 50mm f/1.8D nominal focal length 50 mm and minimum focus 0.45 m; AF NIKKOR 85mm f/1.8D nominal focal length 85 mm. Other subject distances are stated teaching inputs. The thin-lens idealisation does not claim a product calibration. No source text or figures are copied. Raw references remain outside the shipped course.
