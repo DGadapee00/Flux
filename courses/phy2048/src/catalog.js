@@ -84,8 +84,8 @@ export const UNITS = [
     title: 'Gravitation',
     chapters: ['13'],
     date: null,
-    labs: [],
-    coming: ['Orbits', "Kepler's laws", 'ISS orbit'],
+    labs: ['orbit', 'kepler', 'iss-orbit'],
+    coming: [],
   },
   {
     id: 'u10',
@@ -200,6 +200,9 @@ export const LAB_META = {
   ladder: { id: 'ladder', exam: 'u8', title: 'Ladder' },
   'stress-strain': { id: 'stress-strain', exam: 'u8', title: 'Stress and strain' },
   'car-balance': { id: 'car-balance', exam: 'u8', title: 'Car weight balance', app: true },
+  orbit: { id: 'orbit', exam: 'u9', title: 'Orbit' },
+  kepler: { id: 'kepler', exam: 'u9', title: "Kepler's laws" },
+  'iss-orbit': { id: 'iss-orbit', exam: 'u9', title: 'ISS orbit', app: true },
 };
 
 export function examById(id) {

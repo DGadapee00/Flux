@@ -23,14 +23,17 @@ These stay in the course. They are not copied into `packages/core` or the shell.
   the spin-energy bar, and a flywheel that drops on are gold. The origin and the pivot mark are yellow.
   Unit 8 keeps force pink. A second support, and the wall’s push on a ladder, are white. The person
   and the car’s center of mass are gold. The center mark is yellow.
-- **Labs.** Units 1 to 8 are drawn (graph panels and flat vector scenes, framed by `fit` and the
+  Unit 9 keeps force pink and velocity white. The planet is blue. A craft, the station, and the
+  star are gold. The equal-area wedge the readout measures is white, and the other wedge is pink.
+  The orbit path is grey.
+- **Labs.** Units 1 to 9 are drawn (graph panels and flat vector scenes, framed by `fit` and the
   free space). The projectile lab draws the world at one scale on both axes, so angles are true. The
   free space between the panels is taller than wide on a laptop, so a lab with a picture and a bar chart stacks
   them (Unit 4). Energy bars: potential blue, kinetic white, thermal and work pink, a total yellow.
   Momentum bars are teal.
   A choice between a few named options is a `selectRow` (`define.js`).
   A lab says its numbers once, as `readoutCells`, and its law as TeX lines.
-- **Notes.** One file per unit in `src/notes/content/`, registered in `src/notes/units/`. Units 1 to 8
+- **Notes.** One file per unit in `src/notes/content/`, registered in `src/notes/units/`. Units 1 to 9
   have them. A worked example's setup in `src/notes/setups/` is checked against the lab within 2%.
 - **Problems.** A unit built to the standard is listed in `STANDARD_UNITS` in `scripts/problems-check.mjs`,
   which then also requires a level, a declared variety, a cited case, traps that can fire, and a lab
