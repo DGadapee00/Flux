@@ -29,6 +29,16 @@
   --copper-soft: rgba(240, 172, 95, 0.09);
   --ok: var(--text);
   --ok-soft: rgba(236, 230, 226, 0.05);
+  /*
+   * PHY 2049's five steps (physics shell): meta, ui, body, title, display. Nothing between.
+   * The engineering shell does not set these. An unset var() drops the declaration, and a
+   * heading then inherits the body size.
+   */
+  --fs-meta: 11px;
+  --fs-ui: 13px;
+  --fs-body: 15px;
+  --fs-title: 18px;
+  --fs-display: 24px;
 }
 
 body.notes-open #eq-panel,
@@ -182,14 +192,15 @@ body.notes-resizing {
 
 .nt-doc {
   font-family: var(--serif);
-  font-size: 15px;
+  font-size: var(--fs-body);
   line-height: 1.65;
   color: var(--text);
 }
 
 .nt-doc .eyebrow {
   font-family: var(--font);
-  font-size: 11px;
+  font-size: var(--fs-meta);
+  line-height: 1.4;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -203,7 +214,7 @@ body.notes-resizing {
 .nt-doc h1 {
   margin: 8px 0 10px;
   font-family: var(--font);
-  font-size: 22px;
+  font-size: var(--fs-display);
   font-weight: 600;
   line-height: 1.2;
 }
@@ -213,12 +224,13 @@ body.notes-resizing {
 }
 
 .nt-doc nav.toc {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-top: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 24px;
+  margin-top: 20px;
   font-family: var(--font);
-  font-size: 14px;
+  font-size: var(--fs-ui);
+  line-height: 1.45;
 }
 
 .nt-doc nav.toc a {
@@ -247,7 +259,12 @@ body.notes-resizing {
 
 .nt-doc h2 {
   margin-top: 34px;
-  font-size: 18px;
+  font-size: var(--fs-title);
+}
+
+.nt-doc h3 {
+  margin-top: 22px;
+  font-size: var(--fs-body);
 }
 
 .nt-doc h2 .n {
@@ -260,58 +277,140 @@ body.notes-resizing {
   margin: 10px 0;
 }
 
+.nt-doc ul,
+.nt-doc ol {
+  margin: 10px 0;
+  padding-left: 1.3em;
+}
+
+.nt-doc li {
+  margin: 4px 0;
+}
+
+.nt-doc .katex {
+  font-size: 1.06em;
+}
+
+/* Callouts sit off the body: a title row, then padded text, then equations in their own band. */
 .nt-doc .box {
-  margin: 18px 0;
-  padding: 12px 16px;
+  margin: 22px 0;
+  padding: 0 0 14px;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: rgba(236, 230, 226, 0.03);
+  border-left-width: 3px;
+  border-radius: 8px;
+  background: rgba(236, 230, 226, 0.04);
+  overflow: hidden;
 }
 
 .nt-doc .box > .tag {
   display: block;
-  margin-bottom: 2px;
+  margin: 0 0 12px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(236, 230, 226, 0.05);
   font-family: var(--font);
-  font-size: 11px;
+  font-size: var(--fs-meta);
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
+  line-height: 1.35;
   text-transform: uppercase;
 }
 
-.nt-doc .box.ex > .tag,
-.nt-doc .box.why > .tag {
+.nt-doc .box > p,
+.nt-doc .box > ul,
+.nt-doc .box > ol {
+  margin: 8px 16px 0;
+}
+
+.nt-doc .box > ul,
+.nt-doc .box > ol {
+  padding-left: 1.25em;
+}
+
+.nt-doc .box .katex-display {
+  margin: 12px 16px 0;
+  padding: 8px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 4px;
+}
+
+.nt-doc .box > .nt-setup,
+.nt-doc .box > .nt-links {
+  margin: 12px 16px 0;
+}
+
+.nt-doc .box.ex {
+  border-color: rgba(88, 196, 221, 0.38);
+  border-left-color: var(--blue);
+  background: rgba(88, 196, 221, 0.08);
+}
+
+.nt-doc .box.ex > .tag {
   color: var(--blue);
+  background: rgba(88, 196, 221, 0.14);
+  border-bottom-color: rgba(88, 196, 221, 0.24);
 }
 
 .nt-doc .box.why {
   border-color: transparent;
+  border-left-color: var(--blue);
   background: var(--field-soft);
 }
 
+.nt-doc .box.why > .tag {
+  color: var(--blue);
+  background: rgba(88, 196, 221, 0.12);
+  border-bottom-color: rgba(88, 196, 221, 0.18);
+}
+
 .nt-doc .box.fix {
-  border-color: rgba(240, 172, 95, 0.3);
+  border-color: rgba(240, 172, 95, 0.35);
+  border-left-color: var(--gold);
   background: var(--copper-soft);
 }
 
 .nt-doc .box.fix > .tag {
   color: var(--gold);
+  background: rgba(240, 172, 95, 0.14);
+  border-bottom-color: rgba(240, 172, 95, 0.28);
+}
+
+.nt-doc .box.key {
+  border-color: var(--border-hover);
+  border-left-color: var(--text);
+  background: var(--ok-soft);
+}
+
+.nt-doc .box.key > .tag {
+  color: var(--text);
+  background: rgba(236, 230, 226, 0.06);
+  border-bottom-color: var(--border-hover);
 }
 
 /* What a section's model leaves out: the last box of a section. */
 .nt-doc .box.out {
   border-style: dashed;
+  border-left-width: 1px;
+  border-left-style: dashed;
   border-color: var(--border-hover);
   background: transparent;
 }
 
 .nt-doc .box.out > .tag {
   color: var(--text-muted);
+  background: rgba(236, 230, 226, 0.03);
+  border-bottom-style: dashed;
+  border-bottom-color: var(--border-hover);
 }
 
 .nt-doc .katex-display {
   margin: 12px 0;
   overflow-x: auto;
   overflow-y: hidden;
+  padding-block: 2px;
 }
 
 .nt-links,
@@ -377,42 +476,64 @@ body.notes-resizing {
 /* The rest of PHY 2049's notes structure (D32): a toc grouped by part, the closing bridge of a part,
    the key box, the source footer, and the Another view line. */
 .nt-doc nav.toc h3 {
-  margin: 10px 0 0;
+  grid-column: 1 / -1;
+  margin: 12px 0 0;
   font-size: var(--fs-meta);
   font-weight: 600;
   letter-spacing: 0.06em;
+  line-height: 1.4;
   text-transform: uppercase;
   color: var(--text-muted);
 }
 
 .nt-doc .bridge {
-  margin-top: 18px;
-  padding-left: 12px;
+  margin-top: 20px;
+  padding-left: 14px;
   border-left: 2px solid var(--border-hover);
   color: var(--text-muted);
   font-style: italic;
 }
 
-.nt-doc .box.key {
-  border-color: transparent;
-  background: var(--ok-soft);
-}
-
-.nt-doc .box.key > .tag {
-  color: var(--text);
-}
-
 .nt-doc footer {
-  margin-top: 28px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border-hover);
-  font-size: var(--fs-meta);
+  margin-top: 40px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font);
+  font-size: var(--fs-ui);
+  line-height: 1.5;
   color: var(--text-muted);
 }
 
 .nt-doc .another-view {
-  font-size: var(--fs-meta);
+  font-family: var(--font);
+  font-size: var(--fs-ui);
+  line-height: 1.5;
   color: var(--text-muted);
+}
+
+.notes .btn {
+  font-size: var(--fs-ui);
+}
+
+@media (max-width: 720px) {
+  .nt-doc nav.toc {
+    grid-template-columns: 1fr;
+  }
+
+  .nt-doc .box > .tag {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .nt-doc .box > p,
+  .nt-doc .box > ul,
+  .nt-doc .box > ol,
+  .nt-doc .box .katex-display,
+  .nt-doc .box > .nt-setup,
+  .nt-doc .box > .nt-links {
+    margin-left: 12px;
+    margin-right: 12px;
+  }
 }
 
 .nt-doc .another-view a {
