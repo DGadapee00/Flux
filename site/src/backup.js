@@ -9,6 +9,7 @@ import { courseStore as dynamicsStore } from '@flux/egn3321/src/storage.js';
 import { courseStore as materialsStore } from '@flux/egn3331/src/storage.js';
 import { courseStore as thermoStore } from '@flux/eml3100/src/storage.js';
 import { courseStore as staticsStore } from '@flux/statics/src/storage.js';
+import { courseStore as odeStore } from '@flux/map2302/src/storage.js';
 import { courseStore as benchStore } from '@flux/bench/src/storage.js';
 
 /** Course stores, in the order a backup file writes them. */
@@ -25,6 +26,7 @@ export function backupParts() {
     { courseId: 'egn3331', store: materialsStore() },
     { courseId: 'phy2048', store: phy1Store() },
     { courseId: 'bench', store: benchStore() },
+    { courseId: 'map2302', store: odeStore() },
   ];
 }
 
