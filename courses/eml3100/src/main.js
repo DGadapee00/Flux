@@ -243,7 +243,11 @@ function draw() {
   stage.show(lab, slice());
 }
 
+let lastFrame = 0;
 function frame(now = 0) {
+  const dt = lastFrame ? Math.min(0.05, (now - lastFrame) / 1000) : 0;
+  lastFrame = now;
+  if (typeof app.lab?.tick === 'function' && app.lab.tick(dt, slice(), computed)) app.dirty = true;
   const relayout = layoutChanged(now);
   if (app.dirty) {
     recompute();
