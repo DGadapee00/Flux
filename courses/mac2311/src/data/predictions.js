@@ -348,3 +348,91 @@ PREDICTIONS.spheroid = [
     why: 'The equatorial radius enters disk area twice. The axial interval has not doubled, so this is not an eightfold uniform scaling.',
   },
 ];
+
+PREDICTIONS.arc = [
+  {
+    id: 'arc-scale',
+    scenario: 'parabola',
+    ask: 'Double the right endpoint on y=x². Does the whole arc length merely double?',
+    apply: (s) => {
+      s.b *= 2;
+    },
+    watch: [watch('length', 'Arc length', (c) => c.length)],
+    factors: [1, 2, 3.14, 4],
+    tol: 0.02,
+    expect: { length: 3.14 },
+    why: 'Changing the endpoint also admits steeper pieces. It does not scale both coordinates equally.',
+  },
+  {
+    id: 'line-gap',
+    scenario: 'line',
+    ask: 'Double the right endpoint on a straight line. Does a gap between arc and chord appear?',
+    apply: (s) => {
+      s.b *= 2;
+    },
+    watch: [watch('gap', 'Arc exceeds chord', (c) => c.shorter, 'bool')],
+    expect: { gap: false },
+    why: 'A straight line has no bending. The arc and chord remain identical at every endpoint.',
+  },
+];
+PREDICTIONS.technique = [
+  {
+    id: 'half-width',
+    scenario: 'exp',
+    ask: 'Start halfway through [0,1]. Double the width. Does the accumulated integral merely double?',
+    prep: (s) => {
+      s.fraction = 0.5;
+    },
+    apply: (s) => {
+      s.fraction = 1;
+    },
+    watch: [watch('I', 'Integral', (c) => c.integral)],
+    factors: [1, 2, 4, 5.69],
+    tol: 0.02,
+    expect: { I: 5.69 },
+    why: 'The new half contains taller values of x exp(x). Area is not proportional to width when the height changes.',
+  },
+  {
+    id: 'even-height',
+    scenario: 'even',
+    ask: 'Extend the upper bound from π/2 to π for sin²x. The final height falls to zero. Does the integral decrease?',
+    prep: (s) => {
+      s.fraction = 0.5;
+    },
+    apply: (s) => {
+      s.fraction = 1;
+    },
+    watch: [watch('I', 'Integral', (c) => c.integral, 'trend')],
+    expect: { I: 'bigger' },
+    why: 'The integrand remains nonnegative. Additional width contributes positive area even while its endpoint height falls.',
+  },
+];
+PREDICTIONS.bridge = [
+  {
+    id: 'sag-excess',
+    scenario: 'shallow',
+    ask: 'Double the assumed sag from 50 to 100 m. Approximately what factors describe the total length and its small excess beyond the span?',
+    apply: (s) => {
+      s.d *= 2;
+    },
+    watch: [
+      watch('length', 'Cable length', (c) => c.length),
+      watch('excess', 'Length beyond span', (c) => c.extra),
+    ],
+    expect: { length: 1, excess: 4 },
+    tol: 0.05,
+    why: 'For small sag, the leading excess is 8d²/(3L). Total length is still dominated by the unchanged horizontal span.',
+  },
+  {
+    id: 'polygon-refine',
+    scenario: 'deep',
+    ask: 'Double the number of polygon segments. What happens to the gap from the smooth cable length?',
+    apply: (s) => {
+      s.n *= 2;
+    },
+    watch: [watch('error', 'Polygon shortfall', (c) => c.error)],
+    expect: { error: 0.25 },
+    tol: 0.02,
+    why: 'For this smooth curve, each chord loses a third-order amount; twice as many half-width pieces reduce total error about fourfold.',
+  },
+];

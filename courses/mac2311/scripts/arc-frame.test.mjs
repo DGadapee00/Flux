@@ -50,3 +50,11 @@ for (const [kind, b] of [
     }
   });
 }
+
+test('programmatic endpoint changes refresh bounds before camera fitting', () => {
+  const s = arc.defaultState();
+  s.b = 2;
+  arc.extent(s);
+  assert.ok(s.yMax >= 4);
+  assert.ok(s.xMax >= 2);
+});
