@@ -91,6 +91,7 @@ const B = [
   }),
   numericFamily({
     id: 'c2.mvt',
+    level: 1,
     exam: 'c2',
     ch: '4',
     title: 'Find where a tangent matches a secant',
