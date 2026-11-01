@@ -13,6 +13,14 @@ export const UNIT_SECTIONS = Object.freeze({
 });
 // Topic → section entries begin with the first confirmed unit, not with invented citations.
 export const SECTIONS = Object.freeze({
+ 'fourier':{section:'4.2',url:'ts_section.html'},
+ 'fourier-operations':{section:'4.3',url:'moreonfourier_section.html'},
+ 'laplace-basics':{section:'6.1',url:'laplace_section.html'},
+ 'laplace-inverse':{section:'6.2',url:'transformsofders_section.html'},
+ 'laplace-ivp':{section:'6.2',url:'transformsofders_section.html'},
+ 'causal-inputs':{section:'6.4',url:'diracdelta_section.html'},
+ 'convolution':{section:'6.3',url:'convolution_section.html'},
+ 'transfer':{section:'6.2',url:'transformsofders_section.html'},
  'characteristic':{section:'2.2',url:'sec_ccsol.html'},
  'vibrations':{section:'2.4',url:'sec_mv.html'},
  'exponential-response':{section:'2.5',url:'sec_nonhom.html'},

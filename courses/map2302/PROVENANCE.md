@@ -1,6 +1,6 @@
 # MAP 2302 provenance
 
-This course contains original Units 1–2 notes, problem templates and labs, and a four-unit catalog. It was copied from the course-neutral math starter,
+This course contains original Units 1–3 notes, problem templates and labs, and a four-unit catalog. It was copied from the course-neutral math starter,
 not another real course. No source wording, problem statements, figures or PDFs ship.
 
 1. MIT OCW 18.03SC Differential Equations, Fall 2011, CC BY-NC-SA 4.0:
