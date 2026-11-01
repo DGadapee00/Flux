@@ -13,6 +13,17 @@ export const UNIT_SECTIONS = Object.freeze({
 });
 // Topic → section entries begin with the first confirmed unit, not with invented citations.
 export const SECTIONS = Object.freeze({
+ 'systems':{section:'3.1',url:'sec_introtosys.html'},
+ 'eigenvalues':{section:'3.4',url:'eigenmethod_section.html'},
+ 'portraits':{section:'3.5',url:'sec_twodimaut.html'},
+ 'normal-modes':{section:'3.6',url:'sol_section.html'},
+ 'repeated':{section:'3.7',url:'sec_multeigen.html'},
+ 'matrix-exponential':{section:'3.8',url:'sec_matexp.html'},
+ 'nonlinear':{section:'8.3',url:'nlinapps_section.html'},
+ 'linearization':{section:'8.1',url:'linearization_section.html'},
+ 'limit-cycles':{section:'8.4',url:'limitcycles_section.html'},
+ 'chaos':{section:'8.5',url:'sec_chaos.html'},
+ 'pendulum':{section:'8.3',url:'nlinapps_section.html'},
  'fourier':{section:'4.2',url:'ts_section.html'},
  'fourier-operations':{section:'4.3',url:'moreonfourier_section.html'},
  'laplace-basics':{section:'6.1',url:'laplace_section.html'},

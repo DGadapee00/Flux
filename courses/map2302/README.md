@@ -1,8 +1,7 @@
 # MAP 2302 Differential Equations
 
 OCW 18.03SC Fall 2011 sets the four-unit sequence. Dalton confirmed Lebl,
-the spine and all four application objects on 1 Nov 2026. Units 1–3 are built;
-Unit 4 stays visible as planned. `standard: false` until Dalton reviews.
+the spine and all four application objects on 1 Nov 2026. All four units are built. `standard: false` until Dalton reviews.
 
 Unit 1 has five labs (including a drawn, animated HARIO coffee server),
 25 original templates, ten computed predictions, and eleven notes sections
@@ -22,4 +21,7 @@ Unit 2 adds four drawn/animated labs, including the Eibach-spring quarter-car,
 25 templates (36% conceptual), eight predictions and eleven checked notes setups.
 
 Unit 3: four labs, a cited 60 kHz radio-clock tuner, eight predictions, 26 templates
-(34.6% conceptual), and eleven notes examples that open in labs. Unit 4 remains planned.
+(34.6% conceptual), and eleven notes examples that open in labs. Owner student review remains.
+
+Unit 4: five labs including the drawn pendulum clock, ten predictions, 25 templates
+(36% conceptual), and thirteen lab-linked notes examples. The full measured scorecard passes.

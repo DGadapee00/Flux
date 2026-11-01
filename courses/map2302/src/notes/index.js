@@ -1,4 +1,5 @@
 import u3 from './units/u3.js';
+import u4 from './units/u4.js';
 /**
  * Notes, one set per unit, in PHY 2049's structure (courses/phy2049/src/notes/content/).
  * Math is \( \) and \[ \]. A dollar sign is not a delimiter in the notes files.
@@ -7,7 +8,7 @@ import u3 from './units/u3.js';
 /** One file per unit in ./units/, so each unit's sections change without touching the others. */
 import u1 from './units/u1.js';
 import u2 from './units/u2.js';
-export const NOTES = {u1,u2,u3};
+export const NOTES = {u1,u2,u3,u4};
 
 export const notesForExam = (examId) => NOTES[examId] || null;
 
