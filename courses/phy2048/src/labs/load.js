@@ -42,6 +42,11 @@ const loaders = {
   orbit: () => import('./orbit.js'),
   kepler: () => import('./kepler.js'),
   'iss-orbit': () => import('./iss-orbit.js'),
+  'pressure-depth': () => import('./pressure-depth.js'),
+  buoyancy: () => import('./buoyancy.js'),
+  bernoulli: () => import('./bernoulli.js'),
+  'brake-hydraulics': () => import('./brake-hydraulics.js'),
+  'fire-hose': () => import('./fire-hose.js'),
 };
 
 const labs = createLabLoader(loaders);

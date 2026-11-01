@@ -25,14 +25,14 @@ test('manifest is PHY 2048, first in the physics track', async () => {
     ['rolling', 'particle-l', 'spinner', 'gyro', 'rover-wheel'],
     ['beam', 'ladder', 'stress-strain', 'car-balance'],
     ['orbit', 'kepler', 'iss-orbit'],
-    [],
+    ['pressure-depth', 'buoyancy', 'bernoulli', 'brake-hydraulics', 'fire-hose'],
     [],
     [],
     [],
   ]);
   const labs = await course.labs();
   assert.equal(typeof labs.loadLab, 'function');
-  for (const id of ['vectors', 'kinematics-graphs', 'stopping-distance', 'projectile', 'circular-motion', 'relative-motion', 'wind-triangle', 'incline', 'atwood', 'banked-curve', 'drag', 'elevator-scale', 'skydiver', 'work-energy', 'work-path', 'track', 'energy-diagram', 'automotive-power', 'impulse', 'collide', 'collide-2d', 'center-of-mass', 'rocket', 'crumple-zone', 'crash-reconstruction', 'rotor', 'inertia', 'massive-pulley', 'helicopter-rotor', 'rolling', 'particle-l', 'spinner', 'gyro', 'rover-wheel', 'beam', 'ladder', 'stress-strain', 'car-balance', 'orbit', 'kepler', 'iss-orbit']) {
+  for (const id of ['vectors', 'kinematics-graphs', 'stopping-distance', 'projectile', 'circular-motion', 'relative-motion', 'wind-triangle', 'incline', 'atwood', 'banked-curve', 'drag', 'elevator-scale', 'skydiver', 'work-energy', 'work-path', 'track', 'energy-diagram', 'automotive-power', 'impulse', 'collide', 'collide-2d', 'center-of-mass', 'rocket', 'crumple-zone', 'crash-reconstruction', 'rotor', 'inertia', 'massive-pulley', 'helicopter-rotor', 'rolling', 'particle-l', 'spinner', 'gyro', 'rover-wheel', 'beam', 'ladder', 'stress-strain', 'car-balance', 'orbit', 'kepler', 'iss-orbit', 'pressure-depth', 'buoyancy', 'bernoulli', 'brake-hydraulics', 'fire-hose']) {
     const lab = await labs.loadLab(id);
     assert.equal(lab.id, id);
     assert.equal(lab.kind, 'scene3d');

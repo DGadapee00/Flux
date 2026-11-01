@@ -102,7 +102,7 @@ function checkSymbolic(tpl, inst) {
 }
 
 /** Units built to the standard. Their templates must meet the unit rules below; the others are reworked as their units are built. */
-const STANDARD_UNITS = ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8', 'u9'];
+const STANDARD_UNITS = ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8', 'u9', 'u10'];
 
 
 /** The lab, set up as the problem sets it up, must show the answers the template computes. */

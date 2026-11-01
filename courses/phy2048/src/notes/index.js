@@ -14,9 +14,10 @@ import u6 from './units/u6.js';
 import u7 from './units/u7.js';
 import u8 from './units/u8.js';
 import u9 from './units/u9.js';
+import u10 from './units/u10.js';
 
 /** One file per unit in ./units/, so each unit's sections change without touching the others. */
-export const NOTES = { u1, u2, u3, u4, u5, u6, u7, u8, u9 };
+export const NOTES = { u1, u2, u3, u4, u5, u6, u7, u8, u9, u10 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
 
