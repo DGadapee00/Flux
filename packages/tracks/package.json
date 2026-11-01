@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./tracks.js"
+    ".": "./tracks.js",
+    "./calculus": "./calculus.js"
   }
 }

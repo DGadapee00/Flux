@@ -1,0 +1,254 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Applications of differentiation</title></head><body><header class="top"><p class="eyebrow">MAC 2311–2312 · Calculus I and II · Unit 2 · OpenStax Vol 1 Ch 4</p><h1>Applications of differentiation</h1><p class="lede">One course from differentiation to infinite series. Derive each result, work an example, then open its lab.</p><div class="legend"><span>Worked example</span><span>Derivation</span><span>Common mistake</span><span>Key idea</span><span>Model limits</span></div><nav class="toc"><a href="#s1"><span>01</span>Linear approximation</a><a href="#s2"><span>02</span>Extreme values</a><a href="#s3"><span>03</span>The Mean Value Theorem</a><a href="#s4"><span>04</span>The shape of a graph</a><a href="#s5"><span>05</span>Limits at infinity</a><a href="#s6"><span>06</span>Optimization</a><a href="#s7"><span>07</span>Newton's method</a><a href="#s8"><span>08</span>Related rates</a><a href="#s9"><span>09</span>Antiderivatives</a><a href="#s10"><span>10</span>Exponentials and logarithms</a><a href="#s11"><span>11</span>Formula sheet</a></nav></header><main><div class="part"><div class="eyebrow">Calculus Volume 1</div><h2>Applications of derivatives</h2><section class="topic" id="s1">
+<h2><span class="n">01</span>Linear approximation</h2>
+<p>Near a point where \(f\) is differentiable, its graph is almost straight. The tangent line is the best straight stand-in. Using it in place of \(f\) is linear approximation.</p>
+\[
+L(x) = f(a) + f'(a)(x - a).
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>The tangent line matches \(f\) in value and in slope at \(a\). The error \(f(x) - L(x)\), divided by \(x - a\), is the difference quotient minus \(f'(a)\). That goes to \(0\) as \(x \to a\). So the error shrinks faster than the distance from \(a\). No other line has that property.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a square root</span>
+<p>Estimate \(\sqrt{4.1}\). Take \(f(x) = \sqrt{x}\) at \(a = 4\). Then \(f(4) = 2\) and \(f'(4) = 1/(2\sqrt{4}) = 1/4\). So \(L(4.1) = 2 + 0.1/4 = 2.025\). The true value is \(2.02485\). The error is \(0.00015\).</p>
+<p>The estimate is high. \(\sqrt{x}\) bends downward, so its tangent lines run above it.</p>
+</div>
+<p>The differential writes the same idea as a change. With \(dx\) a small step in \(x\), \(dy = f'(x)\,dx\) is the change along the tangent. It approximates the true change \(\Delta y\).</p>
+<div class="box ex"><span class="tag">Worked example · an error in a radius</span>
+<p>A sphere's radius is measured as \(10\) cm, give or take \(0.1\) cm. The volume is \(V = \tfrac43\pi r^3\), so \(dV = 4\pi r^2\,dr\). With \(r = 10\) and \(dr = 0.1\): \(dV = 4\pi \cdot 100 \cdot 0.1 = 126\) cm³. The volume itself is \(4190\) cm³.</p>
+<p>The relative error is \(dV/V = 3\,dr/r = 3\%\). A \(1\%\) error in the radius becomes a \(3\%\) error in the volume. The power \(3\) is the multiplier.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Linear approximation is good near \(a\) and poor far away. The same tangent at \(4\) estimates \(\sqrt{9}\) as \(2 + 5/4 = 3.25\). The true value is \(3\). Pick \(a\) close to the point you need.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Near \(a\), \(f(x) \approx f(a) + f'(a)(x - a)\). The sign of \(f''\) says whether the estimate is high or low.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The size of the error is estimated here only by example. A bound on it, in terms of \(f''\), comes with Taylor polynomials in Calculus II.</p>
+</div>
+</section><section class="topic" id="s2">
+<h2><span class="n">02</span>Extreme values</h2>
+<p>An absolute maximum is the largest value \(f\) takes on its domain. A local maximum is the largest value nearby. Minimums are the same with "smallest".</p>
+<p><strong>Extreme Value Theorem.</strong> A continuous function on a closed interval \([a, b]\) has an absolute maximum and an absolute minimum there. Both conditions matter. \(1/x\) on \((0, 1]\) has no maximum, and the interval is not closed.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Fermat's theorem says where to look. Suppose \(f\) has a local maximum at an interior point \(c\), and \(f'(c)\) exists. For a small \(h \gt 0\), \(f(c + h) \le f(c)\). So the quotient \((f(c + h) - f(c))/h\) is \(\le 0\). Its limit is \(f'(c) \le 0\).</p>
+<p>For a small \(h \lt 0\), the top is still \(\le 0\) but the bottom is negative. The quotient is \(\ge 0\), so \(f'(c) \ge 0\). Both hold. So \(f'(c) = 0\).</p>
+</div>
+<p>A critical point is an interior point where \(f' = 0\) or \(f'\) does not exist. Fermat's theorem says every interior extreme is at a critical point. So on \([a, b]\), the absolute extremes are among the critical points and the two endpoints.</p>
+<div class="box ex"><span class="tag">Worked example · the closed-interval method</span>
+<p>Find the absolute extremes of \(f(x) = x^3 - 3x\) on \([-2, 3]\). \(f'(x) = 3x^2 - 3 = 3(x - 1)(x + 1)\). The critical points are \(\pm 1\).</p>
+<p>Evaluate at the candidates: \(f(-2) = -2\), \(f(-1) = 2\), \(f(1) = -2\), \(f(3) = 18\). The absolute maximum is \(18\), at the endpoint \(3\). The absolute minimum is \(-2\), reached twice: at \(-2\) and at \(1\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A critical point is a candidate, not an answer. \(f'(-1) = 0\) and \(f(-1) = 2\) is only a local maximum. The endpoint \(3\) beats it. Skipping the endpoints loses the largest value here.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>On a closed interval, list the critical points and the endpoints. Evaluate \(f\) at each. The largest is the maximum. The smallest is the minimum.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The Extreme Value Theorem is used without proof. Like the Intermediate Value Theorem, it rests on the completeness of the real numbers. On an open interval or an unbounded one, the method needs a separate argument.</p>
+</div>
+</section><section class="topic" id="s3">
+<h2><span class="n">03</span>The Mean Value Theorem</h2>
+<p>Over an interval, some instant's rate equals the average rate. That is the Mean Value Theorem.</p>
+<p><strong>Rolle's theorem.</strong> If \(f\) is continuous on \([a, b]\), differentiable on \((a, b)\), and \(f(a) = f(b)\), then \(f'(c) = 0\) for some \(c\) in \((a, b)\). The function takes an extreme value inside the interval, unless it is constant, and Fermat's theorem applies there.</p>
+<p><strong>Mean Value Theorem.</strong> Under the first two conditions alone, some \(c\) in \((a, b)\) has</p>
+\[
+f'(c) = \frac{f(b) - f(a)}{b - a}.
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>Subtract the secant line from \(f\). The difference \(g(x) = f(x) - S(x)\) is zero at both ends, because the secant meets \(f\) there. Rolle's theorem gives a \(c\) with \(g'(c) = 0\). That says \(f'(c)\) equals the secant's slope.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a parabola on [1, 5]</span>
+<p>For \(f(x) = x^2\) on \([1, 5]\), the secant slope is \((25 - 1)/4 = 6\). Set \(f'(c) = 2c = 6\): \(c = 3\). For a parabola the point is always the midpoint.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a speed trap</span>
+<p>A car covers \(30\) miles in \(24\) minutes. Its average speed is \(30/0.4 = 75\) mph. Position is differentiable in time, so at some instant the speedometer read exactly \(75\) mph.</p>
+</div>
+<p>The theorem's main use is to read shape from the sign of \(f'\). If \(f' \gt 0\) on an interval, then for any \(x_1 \lt x_2\) in it, \(f(x_2) - f(x_1) = f'(c)(x_2 - x_1) \gt 0\). So \(f\) is increasing. If \(f' = 0\) everywhere on an interval, then \(f\) is constant there.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The hypotheses are not decoration. \(|x|\) on \([-1, 1]\) has equal end values, but no point has slope \(0\). It is not differentiable at \(0\), so Rolle's theorem does not apply.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Somewhere inside, the slope equals the average slope. Positive derivative means increasing. Zero derivative means constant.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The theorem says a \(c\) exists. It does not say where, or how many. For most functions, finding \(c\) means solving \(f'(c) = \text{slope}\), which may need Newton's method.</p>
+</div>
+</section><section class="topic" id="s4">
+<h2><span class="n">04</span>The shape of a graph</h2>
+<p>The first derivative says where \(f\) rises and falls. The second says which way it bends.</p>
+<p><strong>First derivative test.</strong> At a critical point \(c\): if \(f'\) changes from \(+\) to \(-\), \(f\) has a local maximum. From \(-\) to \(+\), a local minimum. No change of sign, no extreme.</p>
+<p>\(f\) is concave up where \(f'' \gt 0\): its slopes increase, and the graph lies above its tangents. It is concave down where \(f'' \lt 0\). An inflection point is where the concavity changes.</p>
+<p><strong>Second derivative test.</strong> If \(f'(c) = 0\) and \(f''(c) \gt 0\), the graph curves up at a flat point: a local minimum. If \(f''(c) \lt 0\): a local maximum. If \(f''(c) = 0\), the test says nothing.</p>
+<div class="box ex"><span class="tag">Worked example · a cubic</span>
+<p>Let \(f(x) = x^3 + 3x^2\). Then \(f'(x) = 3x^2 + 6x = 3x(x + 2)\), so the critical points are \(-2\) and \(0\). And \(f''(x) = 6x + 6\).</p>
+<p>\(f''(-2) = -6 \lt 0\), a local maximum, \(f(-2) = 4\). \(f''(0) = 6 \gt 0\), a local minimum, \(f(0) = 0\). \(f''\) changes sign at \(x = -1\). The inflection point is \((-1, 2)\).</p>
+</div>
+<div class="box why"><span class="tag">Why</span>
+<p>Both tests follow from the Mean Value Theorem. If \(f' \gt 0\) on one side of \(c\) and \(f' \lt 0\) on the other, \(f\) rises to \(c\) and falls after it. For the second test, \(f''(c) \gt 0\) means \(f'\) is increasing through \(c\). Since \(f'(c) = 0\), \(f'\) is negative just before and positive just after. That is the first test's minimum.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(f''(c) = 0\) does not make an inflection point. For \(x^4\), \(f''(0) = 0\), yet \(f'' = 12x^2 \ge 0\) on both sides. The graph is concave up throughout, and \(0\) is a minimum. Check that the sign of \(f''\) changes.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Sign of \(f'\): rising or falling. Sign of \(f''\): bending up or down. An extreme needs \(f'\) to change sign. An inflection needs \(f''\) to change sign.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>A full sketch also needs intercepts, symmetry, and asymptotes. The next section gives the asymptotes. The rest is in the text's curve-sketching checklist, §4.6.</p>
+</div>
+</section><section class="topic" id="s5">
+<h2><span class="n">05</span>Limits at infinity</h2>
+<p>\(\lim_{x \to \infty} f(x) = L\) means \(f(x)\) is as close to \(L\) as we like for all large enough \(x\). The line \(y = L\) is then a horizontal asymptote.</p>
+<p>For a rational function, divide the top and the bottom by the highest power of \(x\) in the bottom. Every term with \(x\) left in a denominator goes to \(0\).</p>
+<div class="box ex"><span class="tag">Worked example · equal degrees</span>
+<p>Find \(\lim_{x \to \infty} (3x^2 + 1)/(2x^2 - x)\). Divide by \(x^2\): \((3 + 1/x^2)/(2 - 1/x)\). As \(x \to \infty\), this goes to \(3/2\). At \(x = 1000\) the quotient is \(1.5008\).</p>
+</div>
+<div class="box why"><span class="tag">Why</span>
+<p>The rule by degree follows from the division. Equal degrees leave the ratio of the leading coefficients. A higher degree on the bottom leaves \(0\). A higher degree on top leaves a term that grows, so there is no horizontal asymptote.</p>
+</div>
+<p>Exponentials outgrow every power, and logarithms grow slower than every power. So \(x^{10} e^{-x} \to 0\) and \((\ln x)/x \to 0\) as \(x \to \infty\). Unit 6, section 1 proves both with L'Hôpital's rule.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>The leading terms decide the limit, not the constants. \((3x^2 + 1)/(2x^2 - x)\) is not near \(1/0\) for large \(x\). Dropping lower terms is fine at infinity. It is not fine at a finite point.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>At infinity, divide by the highest power in the bottom. Compare degrees. Exponentials beat powers, and powers beat logarithms.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Slant asymptotes, which appear when the top's degree is one more than the bottom's, are in the text. So is the precise \(\varepsilon\)–\(N\) definition of a limit at infinity.</p>
+</div>
+</section><section class="topic" id="s6">
+<h2><span class="n">06</span>Optimization</h2>
+<p>An optimization problem asks for the best value of a quantity under a constraint. The method:</p>
+<ul>
+<li>Draw it and name the variables.</li>
+<li>Write the quantity to optimize.</li>
+<li>Use the constraint to reduce it to one variable.</li>
+<li>Find that variable's allowed interval.</li>
+<li>Find the critical points, and compare them with the endpoints.</li>
+</ul>
+<div class="box ex"><span class="tag">Worked example · a small cut</span>
+<p>A \(12\) in square sheet has a square of side \(x\) cut from each corner, and the sides fold up. The box's base is \(12 - 2x\), its height \(x\), so \(V(x) = x(12 - 2x)^2\) on \(0 \le x \le 6\).</p>
+<p>At \(x = 1\): \(V = 1 \cdot 10^2 = 100\) in³. The product rule gives \(V'(x) = (12 - 2x)(12 - 6x)\). At \(x = 1\): \(V' = 10 \cdot 6 = 60\). A deeper cut still adds volume.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the best cut</span>
+<p>\(V' = 0\) at \(x = 2\) and \(x = 6\). At the endpoints, \(V(0) = V(6) = 0\). At \(x = 2\): \(V = 2 \cdot 8^2 = 128\) in³, with \(V' = 0\). That is the maximum.</p>
+<p>A cut of \(4\) in goes past it: \(V = 64\) in³ and \(V' = 4 \cdot (-12) = -48\). The volume is falling.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Not every root of \(V'\) is the answer. \(x = 6\) also gives \(V' = 0\), but there the base has width \(0\) and \(V = 0\). It is the minimum. Compare every candidate against the others.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a fence against a wall</span>
+<p>\(40\) m of fence encloses a rectangle on three sides, with a wall as the fourth. With sides \(x\) out from the wall, the length along it is \(40 - 2x\). So \(A = x(40 - 2x)\) on \([0, 20]\). \(A' = 40 - 4x = 0\) at \(x = 10\). There \(A = 200\) m². Both endpoints give \(0\).</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Reduce to one variable, find its interval, and compare the critical points with the endpoints. The answer is a value of the quantity, with units.</p>
+</div>
+<p>In the Open box lab, slide the cut. The readout's \(dV/dx\) changes sign at \(2\) in. A centred difference in the lab gives the same rate as the product rule.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The sheet has no thickness and the folds cost nothing. A real box needs flaps to hold its corners, and a real fence has a gate. Each changes the constraint, and the optimum moves with it.</p>
+</div>
+</section><section class="topic" id="s7">
+<h2><span class="n">07</span>Newton's method</h2>
+<p>To solve \(f(x) = 0\), start at a guess \(x_0\). Replace \(f\) by its tangent line there, and solve that line instead. Its root is the next guess.</p>
+\[
+x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}.
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>The tangent at \(x_n\) is \(y = f(x_n) + f'(x_n)(x - x_n)\). Set \(y = 0\) and solve for \(x\). That is the formula. Near a simple root, each step roughly doubles the number of correct digits.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the square root of 2</span>
+<p>Solve \(x^2 - 2 = 0\) from \(x_0 = 2\). Here \(x_{n+1} = x_n - (x_n^2 - 2)/(2x_n)\). The steps are \(1.5\), \(1.416667\), \(1.4142157\), and \(1.4142136\). The last matches \(\sqrt{2} = 1.41421356\) to eight figures, after four steps.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Newton's method can fail. Where \(f'(x_n) = 0\) the step divides by zero. For \(f(x) = \sqrt[3]{x}\), the step is \(x_{n+1} = -2x_n\): from \(1\) it goes \(-2, 4, -8, 16\), away from the root at \(0\). A good start and a quick check of each step matter.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Each step solves the tangent line. Close to a simple root it converges very fast. Far away, or where \(f'\) is small, it can wander.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The convergence rate is stated, not proved. Its proof uses the second derivative. Bisection, from Unit 1, is slower but cannot run away from a root it has bracketed.</p>
+</div>
+</section></div><div class="part"><div class="eyebrow">Calculus Volume 1</div><h2>Derivatives</h2><section class="topic" id="s8"><h2><span class="n">08</span>Related rates</h2><p>This is implicit differentiation with time as the independent variable. <a href="../mac2311/#/mac2311/c1/secant?n=s11">Review implicit differentiation in Unit 1.</a></p><p>Related rates use the same move with time as the variable. Two quantities are tied by an equation. Differentiate the equation in \(t\). The result ties their rates.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>The method has four steps:</p>
+<ul>
+<li>Name every changing quantity, and say which rate is known.</li>
+<li>Write an equation that holds at every instant.</li>
+<li>Differentiate it in \(t\), with the chain rule on every changing quantity.</li>
+<li>Only then substitute the values at the instant asked about.</li>
+</ul>
+<p>Substituting last matters. A value holds at one instant. The equation holds at every instant, and only the second can be differentiated.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the ladder at 6 ft</span>
+<p>A \(10\) ft ladder leans on a wall. Its foot is \(x\) ft out and slides away at \(x' = 2\) ft/s. The top is \(y\) ft up. The ladder fixes \(x^2 + y^2 = 100\) at every instant.</p>
+<p>Differentiate in \(t\): \(2x\,x' + 2y\,y' = 0\), so \(y' = -x\,x'/y\). When \(x = 6\), \(y = 8\), and \(y' = -12/8 = -1.5\) ft/s. The top slides down at \(1.5\) ft/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the ladder at 2 ft</span>
+<p>The same ladder, with the foot \(2\) ft out. Then \(y = \sqrt{96} = 9.80\) ft, and \(y' = -4/9.80 = -0.408\) ft/s. Near the wall the top barely moves. Far out it falls fast. At \(x = 8\) the rate is \(-16/6 = -2.67\) ft/s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Substituting \(x = 6\) before differentiating. The equation becomes \(36 + y^2 = 100\), with nothing left that changes. Its derivative says \(y' = 0\), which is false. Differentiate first, then substitute.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>Implicit differentiation is the chain rule on an equation. Related rates are implicit differentiation in time. Substitute after differentiating.</p>
+</div>
+<p>In the Ladder lab, move the foot from \(2\) ft to \(8\) ft at a fixed speed. The readout shows \(y'\) growing in size. A finite step in time gives the same rate as the formula.</p>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The model says \(y' = -x\,x'/y\) grows without bound as \(y \to 0\). A real ladder does not do that. It leaves the wall first, because nothing holds the top against it. The geometry knows no forces. Physics does.</p>
+</div>
+</section></div><div class="part"><div class="eyebrow">Calculus Volume 1</div><h2>Integration</h2><section class="topic" id="s9">
+<h2><span class="n">09</span>Antiderivatives</h2>
+<p>\(F\) is an antiderivative of \(f\) when \(F' = f\). Every derivative rule, read backwards, is an antiderivative rule.</p>
+<div class="box why"><span class="tag">Why</span>
+<p>Two antiderivatives of the same \(f\) differ by a constant. Let \(F\) and \(G\) both have derivative \(f\) on an interval. Then \((F - G)' = 0\) there. Unit 3's Mean Value Theorem says a function with zero derivative on an interval is constant. So \(G = F + C\).</p>
+</div>
+<p>The whole family is written \(\int f(x)\,dx = F(x) + C\), the indefinite integral. Reversing the power rule gives the most-used entry:</p>
+\[
+\int x^n\,dx = \frac{x^{n+1}}{n + 1} + C, \qquad n \ne -1.
+\]
+<p>Check any antiderivative by differentiating it. \(\tfrac{d}{dx}\, x^{n+1}/(n + 1) = x^n\). The rule fails at \(n = -1\), where it would divide by zero. Section 10 handles that case.</p>
+<div class="box ex"><span class="tag">Worked example · a ball thrown up</span>
+<p>A ball leaves the ground at \(20\) m/s, straight up. Its acceleration is \(-9.8\) m/s². So \(v(t) = -9.8t + C\), and \(v(0) = 20\) fixes \(C = 20\). Then \(s(t) = 20t - 4.9t^2 + D\), and \(s(0) = 0\) fixes \(D = 0\).</p>
+<p>The ball stops rising when \(v = 0\), at \(t = 20/9.8 = 2.04\) s. Its height then is \(s = 20.4\) m.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Dropping \(+C\) loses the family. Here it would set \(v(0) = 0\), a ball that never left the ground. Each antiderivative step adds one constant, and each needs one condition to fix it.</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>An antiderivative undoes a derivative. All antiderivatives of \(f\) differ by constants. A starting value picks one.</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>Most functions have antiderivatives that no formula writes down. \(e^{-x^2}\) is the standard example. Its integrals are found numerically, as in Calculus II.</p>
+</div>
+</section><section class="topic" id="s10">
+<h2><span class="n">10</span>Exponentials and logarithms</h2>
+<p>Each derivative rule from Unit 2 gives an integral rule.</p>
+\[
+\begin{aligned}
+\int e^x\,dx &= e^x + C,\\
+\int \frac{dx}{x} &= \ln|x| + C.
+\end{aligned}
+\]
+<div class="box why"><span class="tag">Why</span>
+<p>The first is \((e^x)' = e^x\) read backwards. For the second, \((\ln x)' = 1/x\) for \(x \gt 0\). For \(x \lt 0\), \(\ln(-x)\) has derivative \(-1/(-x) = 1/x\) by the chain rule. Both cases are \(\ln|x|\). This fills the gap the power rule left at \(n = -1\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two integrals</span>
+<p>\(\int_1^e dx/x = \ln e - \ln 1 = 1\). So the area under \(1/x\) from \(1\) to \(e\) is exactly \(1\), which is one way to define \(e\).</p>
+<p>\(\int_0^1 e^{2x}\,dx\): with \(u = 2x\), it is \(\tfrac12(e^2 - 1) = 3.19\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the tangent</span>
+<p>\(\int\tan x\,dx = \int \sin x/\cos x\,dx\). Let \(u = \cos x\), so \(du = -\sin x\,dx\). The integral is \(-\int du/u = -\ln|\cos x| + C\). On \([0, \pi/4]\) it gives \(-\ln(1/\sqrt{2}) = \tfrac12\ln 2 = 0.347\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · base 2</span>
+<p>\(\int_1^2 2^x\,dx = [2^x/\ln 2]_1^2 = (4 - 2)/0.6931 = 2.885\). The \(\ln 2\) is the constant from the derivative of \(2^x\), now dividing instead of multiplying.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>\(\int x^{-1}\,dx\) is not \(x^0/0\). The power rule does not apply at \(n = -1\). The answer is \(\ln|x|\). Without the absolute value, it would be undefined for every negative \(x\).</p>
+</div>
+<div class="box key"><span class="tag">Key</span>
+<p>\(e^x\) integrates to itself. \(1/x\) integrates to \(\ln|x|\). Other bases follow from \(a^x = e^{x\ln a}\): \(\int a^x\,dx = a^x/\ln a + C\).</p>
+</div>
+<div class="box out"><span class="tag">What it leaves out</span>
+<p>The text can also define \(\ln x\) as \(\int_1^x dt/t\) and build \(e^x\) as its inverse. That route proves the exponential's properties rather than assuming them. It is in §6.6 of the text.</p>
+</div>
+</section><section class="topic" id="s11"><h2><span class="n">11</span>Formula sheet</h2><p>These results are derived in the sections above. Check each result's hypotheses before applying it.</p><p>\(L(x)=f(a)+f\prime(a)(x-a)\), \(f\prime(c)=[f(b)-f(a)]/(b-a)\), \(x_{n+1}=x_n-f(x_n)/f\prime(x_n)\), \(F\prime=f\) for an antiderivative F.</p></section></div></main><footer><p>Original Flux notes. OpenStax Calculus Volumes 1 and 2, sections identified in the notes and textbook map.</p><p><b>Another view:</b> <a href="https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/">18.01SC Single Variable Calculus, Fall 2010</a>, Unit 2.</p></footer></body></html>

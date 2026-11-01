@@ -1,89 +1,57 @@
-#!/usr/bin/env node
-/**
- * Runs the browser checks against a server this script owns.
- *
- * smoke.mjs and verify.mjs each expect http://localhost:5178 to already be serving, which meant
- * they only ran if you remembered to start one — so a failing assertion in verify.mjs sat
- * unnoticed. This builds, serves `dist/`, runs them all, and shuts the server down again.
- *
- *   node scripts/browser-checks.mjs [name ...]     (default: smoke, verify)
- */
+/** Build both routes and serve their production files on one origin, as the hub does. */
 import { spawn } from 'node:child_process';
-import { once } from 'node:events';
 import { createRequire } from 'node:module';
+import { createServer } from 'node:http';
+import fs from 'node:fs';
 import path from 'node:path';
-
-/*
- * Run vite through Node against its own entry script rather than through `npx`. On Windows npx is
- * npx.cmd, and spawn() without a shell will not resolve a .cmd — the script died with
- * `spawn npx ENOENT` there while working on Linux. Resolving the package means no shell, no PATH
- * lookup, and no quoting rules that differ between platforms.
- */
-const VITE = path.join(
+import { fileURLToPath } from 'node:url';
+const course = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const vite = path.join(
   path.dirname(createRequire(import.meta.url).resolve('vite/package.json')),
-  'bin',
-  'vite.js',
+  'bin/vite.js',
 );
-
-const PORT = 5178;
-const wanted = process.argv.slice(2);
-const checks = (wanted.length ? wanted : ['smoke', 'verify']).map((n) =>
-  n.endsWith('.mjs') ? n : `scripts/${n}.mjs`,
-);
-
 const run = (cmd, args, opts = {}) =>
   new Promise((resolve, reject) => {
-    const c = spawn(cmd, args, { stdio: 'inherit', ...opts });
-    c.on('error', reject);
-    c.on('exit', (code) => (code === 0 ? resolve() : reject(new Error(`${cmd} ${args.join(' ')} exited ${code}`))));
+    const child = spawn(cmd, args, { stdio: 'inherit', ...opts });
+    child.on('error', reject);
+    child.on('exit', (code) => (code === 0 ? resolve() : reject(Error(`${args.join(' ')} exited ${code}`))));
   });
-
-const reachable = async () => {
-  try {
-    const r = await fetch(`http://localhost:${PORT}/`);
-    return r.ok;
-  } catch {
-    return false;
-  }
+for (const cwd of [course, path.resolve(course, '../mac2312')])
+  await run(process.execPath, [vite, 'build'], { cwd });
+const types = {
+  '.html': 'text/html',
+  '.js': 'text/javascript',
+  '.css': 'text/css',
+  '.json': 'application/json',
+  '.svg': 'image/svg+xml',
+  '.woff2': 'font/woff2',
 };
-
-await run(process.execPath, [VITE, 'build']);
-
-const server = spawn(process.execPath, [VITE, 'preview', '--port', String(PORT), '--strictPort'], {
-  stdio: ['ignore', 'pipe', 'inherit'],
-});
-server.stdout.resume();
-
-let up = false;
-for (let i = 0; i < 60 && !up; i++) {
-  up = await reachable();
-  if (!up) await new Promise((r) => setTimeout(r, 250));
-}
-if (!up) {
-  server.kill();
-  console.error(`browser-checks: nothing serving on ${PORT}`);
-  process.exit(1);
-}
-
-let failed = 0;
-for (const script of checks) {
-  console.log(`\n--- ${script} ---`);
-  try {
-    await run(process.execPath, [script]);
-  } catch (e) {
-    failed += 1;
-    console.error(String(e.message));
+const server = createServer((req, res) => {
+  const url = new URL(req.url, 'http://localhost');
+  const [id, ...parts] = decodeURIComponent(url.pathname).split('/').filter(Boolean);
+  if (!['mac2311', 'mac2312'].includes(id)) {
+    res.writeHead(404);
+    res.end();
+    return;
   }
+  const root = path.resolve(course, '..', id, 'dist');
+  const file = path.resolve(root, parts.join('/') || 'index.html');
+  if (!file.startsWith(root + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) {
+    res.writeHead(404);
+    res.end();
+    return;
+  }
+  res.setHeader('Content-Type', types[path.extname(file)] || 'application/octet-stream');
+  fs.createReadStream(file).pipe(res);
+});
+await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+const origin = `http://127.0.0.1:${server.address().port}`;
+try {
+  for (const name of process.argv.slice(2).length ? process.argv.slice(2) : ['smoke', 'verify'])
+    await run(process.execPath, [`scripts/${name.replace(/\.mjs$/, '')}.mjs`], {
+      cwd: course,
+      env: { ...process.env, SMOKE_URL: `${origin}/mac2311/`, LEGACY_URL: `${origin}/mac2312/` },
+    });
+} finally {
+  await new Promise((resolve) => server.close(resolve));
 }
-
-// Wait for the server to actually go, but never hang on it: if it has already exited, `once` would
-// never resolve, which is what left this script warning about an unsettled top-level await.
-server.kill();
-if (server.exitCode === null && server.signalCode === null) {
-  await Promise.race([once(server, 'exit'), new Promise((r) => setTimeout(r, 3000))]).catch(() => {});
-}
-if (failed) {
-  console.error(`\nbrowser-checks: ${failed} failed`);
-  process.exit(1);
-}
-console.log('\nbrowser-checks: all passed');

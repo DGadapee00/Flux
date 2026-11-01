@@ -4,7 +4,7 @@ import { EXAMS, examById, LAB_META } from '../data/catalog.js';
 import { course } from '../manifest.js';
 import { notesDeps } from '../notes/deps.js';
 
-const homeId = 'u1';
+const homeId = 'c1';
 
 export function createHUD(api) {
   return createMathHUD(api, {
