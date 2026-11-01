@@ -46,7 +46,7 @@ subject libraries (a function written for one course serves the next), and one s
 |---|---|---|---|---|
 | PHY 2049 Physics II | [phy2049](docs/course-plans/phy2049.md) | reference | not yet scored | weekly drops; on the physics shell |
 | PHY 2048 Physics I | [phy2048](docs/course-plans/phy2048.md) | on the physics shell; Units 1–13 of 13 built | passes | owner review (`standard` stays false) |
-| MAC 2311–2312 Calculus I and II | [mac2311-2312](docs/course-plans/mac2311-2312.md) | 6 units; Units 1–5 reworked; legacy progress retained | fails | R4a: unit-by-unit content rework |
+| MAC 2311–2312 Calculus I and II | [mac2311-2312](docs/course-plans/mac2311-2312.md) | 6 units reworked; legacy progress retained | passes; owner review pending | R4a: review stacked unit PRs |
 | MAC 2313 Calculus III | [mac2313](docs/course-plans/mac2313.md) | labs and bank, no notes | fails | R4 |
 | EGN 3311 Statics | [statics](docs/course-plans/statics.md) | 4 units with notes, 15 lab routes, 43 templates | passes | printed-answer audit and owner review |
 | EGN 3321 Dynamics | [egn3321](docs/course-plans/egn3321.md) | 7 units, notes; Unit 8 and the D36 topics in progress | passes | R2c: the owner's review findings (D36) |
@@ -127,12 +127,12 @@ EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come las
 ### Review courses (already taken)
 
 - [ ] **EMA 3010 Materials Science**, new: [ema3010](docs/course-plans/ema3010.md), OCW 3.091 (Fall 2018).
-- [ ] **R4a Calculus I and II:** merge MAC 2311 and MAC 2312 into one module in 18.01SC's order
+- [x] **R4a Calculus I and II:** merge MAC 2311 and MAC 2312 into one module in 18.01SC's order
       (D28, `docs/course-plans/mac2311-2312.md`), keeping progress and redirecting old links. Then the
       template rework, predictions, application labs, traps and conceptual problems. The merge is
       done: `mac2311` serves six units in 18.01SC order; `mac2312` redirects old links. All 87
       templates and 38 notes setups are retained, and the migration keeps both review histories
-      and old backup keys. The content scorecard still fails; `standard` stays false.
+      and old backup keys. All six units now pass the content scorecard. Six stacked content PRs await owner review; `standard` stays false.
 - [ ] **R4b MAC 2313:** notes, the missing vector-calculus units (Lagrange multipliers through
       Stokes), 18.02SC's order, and the same rework.
 - [ ] **R4c Statics:** notes, and the same rework, with 2.001 Lectures 1–6 setting their topics'
@@ -206,4 +206,4 @@ review course; nothing is planned. Technical electives are planned when the owne
 - [x] Unit 3: definite integral and applications content rework; owner review pending.
 - [x] Unit 4: integration techniques content rework; owner review pending.
 - [x] Unit 5: parametric and polar content rework; owner review pending.
-- [ ] Unit 6: exploring the infinite.
+- [x] Unit 6: exploring the infinite content rework; owner review pending.
