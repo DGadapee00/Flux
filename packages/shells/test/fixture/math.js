@@ -19,8 +19,13 @@ const api = {
   openNotes: (where) => calls.openNotes.push(where),
   labelLayer: document.getElementById('label-layer'),
 };
-const practice = createPractice(api, fullBank());
-window.__fixture = { practice, calls };
+const bank=fullBank();const progress=bank.createProgress();bank.createProgress=()=>progress;
+if(new URLSearchParams(location.search).has('cumulative')){
+ bank.practiceLabel=exam=>`Unit ${exam.n}`;
+ bank.assessmentFor=()=>({label:'Cumulative practice',templates:bank.PROBLEMS});
+}
+const practice = createPractice(api, bank);
+window.__fixture = { practice, calls, progress };
 function frame() {
   practice.frame();
   requestAnimationFrame(frame);

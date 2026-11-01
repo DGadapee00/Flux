@@ -28,7 +28,7 @@ const expect = (ok, msg) => {
   if (!ok) fails.push(msg);
 };
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, ...(process.env.CHROMIUM_EXECUTABLE?{executablePath:process.env.CHROMIUM_EXECUTABLE,args:['--no-sandbox']}: {}) });
 
 async function run(shell, [w, h]) {
   const phone = w <= 720;
@@ -129,6 +129,16 @@ async function run(shell, [w, h]) {
 try {
   for (const shell of ['engineering', 'math', 'physics']) {
     for (const size of [[1280, 800], [380, 820]]) await run(shell, size);
+  }
+  for(const width of [380,1280]){
+    const page=await browser.newPage({viewport:{width,height:width===380?820:800}});
+    await page.goto(`${BASE}math.html?cumulative=1`);await page.click('#btn-practice');
+    expect((await page.locator('.pb-kicker').innerText()).includes('Unit 1'),`math ${width}: custom unit label missing`);
+    expect((await page.locator('[data-act="exam-start"]').innerText()).includes('Cumulative practice'),`math ${width}: custom assessment label missing`);
+    await page.locator('[data-act="exam-start"]').click();await page.locator('.pb-examnav').waitFor();
+    const ids=await page.evaluate(()=>window.__fixture.progress.loadExam().items.map(x=>x.id));
+    expect(ids.some(id=>id.startsWith('f.2.')),`math ${width}: cumulative assessment ignored earlier/sibling unit templates`);
+    await page.close();
   }
 } finally {
   await browser.close();

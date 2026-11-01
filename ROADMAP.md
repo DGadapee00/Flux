@@ -125,7 +125,9 @@ first slice, then one unit per PR. At most two courses in progress at once (D18)
 Unit 1 is built with five labs, 25 templates, ten predictions and fifteen notes setups.
 Unit 2 adds four labs, 25 templates, eight predictions and eleven notes setups.
 Unit 3 adds Fourier/Laplace, four labs, 26 templates, eight predictions and eleven notes setups.
-Units 3–4 follow in stacked PRs; `standard` stays false.
+Unit 4 adds five labs, 25 templates, ten predictions and thirteen notes setups.
+- [x] MAP 2302: all four units built in stacked PRs; full course scorecard passes.
+      `standard` stays false until Dalton works a unit as a student.
 
 The order follows prerequisites: MAP 2302 and EEL 3111 feed most of what follows; EML 4140 needs
 EML 3015; EML 4312 needs EGN 3203 and EEL 3111; EML 4507C and EML 4301C come last.
