@@ -1,14 +1,18 @@
 /**
- * Opens the hub in headless Chrome at 380px and 1280px.
- * Fails if the page scrolls sideways, if a course card is missing, or if
- * following a card does not land on that course's live app.
+ * Opens the hub in headless Chrome at 380px, 720px and 1280px.
+ * Fails if the page scrolls sideways, if the map is missing a concept, if choosing a concept does
+ * not open it, if a phone's map does not bring the chosen concept into view, if a course card is
+ * missing, or if following a card or a lab link does not land on that course's app.
  */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
+import { loadConcepts } from '@flux/map/load.mjs';
 import { builtCourses, latestBuilt, visibleTracks } from '../src/tracks.js';
+
+const CONCEPTS = (await loadConcepts()).map((item) => item.concept);
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const chromeBin = process.env.CHROME || 'google-chrome';
@@ -156,6 +160,13 @@ async function readHub(page) {
         built: [...document.querySelectorAll('a.course-link')].map((a) => ({ id: a.dataset.course, href: a.href })),
         unbuilt: [...document.querySelectorAll('.unbuilt')].map((el) => el.textContent),
         motions: tracks.map((el) => el.dataset.motion),
+        staged: tracks.filter((el) => el.querySelector('.stage')).map((el) => el.dataset.track),
+        nodes: document.querySelectorAll('#map .node').length,
+        chosen: document.querySelector('#detail')?.dataset.concept ?? null,
+        mapScrolls: (() => {
+          const box = document.querySelector('#mapbox');
+          return box.scrollWidth > box.clientWidth + 1;
+        })(),
       };
     })()`,
   );
@@ -171,7 +182,11 @@ function resolvedHref(href, base) {
 }
 
 function assertHub(width, metrics, hub) {
-  const expectedCols = width >= 720 ? 2 : 1;
+  const expectedCols = width >= 1040 ? 3 : width >= 720 ? 2 : 1;
+  if (metrics.nodes !== CONCEPTS.length) {
+    throw new Error(`${width}px map shows ${metrics.nodes} concepts, expected ${CONCEPTS.length}`);
+  }
+  if (!metrics.chosen) throw new Error(`${width}px map opened on no concept`);
   if (metrics.scroll > metrics.client + 1) {
     throw new Error(`${width}px scrolls sideways (${metrics.scroll} > ${metrics.client})`);
   }
@@ -197,7 +212,7 @@ function assertHub(width, metrics, hub) {
       throw new Error(`${course.id} link is ${row ? row.href : 'missing'}, expected ${expected}`);
     }
   }
-  if (metrics.unbuilt.length === 0 || metrics.unbuilt.some((text) => !text.includes('not built yet'))) {
+  if (metrics.unbuilt.some((text) => !text.includes('not built yet'))) {
     throw new Error('an unbuilt course is missing its label');
   }
 }
@@ -305,6 +320,7 @@ async function main() {
         const shot = await page.send('Page.captureScreenshot', { format: 'png' });
         fs.writeFileSync(path.join(outDir, `hub-${width}.png`), Buffer.from(shot.data, 'base64'));
         for (const track of visibleTracks()) {
+          if (!metrics.staged.includes(track.id)) continue;
           await hoverTrack(page, track.id);
           const box = await evalJson(
             page,
@@ -331,7 +347,29 @@ async function main() {
           fs.writeFileSync(path.join(outDir, 'hub-1280-played.png'), Buffer.from(played.data, 'base64'));
         }
       }
-      console.log(`${width}px ok, ${metrics.cols} column(s), no horizontal scroll`);
+      console.log(`${width}px ok, ${metrics.cols} column(s), ${metrics.nodes} concepts, no horizontal scroll`);
+
+      // Choosing a concept opens it. On a phone the map scrolls in its own box to show it.
+      const last = CONCEPTS[CONCEPTS.length - 1].id;
+      await evalJson(page, `document.querySelector('#map .node[data-concept="${last}"]').dispatchEvent(new MouseEvent('click', { bubbles: true }))`);
+      await delay(400);
+      const chosen = await evalJson(
+        page,
+        `({ hash: location.hash, shown: document.querySelector('#detail').dataset.concept, left: document.querySelector('#mapbox').scrollLeft, page: document.documentElement.scrollWidth, client: document.documentElement.clientWidth })`,
+      );
+      if (chosen.hash !== `#${last}` || chosen.shown !== last) {
+        throw new Error(`${width}px clicking ${last} showed ${chosen.shown} at ${chosen.hash}`);
+      }
+      if (metrics.mapScrolls && width < 720) {
+        const deep = CONCEPTS.reduce((a, c) => (c.requires.length > a.requires.length ? c : a), CONCEPTS[0]);
+        await evalJson(page, `location.hash = '${deep.id}'`);
+        await delay(600);
+        const left = await evalJson(page, `document.querySelector('#mapbox').scrollLeft`);
+        if (!(left > 0)) throw new Error(`${width}px map did not scroll to ${deep.id}`);
+      }
+      if (chosen.page > chosen.client + 1) throw new Error(`${width}px scrolls sideways after choosing a concept`);
+      const mapShot = await page.send('Page.captureScreenshot', { format: 'png' });
+      fs.writeFileSync(path.join(outDir, `hub-${width}-map.png`), Buffer.from(mapShot.data, 'base64'));
     }
 
     await page.send('Emulation.setDeviceMetricsOverride', {
@@ -345,6 +383,7 @@ async function main() {
     });
     await navigate(page, hub);
     for (const track of visibleTracks()) {
+      if (!(await evalJson(page, `!!document.querySelector('[data-track="${track.id}"] .stage')`))) continue;
       await evalJson(
         page,
         `document.querySelector('[data-track="${track.id}"]').scrollIntoView({ block: 'center' })`,
@@ -378,6 +417,17 @@ async function main() {
       const landed = await waitForPrefix(page, prefix);
       console.log(`${track.id} card → ${landed}`);
       await navigate(page, hub);
+    }
+    // Every lab link on the map lands in its course app.
+    for (const concept of CONCEPTS) {
+      for (const ref of concept.labs) {
+        await navigate(page, hub);
+        await evalJson(page, `location.hash = '${concept.id}'`);
+        await delay(150);
+        await evalJson(page, `document.querySelector('[data-lab="${ref.course}/${ref.lab}"]').click()`);
+        const landed = await waitForPrefix(page, `${hub}${ref.course}/#/${ref.course}/`);
+        console.log(`${concept.id} lab → ${landed}`);
+      }
     }
     console.log('smoke ok');
   } finally {
