@@ -12,7 +12,9 @@
     "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
-    "@flux/tracks": "*"
+    "@flux/map": "*",
+    "@flux/tracks": "*",
+    "katex": "^0.16.47"
   },
   "devDependencies": {
     "vite": "^6.0.0"
