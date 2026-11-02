@@ -6,7 +6,7 @@ export default {
   courses: ['phy2049'],
   eq: String.raw`\oint \mathbf E\cdot d\mathbf A = \frac{q_\text{enc}}{\varepsilon_0}`,
   idea: String.raw`The electric flux out of any closed surface depends only on the charge inside. Charge outside sends in as much flux as it sends out. With enough symmetry you choose a surface where \(E\) is constant and normal, and the integral becomes \(E\) times an area.`,
-  requires: ['surface-flux'],
+  requires: ['surface-flux', 'electric-field'],
   sources: [
     {
       title: 'OpenStax University Physics Vol. 2, §6.1 Electric flux',
@@ -24,6 +24,6 @@ export default {
     },
   ],
   labs: [
-    { course: 'phy2049', lab: 'gauss', notes: 's11', note: 'Spherical, cylindrical and planar symmetry, with the notes on each.' },
+    { course: 'phy2049', lab: 'gauss', notes: ['s11', 's10', 's12'], note: 'Spherical, cylindrical and planar symmetry, with the notes on each.' },
   ],
 };

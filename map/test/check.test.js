@@ -82,6 +82,18 @@ test('notes may list several sections of the lab unit, each of which must exist'
   has(errorsOf(fixture([concept('a', { labs: [{ course: 'c1', lab: 'l1', notes: ['s1', 's1'], note: 'x' }] })])), 'listed twice');
 });
 
+test('a qualified notes id names a section in another unit', () => {
+  const data = fixture([concept('a', { labs: [{ course: 'c1', lab: 'l1', notes: ['s1', 'u2/s4'], note: 'x' }] })]);
+  data.notesIndexes.c1.u2 = [{ id: 's4', title: 'Four', lab: null }];
+  assert.deepEqual(errorsOf(data), []);
+  has(errorsOf(fixture([concept('a', { labs: [{ course: 'c1', lab: 'l1', notes: ['u9/s1'], note: 'x' }] })])), 'no notes for unit u9');
+});
+
+test('a checked date must be a date', () => {
+  has(errorsOf(fixture([concept('a', { sources: [{ ...source(1), checked: 'yes' }, source(2)] })])), 'checked must be a date');
+  assert.deepEqual(errorsOf(fixture([concept('a', { sources: [{ ...source(1), checked: '2026-11-02' }, source(2)] })])), []);
+});
+
 test('missing fields fail', () => {
   for (const field of ['title', 'eq', 'idea', 'sources', 'labs', 'requires']) {
     const c = concept('a');
