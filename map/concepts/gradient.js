@@ -6,7 +6,7 @@ export default {
   courses: ['mac2313'],
   eq: String.raw`\nabla f = \left(\frac{\partial f}{\partial x},\ \frac{\partial f}{\partial y},\ \frac{\partial f}{\partial z}\right)`,
   idea: String.raw`The gradient of a scalar field points the way the field rises fastest, and its length is that rate. It is perpendicular to the level curves. Every "flows downhill" law in this thread starts here: heat flows down the temperature gradient, and \(\mathbf E = -\nabla V\).`,
-  requires: [],
+  requires: ['partial-derivatives'],
   sources: [
     {
       title: 'OpenStax Calculus Vol. 3, §4.6 Directional derivatives and the gradient',
