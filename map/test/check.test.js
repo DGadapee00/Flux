@@ -126,6 +126,17 @@ test('no lab and no candidate fails; a candidate alone passes', () => {
   assert.deepEqual(errorsOf(fixture([concept('a', { labs: [], candidate: 'A lab idea.' })])), []);
 });
 
+test('a project has no status; a course must have one', () => {
+  const data = fixture();
+  data.courses.push({ id: 'p1', code: 'P', title: 'A project', kind: 'project', app: null });
+  assert.deepEqual(errorsOf(data), []);
+  data.courses.push({ id: 'p2', code: 'P2', title: 'Another', kind: 'project', status: 'later', app: null });
+  has(errorsOf(data), 'a project has no status');
+  const bad = fixture();
+  delete bad.courses[0].status;
+  has(errorsOf(bad), 'status must be one of');
+});
+
 test('courses must match tracks.js', () => {
   const data = fixture();
   data.tracks = [{ courses: [{ id: 'c1', code: 'C 1', href: 'elsewhere/' }, { id: 'c3', code: 'C 3', href: null }] }];

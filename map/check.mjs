@@ -100,7 +100,10 @@ export function checkMap({ subjects, courses, statuses, concepts, labCatalogs, n
     courseById.set(c.id, c);
     if (!isText(c.code)) err(where, 'missing code');
     if (!isText(c.title)) err(where, 'missing title');
-    if (!statuses.includes(c.status)) err(where, `status must be one of ${statuses.join(', ')}`);
+    if (c.kind !== undefined && c.kind !== 'project') err(where, "kind must be 'project' when given");
+    if (c.kind === 'project') {
+      if (c.status !== undefined) err(where, 'a project has no status');
+    } else if (!statuses.includes(c.status)) err(where, `status must be one of ${statuses.join(', ')}`);
     if (!('app' in c)) err(where, 'missing app (null when Flux has no app for it)');
     const card = trackCourses.get(c.id);
     if (card) {

@@ -10,7 +10,7 @@ The approved prototype is `docs/map/prototype-flux-thread.html`. Its 15 concepts
 | File | What it holds |
 |---|---|
 | `subjects.js` | The lanes, top to bottom: id, label, colour token, and its value in each theme. A lane is a subject, not a course. |
-| `courses.js` | Each course's code, title, where the owner stands in it (`taken`, `taking now`, `next term`, `later`) and its folder on the hub. |
+| `courses.js` | Each course's code, title, where the owner stands in it (`taken`, `taking now`, `next term`, `later`) and its folder on the hub. A personal project has `kind: 'project'` and no status. |
 | `concepts/<id>.js` | One concept per file. The file name is the id. |
 | `catalog.js` | Every Flux course's labs, read from that course's own catalog. |
 | `routes.js` | The link from a concept into a course app. |

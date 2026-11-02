@@ -163,6 +163,14 @@ async function readHub(page) {
         motions: tracks.map((el) => el.dataset.motion),
         staged: tracks.filter((el) => el.querySelector('.stage')).map((el) => el.dataset.track),
         nodes: document.querySelectorAll('#map .node').length,
+        firstScreen: (() => {
+          const box = document.querySelector('#mapbox').getBoundingClientRect();
+          const node = document.querySelector('#map .node.sel rect')?.getBoundingClientRect();
+          const title = document.querySelector('#concept-title')?.getBoundingClientRect();
+          const inside = (r, b) => r && r.top >= b.top - 1 && r.bottom <= b.bottom + 1 && r.left >= b.left - 1 && r.right <= b.right + 1;
+          const screen = { top: 0, left: 0, bottom: innerHeight, right: innerWidth };
+          return Boolean(inside(node, box) && inside(node, screen) && inside(title, screen));
+        })(),
         chosen: document.querySelector('#detail')?.dataset.concept ?? null,
         mapScrolls: (() => {
           const box = document.querySelector('#mapbox');
@@ -184,9 +192,10 @@ function resolvedHref(href, base) {
 
 function assertHub(width, metrics, hub) {
   const expectedCols = width >= 1040 ? 3 : width >= 720 ? 2 : 1;
-  if (metrics.nodes !== CONCEPTS.length) {
-    throw new Error(`${width}px map shows ${metrics.nodes} concepts, expected ${CONCEPTS.length}`);
+  if (metrics.nodes < 2 || metrics.nodes >= CONCEPTS.length) {
+    throw new Error(`${width}px local view shows ${metrics.nodes} concepts, expected a neighbourhood`);
   }
+  if (!metrics.firstScreen) throw new Error(`${width}px: the chosen concept and its title are not both on the first screen`);
   if (!metrics.chosen) throw new Error(`${width}px map opened on no concept`);
   if (metrics.scroll > metrics.client + 1) {
     throw new Error(`${width}px scrolls sideways (${metrics.scroll} > ${metrics.client})`);
@@ -350,7 +359,11 @@ async function main() {
       }
       console.log(`${width}px ok, ${metrics.cols} column(s), ${metrics.nodes} concepts, no horizontal scroll`);
 
-      // Choosing a concept opens it. On a phone the map scrolls in its own box to show it.
+      // Full map draws every concept. Choosing one opens it; the map scrolls in its box to show it.
+      await evalJson(page, `document.querySelector('#scope [data-scope="all"]').click()`);
+      await delay(200);
+      const all = await evalJson(page, `document.querySelectorAll('#map .node').length`);
+      if (all !== CONCEPTS.length) throw new Error(`${width}px full map shows ${all} concepts, expected ${CONCEPTS.length}`);
       const last = CONCEPTS[CONCEPTS.length - 1].id;
       await evalJson(page, `document.querySelector('#map .node[data-concept="${last}"]').dispatchEvent(new MouseEvent('click', { bubbles: true }))`);
       await delay(400);

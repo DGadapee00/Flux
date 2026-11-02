@@ -4,7 +4,7 @@ export default {
   subject: 'thermo',
   courses: ['eml3100'],
   eq: String.raw`ds = \left(\frac{\delta q}{T}\right)_\text{rev}, \qquad s_2 - s_1 = c_p\ln\frac{T_2}{T_1} - R\ln\frac{p_2}{p_1}`,
-  idea: String.raw`Entropy is a property, so its change depends only on the end states. Along a reversible path it is heat divided by temperature, so the area under a reversible path on a \(T\)–\(s\) diagram is the heat. For an ideal gas and for a liquid there are formulas; for steam, tables. A real process ends to the right of the reversible one.`,
+  idea: String.raw`Entropy is a property, so its change depends only on the end states. Along a reversible path it is heat divided by temperature, so the area under a reversible path on a \(T\)–\(s\) diagram is the heat. For an ideal gas and for a liquid there are formulas; for steam, tables. In an adiabatic process, a real one ends to the right of the reversible one, because friction and mixing can only add entropy. With heat removed, a real process can end to the left.`,
   requires: ['carnot-limit'],
   sources: [
     {

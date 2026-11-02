@@ -10,6 +10,8 @@ export default {
   sources: [
     {
       title: 'OpenStax Calculus Vol. 3, §4.7 Maxima/minima problems',
+      // Unconfirmed: OpenStax drops the slash in "Maxima/Minima", so this page is most likely
+      // 4-7-maximaminima-problems. Not changed until npm run map-sources can open both.
       url: 'https://openstax.org/books/calculus-volume-3/pages/4-7-maxima-minima-problems',
       kind: 'Open textbook',
       level: 'Intro',

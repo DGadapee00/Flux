@@ -56,3 +56,19 @@ test('no concept id is also an id on the hub page, so #<concept> never jumps els
   pageIds.add('concept-title');
   for (const c of concepts) assert.equal(pageIds.has(c.id), false, `${c.id} is also a page id`);
 });
+
+test('the local view: one step each way, then two, without siblings', async () => {
+  const { neighbourhood, subMap } = await import('../src/layout.js');
+  const req = (id) => graph.byId[id].requires;
+  const lead = (id) => graph.leads[id];
+  const near = neighbourhood('divergence-theorem', 1, req, lead);
+  assert.deepEqual([...near].sort(), ['continuity', 'divergence', 'divergence-theorem', 'heat-equation', 'maxwell-div']);
+  const two = neighbourhood('divergence-theorem', 2, req, lead);
+  assert.ok(two.has('surface-flux') && two.has('lumped') && two.has('em-waves'));
+  assert.equal(two.has('mass-cv'), false, 'a prerequisite of a lead is a sibling path, not two steps out');
+  const sub = subMap(concepts, near);
+  const local = buildGraph(sub);
+  assert.deepEqual([local.depth.divergence, local.depth['divergence-theorem']], [0, 1]);
+  const { pos } = layout(sub, SUBJECTS, local.depth);
+  assert.equal(Object.keys(pos).length, near.size);
+});

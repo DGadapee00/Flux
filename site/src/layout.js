@@ -74,3 +74,47 @@ export function wrapLabel(title, max = 15) {
   }
   return best;
 }
+
+/** How much of the map the hub draws around the chosen concept. */
+export const SCOPES = { near: 1, two: 2, all: Infinity };
+
+/**
+ * The chosen concept, what it builds on and what it leads to, up to `steps` each way. Upward
+ * steps follow `requires` only and downward steps follow `leads` only, so a sibling that shares a
+ * prerequisite is not pulled in.
+ * @param {string} id
+ * @param {number} steps
+ * @param {(id: string) => string[]} requiresOf
+ * @param {(id: string) => string[]} leadsOf
+ */
+export function neighbourhood(id, steps, requiresOf, leadsOf) {
+  const out = new Set([id]);
+  for (const next of [requiresOf, leadsOf]) {
+    let ring = [id];
+    for (let s = 0; s < steps && ring.length; s += 1) {
+      const nextRing = [];
+      for (const x of ring) {
+        for (const y of next(x)) {
+          if (!out.has(y)) {
+            out.add(y);
+            nextRing.push(y);
+          }
+        }
+      }
+      ring = nextRing;
+    }
+  }
+  return out;
+}
+
+/**
+ * The concepts in `ids`, with `requires` cut to that set, so a part of the map can be laid out on
+ * its own: its depths start at zero and it has no empty columns.
+ * @template {{ id: string, requires: string[] }} C
+ * @param {C[]} concepts
+ * @param {Set<string>} ids
+ * @returns {C[]}
+ */
+export function subMap(concepts, ids) {
+  return concepts.filter((c) => ids.has(c.id)).map((c) => ({ ...c, requires: c.requires.filter((r) => ids.has(r)) }));
+}

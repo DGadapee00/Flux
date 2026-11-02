@@ -3,8 +3,8 @@ export default {
   title: 'Ampère’s law',
   subject: 'em',
   courses: ['phy2049'],
-  eq: String.raw`\oint \mathbf B\cdot d\mathbf l = \mu_0 I_\text{enc}`,
-  idea: String.raw`Go around any closed loop adding up \(\mathbf B\cdot d\mathbf l\), and the total is \(\mu_0\) times the current threading the loop. Current outside adds nothing. Like Gauss's law, it is always true but only useful with symmetry: pick a loop where \(B\) is constant along it. Then a long wire gives \(B = \mu_0I/2\pi r\), and a long solenoid gives \(B = \mu_0 nI\) inside.`,
+  eq: String.raw`\oint \mathbf B\cdot d\mathbf l = \mu_0 I_\text{enc}\quad\text{(steady currents)}`,
+  idea: String.raw`Go around any closed loop adding up \(\mathbf B\cdot d\mathbf l\), and the total is \(\mu_0\) times the current threading the loop. Current outside adds nothing. Like Gauss's law, it holds for any loop but is only useful with symmetry: pick a loop where \(B\) is constant along it. Then a long wire gives \(B = \mu_0I/2\pi r\), and a long solenoid gives \(B = \mu_0 nI\) inside. This form holds for steady currents. When the electric field changes, Maxwell's displacement term \(\mu_0\varepsilon_0\,d\Phi_E/dt\) joins the current, and that term is what lets an electromagnetic wave travel.`,
   requires: ['biot-savart', 'line-integrals'],
   sources: [
     {

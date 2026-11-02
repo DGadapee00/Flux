@@ -185,17 +185,18 @@ h1 {
 
 .mapbox {
   max-width: 100%;
+  max-height: min(68vh, 640px);
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 10px;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
+  overscroll-behavior: contain;
 }
 
 .mapinner {
   position: relative;
+  margin: 0 auto;
 }
 
 .mapbox svg {
@@ -230,7 +231,7 @@ h1 {
   font-family: var(--mono);
   font-size: 12px;
   color: var(--dim);
-  margin: -12px 0 0;
+  margin: 0;
 }
 
 .lane-label {
@@ -340,18 +341,136 @@ h1 {
 
 /* ---------- Reading panel ---------- */
 
-.detail {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-  gap: 28px;
-  align-items: start;
+/*
+ * The explore area. Wider than 1000 px: the map and its controls on the left, the reading panel
+ * beside them, sticky, with its own scroll. Narrower: one column, with the panel's head (courses,
+ * title, equation) first, the local view under it, and the rest of the panel after the map.
+ */
+.explore {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
 }
 
-@media (max-width: 820px) {
-  .detail {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 22px;
+.detail {
+  display: contents;
+}
+
+.detail-head,
+.detail-body {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.detail-head {
+  order: 1;
+}
+
+.explore > .mapbox {
+  order: 2;
+}
+
+.explore > .scope {
+  order: 3;
+}
+
+.explore > .hint {
+  order: 4;
+}
+
+.detail-body {
+  order: 5;
+}
+
+.explore > .paths {
+  order: 6;
+}
+
+.explore > .path-list {
+  order: 7;
+}
+
+.explore > .trail {
+  order: 8;
+}
+
+.explore > .legend {
+  order: 9;
+}
+
+@media (min-width: 1001px) {
+  .explore {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 400px);
+    grid-template-rows: auto auto auto auto auto auto 1fr;
+    grid-template-areas:
+      'legend panel'
+      'paths  panel'
+      'scope  panel'
+      'map    panel'
+      'hint   panel'
+      'trail  panel'
+      'plist  panel';
+    column-gap: 28px;
+    row-gap: 14px;
+    align-items: start;
   }
+
+  .explore > .legend { grid-area: legend; }
+  .explore > .paths { grid-area: paths; }
+  .explore > .scope { grid-area: scope; }
+  .explore > .mapbox { grid-area: map; }
+  .explore > .hint { grid-area: hint; }
+  .explore > .trail { grid-area: trail; }
+  .explore > .path-list { grid-area: plist; }
+
+  .detail {
+    grid-area: panel;
+    display: grid;
+    gap: 16px;
+    align-content: start;
+    position: sticky;
+    top: 12px;
+    max-height: calc(100vh - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 2px 6px 12px 2px;
+  }
+}
+
+.scope {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--display);
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.scope-label {
+  margin-right: 4px;
+}
+
+.scope button {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  min-height: 34px;
+  cursor: pointer;
+}
+
+.scope button[aria-pressed='true'] {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
 }
 
 .col {
