@@ -7,6 +7,8 @@
  * - a lab the course's catalog does not have, or a notes section its notes index does not have
  * - a missing field, a URL that is not https, TeX that KaTeX cannot parse, an em dash in our prose
  * - a concept with no lab and no `candidate`
+ * - a course path (map/paths/) that names an unknown concept, misses or adds a concept relative to
+ *   the concepts that list the course, repeats one, or puts a concept before its prerequisite
  * and on subjects or courses that are malformed or out of step with packages/tracks.
  */
 import path from 'node:path';
@@ -67,10 +69,11 @@ function httpsError(url) {
  *   labCatalogs: Record<string, Record<string, { unit: string, title: string }>>,
  *   notesIndexes: Record<string, Record<string, { id: string }[]>>,
  *   tracks?: { courses: { id: string, code: string, href: string|null }[] }[],
+ *   paths?: { file?: string, path: any }[],
  * }} data
  * @returns {string[]} errors
  */
-export function checkMap({ subjects, courses, statuses, concepts, labCatalogs, notesIndexes, tracks = [] }) {
+export function checkMap({ subjects, courses, statuses, concepts, labCatalogs, notesIndexes, tracks = [], paths = [] }) {
   const errors = [];
   const err = (where, msg) => errors.push(`${where}: ${msg}`);
 
@@ -201,6 +204,47 @@ export function checkMap({ subjects, courses, statuses, concepts, labCatalogs, n
   const cycle = findCycle(list);
   if (cycle) errors.push(`cycle: ${cycle.join(' → ')}`);
 
+  // Course paths
+  const pathCourses = new Set();
+  for (const { file, path: p } of paths) {
+    const where = `path ${p?.course ?? file ?? '?'}`;
+    if (!p || typeof p !== 'object') {
+      err(where, 'file has no default export');
+      continue;
+    }
+    if (!courseById.has(p.course)) err(where, `course ${p.course} is not in courses.js`);
+    if (file && file !== `${p.course}.js`) err(where, `file is ${file}, expected ${p.course}.js`);
+    if (pathCourses.has(p.course)) err(where, 'duplicate path for this course');
+    pathCourses.add(p.course);
+    if (!Array.isArray(p.units) || p.units.length === 0) {
+      err(where, 'units must list at least one unit');
+      continue;
+    }
+    const order = [];
+    p.units.forEach((u, i) => {
+      if (u.title !== undefined && !isText(u.title)) err(`${where} unit ${i + 1}`, 'title is empty');
+      if (u.title?.includes(EM_DASH)) err(`${where} unit ${i + 1}`, 'title has an em dash');
+      if (!Array.isArray(u.concepts) || u.concepts.length === 0) err(`${where} unit ${i + 1}`, 'concepts must list at least one id');
+      else order.push(...u.concepts);
+    });
+    const at = new Map();
+    order.forEach((id, i) => {
+      if (at.has(id)) err(where, `${id} appears twice`);
+      else at.set(id, i);
+      const c = ids.get(id);
+      if (!c) err(where, `${id} is not a concept`);
+      else if (!c.courses?.includes(p.course)) err(where, `${id} is on the path, but its courses do not list ${p.course}`);
+    });
+    for (const c of ids.values()) {
+      if (c.courses?.includes(p.course) && !at.has(c.id)) err(where, `${c.id} lists ${p.course} but is not on its path`);
+    }
+    for (const [id, i] of at) {
+      for (const r of ids.get(id)?.requires || []) {
+        if (at.has(r) && at.get(r) > i) err(where, `${id} comes before its prerequisite ${r}`);
+      }
+    }
+  }
+
   return errors;
 }
 
@@ -215,6 +259,7 @@ export async function checkRepo() {
       import('./load.mjs'),
     ]);
   const concepts = await loadConcepts();
+  const paths = await (await import('./load.mjs')).loadPaths();
   const notesIndexes = await loadNotesIndexes(Object.keys(LAB_CATALOGS));
   const errors = checkMap({
     subjects: SUBJECTS,
@@ -224,17 +269,18 @@ export async function checkRepo() {
     labCatalogs: LAB_CATALOGS,
     notesIndexes,
     tracks: TRACKS,
+    paths,
   });
   const withLab = concepts.filter(({ concept }) => concept.labs?.length).length;
-  return { errors, count: concepts.length, withLab };
+  return { errors, count: concepts.length, withLab, paths: paths.map((p) => p.path.course) };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const { errors, count, withLab } = await checkRepo();
+  const { errors, count, withLab, paths } = await checkRepo();
   if (errors.length) {
     for (const e of errors) console.error(e);
     console.error(`map check: ${errors.length} error(s)`);
     process.exit(1);
   }
-  console.log(`map ok: ${count} concepts, ${withLab} with a lab, ${count - withLab} gaps`);
+  console.log(`map ok: ${count} concepts, ${withLab} with a lab, ${count - withLab} gaps; paths: ${paths.join(', ') || 'none'}`);
 }

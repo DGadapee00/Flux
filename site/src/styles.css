@@ -690,3 +690,159 @@ footer a {
     animation: none !important;
   }
 }
+
+/* ---------- Course paths ---------- */
+
+.paths {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  font-family: var(--display);
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.paths[hidden],
+.path-list[hidden] {
+  display: none;
+}
+
+.path-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.path-button {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  min-height: 34px;
+  cursor: pointer;
+}
+
+.path-button[aria-pressed='true'] {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
+}
+
+.node .step {
+  display: none;
+}
+
+.node.on-path .step {
+  display: inline;
+}
+
+.node .step circle {
+  fill: var(--fg);
+}
+
+.node .step text {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  fill: var(--bg);
+}
+
+.edge.path {
+  stroke: var(--focus);
+  opacity: 0.9;
+  stroke-width: 2;
+}
+
+.path-list {
+  display: grid;
+  gap: 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.path-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 18px;
+}
+
+.path-list h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.path-list h4 {
+  margin: 0 0 6px;
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.path-list .links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.link {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  min-height: 32px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--dim);
+  text-underline-offset: 3px;
+}
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.steps .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+}
+
+.steps .chip[aria-current='true'] {
+  border-color: var(--c, var(--fg));
+  box-shadow: inset 0 0 0 1px var(--c, var(--fg));
+}
+
+.steps .n {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--dim);
+}
+
+.steps .gap {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--dim);
+}

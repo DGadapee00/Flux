@@ -130,3 +130,29 @@ test('lab links use each course route', () => {
   assert.equal(labHref({ course: 'phy2049', unit: 'e2', lab: 'gauss', notes: 's11' }), 'phy2049/#/phy2049/e2/gauss?n=s11');
   assert.equal(labHref({ course: 'sta3032', unit: 'final', lab: 'clt' }), 'sta3032/#/sta3032/final/explore/clt');
 });
+
+const withPath = (units, concepts) => ({ ...fixture(concepts), paths: [{ file: 'c1.js', path: { course: 'c1', units } }] });
+
+test('a course path that matches its concepts, in order, passes', () => {
+  assert.deepEqual(errorsOf(withPath([{ title: 'Unit 1', concepts: ['a'] }, { concepts: ['b'] }])), []);
+});
+
+test('a path fails on an unknown concept, a repeat, or a concept out of order', () => {
+  has(errorsOf(withPath([{ concepts: ['a', 'b', 'ghost'] }])), 'ghost is not a concept');
+  has(errorsOf(withPath([{ concepts: ['a', 'b', 'a'] }])), 'a appears twice');
+  has(errorsOf(withPath([{ concepts: ['b', 'a'] }])), 'b comes before its prerequisite a');
+});
+
+test('a path must hold exactly the concepts that list its course', () => {
+  has(errorsOf(withPath([{ concepts: ['a'] }])), 'b lists c1 but is not on its path');
+  const other = concept('x', { courses: ['c2'], labs: [], candidate: 'An idea.' });
+  has(errorsOf(withPath([{ concepts: ['a', 'b', 'x'] }], [concept('a'), concept('b', { requires: ['a'] }), other])), 'its courses do not list c1');
+});
+
+test('a path for an unknown course, or in the wrong file, fails', () => {
+  const data = fixture();
+  data.paths = [{ file: 'zz.js', path: { course: 'zz', units: [{ concepts: ['a', 'b'] }] } }];
+  const errors = errorsOf(data);
+  has(errors, 'course zz is not in courses.js');
+  has(errorsOf({ ...fixture(), paths: [{ file: 'other.js', path: { course: 'c1', units: [{ concepts: ['a', 'b'] }] } }] }), 'expected c1.js');
+});

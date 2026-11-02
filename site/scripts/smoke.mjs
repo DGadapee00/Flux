@@ -9,10 +9,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
-import { loadConcepts } from '@flux/map/load.mjs';
+import { loadConcepts, loadPaths } from '@flux/map/load.mjs';
 import { builtCourses, latestBuilt, visibleTracks } from '../src/tracks.js';
 
 const CONCEPTS = (await loadConcepts()).map((item) => item.concept);
+const PATHS = (await loadPaths()).map((item) => item.path);
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const chromeBin = process.env.CHROME || 'google-chrome';
@@ -418,6 +419,22 @@ async function main() {
       console.log(`${track.id} card → ${landed}`);
       await navigate(page, hub);
     }
+    // Choosing a course numbers its path on the map and lists it in order.
+    for (const p of PATHS) {
+      const want = p.units.flatMap((u) => u.concepts);
+      await navigate(page, hub);
+      await evalJson(page, `document.querySelector('[data-path="${p.course}"]').click()`);
+      await delay(200);
+      const got = await evalJson(
+        page,
+        `({ on: [...document.querySelectorAll('#map .node.on-path')].length, list: [...document.querySelectorAll('#path-list [data-go]')].map((b) => b.dataset.go), url: location.search })`,
+      );
+      if (got.on !== want.length || JSON.stringify(got.list) !== JSON.stringify(want) || got.url !== `?path=${p.course}`) {
+        throw new Error(`${p.course} path shows ${got.on} on the map and lists ${got.list.join(', ')}`);
+      }
+      console.log(`${p.course} path: ${want.length} concepts`);
+    }
+
     // Every lab link on the map lands in its course app.
     for (const concept of CONCEPTS) {
       for (const ref of concept.labs) {
