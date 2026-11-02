@@ -5,7 +5,7 @@ export default {
   courses: ['phy2049'],
   eq: String.raw`\oint \mathbf B\cdot d\mathbf l = \mu_0 I_\text{enc}`,
   idea: String.raw`Go around any closed loop adding up \(\mathbf B\cdot d\mathbf l\), and the total is \(\mu_0\) times the current threading the loop. Current outside adds nothing. Like Gauss's law, it is always true but only useful with symmetry: pick a loop where \(B\) is constant along it. Then a long wire gives \(B = \mu_0I/2\pi r\), and a long solenoid gives \(B = \mu_0 nI\) inside.`,
-  requires: ['biot-savart'],
+  requires: ['biot-savart', 'line-integrals'],
   sources: [
     {
       title: 'OpenStax University Physics Vol. 2, §12.5 Ampère’s law',
