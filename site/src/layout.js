@@ -6,7 +6,7 @@
  * Inside one lane and column, boxes are ordered by the average height of their prerequisites, so
  * arrows cross as little as they can. Ties fall back to the title. File order never matters.
  */
-export const BOX = { COLW: 146, NODEW: 124, NODEH: 46, LEFT: 24, TOP: 34, ROWH: 62, LANEPAD: 16 };
+export const BOX = { COLW: 146, NODEW: 124, NODEH: 46, LEFT: 24, TOP: 8, ROWH: 62, LANEPAD: 26 };
 
 /**
  * @param {{ id: string, title: string, subject: string, requires: string[] }[]} concepts

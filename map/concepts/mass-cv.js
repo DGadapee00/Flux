@@ -24,6 +24,6 @@ export default {
     },
   ],
   labs: [
-    { course: 'eml3100', lab: 'nozzle', notes: 's1', note: String.raw`Conservation of mass, \(\dot m = AV/v\), sets the area a stream needs.` },
+    { course: 'eml3100', lab: 'nozzle', notes: ['s1', 's4'], note: String.raw`Conservation of mass, \(\dot m = AV/v\), sets the area a stream needs.` },
   ],
 };

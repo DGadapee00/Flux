@@ -41,7 +41,12 @@
         <span class="paths-label">Follow a course:</span>
         <div class="path-buttons" id="path-buttons"></div>
       </div>
-      <div class="mapbox" id="mapbox"><svg id="map" role="group" aria-label="Concept map"></svg></div>
+      <div class="mapbox" id="mapbox">
+        <div class="mapinner" id="mapinner">
+          <svg id="map" role="group" aria-label="Concept map"></svg>
+          <div class="lane-tags" id="lane-tags" aria-hidden="true"></div>
+        </div>
+      </div>
       <p class="hint">Solid bright lines: what the chosen concept builds on. Dashed: where it leads. With a course chosen, its concepts are numbered in teaching order.</p>
       <section class="path-list" id="path-list" hidden aria-live="polite"></section>
       <nav class="trail" id="trail" aria-label="Where you have been"></nav>
