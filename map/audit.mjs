@@ -13,7 +13,7 @@
  */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { notesOf } from './routes.js';
+import { notesOf, notesTarget } from './routes.js';
 
 const SUMMARY = /\b(formula sheet|review|summary|cheat sheet)\b/i;
 
@@ -31,7 +31,10 @@ export function auditMap({ concepts, labCatalogs, notesIndexes }) {
     for (const ref of c.labs || []) {
       labsUsed.add(`${ref.course}/${ref.lab}`);
       const unit = labCatalogs[ref.course]?.[ref.lab]?.unit;
-      for (const id of notesOf(ref)) notesUsed.add(`${ref.course}/${unit}/${id}`);
+      for (const id of notesOf(ref)) {
+        const t = notesTarget(id, unit);
+        notesUsed.add(`${ref.course}/${t.unit}/${t.section}`);
+      }
     }
   }
   /** @type {Record<string, any>} */

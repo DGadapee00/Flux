@@ -15,7 +15,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import katex from 'katex';
 import { findCycle } from './graph.js';
-import { notesOf } from './routes.js';
+import { notesOf, notesTarget } from './routes.js';
 
 export const LEVELS = ['Intro', 'Course level', 'Deeper'];
 const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -159,6 +159,7 @@ export function checkMap({ subjects, courses, statuses, concepts, labCatalogs, n
         }
         if (isText(s?.level) && !LEVELS.includes(s.level)) err(at, `level must be one of ${LEVELS.join(', ')}`);
         if (isText(s?.why)) for (const e of proseErrors(s.why)) err(at, `why ${e}`);
+        if (s?.checked !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(s.checked)) err(at, 'checked must be a date, YYYY-MM-DD');
       });
     }
 
@@ -178,12 +179,13 @@ export function checkMap({ subjects, courses, statuses, concepts, labCatalogs, n
         seen.add(key);
         if (ref.notes !== undefined && ref.notes !== null) {
           const list = notesOf(ref);
-          const sections = notesIndexes[ref.course]?.[meta.unit];
           if (list.length === 0 || !list.every(isText)) err(at, 'notes must be a section id or a list of them');
-          else if (!sections) err(at, `${ref.course} has no notes for unit ${meta.unit}`);
           else {
             for (const id of list) {
-              if (!sections.some((s) => s.id === id)) err(at, `${ref.course} unit ${meta.unit} notes have no section ${id}`);
+              const { unit, section } = notesTarget(id, meta.unit);
+              const sections = notesIndexes[ref.course]?.[unit];
+              if (!sections) err(at, `${ref.course} has no notes for unit ${unit}`);
+              else if (!sections.some((s) => s.id === section)) err(at, `${ref.course} unit ${unit} notes have no section ${section}`);
             }
             if (new Set(list).size !== list.length) err(at, 'a notes section is listed twice');
           }
@@ -278,15 +280,18 @@ export async function checkRepo() {
     paths,
   });
   const withLab = concepts.filter(({ concept }) => concept.labs?.length).length;
-  return { errors, count: concepts.length, withLab, paths: paths.map((p) => p.path.course) };
+  const sources = concepts.flatMap(({ concept }) => concept.sources || []);
+  const unchecked = sources.filter((s) => !s.checked).length;
+  return { errors, count: concepts.length, withLab, paths: paths.map((p) => p.path.course), sources: sources.length, unchecked };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const { errors, count, withLab, paths } = await checkRepo();
+  const { errors, count, withLab, paths, sources, unchecked } = await checkRepo();
   if (errors.length) {
     for (const e of errors) console.error(e);
     console.error(`map check: ${errors.length} error(s)`);
     process.exit(1);
   }
   console.log(`map ok: ${count} concepts, ${withLab} with a lab, ${count - withLab} gaps; paths: ${paths.join(', ') || 'none'}`);
+  if (unchecked) console.log(`${unchecked} of ${sources} sources have no checked date yet (npm run map-sources opens them)`);
 }
