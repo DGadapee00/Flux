@@ -36,21 +36,32 @@
         </div>
       </header>
 
-      <div class="legend" id="legend" aria-label="Legend"></div>
-      <div class="paths" id="paths" hidden>
-        <span class="paths-label">Follow a course:</span>
-        <div class="path-buttons" id="path-buttons"></div>
-      </div>
-      <div class="mapbox" id="mapbox">
-        <div class="mapinner" id="mapinner">
-          <svg id="map" role="group" aria-label="Concept map"></svg>
-          <div class="lane-tags" id="lane-tags" aria-hidden="true"></div>
+      <div class="explore">
+        <div class="legend" id="legend" aria-label="Legend"></div>
+        <div class="paths" id="paths" hidden>
+          <span class="paths-label">Follow a course:</span>
+          <div class="path-buttons" id="path-buttons"></div>
         </div>
+        <div class="scope" id="scope" role="group" aria-label="How much of the map to show">
+          <span class="scope-label">Show:</span>
+          <button type="button" data-scope="near">1 step</button>
+          <button type="button" data-scope="two">2 steps</button>
+          <button type="button" data-scope="all">Full map</button>
+        </div>
+        <div class="mapbox" id="mapbox">
+          <div class="mapinner" id="mapinner">
+            <svg id="map" role="group" aria-label="Concept map"></svg>
+            <div class="lane-tags" id="lane-tags" aria-hidden="true"></div>
+          </div>
+        </div>
+        <p class="hint">Solid bright lines: what the chosen concept builds on. Dashed: where it leads. With a course chosen, its concepts are numbered in teaching order.</p>
+        <nav class="trail" id="trail" aria-label="Where you have been"></nav>
+        <section class="path-list" id="path-list" hidden aria-live="polite"></section>
+        <aside class="detail" id="detail" aria-live="polite" aria-labelledby="concept-title">
+          <div class="detail-head" id="detail-head"></div>
+          <div class="detail-body" id="detail-body"></div>
+        </aside>
       </div>
-      <p class="hint">Solid bright lines: what the chosen concept builds on. Dashed: where it leads. With a course chosen, its concepts are numbered in teaching order.</p>
-      <section class="path-list" id="path-list" hidden aria-live="polite"></section>
-      <nav class="trail" id="trail" aria-label="Where you have been"></nav>
-      <section class="detail" id="detail" aria-live="polite" aria-labelledby="concept-title"></section>
 
       <section class="section" id="courses" aria-labelledby="courses-title">
         <h2 id="courses-title">Courses</h2>

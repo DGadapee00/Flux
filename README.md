@@ -4,8 +4,10 @@ One concept map for the degree. Each concept is a node: a short idea, its key eq
 builds on, where it leads, sources worth your time, and the Flux lab and notes that show it.
 Courses are paths through the map. A concept with no lab is a visible gap.
 
-The hub opens on the map. Choose a concept to read it, or choose a course to see its path in
-teaching order. The course apps below the map open each course as it is today.
+The hub opens on a local view of the map: the chosen concept, what it builds on and what it leads
+to, one step each way, beside its reading panel. Widen it to two steps or the full map, or choose a
+course to see its path in teaching order. The course apps below the map open each course as it is
+today.
 
 | Where | What |
 |---|---|

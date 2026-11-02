@@ -4,13 +4,18 @@
  * panel for the chosen concept, the trail of where you have been, and highlighting of what the
  * concept builds on (solid) and where it leads (dashed). `#<concept-id>` opens a concept.
  *
+ * The map opens as a local view: the chosen concept, centred, with what it builds on and what it
+ * leads to, one step each way. A control widens it to two steps or to the full map, and
+ * `?view=two|all` keeps that choice.
+ *
  * A course is a path through the map (map/paths/). Choosing one numbers its concepts on the map,
- * fades the rest and lists them in teaching order. `?path=<course-id>` keeps the choice.
+ * fades the rest and lists them in teaching order. In a local view the whole path is drawn as well.
+ * `?path=<course-id>` keeps the choice.
  */
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
 import { buildGraph, COURSES, LAB_CATALOGS, labHref, notesHref, SUBJECTS } from '@flux/map';
-import { BOX, layout, wrapLabel } from './layout.js';
+import { BOX, layout, neighbourhood, SCOPES, subMap, wrapLabel } from './layout.js';
 
 /** The concept the map opens on when the link names none. */
 export const START = 'divergence-theorem';
@@ -87,111 +92,174 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
   root.head.append(style);
 
   const graph = buildGraph(concepts);
-  const { byId, leads, depth, closure } = graph;
+  const { byId, leads, closure } = graph;
   const subjectOf = Object.fromEntries(SUBJECTS.map((s) => [s.id, s]));
   const courseOf = Object.fromEntries(COURSES.map((c) => [c.id, c]));
   const colour = (c) => `var(${subjectOf[c.subject].token})`;
-  const { lanes, pos, W, H } = layout(concepts, SUBJECTS, depth);
   const { NODEW, NODEH } = BOX;
 
-  // Legend: the lanes in use, then the lab markers.
+  // Legend: every lane in use on the full map, then the lab markers.
   const legend = root.getElementById('legend');
   legend.innerHTML =
-    lanes.map((l) => `<span><i class="sw" style="background:var(${l.subject.token})"></i>${esc(l.subject.label)}</span>`).join('') +
-    '<span><i class="dot"></i>Flux lab exists</span><span><i class="dot hollow"></i>No lab yet</span>';
+    layout(concepts, SUBJECTS, graph.depth)
+      .lanes.map((l) => `<span><i class="sw" style="background:var(${l.subject.token})"></i>${esc(l.subject.label)}</span>`)
+      .join('') + '<span><i class="dot"></i>Flux lab exists</span><span><i class="dot hollow"></i>No lab yet</span>';
 
   // ---------- Map ----------
   const svg = root.getElementById('map');
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  // Fit the map to its box when that costs at most a fifth of its size. Narrower than that (a
-  // phone), it keeps its natural size and scrolls sideways inside the box.
   const mapbox = root.getElementById('mapbox');
   const inner = root.getElementById('mapinner');
-  const fit = () => {
-    inner.style.minWidth = mapbox.clientWidth >= W * 0.8 ? '' : `${W}px`;
-  };
-  fit();
-  window.addEventListener('resize', fit);
-  for (const lane of lanes) {
-    el('rect', { x: 0, y: lane.y, width: W, height: lane.h, fill: `var(${lane.subject.token})`, class: 'lane-bg' }, svg);
-  }
+  const tags = root.getElementById('lane-tags');
+  /** What is drawn now: its key, positions and size. */
+  let view = { key: '', pos: {}, W: 0, H: 0 };
+  let nodeEls = {};
+  let edgeEls = [];
 
-  const edgeEls = [];
-  const edgeLayer = el('g', {}, svg);
-  for (const c of concepts) {
-    for (const r of c.requires) {
-      const a = pos[r];
-      const b = pos[c.id];
-      const x1 = a.x + NODEW;
-      const y1 = a.y + NODEH / 2;
-      const x2 = b.x;
-      const y2 = b.y + NODEH / 2;
-      const mx = (x2 - x1) * 0.5;
-      const p = el('path', { d: `M${x1},${y1} C${x1 + mx},${y1} ${x2 - mx},${y2} ${x2 - 4},${y2}`, class: 'edge' }, edgeLayer);
-      edgeEls.push({ from: r, to: c.id, el: p });
+  /**
+   * Size the drawing. Narrower than the box, it keeps its natural size and sits in the middle.
+   * Wider, it fits the box when that costs at most a fifth of its size; past that (a phone, or the
+   * full map on a laptop) it keeps its natural size and scrolls inside the box.
+   */
+  function fit() {
+    const box = mapbox.clientWidth;
+    const { W } = view;
+    if (W <= box) {
+      inner.style.width = `${W}px`;
+      inner.style.minWidth = '';
+    } else if (box >= W * 0.8) {
+      inner.style.width = '';
+      inner.style.minWidth = '';
+    } else {
+      inner.style.width = `${W}px`;
+      inner.style.minWidth = `${W}px`;
     }
   }
+  window.addEventListener('resize', fit);
 
-  const nodeEls = {};
-  for (const c of concepts) {
-    const p = pos[c.id];
-    const hasLab = c.labs.length > 0;
-    const g = el(
-      'g',
-      {
-        class: 'node',
-        tabindex: '0',
-        role: 'button',
-        'aria-label': `${c.title}${hasLab ? '' : ', no lab yet'}`,
-        'data-concept': c.id,
-        transform: `translate(${p.x},${p.y})`,
-      },
-      svg,
-    );
-    el('rect', { width: NODEW, height: NODEH, rx: 7, stroke: colour(c) }, g);
-    const lines = c.label || wrapLabel(c.title);
-    const ty = NODEH / 2 - (lines.length - 1) * 8 + 5;
-    lines.forEach((s, i) => {
-      const t = el('text', { x: 11, y: ty + i * 16 }, g);
-      t.textContent = s;
-    });
-    el(
-      'circle',
-      {
-        cx: NODEW - 10,
-        cy: 10,
-        r: 4,
-        fill: hasLab ? 'var(--fg)' : 'none',
-        stroke: hasLab ? 'none' : 'var(--dim)',
-        'stroke-width': 1.5,
-      },
-      g,
-    );
-    const badge = el('g', { class: 'step', transform: 'translate(0,0)' }, g);
-    el('circle', { r: 10 }, badge);
-    el('text', { 'text-anchor': 'middle', y: 4 }, badge);
-    g.addEventListener('click', () => go(c.id));
-    g.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        go(c.id);
+  /** @param {Set<string>|null} ids The concepts to draw, or null for the full map. */
+  function draw(ids) {
+    const key = ids ? [...ids].sort().join(',') : '*';
+    if (key === view.key) return;
+    const sub = ids ? subMap(concepts, ids) : concepts;
+    const depth = ids ? buildGraph(sub).depth : graph.depth;
+    const { lanes, pos, W, H } = layout(sub, SUBJECTS, depth);
+    view = { key, pos, W, H };
+    svg.replaceChildren();
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    fit();
+    for (const lane of lanes) {
+      el('rect', { x: 0, y: lane.y, width: W, height: lane.h, fill: `var(${lane.subject.token})`, class: 'lane-bg' }, svg);
+    }
+    edgeEls = [];
+    const edgeLayer = el('g', {}, svg);
+    for (const c of sub) {
+      for (const r of c.requires) {
+        const a = pos[r];
+        const b = pos[c.id];
+        const x1 = a.x + NODEW;
+        const y1 = a.y + NODEH / 2;
+        const x2 = b.x;
+        const y2 = b.y + NODEH / 2;
+        const mx = (x2 - x1) * 0.5;
+        const p = el('path', { d: `M${x1},${y1} C${x1 + mx},${y1} ${x2 - mx},${y2} ${x2 - 4},${y2}`, class: 'edge' }, edgeLayer);
+        edgeEls.push({ from: r, to: c.id, el: p });
       }
-    });
-    nodeEls[c.id] = g;
+    }
+    nodeEls = {};
+    for (const c of sub) {
+      const p = pos[c.id];
+      const hasLab = c.labs.length > 0;
+      const g = el(
+        'g',
+        {
+          class: 'node',
+          tabindex: '0',
+          role: 'button',
+          'aria-label': `${c.title}${hasLab ? '' : ', no lab yet'}`,
+          'data-concept': c.id,
+          transform: `translate(${p.x},${p.y})`,
+        },
+        svg,
+      );
+      el('rect', { width: NODEW, height: NODEH, rx: 7, stroke: colour(c) }, g);
+      const lines = c.label || wrapLabel(c.title);
+      const ty = NODEH / 2 - (lines.length - 1) * 8 + 5;
+      lines.forEach((s, i) => {
+        const t = el('text', { x: 11, y: ty + i * 16 }, g);
+        t.textContent = s;
+      });
+      el(
+        'circle',
+        {
+          cx: NODEW - 10,
+          cy: 10,
+          r: 4,
+          fill: hasLab ? 'var(--fg)' : 'none',
+          stroke: hasLab ? 'none' : 'var(--dim)',
+          'stroke-width': 1.5,
+        },
+        g,
+      );
+      const badge = el('g', { class: 'step' }, g);
+      el('circle', { r: 10 }, badge);
+      el('text', { 'text-anchor': 'middle', y: 4 }, badge);
+      g.addEventListener('click', () => go(c.id));
+      g.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          go(c.id);
+        }
+      });
+      nodeEls[c.id] = g;
+    }
+    // Lane labels are HTML over the map, each stuck to the box's left edge, so a lane stays named
+    // however far the map is scrolled. A backing keeps edges from running through the text.
+    tags.innerHTML = lanes
+      .map(
+        (lane) =>
+          `<div class="lane-row" style="top:${(lane.y / H) * 100}%"><span class="lane-label" style="color:var(${lane.subject.token})">${esc(lane.subject.label)}</span></div>`,
+      )
+      .join('');
   }
 
-  // Lane labels are HTML over the map, each stuck to the box's left edge, so a lane stays named
-  // however far the map is scrolled. A backing keeps edges from running through the text.
-  const tags = root.getElementById('lane-tags');
-  tags.innerHTML = lanes
-    .map(
-      (lane) =>
-        `<div class="lane-row" style="top:${(lane.y / H) * 100}%"><span class="lane-label" style="color:var(${lane.subject.token})">${esc(lane.subject.label)}</span></div>`,
-    )
-    .join('');
+  // ---------- Scope: one step, two steps, the full map ----------
+  const scopeEl = root.getElementById('scope');
+  let scope = new URLSearchParams(window.location.search).get('view');
+  if (!(scope in SCOPES)) scope = 'near';
+
+  function visible(id) {
+    if (scope === 'all') return null;
+    const ids = neighbourhood(id, SCOPES[scope], (x) => byId[x].requires, (x) => leads[x]);
+    if (activePath) for (const x of pathOrder(paths[activePath])) ids.add(x);
+    return ids;
+  }
+
+  function setParam(name, value, fallback) {
+    const url = new URL(window.location.href);
+    if (value && value !== fallback) url.searchParams.set(name, value);
+    else url.searchParams.delete(name);
+    window.history.replaceState(window.history.state, '', url);
+  }
+
+  function chooseScope(next) {
+    scope = next in SCOPES ? next : 'near';
+    scopeEl.querySelectorAll('[data-scope]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.scope === scope)));
+    setParam('view', scope, 'near');
+    if (current) {
+      draw(visible(current));
+      highlight(current);
+      reveal(current);
+    }
+  }
+  scopeEl.querySelectorAll('[data-scope]').forEach((b) => {
+    b.setAttribute('aria-pressed', String(b.dataset.scope === scope));
+    b.addEventListener('click', () => chooseScope(b.dataset.scope));
+  });
 
   // ---------- Reading panel ----------
   const detail = root.getElementById('detail');
+  const detailHead = root.getElementById('detail-head');
+  const detailBody = root.getElementById('detail-body');
   const trailEl = root.getElementById('trail');
   let trail = [];
 
@@ -204,7 +272,8 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
     const tag = course.app
       ? `<a class="course" href="${course.app}" style="color:${colour(c)}" title="Open ${esc(course.title)}">${code}</a>`
       : `<span class="course" style="color:${colour(c)}">${code}</span>`;
-    return `<span class="course-tag">${tag}<span class="status">${esc(course.status)}</span></span>`;
+    const status = course.kind === 'project' ? 'project' : course.status;
+    return `<span class="course-tag">${tag}<span class="status">${esc(status)}</span></span>`;
   }
 
   function labBlock(ref) {
@@ -227,20 +296,18 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
           `<li class="src"><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)} <span aria-hidden="true">↗</span></a><div class="meta"><span>${esc(s.kind)}</span><span>${esc(s.level)}</span></div><p class="why">${esc(s.why)}</p></li>`,
       )
       .join('');
-    detail.innerHTML = `
-      <div class="col">
-        <div class="tagrow">${c.courses.map((k) => courseTag(k, c)).join('')}</div>
-        <h2 id="concept-title">${esc(c.title)}</h2>
-        <div class="eq">${tex(c.eq, true)}</div>
-        <p class="idea">${prose(c.idea)}</p>
-        <div><h3>Builds on</h3>${c.requires.length ? `<div class="chips">${c.requires.map(chip).join('')}</div>` : '<p class="none">Nothing on the map yet. It is a starting point.</p>'}</div>
-        <div><h3>Leads to</h3>${leads[id].length ? `<div class="chips">${leads[id].map(chip).join('')}</div>` : '<p class="none">The end of this thread, for now.</p>'}</div>
-      </div>
-      <div class="col">
-        ${labs}${extra}
-        <div><h3>Worth your time</h3><ul class="sources">${srcs}</ul></div>
-      </div>`;
+    detailHead.innerHTML = `
+      <div class="tagrow">${c.courses.map((k) => courseTag(k, c)).join('')}</div>
+      <h2 id="concept-title">${esc(c.title)}</h2>
+      <div class="eq">${tex(c.eq, true)}</div>`;
+    detailBody.innerHTML = `
+      <p class="idea">${prose(c.idea)}</p>
+      <div><h3>Builds on</h3>${c.requires.length ? `<div class="chips">${c.requires.map(chip).join('')}</div>` : '<p class="none">Nothing on the map yet. It is a starting point.</p>'}</div>
+      <div><h3>Leads to</h3>${leads[id].length ? `<div class="chips">${leads[id].map(chip).join('')}</div>` : '<p class="none">The end of this thread, for now.</p>'}</div>
+      ${labs}${extra}
+      <div><h3>Worth your time</h3><ul class="sources">${srcs}</ul></div>`;
     detail.dataset.concept = id;
+    detail.scrollTop = 0;
     detail.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
   }
 
@@ -259,10 +326,10 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
       for (const e of edgeEls) e.el.setAttribute('class', `edge${on.has(e.from) && on.has(e.to) ? ' path' : ' faded'}`);
       return;
     }
-    for (const k in nodeEls) nodeEls[k].classList.remove('on-path');
     const up = closure(id, 'requires');
     const down = closure(id, 'leads');
     for (const k in nodeEls) {
+      nodeEls[k].classList.remove('on-path');
       nodeEls[k].classList.toggle('sel', k === id);
       nodeEls[k].classList.toggle('faded', k !== id && !up.has(k) && !down.has(k));
       if (k === id) nodeEls[k].setAttribute('aria-current', 'true');
@@ -292,14 +359,19 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
     trailEl.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
   }
 
-  /** On a narrow screen the map scrolls sideways in its box; bring the chosen concept into view. */
+  /** Centre the chosen concept in the map's box, across and down, when the drawing overflows it. */
   function reveal(id) {
-    const box = mapbox;
-    if (box.scrollWidth <= box.clientWidth) return;
-    const scale = svg.getBoundingClientRect().width / W;
-    const cx = (pos[id].x + NODEW / 2) * scale;
+    const p = view.pos[id];
+    if (!p) return;
+    const scale = svg.getBoundingClientRect().width / view.W;
+    const cx = (p.x + NODEW / 2) * scale;
+    const cy = (p.y + NODEH / 2) * scale;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    box.scrollTo({ left: Math.max(0, cx - box.clientWidth / 2), behavior: reduce ? 'auto' : 'smooth' });
+    mapbox.scrollTo({
+      left: Math.max(0, cx - mapbox.clientWidth / 2),
+      top: Math.max(0, cy - mapbox.clientHeight / 2),
+      behavior: reduce ? 'auto' : 'smooth',
+    });
   }
 
   // ---------- Course paths ----------
@@ -340,7 +412,7 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
       })
       .join('');
     const open = course.app ? `<a href="${course.app}">Open ${esc(course.code)}</a>` : '';
-    pathList.innerHTML = `<div class="path-head"><h3>${esc(course.code)} ${esc(course.title)}, in teaching order</h3><div class="links">${open}<button type="button" class="link" data-clear>Show the whole map</button></div></div>${units}`;
+    pathList.innerHTML = `<div class="path-head"><h3>${esc(course.code)} ${esc(course.title)}, in teaching order</h3><div class="links">${open}<button type="button" class="link" data-clear>Leave the path</button></div></div>${units}`;
     pathList.hidden = false;
     pathList.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
     pathList.querySelector('[data-clear]').addEventListener('click', () => choosePath(null));
@@ -349,11 +421,12 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
   function choosePath(id) {
     activePath = id && paths[id] ? id : null;
     buttons.querySelectorAll('[data-path]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.path === activePath)));
-    const url = new URL(window.location.href);
-    if (activePath) url.searchParams.set('path', activePath);
-    else url.searchParams.delete('path');
-    window.history.replaceState(window.history.state, '', url);
-    if (current) highlight(current);
+    setParam('path', activePath, null);
+    if (current) {
+      draw(visible(current));
+      highlight(current);
+      reveal(current);
+    }
     renderPathList();
   }
 
@@ -362,6 +435,7 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
     if (!byId[id]) return false;
     current = id;
     render(id);
+    draw(visible(id));
     highlight(id);
     renderTrail(id);
     renderPathList();
@@ -389,11 +463,15 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
     show,
     go,
     choosePath,
+    chooseScope,
     get current() {
       return current;
     },
     get path() {
       return activePath;
+    },
+    get scope() {
+      return scope;
     },
     graph,
   };

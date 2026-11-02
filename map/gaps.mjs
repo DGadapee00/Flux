@@ -4,7 +4,7 @@
  *
  * A gap scores one point for every concept that builds on it (directly or further along), and more
  * for each course that teaches it, by where the owner stands in that course: taking now 3, next
- * term 2, later 1, taken 0. Concepts that have a lab but still carry a `candidate` are listed after
+ * term 2, later 1, taken 0. A project counts 0. Concepts that have a lab but still carry a `candidate` are listed after
  * the gaps, as labs worth adding.
  */
 import { COURSES } from './courses.js';
