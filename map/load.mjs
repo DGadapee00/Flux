@@ -24,6 +24,21 @@ export async function loadConcepts(dir = path.join(MAP_DIR, 'concepts')) {
 }
 
 /**
+ * @param {string} [dir]
+ * @returns {Promise<{ file: string, path: any }[]>}
+ */
+export async function loadPaths(dir = path.join(MAP_DIR, 'paths')) {
+  if (!fs.existsSync(dir)) return [];
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith('.js')).sort();
+  const out = [];
+  for (const file of files) {
+    const mod = await import(pathToFileURL(path.join(dir, file)).href);
+    out.push({ file, path: mod.default });
+  }
+  return out;
+}
+
+/**
  * Each course's notes sections, by unit: `{ [unit]: [{ id, title, lab }] }`.
  * A course with no notes index is absent.
  * @param {string[]} courseIds

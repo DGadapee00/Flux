@@ -37,8 +37,13 @@
       </header>
 
       <div class="legend" id="legend" aria-label="Legend"></div>
+      <div class="paths" id="paths" hidden>
+        <span class="paths-label">Follow a course:</span>
+        <div class="path-buttons" id="path-buttons"></div>
+      </div>
       <div class="mapbox" id="mapbox"><svg id="map" role="group" aria-label="Concept map"></svg></div>
-      <p class="hint">Solid bright lines: what the chosen concept builds on. Dashed: where it leads.</p>
+      <p class="hint">Solid bright lines: what the chosen concept builds on. Dashed: where it leads. With a course chosen, its concepts are numbered in teaching order.</p>
+      <section class="path-list" id="path-list" hidden aria-live="polite"></section>
       <nav class="trail" id="trail" aria-label="Where you have been"></nav>
       <section class="detail" id="detail" aria-live="polite" aria-labelledby="concept-title"></section>
 

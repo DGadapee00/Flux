@@ -3,6 +3,9 @@
  * (docs/map/prototype-flux-thread.html). Subject lanes, prerequisites left to right, a reading
  * panel for the chosen concept, the trail of where you have been, and highlighting of what the
  * concept builds on (solid) and where it leads (dashed). `#<concept-id>` opens a concept.
+ *
+ * A course is a path through the map (map/paths/). Choosing one numbers its concepts on the map,
+ * fades the rest and lists them in teaching order. `?path=<course-id>` keeps the choice.
  */
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
@@ -20,6 +23,15 @@ export function loadConcepts() {
   const mods = import.meta.glob('../../map/concepts/*.js', { eager: true });
   return Object.values(mods).map((m) => /** @type {any} */ (m).default);
 }
+
+/** Every course path, from one file each in map/paths/, keyed by course id. */
+export function loadPaths() {
+  const mods = import.meta.glob('../../map/paths/*.js', { eager: true });
+  return Object.fromEntries(Object.values(mods).map((m) => [/** @type {any} */ (m).default.course, /** @type {any} */ (m).default]));
+}
+
+/** A path's concept ids in order. */
+export const pathOrder = (p) => p.units.flatMap((u) => u.concepts);
 
 /**
  * The lane colours as CSS custom properties, in both themes, from map/subjects.js.
@@ -65,10 +77,11 @@ function el(tag, attrs, parent) {
 /**
  * @param {{
  *   concepts?: any[],
+ *   paths?: Record<string, any>,
  *   root?: Document,
  * }} [opts]
  */
-export function mountMap({ concepts = loadConcepts(), root = document } = {}) {
+export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root = document } = {}) {
   const style = root.createElement('style');
   style.textContent = laneCss(SUBJECTS);
   root.head.append(style);
@@ -153,6 +166,9 @@ export function mountMap({ concepts = loadConcepts(), root = document } = {}) {
       },
       g,
     );
+    const badge = el('g', { class: 'step', transform: 'translate(0,0)' }, g);
+    el('circle', { r: 10 }, badge);
+    el('text', { 'text-anchor': 'middle', y: 4 }, badge);
     g.addEventListener('click', () => go(c.id));
     g.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -237,6 +253,21 @@ export function mountMap({ concepts = loadConcepts(), root = document } = {}) {
   }
 
   function highlight(id) {
+    if (activePath) {
+      const order = pathOrder(paths[activePath]);
+      const on = new Set(order);
+      for (const k in nodeEls) {
+        nodeEls[k].classList.toggle('sel', k === id);
+        nodeEls[k].classList.toggle('faded', k !== id && !on.has(k));
+        nodeEls[k].classList.toggle('on-path', on.has(k));
+        nodeEls[k].querySelector('.step text').textContent = on.has(k) ? String(order.indexOf(k) + 1) : '';
+        if (k === id) nodeEls[k].setAttribute('aria-current', 'true');
+        else nodeEls[k].removeAttribute('aria-current');
+      }
+      for (const e of edgeEls) e.el.setAttribute('class', `edge${on.has(e.from) && on.has(e.to) ? ' path' : ' faded'}`);
+      return;
+    }
+    for (const k in nodeEls) nodeEls[k].classList.remove('on-path');
     const up = closure(id, 'requires');
     const down = closure(id, 'leads');
     for (const k in nodeEls) {
@@ -279,6 +310,61 @@ export function mountMap({ concepts = loadConcepts(), root = document } = {}) {
     box.scrollTo({ left: Math.max(0, cx - box.clientWidth / 2), behavior: reduce ? 'auto' : 'smooth' });
   }
 
+  // ---------- Course paths ----------
+  const chooser = root.getElementById('paths');
+  const buttons = root.getElementById('path-buttons');
+  const pathList = root.getElementById('path-list');
+  const pathIds = COURSES.map((c) => c.id).filter((id) => paths[id]);
+  let activePath = null;
+
+  if (pathIds.length) {
+    chooser.hidden = false;
+    buttons.innerHTML = pathIds
+      .map((id) => `<button type="button" class="path-button" data-path="${id}" aria-pressed="false">${esc(courseOf[id].code)}</button>`)
+      .join('');
+    buttons.querySelectorAll('[data-path]').forEach((b) =>
+      b.addEventListener('click', () => choosePath(activePath === b.dataset.path ? null : b.dataset.path)),
+    );
+  }
+
+  function renderPathList() {
+    if (!activePath) {
+      pathList.hidden = true;
+      pathList.innerHTML = '';
+      return;
+    }
+    const course = courseOf[activePath];
+    let n = 0;
+    const units = paths[activePath].units
+      .map((u) => {
+        const items = u.concepts
+          .map((id) => {
+            n += 1;
+            const here = id === current ? ' aria-current="true"' : '';
+            return `<li><button class="chip" data-go="${id}" style="--c:${colour(byId[id])}"${here}><span class="n">${n}</span>${esc(byId[id].title)}${byId[id].labs.length ? '' : ' <span class="gap">no lab yet</span>'}</button></li>`;
+          })
+          .join('');
+        return `<div class="unit">${u.title ? `<h4>${esc(u.title)}</h4>` : ''}<ol class="steps" start="${n - u.concepts.length + 1}">${items}</ol></div>`;
+      })
+      .join('');
+    const open = course.app ? `<a href="${course.app}">Open ${esc(course.code)}</a>` : '';
+    pathList.innerHTML = `<div class="path-head"><h3>${esc(course.code)} ${esc(course.title)}, in teaching order</h3><div class="links">${open}<button type="button" class="link" data-clear>Show the whole map</button></div></div>${units}`;
+    pathList.hidden = false;
+    pathList.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
+    pathList.querySelector('[data-clear]').addEventListener('click', () => choosePath(null));
+  }
+
+  function choosePath(id) {
+    activePath = id && paths[id] ? id : null;
+    buttons.querySelectorAll('[data-path]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.path === activePath)));
+    const url = new URL(window.location.href);
+    if (activePath) url.searchParams.set('path', activePath);
+    else url.searchParams.delete('path');
+    window.history.replaceState(window.history.state, '', url);
+    if (current) highlight(current);
+    renderPathList();
+  }
+
   let current = null;
   function show(id) {
     if (!byId[id]) return false;
@@ -286,6 +372,7 @@ export function mountMap({ concepts = loadConcepts(), root = document } = {}) {
     render(id);
     highlight(id);
     renderTrail(id);
+    renderPathList();
     reveal(id);
     return true;
   }
@@ -299,7 +386,23 @@ export function mountMap({ concepts = loadConcepts(), root = document } = {}) {
   // whatever it was showing.
   window.addEventListener('hashchange', () => show(decodeURIComponent(window.location.hash.slice(1))));
   const first = decodeURIComponent(window.location.hash.slice(1));
-  if (!show(first)) show(byId[START] ? START : concepts[0].id);
+  const startPath = new URLSearchParams(window.location.search).get('path');
+  if (startPath && paths[startPath]) {
+    activePath = startPath;
+    buttons.querySelector(`[data-path="${startPath}"]`)?.setAttribute('aria-pressed', 'true');
+  }
+  if (!show(first)) show(activePath ? pathOrder(paths[activePath])[0] : byId[START] ? START : concepts[0].id);
 
-  return { show, go, get current() { return current; }, graph };
+  return {
+    show,
+    go,
+    choosePath,
+    get current() {
+      return current;
+    },
+    get path() {
+      return activePath;
+    },
+    graph,
+  };
 }
