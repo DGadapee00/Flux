@@ -1,0 +1,30 @@
+export default {
+  id: 'newtons-second-law',
+  title: 'Newton’s second law',
+  subject: 'mechanics',
+  courses: ['egn3321'],
+  eq: String.raw`\sum \mathbf F = m\,\mathbf a`,
+  idea: String.raw`The net force on a particle sets its acceleration. Draw the free-body diagram, choose axes, and write one equation per direction. Friction, ropes and pulleys each add a rule: kinetic friction is \(\mu_k N\), a rope pulls along itself, and a pulley's geometry ties the blocks' accelerations together. Drag makes the force depend on speed, and the equation becomes a differential one.`,
+  requires: ['particle-kinematics', 'vectors'],
+  sources: [
+    {
+      title: 'OpenStax University Physics Vol. 1, §6.1 Solving problems with Newton’s laws',
+      url: 'https://openstax.org/books/university-physics-volume-1/pages/6-1-solving-problems-with-newtons-laws',
+      kind: 'Open textbook',
+      level: 'Intro',
+      why: 'A fixed method, then connected bodies and inclines.',
+    },
+    {
+      title: 'MIT 8.01SC, 12.1 Pulley problems, part I: set up the equations',
+      url: 'https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-4-drag-forces-constraints-and-continuous-systems/12-1-pulley-problems-part-i-set-up-the-equations/',
+      kind: 'Lecture video',
+      level: 'Course level',
+      why: 'The constraint equation that most pulley mistakes skip.',
+    },
+  ],
+  labs: [
+    { course: 'egn3321', lab: 'fma', notes: ['s1', 's2', 's3'], note: 'Blocks on inclines with friction, alone and connected.' },
+    { course: 'egn3321', lab: 'pulleys', notes: ['s4'], note: 'Pulley systems and the length constraint that links their motions.' },
+    { course: 'egn3321', lab: 'drag', notes: ['s5'], note: 'Falling with drag, approaching terminal speed.' },
+  ],
+};

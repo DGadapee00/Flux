@@ -1,0 +1,30 @@
+export default {
+  id: 'work-energy',
+  title: 'Work and energy',
+  subject: 'mechanics',
+  courses: ['egn3321'],
+  eq: String.raw`T_1 + \sum U_{1\to2} = T_2, \qquad U = \int \mathbf F\cdot d\mathbf r`,
+  idea: String.raw`The work done on a particle equals the change in its kinetic energy. Work is a line integral of force along the path, so it skips the acceleration entirely and goes straight from speeds to positions. Gravity and springs do work that depends only on the endpoints; friction does not. Power is how fast the work is done.`,
+  requires: ['newtons-second-law', 'line-integrals'],
+  sources: [
+    {
+      title: 'OpenStax University Physics Vol. 1, §7.3 Work-energy theorem',
+      url: 'https://openstax.org/books/university-physics-volume-1/pages/7-3-work-energy-theorem',
+      kind: 'Open textbook',
+      level: 'Intro',
+      why: 'The theorem derived from Newton’s law, then used on real paths.',
+    },
+    {
+      title: 'MIT 8.01SC, 22.1 Path independence: gravity',
+      url: 'https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-7-kinetic-energy-and-work/22-1-path-independence-gravity/',
+      kind: 'Lecture video',
+      level: 'Course level',
+      why: 'Why some forces only care about the endpoints.',
+    },
+  ],
+  labs: [
+    { course: 'egn3321', lab: 'collar', notes: ['s1', 's2', 's3', 's4'], note: 'A collar on a rod with a spring and friction: work in, speed out.' },
+    { course: 'egn3321', lab: 'paths', notes: ['s5'], note: 'Two paths between the same points: gravity agrees, friction does not.' },
+    { course: 'egn3321', lab: 'stopping', notes: ['s6'], note: 'Stopping sight distance: reaction distance plus braking distance.' },
+  ],
+};
