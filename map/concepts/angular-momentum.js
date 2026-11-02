@@ -1,0 +1,31 @@
+export default {
+  id: 'angular-momentum',
+  title: 'Angular momentum and impulse',
+  label: ['Angular', 'momentum'],
+  subject: 'mechanics',
+  courses: ['egn3321'],
+  eq: String.raw`\mathbf H_G = I_G\,\boldsymbol\omega, \qquad \mathbf H_1 + \int\sum\mathbf M\,dt = \mathbf H_2`,
+  idea: String.raw`Angular momentum is to turning what momentum is to moving. Angular impulse changes it, and with no outside moment about a point it stays fixed: pull mass inward and the spin speeds up. In an off-centre impact, take moments about the contact point and the unknown contact force drops out. That is how a bat's sweet spot is found.`,
+  requires: ['impulse-momentum', 'rigid-kinetics'],
+  sources: [
+    {
+      title: 'OpenStax University Physics Vol. 1, §11.3 Conservation of angular momentum',
+      url: 'https://openstax.org/books/university-physics-volume-1/pages/11-3-conservation-of-angular-momentum',
+      kind: 'Open textbook',
+      level: 'Intro',
+      why: 'Skaters, stars and collisions, all one rule.',
+    },
+    {
+      title: 'MIT 2.003SC, Angular momentum and motion of rotating rigid bodies',
+      url: 'https://ocw.mit.edu/courses/2-003sc-engineering-dynamics-fall-2011/pages/angular-momentum-and-motion-of-rotating-rigid-bodies/',
+      kind: 'Lectures + problems with solutions',
+      level: 'Deeper',
+      why: 'The rigid-body form, with the inertia tensor where it matters.',
+    },
+  ],
+  labs: [
+    { course: 'egn3321', lab: 'spin', notes: ['s3', 's1', 's2', 'u4/s5'], note: 'A spinning body pulling its mass in: angular momentum kept, spin rate up.' },
+    { course: 'egn3321', lab: 'strike', notes: ['s4'], note: 'An eccentric impact on a rigid body, with moments about the contact.' },
+    { course: 'egn3321', lab: 'bat', notes: ['s5'], note: 'A baseball bat’s sweet spot, where the hands feel no sting.' },
+  ],
+};
