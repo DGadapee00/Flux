@@ -24,7 +24,8 @@
     "ocw:textbooks": "node tools/ocw/fetch-textbooks.mjs",
     "new-lab": "node tools/new-lab.mjs",
     "map-audit": "node map/audit.mjs",
-    "map-sources": "node map/sources.mjs"
+    "map-sources": "node map/sources.mjs",
+    "map-gaps": "node map/gaps.mjs"
   },
   "engines": {
     "node": ">=22"

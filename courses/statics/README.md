@@ -36,6 +36,6 @@ regression check.
 Routes use `#/statics/u3/truss`, `?p=ch6.truss-joints&s=0` for practice, and `?n=s2` for notes.
 Original lab routes and progress keys remain supported. Backups live on the hub.
 
-See [the course plan](../../docs/course-plans/statics.md), [CONVENTIONS.md](CONVENTIONS.md) and
+See [the course plan](../../docs/history/guidance-2026-11-02/docs/course-plans/statics.md), [CONVENTIONS.md](CONVENTIONS.md) and
 [PROVENANCE.md](PROVENANCE.md). The measured scorecard passes; `standard` remains false.
 The complete printed-answer case audit and the owner's student review remain outstanding.

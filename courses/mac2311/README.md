@@ -29,7 +29,7 @@ are prefixed `ii.`; saved seeds retain their original question values.
 
 The migration combines review histories without deleting old keys or adding attempts
 twice. Existing hub backups keep both source-course entries. The complete contract is
-in `docs/course-plans/mac2311-2312.md`.
+in `docs/history/guidance-2026-11-02/docs/course-plans/mac2311-2312.md`.
 
 Unit 1 has been reworked with a camera-focus application, predictions, and a new active bank. Original Unit 1 templates remain accessible by saved ID and keep their seed identity. Unit 2 now adds constrained can design, approximation error, Newton failures and first differential equations. Unit 3 adds rain-barrel accumulation, spheroid slices, probability, weighted means and a checked source correction. Unit 4 adds an integral workbench and suspension-cable geometry. Unit 5 adds record-player motion, signed polar coordinates and weighted arc averages. Unit 6 adds nonlinear clock-pendulum timing, rigorous convergence and remainder bounds.
 All six units pass the content scorecard; the merge and content rework are complete within R4a.

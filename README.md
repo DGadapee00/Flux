@@ -1,24 +1,35 @@
 # FLUX
 
-One study platform. Each course is a module inside a track. The hub is the front door: one card per track, and each built course opens the app that is live for it today.
+One concept map for the degree. Each concept is a node: a short idea, its key equation, what it
+builds on, where it leads, sources worth your time, and the Flux lab and notes that show it.
+Courses are paths through the map. A concept with no lab is a visible gap.
 
-| Track | Card opens | Also on the card |
-|---|---|---|
-| Physics | PHY 2049 at `phy2049/` | |
-| Math | MAC 2313 at `mac2313/` | MAC 2311, MAC 2312 |
-| Mechanics | EGN 3321 Dynamics at `egn3321/` | EGN 3311 Statics at `statics/` |
-| Statistics | STA 3032 at `sta3032/` | |
+The hub opens on the map. Choose a concept to read it, or choose a course to see its path in
+teaching order. The course apps below the map open each course as it is today.
 
-Courses that are not built yet stay on the card, dimmed. The built courses open the copies in this repo. The old repos are frozen, and their sites stay up. Those repos are not edited from here.
+| Where | What |
+|---|---|
+| `map/` | The map's data and its check: subjects, courses, concepts, course paths. See `map/README.md`. |
+| `MAP.md` | What the map covers and which gaps are most worth a lab. |
+| `site/` | The hub. |
+| `courses/<id>/` | Each course app: labs, notes and problems. The map links into them. |
+| `packages/` | Shared core, subject libraries, shells, track list and checks. |
+| `docs/map/` | The approved prototype the hub is drawn from. |
+| `docs/history/` | Retired plans, kept for the reasoning behind existing material. |
 
-The hub publishes to https://flux-study.pages.dev. `flux.pages.dev` is an unrelated site, so this project does not use that hostname.
+The hub publishes to https://flux-study.pages.dev. `flux.pages.dev` is an unrelated site, so this
+project does not use that hostname.
 
 ```bash
 npm install
-npm start     # http://localhost:5173
-npm test      # every workspace, including the dependency-direction check
-npm run smoke # 380px and 1280px, hover, reduced motion, each built course
+npm start               # http://localhost:5173
+npm test                # every workspace, the map check and the dependency-direction check
+npm run smoke           # the hub at 380, 720 and 1280px, every map lab link
 npm run build
+npm run map-audit       # labs and notes sections no concept references
+npm run map-gaps        # concepts with no lab, most worth building first
+npm run map-sources     # open every unchecked source link
 ```
 
-[DEPLOY.md](DEPLOY.md) covers publishing. [AGENTS.md](AGENTS.md) is the rules. Flux is about to be refactored around a concept map that runs across courses. The old course-by-course plan, standard and course plans are archived in [docs/history/guidance-2026-11-02/](docs/history/guidance-2026-11-02/).
+[DEPLOY.md](DEPLOY.md) covers publishing. [AGENTS.md](AGENTS.md) is the rules, including how to add
+a concept, a thread and a lab.
