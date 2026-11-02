@@ -5,5 +5,5 @@
 export { SUBJECTS } from './subjects.js';
 export { COURSES, STATUSES } from './courses.js';
 export { LAB_CATALOGS } from './catalog.js';
-export { labHref } from './routes.js';
+export { labHref, notesOf } from './routes.js';
 export { buildGraph, findCycle } from './graph.js';

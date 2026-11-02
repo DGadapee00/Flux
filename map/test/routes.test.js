@@ -4,7 +4,7 @@ import test from 'node:test';
 import { pathToFileURL } from 'node:url';
 import { LAB_CATALOGS } from '../catalog.js';
 import { loadConcepts, ROOT } from '../load.mjs';
-import { labHref } from '../routes.js';
+import { labHref, notesOf } from '../routes.js';
 
 const router = (course) => import(pathToFileURL(path.join(ROOT, 'courses', course, 'src/engine/router.js')).href);
 
@@ -14,7 +14,8 @@ test("every lab link on the map opens that lab in its course's own router", asyn
   for (const { concept } of concepts) {
     for (const ref of concept.labs) {
       const meta = LAB_CATALOGS[ref.course][ref.lab];
-      const href = labHref({ course: ref.course, unit: meta.unit, lab: ref.lab, notes: ref.notes });
+      const first = notesOf(ref)[0] ?? null;
+      const href = labHref({ course: ref.course, unit: meta.unit, lab: ref.lab, notes: first });
       const hash = href.slice(href.indexOf('#'));
       const r = await router(ref.course);
       const route = r.parseRoute ? r.parseRoute(hash) : r.parseHash(hash);
@@ -22,7 +23,7 @@ test("every lab link on the map opens that lab in its course's own router", asyn
       assert.equal(route.legacy, false, href);
       if (r.parseRoute) {
         assert.equal(route.examId, meta.unit, href);
-        assert.equal(route.notes, ref.notes ?? null, href);
+        assert.equal(route.notes, first, href);
       }
       n += 1;
     }
