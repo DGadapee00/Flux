@@ -26,5 +26,5 @@ export default {
   labs: [
     { course: 'phy2049', lab: 'transformer', notes: ['s5', 's6', 's7', 's10'], note: 'Two coils on one core: voltage goes with turns, current the other way.' },
   ],
-  candidate: String.raw`An RL circuit beside the RC lab: current rising toward \(\mathcal E/R\) with time constant \(L/R\), and an LC loop trading energy between field and field.`,
+  candidate: String.raw`An RL circuit beside the RC lab: current rising toward \(\mathcal E/R\) with time constant \(L/R\), and an LC loop trading energy between the capacitor's electric field and the coil's magnetic field.`,
 };
