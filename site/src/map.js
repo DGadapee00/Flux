@@ -92,7 +92,7 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
   const courseOf = Object.fromEntries(COURSES.map((c) => [c.id, c]));
   const colour = (c) => `var(${subjectOf[c.subject].token})`;
   const { lanes, pos, W, H } = layout(concepts, SUBJECTS, depth);
-  const { NODEW, NODEH, LEFT } = BOX;
+  const { NODEW, NODEH } = BOX;
 
   // Legend: the lanes in use, then the lab markers.
   const legend = root.getElementById('legend');
@@ -106,8 +106,9 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
   // Fit the map to its box when that costs at most a fifth of its size. Narrower than that (a
   // phone), it keeps its natural size and scrolls sideways inside the box.
   const mapbox = root.getElementById('mapbox');
+  const inner = root.getElementById('mapinner');
   const fit = () => {
-    svg.style.minWidth = mapbox.clientWidth >= W * 0.8 ? '' : `${W}px`;
+    inner.style.minWidth = mapbox.clientWidth >= W * 0.8 ? '' : `${W}px`;
   };
   fit();
   window.addEventListener('resize', fit);
@@ -179,24 +180,15 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
     nodeEls[c.id] = g;
   }
 
-  // Lane labels last, with a halo, so edges never run through the text.
-  for (const lane of lanes) {
-    const t = el(
-      'text',
-      {
-        x: LEFT,
-        y: lane.y + 14,
-        fill: `var(${lane.subject.token})`,
-        class: 'lane-label',
-        stroke: 'var(--panel)',
-        'stroke-width': 5,
-        'paint-order': 'stroke',
-        'stroke-linejoin': 'round',
-      },
-      svg,
-    );
-    t.textContent = lane.subject.label;
-  }
+  // Lane labels are HTML over the map, each stuck to the box's left edge, so a lane stays named
+  // however far the map is scrolled. A backing keeps edges from running through the text.
+  const tags = root.getElementById('lane-tags');
+  tags.innerHTML = lanes
+    .map(
+      (lane) =>
+        `<div class="lane-row" style="top:${(lane.y / H) * 100}%"><span class="lane-label" style="color:var(${lane.subject.token})">${esc(lane.subject.label)}</span></div>`,
+    )
+    .join('');
 
   // ---------- Reading panel ----------
   const detail = root.getElementById('detail');
