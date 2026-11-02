@@ -7,6 +7,17 @@
 const MODES = new Set(['sta3032']);
 
 /**
+ * A lab reference's notes sections as a list. `notes` may be one section id or several; the
+ * first is the one the "Open the notes" link opens.
+ * @param {{ notes?: string|string[]|null }} ref
+ * @returns {string[]}
+ */
+export function notesOf(ref) {
+  if (ref.notes === undefined || ref.notes === null) return [];
+  return Array.isArray(ref.notes) ? ref.notes : [ref.notes];
+}
+
+/**
  * @param {{ course: string, unit: string, lab: string, notes?: string|null }} ref
  * @returns {string}
  */

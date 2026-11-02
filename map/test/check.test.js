@@ -74,6 +74,14 @@ test('a notes section the notes index lacks fails', () => {
   has(errorsOf(fixture([concept('a', { labs: [{ course: 'c1', lab: 'l1', notes: 's9', note: 'x' }] })])), 'no section s9');
 });
 
+test('notes may list several sections of the lab unit, each of which must exist', () => {
+  const data = fixture([concept('a', { labs: [{ course: 'c1', lab: 'l1', notes: ['s1', 's2'], note: 'x' }] })]);
+  data.notesIndexes.c1.u1.push({ id: 's2', title: 'Two', lab: 'l1' });
+  assert.deepEqual(errorsOf(data), []);
+  has(errorsOf(fixture([concept('a', { labs: [{ course: 'c1', lab: 'l1', notes: ['s1', 's7'], note: 'x' }] })])), 'no section s7');
+  has(errorsOf(fixture([concept('a', { labs: [{ course: 'c1', lab: 'l1', notes: ['s1', 's1'], note: 'x' }] })])), 'listed twice');
+});
+
 test('missing fields fail', () => {
   for (const field of ['title', 'eq', 'idea', 'sources', 'labs', 'requires']) {
     const c = concept('a');
@@ -155,4 +163,24 @@ test('a path for an unknown course, or in the wrong file, fails', () => {
   const errors = errorsOf(data);
   has(errors, 'course zz is not in courses.js');
   has(errorsOf({ ...fixture(), paths: [{ file: 'other.js', path: { course: 'c1', units: [{ concepts: ['a', 'b'] }] } }] }), 'expected c1.js');
+});
+
+test('the audit lists labs and notes sections no concept references, and skips formula sheets', async () => {
+  const { auditMap } = await import('../audit.mjs');
+  const report = auditMap({
+    concepts: [concept('a', { labs: [{ course: 'c1', lab: 'l1', notes: ['s1'], note: 'x' }] })],
+    labCatalogs: { c1: { l1: { unit: 'u1', title: 'One' }, l2: { unit: 'u1', title: 'Two' } } },
+    notesIndexes: {
+      c1: {
+        u1: [
+          { id: 's1', title: 'Covered', lab: 'l1' },
+          { id: 's2', title: 'Not covered', lab: 'l2' },
+          { id: 's3', title: 'Formula sheet', lab: null },
+        ],
+      },
+    },
+  });
+  assert.deepEqual(report.c1.labs.missing.map((l) => l.id), ['l2']);
+  assert.deepEqual(report.c1.notes.missing.map((s) => s.id), ['s2']);
+  assert.equal(report.c1.summaries, 1);
 });

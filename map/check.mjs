@@ -15,6 +15,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import katex from 'katex';
 import { findCycle } from './graph.js';
+import { notesOf } from './routes.js';
 
 export const LEVELS = ['Intro', 'Course level', 'Deeper'];
 const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -176,10 +177,15 @@ export function checkMap({ subjects, courses, statuses, concepts, labCatalogs, n
         if (seen.has(key)) err(at, `${key} is listed twice`);
         seen.add(key);
         if (ref.notes !== undefined && ref.notes !== null) {
+          const list = notesOf(ref);
           const sections = notesIndexes[ref.course]?.[meta.unit];
-          if (!sections) err(at, `${ref.course} has no notes for unit ${meta.unit}`);
-          else if (!sections.some((s) => s.id === ref.notes)) {
-            err(at, `${ref.course} unit ${meta.unit} notes have no section ${ref.notes}`);
+          if (list.length === 0 || !list.every(isText)) err(at, 'notes must be a section id or a list of them');
+          else if (!sections) err(at, `${ref.course} has no notes for unit ${meta.unit}`);
+          else {
+            for (const id of list) {
+              if (!sections.some((s) => s.id === id)) err(at, `${ref.course} unit ${meta.unit} notes have no section ${id}`);
+            }
+            if (new Set(list).size !== list.length) err(at, 'a notes section is listed twice');
           }
         }
         if (!isText(ref.note)) err(at, 'missing note');

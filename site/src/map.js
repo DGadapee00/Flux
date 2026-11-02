@@ -9,7 +9,7 @@
  */
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
-import { buildGraph, COURSES, LAB_CATALOGS, labHref, SUBJECTS } from '@flux/map';
+import { buildGraph, COURSES, LAB_CATALOGS, labHref, notesOf, SUBJECTS } from '@flux/map';
 import { BOX, layout, wrapLabel } from './layout.js';
 
 /** The concept the map opens on when the link names none. */
@@ -219,7 +219,8 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
     const course = courseOf[ref.course];
     const meta = LAB_CATALOGS[ref.course][ref.lab];
     const lab = labHref({ course: ref.course, unit: meta.unit, lab: ref.lab });
-    const notes = ref.notes ? labHref({ course: ref.course, unit: meta.unit, lab: ref.lab, notes: ref.notes }) : null;
+    const first = notesOf(ref)[0];
+    const notes = first ? labHref({ course: ref.course, unit: meta.unit, lab: ref.lab, notes: first }) : null;
     return `<div class="lab"><h3>In Flux</h3><p><strong>${esc(meta.title)}</strong> lab, ${esc(course.code)}. ${prose(ref.note)}</p><div class="links"><a href="${lab}" data-lab="${ref.course}/${ref.lab}">Open the lab</a>${notes ? `<a href="${notes}" data-notes="${ref.course}/${ref.lab}">Open the notes</a>` : ''}</div></div>`;
   }
 
