@@ -21,4 +21,4 @@ npm run smoke # 380px and 1280px, hover, reduced motion, each built course
 npm run build
 ```
 
-[DEPLOY.md](DEPLOY.md) covers publishing. [AGENTS.md](AGENTS.md) is the rules. [ROADMAP.md](ROADMAP.md) is what comes next. [DECISIONS.md](DECISIONS.md) is what is settled. [docs/COURSE-STANDARD.md](docs/COURSE-STANDARD.md) is the bar, and [docs/course-plans/](docs/course-plans/) has a plan for every course.
+[DEPLOY.md](DEPLOY.md) covers publishing. [AGENTS.md](AGENTS.md) is the rules. Flux is about to be refactored around a concept map that runs across courses. The old course-by-course plan, standard and course plans are archived in [docs/history/guidance-2026-11-02/](docs/history/guidance-2026-11-02/).
