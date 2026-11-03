@@ -66,6 +66,22 @@ export function atwood(m1, m2, g = G) {
   };
 }
 
+/**
+ * Atwood machine whose pulley has moment I and radius R. The string does not slip.
+ * a is positive when m2 descends.
+ *
+ * m2 g − T2 = m2 a, and T1 − m1 g = m1 a. The pulley takes (T2 − T1) R = I a / R,
+ * so T2 − T1 = I a / R². Adding the mass equations leaves
+ * (m2 − m1) g = (m1 + m2 + I/R²) a.
+ */
+export function atwoodPulley({ m1, m2, I = 0, R, g = G }) {
+  const share = R > 0 ? I / (R * R) : 0;
+  const denom = m1 + m2 + share;
+  if (!(denom > 0)) return { a: NaN, alpha: NaN, T1: NaN, T2: NaN, I };
+  const a = ((m2 - m1) * g) / denom;
+  return { a, alpha: R > 0 ? a / R : 0, T1: m1 * (g + a), T2: m2 * (g - a), I };
+}
+
 /** Magnitude mv²/r. */
 export function centripetalForce(mass, speed, radius) {
   return mass * centripetalAccel(speed, radius);

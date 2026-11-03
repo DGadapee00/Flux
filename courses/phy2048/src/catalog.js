@@ -48,8 +48,8 @@ export const UNITS = [
     title: 'Momentum and collisions',
     chapters: ['9'],
     date: null,
-    labs: ['collide'],
-    coming: ['Impulse', 'Collisions in two dimensions', 'Center of mass', 'Rocket', 'Crumple zone', 'Crash reconstruction'],
+    labs: ['impulse', 'collide', 'collide-2d', 'center-of-mass', 'rocket', 'crumple-zone', 'crash-reconstruction'],
+    coming: [],
   },
   {
     id: 'u6',
@@ -57,8 +57,8 @@ export const UNITS = [
     title: 'Fixed-axis rotation',
     chapters: ['10'],
     date: null,
-    labs: ['rotor'],
-    coming: ['Moment of inertia', 'Massive pulley', 'Helicopter rotor'],
+    labs: ['rotor', 'inertia', 'massive-pulley', 'helicopter-rotor'],
+    coming: [],
   },
   {
     id: 'u7',
@@ -66,8 +66,8 @@ export const UNITS = [
     title: 'Rolling and angular momentum',
     chapters: ['11'],
     date: null,
-    labs: [],
-    coming: ['Rolling', 'Angular momentum of a particle', 'Spinning stool', 'Gyroscope', 'Rover wheel'],
+    labs: ['rolling', 'particle-l', 'spinner', 'gyro', 'rover-wheel'],
+    coming: [],
   },
   {
     id: 'u8',
@@ -75,8 +75,8 @@ export const UNITS = [
     title: 'Static equilibrium and elasticity',
     chapters: ['12'],
     date: null,
-    labs: [],
-    coming: ['Beam', 'Ladder', 'Stress and strain', 'Car weight balance'],
+    labs: ['beam', 'ladder', 'stress-strain', 'car-balance'],
+    coming: [],
   },
   {
     id: 'u9',
@@ -84,8 +84,8 @@ export const UNITS = [
     title: 'Gravitation',
     chapters: ['13'],
     date: null,
-    labs: [],
-    coming: ['Orbits', "Kepler's laws", 'ISS orbit'],
+    labs: ['orbit', 'kepler', 'iss-orbit'],
+    coming: [],
   },
   {
     id: 'u10',
@@ -93,8 +93,8 @@ export const UNITS = [
     title: 'Fluid mechanics',
     chapters: ['14'],
     date: null,
-    labs: [],
-    coming: ['Pressure and depth', 'Buoyancy', 'Bernoulli', 'Brake hydraulics', 'Fire hose'],
+    labs: ['pressure-depth', 'buoyancy', 'bernoulli', 'brake-hydraulics', 'fire-hose'],
+    coming: [],
   },
   {
     id: 'u11',
@@ -102,8 +102,8 @@ export const UNITS = [
     title: 'Oscillations',
     chapters: ['15'],
     date: null,
-    labs: [],
-    coming: ['Spring and mass', 'Pendulum', 'Resonance', 'Skyscraper damper'],
+    labs: ['spring-mass', 'pendulum', 'resonance', 'skyscraper-damper'],
+    coming: [],
   },
   {
     id: 'u12',
@@ -111,8 +111,8 @@ export const UNITS = [
     title: 'Waves',
     chapters: ['16'],
     date: null,
-    labs: [],
-    coming: ['Traveling wave', 'Standing wave', 'Guitar string'],
+    labs: ['traveling-wave', 'standing-wave', 'guitar-string'],
+    coming: [],
   },
   {
     id: 'u13',
@@ -120,8 +120,8 @@ export const UNITS = [
     title: 'Sound',
     chapters: ['17'],
     date: null,
-    labs: [],
-    coming: ['Intensity', 'Pipe modes', 'Doppler effect', 'Train horn'],
+    labs: ['intensity', 'pipe-modes', 'doppler', 'train-horn'],
+    coming: [],
   },
 ];
 
@@ -146,7 +146,7 @@ export const CHAPTERS = {
 };
 
 /** Chapters whose problems are in the bank. */
-export const BANK_CHAPTERS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '15'];
+export const BANK_CHAPTERS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'];
 
 export function unitForChapter(ch) {
   const id = String(ch);
@@ -180,8 +180,45 @@ export const LAB_META = {
   track: { id: 'track', exam: 'u4', title: 'Energy track' },
   'energy-diagram': { id: 'energy-diagram', exam: 'u4', title: 'Energy diagram' },
   'automotive-power': { id: 'automotive-power', exam: 'u4', title: 'Automotive power', app: true },
+  impulse: { id: 'impulse', exam: 'u5', title: 'Impulse' },
   collide: { id: 'collide', exam: 'u5', title: 'Collisions' },
+  'collide-2d': { id: 'collide-2d', exam: 'u5', title: 'Collisions in two dimensions' },
+  'center-of-mass': { id: 'center-of-mass', exam: 'u5', title: 'Center of mass' },
+  rocket: { id: 'rocket', exam: 'u5', title: 'Rocket' },
+  'crumple-zone': { id: 'crumple-zone', exam: 'u5', title: 'Crumple zone', app: true },
+  'crash-reconstruction': { id: 'crash-reconstruction', exam: 'u5', title: 'Crash reconstruction', app: true },
   rotor: { id: 'rotor', exam: 'u6', title: 'Rotor' },
+  inertia: { id: 'inertia', exam: 'u6', title: 'Moment of inertia' },
+  'massive-pulley': { id: 'massive-pulley', exam: 'u6', title: 'Massive pulley' },
+  'helicopter-rotor': { id: 'helicopter-rotor', exam: 'u6', title: 'Helicopter rotor', app: true },
+  rolling: { id: 'rolling', exam: 'u7', title: 'Rolling' },
+  'particle-l': { id: 'particle-l', exam: 'u7', title: 'Angular momentum of a particle' },
+  spinner: { id: 'spinner', exam: 'u7', title: 'Spinning stool' },
+  gyro: { id: 'gyro', exam: 'u7', title: 'Gyroscope' },
+  'rover-wheel': { id: 'rover-wheel', exam: 'u7', title: 'Rover wheel', app: true },
+  beam: { id: 'beam', exam: 'u8', title: 'Beam' },
+  ladder: { id: 'ladder', exam: 'u8', title: 'Ladder' },
+  'stress-strain': { id: 'stress-strain', exam: 'u8', title: 'Stress and strain' },
+  'car-balance': { id: 'car-balance', exam: 'u8', title: 'Car weight balance', app: true },
+  orbit: { id: 'orbit', exam: 'u9', title: 'Orbit' },
+  kepler: { id: 'kepler', exam: 'u9', title: "Kepler's laws" },
+  'iss-orbit': { id: 'iss-orbit', exam: 'u9', title: 'ISS orbit', app: true },
+  'pressure-depth': { id: 'pressure-depth', exam: 'u10', title: 'Pressure and depth' },
+  buoyancy: { id: 'buoyancy', exam: 'u10', title: 'Buoyancy' },
+  bernoulli: { id: 'bernoulli', exam: 'u10', title: 'Bernoulli' },
+  'brake-hydraulics': { id: 'brake-hydraulics', exam: 'u10', title: 'Brake hydraulics', app: true },
+  'fire-hose': { id: 'fire-hose', exam: 'u10', title: 'Fire hose', app: true },
+  'spring-mass': { id: 'spring-mass', exam: 'u11', title: 'Spring and mass' },
+  pendulum: { id: 'pendulum', exam: 'u11', title: 'Pendulum' },
+  resonance: { id: 'resonance', exam: 'u11', title: 'Resonance' },
+  'skyscraper-damper': { id: 'skyscraper-damper', exam: 'u11', title: 'Skyscraper damper', app: true },
+  'traveling-wave': { id: 'traveling-wave', exam: 'u12', title: 'Traveling wave' },
+  'standing-wave': { id: 'standing-wave', exam: 'u12', title: 'Standing wave' },
+  'guitar-string': { id: 'guitar-string', exam: 'u12', title: 'Guitar string', app: true },
+  intensity: { id: 'intensity', exam: 'u13', title: 'Intensity' },
+  'pipe-modes': { id: 'pipe-modes', exam: 'u13', title: 'Pipe modes' },
+  doppler: { id: 'doppler', exam: 'u13', title: 'Doppler effect' },
+  'train-horn': { id: 'train-horn', exam: 'u13', title: 'Train horn', app: true },
 };
 
 export function examById(id) {

@@ -21,3 +21,5 @@
 The Unit 4 cable uses metres and equal-height supports. Published span is distinguished from assumed sag. Surface area excludes end caps unless stated; radius is distance from the rotation axis. Arc length stays nonnegative, while an oriented slant integral can change sign under reversed limits.
 
 Unit 5 uses radians, seconds, metres and nominal RPM converted through subjects/convert.js. The record mark is a material point; it is not the stylus. Positive counterclockwise angles are a mathematical convention. Sector integrals and path lengths count repeated traversals unless a single pass is specified. Conic distances retain absolute values until a branch is chosen.
+
+Unit 6 distinguishes a clock beat (half-cycle) from a full period. Standard gravity is a conventional calibration input. The inferred point-mass length differs from the cited overall pendulum dimension. K uses modulus k; m=k² is the power-series argument. N terms include the constant term. Tail bounds and actual truncation error are separate quantities; drawing coordinates are schematic.

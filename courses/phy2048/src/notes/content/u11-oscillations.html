@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Oscillations</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">PHY 2048 · Physics I · Unit 11 · OpenStax University Physics Vol. 1, Ch 15, rewritten</div>
+  <h1>Oscillations</h1>
+  <p class="lede">A restoring force proportional to the displacement makes a motion that repeats. The period of a spring depends on the mass and the stiffness, not on how far you pull it. A pendulum agrees, at a small angle. Damping spends the energy. A drive can put it back, and the swing is largest near the natural frequency.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+    <span><i style="background:transparent;outline:1px dashed var(--border-hover)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The spring</h3>
+    <a href="#s1"><span>1</span>Simple harmonic motion</a>
+    <a href="#s2"><span>2</span>Energy in the oscillation</a>
+    <h3>Part II · Pendulums and a drive</h3>
+    <a href="#s3"><span>3</span>Pendulums</a>
+    <a href="#s4"><span>4</span>Damped and driven motion</a>
+    <a href="#s5"><span>5</span>A damper on a tower</a>
+    <h3>Reference</h3>
+    <a href="#s6"><span>6</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The spring</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Simple harmonic motion</h2>
+<p>A force that pulls back in proportion to the displacement is</p>
+\[
+F = -kx.
+\]
+<p>Newton's second law then says \(m a = -kx\), or</p>
+\[
+\frac{d^{2}x}{dt^{2}} = -\omega^{2} x, \qquad \omega = \sqrt{\frac{k}{m}}.
+\]
+<p>The solutions are sines and cosines of \(\omega t\). One full cycle advances the argument by \(2\pi\), so the period and the frequency are</p>
+\[
+T = \frac{2\pi}{\omega} = 2\pi\sqrt{\frac{m}{k}}, \qquad f = \frac{1}{T}, \qquad \omega = 2\pi f.
+\]
+<p>The amplitude \(A\) is how far the motion goes from the center. It is not in \(T\). A larger swing travels farther, and it moves faster, and the two effects cancel.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Start from rest at \(x = A\). The cosine is 1 when its argument is 0, so</p>
+\[
+x = A\cos(\omega t).
+\]
+<p>Differentiate once. The chain rule brings a factor of \(\omega\), and the derivative of cosine is minus sine:</p>
+\[
+v = \frac{dx}{dt} = -A\omega\sin(\omega t).
+\]
+<p>Differentiate again:</p>
+\[
+a = \frac{dv}{dt} = -A\omega^{2}\cos(\omega t) = -\omega^{2} x.
+\]
+<p>That is the equation we started from, so the guess was right. The fastest speed is \(A\omega\), at the center, where the sine is \(\pm 1\). The largest acceleration is \(A\omega^{2}\), at the turning points, where the speed is zero.</p>
+<p>The same motion is the shadow of a point going around a circle of radius \(A\) at angular speed \(\omega\). The angle on that circle is \(\omega t\), in radians. A calculator in degree mode is answering a different function. One cycle is \(2\pi\) radians, not \(360\) of them fed to a degree key.</p>
+<p>Hang the same spring. The weight \(mg\) is constant. It shifts the place where the spring force balances the weight, down by</p>
+\[
+\delta = \frac{mg}{k}.
+\]
+<p>Measure \(x\) from that new rest point and the weight cancels the extra spring force. What remains is \(-kx\) again. The period is still \(2\pi\sqrt{m/k}\). Gravity moved the origin. It did not change the motion about that origin.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The period is set by \(m\) and \(k\). Amplitude, and a constant force such as weight, stay out of \(T\). They change how large the swing is, or where its center sits.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an ultrasound</span>
+<p>A medical ultrasound has period \(0.400\ \mu\mathrm{s}\). A microsecond is \(10^{-6}\ \mathrm{s}\), so</p>
+\[
+T = 4.00 \times 10^{-7}\ \mathrm{s}, \qquad f = \frac{1}{T} = 2.50 \times 10^{6}\ \mathrm{Hz}.
+\]
+<p>Human hearing runs from about \(20\ \mathrm{Hz}\) to about \(20\,000\ \mathrm{Hz}\). This sound is far above that, which is why it is called ultrasound. The frequency is \(1/T\), not \(2\pi/T\). The second of those is the angular frequency, in radians per second.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the block</span>
+<p>A \(2.00\ \mathrm{kg}\) block on a frictionless surface is fixed to a spring of constant \(32.0\ \mathrm{N/m}\). It is released from rest at \(x = +0.0200\ \mathrm{m}\).</p>
+\[
+\omega = \sqrt{\frac{32.0}{2.00}} = 4.00\ \mathrm{rad/s}.
+\]
+\[
+T = \frac{2\pi}{4.00} = 1.571\ \mathrm{s}.
+\]
+<p>The book prints \(1.57\ \mathrm{s}\). Both grade. The motion is</p>
+\[
+x = (0.0200\ \mathrm{m})\cos(4.00\, t), \qquad v = -(0.0800\ \mathrm{m/s})\sin(4.00\, t).
+\]
+<p>The maximum speed is \(A\omega = 0.0800\ \mathrm{m/s}\). The maximum acceleration is \(A\omega^{2} = 0.320\ \mathrm{m/s^{2}}\). The picture stretches that \(2\ \mathrm{cm}\) swing so it is visible. The readouts keep the metres.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a later instant</span>
+<p>Stay with that block, and read it at \(t = 0.200\ \mathrm{s}\). The argument is \(4.00 \times 0.200 = 0.800\ \mathrm{rad}\), not \(0.800\) degrees.</p>
+\[
+x = 0.0200\cos 0.800 = 0.01393\ \mathrm{m},
+\]
+\[
+v = -0.0800\sin 0.800 = -0.05739\ \mathrm{m/s},
+\]
+\[
+a = -16.0 \times 0.01393 = -0.2229\ \mathrm{m/s^{2}}.
+\]
+<p>The block is still on the positive side and already moving back toward the center, so \(v\) is negative. The section writes the functions. This instant is a sample on them.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a hanging spring</span>
+<p>Hang the same \(2.00\ \mathrm{kg}\) and \(32.0\ \mathrm{N/m}\). Take \(g = 9.81\ \mathrm{m/s^{2}}\).</p>
+\[
+\delta = \frac{(2.00)(9.81)}{32.0} = 0.613\ \mathrm{m}.
+\]
+<p>The block oscillates about a point \(0.613\ \mathrm{m}\) below the unstretched position. The period is still \(1.571\ \mathrm{s}\). The section describes the shift and does not print this number. The mass and the spring are the block above.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Putting the amplitude into the period. Mixing \(\omega\) and \(f\), or reporting \(2\pi f\) when the question asked for \(f\). Entering \(\omega t\) in degrees. Forgetting the shift \(mg/k\) of a hanging spring, or treating that shift as a change in the period. Using sine for a motion that starts from rest at \(+A\). That motion is a cosine.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The spring is ideal: \(F = -kx\) at every stretch, with no mass of its own and no friction. A real spring sags under its own weight and stops being linear if you pull it too far. The surface in the block example is frictionless. Air resistance is absent. The ultrasound is only a period and a frequency. Nothing here says how the transducer makes the sound.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Energy in the oscillation</h2>
+<p>The spring stores</p>
+\[
+U = \frac{1}{2} kx^{2}.
+\]
+<p>The block carries kinetic energy \(\tfrac{1}{2} mv^{2}\). With no friction, the sum is constant. At the turning point, \(x = A\) and \(v = 0\), so the whole of it is potential:</p>
+\[
+E = \frac{1}{2} k A^{2}.
+\]
+<p>That is the total at every \(x\). At a general point,</p>
+\[
+\frac{1}{2} mv^{2} + \frac{1}{2} kx^{2} = \frac{1}{2} k A^{2}.
+\]
+<div class="box why"><span class="tag">Derivation</span>
+<p>Solve the energy statement for the speed. Move the potential to the other side and multiply by \(2/m\):</p>
+\[
+v^{2} = \frac{k}{m}\left(A^{2} - x^{2}\right) = \omega^{2}\left(A^{2} - x^{2}\right).
+\]
+<p>The speed is the positive square root. The velocity still has a sign, which the energy does not know:</p>
+\[
+|v| = \omega\sqrt{A^{2} - x^{2}}.
+\]
+<p>At \(x = 0\) this is \(A\omega\), the same maximum the derivative gave. At \(x = A\) it is zero. The two routes agree because \(x = A\cos(\omega t)\) and \(v = -A\omega\sin(\omega t)\) satisfy \(\sin^{2} + \cos^{2} = 1\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the energy</span>
+<p>Use the block again: \(m = 2.00\ \mathrm{kg}\), \(k = 32.0\ \mathrm{N/m}\), \(A = 0.0200\ \mathrm{m}\). The total energy is</p>
+\[
+E = \frac{1}{2}(32.0)(0.0200)^{2} = 0.00640\ \mathrm{J}.
+\]
+<p>At \(x = 0.0100\ \mathrm{m}\),</p>
+\[
+|v| = 4.00\sqrt{(0.0200)^{2} - (0.0100)^{2}} = 0.06928\ \mathrm{m/s}.
+\]
+<p>Section 15.2 states this method and does not print the case. The displacement \(0.0100\ \mathrm{m}\) is ours. Released from \(+A\), the block reaches \(+0.0100\ \mathrm{m}\) with a negative velocity. The speed is the absolute value. The lab's time slider is set to that instant.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving out the one half, so the energy comes out twice as large. Using \(\tfrac{1}{2}kx^{2}\) as the total, when that is only the potential at the current \(x\). Quoting the maximum speed \(A\omega\) at a point that is not the center. Replacing \(\sqrt{A^{2} - x^{2}}\) with \(A - x\). The remainder under the square root is not a difference of lengths.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Friction and air resistance would turn mechanical energy into thermal energy, and \(E\) would fall. That is the next section. The energy route also cannot tell you the sign of \(v\), or the time, unless you already know which way the block is going.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Pendulums and a drive</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Pendulums</h2>
+<p>A simple pendulum is a point mass on a string of length \(L\). The restoring torque is \(-mgL\sin\theta\), and the moment of inertia about the pivot is \(mL^{2}\), so</p>
+\[
+\frac{d^{2}\theta}{dt^{2}} = -\frac{g}{L}\sin\theta.
+\]
+<div class="box why"><span class="tag">Derivation</span>
+<p>For a small angle, in radians, \(\sin\theta \approx \theta\). The equation becomes</p>
+\[
+\frac{d^{2}\theta}{dt^{2}} = -\frac{g}{L}\,\theta.
+\]
+<p>That is the spring equation, with \(\omega^{2} = g/L\). The period is</p>
+\[
+T_{0} = 2\pi\sqrt{\frac{L}{g}}.
+\]
+<p>The mass cancelled. A heavier bob has more inertia and a larger restoring force, in the same ratio. The amplitude is absent, for the same reason it was absent from the spring, and only while \(\sin\theta \approx \theta\).</p>
+<p>Measured \(T\) and \(L\) solve for \(g\):</p>
+\[
+g = \frac{4\pi^{2} L}{T^{2}}.
+\]
+<p>Past a few degrees the approximation slips. The exact period is an elliptic integral. It equals the small-angle period divided by the arithmetic-geometric mean of \(1\) and \(\cos(\theta_{0}/2)\):</p>
+\[
+T = \frac{T_{0}}{\mathrm{AGM}\!\left(1,\ \cos(\theta_{0}/2)\right)}.
+\]
+<p>The first correction, with \(\theta_{0}\) in radians, is</p>
+\[
+T \approx T_{0}\left(1 + \frac{\theta_{0}^{2}}{16}\right).
+\]
+<p>At a few degrees the two agree. At \(60^{\circ}\) the series is only a start, and the mean is the period the lab checks against a numerical swing.</p>
+<p>A physical pendulum has the mass spread out. If \(I\) is the moment about the pivot and \(d\) is the distance from the pivot to the center of mass,</p>
+\[
+T = 2\pi\sqrt{\frac{I}{mgd}}
+\]
+<p>for a small angle. A uniform rod of length \(L\), pivoted at one end, has \(I = ML^{2}/3\) and \(d = L/2\), so</p>
+\[
+T = 2\pi\sqrt{\frac{2L}{3g}}.
+\]
+<p>The mass cancels again. The rod is slower than a simple pendulum of the same length, because the mass sits closer to the pivot than a bob at the end would.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · measuring g</span>
+<p>A pendulum has length \(75.000\ \mathrm{cm} = 0.75000\ \mathrm{m}\) and a measured small-angle period \(1.7357\ \mathrm{s}\).</p>
+\[
+g = \frac{4\pi^{2}(0.75000)}{(1.7357)^{2}} = 9.8281\ \mathrm{m/s^{2}}.
+\]
+<p>The section prints \(9.8281\ \mathrm{m/s^{2}}\). The course's \(g = 9.81\ \mathrm{m/s^{2}}\) would give this length a period of \(1.737\ \mathrm{s}\). The example runs the other way: the period is measured, and \(g\) is what you find. The angle has to stay small. The section keeps it under about half a degree for that many figures, and the strategy mentions a deflection under \(15^{\circ}\) for a rougher use of the same formula.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a large angle</span>
+<p>The same length, \(0.750\ \mathrm{m}\), with the course's \(g = 9.81\ \mathrm{m/s^{2}}\), has small-angle period</p>
+\[
+T_{0} = 2\pi\sqrt{\frac{0.750}{9.81}} = 1.737\ \mathrm{s}.
+\]
+<p>Released from \(60^{\circ}\), the exact period is \(1.864\ \mathrm{s}\), about \(7\%\) longer. The first correction, \(\theta_{0} = \pi/3\), gives \(1.856\ \mathrm{s}\). Close, and not the exact value. At \(5^{\circ}\) the exact period and \(T_{0}\) differ in the fourth figure. The mass is still absent.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Letting the bob's mass change the period. Using the simple-pendulum length for a rod pivoted at one end. Using \(T_{0}\) at \(60^{\circ}\), where the exact period is visibly longer. Forgetting to square the period when solving for \(g\), or putting \(L\) in the denominator. \(g = 4\pi^{2} L / T^{2}\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The string does not stretch, and the bob is a point. Air resistance is absent, so a real pendulum's amplitude falls. The pivot has no friction. The exact period assumes a rigid length and a constant \(g\). It does not include the rotation of the Earth, which a careful gravity measurement has to face.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Damped and driven motion</h2>
+<p>A drag linear in the velocity, \(F_{D} = -bv\), spends the energy. With the spring,</p>
+\[
+m a = -bv - kx.
+\]
+<div class="box why"><span class="tag">Derivation</span>
+<p>Write \(\omega_{0} = \sqrt{k/m}\). The character of the motion depends on \(b\) against \(2\sqrt{mk}\).</p>
+<p>Under that value the motion still oscillates, inside a falling envelope. Released from rest at \(A_{0}\),</p>
+\[
+x = A_{0}\, e^{-bt/(2m)}\cos(\omega t), \qquad \omega = \sqrt{\omega_{0}^{2} - \left(\frac{b}{2m}\right)^{2}}.
+\]
+<p>The oscillation is a little slower than \(\omega_{0}\). The envelope is \(A_{0} e^{-bt/(2m)}\). The \(2\) in the exponent is the same \(2\) that sits in the critical value \(b = 2\sqrt{mk}\).</p>
+<p>At \(b = 2\sqrt{mk}\) the motion is critically damped. It returns to equilibrium without oscillating, and faster than a heavier damping. Above that value it is overdamped: no oscillation, and a slower return.</p>
+<p>Add a drive \(F_{0}\sin(\omega t)\). After the transient has died, the steady piece has the drive's frequency. Its amplitude is</p>
+\[
+A = \frac{F_{0}}{\sqrt{m^{2}(\omega_{0}^{2} - \omega^{2})^{2} + b^{2}\omega^{2}}}.
+\]
+<p>On resonance, \(\omega = \omega_{0}\), this collapses to</p>
+\[
+A = \frac{F_{0}}{b\,\omega_{0}}.
+\]
+<p>Less damping, taller peak. The true maximum of the formula sits slightly under \(\omega_{0}\), at \(\sqrt{\omega_{0}^{2} - b^{2}/(2m^{2})}\), when that quantity is positive. For light damping the shift is tiny, and the section quotes the peak at \(\omega_{0}\).</p>
+<p>The displacement lags the drive. Below resonance the lag is near \(0\). At \(\omega_{0}\) it is \(\pi/2\). Above resonance it approaches \(\pi\). With no damping the amplitude at \(\omega_{0}\) would be infinite. Real oscillators always have some \(b\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a ring-down</span>
+<p>Take \(m = 1.00\ \mathrm{kg}\), \(k = 100\ \mathrm{N/m}\), \(b = 2.00\ \mathrm{kg/s}\), released from rest at \(0.0500\ \mathrm{m}\). Then \(\omega_{0} = 10.0\ \mathrm{rad/s}\) and \(b/(2m) = 1.00\ \mathrm{s^{-1}}\).</p>
+\[
+\omega = \sqrt{100 - 1} = 9.950\ \mathrm{rad/s}.
+\]
+<p>At \(t = 0.400\ \mathrm{s}\) the envelope is</p>
+\[
+A_{0} e^{-0.400} = 0.03352\ \mathrm{m}.
+\]
+<p>Section 15.5 states the solution and does not print a numerical case. These values are computed from it. Critical damping for this mass and spring would be \(b = 20.0\ \mathrm{kg/s}\). This \(b\) is well under that, so the motion still oscillates.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · driven on resonance</span>
+<p>The same mass and spring, with \(b = 0.500\ \mathrm{kg/s}\) and a drive of amplitude \(2.00\ \mathrm{N}\) at \(\omega = 10.0\ \mathrm{rad/s}\).</p>
+\[
+A = \frac{2.00}{(0.500)(10.0)} = 0.400\ \mathrm{m}.
+\]
+<p>The lag is \(\pi/2 = 1.571\ \mathrm{rad}\). The true peak of \(A(\omega)\) is at \(9.994\ \mathrm{rad/s}\), not a difference you would see on the slider. Section 15.6 states the amplitude and does not print this case. Off resonance you need the full denominator. \(F_{0}/(b\omega)\) is only the on-resonance value, and only if that \(\omega\) is \(\omega_{0}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(\omega_{0}\) for the damped frequency. Decaying as \(e^{-bt/m}\) instead of \(e^{-bt/(2m)}\). Using \(F_{0}/(b\omega)\) off resonance, or forgetting \(\omega_{0}\) in the on-resonance amplitude. Quoting the lag as \(\pi/2\) at every drive frequency, or reporting it in degrees. Treating critical damping as the slow return. The slow return without oscillation is the overdamped one.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The drag is linear in \(v\). A quadratic drag, the usual one at high speed, does not give this envelope or this amplitude formula. The drive is a pure sine that has been on forever. A drive that starts at \(t = 0\) still carries a dying transient. The infinite peak at \(b = 0\) is the equation, not a device. No mass on a spring survives that.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>A damper on a tower</h2>
+<p>A tall building sways at a low frequency. A mass tuned to that frequency, free to move the other way, takes energy out of the sway. One model of the mass is a uniform beam, pivoted at one end, used as a physical pendulum.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The building's frequency is \(f\), so the period to match is \(T = 1/f\). For the beam,</p>
+\[
+T = 2\pi\sqrt{\frac{2L}{3g}}.
+\]
+<p>Square both sides. \(T^{2} = 4\pi^{2} \cdot 2L/(3g)\). Solve for the length:</p>
+\[
+L = \frac{3g}{8\pi^{2} f^{2}}.
+\]
+<p>The mass cancelled between \(I\) and the weight. A heavier beam, at the same length, has the same period. What the mass does change is how strongly the beam pulls on the building. The lab gives the building an illustrative mass of \(1.00 \times 10^{6}\ \mathrm{kg}\), so the pull is visible. The section does not print that mass.</p>
+<p>The two motions are linear for a small angle. The building's displacement \(x\) and the beam's angle \(\theta\) trade energy. When they have opposite signs, the beam is on the other side of the sway. That is the damper doing its job. The check integrates both of them and asks that the energy hold and that the beam spend time opposed.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the tower</span>
+<p>The sway is \(0.50\ \mathrm{Hz}\), so \(T = 2.00\ \mathrm{s}\). The beam's mass is \(100\) metric tons, \(1.00 \times 10^{5}\ \mathrm{kg}\). Take \(g = 9.81\ \mathrm{m/s^{2}}\).</p>
+\[
+L = \frac{3(9.81)}{8\pi^{2}(0.50)^{2}} = 1.491\ \mathrm{m}.
+\]
+<p>The section prints \(1.49\ \mathrm{m}\). The difference is \(g = 9.81\) against the book's \(9.80\), and it grades. Doubling the frequency quarters the length, because \(L\) follows \(1/f^{2}\). Doubling the mass leaves the length alone.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a torsion constant</span>
+<p>A different pendulum in the same section: a uniform rod of mass \(4.00\ \mathrm{kg}\) and length \(0.30\ \mathrm{m}\), hung from a string at its center. Twisted and released, it has period \(0.50\ \mathrm{s}\). The moment about the center is</p>
+\[
+I = \frac{ML^{2}}{12} = \frac{(4.00)(0.30)^{2}}{12} = 0.0300\ \mathrm{kg\cdot m^{2}}.
+\]
+<p>The torsion constant is \(I\omega^{2}\), with \(\omega = 2\pi/T\):</p>
+\[
+\kappa = (0.0300)\left(\frac{2\pi}{0.50}\right)^{2} = 4.737\ \mathrm{N\cdot m}.
+\]
+<p>The section prints \(4.73\ \mathrm{N\cdot m}\). There is no separate lab. The period formula is the physical-pendulum one, with the restoring torque \(\kappa\theta\) in place of \(mgd\,\theta\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using a simple pendulum, \(L = g/(4\pi^{2} f^{2})\), for the beam. The beam about one end is longer by a factor \(3/2\). Using the frequency as if it were the period. Keeping the mass in the length, where it cancelled. Using \(I = ML^{2}/3\) for the rod on a string. That rod turns about its center, so \(I = ML^{2}/12\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The building is one mass on one spring, not a flexible tower with many modes. The beam is rigid, uniform, and at a small angle. A real damper is often a tuned mass on cables, or a tank of water, not this beam. The section's tall-building remark is that kind of device. Wind is unsteady, and a large storm leaves the small-angle equations. The picture stretches the sway and the angle so a few centimetres, and a few degrees, can be seen.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Formula sheet</h2>
+\[
+\omega = \sqrt{\frac{k}{m}}, \qquad T = 2\pi\sqrt{\frac{m}{k}}, \qquad f = \frac{1}{T}, \qquad \omega = 2\pi f
+\]
+\[
+x = A\cos(\omega t), \qquad v = -A\omega\sin(\omega t), \qquad a = -\omega^{2} x
+\]
+\[
+E = \frac{1}{2} k A^{2}, \qquad |v| = \omega\sqrt{A^{2} - x^{2}}, \qquad \delta = \frac{mg}{k}
+\]
+\[
+T_{0} = 2\pi\sqrt{\frac{L}{g}}, \qquad g = \frac{4\pi^{2} L}{T^{2}}, \qquad T = 2\pi\sqrt{\frac{I}{mgd}}
+\]
+\[
+T = 2\pi\sqrt{\frac{2L}{3g}}\ \text{(rod, one end)}, \qquad L = \frac{3g}{8\pi^{2} f^{2}}
+\]
+\[
+\omega = \sqrt{\omega_{0}^{2} - \left(\frac{b}{2m}\right)^{2}}, \qquad b_{\mathrm{c}} = 2\sqrt{mk}
+\]
+\[
+A = \frac{F_{0}}{\sqrt{m^{2}(\omega_{0}^{2}-\omega^{2})^{2} + b^{2}\omega^{2}}}, \qquad A(\omega_{0}) = \frac{F_{0}}{b\,\omega_{0}}
+\]
+<p>The argument of every sine and cosine is in radians. The pendulum formulas \(T_{0}\) and the rod are small-angle formulas. The course takes \(g = 9.81\ \mathrm{m/s^{2}}\). The tower length prints as \(1.49\ \mathrm{m}\) in the book and is \(1.491\ \mathrm{m}\) here. Both grade. Underdamped motion needs \(b \lt 2\sqrt{mk}\).</p>
+</section>
+
+</main>
+</body>
+</html>

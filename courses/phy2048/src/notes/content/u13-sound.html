@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sound</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">PHY 2048 · Physics I · Unit 13 · OpenStax University Physics Vol. 1, Ch 17, rewritten</div>
+  <h1>Sound</h1>
+  <p class="lede">Sound in air is a longitudinal pressure wave. The air sets the speed. The source sets the frequency. Intensity is power per area, and the decibel is a logarithm of that intensity. A pipe then selects a few frequencies. A moving source changes the pitch a listener hears, and past the speed of sound the crests form a cone.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+    <span><i style="background:transparent;outline:1px dashed var(--border-hover)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The air</h3>
+    <a href="#s1"><span>1</span>Sound and its speed</a>
+    <a href="#s2"><span>2</span>Intensity and the decibel</a>
+    <h3>Part II · The instrument</h3>
+    <a href="#s3"><span>3</span>Pipes</a>
+    <a href="#s4"><span>4</span>Beats</a>
+    <h3>Part III · A moving source</h3>
+    <a href="#s5"><span>5</span>Doppler and shock waves</a>
+    <h3>Reference</h3>
+    <a href="#s6"><span>6</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The air</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Sound and its speed</h2>
+<p>A sound wave in air is a traveling squeeze and release. Where the air is compressed, the pressure is above the background. Where it is rarefied, the pressure is below. The air itself only oscillates along the direction of travel. It does not travel with the wave. That is a longitudinal wave. The pattern moves at the speed of sound.</p>
+<p>The source decides how often the squeezes leave. That frequency stays the same when the wave enters a new temperature. The wavelength changes so that \(v = f\lambda\) still holds. A higher frequency, in the same air, is a shorter wavelength. It is not a faster wave.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>For an ideal gas the speed of a sound wave is \(\sqrt{\gamma P/\rho}\). Pressure and density are proportional to the kelvin temperature at fixed composition, so the speed follows the square root of that temperature. Anchor the formula at \(0^{\circ}\mathrm{C}\), where the speed in air is \(331\ \mathrm{m/s}\). At Celsius temperature \(\theta\),</p>
+\[
+v = (331\ \mathrm{m/s})\sqrt{\frac{\theta + 273}{273}}.
+\]
+<p>The \(273\) in the denominator is the section's offset, not \(273.15\). At \(0^{\circ}\mathrm{C}\) the speed is \(331\ \mathrm{m/s}\) exactly. At \(20^{\circ}\mathrm{C}\) it is \(342.9\ \mathrm{m/s}\). A stated \(343\ \mathrm{m/s}\), or \(340\ \mathrm{m/s}\), is a given for that example. It is not this formula.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The source sets the frequency. The air sets the speed, through the square root of the kelvin temperature. Then \(\lambda = v/f\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the audible range</span>
+<p>Take the audible range as \(20.0\ \mathrm{Hz}\) to \(20.0\ \mathrm{kHz}\), in air at \(30.0^{\circ}\mathrm{C}\). Then \(T = 303\ \mathrm{K}\).</p>
+\[
+v = 331\sqrt{\frac{303}{273}} = 348.7\ \mathrm{m/s}.
+\]
+\[
+\lambda_{\max} = \frac{348.7}{20.0} = 17.44\ \mathrm{m}, \qquad \lambda_{\min} = \frac{348.7}{20000} = 0.01744\ \mathrm{m}.
+\]
+<p>Section 17.2 prints \(348.7\ \mathrm{m/s}\), \(17\ \mathrm{m}\), and \(0.017\ \mathrm{m}\). The speed grades. The \(17\ \mathrm{m}\) print has two figures, and it does not grade against \(v/20\). The case wants the unrounded wavelengths, \(17.436\ \mathrm{m}\) and \(0.017436\ \mathrm{m}\). The same air at a higher frequency does not travel faster. It only shortens \(\lambda\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(331\ \mathrm{m/s}\) at a temperature that is not \(0^{\circ}\mathrm{C}\). Using Celsius in the square root instead of \(\theta + 273\). Reporting the two-figure \(17\ \mathrm{m}\) as if it were the computed wavelength. Thinking a higher frequency makes sound travel faster, or that the frequency changes when the wave enters colder air.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The air is dry, still, and the same temperature everywhere. Humidity, wind, and a temperature that changes with height all change the speed. The formula is for audible sound in ordinary air. It is not a speed inside a solid or a liquid. The pipe lab draws the wave once a second. The plot is the true motion.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Intensity and the decibel</h2>
+<p>A source radiates power. The intensity is that power spread over an area. A listener hears a level, which is a logarithm of the intensity.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A point source that radiates equally in every direction puts its power through a sphere. The area is \(4\pi r^{2}\), so</p>
+\[
+I = \frac{P}{4\pi r^{2}}.
+\]
+<p>Twice the distance multiplies the area by four and divides the intensity by four. The level uses a fixed threshold \(I_0 = 10^{-12}\ \mathrm{W/m^{2}}\):</p>
+\[
+\beta = 10\log_{10}\frac{I}{I_0}.
+\]
+<p>A ratio of intensities is a difference of levels,</p>
+\[
+\Delta\beta = 10\log_{10}\frac{I_2}{I_1}.
+\]
+<p>A factor of two is \(10\log_{10} 2 = 3.01\ \mathrm{dB}\). A factor of four, from twice the distance, is \(10\log_{10} 4 = 6.02\ \mathrm{dB}\) down. Incoherent sources add intensities. They do not add decibel readings. Two equal sources are \(3.01\ \mathrm{dB}\) above either one.</p>
+<p>For a harmonic plane wave the pressure and the particle velocity are in phase, and the particle velocity has amplitude \(\Delta p/(\rho v)\). Their product averages to</p>
+\[
+I = \frac{(\Delta p)^{2}}{2\rho v}.
+\]
+<p>The square and the factor of one half are the average of \(\cos^{2}\) over a period. Distance is not in this formula. The wave is plane, so the area is not growing.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the pressure wave</span>
+<p>A sound wave has pressure amplitude \(0.656\ \mathrm{Pa}\). The air is at \(0^{\circ}\mathrm{C}\), with \(\rho = 1.29\ \mathrm{kg/m^{3}}\) and \(v = 331\ \mathrm{m/s}\).</p>
+\[
+I = \frac{(0.656)^{2}}{2(1.29)(331)} = 5.04 \times 10^{-4}\ \mathrm{W/m^{2}}.
+\]
+\[
+\beta = 10\log_{10}\frac{5.04 \times 10^{-4}}{10^{-12}} = 87.02\ \mathrm{dB}.
+\]
+<p>Section 17.3 prints \(5.04 \times 10^{-4}\ \mathrm{W/m^{2}}\) and \(87\ \mathrm{dB}\). Both grade. \(10\log_{10} 5 = 6.99\), so \(87\ \mathrm{dB}\) is about five times the intensity of an \(80\ \mathrm{dB}\) sound. The picture draws a speaker so the wave has a home. The plot is the pressure.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two speakers</span>
+<p>Each of two incoherent speakers produces \(60\ \mathrm{dB}\) at the same listener. Intensities add, so the pair has twice the intensity of one.</p>
+\[
+\beta = 60 + 10\log_{10} 2 = 63.01\ \mathrm{dB}.
+\]
+<p>The section prints \(3.01\ \mathrm{dB}\) for a doubled intensity. It does not print \(63\). Adding the readings would give \(120\ \mathrm{dB}\), which is a factor of a million in intensity, not a factor of two. The lab places that pair at \(2.00\ \mathrm{m}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · twice as far</span>
+<p>The \(0.656\ \mathrm{Pa}\) wave has intensity \(5.04 \times 10^{-4}\ \mathrm{W/m^{2}}\). Put that intensity on a sphere at \(2.00\ \mathrm{m}\), and walk out to \(4.00\ \mathrm{m}\). The intensity falls by four.</p>
+\[
+\Delta\beta = 10\log_{10}\frac{1}{4} = -6.02\ \mathrm{dB}.
+\]
+<p>The level goes from \(87.02\ \mathrm{dB}\) to \(81.00\ \mathrm{dB}\). The section says the level falls by about \(6\ \mathrm{dB}\). The change is \(-6.02\ \mathrm{dB}\), and \(-6\ \mathrm{dB}\) grades. A drop counted as \(1/r\) instead of \(1/r^{2}\) is only \(3.01\ \mathrm{dB}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding decibel readings. Two \(60\ \mathrm{dB}\) sources together are \(63\ \mathrm{dB}\), not \(120\ \mathrm{dB}\). Using \(20\log\) for an intensity. Forgetting that \(I_0\) is \(10^{-12}\ \mathrm{W/m^{2}}\). Taking intensity proportional to \(1/r\) rather than \(1/r^{2}\), so a doubled distance is counted as \(-3\ \mathrm{dB}\) instead of \(-6\ \mathrm{dB}\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The sphere model loses no power on the way, and nothing reflects. A real room sends sound back from the walls, so the level falls more slowly than \(1/r^{2}\) once you are far from the source. The plane-wave formula has no distance in it. The picture draws a few crests so the spreading is visible. The plot is the true level.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>The instrument</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Pipes</h2>
+<p>A pipe holds a standing sound wave. The boundary at each end decides which wavelengths fit. Strings fixed at both ends were the previous unit. A pipe can be open at both ends, or stopped at one end.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The air cannot move through a closed end, so the displacement there is a node. An open end leaves the air free, so the displacement there is an antinode. Pressure is the other way around. A displacement node is a pressure antinode, because the air is squeezed there and cannot flow away.</p>
+<p>A pipe stopped at one end has a node at the cap and an antinode at the mouth. The shortest pattern puts those a quarter wavelength apart:</p>
+\[
+L = \frac{\lambda}{4}, \qquad f_1 = \frac{v}{4L}.
+\]
+<p>The next patterns fit three quarters, then five, and so on. The harmonic number \(n\) is odd:</p>
+\[
+f_n = \frac{nv}{4L}, \qquad n = 1, 3, 5, \ldots
+\]
+<p>The overtones are \(3f_1\), \(5f_1\), \(7f_1\), \(9f_1\). The fourth overtone is \(n = 9\), not \(n = 4\). Opening both ends puts an antinode at each end. Half a wavelength fits, and every whole number is allowed:</p>
+\[
+f_n = \frac{nv}{2L}, \qquad n = 1, 2, 3, \ldots
+\]
+<p>The open fundamental is twice the stopped fundamental of the same length. Two speakers in phase are quiet where the path difference is half a wavelength. The first such point has</p>
+\[
+\lambda = 2|r_2 - r_1|, \qquad f = \frac{v}{\lambda}.
+\]
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>A stopped pipe holds only odd harmonics, and its fundamental is \(v/(4L)\). Open both ends and the fundamental doubles.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the stopped pipe</span>
+<p>A tube closed at one end has fundamental \(128\ \mathrm{Hz}\) in air at \(22.0^{\circ}\mathrm{C}\). Then \(T = 295\ \mathrm{K}\).</p>
+\[
+v = 331\sqrt{\frac{295}{273}} = 344.1\ \mathrm{m/s}.
+\]
+<p>The length, before that speed is rounded, is \(0.6720\ \mathrm{m}\). Section 17.5 prints \(344\ \mathrm{m/s}\) and \(0.672\ \mathrm{m}\). Both grade.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the fourth overtone</span>
+<p>On that stopped pipe the series is \(128\ \mathrm{Hz}\), \(384\ \mathrm{Hz}\), \(640\ \mathrm{Hz}\), \(896\ \mathrm{Hz}\), and then</p>
+\[
+f_9 = 9 \times 128 = 1152\ \mathrm{Hz}.
+\]
+<p>The section prints this fourth overtone as \(1.15\ \mathrm{kHz}\). That print grades against \(1152\ \mathrm{Hz}\). Counting the fourth overtone as \(4 \times 128 = 512\ \mathrm{Hz}\) uses the even series this pipe does not have.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the open pipe</span>
+<p>Open both ends and keep \(L = 0.672\ \mathrm{m}\) at \(22.0^{\circ}\mathrm{C}\).</p>
+\[
+f_1 = \frac{v}{2L} = 256\ \mathrm{Hz}.
+\]
+<p>The section prints the stopped length and does not print \(256\ \mathrm{Hz}\). It is \(v/(2L)\) on those figures. The same length, stopped, was \(128\ \mathrm{Hz}\). Opening the cap doubles the fundamental.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the first quiet point</span>
+<p>Two speakers in phase sit \(2.00\ \mathrm{m}\) and \(3.00\ \mathrm{m}\) off a center line. The first quiet point on that line is \(6.00\ \mathrm{m}\) from the pair. The sound speed is the section's \(343\ \mathrm{m/s}\).</p>
+\[
+r_1 = \sqrt{40} = 6.3246\ \mathrm{m}, \qquad r_2 = \sqrt{45} = 6.7082\ \mathrm{m}.
+\]
+<p>The difference of the unrounded roots is \(0.38365\ \mathrm{m}\). Half a wavelength is that difference, so</p>
+\[
+\lambda = 0.7673\ \mathrm{m}, \qquad f = \frac{343}{0.7673} = 447.0\ \mathrm{Hz}.
+\]
+<p>Section 17.4 rounds the paths to \(6.32\ \mathrm{m}\) and \(6.71\ \mathrm{m}\) and prints \(439.74\ \mathrm{Hz}\). That print does not grade. The case accepts \(6.325\ \mathrm{m}\), \(6.708\ \mathrm{m}\), and \(447\ \mathrm{Hz}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Giving a stopped pipe the even harmonics. Using \(v/(2L)\) for a stopped pipe, or \(v/(4L)\) for an open one. Swapping the displacement node and the antinode. A closed end is a displacement node. The pressure there is an antinode. Using the section's rounded path lengths and expecting the unrounded frequency.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real open end sits a fraction of a radius past the pipe. That end correction is outside \(f = nv/(4L)\) and \(f = nv/(2L)\). The bore is assumed much smaller than the wavelength, and the walls do not flex. The picture is one cycle per second, and the swing is enlarged. The plot is that swing against true time.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Beats</h2>
+<p>Two pure tones of nearly equal frequency add. The sum grows and shrinks at the difference of the frequencies. That throb is a beat.</p>
+<p>Write the two tones as \(\sin(2\pi f_1 t)\) and \(\sin(2\pi f_2 t)\). The sum-to-product identity gives</p>
+\[
+\sin(2\pi f_1 t) + \sin(2\pi f_2 t) = 2\sin(2\pi f_{\mathrm{avg}} t)\cos(\pi |f_2 - f_1| t).
+\]
+<p>The sine is the pitch you hear, near the average frequency. The cosine is the envelope. Loudness follows its absolute value, so the loud peaks are separated by \(1/|f_2 - f_1|\). Therefore</p>
+\[
+f_{\mathrm{beat}} = |f_2 - f_1|.
+\]
+<p>The absolute value keeps the beat from coming out negative. A large difference is still a beat in the formula. It is not a slow throb.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The beat frequency is the absolute difference of the two frequencies. Close tones throb slowly. An octave does not.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the forks</span>
+<p>Two forks, \(256\ \mathrm{Hz}\) and \(512\ \mathrm{Hz}\), sound together.</p>
+\[
+f_{\mathrm{beat}} = |512 - 256| = 256\ \mathrm{Hz}.
+\]
+<p>Section 17.6 prints \(256\ \mathrm{Hz}\). The forks are an octave apart, so the beat equals the lower fork. It is not the slow pulse of two notes a few hertz apart. The same formula gives that pulse when the forks are close. The picture moves the forks once a second. The plot is the true sum, over two beat periods.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the beat frequency as the sum, or as the average. Reporting a negative frequency. Treating \(256\ \mathrm{Hz}\) against \(512\ \mathrm{Hz}\) as a slow beat. It is an octave, and the beat equals the lower fork.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The two tones are pure and endless, and they are equally loud. A real fork decays, and a musical interval has a spectrum of partials. The ear also judges roughness, which this difference does not describe. The model is only \(|f_2 - f_1|\).</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>A moving source</h2>
+</div>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Doppler and shock waves</h2>
+<p>A listener and a source in relative motion do not agree on the time between crests. The pitch changes. Past the speed of sound, the crests pile into a cone.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Let \(v\) be the speed of sound. Take \(v_o &gt; 0\) when the observer moves toward the source, and \(v_s &gt; 0\) when the source moves toward the observer. A source moving toward the observer shortens the wavelength to \((v - v_s)/f\), so the frequency at a stationary listener is \(f v/(v - v_s)\). A listener moving toward a stationary source meets crests faster, which multiplies the frequency by \((v + v_o)/v\). Both at once:</p>
+\[
+f' = f\frac{v + v_o}{v - v_s}.
+\]
+<p>The two speeds are not interchangeable. Shrinking the denominator raises the pitch more than the same speed added in the numerator. Motion away flips the sign of that speed.</p>
+<p>Head-on, the rise and the drop are different sizes. With \(v_s\) toward the listener on the way in,</p>
+\[
+f_{\mathrm{in}} = \frac{fv}{v - v_s}, \qquad f_{\mathrm{out}} = \frac{fv}{v + v_s}.
+\]
+<p>\(v - v_s\) sits farther from \(v\) in the quotient than \(v + v_s\) does. The rise is larger than the drop.</p>
+<p>If the source outruns the sound, the crests do not travel ahead of it. In time \(t\) the source moves \(v_s t\) and a crest's sphere has radius \(v t\). The tangent from the source to that sphere makes an angle \(\theta\) with the rearward path:</p>
+\[
+\sin\theta = \frac{v}{v_s} = \frac{1}{M}, \qquad M = \frac{v_s}{v}.
+\]
+<p>\(\theta\) is the half-angle of the cone. A larger Mach number is a narrower cone. The boom is that cone sweeping over a listener. It is not the instant the source first passes Mach 1.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · approaching</span>
+<p>A horn emits \(150\ \mathrm{Hz}\). The train approaches at \(35.0\ \mathrm{m/s}\). The sound speed is \(340\ \mathrm{m/s}\).</p>
+\[
+f' = 150 \times \frac{340}{340 - 35} = 167.2\ \mathrm{Hz}.
+\]
+<p>The rise is \(17.2\ \mathrm{Hz}\). Section 17.7 prints \(167\ \mathrm{Hz}\) and a rise of \(17.0\ \mathrm{Hz}\). The print grades. The quotient is \(167.2\ \mathrm{Hz}\). The picture takes two seconds to pass, and the locomotive is enlarged. The plot is the true pitch against the radial speed.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · receding</span>
+<p>The same horn, now going away:</p>
+\[
+f' = 150 \times \frac{340}{340 + 35} = 136\ \mathrm{Hz}.
+\]
+<p>The drop is \(14.0\ \mathrm{Hz}\). The section prints \(136\ \mathrm{Hz}\) and \(14\ \mathrm{Hz}\). Both are exact, and both grade. The rise of \(17.2\ \mathrm{Hz}\) and the drop of \(14.0\ \mathrm{Hz}\) are not equal. A listener who walks toward a still horn at \(35.0\ \mathrm{m/s}\) hears</p>
+\[
+f' = 150 \times \frac{340 + 35}{340} = 165.4\ \mathrm{Hz}.
+\]
+<p>The section states the method and does not print \(165.4\ \mathrm{Hz}\). The approaching horn, at \(167.2\ \mathrm{Hz}\), is higher. While the train passes, only the component of its velocity along the line to the listener counts. A \(12\ \mathrm{m}\) miss, used only in that passing picture, is not in the section. Far up the track the limits are the head-on pair, \(167.2\ \mathrm{Hz}\) and \(136\ \mathrm{Hz}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the cone</span>
+<p>An SR-71 flies at \(3529.60\ \mathrm{km/h}\), which the section calls Mach \(2.85\).</p>
+\[
+v_s = \frac{3529.60 \times 1000}{3600} = 980.4\ \mathrm{m/s}, \qquad v = \frac{980.4}{2.85} = 344.0\ \mathrm{m/s}.
+\]
+\[
+\theta = \sin^{-1}\frac{1}{2.85} = 20.54^{\circ}.
+\]
+<p>The section prints the speed and the Mach number. It does not print the sound speed or the angle. Those are \(v_s/M\) and \(\sin^{-1}(1/M)\). Mach 2 is exactly \(30^{\circ}\). This jet is faster, so the cone is narrower.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the rider</span>
+<p>The engineer rides with the horn. The horn is ahead of the engineer, and both move at \(35.0\ \mathrm{m/s}\). In the ground frame the horn moves away from the engineer, and the engineer moves toward the horn.</p>
+\[
+f' = 150 \times \frac{340 + 35}{340 - (-35)} = 150\ \mathrm{Hz}.
+\]
+<p>The two shifts cancel. The engineer hears the emitted pitch. A trackside listener does not.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Swapping the Doppler signs, or treating a moving source and a moving listener at one speed as the same shift. Quoting the rise and the drop as equal. Reporting the cone angle as \(1/M\) in degrees without the inverse sine. Hearing the boom at the instant the jet passes Mach 1.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The horn is a point, the ground does not reflect, and there is no wind. A real horn has a length, and the ground sends a second path. The \(12\ \mathrm{m}\) miss is only the passing picture. The head-on prints assume the motion is along the line to the listener. The boom in this model is the cone arriving. A real boom also depends on the atmosphere the cone has crossed.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Formula sheet</h2>
+\[
+v = (331\ \mathrm{m/s})\sqrt{\frac{\theta + 273}{273}}, \qquad v = f\lambda
+\]
+\[
+I = \frac{P}{4\pi r^{2}}, \qquad I = \frac{(\Delta p)^{2}}{2\rho v}, \qquad \beta = 10\log_{10}\frac{I}{10^{-12}}
+\]
+\[
+\Delta\beta = 10\log_{10}\frac{I_2}{I_1}, \qquad f_n = \frac{nv}{4L}\ \mathrm{(stopped,\ odd\ n)}, \qquad f_n = \frac{nv}{2L}\ \mathrm{(open)}
+\]
+\[
+f_{\mathrm{beat}} = |f_2 - f_1|, \qquad f' = f\frac{v + v_o}{v - v_s}, \qquad \sin\theta = \frac{1}{M}
+\]
+<p>Speeds in the Doppler formula are positive toward the other. The \(273\) in the sound-speed formula is the section's offset. At \(20^{\circ}\mathrm{C}\) that formula gives \(342.9\ \mathrm{m/s}\). Examples that state \(340\ \mathrm{m/s}\) or \(343\ \mathrm{m/s}\) are using those givens. The \(17\ \mathrm{m}\) wavelength print and the \(439.74\ \mathrm{Hz}\) interference print do not grade. The stopped-pipe prints \(344\ \mathrm{m/s}\) and \(0.672\ \mathrm{m}\) do. The fourth overtone is \(1152\ \mathrm{Hz}\). The section prints \(1.15\ \mathrm{kHz}\), which grades. End correction is outside the pipe formulas.</p>
+</section>
+
+</main>
+</body>
+</html>

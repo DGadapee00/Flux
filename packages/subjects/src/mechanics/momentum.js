@@ -58,6 +58,60 @@ export function collideOblique({ m1, m2, un1, ut1 = 0, un2, ut2 = 0, e = 1 }) {
   return { vn1: hit.v1, vt1: ut1, vn2: hit.v2, vt2: ut2, vcm };
 }
 
+const DEG = Math.PI / 180;
+
+/**
+ * Two smooth discs. The contact normal is at thetaDeg from +x.
+ * No friction, so the tangent velocities are copied through and only the
+ * normal pair is a one-dimensional collision.
+ */
+export function discCollision({ m1, m2, u1x, u1y = 0, u2x = 0, u2y = 0, thetaDeg = 0, e = 1 }) {
+  const th = thetaDeg * DEG;
+  const nx = Math.cos(th);
+  const ny = Math.sin(th);
+  const tx = -ny;
+  const ty = nx;
+  const un1 = u1x * nx + u1y * ny;
+  const ut1 = u1x * tx + u1y * ty;
+  const un2 = u2x * nx + u2y * ny;
+  const ut2 = u2x * tx + u2y * ty;
+  const hit = collideOblique({ m1, m2, un1, ut1, un2, ut2, e });
+  return {
+    v1x: hit.vn1 * nx + hit.vt1 * tx,
+    v1y: hit.vn1 * ny + hit.vt1 * ty,
+    v2x: hit.vn2 * nx + hit.vt2 * tx,
+    v2y: hit.vn2 * ny + hit.vt2 * ty,
+    un1,
+    ut1,
+    un2,
+    ut2,
+  };
+}
+
+/**
+ * Impulse of one pulse of duration T and peak force.
+ * rect: F T. tri: a tent, ½ F T. sine: F sin(π t / T), area 2 F T / π.
+ */
+export function pulseImpulse(shape, peak, duration) {
+  if (!(duration > 0) || !Number.isFinite(peak)) return NaN;
+  if (shape === 'rect') return peak * duration;
+  if (shape === 'tri') return 0.5 * peak * duration;
+  if (shape === 'sine') return (2 * peak * duration) / Math.PI;
+  return NaN;
+}
+
+/** The force at time t inside that pulse, and 0 outside it. */
+export function pulseForce(shape, peak, duration, t) {
+  if (!(duration > 0) || t < 0 || t > duration) return 0;
+  if (shape === 'rect') return peak;
+  if (shape === 'tri') {
+    const x = t / duration;
+    return peak * (x <= 0.5 ? 2 * x : 2 * (1 - x));
+  }
+  if (shape === 'sine') return peak * Math.sin((Math.PI * t) / duration);
+  return NaN;
+}
+
 /**
  * Constant burn rate. mdot > 0 is the mass lost per time.
  * Δv = ve ln(m0/mf) − g tb, with tb = (m0 − mf) / mdot.

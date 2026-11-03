@@ -79,8 +79,9 @@ export const resultant = (...list) => list.reduce((s, f) => add(s, f), v(0, 0, 0
 export function parallelogram(F1, F2, betweenDeg) {
   // The triangle's interior angle is the supplement of the angle between the two forces.
   const R = Math.sqrt(F1 ** 2 + F2 ** 2 + 2 * F1 * F2 * Math.cos(betweenDeg * DEG));
-  const sinPhi = (F2 * Math.sin(betweenDeg * DEG)) / (R || 1);
-  return { R, phi: Math.asin(Math.max(-1, Math.min(1, sinPhi))) / DEG };
+  // atan2 retains the quadrant when a large second force points back past 90°.
+  const phi = Math.atan2(F2 * Math.sin(betweenDeg * DEG), F1 + F2 * Math.cos(betweenDeg * DEG)) / DEG;
+  return { R, phi };
 }
 
 /** Law of cosines / sines helpers, used by the Ch 2 parallelogram problems. */

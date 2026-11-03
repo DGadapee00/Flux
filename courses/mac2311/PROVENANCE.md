@@ -4,7 +4,8 @@ MAC 2311–2312 is a merged review course. It has no Canvas drop and no instruct
 
 ## Source
 
-Problems and labs follow the section list of OpenStax *Calculus Volume 1* and *Volume 2*,
+18.01SC Single Variable Calculus, Fall 2010, sets the program and unit order.
+OpenStax supplies the section references in *Calculus Volume 1* and *Volume 2*,
 [Volume 1](https://openstax.org/details/books/calculus-volume-1) and [Volume 2](https://openstax.org/details/books/calculus-volume-2).
 
 The book is CC BY-NC-SA 4.0: [creativecommons.org/licenses/by-nc-sa/4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). (Corrected 18 Oct 2026: OpenStax publishes its Calculus volumes under CC BY-NC-SA, not CC BY. Flux cites and copies nothing, so nothing else changes.)
@@ -13,7 +14,7 @@ The book is CC BY-NC-SA 4.0: [creativecommons.org/licenses/by-nc-sa/4.0](https:/
 
 Statements are written fresh. Numbers are generated. A worked case may use a section's setup, cited as `OpenStax Calc 1 §2.3`, and never an invented example number. No figures and no text are copied.
 
-The notes in `src/notes/content/` follow the book's section list. Their prose, derivations, and worked examples are written here, and every number in them is recomputed.
+The notes in `src/notes/content/` follow the merged program spine. Their prose, derivations, and worked examples are written here, and every number in them is recomputed.
 
 ## What does not ship
 
@@ -29,8 +30,8 @@ into six; the original worked examples remain. The legacy-seed fixture records g
 pre-merge questions and answers to verify that saved work remains reproducible.
 
 18.01SC Single Variable Calculus (Fall 2010) sets the merged order. Its downloaded references
-remain in the ignored `reference/` tree. The content scorecard rework and printed-answer
-audit remain outstanding; this change establishes the merged module and migration.
+remain in the ignored `reference/` tree. The six content reworks and printed-answer checks are recorded below. The original merge
+established the module, redirects and migration.
 
 ## Unit 1 content rework
 
@@ -93,3 +94,28 @@ geometry and timing/scaling identities independently check the model.
 OpenStax Calculus Volume 2 §§7.1–7.5 supply parameter restrictions, tangent conditions,
 polar intersections and eccentricity. The notes explicitly retain the directrix
 absolute value until choosing a branch.
+
+### Unit 6 content rework
+
+Original notes follow 18.01SC Fall 2010 Unit 5, with OpenStax's sequence and convergence
+spine. Checked cases use Sessions 88(b), 90, 91, 94(c), 95(b,c), 97, 98 and 100,
+and Final Exam Solutions problem 14(a,c,d). Symbolic logarithmic coefficients and
+polynomials reproduce the printed formulas; the series-integral approximation is
+13/42, not a claim that this finite approximation equals the exact integral.
+New truncations, error-bound questions and series substitutions are labeled as transfers. Conceptual
+cases cite definitions or theorem applications, rather than invented numeric answers.
+
+The clock application cites Parliament's Great Clock facts, including the 2 s beat
+and 4.4 m overall pendulum dimension:
+https://www.parliament.uk/about/living-heritage/building/palace/big-ben/facts-figures/great-clock-facts/.
+Two beats make a full 4 s cycle. This calibrates an equivalent point-mass length;
+it is not a measurement or substitution of the 4.4 m overall dimension. The shared
+conventional standard gravity supplies g, not measured local gravity. Swing amplitudes
+and the quarter-length variant are assumptions. The drawing is original and schematic.
+No prediction of the actual clock's timing or escapement behavior is made.
+
+NIST DLMF §19.2 defines K(k), and §19.5 gives its hypergeometric series. Our derivation
+integrates the binomial series and bounds its tail by a geometric majorant. An
+arithmetic-geometric-mean evaluation is checked against independent quadrature and
+length/amplitude scaling. OpenStax Calculus Volume 1 §4.8 and Volume 2 §§3.7, 5.1–5.6,
+6.1–6.4 supply the remaining theorem hypotheses and examples.

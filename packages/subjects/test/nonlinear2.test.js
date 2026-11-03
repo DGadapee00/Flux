@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import { jacobian2,localSystem,localJacobian } from '../src/math/nonlinear2.js';
+test('analytic Jacobians agree with independent differences for nonlinear model families',()=>{for(const kind of ['centre','prey','potential'])for(const z of [[0,0],[1,1],[.2,-.1]]){const p={a:.3,b:2,c:.2,d:1},a=localJacobian(kind,z,p),n=jacobian2(z=>localSystem(kind,z,p),z);a.forEach((v,i)=>assert.ok(Math.abs(v-n[i])<1e-8));}});

@@ -320,7 +320,7 @@ export const NOTES = {
         topics: ['taylor', 'symbolic'],
         home: true,
       },
-      { id: 's10', n: 10, title: 'Working with power series', lab: null, ch: ['v2.6'], topics: ['taylor'] },
+      { id: 's10', n: 10, title: 'Working with power series', lab: 'clock', ch: ['v2.6'], topics: ['taylor'] },
       { id: 's11', n: 11, title: 'Formula sheet', lab: null, ch: [] },
     ],
     load: () => import('./content/c6.html?raw').then((m) => m.default),

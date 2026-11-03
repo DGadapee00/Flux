@@ -284,3 +284,48 @@ for (const [section, tag, scenario, setup, read] of [
   ],
 ])
   (SETUPS.c5[section] ??= []).push({ tag, lab: 'record', scenario, setup, read });
+
+for (const [tag, scenario, setup, read] of [
+  [
+    'calibrating an effective length',
+    'small',
+    (s) => {
+      s.angle = 0;
+    },
+    (c) => ({ period: [c.period, 4], series: [c.series, 4] }),
+  ],
+  ['a small assumed swing', 'small', null, (c) => ({ period: [c.period, 4.001904689943947] })],
+  [
+    'a wide assumed swing',
+    'wide',
+    null,
+    (c) => ({
+      period: [c.period, 4.721362396064385],
+      series: [c.series, 4.689453125],
+      bound: [c.tailBound, 0.037384033203124965],
+    }),
+  ],
+  [
+    'improving the calculation',
+    'wide',
+    (s) => {
+      s.n = 8;
+    },
+    (c) => ({ series: [c.series, 4.720267184078693], bound: [c.tailBound, 0.0012051670637447363] }),
+  ],
+  [
+    'near the upright limit',
+    'slow',
+    null,
+    (c) => ({ period: [c.period, 9.757450878695543], series: [c.series, 7.305015657094492] }),
+  ],
+  [
+    'quartering effective length',
+    'wide',
+    (s) => {
+      s.L /= 4;
+    },
+    (c) => ({ period: [c.period, 2.3606811980321925] }),
+  ],
+])
+  (SETUPS.c6.s10 ??= []).push({ tag, lab: 'clock', scenario, setup, read });

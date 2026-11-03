@@ -164,7 +164,19 @@ export function formulaFamily({ id, exam, ch, title, topics, forms, hints, level
       ),
   });
 }
-export function numericFamily({ id, exam, ch, title, topics, forms, hints, level = 2, lab, sim }) {
+export function numericFamily({
+  id,
+  exam,
+  ch,
+  title,
+  topics,
+  forms,
+  hints,
+  level = 2,
+  lab,
+  sim,
+  tol = 0.005,
+}) {
   const ids = Object.keys(forms);
   return problem({
     id,
@@ -182,10 +194,13 @@ export function numericFamily({ id, exam, ch, title, topics, forms, hints, level
     derive: ($) => ({ v: forms[$.form] }),
     text: (T, $) => $.v.ask,
     parts: [
-      numeric('answer', ($) => $.v.answer, 'requested value', [
-        [($) => $.v.traps[0][0], ($) => $.v.traps[0][1]],
-        [($) => $.v.traps[1][0], ($) => $.v.traps[1][1]],
-      ]),
+      {
+        ...numeric('answer', ($) => $.v.answer, 'requested value', [
+          [($) => $.v.traps[0][0], ($) => $.v.traps[0][1]],
+          [($) => $.v.traps[1][0], ($) => $.v.traps[1][1]],
+        ]),
+        tol,
+      },
     ],
     hints,
     steps: ($) => [$.v.reason, `The result is ${$.v.answer}${$.v.unit ? ' ' + $.v.unit : ''}.`],

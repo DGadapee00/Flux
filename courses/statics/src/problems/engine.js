@@ -10,6 +10,7 @@ const engine = createEngine({
   consts: { pi: Math.PI, g: G, gft: G_FT },
   greek: { 'π': 'pi', 'λ': 'lam', 'σ': 'sig', 'ρ': 'rho', 'θ': 'th', 'ω': 'omega', 'ε0': 'eps0', 'ε₀': 'eps0', 'μ0': 'mu0', 'μ₀': 'mu0', 'φ': 'phi', 'α': 'alpha' },
   units: { ZERO, CONST_DIMS, parseUnit, formatDim, dimEqual, isDimensionless, dimMul, dimDiv, dimScale },
+  optionWhy: true,
   prose: 'none',
   steps: 'sig',
   numbers: 'unit',
@@ -17,6 +18,9 @@ const engine = createEngine({
 });
 
 export const {
+  GLYPH,
+  exprToTex,
+  choiceOptions,
   rng,
   hashSeed,
   build,

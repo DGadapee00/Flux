@@ -16,7 +16,7 @@ const triTruss = ($) => ({
 
 export default [
   problem({
-    ...U3, id: 'ch5.beam-reactions', ch: '5', lab: 'beam', src: 'Part 3 · 5.2, 5.8, 5.10', title: 'Reactions on a simply supported beam', kind: 'numeric', topics: ['equilibrium', 'reactions'],
+    ...U3, id: 'ch5.beam-reactions', ch: '5', lab: 'reactions', src: 'Part 3 · 5.2, 5.8, 5.10', title: 'Reactions on a simply supported beam', kind: 'numeric', topics: ['equilibrium', 'reactions'],
     vars: { L: range(4, 20, 1, 'ft'), P: range(100, 2000, 50, 'lb'), a: range(1, 18, 1, 'ft') },
     derive: ($) => {
       const sol = rigidBody2D({
@@ -49,7 +49,7 @@ export default [
     cases: [kase('hand', { L: 10, P: 600, a: 4 }, { RA: 360, RB: 240 })],
   }),
   problem({
-    ...U3, id: 'ch5.distributed', ch: '5', lab: 'beam', src: 'Part 3 · distributed loads', title: 'Reactions under a distributed load', kind: 'numeric', level: 2, topics: ['equilibrium', 'distributed-load'],
+    ...U3, id: 'ch5.distributed', ch: '5', lab: 'reactions', src: 'Part 3 · distributed loads', title: 'Reactions under a distributed load', kind: 'numeric', level: 2, topics: ['equilibrium', 'distributed-load'],
     vars: { L: range(4, 16, 1, 'ft'), w: range(20, 400, 10, 'lb/ft'), shape: choice(['uniform', 'uniform'], ['triangular', 'triangular, zero at A']) },
     derive: ($) => {
       const eq = $.shape === 'uniform' ? uniformLoad($.w, 0, $.L) : triangularLoad($.w, 0, $.L);
@@ -139,7 +139,7 @@ export default [
       const m = 2 * $.j - 3 + $.extra;
       return { m, r: 3, verdict: $.extra === 0 ? 'determinate' : $.extra > 0 ? 'indeterminate' : 'unstable' };
     },
-    text: (T, $) => `A plane truss has ${T.j} joints and three support reactions, and carries ${$.m} members — that is ${$.extra === 0 ? 'exactly' : $.extra > 0 ? 'one more member than' : 'one fewer member than'} the count m + r = 2j requires. What can you say about it?`,
+    text: (T, $) => `A plane truss has ${T.j} joints and three support reactions, and carries ${$.m} members — that is ${$.extra === 0 ? 'exactly' : $.extra > 0 ? 'one more member than' : 'one fewer member than'} the count m + r = 2j requires. Assume the supports restrain rigid motion and the remaining constraints are independent. What does the count imply?`,
     parts: [
       mc('verdict', [['determinate', 'Statically determinate — the joint equations have exactly one solution'], ['indeterminate', 'Statically indeterminate — more unknowns than equations'], ['unstable', 'Unstable — not enough members to hold its shape']], ($) => $.verdict),
     ],
@@ -147,7 +147,7 @@ export default [
     steps: ($, f) => [
       String.raw`$m + r = ${texNum($.m + 3)}$ and $2j = ${texNum(2 * $.j)}$.`,
       $.verdict === 'determinate'
-        ? 'Equal counts: the method of joints will close exactly.'
+        ? 'With the stated stability and independence assumptions, equal counts give a unique solution.'
         : $.verdict === 'indeterminate'
           ? 'More unknowns than equations — statics alone cannot finish it; you would need the members’ stiffness.'
           : 'Fewer members than needed: the truss is a mechanism and will collapse.',
@@ -164,9 +164,9 @@ export default [
       ),
     },
     derive: ($) => ({ n: $.layout === 'two' ? 2 : $.layout === 'three' ? 1 : 0 }),
-    text: (T) => `At a joint with no support and where ${T.layout}, how many of those members carry zero force?`,
+    text: (T) => `At a joint with no support and where ${T.layout}, how many members can the unloaded-joint rules identify as zero?`,
     parts: [
-      mc('n', [[2, 'Both of them'], [1, 'One — the member that is not in line with the others'], [0, 'None of them']], ($) => $.n),
+      mc('n', [[2, 'Both of them'], [1, 'One — the member that is not in line with the others'], [0, 'No zero-force conclusion from these rules']], ($) => $.n),
     ],
     hints: [
       'Set up axes along and perpendicular to the collinear pair; the perpendicular equation usually has just one term in it.',
@@ -249,7 +249,7 @@ export default [
     cases: [kase('hand', { P: 50, b: 3 }, { N: 150, C: 200 })],
   }),
   problem({
-    ...U3, id: 'ch5.cantilever', ch: '5', lab: 'beam', src: 'Part 3 · fixed supports', title: 'Cantilever: reactions at the wall', kind: 'numeric', level: 2, topics: ['equilibrium', 'fixed-support'],
+    ...U3, id: 'ch5.cantilever', ch: '5', lab: 'reactions', src: 'Part 3 · fixed supports', title: 'Cantilever: reactions at the wall', kind: 'numeric', level: 2, topics: ['equilibrium', 'fixed-support'],
     vars: { L: range(3, 16, 1, 'ft'), P: range(0, 1000, 50, 'lb'), w: range(0, 200, 10, 'lb/ft') },
     derive: ($) => ({ Ay: $.P + $.w * $.L, MA: $.P * $.L + ($.w * $.L ** 2) / 2 }),
     valid: ($) => $.P + $.w > 0,
