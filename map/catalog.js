@@ -22,11 +22,31 @@ function fromMeta(meta) {
   return Object.fromEntries(Object.entries(meta).map(([id, m]) => [id, { unit: m.exam, title: m.title || id }]));
 }
 
-/** @param {{ id: string, labs: string[] }[]} units */
-function fromUnits(units) {
+/**
+ * STA 3032's lab titles. Its lab definitions carry drawing code, so the hub does not import them;
+ * map/test/catalog.test.js keeps this table equal to their titles.
+ */
+export const STA3032_TITLES = {
+  describe: 'Describing data',
+  cond: 'Conditional probability',
+  dist: 'Distributions',
+  npp: 'Normal probability plot',
+  clt: 'Sampling distributions (CLT)',
+  ci: 'Confidence interval coverage',
+  power: 'Errors and power',
+  tests: 'Which test?',
+  paired: 'Paired vs independent',
+  reg: 'Regression',
+};
+
+/**
+ * @param {{ id: string, labs: string[] }[]} units
+ * @param {Record<string, string>} [titles]
+ */
+function fromUnits(units, titles = {}) {
   const out = {};
   for (const unit of units) {
-    for (const id of unit.labs || []) if (!out[id]) out[id] = { unit: unit.id, title: id };
+    for (const id of unit.labs || []) if (!out[id]) out[id] = { unit: unit.id, title: titles[id] || id };
   }
   return out;
 }
@@ -42,6 +62,6 @@ export const LAB_CATALOGS = {
   map2302: fromMeta(map2302.LAB_META),
   phy2048: fromMeta(phy2048.LAB_META),
   phy2049: fromMeta(phy2049.LAB_META),
-  sta3032: fromUnits(sta3032.UNITS),
+  sta3032: fromUnits(sta3032.UNITS, STA3032_TITLES),
   statics: fromMeta(statics.LAB_META),
 };
