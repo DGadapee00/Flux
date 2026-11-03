@@ -1,10 +1,10 @@
 # What the map covers
 
 A snapshot from the data on 3 November 2026, after the materials-science thread and the split of
-thermodynamics from fluid mechanics. For the live
+thermodynamics from fluid mechanics, and EML 3015 Fluids. For the live
 numbers run `node map/check.mjs`, `npm run map-audit` and `npm run map-gaps`.
 
-**168 concepts, 146 with a Flux lab, 22 gaps.**
+**184 concepts, 146 with a Flux lab, 38 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -13,7 +13,7 @@ numbers run `node map/check.mjs`, `npm run map-audit` and `npm run map-gaps`.
 | Mechanics | 30 | 30 |
 | Electricity and magnetism | 26 | 25 |
 | Thermodynamics | 12 | 12 |
-| Fluid mechanics | 4 | 3 |
+| Fluid mechanics | 20 | 3 |
 | Heat transfer | 3 | 2 |
 | Circuits and systems | 11 | 11 |
 | Mechanics of materials | 14 | 14 |
@@ -37,12 +37,13 @@ Every Flux course app is on the map: every lab and every notes section sits on a
 | STA 3032 Probability and Statistics | 9 |
 | Bench (a project) | 6 |
 
-EMA 3010 Materials Science has no app, so it is not audited; its path holds the 15 concepts of
-the Materials science lane, all of them gaps with a candidate lab:
+Courses with no app are not audited. Their paths follow an MIT OpenCourseWare course's order, and
+each new concept on them is a gap with a candidate lab:
 
-| Course | Concepts on its path |
-|---|---|
-| EMA 3010 Materials Science | 15 |
+| Course | Concepts on its path | Order from |
+|---|---|---|
+| EMA 3010 Materials Science | 15 | 3.091 recitations |
+| EML 3015 Fluids | 22 (16 new) | 2.06, Spring 2013 |
 
 EML 3101 Thermodynamics II is on the course list with no app and no path yet.
 
