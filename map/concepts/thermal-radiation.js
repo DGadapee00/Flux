@@ -5,7 +5,7 @@ export default {
   subject: 'heat',
   courses: ['eml4140'],
   eq: String.raw`E_b = \sigma T^4, \qquad \lambda_\text{max}T = 2898\ \mu\text{m·K}, \qquad q'' = \varepsilon\sigma\left(T_s^4 - T_\text{sur}^4\right)`,
-  idea: String.raw`Every surface emits electromagnetic waves because of its temperature, and needs no medium to do it. A black body emits the most possible at each wavelength, with a total of \(\sigma T^4\) and a peak that moves to shorter waves as it heats. A real surface emits a fraction \(\varepsilon\) of that, and the fraction can change with wavelength. Glass passes visible light but absorbs the infrared, which is how a greenhouse holds heat; white paint reflects sunlight yet is nearly black in the infrared. Because of the fourth power, radiation dominates at high temperature and matters even at room temperature.`,
+  idea: String.raw`Every surface emits electromagnetic waves because of its temperature, and needs no medium to do it. A black body emits the most possible at each wavelength, with a total of \(\sigma T^4\) and a peak that moves to shorter waves as it heats. A real surface emits a fraction \(\varepsilon\) of that, and the fraction can change with wavelength. Glass passes visible light but absorbs the infrared, so a window lets sunlight in and blocks the room's own glow; a real greenhouse stays warm mostly because its roof stops the warm air rising away. White paint reflects sunlight yet is nearly black in the infrared. Because of the fourth power, radiation dominates at high temperature and matters even at room temperature.`,
   requires: ['light-intensity'],
   sources: [
     {

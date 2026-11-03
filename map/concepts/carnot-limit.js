@@ -3,7 +3,7 @@ export default {
   title: 'The second law and the Carnot limit',
   label: ['Second law,', 'Carnot limit'],
   subject: 'thermo',
-  courses: ['eml3100'],
+  courses: ['eml3100', 'eml3101'],
   eq: String.raw`\eta_\text{max} = 1 - \frac{T_L}{T_H}, \qquad \oint \frac{\delta Q}{T} \le 0`,
   idea: String.raw`No engine working between two temperatures beats a reversible one, and every reversible one does exactly as well. Its efficiency depends only on the two temperatures, in kelvin. A claim above the limit is impossible; at the limit, reversible; below it, real. Real air conditioners sit far below theirs.`,
   requires: ['heat-engines'],
