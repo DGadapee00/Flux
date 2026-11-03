@@ -1,0 +1,208 @@
+<header class="top">
+  <div class="eyebrow">EGN 3311 · Statics · U1</div>
+  <h1>Force vectors</h1>
+  <p class="lede">Draw the body. Resolve the forces. Derive the result and check it another way.</p>
+  <div class="legend">
+    <span><i style="background: var(--field)"></i>Worked example</span
+    ><span><i style="background: var(--field-soft)"></i>Derivation</span
+    ><span><i style="background: var(--copper)"></i>Common mistake</span><span>Key idea</span
+    ><span>Model limits</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <a href="#s1"><span>1</span>Components and the resultant</a
+    ><a href="#s2"><span>2</span>Direction in three dimensions</a
+    ><a href="#s3"><span>3</span>Projection and a lifting bridle</a
+    ><a href="#s4"><span>4</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+  <div class="part">
+    <div class="eyebrow">Part I</div>
+    <h2>Build the model</h2>
+    <section class="topic" id="s1">
+      <h2><span class="n">1</span>Components and the resultant</h2>
+      <p>
+        A force has magnitude, direction and a point of application. Choose axes before resolving it. The
+        right triangle formed by a planar force gives \(F_x=F\cos\theta\) and \(F_y=F\sin\theta\), when the
+        angle starts at positive x. A component is signed. It is not a second force added to the original one.
+      </p>
+      <p>
+        Add forces head to tail. Their x displacements add independently of their y displacements. Therefore
+        \(R_x=\sum F_x\) and \(R_y=\sum F_y\). Applying Pythagoras to that resultant gives
+        \(R=\sqrt{R_x^2+R_y^2}\). Use \(\operatorname{atan2}(R_y,R_x)\) for its direction. Ordinary inverse
+        tangent loses the quadrant.
+      </p>
+      <div class="box why">
+        <span class="tag">Derivation · the parallelogram</span>
+        <p>
+          Put the first force on positive x. The second contributes \(F_2\cos\theta\) horizontally and
+          \(F_2\sin\theta\) vertically. Square the component sums and use \(\sin^2\theta+\cos^2\theta=1\).
+        </p>
+        \[R^2=(F_1+F_2\cos\theta)^2+(F_2\sin\theta)^2=F_1^2+F_2^2+2F_1F_2\cos\theta.\]
+        <p>
+          The force triangle's interior angle is supplementary to the given angle between forces. This
+          explains the plus sign.
+        </p>
+      </div>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          Do not add force magnitudes unless the forces point along the same ray. Opposite forces subtract.
+          Perpendicular ones combine by Pythagoras.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Parallelogram</span>
+        <p>
+          For 3000 lb and 2000 lb separated by 60°, resolve first: \(R_x=4000\) lb and \(R_y=1732.05\) lb.
+          Then \(R=4358.90\) lb and \(\phi=23.413°\). The answer lies between the force directions, closer to
+          the larger force.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Three directions</span>
+        <p>
+          Take 300 N at 0°, 200 N at 120°, and 150 N at 250°. Signed sums give \(R_x=148.697\) N and
+          \(R_y=32.251\) N. Thus \(R=152.154\) N at \(12.237°\). The negative x component of the third force
+          matters.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          Concurrent forces can be replaced by a single resultant. For separated forces, their moments must
+          also be preserved.
+        </p>
+      </div>
+    </section>
+    <section class="topic" id="s2">
+      <h2><span class="n">2</span>Direction in three dimensions</h2>
+      <p>
+        Coordinates describe geometry before they describe force. From A to B, subtract tail from head:
+        \(\mathbf r_{AB}=\mathbf r_B-\mathbf r_A\). Its length follows from three-dimensional Pythagoras.
+        Dividing by that length gives a vector of magnitude one. \[\hat{\mathbf u}_{AB}=\frac{\mathbf
+        r_{AB}}{\sqrt{(x_B-x_A)^2+(y_B-y_A)^2+(z_B-z_A)^2}},\qquad \mathbf F=F\hat{\mathbf u}_{AB}.\]
+      </p>
+      <p>
+        A cable pulls the attachment at A toward B. At B, the force reverses. The coordinate direction angles
+        are measured from the positive axes, so \(\cos\alpha=F_x/F\), with corresponding expressions for beta
+        and gamma. Squaring and adding gives \(\cos^2\alpha+\cos^2\beta+\cos^2\gamma=1\). This is a check, not
+        another independent equation.
+      </p>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          A negative component gives an obtuse coordinate direction angle. Do not erase that sign or use the
+          angle to the negative axis.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Cartesian angles</span>
+        <p>
+          For \(\mathbf F=(34.3,-22.9,-68.6)\) lb, its length is \(80.0366\) lb. Divide each component by this
+          length, then take inverse cosine: \(\alpha=64.624°\), \(\beta=106.625°\), \(\gamma=148.993°\). Both
+          negative components give obtuse angles.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Cable direction</span>
+        <p>
+          A 700 N cable runs from the origin to (2,3,0) m. Its length is \(\sqrt{13}\) m, so \(\mathbf
+          F=700(2,3,0)/\sqrt{13}=(388.29,582.44,0)\) N. Check the vector magnitude: it returns 700 N.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          A straight, massless cable has one direction. A hanging cable with significant self-weight needs a
+          curved-cable model.
+        </p>
+      </div>
+    </section>
+  </div>
+  <div class="part">
+    <div class="eyebrow">Part II</div>
+    <h2>Use and check the model</h2>
+    <section class="topic" id="s3">
+      <h2><span class="n">3</span>Projection and a lifting bridle</h2>
+      <p>
+        The dot product extracts the part of a force along a chosen direction. For a unit direction
+        \(\hat{\mathbf u}\), the signed scalar component is \(F_\parallel=\mathbf F\cdot\hat{\mathbf u}\). The
+        vector projection is \(F_\parallel\hat{\mathbf u}\). Subtract it from the original force to obtain the
+        perpendicular vector. Since these parts are orthogonal, \(F_\perp=\sqrt{F^2-F_\parallel^2}\).
+      </p>
+      <p>
+        For a symmetric lifting bridle, horizontal sling components cancel. Each vertical component carries
+        half the load. Hence \(2T\sin\theta=W\), where theta is above horizontal. The inward force on each
+        lifting point is \(H=T\cos\theta=(W/2)\cot\theta\). As theta approaches zero, both T and H grow
+        without bound. The pallet weight has not changed; the geometry has.
+      </p>
+      <div class="box why">
+        <span class="tag">Derivation · why the dot product measures a component</span>
+        <p>
+          Rotate coordinates until one axis follows the requested direction. In that basis, only the component
+          parallel to the axis contributes. Rotations preserve the dot product, so the same scalar in the
+          original basis is \(F_xu_x+F_yu_y+F_zu_z\). Writing the force angle as psi gives
+          \(F_\parallel=F\cos\psi\). Squaring the perpendicular difference gives \(|\mathbf
+          F-F_\parallel\hat{\mathbf u}|^2=F^2-F_\parallel^2\), because the unit direction has length one.
+        </p>
+        <p>
+          At 90°, the scalar projection vanishes. At an obtuse angle it is negative. The perpendicular
+          magnitude remains nonnegative in both cases. A projection is not generally a force's Cartesian x
+          component; that happens only when the chosen direction is the x axis.
+        </p>
+      </div>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          A projection onto an unnormalised direction vector is too large by that vector’s length. A signed
+          scalar projection can be negative.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Parallel and perpendicular</span>
+        <p>
+          Project (100,200,0) N onto direction (2,0,0). Normalise to (1,0,0). The signed component is 100 N,
+          the perpendicular magnitude is 200 N, and their angle is \(\tan^{-1}(2)=63.435°\).
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Empty pallet</span>
+        <p>
+          EPAL gives an approximate pallet mass of 25 kg. With \(g=9.81\) m/s², \(W=245.25\) N. At 30° above
+          horizontal, \(T=245.25\) N in each sling and \(H=212.393\) N. Each sling carries the whole weight in
+          tension, although its vertical component carries only half.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          The bridle assumes equal lengths, a centred load, and no lifting acceleration. It does not establish
+          a safe working load.
+        </p>
+      </div>
+    </section>
+    <section class="topic" id="s4">
+      <h2><span class="n">4</span>Formula sheet</h2>
+      <p>
+        Each result is derived above. Draw the free body, state the axis and check the assumptions before
+        using it.
+      </p>
+      <p>
+        \(\mathbf R=\sum\mathbf F\), \(\mathbf F=F\mathbf r/|\mathbf r|\), \(F_\parallel=\mathbf
+        F\cdot\hat{\mathbf u}\), \(T=W/(2\sin\theta)\).
+      </p>
+    </section>
+  </div>
+</main>
+<footer>
+  <p>
+    Textbook: Hibbeler, <i>Engineering Mechanics: Statics</i>, chapters 2. Original Flux prose and diagrams.
+  </p>
+  <p>
+    <b>Another view:</b>
+    <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/pages/lecture-notes/"
+      >2.001 Mechanics and Materials I, Fall 2006, lectures 1</a
+    >. Frames, spatial equilibrium and area geometry supplement that sequence through Hibbeler.
+  </p>
+</footer>

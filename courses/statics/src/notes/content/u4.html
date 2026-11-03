@@ -1,0 +1,324 @@
+<header class="top">
+  <div class="eyebrow">EGN 3311 · Statics · U4</div>
+  <h1>Friction, internal loads and section geometry</h1>
+  <p class="lede">Draw the body. Resolve the forces. Derive the result and check it another way.</p>
+  <div class="legend">
+    <span><i style="background: var(--field)"></i>Worked example</span
+    ><span><i style="background: var(--field-soft)"></i>Derivation</span
+    ><span><i style="background: var(--copper)"></i>Common mistake</span><span>Key idea</span
+    ><span>Model limits</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <a href="#s1"><span>1</span>Static friction, impending motion and tipping</a
+    ><a href="#s2"><span>2</span>Belt friction and the bookcase</a
+    ><a href="#s3"><span>3</span>Cuts, shear and bending moment</a
+    ><a href="#s4"><span>4</span>Centroids, holes and Pappus</a
+    ><a href="#s5"><span>5</span>Area moments of inertia</a><a href="#s6"><span>6</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+  <div class="part">
+    <div class="eyebrow">Part I</div>
+    <h2>Build the model</h2>
+    <section class="topic" id="s1">
+      <h2><span class="n">1</span>Static friction, impending motion and tipping</h2>
+      <p>
+        Dry static friction adjusts to the force needed for equilibrium, subject to \(|F|\le\mu_sN\). Equality
+        holds only at impending slip. First solve equilibrium, then compare the required friction with the
+        limit. If the limit is exceeded, the assumed rest state cannot exist. Kinetic friction uses a
+        different coefficient and does not restore static equilibrium.
+      </p>
+      <p>
+        For a push parallel to an incline, \(N=W\cos\theta\). At impending upward motion, friction points down
+        and \(P_{up}=W(\sin\theta+\mu_s\cos\theta)\). At impending downward motion it points up and
+        \(P_{hold}=\max[0,W(\sin\theta-\mu_s\cos\theta)]\). The interval between the thresholds contains the
+        resting states. Without a push, the limiting slope obeys \(\tan\theta=\mu_s\).
+      </p>
+      <p>
+        A horizontal push on a crate can cause tipping first. At the threshold, the normal resultant reaches
+        the front edge. Moments there give \(P_{tip}h_p=Wb/2\). Compare with \(P_{slip}=\mu_sW\). Whichever is
+        smaller controls. Increasing friction can change the failure mode from sliding to tipping.
+      </p>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          Friction is not always μN. That is a limiting value for static friction, not the force in every
+          resting state.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Incline band</span>
+        <p>
+          For W = 100 lb, theta = 35° and μs = 0.30, the normal is 81.9152 lb. Upward impending motion needs
+          \(P=57.3576+24.5746=81.9322\) lb. To prevent downward slip needs \(P=32.7831\) lb. Between these
+          values the friction adjusts.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Tip before slip</span>
+        <p>
+          A 200 lb crate has b = 2 ft, push height 3 ft and μs = 0.35. Sliding needs 70 lb. Tipping needs
+          \(200(2)/(2\cdot3)=66.6667\) lb. Tipping occurs first, so the assumed all-base contact fails before
+          the friction limit.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          Friction coefficients vary with surfaces and contamination. A rigid flat-base model ignores rocking
+          and floor irregularities.
+        </p>
+      </div>
+    </section>
+    <section class="topic" id="s2">
+      <h2><span class="n">2</span>Belt friction and the bookcase</h2>
+      <p>
+        For a small rope element on a post, radial balance gives \(dN\approx T\,d\theta\). Tangential balance
+        at impending slip gives \(dT=\mu\,dN\). Divide by T and integrate:
+        \(\ln(T_{tight}/T_{slack})=\mu\beta\). Thus \(T_{tight}=T_{slack}e^{\mu\beta}\), with beta in radians.
+        Below impending slip this is an inequality, not an exact force ratio.
+      </p>
+      <p>
+        The bookcase lab uses the depth, not the front-view width, for forward tipping. A narrow footprint
+        gives little restoring moment. Weight must act through the actual centre of gravity; contents can
+        shift it. The model explains why manufacturers require anchoring even when floor friction is large.
+      </p>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          One full wrap is 2π radians. Substituting 360 into an exponential intended for radians gives an
+          absurd answer.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Capstan</span>
+        <p>
+          A 50 lb holding force with μ = 0.30 and half a wrap has \(\beta=\pi\). Therefore
+          \(T_{tight}=50e^{0.3\pi}=128.317\) lb. A full wrap squares the ratio, rather than doubling it.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Tall bookcase</span>
+        <p>
+          The cited bookcase depth is 0.28 m. For assumed W = 400 N, push height 1.5 m and μs = 0.30,
+          \(P_{tip}=400(0.14)/1.5=37.3333\) N, while \(P_{slip}=120\) N. The unanchored model tips first.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          The rope model ignores stretch and nonuniform contact. The bookcase model omits the wall anchor and
+          assumes centred weight.
+        </p>
+      </div>
+    </section>
+  </div>
+  <div class="part">
+    <div class="eyebrow">Part II</div>
+    <h2>Use and check the model</h2>
+    <section class="topic" id="s3">
+      <h2><span class="n">3</span>Cuts, shear and bending moment</h2>
+      <p>
+        Find external reactions before making a cut. Replace the removed part by an axial force N, shear V and
+        bending couple M. Use the course convention: the plotted V is the sum of upward external forces to the
+        left, and positive M is sagging. On the retained left segment, positive internal shear acts downward
+        at the cut and positive internal moment acts counterclockwise.
+      </p>
+      <p>
+        Equilibrium of a short segment with downward load intensity w gives \(dV/dx=-w\). Moment balance gives
+        \(dM/dx=V\). Therefore the area under the load diagram changes shear; the area under shear changes
+        moment. A point force makes a shear jump. An applied couple makes a moment jump. Neither is spread
+        over a finite interval.
+      </p>
+      <p>
+        Under uniform loading, symmetry gives \(A_y=B_y=wL/2\). Cutting at x gives \(V=wL/2-wx\) and
+        \(M=wLx/2-wx^2/2\). The smooth maximum occurs where V vanishes, at L/2, giving \(M_{max}=wL^2/8\). At
+        a point load or applied couple, also check either side of the discontinuity.
+      </p>
+      <h3>Construct a diagram without guessing its shape</h3>
+      <p>
+        Mark every support, point force, distributed-load boundary and applied couple. Work interval by
+        interval. On an unloaded interval, V is constant and M is linear. Under constant downward w, V is
+        linear and M is quadratic. Under a linearly increasing load, V is quadratic and M is cubic. These
+        statements follow by integrating the differential balances, not from memorising sketches.
+      </p>
+      <p>
+        Across a downward point force P, \(V(x^+)-V(x^-)=-P\). For a counterclockwise external couple C, the
+        convention used here gives \(M(x^+)-M(x^-)=-C\). At a free end without an applied tip force or couple,
+        both V and M vanish. A simple support does not always mean zero moment: an overhanging continuous
+        member can carry moment across a support. A true unloaded internal hinge does impose zero transmitted
+        moment.
+      </p>
+      <p>
+        For a cantilever with a tip load P, cut a distance x from its fixed end and retain the free-end side.
+        The moment magnitude is \(P(L-x)\). It grows toward the wall. The wall's reaction couple is
+        counterclockwise, while the internal moment diagram is negative for the downward tip load. External
+        reaction moment and internal bending moment describe different free bodies.
+      </p>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          A load to the right of the cut does not appear on the left-segment free body. Its effect is already
+          present through the support reactions.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Point-load cut</span>
+        <p>
+          A 12 ft span carries 600 lb at x = 4 ft. Reactions are 400 lb and 200 lb. Cut at x = 2 ft, before
+          the load. Thus N = 0, V = 400 lb and \(M=400(2)=800\) lb·ft. Past the point load, V becomes −200 lb.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Uniform-load diagrams</span>
+        <p>
+          On a 10 ft span at 120 lb/ft, each reaction is 600 lb. At x = 3 ft, \(V=600-360=240\) lb and
+          \(M=600(3)-120(3)^2/2=1260\) lb·ft. The peak is 1500 lb·ft at midspan.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          This section computes internal resultants, not stress or deflection. Those require geometry and
+          material properties.
+        </p>
+      </div>
+    </section>
+    <section class="topic" id="s4">
+      <h2><span class="n">4</span>Centroids, holes and Pappus</h2>
+      <p>
+        A centroid preserves the first moment of an area. Imagine a thin uniform plate in gravity. Balancing
+        moments gives \(\bar x A=\int x\,dA\), hence \(\bar x=\int x\,dA/A\), and similarly for y.
+        Partitioning the integral gives \(\bar x=\sum A_i x_i/\sum A_i\). The coordinates x_i belong to each
+        part's centroid in the same global coordinate system.
+      </p>
+      <p>
+        A hole contributes negative area and negative first moment. Removing material on the right moves the
+        remaining centroid left. Do not subtract the hole in the numerator but add it in the denominator. A
+        line centroid uses length, an area centroid uses area, and a volume centroid uses volume.
+      </p>
+      <p>
+        Pappus follows by summing circular travel paths. Rotating a small area dA at distance r sweeps
+        \(dV=2\pi r\,dA\). Integrating gives \(V=2\pi\bar r A\). A generating curve gives surface area
+        \(S=2\pi\bar r L\). The axis must lie in the generating plane and not cross the generating interior;
+        otherwise swept regions can overlap.
+      </p>
+      <div class="box why">
+        <span class="tag">Derivation · two semicircle centroids</span>
+        <p>
+          For the right semicircular area, use polar strips: \(dA=r\,dr\,d\theta\), \(x=r\cos\theta\), with
+          theta from −π/2 to π/2. The first moment is \(\int x\,dA=(a^3/3)\int\cos\theta\,d\theta=2a^3/3\).
+          Divide by \(\pi a^2/2\) to obtain \(\bar r_A=4a/(3\pi)\). For the curved arc, \(ds=a\,d\theta\), so
+          \(\int x\,ds=2a^2\). Divide by arc length πa to obtain \(\bar r_L=2a/\pi\). The different weightings
+          explain why the two centroids differ.
+        </p>
+      </div>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          Do not average part centroid coordinates without area weights. A small web and a broad flange do not
+          contribute equally.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · L-section centroid</span>
+        <p>
+          The base is 6 by 2 in, with centroid (3,1) and area 12 in². The upright is 2 by 4 in above it, with
+          centroid (1,4) and area 8 in². Therefore \(\bar x=(36+8)/20=2.20\) in and \(\bar y=(12+32)/20=2.20\)
+          in.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · Removed hole</span>
+        <p>
+          An 8 by 4 in plate has a radius-1 in hole at (6,2). Its net area is \(32-\pi=28.8584\) in². Thus
+          \(\bar x=(128-6\pi)/(32-\pi)=3.78228\) in. Symmetry keeps \(\bar y=2\) in.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>Geometric centroids coincide with centres of mass only for uniform density and thickness.</p>
+      </div>
+    </section>
+    <section class="topic" id="s5">
+      <h2><span class="n">5</span>Area moments of inertia</h2>
+      <p>
+        The area moment \(I_x=\int y^2\,dA\) measures the spread of area about an axis. It is not a mass
+        moment of inertia. Its units are length to the fourth power. For a rectangle centred on x, integrate
+        horizontal strips: \(I_x=b\int_{-h/2}^{h/2}y^2dy=bh^3/12\). Interchanging b and h gives
+        \(I_y=hb^3/12\).
+      </p>
+      <div class="box why">
+        <span class="tag">Derivation · parallel axes</span>
+        <p>
+          Write the new coordinate as \(y=\eta+d\), where eta starts at the centroid. Expand before
+          integrating.
+        </p>
+        \[I_x=\int(\eta+d)^2dA=\bar I_x+2d\int\eta\,dA+d^2A=\bar I_x+Ad^2.\]
+        <p>
+          The cross term vanishes only because the reference axis is centroidal. A hole subtracts both its own
+          inertia and its transfer term.
+        </p>
+      </div>
+      <p>
+        The polar area moment is \(J_O=\int(x^2+y^2)dA=I_x+I_y\) about perpendicular axes meeting at O. Radius
+        of gyration \(k_x=\sqrt{I_x/A}\) is the distance at which concentrated area would have the same I.
+        Moving material farther from a bending axis increases I without necessarily adding area. This is why
+        I-sections have separated flanges.
+      </p>
+      <div class="box fix">
+        <span class="tag">Common mistake</span>
+        <p>
+          The d in Ad² is the distance between parallel axes, not the distance to the corner of a part. Begin
+          from each part’s centroidal inertia.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · T-section inertia</span>
+        <p>
+          The web is 2 by 8 in; the flange is 6 by 2 in above it. Area is 28 in² and \(\bar y=172/28=6.14286\)
+          in. Add each centroidal inertia and its transfer term to get \(I_x=260.762\) in⁴, then
+          \(k_x=\sqrt{260.762/28}=3.05171\) in.
+        </p>
+      </div>
+      <div class="box ex">
+        <span class="tag">Worked example · I-section subtraction</span>
+        <p>
+          For depth 10 in, flange width 6 in, flange thickness 1 in and web thickness 0.75 in, area is 18 in².
+          The outer rectangle minus the centred empty strips gives \(I_x=6(10)^3/12-(6-0.75)(8)^3/12=276\)
+          in⁴. All terms use the same centroidal axis.
+        </p>
+      </div>
+      <div class="box out">
+        <span class="tag">What the model leaves out</span>
+        <p>
+          Area inertia alone does not determine capacity. Material strength, local buckling and connection
+          details remain outside statics.
+        </p>
+      </div>
+    </section>
+    <section class="topic" id="s6">
+      <h2><span class="n">6</span>Formula sheet</h2>
+      <p>
+        Each result is derived above. Draw the free body, state the axis and check the assumptions before
+        using it.
+      </p>
+      <p>
+        \(|F_s|\le\mu_sN\), \(T_2/T_1\le e^{\mu\beta}\), \(P_{tip}=Wb/(2h_p)\), \(V^{\prime}=-w\),
+        \(M^{\prime}=V\), \(\bar x=\sum A_ix_i/\sum A_i\), \(I=\bar I+Ad^2\), \(k=\sqrt{I/A}\).
+      </p>
+    </section>
+  </div>
+</main>
+<footer>
+  <p>
+    Textbook: Hibbeler, <i>Engineering Mechanics: Statics</i>, chapters 8, 7, 9, 10. Original Flux prose and
+    diagrams.
+  </p>
+  <p>
+    <b>Another view:</b>
+    <a href="https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/pages/lecture-notes/"
+      >2.001 Mechanics and Materials I, Fall 2006, lectures 4–6</a
+    >. Frames, spatial equilibrium and area geometry supplement that sequence through Hibbeler.
+  </p>
+</footer>

@@ -6,7 +6,7 @@ export const EXAMS = [
     title: 'Differentiation',
     chapters: 'Vol 1 Ch 1\u20133',
     date: null,
-    labs: ['limits', 'secant'],
+    labs: ['limits', 'secant', 'focus'],
   },
   {
     id: 'c2',
@@ -14,7 +14,7 @@ export const EXAMS = [
     title: 'Applications of differentiation',
     chapters: 'Vol 1 Ch 4',
     date: null,
-    labs: ['rates', 'box'],
+    labs: ['rates', 'box', 'can'],
   },
   {
     id: 'c3',
@@ -22,7 +22,7 @@ export const EXAMS = [
     title: 'The definite integral and its applications',
     chapters: 'Vol 1 Ch 5\u20136; Vol 2 Ch 2',
     date: null,
-    labs: ['riemann', 'accum', 'solids', 'numint'],
+    labs: ['riemann', 'accum', 'solids', 'numint', 'barrel', 'spheroid'],
   },
   {
     id: 'c4',
@@ -30,7 +30,7 @@ export const EXAMS = [
     title: 'Techniques of integration',
     chapters: 'Vol 2 Ch 2\u20133',
     date: null,
-    labs: ['arc'],
+    labs: ['arc', 'technique', 'bridge'],
   },
   {
     id: 'c5',
@@ -38,7 +38,7 @@ export const EXAMS = [
     title: 'Parametric equations and polar coordinates',
     chapters: 'Vol 2 Ch 7',
     date: null,
-    labs: ['parametric', 'polar'],
+    labs: ['parametric', 'polar', 'record'],
   },
   {
     id: 'c6',
@@ -46,10 +46,18 @@ export const EXAMS = [
     title: 'Exploring the infinite',
     chapters: 'Vol 1 \u00a74.8; Vol 2 Ch 3, 5\u20136',
     date: null,
-    labs: ['improper', 'taylor', 'series'],
+    labs: ['improper', 'taylor', 'series', 'clock'],
   },
 ];
 export const LAB_META = {
+  clock: { id: 'clock', exam: 'c6', title: 'Pendulum clock', app: true },
+  record: { id: 'record', exam: 'c5', title: 'Record player', app: true },
+  technique: { id: 'technique', exam: 'c4', title: 'Integral workbench' },
+  bridge: { id: 'bridge', exam: 'c4', title: 'Bridge cable', app: true },
+  spheroid: { id: 'spheroid', exam: 'c3', title: 'Spheroid slices' },
+  barrel: { id: 'barrel', exam: 'c3', title: 'Rain barrel', app: true },
+  can: { id: 'can', exam: 'c2', title: 'Drink can', app: true },
+  focus: { id: 'focus', exam: 'c1', title: 'Camera focus', app: true },
   limits: {
     id: 'limits',
     exam: 'c1',

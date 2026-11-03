@@ -1,6 +1,9 @@
-import { mountCardAnimation } from './anim/draw.js';
+import { hasAnimation, mountCardAnimation } from './anim/draw.js';
 import { mountBackup } from './backup.js';
+import { mountMap } from './map.js';
 import { latestBuilt, visibleTracks } from './tracks.js';
+
+mountMap();
 
 const root = document.querySelector('#tracks');
 
@@ -54,9 +57,17 @@ for (const track of visibleTracks()) {
     list.append(item);
   }
 
-  card.append(heading, stage, list);
-  root.append(card);
-  mountCardAnimation(card, stage, track.id);
+  // A track with no card animation shows no stage. Before, mounting one threw and stopped the
+  // page before the Progress section mounted.
+  if (hasAnimation(track.id)) {
+    card.append(heading, stage, list);
+    root.append(card);
+    mountCardAnimation(card, stage, track.id);
+  } else {
+    card.dataset.motion = 'still';
+    card.append(heading, list);
+    root.append(card);
+  }
 }
 
 mountBackup();

@@ -444,11 +444,13 @@ export function createPractice(api, bank) {
   // ------------------------------------------------------------------ practice exam
   function startExam() {
     const examId = st.listExam;
-    const tpls = problemsForExam(examId);
+    const spec = bank.assessmentFor?.(examById(examId));
+    const tpls = spec?.templates || problemsForExam(examId);
     const set = pickSet(tpls, progress, { n: Math.min(EXAM_SIZE, tpls.length) });
     const now = Date.now();
     st.exam = {
       examId,
+      label: spec?.label || 'Practice exam',
       items: set.map((t) => ({ id: t.id, seed: 1 + Math.floor(Math.random() * 99999), inputs: {} })),
       i: 0,
       startedAt: now,
@@ -570,11 +572,12 @@ export function createPractice(api, bank) {
     const tpls = orderByChapter(filteredTemplates(exam.id));
 
     const ex = st.exam;
+    const assessment = bank.assessmentFor?.(exam);
     let examBtn;
     if (ex && !ex.done) {
       examBtn = `<button type="button" class="btn accent" data-act="exam-resume">Resume practice exam · ${fmtClock(ex.endsAt - Date.now())} left</button>`;
     } else {
-      examBtn = `<button type="button" class="btn accent" data-act="exam-start">Practice exam · ${Math.min(EXAM_SIZE, all.length)} problems · ${EXAM_MINUTES} min</button>`;
+      examBtn = `<button type="button" class="btn accent" data-act="exam-start">${esc(assessment?.label || 'Practice exam')} · ${Math.min(EXAM_SIZE, (assessment?.templates || all).length)} problems · ${EXAM_MINUTES} min</button>`;
     }
     const lastResults = ex && ex.done && ex.examId === exam.id ? `<button type="button" class="linkish" data-act="exam-results">Last exam results</button>` : '';
 
@@ -612,7 +615,7 @@ export function createPractice(api, bank) {
 
     return `<div class="pb-head">
         <div>
-          <div class="pb-kicker">Practice · ${exam.id === 'wave' ? 'Final exam' : `Exam ${exam.n}`} · Ch ${esc(exam.chapters)}</div>
+          <div class="pb-kicker">Practice · ${esc(bank.practiceLabel?.(exam) || (exam.id === 'wave' ? 'Final exam' : `Exam ${exam.n}`))} · Ch ${esc(exam.chapters)}</div>
           <h2 class="pb-h">${esc(exam.title)}</h2>
         </div>
         <button type="button" class="pb-x" data-act="close" title="Back to the lab (P)" aria-label="Close practice">×</button>
@@ -878,7 +881,7 @@ export function createPractice(api, bank) {
         })
         .join('');
       head = `<div class="pb-head">
-          <div><div class="pb-kicker">Practice exam · ${esc(examById(ex.examId).title)}</div><div class="pb-timer" id="pb-timer">${fmtClock(ex.endsAt - Date.now())}</div></div>
+          <div><div class="pb-kicker">${esc(ex.label || 'Practice exam')} · ${esc(examById(ex.examId).title)}</div><div class="pb-timer" id="pb-timer">${fmtClock(ex.endsAt - Date.now())}</div></div>
           <button type="button" class="btn ghost" data-act="exam-submit">Submit exam</button>
         </div>
         <nav class="pb-examnav" aria-label="Exam problems">${nav}</nav>`;
@@ -957,7 +960,7 @@ export function createPractice(api, bank) {
       })
       .join('');
     return `<div class="pb-head">
-        <div><div class="pb-kicker">Practice exam · ${esc(examById(ex.examId).title)} · ${mins} min</div><h2 class="pb-h">Score ${pct}%</h2></div>
+        <div><div class="pb-kicker">${esc(ex.label || 'Practice exam')} · ${esc(examById(ex.examId).title)} · ${mins} min</div><h2 class="pb-h">Score ${pct}%</h2></div>
         <button type="button" class="pb-x" data-act="close" aria-label="Close practice">×</button>
       </div>
       <div class="pb-meter"><div class="pb-meter-bar"><i style="width:${pct}%"></i></div><div class="pb-meter-text"><span>${right} of ${scored} answer parts right</span><span>Sketch parts aren't scored</span></div></div>

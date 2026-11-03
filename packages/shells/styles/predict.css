@@ -1,0 +1,82 @@
+.predict {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(244, 211, 69, 0.05);
+}
+
+.predict[hidden] {
+  display: none;
+}
+
+.pred-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.pred-head h3 {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--yellow);
+}
+
+.pred-head span,
+.pred-ask,
+.pred-why,
+.pred-q,
+.pred-grade {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.pred-head span {
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.pred-why {
+  color: var(--text-muted);
+}
+
+.pred-grade.ok {
+  color: var(--green);
+}
+
+.pred-grade.bad {
+  color: var(--red);
+}
+
+.pred-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pred-choice {
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.pred-choice.on {
+  color: var(--blue);
+  border-color: var(--blue);
+  background: var(--accent-soft);
+}
+
+.predict .btn {
+  font-size: 13px;
+}
+.predict summary {cursor:pointer; font-weight:600; margin-bottom:10px;}

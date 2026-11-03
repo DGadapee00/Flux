@@ -42,6 +42,9 @@ export function createPractice(api) {
     examById,
     LAB_META,
     homeId,
-    sectionForProblem, fading: true, labDrawer: true,
+    sectionForProblem,
+    fading: true,
+    labDrawer: true,
+    choiceNotes: true,
   });
 }

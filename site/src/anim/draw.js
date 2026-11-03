@@ -452,6 +452,9 @@ function paintThermal(svg) {
  * @param {HTMLElement} host
  * @param {string} trackId
  */
+/** Whether a track has a card animation. A track without one (Projects) shows no stage. */
+export const hasAnimation = (trackId) => Object.hasOwn(PAINT, trackId);
+
 export function mountCardAnimation(card, host, trackId) {
   const frame = mountStage(host, trackId);
   attachMotion(card, { onFrame: frame });

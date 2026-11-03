@@ -358,3 +358,50 @@ for (const [name, makeHUD] of [['engineering', createHUD], ['math', createMathHU
     assert.equal(openNotesFromRoute(null, { examId: 'u1', notes: 's1' }), false);
   });
 }
+
+test('math prediction hook is opt-in and grades with the fixture lab computation', () => {
+  page();
+  const state={scenarioId:'start',n:2,show:{}};
+  const prompt={id:'square',scenario:'start',ask:'Double n. Does its square double?',apply:s=>{s.n*=2;},watch:[{id:'q',label:'square',get:c=>c.q,mode:'factor'}],expect:{q:4},why:'Squaring doubles both factors.'};
+  const lab={id:'diagram',title:'Square',scenarios:[{id:'start',name:'Start'}],predictions:[prompt],controls:()=>'',bind(){},syncControls(){},defaultState:()=>({n:2}),applyScenario(id,s){s.scenarioId=id;},recompute(s,c){c.q=s.n*s.n;},toggles:[],law:()=>[],liveRows:()=>'',readout:()=>'',coach:()=>({}),plot:()=>null};
+  let hud=createMathHUD(api({slice:()=>state,bump(){}}),catalog);
+  hud.mount(lab,catalog.exams[0],state);
+  assert.equal(document.getElementById('predict'),null);
+  page();
+  const hooked={...catalog,predictions:true};
+  hud=createMathHUD(api({slice:()=>state,bump(){hud.update(state,{},lab);}}),hooked);
+  hud.mount(lab,catalog.exams[0],state);
+  const host=document.getElementById('predict');
+  assert.ok(host.textContent.includes('Predict first'));
+  const pick=host.querySelector('[data-value="2"]');
+  host.dispatchEvent({type:'click',target:pick});
+  host.dispatchEvent({type:'click',target:host.querySelector('[data-act="apply"]')});
+  assert.equal(state.n,4);
+  assert.ok(host.textContent.includes('the lab says ×4'));
+  assert.ok(host.querySelector('.pred-grade').textContent.includes('the lab says ×4'));
+  assert.doesNotMatch(host.querySelector('.pred-grade').innerHTML, /<p[ >]/);
+});
+
+test('math scaffold can describe its content gate without claiming practice is ready',()=>{
+  page();
+  const unit={...catalog.exams[0],labs:[],coming:['Future lab']};
+  let hud=createMathHUD(api(),{...catalog,exams:[unit]});
+  hud.mount(null,unit,{examId:unit.id});
+  assert.ok(document.getElementById('lab-controls').textContent.includes('practice problems for this unit are ready'));
+  page();
+  hud=createMathHUD(api(),{...catalog,exams:[unit],unbuiltMessage:'Awaiting spine confirmation.'});
+  hud.mount(null,unit,{examId:unit.id});
+  assert.equal(document.getElementById('lab-controls').textContent,'Awaiting spine confirmation.');
+});
+
+test('math active-tab reveal is opt-in and limited to phone width',()=>{
+ page();const proto=window.Element.prototype,previous=proto.scrollIntoView,calls=[];
+ proto.scrollIntoView=function(options){calls.push([this.dataset.lab,options]);};
+ const lab={id:'diagram',scenarios:[],controls:()=>'',bind(){},toggles:[]};
+ try{
+  window.innerWidth=380;let hud=createMathHUD(api(),catalog);hud.mount(lab,catalog.exams[0],{});assert.equal(calls.length,0);
+  page();window.innerWidth=380;hud=createMathHUD(api(),{...catalog,revealActiveLab:true});hud.mount(lab,catalog.exams[0],{});
+  assert.deepEqual(calls,[['diagram',{block:'nearest',inline:'nearest'}]]);
+  page();window.innerWidth=1280;hud=createMathHUD(api(),{...catalog,revealActiveLab:true});hud.mount(lab,catalog.exams[0],{});assert.equal(calls.length,1);
+ }finally{if(previous)proto.scrollIntoView=previous;else delete proto.scrollIntoView;}
+});

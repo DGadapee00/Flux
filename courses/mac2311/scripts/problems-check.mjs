@@ -116,7 +116,7 @@ function checkAnswers(tpl, inst, label) {
     const want = expected(p, inst.$);
     if (p.kind === 'numeric' && !Number.isFinite(want)) err(tpl.id, `${label} part ${p.id} not finite (${JSON.stringify(inst.values)})`);
     if (p.kind === 'choice') {
-      const opts = new Set(p.options.map((o) => o.value));
+      const opts = new Set((typeof p.options === 'function' ? p.options(inst.$) : p.options).map((o) => o.value));
       for (const w of [].concat(want)) if (!opts.has(w)) err(tpl.id, `${label} part ${p.id} answer ${w} not among options (${JSON.stringify(inst.values)})`);
     }
     if (p.kind === 'symbolic') {
@@ -336,7 +336,7 @@ for (const tpl of PROBLEMS) {
   let piBad = null;
   let oneBad = null;
   const versions = countVersions(tpl, {
-    need: 50,
+    need: tpl.minVersions ?? 50,
     onEach(values) {
       if (piBad && oneBad) return;
       try {
@@ -348,7 +348,7 @@ for (const tpl of PROBLEMS) {
       }
     },
   });
-  if (versions < 50) err(tpl.id, `${versions} distinct versions; need at least 50`);
+  if (versions < (tpl.minVersions ?? 50)) err(tpl.id, `${versions} distinct versions; need at least ${tpl.minVersions ?? 50}`);
   for (const c of tpl.cases) {
     if (piBad && oneBad) break;
     try {

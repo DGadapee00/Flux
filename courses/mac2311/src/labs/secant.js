@@ -6,6 +6,10 @@ import { GraphView } from '../scene/graph.js';
 import { defineLab, planeCamera } from './define.js';
 
 const SCENARIOS = [
+  { id: 'tangent1', name: '(x−1)²+1: a tangent through the origin', graphId: 'tangent1', a: -3, b: 3 },
+  { id: 'tangent2', name: 'x²+4: two symmetric tangents', graphId: 'tangent2', a: -3, b: 3 },
+  { id: 'fall', name: 'Falling height (ft versus seconds)', graphId: 'fall', a: 0, b: 5 },
+  { id: 'mathlet', name: '0.5x³−x: secant direction matters', graphId: 'mathlet', a: -1.5, b: 1.5 },
   { id: 'quad', name: 'x²', graphId: 'quad', a: -2, b: 2 },
   { id: 'line', name: '2x + 1', graphId: 'line', a: -2, b: 2 },
   { id: 'cube', name: 'x³', graphId: 'cube', a: -1.5, b: 1.5 },
@@ -112,7 +116,7 @@ export default defineLab({
     const a = state.a;
     const b = state.b;
     let h = Number.isFinite(state.h) ? state.h : 0.4;
-    h = Math.min(1.2, Math.max(0.05, h));
+    h = (h < 0 ? -1 : 1) * Math.min(2, Math.max(0.01, Math.abs(h)));
     let x0 = Number.isFinite(state.x0) ? state.x0 : 0;
     x0 = Math.max(a, Math.min(b, x0));
     state.h = h;
@@ -155,14 +159,26 @@ export default defineLab({
     view.syncCurve(g.f, state.a, state.b, show.curve !== false);
     view.syncBars([], false);
     const sec = lineEnds(state.x0 + state.h / 2, computed.f0 + computed.msec * (state.h / 2), computed.msec);
-    view.syncLine('secant', sec.x0, sec.y0, sec.x1, sec.y1, show.secant !== false && Number.isFinite(computed.msec));
+    view.syncLine(
+      'secant',
+      sec.x0,
+      sec.y0,
+      sec.x1,
+      sec.y1,
+      show.secant !== false && Number.isFinite(computed.msec),
+    );
     const tan = lineEnds(state.x0, computed.f0, Number.isFinite(computed.fp) ? computed.fp : 0);
-    view.syncLine('tangent', tan.x0, tan.y0, tan.x1, tan.y1, show.tangent !== false && Number.isFinite(computed.fp));
+    view.syncLine(
+      'tangent',
+      tan.x0,
+      tan.y0,
+      tan.x1,
+      tan.y1,
+      show.tangent !== false && Number.isFinite(computed.fp),
+    );
   },
   law() {
-    return [
-      "f'(x_0)=\\lim_{h\\to 0}\\dfrac{f(x_0+h)-f(x_0)}{h}",
-    ];
+    return ["f'(x_0)=\\lim_{h\\to 0}\\dfrac{f(x_0+h)-f(x_0)}{h}"];
   },
   liveRows(state, computed) {
     const fp = Number.isFinite(computed.fp) ? `$${fmt(computed.fp)}$` : 'undefined';
@@ -187,7 +203,7 @@ export default defineLab({
     const body = [
       'The secant uses two points on the graph.',
       'Shrink $h$. That line turns into the tangent.',
-      eq("m_{\\mathrm{sec}}=\\dfrac{f(x_0+h)-f(x_0)}{h}"),
+      eq('m_{\\mathrm{sec}}=\\dfrac{f(x_0+h)-f(x_0)}{h}'),
     ];
     if (computed.g?.id === 'abs' && Math.abs(state.x0) < 0.08) {
       body.push(

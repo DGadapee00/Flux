@@ -183,6 +183,17 @@ class Element extends Node {
     for (const node of nodes) this.appendChild(node);
   }
 
+  before(...nodes) {
+    const parent = this.parentNode;
+    if (!parent) throw new Error('before() needs a parent');
+    for (const node of nodes) {
+      node.remove();
+      const i = parent.childNodes.indexOf(this);
+      node.parentNode = parent;
+      parent.childNodes.splice(i, 0, node);
+    }
+  }
+
   after(...nodes) {
     const parent = this.parentNode;
     if (!parent) throw new Error('after() needs a parent');

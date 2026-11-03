@@ -1,0 +1,28 @@
+export default {
+  id: 'boundary-layer',
+  title: 'Boundary layers',
+  label: ['Boundary layers'],
+  subject: 'fluids',
+  courses: ['eml3015'],
+  eq: String.raw`\frac{\delta}{x} \approx \frac{5.0}{\sqrt{\text{Re}_x}}, \qquad c_f = \frac{0.664}{\sqrt{\text{Re}_x}}\ \text{(laminar)}`,
+  idea: String.raw`At high Reynolds number, viscosity matters only in a thin layer next to a surface, where the no-slip condition drags the flow to rest. Outside it the flow is close to inviscid. Momentum diffuses out from the wall over a distance of about \(\sqrt{\nu x/V}\), so the layer thickens as the square root of distance. Wall friction falls along the plate as the layer thickens. Downstream the layer turns turbulent and grows faster; against a rising pressure it can separate.`,
+  requires: ['navier-stokes', 'dimensional-analysis'],
+  sources: [
+    {
+      title: 'Lienhard, A Heat Transfer Textbook',
+      url: 'https://ahtt.mit.edu',
+      kind: 'Free textbook',
+      level: 'Course level',
+      why: 'Chapter 6 builds the velocity boundary layer before the thermal one, with the Blasius result.',
+    },
+    {
+      title: 'Cleynen, Fluid Dynamics for Engineers',
+      url: 'https://fluidmech.ninja/',
+      kind: 'Open textbook',
+      level: 'Course level',
+      why: 'Laminar and turbulent layers on a plate, transition and separation.',
+    },
+  ],
+  labs: [],
+  candidate: 'Draw velocity profiles along a flat plate with a slider for the free-stream speed. It corrects the idea that the layer grows in step with distance: a laminar layer grows as \\(\\sqrt x\\), and faster flow makes it thinner.',
+};

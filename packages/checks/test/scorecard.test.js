@@ -13,10 +13,10 @@ test('no course is marked yet, so the scorecard passes and prints every course',
 });
 
 test('a course marked standard: true that falls short fails, and names what it misses', () => {
-  // Statics has no application lab. Marking it standard must fail and name that miss.
-  const r = run('--quiet', '--mark', 'statics');
+  // The older Calculus III course has no application lab; the failure gate must still work.
+  const r = run('--quiet', '--mark', 'mac2313');
   assert.equal(r.status, 1);
-  assert.match(r.stderr, /EGN 3311 is marked standard: true but misses .*app labs\/unit 0/);
+  assert.match(r.stderr, /MAC 2313 is marked standard: true but misses .*app labs\/unit 0/);
 });
 
 test('the Markdown table has a header row and one row per course', () => {
@@ -24,5 +24,29 @@ test('the Markdown table has a header row and one row per course', () => {
   assert.equal(r.status, 0, r.stderr);
   const rows = r.stdout.trim().split('\n');
   assert.match(rows[0], /^\| course \| std \|/);
-  assert.equal(rows.length, 2 + 10);
+  assert.equal(rows.length, 2 + 11);
+});
+
+test('Statics meets the measured floor without changing its manifest standard flag', () => {
+  const r = run('--quiet', '--mark', 'statics');
+  assert.equal(r.status, 0, r.stderr);
+});
+
+// The starter is intentionally below the content floor; it can still be measured explicitly.
+
+test('an unlisted starter can be measured explicitly without claiming it passes', () => {
+  const r = run('--course', 'mathstarter', '--units');
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stdout, /MATH STARTER/);
+  assert.doesNotMatch(r.stdout, /PHY 2049/);
+  assert.equal(run('--course', 'mathstarter', '--mark', 'mathstarter').status, 1);
+});
+test('course selection rejects traversal and unknown folders', () => {
+  for (const id of ['../starter', 'nosuchcourse']) assert.notEqual(run('--course', id).status, 0);
+});
+
+test('MAP meets every measured floor while retaining its owner-review flag',()=>{
+ const r=run('--course','map2302','--units');assert.equal(r.status,0,r.stderr);
+ assert.match(r.stdout,/MAP 2302/);assert.match(r.stdout,/u4\s+25/);
+ const gate=run('--course','map2302','--mark','map2302');assert.equal(gate.status,0,gate.stderr);
 });

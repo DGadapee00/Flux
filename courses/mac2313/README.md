@@ -3,7 +3,8 @@
 **This course now lives in the Flux platform repo (DGadapee00/Flux), at `courses/mac2313/`.** Paths
 in this file are relative to that folder, and commands run from it, unless they say "repo root".
 The old repo, flux-mac2313, is frozen and no longer edited. The platform's own rules are in the
-repo root's `AGENTS.md` and `ROADMAP.md`; where they and this file differ about the platform, they win.
+repo root's `AGENTS.md`; where it and this file differ about the platform, it wins. The old
+`ROADMAP.md` is archived in `docs/history/guidance-2026-11-02/`.
 On the hub the route is `#/mac2313/...`. An old hash such as `#/ch2/gradient` redirects.
 
 Interactive 3D labs for Calculus III (Merino, UNF). Units in the top row, labs as tabs, hash URLs so each lab is bookmarkable (`#/mac2313/ch2/gradient`).

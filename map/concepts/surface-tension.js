@@ -1,0 +1,28 @@
+export default {
+  id: 'surface-tension',
+  title: 'Surface tension and capillarity',
+  label: ['Surface tension'],
+  subject: 'fluids',
+  courses: ['eml3015'],
+  eq: String.raw`\Delta p = \sigma\left(\frac1{R_1} + \frac1{R_2}\right), \qquad h = \frac{2\sigma\cos\theta}{\rho g r}`,
+  idea: String.raw`A liquid's surface pulls along itself with a force \(\sigma\) per unit length. A curved surface pulls inward, so the pressure on its concave side is higher, by \(\sigma\) times the curvature. In a thin tube the wetted wall pulls the edge up, and the column rises until its weight balances the pull around the rim. The rim grows as \(r\) and the weight as \(r^2\), so a narrower tube lifts water higher.`,
+  requires: ['pressure', 'particle-equilibrium'],
+  sources: [
+    {
+      title: 'MIT 2.06, Lecture notes: Surface tension',
+      url: 'https://ocw.mit.edu/courses/2-06-fluid-dynamics-spring-2013/resources/mit2_06s13_notes_st/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'The course’s own notes on the pressure jump and capillary rise.',
+    },
+    {
+      title: 'OpenStax College Physics 2e, §11.8 Cohesion and adhesion in liquids',
+      url: 'https://openstax.org/books/college-physics-2e/pages/11-8-cohesion-and-adhesion-in-liquids-surface-tension-and-capillary-action',
+      kind: 'Open textbook',
+      level: 'Intro',
+      why: 'Surface tension, contact angle and capillary action, at a first-course level.',
+    },
+  ],
+  labs: [],
+  candidate: 'Dip glass tubes of several radii in water and mercury. It corrects the idea that a wider tube draws liquid higher: rise goes as \\(1/r\\), and mercury, which does not wet glass, sinks instead.',
+};

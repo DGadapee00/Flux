@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rolling and angular momentum</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">PHY 2048 · Physics I · Unit 7 · OpenStax University Physics Vol. 1, Ch 11, rewritten</div>
+  <h1>Rolling and angular momentum</h1>
+  <p class="lede">A rolling wheel translates and turns together. Angular momentum is what a torque changes. It stays fixed when the outside torque about your point is zero, and the kinetic energy need not stay with it.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+    <span><i style="background:transparent;outline:1px dashed var(--border-hover)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Rolling</h3>
+    <a href="#s1"><span>1</span>Rolling without slipping</a>
+    <a href="#s2"><span>2</span>Rolling with slipping</a>
+    <a href="#s3"><span>3</span>Energy of a rolling body</a>
+    <h3>Part II · Angular momentum</h3>
+    <a href="#s4"><span>4</span>Angular momentum of a particle</a>
+    <a href="#s5"><span>5</span>Angular momentum of a rigid body</a>
+    <h3>Part III · Conservation</h3>
+    <a href="#s6"><span>6</span>Conservation of angular momentum</a>
+    <a href="#s7"><span>7</span>Precession</a>
+    <h3>Reference</h3>
+    <a href="#s8"><span>8</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Rolling</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Rolling without slipping</h2>
+<p>The contact point of a wheel that rolls without slipping is instantaneously at rest on the surface. Relative to the center, that point moves backward at \(R\omega\). Relative to the ground, the center moves forward at \(v\). Those two cancel only when</p>
+\[
+v = R\omega, \qquad a = R\alpha.
+\]
+<p>The distance along the ground equals the arc that rolled across it, \(s = R\theta\). A point at the top of the wheel moves at \(2v\). A point at the bottom moves at zero, for that instant.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Take \(x\) down the plane. The forces on the center are the weight, the normal force, and static friction \(f\) up the plane:</p>
+\[
+mg\sin\theta - f = ma, \qquad N = mg\cos\theta.
+\]
+<p>Friction is the only torque about the center. With \(I\) about that center, and with \(a = R\alpha\),</p>
+\[
+fR = I\alpha = I\frac{a}{R}, \qquad f = \frac{I}{R^2}\,a.
+\]
+<p>Put that friction back into the force equation. The mass and the radius cancel into one number, \(k = I/(mR^2)\):</p>
+\[
+a = \frac{g\sin\theta}{1+k}, \qquad f = \frac{k}{1+k}\,mg\sin\theta.
+\]
+<p>A solid sphere has \(k = 2/5\), a solid cylinder or disk has \(k = 1/2\), and a thin hoop has \(k = 1\). The sphere accelerates most. The hoop accelerates least. Doubling the radius does not change \(k\), so it does not change \(a\).</p>
+<p>Static friction has a ceiling, \(f \le \mu_s N\). The wheel keeps rolling only when</p>
+\[
+\mu_s \ge \frac{k}{1+k}\tan\theta.
+\]
+<p>For a solid cylinder, \(k = 1/2\), so \(a = \tfrac23 g\sin\theta\) and \(\mu_s \ge \tfrac13\tan\theta\). For a hoop, \(\mu_s \ge \tfrac12\tan\theta\). The coefficient is a requirement, not the value of the force. Below the limit, \(f\) is the smaller number the equations already gave.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Without slipping, the shape sets the pace. Mass and radius drop out. Friction is whatever enforces \(v = R\omega\), and it equals \(\mu N\) only on the verge of slipping.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a solid cylinder on a 30 degree hill</span>
+<p>A solid cylinder rolls from rest, without slipping, down a \(30^\circ\) incline. It travels \(1.50\ \text{m}\) along the plane. Take \(g = 9.81\ \text{m/s}^2\). Then \(k = 1/2\) and</p>
+\[
+a = \frac{9.81\sin 30^\circ}{1 + 1/2} = \frac{9.81}{3} = 3.270\ \text{m/s}^2.
+\]
+<p>The friction that produces this acceleration is</p>
+\[
+f = \frac{1/2}{3/2}\,mg\sin 30^\circ = \frac13 mg\sin 30^\circ.
+\]
+<p>For a \(2.00\ \text{kg}\) cylinder that force is \(3.270\ \text{N}\). It matches the acceleration in number only because the mass is \(2\ \text{kg}\). They are different quantities. The hill must supply</p>
+\[
+\mu_s \ge \frac13\tan 30^\circ = 0.1925.
+\]
+<p>The height after \(1.50\ \text{m}\) is \(0.750\ \text{m}\). Energy, checked below, gives the speed of the center:</p>
+\[
+v = \sqrt{\frac{2gh}{1+k}} = \sqrt{9.81} = 3.132\ \text{m/s}.
+\]
+<p>The book leaves the angle free. It prints \(a = \tfrac23 g\sin\theta\) and \(\mu_s \ge \tfrac13\tan\theta\). The \(1.50\ \text{m}\) and the speed are ours, so the lab has a distance to roll.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(a = g\sin\theta\), as if the wheel did not have to spin. Setting the friction equal to \(\mu_s N\) when the wheel is not on the verge. Putting the radius into the acceleration after \(k\) has already cancelled it. Using \(v = \omega R\) as a force, rather than as the link between the two motions.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The wheel is rigid, the hill is a straight line, and the contact is a point. A tire flattens, so a patch of tread is at rest, not a point. Rolling resistance is a second friction, from that deformation, and it does take energy. This model sets that resistance to zero. Static friction then does no work, because its point of application does not move along the surface.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Rolling with slipping</h2>
+<p>If the contact slides, \(v\) and \(\omega R\) are no longer equal. Static friction is gone. Kinetic friction has a known size,</p>
+\[
+f_k = \mu_k N = \mu_k mg\cos\theta,
+\]
+<p>and it still points up the plane when the contact is sliding down. The center then obeys the sliding-block rule. The torque about the center is a separate equation:</p>
+\[
+a = g(\sin\theta - \mu_k\cos\theta), \qquad \alpha = \frac{f_k R}{I}.
+\]
+<p>For a solid cylinder, \(I = \tfrac12 mR^2\), so \(\alpha = 2\mu_k g\cos\theta / R\). The mass cancels. The radius does not. A larger cylinder gains spin more slowly under the same friction.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>While the wheel slips, friction is \(\mu_k N\) and \(\alpha\) is not \(a/R\). The no-slip link comes back only after the speeds have matched, if they do.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a solid cylinder that slips</span>
+<p>A solid cylinder of radius \(0.200\ \text{m}\) slips down a \(30^\circ\) hill with \(\mu_k = 0.10\). Take \(g = 9.81\ \text{m/s}^2\).</p>
+\[
+a = 9.81\,(\sin 30^\circ - 0.10\cos 30^\circ) = 4.055\ \text{m/s}^2.
+\]
+\[
+\alpha = \frac{2(0.10)(9.81)\cos 30^\circ}{0.200} = 8.496\ \text{rad/s}^2.
+\]
+<p>The book leaves \(\theta\) and \(\mu_k\) free and prints those two formulas for a solid cylinder. The no-slip acceleration on this same hill was \(3.270\ \text{m/s}^2\). Slipping lets the center run ahead, because kinetic friction is smaller here than the static friction rolling would have asked for. The spin lags. \(v\) is not \(\omega R\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Setting \(\alpha = a/R\) while the contact is still slipping. Using the static minimum \(\mu_s\) as if it were the kinetic coefficient. Forgetting that \(a\) itself no longer depends on the shape. The shape still sets \(\alpha\), through \(I\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>\(\mu_k\) is taken as one constant for the whole slide. A real contact depends on speed, on temperature, and on how long the surfaces have been sliding. The model also assumes the body is slipping for the whole trip. It does not find the place where \(v\) and \(\omega R\) meet and slipping stops. After that point the static story of the previous section takes over, if \(\mu_s\) is large enough to hold.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Energy of a rolling body</h2>
+<p>Static friction does no work on a wheel that is not slipping, because the contact point is at rest. Mechanical energy is then conserved. From rest, a drop \(h\) gives</p>
+\[
+mgh = \tfrac12 mv^2 + \tfrac12 I\omega^2.
+\]
+<p>Put \(\omega = v/R\) and \(k = I/(mR^2)\):</p>
+\[
+v = \sqrt{\frac{2gh}{1+k}}.
+\]
+<p>The rotational share of the kinetic energy is \(k/(1+k)\). A hoop has \(k = 1\), so \(v = \sqrt{gh}\) and the energy splits in half. A slide with no friction has \(k = 0\) and \(v = \sqrt{2gh}\). The slide is faster because nothing is stored in the spin. The slope changes the time, not this speed, as long as the wheel never slips.</p>
+<div class="box ex"><span class="tag">Worked example · a rover wheel on Mars</span>
+<p>One wheel from the Curiosity rover is modeled as a thin hoop. The radius is \(0.25\ \text{m}\), the mass is \(5\ \text{kg}\), and the wheel drops \(25.0\ \text{m}\) from rest without slipping. On Mars, \(g = 3.71\ \text{m/s}^2\). Then \(k = 1\) and the mass cancels:</p>
+\[
+v = \sqrt{gh} = \sqrt{(3.71)(25.0)} = 9.631\ \text{m/s}.
+\]
+<p>Translation and rotation each hold \(231.9\ \text{J}\). The book prints \(9.63\ \text{m/s}\). A solid disk on the same drop would have \(k = 1/2\) and \(v = \sqrt{4gh/3} = 11.12\ \text{m/s}\). A frictionless slide would reach \(\sqrt{2gh} = 13.62\ \text{m/s}\). That slide is a comparison. The example itself is the hoop.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(\sqrt{2gh}\) for a rolling hoop. That is the slide. The hoop is \(\sqrt{gh}\), because half the kinetic energy is in the spin. Keeping the mass in the speed, as if a heavier hoop of the same shape arrived faster. It does not. Using \(v = \omega R\) to invent a spin after you have already assumed a slide.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real rover wheel is not a thin hoop, and the basin is not a straight ramp. The tire sinks, and the sand drags. Air on Mars is thin, so the missing drag is small beside that. The \(25\ \text{cm}\), \(5\ \text{kg}\), \(25\ \text{m}\), and \(3.71\ \text{m/s}^2\) are the book’s figures for this example. The no-friction slide is ours, so you can see what the spin costs.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Angular momentum</h2>
+</div>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Angular momentum of a particle</h2>
+<p>Pick an origin first. The angular momentum of a particle about that origin is</p>
+\[
+\vec L = \vec r \times \vec p = m\,\vec r \times \vec v.
+\]
+<p>In the plane, the only component is</p>
+\[
+L_z = m(xv_y - yv_x) = m\,v\,b,
+\]
+<p>where \(b\) is the miss distance, the perpendicular distance from the origin to the line of motion. If the velocity points straight away from the origin, \(b = 0\) and \(L = 0\). Move the origin off that line and the same particle has a nonzero \(L\). The particle did not change. The reference point did.</p>
+<p>The torque about the same origin is the rate of change of this \(L\):</p>
+\[
+\vec\tau = \vec r \times \vec F = \frac{d\vec L}{dt}.
+\]
+<p>With a constant acceleration and a position you are holding fixed for the instant,</p>
+\[
+\tau_z = m(xa_y - ya_x).
+\]
+<p>If no force acts, \(L\) is constant. The area the position vector sweeps then grows at a steady rate,</p>
+\[
+\frac{dA}{dt} = \frac{L}{2m}.
+\]
+<p>A central force has the same result, because its torque about the center is zero. Equal areas in equal times is that statement, for one particle.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Name the origin before you report \(L\). The size is \(mvr\sin\phi\), and \(\phi\) is the angle between \(\vec r\) and \(\vec v\). A parallel pair gives zero.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a meteor above an observer</span>
+<p>An observer sees a \(15.0\ \text{kg}\) meteor at \(25\ \text{km}\) east and \(25\ \text{km}\) north. At that instant the velocity is \(2.0\ \text{km/s}\) straight down, and the acceleration is \(2.0\ \text{m/s}^2\) in the same direction. Positive \(z\) is out of the page. Convert the position and the velocity to meters:</p>
+\[
+L_z = (15.0)(2.50\times 10^4)(-2.0\times 10^3) = -7.50\times 10^8\ \text{kg·m}^2\text{/s}.
+\]
+\[
+\tau_z = (15.0)(2.50\times 10^4)(-2.0) = -7.50\times 10^5\ \text{N·m}.
+\]
+<p>Both point into the page. The north-south coordinate never enters, because it is parallel to the velocity and to the force. The lever arm is the \(25\ \text{km}\) to the east. The book prints those two magnitudes in the \(-\hat k\) direction. It holds the \(25\ \text{km}\) position fixed while it differentiates \(L\). The full distance from the observer is \(35.4\ \text{km}\), and using that as if it were perpendicular overstates both answers by \(\sqrt{2}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Writing \(L = mvr\) with the full distance when \(\vec r\) and \(\vec v\) are not perpendicular. Reporting the torque as if it were the angular momentum. Here one carries a velocity and the other an acceleration, and they differ by a factor of a thousand. Leaving the kilometers in the formula as if they were meters.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The meteor is not a point, and it is already burning up. Holding \(\vec r\) fixed while \(L\) changes drops the piece of \(d\vec L/dt\) that comes from a moving position. Over a short look that piece is small beside the \(2.0\ \text{m/s}^2\). The straight-down path is the book’s idealization of one instant, not the whole trail.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Angular momentum of a rigid body</h2>
+<p>For a rigid body spinning at \(\omega\) about a fixed axis, every particle’s contribution adds up to</p>
+\[
+L = I\omega,
+\]
+<p>along the axis, by the right-hand rule. \(I\) is the moment about that same axis. The torque about the axis is still the rate of change,</p>
+\[
+\tau = \frac{dL}{dt} = I\alpha,
+\]
+<p>when \(I\) is constant. This is Newton’s second law for rotation, read as a statement about \(L\). A system of particles uses the same rule as a sum. Each particle has its own \(\vec r \times \vec p\), and the total \(L\) changes at the rate of the total outside torque. An inside pair of forces cancels in that total when the forces are equal and opposite along the line that joins the particles.</p>
+<div class="box ex"><span class="tag">Worked example · a robot arm and its forceps</span>
+<p>A robot arm is a uniform rod of mass \(2.0\ \text{kg}\) and length \(1.0\ \text{m}\), pivoted at one end. Forceps of mass \(1.0\ \text{kg}\) sit at the free end, modeled as a point. The arm starts at rest and reaches \(0.1\pi\ \text{rad/s}\) in \(0.1\ \text{s}\). A \(1.5\ \text{kg}\) rock, also a point, may then sit in the forceps. The empty moment is</p>
+\[
+I = \tfrac13(2.0)(1.0)^2 + (1.0)(1.0)^2 = \tfrac53 = 1.667\ \text{kg·m}^2.
+\]
+\[
+L = \left(\tfrac53\right)(0.1\pi) = \frac{\pi}{6} = 0.5236\ \text{kg·m}^2\text{/s}.
+\]
+<p>With the rock, \(I = 19/6 = 3.167\ \text{kg·m}^2\) and \(L = 19\pi/60 = 0.9948\ \text{kg·m}^2\text{/s}\). The spin-up of the empty arm has \(\alpha = \pi\ \text{rad/s}^2\), so</p>
+\[
+\tau = \left(\tfrac53\right)\pi = 5.236\ \text{N·m}.
+\]
+<p>The book prints \(0.17\pi\), \(0.32\pi\), and \(1.67\pi\), from rounding \(5/3\) to \(1.67\) and \(19/6\) to \(3.17\). The with-rock vector in the book points into the page, because that motion is the other way. These magnitudes do not include that sign. The lab draws the empty arm, so it shows \(\pi/6\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · three particles about one origin</span>
+<p>Three particles move in the \(xy\) plane. Their positions, momenta, and forces are the set in the practice problem: \((-2, 1)\ \text{m}\) with momentum \(8\ \text{kg·m/s}\) up and a \(6\ \text{N}\) force to the left; \((4, 1)\ \text{m}\) with momentum \(20\ \text{kg·m/s}\) to the right and a \(10\ \text{N}\) force up; \((2, -2)\ \text{m}\) with momentum \(3\ \text{kg·m/s}\) to the right and an \(8\ \text{N}\) force down. The angular momenta about the origin are \(-16\), \(-20\), and \(+6\), so</p>
+\[
+L_z = -30\ \text{kg·m}^2\text{/s}.
+\]
+<p>The torques are \(+6\), \(+40\), and \(-16\), so</p>
+\[
+\tau_z = +30\ \text{N·m}.
+\]
+<p>The book prints both. The torque is the rate of change of \(L\). It is not \(L\). They happen to have the same size here and opposite signs. There is no lab for this set. The three particles do not share one rigid spinner.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(mL^2/12\) for an arm that turns about its end. That is the center. The end is \(mL^2/3\). Treating the rock as a small sphere about its own center and forgetting the meter out to the forceps. Calling the torque equal to \(L\). During the spin-up the torque is \(I\alpha\). After it, \(L\) is \(I\omega\).</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The arm is a rigid rod, and the forceps and the rock are points. A real arm has joints, and a rock has a size of its own. The example also keeps the same \(\omega\) with the rock and without it. Picking the rock up is a collision, and that collision is not in the calculation. The three-particle forces are given, not derived from a contact you can see.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Conservation</h2>
+</div>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Conservation of angular momentum</h2>
+<p>If the net outside torque about a point is zero, \(L\) about that point does not change:</p>
+\[
+I_1\omega_1 = I_2\omega_2.
+\]
+<p>Inside forces can still do work. Kinetic energy is a separate question. With \(L\) fixed,</p>
+\[
+K = \frac{L^2}{2I}.
+\]
+<p>Shrink \(I\) and \(K\) rises. The rise is the work done pulling the mass inward. Grow \(I\) by coupling a second body that starts at rest, and \(K\) falls. The fall is the work against the friction that matched the two spins. Conserving \(L\) does not say which way \(K\) goes.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Two flywheels end at one \(\omega\). The second starts at rest and has moment \(f\) times the first. No outside torque acts, so</p>
+\[
+I_0\omega_0 = (1+f)I_0\,\omega, \qquad \omega = \frac{\omega_0}{1+f}.
+\]
+<p>The kinetic energy that remains is</p>
+\[
+\frac{K}{K_0} = \frac{\tfrac12(1+f)I_0\omega^2}{\tfrac12 I_0\omega_0^2} = \frac{1}{1+f}.
+\]
+<p>The lost fraction is \(f/(1+f)\). For \(f = 3\), three quarters of the kinetic energy leaves, and one quarter stays.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two flywheels brought to one spin</span>
+<p>A flywheel spins at \(600\ \text{rev/min}\) on a frictionless shaft. A second flywheel, at rest, has three times that moment and drops onto the first. Friction between the faces brings them to one spin.</p>
+\[
+\omega_0 = 600\cdot\frac{2\pi}{60} = 20\pi\ \text{rad/s}, \qquad \omega = \frac{20\pi}{4} = 5\pi = 15.71\ \text{rad/s}.
+\]
+<p>That is \(150\ \text{rev/min}\). The remaining kinetic energy is one quarter, so the lost fraction is \(3/4\). The book prints \(15.7\ \text{rad/s}\) and the three-quarter loss. The lab uses \(I_0 = 1\ \text{kg·m}^2\) as a unit moment. The example never needed the size, because it cancels.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a gymnast who tucks</span>
+<p>An \(80.0\ \text{kg}\) gymnast is modeled as a uniform rod about his center. Extended, the rod is \(1.8\ \text{m}\) long and turning at \(1.0\ \text{rev/s}\). In the tuck it is \(0.9\ \text{m}\) long. The moments are \(mL^2/12\):</p>
+\[
+I_0 = 21.6\ \text{kg·m}^2, \qquad I = 5.4\ \text{kg·m}^2, \qquad \omega = 4.0\ \text{rev/s}.
+\]
+<p>The lab shows that spin as \(25.13\ \text{rad/s}\). He leaves the bar horizontally, with his center \(3.0\ \text{m}\) up, and he opens at \(1.8\ \text{m}\). The drop is \(1.2\ \text{m}\). With the book’s \(g = 9.8\ \text{m/s}^2\),</p>
+\[
+t = \sqrt{\frac{2(1.2)}{9.8}} = 0.4949\ \text{s}.
+\]
+<p>At \(4.0\ \text{rev/s}\) he turns \(1.979\) revolutions in that time.</p>
+<p>The book prints \(0.5\ \text{s}\) and two revolutions. That is this drop with the time rounded to \(0.5\ \text{s}\) before the multiply. The moment is about the center, not about the bar.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a bullet in the rim of a disk</span>
+<p>A bullet of mass \(2.0\ \text{g}\) and speed \(500.0\ \text{m/s}\) embeds in the rim of a solid disk. The disk has mass \(3.2\ \text{kg}\) and radius \(0.50\ \text{m}\), and it is free about its center. It starts at rest. The pivot’s reaction has no torque about the axis, so \(L\) about that axis is conserved. Before the hit only the bullet contributes:</p>
+\[
+L = mvR = (0.0020)(500.0)(0.50) = 0.500\ \text{kg·m}^2\text{/s}.
+\]
+<p>Afterward the moment is \(\tfrac12 MR^2 + mR^2\), and</p>
+\[
+\omega = \frac{mv}{(m + M/2)R} = \frac{1}{0.801} = 1.248\ \text{rad/s}.
+\]
+<p>The book prints \(1.2\ \text{rad/s}\). The inputs give \(1.248\), and \(1.2\) sits outside the tolerance this course grades with, so the practice key is \(1.248\). Kinetic energy is not conserved. The embedding is inelastic. There is no lab for this collision. The disk and the bullet are not the two flywheels.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Deciding that kinetic energy is conserved because angular momentum is. On the stool, pulling in raises \(K\). On the flywheels, the coupling lowers \(K\). Using \(mL^2/3\), a rod about its end, for the gymnast. The book’s model is a rod about his center. Dividing the flywheel spin by \(3\) instead of by \(4\), and forgetting the wheel that was already turning. Treating the bullet’s \(\omega\) as \(v/R\), which would be true only if the rim kept the bullet’s speed.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The flywheels match their spins in no time, and the shaft has no friction of its own. A real coupling takes a finite time, and the bearings are not perfectly free. The gymnast is a rod about his center. The force from the bar, the work of the tuck, and the air are left out, and he is taken to leave horizontally. The bullet stays at the rim and the disk is rigid. A real impact deforms both.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Precession</h2>
+<p>A spinning disk whose center is a distance \(d\) from a pivot does not fall over. Gravity pulls on the center and produces a torque about the pivot. The pivot’s own force has no lever arm about the pivot, so it contributes nothing. The torque is horizontal and perpendicular to the spin angular momentum \(\vec L\). It does not change the size of \(L\). It changes the direction.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>In a short time \(dt\) the tip of \(\vec L\) moves by \(dL = \tau\,dt\). That tip travels a circle of radius \(L\sin\theta\), where \(\theta\) is the angle between the shaft and the vertical. The angle \(d\phi\) around the vertical satisfies \(L\sin\theta\,d\phi = dL\). For a horizontal shaft, \(\sin\theta = 1\) and \(\tau = mgd\), so</p>
+\[
+\Omega = \frac{d\phi}{dt} = \frac{mgd}{L} = \frac{mgd}{I\omega}.
+\]
+<p>A faster spin is a larger \(L\), and the same torque turns it more slowly. The period of one precession is \(2\pi/\Omega\). The derivation assumes \(\Omega\) is much smaller than the spin, so the extra angular momentum from the precession itself can be left out. That extra piece is the start of nutation, the small bob of the shaft.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a disk precessing on a pivot</span>
+<p>A solid disk has mass \(0.30\ \text{kg}\) and radius \(5.0\ \text{cm}\). It spins at \(20\ \text{rev/s}\). Its center is \(5.0\ \text{cm}\) from the pivot, and the shaft is horizontal. The book uses \(g = 9.8\ \text{m/s}^2\).</p>
+\[
+I = \tfrac12(0.30)(0.050)^2 = 3.75\times 10^{-4}\ \text{kg·m}^2.
+\]
+\[
+\omega = 20\cdot 2\pi = 125.66\ \text{rad/s}.
+\]
+\[
+\Omega = \frac{(0.30)(9.8)(0.050)}{(3.75\times 10^{-4})(125.66)} = 3.119\ \text{rad/s}.
+\]
+<p>One turn of the precession takes \(T = 2\pi/\Omega = 2.015\ \text{s}\). The book prints \(3.12\ \text{rad/s}\) and \(2.0\ \text{s}\), using \(\omega = 125.66\ \text{rad/s}\). Doubling the spin halves \(\Omega\). Doubling the mass does nothing, because \(I\) and the torque both double. Doubling the pivot distance doubles \(\Omega\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting a faster spin to precess faster. \(\Omega\) goes as \(1/\omega\). Reporting the period as \(1/\Omega\) instead of \(2\pi/\Omega\). Using \(I = mR^2\) for a solid disk. Including the pivot’s push as a torque about the pivot. That force acts at the pivot, so its lever arm is zero.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Steady precession assumes the spin is much faster than the precession, so nutation is left out. Friction at the tip is left out, and it would slowly drain the spin. The disk is a rigid cylinder on a massless shaft, and \(g\) is constant. A slow rotor does not obey the formula. It nods and falls.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Formula sheet</h2>
+\[
+v = R\omega, \qquad a = R\alpha, \qquad k = \frac{I}{mR^2}
+\]
+\[
+a = \frac{g\sin\theta}{1+k}, \qquad f = \frac{k}{1+k}\,mg\sin\theta, \qquad \mu_s \ge \frac{k}{1+k}\tan\theta
+\]
+\[
+\text{sphere } k = \tfrac25, \quad \text{disk } k = \tfrac12, \quad \text{hoop } k = 1
+\]
+\[
+a = g(\sin\theta - \mu_k\cos\theta), \qquad \alpha = \frac{\mu_k mg\cos\theta\, R}{I}
+\]
+\[
+v = \sqrt{\frac{2gh}{1+k}}, \qquad \frac{K_{\text{rot}}}{K} = \frac{k}{1+k}
+\]
+\[
+L_z = m(xv_y - yv_x), \qquad \tau_z = m(xa_y - ya_x), \qquad \frac{dA}{dt} = \frac{L}{2m}
+\]
+\[
+L = I\omega, \qquad \tau = \frac{dL}{dt} = I\alpha
+\]
+\[
+I_1\omega_1 = I_2\omega_2, \qquad K = \frac{L^2}{2I}
+\]
+\[
+\text{rod about its end } \tfrac13 mL^2, \quad \text{rod about its center } \tfrac{1}{12}mL^2, \quad \text{point mass } m r^2
+\]
+\[
+\Omega = \frac{mgd}{I\omega}, \qquad T = \frac{2\pi}{\Omega}
+\]
+</section>
+
+</main>
+</body>
+</html>

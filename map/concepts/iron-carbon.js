@@ -1,0 +1,28 @@
+export default {
+  id: 'iron-carbon',
+  title: 'The iron–carbon diagram and heat treatment',
+  label: ['Iron–carbon,', 'heat treatment'],
+  subject: 'matsci',
+  courses: ['ema3010'],
+  eq: String.raw`\gamma\,(0.76\ \text{wt\% C}) \xrightarrow{727\,^\circ\text{C}} \alpha\,(0.022\ \text{wt\% C}) + \text{Fe}_3\text{C}\,(6.7\ \text{wt\% C})`,
+  idea: String.raw`Austenite dissolves far more carbon than ferrite, so cooling steel through 727 °C forces the carbon out. Cooled slowly, carbon has time to diffuse into layers of cementite, and the steel becomes pearlite. Quenched fast, carbon has no time to move, and the iron shears into martensite, hard and brittle; tempering lets some carbon out to buy back toughness. How fast a point inside a part cools is set by heat conduction, so a thick bar hardens near its surface and stays softer in its core.`,
+  requires: ['phase-diagrams', 'diffusion', 'heat-equation'],
+  sources: [
+    {
+      title: 'DoITPoMS, The Jominy end quench test (University of Cambridge)',
+      url: 'https://www.doitpoms.ac.uk/tlplib/jominy/index.php',
+      kind: 'Teaching package',
+      level: 'Course level',
+      why: 'Cooling rate against hardness along one bar, the link between conduction and microstructure.',
+    },
+    {
+      title: 'Martensite (Wikipedia)',
+      url: 'https://en.wikipedia.org/wiki/Martensite',
+      kind: 'Reference article',
+      level: 'Intro',
+      why: 'Why a diffusionless transformation is hard, and what tempering does.',
+    },
+  ],
+  labs: [],
+  candidate: 'Quench a steel bar from one end and read the cooling rate and microstructure along it. It corrects the idea that quenching hardens the whole part equally.',
+};

@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Static equilibrium and elasticity</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">PHY 2048 · Physics I · Unit 8 · OpenStax University Physics Vol. 1, Ch 12, rewritten</div>
+  <h1>Static equilibrium and elasticity</h1>
+  <p class="lede">A rigid body at rest has no net force and no net torque. Where you take the torque is a choice, and a good choice drops an unknown. Stress is the force per area. Strain is the fractional change in shape. Below the yield they stay in proportion. Past it, the body keeps a set when the load comes off.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+    <span><i style="background:transparent;outline:1px dashed var(--border-hover)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Equilibrium</h3>
+    <a href="#s1"><span>1</span>Conditions for equilibrium</a>
+    <a href="#s2"><span>2</span>Beams and scaffolds</a>
+    <a href="#s3"><span>3</span>Ladders, cables, and hinges</a>
+    <h3>Part II · Elasticity</h3>
+    <a href="#s4"><span>4</span>Stress and strain</a>
+    <a href="#s5"><span>5</span>Elasticity and plasticity</a>
+    <h3>Reference</h3>
+    <a href="#s6"><span>6</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Equilibrium</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Conditions for equilibrium</h2>
+<p>A body in static equilibrium is not translating and not rotating. Both statements are about the net, not about every force being zero. The first condition is Newton’s first law for the center of mass:</p>
+\[
+\sum F_x = 0, \qquad \sum F_y = 0.
+\]
+<p>The second is that the net torque is zero. In a plane, one component is enough:</p>
+\[
+\sum \tau = 0.
+\]
+<p>Torque is a force times a lever arm. The lever arm is the perpendicular distance from the line of the force to the point you chose. A force that passes through that point has lever arm zero, so it drops out of the torque equation. That is why the point is worth choosing. It does not change the physics. It changes which unknown you have to carry.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Put a car on level ground. The wheelbase is \(d\). A fraction \(s\) of the weight sits on the front axle, so the rear axle carries \(1 - s\). Take torques about the rear axle. The rear force has no arm. The weight \(W\) acts at the center of mass, a distance \(x\) ahead of the rear axle, and the front axle is a distance \(d\) ahead:</p>
+\[
+W x = (sW)\, d.
+\]
+<p>The weight cancels. The center sits at</p>
+\[
+x = s\, d.
+\]
+<p>Now let the car brake, slowing at \(a\), with the center a height \(h\) above the ground. In the car’s frame a forward inertial force \(Wa/g\) acts at the center. Its lever arm about the rear contact is \(h\). The front axle picks up an extra force \(\Delta N\), and the rear gives up the same amount, because the vertical forces still sum to \(W\):</p>
+\[
+\Delta N = \frac{W a h}{g d}.
+\]
+<p>The front axle then carries \(sW + \Delta N\), and the rear carries \((1-s)W - \Delta N\). The center of mass does not move. The axle forces do. Doubling \(a\) doubles the shift. Doubling the wheelbase halves it. At rest, \(\Delta N = 0\), and the split is the share you started with.</p>
+<p>The same two equations written about the front axle give the rear force first. The arithmetic must land on the same pair. If it does not, a sign in the lever arm is wrong.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Two conditions, force and torque. Choose the torque point so that an unknown you do not want has lever arm zero. The weight cancels when you are locating a center, and it stays when you are finding a force.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · car on level ground</span>
+<p>A car has a wheelbase of \(2.5\ \text{m}\). At rest, \(52\%\) of its weight is on the front axle. The center of mass is</p>
+\[
+x = 0.52 \times 2.5 = 1.30\ \text{m}
+\]
+<p>ahead of the rear axle. The book’s example stops there, because the weight cancels. The lab draws a car of weight \(12\,000\ \text{N}\), so the axles have forces to show. At rest the front axle carries</p>
+\[
+0.52 \times 12\,000 = 6240\ \text{N},
+\]
+<p>and the rear carries \(5760\ \text{N}\). The \(0.55\ \text{m}\) height on the lab is not in the example. It is there so a brake application can shift load. At \(2.5\ \text{m/s}^2\), with \(g = 9.81\ \text{m/s}^2\),</p>
+\[
+\Delta N = \frac{(12\,000)(2.5)(0.55)}{(9.81)(2.5)} = 672.8\ \text{N}.
+\]
+<p>The front axle rises to \(6913\ \text{N}\) and the rear falls to \(5087\ \text{N}\). The center is still \(1.30\ \text{m}\) ahead of the rear axle.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking a moment about a point and still including a force that acts at that point. Its lever arm is zero. Treating the front share as a distance in meters. It is a fraction, and the distance is that fraction times the wheelbase. Adding the braking shift to both axles, or subtracting it from the front. Braking loads the front and unloads the rear.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The two conditions say the body is not accelerating. They do not say it is strong enough. A real stop pitches the body on its springs, and the two wheels of one axle are not a single force. The book’s car gives the \(2.5\ \text{m}\) wheelbase and the \(52\%\) share. The height, the braking rate, and the \(12\,000\ \text{N}\) weight are ours. The weight cancels in the location of the center, so that location does not depend on them.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Beams and scaffolds</h2>
+<p>A horizontal board on two supports is the same pair of equations. The supports are vertical. There is no horizontal force to solve, so the force equation is one line: the two supports sum to the total weight. The torque equation splits that total.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Let the board have length \(L\) and weight \(W\), acting at the middle. A person of weight \(P\) stands a distance \(x\) from the left end. The supports are inset a distance \(a\) from each end, so the span between them is \(L - 2a\). Take torques about the left support. The left force drops out. The board’s center is \(L/2 - a\) to the right of that support, and the person is \(x - a\) to the right:</p>
+\[
+N_R = \frac{W(L/2 - a) + P(x - a)}{L - 2a}, \qquad N_L = W + P - N_R.
+\]
+<p>Moments about the right support give \(N_L\) first and \(N_R\) as the remainder. The two routes have to agree. When \(a = 0\) the supports are at the ends, and the denominator is the whole length.</p>
+<p>Walk the person toward the right and \(N_R\) grows while \(N_L\) shrinks. The trade is linear in \(x\). A support that comes out negative would have to pull down. A roller cannot pull. The board tips about the other support at the load where that force hits zero.</p>
+<p>Doubling the person’s weight does not double either support, unless the person is the whole load. The board is still there. Doubling the board, with the person at the center, raises both supports by the same amount, and neither one doubles.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The supports trade off. Their sum is fixed by the weights. Their split is fixed by where the weights sit. Zero is the tipping point, not a small push.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · scaffold</span>
+<p>A uniform scaffold is \(6.0\ \text{m}\) long and has mass \(70.0\ \text{kg}\). The ropes are at the ends. A person of mass \(50\ \text{kg}\) stands \(1.5\ \text{m}\) from the left end. Take \(g = 9.81\ \text{m/s}^2\). The weights are \(686.7\ \text{N}\) and \(490.5\ \text{N}\). The right rope is</p>
+\[
+N_R = \frac{(686.7)(3.0) + (490.5)(1.5)}{6.0} = 466.0\ \text{N},
+\]
+<p>and the left rope is \(1177.2 - 466.0 = 711.2\ \text{N}\). The section states the scaffold and does not print the tensions. Moments about the right end give the left rope first and the same pair. Move the person to the center and each rope carries half of \(1177.2\ \text{N}\), which is \(588.6\ \text{N}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Dividing by the full length after the supports have been moved in. The span is the distance between the supports. Dropping the board’s weight and keeping only the person. Reading a negative support as a downward push from the ground. A negative answer means that support would have to pull, and a plain support cannot, so the board tips.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The board is rigid, each support is one force, and the person is a point load. A real scaffold bends, and the ropes stretch. Those deflections are the next part of the chapter, not this balance. The balance here uses the weights the section gives and \(g = 9.81\ \text{m/s}^2\).</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Ladders, cables, and hinges</h2>
+<p>The same two conditions solve a ladder, a hanging sign, a forearm, and a door. Each one picks the torque point so that one unknown disappears. A ladder against a smooth wall is the clearest, because the length cancels and people expect it not to.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A uniform ladder of weight \(W\) leans at an angle \(\theta\) to the floor. The wall is smooth, so its force is horizontal. Call it \(P\). The floor pushes up with \(N\) and sideways with friction \(f\), toward the wall, because the wall pushes the ladder out. The forces are</p>
+\[
+N = W, \qquad f = P.
+\]
+<p>Take torques about the contact with the floor. Both floor forces drop out. The wall’s force has lever arm \(L\sin\theta\). The ladder’s weight, at the center, has lever arm \((L/2)\cos\theta\):</p>
+\[
+P\, L\sin\theta = W\, \frac{L}{2}\cos\theta, \qquad P = \frac{W}{2}\cot\theta.
+\]
+<p>The length cancels. A person of weight \(W_p\) standing a fraction \(f_p\) of the way up adds a term \(W_p f_p\) next to \(W/2\), and the normal becomes \(W + W_p\). The coefficient the floor must be able to supply is</p>
+\[
+\mu = \frac{f}{N} = \frac{\tfrac12 W + f_p W_p}{(W + W_p)\tan\theta}.
+\]
+<p>A steeper ladder needs less friction. A person higher up needs more. The length never enters.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>If every arm scales with the length, the length is not in the answer. Friction equals \(\mu N\) only on the verge. Otherwise \(\mu\) is the minimum the floor must provide, and \(f\) is whatever the torque equation gave.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · ladder at 53°</span>
+<p>A ladder weighs \(400.0\ \text{N}\) and leans at \(53^\circ\) to the floor. The wall is smooth. Nobody is on it. The floor’s normal is \(400.0\ \text{N}\). The wall’s push, and the friction that matches it, is</p>
+\[
+f = 200.0 \cot 53^\circ = 150.7\ \text{N}.
+\]
+<p>The floor must supply at least</p>
+\[
+\mu = \frac{150.7}{400.0} = 0.3768.
+\]
+<p>The book prints \(150.7\ \text{N}\) and \(0.377\). The length is \(5.0\ \text{m}\) in the example and it cancels, so the lab does not need it. A person higher on the same ladder raises \(\mu\). A steeper angle lowers it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a breaking tension</span>
+<p>A pan of mass \(42.0\ \text{g}\) hangs from two strings. One rises two units for each unit across. The other rises one unit for each two across. The steep string reaches \(2.80\ \text{N}\) and breaks. A unit vector along the steep string is \((1/\sqrt5,\ 2/\sqrt5)\). Along the shallow string it is \((2/\sqrt5,\ 1/\sqrt5)\). Horizontal balance then forces the steep tension to be twice the shallow one. Vertical balance gives</p>
+\[
+T_{\text{steep}} = \frac{2w}{\sqrt5}, \qquad T_{\text{shallow}} = \frac{w}{\sqrt5}.
+\]
+<p>At the break, \(T_{\text{steep}} = 2.80\ \text{N}\) and \(T_{\text{shallow}} = 1.40\ \text{N}\). The weight they hold is</p>
+\[
+w = 2.80 \times \frac{\sqrt5}{2} = 3.130\ \text{N}.
+\]
+<p>With \(g = 9.81\ \text{m/s}^2\) the total mass is \(0.3191\ \text{kg}\), so the added mass is \(0.2771\ \text{kg}\). The book prints \(277.0\ \text{g}\), using \(g = 9.8\ \text{m/s}^2\). The page writes the components as \(T/5\) and \(2T/5\). Those are not a unit vector: \((1/5)^2 + (2/5)^2\) is not \(1\). The \(1\)-\(2\)-\(\sqrt5\) triangle is the geometry that produces the printed mass. This knot is not on a lab. The beam and the ladder already show the two conditions.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a meter stick on a fulcrum</span>
+<p>A meter stick has mass \(150.0\ \text{g}\) and its center at the \(50\ \text{cm}\) mark. The fulcrum is at \(70\ \text{cm}\). A \(50.0\ \text{g}\) mass sits at \(0\ \text{cm}\), and a \(75.0\ \text{g}\) mass sits at \(30\ \text{cm}\). The unknown mass sits at \(100\ \text{cm}\). Arms measured from the fulcrum are \(0.70\ \text{m}\), \(0.40\ \text{m}\), \(0.20\ \text{m}\), and \(0.30\ \text{m}\). Torque balance gives</p>
+\[
+m_3 = \frac{(0.70)(0.050) + (0.40)(0.075) + (0.20)(0.150)}{0.30} = 0.3167\ \text{kg}.
+\]
+<p>The fulcrum holds every mass, \(0.5917\ \text{kg}\). With \(g = 9.81\ \text{m/s}^2\) that force is \(5.804\ \text{N}\). The arms on the page give \(316.7\ \text{g}\). The page prints \(316.023\ \text{g}\) on the way to \(317\ \text{g}\). The \(5.8\ \text{N}\) it prints uses a rounded mass and \(g = 9.8\ \text{m/s}^2\). There is no lab for the stick. The scaffold is the same torque balance with the supports at the ends.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · forces in the forearm</span>
+<p>A hand holds \(50.0\ \text{lb}\), which the example gives as \(222.4\ \text{N}\). The muscle attaches \(1.50\ \text{in}\) from the elbow. The load is \(13.0\ \text{in}\) from the elbow. Both forces are vertical, so the \(60^\circ\) angle in the figure is in both lever arms and cancels. The muscle tension is</p>
+\[
+T = 222.4 \times \frac{13.0}{1.50} = 1927\ \text{N}.
+\]
+<p>The elbow pushes the other way with \(1927 - 222.4 = 1705\ \text{N}\). The book prints \(1927\ \text{N}\) and \(1705\ \text{N}\). The arm’s own weight is not in this model. There is no lab. The ratio is two lengths, and a drawing would not add a check the arithmetic does not already have.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a sign on a strut</span>
+<p>A strut \(4.0\ \text{m}\) long weighs \(600.0\ \text{N}\) and is hinged to a wall. A sign of \(400.0\ \text{N}\) hangs at the outer end. A cable runs from that end to a point \(3.0\ \text{m}\) above the hinge. The triangle is \(3\)-\(4\)-\(5\), so the cable’s length is \(5.0\ \text{m}\). The hinge carries half the strut’s weight vertically, \(300.0\ \text{N}\), because the strut is uniform and the sign is at the end. The cable carries the sign and the other half of the strut, \(700.0\ \text{N}\), along a rise of \(3\):</p>
+\[
+T = 700.0 \times \frac{5}{3} = 1167\ \text{N}, \qquad H_x = 700.0 \times \frac{4}{3} = 933.3\ \text{N}.
+\]
+<p>The section describes a sign of this kind and does not print these tensions. There is no lab. The ladder already shows a hinge-and-cable style of torque, with the pivot chosen so one force drops out.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · forces on door hinges</span>
+<p>A door weighs \(400.0\ \text{N}\). It is \(1.00\ \text{m}\) wide. The hinges are \(2.00\ \text{m}\) apart, and the weight is shared equally between them. Each hinge then carries \(200.0\ \text{N}\) vertically. Take torques about the lower hinge. The two vertical forces and the lower horizontal force have no arm or cancel in pairs. The upper hinge’s horizontal force, over a \(2.00\ \text{m}\) arm, balances the weight at \(0.50\ \text{m}\) out from the hinge line:</p>
+\[
+H \times 2.00 = 400.0 \times 0.50, \qquad H = 100.0\ \text{N}.
+\]
+<p>The lower hinge pushes the other way with \(100.0\ \text{N}\). Four unknowns and three equations leave the door indeterminate until the equal-share assumption is added. The book states that assumption. There is no lab.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Keeping the ladder’s length in the friction. Both lever arms grow with the length, so it cancels. Setting the friction equal to \(\mu N\) when nobody said the ladder was on the verge. The torque equation gives the friction, and \(\mu\) is that force divided by the normal. Pointing the floor friction away from the wall. The wall pushes the ladder outward, so friction points back toward the wall. For the forearm, putting \(\sin 60^\circ\) into a ratio of two vertical forces. The angle is the same for both, and it cancels.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The wall is smooth, so it contributes no friction. A rough wall would share the sideways force and lower what the floor must supply. The ladder is a uniform rigid bar. The forearm model leaves out the arm’s own weight. The door is indeterminate until the weight is shared by assumption. A real hinge also carries a little friction, and a real ladder bends. The knot, the stick, the forearm, the sign, and the door are worked here and not drawn. Each one is the same two conditions on a body the ladder or the scaffold already shows.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Elasticity</h2>
+</div>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Stress and strain</h2>
+<p>Equilibrium finds the forces. It does not find how much the body stretches. Stress is the force per area on a cut. Strain is the fractional change in size. In the straight part of the curve they stay proportional, and the constant is a modulus.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>An axial force \(F\) on a bar of cross section \(A\) produces an average normal stress</p>
+\[
+\sigma = \frac{F}{A}.
+\]
+<p>The bar’s length changes from \(L_0\) to \(L_0 + \Delta L\). The normal strain is</p>
+\[
+\varepsilon = \frac{\Delta L}{L_0}.
+\]
+<p>Young’s modulus \(Y\) is the slope on the straight part:</p>
+\[
+Y = \frac{\sigma}{\varepsilon}, \qquad \Delta L = \frac{F L_0}{A Y}.
+\]
+<p>Doubling the force doubles the stress and the stretch. Doubling the area halves both. Doubling the length doubles the stretch and leaves the stress alone. The area has to be in square meters when the force is in newtons. One square centimeter is \(10^{-4}\ \text{m}^2\).</p>
+<p>A uniform pillar carries its own weight as well as whatever sits on top. A horizontal cut a depth \(h\) down holds the load above it plus \(\rho A h g\). The stress is largest at the base, where \(h\) is the whole column. The strain at that cut is \(\sigma / Y\), still with the modulus of the stone.</p>
+<p>Shear is the sideways version. A force \(F_\parallel\) parallel to a face of area \(A\) gives shear stress \(F_\parallel / A\). A sideways shift \(\Delta x\) over a height \(L_0\) gives shear strain \(\Delta x / L_0\). The shear modulus is stress over strain,</p>
+\[
+S = \frac{F_\parallel / A}{\Delta x / L_0}.
+\]
+<p>The weight sitting on the shelf is a normal force. It is not the shear force, unless the problem says the shelf fails in shear under that weight.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Stress is not the force, and strain is not the stretch. The modulus connects them only while the curve is straight. Area, length, and force each move a different one of the three.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · steel rod</span>
+<p>A steel rod is \(2.0\ \text{m}\) long and has area \(0.30\ \text{cm}^2\), which is \(3.0 \times 10^{-5}\ \text{m}^2\). A mass of \(550\ \text{kg}\) hangs from it. Young’s modulus is \(2.0 \times 10^{11}\ \text{Pa}\). The example uses \(g = 9.8\ \text{m/s}^2\). The weight is \(5390\ \text{N}\), and the stress is</p>
+\[
+\sigma = \frac{5390}{3.0 \times 10^{-5}} = 1.797 \times 10^{8}\ \text{Pa}.
+\]
+<p>The elongation is</p>
+\[
+\Delta L = \frac{(1.797 \times 10^{8})(2.0)}{2.0 \times 10^{11}} = 1.797 \times 10^{-3}\ \text{m}.
+\]
+<p>The book prints \(1.8 \times 10^{8}\ \text{Pa}\) and \(1.8\ \text{mm}\). The rod’s own weight is left out, as the example leaves it out.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · granite pillar</span>
+<p>A sculpture weighs \(10\,000\ \text{N}\). The cut is \(3.0\ \text{m}\) down a granite pillar of area \(0.20\ \text{m}^2\). The density is \(2700\ \text{kg/m}^3\), and \(Y = 4.5 \times 10^{10}\ \text{Pa}\). The example uses \(g = 9.80\ \text{m/s}^2\). The stone above the cut has mass</p>
+\[
+m = (2700)(0.20)(3.0) = 1620\ \text{kg},
+\]
+<p>and weight \(1.588 \times 10^{4}\ \text{N}\). The cut carries \(2.588 \times 10^{4}\ \text{N}\). The stress and the strain are</p>
+\[
+\sigma = \frac{2.588 \times 10^{4}}{0.20} = 1.294 \times 10^{5}\ \text{Pa}, \qquad \varepsilon = \frac{1.294 \times 10^{5}}{4.5 \times 10^{10}} = 2.875 \times 10^{-6}.
+\]
+<p>The book rounds the segment to \(1.60 \times 10^{3}\ \text{kg}\) and prints \(1.284 \times 10^{5}\ \text{Pa}\) and \(2.85 \times 10^{-6}\). The lab uses \(1620\ \text{kg}\). The stress grows as you move the cut down, because more stone stands on it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a shelf in shear</span>
+<p>A sideways force of \(50.0\ \text{N}\) acts on a face of area \(0.27\ \text{m}^2\). The bookcase is \(1.80\ \text{m}\) tall and the top shifts \(15.0\ \text{cm}\). The shear stress is</p>
+\[
+\frac{50.0}{0.27} = 185.2\ \text{Pa}.
+\]
+<p>The shear strain is \(0.150 / 1.80 = 1/12 = 0.08333\). The shear modulus is</p>
+\[
+S = \frac{185.2}{1/12} = 2222\ \text{Pa}.
+\]
+<p>The book prints \(185.2\ \text{Pa}\), a strain of \(1/12\), and \(2.222\ \text{kPa}\). That quotient is the modulus. An intermediate line on the page does not match it. The \(600\ \text{N}\) weight of the books is not the shear force in this example.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving an area in \(\text{cm}^2\) when the force is in newtons. Stress wants square meters, and \(1\ \text{cm}^2\) is \(10^{-4}\ \text{m}^2\). Reporting the hanging weight as the stress. For the pillar, using only the sculpture and forgetting the stone above the cut. For shear, dividing the sideways shift by the area. Strain divides the shift by the height.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Hooke’s law is the straight part of the curve, below the yield. The rod’s own weight is left out. The pillar is uniform, and the cut is horizontal. A real column also bends in the wind. Shear here is an average over the face, not the stress at a corner. The hydraulic press in the same section is a bulk-modulus problem, and this unit does not draw it. The press changes a volume. These labs change a length.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Elasticity and plasticity</h2>
+<p>Past a yield stress the stretch stops being proportional, and removing the load does not bring the body back. The simplest model that shows this is two straight segments. Up to the yield, the slope is Young’s modulus. After it, the slope is a smaller tangent modulus. Unloading follows a line parallel to the first segment.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Let the yield stress be \(\sigma_Y\) and Young’s modulus be \(Y\). The yield strain is</p>
+\[
+\varepsilon_Y = \frac{\sigma_Y}{Y}.
+\]
+<p>For a strain \(\varepsilon\) still below that, \(\sigma = Y\varepsilon\), and unloading returns to the origin. For a strain past the yield, with tangent modulus \(Y_t\),</p>
+\[
+\sigma = \sigma_Y + Y_t\,(\varepsilon - \varepsilon_Y).
+\]
+<p>Unload from \((\varepsilon, \sigma)\) along a line of slope \(Y\). The stress falls to zero at a leftover strain</p>
+\[
+\varepsilon_{\text{set}} = \varepsilon - \frac{\sigma}{Y}.
+\]
+<p>The set is zero while the wire is still loaded. It appears when the load comes off. A larger tangent modulus leaves a smaller set, because the stress at the turning point is higher and the unloading line has farther to travel. If \(Y_t = 0\), the stress stays at \(\sigma_Y\) and the set is \(\varepsilon - \varepsilon_Y\).</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Elastic means the unloading path is the loading path. Plastic means it is not. The permanent set is the strain still there at zero stress, not the strain you reached under load.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · wire unloaded past yield</span>
+<p>A wire is pulled to strain \(0.010\). Young’s modulus is \(200\ \text{GPa}\), the yield stress is \(250\ \text{MPa}\), and the tangent modulus is \(10\ \text{GPa}\). The yield strain is</p>
+\[
+\varepsilon_Y = \frac{250 \times 10^{6}}{200 \times 10^{9}} = 0.00125.
+\]
+<p>The strain is past the yield, so the stress is</p>
+\[
+\sigma = 250 \times 10^{6} + (10 \times 10^{9})(0.010 - 0.00125) = 3.375 \times 10^{8}\ \text{Pa}.
+\]
+<p>Unload along \(Y\). The permanent strain is</p>
+\[
+\varepsilon_{\text{set}} = 0.010 - \frac{3.375 \times 10^{8}}{200 \times 10^{9}} = 0.008313.
+\]
+<p>The section describes yielding and does not print this wire. The numbers are ours, so the lab has a curve to draw. While the wire is still loaded the permanent strain on the readout is zero. It becomes \(0.008313\) when the load is removed.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Unloading along the shallow slope instead of along Young’s modulus. The permanent set is what remains after the stress comes back on the steep line. Treating the yield stress as the stress at every later strain. Past the yield the stress still rises, more slowly. Reporting a permanent set while the wire is still loaded. The set is the strain left after the load is removed.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A real metal does not turn a corner at the yield. It curves, hardens, and can neck. The model here is two slopes and an unloading line parallel to the first. Temperature, rate, and fatigue are left out. So is the fracture that ends the curve. The section’s discussion is the source of the idea. The wire itself is not a printed example.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Formula sheet</h2>
+\[
+\sum F_x = 0, \qquad \sum F_y = 0, \qquad \sum \tau = 0
+\]
+\[
+x = s\, d, \qquad \Delta N = \frac{W a h}{g d}
+\]
+\[
+N_R = \frac{W(L/2 - a) + P(x - a)}{L - 2a}, \qquad N_L + N_R = W + P
+\]
+\[
+N = W + W_p, \qquad f = \left(\tfrac12 W + f_p W_p\right)\cot\theta, \qquad \mu = \frac{f}{N}
+\]
+\[
+\sigma = \frac{F}{A}, \qquad \varepsilon = \frac{\Delta L}{L_0}, \qquad Y = \frac{\sigma}{\varepsilon}, \qquad \Delta L = \frac{F L_0}{A Y}
+\]
+\[
+\text{shear stress } \frac{F_\parallel}{A}, \qquad \text{shear strain } \frac{\Delta x}{L_0}, \qquad S = \frac{F_\parallel / A}{\Delta x / L_0}
+\]
+\[
+\varepsilon_Y = \frac{\sigma_Y}{Y}, \qquad \sigma = \sigma_Y + Y_t(\varepsilon - \varepsilon_Y), \qquad \varepsilon_{\text{set}} = \varepsilon - \frac{\sigma}{Y}
+\]
+</section>
+
+</main>
+</body>
+</html>

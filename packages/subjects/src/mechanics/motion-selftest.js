@@ -14,26 +14,28 @@ import {
   speedFromDisplacement, stoppingDistance, timeAtSpeed,
 } from './kinematics.js';
 import {
-  apparentWeight, atwood, bankedCurve, centripetalForce, crateOnTruck, hangingIncline, incline, newton, springCollar, verticalLoop,
+  apparentWeight, atwood, atwoodPulley, bankedCurve, centripetalForce, crateOnTruck, hangingIncline, incline, newton, springCollar, verticalLoop,
 } from './dynamics.js';
 import {
   collarPath, collarTrip, conservativeWork, gravitationalEnergy, kineticEnergy, pathPotential,
   power, speedFromEnergy, springEnergy, springStop, springWork, work, workVector,
 } from './energy.js';
 import {
-  centerOfMass, collide1D, collideOblique, impactLoss, impulse, impulseRamp, momentum,
-  particleAngularMomentum, rocketDeltaV,
+  centerOfMass, collide1D, collideOblique, discCollision, impactLoss, impulse, impulseRamp, momentum,
+  particleAngularMomentum, pulseForce, pulseImpulse, rocketDeltaV,
 } from './momentum.js';
 import { inclineState } from './friction.js';
 import {
-  angularAcceleration, angularMomentum, constAlpha, inertiaDisk, inertiaPoint, inertiaRodCenter,
-  inertiaRodEnd, parallelAxisMass, rollingIncline, rotationalKE, torqueMag,
+  angularAcceleration, angularMomentum, constAlpha, inertiaDisk, inertiaHoop, inertiaPoint, inertiaRodCenter,
+  inertiaRodEnd, parallelAxisMass, precessionRate, rollingIncline, rollingSlip, rollingSpeed, rotationalKE, spinAfter, torqueMag,
 } from './rotation.js';
 import {
   pendulumPeriod, physicalPendulumPeriod, shm, shmEnergy, springOmega, springPeriod,
 } from './oscillation.js';
 import {
-  circularOrbitEnergy, circularOrbitPeriod, circularOrbitSpeed, escapeSpeed, gravityEnergy,
+  circularOrbitEnergy, circularOrbitPeriod, circularOrbitSpeed, conic, eccentricFromMean,
+  eccentricFromTrue, ellipseRadius, escapeSpeed, gravityEnergy, massFromPeriod, massFromSurface,
+  rk4Central, semiMajorAxis, sweptArea, trueFromEccentric, wedgeArc, wedgeArcChord, wedgeArea,
   gravityField, gravityForce,
 } from './gravitation.js';
 
@@ -252,6 +254,18 @@ console.log('\nDynamics');
   approx(atwood(2, 2, g).a, 0, 1e-12, 'equal masses do not accelerate');
   approx(atwood(2, 2, g).T, 2 * g, 1e-12, 'equal masses hang at their weight');
 
+  // A massive pulley: energy over a drop s gives the same a as the force equations.
+  const pulley = atwoodPulley({ m1: 1, m2: 3, I: 0.01, R: 0.1, g });
+  const sDrop = 0.4;
+  const v2 = 2 * pulley.a * sDrop;
+  const left = (3 - 1) * g * sDrop;
+  const right = 0.5 * (1 + 3 + 0.01 / 0.01) * v2;
+  approx(left, right, 1e-12, 'pulley energy matches the acceleration');
+  approx(pulley.T2 - pulley.T1, 0.01 * pulley.a / 0.01, 1e-12, 'the pulley torque is (T2 − T1) R');
+  approx(atwoodPulley({ m1: 1, m2: 3, I: 0, R: 0.1, g }).a, atwood(1, 3, g).a, 1e-12, 'a massless pulley is the plain Atwood machine');
+  const doubled = atwoodPulley({ m1: 2, m2: 6, I: 0.02, R: 0.1, g });
+  approx(doubled.a, pulley.a, 1e-12, 'doubling every mass, including the pulley, leaves a unchanged');
+
   const aC = v(centripetalAccel(3, 1), 0, 0);
   approx(mag(newton(4, aC)), centripetalForce(4, 3, 1), 1e-12, 'F = ma gives mv²/r');
 }
@@ -347,6 +361,36 @@ console.log('\nRotation');
   approx(roll.a, aFromEnergy, 1e-12, 'rolling acceleration matches energy');
   approx(roll.alpha, roll.a / radius, 1e-12, 'no slip: α = a / R');
   approx(roll.k, 0.5, 1e-12, 'a disk has k = 1/2');
+  approx(roll.muMin, Math.tan(30 * DEG) / 3, 1e-12, 'a disk needs μ ≥ (1/3) tan θ');
+  approx(roll.f, (1 / 3) * m * 10 * Math.sin(30 * DEG), 1e-12, 'static friction is (k/(1+k)) mg sin θ');
+
+  const hoop = rollingIncline({ mass: m, radius, I: inertiaHoop(m, radius), thetaDeg: 60, g: 9.8 });
+  approx(hoop.muMin, 0.5 * Math.tan(60 * DEG), 1e-12, 'a hoop needs half of tan θ');
+  const dropped = rollingSpeed({ mass: m, radius, I: inertiaHoop(m, radius), height: 25, g: 3.71 });
+  approx(dropped.v, Math.sqrt(3.71 * 25), 1e-12, 'a hoop drops at √(gh)');
+
+  const slip = rollingSlip({ mass: 2, radius: 0.2, I: inertiaDisk(2, 0.2), thetaDeg: 30, mu: 0.1, g: 9.81 });
+  const aSlide = 9.81 * (Math.sin(30 * DEG) - 0.1 * Math.cos(30 * DEG));
+  approx(slip.a, aSlide, 1e-12, 'slipping acceleration is the sliding formula');
+  approx(slip.alpha, (slip.f * 0.2) / inertiaDisk(2, 0.2), 1e-12, 'slipping α is fR/I');
+
+  const gyro = precessionRate({ mass: 0.3, r: 0.05, I: 3.75e-4, omega: 20 * 2 * Math.PI, g: 9.8 });
+  let Lx = gyro.L;
+  let Ly = 0;
+  const tau = 0.3 * 9.8 * 0.05;
+  const steps = 5000;
+  const dphi = (tau / gyro.L) * 0.2 / steps;
+  for (let i = 0; i < steps; i += 1) {
+    const c = Math.cos(dphi);
+    const s = Math.sin(dphi);
+    const nx = Lx * c - Ly * s;
+    const ny = Lx * s + Ly * c;
+    Lx = nx;
+    Ly = ny;
+  }
+  approx(Math.atan2(Ly, Lx) / 0.2, gyro.omegaP, 1e-9, 'precession is the turning of L under a steady torque');
+  approx(spinAfter(4, 10, 1), 40, 1e-12, 'a smaller moment spins faster at fixed L');
+  approx(0.5 * 1 * spinAfter(4, 10, 1) ** 2, 4 * (0.5 * 4 * 100), 1e-9, 'pulling in multiplies the kinetic energy by I1/I2');
 }
 
 console.log('\nOscillation');
@@ -409,6 +453,36 @@ console.log('\nGravitation');
   approx(vCirc * vCirc / r, gravityField(M, r), 1e-12, 'a circular orbit falls at the field strength');
   approx(circularOrbitPeriod(M, r), (2 * Math.PI * r) / vCirc, 1e-12, 'the period is one lap at the orbital speed');
   approx(circularOrbitEnergy(m, M, r), kineticEnergy(m, vCirc) + u, 1e-9, 'orbit energy is kinetic plus potential');
+
+  const launched = conic(M, r, vCirc);
+  approx(launched.e, 0, 1e-12, 'a circular launch has zero eccentricity');
+  approx(launched.a, r, 1e-9, 'a circular orbit’s semi-major axis is the radius');
+  const escape = conic(M, r, vEsc);
+  approx(escape.specE, 0, 1e-6, 'escape is the zero of specific energy');
+  ok(!escape.bound, 'escape is not bound');
+
+  const T = circularOrbitPeriod(M, r);
+  approx(massFromPeriod(T, r), M, 1e-9 * M, 'Kepler’s third law returns the central mass');
+  approx(semiMajorAxis(M, T), r, 1e-6, 'the semi-major axis comes back from the period');
+  approx(massFromSurface(gravityField(M, r), r), M, 1e-9 * M, 'surface gravity returns the mass');
+
+  const end = rk4Central({ M, x: r, y: 0, vx: 0, vy: vCirc, dt: T / 8000, steps: 1600 });
+  approx(end.specE, launched.specE, 1e-9 * Math.abs(launched.specE), 'RK4 keeps the specific energy');
+  approx(end.h, launched.h, 1e-9 * launched.h, 'RK4 keeps the specific angular momentum');
+
+  const ecc = 0.4;
+  const nu = 1.2;
+  const E = eccentricFromTrue(nu, ecc);
+  approx(trueFromEccentric(E, ecc), nu, 1e-12, 'true anomaly round-trips');
+  approx(eccentricFromMean(E - ecc * Math.sin(E), ecc), E, 1e-12, 'Kepler’s equation round-trips');
+  const frac = 0.15;
+  approx(wedgeArea(r, 0, frac), Math.PI * r * r * frac, 1e-9 * r * r, 'a circular wedge is a sector');
+  approx(wedgeArea(2 * r, ecc, frac), 4 * wedgeArea(r, ecc, frac), 1e-9 * r * r, 'area scales with a squared');
+  approx(wedgeArc(r, 0, 0, 0.25), (Math.PI * r) / 2, 1e-8 * r, 'a quarter circle has the right arc');
+  approx(wedgeArcChord(r, ecc, nu, frac), wedgeArc(r, ecc, nu, frac), 1e-8 * r, 'chord and speed arcs agree');
+  approx(wedgeArc(2 * r, ecc, nu, frac), 2 * wedgeArc(r, ecc, nu, frac), 1e-8 * r, 'arc length doubles with a');
+  const area = sweptArea(M, r, ecc, nu, frac);
+  approx(area, wedgeArea(r, ecc, frac), 1e-6 * wedgeArea(r, ecc, frac), 'RK4 sweeps the Kepler area');
 }
 
 console.log('\nParticle kinetics');
@@ -640,6 +714,35 @@ console.log('\nImpulse and momentum');
   approx(rocketDeltaV(gravity).dv, burn(gravity), 1e-6, 'a rocket in gravity matches the midpoint burn');
   const heavy = { m0: 400, mf: 280, ve: 1500, mdot: 40, g: 0 };
   approx(rocketDeltaV(heavy).dv, burn(heavy), 1e-6, 'a smaller mass ratio matches the midpoint burn');
+  approx(rocketDeltaV({ ...coast, ve: 3000 }).dv, 2 * rocketDeltaV(coast).dv, 1e-9, 'doubling the exhaust speed doubles a coasting change of velocity');
+
+  approx(pulseImpulse('rect', 10, 2), 20, 1e-12, 'a rectangular pulse impulse is the peak times the duration');
+  approx(pulseImpulse('tri', 10, 2), 10, 1e-12, 'a triangular pulse has half the rectangular area');
+  approx(pulseImpulse('sine', 10, 2), 40 / Math.PI, 1e-12, 'a half-sine pulse integrates to 2FT/pi');
+  approx(pulseImpulse('rect', 20, 2), 2 * pulseImpulse('rect', 10, 2), 1e-12, 'doubling the peak doubles the impulse');
+  {
+    const n = 4000;
+    const dt = 2 / n;
+    let area = 0;
+    for (let i = 0; i < n; i += 1) area += pulseForce('sine', 10, 2, (i + 0.5) * dt) * dt;
+    approx(pulseImpulse('sine', 10, 2), area, 1e-6, 'the half-sine area matches a midpoint sum');
+    // The tent is linear on each half. The midpoint rule is exact on a linear piece, so split at the peak.
+    let tri = 0;
+    for (const [a, b] of [[0, 1], [1, 2]]) {
+      const h = (b - a) / n;
+      for (let i = 0; i < n; i += 1) tri += pulseForce('tri', 10, 2, a + (i + 0.5) * h) * h;
+    }
+    approx(pulseImpulse('tri', 10, 2), tri, 1e-12, 'the tent area matches the midpoint rule on each linear half');
+  }
+
+  const disc = discCollision({ m1: 2, m2: 2, u1x: 4, thetaDeg: 35, e: 1 });
+  approx(disc.v1x * disc.v2x + disc.v1y * disc.v2y, 0, 1e-9, 'equal masses, one at rest, elastic: the paths are perpendicular');
+  approx(2 * disc.v1x + 2 * disc.v2x, 8, 1e-9, 'a disc collision keeps the x momentum');
+  approx(2 * disc.v1y + 2 * disc.v2y, 0, 1e-9, 'a disc collision keeps the y momentum');
+  const Kd = kineticEnergy(2, Math.hypot(disc.v1x, disc.v1y)) + kineticEnergy(2, Math.hypot(disc.v2x, disc.v2y));
+  approx(Kd, kineticEnergy(2, 4), 1e-9, 'an elastic disc collision keeps the kinetic energy');
+  const fast = discCollision({ m1: 2, m2: 2, u1x: 8, thetaDeg: 35, e: 1 });
+  approx(fast.v2x, 2 * disc.v2x, 1e-9, 'doubling the incoming speed doubles each disc velocity');
 
   const L = particleAngularMomentum(2, v(0.4, -0.3, 0), v(1, 3, 0));
   approx(L.z, 2 * (0.4 * 3 - (-0.3) * 1), 1e-12, 'particle angular momentum is m times x vy minus y vx');

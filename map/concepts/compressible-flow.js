@@ -1,0 +1,35 @@
+export default {
+  id: 'compressible-flow',
+  title: 'Compressible flow in nozzles',
+  label: ['Compressible', 'flow'],
+  subject: 'thermo',
+  courses: ['eml3101'],
+  eq: String.raw`c = \sqrt{kRT}, \qquad \frac{T_0}{T} = 1 + \frac{k-1}{2}\,\text{Ma}^2, \qquad \frac{dA}{A} = \left(\text{Ma}^2 - 1\right)\frac{dV}{V}`,
+  idea: String.raw`When a gas moves at a good fraction of the speed of sound its density changes, and Bernoulli no longer holds. The steady-flow energy equation gives stagnation properties: the temperature and pressure the gas would reach if brought to rest without loss. Combine mass, energy and an isentropic path, and a duct behaves oddly: below Mach 1 a narrowing speeds the gas up, above Mach 1 a widening does. So a nozzle must converge and then diverge to make supersonic flow. Once the throat reaches Mach 1 the nozzle is choked, and lowering the back pressure further adds no mass flow.`,
+  requires: ['energy-cv', 'entropy', 'mass-cv'],
+  sources: [
+    {
+      title: 'NASA Glenn, Beginner’s guide to aeronautics: Isentropic flow',
+      url: 'https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/isentropic-flow/',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'The isentropic relations with Mach number, from the people who test nozzles.',
+    },
+    {
+      title: 'Wikipedia, Choked flow',
+      url: 'https://en.wikipedia.org/wiki/Choked_flow',
+      kind: 'Reference',
+      level: 'Course level',
+      why: 'Why the mass flow stops rising once the throat is sonic.',
+    },
+    {
+      title: 'Cleynen, Fluid Dynamics for Engineers',
+      url: 'https://fluidmech.ninja/',
+      kind: 'Open textbook',
+      level: 'Course level',
+      why: 'A free text with a chapter on compressible flow in ducts.',
+    },
+  ],
+  labs: [],
+  candidate: 'A converging-diverging nozzle with a back-pressure slider and the Mach number drawn along it. It corrects the idea that lowering the back pressure always pulls more gas through: once the throat is sonic the mass flow stays fixed.',
+};
