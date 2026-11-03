@@ -1,0 +1,35 @@
+export default {
+  id: 'exergy',
+  title: 'Exergy',
+  label: ['Exergy'],
+  subject: 'thermo',
+  courses: ['eml3101'],
+  eq: String.raw`\psi = (h - h_0) - T_0(s - s_0) + \tfrac12V^2 + gz, \qquad X_\text{destroyed} = T_0\,S_\text{gen}, \qquad \eta_{II} = \frac{\eta}{\eta_\text{rev}}`,
+  idea: String.raw`Energy is conserved, so it cannot measure what a process wastes. Exergy can: it is the most work a stream or a system could give while it comes to equilibrium with the surroundings at \(T_0\) and \(p_0\). A kilojoule of heat at temperature \(T\) carries \(1 - T_0/T\) of a kilojoule of exergy, so heat near room temperature is worth little. Every bit of entropy a process generates destroys \(T_0\) times as much exergy. The second-law efficiency compares a device with the best it could do, not with the energy it took in.`,
+  requires: ['entropy-generation', 'energy-cv'],
+  sources: [
+    {
+      title: 'MIT 16.050, calendar: Applications of the second law',
+      url: 'https://ocw.mit.edu/courses/16-050-thermal-energy-fall-2002/pages/calendar/',
+      kind: 'Course outline',
+      level: 'Course level',
+      why: 'The lectures that turn entropy generation into lost work.',
+    },
+    {
+      title: 'Cleynen, Engineering Thermodynamics',
+      url: 'https://thermodynamicsbook.com/',
+      kind: 'Open textbook',
+      level: 'Course level',
+      why: 'The free text paired with 16.050 in this repo: the second law applied to real devices.',
+    },
+    {
+      title: 'Wikipedia, Exergy',
+      url: 'https://en.wikipedia.org/wiki/Exergy',
+      kind: 'Reference',
+      level: 'Deeper',
+      why: 'Definitions for closed systems and flows, and the link to entropy generation.',
+    },
+  ],
+  labs: [],
+  candidate: 'Deliver one kilojoule of heat at a slider temperature, from a furnace down to room temperature. It corrects the idea that a kilojoule is a kilojoule: the work it can give falls to zero as its temperature nears the surroundings.',
+};

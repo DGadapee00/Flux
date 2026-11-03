@@ -1,0 +1,28 @@
+export default {
+  id: 'jet-propulsion',
+  title: 'Jet propulsion',
+  label: ['Jet propulsion'],
+  subject: 'thermo',
+  courses: ['eml3101'],
+  eq: String.raw`F = \dot m\,(V_e - V_0) + (p_e - p_0)A_e, \qquad \eta_p = \frac{2}{1 + V_e/V_0}`,
+  idea: String.raw`A turbojet is a Brayton cycle whose turbine drives only the compressor; the rest of the expansion happens in a nozzle and makes a fast jet. A momentum balance on the engine gives the thrust: the mass flow times the speed it gains, plus a pressure term at the exit. The power that moves the aircraft is thrust times flight speed, and the rest of the jet's kinetic energy is wasted in the wake. So propulsive efficiency is best when the jet is only a little faster than the aircraft. That is why airliners use turbofans, which push a lot of air a little.`,
+  requires: ['brayton-cycle', 'momentum-cv'],
+  sources: [
+    {
+      title: 'MIT 16.050, calendar: Gas power and propulsion cycles',
+      url: 'https://ocw.mit.edu/courses/16-050-thermal-energy-fall-2002/pages/calendar/',
+      kind: 'Course outline',
+      level: 'Course level',
+      why: 'An aero course’s thermodynamics: the cycles end at the jet engine.',
+    },
+    {
+      title: 'NASA Glenn, Beginner’s guide to aeronautics: Turbine engine thrust',
+      url: 'https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/turbine-engine-thrust/',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'The thrust equation with each term labelled on an engine.',
+    },
+  ],
+  labs: [],
+  candidate: 'One engine core with a bypass-ratio slider, thrust and fuel use read out. It corrects the idea that a faster jet means a better engine: at the same thrust, more air at a lower speed wastes less energy in the wake.',
+};

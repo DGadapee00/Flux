@@ -2,7 +2,7 @@ export default {
   id: 'brayton-cycle',
   title: 'The Brayton cycle',
   subject: 'thermo',
-  courses: ['eml3100'],
+  courses: ['eml3100', 'eml3101'],
   eq: String.raw`\eta_\text{Brayton} = 1 - r_p^{-(k-1)/k}`,
   idea: String.raw`A gas turbine compresses air, burns fuel at constant pressure, expands the hot gas through a turbine and exhausts it. With cold-air assumptions its efficiency depends only on the pressure ratio. It rises as the ratio rises, but stays below the Carnot limit between the coldest and hottest temperatures in the cycle.`,
   requires: ['carnot-limit', 'energy-cv'],
