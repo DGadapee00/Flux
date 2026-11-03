@@ -1,0 +1,76 @@
+.mission-overview { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 28px; align-items: center; padding: 24px 0 28px; }
+.app-kicker { font: 500 11px/1.5 var(--mono); letter-spacing: .09em; color: var(--muted); margin: 0 0 12px; }
+.mission-copy h3 { font: 700 clamp(36px, 5vw, 58px)/1.05 var(--display); margin: 0 0 18px; }
+.mission-lede { font: 500 24px/1.25 var(--display); color: var(--accent); margin: 0 0 16px; }
+.mission-copy > p:not([class]) { max-width: 48ch; }
+.app-meta { font: 12px/1.6 var(--mono); color: var(--muted); }
+.mission-copy .app-meta { max-width: 48ch; margin: 16px 0 0; }
+.app-bench { display: inline-flex; gap: 22px; align-items: center; min-height: 44px; font-family: var(--display); font-weight: 600; }
+.sat-figure { margin: 0; min-width: 0; }
+.sat-figure svg { display: block; width: 100%; overflow: visible; color: var(--muted); }
+.sat-figure figcaption { text-align: center; color: var(--muted); font: 11px/1.5 var(--mono); }
+.sat-figure path, .sat-figure ellipse { fill: var(--panel); stroke: currentColor; stroke-width: 1.4; stroke-linejoin: round; }
+.sat-figure text { fill: currentColor; font: 9px var(--mono); letter-spacing: .03em; }
+.sat-figure .sat-orbit ellipse, .sat-figure .sat-orbit path { fill: none; stroke-dasharray: 4 5; opacity: .55; }
+.sat-figure .sat-leader { fill: none; opacity: .6; stroke-width: .8; }
+.sat-figure .sat-grid { fill: url(#sat-cells); opacity: .6; }
+.sat-piece, .sat-orbit { transition: color .2s; }
+.sat-figure .active { color: var(--accent); }
+.assembly-summary { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-block: 1px solid var(--line); padding: 16px 0; }
+.assembly-summary .app-kicker { margin: 0 0 4px; }
+.assembly-summary p { margin: 0; font-family: var(--display); }
+.app-assembly-link { min-height: 44px; display: inline-flex; align-items: center; gap: 12px; font-family: var(--display); color: var(--accent); }
+.component-recipes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding-block: 18px; }
+.component-recipes button { display: flex; align-items: flex-start; gap: 10px; text-align: left; font-family: var(--display); background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 12px; min-height: 87px; cursor: pointer; min-width: 0; position: relative; }
+.component-recipes button[aria-pressed='true'] { border-color: var(--accent); box-shadow: inset 0 3px var(--accent); }
+.component-number { color: var(--accent); font: 12px/1.8 var(--mono); }
+.component-recipes strong { display: block; font-size: 17px; line-height: 1.25; }
+.component-recipes small { color: var(--muted); display: block; line-height: 1.3; margin-block: 4px 16px; }
+.component-state { position: absolute; bottom: 9px; right: 12px; color: var(--muted); font: 10px var(--mono); }
+.component-recipes [data-complete='true'] .component-state { color: var(--accent); }
+.application-recipe { border: 1px solid var(--line); border-radius: 8px; scroll-margin-top: 16px; }
+.recipe-heading { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 22px; border-bottom: 1px solid var(--line); align-items: start; }
+.recipe-heading h3 { font: 600 30px/1.2 var(--display); margin: 0; }
+.recipe-heading p:not(.app-kicker) { margin: 8px 0 0; max-width: 58ch; }
+.recipe-status { font: 11px/1.5 var(--mono); color: var(--accent); border: 1px solid var(--line); border-radius: 20px; padding: 6px 10px; }
+.recipe-columns { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+.recipe-learning, .recipe-record { padding: 22px; min-width: 0; }
+.recipe-learning { display: grid; gap: 24px; align-content: start; }
+.application-recipe h4 { font: 600 17px/1.3 var(--display); margin: 0 0 10px; }
+.application-recipe p { margin-block: 0 12px; }
+.recipe-record { border-left: 1px solid var(--line); background: var(--panel); border-radius: 0 0 8px 0; }
+.recipe-inputs { display: flex; flex-wrap: wrap; gap: 8px; }
+.recipe-inputs button { cursor: pointer; padding: 8px 12px; border: 1px solid var(--line); border-radius: 5px; color: var(--fg); background: var(--panel); font: 500 15px var(--display); text-align: left; min-height: 44px; }
+.recipe-inputs small { display: block; color: var(--muted); font: 10px/1.6 var(--mono); }
+.foundation-links { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.foundation-links a { border-bottom: 1px solid var(--line); padding: 5px 0; margin-right: 12px; font-family: var(--display); min-height: 34px; }
+.foundation-links .app-meta { font-size: 10px; }
+.application-labs { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.application-labs li { display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; }
+.application-labs li > a { font-family: var(--display); }
+.application-labs span { color: var(--muted); font: 11px/1.8 var(--mono); }
+.application-gap { border-left: 2px dashed var(--dim); padding-left: 14px; color: var(--muted); }
+.application-gap p, .recipe-output p { font-size: 15px; }
+.app-check { display: flex; gap: 10px; align-items: center; min-height: 44px; margin-bottom: 12px; font-family: var(--display); }
+.app-check input { accent-color: var(--accent); width: 18px; height: 18px; flex: none; }
+.recipe-record label[for] { display: block; margin-top: 18px; font: 600 16px var(--display); }
+.recipe-record label[for] span { font-weight: 400; color: var(--muted); }
+.recipe-record textarea { display: block; resize: vertical; width: 100%; min-height: 130px; border: 1px solid var(--line); border-radius: 5px; background: var(--bg); color: var(--fg); padding: 12px; font: 15px/1.5 var(--body); margin: 8px 0 12px; }
+.recipe-record textarea:focus-visible, .app-check input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.record-requirements { color: var(--muted); font: 13px/1.5 var(--display); }
+.record-capability { min-height: 44px; padding: 10px 16px; font: 600 16px var(--display); background: var(--accent); color: var(--bg); border: 1px solid var(--accent); border-radius: 5px; cursor: pointer; margin: 2px 0 16px; }
+.record-capability:disabled { background: var(--node); border-color: var(--line); color: var(--muted); cursor: default; }
+.application-note { max-width: 90ch; margin: 16px 0 0; color: var(--muted); font: 12px/1.65 var(--mono); }
+@media (max-width: 850px) {
+  .component-recipes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mission-overview { gap: 16px; }
+}
+@media (max-width: 600px) {
+  .mission-overview, .recipe-columns { grid-template-columns: minmax(0, 1fr); }
+  .mission-overview { padding-top: 12px; }
+  .sat-figure { margin-block: 8px; }
+  .recipe-record { border-left: 0; border-top: 1px solid var(--line); border-radius: 0 0 8px 8px; }
+  .recipe-heading, .recipe-learning, .recipe-record { padding: 18px; }
+  .component-recipes button { padding: 10px; gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .sat-piece, .sat-orbit { transition: none; } }
