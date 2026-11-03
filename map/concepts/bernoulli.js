@@ -1,7 +1,7 @@
 export default {
   id: 'bernoulli',
   title: 'Bernoulli’s equation',
-  subject: 'thermo',
+  subject: 'fluids',
   courses: ['phy2048'],
   eq: String.raw`p + \tfrac12\rho v^2 + \rho g h = \text{const}, \qquad A_1v_1 = A_2v_2`,
   idea: String.raw`For steady flow of an incompressible fluid without friction, energy per unit volume is conserved along a streamline. Where a pipe narrows, continuity speeds the flow and Bernoulli lowers the pressure. A tank drains at Torricelli's \(\sqrt{2gh}\). Real fluids have viscosity, and fast flow turns turbulent, so these are the ideal limits.`,

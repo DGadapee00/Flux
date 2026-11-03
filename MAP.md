@@ -1,6 +1,7 @@
 # What the map covers
 
-A snapshot from the data on 3 November 2026, after the materials-science thread. For the live
+A snapshot from the data on 3 November 2026, after the materials-science thread and the split of
+thermodynamics from fluid mechanics. For the live
 numbers run `node map/check.mjs`, `npm run map-audit` and `npm run map-gaps`.
 
 **168 concepts, 146 with a Flux lab, 22 gaps.**
@@ -11,7 +12,8 @@ numbers run `node map/check.mjs`, `npm run map-audit` and `npm run map-gaps`.
 | Differential equations | 13 | 13 |
 | Mechanics | 30 | 30 |
 | Electricity and magnetism | 26 | 25 |
-| Thermo and fluids | 16 | 15 |
+| Thermodynamics | 12 | 12 |
+| Fluid mechanics | 4 | 3 |
 | Heat transfer | 3 | 2 |
 | Circuits and systems | 11 | 11 |
 | Mechanics of materials | 14 | 14 |
@@ -41,6 +43,11 @@ the Materials science lane, all of them gaps with a candidate lab:
 | Course | Concepts on its path |
 |---|---|
 | EMA 3010 Materials Science | 15 |
+
+EML 3101 Thermodynamics II is on the course list with no app and no path yet.
+
+A concept can also list `related` concepts: parallels that are not prerequisites, such as diffusion
+and the heat equation. The hub lists them in the reading panel's Parallels row and draws nothing.
 
 Courses that share ideas share concepts: Dynamics and Physics I meet on the mechanics lane,
 Statics leads into Mechanics of Materials, and Differential Equations ties the oscillators of

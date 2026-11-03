@@ -2,7 +2,8 @@
  * Opens the hub in headless Chrome at 380px, 720px and 1280px.
  * Fails if the page scrolls sideways, if the map is missing a concept, if choosing a concept does
  * not open it, if a phone's map does not bring the chosen concept into view, if a course card is
- * missing, or if following a card or a lab link does not land on that course's app.
+ * missing, if a concept's Parallels row is wrong or opening it throws, or if following a card or a lab
+ * link does not land on that course's app.
  */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
@@ -457,6 +458,37 @@ async function main() {
       }
       console.log(`${p.course} path: ${want.length} concepts`);
     }
+
+    // A concept with a parallel lists it in the panel, from either end, and opening it throws nothing.
+    const parallels = new Map(CONCEPTS.map((c) => [c.id, []]));
+    for (const c of CONCEPTS) {
+      for (const r of c.related || []) {
+        parallels.get(c.id).push(r.id);
+        parallels.get(r.id).push(c.id);
+      }
+    }
+    const thrown = [];
+    const onThrow = (message) => {
+      if (message.method === 'Runtime.exceptionThrown') thrown.push(message.params.exceptionDetails?.exception?.description || 'exception');
+    };
+    page.on(onThrow);
+    for (const [id, want] of parallels) {
+      if (!want.length) continue;
+      await navigate(page, hub);
+      await evalJson(page, `location.hash = '${id}'`);
+      const deadline = Date.now() + 10000;
+      while ((await evalJson(page, `document.getElementById('detail').dataset.concept`)) !== id) {
+        if (Date.now() > deadline) throw new Error(`${id}: the panel did not open`);
+        await delay(100);
+      }
+      const got = await evalJson(page, `[...document.querySelectorAll('.parallels [data-go]')].map((b) => b.dataset.go)`);
+      if (JSON.stringify([...got].sort()) !== JSON.stringify([...want].sort())) {
+        throw new Error(`${id}: Parallels lists ${got.join(', ') || 'nothing'}, expected ${want.join(', ')}`);
+      }
+      if (thrown.length) throw new Error(`${id}: the page threw ${thrown.join('; ')}`);
+      console.log(`${id} parallels: ${want.join(', ')}`);
+    }
+    page.off(onThrow);
 
     // Every lab link on the map lands in its course app.
     for (const concept of CONCEPTS) {

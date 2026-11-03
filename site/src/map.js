@@ -2,7 +2,8 @@
  * The hub's front door: the concept map, drawn from map/ as the approved prototype draws it
  * (docs/map/prototype-flux-thread.html). Subject lanes, prerequisites left to right, a reading
  * panel for the chosen concept, the trail of where you have been, and highlighting of what the
- * concept builds on (solid) and where it leads (dashed). `#<concept-id>` opens a concept.
+ * concept builds on (solid) and where it leads (dashed). `#<concept-id>` opens a concept. The panel
+ * also lists a concept's parallels (its `related` field, read both ways); they are not drawn.
  *
  * The map opens as a local view: the chosen concept, centred, with what it builds on and what it
  * leads to, one step each way. A control widens it to two steps or to the full map, and
@@ -92,7 +93,7 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
   root.head.append(style);
 
   const graph = buildGraph(concepts);
-  const { byId, leads, closure } = graph;
+  const { byId, leads, closure, related } = graph;
   const subjectOf = Object.fromEntries(SUBJECTS.map((s) => [s.id, s]));
   const courseOf = Object.fromEntries(COURSES.map((c) => [c.id, c]));
   const colour = (c) => `var(${subjectOf[c.subject].token})`;
@@ -284,6 +285,13 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
     return `<div class="lab"><h3>In Flux</h3><p><strong>${esc(meta.title)}</strong> lab, ${esc(course.code)}. ${prose(ref.note)}</p><div class="links"><a href="${lab}" data-lab="${ref.course}/${ref.lab}">Open the lab</a>${notes ? `<a href="${notes}" data-notes="${ref.course}/${ref.lab}">Open the notes</a>` : ''}</div></div>`;
   }
 
+  /** Parallels: concepts that share a form or a method with this one without being a prerequisite. */
+  function parallels(id) {
+    if (!related[id].length) return '';
+    const items = related[id].map((r) => `<li>${chip(r.id)}<p class="why">${prose(r.note)}</p></li>`).join('');
+    return `<div><h3>Parallels</h3><ul class="parallels">${items}</ul></div>`;
+  }
+
   function render(id) {
     const c = byId[id];
     const labs = c.labs.length
@@ -304,6 +312,7 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
       <p class="idea">${prose(c.idea)}</p>
       <div><h3>Builds on</h3>${c.requires.length ? `<div class="chips">${c.requires.map(chip).join('')}</div>` : '<p class="none">Nothing on the map yet. It is a starting point.</p>'}</div>
       <div><h3>Leads to</h3>${leads[id].length ? `<div class="chips">${leads[id].map(chip).join('')}</div>` : '<p class="none">The end of this thread, for now.</p>'}</div>
+      ${parallels(id)}
       ${labs}${extra}
       <div><h3>Worth your time</h3><ul class="sources">${srcs}</ul></div>`;
     detail.dataset.concept = id;

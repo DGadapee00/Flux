@@ -7,6 +7,8 @@
  * - a lab the course's catalog does not have, or a notes section its notes index does not have
  * - a missing field, a URL that is not https, TeX that KaTeX cannot parse, an em dash in our prose
  * - a concept with no lab and no `candidate`
+ * - a `related` link to no concept, to itself, to a concept it is also joined to by `requires`,
+ *   or written twice (a pair is written on one of its two concepts)
  * - a course path (map/paths/) that names an unknown concept, misses or adds a concept relative to
  *   the concepts that list the course, repeats one, or puts a concept before its prerequisite
  * and on subjects or courses that are malformed or out of step with packages/tracks.
@@ -198,6 +200,16 @@ export function checkMap({ subjects, courses, statuses, concepts, labCatalogs, n
       });
       if (c.labs.length === 0 && !isText(c.candidate)) err(where, 'has no lab and no candidate');
     }
+    if (c.related !== undefined) {
+      if (!Array.isArray(c.related)) err(where, 'related must be a list of { id, note }');
+      else
+        c.related.forEach((r, i) => {
+          const at = `${where} related ${i + 1}`;
+          if (!isText(r?.id)) err(at, 'missing id');
+          if (!isText(r?.note)) err(at, 'missing note');
+          else for (const e of proseErrors(r.note)) err(at, `note ${e}`);
+        });
+    }
     if (c.candidate !== undefined) {
       if (!isText(c.candidate)) err(where, 'candidate is empty');
       else for (const e of proseErrors(c.candidate)) err(where, `candidate ${e}`);
@@ -210,6 +222,25 @@ export function checkMap({ subjects, courses, statuses, concepts, labCatalogs, n
     for (const r of c.requires) {
       if (r === c.id) err(`concept ${c.id}`, 'requires itself');
       else if (!ids.has(r)) err(`concept ${c.id}`, `requires ${r}, which is not a concept`);
+    }
+  }
+  const pairs = new Set();
+  for (const c of list) {
+    if (!Array.isArray(c.related)) continue;
+    for (const r of c.related) {
+      if (!isText(r?.id)) continue;
+      const where = `concept ${c.id}`;
+      if (r.id === c.id) err(where, 'is related to itself');
+      else if (!ids.has(r.id)) err(where, `is related to ${r.id}, which is not a concept`);
+      else {
+        const other = ids.get(r.id);
+        if (c.requires.includes(r.id) || other.requires?.includes(c.id)) {
+          err(where, `is related to ${r.id}, but one requires the other: a pair is one or the other`);
+        }
+        const key = [c.id, r.id].sort().join(' ');
+        if (pairs.has(key)) err(where, `the pair with ${r.id} is written twice`);
+        pairs.add(key);
+      }
     }
   }
   const cycle = findCycle(list);

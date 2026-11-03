@@ -38,7 +38,9 @@ export function findCycle(concepts) {
 
 /**
  * What each concept leads to, its depth (the longest chain of prerequisites under it, so every
- * arrow on the map points right) and the closure of a concept in either direction.
+ * arrow on the map points right), the closure of a concept in either direction, and its parallels.
+ * `related` is the optional `related` field read both ways: a pair written on one concept shows on
+ * both. It is not an edge, so it changes no depth, closure or path.
  * Call only on a map that has passed the check: no cycles, no unknown ids.
  * @template {{ id: string, requires: string[] }} C
  * @param {C[]} concepts
@@ -74,5 +76,14 @@ export function buildGraph(concepts) {
     }
     return out;
   }
-  return { byId, leads, depth, closure };
+  /** @type {Record<string, { id: string, note: string }[]>} */
+  const related = Object.fromEntries(concepts.map((c) => [c.id, []]));
+  for (const c of concepts) {
+    for (const r of /** @type {any} */ (c).related || []) {
+      if (!related[r.id]) continue; // a sub-map (the local view) may leave the other end out
+      related[c.id].push({ id: r.id, note: r.note });
+      related[r.id].push({ id: c.id, note: r.note });
+    }
+  }
+  return { byId, leads, depth, closure, related };
 }
