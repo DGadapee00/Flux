@@ -5,7 +5,7 @@ export default {
   subject: 'matsci',
   courses: ['ema3010'],
   eq: String.raw`\sigma_y = \sigma_0 + k_y\,d^{-1/2}\ \text{(Hall–Petch)}`,
-  idea: String.raw`A metal yields when dislocations move, so every way of strengthening it puts obstacles in their path. Grain boundaries stop them, and smaller grains mean more boundaries, giving the Hall–Petch rise with \(d^{-1/2}\). Solute atoms strain the lattice around them; cold work multiplies dislocations until they tangle; fine precipitates, grown when solubility falls on cooling, pin them. Each one costs ductility, and annealing gives it back.`,
+  idea: String.raw`A metal yields when dislocations move, so every way of strengthening it puts obstacles in their path. Grain boundaries stop them, and smaller grains mean more boundaries, giving the Hall–Petch rise with \(d^{-1/2}\). Solute atoms strain the lattice around them; cold work multiplies dislocations until they tangle; fine precipitates pin them. Those come from quenching the alloy to trap the solute, then ageing it so tiny particles form; slow cooling grows coarse ones that barely help. Each one costs ductility, and annealing gives it back.`,
   requires: ['dislocations', 'phase-diagrams'],
   sources: [
     {
