@@ -6,7 +6,7 @@ export default {
   courses: ['sta3032'],
   eq: String.raw`\hat y = a + bx, \qquad b = \frac{\sum (x_i - \bar x)(y_i - \bar y)}{\sum (x_i - \bar x)^2}, \qquad R^2 = 1 - \frac{SS_\text{res}}{SS_\text{tot}}`,
   idea: String.raw`The least-squares line makes the sum of squared vertical misses as small as it can be; setting its partial derivatives to zero gives the slope and intercept. \(R^2\) is the share of the spread in \(y\) the line explains. Not every unusual point matters equally: one far out in \(x\) can swing the line, while one in the middle barely moves it. A curve in the residual plot means a line is the wrong model.`,
-  requires: ['descriptive-statistics', 'partial-derivatives'],
+  requires: ['descriptive-statistics', 'partial-derivatives', 'orthogonality-projection'],
   sources: [
     {
       title: 'MIT 18.05, Reading 25: Linear regression',
