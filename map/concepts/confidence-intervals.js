@@ -3,7 +3,7 @@ export default {
   title: 'Confidence intervals',
   label: ['Confidence', 'intervals'],
   subject: 'stats',
-  courses: ['sta3032'],
+  courses: ['sta3032', 'egn3203'],
   eq: String.raw`\bar x \pm t_{\alpha/2,\,n-1}\,\frac{s}{\sqrt n}`,
   idea: String.raw`A confidence interval is a method that catches the true value a stated share of the time. A 95% interval does not have a 95% chance of holding \(\mu\) once it is drawn; it either does or it does not. Over many samples, 95% of the intervals would. Wider intervals buy more confidence; larger samples buy narrower ones.`,
   requires: ['sampling-distributions'],
