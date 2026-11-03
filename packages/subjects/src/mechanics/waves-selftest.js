@@ -7,8 +7,12 @@
  */
 import { G } from './constants.js';
 import {
-  lengthFromPitch, modeFrequency, pulseSpeed, standingPeriodFromCrossings, tensionForSpeed,
-  travelingWave, waveFromConstants, wavePower, wavePowerSamples, waveSpeed,
+  beatFrequency, beatPeriodFromEnvelope, closedPipeFrequency, closedPipeLength, decibels,
+  doppler, dopplerFromArrivals, intensityFromDecibels, intensityFromPressure,
+  intensityFromPressureSamples, lengthFromPitch, levelChange, machAngle, machAngleFromWavefront,
+  machNumber, modeFrequency, pipePeriodFromCrossings, pulseSpeed, radiatedPower, soundSpeed,
+  sphereIntensity, standingPeriodFromCrossings, tensionForSpeed, travelingWave,
+  waveFromConstants, wavePower, wavePowerSamples, waveSpeed, wavelength,
 } from './waves.js';
 
 let passed = 0;
@@ -86,6 +90,59 @@ const period = standingPeriodFromCrossings({ tension: 2 * G, mu: 0.006, length: 
 approx(period, 1 / modeFrequency(1, vStand, 2), 2e-3, 'finite-difference crossings recover the fundamental period');
 const period3 = standingPeriodFromCrossings({ tension: 2 * G, mu: 0.006, length: 2, mode: 3 });
 approx(period3, 1 / modeFrequency(3, vStand, 2), 2e-3, 'and the third mode');
+
+console.log('Sound speed, intensity, tubes');
+const v30 = soundSpeed(30);
+ok(grades(v30, 348.7), '30.0 °C air prints 348.7 m/s');
+ok(grades(wavelength(v30, 20), 17) === false, 'the two-figure 17 m print does not grade against v/20');
+ok(grades(wavelength(v30, 20000), 0.017), 'the 0.017 m print does grade, because the absolute floor is 0.02');
+const air = intensityFromPressure(0.656, 1.29, 331);
+ok(grades(air, 5.04e-4), 'a 0.656 Pa wave prints 5.04×10⁻⁴ W/m²');
+ok(grades(decibels(air), 87), 'and 87 dB');
+approx(intensityFromPressureSamples({ dp: 0.656, rho: 1.29, speed: 331 }), air, 1e-6, 'a period average of p·u matches (Δp)²/(2ρv)');
+approx(levelChange(2), 3.01, 1e-4, 'twice the intensity is 3.01 dB');
+approx(levelChange(0.25), -6.0206, 1e-4, 'four times the distance, one quarter the intensity, is −6.02 dB');
+approx(decibels(2 * intensityFromDecibels(60)), 63.0103, 1e-4, 'two 60 dB sources are 63.01 dB, not 120');
+const spread = sphereIntensity(1, 2);
+approx(radiatedPower(1, 2), 1, 2e-4, 'summing I ΔA over the sphere returns the source power');
+approx(sphereIntensity(1, 4) / spread, 0.25, 1e-12, 'double the distance and the intensity is ÷4');
+const v22 = soundSpeed(22);
+ok(grades(v22, 344), '22.0 °C air prints 344 m/s');
+const stopped = closedPipeLength(v22, 128);
+ok(grades(stopped, 0.672), 'a 128 Hz stopped pipe prints 0.672 m');
+ok(grades(closedPipeFrequency(9, v22, stopped), 1152), 'the fourth overtone is 9 times the fundamental');
+approx(9 * 128, 1152, 0, 'and that is 1.152 kHz, which the section prints as 1.15 kHz');
+approx(v22 / (2 * stopped), 256, 1e-9, 'the same length, open at both ends, sounds at 256 Hz');
+
+console.log('Beats, Doppler, Mach');
+approx(beatFrequency(512, 256), 256, 0, '256 Hz against 512 Hz beats at 256 Hz');
+approx(beatPeriodFromEnvelope({ f1: 440, f2: 442 }), 0.5, 0.02, 'a 2 Hz difference beats twice a second');
+const approach = doppler({ f: 150, v: 340, vs: 35 });
+const recede = doppler({ f: 150, v: 340, vs: -35 });
+const walker = doppler({ f: 150, v: 340, vo: 35 });
+ok(grades(approach, 167), 'the approaching train prints 167 Hz');
+ok(grades(recede, 136), 'the receding train prints 136 Hz');
+approx(approach - 150, 17.213, 1e-3, 'the rise is 17.2 Hz, which the section rounds to 17.0');
+approx(150 - recede, 14, 0, 'the drop is 14.0 Hz exactly');
+ok(Math.abs(walker - approach) > 1, 'the same speed, with the listener moving, is not the train result');
+approx(doppler({ f: 150, v: 340, vo: 35, vs: -35 }), 150, 1e-12, 'rider and horn at one speed leave the pitch unchanged');
+approx(dopplerFromArrivals({ f: 150, v: 340, vs: 35 }), approach, 2e-3, 'arrival gaps recover the approaching train');
+approx(dopplerFromArrivals({ f: 150, v: 340, vs: -35 }), recede, 2e-3, 'and the receding train');
+approx(dopplerFromArrivals({ f: 150, v: 340, vo: 35 }), walker, 2e-3, 'and a listener walking toward a still horn');
+const jet = 3529.6 * 1000 / 3600;
+approx(machNumber(jet, jet / 2.85), 2.85, 1e-12, '3529.60 km/h at Mach 2.85 divides to that Mach number');
+approx(machAngle(2) * 180 / Math.PI, 30, 1e-12, 'Mach 2 opens a 30° half-angle');
+approx(machAngleFromWavefront(2.85), machAngle(2.85), 2e-3, 'the tangent to a wavefront matches sin θ = 1/M');
+
+console.log('Pipe modes, the second method');
+const closedT = pipePeriodFromCrossings({ speed: v22, length: stopped, end: 'closed', harmonic: 1 });
+approx(closedT, 1 / 128, 4e-3, 'a stopped pipe crosses at the 128 Hz period');
+const closed3 = pipePeriodFromCrossings({ speed: v22, length: stopped, end: 'closed', harmonic: 3 });
+approx(closed3, 1 / (3 * 128), 4e-3, 'and at the first overtone');
+const openT = pipePeriodFromCrossings({ speed: v22, length: stopped, end: 'open', harmonic: 1 });
+approx(openT, 1 / 256, 4e-3, 'the open pipe of that length crosses at 256 Hz');
+const open2 = pipePeriodFromCrossings({ speed: v22, length: stopped, end: 'open', harmonic: 2 });
+approx(open2, 1 / 512, 4e-3, 'and at its second harmonic');
 
 console.log(`\n${passed} passed, ${failed} failed`);
 if (failed) process.exit(1);

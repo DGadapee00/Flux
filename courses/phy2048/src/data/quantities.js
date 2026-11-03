@@ -52,6 +52,8 @@ export const QUANTITIES = {
   amp: { sym: 'A', name: 'Amplitude', unit: 'm', unitName: 'metre', from: 'x = A\\cos(\\omega t)' },
   muS: { sym: '\\mu', name: 'Mass per length', unit: 'kg/m', unitName: '', from: 'v = \\sqrt{F/\\mu}' },
   len: { sym: 'L', name: 'Length', unit: 'm', unitName: 'metre', from: 'f = v/(2L)' },
+  intens: { sym: 'I', name: 'Intensity', unit: 'W/m^2', unitName: '', from: 'I = P/(4\\pi r^{2})' },
+  beta: { sym: '\\beta', name: 'Sound level', unit: '', unitName: 'decibel', from: '\\beta = 10\\log_{10}(I/I_0)' },
 };
 
 export const LAB_UNITS = {
@@ -105,6 +107,10 @@ export const LAB_UNITS = {
   'traveling-wave': ['v', 'freq', 'T', 'amp', 'tension', 'muS', 'P'],
   'standing-wave': ['v', 'freq', 'len', 'tension', 'muS', 'P'],
   'guitar-string': ['v', 'freq', 'len', 'tension', 'muS'],
+  intensity: ['intens', 'beta', 'P', 'r'],
+  'pipe-modes': ['v', 'freq', 'len', 'T'],
+  doppler: ['freq', 'v', 'theta'],
+  'train-horn': ['freq', 'v'],
 };
 
 const BASE = ['kg', 'm', 's', 'A'];
