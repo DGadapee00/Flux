@@ -5,7 +5,7 @@ export default {
   courses: ['map2302'],
   eq: String.raw`m\ddot x + c\dot x + kx = 0, \qquad \zeta = \frac{c}{2\sqrt{mk}}`,
   idea: String.raw`A mass on a spring with friction obeys a second-order linear equation, solved by exponentials whose rates are the roots of \(mr^2 + cr + k = 0\). Complex roots ring down, real roots creep back, and a repeated root is the boundary, critical damping. More damping does not always return faster. A series RLC circuit is the same equation in charge.`,
-  requires: ['first-order-odes'],
+  requires: ['first-order-odes', 'simple-harmonic-motion'],
   sources: [
     {
       title: 'Lebl, Notes on Diffy Qs, §2.4 Mechanical vibrations',

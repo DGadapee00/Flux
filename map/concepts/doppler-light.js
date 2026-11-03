@@ -6,7 +6,7 @@ export default {
   courses: ['phy2049'],
   eq: String.raw`f_\text{obs} \approx f\left(1 \pm \frac{v}{c}\right)\ \ (v \ll c), \qquad \Delta f_\text{echo} = \frac{2fv}{c}`,
   idea: String.raw`A source and observer closing in see a higher frequency, and moving apart a lower one. For light only their relative speed matters. A radar echo is shifted twice: once as the car receives the wave, once as it sends it back. The gun counts the beat between the outgoing and returning waves and reads the speed from it.`,
-  requires: ['em-waves'],
+  requires: ['em-waves', 'doppler-sound'],
   sources: [
     {
       title: 'OpenStax University Physics Vol. 3, §5.7 Doppler effect for light',

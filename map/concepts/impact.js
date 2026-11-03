@@ -3,7 +3,7 @@ export default {
   title: 'Impact and restitution',
   label: ['Impact'],
   subject: 'mechanics',
-  courses: ['egn3321'],
+  courses: ['egn3321', 'phy2048'],
   eq: String.raw`e = \frac{v_{B2} - v_{A2}}{v_{A1} - v_{B1}}`,
   idea: String.raw`In a collision, momentum along the line of impact is shared and conserved. One more equation is needed, and the coefficient of restitution supplies it: how fast they separate over how fast they closed. \(e = 1\) loses no energy; \(e = 0\) makes them move together. In an oblique impact the parts across the line of impact are unchanged.`,
   requires: ['impulse-momentum'],
@@ -25,5 +25,8 @@ export default {
   ],
   labs: [
     { course: 'egn3321', lab: 'impact', notes: ['s3', 's4'], note: 'Central and oblique impact, with the energy each one loses.' },
+    { course: 'phy2048', lab: 'collide', notes: ['s3'], note: 'One-dimensional collisions from elastic to sticking, with the energy lost.' },
+    { course: 'phy2048', lab: 'collide-2d', notes: ['s5'], note: 'Collisions in a plane: momentum by components, and the right-angle split.' },
+    { course: 'phy2048', lab: 'crash-reconstruction', notes: ['s4'], note: 'A car into a parked truck: skid lengths give speeds, momentum gives the rest.' },
   ],
 };

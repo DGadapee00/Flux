@@ -2,7 +2,7 @@ export default {
   id: 'work-energy',
   title: 'Work and energy',
   subject: 'mechanics',
-  courses: ['egn3321'],
+  courses: ['egn3321', 'phy2048'],
   eq: String.raw`T_1 + \sum U_{1\to2} = T_2, \qquad U = \int \mathbf F\cdot d\mathbf r`,
   idea: String.raw`The work done on a particle equals the change in its kinetic energy. Work is a line integral of force along the path, so it skips the acceleration entirely and goes straight from speeds to positions. Gravity and springs do work that depends only on the endpoints; friction does not. Power is how fast the work is done.`,
   requires: ['newtons-second-law', 'line-integrals'],
@@ -26,5 +26,8 @@ export default {
     { course: 'egn3321', lab: 'collar', notes: ['s1', 's2', 's3', 's4'], note: 'A collar on a rod with a spring and friction: work in, speed out.' },
     { course: 'egn3321', lab: 'paths', notes: ['s5'], note: 'Two paths between the same points: gravity agrees, friction does not.' },
     { course: 'egn3321', lab: 'stopping', notes: ['s6'], note: 'Stopping sight distance: reaction distance plus braking distance.' },
+    { course: 'phy2048', lab: 'work-energy', notes: ['s1', 's3', 's4'], note: 'The works of every force add to the change in kinetic energy.' },
+    { course: 'phy2048', lab: 'work-path', notes: ['s2', 's7'], note: 'Gravity’s work depends only on the ends; friction’s and a swirling force’s do not.' },
+    { course: 'phy2048', lab: 'automotive-power', notes: ['s5'], note: String.raw`The power a car needs up a hill, \(P = Fv\).` },
   ],
 };

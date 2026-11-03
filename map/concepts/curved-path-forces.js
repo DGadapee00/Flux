@@ -3,7 +3,7 @@ export default {
   title: 'Force in curved motion',
   label: ['Force in', 'curved motion'],
   subject: 'mechanics',
-  courses: ['egn3321'],
+  courses: ['egn3321', 'phy2048'],
   eq: String.raw`\sum F_n = m\frac{v^2}{\rho}, \qquad v_\text{design} = \sqrt{g\rho\tan\theta}`,
   idea: String.raw`To follow a curve, something must push toward its centre. On a banked road it is part of the normal force, with friction making up any difference, so one speed needs no friction at all. In a vertical loop the needed force changes around the loop, and at the top gravity alone may be enough. Write Newton's law in the same components as the curve.`,
   requires: ['newtons-second-law', 'curvilinear-motion'],
@@ -26,5 +26,6 @@ export default {
   labs: [
     { course: 'egn3321', lab: 'curve', notes: ['s6', 's7', 's8', 's9'], note: 'A banked curve and a vertical loop, with the forces that hold each path.' },
     { course: 'egn3321', lab: 'highway', notes: ['s10'], note: 'A highway curve designed to its posted speed, superelevation and friction.' },
+    { course: 'phy2048', lab: 'banked-curve', notes: ['s10'], note: 'A banked road: one speed needs no friction, and friction widens it into a band.' },
   ],
 };

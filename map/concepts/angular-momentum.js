@@ -3,7 +3,7 @@ export default {
   title: 'Angular momentum and impulse',
   label: ['Angular', 'momentum'],
   subject: 'mechanics',
-  courses: ['egn3321'],
+  courses: ['egn3321', 'phy2048'],
   eq: String.raw`\mathbf H_G = I_G\,\boldsymbol\omega, \qquad \mathbf H_1 + \int\sum\mathbf M\,dt = \mathbf H_2`,
   idea: String.raw`Angular momentum is to turning what momentum is to moving. Angular impulse changes it, and with no outside moment about a point it stays fixed: pull mass inward and the spin speeds up. In an off-centre impact, take moments about the contact point and the unknown contact force drops out. That is how a bat's sweet spot is found.`,
   requires: ['impulse-momentum', 'rigid-kinetics'],
@@ -27,5 +27,8 @@ export default {
     { course: 'egn3321', lab: 'spin', notes: ['s3', 's1', 's2', 'u4/s5'], note: 'A spinning body pulling its mass in: angular momentum kept, spin rate up.' },
     { course: 'egn3321', lab: 'strike', notes: ['s4'], note: 'An eccentric impact on a rigid body, with moments about the contact.' },
     { course: 'egn3321', lab: 'bat', notes: ['s5'], note: 'A baseball bat’s sweet spot, where the hands feel no sting.' },
+    { course: 'phy2048', lab: 'particle-l', notes: ['s4'], note: 'A particle’s angular momentum depends on the origin, and stays fixed on a straight line.' },
+    { course: 'phy2048', lab: 'spinner', notes: ['s5', 's6'], note: 'A spinning stool: pull the weights in and spin faster.' },
+    { course: 'phy2048', lab: 'gyro', notes: ['s7'], note: 'A gyroscope precessing slower as it spins faster.' },
   ],
 };
