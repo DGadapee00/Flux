@@ -4,7 +4,7 @@ export default {
   subject: 'calculus',
   courses: ['mac2311'],
   eq: String.raw`f'(x^*) = 0, \qquad f''(x^*) < 0 \Rightarrow \text{local max}`,
-  idea: String.raw`A smooth function's highest and lowest points on an interval sit where the derivative is zero, where it does not exist, or at the ends. The second derivative says which way the graph bends. In a real problem the work is the setup: write the quantity in one variable using the constraint, then differentiate. The Mean Value Theorem is the reason a zero slope means a flat spot.`,
+  idea: String.raw`A smooth function's highest and lowest points on an interval sit where the derivative is zero, where it does not exist, or at the ends. The second derivative says which way the graph bends. In a real problem the work is the setup: write the quantity in one variable using the constraint, then differentiate. A zero slope is a candidate, not a proof: \(x^3\) is flat at 0 and has no peak or pit there.`,
   requires: ['derivative'],
   sources: [
     {

@@ -5,7 +5,7 @@ export default {
   subject: 'calculus',
   courses: ['mac2311'],
   eq: String.raw`\sum_{n=0}^{\infty} r^n = \frac{1}{1-r}\ \ (|r| < 1)`,
-  idea: String.raw`An infinite series is the limit of its partial sums. Terms going to zero is needed but not enough: the harmonic series still diverges. Tests compare a series with one whose fate is known, an integral, a geometric series or a smaller or larger series. An alternating series with shrinking terms converges, and its error is less than the first term left out.`,
+  idea: String.raw`An infinite series is the limit of its partial sums. Terms going to zero is needed but not enough: the harmonic series still diverges. Tests compare a series with one whose fate is known, an integral, a geometric series or a smaller or larger series. An alternating series whose terms shrink steadily to zero converges, and its error is less than the first term left out.`,
   requires: ['limits', 'improper-integrals'],
   sources: [
     {

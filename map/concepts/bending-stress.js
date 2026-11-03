@@ -4,7 +4,7 @@ export default {
   subject: 'materials',
   courses: ['egn3331'],
   eq: String.raw`\sigma = -\frac{My}{I}, \qquad \frac1\rho = \frac{M}{EI}`,
-  idea: String.raw`A bent beam's fibres stretch on one side and shorten on the other, in proportion to their distance from the neutral axis, which passes through the centroid. Stress follows the same line, \(My/I\). A deeper section has a much larger \(I\), so stress drops fast with depth. Two materials bolted together share the moment by stiffness, and a beam turned off its principal axes bends sideways too.`,
+  idea: String.raw`A bent beam's fibres stretch on one side and shorten on the other, in proportion to their distance from the neutral axis, which passes through the centroid. Stress follows the same line, \(My/I\). A deeper section has a much larger \(I\), so a deeper beam carries the same moment at much lower stress. Two materials bolted together share the moment by stiffness, and a beam turned off its principal axes bends sideways too.`,
   requires: ['internal-loads', 'centroids', 'stress-strain'],
   sources: [
     {
