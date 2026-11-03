@@ -25,6 +25,11 @@ export const SATELLITE = {
     },
     {
       id: 'structure', title: 'Structure', part: 'Frame + attachments', requires: [],
+      submission: {
+        title: 'Submit an enclosure design',
+        url: 'https://flux-design-review.readydelta2.chatgpt.site',
+        description: 'Upload a STEP model and dimensioned PDF, keep each revision and review its evidence against the enclosure brief. ChatGPT sign-in protects your private files. AI review availability is shown in the workspace.',
+      },
       outcome: 'Support the components without exceeding a stated stress or deflection limit.',
       concepts: ['static-equilibrium', 'stress-on-a-section', 'beam-deflection', 'forced-resonance'],
       labs: [{ concept: 'stress-on-a-section', course: 'egn3331', lab: 'pins' }],
