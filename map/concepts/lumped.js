@@ -24,6 +24,6 @@ export default {
     },
   ],
   labs: [
-    { course: 'map2302', lab: 'coffee', note: 'Newton cooling, solved exactly and checked by numerical integration.' },
+    { course: 'map2302', lab: 'coffee', notes: ['s9'], note: 'Newton cooling, solved exactly and checked by numerical integration.' },
   ],
 };
