@@ -23,6 +23,9 @@ test('every recipe uses existing concepts and labs that teach its foundations', 
     }
   }
   assert.deepEqual(SATELLITE.integration.requires, SATELLITE.components.map((c) => c.id));
+  const submissions = SATELLITE.components.filter((c) => c.submission);
+  assert.deepEqual(submissions.map((c) => c.id), ['structure']);
+  assert.equal(new URL(submissions[0].submission.url).protocol, 'https:');
 });
 
 function complete(state, id) {

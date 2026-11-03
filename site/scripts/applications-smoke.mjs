@@ -113,6 +113,8 @@ try {
     for (const [width, height] of [[390, 844], [1280, 800]]) {
       await page.send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 600 });
       await navigate();
+      await select('structure');
+      assert.equal(await page.eval('document.querySelector(".application-submission a").href'), 'https://flux-design-review.readydelta2.chatgpt.site/');
       await page.eval(`document.documentElement.dataset.theme = '${theme}'; document.querySelector('#applications').scrollIntoView()`);
       await delay(150);
       assert.equal(await page.eval('document.documentElement.scrollWidth > innerWidth'), false, `${theme} ${width}`);

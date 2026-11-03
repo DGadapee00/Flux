@@ -28,3 +28,18 @@ shared importer validates the complete file. Missing course sections and wrong c
 The content is in `site/src/applications/satellite.js`. Capability rules and storage are in
 `progress.js`; the hub view is in `view.js`. Tests check concept and lab links, prerequisite gates,
 integration, evidence invalidation and backup round trips.
+
+## Enclosure submissions
+
+The Structure recipe links to the private Flux Design Review workspace at
+https://flux-design-review.readydelta2.chatgpt.site. The public hub does not receive uploaded
+designs. The workspace uses ChatGPT sign-in, private R2 files and D1 submission metadata.
+Each version records a STEP file, a dimensioned PDF, design notes and file hashes. Reviews
+remain attached to that version. An evidence link can be copied into the personal capability record;
+no cross-site review result automatically grants completion.
+
+AI review is available only after the workspace's server API key is configured through the
+OpenAI Developers plugin's approved key workflow. Without it, uploads and version history remain
+available and review is explicitly unavailable. The review interprets the PDF and notes against
+the enclosure rubric. Independent CAD geometry analysis is not connected. Its geometry criterion
+always remains unverified, even if an AI response claims otherwise. PCB submissions are a later milestone.
