@@ -2,7 +2,7 @@ export default {
   id: 'buoyancy',
   title: 'Buoyancy',
   subject: 'fluids',
-  courses: ['phy2048'],
+  courses: ['phy2048', 'eml3015'],
   eq: String.raw`F_B = \rho_\text{fluid}\,g\,V_\text{sub}, \qquad \frac{V_\text{sub}}{V} = \frac{\rho_\text{body}}{\rho_\text{fluid}}\ \text{(floating)}`,
   idea: String.raw`Pressure rises with depth, so a submerged body is pushed up harder from below than down from above. The net push equals the weight of the fluid it displaces. A floating body sinks until it displaces its own weight, so the fraction under water is the ratio of the densities.`,
   requires: ['pressure'],

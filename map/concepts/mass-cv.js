@@ -3,7 +3,7 @@ export default {
   title: 'Mass balance on a control volume',
   label: ['Mass balance', '(control volume)'],
   subject: 'thermo',
-  courses: ['eml3100'],
+  courses: ['eml3100', 'eml3015'],
   eq: String.raw`\frac{dm_\text{cv}}{dt} = \sum \dot m_\text{in} - \sum \dot m_\text{out}, \qquad \dot m = \rho V A`,
   idea: String.raw`Draw a boundary around a device and count what crosses it. The mass flow through an opening is the flux of \(\rho\mathbf v\) through it. That is \(\rho V A\) when the velocity is uniform and normal to the opening. In steady flow, what enters leaves.`,
   requires: ['surface-flux'],

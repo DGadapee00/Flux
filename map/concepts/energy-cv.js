@@ -3,7 +3,7 @@ export default {
   title: 'Steady-flow energy equation',
   label: ['Steady-flow', 'energy'],
   subject: 'thermo',
-  courses: ['eml3100'],
+  courses: ['eml3100', 'eml3015'],
   eq: String.raw`\dot Q - \dot W = \dot m\left[(h_2 - h_1) + \tfrac12\left(V_2^2 - V_1^2\right) + g\,(z_2 - z_1)\right]`,
   idea: 'Energy gets the same boundary bookkeeping as mass. Each kilogram that crosses carries enthalpy, kinetic energy and potential energy. The heat and work crossing the boundary account for the change. Turbines, nozzles and water heaters are all this one equation.',
   requires: ['mass-cv', 'first-law-closed'],
