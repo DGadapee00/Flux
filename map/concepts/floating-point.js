@@ -1,0 +1,28 @@
+export default {
+  id: 'floating-point',
+  title: 'Floating point and round-off',
+  label: ['Floating point'],
+  subject: 'numerics',
+  courses: ['egn3203'],
+  eq: String.raw`\operatorname{fl}(x) = x\,(1 + \delta), \quad |\delta| \le u = 2^{-53} \approx 1.1\times10^{-16}, \qquad 1 - \cos x = 2\sin^2\tfrac x2`,
+  idea: String.raw`A computer stores a real number in binary with a fixed count of significant digits, about 16 decimal digits in double precision. Each stored number and each operation can be off by a relative amount up to the unit round-off \(u\). Most of the time that is far too small to matter. Subtracting two nearly equal numbers is the exception: the leading digits cancel and the round-off left behind becomes most of the answer. The fix is to rewrite the formula so it never subtracts close numbers, as \(2\sin^2(x/2)\) does for \(1 - \cos x\).`,
+  requires: [],
+  sources: [
+    {
+      title: 'Yano, Penn, Konidaris and Patera, Math, Numerics, and Programming (for Mechanical Engineers)',
+      url: 'https://ocw.mit.edu/courses/2-086-numerical-computation-for-mechanical-engineers-spring-2013/resources/mit2_086s13_textbook/',
+      kind: 'Open textbook',
+      level: 'Course level',
+      why: 'The text written for MIT 2.086; it treats floating point where it first meets programs.',
+    },
+    {
+      title: 'Wikipedia, Floating-point arithmetic',
+      url: 'https://en.wikipedia.org/wiki/Floating-point_arithmetic',
+      kind: 'Reference',
+      level: 'Deeper',
+      why: 'The IEEE 754 formats, rounding and the classic cancellation cases.',
+    },
+  ],
+  labs: [],
+  candidate: 'Evaluate \\((1 - \\cos x)/x^2\\) as \\(x\\) shrinks, written directly and as \\(2\\sin^2(x/2)/x^2\\). It corrects the idea that a computer’s answer is good to 16 digits: the direct form loses every digit near \\(x = 10^{-8}\\), while the true value is \\(1/2\\).',
+};

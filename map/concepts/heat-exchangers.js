@@ -1,0 +1,35 @@
+export default {
+  id: 'heat-exchangers',
+  title: 'Heat exchangers: LMTD and ε-NTU',
+  label: ['Heat exchangers'],
+  subject: 'heat',
+  courses: ['eml4140'],
+  eq: String.raw`q = UA\,\Delta T_\text{lm}, \quad \Delta T_\text{lm} = \frac{\Delta T_1 - \Delta T_2}{\ln(\Delta T_1/\Delta T_2)}, \qquad q = \varepsilon\,C_\text{min}\,(T_{h,i} - T_{c,i}), \quad \text{NTU} = \frac{UA}{C_\text{min}}`,
+  idea: String.raw`A heat exchanger passes heat from one stream to another through a wall, and the overall coefficient \(U\) sums the resistances in between. The temperature difference changes along the length, so energy balances on both streams give a log-mean difference to use with \(UA\). When the outlet temperatures are not known, the effectiveness method is quicker: \(\varepsilon\) is the heat moved over the most that could move, and it depends only on NTU, the capacity ratio and the flow arrangement. In counterflow the cold stream can leave hotter than the hot stream leaves; in parallel flow it never can.`,
+  requires: ['thermal-resistance', 'energy-cv'],
+  sources: [
+    {
+      title: 'Lienhard, A Heat Transfer Textbook',
+      url: 'https://ahtt.mit.edu',
+      kind: 'Free textbook',
+      level: 'Course level',
+      why: 'Chapter 3 covers exchanger types, LMTD and effectiveness.',
+    },
+    {
+      title: 'MIT 16.050, calendar: Applications of the concepts, heat exchangers',
+      url: 'https://ocw.mit.edu/courses/16-050-thermal-energy-fall-2002/pages/calendar/',
+      kind: 'Course outline',
+      level: 'Course level',
+      why: 'MIT 2.51’s calendar has no exchanger session; 16.050 gives it two lectures.',
+    },
+    {
+      title: 'Wikipedia, NTU method',
+      url: 'https://en.wikipedia.org/wiki/NTU_method',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'Effectiveness against NTU for the common flow arrangements.',
+    },
+  ],
+  labs: [],
+  candidate: 'Run one exchanger in counterflow and parallel flow, the two temperature profiles drawn. It corrects the idea that the cold stream can never leave hotter than the hot stream leaves: in counterflow it can, and LMTD and ε-NTU give the same duty.',
+};
