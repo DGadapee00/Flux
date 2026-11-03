@@ -4,8 +4,8 @@ export default {
   label: ['Convection', 'in pipes'],
   subject: 'heat',
   courses: ['eml4140'],
-  eq: String.raw`\frac{T_s - T_m(x)}{T_s - T_{m,i}} = \exp\!\left(-\frac{hPx}{\dot m c_p}\right), \qquad \text{Nu}_D = 3.66\ \text{(laminar)}, \quad 0.023\,\text{Re}_D^{0.8}\text{Pr}^{0.4}\ \text{(turbulent)}`,
-  idea: String.raw`Inside a pipe the layers from the wall meet in the middle, and the flow becomes fully developed. In laminar flow \(h\) then stops changing and the Nusselt number is a constant. An energy balance on a slice of the pipe says the bulk temperature approaches a constant wall temperature exponentially along the length. So the average driving difference over the pipe is a logarithmic mean, not an arithmetic one. Turbulent flow mixes the core and raises Nu sharply, and the correlations use the same Reynolds number as the friction factor.`,
+  eq: String.raw`\frac{T_s - T_m(x)}{T_s - T_{m,i}} = \exp\!\left(-\frac{hPx}{\dot m c_p}\right), \qquad \text{Nu}_D = 3.66\ \text{(laminar, uniform wall temperature)}, \quad 0.023\,\text{Re}_D^{0.8}\text{Pr}^{0.4}\ \text{(turbulent)}`,
+  idea: String.raw`Inside a pipe the layers from the wall meet in the middle, and the flow becomes fully developed. In laminar flow \(h\) then stops changing and the Nusselt number is a constant: 3.66 for a wall at one temperature, 4.36 for a wall with uniform heat flux. An energy balance on a slice of the pipe says the bulk temperature approaches a constant wall temperature exponentially along the length. So the average driving difference over the pipe is a logarithmic mean, not an arithmetic one. Turbulent flow mixes the core and raises Nu sharply, and the correlations use the same Reynolds number as the friction factor.`,
   requires: ['convection', 'pipe-flow', 'energy-cv'],
   sources: [
     {
