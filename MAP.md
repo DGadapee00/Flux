@@ -1,9 +1,9 @@
 # What the map covers
 
-A snapshot from the data on 3 November 2026. For the live numbers run `node map/check.mjs`,
-`npm run map-audit` and `npm run map-gaps`.
+A snapshot from the data on 3 November 2026, after the materials-science thread. For the live
+numbers run `node map/check.mjs`, `npm run map-audit` and `npm run map-gaps`.
 
-**153 concepts, 146 with a Flux lab, 7 gaps.**
+**168 concepts, 146 with a Flux lab, 22 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -14,7 +14,8 @@ A snapshot from the data on 3 November 2026. For the live numbers run `node map/
 | Thermo and fluids | 16 | 15 |
 | Heat transfer | 3 | 2 |
 | Circuits and systems | 11 | 11 |
-| Materials | 14 | 14 |
+| Mechanics of materials | 14 | 14 |
+| Materials science | 15 | 0 |
 | Statistics | 9 | 9 |
 
 Every Flux course app is on the map: every lab and every notes section sits on a concept, and
@@ -33,6 +34,13 @@ Every Flux course app is on the map: every lab and every notes section sits on a
 | EML 3100 Thermodynamics | 14 |
 | STA 3032 Probability and Statistics | 9 |
 | Bench (a project) | 6 |
+
+EMA 3010 Materials Science has no app, so it is not audited; its path holds the 15 concepts of
+the Materials science lane, all of them gaps with a candidate lab:
+
+| Course | Concepts on its path |
+|---|---|
+| EMA 3010 Materials Science | 15 |
 
 Courses that share ideas share concepts: Dynamics and Physics I meet on the mechanics lane,
 Statics leads into Mechanics of Materials, and Differential Equations ties the oscillators of

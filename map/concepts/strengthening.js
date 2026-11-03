@@ -1,0 +1,28 @@
+export default {
+  id: 'strengthening',
+  title: 'Strengthening mechanisms',
+  label: ['Strengthening'],
+  subject: 'matsci',
+  courses: ['ema3010'],
+  eq: String.raw`\sigma_y = \sigma_0 + k_y\,d^{-1/2}\ \text{(Hall–Petch)}`,
+  idea: String.raw`A metal yields when dislocations move, so every way of strengthening it puts obstacles in their path. Grain boundaries stop them, and smaller grains mean more boundaries, giving the Hall–Petch rise with \(d^{-1/2}\). Solute atoms strain the lattice around them; cold work multiplies dislocations until they tangle; fine precipitates, grown when solubility falls on cooling, pin them. Each one costs ductility, and annealing gives it back.`,
+  requires: ['dislocations', 'phase-diagrams'],
+  sources: [
+    {
+      title: 'Grain boundary strengthening (Wikipedia)',
+      url: 'https://en.wikipedia.org/wiki/Grain_boundary_strengthening',
+      kind: 'Reference article',
+      level: 'Course level',
+      why: 'Hall–Petch, its pile-up argument and where it stops working.',
+    },
+    {
+      title: 'Precipitation hardening (Wikipedia)',
+      url: 'https://en.wikipedia.org/wiki/Precipitation_hardening',
+      kind: 'Reference article',
+      level: 'Course level',
+      why: 'Solution treatment, quench and ageing, tied to the solvus on the phase diagram.',
+    },
+  ],
+  labs: [],
+  candidate: 'Change the grain size and plot yield strength against \\(d^{-1/2}\\). It corrects the idea that more grain boundaries, being flaws, make a metal weaker.',
+};

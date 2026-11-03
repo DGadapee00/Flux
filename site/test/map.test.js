@@ -62,7 +62,7 @@ test('the local view: one step each way, then two, without siblings', async () =
   const req = (id) => graph.byId[id].requires;
   const lead = (id) => graph.leads[id];
   const near = neighbourhood('divergence-theorem', 1, req, lead);
-  assert.deepEqual([...near].sort(), ['continuity', 'divergence', 'divergence-theorem', 'heat-equation', 'maxwell-div']);
+  assert.deepEqual([...near].sort(), ['continuity', 'diffusion', 'divergence', 'divergence-theorem', 'heat-equation', 'maxwell-div']);
   const two = neighbourhood('divergence-theorem', 2, req, lead);
   assert.ok(two.has('surface-flux') && two.has('lumped') && two.has('em-waves'));
   assert.equal(two.has('mass-cv'), false, 'a prerequisite of a lead is a sibling path, not two steps out');

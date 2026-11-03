@@ -14,6 +14,7 @@ export const SUBJECTS = [
   { id: 'thermo', label: 'Thermo and fluids', token: '--lane-thermo', dark: '#83c167', light: '#3f7d27' },
   { id: 'heat', label: 'Heat transfer', token: '--lane-heat', dark: '#fc6255', light: '#c23a2f' },
   { id: 'circuits', label: 'Circuits and systems', token: '--lane-circuits', dark: '#b39af0', light: '#6a48b8' },
-  { id: 'materials', label: 'Materials', token: '--lane-materials', dark: '#d2b48c', light: '#7a6235' },
+  { id: 'materials', label: 'Mechanics of materials', token: '--lane-materials', dark: '#d2b48c', light: '#7a6235' },
+  { id: 'matsci', label: 'Materials science', token: '--lane-matsci', dark: '#8c9cff', light: '#3d4fc4' },
   { id: 'stats', label: 'Statistics', token: '--lane-stats', dark: '#ef86d2', light: '#a2338b' },
 ];
