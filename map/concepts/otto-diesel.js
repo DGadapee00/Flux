@@ -1,0 +1,35 @@
+export default {
+  id: 'otto-diesel',
+  title: 'Otto and Diesel cycles',
+  label: ['Otto and Diesel'],
+  subject: 'thermo',
+  courses: ['eml3101'],
+  eq: String.raw`\eta_\text{Otto} = 1 - \frac{1}{r^{\,k-1}}, \qquad \eta_\text{Diesel} = 1 - \frac{1}{r^{\,k-1}}\,\frac{r_c^{\,k} - 1}{k\,(r_c - 1)}`,
+  idea: String.raw`A piston engine is modelled as air in a closed cylinder run round a cycle: isentropic compression, heat added, isentropic expansion, heat rejected. In the Otto cycle the heat goes in at constant volume, as a spark ignites the charge at the top of the stroke. In the Diesel cycle it goes in at constant pressure while the fuel burns as the piston moves down. With cold-air assumptions Otto's efficiency depends only on the compression ratio \(r\). At the same \(r\) the Diesel does worse, but it runs at much higher \(r\) because it compresses air alone and cannot knock.`,
+  requires: ['entropy', 'boundary-work'],
+  sources: [
+    {
+      title: 'MIT 16.050, calendar: Gas power and propulsion cycles',
+      url: 'https://ocw.mit.edu/courses/16-050-thermal-energy-fall-2002/pages/calendar/',
+      kind: 'Course outline',
+      level: 'Course level',
+      why: 'The six lectures on air-standard cycles that this concept starts.',
+    },
+    {
+      title: 'Cleynen, Engineering Thermodynamics',
+      url: 'https://thermodynamicsbook.com/',
+      kind: 'Open textbook',
+      level: 'Course level',
+      why: 'Piston-engine cycles on \\(p\\)–\\(v\\) and \\(T\\)–\\(s\\) diagrams, worked through.',
+    },
+    {
+      title: 'Wikipedia, Otto cycle',
+      url: 'https://en.wikipedia.org/wiki/Otto_cycle',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'The four strokes mapped onto the four processes.',
+    },
+  ],
+  labs: [],
+  candidate: 'Run Otto and Diesel cycles side by side on \\(p\\)–\\(v\\) and \\(T\\)–\\(s\\), with a slider for compression ratio. It corrects the idea that the Diesel is the more efficient cycle: at the same compression ratio it is less efficient; it wins only because it can run at a higher one.',
+};

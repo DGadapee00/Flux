@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { fitArcCamera, plotWindow } from './arc.js';
 import { cells, eq, kv } from '@flux/shells/math/shared.js';
 import { fmtNum as fmt } from '@flux/shells/math/format.js';
 import {
@@ -30,16 +30,8 @@ function keepXy(state) {
 }
 
 function seriesCamera(state) {
-  const u = state?.view?.upm > 0 ? state.view.upm : 1;
-  const xMin = Number.isFinite(state?.xMin) ? state.xMin : FRAME.xMin;
-  const xMax = Number.isFinite(state?.xMax) ? state.xMax : FRAME.xMax;
-  const yMin = Number.isFinite(state?.yMin) ? state.yMin : FRAME.yMin;
-  const yMax = Number.isFinite(state?.yMax) ? state.yMax : FRAME.yMax;
-  const cx = ((xMin + xMax) / 2) * u;
-  const cy = ((yMin + yMax) / 2) * u;
-  const halfW = ((xMax - xMin) / 2) * u;
-  const z = (halfW * 1.25) / (Math.tan(Math.PI / 9) * (380 / 780));
-  return { pos: new THREE.Vector3(cx, cy, z), target: new THREE.Vector3(cx, cy, 0) };
+  const c = fitArcCamera(state, plotWindow());
+  return { pos: c.pos, target: c.target };
 }
 
 function clampN(n) {
@@ -79,6 +71,12 @@ function limitOf(kind) {
   return null;
 }
 
+function seriesFrame(s) {
+  const n = clampN(s.n),
+    kind = kindOf(s.kind),
+    high = Math.max(2.2, partial(kind, n), limitOf(kind) || 0);
+  return { xMin: -0.4, xMax: n + 1, yMin: -0.2, yMax: high * 1.12 + 0.2 };
+}
 export default defineLab({
   id: 'series',
   exam: 'u3',
@@ -117,7 +115,7 @@ export default defineLab({
   bind(api) {
     document.getElementById('ser-n').addEventListener('input', (e) => {
       api.slice().n = Number(e.target.value);
-      api.bump();
+      api.fitView?.();
     });
   },
   syncControls(state) {
@@ -129,11 +127,13 @@ export default defineLab({
     state.scenarioId = s.id;
     state.kind = s.kind;
     state.n = s.n;
-    Object.assign(state, FRAME);
+    Object.assign(state, seriesFrame(state));
     keepXy(state);
   },
-  extent() {
-    return Math.max(Math.abs(FRAME.xMin), FRAME.xMax, Math.abs(FRAME.yMin), FRAME.yMax);
+  extent(s) {
+    const f = seriesFrame(s);
+    Object.assign(s, f);
+    return Math.max(Math.abs(f.xMin), f.xMax, Math.abs(f.yMin), f.yMax);
   },
   recompute(state, computed) {
     keepXy(state);
@@ -141,7 +141,7 @@ export default defineLab({
     const n = clampN(state.n);
     state.kind = kind;
     state.n = n;
-    Object.assign(state, FRAME);
+    Object.assign(state, seriesFrame(state));
     const sn = partial(kind, n);
     const alt = partialAlt(kind, n);
     const limit = limitOf(kind);
@@ -169,19 +169,39 @@ export default defineLab({
     const n = state.n;
     const points = [];
     for (let k = 1; k <= n; k++) points.push({ x: k, y: partial(kind, k) });
-    view.syncCurve('curve', (x) => partial(kind, Math.max(1, Math.min(n, Math.round(x)))), 1, n, show.sums !== false);
-    view.syncCurve('poly', (x) => termAt(kind, Math.max(1, Math.min(n, Math.round(x)))), 1, n, show.terms !== false);
+    view.syncCurve(
+      'curve',
+      (x) => partial(kind, Math.max(1, Math.min(n, Math.round(x)))),
+      1,
+      n,
+      show.sums !== false,
+    );
+    view.syncCurve(
+      'poly',
+      (x) => termAt(kind, Math.max(1, Math.min(n, Math.round(x)))),
+      1,
+      n,
+      show.terms !== false,
+    );
     view.syncNodes(points, show.sums !== false, 0.16);
     view.syncMark(0, 0, false);
     view.syncHatch(() => 0, 0, 1, false);
-    view.syncLevel(computed.limit, FRAME.xMin + 0.2, FRAME.xMax - 0.2, computed.converges === true);
+    view.syncLevel(computed.limit, state.xMin + 0.2, state.xMax - 0.2, computed.converges === true);
   },
   law(state) {
     const kind = state?.kind || 'geom';
-    if (kind === 'harm') return [String.raw`H_n=\sum_{k=1}^{n}\frac{1}{k}`, String.raw`\int_1^{\infty}\frac{1}{x}\,dx`];
-    if (kind === 'alt') return [String.raw`\sum_{k=1}^{n}\frac{(-1)^{k+1}}{k}`, String.raw`\sum_{k=1}^{\infty}\frac{(-1)^{k+1}}{k}=\ln 2`];
+    if (kind === 'harm')
+      return [String.raw`H_n=\sum_{k=1}^{n}\frac{1}{k}`, String.raw`\int_1^{\infty}\frac{1}{x}\,dx`];
+    if (kind === 'alt')
+      return [
+        String.raw`\sum_{k=1}^{n}\frac{(-1)^{k+1}}{k}`,
+        String.raw`\sum_{k=1}^{\infty}\frac{(-1)^{k+1}}{k}=\ln 2`,
+      ];
     if (kind === 'ones') return [String.raw`\sum_{k=1}^{n} 1=n`];
-    return [String.raw`\sum_{k=0}^{n-1}\left(\frac{1}{2}\right)^{k}=2\left(1-\left(\frac{1}{2}\right)^{n}\right)`, String.raw`\sum_{k=0}^{\infty}\left(\frac{1}{2}\right)^{k}=2`];
+    return [
+      String.raw`\sum_{k=0}^{n-1}\left(\frac{1}{2}\right)^{k}=2\left(1-\left(\frac{1}{2}\right)^{n}\right)`,
+      String.raw`\sum_{k=0}^{\infty}\left(\frac{1}{2}\right)^{k}=2`,
+    ];
   },
   liveRows(state, computed) {
     const limit = computed.converges ? `$${fmt(computed.limit)}$` : 'none';
@@ -201,17 +221,21 @@ export default defineLab({
     ]);
   },
   coach(state, computed) {
-    const body = [
-      'Teal is the partial sum. Yellow is the term you just added. White marks are the sums.',
-    ];
+    const body = ['Teal is the partial sum. Yellow is the term you just added. White marks are the sums.'];
     if (state.kind === 'geom') {
-      body.push('Each term is half the one before it. The geometric formula gives the sum, and the ceiling is 2.');
+      body.push(
+        'Each term is half the one before it. The geometric formula gives the sum, and the ceiling is 2.',
+      );
     } else if (state.kind === 'harm') {
       body.push('The terms go to 0. The sums still climb. The integral of 1/x says there is no ceiling.');
     } else if (state.kind === 'alt') {
-      body.push('The signs alternate and the terms shrink. The alternating-series test gives a ceiling at ln 2.');
+      body.push(
+        'The signs alternate and the terms shrink. The alternating-series test gives a ceiling at ln 2.',
+      );
     } else {
-      body.push('The terms stay at 1. They do not go to 0, so the partial sums are just the number of terms.');
+      body.push(
+        'The terms stay at 1. They do not go to 0, so the partial sums are just the number of terms.',
+      );
     }
     body.push(eq(String.raw`s_{${state.n}}=${fmt(computed.sn)}`));
     if (computed.agree) body.push('A second way of adding the same terms agrees.');

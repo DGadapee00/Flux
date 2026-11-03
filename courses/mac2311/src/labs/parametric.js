@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { fitArcCamera, plotWindow } from './arc.js';
 import { cells, eq, kv } from '@flux/shells/math/shared.js';
 import { fmtNum as fmt } from '@flux/shells/math/format.js';
 import {
@@ -31,16 +31,8 @@ function keepXy(state) {
 }
 
 function paramCamera(state) {
-  const u = state?.view?.upm > 0 ? state.view.upm : 1;
-  const xMin = Number.isFinite(state?.xMin) ? state.xMin : FRAME.xMin;
-  const xMax = Number.isFinite(state?.xMax) ? state.xMax : FRAME.xMax;
-  const yMin = Number.isFinite(state?.yMin) ? state.yMin : FRAME.yMin;
-  const yMax = Number.isFinite(state?.yMax) ? state.yMax : FRAME.yMax;
-  const cx = ((xMin + xMax) / 2) * u;
-  const cy = ((yMin + yMax) / 2) * u;
-  const halfW = ((xMax - xMin) / 2) * u;
-  const z = (halfW * 1.25) / (Math.tan(Math.PI / 9) * (380 / 780));
-  return { pos: new THREE.Vector3(cx, cy, z), target: new THREE.Vector3(cx, cy, 0) };
+  const c = fitArcCamera(state, plotWindow());
+  return { pos: c.pos, target: c.target };
 }
 
 function kindOf(kind) {
@@ -90,7 +82,11 @@ function sample(kind) {
 
 function tangentSegment(x, y, dx, dy) {
   const speed = Math.hypot(dx, dy);
-  if (speed < 1e-12) return [{ x, y }, { x, y }];
+  if (speed < 1e-12)
+    return [
+      { x, y },
+      { x, y },
+    ];
   const h = 0.4;
   const ux = (h * dx) / speed;
   const uy = (h * dy) / speed;
@@ -162,7 +158,7 @@ export default defineLab({
     return `
       <div class="lab-block">
         <label class="field">
-          <span id="par-name">quarter turns of π</span>
+          <span id="par-name">Angle in steps of π/4</span>
           <div class="slider-row">
             <input type="range" id="par-k" min="0" max="72" step="1" value="2" />
           </div>
@@ -184,7 +180,7 @@ export default defineLab({
     slider.max = circle ? '72' : '4';
     slider.step = circle ? '1' : '0.08';
     slider.value = state.k;
-    if (name) name.textContent = circle ? 'quarter turns of π' : 'fourths of the segment';
+    if (name) name.textContent = circle ? 'Angle in steps of π/4' : 'fourths of the segment';
   },
   applyScenario(id, state) {
     const s = SCENARIOS.find((item) => item.id === id) || SCENARIOS[0];
@@ -232,7 +228,11 @@ export default defineLab({
     const show = state.show || {};
     const view = ctx.handle.view;
     view.syncPath('curve', sample(state.kind), show.curve !== false);
-    view.syncPath('poly', tangentSegment(computed.x, computed.y, computed.dx, computed.dy), show.tangent !== false);
+    view.syncPath(
+      'poly',
+      tangentSegment(computed.x, computed.y, computed.dx, computed.dy),
+      show.tangent !== false,
+    );
     view.syncNodes([{ x: computed.x, y: computed.y }], true, 0.07);
     view.syncMark(0, 0, false);
     view.syncHatch(() => 0, 0, 1, false);
@@ -240,9 +240,15 @@ export default defineLab({
   },
   law(state) {
     const kind = state?.kind || 'circle';
-    if (kind === 'para') return [String.raw`x=t,\ y=t^2`, String.raw`\frac{dy}{dx}=2t`, String.raw`L=\int_0^t\sqrt{1+4u^2}\,du`];
-    if (kind === 'line') return [String.raw`x=t,\ y=2t`, String.raw`\frac{dy}{dx}=2`, String.raw`L=\sqrt{5}\,t`];
-    return [String.raw`x=\cos t,\ y=\sin t`, String.raw`\frac{dy}{dx}=\frac{\cos t}{-\sin t}`, String.raw`L=t`];
+    if (kind === 'para')
+      return [String.raw`x=t,\ y=t^2`, String.raw`\frac{dy}{dx}=2t`, String.raw`L=\int_0^t\sqrt{1+4u^2}\,du`];
+    if (kind === 'line')
+      return [String.raw`x=t,\ y=2t`, String.raw`\frac{dy}{dx}=2`, String.raw`L=\sqrt{5}\,t`];
+    return [
+      String.raw`x=\cos t,\ y=\sin t`,
+      String.raw`\frac{dy}{dx}=\frac{\cos t}{-\sin t}`,
+      String.raw`L=t`,
+    ];
   },
   liveRows(state, computed) {
     const slope = computed.vertical ? 'vertical' : `$${fmt(computed.slope)}$`;
@@ -273,8 +279,13 @@ export default defineLab({
     } else {
       body.push('The speed stays at 1. The slope changes as the point moves around the circle.');
     }
-    const slopeTex = computed.vertical ? String.raw`\infty` : fmt(computed.slope);
-    body.push(eq(String.raw`\frac{dy}{dx}=${slopeTex},\quad \text{speed}=${fmt(computed.speed)}`));
+    body.push(
+      eq(
+        computed.vertical
+          ? String.raw`\text{vertical tangent},\quad \text{speed}=${fmt(computed.speed)}`
+          : String.raw`\frac{dy}{dx}=${fmt(computed.slope)},\quad \text{speed}=${fmt(computed.speed)}`,
+      ),
+    );
     if (computed.agree) body.push('A second calculation agrees.');
     return { title: 'Slope is not speed', body };
   },

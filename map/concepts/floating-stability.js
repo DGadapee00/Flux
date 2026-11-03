@@ -1,0 +1,28 @@
+export default {
+  id: 'floating-stability',
+  title: 'Stability of floating bodies',
+  label: ['Floating', 'stability'],
+  subject: 'fluids',
+  courses: ['eml3015'],
+  eq: String.raw`\overline{GM} = \frac{I_\text{wp}}{V_\text{sub}} - \overline{BG}, \qquad \overline{GM} > 0\ \text{(stable)}`,
+  idea: String.raw`Buoyancy acts at B, the centroid of the displaced water, and weight acts at G. Tilt a floating body and the displaced shape changes, so B moves toward the side that went down. The new buoyancy line crosses the centre line at the metacentre M. If M is above G, the pair of forces turns the body back upright. The width of the waterline sets how far B moves, through its area moment of inertia.`,
+  requires: ['buoyancy', 'centroids', 'moments'],
+  sources: [
+    {
+      title: 'MIT 2.06, calendar: Lecture 2, buoyancy forces on surfaces',
+      url: 'https://ocw.mit.edu/courses/2-06-fluid-dynamics-spring-2013/pages/calendar/',
+      kind: 'Course outline',
+      level: 'Course level',
+      why: 'Buoyancy as the net pressure force on a closed surface, the step before stability.',
+    },
+    {
+      title: 'Wikipedia, Metacentric height',
+      url: 'https://en.wikipedia.org/wiki/Metacentric_height',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'The metacentre and the righting arm, with the ship-design view of GM.',
+    },
+  ],
+  labs: [],
+  candidate: 'Tilt a floating block and watch B swing toward the low side. It corrects the idea that a body floats upright only if G sits below B: a ship floats with G above B, as long as the metacentre is higher still.',
+};

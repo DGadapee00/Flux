@@ -7,6 +7,7 @@ import { GraphView } from '../scene/graph.js';
 import { defineLab, planeCamera } from './define.js';
 
 const SCENARIOS = [
+  { id: 'cube', name: 'x³ on [0,1]', graphId: 'cube', a: 0, b: 1 },
   { id: 'quad', name: 'x² on [0, 1]', graphId: 'quad', a: 0, b: 1 },
   { id: 'line', name: '2x+1 on [0, 2]', graphId: 'line', a: 0, b: 2 },
   { id: 'sine', name: 'sin x on [0, π]', graphId: 'sine', a: 0, b: Math.PI },
@@ -156,9 +157,7 @@ export default defineLab({
     view.syncBars(computed.rects || [], show.bars !== false);
   },
   law() {
-    return [
-      '\\displaystyle\\int_a^b f(x)\\,dx=\\lim_{n\\to\\infty}\\sum_{i=1}^{n} f(x_i^*)\\,\\Delta x',
-    ];
+    return ['\\displaystyle\\int_a^b f(x)\\,dx=\\lim_{n\\to\\infty}\\sum_{i=1}^{n} f(x_i^*)\\,\\Delta x'];
   },
   liveRows(state, computed) {
     return (

@@ -16,3 +16,5 @@ export function createProgress(storage = browserStorage(), { now } = {}) {
 export function pickSet(templates, progress, opts = {}) {
   return corePickSet(templates, progress, { ...opts, chapterOrder: CHAPTER_ORDER });
 }
+
+export { pickInterleave } from '@flux/core';

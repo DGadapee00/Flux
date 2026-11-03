@@ -1,0 +1,455 @@
+<title>The Flux Thread</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+/* Layout: a subway-style map (subjects as lanes, prerequisites left to right) over a reading panel for the chosen concept. */
+:root {
+  --bg: #0b0c0e;
+  --panel: #131418;
+  --line: #2a2c31;
+  --fg: #ece6e2;
+  --muted: #aaa39e;
+  --dim: #77716c;
+  --math: #58c4dd;
+  --em: #f4d345;
+  --thermo: #83c167;
+  --heat: #fc6255;
+  --focus: #ece6e2;
+  --node: #17181c;
+  --display: 'IBM Plex Sans Condensed', 'Arial Narrow', system-ui, sans-serif;
+  --body: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f6f5f2; --panel: #ffffff; --line: #dcd8d2; --fg: #1d1c1a; --muted: #5d5853; --dim: #8a847e;
+    --math: #1f7f99; --em: #a07800; --thermo: #3f7d27; --heat: #c23a2f; --focus: #1d1c1a; --node: #ffffff;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f6f5f2; --panel: #ffffff; --line: #dcd8d2; --fg: #1d1c1a; --muted: #5d5853; --dim: #8a847e;
+  --math: #1f7f99; --em: #a07800; --thermo: #3f7d27; --heat: #c23a2f; --focus: #1d1c1a; --node: #ffffff;
+  color-scheme: light;
+}
+
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 28px 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 22px; }
+
+header { display: grid; gap: 8px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 5vw, 44px); line-height: 1.05; margin: 0; text-wrap: balance; }
+.lede { margin: 0; max-width: 66ch; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--display); font-size: 14px; color: var(--muted); margin-top: 4px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; background: var(--fg); }
+.dot.hollow { background: transparent; border: 1.5px solid var(--dim); }
+
+.mapbox { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.mapbox svg { display: block; min-width: 980px; width: 100%; height: auto; }
+.hint { font-family: var(--mono); font-size: 12px; color: var(--dim); margin: -12px 0 0; }
+
+.lane-label { font-family: var(--display); font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.lane-bg { opacity: .07; }
+.edge { fill: none; stroke: var(--dim); stroke-width: 1.4; opacity: .55; transition: opacity .15s, stroke .15s; }
+.edge.up { stroke: var(--focus); opacity: 1; stroke-width: 2.2; }
+.edge.down { opacity: .9; stroke-dasharray: 4 4; }
+.edge.faded { opacity: .12; }
+.node { cursor: pointer; }
+.node rect { fill: var(--node); stroke-width: 1.6; transition: opacity .15s; }
+.node text { font-family: var(--display); font-size: 14px; font-weight: 600; fill: var(--fg); pointer-events: none; }
+.node.faded { opacity: .28; }
+.node.sel rect { stroke-width: 3; }
+.node:focus { outline: none; }
+.node:focus-visible rect { stroke: var(--focus); stroke-width: 3; }
+
+.trail { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-family: var(--display); font-size: 14px; color: var(--dim); min-height: 28px; }
+.trail button { font: inherit; color: var(--muted); background: none; border: 0; padding: 2px 4px; cursor: pointer; border-radius: 4px; }
+.trail button:hover, .trail button:focus-visible { color: var(--fg); outline: 1px solid var(--line); }
+.trail .now { color: var(--fg); font-weight: 600; }
+
+.detail { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 820px) { .detail { grid-template-columns: minmax(0, 1fr); gap: 22px; } }
+.col { display: grid; gap: 16px; min-width: 0; }
+.tagrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.course { font-family: var(--display); font-size: 13px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor; }
+.status { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+h2 { font-family: var(--display); font-weight: 700; font-size: 30px; line-height: 1.1; margin: 0; text-wrap: balance; }
+.eq { overflow-x: auto; padding: 12px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; font-size: 1.15em; }
+.eq math { font-size: 1.1em; }
+.idea { margin: 0; max-width: 64ch; }
+.tex-fallback { font-family: var(--mono); font-size: .9em; }
+h3 { font-family: var(--display); font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); margin: 0 0 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-family: var(--display); font-size: 15px; font-weight: 500; color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--c, var(--dim)); border-radius: 6px; padding: 5px 10px; cursor: pointer; }
+.chip:hover, .chip:focus-visible { border-color: var(--c, var(--fg)); outline: none; }
+.none { color: var(--dim); font-style: italic; margin: 0; }
+
+.lab { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: grid; gap: 8px; }
+.lab.missing { border-style: dashed; }
+.lab p { margin: 0; }
+.lab .links { display: flex; flex-wrap: wrap; gap: 14px; font-family: var(--display); font-size: 15px; font-weight: 600; }
+a { color: inherit; text-decoration-color: var(--dim); text-underline-offset: 3px; }
+a:hover { text-decoration-color: currentColor; }
+
+.sources { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.src { display: grid; gap: 3px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.src:last-child { border-bottom: 0; padding-bottom: 0; }
+.src a { font-family: var(--display); font-size: 16px; font-weight: 600; }
+.meta { font-family: var(--mono); font-size: 12px; color: var(--dim); display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.why { margin: 0; color: var(--muted); font-size: 15px; }
+
+footer { font-family: var(--mono); font-size: 12px; color: var(--dim); border-top: 1px solid var(--line); padding-top: 14px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Flux · one thread through the degree</div>
+    <h1>The Flux Thread</h1>
+    <p class="lede">Flux is one idea that keeps coming back: in Calculus III, then Gauss's and Faraday's laws, then control volumes, fluids and heat transfer. Pick any concept to see what it builds on, where it leads, the sources worth your time and the Flux lab that shows it.</p>
+    <div class="legend" aria-label="Legend">
+      <span><i class="sw" style="background:var(--math)"></i>Calculus III</span>
+      <span><i class="sw" style="background:var(--em)"></i>Electricity and magnetism</span>
+      <span><i class="sw" style="background:var(--thermo)"></i>Thermo and fluids</span>
+      <span><i class="sw" style="background:var(--heat)"></i>Heat transfer</span>
+      <span><i class="dot"></i>Flux lab exists</span>
+      <span><i class="dot hollow"></i>No lab yet</span>
+    </div>
+  </header>
+
+  <div class="mapbox" id="mapbox"><svg id="map" role="group" aria-label="Concept map"></svg></div>
+  <p class="hint">Solid bright lines: what the chosen concept builds on. Dashed: where it leads.</p>
+
+  <nav class="trail" id="trail" aria-label="Where you have been"></nav>
+
+  <section class="detail" id="detail" aria-live="polite"></section>
+
+  <footer>Prototype: one thread, 15 concepts. Sources are free: MIT OpenCourseWare, OpenStax, Lienhard's <i>A Heat Transfer Textbook</i>, Cleynen's <i>Engineering Thermodynamics</i>, PhET. The explanations here are written fresh; nothing is copied.</footer>
+</div>
+
+<script>
+const FLUX = 'https://flux-study.pages.dev/';
+const LANES = [
+  { id: 'math', label: 'Calculus III', color: 'var(--math)' },
+  { id: 'em', label: 'Electricity and magnetism', color: 'var(--em)' },
+  { id: 'thermo', label: 'Thermo and fluids', color: 'var(--thermo)' },
+  { id: 'heat', label: 'Heat transfer', color: 'var(--heat)' },
+];
+const COURSES = {
+  mac2313: { code: 'MAC 2313', status: 'taken' },
+  phy2049: { code: 'PHY 2049', status: 'taking now' },
+  eml3100: { code: 'EML 3100', status: 'next term' },
+  eml3015: { code: 'EML 3015', status: 'later' },
+  eml4140: { code: 'EML 4140', status: 'later' },
+  map2302: { code: 'MAP 2302', status: 'later' },
+};
+const OCW18 = 'https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/';
+const OS3 = 'https://openstax.org/books/calculus-volume-3/pages/';
+const UP1 = 'https://openstax.org/books/university-physics-volume-1/pages/';
+const UP2 = 'https://openstax.org/books/university-physics-volume-2/pages/';
+const LIENHARD = { title: 'Lienhard, A Heat Transfer Textbook', url: 'https://ahtt.mit.edu', kind: 'Free textbook', level: 'Course level' };
+
+const NODES = [
+  { id: 'gradient', title: 'Gradient', lane: 'math', courses: ['mac2313'], label: ['Gradient'],
+    eq: String.raw`\nabla f = \left(\frac{\partial f}{\partial x},\ \frac{\partial f}{\partial y},\ \frac{\partial f}{\partial z}\right)`,
+    idea: String.raw`The gradient of a scalar field points the way the field rises fastest, and its length is that rate. It is perpendicular to the level curves. Every "flows downhill" law in this thread starts here: heat flows down the temperature gradient, and \(\mathbf E = -\nabla V\).`,
+    requires: [],
+    lab: { course: 'mac2313', title: 'Gradient', path: 'mac2313/#/mac2313/ch2/gradient', note: String.raw`\(\nabla f\) and the directional derivative \(D_{\hat u} f\) on a surface.` },
+    sources: [
+      { title: 'OpenStax Calculus Vol. 3, §4.6 Directional derivatives and the gradient', url: OS3 + '4-6-directional-derivatives-and-the-gradient', kind: 'Open textbook', level: 'Course level', why: 'Shows why the gradient is perpendicular to level curves, with worked examples.' },
+      { title: 'MIT 18.02SC, Part B: Chain rule, gradient and directional derivatives', url: OCW18 + 'pages/2.-partial-derivatives/part-b-chain-rule-gradient-and-directional-derivatives/', kind: 'Lectures + problems with solutions', level: 'Course level', why: 'MIT’s own sequence: short lectures, recitation videos and checked problems.' },
+    ] },
+
+  { id: 'vector-fields', title: 'Vector fields', lane: 'math', courses: ['mac2313', 'phy2049'], label: ['Vector fields'],
+    eq: String.raw`\mathbf F(x,y) = P(x,y)\,\hat{\imath} + Q(x,y)\,\hat{\jmath}`,
+    idea: String.raw`A vector field puts an arrow at every point: a fluid's velocity, a force per unit charge, a rate of heat flow. A gradient field is the special case \(\mathbf F = \nabla f\). The electrostatic field is one.`,
+    requires: ['gradient'],
+    lab: { course: 'phy2049', title: 'Field', path: 'phy2049/#/e2/field', note: 'The field of point charges, drawn as arrows and field lines.' },
+    sources: [
+      { title: 'OpenStax Calculus Vol. 3, §6.1 Vector fields', url: OS3 + '6-1-vector-fields', kind: 'Open textbook', level: 'Course level', why: 'Many sketched fields; good for learning to read one at a glance.' },
+      { title: 'MIT 18.02SC, Session 56: Vector fields (problems with solutions)', url: OCW18 + 'resources/mit18_02sc_pb_56_comb/', kind: 'Problems + solutions', level: 'Course level', why: 'Short problems with full solutions to check yourself against.' },
+    ] },
+
+  { id: 'flux-2d', title: 'Flux across a curve', lane: 'math', courses: ['mac2313'], label: ['Flux across', 'a curve'],
+    eq: String.raw`\text{Flux} = \oint_C \mathbf F\cdot\hat n\;ds`,
+    idea: String.raw`Flux counts how much of a field crosses a curve, with outward taken as positive. Only the normal part of \(\mathbf F\) counts; the part along the curve slides past. Green's theorem in normal form turns flux out of a closed curve into an area integral of \(\partial P/\partial x + \partial Q/\partial y\). That integrand is the divergence in two dimensions.`,
+    requires: ['vector-fields'],
+    lab: null, candidate: 'A 2D field with a loop you drag and reshape. The flux readout and the area integral of the divergence inside agree.',
+    sources: [
+      { title: 'MIT 18.02SC, Session 69: Flux across curves (problems with solutions)', url: OCW18 + 'resources/mit18_02sc_pb_69_comb/', kind: 'Problems + solutions', level: 'Course level', why: 'Practice setting up n̂ ds, the step most people get wrong.' },
+      { title: 'MIT 18.02SC, Part C: Green’s theorem', url: OCW18 + 'pages/3.-double-integrals-and-line-integrals-in-the-plane/part-c-greens-theorem/', kind: 'Lectures + problems with solutions', level: 'Course level', why: 'Covers both forms of Green’s theorem, including the flux (normal) form used here.' },
+    ] },
+
+  { id: 'surface-flux', title: 'Flux through a surface', lane: 'math', courses: ['mac2313'], label: ['Flux through', 'a surface'],
+    eq: String.raw`\Phi = \iint_S \mathbf F\cdot\hat n\;dA`,
+    idea: String.raw`The same idea one dimension up: add the normal component of the field over a surface. The hard part is usually \(\hat n\,dA\), the area element with its direction. For a fluid, \(\mathbf F = \rho\mathbf v\) and the flux is the mass crossing per second.`,
+    requires: ['flux-2d'],
+    lab: { course: 'phy2049', title: 'Gauss', path: 'phy2049/#/e2/gauss', note: String.raw`Colours a closed surface by \(\mathbf E\cdot\hat n\), from inward to outward.` },
+    sources: [
+      { title: 'OpenStax Calculus Vol. 3, §6.6 Surface integrals', url: OS3 + '6-6-surface-integrals', kind: 'Open textbook', level: 'Course level', why: 'Parametrized surfaces step by step, then flux as a special case.' },
+      { title: 'MIT 18.02SC, Session 81: Calculating flux, finding n dS', url: OCW18 + 'resources/mit18_02sc_mnotes_v9-2/', kind: 'Worked example', level: 'Course level', why: 'One clean worked example of the area element, the step that trips people up.' },
+    ] },
+
+  { id: 'divergence', title: 'Divergence', lane: 'math', courses: ['mac2313'], label: ['Divergence'],
+    eq: String.raw`\nabla\cdot\mathbf F = \frac{\partial P}{\partial x} + \frac{\partial Q}{\partial y} + \frac{\partial R}{\partial z}`,
+    idea: String.raw`Divergence is the net outward flux per unit volume, in the limit of a tiny box. Positive means a source: more leaves than enters. Zero everywhere means whatever flows in flows out. Incompressible flow and the magnetic field both obey that.`,
+    requires: ['surface-flux'],
+    lab: null, candidate: String.raw`A small box you drag through a field. It shows the flux out of each face and compares their sum with \(\nabla\cdot\mathbf F\,\Delta V\).`,
+    sources: [
+      { title: 'OpenStax Calculus Vol. 3, §6.5 Divergence and curl', url: OS3 + '6-5-divergence-and-curl', kind: 'Open textbook', level: 'Course level', why: 'Defines divergence, then interprets it as sources and sinks.' },
+      { title: 'MIT 18.02SC, Part B: Flux and the divergence theorem', url: OCW18 + 'pages/4.-triple-integrals-and-surface-integrals-in-3-space/part-b-flux-and-the-divergence-theorem/', kind: 'Lectures + problems with solutions', level: 'Course level', why: 'Divergence taught together with the theorem that gives it meaning.' },
+    ] },
+
+  { id: 'divergence-theorem', title: 'Divergence theorem', lane: 'math', courses: ['mac2313'], label: ['Divergence', 'theorem'],
+    eq: String.raw`\oint_{\partial V} \mathbf F\cdot\hat n\;dA = \iiint_V \nabla\cdot\mathbf F\;dV`,
+    idea: String.raw`Add the divergence over every tiny box in a region. Each inner face is shared by two boxes, so its flux leaves one and enters the other and cancels. Only the outer surface survives. That is the whole theorem. It is also how every conservation law moves between its integral form and its differential form.`,
+    requires: ['divergence'],
+    lab: null, candidate: 'Grid a region into boxes and watch the inner-face fluxes cancel as the grid refines.',
+    sources: [
+      { title: 'OpenStax Calculus Vol. 3, §6.8 The divergence theorem', url: OS3 + '6-8-the-divergence-theorem', kind: 'Open textbook', level: 'Course level', why: 'Includes applications to Gauss’s law, which ties this lane to the next one.' },
+      { title: 'MIT 18.02SC, Session 84: Divergence theorem example', url: OCW18 + 'resources/mit18_02sc_mnotes_v10-1/', kind: 'Worked example', level: 'Course level', why: 'A full computation both ways, so you can see the two sides agree.' },
+    ] },
+
+  { id: 'gauss-law', title: 'Gauss’s law', lane: 'em', courses: ['phy2049'], label: ['Gauss’s law'],
+    eq: String.raw`\oint \mathbf E\cdot d\mathbf A = \frac{q_\text{enc}}{\varepsilon_0}`,
+    idea: String.raw`The electric flux out of any closed surface depends only on the charge inside. Charge outside sends in as much flux as it sends out. With enough symmetry you choose a surface where \(E\) is constant and normal, and the integral becomes \(E\) times an area.`,
+    requires: ['surface-flux'],
+    lab: { course: 'phy2049', title: 'Gauss', path: 'phy2049/#/e2/gauss', notes: 'phy2049/#/e2/gauss?n=s11', note: 'Spherical, cylindrical and planar symmetry, with the notes on each.' },
+    sources: [
+      { title: 'OpenStax University Physics Vol. 2, §6.1 Electric flux', url: UP2 + '6-1-electric-flux', kind: 'Open textbook', level: 'Intro', why: 'Builds flux from a flat surface up, before the law itself.' },
+      { title: 'MIT 8.02, Problem-solving guide: Gauss’s law', url: 'https://ocw.mit.edu/courses/8-02-physics-ii-electricity-and-magnetism-spring-2007/resources/solving03/', kind: 'Guide + solved problems', level: 'Course level', why: 'A step-by-step method for choosing the Gaussian surface, then solved cases.' },
+    ] },
+
+  { id: 'faraday', title: 'Magnetic flux and Faraday’s law', lane: 'em', courses: ['phy2049'], label: ['Faraday’s law'],
+    eq: String.raw`\mathcal E = -\frac{d\Phi_B}{dt}, \qquad \Phi_B = \iint_S \mathbf B\cdot d\mathbf A`,
+    idea: String.raw`Magnetic flux through a loop is the same surface integral, applied to \(\mathbf B\). A changing flux drives an emf around the loop. The minus sign says the induced current opposes the change. Through any closed surface, magnetic flux is zero.`,
+    requires: ['surface-flux'],
+    lab: { course: 'phy2049', title: 'Faraday', path: 'phy2049/#/e5/faraday', notes: 'phy2049/#/e5/faraday?n=s2', note: 'Changing flux through a loop and the emf it drives. The flow meter lab applies it to a real device.' },
+    sources: [
+      { title: 'OpenStax University Physics Vol. 2, §13.1 Faraday’s law', url: UP2 + '13-1-faradays-law', kind: 'Open textbook', level: 'Intro', why: 'Covers the three ways to change flux: field, area and angle.' },
+      { title: 'PhET: Faraday’s law', url: 'https://phet.colorado.edu/en/simulations/faradays-law', kind: 'Simulation', level: 'Intro', why: 'Move a magnet through a coil and watch the bulb. Good intuition before the math.' },
+    ] },
+
+  { id: 'maxwell-div', title: 'Maxwell’s divergence equations', lane: 'em', courses: ['phy2049'], label: ['∇·E and ∇·B'],
+    eq: String.raw`\nabla\cdot\mathbf E = \frac{\rho}{\varepsilon_0}, \qquad \nabla\cdot\mathbf B = 0`,
+    idea: String.raw`Apply the divergence theorem to Gauss's law and shrink the surface to a point. The flux per unit volume is the charge density over \(\varepsilon_0\). The magnetic version is zero because there is no magnetic charge, so every field line that enters a closed surface also leaves it.`,
+    requires: ['gauss-law', 'faraday', 'divergence-theorem'],
+    lab: null, candidate: 'The same field shown two ways: flux through a shrinking sphere, and the charge density at its centre.',
+    sources: [
+      { title: 'OpenStax University Physics Vol. 2, §16.1 Maxwell’s equations', url: UP2 + '16-1-maxwells-equations-and-electromagnetic-waves', kind: 'Open textbook', level: 'Intro', why: 'All four equations in one place, in integral form, with what each one says.' },
+      { title: 'MIT 18.02SC, Part B: Flux and the divergence theorem', url: OCW18 + 'pages/4.-triple-integrals-and-surface-integrals-in-3-space/part-b-flux-and-the-divergence-theorem/', kind: 'Lectures + problems with solutions', level: 'Course level', why: 'The math step that turns the integral law into the point law.' },
+    ] },
+
+  { id: 'mass-cv', title: 'Mass balance on a control volume', lane: 'thermo', courses: ['eml3100'], label: ['Mass balance', '(control volume)'],
+    eq: String.raw`\frac{dm_\text{cv}}{dt} = \sum \dot m_\text{in} - \sum \dot m_\text{out}, \qquad \dot m = \rho V A`,
+    idea: String.raw`Draw a boundary around a device and count what crosses it. The mass flow through an opening is the flux of \(\rho\mathbf v\) through it. That is \(\rho V A\) when the velocity is uniform and normal to the opening. In steady flow, what enters leaves.`,
+    requires: ['surface-flux'],
+    lab: { course: 'eml3100', title: 'Nozzle and diffuser', path: 'eml3100/#/eml3100/u3/nozzle', notes: 'eml3100/#/eml3100/u3/nozzle?n=s1', note: String.raw`Conservation of mass, \(\dot m = AV/v\), sets the area a stream needs.` },
+    sources: [
+      { title: 'OpenStax University Physics Vol. 1, §14.5 Fluid dynamics', url: UP1 + '14-5-fluid-dynamics', kind: 'Open textbook', level: 'Intro', why: 'The continuity equation ρAV = constant, from first principles.' },
+      { title: 'MIT 2.06, Lecture 5 notes: Control volume formulation', url: 'https://ocw.mit.edu/courses/2-06-fluid-dynamics-spring-2013/resources/mit2_06s13_notes_lens/', kind: 'Lecture notes', level: 'Deeper', why: 'The general control-volume statement, which the thermo version is a case of.' },
+    ] },
+
+  { id: 'energy-cv', title: 'Steady-flow energy equation', lane: 'thermo', courses: ['eml3100'], label: ['Steady-flow', 'energy'],
+    eq: String.raw`\dot Q - \dot W = \dot m\left[(h_2 - h_1) + \tfrac12\left(V_2^2 - V_1^2\right) + g\,(z_2 - z_1)\right]`,
+    idea: String.raw`Energy gets the same boundary bookkeeping as mass. Each kilogram that crosses carries enthalpy, kinetic energy and potential energy. The heat and work crossing the boundary account for the change. Turbines, nozzles and water heaters are all this one equation.`,
+    requires: ['mass-cv'],
+    lab: { course: 'eml3100', title: 'Water heater', path: 'eml3100/#/eml3100/u3/heater', notes: 'eml3100/#/eml3100/u3/heater?n=s2', note: String.raw`A tankless water heater as one control volume: \(\dot Q = \dot m\,(h_\text{out} - h_\text{in})\).` },
+    sources: [
+      { title: 'Cleynen, Engineering Thermodynamics', url: 'https://thermodynamicsbook.com/', kind: 'Open textbook (CC BY-SA)', level: 'Course level', why: 'Open systems with many worked examples and problems with solutions.' },
+      { title: 'MIT 16.050 Thermal Energy, calendar', url: 'https://ocw.mit.edu/courses/16-050-thermal-energy-fall-2002/pages/calendar/', kind: 'Lecture notes', level: 'Course level', why: 'The prelude reviews control-volume energy before the second law.' },
+    ] },
+
+  { id: 'continuity', title: 'Continuity equation', lane: 'thermo', courses: ['eml3015'], label: ['Continuity', 'equation'],
+    eq: String.raw`\frac{\partial \rho}{\partial t} + \nabla\cdot(\rho\mathbf v) = 0`,
+    idea: String.raw`Shrink the control volume to a point with the divergence theorem, and the mass balance becomes a differential equation. For an incompressible fluid it reduces to \(\nabla\cdot\mathbf v = 0\): the flow has no sources. Charge conservation has the same form, with charge density and current density.`,
+    requires: ['mass-cv', 'divergence-theorem'],
+    lab: null, candidate: 'A 2D flow with a small control volume you drag. Net outflow is zero for incompressible flow, and nonzero where density changes.',
+    sources: [
+      { title: 'MIT 2.06, Lecture 8 notes: Differential forms, mass conservation', url: 'https://ocw.mit.edu/courses/2-06-fluid-dynamics-spring-2013/resources/mit2_06s13_notes_vo/', kind: 'Lecture notes', level: 'Deeper', why: 'Derives the equation from the control volume, as above.' },
+      { title: 'OpenStax Calculus Vol. 3, §6.8 The divergence theorem', url: OS3 + '6-8-the-divergence-theorem', kind: 'Open textbook', level: 'Course level', why: 'The math step, if it has faded since Calculus III.' },
+    ] },
+
+  { id: 'fourier', title: 'Fourier’s law', lane: 'heat', courses: ['eml4140', 'eml3100'], label: ['Fourier’s law'],
+    eq: String.raw`\mathbf q'' = -k\,\nabla T`,
+    idea: String.raw`Heat flux in a solid points down the temperature gradient, at a rate set by the conductivity \(k\). Through a flat wall it becomes \(q'' = k\,\Delta T/L\). This is the vector field of heat transfer: its flux through a surface is the heat rate.`,
+    requires: ['gradient'],
+    lab: { course: 'eml3100', title: 'Heat through a wall', path: 'eml3100/#/eml3100/u5/wall', note: 'Shows the entropy generated as heat crosses a wall. It does not draw the temperature profile.' },
+    sources: [
+      { title: 'OpenStax University Physics Vol. 2, §1.6 Mechanisms of heat transfer', url: UP2 + '1-6-mechanisms-of-heat-transfer', kind: 'Open textbook', level: 'Intro', why: 'Conduction through a slab, with the numbers worked.' },
+      Object.assign({}, LIENHARD, { why: 'The text MIT 2.51 uses. Chapter 1 introduces conduction; chapter 2 builds the equation.' }),
+    ] },
+
+  { id: 'heat-equation', title: 'Heat equation', lane: 'heat', courses: ['eml4140'], label: ['Heat equation'],
+    eq: String.raw`\rho c\,\frac{\partial T}{\partial t} = \nabla\cdot\left(k\,\nabla T\right)`,
+    idea: String.raw`Balance energy on a tiny volume. The energy stored per second equals the net heat flux in, and the divergence theorem turns that into this equation. With constant \(k\) it is \(\partial T/\partial t = \alpha\,\nabla^2 T\). Steady conduction is \(\nabla^2 T = 0\).`,
+    requires: ['fourier', 'divergence-theorem', 'energy-cv'],
+    lab: null, candidate: 'A rod with a starting temperature profile, solved by Fourier series and by finite differences, side by side.',
+    sources: [
+      Object.assign({}, LIENHARD, { why: 'Chapter 2 derives this equation and solves the standard cases.' }),
+      { title: 'MIT 2.51, calendar: Conduction, resistances, energy equation', url: 'https://ocw.mit.edu/courses/2-51-intermediate-heat-and-mass-transfer-fall-2008/pages/calendar/', kind: 'Course outline', level: 'Deeper', why: 'Shows where the equation sits in a heat transfer course.' },
+    ] },
+
+  { id: 'lumped', title: 'Lumped cooling', lane: 'heat', courses: ['eml4140', 'map2302'], label: ['Lumped cooling'],
+    eq: String.raw`\frac{dT}{dt} = -\frac{hA}{\rho c V}\,\left(T - T_\infty\right)`,
+    idea: String.raw`When conduction inside a body is fast compared with convection at its surface, the temperature is nearly uniform. The test is a Biot number \(hL/k\) well below 0.1. The heat equation then collapses to one ODE: Newton's law of cooling, an exponential approach to the surroundings.`,
+    requires: ['heat-equation'],
+    lab: { course: 'map2302', title: 'Cooling coffee', path: 'map2302/#/map2302/u1/coffee', note: 'Newton cooling, solved exactly and checked by numerical integration.' },
+    sources: [
+      Object.assign({}, LIENHARD, { why: 'Chapter 1 covers lumped capacity and when it is valid.' }),
+      { title: 'MIT 2.51, calendar: Lumped capacity (session 5)', url: 'https://ocw.mit.edu/courses/2-51-intermediate-heat-and-mass-transfer-fall-2008/pages/calendar/', kind: 'Course outline', level: 'Deeper', why: 'Where it sits, between fins and transient conduction.' },
+    ] },
+];
+
+const byId = Object.fromEntries(NODES.map((n) => [n.id, n]));
+const laneOf = Object.fromEntries(LANES.map((l, i) => [l.id, i]));
+NODES.forEach((n) => (n.leads = []));
+NODES.forEach((n) => n.requires.forEach((r) => byId[r].leads.push(n.id)));
+
+// Depth = longest prerequisite chain, so every arrow points right.
+const depth = {};
+function d(id) { if (id in depth) return depth[id]; const n = byId[id]; return (depth[id] = n.requires.length ? 1 + Math.max(...n.requires.map(d)) : 0); }
+NODES.forEach((n) => d(n.id));
+
+function closure(id, key) { const out = new Set(); const st = [...byId[id][key]]; while (st.length) { const x = st.pop(); if (!out.has(x)) { out.add(x); st.push(...byId[x][key]); } } return out; }
+
+// ---------- Map ----------
+const NS = 'http://www.w3.org/2000/svg';
+const COLW = 146, NODEW = 124, NODEH = 46, LEFT = 24, TOP = 34, ROWH = 62, LANEPAD = 16;
+const cols = Math.max(...Object.values(depth)) + 1;
+const slots = {};
+NODES.forEach((n) => { const k = n.lane + ':' + depth[n.id]; (slots[k] = slots[k] || []).push(n.id); });
+const laneRows = LANES.map((l) => Math.max(1, ...Object.keys(slots).filter((k) => k.startsWith(l.id + ':')).map((k) => slots[k].length)));
+const laneY = []; let y = TOP;
+laneRows.forEach((r, i) => { laneY[i] = y; y += r * ROWH + LANEPAD * 2; });
+const W = LEFT + cols * COLW + 8, H = y + 6;
+const pos = {};
+NODES.forEach((n) => {
+  const li = laneOf[n.lane], k = n.lane + ':' + depth[n.id], idx = slots[k].indexOf(n.id), cnt = slots[k].length;
+  const laneH = laneRows[li] * ROWH;
+  const cy = laneY[li] + LANEPAD + (laneH - cnt * ROWH) / 2 + idx * ROWH + ROWH / 2;
+  pos[n.id] = { x: LEFT + depth[n.id] * COLW, y: cy - NODEH / 2 };
+});
+
+const svg = document.getElementById('map');
+svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+
+LANES.forEach((l, i) => {
+  const h = laneRows[i] * ROWH + LANEPAD * 2;
+  el('rect', { x: 0, y: laneY[i], width: W, height: h, fill: l.color, class: 'lane-bg' }, svg);
+});
+
+const edgeEls = [];
+const edgeLayer = el('g', {}, svg);
+NODES.forEach((n) => n.requires.forEach((r) => {
+  const a = pos[r], b = pos[n.id];
+  const x1 = a.x + NODEW, y1 = a.y + NODEH / 2, x2 = b.x, y2 = b.y + NODEH / 2, mx = (x2 - x1) * 0.5;
+  const p = el('path', { d: `M${x1},${y1} C${x1 + mx},${y1} ${x2 - mx},${y2} ${x2 - 4},${y2}`, class: 'edge' }, edgeLayer);
+  edgeEls.push({ from: r, to: n.id, el: p });
+}));
+
+const nodeEls = {};
+NODES.forEach((n) => {
+  const p = pos[n.id], color = LANES[laneOf[n.lane]].color;
+  const g = el('g', { class: 'node', tabindex: '0', role: 'button', 'aria-label': n.title, transform: `translate(${p.x},${p.y})` }, svg);
+  el('rect', { width: NODEW, height: NODEH, rx: 7, stroke: color }, g);
+  const lines = n.label, ty = NODEH / 2 - (lines.length - 1) * 8 + 5;
+  lines.forEach((s, i) => { const t = el('text', { x: 11, y: ty + i * 16 }, g); t.textContent = s; });
+  el('circle', { cx: NODEW - 10, cy: 10, r: 4, fill: n.lab ? 'var(--fg)' : 'none', stroke: n.lab ? 'none' : 'var(--dim)', 'stroke-width': 1.5 }, g);
+  g.addEventListener('click', () => go(n.id));
+  g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(n.id); } });
+  nodeEls[n.id] = g;
+});
+
+// Lane labels last, with a halo, so edges never run through the text.
+LANES.forEach((l, i) => {
+  const t = el('text', { x: LEFT, y: laneY[i] + 14, fill: l.color, class: 'lane-label', stroke: 'var(--panel)', 'stroke-width': 5, 'paint-order': 'stroke', 'stroke-linejoin': 'round' }, svg);
+  t.textContent = l.label;
+});
+
+// ---------- Math ----------
+function tex(s, display) {
+  if (window.katex) { try { return katex.renderToString(s, { displayMode: !!display, output: 'mathml', throwOnError: false }); } catch (e) {} }
+  return `<code class="tex-fallback">${esc(s)}</code>`;
+}
+function esc(s) { return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+function prose(s) { return s.split(/(\\\(.*?\\\))/g).map((part) => part.startsWith('\\(') ? tex(part.slice(2, -2)) : esc(part)).join(''); }
+
+// ---------- Detail ----------
+const detail = document.getElementById('detail');
+const trailEl = document.getElementById('trail');
+let trail = [];
+
+function chip(id) { const n = byId[id]; return `<button class="chip" data-go="${id}" style="--c:${LANES[laneOf[n.lane]].color}">${esc(n.title)}</button>`; }
+
+function render(id) {
+  const n = byId[id], lane = LANES[laneOf[n.lane]];
+  const courses = n.courses.map((c) => `<span class="course" style="color:${lane.color}">${COURSES[c].code}</span><span class="status">${COURSES[c].status}</span>`).join('');
+  const lab = n.lab
+    ? `<div class="lab"><h3>In Flux</h3><p><strong>${esc(n.lab.title)}</strong> lab, ${COURSES[n.lab.course].code}. ${prose(n.lab.note)}</p><div class="links"><a href="${FLUX + n.lab.path}" target="_blank" rel="noopener">Open the lab ↗</a>${n.lab.notes ? `<a href="${FLUX + n.lab.notes}" target="_blank" rel="noopener">Open the notes ↗</a>` : ''}</div></div>`
+    : `<div class="lab missing"><h3>No Flux lab yet</h3><p>${prose(n.candidate || '')}</p></div>`;
+  const srcs = n.sources.map((s) => `<li class="src"><a href="${s.url}" target="_blank" rel="noopener">${esc(s.title)}</a><div class="meta"><span>${esc(s.kind)}</span><span>${esc(s.level)}</span></div><p class="why">${esc(s.why)}</p></li>`).join('');
+  detail.innerHTML = `
+    <div class="col">
+      <div class="tagrow">${courses}</div>
+      <h2>${esc(n.title)}</h2>
+      <div class="eq">${tex(n.eq, true)}</div>
+      <p class="idea">${prose(n.idea)}</p>
+      <div><h3>Builds on</h3>${n.requires.length ? `<div class="chips">${n.requires.map(chip).join('')}</div>` : '<p class="none">Nothing in this thread. It is a starting point.</p>'}</div>
+      <div><h3>Leads to</h3>${n.leads.length ? `<div class="chips">${n.leads.map(chip).join('')}</div>` : '<p class="none">The end of this thread, for now.</p>'}</div>
+    </div>
+    <div class="col">
+      ${lab}
+      <div><h3>Worth your time</h3><ul class="sources">${srcs}</ul></div>
+    </div>`;
+  detail.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
+}
+
+function highlight(id) {
+  const up = closure(id, 'requires'), down = closure(id, 'leads');
+  for (const k in nodeEls) {
+    nodeEls[k].classList.toggle('sel', k === id);
+    nodeEls[k].classList.toggle('faded', k !== id && !up.has(k) && !down.has(k));
+  }
+  edgeEls.forEach((e) => {
+    const isUp = (e.to === id || up.has(e.to)) && up.has(e.from);
+    const isDown = (e.from === id || down.has(e.from)) && down.has(e.to);
+    e.el.setAttribute('class', 'edge' + (isUp ? ' up' : isDown ? ' down' : ' faded'));
+  });
+}
+
+function renderTrail(id) {
+  const i = trail.indexOf(id);
+  if (i >= 0) trail = trail.slice(0, i + 1); else trail.push(id);
+  if (trail.length > 8) trail = trail.slice(-8);
+  trailEl.innerHTML = '<span>Your path:</span>' + trail.map((t, j) => j === trail.length - 1
+    ? `<span class="now">${esc(byId[t].title)}</span>`
+    : `<button data-go="${t}">${esc(byId[t].title)}</button><span aria-hidden="true">→</span>`).join('');
+  trailEl.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
+}
+
+function show(id) {
+  if (!byId[id]) id = 'divergence-theorem';
+  render(id); highlight(id); renderTrail(id);
+  // On a narrow screen the map scrolls sideways; bring the chosen concept into view.
+  const box = document.getElementById('mapbox');
+  if (box.scrollWidth > box.clientWidth) {
+    const scale = svg.getBoundingClientRect().width / W;
+    const cx = (pos[id].x + NODEW / 2) * scale;
+    box.scrollTo({ left: Math.max(0, cx - box.clientWidth / 2), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }
+}
+function go(id) {
+  if (location.hash.slice(1) === id) { show(id); return; }
+  location.hash = id;
+}
+window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+show(location.hash.slice(1) || 'divergence-theorem');
+</script>

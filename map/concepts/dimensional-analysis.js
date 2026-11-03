@@ -1,0 +1,28 @@
+export default {
+  id: 'dimensional-analysis',
+  title: 'Dimensional analysis and similitude',
+  label: ['Dimensional', 'analysis'],
+  subject: 'fluids',
+  courses: ['eml3015'],
+  eq: String.raw`\text{Re} = \frac{\rho V L}{\mu}, \qquad \text{Fr} = \frac{V}{\sqrt{gL}}, \qquad \#\Pi = n - r`,
+  idea: String.raw`A physical law cannot depend on the units it is written in. So \(n\) variables built from \(r\) base dimensions combine into \(n - r\) dimensionless groups, and the law is a relation among those groups. The Reynolds number compares inertia with viscous force; the Froude number compares inertia with gravity. A model test predicts the full-size flow only when the groups that matter have the same values in both.`,
+  requires: ['viscosity'],
+  sources: [
+    {
+      title: 'Cleynen, Fluid Dynamics for Engineers',
+      url: 'https://fluidmech.ninja/',
+      kind: 'Open textbook',
+      level: 'Course level',
+      why: 'Has a chapter on scale effects: the groups, how to find them and how to use them in tests.',
+    },
+    {
+      title: 'Wikipedia, Buckingham π theorem',
+      url: 'https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem',
+      kind: 'Reference',
+      level: 'Deeper',
+      why: 'The theorem stated with care, and the classic pendulum and drag examples.',
+    },
+  ],
+  labs: [],
+  candidate: 'Scale a ship hull down with sliders for the model size and the test fluid. It corrects the idea that a scale model in water behaves like the real ship: matching Reynolds and Froude numbers at once needs a fluid that does not exist.',
+};

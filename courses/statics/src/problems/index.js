@@ -1,14 +1,18 @@
+import vectorDesign from './bank/vector-design.js';
 /**
  * Problem bank for Statics (Hibbeler chapters 2–10).
  * Each bank module exports an array of templates; see kit.js and PROBLEMS.md.
  */
+import concepts from './bank/concepts.js';
+import { coach } from './coaching.js';
+import { withInverse } from './inverse.js';
 import ch2 from './bank/ch2.js';
 import ch34 from './bank/ch34.js';
 import ch56 from './bank/ch56.js';
 import ch7910 from './bank/ch7910.js';
 import ch8 from './bank/ch8.js';
 
-export const PROBLEMS = [...ch2, ...ch34, ...ch56, ...ch7910, ...ch8];
+export const PROBLEMS = [...ch2, ...ch34, ...ch56, ...ch7910, ...ch8, ...concepts, vectorDesign].map(coach).map(withInverse);
 
 const byIdMap = new Map(PROBLEMS.map((p) => [p.id, p]));
 

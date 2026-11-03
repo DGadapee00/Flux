@@ -26,7 +26,8 @@ try {
   ]) {
     const page = await browser.newPage({ viewport: { width, height } });
     page.on('pageerror', (e) => errors.push(e.message));
-    for (const lab of exam.labs.filter(id=>!process.env.REVIEW_LAB||id===process.env.REVIEW_LAB)) {
+    for (const lab of exam.labs.filter((id) => !process.env.REVIEW_LAB || id === process.env.REVIEW_LAB)) {
+      console.log(`Review ${unit}/${lab} at ${width}`);
       await page.goto(`${base}#/mac2311/${unit}/${lab}`, { waitUntil: 'domcontentloaded' });
       await page.waitForFunction((id) => window.__flux?.app.lab?.id === id, lab);
       const ids = await page.locator('#scenario option').evaluateAll((els) => els.map((e) => e.value));
@@ -45,14 +46,20 @@ try {
       const pred = page.locator('#predict');
       assert.equal(await pred.isVisible(), true, `${lab}: prediction missing`);
       await pred.locator('summary').click();
-      await pred.locator('[data-watch]').first().click();
+      const watches = await pred
+        .locator('[data-watch]')
+        .evaluateAll((els) => [...new Set(els.map((el) => el.dataset.watch))]);
+      for (const id of watches) await pred.locator(`[data-watch="${id}"]`).first().click();
       await pred.locator('[data-act="apply"]').click();
-      await page.waitForTimeout(100);
+      await page.waitForTimeout(1100);
       assert.ok(await pred.locator('.pred-grade').count());
       await pred.locator('summary').click();
       await page.screenshot({ path: `${shots}/${unit}-${lab}-${width}.png` });
     }
-    if(process.env.REVIEW_SHORT){await page.close();continue;}
+    if (process.env.REVIEW_SHORT) {
+      await page.close();
+      continue;
+    }
     const setups = Object.entries(SETUPS[unit]).flatMap(([section, list]) =>
       list.map((ex, i) => ({ section, ex, i })),
     );

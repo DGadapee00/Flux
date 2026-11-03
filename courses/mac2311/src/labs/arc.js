@@ -244,6 +244,7 @@ export default defineLab({
   extent(state) {
     const b = clampB(state?.b);
     const frame = frameFor(kindOf(state?.kind), b);
+    Object.assign(state, frame);
     return Math.max(Math.abs(frame.xMin), frame.xMax, Math.abs(frame.yMin), frame.yMax);
   },
   recompute(state, computed) {

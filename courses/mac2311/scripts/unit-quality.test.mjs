@@ -25,7 +25,14 @@ for (const unit of REWORKED_UNITS)
       for (const seed of [0, 7, 19, 41]) {
         const inst = instance(t, seed),
           out = render(inst);
-      assert.ok(out.steps.some(step=>step.includes('Sources for this family:')),`${t.id}: citations must be visible in the solution`);
+        assert.ok(
+          out.steps.every((step) => typeof step === 'string'),
+          `${t.id}: worked steps must be text`,
+        );
+        assert.ok(
+          out.steps.some((step) => step.includes('Sources for this family:')),
+          `${t.id}: citations must be visible in the solution`,
+        );
         for (const p of t.parts) {
           if (p.kind === 'choice') {
             const options = typeof p.options === 'function' ? p.options(inst.$) : p.options;
@@ -43,7 +50,7 @@ for (const unit of REWORKED_UNITS)
             for (const [value, message] of p.traps) {
               const wrong = value(inst.$);
               assert.ok(Number.isFinite(wrong), t.id);
-              assert.ok(message.length > 20);
+              assert.ok((typeof message === 'function' ? message(inst.$) : message).length > 20);
               if (Math.abs(wrong - p.get(inst.$)) > Math.max(1e-6, Math.abs(p.get(inst.$)) * 0.01)) {
                 const g = grade(p, inst.$, String(wrong));
                 assert.equal(g.correct, false, t.id);
@@ -56,4 +63,30 @@ for (const unit of REWORKED_UNITS)
     }
   });
 
-test('legacy setup labels are not promoted to published citations',()=>{assert.equal(citeCases(LEGACY_PROBLEMS[0]),LEGACY_PROBLEMS[0]);});
+test('legacy setup labels are not promoted to published citations', () => {
+  assert.equal(citeCases(LEGACY_PROBLEMS[0]), LEGACY_PROBLEMS[0]);
+});
+
+test('every completed unit has introductory, intermediate and advanced practice', () => {
+  for (const unit of REWORKED_UNITS)
+    for (const level of [1, 2, 3])
+      assert.ok(
+        PROBLEMS.some((t) => t.exam === unit && t.level === level),
+        `${unit}: difficulty ${level} has no problems`,
+      );
+});
+test('the sign of a small integrated series correction is still graded', () => {
+  const t = PROBLEMS.find((p) => p.id === 'c6.integrate-series');
+  if (!t) return;
+  let found = false;
+  for (let seed = 0; seed < 30; seed++) {
+    const q = instance(t, seed);
+    if (q.$.form !== 'three') continue;
+    const g = grade(t.parts[0], q.$, String(13 / 42 - 1 / 1320));
+    assert.equal(g.correct, false);
+    assert.ok(g.feedback.includes('positive'));
+    found = true;
+    break;
+  }
+  assert.ok(found);
+});
