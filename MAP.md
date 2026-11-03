@@ -1,10 +1,10 @@
 # What the map covers
 
-A snapshot from the data on 3 November 2026, after the materials-science thread and the split of
-thermodynamics from fluid mechanics, and EML 3015 Fluids. For the live
+A snapshot from the data on 3 November 2026, after the materials-science thread. Since then, fluid
+mechanics has its own lane, and EML 3015 Fluids and EML 4140 Heat Transfer are on the map. For the live
 numbers run `node map/check.mjs`, `npm run map-audit` and `npm run map-gaps`.
 
-**184 concepts, 146 with a Flux lab, 38 gaps.**
+**199 concepts, 146 with a Flux lab, 53 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -14,7 +14,7 @@ numbers run `node map/check.mjs`, `npm run map-audit` and `npm run map-gaps`.
 | Electricity and magnetism | 26 | 25 |
 | Thermodynamics | 12 | 12 |
 | Fluid mechanics | 20 | 3 |
-| Heat transfer | 3 | 2 |
+| Heat transfer | 18 | 2 |
 | Circuits and systems | 11 | 11 |
 | Mechanics of materials | 14 | 14 |
 | Materials science | 15 | 0 |
@@ -44,6 +44,7 @@ each new concept on them is a gap with a candidate lab:
 |---|---|---|
 | EMA 3010 Materials Science | 15 | 3.091 recitations |
 | EML 3015 Fluids | 22 (16 new) | 2.06, Spring 2013 |
+| EML 4140 Heat Transfer | 19 (15 new) | 2.51, Fall 2008, with Lienhard |
 
 EML 3101 Thermodynamics II is on the course list with no app and no path yet.
 

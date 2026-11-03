@@ -1,0 +1,35 @@
+export default {
+  id: 'fins',
+  title: 'Fins',
+  label: ['Fins'],
+  subject: 'heat',
+  courses: ['eml4140'],
+  eq: String.raw`\frac{d^2\theta}{dx^2} - m^2\theta = 0, \quad m = \sqrt{\frac{hP}{kA_c}}, \qquad q_\text{fin} = \sqrt{hPkA_c}\;\theta_b\tanh mL`,
+  idea: String.raw`A fin conducts heat along its length and loses it from its sides, so its temperature falls toward the tip. An energy balance on a thin slice gives a second-order equation with the characteristic roots \(\pm m\), real this time, so the solution is made of \(\cosh\) and \(\sinh\). The parameter \(mL\) compares side losses with conduction along the fin. Past \(mL\) of about 2 the far end is near the fluid temperature and adds almost nothing. A fin helps only when its conduction resistance is small next to the surface film it replaces.`,
+  requires: ['thermal-resistance', 'damped-oscillator'],
+  sources: [
+    {
+      title: 'Lienhard, A Heat Transfer Textbook',
+      url: 'https://ahtt.mit.edu',
+      kind: 'Free textbook',
+      level: 'Course level',
+      why: 'Chapter 4 derives the fin equation and gives efficiency for the common shapes.',
+    },
+    {
+      title: 'MIT 2.51, calendar: Fins (session 4)',
+      url: 'https://ocw.mit.edu/courses/2-51-intermediate-heat-and-mass-transfer-fall-2008/pages/calendar/',
+      kind: 'Course outline',
+      level: 'Course level',
+      why: 'Fins follow resistances directly in the course.',
+    },
+    {
+      title: 'Wikipedia, Fin (extended surface)',
+      url: 'https://en.wikipedia.org/wiki/Fin_(extended_surface)',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'Fin efficiency and effectiveness, with real uses from radiators to CPUs.',
+    },
+  ],
+  labs: [],
+  candidate: 'A pin fin with sliders for length and material, the temperature along it drawn. It corrects the idea that a longer fin always sheds more heat: past \\(mL \\approx 2\\) it adds almost nothing, and a plastic fin can lose less than the bare wall.',
+};
