@@ -3,8 +3,8 @@ import test from 'node:test';
 import { LAB_CATALOGS, findCycle } from '@flux/map';
 import { loadConcepts } from '@flux/map/load.mjs';
 import { exportBundle, importBundle, memoryStorage } from '@flux/core';
-import { RECIPES, SATELLITE } from '../src/applications/satellite.js';
-import { applicationStore, cleanProgress, demonstrated, missingInputs, record, revise } from '../src/applications/progress.js';
+import { RECIPES, SATELLITE } from '@flux/map/applications/satellite.js';
+import { applicationStore, cleanProgress, demonstrated, missingInputs, record, revise, wouldClear } from '../src/applications/progress.js';
 import { backupParts, restoreHubBackup } from '../src/backup.js';
 
 const concepts = Object.fromEntries((await loadConcepts()).map(({ concept }) => [concept.id, concept]));
@@ -23,6 +23,10 @@ test('every recipe uses existing concepts and labs that teach its foundations', 
     }
   }
   assert.deepEqual(SATELLITE.integration.requires, SATELLITE.components.map((c) => c.id));
+  // Numbered in build order: working 01 to 07 never meets a subsystem that is still locked.
+  SATELLITE.components.forEach((c, i) => {
+    for (const dep of c.requires) assert.ok(SATELLITE.components.findIndex((d) => d.id === dep) < i, `${c.id} before ${dep}`);
+  });
   const submissions = SATELLITE.components.filter((c) => c.submission);
   assert.deepEqual(submissions.map((c) => c.id), ['structure']);
   assert.equal(new URL(submissions[0].submission.url).protocol, 'https:');
@@ -58,6 +62,16 @@ test('a shared mission needs all seven demonstrations; revising an input invalid
   }
   assert.equal(demonstrated('structure', state), true);
   assert.equal(state.communications.evidence, notes);
+});
+
+test('a recipe depends on every subsystem whose numbers it uses, so a payload edit reaches Thermal and Communications', () => {
+  let state = cleanProgress(null);
+  for (const r of SATELLITE.components) state = complete(state, r.id);
+  assert.deepEqual(wouldClear(state, 'payload'), ['payload', 'thermal', 'communications']);
+  state = revise(state, 'payload', { evidence: 'A larger data budget.' });
+  for (const id of ['thermal', 'communications', 'payload']) assert.equal(demonstrated(id, state), false, id);
+  for (const id of ['orbit', 'power', 'structure', 'attitude']) assert.equal(demonstrated(id, state), true, id);
+  assert.deepEqual(wouldClear(state, 'payload'), [], 'nothing left to clear');
 });
 
 test('blank evidence and an unread foundation cannot become a demonstration', () => {

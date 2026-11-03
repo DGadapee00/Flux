@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import fs from 'node:fs/promises';
 import { createServer } from 'vite';
-import { SATELLITE } from '../src/applications/satellite.js';
+import { SATELLITE } from '@flux/map/applications/satellite.js';
 
 const out = process.env.FLUX_APPLICATIONS_OUT || '/tmp/flux-applications';
 const port = 9335;
@@ -41,7 +41,7 @@ class CDP {
 
 const server = await createServer({ root: new URL('..', import.meta.url).pathname, server: { host: '127.0.0.1', port: 5175, strictPort: true, hmr: false } });
 await server.listen();
-const chrome = spawn(process.env.CHROME || 'chromium', ['--headless=new', '--no-sandbox', '--disable-dev-shm-usage', `--remote-debugging-port=${port}`, `--user-data-dir=/tmp/flux-app-chrome-${process.pid}`, 'about:blank'], { stdio: 'ignore' });
+const chrome = spawn(process.env.CHROME || 'google-chrome', ['--headless=new', '--no-sandbox', '--disable-dev-shm-usage', `--remote-debugging-port=${port}`, `--user-data-dir=/tmp/flux-app-chrome-${process.pid}`, 'about:blank'], { stdio: 'ignore' });
 let page;
 try {
   const targets = await wait(async () => { const r = await fetch(`http://127.0.0.1:${port}/json/list`); return (await r.json()).find((x) => x.type === 'page'); });
@@ -60,8 +60,9 @@ try {
     await wait(() => page.eval('!!document.querySelector("[data-record]")'));
   }
   const click = (selector) => page.eval(`document.querySelector(${JSON.stringify(selector)}).click()`);
-  async function evidence(text) {
-    await page.eval(`(() => { const e = document.querySelector('#application-evidence'); e.value = ${JSON.stringify(text)}; e.dispatchEvent(new Event('input', {bubbles:true})); })()`);
+  /** Type into the evidence box. `leave` also fires the change a browser sends when focus leaves it. */
+  async function evidence(text, leave = true) {
+    await page.eval(`(() => { const e = document.querySelector('#application-evidence'); e.value = ${JSON.stringify(text)}; e.dispatchEvent(new Event('input', {bubbles:true})); ${leave ? "e.dispatchEvent(new Event('change', {bubbles:true}));" : ''} })()`);
   }
   async function select(id) { await click(`[data-select="${id}"]`); }
   await navigate();
@@ -88,7 +89,12 @@ try {
   await navigate('http://127.0.0.1:5175/?application=satellite&component=satellite#applications');
   assert.match(await page.eval('document.querySelector("#assembly-count").textContent'), /integration recorded/);
   await select('orbit');
+  // While typing, nothing is cleared yet; a warning names every record the edit will clear.
+  await evidence('Revised orbit changes eclipse time.', false);
+  assert.match(await page.eval('document.querySelector("#assembly-count").textContent'), /7 of 7/);
+  assert.match(await page.eval('document.querySelector("[data-warning]").textContent'), /clears 7 records: Orbit, Power,.*Assemble the satellite/);
   await evidence('Revised orbit changes eclipse time.');
+  assert.equal(await page.eval('document.querySelector("[data-warning]").hidden'), true);
   assert.match(await page.eval('document.querySelector("#assembly-count").textContent'), /1 of 7/);
   await select('communications');
   assert.match(await page.eval('document.querySelector("#application-evidence").value'), /computed result/);

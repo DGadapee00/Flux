@@ -58,6 +58,8 @@
 .recipe-record textarea { display: block; resize: vertical; width: 100%; min-height: 130px; border: 1px solid var(--line); border-radius: 5px; background: var(--bg); color: var(--fg); padding: 12px; font: 15px/1.5 var(--body); margin: 8px 0 12px; }
 .recipe-record textarea:focus-visible, .app-check input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .record-requirements { color: var(--muted); font: 13px/1.5 var(--display); }
+.record-warning { border-left: 2px solid var(--accent); padding-left: 10px; font: 13px/1.5 var(--display); }
+.record-warning[hidden] { display: none; }
 .record-capability { min-height: 44px; padding: 10px 16px; font: 600 16px var(--display); background: var(--accent); color: var(--bg); border: 1px solid var(--accent); border-radius: 5px; cursor: pointer; margin: 2px 0 16px; }
 .record-capability:disabled { background: var(--node); border-color: var(--line); color: var(--muted); cursor: default; }
 .application-note { max-width: 90ch; margin: 16px 0 0; color: var(--muted); font: 12px/1.65 var(--mono); }
@@ -69,6 +71,8 @@
   .mission-overview, .recipe-columns { grid-template-columns: minmax(0, 1fr); }
   .mission-overview { padding-top: 12px; }
   .sat-figure { margin-block: 8px; }
+  /* The drawing scales to about 0.6 at phone width; larger labels stay readable there. */
+  .sat-figure text { font-size: 15px; letter-spacing: 0; }
   .recipe-record { border-left: 0; border-top: 1px solid var(--line); border-radius: 0 0 8px 8px; }
   .recipe-heading, .recipe-learning, .recipe-record { padding: 18px; }
   .component-recipes button { padding: 10px; gap: 8px; }

@@ -75,6 +75,13 @@ closed form against a numeric integration, a sum against an integral, one route 
 algebra against another. The course's `labs-check` runs both on every scenario. A lab whose numbers
 are checked only one way is not done.
 
+### Applications
+
+An application is a project the map leads to, such as a satellite built subsystem by subsystem.
+Its recipes are in `map/applications/` and name concepts and labs already on the map; they add no
+new labs. A recipe's `gap` says what is still to build, and `npm run map-gaps` ranks a gap higher
+when a recipe needs it. `docs/map/applications.md` has the rules for capability records.
+
 ### Audit a course
 
 Use the `flux-audit-course` skill: read each lab and notes section `map-audit` lists, attach it to a

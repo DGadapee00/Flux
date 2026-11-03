@@ -459,6 +459,23 @@ async function main() {
       console.log(`${p.course} path: ${want.length} concepts`);
     }
 
+    // The find box opens a concept by name, and a subject match keeps only that lane.
+    await navigate(page, hub);
+    const typeAndEnter = (q) =>
+      evalJson(
+        page,
+        `(() => { const i = document.querySelector('#find-input'); i.focus(); i.value = ${JSON.stringify(q)}; i.dispatchEvent(new Event('input')); i.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); })()`,
+      );
+    await typeAndEnter('gauss');
+    await delay(300);
+    const foundId = await evalJson(page, `document.getElementById('detail').dataset.concept`);
+    if (foundId !== 'gauss-law') throw new Error(`find "gauss" opened ${foundId}`);
+    await typeAndEnter('heat transfer');
+    await delay(300);
+    const lane = await evalJson(page, `({ url: location.search, subjects: [...new Set([...document.querySelectorAll('#map .node')].map((n) => n.querySelector('rect').getAttribute('stroke')))].length })`);
+    if (!lane.url.includes('lanes=heat') || lane.subjects !== 1) throw new Error(`find "heat transfer" left ${lane.subjects} lanes at ${lane.url}`);
+    console.log('find: a name opens its concept, a subject keeps its lane');
+
     // A concept with a parallel lists it in the panel, from either end, and opening it throws nothing.
     const parallels = new Map(CONCEPTS.map((c) => [c.id, []]));
     for (const c of CONCEPTS) {

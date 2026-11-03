@@ -13,6 +13,7 @@ The approved prototype is `docs/map/prototype-flux-thread.html`. Its 15 concepts
 | `courses.js` | Each course's code, title, where the owner stands in it (`taken`, `taking now`, `next term`, `later`) and its folder on the hub. A personal project has `kind: 'project'` and no status. |
 | `concepts/<id>.js` | One concept per file. The file name is the id. |
 | `catalog.js` | Every Flux course's labs, read from that course's own catalog. |
+| `applications/` | Projects the map leads to. Each recipe names concepts and labs on the map (`docs/map/applications.md`). |
 | `routes.js` | The link from a concept into a course app. |
 | `graph.js` | What a concept leads to, its depth and its closure. Shared by the hub and the check. |
 | `check.mjs` | The check. `npm test` runs it. |

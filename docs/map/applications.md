@@ -17,7 +17,13 @@ mission simulator remain visible gaps. The recipes do not imply those tools are 
 
 These are personal records. No automatic assessment, physical test or flight qualification is
 claimed. Editing a subsystem record clears its demonstration and those of its dependents, while
-preserving all evidence notes. Unrelated subsystem records stay valid.
+preserving all evidence notes. Unrelated subsystem records stay valid. Typed evidence is saved when
+the box loses focus or the tab closes. Until then a warning names every record the edit will clear.
+
+A recipe's `requires` lists every subsystem whose numbers it uses. Communications needs the
+payload's data volume and Thermal needs its operating limits, so both require Payload. The
+components are listed and numbered in build order: working from 01 to 07 never meets a locked
+subsystem. A test keeps that order.
 
 Progress is stored at `flux.applications.satellite.v1` and included in the hub's Progress backup
 as the `applications` section. A blocked browser store leaves the current session usable and
@@ -25,8 +31,11 @@ shows that records cannot be saved. Restoring an older backup keeps application 
 that backup has no applications section. The hub adds the current application section before the
 shared importer validates the complete file. Missing course sections and wrong course ids still fail.
 
-The content is in `site/src/applications/satellite.js`. Capability rules and storage are in
-`progress.js`; the hub view is in `view.js`. Tests check concept and lab links, prerequisite gates,
+The content is in `map/applications/satellite.js`, beside the concepts it names, and
+`map/applications/index.js` lists every application. `npm run map-gaps` adds 2 to a gap's score for
+each recipe that names it, and prints which recipes use it. Capability rules and storage are in
+`site/src/applications/progress.js`; the hub view is in `view.js`. `npm run smoke` runs the
+applications browser check after the hub's. Tests check concept and lab links, prerequisite gates,
 integration, evidence invalidation and backup round trips.
 
 ## Enclosure submissions

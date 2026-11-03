@@ -1,6 +1,6 @@
 import { LAB_CATALOGS, labHref, notesHref } from '@flux/map';
-import { SATELLITE, RECIPES, recipeById } from './satellite.js';
-import { applicationStore, cleanProgress, demonstrated, missingInputs, record, revise } from './progress.js';
+import { SATELLITE, RECIPES, recipeById } from '@flux/map/applications/satellite.js';
+import { applicationStore, cleanProgress, demonstrated, missingInputs, record, revise, wouldClear } from './progress.js';
 import './style.css';
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -13,10 +13,10 @@ function spacecraft() {
     <g class="sat-orbit" data-part="orbit"><ellipse cx="300" cy="163" rx="267" ry="113" transform="rotate(-12 300 163)"/><path d="m55 211 8-16 7 13"/><text x="45" y="240">01 / ORBIT</text></g>
     <g class="sat-piece" data-part="power"><path d="m48 136 148-57 73 44-147 59z M344 192l148-57 73 44-148 59z"/><path class="sat-grid" d="m48 136 148-57 73 44-147 59z M344 192l148-57 73 44-148 59z"/><path d="m206 150 61-22 M340 190l53-19"/><text x="75" y="111">02 / POWER</text></g>
     <g class="sat-piece" data-part="structure"><path d="m247 125 82-32 67 42-83 33z M247 125v82l66 43v-82 M313 250l83-33v-82"/><path d="m256 146 47 31v54l-47-31z M323 177l63-25v55l-63 25z"/><text x="217" y="280">03 / STRUCTURE</text></g>
-    <g class="sat-piece" data-part="thermal"><path d="m269 124 58-23 47 29-59 24z"/><path d="m280 121 44-17 M290 128l44-17 M300 135l44-17"/><text x="360" y="83">04 / THERMAL</text><path class="sat-leader" d="m359 88-30 29"/></g>
-    <g class="sat-piece" data-part="attitude"><ellipse cx="346" cy="187" rx="17" ry="12" transform="rotate(-20 346 187)"/><path d="m337 185 18-7v14l-18 7z"/><text x="399" y="269">05 / POINTING</text><path class="sat-leader" d="m408 254-48-51"/></g>
-    <g class="sat-piece" data-part="communications"><path d="m342 96 9-33 M330 51q28-11 42 11-26 17-42-11z M350 48l10-22"/><text x="381" y="34">06 / RADIO</text><path class="sat-leader" d="m377 39-15 13"/></g>
-    <g class="sat-piece" data-part="payload"><path d="m258 157 29 19v24l-29-19z"/><ellipse cx="272" cy="179" rx="6" ry="9" transform="rotate(-30 272 179)"/><text x="83" y="269">07 / SENSOR</text><path class="sat-leader" d="m176 257 87-68"/></g>
+    <g class="sat-piece" data-part="thermal"><path d="m269 124 58-23 47 29-59 24z"/><path d="m280 121 44-17 M290 128l44-17 M300 135l44-17"/><text x="360" y="83">05 / THERMAL</text><path class="sat-leader" d="m359 88-30 29"/></g>
+    <g class="sat-piece" data-part="attitude"><ellipse cx="346" cy="187" rx="17" ry="12" transform="rotate(-20 346 187)"/><path d="m337 185 18-7v14l-18 7z"/><text x="399" y="269">06 / POINTING</text><path class="sat-leader" d="m408 254-48-51"/></g>
+    <g class="sat-piece" data-part="communications"><path d="m342 96 9-33 M330 51q28-11 42 11-26 17-42-11z M350 48l10-22"/><text x="381" y="34">07 / RADIO</text><path class="sat-leader" d="m377 39-15 13"/></g>
+    <g class="sat-piece" data-part="payload"><path d="m258 157 29 19v24l-29-19z"/><ellipse cx="272" cy="179" rx="6" ry="9" transform="rotate(-30 272 179)"/><text x="83" y="269">04 / SENSOR</text><path class="sat-leader" d="m176 257 87-68"/></g>
   </svg>`;
 }
 
@@ -25,10 +25,12 @@ export function mountApplications(map, parent = document.querySelector('#applica
   const store = applicationStore();
   let state = cleanProgress(store.readJSON('satellite'));
   let selected = 'orbit';
+  /** Evidence typed but not yet saved. It is saved, and its dependents cleared, when the box loses focus. */
+  let draft = null;
   let storageMessage = 'Saved in this browser. Included in your Progress backup.';
 
   parent.innerHTML = `<div class="mission-overview">
-    <div class="mission-copy"><p class="app-kicker">APPLICATION 01 / BENCH</p>
+    <div class="mission-copy"><p class="app-kicker">APPLICATION 01</p>
       <h3>Build a satellite</h3><p class="mission-lede">Learn the pieces.<br>Make them work together.</p>
       <p>Model a small satellite in Earth orbit. Keep a sensor powered, point it and return its readings. Each subsystem turns concepts into a capability.</p>
       <a class="app-bench" href="bench/">Start at the Bench <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M4 3h9v9" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
@@ -56,10 +58,43 @@ export function mountApplications(map, parent = document.querySelector('#applica
     parent.querySelectorAll('[data-part]').forEach((el) => el.classList.toggle('active', el.dataset.part === selected || selected === 'satellite'));
     const badge = panel.querySelector('[data-recipe-status]');
     if (badge) badge.textContent = status(selected);
+    const text = draft ?? state[selected].evidence;
+    const missing = missingInputs(selected, state);
+    const unstudied = selected !== 'satellite' && !state[selected].studied;
     const save = panel.querySelector('[data-record]');
-    if (save) save.disabled = demonstrated(selected, state) || missingInputs(selected, state).length > 0 || !state[selected].evidence.trim() || (selected !== 'satellite' && !state[selected].studied);
+    if (save) save.disabled = (draft === null && demonstrated(selected, state)) || missing.length > 0 || !text.trim() || unstudied;
+    const needs = panel.querySelector('[data-requirements]');
+    if (needs) needs.textContent = requirements(missing, text, unstudied);
+    const warning = panel.querySelector('[data-warning]');
+    if (warning) {
+      const clear = draft !== null && draft !== state[selected].evidence ? wouldClear(state, selected) : [];
+      warning.hidden = clear.length === 0;
+      warning.textContent = clear.length
+        ? `Leaving this box saves the edit and clears ${clear.length === 1 ? '1 record' : `${clear.length} records`}: ${clear.map((id) => recipeById[id].title).join(', ')}. Their notes stay.`
+        : '';
+    }
     const message = panel.querySelector('[data-storage]');
     if (message) message.textContent = storageMessage;
+  }
+
+  function requirements(missing, text, unstudied) {
+    if (missing.length) return `First record demonstrations for: ${missing.map((id) => recipeById[id].title).join(', ')}.`;
+    if (draft === null && demonstrated(selected, state)) {
+      return selected === 'satellite' ? 'Integration recorded.' : 'Demonstration recorded. Editing it asks dependent subsystems to be checked again.';
+    }
+    if (unstudied) return text.trim() ? 'Tick the box once you have studied the foundations.' : 'Study the foundations and add evidence before recording a demonstration.';
+    if (!text.trim()) return selected === 'satellite' ? 'All subsystem inputs are recorded. Add your integration evidence.' : 'Add evidence before recording a demonstration.';
+    return selected === 'satellite' ? 'Ready to record the integration.' : 'Ready to record.';
+  }
+
+  /** Save typed evidence. A changed record asks its dependents to be checked again. */
+  function commit() {
+    if (draft === null) return;
+    const text = draft;
+    draft = null;
+    if (text === state[selected].evidence) return summary();
+    state = revise(state, selected, { evidence: text });
+    save();
   }
 
   function save() {
@@ -73,7 +108,6 @@ export function mountApplications(map, parent = document.querySelector('#applica
   function render() {
     const r = recipeById[selected];
     const integrated = selected === 'satellite';
-    const missing = missingInputs(selected, state);
     const foundations = (r.concepts || []).map((id) => {
       const c = map.graph.byId[id];
       return `<a href="#${id}" data-concept="${id}">${esc(c.title)}${c.labs.length ? '' : ' <span class="app-meta">/ lab gap</span>'}</a>`;
@@ -95,16 +129,18 @@ export function mountApplications(map, parent = document.querySelector('#applica
       </div><div class="recipe-record"><p class="app-kicker">${integrated ? '03 / INTEGRATED' : '01 / STUDIED → 02 / DEMONSTRATED'}</p><h4>${integrated ? 'Record the shared mission' : 'Keep a capability record'}</h4>
         ${!integrated ? `<label class="app-check"><input type="checkbox" data-studied ${state[selected].studied ? 'checked' : ''}> I have studied these foundations.</label>` : ''}
         <p class="demonstration-task">${esc(r.demonstrate)}</p>
-        <label for="application-evidence">Your evidence <span>(personal record)</span></label><textarea id="application-evidence" maxlength="2000" rows="5" placeholder="Describe your model, result and checks. Add a report reference or link.">${esc(state[selected].evidence)}</textarea>
-        <p class="record-requirements">${missing.length ? `First record demonstrations for: ${missing.map((id) => esc(recipeById[id].title)).join(', ')}.` : integrated ? 'All subsystem inputs are recorded. Add your integration evidence.' : 'Study the foundations and add evidence before recording a demonstration.'}</p>
+        <label for="application-evidence">Your evidence <span>(personal record)</span></label><textarea id="application-evidence" maxlength="2000" rows="5" placeholder="Describe your model, result and checks. Add a report reference or link.">${esc(draft ?? state[selected].evidence)}</textarea>
+        <p class="record-warning" data-warning role="status" hidden></p>
+        <p class="record-requirements" data-requirements></p>
         <button type="button" class="record-capability" data-record>${integrated ? 'Record integration' : 'Record demonstration'}</button>
-        <p class="app-meta">Self-recorded evidence. No automated check or hardware qualification is claimed. Editing a record asks dependent subsystems to be checked again; their notes stay.</p>
+        <p class="app-meta">Self-recorded evidence. No automated check or hardware qualification is claimed. Editing a record asks dependent subsystems to be checked again. Their notes stay.</p>
         <p class="app-meta" data-storage role="status"></p>
       </div></div>`;
     summary();
   }
 
   function select(id, updateUrl = true) {
+    commit();
     selected = recipeById[id] ? id : 'orbit';
     if (updateUrl) {
       const url = new URL(window.location.href);
@@ -134,6 +170,7 @@ export function mountApplications(map, parent = document.querySelector('#applica
       document.querySelector('.explore').scrollIntoView({ block: 'start' });
     }
     if (event.target.closest('[data-record]')) {
+      commit();
       state = record(state, selected);
       save();
     }
@@ -146,13 +183,22 @@ export function mountApplications(map, parent = document.querySelector('#applica
   });
   panel.addEventListener('input', (event) => {
     if (event.target.id === 'application-evidence') {
-      state = revise(state, selected, { evidence: event.target.value });
-      save();
+      draft = event.target.value;
+      summary();
     }
+  });
+  panel.addEventListener('change', (event) => {
+    if (event.target.id === 'application-evidence') commit();
+  });
+  // Typed evidence is not lost when the tab closes or goes to the background.
+  window.addEventListener('pagehide', commit);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') commit();
   });
   window.addEventListener('popstate', () => select(new URLSearchParams(window.location.search).get('component'), false));
   window.addEventListener('storage', (event) => {
     if (event.key === 'flux.applications.satellite.v1' || event.key === null) {
+      // Another tab saved. Keep any evidence still being typed here.
       state = cleanProgress(store.readJSON('satellite'));
       render();
     }

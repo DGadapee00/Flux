@@ -1,5 +1,5 @@
 import { browserStorage, createStore } from '@flux/core';
-import { RECIPES, recipeById } from './satellite.js';
+import { RECIPES, recipeById } from '@flux/map/applications/satellite.js';
 
 export function applicationStore(storage = browserStorage()) {
   return createStore({ courseId: 'applications', storage, slots: [
@@ -26,14 +26,25 @@ export function missingInputs(id, state) {
   return recipeById[id].requires.filter((dep) => !demonstrated(dep, state));
 }
 
-/** Preserve the notes, but ask for a fresh check whenever an input changes. */
-export function revise(state, id, change) {
-  const next = cleanProgress(state);
+/** The recipe and every recipe that uses its numbers, directly or further along. */
+export function dependents(id) {
   const affected = new Set([id]);
   for (let n = 0; n < RECIPES.length; n++) {
     for (const r of RECIPES) if (r.requires.some((dep) => affected.has(dep))) affected.add(r.id);
   }
-  for (const key of affected) next[key].recorded = false;
+  return affected;
+}
+
+/** The recorded demonstrations an edit to `id` would ask to be checked again, in recipe order. */
+export function wouldClear(state, id) {
+  const affected = dependents(id);
+  return RECIPES.filter((r) => affected.has(r.id) && demonstrated(r.id, state)).map((r) => r.id);
+}
+
+/** Preserve the notes, but ask for a fresh check whenever an input changes. */
+export function revise(state, id, change) {
+  const next = cleanProgress(state);
+  for (const key of dependents(id)) next[key].recorded = false;
   Object.assign(next[id], change);
   return next;
 }
