@@ -1,0 +1,35 @@
+export default {
+  id: 'thermal-radiation',
+  title: 'Thermal radiation',
+  label: ['Thermal', 'radiation'],
+  subject: 'heat',
+  courses: ['eml4140'],
+  eq: String.raw`E_b = \sigma T^4, \qquad \lambda_\text{max}T = 2898\ \mu\text{m·K}, \qquad q'' = \varepsilon\sigma\left(T_s^4 - T_\text{sur}^4\right)`,
+  idea: String.raw`Every surface emits electromagnetic waves because of its temperature, and needs no medium to do it. A black body emits the most possible at each wavelength, with a total of \(\sigma T^4\) and a peak that moves to shorter waves as it heats. A real surface emits a fraction \(\varepsilon\) of that, and the fraction can change with wavelength. Glass passes visible light but absorbs the infrared, so a window lets sunlight in and blocks the room's own glow; a real greenhouse stays warm mostly because its roof stops the warm air rising away. White paint reflects sunlight yet is nearly black in the infrared. Because of the fourth power, radiation dominates at high temperature and matters even at room temperature.`,
+  requires: ['light-intensity'],
+  sources: [
+    {
+      title: 'Lienhard, A Heat Transfer Textbook',
+      url: 'https://ahtt.mit.edu',
+      kind: 'Free textbook',
+      level: 'Course level',
+      why: 'Chapter 10 covers black bodies, emissivity and spectral and solar radiation.',
+    },
+    {
+      title: 'MIT 2.51, calendar: Radiation, black bodies (session 23)',
+      url: 'https://ocw.mit.edu/courses/2-51-intermediate-heat-and-mass-transfer-fall-2008/pages/calendar/',
+      kind: 'Course outline',
+      level: 'Course level',
+      why: 'Opens the radiation part of the course.',
+    },
+    {
+      title: 'OpenStax University Physics Vol. 2, §1.6 Mechanisms of heat transfer',
+      url: 'https://openstax.org/books/university-physics-volume-2/pages/1-6-mechanisms-of-heat-transfer',
+      kind: 'Open textbook',
+      level: 'Intro',
+      why: 'The Stefan–Boltzmann law and emissivity at a first-course level.',
+    },
+  ],
+  labs: [],
+  candidate: 'Plot Planck’s spectrum with a temperature slider and a surface’s emissivity laid over it. It corrects the idea that a white surface is cool in every band: white paint is nearly black in the infrared.',
+};

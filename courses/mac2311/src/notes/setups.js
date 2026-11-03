@@ -193,3 +193,139 @@ SETUPS.c1.s11 = [
   },
   read: (c) => ({ total: [c.exact, 32 / 3] }),
 });
+
+for (const [section, tag, scenario, value] of [
+  ['s1', 'x times e to the x', 'exp', 1],
+  ['s1', 'a logarithm alone', 'log', 1],
+  ['s1', 'closing the cycle', 'cycle', 1.3780246135473637],
+  ['s2', 'an odd power of sine', 'odd', 2 / 15],
+  ['s2', 'an even power', 'even', Math.PI / 2],
+  ['s3', 'part of a circle', 'circle', Math.PI / 3 + Math.sqrt(3) / 2],
+  ['s4', 'two linear factors', 'fractions', Math.log(2) + 2 * Math.log(4 / 3)],
+  ['s4', 'integrating the repeated factor', 'repeated', 2 * Math.log(4 / 3) + 1 / 6],
+  ['s5', 'one line makes two cones', 'cone', (Math.PI * Math.sqrt(5)) / 2],
+])
+  (SETUPS.c4[section] ??= []).push({
+    tag,
+    lab: 'technique',
+    scenario,
+    read: (c) => ({ integral: [c.integral, value] }),
+  });
+(SETUPS.c4.s5 ??= []).push(
+  {
+    tag: 'main span with assumed shallow sag',
+    lab: 'bridge',
+    scenario: 'shallow',
+    read: (c) => ({ length: [c.length, 1285.3487802963207], extra: [c.extra, 5.188780296320601] }),
+  },
+  {
+    tag: 'doubling assumed sag',
+    lab: 'bridge',
+    scenario: 'deep',
+    read: (c) => ({ length: [c.length, 1300.6958269151703], extra: [c.extra, 20.53582691517022] }),
+  },
+  {
+    tag: 'refining cable chords',
+    lab: 'bridge',
+    scenario: 'deep',
+    setup: (s) => {
+      s.n = 32;
+    },
+    read: (c) => ({ length: [c.length, 1300.6958269151703] }),
+  },
+  {
+    tag: 'a geometrically similar small model',
+    lab: 'bridge',
+    scenario: 'model',
+    read: (c) => ({ length: [c.length, 10.260606304268446] }),
+  },
+);
+
+for (const [section, tag, scenario, setup, read] of [
+  [
+    's1',
+    'a quarter turn on an LP',
+    'lp',
+    null,
+    (c) => ({ theta: [c.theta, Math.PI / 2], distance: [c.distance, (0.14 * Math.PI) / 2] }),
+  ],
+  [
+    's2',
+    'a faster record at the same point',
+    'single',
+    null,
+    (c) => ({ speed: [c.speed, 0.14 * 1.5 * Math.PI], period: [c.period, 4 / 3] }),
+  ],
+  [
+    's2',
+    'moving the mark inward',
+    'inner',
+    null,
+    (c) => ({ speed: [c.speed, (0.07 * 10 * Math.PI) / 9], period: [c.period, 1.8] }),
+  ],
+  [
+    's2',
+    'a tangent at sixty degrees',
+    'lp',
+    (s) => {
+      s.t = 0.3;
+    },
+    (c) => ({ slope: [c.slope, -1 / Math.sqrt(3)], x: [c.x, 0.07] }),
+  ],
+  ['s4', 'the mark sweeps a sector', 'lp', null, (c) => ({ area: [c.area, (Math.PI * 0.14 ** 2) / 4] })],
+  [
+    's4',
+    'one complete revolution',
+    'lp',
+    (s) => {
+      s.t = 1.8;
+    },
+    (c) => ({ area: [c.area, Math.PI * 0.14 ** 2], distance: [c.distance, 2 * Math.PI * 0.14] }),
+  ],
+])
+  (SETUPS.c5[section] ??= []).push({ tag, lab: 'record', scenario, setup, read });
+
+for (const [tag, scenario, setup, read] of [
+  [
+    'calibrating an effective length',
+    'small',
+    (s) => {
+      s.angle = 0;
+    },
+    (c) => ({ period: [c.period, 4], series: [c.series, 4] }),
+  ],
+  ['a small assumed swing', 'small', null, (c) => ({ period: [c.period, 4.001904689943947] })],
+  [
+    'a wide assumed swing',
+    'wide',
+    null,
+    (c) => ({
+      period: [c.period, 4.721362396064385],
+      series: [c.series, 4.689453125],
+      bound: [c.tailBound, 0.037384033203124965],
+    }),
+  ],
+  [
+    'improving the calculation',
+    'wide',
+    (s) => {
+      s.n = 8;
+    },
+    (c) => ({ series: [c.series, 4.720267184078693], bound: [c.tailBound, 0.0012051670637447363] }),
+  ],
+  [
+    'near the upright limit',
+    'slow',
+    null,
+    (c) => ({ period: [c.period, 9.757450878695543], series: [c.series, 7.305015657094492] }),
+  ],
+  [
+    'quartering effective length',
+    'wide',
+    (s) => {
+      s.L /= 4;
+    },
+    (c) => ({ period: [c.period, 2.3606811980321925] }),
+  ],
+])
+  (SETUPS.c6.s10 ??= []).push({ tag, lab: 'clock', scenario, setup, read });

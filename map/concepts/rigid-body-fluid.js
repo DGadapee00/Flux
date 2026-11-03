@@ -1,0 +1,28 @@
+export default {
+  id: 'rigid-body-fluid',
+  title: 'Fluids in rigid-body motion',
+  label: ['Rigid-body', 'fluid motion'],
+  subject: 'fluids',
+  courses: ['eml3015'],
+  eq: String.raw`\nabla p = \rho\,(\mathbf g - \mathbf a), \qquad \tan\theta = \frac{a_x}{g + a_z}`,
+  idea: String.raw`A fluid that moves as one block has no shear, so pressure and gravity alone must give each parcel its acceleration. Newton's second law on a small cube says the pressure gradient points along \(\mathbf g - \mathbf a\). Surfaces of constant pressure, the free surface among them, lie across that direction. A tank on an accelerating truck tilts its surface by \(a/g\); a spinning bucket curves it into a paraboloid.`,
+  requires: ['pressure', 'newtons-second-law', 'gradient'],
+  sources: [
+    {
+      title: 'MIT 2.06, calendar: Lecture 3, fluids under constant acceleration',
+      url: 'https://ocw.mit.edu/courses/2-06-fluid-dynamics-spring-2013/pages/calendar/',
+      kind: 'Course outline',
+      level: 'Course level',
+      why: 'The course places it between statics and moving fluids, which is where it belongs.',
+    },
+    {
+      title: 'Cleynen, Fluid Dynamics for Engineers',
+      url: 'https://fluidmech.ninja/',
+      kind: 'Open textbook',
+      level: 'Course level',
+      why: 'Pressure in accelerating and rotating liquids, from the same force balance as statics.',
+    },
+  ],
+  labs: [],
+  candidate: 'Accelerate a tank of water or spin it, and draw the free surface and the isobars. It corrects the idea that the water piles up at the front: it piles at the back, tilted by \\(a/g\\), and holds that shape while the acceleration holds.',
+};

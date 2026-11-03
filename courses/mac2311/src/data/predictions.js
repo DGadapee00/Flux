@@ -348,3 +348,291 @@ PREDICTIONS.spheroid = [
     why: 'The equatorial radius enters disk area twice. The axial interval has not doubled, so this is not an eightfold uniform scaling.',
   },
 ];
+
+PREDICTIONS.arc = [
+  {
+    id: 'arc-scale',
+    scenario: 'parabola',
+    ask: 'Double the right endpoint on y=x². Does the whole arc length merely double?',
+    apply: (s) => {
+      s.b *= 2;
+    },
+    watch: [watch('length', 'Arc length', (c) => c.length)],
+    factors: [1, 2, 3.14, 4],
+    tol: 0.02,
+    expect: { length: 3.14 },
+    why: 'Changing the endpoint also admits steeper pieces. It does not scale both coordinates equally.',
+  },
+  {
+    id: 'line-gap',
+    scenario: 'line',
+    ask: 'Double the right endpoint on a straight line. Does a gap between arc and chord appear?',
+    apply: (s) => {
+      s.b *= 2;
+    },
+    watch: [watch('gap', 'Arc exceeds chord', (c) => c.shorter, 'bool')],
+    expect: { gap: false },
+    why: 'A straight line has no bending. The arc and chord remain identical at every endpoint.',
+  },
+];
+PREDICTIONS.technique = [
+  {
+    id: 'half-width',
+    scenario: 'exp',
+    ask: 'Start halfway through [0,1]. Double the width. Does the accumulated integral merely double?',
+    prep: (s) => {
+      s.fraction = 0.5;
+    },
+    apply: (s) => {
+      s.fraction = 1;
+    },
+    watch: [watch('I', 'Integral', (c) => c.integral)],
+    factors: [1, 2, 4, 5.69],
+    tol: 0.02,
+    expect: { I: 5.69 },
+    why: 'The new half contains taller values of x exp(x). Area is not proportional to width when the height changes.',
+  },
+  {
+    id: 'even-height',
+    scenario: 'even',
+    ask: 'Extend the upper bound from π/2 to π for sin²x. The final height falls to zero. Does the integral decrease?',
+    prep: (s) => {
+      s.fraction = 0.5;
+    },
+    apply: (s) => {
+      s.fraction = 1;
+    },
+    watch: [watch('I', 'Integral', (c) => c.integral, 'trend')],
+    expect: { I: 'bigger' },
+    why: 'The integrand remains nonnegative. Additional width contributes positive area even while its endpoint height falls.',
+  },
+];
+PREDICTIONS.bridge = [
+  {
+    id: 'sag-excess',
+    scenario: 'shallow',
+    ask: 'Double the assumed sag from 50 to 100 m. Approximately what factors describe the total length and its small excess beyond the span?',
+    apply: (s) => {
+      s.d *= 2;
+    },
+    watch: [
+      watch('length', 'Cable length', (c) => c.length),
+      watch('excess', 'Length beyond span', (c) => c.extra),
+    ],
+    expect: { length: 1, excess: 4 },
+    tol: 0.05,
+    why: 'For small sag, the leading excess is 8d²/(3L). Total length is still dominated by the unchanged horizontal span.',
+  },
+  {
+    id: 'polygon-refine',
+    scenario: 'deep',
+    ask: 'Double the number of polygon segments. What happens to the gap from the smooth cable length?',
+    apply: (s) => {
+      s.n *= 2;
+    },
+    watch: [watch('error', 'Polygon shortfall', (c) => c.error)],
+    expect: { error: 0.25 },
+    tol: 0.02,
+    why: 'For this smooth curve, each chord loses a third-order amount; twice as many half-width pieces reduce total error about fourfold.',
+  },
+];
+
+PREDICTIONS.parametric = [
+  {
+    id: 'circle-time',
+    scenario: 'circle',
+    prep: (s) => {
+      s.k = 2;
+    },
+    ask: 'Move the unit-circle point from π/2 to π. What happens to distance travelled and instantaneous speed?',
+    apply: (s) => {
+      s.k = 4;
+    },
+    watch: [watch('distance', 'Distance so far', (c) => c.length), watch('speed', 'Speed', (c) => c.speed)],
+    expect: { distance: 2, speed: 1 },
+    why: 'The parameter runs twice as far at constant unit speed. A longer trip need not mean a faster moving point.',
+  },
+  {
+    id: 'parabola-velocity',
+    scenario: 'para',
+    prep: (s) => {
+      s.k = 2;
+    },
+    ask: 'Move from t=1/2 to t=1 on (t,t²). Does the slope double while the speed also doubles?',
+    apply: (s) => {
+      s.k = 4;
+    },
+    watch: [watch('slope', 'Slope', (c) => c.slope), watch('speed', 'Speed', (c) => c.speed)],
+    factors: [1, 1.58, 2, 4],
+    tol: 0.01,
+    expect: { slope: 2, speed: 1.58 },
+    why: 'Slope is 2t, but speed is √(1+4t²). The unchanged horizontal velocity prevents proportional speed scaling.',
+  },
+];
+PREDICTIONS.polar = [
+  {
+    id: 'repeat-area',
+    scenario: 'disk',
+    ask: 'Sweep a second full revolution around r=1. Does the integral count the same disk again?',
+    apply: (s) => {
+      s.k = 8;
+    },
+    watch: [watch('area', 'Accumulated area', (c) => c.area)],
+    expect: { area: 2 },
+    why: 'The sector integral counts traversal multiplicity. It doubles even though the geometric disk has not changed.',
+  },
+  {
+    id: 'translate-circle',
+    scenario: 'disk',
+    ask: 'Replace the unit disk by r=2 cosθ traced once. Does its area increase because its maximum r doubles?',
+    apply: (s) => {
+      s.kind = 'shift';
+      s.k = 4;
+    },
+    watch: [watch('area', 'Area', (c) => c.area, 'trend')],
+    expect: { area: 'same' },
+    why: 'The new curve is still a circle of radius one, translated one unit. Its distance from the polar origin is not its geometric radius.',
+  },
+];
+PREDICTIONS.record = [
+  {
+    id: 'record-inner',
+    scenario: 'lp',
+    ask: 'Move the mark halfway inward at unchanged RPM. What happens to linear speed and revolution time?',
+    apply: (s) => {
+      s.r /= 2;
+    },
+    watch: [
+      watch('speed', 'Linear speed', (c) => c.speed),
+      watch('period', 'Revolution time', (c) => c.period),
+    ],
+    expect: { speed: 0.5, period: 1 },
+    why: 'All material points on a rigid record share angular speed. Linear speed is rω, but the revolution period is 2π/ω.',
+  },
+  {
+    id: 'record-speed',
+    scenario: 'lp',
+    prep: (s) => {
+      s.t = 0.3;
+    },
+    ask: 'Switch from 33⅓ to 45 RPM and compare at the same angle. Does the tangent slope change?',
+    apply: (s) => {
+      s.t *= s.rpm / 45;
+      s.rpm = 45;
+    },
+    watch: [
+      watch('slope', 'Tangent slope', (c) => c.slope, 'trend'),
+      watch('speed', 'Linear speed', (c) => c.speed, 'trend'),
+    ],
+    expect: { slope: 'same', speed: 'bigger' },
+    why: 'The factor ω cancels from dy/dx. It remains in the time derivatives, so the same geometric tangent can carry a different speed.',
+  },
+];
+
+PREDICTIONS.improper = [
+  {
+    id: 'tail-half',
+    scenario: 'mid',
+    ask: 'Double the cutoff from 4 to 8 in the integral of 1/x². What happens to the missing tail?',
+    apply: (s) => {
+      s.b *= 2;
+    },
+    watch: [watch('tail', 'Tail beyond cutoff', (c) => c.tail)],
+    expect: { tail: 0.5 },
+    why: 'The tail is exactly 1/b. Doubling a cutoff halves this missing area; it does not make it zero.',
+  },
+  {
+    id: 'area-tail',
+    scenario: 'near',
+    ask: 'Double the cutoff from 2 to 4. Do the collected area and missing tail both double?',
+    apply: (s) => {
+      s.b *= 2;
+    },
+    watch: [watch('area', 'Area from 1', (c) => c.area), watch('tail', 'Tail', (c) => c.tail)],
+    factors: [0.5, 1, 1.5, 2],
+    expect: { area: 1.5, tail: 0.5 },
+    why: 'Collected area is 1−1/b, while the tail is 1/b. They add to one and move in opposite directions.',
+  },
+];
+PREDICTIONS.taylor = [
+  {
+    id: 'zero-coefficient',
+    scenario: 'line',
+    ask: 'Raise the Maclaurin order for sin x from one to two. Must the approximation change?',
+    apply: (s) => {
+      s.n = 2;
+    },
+    watch: [watch('error', 'Error at the probe', (c) => c.err, 'trend')],
+    expect: { error: 'same' },
+    why: 'The quadratic coefficient of sine at zero vanishes. Increasing the allowed degree need not add a nonzero term.',
+  },
+  {
+    id: 'distance-error',
+    scenario: 'line',
+    prep: (s) => {
+      s.x = 0.25;
+    },
+    ask: 'Keep the tangent approximation to sin x at zero and double the probe distance from 0.25 to 0.5. Approximately how does its error change?',
+    apply: (s) => {
+      s.x *= 2;
+    },
+    watch: [watch('error', 'Error', (c) => c.err)],
+    factors: [2, 4, 8, 1],
+    tol: 0.02,
+    expect: { error: 8 },
+    why: 'The first missing nonzero term is −x³/6. Near the centre its cubic scaling dominates the error.',
+  },
+];
+PREDICTIONS.series = [
+  {
+    id: 'harmonic-limit',
+    scenario: 'harm',
+    ask: 'Double the number of harmonic terms. Their individual size falls. Does this make the infinite sum convergent?',
+    apply: (s) => {
+      s.n *= 2;
+    },
+    watch: [watch('converges', 'Infinite series converges', (c) => c.converges, 'bool')],
+    expect: { converges: false },
+    why: 'A zero term limit is necessary but not sufficient. Blocks from n+1 through 2n retain at least one-half of added sum.',
+  },
+  {
+    id: 'geometric-tail',
+    scenario: 'geom',
+    ask: 'Increase the halving series from eight terms to sixteen. What fraction of the old missing tail remains?',
+    apply: (s) => {
+      s.n *= 2;
+    },
+    watch: [watch('tail', 'Missing tail', (c) => 2 - c.sn)],
+    factors: [0.5, 0.25, 1 / 256, 1],
+    expect: { tail: 1 / 256 },
+    why: 'Each new term advances the geometric tail by another factor one-half. Eight extra terms multiply it by 2⁻⁸, not one-half.',
+  },
+];
+PREDICTIONS.clock = [
+  {
+    id: 'amplitude-correction',
+    scenario: 'small',
+    ask: 'Double assumed amplitude from 5° to 10°. Approximately how does the excess period beyond the small-angle limit change?',
+    apply: (s) => {
+      s.angle *= 2;
+    },
+    watch: [watch('excess', 'Period beyond T₀', (c) => c.period - c.T0)],
+    tol: 0.02,
+    expect: { excess: 4 },
+    why: 'The leading correction is θ₀²/16. Total period hardly changes, while its small amplitude correction nearly quadruples.',
+  },
+  {
+    id: 'more-terms',
+    scenario: 'wide',
+    ask: 'Double the number of series terms. Does the pendulum speed up, or does only the calculation improve?',
+    apply: (s) => {
+      s.n *= 2;
+    },
+    watch: [
+      watch('period', 'Nonlinear period', (c) => c.period, 'trend'),
+      watch('error', 'Series error', (c) => c.error, 'trend'),
+    ],
+    expect: { period: 'same', error: 'smaller' },
+    why: 'The physical period depends on length, gravity and amplitude. The truncation count controls the approximation, not the pendulum.',
+  },
+];
