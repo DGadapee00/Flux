@@ -1,14 +1,16 @@
 # What the map covers
 
 A snapshot from the data on 3 November 2026, after the thermal-fluids courses (EML 3015, EML 4140,
-EML 3101). Lanes for linear algebra and numerical methods are added for the next round. For the
+EML 3101). A linear algebra thread now runs from vectors to eigenvalues and projection, and feeds
+differential equations and regression. For the
 live numbers run `node map/check.mjs`, `npm run map-audit` and `npm run map-gaps`.
 
-**209 concepts, 146 with a Flux lab, 63 gaps.**
+**216 concepts, 146 with a Flux lab, 70 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
 | Calculus | 30 | 26 |
+| Linear algebra | 7 | 0 |
 | Differential equations | 12 | 12 |
 | Numerical methods | 2 | 2 |
 | Mechanics | 30 | 30 |

@@ -6,7 +6,7 @@ export default {
   courses: ['map2302'],
   eq: String.raw`M\ddot{\mathbf x} + K\mathbf x = \mathbf 0, \qquad (K - \omega^2 M)\,\mathbf v = \mathbf 0`,
   idea: String.raw`Masses joined by springs move in patterns where everything shares one frequency: the normal modes. Any free motion is a mix of them, and the starting state sets the mix. Release one mass and both modes usually start, which is why the motion seems to pass back and forth.`,
-  requires: ['linear-systems'],
+  requires: ['linear-systems', 'eigenvalues'],
   sources: [
     {
       title: 'Lebl, Notes on Diffy Qs, §3.6 Second-order systems and applications',

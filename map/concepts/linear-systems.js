@@ -6,7 +6,7 @@ export default {
   courses: ['map2302'],
   eq: String.raw`\dot{\mathbf x} = A\mathbf x, \qquad \mathbf x(t) = e^{At}\mathbf x_0 = \sum c_i e^{\lambda_i t}\mathbf v_i`,
   idea: String.raw`Any linear equation can be written as a first-order system for a state vector. The eigenvalues of \(A\) set the rates and the eigenvectors the directions, and together they sort the phase portrait: node, saddle, spiral or centre. A repeated eigenvalue may have only one eigenvector, and then the matrix exponential still gives the answer.`,
-  requires: ['damped-oscillator'],
+  requires: ['damped-oscillator', 'eigenvalues'],
   sources: [
     {
       title: 'Lebl, Notes on Diffy Qs, §3.5 Two-dimensional systems and their vector fields',
