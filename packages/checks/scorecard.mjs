@@ -5,6 +5,7 @@
  *   npm run scorecard              every course, one row each
  *   npm run scorecard -- --units   one row per unit as well
  *   npm run scorecard -- --md      the table as Markdown, for a PR
+ *   --course <id>                  measure a scaffold or starter outside the hub
  *   --quiet                        only the verdict (npm test runs it this way)
  *   --mark <id>                    treat that course as marked, to see what CI would say
  *
@@ -33,7 +34,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { withCoaching } from './coaching.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const COURSES = ['phy2049', 'phy2048', 'mac2311', 'mac2313', 'statics', 'egn3321', 'egn3331', 'eml3100', 'sta3032', 'bench'];
+const COURSES = ['phy2049', 'phy2048', 'mac2311', 'mac2313', 'statics', 'egn3321', 'egn3331', 'eml3100', 'sta3032', 'bench', 'map2302'];
 const argv = process.argv.slice(2);
 const args = new Set(argv);
 const marked = new Set(argv.flatMap((a, i) => (a === '--mark' ? [argv[i + 1]] : [])));
@@ -233,8 +234,10 @@ function unitTable(r) {
   return [`${r.code}`, line(head), ...body.map(line)].join('\n');
 }
 
+const selected = argv.flatMap((arg,i)=>arg==='--course'?[argv[i+1]]:[]);
+for(const id of selected){if(!/^[a-z][a-z0-9]*$/.test(id||'')||!exists(`courses/${id}/src/manifest.js`))throw Error(`Unknown course: ${id}`);}
 const results = [];
-for (const id of COURSES) {
+for (const id of (selected.length ? selected : COURSES)) {
   if (!exists(`courses/${id}/src/manifest.js`)) continue;
   results.push(await measure(id));
 }

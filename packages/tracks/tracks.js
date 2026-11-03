@@ -35,7 +35,7 @@ export const TRACKS = [
         term: 'Spring 2026',
         href: 'mac2313/',
       },
-      { id: 'map2302', code: 'MAP 2302', title: 'Differential equations', term: null, href: null },
+      { id: 'map2302', code: 'MAP 2302', title: 'Differential Equations', term: null, href: 'map2302/' },
     ],
   },
   {

@@ -4,13 +4,23 @@
  * Each section names the lab that shows it and the chapters and topics its practice problems use,
  * so a section links to its lab and its problems, and a problem and a lab link back.
  */
+import { SETUPS } from './setups.js';
 import u1 from './units/u1.js';
 import u2 from './units/u2.js';
 import u3 from './units/u3.js';
 import u4 from './units/u4.js';
+import u5 from './units/u5.js';
+import u6 from './units/u6.js';
+import u7 from './units/u7.js';
+import u8 from './units/u8.js';
+import u9 from './units/u9.js';
+import u10 from './units/u10.js';
+import u11 from './units/u11.js';
+import u12 from './units/u12.js';
+import u13 from './units/u13.js';
 
 /** One file per unit in ./units/, so each unit's sections change without touching the others. */
-export const NOTES = { u1, u2, u3, u4 };
+export const NOTES = { u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
 
@@ -41,5 +51,12 @@ export function sectionForLab(labId, examId) {
   const set = NOTES[examId];
   const mine = set?.sections.filter((s) => s.lab === labId) || [];
   const hit = mine.find((s) => s.home) || mine[0];
-  return hit ? { set, section: hit } : null;
+  if (hit) return { set, section: hit };
+  // A worked example can open a lab the section list did not name, such as an application lab.
+  const bySec = SETUPS[examId];
+  if (!bySec) return null;
+  for (const section of set.sections) {
+    if ((bySec[section.id] || []).some((ex) => ex.lab === labId)) return { set, section };
+  }
+  return null;
 }

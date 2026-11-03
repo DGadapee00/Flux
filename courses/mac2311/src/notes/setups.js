@@ -240,3 +240,92 @@ for (const [section, tag, scenario, value] of [
     read: (c) => ({ length: [c.length, 10.260606304268446] }),
   },
 );
+
+for (const [section, tag, scenario, setup, read] of [
+  [
+    's1',
+    'a quarter turn on an LP',
+    'lp',
+    null,
+    (c) => ({ theta: [c.theta, Math.PI / 2], distance: [c.distance, (0.14 * Math.PI) / 2] }),
+  ],
+  [
+    's2',
+    'a faster record at the same point',
+    'single',
+    null,
+    (c) => ({ speed: [c.speed, 0.14 * 1.5 * Math.PI], period: [c.period, 4 / 3] }),
+  ],
+  [
+    's2',
+    'moving the mark inward',
+    'inner',
+    null,
+    (c) => ({ speed: [c.speed, (0.07 * 10 * Math.PI) / 9], period: [c.period, 1.8] }),
+  ],
+  [
+    's2',
+    'a tangent at sixty degrees',
+    'lp',
+    (s) => {
+      s.t = 0.3;
+    },
+    (c) => ({ slope: [c.slope, -1 / Math.sqrt(3)], x: [c.x, 0.07] }),
+  ],
+  ['s4', 'the mark sweeps a sector', 'lp', null, (c) => ({ area: [c.area, (Math.PI * 0.14 ** 2) / 4] })],
+  [
+    's4',
+    'one complete revolution',
+    'lp',
+    (s) => {
+      s.t = 1.8;
+    },
+    (c) => ({ area: [c.area, Math.PI * 0.14 ** 2], distance: [c.distance, 2 * Math.PI * 0.14] }),
+  ],
+])
+  (SETUPS.c5[section] ??= []).push({ tag, lab: 'record', scenario, setup, read });
+
+for (const [tag, scenario, setup, read] of [
+  [
+    'calibrating an effective length',
+    'small',
+    (s) => {
+      s.angle = 0;
+    },
+    (c) => ({ period: [c.period, 4], series: [c.series, 4] }),
+  ],
+  ['a small assumed swing', 'small', null, (c) => ({ period: [c.period, 4.001904689943947] })],
+  [
+    'a wide assumed swing',
+    'wide',
+    null,
+    (c) => ({
+      period: [c.period, 4.721362396064385],
+      series: [c.series, 4.689453125],
+      bound: [c.tailBound, 0.037384033203124965],
+    }),
+  ],
+  [
+    'improving the calculation',
+    'wide',
+    (s) => {
+      s.n = 8;
+    },
+    (c) => ({ series: [c.series, 4.720267184078693], bound: [c.tailBound, 0.0012051670637447363] }),
+  ],
+  [
+    'near the upright limit',
+    'slow',
+    null,
+    (c) => ({ period: [c.period, 9.757450878695543], series: [c.series, 7.305015657094492] }),
+  ],
+  [
+    'quartering effective length',
+    'wide',
+    (s) => {
+      s.L /= 4;
+    },
+    (c) => ({ period: [c.period, 2.3606811980321925] }),
+  ],
+])
+  (SETUPS.c6.s10 ??= []).push({ tag, lab: 'clock', scenario, setup, read });

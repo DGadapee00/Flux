@@ -1,0 +1,35 @@
+export default {
+  id: 'convection',
+  title: 'Convection and the Nusselt number',
+  label: ['Convection', 'and Nusselt'],
+  subject: 'heat',
+  courses: ['eml4140'],
+  eq: String.raw`q'' = h\,(T_s - T_\infty), \qquad \text{Nu} = \frac{hL}{k_f}, \qquad \overline{\text{Nu}}_L = 0.664\,\text{Re}_L^{1/2}\,\text{Pr}^{1/3}\ \text{(laminar plate)}`,
+  idea: String.raw`At the wall the fluid does not move, so heat leaves by conduction through the fluid there. The coefficient \(h\) is that wall conduction divided by the temperature difference. It depends on how thin the thermal layer is, so it depends on the flow. The Nusselt number is \(h\) made dimensionless: how much the flow raises heat transfer above pure conduction across \(L\). Dimensional analysis says Nu depends on Re and Pr, and the correlations give that dependence for plates, cylinders and spheres. The Reynolds analogy ties it to wall friction: \(\text{St}\,\text{Pr}^{2/3} = c_f/2\).`,
+  requires: ['thermal-boundary-layer', 'boundary-layer'],
+  sources: [
+    {
+      title: 'Lienhard, A Heat Transfer Textbook',
+      url: 'https://ahtt.mit.edu',
+      kind: 'Free textbook',
+      level: 'Course level',
+      why: 'Chapters 6 and 7 define \\(h\\) and Nu and give the external-flow correlations.',
+    },
+    {
+      title: 'MIT 2.51, calendar: Laminar boundary layers, integral methods (sessions 12 and 13)',
+      url: 'https://ocw.mit.edu/courses/2-51-intermediate-heat-and-mass-transfer-fall-2008/pages/calendar/',
+      kind: 'Course outline',
+      level: 'Deeper',
+      why: 'Where the course derives the plate result two ways.',
+    },
+    {
+      title: 'OpenStax University Physics Vol. 2, §1.6 Mechanisms of heat transfer',
+      url: 'https://openstax.org/books/university-physics-volume-2/pages/1-6-mechanisms-of-heat-transfer',
+      kind: 'Open textbook',
+      level: 'Intro',
+      why: 'Convection as the first course meets it, before \\(h\\) is explained.',
+    },
+  ],
+  labs: [],
+  candidate: 'Plot the local \\(h\\) along a heated plate in air and water. It corrects the idea that \\(h\\) is a property of the fluid: it is largest at the leading edge, falls along the plate, and jumps where the layer turns turbulent.',
+};

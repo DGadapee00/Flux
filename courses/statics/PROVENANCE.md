@@ -28,3 +28,16 @@ textbook.
 Their numbers stay in the worked cases so a check can reproduce a printed answer by a second method,
 and they ship with the app. No class material (lecture notes, slides, worksheets, Canvas files) is in
 this folder.
+
+## R4c additions
+
+The four notes files, five application drawings and nine additional problem templates are original
+Flux work. Hibbeler is cited by chapter/topic; its problem statements and figures are not copied.
+The source map is `src/data/textbook.js`. Application dimensions and nominal ratings are attributed
+there. Assumed loads, friction and geometry are identified in the lab explanations.
+
+The fetched 2.001 Fall 2006 lectures 1–6 and sets 1–3 were used to check coverage and difficulty.
+Downloaded PDFs remain only in the ignored `reference/` tree. No downloaded text or figure ships.
+The problem sets do not include posted solution keys. New generated cases are computational
+verification cases, not purported printed numerical answers. The scorecard checks citation presence;
+it cannot replace the outstanding printed-answer audit of the entire bank.

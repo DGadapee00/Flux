@@ -16,7 +16,7 @@ import { kv, cells, qv, eq } from '../ui/shared.js';
 const U = 1.0;
 
 const SCENARIOS = [
-  { id: 'two', name: 'Two forces at a point', mode: 'components', F1: [50, 40, -30], F2: [-20, 60, 45] },
+  { id: 'two', name: 'Two forces at a point', unit: 'lb', mode: 'components', F1: [50, 40, -30], F2: [-20, 60, 45] },
   { id: 'cable', name: 'F = F·u along a cable', mode: 'along', Fmag: 700, A: [0, 0, 0], B: [2, 3, 6], F2: [0, -300, 0] },
   { id: 'bracket', name: 'Bracket · three forces', mode: 'components', F1: [300, 0, 0], F2: [-120, 250, 0], F3: [0, -100, 180] },
 ];
@@ -48,6 +48,8 @@ export default defineLab({
     Object.assign(state, {
       scenarioId: sc.id,
       mode: sc.mode,
+      unit: sc.unit || 'lb',
+      showResultant: true,
       F1: sc.F1 ? [...sc.F1] : state.F1,
       F2: sc.F2 ? [...sc.F2] : state.F2,
       F3: sc.F3 ? [...sc.F3] : null,
@@ -133,16 +135,17 @@ export default defineLab({
     group.add(axes);
     const f1 = arrowFor(v(1, 0, 0), M.blue);
     const f2 = arrowFor(v(0, 1, 0), M.teal);
+    const f3 = arrowFor(v(0, 0, 1), M.pink);
     const res = arrowFor(v(0, 0, 1), M.gold, 0.05);
     markAnswer(res);
-    group.add(f1, f2, res);
+    group.add(f1, f2, f3, res);
     const guides = fatSegments(segmentCapacity(12), { color: M.greyDark, width: 1.2, opacity: 0.6 });
     group.add(guides);
-    const labels = { f1: label('F₁'), f2: label('F₂'), res: label('R'), x: label('x'), y: label('y'), z: label('z') };
+    const labels = { f1: label('F₁'), f2: label('F₂'), f3: label('F₃'), res: label('R'), x: label('x'), y: label('y'), z: label('z') };
     markAnswer(labels.res);
     Object.values(labels).forEach((l) => group.add(l));
     group.visible = false;
-    return { group, axes, f1, f2, res, guides, labels };
+    return { group, axes, f1, f2, f3, res, guides, labels };
   },
   enter(ctx, handle) {
     handle.group.visible = true;
@@ -172,7 +175,7 @@ export default defineLab({
     const h = ctx.handle;
     const c = computed.vec;
     if (!h || !c) return;
-    const peak = Math.max(mag(c.F1), mag(c.F2), mag(c.R), 1);
+    const peak = Math.max(mag(c.F1), mag(c.F2), state.F3?mag(v(...state.F3)):0, mag(c.R), 1);
     const SC = (4.2 * U) / peak;
 
     setFatSegments(h.axes, [
@@ -189,7 +192,8 @@ export default defineLab({
       arrow.setLength(m * SC);
     };
     place(h.f1, c.F1);
-    place(h.f2, c.F2);
+    place(h.f2, state.mode === 'projection' ? scale(unit(c.F2),peak*0.65) : c.F2);
+    place(h.f3, state.F3 ? v(...state.F3) : v(0,0,0));
     place(h.res, c.R, state.showResultant);
 
     // Component guide lines for the resultant, so the x/y/z split is visible.
@@ -209,7 +213,8 @@ export default defineLab({
       l.visible = mag(vec) > 1e-6;
     };
     put(h.labels.f1, c.F1, `F₁ = ${mag(c.F1).toFixed(0)}`);
-    put(h.labels.f2, c.F2, `F₂ = ${mag(c.F2).toFixed(0)}`);
+    put(h.labels.f2, state.mode === 'projection' ? scale(unit(c.F2),peak*0.65) : c.F2, state.mode === 'projection' ? 'projection direction' : `F₂ = ${mag(c.F2).toFixed(0)}`);
+    put(h.labels.f3, state.F3 ? v(...state.F3) : v(0,0,0), 'F₃');
     h.labels.res.visible = state.showResultant;
     if (state.showResultant) put(h.labels.res, c.R, `R = ${mag(c.R).toFixed(1)}`);
     h.labels.x.position.set(5.2, 0, 0);
@@ -225,25 +230,30 @@ export default defineLab({
   liveRows(state, computed) {
     const c = computed.vec;
     if (!c) return '';
+    const u=state.unit||'lb';
+    if(state.mode==='projection')return [kv('force',`${mag(c.F1).toFixed(3)} ${u}`),kv('signed parallel component',`${c.proj12.toFixed(3)} ${u}`),kv('perpendicular magnitude',`${Math.sqrt(Math.max(0,mag(c.F1)**2-c.proj12**2)).toFixed(3)} ${u}`),kv('angle to direction',`${c.between.toFixed(3)}°`)].join('');
     const fmt = (F) => `(${F.x.toFixed(0)}, ${F.y.toFixed(0)}, ${F.z.toFixed(0)})`;
-    const ang = (d) => `${d.alpha.toFixed(1)}°, ${d.beta.toFixed(1)}°, ${d.gamma.toFixed(1)}°`;
+    const ang = (d, F) => mag(F) < 1e-9 ? 'undefined (zero vector)' : `${d.alpha.toFixed(1)}°, ${d.beta.toFixed(1)}°, ${d.gamma.toFixed(1)}°`;
     return [
-      kv(String.raw`$\vec{F}_1$`, `${fmt(c.F1)} lb · |F₁| = ${mag(c.F1).toFixed(1)}`),
-      kv(String.raw`$\alpha, \beta, \gamma$ of $\vec{F}_1$`, ang(c.d1)),
-      kv(String.raw`$\vec{F}_2$`, `${fmt(c.F2)} lb · |F₂| = ${mag(c.F2).toFixed(1)}`),
-      kv(String.raw`$\alpha, \beta, \gamma$ of $\vec{F}_2$`, ang(c.d2)),
-      kv(String.raw`$\vec{R} = \vec{F}_1 + \vec{F}_2$`, qv('qV', `${fmt(c.R)} lb`)),
-      kv('$|R|$', qv('qV', `${mag(c.R).toFixed(2)} lb`)),
-      kv(String.raw`$\alpha, \beta, \gamma$ of $\vec{R}$`, qv('qV', ang(c.dR))),
-      kv(String.raw`$\cos^2\alpha+\cos^2\beta+\cos^2\gamma$`, c.check(c.dR).toFixed(6)),
+      kv(String.raw`$\vec{F}_1$`, `${fmt(c.F1)} ${u} · |F₁| = ${mag(c.F1).toFixed(1)}`),
+      kv(String.raw`$\alpha, \beta, \gamma$ of $\vec{F}_1$`, ang(c.d1, c.F1)),
+      kv(String.raw`$\vec{F}_2$`, `${fmt(c.F2)} ${u} · |F₂| = ${mag(c.F2).toFixed(1)}`),
+      kv(String.raw`$\alpha, \beta, \gamma$ of $\vec{F}_2$`, ang(c.d2, c.F2)),
+      kv(state.F3 ? String.raw`$\vec{R} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3$` : String.raw`$\vec{R} = \vec{F}_1 + \vec{F}_2$`, qv('qV', `${fmt(c.R)} ${u}`)),
+      kv('$|R|$', qv('qV', `${mag(c.R).toFixed(2)} ${u}`)),
+      kv(String.raw`$\alpha, \beta, \gamma$ of $\vec{R}$`, qv('qV', ang(c.dR, c.R))),
+      kv(String.raw`$\cos^2\alpha+\cos^2\beta+\cos^2\gamma$`, mag(c.R) < 1e-9 ? 'undefined (zero resultant)' : c.check(c.dR).toFixed(6)),
       kv('angle between $F_1$ and $F_2$', `${c.between.toFixed(2)}°`),
     ].join('');
   },
   readout(state, computed) {
+    const u=state.unit||'lb';
     const c = computed.vec;
+    if(state.mode==='projection')return cells([['parallel',`${c.proj12.toFixed(3)} ${u}`],['angle',`${c.between.toFixed(3)}°`]]);
     if (!c) return '';
+    if (mag(c.R) < 1e-9) return cells([['$|R|$', `0 ${u}`], ['direction', 'undefined (zero resultant)']]);
     return cells([
-      ['$|R|$', `${mag(c.R).toFixed(2)} lb`, 'ok'],
+      ['$|R|$', `${mag(c.R).toFixed(2)} ${u}`, 'ok'],
       [String.raw`$\alpha$`, `${c.dR.alpha.toFixed(1)}°`, ''],
       [String.raw`$\beta$`, `${c.dR.beta.toFixed(1)}°`, ''],
       [String.raw`$\gamma$`, `${c.dR.gamma.toFixed(1)}°`, ''],
@@ -257,7 +267,7 @@ export default defineLab({
         String.raw`Writing $\vec{F} = F_x\hat{i} + F_y\hat{j} + F_z\hat{k}$ is the whole of Chapter 2. Adding forces then means adding three ordinary numbers — no triangles, no law of cosines.`,
         String.raw`When a force is given as "$F$ along the cable from $A$ to $B$", build the unit vector first and scale it:`,
         eq(String.raw`\vec{F} = F\,\hat{u}_{AB} = F\,\frac{\vec{r}_{AB}}{|\vec{r}_{AB}|}`),
-        String.raw`The coordinate direction angles are just the components divided by the magnitude: $\cos\alpha = F_x/F$, and so on. They are not independent — squaring and adding always gives 1` + (c ? `, and the panel shows ${c.check(c.dR).toFixed(4)} for the resultant right now.` : '.'),
+        String.raw`The coordinate direction angles are just the components divided by the magnitude: $\cos\alpha = F_x/F$, and so on. For a nonzero vector, squaring and adding gives 1` + (c && mag(c.R) > 1e-9 ? `, and the panel shows ${c.check(c.dR).toFixed(4)} for the resultant right now.` : '. A zero resultant has no direction angles.'),
         String.raw`That identity is the cheapest error check in the chapter: if your three angles do not satisfy it, one of them is wrong.`,
       ],
     };

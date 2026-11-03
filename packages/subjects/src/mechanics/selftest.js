@@ -10,6 +10,8 @@ import {
 import {
   springForce, particleEq2D, particleEq3D, momentAbout, moment2D, momentArm, momentAboutAxis,
   coupleMoment, resultantWrench, rigidBody2D, distributedLoad, uniformLoad, triangularLoad, solve3,
+  boardReactions, boardReactionsAboutRight, smoothLadder, axleSplit, steepShallow, verticalForearm,
+  stickBalance, cableStrut,
 } from './statics.js';
 import { solveTruss, memberForce, zeroForceMembers, sectionCheck, stateOf, methodOfSections } from './truss.js';
 import { inclineState, inclineRange, tipOrSlip, beltTension } from './friction.js';
@@ -476,6 +478,87 @@ console.log('\nFriction (Ch 8)');
   approx(o2.Mmax / o.Mmax, 2, 1e-9, 'general beam: doubling the loads doubles the moment');
   const c = generalBeam({ L: 2, support: 'cantilever', points: [{ x: 2, P: 8e3 }] });
   approx(c.Mmax, cantileverTip(8e3, 2).Mmax, 1e-6, 'cantilever: wall moment −PL');
+}
+
+{
+  const board = { length: 6, inset: 0, weight: 70 * 9.81, load: 50 * 9.81, at: 1.5 };
+  const ends = boardReactions(board);
+  const other = boardReactionsAboutRight(board);
+  approx(ends.left, other.left, 1e-12, 'board: the right-hand moment gives the same left support');
+  approx(ends.right, other.right, 1e-12, 'board: the right-hand moment gives the same right support');
+  const body = rigidBody2D({
+    about: v(0, 0, 0),
+    loads: [
+      { at: v(3, 0, 0), F: v(0, -board.weight, 0) },
+      { at: v(1.5, 0, 0), F: v(0, -board.load, 0) },
+    ],
+    unknowns: [
+      { at: v(0, 0, 0), dir: v(1, 0, 0) },
+      { at: v(0, 0, 0), dir: v(0, 1, 0) },
+      { at: v(6, 0, 0), dir: v(0, 1, 0) },
+    ],
+  });
+  approx(body.reactions[0], 0, 1e-9, 'board: nothing pushes along the board');
+  approx(body.reactions[1], ends.left, 1e-9, 'board: the left support matches the rigid-body solve');
+  approx(body.reactions[2], ends.right, 1e-9, 'board: the right support matches the rigid-body solve');
+  const heavy = boardReactions({ ...board, weight: 2 * board.weight, load: 2 * board.load });
+  approx(heavy.left / ends.left, 2, 1e-12, 'board: doubling both weights doubles the left support');
+
+  const ladder = smoothLadder({ ladderW: 400, thetaDeg: 53 });
+  approx(ladder.normal, 400, 1e-12, 'ladder: the floor carries the weight');
+  approx(ladder.wall, 200 / Math.tan(53 * DEG), 1e-12, 'ladder: the wall push is (W/2) cot θ');
+  const higher = smoothLadder({ ladderW: 400, personW: 700, frac: 0.8, thetaDeg: 53 });
+  const lower = smoothLadder({ ladderW: 400, personW: 700, frac: 0.2, thetaDeg: 53 });
+  ok(higher.mu > lower.mu, 'ladder: the same person higher up asks for more friction');
+
+  const car = axleSplit({ wheelbase: 2.5, weight: 10000, frontShare: 0.52, height: 0.5, decel: 0 });
+  approx(car.xRear, 1.3, 1e-12, 'car: 52% of a 2.5 m wheelbase is 1.3 m from the rear axle');
+  const braking = axleSplit({ wheelbase: 2.5, weight: 10000, frontShare: 0.52, height: 0.5, decel: 2 });
+  const harder = axleSplit({ wheelbase: 2.5, weight: 10000, frontShare: 0.52, height: 0.5, decel: 4 });
+  approx(harder.transfer / braking.transfer, 2, 1e-12, 'car: doubling the deceleration doubles the load transfer');
+  const longer = axleSplit({ wheelbase: 5, weight: 10000, frontShare: 0.52, height: 0.5, decel: 2 });
+  approx(longer.transfer / braking.transfer, 0.5, 1e-12, 'car: doubling the wheelbase halves the load transfer');
+
+  const knot = steepShallow(9.81);
+  const dirs = particleEq2D(
+    [v(0, -9.81, 0)],
+    [v(-1 / Math.sqrt(5), 2 / Math.sqrt(5), 0), v(2 / Math.sqrt(5), 1 / Math.sqrt(5), 0)],
+  );
+  approx(dirs.magnitudes[0], knot.steep, 1e-12, 'strings: the steep tension matches the force balance');
+  approx(dirs.magnitudes[1], knot.shallow, 1e-12, 'strings: the shallow tension matches the force balance');
+  approx(knot.steep / knot.shallow, 2, 1e-12, 'strings: the steep string carries twice the shallow one');
+
+  const arm = verticalForearm({ weight: 222.4, near: 1.5, far: 13 });
+  approx(arm.tension, 222.4 * 13 / 1.5, 1e-12, 'forearm: tension is the load times the arm ratio');
+  approx(arm.elbow, arm.tension - 222.4, 1e-12, 'forearm: the elbow makes up the difference');
+
+  const stick = stickBalance({
+    masses: [{ m: 0.05, arm: 0.7 }, { m: 0.075, arm: 0.4 }],
+    stickMass: 0.15, stickArm: 0.2, unknownArm: 0.3,
+  });
+  approx(stick.m3, (0.7 * 0.05 + 0.4 * 0.075 + 0.2 * 0.15) / 0.3, 1e-12, 'stick: the unknown mass balances the moments');
+  const wide = stickBalance({
+    masses: [{ m: 0.05, arm: 1.4 }, { m: 0.075, arm: 0.8 }],
+    stickMass: 0.15, stickArm: 0.4, unknownArm: 0.6,
+  });
+  approx(wide.m3, stick.m3, 1e-12, 'stick: doubling every arm leaves the mass unchanged');
+
+  const strut = cableStrut({ strutW: 600, signW: 400, length: 4, rise: 3 });
+  approx(strut.tension, (3500 / 3), 1e-12, 'strut: the cable tension is 3500/3 N');
+  approx(strut.hingeY, 300, 1e-12, 'strut: the hinge carries half the strut weight');
+  const strutBody = rigidBody2D({
+    about: v(0, 0, 0),
+    loads: [
+      { at: v(2, 0, 0), F: v(0, -600, 0) },
+      { at: v(4, 0, 0), F: v(0, -400, 0) },
+    ],
+    unknowns: [
+      { at: v(0, 0, 0), dir: v(1, 0, 0) },
+      { at: v(0, 0, 0), dir: v(0, 1, 0) },
+      { at: v(4, 0, 0), dir: v(-0.8, 0.6, 0) },
+    ],
+  });
+  approx(strutBody.reactions[2], strut.tension, 1e-9, 'strut: the cable matches the rigid-body solve');
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);

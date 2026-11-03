@@ -1,0 +1,16 @@
+/** Shows that a stable differential equation can have an unstable Euler approximation.
+ * The recurrence is checked by its independent geometric-power formula; RK4 checks the exact ODE. */
+import { integrate } from '@flux/subjects/math/ode.js';import { defineLab } from './define.js';import { slider,bindSlider } from './widgets.js';
+import { cells,kv } from '../ui/shared.js';import { fig } from '../ui/format.js';import { C,clear,line,chart,map,cameraFor,initFigure,enterFigure,exitFigure } from './figure.js';
+const scenarios=[{id:'decay',name:'Resolved exponential decay',a:-1,y0:1,t:2,n:20},{id:'unstable',name:'Stable ODE, unstable Euler steps',a:-1,y0:1,t:6,n:2},{id:'growth',name:'Growth: tangent steps underestimate',a:1,y0:1,t:2,n:20}];
+const apply=(id,s)=>Object.assign(s,scenarios.find(x=>x.id===id)||scenarios[0],{scenarioId:id,show:{}});
+export default defineLab({id:'euler',exam:'u1',title:'Euler steps',hint:'Change the step count. Watch the approximation, not only the exact curve.',orbit:false,cameraFor,gapLimit:1e-6,scenarios,
+ defaultState(){const s={};apply('decay',s);return s;},applyScenario:apply,
+ controls:()=>slider('eu-n','number of steps N',20,2,100,1)+slider('eu-a','growth/decay coefficient (1/s)',-1,-2,1,.1)+slider('eu-t','end time (s)',2,.2,6,.2),
+ bind(api){for(const [id,key] of [['eu-n','n'],['eu-a','a'],['eu-t','t']])bindSlider(id,(s,v)=>s[key]=v,api);},syncControls(s){for(const [id,key] of [['eu-n','n'],['eu-a','a'],['eu-t','t']])document.getElementById(id).value=s[key];},
+ compute(s){const n=Math.round(s.n),e=integrate((t,y)=>s.a*y,0,s.y0,s.t,n,'euler'),half=integrate((t,y)=>s.a*y,0,s.y0,s.t,2*n,'euler'),exact=s.y0*Math.exp(s.a*s.t),rk=integrate((t,y)=>s.a*y,0,s.y0,s.t,512).end,power=s.y0*(1+s.a*s.t/n)**n;
+ return {h:s.t/n,exact,euler:e.end,error:Math.abs(e.end-exact),fineError:Math.abs(half.end-exact),multiplier:1+s.a*s.t/n,xs:e.ts,ys:e.ys,gap:Math.max(Math.abs(e.end-power)/Math.max(1,Math.abs(power)),Math.abs(rk-exact)/Math.max(1,Math.abs(exact)))};},
+ recompute(s,c){Object.assign(c,this.compute(s));},init:initFigure,enter:enterFigure,exit:exitFigure,syncViews(s,c,ctx){ctx.grid.group.visible=false;const g=ctx.handle.group;clear(g);const ymin=Math.min(0,...c.ys),ymax=Math.max(1,...c.ys,s.y0*Math.exp(s.a*s.t));chart(g,c.xs,c.ys,{xLabel:'t (s)',yLabel:'y; gold = exact',ymin,ymax,color:C.blue});line(g,Array.from({length:101},(_,i)=>{const t=s.t*i/100;return [map(t,0,s.t),map(s.y0*Math.exp(s.a*t),ymin,ymax,-2,2),.02];}),C.gold);},
+ law:()=>[String.raw`y_{n+1}=y_n+h f(t_n,y_n)`],liveRows:(s,c)=>kv('step h',`${fig(c.h)} s`)+kv('step multiplier',fig(c.multiplier))+kv('error after halving h',fig(c.fineError)),readout:(s,c)=>cells([['Euler at end',fig(c.euler)],['exact at end',fig(c.exact)],['absolute error',fig(c.error)]]),
+ coach:(s,c)=>({title:Math.abs(c.multiplier)>1?'The numerical method is unstable':'A tangent step is only first order',body:'For y′=a y, Euler multiplies by 1+a h at each step. Decay requires its magnitude below one. A negative multiplier alternates signs, even though a positive exact exponential never crosses zero. In the resolved range, halving h approximately halves accumulated error, not quarters it.'}),
+});
