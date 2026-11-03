@@ -3,7 +3,7 @@ export default {
   title: 'Diffusion and Fick’s laws',
   label: ['Diffusion'],
   subject: 'matsci',
-  courses: ['ema3010'],
+  courses: ['ema3010', 'eml4140'],
   eq: String.raw`J = -D\,\nabla C, \qquad \frac{\partial C}{\partial t} = D\,\nabla^2 C, \qquad D = D_0\exp\!\left(-\frac{Q_d}{RT}\right)`,
   idea: String.raw`Atoms hop between sites, mostly into vacancies, and more hop down a concentration gradient than up it. The net flux is \(-D\) times the gradient: Fick's first law, the same form as Fourier's law with concentration in place of temperature. Conserve atoms in a small volume, as the heat equation conserves energy, and the divergence theorem gives Fick's second law, the heat equation with \(D\) in place of the thermal diffusivity \(\alpha\). So depth grows as \(\sqrt{Dt}\), and \(D\) rises steeply with temperature because each hop needs a vacancy and an energy barrier.`,
   requires: ['point-defects', 'gradient', 'divergence-theorem'],

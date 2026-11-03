@@ -1,0 +1,28 @@
+export default {
+  id: 'natural-convection',
+  title: 'Natural convection',
+  label: ['Natural', 'convection'],
+  subject: 'heat',
+  courses: ['eml4140'],
+  eq: String.raw`\text{Ra}_L = \frac{g\beta\,\Delta T\,L^3}{\nu\alpha}, \qquad \overline{\text{Nu}}_L \approx 0.59\,\text{Ra}_L^{1/4}\ \ (10^4 < \text{Ra}_L < 10^9)`,
+  idea: String.raw`Fluid warmed by a surface becomes less dense, and buoyancy lifts it. No fan sets the speed: the flow's own buoyancy does, so the Reynolds number gives way to the Grashof number, buoyancy over viscous force. The Rayleigh number, Gr times Pr, sets the heat transfer. On a vertical plate in laminar flow \(h\) grows as \(\Delta T^{1/4}\), so the heat loss grows faster than the temperature difference. Above a Rayleigh number of about \(10^9\) the layer turns turbulent.`,
+  requires: ['convection', 'buoyancy'],
+  sources: [
+    {
+      title: 'Lienhard, A Heat Transfer Textbook',
+      url: 'https://ahtt.mit.edu',
+      kind: 'Free textbook',
+      level: 'Course level',
+      why: 'Chapter 8 derives the scaling and gives the plate, cylinder and enclosure correlations.',
+    },
+    {
+      title: 'MIT 2.51, calendar: Natural convection (session 17)',
+      url: 'https://ocw.mit.edu/courses/2-51-intermediate-heat-and-mass-transfer-fall-2008/pages/calendar/',
+      kind: 'Course outline',
+      level: 'Deeper',
+      why: 'The course’s session on buoyancy-driven flow.',
+    },
+  ],
+  labs: [],
+  candidate: 'A heated vertical plate with a slider for its temperature, the rising layer drawn. It corrects the idea that \\(h\\) is fixed for still air: it grows with the temperature difference, because a hotter plate drives a faster flow.',
+};
