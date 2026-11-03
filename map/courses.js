@@ -13,7 +13,8 @@
  * - taking now: PHY 2049 and STA 3032 are Fall 2026 in tracks.js.
  * - next term: EML 3100, EGN 3321 and EGN 3331, Spring 2027 (owner, 15 October 2026, archived as D8).
  * - later: MAP 2302, EML 3015 and EML 4140, as the prototype has them. EML 3101 Thermodynamics II
- *   follows EML 3100 in the thermal track (archived plan, D19); it has no app yet.
+ *   follows EML 3100 in the thermal track (archived plan, D19); it has no app yet. EEL 3111 Circuit
+ *   Analysis I and EGN 3203 Modern Computation Methods are not taken yet (archived plans); no apps.
  * - Bench is a personal project (archived D35), so it has no status.
  */
 export const STATUSES = ['taken', 'taking now', 'next term', 'later'];
@@ -33,5 +34,7 @@ export const COURSES = [
   { id: 'eml3101', code: 'EML 3101', title: 'Thermodynamics II', status: 'later', app: null },
   { id: 'eml3015', code: 'EML 3015', title: 'Fluids', status: 'later', app: null },
   { id: 'eml4140', code: 'EML 4140', title: 'Heat Transfer', status: 'later', app: null },
+  { id: 'eel3111', code: 'EEL 3111', title: 'Circuit Analysis I', status: 'later', app: null },
+  { id: 'egn3203', code: 'EGN 3203', title: 'Modern Computation Methods', status: 'later', app: null },
   { id: 'bench', code: 'BENCH', title: 'Electronics on the bench', kind: 'project', app: 'bench/' },
 ];

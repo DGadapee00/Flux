@@ -2,7 +2,7 @@ export default {
   id: 'numerical-integration',
   title: 'Numerical integration',
   label: ['Numerical', 'integration'],
-  subject: 'calculus',
+  subject: 'numerics',
   courses: ['mac2311'],
   eq: String.raw`S_n = \frac h3\big[f_0 + 4f_1 + 2f_2 + \cdots + 4f_{n-1} + f_n\big], \qquad |E_S| \le \frac{(b-a)h^4}{180}\max|f^{(4)}|`,
   idea: String.raw`When no antiderivative is at hand, sample the function and add weighted heights. The trapezoid rule joins samples with straight lines; Simpson's rule uses parabolas and, from the same points, shrinks its error sixteen times when the panels halve. The error bounds say how many panels a given accuracy needs.`,

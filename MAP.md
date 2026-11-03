@@ -1,16 +1,16 @@
 # What the map covers
 
-A snapshot from the data on 3 November 2026, after the materials-science thread. Since then, fluid
-mechanics has its own lane, and EML 3015 Fluids, EML 4140 Heat Transfer and EML 3101
-Thermodynamics II are on the map. For the live
-numbers run `node map/check.mjs`, `npm run map-audit` and `npm run map-gaps`.
+A snapshot from the data on 3 November 2026, after the thermal-fluids courses (EML 3015, EML 4140,
+EML 3101). Lanes for linear algebra and numerical methods are added for the next round. For the
+live numbers run `node map/check.mjs`, `npm run map-audit` and `npm run map-gaps`.
 
 **209 concepts, 146 with a Flux lab, 63 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
-| Calculus | 31 | 27 |
-| Differential equations | 13 | 13 |
+| Calculus | 30 | 26 |
+| Differential equations | 12 | 12 |
+| Numerical methods | 2 | 2 |
 | Mechanics | 30 | 30 |
 | Electricity and magnetism | 26 | 25 |
 | Thermodynamics | 22 | 12 |
