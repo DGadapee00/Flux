@@ -1,0 +1,28 @@
+export default {
+  id: 'truncation-error',
+  title: 'Truncation error and order of accuracy',
+  label: ['Truncation', 'error'],
+  subject: 'numerics',
+  courses: ['egn3203'],
+  eq: String.raw`E(h) \approx C\,h^{p}, \qquad p = \frac{\ln\big(E(h)/E(h/2)\big)}{\ln 2}, \qquad E_\text{total}(h) \approx C h^{p} + \frac{u}{h}\ \text{(a difference quotient)}`,
+  idea: String.raw`A numerical method replaces calculus with a finite step \(h\), and Taylor series say what that drops: the truncation error. For a method of order \(p\) it shrinks like \(h^p\), so halving the step divides the error by \(2^p\). Plotted against \(h\) on log axes the error is a line of slope \(p\), which is how the order is measured. Round-off grows as the step shrinks in a difference quotient, so the total error has a best step. Below it, a smaller step makes the answer worse.`,
+  requires: ['taylor-series', 'floating-point'],
+  sources: [
+    {
+      title: 'MIT 2.086, calendar: Numerical calculus, parts 1 to 3',
+      url: 'https://ocw.mit.edu/courses/2-086-numerical-computation-for-mechanical-engineers-spring-2013/pages/calendar/',
+      kind: 'Course outline',
+      level: 'Course level',
+      why: 'The course’s opening lectures, where error and its order are built up.',
+    },
+    {
+      title: 'Yano, Penn, Konidaris and Patera, Math, Numerics, and Programming (for Mechanical Engineers)',
+      url: 'https://ocw.mit.edu/courses/2-086-numerical-computation-for-mechanical-engineers-spring-2013/resources/mit2_086s13_textbook/',
+      kind: 'Open textbook',
+      level: 'Course level',
+      why: 'Error bounds for interpolation, differentiation and integration, with convergence plots.',
+    },
+  ],
+  labs: [],
+  candidate: 'Halve the step again and again for a first- and a fourth-order method, the errors on log axes. It corrects the idea that every method improves at the same rate: one halves its error, the other divides it by sixteen.',
+};

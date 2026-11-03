@@ -7,7 +7,7 @@ import { createHUD } from '@flux/shells/physics/hud.js';
 import { createPractice } from '@flux/shells/physics/problems.js';
 import { createUnits } from '@flux/shells/physics/units.js';
 import { createFading } from '../../practice/fading.js';
-import { UNSURE, createPrincipleStep, primaryOf } from '../../practice/principles.js';
+import { primaryOf } from '../../practice/principles.js';
 import { EXAMS, LAB_META, PRINCIPLES, engine, examById, fullBank } from './bank.js';
 
 /** A stand-in for a course's main.js: one lab ("demo") with no electromagnetic data at all. */
@@ -40,18 +40,12 @@ const api = {
 };
 
 const base = fullBank();
-const step = createPrincipleStep({ PRINCIPLES, confused: base.principleConfused, twins: base.principleTwins });
 const fading = createFading(engine);
 const bank = {
   ...base,
   examLabel: (exam) => `Unit ${exam.n}`,
   PRINCIPLES,
   primaryOf,
-  UNSURE,
-  ASK_PRINCIPLE: true,
-  asksPrinciple: step.asksPrinciple,
-  principleOptions: step.principleOptions,
-  gradePrinciple: step.gradePrinciple,
   guidanceFor: fading.guidanceFor,
   workedExample: fading.workedExample,
 };
