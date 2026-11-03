@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/src/styles.css" />
@@ -26,19 +26,57 @@
             <line x1="12.5" y1="20" x2="4.5" y2="20" /><path d="M2 20 L6 17.6 L6 22.4 Z" stroke="none" />
           </g>
         </svg>
-        <div>
+        <div class="brand-text">
           <h1>FLUX</h1>
-          <p class="lede">The tracks through the degree. A card opens its latest course. A course that is not built yet stays on its track's list.</p>
+          <p class="lede">One map of the degree. Each box is a concept. Pick one to see what it builds on, where it leads, the sources worth your time and the Flux lab that shows it.</p>
+          <nav class="jump" aria-label="On this page">
+            <a href="#courses">Courses</a>
+            <a href="#progress">Progress</a>
+          </nav>
         </div>
       </header>
-      <div id="tracks"></div>
-      <section class="backup" aria-labelledby="backup-title">
+
+      <div class="explore">
+        <div class="legend" id="legend" aria-label="Legend"></div>
+        <div class="paths" id="paths" hidden>
+          <span class="paths-label">Follow a course:</span>
+          <div class="path-buttons" id="path-buttons"></div>
+        </div>
+        <div class="scope" id="scope" role="group" aria-label="How much of the map to show">
+          <span class="scope-label">Show:</span>
+          <button type="button" data-scope="near">1 step</button>
+          <button type="button" data-scope="two">2 steps</button>
+          <button type="button" data-scope="all">Full map</button>
+        </div>
+        <div class="mapbox" id="mapbox">
+          <div class="mapinner" id="mapinner">
+            <svg id="map" role="group" aria-label="Concept map"></svg>
+            <div class="lane-tags" id="lane-tags" aria-hidden="true"></div>
+          </div>
+        </div>
+        <p class="hint">Solid bright lines: what the chosen concept builds on. Dashed: where it leads. With a course chosen, its concepts are numbered in teaching order.</p>
+        <nav class="trail" id="trail" aria-label="Where you have been"></nav>
+        <section class="path-list" id="path-list" hidden aria-live="polite"></section>
+        <aside class="detail" id="detail" aria-live="polite" aria-labelledby="concept-title">
+          <div class="detail-head" id="detail-head"></div>
+          <div class="detail-body" id="detail-body"></div>
+        </aside>
+      </div>
+
+      <section class="section" id="courses" aria-labelledby="courses-title">
+        <h2 id="courses-title">Courses</h2>
+        <p>Each course app, as it is today. A card opens its latest course.</p>
+        <div id="tracks"></div>
+      </section>
+
+      <section class="section backup" id="progress" aria-labelledby="backup-title">
         <h2 id="backup-title">Progress</h2>
         <p>One file holds all your courses. Restoring replaces what this browser has saved.</p>
         <div id="backup"></div>
       </section>
+
       <footer>
-        <p><a href="https://github.com/DGadapee00/Flux">Source</a></p>
+        <p>Sources are free and linked with our own reason for each. The explanations on the map are written fresh; nothing is copied. <a href="https://github.com/DGadapee00/Flux">Source</a></p>
       </footer>
     </div>
     <script type="module" src="/src/main.js"></script>

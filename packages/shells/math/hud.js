@@ -18,6 +18,8 @@ import { setLawEl, prose, mathText } from './shared.js';
  * @param {string} [catalog.courseId] Marks this course in the track row.
  * @param {{ id?: string, code?: string, title?: string, href?: string|null }[]} [catalog.track] Sibling courses, hub order.
  * @param {string} catalog.homeId Unit shown before one is mounted.
+ * @param {boolean} [catalog.revealActiveLab] Keep the active phone tab in its scroll row.
+ * @param {string} [catalog.unbuiltMessage] Plain text for a scaffold without unit content.
  * @param {object} [catalog.notes] Core `createNotes` dependencies. Omit when the manifest has no notes.
  */
 export function createHUD(api, catalog) {
@@ -128,7 +130,7 @@ export function createHUD(api, catalog) {
         .map((w) => {
           const right = pred.got[w.id] === pred.picks[w.id];
           const label = choices(prompt, w).find(([value]) => value === pred.got[w.id]);
-          return `<p class="pred-grade ${right ? 'ok' : 'bad'}">${prose(w.label)}: ${right ? 'right' : `the lab says ${label ? label[1] : pred.got[w.id]}`}.</p>`;
+          return `<p class="pred-grade ${right ? 'ok' : 'bad'}">${mathText(w.label)}: ${right ? 'right' : `the lab says ${label ? label[1] : pred.got[w.id]}`}.</p>`;
         })
         .join('');
       const note = matchesExpect(prompt, pred.got)
@@ -182,6 +184,7 @@ export function createHUD(api, catalog) {
       .map((t) => `<button type="button" class="tab soon" disabled title="Coming soon">${t}</button>`)
       .join('');
     $('lab-tabs').innerHTML = built + soon;
+    if(catalog.revealActiveLab && window.innerWidth<=720) $('lab-tabs').querySelector('.tab.active')?.scrollIntoView?.({block:'nearest',inline:'nearest'});
   }
 
   function renderToggles(lab, state) {
@@ -278,7 +281,9 @@ export function createHUD(api, catalog) {
     const host = $('lab-controls');
     if (!lab) {
       const coming = (exam?.coming || []).join(', ') || 'coming next';
-      host.innerHTML = `<p class="tiny">The ${coming} labs aren’t built yet. The practice problems for this unit are ready: press <b>P</b> or use Practice.</p>`;
+      host.innerHTML = catalog.unbuiltMessage
+        ? `<p class="tiny">${mathText(catalog.unbuiltMessage)}</p>`
+        : `<p class="tiny">The ${coming} labs aren’t built yet. The practice problems for this unit are ready: press <b>P</b> or use Practice.</p>`;
       mountedId = '';
       renderToggles(null);
       renderLegend(null);

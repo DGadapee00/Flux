@@ -963,6 +963,27 @@
    "path": "incoming/2026-wk43/Calculus Physics II Lecture Notes Ch 57 Intro to Optics Fall 2026.pdf",
    "stamp": "2026-10-22T18:19:30Z"
   },
+  "24893940": {
+   "fetched": "2026-11-01",
+   "module": "Week 12 - Lecture - November 2 - 8",
+   "name": "Worksheet # 6 Part B UpL Physics II Fall 2026.pdf",
+   "path": "incoming/2026-wk44/Worksheet _ 6 Part B UpL Physics II Fall 2026.pdf",
+   "stamp": "2026-10-29T19:11:46Z"
+  },
+  "24894010": {
+   "fetched": "2026-11-01",
+   "module": "Week 12 - Lecture - November 2 - 8",
+   "name": "Worksheet # 6 Part A MC Physics II Fall 2026.pdf",
+   "path": "incoming/2026-wk44/Worksheet _ 6 Part A MC Physics II Fall 2026.pdf",
+   "stamp": "2026-10-29T19:14:29Z"
+  },
+  "24901760": {
+   "fetched": "2026-11-01",
+   "module": "Exam 6 - Friday November 6",
+   "name": "Exam 6 Equations.pdf",
+   "path": "incoming/2026-wk44/Exam 6 Equations.pdf",
+   "stamp": "2026-10-30T13:18:50Z"
+  },
   "assignment:1880067": {
    "fetched": "2026-10-04",
    "module": "Week 1 - Lecture - August 17 - 23",
@@ -1026,6 +1047,13 @@
    "path": "incoming/2026-wk42/Worksheet _ 5 Part B Upload Solutions Fall 2026.html",
    "stamp": "2026-10-16T18:47:53Z"
   },
+  "assignment:1880084": {
+   "fetched": "2026-11-01",
+   "module": "Week 12 - Lecture - November 2 - 8",
+   "name": "Worksheet # 6 Part B Upload Solutions Fall 2026",
+   "path": "incoming/2026-wk44/Worksheet _ 6 Part B Upload Solutions Fall 2026.html",
+   "stamp": "2026-10-30T18:56:59Z"
+  },
   "assignment:1880088": {
    "fetched": "2026-10-04",
    "module": "Week 2 - Lecture - August 24 - 30",
@@ -1053,6 +1081,13 @@
    "name": "Checklist Week 11 Calculus Physics 2 Fall 2026",
    "path": "incoming/2026-wk43/Checklist Week 11 Calculus Physics 2 Fall 2026.html",
    "stamp": "2026-10-23T13:20:26Z"
+  },
+  "page:1868126": {
+   "fetched": "2026-11-01",
+   "module": "Week 12 - Lecture - November 2 - 8",
+   "name": "Checklist Week 12 Calculus Physics 2 Fall 2026",
+   "path": "incoming/2026-wk44/Checklist Week 12 Calculus Physics 2 Fall 2026.html",
+   "stamp": "2026-10-30T18:56:58Z"
   },
   "page:1868131": {
    "fetched": "2026-10-04",
@@ -1413,8 +1448,8 @@
   }
  },
  "last_run": {
-  "date": "2026-10-25",
+  "date": "2026-11-01",
   "source": "modules",
-  "taken": 29
+  "taken": 5
  }
 }

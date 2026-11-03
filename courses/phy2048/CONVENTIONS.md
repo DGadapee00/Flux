@@ -16,15 +16,32 @@ These stay in the course. They are not copied into `packages/core` or the shell.
   relative-motion and wind-triangle labs: the velocity of the moving frame (a current, a wind, minus
   an observer's velocity) is teal, and the resulting velocity over the ground is gold. In Unit 3's
   force diagrams every force is pink and labelled, so the acceleration there is a thin yellow arrow,
-  and a reference line on a graph (free fall, a weight, a terminal speed) is yellow too.
-- **Labs.** Units 1 to 4 are drawn (graph panels and flat vector scenes, framed by `fit` and the
+  and a reference line on a graph (free fall, a weight, a terminal speed) is yellow too. Unit 5
+  draws momentum bars in teal and marks the center of mass in yellow. A second body is gold. Unit 6
+  keeps force pink and velocity white. A rider, a second hanging mass, and the flight-energy bar are
+  gold. The rotation axis mark is yellow. Unit 7 keeps force pink and velocity white. A second mass,
+  the spin-energy bar, and a flywheel that drops on are gold. The origin and the pivot mark are yellow.
+  Unit 8 keeps force pink. A second support, and the wall’s push on a ladder, are white. The person
+  and the car’s center of mass are gold. The center mark is yellow.
+  Unit 9 keeps force pink and velocity white. The planet is blue. A craft, the station, and the
+  star are gold. The equal-area wedge the readout measures is white, and the other wedge is pink.
+  The orbit path is grey.
+  Unit 10 keeps force pink and velocity white. Water is blue. The pistons, the floating block, and
+  the fire-hose nozzle are gold. The dam wall is grey.
+  Unit 11 keeps force pink and velocity white. The spring and the pendulum arm are gold. The block
+  and the bob are blue. The equilibrium mark is yellow. The tower is grey, and the damper beam is gold.
+  Unit 12 keeps the string gold and a marked point of the rope blue. The guitar body is grey, and the
+  low E string is blue. Nodes are yellow. The hanger is blue.
+  Unit 13 keeps the sound wave blue. The speaker cone and the train horn are gold. The listener is
+  blue. The pipe wall is grey, and a node is yellow. The crossbuck is white.
+- **Labs.** Units 1 to 13 are drawn (graph panels and flat vector scenes, framed by `fit` and the
   free space). The projectile lab draws the world at one scale on both axes, so angles are true. The
-  two older labs in Units 5 and 6 are logic only until their unit's PR draws them. The free space
-  between the panels is taller than wide on a laptop, so a lab with a picture and a bar chart stacks
+  free space between the panels is taller than wide on a laptop, so a lab with a picture and a bar chart stacks
   them (Unit 4). Energy bars: potential blue, kinetic white, thermal and work pink, a total yellow.
+  Momentum bars are teal.
   A choice between a few named options is a `selectRow` (`define.js`).
   A lab says its numbers once, as `readoutCells`, and its law as TeX lines.
-- **Notes.** One file per unit in `src/notes/content/`, registered in `src/notes/units/`. Units 1 to 4
+- **Notes.** One file per unit in `src/notes/content/`, registered in `src/notes/units/`. Units 1 to 13
   have them. A worked example's setup in `src/notes/setups/` is checked against the lab within 2%.
 - **Problems.** A unit built to the standard is listed in `STANDARD_UNITS` in `scripts/problems-check.mjs`,
   which then also requires a level, a declared variety, a cited case, traps that can fire, and a lab

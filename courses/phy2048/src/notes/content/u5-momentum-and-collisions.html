@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Momentum and collisions</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">PHY 2048 · Physics I · Unit 5 · OpenStax University Physics Vol. 1, Ch 9, rewritten</div>
+  <h1>Momentum and collisions</h1>
+  <p class="lede">Force tells how a velocity is changing at one moment. Momentum is the quantity that force changes. When a hit is too short to follow, the change of momentum is still a number you can use, and when outside forces are absent that number is shared by the whole system.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+    <span><i style="background:transparent;outline:1px dashed var(--border-hover)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Momentum and impulse</h3>
+    <a href="#s1"><span>1</span>Linear momentum</a>
+    <a href="#s2"><span>2</span>Impulse</a>
+    <h3>Part II · Collisions</h3>
+    <a href="#s3"><span>3</span>Conservation of momentum</a>
+    <a href="#s4"><span>4</span>Types of collisions</a>
+    <a href="#s5"><span>5</span>Collisions in two dimensions</a>
+    <h3>Part III · Center of mass and rockets</h3>
+    <a href="#s6"><span>6</span>Center of mass</a>
+    <a href="#s7"><span>7</span>Rocket propulsion</a>
+    <h3>Reference</h3>
+    <a href="#s8"><span>8</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Momentum and impulse</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Linear momentum</h2>
+<p>The <b>linear momentum</b> of a particle is its mass times its velocity:</p>
+\[
+\vec p = m\vec v.
+\]
+<p>Momentum is a vector. It points the same way as the velocity. Its unit is the kilogram metre per second, which is the same as a newton second. A system of particles has a total momentum, the vector sum of the pieces. Components add on their own axes. Magnitudes do not.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Newton's second law is a statement about momentum. For a fixed mass, \(\vec F = m\vec a\) is the same claim as \(\vec F = d\vec p/dt\). A force is the rate at which momentum changes.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a car on a straight road</span>
+<p>A 1400 kg car moves at 15 m/s along a straight road. Take the road as +x. Then \(p_x = (1400)(15) = 21000\ \text{kg·m/s}\) and \(p_y = 0\). The magnitude is 21000 kg·m/s. There is only one component, so the magnitude and that component agree.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding \(p_x\) and \(p_y\) as ordinary numbers to get the magnitude. Those components are perpendicular. The magnitude is \(\sqrt{p_x^2 + p_y^2}\). Dropping the sign of a component is the same family of mistake: a component can be negative, and the magnitude cannot.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>\(\vec p = m\vec v\) is the slow-speed model. Near the speed of light the momentum is larger than \(mv\) by a factor that grows without a bound. This unit never reaches that regime. A body made of moving parts can also hold momentum inside itself. The \(\vec p\) here is the motion of the body as a whole.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Impulse</h2>
+<p>Integrate \(\vec F = d\vec p/dt\) across a time interval. The left side becomes the area under the force graph. The right side becomes the change of momentum:</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Start from \(F_x = dp_x/dt\) and multiply by \(dt\). Integrate from \(t_i\) to \(t_f\):</p>
+\[
+J_x = \int_{t_i}^{t_f} F_x\,dt = p_{x,f} - p_{x,i} = \Delta p_x.
+\]
+<p>The same holds on each axis. \(\vec J\) is the <b>impulse</b>. For a constant force, \(J = F\Delta t\). For a changing force, \(J\) is the area under \(F(t)\), and \(F_{\text{avg}} = J/\Delta t\) is the constant force with that same area.</p>
+</div>
+<p>Three shapes with the same peak \(F\) and the same duration \(T\) do not have the same area. A rectangle has \(FT\). A triangle that rises and falls has \(\tfrac12 FT\). A half-sine, \(F\sin(\pi t/T)\), has \(2FT/\pi\).</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>A rebound is not a stop. A ball that arrives with \(mv\) and leaves with \(mv\) the other way changes its momentum by \(2mv\). The wall must supply both the removal of the incoming momentum and the outgoing momentum.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a driver stopped by a seatbelt</span>
+<p>A driver weighs 860 N and is moving at 27 m/s. A seatbelt and an airbag stop that motion in 2.5 s. Take \(g = 9.81\ \text{m/s}^2\), so the mass is \(860/9.81 = 87.67\ \text{kg}\). The momentum to remove is \((87.67)(27) = 2367\ \text{kg·m/s}\). Spread over 2.5 s, the average force is \(2367/2.5 = 946.8\ \text{N}\), against the motion. The book uses \(g = 9.80\ \text{m/s}^2\) and prints 948 N.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the same change as a triangle</span>
+<p>A 2 kg body at 4 m/s is stopped by a triangular pulse: the force rises to \(-32\ \text{N}\) at 0.25 s and is back to zero at 0.50 s. The area is \(\tfrac12(-32)(0.50) = -8\ \text{N·s}\). Then \(\Delta v = -8/2 = -4\ \text{m/s}\), and the body stops. The average force is \(-8/0.50 = -16\ \text{N}\), half the peak, because the triangle spends the whole interval below the peak.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a stop against the steering wheel</span>
+<p>The same driver, the same 27 m/s, stops in 0.20 s instead of 2.5 s. The impulse is still \(-2367\ \text{N·s}\). The average force is \(-2367/0.20 = -1.183\times 10^{4}\ \text{N}\), about 13.8 times the driver's weight. A constant force at that size stops the body in \(d = vT/2 = 2.7\ \text{m}\). The book prints \(1.185\times 10^{4}\ \text{N}\) with \(g = 9.80\ \text{m/s}^2\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading the peak of the graph as the impulse, or giving a triangle the area of a rectangle. The impulse is the area. A second mistake is to use \(mv\) for a bounce that reverses the velocity. That number stops the body. It does not send it back.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The seatbelt, the airbag, and the driver are not one constant force on one mass. The 2.5 s and the 0.20 s are the durations in the example, not a measured pulse. Real force rises, falls, and is different at the belt and at the chest. The average is what momentum can see. The shape inside the interval is not.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Collisions</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Conservation of momentum</h2>
+<p>Add \(\vec F = d\vec p/dt\) for every particle in a system. Internal forces come in third-law pairs. If those pairs are equal and opposite along the line between the particles, they cancel in the total. Whatever is left is the outside force:</p>
+\[
+\vec F_{\text{ext}} = \frac{d\vec P}{dt}.
+\]
+<div class="box key"><span class="tag">Key idea</span>
+<p>When the outside force is zero, or the hit is so short that an outside push has no time to matter, the total momentum does not change. Kinetic energy has no such promise. Momentum can be conserved in a collision that loses a great deal of kinetic energy.</p>
+</div>
+<p>Two bodies that stick move as one mass afterward. Along a line,</p>
+\[
+v = \frac{m_1 u_1 + m_2 u_2}{m_1 + m_2}.
+\]
+<p>A launch from rest is the same rule with the total equal to zero. The projectile and the launcher leave with equal and opposite momenta: \(mu + MV = 0\).</p>
+<div class="box ex"><span class="tag">Worked example · two carts that stick</span>
+<p>A 0.500 kg cart at 1.33 m/s catches a 0.675 kg cart at 0.750 m/s, and they stick. The shared velocity is</p>
+\[
+v = \frac{(0.500)(1.33) + (0.675)(0.750)}{1.175} = 0.9968\ \text{m/s}.
+\]
+<p>The kinetic energy falls from 0.6321 J to 0.5838 J, so 0.04831 J is lost. The book prints 0.997 m/s. Momentum before and after both equal 1.171 kg·m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · equal pucks that exchange</span>
+<p>A 15 g puck at 2.50 m/s hits an equal puck at rest, and the collision is elastic. Put the incoming direction as positive. The incoming puck stops and the target leaves at 2.50 m/s. The kinetic energy stays \(0.04688\ \text{J}\). Equal masses are the case where an elastic hit with a target at rest exchanges the two velocities. The next section shows why.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Treating a stick as if it were elastic, or adding the speeds as positive numbers when the bodies are approaching. A head-on velocity points backward on the axis you chose. Momentum uses that sign. The sizes of the momenta are not what is conserved.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Friction, gravity, and the normal force are outside forces. They cancel from the momentum account only when they add to nothing, or when the collision is short enough that their impulse is small beside the impulse the two bodies give each other. A long push, or a skid after the hit, is a different problem. The skid is where the road's friction removes the momentum.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Types of collisions</h2>
+<p>A one-dimensional collision of two bodies is fixed by two facts. Momentum is conserved. The <b>coefficient of restitution</b> says how the relative velocity comes out:</p>
+\[
+v_2 - v_1 = e(u_1 - u_2).
+\]
+<p>\(e = 1\) is elastic: the relative velocity reverses and the kinetic energy returns. \(e = 0\) is perfectly inelastic: the bodies have one velocity afterward. Values between are real collisions, inelastic but not stuck.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Solve the pair. With \(M = m_1 + m_2\) and \(P = m_1 u_1 + m_2 u_2\),</p>
+\[
+v_1 = \frac{P - m_2 e(u_1 - u_2)}{M}, \qquad v_2 = \frac{P + m_1 e(u_1 - u_2)}{M}.
+\]
+<p>For \(e = 1\) and \(m_1 = m_2\), this is \(v_1 = u_2\) and \(v_2 = u_1\): an exchange. The kinetic energy that can be lost lives in the relative motion. With \(\mu = m_1 m_2/M\),</p>
+\[
+K_{\text{lost}} = \tfrac12\mu(1 - e^2)(u_1 - u_2)^2.
+\]
+<p>The center-of-mass motion is not in that expression. Sticking, \(e = 0\), loses all of the relative kinetic energy and keeps the rest.</p>
+</div>
+<p>Given the kinetic energy afterward, the same relation runs backward. The fraction of the relative kinetic energy that remains is \(e^2\), not the fraction of the total kinetic energy.</p>
+<div class="box ex"><span class="tag">Worked example · a lighter puck into a heavier one</span>
+<p>A 12 g puck at 2.50 m/s hits a 15 g puck at rest. The collision is elastic. Take the incoming direction as positive.</p>
+\[
+v_1 = \frac{(0.012)(2.50) - (0.015)(2.50)}{0.027} = -0.2778\ \text{m/s},
+\]
+\[
+v_2 = \frac{(0.012)(2.50) + (0.012)(2.50)}{0.027} = 2.222\ \text{m/s}.
+\]
+<p>The lighter puck bounces back. The kinetic energy stays 0.0375 J. The book takes the opposite direction as positive and prints 2.22 m/s and \(-0.28\ \text{m/s}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a skid after a crash</span>
+<p>A 1200 kg car hits a parked 3000 kg truck. The truck then skids 10 m on a road with \(\mu = 0.62\) and stops. The car is taken to stop in the hit. Take \(g = 9.81\ \text{m/s}^2\). The skid says the truck's speed after the hit:</p>
+\[
+v_t = \sqrt{2\mu g d} = \sqrt{2(0.62)(9.81)(10)} = 11.03\ \text{m/s}.
+\]
+<p>The truck carries the momentum the car brought in, so \(v_c = (3000/1200)(11.03) = 27.57\ \text{m/s}\). The book rounds the square root to 11.0 m/s and prints 27.5 m/s. If they had stuck and skidded as one mass, the same skid would be the shared speed, and the car would have been faster before the hit.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(\mu g d\) for the skid speed, with the square root and the 2 left out. From \(v^2 = 2ad\) the speed is \(\sqrt{2\mu g d}\). A second mistake is to quote the truck's speed as the car's. The masses are different, so the speeds are different. A third is to use the elastic formulas when the bodies stick.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>\(e\) is not a constant of nature. It depends on the materials and on the speed. The crash has two readings, and the evidence does not choose between them: the car stops, or the two lock and skid together. Both ignore rotation, crush, and the friction that acts during the hit itself. The skid length is doing all of the work of the measurement.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Collisions in two dimensions</h2>
+<p>Momentum is a vector, so each component is conserved on its own. If two vehicles stick, add \(p_x\) and \(p_y\) separately and divide by the total mass. The direction of the shared velocity is \(\tan^{-1}(p_y/p_x)\) from the axis you called +x.</p>
+<p>Smooth discs are a different model. There is no friction, so the velocity along the contact face is unchanged. Only the piece along the contact normal is a one-dimensional collision, with the same \(e\) as on a line.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Equal masses, an elastic collision, and a target at rest: the two outgoing velocities are perpendicular, unless the hit is head-on and one of them is zero. In the center-of-mass frame the two velocities are always equal and opposite. Here that frame moves at half the incoming velocity, and adding it back makes a right angle.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two vehicles that stick at a crossing</span>
+<p>A 1200 kg car at 16.67 m/s along +x hits a 3000 kg car at 11.1 m/s along +y. They stick. The total mass is 4200 kg.</p>
+\[
+v_x = \frac{(1200)(16.67)}{4200} = 4.763\ \text{m/s}, \qquad v_y = \frac{(3000)(11.1)}{4200} = 7.929\ \text{m/s}.
+\]
+<p>The shared speed is \(\sqrt{4.763^2 + 7.929^2} = 9.249\ \text{m/s}\), at \(59.01^\circ\) from the first car's axis. The book prints 4.76 m/s, 7.93 m/s, and \(59^\circ\). That same heading is \(31^\circ\) from the second car's axis. Adding the speeds as if they were parallel would give \((1200\cdot 16.67 + 3000\cdot 11.1)/4200 = 12.69\ \text{m/s}\), which is too high.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · equal discs that glance</span>
+<p>Two discs of 0.50 kg meet. One is at rest. The other arrives at 2.0 m/s, and the contact normal is \(40^\circ\) from that velocity. The collision is elastic. The outgoing velocities are perpendicular: the angle between them is \(90^\circ\). Momentum on each axis is unchanged, and so is the kinetic energy. Turn \(e\) down to zero and the energy loss appears, but the discs still do not lock. With no friction, each one keeps its sideways velocity. Locking is the wreck model, not a smooth \(e = 0\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding the momenta as magnitudes, or reporting the complement of the angle. The traffic heading is \(59^\circ\) from the first car, not \(31^\circ\). The \(31^\circ\) is the same direction measured from the other axis. Both numbers describe one velocity. The question has to say which axis.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Real vehicles rotate, scrape, and crush. A smooth disc has no tangent force at all, which is why a glancing blow cannot make the bodies stick. The wreck model is the opposite ideal: they leave as one body, and the angle between them is zero by definition. Neither model is a measurement of a real intersection.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Center of mass and rockets</h2>
+</div>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Center of mass</h2>
+<p>The <b>center of mass</b> is the average position, weighted by mass. For two bodies,</p>
+\[
+x_{\text{cm}} = \frac{m_1 x_1 + m_2 x_2}{m_1 + m_2},
+\]
+<p>and the same for \(y\). For a continuous body the sums become integrals, \(M\vec r_{\text{cm}} = \int \vec r\,dm\). The total momentum is the total mass times the velocity of this point. From the section on conservation, that velocity changes only when an outside force acts:</p>
+\[
+\vec F_{\text{ext}} = M\vec a_{\text{cm}}.
+\]
+<div class="box why"><span class="tag">Derivation</span>
+<p>A uniform rod of mass \(m\) and length \(L\) runs from \(x = 0\) to \(x = L\), with a point mass \(m_e\) at the far end. The rod's own center is at \(L/2\), because every slice \(dm = (m/L)\,dx\) has a partner the same distance the other side of the middle. The composite center is</p>
+\[
+x_{\text{cm}} = \frac{m(L/2) + m_e L}{m + m_e}.
+\]
+<p>A uniform hoop is the same idea around a circle. Each piece has an opposite piece, so the average is the center, where the hoop itself has no material.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a light mass and a heavy one</span>
+<p>A 2 kg mass sits at the origin and a 6 kg mass at \((4, 1)\ \text{m}\). Then \(x_{\text{cm}} = (6\cdot 4)/8 = 3\ \text{m}\) and \(y_{\text{cm}} = (6\cdot 1)/8 = 0.75\ \text{m}\). The midpoint of the two positions would be \((2, 0.5)\ \text{m}\). The heavier mass pulls the average past that point.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a rod with a mass at one end</span>
+<p>A uniform rod of mass 3 kg and length 2 m has a 1 kg mass at the far end. The rod alone would balance at 1 m. With the end mass,</p>
+\[
+x_{\text{cm}} = \frac{(3)(1) + (1)(2)}{4} = 1.25\ \text{m}.
+\]
+<p>The end mass shifts the balance 0.25 m toward itself.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a shell that bursts</span>
+<p>A shell of mass 2 kg is launched at 8 m/s at \(50^\circ\). At \(t = 1.2\ \text{s}\) it bursts into three equal fragments. In the center-of-mass frame their velocities add to zero. Take \(g = 9.81\ \text{m/s}^2\). The center of mass is still on the original parabola:</p>
+\[
+x = (8\cos 50^\circ)(1.2) = 6.171\ \text{m},
+\]
+\[
+y = (8\sin 50^\circ)(1.2) - \tfrac12(9.81)(1.2)^2 = 0.2908\ \text{m}.
+\]
+<p>The burst is internal. It spreads the fragments around that point. It does not move the point.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the Earth-Moon system</span>
+<p>Treat Earth as \(5.97\times 10^{24}\ \text{kg}\) at the origin and the Moon as \(7.36\times 10^{22}\ \text{kg}\) at \(3.82\times 10^{8}\ \text{m}\). The center of mass is</p>
+\[
+x_{\text{cm}} = \frac{(7.36\times 10^{22})(3.82\times 10^{8})}{5.97\times 10^{24} + 7.36\times 10^{22}} = 4.652\times 10^{6}\ \text{m}
+\]
+<p>from Earth's center. The book prints \(4.64\times 10^{6}\ \text{m}\). With an Earth radius of \(6.37\times 10^{6}\ \text{m}\), this point is \(1.72\times 10^{3}\ \text{km}\) below the surface. The book prints 1730 km for that depth.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the midpoint when the masses differ. The midpoint is right only for equal masses. Weight each coordinate by the mass that sits there, and do not swap the two masses.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Earth and the Moon are not points, and neither is a uniform sphere in every detail. The hoop result uses a perfect circle and a uniform rim. After a shell bursts, air pushes on the fragments, and those pushes are outside forces. During the burst itself they are small beside the internal forces, which is why the center of mass stays on the parabola for that moment.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Rocket propulsion</h2>
+<p>A rocket carries the mass it is about to throw. In a short interval it ejects a positive mass \(\delta\) backward at speed \(v_e\) relative to itself. The rocket's remaining mass is \(m - \delta\), and its speed changes by \(dv\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Take forward as positive. Before the puff, the momentum is \(mv\). After it, the rocket has \((m - \delta)(v + dv)\) and the exhaust has \(\delta(v - v_e)\). The second-order piece \(\delta\,dv\) is dropped. If an outside force \(F_{\text{ext}}\) also acts,</p>
+\[
+m\,dv - \delta v_e = F_{\text{ext}}\,dt.
+\]
+<p>The exhaust mass per time is \(\dot m = \delta/dt\), so the thrust is \(\dot m v_e\). For a vertical burn, \(F_{\text{ext}} = -mg\), and</p>
+\[
+dv = v_e\frac{\delta}{m} - g\,dt.
+\]
+<p>Integrate from the starting mass \(m_0\) to the mass at burnout \(m_f\). The mass ratio produces a logarithm, and gravity subtracts \(g\) times the burn time \(t_b = (m_0 - m_f)/\dot m\):</p>
+\[
+\Delta v = v_e\ln\frac{m_0}{m_f} - g t_b.
+\]
+<p>A coast has no \(g t_b\) term. Doubling \(v_e\) doubles a coasting \(\Delta v\). Doubling the mass burned does not, because the logarithm grows slower than the mass you throw.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a coasting thruster</span>
+<p>A spacecraft thruster ejects gas at 250 m/s, at 200 kg/s. The craft starts at 20 000 kg and shuts down at 14 000 kg. The thrust is \((200)(250) = 5.00\times 10^{4}\ \text{N}\). At ignition, with gravity left out of the acceleration,</p>
+\[
+a(0) = \frac{5.00\times 10^{4}}{2.00\times 10^{4}} = 2.50\ \text{m/s}^2.
+\]
+<p>Halfway, 15 s in, the mass is 17 000 kg and \(a = 2.94\ \text{m/s}^2\). At burnout, \(a = 3.57\ \text{m/s}^2\). The book prints 2.5, 2.9, and 3.6 m/s² for those three moments, from thrust over mass. The coasting change of velocity is</p>
+\[
+\Delta v = 250\ln\frac{20000}{14000} = 89.17\ \text{m/s},
+\]
+<p>over a 30 s burn. The weight at the start is \((20000)(9.81) = 1.962\times 10^{5}\ \text{N}\), about four times the thrust. Fired straight up, this thruster cannot lift itself. Gravity would subtract \((9.81)(30) = 294\ \text{m/s}\), and the velocity would fall by 205 m/s.</p>
+</div>
+<p>Burn twice the propellant and finish at the same 14 000 kg, so the start is 26 000 kg. The coasting \(\Delta v\) becomes 155 m/s, which is 1.74 times the original, not twice. The exhaust speed is the lever that doubles cleanly. The mass burned is not.</p>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Making \(\Delta v\) proportional to the mass burned, or using a base-10 logarithm. The coasting result is \(v_e\) times a natural log of the mass ratio. Leaving out \(g t_b\) on an upward burn is a third version of the same slip: the formula you use has to match the forces that act.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The exhaust speed is taken as constant, and there is no drag. A real nozzle does not hold \(v_e\) fixed from the ground to orbit. The book's thruster is a number from the example, and it loses to the craft's weight. A lifter needs a much higher exhaust speed. Any larger \(v_e\) you set in the lab to watch a craft rise is an illustration, not a figure from the book.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Formula sheet</h2>
+\[
+\vec p = m\vec v, \qquad \vec F = \frac{d\vec p}{dt}, \qquad \vec J = \int \vec F\,dt = \Delta\vec p
+\]
+\[
+\text{rectangle } FT, \qquad \text{triangle } \tfrac12 FT, \qquad \text{half-sine } \frac{2FT}{\pi}
+\]
+\[
+\vec F_{\text{ext}} = \frac{d\vec P}{dt}, \qquad v = \frac{m_1 u_1 + m_2 u_2}{m_1 + m_2}\ \text{(they stick)}
+\]
+\[
+v_2 - v_1 = e(u_1 - u_2), \qquad K_{\text{lost}} = \tfrac12\mu(1 - e^2)(u_1 - u_2)^2, \qquad \mu = \frac{m_1 m_2}{m_1 + m_2}
+\]
+\[
+v_t = \sqrt{2\mu g d}, \qquad x_{\text{cm}} = \frac{\sum m_i x_i}{\sum m_i}, \qquad \vec F_{\text{ext}} = M\vec a_{\text{cm}}
+\]
+\[
+\text{thrust } = \dot m v_e, \qquad \Delta v = v_e\ln\frac{m_0}{m_f} - g t_b
+\]
+</section>
+
+</main>
+</body>
+</html>

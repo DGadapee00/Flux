@@ -1,6 +1,14 @@
 import { createLabLoader } from '@flux/core';
 
 const loaders = {
+  pappus: () => import('./pappus.js'),
+  reactions: () => import('./reactions.js'),
+  bridle: () => import('./bridle.js'),
+  shelf: () => import('./shelf.js'),
+  gantry: () => import('./gantry.js'),
+  jack: () => import('./jack.js'),
+  bookcase: () => import('./bookcase.js'),
+
   vectors: () => import('./vectors.js'),
   particle: () => import('./particle.js'),
   moments: () => import('./moments.js'),

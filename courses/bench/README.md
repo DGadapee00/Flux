@@ -2,7 +2,7 @@
 
 A personal-projects module beside PHY 2049: how to put real circuits together on a breadboard to
 get a job done, and how to find out why one does not work. The plan is
-`docs/course-plans/bench.md` (DECISIONS.md, D35). It runs on the engineering shell; its labs draw a
+`docs/history/guidance-2026-11-02/docs/course-plans/bench.md` (docs/history/guidance-2026-11-02/DECISIONS.md, D35). It runs on the engineering shell; its labs draw a
 half-size breadboard on the shell's 2D stage, and the circuits are solved by
 `@flux/subjects/em/breadboard.js`.
 
