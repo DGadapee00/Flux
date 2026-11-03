@@ -3,7 +3,7 @@ export default {
   title: 'Random variables and distributions',
   label: ['Random', 'variables'],
   subject: 'stats',
-  courses: ['sta3032'],
+  courses: ['sta3032', 'egn3203'],
   eq: String.raw`E[X] = \sum x\,p(x) \ \text{or}\ \int x f(x)\,dx, \qquad \text{Var}(X) = E[X^2] - E[X]^2`,
   idea: String.raw`A random variable puts a number on each outcome, and its distribution says how probability spreads over those numbers. Counting successes gives the binomial; counting rare events, the Poisson; waiting times, the exponential; and measurements that add many small effects, the normal. For a continuous variable a probability is an area under the density, never the height at a point.`,
   requires: ['conditional-probability', 'definite-integral'],

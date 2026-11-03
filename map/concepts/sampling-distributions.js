@@ -3,7 +3,7 @@ export default {
   title: 'Sampling distributions and the central limit theorem',
   label: ['Sampling,', 'CLT'],
   subject: 'stats',
-  courses: ['sta3032'],
+  courses: ['sta3032', 'egn3203'],
   eq: String.raw`\bar X \approx N\!\left(\mu,\ \frac{\sigma^2}{n}\right)\ \text{for large } n`,
   idea: String.raw`A statistic computed from a random sample is itself random, with its own distribution. The mean of \(n\) draws has the population's mean and a spread that shrinks as \(1/\sqrt n\). Whatever the population's shape, that mean's distribution approaches a normal as \(n\) grows. That is why normal tables serve for so many problems.`,
   requires: ['random-variables', 'descriptive-statistics'],
