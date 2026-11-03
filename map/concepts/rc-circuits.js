@@ -2,7 +2,7 @@ export default {
   id: 'rc-circuits',
   title: 'RC circuits',
   subject: 'circuits',
-  courses: ['phy2049'],
+  courses: ['phy2049', 'eel3111'],
   eq: String.raw`V_C(t) = \mathcal E\left(1 - e^{-t/RC}\right), \qquad \tau = RC`,
   idea: String.raw`A capacitor charging through a resistor fills fast at first and slowly at the end, because the current falls as the capacitor's voltage rises. The loop rule gives a first-order differential equation, and its solution is an exponential with time constant \(RC\). After five time constants it is within one percent of full.`,
   requires: ['kirchhoff', 'capacitance'],

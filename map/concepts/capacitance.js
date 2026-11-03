@@ -2,7 +2,7 @@ export default {
   id: 'capacitance',
   title: 'Capacitance',
   subject: 'em',
-  courses: ['phy2049'],
+  courses: ['phy2049', 'eel3111'],
   eq: String.raw`C = \frac{Q}{\Delta V}, \qquad C_\text{plates} = \frac{\varepsilon_0 A}{d}, \qquad U = \tfrac12 C\,\Delta V^2`,
   idea: String.raw`Two conductors holding equal and opposite charge make a capacitor. The charge it holds per volt depends only on its shape: for parallel plates, more area and a smaller gap give more. Charging it stores energy in the field between the plates, \(\tfrac12\varepsilon_0E^2\) per unit volume.`,
   requires: ['electric-potential', 'gauss-law'],
