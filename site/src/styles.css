@@ -818,7 +818,16 @@ a.course:hover {
 .backup .flux-files button {
   font-family: var(--display);
   border-color: var(--line);
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  min-height: 44px;
+  padding: 8px 14px;
+  cursor: pointer;
 }
+
+.backup .flux-files { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 
 .backup .flux-files-msg {
   font-family: var(--display);

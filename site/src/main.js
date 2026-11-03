@@ -1,9 +1,11 @@
 import { hasAnimation, mountCardAnimation } from './anim/draw.js';
 import { mountBackup } from './backup.js';
 import { mountMap } from './map.js';
+import { mountApplications } from './applications/view.js';
 import { latestBuilt, visibleTracks } from './tracks.js';
 
-mountMap();
+const map = mountMap();
+mountApplications(map);
 
 const root = document.querySelector('#tracks');
 
