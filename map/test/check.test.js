@@ -207,3 +207,33 @@ test('the audit lists labs and notes sections no concept references, and skips f
   assert.deepEqual(report.c1.notes.missing.map((s) => s.id), ['s2']);
   assert.equal(report.c1.summaries, 1);
 });
+
+test('a related link to a real concept, with a note, passes and reads both ways', () => {
+  const a = concept('a');
+  const c = concept('c', { related: [{ id: 'a', note: 'Same form.' }] });
+  assert.deepEqual(errorsOf(fixture([a, concept('b', { requires: ['a'] }), c])), []);
+  const g = buildGraph([a, c]);
+  assert.deepEqual(g.related.a, [{ id: 'c', note: 'Same form.' }]);
+  assert.deepEqual(g.related.c, [{ id: 'a', note: 'Same form.' }]);
+  assert.deepEqual(g.leads.a, [], 'a related link is not an edge');
+});
+
+test('a related link fails on an unknown id, itself, a requires edge, a repeat or a missing note', () => {
+  has(errorsOf(fixture([concept('a', { related: [{ id: 'ghost', note: 'x' }] })])), 'related to ghost, which is not a concept');
+  has(errorsOf(fixture([concept('a', { related: [{ id: 'a', note: 'x' }] })])), 'is related to itself');
+  has(
+    errorsOf(fixture([concept('a', { related: [{ id: 'b', note: 'x' }] }), concept('b', { requires: ['a'] })])),
+    'one requires the other',
+  );
+  has(
+    errorsOf(fixture([concept('a', { related: [{ id: 'b', note: 'x' }] }), concept('b', { related: [{ id: 'a', note: 'y' }] })])),
+    'written twice',
+  );
+  has(errorsOf(fixture([concept('a'), concept('c', { related: [{ id: 'a' }] })])), 'missing note');
+  has(errorsOf(fixture([concept('a'), concept('c', { related: [{ id: 'a', note: 'A dash — here.' }] })])), 'em dash');
+});
+
+test('a graph of part of the map skips a related link whose other end is left out', () => {
+  const g = buildGraph([concept('c', { related: [{ id: 'a', note: 'Same form.' }] })]);
+  assert.deepEqual(g.related.c, []);
+});

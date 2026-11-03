@@ -2,7 +2,7 @@ export default {
   id: 'pressure',
   title: 'Pressure and manometers',
   label: ['Pressure and', 'manometers'],
-  subject: 'thermo',
+  subject: 'fluids',
   courses: ['eml3100', 'phy2048'],
   eq: String.raw`p_\text{abs} = p_\text{gauge} + p_\text{atm}, \qquad \Delta p = \rho g\,\Delta z`,
   idea: String.raw`Pressure is force per unit area, and in a fluid at rest it grows with depth by \(\rho g\) per metre. Only the vertical drop counts, not the tube's width or slope. A gauge reads pressure above the atmosphere; the thermodynamics always uses absolute pressure, so add the atmosphere back.`,

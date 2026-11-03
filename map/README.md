@@ -32,6 +32,7 @@ export default {
   sources: [
     { title: '…', url: 'https://…', kind: 'Open textbook', level: 'Intro', why: 'Our one-line reason.' },
   ],
+  related: [{ id: 'em-waves', note: 'One line on what the two share.' }], // optional: parallels, not prerequisites
   labs: [{ course: 'phy2049', lab: 'gauss', notes: 's11', note: 'One line on what the lab shows.' }],
   // candidate: 'A lab idea.', // required when labs is empty
 };
@@ -42,10 +43,15 @@ export default {
   set for the lab's unit.
 - No em dashes in `idea`, `note`, `candidate`, `why`, `title` or `label`.
 - A concept with no lab is a gap. Its `candidate` says what lab would fill it.
+- `related`: optional. A parallel that is not a prerequisite, such as diffusion and the heat
+  equation. `note` says in one line what the two share. Write a pair on one of its two concepts;
+  the hub lists it on both, in the reading panel's Parallels row. It draws no line on the map and
+  changes no depth, path or gap score. A pair joined by `requires` is not also `related`.
 
 ## The check
 
 `node map/check.mjs` (or `npm test -w @flux/map`) fails on a duplicate id, a `requires` that names
 no concept, a cycle, a lab or notes section the course does not have, a missing field, a URL that
 is not https, TeX that KaTeX cannot parse, an em dash in our prose, and a concept with no lab and no
-`candidate`. It also keeps `courses.js` in step with `packages/tracks/tracks.js`.
+`candidate`, and a `related` link to no concept, to itself, to a concept it already requires or is
+required by, or written twice. It also keeps `courses.js` in step with `packages/tracks/tracks.js`.

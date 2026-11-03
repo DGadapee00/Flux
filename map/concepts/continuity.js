@@ -2,7 +2,7 @@ export default {
   id: 'continuity',
   title: 'Continuity equation',
   label: ['Continuity', 'equation'],
-  subject: 'thermo',
+  subject: 'fluids',
   courses: ['eml3015'],
   eq: String.raw`\frac{\partial \rho}{\partial t} + \nabla\cdot(\rho\mathbf v) = 0`,
   idea: String.raw`Shrink the control volume to a point with the divergence theorem, and the mass balance becomes a differential equation. For an incompressible fluid it reduces to \(\nabla\cdot\mathbf v = 0\): the flow has no sources. Charge conservation has the same form, with charge density and current density.`,
