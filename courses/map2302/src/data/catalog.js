@@ -33,17 +33,16 @@ export const EXAMS = [
     "title": "First-order systems",
     "chapters": "4",
     "date": null,
-    "labs": [],
-    "coming": [
-      "phase-portrait",
-      "normal-modes",
-      "linearize",
-      "limit-cycle",
-      "clock-pendulum"
-    ]
+    "labs": ["phase-portrait","normal-modes","linearize","limit-cycle","clock-pendulum"],
+    "coming": []
   }
 ];
 export const LAB_META = {
+  'clock-pendulum': { id: 'clock-pendulum', exam: 'u4', title: 'Pendulum clock', app: true },
+  'limit-cycle': { id: 'limit-cycle', exam: 'u4', title: 'Attracting cycles' },
+  linearize: { id: 'linearize', exam: 'u4', title: 'Linearization limits' },
+  'normal-modes': { id: 'normal-modes', exam: 'u4', title: 'Coupled normal modes' },
+  'phase-portrait': { id: 'phase-portrait', exam: 'u4', title: 'Linear phase portrait' },
   'radio-tuner': { id: 'radio-tuner', exam: 'u3', title: 'Radio clock tuner', app: true },
   convolution: { id: 'convolution', exam: 'u3', title: 'Convolution memory' },
   laplace: { id: 'laplace', exam: 'u3', title: 'Steps, impulses and poles' },

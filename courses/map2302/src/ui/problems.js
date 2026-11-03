@@ -17,6 +17,8 @@ const homeId = 'u1';
 export function createPractice(api) {
   return createMathPractice(api, {
     PROBLEMS,
+    practiceLabel: exam => `Unit ${exam.n}`,
+    assessmentFor: exam => exam.id === 'u4' ? { label: 'Cumulative final practice', templates: PROBLEMS } : null,
     problemById,
     problemsForExam,
     CHAPTER_ORDER,

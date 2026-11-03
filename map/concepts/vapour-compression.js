@@ -1,0 +1,35 @@
+export default {
+  id: 'vapour-compression',
+  title: 'Vapour-compression refrigeration',
+  label: ['Refrigeration', 'cycle'],
+  subject: 'thermo',
+  courses: ['eml3101'],
+  eq: String.raw`\text{COP}_R = \frac{h_1 - h_4}{h_2 - h_1}, \qquad h_4 = h_3\ \text{(throttle)}, \qquad \text{COP}_{R,\text{Carnot}} = \frac{T_L}{T_H - T_L}`,
+  idea: String.raw`A refrigerant boils in the evaporator, taking heat from the cold space at low pressure. A compressor raises its pressure, so it condenses at a temperature above the room and rejects heat there. A throttle valve drops the pressure again with no work, at constant enthalpy. The COP is the heat lifted over the work paid. It falls as the lift between the two temperatures grows, which is why a heat pump struggles on the coldest days.`,
+  requires: ['isentropic-efficiency', 'phases'],
+  sources: [
+    {
+      title: 'Cleynen, Engineering Thermodynamics',
+      url: 'https://thermodynamicsbook.com/',
+      kind: 'Open textbook',
+      level: 'Course level',
+      why: 'Refrigerators and heat pumps as cycles with real devices.',
+    },
+    {
+      title: 'OpenStax University Physics Vol. 2, §4.3 Refrigerators and heat pumps',
+      url: 'https://openstax.org/books/university-physics-volume-2/pages/4-3-refrigerators-and-heat-pumps',
+      kind: 'Open textbook',
+      level: 'Intro',
+      why: 'COP and the reversed engine, before the real cycle.',
+    },
+    {
+      title: 'Wikipedia, Vapor-compression refrigeration',
+      url: 'https://en.wikipedia.org/wiki/Vapor-compression_refrigeration',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'The four components and the cycle on a pressure–enthalpy chart.',
+    },
+  ],
+  labs: [],
+  candidate: 'A heat pump on a \\(p\\)–\\(h\\) chart with a slider for the outdoor temperature. It corrects the idea that a heat pump gets more out than it puts in by a fixed factor: its COP falls as the outdoor air gets colder.',
+};
