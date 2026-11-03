@@ -146,19 +146,13 @@ h1 {
   align-items: center;
 }
 
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 18px;
-  font-family: var(--display);
-  font-size: 14px;
-  color: var(--muted);
-}
-
-.legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .sw {
@@ -209,6 +203,8 @@ h1 {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  /* A label never stretches the box past the drawing. Clip, unlike hidden, keeps labels sticky. */
+  overflow: clip;
 }
 
 .lane-row {
@@ -368,11 +364,16 @@ h1 {
   order: 1;
 }
 
+.explore > .find {
+  order: 0;
+}
+
 .explore > .mapbox {
   order: 2;
 }
 
-.explore > .scope {
+.explore > .map-bar,
+.explore > .filters {
   order: 3;
 }
 
@@ -384,10 +385,6 @@ h1 {
   order: 5;
 }
 
-.explore > .paths {
-  order: 6;
-}
-
 .explore > .path-list {
   order: 7;
 }
@@ -396,31 +393,27 @@ h1 {
   order: 8;
 }
 
-.explore > .legend {
-  order: 9;
-}
-
 @media (min-width: 1001px) {
   .explore {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(340px, 400px);
     grid-template-rows: auto auto auto auto auto auto 1fr;
     grid-template-areas:
-      'legend panel'
-      'paths  panel'
-      'scope  panel'
-      'map    panel'
-      'hint   panel'
-      'trail  panel'
-      'plist  panel';
+      'find    panel'
+      'bar     panel'
+      'filters panel'
+      'map     panel'
+      'hint    panel'
+      'trail   panel'
+      'plist   panel';
     column-gap: 28px;
     row-gap: 14px;
     align-items: start;
   }
 
-  .explore > .legend { grid-area: legend; }
-  .explore > .paths { grid-area: paths; }
-  .explore > .scope { grid-area: scope; }
+  .explore > .find { grid-area: find; }
+  .explore > .map-bar { grid-area: bar; }
+  .explore > .filters { grid-area: filters; }
   .explore > .mapbox { grid-area: map; }
   .explore > .hint { grid-area: hint; }
   .explore > .trail { grid-area: trail; }
@@ -1013,4 +1006,274 @@ footer a {
   font-family: var(--mono);
   font-size: 11px;
   color: var(--dim);
+}
+
+/* ---------- Finding your way: find, zoom, subject and course filters ---------- */
+
+.find {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+}
+
+.find-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.find-field {
+  position: relative;
+  flex: 1 1 auto;
+  max-width: 520px;
+  min-width: 0;
+}
+
+.find-field input {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 40px 8px 14px;
+  font: 500 16px var(--display);
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.find-field input::placeholder {
+  color: var(--dim);
+}
+
+.find-field input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.find-field kbd {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font: 12px var(--mono);
+  color: var(--dim);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 6px;
+  pointer-events: none;
+}
+
+.find-field input:focus + kbd,
+.find-field input:not(:placeholder-shown) + kbd {
+  display: none;
+}
+
+.find-results {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.2);
+  max-height: min(60vh, 420px);
+  overflow-y: auto;
+}
+
+.find-results[hidden] {
+  display: none;
+}
+
+.find-results [role='option'] {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr);
+  column-gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.find-results [role='option'] .sw {
+  grid-row: span 2;
+}
+
+.find-results [role='option']:hover {
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+}
+
+.find-results [aria-selected='true'],
+.find-results [aria-selected='true']:hover {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.find-title {
+  font-size: 15px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.find-meta {
+  grid-column: 2;
+  font: 12px/1.4 var(--mono);
+  color: var(--muted);
+}
+
+.find-note {
+  padding: 8px 10px;
+  font: 12px/1.4 var(--mono);
+  color: var(--muted);
+}
+
+.sw.course-sw {
+  background: transparent;
+  border: 1.5px solid var(--fg);
+  border-radius: 50%;
+}
+
+.map-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+
+.zoom {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.zoom button,
+.filter-toggle,
+.lane-toggle {
+  min-height: 34px;
+  padding: 4px 12px;
+  font: 600 14px var(--display);
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.zoom button {
+  min-width: 34px;
+  padding-inline: 10px;
+}
+
+.zoom .zoom-level {
+  min-width: 60px;
+  font: 500 12px var(--mono);
+}
+
+.zoom button:disabled {
+  color: var(--dim);
+  cursor: default;
+}
+
+.filters {
+  display: grid;
+  gap: 10px;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-toggle span {
+  color: var(--accent);
+}
+
+.filter-toggle::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  margin-left: 4px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+}
+
+.filter-toggle[aria-expanded='true'] {
+  border-color: var(--fg);
+}
+
+.filter-toggle[aria-expanded='true']::after {
+  transform: translateY(2px) rotate(-135deg);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.legend[hidden] {
+  display: none;
+}
+
+.lane-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 500;
+}
+
+.lane-toggle .count {
+  font: 11px var(--mono);
+  color: var(--muted);
+}
+
+.lane-toggle[aria-pressed='true'] {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
+}
+
+.lane-toggle[aria-pressed='true'] .count {
+  color: inherit;
+  opacity: 0.75;
+}
+
+.hint .map-status {
+  color: var(--muted);
+}
+
+.hint .key {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.hint .key .dot + .dot,
+.hint .key .dot.hollow {
+  margin-left: 6px;
+}
+
+@media (pointer: coarse) {
+  .find-field kbd {
+    display: none;
+  }
+}
+
+.lane-tags.small .lane-label {
+  font-size: 9px;
+  margin-left: 6px;
+  padding: 0 4px;
 }

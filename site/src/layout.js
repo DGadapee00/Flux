@@ -118,3 +118,45 @@ export function neighbourhood(id, steps, requiresOf, leadsOf) {
 export function subMap(concepts, ids) {
   return concepts.filter((c) => ids.has(c.id)).map((c) => ({ ...c, requires: c.requires.filter((r) => ids.has(r)) }));
 }
+
+/**
+ * The box an arrow key moves to: the nearest one on that side of `from`, where being out of line
+ * costs three times as much as being far along. Right and left cross columns; up and down stay
+ * close to the column. Null when nothing lies that way.
+ * @param {Record<string, { x: number, y: number }>} pos
+ * @param {string} from
+ * @param {'left'|'right'|'up'|'down'} dir
+ */
+export function nearestInDirection(pos, from, dir) {
+  const a = pos[from];
+  if (!a) return null;
+  let best = null;
+  let bestScore = Infinity;
+  for (const [id, p] of Object.entries(pos)) {
+    if (id === from) continue;
+    const dx = p.x - a.x;
+    const dy = p.y - a.y;
+    const [along, across] = dir === 'right' ? [dx, dy] : dir === 'left' ? [-dx, dy] : dir === 'down' ? [dy, dx] : [-dy, dx];
+    if (along <= 0) continue;
+    const score = along + 3 * Math.abs(across);
+    if (score < bestScore || (score === bestScore && id < best)) {
+      best = id;
+      bestScore = score;
+    }
+  }
+  return best;
+}
+
+/**
+ * Keep only the concepts in the chosen subjects. The chosen concept always stays, so the reading
+ * panel and the map never disagree. No subjects chosen keeps everything.
+ * @param {Iterable<string>} ids
+ * @param {(id: string) => string} subjectOf
+ * @param {Set<string>} subjects
+ * @param {string} keep
+ */
+export function inSubjects(ids, subjectOf, subjects, keep) {
+  const out = new Set();
+  for (const id of ids) if (!subjects.size || subjects.has(subjectOf(id)) || id === keep) out.add(id);
+  return out;
+}
