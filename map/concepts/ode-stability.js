@@ -1,0 +1,28 @@
+export default {
+  id: 'ode-stability',
+  title: 'Stability and stiffness of ODE solvers',
+  label: ['Solver stability', 'and stiffness'],
+  subject: 'numerics',
+  courses: ['egn3203'],
+  eq: String.raw`y' = \lambda y: \quad y_{n+1} = (1 + h\lambda)\,y_n\ \text{(explicit Euler)}, \qquad y_{n+1} = \frac{y_n}{1 - h\lambda}\ \text{(implicit Euler)}, \qquad |1 + h\lambda| \le 1`,
+  idea: String.raw`Apply a solver to \(y' = \lambda y\) and each step multiplies the answer by a factor that depends on \(h\lambda\). If that factor's size exceeds one, a decaying solution grows in the numbers. For a system, \(\lambda\) runs over the eigenvalues of the matrix, so the fastest mode sets the step limit. A stiff system has modes decaying at very different rates: the fast one dies out at once but still caps an explicit method's step. Implicit methods solve an equation at each step and stay stable for any step on a decaying mode, so they suit stiff problems.`,
+  requires: ['runge-kutta', 'eigenvalues'],
+  sources: [
+    {
+      title: 'MIT 2.086, calendar: Ordinary differential equations and MATLAB eig',
+      url: 'https://ocw.mit.edu/courses/2-086-numerical-computation-for-mechanical-engineers-spring-2013/pages/calendar/',
+      kind: 'Course outline',
+      level: 'Course level',
+      why: 'The course puts eigenvalues inside its ODE unit, for stability.',
+    },
+    {
+      title: 'Wikipedia, Stiff equation',
+      url: 'https://en.wikipedia.org/wiki/Stiff_equation',
+      kind: 'Reference',
+      level: 'Deeper',
+      why: 'Stiffness, A-stability and the classic examples.',
+    },
+  ],
+  labs: [],
+  candidate: 'Integrate a two-mode system with rates 1 and 1000 by explicit and implicit Euler. It corrects the idea that the step only needs to resolve the motion you can see: the fast mode has died out within 10 milliseconds, yet any explicit step over 0.002 still blows up.',
+};

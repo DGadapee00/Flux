@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fluid mechanics</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">PHY 2048 · Physics I · Unit 10 · OpenStax University Physics Vol. 1, Ch 14, rewritten</div>
+  <h1>Fluid mechanics</h1>
+  <p class="lede">A fluid is a substance that cannot hold its shape. At rest, the pressure depends on the depth and on nothing else about the container. In motion, a narrower passage is faster, and that speed is paid for by a drop in pressure. Viscosity returns only at the end, and only for a slow, smooth flow.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+    <span><i style="background:transparent;outline:1px dashed var(--border-hover)"></i>What the model leaves out</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Still fluid</h3>
+    <a href="#s1"><span>1</span>Density and pressure</a>
+    <a href="#s2"><span>2</span>Gauge and absolute pressure</a>
+    <a href="#s3"><span>3</span>Pascal's principle</a>
+    <a href="#s4"><span>4</span>Buoyancy</a>
+    <h3>Part II · Moving fluid</h3>
+    <a href="#s5"><span>5</span>Continuity and Bernoulli</a>
+    <a href="#s6"><span>6</span>Viscosity and turbulence</a>
+    <h3>Reference</h3>
+    <a href="#s7"><span>7</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Still fluid</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Density and pressure</h2>
+<p>Density is mass per volume. A uniform sample has</p>
+\[
+\rho = \frac{m}{V}.
+\]
+<p>Water at ordinary temperature sits near \(10^{3}\ \mathrm{kg/m^3}\). Pressure is force per area, perpendicular to the surface it acts on:</p>
+\[
+p = \frac{F}{A}.
+\]
+<p>The unit is the pascal, \(1\ \mathrm{Pa} = 1\ \mathrm{N/m^2}\). A kilopascal is a thousand pascals. The number \(392\) is not the same statement as \(3.92 \times 10^{5}\).</p>
+<p>In a still fluid the pressure at one depth is the same in every direction. A sideways force would start the fluid moving. The increase with depth is the weight of the fluid above, divided by the area.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Take a vertical column of fluid. The height is \(h\), the cross section is \(A\), and the density is \(\rho\). The mass is \(\rho A h\). The weight is \(\rho A h g\). That weight is supported by the extra force on the bottom, so</p>
+\[
+p = \rho g h.
+\]
+<p>This \(p\) is the gauge pressure, measured from the free surface. The area cancelled. A wide lake and a narrow tube, filled to the same depth, have the same pressure at the bottom.</p>
+<p>On a vertical wall the pressure is not one number. At a depth \(y\) below the surface it is \(\rho g y\). It is zero at the surface and \(\rho g H\) at the bottom. The growth is linear, so the average is the value at half the depth:</p>
+\[
+p_{\mathrm{avg}} = \rho g \frac{H}{2}.
+\]
+<p>The force on a wall of width \(w\) is that average times the wetted area \(wH\):</p>
+\[
+F = \rho g \frac{H}{2} \cdot w H = \frac{1}{2}\rho g w H^{2}.
+\]
+<p>The same force comes from adding thin horizontal slices. Each slice at depth \(y\) has force \(\rho g y \cdot w\, dy\). The integral of \(y\) from \(0\) to \(H\) is \(H^{2}/2\). Doubling the depth multiplies the force by four, because both the pressure and the area grow. Doubling the width multiplies the force by two and leaves the pressure alone. Doubling the area of the lake, at the same depth against the dam, changes neither.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Pressure follows depth. The shape of the container is not in \(\rho g h\). The force on a wall uses the wall’s own area, and the average pressure, not the pressure at the bottom.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the dam</span>
+<p>The dam is \(500\ \mathrm{m}\) wide and holds water \(80.0\ \mathrm{m}\) deep. Take \(\rho = 10^{3}\ \mathrm{kg/m^3}\) and \(g = 9.81\ \mathrm{m/s^2}\). Half the depth is \(40.0\ \mathrm{m}\).</p>
+\[
+p_{\mathrm{avg}} = (10^{3})(9.81)(40.0) = 3.924 \times 10^{5}\ \mathrm{Pa}.
+\]
+<p>The wetted area is \(80.0 \times 500 = 4.00 \times 10^{4}\ \mathrm{m^2}\). The force is</p>
+\[
+F = (3.924 \times 10^{5})(4.00 \times 10^{4}) = 1.5696 \times 10^{10}\ \mathrm{N}.
+\]
+<p>The readout rounds that force to \(1.570 \times 10^{10}\ \mathrm{N}\). The book uses \(g = 9.80\ \mathrm{m/s^2}\) and prints \(3.92 \times 10^{5}\ \mathrm{Pa}\) and \(1.57 \times 10^{10}\ \mathrm{N}\). Both printed values grade. The bottom pressure is twice the average, \(7.848 \times 10^{5}\ \mathrm{Pa}\). Using that on the whole face would double the force. The lab draws the dam and the two pistons of the next section. This example is the dam: width \(500\ \mathrm{m}\), depth \(80.0\ \mathrm{m}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the bottom pressure as the average. The average is half of that. Leaving \(g\) out of \(\rho g h\). Reporting the pressure as if it were the force. The force still has to be multiplied by the area of the face. Changing the lake’s area and expecting the dam to feel it. The dam feels its own width and the depth.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The wall was taken as vertical, and the water as still and of one density. A real dam leans, the water moves in a wind, and silt changes the density near the bottom. Atmospheric pressure pushes on the downstream face as well. The net force from the water alone is the gauge result above. The concrete and the anchors are a structures problem, not this one.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Gauge and absolute pressure</h2>
+<p>A tyre gauge reads zero in the open air. It reports the extra pressure, not the whole pressure. Absolute pressure adds the atmosphere back:</p>
+\[
+p_{\mathrm{abs}} = p_{0} + \rho g h.
+\]
+<p>Here \(p_{0}\) is the pressure on the free surface. In a room that is about \(1.01 \times 10^{5}\ \mathrm{Pa}\). Ten metres of water, with \(g = 9.81\ \mathrm{m/s^2}\), add</p>
+\[
+\rho g h = (10^{3})(9.81)(10) = 9.810 \times 10^{4}\ \mathrm{Pa}
+\]
+<p>of gauge pressure. The absolute pressure at that depth is \(1.991 \times 10^{5}\ \mathrm{Pa}\) when \(p_{0} = 1.01 \times 10^{5}\ \mathrm{Pa}\).</p>
+<p>A barometer is a closed column with a vacuum, or nearly a vacuum, above the liquid. The atmosphere holds the column up. Mercury is \(13.6\) times as dense as water, so the column is about \(76\ \mathrm{cm}\) instead of about \(10\ \mathrm{m}\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>An open U-tube has two free surfaces, both at atmospheric pressure. Pour a second liquid into one arm. Call the densities \(\rho_{1}\) and \(\rho_{2}\), and measure heights upward from the interface. At the interface the pressure from the left is \(p_{0} + \rho_{1} g h_{1}\). From the right it is \(p_{0} + \rho_{2} g h_{2}\). The fluid is still, so the two pressures match. The atmosphere cancels, and so does \(g\):</p>
+\[
+\rho_{1} h_{1} = \rho_{2} h_{2}.
+\]
+<p>The heavier liquid stands lower. The difference in the free surfaces is \(h_{2} - h_{1}\). The area of the tube never enters. A wider arm does not change the heights.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a mercury column</span>
+<p>Take mercury at \(1.36 \times 10^{4}\ \mathrm{kg/m^3}\) and a column \(0.760\ \mathrm{m}\) tall. The gauge pressure at the bottom is</p>
+\[
+p = (1.36 \times 10^{4})(9.81)(0.760) = 1.014 \times 10^{5}\ \mathrm{Pa}.
+\]
+<p>The section says the column is approximately \(76\ \mathrm{cm}\) and does not print the pascal. The area of the tube is not in the result. The lab shows this as the pressure at the bottom of a column of that density and depth. The average on a wall of the same depth would be half of it. This example wants the bottom.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two liquids</span>
+<p>Water, \(\rho_{1} = 10^{3}\ \mathrm{kg/m^3}\), fills one arm. A liquid of density \(\rho_{2} = 800\ \mathrm{kg/m^3}\) stands \(0.200\ \mathrm{m}\) above the interface. The heavier height is</p>
+\[
+h_{1} = \frac{800}{1000}(0.200) = 0.160\ \mathrm{m}.
+\]
+<p>The lighter side stands higher by</p>
+\[
+h_{2} - h_{1} = 0.040\ \mathrm{m}.
+\]
+<p>The section’s example is the balance \(\rho_{1} h_{1} = \rho_{2} h_{2}\), written with symbols. These two densities are ours. The lab’s U-tube uses them. The products \(\rho h\) match, so the pressures at the interface match.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding the atmosphere to a gauge reading that the question did not ask for. Leaving \(g\) out of \(\rho g h\). Swapping the densities in the U-tube, so the heavier liquid stands taller. Adding the two heights instead of subtracting them. Letting the width of the tube into a pressure that does not depend on it.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Mercury has a small vapor pressure, so the space above a real barometer is not a perfect vacuum. A narrow tube also has a capillary rise, and density changes with temperature. The \(76\ \mathrm{cm}\) figure is the standard atmosphere expressed as a mercury column, not a laboratory reading on one afternoon. The U-tube model assumes the two liquids do not mix.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Pascal's principle</h2>
+<p>A pressure applied to a confined fluid is transmitted, undiminished, to every part of the fluid and to the walls. In a hydraulic jack the pressure is the same at the small piston and at the large one:</p>
+\[
+\frac{F_{1}}{A_{1}} = \frac{F_{2}}{A_{2}}.
+\]
+<p>Area scales with the square of the diameter, so</p>
+\[
+\frac{F_{2}}{F_{1}} = \left(\frac{d_{2}}{d_{1}}\right)^{2}.
+\]
+<p>The larger piston carries the larger force. The fluid is treated as incompressible, so the volume pushed in equals the volume pushed out:</p>
+\[
+A_{1} x_{1} = A_{2} x_{2}.
+\]
+<p>The larger piston moves less. The work in equals the work out, \(F_{1} x_{1} = F_{2} x_{2}\), because each side is force times the distance its own piston moves, and the area ratio has cancelled.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Start from one pressure, \(p = F_{1}/A_{1}\). The same \(p\) acts on \(A_{2}\), so \(F_{2} = p A_{2} = F_{1} A_{2}/A_{1}\). For circles, \(A = \pi d^{2}/4\), and the \(\pi/4\) cancels in the ratio. A diameter ratio of \(5\) is a force ratio of \(25\). It is not a force ratio of \(5\).</p>
+<p>The travel goes the other way. \(x_{2} = x_{1} (d_{1}/d_{2})^{2}\). A gas would compress, the volume in would not equal the volume out, and the works would not match. Brake fluid is chosen because it barely compresses.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the brake</span>
+<p>The pedal is pushed with \(100\ \mathrm{N}\). A lever multiplies that by \(5\), so the master piston feels \(500\ \mathrm{N}\). The master diameter is \(0.500\ \mathrm{cm}\). Each wheel piston has diameter \(2.50\ \mathrm{cm}\).</p>
+\[
+F_{2} = 500 \left(\frac{2.50}{0.500}\right)^{2} = 500 \times 25 = 1.25 \times 10^{4}\ \mathrm{N}.
+\]
+<p>That is the force at one wheel. Four wheels each get it, because each sees the same pressure. The book prints \(1.25 \times 10^{4}\ \mathrm{N}\). Let the master piston move \(2.00\ \mathrm{cm}\), a travel we chose. The section says the wheel moves less and does not print a distance.</p>
+\[
+x_{2} = 0.0200 \left(\frac{0.500}{2.50}\right)^{2} = 8.00 \times 10^{-4}\ \mathrm{m}.
+\]
+<p>The work either way is \(500 \times 0.0200 = 10.0\ \mathrm{J}\). The pressure in the line is the master force divided by the master area, \(2.546 \times 10^{7}\ \mathrm{Pa}\). The lab’s book scenario is this brake, including the lever. The \(100\ \mathrm{N}\) is on the pedal. The \(500\ \mathrm{N}\) is already on the fluid.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the diameter ratio once, without the square. Inverting the pistons, so the small one is given the large force. Giving both pistons the same travel. The volume is fixed, so the larger piston moves less, not more. Starting from the \(100\ \mathrm{N}\) on the pedal and forgetting the lever, or starting from \(500\ \mathrm{N}\) and multiplying by \(5\) again.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Real lines contain a little air, and air compresses, so the pedal can move without the pads moving. Seals have friction. A power-brake pump adds pressure the pedal never produced. The four wheel pistons are drawn as equal. A car can size them differently on purpose. The lever is taken as a pure factor of \(5\), with no friction at the pivot.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Buoyancy</h2>
+<p>A body in a fluid feels an upward force equal to the weight of the fluid it displaces. That is Archimedes’ principle:</p>
+\[
+F_{B} = \rho_{\mathrm{f}} V_{\mathrm{sub}} g.
+\]
+<p>The displaced volume is the part of the body that is under the surface, not the whole body, unless the body is fully under. A floating body sinks until this force equals its weight. The submerged fraction is then the ratio of densities:</p>
+\[
+\frac{V_{\mathrm{sub}}}{V} = \frac{\rho}{\rho_{\mathrm{f}}}.
+\]
+<p>The fraction cannot exceed \(1\). If the body is denser than the fluid, it sinks, \(V_{\mathrm{sub}} = V\), and the buoyant force is less than the weight. The apparent weight is what is left:</p>
+\[
+F_{\mathrm{app}} = mg - F_{B}.
+\]
+<div class="box why"><span class="tag">Derivation</span>
+<p>Consider a vertical cylinder of cross section \(A\) and height \(H\). Pressure on the side walls pushes inward, and the pushes cancel in pairs. The bottom is deeper than the top, so the upward force on the bottom is larger than the downward force on the top.</p>
+<p>If the cylinder floats, the top is in the air and the gauge pressure there is zero. The bottom sits at the draft \(d\). The net force is</p>
+\[
+F_{B} = (\rho_{\mathrm{f}} g d)\, A = \rho_{\mathrm{f}} g (A d).
+\]
+<p>\(Ad\) is the displaced volume. If the cylinder is fully under, the top is also under, at a depth \(d - H\). The difference of the two pressures is \(\rho_{\mathrm{f}} g H\), and the net force is \(\rho_{\mathrm{f}} g (A H)\), the weight of a volume equal to the whole cylinder. The result does not depend on the cylinder. Any shape can be built from thin vertical tubes, and each tube contributes the weight of the fluid it displaces.</p>
+<p>Set \(F_{B} = mg\) for floating. Then \(\rho_{\mathrm{f}} (f V) g = (\rho V) g\), and \(f = \rho / \rho_{\mathrm{f}}\). The mass cancelled. Two bodies of the same density float at the same waterline, whatever their mass.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The buoyant force is the weight of the displaced fluid. It is not the weight of the body. The waterline of a floating body is a ratio of densities. Apparent weight is the true weight minus the buoyant force.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a floating person</span>
+<p>A person of mass \(60.0\ \mathrm{kg}\) floats in fresh water, \(\rho_{\mathrm{f}} = 10^{3}\ \mathrm{kg/m^3}\), with \(97.0\%\) of her volume under the surface. The fraction is \(0.970\), not \(97\). Her average density is</p>
+\[
+\rho = (0.970)(10^{3}) = 970\ \mathrm{kg/m^3}.
+\]
+<p>The book prints \(970\ \mathrm{kg/m^3}\). Her volume is</p>
+\[
+V = \frac{60.0}{970} = 0.06186\ \mathrm{m^3}.
+\]
+<p>The book does not print the volume. Her weight is \(60.0 \times 9.81 = 588.6\ \mathrm{N}\). While she floats, the buoyant force equals that weight. Specific gravity is this density divided by the density of water, so it is \(0.970\), the same number as the submerged fraction. It is not \(970\). The lab’s floating-woman scenario uses these numbers. The block there is a stand-in for the person. The fraction is what the picture shows.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a sunk block</span>
+<p>A block of mass \(2.70\ \mathrm{kg}\) and density \(2700\ \mathrm{kg/m^3}\) is held fully under water. The section describes weighing an object under a fluid and does not print this block. The volume is</p>
+\[
+V = \frac{2.70}{2700} = 1.00 \times 10^{-3}\ \mathrm{m^3}.
+\]
+<p>The true weight, the buoyant force, and the apparent weight are</p>
+\[
+mg = 26.49\ \mathrm{N}, \qquad F_{B} = (10^{3})(1.00 \times 10^{-3})(9.81) = 9.810\ \mathrm{N},
+\]
+\[
+F_{\mathrm{app}} = 26.49 - 9.810 = 16.68\ \mathrm{N}.
+\]
+<p>The hand, or the scale, supplies the apparent weight. The fluid supplies the rest. Using the block’s weight as the buoyant force would erase that difference. The lab’s sinking scenario is this block.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the body’s weight as the buoyant force. Using the body’s density in \(F_{B}\) instead of the fluid’s. Treating \(0.97\) as \(97\) and multiplying by \(100\) again. Multiplying a density by \(g\) and calling the result a density. Forgetting to subtract, so the apparent weight comes out equal to the true weight. Dividing the mass by the fluid density when the question asked for the person’s volume.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A person is not a cylinder, and surface tension holds a needle that this force law would sink. The displaced volume is still the whole of the rule. What the model does not give is whether the floating body stays upright. A boat’s stability depends on where the center of buoyancy sits relative to the center of mass. That is a later question. The lab checks the force by the pressure difference on a cylinder, which matches Archimedes for that shape.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Moving fluid</h2>
+</div>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Continuity and Bernoulli</h2>
+<p>Where a pipe narrows, an incompressible fluid speeds up. The volume that enters in a time \(\Delta t\) has to leave in that same time. If the density does not change,</p>
+\[
+A_{1} v_{1} = A_{2} v_{2} = Q.
+\]
+<p>\(Q\) is the volume flow, in cubic metres per second. A litre per second is \(10^{-3}\ \mathrm{m^3/s}\). The speed is \(Q\) divided by the area, and the area of a circle is \(\pi (d/2)^{2}\), not \(\pi d^{2}\).</p>
+<p>Bernoulli’s equation is an energy statement for a steady flow with no friction and no pump between the two stations:</p>
+\[
+p + \frac{1}{2}\rho v^{2} + \rho g h = \mathrm{constant}.
+\]
+<p>A faster station, or a higher one, has a lower pressure. The nozzle of a hose is open to the air, so its pressure sits near atmospheric while the hose, moving slowly, is well above it.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Follow a parcel of volume \(\Delta V\) from station 1 to station 2. The pressure at the inlet does work \(p_{1} \Delta V\). At the outlet the parcel does work \(p_{2} \Delta V\). The net work is \((p_{1} - p_{2})\Delta V\). That work becomes kinetic energy and gravitational potential energy. Divide by \(\Delta V\):</p>
+\[
+p_{1} + \frac{1}{2}\rho v_{1}^{2} + \rho g h_{1} = p_{2} + \frac{1}{2}\rho v_{2}^{2} + \rho g h_{2}.
+\]
+<p>The \(\tfrac{1}{2}\) belongs to the kinetic term, as it does in \(\tfrac{1}{2}mv^{2}\). Dropping it doubles the pressure change that the speed accounts for.</p>
+<p>A tank open to the air, with a small hole a depth \(h\) below the surface, is the same equation with two simplifications. Both ends are at atmospheric pressure. The surface is so wide that its speed is nearly zero. Put the hole at height zero:</p>
+\[
+\rho g h = \frac{1}{2}\rho v^{2}, \qquad v = \sqrt{2gh}.
+\]
+<p>That is Torricelli’s result. It is the free-fall speed from the same height. The pressure cancelled because both ends see the atmosphere.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the nozzle</span>
+<p>Water flows at \(0.500\ \mathrm{L/s} = 5.00 \times 10^{-4}\ \mathrm{m^3/s}\). The hose diameter is \(1.80\ \mathrm{cm}\) and the nozzle diameter is \(0.500\ \mathrm{cm}\). The radii are \(0.900\ \mathrm{cm}\) and \(0.250\ \mathrm{cm}\).</p>
+\[
+v_{1} = \frac{5.00 \times 10^{-4}}{\pi (0.00900)^{2}} = 1.965\ \mathrm{m/s},
+\]
+\[
+v_{2} = \frac{5.00 \times 10^{-4}}{\pi (0.00250)^{2}} = 25.46\ \mathrm{m/s}.
+\]
+<p>The book uses \(\pi = 3.14\) and prints \(1.96\ \mathrm{m/s}\) and \(25.5\ \mathrm{m/s}\). Both print. The same section then takes those printed speeds, a nozzle pressure of \(1.01 \times 10^{5}\ \mathrm{Pa}\), and \(\rho = 10^{3}\ \mathrm{kg/m^3}\), and finds the hose pressure</p>
+\[
+p_{1} = 1.01 \times 10^{5} + \tfrac{1}{2}(10^{3})\big(25.5^{2} - 1.96^{2}\big) = 4.242 \times 10^{5}\ \mathrm{Pa}.
+\]
+<p>The book prints \(4.24 \times 10^{5}\ \mathrm{N/m^2}\). The lab runs the equation the other way. It starts from \(4.24 \times 10^{5}\ \mathrm{Pa}\) in the hose and the speeds from the areas, and the nozzle pressure comes out \(1.017 \times 10^{5}\ \mathrm{Pa}\), next to the atmosphere. The heights are equal, so \(\rho g h\) does not enter.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the fire hose</span>
+<p>A hose of diameter \(6.40\ \mathrm{cm}\) carries \(40.0\ \mathrm{L/s}\) at a gauge pressure of \(1.62 \times 10^{6}\ \mathrm{Pa}\). The nozzle has diameter \(3.00\ \mathrm{cm}\) and is \(10.0\ \mathrm{m}\) higher. Water density is \(10^{3}\ \mathrm{kg/m^3}\).</p>
+\[
+v_{1} = 12.43\ \mathrm{m/s}, \qquad v_{2} = 56.59\ \mathrm{m/s}.
+\]
+<p>The book rounds those to \(12.4\ \mathrm{m/s}\) and \(56.6\ \mathrm{m/s}\). The nozzle pressure, with \(g = 9.81\ \mathrm{m/s^2}\) and the unrounded speeds, is</p>
+\[
+p_{2} = 1.62 \times 10^{6} + \tfrac{1}{2}(10^{3})(v_{1}^{2} - v_{2}^{2}) - (10^{3})(9.81)(10.0) = -1923\ \mathrm{Pa}.
+\]
+<p>The book uses \(g = 9.80\ \mathrm{m/s^2}\) and the rounded speeds, and it prints \(-2.9\ \mathrm{kPa}\). The rounded nozzle speed moves the kinetic term by about a kilopascal, which is the whole of the difference. Next to atmospheric pressure, \(-1923\ \mathrm{Pa}\) is about \(2\%\). The section treats the nozzle as open to the air. The printed speeds still grade. The printed pressure does not, so the worked case uses \(-1923\ \mathrm{Pa}\). The lab keeps the unrounded value and says so.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a hole in a tank</span>
+<p>A large tank is open. A small hole is \(5.00\ \mathrm{m}\) below the surface. The exit speed is</p>
+\[
+v = \sqrt{2(9.81)(5.00)} = 9.905\ \mathrm{m/s}.
+\]
+<p>With \(g = 9.80\ \mathrm{m/s^2}\) the same hole gives \(9.90\ \mathrm{m/s}\). The section states \(\sqrt{2gh}\) and does not print this tank. \(9.90\ \mathrm{m/s}\) grades. The lab’s tank scenario is this hole. The surface is drawn wide so its speed stays negligible, which is the step that dropped \(v_{1}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the diameter as a radius, which makes the area four times too big and the speed four times too small. Leaving a flow in litres per second when the area is in square metres. Dropping the \(\tfrac{1}{2}\) on \(\rho v^{2}\). Swapping the two speeds, so the hose comes out at the lower pressure. Forgetting the rise, or forgetting the kinetic term, on the fire hose. Writing \(2gh\) without the square root. Applying Bernoulli across a pump. A pump adds energy, and the two stations no longer share one sum.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The derivation assumed no friction and a density that does not change. A real hose has bends, and the wall drags on the water. The jet also breaks into drops, so the pressure in the free stream is the pressure of the air, not a number the nozzle wall can hold below zero for long. The negative gauge in the example is the ideal result. It says the hose pressure was a little more than the speed and the rise required. It is not a vacuum pump. The tank model ignores the speed of the falling surface and the vena contracta, the narrowing of the jet outside the hole.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Viscosity and turbulence</h2>
+<p>Bernoulli left out friction. A slow flow in a long pipe does not. Viscosity \(\eta\) is the resistance to sliding one layer of fluid over another. The unit is the pascal-second. For air at room conditions the section uses \(0.0181\ \mathrm{mPa \cdot s}\), which is \(1.81 \times 10^{-5}\ \mathrm{Pa \cdot s}\).</p>
+<p>In a straight round pipe, with the flow smooth and steady, the volume flow is Poiseuille’s law:</p>
+\[
+Q = \frac{\Delta p \, \pi r^{4}}{8 \eta L}.
+\]
+<p>The radius is to the fourth power. Halving the radius cuts the flow to \(1/16\), not to \(1/2\) and not to \(1/4\). The length is in the denominator once. Doubling the length halves the flow.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The speed is greatest on the centerline and zero at the wall, where the fluid sticks. A cylindrical shell of fluid, radius \(r\) and thickness \(dr\), is pulled along by the pressure difference and held back by the shear on its surface. In a steady flow those two forces balance. The shear stress is \(\eta\) times the velocity gradient. The balance integrates to a parabola:</p>
+\[
+v(r) = \frac{\Delta p}{4\eta L}\big(R^{2} - r^{2}\big).
+\]
+<p>The volume flow is that speed times a ring of area \(2\pi r\, dr\), summed from the center to the wall. The integral of \((R^{2} - r^{2}) r\) produces \(R^{4}/8\), which is where the \(8\) and the fourth power come from. Leave the \(8\) out and the flow is eight times too large. Use \(r^{2}\) and you have counted the area but not the slower fluid near the wall.</p>
+<p>The Reynolds number compares the inertial scale \(\rho v\) with the viscous scale \(\eta\) across a length. The section uses the diameter, \(D = 2r\):</p>
+\[
+N_{R} = \frac{\rho v D}{\eta} = \frac{2\rho v r}{\eta}.
+\]
+<p>The section calls the flow laminar below \(2000\) and turbulent above it. The number \(2000\) is the line they draw. It is not itself the Reynolds number of a duct.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an air duct</span>
+<p>An air-conditioning duct has radius \(0.090\ \mathrm{m}\) and length \(20\ \mathrm{m}\). The pressure difference is \(0.054\ \mathrm{Pa}\). The viscosity is \(1.81 \times 10^{-5}\ \mathrm{Pa \cdot s}\). There is no lab for this section. The arithmetic is the check.</p>
+\[
+Q = \frac{(0.054)\, \pi\, (0.090)^{4}}{8(1.81 \times 10^{-5})(20)} = 3.843 \times 10^{-3}\ \mathrm{m^3/s}.
+\]
+<p>The book uses \(\pi = 3.14\) and prints \(3.84 \times 10^{-3}\ \mathrm{m^3/s}\). Half the radius, \(0.045\ \mathrm{m}\), gives \(2.402 \times 10^{-4}\ \mathrm{m^3/s}\), which is \(6.25\%\) of the original, one sixteenth. The book prints \(2.40 \times 10^{-4}\ \mathrm{m^3/s}\). A room \(12 \times 6 \times 3\ \mathrm{m}\) has volume \(216\ \mathrm{m^3}\). At this flow the air is replaced in \(5.62 \times 10^{4}\ \mathrm{s}\), about \(15.6\) hours. The book prints \(5.63 \times 10^{4}\ \mathrm{s}\).</p>
+<p>The mean speed at the printed flow \(3.84 \times 10^{-3}\ \mathrm{m^3/s}\) is</p>
+\[
+v = \frac{3.84 \times 10^{-3}}{\pi (0.090)^{2}} = 0.1509\ \mathrm{m/s}.
+\]
+<p>The book prints \(0.15\ \mathrm{m/s}\). With \(\rho = 1.23\ \mathrm{kg/m^3}\),</p>
+\[
+N_{R} = \frac{2(1.23)(0.1509)(0.090)}{1.81 \times 10^{-5}} = 1846.
+\]
+<p>The book prints \(1835\), from \(\pi = 3.14\). Both sit under \(2000\), so the section calls the flow laminar, which is what Poiseuille’s law required. The speed that would put \(N_{R}\) on the line of \(2000\) is \(0.164\ \mathrm{m/s}\). The book prints \(0.16\ \mathrm{m/s}\). That printed limit does not grade, so it is not a case. The flow and the Reynolds number are.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using \(r^{2}\) or \(r^{3}\) in Poiseuille’s law. The power is four. Leaving out the \(8\). Forgetting the \(2\) in the Reynolds number, which is the diameter written as \(2r\). Using the diameter as the radius of the area when you find the mean speed. Answering \(2000\) when the question asked for \(N_{R}\). The \(2000\) is the comparison, after you have computed the number.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The parabola assumes a long pipe, a round cross section, and a flow that has already forgotten the entrance. A duct of rectangular section, a bend, or a fan between the two pressures is outside the law. The line at \(2000\) is a convention for this section, not a law of nature. Real transitions depend on how smooth the wall is and on how hard the flow is disturbed. Turbulence is not solved here. There is no lab for this section. The two examples are the coverage, as the spine sets it.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Formula sheet</h2>
+\[
+\rho = \frac{m}{V}, \qquad p = \frac{F}{A}, \qquad p = \rho g h
+\]
+\[
+F = p_{\mathrm{avg}} A = \frac{1}{2}\rho g w H^{2}, \qquad p_{\mathrm{abs}} = p_{0} + \rho g h
+\]
+\[
+\rho_{1} h_{1} = \rho_{2} h_{2}, \qquad \frac{F_{2}}{F_{1}} = \left(\frac{d_{2}}{d_{1}}\right)^{2}, \qquad A_{1} x_{1} = A_{2} x_{2}
+\]
+\[
+F_{B} = \rho_{\mathrm{f}} V_{\mathrm{sub}} g, \qquad \frac{V_{\mathrm{sub}}}{V} = \frac{\rho}{\rho_{\mathrm{f}}}, \qquad F_{\mathrm{app}} = mg - F_{B}
+\]
+\[
+A_{1} v_{1} = A_{2} v_{2}, \qquad p + \frac{1}{2}\rho v^{2} + \rho g h = \mathrm{constant}, \qquad v = \sqrt{2gh}
+\]
+\[
+Q = \frac{\Delta p \, \pi r^{4}}{8 \eta L}, \qquad N_{R} = \frac{2\rho v r}{\eta}
+\]
+<p>The course takes \(g = 9.81\ \mathrm{m/s^2}\). The book’s fluid examples often use \(9.80\ \mathrm{m/s^2}\). A printed answer that the difference explains still grades. The fire-hose pressure does not. That case uses \(-1923\ \mathrm{Pa}\).</p>
+</section>
+
+</main>
+</body>
+</html>

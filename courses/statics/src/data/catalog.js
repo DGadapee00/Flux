@@ -7,7 +7,7 @@ export const EXAMS = [
     title: 'Force vectors',
     chapters: '2',
     date: 'Ch 2',
-    labs: ['vectors'],
+    labs: ['vectors', 'bridle'],
     coming: [],
   },
   {
@@ -16,7 +16,7 @@ export const EXAMS = [
     title: 'Equilibrium & moments',
     chapters: '3–4',
     date: 'Ch 3–4',
-    labs: ['particle', 'moments'],
+    labs: ['particle', 'moments', 'shelf'],
     coming: [],
   },
   {
@@ -25,7 +25,7 @@ export const EXAMS = [
     title: 'Rigid bodies & trusses',
     chapters: '5–6',
     date: 'Ch 5–6',
-    labs: ['truss', 'frame'],
+    labs: ['reactions', 'truss', 'frame', 'gantry', 'jack'],
     coming: [],
   },
   {
@@ -34,12 +34,20 @@ export const EXAMS = [
     title: 'Internal loads, friction, centroids, MOI',
     chapters: '7–10',
     date: 'Ch 7–10',
-    labs: ['beam', 'friction', 'sections'],
+    labs: ['friction', 'beam', 'sections', 'pappus', 'bookcase'],
     coming: [],
   },
 ];
 
 export const LAB_META = {
+  pappus: { id: 'pappus', exam: 'u4', title: 'Pappus' },
+  reactions: { id: 'reactions', exam: 'u3', title: 'Reactions' },
+  bridle: { id: 'bridle', exam: 'u1', title: 'Lifting bridle', app: true },
+  shelf: { id: 'shelf', exam: 'u2', title: 'Wall shelf', app: true },
+  gantry: { id: 'gantry', exam: 'u3', title: 'Sign gantry', app: true },
+  jack: { id: 'jack', exam: 'u3', title: 'Scissor jack', app: true },
+  bookcase: { id: 'bookcase', exam: 'u4', title: 'Bookcase', app: true },
+
   vectors: { id: 'vectors', exam: 'u1', title: 'Vectors' },
   particle: { id: 'particle', exam: 'u2', title: 'Particle' },
   moments: { id: 'moments', exam: 'u2', title: 'Moments' },
@@ -75,3 +83,5 @@ export function examIndex(id) {
   const i = EXAMS.findIndex((e) => e.id === id);
   return i < 0 ? 0 : i;
 }
+
+export const examLabel = (id) => examById(id).title;

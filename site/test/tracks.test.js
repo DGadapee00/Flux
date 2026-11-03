@@ -19,6 +19,7 @@ const PLATFORM_HREF = {
   eml3100: 'eml3100/',
   egn3331: 'egn3331/',
   bench: 'bench/',
+  map2302: 'map2302/',
 };
 
 const PLATFORM = 'https://flux-study.pages.dev/';
@@ -58,8 +59,8 @@ test('six tracks in order, each with a built course unless it is still to come',
 
 test('the card opens the latest built course, and D5 is on the list', () => {
   assert.equal(latestBuilt(TRACKS[0]).id, 'phy2049');
-  assert.equal(latestBuilt(TRACKS[1]).id, 'mac2313');
-  assert.equal(latestBuilt(TRACKS[1]).term, 'Spring 2026');
+  assert.equal(latestBuilt(TRACKS[1]).id, 'map2302');
+  assert.equal(latestBuilt(TRACKS[1]).term, null);
   assert.equal(latestBuilt(TRACKS[2]).id, 'egn3331');
   assert.equal(latestBuilt(TRACKS[2]).code, 'EGN 3331');
   assert.equal(latestBuilt(TRACKS[3]).id, 'sta3032');
@@ -67,7 +68,7 @@ test('the card opens the latest built course, and D5 is on the list', () => {
   assert.equal(latestBuilt(TRACKS[5]).id, 'bench');
   assert.deepEqual(
     builtCourses().map((course) => course.id),
-    ['phy2048', 'phy2049', 'mac2311', 'mac2313', 'statics', 'egn3321', 'egn3331', 'sta3032', 'eml3100', 'bench'],
+    ['phy2048', 'phy2049', 'mac2311', 'mac2313', 'map2302', 'statics', 'egn3321', 'egn3331', 'sta3032', 'eml3100', 'bench'],
   );
 });
 
@@ -100,7 +101,7 @@ test('a course header gets its track, in hub order, with unbuilt siblings unlink
   );
   assert.deepEqual(
     trackSiblings('mac2312').map((course) => course.href),
-    ['../mac2311/', '../mac2313/', null],
+    ['../mac2311/', '../mac2313/', '../map2302/'],
   );
   assert.deepEqual(trackSiblings('sta3032').map((course) => course.code), ['STA 3032']);
   assert.deepEqual(trackSiblings('missing'), []);

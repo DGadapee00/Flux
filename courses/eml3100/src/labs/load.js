@@ -3,8 +3,10 @@ import { PREDICTIONS } from './predictions.js';
 
 const loaders = {
   phase: () => import('./phase.js'),
+  manometer: () => import('./manometer.js'),
   canner: () => import('./canner.js'),
   piston: () => import('./piston.js'),
+  balance: () => import('./balance.js'),
   kettle: () => import('./kettle.js'),
   nozzle: () => import('./nozzle.js'),
   devices: () => import('./devices.js'),
