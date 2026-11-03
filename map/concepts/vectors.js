@@ -3,7 +3,7 @@ export default {
   title: 'Vectors, dot and cross products',
   label: ['Vectors, dot', 'and cross'],
   subject: 'calculus',
-  courses: ['phy2049', 'mac2313'],
+  courses: ['phy2049', 'mac2313', 'phy2048'],
   eq: String.raw`\mathbf a\cdot\mathbf b = ab\cos\theta, \qquad |\mathbf a\times\mathbf b| = ab\sin\theta`,
   idea: String.raw`A vector has a size and a direction, and in components it is just three numbers. The dot product measures how much two vectors point the same way, so it is zero when they are perpendicular. The cross product gives a third vector perpendicular to both, with a length set by how far apart they point. Work and flux use the dot product; torque and the magnetic force use the cross product.`,
   requires: [],
@@ -26,5 +26,6 @@ export default {
   labs: [
     { course: 'phy2049', lab: 'vectors', notes: ['s1', 's2', 's3', 's4'], note: 'Components, the dot product and the cross product, drawn in 3D.' },
     { course: 'mac2313', lab: 'r3', note: 'Two vectors in space, their sum, and the parallelogram whose area is the cross product.' },
+    { course: 'phy2048', lab: 'vectors', notes: ['s4', 's5', 's6', 's1', 's2', 's3'], note: 'Vectors added by components, the dot product as a projection, the cross product as an area.' },
   ],
 };

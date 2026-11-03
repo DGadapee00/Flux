@@ -2,7 +2,7 @@ export default {
   id: 'curvilinear-motion',
   title: 'Curvilinear motion',
   subject: 'mechanics',
-  courses: ['egn3321'],
+  courses: ['egn3321', 'phy2048'],
   eq: String.raw`\mathbf a = \dot v\,\hat{\mathbf u}_t + \frac{v^2}{\rho}\,\hat{\mathbf u}_n, \qquad \mathbf a = (\ddot r - r\dot\theta^2)\,\hat{\mathbf u}_r + (r\ddot\theta + 2\dot r\dot\theta)\,\hat{\mathbf u}_\theta`,
   idea: String.raw`On a curved path, split the acceleration along and across the path. The tangential part changes the speed; the normal part, \(v^2/\rho\), turns the velocity toward the centre of curvature. For something swinging about a point, polar components are easier, and they carry the extra \(2\dot r\dot\theta\) term. A projectile is the simplest case: constant acceleration in \(x\) and \(y\) separately.`,
   requires: ['particle-kinematics', 'parametric-curves', 'polar-coordinates'],
@@ -25,5 +25,7 @@ export default {
   labs: [
     { course: 'egn3321', lab: 'path-nt', notes: ['s5', 's4'], note: String.raw`Tangential and normal components on a curved path, with \(\rho\) at each point.` },
     { course: 'egn3321', lab: 'polar', notes: ['s6'], note: 'Radial and transverse components for an arm swinging and extending.' },
+    { course: 'phy2048', lab: 'projectile', notes: ['s3', 's1', 's2', 's4', 's5'], note: 'Projectiles from level ground and from a height, with complementary angles compared.' },
+    { course: 'phy2048', lab: 'circular-motion', notes: ['s6', 's7'], note: String.raw`Steady motion on a circle still accelerates, toward the centre, at \(v^2/r\).` },
   ],
 };

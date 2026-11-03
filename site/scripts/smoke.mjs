@@ -88,11 +88,21 @@ async function navigate(page, url) {
  * @param {string} expression
  */
 async function evalJson(page, expression) {
-  const result = await page.send('Runtime.evaluate', {
-    expression,
-    returnByValue: true,
-    awaitPromise: true,
-  });
+  // A page that is still navigating can drop an evaluation; try again, a few times only.
+  let result;
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      result = await page.send('Runtime.evaluate', {
+        expression,
+        returnByValue: true,
+        awaitPromise: true,
+      });
+      break;
+    } catch (err) {
+      if (attempt >= 4 || !/navigated or closed|context/i.test(String(err.message))) throw err;
+      await delay(250);
+    }
+  }
   if (result.exceptionDetails) {
     throw new Error(result.exceptionDetails.text || 'page evaluation failed');
   }
