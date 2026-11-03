@@ -195,8 +195,10 @@ export function mountCourseFiles(parent, { courseId, store }) {
  * One file for every course on the hub. Each section is checked by its course id.
  * @param {HTMLElement} parent
  * @param {{ courseId: string, store: { exportJSON: () => object, importJSON: (blob: object) => void } }[]} parts
+ * @param {{ restore?: (blob: any, parts: any[]) => void }} [opts] `restore` replaces the importer, so a
+ *   hub can adapt an older file before the shared checks run. It throws to refuse the file.
  */
-export function mountHubBackup(parent, parts) {
+export function mountHubBackup(parent, parts, { restore = importBundle } = {}) {
   styleOnce();
   const root = document.createElement('div');
   root.className = 'flux-files';
@@ -228,7 +230,7 @@ export function mountHubBackup(parent, parts) {
     if (!file) return;
     try {
       const data = parseProgressText(await file.text());
-      importBundle(data, parts);
+      restore(data, parts);
       rememberNotice('Progress restored.');
       location.reload();
     } catch (err) {

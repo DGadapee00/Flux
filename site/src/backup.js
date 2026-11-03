@@ -1,4 +1,4 @@
-import { downloadJSON, exportBundle, importBundle, parseProgressText } from '@flux/core';
+import { importBundle, mountHubBackup } from '@flux/core';
 import { courseStore as calc1Store } from '@flux/mac2311/src/storage.js';
 import { courseStore as calc2Store } from '@flux/mac2312/src/storage.js';
 import { courseStore as macStore } from '@flux/mac2313/src/storage.js';
@@ -49,35 +49,5 @@ export function restoreHubBackup(blob, parts) {
 
 export function mountBackup(parent = document.querySelector('#backup')) {
   if (!parent) return null;
-  const parts = backupParts();
-  const root = document.createElement('div');
-  root.className = 'flux-files';
-  root.innerHTML = '<button type="button" data-export>Back up progress</button><button type="button" data-import>Restore</button><input type="file" accept="application/json,.json" hidden aria-label="Choose a progress backup"><span class="flux-files-msg" role="status"></span>';
-  parent.append(root);
-  const message = root.querySelector('[role="status"]');
-  const input = root.querySelector('input');
-  try {
-    if (sessionStorage.getItem('flux.hub.restore.notice')) {
-      message.textContent = 'Progress restored.';
-      sessionStorage.removeItem('flux.hub.restore.notice');
-    }
-  } catch { /* session storage may be blocked */ }
-  root.querySelector('[data-export]').addEventListener('click', () => {
-    downloadJSON('flux-progress.json', exportBundle(parts));
-    message.textContent = 'Backup downloaded.';
-  });
-  root.querySelector('[data-import]').addEventListener('click', () => input.click());
-  input.addEventListener('change', async () => {
-    const file = input.files?.[0];
-    input.value = '';
-    if (!file) return;
-    try {
-      restoreHubBackup(parseProgressText(await file.text()), parts);
-      try { sessionStorage.setItem('flux.hub.restore.notice', '1'); } catch { /* optional notice */ }
-      location.reload();
-    } catch (error) {
-      message.textContent = error instanceof Error ? error.message : 'Could not restore progress.';
-    }
-  });
-  return root;
+  return mountHubBackup(parent, backupParts(), { restore: restoreHubBackup });
 }

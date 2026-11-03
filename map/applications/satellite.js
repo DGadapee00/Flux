@@ -1,4 +1,9 @@
-/** Applications reuse the map's concepts and labs. These are project recipes, not new labs. */
+/**
+ * An application: a project built from the map's concepts and labs. These are recipes, not new labs.
+ * Components are listed in build order, each after everything it requires, and numbered that way.
+ * `requires` lists every subsystem whose numbers a recipe uses, so editing one asks its dependents
+ * to be checked again. `npm run map-gaps` counts a recipe's concepts when it ranks gaps.
+ */
 export const SATELLITE = {
   id: 'satellite',
   title: 'Build a satellite',
@@ -39,14 +44,24 @@ export const SATELLITE = {
       gap: 'Launch vibration, fatigue and attachment qualification need dedicated work beyond these foundation labs.',
     },
     {
-      id: 'thermal', title: 'Thermal control', part: 'Surfaces + heat paths', requires: ['power'],
+      id: 'payload', title: 'Sensor payload', part: 'The measurement', requires: ['power'],
+      outcome: 'Turn a physical signal into a reading with stated uncertainty.',
+      concepts: ['voltage-divider', 'measuring-circuits', 'confidence-intervals'],
+      labs: [{ concept: 'voltage-divider', course: 'bench', lab: 'divider' }, { concept: 'voltage-divider', course: 'bench', lab: 'nightlight' }],
+      demonstrate: 'Choose a sensor and its measurement range. Map the signal to a voltage or digital count, check loading and resolution, and record calibration assumptions, sample rate, power and data volume.',
+      deliverable: 'A sensor model, calibration estimate and data budget.',
+      interface: 'Send data volume to Communications and operating limits to Thermal. Keep the sample schedule within the power budget.',
+      gap: 'The Bench sensor labs teach the circuit. A complete orbital sensor and calibration model is still to be built.',
+    },
+    {
+      id: 'thermal', title: 'Thermal control', part: 'Surfaces + heat paths', requires: ['power', 'payload'],
       outcome: 'Keep the electronics within a chosen temperature range.',
       concepts: ['first-law-closed', 'thermal-resistance', 'thermal-radiation', 'lumped'],
-      labs: [],
+      labs: [{ concept: 'first-law-closed', course: 'eml3100', lab: 'balance' }, { concept: 'lumped', course: 'map2302', lab: 'coffee' }],
       demonstrate: 'Use the power budget as a heat input. Write a radiation balance for hot and cold cases, include the absorbed environment, and state the limits of a lumped-temperature model.',
       deliverable: 'Hot and cold temperature estimates with surface assumptions.',
       interface: 'Return temperature limits to Power and Payload. A bigger array also changes the exposed area.',
-      gap: 'A spacecraft radiation-balance lab is not built yet. Existing concept notes provide the starting equations.',
+      gap: 'The foundation labs cover energy balance and lumped cooling. A spacecraft radiation-balance lab is not built yet.',
     },
     {
       id: 'attitude', title: 'Attitude control', part: 'Pointing + rotation', requires: ['structure', 'power'],
@@ -59,28 +74,18 @@ export const SATELLITE = {
       gap: 'Reaction-wheel saturation, attitude sensing and a closed-loop pointing lab remain project gaps.',
     },
     {
-      id: 'communications', title: 'Communications', part: 'Radio + ground link', requires: ['orbit', 'power', 'attitude'],
+      id: 'communications', title: 'Communications', part: 'Radio + ground link', requires: ['orbit', 'power', 'attitude', 'payload'],
       outcome: 'Return sensor readings within the available energy and contact time.',
       concepts: ['em-waves', 'light-intensity', 'random-variables'],
       labs: [{ concept: 'em-waves', course: 'phy2049', lab: 'emwave' }],
       demonstrate: 'State range, frequency, antenna assumptions, data rate and receiver sensitivity. Build a link budget with a margin, then check whether contact time and transmitter energy can return the planned data.',
       deliverable: 'A link budget and a contact-by-contact data and energy estimate.',
-      interface: 'Take range from Orbit, pointing from Attitude control and power from Power. Tell Payload how much data can be returned.',
+      interface: 'Take range from Orbit, pointing from Attitude control, power from Power and data volume from Payload. Tell Payload how much data can be returned.',
       gap: 'The wave lab is a foundation. Antenna gain, receiver noise and a complete radio link need a dedicated lab.',
-    },
-    {
-      id: 'payload', title: 'Sensor payload', part: 'The measurement', requires: ['power'],
-      outcome: 'Turn a physical signal into a reading with stated uncertainty.',
-      concepts: ['voltage-divider', 'measuring-circuits', 'confidence-intervals'],
-      labs: [{ concept: 'voltage-divider', course: 'bench', lab: 'divider' }, { concept: 'voltage-divider', course: 'bench', lab: 'nightlight' }],
-      demonstrate: 'Choose a sensor and its measurement range. Map the signal to a voltage or digital count, check loading and resolution, and record calibration assumptions, sample rate, power and data volume.',
-      deliverable: 'A sensor model, calibration estimate and data budget.',
-      interface: 'Send data volume to Communications and operating limits to Thermal. Keep the sample schedule within the power budget.',
-      gap: 'The Bench sensor labs teach the circuit. A complete orbital sensor and calibration model is still to be built.',
     },
   ],
   integration: {
-    id: 'satellite', title: 'Assemble the satellite', requires: ['orbit', 'power', 'structure', 'thermal', 'attitude', 'communications', 'payload'],
+    id: 'satellite', title: 'Assemble the satellite', requires: ['orbit', 'power', 'structure', 'payload', 'thermal', 'attitude', 'communications'],
     outcome: 'Make the seven subsystem budgets agree on one mission.',
     demonstrate: 'Record one mission case. Reconcile mass, energy, temperature, pointing and data budgets. Change transmitter duty cycle, then trace the effect through Power, Thermal and the returned data. Document the margin that limits the mission.',
     deliverable: 'One shared mission report with linked subsystem evidence and a tradeoff study.',

@@ -817,7 +817,6 @@ a.course:hover {
 
 .backup .flux-files button {
   font-family: var(--display);
-  border-color: var(--line);
   color: var(--fg);
   background: var(--panel);
   border: 1px solid var(--line);
