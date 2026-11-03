@@ -1,7 +1,7 @@
 export default {
   id: 'euler-method',
   title: 'Euler’s method',
-  subject: 'diffeq',
+  subject: 'numerics',
   courses: ['map2302'],
   eq: String.raw`y_{n+1} = y_n + h\,f(t_n, y_n); \qquad y' = -ky \Rightarrow y_n = (1 - kh)^n y_0`,
   idea: String.raw`Walk along the slope field in short straight steps. Smaller steps follow the true solution more closely, with error proportional to the step. But a step too large for a fast-decaying equation makes the numbers oscillate and grow, even though the exact solution decays: \(|1 - kh|\) must stay below one.`,

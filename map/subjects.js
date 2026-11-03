@@ -8,7 +8,9 @@
  */
 export const SUBJECTS = [
   { id: 'calculus', label: 'Calculus', token: '--lane-calculus', dark: '#58c4dd', light: '#1a7590' },
+  { id: 'linalg', label: 'Linear algebra', token: '--lane-linalg', dark: '#de8cf0', light: '#9a35b0' },
   { id: 'diffeq', label: 'Differential equations', token: '--lane-diffeq', dark: '#5cd0b3', light: '#16775f' },
+  { id: 'numerics', label: 'Numerical methods', token: '--lane-numerics', dark: '#b0dc45', light: '#527000' },
   { id: 'mechanics', label: 'Mechanics', token: '--lane-mechanics', dark: '#ff9a52', light: '#a8500f' },
   { id: 'em', label: 'Electricity and magnetism', token: '--lane-em', dark: '#f4d345', light: '#8a6800' },
   { id: 'thermo', label: 'Thermodynamics', token: '--lane-thermo', dark: '#83c167', light: '#3f7d27' },
