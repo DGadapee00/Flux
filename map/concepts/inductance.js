@@ -3,7 +3,7 @@ export default {
   title: 'Inductance and transformers',
   label: ['Inductance and', 'transformers'],
   subject: 'em',
-  courses: ['phy2049'],
+  courses: ['phy2049', 'eel3111'],
   eq: String.raw`\mathcal E = -L\frac{dI}{dt}, \qquad \frac{V_s}{V_p} = \frac{N_s}{N_p}, \qquad U = \tfrac12 LI^2`,
   idea: String.raw`A changing current changes its own flux, so a coil fights changes in its current. That is self-inductance, and the energy it stores lives in the magnetic field. Two coils on one core share their flux, so each turn of either coil sees the same emf. The voltages then go as the turns, which is how a transformer steps voltage up for the grid and down for the home.`,
   requires: ['faraday'],

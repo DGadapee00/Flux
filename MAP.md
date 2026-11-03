@@ -2,10 +2,10 @@
 
 A snapshot from the data on 3 November 2026, after the thermal-fluids courses (EML 3015, EML 4140,
 EML 3101). A linear algebra thread now runs from vectors to eigenvalues and projection, and feeds
-differential equations and regression. For the
+differential equations and regression, and EEL 3111 Circuit Analysis I is on the map. For the
 live numbers run `node map/check.mjs`, `npm run map-audit` and `npm run map-gaps`.
 
-**216 concepts, 146 with a Flux lab, 70 gaps.**
+**226 concepts, 146 with a Flux lab, 80 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -18,7 +18,7 @@ live numbers run `node map/check.mjs`, `npm run map-audit` and `npm run map-gaps
 | Thermodynamics | 22 | 12 |
 | Fluid mechanics | 20 | 3 |
 | Heat transfer | 18 | 2 |
-| Circuits and systems | 11 | 11 |
+| Circuits and systems | 21 | 11 |
 | Mechanics of materials | 14 | 14 |
 | Materials science | 15 | 0 |
 | Statistics | 9 | 9 |
@@ -46,6 +46,7 @@ each new concept on them is a gap with a candidate lab:
 | Course | Concepts on its path | Order from |
 |---|---|---|
 | EMA 3010 Materials Science | 15 | 3.091 recitations |
+| EEL 3111 Circuit Analysis I | 18 (10 new) | 6.002, Spring 2007, in the archived plan's order |
 | EML 3101 Thermodynamics II | 14 (10 new) | 16.050, Fall 2002, with Cleynen |
 | EML 3015 Fluids | 22 (16 new) | 2.06, Spring 2013 |
 | EML 4140 Heat Transfer | 19 (15 new) | 2.51, Fall 2008, with Lienhard |

@@ -2,7 +2,7 @@ export default {
   id: 'electric-power',
   title: 'Electric power',
   subject: 'circuits',
-  courses: ['phy2049'],
+  courses: ['phy2049', 'eel3111'],
   eq: String.raw`P = IV = I^2R = \frac{V^2}{R}, \qquad V_\text{rms} = \frac{V_0}{\sqrt2}`,
   idea: String.raw`A source does work on each coulomb it pushes, so power is current times voltage. In a resistor all of it turns to heat. To send power far, raise the voltage: the current falls, and the line's \(I^2R\) loss falls with its square. For AC, the rms value is the steady voltage that would heat a resistor the same.`,
   requires: ['current-resistance'],

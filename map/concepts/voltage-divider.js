@@ -3,7 +3,7 @@ export default {
   title: 'Voltage dividers and resistive sensors',
   label: ['Voltage', 'divider'],
   subject: 'circuits',
-  courses: ['bench'],
+  courses: ['bench', 'eel3111'],
   eq: String.raw`V_\text{out} = V_s\,\frac{R_2}{R_1 + R_2}, \qquad R_\text{fixed} = \sqrt{R_\text{light}\,R_\text{dark}}\ \text{(largest swing)}`,
   idea: String.raw`Two resistors in series split a voltage in proportion to their sizes. A load across the lower one sits in parallel with it and pulls the output down, harder when the divider's resistors are large. Put a sensor whose resistance changes, a light or temperature sensor, in one place and the output tracks what it senses. The fixed resistor that gives the largest swing is the geometric mean of the sensor's two extremes.`,
   requires: ['kirchhoff'],

@@ -3,7 +3,7 @@ export default {
   title: 'AC circuits and resonance',
   label: ['AC circuits and', 'resonance'],
   subject: 'circuits',
-  courses: ['phy2049'],
+  courses: ['phy2049', 'eel3111'],
   eq: String.raw`Z = \sqrt{R^2 + \left(\omega L - \frac{1}{\omega C}\right)^2}, \qquad \omega_0 = \frac{1}{\sqrt{LC}}`,
   idea: String.raw`Drive a circuit with a sine wave and each part responds at the same frequency but with its own phase. A resistor's voltage is in step with the current, an inductor's leads it and a capacitor's lags it. Draw them as rotating arrows, phasors, and they add like vectors. At \(\omega_0\) the inductor and capacitor cancel, the impedance drops to \(R\), and the current peaks.`,
   requires: ['rc-circuits', 'inductance', 'forced-resonance'],

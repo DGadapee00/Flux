@@ -3,7 +3,7 @@ export default {
   title: 'Current and resistance',
   label: ['Current and', 'resistance'],
   subject: 'circuits',
-  courses: ['phy2049'],
+  courses: ['phy2049', 'eel3111'],
   eq: String.raw`I = \frac{dq}{dt}, \qquad R = \frac{\rho L}{A}, \qquad V = IR`,
   idea: String.raw`Current is charge per second through a cross-section. Inside a wire the field pushes electrons, collisions slow them, and the result is a small steady drift. Resistance grows with length and shrinks with area, and resistivity rises with temperature for metals. Ohm's law, \(V = IR\), says the current is proportional to the voltage. Many devices do not obey it.`,
   requires: ['electric-potential'],

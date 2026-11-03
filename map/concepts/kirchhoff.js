@@ -2,7 +2,7 @@ export default {
   id: 'kirchhoff',
   title: 'Kirchhoff’s rules',
   subject: 'circuits',
-  courses: ['phy2049'],
+  courses: ['phy2049', 'eel3111'],
   eq: String.raw`\sum I_\text{in} = \sum I_\text{out}, \qquad \oint \Delta V = 0`,
   idea: String.raw`Two rules solve any circuit. At a junction, charge in equals charge out. Around any loop, the voltage changes add to zero, because potential has one value at each point. Series and parallel rules follow from these. When a network does not reduce, write one equation per loop and junction and solve them together.`,
   requires: ['current-resistance'],
