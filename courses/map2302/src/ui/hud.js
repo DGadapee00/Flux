@@ -18,7 +18,8 @@ export function createHUD(api) {
     track: trackSiblings(course.id).length ? trackSiblings(course.id) : TRACKS.find(t=>t.id===course.track).courses.map(c=>({...c,href:c.href?siblingHref(c.href):null})),
     homeId,
     predictions: true,
-    unbuiltMessage: 'Awaiting Dalton’s spine confirmation. Labs, notes and practice will be built after confirmation.',
+    revealActiveLab: true,
+    unbuiltMessage: 'This unit is planned. Its labs, notes and practice have not been built yet.',
     notes: notesDeps,
   });
 }

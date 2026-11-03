@@ -1,14 +1,20 @@
 /**
- * Opens the hub in headless Chrome at 380px and 1280px.
- * Fails if the page scrolls sideways, if a course card is missing, or if
- * following a card does not land on that course's live app.
+ * Opens the hub in headless Chrome at 380px, 720px and 1280px.
+ * Fails if the page scrolls sideways, if the map is missing a concept, if choosing a concept does
+ * not open it, if a phone's map does not bring the chosen concept into view, if a course card is
+ * missing, if a concept's Parallels row is wrong or opening it throws, or if following a card or a lab
+ * link does not land on that course's app.
  */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
+import { loadConcepts, loadPaths } from '@flux/map/load.mjs';
 import { builtCourses, latestBuilt, visibleTracks } from '../src/tracks.js';
+
+const CONCEPTS = (await loadConcepts()).map((item) => item.concept);
+const PATHS = (await loadPaths()).map((item) => item.path);
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const chromeBin = process.env.CHROME || 'google-chrome';
@@ -83,11 +89,21 @@ async function navigate(page, url) {
  * @param {string} expression
  */
 async function evalJson(page, expression) {
-  const result = await page.send('Runtime.evaluate', {
-    expression,
-    returnByValue: true,
-    awaitPromise: true,
-  });
+  // A page that is still navigating can drop an evaluation; try again, a few times only.
+  let result;
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      result = await page.send('Runtime.evaluate', {
+        expression,
+        returnByValue: true,
+        awaitPromise: true,
+      });
+      break;
+    } catch (err) {
+      if (attempt >= 4 || !/navigated or closed|context/i.test(String(err.message))) throw err;
+      await delay(250);
+    }
+  }
   if (result.exceptionDetails) {
     throw new Error(result.exceptionDetails.text || 'page evaluation failed');
   }
@@ -156,6 +172,21 @@ async function readHub(page) {
         built: [...document.querySelectorAll('a.course-link')].map((a) => ({ id: a.dataset.course, href: a.href })),
         unbuilt: [...document.querySelectorAll('.unbuilt')].map((el) => el.textContent),
         motions: tracks.map((el) => el.dataset.motion),
+        staged: tracks.filter((el) => el.querySelector('.stage')).map((el) => el.dataset.track),
+        nodes: document.querySelectorAll('#map .node').length,
+        firstScreen: (() => {
+          const box = document.querySelector('#mapbox').getBoundingClientRect();
+          const node = document.querySelector('#map .node.sel rect')?.getBoundingClientRect();
+          const title = document.querySelector('#concept-title')?.getBoundingClientRect();
+          const inside = (r, b) => r && r.top >= b.top - 1 && r.bottom <= b.bottom + 1 && r.left >= b.left - 1 && r.right <= b.right + 1;
+          const screen = { top: 0, left: 0, bottom: innerHeight, right: innerWidth };
+          return Boolean(inside(node, box) && inside(node, screen) && inside(title, screen));
+        })(),
+        chosen: document.querySelector('#detail')?.dataset.concept ?? null,
+        mapScrolls: (() => {
+          const box = document.querySelector('#mapbox');
+          return box.scrollWidth > box.clientWidth + 1;
+        })(),
       };
     })()`,
   );
@@ -171,7 +202,12 @@ function resolvedHref(href, base) {
 }
 
 function assertHub(width, metrics, hub) {
-  const expectedCols = width >= 720 ? 2 : 1;
+  const expectedCols = width >= 1040 ? 3 : width >= 720 ? 2 : 1;
+  if (metrics.nodes < 2 || metrics.nodes >= CONCEPTS.length) {
+    throw new Error(`${width}px local view shows ${metrics.nodes} concepts, expected a neighbourhood`);
+  }
+  if (!metrics.firstScreen) throw new Error(`${width}px: the chosen concept and its title are not both on the first screen`);
+  if (!metrics.chosen) throw new Error(`${width}px map opened on no concept`);
   if (metrics.scroll > metrics.client + 1) {
     throw new Error(`${width}px scrolls sideways (${metrics.scroll} > ${metrics.client})`);
   }
@@ -197,7 +233,7 @@ function assertHub(width, metrics, hub) {
       throw new Error(`${course.id} link is ${row ? row.href : 'missing'}, expected ${expected}`);
     }
   }
-  if (metrics.unbuilt.length === 0 || metrics.unbuilt.some((text) => !text.includes('not built yet'))) {
+  if (metrics.unbuilt.some((text) => !text.includes('not built yet'))) {
     throw new Error('an unbuilt course is missing its label');
   }
 }
@@ -305,6 +341,7 @@ async function main() {
         const shot = await page.send('Page.captureScreenshot', { format: 'png' });
         fs.writeFileSync(path.join(outDir, `hub-${width}.png`), Buffer.from(shot.data, 'base64'));
         for (const track of visibleTracks()) {
+          if (!metrics.staged.includes(track.id)) continue;
           await hoverTrack(page, track.id);
           const box = await evalJson(
             page,
@@ -331,7 +368,33 @@ async function main() {
           fs.writeFileSync(path.join(outDir, 'hub-1280-played.png'), Buffer.from(played.data, 'base64'));
         }
       }
-      console.log(`${width}px ok, ${metrics.cols} column(s), no horizontal scroll`);
+      console.log(`${width}px ok, ${metrics.cols} column(s), ${metrics.nodes} concepts, no horizontal scroll`);
+
+      // Full map draws every concept. Choosing one opens it; the map scrolls in its box to show it.
+      await evalJson(page, `document.querySelector('#scope [data-scope="all"]').click()`);
+      await delay(200);
+      const all = await evalJson(page, `document.querySelectorAll('#map .node').length`);
+      if (all !== CONCEPTS.length) throw new Error(`${width}px full map shows ${all} concepts, expected ${CONCEPTS.length}`);
+      const last = CONCEPTS[CONCEPTS.length - 1].id;
+      await evalJson(page, `document.querySelector('#map .node[data-concept="${last}"]').dispatchEvent(new MouseEvent('click', { bubbles: true }))`);
+      await delay(400);
+      const chosen = await evalJson(
+        page,
+        `({ hash: location.hash, shown: document.querySelector('#detail').dataset.concept, left: document.querySelector('#mapbox').scrollLeft, page: document.documentElement.scrollWidth, client: document.documentElement.clientWidth })`,
+      );
+      if (chosen.hash !== `#${last}` || chosen.shown !== last) {
+        throw new Error(`${width}px clicking ${last} showed ${chosen.shown} at ${chosen.hash}`);
+      }
+      if (metrics.mapScrolls && width < 720) {
+        const deep = CONCEPTS.reduce((a, c) => (c.requires.length > a.requires.length ? c : a), CONCEPTS[0]);
+        await evalJson(page, `location.hash = '${deep.id}'`);
+        await delay(600);
+        const left = await evalJson(page, `document.querySelector('#mapbox').scrollLeft`);
+        if (!(left > 0)) throw new Error(`${width}px map did not scroll to ${deep.id}`);
+      }
+      if (chosen.page > chosen.client + 1) throw new Error(`${width}px scrolls sideways after choosing a concept`);
+      const mapShot = await page.send('Page.captureScreenshot', { format: 'png' });
+      fs.writeFileSync(path.join(outDir, `hub-${width}-map.png`), Buffer.from(mapShot.data, 'base64'));
     }
 
     await page.send('Emulation.setDeviceMetricsOverride', {
@@ -345,6 +408,7 @@ async function main() {
     });
     await navigate(page, hub);
     for (const track of visibleTracks()) {
+      if (!(await evalJson(page, `!!document.querySelector('[data-track="${track.id}"] .stage')`))) continue;
       await evalJson(
         page,
         `document.querySelector('[data-track="${track.id}"]').scrollIntoView({ block: 'center' })`,
@@ -378,6 +442,70 @@ async function main() {
       const landed = await waitForPrefix(page, prefix);
       console.log(`${track.id} card → ${landed}`);
       await navigate(page, hub);
+    }
+    // Choosing a course numbers its path on the map and lists it in order.
+    for (const p of PATHS) {
+      const want = p.units.flatMap((u) => u.concepts);
+      await navigate(page, hub);
+      await evalJson(page, `document.querySelector('[data-path="${p.course}"]').click()`);
+      await delay(200);
+      const got = await evalJson(
+        page,
+        `({ on: [...document.querySelectorAll('#map .node.on-path')].length, list: [...document.querySelectorAll('#path-list [data-go]')].map((b) => b.dataset.go), url: location.search })`,
+      );
+      if (got.on !== want.length || JSON.stringify(got.list) !== JSON.stringify(want) || got.url !== `?path=${p.course}`) {
+        throw new Error(`${p.course} path shows ${got.on} on the map and lists ${got.list.join(', ')}`);
+      }
+      console.log(`${p.course} path: ${want.length} concepts`);
+    }
+
+    // A concept with a parallel lists it in the panel, from either end, and opening it throws nothing.
+    const parallels = new Map(CONCEPTS.map((c) => [c.id, []]));
+    for (const c of CONCEPTS) {
+      for (const r of c.related || []) {
+        parallels.get(c.id).push(r.id);
+        parallels.get(r.id).push(c.id);
+      }
+    }
+    const thrown = [];
+    const onThrow = (message) => {
+      if (message.method === 'Runtime.exceptionThrown') thrown.push(message.params.exceptionDetails?.exception?.description || 'exception');
+    };
+    page.on(onThrow);
+    for (const [id, want] of parallels) {
+      if (!want.length) continue;
+      await navigate(page, hub);
+      await evalJson(page, `location.hash = '${id}'`);
+      const deadline = Date.now() + 10000;
+      while ((await evalJson(page, `document.getElementById('detail').dataset.concept`)) !== id) {
+        if (Date.now() > deadline) throw new Error(`${id}: the panel did not open`);
+        await delay(100);
+      }
+      const got = await evalJson(page, `[...document.querySelectorAll('.parallels [data-go]')].map((b) => b.dataset.go)`);
+      if (JSON.stringify([...got].sort()) !== JSON.stringify([...want].sort())) {
+        throw new Error(`${id}: Parallels lists ${got.join(', ') || 'nothing'}, expected ${want.join(', ')}`);
+      }
+      if (thrown.length) throw new Error(`${id}: the page threw ${thrown.join('; ')}`);
+      console.log(`${id} parallels: ${want.join(', ')}`);
+    }
+    page.off(onThrow);
+
+    // Every lab link on the map lands in its course app.
+    for (const concept of CONCEPTS) {
+      for (const ref of concept.labs) {
+        await navigate(page, hub);
+        await evalJson(page, `location.hash = '${concept.id}'`);
+        // Wait for the panel to show this concept's lab link before following it.
+        const selector = `[data-lab="${ref.course}/${ref.lab}"]`;
+        const deadline = Date.now() + 10000;
+        while (!(await evalJson(page, `Boolean(document.querySelector('${selector}'))`))) {
+          if (Date.now() > deadline) throw new Error(`${concept.id}: no link to ${ref.course}/${ref.lab} in the panel`);
+          await delay(100);
+        }
+        await evalJson(page, `document.querySelector('${selector}').click()`);
+        const landed = await waitForPrefix(page, `${hub}${ref.course}/#/${ref.course}/`);
+        console.log(`${concept.id} lab → ${landed}`);
+      }
     }
     console.log('smoke ok');
   } finally {

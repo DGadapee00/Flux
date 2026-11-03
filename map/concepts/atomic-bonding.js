@@ -1,0 +1,28 @@
+export default {
+  id: 'atomic-bonding',
+  title: 'Atomic bonding and the bond-energy curve',
+  label: ['Atomic', 'bonding'],
+  subject: 'matsci',
+  courses: ['ema3010'],
+  eq: String.raw`U(r) = -\frac{A}{r^n} + \frac{B}{r^m}\ (m > n), \qquad F = -\frac{dU}{dr}, \qquad E \propto \left.\frac{d^2U}{dr^2}\right|_{r_0}`,
+  idea: String.raw`Two atoms attract at long range and repel when their electron clouds overlap, so their energy has a well. The bottom of the well is the bond length, where the force is zero. The well's depth is the energy to pull the atoms apart, which is why strong bonds melt hot. Its curvature at the bottom is the spring constant of the bond, which is why stiffness follows curvature, not depth. Ionic, covalent and metallic bonds make deep wells; the weak secondary bonds between molecules make shallow ones.`,
+  requires: ['coulombs-law', 'energy-conservation'],
+  sources: [
+    {
+      title: 'OpenStax Chemistry 2e, §7.5 Strengths of ionic and covalent bonds',
+      url: 'https://openstax.org/books/chemistry-2e/pages/7-5-strengths-of-ionic-and-covalent-bonds',
+      kind: 'Open textbook',
+      level: 'Intro',
+      why: 'Bond energies and lattice energy, with the numbers that set melting points.',
+    },
+    {
+      title: 'MIT 3.091, Recitation 11: Molecular orbital theory and intermolecular forces',
+      url: 'https://ocw.mit.edu/courses/3-091-introduction-to-solid-state-chemistry-fall-2018/resources/mit3_091f18_rec11/',
+      kind: 'Recitation notes',
+      level: 'Course level',
+      why: 'Primary bonds against the secondary forces that hold molecules and polymer chains together.',
+    },
+  ],
+  labs: [],
+  candidate: 'Drag two atoms along their energy curve and change its depth and curvature apart. It corrects the idea that a deeper well makes a stiffer solid: stiffness follows the curvature.',
+};

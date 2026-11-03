@@ -1,7 +1,7 @@
 # Provenance
 
 BENCH is a personal-projects module with no UNF course behind it. Its plan,
-`docs/course-plans/bench.md`, sets the units and their order (DECISIONS.md, D35). Nothing in it is
+`docs/history/guidance-2026-11-02/docs/course-plans/bench.md`, sets the units and their order (docs/history/guidance-2026-11-02/DECISIONS.md, D35). Nothing in it is
 copied from any source: the notes, labs and problems are written for this course and cite what they
 rest on through `src/data/textbook.js`.
 

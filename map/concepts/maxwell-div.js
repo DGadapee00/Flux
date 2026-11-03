@@ -1,0 +1,28 @@
+export default {
+  id: 'maxwell-div',
+  title: 'Maxwell’s divergence equations',
+  label: ['∇·E and ∇·B'],
+  subject: 'em',
+  courses: ['phy2049'],
+  eq: String.raw`\nabla\cdot\mathbf E = \frac{\rho}{\varepsilon_0}, \qquad \nabla\cdot\mathbf B = 0`,
+  idea: String.raw`Apply the divergence theorem to Gauss's law and shrink the surface to a point. The flux per unit volume is the charge density over \(\varepsilon_0\). The magnetic version is zero because there is no magnetic charge, so every field line that enters a closed surface also leaves it.`,
+  requires: ['gauss-law', 'faraday', 'divergence-theorem'],
+  sources: [
+    {
+      title: 'OpenStax University Physics Vol. 2, §16.1 Maxwell’s equations',
+      url: 'https://openstax.org/books/university-physics-volume-2/pages/16-1-maxwells-equations-and-electromagnetic-waves',
+      kind: 'Open textbook',
+      level: 'Intro',
+      why: 'All four equations in one place, in integral form, with what each one says.',
+    },
+    {
+      title: 'MIT 18.02SC, Part B: Flux and the divergence theorem',
+      url: 'https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/pages/4.-triple-integrals-and-surface-integrals-in-3-space/part-b-flux-and-the-divergence-theorem/',
+      kind: 'Lectures + problems with solutions',
+      level: 'Course level',
+      why: 'The math step that turns the integral law into the point law.',
+    },
+  ],
+  labs: [],
+  candidate: 'The same field shown two ways: flux through a shrinking sphere, and the charge density at its centre.',
+};

@@ -13,6 +13,8 @@ configureFrame({
   planes: ['xy'],
   lenLabel,
   gridScale: 1,
+  hideOffPlane: true,
+  labelStyle: 'math',
 });
 
 export { defaultView, sceneScale, setFrame, workPlane } from '@flux/core/scene3d/frame.js';

@@ -1,5 +1,5 @@
 import { defineCourse } from '@flux/core';
-import { EXAMS } from './data/catalog.js';
+import { EXAMS, CHAPTER_TITLES } from './data/catalog.js';
 
 export const course = defineCourse({
   id: 'map2302',
@@ -9,7 +9,7 @@ export const course = defineCourse({
   track: 'math',
   order: 4,
   term: '',
-  text: 'OCW 18.03SC Fall 2011; textbook choice pending',
+  text: 'OCW 18.03SC Fall 2011; Lebl, Notes on Diffy Qs',
   units: EXAMS.map((exam) => ({
     id: exam.id,
     title: exam.title,
@@ -17,7 +17,7 @@ export const course = defineCourse({
     date: exam.date,
     labs: exam.labs,
   })),
-  chapters: {},
+  chapters: CHAPTER_TITLES,
   // Only Dalton may flip this after reviewing a built unit as a student.
   standard: false,
   labs: () => import('./labs/load.js'),

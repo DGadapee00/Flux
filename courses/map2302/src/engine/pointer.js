@@ -1,4 +1,2 @@
-/** Labs are driven from the Setup panel. Nothing is dragged in the picture. */
-export function createChargePointer() {
-  return { dragging: false, dispose() {} };
-}
+// Reuse the core's work-plane dragging; a lab opts in by supplying a probe.
+export { createProbePointer as createChargePointer } from '@flux/core/scene3d/probePointer.js';

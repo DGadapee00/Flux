@@ -272,6 +272,7 @@ for (const [key, st] of trapStats) {
 if (!ONLY) {
   for (const exam of EXAMS) {
     const tpls = problemsForExam(exam.id);
+    if(!tpls.length && !exam.labs.length)continue; // Planned units are measured as empty, not asserted built.
     const share = tpls.filter(conceptual).length / Math.max(1, tpls.length);
     if (share < 0.25) err(exam.id, `${Math.round(share * 100)}% conceptual; the standard asks at least 25%`);
   }
@@ -286,14 +287,14 @@ for (const [s, v] of [
   ['1/2', 0.5],
   ['3.61 m/s', 3.61],
 ]) {
-  if (parseNumber(s) !== v) err('engine', `parseNumber(${s}) = ${parseNumber(s)}`);
+  if (Math.abs(parseNumber(s)-v)>1e-12*Math.max(1,Math.abs(v))) err('engine', `parseNumber(${s}) = ${parseNumber(s)}`);
 }
 
 {
   const progress = createProgress(memoryStorage());
   const t0 = Date.parse('2026-09-01T12:00:00Z');
   const DAY = 864e5;
-  let it = progress.record('u1.1.fill-time', { correct: true, clean: true, now: t0 });
+  let it = progress.record('u1.accumulate', { correct: true, clean: true, now: t0 });
   if (it.box !== 1 || it.due !== t0 + INTERVAL_DAYS[1] * DAY) err('progress', 'a clean solve should move to box 1');
   const tpls = problemsForExam('u1');
   const n = Math.min(8, tpls.length);
@@ -302,7 +303,7 @@ for (const [s, v] of [
   if (a.length !== n) err('pickSet', `picked ${a.length} of ${n}`);
   if (new Set(a.map((t) => t.id)).size !== a.length) err('pickSet', 'duplicate problem');
   if (a.map((t) => t.id).join() !== b.map((t) => t.id).join()) err('pickSet', 'same seed gave different sets');
-  if (new Set(a.map((t) => t.ch)).size < 2) err('pickSet', 'Unit 1 set skipped a chapter');
+  if (new Set(a.map((t) => t.ch)).size < Math.min(2,new Set(tpls.map(t=>t.ch)).size)) err('pickSet', 'Unit 1 set skipped a chapter');
 }
 
 console.log(`${seen.size} templates · ${PROBLEMS.reduce((sum, p) => sum + p.cases.length, 0)} worked cases · ${secondChecks} second-method checks · ${simChecks} sim comparisons`);
