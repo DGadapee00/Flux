@@ -23,6 +23,8 @@ export default {
     },
   ],
   labs: [
+    { course: 'mac2311', lab: 'parametric', notes: ['s1', 's2'], note: 'Move a point along a curve: the slope and the speed are different numbers.' },
+    { course: 'mac2311', lab: 'record', note: 'A record player: inner and outer points share a period but not a speed.' },
     { course: 'mac2313', lab: 'parametric', note: 'Slide t along a plane curve and watch its tangent.' },
     { course: 'mac2313', lab: 'space', note: 'The same in three dimensions: helices and coils with their tangent lines.' },
   ],

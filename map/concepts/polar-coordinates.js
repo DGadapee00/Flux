@@ -23,6 +23,7 @@ export default {
     },
   ],
   labs: [
+    { course: 'mac2311', lab: 'polar', notes: ['s4', 's3', 's5'], note: String.raw`Sweep the angle: polar area grows with \(r^2\), not with \(r\).` },
     { course: 'mac2313', lab: 'polar', note: String.raw`Drag a point and read \(r\), \(\theta\) and the local \(\hat r\), \(\hat\theta\).` },
   ],
 };

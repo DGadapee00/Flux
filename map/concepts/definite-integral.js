@@ -23,6 +23,7 @@ export default {
     },
   ],
   labs: [
+    { course: 'mac2311', lab: 'riemann', notes: ['s1', 's2'], note: 'Change n and the sample point; the rectangles close in on the area.' },
     { course: 'mac2313', lab: 'riemann1', note: 'Rectangles under a graph, added one term at a time.' },
   ],
 };

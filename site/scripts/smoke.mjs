@@ -453,8 +453,14 @@ async function main() {
       for (const ref of concept.labs) {
         await navigate(page, hub);
         await evalJson(page, `location.hash = '${concept.id}'`);
-        await delay(150);
-        await evalJson(page, `document.querySelector('[data-lab="${ref.course}/${ref.lab}"]').click()`);
+        // Wait for the panel to show this concept's lab link before following it.
+        const selector = `[data-lab="${ref.course}/${ref.lab}"]`;
+        const deadline = Date.now() + 10000;
+        while (!(await evalJson(page, `Boolean(document.querySelector('${selector}'))`))) {
+          if (Date.now() > deadline) throw new Error(`${concept.id}: no link to ${ref.course}/${ref.lab} in the panel`);
+          await delay(100);
+        }
+        await evalJson(page, `document.querySelector('${selector}').click()`);
         const landed = await waitForPrefix(page, `${hub}${ref.course}/#/${ref.course}/`);
         console.log(`${concept.id} lab → ${landed}`);
       }
