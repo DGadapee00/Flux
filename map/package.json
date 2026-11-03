@@ -1,0 +1,17 @@
+{
+  "name": "@flux/map",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./*": "./*"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js && node check.mjs"
+  },
+  "dependencies": {
+    "@flux/tracks": "*",
+    "katex": "^0.16.47"
+  }
+}

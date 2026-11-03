@@ -1219,3 +1219,6 @@ select:focus-visible {
   }
 }
 
+
+/* Device/source citations remain legible on the dark Setup panel. */
+.controls .tiny a { color: var(--blue); text-underline-offset: 2px; }

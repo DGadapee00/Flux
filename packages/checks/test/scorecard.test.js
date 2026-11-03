@@ -24,7 +24,7 @@ test('the Markdown table has a header row and one row per course', () => {
   assert.equal(r.status, 0, r.stderr);
   const rows = r.stdout.trim().split('\n');
   assert.match(rows[0], /^\| course \| std \|/);
-  assert.equal(rows.length, 2 + 10);
+  assert.equal(rows.length, 2 + 11);
 });
 
 test('Statics meets the measured floor without changing its manifest standard flag', () => {
@@ -43,4 +43,10 @@ test('an unlisted starter can be measured explicitly without claiming it passes'
 });
 test('course selection rejects traversal and unknown folders', () => {
   for (const id of ['../starter', 'nosuchcourse']) assert.notEqual(run('--course', id).status, 0);
+});
+
+test('MAP meets every measured floor while retaining its owner-review flag',()=>{
+ const r=run('--course','map2302','--units');assert.equal(r.status,0,r.stderr);
+ assert.match(r.stdout,/MAP 2302/);assert.match(r.stdout,/u4\s+25/);
+ const gate=run('--course','map2302','--mark','map2302');assert.equal(gate.status,0,gate.stderr);
 });
