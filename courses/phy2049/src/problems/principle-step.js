@@ -36,8 +36,10 @@ const CONFUSED = {
   ac: ['inductance', 'capacitance', 'ohm', 'power', 'faraday'],
   'em-wave': ['wave-energy', 'refraction', 'interference', 'polarization', 'faraday'],
   'wave-energy': ['em-wave', 'power', 'polarization', 'energy', 'newton'],
+  'thermal-radiation': ['wave-energy', 'em-wave', 'power', 'energy', 'interference'],
   polarization: ['wave-energy', 'em-wave', 'refraction', 'reflection', 'interference'],
   refraction: ['reflection', 'imaging', 'interference', 'em-wave', 'polarization'],
+  'ray-model': ['refraction', 'interference', 'em-wave', 'imaging', 'polarization'],
   reflection: ['refraction', 'imaging', 'interference', 'polarization', 'em-wave'],
   imaging: ['refraction', 'reflection', 'interference', 'em-wave', 'polarization'],
   interference: ['refraction', 'em-wave', 'imaging', 'polarization', 'reflection'],
@@ -56,6 +58,7 @@ const TWINS = [
   ['ac', 'inductance'],
   ['imaging', 'refraction'],
   ['imaging', 'reflection'],
+  ['ray-model', 'reflection'],
 ];
 const twins = (a, b) => TWINS.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
 
