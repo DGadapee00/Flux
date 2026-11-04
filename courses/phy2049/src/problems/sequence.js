@@ -12,14 +12,20 @@
  */
 export const SEQUENCE = {
   55: [
-    ['Intensity and the fields', ['e6.55.intensity', 'e6.55.E-from-I']],
-    ['Spreading from a source', ['e6.55.point-source']],
+    ['Intensity and the fields', ['e6.55.intensity', 'e6.55.E-from-I', 'e6.55.peak-to-rms', 'e6.55.rms-from-I']],
+    ['Spreading from a source', ['e6.55.point-source', 'e6.55.detector-distance']],
+    ['Power on a tilted surface', ['e6.55.solar-cell']],
+    ['Blackbody radiation', ['e6.55.wien', 'e6.55.glowing-glass']],
     ['Light pushes', ['e6.55.pressure']],
     ['Application: a solar sail', ['e6.55.solar-sail']],
   ],
   53: [
+    ['What a wave is', ['e6.53.wave-terms', 'e6.53.true-or-false']],
     ['Wavelength and frequency', ['e6.53.f-from-lambda', 'e6.53.wave-eq']],
+    ['Light-years', ['e6.53.light-year']],
+    ['Photons', ['e6.53.photon-color', 'e6.53.photon-energy']],
     ['E, B and the direction of travel', ['e6.53.B-from-E', 'e6.53.direction']],
+    ['Red shift and blue shift', ['e6.53.redshift']],
     ['Application: a police radar gun', ['e6.53.radar-gun']],
   ],
   38: [
