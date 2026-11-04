@@ -3,6 +3,12 @@ import { PREDICTIONS } from './predictions.js';
 
 /** One entry per lab. Add each new lab here and in src/data/catalog.js (LAB_META). */
 const loaders = {
+  'laplace-rules': () => import('./laplace-rules.js'),
+  'higher-order': () => import('./higher-order.js'),
+  'cauchy-euler': () => import('./cauchy-euler.js'),
+  variation: () => import('./variation.js'),
+  'first-order-models': () => import('./first-order-models.js'),
+  'exact-substitution': () => import('./exact-substitution.js'),
   'clock-pendulum': () => import('./clock-pendulum.js'),
   'limit-cycle': () => import('./limit-cycle.js'),
   linearize: () => import('./linearize.js'),

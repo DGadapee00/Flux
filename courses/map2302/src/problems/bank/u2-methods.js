@@ -1,0 +1,163 @@
+/** UNF supplement for Unit 2: variation of parameters, Cauchy–Euler equations, reduction of order,
+ * higher-order equations and annihilators. Original questions. Each worked case reproduces a worked
+ * example derived by hand in the Unit 2 notes; second() recomputes it by RK4, a determinant or a
+ * different basis. */
+import { problem,range,choice,kase,num } from '../kit.js';
+import { integrate } from '@flux/subjects/math/ode.js';
+import { secantForced,repeatedForced,cauchyEuler,reductionExample,higherOrder,basisFromRoots,wronskian,solveLinear } from '@flux/subjects/math/ode-methods.js';
+import { citation } from '../../data/textbook.js';
+const N=sec=>`Flux notes, Unit 2 §${sec} worked example (derived by hand, checked by RK4)`;
+const base={exam:'u2',ch:'2'};
+const nc=spec=>problem({...base,kind:'numeric',...spec,src:citation(spec.topics[0])});
+const cc=spec=>problem({...base,kind:'conceptual',...spec,src:citation(spec.topics[0])});
+const part=(id,get,label,traps)=>num(id,get,'',{label,tol:.003,abs:1e-9,traps});
+const pick=(id,label,opts,correct)=>({id,kind:'choice',label,multi:false,options:opts.map(([value,label,why])=>({value,label,why})),correct});
+const cs=(src,v,want)=>kase(src,v,want,{note:'The case is the notes worked example; its numbers were derived there and checked by RK4.'});
+const check=(v,want)=>kase('Flux check value: the closed form, checked by RK4',v,want,{note:'Not from a source. The value is the derived formula, confirmed by an independent integration.'});
+const CE={distinct:[-2,2],repeated:[-1,1],complex:[1,4]};
+const ROOTS={distinct:[{re:-1,m:1},{re:-2,m:1},{re:-3,m:1}],mixed:[{re:-1,m:1},{re:-1,im:2,m:1}]};
+const POLY={distinct:[1,6,11,6],mixed:[1,3,7,5]};
+const rk3=(poly,init,t,f=()=>0)=>integrate((u,y)=>[y[1],y[2],f(u)-poly[1]*y[2]-poly[2]*y[1]-poly[3]*y[0]],0,init,t,4096).end;
+const annY=t=>higherOrder([{re:0,m:1},{re:0,im:1,m:1}],[0,0,0],t,(j,u)=>[u*u-1.5*Math.exp(-u),2*u+1.5*Math.exp(-u),2-1.5*Math.exp(-u)][j]).y;
+export default [
+ nc({id:'u2.vop-secant',title:'Variation of parameters with sec t forcing',topics:['variation-parameters'],lab:'variation',level:2,
+  vars:{y0:range(0,1,.5),v0:range(0,1,.5),t:range(.4,1.2,.4),data:choice(['given','with the given data'],['check','and check y_p(0)=y_p′(0)=0 first'])},
+  valid:$=>$.y0!==0||$.v0!==0,
+  text:T=>`Solve y″+y=sec t on |t|<π/2 with y(0)=${T.y0}, y′(0)=${T.v0}, ${T.data}. Find y(${T.t}).`,
+  parts:[part('y',$=>secantForced($.y0,$.v0,$.t).y,'y at the given time',[[ $=>Math.cos($.t)*Math.log(Math.cos($.t))+$.t*Math.sin($.t),'The homogeneous part y₀cos t+v₀sin t is missing.'],[$=>$.y0*Math.cos($.t)+$.v0*Math.sin($.t)-Math.cos($.t)*Math.log(Math.cos($.t))+$.t*Math.sin($.t),'Sign of u₁: u₁′=−y₂f/W=−tan t, so u₁=+ln(cos t).']])],
+  hints:['Use y₁=cos t, y₂=sin t, W=1.','u₁′=−sin t·sec t and u₂′=cos t·sec t. Integrate, then add the homogeneous part that fits the data.'],
+  steps:($,f)=>[String.raw`$y_p=\cos t\ln(\cos t)+t\sin t$ has zero initial data.`,`y=${f($.y0)}cos t+${f($.v0)}sin t+y_p=${f(secantForced($.y0,$.v0,$.t).y)}.`],
+  second:$=>({y:integrate((t,[y,v])=>[v,1/Math.cos(t)-y],0,[$.y0,$.v0],$.t,2048).end[0]}),
+  sim:{scenario:'secant',setup(s,$){Object.assign(s,{y0:$.y0,v0:$.v0,t:$.t});},read:c=>({y:c.y})},
+  cases:[check({y0:1,v0:0,t:1.2,data:'given'},{y:secantForced(1,0,1.2).y})]}),
+ nc({id:'u2.vop-repeated',title:'A repeated root and eᵗ/t forcing',topics:['variation-parameters'],lab:'variation',level:3,
+  vars:{t:range(1.5,3,.5),ask:choice(['y','y(t)'],['W','the Wronskian W(t) of eᵗ and teᵗ'])},
+  text:T=>`Solve y″−2y′+y=eᵗ/t for t>0 with y(1)=y′(1)=0. Find ${T.ask} at t=${T.t}.`,
+  parts:[part('r',$=>$.ask==='y'?repeatedForced(1,0,0,$.t).y:Math.exp(2*$.t),'requested value',[[ $=>$.ask==='y'?$.t*Math.exp($.t)*(Math.log($.t)-1):Math.exp($.t),$=>$.ask==='y'?'y_p alone misses y(1)=0: add the homogeneous part eᵗ.':'W=y₁y₂′−y₁′y₂=e^(2t), not eᵗ.'],[$=>$.ask==='y'?Math.exp($.t)+$.t*Math.exp($.t)*Math.log($.t):$.t*Math.exp(2*$.t),$=>$.ask==='y'?'u₁=−t contributes −teᵗ; the −1 in ln t−1 is missing.':'The t terms cancel in y₁y₂′−y₁′y₂.']])],
+  hints:['The double root gives y₁=eᵗ, y₂=teᵗ and W=e^(2t).','u₁′=−1 and u₂′=1/t; fit the constants at t=1.'],
+  steps:($,f)=>[String.raw`$y_p=te^t(\ln t-1)$; fitting $y(1)=y'(1)=0$ adds $e^t$.`,`At t=${f($.t)}: y=${f(repeatedForced(1,0,0,$.t).y)}, W=${f(Math.exp(2*$.t))}.`],
+  second:$=>({r:$.ask==='y'?integrate((t,[y,v])=>[v,Math.exp(t)/t+2*v-y],1,[0,0],$.t,2048).end[0]:wronskian(basisFromRoots([{re:1,m:2}]),$.t)}),
+  sim:{scenario:'repeated',setup(s,$){Object.assign(s,{t0:1,y0:0,v0:0,t:$.t});},read:(c,s,$)=>({r:$.ask==='y'?c.y:c.W})},
+  cases:[cs(N('10'),{t:2,ask:'y'},{r:2.85435})]}),
+ cc({id:'u2.vop-formula',title:'Which quotient gives u₁′ and u₂′',topics:['variation-parameters'],
+  vars:{which:choice(['u1','u₁′'],['u2','u₂′'])},
+  text:T=>`For y″+py′+qy=f with homogeneous solutions y₁, y₂ and Wronskian W, what is ${T.which}?`,
+  parts:[pick('q','formula',[
+   ['m2','−y₂f/W','From Cramer’s rule on u₁′y₁+u₂′y₂=0, u₁′y₁′+u₂′y₂′=f, the first unknown carries −y₂.'],
+   ['p1','y₁f/W','The second unknown carries +y₁.'],
+   ['p2','y₂f/W','The sign is wrong: Cramer’s rule puts a minus sign on the first unknown.'],
+  ],$=>$.which==='u1'?'m2':'p1')],
+  hints:['Write the two conditions as a 2×2 system for u₁′, u₂′.','Replace one column of the coefficient matrix by (0, f) and divide by W.'],
+  steps:$=>[$.which==='u1'?'u₁′=det[[0,y₂],[f,y₂′]]/W=−y₂f/W.':'u₂′=det[[y₁,0],[y₁′,f]]/W=y₁f/W.'],
+  second:$=>({q:$.which==='u1'?'m2':'p1'}),
+  cases:[cs(N('10'),{which:'u1'},{q:'m2'})]}),
+ cc({id:'u2.method-choice',title:'When undetermined coefficients fails',topics:['variation-parameters'],
+  vars:{f:choice(['texp','te^(2t)'],['tan','tan t'],['log','ln t'],['sin','eᵗ sin 3t'])},
+  text:T=>`For y″+4y=${T.f}, which methods find a particular solution?`,
+  parts:[pick('m','method',[
+   ['both','Undetermined coefficients or variation of parameters','The derivatives of this forcing stay in a finite family, so a trial exists. Variation of parameters works too.'],
+   ['vp','Variation of parameters only','Repeated derivatives of this forcing never close into a finite family, so no trial exists.'],
+  ],$=>['texp','sin'].includes($.f)?'both':'vp')],
+  hints:['Differentiate the forcing a few times.','If new function types keep appearing, use variation of parameters.'],
+  steps:$=>[['texp','sin'].includes($.f)?'An annihilator exists: (D−2)² or D²−2D+10.':'tan t and ln t have no constant-coefficient annihilator.'],
+  second:$=>({m:['texp','sin'].includes($.f)?'both':'vp'}),
+  cases:[cs(N('10'),{f:'tan'},{m:'vp'})]}),
+ nc({id:'u2.cauchy-euler',title:'Cauchy–Euler equations by the indicial equation',topics:['cauchy-euler'],lab:'cauchy-euler',level:2,
+  vars:{kind:choice(['distinct','x²y″−2xy′+2y=0'],['repeated','x²y″−xy′+y=0'],['complex','x²y″+xy′+4y=0']),v0:range(0,1,.5),x:range(2,4,1)},
+  text:T=>`Solve ${T.kind} on x>0 with y(1)=1, y′(1)=${T.v0}. Find y(${T.x}).`,
+  parts:[part('y',$=>cauchyEuler(...CE[$.kind],1,1,$.v0,$.x).y,'y at the given x',[[ $=>cauchyEuler(CE[$.kind][0]+1,CE[$.kind][1],1,1,$.v0,$.x).y,'Indicial equation: x²(xʳ)″=r(r−1)xʳ, so it is r²+(a−1)r+b=0, not r²+ar+b=0.'],[$=>cauchyEuler(CE[$.kind][0]+1,CE[$.kind][1],1,1,$.v0,Math.exp($.x-1)).y,'Constant-coefficient roots in x: the solutions are powers of x, not exponentials in x.']])],
+  hints:['Try y=xʳ and divide by xʳ.','Fit the two constants at x=1, where ln x=0.'],
+  steps:($,f)=>{const r=cauchyEuler(...CE[$.kind],1,1,$.v0,$.x);return [`Indicial roots: ${r.kind==='complex'?`${f(r.roots[0])}±${f(r.roots[1])}i`:`${f(r.roots[0])}, ${f(r.roots[1])}`} (${r.kind}).`,`y(${f($.x)})=${f(r.y)}.`];},
+  second:$=>{const [a,b]=CE[$.kind];return {y:integrate((x,[y,v])=>[v,(-a*x*v-b*y)/(x*x)],1,[1,$.v0],$.x,2048).end[0]};},
+  sim:{scenario:'distinct',setup(s,$){const [a,b]=CE[$.kind];Object.assign(s,{a,b,x0:1,y0:1,v0:$.v0,x:$.x});},read:c=>({y:c.y})},
+  cases:[cs(N('11'),{kind:'repeated',v0:0,x:3},{y:-.295837})]}),
+ cc({id:'u2.indicial-case',title:'Read the solution form from the indicial roots',topics:['cauchy-euler'],
+  vars:{eq:choice(['d','x²y″+2xy′−6y=0'],['r','x²y″+5xy′+4y=0'],['c','x²y″−xy′+5y=0'])},
+  text:T=>`What is the general solution of ${T.eq} on x>0?`,
+  parts:[pick('form','solution form',[
+   ['d','c₁x²+c₂x⁻³','r²+r−6=0 has roots 2 and −3.'],
+   ['r','(c₁+c₂ ln x)x⁻²','r²+4r+4=0 has the double root −2, so ln x enters.'],
+   ['c','x(c₁cos(2 ln x)+c₂sin(2 ln x))','r²−2r+5=0 has roots 1±2i.'],
+  ],$=>$.eq)],
+  hints:['The indicial equation is r²+(a−1)r+b=0.','A repeated root brings ln x; complex roots bring cos and sin of β ln x.'],
+  steps:$=>[({d:'r²+r−6=(r−2)(r+3).',r:'r²+4r+4=(r+2)².',c:'r=1±2i.'})[$.eq]],
+  second:$=>{const ab={d:[2,-6],r:[5,4],c:[-1,5]}[$.eq],k=cauchyEuler(ab[0],ab[1],1,1,0,2).kind;return {form:{distinct:'d',repeated:'r',complex:'c'}[k]};},
+  cases:[cs(N('11'),{eq:'c'},{form:'c'})]}),
+ nc({id:'u2.reduction',title:'Reduction of order from y₁=eˣ',topics:['cauchy-euler'],lab:'cauchy-euler',level:3,
+  vars:{y0:range(1,3,1),v0:range(0,2,1),x:range(1.5,3,.5),route:choice(['formula','the reduction formula'],['direct','the substitution y=u eˣ'])},
+  valid:$=>Math.abs($.y0-$.v0)>.5,
+  text:T=>`The equation xy″−(x+1)y′+y=0 has y₁=eˣ. Find a second solution by ${T.route}, then solve with y(1)=${T.y0}, y′(1)=${T.v0} and report y(${T.x}).`,
+  parts:[part('y',$=>reductionExample(1,$.y0,$.v0,$.x).y,'y at the given x',[[ $=>$.y0*Math.exp($.x-1),'One solution cannot meet two initial values; the second solution x+1 is needed.'],[$=>{const c2=($.v0-$.y0)/Math.E,c1=$.y0/Math.E-c2;return (c1+c2*$.x)*Math.exp($.x);},'xeˣ is the repeated-root habit, but it does not solve this equation. Reduction gives y₂=x+1.']])],
+  hints:['Put y=u eˣ; the u terms cancel, leaving xu″+(x−1)u′=0.','Solve for u′, integrate, and multiply by eˣ to get y₂=x+1.'],
+  steps:($,f)=>{const r=reductionExample(1,$.y0,$.v0,$.x);return [`y=c₁eˣ+c₂(x+1); the data give c₁=${f(r.c1)}, c₂=${f(r.c2)}.`,`y(${f($.x)})=${f(r.y)}.`];},
+  second:$=>({y:integrate((x,[y,v])=>[v,((x+1)*v-y)/x],1,[$.y0,$.v0],$.x,2048).end[0]}),
+  sim:{scenario:'reduction',setup(s,$){Object.assign(s,{x0:1,y0:$.y0,v0:$.v0,x:$.x});},read:c=>({y:c.y})},
+  cases:[cs(N('11'),{y0:2,v0:1,x:2.5,route:'formula'},{y:3.5})]}),
+ nc({id:'u2.third-order',title:'A third-order IVP from its roots',topics:['higher-order'],lab:'higher-order',level:2,
+  vars:{eq:choice(['distinct','y‴+6y″+11y′+6y=0'],['mixed','y‴+3y″+7y′+5y=0']),v0:range(-1,1,.5),t:range(1,3,1)},
+  text:T=>`Solve ${T.eq} with y(0)=1, y′(0)=${T.v0}, y″(0)=0. Find y(${T.t}).`,
+  parts:[part('y',$=>higherOrder(ROOTS[$.eq],[1,$.v0,0],$.t).y,'y at the given time',[[ $=>Math.exp(-$.t),'One root cannot meet three initial values; all three basis functions are needed.'],[$=>higherOrder(ROOTS[$.eq].map(r=>({...r,re:-r.re})),[1,$.v0,0],$.t).y,'Root signs: p(r)=0 for the coefficients shown has negative real parts.']])],
+  hints:['Factor the characteristic polynomial.','Write three basis functions and solve a 3×3 system from the data.'],
+  steps:($,f)=>[`Roots: ${$.eq==='distinct'?'−1, −2, −3':'−1 and −1±2i'}.`,`y(${f($.t)})=${f(higherOrder(ROOTS[$.eq],[1,$.v0,0],$.t).y)}.`],
+  second:$=>({y:rk3(POLY[$.eq],[1,$.v0,0],$.t)[0]}),
+  sim:{scenario:'distinct',setup(s,$){Object.assign(s,{roots:structuredClone(ROOTS[$.eq]),init:[1,$.v0,0],forced:false,t:$.t});},read:c=>({y:c.y})},
+  cases:[cs(N('12'),{eq:'distinct',v0:0,t:3},{y:.142048})]}),
+ nc({id:'u2.abel',title:'Abel’s formula for the Wronskian',topics:['higher-order'],lab:'higher-order',level:2,
+  vars:{eq:choice(['distinct','y‴+6y″+11y′+6y=0'],['mixed','y‴+3y″+7y′+5y=0']),t:range(.25,1,.25)},
+  text:(T,$)=>`For ${T.eq}, a fundamental set has W(0)=${$.eq==='distinct'?'−2':'8'}. Use Abel’s formula to find W(${T.t}).`,
+  parts:[part('W',$=>($.eq==='distinct'?-2:8)*Math.exp(-POLY[$.eq][1]*$.t),'W at the given time',[[ $=>($.eq==='distinct'?-2:8)*Math.exp(POLY[$.eq][1]*$.t),'Sign: W′=−p_(n−1)W, so W decays when p_(n−1)>0.'],[$=>($.eq==='distinct'?-2:8)*Math.exp(-POLY[$.eq][2]*$.t),'Abel uses the coefficient of y″, one below the top derivative, not the coefficient of y′.']])],
+  hints:['Abel: W(t)=W(0)exp(−∫p_(n−1)dt).','Here p_(n−1) is the coefficient of y″.'],
+  steps:($,f)=>[`p₂=${POLY[$.eq][1]}, so W=${$.eq==='distinct'?'−2':'8'}e^(−${POLY[$.eq][1]}t)=${f(($.eq==='distinct'?-2:8)*Math.exp(-POLY[$.eq][1]*$.t))}.`],
+  second:$=>({W:wronskian(basisFromRoots(ROOTS[$.eq]),$.t)}),
+  cases:[cs(N('12'),{eq:'mixed',t:1},{W:8*Math.exp(-3)})]}),
+ cc({id:'u2.order-count',title:'Count the basis functions',topics:['higher-order'],
+  vars:{op:choice(['a','(D²+1)²y=0'],['b','D³(D−1)y=0'],['c','(D+2)³y=0'],['d','(D²+4)(D−1)²y=0'])},
+  text:T=>`How many initial values does ${T.op} need, and how many basis functions does it have?`,
+  parts:[pick('n','count',[
+   ['3','3','Three roots with multiplicity, for example −2 three times: e^(−2t), te^(−2t), t²e^(−2t).'],
+   ['4','4','Count each root with its multiplicity and a complex pair as two.'],
+   ['6','6','This counts the degree of the factors written, not the order of the product.'],
+  ],$=>$.op==='c'?'3':'4')],
+  hints:['The order is the degree of the characteristic polynomial.','Add multiplicities; a complex pair counts twice.'],
+  steps:$=>[({a:'(r²+1)² has degree 4: cos t, sin t, t cos t, t sin t.',b:'r³(r−1) has degree 4: 1, t, t², eᵗ.',c:'(r+2)³ has degree 3.',d:'(r²+4)(r−1)² has degree 4: cos 2t, sin 2t, eᵗ, teᵗ.'})[$.op]],
+  second:$=>({n:String({a:4,b:4,c:3,d:4}[$.op])}),
+  cases:[cs(N('12'),{op:'a'},{n:'4'})]}),
+ cc({id:'u2.annihilate',title:'Find the annihilator',topics:['annihilator'],
+  vars:{f:choice(['poly','3t²−1'],['texp','te^(2t)'],['esin','eᵗ sin 2t'],['sum','5+e^(−t)'])},
+  text:T=>`Which operator annihilates ${T.f}?`,
+  parts:[pick('A','annihilator',[
+   ['D3','D³','Three derivatives remove a quadratic.'],
+   ['D22','(D−2)²','tᵐe^(at) needs (D−a)^(m+1); here m=1.'],
+   ['quad','D²−2D+5','e^(αt)sin βt needs D²−2αD+α²+β²; here α=1, β=2.'],
+   ['prod','D(D+1)','Multiply the annihilators of the terms: D for 5, D+1 for e^(−t).'],
+  ],$=>({poly:'D3',texp:'D22',esin:'quad',sum:'prod'})[$.f])],
+  hints:['Match each term to its standard annihilator.','For a sum, multiply the annihilators of the terms.'],
+  steps:$=>[({poly:'D³(3t²−1)=0.',texp:'(D−2)²(te^(2t))=0.',esin:'Roots 1±2i give r²−2r+5.',sum:'D kills 5 and D+1 kills e^(−t).'})[$.f]],
+  second:$=>({A:({poly:'D3',texp:'D22',esin:'quad',sum:'prod'})[$.f]}),
+  cases:[cs(N('13'),{f:'esin'},{A:'quad'})]}),
+ cc({id:'u2.annihilator-trial',title:'The trial after removing repeated roots',topics:['annihilator'],
+  vars:{f:choice(['t','2t'],['e','3e^(−t)'],['s','sin t'])},
+  text:T=>`For y‴+y′=${T.f}, which trial form does the annihilator method give for y_p?`,
+  parts:[pick('trial','trial form',[
+   ['tAB','At²+Bt','D² meets the root 0 of D(D²+1), so the multiplicity rises: t and t² remain.'],
+   ['C','Ce^(−t)','−1 is not a root of r³+r, so no extra t factor is needed.'],
+   ['tsc','t(A cos t+B sin t)','±i are already roots, so the trial gains a factor t.'],
+   ['AB','At+B','B is a homogeneous solution, since 0 is a root; it cannot match the forcing.'],
+  ],$=>({t:'tAB',e:'C',s:'tsc'})[$.f])],
+  hints:['Write the roots of r³+r and of the annihilator.','Drop the roots of r³+r from the combined list; what remains is the trial.'],
+  steps:$=>[({t:'Combined roots 0,0,0,±i; drop 0,±i: t, t².',e:'Combined roots 0,±i,−1; drop 0,±i: e^(−t).',s:'Combined roots 0,±i,±i; drop 0,±i: t cos t, t sin t.'})[$.f]],
+  second:$=>({trial:({t:'tAB',e:'C',s:'tsc'})[$.f]}),
+  cases:[cs(N('13'),{f:'t'},{trial:'tAB'})]}),
+ nc({id:'u2.annihilator-ivp',title:'Annihilator trial, then fit the data',topics:['annihilator'],lab:'higher-order',level:3,
+  vars:{t:range(1,3,1),ask:choice(['y','y(t)'],['A','the coefficient A of t² in y_p'],['C','the coefficient C of e^(−t) in y_p'])},
+  text:T=>`Solve y‴+y′=2t+3e^(−t) with y(0)=y′(0)=y″(0)=0 using the trial At²+Bt+Ce^(−t). Report ${T.ask}${T.ask==='y(t)'?` at t=${T.t}`:''}.`,
+  parts:[part('r',$=>$.ask==='y'?annY($.t):$.ask==='A'?1:-1.5,'requested value',[[ $=>$.ask==='y'?$.t*$.t-1.5*Math.exp(-$.t):$.ask==='A'?2:1.5,$=>$.ask==='y'?'y_p alone has y(0)=−1.5; add the homogeneous part.':$.ask==='A'?'y′ of At² is 2At; match 2At=2t.':'(D³+D)Ce^(−t)=−2Ce^(−t); the sign of C is negative.'],[$=>$.ask==='y'?annY($.t)-1:$.ask==='A'?.5:-3,$=>$.ask==='y'?'The constant c₁ from the root 0 is missing.':$.ask==='A'?'Only y′ acts on t²; y‴ of t² is zero.':'−2C=3 gives C=−3/2, not −3.']])],
+  hints:['Substitute the trial: y‴+y′=2At+B−2Ce^(−t).','Match coefficients, then fit c₁+c₂cos t+c₃sin t to the zero data.'],
+  steps:($,f)=>[String.raw`$A=1$, $B=0$, $C=-3/2$.`,`Homogeneous fit: 1+½cos t−3/2 sin t. y(${f($.t)})=${f(annY($.t))}.`],
+  second:$=>{if($.ask==='y')return {r:rk3([1,0,1,0],[0,0,0],$.t,u=>2*u+3*Math.exp(-u))[0]};
+   // Apply L=D³+D to each trial function by central differences, then match the forcing at three times.
+   const h=1e-3,L=g=>u=>(g(u+2*h)-2*g(u+h)+2*g(u-h)-g(u-2*h))/(2*h**3)+(g(u+h)-g(u-h))/(2*h),basis=[u=>u*u,u=>u,u=>Math.exp(-u)],ts=[.5,1,1.5];
+   const [A,,C]=solveLinear(ts.map(u=>basis.map(g=>L(g)(u))),ts.map(u=>2*u+3*Math.exp(-u)));return {r:$.ask==='A'?A:C};},
+  sim:{scenario:'annihilator',setup(s,$){Object.assign(s,{init:[0,0,0],t:$.t});},read:(c,s,$)=>$.ask==='y'?{r:c.y}:{}},
+  cases:[cs(N('13'),{t:3,ask:'y'},{r:9.21864})]}),
+];

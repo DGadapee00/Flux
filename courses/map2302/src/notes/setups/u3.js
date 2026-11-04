@@ -11,4 +11,10 @@ export default {
  s9:[setup('Delayed input does not delay existing motion','laplace','moving',{},c=>({x:[c.x,.6070548491670358],v:[c.v,-1.3253831760161683]}))],
  s10:[setup('A critically damped pulse','laplace','pulse',{},c=>({x:[c.x,.3519705891978756]}))],
  s11:[setup('Narrow tuning has a transient cost','radio-tuner','tuned',{},c=>({Q:[c.Q,20],time:[c.tau,.00010610329539459691]}))],
+ s13:[
+ {tag:'The transform of t sin 2t',lab:'laplace-rules',scenario:'tsin',setup(s){s.s=1.5;},read:c=>({F:[c.F,.1536],quadrature:[c.numeric,.1536]})},
+ {tag:'A power times a decay',lab:'laplace-rules',scenario:'tnexp',setup(s){s.s=1;},read:c=>({F:[c.F,1.18519]})},
+ {tag:'A delayed parabola',lab:'laplace-rules',scenario:'delayed',setup(s){s.s=2;},read:c=>({F:[c.F,.0338338]})},
+ {tag:'A square wave',lab:'laplace-rules',scenario:'square',setup(s){s.s=1;},read:c=>({F:[c.F,.731059]})},
+ ],
 };

@@ -9,7 +9,7 @@ export const course = defineCourse({
   track: 'math',
   order: 4,
   term: '',
-  text: 'OCW 18.03SC Fall 2011; Lebl, Notes on Diffy Qs',
+  text: 'OCW 18.03SC Fall 2011; Lebl, Notes on Diffy Qs; UNF schedule supplement',
   units: EXAMS.map((exam) => ({
     id: exam.id,
     title: exam.title,

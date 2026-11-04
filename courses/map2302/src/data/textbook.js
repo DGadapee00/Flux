@@ -45,6 +45,15 @@ export const SECTIONS = Object.freeze({
  'phase-line':{section:'1.6',url:'auteq_section.html'},
  'euler':{section:'1.7',url:'numer_section.html'},
  'complex-response':{section:'2.2',url:'sec_ccsol.html'},
+ // UNF supplement topics. Section numbers only; the page names are not yet confirmed against the book.
+ 'exact':{section:'1.8'},
+ 'substitution':{section:'1.5'},
+ 'first-order-models':{section:'1.4'},
+ 'variation-parameters':{section:'2.5'},
+ 'cauchy-euler':{section:'2.1'},
+ 'higher-order':{section:'2.3'},
+ 'annihilator':{section:'2.3'},
+ 'laplace-rules':{section:'6.1'},
 });
 export function citation(topic){const s=SECTIONS[topic];return s?`Lebl, Notes on Diffy Qs §${s.section}`:null;}
-export function sectionURL(topic){return SECTIONS[topic]?`https://www.jirka.org/diffyqs/html/${SECTIONS[topic].url}`:null;}
+export function sectionURL(topic){return SECTIONS[topic]?.url?`https://www.jirka.org/diffyqs/html/${SECTIONS[topic].url}`:null;}

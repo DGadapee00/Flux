@@ -11,5 +11,7 @@
   learner-error boxes Common mistake. Use PHY 2049's parts, legend and TOC.
 - Domains, initial data, uniqueness hypotheses, causal step/impulse conventions and Fourier
   endpoint conventions are explicit. A transfer function presumes zero initial conditions.
-- No power-series/Frobenius, standalone exact-equation/PDE unit without a mapped UNF supplement.
+- No power-series/Frobenius or PDE unit. The UNF supplement (exact equations, substitutions,
+  models, variation of parameters, Cauchy–Euler, higher order, annihilators, transform rules) sits
+  inside Units 1–3 as Part IV or a closing section, mapped section by section in `src/data/syllabus.js`.
 - Lebl and the four-unit OCW spine were confirmed by Dalton on 1 Nov 2026. No fabricated source cases or device-performance promises.

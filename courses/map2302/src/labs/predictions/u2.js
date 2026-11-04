@@ -15,4 +15,16 @@ export default {
  {id:'rl-charge',scenario:'ring',ask:'At the initial instant, the capacitor is charged and current is zero. Is its stored electric energy zero?',apply(s){s.t=0;},watch:[{id:'empty',label:'is the stored energy zero?',get:c=>c.energy<1e-14}],mode:'bool',expect:{empty:false},why:'Zero current says q′=0 at that instant. Capacitor energy q²/(2C) is positive when q is nonzero.'},
  {id:'rl-frequency',scenario:'ring',ask:'Increase R from 40 to 100 Ω while L and C stay fixed. What happens to the undamped natural frequency?',apply(s){s.R=100;},watch:[{id:'wn',label:'ωn=1/√(LC)',get:c=>c.wn}],mode:'dir',expect:{wn:'same'},why:'R changes damping and the damped oscillation frequency. The undamped natural frequency depends only on L and C.'},
  ],
+ variation:[
+  {id:'vp-edge',scenario:'secant',ask:'Move t from 1.2 to 1.5, closer to π/2 where sec t blows up. What happens to y?',apply(s){s.t=1.5;},watch:[{id:'y',label:'y(t)',get:c=>c.y}],mode:'dir',expect:{y:'bigger'},why:'y=cos t ln(cos t)+t sin t. The first term tends to zero and the second to π/2 as t→π/2, so y rises toward about 1.57, even though the forcing is unbounded.'},
+  {id:'vp-wronskian',scenario:'repeated',ask:'Move t from 2 to 3. What happens to the Wronskian of eᵗ and teᵗ?',apply(s){s.t=3;},watch:[{id:'W',label:'Wronskian W',get:c=>c.W}],mode:'dir',expect:{W:'bigger'},why:'W=e^(2t) grows. It is never zero, which is why the two functions stay independent and the formulas for u₁′ and u₂′ never divide by zero.'},
+ ],
+ 'cauchy-euler':[
+  {id:'ce-case',scenario:'distinct',ask:'Keep a=−2 and raise b from 2 to 2.25. Are the indicial roots still distinct?',apply(s){s.b=2.25;},watch:[{id:'distinct',label:'are the roots distinct and real?',get:c=>c.kind==='distinct'}],mode:'bool',expect:{distinct:false},why:'The indicial equation is r²−3r+b=0 with discriminant 9−4b. At b=2.25 it is zero, so r=1.5 repeats and the second solution is x^1.5 ln x.'},
+  {id:'ce-turns',scenario:'complex',ask:'Raise b from 4 to 6 with a=1. What happens to β in x^α cos(β ln x)?',apply(s){s.b=6;},watch:[{id:'beta',label:'β, the imaginary part of the root',get:c=>c.r2}],mode:'dir',expect:{beta:'bigger'},why:'With a=1 the indicial equation is r²+b=0, so r=±i√b. β grows from 2 to about 2.45, and the solution oscillates faster in ln x.'},
+ ],
+ 'higher-order':[
+  {id:'ho-wronskian',scenario:'mixed',ask:'Change the initial slope y′(0) from 0 to 1. What happens to the Wronskian of the basis at the end time?',apply(s){s.init[1]=1;},watch:[{id:'W',label:'Wronskian W(t)',get:c=>c.W}],mode:'dir',expect:{W:'same'},why:'The Wronskian belongs to the basis e^(−t), e^(−t)cos 2t, e^(−t)sin 2t, not to one solution. Initial data change the coefficients, not the basis.'},
+  {id:'ho-order',scenario:'repeated',ask:'For (D²+1)²y=0, is y(0) and y′(0) enough to fix the solution?',apply(){},watch:[{id:'four',label:'does the order need more than two initial values?',get:c=>c.order>2}],mode:'bool',expect:{four:true},why:'The equation has order four, with basis cos t, sin t, t cos t and t sin t. Four constants need four initial values: y, y′, y″ and y‴.'},
+ ],
 };

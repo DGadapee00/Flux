@@ -24,5 +24,6 @@ export default {
   ],
   labs: [
     { course: 'map2302', lab: 'laplace', notes: ['s4', 's5', 's7', 's8', 's9', 's10'], note: 'Steps, delayed steps and a hammer tap on a mass, at rest and already moving.' },
+    { course: 'map2302', lab: 'laplace-rules', notes: ['s13'], note: 'Multiply by t, shift in s, shift in t and periodic inputs, each checked against the defining integral.' },
   ],
 };

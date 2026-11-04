@@ -8,4 +8,8 @@ export default {exam:'u2',title:'Second-order linear equations',chapters:'2',fil
 {id:'s7',n:7,title:'Pure and practical resonance',lab:'resonance',ch:['2'],topics:['frequency-response'],problems:['u2.peak-frequency','u2.beats','u2.resonance-kind','u2.three-frequencies']},
 {id:'s8',n:8,title:'A car suspension',lab:'suspension',ch:['2'],topics:['vibrations'],problems:['u2.real-spring','u2.base-input']},
 {id:'s9',n:9,title:'The series RLC circuit',lab:'rlc',ch:['2'],topics:['rlc']},
-{id:'s10',n:10,title:'Formula sheet',lab:null,ch:[]},]};
+{id:'s11',n:10,title:'Variation of parameters',lab:'variation',ch:['2'],topics:['variation-parameters']},
+{id:'s12',n:11,title:'Cauchy–Euler equations and reduction of order',lab:'cauchy-euler',ch:['2'],topics:['cauchy-euler']},
+{id:'s13',n:12,title:'Higher-order linear equations',lab:'higher-order',ch:['2'],topics:['higher-order']},
+{id:'s14',n:13,title:'Annihilators and variation of parameters in order n',lab:'higher-order',ch:['2'],topics:['annihilator']},
+{id:'s10',n:14,title:'Formula sheet',lab:null,ch:[]},]};
