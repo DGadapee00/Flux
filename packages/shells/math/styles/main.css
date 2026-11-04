@@ -1,4 +1,10 @@
 @import "../../styles/predict.css";
+
+/* The page is dark, so what the browser draws itself (a select's open list, scrollbars,
+ * checkboxes, number spinners) is drawn dark too. */
+:root {
+  color-scheme: dark;
+}
 /* 3Blue1Brown / Manim look: near-black ground, flat panels, Computer Modern math, Manim palette. */
 :root {
   --bg: #0b0c0e;
@@ -624,6 +630,21 @@ select {
   background: var(--panel-solid);
   color: var(--text);
   font: inherit;
+}
+
+/*
+ * The open list of any select. The unit picker's own background is see-through, so Windows opens
+ * it as a white list of the app's light text unless the options say otherwise. The physics shell
+ * has the same rule.
+ */
+select option,
+select optgroup {
+  background-color: var(--panel-solid);
+  color: var(--text);
+}
+
+select option:disabled {
+  color: var(--text-dim);
 }
 
 .row {
