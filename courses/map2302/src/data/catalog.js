@@ -6,7 +6,7 @@ export const EXAMS = [
     "title": "First-order equations",
     "chapters": "1",
     "date": null,
-    "labs": ["slope-field","euler","phase-line","first-order-response","coffee"],
+    "labs": ["slope-field","euler","phase-line","first-order-response","coffee","exact-substitution","first-order-models"],
     "coming": []
   },
   {
@@ -15,7 +15,7 @@ export const EXAMS = [
     "title": "Second-order linear equations",
     "chapters": "2",
     "date": null,
-    "labs": ["oscillator","resonance","suspension","rlc"],
+    "labs": ["oscillator","resonance","suspension","rlc","variation","cauchy-euler","higher-order"],
     "coming": []
   },
   {
@@ -24,7 +24,7 @@ export const EXAMS = [
     "title": "Fourier series and Laplace transforms",
     "chapters": "3",
     "date": null,
-    "labs": ["fourier","laplace","convolution","radio-tuner"],
+    "labs": ["fourier","laplace","convolution","radio-tuner","laplace-rules"],
     "coming": []
   },
   {
@@ -38,6 +38,12 @@ export const EXAMS = [
   }
 ];
 export const LAB_META = {
+  'laplace-rules': { id: 'laplace-rules', exam: 'u3', title: 'Transform rules' },
+  'higher-order': { id: 'higher-order', exam: 'u2', title: 'Higher-order equations' },
+  'cauchy-euler': { id: 'cauchy-euler', exam: 'u2', title: 'Cauchy–Euler equations' },
+  variation: { id: 'variation', exam: 'u2', title: 'Variation of parameters' },
+  'first-order-models': { id: 'first-order-models', exam: 'u1', title: 'Tanks, buildings and falls' },
+  'exact-substitution': { id: 'exact-substitution', exam: 'u1', title: 'Exact and substitution' },
   'clock-pendulum': { id: 'clock-pendulum', exam: 'u4', title: 'Pendulum clock', app: true },
   'limit-cycle': { id: 'limit-cycle', exam: 'u4', title: 'Attracting cycles' },
   linearize: { id: 'linearize', exam: 'u4', title: 'Linearization limits' },

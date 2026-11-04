@@ -3,16 +3,18 @@
 A snapshot from the data on 3 November 2026, after the thermal-fluids courses (EML 3015, EML 4140,
 EML 3101). Since then a linear algebra thread runs from vectors to eigenvalues and projection, and
 feeds differential equations and regression. EEL 3111 Circuit Analysis I and EGN 3203 Modern
-Computation Methods are on the map. For the live numbers run `node map/check.mjs`,
+Computation Methods are on the map. MAP 2302 gained six concepts and six labs for the UNF schedule:
+exact equations, substitutions, balance models, variation of parameters, Cauchy–Euler equations and
+higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**237 concepts, 146 with a Flux lab, 91 gaps.**
+**243 concepts, 152 with a Flux lab, 91 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
 | Calculus | 30 | 26 |
 | Linear algebra | 7 | 0 |
-| Differential equations | 12 | 12 |
+| Differential equations | 18 | 18 |
 | Numerical methods | 13 | 2 |
 | Mechanics | 30 | 30 |
 | Electricity and magnetism | 26 | 25 |
@@ -31,7 +33,7 @@ Every Flux course app is on the map: every lab and every notes section sits on a
 |---|---|
 | MAC 2311–2312 Calculus I and II | 16 |
 | MAC 2313 Calculus III | 19 |
-| MAP 2302 Differential Equations | 14 |
+| MAP 2302 Differential Equations | 20 |
 | PHY 2048 Physics I | 27 |
 | PHY 2049 Physics II | 33 |
 | EGN 3311 Statics | 8 |

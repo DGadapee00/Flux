@@ -15,4 +15,8 @@ export default {
  {id:'ra-tune',scenario:'tuned',ask:'Increase L by 20% while keeping C fixed. Does the tuned natural frequency stay at 60 kHz?',apply(s){s.L*=1.2;},watch:[{id:'same',label:'is f0 still 60 kHz?',get:c=>Math.abs(c.f0-60000)<1e-5}],mode:'bool',expect:{same:false},why:'The tuning frequency varies as 1/√L at fixed C. Increasing L lowers it; keeping the same station requires reducing C accordingly.'},
  {id:'ra-memory',scenario:'tuned',ask:'Halve the chosen resistance. The frequency preference sharpens. Does the transient envelope decay twice as fast?',apply(s){s.R/=2;},watch:[{id:'tau',label:'envelope decay time',get:c=>c.tau}],mode:'factor',expect:{tau:2},why:'The decay rate is R/(2L), so halving R doubles the decay time. A sharper resonance and a faster transient are competing goals.'},
  ],
+ 'laplace-rules':[
+  {id:'lr-decay',scenario:'tsin',ask:'Raise s from 1.5 to 3. What happens to the transform of t sin 2t?',apply(s){s.s=3;},watch:[{id:'F',label:'F(s)',get:c=>c.F}],mode:'dir',expect:{F:'smaller'},why:'F=4s/(s²+4)² falls from about 0.154 to 0.071. For large s, e^(−st) weights only the start, where t sin 2t is small.'},
+  {id:'lr-delay',scenario:'delayed',ask:'Increase the delay c from 1 to 2 with s=2. What happens to F(s)?',apply(s){s.p.c=2;},watch:[{id:'F',label:'F(s)',get:c=>c.F}],mode:'dir',expect:{F:'smaller'},why:'F=2e^(−cs)/s³. One more unit of delay multiplies F by e^(−2)≈0.135. The shape of g is unchanged; only its start moves.'},
+ ],
 };

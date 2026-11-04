@@ -12,6 +12,9 @@ export default {
  {id:'s8',n:8,title:'Autonomous equations and stability',lab:'phase-line',ch:['1'],topics:['phase-line']},
  {id:'s9',n:9,title:'A cooling coffee server',lab:'coffee',ch:['1'],topics:['separation'],problems:['u1.cooling-temperature','u1.cooling-time','u1.cooling-fit','u1.cooling-model']},
  {id:'s10',n:10,title:'Linear versus nonlinear',lab:'slope-field',ch:['1'],topics:['integrating-factor'],problems:['u1.linear-superposition','u1.classify']},
- {id:'s11',n:11,title:'Formula sheet',lab:null,ch:[]},
+ {id:'s12',n:11,title:'Exact equations',lab:'exact-substitution',ch:['1'],topics:['exact']},
+ {id:'s13',n:12,title:'Substitutions',lab:'exact-substitution',ch:['1'],topics:['substitution']},
+ {id:'s14',n:13,title:'Tanks, buildings and falling bodies',lab:'first-order-models',ch:['1'],topics:['first-order-models']},
+ {id:'s11',n:14,title:'Formula sheet',lab:null,ch:[]},
  ],
 };

@@ -23,5 +23,11 @@ Unit 2 adds four drawn/animated labs, including the Eibach-spring quarter-car,
 Unit 3: four labs, a cited 60 kHz radio-clock tuner, eight predictions, 26 templates
 (34.6% conceptual), and eleven notes examples that open in labs. Owner student review remains.
 
+UNF supplement: the UNF MAP 2302 schedule (Nagle, Saff and Snider, 9th ed.) is mapped section
+by section in `src/data/syllabus.js`, and `spine.test.mjs` fails if any section loses its notes, lab
+or problems. Six labs and eight notes sections fill what the OCW spine leaves out: exact equations,
+substitutions, tanks, buildings and drag (Unit 1); variation of parameters, Cauchy–Euler and
+reduction of order, higher-order equations and annihilators (Unit 2); and transform rules (Unit 3).
+
 Unit 4: five labs including the drawn pendulum clock, ten predictions, 25 templates
 (36% conceptual), and thirteen lab-linked notes examples. The full measured scorecard passes.

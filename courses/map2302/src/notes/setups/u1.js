@@ -20,4 +20,18 @@ export default {
  {tag:'A new ambient changes the equilibrium',lab:'coffee',scenario:'switch',setup(s){Object.assign(s,{T0:90,Ta:20,Ta2:10,k:.001,t:900,switchAt:300});},read:c=>({T:[c.T,43.9479925427822]})},
  ],
  s10:[{tag:'Doubling initial data need not double the trajectory',lab:'slope-field',scenario:'blowup',setup(s){s.probe={x:0,y:2,z:0};s.t=.25;},read:c=>({y:[c.y,4]})}],
+ s12:[
+ {tag:'A potential through the origin',lab:'exact-substitution',scenario:'exact',setup(s){Object.assign(s,{x0:0,y0:1,x:1.5});},read:c=>({y:[c.y,-.21764],level:[c.C,1]})},
+ {tag:'A factor of x',lab:'exact-substitution',scenario:'factor',setup(s){Object.assign(s,{x0:1,y0:1,x:2});},read:c=>({y:[c.y,.179449],level:[c.C,1.5]})},
+ ],
+ s13:[
+ {tag:'The ratio y/x',lab:'exact-substitution',scenario:'homogeneous',setup(s){Object.assign(s,{x0:1,y0:1,x:2});},read:c=>({y:[c.y,3.08953]})},
+ {tag:'A Bernoulli pole',lab:'exact-substitution',scenario:'bernoulli',setup(s){Object.assign(s,{x0:1,y0:1,x:1.5});},read:c=>({y:[c.y,4/3],pole:[c.pole,2]})},
+ ],
+ s14:[
+ {tag:'Salt passes downstream',lab:'first-order-models',scenario:'tanks',setup(s){Object.assign(s,{q:5,V1:100,V2:50,a0:20,b0:0,t:12});},read:c=>({tank2:[c.y,4.95235],peak:[c.peak,13.8629]})},
+ {tag:'A building lags the weather',lab:'first-order-models',scenario:'building',setup(s){Object.assign(s,{K:.2,M0:10,B:8,H:2,T0:15,t:30});},read:c=>({T:[c.y,16.136],swing:[c.swing,4.857],lag:[c.lag,3.51],mean:[c.mean,20]})},
+ {tag:'Linear drag from rest',lab:'first-order-models',scenario:'linear',setup(s){Object.assign(s,{m:2,b:.5,v0:0,t:4});},read:c=>({v:[c.y,24.80],x:[c.y2,57.74],vt:[c.vt,39.24]})},
+ {tag:'A skydiver near terminal speed',lab:'first-order-models',scenario:'quadratic',setup(s){Object.assign(s,{m:80,c:.25,v0:0,t:6});},read:c=>({v:[c.y,43.8],vt:[c.vt,56.03],x:[c.y2,151]})},
+ ],
 };

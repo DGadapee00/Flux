@@ -10,4 +10,5 @@ export default {exam:'u3',title:'Fourier series and Laplace transforms',chapters
 {id:'s9',n:9,title:'Initial-value problems',lab:'laplace',ch:['3'],topics:['laplace-ivp'],problems:['u3.first-ivp','u3.initial-pulse']},
 {id:'s10',n:10,title:'Transfer functions and poles',lab:'laplace',ch:['3'],topics:['transfer'],problems:['u3.transfer','u3.transfer-state','u3.poles']},
 {id:'s11',n:11,title:'A radio-clock tuner',lab:'radio-tuner',ch:['3'],topics:['transfer'],problems:['u3.radio-tuning']},
-{id:'s12',n:12,title:'Formula sheet',lab:null,ch:[]},]};
+{id:'s13',n:12,title:'More transform rules',lab:'laplace-rules',ch:['3'],topics:['laplace-rules']},
+{id:'s12',n:13,title:'Formula sheet',lab:null,ch:[]},]};
