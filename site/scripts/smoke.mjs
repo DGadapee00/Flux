@@ -263,7 +263,7 @@ async function main() {
   const server = await createServer({
     root: siteRoot,
     configFile: path.join(siteRoot, 'vite.config.js'),
-    server: { host: '127.0.0.1', port: 5173, strictPort: true },
+    server: { host: '127.0.0.1', port: 5173, strictPort: true, hmr: false },
   });
   await server.listen();
 
@@ -395,6 +395,21 @@ async function main() {
       if (chosen.page > chosen.client + 1) throw new Error(`${width}px scrolls sideways after choosing a concept`);
       const mapShot = await page.send('Page.captureScreenshot', { format: 'png' });
       fs.writeFileSync(path.join(outDir, `hub-${width}-map.png`), Buffer.from(mapShot.data, 'base64'));
+
+      // A tall map can fill the width without shrinking every lane into the viewport height.
+      await evalJson(page, `document.querySelector('[data-zoom="width"]').click()`);
+      const fitted = await evalJson(page, `(() => {
+        const box = document.querySelector('#mapbox');
+        return { width: box.clientWidth, drawing: document.querySelector('#map').getBoundingClientRect().width };
+      })()`);
+      if (Math.abs(fitted.width - fitted.drawing) > 8) throw new Error(`${width}px Fit width leaves unused map space`);
+      await evalJson(page, `document.querySelector('[data-zoom="fit"]').click()`);
+      const fitsAll = await evalJson(page, `(() => {
+        const box = document.querySelector('#mapbox');
+        const drawing = document.querySelector('#map').getBoundingClientRect();
+        return drawing.width <= box.clientWidth + 1 && drawing.height <= box.clientHeight + 1;
+      })()`);
+      if (!fitsAll) throw new Error(`${width}px Fit all does not show the whole map`);
     }
 
     await page.send('Emulation.setDeviceMetricsOverride', {

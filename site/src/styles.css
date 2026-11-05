@@ -85,14 +85,13 @@ button:focus-visible {
 }
 
 .wrap {
-  max-width: 1180px;
   margin: 0 auto;
-  padding-block: 28px 56px;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 40px;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 22px;
+  gap: 18px;
 }
 
 /* ---------- Header ---------- */
@@ -186,6 +185,7 @@ h1 {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .mapinner {
@@ -369,12 +369,12 @@ h1 {
 }
 
 .explore > .mapbox {
-  order: 2;
+  order: 3;
 }
 
 .explore > .map-bar,
 .explore > .filters {
-  order: 3;
+  order: 2;
 }
 
 .explore > .hint {
@@ -394,20 +394,30 @@ h1 {
 }
 
 @media (min-width: 1001px) {
+  .brand-text {
+    flex: 1;
+    grid-template-columns: auto minmax(0, 66ch) 1fr;
+    align-items: center;
+    gap: 14px 24px;
+  }
+
+  .jump {
+    justify-self: end;
+  }
+
   .explore {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(340px, 400px);
-    grid-template-rows: auto auto auto auto auto auto 1fr;
+    grid-template-columns: minmax(0, 1fr) auto minmax(320px, 360px);
+    grid-template-rows: auto auto auto auto auto 1fr;
     grid-template-areas:
-      'find    panel'
-      'bar     panel'
-      'filters panel'
-      'map     panel'
-      'hint    panel'
-      'trail   panel'
-      'plist   panel';
-    column-gap: 28px;
-    row-gap: 14px;
+      'find  filters panel'
+      'bar   bar     panel'
+      'map   map     panel'
+      'hint  hint    panel'
+      'trail trail   panel'
+      'plist plist   panel';
+    column-gap: 20px;
+    row-gap: 12px;
     align-items: start;
   }
 
@@ -418,6 +428,32 @@ h1 {
   .explore > .hint { grid-area: hint; }
   .explore > .trail { grid-area: trail; }
   .explore > .path-list { grid-area: plist; }
+
+  .explore > .mapbox {
+    height: max(480px, calc(100dvh - 230px));
+    max-height: none;
+  }
+
+  .explore > .filters {
+    position: relative;
+    align-self: center;
+  }
+
+  .filters > .legend,
+  .filters > .paths {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: min(520px, 70vw);
+    max-height: 50vh;
+    overflow-y: auto;
+    z-index: 4;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel);
+    box-shadow: 0 8px 24px #0003;
+  }
 
   .detail {
     grid-area: panel;
