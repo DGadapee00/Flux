@@ -11,7 +11,8 @@
  *
  * Finding your way on a map this size: a find box (`/` focuses it) opens a concept, shows one
  * subject or follows a course. A subject filter keeps only the chosen lanes, and `?lanes=a,b`
- * keeps that choice. Zoom buttons and Ctrl with the wheel resize the drawing; Fit shows all of it.
+ * keeps that choice. Zoom buttons and Ctrl with the wheel resize the drawing; Fit width uses the
+ * available width and Fit all shows the whole map.
  * Arrow keys move between boxes and Enter opens one; the map is one stop in the tab order.
  *
  * A course is a path through the map (map/paths/). Choosing one numbers its concepts on the map,
@@ -210,7 +211,7 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
   };
   /** The scale at which the whole drawing fits the box, across and down, never above actual size. */
   function fitScale() {
-    let maxH = parseFloat(getComputedStyle(mapbox).maxHeight);
+    let maxH = mapbox.clientHeight || parseFloat(getComputedStyle(mapbox).maxHeight);
     if (!Number.isFinite(maxH)) maxH = Math.min(window.innerHeight * 0.68, 640);
     return Math.min(1, (mapbox.clientWidth - 4) / view.W, (maxH - 12) / view.H);
   }
@@ -253,7 +254,10 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
     if (b.dataset.zoom === 'in') setZoom(now * 1.25);
     else if (b.dataset.zoom === 'out') setZoom(now / 1.25);
     else if (b.dataset.zoom === 'fit') setZoom(fitScale());
-    else {
+    else if (b.dataset.zoom === 'width') {
+      setZoom((mapbox.clientWidth - 4) / view.W);
+      if (current) reveal(current);
+    } else {
       setZoom(1);
       if (current) reveal(current);
     }
