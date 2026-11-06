@@ -13,13 +13,25 @@ export const EXAMS = [
     labs: ['viscosity'],
     coming: ['Couette and Poiseuille flow', 'Pipe flow'],
   },
+  {
+    id: 'u2',
+    n: 2,
+    title: 'Pressure on walls and in moving tanks',
+    chapters: '4',
+    date: 'Unit 2',
+    labs: ['gate', 'rigid-tank'],
+    coming: ['Buoyancy and stability'],
+  },
 ];
 
 export const LAB_META = {
   viscosity: { id: 'viscosity', exam: 'u1', title: 'Viscosity' },
+  gate: { id: 'gate', exam: 'u2', title: 'Gate' },
+  'rigid-tank': { id: 'rigid-tank', exam: 'u2', title: 'Accelerating tank' },
 };
 
 export const CHAPTER_TITLES = {
+  4: 'Effects of pressure',
   5: 'Effects of shear',
 };
 

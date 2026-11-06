@@ -17,6 +17,8 @@ export const BOOKS = Object.freeze({
 
 /** topic → where to read about it. */
 export const SECTIONS = Object.freeze({
+  'hydrostatic-force': { book: 'cleynen', section: '4', title: 'Effects of pressure' },
+  'rigid-body': { book: 'cleynen', section: '4', title: 'Effects of pressure' },
   viscosity: { book: 'cleynen', section: '5', title: 'Effects of shear' },
   diffusion: { book: 'cleynen', section: '5', title: 'Effects of shear' },
 });

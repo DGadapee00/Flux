@@ -5,6 +5,9 @@
 export const PRINCIPLES = {
   'viscosity-law': { name: 'Stress from a velocity gradient', statement: 'In a Newtonian fluid the shear stress is the viscosity times the velocity gradient.', cue: 'A fluid sheared between surfaces.', family: 'Shear' },
   'momentum-diffusion': { name: 'Momentum diffuses', statement: 'Motion spreads into a still fluid at the kinematic viscosity ν = μ/ρ, over a time of order h²/ν.', cue: 'A wall starts moving, or a flow starts up.', family: 'Shear' },
+  'pressure-force': { name: 'Force from pressure on a flat wall', statement: 'The force on a flat submerged surface is the pressure at its centroid times its area.', cue: 'A gate, hatch or window under a liquid.', family: 'Pressure' },
+  'center-of-pressure': { name: 'Where a pressure force acts', statement: 'The force on a flat submerged surface acts below its centroid, by I/(y_c A) along its plane.', cue: 'A hinge, a moment or a line of action under a liquid.', family: 'Pressure' },
+  'rigid-body-pressure': { name: 'Pressure in a liquid moving as one body', statement: 'With no shear, the pressure gradient is ρ(g − a), so every isobar, the surface included, lies square to g − a.', cue: 'A tank that accelerates or spins with its liquid.', family: 'Pressure' },
 };
 
 /** Tags for templates that do not carry their own `principles`. */

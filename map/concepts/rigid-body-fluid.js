@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Accelerate a tank of water or spin it, and draw the free surface and the isobars. It corrects the idea that the water piles up at the front: it piles at the back, tilted by \\(a/g\\), and holds that shape while the acceleration holds.',
+  labs: [
+    { course: 'eml3015', lab: 'rigid-tank', notes: ['s3', 's4'], note: 'A tank that speeds up, brakes, rides a lift or spins, with its surface and isobars drawn.' },
+  ],
 };
