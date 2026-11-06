@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Joints and mounts</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Design practice · Unit 4 · MIT 2.72, Lectures 6 and 10</div>
+  <h1>Joints and mounts</h1>
+  <p class="lede">Why a tightened bolt barely notices the load on its joint, when the joint opens, and how to hold a part so it sits the same way every time.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Bolted joints</h3>
+    <a href="#s1"><span>1</span>Preload and the stiffness share</a>
+    <a href="#s2"><span>2</span>When the joint opens</a>
+    <h3>Part II · Mounts</h3>
+    <a href="#s3"><span>3</span>One contact per freedom</a>
+    <h3>Reference</h3>
+    <a href="#s4"><span>4</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Bolted joints</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Preload and the stiffness share</h2>
+<p>Tightening a bolt stretches it and squeezes the parts it clamps by the same force, the preload. The bolt and the clamped parts then act as two springs side by side between the same two faces.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A pull \(P\) that opens the faces by \(\delta\) adds \(k_b\delta\) to the bolt and takes \(k_m\delta\) off the parts, with \(k_b\delta + k_m\delta = P\). So while the parts still touch,</p>
+\[
+F_b = F_i + C\,P, \qquad F_m = F_i - (1 - C)\,P, \qquad C = \frac{k_b}{k_b + k_m}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · a steel joint pulled with 10 kN</span>
+<p>Steel plates three times as stiff as their bolt give \(C = 0.25\). Preloaded to 20 kN and pulled with 10 kN, the bolt rises to 22.5 kN and the plates still press together with 12.5 kN.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding the whole load to the bolt. A preloaded bolt in a stiff joint feels a small share of the load, which is why preload protects it from fatigue. A soft gasket reverses that: the bolt becomes the stiffer path and takes most of the load.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>When the joint opens</h2>
+<p>The clamp falls as the pull grows. When it reaches zero the parts separate, and from then on the bolt carries the whole load.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+F_m = 0 \quad\text{at}\quad P_\text{sep} = \frac{F_i}{1 - C}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · how hard it can be pulled</span>
+<p>For the steel joint, \(P_\text{sep} = 20/0.75 = 26.7\) kN. Past that the bolt force equals the pull, and the joint leaks, loosens and works its bolt.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Preload set by a torque wrench can scatter by a quarter or more, because most of the torque goes into friction under the head and in the threads. Loads that enter partway through the members lower the bolt's share further.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Mounts</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>One contact per freedom</h2>
+<p>A part in the plane can slide two ways and turn, three freedoms; in space it has six. Exact constraint holds each freedom with one contact and no more, and pushes the part gently onto them.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A contact at \(\mathbf r\) with inward normal \(\mathbf n\) blocks motion into it. To first order a motion \((d_x, d_y, \theta)\) changes its gap by a row of the contact matrix \(J\): \([n_x,\ n_y,\ r_x n_y - r_y n_x]\). Then</p>
+\[
+\text{held} = \operatorname{rank} J, \qquad \text{free} = 3 - \operatorname{rank} J, \qquad \text{redundant} = n - \operatorname{rank} J.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · one pin 50 μm off</span>
+<p>A plate sits on two pins below and one at the side. Make the side pin 50 μm long and the plate shifts 50 μm, still touching all three. Add a second side pin, 50 μm off, and the plate cannot meet all four: a 21 μm misfit is left, so it rocks or strains, and settles differently each time.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding supports to make a mount stiffer or more accurate. An extra contact fights the others. Where stiffness is needed, spread the contacts apart or preload them; where many contacts are needed, make them compliant on purpose.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>In three dimensions the same counting gives the 3-2-1 rule for fixturing: three points on one face, two on the next, one on the third.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Formula sheet</h2>
+\[
+F_b = F_i + C\,P, \qquad F_m = F_i - (1 - C)\,P, \qquad C = \frac{k_b}{k_b + k_m}, \qquad P_\text{sep} = \frac{F_i}{1 - C},
+\]
+\[
+\text{held} = \operatorname{rank} J, \qquad \text{free} = 3 - \operatorname{rank} J, \qquad \text{redundant} = n - \operatorname{rank} J.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 2.72 (Spring 2009), Lecture 6 on exact constraint and Lecture 10 on bolted joints.</footer>
+</body>
+</html>

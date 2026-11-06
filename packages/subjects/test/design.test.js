@@ -86,3 +86,62 @@ test('decision: weight ranges by formula and by bisection', () => {
   assert.deepEqual(req.fails.c, ['defl']);
   assert.notEqual(req.leader, 'c');
 });
+
+import { boltedJoint, boltedJointNetwork, constraintRows, rankByElimination, rankByMinors, seat, seatIterative } from '../src/design/joints.js';
+import { sketchClosed, sketchSolve } from '../src/design/sketch.js';
+import { bracketClosed, bracketNumeric } from '../src/design/verify.js';
+
+test('bolted joint: stiffness share against the spring network', () => {
+  for (const ratio of [0.3, 1, 3]) {
+    for (const P of [0, 5, 15, 40]) {
+      const a = boltedJoint({ Fi: 20, P, ratio });
+      const b = boltedJointNetwork({ Fi: 20, P, ratio });
+      close(b.Fb, a.Fb, 1e-9, `bolt at ${ratio}, ${P}`);
+      close(b.Fm, a.Fm, 1e-9, `members at ${ratio}, ${P}`);
+    }
+  }
+});
+
+const LAYOUTS = {
+  exact: [{ x: 20, y: 0, nx: 0, ny: 1 }, { x: 80, y: 0, nx: 0, ny: 1 }, { x: 0, y: 25, nx: 1, ny: 0 }],
+  over: [{ x: 20, y: 0, nx: 0, ny: 1 }, { x: 80, y: 0, nx: 0, ny: 1 }, { x: 0, y: 25, nx: 1, ny: 0 }, { x: 100, y: 25, nx: -1, ny: 0 }],
+  under: [{ x: 20, y: 0, nx: 0, ny: 1 }, { x: 80, y: 0, nx: 0, ny: 1 }],
+};
+
+test('mount: rank two ways, and seating two ways', () => {
+  for (const [name, contacts, rank] of [['exact', LAYOUTS.exact, 3], ['over', LAYOUTS.over, 3], ['under', LAYOUTS.under, 2]]) {
+    const J = constraintRows(contacts);
+    assert.equal(rankByElimination(J), rank, name);
+    assert.equal(rankByMinors(J), rank, name);
+    const a = seat(contacts, contacts.length - 1, 0.05);
+    const b = seatIterative(contacts, contacts.length - 1, 0.05);
+    a.misfit.forEach((m, i) => close(b.misfit[i], m, 1e-7, `${name} misfit ${i}`));
+  }
+  assert.ok(Math.max(...seat(LAYOUTS.exact, 2, 0.05).misfit.map(Math.abs)) < 1e-9, 'exact constraint takes up the error');
+  assert.ok(Math.max(...seat(LAYOUTS.over, 3, 0.05).misfit.map(Math.abs)) > 0.02, 'a redundant contact fights');
+});
+
+test('sketch: written-down positions against the Newton solver', () => {
+  for (const dims of [{ W: 80, H: 40, S: 40 }, { W: 100, H: 40, S: 50 }]) {
+    for (const scheme of ['intent', 'chained', 'eye']) {
+      const a = sketchClosed(scheme, dims);
+      const b = sketchSolve(scheme, dims);
+      close(b.x1, a.x1, 1e-9, `${scheme} x1`);
+      close(b.x2, a.x2, 1e-9, `${scheme} x2`);
+      assert.equal(b.dof, 0);
+    }
+    const loose = sketchSolve('loose', dims);
+    assert.equal(loose.dof, 1);
+    close(loose.x2 - loose.x1, dims.S, 1e-9, 'loose spacing');
+  }
+});
+
+test('bracket: closed form against integrated curvature and bisection', () => {
+  for (const ktheta of [Infinity, 2e6, 2e5]) {
+    const spec = { P: 200, L: 100, b: 20, h: 5, FS: 1.5, limit: 1, ktheta };
+    const a = bracketClosed(spec);
+    const b = bracketNumeric(spec);
+    close(b.tip, a.tipTest, 1e-9 * a.tipTest + 1e-12, `tip at ${ktheta}`);
+    close(b.pYield, a.pYield, 1e-6, 'yield load');
+  }
+});

@@ -1,7 +1,7 @@
 # Provenance
 
 Design practice lives in this folder. It is a project, not a UNF course, so it has no syllabus,
-course pack or textbook. It is written here, unit by unit. Units 1 to 3 are in.
+course pack or textbook. It is written here, unit by unit. Units 1 to 4 are in.
 
 ## References
 
@@ -14,10 +14,15 @@ Wikipedia's Engineering fit, Tolerance analysis and Geometric dimensioning and t
 
 The 50 mm fit deviations (H8/f7, H7/g6, H7/h6, H7/k6, H7/p6) come from Wikipedia's Engineering fit
 article, read on 6 November 2026, which cites the ISO system of limits and fits. The bracket's
-numbers in the Decision lab are illustrative, written for this course, not measured parts.
+numbers in the Decision lab are illustrative, written for this course, not measured parts. The
+Verification lab's 6061-T6 values (E = 68 GPa, minimum yield 35 ksi = 241 MPa) come from Wikipedia's
+6061 aluminium alloy article, read on 6 November 2026. Joint stiffness ratios and mount stiffnesses
+are round example values.
 
 ## Methods
 
 All derivations are our own. Fits and stacks are checked by convolving binned size distributions;
 position zones by 2D Simpson integration; capability by Simpson integration and by stepping a
-drifting mean; the decision matrix's weight ranges by scan and bisection.
+drifting mean; the decision matrix's weight ranges by scan and bisection; the bolted joint by a spring network
+solved by bisection; contact ranks by elimination and by minors, seating by normal equations and
+conjugate gradients; sketches by a Newton constraint solver; the bracket by integrating curvature.

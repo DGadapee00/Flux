@@ -8,6 +8,8 @@ export default {
   sections: [
     { id: 's1', n: 1, title: 'Requirements, then weights', lab: 'decision', ch: ['3'], topics: ['decision'], home: true },
     { id: 's2', n: 2, title: 'How firm is the choice?', lab: 'decision', ch: ['3'], topics: ['decision'] },
-    { id: 's3', n: 3, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's3', n: 3, title: 'Dimension the reason', lab: 'intent', ch: ['3'], topics: ['intent'], home: true },
+    { id: 's4', n: 4, title: 'A margin rests on its assumptions', lab: 'verify', ch: ['3'], topics: ['verify'], home: true },
+    { id: 's5', n: 5, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

@@ -8,6 +8,10 @@ const loaders = {
   position: () => import('./position.js'),
   capability: () => import('./capability.js'),
   decision: () => import('./decision.js'),
+  intent: () => import('./intent.js'),
+  verify: () => import('./verify.js'),
+  bolted: () => import('./bolted.js'),
+  mount: () => import('./mount.js'),
 };
 
 const labs = createLabLoader(loaders);

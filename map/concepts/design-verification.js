@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Match each requirement of a small bracket to a test, an analysis or an inspection, then run the tests. It corrects the idea that a positive margin on paper means the part is proven: an untested assumption can hide a failure. The check computes each margin from the formula and from the tested load.',
+  labs: [
+    { course: 'design', lab: 'verify', notes: ['s4'], note: 'A bracket arm’s strength and stiffness margins by analysis and by a test on its real mount.' },
+  ],
 };

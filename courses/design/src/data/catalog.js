@@ -29,8 +29,17 @@ export const EXAMS = [
     title: 'Choosing a design',
     chapters: '3',
     date: 'Unit 3',
-    labs: ['decision'],
-    coming: ['Design intent in CAD', 'Verification and margins'],
+    labs: ['decision', 'intent', 'verify'],
+    coming: [],
+  },
+  {
+    id: 'u4',
+    n: 4,
+    title: 'Joints and mounts',
+    chapters: '4',
+    date: 'Unit 4',
+    labs: ['bolted', 'mount'],
+    coming: [],
   },
 ];
 
@@ -40,12 +49,17 @@ export const LAB_META = {
   position: { id: 'position', exam: 'u2', title: 'Position' },
   capability: { id: 'capability', exam: 'u2', title: 'Capability' },
   decision: { id: 'decision', exam: 'u3', title: 'Decision' },
+  intent: { id: 'intent', exam: 'u3', title: 'Design intent' },
+  verify: { id: 'verify', exam: 'u3', title: 'Verification' },
+  bolted: { id: 'bolted', exam: 'u4', title: 'Bolted joint' },
+  mount: { id: 'mount', exam: 'u4', title: 'Mount' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Fits and stack-ups',
   2: 'Position and process',
   3: 'Choosing a design',
+  4: 'Joints and mounts',
 };
 
 export function examById(id) {

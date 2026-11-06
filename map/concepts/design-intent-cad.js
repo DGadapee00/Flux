@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Build a bracket two ways, with dimensions tied to its function and with dimensions picked by eye, then change the bolt spacing. It corrects the idea that a model that looks right is done: only the one built on design intent updates cleanly. The check measures the changed features in both models and compares them with the intended values.',
+  labs: [
+    { course: 'design', lab: 'intent', notes: ['s3'], note: 'One plate drawn four ways in a sketch, then edited: only the one dimensioned by intent keeps its sensor lined up. It shows sketch-level intent, not feature order.' },
+  ],
 };

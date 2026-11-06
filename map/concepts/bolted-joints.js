@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Tighten a bolt, then pull on the joint and plot the bolt force against the load. It corrects the idea that the bolt carries the whole external load: until the joint separates, it feels only the stiffness share. The check compares the stiffness model with a spring-network solution of the same joint.',
+  labs: [
+    { course: 'design', lab: 'bolted', notes: ['s1', 's2'], note: 'Bolt and clamp forces as a preloaded joint is pulled apart, for steel plates and a gasket.' },
+  ],
 };

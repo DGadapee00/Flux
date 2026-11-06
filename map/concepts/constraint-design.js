@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Support a plate on three, four and six contacts and add a small machining error. It corrects the idea that more supports always make a mount stiffer and more accurate: the fourth contact fights the others and the plate rocks or strains. The check counts the constrained freedoms by the contact equations and by perturbing the plate.',
+  labs: [
+    { course: 'design', lab: 'mount', notes: ['s3'], note: 'A plate on two to four pins in the plane, with one pin off size. The plane has three freedoms; the notes extend the count to six.' },
+  ],
 };
