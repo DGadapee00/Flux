@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Route a small sensor board two ways and run its design rule check. It corrects the idea that a board that connects is a board that works: a long ground return or a thin power trace shows up as noise and heat. The check computes trace resistance and temperature rise from geometry and from a current-flow model.',
+  labs: [
+    { course: 'design', lab: 'board', notes: ['s2'], note: 'A motor and a sensor sharing ground copper, against a star ground and a plane. It covers return paths and IR drop, not trace heating.' },
+  ],
 };

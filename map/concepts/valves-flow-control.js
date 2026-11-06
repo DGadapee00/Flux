@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Throttle a valve in a pipe system and plot flow against opening. It corrects the idea that half open passes half the flow: with the pipe’s own losses, flow barely changes until the valve is mostly closed. The check solves the valve and pipe losses together and compares with the system curve.',
+  labs: [
+    { course: 'design', lab: 'valve', notes: ['s1'], note: 'A linear, equal-percentage or quick-opening valve in a pump and pipe system, with its installed characteristic.' },
+  ],
 };

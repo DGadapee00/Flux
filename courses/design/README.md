@@ -9,9 +9,11 @@ along a chain of parts (`stackup`). Unit 2 is position and process: a hole's pos
 and a round zone (`position`), and capability with an x̄ chart (`capability`). Unit 3 is choosing a
 design: requirements, weights and how firm the choice is (`decision`), design intent in a sketch
 (`intent`) and margins by analysis and by test (`verify`). Unit 4 is joints and mounts: a preloaded
-bolted joint (`bolted`) and exact constraint (`mount`).
+bolted joint (`bolted`) and exact constraint (`mount`). Unit 5 is sensors and signals: a
+strain-gauge bridge (`bridge`) and sampling (`sampling`). Unit 6 is valves and boards: a control
+valve in its system (`valve`) and a board's ground return (`board`).
 
-The math is in `packages/subjects/src/design/` (`tolerancing.js`, `decision.js`, `joints.js`, `sketch.js`, `verify.js`). Each lab checks its
+The math is in `packages/subjects/src/design/` (`tolerancing.js`, `decision.js`, `joints.js`, `sketch.js`, `verify.js`, `instruments.js`). Each lab checks its
 closed form against a second method on every scenario and slider stop
 (`npm test -w @flux/design`).
 

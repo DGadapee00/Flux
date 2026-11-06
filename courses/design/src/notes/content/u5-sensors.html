@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sensors and signals</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Design practice · Unit 5 · Wikipedia, Strain gauge and Aliasing</div>
+  <h1>Sensors and signals</h1>
+  <p class="lede">How a strain gauge turns a part's stretch into a voltage worth reading, how to place gauges so heat does not read as load, and how to sample a signal without inventing one.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Strain gauges</h3>
+    <a href="#s1"><span>1</span>A gauge and its bridge</a>
+    <a href="#s2"><span>2</span>Heat, and where to put the gauges</a>
+    <h3>Part II · Sampling</h3>
+    <a href="#s3"><span>3</span>Sampling and aliasing</a>
+    <h3>Reference</h3>
+    <a href="#s4"><span>4</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Strain gauges</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>A gauge and its bridge</h2>
+<p>A foil strain gauge is a fine metal track on a thin backing, glued to the part. When the part stretches, the track stretches, and its resistance rises in proportion. The gauge factor, a little over 2 for foil gauges, is that proportion.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The change is \(\Delta R = R\,GF\,\varepsilon\): a fraction of an ohm in 350. Rather than measure it directly, the gauge goes in one arm of a Wheatstone bridge, two voltage dividers fed from the same supply. Balanced, the bridge puts out nothing; strained, it puts out about</p>
+\[
+V_o \approx V\,\frac{n\,GF\,\varepsilon}{4},
+\]
+<p>with \(n\) the number of active gauges, placed so their signals add.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one gauge at 100 N</span>
+<p>The Verification lab's arm, 100 N at its tip, is strained 689 με at the root. A 350 Ω gauge changes by 0.48 Ω. On 5 V a quarter bridge gives \(5 \times 2 \times 689\times10^{-6}/4 = 1.72\) mV: about 2 counts of a 12-bit ADC over 3.3 V. Amplified 100 times it is 214 counts.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Wiring a gauge straight into an ADC input. The signal is millivolts riding on volts; it needs a bridge to remove the volts and an instrumentation amplifier to raise the millivolts.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Heat, and where to put the gauges</h2>
+<p>A gauge's resistance also changes with temperature. A single gauge cannot tell that from strain. Placement solves it: a gauge on the far face of a bent beam feels the same heat but the opposite strain.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>In a divider, the output depends on the ratio of its two arms. If both arms change by the same fraction, the ratio, and the output, stay put. Put the tension and compression gauges in adjacent arms: heat raises both, strain raises one and lowers the other. A half bridge doubles the signal and cancels heat; a full bridge quadruples it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a warm room</span>
+<p>Take an uncompensated gauge that reads 10 με per °C, an illustrative figure. A 10 °C warm-up shifts the quarter bridge by 0.25 mV, as if the strain had risen 100 με. A full bridge on the same arm gives 6.89 mV and no shift from the heat.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Installing a gauge is mostly about where it goes and how it is wired: on the surface that strains most, aligned with the strain you want, with a partner where it cancels what you do not.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Sampling</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Sampling and aliasing</h2>
+<p>A data-acquisition card samples a voltage at a fixed rate. Between samples it sees nothing. If the signal changes faster than the samples can follow, the samples do not just miss detail: they trace out a slower wave.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A tone at \(f\) sampled at \(f_s\) gives the same samples as one at \(f - k f_s\) for any whole number \(k\). The data show the slowest of them:</p>
+\[
+f_a = \left|\,f - k f_s\,\right|, \qquad k = \operatorname{round}(f/f_s),
+\]
+<p>which is the true frequency only if \(f < f_s/2\), the Nyquist frequency.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · 950 Hz at 1 kHz</span>
+<p>A 950 Hz vibration sampled at 1000 Hz shows up at \(1000 - 950 = 50\) Hz. Raise it to 990 Hz and it appears at 10 Hz: a faster vibration looks slower.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Choosing a sample rate from the signal you care about. Noise and harmonics above the Nyquist frequency alias down too. Put an analog low-pass filter before the converter, and sample five to ten times faster than the highest frequency you want to see.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Formula sheet</h2>
+\[
+\Delta R = R\,GF\,\varepsilon, \qquad V_o \approx V\,\frac{n\,GF\,\varepsilon}{4}, \qquad \varepsilon = \frac{6PL}{Ebh^2},
+\]
+\[
+f_a = \left|\,f - k f_s\,\right|, \qquad f_s > 2 f_\text{max}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Gauge factor and the quarter-bridge estimate from Wikipedia's Strain gauge article, read 6 November 2026. Read alongside Wikipedia's Strain gauge and Aliasing articles.</footer>
+</body>
+</html>

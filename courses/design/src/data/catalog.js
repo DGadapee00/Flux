@@ -41,6 +41,24 @@ export const EXAMS = [
     labs: ['bolted', 'mount'],
     coming: [],
   },
+  {
+    id: 'u5',
+    n: 5,
+    title: 'Sensors and signals',
+    chapters: '5',
+    date: 'Unit 5',
+    labs: ['bridge', 'sampling'],
+    coming: ['Thermocouples and RTDs', 'Pressure and flow measurement'],
+  },
+  {
+    id: 'u6',
+    n: 6,
+    title: 'Valves and boards',
+    chapters: '6',
+    date: 'Unit 6',
+    labs: ['valve', 'board'],
+    coming: ['Actuators', 'Decoupling'],
+  },
 ];
 
 export const LAB_META = {
@@ -53,6 +71,10 @@ export const LAB_META = {
   verify: { id: 'verify', exam: 'u3', title: 'Verification' },
   bolted: { id: 'bolted', exam: 'u4', title: 'Bolted joint' },
   mount: { id: 'mount', exam: 'u4', title: 'Mount' },
+  bridge: { id: 'bridge', exam: 'u5', title: 'Strain bridge' },
+  sampling: { id: 'sampling', exam: 'u5', title: 'Sampling' },
+  valve: { id: 'valve', exam: 'u6', title: 'Valve' },
+  board: { id: 'board', exam: 'u6', title: 'Ground return' },
 };
 
 export const CHAPTER_TITLES = {
@@ -60,6 +82,8 @@ export const CHAPTER_TITLES = {
   2: 'Position and process',
   3: 'Choosing a design',
   4: 'Joints and mounts',
+  5: 'Sensors and signals',
+  6: 'Valves and boards',
 };
 
 export function examById(id) {

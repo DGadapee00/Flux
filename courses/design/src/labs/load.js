@@ -12,6 +12,10 @@ const loaders = {
   verify: () => import('./verify.js'),
   bolted: () => import('./bolted.js'),
   mount: () => import('./mount.js'),
+  bridge: () => import('./bridge.js'),
+  sampling: () => import('./sampling.js'),
+  valve: () => import('./valve.js'),
+  board: () => import('./board.js'),
 };
 
 const labs = createLabLoader(loaders);

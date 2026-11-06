@@ -1,7 +1,7 @@
 # Provenance
 
 Design practice lives in this folder. It is a project, not a UNF course, so it has no syllabus,
-course pack or textbook. It is written here, unit by unit. Units 1 to 4 are in.
+course pack or textbook. It is written here, unit by unit. Units 1 to 6 are in.
 
 ## References
 
@@ -17,7 +17,11 @@ article, read on 6 November 2026, which cites the ISO system of limits and fits.
 numbers in the Decision lab are illustrative, written for this course, not measured parts. The
 Verification lab's 6061-T6 values (E = 68 GPa, minimum yield 35 ksi = 241 MPa) come from Wikipedia's
 6061 aluminium alloy article, read on 6 November 2026. Joint stiffness ratios and mount stiffnesses
-are round example values.
+are round example values. Units 5 and 6 take a foil gauge factor of about 2 and the quarter-bridge
+estimate (Strain gauge), the Kv definition (Flow coefficient), copper's resistivity 1.68 × 10⁻⁸ Ω·m
+(Electrical resistivity and conductivity) and 1 oz copper as 35 μm (Printed circuit board), all from
+Wikipedia, read on 6 November 2026. The gauge's 10 με per °C drift, the pump, pipe and valve sizes,
+and the board's currents are example values written for the labs.
 
 ## Methods
 

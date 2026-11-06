@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Sample a vibration signal while you lower the sample rate. It corrects the idea that a slower sample rate only loses detail: below twice the frequency it shows a slow wave that is not there. The check compares the apparent frequency with the folding formula and with the sampled data’s spectrum.',
+  labs: [
+    { course: 'design', lab: 'sampling', notes: ['s3'], note: 'A tone sampled at a chosen rate, with the false frequency the samples show and their spectrum. It covers aliasing, not filtering or quantization.' },
+  ],
 };

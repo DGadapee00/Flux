@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchyâ
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 172 with a Flux lab, 103 gaps.**
+**275 concepts, 176 with a Flux lab, 99 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -21,11 +21,11 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Thermodynamics | 22 | 12 |
 | Fluid mechanics | 20 | 9 |
 | Heat transfer | 19 | 2 |
-| Circuits and systems | 27 | 11 |
+| Circuits and systems | 27 | 12 |
 | Mechanics of materials | 16 | 15 |
 | Materials science | 15 | 0 |
 | Design and manufacturing | 9 | 8 |
-| Instrumentation and actuators | 8 | 1 |
+| Instrumentation and actuators | 8 | 4 |
 | Statistics | 9 | 9 |
 
 Every Flux course app is on the map: every lab and every notes section sits on a concept, and
@@ -94,9 +94,11 @@ decoupling. Bolted joints sit with mechanics of materials. All twenty are on the
 *Design practice*, with a path, until the owner's design and measurement courses join the map.
 Sources are MIT 2.007, 2.72 and 2.008 lectures and reference articles, read on 6 November 2026.
 Sensors already has Bench's divider and night-light labs. *Design practice* now has its own app
-with nine labs: fits, stack-ups, position zones, process capability, a decision matrix, design
-intent in a sketch, verification margins, a bolted joint and an exact-constraint mount. Design for
-manufacture and the instrumentation and board concepts are still gaps with lab candidates.
+with thirteen labs: fits, stack-ups, position zones, process capability, a decision matrix, design
+intent in a sketch, verification margins, a bolted joint, an exact-constraint mount, a strain-gauge
+bridge, sampling and aliasing, a control valve in its system, and a board's ground return. Design
+for manufacture, temperature sensors, pressure and flow measurement, actuators, microcontrollers
+and decoupling are still gaps with lab candidates.
 Standards such as ASME Y14.5 and ISO 286 are paid documents: concepts explain the ideas and do not
 reproduce them.
 

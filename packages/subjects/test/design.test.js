@@ -145,3 +145,39 @@ test('bracket: closed form against integrated curvature and bisection', () => {
     close(b.pYield, a.pYield, 1e-6, 'yield load');
   }
 });
+
+import { aliasByDft, aliasFrequency, authority, bridgeNodal, bridgeOutput, groundClosed, groundNodal, traceResistance, valveFlow, valveFlowNumeric } from '../src/design/instruments.js';
+
+test('bridge: exact output against nodal analysis; half and full cancel temperature', () => {
+  for (const kind of ['quarter', 'half', 'full']) {
+    const spec = { kind, Vex: 5, GF: 2.1, strain: 500e-6, thermal: 200e-6 };
+    close(bridgeNodal(spec).out, bridgeOutput(spec).exact, 1e-12, kind);
+  }
+  close(bridgeOutput({ kind: 'quarter', Vex: 5, GF: 2, strain: 1e-3 }).linear, 2.5e-3, 1e-15, 'quarter linear');
+  close(bridgeOutput({ kind: 'full', Vex: 5, GF: 2, strain: 0, thermal: 1e-3 }).exact, 0, 1e-15, 'full ignores temperature');
+});
+
+test('aliasing: folding formula against the DFT of the samples', () => {
+  for (const [f, fs] of [[50, 1000], [480, 1000], [950, 1000], [1230, 1000], [130, 200]]) {
+    close(aliasByDft(f, fs).f, aliasFrequency(f, fs), 0.01, `${f} at ${fs}`);
+  }
+});
+
+test('valve: closed form against bisection on the pump and system curves', () => {
+  for (const kind of ['linear', 'equal', 'quick']) {
+    for (const x of [0.1, 0.5, 1]) {
+      const p = { H0: 4, a: 0.002, k: 0.01, KvMax: 10, kind, x };
+      close(valveFlowNumeric(p).Q, valveFlow(p).Q, 1e-9, `${kind} ${x}`);
+    }
+  }
+  const p = { H0: 4, a: 0, k: 0.01, KvMax: 10, kind: 'linear' };
+  close(authority(p), 0.5, 1e-12, 'equal drops give authority 1/2');
+});
+
+test('board: ground offset by hand against nodal analysis', () => {
+  close(traceResistance(1000, 1, 35e-6), 0.48, 1e-12, 'a metre of 1 mm trace');
+  for (const layout of ['shared', 'star']) {
+    const p = { I: 2, Rgs: 0.02, Rsh: traceResistance(50, 0.5, 35e-6), layout };
+    close(groundNodal(p).error, groundClosed(p).error, 1e-12, layout);
+  }
+});

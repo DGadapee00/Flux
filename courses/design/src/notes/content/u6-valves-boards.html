@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Valves and boards</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Design practice · Unit 6 · Wikipedia, Flow coefficient and Printed circuit board</div>
+  <h1>Valves and boards</h1>
+  <p class="lede">What a control valve does once it is installed in a real pipe, and why the copper on a circuit board is part of the circuit.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Valves</h3>
+    <a href="#s1"><span>1</span>A valve in its system</a>
+    <h3>Part II · Boards</h3>
+    <a href="#s2"><span>2</span>Copper is a resistor</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Valves</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>A valve in its system</h2>
+<p>A control valve is a variable restriction. Its flow factor \(K_v\) is the water flow in m³/h it passes with 1 bar across it, fully open. Its trim sets how \(K_v\) changes with travel: linear, equal percentage (each step changes \(K_v\) by the same percentage) or quick opening.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>For water, \(Q = K_v\sqrt{\Delta p}\). Installed, the valve shares the pump's pressure with the pipe:</p>
+\[
+H_0 - aQ^2 = kQ^2 + \left(\frac{Q}{K_v f(x)}\right)^2 \quad\Longrightarrow\quad Q = \sqrt{\frac{H_0}{a + k + 1/(K_v f(x))^2}}.
+\]
+<p>The valve's authority \(N\) is its share of the drop when fully open. With low authority, closing the valve partway adds little to the whole system's resistance.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a linear valve on a long pipe</span>
+<p>A pump giving 4 bar at no flow drives water through a pipe that loses 3 bar at 10 m³/h and a linear valve with \(K_v = 10\). Fully open, the valve takes a quarter of the drop. Half open, it still passes 77% of full flow. An equal-percentage trim in the same place passes 29% at half open, which spreads the control over the travel.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting half open to mean half the flow. That holds only for a linear valve that takes all the pressure. Size a control valve so it takes a fair share of the drop, and choose its trim for the system it sits in.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Cavitation and choked flow. A valve that drops too much pressure can let the liquid flash to vapour and collapse again, which erodes the trim and caps the flow.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Boards</h2>
+</div>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Copper is a resistor</h2>
+<p>On a schematic a wire has no resistance. On a board it is a strip of copper, usually 35 μm thick (1 oz), and a long thin trace has milliohms that matter when amps flow through it.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+R = \frac{\rho L}{w\,t}, \qquad \rho_\text{Cu} = 1.68\times10^{-8}\ \Omega\,\text{m}.
+\]
+<p>A sensor chip puts out its signal above its own ground pin. If a motor's return current \(I\) flows through copper that the sensor's ground also uses, that pin rises by \(I R\), and the output with it. The ADC, referenced at the connector, reads the rise as a change in the sensor.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a shared return</span>
+<p>60 mm of 0.5 mm wide, 1 oz trace measures \(1.68\times10^{-8} \times 0.06/(0.0005 \times 35\times10^{-6}) = 57.6\) mΩ. A 2 A motor current through it lifts the sensor's ground 115 mV: 143 counts of a 12-bit ADC over 3.3 V. Give the motor its own return to the connector, a star ground, and the error falls to the sensor's own milliamp through its short ground stub: about 5 μV.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Routing every ground to the nearest ground. Plan the return paths: high currents to the connector by their own route, sensitive grounds separately, and a ground plane under the board where you can.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Every current returns to its source. Draw where each one goes before routing the board, and keep the big ones away from the small ones.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+Q = K_v\sqrt{\Delta p}, \qquad Q = \sqrt{\frac{H_0}{a + k + 1/(K_v f(x))^2}}, \qquad f_\text{eq}(x) = R^{\,x - 1},
+\]
+\[
+R = \frac{\rho L}{w\,t}, \qquad \Delta V = I\,R_\text{shared}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. The Kv definition from Wikipedia's Flow coefficient article; copper's resistivity from Electrical resistivity and conductivity; 1 oz copper as 35 μm from Printed circuit board; all read 6 November 2026. The pump, pipe and board numbers are examples written for this course.</footer>
+</body>
+</html>

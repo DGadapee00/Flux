@@ -12,6 +12,10 @@ export const PRINCIPLES = {
   margins: { name: 'A margin rests on its assumptions', statement: 'MS = allowable/(FS × applied) − 1 holds only as far as the analysis behind it; a test checks what the analysis assumed.', cue: 'A part judged on paper before it is built.', family: 'Design approach' },
   preload: { name: 'A preloaded bolt takes its share', statement: 'Until the joint opens, the bolt feels only C = k_b/(k_b + k_m) of an external pull; the rest unclamps the parts.', cue: 'A bolted joint under a separating load.', family: 'Joints' },
   'exact-constraint': { name: 'One contact per freedom', statement: 'A part has three freedoms in the plane and six in space; hold each once, and no more.', cue: 'Locating or mounting a part on pins or pads.', family: 'Joints' },
+  bridge: { name: 'Read a gauge with a bridge', statement: 'A gauge’s resistance barely changes, so it is read as a bridge’s imbalance; gauges in adjacent arms add strain and cancel heat.', cue: 'A strain gauge, load cell or pressure sensor.', family: 'Measurement' },
+  nyquist: { name: 'Sample faster than twice the frequency', statement: 'Below twice a signal’s frequency, samples show a false slower wave: f folds to |f − k fₛ|.', cue: 'Choosing a sample rate or reading logged data.', family: 'Measurement' },
+  'installed-characteristic': { name: 'A valve acts in its system', statement: 'Flow is set by the valve and the pipe together; where the pipe takes most of the drop, the valve controls only near closed.', cue: 'Choosing or sizing a control valve.', family: 'Flow' },
+  'ground-return': { name: 'Shared copper couples circuits', statement: 'A current through copper that a sensor’s ground shares lifts that ground by IR, and the sensor reads it.', cue: 'Routing power, motor and sensor grounds on a board.', family: 'Boards' },
 };
 
 /** Tags for templates that do not carry their own `principles`. */

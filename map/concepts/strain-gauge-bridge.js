@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Glue a gauge to a beam, load it and read a quarter, half and full bridge. It corrects the idea that the gauge’s resistance change can be read directly: it is a few milliohms in hundreds of ohms, lost without the bridge. The check compares the bridge output from the linear formula with an exact circuit solution.',
+  labs: [
+    { course: 'design', lab: 'bridge', notes: ['s1', 's2'], note: 'Gauges on a bracket arm read as a quarter, half or full bridge, through an amplifier into an ADC, with a warm room to cancel.' },
+  ],
 };

@@ -22,6 +22,10 @@ export const SECTIONS = Object.freeze({
   verify: { book: 'wikipedia', section: 'Factor of safety', title: 'Factor of safety' },
   bolted: { book: 'mit272', section: 'Lecture 10', title: 'Bolted joints' },
   mount: { book: 'mit272', section: 'Lecture 6', title: 'Constraints, exact constraint design' },
+  bridge: { book: 'wikipedia', section: 'Strain gauge', title: 'Strain gauge' },
+  sampling: { book: 'wikipedia', section: 'Aliasing', title: 'Aliasing' },
+  valve: { book: 'wikipedia', section: 'Flow coefficient', title: 'Flow coefficient' },
+  board: { book: 'wikipedia', section: 'Printed circuit board', title: 'Printed circuit board' },
 });
 
 export function citation(topic) {
