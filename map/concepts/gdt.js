@@ -1,0 +1,30 @@
+export default {
+  id: 'gdt',
+  title: 'Geometric dimensioning and tolerancing',
+  label: ['GD&T'],
+  subject: 'design',
+  courses: ['design'],
+  eq: String.raw`\varnothing\, t \text{ zone about the true position}`,
+  idea: 'Plus-and-minus sizes say how big a feature is but not quite where it is or what shape it has. GD&T adds that: datums say how the part is held for measuring, and a feature control frame bounds a feature’s form, orientation or position. A position tolerance is a round zone around the true location, which allows more usable parts than a square plus-and-minus box. The drawing then says exactly what an inspector checks.',
+  requires: ['tolerances-fits'],
+  sources: [
+    {
+      title: 'Wikipedia, Geometric dimensioning and tolerancing',
+      url: 'https://en.wikipedia.org/wiki/Geometric_dimensioning_and_tolerancing',
+      kind: 'Reference',
+      level: 'Course level',
+      why: 'Datums, feature control frames and the geometric tolerances, with what each controls.',
+      checked: '2026-11-06',
+    },
+    {
+      title: 'MIT 2.72, Lecture 9: Connections, alignment interfaces',
+      url: 'https://ocw.mit.edu/courses/2-72-elements-of-mechanical-design-spring-2009/resources/mit2_72s09_lec09/',
+      kind: 'Lecture notes',
+      level: 'Deeper',
+      why: 'Why repeatable location matters: alignment methods and kinematic couplings.',
+      checked: '2026-11-06',
+    },
+  ],
+  labs: [],
+  candidate: 'Place a hole by a square plus-and-minus box and by a round position zone, then scatter many made holes. It corrects the idea that the box and the circle accept the same parts: the circle of the same width accepts more good ones. The check counts accepted holes by both rules and compares with the area ratio of the zones.',
+};

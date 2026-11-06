@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchyâ
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**255 concepts, 156 with a Flux lab, 99 gaps.**
+**275 concepts, 157 with a Flux lab, 118 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -21,9 +21,11 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Thermodynamics | 22 | 12 |
 | Fluid mechanics | 20 | 3 |
 | Heat transfer | 19 | 2 |
-| Circuits and systems | 25 | 11 |
-| Mechanics of materials | 15 | 14 |
+| Circuits and systems | 27 | 11 |
+| Mechanics of materials | 16 | 14 |
 | Materials science | 15 | 0 |
+| Design and manufacturing | 9 | 0 |
+| Instrumentation and actuators | 8 | 1 |
 | Statistics | 9 | 9 |
 
 Every Flux course app is on the map: every lab and every notes section sits on a concept, and
@@ -55,6 +57,7 @@ each new concept on them is a gap with a candidate lab:
 | EML 3015 Fluids | 22 (16 new) | 2.06, Spring 2013 |
 | EML 4140 Heat Transfer | 19 (15 new) | 2.51, Fall 2008, with Lienhard |
 | Build a satellite (a project) | 12 (11 new) | The satellite's subsystems, from MIT 16.07, 16.06 and 16.851 |
+| Design practice (a project) | 20 (20 new) | Requirements to a tested part, then sensors, actuators and boards; MIT 2.007, 2.72 and 2.008 |
 
 A concept can also list `related` concepts: parallels that are not prerequisites, such as diffusion
 and the heat equation. The hub lists them in the reading panel's Parallels row and draws nothing.
@@ -78,6 +81,23 @@ thermal noise, and the link budget. Their sources are MIT 16.07 Dynamics, 16.06 
 and 16.851 Satellite Engineering. The rocket equation already has PHY 2048's and Dynamics' rocket
 labs; the other eleven are gaps with lab candidates, and each subsystem recipe names them. When a
 course that teaches one joins the map, add it to that concept's `courses`.
+
+## Design practice
+
+The owner's focus after the thermal-fluids courses is designing, making and testing parts. Two
+lanes hold it: **Design and manufacturing** (the design process, design intent in CAD, tolerances
+and fits, stack-up, GD&T, exact constraint, design for manufacture, process capability,
+verification and margins) and **Instrumentation and actuators** (sensors, strain-gauge bridges,
+temperature sensors, data acquisition, pressure and flow measurement, valves, actuators and
+microcontrollers). Circuit boards sit in the circuits lane: schematic to board, and grounding and
+decoupling. Bolted joints sit with mechanics of materials. All twenty are on the project course
+*Design practice*, with a path, until the owner's design and measurement courses join the map.
+Sources are MIT 2.007, 2.72 and 2.008 lectures and reference articles, read on 6 November 2026.
+Sensors already has Bench's divider and night-light labs; the rest are gaps with lab candidates.
+Standards such as ASME Y14.5 and ISO 286 are paid documents: concepts explain the ideas and do not
+reproduce them.
+
+`map-gaps` weighs a project like a next-term course, so these gaps rank beside the courses ahead.
 
 ## Gaps most worth a lab
 

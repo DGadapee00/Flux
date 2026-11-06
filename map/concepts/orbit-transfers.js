@@ -4,7 +4,7 @@ export default {
   label: ['Orbit transfers'],
   subject: 'mechanics',
   courses: ['satellite'],
-  eq: String.raw`v^2 = \mu\left(\frac{2}{r} - \frac{1}{a}\right),\qquad \Delta v_1 = \sqrt{\frac{\mu}{r_1}}\left(\sqrt{\frac{2r_2}{r_1 + r_2}} - 1\right)`,
+  eq: String.raw`\begin{gathered}v^2 = \mu\left(\frac{2}{r} - \frac{1}{a}\right) \\ \Delta v_1 = \sqrt{\frac{\mu}{r_1}}\left(\sqrt{\frac{2r_2}{r_1 + r_2}} - 1\right)\end{gathered}`,
   idea: String.raw`To change orbit, change speed. The vis-viva equation gives the speed anywhere on an orbit from its distance and its size. A Hohmann transfer uses two burns: one stretches a circle into an ellipse that touches the higher orbit, and one at the far end rounds it out. Every manoeuvre is costed in \(\Delta v\), which the rocket equation turns into propellant.`,
   requires: ['kepler-equation', 'energy-conservation', 'rocket-equation'],
   sources: [

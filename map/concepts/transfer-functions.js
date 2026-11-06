@@ -4,7 +4,7 @@ export default {
   label: ['Transfer functions', 'and stability'],
   subject: 'circuits',
   courses: ['satellite'],
-  eq: String.raw`G(s) = \frac{Y(s)}{U(s)},\qquad \text{stable} \iff \operatorname{Re}(p_i) < 0`,
+  eq: String.raw`\begin{gathered}G(s) = \frac{Y(s)}{U(s)} \\ \text{stable} \iff \operatorname{Re}(p_i) < 0\end{gathered}`,
   idea: String.raw`The Laplace transform turns a linear differential equation into algebra. The ratio of output to input, \(G(s)\), is the transfer function, and it does not depend on the input. Its poles are the roots of its denominator, and each is a mode of the response, \(e^{p t}\). The system settles only if every pole has a negative real part, which the Routh criterion checks without finding the roots.`,
   requires: ['laplace-transform'],
   sources: [

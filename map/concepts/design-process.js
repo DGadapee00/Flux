@@ -1,0 +1,30 @@
+export default {
+  id: 'design-process',
+  title: 'Requirements and the design process',
+  label: ['Requirements and', 'the design process'],
+  subject: 'design',
+  courses: ['design'],
+  eq: String.raw`\begin{gathered}\text{need} \to \text{requirements} \to \text{concepts} \\ \to \text{analysis} \to \text{test} \to \text{detail}\end{gathered}`,
+  idea: 'A design starts from a need, not a shape. Write the requirements first: what it must do, how well, and within which limits of cost, mass and space, each one measurable. Then generate several concepts and choose between them against the requirements, before any detail. Analysis and tests check each choice, and the design loops back when they fail. Most cost is fixed by the early choices, so that is where the time pays.',
+  requires: [],
+  sources: [
+    {
+      title: 'MIT 2.007, Lecture 2: Problem definition and design',
+      url: 'https://ocw.mit.edu/courses/2-007-design-and-manufacturing-i-spring-2009/resources/mit2_007s09_lec02/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'The design process step by step: objectives, requirements, constraints, functions, specifications, then alternatives.',
+      checked: '2026-11-06',
+    },
+    {
+      title: 'Wikipedia, Verification and validation',
+      url: 'https://en.wikipedia.org/wiki/Verification_and_validation',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'Checking that a design meets its requirements, and that the requirements meet the need.',
+      checked: '2026-11-06',
+    },
+  ],
+  labs: [],
+  candidate: 'Turn a vague need into measurable requirements, then score three concepts against them. It corrects the idea that the best concept is the one you thought of first: a weighted comparison against stated requirements often picks another. The check recomputes the scores two ways, by weighted sum and by ranking each criterion.',
+};

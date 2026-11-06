@@ -1,0 +1,30 @@
+export default {
+  id: 'pressure-flow-measurement',
+  title: 'Measuring pressure and flow',
+  label: ['Pressure and', 'flow measurement'],
+  subject: 'instruments',
+  courses: ['design'],
+  eq: String.raw`\begin{gathered}v = \sqrt{2\,(p_0 - p)/\rho} \\ Q = C_d\,A\sqrt{\frac{2\,\Delta p}{\rho\,(1-\beta^{4})}}\end{gathered}`,
+  idea: 'Many flow meters measure a pressure difference and use Bernoulli to turn it into speed. A Pitot tube faces the flow and reads the stagnation pressure, so its difference from the static pressure gives the local speed. An orifice plate or a venturi narrows a pipe, and the drop across it gives the flow rate. Real flow loses energy, so a discharge coefficient corrects the ideal answer.',
+  requires: ['bernoulli', 'pressure'],
+  sources: [
+    {
+      title: 'Wikipedia, Pitot tube',
+      url: 'https://en.wikipedia.org/wiki/Pitot_tube',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'Stagnation and static pressure, and the speed from their difference.',
+      checked: '2026-11-06',
+    },
+    {
+      title: 'Wikipedia, Orifice plate',
+      url: 'https://en.wikipedia.org/wiki/Orifice_plate',
+      kind: 'Reference',
+      level: 'Course level',
+      why: 'Flow from the pressure drop across a plate, and the correction real flow needs.',
+      checked: '2026-11-06',
+    },
+  ],
+  labs: [],
+  candidate: 'Put an orifice plate in a pipe and read the pressure drop as the flow changes. It corrects the idea that the drop rises in step with the flow: it rises with its square, so a meter read near the bottom of its range is coarse. The check compares the flow from the meter equation with a mass balance on a timed fill.',
+};

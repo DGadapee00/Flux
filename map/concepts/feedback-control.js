@@ -4,7 +4,7 @@ export default {
   label: ['Feedback and', 'PID control'],
   subject: 'circuits',
   courses: ['satellite'],
-  eq: String.raw`u(t) = K_p\,e + K_i\!\int e\,dt + K_d\,\dot e,\qquad 1 + C(s)G(s) = 0`,
+  eq: String.raw`\begin{gathered}u = K_p\,e + K_i\!\int e\,dt + K_d\,\dot e \\ 1 + C(s)G(s) = 0\end{gathered}`,
   idea: String.raw`Feedback measures the output, compares it with what you want, and acts on the error. A proportional gain pushes toward the target, an integral term removes the error that remains, and a derivative term damps the swing. Closing the loop moves the poles to the roots of \(1 + C(s)G(s)\). Too much gain can make a stable plant oscillate, so gains are chosen with the poles in view.`,
   requires: ['transfer-functions', 'damped-oscillator'],
   sources: [

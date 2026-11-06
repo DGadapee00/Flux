@@ -4,7 +4,7 @@ export default {
   label: ['Kepler’s equation'],
   subject: 'mechanics',
   courses: ['satellite'],
-  eq: String.raw`M = E - e\sin E,\qquad M = \sqrt{\mu/a^{3}}\,(t - t_p)`,
+  eq: String.raw`\begin{gathered}M = E - e\sin E \\ M = \sqrt{\mu/a^{3}}\,(t - t_p)\end{gathered}`,
   idea: String.raw`A bound orbit is an ellipse with the planet at one focus. Equal areas in equal times means the craft moves fast near perigee and slowly near apogee, so its angle is not a steady fraction of the period. The mean anomaly \(M\) grows steadily with time; solving \(M = E - e\sin E\) for the eccentric anomaly \(E\) gives where the craft is. The equation has no closed-form solution, so it is solved numerically, often by Newton’s method.`,
   requires: ['gravitation', 'root-finding'],
   sources: [

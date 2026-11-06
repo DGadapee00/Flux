@@ -19,5 +19,7 @@ export const SUBJECTS = [
   { id: 'circuits', label: 'Circuits and systems', token: '--lane-circuits', dark: '#b39af0', light: '#6a48b8' },
   { id: 'materials', label: 'Mechanics of materials', token: '--lane-materials', dark: '#d2b48c', light: '#7a6235' },
   { id: 'matsci', label: 'Materials science', token: '--lane-matsci', dark: '#8c9cff', light: '#3d4fc4' },
+  { id: 'design', label: 'Design and manufacturing', token: '--lane-design', dark: '#c4bfb8', light: '#5c5750' },
+  { id: 'instruments', label: 'Instrumentation and actuators', token: '--lane-instruments', dark: '#5fd68a', light: '#1d7a3f' },
   { id: 'stats', label: 'Statistics', token: '--lane-stats', dark: '#ef86d2', light: '#a2338b' },
 ];

@@ -1,0 +1,30 @@
+export default {
+  id: 'process-variation',
+  title: 'Variation, capability and process control',
+  label: ['Process', 'capability'],
+  subject: 'design',
+  courses: ['design'],
+  eq: String.raw`C_p = \frac{\text{USL} - \text{LSL}}{6\sigma}`,
+  idea: String.raw`Every process scatters. If the scatter is roughly normal, its spread \(\sigma\) set against the tolerance band says how many parts will fall outside: that is capability. A process can be precise but off target, or on target but loose. A control chart plots samples over time and flags when the process has shifted, before it makes bad parts.`,
+  requires: ['descriptive-statistics', 'sampling-distributions', 'tolerances-fits'],
+  sources: [
+    {
+      title: 'MIT 2.008, Lecture 11: Variation and quality',
+      url: 'https://ocw.mit.edu/courses/2-008-design-and-manufacturing-ii-spring-2025/resources/mit2_008_s25_lec11_pdf/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'Defining, measuring and controlling quality in manufacturing.',
+      checked: '2026-11-06',
+    },
+    {
+      title: 'MIT 2.008, Lecture 12: Statistical process control',
+      url: 'https://ocw.mit.edu/courses/2-008-design-and-manufacturing-ii-spring-2025/resources/mit2_008_s25_lec12_pdf/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'Process capability, control charts, and accuracy against precision.',
+      checked: '2026-11-06',
+    },
+  ],
+  labs: [],
+  candidate: String.raw`Run a machine that drifts and watch a control chart catch it. It corrects the idea that parts inside tolerance mean the process is fine: a drifting mean flags on the chart long before parts go out. The check compares the reject rate from \(C_p\) with a count from simulated parts.`,
+};

@@ -1,0 +1,30 @@
+export default {
+  id: 'design-verification',
+  title: 'Testing a design: verification and margins',
+  label: ['Verification', 'and margins'],
+  subject: 'design',
+  courses: ['design'],
+  eq: String.raw`\text{MS} = \frac{\text{allowable}}{\text{FS} \times \text{applied}} - 1`,
+  idea: 'Every requirement needs a way to show it is met: by test, analysis, inspection or demonstration. A factor of safety covers what the analysis does not know, and the margin of safety says how much room is left after it. Tests are planned before the design is finished, so the design leaves room to measure. A test that cannot fail checks nothing.',
+  requires: ['design-process', 'failure-theories'],
+  sources: [
+    {
+      title: 'Wikipedia, Verification and validation',
+      url: 'https://en.wikipedia.org/wiki/Verification_and_validation',
+      kind: 'Reference',
+      level: 'Course level',
+      why: 'Verification against requirements and validation against the need, with the methods used.',
+      checked: '2026-11-06',
+    },
+    {
+      title: 'Wikipedia, Factor of safety',
+      url: 'https://en.wikipedia.org/wiki/Factor_of_safety',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'Design factor and margin of safety, and how they differ.',
+      checked: '2026-11-06',
+    },
+  ],
+  labs: [],
+  candidate: 'Match each requirement of a small bracket to a test, an analysis or an inspection, then run the tests. It corrects the idea that a positive margin on paper means the part is proven: an untested assumption can hide a failure. The check computes each margin from the formula and from the tested load.',
+};

@@ -4,7 +4,7 @@ export default {
   label: ['Spacecraft power'],
   subject: 'circuits',
   courses: ['satellite'],
-  eq: String.raw`E_\text{batt} \ge \frac{P_\text{load}\,T_\text{ecl}}{\mathrm{DoD}\;\eta},\qquad P_\text{array}\,T_\text{sun} \ge P_\text{load}\,T_\text{sun} + \frac{P_\text{load}\,T_\text{ecl}}{\eta}`,
+  eq: String.raw`\begin{gathered}E_\text{batt} \ge \frac{P\,T_\text{ecl}}{\mathrm{DoD}\;\eta} \\ P_\text{arr}\,T_\text{sun} \ge P\,T_\text{sun} + \frac{P\,T_\text{ecl}}{\eta}\end{gathered}`,
   idea: 'A satellite in low orbit spends part of each orbit in Earth’s shadow. The solar array must run the loads in sunlight and also refill the battery for the eclipse, so it is sized for more than the average load. The battery is sized so an eclipse uses only part of it: a shallow depth of discharge lets it survive thousands of cycles. Arrays lose output as radiation damages them, so they are sized for the end of the mission.',
   requires: ['electric-power', 'internal-resistance'],
   sources: [
