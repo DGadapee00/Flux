@@ -93,7 +93,22 @@ main { padding-block: 28px 64px; }
 .step { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 0 14px; }
 .step-n { font-family: var(--display); font-weight: 700; font-size: 28px; line-height: 1; color: var(--dim); padding-top: 2px; }
 .queue { display: grid; gap: 2px; margin: 14px 0; }
-.queue-row { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+.queue-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); }
+.queue-row input[type='checkbox'] { width: 18px; height: 18px; margin: 0; accent-color: var(--ok); }
+.queue-row label { cursor: pointer; }
+.sets { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; margin-top: 14px; }
+.set-card { display: grid; gap: 6px; align-content: start; text-decoration: none; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); border-left: 4px solid var(--lane); background: var(--panel); min-width: 0; }
+.set-card:hover { border-color: var(--lane); }
+.set-card .chain { font-family: var(--display); font-weight: 600; font-size: 18px; line-height: 1.3; }
+.set-card .go { font-family: var(--display); font-weight: 600; font-size: 14px; color: var(--lane); margin-top: 4px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.recall { display: grid; gap: 12px; border-top: 4px solid var(--lane, var(--line)); margin-bottom: 16px; }
+.recall .eq { margin: 0; }
+.reveal { display: grid; gap: 12px; padding-top: 4px; }
+.rate { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.rate .meta { margin-right: 4px; }
+.rail a.s-now span.seg { background: var(--fg); border-color: var(--fg); }
+.rail a.s-now { color: var(--fg); }
 .queue-row a { text-decoration: none; }
 .queue-row .why { font-size: 14px; color: var(--muted); }
 .next-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 14px; }
@@ -459,6 +474,73 @@ function reviewQueue() {
   rows.sort((a, b) => (b.missed - a.missed) || (a.due - b.due));
   return rows;
 }
+
+/** True when `a` builds on `b`, directly or further back. */
+const buildsOnMemo = {};
+function buildsOn(a, b) {
+  const k = `${a}>${b}`;
+  if (k in buildsOnMemo) return buildsOnMemo[k];
+  return (buildsOnMemo[k] = C[a].requires.some((r) => r === b || buildsOn(r, b)));
+}
+
+/**
+ * Review in sets, one subject each. Switching between unrelated subjects costs more than mixing
+ * helps, so a set stays in one lane and runs foundation first, with the problems for each concept
+ * together. The nearest exam's subject goes first, then misses, then the longest overdue.
+ */
+const SET_MAX = 8;
+function reviewSets() {
+  const bySubject = {};
+  for (const r of reviewQueue()) (bySubject[r.concept.subject] ||= []).push(r);
+  const upcoming = D.exams.filter((e) => examDays(e) >= 0);
+  const sets = Object.entries(bySubject).map(([subject, rows]) => {
+    const byConcept = new Map();
+    for (const r of rows) {
+      if (!byConcept.has(r.concept.id)) byConcept.set(r.concept.id, []);
+      byConcept.get(r.concept.id).push(r);
+    }
+    const ordered = [...byConcept.entries()]
+      .sort(([a], [b]) => depth(a) - depth(b) || a.localeCompare(b))
+      .map(([id, list]) => ({ concept: C[id], rows: list }));
+    // Keep whole concepts together; anything past SET_MAX waits for the next sitting.
+    const today = [];
+    const later = [];
+    let n = 0;
+    for (const g of ordered) {
+      if (n && n + g.rows.length > SET_MAX) later.push(g);
+      else { today.push(g); n += g.rows.length; }
+    }
+    const examIdx = Math.min(...today.map((g) => { const i = upcoming.findIndex((e) => e.concepts.includes(g.concept.id)); return i < 0 ? 99 : i; }));
+    return {
+      subject,
+      groups: today,
+      n,
+      waiting: later.reduce((s, g) => s + g.rows.length, 0),
+      missed: today.reduce((s, g) => s + g.rows.filter((r) => r.missed).length, 0),
+      oldest: Math.min(...rows.map((r) => r.due)),
+      exam: examIdx < 99 ? upcoming[examIdx] : null,
+      examIdx,
+    };
+  });
+  sets.sort((a, b) => a.examIdx - b.examIdx || (b.missed > 0) - (a.missed > 0) || a.oldest - b.oldest);
+  // Today takes whole sets up to the daily cap and at most three sittings, always at least one.
+  // A set of one or two problems with no miss waits a day to join a fuller review.
+  let total = 0;
+  let count = 0;
+  for (const s of sets) {
+    const small = s.n < 3 && !s.missed && !s.exam;
+    s.today = count === 0 || (!small && count < 3 && total + s.n <= DAILY_CAP);
+    if (s.today) { total += s.n; count++; }
+  }
+  return sets;
+}
+/** The concepts of a set as a chain: an arrow where the next one builds on the last. */
+function chain(groups) {
+  return groups.map((g, i) => {
+    const sep = i === 0 ? '' : buildsOn(g.concept.id, groups[i - 1].concept.id) ? ' <span aria-label="leads to">→</span> ' : ' · ';
+    return `${sep}${esc(g.concept.title)}`;
+  }).join('');
+}
 function courseRank(c) {
   const ranks = c.courses.map((id) => ({ 'taking now': 0, 'next term': 1, later: 2, taken: 3, project: 2 }[COURSE[id]?.status] ?? 4));
   return Math.min(...ranks);
@@ -510,16 +592,18 @@ const view = document.getElementById('view');
 
 function renderToday() {
   const queue = reviewQueue();
-  const todayList = queue.slice(0, DAILY_CAP);
-  const minutes = Math.max(1, Math.round(todayList.length * 1.5));
+  const sets = reviewSets();
+  const todaySets = sets.filter((s) => s.today);
+  const laterSets = sets.filter((s) => !s.today);
+  const todayN = todaySets.reduce((s, x) => s + x.n, 0);
   const next = nextUp(3);
   const exam = nextExam();
   const dateLine = new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
 
   let headline;
-  const plural = todayList.length > 1 ? 's' : '';
-  if (todayList.length && next.length) headline = `Review ${todayList.length} problem${plural}. Then learn <em>${esc(next[0].title)}</em>.`;
-  else if (todayList.length) headline = `Review ${todayList.length} problem${plural} today.`;
+  const setWord = todaySets.length === 1 ? 'one short review' : `${['', '', 'two', 'three', 'four'][todaySets.length] || todaySets.length} short reviews`;
+  if (todaySets.length && next.length) headline = `${setWord[0].toUpperCase()}${setWord.slice(1)}. Then learn <em>${esc(next[0].title)}</em>.`;
+  else if (todaySets.length) headline = `${setWord[0].toUpperCase()}${setWord.slice(1)} today.`;
   else if (next.length) headline = `Nothing to review. Learn <em>${esc(next[0].title)}</em>.`;
   else headline = 'Nothing due today.';
   let sub = '';
@@ -530,20 +614,18 @@ function renderToday() {
     if (d === 0 && D.exams[ex + 1]) sub += ` Exam ${D.exams[ex + 1].n} follows in ${examDays(D.exams[ex + 1])} days.`;
   }
 
-  const byCourse = {};
-  for (const r of queue) { const k = r.key.split(':')[0]; byCourse[k] = (byCourse[k] || 0) + 1; }
-  const courseLine = Object.entries(byCourse).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${n} ${esc(courseCode(k))}`).join(' · ');
-
-  const reviewBlock = todayList.length
-    ? `<p class="muted" style="margin:0">About ${minutes} minutes. ${queue.length > DAILY_CAP ? `${queue.length} are due in all; today takes the ${DAILY_CAP} that slipped longest, misses first.` : 'Misses come first, then the longest overdue.'}</p>
-       <div class="queue">${todayList.slice(0, 6).map((r) => {
-          const lab = r.concept.labs.find((l) => r.key.startsWith(`${l.course}:`)) || r.concept.labs[0];
-          return `<div class="queue-row"><span class="dot" style="background:${r.missed ? 'var(--due)' : lane(r.concept)}"></span>
-            <div style="min-width:0"><a href="#${r.concept.id}"><strong>${D.problems[r.key]}</strong></a><div class="why">${esc(r.concept.title)} · ${esc(courseCode(r.key.split(':')[0]))}${r.missed ? ' · missed last time' : ''}</div></div>
-            ${lab?.href ? `<a class="meta" href="${lab.href}" target="_blank" rel="noopener">Practise ↗</a>` : ''}</div>`;
+  const waiting = sets.reduce((s, x) => s + x.waiting, 0) + laterSets.reduce((s, x) => s + x.n, 0);
+  const reviewBlock = todaySets.length
+    ? `<p class="muted" style="margin:0">Each review stays in one subject and runs from the foundation up, so one idea leads into the next. Do one at a sitting, about ${Math.round(todayN * 1.5)} minutes in all.</p>
+       <div class="sets">${todaySets.map((s) => {
+          const sub = SUBJECT[s.subject];
+          return `<a class="set-card" href="#review-${s.subject}" style="--lane:var(--lane-${s.subject})">
+            <span class="eyebrow" style="color:var(--lane)">${esc(sub.label)}${s.exam ? ` · for Exam ${s.exam.n}` : ''}</span>
+            <span class="chain">${chain(s.groups)}</span>
+            <span class="meta">${s.groups.length} concept${s.groups.length > 1 ? 's' : ''} · ${s.n} problem${s.n > 1 ? 's' : ''} · about ${Math.max(2, Math.round(s.n * 1.5))} min${s.missed ? ` · ${s.missed} missed last time` : ''}</span>
+            <span class="go">Start this review →</span></a>`;
         }).join('')}</div>
-       ${todayList.length > 6 ? `<p class="meta" style="margin:0 0 12px">and ${todayList.length - 6} more today${courseLine ? ` · due by course: ${courseLine}` : ''}</p>` : ''}
-       <button class="btn" type="button" data-proto="Start review opens one mixed set from every course in the finished app. In this prototype, use the Practise links.">Start review</button>`
+       ${waiting ? `<p class="meta" style="margin:12px 0 0">${waiting} more can wait for tomorrow${laterSets.length ? `: ${laterSets.map((s) => `${esc(SUBJECT[s.subject].label)} (${s.n})`).join(', ')}` : ''}. A day’s delay costs little; the gaps between reviews are widening anyway.</p>` : ''}`
     : '<p class="muted" style="margin:0">Nothing is due. Reviews appear here when a problem’s next date arrives.</p>';
 
   const nextBlock = next.length
@@ -802,17 +884,83 @@ function runOrbitCheck(form) {
 }
 
 /* ---------- Router and events ---------- */
+/*
+ * One review set, one concept at a time. Recall the concept first, the way you would before an
+ * exam question, then its problems. The next concept says how it connects to the one just done.
+ */
+let session = { subject: null, i: 0, shown: false, rated: {}, done: {} };
+const RECALL = { got: 'I had it', partly: 'Partly', not: 'Not really' };
+function renderReview(subject) {
+  const set = reviewSets().find((s) => s.subject === subject);
+  if (session.subject !== subject) session = { subject, i: 0, shown: false, rated: {}, done: {} };
+  const sub = SUBJECT[subject];
+  if (!set) {
+    view.innerHTML = `<nav class="crumbs"><a href="#today">Today</a></nav><h1>Nothing due in ${esc(sub?.label || 'this subject')}</h1><p class="muted">It may have been finished already. <a href="#today">Back to today</a>.</p>`;
+    return;
+  }
+  const groups = set.groups;
+  const finished = session.i >= groups.length;
+  const rail = `<div class="rail" style="grid-template-columns:repeat(${groups.length},minmax(0,1fr))" aria-label="Concepts in this review">${groups.map((g, i) => `<a href="#review-${subject}" data-goto="${i}" class="${i < session.i ? 'done' : i === session.i ? 's-now' : ''}"><span class="seg"></span><span class="lbl">${esc(g.concept.title)}</span></a>`).join('')}</div>`;
+  let body;
+  if (finished) {
+    const rated = Object.values(session.rated);
+    const weak = groups.filter((g) => session.rated[g.concept.id] && session.rated[g.concept.id] !== 'got');
+    const nextSet = reviewSets().find((s) => s.today && s.subject !== subject);
+    body = `<section class="panel recall"><span class="eyebrow">Review done</span>
+      <h2 style="font-size:26px">${esc(sub.label)}: ${groups.length} concept${groups.length > 1 ? 's' : ''}, ${set.n} problem${set.n > 1 ? 's' : ''}</h2>
+      <p class="muted">${rated.length ? `You recalled ${rated.filter((r) => r === 'got').length} of ${rated.length} concept${rated.length > 1 ? 's' : ''} without help.` : ''} ${weak.length ? `Worth a second look: ${weak.map((g) => `<a href="#${g.concept.id}">${esc(g.concept.title)}</a>`).join(', ')}. Flux brings ${weak.length > 1 ? 'them' : 'it'} back sooner.` : 'Each comes back on its widening schedule.'}</p>
+      <div class="actions">${nextSet ? `<a class="btn" href="#review-${nextSet.subject}">Next: ${esc(SUBJECT[nextSet.subject].label)} →</a>` : ''}<a class="btn quiet" href="#today">Back to today</a></div></section>`;
+  } else {
+    const g = groups[session.i];
+    const c = g.concept;
+    const prev = groups[session.i - 1]?.concept;
+    const link = prev && buildsOn(c.id, prev.id) ? `It builds on ${esc(prev.title)}, which you just reviewed.` : prev ? `A separate idea from ${esc(prev.title)}, in the same subject.` : 'The foundation of this review.';
+    const rating = session.rated[c.id];
+    const lab = (key) => c.labs.find((l) => key.startsWith(`${l.course}:`)) || c.labs[0];
+    body = `<section class="panel recall" style="--lane:var(--lane-${subject})">
+        <span class="eyebrow">Concept ${session.i + 1} of ${groups.length} · ${link}</span>
+        <h2 style="font-size:30px">${esc(c.title)}</h2>
+        <p style="margin:0">Before the problems, recall it. Say the idea in a sentence and write its key equation. Then check.</p>
+        ${session.shown
+          ? `<div class="reveal">${c.eq ? `<div class="eq">${c.eq}</div>` : ''}<p class="idea" style="margin:0">${c.idea}</p></div>
+             <div class="rate" role="group" aria-label="How did you do?"><span class="meta">How did you do?</span>${Object.entries(RECALL).map(([k, v]) => `<button type="button" class="btn ${rating === k ? '' : 'quiet'}" data-rate="${k}" aria-pressed="${rating === k}">${v}</button>`).join('')}</div>`
+          : '<div><button class="btn" type="button" data-show>Show the idea</button></div>'}
+      </section>
+      ${session.shown ? `<section class="panel" aria-labelledby="probs-h">
+        <div class="section-head"><h3 id="probs-h" style="font-size:18px">Its problems</h3><span class="meta">${g.rows.length} due</span></div>
+        <div class="queue">${g.rows.map((r) => {
+          const l = lab(r.key);
+          const done = session.done[r.key];
+          return `<div class="queue-row"><input type="checkbox" id="d-${esc(r.key)}" data-done="${esc(r.key)}" ${done ? 'checked' : ''} aria-label="Done" />
+            <label for="d-${esc(r.key)}" style="min-width:0"><strong>${D.problems[r.key]}</strong><div class="why">${esc(courseCode(r.key.split(':')[0]))}${r.missed ? ' · missed last time' : ''}</div></label>
+            ${l?.href ? `<a class="meta" href="${l.href}" target="_blank" rel="noopener">Solve ↗</a>` : ''}</div>`;
+        }).join('')}</div>
+        <p class="meta" style="margin:0 0 12px">In the finished app the problem opens here. In this prototype, Solve opens it in its course and the box ticks it off.</p>
+        <div class="actions"><button class="btn" type="button" data-next>${session.i + 1 < groups.length ? `Next: ${esc(groups[session.i + 1].concept.title)} →` : 'Finish this review'}</button></div>
+      </section>` : ''}`;
+  }
+  view.innerHTML = `
+    <nav class="crumbs" aria-label="Back"><a href="#today">Today</a><span>/</span><span>Review</span></nav>
+    <div class="section-head" style="margin-bottom:8px"><h1 style="font-size:clamp(28px,4.5vw,40px)"><span style="color:var(--lane-${subject})">${esc(sub.label)}</span> review</h1>
+      <span class="meta">${groups.length} concept${groups.length > 1 ? 's' : ''} · ${set.n} problem${set.n > 1 ? 's' : ''}${set.exam ? ` · for Exam ${set.exam.n}` : ''}</span></div>
+    <p class="muted" style="margin:0 0 16px;max-width:65ch">${chain(groups)}</p>
+    ${rail}
+    <div class="review-body">${body}</div>`;
+}
+
 const PLACES = ['today', 'map', 'satellite'];
 function render() {
   const hash = decodeURIComponent(location.hash.slice(1)) || 'today';
-  const place = PLACES.includes(hash) ? hash : C[hash] ? 'concept' : hash.startsWith('sat-') ? 'satellite' : 'today';
+  const place = PLACES.includes(hash) ? hash : C[hash] ? 'concept' : hash.startsWith('sat-') ? 'satellite' : hash.startsWith('review-') ? 'review' : 'today';
   document.body.classList.toggle('author', author);
   for (const a of document.querySelectorAll('nav.places a')) { if (a.dataset.place === place) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }
   if (place === 'today') renderToday();
   else if (place === 'map') renderMap();
   else if (place === 'satellite') renderSatellite();
+  else if (place === 'review') renderReview(hash.slice('review-'.length));
   else renderConcept(hash);
-  if (place !== 'concept') cameFrom = place;
+  if (place !== 'concept') cameFrom = place === 'review' ? 'today' : place;
+  for (const a of document.querySelectorAll('nav.places a')) if (place === 'review' && a.dataset.place === 'today') a.setAttribute('aria-current', 'page');
   const note = document.createElement('p');
   note.className = 'notice';
   note.textContent = sourceNote;
@@ -823,6 +971,16 @@ function render() {
 }
 
 view.addEventListener('click', (e) => {
+  const r = e.target.closest('[data-show],[data-rate],[data-next],[data-goto]');
+  if (r) {
+    if (r.dataset.goto != null) { e.preventDefault(); session.i = Number(r.dataset.goto); session.shown = false; }
+    else if (r.hasAttribute('data-show')) session.shown = true;
+    else if (r.dataset.rate) { const set = reviewSets().find((s) => s.subject === session.subject); session.rated[set.groups[session.i].concept.id] = r.dataset.rate; }
+    else if (r.hasAttribute('data-next')) { session.i++; session.shown = false; }
+    renderReview(session.subject);
+    if (r.hasAttribute('data-next') || r.dataset.goto != null) window.scrollTo(0, 0);
+    return;
+  }
   const t = e.target.closest('[data-set-lens],[data-lens],[data-skip],[data-undo],[data-proto]');
   if (!t) return;
   if (t.dataset.setLens || t.dataset.lens) {
@@ -836,6 +994,9 @@ view.addEventListener('click', (e) => {
     if (!msg) { msg = document.createElement('p'); msg.className = 'meta proto-msg'; msg.style.margin = '10px 0 0'; t.after(msg); }
     msg.textContent = t.dataset.proto;
   }
+});
+view.addEventListener('change', (e) => {
+  if (e.target.dataset.done) session.done[e.target.dataset.done] = e.target.checked;
 });
 view.addEventListener('submit', (e) => {
   if (e.target.id === 'orbit-form') { e.preventDefault(); runOrbitCheck(e.target); }
