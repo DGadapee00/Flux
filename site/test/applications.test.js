@@ -7,6 +7,7 @@ import { RECIPES, SATELLITE, recipeById } from '@flux/map/applications/satellite
 import { projectInstructions, reviewBrief } from '../src/applications/brief.js';
 import { applicationStore, cleanProgress, demonstrated, missingInputs, record, revise, wouldClear } from '../src/applications/progress.js';
 import { backupParts, restoreHubBackup } from '../src/backup.js';
+import { courseStore as fluidsStore } from '@flux/eml3015/src/storage.js';
 
 const concepts = Object.fromEntries((await loadConcepts()).map(({ concept }) => [concept.id, concept]));
 
@@ -136,4 +137,15 @@ test('old hub backups restore courses without erasing application evidence; inco
   assert.throws(() => restoreHubBackup(invalid, parts), /does not match this course/);
   assert.deepEqual(applications.store.readJSON('satellite'), progress);
   assert.equal('applications' in oldBackup.courses, false, 'restoring does not modify the source backup');
+});
+
+test('a hub backup from before Fluids was added restores and keeps the Fluids record', () => {
+  const parts = backupParts();
+  const fluids = parts.find((p) => p.courseId === 'eml3015');
+  fluids.store = fluidsStore(memoryStorage(), () => 0);
+  fluids.store.writeJSON('problems', { v: 1, kept: true });
+  const before = exportBundle(parts.filter((p) => p.courseId !== 'eml3015' && p.courseId !== 'applications'));
+  assert.equal('eml3015' in before.courses, false);
+  restoreHubBackup(before, parts);
+  assert.deepEqual(fluids.store.readJSON('problems'), { v: 1, kept: true });
 });

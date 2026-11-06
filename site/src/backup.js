@@ -10,6 +10,7 @@ import { courseStore as materialsStore } from '@flux/egn3331/src/storage.js';
 import { courseStore as thermoStore } from '@flux/eml3100/src/storage.js';
 import { courseStore as staticsStore } from '@flux/statics/src/storage.js';
 import { courseStore as odeStore } from '@flux/map2302/src/storage.js';
+import { courseStore as fluidsStore } from '@flux/eml3015/src/storage.js';
 import { courseStore as benchStore } from '@flux/bench/src/storage.js';
 import { applicationStore } from './applications/progress.js';
 
@@ -28,19 +29,23 @@ export function backupParts() {
     { courseId: 'phy2048', store: phy1Store() },
     { courseId: 'bench', store: benchStore() },
     { courseId: 'map2302', store: odeStore() },
+    { courseId: 'eml3015', store: fluidsStore() },
     { courseId: 'applications', store: applicationStore() },
   ];
 }
 
-/** Older hub backups lack only the new applications section. Keep current application notes. */
+/**
+ * Courses added after a backup was made (EML 3015, 6 November 2026) and the applications section
+ * are missing from older files. Keep this browser's current data for those, and restore the rest.
+ * A section for a course the hub does not know still fails.
+ */
+const ADDED_LATER = ['applications', 'eml3015'];
 export function restoreHubBackup(blob, parts) {
-  const expected = parts.filter((p) => p.courseId !== 'applications').map((p) => p.courseId).sort();
   const courses = blob?.courses;
   if (blob?.v === 1 && courses && typeof courses === 'object' && !Array.isArray(courses)) {
-    const got = Object.keys(courses).sort();
-    if (JSON.stringify(got) === JSON.stringify(expected)) {
-      const applications = parts.find((p) => p.courseId === 'applications');
-      blob = { ...blob, courses: { ...courses, applications: applications.store.exportJSON() } };
+    const missing = parts.filter((p) => !(p.courseId in courses));
+    if (missing.length && missing.every((p) => ADDED_LATER.includes(p.courseId))) {
+      blob = { ...blob, courses: { ...courses, ...Object.fromEntries(missing.map((p) => [p.courseId, p.store.exportJSON()])) } };
     }
   }
   // The shared importer still validates every section before writing any record.

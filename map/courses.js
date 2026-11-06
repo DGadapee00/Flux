@@ -33,7 +33,7 @@ export const COURSES = [
   { id: 'egn3321', code: 'EGN 3321', title: 'Dynamics', status: 'next term', app: 'egn3321/' },
   { id: 'egn3331', code: 'EGN 3331', title: 'Mechanics of Materials', status: 'next term', app: 'egn3331/' },
   { id: 'eml3101', code: 'EML 3101', title: 'Thermodynamics II', status: 'later', app: null },
-  { id: 'eml3015', code: 'EML 3015', title: 'Fluids', status: 'later', app: null },
+  { id: 'eml3015', code: 'EML 3015', title: 'Fluids', status: 'later', app: 'eml3015/' },
   { id: 'eml4140', code: 'EML 4140', title: 'Heat Transfer', status: 'later', app: null },
   { id: 'eel3111', code: 'EEL 3111', title: 'Circuit Analysis I', status: 'later', app: null },
   { id: 'egn3203', code: 'EGN 3203', title: 'Modern Computation Methods', status: 'later', app: null },

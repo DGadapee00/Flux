@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchy�
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 157 with a Flux lab, 118 gaps.**
+**275 concepts, 158 with a Flux lab, 117 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -19,7 +19,7 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Mechanics | 34 | 31 |
 | Electricity and magnetism | 27 | 25 |
 | Thermodynamics | 22 | 12 |
-| Fluid mechanics | 20 | 3 |
+| Fluid mechanics | 20 | 4 |
 | Heat transfer | 19 | 2 |
 | Circuits and systems | 27 | 11 |
 | Mechanics of materials | 16 | 14 |
@@ -121,8 +121,8 @@ in the courses that teach it.
    2×2 matrix's columns, then solve a 3×3 system with its planes drawn.
 6. **The thermal-fluids trunk.** Material derivative, Rigid-body motion, Viscosity, Continuity,
    Euler's equation, Navier–Stokes and the Heat equation: 10 to 13 concepts build on each, because
-   fluid mechanics feeds heat transfer. The courses are later; build these as EML 3015 comes
-   close, Viscosity first (a plate dragged over honey, water and mercury).
+   fluid mechanics feeds heat transfer. EML 3015 now has its own app, with Viscosity as unit 1
+   (a plate dragged over water, mercury, glycerol, oil and air). The rest of the trunk is next.
 
 ## Sources
 

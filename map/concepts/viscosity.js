@@ -31,6 +31,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Drag a plate over a thin layer of honey, water and mercury, with the velocity profile drawn. It corrects the idea that viscosity is a fluid’s thickness or weight: mercury is dense and runny, and the drag depends on the velocity gradient, not on the speed alone.',
+  labs: [
+    { course: 'eml3015', lab: 'viscosity', notes: ['s1', 's2'], note: 'Drags a plate over water, mercury, glycerol, oil and air, and draws the profile as it grows from rest.' },
+  ],
 };

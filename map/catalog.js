@@ -9,6 +9,7 @@ import * as bench from '../courses/bench/src/data/catalog.js';
 import * as egn3321 from '../courses/egn3321/src/data/catalog.js';
 import * as egn3331 from '../courses/egn3331/src/data/catalog.js';
 import * as eml3100 from '../courses/eml3100/src/data/catalog.js';
+import * as eml3015 from '../courses/eml3015/src/data/catalog.js';
 import * as mac2311 from '../courses/mac2311/src/data/catalog.js';
 import * as mac2313 from '../courses/mac2313/src/data/catalog.js';
 import * as map2302 from '../courses/map2302/src/data/catalog.js';
@@ -57,6 +58,7 @@ export const LAB_CATALOGS = {
   egn3321: fromMeta(egn3321.LAB_META),
   egn3331: fromMeta(egn3331.LAB_META),
   eml3100: fromMeta(eml3100.LAB_META),
+  eml3015: fromMeta(eml3015.LAB_META),
   mac2311: fromMeta(mac2311.LAB_META),
   mac2313: fromMeta(mac2313.LAB_META),
   map2302: fromMeta(map2302.LAB_META),
