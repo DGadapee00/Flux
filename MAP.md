@@ -8,11 +8,11 @@ exact equations, substitutions, balance models, variation of parameters, Cauchyâ
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**243 concepts, 153 with a Flux lab, 90 gaps.**
+**243 concepts, 155 with a Flux lab, 88 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
-| Calculus | 30 | 27 |
+| Calculus | 30 | 29 |
 | Linear algebra | 7 | 0 |
 | Differential equations | 18 | 18 |
 | Numerical methods | 13 | 2 |
@@ -71,10 +71,9 @@ convection.
 From `npm run map-gaps`, which weighs how many concepts build on a gap and where the owner stands
 in the courses that teach it.
 
-1. **Flux across a curve, Divergence, Divergence theorem.** The trunk of the flux thread: 37 to 68
-   concepts build on each, from Gauss's law to the heat equation. MAC 2313's app stops at triple
-   integrals, so none of them has a lab. One lab could carry two of them: a box dragged through a
-   field, with face fluxes that sum to the divergence, then a grid whose inner faces cancel.
+1. **Divergence theorem.** 37 concepts build on it. MAC 2313's Flux lab (unit 6) now shows flux
+   across a curve and divergence in the plane, three ways. The theorem in space is still a gap:
+   grid a region into boxes and watch the inner-face fluxes cancel.
 2. **Maxwell's divergence equations.** PHY 2049 is being taken now, and this is the step from
    Gauss's law to EM waves. Its candidate: flux through a shrinking sphere beside the charge
    density at its centre.

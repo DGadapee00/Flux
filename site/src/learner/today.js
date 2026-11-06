@@ -412,7 +412,7 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
       let line;
       if (st.tried) {
         line = `${st.solid} of ${plural(st.n, 'problem')} solid${st.due ? `, ${st.due} due now` : st.next < Infinity ? `, next review in ${plural(Math.max(1, learner.daysTo(st.next)), 'day')}` : ''}.`;
-      } else if (status === 'assumed') line = 'No Flux practice measures it yet.';
+      } else if (status === 'assumed') line = st.all ? `${plural(st.all, 'problem')} check it. Your first solve starts the record.` : 'No Flux practice measures it yet.';
       else if (status === 'locked') {
         const missing = c.requires.filter((r) => !learner.met(r));
         line = `Builds on ${missing.map((r) => conceptLink(r)).join(', ')}, not solid yet.`;

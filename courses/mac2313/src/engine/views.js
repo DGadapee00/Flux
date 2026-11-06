@@ -15,6 +15,7 @@ import { TripleBoxesView } from '../scene/tripleBoxes.js';
 import { SolidView } from '../scene/solid.js';
 import { SliceAreaView } from '../scene/sliceArea.js';
 import { ElementView } from '../scene/element.js';
+import { FluxLoopView } from '../scene/fluxLoop.js';
 import { M } from '../scene/manim.js';
 
 /** Lazy view pool: a lab's first visit builds what it needs; exit hides, does not dispose. */
@@ -44,6 +45,7 @@ export function createViewPool(scene) {
     sliceArea: () => once('sliceArea', () => new SliceAreaView(scene)),
     element: () => once('element', () => new ElementView(scene)),
     crits: () => once('crits', () => new CritView(scene)),
+    fluxLoop: () => once('fluxLoop', () => new FluxLoopView(scene)),
     hideAll() {
       made.surface?.setVisible(false);
       made.contours?.setVisible(false);
@@ -63,6 +65,7 @@ export function createViewPool(scene) {
       made.sliceArea?.setVisible(false);
       made.element?.setVisible(false);
       made.crits?.setVisible(false);
+      made.fluxLoop?.setVisible(false);
     },
   };
   return pool;

@@ -18,6 +18,7 @@ const loaders = {
   triple: () => import('./triple.js'),
   cyl: () => import('./cyl.js'),
   sph: () => import('./sph.js'),
+  flux2d: () => import('./flux2d.js'),
 };
 
 const labs = createLabLoader(loaders);

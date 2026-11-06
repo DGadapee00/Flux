@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'A 2D field with a loop you drag and reshape. The flux readout and the area integral of the divergence inside agree.',
+  labs: [
+    { course: 'mac2313', lab: 'flux2d', note: String.raw`A loop you move and resize in six fields. The flux comes three ways: a closed form, \(\oint \mathbf F\cdot\hat n\,ds\) summed around it, and the divergence summed inside.` },
+  ],
 };

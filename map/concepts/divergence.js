@@ -25,6 +25,8 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
+  labs: [
+    { course: 'mac2313', lab: 'flux2d', note: String.raw`The same limit in the plane: shrink the loop and the flux per area closes in on \(\nabla\cdot\mathbf F\) at its centre.` },
+  ],
   candidate: String.raw`A small box you drag through a field. It shows the flux out of each face and compares their sum with \(\nabla\cdot\mathbf F\,\Delta V\).`,
 };
