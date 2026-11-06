@@ -256,3 +256,22 @@ test('continuity: closed form against the boundary sum', () => {
     }
   }
 });
+
+import { tiles } from '../src/math/tiles2d.js';
+import { FIELDS as PLANE, fluxClosed } from '../src/math/flux2d.js';
+
+test('tiles: inner faces cancel exactly; the midpoint sum converges', () => {
+  for (const id of ['source', 'spread', 'cubic', 'shear']) {
+    const f = PLANE[id];
+    const exact = fluxClosed(f, { shape: 'square', size: 1, a: 0.5, b: 0.2 });
+    let last = Infinity;
+    for (const n of [1, 2, 4, 8]) {
+      const t = tiles(f, { a: 0.5, b: 0.2, s: 1, n });
+      close(t.cells, t.outer, 1e-12, `${id} cells at n=${n}`);
+      close(t.outer, exact, 1e-12, `${id} outer`);
+      const err = Math.abs(t.midpoint - exact);
+      assert.ok(err <= last + 1e-12, `${id} midpoint error shrinks`);
+      last = err;
+    }
+  }
+});

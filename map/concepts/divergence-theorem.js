@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Grid a region into boxes and watch the inner-face fluxes cancel as the grid refines.',
+  labs: [
+    { course: 'mac2313', lab: 'tiles', note: 'A square cut into n × n cells: inner faces cancel, and the midpoint sum of div F closes in on the flux. Shown in the plane; boxes in space cancel the same way.' },
+  ],
 };
