@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'A rod with a starting temperature profile, solved by Fourier series and by finite differences, side by side.',
+  labs: [
+    { course: 'eml4140', lab: 'rod', notes: ['s1', 's2', 's3'], note: 'A rod with its ends held fixed: a starting profile by Fourier series and by finite differences, side by side. Ripples fade first, and time scales as L²/α.' },
+  ],
 };

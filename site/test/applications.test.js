@@ -144,7 +144,7 @@ test('a hub backup from before Fluids was added restores and keeps the Fluids re
   const fluids = parts.find((p) => p.courseId === 'eml3015');
   fluids.store = fluidsStore(memoryStorage(), () => 0);
   fluids.store.writeJSON('problems', { v: 1, kept: true });
-  const before = exportBundle(parts.filter((p) => !['eml3015', 'design', 'egn3203', 'ema3010', 'applications'].includes(p.courseId)));
+  const before = exportBundle(parts.filter((p) => !['eml3015', 'design', 'egn3203', 'ema3010', 'eml4140', 'applications'].includes(p.courseId)));
   assert.equal('eml3015' in before.courses, false);
   restoreHubBackup(before, parts);
   assert.deepEqual(fluids.store.readJSON('problems'), { v: 1, kept: true });

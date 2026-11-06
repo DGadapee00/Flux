@@ -74,6 +74,7 @@ export const TRACKS = [
     courses: [
       { id: 'eml3100', code: 'EML 3100', title: 'Thermodynamics', term: null, href: 'eml3100/' },
       { id: 'eml3015', code: 'EML 3015', title: 'Fluids', term: null, href: 'eml3015/' },
+      { id: 'eml4140', code: 'EML 4140', title: 'Heat Transfer', term: null, href: 'eml4140/' },
     ],
   },
   {

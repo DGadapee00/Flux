@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchy�
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 188 with a Flux lab, 87 gaps.**
+**275 concepts, 189 with a Flux lab, 86 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -20,7 +20,7 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Electricity and magnetism | 27 | 26 |
 | Thermodynamics | 22 | 12 |
 | Fluid mechanics | 20 | 10 |
-| Heat transfer | 19 | 2 |
+| Heat transfer | 19 | 3 |
 | Circuits and systems | 27 | 13 |
 | Mechanics of materials | 16 | 15 |
 | Materials science | 15 | 1 |
@@ -55,7 +55,7 @@ each new concept on them is a gap with a candidate lab:
 | EGN 3203 Modern Computation Methods | 24 (11 new, plus the 7 linear algebra concepts) | 2.086, Spring 2013 |
 | EML 3101 Thermodynamics II | 14 (10 new) | 16.050, Fall 2002, with Cleynen |
 | EML 3015 Fluids | 22 (16 new) | 2.06, Spring 2013 |
-| EML 4140 Heat Transfer | 19 (15 new) | 2.51, Fall 2008, with Lienhard |
+| EML 4140 Heat Transfer | 19 (15 new; app started: a Rod lab for the heat equation) | 2.51, Fall 2008, with Lienhard |
 | Build a satellite (a project) | 12 (11 new) | The satellite's subsystems, from MIT 16.07, 16.06 and 16.851 |
 | Design practice (a project) | 20 (20 new) | Requirements to a tested part, then sensors, actuators and boards; MIT 2.007, 2.72 and 2.008 |
 
@@ -124,11 +124,11 @@ in the courses that teach it.
    concepts build on them, through eigenvalues into differential equations, node analysis into
    circuits, and least squares and LU into numerical methods. EGN 3203 now has an app with a Matrix
    map lab and an Elimination lab; the determinant, rank and least squares are next in its unit 1.
-6. **The thermal-fluids trunk.** The Heat equation is left: 10 concepts build on it, because
-   fluid mechanics feeds heat transfer. Continuity now has a lab. EML 3015 has its own app with
-   three units: viscosity (Viscosity, and Navier–Stokes for flow along a wall), pressure (a gate
-   and an accelerating tank) and following the flow (a nozzle for the material derivative and a
-   bend for Euler's equation). Navier–Stokes still wants a pressure-driven or two-dimensional lab.
+6. **The thermal-fluids trunk.** EML 4140 now has an app, and its Rod lab solves the Heat equation
+   by Fourier series and by finite differences side by side. EML 3015 has three units: viscosity
+   (Viscosity, and Navier–Stokes for flow along a wall), pressure (a gate and an accelerating tank)
+   and following the flow (a nozzle, a bend and Continuity). Navier–Stokes still wants a
+   pressure-driven or two-dimensional lab.
 
 ## Sources
 

@@ -14,6 +14,7 @@ import { courseStore as fluidsStore } from '@flux/eml3015/src/storage.js';
 import { courseStore as designStore } from '@flux/design/src/storage.js';
 import { courseStore as computationStore } from '@flux/egn3203/src/storage.js';
 import { courseStore as matsciStore } from '@flux/ema3010/src/storage.js';
+import { courseStore as heatStore } from '@flux/eml4140/src/storage.js';
 import { courseStore as benchStore } from '@flux/bench/src/storage.js';
 import { applicationStore } from './applications/progress.js';
 
@@ -36,6 +37,7 @@ export function backupParts() {
     { courseId: 'design', store: designStore() },
     { courseId: 'egn3203', store: computationStore() },
     { courseId: 'ema3010', store: matsciStore() },
+    { courseId: 'eml4140', store: heatStore() },
     { courseId: 'applications', store: applicationStore() },
   ];
 }
@@ -45,7 +47,7 @@ export function backupParts() {
  * are missing from older files. Keep this browser's current data for those, and restore the rest.
  * A section for a course the hub does not know still fails.
  */
-const ADDED_LATER = ['applications', 'eml3015', 'design', 'egn3203', 'ema3010'];
+const ADDED_LATER = ['applications', 'eml3015', 'design', 'egn3203', 'ema3010', 'eml4140'];
 export function restoreHubBackup(blob, parts) {
   const courses = blob?.courses;
   if (blob?.v === 1 && courses && typeof courses === 'object' && !Array.isArray(courses)) {
