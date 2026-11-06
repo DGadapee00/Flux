@@ -1,0 +1,30 @@
+export default {
+  id: 'transfer-functions',
+  title: 'Transfer functions, poles and stability',
+  label: ['Transfer functions', 'and stability'],
+  subject: 'circuits',
+  courses: ['satellite'],
+  eq: String.raw`G(s) = \frac{Y(s)}{U(s)},\qquad \text{stable} \iff \operatorname{Re}(p_i) < 0`,
+  idea: String.raw`The Laplace transform turns a linear differential equation into algebra. The ratio of output to input, \(G(s)\), is the transfer function, and it does not depend on the input. Its poles are the roots of its denominator, and each is a mode of the response, \(e^{p t}\). The system settles only if every pole has a negative real part, which the Routh criterion checks without finding the roots.`,
+  requires: ['laplace-transform'],
+  sources: [
+    {
+      title: 'MIT 16.06, Lecture 5: Dynamic response of closed-loop systems',
+      url: 'https://ocw.mit.edu/courses/16-06-principles-of-automatic-control-fall-2012/resources/mit16_06f12_lecture_5/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'A DC motor’s transfer function, its poles and its step response, found with Laplace transforms.',
+      checked: '2026-11-06',
+    },
+    {
+      title: 'MIT 16.06, Lecture 8: The Routh criterion',
+      url: 'https://ocw.mit.edu/courses/16-06-principles-of-automatic-control-fall-2012/resources/mit16_06f12_lecture_8/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'Stability as poles in the left half-plane, and how to test it from the coefficients.',
+      checked: '2026-11-06',
+    },
+  ],
+  labs: [],
+  candidate: 'Drag poles in the complex plane and watch the step response change. It corrects the idea that a slowly growing mode is nearly stable: any pole right of the axis grows without bound. The check compares the response built from the poles with a numerical solution of the differential equation.',
+};

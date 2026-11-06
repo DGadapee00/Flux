@@ -1,0 +1,30 @@
+export default {
+  id: 'link-budget',
+  title: 'Decibels and the link budget',
+  label: ['Link budget'],
+  subject: 'em',
+  courses: ['satellite'],
+  eq: String.raw`P_r = P_t\,G_t\,G_r\left(\frac{\lambda}{4\pi d}\right)^{2}`,
+  idea: 'A radio wave spreads over a growing sphere, so the power a receiver catches falls with the square of the distance. Antennas concentrate it: gain in transmission and collecting area in reception. The Friis equation multiplies these together, and in decibels the products become sums: a link budget adds power and gains and subtracts the path loss. What is left above the noise is the margin.',
+  requires: ['em-waves', 'light-intensity', 'thermal-noise'],
+  sources: [
+    {
+      title: 'Wikipedia, Friis transmission equation',
+      url: 'https://en.wikipedia.org/wiki/Friis_transmission_equation',
+      kind: 'Reference',
+      level: 'Course level',
+      why: 'The equation in its original and modern forms, derived from spreading and antenna area.',
+      checked: '2026-11-06',
+    },
+    {
+      title: 'MIT 16.851, Lecture 21: Satellite communication',
+      url: 'https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l21satelitecomm2_done/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'EIRP, space loss, noise and margin in a satellite link.',
+      checked: '2026-11-06',
+    },
+  ],
+  labs: [],
+  candidate: 'Change a satellite’s range, transmitter power and dish size, with the budget written in decibels. It corrects the idea that doubling the distance halves the received power: it quarters it, a loss of 6 dB. The check computes the received power in watts and in decibels and compares them.',
+};

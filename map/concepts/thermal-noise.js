@@ -1,0 +1,30 @@
+export default {
+  id: 'thermal-noise',
+  title: 'Thermal noise and signal-to-noise ratio',
+  label: ['Thermal noise', 'and SNR'],
+  subject: 'circuits',
+  courses: ['satellite'],
+  eq: String.raw`P_n = k_B\,T\,B`,
+  idea: String.raw`Every resistor at a temperature makes a random voltage, because its electrons jiggle. The noise power it can deliver in a bandwidth \(B\) is \(k_B T B\), whatever its resistance. A receiver is rated by an equivalent noise temperature. What decides whether a signal is read is its power over the noise, often written per bit as \(E_b/N_0\): halve the bandwidth and you halve the noise.`,
+  requires: ['electric-power', 'random-variables'],
+  sources: [
+    {
+      title: 'Wikipedia, Johnson–Nyquist noise',
+      url: 'https://en.wikipedia.org/wiki/Johnson%E2%80%93Nyquist_noise',
+      kind: 'Reference',
+      level: 'Course level',
+      why: 'Where the noise comes from, why its power depends on temperature and bandwidth only, and Nyquist’s derivation.',
+      checked: '2026-11-06',
+    },
+    {
+      title: 'MIT 16.851, Lecture 21: Satellite communication',
+      url: 'https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l21satelitecomm2_done/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'Noise temperature, system noise and the energy per bit over noise that a link must reach.',
+      checked: '2026-11-06',
+    },
+  ],
+  labs: [],
+  candidate: String.raw`Add noise to a signal and narrow the receiver bandwidth. It corrects the idea that a weak signal is lost because it is small: it is lost when it sinks below the noise, and a narrower band lowers the noise. The check compares the noise power measured from samples with \(k_B T B\).`,
+};

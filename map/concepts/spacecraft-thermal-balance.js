@@ -1,0 +1,30 @@
+export default {
+  id: 'spacecraft-thermal-balance',
+  title: 'Spacecraft radiation balance',
+  label: ['Spacecraft', 'radiation balance'],
+  subject: 'heat',
+  courses: ['satellite'],
+  eq: String.raw`\alpha\, S\, A_p + Q_\text{int} = \varepsilon\,\sigma A\, T^{4}`,
+  idea: 'In space a satellite gains heat only from sunlight, Earth and its own electronics, and loses it only by radiating. At steady state the two balance, and the temperature follows from the absorptivity for sunlight and the emissivity in the infrared. A surface that absorbs little sunlight but emits well runs cold. Designers check a hot case in full sun and a cold case in eclipse, and use insulation and radiators to stay within limits.',
+  requires: ['thermal-radiation', 'view-factors', 'first-law-closed'],
+  sources: [
+    {
+      title: 'MIT 16.851, Lecture 23: Spacecraft thermal control systems',
+      url: 'https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l23thermalcontro/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'Absorptivity, emissivity, albedo, multilayer insulation and radiators for a satellite.',
+      checked: '2026-11-06',
+    },
+    {
+      title: 'Wikipedia, Spacecraft thermal control',
+      url: 'https://en.wikipedia.org/wiki/Spacecraft_thermal_control',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'The thermal environment in orbit and the passive and active ways a satellite stays in range.',
+      checked: '2026-11-06',
+    },
+  ],
+  labs: [],
+  candidate: 'Choose a surface finish and an orbit, and find the satellite’s temperature in sun and in shadow. It corrects the idea that a black satellite runs hottest: the ratio of absorptivity to emissivity sets the temperature, and white paint runs cold. The check solves the balance in closed form and steps a lumped heat equation until it settles.',
+};

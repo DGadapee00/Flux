@@ -11,7 +11,7 @@ export const SATELLITE = {
     {
       id: 'orbit', title: 'Orbit', part: 'The trajectory', requires: [],
       outcome: 'Predict where the satellite goes and how long each orbit takes.',
-      concepts: ['gravitation', 'curved-path-forces', 'numerical-integration'],
+      concepts: ['gravitation', 'curved-path-forces', 'numerical-integration', 'kepler-equation', 'orbit-transfers'],
       labs: [{ concept: 'gravitation', course: 'phy2048', lab: 'iss-orbit' }],
       demonstrate: 'Choose an altitude for a circular Earth orbit. Compute speed and period, state your units, and check the period by a second method.',
       deliverable: 'An orbit model with altitude, speed, period and assumptions.',
@@ -21,7 +21,7 @@ export const SATELLITE = {
     {
       id: 'power', title: 'Power', part: 'Solar array + battery', requires: ['orbit'],
       outcome: 'Keep the electronics powered through sunlight and eclipse.',
-      concepts: ['electric-power', 'internal-resistance', 'breadboard-circuits'],
+      concepts: ['electric-power', 'internal-resistance', 'breadboard-circuits', 'spacecraft-power'],
       labs: [{ concept: 'internal-resistance', course: 'bench', lab: 'usb-rail' }, { concept: 'breadboard-circuits', course: 'bench', lab: 'breadboard' }],
       demonstrate: 'List each load and its duty cycle. Size stored energy for your eclipse duration, include conversion losses and reserve, and check that sunlight can recharge it.',
       deliverable: 'A power budget, battery capacity and solar-array requirement.',
@@ -36,7 +36,7 @@ export const SATELLITE = {
         description: 'Upload a STEP model and dimensioned PDF, keep each revision and review its evidence against the enclosure brief. ChatGPT sign-in protects your private files. AI review availability is shown in the workspace.',
       },
       outcome: 'Support the components without exceeding a stated stress or deflection limit.',
-      concepts: ['static-equilibrium', 'stress-on-a-section', 'beam-deflection', 'forced-resonance'],
+      concepts: ['static-equilibrium', 'stress-on-a-section', 'beam-deflection', 'forced-resonance', 'launch-loads'],
       labs: [{ concept: 'stress-on-a-section', course: 'egn3331', lab: 'pins' }],
       demonstrate: 'Draw the load path for a chosen mass and acceleration. Check one attachment and one frame member against stated allowables. Record what a static check cannot establish about vibration.',
       deliverable: 'A mass budget, load case, attachment check and deflection limit.',
@@ -56,7 +56,7 @@ export const SATELLITE = {
     {
       id: 'thermal', title: 'Thermal control', part: 'Surfaces + heat paths', requires: ['power', 'payload'],
       outcome: 'Keep the electronics within a chosen temperature range.',
-      concepts: ['first-law-closed', 'thermal-resistance', 'thermal-radiation', 'lumped'],
+      concepts: ['first-law-closed', 'thermal-resistance', 'thermal-radiation', 'lumped', 'spacecraft-thermal-balance'],
       labs: [{ concept: 'first-law-closed', course: 'eml3100', lab: 'balance' }, { concept: 'lumped', course: 'map2302', lab: 'coffee' }],
       demonstrate: 'Use the power budget as a heat input. Write a radiation balance for hot and cold cases, include the absorbed environment, and state the limits of a lumped-temperature model.',
       deliverable: 'Hot and cold temperature estimates with surface assumptions.',
@@ -66,7 +66,7 @@ export const SATELLITE = {
     {
       id: 'attitude', title: 'Attitude control', part: 'Pointing + rotation', requires: ['structure', 'power'],
       outcome: 'Turn the satellite toward a target and account for its angular momentum.',
-      concepts: ['moment-of-inertia', 'rigid-kinetics', 'angular-momentum', 'linear-systems'],
+      concepts: ['moment-of-inertia', 'rigid-kinetics', 'angular-momentum', 'linear-systems', 'euler-rigid-body', 'attitude-rotations', 'feedback-control'],
       labs: [{ concept: 'angular-momentum', course: 'egn3321', lab: 'spin' }],
       demonstrate: 'Use your mass layout to estimate inertia. Predict a turn under a stated torque and check its angular impulse. Define a pointing-error target and explain how feedback would correct a disturbance.',
       deliverable: 'A pointing model, torque estimate and actuator power allowance.',
@@ -76,7 +76,7 @@ export const SATELLITE = {
     {
       id: 'communications', title: 'Communications', part: 'Radio + ground link', requires: ['orbit', 'power', 'attitude', 'payload'],
       outcome: 'Return sensor readings within the available energy and contact time.',
-      concepts: ['em-waves', 'light-intensity', 'random-variables'],
+      concepts: ['em-waves', 'light-intensity', 'random-variables', 'thermal-noise', 'link-budget'],
       labs: [{ concept: 'em-waves', course: 'phy2049', lab: 'emwave' }],
       demonstrate: 'State range, frequency, antenna assumptions, data rate and receiver sensitivity. Build a link budget with a margin, then check whether contact time and transmitter energy can return the planned data.',
       deliverable: 'A link budget and a contact-by-contact data and energy estimate.',

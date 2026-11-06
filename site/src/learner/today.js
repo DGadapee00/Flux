@@ -422,7 +422,7 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
       else if (status === 'locked') {
         const missing = c.requires.filter((r) => !learner.met(r));
         line = `Builds on ${missing.map((r) => conceptLink(r)).join(', ')}, not solid yet.`;
-      } else line = st.all ? `${plural(st.all, 'problem')} to practise. Your first solve starts the record.` : 'Learn it from the lab and the sources below.';
+      } else line = st.all ? `${plural(st.all, 'problem')} to practise. Your first solve starts the record.` : (c.labs.length ? 'Learn it from the lab and the sources below.' : 'No Flux lab yet. Learn it from the sources below.');
       const first = learner.problemsOf[id].find((k) => st.dueKeys.includes(k)) || learner.problemsOf[id][0];
       const href = first ? problemHref(first) : null;
       return `<div class="tdy-record">${pill(status)}<span>${line}</span>${href ? `<a href="${href}">${st.due ? 'Review now' : 'Practise'} ↗</a>` : ''}</div>`;

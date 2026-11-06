@@ -16,6 +16,7 @@
  *   follows EML 3100 in the thermal track (archived plan, D19); it has no app yet. EEL 3111 Circuit
  *   Analysis I and EGN 3203 Modern Computation Methods are not taken yet (archived plans); no apps.
  * - Bench is a personal project (archived D35), so it has no status.
+ * - Build a satellite is the application in map/applications/ taken as a project (6 November 2026).
  */
 export const STATUSES = ['taken', 'taking now', 'next term', 'later'];
 
@@ -37,4 +38,7 @@ export const COURSES = [
   { id: 'eel3111', code: 'EEL 3111', title: 'Circuit Analysis I', status: 'later', app: null },
   { id: 'egn3203', code: 'EGN 3203', title: 'Modern Computation Methods', status: 'later', app: null },
   { id: 'bench', code: 'BENCH', title: 'Electronics on the bench', kind: 'project', app: 'bench/' },
+  // The satellite application as a project: the aerospace concepts it needs that no course on the
+  // map teaches yet. A real course (controls, astrodynamics) joins a concept's list when it is added.
+  { id: 'satellite', code: 'SAT', title: 'Build a satellite', kind: 'project', app: null },
 ];

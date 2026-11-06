@@ -8,21 +8,21 @@ exact equations, substitutions, balance models, variation of parameters, Cauchyâ
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**243 concepts, 155 with a Flux lab, 88 gaps.**
+**255 concepts, 156 with a Flux lab, 99 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
 | Calculus | 30 | 29 |
-| Linear algebra | 7 | 0 |
+| Linear algebra | 8 | 0 |
 | Differential equations | 18 | 18 |
 | Numerical methods | 13 | 2 |
-| Mechanics | 30 | 30 |
-| Electricity and magnetism | 26 | 25 |
+| Mechanics | 34 | 31 |
+| Electricity and magnetism | 27 | 25 |
 | Thermodynamics | 22 | 12 |
 | Fluid mechanics | 20 | 3 |
-| Heat transfer | 18 | 2 |
-| Circuits and systems | 21 | 11 |
-| Mechanics of materials | 14 | 14 |
+| Heat transfer | 19 | 2 |
+| Circuits and systems | 25 | 11 |
+| Mechanics of materials | 15 | 14 |
 | Materials science | 15 | 0 |
 | Statistics | 9 | 9 |
 
@@ -54,6 +54,7 @@ each new concept on them is a gap with a candidate lab:
 | EML 3101 Thermodynamics II | 14 (10 new) | 16.050, Fall 2002, with Cleynen |
 | EML 3015 Fluids | 22 (16 new) | 2.06, Spring 2013 |
 | EML 4140 Heat Transfer | 19 (15 new) | 2.51, Fall 2008, with Lienhard |
+| Build a satellite (a project) | 12 (11 new) | The satellite's subsystems, from MIT 16.07, 16.06 and 16.851 |
 
 A concept can also list `related` concepts: parallels that are not prerequisites, such as diffusion
 and the heat equation. The hub lists them in the reading panel's Parallels row and draws nothing.
@@ -65,6 +66,18 @@ balances with EML 3100, the boundary layer between fluids and heat transfer, and
 EMA 3010. Parallels run momentum, heat and mass transfer side by side: viscosity and Fourier's law,
 Navierâ€“Stokes and the heat equation, the velocity and thermal boundary layers, heat and mass
 convection.
+
+## The satellite's own concepts
+
+The satellite application (`map/applications/satellite.js`) needs ideas no course on the map
+teaches yet. Twelve are on the map as the project course *Build a satellite*, with a path in
+subsystem order: elliptical orbits and Kepler's equation, the rocket equation, orbit transfers,
+spacecraft power, launch loads, the spacecraft radiation balance, rotations and quaternions,
+Euler's equations and spin stability, transfer functions and stability, feedback and PID control,
+thermal noise, and the link budget. Their sources are MIT 16.07 Dynamics, 16.06 Automatic Control
+and 16.851 Satellite Engineering. The rocket equation already has PHY 2048's and Dynamics' rocket
+labs; the other eleven are gaps with lab candidates, and each subsystem recipe names them. When a
+course that teaches one joins the map, add it to that concept's `courses`.
 
 ## Gaps most worth a lab
 
