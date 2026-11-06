@@ -8,8 +8,9 @@ The hub opens on Today. It reads your practice record from every course app and 
 now: review the problems that are due, grouped by thread on the map so each concept comes after
 the one it builds on, then learn the next concept whose prerequisites are solid. A thread review
 asks you to recall each concept before its problems, and Solve opens each problem in its course
-app. The next PHY 2049 exam and your courses sit beside it. The reading panel on the map shows your
-record for the chosen concept.
+app. The next PHY 2049 exam and your courses sit beside it. The map fills in as you learn: each box in its
+lane's colour, all the way when solid, part of the way while learning, with a dot when a review
+is due. The reading panel shows your record for the chosen concept.
 
 Below Today, the map opens on a local view: the chosen concept, what it builds on and what it leads
 to, one step each way, beside its reading panel. Widen it to two steps or the full map, or choose a

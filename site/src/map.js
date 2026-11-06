@@ -93,11 +93,14 @@ function el(tag, attrs, parent) {
  *   paths?: Record<string, any>,
  *   root?: Document,
  *   record?: (id: string) => string,
+ *   status?: (id: string) => ({ status: string, share: number, due: number } | null),
  * }} [opts]
  * `record` returns the learner's record for a concept as HTML; the reading panel shows it under
- * the equation. The hub's Today view supplies it.
+ * the equation. `status` returns where the learner stands on a concept, and each box is filled to
+ * match: solid, from a course taken, learning (filled by the share of its problems that are
+ * solid), ready, or not yet, with a dot when a review is due. The hub's Today view supplies both.
  */
-export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root = document, record = () => '' } = {}) {
+export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root = document, record = () => '', status = () => null } = {}) {
   const style = root.createElement('style');
   style.textContent = laneCss(SUBJECTS);
   root.head.append(style);
@@ -323,6 +326,9 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
         svg,
       );
       el('rect', { width: NODEW, height: NODEH, rx: 7, stroke: colour(c) }, g);
+      // The learner's progress: a fill in the lane's colour, sized by paintStatus().
+      el('rect', { class: 'progress', width: 0, height: NODEH, rx: 7, style: `fill: ${colour(c)}` }, g);
+      el('circle', { class: 'due', cx: 3, cy: 3, r: 5 }, g);
       const lines = c.label || wrapLabel(c.title);
       const ty = NODEH / 2 - (lines.length - 1) * 8 + 5;
       lines.forEach((s, i) => {
@@ -363,6 +369,7 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
       });
       nodeEls[c.id] = g;
     }
+    paintStatus();
     // Lane labels are HTML over the map, each stuck to the box's left edge, so a lane stays named
     // however far the map is scrolled. A backing keeps edges from running through the text.
     tags.innerHTML = bands
@@ -464,6 +471,22 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
     if (!related[id].length) return '';
     const items = related[id].map((r) => `<li>${chip(r.id)}<p class="why">${prose(r.note)}</p></li>`).join('');
     return `<div><h3>Parallels</h3><ul class="parallels">${items}</ul></div>`;
+  }
+
+  /** Fill each drawn box from the learner's record, without drawing the map again. */
+  function paintStatus() {
+    const STATUS_WORDS = { solid: 'solid', assumed: 'from a course you took', learning: 'learning', ready: 'ready to learn', locked: 'needs something first' };
+    for (const [id, g] of Object.entries(nodeEls)) {
+      const s = status(id);
+      const c = byId[id];
+      for (const k of Object.keys(STATUS_WORDS)) g.classList.toggle(`st-${k}`, s?.status === k);
+      g.classList.toggle('st-due', Boolean(s?.due));
+      const share = !s ? 0 : s.status === 'solid' || s.status === 'assumed' ? 1 : s.status === 'learning' ? Math.max(0.08, s.share) : 0;
+      g.querySelector('rect.progress')?.setAttribute('width', String(share * NODEW));
+      const lab = c.labs.length > 0 ? '' : ', no lab yet';
+      const where = s ? `, ${STATUS_WORDS[s.status]}${s.due ? `, ${s.due} due` : ''}` : '';
+      g.setAttribute('aria-label', `${c.title}${lab}${where}`);
+    }
   }
 
   function render(id) {
@@ -761,6 +784,8 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
     refreshPanel() {
       if (current) render(current);
     },
+    /** Fill the boxes again from the learner's record. */
+    refreshStatus: paintStatus,
     choosePath,
     chooseScope,
     chooseLanes,

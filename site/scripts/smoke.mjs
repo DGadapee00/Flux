@@ -5,7 +5,8 @@
  * not open it, if a phone's map does not bring the chosen concept into view, if a course card is
  * missing, if a concept's Parallels row is wrong or opening it throws, if following a card or a lab
  * link does not land on that course's app, or if a due problem in a course's record does not give
- * a thread review on Today whose Solve link opens that problem in its course app.
+ * a thread review on Today whose Solve link opens that problem in its course app and fills the
+ * concept's box on the map as learning and due.
  */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
@@ -595,6 +596,9 @@ async function main() {
       await delay(250);
       const record = await evalJson(page, `document.querySelector('#detail .tdy-record')?.textContent ?? ''`);
       if (!/Learning/.test(record)) throw new Error(`${width}px: ${concept.id} panel record reads "${record}"`);
+      // The concept's box on the map is filled as learning and marked due.
+      const box = await evalJson(page, `(() => { const g = document.querySelector('#map .node[data-concept="${concept.id}"]'); return g ? [...g.classList] : null; })()`);
+      if (!box || !box.includes('st-learning') || !box.includes('st-due')) throw new Error(`${width}px: ${concept.id} box is ${JSON.stringify(box)}, expected learning and due`);
       if (width === 1280) {
         // Following Solve opens that problem in PHY 2049, ready to answer.
         await navigate(page, review.solve);

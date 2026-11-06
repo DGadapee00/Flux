@@ -404,6 +404,12 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
       refresh();
       render();
     },
+    /** Where the learner stands on one concept, for filling its box on the map. */
+    statusOf(id) {
+      if (!byId[id]) return null;
+      const st = learner.stats(id);
+      return { status: learner.status(id), share: st.n ? st.solid / st.n : 0, due: st.due };
+    },
     /** The learner's record for one concept, for the map's reading panel. */
     recordHtml(id) {
       const c = byId[id];
