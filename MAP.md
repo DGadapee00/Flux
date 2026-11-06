@@ -8,11 +8,11 @@ exact equations, substitutions, balance models, variation of parameters, Cauchy‚
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**243 concepts, 152 with a Flux lab, 91 gaps.**
+**243 concepts, 153 with a Flux lab, 90 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
-| Calculus | 30 | 26 |
+| Calculus | 30 | 27 |
 | Linear algebra | 7 | 0 |
 | Differential equations | 18 | 18 |
 | Numerical methods | 13 | 2 |
@@ -78,9 +78,9 @@ in the courses that teach it.
 2. **Maxwell's divergence equations.** PHY 2049 is being taken now, and this is the step from
    Gauss's law to EM waves. Its candidate: flux through a shrinking sphere beside the charge
    density at its centre.
-3. **Line integrals and work.** 60 concepts build on it: electric potential, Amp√®re's law, and
-   work and energy in Dynamics and Physics I. A path dragged through a field, with two paths
-   compared for a gradient field.
+3. **Line integrals and work.** PHY 2048's work-path lab and Dynamics' paths lab now show it:
+   work summed along a path, one total for a gradient field, another for friction. A calculus lab
+   where you drag your own path through a field is still worth building.
 4. **An RL and LC lab for Inductance.** PHY 2049 has a transformer lab, but notes sections on
    self-inductance, RL circuits and LC oscillation have no lab of their own.
 5. **Matrices as linear maps, and elimination.** The root of the linear algebra thread: 24 and 25

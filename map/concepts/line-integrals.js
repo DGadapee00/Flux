@@ -25,6 +25,9 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
+  labs: [
+    { course: 'phy2048', lab: 'work-path', notes: ['s2', 's7'], note: String.raw`Work as \(\int \mathbf F\cdot d\mathbf r\), summed leg by leg on four paths: gravity and a spring give one total, friction and a swirl do not.` },
+    { course: 'egn3321', lab: 'paths', notes: 's5', note: 'Two paths between the same points: gravity and a spring agree, friction does not.' },
+  ],
   candidate: 'A field and a path you drag: the work integral adds up piece by piece, and for a gradient field two paths between the same points give the same total.',
 };
