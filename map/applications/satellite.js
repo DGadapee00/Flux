@@ -1,5 +1,7 @@
 /**
  * An application: a project built from the map's concepts and labs. These are recipes, not new labs.
+ * Each recipe is a reference and how-to: a method, a checklist of what a good result contains, and
+ * references. The work itself is reviewed in a Claude Project; the hub builds the brief to paste in.
  * Components are listed in build order, each after everything it requires, and numbered that way.
  * `requires` lists every subsystem whose numbers a recipe uses, so editing one asks its dependents
  * to be checked again. `npm run map-gaps` counts a recipe's concepts when it ranks gaps.
@@ -10,6 +12,26 @@ export const SATELLITE = {
   components: [
     {
       id: 'orbit', title: 'Orbit', part: 'The trajectory', requires: [],
+      method: [
+        'Pick an altitude and say why: lifetime against drag, coverage, launch options.',
+        'Measure r from Earth’s centre: r = R + h.',
+        'Compute speed from v = √(GM/r) and period from T = 2πr/v, with units at every step.',
+        'Check the period a second way: integrate the orbit, or use T = 2π√(r³/GM).',
+        'Estimate the longest eclipse: the share of the orbit behind Earth for a circular orbit at that altitude.',
+        'List what you assumed: circular orbit, no drag, spherical Earth.',
+      ],
+      checklist: [
+        'r is measured from Earth’s centre, not the surface.',
+        'Speed and period agree with a second method within 1%.',
+        'Units are stated and carried through.',
+        'The eclipse duration is estimated and explained.',
+        'Assumptions are listed, with what each one leaves out.',
+        'The numbers Power and Communications need are stated.',
+      ],
+      references: [
+        { title: 'MIT 16.07, Lecture 15: Central force motion, Kepler’s laws', url: 'https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/resources/mit16_07f09_lec15/', why: 'Orbits from the central-force equations.' },
+        { title: 'MIT 16.07, Lecture 17: Orbit transfers', url: 'https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/resources/mit16_07f09_lec17/', why: 'How a satellite gets to the orbit you chose.' },
+      ],
       outcome: 'Predict where the satellite goes and how long each orbit takes.',
       concepts: ['gravitation', 'curved-path-forces', 'numerical-integration', 'kepler-equation', 'orbit-transfers'],
       labs: [{ concept: 'gravitation', course: 'phy2048', lab: 'iss-orbit' }],
@@ -20,6 +42,26 @@ export const SATELLITE = {
     },
     {
       id: 'power', title: 'Power', part: 'Solar array + battery', requires: ['orbit'],
+      method: [
+        'List every load with its power and the share of each orbit it runs.',
+        'Split the orbit into sunlight and eclipse using the Orbit numbers.',
+        'Size the battery for the eclipse: energy needed divided by the depth of discharge you allow and the path efficiency.',
+        'Size the array to run the loads in sunlight and refill the battery, at end of life, not at launch.',
+        'Add a margin and say how big it is and why.',
+        'Check one orbit by stepping the battery’s charge through sun and shadow.',
+      ],
+      checklist: [
+        'Every load is listed with power and duty cycle.',
+        'Battery size follows from eclipse energy, depth of discharge and efficiency.',
+        'Array size covers loads plus recharge, with degradation.',
+        'A margin is stated.',
+        'A step-through of one orbit agrees with the budget.',
+        'Dissipated power is passed to Thermal.',
+      ],
+      references: [
+        { title: 'MIT 16.851, Lecture 3: Spacecraft power systems', url: 'https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l3_scpowersys_dm_done2/', why: 'Arrays, batteries, depth of discharge and end-of-life sizing.' },
+        { title: 'Wikipedia, Solar panels on spacecraft', url: 'https://en.wikipedia.org/wiki/Solar_panels_on_spacecraft', why: 'How arrays are used in orbit and why they degrade.' },
+      ],
       outcome: 'Keep the electronics powered through sunlight and eclipse.',
       concepts: ['electric-power', 'internal-resistance', 'breadboard-circuits', 'spacecraft-power'],
       labs: [{ concept: 'internal-resistance', course: 'bench', lab: 'usb-rail' }, { concept: 'breadboard-circuits', course: 'bench', lab: 'breadboard' }],
@@ -30,11 +72,25 @@ export const SATELLITE = {
     },
     {
       id: 'structure', title: 'Structure', part: 'Frame + attachments', requires: [],
-      submission: {
-        title: 'Submit an enclosure design',
-        url: 'https://flux-design-review.readydelta2.chatgpt.site',
-        description: 'Upload a STEP model and dimensioned PDF, keep each revision and review its evidence against the enclosure brief. ChatGPT sign-in protects your private files. AI review availability is shown in the workspace.',
-      },
+      method: [
+        'Draw the load path: from each component through its bracket to the launcher interface.',
+        'Take a launch acceleration for the case you are checking and state where it comes from.',
+        'Check the most loaded attachment and one frame member against an allowable, with a factor of safety.',
+        'Estimate the first natural frequency of the stack and compare it with the launcher’s requirement.',
+        'Record what a static check cannot show: random vibration, fatigue and joint preload.',
+      ],
+      checklist: [
+        'The load path is drawn end to end.',
+        'Load case and its source are stated.',
+        'Stress is compared with an allowable and a factor of safety.',
+        'A first natural frequency is estimated.',
+        'Limits of the analysis are named.',
+        'Mass layout and inertia go to Attitude control.',
+      ],
+      references: [
+        { title: 'MIT 16.851, Lecture 14: Structures in space systems', url: 'https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l14_structures/', why: 'What a satellite structure has to do, and the issues it faces.' },
+        { title: 'MIT 16.07, Lecture 19: Vibration, normal modes, natural frequencies', url: 'https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/resources/mit16_07f09_lec19/', why: 'The tools behind a natural-frequency requirement.' },
+      ],
       outcome: 'Support the components without exceeding a stated stress or deflection limit.',
       concepts: ['static-equilibrium', 'stress-on-a-section', 'beam-deflection', 'forced-resonance', 'launch-loads'],
       labs: [{ concept: 'stress-on-a-section', course: 'egn3331', lab: 'pins' }],
@@ -45,6 +101,24 @@ export const SATELLITE = {
     },
     {
       id: 'payload', title: 'Sensor payload', part: 'The measurement', requires: ['power'],
+      method: [
+        'Say what you will measure and over what range.',
+        'Choose a sensor and write how its output follows the quantity: sensitivity and offset.',
+        'Design the conditioning: divider, amplifier or filter, so the signal fills the converter’s range.',
+        'Find the resolution: the smallest change one converter step stands for.',
+        'Plan calibration: known inputs, the fit, and the uncertainty left.',
+        'Count the data: bits per sample times samples per orbit.',
+      ],
+      checklist: [
+        'Range, sensitivity and resolution are stated.',
+        'Loading by the next stage is checked.',
+        'Calibration and its uncertainty are planned.',
+        'Sample rate, power and data volume are stated.',
+        'The space environment the sensor must survive is considered.',
+      ],
+      references: [
+        { title: 'MIT 16.851, Lecture 5: The environment of space', url: 'https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l5_space_environ_done2/', why: 'Radiation and thermal conditions a sensor has to survive.' },
+      ],
       outcome: 'Turn a physical signal into a reading with stated uncertainty.',
       concepts: ['voltage-divider', 'measuring-circuits', 'confidence-intervals'],
       labs: [{ concept: 'voltage-divider', course: 'bench', lab: 'divider' }, { concept: 'voltage-divider', course: 'bench', lab: 'nightlight' }],
@@ -55,6 +129,25 @@ export const SATELLITE = {
     },
     {
       id: 'thermal', title: 'Thermal control', part: 'Surfaces + heat paths', requires: ['power', 'payload'],
+      method: [
+        'Collect the heat inputs: absorbed sunlight, Earth’s reflected and emitted heat, and the electronics’ dissipation from Power.',
+        'Choose surface finishes and look up their absorptivity and emissivity.',
+        'Write the balance for a hot case in full sun and a cold case in eclipse.',
+        'Solve each for the temperature and compare with the electronics’ limits.',
+        'If a case fails, change finishes, add insulation or a radiator, and solve again.',
+        'State where a single-temperature model stops being true.',
+      ],
+      checklist: [
+        'Hot and cold cases are both solved.',
+        'Absorptivity and emissivity are stated with their source.',
+        'Electronics dissipation comes from the power budget.',
+        'Temperatures are compared with stated limits.',
+        'The limits of the lumped model are stated.',
+      ],
+      references: [
+        { title: 'MIT 16.851, Lecture 23: Spacecraft thermal control systems', url: 'https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l23thermalcontro/', why: 'Surfaces, insulation and radiators.' },
+        { title: 'Wikipedia, Spacecraft thermal control', url: 'https://en.wikipedia.org/wiki/Spacecraft_thermal_control', why: 'The thermal environment in orbit and the ways to stay in range.' },
+      ],
       outcome: 'Keep the electronics within a chosen temperature range.',
       concepts: ['first-law-closed', 'thermal-resistance', 'thermal-radiation', 'lumped', 'spacecraft-thermal-balance'],
       labs: [{ concept: 'first-law-closed', course: 'eml3100', lab: 'balance' }, { concept: 'lumped', course: 'map2302', lab: 'coffee' }],
@@ -65,6 +158,27 @@ export const SATELLITE = {
     },
     {
       id: 'attitude', title: 'Attitude control', part: 'Pointing + rotation', requires: ['structure', 'power'],
+      method: [
+        'Find the moments of inertia from the mass layout Structure gives you.',
+        'Set a pointing requirement: how far off target and how steady.',
+        'List disturbance torques and estimate the largest.',
+        'Size an actuator: the torque to turn in the time you need, and the momentum it must store.',
+        'Sketch the feedback loop: sensor, controller, actuator, and the gains you start from.',
+        'Check a turn: torque times time against the change in angular momentum.',
+      ],
+      checklist: [
+        'Inertias come from the mass layout.',
+        'Pointing accuracy and stability are stated.',
+        'The largest disturbance torque is estimated.',
+        'Actuator torque and stored momentum are sized.',
+        'The control loop is drawn with its sensor and actuator.',
+        'Actuator power goes back to Power.',
+      ],
+      references: [
+        { title: 'MIT 16.851, Lecture 9: Attitude determination and control', url: 'https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l9_acs/', why: 'Sensors, reaction wheels, gravity gradient and control on a satellite.' },
+        { title: 'MIT 16.07, Lecture 28: Euler’s equations', url: 'https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/resources/mit16_07f09_lec28/', why: 'The rigid-body equations and spin stability.' },
+        { title: 'MIT 16.06, Lecture 10: PID control', url: 'https://ocw.mit.edu/courses/16-06-principles-of-automatic-control-fall-2012/resources/mit16_06f12_lecture_10/', why: 'What each control term does.' },
+      ],
       outcome: 'Turn the satellite toward a target and account for its angular momentum.',
       concepts: ['moment-of-inertia', 'rigid-kinetics', 'angular-momentum', 'linear-systems', 'euler-rigid-body', 'attitude-rotations', 'feedback-control'],
       labs: [{ concept: 'angular-momentum', course: 'egn3321', lab: 'spin' }],
@@ -75,6 +189,26 @@ export const SATELLITE = {
     },
     {
       id: 'communications', title: 'Communications', part: 'Radio + ground link', requires: ['orbit', 'power', 'attitude', 'payload'],
+      method: [
+        'Take the range from Orbit and the data volume from Payload.',
+        'Choose a frequency, transmitter power and antennas, and state their gains.',
+        'Write the link budget in decibels: power plus gains minus path and other losses.',
+        'Compute the noise from the receiver’s noise temperature and bandwidth.',
+        'Find the margin: what you have above what the data rate needs.',
+        'Check that contact time and transmitter energy can return the planned data.',
+      ],
+      checklist: [
+        'Every term of the budget is in decibels with its source.',
+        'Path loss follows from range and wavelength.',
+        'Noise follows from temperature and bandwidth.',
+        'A positive margin is shown and its size justified.',
+        'Data returned per contact covers the payload’s volume.',
+        'Transmitter energy goes back to Power.',
+      ],
+      references: [
+        { title: 'MIT 16.851, Lecture 21: Satellite communication', url: 'https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l21satelitecomm2_done/', why: 'EIRP, space loss, noise and margin.' },
+        { title: 'Wikipedia, Friis transmission equation', url: 'https://en.wikipedia.org/wiki/Friis_transmission_equation', why: 'The equation behind the path loss.' },
+      ],
       outcome: 'Return sensor readings within the available energy and contact time.',
       concepts: ['em-waves', 'light-intensity', 'random-variables', 'thermal-noise', 'link-budget'],
       labs: [{ concept: 'em-waves', course: 'phy2049', lab: 'emwave' }],
@@ -86,6 +220,23 @@ export const SATELLITE = {
   ],
   integration: {
     id: 'satellite', title: 'Assemble the satellite', requires: ['orbit', 'power', 'structure', 'payload', 'thermal', 'attitude', 'communications'],
+      method: [
+        'Write one mission case: orbit, payload and how long it runs.',
+        'Bring the seven budgets together: mass, power, temperature, pointing and data.',
+        'Find where they disagree and settle each disagreement.',
+        'Change one thing, such as transmitter duty cycle, and trace it through Power, Thermal and the data returned.',
+        'Name the margin that limits the mission.',
+      ],
+      checklist: [
+        'One mission case is stated.',
+        'All seven budgets use the same numbers.',
+        'Each disagreement and how it was settled is recorded.',
+        'A trade study traces one change through the budgets.',
+        'The limiting margin is named.',
+      ],
+      references: [
+        { title: 'MIT 16.851 Satellite Engineering, lecture notes', url: 'https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/pages/lecture-notes/', why: 'One lecture per subsystem, the order this project follows.' },
+      ],
     outcome: 'Make the seven subsystem budgets agree on one mission.',
     demonstrate: 'Record one mission case. Reconcile mass, energy, temperature, pointing and data budgets. Change transmitter duty cycle, then trace the effect through Power, Thermal and the returned data. Document the margin that limits the mission.',
     deliverable: 'One shared mission report with linked subsystem evidence and a tradeoff study.',

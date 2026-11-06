@@ -57,81 +57,50 @@ try {
     const blank = page.loads;
     await page.send('Page.navigate', { url });
     await wait(() => page.loads > blank);
-    await wait(() => page.eval('!!document.querySelector("[data-record]")'));
+    await wait(() => page.eval('!!document.querySelector("[data-copy=\\"brief\\"]")'));
   }
   const click = (selector) => page.eval(`document.querySelector(${JSON.stringify(selector)}).click()`);
-  /** Type into the evidence box. `leave` also fires the change a browser sends when focus leaves it. */
-  async function evidence(text, leave = true) {
-    await page.eval(`(() => { const e = document.querySelector('#application-evidence'); e.value = ${JSON.stringify(text)}; e.dispatchEvent(new Event('input', {bubbles:true})); ${leave ? "e.dispatchEvent(new Event('change', {bubbles:true}));" : ''} })()`);
-  }
   async function select(id) { await click(`[data-select="${id}"]`); }
   await navigate();
-  await page.eval('localStorage.clear()');
-  await navigate();
-  // Orbit checks the numbers you enter two ways. A wrong speed fails; the right numbers pass and
-  // go into the evidence.
+  // Seven subsystems and the integration, each a reference page with its own review brief.
+  assert.equal(await page.eval('document.querySelectorAll(".component-recipes button").length'), 8);
+  assert.equal(await page.eval('document.querySelectorAll("[data-record], #application-evidence, .application-submission").length'), 0);
+  for (const r of [...SATELLITE.components, SATELLITE.integration]) {
+    await select(r.id);
+    const text = await page.eval('document.querySelector("[data-text=\\"brief\\"]").textContent');
+    assert.match(text, new RegExp(`^# Review: ${r.title}`), r.id);
+    for (const item of r.checklist) assert.ok(text.includes(item), `${r.id}: ${item}`);
+    assert.equal(await page.eval('document.querySelectorAll(".method li").length'), r.method.length, r.id);
+  }
+  // The Project instructions are on the page to copy once.
+  assert.match(await page.eval('document.querySelector("[data-text=\\"instructions\\"]").textContent'), /Recompute every number/);
+  // Copying either text says what happened: copied, or selected for copying by hand.
+  await click('[data-copy="brief"]');
+  await wait(() => page.eval('document.querySelector("[data-copied=\\"brief\\"]").textContent.length > 0'));
+  // Orbit keeps a self-check: a wrong speed fails, the right numbers pass, nothing is recorded.
+  await select('orbit');
   async function checkOrbit(v, T) {
     await page.eval(`(() => { document.querySelector('#oc-h').value = '550'; document.querySelector('#oc-v').value = '${v}'; document.querySelector('#oc-T').value = '${T}'; document.querySelector('[data-orbit-form]').requestSubmit(); })()`);
     return page.eval('document.querySelector("[data-orbit-result]").textContent');
   }
   assert.match(await checkOrbit('7.0', '95.5'), /Not yet: speed is off/);
   assert.match(await checkOrbit('7.59', '95.5'), /agree with both routes/);
-  assert.match(await page.eval('document.querySelector("#application-evidence").value'), /^Orbit check passed in Flux: altitude 550 km/);
-  await evidence('');
-  assert.equal(await page.eval('document.querySelectorAll(".component-recipes button").length'), 7);
-  assert.equal(await page.eval('document.querySelector("[data-record]").disabled'), true);
-  await select('power');
-  await click('[data-studied]');
-  await evidence('A power budget without an orbit is not enough.');
-  assert.equal(await page.eval('document.querySelector("[data-record]").disabled'), true);
-  for (const r of SATELLITE.components) {
-    await select(r.id);
-    if (!await page.eval('document.querySelector("[data-studied]").checked')) await click('[data-studied]');
-    await evidence(`${r.title}: my model, assumptions, computed result and independent check.`);
-    assert.equal(await page.eval('document.querySelector("[data-record]").disabled'), false, r.id);
-    await click('[data-record]');
-  }
-  await select('satellite');
-  await evidence('Mission report: all budgets agree; transmitter duty cycle tradeoff checked.');
-  assert.equal(await page.eval('document.querySelector("[data-record]").disabled'), false);
-  await click('[data-record]');
-  assert.match(await page.eval('document.querySelector("#assembly-count").textContent'), /7 of 7.*integration recorded/);
-  await navigate('http://127.0.0.1:5175/?application=satellite&component=satellite#applications');
-  assert.match(await page.eval('document.querySelector("#assembly-count").textContent'), /integration recorded/);
-  await select('orbit');
-  // While typing, nothing is cleared yet; a warning names every record the edit will clear.
-  await evidence('Revised orbit changes eclipse time.', false);
-  assert.match(await page.eval('document.querySelector("#assembly-count").textContent'), /7 of 7/);
-  assert.match(await page.eval('document.querySelector("[data-warning]").textContent'), /clears 7 records: Orbit, Power,.*Assemble the satellite/);
-  await evidence('Revised orbit changes eclipse time.');
-  assert.equal(await page.eval('document.querySelector("[data-warning]").hidden'), true);
-  assert.match(await page.eval('document.querySelector("#assembly-count").textContent'), /1 of 7/);
+  // A foundation link selects the concept in the live map.
   await select('communications');
-  assert.match(await page.eval('document.querySelector("#application-evidence").value'), /computed result/);
-  assert.equal(await page.eval('document.querySelector("[data-record]").disabled'), true);
-  // A foundation link selects the concept in the live map, clearing an unrelated course path.
   await click('[data-concept="em-waves"]');
   await wait(() => page.eval('document.querySelector("#concept-title")?.textContent.includes("Electromagnetic")'));
   assert.equal(await page.eval('location.hash'), '#em-waves');
+  // The address keeps the chosen subsystem, and Back returns to the one before.
   await navigate('http://127.0.0.1:5175/?application=satellite&component=payload#applications');
   assert.equal(await page.eval('document.querySelector("#recipe-title").textContent'), 'Sensor payload');
   await select('power');
   await page.eval('history.back()');
   await wait(() => page.eval('document.querySelector("#recipe-title").textContent === "Sensor payload"'));
-  // User-provided evidence stays text across navigation and restore.
-  await evidence('<img src=x onerror="window.applicationXss=true">');
-  await navigate('http://127.0.0.1:5175/?application=satellite&component=payload#applications');
-  assert.equal(await page.eval('!!window.applicationXss'), false);
-  assert.match(await page.eval('document.querySelector("#application-evidence").value'), /<img/);
-  // Fresh records make initial screenshots useful, without pretending the learner has passed.
-  await page.eval('localStorage.clear()');
   for (const theme of ['light', 'dark']) {
     for (const [width, height] of [[390, 844], [1280, 800]]) {
       await page.send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 600 });
       await navigate();
-      await select('structure');
-      assert.equal(await page.eval('document.querySelector(".application-submission a").href'), 'https://flux-design-review.readydelta2.chatgpt.site/');
-      await page.eval(`document.documentElement.dataset.theme = '${theme}'; document.querySelector('#applications').scrollIntoView()`);
+      await page.eval(`document.documentElement.dataset.theme = '${theme}'; document.querySelectorAll('#applications details').forEach((d) => d.setAttribute('open', '')); document.querySelector('#applications').scrollIntoView()`);
       await delay(150);
       assert.equal(await page.eval('document.documentElement.scrollWidth > innerWidth'), false, `${theme} ${width}`);
       for (const [name, selector] of [['overview', '#applications'], ['recipe', '#application-recipe']]) {
@@ -142,14 +111,6 @@ try {
       }
     }
   }
-  // Blocked storage still lets a learner explore and record during this visit.
-  await page.send('Page.addScriptToEvaluateOnNewDocument', { source: 'Object.defineProperty(window, "localStorage", {get(){throw new DOMException("Blocked", "SecurityError")}})' });
-  await navigate();
-  await click('[data-studied]');
-  await evidence('Session-only report.');
-  await click('[data-record]');
-  assert.match(await page.eval('document.querySelector("[data-storage]").textContent'), /only for this visit/);
-  assert.match(await page.eval('document.querySelector("[data-recipe-status]").textContent'), /Demonstration recorded/);
   assert.deepEqual(page.errors, []);
   console.log(`Applications smoke passed. Eight screenshots: ${out}`);
 } finally {

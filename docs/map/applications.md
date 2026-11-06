@@ -2,59 +2,51 @@
 
 The concept map shows how ideas connect. Applications show what those ideas help a person build.
 The first application is an educational satellite model, reached from the hub's Applications link.
-`?application=satellite&component=power#applications` opens a subsystem recipe.
+`?application=satellite&component=power#applications` opens a subsystem.
 
-Each recipe names existing concepts, foundation labs, the output to produce, the inputs it needs
-and the interface it passes to other subsystems. Bench supplies circuit and sensor foundations.
+## A recipe is a reference and a how-to
+
+Each subsystem recipe in `map/applications/satellite.js` holds:
+
+- `concepts`: the foundations on the map. Each shows where the learner stands, from Today.
+- `labs`: the Flux labs that teach those foundations.
+- `method`: the steps to do the work, in order.
+- `references`: sources read and chosen for the subsystem, each with our own reason.
+- `checklist`: what a good result contains. It is also the review's rubric.
+- `demonstrate`, `deliverable`, `interface`: the task, what to produce and what it passes on.
+- `requires`: every subsystem whose numbers it uses. Communications needs the payload's data volume
+  and Thermal needs its operating limits, so both require Payload. Components are listed and
+  numbered in build order: working from 01 to 07 never needs a later one. A test keeps that order.
+- `gap`: what Flux has not built for this step yet.
+
 Existing courses, labs and notes stay where they are. Satellite-specific labs and the coupled
-mission simulator remain visible gaps. The recipes do not imply those tools are already built.
+mission simulator remain visible gaps. A recipe does not imply those tools are built.
 
-## Capability records
+## Review happens in a Claude Project
 
-- Studied: the learner says they have studied a subsystem's foundations.
-- Demonstrated: the learner records evidence after studying and recording the required inputs.
-- Integrated: all seven subsystem demonstrations and a shared mission report are recorded.
+Flux teaches and refers; it does not grade the work. The learner makes one Claude Project for the
+satellite and pastes the Project instructions into it once (the hub has a copy button). For each
+subsystem, the hub builds a review brief: the task, its inputs, the method, the checklist, the
+foundations with the learner's standing, the references, and a slot for the learner's numbers. The
+learner opens a new chat in the Project, pastes the brief and attaches their work. A fresh chat
+keeps each review on its own. The instructions ask the reviewer to recompute every number by a
+second method, go through the checklist item by item, and name the next step.
 
-These are personal records. No physical test or flight qualification is claimed.
+`site/src/applications/brief.js` writes both texts as plain text. A test checks that each brief
+carries the task, every checklist item, every reference and every input subsystem.
 
-Orbit checks the numbers you enter. You give an altitude, a speed and a period; Flux computes the
-speed and period from \(v=\sqrt{GM/r}\) and again by integrating the orbit step by step
-(`packages/subjects/src/mechanics/orbit-check.js`). Within 1% of both passes, and the check writes
-your numbers into the evidence. You still tick the foundations and record the demonstration. The
-other six subsystems have no number check yet; their records stay self-reported. Each foundation
-concept shows where you stand on it, from your practice record (Today). Editing a subsystem record clears its demonstration and those of its dependents, while
-preserving all evidence notes. Unrelated subsystem records stay valid. Typed evidence is saved when
-the box loses focus or the tab closes. Until then a warning names every record the edit will clear.
+Orbit keeps a number check as a self-check. You give an altitude, a speed and a period; Flux
+computes the speed and period from \(v=\sqrt{GM/r}\) and again by integrating the orbit
+(`packages/subjects/src/mechanics/orbit-check.js`). Within 1% of both passes. It records nothing.
 
-A recipe's `requires` lists every subsystem whose numbers it uses. Communications needs the
-payload's data volume and Thermal needs its operating limits, so both require Payload. The
-components are listed and numbered in build order: working from 01 to 07 never meets a locked
-subsystem. A test keeps that order.
+## Earlier records
 
-Progress is stored at `flux.applications.satellite.v1` and included in the hub's Progress backup
-as the `applications` section. A blocked browser store leaves the current session usable and
-shows that records cannot be saved. Restoring an older backup keeps application records when
-that backup has no applications section. The hub adds the current application section before the
-shared importer validates the complete file. Missing course sections and wrong course ids still fail.
+Earlier versions kept capability records in the hub (studied, demonstrated, integrated) and linked
+a separate design-review site for enclosure files. Both are gone from the page. Records already
+saved stay in the browser at `flux.applications.satellite.v1` and in Progress backups, so an old
+backup still restores; `site/src/applications/progress.js` keeps that format. Deleting them is the
+owner's call.
 
-The content is in `map/applications/satellite.js`, beside the concepts it names, and
-`map/applications/index.js` lists every application. `npm run map-gaps` adds 2 to a gap's score for
-each recipe that names it, and prints which recipes use it. Capability rules and storage are in
-`site/src/applications/progress.js`; the hub view is in `view.js`. `npm run smoke` runs the
-applications browser check after the hub's. Tests check concept and lab links, prerequisite gates,
-integration, evidence invalidation and backup round trips.
-
-## Enclosure submissions
-
-The Structure recipe links to the private Flux Design Review workspace at
-https://flux-design-review.readydelta2.chatgpt.site. The public hub does not receive uploaded
-designs. The workspace uses ChatGPT sign-in, private R2 files and D1 submission metadata.
-Each version records a STEP file, a dimensioned PDF, design notes and file hashes. Reviews
-remain attached to that version. An evidence link can be copied into the personal capability record;
-no cross-site review result automatically grants completion.
-
-AI review is available only after the workspace's server API key is configured through the
-OpenAI Developers plugin's approved key workflow. Without it, uploads and version history remain
-available and review is explicitly unavailable. The review interprets the PDF and notes against
-the enclosure rubric. Independent CAD geometry analysis is not connected. Its geometry criterion
-always remains unverified, even if an AI response claims otherwise. PCB submissions are a later milestone.
+`npm run map-gaps` adds 2 to a gap's score for each recipe that names it, and prints which recipes
+use it. `npm run smoke` runs the applications browser check after the hub's: every subsystem's
+brief, the copy buttons, the Orbit self-check, and no sideways scroll at 390 and 1280 px.

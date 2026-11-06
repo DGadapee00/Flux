@@ -10,6 +10,8 @@ const concepts = loadConcepts();
 const paths = loadPaths();
 /** @type {ReturnType<typeof mountToday> | null} */
 let today = null;
+/** @type {{ refresh: () => void } | undefined} */
+let applications;
 const map = mountMap({
   concepts,
   paths,
@@ -24,6 +26,7 @@ today = mountToday({
   onRefresh: () => {
     map.refreshPanel();
     map.refreshStatus();
+    applications?.refresh();
   },
   onLeaveReview: () => map.current && map.show(map.current),
 });
@@ -33,7 +36,7 @@ map.refreshStatus();
 if (map.current && decodeURIComponent(window.location.hash.slice(1)) === map.current) {
   document.getElementById('explore')?.scrollIntoView({ block: 'start' });
 }
-mountApplications(map, undefined, { status: (id) => today?.statusOf(id) ?? null });
+applications = mountApplications(map, undefined, { status: (id) => today?.statusOf(id) ?? null });
 
 const root = document.querySelector('#tracks');
 
