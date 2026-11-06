@@ -29,5 +29,5 @@ export const CHAPTER_TITLES = {
   3: 'Choosing a design',
   4: 'Joints and mounts',
   5: 'Sensors and signals',
-  6: 'Valves and boards',
+  6: 'Valves, motors and boards',
 };

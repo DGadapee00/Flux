@@ -16,6 +16,10 @@ export const PRINCIPLES = {
   nyquist: { name: 'Sample faster than twice the frequency', statement: 'Below twice a signal’s frequency, samples show a false slower wave: f folds to |f − k fₛ|.', cue: 'Choosing a sample rate or reading logged data.', family: 'Measurement' },
   'installed-characteristic': { name: 'A valve acts in its system', statement: 'Flow is set by the valve and the pipe together; where the pipe takes most of the drop, the valve controls only near closed.', cue: 'Choosing or sizing a control valve.', family: 'Flow' },
   'ground-return': { name: 'Shared copper couples circuits', statement: 'A current through copper that a sensor’s ground shares lifts that ground by IR, and the sensor reads it.', cue: 'Routing power, motor and sensor grounds on a board.', family: 'Boards' },
+  'reference-junction': { name: 'A thermocouple measures a difference', statement: 'A thermocouple’s voltage is set by the difference between its tip and where its wires meet the instrument; the instrument must know that junction’s temperature.', cue: 'Reading or wiring a thermocouple.', family: 'Measurement' },
+  'square-law': { name: 'Drop goes as flow squared', statement: 'A differential-pressure flowmeter’s drop rises as the square of the flow, so its error in flow grows as the flow falls.', cue: 'An orifice, venturi or nozzle meter.', family: 'Measurement' },
+  'motor-line': { name: 'A DC motor’s straight line', statement: 'Torque sets the current, τ = k i; voltage less the iR drop sets the speed, ω = (V − iR)/k; power peaks at half the stall torque.', cue: 'Sizing or loading a brushed DC motor.', family: 'Actuators' },
+  'pwm-average': { name: 'Duty sets the average', statement: 'PWM’s average voltage is the duty cycle times the supply; the frequency only sets the ripple and must be fast against the load’s time constant.', cue: 'Driving a motor, coil or LED from a microcontroller pin.', family: 'Actuators' },
 };
 
 /** Tags for templates that do not carry their own `principles`. */

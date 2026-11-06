@@ -47,17 +47,17 @@ export const EXAMS = [
     title: 'Sensors and signals',
     chapters: '5',
     date: 'Unit 5',
-    labs: ['bridge', 'sampling'],
-    coming: ['Thermocouples and RTDs', 'Pressure and flow measurement'],
+    labs: ['bridge', 'sampling', 'temperature', 'orifice'],
+    coming: [],
   },
   {
     id: 'u6',
     n: 6,
-    title: 'Valves and boards',
+    title: 'Valves, motors and boards',
     chapters: '6',
     date: 'Unit 6',
-    labs: ['valve', 'board'],
-    coming: ['Actuators', 'Decoupling'],
+    labs: ['valve', 'motor', 'pwm', 'board'],
+    coming: ['Decoupling'],
   },
 ];
 
@@ -75,6 +75,10 @@ export const LAB_META = {
   sampling: { id: 'sampling', exam: 'u5', title: 'Sampling' },
   valve: { id: 'valve', exam: 'u6', title: 'Valve' },
   board: { id: 'board', exam: 'u6', title: 'Ground return' },
+  temperature: { id: 'temperature', exam: 'u5', title: 'Temperature sensors' },
+  orifice: { id: 'orifice', exam: 'u5', title: 'Orifice meter' },
+  motor: { id: 'motor', exam: 'u6', title: 'DC motor' },
+  pwm: { id: 'pwm', exam: 'u6', title: 'PWM drive' },
 };
 
 export const CHAPTER_TITLES = {
@@ -83,7 +87,7 @@ export const CHAPTER_TITLES = {
   3: 'Choosing a design',
   4: 'Joints and mounts',
   5: 'Sensors and signals',
-  6: 'Valves and boards',
+  6: 'Valves, motors and boards',
 };
 
 export function examById(id) {

@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Load a DC motor from free running to stall and plot torque, speed and power. It corrects the idea that a motor gives its most power at top speed: power peaks at half the stall torque. The check compares the motor model with a step-by-step simulation of the motor turning a load.',
+  labs: [
+    { course: 'design', lab: 'motor', notes: ['s3'], note: 'A brushed DC motor from free running to stall: speed, current, power and efficiency. Solenoids and hydraulics are not covered.' },
+  ],
 };

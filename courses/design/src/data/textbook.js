@@ -26,6 +26,10 @@ export const SECTIONS = Object.freeze({
   sampling: { book: 'wikipedia', section: 'Aliasing', title: 'Aliasing' },
   valve: { book: 'wikipedia', section: 'Flow coefficient', title: 'Flow coefficient' },
   board: { book: 'wikipedia', section: 'Printed circuit board', title: 'Printed circuit board' },
+  temperature: { book: 'wikipedia', section: 'Thermocouple', title: 'Thermocouple and Resistance thermometer' },
+  orifice: { book: 'wikipedia', section: 'Orifice plate', title: 'Orifice plate' },
+  motor: { book: 'wikipedia', section: 'DC motor', title: 'DC motor' },
+  pwm: { book: 'wikipedia', section: 'Pulse-width modulation', title: 'Pulse-width modulation' },
 });
 
 export function citation(topic) {

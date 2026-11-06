@@ -190,3 +190,142 @@ export function groundNodal({ I, is = 1e-3, Rgs, Rsh, layout, Vsig = 1.65 }) {
   const [g] = solveLinear([[G(Rgs), -G(Rgs)], [-G(Rgs), G(Rgs) + G(Rsh)]], [is, I]);
   return { Vm: Vsig + g, error: g };
 }
+
+/*
+ * Temperature sensors. A type K thermocouple gives about 41 μV per °C of difference between its tip
+ * and its reference junction (Wikipedia, Thermocouple). A Pt100 RTD is 100 Ω at 0 °C and follows
+ * R = R0(1 + AT + BT²) above 0 °C with A = 3.9083 × 10⁻³ and B = −5.775 × 10⁻⁷ (Wikipedia,
+ * Resistance thermometer, from IEC 60751).
+ */
+export const TYPE_K = 41e-6; // V/°C
+export const PT100 = Object.freeze({ R0: 100, A: 3.9083e-3, B: -5.775e-7 });
+
+/** Pt100 resistance at T (°C, T ≥ 0). */
+export const rtdResistance = (T) => PT100.R0 * (1 + PT100.A * T + PT100.B * T * T);
+
+/** Temperature from a Pt100 resistance by the quadratic's root. */
+export function rtdTemperature(R) {
+  const { R0, A, B } = PT100;
+  return (-A + Math.sqrt(A * A - 4 * B * (1 - R / R0))) / (2 * B);
+}
+
+/** The same by Newton's method on R(T) − R = 0, from T = (R/R0 − 1)/A. */
+export function rtdTemperatureNewton(R) {
+  let T = (R / PT100.R0 - 1) / PT100.A;
+  for (let i = 0; i < 50; i++) {
+    const f = rtdResistance(T) - R;
+    const d = PT100.R0 * (PT100.A + 2 * PT100.B * T);
+    const step = f / d;
+    T -= step;
+    if (Math.abs(step) < 1e-12) break;
+  }
+  return T;
+}
+
+/** What each sensor reports. Leads: Ω per wire; wiring: 2, 3 or 4 wires. */
+export function temperatureReadings({ tip, room, cjc, lead, wires }) {
+  const emf = TYPE_K * (tip - room);
+  const tc = emf / TYPE_K + (cjc ? room : 0);
+  // Two wires add both leads; three wires cancel them in a bridge; four wires measure past them.
+  const extra = wires === 2 ? 2 * lead : 0;
+  const R = rtdResistance(tip) + extra;
+  return { emf, tc, R, rtd: rtdTemperature(R), rtdNewton: rtdTemperatureNewton(R) };
+}
+
+/*
+ * Orifice meter: q = C_d A₂ √(2Δp/(ρ(1 − β⁴))) with β = d/D (Wikipedia, Orifice plate). The drop
+ * rises as the square of the flow, so a transmitter's fixed error in Δp is a growing share of a
+ * small flow.
+ */
+export function orificeDp({ Q, D, beta, Cd = 0.61, rho = 998 }) {
+  const d = beta * D;
+  const A2 = (Math.PI / 4) * d * d;
+  return (rho / 2) * (Q / (Cd * A2)) ** 2 * (1 - beta ** 4);
+}
+
+/** Flow from a drop by the meter equation. */
+export function orificeFlow({ dp, D, beta, Cd = 0.61, rho = 998 }) {
+  const A2 = (Math.PI / 4) * (beta * D) ** 2;
+  return Cd * A2 * Math.sqrt((2 * Math.max(dp, 0)) / (rho * (1 - beta ** 4)));
+}
+
+/** The same flow by bisection on the drop equation. */
+export function orificeFlowNumeric(p) {
+  let lo = 0;
+  let hi = 1e-3;
+  while (orificeDp({ ...p, Q: hi }) < p.dp) hi *= 2;
+  for (let i = 0; i < 200; i++) {
+    const m = (lo + hi) / 2;
+    if (orificeDp({ ...p, Q: m }) < p.dp) lo = m;
+    else hi = m;
+  }
+  return (lo + hi) / 2;
+}
+
+/*
+ * A brushed DC motor: V = iR + kω and τ = k i (SI units, kt = ke = k). In steady state the torque and
+ * speed fall on a straight line from stall, τ_s = kV/R, to no load, ω₀ = V/k, and the output power
+ * τω peaks at half the stall torque.
+ */
+export function motorSteady({ V, R, k, load }) {
+  const i = load / k;
+  const w = (V - i * R) / k;
+  return { i, w, stall: (k * V) / R, w0: V / k, Pout: load * w, Pin: V * i, Pmax: (V * V) / (4 * R) };
+}
+
+/** The motor started from rest and stepped in time with RK4: L di/dt = V − iR − kω, J dω/dt = ki − load. */
+export function motorStep({ V, R, k, load, L = 1e-3, J = 5e-6, tEnd = 0.4, dt = 2e-5 }) {
+  let i = 0;
+  let w = 0;
+  const f = (ii, ww) => [(V - ii * R - k * ww) / L, (k * ii - load) / J];
+  const trace = [];
+  const n = Math.round(tEnd / dt);
+  for (let s = 0; s < n; s++) {
+    const a = f(i, w);
+    const b = f(i + (dt / 2) * a[0], w + (dt / 2) * a[1]);
+    const c = f(i + (dt / 2) * b[0], w + (dt / 2) * b[1]);
+    const e = f(i + dt * c[0], w + dt * c[1]);
+    i += (dt / 6) * (a[0] + 2 * b[0] + 2 * c[0] + e[0]);
+    w += (dt / 6) * (a[1] + 2 * b[1] + 2 * c[1] + e[1]);
+    // A motor held at stall does not turn backward: the load is friction-like.
+    if (w < 0 && k * i < load) w = 0;
+    if (s % 100 === 0) trace.push([s * dt, w]);
+  }
+  return { i, w, trace };
+}
+
+/*
+ * PWM into a coil (R, L): the supply V is on for D of each period T = 1/f. The average voltage is
+ * DV whatever f is; f only sets the current's ripple. In steady state the ripple is
+ *   ΔI = (V/R)(1 − e^{−DT/τ})(1 − e^{−(1−D)T/τ})/(1 − e^{−T/τ}), τ = L/R.
+ */
+export function pwmClosed({ V, R, L, D, f }) {
+  const T = 1 / f;
+  const tau = L / R;
+  const ripple = D <= 0 || D >= 1 ? 0 : ((V / R) * (1 - Math.exp((-D * T) / tau)) * (1 - Math.exp((-(1 - D) * T) / tau))) / (1 - Math.exp(-T / tau));
+  return { avgV: D * V, meanI: (D * V) / R, ripple, tau };
+}
+
+/**
+ * The same by stepping the coil period after period from rest, each on and off interval solved
+ * exactly, until it settles; then the last period's mean current (integrated) and ripple are measured.
+ */
+export function pwmNumeric({ V, R, L, D, f }) {
+  const T = 1 / f;
+  const tau = L / R;
+  const tOn = D * T;
+  const tOff = T - tOn;
+  // i(t) = v/R + (i0 − v/R) e^{−t/τ}; its integral over Δ is vΔ/R + (i0 − v/R) τ (1 − e^{−Δ/τ}).
+  const step = (i0, v, dt) => v / R + (i0 - v / R) * Math.exp(-dt / tau);
+  const area = (i0, v, dt) => (v * dt) / R + (i0 - v / R) * tau * (1 - Math.exp(-dt / tau));
+  let i = 0;
+  const periods = Math.max(50, Math.ceil((40 * tau) / T));
+  let res = null;
+  for (let p = 0; p < periods; p++) {
+    const iOn = step(i, V, tOn);
+    const iOff = step(iOn, 0, tOff);
+    if (p === periods - 1) res = { meanI: (area(i, V, tOn) + area(iOn, 0, tOff)) / T, ripple: Math.abs(iOn - i), avgV: (V * tOn) / T };
+    i = iOff;
+  }
+  return res;
+}

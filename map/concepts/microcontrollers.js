@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Drive a motor from a PWM pin and change the duty cycle and the frequency. It corrects the idea that the switching frequency sets the speed: the duty cycle does, and the frequency only has to be fast enough. The check compares the average voltage from the duty cycle with a numerical average of the waveform.',
+  labs: [
+    { course: 'design', lab: 'pwm', notes: ['s4'], note: 'A timer’s PWM switching a coil: duty sets the average, frequency the ripple and the timer’s resolution.' },
+  ],
 };

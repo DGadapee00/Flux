@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Put an orifice plate in a pipe and read the pressure drop as the flow changes. It corrects the idea that the drop rises in step with the flow: it rises with its square, so a meter read near the bottom of its range is coarse. The check compares the flow from the meter equation with a mass balance on a timed fill.',
+  labs: [
+    { course: 'design', lab: 'orifice', notes: ['s5'], note: 'An orifice plate read by a transmitter, with the flow error growing as the flow falls. Pressure sensors themselves are left to the Strain bridge lab.' },
+  ],
 };

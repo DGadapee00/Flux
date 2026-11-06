@@ -181,3 +181,44 @@ test('board: ground offset by hand against nodal analysis', () => {
     close(groundNodal(p).error, groundClosed(p).error, 1e-12, layout);
   }
 });
+
+import { motorStep, motorSteady, orificeDp, orificeFlow, orificeFlowNumeric, pwmClosed, pwmNumeric, rtdResistance, rtdTemperature, rtdTemperatureNewton } from '../src/design/instruments.js';
+
+test('RTD: the quadratic root against Newton', () => {
+  close(rtdResistance(100), 138.5055, 1e-3, 'Pt100 at 100 °C');
+  for (const T of [0, 50, 200, 400]) {
+    const R = rtdResistance(T);
+    close(rtdTemperature(R), T, 1e-9, `root at ${T}`);
+    close(rtdTemperatureNewton(R), T, 1e-9, `Newton at ${T}`);
+  }
+});
+
+test('orifice: meter equation against bisection', () => {
+  for (const Q of [0.001, 0.005, 0.02]) {
+    const p = { D: 0.05, beta: 0.5 };
+    const dp = orificeDp({ ...p, Q });
+    close(orificeFlow({ ...p, dp }), Q, 1e-12, 'round trip');
+    close(orificeFlowNumeric({ ...p, dp }), Q, 1e-12, 'bisection');
+  }
+});
+
+test('motor: steady line against stepping the motor in time', () => {
+  for (const load of [0, 0.03, 0.06, 0.1]) {
+    const p = { V: 12, R: 2, k: 0.02, load };
+    const a = motorSteady(p);
+    const b = motorStep(p);
+    close(b.w, a.w, 1e-4 * a.w0, `speed at ${load}`);
+    close(b.i, a.i, 1e-4 * (12 / 2), `current at ${load}`);
+  }
+  close(motorSteady({ V: 12, R: 2, k: 0.02, load: 0.06 }).Pout, 18, 1e-12, 'peak power at half stall');
+});
+
+test('PWM: ripple formula against stepping the coil', () => {
+  for (const [D, f] of [[0.25, 1000], [0.5, 20000], [0.8, 200]]) {
+    const p = { V: 12, R: 2, L: 1e-3, D, f };
+    const a = pwmClosed(p);
+    const b = pwmNumeric(p);
+    close(b.meanI, a.meanI, 1e-9, `mean current at ${D}`);
+    close(b.ripple, a.ripple, 1e-3 * (12 / 2), `ripple at ${D}, ${f}`);
+  }
+});

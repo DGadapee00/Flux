@@ -21,7 +21,11 @@ are round example values. Units 5 and 6 take a foil gauge factor of about 2 and 
 estimate (Strain gauge), the Kv definition (Flow coefficient), copper's resistivity 1.68 × 10⁻⁸ Ω·m
 (Electrical resistivity and conductivity) and 1 oz copper as 35 μm (Printed circuit board), all from
 Wikipedia, read on 6 November 2026. The gauge's 10 με per °C drift, the pump, pipe and valve sizes,
-and the board's currents are example values written for the labs.
+and the board's currents are example values written for the labs. The type K sensitivity (about
+41 μV/°C), the Pt100 constants (R0 = 100 Ω, A = 3.9083 × 10⁻³, B = −5.775 × 10⁻⁷) and the orifice
+equation come from Wikipedia's Thermocouple, Resistance thermometer and Orifice plate articles, read
+on 6 November 2026. The motor's constants, the transmitter accuracy and the 16 MHz timer clock are
+example values.
 
 ## Methods
 

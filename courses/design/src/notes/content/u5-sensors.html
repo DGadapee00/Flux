@@ -21,8 +21,11 @@
     <a href="#s2"><span>2</span>Heat, and where to put the gauges</a>
     <h3>Part II · Sampling</h3>
     <a href="#s3"><span>3</span>Sampling and aliasing</a>
+    <h3>Part III · Temperature, pressure and flow</h3>
+    <a href="#s4"><span>4</span>Thermocouples and RTDs</a>
+    <a href="#s5"><span>5</span>Measuring flow with a pressure drop</a>
     <h3>Reference</h3>
-    <a href="#s4"><span>4</span>Formula sheet</a>
+    <a href="#s6"><span>6</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -87,17 +90,62 @@ f_a = \left|\,f - k f_s\,\right|, \qquad k = \operatorname{round}(f/f_s),
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Temperature, pressure and flow</h2>
+</div>
+
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">4</span>Thermocouples and RTDs</h2>
+<p>A thermocouple is two different metals joined at the tip. It makes a small voltage, about 41 μV per °C for type K, set by the difference between the tip and the place where its wires meet the instrument's copper, the reference junction. An RTD is a platinum resistor whose resistance rises with temperature: a Pt100 is 100 Ω at 0 °C and rises about 0.385 Ω per °C.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+V = S\,(T_\text{tip} - T_\text{ref}), \qquad R = R_0\,(1 + AT + BT^2),\quad A = 3.9083\times10^{-3},\ B = -5.775\times10^{-7}.
+\]
+<p>An instrument must add back \(T_\text{ref}\), measured at its terminals: cold-junction compensation. An RTD's reading inverts the quadratic for \(T\). Two-wire leads add their resistance to \(R\); a three-wire bridge cancels it, and four wires sense the voltage past it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 200 °C bath in a 25 °C room</span>
+<p>The thermocouple gives \(41\times10^{-6} \times 175 = 7.18\) mV. A logger that takes its terminals as 0 °C reports 175 °C. A Pt100 on two leads of 0.5 Ω each reads 176.86 Ω instead of 175.86 Ω, and so 202.7 °C.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Extending a thermocouple with copper wire, or reading it with a meter that has no compensation. Use thermocouple extension wire of the same type to the instrument, and an instrument that measures its own terminals.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Choose a thermocouple for wide range, speed and toughness; an RTD for accuracy and stability over a narrower range. Either way, install the tip where the temperature you want is, with enough immersion that heat does not leak along the probe.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Measuring flow with a pressure drop</h2>
+<p>An orifice plate is a plate with a sharp-edged hole clamped in a pipe. The flow speeds up through the hole and its pressure falls; a transmitter reads the drop across the plate.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>From Bernoulli and continuity, with a discharge coefficient \(C_d\) for the jet's narrowing and the losses,</p>
+\[
+Q = C_d A_2 \sqrt{\frac{2\,\Delta p}{\rho\,(1 - \beta^4)}}, \qquad \beta = \frac{d}{D}, \qquad \frac{\delta Q}{Q} = \frac{1}{2}\,\frac{\delta(\Delta p)}{\Delta p}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · a fifth of design flow</span>
+<p>A 25 mm hole in a 50 mm pipe drops 90.6 kPa at 15 m³/h of water. At 3 m³/h it drops 3.6 kPa, a twenty-fifth. A transmitter good to ±0.25 kPa reads the first flow to ±0.14% and the second to ±3.5%.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Sizing a flowmeter for the maximum flow and reading it at a tenth of that. Size the plate so the normal flow sits in the upper part of the transmitter's span, and use another meter type where the flow varies widely.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Formula sheet</h2>
 \[
 \Delta R = R\,GF\,\varepsilon, \qquad V_o \approx V\,\frac{n\,GF\,\varepsilon}{4}, \qquad \varepsilon = \frac{6PL}{Ebh^2},
 \]
 \[
-f_a = \left|\,f - k f_s\,\right|, \qquad f_s > 2 f_\text{max}.
+f_a = \left|\,f - k f_s\,\right|, \qquad f_s > 2 f_\text{max},
+\]
+\[
+V = S\,(T_\text{tip} - T_\text{ref}), \qquad R = R_0\,(1 + AT + BT^2), \qquad Q = C_d A_2 \sqrt{\frac{2\,\Delta p}{\rho\,(1 - \beta^4)}}.
 \]
 </section>
 
 </main>
-<footer>Our own notes, written for Flux. Gauge factor and the quarter-bridge estimate from Wikipedia's Strain gauge article, read 6 November 2026. Read alongside Wikipedia's Strain gauge and Aliasing articles.</footer>
+<footer>Our own notes, written for Flux. Gauge factor and the quarter-bridge estimate from Wikipedia's Strain gauge article; type K sensitivity from Thermocouple; Pt100 constants from Resistance thermometer; the orifice equation from Orifice plate; all read 6 November 2026. The gauge drift and transmitter accuracy are example values.</footer>
 </body>
 </html>

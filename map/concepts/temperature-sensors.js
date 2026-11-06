@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Read a thermocouple with its reference junction at room temperature, then let the room warm. It corrects the idea that a thermocouple reads the temperature at its tip: it reads the difference from its reference. The check compares the corrected reading with an RTD in the same bath.',
+  labs: [
+    { course: 'design', lab: 'temperature', notes: ['s4'], note: 'A type K thermocouple and a Pt100 RTD in one bath, with and without cold-junction compensation, on two, three or four wires.' },
+  ],
 };

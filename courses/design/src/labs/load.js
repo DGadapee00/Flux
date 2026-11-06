@@ -16,6 +16,10 @@ const loaders = {
   sampling: () => import('./sampling.js'),
   valve: () => import('./valve.js'),
   board: () => import('./board.js'),
+  temperature: () => import('./temperature.js'),
+  orifice: () => import('./orifice.js'),
+  motor: () => import('./motor.js'),
+  pwm: () => import('./pwm.js'),
 };
 
 const labs = createLabLoader(loaders);

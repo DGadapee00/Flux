@@ -2,11 +2,12 @@
  * Unit 6 bank: valves and boards. Original problems, written for the Valve and Ground return labs,
  * with staged hints and named traps (../coaching/u6.js), each checked against its lab (`sim`).
  */
-import { COPPER, groundClosed, traceResistance, valveFlow } from '@flux/subjects/design/instruments.js';
+import { COPPER, groundClosed, motorSteady, traceResistance, valveFlow } from '@flux/subjects/design/instruments.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 export const flow = ($) => valveFlow({ H0: 4, a: 0.004, k: $.dp10 / 100, KvMax: 10, kind: 'linear', x: $.x }).Q;
+export const motorRpm = ($) => (motorSteady({ V: Number($.V), R: 2, k: 0.02, load: $.load }).w * 60) / (2 * Math.PI);
 export const boardError = ($) => {
   const Rsh = traceResistance($.L, $.w, COPPER.oz1 * Number($.oz));
   return groundClosed({ I: $.I, Rgs: 0.005, Rsh, layout: 'shared' }).error * 1000;
@@ -130,5 +131,61 @@ export default [
       },
     },
     cases: [kase('A star ground', { change: 'star' }, { effect: 'gone' })],
+  }),
+  problem({
+    id: 'u6.5.motor-speed',
+    title: 'Speed under load',
+    exam: 'u6',
+    ch: '6',
+    lab: 'motor',
+    src: 'Flux, written for the DC motor lab',
+    topics: ['motor'],
+    principles: ['motor-line'],
+    vars: { V: choice(['12', '12 V'], ['6', '6 V']), load: range(0.01, 0.05, 0.005, 'N·m') },
+    text: (T) => String.raw`A DC motor with a 2 Ω winding and $k = 0.02$ N·m/A (also V·s/rad) runs from ${T.V} against a load of ${T.load}. How fast does it turn, in rpm?`,
+    parts: [num('rpm', ($) => motorRpm($), 'rpm', { label: 'speed' })],
+    level: 2,
+    hints: ['The load sets the current: $i = \\tau/k$.', 'Then $V = iR + k\\omega$ gives $\\omega$ in rad/s; multiply by $60/2\\pi$ for rpm.'],
+    steps: ($, sig) => [String.raw`$i = ${$.load}/0.02 = ${sig($.load / 0.02)}$ A, $\omega = (${$.V} - ${sig($.load / 0.02)} \times 2)/0.02 = ${sig(motorRpm($) * 2 * Math.PI / 60)}$ rad/s $= ${sig(motorRpm($))}$ rpm.`],
+    sim: {
+      scenario: 'light',
+      setup(s, $) {
+        Object.assign(s, { V: Number($.V), load: $.load });
+      },
+      read: (c) => ({ rpm: c.rpm }),
+    },
+    cases: [kase('12 V, 0.02 N·m', { V: '12', load: 0.02 }, { rpm: 4775 })],
+  }),
+
+  problem({
+    id: 'u6.6.pwm-change',
+    title: 'Duty or frequency?',
+    exam: 'u6',
+    ch: '6',
+    kind: 'conceptual',
+    lab: 'pwm',
+    src: 'Flux, written for the PWM drive lab',
+    topics: ['pwm'],
+    principles: ['pwm-average'],
+    vars: { change: choice(['faster', 'the PWM frequency is doubled'], ['slower', 'the PWM frequency is halved'], ['duty', 'the duty cycle goes from 50% to 75%']) },
+    text: (T) => `A microcontroller drives a 2 Ω coil from 12 V with PWM at 20 kHz and 50% duty, so it carries 3 A on average. Then ${T.change}. What happens to the mean current?`,
+    parts: [
+      pick('mean', 'the mean current', [
+        ['same', 'it stays at 3 A', 'The average voltage is D V whatever the frequency, so the mean current is unchanged; only the ripple moves.'],
+        ['bigger', 'it rises', 'More on-time per period raises the average voltage and so the mean current.'],
+        ['smaller', 'it falls', 'Less on-time per period would lower it.'],
+      ], ($) => ($.change === 'duty' ? 'bigger' : 'same')),
+    ],
+    level: 1,
+    hints: ['The coil averages the voltage it sees.', 'Which change alters the fraction of time the pin is on?'],
+    steps: ($) => [$.change === 'duty' ? 'The average voltage rises to 9 V, so the mean current rises to 4.5 A.' : 'The fraction of time on is still 50%: 6 V average, 3 A mean. Only the ripple changes.'],
+    sim: {
+      scenario: 'fast',
+      setup(s, $) {
+        Object.assign(s, { D: $.change === 'duty' ? 0.75 : 0.5, logf: Math.log10($.change === 'faster' ? 40000 : $.change === 'slower' ? 10000 : 20000) });
+      },
+      read: (c) => ({ mean: Math.abs(c.meanI - 3) < 1e-6 ? 'same' : c.meanI > 3 ? 'bigger' : 'smaller' }),
+    },
+    cases: [kase('Doubling the frequency', { change: 'faster' }, { mean: 'same' })],
   }),
 ];

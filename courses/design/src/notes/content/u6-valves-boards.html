@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Valves and boards</title>
+<title>Valves, motors and boards</title>
 </head>
 <body>
 <header class="top">
   <div class="eyebrow">Design practice · Unit 6 · Wikipedia, Flow coefficient and Printed circuit board</div>
-  <h1>Valves and boards</h1>
-  <p class="lede">What a control valve does once it is installed in a real pipe, and why the copper on a circuit board is part of the circuit.</p>
+  <h1>Valves, motors and boards</h1>
+  <p class="lede">What a control valve does once it is installed in a real pipe, how a DC motor trades speed for torque, how a microcontroller drives it, and why the copper on a circuit board is part of the circuit.</p>
   <div class="legend">
     <span><i style="background:var(--field)"></i>Worked example</span>
     <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
@@ -20,8 +20,11 @@
     <a href="#s1"><span>1</span>A valve in its system</a>
     <h3>Part II · Boards</h3>
     <a href="#s2"><span>2</span>Copper is a resistor</a>
+    <h3>Part III · Motors</h3>
+    <a href="#s3"><span>3</span>A DC motor's straight line</a>
+    <a href="#s4"><span>4</span>Driving it with PWM</a>
     <h3>Reference</h3>
-    <a href="#s3"><span>3</span>Formula sheet</a>
+    <a href="#s5"><span>5</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -77,17 +80,62 @@ R = \frac{\rho L}{w\,t}, \qquad \rho_\text{Cu} = 1.68\times10^{-8}\ \Omega\,\tex
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Motors</h2>
+</div>
+
 <section class="topic" id="s3">
-<h2><span class="n">3</span>Formula sheet</h2>
+<h2><span class="n">3</span>A DC motor's straight line</h2>
+<p>A brushed DC motor turns current into torque and speed into a back voltage, with one constant \(k\) for both. Everything about it follows from that and its winding's resistance.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+\tau = k\,i, \qquad V = iR + k\omega \quad\Longrightarrow\quad \omega = \frac{V}{k} - \frac{R}{k^2}\,\tau.
+\]
+<p>Speed falls in a straight line from the free speed \(V/k\) to stall at \(\tau_s = kV/R\). The power out, \(\tau\omega\), is a parabola that peaks at \(\tau_s/2\), where it is \(V^2/4R\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · half the stall torque</span>
+<p>A motor with a 2 Ω winding and \(k = 0.02\) N·m/A on 12 V stalls at 0.12 N·m. At 0.06 N·m it draws 3 A and turns 300 rad/s, 2,865 rpm, giving 18 W, its peak. It takes 36 W in, so it is only 50% efficient there.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting the most power at top speed, or sizing a motor for its peak power. Motors run most efficiently well short of half stall, and the winding's heat at high current is what usually limits them.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Driving it with PWM</h2>
+<p>A microcontroller pin cannot supply a motor's current, and a resistor to drop the voltage would waste power. Instead a transistor switches the full supply on and off, fast, under the control of a timer: pulse-width modulation.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>On for a fraction \(D\) of each period \(T\), the average voltage is \(DV\). The winding's inductance smooths the current, with time constant \(\tau = L/R\); the ripple about the mean is</p>
+\[
+\Delta I = \frac{V}{R}\,\frac{(1 - e^{-DT/\tau})(1 - e^{-(1-D)T/\tau})}{1 - e^{-T/\tau}}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · 20 kHz against 200 Hz</span>
+<p>12 V into a 2 Ω, 1 mH winding at half duty: the mean current is 3 A at either frequency. At 20 kHz it ripples 0.15 A; at 200 Hz, with each period ten times the 0.5 ms time constant, it swings 5.9 A, nearly full on and full off.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Changing the frequency to change the speed. The duty cycle sets the speed. Choose the frequency fast against the winding's time constant and above hearing, then check the timer still has enough counts per period for fine steps of duty.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A coil's current cannot stop at once. When the transistor switches off, a flyback diode across the coil must carry it, or the voltage spikes and destroys the transistor.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Formula sheet</h2>
 \[
 Q = K_v\sqrt{\Delta p}, \qquad Q = \sqrt{\frac{H_0}{a + k + 1/(K_v f(x))^2}}, \qquad f_\text{eq}(x) = R^{\,x - 1},
 \]
 \[
-R = \frac{\rho L}{w\,t}, \qquad \Delta V = I\,R_\text{shared}.
+R = \frac{\rho L}{w\,t}, \qquad \Delta V = I\,R_\text{shared},
+\]
+\[
+\tau = k\,i, \qquad \omega = \frac{V}{k} - \frac{R}{k^2}\,\tau, \qquad P_\text{max} = \frac{V^2}{4R}, \qquad \bar V = D\,V.
 \]
 </section>
 
 </main>
-<footer>Our own notes, written for Flux. The Kv definition from Wikipedia's Flow coefficient article; copper's resistivity from Electrical resistivity and conductivity; 1 oz copper as 35 μm from Printed circuit board; all read 6 November 2026. The pump, pipe and board numbers are examples written for this course.</footer>
+<footer>Our own notes, written for Flux. The Kv definition from Wikipedia's Flow coefficient article; copper's resistivity from Electrical resistivity and conductivity; 1 oz copper as 35 μm from Printed circuit board; all read 6 November 2026. The pump, pipe, board, motor and timer numbers are examples written for this course.</footer>
 </body>
 </html>
