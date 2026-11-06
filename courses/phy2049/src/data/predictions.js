@@ -795,6 +795,39 @@ export const PREDICTIONS = [
     why: 'A receding car lowers the echo: $f_{\\text{echo}} = f(1 + 2v/c)$, and $v$ is now negative. The beat is the difference between the two frequencies, and its size $2f|v|/c$ is unchanged. The gun reads the speed either way.',
   },
   {
+    id: 'divergence-halve-r',
+    lab: 'divergence',
+    scenario: 'inside',
+    ask: 'Halve the small sphere’s radius, keeping it inside the ball.',
+    apply(s) {
+      s.r /= 2;
+    },
+    watch: [
+      { id: 'phi', label: 'the flux out of the small sphere', get: (c) => c.dv.numeric.net, fmt: fmtPhi },
+      { id: 'perV', label: 'the flux per unit volume, $\\Phi/V$', get: (c) => c.dv.perVolume, fmt: (x) => `${sciText(x)} N/(C·m)` },
+    ],
+    mode: 'factor',
+    factors: [1, 0.5, 0.25, 0.125],
+    expect: { phi: 0.125, perV: 1 },
+    why: 'The sphere holds $\\rho V$, and $V$ goes as $r^3$, so the flux falls to an eighth. Divided by the volume, the size drops out: $\\Phi/V = \\rho/\\varepsilon_0$ for any sphere inside the ball.',
+  },
+  {
+    id: 'divergence-wire-double-I',
+    lab: 'divergence',
+    scenario: 'wire',
+    ask: 'Double the current in the wire.',
+    apply(s) {
+      s.I *= 2;
+    },
+    watch: [
+      { id: 'out', label: 'the B flux that leaves the small sphere', get: (c) => c.dv.numeric.out, fmt: (x) => `${sciText(x)} Wb` },
+      { id: 'zero', label: 'Is the net B flux still zero?', get: (c) => Math.abs(c.dv.numeric.net) < 1e-9 * c.dv.numeric.out, mode: 'bool' },
+    ],
+    mode: 'factor',
+    expect: { out: 2, zero: true },
+    why: 'Twice the current makes twice the field everywhere, so twice as much flux leaves. Twice as much enters too: with no magnetic charge inside, the net is always 0.',
+  },
+  {
     id: 'solarsail-double-r',
     lab: 'solarsail',
     scenario: 'notes',

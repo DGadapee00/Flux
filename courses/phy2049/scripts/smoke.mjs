@@ -34,6 +34,7 @@ const LAB = {
   ac: 'e5',
   emwave: 'e6',
   polar: 'e6',
+  divergence: 'e6',
   refraction: 'e7',
   mirrors: 'e7',
   lenses: 'e7',

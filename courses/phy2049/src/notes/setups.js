@@ -694,6 +694,12 @@ export const SETUPS = {
   e6: {
     s2: [
       {
+        tag: 'a small sphere in a charged ball',
+        lab: 'divergence',
+        scenario: 'inside',
+        read: (c) => ({ 'Φ': [c.dv.numeric.net, 1.28e4], 'Φ/V': [c.dv.perVolume, 1.13e5] }),
+      },
+      {
         tag: 'green light at 530 nm',
         lab: 'emwave',
         scenario: 'green',

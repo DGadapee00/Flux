@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchy�
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 186 with a Flux lab, 89 gaps.**
+**275 concepts, 187 with a Flux lab, 88 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -17,7 +17,7 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Differential equations | 18 | 18 |
 | Numerical methods | 13 | 2 |
 | Mechanics | 34 | 31 |
-| Electricity and magnetism | 27 | 25 |
+| Electricity and magnetism | 27 | 26 |
 | Thermodynamics | 22 | 12 |
 | Fluid mechanics | 20 | 10 |
 | Heat transfer | 19 | 2 |
@@ -109,12 +109,12 @@ reproduce them.
 From `npm run map-gaps`, which weighs how many concepts build on a gap and where the owner stands
 in the courses that teach it.
 
-1. **Divergence theorem.** 37 concepts build on it. MAC 2313's Flux lab (unit 6) now shows flux
-   across a curve and divergence in the plane, three ways. The theorem in space is still a gap:
-   grid a region into boxes and watch the inner-face fluxes cancel.
-2. **Maxwell's divergence equations.** PHY 2049 is being taken now, and this is the step from
-   Gauss's law to EM waves. Its candidate: flux through a shrinking sphere beside the charge
-   density at its centre.
+1. **Divergence theorem.** 37 concepts build on it. MAC 2313's Flux lab shows flux across a curve
+   and divergence in the plane, and its Tiles lab cuts a square into cells and watches the
+   inner-face fluxes cancel. Boxes in space are the same picture one dimension up.
+2. **Maxwell's divergence equations.** PHY 2049's Divergence lab (Exam 6) puts a small sphere in a
+   charged ball and sums E·n̂ ΔA over it against Q_in/ε₀. Φ/V stays ρ/ε₀ as the sphere shrinks,
+   and a wire's B gives as much flux in as out.
 3. **Line integrals and work.** PHY 2048's work-path lab and Dynamics' paths lab now show it:
    work summed along a path, one total for a gradient field, another for friction. A calculus lab
    where you drag your own path through a field is still worth building.

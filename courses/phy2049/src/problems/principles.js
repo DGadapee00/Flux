@@ -475,6 +475,7 @@ export const PRINCIPLE_TAGS = {
   'e6.53.direction': ['em-wave', 'vectors'],
   'e6.53.wave-eq': ['em-wave'],
   'e6.53.radar-gun': ['em-wave'],
+  'e6.53.divergence': ['gauss', 'density'],
   'e6.53.wave-terms': ['em-wave'],
   'e6.53.true-or-false': ['em-wave'],
   'e6.53.light-year': ['em-wave'],

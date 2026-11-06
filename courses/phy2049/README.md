@@ -157,7 +157,7 @@ The number plane is labeled in real distance and the ticks change with the view,
 | Exam 3 · Ch 38–42 | `#/e3/potential` | Potential, Integrals, Capacitor, Ohm, Power, Breakdown |
 | Exam 4 · Ch 43–47 | `#/e4/circuits` | Circuits, RC, Biot–Savart, Ampère, Mag force |
 | Exam 5 · Ch 48–52 | `#/e5/faraday` | Faraday, AC |
-| Exam 6 · Ch 53–57 | `#/e6/emwave` | EM wave, Polarization |
+| Exam 6 · Ch 53–57 | `#/e6/emwave` | EM wave, Divergence, Polarization |
 | Exam 7 · Ch 58–62 | `#/e7/refraction` | Refraction, Mirrors, Lenses |
 | Wave optics · Ch 63–65 | `#/wave` | Interference, Diffraction, Thin film |
 
@@ -186,6 +186,7 @@ The number plane is labeled in real distance and the ticks change with the view,
 ### Exam 6 labs
 
 - **EM wave** (`#/e6/emwave`) — traveling plane wave, E ŷ, B ẑ, S along +x̂. E/B = c = 1/√(μ₀ε₀). Intensity I = ½ c ε₀ E₀². The drawing is stretched and slowed, so a log-scale **spectrum ruler** (1 pm to 1 km) marks where this λ really sits, and what one wavelength is about the size of — an atom for X-rays, a house for FM radio (Ch 54).
+- **Divergence** (`#/e6/divergence`): Maxwell's divergence equations. A small sphere in a uniformly charged ball: the tile sum of E·n̂ ΔA against Q_in/ε₀ from the volume the spheres share, and Φ/V = ρ/ε₀ however small the sphere. Outside the ball E is strong and the net flux is 0. A wire's B gives as much flux in as out.
 - **Polarization** (`#/e6/polar`) — Malus I = I₀ cos²θ. Unpolarized → one filter is I₀/2. Crossed filters go dark; a 45° filter in the middle brings back I₀/8.
 
 ### Exam 7 labs
