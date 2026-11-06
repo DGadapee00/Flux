@@ -1,9 +1,11 @@
 /**
  * Opens the hub in headless Chrome at 380px, 720px and 1280px.
- * Fails if the page scrolls sideways, if the map is missing a concept, if choosing a concept does
+ * Fails if Today is not on the first screen, if a link that names a concept does not open on the
+ * map, if the page scrolls sideways, if the map is missing a concept, if choosing a concept does
  * not open it, if a phone's map does not bring the chosen concept into view, if a course card is
- * missing, if a concept's Parallels row is wrong or opening it throws, or if following a card or a lab
- * link does not land on that course's app.
+ * missing, if a concept's Parallels row is wrong or opening it throws, if following a card or a lab
+ * link does not land on that course's app, or if a due problem in a course's record does not give
+ * a thread review on Today whose Solve link opens that problem in its course app.
  */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
@@ -11,9 +13,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 import { loadConcepts, loadPaths } from '@flux/map/load.mjs';
+import { problemIndex } from '@flux/map/problems.mjs';
 import { builtCourses, latestBuilt, visibleTracks } from '../src/tracks.js';
 
 const CONCEPTS = (await loadConcepts()).map((item) => item.concept);
+/** The concept the hub's map opens on (START in src/map.js, which Node cannot import: it loads CSS). */
+const START = 'divergence-theorem';
 const PATHS = (await loadPaths()).map((item) => item.path);
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -329,7 +334,22 @@ async function main() {
         mobile: width < 700,
       });
       await page.send('Emulation.setEmulatedMedia', { features: [] });
+      // The hub opens on Today.
       await navigate(page, hub);
+      await evalJson(page, 'document.fonts ? document.fonts.ready : null');
+      await delay(250);
+      const today = await evalJson(page, `(() => {
+        const h = document.querySelector('#today-title')?.getBoundingClientRect();
+        return { headline: document.querySelector('#today-title')?.textContent ?? '', top: h ? h.top : -1, bottom: h ? h.bottom : -1, scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth };
+      })()`);
+      if (!today.headline || today.top < 0 || today.bottom > (width === 380 ? 780 : 900)) throw new Error(`${width}px: Today's headline is not on the first screen`);
+      if (today.scroll > today.client + 1) throw new Error(`${width}px Today scrolls sideways`);
+      if (width === 380 || width === 1280) {
+        const shot = await page.send('Page.captureScreenshot', { format: 'png' });
+        fs.writeFileSync(path.join(outDir, `hub-${width}-today.png`), Buffer.from(shot.data, 'base64'));
+      }
+      // A link that names a concept opens on the map, below Today.
+      await navigate(page, `${hub}?from=smoke#${START}`);
       await evalJson(page, 'document.fonts ? document.fonts.ready : null');
       await delay(250);
       const metrics = await readHub(page);
@@ -538,6 +558,58 @@ async function main() {
         const landed = await waitForPrefix(page, `${hub}${ref.course}/#/${ref.course}/`);
         console.log(`${concept.id} lab → ${landed}`);
       }
+    }
+    // A due problem in a course's record gives a thread review on Today, and Solve opens it.
+    const { byLab, titles } = await problemIndex();
+    const plain = (lab) => (byLab[`phy2049/${lab}`] || []).filter((k) => !titles[k].includes('$'));
+    const concept = CONCEPTS.find((c) => c.labs.some((ref) => ref.course === 'phy2049' && plain(ref.lab).length));
+    const ref = concept.labs.find((r) => r.course === 'phy2049' && plain(r.lab).length);
+    const key = plain(ref.lab)[0];
+    const problemId = key.slice('phy2049:'.length);
+    for (const width of [380, 1280]) {
+      await page.send('Emulation.setDeviceMetricsOverride', { width, height: width === 380 ? 780 : 900, deviceScaleFactor: 1, mobile: width < 700 });
+      await navigate(page, hub);
+      await evalJson(page, `(() => {
+        const t = Date.now();
+        localStorage.setItem('flux.phy2049.problems.v1', JSON.stringify({ v: 1, items: { ${JSON.stringify(problemId)}: { box: 1, due: t - 864e5, lastOk: false, last: t - 2 * 864e5 } } }));
+        sessionStorage.clear();
+      })()`);
+      await navigate(page, `${hub}?from=smoke-review`);
+      await delay(250);
+      const thread = await evalJson(page, `document.querySelector('.tdy-thread')?.getAttribute('href') ?? null`);
+      if (thread !== `#review-${concept.id}`) throw new Error(`${width}px: Today shows thread ${thread}, expected #review-${concept.id}`);
+      await evalJson(page, `document.querySelector('.tdy-thread').click()`);
+      await delay(250);
+      await evalJson(page, `document.querySelector('[data-show]').click()`);
+      await delay(250);
+      const review = await evalJson(page, `({ solve: document.querySelector('.tdy-solve')?.href ?? null, title: document.querySelector('#today-title')?.textContent ?? '', scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth })`);
+      const want = `/phy2049/#/phy2049/`;
+      if (!review.solve || !review.solve.includes(want) || !review.solve.endsWith(`?p=${encodeURIComponent(problemId)}`)) {
+        throw new Error(`${width}px: Solve links to ${review.solve}, expected a phy2049 link ending ?p=${problemId}`);
+      }
+      if (review.scroll > review.client + 1) throw new Error(`${width}px thread review scrolls sideways`);
+      const shot = await page.send('Page.captureScreenshot', { format: 'png' });
+      fs.writeFileSync(path.join(outDir, `hub-${width}-review.png`), Buffer.from(shot.data, 'base64'));
+      // The reading panel shows the record for that concept.
+      await navigate(page, `${hub}?from=smoke-panel#${concept.id}`);
+      await delay(250);
+      const record = await evalJson(page, `document.querySelector('#detail .tdy-record')?.textContent ?? ''`);
+      if (!/Learning/.test(record)) throw new Error(`${width}px: ${concept.id} panel record reads "${record}"`);
+      if (width === 1280) {
+        // Following Solve opens that problem in PHY 2049, ready to answer.
+        await navigate(page, review.solve);
+        await waitForPrefix(page, `${hub}phy2049/`);
+        const deadline = Date.now() + 15000;
+        let text = '';
+        while (Date.now() < deadline && !text.includes(titles[key])) {
+          await delay(300);
+          text = await evalJson(page, 'document.body.innerText');
+        }
+        if (!text.includes(titles[key])) throw new Error(`Solve opened PHY 2049 without "${titles[key]}"`);
+        console.log(`thread review → ${titles[key]} in PHY 2049`);
+        await navigate(page, hub);
+      }
+      await evalJson(page, `localStorage.removeItem('flux.phy2049.problems.v1')`);
     }
     console.log('smoke ok');
   } finally {

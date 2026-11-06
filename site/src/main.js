@@ -1,10 +1,29 @@
 import { hasAnimation, mountCardAnimation } from './anim/draw.js';
 import { mountBackup } from './backup.js';
-import { mountMap } from './map.js';
+import problems from 'virtual:flux-problems';
+import { loadConcepts, loadPaths, mountMap } from './map.js';
 import { mountApplications } from './applications/view.js';
+import { mountToday } from './learner/today.js';
 import { latestBuilt, visibleTracks } from './tracks.js';
 
-const map = mountMap();
+const concepts = loadConcepts();
+const paths = loadPaths();
+/** @type {ReturnType<typeof mountToday> | null} */
+let today = null;
+const map = mountMap({ concepts, paths, record: (id) => today?.recordHtml(id) ?? '' });
+today = mountToday({
+  concepts,
+  paths,
+  problems,
+  onPath: (id) => map.choosePath(id),
+  onRefresh: () => map.refreshPanel(),
+  onLeaveReview: () => map.current && map.show(map.current),
+});
+map.refreshPanel();
+// Today sits above the map. A link that names a concept still opens on the map.
+if (map.current && decodeURIComponent(window.location.hash.slice(1)) === map.current) {
+  document.getElementById('explore')?.scrollIntoView({ block: 'start' });
+}
 mountApplications(map);
 
 const root = document.querySelector('#tracks');

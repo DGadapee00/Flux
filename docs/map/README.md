@@ -11,7 +11,9 @@ been) and its look. Its 15 concepts are the seed data for the map.
 
 ## Learner home prototype
 
-`prototype-learner.html` is a proposal, not yet approved. It asks what Flux looks like once it
+`prototype-learner.html` is the proposal for the learner side of Flux. The owner approved its
+Today page and thread reviews on 6 November 2026, and they are in the hub (`site/src/learner/`).
+Its map filled in by progress and its satellite that opens from mastery are not built yet. It asks what Flux looks like once it
 knows the learner: a Today page (the next concept you are ready for, the next exam, and reviews
 grouped by thread: each due concept follows the due concept it builds on, across subjects where
 the map crosses them, and is recalled before its problems), a map filled in by your own progress, a page per concept with your steps

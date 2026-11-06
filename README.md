@@ -4,7 +4,14 @@ One concept map for the degree. Each concept is a node: a short idea, its key eq
 builds on, where it leads, sources worth your time, and the Flux lab and notes that show it.
 Courses are paths through the map. A concept with no lab is a visible gap.
 
-The hub opens on a local view of the map: the chosen concept, what it builds on and what it leads
+The hub opens on Today. It reads your practice record from every course app and says what to do
+now: review the problems that are due, grouped by thread on the map so each concept comes after
+the one it builds on, then learn the next concept whose prerequisites are solid. A thread review
+asks you to recall each concept before its problems, and Solve opens each problem in its course
+app. The next PHY 2049 exam and your courses sit beside it. The reading panel on the map shows your
+record for the chosen concept.
+
+Below Today, the map opens on a local view: the chosen concept, what it builds on and what it leads
 to, one step each way, beside its reading panel. Widen it to two steps or the full map, or choose a
 course to see its path in teaching order. The find box (press `/`) opens a concept, a subject or a
 course by name. Show only some subjects, zoom out to see the whole map, and move between boxes

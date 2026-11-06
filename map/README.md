@@ -16,6 +16,7 @@ The approved prototype is `docs/map/prototype-flux-thread.html`. Its 15 concepts
 | `applications/` | Projects the map leads to. Each recipe names concepts and labs on the map (`docs/map/applications.md`). |
 | `routes.js` | The link from a concept into a course app. |
 | `graph.js` | What a concept leads to, its depth and its closure. Shared by the hub and the check. |
+| `problems.mjs` | Which practice problems belong to which lab, read from each course's bank. The hub's build ships it for Today. |
 | `check.mjs` | The check. `npm test` runs it. |
 
 ## A concept

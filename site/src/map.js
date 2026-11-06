@@ -64,7 +64,7 @@ export function esc(s) {
   return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 }
 
-function tex(s, display = false) {
+export function tex(s, display = false) {
   try {
     return katex.renderToString(s, { displayMode: display, throwOnError: false });
   } catch {
@@ -92,9 +92,12 @@ function el(tag, attrs, parent) {
  *   concepts?: any[],
  *   paths?: Record<string, any>,
  *   root?: Document,
+ *   record?: (id: string) => string,
  * }} [opts]
+ * `record` returns the learner's record for a concept as HTML; the reading panel shows it under
+ * the equation. The hub's Today view supplies it.
  */
-export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root = document } = {}) {
+export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root = document, record = () => '' } = {}) {
   const style = root.createElement('style');
   style.textContent = laneCss(SUBJECTS);
   root.head.append(style);
@@ -478,7 +481,8 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
     detailHead.innerHTML = `
       <div class="tagrow">${c.courses.map((k) => courseTag(k, c)).join('')}</div>
       <h2 id="concept-title">${esc(c.title)}</h2>
-      <div class="eq">${tex(c.eq, true)}</div>`;
+      <div class="eq">${tex(c.eq, true)}</div>
+      ${record(id)}`;
     detailBody.innerHTML = `
       <p class="idea">${prose(c.idea)}</p>
       <div><h3>Builds on</h3>${c.requires.length ? `<div class="chips">${c.requires.map(chip).join('')}</div>` : '<p class="none">Nothing on the map yet. It is a starting point.</p>'}</div>
@@ -753,6 +757,10 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
   return {
     show,
     go,
+    /** Draw the reading panel again, as when the learner's record has changed. */
+    refreshPanel() {
+      if (current) render(current);
+    },
     choosePath,
     chooseScope,
     chooseLanes,
