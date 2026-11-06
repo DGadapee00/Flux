@@ -3,12 +3,21 @@
  * Folded into the bank by src/problems/index.js.
  */
 import { bendPressure } from '@flux/subjects/mechanics/flowfields.js';
+import { pipeQ } from '../bank/u3.js';
 
 const RATIO = { gentle: 2, medium: 4, sharp: 6 };
 const RHO = { water: 998, air: 1.2 };
 const bend = ($) => bendPressure({ rho: RHO[$.fluid] ?? 998, V: $.V, R: $.R, w: $.w, profile: 'vortex' });
 
 export default {
+  'u3.9.poiseuille': {
+    traps: {
+      Q: [
+        [($) => pipeQ($, 2 * $.R) * 1e6, 'That uses the diameter where the formula wants the radius: 2⁴ = 16 times too much.'],
+        [($) => pipeQ($) * 1e6 / ($.R * $.R), 'R is to the fourth power: the peak speed goes as R², and so does the area.'],
+      ],
+    },
+  },
   'u3.1.exit-acceleration': {
     traps: {
       a: [

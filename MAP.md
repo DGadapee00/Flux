@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchy�
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 189 with a Flux lab, 86 gaps.**
+**275 concepts, 190 with a Flux lab, 85 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -19,7 +19,7 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Mechanics | 34 | 31 |
 | Electricity and magnetism | 27 | 26 |
 | Thermodynamics | 22 | 12 |
-| Fluid mechanics | 20 | 10 |
+| Fluid mechanics | 20 | 11 |
 | Heat transfer | 19 | 3 |
 | Circuits and systems | 27 | 13 |
 | Mechanics of materials | 16 | 15 |
@@ -127,8 +127,8 @@ in the courses that teach it.
 6. **The thermal-fluids trunk.** EML 4140 now has an app, and its Rod lab solves the Heat equation
    by Fourier series and by finite differences side by side. EML 3015 has three units: viscosity
    (Viscosity, and Navier–Stokes for flow along a wall), pressure (a gate and an accelerating tank)
-   and following the flow (a nozzle, a bend and Continuity). Navier–Stokes still wants a
-   pressure-driven or two-dimensional lab.
+   and following the flow (a nozzle, a bend, Continuity, and a Pipe lab that drives Navier–Stokes
+   with a pressure drop). Navier–Stokes in two dimensions is still to come.
 
 ## Sources
 

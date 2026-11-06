@@ -31,6 +31,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Push oil through a tube with a slider for the radius and the pressure drop held fixed. It corrects the idea that doubling the radius doubles or quadruples the flow: it grows sixteenfold.',
+  labs: [
+    { course: 'eml3015', lab: 'pipe', notes: ['s5'], note: 'Oil pushed down a tube: twice the radius carries sixteen times the flow. A slot shows h³, and the Reynolds number shows where the laminar answer ends.' },
+  ],
 };

@@ -5,10 +5,14 @@
  */
 import { bendPressure, nozzleParticle } from '@flux/subjects/mechanics/flowfields.js';
 import { cvClosed } from '@flux/subjects/mechanics/continuity.js';
+import { FLUIDS } from '@flux/subjects/mechanics/couette.js';
+import { poiseuille } from '@flux/subjects/mechanics/poiseuille.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 const RATIO = { gentle: 2, medium: 4, sharp: 6 };
+/** Flow rate in a pipe, m³/s, for the problems' fluids; R in m, dp in Pa, L in m. */
+export const pipeQ = ($, R = $.R) => poiseuille({ geom: 'pipe', size: R, G: $.dp / $.L, mu: FLUIDS[$.fluid].mu }).Q;
 const shape = () => choice(['gentle', 'its area halves'], ['medium', 'its area falls to a quarter'], ['sharp', 'its area falls to a sixth']);
 const exit = ($) => nozzleParticle({ u0: $.u0, L: $.L, CR: RATIO[$.shape], ramp: 0 }, $.L);
 const RHO = { water: 998, air: 1.2 };
@@ -225,5 +229,66 @@ export default [
       read: (c) => ({ balance: Math.abs(c.net) < 1e-9 ? 'equal' : c.net < 0 ? 'more-in' : 'more-out' }),
     },
     cases: [kase('Air squeezed by a piston', { field: 'piston' }, { balance: 'more-in' })],
+  }),
+
+  problem({
+    id: 'u3.9.poiseuille',
+    title: 'Flow down a tube',
+    exam: 'u3',
+    ch: '6',
+    lab: 'pipe',
+    src: 'Flux, written for the Pipe lab',
+    topics: ['poiseuille'],
+    principles: ['poiseuille'],
+    vars: { fluid: choice(['oil', 'olive oil (μ = 0.0562 Pa·s)'], ['glycerol', 'glycerol (μ = 1.412 Pa·s)']), R: range(1, 5, 0.5, 'mm', 1e-3), dp: range(5, 50, 5, 'kPa', 1e3), L: range(0.5, 2, 0.5, 'm') },
+    text: (T) => `${T.fluid[0].toUpperCase()}${T.fluid.slice(1)} flows steadily down a long straight tube of radius ${T.R} mm and length ${T.L} m, driven by a pressure drop of ${T.dp} kPa. Assuming laminar flow, what is the flow rate in mL/s?`,
+    parts: [num('Q', ($) => pipeQ($) * 1e6, 'mL/s', { label: 'Q' })],
+    level: 2,
+    hints: ['Fully developed flow does not accelerate: the pressure gradient Δp/L balances viscous shear, and the profile is a parabola.', 'Q = πR⁴Δp/(8μL). Use R in metres; 1 m³/s is 10⁶ mL/s.'],
+    steps: ($) => [String.raw`$Q = \dfrac{\pi R^4\Delta p}{8\mu L} = \dfrac{\pi(${$.R})^4(${$.dp})}{8(${FLUIDS[$.fluid].mu})(${$.L})} = ${Number((pipeQ($)).toPrecision(3))}$ m³/s $= ${Number((pipeQ($) * 1e6).toPrecision(3))}$ mL/s`],
+    sim: {
+      scenario: 'oil',
+      setup(s, $) {
+        Object.assign(s, { geom: 'pipe', fluid: $.fluid, size: $.R * 1e3, dp: $.dp / 1e3, L: $.L });
+      },
+      read: (c) => ({ Q: c.numeric.Q * 1e6 }),
+    },
+    cases: [kase('the notes’ olive oil', { fluid: 'oil', R: 2, dp: 10, L: 1 }, { Q: 1.118 })],
+  }),
+
+  problem({
+    id: 'u3.10.radius',
+    title: 'Twice the radius',
+    exam: 'u3',
+    ch: '6',
+    kind: 'conceptual',
+    lab: 'pipe',
+    src: 'Flux, written for the Pipe lab',
+    topics: ['poiseuille'],
+    principles: ['poiseuille'],
+    vars: { change: choice(['radius', 'the tube’s radius is doubled'], ['dp', 'the pressure drop is doubled'], ['length', 'the tube is made twice as long']) },
+    text: (T) => `Oil flows slowly and steadily down a long tube. Everything else stays the same, but ${T.change}. By what factor does the flow rate change?`,
+    parts: [
+      pick('factor', 'the flow rate', [
+        ['half', '×½', 'Twice the length halves the gradient Δp/L that drives the flow.'],
+        ['two', '×2', 'Q is proportional to Δp: double the push, double the flow.'],
+        ['four', '×4', 'The peak speed does go as R², but the area it flows through grows as R² too.'],
+        ['sixteen', '×16', 'Q = πR⁴Δp/(8μL): R², twice over, from the speed and from the area.'],
+      ], ($) => ({ radius: 'sixteen', dp: 'two', length: 'half' }[$.change])),
+    ],
+    level: 1,
+    hints: ['Write Q = πR⁴Δp/(8μL) and change one thing.', 'How does each quantity enter: to which power?'],
+    steps: ($) => [{ radius: 'Q grows as R⁴: 2⁴ = 16.', dp: 'Q grows as Δp: ×2.', length: 'Q falls as 1/L: ×½.' }[$.change]],
+    sim: {
+      scenario: 'oil',
+      setup() {},
+      read: (c, s, $) => {
+        const base = { fluid: 'oil', R: s.size * 1e-3, dp: s.dp * 1e3, L: s.L };
+        const after = { ...base, R: base.R * ($.change === 'radius' ? 2 : 1), dp: base.dp * ($.change === 'dp' ? 2 : 1), L: base.L * ($.change === 'length' ? 2 : 1) };
+        const k = pipeQ(after) / c.Q;
+        return { factor: k > 10 ? 'sixteen' : k > 3 ? 'four' : k > 1.5 ? 'two' : 'half' };
+      },
+    },
+    cases: [kase('the radius doubled', { change: 'radius' }, { factor: 'sixteen' })],
   }),
 ];

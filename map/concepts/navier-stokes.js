@@ -32,6 +32,7 @@ export default {
     },
   ],
   labs: [
-    { course: 'eml3015', lab: 'viscosity', notes: ['s2'], note: 'A plate starts moving over a still layer, and momentum diffuses in from it: Navier–Stokes for flow along a wall. Pressure-driven and two-dimensional flows are still to come.' },
+    { course: 'eml3015', lab: 'viscosity', notes: ['s2'], note: 'A plate starts moving over a still layer, and momentum diffuses in from it: Navier–Stokes for flow along a wall.' },
+    { course: 'eml3015', lab: 'pipe', notes: ['s5'], note: 'Navier–Stokes driven by a pressure drop in a pipe or slot: the parabolic profile in closed form and by finite volumes. Two-dimensional flows are still to come.' },
   ],
 };

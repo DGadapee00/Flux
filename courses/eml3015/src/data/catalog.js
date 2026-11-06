@@ -28,8 +28,8 @@ export const EXAMS = [
     title: 'Following the flow',
     chapters: '6',
     date: 'Unit 3',
-    labs: ['nozzle', 'bend', 'continuity'],
-    coming: ['Navier–Stokes'],
+    labs: ['nozzle', 'bend', 'continuity', 'pipe'],
+    coming: ['Flow in 2D'],
   },
 ];
 
@@ -40,6 +40,7 @@ export const LAB_META = {
   nozzle: { id: 'nozzle', exam: 'u3', title: 'Nozzle' },
   bend: { id: 'bend', exam: 'u3', title: 'Bend' },
   continuity: { id: 'continuity', exam: 'u3', title: 'Continuity' },
+  pipe: { id: 'pipe', exam: 'u3', title: 'Pipe' },
 };
 
 export const CHAPTER_TITLES = {

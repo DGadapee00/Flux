@@ -23,7 +23,8 @@
     <a href="#s3"><span>3</span>Euler's equation across a bend</a>
     <a href="#s4"><span>4</span>Mass in, mass out</a>
     <h3>Reference</h3>
-    <a href="#s5"><span>5</span>Formula sheet</a>
+    <a href="#s5"><span>5</span>Pressure-driven flow in a pipe</a>
+    <a href="#s6"><span>6</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -119,12 +120,41 @@ p_2 - p_1 = \frac{\rho K^2}{2}\left(\frac{1}{r_1^2} - \frac{1}{r_2^2}\right).
 </section>
 
 <section class="topic" id="s5">
-<h2><span class="n">5</span>Formula sheet</h2>
+<h2><span class="n">5</span>Pressure-driven flow in a pipe</h2>
+<p>Push a liquid down a long straight pipe and, far from the inlet, every particle moves straight along at its own steady speed. Nothing accelerates, so Navier–Stokes keeps only two terms: the pressure gradient and viscous shear.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>With \(\mathbf v = u(r)\,\hat{\mathbf x}\), continuity holds and \((\mathbf v\cdot\nabla)\mathbf v = 0\). The axial part of Navier–Stokes, with \(G = \Delta p/L\), is</p>
+\[
+0 = G + \frac{\mu}{r}\frac{d}{dr}\Big(r\frac{du}{dr}\Big).
+\]
+<p>Integrate twice. Keep \(u\) finite on the axis and set \(u(R) = 0\) at the wall (no slip):</p>
+\[
+u = \frac{G}{4\mu}\,(R^2 - r^2), \qquad Q = \int_0^R u\,2\pi r\,dr = \frac{\pi R^4 G}{8\mu}, \qquad \tau_\text{wall} = \frac{GR}{2}.
+\]
+<p>The profile is a parabola. Its peak grows as \(R^2\), and the area it fills grows as \(R^2\), so the flow grows as \(R^4\). Between two plates a gap \(h\) apart the same steps give \(q = Gh^3/(12\mu)\) per unit width.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · olive oil in a 4 mm tube</span>
+<p>Olive oil (\(\mu = 0.0562\) Pa·s, \(\rho = 920\) kg/m³) flows down a tube of radius 2 mm under 10 kPa per metre:</p>
+\[
+Q = \frac{\pi(0.002)^4(10^4)}{8(0.0562)} = 1.12\times10^{-6}\ \text{m}^3/\text{s} = 1.12\ \text{mL/s}.
+\]
+<p>The mean speed is \(Q/\pi R^2 = 0.089\) m/s, so \(Re = \rho V D/\mu = 5.8\): well inside laminar flow. A tube of twice the radius carries 16 times as much, 17.9 mL/s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the formula without checking the Reynolds number. Water under 1 kPa per metre in a 1 cm pipe would, by the formula, move at 3.1 m/s, with \(Re \approx 31{,}000\). Above about 2300 the flow is turbulent and carries far less.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Formula sheet</h2>
 \[
 \frac{D\mathbf v}{Dt} = \frac{\partial\mathbf v}{\partial t} + (\mathbf v\cdot\nabla)\mathbf v, \qquad T = \int \frac{dx}{u}, \qquad \rho\,\frac{D\mathbf v}{Dt} = -\nabla p + \rho\,\mathbf g,
 \]
 \[
 \frac{\partial p}{\partial r} = \rho\,\frac{u^2}{r}, \qquad Vw = K\ln\frac{r_2}{r_1}, \qquad p_2 - p_1 = \frac{\rho K^2}{2}\left(\frac{1}{r_1^2} - \frac{1}{r_2^2}\right).
+\]
+\[
+u = \frac{\Delta p}{4\mu L}(R^2 - r^2), \qquad Q = \frac{\pi R^4\,\Delta p}{8\mu L}, \qquad q_\text{slot} = \frac{\Delta p\,h^3}{12\mu L}, \qquad Re = \frac{\rho V D}{\mu}.
 \]
 </section>
 

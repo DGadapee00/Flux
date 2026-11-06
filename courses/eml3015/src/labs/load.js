@@ -9,6 +9,7 @@ const loaders = {
   nozzle: () => import('./nozzle.js'),
   bend: () => import('./bend.js'),
   continuity: () => import('./continuity.js'),
+  pipe: () => import('./pipe.js'),
 };
 
 const labs = createLabLoader(loaders);
