@@ -491,62 +491,125 @@ function buildsOn(a, b) {
 }
 
 /**
- * Review in sets, one subject each. Switching between unrelated subjects costs more than mixing
- * helps, so a set stays in one lane and runs foundation first, with the problems for each concept
- * together. The nearest exam's subject goes first, then misses, then the longest overdue.
+ * Review by thread. A thread is a line of prerequisites on the map, and it may cross subjects the
+ * way flux runs from calculus into electricity. Each due concept hangs from its nearest due
+ * prerequisite, up to THREAD_REACH steps back; each tree that makes is one review, walked depth
+ * first so every concept comes straight after the one it builds on. A tree too big for one sitting
+ * splits into its branches. The nearest exam's thread goes first, then misses, then the oldest.
  */
 const SET_MAX = 8;
+const THREAD_REACH = 3;
+
+/** The nearest due prerequisites of `id`: breadth first up `requires`, stopping at the first hit. */
+function nearestDueAncestor(id, due) {
+  let frontier = [id];
+  const from = { [id]: null };
+  for (let step = 1; step <= THREAD_REACH; step++) {
+    const next = [];
+    for (const x of frontier) for (const r of C[x].requires) if (!(r in from)) { from[r] = x; next.push(r); }
+    const hits = next.filter((r) => due.has(r));
+    if (hits.length) {
+      // Prefer a prerequisite in the same subject, then the deeper one, which is the closer idea.
+      hits.sort((a, b) => (C[b].subject === C[id].subject) - (C[a].subject === C[id].subject) || depth(b) - depth(a) || a.localeCompare(b));
+      // The concepts between the two, from the prerequisite down toward this one.
+      const via = [];
+      for (let x = from[hits[0]]; x && x !== id; x = from[x]) via.push(x);
+      return { id: hits[0], steps: step, via };
+    }
+    frontier = next;
+  }
+  return null;
+}
+
 function reviewSets() {
-  const bySubject = {};
-  for (const r of reviewQueue()) (bySubject[r.concept.subject] ||= []).push(r);
+  const byConcept = new Map();
+  for (const r of reviewQueue()) {
+    if (!byConcept.has(r.concept.id)) byConcept.set(r.concept.id, []);
+    byConcept.get(r.concept.id).push(r);
+  }
+  const due = new Set(byConcept.keys());
+  const parent = {};
+  const kids = {};
+  for (const id of due) {
+    const hit = nearestDueAncestor(id, due);
+    if (hit) { parent[id] = hit; (kids[hit.id] ||= []).push(id); }
+  }
+  const order = (a, b) => depth(a) - depth(b) || C[a].title.localeCompare(C[b].title);
+  const walk = (id, out) => { out.push(id); for (const k of (kids[id] || []).sort(order)) walk(k, out); return out; };
+  const size = (id) => byConcept.get(id).length + (kids[id] || []).reduce((s, k) => s + size(k), 0);
+
+  // Split a tree that will not fit one sitting: the root keeps its first branch, the rest stand alone.
+  const pieces = [];
+  const place = (root) => {
+    if (size(root) <= SET_MAX || !(kids[root] || []).length) { pieces.push(walk(root, [])); return; }
+    const branches = [...kids[root]].sort(order);
+    const first = branches.shift();
+    const head = [root];
+    if (byConcept.get(root).length + size(first) <= SET_MAX) walk(first, head); else place(first);
+    pieces.push(head);
+    for (const b of branches) place(b);
+  };
+  for (const id of [...due].filter((x) => !parent[x]).sort(order)) place(id);
+
   const upcoming = D.exams.filter((e) => examDays(e) >= 0);
-  const sets = Object.entries(bySubject).map(([subject, rows]) => {
-    const byConcept = new Map();
-    for (const r of rows) {
-      if (!byConcept.has(r.concept.id)) byConcept.set(r.concept.id, []);
-      byConcept.get(r.concept.id).push(r);
-    }
-    const ordered = [...byConcept.entries()]
-      .sort(([a], [b]) => depth(a) - depth(b) || a.localeCompare(b))
-      .map(([id, list]) => ({ concept: C[id], rows: list }));
-    // Keep whole concepts together; anything past SET_MAX waits for the next sitting.
-    const today = [];
-    const later = [];
-    let n = 0;
-    for (const g of ordered) {
-      if (n && n + g.rows.length > SET_MAX) later.push(g);
-      else { today.push(g); n += g.rows.length; }
-    }
-    const examIdx = Math.min(...today.map((g) => { const i = upcoming.findIndex((e) => e.concepts.includes(g.concept.id)); return i < 0 ? 99 : i; }));
+  const sets = pieces.map((ids) => {
+    const groups = ids.map((id) => ({ concept: C[id], rows: byConcept.get(id), parent: ids.includes(parent[id]?.id) ? parent[id] : null }));
+    const rows = groups.flatMap((g) => g.rows);
+    const examIdx = Math.min(...ids.map((id) => { const i = upcoming.findIndex((e) => e.concepts.includes(id)); return i < 0 ? 99 : i; }));
+    const subjects = [];
+    for (const g of groups) if (!subjects.includes(g.concept.subject)) subjects.push(g.concept.subject);
     return {
-      subject,
-      groups: today,
-      n,
-      waiting: later.reduce((s, g) => s + g.rows.length, 0),
-      missed: today.reduce((s, g) => s + g.rows.filter((r) => r.missed).length, 0),
+      key: ids[0],
+      root: C[ids[0]],
+      subjects,
+      groups,
+      n: rows.length,
+      waiting: 0,
+      missed: rows.filter((r) => r.missed).length,
       oldest: Math.min(...rows.map((r) => r.due)),
       exam: examIdx < 99 ? upcoming[examIdx] : null,
       examIdx,
     };
   });
   sets.sort((a, b) => a.examIdx - b.examIdx || (b.missed > 0) - (a.missed > 0) || a.oldest - b.oldest);
-  // Today takes whole sets up to the daily cap and at most three sittings, always at least one.
-  // A set of one or two problems with no miss waits a day to join a fuller review.
+  // Today takes whole threads up to the daily cap and at most four sittings, always at least one.
+  // A lone problem with no miss and no exam waits a day; its thread may grow by then.
   let total = 0;
   let count = 0;
   for (const s of sets) {
-    const small = s.n < 3 && !s.missed && !s.exam;
-    s.today = count === 0 || (!small && count < 3 && total + s.n <= DAILY_CAP);
+    const small = s.n < 2 && !s.missed && !s.exam;
+    s.today = count === 0 || (!small && count < 4 && total + s.n <= DAILY_CAP);
     if (s.today) { total += s.n; count++; }
   }
   return sets;
 }
-/** The concepts of a set as a chain: an arrow where the next one builds on the last. */
+/**
+ * A thread as text: an arrow where a concept builds on the one before it, a comma between two
+ * that build on the same concept, and a semicolon before a branch from further back.
+ */
 function chain(groups) {
   return groups.map((g, i) => {
-    const sep = i === 0 ? '' : buildsOn(g.concept.id, groups[i - 1].concept.id) ? ' <span aria-label="leads to">→</span> ' : ' · ';
+    const prev = groups[i - 1];
+    const sep = i === 0 ? ''
+      : g.parent?.id === prev.concept.id ? ' <span aria-label="leads to">→</span> '
+      : g.parent && g.parent.id === prev.parent?.id ? ', '
+      : '; ';
     return `${sep}${esc(g.concept.title)}`;
   }).join('');
+}
+/** The subjects a thread crosses, each in its lane colour. */
+function lanesLine(subjects) {
+  return subjects.map((s) => `<span style="color:var(--lane-${s})">${esc(SUBJECT[s].label)}</span>`).join(' <span aria-label="into">→</span> ');
+}
+/** How a concept in a review connects to the one it hangs from. */
+function connection(g, i, groups) {
+  if (!g.parent) return 'Where this thread starts.';
+  const p = C[g.parent.id];
+  const ago = groups[i - 1]?.concept.id === p.id ? 'which you just reviewed' : 'which you reviewed earlier in this thread';
+  if (!g.parent.via.length) return `It builds on ${esc(p.title)}, ${ago}.`;
+  const names = g.parent.via.map((x) => `<a href="#${x}">${esc(C[x].title)}</a>`);
+  const list = names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : names[0];
+  return `${esc(p.title)}, ${ago}, leads here through ${list}.`;
 }
 function courseRank(c) {
   const ranks = c.courses.map((id) => ({ 'taking now': 0, 'next term': 1, later: 2, taken: 3, project: 2 }[COURSE[id]?.status] ?? 4));
@@ -623,16 +686,13 @@ function renderToday() {
 
   const waiting = sets.reduce((s, x) => s + x.waiting, 0) + laterSets.reduce((s, x) => s + x.n, 0);
   const reviewBlock = todaySets.length
-    ? `<p class="muted" style="margin:0">Each review stays in one subject and runs from the foundation up, so one idea leads into the next. Do one at a sitting, about ${Math.round(todayN * 1.5)} minutes in all.</p>
-       <div class="sets">${todaySets.map((s) => {
-          const sub = SUBJECT[s.subject];
-          return `<a class="set-card" href="#review-${s.subject}" style="--lane:var(--lane-${s.subject})">
-            <span class="eyebrow" style="color:var(--lane)">${esc(sub.label)}${s.exam ? ` · for Exam ${s.exam.n}` : ''}</span>
+    ? `<p class="muted" style="margin:0">Each review follows one thread on the map: a concept, then the ideas built on it, in order. A thread can cross subjects, the way flux runs from calculus into electricity. Do one at a sitting, about ${Math.round(todayN * 1.5)} minutes in all.</p>
+       <div class="sets">${todaySets.map((s) => `<a class="set-card" href="#review-${s.key}" style="--lane:var(--lane-${s.root.subject})">
+            <span class="eyebrow">${lanesLine(s.subjects)}${s.exam ? ` · for Exam ${s.exam.n}` : ''}</span>
             <span class="chain">${chain(s.groups)}</span>
             <span class="meta">${s.groups.length} concept${s.groups.length > 1 ? 's' : ''} · ${s.n} problem${s.n > 1 ? 's' : ''} · about ${Math.max(2, Math.round(s.n * 1.5))} min${s.missed ? ` · ${s.missed} missed last time` : ''}</span>
-            <span class="go">Start this review →</span></a>`;
-        }).join('')}</div>
-       ${waiting ? `<p class="meta" style="margin:12px 0 0">${waiting} more can wait for tomorrow${laterSets.length ? `: ${laterSets.map((s) => `${esc(SUBJECT[s.subject].label)} (${s.n})`).join(', ')}` : ''}. A day’s delay costs little; the gaps between reviews are widening anyway.</p>` : ''}`
+            <span class="go">Start this thread →</span></a>`).join('')}</div>
+       ${waiting ? `<p class="meta" style="margin:12px 0 0">${waiting} more can wait for tomorrow${laterSets.length ? `: ${laterSets.map((s) => `${esc(s.root.title)}${s.groups.length > 1 ? ` and ${s.groups.length - 1} more` : ''} (${s.n})`).join(', ')}` : ''}. A day’s delay costs little; the gaps between reviews are widening anyway.</p>` : ''}`
     : '<p class="muted" style="margin:0">Nothing is due. Reviews appear here when a problem’s next date arrives.</p>';
 
   const nextBlock = next.length
@@ -895,38 +955,37 @@ function runOrbitCheck(form) {
  * One review set, one concept at a time. Recall the concept first, the way you would before an
  * exam question, then its problems. The next concept says how it connects to the one just done.
  */
-let session = { subject: null, i: 0, shown: false, rated: {}, done: {} };
+let session = { key: null, i: 0, shown: false, rated: {}, done: {} };
 const RECALL = { got: 'I had it', partly: 'Partly', not: 'Not really' };
-function renderReview(subject) {
-  const set = reviewSets().find((s) => s.subject === subject);
-  if (session.subject !== subject) session = { subject, i: 0, shown: false, rated: {}, done: {} };
-  const sub = SUBJECT[subject];
+function renderReview(key) {
+  const set = reviewSets().find((s) => s.key === key);
+  if (session.key !== key) session = { key, i: 0, shown: false, rated: {}, done: {} };
   if (!set) {
-    view.innerHTML = `<nav class="crumbs"><a href="#today">Today</a></nav><h1>Nothing due in ${esc(sub?.label || 'this subject')}</h1><p class="muted">It may have been finished already. <a href="#today">Back to today</a>.</p>`;
+    view.innerHTML = `<nav class="crumbs"><a href="#today">Today</a></nav><h1>Nothing due on this thread</h1><p class="muted">It may have been finished already. <a href="#today">Back to today</a>.</p>`;
     return;
   }
   const groups = set.groups;
   const finished = session.i >= groups.length;
-  const rail = `<div class="rail" style="grid-template-columns:repeat(${groups.length},minmax(0,1fr))" aria-label="Concepts in this review">${groups.map((g, i) => `<a href="#review-${subject}" data-goto="${i}" class="${i < session.i ? 'done' : i === session.i ? 's-now' : ''}"><span class="seg"></span><span class="lbl">${esc(g.concept.title)}</span></a>`).join('')}</div>`;
+  const rail = `<div class="rail" style="grid-template-columns:repeat(${groups.length},minmax(0,1fr))" aria-label="Concepts in this review">${groups.map((g, i) => `<a href="#review-${key}" data-goto="${i}" class="${i < session.i ? 'done' : i === session.i ? 's-now' : ''}"><span class="seg"></span><span class="lbl">${esc(g.concept.title)}</span></a>`).join('')}</div>`;
   let body;
   if (finished) {
     const rated = Object.values(session.rated);
     const weak = groups.filter((g) => session.rated[g.concept.id] && session.rated[g.concept.id] !== 'got');
-    const nextSet = reviewSets().find((s) => s.today && s.subject !== subject);
+    const nextSet = reviewSets().find((s) => s.today && s.key !== key);
     body = `<section class="panel recall"><span class="eyebrow">Review done</span>
-      <h2 style="font-size:26px">${esc(sub.label)}: ${groups.length} concept${groups.length > 1 ? 's' : ''}, ${set.n} problem${set.n > 1 ? 's' : ''}</h2>
+      <h2 style="font-size:26px">${esc(set.root.title)} thread: ${groups.length} concept${groups.length > 1 ? 's' : ''}, ${set.n} problem${set.n > 1 ? 's' : ''}</h2>
       <p class="muted">${rated.length ? `You recalled ${rated.filter((r) => r === 'got').length} of ${rated.length} concept${rated.length > 1 ? 's' : ''} without help.` : ''} ${weak.length ? `Worth a second look: ${weak.map((g) => `<a href="#${g.concept.id}">${esc(g.concept.title)}</a>`).join(', ')}. Flux brings ${weak.length > 1 ? 'them' : 'it'} back sooner.` : 'Each comes back on its widening schedule.'}</p>
-      <div class="actions">${nextSet ? `<a class="btn" href="#review-${nextSet.subject}">Next: ${esc(SUBJECT[nextSet.subject].label)} →</a>` : ''}<a class="btn quiet" href="#today">Back to today</a></div></section>`;
+      <div class="actions">${nextSet ? `<a class="btn" href="#review-${nextSet.key}">Next thread: ${esc(nextSet.root.title)} →</a>` : ''}<a class="btn quiet" href="#today">Back to today</a></div></section>`;
   } else {
     const g = groups[session.i];
     const c = g.concept;
-    const prev = groups[session.i - 1]?.concept;
-    const link = prev && buildsOn(c.id, prev.id) ? `It builds on ${esc(prev.title)}, which you just reviewed.` : prev ? `A separate idea from ${esc(prev.title)}, in the same subject.` : 'The foundation of this review.';
+    const link = connection(g, session.i, groups);
     const rating = session.rated[c.id];
     const lab = (key) => c.labs.find((l) => key.startsWith(`${l.course}:`)) || c.labs[0];
-    body = `<section class="panel recall" style="--lane:var(--lane-${subject})">
-        <span class="eyebrow">Concept ${session.i + 1} of ${groups.length} · ${link}</span>
+    body = `<section class="panel recall" style="--lane:var(--lane-${c.subject})">
+        <span class="eyebrow" style="color:var(--lane)">Concept ${session.i + 1} of ${groups.length} · ${esc(SUBJECT[c.subject].label)}</span>
         <h2 style="font-size:30px">${esc(c.title)}</h2>
+        <p class="muted" style="margin:0">${link}</p>
         <p style="margin:0">Before the problems, recall it. Say the idea in a sentence and write its key equation. Then check.</p>
         ${session.shown
           ? `<div class="reveal">${c.eq ? `<div class="eq">${c.eq}</div>` : ''}<p class="idea" style="margin:0">${c.idea}</p></div>
@@ -948,7 +1007,7 @@ function renderReview(subject) {
   }
   view.innerHTML = `
     <nav class="crumbs" aria-label="Back"><a href="#today">Today</a><span>/</span><span>Review</span></nav>
-    <div class="section-head" style="margin-bottom:8px"><h1 style="font-size:clamp(28px,4.5vw,40px)"><span style="color:var(--lane-${subject})">${esc(sub.label)}</span> review</h1>
+    <div class="section-head" style="margin-bottom:8px"><div style="display:grid;gap:6px;min-width:0"><span class="eyebrow">Thread review · ${lanesLine(set.subjects)}</span><h1 style="font-size:clamp(28px,4.5vw,40px)">From ${esc(set.root.title)}</h1></div>
       <span class="meta">${groups.length} concept${groups.length > 1 ? 's' : ''} · ${set.n} problem${set.n > 1 ? 's' : ''}${set.exam ? ` · for Exam ${set.exam.n}` : ''}</span></div>
     <p class="muted" style="margin:0 0 16px;max-width:65ch">${chain(groups)}</p>
     ${rail}
@@ -982,9 +1041,9 @@ view.addEventListener('click', (e) => {
   if (r) {
     if (r.dataset.goto != null) { e.preventDefault(); session.i = Number(r.dataset.goto); session.shown = false; }
     else if (r.hasAttribute('data-show')) session.shown = true;
-    else if (r.dataset.rate) { const set = reviewSets().find((s) => s.subject === session.subject); session.rated[set.groups[session.i].concept.id] = r.dataset.rate; }
+    else if (r.dataset.rate) { const set = reviewSets().find((s) => s.key === session.key); session.rated[set.groups[session.i].concept.id] = r.dataset.rate; }
     else if (r.hasAttribute('data-next')) { session.i++; session.shown = false; }
-    renderReview(session.subject);
+    renderReview(session.key);
     if (r.hasAttribute('data-next') || r.dataset.goto != null) window.scrollTo(0, 0);
     return;
   }

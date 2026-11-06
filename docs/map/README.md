@@ -13,8 +13,8 @@ been) and its look. Its 15 concepts are the seed data for the map.
 
 `prototype-learner.html` is a proposal, not yet approved. It asks what Flux looks like once it
 knows the learner: a Today page (the next concept you are ready for, the next exam, and reviews
-grouped into short sets of one subject each, foundation first, with each concept recalled before
-its problems), a map filled in by your own progress, a page per concept with your steps
+grouped by thread: each due concept follows the due concept it builds on, across subjects where
+the map crosses them, and is recalled before its problems), a map filled in by your own progress, a page per concept with your steps
 through it, and a satellite whose subsystems open as their concepts become solid. The orbit
 subsystem checks the learner's speed and period against a closed form and an integrated orbit.
 
