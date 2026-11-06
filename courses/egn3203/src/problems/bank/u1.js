@@ -3,13 +3,22 @@
  * Elimination labs, with staged hints and named traps (../coaching/u1.js), each checked against its
  * lab (`sim`).
  */
-import { det2, mul2, rotation } from '@flux/subjects/math/linalg.js';
+import { det2, inverse2, mul2, rotation } from '@flux/subjects/math/linalg.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 export const AREA = { unit: 1, two: 4 };
 export const A3 = [[2, 1, -1], [-3, -1, 2], [-2, 1, 2]];
 const R = rotation(90);
+/** Where an inverse entry sits in the matrix, by name. */
+export const ENTRY = { tl: [0, 0], tr: [0, 1], bl: [1, 0] };
+export const invEntry = ($) => {
+  const [i, j] = ENTRY[$.entry];
+  return inverse2([[$.a, $.b], [$.c, $.d]])[i][j];
+};
+/** The nearly dependent system's solution: (1, 1, 1) + (δ/2.5ε)(1.5, 0.5, −2). */
+export const NULL_DIR = { x: 1.5, y: 0.5, z: -2 };
+export const nearly = ($) => 1 + ($.delta / (2.5 * $.eps)) * NULL_DIR[$.ask];
 
 export default [
   problem({
@@ -123,5 +132,119 @@ export default [
       read: (c) => ({ x1: Math.abs(c.x[0] - 1) < 0.01 ? 'right' : 'wrong' }),
     },
     cases: [kase('Rows kept in order', { how: 'keep' }, { x1: 'wrong' })],
+  }),
+
+  problem({
+    id: 'u1.6.inverse',
+    title: 'An entry of the inverse',
+    exam: 'u1',
+    ch: '1',
+    lab: 'inverse',
+    src: 'Flux, written for the Inverse lab',
+    topics: ['inverse'],
+    principles: ['conditioning'],
+    vars: { entry: choice(['tl', 'top-left'], ['tr', 'top-right'], ['bl', 'bottom-left']), a: range(1, 5, 1, ''), b: range(1, 4, 1, ''), c: range(1, 4, 1, ''), d: range(1, 5, 1, '') },
+    valid: ($) => Math.abs($.a * $.d - $.b * $.c) >= 2,
+    text: (T, $) => String.raw`Find the ${T.entry} entry of $A^{-1}$ for $A = \begin{pmatrix} ${$.a} & ${$.b} \\ ${$.c} & ${$.d} \end{pmatrix}$.`,
+    parts: [num('entry', ($) => invEntry($), '', { label: 'entry', abs: 1e-6 })],
+    level: 1,
+    hints: ['For a 2×2, A⁻¹ = (1/det A)[[d, −b], [−c, a]].', 'Swap the diagonal, negate the off-diagonal, then divide everything by ad − bc.'],
+    steps: ($) => [String.raw`$\det A = ${$.a}\cdot${$.d} - ${$.b}\cdot${$.c} = ${$.a * $.d - $.b * $.c}$, so the ${$.entry === 'tl' ? 'top-left entry is d/det A' : $.entry === 'tr' ? 'top-right entry is −b/det A' : 'bottom-left entry is −c/det A'} $= ${Number(invEntry($).toPrecision(4))}$.`],
+    sim: {
+      scenario: 'shear',
+      setup(s, $) {
+        Object.assign(s, { a: $.a, b: $.b, c: $.c, d: $.d, s: 1 });
+      },
+      read: (c, s, $) => ({ entry: c.inv[ENTRY[$.entry][0]][ENTRY[$.entry][1]] }),
+    },
+    cases: [kase('A = [[3, 1], [4, 2]], top-right', { entry: 'tr', a: 3, b: 1, c: 4, d: 2 }, { entry: -0.5 })],
+  }),
+
+  problem({
+    id: 'u1.7.condition',
+    title: 'Which is nearly singular?',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'inverse',
+    src: 'Flux, written for the Inverse lab',
+    topics: ['inverse'],
+    principles: ['conditioning'],
+    vars: { small: choice(['tenth', 'P = 0.1 I, with det P = 0.01'], ['hundredth', 'P = 0.01 I, with det P = 0.0001']) },
+    text: (T) => String.raw`Two matrices: ${T.small}, and $Q = \begin{pmatrix} 1 & 1 \\ 1 & 1.01 \end{pmatrix}$, with det Q = 0.01. Which is closer to being singular?`,
+    parts: [
+      pick('which', 'closer to singular', [
+        ['P', 'P: its determinant is as small or smaller', 'Scaling the identity shrinks det but maps the circle to a circle: κ = 1, as far from singular as a matrix can be.'],
+        ['Q', 'Q: its columns nearly line up', 'Q squashes the circle almost flat: κ ≈ 400. That flatness, not det, measures how close a matrix is to singular.'],
+        ['same', 'neither: equal determinants mean equal risk', 'The determinant mixes size with shape. Only κ separates them.'],
+      ], () => 'Q'),
+    ],
+    level: 2,
+    hints: ['What does each matrix do to the unit circle?', 'Compare κ = σ₁/σ₂, not det.'],
+    steps: () => ['P is a multiple of I: κ = 1, and P⁻¹ = (1/s) I is tame. Q has σ₁ = 2.005 and σ₂ = 0.005, so κ = 402: Q is the one near singular.'],
+    sim: {
+      scenario: 'nearly',
+      setup() {},
+      read: (c) => ({ which: c.kappa > 2 ? 'Q' : 'P' }),
+    },
+    cases: [kase('0.1 I against Q', { small: 'tenth' }, { which: 'Q' })],
+  }),
+
+  problem({
+    id: 'u1.8.rank',
+    title: 'Pivots and free directions',
+    exam: 'u1',
+    ch: '1',
+    lab: 'rank',
+    src: 'Flux, written for the Rank lab',
+    topics: ['rank'],
+    principles: ['rank'],
+    vars: { rhs: choice(['same', '3.5'], ['off', '4.5']) },
+    text: (T) => String.raw`Solve $x + y + z = 3$, $x - y + 0.5z = 0.5$, $2x + 1.5z = ${T.rhs}$ by elimination. What is the rank of A, how many free directions does the null space have, and how many solutions are there?`,
+    parts: [
+      num('rank', () => 2, '', { label: 'rank A', abs: 1e-6 }),
+      num('nullity', () => 1, '', { label: 'dim N(A)', abs: 1e-6 }),
+      pick('solutions', 'the solutions', [
+        ['one', 'exactly one', 'That needs three pivots. Row 3’s left side is r₁ + r₂, so elimination leaves only two.'],
+        ['line', 'a whole line of them', 'Rank 2 and a consistent right side: xₚ plus any multiple of the null direction.'],
+        ['none', 'none', 'Elimination ends at 0 = (b₃ − b₁ − b₂): no solution when that is not zero.'],
+      ], ($) => ($.rhs === 'same' ? 'line' : 'none')),
+    ],
+    level: 2,
+    hints: ['Look at row 3’s left side: it is r₁ + r₂.', 'Rank + dim N(A) = 3. Then compare b₃ with b₁ + b₂ = 3.5.'],
+    steps: ($) => [`Row 3 − row 1 − row 2 leaves 0 = ${$.rhs === 'same' ? '0' : '1'}: two pivots, so rank 2 and a null space of dimension 3 − 2 = 1. ${$.rhs === 'same' ? 'Consistent: a line of solutions.' : 'Inconsistent: no solution.'}`],
+    sim: {
+      scenario: 'line',
+      setup(s, $) {
+        Object.assign(s, { eps: 0, delta: $.rhs === 'same' ? 0 : 1 });
+      },
+      read: (c) => ({ rank: c.rankA, nullity: c.nullity, solutions: c.kind }),
+    },
+    cases: [kase('a consistent right side', { rhs: 'same' }, { rank: 2, nullity: 1, solutions: 'line' })],
+  }),
+
+  problem({
+    id: 'u1.9.nearly',
+    title: 'A nearly dependent system',
+    exam: 'u1',
+    ch: '1',
+    lab: 'rank',
+    src: 'Flux, written for the Rank lab',
+    topics: ['rank'],
+    principles: ['rank'],
+    vars: { ask: choice(['x', 'x'], ['y', 'y'], ['z', 'z']), eps: range(0.02, 0.5, 0.02, ''), delta: range(0.5, 2, 0.5, '') },
+    text: (T, $) => String.raw`Solve $x + y + z = 3$, $x - y + 0.5z = 0.5$, $2x + ${$.eps}y + ${Number((1.5 - $.eps).toFixed(2))}z = ${Number((3.5 + $.delta).toFixed(2))}$. What is ${T.ask}?`,
+    parts: [num('v', ($) => nearly($), '', { label: 'value', abs: 1e-4 })],
+    level: 3,
+    hints: ['The first two planes meet on the line (1, 1, 1) + t(1.5, 0.5, −2). Check that both equations hold on it.', 'Put that line into the third equation and solve for t. Then read off the unknown asked for.'],
+    steps: ($) => [String.raw`On the line, the third equation gives $3.5 + 2.5\,(${$.eps})\,t = ${Number((3.5 + $.delta).toFixed(2))}$, so $t = ${Number(($.delta / (2.5 * $.eps)).toPrecision(4))}$ and ${$.ask} $= ${Number(nearly($).toPrecision(4))}$.`],
+    sim: {
+      scenario: 'nearly',
+      setup(s, $) {
+        Object.assign(s, { eps: $.eps, delta: $.delta });
+      },
+      read: (c, s, $) => ({ v: c.x[{ x: 0, y: 1, z: 2 }[$.ask]] }),
+    },
+    cases: [kase('the lab’s nearly dependent case', { ask: 'x', eps: 0.02, delta: 0.5 }, { v: 16 })],
   }),
 ];

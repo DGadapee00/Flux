@@ -8,12 +8,12 @@ exact equations, substitutions, balance models, variation of parameters, Cauchyâ
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 190 with a Flux lab, 85 gaps.**
+**275 concepts, 192 with a Flux lab, 83 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
 | Calculus | 30 | 30 |
-| Linear algebra | 8 | 2 |
+| Linear algebra | 8 | 4 |
 | Differential equations | 18 | 18 |
 | Numerical methods | 13 | 2 |
 | Mechanics | 34 | 31 |
@@ -123,7 +123,8 @@ in the courses that teach it.
 5. **Matrices as linear maps, and elimination.** The root of the linear algebra thread: 24 and 25
    concepts build on them, through eigenvalues into differential equations, node analysis into
    circuits, and least squares and LU into numerical methods. EGN 3203 now has an app with a Matrix
-   map lab and an Elimination lab; the determinant, rank and least squares are next in its unit 1.
+   map, Elimination, Inverse (determinant against condition number) and Rank labs; least squares
+   is next in its unit 1.
 6. **The thermal-fluids trunk.** EML 4140 now has an app, and its Rod lab solves the Heat equation
    by Fourier series and by finite differences side by side. EML 3015 has three units: viscosity
    (Viscosity, and Navierâ€“Stokes for flow along a wall), pressure (a gate and an accelerating tank)

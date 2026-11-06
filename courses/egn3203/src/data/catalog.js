@@ -11,14 +11,16 @@ export const EXAMS = [
     title: 'Matrices and elimination',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['matrix', 'elimination'],
-    coming: ['Determinant and inverse', 'Rank and solvability', 'Least squares'],
+    labs: ['matrix', 'elimination', 'inverse', 'rank'],
+    coming: ['Least squares'],
   },
 ];
 
 export const LAB_META = {
   matrix: { id: 'matrix', exam: 'u1', title: 'Matrix map' },
   elimination: { id: 'elimination', exam: 'u1', title: 'Elimination' },
+  inverse: { id: 'inverse', exam: 'u1', title: 'Inverse' },
+  rank: { id: 'rank', exam: 'u1', title: 'Rank' },
 };
 
 export const CHAPTER_TITLES = {

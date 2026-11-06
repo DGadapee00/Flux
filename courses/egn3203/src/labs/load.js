@@ -5,6 +5,8 @@ import { PREDICTIONS } from './predictions.js';
 const loaders = {
   matrix: () => import('./matrix.js'),
   elimination: () => import('./elimination.js'),
+  inverse: () => import('./inverse.js'),
+  rank: () => import('./rank.js'),
 };
 
 const labs = createLabLoader(loaders);

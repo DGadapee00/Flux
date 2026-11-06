@@ -106,3 +106,128 @@ function fmtNum(v) {
   if (Math.abs(v) >= 1e4 || (Math.abs(v) < 1e-3 && v !== 0)) return v.toExponential(2);
   return String(Number(v.toFixed(4)));
 }
+
+/*
+ * Inverse and conditioning (the Inverse lab). The 2×2 inverse by the adjugate, checked against
+ * Gauss–Jordan elimination. The singular values in closed form, checked by searching the unit circle
+ * for the longest and shortest |Au|. The condition number κ = σ₁/σ₂ says how close a matrix is to
+ * singular; the determinant does not, because scaling every entry by s scales det by s² and leaves
+ * κ alone.
+ */
+
+/** Inverse of a 2×2 by the adjugate, (1/det)[[d, −b], [−c, a]]; null when det = 0. */
+export function inverse2(A) {
+  const D = det2(A);
+  if (D === 0) return null;
+  return [[A[1][1] / D, -A[0][1] / D], [-A[1][0] / D, A[0][0] / D]];
+}
+
+/**
+ * Gauss–Jordan elimination with partial pivoting on [A | I]. Returns the inverse (null when a pivot
+ * is below tol times the largest entry) and the determinant as the signed product of the pivots.
+ */
+export function gaussJordan(A, tol = 1e-12) {
+  const n = A.length;
+  const M = A.map((row, i) => [...row, ...row.map((_, j) => (i === j ? 1 : 0))]);
+  const scale = Math.max(...A.flat().map(Math.abs), 1e-300);
+  let det = 1;
+  let singular = false;
+  for (let k = 0; k < n; k++) {
+    let p = k;
+    for (let i = k + 1; i < n; i++) if (Math.abs(M[i][k]) > Math.abs(M[p][k])) p = i;
+    if (Math.abs(M[p][k]) <= tol * scale) {
+      singular = true;
+      det = 0;
+      continue;
+    }
+    if (p !== k) {
+      [M[p], M[k]] = [M[k], M[p]];
+      det = -det;
+    }
+    const piv = M[k][k];
+    det *= piv;
+    for (let j = 0; j < 2 * n; j++) M[k][j] /= piv;
+    for (let i = 0; i < n; i++) {
+      if (i === k) continue;
+      const f = M[i][k];
+      if (f !== 0) for (let j = 0; j < 2 * n; j++) M[i][j] -= f * M[k][j];
+    }
+  }
+  return { inverse: singular ? null : M.map((r) => r.slice(n)), det };
+}
+
+/** Singular values of a 2×2 in closed form: σ₁² + σ₂² = Σ a², σ₁σ₂ = |det A|. */
+export function singular2(A) {
+  const t = A.flat().reduce((s, v) => s + v * v, 0);
+  const d = Math.abs(det2(A));
+  const s1 = Math.sqrt((t + Math.sqrt(Math.max(0, t * t - 4 * d * d))) / 2);
+  return [s1, s1 > 0 ? d / s1 : 0];
+}
+
+/** The longest and shortest |Au| over unit vectors u: scan the half circle, then golden-section search. */
+export function stretchRange(A) {
+  const len = (th) => Math.hypot(A[0][0] * Math.cos(th) + A[0][1] * Math.sin(th), A[1][0] * Math.cos(th) + A[1][1] * Math.sin(th));
+  const refine = (sign) => {
+    const N = 720;
+    let best = 0;
+    for (let i = 1; i < N; i++) if (sign * len((Math.PI * i) / N) > sign * len((Math.PI * best) / N)) best = i;
+    let a = (Math.PI * (best - 1)) / N;
+    let b = (Math.PI * (best + 1)) / N;
+    const g = (Math.sqrt(5) - 1) / 2;
+    for (let k = 0; k < 80; k++) {
+      const c = b - g * (b - a);
+      const d = a + g * (b - a);
+      if (sign * len(c) > sign * len(d)) b = d;
+      else a = c;
+    }
+    return len((a + b) / 2);
+  };
+  return [refine(1), refine(-1)];
+}
+
+/*
+ * Rank (the Rank lab). The number of pivots elimination finds, checked against the size of the
+ * largest non-zero minor. Both use a tolerance relative to the matrix's own scale.
+ */
+
+/** Rank by elimination with partial pivoting. */
+export function rankByPivots(rows, tol = 1e-10) {
+  const M = rows.map((r) => r.slice());
+  const m = M.length;
+  const n = M[0].length;
+  const scale = Math.max(...M.flat().map(Math.abs), 1e-300);
+  let r = 0;
+  for (let c = 0; c < n && r < m; c++) {
+    let p = r;
+    for (let i = r + 1; i < m; i++) if (Math.abs(M[i][c]) > Math.abs(M[p][c])) p = i;
+    if (Math.abs(M[p][c]) <= tol * scale) continue;
+    [M[p], M[r]] = [M[r], M[p]];
+    for (let i = r + 1; i < m; i++) {
+      const f = M[i][c] / M[r][c];
+      for (let j = c; j < n; j++) M[i][j] -= f * M[r][j];
+    }
+    r++;
+  }
+  return r;
+}
+
+const choose = (n, k) => (k === 0 ? [[]] : n < k ? [] : [...choose(n - 1, k - 1).map((s) => [...s, n - 1]), ...choose(n - 1, k)]);
+
+/** Rank as the size of the largest minor that is not zero (every choice of k rows and k columns). */
+export function rankByMinors(rows, tol = 1e-10) {
+  const m = rows.length;
+  const n = rows[0].length;
+  const scale = Math.max(...rows.flat().map(Math.abs), 1e-300);
+  for (let k = Math.min(m, n); k >= 1; k--) {
+    for (const R of choose(m, k)) {
+      for (const Cs of choose(n, k)) {
+        const sub = R.map((i) => Cs.map((j) => rows[i][j]));
+        if (Math.abs(detN(sub)) > tol * scale ** k) return k;
+      }
+    }
+  }
+  return 0;
+}
+
+/** Cross product, for the direction two planes share. */
+export const cross3 = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];

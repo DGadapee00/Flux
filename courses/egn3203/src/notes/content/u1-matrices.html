@@ -22,8 +22,10 @@
     <h3>Part II · Solving</h3>
     <a href="#s3"><span>3</span>Elimination</a>
     <a href="#s4"><span>4</span>Pivoting</a>
+    <a href="#s5"><span>5</span>Determinant, inverse and conditioning</a>
+    <a href="#s6"><span>6</span>Rank and solvability</a>
     <h3>Reference</h3>
-    <a href="#s5"><span>5</span>Formula sheet</a>
+    <a href="#s7"><span>7</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -105,12 +107,51 @@ x_i = \frac{1}{u_{ii}}\Big(c_i - \sum_{j>i} u_{ij} x_j\Big).
 </section>
 
 <section class="topic" id="s5">
-<h2><span class="n">5</span>Formula sheet</h2>
+<h2><span class="n">5</span>Determinant, inverse and conditioning</h2>
+<p>When \(\det A \ne 0\) the map can be undone. The inverse sends every image back where it came from: \(A^{-1}A = I\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+\begin{bmatrix} a & b\\ c & d\end{bmatrix}^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b\\ -c & a\end{bmatrix}, \qquad \det(A^{-1}) = \frac{1}{\det A}.
+\]
+<p>Multiply it out to check. In practice the inverse comes from Gauss–Jordan elimination on \([A \mid I]\), and the determinant from the product of the pivots.</p>
+<p>The unit circle maps to an ellipse. Its half-axes are the singular values \(\sigma_1 \ge \sigma_2\), with \(\sigma_1\sigma_2 = |\det A|\). The condition number \(\kappa = \sigma_1/\sigma_2\) is how flat that ellipse is. Scaling every entry by \(s\) scales both half-axes by \(s\): \(\det\) changes by \(s^2\), \(\kappa\) not at all.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two matrices with det 0.01</span>
+<p>\(0.1\,I\) has \(\det = 0.01\), yet it maps the circle to a circle of radius 0.1: \(\kappa = 1\), and its inverse is \(10\,I\). The matrix \(\begin{bmatrix} 1 & 1\\ 1 & 1.01\end{bmatrix}\) also has \(\det = 1.01 - 1 = 0.01\). Its columns nearly line up, \(\sigma_1 = 2.005\) and \(\sigma_2 = 0.00499\), so \(\kappa = 402\). Its inverse is \(\begin{bmatrix} 101 & -100\\ -100 & 100\end{bmatrix}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading a small determinant as nearly singular. The determinant depends on the matrix's size as much as its shape. The condition number does not.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Rank and solvability</h2>
+<p>Three equations in three unknowns are three planes. They usually meet in one point, but not always.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The rank is the number of pivots elimination finds. The null space holds every \(\mathbf x\) with \(A\mathbf x = \mathbf 0\), and</p>
+\[
+\operatorname{rank}A + \dim N(A) = n.
+\]
+<p>\(A\mathbf x = \mathbf b\) has a solution exactly when \(\mathbf b\) is a combination of the columns: \(\operatorname{rank}[A \mid \mathbf b] = \operatorname{rank}A\). Then every solution is \(\mathbf x_p + \mathbf x_n\), one particular solution plus anything from the null space.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a third row that adds nothing</span>
+<p>Take \(x + y + z = 3\), \(x - y + 0.5z = 0.5\) and \(2x + 1.5z = 3.5\). The third row is the sum of the first two, so elimination clears it to \(0 = 0\): two pivots, rank 2. The null space is the direction the first two planes share, \((1, 1, 1)\times(1, -1, 0.5) = (1.5, 0.5, -2)\). Every point \((1, 1, 1) + t(1.5, 0.5, -2)\) solves the system. Change the third right side to 4.5 and elimination ends at \(0 = 1\): no solution.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Nearly dependent rows are the dangerous case. Tilt the third plane by \(\varepsilon = 0.02\) and shift it by 0.5, and the one solution lands at (16, 6, −19), 25 units from (1, 1, 1). The system is solvable but ill-conditioned.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Formula sheet</h2>
 \[
 A\mathbf x = x_1\mathbf a_1 + x_2\mathbf a_2, \qquad \det A = a_{11}a_{22} - a_{12}a_{21}, \qquad (AB)_{ij} = \sum_k a_{ik} b_{kj},
 \]
 \[
 \ell_{ji} = \frac{a_{ji}}{u_{ii}}, \qquad x_i = \frac{1}{u_{ii}}\Big(c_i - \sum_{j>i} u_{ij} x_j\Big).
+\]
+\[
+A^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b\\ -c & a\end{bmatrix}, \qquad \kappa = \frac{\sigma_1}{\sigma_2}, \qquad \operatorname{rank}A + \dim N(A) = n.
 \]
 </section>
 
