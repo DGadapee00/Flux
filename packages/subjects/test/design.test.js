@@ -275,3 +275,36 @@ test('tiles: inner faces cancel exactly; the midpoint sum converges', () => {
     }
   }
 });
+
+import { apply2, backSubstitute, cramer, det2, eliminate, mul2, mulByColumns, rotation, shear, shoelace, solutionAt } from '../src/math/linalg.js';
+
+test('matrix maps: area by det and by shoelace; product two ways; order matters', () => {
+  const A = [[2, 1], [0.5, 1.5]];
+  const sq = [[0, 0], [1, 0], [1, 1], [0, 1]].map((p) => apply2(A, p));
+  close(shoelace(sq), det2(A), 1e-12, 'area');
+  const R = rotation(90);
+  const S = shear(1);
+  const RS = mul2(R, S);
+  const SR = mul2(S, R);
+  RS.flat().forEach((v, i) => close(mulByColumns(R, S).flat()[i], v, 1e-12, 'product by columns'));
+  assert.ok(Math.abs(RS[0][0] - SR[0][0]) + Math.abs(RS[1][1] - SR[1][1]) > 0.5, 'RS differs from SR');
+});
+
+test('elimination: back substitution against Cramer; every step keeps the solution', () => {
+  const A = [[2, 1, -1], [-3, -1, 2], [-2, 1, 2]];
+  const b = [8, -11, -3];
+  for (const pivot of [true, false]) {
+    const steps = eliminate(A, b, { pivot });
+    const x = backSubstitute(steps.at(-1).M);
+    [2, 3, -1].forEach((v, i) => close(x[i], v, 1e-12, `x${i} pivot ${pivot}`));
+    for (const s of steps) solutionAt(s.M).forEach((v, i) => close(v, [2, 3, -1][i], 1e-9, 'step keeps the solution'));
+  }
+  // A tiny pivot: without swapping, floating point loses x1.
+  const tinyA = [[1e-17, 1], [1, 1]];
+  const tinyB = [1, 2];
+  const bad = backSubstitute(eliminate(tinyA, tinyB, { pivot: false }).at(-1).M);
+  const good = backSubstitute(eliminate(tinyA, tinyB, { pivot: true }).at(-1).M);
+  close(good[0], 1, 1e-12, 'pivoted x1');
+  assert.ok(Math.abs(bad[0] - 1) > 0.5, `unpivoted x1 is wrong: ${bad[0]}`);
+  close(cramer(tinyA, tinyB)[0], 1, 1e-12, 'Cramer x1');
+});

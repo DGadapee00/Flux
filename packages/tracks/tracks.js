@@ -36,6 +36,7 @@ export const TRACKS = [
         href: 'mac2313/',
       },
       { id: 'map2302', code: 'MAP 2302', title: 'Differential Equations', term: null, href: 'map2302/' },
+      { id: 'egn3203', code: 'EGN 3203', title: 'Modern Computation Methods', term: null, href: 'egn3203/' },
     ],
   },
   {

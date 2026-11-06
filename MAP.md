@@ -8,12 +8,12 @@ exact equations, substitutions, balance models, variation of parameters, Cauchy�
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 183 with a Flux lab, 92 gaps.**
+**275 concepts, 186 with a Flux lab, 89 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
-| Calculus | 30 | 29 |
-| Linear algebra | 8 | 0 |
+| Calculus | 30 | 30 |
+| Linear algebra | 8 | 2 |
 | Differential equations | 18 | 18 |
 | Numerical methods | 13 | 2 |
 | Mechanics | 34 | 31 |
@@ -122,8 +122,8 @@ in the courses that teach it.
    self-inductance, RL circuits and LC oscillation have no lab of their own.
 5. **Matrices as linear maps, and elimination.** The root of the linear algebra thread: 24 and 25
    concepts build on them, through eigenvalues into differential equations, node analysis into
-   circuits, and least squares and LU into numerical methods. One lab could carry both: drag a
-   2×2 matrix's columns, then solve a 3×3 system with its planes drawn.
+   circuits, and least squares and LU into numerical methods. EGN 3203 now has an app with a Matrix
+   map lab and an Elimination lab; the determinant, rank and least squares are next in its unit 1.
 6. **The thermal-fluids trunk.** The Heat equation is left: 10 concepts build on it, because
    fluid mechanics feeds heat transfer. Continuity now has a lab. EML 3015 has its own app with
    three units: viscosity (Viscosity, and Navier–Stokes for flow along a wall), pressure (a gate
