@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The relativistic formula and its slow-speed limit.',
+      checked: '2026-11-06',
     },
     {
       title: 'Feynman Lectures Vol. I, Ch. 34: Relativistic effects in radiation',

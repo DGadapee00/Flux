@@ -14,6 +14,7 @@ export default {
       kind: 'Teaching package',
       level: 'Course level',
       why: 'Isomorphous and eutectic systems with the tie line and lever rule drawn.',
+      checked: '2026-11-06',
     },
     {
       title: 'Lever rule (Wikipedia)',
@@ -21,6 +22,7 @@ export default {
       kind: 'Reference article',
       level: 'Intro',
       why: 'The mass balance behind the rule in a few lines.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

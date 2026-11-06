@@ -20,6 +20,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The course reaches the node method in its second lecture, before any theorem.',
+      checked: '2026-11-06',
     },
     {
       title: 'Kuphaldt, Lessons in Electric Circuits, Vol. I: DC',

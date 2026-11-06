@@ -21,6 +21,7 @@ export default {
       kind: 'Course',
       level: 'Course level',
       why: 'Unit I builds the four subspaces that decide when a system can be solved.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

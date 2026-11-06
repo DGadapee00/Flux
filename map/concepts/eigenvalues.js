@@ -27,6 +27,7 @@ export default {
       kind: 'Course',
       level: 'Course level',
       why: 'Unit II ends with eigenvalues, diagonalizing and differential equations.',
+      checked: '2026-11-06',
     },
     {
       title: 'Lebl, Notes on Diffy Qs, §3.4 Eigenvalue method',
@@ -34,6 +35,7 @@ export default {
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Uses eigenvalues to solve systems of ODEs, the use this map leads to.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

@@ -13,6 +13,7 @@ export default {
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'The three damping cases and the RLC analogue.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.03SC, Damped harmonic oscillators',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Underdamped, critical and overdamped on video, with problems.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

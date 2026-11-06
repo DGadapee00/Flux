@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Shows how the wave equation and c fall out of Maxwell’s equations.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.02, Problem-solving guide: EM radiation',
@@ -21,6 +22,7 @@ export default {
       kind: 'Guide + solved problems',
       level: 'Course level',
       why: 'Reading direction, polarization and amplitude off a wave’s formula.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

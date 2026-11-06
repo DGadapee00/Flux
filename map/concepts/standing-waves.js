@@ -14,13 +14,15 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Nodes, antinodes and the allowed frequencies of a string.',
+      checked: '2026-11-06',
     },
     {
-      title: 'OpenStax University Physics Vol. 1, §17.5 Normal modes of a standing sound wave',
-      url: 'https://openstax.org/books/university-physics-volume-1/pages/17-5-normal-modes-of-a-standing-sound-wave',
+      title: 'OpenStax University Physics Vol. 1, §17.4 Normal modes of a standing sound wave',
+      url: 'https://openstax.org/books/university-physics-volume-1/pages/17-4-normal-modes-of-a-standing-sound-wave',
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Open and stopped pipes compared.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

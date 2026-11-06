@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Setting the limits for type I and type II regions, the hard part.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part A: Double integrals',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Iterated integrals and switching order, with checked problems.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

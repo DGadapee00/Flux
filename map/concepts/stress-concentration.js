@@ -14,13 +14,15 @@ export default {
       kind: 'Course outline',
       level: 'Deeper',
       why: 'Where the course’s reading measures stress raisers.',
+      checked: '2026-11-06',
     },
     {
-      title: 'MIT 2.001, Lecture 17: Failure of materials and examples',
+      title: 'MIT 2.001, Lecture 18: Failure of materials and examples',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec17/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Stress raisers in the context of failure.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

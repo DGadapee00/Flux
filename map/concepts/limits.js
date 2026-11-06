@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'One-sided limits and the cases where a limit does not exist.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.01SC, Part A: Definition and basic rules',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Limits and continuity as the course sets them up for derivatives.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

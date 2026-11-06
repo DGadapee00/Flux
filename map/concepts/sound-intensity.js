@@ -9,11 +9,12 @@ export default {
   requires: ['mechanical-waves'],
   sources: [
     {
-      title: 'OpenStax University Physics Vol. 1, §17.4 Sound intensity',
-      url: 'https://openstax.org/books/university-physics-volume-1/pages/17-4-sound-intensity',
+      title: 'OpenStax University Physics Vol. 1, §17.3 Sound intensity',
+      url: 'https://openstax.org/books/university-physics-volume-1/pages/17-3-sound-intensity',
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Intensity, the decibel scale and hearing thresholds.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 1, §17.2 Speed of sound',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'What sets sound’s speed in air and other media.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

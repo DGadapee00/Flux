@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Integrating a varying acceleration, past the constant case.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.01SC, 2.3 Worked example: acceleration from position',
@@ -20,6 +21,7 @@ export default {
       kind: 'Worked example',
       level: 'Course level',
       why: 'A short video that differentiates a position twice and reads the motion.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The theorem derived from Newton’s law, then used on real paths.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.01SC, 22.1 Path independence: gravity',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lecture video',
       level: 'Course level',
       why: 'Why some forces only care about the endpoints.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

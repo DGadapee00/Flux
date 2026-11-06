@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The phase-flip rule stated once and used on every example.',
+      checked: '2026-11-06',
     },
     {
       title: 'PhET: Wave interference',
@@ -21,6 +22,7 @@ export default {
       kind: 'Simulation',
       level: 'Intro',
       why: 'See path difference make bright and dark before adding films.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

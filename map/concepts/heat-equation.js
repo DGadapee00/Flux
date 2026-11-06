@@ -14,6 +14,7 @@ export default {
       kind: 'Free textbook',
       level: 'Course level',
       why: 'Chapter 2 derives this equation and solves the standard cases.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 2.51, calendar: Conduction, resistances, energy equation',
@@ -21,6 +22,7 @@ export default {
       kind: 'Course outline',
       level: 'Deeper',
       why: 'Shows where the equation sits in a heat transfer course.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

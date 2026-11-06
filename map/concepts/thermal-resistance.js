@@ -20,6 +20,7 @@ export default {
       kind: 'Free textbook',
       level: 'Course level',
       why: 'Chapter 2 builds resistances and the overall coefficient; it is the course text MIT 2.51 assigns.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 2.51, calendar: Conduction, resistances, energy equation',
@@ -27,6 +28,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The course’s second session: resistances come before the full heat equation.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 2, §1.6 Mechanisms of heat transfer',
@@ -34,6 +36,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Conduction through a slab and the three modes, at a first-course level.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

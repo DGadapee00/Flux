@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Both volume elements derived, then used on cones and balls.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part A: Triple integrals',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Spherical and cylindrical integrals with full solutions.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

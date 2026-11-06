@@ -10,10 +10,11 @@ export default {
   sources: [
     {
       title: 'Lebl, Notes on Diffy Qs, §2.5 Nonhomogeneous equations',
-      url: 'https://www.jirka.org/diffyqs/',
+      url: 'https://www.jirka.org/diffyqs/html/sec_nonhom.html',
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Variation of parameters next to undetermined coefficients.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.03SC, Transfer and weight functions, Green’s formula',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Deeper',
       why: 'Green’s formula: the integral form the method takes for constant coefficients.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

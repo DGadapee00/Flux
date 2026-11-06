@@ -10,10 +10,11 @@ export default {
   sources: [
     {
       title: 'Yano, Penn, Konidaris and Patera, Math, Numerics, and Programming (for Mechanical Engineers)',
-      url: 'https://ocw.mit.edu/courses/2-086-numerical-computation-for-mechanical-engineers-spring-2013/resources/mit2_086s13_textbook/',
+      url: 'https://ocw.mit.edu/courses/2-086-numerical-computation-for-mechanical-engineers-spring-2013/resources/mit2_086s13_coursetext_pdf/',
       kind: 'Open textbook',
       level: 'Course level',
       why: 'The text written for MIT 2.086; it treats floating point where it first meets programs.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Floating-point arithmetic',
@@ -21,6 +22,7 @@ export default {
       kind: 'Reference',
       level: 'Deeper',
       why: 'The IEEE 754 formats, rounding and the classic cancellation cases.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

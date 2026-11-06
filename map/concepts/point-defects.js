@@ -14,6 +14,7 @@ export default {
       kind: 'Recitation notes',
       level: 'Course level',
       why: 'The vacancy fraction and its Arrhenius plot, worked.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax Chemistry 2e, §12.5 Collision theory',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Where the Arrhenius form comes from, for readers meeting it here first.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

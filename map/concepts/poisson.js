@@ -9,11 +9,12 @@ export default {
   requires: ['stress-strain'],
   sources: [
     {
-      title: 'MIT 2.001, Lecture 13: Multiaxial strain and multiaxial stress-strain relationships',
+      title: 'MIT 2.001, Lecture 14: Multiaxial strain and multiaxial stress-strain relationships',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec13/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Generalized Hooke’s law built up direction by direction.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 3.11, calendar: Constitutive relations (18)',
@@ -21,6 +22,7 @@ export default {
       kind: 'Course outline',
       level: 'Deeper',
       why: 'Where the course’s reading (Roylance) treats isotropic constitutive laws.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

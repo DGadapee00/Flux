@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'A sign convention you can follow every time, with a multi-loop example.',
+      checked: '2026-11-06',
     },
     {
       title: 'PhET: Circuit construction kit (DC)',
@@ -20,6 +21,7 @@ export default {
       kind: 'Simulation',
       level: 'Intro',
       why: 'Build a network, then check your loop equations against its meters.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

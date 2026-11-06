@@ -9,11 +9,12 @@ export default {
   requires: ['stress-on-a-section', 'pressure'],
   sources: [
     {
-      title: 'MIT 2.001, Lecture 14: Thin-walled pressure vessels',
+      title: 'MIT 2.001, Lecture 15: Thin-walled pressure vessels',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec14/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Hoop and axial stress from free-body cuts.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 3.11, calendar: Pressure vessel stresses and deformations (10)',
@@ -21,6 +22,7 @@ export default {
       kind: 'Course outline',
       level: 'Deeper',
       why: 'Where the course’s reading treats vessels, including deformation.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

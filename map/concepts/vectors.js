@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Both products from components, with the right-hand rule drawn out.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.02, Problem-solving guide: Coordinate systems, gradients, line and surface integrals',
@@ -21,6 +22,7 @@ export default {
       kind: 'Guide + solved problems',
       level: 'Course level',
       why: 'The vector tools the rest of E&M leans on, set up the way 8.02 uses them.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

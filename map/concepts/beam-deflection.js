@@ -8,18 +8,20 @@ export default {
   requires: ['bending-stress', 'definite-integral'],
   sources: [
     {
-      title: 'MIT 2.001, Lecture 20: Beam deflection',
+      title: 'MIT 2.001, Lecture 22: Beam deflection',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec20/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Integrating the moment-curvature equation with boundary conditions.',
+      checked: '2026-11-06',
     },
     {
-      title: 'MIT 2.001, Lecture 21: Symmetry, superposition, and statically indeterminate beams',
+      title: 'MIT 2.001, Lecture 23: Symmetry, superposition, and statically indeterminate beams',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec21/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Superposition and redundant supports.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

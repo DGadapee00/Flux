@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'How to choose u, with the cases that loop back.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.01SC, Part B: Partial fractions, integration by parts, arc length, and surface area',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Parts and partial fractions with checked problems.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

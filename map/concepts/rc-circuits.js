@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Charging and discharging derived from the loop rule.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.02, Problem-solving guide: RC and RL circuits',
@@ -20,6 +21,7 @@ export default {
       kind: 'Guide + solved problems',
       level: 'Course level',
       why: 'Treats RC and RL side by side, which makes the pattern plain.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

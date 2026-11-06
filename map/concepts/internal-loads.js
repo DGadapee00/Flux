@@ -14,6 +14,7 @@ export default {
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'The diagrams from cuts, then from the load–shear–moment relations.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 2.001, Lecture 6: Shear force and bending moment diagrams (cont.)',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Distributed loads and couples on the same diagrams.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

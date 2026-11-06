@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Riemann sums to the limit, with signed area explained.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.01SC, Part A: Definition of the definite integral and first fundamental theorem',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'The sum, the limit and the fundamental theorem in one sequence.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

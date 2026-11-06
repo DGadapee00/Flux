@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Impulse as the area under a force-time curve, with helmets and airbags.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 1, §9.7 Rocket propulsion',
@@ -20,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The rocket equation derived from momentum, step by step.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

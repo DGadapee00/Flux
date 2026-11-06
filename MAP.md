@@ -94,6 +94,18 @@ in the courses that teach it.
 
 ## Sources
 
-Every concept has two or three sources, but none has a `checked` date yet. The session that wrote
-them could not reach any source site. Run `npm run map-sources` where the network allows, fix what
-fails, and date each one you confirm.
+On 6 November 2026, 466 of the 502 sources were opened, read against what their concept says,
+and dated. The check fixed what it found:
+
+- Seven MIT 2.06 citations pointed at a contact lens worked example and a quiz equation sheet,
+  not at notes on control volumes and differential forms. Each now cites a chapter of Cleynen's
+  *Fluid Dynamics for Engineers* or a reference article that covers what its reason claims.
+- MIT 18.05 moved from its 2014 to its 2022 edition, and NASA Glenn's guide, three OpenStax
+  sections and the 2.086 textbook moved. Each link now opens the current page.
+- MIT 2.001 lecture files and MIT 2.51 sessions are numbered differently from the course's own
+  list. The titles now use the course's lecture numbers. Six Lebl citations now open their section.
+
+The other 36 sources are on five sites that turn away scripted requests or send an incomplete
+certificate chain: the Feynman Lectures, All About Circuits, Yan's thermodynamics book on
+BCcampus, Kuphaldt on ibiblio and Margalit and Rabinoff's linear algebra. They have no `checked`
+date. Open each in a browser, confirm it, and date it.

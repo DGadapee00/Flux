@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Refrigerators and heat pumps as cycles with real devices.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 2, §4.3 Refrigerators and heat pumps',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'COP and the reversed engine, before the real cycle.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Vapor-compression refrigeration',
@@ -28,6 +30,7 @@ export default {
       kind: 'Reference',
       level: 'Intro',
       why: 'The four components and the cycle on a pressure–enthalpy chart.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Includes applications to Gauss’s law, which ties this lane to the next one.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Session 84: Divergence theorem example',
@@ -21,6 +22,7 @@ export default {
       kind: 'Worked example',
       level: 'Course level',
       why: 'A full computation both ways, so you can see the two sides agree.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

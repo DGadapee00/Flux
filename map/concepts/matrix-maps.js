@@ -21,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Deeper',
       why: 'Maps between spaces come first, and matrices are how to write them down.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.06SC Linear Algebra, Fall 2011',
@@ -28,6 +29,7 @@ export default {
       kind: 'Course',
       level: 'Course level',
       why: 'Strang’s full course with lectures, problem sets and solutions.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

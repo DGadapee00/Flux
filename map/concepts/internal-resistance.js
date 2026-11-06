@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'EMF, internal resistance and terminal voltage.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 6.002, calendar: Thevenin and Norton equivalences',
@@ -21,6 +22,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Where a source with internal resistance becomes a Thévenin model.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

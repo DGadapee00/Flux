@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Quantization and conservation, with the experiments that show them.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 2, §5.2 Conductors, insulators, and charging by induction',
@@ -20,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Charging by contact and by induction, step by step with diagrams.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

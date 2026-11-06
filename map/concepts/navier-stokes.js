@@ -20,6 +20,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The lecture that adds the viscous term, followed by three lectures of solutions.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Fluid Dynamics for Engineers',
@@ -27,6 +28,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Derives the equations term by term and solves the standard laminar cases.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

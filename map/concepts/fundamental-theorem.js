@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Both parts, with the accumulation function drawn.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.01SC, Part B: Second fundamental theorem, areas, volumes',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'The theorem used, then turned on areas and volumes.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

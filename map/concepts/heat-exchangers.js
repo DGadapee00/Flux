@@ -14,6 +14,7 @@ export default {
       kind: 'Free textbook',
       level: 'Course level',
       why: 'Chapter 3 covers exchanger types, LMTD and effectiveness.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 16.050, calendar: Applications of the concepts, heat exchangers',
@@ -21,6 +22,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'MIT 2.51’s calendar has no exchanger session; 16.050 gives it two lectures.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, NTU method',
@@ -28,6 +30,7 @@ export default {
       kind: 'Reference',
       level: 'Intro',
       why: 'Effectiveness against NTU for the common flow arrangements.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

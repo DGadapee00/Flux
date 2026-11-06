@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Unit cells, coordination numbers and density from the cell.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 3.091, Recitation 13: Bravais lattices and crystal packing',
@@ -21,6 +22,7 @@ export default {
       kind: 'Recitation notes',
       level: 'Course level',
       why: 'Lattices and packing worked the way the course sets them.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

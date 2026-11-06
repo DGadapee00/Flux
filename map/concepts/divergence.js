@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Defines divergence, then interprets it as sources and sinks.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part B: Flux and the divergence theorem',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Divergence taught together with the theorem that gives it meaning.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

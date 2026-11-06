@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Circles and helices, with the radius and period derived.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.02, Problem-solving guide: Force and torque on a current loop',
@@ -20,6 +21,7 @@ export default {
       kind: 'Guide + solved problems',
       level: 'Course level',
       why: 'From force on each side to the dipole moment and torque.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

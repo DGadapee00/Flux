@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Secant to tangent, with the limit computed for several functions.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.01SC, Part A: Definition and basic rules',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Short lectures and checked problems on the definition itself.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

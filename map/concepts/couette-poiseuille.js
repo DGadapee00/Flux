@@ -20,6 +20,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Bearings and laminar pipe flow are the course’s first exact solutions.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 1, §14.7 Viscosity and turbulence',
@@ -27,6 +28,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Poiseuille’s law and the fourth-power dependence on radius, with blood-flow examples.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

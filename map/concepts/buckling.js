@@ -13,13 +13,15 @@ export default {
       kind: 'Reference article',
       level: 'Course level',
       why: 'The derivation and the effective-length factors in one place.',
+      checked: '2026-11-06',
     },
     {
-      title: 'MIT 2.001, Lecture 20: Beam deflection',
+      title: 'MIT 2.001, Lecture 22: Beam deflection',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec20/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'The elastic-curve equation that buckling solves as an eigenvalue problem.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

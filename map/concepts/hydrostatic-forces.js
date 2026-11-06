@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Where the course starts: the pressure field at rest, then the force it puts on a wall.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Fluid Dynamics for Engineers',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'A free text for the whole course. Its statics chapter works plane and curved surfaces.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

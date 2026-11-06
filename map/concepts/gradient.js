@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Shows why the gradient is perpendicular to level curves, with worked examples.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part B: Chain rule, gradient and directional derivatives',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'MIT’s own sequence: short lectures, recitation videos and checked problems.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

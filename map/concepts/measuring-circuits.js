@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'How voltmeters and ammeters connect, and what each one changes.',
+      checked: '2026-11-06',
     },
     {
       title: 'Kuphaldt, Lessons in Electric Circuits',

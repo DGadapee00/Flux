@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Battery connected versus isolated, the two cases the lab switches between.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 2, §8.5 Molecular model of a dielectric',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Why polarization lowers the field, and where breakdown strength comes in.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

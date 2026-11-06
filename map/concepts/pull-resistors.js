@@ -21,6 +21,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Why a logic input needs a defined level at all.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

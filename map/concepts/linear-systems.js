@@ -14,6 +14,7 @@ export default {
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Every portrait type, from the eigenvalues.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.03SC, Matrix methods: eigenvalues and normal modes',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Eigenvalue methods with recitations and problems.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

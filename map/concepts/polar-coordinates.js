@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Converting both ways and sketching polar curves.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.01SC, Part C: Parametric equations and polar coordinates',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Polar curves and their areas, with checked problems.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The law, then a straight segment and a loop worked through.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 2, §12.3 Magnetic force between two parallel currents',
@@ -20,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Field from one wire, force on the other, and the old definition of the ampere.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

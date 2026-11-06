@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Covers the three ways to change flux: field, area and angle.',
+      checked: '2026-11-06',
     },
     {
       title: 'PhET: Faraday’s law',
@@ -21,6 +22,7 @@ export default {
       kind: 'Simulation',
       level: 'Intro',
       why: 'Move a magnet through a coil and watch the bulb. Good intuition before the math.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

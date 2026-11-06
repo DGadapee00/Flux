@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Superposition worked in components, the step most errors come from.',
+      checked: '2026-11-06',
     },
     {
       title: 'PhET: Coulomb’s law',
@@ -20,6 +21,7 @@ export default {
       kind: 'Simulation',
       level: 'Intro',
       why: 'Change the charges and the gap and read the force; the inverse square shows quickly.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

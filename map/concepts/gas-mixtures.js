@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Free text that covers the ideal-gas properties mixtures are built from.',
+      checked: '2026-11-06',
     },
     {
       title: 'Yan, Introduction to Engineering Thermodynamics',

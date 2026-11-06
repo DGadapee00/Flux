@@ -27,6 +27,7 @@ export default {
       kind: 'Course',
       level: 'Course level',
       why: 'Unit II opens with projections and least squares, then Gram–Schmidt.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

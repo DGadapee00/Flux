@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Has a chapter on scale effects: the groups, how to find them and how to use them in tests.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Buckingham π theorem',
@@ -21,6 +22,7 @@ export default {
       kind: 'Reference',
       level: 'Deeper',
       why: 'The theorem stated with care, and the classic pendulum and drag examples.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

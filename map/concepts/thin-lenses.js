@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The lensmaker’s equation, ray tracing and sign rules.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 3, §2.8 Microscopes and telescopes',
@@ -20,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Two-lens instruments, the lab’s last two scenarios.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

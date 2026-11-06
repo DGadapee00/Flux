@@ -14,6 +14,7 @@ export default {
       kind: 'Problems + solutions',
       level: 'Course level',
       why: 'Practice setting up n̂ ds, the step most people get wrong.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part C: Green’s theorem',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Covers both forms of Green’s theorem, including the flux (normal) form used here.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

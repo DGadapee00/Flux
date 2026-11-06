@@ -21,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Deeper',
       why: 'Its determinants chapter, with the geometric meaning and the proofs.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

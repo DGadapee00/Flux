@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Gauge and absolute pressure, and how a manometer reads a difference.',
+      checked: '2026-11-06',
     },
     {
       title: 'Yan, Introduction to Engineering Thermodynamics, §1.3 Extensive and intensive properties',

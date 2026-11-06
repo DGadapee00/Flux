@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The course places it between statics and moving fluids, which is where it belongs.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Fluid Dynamics for Engineers',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Pressure in accelerating and rotating liquids, from the same force balance as statics.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

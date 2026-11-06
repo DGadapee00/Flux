@@ -9,11 +9,12 @@ export default {
   requires: ['energy-cv', 'entropy', 'mass-cv'],
   sources: [
     {
-      title: 'NASA Glenn, Beginner’s guide to aeronautics: Isentropic flow',
-      url: 'https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/isentropic-flow/',
+      title: 'NASA Glenn, Beginner’s guide to aeronautics: Interactive isentropic flow',
+      url: 'https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/isentrop/',
       kind: 'Reference',
       level: 'Intro',
-      why: 'The isentropic relations with Mach number, from the people who test nozzles.',
+      why: 'The isentropic relations with Mach number, with a calculator to try them.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Choked flow',
@@ -21,6 +22,7 @@ export default {
       kind: 'Reference',
       level: 'Course level',
       why: 'Why the mass flow stops rising once the throat is sonic.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Fluid Dynamics for Engineers',
@@ -28,6 +30,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'A free text with a chapter on compressible flow in ducts.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

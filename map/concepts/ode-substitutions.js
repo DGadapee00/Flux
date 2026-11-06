@@ -10,10 +10,11 @@ export default {
   sources: [
     {
       title: 'Lebl, Notes on Diffy Qs, §1.5 Substitution',
-      url: 'https://www.jirka.org/diffyqs/',
+      url: 'https://www.jirka.org/diffyqs/html/substitution_section.html',
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Homogeneous and Bernoulli substitutions from the course’s book.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.03SC, First order linear ODEs',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'The linear equation a Bernoulli substitution leads to.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

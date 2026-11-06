@@ -9,11 +9,12 @@ export default {
   requires: ['conditional-probability', 'definite-integral'],
   sources: [
     {
-      title: 'MIT 18.05, Reading 5a: Variance, continuous random variables',
-      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/resources/mit18_05s14_reading5a/',
+      title: 'MIT 18.05, Reading 5b: Continuous random variables',
+      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/resources/mit18_05_s22_class05-prep-b_pdf/',
       kind: 'Reading notes',
       level: 'Course level',
-      why: 'Densities, expectation and variance in one reading.',
+      why: 'Densities and the cumulative distribution function, with worked examples.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax Introductory Statistics 2e, §4.3 Binomial distribution',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'When a count is binomial, with worked tables.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

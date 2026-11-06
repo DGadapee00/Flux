@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Disks and washers, with the slice drawn each time.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax Calculus Vol. 1, §6.5 Physical applications',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Mass, work and force from the same slice-and-add idea.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

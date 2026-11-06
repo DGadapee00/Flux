@@ -14,6 +14,7 @@ export default {
       kind: 'Lecture video',
       level: 'Intro',
       why: 'What changes when the observer accelerates or turns.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 2.003SC, Velocity, acceleration, and rotational motion',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Deeper',
       why: 'Derives every term of the rotating-frame acceleration.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

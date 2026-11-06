@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Builds flux from a flat surface up, before the law itself.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.02, Problem-solving guide: Gauss’s law',
@@ -21,6 +22,7 @@ export default {
       kind: 'Guide + solved problems',
       level: 'Course level',
       why: 'A step-by-step method for choosing the Gaussian surface, then solved cases.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

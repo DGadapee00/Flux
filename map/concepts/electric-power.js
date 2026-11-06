@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Power in resistors, with the cost of running real appliances.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 2, §10.6 Household wiring and electrical safety',
@@ -20,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Grounding, breakers and why a shock depends on current, not voltage alone.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

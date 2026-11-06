@@ -20,6 +20,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Isobaric, isothermal and adiabatic paths on one diagram.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

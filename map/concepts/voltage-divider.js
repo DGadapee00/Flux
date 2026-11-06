@@ -21,6 +21,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Where the divider sits in network analysis.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

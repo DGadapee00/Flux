@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Reading speed, wavelength and period off the wave function.',
+      checked: '2026-11-06',
     },
     {
       title: 'PhET: Wave on a string',
@@ -21,6 +22,7 @@ export default {
       kind: 'Simulation',
       level: 'Intro',
       why: 'Change tension and damping and watch the speed, not the frequency, change.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

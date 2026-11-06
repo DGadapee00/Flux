@@ -9,11 +9,12 @@ export default {
   requires: ['descriptive-statistics', 'partial-derivatives', 'orthogonality-projection'],
   sources: [
     {
-      title: 'MIT 18.05, Reading 25: Linear regression',
-      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/resources/mit18_05s14_reading25/',
+      title: 'MIT 18.05, Reading 26: Linear regression',
+      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/resources/mit18_05_s22_class26-prep_pdf/',
       kind: 'Reading notes',
       level: 'Course level',
-      why: 'Least squares derived, with the probabilistic model behind it.',
+      why: 'Least squares derived, with the modelling assumptions behind it.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax Introductory Statistics 2e, §12.3 The regression equation',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Slope, intercept and R² computed by hand.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

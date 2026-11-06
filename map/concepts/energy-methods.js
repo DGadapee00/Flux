@@ -9,11 +9,12 @@ export default {
   requires: ['axial-deformation', 'beam-deflection', 'partial-derivatives'],
   sources: [
     {
-      title: 'MIT 2.001, Lecture 24: Energy methods',
+      title: 'MIT 2.001, Lecture 26: Energy methods',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec24/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Strain energy and Castigliano’s theorem.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 3.11, calendar: Truss deflections and Castigliano’s method (8)',
@@ -21,6 +22,7 @@ export default {
       kind: 'Course outline',
       level: 'Deeper',
       why: 'Where the course’s reading applies Castigliano to trusses.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

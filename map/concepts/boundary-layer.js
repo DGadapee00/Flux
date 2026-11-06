@@ -14,6 +14,7 @@ export default {
       kind: 'Free textbook',
       level: 'Course level',
       why: 'Chapter 6 builds the velocity boundary layer before the thermal one, with the Blasius result.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Fluid Dynamics for Engineers',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Laminar and turbulent layers on a plate, transition and separation.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

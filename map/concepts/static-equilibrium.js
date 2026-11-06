@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Both conditions, and choosing the pivot.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 1, §12.2 Examples of static equilibrium',
@@ -20,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Beams, ladders and hinges worked through.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

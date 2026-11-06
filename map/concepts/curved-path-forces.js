@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Banked curves with and without friction, worked in full.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.01SC, 11.1 Newton’s second law and circular motion',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lecture video',
       level: 'Course level',
       why: 'The radial equation set up with care about signs.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

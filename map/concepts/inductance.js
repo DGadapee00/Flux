@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Inductance of a solenoid and a toroid, derived from flux.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.02, Problem-solving guide: Mutual inductance and transformers; inductors',
@@ -21,6 +22,7 @@ export default {
       kind: 'Guide + solved problems',
       level: 'Course level',
       why: 'Mutual and self inductance in one method, with transformers as the payoff.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

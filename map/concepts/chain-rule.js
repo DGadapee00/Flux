@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Tree diagrams that keep track of every path from f down to t.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part B: Chain rule, gradient and directional derivatives',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Teaches the chain rule and the gradient together, as they belong.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

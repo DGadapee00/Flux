@@ -20,6 +20,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The course builds sampling and estimation, then uses them to compute.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Monte Carlo integration',
@@ -27,6 +28,7 @@ export default {
       kind: 'Reference',
       level: 'Intro',
       why: 'The estimator, its error and why it suits high dimensions.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

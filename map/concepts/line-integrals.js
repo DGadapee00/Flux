@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Scalar and vector line integrals, then work and flux along a curve.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part B: Vector fields and line integrals',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Work, gradient fields and path independence with checked problems.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

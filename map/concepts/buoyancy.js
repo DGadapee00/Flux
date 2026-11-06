@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Archimedes from pressure differences, then floating and density.',
+      checked: '2026-11-06',
     },
     {
       title: 'PhET: Buoyancy',
@@ -20,6 +21,7 @@ export default {
       kind: 'Simulation',
       level: 'Intro',
       why: 'Change the block and fluid densities and watch the waterline.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

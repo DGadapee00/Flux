@@ -9,11 +9,12 @@ export default {
   requires: ['mass-cv', 'divergence-theorem'],
   sources: [
     {
-      title: 'MIT 2.06, Lecture 8 notes: Differential forms, mass conservation',
-      url: 'https://ocw.mit.edu/courses/2-06-fluid-dynamics-spring-2013/resources/mit2_06s13_notes_vo/',
-      kind: 'Lecture notes',
-      level: 'Deeper',
-      why: 'Derives the equation from the control volume, as above.',
+      title: 'Cleynen, Fluid Dynamics for Engineers, Ch. 6: Prediction of fluid flows',
+      url: 'https://fluidmech.ninja/chapter6.pdf',
+      kind: 'Open textbook',
+      level: 'Course level',
+      why: 'Derives the continuity equation from a balance of mass on a small fixed volume, for any flow and then incompressible flow.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax Calculus Vol. 3, §6.8 The divergence theorem',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'The math step, if it has faded since Calculus III.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

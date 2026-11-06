@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Capacitors and inductors, step responses and the intuitive method.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 2, §14.4 RL circuits',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The RL rise and decay beside the RC case the map already has.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

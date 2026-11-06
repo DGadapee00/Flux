@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Phasor diagrams built one element at a time.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.02, Problem-solving guide: Driven LRC circuits',
@@ -21,6 +22,7 @@ export default {
       kind: 'Guide + solved problems',
       level: 'Course level',
       why: 'Impedance, phase and resonance with checked numbers.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

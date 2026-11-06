@@ -14,6 +14,7 @@ export default {
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'The course’s own notes on the pressure jump and capillary rise.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax College Physics 2e, §11.8 Cohesion and adhesion in liquids',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Surface tension, contact angle and capillary action, at a first-course level.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

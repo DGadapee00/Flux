@@ -13,6 +13,7 @@ export default {
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Moments and couples reviewed before equilibrium.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 1, §10.6 Torque',
@@ -20,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The moment as a cross product, with the lever arm drawn.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

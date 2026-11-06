@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Engines as energy-flow diagrams, the picture the lab uses.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 2, §4.3 Refrigerators and heat pumps',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The same diagram reversed, with COP for each use.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

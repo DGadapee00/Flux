@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Isentropic efficiencies of real devices, with worked steam examples.',
+      checked: '2026-11-06',
     },
     {
       title: 'Yan, Introduction to Engineering Thermodynamics, Ch. 6 Entropy and the second law',

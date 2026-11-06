@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The four lectures on solving linear systems, sparse ones included.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Condition number',
@@ -21,6 +22,7 @@ export default {
       kind: 'Reference',
       level: 'Deeper',
       why: 'The definition for matrices and the digits-lost rule of thumb.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

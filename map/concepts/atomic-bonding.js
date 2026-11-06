@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Bond energies and lattice energy, with the numbers that set melting points.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 3.091, Recitation 11: Molecular orbital theory and intermolecular forces',
@@ -21,6 +22,7 @@ export default {
       kind: 'Recitation notes',
       level: 'Course level',
       why: 'Primary bonds against the secondary forces that hold molecules and polymer chains together.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

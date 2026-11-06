@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The lectures that turn entropy generation into lost work.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Engineering Thermodynamics',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'The free text paired with 16.050 in this repo: the second law applied to real devices.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Exergy',
@@ -28,6 +30,7 @@ export default {
       kind: 'Reference',
       level: 'Deeper',
       why: 'Definitions for closed systems and flows, and the link to entropy generation.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

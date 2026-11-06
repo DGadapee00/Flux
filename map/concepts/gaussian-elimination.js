@@ -21,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Deeper',
       why: 'Its first chapter is Gauss’s method, with proofs that it never changes the solution set.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

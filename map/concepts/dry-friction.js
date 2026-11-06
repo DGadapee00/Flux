@@ -14,6 +14,7 @@ export default {
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Impending motion, wedges and belts.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 1, §6.2 Friction',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Static against kinetic friction with measured coefficients.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

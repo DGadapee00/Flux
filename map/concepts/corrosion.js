@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Rusting as a cell, with cathodic protection and galvanizing.',
+      checked: '2026-11-06',
     },
     {
       title: 'Galvanic series (Wikipedia)',
@@ -20,6 +21,7 @@ export default {
       kind: 'Reference article',
       level: 'Intro',
       why: 'Which metal corrodes when two are joined in seawater.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

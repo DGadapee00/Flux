@@ -20,6 +20,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Filters and \\(Q\\) through the example of a radio tuner.',
+      checked: '2026-11-06',
     },
     {
       title: 'Kuphaldt, Lessons in Electric Circuits, Vol. II: AC',

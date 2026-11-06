@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Midpoint, trapezoid and Simpson, with their error bounds.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.01SC, Part C: Average value, probability and numerical integration',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Numerical rules beside averages and probability.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

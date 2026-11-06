@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'All four equations in one place, in integral form, with what each one says.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part B: Flux and the divergence theorem',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'The math step that turns the integral law into the point law.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

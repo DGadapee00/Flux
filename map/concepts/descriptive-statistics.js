@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Quartiles, fences and outliers drawn step by step.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax Introductory Statistics 2e, §2.7 Measures of the spread of the data',
@@ -20,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Standard deviation and why it divides by n − 1.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

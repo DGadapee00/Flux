@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Separates potential energy from potential, the distinction most students blur.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 2, §7.4 Determining field from potential',
@@ -20,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'The gradient step, with the components written out.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

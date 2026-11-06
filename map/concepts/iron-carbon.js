@@ -14,6 +14,7 @@ export default {
       kind: 'Teaching package',
       level: 'Course level',
       why: 'Cooling rate against hardness along one bar, the link between conduction and microstructure.',
+      checked: '2026-11-06',
     },
     {
       title: 'Martensite (Wikipedia)',
@@ -21,6 +22,7 @@ export default {
       kind: 'Reference article',
       level: 'Intro',
       why: 'Why a diffusionless transformation is hard, and what tempering does.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

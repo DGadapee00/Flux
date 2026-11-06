@@ -14,6 +14,7 @@ export default {
       kind: 'Free textbook (CC BY-NC-SA)',
       level: 'Course level',
       why: 'A free statics text with interactive diagrams; its particle-equilibrium chapter fits here.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 2.001, Lecture 2: Forces, moments, equilibrium',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Equilibrium set up from free-body diagrams, MIT’s way.',
+      checked: '2026-11-06',
     },
   ],
   labs: [
