@@ -5,7 +5,7 @@ export default {
   subject: 'design',
   courses: ['design'],
   eq: String.raw`C_p = \frac{\text{USL} - \text{LSL}}{6\sigma}`,
-  idea: String.raw`Every process scatters. If the scatter is roughly normal, its spread \(\sigma\) set against the tolerance band says how many parts will fall outside: that is capability. A process can be precise but off target, or on target but loose. A control chart plots samples over time and flags when the process has shifted, before it makes bad parts.`,
+  idea: String.raw`Every process scatters. If the scatter is roughly normal, its spread \(\sigma\) set against the tolerance band says how many parts will fall outside: that is capability. A process can be precise but off target, or on target but loose. A control chart plots samples over time and flags when the process has shifted. A capable process leaves room between its spread and the limits, which gives the chart time to catch a shift before bad parts are made.`,
   requires: ['descriptive-statistics', 'sampling-distributions', 'tolerances-fits'],
   sources: [
     {
@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: String.raw`Run a machine that drifts and watch a control chart catch it. It corrects the idea that parts inside tolerance mean the process is fine: a drifting mean flags on the chart long before parts go out. The check compares the reject rate from \(C_p\) with a count from simulated parts.`,
+  labs: [
+    { course: 'design', lab: 'capability', notes: ['s2', 's3'], note: 'Cp, Cpk and parts out of limits for a lathe, and an x̄ chart catching tool wear.' },
+  ],
 };

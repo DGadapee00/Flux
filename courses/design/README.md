@@ -1,0 +1,16 @@
+# Design practice
+
+The design project's course app: designing, making and testing parts. It was copied from the
+EML 3015 app's wiring to give the design lane on the map its labs. It is built into the site and
+listed under Projects in the hub.
+
+Unit 1 is fits and stack-ups: hole and shaft bands for standard fits (`fits`), and tolerances adding
+along a chain of parts (`stackup`). Unit 2 is position and process: a hole's position against a box
+and a round zone (`position`), and capability with an x̄ chart (`capability`). Unit 3 is choosing a
+design: requirements, weights and how firm the choice is (`decision`).
+
+The math is in `packages/subjects/src/design/` (`tolerancing.js`, `decision.js`). Each lab checks its
+closed form against a second method on every scenario and slider stop
+(`npm test -w @flux/design`).
+
+Run the dev server with `npm run dev -w @flux/design` (port 5186).

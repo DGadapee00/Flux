@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchyâ
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 163 with a Flux lab, 112 gaps.**
+**275 concepts, 168 with a Flux lab, 107 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -24,7 +24,7 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Circuits and systems | 27 | 11 |
 | Mechanics of materials | 16 | 14 |
 | Materials science | 15 | 0 |
-| Design and manufacturing | 9 | 0 |
+| Design and manufacturing | 9 | 5 |
 | Instrumentation and actuators | 8 | 1 |
 | Statistics | 9 | 9 |
 
@@ -93,7 +93,9 @@ microcontrollers). Circuit boards sit in the circuits lane: schematic to board, 
 decoupling. Bolted joints sit with mechanics of materials. All twenty are on the project course
 *Design practice*, with a path, until the owner's design and measurement courses join the map.
 Sources are MIT 2.007, 2.72 and 2.008 lectures and reference articles, read on 6 November 2026.
-Sensors already has Bench's divider and night-light labs; the rest are gaps with lab candidates.
+Sensors already has Bench's divider and night-light labs. *Design practice* now has its own app
+with five labs: fits, stack-ups, position zones, process capability and a decision matrix. The
+rest are gaps with lab candidates.
 Standards such as ASME Y14.5 and ISO 286 are paid documents: concepts explain the ideas and do not
 reproduce them.
 

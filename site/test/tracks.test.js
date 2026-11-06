@@ -18,6 +18,7 @@ const PLATFORM_HREF = {
   egn3321: 'egn3321/',
   eml3100: 'eml3100/',
   eml3015: 'eml3015/',
+  design: 'design/',
   egn3331: 'egn3331/',
   bench: 'bench/',
   map2302: 'map2302/',
@@ -66,10 +67,10 @@ test('the card opens the latest built course, and D5 is on the list', () => {
   assert.equal(latestBuilt(TRACKS[2]).code, 'EGN 3331');
   assert.equal(latestBuilt(TRACKS[3]).id, 'sta3032');
   assert.equal(latestBuilt(TRACKS[4]).id, 'eml3015');
-  assert.equal(latestBuilt(TRACKS[5]).id, 'bench');
+  assert.equal(latestBuilt(TRACKS[5]).id, 'design');
   assert.deepEqual(
     builtCourses().map((course) => course.id),
-    ['phy2048', 'phy2049', 'mac2311', 'mac2313', 'map2302', 'statics', 'egn3321', 'egn3331', 'sta3032', 'eml3100', 'eml3015', 'bench'],
+    ['phy2048', 'phy2049', 'mac2311', 'mac2313', 'map2302', 'statics', 'egn3321', 'egn3331', 'sta3032', 'eml3100', 'eml3015', 'bench', 'design'],
   );
 });
 

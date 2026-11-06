@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Place a hole by a square plus-and-minus box and by a round position zone, then scatter many made holes. It corrects the idea that the box and the circle accept the same parts: the circle of the same width accepts more good ones. The check counts accepted holes by both rules and compares with the area ratio of the zones.',
+  labs: [
+    { course: 'design', lab: 'position', notes: ['s1'], note: 'Drilled holes against a plus-and-minus box and a round position zone. It covers position only, not datums, form or orientation.' },
+  ],
 };

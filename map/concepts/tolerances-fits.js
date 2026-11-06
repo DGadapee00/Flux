@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Set a hole and a shaft with their tolerance bands and slide the bands. It corrects the idea that a nominal clearance guarantees a sliding fit: with the bands too wide, the worst pair interferes. The check computes the extreme clearances from the limits and by sampling many pairs.',
+  labs: [
+    { course: 'design', lab: 'fits', notes: ['s1', 's2'], note: 'Hole and shaft bands for standard 50 mm fits, the tightest and loosest pair, and how often a transition fit interferes.' },
+  ],
 };

@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Turn a vague need into measurable requirements, then score three concepts against them. It corrects the idea that the best concept is the one you thought of first: a weighted comparison against stated requirements often picks another. The check recomputes the scores two ways, by weighted sum and by ranking each criterion.',
+  labs: [
+    { course: 'design', lab: 'decision', notes: ['s1', 's2'], note: 'Three ways to make a bracket, judged by requirements first, then weights, then how far each weight can move. It does not cover generating concepts or testing them.' },
+  ],
 };

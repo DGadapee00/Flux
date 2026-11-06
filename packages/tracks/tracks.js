@@ -78,7 +78,10 @@ export const TRACKS = [
     // Personal projects outside the degree map (DECISIONS.md, D35).
     id: 'projects',
     name: 'Projects',
-    courses: [{ id: 'bench', code: 'BENCH', title: 'Electronics on the bench', term: null, href: 'bench/' }],
+    courses: [
+      { id: 'bench', code: 'BENCH', title: 'Electronics on the bench', term: null, href: 'bench/' },
+      { id: 'design', code: 'DES', title: 'Design practice', term: null, href: 'design/' },
+    ],
   },
 ];
 

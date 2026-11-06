@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Choosing a design</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Design practice · Unit 3 · MIT 2.007, Lecture 2</div>
+  <h1>Choosing a design</h1>
+  <p class="lede">How to turn a need into requirements, compare concepts against them, and check that the choice does not hang on one guess.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Deciding</h3>
+    <a href="#s1"><span>1</span>Requirements, then weights</a>
+    <a href="#s2"><span>2</span>How firm is the choice?</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Deciding</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Requirements, then weights</h2>
+<p>Start from the need, not from a part. Write what the part must do as requirements you can check: a number and a limit, such as deflection at most 0.3 mm under the sensor's load. Write what you would like more of as criteria with weights. Then sketch more than one concept before you judge any.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A requirement is pass or fail. A concept that misses one is out, whatever else it does well. Score the rest on each criterion from 1 (worst of the field) to 5 (best), and rank by the weighted mean:</p>
+\[
+S_j = \frac{\sum_k w_k\, s_{jk}}{\sum_k w_k}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · the run of 1,000</span>
+<p>A sensor bracket can be machined aluminium, bent steel sheet or printed nylon. For a run of 1,000 with deflection at most 0.3 mm, the printed part bends 0.6 mm and is out. With weights 1, 5, 2, 1, 1 on mass, cost, deflection, lead time and heat limit, sheet scores 3.4 and machined 2.6.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Scoring the first concept you thought of against nothing in particular. A machined part is often the first sketch; for a run of 1,000 the bent sheet costs a quarter as much and still meets the stiffness requirement.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>How firm is the choice?</h2>
+<p>Weights are judgements. Before trusting a ranking, ask how far each weight can move before the leader changes.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The leader \(L\) stays ahead of a rival \(j\) while \(\sum_k w_k (s_{Lk} - s_{jk}) > 0\). That is linear in each weight, so holding the others, the crossover is</p>
+\[
+w_k^{*} = -\frac{\sum_{i \ne k} w_i\,(s_{Li} - s_{ji})}{s_{Lk} - s_{jk}}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · how far the cost weight can fall</span>
+<p>For the run of 1,000, sheet leads while the weight on cost stays at 3 or more. Below 3, the machined part's stiffness, lighter weight and shorter lead time carry it.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>A choice that flips when one weight moves a little is a choice the numbers have not made. Get better data on the close criteria, or build both and test.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Scores run straight from the worst concept to the best, so they say nothing about how good the best one is. A matrix ranks the concepts you have; it cannot find one you did not sketch.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+S_j = \frac{\sum_k w_k\, s_{jk}}{\sum_k w_k}, \qquad s_{jk} = 1 + 4\,\frac{v_\text{worst} - v_{jk}}{v_\text{worst} - v_\text{best}}, \qquad w_k^{*} = -\frac{\sum_{i \ne k} w_i\,(s_{Li} - s_{ji})}{s_{Lk} - s_{jk}}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. The bracket's numbers are illustrative, written for this course. Read alongside MIT 2.007 (Spring 2009), Lecture 2.</footer>
+</body>
+</html>

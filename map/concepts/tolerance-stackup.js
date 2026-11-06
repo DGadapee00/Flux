@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Stack five parts and compare the worst-case band with the spread of many random assemblies. It corrects the idea that the worst case is what you will see: with independent parts the extremes almost never coincide. The check compares the root-sum-square prediction with the spread of a simulated batch.',
+  labs: [
+    { course: 'design', lab: 'stackup', notes: ['s3'], note: 'Two to eight parts in a stack: the worst case against the exact spread of real stacks, for normal and flat part spreads.' },
+  ],
 };
