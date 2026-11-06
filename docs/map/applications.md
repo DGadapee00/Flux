@@ -15,8 +15,14 @@ mission simulator remain visible gaps. The recipes do not imply those tools are 
 - Demonstrated: the learner records evidence after studying and recording the required inputs.
 - Integrated: all seven subsystem demonstrations and a shared mission report are recorded.
 
-These are personal records. No automatic assessment, physical test or flight qualification is
-claimed. Editing a subsystem record clears its demonstration and those of its dependents, while
+These are personal records. No physical test or flight qualification is claimed.
+
+Orbit checks the numbers you enter. You give an altitude, a speed and a period; Flux computes the
+speed and period from \(v=\sqrt{GM/r}\) and again by integrating the orbit step by step
+(`packages/subjects/src/mechanics/orbit-check.js`). Within 1% of both passes, and the check writes
+your numbers into the evidence. You still tick the foundations and record the demonstration. The
+other six subsystems have no number check yet; their records stay self-reported. Each foundation
+concept shows where you stand on it, from your practice record (Today). Editing a subsystem record clears its demonstration and those of its dependents, while
 preserving all evidence notes. Unrelated subsystem records stay valid. Typed evidence is saved when
 the box loses focus or the tab closes. Until then a warning names every record the edit will clear.
 

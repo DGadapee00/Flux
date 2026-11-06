@@ -78,3 +78,83 @@
   .component-recipes button { padding: 10px; gap: 8px; }
 }
 @media (prefers-reduced-motion: reduce) { .sat-piece, .sat-orbit { transition: none; } }
+
+/* The Orbit check: your numbers beside the closed form and the integrated orbit. */
+.orbit-check {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.orbit-check h4,
+.orbit-check p {
+  margin: 0;
+}
+
+.orbit-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.orbit-fields label {
+  display: grid;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.orbit-fields label {
+  min-width: 0;
+}
+
+.orbit-fields input {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 15px;
+  padding: 7px 9px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.orbit-table {
+  overflow-x: auto;
+}
+
+.orbit-table table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.orbit-table th,
+.orbit-table td {
+  text-align: left;
+  padding: 4px 10px 4px 0;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.orbit-pass {
+  color: #3f9a5c;
+}
+
+.orbit-fail {
+  color: #c9792a;
+}
+
+.foundation-state[data-state='solid'],
+.foundation-state[data-state='assumed'] {
+  color: #3f9a5c;
+}

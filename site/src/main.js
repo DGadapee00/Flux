@@ -33,7 +33,7 @@ map.refreshStatus();
 if (map.current && decodeURIComponent(window.location.hash.slice(1)) === map.current) {
   document.getElementById('explore')?.scrollIntoView({ block: 'start' });
 }
-mountApplications(map);
+mountApplications(map, undefined, { status: (id) => today?.statusOf(id) ?? null });
 
 const root = document.querySelector('#tracks');
 

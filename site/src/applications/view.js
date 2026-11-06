@@ -1,5 +1,6 @@
 import { LAB_CATALOGS, labHref, notesHref } from '@flux/map';
 import { SATELLITE, RECIPES, recipeById } from '@flux/map/applications/satellite.js';
+import { checkOrbit } from '@flux/subjects/mechanics/orbit-check.js';
 import { applicationStore, cleanProgress, demonstrated, missingInputs, record, revise, wouldClear } from './progress.js';
 import './style.css';
 
@@ -20,8 +21,16 @@ function spacecraft() {
   </svg>`;
 }
 
-export function mountApplications(map, parent = document.querySelector('#application-workbench')) {
+/**
+ * @param {any} map
+ * @param {Element | null} [parent]
+ * @param {{ status?: (id: string) => ({ status: string } | null) }} [opts] The learner's standing
+ *   on a concept, from Today, shown beside each foundation.
+ */
+export function mountApplications(map, parent = document.querySelector('#application-workbench'), { status: standing = () => null } = {}) {
   if (!parent) return;
+  /** The last numbers typed into the Orbit check, kept while the panel redraws. */
+  const orbitInput = { h: '550', v: '', T: '' };
   const store = applicationStore();
   let state = cleanProgress(store.readJSON('satellite'));
   let selected = 'orbit';
@@ -41,7 +50,7 @@ export function mountApplications(map, parent = document.querySelector('#applica
       <a href="#application-recipe" class="app-assembly-link" data-select="satellite">View integration <span aria-hidden="true">↓</span></a></div>
     <nav class="component-recipes" aria-label="Satellite subsystems">${SATELLITE.components.map((r) => `<button type="button" data-select="${r.id}" aria-pressed="false"><span class="component-number">${number(r.id)}</span><span><strong>${r.title}</strong><small>${r.part}</small></span><span class="component-state" data-status="${r.id}"></span></button>`).join('')}</nav>
     <article class="application-recipe" id="application-recipe" aria-labelledby="recipe-title"></article>
-    <p class="application-note">These are personal project records, not automatic assessments. Existing labs teach the foundations; opening a lab or completing a course does not verify a satellite subsystem. The coupled mission simulator is still to be built.</p>`;
+    <p class="application-note">These are personal project records. Orbit checks the numbers you enter two ways; the other subsystems’ checks are still to be built. Opening a lab or completing a course does not verify a satellite subsystem. The coupled mission simulator is still to be built.</p>`;
 
   const panel = parent.querySelector('#application-recipe');
   const status = (id) => demonstrated(id, state) ? (id === 'satellite' ? 'Integration recorded' : 'Demonstration recorded') : state[id].studied ? 'Foundations studied' : 'To explore';
@@ -110,7 +119,9 @@ export function mountApplications(map, parent = document.querySelector('#applica
     const integrated = selected === 'satellite';
     const foundations = (r.concepts || []).map((id) => {
       const c = map.graph.byId[id];
-      return `<a href="#${id}" data-concept="${id}">${esc(c.title)}${c.labs.length ? '' : ' <span class="app-meta">/ lab gap</span>'}</a>`;
+      const s = standing(id)?.status;
+      const word = { solid: 'solid', assumed: 'from a course you took', learning: 'learning', ready: 'ready to learn', locked: 'not yet' }[s];
+      return `<a href="#${id}" data-concept="${id}">${esc(c.title)}${c.labs.length ? '' : ' <span class="app-meta">/ lab gap</span>'}${word ? ` <span class="app-meta foundation-state" data-state="${s}">· ${word}</span>` : ''}</a>`;
     }).join('');
     const labs = (r.labs || []).map((ref) => {
       const c = map.graph.byId[ref.concept];
@@ -129,6 +140,7 @@ export function mountApplications(map, parent = document.querySelector('#applica
       </div><div class="recipe-record"><p class="app-kicker">${integrated ? '03 / INTEGRATED' : '01 / STUDIED → 02 / DEMONSTRATED'}</p><h4>${integrated ? 'Record the shared mission' : 'Keep a capability record'}</h4>
         ${!integrated ? `<label class="app-check"><input type="checkbox" data-studied ${state[selected].studied ? 'checked' : ''}> I have studied these foundations.</label>` : ''}
         <p class="demonstration-task">${esc(r.demonstrate)}</p>
+        ${selected === 'orbit' ? orbitCheck() : ''}
         <label for="application-evidence">Your evidence <span>(personal record)</span></label><textarea id="application-evidence" maxlength="2000" rows="5" placeholder="Describe your model, result and checks. Add a report reference or link.">${esc(draft ?? state[selected].evidence)}</textarea>
         <p class="record-warning" data-warning role="status" hidden></p>
         <p class="record-requirements" data-requirements></p>
@@ -137,6 +149,44 @@ export function mountApplications(map, parent = document.querySelector('#applica
         <p class="app-meta" data-storage role="status"></p>
       </div></div>`;
     summary();
+  }
+
+  function orbitCheck() {
+    return `<form class="orbit-check" data-orbit-form novalidate><h4>Check your numbers</h4>
+      <p>Work out the speed and period for your altitude, by hand or in your own code, then enter them. Flux checks them against \u221A(GM/r) and against an orbit it integrates step by step.</p>
+      <div class="orbit-fields">
+        <label for="oc-h">Altitude, km<input id="oc-h" inputmode="decimal" autocomplete="off" value="${esc(orbitInput.h)}"></label>
+        <label for="oc-v">Your speed, km/s<input id="oc-v" inputmode="decimal" autocomplete="off" value="${esc(orbitInput.v)}"></label>
+        <label for="oc-T">Your period, min<input id="oc-T" inputmode="decimal" autocomplete="off" value="${esc(orbitInput.T)}"></label>
+      </div>
+      <button type="submit" class="record-capability">Check my numbers</button>
+      <div class="orbit-result" data-orbit-result role="status" aria-live="polite"></div>
+      <p class="app-meta">GM = 3.986004418\u00D710\u00B9\u2074 m\u00B3/s\u00B2 and Earth\u2019s mean radius, 6371 km. Within 1% of both routes passes, and your numbers go into the evidence below.</p></form>`;
+  }
+
+  function runOrbitCheck(form) {
+    orbitInput.h = form.querySelector('#oc-h').value;
+    orbitInput.v = form.querySelector('#oc-v').value;
+    orbitInput.T = form.querySelector('#oc-T').value;
+    const res = checkOrbit({ altitudeKm: parseFloat(orbitInput.h), speedKmS: parseFloat(orbitInput.v), periodMin: parseFloat(orbitInput.T) });
+    const out = form.querySelector('[data-orbit-result]');
+    if (!res.ok) {
+      out.innerHTML = `<p class="orbit-fail">${esc(res.reason)}</p>`;
+      return;
+    }
+    const f = (x, d) => Number(x).toFixed(d);
+    out.innerHTML = `<div class="orbit-table"><table><thead><tr><th></th><th>Yours</th><th>\u221A(GM/r)</th><th>Integrated</th></tr></thead><tbody>
+      <tr><th>Speed, km/s</th><td>${f(orbitInput.v, 3)}</td><td>${f(res.closed.speed, 3)}</td><td>${f(res.integrated.speed, 3)}</td></tr>
+      <tr><th>Period, min</th><td>${f(orbitInput.T, 2)}</td><td>${f(res.closed.period, 2)}</td><td>${f(res.integrated.period, 2)}</td></tr></tbody></table></div>
+      <p class="${res.pass ? 'orbit-pass' : 'orbit-fail'}">${res.pass ? 'Your numbers agree with both routes. They are in your evidence below.' : `Not yet: speed is off by ${f(res.speedError * 100, 1)}%, period by ${f(res.periodError * 100, 1)}%. ${esc(res.hint)}`}</p>`;
+    if (res.pass) {
+      const line = `Orbit check passed in Flux: altitude ${orbitInput.h} km, speed ${orbitInput.v} km/s, period ${orbitInput.T} min. Closed form ${f(res.closed.speed, 3)} km/s and ${f(res.closed.period, 2)} min; integrated orbit ${f(res.integrated.speed, 3)} km/s and ${f(res.integrated.period, 2)} min.`;
+      const prior = (draft ?? state.orbit.evidence).replace(/^Orbit check passed in Flux:.*$/m, '').trim();
+      draft = prior ? `${line}\n${prior}` : line;
+      commit();
+      const box = panel.querySelector('#application-evidence');
+      if (box) box.value = state.orbit.evidence;
+    }
   }
 
   function select(id, updateUrl = true) {
@@ -173,6 +223,12 @@ export function mountApplications(map, parent = document.querySelector('#applica
       commit();
       state = record(state, selected);
       save();
+    }
+  });
+  panel.addEventListener('submit', (event) => {
+    if (event.target.matches('[data-orbit-form]')) {
+      event.preventDefault();
+      runOrbitCheck(event.target);
     }
   });
   panel.addEventListener('change', (event) => {

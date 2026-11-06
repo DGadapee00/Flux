@@ -68,6 +68,16 @@ try {
   await navigate();
   await page.eval('localStorage.clear()');
   await navigate();
+  // Orbit checks the numbers you enter two ways. A wrong speed fails; the right numbers pass and
+  // go into the evidence.
+  async function checkOrbit(v, T) {
+    await page.eval(`(() => { document.querySelector('#oc-h').value = '550'; document.querySelector('#oc-v').value = '${v}'; document.querySelector('#oc-T').value = '${T}'; document.querySelector('[data-orbit-form]').requestSubmit(); })()`);
+    return page.eval('document.querySelector("[data-orbit-result]").textContent');
+  }
+  assert.match(await checkOrbit('7.0', '95.5'), /Not yet: speed is off/);
+  assert.match(await checkOrbit('7.59', '95.5'), /agree with both routes/);
+  assert.match(await page.eval('document.querySelector("#application-evidence").value'), /^Orbit check passed in Flux: altitude 550 km/);
+  await evidence('');
   assert.equal(await page.eval('document.querySelectorAll(".component-recipes button").length'), 7);
   assert.equal(await page.eval('document.querySelector("[data-record]").disabled'), true);
   await select('power');
