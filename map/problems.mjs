@@ -13,7 +13,7 @@ import { pathToFileURL } from 'node:url';
 import { ROOT } from './load.mjs';
 
 /** Courses with a problem bank, by folder. MAC 2312 practises inside MAC 2311's app. */
-export const BANK_COURSES = ['bench', 'design', 'egn3203', 'egn3321', 'egn3331', 'eml3015', 'eml3100', 'mac2311', 'mac2313', 'map2302', 'phy2048', 'phy2049', 'sta3032', 'statics'];
+export const BANK_COURSES = ['bench', 'design', 'egn3203', 'egn3321', 'egn3331', 'ema3010', 'eml3015', 'eml3100', 'mac2311', 'mac2313', 'map2302', 'phy2048', 'phy2049', 'sta3032', 'statics'];
 
 /**
  * @returns {Promise<{ byLab: Record<string, string[]>, titles: Record<string, string>, unlinked: Record<string, number> }>}

@@ -25,7 +25,7 @@ export const COURSES = [
   { id: 'mac2313', code: 'MAC 2313', title: 'Calculus III', status: 'taken', app: 'mac2313/' },
   { id: 'phy2048', code: 'PHY 2048', title: 'Physics I', status: 'taken', app: 'phy2048/' },
   { id: 'statics', code: 'EGN 3311', title: 'Statics', status: 'taken', app: 'statics/' },
-  { id: 'ema3010', code: 'EMA 3010', title: 'Materials Science', status: 'taken', app: null },
+  { id: 'ema3010', code: 'EMA 3010', title: 'Materials Science', status: 'taken', app: 'ema3010/' },
   { id: 'phy2049', code: 'PHY 2049', title: 'Physics II', status: 'taking now', app: 'phy2049/' },
   { id: 'sta3032', code: 'STA 3032', title: 'Probability and Statistics', status: 'taking now', app: 'sta3032/' },
   { id: 'eml3100', code: 'EML 3100', title: 'Thermodynamics', status: 'next term', app: 'eml3100/' },
