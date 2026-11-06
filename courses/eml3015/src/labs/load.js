@@ -6,6 +6,8 @@ const loaders = {
   viscosity: () => import('./viscosity.js'),
   gate: () => import('./gate.js'),
   'rigid-tank': () => import('./rigid-tank.js'),
+  nozzle: () => import('./nozzle.js'),
+  bend: () => import('./bend.js'),
 };
 
 const labs = createLabLoader(loaders);

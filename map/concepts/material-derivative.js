@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Trace particles through a steady converging nozzle and plot their speed against time. It corrects the idea that steady flow has no acceleration: the field never changes, but every particle speeds up as it moves.',
+  labs: [
+    { course: 'eml3015', lab: 'nozzle', notes: ['s1', 's2'], note: 'Particles carried through a nozzle at equal time steps, with the local and convective parts of their acceleration.' },
+  ],
 };

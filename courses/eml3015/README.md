@@ -8,7 +8,13 @@ layer of fluid and draws the velocity profile as it grows from rest to the strai
 problems cover shear stress, the force on a plate, the settling time, and why a dense fluid need
 not be a thick one.
 
-The math is in `packages/subjects/src/mechanics/couette.js`. The lab checks the series solution
-against a finite-difference march on every scenario (`npm test -w @flux/eml3015`).
+Unit 2 is pressure on walls and in moving tanks (Cleynen ch. 4): a gate you lower and tilt
+(`gate`), and a tank that accelerates or spins (`rigid-tank`). Unit 3 is following the flow
+(Cleynen ch. 6): particles through a nozzle for the material derivative (`nozzle`), and the
+pressure across a bend for Euler's equation (`bend`).
+
+The math is in `packages/subjects/src/mechanics/` (`couette.js`, `pressure-fields.js`,
+`flowfields.js`). Each lab checks its closed form against a second method on every scenario and
+slider stop (`npm test -w @flux/eml3015`).
 
 Run the dev server with `npm run dev -w @flux/eml3015` (port 5185).

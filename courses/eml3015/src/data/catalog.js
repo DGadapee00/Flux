@@ -22,17 +22,29 @@ export const EXAMS = [
     labs: ['gate', 'rigid-tank'],
     coming: ['Buoyancy and stability'],
   },
+  {
+    id: 'u3',
+    n: 3,
+    title: 'Following the flow',
+    chapters: '6',
+    date: 'Unit 3',
+    labs: ['nozzle', 'bend'],
+    coming: ['Continuity', 'Navier–Stokes'],
+  },
 ];
 
 export const LAB_META = {
   viscosity: { id: 'viscosity', exam: 'u1', title: 'Viscosity' },
   gate: { id: 'gate', exam: 'u2', title: 'Gate' },
   'rigid-tank': { id: 'rigid-tank', exam: 'u2', title: 'Accelerating tank' },
+  nozzle: { id: 'nozzle', exam: 'u3', title: 'Nozzle' },
+  bend: { id: 'bend', exam: 'u3', title: 'Bend' },
 };
 
 export const CHAPTER_TITLES = {
   4: 'Effects of pressure',
   5: 'Effects of shear',
+  6: 'Prediction of fluid flows',
 };
 
 export function examById(id) {

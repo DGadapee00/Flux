@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Following the flow</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EML 3015 · Fluids · Unit 3 · Cleynen, Fluid Dynamics for Engineers, ch. 6</div>
+  <h1>Following the flow</h1>
+  <p class="lede">How to find the acceleration of a fluid particle from a flow field, and what that acceleration asks of the pressure, along a stream and across it.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Particles</h3>
+    <a href="#s1"><span>1</span>Acceleration following a particle</a>
+    <a href="#s2"><span>2</span>Time along a path</a>
+    <h3>Part II · Pressure</h3>
+    <a href="#s3"><span>3</span>Euler's equation across a bend</a>
+    <h3>Reference</h3>
+    <a href="#s4"><span>4</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Particles</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Acceleration following a particle</h2>
+<p>A flow field gives the velocity at each point and time, \(\mathbf v(x, y, z, t)\). Newton's law is about a particle, which moves through that field. Its velocity changes for two reasons: the field changes in time where the particle is, and the particle moves to a place where the field is different.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Along the particle's path \(x(t)\), the chain rule gives, in one dimension,</p>
+\[
+\frac{Du}{Dt} = \frac{\partial u}{\partial t} + \frac{\partial u}{\partial x}\frac{dx}{dt} = \frac{\partial u}{\partial t} + u\,\frac{\partial u}{\partial x},
+\]
+<p>and in three, \(D\mathbf v/Dt = \partial\mathbf v/\partial t + (\mathbf v\cdot\nabla)\mathbf v\). The first term is the local part, the second the convective part.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a particle leaving the nozzle</span>
+<p>Water enters a nozzle 0.5 m long at a steady 1 m/s, and the area falls in a straight line to a quarter. Then \(u = 1/(1 - 0.75\,x/0.5)\). At the exit \(u = 4\) m/s and \(\partial u/\partial x = u \times 0.75/(0.5 \times 0.25) = 24\) s⁻¹, so the particle accelerates at \(4 \times 24 = 96\) m/s², nearly ten g.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking steady flow to mean no acceleration. Steady means nothing changes at a fixed point. Every particle in a steady nozzle still speeds up, because it moves into the narrow end.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Double the speed and the convective acceleration goes up four times: both \(u\) and \(\partial u/\partial x\) double.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Time along a path</h2>
+<p>To follow a particle, integrate its speed along the path. Where the flow is fast the particle covers ground quickly; dots placed at equal times spread out.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>From \(dt = dx/u\) with \(u = u_0/(1 - c\,x/L)\),</p>
+\[
+T = \int_0^L \frac{1 - c\,x/L}{u_0}\,dx = \frac{L}{u_0}\left(1 - \frac{c}{2}\right).
+\]
+<p>If the inflow ramps up as \(u_0(1 + rt)\), the path separates the same way: \(x - c\,x^2/(2L) = u_0(t + r t^2/2)\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · crossing the nozzle</span>
+<p>For the same nozzle, \(c = 0.75\), so \(T = (0.5/1)(1 - 0.375) = 0.313\) s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Averaging the inlet and exit speeds. The particle spends most of its time near the slow inlet, so the time is longer than \(L\) over the average speed.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Pressure</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Euler's equation across a bend</h2>
+<p>With friction left out, the only forces on a particle are pressure and weight. Newton's law with the material derivative is Euler's equation. Across curved streamlines it says how much the pressure must rise to turn the flow.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+\rho\,\frac{D\mathbf v}{Dt} = -\nabla p + \rho\,\mathbf g.
+\]
+<p>A particle on a streamline of radius \(r\) accelerates toward the centre at \(u^2/r\). In the horizontal plane, the normal part of Euler's equation is \(\partial p/\partial r = \rho u^2/r\). For a free vortex, \(u = K/r\), with \(K\) set by the flow rate \(Vw = K\ln(r_2/r_1)\):</p>
+\[
+p_2 - p_1 = \frac{\rho K^2}{2}\left(\frac{1}{r_1^2} - \frac{1}{r_2^2}\right).
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · a water elbow</span>
+<p>Water at a mean 2 m/s turns through a bend 0.2 m wide with centre-line radius 0.3 m, so \(r_1 = 0.2\) and \(r_2 = 0.4\) m. Then \(K = 0.4/\ln 2 = 0.577\) m²/s, the inner wall moves at \(K/r_1 = 2.89\) m/s, and the outer wall carries \(\tfrac{998}{2}(0.577)^2(25 - 6.25) = 3.12\) kPa more than the inner.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the pressure as even across a stream. That holds only where the streamlines are straight. A flow that turns needs a pressure that rises toward the outside of the turn.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Friction. In a real pipe bend the slow fluid near the walls cannot resist the same pressure difference, so it drifts inward and sets up a pair of swirls downstream of the bend.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Formula sheet</h2>
+\[
+\frac{D\mathbf v}{Dt} = \frac{\partial\mathbf v}{\partial t} + (\mathbf v\cdot\nabla)\mathbf v, \qquad T = \int \frac{dx}{u}, \qquad \rho\,\frac{D\mathbf v}{Dt} = -\nabla p + \rho\,\mathbf g,
+\]
+\[
+\frac{\partial p}{\partial r} = \rho\,\frac{u^2}{r}, \qquad Vw = K\ln\frac{r_2}{r_1}, \qquad p_2 - p_1 = \frac{\rho K^2}{2}\left(\frac{1}{r_1^2} - \frac{1}{r_2^2}\right).
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Cleynen, Fluid Dynamics for Engineers, chapter 6 (Prediction of fluid flows).</footer>
+</body>
+</html>

@@ -31,6 +31,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Start a wall moving under still fluid and watch the velocity spread upward. It corrects the idea that viscosity acts everywhere at once: momentum diffuses in from the wall over a depth of order \\(\\sqrt{\\nu t}\\), as heat does.',
+  labs: [
+    { course: 'eml3015', lab: 'viscosity', notes: ['s2'], note: 'A plate starts moving over a still layer, and momentum diffuses in from it: Navier–Stokes for flow along a wall. Pressure-driven and two-dimensional flows are still to come.' },
+  ],
 };

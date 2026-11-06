@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchy�
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 158 with a Flux lab, 117 gaps.**
+**275 concepts, 163 with a Flux lab, 112 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -19,7 +19,7 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Mechanics | 34 | 31 |
 | Electricity and magnetism | 27 | 25 |
 | Thermodynamics | 22 | 12 |
-| Fluid mechanics | 20 | 4 |
+| Fluid mechanics | 20 | 9 |
 | Heat transfer | 19 | 2 |
 | Circuits and systems | 27 | 11 |
 | Mechanics of materials | 16 | 14 |
@@ -119,10 +119,11 @@ in the courses that teach it.
    concepts build on them, through eigenvalues into differential equations, node analysis into
    circuits, and least squares and LU into numerical methods. One lab could carry both: drag a
    2×2 matrix's columns, then solve a 3×3 system with its planes drawn.
-6. **The thermal-fluids trunk.** Material derivative, Rigid-body motion, Viscosity, Continuity,
-   Euler's equation, Navier–Stokes and the Heat equation: 10 to 13 concepts build on each, because
-   fluid mechanics feeds heat transfer. EML 3015 now has its own app, with Viscosity as unit 1
-   (a plate dragged over water, mercury, glycerol, oil and air). The rest of the trunk is next.
+6. **The thermal-fluids trunk.** Continuity and the Heat equation are left: 10 to 12 concepts
+   build on each, because fluid mechanics feeds heat transfer. EML 3015 has its own app with
+   three units: viscosity (Viscosity, and Navier–Stokes for flow along a wall), pressure (a gate
+   and an accelerating tank) and following the flow (a nozzle for the material derivative and a
+   bend for Euler's equation). Navier–Stokes still wants a pressure-driven or two-dimensional lab.
 
 ## Sources
 

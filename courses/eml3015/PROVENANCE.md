@@ -1,7 +1,7 @@
 # Provenance
 
 EML 3015 Fluids lives in this folder. There is no earlier repo to snapshot. The course is written
-here, unit by unit. Unit 1 is in.
+here, unit by unit. Units 1 to 3 are in.
 
 ## Textbook
 
@@ -23,4 +23,12 @@ pages, read on 6 November 2026.
 
 Unit 1 is viscosity and shear. The lab is plane Couette flow started from rest. The series solution
 is our own derivation, and the second method is an explicit finite-difference march of the same
-equation. No UNF syllabus or course pack was used.
+equation.
+
+Unit 2 is pressure: a rectangular gate (closed form against a slice sum) and a liquid moving as
+one body (surface by symmetry against a volume balance). Unit 3 is following the flow: a
+one-dimensional nozzle (closed-form particle path against RK4 tracking) and a free vortex in a
+bend (closed form against Simpson's rule). All are our own derivations. Liquid densities are round
+handbook values.
+
+No UNF syllabus or course pack was used.

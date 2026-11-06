@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Flow round a bend with pressure contours drawn across it. It corrects the idea that pressure is uniform across a stream: curved streamlines need higher pressure on the outside to turn the fluid.',
+  labs: [
+    { course: 'eml3015', lab: 'bend', notes: ['s3'], note: 'Flow round a bend, with the pressure rising from the inner wall to the outer. It shows the normal part of Euler’s equation only.' },
+  ],
 };
