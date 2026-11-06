@@ -11,7 +11,8 @@ not be a thick one.
 Unit 2 is pressure on walls and in moving tanks (Cleynen ch. 4): a gate you lower and tilt
 (`gate`), and a tank that accelerates or spins (`rigid-tank`). Unit 3 is following the flow
 (Cleynen ch. 6): particles through a nozzle for the material derivative (`nozzle`), and the
-pressure across a bend for Euler's equation (`bend`).
+pressure across a bend for Euler's equation (`bend`), and a control volume's mass balance for
+continuity (`continuity`).
 
 The math is in `packages/subjects/src/mechanics/` (`couette.js`, `pressure-fields.js`,
 `flowfields.js`). Each lab checks its closed form against a second method on every scenario and

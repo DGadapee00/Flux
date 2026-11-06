@@ -2,7 +2,9 @@
  * Unit 2 bank: position and process. Original problems, written for the Position and Capability
  * labs, with staged hints and named traps (../coaching/u2.js), each checked against its lab (`sim`).
  */
-import { capability, positionYield } from '@flux/subjects/design/tolerancing.js';
+import { allocateClosed, capability, positionYield } from '@flux/subjects/design/tolerancing.js';
+
+export const PARTS3 = [{ a: 2, b: 0.02 }, { a: 8, b: 0.08 }, { a: 5, b: 0.3 }];
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
@@ -138,5 +140,62 @@ export default [
       read: (c) => ({ ppm: c.ppm }),
     },
     cases: [kase('15 μm high, σ = 7.5 μm', { part: 'pin', offset: 0.015, sigma: 0.0075 }, { ppm: 22750 })],
+  }),
+
+  problem({
+    id: 'u2.5.allocate',
+    title: 'The cheapest tolerance',
+    exam: 'u2',
+    ch: '2',
+    lab: 'allocate',
+    src: 'Flux, written for the Tolerance cost lab',
+    topics: ['allocate'],
+    principles: ['tolerance-cost'],
+    vars: { part: choice(['0', 'the turned spacer (b = 0.02)'], ['1', 'the milled block (b = 0.08)'], ['2', 'the ground pin (b = 0.3)']), T: range(0.05, 0.2, 0.01, 'mm') },
+    text: (T_, $) => String.raw`Three parts stack to hold ±${T_.T} by RSS. Each costs $a + b/T$ dollars with $b$ = 0.02, 0.08 and 0.3 \$·mm for a turned spacer, a milled block and a ground pin. In the cheapest split, what tolerance does ${T_.part} get?`,
+    parts: [num('Ti', ($) => allocateClosed(PARTS3, $.T, 'rss')[Number($.part)] * 1000, 'μm', { label: 'its tolerance ±' })],
+    level: 3,
+    hints: ['Minimise Σ b/T with Σ T² fixed: Lagrange gives $T_i \\propto b_i^{1/3}$.', 'Scale so the squares add to $T^2$: $T_i = T\\,b_i^{1/3}/\\sqrt{\\sum b_j^{2/3}}$.'],
+    steps: ($, sig) => [String.raw`$\sum b_j^{2/3} = ${sig(PARTS3.reduce((s, p) => s + p.b ** (2 / 3), 0))}$, so $T_i = ${$.T} \times ${sig(PARTS3[Number($.part)].b ** (1 / 3))}/${sig(Math.sqrt(PARTS3.reduce((s, p) => s + p.b ** (2 / 3), 0)))} = ${sig(allocateClosed(PARTS3, $.T, 'rss')[Number($.part)] * 1000)}$ μm.`],
+    sim: {
+      scenario: 'rss',
+      setup(s, $) {
+        Object.assign(s, { mode: 'rss', T: $.T });
+      },
+      read: (c, s, $) => ({ Ti: c.best[Number($.part)] * 1000 }),
+    },
+    cases: [kase('The ground pin at ±0.10 mm', { part: '2', T: 0.1 }, { Ti: 79.6 })],
+  }),
+
+  problem({
+    id: 'u2.6.loosest',
+    title: 'Who gets the room?',
+    exam: 'u2',
+    ch: '2',
+    kind: 'conceptual',
+    lab: 'allocate',
+    src: 'Flux, written for the Tolerance cost lab',
+    topics: ['allocate'],
+    principles: ['tolerance-cost'],
+    vars: { mode: choice(['rss', 'by RSS'], ['worst', 'in the worst case']) },
+    text: (T) => `A turned spacer, a milled block and a ground pin stack to hold ±0.1 mm ${T.mode}. The pin is by far the dearest to make precise. In the cheapest split, which part gets the loosest tolerance?`,
+    parts: [
+      pick('part', 'the loosest tolerance goes to', [
+        ['pin', 'the ground pin', 'Precision costs most on the pin, so it is the best place to give tolerance away.'],
+        ['spacer', 'the turned spacer', 'The spacer is cheap to hold tight, so it should be squeezed, not given room.'],
+        ['equal', 'none: split it equally', 'An equal split ignores the costs, and costs more.'],
+      ], () => 'pin'),
+    ],
+    level: 1,
+    hints: ['Each part’s cost rises as b/T.', 'Where does a little extra tolerance save the most money?'],
+    steps: () => ['The ground pin has the largest b, so loosening it saves the most: it gets the most room either way.'],
+    sim: {
+      scenario: 'rss',
+      setup(s, $) {
+        Object.assign(s, { mode: $.mode, T: 0.1 });
+      },
+      read: (c) => ({ part: ['spacer', 'block', 'pin'][c.best.indexOf(Math.max(...c.best))] }),
+    },
+    cases: [kase('By RSS', { mode: 'rss' }, { part: 'pin' })],
   }),
 ];

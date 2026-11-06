@@ -23,8 +23,9 @@
     <h3>Part III · Motors</h3>
     <a href="#s3"><span>3</span>A DC motor's straight line</a>
     <a href="#s4"><span>4</span>Driving it with PWM</a>
+    <a href="#s5"><span>5</span>Charge must be close</a>
     <h3>Reference</h3>
-    <a href="#s5"><span>5</span>Formula sheet</a>
+    <a href="#s6"><span>6</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -123,7 +124,24 @@ R = \frac{\rho L}{w\,t}, \qquad \rho_\text{Cu} = 1.68\times10^{-8}\ \Omega\,\tex
 </section>
 
 <section class="topic" id="s5">
-<h2><span class="n">5</span>Formula sheet</h2>
+<h2><span class="n">5</span>Charge must be close</h2>
+<p>Chips draw current in sudden steps as they switch. The current has to come from somewhere, and the copper to the regulator has inductance: it cannot change its current quickly without a voltage across it.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+\Delta V \approx L\,\frac{di}{dt} = L\,\frac{\Delta I}{t_r}.
+\]
+<p>A capacitor beside the chip holds charge behind much less inductance, so it supplies the step while the trace slowly recharges it. Wikipedia's Decoupling capacitor article advises about 100 nF of ceramic per chip, placed as close as possible.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a step with no capacitor near</span>
+<p>A chip 50 mm from its regulator, taken as 50 nH of trace, steps 0.1 A in 10 ns: about \(50\times10^{-9} \times 0.1/10^{-8} = 0.5\) V. The circuit dips 466 mV, below a 3.0 V reset. A 100 nF capacitor 30 mm away leaves a 194 mV dip; 2 mm away, 65 mV.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>One large capacitor somewhere on the board. Capacitance far away sits behind inductance. Put a small ceramic at each supply pin, with short, wide connections to the pin and to the ground plane.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Formula sheet</h2>
 \[
 Q = K_v\sqrt{\Delta p}, \qquad Q = \sqrt{\frac{H_0}{a + k + 1/(K_v f(x))^2}}, \qquad f_\text{eq}(x) = R^{\,x - 1},
 \]

@@ -20,8 +20,8 @@ export const EXAMS = [
     title: 'Position and process',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['position', 'capability'],
-    coming: ['Design for manufacture'],
+    labs: ['position', 'capability', 'allocate'],
+    coming: [],
   },
   {
     id: 'u3',
@@ -56,8 +56,8 @@ export const EXAMS = [
     title: 'Valves, motors and boards',
     chapters: '6',
     date: 'Unit 6',
-    labs: ['valve', 'motor', 'pwm', 'board'],
-    coming: ['Decoupling'],
+    labs: ['valve', 'motor', 'pwm', 'board', 'decoupling'],
+    coming: [],
   },
 ];
 
@@ -79,6 +79,8 @@ export const LAB_META = {
   orifice: { id: 'orifice', exam: 'u5', title: 'Orifice meter' },
   motor: { id: 'motor', exam: 'u6', title: 'DC motor' },
   pwm: { id: 'pwm', exam: 'u6', title: 'PWM drive' },
+  decoupling: { id: 'decoupling', exam: 'u6', title: 'Decoupling' },
+  allocate: { id: 'allocate', exam: 'u2', title: 'Tolerance cost' },
 };
 
 export const CHAPTER_TITLES = {

@@ -4,6 +4,7 @@
  * (../coaching/u3.js), and is checked against its lab (`sim`).
  */
 import { bendPressure, nozzleParticle } from '@flux/subjects/mechanics/flowfields.js';
+import { cvClosed } from '@flux/subjects/mechanics/continuity.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
@@ -167,5 +168,62 @@ export default [
     },
     sim: { scenario: 'elbow', setup: bendSetup, read: (c) => ({ u1: c.uIn }) },
     cases: [kase('The notes’ example: water elbow, 2 m/s, R = 0.3 m, w = 0.2 m', { fluid: 'water', V: 2, R: 0.3, w: 0.2 }, { u1: 2.885 })],
+  }),
+
+  problem({
+    id: 'u3.7.cv-net',
+    title: 'Net mass out of a square',
+    exam: 'u3',
+    ch: '6',
+    lab: 'continuity',
+    src: 'Flux, written for the Continuity lab',
+    topics: ['continuity'],
+    principles: ['continuity'],
+    vars: { field: choice(['piston', 'air squeezed by a piston, u = −a x, v = 0'], ['heated', 'air expanding as it heats, u = a x, v = a y']), a: range(0.5, 4, 0.5, '1/s'), h: range(0.1, 0.5, 0.05, 'm') },
+    text: (T) => String.raw`In ${T.field}, with $a$ = ${T.a} and air at 1.2 kg/m³, a square control volume ${T.h} on a side sits in the flow. What net mass leaves it each second, per metre of depth? (Negative means it gains mass.)`,
+    parts: [num('net', ($) => cvClosed({ field: $.field, a: $.a, h: $.h }).net, 'kg/s', { label: 'net mass out' })],
+    level: 2,
+    hints: ['By the divergence theorem the net outflow is $\\iint \\nabla\\cdot(\\rho\\mathbf v)\\,dA$.', 'Here ρ is uniform, so it is $\\rho\\,(\\partial u/\\partial x + \\partial v/\\partial y)\\,h^2$.'],
+    steps: ($, sig) => [String.raw`$\nabla\cdot\mathbf v = ${$.field === 'piston' ? `-${$.a}` : `2 \times ${$.a}`}$ s⁻¹, so the net out is $1.2 \times (${sig($.field === 'piston' ? -$.a : 2 * $.a)}) \times ${sig($.h)}^2 = ${sig(cvClosed({ field: $.field, a: $.a, h: $.h }).net)}$ kg/s.`],
+    sim: {
+      scenario: 'piston',
+      setup(s, $) {
+        Object.assign(s, { field: $.field, a: $.a, h: $.h, x0: 0.3, y0: 0.2 });
+      },
+      read: (c) => ({ net: c.net }),
+    },
+    cases: [kase('The notes’ example: the piston, a = 2, h = 0.3 m', { field: 'piston', a: 2, h: 0.3 }, { net: -0.216 })],
+  }),
+
+  problem({
+    id: 'u3.8.in-or-out',
+    title: 'In equals out?',
+    exam: 'u3',
+    ch: '6',
+    kind: 'conceptual',
+    lab: 'continuity',
+    src: 'Flux, written for the Continuity lab',
+    topics: ['continuity'],
+    principles: ['continuity'],
+    vars: { field: choice(['corner', 'water flowing into a corner'], ['piston', 'air squeezed by a piston'], ['heated', 'air expanding as it heats']) },
+    text: (T) => `A small fixed square sits in ${T.field}. Compare the mass flowing in through its sides with the mass flowing out.`,
+    parts: [
+      pick('balance', 'the mass flows', [
+        ['equal', 'in equals out', 'The density cannot change, so nothing can pile up inside.'],
+        ['more-in', 'more comes in than leaves', 'The gas inside is being compressed: its density rises.'],
+        ['more-out', 'more leaves than comes in', 'The gas inside is expanding: its density falls.'],
+      ], ($) => ({ corner: 'equal', piston: 'more-in', heated: 'more-out' }[$.field])),
+    ],
+    level: 1,
+    hints: ['Mass in minus mass out is the rate mass builds up inside.', 'Can the density inside change in this flow, and which way?'],
+    steps: ($) => [{ corner: 'Water is incompressible: ∇·v = 0, so in equals out.', piston: '∇·v < 0: the gas converges and its density rises, so more comes in.', heated: '∇·v > 0: the gas spreads out and its density falls, so more leaves.' }[$.field]],
+    sim: {
+      scenario: 'corner',
+      setup(s, $) {
+        Object.assign(s, { field: $.field, a: 2, x0: 0.4, y0: 0.4, h: 0.3 });
+      },
+      read: (c) => ({ balance: Math.abs(c.net) < 1e-9 ? 'equal' : c.net < 0 ? 'more-in' : 'more-out' }),
+    },
+    cases: [kase('Air squeezed by a piston', { field: 'piston' }, { balance: 'more-in' })],
   }),
 ];

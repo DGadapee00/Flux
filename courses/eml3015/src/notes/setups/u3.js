@@ -15,4 +15,5 @@ export default {
       read: (c) => ({ uIn: [c.uIn, 2.89], dp: [c.dp / 1000, 3.12] }),
     },
   ],
+  s4: [{ tag: 'air squeezed by a piston', lab: 'continuity', scenario: 'piston', read: (c) => ({ in: [c.in, 0.468], out: [c.out, 0.252], net: [c.net, -0.216], rate: [c.dRhoDt, 2.4] }) }],
 };

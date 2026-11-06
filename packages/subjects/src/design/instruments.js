@@ -329,3 +329,120 @@ export function pwmNumeric({ V, R, L, D, f }) {
   }
   return res;
 }
+
+/*
+ * Decoupling. A chip draws a load current that ramps from 0 to ΔI in t_r. Its supply comes from a
+ * regulator at V0 through a trace (R_t, L_t); a capacitor C (ESR R_c) sits at the end of its own
+ * connection inductance L_c. With i_L the trace current and v_c the capacitor's voltage,
+ *   i_L' = (V0 − (R_t + R_c) i_L + L_c i_l' − v_c + R_c i_l)/(L_t + L_c),  v_c' = (i_L − i_l)/C,
+ * and the chip's supply is v = [L_c(V0 − R_t i_L − L_t i_l') + L_t(v_c + R_c(i_L − i_l))]/(L_t + L_c).
+ * The closed form solves this 2×2 linear system exactly on the ramp and after it (matrix exponential
+ * plus an affine particular solution); the second method steps it with RK4.
+ */
+function exp2(A, t) {
+  const s = (A[0][0] + A[1][1]) / 2;
+  const det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
+  const q2 = s * s - det;
+  let c;
+  let g;
+  if (q2 > 1e-12 * s * s) {
+    const q = Math.sqrt(q2);
+    c = Math.cosh(q * t);
+    g = Math.sinh(q * t) / q;
+  } else if (q2 < -1e-12 * s * s) {
+    const w = Math.sqrt(-q2);
+    c = Math.cos(w * t);
+    g = Math.sin(w * t) / w;
+  } else {
+    c = 1;
+    g = t;
+  }
+  const e = Math.exp(s * t);
+  return [
+    [e * (c + (A[0][0] - s) * g), e * A[0][1] * g],
+    [e * A[1][0] * g, e * (c + (A[1][1] - s) * g)],
+  ];
+}
+const mul = (M, x) => [M[0][0] * x[0] + M[0][1] * x[1], M[1][0] * x[0] + M[1][1] * x[1]];
+const inv2 = (A) => {
+  const d = A[0][0] * A[1][1] - A[0][1] * A[1][0];
+  return [[A[1][1] / d, -A[0][1] / d], [-A[1][0] / d, A[0][0] / d]];
+};
+
+function decouplingSystem({ V0, Rt, Lt, C, Rc, Lc, dI, tr }) {
+  const S = Lt + Lc;
+  const A = [[-(Rt + Rc) / S, -1 / S], [1 / C, 0]];
+  const load = (t) => (t < tr ? (dI * t) / tr : dI);
+  const slope = (t) => (t < tr ? dI / tr : 0);
+  const node = (x, t) => (Lc * (V0 - Rt * x[0] - Lt * slope(t)) + Lt * (x[1] + Rc * (x[0] - load(t)))) / S;
+  const deriv = (x, t) => [(V0 - (Rt + Rc) * x[0] + Lc * slope(t) - x[1] + Rc * load(t)) / S, (x[0] - load(t)) / C];
+  return { A, load, slope, node, deriv };
+}
+
+/** The supply at the chip by the exact solution, sampled at n + 1 times over [0, tEnd]. */
+export function decouplingClosed(p, tEnd, n = 600) {
+  const { A, node } = decouplingSystem(p);
+  const { V0, Rc, Lc, dI, tr, C } = p;
+  const S = p.Lt + Lc;
+  const Ai = inv2(A);
+  // Affine particular solutions x_p = p0 + p1 t for forcing b0 + b1 t.
+  const particular = (b0, b1) => {
+    const p1 = mul(Ai, b1).map((v) => -v);
+    const p0 = mul(Ai, [p1[0] - b0[0], p1[1] - b0[1]]);
+    return (t) => [p0[0] + p1[0] * t, p0[1] + p1[1] * t];
+  };
+  const ramp = particular([(V0 + (Lc * dI) / tr) / S, 0], [(Rc * dI) / (tr * S), -dI / (tr * C)]);
+  const hold = particular([(V0 + Rc * dI) / S, -dI / C], [0, 0]);
+  const x0 = [0, V0];
+  const atRamp = (t) => {
+    const h = mul(exp2(A, t), [x0[0] - ramp(0)[0], x0[1] - ramp(0)[1]]);
+    const xp = ramp(t);
+    return [xp[0] + h[0], xp[1] + h[1]];
+  };
+  const xr = atRamp(tr);
+  const atHold = (t) => {
+    const h = mul(exp2(A, t - tr), [xr[0] - hold(tr)[0], xr[1] - hold(tr)[1]]);
+    const xp = hold(t);
+    return [xp[0] + h[0], xp[1] + h[1]];
+  };
+  const out = [];
+  for (let k = 0; k <= n; k++) {
+    const t = (k / n) * tEnd;
+    const x = t < tr ? atRamp(t) : atHold(t);
+    out.push([t, node(x, t)]);
+  }
+  return out;
+}
+
+/** The same supply by stepping the circuit with RK4, sampled at the same times. */
+export function decouplingNumeric(p, tEnd, n = 600, sub = 200) {
+  const { deriv, node } = decouplingSystem(p);
+  let x = [0, p.V0];
+  const out = [[0, node(x, 0)]];
+  const dt = tEnd / n / sub;
+  let t = 0;
+  for (let k = 1; k <= n; k++) {
+    for (let s = 0; s < sub; s++) {
+      // Step the ramp's corner exactly: split a step that crosses t_r.
+      const h = t < p.tr && t + dt > p.tr ? p.tr - t : dt;
+      const a = deriv(x, t);
+      const b = deriv([x[0] + (h / 2) * a[0], x[1] + (h / 2) * a[1]], t + h / 2);
+      const c = deriv([x[0] + (h / 2) * b[0], x[1] + (h / 2) * b[1]], t + h / 2);
+      const d = deriv([x[0] + h * c[0], x[1] + h * c[1]], t + h);
+      x = [x[0] + (h / 6) * (a[0] + 2 * b[0] + 2 * c[0] + d[0]), x[1] + (h / 6) * (a[1] + 2 * b[1] + 2 * c[1] + d[1])];
+      t += h;
+      if (h < dt) {
+        const h2 = dt - h;
+        const a2 = deriv(x, t);
+        const b2 = deriv([x[0] + (h2 / 2) * a2[0], x[1] + (h2 / 2) * a2[1]], t + h2 / 2);
+        const c2 = deriv([x[0] + (h2 / 2) * b2[0], x[1] + (h2 / 2) * b2[1]], t + h2 / 2);
+        const d2 = deriv([x[0] + h2 * c2[0], x[1] + h2 * c2[1]], t + h2);
+        x = [x[0] + (h2 / 6) * (a2[0] + 2 * b2[0] + 2 * c2[0] + d2[0]), x[1] + (h2 / 6) * (a2[1] + 2 * b2[1] + 2 * c2[1] + d2[1])];
+        t += h2;
+      }
+    }
+    t = (k / n) * tEnd;
+    out.push([t, node(x, t)]);
+  }
+  return out;
+}

@@ -29,4 +29,12 @@ export default {
       ],
     },
   },
+  'u6.7.dip-estimate': {
+    traps: {
+      dV: [
+        [($) => 50e-9 * $.dI * 1000, 'Divide by the rise time: the drop is L times the rate of change of current.'],
+        [($) => ((50e-6 * $.dI) / $.tr) * 1000, 'A nanohenry is 10⁻⁹ H, not 10⁻⁶.'],
+      ],
+    },
+  },
 };

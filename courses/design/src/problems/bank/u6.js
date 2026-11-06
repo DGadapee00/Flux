@@ -188,4 +188,60 @@ export default [
     },
     cases: [kase('Doubling the frequency', { change: 'faster' }, { mean: 'same' })],
   }),
+
+  problem({
+    id: 'u6.7.dip-estimate',
+    title: 'L di/dt',
+    exam: 'u6',
+    ch: '6',
+    lab: 'decoupling',
+    src: 'Flux, written for the Decoupling lab',
+    topics: ['decoupling'],
+    principles: ['decoupling'],
+    vars: { chip: choice(['mcu', 'a microcontroller'], ['fpga', 'a logic chip'], ['radio', 'a radio chip']), dI: range(0.05, 0.3, 0.05, 'A'), tr: range(5, 50, 5, 'ns', 1e-9) },
+    text: (T) => String.raw`${T.chip.replace(/^a/, 'A')} steps its supply current by ${T.dI} in ${T.tr}. With no capacitor nearby, the current must come through 50 nH of trace. Roughly how far does its supply dip?`,
+    parts: [num('dV', ($) => ((50e-9 * $.dI) / $.tr) * 1000, 'mV', { label: 'supply dip' })],
+    level: 1,
+    hints: ['The voltage across an inductance is $L\\,di/dt$.', 'Here $di/dt = \\Delta I/t_r$; keep nH as $10^{-9}$ H and ns as $10^{-9}$ s.'],
+    steps: ($, sig) => [String.raw`$\Delta V = 50\times10^{-9} \times ${$.dI}/${sig($.tr)} = ${sig(((50e-9 * $.dI) / $.tr) * 1000)}$ mV.`],
+    sim: {
+      scenario: 'none',
+      setup(s, $) {
+        Object.assign(s, { cap: 'none', dI: $.dI, trNs: $.tr * 1e9 });
+      },
+      read: (c) => ({ dV: c.estimate * 1000 }),
+    },
+    cases: [kase('The notes’ example: 0.1 A in 10 ns', { chip: 'mcu', dI: 0.1, tr: 10 }, { dV: 500 })],
+  }),
+
+  problem({
+    id: 'u6.8.cap-placement',
+    title: 'Will the chip stay up?',
+    exam: 'u6',
+    ch: '6',
+    kind: 'conceptual',
+    lab: 'decoupling',
+    src: 'Flux, written for the Decoupling lab',
+    topics: ['decoupling'],
+    principles: ['decoupling'],
+    vars: { setup: choice(['none', 'no capacitor near the chip'], ['close', 'a 100 nF ceramic 2 mm from the chip']) },
+    text: (T) => `A 3.3 V chip that resets below 3.0 V steps its current by 0.1 A in 10 ns. Its regulator is 50 mm away, and there is ${T.setup}. Does its supply stay above 3.0 V?`,
+    parts: [
+      pick('ok', 'the supply', [
+        ['yes', 'stays above 3.0 V', 'A nearby capacitor supplies the step through only a few nH.'],
+        ['no', 'dips below 3.0 V', 'Through 50 nH of trace the step needs about 0.5 V, more than the 0.3 V of room.'],
+      ], ($) => ($.setup === 'close' ? 'yes' : 'no')),
+    ],
+    level: 1,
+    hints: ['Estimate L di/dt for the path the current must take.', 'Compare with the 0.3 V of room between 3.3 and 3.0 V.'],
+    steps: ($) => [$.setup === 'close' ? 'Behind 3 nH, the step dips the supply only about 65 mV.' : '50 nH × 0.1 A / 10 ns = 0.5 V: the chip resets.'],
+    sim: {
+      scenario: 'none',
+      setup(s, $) {
+        Object.assign(s, { cap: $.setup === 'close' ? 'local' : 'none', d: 2, dI: 0.1, trNs: 10 });
+      },
+      read: (c) => ({ ok: c.low ? 'no' : 'yes' }),
+    },
+    cases: [kase('No capacitor', { setup: 'none' }, { ok: 'no' })],
+  }),
 ];

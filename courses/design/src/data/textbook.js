@@ -30,6 +30,8 @@ export const SECTIONS = Object.freeze({
   orifice: { book: 'wikipedia', section: 'Orifice plate', title: 'Orifice plate' },
   motor: { book: 'wikipedia', section: 'DC motor', title: 'DC motor' },
   pwm: { book: 'wikipedia', section: 'Pulse-width modulation', title: 'Pulse-width modulation' },
+  decoupling: { book: 'wikipedia', section: 'Decoupling capacitor', title: 'Decoupling capacitor' },
+  allocate: { book: 'wikipedia', section: 'Design for manufacturability', title: 'Design for manufacturability' },
 });
 
 export function citation(topic) {

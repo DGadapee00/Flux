@@ -42,4 +42,12 @@ export default {
       ],
     },
   },
+  'u3.7.cv-net': {
+    traps: {
+      net: [
+        [($) => 1.2 * ($.field === 'piston' ? -$.a : 2 * $.a) * $.h, 'Multiply by the area, h², not the side.'],
+        [($) => ($.field === 'piston' ? -$.a : 2 * $.a) * $.h * $.h, 'That is the volume rate. Multiply by the density, 1.2 kg/m³, for mass.'],
+      ],
+    },
+  },
 };

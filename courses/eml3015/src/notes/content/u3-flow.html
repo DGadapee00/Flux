@@ -21,8 +21,9 @@
     <a href="#s2"><span>2</span>Time along a path</a>
     <h3>Part II · Pressure</h3>
     <a href="#s3"><span>3</span>Euler's equation across a bend</a>
+    <a href="#s4"><span>4</span>Mass in, mass out</a>
     <h3>Reference</h3>
-    <a href="#s4"><span>4</span>Formula sheet</a>
+    <a href="#s5"><span>5</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -100,7 +101,25 @@ p_2 - p_1 = \frac{\rho K^2}{2}\left(\frac{1}{r_1^2} - \frac{1}{r_2^2}\right).
 </section>
 
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">4</span>Mass in, mass out</h2>
+<p>Mass is neither made nor lost. For any fixed region of a flow, the mass flowing out through its sides each second must equal the rate the mass inside falls.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>For a region of area \(A\) and boundary \(s\), and then by the divergence theorem for a vanishing region,</p>
+\[
+\oint \rho\,\mathbf v\cdot\mathbf n\,ds = -\frac{d}{dt}\iint \rho\,dA \quad\Longrightarrow\quad \frac{\partial \rho}{\partial t} + \nabla\cdot(\rho\mathbf v) = 0.
+\]
+<p>Where the density cannot change, as in water at ordinary speeds, this says \(\nabla\cdot\mathbf v = 0\): what flows in flows out.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · air squeezed by a piston</span>
+<p>Air at 1.2 kg/m³ moves as \(u = -2x\) s⁻¹ toward a closed end. A square 0.3 m on a side takes in 0.468 kg/s per metre of depth and lets out 0.252: a net 0.216 kg/s stays. The density inside rises at \(0.216/0.09 = 2.4\) kg/m³ each second.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading a speeding-up flow as one that gains or loses mass. Water entering a corner speeds up in one direction and slows in the other; in and out still balance.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Formula sheet</h2>
 \[
 \frac{D\mathbf v}{Dt} = \frac{\partial\mathbf v}{\partial t} + (\mathbf v\cdot\nabla)\mathbf v, \qquad T = \int \frac{dx}{u}, \qquad \rho\,\frac{D\mathbf v}{Dt} = -\nabla p + \rho\,\mathbf g,
 \]

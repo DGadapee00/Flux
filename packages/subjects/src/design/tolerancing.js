@@ -198,3 +198,55 @@ export function driftNumeric({ mu0, sigma, usl, delta, n }, max = 10000) {
   }
   return { flag, out };
 }
+
+/*
+ * Tolerance allocation for cost. Each part's cost rises as its tolerance tightens, modelled as
+ * a + b/T (the reciprocal model). The stack must hold ±T_asm, by root-sum-square (Σ T² = T_asm²) or
+ * by worst case (Σ T = T_asm). Lagrange's method gives the cheapest split in closed form:
+ *   RSS:   T_i = T_asm b_i^{1/3} / √(Σ b_j^{2/3})
+ *   worst: T_i = T_asm √b_i / Σ √b_j
+ * The second method walks downhill on the constraint surface by projected gradient descent.
+ */
+export const partsCost = (parts, T) => parts.reduce((s, p, i) => s + p.a + p.b / T[i], 0);
+
+export function allocateClosed(parts, Tasm, mode = 'rss') {
+  if (mode === 'worst') {
+    const sum = parts.reduce((s, p) => s + Math.sqrt(p.b), 0);
+    return parts.map((p) => (Tasm * Math.sqrt(p.b)) / sum);
+  }
+  const norm = Math.sqrt(parts.reduce((s, p) => s + p.b ** (2 / 3), 0));
+  return parts.map((p) => (Tasm * p.b ** (1 / 3)) / norm);
+}
+
+export function allocateNumeric(parts, Tasm, mode = 'rss', iters = 20000) {
+  const n = parts.length;
+  const project = (T) => {
+    const t = T.map((v) => Math.max(v, 1e-9));
+    if (mode === 'worst') {
+      const s = t.reduce((a, v) => a + v, 0);
+      return t.map((v) => (v * Tasm) / s);
+    }
+    const s = Math.sqrt(t.reduce((a, v) => a + v * v, 0));
+    return t.map((v) => (v * Tasm) / s);
+  };
+  let T = project(new Array(n).fill(Tasm / n));
+  let rate = 1e-3 * Tasm * Tasm / Math.max(...parts.map((p) => p.b));
+  let cost = partsCost(parts, T);
+  for (let k = 0; k < iters; k++) {
+    const grad = parts.map((p, i) => -p.b / (T[i] * T[i]));
+    // Remove the part of the gradient that leaves the constraint surface.
+    const nrm = mode === 'worst' ? new Array(n).fill(1) : T.map((v) => 2 * v);
+    const nn = nrm.reduce((a, v) => a + v * v, 0);
+    const gn = grad.reduce((a, g, i) => a + g * nrm[i], 0);
+    const tang = grad.map((g, i) => g - (gn / nn) * nrm[i]);
+    const next = project(T.map((v, i) => v - rate * tang[i]));
+    const c = partsCost(parts, next);
+    if (c < cost) {
+      T = next;
+      cost = c;
+      rate *= 1.1;
+    } else rate *= 0.5;
+    if (rate < 1e-30) break;
+  }
+  return T;
+}

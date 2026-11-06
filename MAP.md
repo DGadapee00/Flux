@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchy�
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 180 with a Flux lab, 95 gaps.**
+**275 concepts, 183 with a Flux lab, 92 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -19,12 +19,12 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Mechanics | 34 | 31 |
 | Electricity and magnetism | 27 | 25 |
 | Thermodynamics | 22 | 12 |
-| Fluid mechanics | 20 | 9 |
+| Fluid mechanics | 20 | 10 |
 | Heat transfer | 19 | 2 |
-| Circuits and systems | 27 | 12 |
+| Circuits and systems | 27 | 13 |
 | Mechanics of materials | 16 | 15 |
 | Materials science | 15 | 0 |
-| Design and manufacturing | 9 | 8 |
+| Design and manufacturing | 9 | 9 |
 | Instrumentation and actuators | 8 | 8 |
 | Statistics | 9 | 9 |
 
@@ -94,11 +94,11 @@ decoupling. Bolted joints sit with mechanics of materials. All twenty are on the
 *Design practice*, with a path, until the owner's design and measurement courses join the map.
 Sources are MIT 2.007, 2.72 and 2.008 lectures and reference articles, read on 6 November 2026.
 Sensors already has Bench's divider and night-light labs. *Design practice* now has its own app
-with seventeen labs: fits, stack-ups, position zones, process capability, a decision matrix, design
-intent in a sketch, verification margins, a bolted joint, an exact-constraint mount, a strain-gauge
-bridge, sampling and aliasing, thermocouples and RTDs, an orifice meter, a control valve in its
-system, a DC motor, PWM drive, and a board's ground return. Design for manufacture and decoupling
-are still gaps with lab candidates.
+with nineteen labs: fits, stack-ups, position zones, process capability, tolerance cost, a decision
+matrix, design intent in a sketch, verification margins, a bolted joint, an exact-constraint mount,
+a strain-gauge bridge, sampling and aliasing, thermocouples and RTDs, an orifice meter, a control
+valve in its system, a DC motor, PWM drive, a board's ground return and decoupling. Every concept on
+the design path now has a lab.
 Standards such as ASME Y14.5 and ISO 286 are paid documents: concepts explain the ideas and do not
 reproduce them.
 
@@ -124,8 +124,8 @@ in the courses that teach it.
    concepts build on them, through eigenvalues into differential equations, node analysis into
    circuits, and least squares and LU into numerical methods. One lab could carry both: drag a
    2×2 matrix's columns, then solve a 3×3 system with its planes drawn.
-6. **The thermal-fluids trunk.** Continuity and the Heat equation are left: 10 to 12 concepts
-   build on each, because fluid mechanics feeds heat transfer. EML 3015 has its own app with
+6. **The thermal-fluids trunk.** The Heat equation is left: 10 concepts build on it, because
+   fluid mechanics feeds heat transfer. Continuity now has a lab. EML 3015 has its own app with
    three units: viscosity (Viscosity, and Navier–Stokes for flow along a wall), pressure (a gate
    and an accelerating tank) and following the flow (a nozzle for the material derivative and a
    bend for Euler's equation). Navier–Stokes still wants a pressure-driven or two-dimensional lab.

@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Price one bracket as machined, bent from sheet and printed, while you change its tolerances and fillets. It corrects the idea that a tighter tolerance is free insurance: it can double the machining time. The check sums the cost terms two ways, per operation and per part.',
+  labs: [
+    { course: 'design', lab: 'allocate', notes: ['s4'], note: 'Three parts sharing a stack’s tolerance at least cost, by RSS or worst case. It covers tolerance cost, not process choice or assembly.' },
+  ],
 };

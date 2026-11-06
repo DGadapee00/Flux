@@ -23,6 +23,7 @@ export const SECTIONS = Object.freeze({
   diffusion: { book: 'cleynen', section: '5', title: 'Effects of shear' },
   'material-derivative': { book: 'cleynen', section: '6', title: 'Prediction of fluid flows' },
   euler: { book: 'cleynen', section: '6', title: 'Prediction of fluid flows' },
+  continuity: { book: 'cleynen', section: '6', title: 'Prediction of fluid flows' },
 });
 
 export function citation(topic) {

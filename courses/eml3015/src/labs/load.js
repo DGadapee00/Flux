@@ -8,6 +8,7 @@ const loaders = {
   'rigid-tank': () => import('./rigid-tank.js'),
   nozzle: () => import('./nozzle.js'),
   bend: () => import('./bend.js'),
+  continuity: () => import('./continuity.js'),
 };
 
 const labs = createLabLoader(loaders);

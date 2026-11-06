@@ -222,3 +222,37 @@ test('PWM: ripple formula against stepping the coil', () => {
     close(b.ripple, a.ripple, 1e-3 * (12 / 2), `ripple at ${D}, ${f}`);
   }
 });
+
+import { decouplingClosed, decouplingNumeric } from '../src/design/instruments.js';
+import { allocateClosed, allocateNumeric, partsCost } from '../src/design/tolerancing.js';
+import { cvClosed, cvNumeric } from '../src/mechanics/continuity.js';
+
+test('decoupling: exact solution against RK4', () => {
+  for (const [C, Lc] of [[100e-9, 3e-9], [100e-9, 31e-9], [10e-6, 50e-9]]) {
+    const p = { V0: 3.3, Rt: 0.05, Lt: 50e-9, C, Rc: 0.01, Lc, dI: 0.1, tr: 10e-9 };
+    const a = decouplingClosed(p, 400e-9);
+    const b = decouplingNumeric(p, 400e-9);
+    const dipA = 3.3 - Math.min(...a.map(([, v]) => v));
+    const dipB = 3.3 - Math.min(...b.map(([, v]) => v));
+    close(dipB, dipA, 1e-6, `dip with C ${C}, Lc ${Lc}`);
+  }
+});
+
+test('allocation: Lagrange against projected gradient descent', () => {
+  const parts = [{ a: 2, b: 0.02 }, { a: 8, b: 0.08 }, { a: 5, b: 0.3 }];
+  for (const mode of ['rss', 'worst']) {
+    const a = allocateClosed(parts, 0.1, mode);
+    const b = allocateNumeric(parts, 0.1, mode);
+    close(partsCost(parts, b), partsCost(parts, a), 1e-6, `${mode} cost`);
+    a.forEach((t, i) => close(b[i], t, 1e-5, `${mode} T${i}`));
+  }
+});
+
+test('continuity: closed form against the boundary sum', () => {
+  for (const field of ['corner', 'shear', 'piston', 'heated']) {
+    for (const [x0, y0] of [[0.5, 0.5], [1, -0.3]]) {
+      const p = { field, a: 2, h: 0.2, x0, y0 };
+      close(cvNumeric(p).net, cvClosed(p).net, 1e-9, `${field} at ${x0}, ${y0}`);
+    }
+  }
+});

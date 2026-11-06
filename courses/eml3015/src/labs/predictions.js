@@ -169,5 +169,27 @@ export const PREDICTIONS = {
       expect: { dp: 0.0012 },
       why: 'The speeds are the same, so only the density changes. Air is 830 times lighter than water.',
     },
+  ],  continuity: [
+    {
+      id: 'co-move',
+      scenario: 'corner',
+      ask: 'Water flows into a corner, speeding up and turning. Move the square to the other side, x = −0.5 m. Does any net mass now leave it?',
+      apply(s) { s.x0 = -0.5; },
+      watch: [{ id: 'net', label: 'the net mass leaving the square', get: (c) => Math.round(c.net * 1e9) / 1e9 }],
+      mode: 'dir',
+      expect: { net: 'same' },
+      why: 'Water’s density cannot change, and ∇·v = 0 everywhere in this flow. The flow rates through the sides change; their sum stays zero.',
+    },
+    {
+      id: 'co-piston',
+      scenario: 'piston',
+      ask: 'Push the piston twice as fast. How fast does the density inside the square rise?',
+      apply(s) { s.a = 4; },
+      watch: [{ id: 'dRhoDt', label: 'the density’s rate of rise', get: (c) => c.dRhoDt }],
+      mode: 'factor',
+      factors: [1, 2, 4],
+      expect: { dRhoDt: 2 },
+      why: 'The net inflow is ρ a A, and it all stays inside: twice a, twice the rate.',
+    },
   ],
 };

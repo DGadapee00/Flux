@@ -25,7 +25,9 @@ and the board's currents are example values written for the labs. The type K sen
 41 μV/°C), the Pt100 constants (R0 = 100 Ω, A = 3.9083 × 10⁻³, B = −5.775 × 10⁻⁷) and the orifice
 equation come from Wikipedia's Thermocouple, Resistance thermometer and Orifice plate articles, read
 on 6 November 2026. The motor's constants, the transmitter accuracy and the 16 MHz timer clock are
-example values.
+example values. The decoupling lab's 1 nH per mm, the chip's own 2 nF and its 3.0 V reset, and
+the tolerance-cost constants are example values; the 100 nF per chip, placed close, follows
+Wikipedia's Decoupling capacitor article.
 
 ## Methods
 

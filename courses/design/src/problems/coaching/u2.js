@@ -39,4 +39,12 @@ export default {
       ],
     },
   },
+  'u2.5.allocate': {
+    traps: {
+      Ti: [
+        [($) => ($.T / Math.sqrt(3)) * 1000, 'That is the equal split. The cheapest split gives more room to the parts dear to hold tight.'],
+        [($) => (($.T * Math.sqrt([0.02, 0.08, 0.3][Number($.part)])) / [0.02, 0.08, 0.3].reduce((s, b) => s + Math.sqrt(b), 0)) * 1000, 'That is the worst-case split, T_i ∝ √b. By RSS it is T_i ∝ b^(1/3), scaled so the squares add to T².'],
+      ],
+    },
+  },
 };

@@ -20,6 +20,8 @@ const loaders = {
   orifice: () => import('./orifice.js'),
   motor: () => import('./motor.js'),
   pwm: () => import('./pwm.js'),
+  decoupling: () => import('./decoupling.js'),
+  allocate: () => import('./allocate.js'),
 };
 
 const labs = createLabLoader(loaders);

@@ -20,6 +20,8 @@ export const PRINCIPLES = {
   'square-law': { name: 'Drop goes as flow squared', statement: 'A differential-pressure flowmeter’s drop rises as the square of the flow, so its error in flow grows as the flow falls.', cue: 'An orifice, venturi or nozzle meter.', family: 'Measurement' },
   'motor-line': { name: 'A DC motor’s straight line', statement: 'Torque sets the current, τ = k i; voltage less the iR drop sets the speed, ω = (V − iR)/k; power peaks at half the stall torque.', cue: 'Sizing or loading a brushed DC motor.', family: 'Actuators' },
   'pwm-average': { name: 'Duty sets the average', statement: 'PWM’s average voltage is the duty cycle times the supply; the frequency only sets the ripple and must be fast against the load’s time constant.', cue: 'Driving a motor, coil or LED from a microcontroller pin.', family: 'Actuators' },
+  'tolerance-cost': { name: 'Tolerance costs money', statement: 'Each part’s cost rises as its tolerance tightens; the cheapest split gives room to the parts dearest to make precise.', cue: 'Setting tolerances on parts in an assembly.', family: 'Tolerances' },
+  decoupling: { name: 'Charge must be close', statement: 'A fast current step through inductance dips the supply by L di/dt; a capacitor beside the chip supplies it through little inductance.', cue: 'Placing capacitors on a board.', family: 'Boards' },
 };
 
 /** Tags for templates that do not carry their own `principles`. */

@@ -9,6 +9,7 @@ export default {
     { id: 's1', n: 1, title: 'A circle, not a box', lab: 'position', ch: ['2'], topics: ['position'], home: true },
     { id: 's2', n: 2, title: 'Cp and Cpk', lab: 'capability', ch: ['2'], topics: ['capability'], home: true },
     { id: 's3', n: 3, title: 'Watching a process drift', lab: 'capability', ch: ['2'], topics: ['capability'] },
-    { id: 's4', n: 4, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's4', n: 4, title: 'Tolerance costs money', lab: 'allocate', ch: ['2'], topics: ['allocate'], home: true },
+    { id: 's5', n: 5, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

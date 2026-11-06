@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: String.raw`Switch a chip’s load quickly and watch its supply with and without a decoupling capacitor, near and far. It corrects the idea that one large capacitor anywhere on the board will do: a small one beside the chip matters more, because of the trace inductance between. The check compares the dip from \(L\,di/dt\) with a circuit simulation.`,
+  labs: [
+    { course: 'design', lab: 'decoupling', notes: ['s5'], note: 'A chip’s current step with no capacitor near, or 100 nF far or close, and the dip in its supply. Ground planes appear in the Ground return lab.' },
+  ],
 };

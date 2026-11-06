@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'A 2D flow with a small control volume you drag. Net outflow is zero for incompressible flow, and nonzero where density changes.',
+  labs: [
+    { course: 'eml3015', lab: 'continuity', notes: ['s4'], note: 'A square control volume moved about water and air flows, with the mass across each side and the density change it implies.' },
+  ],
 };
