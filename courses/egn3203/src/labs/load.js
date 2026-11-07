@@ -7,6 +7,7 @@ const loaders = {
   elimination: () => import('./elimination.js'),
   inverse: () => import('./inverse.js'),
   rank: () => import('./rank.js'),
+  roundoff: () => import('./roundoff.js'),
 };
 
 const labs = createLabLoader(loaders);

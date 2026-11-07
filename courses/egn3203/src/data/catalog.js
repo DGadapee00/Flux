@@ -14,6 +14,15 @@ export const EXAMS = [
     labs: ['matrix', 'elimination', 'inverse', 'rank'],
     coming: ['Least squares'],
   },
+  {
+    id: 'u2',
+    n: 2,
+    title: 'Numbers on a computer',
+    chapters: '2',
+    date: 'Unit 2',
+    labs: ['roundoff'],
+    coming: ['Truncation error', 'Numerical derivatives'],
+  },
 ];
 
 export const LAB_META = {
@@ -21,10 +30,12 @@ export const LAB_META = {
   elimination: { id: 'elimination', exam: 'u1', title: 'Elimination' },
   inverse: { id: 'inverse', exam: 'u1', title: 'Inverse' },
   rank: { id: 'rank', exam: 'u1', title: 'Rank' },
+  roundoff: { id: 'roundoff', exam: 'u2', title: 'Round-off' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Matrices and elimination',
+  2: 'Round-off',
 };
 
 export function examById(id) {

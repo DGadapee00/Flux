@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Evaluate \\((1 - \\cos x)/x^2\\) as \\(x\\) shrinks, written directly and as \\(2\\sin^2(x/2)/x^2\\). It corrects the idea that a computer’s answer is good to 16 digits: the direct form loses every digit near \\(x = 10^{-8}\\), while the true value is \\(1/2\\).',
+  labs: [
+    { course: 'egn3203', lab: 'roundoff', notes: ['s1', 's2'], note: 'Three formulas in double precision, as written and rewritten, against their Taylor series: (1 − cos x)/x² loses every digit by x = 10⁻⁸, while 2 sin²(x/2)/x² keeps them.' },
+  ],
 };
