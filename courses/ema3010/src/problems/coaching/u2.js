@@ -2,9 +2,17 @@
  * Unit 2 coaching: traps (the wrong value a named mistake gives) and their fixes, per template.
  * Folded into the bank by src/problems/index.js.
  */
-import { CELSIUS, DIFF, caseHours, frac } from '../bank/u2.js';
+import { CELSIUS, D2R, DIFF, caseHours, frac, schmidM } from '../bank/u2.js';
 
 export default {
+  'u2.5.schmid': {
+    traps: {
+      s: [
+        [($) => ($.ask === 'tau' ? 3 * Math.cos($.phi * D2R) : 1 / Math.cos($.phi * D2R)), 'Both angles count: the shear on the plane is σ cos φ times its area factor, and only cos λ of it lies along the slip direction.'],
+        [($) => ($.ask === 'tau' ? 3 / schmidM($) : schmidM($)), 'The Schmid factor turns σ into τ by multiplying: τ_R = mσ. To find the pull, divide τ_crss by m.'],
+      ],
+    },
+  },
   'u2.3.case-time': {
     traps: {
       t: [

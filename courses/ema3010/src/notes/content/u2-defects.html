@@ -20,7 +20,8 @@
     <a href="#s1"><span>1</span>Vacancies in equilibrium</a>
     <h3>Reference</h3>
     <a href="#s2"><span>2</span>Diffusion</a>
-    <a href="#s3"><span>3</span>Formula sheet</a>
+    <a href="#s3"><span>3</span>Slip and Schmid’s law</a>
+    <a href="#s4"><span>4</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -82,16 +83,37 @@ D = 2.3\times10^{-5}\exp\!\left(-\frac{148000}{8.314(1173)}\right) = 5.91\times1
 </section>
 
 <section class="topic" id="s3">
-<h2><span class="n">3</span>Formula sheet</h2>
+<h2><span class="n">3</span>Slip and Schmid’s law</h2>
+<p>Sliding one whole plane of atoms over the next at once would take a shear stress near a tenth of the shear modulus, far more than metals yield at. They yield sooner because a dislocation, the edge of an extra half-plane, moves through the crystal one row of bonds at a time.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Dislocations glide on close-packed planes, along close-packed directions: in FCC metals the four {111} planes, each with three ⟨110⟩ directions. A pull \(\sigma\) along an axis at \(\phi\) to a plane's normal spreads over an area larger by \(1/\cos\phi\), and only \(\cos\lambda\) of the force lies along a slip direction at \(\lambda\) to the axis:</p>
+\[
+\tau_R = \sigma\cos\phi\cos\lambda.
+\]
+<p>Slip starts when \(\tau_R\) reaches the critical resolved shear stress \(\tau_\text{crss}\), a property of the crystal. The Schmid factor \(\cos\phi\cos\lambda\) is at most ½, at \(\phi = \lambda = 45^\circ\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a crystal at 40°</span>
+<p>A crystal with \(\tau_\text{crss} = 1\) MPa is pulled at 2.2 MPa. Its slip plane's normal is at \(\phi = 40^\circ\) to the axis, with the slip direction at \(\lambda = 50^\circ\). Then \(m = \cos 40^\circ\cos 50^\circ = 0.492\) and \(\tau_R = 2.2(0.492) = 1.08\) MPa, enough to slip. It began to slip at \(\sigma_y = 1/0.492 = 2.03\) MPa.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Treating yield as a tensile limit. The same pull slips a crystal at 45° and leaves one at 10° or 80° whole. Yield is a shear event, which is why the yield criteria for parts judge shear.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Formula sheet</h2>
 \[
 g(c) = cQ_v + kT[c\ln c + (1 - c)\ln(1 - c)], \qquad c^* \approx e^{-Q_v/kT}, \qquad k = 8.617\times10^{-5}\ \text{eV/K}.
 \]
 \[
 J = -D\frac{\partial C}{\partial x}, \qquad \frac{\partial C}{\partial t} = D\frac{\partial^2 C}{\partial x^2}, \qquad \frac{C_s - C}{C_s - C_0} = \operatorname{erf}\frac{x}{2\sqrt{Dt}}, \qquad D = D_0e^{-Q_d/RT}.
 \]
+\[
+\tau_R = \sigma\cos\phi\cos\lambda, \qquad \text{slip when } \tau_R \ge \tau_\text{crss}, \qquad \sigma_y = \frac{\tau_\text{crss}}{\cos\phi\cos\lambda} \ge 2\tau_\text{crss}.
+\]
 </section>
 
 </main>
-<footer>Our own notes, written for Flux. Read alongside MIT 3.091's recitations on point defects, Arrhenius activation and diffusion, and the DoITPoMS package on diffusion.</footer>
+<footer>Our own notes, written for Flux. Read alongside MIT 3.091's recitations on point defects, Arrhenius activation and diffusion, and the DoITPoMS packages on diffusion and dislocations.</footer>
 </body>
 </html>

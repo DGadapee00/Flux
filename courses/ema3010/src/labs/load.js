@@ -7,6 +7,7 @@ const loaders = {
   crystal: () => import('./crystal.js'),
   vacancy: () => import('./vacancy.js'),
   diffusion: () => import('./diffusion.js'),
+  slip: () => import('./slip.js'),
 };
 
 const labs = createLabLoader(loaders);

@@ -13,6 +13,10 @@ export const frac = (Q, T) => Math.exp(-Q / (KB * T));
 /** The carburizing problem: furnace temperatures (°C), D, and the hours to reach 0.6 wt% at a depth. */
 export const FURNACE = { nine: 900, thousand: 1000 };
 export const Z_HALF = 0.4769;
+/** The slip problem: the Schmid factor from φ and λ in degrees, and the asked value in MPa. */
+export const D2R = Math.PI / 180;
+export const schmidM = ($) => Math.cos($.phi * D2R) * Math.cos($.lam * D2R);
+export const slipAnswer = ($) => ($.ask === 'tau' ? 3 * schmidM($) : 1 / schmidM($));
 export const DIFF = ($, kelvin = true) => 2.3e-5 * Math.exp(-148e3 / (8.314 * (FURNACE[$.temp] + (kelvin ? 273 : 0))));
 export const caseHours = ($, D = DIFF($), two = 2) => ($.depth ** 2 / (two * two * Z_HALF ** 2 * D)) / 3600;
 
@@ -141,5 +145,70 @@ export default [
       },
     },
     cases: [kase('twice as long', { change: 'twice' }, { f: '1.4' })],
+  }),
+
+  problem({
+    id: 'u2.5.schmid',
+    title: 'Resolved shear on a slip system',
+    exam: 'u2',
+    ch: '2',
+    lab: 'slip',
+    src: 'Flux, written for the Slip lab',
+    topics: ['slip'],
+    principles: ['schmid'],
+    vars: {
+      ask: choice(['tau', 'the shear stress resolved onto the slip system under a 3 MPa pull'], ['yield', 'the pull at which it starts to slip, if τ_crss = 1 MPa']),
+      phi: range(40, 60, 5, '°'),
+      lam: range(50, 70, 5, '°'),
+    },
+    text: (T) => `A single crystal is pulled along its axis. One slip plane’s normal is at φ = ${T.phi}° to the axis, and a slip direction in that plane is at λ = ${T.lam}° to it. What is ${T.ask}, in MPa?`,
+    parts: [num('s', ($) => slipAnswer($), 'MPa', { label: $ => ($.ask === 'tau' ? 'τ_R' : 'σ_y') })],
+    level: 2,
+    hints: ['Only the shear along the slip direction drives slip: τ_R = σ cos φ cos λ.', 'Slip starts when τ_R = τ_crss, so σ_y = τ_crss/(cos φ cos λ).'],
+    steps: ($) => [
+      String.raw`$m = \cos ${$.phi}^\circ \cos ${$.lam}^\circ = ${Number(schmidM($).toPrecision(4))}$`,
+      $.ask === 'tau' ? String.raw`$\tau_R = 3(${Number(schmidM($).toPrecision(4))}) = ${Number(slipAnswer($).toPrecision(3))}$ MPa` : String.raw`$\sigma_y = 1/${Number(schmidM($).toPrecision(4))} = ${Number(slipAnswer($).toPrecision(3))}$ MPa`,
+    ],
+    sim: {
+      scenario: 'fortyfive',
+      setup(s, $) {
+        const psi = (Math.acos(Math.min(1, Math.cos($.lam * D2R) / Math.sin($.phi * D2R))) * 180) / Math.PI;
+        Object.assign(s, { phi: $.phi, psi, sigma: 3, tauC: 1 });
+      },
+      read: (c, s, $) => ({ s: $.ask === 'tau' ? c.tau : c.sigmaY }),
+    },
+    cases: [kase('τ_R at 45° and 60°', { ask: 'tau', phi: 45, lam: 60 }, { s: 1.0607 })],
+  }),
+
+  problem({
+    id: 'u2.6.never-slips',
+    title: 'Can it ever slip?',
+    exam: 'u2',
+    ch: '2',
+    kind: 'conceptual',
+    lab: 'slip',
+    src: 'Flux, written for the Slip lab',
+    topics: ['slip'],
+    principles: ['schmid'],
+    vars: { axis: choice(['normal', 'along the slip plane’s normal'], ['inplane', 'along a line lying in the slip plane, square to the slip direction'], ['diagonal', 'at 45° to both the plane’s normal and the slip direction']) },
+    text: (T) => `A single crystal with one slip system is pulled along an axis ${T.axis}. What happens as the pull rises?`,
+    parts: [
+      pick('d', 'the slip system', [
+        ['never', 'it never slips, however hard the pull', 'cos φ cos λ = 0 when the pull is square to the slip direction or along the normal: no shear reaches the system.'],
+        ['easiest', 'it slips at the lowest pull of any orientation', 'φ = λ = 45° gives the largest Schmid factor, ½, so slip starts at 2τ_crss.'],
+        ['tensile', 'it slips when the pull reaches τ_crss', 'Slip answers to the resolved shear, not the tensile stress: the pull is at least 2τ_crss.'],
+      ], ($) => ($.axis === 'diagonal' ? 'easiest' : 'never')),
+    ],
+    level: 1,
+    hints: ['Write τ_R = σ cos φ cos λ.', 'What are φ and λ in each case?'],
+    steps: ($) => [{ normal: 'φ = 0 but λ = 90°: cos λ = 0.', inplane: 'λ = 90° (square to the slip direction): cos λ = 0.', diagonal: 'φ = λ = 45°: m = ½, the most possible.' }[$.axis]],
+    sim: {
+      scenario: 'fortyfive',
+      setup(s, $) {
+        Object.assign(s, { normal: { phi: 0, psi: 0 }, inplane: { phi: 90, psi: 90 }, diagonal: { phi: 45, psi: 0 } }[$.axis]);
+      },
+      read: (c) => ({ d: c.m < 1e-9 ? 'never' : c.m > 0.499 ? 'easiest' : 'tensile' }),
+    },
+    cases: [kase('along the normal', { axis: 'normal' }, { d: 'never' })],
   }),
 ];

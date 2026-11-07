@@ -24,6 +24,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Pull a single crystal and turn its slip plane, reading the resolved shear stress. It corrects the idea that a crystal yields when the tensile stress reaches a limit: the same pull yields it or not depending on angle.',
+  labs: [
+    { course: 'ema3010', lab: 'slip', notes: ['s3'], note: 'A single crystal pulled at an angle to its slip plane: the same pull slips it at 45° and leaves it whole at 10° or 80°, because only the resolved shear counts.' },
+  ],
 };

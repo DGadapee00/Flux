@@ -20,8 +20,8 @@ export const EXAMS = [
     title: 'Defects',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['vacancy', 'diffusion'],
-    coming: ['Dislocations'],
+    labs: ['vacancy', 'diffusion', 'slip'],
+    coming: ['Strengthening'],
   },
 ];
 
@@ -30,6 +30,7 @@ export const LAB_META = {
   crystal: { id: 'crystal', exam: 'u1', title: 'Crystal' },
   vacancy: { id: 'vacancy', exam: 'u2', title: 'Vacancy' },
   diffusion: { id: 'diffusion', exam: 'u2', title: 'Diffusion' },
+  slip: { id: 'slip', exam: 'u2', title: 'Slip' },
 };
 
 export const CHAPTER_TITLES = {
