@@ -2,9 +2,17 @@
  * Unit 3 coaching: traps (the wrong value a named mistake gives) and their fixes, per template.
  * Folded into the bank by src/problems/index.js.
  */
-import { angleRate } from '../bank/u3.js';
+import { angleRate, tumbleRate } from '../bank/u3.js';
 
 export default {
+  'u3.4.tumble-rate': {
+    traps: {
+      lam: [
+        [($) => tumbleRate($, false), 'The linearised equation gives λ², the rate squared: take the square root.'],
+        [($) => tumbleRate($, true, 'middle'), 'The denominator is the product of the other two inertias, I₁I₃, not the spin axis’s own.'],
+      ],
+    },
+  },
   'u3.1.rates': {
     traps: {
       rate: [

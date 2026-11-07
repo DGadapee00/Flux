@@ -21,7 +21,8 @@
     <a href="#s2"><span>2</span>Gimbal lock</a>
     <a href="#s3"><span>3</span>Quaternions</a>
     <h3>Reference</h3>
-    <a href="#s4"><span>4</span>Formula sheet</a>
+    <a href="#s4"><span>4</span>Euler’s equations and spin stability</a>
+    <a href="#s5"><span>5</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -97,7 +98,33 @@ R = R_z(\psi)\,R_y(\theta)\,R_x(\phi), \qquad R_z(\psi) = \begin{bmatrix}\cos\ps
 </section>
 
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">4</span>Euler’s equations and spin stability</h2>
+<p>Spinning a satellite is the cheapest way to hold it steady: a spinning body keeps its angular momentum. But not every spin axis works.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>About its principal axes a body's angular momentum is \(\mathbf H = (I_1\omega_1, I_2\omega_2, I_3\omega_3)\). In the turning body frame, \(\dot{\mathbf H} + \boldsymbol\omega\times\mathbf H = \mathbf M\), which with no torque gives Euler's equations,</p>
+\[
+I_1\dot\omega_1 = (I_2 - I_3)\,\omega_2\omega_3, \qquad I_2\dot\omega_2 = (I_3 - I_1)\,\omega_3\omega_1, \qquad I_3\dot\omega_3 = (I_1 - I_2)\,\omega_1\omega_2.
+\]
+<p>Spin at \(\omega_0\) about axis \(s\) with small rates \(w_a, w_b\) on the other two, and keep first-order terms:</p>
+\[
+\ddot w_a = -\omega_0^2\,\frac{(I_s - I_a)(I_s - I_b)}{I_aI_b}\,w_a.
+\]
+<p>About the least or the greatest axis both factors have the same sign: the wobble oscillates. About the middle axis they differ: the wobble grows as \(e^{\lambda t}\) and the body flips.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a brick about its middle axis</span>
+<p>A 12 kg brick, 0.6 × 0.4 × 0.2 m, has \(I = m(b^2 + c^2)/12 = 0.20,\ 0.40,\ 0.52\) kg·m². Spun at 1 rad/s about the middle axis,</p>
+\[
+\lambda = \sqrt{\frac{(0.40 - 0.20)(0.52 - 0.40)}{(0.20)(0.52)}} = 0.480\ \text{s}^{-1}.
+\]
+<p>The wobble grows e-fold every 2.1 s, so a 1% wobble becomes a flip in about 15 s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Trusting the least axis for good. A rigid body is steady there, but a real one flexes and loses energy while keeping its angular momentum, and drifts to spin about its greatest axis. Spin-stabilized satellites spin about the greatest axis.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Formula sheet</h2>
 \[
 R = R_z(\psi)R_y(\theta)R_x(\phi), \qquad R^{\mathsf T}R = I, \qquad \hat{\mathbf x}_\text{body} = (\cos\psi\cos\theta,\ \sin\psi\cos\theta,\ -\sin\theta).
 \]
@@ -107,9 +134,12 @@ R = R_z(\psi)R_y(\theta)R_x(\phi), \qquad R^{\mathsf T}R = I, \qquad \hat{\mathb
 \[
 \mathbf q = \left(\cos\tfrac\alpha2,\ \hat{\mathbf n}\sin\tfrac\alpha2\right), \qquad \mathbf q = q_z(\psi)\,q_y(\theta)\,q_x(\phi), \qquad \mathbf q_\text{new} = \mathbf q\otimes\delta\mathbf q.
 \]
+\[
+I_1\dot\omega_1 = (I_2 - I_3)\omega_2\omega_3 + M_1, \qquad \lambda_\text{middle} = \omega_0\sqrt{\frac{(I_2 - I_1)(I_3 - I_2)}{I_1I_3}}, \qquad I_\text{box} = \frac{m(b^2 + c^2)}{12}.
+\]
 </section>
 
 </main>
-<footer>Our own notes, written for Flux. Read alongside MIT 16.07 Dynamics, Lecture 3, on coordinate transformations.</footer>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.07 Dynamics, Lecture 3, on coordinate transformations, and Lecture 28, on Euler's equations.</footer>
 </body>
 </html>

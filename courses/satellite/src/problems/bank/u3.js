@@ -2,6 +2,7 @@
  * Unit 3 bank: attitude control. Original problems, written for the Attitude lab, with staged hints
  * and named traps (../coaching/u3.js), each checked against the lab (`sim`).
  */
+import { inertias } from '@flux/subjects/mechanics/spin.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
@@ -9,6 +10,13 @@ const DEG = Math.PI / 180;
 /** The angle rate (°/s) that makes 1°/s about body z at pitch θ with zero roll. */
 export const angleRate = ($) => ($.angle === 'yaw' ? 1 / Math.cos($.pitch) : Math.tan($.pitch));
 /** A component of the body x axis after yaw ψ and pitch θ. */
+/** The middle-axis growth rate for the box spun at ω₀; `root` and `den` name the traps. */
+export const tumbleRate = ($, root = true, den = 'outer') => {
+  const [a, b, c] = inertias($.body);
+  const k = den === 'outer' ? ((b - a) * (c - b)) / (a * c) : ((b - a) * (c - b)) / (b * b);
+  return $.w0 * (root ? Math.sqrt(k) : k);
+};
+export { inertias };
 export const noseComponent = ($) => ($.comp === 'x' ? Math.cos($.psi) * Math.cos($.theta) : Math.sin($.psi) * Math.cos($.theta));
 
 export default [
@@ -94,5 +102,71 @@ export default [
       read: (c, s, $) => ({ lock: $.rep === 'euler' ? (c.reachable ? 'no' : 'yes') : c.quatFollows ? 'no' : 'yes' }),
     },
     cases: [kase('three angles', { rep: 'euler' }, { lock: 'yes' })],
+  }),
+
+  problem({
+    id: 'u3.4.tumble-rate',
+    title: 'How fast does the tumble grow?',
+    exam: 'u3',
+    ch: '3',
+    lab: 'spin',
+    src: 'Flux, written for the Spin lab',
+    topics: ['spin'],
+    principles: ['spin-stability'],
+    vars: { body: choice(['brick', 'a 12 kg brick, 0.6 × 0.4 × 0.2 m'], ['plate', 'a 12 kg plate, 0.5 × 0.3 × 0.05 m']), w0: range(0.5, 2, 0.5, 'rad/s') },
+    text: (T) => `In orbit, ${T.body} is spun at ${T.w0} rad/s about its middle principal axis, with a tiny wobble. Treat it as a uniform box, I = m(b² + c²)/12 about each axis. At what rate λ does the wobble grow, in 1/s?`,
+    parts: [num('lam', ($) => tumbleRate($), '1/s', { label: 'λ' })],
+    level: 3,
+    hints: [
+      'Find the three inertias. The middle one is I₂, spun about; I₁ and I₃ are the other two.',
+      'Linearise Euler’s equations: λ = ω₀√((I₂ − I₁)(I₃ − I₂)/(I₁I₃)).',
+    ],
+    steps: ($) => {
+      const I = inertias($.body);
+      return [
+        String.raw`$I = ${I.map((v) => Number(v.toPrecision(4))).join(',\\ ')}$ kg·m²`,
+        String.raw`$\lambda = ${$.w0}\sqrt{\dfrac{(${Number(I[1].toPrecision(4))} - ${Number(I[0].toPrecision(4))})(${Number(I[2].toPrecision(4))} - ${Number(I[1].toPrecision(4))})}{(${Number(I[0].toPrecision(4))})(${Number(I[2].toPrecision(4))})}} = ${Number(tumbleRate($).toPrecision(3))}$ 1/s`,
+      ];
+    },
+    sim: {
+      scenario: 'mid',
+      setup(s, $) {
+        Object.assign(s, { body: $.body, axis: 'y' });
+      },
+      // The lab spins at 1 rad/s; Euler's equations scale time with 1/ω₀, so λ scales with ω₀.
+      read: (c, s, $) => ({ lam: c.check.measured * $.w0 }),
+    },
+    cases: [kase('the brick at 1 rad/s', { body: 'brick', w0: 1 }, { lam: 0.4804 })],
+  }),
+
+  problem({
+    id: 'u3.5.which-axis',
+    title: 'Which spin is steady?',
+    exam: 'u3',
+    ch: '3',
+    kind: 'conceptual',
+    lab: 'spin',
+    src: 'Flux, written for the Spin lab',
+    topics: ['spin'],
+    principles: ['spin-stability'],
+    vars: { axis: choice(['least', 'its least'], ['middle', 'its middle'], ['greatest', 'its greatest']) },
+    text: (T) => `A rigid box with three different moments of inertia is spun in orbit about the principal axis of ${T.axis} moment of inertia, with a small wobble. With no torque on it, what does the wobble do?`,
+    parts: [
+      pick('d', 'the wobble', [
+        ['steady', 'it stays small, turning over between the other two axes', 'About the least or the greatest axis, Euler’s equations make the wobble oscillate.'],
+        ['flips', 'it grows until the box flips over, again and again', 'About the middle axis the linearised equations have a growing solution, e^(λt).'],
+      ], ($) => ($.axis === 'middle' ? 'flips' : 'steady')),
+    ],
+    level: 1,
+    hints: ['Linearise Euler’s equations about the spin.', 'The sign of (I_s − I_a)(I_s − I_b) decides: positive oscillates, negative grows.'],
+    steps: ($) => [$.axis === 'middle' ? 'The two factors have opposite signs: the wobble grows.' : 'Both factors have the same sign: the wobble oscillates.'],
+    sim: {
+      scenario: 'max',
+      setup(s, $) {
+        s.axis = { least: 'x', middle: 'y', greatest: 'z' }[$.axis];
+      },
+      read: (c) => ({ d: c.flips > 0 ? 'flips' : 'steady' }),
+    },
+    cases: [kase('the middle axis', { axis: 'middle' }, { d: 'flips' })],
   }),
 ];

@@ -9,6 +9,7 @@ export default {
     { id: 's1', n: 1, title: 'Rotation matrices and three angles', lab: 'attitude', ch: ['3'], topics: ['rotation'], home: true },
     { id: 's2', n: 2, title: 'Gimbal lock', lab: 'attitude', ch: ['3'], topics: ['gimbal-lock'] },
     { id: 's3', n: 3, title: 'Quaternions', lab: 'attitude', ch: ['3'], topics: ['quaternion'] },
-    { id: 's4', n: 4, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's4', n: 4, title: 'Euler’s equations and spin stability', lab: 'spin', ch: ['3'], topics: ['spin'], home: true },
+    { id: 's5', n: 5, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

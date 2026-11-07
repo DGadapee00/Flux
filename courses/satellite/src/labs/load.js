@@ -6,6 +6,7 @@ const loaders = {
   kepler: () => import('./kepler.js'),
   noise: () => import('./noise.js'),
   attitude: () => import('./attitude.js'),
+  spin: () => import('./spin.js'),
 };
 
 const labs = createLabLoader(loaders);

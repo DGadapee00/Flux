@@ -29,8 +29,8 @@ export const EXAMS = [
     title: 'Attitude control',
     chapters: '3',
     date: 'Unit 3',
-    labs: ['attitude'],
-    coming: ['Euler’s equations and spin stability', 'Transfer functions', 'Feedback and PID'],
+    labs: ['attitude', 'spin'],
+    coming: ['Transfer functions', 'Feedback and PID'],
   },
 ];
 
@@ -38,6 +38,7 @@ export const LAB_META = {
   kepler: { id: 'kepler', exam: 'u1', title: 'Kepler' },
   noise: { id: 'noise', exam: 'u2', title: 'Noise' },
   attitude: { id: 'attitude', exam: 'u3', title: 'Attitude' },
+  spin: { id: 'spin', exam: 'u3', title: 'Spin' },
 };
 
 export const CHAPTER_TITLES = {

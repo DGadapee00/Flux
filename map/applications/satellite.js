@@ -187,6 +187,7 @@ export const SATELLITE = {
       labs: [
         { concept: 'angular-momentum', course: 'egn3321', lab: 'spin' },
         { concept: 'attitude-rotations', course: 'satellite', lab: 'attitude' },
+        { concept: 'euler-rigid-body', course: 'satellite', lab: 'spin' },
       ],
       demonstrate: 'Use your mass layout to estimate inertia. Predict a turn under a stated torque and check its angular impulse. Define a pointing-error target and explain how feedback would correct a disturbance.',
       deliverable: 'A pointing model, torque estimate and actuator power allowance.',
