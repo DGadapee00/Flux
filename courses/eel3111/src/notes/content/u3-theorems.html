@@ -19,8 +19,11 @@
     <h3>Part I · Superposition</h3>
     <a href="#s1"><span>1</span>Superposition</a>
     <a href="#s2"><span>2</span>Power does not superpose</a>
+    <h3>Part II · Equivalent circuits</h3>
+    <a href="#s3"><span>3</span>Thévenin and Norton equivalents</a>
+    <a href="#s4"><span>4</span>Maximum power is not efficiency</a>
     <h3>Reference</h3>
-    <a href="#s3"><span>3</span>Formula sheet</a>
+    <a href="#s5"><span>5</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -75,13 +78,60 @@ P_L = R_L\,(I_{L1} + I_{L2})^2 = P_1 + P_2 + 2R_L\,I_{L1}I_{L2}.
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Equivalent circuits</h2>
+</div>
+
 <section class="topic" id="s3">
-<h2><span class="n">3</span>Formula sheet</h2>
+<h2><span class="n">3</span>Thévenin and Norton equivalents</h2>
+<p>Take the load out of a linear network and look into the two terminals it left. Whatever is inside, the terminal voltage falls on a straight line as the load draws more current.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>By superposition, the terminal voltage is the sum of a part from the sources inside, with the load drawing nothing, and a part from the load's current \(I\) alone, with the sources switched off. The first is the open-circuit voltage \(V_\text{th}\). The second is \(-I R_\text{th}\), where \(R_\text{th}\) is the resistance seen with every independent source switched off. So</p>
+\[
+V = V_\text{th} - I R_\text{th}.
+\]
+<p>That is one source in series with one resistor, Thévenin's form. Shorting the terminals gives the other intercept, \(I_N = V_\text{th}/R_\text{th}\): one current source beside the same resistor, Norton's form.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the network from its load</span>
+<p>The two-source network of section 1, with the load taken out. Switch both sources off and the terminals see 4 Ω in parallel with 2 Ω plus 2 Ω ∥ 4 Ω:</p>
+\[
+R_\text{th} = 4 \parallel 3.33 = 1.82\ \Omega.
+\]
+<p>Short the terminals: the 6 V source sends 1.5 A through its 4 Ω, and the 12 V source sends 2.4 A through the 2 Ω, so \(I_N = 3.9\) A and \(V_\text{th} = 3.9 \times 1.82 = 7.09\) V. On the bench, a 10 Ω load reads 6.0 V and a 1 Ω load 2.52 V: the line through those two points gives the same pair.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Switching off a dependent source to find \(R_\text{th}\). It stays in; with one inside, push a test current into the terminals and read the voltage.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Maximum power is not efficiency</h2>
+<p>A load \(R_L\) on the equivalent draws \(I = V_\text{th}/(R_\text{th} + R_L)\). Its power \(I^2 R_L\) is zero for a short and for an open, so it peaks between.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+P_L = \frac{V_\text{th}^2 R_L}{(R_\text{th} + R_L)^2}, \qquad \frac{dP_L}{dR_L} = 0 \ \text{ at } \ R_L = R_\text{th}, \qquad P_\text{max} = \frac{V_\text{th}^2}{4R_\text{th}}.
+\]
+<p>At the peak the same current runs through \(R_\text{th}\), which takes as much power as the load. The equivalent's efficiency is \(\eta = R_L/(R_L + R_\text{th})\): 50% at the match, rising towards 100% as the load grows.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a matched load</span>
+<p>The network above with \(R_L = 1.82\) Ω takes \(7.09^2/(4 \times 1.82) = 6.91\) W, and 6.91 W heats \(R_\text{th}\): 50%. The real sources put out 38.4 W, because the network wastes power inside, in the 4 Ω shunt above all. A 20 Ω load takes only 2.11 W, but at 92% efficiency in the equivalent.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Match the load to get the most power from a weak source, such as an antenna. Make the load much larger than \(R_\text{th}\) to waste little, as every power supply does. The equivalent copies the terminals, not the losses inside.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Formula sheet</h2>
 \[
 \mathbf v = G^{-1}\mathbf i_s = \sum_k G^{-1}\mathbf i_{s,k}, \qquad \text{off: } V \to \text{wire}, \quad I \to \text{break}.
 \]
 \[
 P_L = R_L\,(I_{L1} + I_{L2})^2 = P_1 + P_2 + 2R_L I_{L1} I_{L2}.
+\]
+\[
+V = V_\text{th} - I R_\text{th}, \quad I_N = \frac{V_\text{th}}{R_\text{th}}, \qquad P_\text{max} = \frac{V_\text{th}^2}{4R_\text{th}} \text{ at } R_L = R_\text{th}, \quad \eta = \frac{R_L}{R_L + R_\text{th}}.
 \]
 </section>
 

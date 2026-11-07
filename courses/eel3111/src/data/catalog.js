@@ -28,8 +28,8 @@ export const EXAMS = [
     title: 'Circuit theorems',
     chapters: '3',
     date: 'Unit 3',
-    labs: ['superpose'],
-    coming: ['Thévenin and Norton equivalents'],
+    labs: ['superpose', 'thevenin'],
+    coming: [],
   },
 ];
 
@@ -38,6 +38,7 @@ export const LAB_META = {
   dependent: { id: 'dependent', exam: 'u1', title: 'Dependent' },
   phasors: { id: 'phasors', exam: 'u2', title: 'Phasors' },
   superpose: { id: 'superpose', exam: 'u3', title: 'Superpose' },
+  thevenin: { id: 'thevenin', exam: 'u3', title: 'Thévenin' },
 };
 
 export const CHAPTER_TITLES = {

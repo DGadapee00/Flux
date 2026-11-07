@@ -141,4 +141,45 @@ export const PREDICTIONS = {
       why: 'Alone, each source gives the same power whichever way it pushes: the square hides the sign. Together the parts now oppose, 0.75 A − 0.47 A, and the load power falls from 5.94 W to 0.32 W.',
     },
   ],
+  thevenin: [
+    {
+      id: 'th-match',
+      scenario: 'heavy',
+      ask: 'Raise the load from 0.3 Ω to R_th = 1.82 Ω. What happens to the load’s power, and to the efficiency of the equivalent circuit?',
+      apply(s) { s.lRL = Math.log10(20 / 11); },
+      watch: [
+        { id: 'P', label: 'load power', get: (c) => c.P },
+        { id: 'eta', label: 'efficiency', get: (c) => c.eta },
+      ],
+      mode: 'dir',
+      expect: { P: 'bigger', eta: 'bigger' },
+      why: 'At 0.3 Ω most of the power heats R_th: 3.4 W reaches the load. At the match the load takes the most it can, 6.91 W, and the efficiency rises from 14% to 50%.',
+    },
+    {
+      id: 'th-light',
+      scenario: 'match',
+      ask: 'Raise the load from R_th to 20 Ω. What happens to the load’s power, and to the efficiency?',
+      apply(s) { s.lRL = Math.log10(20); },
+      watch: [
+        { id: 'P', label: 'load power', get: (c) => c.P },
+        { id: 'eta', label: 'efficiency', get: (c) => c.eta },
+      ],
+      mode: 'dir',
+      expect: { P: 'smaller', eta: 'bigger' },
+      why: 'Past the match the power falls, to 2.11 W, but less is wasted: the efficiency rises to 92%. Maximum power and maximum efficiency are different loads.',
+    },
+    {
+      id: 'th-off',
+      scenario: 'match',
+      ask: 'Switch V₂ off, 6 V to 0 V. Does R_th change? Does V_th?',
+      apply(s) { s.V2 = 0; },
+      watch: [
+        { id: 'R', label: 'R_th', get: (c) => c.Rth },
+        { id: 'V', label: 'V_th', get: (c) => c.Vth },
+      ],
+      mode: 'dir',
+      expect: { R: 'same', V: 'smaller' },
+      why: 'R_th is the network’s resistance with every source switched off, so it does not depend on what the sources are. V_th falls from 7.09 V to 4.36 V, the part V₁ gives alone.',
+    },
+  ],
 };
