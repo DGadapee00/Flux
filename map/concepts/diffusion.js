@@ -31,6 +31,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Carburize a steel surface and watch the carbon profile deepen with time. It corrects the idea that twice the time gives twice the depth: depth grows with the square root of time.',
+  labs: [
+    { course: 'ema3010', lab: 'diffusion', notes: ['s2'], note: 'Carbon soaking into a steel surface: the case deepens as the square root of time, and far faster in a hotter furnace.' },
+  ],
 };

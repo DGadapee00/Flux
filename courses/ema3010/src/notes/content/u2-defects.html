@@ -19,7 +19,8 @@
     <h3>Part I · Point defects</h3>
     <a href="#s1"><span>1</span>Vacancies in equilibrium</a>
     <h3>Reference</h3>
-    <a href="#s2"><span>2</span>Formula sheet</a>
+    <a href="#s2"><span>2</span>Diffusion</a>
+    <a href="#s3"><span>3</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -55,13 +56,42 @@ g(c) = cQ_v + kT\,[c\ln c + (1 - c)\ln(1 - c)].
 </section>
 
 <section class="topic" id="s2">
-<h2><span class="n">2</span>Formula sheet</h2>
+<h2><span class="n">2</span>Diffusion</h2>
+<p>Atoms in a hot solid hop from site to site. Carbon in iron hops between the gaps among the iron atoms; a metal atom hops into a neighbouring vacancy. Each hop is random, but where there are more atoms on one side, more hop away from it.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The net flux runs down the gradient, Fick's first law, the same form as Fourier's law for heat:</p>
+\[
+J = -D\,\frac{\partial C}{\partial x}.
+\]
+<p>Atoms are conserved, so what flows into a thin slice builds up there: \(\partial C/\partial t = -\partial J/\partial x\). That gives Fick's second law, the heat equation with \(D\) in place of \(\alpha\). For a deep part at \(C_0\) whose surface is held at \(C_s\),</p>
+\[
+\frac{C_s - C(x,t)}{C_s - C_0} = \operatorname{erf}\frac{x}{2\sqrt{Dt}}.
+\]
+<p>Any chosen concentration sits at a fixed \(x/\sqrt{Dt}\), so it moves in as \(\sqrt t\). Each hop needs energy \(Q_d\), so \(D = D_0\,e^{-Q_d/RT}\) rises steeply with temperature.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · carburizing at 900 °C</span>
+<p>Carbon in austenite has \(D_0 = 2.3\times10^{-5}\) m²/s and \(Q_d = 148\) kJ/mol, a common textbook pair. At 900 °C, 1173 K,</p>
+\[
+D = 2.3\times10^{-5}\exp\!\left(-\frac{148000}{8.314(1173)}\right) = 5.91\times10^{-12}\ \text{m}^2/\text{s}.
+\]
+<p>After 4 hours \(\sqrt{Dt} = 0.292\) mm. A 0.2 wt% steel with its surface at 1.0 wt% reaches 0.6 wt% where \(\operatorname{erf} z = 0.5\), \(z = 0.4769\): \(x = 2(0.4769)(0.292) = 0.278\) mm.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Scaling the depth with time. Twice as long gives √2 the depth; twice the depth takes four times as long. Raising the temperature does far more.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
 \[
 g(c) = cQ_v + kT[c\ln c + (1 - c)\ln(1 - c)], \qquad c^* \approx e^{-Q_v/kT}, \qquad k = 8.617\times10^{-5}\ \text{eV/K}.
+\]
+\[
+J = -D\frac{\partial C}{\partial x}, \qquad \frac{\partial C}{\partial t} = D\frac{\partial^2 C}{\partial x^2}, \qquad \frac{C_s - C}{C_s - C_0} = \operatorname{erf}\frac{x}{2\sqrt{Dt}}, \qquad D = D_0e^{-Q_d/RT}.
 \]
 </section>
 
 </main>
-<footer>Our own notes, written for Flux. Read alongside MIT 3.091's recitation on point defects and Arrhenius activation.</footer>
+<footer>Our own notes, written for Flux. Read alongside MIT 3.091's recitations on point defects, Arrhenius activation and diffusion, and the DoITPoMS package on diffusion.</footer>
 </body>
 </html>

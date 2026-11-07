@@ -7,6 +7,7 @@ export default {
   load: () => import('../content/u2-defects.html?raw').then((m) => m.default),
   sections: [
     { id: 's1', n: 1, title: 'Vacancies in equilibrium', lab: 'vacancy', ch: ['2'], topics: ['vacancy'], home: true },
-    { id: 's2', n: 2, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's2', n: 2, title: 'Diffusion', lab: 'diffusion', ch: ['2'], topics: ['diffusion'], home: true },
+    { id: 's3', n: 3, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };
