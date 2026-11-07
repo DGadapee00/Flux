@@ -161,11 +161,16 @@ export const SATELLITE = {
       ],
       outcome: 'Keep the electronics within a chosen temperature range.',
       concepts: ['first-law-closed', 'thermal-resistance', 'thermal-radiation', 'lumped', 'spacecraft-thermal-balance'],
-      labs: [{ concept: 'first-law-closed', course: 'eml3100', lab: 'balance' }, { concept: 'lumped', course: 'map2302', lab: 'coffee' }, { concept: 'thermal-radiation', course: 'eml4140', lab: 'radiation' }],
+      labs: [
+        { concept: 'first-law-closed', course: 'eml3100', lab: 'balance' },
+        { concept: 'lumped', course: 'map2302', lab: 'coffee' },
+        { concept: 'thermal-radiation', course: 'eml4140', lab: 'radiation' },
+        { concept: 'spacecraft-thermal-balance', course: 'satellite', lab: 'balance' },
+      ],
       demonstrate: 'Use the power budget as a heat input. Write a radiation balance for hot and cold cases, include the absorbed environment, and state the limits of a lumped-temperature model.',
       deliverable: 'Hot and cold temperature estimates with surface assumptions.',
       interface: 'Return temperature limits to Power and Payload. A bigger array also changes the exposed area.',
-      gap: 'The foundation labs cover energy balance, lumped cooling and a sunlit plate’s balance from its α and ε. A spacecraft balance with eclipse and Earth’s heat is not built yet.',
+      gap: 'The Thermal balance lab treats the craft as one temperature through sun and eclipse. Hot and cold faces, conduction between them, and heaters and radiators are still to be built.',
     },
     {
       id: 'attitude', title: 'Attitude control', part: 'Pointing + rotation', requires: ['structure', 'power'],

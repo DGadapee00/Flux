@@ -20,10 +20,15 @@ test('every application recipe names concepts on the map, and its labs belong to
 });
 
 test('a gap that an application recipe needs ranks higher by two per recipe', () => {
-  // Any gap one recipe needs will do; which one changes as labs are built.
-  const withApps = rankGaps(concepts).gaps.find((r) => r.uses?.length === 1);
-  assert.ok(withApps, 'some gap is needed by exactly one recipe');
-  const without = rankGaps(concepts, []).gaps.find((r) => r.id === withApps.id);
+  // Any concept one recipe needs will do. Once every such concept has a lab, take one and remove its
+  // labs in a copy of the map, so the rule is still tested whatever has been built.
+  const uses = recipeUses(APPLICATIONS);
+  const id = Object.keys(uses).find((k) => uses[k].length === 1 && byId[k]);
+  assert.ok(id, 'some concept is needed by exactly one recipe');
+  const asGap = concepts.map((c) => (c.id === id ? { ...c, labs: [], candidate: c.candidate || 'A lab for this concept.' } : c));
+  const withApps = rankGaps(asGap).gaps.find((r) => r.id === id);
+  assert.ok(withApps, 'the concept ranks as a gap once its labs are removed');
+  const without = rankGaps(asGap, []).gaps.find((r) => r.id === withApps.id);
   assert.match(withApps.uses[0], /^satellite\//);
   assert.equal(withApps.score - without.score, 2);
   assert.deepEqual(recipeUses([{ id: 'a', components: [{ id: 'x', concepts: ['q'] }], integration: { id: 'all' } }]), { q: ['a/x'] });

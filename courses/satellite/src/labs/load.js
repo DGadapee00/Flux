@@ -12,6 +12,7 @@ const loaders = {
   pointing: () => import('./pointing.js'),
   shake: () => import('./shake.js'),
   power: () => import('./power.js'),
+  balance: () => import('./balance.js'),
 };
 
 const labs = createLabLoader(loaders);

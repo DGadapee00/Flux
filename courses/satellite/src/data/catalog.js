@@ -50,6 +50,15 @@ export const EXAMS = [
     labs: ['power'],
     coming: [],
   },
+  {
+    id: 'u6',
+    n: 6,
+    title: 'Thermal control',
+    chapters: '6',
+    date: 'Unit 6',
+    labs: ['balance'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
@@ -62,6 +71,7 @@ export const LAB_META = {
   pointing: { id: 'pointing', exam: 'u3', title: 'Pointing' },
   shake: { id: 'shake', exam: 'u4', title: 'Shake' },
   power: { id: 'power', exam: 'u5', title: 'Power' },
+  balance: { id: 'balance', exam: 'u6', title: 'Thermal balance' },
 };
 
 export const CHAPTER_TITLES = {
@@ -70,6 +80,7 @@ export const CHAPTER_TITLES = {
   3: 'Attitude control',
   4: 'Structure',
   5: 'Power',
+  6: 'Thermal control',
 };
 
 export function examById(id) {

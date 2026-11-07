@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchyâ
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 221 with a Flux lab, 54 gaps.**
+**275 concepts, 222 with a Flux lab, 53 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -20,7 +20,7 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Electricity and magnetism | 27 | 27 |
 | Thermodynamics | 22 | 12 |
 | Fluid mechanics | 20 | 16 |
-| Heat transfer | 19 | 7 |
+| Heat transfer | 19 | 8 |
 | Circuits and systems | 27 | 18 |
 | Mechanics of materials | 16 | 16 |
 | Materials science | 15 | 5 |
@@ -56,7 +56,7 @@ each new concept on them is a gap with a candidate lab:
 | EML 3101 Thermodynamics II | 14 (10 new) | 16.050, Fall 2002, with Cleynen |
 | EML 3015 Fluids | 22 (16 new) | 2.06, Spring 2013 |
 | EML 4140 Heat Transfer | 19 (15 new; app started: Rod, Resistance, Radiation, Thermal layer and Nusselt labs) | 2.51, Fall 2008, with Lienhard |
-| Build a satellite (a project) | 12 (11 new; app started: Kepler, Transfer, Noise, Link budget, Attitude, Spin, Pointing, Shake and Power labs) | The satellite's subsystems, from MIT 16.07, 16.06 and 16.851 |
+| Build a satellite (a project) | 12 (11 new; app started: Kepler, Transfer, Noise, Link budget, Attitude, Spin, Pointing, Shake, Power and Thermal balance labs) | The satellite's subsystems, from MIT 16.07, 16.06 and 16.851 |
 | Design practice (a project) | 20 (20 new) | Requirements to a tested part, then sensors, actuators and boards; MIT 2.007, 2.72 and 2.008 |
 
 A concept can also list `related` concepts: parallels that are not prerequisites, such as diffusion
@@ -79,8 +79,9 @@ spacecraft power, launch loads, the spacecraft radiation balance, rotations and 
 Euler's equations and spin stability, transfer functions and stability, feedback and PID control,
 thermal noise, and the link budget. Their sources are MIT 16.07 Dynamics, 16.06 Automatic Control
 and 16.851 Satellite Engineering. The rocket equation already has PHY 2048's and Dynamics' rocket
-labs, Kepler's equation, orbit transfers, spacecraft power, thermal noise, the link budget, rotations,
-Euler's equations, feedback and launch loads have the satellite app's labs. The other two are gaps with lab candidates, and each subsystem recipe names them. When a
+labs, and Kepler's equation, orbit transfers, spacecraft power, the radiation balance, thermal noise,
+the link budget, rotations, Euler's equations, feedback and launch loads have the satellite app's
+labs. Transfer functions are the one gap left, with a lab candidate the Attitude recipe names. When a
 course that teaches one joins the map, add it to that concept's `courses`.
 
 ## Design practice
