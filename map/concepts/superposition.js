@@ -24,6 +24,7 @@ export default {
       why: 'Network theorems, superposition among them, worked step by step.',
     },
   ],
-  labs: [],
-  candidate: 'Two sources feeding one resistor, switched on one at a time and then together. It corrects the idea that powers add like currents: the currents add, but the power with both on is not the sum of the two powers.',
+  labs: [
+    { course: 'eel3111', lab: 'superpose', notes: ['s1', 's2'], note: 'Two sources feeding one load, switched on one at a time and then together: the currents add, the powers do not, and a reversed source can cancel the load to nothing.' },
+  ],
 };

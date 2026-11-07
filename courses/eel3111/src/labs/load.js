@@ -5,6 +5,7 @@ import { PREDICTIONS } from './predictions.js';
 const loaders = {
   nodes: () => import('./nodes.js'),
   phasors: () => import('./phasors.js'),
+  superpose: () => import('./superpose.js'),
 };
 
 const labs = createLabLoader(loaders);
