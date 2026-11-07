@@ -34,7 +34,10 @@ export const SATELLITE = {
       ],
       outcome: 'Predict where the satellite goes and how long each orbit takes.',
       concepts: ['gravitation', 'curved-path-forces', 'numerical-integration', 'kepler-equation', 'orbit-transfers'],
-      labs: [{ concept: 'gravitation', course: 'phy2048', lab: 'iss-orbit' }],
+      labs: [
+        { concept: 'gravitation', course: 'phy2048', lab: 'iss-orbit' },
+        { concept: 'kepler-equation', course: 'satellite', lab: 'kepler' },
+      ],
       demonstrate: 'Choose an altitude for a circular Earth orbit. Compute speed and period, state your units, and check the period by a second method.',
       deliverable: 'An orbit model with altitude, speed, period and assumptions.',
       interface: 'Pass the period and an estimated eclipse duration to Power. Pass the ground range to Communications.',

@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'An elliptical orbit with a clock: slide the time and watch the craft race through perigee. It corrects the idea that a quarter of the period moves the craft a quarter of the way round: from perigee it goes well past 90°. The check solves Kepler’s equation by Newton’s method and compares the position with a numerically integrated orbit.',
+  labs: [
+    { course: 'satellite', lab: 'kepler', notes: ['s1', 's2'], note: 'An elliptical orbit with a clock: a quarter period from perigee carries a transfer orbit to 156°, and the position from Kepler’s equation matches an RK4 integration of the orbit.' },
+  ],
 };

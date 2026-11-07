@@ -40,7 +40,7 @@ export const COURSES = [
   { id: 'bench', code: 'BENCH', title: 'Electronics on the bench', kind: 'project', app: 'bench/' },
   // The satellite application as a project: the aerospace concepts it needs that no course on the
   // map teaches yet. A real course (controls, astrodynamics) joins a concept's list when it is added.
-  { id: 'satellite', code: 'SAT', title: 'Build a satellite', kind: 'project', app: null },
+  { id: 'satellite', code: 'SAT', title: 'Build a satellite', kind: 'project', app: 'satellite/' },
   // Design practice: designing, making and testing parts, and the sensors, actuators and boards in
   // them. A project until the owner's design and measurement courses join the map (6 November 2026).
   { id: 'design', code: 'DES', title: 'Design practice', kind: 'project', app: 'design/' },
