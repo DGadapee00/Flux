@@ -7,6 +7,7 @@ const loaders = {
   elimination: () => import('./elimination.js'),
   inverse: () => import('./inverse.js'),
   rank: () => import('./rank.js'),
+  projection: () => import('./projection.js'),
   eigen: () => import('./eigen.js'),
   roundoff: () => import('./roundoff.js'),
   truncation: () => import('./truncation.js'),

@@ -26,7 +26,8 @@
     <a href="#s6"><span>6</span>Rank and solvability</a>
     <a href="#s7"><span>7</span>Eigenvalues and eigenvectors</a>
     <h3>Reference</h3>
-    <a href="#s8"><span>8</span>Formula sheet</a>
+    <a href="#s8"><span>8</span>Projection and least squares</a>
+    <a href="#s9"><span>9</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -162,7 +163,29 @@ x_i = \frac{1}{u_{ii}}\Big(c_i - \sum_{j>i} u_{ij} x_j\Big).
 </section>
 
 <section class="topic" id="s8">
-<h2><span class="n">8</span>Formula sheet</h2>
+<h2><span class="n">8</span>Projection and least squares</h2>
+<p>When \(A\mathbf x = \mathbf b\) has more equations than unknowns, \(\mathbf b\) usually lies off the column space and there is no solution. Ask instead for the point of the column space closest to \(\mathbf b\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Call the closest point \(\mathbf p = A\hat{\mathbf x}\). The error \(\mathbf b - \mathbf p\) must be perpendicular to every column, or sliding \(\mathbf p\) along that column would bring it closer. With dot products that is \(A^{\mathsf T}(\mathbf b - A\hat{\mathbf x}) = \mathbf 0\), the normal equations:</p>
+\[
+A^{\mathsf T}A\,\hat{\mathbf x} = A^{\mathsf T}\mathbf b.
+\]
+<p>When the columns are perpendicular, \(A^{\mathsf T}A\) is diagonal and each coefficient is a separate shadow, \(\mathbf b\cdot\mathbf a_i/\mathbf a_i\cdot\mathbf a_i\). When they are not, the equations couple. Gram–Schmidt makes them perpendicular first, which is how QR solves least squares.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · arrows at 45°</span>
+<p>\(\mathbf a_1 = (1, 0, 0)\), \(\mathbf a_2 = (0.707, 0.707, 0)\), \(\mathbf b = (1.2, 0.8, 1)\). Then \(A^{\mathsf T}A = \begin{bmatrix}1 & 0.707\\ 0.707 & 1\end{bmatrix}\) and \(A^{\mathsf T}\mathbf b = (1.2, 1.414)\), so</p>
+\[
+\hat{\mathbf x} = (0.4,\ 1.131), \qquad \mathbf p = (1.2,\ 0.8,\ 0).
+\]
+<p>The separate shadows, \(1.2\,\mathbf a_1\) and \(1.414\,\mathbf a_2\), add to \((2.2, 1.0, 0)\), which misses \(\mathbf p\) by 1.02.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Projecting onto each column and adding. That works only for perpendicular columns. Otherwise solve the normal equations, or orthogonalise first.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Formula sheet</h2>
 \[
 A\mathbf x = x_1\mathbf a_1 + x_2\mathbf a_2, \qquad \det A = a_{11}a_{22} - a_{12}a_{21}, \qquad (AB)_{ij} = \sum_k a_{ik} b_{kj},
 \]
@@ -171,6 +194,9 @@ A\mathbf x = x_1\mathbf a_1 + x_2\mathbf a_2, \qquad \det A = a_{11}a_{22} - a_{
 \]
 \[
 A^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b\\ -c & a\end{bmatrix}, \qquad \kappa = \frac{\sigma_1}{\sigma_2}, \qquad \operatorname{rank}A + \dim N(A) = n.
+\]
+\[
+A^{\mathsf T}A\,\hat{\mathbf x} = A^{\mathsf T}\mathbf b, \qquad \mathbf p = A\hat{\mathbf x}, \qquad A^{\mathsf T}(\mathbf b - \mathbf p) = \mathbf 0.
 \]
 \[
 A\mathbf v = \lambda\mathbf v, \qquad \lambda^2 - (\operatorname{tr}A)\lambda + \det A = 0.

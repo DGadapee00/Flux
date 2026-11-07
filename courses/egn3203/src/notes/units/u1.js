@@ -13,6 +13,7 @@ export default {
     { id: 's5', n: 5, title: 'Determinant, inverse and conditioning', lab: 'inverse', ch: ['1'], topics: ['inverse'], home: true },
     { id: 's6', n: 6, title: 'Rank and solvability', lab: 'rank', ch: ['1'], topics: ['rank'], home: true },
     { id: 's7', n: 7, title: 'Eigenvalues and eigenvectors', lab: 'eigen', ch: ['1'], topics: ['eigen'], home: true },
-    { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's8', n: 8, title: 'Projection and least squares', lab: 'projection', ch: ['1'], topics: ['projection'], home: true },
+    { id: 's9', n: 9, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

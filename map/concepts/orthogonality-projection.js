@@ -30,6 +30,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Drop a point onto a plane spanned by two arrows you drag, with the error drawn. It corrects the idea that you can project onto each arrow in turn and add: that works only when the arrows are perpendicular.',
+  labs: [
+    { course: 'egn3203', lab: 'projection', notes: ['s8'], note: 'A point dropped onto the plane of two arrows: the error is square to both, and adding the separate shadows works only when the arrows are perpendicular.' },
+  ],
 };

@@ -4,6 +4,7 @@
  */
 export const PRINCIPLES = {
   columns: { name: 'A matrix is its columns', statement: 'A matrix sends each unit vector to one of its columns, and every other vector to the same combination of them; areas scale by det A.', cue: 'A transformation given as a matrix.', family: 'Linear algebra' },
+  projection: { name: 'The error is square to the plane', statement: 'The closest point p = Ax̂ to b has b − p perpendicular to every column, so AᵀA x̂ = Aᵀb. Separate projections onto the columns add up to p only when the columns are perpendicular.', cue: 'A system with more equations than unknowns, a best fit, or a projection.', family: 'Linear algebra' },
   'no-commute': { name: 'Order matters', statement: 'AB applies B first, then A; in general AB ≠ BA, though det(AB) = det A det B.', cue: 'Two transformations in a row.', family: 'Linear algebra' },
   elimination: { name: 'Row operations keep the solution', statement: 'Adding a multiple of one equation to another, or swapping two, never changes the solution; elimination uses them to reach a triangle, solved from the bottom up.', cue: 'A square linear system.', family: 'Linear algebra' },
   conditioning: { name: 'Condition, not determinant', statement: 'How close a matrix is to singular is its condition number κ = σ₁/σ₂, the flatness of the ellipse it maps the circle to. Scaling a matrix changes det but not κ.', cue: 'A matrix with a small determinant, or an inverse with large entries.', family: 'Linear algebra' },
