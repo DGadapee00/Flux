@@ -247,4 +247,63 @@ export default [
     },
     cases: [kase('the lab’s nearly dependent case', { ask: 'x', eps: 0.02, delta: 0.5 }, { v: 16 })],
   }),
+
+  problem({
+    id: 'u1.10.eigen',
+    title: 'Eigenvalues of a symmetric matrix',
+    exam: 'u1',
+    ch: '1',
+    lab: 'eigen',
+    src: 'Flux, written for the Eigen lab',
+    topics: ['eigen'],
+    principles: ['eigen'],
+    vars: { which: choice(['larger', 'larger'], ['smaller', 'smaller']), a: range(1, 4, 1, ''), b: range(1, 3, 1, '') },
+    text: (T, $) => String.raw`Find the ${T.which} eigenvalue of $A = \begin{pmatrix} ${$.a} & ${$.b} \\ ${$.b} & ${$.a} \end{pmatrix}$.`,
+    parts: [num('lambda', ($) => ($.which === 'larger' ? $.a + $.b : $.a - $.b), '', { label: 'λ', abs: 1e-6 })],
+    level: 1,
+    hints: ['Solve det(A − λI) = 0: λ² − (tr A)λ + det A = 0.', `Here tr A = 2a and det A = a² − b², so λ = a ± b.`],
+    steps: ($) => [String.raw`$\lambda^2 - ${2 * $.a}\lambda + ${$.a * $.a - $.b * $.b} = 0$, so $\lambda = ${$.a} \pm ${$.b}$: the ${$.which} is ${$.which === 'larger' ? $.a + $.b : $.a - $.b}.`],
+    sim: {
+      scenario: 'symmetric',
+      setup(s, $) {
+        Object.assign(s, { a: $.a, b: $.b, c: $.b, d: $.a });
+      },
+      read: (c, s, $) => ({ lambda: $.which === 'larger' ? c.values[0] : c.values[c.values.length - 1] }),
+    },
+    cases: [kase('the notes’ matrix, larger', { which: 'larger', a: 2, b: 1 }, { lambda: 3 })],
+  }),
+
+  problem({
+    id: 'u1.11.turn',
+    title: 'Does a turn have an eigenvector?',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'eigen',
+    src: 'Flux, written for the Eigen lab',
+    topics: ['eigen'],
+    principles: ['eigen'],
+    vars: { angle: choice(['ninety', 'a quarter turn, 90°'], ['fortyfive', 'an eighth of a turn, 45°']) },
+    text: (T) => `A matrix rotates the plane by ${T.angle} and does nothing else. How many real directions does it only stretch?`,
+    parts: [
+      pick('n', 'directions it only stretches', [
+        ['none', 'none: every vector turns', 'A rotation by anything but 0° or 180° turns every vector; its eigenvalues are a complex pair.'],
+        ['one', 'one', 'One direction comes from a repeated eigenvalue, as in a shear. A rotation has none.'],
+        ['two', 'two', 'Two real eigenvalues need a positive discriminant; a rotation’s is negative.'],
+      ], () => 'none'),
+    ],
+    level: 1,
+    hints: ['Does any vector come out pointing along itself?', 'For a rotation by θ, tr A = 2 cos θ and det A = 1: check the sign of tr² − 4 det.'],
+    steps: () => ['tr² − 4 det = 4cos²θ − 4 < 0 for these angles: complex eigenvalues, no real eigenvector.'],
+    sim: {
+      scenario: 'rotation',
+      setup(s, $) {
+        const t = $.angle === 'ninety' ? Math.PI / 2 : Math.PI / 4;
+        Object.assign(s, { a: Math.cos(t), b: -Math.sin(t), c: Math.sin(t), d: Math.cos(t) });
+      },
+      read: (c) => ({ n: c.found.length === 0 ? 'none' : c.found.length === 1 ? 'one' : 'two' }),
+    },
+    cases: [kase('a quarter turn', { angle: 'ninety' }, { n: 'none' })],
+  }),
+
 ];

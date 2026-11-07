@@ -11,7 +11,7 @@ export const EXAMS = [
     title: 'Matrices and elimination',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['matrix', 'elimination', 'inverse', 'rank'],
+    labs: ['matrix', 'elimination', 'inverse', 'rank', 'eigen'],
     coming: ['Least squares'],
   },
   {
@@ -30,6 +30,7 @@ export const LAB_META = {
   elimination: { id: 'elimination', exam: 'u1', title: 'Elimination' },
   inverse: { id: 'inverse', exam: 'u1', title: 'Inverse' },
   rank: { id: 'rank', exam: 'u1', title: 'Rank' },
+  eigen: { id: 'eigen', exam: 'u1', title: 'Eigen' },
   roundoff: { id: 'roundoff', exam: 'u2', title: 'Round-off' },
   truncation: { id: 'truncation', exam: 'u2', title: 'Truncation' },
 };

@@ -231,3 +231,59 @@ export function rankByMinors(rows, tol = 1e-10) {
 
 /** Cross product, for the direction two planes share. */
 export const cross3 = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+
+/*
+ * Eigenvalues (the Eigen lab). A direction u is an eigenvector when Au points along u: Au = λu. For a
+ * 2×2, λ solves λ² − (tr A)λ + det A = 0. The second route scans the unit circle for directions
+ * where Au is parallel to u, the cross product u × Au vanishing, and reads λ = u·Au there.
+ */
+
+/** Eigenvalues of a 2×2 from the characteristic polynomial: two reals, one repeated, or a complex pair. */
+export function eigen2(A) {
+  const tr = A[0][0] + A[1][1];
+  const det = det2(A);
+  const disc = tr * tr - 4 * det;
+  const scale = Math.max(1e-300, tr * tr, Math.abs(det));
+  if (disc < -1e-12 * scale) return { kind: 'complex', re: tr / 2, im: Math.sqrt(-disc) / 2, values: [], tr, det, disc };
+  if (Math.abs(disc) <= 1e-12 * scale) return { kind: 'repeated', values: [tr / 2], tr, det, disc: 0 };
+  const r = Math.sqrt(disc);
+  return { kind: 'real', values: [(tr + r) / 2, (tr - r) / 2], tr, det, disc };
+}
+
+/**
+ * Directions on the half circle where u × Au = 0, found by scanning 720 angles and refining each
+ * minimum of |u × Au| by golden-section search. Returns each direction's angle and λ = u·Au.
+ */
+export function eigenScan(A, tol = 1e-7) {
+  const cross = (t) => {
+    const u = [Math.cos(t), Math.sin(t)];
+    const v = apply2(A, u);
+    return u[0] * v[1] - u[1] * v[0];
+  };
+  const N = 720;
+  const g = (t) => Math.abs(cross(t));
+  const scale = Math.max(...A.flat().map(Math.abs), 1e-300);
+  const found = [];
+  for (let i = 0; i < N; i++) {
+    const t0 = (Math.PI * (i - 1)) / N;
+    const t1 = (Math.PI * i) / N;
+    const t2 = (Math.PI * (i + 1)) / N;
+    if (!(g(t1) <= g(t0) && g(t1) < g(t2))) continue;
+    let a = t0;
+    let b = t2;
+    const phi = (Math.sqrt(5) - 1) / 2;
+    for (let k = 0; k < 90; k++) {
+      const c = b - phi * (b - a);
+      const d = a + phi * (b - a);
+      if (g(c) < g(d)) b = d;
+      else a = c;
+    }
+    const t = (a + b) / 2;
+    if (g(t) > tol * scale) continue;
+    const u = [Math.cos(t), Math.sin(t)];
+    const v = apply2(A, u);
+    const angle = ((t % Math.PI) + Math.PI) % Math.PI;
+    if (!found.some((f) => Math.abs(f.angle - angle) < 1e-4 || Math.abs(Math.abs(f.angle - angle) - Math.PI) < 1e-4)) found.push({ angle, lambda: u[0] * v[0] + u[1] * v[1] });
+  }
+  return found;
+}

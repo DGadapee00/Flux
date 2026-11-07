@@ -38,6 +38,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Apply a 2×2 matrix to a ring of arrows and watch which ones only stretch. It corrects the idea that every matrix has directions it only stretches: a quarter-turn rotation turns every arrow, and its eigenvalues are \\(\\pm i\\).',
+  labs: [
+    { course: 'egn3203', lab: 'eigen', notes: ['s7'], note: 'A ring of unit arrows and their images: the directions a matrix only stretches, found from the characteristic polynomial and by scanning the circle. A quarter turn has none.' },
+  ],
 };

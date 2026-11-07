@@ -51,4 +51,12 @@ export default {
       ],
     },
   },
+  'u1.10.eigen': {
+    traps: {
+      lambda: [
+        [($) => $.a, 'The diagonal holds the eigenvalues only for a triangular matrix. Solve λ² − (tr A)λ + det A = 0.'],
+        [($) => 2 * $.a, 'That is the trace: the sum of the two eigenvalues, not one of them.'],
+      ],
+    },
+  },
 };

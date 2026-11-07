@@ -24,8 +24,9 @@
     <a href="#s4"><span>4</span>Pivoting</a>
     <a href="#s5"><span>5</span>Determinant, inverse and conditioning</a>
     <a href="#s6"><span>6</span>Rank and solvability</a>
+    <a href="#s7"><span>7</span>Eigenvalues and eigenvectors</a>
     <h3>Reference</h3>
-    <a href="#s7"><span>7</span>Formula sheet</a>
+    <a href="#s8"><span>8</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -143,7 +144,25 @@ x_i = \frac{1}{u_{ii}}\Big(c_i - \sum_{j>i} u_{ij} x_j\Big).
 </section>
 
 <section class="topic" id="s7">
-<h2><span class="n">7</span>Formula sheet</h2>
+<h2><span class="n">7</span>Eigenvalues and eigenvectors</h2>
+<p>A matrix turns most vectors. An eigenvector is one it only stretches: \(A\mathbf v = \lambda\mathbf v\), and \(\lambda\) is its eigenvalue.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>\(A\mathbf v = \lambda\mathbf v\) means \((A - \lambda I)\mathbf v = \mathbf 0\) with \(\mathbf v \ne \mathbf 0\), so \(A - \lambda I\) is singular:</p>
+\[
+\det(A - \lambda I) = \lambda^2 - (\operatorname{tr}A)\,\lambda + \det A = 0.
+\]
+<p>The discriminant \((\operatorname{tr}A)^2 - 4\det A\) decides the cases: positive, two real eigenvalues and two directions; zero, one repeated eigenvalue, often with one direction; negative, a complex pair and no real direction at all.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a symmetric matrix</span>
+<p>\(A = \begin{bmatrix} 2 & 1\\ 1 & 2\end{bmatrix}\): \(\operatorname{tr}A = 4\), \(\det A = 3\), so \(\lambda^2 - 4\lambda + 3 = 0\) and \(\lambda = 3, 1\). The eigenvectors are \((1, 1)\) and \((1, -1)\), at 45° and 135°, at right angles. A quarter turn \(\begin{bmatrix} 0 & -1\\ 1 & 0\end{bmatrix}\) gives \(\lambda^2 + 1 = 0\): \(\lambda = \pm i\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading the eigenvalues off the diagonal. That works only for a triangular matrix. For \(\begin{bmatrix} 2 & 1\\ 1 & 2\end{bmatrix}\) the diagonal says 2, the eigenvalues are 3 and 1.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Formula sheet</h2>
 \[
 A\mathbf x = x_1\mathbf a_1 + x_2\mathbf a_2, \qquad \det A = a_{11}a_{22} - a_{12}a_{21}, \qquad (AB)_{ij} = \sum_k a_{ik} b_{kj},
 \]
@@ -152,6 +171,9 @@ A\mathbf x = x_1\mathbf a_1 + x_2\mathbf a_2, \qquad \det A = a_{11}a_{22} - a_{
 \]
 \[
 A^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b\\ -c & a\end{bmatrix}, \qquad \kappa = \frac{\sigma_1}{\sigma_2}, \qquad \operatorname{rank}A + \dim N(A) = n.
+\]
+\[
+A\mathbf v = \lambda\mathbf v, \qquad \lambda^2 - (\operatorname{tr}A)\lambda + \det A = 0.
 \]
 </section>
 
