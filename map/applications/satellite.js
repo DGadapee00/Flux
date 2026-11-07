@@ -96,11 +96,14 @@ export const SATELLITE = {
       ],
       outcome: 'Support the components without exceeding a stated stress or deflection limit.',
       concepts: ['static-equilibrium', 'stress-on-a-section', 'beam-deflection', 'forced-resonance', 'launch-loads'],
-      labs: [{ concept: 'stress-on-a-section', course: 'egn3331', lab: 'pins' }],
+      labs: [
+        { concept: 'stress-on-a-section', course: 'egn3331', lab: 'pins' },
+        { concept: 'launch-loads', course: 'satellite', lab: 'shake' },
+      ],
       demonstrate: 'Draw the load path for a chosen mass and acceleration. Check one attachment and one frame member against stated allowables. Record what a static check cannot establish about vibration.',
       deliverable: 'A mass budget, load case, attachment check and deflection limit.',
       interface: 'Give Attitude control the mass layout and moments of inertia. Reserve space for the other subsystems.',
-      gap: 'Launch vibration, fatigue and attachment qualification need dedicated work beyond these foundation labs.',
+      gap: 'The Shake lab covers sine vibration of one mode. Random vibration, fatigue and attachment qualification need dedicated work beyond it.',
     },
     {
       id: 'payload', title: 'Sensor payload', part: 'The measurement', requires: ['power'],

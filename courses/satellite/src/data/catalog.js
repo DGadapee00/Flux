@@ -32,6 +32,15 @@ export const EXAMS = [
     labs: ['attitude', 'spin', 'pointing'],
     coming: ['Transfer functions'],
   },
+  {
+    id: 'u4',
+    n: 4,
+    title: 'Structure',
+    chapters: '4',
+    date: 'Unit 4',
+    labs: ['shake'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
@@ -41,12 +50,14 @@ export const LAB_META = {
   attitude: { id: 'attitude', exam: 'u3', title: 'Attitude' },
   spin: { id: 'spin', exam: 'u3', title: 'Spin' },
   pointing: { id: 'pointing', exam: 'u3', title: 'Pointing' },
+  shake: { id: 'shake', exam: 'u4', title: 'Shake' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Orbit',
   2: 'Communications',
   3: 'Attitude control',
+  4: 'Structure',
 };
 
 export function examById(id) {

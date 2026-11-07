@@ -9,6 +9,7 @@ const loaders = {
   attitude: () => import('./attitude.js'),
   spin: () => import('./spin.js'),
   pointing: () => import('./pointing.js'),
+  shake: () => import('./shake.js'),
 };
 
 const labs = createLabLoader(loaders);
