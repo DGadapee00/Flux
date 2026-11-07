@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchyâ
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 205 with a Flux lab, 70 gaps.**
+**275 concepts, 206 with a Flux lab, 69 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -21,7 +21,7 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Thermodynamics | 22 | 12 |
 | Fluid mechanics | 20 | 14 |
 | Heat transfer | 19 | 6 |
-| Circuits and systems | 27 | 14 |
+| Circuits and systems | 27 | 15 |
 | Mechanics of materials | 16 | 15 |
 | Materials science | 15 | 3 |
 | Design and manufacturing | 9 | 9 |
@@ -56,7 +56,7 @@ each new concept on them is a gap with a candidate lab:
 | EML 3101 Thermodynamics II | 14 (10 new) | 16.050, Fall 2002, with Cleynen |
 | EML 3015 Fluids | 22 (16 new) | 2.06, Spring 2013 |
 | EML 4140 Heat Transfer | 19 (15 new; app started: Rod, Resistance, Radiation and Thermal layer labs) | 2.51, Fall 2008, with Lienhard |
-| Build a satellite (a project) | 12 (11 new; app started: a Kepler lab) | The satellite's subsystems, from MIT 16.07, 16.06 and 16.851 |
+| Build a satellite (a project) | 12 (11 new; app started: Kepler and Noise labs) | The satellite's subsystems, from MIT 16.07, 16.06 and 16.851 |
 | Design practice (a project) | 20 (20 new) | Requirements to a tested part, then sensors, actuators and boards; MIT 2.007, 2.72 and 2.008 |
 
 A concept can also list `related` concepts: parallels that are not prerequisites, such as diffusion
@@ -79,8 +79,8 @@ spacecraft power, launch loads, the spacecraft radiation balance, rotations and 
 Euler's equations and spin stability, transfer functions and stability, feedback and PID control,
 thermal noise, and the link budget. Their sources are MIT 16.07 Dynamics, 16.06 Automatic Control
 and 16.851 Satellite Engineering. The rocket equation already has PHY 2048's and Dynamics' rocket
-labs, and Kepler's equation has the satellite app's Kepler lab. The other ten are gaps with lab
-candidates, and each subsystem recipe names them. When a
+labs, Kepler's equation and thermal noise have the satellite app's Kepler and Noise labs. The other
+nine are gaps with lab candidates, and each subsystem recipe names them. When a
 course that teaches one joins the map, add it to that concept's `courses`.
 
 ## Design practice

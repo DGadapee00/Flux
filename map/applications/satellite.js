@@ -214,11 +214,14 @@ export const SATELLITE = {
       ],
       outcome: 'Return sensor readings within the available energy and contact time.',
       concepts: ['em-waves', 'light-intensity', 'random-variables', 'thermal-noise', 'link-budget'],
-      labs: [{ concept: 'em-waves', course: 'phy2049', lab: 'emwave' }],
+      labs: [
+        { concept: 'em-waves', course: 'phy2049', lab: 'emwave' },
+        { concept: 'thermal-noise', course: 'satellite', lab: 'noise' },
+      ],
       demonstrate: 'State range, frequency, antenna assumptions, data rate and receiver sensitivity. Build a link budget with a margin, then check whether contact time and transmitter energy can return the planned data.',
       deliverable: 'A link budget and a contact-by-contact data and energy estimate.',
       interface: 'Take range from Orbit, pointing from Attitude control, power from Power and data volume from Payload. Tell Payload how much data can be returned.',
-      gap: 'The wave lab is a foundation. Antenna gain, receiver noise and a complete radio link need a dedicated lab.',
+      gap: 'The wave lab is a foundation and the Noise lab covers receiver noise. Antenna gain and a complete radio link, the link budget, still need a lab.',
     },
   ],
   integration: {

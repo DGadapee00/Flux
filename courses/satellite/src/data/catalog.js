@@ -14,14 +14,25 @@ export const EXAMS = [
     labs: ['kepler'],
     coming: ['Rocket equation', 'Orbit transfers'],
   },
+  {
+    id: 'u2',
+    n: 2,
+    title: 'Communications',
+    chapters: '2',
+    date: 'Unit 2',
+    labs: ['noise'],
+    coming: ['Link budget'],
+  },
 ];
 
 export const LAB_META = {
   kepler: { id: 'kepler', exam: 'u1', title: 'Kepler' },
+  noise: { id: 'noise', exam: 'u2', title: 'Noise' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Orbit',
+  2: 'Communications',
 };
 
 export function examById(id) {

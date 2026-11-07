@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Communications</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 2 · after MIT 16.851, Lecture 21</div>
+  <h1>Communications</h1>
+  <p class="lede">Why a satellite's faint signal can be read at all, what the receiver's own warmth adds to it, and how a narrower band or a colder receiver brings the bits back.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Noise</h3>
+    <a href="#s1"><span>1</span>Noise from heat</a>
+    <a href="#s2"><span>2</span>Bits in noise</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Noise</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Noise from heat</h2>
+<p>The electrons in any resistor jiggle with its temperature, so it makes a small random voltage with no signal at all. A receiver adds noise of its own the same way. Both are rated as a temperature.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Nyquist's argument: a resistor at temperature \(T\) feeding a matched load delivers \(k_BT\) of power in every hertz of band, whatever its resistance. A larger resistor makes a larger noise voltage, \(\overline{v^2} = 4k_BTRB\), but delivers the same power to a matched load. In a band \(B\),</p>
+\[
+N = k_B\,T_\text{sys}\,B, \qquad k_B = 1.381\times10^{-23}\ \text{J/K}.
+\]
+<p>\(T_\text{sys}\) gathers everything: the sky the antenna sees, the cable and the amplifier. At 290 K, \(k_BT\) is \(4.0\times10^{-21}\) W/Hz, or −174 dBm in each hertz.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a small satellite’s downlink</span>
+<p>A ground station with \(T_\text{sys} = 500\) K listens in a 10 kHz band. The noise is</p>
+\[
+N = (1.381\times10^{-23})(500)(10^4) = 6.9\times10^{-17}\ \text{W} = -131.6\ \text{dBm}.
+\]
+<p>A signal arriving at −120 dBm, \(10^{-15}\) W, is 11.6 dB above it: \(S/N = 14.5\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Calling a signal too weak because it is small. −120 dBm is a millionth of a millionth of a milliwatt, and it reads cleanly. A signal is lost when it sinks below the noise in its band.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Bits in noise</h2>
+<p>A digital link cares about each bit's energy against the noise. Sending fewer bits a second lets each one last longer, and a matching narrower band lets in less noise.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A bit lasts \(1/R_b\), so it carries \(E_b = S/R_b\). The noise per hertz is \(N_0 = k_BT_\text{sys}\), so</p>
+\[
+\frac{E_b}{N_0} = \frac{S}{k_B T_\text{sys} R_b}.
+\]
+<p>For binary phase-shift keying, each bit is a sign, \(\pm\sqrt{E_b}\), and noise flips it with probability \(\tfrac12\operatorname{erfc}\sqrt{E_b/N_0}\). One error in a million needs about 10.5 dB.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a weak signal, a narrower band</span>
+<p>The signal drops to −135 dBm. At 10 kbit/s, \(E_b/N_0 = -3.4\) dB and about one bit in six is wrong. At 1 kbit/s in a 1 kHz band,</p>
+\[
+\frac{E_b}{N_0} = \frac{3.16\times10^{-17}}{(1.381\times10^{-23})(500)(10^3)} = 4.6 = 6.6\ \text{dB},
+\]
+<p>and the error rate is \(\tfrac12\operatorname{erfc}\sqrt{4.6} = 1.24\times10^{-3}\). A tenth of the data rate bought 10 dB.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Every dB counts the same wherever it comes from: transmit power, antenna gain, a colder receiver or a lower bit rate. A link budget adds them up.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+N = k_BT_\text{sys}B, \qquad \frac{S}{N} = \frac{S}{k_BT_\text{sys}B}, \qquad \frac{E_b}{N_0} = \frac{S}{k_BT_\text{sys}R_b}, \qquad \text{BER} = \tfrac12\operatorname{erfc}\sqrt{E_b/N_0}.
+\]
+\[
+P_\text{dBm} = 10\log_{10}\frac{P}{1\ \text{mW}}, \qquad k_BT_{290} = -174\ \text{dBm/Hz}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, Lecture 21, on satellite communication.</footer>
+</body>
+</html>

@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: String.raw`Add noise to a signal and narrow the receiver bandwidth. It corrects the idea that a weak signal is lost because it is small: it is lost when it sinks below the noise, and a narrower band lowers the noise. The check compares the noise power measured from samples with \(k_B T B\).`,
+  labs: [
+    { course: 'satellite', lab: 'noise', notes: ['s1', 's2'], note: 'A downlink buried in receiver noise: widen the band and the same signal drowns; narrow it or cool the receiver and the bits come back.' },
+  ],
 };
