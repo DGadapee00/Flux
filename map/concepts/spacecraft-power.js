@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Size a battery and an array for a chosen orbit and load, then run several orbits. It corrects the idea that the array only has to match the average load: it must also refill the battery during the sunlit part. The check steps the battery’s charge through each orbit and compares it with the energy balance.',
+  labs: [
+    { course: 'satellite', lab: 'power', notes: ['s1'], note: 'An array and battery run through five orbits: an array that only matches the average load lets the battery sink a little every orbit.' },
+  ],
 };

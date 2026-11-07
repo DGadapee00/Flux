@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Thermal control</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 6 · after MIT 16.851 Satellite Engineering</div>
+  <h1>Thermal control</h1>
+  <p class="lede">What sets a satellite's temperature when the only way to lose heat is to radiate it, and why a shiny surface can run hotter than a black one.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Heat in a vacuum</h3>
+    <a href="#s1"><span>1</span>The radiation balance</a>
+    <h3>Reference</h3>
+    <a href="#s2"><span>2</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Heat in a vacuum</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>The radiation balance</h2>
+<p>In orbit there is no air to carry heat away. A satellite gains heat from sunlight, from sunlight reflected off Earth, from Earth's own infrared glow and from its electronics, and loses it only by radiating.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Take a sphere of radius \(R\), surface \(A = 4\pi R^2\), shadow \(A_p = \pi R^2\), with solar absorptivity \(\alpha\) and infrared emissivity \(\varepsilon\). If Earth fills a share \(F\) of its view, it settles where</p>
+\[
+\varepsilon\sigma A T^4 = \alpha S A_p + \alpha a S A F + \varepsilon q_E A F + Q,
+\]
+<p>with \(S = 1361\) W/m², albedo \(a \approx 0.3\) and Earth's infrared \(q_E \approx 237\) W/m². Dividing by \(\varepsilon\) shows the finish enters through \(\alpha/\varepsilon\). In eclipse the sunlight terms vanish. A real satellite has heat capacity \(mc\), so it swings between the two and reaches neither:</p>
+\[
+mc\,\frac{dT}{dt} = \text{absorbed}(t) + Q - \varepsilon\sigma A T^4.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · a black sphere at 500 km</span>
+<p>Black paint, \(\alpha = 0.95\), \(\varepsilon = 0.9\), on a 0.5 m sphere with 10 W inside. In sun for good it would settle at 45.2 °C; in shadow for good, at −74.5 °C. With 10 kg of aluminium it never gets there: through each orbit it swings between −10.8 °C and 35.8 °C.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting black to run hottest. Polished aluminium absorbs only 15% of sunlight but radiates only 5% as well as a black body: \(\alpha/\varepsilon = 3\), and it runs above 100 °C at 500 km. White paint, \(\alpha/\varepsilon = 0.22\), runs coldest.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Formula sheet</h2>
+\[
+\varepsilon\sigma A T^4 = \alpha S A_p + \alpha a S A F + \varepsilon q_E A F + Q, \qquad T_\text{deep space} = \left(\frac{\alpha S}{4\varepsilon\sigma}\right)^{1/4}, \qquad F = \tfrac12\left(1 - \sqrt{1 - (R_E/r)^2}\right).
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, on thermal control, and the EML 4140 notes on radiation. Albedo and Earth's infrared are round orbit-average values.</footer>
+</body>
+</html>

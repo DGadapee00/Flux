@@ -2,9 +2,17 @@
  * Unit 1 coaching: traps (the wrong value a named mistake gives) and their fixes, per template.
  * Folded into the bank by src/problems/index.js.
  */
-import { AREA, NULL_DIR } from '../bank/u1.js';
+import { AREA, NULL_DIR, projCoef } from '../bank/u1.js';
 
 export default {
+  'u1.12.coefficients': {
+    traps: {
+      x: [
+        [($) => projCoef($, 'own'), 'That is the shadow on one arrow alone, b·a/a·a. The arrows are not perpendicular, so solve the normal equations together.'],
+        [($) => projCoef($, 'other'), 'That is the other coefficient. x̂₁ multiplies a₁ = (1, 0, 0) and x̂₂ multiplies a₂ = (1, 1, 0).'],
+      ],
+    },
+  },
   'u1.1.matrix-area': {
     traps: {
       area: [

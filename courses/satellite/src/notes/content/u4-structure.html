@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Structure</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 4 · after MIT 16.851 Satellite Engineering</div>
+  <h1>Structure</h1>
+  <p class="lede">Why a satellite's parts are designed against the launcher's shaking as much as against its weight, and why a bracket's natural frequency matters as much as its strength.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Launch loads</h3>
+    <a href="#s1"><span>1</span>Shaken at the base</a>
+    <h3>Reference</h3>
+    <a href="#s2"><span>2</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Launch loads</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Shaken at the base</h2>
+<p>During launch the rocket shakes everything bolted to it. A component on a bracket is a mass on a spring with some damping, driven at its base.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Let the base move as \(y(t)\) and the mass as \(x(t)\). The bracket pushes on the mass with \(k(y - x) + c(\dot y - \dot x)\), so with \(z = x - y\),</p>
+\[
+m\ddot z + c\dot z + kz = -m\ddot y.
+\]
+<p>For a sine at frequency \(f\), the mass's acceleration in steady state is the base's times the transmissibility</p>
+\[
+T = \sqrt{\frac{1 + (2\zeta r)^2}{(1 - r^2)^2 + (2\zeta r)^2}}, \qquad r = \frac{f}{f_n}, \qquad f_n = \frac{1}{2\pi}\sqrt{\frac km}, \qquad \zeta = \frac{c}{2\sqrt{km}}.
+\]
+<p>Well below resonance \(T \approx 1\): the mass moves with the base. Near \(r = 1\), \(T \approx 1/(2\zeta)\). Above \(r = \sqrt2\), \(T < 1\): the mount isolates, and more damping makes that worse.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a bracket at resonance</span>
+<p>A 2 kg component on a bracket with \(f_n = 40\) Hz and \(\zeta = 0.05\), shaken at 40 Hz and 1 g. Then \(r = 1\) and</p>
+\[
+T = \frac{\sqrt{1 + 0.1^2}}{0.1} = 10.05,
+\]
+<p>so the component sees 10 g and the bracket carries \(2 \times 10.05 \times 9.81 = 197\) N, ten times its static load.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Sizing a bracket for strength alone. A strong but flexible bracket whose natural frequency lands in the launcher's shaking band multiplies the load by about \(1/(2\zeta)\). Launchers set a minimum first natural frequency for this reason.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Formula sheet</h2>
+\[
+m\ddot z + c\dot z + kz = -m\ddot y, \qquad T = \sqrt{\frac{1 + (2\zeta r)^2}{(1 - r^2)^2 + (2\zeta r)^2}}, \qquad T_\text{peak} \approx \frac{1}{2\zeta}, \qquad f_n = \frac{1}{2\pi}\sqrt{\frac km}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, on structures and launch environments.</footer>
+</body>
+</html>

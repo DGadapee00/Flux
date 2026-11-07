@@ -11,7 +11,7 @@ export const EXAMS = [
     chapters: '5',
     date: 'Unit 1',
     labs: ['viscosity'],
-    coming: ['Couette and Poiseuille flow', 'Pipe flow'],
+    coming: ['Couette and Poiseuille flow'],
   },
   {
     id: 'u2',
@@ -28,7 +28,7 @@ export const EXAMS = [
     title: 'Following the flow',
     chapters: '6',
     date: 'Unit 3',
-    labs: ['nozzle', 'bend', 'continuity', 'transport', 'pipe', 'model', 'layer'],
+    labs: ['nozzle', 'bend', 'continuity', 'transport', 'vane', 'pipe', 'headloss', 'model', 'layer'],
     coming: [],
   },
 ];
@@ -41,7 +41,9 @@ export const LAB_META = {
   bend: { id: 'bend', exam: 'u3', title: 'Bend' },
   continuity: { id: 'continuity', exam: 'u3', title: 'Continuity' },
   transport: { id: 'transport', exam: 'u3', title: 'Transport' },
+  vane: { id: 'vane', exam: 'u3', title: 'Vane' },
   pipe: { id: 'pipe', exam: 'u3', title: 'Pipe' },
+  headloss: { id: 'headloss', exam: 'u3', title: 'Head loss' },
   model: { id: 'model', exam: 'u3', title: 'Model' },
   layer: { id: 'layer', exam: 'u3', title: 'Boundary layer' },
 };

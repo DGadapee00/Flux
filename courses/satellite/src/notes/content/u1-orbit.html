@@ -20,7 +20,8 @@
     <a href="#s1"><span>1</span>Ellipses and their speeds</a>
     <a href="#s2"><span>2</span>Kepler's equation</a>
     <h3>Reference</h3>
-    <a href="#s3"><span>3</span>Formula sheet</a>
+    <a href="#s3"><span>3</span>Orbit transfers</a>
+    <a href="#s4"><span>4</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -67,16 +68,45 @@ M = E - e\sin E, \qquad r = a(1 - e\cos E), \qquad \tan\frac\nu2 = \sqrt{\frac{1
 </section>
 
 <section class="topic" id="s3">
-<h2><span class="n">3</span>Formula sheet</h2>
+<h2><span class="n">3</span>Orbit transfers</h2>
+<p>To change orbit, change speed. Where the burn happens, and which way, decide what the new orbit looks like.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The orbit's energy per kilogram is \(v^2/2 - \mu/r = -\mu/2a\), which rearranges to the vis-viva equation</p>
+\[
+v^2 = \mu\left(\frac2r - \frac1a\right).
+\]
+<p>A forward burn on a circle of radius \(r_1\) makes that point the perigee of a bigger ellipse. A Hohmann transfer picks the burn whose apogee is the target radius \(r_2\), so \(a = (r_1 + r_2)/2\), and burns again at apogee to round the orbit out:</p>
+\[
+\Delta v_1 = \sqrt{\frac{\mu}{r_1}}\left(\sqrt{\frac{2r_2}{r_1 + r_2}} - 1\right), \qquad \Delta v_2 = \sqrt{\frac{\mu}{r_2}}\left(1 - \sqrt{\frac{2r_1}{r_1 + r_2}}\right),
+\]
+<p>with half the ellipse, \(t = \pi\sqrt{a^3/\mu}\), between them.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · low orbit to geostationary</span>
+<p>From 300 km, \(r_1 = 6678\) km, to 35,786 km, \(r_2 = 42{,}164\) km: the circular speeds are 7.73 and 3.07 km/s, and</p>
+\[
+\Delta v_1 = 2426\ \text{m/s}, \qquad \Delta v_2 = 1467\ \text{m/s}, \qquad t = 5.27\ \text{h}.
+\]
+<p>3.89 km/s in all, spent speeding up twice, and yet the craft ends 4.66 km/s slower than it began: the climb trades speed for height.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Burning forward to catch a craft ahead on the same orbit. The burn raises the orbit and lengthens its period, so you fall further behind. Burn backward: a lower orbit is faster round.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Formula sheet</h2>
 \[
 a = \tfrac12(r_p + r_a), \quad e = \frac{r_a - r_p}{r_a + r_p}, \quad T = 2\pi\sqrt{a^3/\mu}, \quad v^2 = \mu\left(\frac2r - \frac1a\right),
 \]
 \[
 M = \sqrt{\mu/a^3}\,t = E - e\sin E, \qquad \tan\frac\nu2 = \sqrt{\frac{1+e}{1-e}}\tan\frac E2, \qquad \mu_\oplus = 398{,}600\ \text{km}^3/\text{s}^2.
 \]
+\[
+\Delta v_1 = \sqrt{\frac{\mu}{r_1}}\left(\sqrt{\frac{2r_2}{r_1 + r_2}} - 1\right), \qquad \Delta v_2 = \sqrt{\frac{\mu}{r_2}}\left(1 - \sqrt{\frac{2r_1}{r_1 + r_2}}\right), \qquad t = \pi\sqrt{\frac{a^3}{\mu}}.
+\]
 </section>
 
 </main>
-<footer>Our own notes, written for Flux. Read alongside MIT 16.07 Dynamics, Lecture 15. Earth's radius 6378 km.</footer>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.07 Dynamics, Lectures 15 and 17. Earth's radius 6378 km.</footer>
 </body>
 </html>

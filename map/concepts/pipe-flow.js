@@ -33,6 +33,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Plot head loss against flow rate through the laminar and turbulent ranges, with a roughness slider. It corrects the idea that loss grows in step with speed: it is linear while laminar, close to the square once turbulent, and roughness matters only in the turbulent range.',
+  labs: [
+    { course: 'eml3015', lab: 'headloss', notes: ['s10'], note: 'Head loss against flow through the laminar and turbulent ranges: in step with flow while laminar, nearly as its square once turbulent, with roughness counting only then.' },
+  ],
 };

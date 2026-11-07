@@ -4,9 +4,33 @@
  */
 import { MU_EARTH } from '@flux/subjects/mechanics/kepler.js';
 import { ORBITS } from '../../labs/kepler.js';
-import { orbitOf } from '../bank/u1.js';
+import { hohmannBurn, newApogee, orbitOf, transferHours } from '../bank/u1.js';
 
 export default {
+  'u1.5.hohmann': {
+    traps: {
+      dv: [
+        [($) => hohmannBurn($, true, true), 'A Hohmann burn is not the difference of the two circular speeds: each burn moves between a circle and the transfer ellipse, at its own end.'],
+        [($) => hohmannBurn($, false), 'Radii are measured from Earth’s centre: add 6378 km to each altitude.'],
+      ],
+    },
+  },
+  'u1.6.transfer-time': {
+    traps: {
+      t: [
+        [($) => transferHours($, false), 'The coast is half the ellipse, not a whole period: t = π√(a³/μ).'],
+        [($) => transferHours($, true, false), 'Measure the radii from Earth’s centre: add 6378 km to each altitude before averaging.'],
+      ],
+    },
+  },
+  'u1.7.new-apogee': {
+    traps: {
+      ha: [
+        [($) => newApogee($, 'a'), 'That is the semi-major axis. The apogee is the far end: r_a = 2a − r_p.'],
+        [($) => newApogee($, 'radius'), 'That is the apogee radius from Earth’s centre. Subtract 6378 km for the altitude.'],
+      ],
+    },
+  },
   'u1.1.period': {
     traps: {
       T: [

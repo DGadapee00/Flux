@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Attitude control</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 3 · after MIT 16.07, Lecture 3</div>
+  <h1>Attitude control</h1>
+  <p class="lede">How to write down which way a satellite points, why three angles can trap a controller at one attitude, and what flight software carries instead.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Describing an attitude</h3>
+    <a href="#s1"><span>1</span>Rotation matrices and three angles</a>
+    <a href="#s2"><span>2</span>Gimbal lock</a>
+    <a href="#s3"><span>3</span>Quaternions</a>
+    <h3>Reference</h3>
+    <a href="#s4"><span>4</span>Euler’s equations and spin stability</a>
+    <a href="#s5"><span>5</span>Feedback and PID</a>
+    <a href="#s6"><span>6</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Describing an attitude</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Rotation matrices and three angles</h2>
+<p>An attitude is the rotation that takes the reference axes onto the body axes. A rotation matrix \(R\) does it: its columns are the body's x, y and z axes written in the reference frame.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The columns stay unit length and perpendicular, so \(R^{\mathsf T}R = I\) and \(R^{-1} = R^{\mathsf T}\). Nine numbers with six conditions leave three freedoms. Three angles in sequence name them: yaw \(\psi\) about z, then pitch \(\theta\) about the new y, then roll \(\phi\) about the body x,</p>
+\[
+R = R_z(\psi)\,R_y(\theta)\,R_x(\phi), \qquad R_z(\psi) = \begin{bmatrix}\cos\psi & -\sin\psi & 0\\ \sin\psi & \cos\psi & 0\\ 0 & 0 & 1\end{bmatrix}.
+\]
+<p>Order matters: the same three angles in another order give another attitude.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 3-2-1 turn</span>
+<p>Yaw 30°, pitch 20°, roll 10°. Roll turns the craft about its own nose, so the nose, the first column, depends on yaw and pitch only:</p>
+\[
+\hat{\mathbf x}_\text{body} = (\cos\psi\cos\theta,\ \sin\psi\cos\theta,\ -\sin\theta) = (0.814,\ 0.470,\ -0.342).
+\]
+<p>The nose points 30° round from x and 20° below the x-y plane.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding angles from different sequences, or applying the turns in the other order. Rotations do not commute: \(R_zR_y \ne R_yR_z\).</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Gimbal lock</h2>
+<p>A controller measures the body's angular velocity \(\boldsymbol\omega\) and must turn it into angle rates. Three angles cannot always do that.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Each angle rate turns the body about its own axis: roll about the body x, pitch about the once-turned y, yaw about the reference z. Written in body axes,</p>
+\[
+\boldsymbol\omega = \begin{bmatrix}1 & 0 & -\sin\theta\\ 0 & \cos\phi & \cos\theta\sin\phi\\ 0 & -\sin\phi & \cos\theta\cos\phi\end{bmatrix}\begin{bmatrix}\dot\phi\\ \dot\theta\\ \dot\psi\end{bmatrix}, \qquad \det = \cos\theta.
+\]
+<p>Solving for the angle rates divides by \(\cos\theta\). At \(\theta = \pm90^\circ\) the yaw and roll columns are the same line, so the three angles span only two directions. The third is lost: that is gimbal lock.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · pitched up 80°</span>
+<p>With zero roll, a turn of 1°/s about body z needs \(\dot\psi\cos\theta = 1\) and \(\dot\phi - \dot\psi\sin\theta = 0\):</p>
+\[
+\dot\psi = \frac{1}{\cos 80^\circ} = 5.76\ ^\circ/\text{s}, \qquad \dot\phi = \tan 80^\circ = 5.67\ ^\circ/\text{s}.
+\]
+<p>At 85° both double. At 90° no rates exist: the turn about body z has no angle left to make it.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading the angle rates as the body's turn rates. They match only near zero pitch; near 90° a gentle turn needs violent angle rates.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Quaternions</h2>
+<p>Any rotation is a single turn by an angle \(\alpha\) about one axis \(\hat{\mathbf n}\). A unit quaternion stores that axis and half the angle in four numbers.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+\mathbf q = \left(\cos\tfrac\alpha2,\ \hat{\mathbf n}\sin\tfrac\alpha2\right), \qquad \lvert\mathbf q\rvert = 1.
+\]
+<p>One turn followed by another is a quaternion product, so the 3-2-1 sequence is \(\mathbf q = q_z(\psi)\,q_y(\theta)\,q_x(\phi)\). A small body turn \(\delta\mathbf q\) updates it as \(\mathbf q \otimes \delta\mathbf q\), which works at every attitude: there are no angles to line up. \(\mathbf q\) and \(-\mathbf q\) are the same attitude.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the tilted craft as a quaternion</span>
+<p>Yaw 30°, pitch 20°, roll 10° multiply out to</p>
+\[
+\mathbf q = (0.9515,\ 0.0381,\ 0.1893,\ 0.2393),
+\]
+<p>a single turn of \(2\arccos 0.9515 = 34.2^\circ\) about the axis \((0.0381, 0.1893, 0.2393)\) made unit length.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Flight software carries a quaternion, or a matrix, and shows angles only to people. Four numbers with one condition, no lock, and cheap products.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Euler’s equations and spin stability</h2>
+<p>Spinning a satellite is the cheapest way to hold it steady: a spinning body keeps its angular momentum. But not every spin axis works.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>About its principal axes a body's angular momentum is \(\mathbf H = (I_1\omega_1, I_2\omega_2, I_3\omega_3)\). In the turning body frame, \(\dot{\mathbf H} + \boldsymbol\omega\times\mathbf H = \mathbf M\), which with no torque gives Euler's equations,</p>
+\[
+I_1\dot\omega_1 = (I_2 - I_3)\,\omega_2\omega_3, \qquad I_2\dot\omega_2 = (I_3 - I_1)\,\omega_3\omega_1, \qquad I_3\dot\omega_3 = (I_1 - I_2)\,\omega_1\omega_2.
+\]
+<p>Spin at \(\omega_0\) about axis \(s\) with small rates \(w_a, w_b\) on the other two, and keep first-order terms:</p>
+\[
+\ddot w_a = -\omega_0^2\,\frac{(I_s - I_a)(I_s - I_b)}{I_aI_b}\,w_a.
+\]
+<p>About the least or the greatest axis both factors have the same sign: the wobble oscillates. About the middle axis they differ: the wobble grows as \(e^{\lambda t}\) and the body flips.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a brick about its middle axis</span>
+<p>A 12 kg brick, 0.6 × 0.4 × 0.2 m, has \(I = m(b^2 + c^2)/12 = 0.20,\ 0.40,\ 0.52\) kg·m². Spun at 1 rad/s about the middle axis,</p>
+\[
+\lambda = \sqrt{\frac{(0.40 - 0.20)(0.52 - 0.40)}{(0.20)(0.52)}} = 0.480\ \text{s}^{-1}.
+\]
+<p>The wobble grows e-fold every 2.1 s, so a 1% wobble becomes a flip in about 15 s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Trusting the least axis for good. A rigid body is steady there, but a real one flexes and loses energy while keeping its angular momentum, and drifts to spin about its greatest axis. Spin-stabilized satellites spin about the greatest axis.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Feedback and PID</h2>
+<p>A reaction wheel holds the satellite on target: a sensor measures the pointing error, a controller turns it into a torque command, and the wheel spins up to push back. Gains chosen by feel can make that loop ring, or worse.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>One axis with inertia \(J\) under a disturbance \(d\), and a wheel that answers its command \(u\) with a lag \(\tau\):</p>
+\[
+J\ddot\theta = T + d, \qquad \tau\dot T = u - T, \qquad u = -\left(K_p\theta + K_d\dot\theta + K_i\!\int\!\theta\,dt\right).
+\]
+<p>With \(G(s) = 1/\big(Js^2(\tau s + 1)\big)\) and \(C(s) = K_p + K_d s + K_i/s\), the closed-loop poles are the roots of \(1 + C(s)G(s) = 0\):</p>
+\[
+J\tau s^4 + Js^3 + K_ds^2 + K_ps + K_i = 0.
+\]
+<p>Every pole must sit left of the imaginary axis. With \(K_d = K_i = 0\) the \(s\) term is missing and some pole always lies on the right: P alone never settles. For PD, Routh's test gives stability only while \(K_p < K_d/\tau\). PD settles at \(\theta = d/K_p\); the integral term keeps pushing until the error is zero.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · holding against 10 mN·m</span>
+<p>\(J = 10\) kg·m², \(\tau = 0.5\) s, \(K_p = 10\), \(K_d = 20\), \(K_i = 0\). The poles are \(0\), \(-0.639\) and \(-0.681 \pm 1.633i\): stable, as \(10 < K_d/\tau = 40\). The slowest decays as \(e^{-0.639t}\), so the loop settles in about \(4/0.639 = 6.26\) s, at</p>
+\[
+\theta = \frac{d}{K_p} = \frac{0.01}{10} = 10^{-3}\ \text{rad} = 0.0573^\circ.
+\]
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Turning up the gain to hold tighter. A larger \(K_p\) shrinks the offset only until it meets \(K_d/\tau\); past that the wheel's lag turns the push into a growing swing. Read the poles before raising a gain.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Formula sheet</h2>
+\[
+R = R_z(\psi)R_y(\theta)R_x(\phi), \qquad R^{\mathsf T}R = I, \qquad \hat{\mathbf x}_\text{body} = (\cos\psi\cos\theta,\ \sin\psi\cos\theta,\ -\sin\theta).
+\]
+\[
+\dot\psi = \frac{\omega_y\sin\phi + \omega_z\cos\phi}{\cos\theta}, \qquad \dot\theta = \omega_y\cos\phi - \omega_z\sin\phi, \qquad \dot\phi = \omega_x + \dot\psi\sin\theta.
+\]
+\[
+\mathbf q = \left(\cos\tfrac\alpha2,\ \hat{\mathbf n}\sin\tfrac\alpha2\right), \qquad \mathbf q = q_z(\psi)\,q_y(\theta)\,q_x(\phi), \qquad \mathbf q_\text{new} = \mathbf q\otimes\delta\mathbf q.
+\]
+\[
+I_1\dot\omega_1 = (I_2 - I_3)\omega_2\omega_3 + M_1, \qquad \lambda_\text{middle} = \omega_0\sqrt{\frac{(I_2 - I_1)(I_3 - I_2)}{I_1I_3}}, \qquad I_\text{box} = \frac{m(b^2 + c^2)}{12}.
+\]
+\[
+1 + C(s)G(s) = 0, \qquad J\tau s^4 + Js^3 + K_ds^2 + K_ps + K_i = 0, \qquad \theta_\text{PD} = \frac{d}{K_p}, \qquad K_p < \frac{K_d}{\tau}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.07 Dynamics, Lecture 3, on coordinate transformations, and Lecture 28, on Euler's equations, and MIT 16.06 on feedback.</footer>
+</body>
+</html>

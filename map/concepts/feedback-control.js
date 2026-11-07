@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: String.raw`Hold a satellite’s pointing against a disturbance torque with P, PI and PID control. It corrects the idea that a bigger gain is always better: past a point the response rings and then grows. The check simulates the closed loop and compares its settling with the poles of \(1 + CG\).`,
+  labs: [
+    { course: 'satellite', lab: 'pointing', notes: ['s5'], note: 'A reaction wheel holding a satellite’s pointing with P, PD and PID: P rings and grows, PD settles off target by d/K_p, and too much K_p against the wheel’s lag makes it grow again.' },
+  ],
 };

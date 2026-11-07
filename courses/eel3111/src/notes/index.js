@@ -3,9 +3,10 @@
  * Math is \( \) and \[ \]. A dollar sign is not a delimiter in the notes files.
  */
 import u1 from './units/u1.js';
+import u2 from './units/u2.js';
 
 /** One file per unit in ./units/, so each unit's sections change without touching the others. */
-export const NOTES = { u1 };
+export const NOTES = { u1, u2 };
 
 export const notesForExam = (examId) => NOTES[examId] || null;
 

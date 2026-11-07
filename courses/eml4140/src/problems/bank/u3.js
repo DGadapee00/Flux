@@ -2,6 +2,7 @@
  * Unit 3 bank: convection. Original problems, written for the Thermal layer lab, with staged hints
  * and named traps (../coaching/u3.js), each checked against the lab (`sim`).
  */
+import { plateConvection } from '@flux/subjects/heat/convection.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
@@ -9,6 +10,15 @@ const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, opti
 export const STREAMS = {
   air: { U: 5, k: 0.0263, nu: 1.57e-5, Pr: 0.707 },
   water: { U: 0.5, k: 0.613, nu: 8.57e-7, Pr: 5.83 },
+};
+/** The average-h problem's streams: speed (m/s) and properties. */
+export const PLATE = {
+  air: { U: 5, k: 0.0263, nu: 1.57e-5, Pr: 0.707 },
+  water: { U: 0.2, k: 0.613, nu: 8.57e-7, Pr: 5.83 },
+};
+export const avgH = ($, c = 0.664, pr = 1 / 3) => {
+  const S = PLATE[$.fluid];
+  return (c * Math.sqrt((S.U * $.L) / S.nu) * S.Pr ** pr * S.k) / $.L;
 };
 export const DT_PLATE = 40; // K, plate above the stream
 /** The local heat flux with θ′(0) given, W/m². */
@@ -96,5 +106,77 @@ export default [
       read: (c) => ({ d: c.ratio > 2 ? 'thicker' : c.ratio > 0.6 ? 'same' : 'thinner' }),
     },
     cases: [kase('mercury', { fluid: 'mercury' }, { d: 'thicker' })],
+  }),
+
+  problem({
+    id: 'u3.3.average',
+    title: 'The average h on a plate',
+    exam: 'u3',
+    ch: '6',
+    lab: 'nusselt',
+    src: 'Flux, written for the Nusselt lab',
+    topics: ['plate-h'],
+    principles: ['convection'],
+    vars: {
+      fluid: choice(
+        ['air', 'air at 5 m/s (k = 0.0263 W/m·K, ν = 1.57 × 10⁻⁵ m²/s, Pr = 0.707)'],
+        ['water', 'water at 0.2 m/s (k = 0.613 W/m·K, ν = 8.57 × 10⁻⁷ m²/s, Pr = 5.83)'],
+      ),
+      L: range(0.5, 1.5, 0.25, 'm'),
+    },
+    text: (T) => `A smooth plate ${T.L} m long sits edge-on in ${T.fluid}, and the layer stays laminar over all of it. What is the average heat transfer coefficient over the plate, in W/m²·K?`,
+    parts: [num('h', ($) => avgH($), 'W/m²·K', { label: 'h̄' })],
+    level: 2,
+    hints: ['Find Re_L = UL/ν and check it is below 5 × 10⁵.', 'Average over a laminar plate: N̄u = 0.664 Re_L^(1/2) Pr^(1/3), then h̄ = N̄u k/L.'],
+    steps: ($) => {
+      const S = PLATE[$.fluid];
+      const Re = (S.U * $.L) / S.nu;
+      return [
+        String.raw`$\mathrm{Re}_L = ${Number(Re.toPrecision(3))}$, laminar`,
+        String.raw`$\overline{\mathrm{Nu}} = 0.664\sqrt{${Number(Re.toPrecision(3))}}\,(${S.Pr})^{1/3} = ${Number(((avgH($) * $.L) / S.k).toPrecision(3))}$, so $\bar h = ${Number(avgH($).toPrecision(3))}$ W/m²·K`,
+      ];
+    },
+    sim: {
+      scenario: 'air',
+      setup(s, $) {
+        Object.assign(s, { fluid: $.fluid, lU: Math.log10(PLATE[$.fluid].U), L: $.L });
+      },
+      read: (c) => ({ h: c.hBar }),
+    },
+    cases: [kase('air on a 1 m plate', { fluid: 'air', L: 1 }, { h: 8.779 })],
+  }),
+
+  problem({
+    id: 'u3.4.what-changes-h',
+    title: 'Is h a property of the fluid?',
+    exam: 'u3',
+    ch: '6',
+    kind: 'conceptual',
+    lab: 'nusselt',
+    src: 'Flux, written for the Nusselt lab',
+    topics: ['plate-h'],
+    principles: ['convection'],
+    vars: { change: choice(['speed', 'the stream speed doubles'], ['longer', 'the plate is made twice as long'], ['wider', 'the plate is made twice as wide, across the stream']) },
+    text: (T) => `Oil flows along a heated plate and the layer stays laminar. Nothing about the oil changes. What happens to the average heat transfer coefficient if ${T.change}?`,
+    parts: [
+      pick('d', 'the average h', [
+        ['up', 'it rises', 'A faster stream thins the layer everywhere: h̄ ∝ √U.'],
+        ['down', 'it falls', 'A longer plate adds length where the layer is thick and h is low: h̄ ∝ 1/√L.'],
+        ['same', 'it does not change', 'Across the stream nothing varies: every strip of the plate sees the same layer, so h̄ stays.'],
+      ], ($) => ({ speed: 'up', longer: 'down', wider: 'same' })[$.change]),
+    ],
+    level: 1,
+    hints: ['Write h̄ = 0.664 (k/L) √(UL/ν) Pr^(1/3) and see what each change does.', 'Which of U, L and the width appear in it?'],
+    steps: ($) => [{ speed: 'h̄ ∝ √U: up by √2.', longer: 'h̄ ∝ √(UL)/L = √(U/L): down by √2.', wider: 'Width does not appear: h̄ is unchanged.' }[$.change]],
+    sim: {
+      scenario: 'oil',
+      read: (c, s, $) => {
+        if ($.change === 'wider') return { d: 'same' };
+        const other = plateConvection({ fluid: s.fluid, U: $.change === 'speed' ? 2 * c.U : c.U, L: $.change === 'longer' ? 2 * s.L : s.L });
+        const r = other.hBar / c.hBar;
+        return { d: r > 1.05 ? 'up' : r < 0.95 ? 'down' : 'same' };
+      },
+    },
+    cases: [kase('a faster stream', { change: 'speed' }, { d: 'up' })],
   }),
 ];

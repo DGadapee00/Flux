@@ -8,6 +8,7 @@ export default {
   sections: [
     { id: 's1', n: 1, title: 'Two layers on a heated plate', lab: 'thermal', ch: ['6'], topics: ['thermal-layer'], home: true },
     { id: 's2', n: 2, title: 'Heat leaving the wall', lab: 'thermal', ch: ['6'], topics: ['wall-flux'] },
-    { id: 's3', n: 3, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's3', n: 3, title: 'The Nusselt number along a plate', lab: 'nusselt', ch: ['6'], topics: ['plate-h'], home: true },
+    { id: 's4', n: 4, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

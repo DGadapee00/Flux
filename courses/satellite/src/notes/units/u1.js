@@ -8,6 +8,7 @@ export default {
   sections: [
     { id: 's1', n: 1, title: 'Ellipses and their speeds', lab: 'kepler', ch: ['1'], topics: ['ellipse'], home: true },
     { id: 's2', n: 2, title: "Kepler's equation", lab: 'kepler', ch: ['1'], topics: ['kepler'] },
-    { id: 's3', n: 3, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's3', n: 3, title: 'Orbit transfers', lab: 'transfer', ch: ['1'], topics: ['transfer'], home: true },
+    { id: 's4', n: 4, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

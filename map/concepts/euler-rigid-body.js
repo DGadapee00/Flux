@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Spin a box about each of its three principal axes with a small wobble. It corrects the idea that any spin axis is as good as another: about the middle axis the wobble grows and the box flips. The check integrates Euler’s equations and confirms that energy and angular momentum stay fixed.',
+  labs: [
+    { course: 'satellite', lab: 'spin', notes: ['s4'], note: 'A box spun about each principal axis with a small wobble: steady about the least and greatest, tumbling about the middle, with the growth rate checked against linear theory.' },
+  ],
 };

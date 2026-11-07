@@ -3,12 +3,16 @@
  * named traps (../coaching/u2.js), each checked against the lab (`sim`).
  */
 import { K_B, dB, fromDBm, link } from '@flux/subjects/em/noise.js';
+import { linkBudget } from '@flux/subjects/em/link.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 /** The receivers by name: system noise temperature, K. */
 export const RX = { uhf: 500, cold: 100 };
 export const PR_DBM = -120;
+/** The path-loss problem: band frequencies and the loss in dB; `k` and `scale` name the traps. */
+export const BAND_F = { uhf: 437e6, s: 2.2e9, x: 8.4e9 };
+export const pathLossDB = ($, k = 20, scale = 1) => k * Math.log10((4 * Math.PI * $.d * scale) / (3e8 / BAND_F[$.band]));
 export const snrDB = ($, T = RX[$.rx]) => dB(fromDBm(PR_DBM) / (K_B * T * $.B));
 
 export default [
@@ -90,5 +94,69 @@ export default [
       },
     },
     cases: [kase('a wider band', { change: 'band' }, { d: 'down' })],
+  }),
+
+  problem({
+    id: 'u2.3.path-loss',
+    title: 'Free-space path loss',
+    exam: 'u2',
+    ch: '2',
+    lab: 'link',
+    src: 'Flux, written for the Link budget lab',
+    topics: ['link'],
+    principles: ['link'],
+    vars: { band: choice(['uhf', 'UHF at 437 MHz'], ['s', 'S band at 2.2 GHz'], ['x', 'X band at 8.4 GHz']), d: range(500, 2000, 500, 'km', 1000) },
+    text: (T) => `A satellite ${T.d} km from a ground station transmits in ${T.band}. What is the free-space path loss, (4πd/λ)², in dB? Take c = 3.00 × 10⁸ m/s.`,
+    parts: [num('L', ($) => pathLossDB($), 'dB', { label: 'L', tol: 0.005 })],
+    level: 2,
+    hints: ['λ = c/f.', 'In decibels the loss is 10 log₁₀ of a squared ratio: 20 log₁₀(4πd/λ), with d in metres.'],
+    steps: ($) => {
+      const lam = 3e8 / BAND_F[$.band];
+      return [String.raw`$\lambda = ${Number(lam.toPrecision(4))}$ m, so $20\log_{10}\dfrac{4\pi(${$.d.toExponential(1)})}{${Number(lam.toPrecision(4))}} = ${Number(pathLossDB($).toPrecision(4))}$ dB`];
+    },
+    sim: {
+      scenario: 'leo',
+      setup(s, $) {
+        Object.assign(s, { band: $.band, ld: Math.log10($.d / 1000) });
+      },
+      read: (c) => ({ L: c.terms.loss }),
+    },
+    cases: [kase('S band at 1000 km', { band: 's', d: 1000 }, { L: 159.3 })],
+  }),
+
+  problem({
+    id: 'u2.4.what-doubles',
+    title: 'Double something',
+    exam: 'u2',
+    ch: '2',
+    kind: 'conceptual',
+    lab: 'link',
+    src: 'Flux, written for the Link budget lab',
+    topics: ['link'],
+    principles: ['link'],
+    vars: { change: choice(['range', 'the satellite moves twice as far away'], ['dish', 'the ground dish’s diameter doubles'], ['power', 'the transmitter power doubles']) },
+    text: (T) => `In a satellite downlink, ${T.change}. Everything else stays. What happens to the received power?`,
+    parts: [
+      pick('d', 'the received power', [
+        ['m6', 'it falls 6 dB, to a quarter', 'Power spreads over a sphere of area 4πd²: twice the range, a quarter of the power.'],
+        ['m3', 'it falls 3 dB, to a half', 'Halving would need the loss to grow as d, but it grows as d².'],
+        ['p3', 'it rises 3 dB, doubling', 'Received power is proportional to transmitted power: twice the watts, +3 dB.'],
+        ['p6', 'it rises 6 dB, four times', 'A dish’s gain grows with its area, as D²: twice the diameter, four times the power.'],
+      ], ($) => ({ range: 'm6', dish: 'p6', power: 'p3' })[$.change]),
+    ],
+    level: 1,
+    hints: ['Write P_r = P_t G_t G_r (λ/4πd)² with G_r = η(πD/λ)².', 'Find how P_r scales with the quantity that changes.'],
+    steps: ($) => [{ range: 'P_r ∝ 1/d²: ×¼, −6 dB.', dish: 'P_r ∝ D²: ×4, +6 dB.', power: 'P_r ∝ P_t: ×2, +3 dB.' }[$.change]],
+    sim: {
+      scenario: 'leo',
+      read: (c, s, $) => {
+        const p = { band: s.band, Pt: 10 ** s.lPt, GtdBi: s.GtdBi, Dr: s.Dr, d: 1000 * 10 ** s.ld, T: s.T, Rb: 10 ** s.lRb };
+        const q = { ...p, ...({ range: { d: 2 * p.d }, dish: { Dr: 2 * p.Dr }, power: { Pt: 2 * p.Pt } }[$.change]) };
+        const ddB = linkBudget(q).PrdBW - c.PrdBW;
+        const opts = { m6: -6, m3: -3, p3: 3, p6: 6 };
+        return { d: Object.keys(opts).reduce((a, b) => (Math.abs(opts[b] - ddB) < Math.abs(opts[a] - ddB) ? b : a)) };
+      },
+    },
+    cases: [kase('twice the range', { change: 'range' }, { d: 'm6' })],
   }),
 ];

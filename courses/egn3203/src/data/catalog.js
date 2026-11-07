@@ -11,8 +11,8 @@ export const EXAMS = [
     title: 'Matrices and elimination',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['matrix', 'elimination', 'inverse', 'rank', 'eigen'],
-    coming: ['Least squares'],
+    labs: ['matrix', 'elimination', 'inverse', 'rank', 'projection', 'eigen'],
+    coming: [],
   },
   {
     id: 'u2',
@@ -20,7 +20,7 @@ export const EXAMS = [
     title: 'Numbers on a computer',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['roundoff', 'truncation'],
+    labs: ['roundoff', 'truncation', 'roots'],
     coming: ['Interpolation', 'Numerical integration'],
   },
 ];
@@ -30,9 +30,11 @@ export const LAB_META = {
   elimination: { id: 'elimination', exam: 'u1', title: 'Elimination' },
   inverse: { id: 'inverse', exam: 'u1', title: 'Inverse' },
   rank: { id: 'rank', exam: 'u1', title: 'Rank' },
+  projection: { id: 'projection', exam: 'u1', title: 'Projection' },
   eigen: { id: 'eigen', exam: 'u1', title: 'Eigen' },
   roundoff: { id: 'roundoff', exam: 'u2', title: 'Round-off' },
   truncation: { id: 'truncation', exam: 'u2', title: 'Truncation' },
+  roots: { id: 'roots', exam: 'u2', title: 'Roots' },
 };
 
 export const CHAPTER_TITLES = {

@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Choose a surface finish and an orbit, and find the satellite’s temperature in sun and in shadow. It corrects the idea that a black satellite runs hottest: the ratio of absorptivity to emissivity sets the temperature, and white paint runs cold. The check solves the balance in closed form and steps a lumped heat equation until it settles.',
+  labs: [
+    { course: 'satellite', lab: 'balance', notes: ['s1'], note: 'A satellite’s temperature through an orbit for black, white and polished-metal finishes: α/ε sets it, so polished aluminium runs hottest and white coldest.' },
+  ],
 };

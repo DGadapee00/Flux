@@ -3,9 +3,17 @@
  * Folded into the bank by src/problems/index.js.
  */
 import { U } from '@flux/subjects/math/roundoff.js';
-import { ORDER, POWER } from '../bank/u2.js';
+import { ORDER, POWER, newtonStep } from '../bank/u2.js';
 
 export default {
+  'u2.5.newton-step': {
+    traps: {
+      x1: [
+        [($) => newtonStep($, 'plus'), 'Step against the function: x₁ = x₀ − f/f′. The tangent meets the axis on the side f slopes down to.'],
+        [($) => newtonStep($, 'flip'), 'The step is f/f′, the height over the slope, not f′/f.'],
+      ],
+    },
+  },
   'u2.1.estimate': {
     traps: {
       err: [

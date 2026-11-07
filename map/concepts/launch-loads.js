@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Mount a mass on a bracket and shake the base across frequency. It corrects the idea that a stronger bracket always survives launch better: a strong but flexible one can resonate with the launcher and see many times the input acceleration. The check compares the closed-form response of a damped oscillator with a numerical solution.',
+  labs: [
+    { course: 'satellite', lab: 'shake', notes: ['s1'], note: 'A component on a bracket shaken at its base across frequency: ten times the input at resonance, about the input when stiff, less when soft.' },
+  ],
 };

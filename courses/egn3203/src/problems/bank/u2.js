@@ -3,12 +3,19 @@
  * named traps (../coaching/u2.js), each checked against the lab (`sim`).
  */
 import { U } from '@flux/subjects/math/roundoff.js';
+import { CUBICS, df, f } from '@flux/subjects/math/roots.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 export const POWER = { four: 4, five: 5, six: 6 };
 /** The order of each difference formula the problems name. */
 export const ORDER = { central: 2, five: 4 };
+/** One Newton step; `how` names the traps. */
+export const newtonStep = ($, how = 'right') => {
+  const c = CUBICS[$.fn];
+  const [y, d] = [f(c, $.x0), df(c, $.x0)];
+  return how === 'plus' ? $.x0 + y / d : how === 'flip' ? $.x0 - d / y : $.x0 - y / d;
+};
 
 export default [
   problem({
@@ -125,4 +132,63 @@ export default [
     cases: [kase('forward', { method: 'forward' }, { step: 'balance' })],
   }),
 
+
+  problem({
+    id: 'u2.5.newton-step',
+    title: 'One Newton step',
+    exam: 'u2',
+    ch: '2',
+    lab: 'roots',
+    src: 'Flux, written for the Roots lab',
+    topics: ['roots'],
+    principles: ['roots'],
+    vars: { fn: choice(['cycle', 'f(x) = x³ − 2x + 2'], ['shifted', 'f(x) = x³ − 3x + 1']), x0: range(-3, -1.5, 0.5) },
+    text: (T) => `Take one step of Newton’s method on ${T.fn} from x₀ = ${T.x0}. What is x₁?`,
+    parts: [num('x1', ($) => newtonStep($), '', { label: 'x₁' })],
+    level: 1,
+    hints: ['x₁ = x₀ − f(x₀)/f′(x₀).', 'f′(x) = 3x² + p for x³ + px + q.'],
+    steps: ($) => {
+      const c = CUBICS[$.fn];
+      return [String.raw`$f(${$.x0}) = ${Number(f(c, $.x0).toPrecision(4))}$, $f'(${$.x0}) = ${Number(df(c, $.x0).toPrecision(4))}$, so $x_1 = ${Number(newtonStep($).toPrecision(5))}$`];
+    },
+    sim: {
+      scenario: 'good',
+      setup(s, $) {
+        Object.assign(s, { fn: $.fn, x0: $.x0 });
+      },
+      read: (c) => ({ x1: c.newton.xs[1] }),
+    },
+    cases: [kase('x³ − 2x + 2 from −2', { fn: 'cycle', x0: -2 }, { x1: -1.8 })],
+  }),
+
+  problem({
+    id: 'u2.6.sure',
+    title: 'Which one is sure?',
+    exam: 'u2',
+    ch: '2',
+    kind: 'conceptual',
+    lab: 'roots',
+    src: 'Flux, written for the Roots lab',
+    topics: ['roots'],
+    principles: ['roots'],
+    vars: { method: choice(['bisection', 'bisection on [−2, 2]'], ['newton', 'Newton’s method started at the bracket’s midpoint, 0']) },
+    text: (T) => `f(x) = x³ − 2x + 2 has f(−2) = −2 and f(2) = 6, so it has a root in [−2, 2]. Is ${T.method} sure to find it?`,
+    parts: [
+      pick('d', 'the method', [
+        ['yes', 'yes, it always closes in', 'A sign-change bracket, halved each step, keeps the root inside and shrinks to it.'],
+        ['no', 'no, it can fail', 'Newton follows tangents, not the bracket: from 0 on this cubic it cycles between 0 and 1.'],
+      ], ($) => ($.method === 'bisection' ? 'yes' : 'no')),
+    ],
+    level: 1,
+    hints: ['What does each method keep track of from step to step?', 'Try Newton from 0: f(0) = 2, f′(0) = −2.'],
+    steps: ($) => [$.method === 'bisection' ? 'The bracket always holds the root and halves: sure.' : 'x₁ = 0 − 2/(−2) = 1, x₂ = 1 − 1/1 = 0: a cycle.'],
+    sim: {
+      scenario: 'cycle',
+      setup(s) {
+        Object.assign(s, { fn: 'cycle', x0: 0, a: -2, b: 2 });
+      },
+      read: (c, s, $) => ({ d: $.method === 'bisection' ? (c.bisect.valid ? 'yes' : 'no') : c.converged ? 'yes' : 'no' }),
+    },
+    cases: [kase('Newton from 0', { method: 'newton' }, { d: 'no' })],
+  }),
 ];

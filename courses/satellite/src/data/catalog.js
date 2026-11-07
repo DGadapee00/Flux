@@ -11,8 +11,8 @@ export const EXAMS = [
     title: 'Orbit',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['kepler'],
-    coming: ['Rocket equation', 'Orbit transfers'],
+    labs: ['kepler', 'transfer'],
+    coming: ['Rocket equation'],
   },
   {
     id: 'u2',
@@ -20,19 +20,67 @@ export const EXAMS = [
     title: 'Communications',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['noise'],
-    coming: ['Link budget'],
+    labs: ['noise', 'link'],
+    coming: [],
+  },
+  {
+    id: 'u3',
+    n: 3,
+    title: 'Attitude control',
+    chapters: '3',
+    date: 'Unit 3',
+    labs: ['attitude', 'spin', 'pointing'],
+    coming: ['Transfer functions'],
+  },
+  {
+    id: 'u4',
+    n: 4,
+    title: 'Structure',
+    chapters: '4',
+    date: 'Unit 4',
+    labs: ['shake'],
+    coming: [],
+  },
+  {
+    id: 'u5',
+    n: 5,
+    title: 'Power',
+    chapters: '5',
+    date: 'Unit 5',
+    labs: ['power'],
+    coming: [],
+  },
+  {
+    id: 'u6',
+    n: 6,
+    title: 'Thermal control',
+    chapters: '6',
+    date: 'Unit 6',
+    labs: ['balance'],
+    coming: [],
   },
 ];
 
 export const LAB_META = {
   kepler: { id: 'kepler', exam: 'u1', title: 'Kepler' },
+  transfer: { id: 'transfer', exam: 'u1', title: 'Transfer' },
   noise: { id: 'noise', exam: 'u2', title: 'Noise' },
+  link: { id: 'link', exam: 'u2', title: 'Link budget' },
+  attitude: { id: 'attitude', exam: 'u3', title: 'Attitude' },
+  spin: { id: 'spin', exam: 'u3', title: 'Spin' },
+  pointing: { id: 'pointing', exam: 'u3', title: 'Pointing' },
+  shake: { id: 'shake', exam: 'u4', title: 'Shake' },
+  power: { id: 'power', exam: 'u5', title: 'Power' },
+  balance: { id: 'balance', exam: 'u6', title: 'Thermal balance' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Orbit',
   2: 'Communications',
+  3: 'Attitude control',
+  4: 'Structure',
+  5: 'Power',
+  6: 'Thermal control',
 };
 
 export function examById(id) {

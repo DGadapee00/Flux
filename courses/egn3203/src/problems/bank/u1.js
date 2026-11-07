@@ -18,6 +18,13 @@ export const invEntry = ($) => {
 };
 /** The nearly dependent system's solution: (1, 1, 1) + (δ/2.5ε)(1.5, 0.5, −2). */
 export const NULL_DIR = { x: 1.5, y: 0.5, z: -2 };
+/** The projection problem: a₁ = (1, 0, 0), a₂ = (1, 1, 0); `how` names the traps. */
+export const projCoef = ($, how = 'right') => {
+  const right = { x1: $.bu - $.bv, x2: $.bv };
+  const own = { x1: $.bu, x2: ($.bu + $.bv) / 2 };
+  const other = { x1: $.bv, x2: $.bu - $.bv };
+  return { right, own, other }[how][$.ask];
+};
 export const nearly = ($) => 1 + ($.delta / (2.5 * $.eps)) * NULL_DIR[$.ask];
 
 export default [
@@ -306,4 +313,60 @@ export default [
     cases: [kase('a quarter turn', { angle: 'ninety' }, { n: 'none' })],
   }),
 
+
+  problem({
+    id: 'u1.12.coefficients',
+    title: 'Coefficients of a projection',
+    exam: 'u1',
+    ch: '1',
+    lab: 'projection',
+    src: 'Flux, written for the Projection lab',
+    topics: ['projection'],
+    principles: ['projection'],
+    vars: { ask: choice(['x1', 'x̂₁, the coefficient of a₁'], ['x2', 'x̂₂, the coefficient of a₂']), bu: range(7, 9, 1), bv: range(1, 3, 1) },
+    text: (T) => `Project b = (${T.bu}, ${T.bv}, 1) onto the plane of a₁ = (1, 0, 0) and a₂ = (1, 1, 0), so that p = x̂₁a₁ + x̂₂a₂ is the closest point. What is ${T.ask}?`,
+    parts: [num('x', ($) => projCoef($), '', { label: 'x̂' })],
+    level: 2,
+    hints: ['Write the normal equations AᵀA x̂ = Aᵀb with A = [a₁ a₂].', 'AᵀA = [[1, 1], [1, 2]] and Aᵀb = (b₁, b₁ + b₂). Solve the 2 × 2 system.'],
+    steps: ($) => [String.raw`$x̂_1 + x̂_2 = ${$.bu}$ and $x̂_1 + 2x̂_2 = ${$.bu + $.bv}$, so $x̂_2 = ${$.bv}$ and $x̂_1 = ${$.bu - $.bv}$`],
+    sim: {
+      scenario: 'slant',
+      setup(s, $) {
+        Object.assign(s, { theta: 45, L: Math.SQRT2, bu: $.bu, bv: $.bv, bw: 1 });
+      },
+      read: (c, s, $) => ({ x: $.ask === 'x1' ? c.xhat[0] : c.xhat[1] }),
+    },
+    cases: [kase('x̂₁ for b = (8, 2, 1)', { ask: 'x1', bu: 8, bv: 2 }, { x: 6 })],
+  }),
+
+  problem({
+    id: 'u1.13.shadows',
+    title: 'Do the shadows add?',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'projection',
+    src: 'Flux, written for the Projection lab',
+    topics: ['projection'],
+    principles: ['projection'],
+    vars: { arrows: choice(['perp', 'perpendicular arrows of lengths 1 and 2'], ['slant', 'arrows 60° apart, of lengths 1 and 1.5'], ['unit', 'unit-length arrows 60° apart']) },
+    text: (T) => `A plane is spanned by ${T.arrows}. Does projecting b onto each arrow on its own and adding the two give the projection of b onto the plane?`,
+    parts: [
+      pick('d', 'the sum of the two projections', [
+        ['yes', 'yes: it is the projection', 'Perpendicular arrows do not share any direction, so each shadow is exactly its part of p.'],
+        ['no', 'no: it overshoots', 'Slanted arrows share a direction, so each shadow contains part of the other and the sum counts it twice. Unit length does not help.'],
+      ], ($) => ($.arrows === 'perp' ? 'yes' : 'no')),
+    ],
+    level: 1,
+    hints: ['When is AᵀA diagonal?', 'Only then do the normal equations split into one equation per column.'],
+    steps: ($) => [$.arrows === 'perp' ? 'a₁ · a₂ = 0: AᵀA is diagonal, and each coefficient is b·aᵢ/aᵢ·aᵢ.' : 'a₁ · a₂ ≠ 0: AᵀA is not diagonal, so the coefficients couple.'],
+    sim: {
+      scenario: 'slant',
+      setup(s, $) {
+        Object.assign(s, { perp: { theta: 90, L: 2 }, slant: { theta: 60, L: 1.5 }, unit: { theta: 60, L: 1 } }[$.arrows]);
+      },
+      read: (c) => ({ d: c.naiveRight ? 'yes' : 'no' }),
+    },
+    cases: [kase('slanted arrows', { arrows: 'slant' }, { d: 'no' })],
+  }),
 ];

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Power</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 5 · after MIT 16.851 Satellite Engineering</div>
+  <h1>Power</h1>
+  <p class="lede">How long a satellite in low orbit spends in Earth's shadow, and why its solar array must produce more than its average load to keep the battery from running down.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The energy budget</h3>
+    <a href="#s1"><span>1</span>Daylight and eclipse</a>
+    <h3>Reference</h3>
+    <a href="#s2"><span>2</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The energy budget</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Daylight and eclipse</h2>
+<p>A satellite in low orbit spends a third of each orbit in Earth's shadow. Its array works only in daylight; the battery carries it through the dark.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Treat Earth's shadow as a cylinder of radius \(R\). With the Sun in the orbit's plane, an orbit of radius \(r\) is in shadow over an arc of half-angle \(\arcsin(R/r)\) either side of midnight, so</p>
+\[
+T_e = T\,\frac{\arcsin(R/r)}{\pi}, \qquad T = 2\pi\sqrt{\frac{r^3}{\mu}}, \qquad T_s = T - T_e.
+\]
+<p>The load \(P_L\) runs all the time. In daylight the array carries it and refills the battery for the eclipse; every watt-hour going through the battery loses a share in charging (\(\eta_c\)) and again in discharging (\(\eta_d\)). A sun-tracking array therefore needs</p>
+\[
+P_\text{sun} = P_L\,\frac{T_s + T_e/(\eta_c\eta_d)}{T_s}.
+\]
+<p>The battery gives \(P_L T_e/\eta_d\) each eclipse; that over its capacity is the depth of discharge.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 20 W load at 500 km</span>
+<p>At 500 km, \(T = 94.6\) min and \(\arcsin(6378/6878) = 1.19\) rad, so the eclipse lasts 35.8 min and the daylight 58.8 min. With 90% each way,</p>
+\[
+P_\text{sun} = 20\,\frac{58.8 + 35.8/0.81}{58.8} = 35.0\ \text{W}.
+\]
+<p>The eclipse draws \(20 \times 35.8/60/0.9 = 13.2\) Wh: a 40 Wh battery cycles to 33% depth every orbit.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Sizing the array to the orbit-average load, \(P_L T/T_s = 32.1\) W here. That forgets the battery's losses, and the charge sinks a little every orbit until it runs flat.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Formula sheet</h2>
+\[
+T_e = T\,\frac{\arcsin(R/r)}{\pi}, \qquad P_\text{sun} = P_L\,\frac{T_s + T_e/(\eta_c\eta_d)}{T_s}, \qquad \text{DoD} = \frac{P_L T_e}{\eta_d E_\text{batt}}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, on power systems.</footer>
+</body>
+</html>

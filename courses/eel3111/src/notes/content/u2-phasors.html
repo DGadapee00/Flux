@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sinusoidal steady state</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EEL 3111 · Circuit Analysis I · Unit 2 · Kuphaldt, Lessons in Electric Circuits, Vol. II, AC</div>
+  <h1>Sinusoidal steady state</h1>
+  <p class="lede">How a sine source turns inductors and capacitors into complex resistances, why voltages round a loop add as arrows, and how a series circuit can carry more voltage than its source.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Phasors</h3>
+    <a href="#s1"><span>1</span>Phasors and impedance</a>
+    <a href="#s2"><span>2</span>Resonance</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Phasors</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Phasors and impedance</h2>
+<p>Once a sine source has run for a while, every voltage and current in a linear circuit is a sine at the same frequency. Each is fixed by two numbers, an amplitude and a phase, which one complex number holds: its phasor.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Write \(v(t) = \operatorname{Re}\big(\mathbf V e^{j\omega t}\big)\). A time derivative then becomes multiplication by \(j\omega\), so \(v_L = L\,di/dt\) becomes \(\mathbf V_L = j\omega L\,\mathbf I\), and \(i_C = C\,dv/dt\) becomes \(\mathbf V_C = \mathbf I/(j\omega C)\). Each part acts as a resistor with a complex value, its impedance:</p>
+\[
+Z_R = R, \qquad Z_L = j\omega L, \qquad Z_C = \frac{1}{j\omega C}.
+\]
+<p>Ohm's law, series and parallel rules and node analysis all carry over. Kirchhoff's voltage law holds for the phasors: \(\mathbf V_R + \mathbf V_L + \mathbf V_C = \mathbf V\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 3-4-5 RC circuit</span>
+<p>5 V at 1 kHz across 1 kΩ and a capacitor with \(X_C = 1/(\omega C) = 1333\) Ω. Then</p>
+\[
+|Z| = \sqrt{1000^2 + 1333^2} = 1667\ \Omega, \qquad I = \frac{5}{1667} = 3\ \text{mA},
+\]
+<p>so \(|V_R| = 3\) V and \(|V_C| = 4\) V. The current leads the source by \(\arctan(1333/1000) = 53.1^\circ\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding amplitudes round a loop. 3 V and 4 V make 5 V here because the two voltages peak a quarter cycle apart. Add the phasors, head to tail.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Resonance</h2>
+<p>\(Z_L\) points up the imaginary axis and \(Z_C\) down it. At one frequency they are equal and cancel.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>In series, \(Z = R + j(\omega L - 1/\omega C)\). It is smallest, and purely resistive, at</p>
+\[
+\omega_0 = \frac{1}{\sqrt{LC}}, \qquad f_0 = \frac{1}{2\pi\sqrt{LC}}.
+\]
+<p>There the current is \(V/R\), and each of \(\mathbf V_L\) and \(\mathbf V_C\) has amplitude \(Q V\), with \(Q = \omega_0 L/R\). They cancel each other, so the source sees only \(R\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a series RLC at resonance</span>
+<p>\(R = 10\) Ω, \(L = 10\) mH, \(C = 2.533\) µF: \(f_0 = 1.000\) kHz and \(\omega_0 L = 62.8\) Ω. A 5 V source drives \(I = 5/10 = 500\) mA, and</p>
+\[
+|V_L| = |V_C| = 0.5 \times 62.8 = 31.4\ \text{V},
+\]
+<p>six times the source, in opposite phase.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>A series resonant circuit can put many times the source voltage across its parts. Rate the capacitor for \(QV\), not \(V\).</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+Z_R = R, \quad Z_L = j\omega L, \quad Z_C = \frac{1}{j\omega C}, \qquad \mathbf I = \frac{\mathbf V}{Z}, \qquad |Z_{RC}| = \sqrt{R^2 + \frac{1}{\omega^2C^2}}.
+\]
+\[
+\omega_0 = \frac{1}{\sqrt{LC}}, \qquad Q = \frac{\omega_0 L}{R}, \qquad |V_L| = |V_C| = QV \text{ at resonance}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Kuphaldt, Lessons in Electric Circuits, Vol. II, on reactance, impedance and resonance.</footer>
+</body>
+</html>

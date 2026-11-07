@@ -30,6 +30,7 @@ export default {
       why: 'Complex numbers, reactance and impedance, then series-parallel AC networks.',
     },
   ],
-  labs: [],
-  candidate: 'Rotating phasors for a series RC with the time waveforms they project. It corrects the idea that the voltages around a loop add as magnitudes: 3 V across the resistor and 4 V across the capacitor make 5 V, not 7 V.',
+  labs: [
+    { course: 'eel3111', lab: 'phasors', notes: ['s1', 's2'], note: 'Rotating phasors for series RC, RL and RLC with the waveforms they project: 3 V and 4 V make 5 V, and at resonance the capacitor carries six times the source.' },
+  ],
 };

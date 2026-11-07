@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Change a satellite’s range, transmitter power and dish size, with the budget written in decibels. It corrects the idea that doubling the distance halves the received power: it quarters it, a loss of 6 dB. The check computes the received power in watts and in decibels and compares them.',
+  labs: [
+    { course: 'satellite', lab: 'link', notes: ['s3'], note: 'A downlink budget in decibels, from transmitter power to margin: twice the range costs 6 dB, and geostationary range 31 dB more than low orbit.' },
+  ],
 };

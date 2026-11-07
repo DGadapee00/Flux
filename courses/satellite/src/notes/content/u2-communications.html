@@ -20,7 +20,8 @@
     <a href="#s1"><span>1</span>Noise from heat</a>
     <a href="#s2"><span>2</span>Bits in noise</a>
     <h3>Reference</h3>
-    <a href="#s3"><span>3</span>Formula sheet</a>
+    <a href="#s3"><span>3</span>The link budget</a>
+    <a href="#s4"><span>4</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -75,12 +76,37 @@ N = (1.381\times10^{-23})(500)(10^4) = 6.9\times10^{-17}\ \text{W} = -131.6\ \te
 </section>
 
 <section class="topic" id="s3">
-<h2><span class="n">3</span>Formula sheet</h2>
+<h2><span class="n">3</span>The link budget</h2>
+<p>Whether a link closes is a chain of multiplications: power out, antenna gain, the loss over the range, the dish's gain, against the noise. In decibels the chain becomes a sum, written as a budget.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Power \(P_t\) radiated with gain \(G_t\) spreads over a sphere, so at range \(d\) it arrives as \(P_tG_t/4\pi d^2\) per square metre. A dish of effective area \(A_e = G_r\lambda^2/4\pi\) catches</p>
+\[
+P_r = P_tG_tG_r\left(\frac{\lambda}{4\pi d}\right)^2, \qquad G = \eta\left(\frac{\pi D}{\lambda}\right)^2.
+\]
+<p>In decibels, \(P_r = P_t + G_t + G_r - L\), with \(L = 20\log_{10}(4\pi d/\lambda)\). The power falls as \(1/d^2\): twice the range costs 6 dB. Then \(E_b/N_0 = P_r - 10\log_{10}(k_BT) - 10\log_{10}R_b\), all in decibels.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a low-orbit downlink</span>
+<p>2 W (3.0 dBW) in S band, \(\lambda = 13.6\) cm, through a 6 dBi antenna, 1000 km to a 3 m dish at 300 K, at 1 Mbit/s. The path loss is \(20\log_{10}(4\pi\times10^6/0.136) = 159.3\) dB and the dish gains \(10\log_{10}\big(0.55(\pi\cdot3/0.136)^2\big) = 34.2\) dBi, so \(P_r = 3.0 + 6 - 159.3 + 34.2 = -116.1\) dBW. With \(k_BT = -203.8\) dBW/Hz,</p>
+\[
+\frac{E_b}{N_0} = -116.1 + 203.8 - 60 = 27.7\ \text{dB},
+\]
+<p>17 dB more than the 10.5 dB needed. At geostationary range the path costs 31 dB more and the link fails.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Scaling received power with distance. It goes as \(1/d^2\): twice as far is a quarter of the power, and 36 times as far is 31 dB less.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Formula sheet</h2>
 \[
 N = k_BT_\text{sys}B, \qquad \frac{S}{N} = \frac{S}{k_BT_\text{sys}B}, \qquad \frac{E_b}{N_0} = \frac{S}{k_BT_\text{sys}R_b}, \qquad \text{BER} = \tfrac12\operatorname{erfc}\sqrt{E_b/N_0}.
 \]
 \[
 P_\text{dBm} = 10\log_{10}\frac{P}{1\ \text{mW}}, \qquad k_BT_{290} = -174\ \text{dBm/Hz}.
+\]
+\[
+P_r = P_tG_tG_r\left(\frac{\lambda}{4\pi d}\right)^2, \qquad L = 20\log_{10}\frac{4\pi d}{\lambda}, \qquad G = \eta\left(\frac{\pi D}{\lambda}\right)^2.
 \]
 </section>
 
