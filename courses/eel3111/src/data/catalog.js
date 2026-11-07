@@ -19,8 +19,8 @@ export const EXAMS = [
     title: 'Sinusoidal steady state',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['phasors'],
-    coming: ['AC power', 'Filters'],
+    labs: ['phasors', 'filter'],
+    coming: ['AC power'],
   },
   {
     id: 'u3',
@@ -37,6 +37,7 @@ export const LAB_META = {
   nodes: { id: 'nodes', exam: 'u1', title: 'Nodes' },
   dependent: { id: 'dependent', exam: 'u1', title: 'Dependent' },
   phasors: { id: 'phasors', exam: 'u2', title: 'Phasors' },
+  filter: { id: 'filter', exam: 'u2', title: 'Filter' },
   superpose: { id: 'superpose', exam: 'u3', title: 'Superpose' },
   thevenin: { id: 'thevenin', exam: 'u3', title: 'Thévenin' },
 };

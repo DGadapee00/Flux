@@ -30,6 +30,7 @@ export default {
       why: 'Its filters chapter covers low-pass, high-pass, band-pass and resonant filters.',
     },
   ],
-  labs: [],
-  candidate: 'Pass a square wave through an RC low-pass filter with a slider for the corner frequency. It corrects the idea that a filter only weakens a signal: it reshapes it, because each harmonic is cut and delayed by a different amount.',
+  labs: [
+    { course: 'eel3111', lab: 'filter', notes: ['s3'], note: 'A 1 kHz square wave through an RC low-pass with a slider for the corner, the waves beside the harmonics: each harmonic is cut and delayed by its own amount, so the corners round and, with the corner at 200 Hz, a small triangle comes out.' },
+  ],
 };

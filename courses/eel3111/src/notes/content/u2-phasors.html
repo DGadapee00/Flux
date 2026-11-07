@@ -19,8 +19,10 @@
     <h3>Part I · Phasors</h3>
     <a href="#s1"><span>1</span>Phasors and impedance</a>
     <a href="#s2"><span>2</span>Resonance</a>
+    <h3>Part II · Frequency response</h3>
+    <a href="#s3"><span>3</span>Filters</a>
     <h3>Reference</h3>
-    <a href="#s3"><span>3</span>Formula sheet</a>
+    <a href="#s4"><span>4</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -74,13 +76,42 @@ Z_R = R, \qquad Z_L = j\omega L, \qquad Z_C = \frac{1}{j\omega C}.
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Frequency response</h2>
+</div>
+
 <section class="topic" id="s3">
-<h2><span class="n">3</span>Formula sheet</h2>
+<h2><span class="n">3</span>Filters</h2>
+<p>A circuit's frequency response is how it treats a sine at each frequency: how much it passes and how much it delays. A signal that is not a sine is a sum of sines, and each is treated on its own.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>For R in series with C, the output across C is a voltage divider of impedances:</p>
+\[
+H(j\omega) = \frac{1/(j\omega C)}{R + 1/(j\omega C)} = \frac{1}{1 + j\omega RC}, \qquad |H| = \frac{1}{\sqrt{1 + (\omega RC)^2}}, \qquad \angle H = -\arctan(\omega RC).
+\]
+<p>At the corner, \(f_c = 1/(2\pi RC)\), \(|H| = 1/\sqrt 2\). Well above it \(|H|\) falls as \(1/f\). A ±1 V square wave at \(f_0\) is \(\tfrac{4}{\pi}\sum \sin(n\omega_0 t)/n\) over odd \(n\), so its \(n\)-th harmonic comes out cut by \(|H(jn\omega_0)|\) and delayed by \(-\angle H/(n\omega_0)\) in time.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a corner at 1 kHz</span>
+<p>A 1 kHz square wave through a filter with its corner at 1 kHz. The fundamental passes 0.707 and is delayed 125 µs. The 3rd harmonic passes 0.316 and is delayed only 66.3 µs. In the input the 3rd harmonic is a third of the fundamental; in the output it is 0.149 of it, and out of step. The output is a new shape: rounded, with sloping sides.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a corner at 200 Hz</span>
+<p>Move the corner to 200 Hz. In each half period the capacitor charges only a little before the input flips: the output ramps up and down between ±0.304 V, nearly a triangle. Its 3rd harmonic is 0.113 of its fundamental, close to the triangle's 1/9.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Picturing a filter as a volume knob that makes the signal smaller. It cuts and delays each frequency differently, so it changes the shape. Only a pure sine keeps its shape through it.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Formula sheet</h2>
 \[
 Z_R = R, \quad Z_L = j\omega L, \quad Z_C = \frac{1}{j\omega C}, \qquad \mathbf I = \frac{\mathbf V}{Z}, \qquad |Z_{RC}| = \sqrt{R^2 + \frac{1}{\omega^2C^2}}.
 \]
 \[
 \omega_0 = \frac{1}{\sqrt{LC}}, \qquad Q = \frac{\omega_0 L}{R}, \qquad |V_L| = |V_C| = QV \text{ at resonance}.
+\]
+\[
+H(j\omega) = \frac{1}{1 + j\omega RC}, \quad f_c = \frac{1}{2\pi RC}, \quad |H(f_c)| = \frac{1}{\sqrt 2}, \qquad v_\text{square} = \frac{4}{\pi}\sum_{n\ \text{odd}}\frac{\sin n\omega_0 t}{n}.
 \]
 </section>
 
