@@ -15,6 +15,7 @@ export default {
       read: (c) => ({ uIn: [c.uIn, 2.89], dp: [c.dp / 1000, 3.12] }),
     },
   ],
+  s6: [{ tag: 'a 1/25 ship model', lab: 'model', scenario: 'tank', read: (c) => ({ Vm: [c.Vm, 2], ReM: [c.ReM, 8.0e6], nu: [c.nuNeeded, 8.0e-9] }) }],
   s5: [{ tag: 'olive oil in a 4 mm tube', lab: 'pipe', scenario: 'oil', read: (c) => ({ 'Q (mL/s)': [c.Q * 1e6, 1.12], V: [c.V, 0.089], Re: [c.Re, 5.8] }) }],
   s4: [{ tag: 'air squeezed by a piston', lab: 'continuity', scenario: 'piston', read: (c) => ({ in: [c.in, 0.468], out: [c.out, 0.252], net: [c.net, -0.216], rate: [c.dRhoDt, 2.4] }) }],
 };

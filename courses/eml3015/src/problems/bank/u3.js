@@ -11,6 +11,8 @@ import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 const RATIO = { gentle: 2, medium: 4, sharp: 6 };
+/** Model scales by name: N in 1 : N. */
+export const SCALE = { sixteen: 16, twentyfive: 25, hundred: 100 };
 /** Flow rate in a pipe, m³/s, for the problems' fluids; R in m, dp in Pa, L in m. */
 export const pipeQ = ($, R = $.R) => poiseuille({ geom: 'pipe', size: R, G: $.dp / $.L, mu: FLUIDS[$.fluid].mu }).Q;
 const shape = () => choice(['gentle', 'its area halves'], ['medium', 'its area falls to a quarter'], ['sharp', 'its area falls to a sixth']);
@@ -291,4 +293,61 @@ export default [
     },
     cases: [kase('the radius doubled', { change: 'radius' }, { factor: 'sixteen' })],
   }),
+  problem({
+    id: 'u3.11.froude',
+    title: 'How fast to tow the model',
+    exam: 'u3',
+    ch: '6',
+    lab: 'model',
+    src: 'Flux, written for the Model lab',
+    topics: ['similitude'],
+    principles: ['similitude'],
+    vars: { scale: choice(['sixteen', '1 : 16'], ['twentyfive', '1 : 25'], ['hundred', '1 : 100']), Vp: range(4, 14, 1, 'm/s') },
+    text: (T) => `A ship is to sail at ${T.Vp} m/s. A ${T.scale} model of it is towed in a water tank so that it makes the same wave pattern. How fast should the model go?`,
+    parts: [num('Vm', ($) => $.Vp / Math.sqrt(SCALE[$.scale]), 'm/s', { label: 'V_m' })],
+    level: 1,
+    hints: ['The waves depend on the Froude number V/√(gL). Make it equal for the model and the ship.', 'V_m/√L_m = V_p/√L_p, so V_m = V_p √(L_m/L_p).'],
+    steps: ($) => [String.raw`$V_m = V_p\sqrt{\lambda} = ${$.Vp}\sqrt{1/${SCALE[$.scale]}} = ${Number(($.Vp / Math.sqrt(SCALE[$.scale])).toPrecision(3))}$ m/s`],
+    sim: {
+      scenario: 'tank',
+      setup(s, $) {
+        Object.assign(s, { mode: 'surface', fluid: 'water', inv: SCALE[$.scale], Vp: $.Vp });
+      },
+      read: (c) => ({ Vm: c.Vm }),
+    },
+    cases: [kase('the notes’ 1/25 model', { scale: 'twentyfive', Vp: 10 }, { Vm: 2 })],
+  }),
+
+  problem({
+    id: 'u3.12.both',
+    title: 'Can the model match both?',
+    exam: 'u3',
+    ch: '6',
+    kind: 'conceptual',
+    lab: 'model',
+    src: 'Flux, written for the Model lab',
+    topics: ['similitude'],
+    principles: ['similitude'],
+    vars: { fluid: choice(['water', 'water'], ['mercury', 'mercury, whose ν is about a ninth of water’s']) },
+    text: (T) => `A 1/25 model of a ship is towed in ${T.fluid} at the speed that matches the ship’s Froude number. How does its Reynolds number compare with the ship’s?`,
+    parts: [
+      pick('re', 'its Reynolds number', [
+        ['match', 'it matches too', 'Matching Fr fixes V_m = V_p√λ, and then Re_m/Re_p = λ^{3/2} ν_p/ν_m, which is 1 only for ν_m = λ^{3/2} ν_p.'],
+        ['low', 'it is far too low', 'λ^{3/2} = 1/125 here. Even a fluid nine times thinner than water leaves Re about 14 times short.'],
+        ['high', 'it is too high', 'The model is smaller and slower: both lower its Reynolds number.'],
+      ], () => 'low'),
+    ],
+    level: 2,
+    hints: ['Write Re_m/Re_p = (V_m/V_p)(L_m/L_p)(ν_p/ν_m).', 'With V_m/V_p = √λ, that is λ^{3/2} ν_p/ν_m.'],
+    steps: ($) => [$.fluid === 'water' ? 'Re_m/Re_p = (1/25)^{3/2} = 1/125: far too low.' : 'Re_m/Re_p = (1/125)(about 9) ≈ 0.07: still far too low.'],
+    sim: {
+      scenario: 'tank',
+      setup(s, $) {
+        Object.assign(s, { mode: 'surface', fluid: $.fluid, inv: 25 });
+      },
+      read: (c) => ({ re: Math.abs(c.reRatio - 1) < 0.02 ? 'match' : c.reRatio < 1 ? 'low' : 'high' }),
+    },
+    cases: [kase('in water', { fluid: 'water' }, { re: 'low' })],
+  }),
+
 ];

@@ -10,6 +10,7 @@ const loaders = {
   bend: () => import('./bend.js'),
   continuity: () => import('./continuity.js'),
   pipe: () => import('./pipe.js'),
+  model: () => import('./model.js'),
 };
 
 const labs = createLabLoader(loaders);

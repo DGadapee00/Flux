@@ -3,13 +3,21 @@
  * Folded into the bank by src/problems/index.js.
  */
 import { bendPressure } from '@flux/subjects/mechanics/flowfields.js';
-import { pipeQ } from '../bank/u3.js';
+import { SCALE, pipeQ } from '../bank/u3.js';
 
 const RATIO = { gentle: 2, medium: 4, sharp: 6 };
 const RHO = { water: 998, air: 1.2 };
 const bend = ($) => bendPressure({ rho: RHO[$.fluid] ?? 998, V: $.V, R: $.R, w: $.w, profile: 'vortex' });
 
 export default {
+  'u3.11.froude': {
+    traps: {
+      Vm: [
+        [($) => $.Vp / SCALE[$.scale], 'Fr has √L, not L: the speed scales with the square root of the length.'],
+        [($) => $.Vp, 'At the ship’s own speed the model’s Froude number is √N times too big, and its waves are wrong.'],
+      ],
+    },
+  },
   'u3.9.poiseuille': {
     traps: {
       Q: [

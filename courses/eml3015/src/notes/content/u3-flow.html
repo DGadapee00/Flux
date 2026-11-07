@@ -24,7 +24,8 @@
     <a href="#s4"><span>4</span>Mass in, mass out</a>
     <h3>Reference</h3>
     <a href="#s5"><span>5</span>Pressure-driven flow in a pipe</a>
-    <a href="#s6"><span>6</span>Formula sheet</a>
+    <a href="#s6"><span>6</span>Models and similitude</a>
+    <a href="#s7"><span>7</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -146,7 +147,29 @@ Q = \frac{\pi(0.002)^4(10^4)}{8(0.0562)} = 1.12\times10^{-6}\ \text{m}^3/\text{s
 </section>
 
 <section class="topic" id="s6">
-<h2><span class="n">6</span>Formula sheet</h2>
+<h2><span class="n">6</span>Models and similitude</h2>
+<p>A law of physics cannot depend on the units it is written in. That one fact says which combinations of the variables can matter, and when a small model behaves like the full-size thing.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A ship's drag depends on \(V\), \(L\), \(\rho\), \(\mu\) and \(g\): five variables in three base dimensions, mass, length and time. The dimension matrix has rank 3, so the drag coefficient can depend on only \(5 - 3 = 2\) independent groups:</p>
+\[
+\mathrm{Re} = \frac{VL}{\nu}, \qquad \mathrm{Fr} = \frac{V}{\sqrt{gL}}.
+\]
+<p>Re compares inertia with viscous force, Fr inertia with gravity. A model at scale \(\lambda = L_m/L_p\) matches Fr when \(V_m = V_p\sqrt\lambda\). Its Reynolds number is then</p>
+\[
+\frac{\mathrm{Re}_m}{\mathrm{Re}_p} = \lambda^{3/2}\,\frac{\nu_p}{\nu_m},
+\]
+<p>so matching both needs \(\nu_m = \lambda^{3/2}\nu_p\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 1/25 ship model</span>
+<p>A 100 m ship at 10 m/s, tested with a 4 m model. Matching Fr gives \(V_m = 10\sqrt{1/25} = 2\) m/s. In water the model's Reynolds number is \((1/25)^{3/2} = 1/125\) of the ship's: \(8.0\times10^6\) against \(1.0\times10^9\). Matching both would need \(\nu_m = 1.0\times10^{-6}/125 = 8.0\times10^{-9}\) m²/s, fourteen times thinner than mercury.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Running the model at the ship's own speed. Its waves then match a ship five times faster: the Froude number is \(\sqrt{25}\) times too big.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Formula sheet</h2>
 \[
 \frac{D\mathbf v}{Dt} = \frac{\partial\mathbf v}{\partial t} + (\mathbf v\cdot\nabla)\mathbf v, \qquad T = \int \frac{dx}{u}, \qquad \rho\,\frac{D\mathbf v}{Dt} = -\nabla p + \rho\,\mathbf g,
 \]
@@ -155,6 +178,9 @@ Q = \frac{\pi(0.002)^4(10^4)}{8(0.0562)} = 1.12\times10^{-6}\ \text{m}^3/\text{s
 \]
 \[
 u = \frac{\Delta p}{4\mu L}(R^2 - r^2), \qquad Q = \frac{\pi R^4\,\Delta p}{8\mu L}, \qquad q_\text{slot} = \frac{\Delta p\,h^3}{12\mu L}, \qquad Re = \frac{\rho V D}{\mu}.
+\]
+\[
+\#\Pi = n - r, \qquad \mathrm{Fr} = \frac{V}{\sqrt{gL}}, \qquad V_m = V_p\sqrt\lambda, \qquad \frac{\mathrm{Re}_m}{\mathrm{Re}_p} = \lambda^{3/2}\frac{\nu_p}{\nu_m}.
 \]
 </section>
 

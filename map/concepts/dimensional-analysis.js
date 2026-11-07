@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Scale a ship hull down with sliders for the model size and the test fluid. It corrects the idea that a scale model in water behaves like the real ship: matching Reynolds and Froude numbers at once needs a fluid that does not exist.',
+  labs: [
+    { course: 'eml3015', lab: 'model', notes: ['s6'], note: 'A 1/25 ship model at the Froude speed: its Reynolds number falls 125 times short, and matching both needs a fluid fourteen times thinner than mercury. A submarine model must match Re instead.' },
+  ],
 };
