@@ -23,6 +23,15 @@ export const EXAMS = [
     labs: ['vacancy', 'diffusion', 'slip'],
     coming: ['Strengthening'],
   },
+  {
+    id: 'u3',
+    n: 3,
+    title: 'Phase diagrams',
+    chapters: '3',
+    date: 'Unit 3',
+    labs: ['lever'],
+    coming: ['Eutectics', 'Iron–carbon'],
+  },
 ];
 
 export const LAB_META = {
@@ -31,11 +40,13 @@ export const LAB_META = {
   vacancy: { id: 'vacancy', exam: 'u2', title: 'Vacancy' },
   diffusion: { id: 'diffusion', exam: 'u2', title: 'Diffusion' },
   slip: { id: 'slip', exam: 'u2', title: 'Slip' },
+  lever: { id: 'lever', exam: 'u3', title: 'Lever' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Bonding and structure',
   2: 'Defects',
+  3: 'Phase diagrams',
 };
 
 export function examById(id) {

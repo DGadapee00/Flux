@@ -8,6 +8,7 @@ const loaders = {
   vacancy: () => import('./vacancy.js'),
   diffusion: () => import('./diffusion.js'),
   slip: () => import('./slip.js'),
+  lever: () => import('./lever.js'),
 };
 
 const labs = createLabLoader(loaders);

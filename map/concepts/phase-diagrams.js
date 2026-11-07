@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Drag a temperature line across a binary diagram and read the tie line. It corrects the common mix-up between the phases’ compositions and how much of each phase there is.',
+  labs: [
+    { course: 'ema3010', lab: 'lever', notes: ['s1', 's2'], note: 'The copper–nickel lens from ideal solutions, with a temperature line and an alloy you move: 50% nickel at 1550 K is 59% liquid, and that liquid holds 47% nickel. The tie line is checked against the common tangent to the Gibbs energy curves.' },
+  ],
 };
