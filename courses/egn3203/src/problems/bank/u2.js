@@ -3,10 +3,12 @@
  * named traps (../coaching/u2.js), each checked against the lab (`sim`).
  */
 import { U } from '@flux/subjects/math/roundoff.js';
-import { choice, kase, num, problem } from '../kit.js';
+import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 export const POWER = { four: 4, five: 5, six: 6 };
+/** The order of each difference formula the problems name. */
+export const ORDER = { central: 2, five: 4 };
 
 export default [
   problem({
@@ -65,4 +67,62 @@ export default [
     },
     cases: [kase('the cosine', { family: 'cosine' }, { form: 'rewritten' })],
   }),
+
+  problem({
+    id: 'u2.3.halve',
+    title: 'Halve the step',
+    exam: 'u2',
+    ch: '2',
+    lab: 'truncation',
+    src: 'Flux, written for the Truncation lab',
+    topics: ['order'],
+    principles: ['order'],
+    vars: { method: choice(['central', 'the central difference (f(x+h) − f(x−h))/2h'], ['five', 'the five-point formula']), E: range(1, 9, 1, '× 10⁻⁴', 1e-4) },
+    text: (T) => `A derivative estimated by ${T.method} has an error of ${T.E} × 10⁻⁴ at some step h, where round-off is negligible. Estimate the error at h/2.`,
+    parts: [num('E2', ($) => $.E / 2 ** ORDER[$.method], '', { label: 'error at h/2', abs: 0, tol: 0.01 })],
+    level: 1,
+    hints: ['What order is the method? The central difference is second order, the five-point formula fourth.', 'Error ≈ K hᵖ, so halving h divides it by 2ᵖ.'],
+    steps: ($) => [`Order ${ORDER[$.method]}: divide by 2^${ORDER[$.method]} = ${2 ** ORDER[$.method]}, giving ${($.E / 2 ** ORDER[$.method]).toExponential(2)}.`],
+    sim: {
+      scenario: 'tenth',
+      setup(s) {
+        s.lh = -1;
+      },
+      read: (c, s, $) => ({ E2: $.E * (c.methods[$.method].errorHalf / c.methods[$.method].error) }),
+    },
+    cases: [kase('central, 8 × 10⁻⁴', { method: 'central', E: 8 }, { E2: 2e-4 })],
+  }),
+
+  problem({
+    id: 'u2.4.smallest',
+    title: 'The smallest step?',
+    exam: 'u2',
+    ch: '2',
+    kind: 'conceptual',
+    lab: 'truncation',
+    src: 'Flux, written for the Truncation lab',
+    topics: ['order'],
+    principles: ['order'],
+    vars: { method: choice(['forward', 'a forward difference'], ['central', 'a central difference']) },
+    text: (T) => `You estimate a derivative in double precision with ${T.method}. Should you use the smallest step h the computer can represent?`,
+    parts: [
+      pick('step', 'the step', [
+        ['smallest', 'yes: the error falls as h shrinks', 'Only the truncation error falls. Round-off, about u|f|/h, grows as h shrinks.'],
+        ['balance', 'no: there is a best h, where truncation and round-off balance', 'Below it the error climbs again; for a forward difference of sin x it is near h = 10⁻⁸.'],
+        ['largest', 'no: a large h is always safest', 'A large h makes the truncation error large.'],
+      ], () => 'balance'),
+    ],
+    level: 2,
+    hints: ['Two errors: truncation, which falls with h, and round-off, which rises as 1/h.', 'Look at the error curve on log axes as h goes to 10⁻¹².'],
+    steps: () => ['Truncation falls as hᵖ while round-off grows as u/h, so the total error has a minimum at a moderate h.'],
+    sim: {
+      scenario: 'small',
+      setup(s) {
+        s.lh = -12;
+      },
+      read: (c, s, $) => ({ step: c.methods[$.method].error > 1e-9 ? 'balance' : 'smallest' }),
+    },
+    cases: [kase('forward', { method: 'forward' }, { step: 'balance' })],
+  }),
+
 ];

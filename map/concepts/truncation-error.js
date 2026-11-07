@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Halve the step again and again for a first- and a fourth-order method, the errors on log axes. It corrects the idea that every method improves at the same rate: one halves its error, the other divides it by sixteen.',
+  labs: [
+    { course: 'egn3203', lab: 'truncation', notes: ['s3'], note: 'The derivative of sin x by forward, central and five-point differences as h shrinks: slopes 1, 2 and 4 on log axes, until round-off over h turns every error back up.' },
+  ],
 };

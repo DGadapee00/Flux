@@ -9,6 +9,7 @@ export const PRINCIPLES = {
   conditioning: { name: 'Condition, not determinant', statement: 'How close a matrix is to singular is its condition number κ = σ₁/σ₂, the flatness of the ellipse it maps the circle to. Scaling a matrix changes det but not κ.', cue: 'A matrix with a small determinant, or an inverse with large entries.', family: 'Linear algebra' },
   rank: { name: 'Rank decides the answers', statement: 'Ax = b has a solution when rank [A | b] = rank A; it is unique when that rank is n, and a family xₚ + xₙ otherwise.', cue: 'A system that may have no answer or many.', family: 'Linear algebra' },
   cancellation: { name: 'Do not subtract nearly equal numbers', statement: 'Each operation is good to u = 2⁻⁵³ relative; a − b keeps the absolute error, so its relative error is about u|a|/|a − b|. Rewrite to avoid the subtraction.', cue: 'A formula that subtracts close numbers at small or large arguments.', family: 'Numerics' },
+  order: { name: 'Order of accuracy', statement: 'A method with error about K hᵖ divides its error by 2ᵖ when h is halved; p is the slope of the error on log axes, until round-off takes over.', cue: 'A step size, and an error that depends on it.', family: 'Numerics' },
   pivoting: { name: 'Pivot on the largest entry', statement: 'Dividing by a tiny pivot makes huge multipliers that swamp the other rows in rounding; swapping the largest entry into the pivot spot avoids it.', cue: 'Solving a system in floating point.', family: 'Numerics' },
 };
 

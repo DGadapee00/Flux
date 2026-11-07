@@ -20,8 +20,8 @@ export const EXAMS = [
     title: 'Numbers on a computer',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['roundoff'],
-    coming: ['Truncation error', 'Numerical derivatives'],
+    labs: ['roundoff', 'truncation'],
+    coming: ['Interpolation', 'Numerical integration'],
   },
 ];
 
@@ -31,6 +31,7 @@ export const LAB_META = {
   inverse: { id: 'inverse', exam: 'u1', title: 'Inverse' },
   rank: { id: 'rank', exam: 'u1', title: 'Rank' },
   roundoff: { id: 'roundoff', exam: 'u2', title: 'Round-off' },
+  truncation: { id: 'truncation', exam: 'u2', title: 'Truncation' },
 };
 
 export const CHAPTER_TITLES = {

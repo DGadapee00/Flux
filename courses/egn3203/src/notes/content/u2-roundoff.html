@@ -19,8 +19,10 @@
     <h3>Part I · Round-off</h3>
     <a href="#s1"><span>1</span>Numbers in binary</a>
     <a href="#s2"><span>2</span>Cancellation</a>
+    <h3>Part II · Truncation</h3>
+    <a href="#s3"><span>3</span>Order of accuracy</a>
     <h3>Reference</h3>
-    <a href="#s3"><span>3</span>Formula sheet</a>
+    <a href="#s4"><span>4</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -66,13 +68,40 @@
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Truncation</h2>
+</div>
+
 <section class="topic" id="s3">
-<h2><span class="n">3</span>Formula sheet</h2>
+<h2><span class="n">3</span>Order of accuracy</h2>
+<p>A derivative estimated from values a step \(h\) apart is off even in exact arithmetic, because the formula cuts a Taylor series short. That truncation error shrinks as a power of \(h\), and the power is the method's order.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Expand \(f(x \pm h) = f \pm hf' + \tfrac{h^2}{2}f'' \pm \tfrac{h^3}{6}f''' + \dots\) Then</p>
+\[
+\frac{f(x+h) - f(x)}{h} = f' + \frac h2 f'' + \dots, \qquad \frac{f(x+h) - f(x-h)}{2h} = f' + \frac{h^2}{6}f''' + \dots
+\]
+<p>The forward difference is first order and the central difference second. Combining four values cancels up to \(h^4\). If \(E \approx Kh^p\), halving \(h\) divides \(E\) by \(2^p\), so \(p = \log_2[E(h)/E(h/2)]\). On log axes the error is a line of slope \(p\).</p>
+<p>Round-off adds about \(u|f|/h\), which grows as \(h\) shrinks. The best step balances the two.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the forward difference at h = 0.1</span>
+<p>For \(\sin x\) at \(x = 1\): \((\sin 1.1 - \sin 1)/0.1 = (0.891207 - 0.841471)/0.1 = 0.4974\). The true value is \(\cos 1 = 0.5403\), an error of 0.0429. The leading term predicts \((0.1/2)\sin 1 = 0.0421\). Halve the step and the error halves, to about 0.021.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the smallest step the computer allows. Near \(h = 10^{-12}\) the forward difference is worse than at \(h = 10^{-4}\), because round-off divided by \(h\) has taken over.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Formula sheet</h2>
 \[
 \operatorname{fl}(x) = x(1 + \delta),\ |\delta| \le u = 2^{-53}, \qquad \text{relative error of } a - b \approx \frac{u|a|}{|a - b|},
 \]
 \[
 1 - \cos x = 2\sin^2\tfrac x2, \qquad \sqrt{x^2 + 1} - x = \frac{1}{\sqrt{x^2 + 1} + x}.
+\]
+\[
+\frac{f(x+h) - f(x)}{h} = f' + O(h), \qquad \frac{f(x+h) - f(x-h)}{2h} = f' + O(h^2), \qquad p = \log_2\frac{E(h)}{E(h/2)}.
 \]
 </section>
 

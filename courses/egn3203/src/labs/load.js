@@ -8,6 +8,7 @@ const loaders = {
   inverse: () => import('./inverse.js'),
   rank: () => import('./rank.js'),
   roundoff: () => import('./roundoff.js'),
+  truncation: () => import('./truncation.js'),
 };
 
 const labs = createLabLoader(loaders);
