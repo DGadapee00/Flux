@@ -8,6 +8,7 @@ export default {
   sections: [
     { id: 's1', n: 1, title: 'Noise from heat', lab: 'noise', ch: ['2'], topics: ['noise'], home: true },
     { id: 's2', n: 2, title: 'Bits in noise', lab: 'noise', ch: ['2'], topics: ['noise'] },
-    { id: 's3', n: 3, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's3', n: 3, title: 'The link budget', lab: 'link', ch: ['2'], topics: ['link'], home: true },
+    { id: 's4', n: 4, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

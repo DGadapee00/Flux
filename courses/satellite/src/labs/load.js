@@ -5,6 +5,7 @@ import { PREDICTIONS } from './predictions.js';
 const loaders = {
   kepler: () => import('./kepler.js'),
   noise: () => import('./noise.js'),
+  link: () => import('./link.js'),
   attitude: () => import('./attitude.js'),
   spin: () => import('./spin.js'),
   pointing: () => import('./pointing.js'),

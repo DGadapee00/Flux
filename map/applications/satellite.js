@@ -222,11 +222,12 @@ export const SATELLITE = {
       labs: [
         { concept: 'em-waves', course: 'phy2049', lab: 'emwave' },
         { concept: 'thermal-noise', course: 'satellite', lab: 'noise' },
+        { concept: 'link-budget', course: 'satellite', lab: 'link' },
       ],
       demonstrate: 'State range, frequency, antenna assumptions, data rate and receiver sensitivity. Build a link budget with a margin, then check whether contact time and transmitter energy can return the planned data.',
       deliverable: 'A link budget and a contact-by-contact data and energy estimate.',
       interface: 'Take range from Orbit, pointing from Attitude control, power from Power and data volume from Payload. Tell Payload how much data can be returned.',
-      gap: 'The wave lab is a foundation and the Noise lab covers receiver noise. Antenna gain and a complete radio link, the link budget, still need a lab.',
+      gap: 'The Noise and Link budget labs cover receiver noise and a complete free-space link. Ground-station visibility over a pass is still to be built.',
     },
   ],
   integration: {

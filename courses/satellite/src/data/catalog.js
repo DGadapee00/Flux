@@ -20,8 +20,8 @@ export const EXAMS = [
     title: 'Communications',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['noise'],
-    coming: ['Link budget'],
+    labs: ['noise', 'link'],
+    coming: [],
   },
   {
     id: 'u3',
@@ -37,6 +37,7 @@ export const EXAMS = [
 export const LAB_META = {
   kepler: { id: 'kepler', exam: 'u1', title: 'Kepler' },
   noise: { id: 'noise', exam: 'u2', title: 'Noise' },
+  link: { id: 'link', exam: 'u2', title: 'Link budget' },
   attitude: { id: 'attitude', exam: 'u3', title: 'Attitude' },
   spin: { id: 'spin', exam: 'u3', title: 'Spin' },
   pointing: { id: 'pointing', exam: 'u3', title: 'Pointing' },
