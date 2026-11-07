@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Solve one equation with Euler and with RK4 at the same number of slope evaluations. It corrects the idea that many cheap steps beat a few careful ones: at equal work RK4 is accurate to many more digits.',
+  labs: [
+    { course: 'egn3203', lab: 'rk', notes: ['s6'], note: 'Euler, midpoint and RK4 on one equation with the same budget of slope evaluations: with 64, RK4’s 16 steps miss by 10⁻⁶ while Euler’s 64 miss by 4 × 10⁻³, and doubling the budget cuts RK4’s error sixteenfold.' },
+  ],
 };

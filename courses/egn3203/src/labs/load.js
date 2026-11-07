@@ -13,6 +13,7 @@ const loaders = {
   roundoff: () => import('./roundoff.js'),
   truncation: () => import('./truncation.js'),
   roots: () => import('./roots.js'),
+  rk: () => import('./rk.js'),
 };
 
 const labs = createLabLoader(loaders);

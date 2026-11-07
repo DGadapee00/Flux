@@ -3,7 +3,7 @@
  * Folded into the bank by src/problems/index.js.
  */
 import { U } from '@flux/subjects/math/roundoff.js';
-import { ORDER, POWER, newtonStep } from '../bank/u2.js';
+import { ORDER, POWER, newtonStep, oneStep } from '../bank/u2.js';
 
 export default {
   'u2.5.newton-step': {
@@ -27,6 +27,14 @@ export default {
       E2: [
         [($) => $.E / 2, 'That is first order. This method’s error falls faster: divide by 2ᵖ.'],
         [($) => $.E / 4 ** ORDER[$.method], 'Halving h once divides the error by 2ᵖ, not 4ᵖ.'],
+      ],
+    },
+  },
+  'u2.7.one-step': {
+    traps: {
+      y: [
+        [($) => ($.method === 'euler' ? 1 / (1 + 2 * $.h) : oneStep('euler', $.h)), ($) => ($.method === 'euler' ? 'That uses the slope at the end of the step, the backward Euler method. Forward Euler uses the slope at the start.' : 'That is a single Euler step. RK4 blends four slopes.')],
+        [($) => ($.method === 'euler' ? Math.exp(-2 * $.h) : oneStep('midpoint', $.h)), ($) => ($.method === 'euler' ? 'That is the exact value, e^(−2h). Euler only follows the starting slope.' : 'That stops at the midpoint method, two slopes. RK4 needs all four.')],
       ],
     },
   },
