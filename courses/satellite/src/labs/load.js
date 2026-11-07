@@ -10,6 +10,7 @@ const loaders = {
   attitude: () => import('./attitude.js'),
   spin: () => import('./spin.js'),
   pointing: () => import('./pointing.js'),
+  poles: () => import('./poles.js'),
   shake: () => import('./shake.js'),
   power: () => import('./power.js'),
   balance: () => import('./balance.js'),

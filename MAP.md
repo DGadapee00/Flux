@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchyâ
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 226 with a Flux lab, 49 gaps.**
+**275 concepts, 227 with a Flux lab, 48 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -21,7 +21,7 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Thermodynamics | 22 | 13 |
 | Fluid mechanics | 20 | 16 |
 | Heat transfer | 19 | 8 |
-| Circuits and systems | 27 | 21 |
+| Circuits and systems | 27 | 22 |
 | Mechanics of materials | 16 | 16 |
 | Materials science | 15 | 5 |
 | Design and manufacturing | 9 | 9 |
@@ -80,9 +80,9 @@ Euler's equations and spin stability, transfer functions and stability, feedback
 thermal noise, and the link budget. Their sources are MIT 16.07 Dynamics, 16.06 Automatic Control
 and 16.851 Satellite Engineering. The rocket equation already has PHY 2048's and Dynamics' rocket
 labs, and Kepler's equation, orbit transfers, spacecraft power, the radiation balance, thermal noise,
-the link budget, rotations, Euler's equations, feedback and launch loads have the satellite app's
-labs. Transfer functions are the one gap left, with a lab candidate the Attitude recipe names. When a
-course that teaches one joins the map, add it to that concept's `courses`.
+the link budget, rotations, Euler's equations, transfer functions, feedback and launch loads have the
+satellite app's labs, so every satellite concept now has one. When a course that teaches one joins
+the map, add it to that concept's `courses`.
 
 ## Design practice
 

@@ -20,10 +20,12 @@
     <a href="#s1"><span>1</span>Rotation matrices and three angles</a>
     <a href="#s2"><span>2</span>Gimbal lock</a>
     <a href="#s3"><span>3</span>Quaternions</a>
-    <h3>Reference</h3>
+    <h3>Part II · Dynamics and control</h3>
     <a href="#s4"><span>4</span>Euler’s equations and spin stability</a>
     <a href="#s5"><span>5</span>Feedback and PID</a>
-    <a href="#s6"><span>6</span>Formula sheet</a>
+    <a href="#s6"><span>6</span>Poles and stability</a>
+    <h3>Reference</h3>
+    <a href="#s7"><span>7</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -150,7 +152,31 @@ J\tau s^4 + Js^3 + K_ds^2 + K_ps + K_i = 0.
 </section>
 
 <section class="topic" id="s6">
-<h2><span class="n">6</span>Formula sheet</h2>
+<h2><span class="n">6</span>Poles and stability</h2>
+<p>The Laplace transform turns a linear differential equation into algebra. The ratio of output to input, \(G(s)\), is the transfer function, and the roots of its denominator, its poles, are the modes of every response.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A pair of poles \(p = \sigma \pm j\omega\) gives \(G(s) = K/(s^2 - 2\sigma s + \sigma^2 + \omega^2)\). For a unit step in, partial fractions split \(G(s)/s\) into one term per pole, so</p>
+\[
+y(t) = 1 + 2\,\mathrm{Re}\!\left(\frac{K\,e^{pt}}{p\,(p - \bar p)}\right), \qquad |e^{pt}| = e^{\sigma t},
+\]
+<p>with \(K = \sigma^2 + \omega^2\). The imaginary part \(\omega\) sets how fast it rings. The real part \(\sigma\) sets the envelope: it shrinks if \(\sigma < 0\) and grows if \(\sigma > 0\), however small. For a quadratic, Routh's test says the same from the coefficients: stable when both \(-2\sigma\) and \(\sigma^2 + \omega^2\) are positive.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a damped pair</span>
+<p>Poles at \(-1 \pm 2j\). The ringing has period \(2\pi/2 = 3.14\) s and the envelope \(e^{-t}\). The first peak overshoots by \(e^{\pi\sigma/\omega} = e^{-\pi/2} = 20.8\%\), and the response stays within 2% of 1 after about</p>
+\[
+t_s = \frac{4}{|\sigma|} = 4\ \text{s}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · σ = +0.1</span>
+<p>Move the poles to \(0.1 \pm 2j\). For the first few seconds the response looks like a lightly damped one. But its envelope \(e^{0.1t}\) doubles every \(\ln 2/0.1 = 6.93\) s, and by 30 s it has swung out to 19.8, with no end.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Calling a slowly growing mode nearly stable. A pole just right of the axis is as unstable as one far right: it only takes longer to show. Mirror it to \(\sigma = -0.1\) and the response settles, though only after \(4/0.1 = 40\) s.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Formula sheet</h2>
 \[
 R = R_z(\psi)R_y(\theta)R_x(\phi), \qquad R^{\mathsf T}R = I, \qquad \hat{\mathbf x}_\text{body} = (\cos\psi\cos\theta,\ \sin\psi\cos\theta,\ -\sin\theta).
 \]
@@ -165,6 +191,9 @@ I_1\dot\omega_1 = (I_2 - I_3)\omega_2\omega_3 + M_1, \qquad \lambda_\text{middle
 \]
 \[
 1 + C(s)G(s) = 0, \qquad J\tau s^4 + Js^3 + K_ds^2 + K_ps + K_i = 0, \qquad \theta_\text{PD} = \frac{d}{K_p}, \qquad K_p < \frac{K_d}{\tau}.
+\]
+\[
+G(s) = \frac{K}{(s - p)(s - \bar p)}, \quad p = \sigma \pm j\omega, \qquad \text{stable} \iff \sigma < 0, \qquad M_p = e^{\pi\sigma/\omega}, \quad t_s \approx \frac{4}{|\sigma|}.
 \]
 </section>
 
