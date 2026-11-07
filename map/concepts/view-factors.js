@@ -33,6 +33,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Two plates you move and tilt, with rays fired at random and counted. It corrects the idea that a large plate sees a small one as much as the small one sees it: the fractions differ by the area ratio, while \\(A_1F_{12}\\) and \\(A_2F_{21}\\) agree.',
+  labs: [
+    { course: 'eml4140', lab: 'viewfactor', notes: ['s3'], note: 'Two long strips you move, resize and tilt, with rays fired and counted: a narrow strip sends 70% of its radiation to a wide one that sends back 14%, while w₁F₁₂ = w₂F₂₁. Crossed strings checked against the double integral.' },
+  ],
 };

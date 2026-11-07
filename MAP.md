@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchyâ
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 227 with a Flux lab, 48 gaps.**
+**275 concepts, 228 with a Flux lab, 47 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -20,7 +20,7 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Electricity and magnetism | 27 | 27 |
 | Thermodynamics | 22 | 13 |
 | Fluid mechanics | 20 | 16 |
-| Heat transfer | 19 | 8 |
+| Heat transfer | 19 | 9 |
 | Circuits and systems | 27 | 22 |
 | Mechanics of materials | 16 | 16 |
 | Materials science | 15 | 5 |
@@ -55,7 +55,7 @@ each new concept on them is a gap with a candidate lab:
 | EGN 3203 Modern Computation Methods | 24 (11 new, plus the 7 linear algebra concepts) | 2.086, Spring 2013 |
 | EML 3101 Thermodynamics II | 14 (10 new; app started: Mixture lab) | 16.050, Fall 2002, with Cleynen |
 | EML 3015 Fluids | 22 (16 new) | 2.06, Spring 2013 |
-| EML 4140 Heat Transfer | 19 (15 new; app started: Rod, Resistance, Radiation, Thermal layer and Nusselt labs) | 2.51, Fall 2008, with Lienhard |
+| EML 4140 Heat Transfer | 19 (15 new; app started: Rod, Resistance, Radiation, View factor, Thermal layer and Nusselt labs) | 2.51, Fall 2008, with Lienhard |
 | Build a satellite (a project) | 12 (11 new; app started: Kepler, Transfer, Noise, Link budget, Attitude, Spin, Pointing, Shake, Power and Thermal balance labs) | The satellite's subsystems, from MIT 16.07, 16.06 and 16.851 |
 | Design practice (a project) | 20 (20 new) | Requirements to a tested part, then sensors, actuators and boards; MIT 2.007, 2.72 and 2.008 |
 
