@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Compressible flow</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EML 3101 · Thermodynamics II · Unit 2 · NASA Glenn’s isentropic flow pages, beside MIT 16.050</div>
+  <h1>Compressible flow</h1>
+  <p class="lede">What happens when a gas moves near the speed of sound: why a nozzle's mass flow stops rising, how a diverging duct speeds a supersonic flow up, and what a normal shock costs.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Nozzles</h3>
+    <a href="#s1"><span>1</span>Choked flow</a>
+    <a href="#s2"><span>2</span>Normal shocks</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Nozzles</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Choked flow</h2>
+<p>When a gas moves at a good fraction of the speed of sound \(c = \sqrt{\gamma RT}\), its density changes along the way and Bernoulli no longer holds. The energy equation, mass conservation and an isentropic path take its place.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Bringing the gas to rest without loss gives its stagnation state: \(T_0/T = 1 + \tfrac{\gamma-1}{2}M^2\), and \(p_0/p = (T_0/T)^{\gamma/(\gamma-1)}\). Combining mass, \(\rho VA\) constant, with the isentropic relations gives</p>
+\[
+\frac{dA}{A} = \left(M^2 - 1\right)\frac{dV}{V}.
+\]
+<p>Below Mach 1 a narrowing speeds the flow up; above Mach 1 a widening does. Mach 1 can only occur where the area is smallest, at the throat. Once it does, the mass flow is fixed by the reservoir and the throat:</p>
+\[
+\dot m = A_t\,p_0\sqrt{\frac{\gamma}{RT_0}}\left(\frac{2}{\gamma+1}\right)^{\frac{\gamma+1}{2(\gamma-1)}}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · a 10 cm² throat</span>
+<p>Air from 500 kPa and 300 K through a throat of 10 cm², opening to twice that at the exit. With a sonic throat, \(\dot m = 0.001 \times 500\,000 \times \sqrt{1.4/(287 \times 300)} \times 0.579 = 1.167\) kg/s. The exit area ratio 2 has two isentropic Mach numbers, 0.306 and 2.20. The subsonic one needs \(p_b = 469\) kPa: any lower back pressure leaves the flow choked. The supersonic one exits at the design pressure, 47.0 kPa.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Lowering the back pressure to push more gas through a choked nozzle. Pressure signals travel at the speed of sound, and at the throat the flow moves at that speed: nothing downstream reaches the reservoir. Raise \(p_0\) or the throat area instead.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Normal shocks</h2>
+<p>Between 469 kPa and the design pressure, no isentropic flow meets the back pressure. A normal shock stands in the diverging part instead: a jump, a fraction of a micrometre thick, from supersonic to subsonic.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Mass, momentum and energy across the jump, with no area change, give</p>
+\[
+M_2^2 = \frac{1 + \frac{\gamma-1}{2}M_1^2}{\gamma M_1^2 - \frac{\gamma-1}{2}}, \qquad \frac{p_2}{p_1} = 1 + \frac{2\gamma}{\gamma+1}\left(M_1^2 - 1\right).
+\]
+<p>The stagnation temperature is unchanged, but entropy rises, so the stagnation pressure falls. Behind the shock the flow is subsonic and decelerates in the widening duct, so its pressure rises to meet \(p_b\). Lower \(p_b\) and the shock moves downstream, where \(M_1\) is larger and the shock stronger, until it sits at the exit.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a shock at 400 kPa</span>
+<p>The nozzle above with \(p_b = 400\) kPa. The shock stands where the flow has reached \(M_1 = 1.66\), and drops it to \(M_2 = 0.652\). The pressure jumps threefold and 12.6% of the stagnation pressure is lost. The mass flow is still 1.167 kg/s. Lower \(p_b\) to 257 kPa and the shock reaches the exit.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>A shock slows the gas, raises its pressure and costs stagnation pressure. The stronger the shock, the higher the cost.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+c = \sqrt{\gamma RT}, \quad \frac{T_0}{T} = 1 + \frac{\gamma-1}{2}M^2, \quad \frac{p_0}{p} = \left(\frac{T_0}{T}\right)^{\frac{\gamma}{\gamma-1}}, \quad \frac{dA}{A} = \left(M^2 - 1\right)\frac{dV}{V}.
+\]
+\[
+\frac{A}{A^*} = \frac{1}{M}\left[\frac{2}{\gamma+1}\left(1 + \frac{\gamma-1}{2}M^2\right)\right]^{\frac{\gamma+1}{2(\gamma-1)}}, \qquad \dot m = A_t\,p_0\sqrt{\frac{\gamma}{RT_0}}\left(\frac{2}{\gamma+1}\right)^{\frac{\gamma+1}{2(\gamma-1)}}.
+\]
+\[
+M_2^2 = \frac{1 + \frac{\gamma-1}{2}M_1^2}{\gamma M_1^2 - \frac{\gamma-1}{2}}, \qquad \frac{p_2}{p_1} = 1 + \frac{2\gamma}{\gamma+1}\left(M_1^2 - 1\right), \qquad T_{02} = T_{01}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside NASA Glenn's Beginner's Guide to Aeronautics on isentropic flow and normal shocks, and MIT 16.050's thermal energy lectures.</footer>
+</body>
+</html>

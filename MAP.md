@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchy�
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 228 with a Flux lab, 47 gaps.**
+**275 concepts, 232 with a Flux lab, 43 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -18,10 +18,10 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Numerical methods | 13 | 5 |
 | Mechanics | 34 | 34 |
 | Electricity and magnetism | 27 | 27 |
-| Thermodynamics | 22 | 13 |
+| Thermodynamics | 22 | 15 |
 | Fluid mechanics | 20 | 16 |
 | Heat transfer | 19 | 9 |
-| Circuits and systems | 27 | 22 |
+| Circuits and systems | 27 | 24 |
 | Mechanics of materials | 16 | 16 |
 | Materials science | 15 | 5 |
 | Design and manufacturing | 9 | 9 |
@@ -51,9 +51,9 @@ each new concept on them is a gap with a candidate lab:
 | Course | Concepts on its path | Order from |
 |---|---|---|
 | EMA 3010 Materials Science | 15 (app started: Bond, Crystal, Vacancy, Diffusion and Slip labs) | 3.091 recitations |
-| EEL 3111 Circuit Analysis I | 18 (10 new; app started: Nodes, Dependent, Phasors, Superpose and Thévenin labs) | 6.002, Spring 2007, in the archived plan's order |
+| EEL 3111 Circuit Analysis I | 18 (10 new; app started: Nodes, Dependent, Phasors, Filter, Superpose, Thévenin and Switch labs) | 6.002, Spring 2007, in the archived plan's order |
 | EGN 3203 Modern Computation Methods | 24 (11 new, plus the 7 linear algebra concepts) | 2.086, Spring 2013 |
-| EML 3101 Thermodynamics II | 14 (10 new; app started: Mixture lab) | 16.050, Fall 2002, with Cleynen |
+| EML 3101 Thermodynamics II | 14 (10 new; app started: Mixture and Nozzle labs) | 16.050, Fall 2002, with Cleynen |
 | EML 3015 Fluids | 22 (16 new) | 2.06, Spring 2013 |
 | EML 4140 Heat Transfer | 19 (15 new; app started: Rod, Resistance, Radiation, View factor, Thermal layer and Nusselt labs) | 2.51, Fall 2008, with Lienhard |
 | Build a satellite (a project) | 12 (11 new; app started: Kepler, Transfer, Noise, Link budget, Attitude, Spin, Pointing, Shake, Power and Thermal balance labs) | The satellite's subsystems, from MIT 16.07, 16.06 and 16.851 |

@@ -33,6 +33,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'A converging-diverging nozzle with a back-pressure slider and the Mach number drawn along it. It corrects the idea that lowering the back pressure always pulls more gas through: once the throat is sonic the mass flow stays fixed.',
+  labs: [
+    { course: 'eml3101', lab: 'nozzle', notes: ['s1'], note: 'A converging–diverging nozzle with a back-pressure slider: the mass flow climbs as p_b falls, then stops at 1.17 kg/s once the throat is sonic, however low p_b goes. Each station’s ρVA is checked against the choked-flow formula.' },
+  ],
 };

@@ -7,6 +7,8 @@ import { choice, kase, num, problem, range } from '../kit.js';
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 /** The RC problem: 10 V across 1 kΩ and 0.1 µF in series; `w` lets a trap drop the 2π. */
 export const RC = { V: 10, R: 1000, C: 1e-7 };
+/** The n-th harmonic of a ±1 V, 1 kHz square wave out of an RC low-pass with corner fc (Hz). */
+export const harmonicOut = ($, gain = (x) => 1 / Math.sqrt(1 + x * x), lead = 4 / Math.PI) => (lead / Number($.n)) * gain((Number($.n) * 1000) / $.fc);
 export const rcVolt = ($, how = 'phasor', w = 2 * Math.PI * $.f) => {
   const X = 1 / (w * RC.C);
   const Zm = how === 'phasor' ? Math.hypot(RC.R, X) : RC.R + X;
@@ -81,5 +83,64 @@ export default [
       },
     },
     cases: [kase('R and C', { pair: 'rc' }, { v: 'pyth' })],
+  }),
+  problem({
+    id: 'u2.3.harmonic',
+    title: 'One harmonic through a filter',
+    exam: 'u2',
+    ch: '2',
+    lab: 'filter',
+    src: 'Flux, written for the Filter lab',
+    topics: ['filter'],
+    principles: ['filter'],
+    vars: { n: choice(['1', 'fundamental (1 kHz)'], ['3', '3rd harmonic (3 kHz)'], ['5', '5th harmonic (5 kHz)']), fc: range(500, 3000, 250, 'Hz') },
+    text: (T) => `A ±1 V square wave at 1 kHz drives an RC low-pass filter whose corner is at ${T.fc}. The square wave is (4/π)(sin ωt + sin 3ωt/3 + sin 5ωt/5 + …). What is the amplitude of its ${T.n} at the output, in V?`,
+    parts: [num('a', ($) => harmonicOut($), 'V', { label: 'amplitude' })],
+    level: 2,
+    hints: ['The n-th harmonic goes in with amplitude 4/(πn).', 'The filter passes |H| = 1/√(1 + (f/f_c)²) of it, at that harmonic’s own frequency f.'],
+    steps: ($) => {
+      const x = (Number($.n) * 1000) / $.fc;
+      return [String.raw`In: $4/(\pi \cdot ${$.n}) = ${Number((4 / (Math.PI * Number($.n))).toPrecision(3))}$ V. $|H| = 1/\sqrt{1 + ${Number(x.toPrecision(3))}^2} = ${Number((1 / Math.sqrt(1 + x * x)).toPrecision(3))}$, so out: ${Number(harmonicOut($).toPrecision(3))} V`];
+    },
+    sim: {
+      scenario: 'equal',
+      setup(s, $) {
+        s.lfc = Math.log10($.fc);
+      },
+      read: (c, s, $) => ({ a: c.list[(Number($.n) - 1) / 2].ampOut }),
+    },
+    cases: [kase('the notes’ 3rd harmonic', { n: '3', fc: 1000 }, { a: 0.1342 })],
+  }),
+
+  problem({
+    id: 'u2.4.shape',
+    title: 'What comes out',
+    exam: 'u2',
+    ch: '2',
+    kind: 'conceptual',
+    lab: 'filter',
+    src: 'Flux, written for the Filter lab',
+    topics: ['filter'],
+    principles: ['filter'],
+    vars: { where: choice(['above', 'ten times the square wave’s frequency'], ['below', 'a fifth of the square wave’s frequency']) },
+    text: (T) => `A square wave passes through an RC low-pass filter whose corner is at ${T.where}. What does the output look like?`,
+    parts: [
+      pick('shape', 'the output', [
+        ['rounded', 'a square wave with rounded corners', 'Only the high harmonics that make the sharp edges are cut; the rest pass almost whole.'],
+        ['triangle', 'nearly a small triangle wave', 'Every harmonic is cut, the higher ones harder: the capacitor ramps up and down and never settles.'],
+        ['smaller', 'the same square wave, only smaller', 'A filter cuts each frequency by a different amount, so the shape changes. Only a sine keeps its shape.'],
+      ], ($) => ($.where === 'above' ? 'rounded' : 'triangle')),
+    ],
+    level: 1,
+    hints: ['Which harmonics are above the corner?', 'Above the corner, |H| falls as 1/f.'],
+    steps: ($) => [$.where === 'above' ? 'Corner well above: only the high harmonics are cut. Rounded corners.' : 'Corner well below: all harmonics cut, the high ones most. A triangle.'],
+    sim: {
+      scenario: 'high',
+      setup(s, $) {
+        s.lfc = Math.log10($.where === 'above' ? 10000 : 200);
+      },
+      read: (c) => ({ shape: c.ratio31 > 0.3 ? 'rounded' : c.ratio31 < 0.15 ? 'triangle' : 'smaller' }),
+    },
+    cases: [kase('a corner well below', { where: 'below' }, { shape: 'triangle' })],
   }),
 ];

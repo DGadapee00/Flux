@@ -14,14 +14,25 @@ export const EXAMS = [
     labs: ['mixture'],
     coming: ['Combustion'],
   },
+  {
+    id: 'u2',
+    n: 2,
+    title: 'Compressible flow',
+    chapters: '2',
+    date: 'Unit 2',
+    labs: ['nozzle'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
   mixture: { id: 'mixture', exam: 'u1', title: 'Mixture' },
+  nozzle: { id: 'nozzle', exam: 'u2', title: 'Nozzle' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Gas mixtures and combustion',
+  2: 'Compressible flow',
 };
 
 export function examById(id) {

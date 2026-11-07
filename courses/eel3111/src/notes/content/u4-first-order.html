@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>First-order circuits</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EEL 3111 · Circuit Analysis I · Unit 4 · Kuphaldt, Lessons in Electric Circuits, Vol. I, DC</div>
+  <h1>First-order circuits</h1>
+  <p class="lede">How a circuit with one capacitor or one inductor settles after a switch moves, which resistance sets its time constant, and what can and cannot jump at the switching instant.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Switching</h3>
+    <a href="#s1"><span>1</span>The time constant</a>
+    <a href="#s2"><span>2</span>What carries over a switch</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Switching</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>The time constant</h2>
+<p>A circuit with one capacitor or one inductor and DC sources settles exponentially after every switching. Only three numbers are needed: where it starts, where it is heading, and how fast.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Replace everything the capacitor sees with its Thévenin equivalent. Then \(C\,dv/dt = (V_\text{th} - v)/R_\text{th}\), whose solution is</p>
+\[
+v(t) = v(\infty) + \big[v(0^+) - v(\infty)\big]\,e^{-t/\tau}, \qquad \tau = R_\text{th}C,
+\]
+<p>with \(v(\infty) = V_\text{th}\). For an inductor the same holds for its current, with \(\tau = L/R_\text{th}\). \(R_\text{th}\) is the resistance across the element's terminals with the sources switched off, so it changes whenever a switch changes the circuit.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · switched in and out</span>
+<p>12 V with \(R_1 = 1\) kΩ feeds node A through a switch; \(R_2 = 2\) kΩ runs from A to ground, and a 10 µF capacitor hangs from A behind \(R_3 = 200\) Ω. Closed, the capacitor sees \(200 + 1000 \parallel 2000 = 867\) Ω, so \(\tau = 8.67\) ms, heading for \(12 \times 2/3 = 8\) V. After 40 ms it has reached 7.92 V. Then the switch opens: the capacitor now sees \(200 + 2000\) Ω, and discharges with \(\tau = 22\) ms.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking \(\tau = R_1 C\), with the source's resistor alone. That gives 10 ms here, and it is wrong both ways: closed, \(R_2\) and \(R_3\) also shape what the capacitor sees; open, \(R_1\) is not connected at all.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>What carries over a switch</h2>
+<p>A capacitor's voltage cannot jump, since that would take an infinite current. An inductor's current cannot jump, since that would take an infinite voltage. These fix the starting value \(x(0^+)\) after every switching.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>\(i_C = C\,dv_C/dt\) and \(v_L = L\,di_L/dt\). A finite current keeps \(v_C\) continuous, and a finite voltage keeps \(i_L\) continuous. The other quantity can jump: the capacitor's current, and the inductor's voltage, change at once to whatever the new circuit demands. In steady DC, a capacitor acts as a break and an inductor as a wire, which gives \(x(\infty)\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · opening on an inductor</span>
+<p>Swap the capacitor for a 10 H inductor. Closed, it heads for \(8/867 = 9.23\) mA and reaches 8.94 mA by 40 ms. When the switch opens, that current must keep flowing, and its only path is \(R_2 + R_3 = 2.2\) kΩ: the inductor's voltage jumps to \(-8.94 \times 2.2 = -19.7\) V, more than the 12 V supply, and the current decays with \(\tau = 4.55\) ms.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Find \(x(0^+)\) from what cannot jump, \(x(\infty)\) from the DC circuit, and \(\tau\) from the Thévenin resistance the element sees in the new switch position.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+x(t) = x(\infty) + \big[x(0^+) - x(\infty)\big]e^{-t/\tau}, \qquad \tau = R_\text{th}C \ \text{ or } \ \frac{L}{R_\text{th}}.
+\]
+\[
+v_C(0^+) = v_C(0^-), \qquad i_L(0^+) = i_L(0^-), \qquad \text{DC: } C \to \text{break}, \ L \to \text{wire}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Kuphaldt, Lessons in Electric Circuits, Vol. I: DC, on RC and L/R time constants.</footer>
+</body>
+</html>
