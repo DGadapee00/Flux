@@ -20,7 +20,7 @@ export const EXAMS = [
     title: 'Numbers on a computer',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['roundoff', 'truncation'],
+    labs: ['roundoff', 'truncation', 'roots'],
     coming: ['Interpolation', 'Numerical integration'],
   },
 ];
@@ -34,6 +34,7 @@ export const LAB_META = {
   eigen: { id: 'eigen', exam: 'u1', title: 'Eigen' },
   roundoff: { id: 'roundoff', exam: 'u2', title: 'Round-off' },
   truncation: { id: 'truncation', exam: 'u2', title: 'Truncation' },
+  roots: { id: 'roots', exam: 'u2', title: 'Roots' },
 };
 
 export const CHAPTER_TITLES = {

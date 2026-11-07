@@ -9,6 +9,7 @@ export default {
     { id: 's1', n: 1, title: 'Numbers in binary', lab: 'roundoff', ch: ['2'] },
     { id: 's2', n: 2, title: 'Cancellation', lab: 'roundoff', ch: ['2'], topics: ['cancellation'], home: true },
     { id: 's3', n: 3, title: 'Order of accuracy', lab: 'truncation', ch: ['2'], topics: ['order'], home: true },
-    { id: 's4', n: 4, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's4', n: 4, title: 'Root finding', lab: 'roots', ch: ['2'], topics: ['roots'], home: true },
+    { id: 's5', n: 5, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

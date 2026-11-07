@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Run Newton’s method from a start you drag along the axis of a cubic. It corrects the idea that Newton finds the nearest root: from some starts it jumps to a far root or cycles, while bisection always closes in.',
+  labs: [
+    { course: 'egn3203', lab: 'roots', notes: ['s4'], note: 'Newton and bisection on cubics: Newton from 0 on x³ − 2x + 2 cycles, from 0.45 on x³ − x it lands on −1, while bisection always closes in.' },
+  ],
 };

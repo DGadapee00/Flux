@@ -8,14 +8,14 @@ exact equations, substitutions, balance models, variation of parameters, Cauchyâ
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 219 with a Flux lab, 56 gaps.**
+**275 concepts, 220 with a Flux lab, 55 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
 | Calculus | 30 | 30 |
 | Linear algebra | 8 | 7 |
 | Differential equations | 18 | 18 |
-| Numerical methods | 13 | 4 |
+| Numerical methods | 13 | 5 |
 | Mechanics | 34 | 34 |
 | Electricity and magnetism | 27 | 27 |
 | Thermodynamics | 22 | 12 |

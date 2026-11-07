@@ -11,6 +11,7 @@ const loaders = {
   eigen: () => import('./eigen.js'),
   roundoff: () => import('./roundoff.js'),
   truncation: () => import('./truncation.js'),
+  roots: () => import('./roots.js'),
 };
 
 const labs = createLabLoader(loaders);

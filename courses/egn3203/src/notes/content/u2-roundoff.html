@@ -22,7 +22,8 @@
     <h3>Part II · Truncation</h3>
     <a href="#s3"><span>3</span>Order of accuracy</a>
     <h3>Reference</h3>
-    <a href="#s4"><span>4</span>Formula sheet</a>
+    <a href="#s4"><span>4</span>Root finding</a>
+    <a href="#s5"><span>5</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -93,7 +94,26 @@
 </section>
 
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">4</span>Root finding</h2>
+<p>Most equations a computer solves, it solves as \(f(x) = 0\) by iteration: guess, improve, repeat. Two methods show the trade between sure and fast.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Bisection starts from a bracket \([a, b]\) where \(f\) changes sign, checks the midpoint, and keeps the half that still changes sign. The root never leaves the bracket, and after \(k\) steps the error is at most \((b - a)/2^{k+1}\): one binary digit a step.</p>
+<p>Newton's method replaces \(f\) by its tangent at \(x_k\) and steps to where the tangent crosses zero:</p>
+\[
+x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}.
+\]
+<p>Near a simple root the error squares each step, so the correct digits roughly double. Far from one the tangent can point anywhere: where \(f'\) is small it throws the next guess far away, and some starts cycle.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · Newton from −2</span>
+<p>\(f(x) = x^3 - 2x + 2\), \(f'(x) = 3x^2 - 2\). From \(x_0 = -2\): \(f = -2\), \(f' = 10\), so \(x_1 = -1.8\); then \(x_2 = -1.76995\), and the root \(-1.76929\) to ten digits by \(x_4\). From \(x_0 = 0\), though, \(x_1 = 1\) and \(x_2 = 0\) again: a cycle.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting Newton to find the nearest root. On \(x^3 - x\), a start at 0.45 is nearest 0 but lands on −1; at 0.46 it lands on +1. Keep a bracket, or start close.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Formula sheet</h2>
 \[
 \operatorname{fl}(x) = x(1 + \delta),\ |\delta| \le u = 2^{-53}, \qquad \text{relative error of } a - b \approx \frac{u|a|}{|a - b|},
 \]
@@ -102,6 +122,9 @@
 \]
 \[
 \frac{f(x+h) - f(x)}{h} = f' + O(h), \qquad \frac{f(x+h) - f(x-h)}{2h} = f' + O(h^2), \qquad p = \log_2\frac{E(h)}{E(h/2)}.
+\]
+\[
+x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}, \qquad |e_k|_\text{bisection} \le \frac{b - a}{2^{k+1}}.
 \]
 </section>
 
