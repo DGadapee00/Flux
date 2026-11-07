@@ -30,6 +30,7 @@ export default {
       why: 'Thévenin, Norton and maximum power transfer in its network theorems chapter.',
     },
   ],
-  labs: [],
-  candidate: 'Sweep a load across a network and plot its terminal voltage against current, with the load power beside it. It corrects the idea that maximum power transfer is the efficient choice: at the peak, half the power heats the source.',
+  labs: [
+    { course: 'eel3111', lab: 'thevenin', notes: ['s3', 's4'], note: 'The Superpose network seen from its load, swept from a short to an open: the terminal point runs down one straight line, and at the matched load the power peaks while as much again heats R_th.' },
+  ],
 };

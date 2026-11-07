@@ -7,6 +7,7 @@ const loaders = {
   dependent: () => import('./dependent.js'),
   phasors: () => import('./phasors.js'),
   superpose: () => import('./superpose.js'),
+  thevenin: () => import('./thevenin.js'),
 };
 
 const labs = createLabLoader(loaders);

@@ -6,6 +6,7 @@
  * node 2, the 4 Ω load from node 2 to ground, and V₂ with 4 Ω into node 2.
  */
 import { choice, kase, num, problem, range } from '../kit.js';
+import { closedForm } from '@flux/subjects/em/thevenin.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 const RL = 4;
@@ -19,6 +20,15 @@ export const sign = ($) => ($.way === 'oppose' ? -1 : 1);
 export const loadI = ($) => part1($.V1) + sign($) * part2($.V2);
 const CIRCUIT = 'V₁ in series with 2 Ω feeds node 1; 4 Ω runs from node 1 to ground and 2 Ω from node 1 to node 2; a 4 Ω load runs from node 2 to ground; V₂ in series with 4 Ω feeds node 2';
 const p3 = (x) => Number(x.toPrecision(3));
+/** The network seen from the load's terminals, with the load taken out. */
+export const th = ($) => closedForm({ V1: $.V1, V2: $.V2 });
+export const thAsk = ($) => ({ vth: th($).Vth, rth: th($).Rth, in: th($).IN })[$.ask];
+/** Load power for a source V_th, R_th and a load k R_th. */
+export const LOADS = { match: 1, double: 2, half: 0.5 };
+export const loadP = ($) => {
+  const RL = LOADS[$.load] * $.R;
+  return ($.V / ($.R + RL)) ** 2 * RL;
+};
 
 export default [
   problem({
@@ -154,5 +164,91 @@ export default [
       read: (c, s, $) => (Math.abs(c.one.I - s.V1 / 16) < 1e-9 ? { put: ({ v: 'wire', i: 'break', dep: 'keep' })[$.what] } : { put: 'none' }),
     },
     cases: [kase('a voltage source', { what: 'v' }, { put: 'wire' })],
+  }),
+  problem({
+    id: 'u3.5.thevenin',
+    title: 'The network as one source',
+    exam: 'u3',
+    ch: '3',
+    lab: 'thevenin',
+    src: 'Flux, written for the Thévenin lab',
+    topics: ['thevenin'],
+    principles: ['thevenin'],
+    vars: { ask: choice(['vth', 'its Thévenin voltage V_th, in V'], ['rth', 'its Thévenin resistance R_th, in Ω'], ['in', 'its Norton current I_N, in A']), V1: range(6, 24, 1, 'V'), V2: range(1, 12, 1, 'V') },
+    text: (T) => `${CIRCUIT.replace('; a 4 Ω load runs from node 2 to ground', '')}. V₁ = ${T.V1} V and V₂ = ${T.V2} V, each pushing current up into its node. Seen from node 2 and ground, find ${T.ask}.`,
+    parts: [num('v', ($) => thAsk($), '', { label: 'value' })],
+    level: 2,
+    hints: [
+      'R_th: switch both sources off, each a wire, and combine what node 2 sees: 4 Ω in parallel with 2 Ω plus 2 Ω ∥ 4 Ω.',
+      'I_N: short node 2 to ground. V₂ sends V₂/4 through its own 4 Ω; V₁ sees 2 Ω plus 4 Ω ∥ 2 Ω, and two thirds of its current takes the 2 Ω to the short.',
+      'V_th = I_N R_th.',
+    ],
+    steps: ($) => {
+      const r = th($);
+      return [
+        String.raw`$R_\text{th} = 4 \parallel (2 + 2 \parallel 4) = ${p3(r.Rth)}$ Ω`,
+        String.raw`$I_N = ${$.V2}/4 + \tfrac{2}{3}\cdot ${$.V1}/(2 + 4/3) = ${p3(r.IN)}$ A, $V_\text{th} = I_N R_\text{th} = ${p3(r.Vth)}$ V`,
+      ];
+    },
+    sim: {
+      scenario: 'match',
+      setup(s, $) {
+        Object.assign(s, { V1: $.V1, V2: $.V2 });
+      },
+      read: (c, s, $) => ({ v: ({ vth: c.Vbench, rth: c.Rbench, in: c.Vbench / c.Rbench })[$.ask] }),
+    },
+    cases: [kase('the notes’ network, its voltage', { ask: 'vth', V1: 12, V2: 6 }, { v: 7.09 })],
+  }),
+
+  problem({
+    id: 'u3.6.load-power',
+    title: 'Power into a load',
+    exam: 'u3',
+    ch: '3',
+    lab: 'thevenin',
+    src: 'Flux, written for the Thévenin lab',
+    topics: ['maxpower'],
+    principles: ['maxpower'],
+    vars: { load: choice(['match', 'equal to R_th'], ['double', 'twice R_th'], ['half', 'half of R_th']), V: range(4, 20, 1, 'V'), R: range(1, 10, 1, 'Ω') },
+    text: (T) => `A network has V_th = ${T.V} and R_th = ${T.R}. A load ${T.load} is connected. What power does the load take, in W?`,
+    parts: [num('p', ($) => loadP($), 'W', { label: 'P_L' })],
+    level: 1,
+    hints: ['The load and R_th are in series across V_th: I = V_th/(R_th + R_L).', 'P_L = I² R_L.'],
+    steps: ($) => {
+      const RL = LOADS[$.load] * $.R;
+      return [String.raw`$I = ${$.V}/(${$.R} + ${p3(RL)}) = ${p3($.V / ($.R + RL))}$ A, $P_L = I^2 \times ${p3(RL)} = ${p3(loadP($))}$ W`];
+    },
+    // The second route: the load's share of the total power, η P_total.
+    second: ($) => {
+      const RL = LOADS[$.load] * $.R;
+      return { p: (RL / (RL + $.R)) * ($.V ** 2 / (RL + $.R)) };
+    },
+    cases: [kase('the notes’ matched load', { load: 'match', V: 7.09, R: 1.82 }, { p: 6.905 })],
+  }),
+
+  problem({
+    id: 'u3.7.match-or-not',
+    title: 'Match the load?',
+    exam: 'u3',
+    ch: '3',
+    kind: 'conceptual',
+    lab: 'thevenin',
+    src: 'Flux, written for the Thévenin lab',
+    topics: ['maxpower'],
+    principles: ['maxpower'],
+    vars: { use: choice(['antenna', 'a radio receiver taking a faint signal from its antenna'], ['supply', 'a bench power supply running a heater'], ['battery', 'a battery running a laptop, where its charge should last']) },
+    text: (T) => `For ${T.use}, should the load’s resistance match the source’s Thévenin resistance?`,
+    parts: [
+      pick('choice', 'the load', [
+        ['match', 'match it: R_L = R_th', 'Matching gets the most power out, at 50% efficiency. Worth it when the source is weak and its power is all there is.'],
+        ['large', 'make it much larger than R_th', 'Little current, little heat in the source: efficiency R_L/(R_L + R_th) near 100%. Where energy matters, run here.'],
+        ['small', 'make it much smaller than R_th', 'Then most of the power heats the source and little reaches the load.'],
+      ], ($) => ($.use === 'antenna' ? 'match' : 'large')),
+    ],
+    level: 1,
+    hints: ['Is the goal the most power from a weak source, or wasting little energy?', 'At the match, the source heats itself as much as the load.'],
+    steps: ($) => [$.use === 'antenna' ? 'The signal is faint: take all the power it can give. Match.' : 'Energy and heat matter: keep R_L well above R_th.'],
+    second: ($) => ({ choice: $.use === 'antenna' ? 'match' : 'large' }),
+    cases: [kase('the antenna', { use: 'antenna' }, { choice: 'match' })],
   }),
 ];

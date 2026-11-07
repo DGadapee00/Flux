@@ -19,8 +19,10 @@
     <h3>Part I · Emission</h3>
     <a href="#s1"><span>1</span>Black bodies</a>
     <a href="#s2"><span>2</span>Real surfaces in sunlight</a>
+    <h3>Part II · Exchange</h3>
+    <a href="#s3"><span>3</span>View factors</a>
     <h3>Reference</h3>
-    <a href="#s3"><span>3</span>Formula sheet</a>
+    <a href="#s4"><span>4</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -65,10 +67,46 @@ E_{b\lambda} = \frac{C_1}{\lambda^5\left(e^{C_2/\lambda T} - 1\right)}, \qquad C
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Exchange</h2>
+</div>
+
 <section class="topic" id="s3">
-<h2><span class="n">3</span>Formula sheet</h2>
+<h2><span class="n">3</span>View factors</h2>
+<p>Of the radiation leaving one surface, the view factor \(F_{12}\) is the share that lands on another. It depends only on the geometry: how the surfaces face each other and how far apart they are.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A diffuse patch sends radiation in proportion to the cosine of the angle from its normal. Summing what each patch of 1 sends to each patch of 2,</p>
+\[
+F_{12} = \frac{1}{A_1}\int_{A_1}\!\int_{A_2}\frac{\cos\theta_1\cos\theta_2}{\pi R^2}\,dA_2\,dA_1.
+\]
+<p>The integrand is symmetric in 1 and 2; only the \(1/A_1\) in front is not. So \(A_1F_{12} = A_2F_{21}\): reciprocity. For two long strips, the integral reduces to Hottel's crossed strings. Stretch strings between the strips' ends:</p>
+\[
+F_{12} = \frac{(\text{crossed strings}) - (\text{uncrossed strings})}{2w_1}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · two strips facing</span>
+<p>Two strips 1 wide, one 1 above the other. The crossed strings run corner to opposite corner, \(\sqrt 2\) each, 2.828 together; the uncrossed run straight up, 2 together. So</p>
+\[
+F_{12} = \frac{2.828 - 2}{2} = 0.414,
+\]
+<p>and the other 58.6% escapes out the sides.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a narrow strip over a wide one</span>
+<p>A strip 0.2 wide, 0.5 above the strip of width 1. The strings give \(F_{12} = 0.141\): the wide strip sends 14% of its radiation up to the narrow one. But the narrow one sends \(F_{21} = 0.704\), 70% of its radiation, down to the wide one. The products agree: \(1 \times 0.141 = 0.2 \times 0.704 = 0.141\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the view factor as mutual, \(F_{12} = F_{21}\). That holds only for equal areas. The products \(A_1F_{12}\) and \(A_2F_{21}\) are equal; the fractions differ by the area ratio.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Formula sheet</h2>
 \[
 E_b = \sigma T^4, \qquad \lambda_\text{max}T = 2898\ \text{µm·K}, \qquad q'' = \varepsilon\sigma\left(T_s^4 - T_\text{sur}^4\right), \qquad T_\text{plate} = \left(\frac{\alpha_s S}{\varepsilon\sigma}\right)^{1/4}.
+\]
+\[
+A_1F_{12} = A_2F_{21}, \qquad \sum_j F_{ij} = 1, \qquad F_{12} = \frac{(\text{crossed}) - (\text{uncrossed})}{2w_1} \ \text{(long strips)}.
 \]
 </section>
 

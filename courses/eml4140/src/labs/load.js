@@ -6,6 +6,7 @@ const loaders = {
   rod: () => import('./rod.js'),
   resistance: () => import('./resistance.js'),
   radiation: () => import('./radiation.js'),
+  viewfactor: () => import('./viewfactor.js'),
   thermal: () => import('./thermal.js'),
   nusselt: () => import('./nusselt.js'),
 };

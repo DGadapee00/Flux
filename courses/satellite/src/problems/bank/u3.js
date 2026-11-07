@@ -17,6 +17,8 @@ export const tumbleRate = ($, root = true, den = 'outer') => {
   return $.w0 * (root ? Math.sqrt(k) : k);
 };
 export { inertias };
+/** A pole pair σ ± jω: the 2% settling time, or the first overshoot in percent. */
+export const poleFigure = ($) => ($.ask === 'settle' ? 4 / -$.sigma : 100 * Math.exp((Math.PI * $.sigma) / $.omega));
 /** The pointing problem: disturbances (N·m) and the steady PD offset in degrees. */
 export const DIST = { small: 0.002, large: 0.01 };
 export const offsetDeg = ($, mode = 'right') => (mode === 'rad' ? DIST[$.dist] / $.Kp : mode === 'times' ? (DIST[$.dist] * $.Kp * 180) / Math.PI : (DIST[$.dist] / $.Kp) * (180 / Math.PI));
@@ -227,5 +229,61 @@ export default [
       read: (c) => ({ d: c.stable ? 'stable' : 'unstable' }),
     },
     cases: [kase('a slower wheel', { change: 'lag' }, { d: 'unstable' })],
+  }),
+  problem({
+    id: 'u3.8.poles',
+    title: 'Reading a response off its poles',
+    exam: 'u3',
+    ch: '3',
+    lab: 'poles',
+    src: 'Flux, written for the Poles lab',
+    topics: ['poles'],
+    principles: ['poles'],
+    vars: { ask: choice(['settle', 'its 2% settling time, in s'], ['over', 'its first overshoot, in percent']), sigma: range(-2, -0.2, 0.1, ''), omega: range(1, 6, 0.5, '') },
+    text: (T) => `An attitude loop’s closed-loop poles are a pair at ${T.sigma} ± ${T.omega}j (1/s). Its response to a step command settles at 1. Estimate ${T.ask}.`,
+    parts: [num('v', ($) => poleFigure($), '', { label: 'value' })],
+    level: 2,
+    hints: ['The envelope is e^(σt); the ringing has angular frequency ω.', 'Settling to 2% takes about 4/|σ|. The first peak overshoots by e^(πσ/ω).'],
+    steps: ($) => [$.ask === 'settle' ? String.raw`$t_s \approx 4/|\sigma| = 4/${-$.sigma} = ${Number((4 / -$.sigma).toPrecision(3))}$ s` : String.raw`$M_p = e^{\pi\sigma/\omega} = e^{\pi(${$.sigma})/${$.omega}} = ${Number(poleFigure($).toPrecision(3))}\%$`],
+    sim: {
+      scenario: 'damped',
+      setup(s, $) {
+        Object.assign(s, { sigma: $.sigma, omega: $.omega });
+      },
+      read: (c, s, $) => ({ v: $.ask === 'settle' ? c.settle : 100 * c.overshoot }),
+    },
+    cases: [kase('the notes’ damped pair, its overshoot', { ask: 'over', sigma: -1, omega: 2 }, { v: 20.8 })],
+  }),
+
+  problem({
+    id: 'u3.9.which-side',
+    title: 'Stable or not?',
+    exam: 'u3',
+    ch: '3',
+    kind: 'conceptual',
+    lab: 'poles',
+    src: 'Flux, written for the Poles lab',
+    topics: ['poles'],
+    principles: ['poles'],
+    vars: { pair: choice(['slowright', 'at +0.05 ± 0.5j: just right of the axis, ringing slowly'], ['fastleft', 'at −0.05 ± 5j: just left of the axis, ringing fast'], ['farleft', 'at −2 ± 0.5j: well left of the axis']) },
+    text: (T) => `A loop’s two poles sit ${T.pair}. Does its response to a step settle?`,
+    parts: [
+      pick('st', 'the response', [
+        ['yes', 'yes, it settles', 'Every pole has σ < 0: each mode’s envelope e^(σt) shrinks.'],
+        ['no', 'no, it grows without bound', 'A pole with σ > 0, however small, has an envelope e^(σt) that grows for ever.'],
+        ['depends', 'it depends on how fast it rings', 'ω sets the ringing, not whether the envelope grows. Only σ decides.'],
+      ], ($) => ($.pair === 'slowright' ? 'no' : 'yes')),
+    ],
+    level: 1,
+    hints: ['Look only at the real part of the poles.', 'Negative real part: decays. Positive: grows.'],
+    steps: ($) => [$.pair === 'slowright' ? 'σ = +0.05 > 0: the envelope doubles every 14 s. It does not settle.' : 'σ < 0: the envelope shrinks. It settles, after about 4/|σ|.'],
+    sim: {
+      scenario: 'damped',
+      setup(s, $) {
+        Object.assign(s, ({ slowright: { sigma: 0.05, omega: 0.5 }, fastleft: { sigma: -0.05, omega: 5 }, farleft: { sigma: -2, omega: 0.5 } })[$.pair]);
+      },
+      read: (c) => ({ st: c.stable ? 'yes' : 'no' }),
+    },
+    cases: [kase('just right of the axis', { pair: 'slowright' }, { st: 'no' })],
   }),
 ];

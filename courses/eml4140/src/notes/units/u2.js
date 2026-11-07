@@ -8,6 +8,7 @@ export default {
   sections: [
     { id: 's1', n: 1, title: 'Black bodies', lab: 'radiation', ch: ['2'], topics: ['blackbody'], home: true },
     { id: 's2', n: 2, title: 'Real surfaces in sunlight', lab: 'radiation', ch: ['2'], topics: ['surfaces'] },
-    { id: 's3', n: 3, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's3', n: 3, title: 'View factors', lab: 'viewfactor', ch: ['2'], topics: ['viewfactor'], home: true },
+    { id: 's4', n: 4, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

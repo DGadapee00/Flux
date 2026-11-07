@@ -3,11 +3,14 @@
  * named traps (../coaching/u2.js), each checked against the lab (`sim`).
  */
 import { WIEN } from '@flux/subjects/heat/radiation.js';
-import { choice, kase, num, problem } from '../kit.js';
+import { choice, kase, num, problem, range } from '../kit.js';
+import { crossedStrings, strips } from '@flux/subjects/heat/viewfactor.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 /** The emitters by name, at their temperatures in kelvin. */
 export const EMITTER = { sun: 5778, filament: 2800, skin: 305 };
+/** Two long strips centred one above the other: strip 1 of width 1 on the floor, strip 2 of width w2 at height h. */
+export const strings = ($) => crossedStrings(strips({ w2: Number($.w2), x2: 0, h: $.h, tiltDeg: 0 }), Number($.w2));
 
 export default [
   problem({
@@ -64,5 +67,66 @@ export default [
       read: (c, s, $) => ({ how: $.band === 'sun' ? (c.alphaSolar < 0.5 ? 'poor' : 'well') : c.eps > 0.5 ? 'well' : 'poor' }),
     },
     cases: [kase('in sunlight', { band: 'sun' }, { how: 'poor' })],
+  }),
+  problem({
+    id: 'u2.3.strings',
+    title: 'Crossed strings',
+    exam: 'u2',
+    ch: '2',
+    lab: 'viewfactor',
+    src: 'Flux, written for the View factor lab',
+    topics: ['viewfactor'],
+    principles: ['viewfactor'],
+    vars: { ask: choice(['F12', 'F₁₂, the share of strip 1’s radiation that reaches strip 2'], ['F21', 'F₂₁, the share of strip 2’s radiation that reaches strip 1']), w2: choice(['0.5', '0.5 m'], ['2', '2 m']), h: range(0.5, 2, 0.25, 'm') },
+    text: (T) => `A long strip 1 m wide lies on the floor facing up. A second long strip, ${T.w2} wide, is centred ${T.h} directly above it, facing down. Find ${T.ask}.`,
+    parts: [num('F', ($) => strings($)[$.ask], '', { label: 'F', abs: 1e-6 })],
+    level: 2,
+    hints: ['Stretch four strings between the strips’ ends: two crossing, two not.', 'F₁₂ = (crossed − uncrossed)/(2w₁); F₂₁ divides by 2w₂ instead.'],
+    steps: ($) => {
+      const r = strings($);
+      const w = $.ask === 'F12' ? 1 : Number($.w2);
+      return [String.raw`crossed $= ${Number(r.crossed.toPrecision(4))}$ m, uncrossed $= ${Number(r.uncrossed.toPrecision(4))}$ m`, String.raw`$F = (${Number(r.crossed.toPrecision(4))} - ${Number(r.uncrossed.toPrecision(4))})/(2\times ${w}) = ${Number(r[$.ask].toPrecision(3))}$`];
+    },
+    sim: {
+      scenario: 'equal',
+      setup(s, $) {
+        Object.assign(s, { w2: Number($.w2), x2: 0, h: $.h, tiltDeg: 0 });
+      },
+      read: (c, s, $) => ({ F: $.ask === 'F12' ? c.F12q : c.F21q }),
+    },
+    cases: [kase('a 2 m strip 1 m up, its F₁₂', { ask: 'F12', w2: '2', h: 1 }, { F: 0.685 })],
+  }),
+
+  problem({
+    id: 'u2.4.reciprocity',
+    title: 'Which sees more?',
+    exam: 'u2',
+    ch: '2',
+    kind: 'conceptual',
+    lab: 'viewfactor',
+    src: 'Flux, written for the View factor lab',
+    topics: ['viewfactor'],
+    principles: ['viewfactor'],
+    vars: { setup: choice(['sensor', 'a thumbnail-sized sensor facing a large furnace wall'], ['ceiling', 'a large ceiling panel above a small desk'], ['equal', 'two equal plates facing each other']) },
+    text: (T) => `Consider ${T.setup}. Call the first surface named 1 and the second 2. How does F₁₂, the share of 1’s radiation reaching 2, compare with F₂₁?`,
+    parts: [
+      pick('cmp', 'F₁₂ against F₂₁', [
+        ['bigger', 'F₁₂ is larger', 'From a small surface, a large one fills much of the view: the small one sends it a large share.'],
+        ['smaller', 'F₁₂ is smaller', 'From a large surface, a small one is a speck: it catches a small share. A₁F₁₂ = A₂F₂₁.'],
+        ['equal', 'they are equal', 'Only for equal areas: A₁F₁₂ = A₂F₂₁, so the fractions differ by the area ratio.'],
+      ], ($) => ({ sensor: 'bigger', ceiling: 'smaller', equal: 'equal' })[$.setup]),
+    ],
+    level: 1,
+    hints: ['A₁F₁₂ = A₂F₂₁.', 'The smaller surface has the larger fraction.'],
+    steps: ($) => [({ sensor: 'The sensor is the smaller area, so its fraction is larger: F₁₂ > F₂₁.', ceiling: 'The ceiling is the larger area, so its fraction is smaller: F₁₂ < F₂₁.', equal: 'Equal areas: A₁F₁₂ = A₂F₂₁ gives F₁₂ = F₂₁.' })[$.setup]],
+    sim: {
+      scenario: 'equal',
+      setup(s, $) {
+        // Strip 1 is the lab's floor strip, width 1. A small first surface means a wide strip 2.
+        s.w2 = ({ sensor: 3, ceiling: 0.2, equal: 1 })[$.setup];
+      },
+      read: (c) => ({ cmp: Math.abs(c.F12 - c.F21) < 1e-9 ? 'equal' : c.F12 > c.F21 ? 'bigger' : 'smaller' }),
+    },
+    cases: [kase('the sensor', { setup: 'sensor' }, { cmp: 'bigger' })],
   }),
 ];

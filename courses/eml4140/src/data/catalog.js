@@ -20,8 +20,8 @@ export const EXAMS = [
     title: 'Radiation',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['radiation'],
-    coming: ['View factors', 'Radiation networks'],
+    labs: ['radiation', 'viewfactor'],
+    coming: ['Radiation networks'],
   },
   {
     id: 'u3',
@@ -38,6 +38,7 @@ export const LAB_META = {
   rod: { id: 'rod', exam: 'u1', title: 'Rod' },
   resistance: { id: 'resistance', exam: 'u1', title: 'Resistance' },
   radiation: { id: 'radiation', exam: 'u2', title: 'Radiation' },
+  viewfactor: { id: 'viewfactor', exam: 'u2', title: 'View factor' },
   thermal: { id: 'thermal', exam: 'u3', title: 'Thermal layer' },
   nusselt: { id: 'nusselt', exam: 'u3', title: 'Nusselt' },
 };

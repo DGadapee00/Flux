@@ -29,8 +29,8 @@ export const EXAMS = [
     title: 'Attitude control',
     chapters: '3',
     date: 'Unit 3',
-    labs: ['attitude', 'spin', 'pointing'],
-    coming: ['Transfer functions'],
+    labs: ['attitude', 'spin', 'pointing', 'poles'],
+    coming: [],
   },
   {
     id: 'u4',
@@ -69,6 +69,7 @@ export const LAB_META = {
   attitude: { id: 'attitude', exam: 'u3', title: 'Attitude' },
   spin: { id: 'spin', exam: 'u3', title: 'Spin' },
   pointing: { id: 'pointing', exam: 'u3', title: 'Pointing' },
+  poles: { id: 'poles', exam: 'u3', title: 'Poles' },
   shake: { id: 'shake', exam: 'u4', title: 'Shake' },
   power: { id: 'power', exam: 'u5', title: 'Power' },
   balance: { id: 'balance', exam: 'u6', title: 'Thermal balance' },

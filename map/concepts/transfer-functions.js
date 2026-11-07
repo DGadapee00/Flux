@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Drag poles in the complex plane and watch the step response change. It corrects the idea that a slowly growing mode is nearly stable: any pole right of the axis grows without bound. The check compares the response built from the poles with a numerical solution of the differential equation.',
+  labs: [
+    { course: 'satellite', lab: 'poles', notes: ['s6'], note: 'A pole pair placed in the complex plane with its step response: −0.1 ± 2j rings and settles, +0.1 ± 2j looks the same at first and then grows without bound. Built from the poles and checked against an RK4 solution.' },
+  ],
 };
