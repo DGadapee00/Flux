@@ -19,6 +19,7 @@ const PLATFORM_HREF = {
   eml3100: 'eml3100/',
   eml3015: 'eml3015/',
   eml4140: 'eml4140/',
+  eel3111: 'eel3111/',
   design: 'design/',
   egn3203: 'egn3203/',
   ema3010: 'ema3010/',
@@ -33,14 +34,14 @@ const DIST = path.resolve(import.meta.dirname, '../../site/dist');
 /** Tracks whose first course is not built yet. Their cards list the courses and open nothing. */
 const UNBUILT_TRACKS = [];
 
-test('six tracks in order, each with a built course unless it is still to come', () => {
+test('seven tracks in order, each with a built course unless it is still to come', () => {
   assert.deepEqual(
     TRACKS.map((track) => track.id),
-    ['physics', 'math', 'mechanics', 'stats', 'thermal', 'projects'],
+    ['physics', 'math', 'mechanics', 'stats', 'thermal', 'circuits', 'projects'],
   );
   assert.deepEqual(
     visibleTracks().map((track) => track.id),
-    ['physics', 'math', 'mechanics', 'stats', 'thermal', 'projects'],
+    ['physics', 'math', 'mechanics', 'stats', 'thermal', 'circuits', 'projects'],
   );
   for (const track of TRACKS) {
     const built = track.courses.filter((course) => course.href);
@@ -70,10 +71,11 @@ test('the card opens the latest built course, and D5 is on the list', () => {
   assert.equal(latestBuilt(TRACKS[2]).code, 'EGN 3331');
   assert.equal(latestBuilt(TRACKS[3]).id, 'sta3032');
   assert.equal(latestBuilt(TRACKS[4]).id, 'eml4140');
-  assert.equal(latestBuilt(TRACKS[5]).id, 'design');
+  assert.equal(latestBuilt(TRACKS[5]).id, 'eel3111');
+  assert.equal(latestBuilt(TRACKS[6]).id, 'design');
   assert.deepEqual(
     builtCourses().map((course) => course.id),
-    ['phy2048', 'phy2049', 'mac2311', 'mac2313', 'map2302', 'egn3203', 'statics', 'egn3321', 'ema3010', 'egn3331', 'sta3032', 'eml3100', 'eml3015', 'eml4140', 'bench', 'design'],
+    ['phy2048', 'phy2049', 'mac2311', 'mac2313', 'map2302', 'egn3203', 'statics', 'egn3321', 'ema3010', 'egn3331', 'sta3032', 'eml3100', 'eml3015', 'eml4140', 'eel3111', 'bench', 'design'],
   );
 });
 

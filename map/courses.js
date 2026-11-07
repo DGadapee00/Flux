@@ -35,7 +35,7 @@ export const COURSES = [
   { id: 'eml3101', code: 'EML 3101', title: 'Thermodynamics II', status: 'later', app: null },
   { id: 'eml3015', code: 'EML 3015', title: 'Fluids', status: 'later', app: 'eml3015/' },
   { id: 'eml4140', code: 'EML 4140', title: 'Heat Transfer', status: 'later', app: 'eml4140/' },
-  { id: 'eel3111', code: 'EEL 3111', title: 'Circuit Analysis I', status: 'later', app: null },
+  { id: 'eel3111', code: 'EEL 3111', title: 'Circuit Analysis I', status: 'later', app: 'eel3111/' },
   { id: 'egn3203', code: 'EGN 3203', title: 'Modern Computation Methods', status: 'later', app: 'egn3203/' },
   { id: 'bench', code: 'BENCH', title: 'Electronics on the bench', kind: 'project', app: 'bench/' },
   // The satellite application as a project: the aerospace concepts it needs that no course on the

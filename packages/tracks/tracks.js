@@ -78,6 +78,11 @@ export const TRACKS = [
     ],
   },
   {
+    id: 'circuits',
+    name: 'Circuits',
+    courses: [{ id: 'eel3111', code: 'EEL 3111', title: 'Circuit Analysis I', term: null, href: 'eel3111/' }],
+  },
+  {
     // Personal projects outside the degree map (DECISIONS.md, D35).
     id: 'projects',
     name: 'Projects',
