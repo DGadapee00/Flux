@@ -15,6 +15,7 @@ export default {
     { id: 's7', n: 7, title: 'Boundary layers', lab: 'layer', ch: ['6'], topics: ['boundary-layer'], home: true },
     { id: 's8', n: 8, title: 'A system passing through a box', lab: 'transport', ch: ['6'], topics: ['transport'], home: true },
     { id: 's9', n: 9, title: 'Momentum on a control volume', lab: 'vane', ch: ['6'], topics: ['momentum-cv'], home: true },
-    { id: 's10', n: 10, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's10', n: 10, title: 'Head loss in pipes', lab: 'headloss', ch: ['6'], topics: ['head-loss'], home: true },
+    { id: 's11', n: 11, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

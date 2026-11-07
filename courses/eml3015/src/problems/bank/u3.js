@@ -10,6 +10,7 @@ import { poiseuille } from '@flux/subjects/mechanics/poiseuille.js';
 import { plate } from '@flux/subjects/mechanics/blasius.js';
 import { DUCT, RHO_WATER, flow } from '@flux/subjects/mechanics/transport.js';
 import { vaneForce } from '@flux/subjects/mechanics/vane.js';
+import { headLoss } from '@flux/subjects/mechanics/headloss.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
@@ -31,6 +32,14 @@ export const boxForce = ($) => {
 };
 /** The vane problem: the vane's speed by name, and the force along the jet; `turn` names the traps. */
 export const VANE_U = { fixed: 0, moving: 5 };
+/** The laminar head-loss problem: oil ν = 1e-4, 10 m; `f` and `twoG` name the traps. */
+export const PIPE_D = { two: 0.02, four: 0.04 };
+export const laminarLoss = ($, k = 64, twoG = 2 * 9.81) => {
+  const D = PIPE_D[$.D];
+  const V = $.Q / ((Math.PI * D * D) / 4);
+  const Re = (V * D) / 1e-4;
+  return ((k / Re) * (10 / D) * V * V) / twoG;
+};
 export const vaneFx = ($, turn = 'right') => {
   const w = 20 - VANE_U[$.motion];
   const q = 998 * ((Math.PI * 0.02 * 0.02) / 4) * w * w;
@@ -587,5 +596,69 @@ export default [
       },
     },
     cases: [kase('half the speed', { change: 'half' }, { f: 'quarter' })],
+  }),
+
+  problem({
+    id: 'u3.19.laminar-loss',
+    title: 'Head loss in laminar flow',
+    exam: 'u3',
+    ch: '6',
+    lab: 'headloss',
+    src: 'Flux, written for the Head loss lab',
+    topics: ['head-loss'],
+    principles: ['head-loss'],
+    vars: { D: choice(['two', 'a 2 cm pipe'], ['four', 'a 4 cm pipe']), Q: range(0.1, 0.5, 0.1, 'L/s', 1e-3) },
+    text: (T) => `An oil with ν = 1.0 × 10⁻⁴ m²/s flows at ${T.Q} L/s through 10 m of ${T.D}. Check that the flow is laminar, then find the head loss, in m.`,
+    parts: [num('h', ($) => laminarLoss($), 'm', { label: 'h_L' })],
+    level: 2,
+    hints: ['V = Q/A and Re = VD/ν. It should come out well below 2300.', 'h_L = f(L/D)V²/2g with f = 64/Re.'],
+    steps: ($) => {
+      const D = PIPE_D[$.D];
+      const V = $.Q / ((Math.PI * D * D) / 4);
+      const Re = (V * D) / 1e-4;
+      return [String.raw`$V = ${Number(V.toPrecision(3))}$ m/s, $\mathrm{Re} = ${Number(Re.toPrecision(3))}$: laminar, $f = 64/\mathrm{Re} = ${Number((64 / Re).toPrecision(3))}$`, String.raw`$h_L = ${Number(laminarLoss($).toPrecision(3))}$ m`];
+    },
+    sim: {
+      scenario: 'laminar',
+      setup(s, $) {
+        Object.assign(s, { fluid: 'oil', lQ: Math.log10($.Q * 1000), Dcm: PIPE_D[$.D] * 100, emm: 0.045 });
+      },
+      read: (c) => ({ h: c.hL }),
+    },
+    cases: [kase('4 cm at 0.2 L/s', { D: 'four', Q: 0.2 }, { h: 0.3245 })],
+  }),
+
+  problem({
+    id: 'u3.20.doubling',
+    title: 'Double the flow',
+    exam: 'u3',
+    ch: '6',
+    kind: 'conceptual',
+    lab: 'headloss',
+    src: 'Flux, written for the Head loss lab',
+    topics: ['head-loss'],
+    principles: ['head-loss'],
+    vars: { regime: choice(['laminar', 'a laminar oil flow'], ['rough', 'a turbulent water flow in a rough pipe']) },
+    text: (T) => `In ${T.regime}, the flow rate doubles. What happens to the head loss along the pipe?`,
+    parts: [
+      pick('d', 'the head loss', [
+        ['same', 'it does not change', 'More flow always costs more head: the wall has to slow more fluid, faster.'],
+        ['two', 'it doubles', 'Laminar: f = 64/Re falls as the speed rises, so h_L ∝ fV² ∝ V.'],
+        ['four', 'it nearly quadruples', 'Rough turbulent: f hardly changes, so h_L ∝ V².'],
+      ], ($) => ($.regime === 'laminar' ? 'two' : 'four')),
+    ],
+    level: 1,
+    hints: ['h_L = f(L/D)V²/2g. How does f depend on V in each regime?', 'Laminar f = 64/Re; rough turbulent f levels off.'],
+    steps: ($) => [$.regime === 'laminar' ? 'f ∝ 1/V, so h_L ∝ V: ×2.' : 'f nearly constant, so h_L ∝ V²: ×4.'],
+    sim: {
+      scenario: 'laminar',
+      read: (c, s, $) => {
+        const base = $.regime === 'laminar' ? { fluid: 'oil', D: 0.05, eps: 0.045e-3 } : { fluid: 'water', D: 0.05, eps: 1e-3 };
+        const r = headLoss({ ...base, Q: 0.004 }).hL / headLoss({ ...base, Q: 0.002 }).hL;
+        const opts = { same: 1, two: 2, four: 4 };
+        return { d: Object.keys(opts).reduce((a, b) => (Math.abs(opts[b] - r) < Math.abs(opts[a] - r) ? b : a)) };
+      },
+    },
+    cases: [kase('laminar oil', { regime: 'laminar' }, { d: 'two' })],
   }),
 ];

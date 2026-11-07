@@ -3,13 +3,21 @@
  * Folded into the bank by src/problems/index.js.
  */
 import { bendPressure } from '@flux/subjects/mechanics/flowfields.js';
-import { SCALE, STREAM, boxForce, deltaAt, nuOf, pipeQ, vaneFx } from '../bank/u3.js';
+import { SCALE, STREAM, boxForce, deltaAt, laminarLoss, nuOf, pipeQ, vaneFx } from '../bank/u3.js';
 
 const RATIO = { gentle: 2, medium: 4, sharp: 6 };
 const RHO = { water: 998, air: 1.2 };
 const bend = ($) => bendPressure({ rho: RHO[$.fluid] ?? 998, V: $.V, R: $.R, w: $.w, profile: 'vortex' });
 
 export default {
+  'u3.19.laminar-loss': {
+    traps: {
+      h: [
+        [($) => laminarLoss($, 16), 'f = 16/Re is the Fanning factor, a quarter of Darcy’s. With h_L = f(L/D)V²/2g use f = 64/Re.'],
+        [($) => laminarLoss($, 64, 1), 'Divide the dynamic head by 2g: h_L = f(L/D)V²/(2g).'],
+      ],
+    },
+  },
   'u3.17.vane-force': {
     traps: {
       F: [

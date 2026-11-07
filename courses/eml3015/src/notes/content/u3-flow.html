@@ -28,7 +28,8 @@
     <a href="#s7"><span>7</span>Boundary layers</a>
     <a href="#s8"><span>8</span>A system passing through a box</a>
     <a href="#s9"><span>9</span>Momentum on a control volume</a>
-    <a href="#s10"><span>10</span>Formula sheet</a>
+    <a href="#s10"><span>10</span>Head loss in pipes</a>
+    <a href="#s11"><span>11</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -242,7 +243,29 @@ F_x = 6.27(20)(1 - \cos 180^\circ) = 250.8\ \text{N},
 </section>
 
 <section class="topic" id="s10">
-<h2><span class="n">10</span>Formula sheet</h2>
+<h2><span class="n">10</span>Head loss in pipes</h2>
+<p>Friction at the wall turns some of a pipe flow's pressure into heat. As a height of fluid, that is the head loss, and it decides the pump a system needs.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Dimensional analysis says the pressure drop over a length \(L\) depends on \(L/D\), \(\mathrm{Re}\) and the wall's relative roughness \(\varepsilon/D\). Darcy–Weisbach puts it as</p>
+\[
+h_L = f\,\frac{L}{D}\,\frac{V^2}{2g}.
+\]
+<p>In laminar flow the Poiseuille profile gives \(f = 64/\mathrm{Re}\) exactly, so \(h_L \propto V\) and roughness does not enter. In turbulent flow Colebrook's equation, \(1/\sqrt f = -2\log_{10}\big(\varepsilon/3.7D + 2.51/(\mathrm{Re}\sqrt f)\big)\), gives an \(f\) that changes slowly with \(\mathrm{Re}\) and levels off in a rough pipe, so \(h_L\) grows nearly as \(V^2\). The Moody chart plots it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · water in 5 cm steel</span>
+<p>2 L/s of water (\(\nu = 1.0\times10^{-6}\) m²/s) through 10 m of 5 cm commercial steel, \(\varepsilon = 0.045\) mm. \(V = 1.02\) m/s and \(\mathrm{Re} = 50{,}930\): turbulent. Colebrook gives \(f = 0.0237\), so</p>
+\[
+h_L = 0.0237\times\frac{10}{0.05}\times\frac{1.02^2}{2(9.81)} = 0.2505\ \text{m}.
+\]
+<p>At twice the flow the loss is 3.68 times as much; in a 1 mm-rough pipe, 3.97 times.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the Fanning friction factor in Darcy's equation. Fanning's is a quarter of Darcy's: laminar Fanning is \(16/\mathrm{Re}\). Check which a chart or formula gives.</p>
+</div>
+</section>
+
+<section class="topic" id="s11">
+<h2><span class="n">11</span>Formula sheet</h2>
 \[
 \frac{D\mathbf v}{Dt} = \frac{\partial\mathbf v}{\partial t} + (\mathbf v\cdot\nabla)\mathbf v, \qquad T = \int \frac{dx}{u}, \qquad \rho\,\frac{D\mathbf v}{Dt} = -\nabla p + \rho\,\mathbf g,
 \]
@@ -263,6 +286,9 @@ u = \frac{\Delta p}{4\mu L}(R^2 - r^2), \qquad Q = \frac{\pi R^4\,\Delta p}{8\mu
 \]
 \[
 \sum\mathbf F = \sum_\text{out}\dot m\,\mathbf w - \sum_\text{in}\dot m\,\mathbf w, \qquad F_x = \rho A (V - U)^2(1 - \cos\theta)\ \text{(one vane)}.
+\]
+\[
+h_L = f\frac{L}{D}\frac{V^2}{2g}, \qquad f_\text{lam} = \frac{64}{\mathrm{Re}}, \qquad \frac{1}{\sqrt f} = -2\log_{10}\left(\frac{\varepsilon/D}{3.7} + \frac{2.51}{\mathrm{Re}\sqrt f}\right).
 \]
 </section>
 

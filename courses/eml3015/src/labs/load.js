@@ -12,6 +12,7 @@ const loaders = {
   transport: () => import('./transport.js'),
   vane: () => import('./vane.js'),
   pipe: () => import('./pipe.js'),
+  headloss: () => import('./headloss.js'),
   model: () => import('./model.js'),
   layer: () => import('./layer.js'),
 };
