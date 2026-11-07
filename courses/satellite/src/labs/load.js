@@ -11,6 +11,7 @@ const loaders = {
   spin: () => import('./spin.js'),
   pointing: () => import('./pointing.js'),
   shake: () => import('./shake.js'),
+  power: () => import('./power.js'),
 };
 
 const labs = createLabLoader(loaders);

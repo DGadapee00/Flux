@@ -68,11 +68,15 @@ export const SATELLITE = {
       ],
       outcome: 'Keep the electronics powered through sunlight and eclipse.',
       concepts: ['electric-power', 'internal-resistance', 'breadboard-circuits', 'spacecraft-power'],
-      labs: [{ concept: 'internal-resistance', course: 'bench', lab: 'usb-rail' }, { concept: 'breadboard-circuits', course: 'bench', lab: 'breadboard' }],
+      labs: [
+        { concept: 'internal-resistance', course: 'bench', lab: 'usb-rail' },
+        { concept: 'breadboard-circuits', course: 'bench', lab: 'breadboard' },
+        { concept: 'spacecraft-power', course: 'satellite', lab: 'power' },
+      ],
       demonstrate: 'List each load and its duty cycle. Size stored energy for your eclipse duration, include conversion losses and reserve, and check that sunlight can recharge it.',
       deliverable: 'A power budget, battery capacity and solar-array requirement.',
       interface: 'Give Thermal the dissipated power. Give every powered subsystem its allowed draw.',
-      gap: 'The Bench labs show wiring and voltage sag. Battery charging and solar-array sizing need a satellite-specific lab.',
+      gap: 'The Bench labs show wiring and voltage sag, and the Power lab sizes the array and battery. Array ageing, temperature and battery wear are still to be built.',
     },
     {
       id: 'structure', title: 'Structure', part: 'Frame + attachments', requires: [],
