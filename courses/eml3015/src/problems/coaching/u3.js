@@ -3,7 +3,7 @@
  * Folded into the bank by src/problems/index.js.
  */
 import { bendPressure } from '@flux/subjects/mechanics/flowfields.js';
-import { SCALE, STREAM, boxForce, deltaAt, laminarLoss, nuOf, pipeQ, vaneFx } from '../bank/u3.js';
+import { SCALE, STREAM, boxForce, deltaAt, laminarLoss, nuOf, parallelQA, pipeQ, vaneFx } from '../bank/u3.js';
 
 const RATIO = { gentle: 2, medium: 4, sharp: 6 };
 const RHO = { water: 998, air: 1.2 };
@@ -96,6 +96,14 @@ export default {
       net: [
         [($) => 1.2 * ($.field === 'piston' ? -$.a : 2 * $.a) * $.h, 'Multiply by the area, h², not the side.'],
         [($) => ($.field === 'piston' ? -$.a : 2 * $.a) * $.h * $.h, 'That is the volume rate. Multiply by the density, 1.2 kg/m³, for mass.'],
+      ],
+    },
+  },
+  'u3.21.parallel': {
+    traps: {
+      qa: [
+        [($) => parallelQA($, 'area'), 'Not by area: the pipes share a head loss, which goes as LQ²/D⁵, so length and the fifth power of D decide.'],
+        [($) => parallelQA($, 'even'), 'Not evenly: the pipes differ, and the split is whatever makes their losses equal.'],
       ],
     },
   },

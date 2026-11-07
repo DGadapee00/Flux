@@ -22,14 +22,16 @@
     <h3>Part II · Pressure</h3>
     <a href="#s3"><span>3</span>Euler's equation across a bend</a>
     <a href="#s4"><span>4</span>Mass in, mass out</a>
-    <h3>Reference</h3>
+    <h3>Part III · Pipes and control volumes</h3>
     <a href="#s5"><span>5</span>Pressure-driven flow in a pipe</a>
     <a href="#s6"><span>6</span>Models and similitude</a>
     <a href="#s7"><span>7</span>Boundary layers</a>
     <a href="#s8"><span>8</span>A system passing through a box</a>
     <a href="#s9"><span>9</span>Momentum on a control volume</a>
     <a href="#s10"><span>10</span>Head loss in pipes</a>
-    <a href="#s11"><span>11</span>Formula sheet</a>
+    <a href="#s12"><span>11</span>Pipe networks and pumps</a>
+    <h3>Reference</h3>
+    <a href="#s11"><span>12</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -261,6 +263,27 @@ h_L = 0.0237\times\frac{10}{0.05}\times\frac{1.02^2}{2(9.81)} = 0.2505\ \text{m}
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Using the Fanning friction factor in Darcy's equation. Fanning's is a quarter of Darcy's: laminar Fanning is \(16/\mathrm{Re}\). Check which a chart or formula gives.</p>
+</div>
+</section>
+
+<section class="topic" id="s12">
+<h2><span class="n">11</span>Pipe networks and pumps</h2>
+<p>A real system strings pipes together: in series, in parallel, branching to several outlets, with a pump to drive it all. Two rules and two curves settle it.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Pipes in series carry one flow and add their losses. Pipes in parallel run between the same two points, so they lose the same head, and their flows add:</p>
+\[
+h_{L,A}(Q_A) = h_{L,B}(Q_B), \qquad Q_A + Q_B = Q.
+\]
+<p>Each \(h_L = f(L/D)V^2/2g\) grows roughly as \(Q^2 L/D^5\), so a short or wide pipe takes more than its share of area suggests. The system needs a head that rises with flow, the lift plus every loss; a pump gives a head that falls with flow. They run where the two curves cross.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two pipes to one shower</span>
+<p>A pump lifts water through a 20 mm trunk to a junction, then through a 15 mm pipe 10 m long (A) and a 10 mm bypass 2 m long (B) in parallel to a shower 6 m up. Both lose the same 4.56 m, which splits the flow 0.429 L/s through A and 0.355 L/s through B: 55% through A, not the 69% its area would give. The pump runs at 0.784 L/s and 32.7 m.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the tap opens</span>
+<p>Open a downstairs tap at the junction halfway. The pump slides down its curve to 1.08 L/s, and the trunk's loss climbs to 11.9 m. The junction's head falls to 9.85 m, and the shower, which must still climb 6 m, gets only 0.327 L/s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Splitting parallel flows evenly or by area. The split is whatever makes the losses equal; work it from \(h_L\), and remember every branch shares the trunk upstream.</p>
 </div>
 </section>
 

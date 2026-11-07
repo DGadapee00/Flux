@@ -31,6 +31,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Two pipes in parallel feed an upstairs shower while a second tap opens. It corrects the idea that flow splits evenly or by pipe area: it splits so the head losses are equal, and opening the tap starves the shower.',
+  labs: [
+    { course: 'eml3015', lab: 'network', notes: ['s12'], note: 'A pump feeding an upstairs shower through two pipes in parallel while a downstairs tap opens: the parallel pair splits by equal loss, not by area, and the tap starves the shower through the shared trunk. Solved two ways, by the junction head and by Newton on all the flows.' },
+  ],
 };

@@ -21,5 +21,9 @@ export default {
   s10: [{ tag: 'water in 5 cm steel', lab: 'headloss', scenario: 'smooth', read: (c) => ({ Re: [c.Re, 50930], f: [c.f, 0.0237], 'h_L (m)': [c.hL, 0.2505] }) }],
   s9: [{ tag: 'a jet on a turning vane', lab: 'vane', scenario: 'fixed180', read: (c) => ({ 'ṁ (kg/s)': [c.mdot, 6.27], 'F_x (N)': [c.Fx, 250.8] }) }],
   s8: [{ tag: 'a steady nozzle', lab: 'transport', scenario: 'nozzle', read: (c) => ({ uIn: [c.uIn, 0.696], uOut: [c.uOut, 0.941], F: [c.sysRate, 2.46] }) }],
+  s12: [
+    { tag: 'two pipes to one shower', lab: 'network', scenario: 'shower', read: (c) => ({ 'Q_A (L/s)': [c.QA * 1000, 0.429], 'Q_B (L/s)': [c.QB * 1000, 0.355], 'shared loss (m)': [c.hp, 4.56], 'pump head (m)': [c.Hpump, 32.7] }) },
+    { tag: 'the tap opens', lab: 'network', scenario: 'tap', read: (c) => ({ 'pump flow (L/s)': [c.Q * 1000, 1.08], 'trunk loss (m)': [c.trunkLoss, 11.9], 'head at J (m)': [c.HJ, 9.85], 'shower (L/s)': [c.Qs * 1000, 0.327] }) },
+  ],
   s4: [{ tag: 'air squeezed by a piston', lab: 'continuity', scenario: 'piston', read: (c) => ({ in: [c.in, 0.468], out: [c.out, 0.252], net: [c.net, -0.216], rate: [c.dRhoDt, 2.4] }) }],
 };

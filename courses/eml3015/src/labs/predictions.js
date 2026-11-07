@@ -365,6 +365,41 @@ export const PREDICTIONS = {
       why: 'Power is F_x U ∝ U(V − U)², which peaks at U = V/3 for a single vane: 627 W at half the speed, 743 W at a third.',
     },
   ],
+  network: [
+    {
+      id: 'nw-tap',
+      scenario: 'shower',
+      ask: 'Open the downstairs tap halfway. What happens to the shower’s flow, and to the pump’s?',
+      apply(s) { s.open = 0.5; },
+      watch: [
+        { id: 'qs', label: 'shower flow', get: (c) => c.Qs },
+        { id: 'q', label: 'pump flow', get: (c) => c.Q },
+      ],
+      mode: 'dir',
+      expect: { qs: 'smaller', q: 'bigger' },
+      why: 'The pump delivers more, 1.08 L/s against 0.78, but all of it crosses the shared trunk, whose loss nearly doubles. The junction’s head falls from 26 m to 9.8 m, and the shower drops to 0.33 L/s.',
+    },
+    {
+      id: 'nw-wide',
+      scenario: 'shower',
+      ask: 'Widen the bypass B from 10 mm to 25 mm. What happens to the share of the shower’s flow through A?',
+      apply(s) { s.DB = 25; },
+      watch: [{ id: 'a', label: 'A’s share', get: (c) => c.shareA }],
+      mode: 'dir',
+      expect: { a: 'smaller' },
+      why: 'A short, wide B loses little head for a lot of flow, so the shared loss falls to 0.22 m and A, at 15 mm and 10 m, carries only 9% at that loss.',
+    },
+    {
+      id: 'nw-area',
+      scenario: 'shower',
+      ask: 'A’s area is 69% of the two pipes’ total. Does A carry 69% of the shower’s flow?',
+      apply(s) { s.open = 0; },
+      watch: [{ id: 'same', label: 'Split by area?', get: (c) => Math.abs(c.shareA - c.areaShare) < 0.02, mode: 'bool' }],
+      mode: 'bool',
+      expect: { same: false },
+      why: 'A carries 55%. The split is set by equal head loss, and B, though narrower, is five times shorter.',
+    },
+  ],
   headloss: [
     {
       id: 'hl-lam',
