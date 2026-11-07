@@ -266,6 +266,37 @@ export const PREDICTIONS = {
       why: 'Re = VL/ν with the same fluid: half the length needs twice the speed.',
     },
   ],
+  transport: [
+    {
+      id: 'tr-leaves',
+      scenario: 'blob',
+      ask: 'Run the clock on to 2 s. The blob is leaving the box now, and the dye in the box is falling fast. Does the dye in the system, the water that is in the box at that instant, change?',
+      apply(s) { s.t = 2; },
+      watch: [{ id: 'changes', label: 'the system’s dye changes', get: (c) => c.changes, mode: 'bool' }],
+      expect: { changes: false },
+      why: 'The dye rides with the water, so no water can lose its dye. The box loses 10 g/s, and exactly that much leaves through the downstream face: the net outflow is −(−10) and the sum is zero.',
+    },
+    {
+      id: 'tr-down',
+      scenario: 'nozzle',
+      ask: 'Slide the box downstream, from 0.75 m to 1.4 m, where the nozzle is narrower. The flow is still steady. Does the net force on the water in the box grow or shrink?',
+      apply(s) { s.xb = 1.4; },
+      watch: [{ id: 'F', label: 'the net force on the water in the box', get: (c) => c.sysRate }],
+      mode: 'dir',
+      expect: { F: 'bigger' },
+      why: 'The force is the momentum flux out minus in, ρQ²(1/A_out − 1/A_in). Near the narrow end 1/A climbs faster for the same 0.5 m, so the force grows from 2.46 N to 6.87 N.',
+    },
+    {
+      id: 'tr-surge-move',
+      scenario: 'surge',
+      ask: 'In the straight pipe whose flow is growing, slide the box downstream from 0.75 m to 1.4 m. Does the force on the water in the box change?',
+      apply(s) { s.xb = 1.4; },
+      watch: [{ id: 'F', label: 'the net force on the water in the box', get: (c) => c.sysRate }],
+      mode: 'dir',
+      expect: { F: 'same' },
+      why: 'In a straight pipe the water leaves as fast as it came in, so only the box term counts: ρQ′ times the box length. Every 0.5 m of pipe holds the same water speeding up at the same rate, wherever it is: 2.5 N.',
+    },
+  ],
   layer: [
     {
       id: 'bl-faster',

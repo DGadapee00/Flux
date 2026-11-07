@@ -13,6 +13,7 @@ export default {
     { id: 's5', n: 5, title: 'Pressure-driven flow in a pipe', lab: 'pipe', ch: ['6'], topics: ['poiseuille'], home: true },
     { id: 's6', n: 6, title: 'Models and similitude', lab: 'model', ch: ['6'], topics: ['similitude'], home: true },
     { id: 's7', n: 7, title: 'Boundary layers', lab: 'layer', ch: ['6'], topics: ['boundary-layer'], home: true },
-    { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's8', n: 8, title: 'A system passing through a box', lab: 'transport', ch: ['6'], topics: ['transport'], home: true },
+    { id: 's9', n: 9, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

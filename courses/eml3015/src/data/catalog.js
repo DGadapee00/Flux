@@ -28,7 +28,7 @@ export const EXAMS = [
     title: 'Following the flow',
     chapters: '6',
     date: 'Unit 3',
-    labs: ['nozzle', 'bend', 'continuity', 'pipe', 'model', 'layer'],
+    labs: ['nozzle', 'bend', 'continuity', 'transport', 'pipe', 'model', 'layer'],
     coming: [],
   },
 ];
@@ -40,6 +40,7 @@ export const LAB_META = {
   nozzle: { id: 'nozzle', exam: 'u3', title: 'Nozzle' },
   bend: { id: 'bend', exam: 'u3', title: 'Bend' },
   continuity: { id: 'continuity', exam: 'u3', title: 'Continuity' },
+  transport: { id: 'transport', exam: 'u3', title: 'Transport' },
   pipe: { id: 'pipe', exam: 'u3', title: 'Pipe' },
   model: { id: 'model', exam: 'u3', title: 'Model' },
   layer: { id: 'layer', exam: 'u3', title: 'Boundary layer' },

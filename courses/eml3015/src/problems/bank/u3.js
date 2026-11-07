@@ -8,6 +8,7 @@ import { cvClosed } from '@flux/subjects/mechanics/continuity.js';
 import { FLUIDS } from '@flux/subjects/mechanics/couette.js';
 import { poiseuille } from '@flux/subjects/mechanics/poiseuille.js';
 import { plate } from '@flux/subjects/mechanics/blasius.js';
+import { DUCT, RHO_WATER, flow } from '@flux/subjects/mechanics/transport.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
@@ -16,6 +17,17 @@ const RATIO = { gentle: 2, medium: 4, sharp: 6 };
 export const SCALE = { sixteen: 16, twentyfive: 25, hundred: 100 };
 /** The boundary-layer problem's two flows: fluid id and speed (m/s). */
 export const STREAM = { air: { fluid: 'air', U: 3 }, water: { fluid: 'water', U: 0.2 } };
+/** The Transport problem: the net force on the water in a 0.5 m box of the 4 to 1 nozzle. */
+export const boxForce = ($) => {
+  const F = flow({ duct: 'nozzle', k: $.flow === 'rising' ? 0.5 : 0 });
+  const Q = F.Q(1);
+  const dQ = F.Q0 * F.k;
+  const Ain = F.A($.xb);
+  const Aout = F.A($.xb + DUCT.w);
+  const box = RHO_WATER * dQ * DUCT.w;
+  const flux = RHO_WATER * Q * Q * (1 / Aout - 1 / Ain);
+  return { Q, dQ, Ain, Aout, box, flux, F: box + flux };
+};
 export const nuOf = (id) => FLUIDS[id].mu / FLUIDS[id].rho;
 export const deltaAt = ($, x = $.x) => (4.91 * x) / Math.sqrt((STREAM[$.flow].U * x) / nuOf(STREAM[$.flow].fluid));
 /** Flow rate in a pipe, m³/s, for the problems' fluids; R in m, dp in Pa, L in m. */
@@ -419,4 +431,85 @@ export default [
     cases: [kase('a faster stream', { change: 'speed' }, { d: 'thinner' })],
   }),
 
+
+  problem({
+    id: 'u3.15.box-force',
+    title: 'The force on the water in a box',
+    exam: 'u3',
+    ch: '6',
+    lab: 'transport',
+    src: 'Flux, written for the Transport lab',
+    topics: ['transport'],
+    principles: ['transport'],
+    vars: { flow: choice(['steady', 'holds steady at 10 L/s'], ['rising', 'is 15 L/s and rising by 5 L/s every second']), xb: range(0.25, 1.25, 0.25, 'm') },
+    text: (T) => `Water (ρ = 1000 kg/m³) flows along a duct whose area falls in a straight line from 0.02 m² at the inlet to 0.005 m² 2 m downstream. The flow ${T.flow}. A fixed box holds the 0.5 m of duct that starts ${T.xb} m from the inlet. Treat the flow as one-dimensional. What net force along the duct acts on the water in the box, in N?`,
+    parts: [num('F', ($) => boxForce($).F, 'N', { label: 'F' })],
+    level: 3,
+    hints: [
+      'Use the transport theorem with b = u: the force is the box term plus the momentum flowing out minus the momentum flowing in.',
+      'The box holds ∫ρuA dx = ρQ × 0.5 m of momentum, so its rate is ρQ′ × 0.5 m. Through a face, momentum flows at ρQu = ρQ²/A.',
+    ],
+    steps: ($) => {
+      const r = boxForce($);
+      return [
+        String.raw`Areas at the faces: $A_\text{in} = ${Number(r.Ain.toPrecision(4))}$ m², $A_\text{out} = ${Number(r.Aout.toPrecision(4))}$ m²`,
+        String.raw`Box term $\rho Q' w = 1000(${r.dQ})(0.5) = ${Number(r.box.toPrecision(3))}$ N; net outflow $\rho Q^2(1/A_\text{out} - 1/A_\text{in}) = ${Number(r.flux.toPrecision(3))}$ N`,
+        String.raw`$F = ${Number(r.F.toPrecision(3))}$ N`,
+      ];
+    },
+    sim: {
+      scenario: 'nozzle',
+      setup(s, $) {
+        Object.assign(s, { duct: 'nozzle', prop: 'momentum', t: 1, k: $.flow === 'rising' ? 0.5 : 0, xb: $.xb });
+      },
+      read: (c) => ({ F: c.sysRate }),
+    },
+    cases: [kase('steady, from 0.75 m', { flow: 'steady', xb: 0.75 }, { F: 2.455 })],
+  }),
+
+  problem({
+    id: 'u3.16.which-term',
+    title: 'Which term carries the change?',
+    exam: 'u3',
+    ch: '6',
+    kind: 'conceptual',
+    lab: 'transport',
+    src: 'Flux, written for the Transport lab',
+    topics: ['transport'],
+    principles: ['transport'],
+    vars: {
+      setup: choice(
+        ['nozzle', 'water flowing steadily through a nozzle, and B is the momentum'],
+        ['surge', 'water in a straight pipe whose flow is growing, and B is the momentum'],
+        ['blob', 'a blob of dye carried into the box by a steady flow, and B is the dye'],
+      ),
+    },
+    text: (T) => `A fixed box sits in a duct, with ${T.setup}. The system is the water inside the box at this instant. In the Reynolds transport theorem, which terms make up the system’s rate of change of B?`,
+    parts: [
+      pick('term', 'the terms', [
+        ['box', 'the build-up inside the box alone', 'The box term alone carries it when the property enters and leaves at the same rate but grows inside, as when a flow speeds up in a straight pipe.'],
+        ['outflow', 'the net outflow through the faces alone', 'The outflow alone carries it when nothing in the box changes but the property leaves at a different rate from the one it enters at, as in a steady nozzle.'],
+        ['both', 'both, and neither is zero', 'Both count when the flow is unsteady and the duct changes, such as a nozzle whose flow is growing.'],
+        ['none', 'the two cancel: the system does not change', 'A property the water carries unchanged, like a passive dye, stays with the system. Whatever builds up in the box has come in through a face.'],
+      ], ($) => ({ nozzle: 'outflow', surge: 'box', blob: 'none' })[$.setup]),
+    ],
+    level: 2,
+    hints: ['Ask two questions: does anything inside the box change with time, and does B leave at a different rate from the one it enters at?', 'Then ask whether the system itself can change B at all.'],
+    steps: ($) => [
+      {
+        nozzle: 'Steady: the box term is zero. The water leaves faster than it entered, so the net outflow of momentum is not zero, and it is the net force on the system.',
+        surge: 'Straight pipe: the same speed in and out, so the fluxes cancel. The flow grows, so the momentum in the box grows: the box term is the whole rate.',
+        blob: 'The dye rides with the water. The box term is the dye arriving, the outflow is minus the same amount, and the system’s dye stays fixed.',
+      }[$.setup],
+    ],
+    sim: {
+      scenario: 'nozzle',
+      setup(s, $) {
+        const S = { nozzle: ['nozzle', 'momentum', 0], surge: ['straight', 'momentum', 0.5], blob: ['straight', 'dye', 0] }[$.setup];
+        Object.assign(s, { duct: S[0], prop: S[1], k: S[2], t: 1, xb: 0.75 });
+      },
+      read: (c) => ({ term: c.fixed ? 'none' : c.steady ? 'outflow' : c.noFlux ? 'box' : 'both' }),
+    },
+    cases: [kase('a steady nozzle', { setup: 'nozzle' }, { term: 'outflow' })],
+  }),
 ];

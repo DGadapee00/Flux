@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Drag a fixed control volume through a flow while a dyed blob of fluid passes through it. It corrects the idea that a control volume follows the fluid: the blob is the system, the box stays put, and the flux term is the difference.',
+  labs: [
+    { course: 'eml3015', lab: 'transport', notes: ['s8'], note: 'A fixed box in a duct and the water that was in it moving on: box term plus net outflow is the system’s rate, for mass, momentum and a dye blob.' },
+  ],
 };

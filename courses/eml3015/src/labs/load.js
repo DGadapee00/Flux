@@ -9,6 +9,7 @@ const loaders = {
   nozzle: () => import('./nozzle.js'),
   bend: () => import('./bend.js'),
   continuity: () => import('./continuity.js'),
+  transport: () => import('./transport.js'),
   pipe: () => import('./pipe.js'),
   model: () => import('./model.js'),
   layer: () => import('./layer.js'),

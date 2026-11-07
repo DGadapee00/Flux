@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchyâ
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 203 with a Flux lab, 72 gaps.**
+**275 concepts, 204 with a Flux lab, 71 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -19,7 +19,7 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Mechanics | 34 | 32 |
 | Electricity and magnetism | 27 | 26 |
 | Thermodynamics | 22 | 12 |
-| Fluid mechanics | 20 | 13 |
+| Fluid mechanics | 20 | 14 |
 | Heat transfer | 19 | 5 |
 | Circuits and systems | 27 | 14 |
 | Mechanics of materials | 16 | 15 |

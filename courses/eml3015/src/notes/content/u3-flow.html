@@ -26,7 +26,8 @@
     <a href="#s5"><span>5</span>Pressure-driven flow in a pipe</a>
     <a href="#s6"><span>6</span>Models and similitude</a>
     <a href="#s7"><span>7</span>Boundary layers</a>
-    <a href="#s8"><span>8</span>Formula sheet</a>
+    <a href="#s8"><span>8</span>A system passing through a box</a>
+    <a href="#s9"><span>9</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -196,7 +197,29 @@ f''' + \tfrac12 f f'' = 0, \qquad f(0) = f'(0) = 0, \quad f'(\infty) = 1.
 </section>
 
 <section class="topic" id="s8">
-<h2><span class="n">8</span>Formula sheet</h2>
+<h2><span class="n">8</span>A system passing through a box</h2>
+<p>Newton's laws are written for a fixed lump of matter, a system. In a pump or a nozzle the matter keeps moving, so it is easier to watch a fixed region, a control volume. The Reynolds transport theorem turns a law for the system into one for the box.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Take the system to be the water in the box at time \(t\). A moment \(dt\) later it has moved on: it has left a sliver at the inlet face and filled a sliver past the outlet face. So its property \(B\) is what the box holds then, minus the inlet sliver, plus the outlet sliver. For one-dimensional flow with \(b\) per kilogram, each sliver holds \(\rho b\,uA\,dt\), and</p>
+\[
+\frac{dB_\text{sys}}{dt} = \frac{d}{dt}\int_\text{box}\rho b\,dV + \big(\rho b\,uA\big)_\text{out} - \big(\rho b\,uA\big)_\text{in}.
+\]
+<p>With \(b = 1\) it is the mass balance. With \(b = u\) the left side is the net force on the water, by Newton's second law. In three dimensions the flux term becomes \(\int_\text{CS}\rho b\,(\mathbf v\cdot\mathbf n)\,dA\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a steady nozzle</span>
+<p>Water at 10 L/s flows steadily through a duct whose area falls from 0.02 m² to 0.005 m² over 2 m. A box holds the duct from 0.75 m to 1.25 m, where the areas are 0.014375 m² and 0.010625 m². The speeds are \(u = Q/A = 0.696\) m/s in and 0.941 m/s out. Nothing in the box changes, so with \(b = u\)</p>
+\[
+F = \rho Q\,(u_\text{out} - u_\text{in}) = 1000(0.01)(0.941 - 0.696) = 2.46\ \text{N}.
+\]
+<p>The walls and the pressure push the water in the box forward with 2.46 N, though the flow is steady.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Treating the box as the system. In steady flow nothing in the box changes, yet the water passing through it speeds up and needs a force. And when dye drifts into the box, the box gains dye while the water, which carries its dye with it, gains none.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Formula sheet</h2>
 \[
 \frac{D\mathbf v}{Dt} = \frac{\partial\mathbf v}{\partial t} + (\mathbf v\cdot\nabla)\mathbf v, \qquad T = \int \frac{dx}{u}, \qquad \rho\,\frac{D\mathbf v}{Dt} = -\nabla p + \rho\,\mathbf g,
 \]
@@ -211,6 +234,9 @@ u = \frac{\Delta p}{4\mu L}(R^2 - r^2), \qquad Q = \frac{\pi R^4\,\Delta p}{8\mu
 \]
 \[
 \delta = \frac{4.91\,x}{\sqrt{\mathrm{Re}_x}}, \qquad \tau_w = \frac{0.332\rho U^2}{\sqrt{\mathrm{Re}_x}}, \qquad C_f = \frac{1.328}{\sqrt{\mathrm{Re}_L}}.
+\]
+\[
+\frac{dB_\text{sys}}{dt} = \frac{d}{dt}\int_\text{CV}\rho b\,dV + \int_\text{CS}\rho b\,(\mathbf v\cdot\mathbf n)\,dA, \qquad F = \rho Q\,(u_\text{out} - u_\text{in})\ \text{(steady, one-dimensional)}.
 \]
 </section>
 
