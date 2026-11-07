@@ -9,6 +9,7 @@ export default {
     { id: 's1', n: 1, title: 'Phasors and impedance', lab: 'phasors', ch: ['2'], topics: ['phasor'], home: true },
     { id: 's2', n: 2, title: 'Resonance', lab: 'phasors', ch: ['2'], topics: ['resonance'] },
     { id: 's3', n: 3, title: 'Filters', lab: 'filter', ch: ['2'], topics: ['filter'], home: true },
-    { id: 's4', n: 4, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's5', n: 4, title: 'AC power and power factor', lab: 'power', ch: ['2'], topics: ['acpower'], home: true },
+    { id: 's4', n: 5, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

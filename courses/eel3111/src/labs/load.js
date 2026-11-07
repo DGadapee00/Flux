@@ -7,6 +7,7 @@ const loaders = {
   dependent: () => import('./dependent.js'),
   phasors: () => import('./phasors.js'),
   filter: () => import('./filter.js'),
+  power: () => import('./power.js'),
   superpose: () => import('./superpose.js'),
   thevenin: () => import('./thevenin.js'),
   switch: () => import('./switch.js'),
