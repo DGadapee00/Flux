@@ -9,6 +9,7 @@ export default {
     { id: 's1', n: 1, title: 'Node voltages', lab: 'nodes', ch: ['1'], topics: ['nodal'], home: true },
     { id: 's2', n: 2, title: 'Mesh currents', lab: 'nodes', ch: ['1'], topics: ['mesh'] },
     { id: 's3', n: 3, title: 'Choosing a method', lab: 'nodes', ch: ['1'], topics: ['count'] },
-    { id: 's4', n: 4, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's4', n: 4, title: 'Dependent sources', lab: 'dependent', ch: ['1'], topics: ['dependent'] },
+    { id: 's5', n: 5, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

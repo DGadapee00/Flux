@@ -10,8 +10,8 @@ export const EXAMS = [
     title: 'Methods of analysis',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['nodes'],
-    coming: ['Dependent sources'],
+    labs: ['nodes', 'dependent'],
+    coming: [],
   },
   {
     id: 'u2',
@@ -35,6 +35,7 @@ export const EXAMS = [
 
 export const LAB_META = {
   nodes: { id: 'nodes', exam: 'u1', title: 'Nodes' },
+  dependent: { id: 'dependent', exam: 'u1', title: 'Dependent' },
   phasors: { id: 'phasors', exam: 'u2', title: 'Phasors' },
   superpose: { id: 'superpose', exam: 'u3', title: 'Superpose' },
 };

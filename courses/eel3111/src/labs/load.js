@@ -4,6 +4,7 @@ import { PREDICTIONS } from './predictions.js';
 /** One entry per lab. Add each new lab here and in src/data/catalog.js (LAB_META). */
 const loaders = {
   nodes: () => import('./nodes.js'),
+  dependent: () => import('./dependent.js'),
   phasors: () => import('./phasors.js'),
   superpose: () => import('./superpose.js'),
 };
