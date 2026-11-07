@@ -29,8 +29,8 @@ export const EXAMS = [
     title: 'Attitude control',
     chapters: '3',
     date: 'Unit 3',
-    labs: ['attitude', 'spin'],
-    coming: ['Transfer functions', 'Feedback and PID'],
+    labs: ['attitude', 'spin', 'pointing'],
+    coming: ['Transfer functions'],
   },
 ];
 
@@ -39,6 +39,7 @@ export const LAB_META = {
   noise: { id: 'noise', exam: 'u2', title: 'Noise' },
   attitude: { id: 'attitude', exam: 'u3', title: 'Attitude' },
   spin: { id: 'spin', exam: 'u3', title: 'Spin' },
+  pointing: { id: 'pointing', exam: 'u3', title: 'Pointing' },
 };
 
 export const CHAPTER_TITLES = {

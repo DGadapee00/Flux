@@ -22,7 +22,8 @@
     <a href="#s3"><span>3</span>Quaternions</a>
     <h3>Reference</h3>
     <a href="#s4"><span>4</span>Euler’s equations and spin stability</a>
-    <a href="#s5"><span>5</span>Formula sheet</a>
+    <a href="#s5"><span>5</span>Feedback and PID</a>
+    <a href="#s6"><span>6</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -124,7 +125,32 @@ I_1\dot\omega_1 = (I_2 - I_3)\,\omega_2\omega_3, \qquad I_2\dot\omega_2 = (I_3 -
 </section>
 
 <section class="topic" id="s5">
-<h2><span class="n">5</span>Formula sheet</h2>
+<h2><span class="n">5</span>Feedback and PID</h2>
+<p>A reaction wheel holds the satellite on target: a sensor measures the pointing error, a controller turns it into a torque command, and the wheel spins up to push back. Gains chosen by feel can make that loop ring, or worse.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>One axis with inertia \(J\) under a disturbance \(d\), and a wheel that answers its command \(u\) with a lag \(\tau\):</p>
+\[
+J\ddot\theta = T + d, \qquad \tau\dot T = u - T, \qquad u = -\left(K_p\theta + K_d\dot\theta + K_i\!\int\!\theta\,dt\right).
+\]
+<p>With \(G(s) = 1/\big(Js^2(\tau s + 1)\big)\) and \(C(s) = K_p + K_d s + K_i/s\), the closed-loop poles are the roots of \(1 + C(s)G(s) = 0\):</p>
+\[
+J\tau s^4 + Js^3 + K_ds^2 + K_ps + K_i = 0.
+\]
+<p>Every pole must sit left of the imaginary axis. With \(K_d = K_i = 0\) the \(s\) term is missing and some pole always lies on the right: P alone never settles. For PD, Routh's test gives stability only while \(K_p < K_d/\tau\). PD settles at \(\theta = d/K_p\); the integral term keeps pushing until the error is zero.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · holding against 10 mN·m</span>
+<p>\(J = 10\) kg·m², \(\tau = 0.5\) s, \(K_p = 10\), \(K_d = 20\), \(K_i = 0\). The poles are \(0\), \(-0.639\) and \(-0.681 \pm 1.633i\): stable, as \(10 < K_d/\tau = 40\). The slowest decays as \(e^{-0.639t}\), so the loop settles in about \(4/0.639 = 6.26\) s, at</p>
+\[
+\theta = \frac{d}{K_p} = \frac{0.01}{10} = 10^{-3}\ \text{rad} = 0.0573^\circ.
+\]
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Turning up the gain to hold tighter. A larger \(K_p\) shrinks the offset only until it meets \(K_d/\tau\); past that the wheel's lag turns the push into a growing swing. Read the poles before raising a gain.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Formula sheet</h2>
 \[
 R = R_z(\psi)R_y(\theta)R_x(\phi), \qquad R^{\mathsf T}R = I, \qquad \hat{\mathbf x}_\text{body} = (\cos\psi\cos\theta,\ \sin\psi\cos\theta,\ -\sin\theta).
 \]
@@ -137,9 +163,12 @@ R = R_z(\psi)R_y(\theta)R_x(\phi), \qquad R^{\mathsf T}R = I, \qquad \hat{\mathb
 \[
 I_1\dot\omega_1 = (I_2 - I_3)\omega_2\omega_3 + M_1, \qquad \lambda_\text{middle} = \omega_0\sqrt{\frac{(I_2 - I_1)(I_3 - I_2)}{I_1I_3}}, \qquad I_\text{box} = \frac{m(b^2 + c^2)}{12}.
 \]
+\[
+1 + C(s)G(s) = 0, \qquad J\tau s^4 + Js^3 + K_ds^2 + K_ps + K_i = 0, \qquad \theta_\text{PD} = \frac{d}{K_p}, \qquad K_p < \frac{K_d}{\tau}.
+\]
 </section>
 
 </main>
-<footer>Our own notes, written for Flux. Read alongside MIT 16.07 Dynamics, Lecture 3, on coordinate transformations, and Lecture 28, on Euler's equations.</footer>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.07 Dynamics, Lecture 3, on coordinate transformations, and Lecture 28, on Euler's equations, and MIT 16.06 on feedback.</footer>
 </body>
 </html>

@@ -2,9 +2,17 @@
  * Unit 3 coaching: traps (the wrong value a named mistake gives) and their fixes, per template.
  * Folded into the bank by src/problems/index.js.
  */
-import { angleRate, tumbleRate } from '../bank/u3.js';
+import { angleRate, offsetDeg, tumbleRate } from '../bank/u3.js';
 
 export default {
+  'u3.6.offset': {
+    traps: {
+      th: [
+        [($) => offsetDeg($, 'rad'), 'd/K_p comes out in radians: multiply by 180/π for degrees.'],
+        [($) => offsetDeg($, 'times'), 'A stiffer loop holds closer: the offset is d divided by K_p, not times it.'],
+      ],
+    },
+  },
   'u3.4.tumble-rate': {
     traps: {
       lam: [

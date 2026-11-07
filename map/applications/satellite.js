@@ -188,11 +188,12 @@ export const SATELLITE = {
         { concept: 'angular-momentum', course: 'egn3321', lab: 'spin' },
         { concept: 'attitude-rotations', course: 'satellite', lab: 'attitude' },
         { concept: 'euler-rigid-body', course: 'satellite', lab: 'spin' },
+        { concept: 'feedback-control', course: 'satellite', lab: 'pointing' },
       ],
       demonstrate: 'Use your mass layout to estimate inertia. Predict a turn under a stated torque and check its angular impulse. Define a pointing-error target and explain how feedback would correct a disturbance.',
       deliverable: 'A pointing model, torque estimate and actuator power allowance.',
       interface: 'Give Communications and Payload a pointing limit. Return actuator demand to the power budget.',
-      gap: 'Reaction-wheel saturation, attitude sensing and a closed-loop pointing lab remain project gaps.',
+      gap: 'The Pointing lab closes the loop on one axis. Reaction-wheel saturation and attitude sensing remain project gaps.',
     },
     {
       id: 'communications', title: 'Communications', part: 'Radio + ground link', requires: ['orbit', 'power', 'attitude', 'payload'],

@@ -7,6 +7,7 @@ const loaders = {
   noise: () => import('./noise.js'),
   attitude: () => import('./attitude.js'),
   spin: () => import('./spin.js'),
+  pointing: () => import('./pointing.js'),
 };
 
 const labs = createLabLoader(loaders);

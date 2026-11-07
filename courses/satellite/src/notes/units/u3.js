@@ -10,6 +10,7 @@ export default {
     { id: 's2', n: 2, title: 'Gimbal lock', lab: 'attitude', ch: ['3'], topics: ['gimbal-lock'] },
     { id: 's3', n: 3, title: 'Quaternions', lab: 'attitude', ch: ['3'], topics: ['quaternion'] },
     { id: 's4', n: 4, title: 'Euler’s equations and spin stability', lab: 'spin', ch: ['3'], topics: ['spin'], home: true },
-    { id: 's5', n: 5, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's5', n: 5, title: 'Feedback and PID', lab: 'pointing', ch: ['3'], topics: ['feedback'], home: true },
+    { id: 's6', n: 6, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

@@ -17,6 +17,9 @@ export const tumbleRate = ($, root = true, den = 'outer') => {
   return $.w0 * (root ? Math.sqrt(k) : k);
 };
 export { inertias };
+/** The pointing problem: disturbances (N·m) and the steady PD offset in degrees. */
+export const DIST = { small: 0.002, large: 0.01 };
+export const offsetDeg = ($, mode = 'right') => (mode === 'rad' ? DIST[$.dist] / $.Kp : mode === 'times' ? (DIST[$.dist] * $.Kp * 180) / Math.PI : (DIST[$.dist] / $.Kp) * (180 / Math.PI));
 export const noseComponent = ($) => ($.comp === 'x' ? Math.cos($.psi) * Math.cos($.theta) : Math.sin($.psi) * Math.cos($.theta));
 
 export default [
@@ -168,5 +171,61 @@ export default [
       read: (c) => ({ d: c.flips > 0 ? 'flips' : 'steady' }),
     },
     cases: [kase('the middle axis', { axis: 'middle' }, { d: 'flips' })],
+  }),
+
+  problem({
+    id: 'u3.6.offset',
+    title: 'How far off target?',
+    exam: 'u3',
+    ch: '3',
+    lab: 'pointing',
+    src: 'Flux, written for the Pointing lab',
+    topics: ['feedback'],
+    principles: ['feedback'],
+    vars: { dist: choice(['small', 'a steady 2 mN·m disturbance torque'], ['large', 'a steady 10 mN·m disturbance torque']), Kp: range(5, 30, 5, 'N·m/rad') },
+    text: (T) => `A reaction wheel holds one axis of a satellite under PD control, K_p = ${T.Kp} N·m/rad and K_d = 20 N·m·s/rad, against ${T.dist}. The loop is stable. Once it settles, how far off target does the satellite point, in degrees?`,
+    parts: [num('th', ($) => offsetDeg($), '°', { label: 'θ' })],
+    level: 2,
+    hints: ['In steady state nothing moves, so the wheel’s torque must cancel the disturbance.', 'The PD torque at rest is K_p θ, so θ = d/K_p, in radians.'],
+    steps: ($) => [String.raw`$\theta = d/K_p = ${DIST[$.dist]}/${$.Kp} = ${(DIST[$.dist] / $.Kp).toExponential(2)}$ rad $= ${Number(offsetDeg($).toPrecision(3))}^\circ$`],
+    sim: {
+      scenario: 'pd',
+      setup(s, $) {
+        Object.assign(s, { Kp: $.Kp, Kd: 20, Ki: 0, tau: 0.5, dmN: DIST[$.dist] * 1000 });
+      },
+      read: (c) => ({ th: c.offsetDeg }),
+    },
+    cases: [kase('10 mN·m at K_p = 10', { dist: 'large', Kp: 10 }, { th: 0.0573 })],
+  }),
+
+  problem({
+    id: 'u3.7.what-breaks',
+    title: 'What breaks the loop?',
+    exam: 'u3',
+    ch: '3',
+    kind: 'conceptual',
+    lab: 'pointing',
+    src: 'Flux, written for the Pointing lab',
+    topics: ['feedback'],
+    principles: ['feedback'],
+    vars: { change: choice(['kp', 'K_p is raised from 10 to 60'], ['kd', 'K_d is raised from 20 to 40'], ['lag', 'the wheel is swapped for a slower one, τ = 3 s']) },
+    text: (T) => `A PD loop holds a satellite’s pointing with K_p = 10 and K_d = 20 through a reaction wheel that lags by τ = 0.5 s, and it is stable. What happens if ${T.change}?`,
+    parts: [
+      pick('d', 'the loop', [
+        ['stable', 'it stays stable', 'More damping, or more margin against the lag, keeps every pole in the left half plane.'],
+        ['unstable', 'it rings and the swing grows', 'The PD loop with a lag is stable only while K_p < K_d/τ. Crossing that puts a pair of poles in the right half plane.'],
+      ], ($) => ($.change === 'kd' ? 'stable' : 'unstable')),
+    ],
+    level: 2,
+    hints: ['The characteristic equation is Jτs³ + Js² + K_d s + K_p = 0.', 'By Routh’s test it is stable while K_p < K_d/τ.'],
+    steps: ($) => [{ kp: 'K_d/τ = 40 < 60: unstable.', kd: 'K_d/τ = 80 > 10: stable, and better damped.', lag: 'K_d/τ = 6.7 < 10: unstable.' }[$.change]],
+    sim: {
+      scenario: 'pd',
+      setup(s, $) {
+        Object.assign(s, { Kp: 10, Kd: 20, Ki: 0, tau: 0.5 }, { kp: { Kp: 60 }, kd: { Kd: 40 }, lag: { tau: 3 } }[$.change]);
+      },
+      read: (c) => ({ d: c.stable ? 'stable' : 'unstable' }),
+    },
+    cases: [kase('a slower wheel', { change: 'lag' }, { d: 'unstable' })],
   }),
 ];
