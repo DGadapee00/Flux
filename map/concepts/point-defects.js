@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Plot the vacancy fraction against temperature on linear and Arrhenius axes. It corrects the idea that vacancies are flaws a perfect process would remove: they are an equilibrium population.',
+  labs: [
+    { course: 'ema3010', lab: 'vacancy', notes: ['s1'], note: 'The free energy per site against the vacancy fraction, lowest at c* = e^(−Q/kT) and never at zero, beside the Arrhenius line ln c* against 1/T.' },
+  ],
 };

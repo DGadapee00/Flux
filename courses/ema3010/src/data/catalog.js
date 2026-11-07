@@ -14,15 +14,26 @@ export const EXAMS = [
     labs: ['bond', 'crystal'],
     coming: ['X-ray diffraction'],
   },
+  {
+    id: 'u2',
+    n: 2,
+    title: 'Defects',
+    chapters: '2',
+    date: 'Unit 2',
+    labs: ['vacancy'],
+    coming: ['Dislocations'],
+  },
 ];
 
 export const LAB_META = {
   bond: { id: 'bond', exam: 'u1', title: 'Bond' },
   crystal: { id: 'crystal', exam: 'u1', title: 'Crystal' },
+  vacancy: { id: 'vacancy', exam: 'u2', title: 'Vacancy' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Bonding and structure',
+  2: 'Defects',
 };
 
 export function examById(id) {

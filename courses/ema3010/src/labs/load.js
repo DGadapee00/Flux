@@ -5,6 +5,7 @@ import { PREDICTIONS } from './predictions.js';
 const loaders = {
   bond: () => import('./bond.js'),
   crystal: () => import('./crystal.js'),
+  vacancy: () => import('./vacancy.js'),
 };
 
 const labs = createLabLoader(loaders);
