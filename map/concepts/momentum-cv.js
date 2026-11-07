@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Aim a water jet at a fixed vane and then at a vane moving away from it. It corrects the idea that the force depends on the jet’s speed alone: on a moving vane only the relative speed counts, and the force is the momentum flux the vane turns.',
+  labs: [
+    { course: 'eml3015', lab: 'vane', notes: ['s9'], note: 'A water jet turned by a fixed or moving vane: 180° doubles the force of 90°, and a vane running at half the jet’s speed feels a quarter of it.' },
+  ],
 };

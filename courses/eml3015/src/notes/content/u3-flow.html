@@ -27,7 +27,8 @@
     <a href="#s6"><span>6</span>Models and similitude</a>
     <a href="#s7"><span>7</span>Boundary layers</a>
     <a href="#s8"><span>8</span>A system passing through a box</a>
-    <a href="#s9"><span>9</span>Formula sheet</a>
+    <a href="#s9"><span>9</span>Momentum on a control volume</a>
+    <a href="#s10"><span>10</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -219,7 +220,29 @@ F = \rho Q\,(u_\text{out} - u_\text{in}) = 1000(0.01)(0.941 - 0.696) = 2.46\ \te
 </section>
 
 <section class="topic" id="s9">
-<h2><span class="n">9</span>Formula sheet</h2>
+<h2><span class="n">9</span>Momentum on a control volume</h2>
+<p>With momentum for the property in the transport theorem, the force on whatever is inside a control volume is the momentum flux out minus the momentum flux in. A jet turned by a vane is the plainest case.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Ride with a vane moving away at \(U\). The flow is steady, the water arrives at \(w = V - U\) and, with no friction and the same pressure all round, leaves at \(w\) turned through \(\theta\). Each second \(\dot m = \rho A w\) passes, so the force on the water is</p>
+\[
+\mathbf F_\text{water} = \dot m\,(\mathbf w_\text{out} - \mathbf w_\text{in}) = \rho A w^2\,(\cos\theta - 1,\ \sin\theta),
+\]
+<p>and the vane feels the opposite: \(F_x = \rho A w^2(1 - \cos\theta)\) along the jet. The relative speed enters twice, so half of it is a quarter of the force.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a jet on a turning vane</span>
+<p>A 2 cm jet at 20 m/s: \(A = 3.14\times10^{-4}\) m² and \(\dot m = 998(3.14\times10^{-4})(20) = 6.27\) kg/s. A fixed vane turning it 180° feels</p>
+\[
+F_x = 6.27(20)(1 - \cos 180^\circ) = 250.8\ \text{N},
+\]
+<p>twice what a 90° vane feels. Running away at 10 m/s, it feels a quarter: 62.7 N.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the jet's own speed for a moving vane. The water meets the vane at \(V - U\), and only that much arrives each second: the force goes as \((V - U)^2\).</p>
+</div>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Formula sheet</h2>
 \[
 \frac{D\mathbf v}{Dt} = \frac{\partial\mathbf v}{\partial t} + (\mathbf v\cdot\nabla)\mathbf v, \qquad T = \int \frac{dx}{u}, \qquad \rho\,\frac{D\mathbf v}{Dt} = -\nabla p + \rho\,\mathbf g,
 \]
@@ -237,6 +260,9 @@ u = \frac{\Delta p}{4\mu L}(R^2 - r^2), \qquad Q = \frac{\pi R^4\,\Delta p}{8\mu
 \]
 \[
 \frac{dB_\text{sys}}{dt} = \frac{d}{dt}\int_\text{CV}\rho b\,dV + \int_\text{CS}\rho b\,(\mathbf v\cdot\mathbf n)\,dA, \qquad F = \rho Q\,(u_\text{out} - u_\text{in})\ \text{(steady, one-dimensional)}.
+\]
+\[
+\sum\mathbf F = \sum_\text{out}\dot m\,\mathbf w - \sum_\text{in}\dot m\,\mathbf w, \qquad F_x = \rho A (V - U)^2(1 - \cos\theta)\ \text{(one vane)}.
 \]
 </section>
 

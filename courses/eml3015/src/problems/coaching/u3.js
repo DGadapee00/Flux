@@ -3,13 +3,21 @@
  * Folded into the bank by src/problems/index.js.
  */
 import { bendPressure } from '@flux/subjects/mechanics/flowfields.js';
-import { SCALE, STREAM, boxForce, deltaAt, nuOf, pipeQ } from '../bank/u3.js';
+import { SCALE, STREAM, boxForce, deltaAt, nuOf, pipeQ, vaneFx } from '../bank/u3.js';
 
 const RATIO = { gentle: 2, medium: 4, sharp: 6 };
 const RHO = { water: 998, air: 1.2 };
 const bend = ($) => bendPressure({ rho: RHO[$.fluid] ?? 998, V: $.V, R: $.R, w: $.w, profile: 'vortex' });
 
 export default {
+  'u3.17.vane-force': {
+    traps: {
+      F: [
+        [($) => vaneFx($, 'none'), 'The water still leaves with momentum: take its exit momentum flux away from the incoming, which gives the factor 1 − cos θ.'],
+        [($) => vaneFx($, 'minus'), 'The incoming flux counts too: the change along the jet is w − w cos θ, not −w cos θ.'],
+      ],
+    },
+  },
   'u3.15.box-force': {
     traps: {
       F: [
