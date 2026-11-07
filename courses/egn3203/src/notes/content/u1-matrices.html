@@ -25,9 +25,10 @@
     <a href="#s5"><span>5</span>Determinant, inverse and conditioning</a>
     <a href="#s6"><span>6</span>Rank and solvability</a>
     <a href="#s7"><span>7</span>Eigenvalues and eigenvectors</a>
-    <h3>Reference</h3>
     <a href="#s8"><span>8</span>Projection and least squares</a>
-    <a href="#s9"><span>9</span>Formula sheet</a>
+    <a href="#s10"><span>9</span>LU and the residual</a>
+    <h3>Reference</h3>
+    <a href="#s9"><span>10</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -181,6 +182,24 @@ A^{\mathsf T}A\,\hat{\mathbf x} = A^{\mathsf T}\mathbf b.
 </div>
 <div class="box fix"><span class="tag">Common mistake</span>
 <p>Projecting onto each column and adding. That works only for perpendicular columns. Otherwise solve the normal equations, or orthogonalise first.</p>
+</div>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">9</span>LU and the residual</h2>
+<p>Elimination done once and kept is LU factorization. A solver keeps the multipliers in \(L\) and the eliminated rows in \(U\), so a new right-hand side costs only two triangular solves. How much to trust the answer is a separate question.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>With row swaps for the larger pivot, \(PA = LU\). To solve \(A\mathbf x = \mathbf b\), solve \(L\mathbf y = P\mathbf b\) forward, then \(U\mathbf x = \mathbf y\) backward. If \(\mathbf b\) changes by \(\delta\mathbf b\), then \(A\,\delta\mathbf x = \delta\mathbf b\), and taking norms,</p>
+\[
+\frac{\|\delta\mathbf x\|}{\|\mathbf x\|} \le \kappa(A)\,\frac{\|\delta\mathbf b\|}{\|\mathbf b\|}, \qquad \kappa(A) = \|A\|\,\|A^{-1}\|.
+\]
+<p>The residual \(\mathbf r = \mathbf b - A\hat{\mathbf x}\) of a wrong answer \(\hat{\mathbf x}\) is the change in \(\mathbf b\) that would make it right, so a small residual can hide an error up to \(\kappa\) times larger.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two nearly parallel lines</span>
+<p>\(x + y = 2\) and \(x + 1.01y = 2\) cross at (2, 0), and \(\kappa = 402\). Nudge the second right-hand side to 2.01, a change of 0.35% in \(\mathbf b\). The crossing moves to (1, 1), a change of 71% in \(\mathbf x\). Yet the old answer (2, 0) fits the nudged system with a residual of only 0.35%.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Checking an answer by its residual alone. A tiny residual says the equations are nearly satisfied; with a large \(\kappa\) many very different answers satisfy them nearly as well.</p>
 </div>
 </section>
 

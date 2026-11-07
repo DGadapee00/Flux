@@ -67,4 +67,12 @@ export default {
       ],
     },
   },
+  'u1.13.nudge': {
+    traps: {
+      v: [
+        [($) => $.delta, 'The answer does not move by the size of the nudge: subtracting the equations gives εy = δ, so y = δ/ε.'],
+        [($) => $.delta * Number($.eps), 'Divide by ε, not multiply: the smaller ε, the further the crossing moves.'],
+      ],
+    },
+  },
 };

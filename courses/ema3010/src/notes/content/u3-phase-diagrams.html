@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Phase diagrams</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EMA 3010 · Materials Science · Unit 3 · after the DoITPoMS package on phase diagrams and solidification</div>
+  <h1>Phase diagrams</h1>
+  <p class="lede">How to read which phases an alloy holds at a temperature, what each phase is made of, and how much of each there is.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Two-phase regions</h3>
+    <a href="#s1"><span>1</span>Reading a binary diagram</a>
+    <a href="#s2"><span>2</span>The lever rule</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Two-phase regions</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Reading a binary diagram</h2>
+<p>A binary phase diagram maps, for each temperature and overall composition, which phases are stable. Copper and nickel mix in any proportion, as liquid and as solid, so between their melting points they share a lens: above the liquidus all liquid, below the solidus all solid α, between them both.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>In equilibrium each element has the same chemical potential in both phases. Treat both as ideal solutions: then for element \(i\), with melting point \(T_i\) and heat of fusion \(\Delta H_i\),</p>
+\[
+\frac{x^\alpha_i}{x^L_i} = \exp\!\left[\frac{\Delta H_i}{R}\left(\frac1T - \frac1{T_i}\right)\right].
+\]
+<p>The two equations, one for each element, fix the two phases' compositions at each temperature. Geometrically, one straight line touches both phases' Gibbs energy curves, and its points of contact are those compositions: the common tangent.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the tie line at 1550 K</span>
+<p>Draw a horizontal line at 1550 K across the lens. It meets the liquidus at 47.1% nickel and the solidus at 54.1%. Any alloy between them, at this temperature, is a liquid of 47.1% nickel and a solid of 54.1%.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading a phase's composition at the alloy's own point. The alloy's point gives the overall composition; each phase's composition is at the end of the tie line, on the boundary of its own region.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>The lever rule</h2>
+<p>The tie line gives what each phase is made of. How much of each there is follows from a mass balance on nickel.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>An alloy of overall composition \(x_0\) splits into liquid of \(x_L\) and solid of \(x_\alpha\), with shares \(W_L + W_\alpha = 1\). Nickel balances: \(W_L x_L + W_\alpha x_\alpha = x_0\). So</p>
+\[
+W_L = \frac{x_\alpha - x_0}{x_\alpha - x_L}, \qquad W_\alpha = \frac{x_0 - x_L}{x_\alpha - x_L}.
+\]
+<p>Each phase's share is the arm of the tie line on the far side of the alloy, like a lever balanced at \(x_0\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · 50% nickel at 1550 K</span>
+<p>\(W_L = (54.1 - 50)/(54.1 - 47.1) = 0.586\): the alloy is 58.6% liquid and 41.4% solid. The liquid holds 47.1% nickel; the 58.6% is how much of the alloy is liquid. Two different numbers, read from two different places.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Ends of the tie line for compositions; opposite arms for amounts. As the alloy cools through the lens, both phases grow richer in copper, and the solid's share rises from 0 to 1.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+\frac{x^\alpha_i}{x^L_i} = \exp\!\left[\frac{\Delta H_i}{R}\left(\frac1T - \frac1{T_i}\right)\right], \qquad W_L = \frac{x_\alpha - x_0}{x_\alpha - x_L}, \qquad W_\alpha = \frac{x_0 - x_L}{x_\alpha - x_L}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Compositions are atom fractions from an ideal-solution model of copper and nickel. Read alongside the DoITPoMS teaching package on phase diagrams and solidification.</footer>
+</body>
+</html>

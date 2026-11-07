@@ -10,6 +10,7 @@ const loaders = {
   superpose: () => import('./superpose.js'),
   thevenin: () => import('./thevenin.js'),
   switch: () => import('./switch.js'),
+  opamp: () => import('./opamp.js'),
 };
 
 const labs = createLabLoader(loaders);

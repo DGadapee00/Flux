@@ -40,6 +40,15 @@ export const EXAMS = [
     labs: ['switch'],
     coming: ['Second-order circuits'],
   },
+  {
+    id: 'u5',
+    n: 5,
+    title: 'Operational amplifiers',
+    chapters: '5',
+    date: 'Unit 5',
+    labs: ['opamp'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
@@ -50,6 +59,7 @@ export const LAB_META = {
   superpose: { id: 'superpose', exam: 'u3', title: 'Superpose' },
   thevenin: { id: 'thevenin', exam: 'u3', title: 'Thévenin' },
   switch: { id: 'switch', exam: 'u4', title: 'Switch' },
+  opamp: { id: 'opamp', exam: 'u5', title: 'Op amp' },
 };
 
 export const CHAPTER_TITLES = {
@@ -57,6 +67,7 @@ export const CHAPTER_TITLES = {
   2: 'Sinusoidal steady state',
   3: 'Circuit theorems',
   4: 'First-order circuits',
+  5: 'Operational amplifiers',
 };
 
 export function examById(id) {
