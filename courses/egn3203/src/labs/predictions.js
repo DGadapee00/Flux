@@ -187,6 +187,43 @@ export const PREDICTIONS = {
       why: 'It falls, from 0.04 to about 10⁻⁵, but it fell much further on the way down: near h = 10⁻⁸ it was 10⁻⁹. Past there, round-off over h wins.',
     },
   ],
+  condition: [
+    {
+      id: 'cd-closer',
+      scenario: 'ill',
+      ask: 'Make the lines ten times closer to parallel, ε from 0.01 to 0.001, with the same nudge δ = 0.01. By what factor does the change in the answer grow?',
+      apply(s) { s.leps = -3; },
+      watch: [{ id: 'x', label: 'change in x', get: (c) => c.relX }],
+      mode: 'factor',
+      factors: [10, 1, 100],
+      expect: { x: 10 },
+      why: 'The crossing moves by δ/ε along the lines: ten times nearer parallel, ten times further. κ grows the same way, from 402 to 4002.',
+    },
+    {
+      id: 'cd-resid',
+      scenario: 'well',
+      ask: 'Keep the nudge, but turn the lines from ε = 1 to nearly parallel, ε = 0.01. What happens to the residual of the old answer, and to how far the answer moves?',
+      apply(s) { s.leps = -2; },
+      watch: [
+        { id: 'r', label: 'residual of the old answer', get: (c) => c.relR },
+        { id: 'x', label: 'change in x', get: (c) => c.relX },
+      ],
+      mode: 'dir',
+      expect: { r: 'same', x: 'bigger' },
+      why: 'The old answer misses the nudged equation by exactly δ whatever the lines’ angle, so the residual stays at 0.35%. The answer itself moves from 0.71% to 71%. The residual cannot tell the two cases apart.',
+    },
+    {
+      id: 'cd-double',
+      scenario: 'ill',
+      ask: 'Double the nudge, δ from 0.01 to 0.02. By what factor does the change in the answer grow?',
+      apply(s) { s.delta = 0.02; },
+      watch: [{ id: 'x', label: 'change in x', get: (c) => c.relX }],
+      mode: 'factor',
+      factors: [2, 4, 1],
+      expect: { x: 2 },
+      why: 'The system is linear: twice the nudge, twice the change. κ sets how big the change is for a given nudge, not how it scales.',
+    },
+  ],
   eigen: [
     {
       id: 'eg-rotate',

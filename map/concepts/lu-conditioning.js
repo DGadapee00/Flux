@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Two nearly parallel lines whose crossing you solve for, with a slider that nudges one right-hand side. It corrects the idea that a tiny residual means an accurate answer: the solution can move far while the residual stays near zero.',
+  labs: [
+    { course: 'egn3203', lab: 'condition', notes: ['s10', 's5'], note: 'Two nearly parallel lines solved by PA = LU, with a nudge to one right-hand side: with κ = 402 a 0.35% nudge moves the answer 71%, while the old answer still fits to 0.35%. Checked by Cramer’s rule.' },
+  ],
 };

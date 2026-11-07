@@ -7,5 +7,6 @@ export default {
   s6: [{ tag: 'a third row that adds nothing', lab: 'rank', scenario: 'line', read: (c) => ({ rank: [c.rankA, 2], 'null x': [c.xn[0], 1.5], 'null z': [c.xn[2], -2] }) }],
   s7: [{ tag: 'a symmetric matrix', lab: 'eigen', scenario: 'symmetric', read: (c) => ({ 'λ₁': [c.values[0], 3], 'λ₂': [c.values[1], 1], 'first direction (°)': [(c.found[0].angle * 180) / Math.PI, 45] }) }],
   s8: [{ tag: 'arrows at 45°', lab: 'projection', scenario: 'slant', read: (c) => ({ 'x̂₁': [c.xhat[0], 0.4], 'x̂₂': [c.xhat[1], 1.131], 'shadows miss by': [c.naiveErr, 1.02] }) }],
+  s10: [{ tag: 'two nearly parallel lines', lab: 'condition', scenario: 'ill', read: (c) => ({ κ: [c.kappa, 402], 'nudge (%)': [100 * c.relB, 0.354], 'change in x (%)': [100 * c.relX, 70.7], 'residual (%)': [100 * c.relR, 0.353] }) }],
   s4: [{ tag: 'a tiny pivot', lab: 'elimination', scenario: 'tiny-pivot', read: (c) => ({ x1: [c.x[0], 1] }) }],
 };

@@ -369,4 +369,60 @@ export default [
     },
     cases: [kase('slanted arrows', { arrows: 'slant' }, { d: 'no' })],
   }),
+  problem({
+    id: 'u1.13.nudge',
+    title: 'A small nudge, a large move',
+    exam: 'u1',
+    ch: '1',
+    lab: 'condition',
+    src: 'Flux, written for the Condition lab',
+    topics: ['conditioning'],
+    principles: ['conditioning'],
+    vars: { eps: choice(['0.1', '0.1'], ['0.01', '0.01'], ['0.001', '0.001']), delta: range(0.001, 0.01, 0.001, '') },
+    text: (T) => `The system x + y = 2, x + (1 + ε)y = 2 has the solution (2, 0). Take ε = ${T.eps} and change the second right-hand side to 2 + ${T.delta}. Find the new y. (x is then 2 − y.)`,
+    parts: [num('v', ($) => $.delta / Number($.eps), '', { label: 'y', abs: 1e-6 })],
+    level: 2,
+    hints: ['Subtract the first equation from the second.', 'εy = δ, so y = δ/ε; then x = 2 − y.'],
+    steps: ($) => [String.raw`$\varepsilon y = \delta \Rightarrow y = ${$.delta}/${$.eps} = ${Number(($.delta / Number($.eps)).toPrecision(4))}$, $x = 2 - y = ${Number((2 - $.delta / Number($.eps)).toPrecision(4))}$`],
+    sim: {
+      scenario: 'ill',
+      setup(s, $) {
+        Object.assign(s, { leps: Math.log10(Number($.eps)), delta: $.delta });
+      },
+      read: (c) => ({ v: c.x[1] }),
+    },
+    cases: [kase('the notes’ lines', { eps: '0.01', delta: 0.01 }, { v: 1 })],
+  }),
+
+  problem({
+    id: 'u1.14.residual',
+    title: 'Is a small residual enough?',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'condition',
+    src: 'Flux, written for the Condition lab',
+    topics: ['conditioning'],
+    principles: ['conditioning'],
+    vars: { k: choice(['big', 'κ(A) = 10⁶'], ['small', 'κ(A) = 2']) },
+    text: (T) => `A solver returns x̂ for Ax = b, and the residual b − Ax̂ is 10⁻⁸ of b in size. The matrix has ${T.k}. What can you say about how close x̂ is to the true x?`,
+    parts: [
+      pick('close', 'x̂', [
+        ['close', 'it is close: within about κ × 10⁻⁸', 'The error is at most κ times the relative residual. With κ = 2 that is tiny.'],
+        ['far', 'it could be off by up to about 1%', 'The bound is κ × 10⁻⁸; with κ = 10⁶ that allows a 1% error even though the equations are nearly satisfied.'],
+        ['exact', 'it is exact to about 10⁻⁸ whatever A is', 'The residual measures fit, not accuracy. κ converts one into the other.'],
+      ], ($) => ($.k === 'big' ? 'far' : 'close')),
+    ],
+    level: 1,
+    hints: ['‖δx‖/‖x‖ ≤ κ ‖r‖/‖b‖.', 'Multiply the relative residual by κ.'],
+    steps: ($) => [$.k === 'big' ? 'κ × 10⁻⁸ = 10⁻²: up to 1% off.' : 'κ × 10⁻⁸ = 2 × 10⁻⁸: close.'],
+    sim: {
+      scenario: 'well',
+      setup(s, $) {
+        if ($.k === 'big') s.leps = -3;
+      },
+      read: (c) => ({ close: c.relX / c.relR > 100 ? 'far' : 'close' }),
+    },
+    cases: [kase('a large κ', { k: 'big' }, { close: 'far' })],
+  }),
 ];

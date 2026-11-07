@@ -14,6 +14,7 @@ export default {
     { id: 's6', n: 6, title: 'Rank and solvability', lab: 'rank', ch: ['1'], topics: ['rank'], home: true },
     { id: 's7', n: 7, title: 'Eigenvalues and eigenvectors', lab: 'eigen', ch: ['1'], topics: ['eigen'], home: true },
     { id: 's8', n: 8, title: 'Projection and least squares', lab: 'projection', ch: ['1'], topics: ['projection'], home: true },
-    { id: 's9', n: 9, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's10', n: 9, title: 'LU and the residual', lab: 'condition', ch: ['1'], topics: ['conditioning'], home: true },
+    { id: 's9', n: 10, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

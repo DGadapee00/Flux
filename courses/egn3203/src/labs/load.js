@@ -9,6 +9,7 @@ const loaders = {
   rank: () => import('./rank.js'),
   projection: () => import('./projection.js'),
   eigen: () => import('./eigen.js'),
+  condition: () => import('./condition.js'),
   roundoff: () => import('./roundoff.js'),
   truncation: () => import('./truncation.js'),
   roots: () => import('./roots.js'),
