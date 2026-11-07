@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Switch an RC and an RL circuit that each have several resistors, and mark the time constant. It corrects the idea that \\(\\tau\\) uses the source’s resistor alone: it uses the Thévenin resistance the capacitor or coil sees, which changes when the switch moves.',
+  labs: [
+    { course: 'eel3111', lab: 'switch', notes: ['s1', 's2'], note: 'A source switched into and out of a circuit of three resistors and a capacitor or an inductor: τ uses the Thévenin resistance the element sees, which changes when the switch moves, and an inductor’s voltage jumps past the supply when the switch opens.' },
+  ],
 };

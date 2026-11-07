@@ -31,6 +31,15 @@ export const EXAMS = [
     labs: ['superpose', 'thevenin'],
     coming: [],
   },
+  {
+    id: 'u4',
+    n: 4,
+    title: 'First-order circuits',
+    chapters: '4',
+    date: 'Unit 4',
+    labs: ['switch'],
+    coming: ['Second-order circuits'],
+  },
 ];
 
 export const LAB_META = {
@@ -40,12 +49,14 @@ export const LAB_META = {
   filter: { id: 'filter', exam: 'u2', title: 'Filter' },
   superpose: { id: 'superpose', exam: 'u3', title: 'Superpose' },
   thevenin: { id: 'thevenin', exam: 'u3', title: 'Thévenin' },
+  switch: { id: 'switch', exam: 'u4', title: 'Switch' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Methods of analysis',
   2: 'Sinusoidal steady state',
   3: 'Circuit theorems',
+  4: 'First-order circuits',
 };
 
 export function examById(id) {

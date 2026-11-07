@@ -138,6 +138,42 @@ export const PREDICTIONS = {
       why: 'Far below the square’s frequency, RC doubles and the capacitor charges half as far in each half period: the peak drops to 0.156 V, about half. The output is the integral of the input, scaled by 1/RC.',
     },
   ],
+  switch: [
+    {
+      id: 'sw-r1',
+      scenario: 'rc',
+      ask: 'Raise the source resistor R₁ from 1 kΩ to 4 kΩ. What happens to the time constant while the switch is closed, and after it opens?',
+      apply(s) { s.R1 = 4000; },
+      watch: [
+        { id: 'on', label: 'τ closed', get: (c) => c.tauOn },
+        { id: 'off', label: 'τ open', get: (c) => c.tauOff },
+      ],
+      mode: 'dir',
+      expect: { on: 'bigger', off: 'same' },
+      why: 'Closed, the capacitor sees R₃ + R₁ ∥ R₂: 8.67 ms becomes 15.3 ms. Open, R₁ is cut off and the capacitor discharges through R₃ + R₂ alone, so τ stays 22 ms.',
+    },
+    {
+      id: 'sw-final',
+      scenario: 'rc',
+      ask: 'Double R₁ to 2 kΩ. By what factor does the capacitor’s final voltage, with the switch closed, change?',
+      apply(s) { s.R1 = 2000; },
+      watch: [{ id: 'v', label: 'final voltage', get: (c) => c.final }],
+      mode: 'factor',
+      factors: [0.75, 0.5, 1],
+      expect: { v: 0.75 },
+      why: 'In steady DC the capacitor is a break and no current crosses R₃, so it sits at the divider voltage 12 × R₂/(R₁ + R₂): 8 V becomes 6 V.',
+    },
+    {
+      id: 'sw-spike',
+      scenario: 'rl',
+      ask: 'With the inductor, raise R₂ from 2 kΩ to 5 kΩ. Does the voltage across the inductor just after the switch opens get larger or smaller in size?',
+      apply(s) { s.R2 = 5000; },
+      watch: [{ id: 'v', label: 'size of the voltage at opening', get: (c) => Math.abs(c.vOpen) }],
+      mode: 'dir',
+      expect: { v: 'bigger' },
+      why: 'The inductor’s current, about 9 mA, cannot change at once, and with the switch open its only path is R₂ + R₃. The bigger that path, the bigger the voltage it takes to push the current through: 19.7 V becomes 49.5 V.',
+    },
+  ],
   superpose: [
     {
       id: 'sp-powers',

@@ -9,6 +9,7 @@ const loaders = {
   filter: () => import('./filter.js'),
   superpose: () => import('./superpose.js'),
   thevenin: () => import('./thevenin.js'),
+  switch: () => import('./switch.js'),
 };
 
 const labs = createLabLoader(loaders);
