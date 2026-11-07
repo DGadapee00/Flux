@@ -25,7 +25,8 @@
     <h3>Reference</h3>
     <a href="#s5"><span>5</span>Pressure-driven flow in a pipe</a>
     <a href="#s6"><span>6</span>Models and similitude</a>
-    <a href="#s7"><span>7</span>Formula sheet</a>
+    <a href="#s7"><span>7</span>Boundary layers</a>
+    <a href="#s8"><span>8</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -169,7 +170,33 @@ Q = \frac{\pi(0.002)^4(10^4)}{8(0.0562)} = 1.12\times10^{-6}\ \text{m}^3/\text{s
 </section>
 
 <section class="topic" id="s7">
-<h2><span class="n">7</span>Formula sheet</h2>
+<h2><span class="n">7</span>Boundary layers</h2>
+<p>A stream sliding along a plate sticks to it at the surface and keeps its full speed a little way off. Between the two is a thin layer where viscosity matters. Outside it, the flow behaves as if it had none.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>In the layer, Navier–Stokes simplifies because it is thin: changes across it are far faster than changes along it. Prandtl's boundary-layer equations follow, and on a flat plate they have a solution of one shape, stretched as the layer grows. With \(u/U = f'(\eta)\) and \(\eta = y\sqrt{U/\nu x}\),</p>
+\[
+f''' + \tfrac12 f f'' = 0, \qquad f(0) = f'(0) = 0, \quad f'(\infty) = 1.
+\]
+<p>Solved numerically, it gives \(f'' = 0.332\) at the wall and \(f' = 0.99\) at \(\eta = 4.91\). So</p>
+\[
+\delta = \frac{4.91\,x}{\sqrt{\mathrm{Re}_x}}, \qquad \tau_w = \frac{0.332\,\rho U^2}{\sqrt{\mathrm{Re}_x}}, \qquad \mathrm{Re}_x = \frac{Ux}{\nu}.
+\]
+<p>The layer grows as \(\sqrt x\) and thins as \(1/\sqrt U\). It stays laminar to about \(\mathrm{Re}_x = 5\times10^5\) on a smooth plate.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · air along a 1 m plate</span>
+<p>Air at 5 m/s, \(\nu = 1.54\times10^{-5}\) m²/s. At the trailing edge \(\mathrm{Re}_L = 5(1)/1.54\times10^{-5} = 3.25\times10^5\), still laminar, and</p>
+\[
+\delta = \frac{4.91(1)}{\sqrt{3.25\times10^5}} = 8.6\ \text{mm}.
+\]
+<p>Halfway along it is \(8.6/\sqrt2 = 6.1\) mm. At 10 m/s the layer turns turbulent at \(x = 5\times10^5\nu/U = 0.77\) m.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Scaling the layer with distance or speed directly. It goes as \(\sqrt{x}\) and \(1/\sqrt{U}\): twice the speed thins it by \(\sqrt2\), not by half.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Formula sheet</h2>
 \[
 \frac{D\mathbf v}{Dt} = \frac{\partial\mathbf v}{\partial t} + (\mathbf v\cdot\nabla)\mathbf v, \qquad T = \int \frac{dx}{u}, \qquad \rho\,\frac{D\mathbf v}{Dt} = -\nabla p + \rho\,\mathbf g,
 \]
@@ -181,6 +208,9 @@ u = \frac{\Delta p}{4\mu L}(R^2 - r^2), \qquad Q = \frac{\pi R^4\,\Delta p}{8\mu
 \]
 \[
 \#\Pi = n - r, \qquad \mathrm{Fr} = \frac{V}{\sqrt{gL}}, \qquad V_m = V_p\sqrt\lambda, \qquad \frac{\mathrm{Re}_m}{\mathrm{Re}_p} = \lambda^{3/2}\frac{\nu_p}{\nu_m}.
+\]
+\[
+\delta = \frac{4.91\,x}{\sqrt{\mathrm{Re}_x}}, \qquad \tau_w = \frac{0.332\rho U^2}{\sqrt{\mathrm{Re}_x}}, \qquad C_f = \frac{1.328}{\sqrt{\mathrm{Re}_L}}.
 \]
 </section>
 

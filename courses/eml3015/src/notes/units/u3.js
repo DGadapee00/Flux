@@ -12,6 +12,7 @@ export default {
     { id: 's4', n: 4, title: 'Mass in, mass out', lab: 'continuity', ch: ['6'], topics: ['continuity'], home: true },
     { id: 's5', n: 5, title: 'Pressure-driven flow in a pipe', lab: 'pipe', ch: ['6'], topics: ['poiseuille'], home: true },
     { id: 's6', n: 6, title: 'Models and similitude', lab: 'model', ch: ['6'], topics: ['similitude'], home: true },
-    { id: 's7', n: 7, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's7', n: 7, title: 'Boundary layers', lab: 'layer', ch: ['6'], topics: ['boundary-layer'], home: true },
+    { id: 's8', n: 8, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

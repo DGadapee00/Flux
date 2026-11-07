@@ -11,6 +11,7 @@ const loaders = {
   continuity: () => import('./continuity.js'),
   pipe: () => import('./pipe.js'),
   model: () => import('./model.js'),
+  layer: () => import('./layer.js'),
 };
 
 const labs = createLabLoader(loaders);

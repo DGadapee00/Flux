@@ -3,13 +3,21 @@
  * Folded into the bank by src/problems/index.js.
  */
 import { bendPressure } from '@flux/subjects/mechanics/flowfields.js';
-import { SCALE, pipeQ } from '../bank/u3.js';
+import { SCALE, STREAM, deltaAt, nuOf, pipeQ } from '../bank/u3.js';
 
 const RATIO = { gentle: 2, medium: 4, sharp: 6 };
 const RHO = { water: 998, air: 1.2 };
 const bend = ($) => bendPressure({ rho: RHO[$.fluid] ?? 998, V: $.V, R: $.R, w: $.w, profile: 'vortex' });
 
 export default {
+  'u3.13.delta': {
+    traps: {
+      d: [
+        [($) => ((4.91 * $.x) / ((STREAM[$.flow].U * $.x) / nuOf(STREAM[$.flow].fluid))) * 1000, 'Take the square root of Re_x: δ = 4.91x/√Re_x.'],
+        [($) => deltaAt($, 1) * 1000, 'Use the distance x to the point, not the whole plate, in both x and Re_x.'],
+      ],
+    },
+  },
   'u3.11.froude': {
     traps: {
       Vm: [

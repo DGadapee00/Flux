@@ -7,12 +7,17 @@ import { bendPressure, nozzleParticle } from '@flux/subjects/mechanics/flowfield
 import { cvClosed } from '@flux/subjects/mechanics/continuity.js';
 import { FLUIDS } from '@flux/subjects/mechanics/couette.js';
 import { poiseuille } from '@flux/subjects/mechanics/poiseuille.js';
+import { plate } from '@flux/subjects/mechanics/blasius.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 const RATIO = { gentle: 2, medium: 4, sharp: 6 };
 /** Model scales by name: N in 1 : N. */
 export const SCALE = { sixteen: 16, twentyfive: 25, hundred: 100 };
+/** The boundary-layer problem's two flows: fluid id and speed (m/s). */
+export const STREAM = { air: { fluid: 'air', U: 3 }, water: { fluid: 'water', U: 0.2 } };
+export const nuOf = (id) => FLUIDS[id].mu / FLUIDS[id].rho;
+export const deltaAt = ($, x = $.x) => (4.91 * x) / Math.sqrt((STREAM[$.flow].U * x) / nuOf(STREAM[$.flow].fluid));
 /** Flow rate in a pipe, m³/s, for the problems' fluids; R in m, dp in Pa, L in m. */
 export const pipeQ = ($, R = $.R) => poiseuille({ geom: 'pipe', size: R, G: $.dp / $.L, mu: FLUIDS[$.fluid].mu }).Q;
 const shape = () => choice(['gentle', 'its area halves'], ['medium', 'its area falls to a quarter'], ['sharp', 'its area falls to a sixth']);
@@ -348,6 +353,70 @@ export default [
       read: (c) => ({ re: Math.abs(c.reRatio - 1) < 0.02 ? 'match' : c.reRatio < 1 ? 'low' : 'high' }),
     },
     cases: [kase('in water', { fluid: 'water' }, { re: 'low' })],
+  }),
+
+  problem({
+    id: 'u3.13.delta',
+    title: 'How thick is the layer?',
+    exam: 'u3',
+    ch: '6',
+    lab: 'layer',
+    src: 'Flux, written for the Boundary layer lab',
+    topics: ['boundary-layer'],
+    principles: ['boundary-layer'],
+    vars: { flow: choice(['air', 'air at 3 m/s (ν = 1.54 × 10⁻⁵ m²/s)'], ['water', 'water at 0.2 m/s (ν = 1.00 × 10⁻⁶ m²/s)']), x: range(0.1, 0.9, 0.1, 'm') },
+    text: (T) => `A smooth flat plate sits edge-on in a steady stream of ${T.flow}. How thick is the laminar boundary layer ${T.x} m from the leading edge, in mm?`,
+    parts: [num('d', ($) => deltaAt($) * 1000, 'mm', { label: 'δ' })],
+    level: 2,
+    hints: ['Find Re_x = Ux/ν at that distance, and check it is below 5 × 10⁵.', 'δ = 4.91 x/√Re_x.'],
+    steps: ($) => {
+      const Re = (STREAM[$.flow].U * $.x) / nuOf(STREAM[$.flow].fluid);
+      return [String.raw`$\mathrm{Re}_x = ${Number(Re.toPrecision(3))}$, so $\delta = \dfrac{4.91(${$.x})}{\sqrt{${Number(Re.toPrecision(3))}}} = ${Number((deltaAt($) * 1000).toPrecision(3))}$ mm`];
+    },
+    sim: {
+      scenario: 'air',
+      setup(s, $) {
+        Object.assign(s, { fluid: STREAM[$.flow].fluid, U: STREAM[$.flow].U, L: $.x });
+      },
+      read: (c) => ({ d: c.deltaEnd * 1000 }),
+    },
+    cases: [kase('air, half a metre along', { flow: 'air', x: 0.5 }, { d: 7.862 })],
+  }),
+
+  problem({
+    id: 'u3.14.thinner',
+    title: 'Thicker or thinner?',
+    exam: 'u3',
+    ch: '6',
+    kind: 'conceptual',
+    lab: 'layer',
+    src: 'Flux, written for the Boundary layer lab',
+    topics: ['boundary-layer'],
+    principles: ['boundary-layer'],
+    vars: { change: choice(['speed', 'the stream’s speed doubles, at the same point on the plate'], ['distance', 'you look twice as far from the leading edge, at the same speed']) },
+    text: (T) => `A laminar boundary layer grows along a flat plate. What happens to its thickness if ${T.change}?`,
+    parts: [
+      pick('d', 'the thickness', [
+        ['half', 'it halves', 'δ does not go as 1/U: it goes as 1/√U.'],
+        ['thinner', 'it thins by √2', 'δ = 4.91x/√(Ux/ν) ∝ 1/√U for a faster stream.'],
+        ['thicker', 'it grows by √2', 'δ ∝ √x: momentum has had longer to diffuse out from the wall.'],
+        ['double', 'it doubles', 'δ does not grow in step with x: it grows as √x.'],
+      ], ($) => ($.change === 'speed' ? 'thinner' : 'thicker')),
+    ],
+    level: 1,
+    hints: ['Write δ = 4.91x/√(Ux/ν) and change one thing.', 'How do U and x enter: to which power?'],
+    steps: ($) => [$.change === 'speed' ? 'δ ∝ U^(−1/2): twice U gives δ/√2.' : 'δ ∝ x^(1/2): twice x gives √2 δ.'],
+    sim: {
+      scenario: 'air',
+      setup(s) {
+        Object.assign(s, { fluid: 'air', U: 3, L: 1 });
+      },
+      read: (c, s, $) => {
+        const k = $.change === 'speed' ? plate({ U: 2 * s.U, L: s.L, nu: c.nu, rho: c.rho }).delta(0.4) / c.delta(0.4) : c.delta(0.8) / c.delta(0.4);
+        return { d: k < 0.6 ? 'half' : k < 1 ? 'thinner' : k < 1.6 ? 'thicker' : 'double' };
+      },
+    },
+    cases: [kase('a faster stream', { change: 'speed' }, { d: 'thinner' })],
   }),
 
 ];

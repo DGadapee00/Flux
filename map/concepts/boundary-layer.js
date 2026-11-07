@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Draw velocity profiles along a flat plate with a slider for the free-stream speed. It corrects the idea that the layer grows in step with distance: a laminar layer grows as \\(\\sqrt x\\), and faster flow makes it thinner.',
+  labs: [
+    { course: 'eml3015', lab: 'layer', notes: ['s7'], note: 'A laminar layer along a flat plate: it grows as √x and thins as 1/√U, with Blasius profiles at three stations and the turn to turbulence at Re_x = 5 × 10⁵.' },
+  ],
 };
