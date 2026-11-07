@@ -28,7 +28,7 @@ export const EXAMS = [
     title: 'Following the flow',
     chapters: '6',
     date: 'Unit 3',
-    labs: ['nozzle', 'bend', 'continuity', 'transport', 'vane', 'pipe', 'headloss', 'model', 'layer'],
+    labs: ['nozzle', 'bend', 'continuity', 'transport', 'vane', 'pipe', 'headloss', 'network', 'model', 'layer'],
     coming: [],
   },
 ];
@@ -44,6 +44,7 @@ export const LAB_META = {
   vane: { id: 'vane', exam: 'u3', title: 'Vane' },
   pipe: { id: 'pipe', exam: 'u3', title: 'Pipe' },
   headloss: { id: 'headloss', exam: 'u3', title: 'Head loss' },
+  network: { id: 'network', exam: 'u3', title: 'Network' },
   model: { id: 'model', exam: 'u3', title: 'Model' },
   layer: { id: 'layer', exam: 'u3', title: 'Boundary layer' },
 };

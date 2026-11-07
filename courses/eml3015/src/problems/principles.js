@@ -3,6 +3,7 @@
  * practice panel shows it with each solution and groups misses by it.
  */
 export const PRINCIPLES = {
+  network: { name: 'Parallel pipes share a loss', statement: 'Pipes in parallel lose the same head and add their flows; pipes in series carry one flow and add their losses. With h_L ∝ Q²L/D⁵ at a fixed f, a pipe’s flow goes as √(D⁵/L). A pump runs where its falling head curve meets the system’s rising one.', cue: 'Two or more pipes between the same two points, or a pump driving a system.', family: 'Pipe flow' },
   'viscosity-law': { name: 'Stress from a velocity gradient', statement: 'In a Newtonian fluid the shear stress is the viscosity times the velocity gradient.', cue: 'A fluid sheared between surfaces.', family: 'Shear' },
   'momentum-diffusion': { name: 'Momentum diffuses', statement: 'Motion spreads into a still fluid at the kinematic viscosity ν = μ/ρ, over a time of order h²/ν.', cue: 'A wall starts moving, or a flow starts up.', family: 'Shear' },
   'pressure-force': { name: 'Force from pressure on a flat wall', statement: 'The force on a flat submerged surface is the pressure at its centroid times its area.', cue: 'A gate, hatch or window under a liquid.', family: 'Pressure' },

@@ -13,6 +13,15 @@ import { vaneForce } from '@flux/subjects/mechanics/vane.js';
 import { headLoss } from '@flux/subjects/mechanics/headloss.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
+/** Two pipes in parallel at one friction factor: A is 15 mm × 10 m; Q in L/s, B in mm and m. */
+export const parallelQA = ($, how = 'loss') => {
+  const DB = Number($.DB) / 1000;
+  const kA = 0.015 ** 5 / 10;
+  const kB = DB ** 5 / $.LB;
+  if (how === 'area') return ($.Q * 0.015 ** 2) / (0.015 ** 2 + DB ** 2);
+  if (how === 'even') return $.Q / 2;
+  return ($.Q * Math.sqrt(kA)) / (Math.sqrt(kA) + Math.sqrt(kB));
+};
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 const RATIO = { gentle: 2, medium: 4, sharp: 6 };
 /** Model scales by name: N in 1 : N. */
@@ -660,5 +669,74 @@ export default [
       },
     },
     cases: [kase('laminar oil', { regime: 'laminar' }, { d: 'two' })],
+  }),
+  problem({
+    id: 'u3.21.parallel',
+    title: 'Two pipes in parallel',
+    exam: 'u3',
+    ch: '6',
+    lab: 'network',
+    src: 'Flux, written for the Network lab',
+    topics: ['pipe-network'],
+    principles: ['network'],
+    vars: { DB: choice(['10', '10 mm'], ['20', '20 mm']), LB: range(2, 20, 2, 'm'), Q: range(0.5, 2, 0.25, 'L/s') },
+    valid: ($) => Math.abs(parallelQA($) - parallelQA($, 'area')) > 0.03 * $.Q && Math.abs(parallelQA($) - $.Q / 2) > 0.03 * $.Q,
+    text: (T) => `${T.Q} of water splits between two pipes in parallel: A, 15 mm across and 10 m long, and B, ${T.DB} across and ${T.LB} long. Take one friction factor for both. How much flows through A, in L/s?`,
+    parts: [num('qa', ($) => parallelQA($), 'L/s', { label: 'Q_A' })],
+    level: 2,
+    hints: ['Both pipes lose the same head: f(L/D)V²/2g is equal.', 'With V = 4Q/πD², h_L ∝ L Q²/D⁵, so Q ∝ √(D⁵/L). Share Q in that ratio.'],
+    steps: ($) => {
+      const a = Math.sqrt(0.015 ** 5 / 10);
+      const b = Math.sqrt((Number($.DB) / 1000) ** 5 / $.LB);
+      return [String.raw`$Q_A/Q_B = \sqrt{(D_A^5/L_A)/(D_B^5/L_B)} = ${Number((a / b).toPrecision(3))}$, so $Q_A = ${$.Q} \times ${Number((a / (a + b)).toPrecision(3))} = ${Number(parallelQA($).toPrecision(3))}$ L/s`];
+    },
+    // Another route: bisect on the shared loss until the two flows add up to Q.
+    second: ($) => {
+      const DB = Number($.DB) / 1000;
+      const flow = (h, D, L) => Math.sqrt((h * D ** 5) / L);
+      let lo = 0;
+      let hi = 1;
+      while (flow(hi, 0.015, 10) + flow(hi, DB, $.LB) < $.Q) hi *= 2;
+      for (let k = 0; k < 200; k++) {
+        const h = (lo + hi) / 2;
+        if (flow(h, 0.015, 10) + flow(h, DB, $.LB) < $.Q) lo = h;
+        else hi = h;
+      }
+      return { qa: flow((lo + hi) / 2, 0.015, 10) };
+    },
+    cases: [kase('a short 20 mm bypass', { DB: '20', LB: 2, Q: 1 }, { qa: 0.179 })],
+  }),
+
+  problem({
+    id: 'u3.22.shower',
+    title: 'Who gets the water?',
+    exam: 'u3',
+    ch: '6',
+    kind: 'conceptual',
+    lab: 'network',
+    src: 'Flux, written for the Network lab',
+    topics: ['pipe-network'],
+    principles: ['network'],
+    vars: { act: choice(['tap', 'someone opens a downstairs tap on the same supply'], ['bypass', 'a plumber widens one of the two pipes feeding the shower']) },
+    text: (T) => `A pump feeds an upstairs shower through a shared trunk pipe. While the shower runs, ${T.act}. What happens to the shower’s flow?`,
+    parts: [
+      pick('q', 'the shower', [
+        ['less', 'it falls', 'More flow through the shared trunk means more loss there, so less head is left at the junction for the shower.'],
+        ['more', 'it rises', 'A wider pipe on the shower’s own path loses less head, so more of what reaches the junction gets through.'],
+        ['same', 'it stays the same', 'Everything shares the pump and the trunk: a change anywhere moves the junction’s head.'],
+      ], ($) => ($.act === 'tap' ? 'less' : 'more')),
+    ],
+    level: 1,
+    hints: ['Which pipes does the change share with the shower?', 'The head at the junction is what the pump gives minus the trunk’s loss.'],
+    steps: ($) => [$.act === 'tap' ? 'The tap adds flow through the shared trunk, which loses more head: the shower falls.' : 'A wider pipe on the shower’s own path loses less: the shower rises.'],
+    sim: {
+      scenario: 'shower',
+      setup(s, $) {
+        if ($.act === 'tap') s.open = 0.5;
+        else s.DB = 25;
+      },
+      read: (c) => ({ q: c.Qs > 0.0007844 * 1.01 ? 'more' : c.Qs < 0.0007844 * 0.99 ? 'less' : 'same' }),
+    },
+    cases: [kase('the tap', { act: 'tap' }, { q: 'less' })],
   }),
 ];
