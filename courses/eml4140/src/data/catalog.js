@@ -29,8 +29,8 @@ export const EXAMS = [
     title: 'Convection',
     chapters: '6',
     date: 'Unit 3',
-    labs: ['thermal'],
-    coming: ['The Nusselt number along a plate', 'Flow in tubes', 'Natural convection'],
+    labs: ['thermal', 'nusselt'],
+    coming: ['Flow in tubes', 'Natural convection'],
   },
 ];
 
@@ -39,6 +39,7 @@ export const LAB_META = {
   resistance: { id: 'resistance', exam: 'u1', title: 'Resistance' },
   radiation: { id: 'radiation', exam: 'u2', title: 'Radiation' },
   thermal: { id: 'thermal', exam: 'u3', title: 'Thermal layer' },
+  nusselt: { id: 'nusselt', exam: 'u3', title: 'Nusselt' },
 };
 
 export const CHAPTER_TITLES = {

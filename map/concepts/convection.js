@@ -33,6 +33,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Plot the local \\(h\\) along a heated plate in air and water. It corrects the idea that \\(h\\) is a property of the fluid: it is largest at the leading edge, falls along the plate, and jumps where the layer turns turbulent.',
+  labs: [
+    { course: 'eml4140', lab: 'nusselt', notes: ['s2', 's3'], note: 'The local h along a heated plate in air, water and oil: largest at the leading edge, falling as 1/√x, jumping where the layer turns turbulent.' },
+  ],
 };
