@@ -31,6 +31,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Draw the velocity and thermal layers on a heated plate with a slider for the Prandtl number, from liquid metal to oil. It corrects the idea that heat and momentum spread together: in oil the thermal layer is a fraction of the velocity layer.',
+  labs: [
+    { course: 'eml4140', lab: 'thermal', notes: ['s1', 's2'], note: 'The velocity and thermal layers on a heated plate with a Prandtl slider: five times thicker in mercury, matched at Pr = 1, a thin skin in an oil.' },
+  ],
 };

@@ -23,17 +23,28 @@ export const EXAMS = [
     labs: ['radiation'],
     coming: ['View factors', 'Radiation networks'],
   },
+  {
+    id: 'u3',
+    n: 3,
+    title: 'Convection',
+    chapters: '6',
+    date: 'Unit 3',
+    labs: ['thermal'],
+    coming: ['The Nusselt number along a plate', 'Flow in tubes', 'Natural convection'],
+  },
 ];
 
 export const LAB_META = {
   rod: { id: 'rod', exam: 'u1', title: 'Rod' },
   resistance: { id: 'resistance', exam: 'u1', title: 'Resistance' },
   radiation: { id: 'radiation', exam: 'u2', title: 'Radiation' },
+  thermal: { id: 'thermal', exam: 'u3', title: 'Thermal layer' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Modes and conduction',
   2: 'Radiation',
+  6: 'Laminar and turbulent boundary layers',
 };
 
 export function examById(id) {

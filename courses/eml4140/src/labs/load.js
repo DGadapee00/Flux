@@ -6,6 +6,7 @@ const loaders = {
   rod: () => import('./rod.js'),
   resistance: () => import('./resistance.js'),
   radiation: () => import('./radiation.js'),
+  thermal: () => import('./thermal.js'),
 };
 
 const labs = createLabLoader(loaders);
