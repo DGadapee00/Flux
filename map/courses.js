@@ -13,7 +13,7 @@
  * - taking now: PHY 2049 and STA 3032 are Fall 2026 in tracks.js.
  * - next term: EML 3100, EGN 3321 and EGN 3331, Spring 2027 (owner, 15 October 2026, archived as D8).
  * - later: MAP 2302, EML 3015 and EML 4140, as the prototype has them. EML 3101 Thermodynamics II
- *   follows EML 3100 in the thermal track (archived plan, D19); it has no app yet. EEL 3111 Circuit
+ *   follows EML 3100 in the thermal track (archived plan, D19); its app started with gas mixtures. EEL 3111 Circuit
  *   Analysis I and EGN 3203 Modern Computation Methods are not taken yet (archived plans); no apps.
  * - Bench is a personal project (archived D35), so it has no status.
  * - Build a satellite is the application in map/applications/ taken as a project (6 November 2026).
@@ -32,7 +32,7 @@ export const COURSES = [
   { id: 'map2302', code: 'MAP 2302', title: 'Differential Equations', status: 'later', app: 'map2302/' },
   { id: 'egn3321', code: 'EGN 3321', title: 'Dynamics', status: 'next term', app: 'egn3321/' },
   { id: 'egn3331', code: 'EGN 3331', title: 'Mechanics of Materials', status: 'next term', app: 'egn3331/' },
-  { id: 'eml3101', code: 'EML 3101', title: 'Thermodynamics II', status: 'later', app: null },
+  { id: 'eml3101', code: 'EML 3101', title: 'Thermodynamics II', status: 'later', app: 'eml3101/' },
   { id: 'eml3015', code: 'EML 3015', title: 'Fluids', status: 'later', app: 'eml3015/' },
   { id: 'eml4140', code: 'EML 4140', title: 'Heat Transfer', status: 'later', app: 'eml4140/' },
   { id: 'eel3111', code: 'EEL 3111', title: 'Circuit Analysis I', status: 'later', app: 'eel3111/' },
