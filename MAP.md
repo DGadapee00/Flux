@@ -8,7 +8,7 @@ exact equations, substitutions, balance models, variation of parameters, Cauchyâ
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 212 with a Flux lab, 63 gaps.**
+**275 concepts, 213 with a Flux lab, 62 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -21,7 +21,7 @@ higher-order equations. For the live numbers run `node map/check.mjs`,
 | Thermodynamics | 22 | 12 |
 | Fluid mechanics | 20 | 14 |
 | Heat transfer | 19 | 7 |
-| Circuits and systems | 27 | 16 |
+| Circuits and systems | 27 | 17 |
 | Mechanics of materials | 16 | 15 |
 | Materials science | 15 | 5 |
 | Design and manufacturing | 9 | 9 |
@@ -51,7 +51,7 @@ each new concept on them is a gap with a candidate lab:
 | Course | Concepts on its path | Order from |
 |---|---|---|
 | EMA 3010 Materials Science | 15 (app started: Bond, Crystal, Vacancy, Diffusion and Slip labs) | 3.091 recitations |
-| EEL 3111 Circuit Analysis I | 18 (10 new; app started: a Nodes lab) | 6.002, Spring 2007, in the archived plan's order |
+| EEL 3111 Circuit Analysis I | 18 (10 new; app started: Nodes and Phasors labs) | 6.002, Spring 2007, in the archived plan's order |
 | EGN 3203 Modern Computation Methods | 24 (11 new, plus the 7 linear algebra concepts) | 2.086, Spring 2013 |
 | EML 3101 Thermodynamics II | 14 (10 new) | 16.050, Fall 2002, with Cleynen |
 | EML 3015 Fluids | 22 (16 new) | 2.06, Spring 2013 |

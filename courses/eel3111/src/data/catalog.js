@@ -13,14 +13,25 @@ export const EXAMS = [
     labs: ['nodes'],
     coming: ['Dependent sources'],
   },
+  {
+    id: 'u2',
+    n: 2,
+    title: 'Sinusoidal steady state',
+    chapters: '2',
+    date: 'Unit 2',
+    labs: ['phasors'],
+    coming: ['AC power', 'Filters'],
+  },
 ];
 
 export const LAB_META = {
   nodes: { id: 'nodes', exam: 'u1', title: 'Nodes' },
+  phasors: { id: 'phasors', exam: 'u2', title: 'Phasors' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Methods of analysis',
+  2: 'Sinusoidal steady state',
 };
 
 export function examById(id) {
