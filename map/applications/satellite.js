@@ -37,6 +37,7 @@ export const SATELLITE = {
       labs: [
         { concept: 'gravitation', course: 'phy2048', lab: 'iss-orbit' },
         { concept: 'kepler-equation', course: 'satellite', lab: 'kepler' },
+        { concept: 'orbit-transfers', course: 'satellite', lab: 'transfer' },
       ],
       demonstrate: 'Choose an altitude for a circular Earth orbit. Compute speed and period, state your units, and check the period by a second method.',
       deliverable: 'An orbit model with altitude, speed, period and assumptions.',

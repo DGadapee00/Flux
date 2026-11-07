@@ -11,8 +11,8 @@ export const EXAMS = [
     title: 'Orbit',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['kepler'],
-    coming: ['Rocket equation', 'Orbit transfers'],
+    labs: ['kepler', 'transfer'],
+    coming: ['Rocket equation'],
   },
   {
     id: 'u2',
@@ -45,6 +45,7 @@ export const EXAMS = [
 
 export const LAB_META = {
   kepler: { id: 'kepler', exam: 'u1', title: 'Kepler' },
+  transfer: { id: 'transfer', exam: 'u1', title: 'Transfer' },
   noise: { id: 'noise', exam: 'u2', title: 'Noise' },
   link: { id: 'link', exam: 'u2', title: 'Link budget' },
   attitude: { id: 'attitude', exam: 'u3', title: 'Attitude' },

@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: String.raw`Fire a burn and watch the orbit stretch, then a second at the far end. It corrects the idea that speeding up catches a craft ahead: a forward burn raises the orbit and lengthens its period, so you fall behind. The check compares each burn’s \(\Delta v\) from vis-viva with the speeds of an integrated trajectory.`,
+  labs: [
+    { course: 'satellite', lab: 'transfer', notes: ['s3'], note: 'A forward burn stretches a circle into an ellipse and lengthens the period, so you fall behind; the Hohmann burn just reaches the target and a second rounds it out.' },
+  ],
 };

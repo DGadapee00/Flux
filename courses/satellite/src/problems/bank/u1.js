@@ -4,7 +4,8 @@
  */
 import { MU_EARTH, R_EARTH, kepler, orbitFromAltitudes } from '@flux/subjects/mechanics/kepler.js';
 import { ORBITS } from '../../labs/kepler.js';
-import { choice, kase, num, problem } from '../kit.js';
+import { transfer } from '@flux/subjects/mechanics/transfer.js';
+import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 export const orbitOf = (id) => orbitFromAltitudes(ORBITS[id].hp, ORBITS[id].ha);
@@ -13,6 +14,29 @@ export const quarterNu = (id) => {
   return (kepler({ a: o.a, e: o.e, t: o.T / 4 }).nu * 180) / Math.PI;
 };
 const deg = (rad) => (rad * 180) / Math.PI;
+/** The transfer problems, with the given μ = 398,600 and R = 6378 km. `alt` and `full` name traps. */
+const MU_G = 398600;
+const R_G = 6378;
+export const DEST = { meo: 20000, geo: 35786 };
+export const START = { low: 400, high: 1000 };
+export const hohmannBurn = ($, radii = true, naive = false) => {
+  const r1 = (radii ? R_G : 0) + 300;
+  const r2 = (radii ? R_G : 0) + $.h2;
+  const v1 = Math.sqrt(MU_G / r1);
+  const v2 = Math.sqrt(MU_G / r2);
+  if (naive) return 1000 * Math.abs(v1 - v2);
+  return 1000 * ($.burn === 'first' ? v1 * (Math.sqrt((2 * r2) / (r1 + r2)) - 1) : v2 * (1 - Math.sqrt((2 * r1) / (r1 + r2))));
+};
+export const transferHours = ($, half = true, radii = true) => {
+  const a = ((radii ? 2 * R_G : 0) + $.h1 + DEST[$.dest]) / 2;
+  return ((half ? 1 : 2) * Math.PI * Math.sqrt(a ** 3 / MU_G)) / 3600;
+};
+export const newApogee = ($, what = 'apogee') => {
+  const r = R_G + START[$.start];
+  const v = Math.sqrt(MU_G / r) + $.dv;
+  const a = 1 / (2 / r - (v * v) / MU_G);
+  return what === 'a' ? a - R_G : what === 'radius' ? 2 * a - r : 2 * a - r - R_G;
+};
 
 export default [
   problem({
@@ -131,6 +155,129 @@ export default [
       read: (c) => ({ way: c.nu > Math.PI / 2 + 1e-6 ? 'more' : c.nu < Math.PI / 2 - 1e-6 ? 'less' : 'exact' }),
     },
     cases: [kase('a transfer orbit', { orbit: 'gto' }, { way: 'more' })],
+  }),
+
+  problem({
+    id: 'u1.5.hohmann',
+    title: 'Hohmann burns',
+    exam: 'u1',
+    ch: '1',
+    lab: 'transfer',
+    src: 'Flux, written for the Transfer lab',
+    topics: ['transfer'],
+    principles: ['transfer'],
+    vars: { burn: choice(['first', 'the first burn, at 300 km'], ['second', 'the second burn, at the target']), h2: range(1000, 21000, 5000, 'km') },
+    text: (T) => `A satellite on a circular orbit at 300 km moves by Hohmann transfer to a circular orbit at ${T.h2} km. How big is ${T.burn}, in m/s? Take μ = 398,600 km³/s² and Earth's radius 6378 km.`,
+    parts: [num('dv', ($) => hohmannBurn($), 'm/s', { label: 'Δv' })],
+    level: 2,
+    hints: ['Work in radii from Earth’s centre: r = 6378 km + altitude. The transfer ellipse has a = (r₁ + r₂)/2.', 'Each burn is the vis-viva speed on the ellipse minus the circular speed √(μ/r) there.'],
+    steps: ($) => {
+      const r1 = 6378 + 300;
+      const r2 = 6378 + $.h2;
+      return [String.raw`$r_1 = ${r1}$ km, $r_2 = ${r2}$ km, $a = ${(r1 + r2) / 2}$ km`, String.raw`$\Delta v = ${Number(hohmannBurn($).toPrecision(4))}$ m/s`];
+    },
+    sim: {
+      scenario: 'raise',
+      setup(s, $) {
+        Object.assign(s, { h1: 300, h2: $.h2, frac: 1 });
+      },
+      read: (c, s, $) => ({ dv: 1000 * ($.burn === 'first' ? c.dv1 : c.dv2) }),
+    },
+    cases: [kase('first burn to 6000 km', { burn: 'first', h2: 6000 }, { dv: 1080 })],
+  }),
+
+  problem({
+    id: 'u1.6.transfer-time',
+    title: 'How long does the transfer take?',
+    exam: 'u1',
+    ch: '1',
+    lab: 'transfer',
+    src: 'Flux, written for the Transfer lab',
+    topics: ['transfer'],
+    principles: ['transfer'],
+    vars: { dest: choice(['meo', 'a circular orbit at 20,000 km'], ['geo', 'geostationary altitude, 35,786 km']), h1: range(200, 1000, 200, 'km') },
+    text: (T) => `A Hohmann transfer starts from a circular orbit at ${T.h1} km and ends at ${T.dest}. How long is the coast between the two burns, in hours? μ = 398,600 km³/s², Earth's radius 6378 km.`,
+    parts: [num('t', ($) => transferHours($), 'h', { label: 't' })],
+    level: 2,
+    hints: ['The coast is half of the transfer ellipse.', 't = π√(a³/μ), with a = (r₁ + r₂)/2 from Earth’s centre.'],
+    steps: ($) => [String.raw`$a = (${6378 + $.h1} + ${6378 + DEST[$.dest]})/2$ km, $t = \pi\sqrt{a^3/\mu} = ${Number(transferHours($).toPrecision(3))}$ h`],
+    sim: {
+      scenario: 'geo',
+      setup(s, $) {
+        Object.assign(s, { h1: $.h1, h2: DEST[$.dest], frac: 1 });
+      },
+      read: (c) => ({ t: c.tTransfer / 3600 }),
+    },
+    cases: [kase('200 km to GEO', { dest: 'geo', h1: 200 }, { t: 5.259 })],
+  }),
+
+  problem({
+    id: 'u1.7.new-apogee',
+    title: 'A small burn raises the far side',
+    exam: 'u1',
+    ch: '1',
+    lab: 'transfer',
+    src: 'Flux, written for the Transfer lab',
+    topics: ['transfer'],
+    principles: ['transfer'],
+    vars: { start: choice(['low', '400 km'], ['high', '1000 km']), dv: range(20, 100, 20, 'm/s', 1e-3) },
+    text: (T) => `A satellite on a circular orbit at ${T.start} fires forward by ${T.dv} m/s. What is the altitude of its new apogee, in km? μ = 398,600 km³/s², Earth's radius 6378 km.`,
+    parts: [num('ha', ($) => newApogee($), 'km', { label: 'h_a' })],
+    level: 3,
+    hints: ['The burn point becomes perigee. Vis-viva there gives the new a: 1/a = 2/r − v²/μ.', 'The apogee radius is 2a − r; subtract Earth’s radius for the altitude.'],
+    steps: ($) => {
+      const r = 6378 + START[$.start];
+      const v = Math.sqrt(398600 / r) + $.dv;
+      const a = 1 / (2 / r - (v * v) / 398600);
+      return [String.raw`$v = ${Number(v.toPrecision(5))}$ km/s, $a = ${Number(a.toPrecision(6))}$ km, apogee altitude $= 2a - r - 6378 = ${Number(newApogee($).toPrecision(4))}$ km`];
+    },
+    sim: {
+      scenario: 'chase',
+      setup(s, $) {
+        const h1 = START[$.start];
+        const MU = 398600.4418;
+        const r1 = 6378.137 + h1;
+        const v1 = Math.sqrt(MU / r1);
+        const h2 = 2 * h1 + 2000;
+        const r2 = 6378.137 + h2;
+        const dv1 = v1 * (Math.sqrt((2 * r2) / (r1 + r2)) - 1);
+        Object.assign(s, { h1, h2, frac: $.dv / dv1 });
+      },
+      read: (c) => ({ ha: c.ra - 6378.137 }),
+    },
+    cases: [kase('400 km, 40 m/s', { start: 'low', dv: 40 }, { ha: 543.3 })],
+  }),
+
+  problem({
+    id: 'u1.8.catch-up',
+    title: 'Which way to burn?',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'transfer',
+    src: 'Flux, written for the Transfer lab',
+    topics: ['transfer'],
+    principles: ['transfer'],
+    vars: { other: choice(['ahead', 'a craft 50 km ahead of you on the same circular orbit'], ['behind', 'a craft 50 km behind you on the same circular orbit']) },
+    text: (T) => `You want to meet ${T.other}. Which small burn closes the gap within a few orbits?`,
+    parts: [
+      pick('d', 'the burn', [
+        ['forward', 'a forward burn, along your motion', 'A forward burn raises the orbit and lengthens its period: you fall back, so the craft behind closes in.'],
+        ['backward', 'a backward burn, against your motion', 'A backward burn lowers the orbit and shortens its period: you gain on the craft ahead.'],
+      ], ($) => ($.other === 'ahead' ? 'backward' : 'forward')),
+    ],
+    level: 1,
+    hints: ['Burning changes the orbit’s size, and the size sets the period.', 'Which way does a forward burn change the period?'],
+    steps: ($) => [$.other === 'ahead' ? 'Burn backward: a lower, faster orbit gains on the craft ahead.' : 'Burn forward: a higher, slower orbit lets the craft behind catch up.'],
+    sim: {
+      scenario: 'chase',
+      read: (c, s, $) => {
+        // A forward burn lengthens the period (the lab shows it); a backward one shortens it.
+        const fwd = transfer({ h1: s.h1, h2: s.h2, frac: 0.3 }).behind;
+        return { d: $.other === 'ahead' ? (fwd ? 'backward' : 'forward') : fwd ? 'forward' : 'backward' };
+      },
+    },
+    cases: [kase('a craft ahead', { other: 'ahead' }, { d: 'backward' })],
   }),
 ];
 
