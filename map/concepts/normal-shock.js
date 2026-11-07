@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Raise the back pressure on a supersonic nozzle and watch a shock enter from the exit and walk toward the throat. It corrects the idea that a shock speeds the gas up: it slows it to subsonic, raises its pressure, and loses stagnation pressure.',
+  labs: [
+    { course: 'eml3101', lab: 'nozzle', notes: ['s2'], note: 'The same nozzle between choking and the design pressure: a normal shock enters the diverging part and walks to the exit as p_b falls, dropping the flow to subsonic and costing up to 37% of the stagnation pressure.' },
+  ],
 };
