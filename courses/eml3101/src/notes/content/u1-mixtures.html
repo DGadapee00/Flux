@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gas mixtures and combustion</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EML 3101 · Thermodynamics II · Unit 1 · Cleynen, Engineering Thermodynamics, beside MIT 16.050</div>
+  <h1>Gas mixtures and combustion</h1>
+  <p class="lede">How to describe a mixture of ideal gases: by molecules or by mass, how each gas's pressure adds to the whole, and how the mixture's properties come from its parts.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Ideal-gas mixtures</h3>
+    <a href="#s1"><span>1</span>Mole and mass fractions</a>
+    <a href="#s2"><span>2</span>Partial pressures</a>
+    <a href="#s3"><span>3</span>Mixture properties</a>
+    <h3>Reference</h3>
+    <a href="#s4"><span>4</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Ideal-gas mixtures</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Mole and mass fractions</h2>
+<p>A mixture can be described by how many molecules of each gas it holds or by how much each gas weighs. The two descriptions agree only when the molecules weigh the same.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A mass \(m_i\) of a gas with molar mass \(M_i\) is \(N_i = m_i/M_i\) moles. The mole fraction and the mass fraction are</p>
+\[
+y_i = \frac{N_i}{N}, \qquad x_i = \frac{m_i}{m}.
+\]
+<p>Since \(m_i = N_i M_i\) and \(m = N M\), with \(M = m/N\) the mixture's molar mass, they are tied by \(y_i = x_i\,M/M_i\). A gas heavier than the average has a smaller share of the molecules than of the mass.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · nitrogen and carbon dioxide</span>
+<p>1 kg of N₂ (28.0 g/mol) and 1 kg of CO₂ (44.0 g/mol). The amounts are \(1/0.0280 = 35.7\) mol and \(1/0.0440 = 22.7\) mol. CO₂ is half the mass, \(x = 0.5\), but</p>
+\[
+y_{\mathrm{CO_2}} = \frac{22.7}{35.7 + 22.7} = 0.389
+\]
+<p>of the molecules.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading a mass fraction as a mole fraction, or the reverse. Convert through the molar masses every time.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Partial pressures</h2>
+<p>An ideal gas's molecules do not feel one another. In a mixture each gas fills the whole vessel at the mixture's temperature, as if the others were not there.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Each gas alone in volume \(V\) at \(T\) would push with \(p_i = N_i \bar R T/V\). The pressures add, Dalton's law, to \(p = N\bar R T/V\), so</p>
+\[
+p_i = y_i\,p.
+\]
+<p>The mole fraction sets a gas's share of the pressure. The mass fraction does not.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a little hydrogen</span>
+<p>1 kg of N₂ and 0.1 kg of H₂ (2.02 g/mol) in 1 m³ at 300 K. The hydrogen is \(0.1/0.00202 = 49.6\) mol against 35.7 mol of nitrogen, so \(y_{\mathrm{H_2}} = 0.582\). The total is \(85.3 \times 8.314 \times 300 = 213\) kPa, and hydrogen's share is</p>
+\[
+p_{\mathrm{H_2}} = 0.582 \times 213 = 124\ \text{kPa}.
+\]
+<p>Split by mass, it would be \(0.0909 \times 213 = 19.3\) kPa, more than six times too little.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Pressure counts molecules. A light gas with a small share of the mass can carry most of the pressure.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Mixture properties</h2>
+<p>A mixture of ideal gases is itself an ideal gas, with properties averaged from its parts. The weights depend on what the property is measured per.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A per-mole quantity averages by mole fraction, a per-kilogram one by mass fraction:</p>
+\[
+M = \sum_i y_i M_i = \frac{m}{N}, \qquad R = \frac{\bar R}{M}, \qquad c_p = \sum_i x_i\,c_{p,i}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · the mixture’s M, R and c_p</span>
+<p>The 1 kg of N₂ and 1 kg of CO₂ above: \(M = 2/(35.7 + 22.7) = 34.2\) g/mol, so \(R = 8.314/0.0342 = 243\) J/(kg·K). At 300 K, \(c_p\) is 1038 J/(kg·K) for N₂ and 846 for CO₂, and with half the mass each</p>
+\[
+c_p = 0.5 \times 1038 + 0.5 \times 846 = 942\ \text{J/(kg·K)}.
+\]
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Averaging the molar masses by mass fraction. That gives 36.0 g/mol here, not 34.2, because it overcounts the heavy CO₂.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Formula sheet</h2>
+\[
+N_i = \frac{m_i}{M_i}, \quad y_i = \frac{N_i}{N}, \quad x_i = \frac{m_i}{m}, \quad y_i = x_i\,\frac{M}{M_i}.
+\]
+\[
+p_i = \frac{N_i \bar R T}{V} = y_i\,p, \qquad M = \sum y_i M_i, \quad R = \frac{\bar R}{M}, \quad c_p = \sum x_i\,c_{p,i}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Cleynen, Engineering Thermodynamics, on perfect gases, and MIT 16.050's thermochemistry lectures.</footer>
+</body>
+</html>

@@ -24,6 +24,7 @@ export default {
       why: 'The ideal-gas model and its limits, the ground mixtures stand on.',
     },
   ],
-  labs: [],
-  candidate: 'Mix nitrogen and carbon dioxide with sliders for the amounts, reading mass and mole fractions together. It corrects the idea that mass and mole fractions are the same thing: a heavy gas has a large mass fraction from a small mole fraction.',
+  labs: [
+    { course: 'eml3101', lab: 'mixture', notes: ['s1', 's2', 's3'], note: 'Nitrogen and a second gas in one vessel, read by molecules, by mass and by pressure: a kilogram of CO₂ beside a kilogram of N₂ is half the mass but 39% of the molecules, and the partial pressures follow the molecules.' },
+  ],
 };

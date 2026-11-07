@@ -20,8 +20,10 @@
     <a href="#s1"><span>1</span>Node voltages</a>
     <a href="#s2"><span>2</span>Mesh currents</a>
     <a href="#s3"><span>3</span>Choosing a method</a>
+    <h3>Part II · Dependent sources</h3>
+    <a href="#s4"><span>4</span>Dependent sources</a>
     <h3>Reference</h3>
-    <a href="#s4"><span>4</span>Formula sheet</a>
+    <a href="#s5"><span>5</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -82,10 +84,49 @@ R\,\mathbf I = \mathbf v_s, \qquad R_{mm} = \sum_{\text{in } m} R, \qquad R_{mn}
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Dependent sources</h2>
+</div>
+
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">4</span>Dependent sources</h2>
+<p>A dependent source sets its voltage or current from a voltage or current elsewhere in the circuit. It is how an amplifier is drawn in a linear model: a small controlling signal sets a large output. Four kinds exist, controlled by a voltage or a current and giving a voltage or a current:</p>
+\[
+v = \mu\,v_x, \qquad i = g_m v_x, \qquad v = r_m i_x, \qquad i = \beta\,i_x.
+\]
+<div class="box why"><span class="tag">Derivation</span>
+<p>Write the node equations as usual, with the dependent source's value in terms of its controlling variable. A source \(\mu v_x\) in series with \(R_o\) into node 2 sends \((\mu v_x - v_2)/R_o\) into it. With \(v_x = v_1\), the term \(\mu v_1/R_o\) depends on an unknown, so it moves to the left side, into the matrix:</p>
+\[
+\begin{aligned}
+v_1\Big(\tfrac{1}{R_s} + \tfrac{1}{R_{in}} + \tfrac{1}{R_f}\Big) - \tfrac{v_2}{R_f} &= \tfrac{V_s}{R_s}, \\
+-v_1\Big(\tfrac{1}{R_f} + \tfrac{\mu}{R_o}\Big) + v_2\Big(\tfrac{1}{R_o} + \tfrac{1}{R_L} + \tfrac{1}{R_f}\Big) &= 0.
+\end{aligned}
+\]
+<p>The matrix is no longer symmetric. The right side holds only the independent source.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an inverting amplifier</span>
+<p>1 V feeds node 1 through \(R_s = 1\) kΩ, with \(R_{in} = 10\) kΩ to ground. A source \(\mu v_x\) with \(\mu = -100\) and \(R_o = 100\) Ω drives node 2, which has a 1 kΩ load, and \(R_f = 10\) kΩ runs back from node 2 to node 1. In siemens,</p>
+\[
+\begin{pmatrix} 0.0012 & -0.0001 \\ 0.9999 & 0.0111 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 0.001 \\ 0 \end{pmatrix},
+\]
+<p>so \(v_1 = 0.098\) V and \(v_2 = -8.82\) V. The circuit's gain is \(-8.82\), close to \(-R_f/R_s = -10\), though the source alone multiplies by 100. Seen from the load, the output resistance is 10.7 Ω.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Switching a dependent source off, as you would an independent one in superposition or when finding a Thévenin resistance. In this amplifier, \(\mu = 0\) leaves only what leaks through \(R_f\): a gain of 0.0075, and an output resistance of 99 Ω. Keep it in; switch off only the independent sources.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>A dependent source is part of the circuit. With feedback, the circuit's gain is set by its resistors, \(-R_f/R_s\), more than by \(\mu\).</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Formula sheet</h2>
 \[
 i = \frac{v_a - v_b + V}{R}, \qquad G\mathbf v = \mathbf i_s \ (n - 1 \text{ equations}), \qquad R\mathbf I = \mathbf v_s \ (b - n + 1 \text{ equations}).
+\]
+\[
+v = \mu v_x, \quad i = g_m v_x, \quad v = r_m i_x, \quad i = \beta i_x, \qquad \frac{v_\text{out}}{v_\text{in}} \to -\frac{R_f}{R_s} \text{ as } \mu \to -\infty.
 \]
 </section>
 

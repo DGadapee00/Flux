@@ -24,6 +24,7 @@ export default {
       why: 'Transistor amplifiers, the devices that dependent sources stand in for.',
     },
   ],
-  labs: [],
-  candidate: 'A circuit with a voltage-controlled source whose gain you sweep, the node voltages updating. It corrects the idea that a dependent source can be zeroed like any other source: zero it and the circuit you analyse is no longer the one you built.',
+  labs: [
+    { course: 'eel3111', lab: 'dependent', notes: ['s4'], note: 'An amplifier drawn with a voltage-controlled source and a feedback resistor, with its gain swept: zero the source and the output collapses, while doubling it barely moves the gain from −R_f/R_s.' },
+  ],
 };

@@ -10,8 +10,8 @@ export const EXAMS = [
     title: 'Methods of analysis',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['nodes'],
-    coming: ['Dependent sources'],
+    labs: ['nodes', 'dependent'],
+    coming: [],
   },
   {
     id: 'u2',
@@ -22,16 +22,28 @@ export const EXAMS = [
     labs: ['phasors'],
     coming: ['AC power', 'Filters'],
   },
+  {
+    id: 'u3',
+    n: 3,
+    title: 'Circuit theorems',
+    chapters: '3',
+    date: 'Unit 3',
+    labs: ['superpose'],
+    coming: ['Thévenin and Norton equivalents'],
+  },
 ];
 
 export const LAB_META = {
   nodes: { id: 'nodes', exam: 'u1', title: 'Nodes' },
+  dependent: { id: 'dependent', exam: 'u1', title: 'Dependent' },
   phasors: { id: 'phasors', exam: 'u2', title: 'Phasors' },
+  superpose: { id: 'superpose', exam: 'u3', title: 'Superpose' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Methods of analysis',
   2: 'Sinusoidal steady state',
+  3: 'Circuit theorems',
 };
 
 export function examById(id) {

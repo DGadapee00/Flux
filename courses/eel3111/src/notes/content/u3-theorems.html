@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Circuit theorems</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EEL 3111 · Circuit Analysis I · Unit 3 · Kuphaldt, Lessons in Electric Circuits, Vol. I, DC</div>
+  <h1>Circuit theorems</h1>
+  <p class="lede">Why a circuit of resistors and sources answers each source separately, how to switch a source off, and why the powers do not add the way the currents do.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Superposition</h3>
+    <a href="#s1"><span>1</span>Superposition</a>
+    <a href="#s2"><span>2</span>Power does not superpose</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Superposition</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Superposition</h2>
+<p>A circuit of resistors and sources is linear. Its node equations are \(G\mathbf v = \mathbf i_s\), and the sources appear only on the right. So the answer to several sources is the sum of the answers to each one alone.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Split the source vector by source: \(\mathbf i_s = \mathbf i_{s,1} + \mathbf i_{s,2}\). Then</p>
+\[
+\mathbf v = G^{-1}\mathbf i_s = G^{-1}\mathbf i_{s,1} + G^{-1}\mathbf i_{s,2}.
+\]
+<p>Each term is the circuit with one source on and the other at zero. A voltage source at zero holds no voltage: it becomes a wire. A current source at zero passes no current: it becomes a break. Its series resistor, and every dependent source, stays.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two sources</span>
+<p>12 V with 2 Ω feeds node 1, 4 Ω runs from node 1 to ground, 2 Ω joins node 1 to node 2, the 4 Ω load hangs from node 2, and 6 V with 4 Ω feeds node 2. With 6 V a wire, node 2 sees 4 Ω ∥ 4 Ω = 2 Ω; with the 2 Ω that makes 4 Ω, which in parallel with the 4 Ω shunt is 2 Ω. The 12 V source sees 4 Ω in all and drives 3 A. Half goes towards node 2 and half of that through the load: \(I_{L1} = 0.75\) A. By the same steps with 12 V a wire, the 6 V source gives \(I_{L2} = 0.469\) A. Both on:</p>
+\[
+I_L = 0.75 + 0.469 = 1.219\ \text{A}.
+\]
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Removing the switched-off voltage source and its resistor, leaving a gap. Zero volts is a wire: the source's resistor still runs to ground.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Power does not superpose</h2>
+<p>Power goes as the square of current, and the square of a sum is not the sum of the squares.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+P_L = R_L\,(I_{L1} + I_{L2})^2 = P_1 + P_2 + 2R_L\,I_{L1}I_{L2}.
+\]
+<p>The cross term is positive when the two parts push the same way and negative when they oppose. Add the currents first, then find the power.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · powers that do not add</span>
+<p>In the circuit above, 12 V alone puts \(0.75^2 \times 4 = 2.25\) W into the load and 6 V alone \(0.469^2 \times 4 = 0.879\) W. Their sum is 3.13 W. With both on the load takes</p>
+\[
+1.219^2 \times 4 = 5.94\ \text{W},
+\]
+<p>nearly twice as much.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · currents that cancel</span>
+<p>Reverse the right-hand source and raise it to 9.6 V. Alone it gives \(-0.75\) A through the load, 2.25 W, the same power as the 12 V source alone. The powers alone sum to 4.5 W, but together the currents cancel and the load takes nothing.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Voltages and currents superpose. Power, a product of the two, does not.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+\mathbf v = G^{-1}\mathbf i_s = \sum_k G^{-1}\mathbf i_{s,k}, \qquad \text{off: } V \to \text{wire}, \quad I \to \text{break}.
+\]
+\[
+P_L = R_L\,(I_{L1} + I_{L2})^2 = P_1 + P_2 + 2R_L I_{L1} I_{L2}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Kuphaldt, Lessons in Electric Circuits, Vol. I, on network theorems, and MIT 6.002's lecture on linearity and superposition.</footer>
+</body>
+</html>

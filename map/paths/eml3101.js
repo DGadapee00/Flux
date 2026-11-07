@@ -1,8 +1,8 @@
 /**
  * EML 3101 Thermodynamics II, in the order of MIT 16.050 Thermal Energy, Fall 2002
- * (docs/ocw/16-050.md), with Cleynen's Engineering Thermodynamics. EML 3101 has no Flux app, so
- * every new concept here is a gap with a candidate lab. 16.050's heat-transfer lectures (27 to 37)
- * are EML 4140's on this map. The last unit holds EML 3101 topics 16.050 does not teach.
+ * (docs/ocw/16-050.md), with Cleynen's Engineering Thermodynamics. EML 3101's app started with gas
+ * mixtures; the other concepts here are gaps with candidate labs. 16.050's heat-transfer lectures
+ * (27 to 37) are EML 4140's on this map. The last unit holds EML 3101 topics 16.050 does not teach.
  */
 export default {
   course: 'eml3101',
