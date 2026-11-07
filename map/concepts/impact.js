@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Elastic and inelastic cases side by side.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.01SC, 26.1 Momentum in collisions',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lecture video',
       level: 'Course level',
       why: 'Collision theory before the worked 1D and 2D cases.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

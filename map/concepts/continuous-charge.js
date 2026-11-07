@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Line, ring and disk worked through with the symmetry argument shown.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.02, Problem-solving guide: Continuous charge distributions',
@@ -21,6 +22,7 @@ export default {
       kind: 'Guide + solved problems',
       level: 'Course level',
       why: 'A fixed recipe for setting up dq and r, then solved cases to check against.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Defects</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EMA 3010 · Materials Science · Unit 2 · after MIT 3.091's recitation on point defects</div>
+  <h1>Defects</h1>
+  <p class="lede">Why every real crystal has empty sites, how many, and how steeply that number climbs with temperature.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Point defects</h3>
+    <a href="#s1"><span>1</span>Vacancies in equilibrium</a>
+    <h3>Reference</h3>
+    <a href="#s2"><span>2</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Point defects</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Vacancies in equilibrium</h2>
+<p>Pulling an atom out of its site costs bonds: an energy \(Q_v\), typically 0.5 to 2 eV in a metal. A perfect crystal would avoid that cost. But a crystal with a few empty sites can arrange them in a vast number of ways, and that disorder lowers the free energy.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>With a fraction \(c\) of sites empty, the free energy per site is the energy cost minus temperature times the entropy of mixing:</p>
+\[
+g(c) = cQ_v + kT\,[c\ln c + (1 - c)\ln(1 - c)].
+\]
+<p>Near \(c = 0\) the entropy term falls faster than the energy term rises, so \(g\) dips below zero before climbing. Setting \(dg/dc = 0\):</p>
+\[
+\frac{c^*}{1 - c^*} = e^{-Q_v/kT} \quad\Longrightarrow\quad c^* \approx e^{-Q_v/kT}.
+\]
+<p>On a plot of \(\ln c^*\) against \(1/T\) this is a straight line of slope \(-Q_v/k\): an Arrhenius plot.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one electronvolt, hot and cold</span>
+<p>Take \(Q_v = 1.0\) eV and \(k = 8.617\times10^{-5}\) eV/K. At 1000 K, \(Q_v/kT = 11.6\), so \(c^* = e^{-11.6} = 9.12\times10^{-6}\). In a metal with copper's \(8.49\times10^{22}\) sites per cm³ that is \(7.74\times10^{17}\) vacancies per cm³. At 300 K, \(Q_v/kT = 38.7\) and \(c^* = 1.6\times10^{-17}\): about a million per cm³, still not zero.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the temperature in degrees Celsius. The Boltzmann factor needs kelvin: at 727 °C, \(T = 1000\) K.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Vacancies are part of equilibrium, not leftovers of a poor process. They are also what lets atoms move through a crystal, so diffusion speeds up with temperature in the same Arrhenius way.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Formula sheet</h2>
+\[
+g(c) = cQ_v + kT[c\ln c + (1 - c)\ln(1 - c)], \qquad c^* \approx e^{-Q_v/kT}, \qquad k = 8.617\times10^{-5}\ \text{eV/K}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 3.091's recitation on point defects and Arrhenius activation.</footer>
+</body>
+</html>

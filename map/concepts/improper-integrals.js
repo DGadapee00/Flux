@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Both kinds, with the comparison test.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.01SC, Part A: L’Hospital’s rule and improper integrals',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Improper integrals beside the limits they need.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

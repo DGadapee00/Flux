@@ -20,6 +20,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'One lecture and a recitation on the equivalents.',
+      checked: '2026-11-06',
     },
     {
       title: 'Kuphaldt, Lessons in Electric Circuits, Vol. I: DC',

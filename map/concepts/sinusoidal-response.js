@@ -14,6 +14,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Complex exponentials applied to first-order response.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.03SC, Complex arithmetic and exponentials',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Intro',
       why: 'The complex-number tools the method needs.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

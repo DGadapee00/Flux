@@ -13,6 +13,7 @@ export default {
       kind: 'Reference article',
       level: 'Course level',
       why: 'S–N curves, endurance limits and the stages of fatigue cracking.',
+      checked: '2026-11-06',
     },
     {
       title: 'Paris’ law (Wikipedia)',
@@ -20,6 +21,7 @@ export default {
       kind: 'Reference article',
       level: 'Deeper',
       why: 'Crack growth per cycle and how it is integrated to a life.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Slices of a surface, then higher and mixed partials.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part A: Functions of two variables, tangent approximation and optimization',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Partials, tangent planes and approximation with checked problems.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

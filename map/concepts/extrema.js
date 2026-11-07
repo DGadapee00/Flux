@@ -16,6 +16,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The second-derivative test with every case worked.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part A: Functions of two variables, tangent approximation and optimization',
@@ -23,6 +24,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Optimization problems with full solutions.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

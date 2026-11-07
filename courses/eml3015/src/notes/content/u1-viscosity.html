@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Viscosity and shear</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EML 3015 · Fluids · Unit 1 · Cleynen, Fluid Dynamics for Engineers, ch. 5</div>
+  <h1>Viscosity and shear</h1>
+  <p class="lede">What makes a fluid resist being sheared, why that is not the same as being heavy, and how a moving wall drags the fluid next to it into motion.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Shear</h3>
+    <a href="#s1"><span>1</span>Viscosity: stress from a velocity gradient</a>
+    <a href="#s2"><span>2</span>Momentum spreads in from the wall</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Shear</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Viscosity: stress from a velocity gradient</h2>
+<p>A fluid sticks to every surface it touches. Drag a plate at speed \(U\) over a thin layer of thickness \(h\), with a still wall below, and the fluid's speed runs from 0 at the wall to \(U\) at the plate. Each layer slides over the one beneath it.</p>
+<p>Sliding layers rub. The stress between them is proportional to how fast the speed changes across the layer, and the constant is the viscosity \(\mu\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+\tau = \mu\,\frac{du}{dy}, \qquad \text{and with a straight-line profile } \frac{du}{dy} = \frac{U}{h}, \text{ so } \tau = \mu\,\frac{U}{h}.
+\]
+<p>The force on a plate of area \(A\) is \(\tau A\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · water under a plate</span>
+<p>A plate moves at 0.5 m/s over a 2 mm layer of water, with \(\mu = 1.0016\times10^{-3}\) Pa·s. The stress is \(1.0016\times10^{-3} \times 0.5/0.002 = 0.250\) Pa. On a 0.1 m² plate that is a force of 0.025 N.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking viscosity as how heavy a fluid is. Mercury is 13.5 times denser than water, but its viscosity is only 1.5 times bigger, so under the same plate the stress is only 1.5 times bigger: 0.38 Pa.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The stress depends on the gradient \(U/h\), not on the speed alone. Halve the gap and the stress doubles.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Momentum spreads in from the wall</h2>
+<p>Start the plate from rest. At first only the fluid touching it moves. The moving layer drags the next, and motion spreads into the gap. This is diffusion of momentum, and it obeys the same equation as heat spreading through a rod.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+\frac{\partial u}{\partial t} = \nu\,\frac{\partial^2 u}{\partial y^2}, \qquad \nu = \frac{\mu}{\rho}.
+\]
+<p>The kinematic viscosity \(\nu\) sets how fast motion spreads. Across a gap \(h\) the slowest part of the start-up dies away on a time \(h^2/(\pi^2\nu)\). The profile is within 1% of its straight line after \(t_1 = \dfrac{h^2}{\pi^2\nu}\ln\dfrac{200}{\pi}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · water settles</span>
+<p>For water, \(\nu = 1.002\times10^{-6}\) m²/s. Across a 2 mm gap, \(t_1 = \dfrac{(0.002)^2}{\pi^2 \times 1.002\times10^{-6}}\ln\dfrac{200}{\pi} = 1.68\) s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting a thick fluid to respond slowly. Glycerol is 1,400 times more viscous than water and only 26% denser, so its \(\nu\) is about 1,100 times bigger. The same gap settles in 1.5 ms, where water takes 1.7 s.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The fluid is Newtonian and the flow laminar, with no edges or end walls. Honey, paint and blood change viscosity as they are sheared.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+\tau = \mu\,\frac{du}{dy}, \qquad \tau = \mu\,\frac{U}{h}, \qquad F = \tau A, \qquad \nu = \frac{\mu}{\rho}, \qquad t_1 = \frac{h^2}{\pi^2\nu}\ln\frac{200}{\pi}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Cleynen, Fluid Dynamics for Engineers, chapter 5 (Effects of shear). Viscosities from Wikipedia's List of viscosities and densities from its Density article, as of 6 November 2026.</footer>
+</body>
+</html>

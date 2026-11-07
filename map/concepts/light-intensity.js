@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Energy density, the Poynting vector and intensity in one short section.',
+      checked: '2026-11-06',
     },
     {
       title: 'Feynman Lectures Vol. II, Ch. 27: Field energy and field momentum',

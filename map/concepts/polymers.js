@@ -13,6 +13,7 @@ export default {
       kind: 'Recitation notes',
       level: 'Course level',
       why: 'Chain structure, molecular weight and degree of polymerization, worked.',
+      checked: '2026-11-06',
     },
     {
       title: 'Glass transition (Wikipedia)',
@@ -20,6 +21,7 @@ export default {
       kind: 'Reference article',
       level: 'Course level',
       why: 'What changes at Tg and why it is a range, not a melting point.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

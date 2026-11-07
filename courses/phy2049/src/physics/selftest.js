@@ -1,5 +1,6 @@
 import { K, EPS0, QE, MU0, C } from './constants.js';
 import { railB, railgunForce, railgunLaunch, thruster, cyclotron, spectrometerRadius, spectrometerMass, AMU, transmission, motor, mriMagnet, transformer, flowMeter, radarGun, solarSail } from './devices.js';
+import { divergence, divergenceGap, lensVolume } from '@flux/subjects/em/divergence.js';
 import { QUANTITIES, LAB_UNITS, baseUnits, unitsForLab, prettyUnit } from '../data/quantities.js';
 import { parseUnit } from './units.js';
 import { EXAMS } from '../data/catalog.js';
@@ -711,6 +712,44 @@ console.log('\nApplications: power lines, motor, MRI magnet');
   approx(solarSail({ A: 392, m: 300, r: 1 }).F / ss.F, 2, 1e-12, 'solar sail: double the area, double the force');
   approx(solarSail({ A: 196, m: 300, r: 2 }).F / ss.F, 0.25, 1e-12, 'solar sail: twice as far from the Sun, a quarter of the force');
   approx(solarSail({ A: 32, m: 5, r: 1 }).a, 5.84e-5, 2e-3, 'solar sail: a 32 m², 5 kg CubeSat sail accelerates ten times faster');
+}
+
+console.log('\nMaxwell’s divergence equations: tile sums against Gauss’s law');
+{
+  // The lens volume against a count of grid cells inside both spheres.
+  for (const [R, r, d] of [[1, 0.4, 1], [1, 0.9, 1.2], [1, 1.5, 0.8]]) {
+    const N = 90;
+    let n = 0;
+    for (let i = 0; i < N; i++)
+      for (let j = 0; j < N; j++)
+        for (let k = 0; k < N; k++) {
+          const x = d - r + (2 * r * (i + 0.5)) / N;
+          const y = -r + (2 * r * (j + 0.5)) / N;
+          const z = -r + (2 * r * (k + 0.5)) / N;
+          if ((x - d) ** 2 + y * y + z * z <= r * r && x * x + y * y + z * z <= R * R) n += 1;
+        }
+    approx(lensVolume(R, r, d), (n * (2 * r) ** 3) / N ** 3, 3e-3, `divergence: lens volume R = ${R}, r = ${r}, d = ${d} by counting cells`);
+  }
+  approx(lensVolume(1, 0.3, 0.4), (4 / 3) * Math.PI * 0.027, 1e-12, 'divergence: a sphere wholly inside shares all its volume');
+  approx(lensVolume(1, 0.3, 1.6), 0, 1e-12, 'divergence: a sphere wholly outside shares none');
+  // Every scenario, and a sweep of d at three radii: the tile sum matches Q_in/ε₀.
+  const cases = [];
+  for (const r of [0.02, 0.3, 0.8]) for (let i = 0; i <= 40; i++) cases.push({ mode: 'ball', r, d: (2 * i) / 40 });
+  let worst = 0;
+  for (const cs of cases) worst = Math.max(worst, divergenceGap(divergence(cs)));
+  ok(worst < 1e-3, `divergence: tile sum matches Q_in/ε₀ on ${cases.length} spheres (worst ${worst.toExponential(1)} of the flux)`);
+  const inside = divergence({ mode: 'ball', r: 0.3, d: 0.4 });
+  approx(inside.perVolume, 1e-6 / EPS0, 1e-9, 'divergence: inside the ball, Φ/V = ρ/ε₀ = 1.13×10⁵ N/(C·m)');
+  approx(inside.closed, 1.278e4, 2e-3, 'divergence: r = 0.3 m inside, Φ = ρ(4/3)πr³/ε₀ = 1.28×10⁴ N·m²/C');
+  approx(divergence({ mode: 'ball', r: 0.15, d: 0.4 }).numeric.net / inside.numeric.net, 0.125, 1e-9, 'divergence: half the radius, an eighth of the flux');
+  const outside = divergence({ mode: 'ball', r: 0.3, d: 1.6 });
+  ok(Math.abs(outside.numeric.net) < 1e-4 * outside.numeric.out && outside.fieldAtCentre > 1e4, 'divergence: outside, E is 14.7 kN/C but the net flux is 0');
+  approx(divergence({ mode: 'ball', r: 0.4, d: 1 }).share, 0.425, 2e-3, 'divergence: half in, half out shares 42.5% of the sphere');
+  for (const [r, d] of [[0.4, 0.8], [0.5, 0.2], [0.05, 1.5]]) {
+    const w = divergence({ mode: 'wire', I: 10, r, d });
+    ok(w.numeric.out > 0 && Math.abs(w.numeric.net) < 1e-9 * w.numeric.out, `divergence: B of a wire, r = ${r}, d = ${d}: flux in equals flux out`);
+  }
+  approx(divergence({ mode: 'wire', I: 20, r: 0.4, d: 0.8 }).numeric.out / divergence({ mode: 'wire', I: 10, r: 0.4, d: 0.8 }).numeric.out, 2, 1e-9, 'divergence: twice the current, twice the B flux each way');
 }
 
 console.log('\nApplications: the cyclotron and relativity');

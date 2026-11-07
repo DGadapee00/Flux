@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Matrices and elimination</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EGN 3203 · Modern Computation Methods · Unit 1 · Margalit and Rabinoff, Interactive Linear Algebra</div>
+  <h1>Matrices and elimination</h1>
+  <p class="lede">What a matrix does to the plane, why the order of two maps matters, and how a computer solves a linear system without losing the answer to rounding.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Maps</h3>
+    <a href="#s1"><span>1</span>A matrix is its columns</a>
+    <a href="#s2"><span>2</span>Order matters</a>
+    <h3>Part II · Solving</h3>
+    <a href="#s3"><span>3</span>Elimination</a>
+    <a href="#s4"><span>4</span>Pivoting</a>
+    <a href="#s5"><span>5</span>Determinant, inverse and conditioning</a>
+    <a href="#s6"><span>6</span>Rank and solvability</a>
+    <a href="#s7"><span>7</span>Eigenvalues and eigenvectors</a>
+    <h3>Reference</h3>
+    <a href="#s8"><span>8</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Maps</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>A matrix is its columns</h2>
+<p>A 2×2 matrix is a rule for moving every point of the plane. It is fixed by where it sends the two unit vectors: those are its columns. Every other point goes to the same combination of the columns.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+A\begin{pmatrix} x \\ y \end{pmatrix} = x\begin{pmatrix} a_{11} \\ a_{21} \end{pmatrix} + y\begin{pmatrix} a_{12} \\ a_{22} \end{pmatrix}, \qquad \text{area of the image} = |\det A| \times \text{area}.
+\]
+<p>The unit square goes to the parallelogram on the two columns, whose signed area is \(\det A = a_{11}a_{22} - a_{12}a_{21}\). A negative determinant means the plane is flipped over.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a shear</span>
+<p>The columns (1, 0) and (1, 1) keep the bottom edge of the square and slide its top edge right by 1. The square becomes a parallelogram with \(\det A = 1\cdot1 - 1\cdot0 = 1\): the same area, a different shape.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading a matrix row by row. Its columns are where the axes go; read them first and the picture follows.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Order matters</h2>
+<p>Two maps in a row make one map, whose matrix is their product. The one written on the right acts first.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+(AB)\mathbf x = A(B\mathbf x), \qquad (AB)_{ij} = \sum_k a_{ik} b_{kj}, \qquad \det(AB) = \det A\,\det B.
+\]
+<p>Column \(j\) of \(AB\) is \(A\) applied to column \(j\) of \(B\). In general \(AB \ne BA\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a shear and a quarter turn</span>
+<p>Shear then turn, \(RS\), sends (1, 0) to (0, 1). Turn then shear, \(SR\), sends it to (1, 1). Both keep areas, since each factor has determinant 1, but they move the plane differently.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>In code and on paper, write the map applied first on the right. A robot arm's joints, a camera's view and a part's coordinate frames all compose this way.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Solving</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Elimination</h2>
+<p>To solve \(A\mathbf x = \mathbf b\), subtract multiples of one equation from the others until the system is a triangle, then solve from the bottom up.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Each row operation can be undone, so it keeps exactly the same solutions. Eliminating below the pivot \(u_{ii}\) with multipliers \(\ell_{ji} = a_{ji}/u_{ii}\) gives \(U\mathbf x = \mathbf c\), and</p>
+\[
+x_i = \frac{1}{u_{ii}}\Big(c_i - \sum_{j>i} u_{ij} x_j\Big).
+\]
+<p>For \(n\) equations it costs about \(\tfrac23 n^3\) operations.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 3×3 system</span>
+<p>\(2x + y - z = 8\), \(-3x - y + 2z = -11\), \(-2x + y + 2z = -3\). The first multiplier is \(-3/2\). After three row operations the triangle gives \(z = -1\), then \(y = 3\), then \(x = 2\). Every step's system has that same solution.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Inverting the matrix to solve a system. It costs more and loses more to rounding than eliminating once and back-substituting.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Pivoting</h2>
+<p>In exact arithmetic any nonzero pivot works. In floating point a tiny pivot makes a huge multiplier, and the other rows' numbers are lost in rounding.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Partial pivoting swaps the row with the largest entry in the column into the pivot spot before eliminating, so every multiplier is at most 1 in size.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a tiny pivot</span>
+<p>\(10^{-17}x_1 + x_2 = 1\), \(x_1 + x_2 = 2\). Without a swap the multiplier is \(10^{17}\); row 2 becomes \(1 - 10^{17}\) and \(2 - 10^{17}\), both of which round to \(-10^{17}\). Then \(x_2 = 1\) and \(x_1 = 0\): wrong. Swapping first gives \(x_1 = 1\).</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The method that is exact on paper is not always exact on a computer. Library solvers pivot for this reason.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Determinant, inverse and conditioning</h2>
+<p>When \(\det A \ne 0\) the map can be undone. The inverse sends every image back where it came from: \(A^{-1}A = I\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+\begin{bmatrix} a & b\\ c & d\end{bmatrix}^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b\\ -c & a\end{bmatrix}, \qquad \det(A^{-1}) = \frac{1}{\det A}.
+\]
+<p>Multiply it out to check. In practice the inverse comes from Gauss–Jordan elimination on \([A \mid I]\), and the determinant from the product of the pivots.</p>
+<p>The unit circle maps to an ellipse. Its half-axes are the singular values \(\sigma_1 \ge \sigma_2\), with \(\sigma_1\sigma_2 = |\det A|\). The condition number \(\kappa = \sigma_1/\sigma_2\) is how flat that ellipse is. Scaling every entry by \(s\) scales both half-axes by \(s\): \(\det\) changes by \(s^2\), \(\kappa\) not at all.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two matrices with det 0.01</span>
+<p>\(0.1\,I\) has \(\det = 0.01\), yet it maps the circle to a circle of radius 0.1: \(\kappa = 1\), and its inverse is \(10\,I\). The matrix \(\begin{bmatrix} 1 & 1\\ 1 & 1.01\end{bmatrix}\) also has \(\det = 1.01 - 1 = 0.01\). Its columns nearly line up, \(\sigma_1 = 2.005\) and \(\sigma_2 = 0.00499\), so \(\kappa = 402\). Its inverse is \(\begin{bmatrix} 101 & -100\\ -100 & 100\end{bmatrix}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading a small determinant as nearly singular. The determinant depends on the matrix's size as much as its shape. The condition number does not.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Rank and solvability</h2>
+<p>Three equations in three unknowns are three planes. They usually meet in one point, but not always.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The rank is the number of pivots elimination finds. The null space holds every \(\mathbf x\) with \(A\mathbf x = \mathbf 0\), and</p>
+\[
+\operatorname{rank}A + \dim N(A) = n.
+\]
+<p>\(A\mathbf x = \mathbf b\) has a solution exactly when \(\mathbf b\) is a combination of the columns: \(\operatorname{rank}[A \mid \mathbf b] = \operatorname{rank}A\). Then every solution is \(\mathbf x_p + \mathbf x_n\), one particular solution plus anything from the null space.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a third row that adds nothing</span>
+<p>Take \(x + y + z = 3\), \(x - y + 0.5z = 0.5\) and \(2x + 1.5z = 3.5\). The third row is the sum of the first two, so elimination clears it to \(0 = 0\): two pivots, rank 2. The null space is the direction the first two planes share, \((1, 1, 1)\times(1, -1, 0.5) = (1.5, 0.5, -2)\). Every point \((1, 1, 1) + t(1.5, 0.5, -2)\) solves the system. Change the third right side to 4.5 and elimination ends at \(0 = 1\): no solution.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Nearly dependent rows are the dangerous case. Tilt the third plane by \(\varepsilon = 0.02\) and shift it by 0.5, and the one solution lands at (16, 6, −19), 25 units from (1, 1, 1). The system is solvable but ill-conditioned.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Eigenvalues and eigenvectors</h2>
+<p>A matrix turns most vectors. An eigenvector is one it only stretches: \(A\mathbf v = \lambda\mathbf v\), and \(\lambda\) is its eigenvalue.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>\(A\mathbf v = \lambda\mathbf v\) means \((A - \lambda I)\mathbf v = \mathbf 0\) with \(\mathbf v \ne \mathbf 0\), so \(A - \lambda I\) is singular:</p>
+\[
+\det(A - \lambda I) = \lambda^2 - (\operatorname{tr}A)\,\lambda + \det A = 0.
+\]
+<p>The discriminant \((\operatorname{tr}A)^2 - 4\det A\) decides the cases: positive, two real eigenvalues and two directions; zero, one repeated eigenvalue, often with one direction; negative, a complex pair and no real direction at all.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a symmetric matrix</span>
+<p>\(A = \begin{bmatrix} 2 & 1\\ 1 & 2\end{bmatrix}\): \(\operatorname{tr}A = 4\), \(\det A = 3\), so \(\lambda^2 - 4\lambda + 3 = 0\) and \(\lambda = 3, 1\). The eigenvectors are \((1, 1)\) and \((1, -1)\), at 45° and 135°, at right angles. A quarter turn \(\begin{bmatrix} 0 & -1\\ 1 & 0\end{bmatrix}\) gives \(\lambda^2 + 1 = 0\): \(\lambda = \pm i\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading the eigenvalues off the diagonal. That works only for a triangular matrix. For \(\begin{bmatrix} 2 & 1\\ 1 & 2\end{bmatrix}\) the diagonal says 2, the eigenvalues are 3 and 1.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Formula sheet</h2>
+\[
+A\mathbf x = x_1\mathbf a_1 + x_2\mathbf a_2, \qquad \det A = a_{11}a_{22} - a_{12}a_{21}, \qquad (AB)_{ij} = \sum_k a_{ik} b_{kj},
+\]
+\[
+\ell_{ji} = \frac{a_{ji}}{u_{ii}}, \qquad x_i = \frac{1}{u_{ii}}\Big(c_i - \sum_{j>i} u_{ij} x_j\Big).
+\]
+\[
+A^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b\\ -c & a\end{bmatrix}, \qquad \kappa = \frac{\sigma_1}{\sigma_2}, \qquad \operatorname{rank}A + \dim N(A) = n.
+\]
+\[
+A\mathbf v = \lambda\mathbf v, \qquad \lambda^2 - (\operatorname{tr}A)\lambda + \det A = 0.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Margalit and Rabinoff, Interactive Linear Algebra, and Hefferon, Linear Algebra.</footer>
+</body>
+</html>

@@ -13,13 +13,15 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'z-scores and the normal quantiles the plot uses.',
+      checked: '2026-11-06',
     },
     {
-      title: 'MIT 18.05, Reading 6a: Expectation, variance, law of large numbers and central limit theorem',
-      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/resources/mit18_05s14_reading6a/',
+      title: 'MIT 18.05, Reading 6b: Central limit theorem and the law of large numbers',
+      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/resources/mit18_05_s22_class06-prep-b_pdf/',
       kind: 'Reading notes',
       level: 'Course level',
       why: 'Why so much data comes out close to normal.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

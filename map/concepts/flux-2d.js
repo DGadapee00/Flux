@@ -14,6 +14,7 @@ export default {
       kind: 'Problems + solutions',
       level: 'Course level',
       why: 'Practice setting up n̂ ds, the step most people get wrong.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part C: Green’s theorem',
@@ -21,8 +22,10 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Covers both forms of Green’s theorem, including the flux (normal) form used here.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'A 2D field with a loop you drag and reshape. The flux readout and the area integral of the divergence inside agree.',
+  labs: [
+    { course: 'mac2313', lab: 'flux2d', note: String.raw`A loop you move and resize in six fields. The flux comes three ways: a closed form, \(\oint \mathbf F\cdot\hat n\,ds\) summed around it, and the divergence summed inside.` },
+  ],
 };

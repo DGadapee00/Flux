@@ -10,10 +10,11 @@ export default {
   sources: [
     {
       title: 'Yano, Penn, Konidaris and Patera, Math, Numerics, and Programming (for Mechanical Engineers)',
-      url: 'https://ocw.mit.edu/courses/2-086-numerical-computation-for-mechanical-engineers-spring-2013/resources/mit2_086s13_textbook/',
+      url: 'https://ocw.mit.edu/courses/2-086-numerical-computation-for-mechanical-engineers-spring-2013/resources/mit2_086s13_coursetext_pdf/',
       kind: 'Open textbook',
       level: 'Course level',
       why: 'The text written for MIT 2.086; it treats floating point where it first meets programs.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Floating-point arithmetic',
@@ -21,8 +22,10 @@ export default {
       kind: 'Reference',
       level: 'Deeper',
       why: 'The IEEE 754 formats, rounding and the classic cancellation cases.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Evaluate \\((1 - \\cos x)/x^2\\) as \\(x\\) shrinks, written directly and as \\(2\\sin^2(x/2)/x^2\\). It corrects the idea that a computer’s answer is good to 16 digits: the direct form loses every digit near \\(x = 10^{-8}\\), while the true value is \\(1/2\\).',
+  labs: [
+    { course: 'egn3203', lab: 'roundoff', notes: ['s1', 's2'], note: 'Three formulas in double precision, as written and rewritten, against their Taylor series: (1 − cos x)/x² loses every digit by x = 10⁻⁸, while 2 sin²(x/2)/x² keeps them.' },
+  ],
 };

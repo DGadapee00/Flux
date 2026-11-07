@@ -36,6 +36,7 @@ export const TRACKS = [
         href: 'mac2313/',
       },
       { id: 'map2302', code: 'MAP 2302', title: 'Differential Equations', term: null, href: 'map2302/' },
+      { id: 'egn3203', code: 'EGN 3203', title: 'Modern Computation Methods', term: null, href: 'egn3203/' },
     ],
   },
   {
@@ -50,6 +51,7 @@ export const TRACKS = [
         href: 'statics/',
       },
       { id: 'egn3321', code: 'EGN 3321', title: 'Dynamics', term: null, href: 'egn3321/' },
+      { id: 'ema3010', code: 'EMA 3010', title: 'Materials Science', term: null, href: 'ema3010/' },
       { id: 'egn3331', code: 'EGN 3331', title: 'Mechanics of Materials', term: null, href: 'egn3331/' },
     ],
   },
@@ -69,13 +71,26 @@ export const TRACKS = [
   {
     id: 'thermal',
     name: 'Thermal-fluids',
-    courses: [{ id: 'eml3100', code: 'EML 3100', title: 'Thermodynamics', term: null, href: 'eml3100/' }],
+    courses: [
+      { id: 'eml3100', code: 'EML 3100', title: 'Thermodynamics', term: null, href: 'eml3100/' },
+      { id: 'eml3015', code: 'EML 3015', title: 'Fluids', term: null, href: 'eml3015/' },
+      { id: 'eml4140', code: 'EML 4140', title: 'Heat Transfer', term: null, href: 'eml4140/' },
+    ],
+  },
+  {
+    id: 'circuits',
+    name: 'Circuits',
+    courses: [{ id: 'eel3111', code: 'EEL 3111', title: 'Circuit Analysis I', term: null, href: 'eel3111/' }],
   },
   {
     // Personal projects outside the degree map (DECISIONS.md, D35).
     id: 'projects',
     name: 'Projects',
-    courses: [{ id: 'bench', code: 'BENCH', title: 'Electronics on the bench', term: null, href: 'bench/' }],
+    courses: [
+      { id: 'bench', code: 'BENCH', title: 'Electronics on the bench', term: null, href: 'bench/' },
+      { id: 'design', code: 'DES', title: 'Design practice', term: null, href: 'design/' },
+      { id: 'satellite', code: 'SAT', title: 'Build a satellite', term: null, href: 'satellite/' },
+    ],
   },
 ];
 

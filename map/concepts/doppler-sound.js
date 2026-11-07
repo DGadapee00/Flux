@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Moving source and moving observer derived separately.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 1, §17.8 Shock waves',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The Mach cone and sonic booms.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

@@ -14,6 +14,7 @@ export default {
       kind: 'Recitation notes',
       level: 'Course level',
       why: 'Bragg’s condition derived from path difference, then used.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 3.091, Recitation 14: Miller indices and interplanar spacing',
@@ -21,6 +22,7 @@ export default {
       kind: 'Recitation notes',
       level: 'Course level',
       why: 'Naming planes and finding their spacing, which Bragg’s law needs.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

@@ -21,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Deeper',
       why: 'Maps between spaces come first, and matrices are how to write them down.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.06SC Linear Algebra, Fall 2011',
@@ -28,8 +29,10 @@ export default {
       kind: 'Course',
       level: 'Course level',
       why: 'Strang’s full course with lectures, problem sets and solutions.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Drag the two columns of a 2×2 matrix and watch the unit square become a parallelogram, then apply two matrices in both orders. It corrects the idea that matrix products commute: a rotation then a shear is not a shear then a rotation.',
+  labs: [
+    { course: 'egn3203', lab: 'matrix', notes: ['s1', 's2'], note: 'A 2×2 matrix moving the unit square and a letter F, with a quarter turn before or after. Two dimensions only.' },
+  ],
 };

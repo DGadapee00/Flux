@@ -9,20 +9,23 @@ export default {
   requires: ['chain-rule', 'vector-fields'],
   sources: [
     {
-      title: 'MIT 2.06, Lecture notes: Differential forms',
-      url: 'https://ocw.mit.edu/courses/2-06-fluid-dynamics-spring-2013/resources/mit2_06s13_notes_vo/',
-      kind: 'Lecture notes',
-      level: 'Course level',
-      why: 'Introduces the substantial derivative before the differential equations of motion.',
+      title: 'Wikipedia, Material derivative',
+      url: 'https://en.wikipedia.org/wiki/Material_derivative',
+      kind: 'Reference',
+      level: 'Deeper',
+      why: 'The definition, the link between the Eulerian and Lagrangian views, and its other names.',
+      checked: '2026-11-06',
     },
     {
-      title: 'Cleynen, Fluid Dynamics for Engineers',
-      url: 'https://fluidmech.ninja/',
+      title: 'Cleynen, Fluid Dynamics for Engineers, Ch. 6: Prediction of fluid flows',
+      url: 'https://fluidmech.ninja/chapter6.pdf',
       kind: 'Open textbook',
       level: 'Course level',
-      why: 'The particle and field views side by side, with the convective term explained.',
+      why: 'Develops the total time derivative from a particle passing a fixed point, with the convective term explained.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Trace particles through a steady converging nozzle and plot their speed against time. It corrects the idea that steady flow has no acceleration: the field never changes, but every particle speeds up as it moves.',
+  labs: [
+    { course: 'eml3015', lab: 'nozzle', notes: ['s1', 's2'], note: 'Particles carried through a nozzle at equal time steps, with the local and convective parts of their acceleration.' },
+  ],
 };

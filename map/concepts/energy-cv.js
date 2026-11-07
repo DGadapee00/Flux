@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Open systems with many worked examples and problems with solutions.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 16.050 Thermal Energy, calendar',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'The prelude reviews control-volume energy before the second law.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Gas-turbine cycles with worked examples, past where Yan stops.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 16.050 Thermal Energy, calendar: Gas power and propulsion cycles',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lecture notes',
       level: 'Deeper',
       why: 'Brayton and its jet-engine variants, from an aerospace course.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

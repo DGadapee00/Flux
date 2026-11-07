@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Where the r comes from, then regions between curves.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part A: Double integrals',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Includes the polar change of variables in the same unit.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

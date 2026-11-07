@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The spring-mass system solved and its energy tracked.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 1, §15.4 Pendulums',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Simple, physical and torsional pendulums side by side.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

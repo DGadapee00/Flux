@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Tangent lines to curves that are not graphs of functions.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.01SC, Part B: Implicit differentiation and inverse functions',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Implicit and inverse derivatives, with exp and log, and checked problems.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

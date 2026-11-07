@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Circular orbits, their energy and escape speed.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.01SC, 5.1 Universal law of gravitation',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lecture video',
       level: 'Course level',
       why: 'The inverse-square law set up as a vector force.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Torque and angular acceleration for fixed-axis problems.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 2.003SC, Finding equations of motion for rigid body rotation',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Deeper',
       why: 'A careful method for general plane motion.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

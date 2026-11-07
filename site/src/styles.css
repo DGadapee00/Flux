@@ -1313,3 +1313,79 @@ footer a {
   margin-left: 6px;
   padding: 0 4px;
 }
+
+/*
+ * The learner's progress on the map. A box fills in its lane's colour: all the way when solid,
+ * part of the way while learning. A course already taken with no Flux practice fills faintly.
+ * A box that needs something first has a dashed edge. An orange dot means a review is due.
+ */
+.node rect.progress {
+  stroke: none;
+  opacity: 0.26;
+  pointer-events: none;
+  transition: width 0.3s;
+}
+
+.node.st-assumed rect.progress {
+  opacity: 0.12;
+}
+
+.node.st-locked > rect:first-of-type {
+  stroke-dasharray: 5 4;
+}
+
+.node .due {
+  fill: #e08a1e;
+  stroke: var(--node);
+  stroke-width: 1.5;
+  display: none;
+}
+
+.node.st-due .due {
+  display: inline;
+}
+
+.hint .progress-key {
+  flex-wrap: wrap;
+  white-space: normal;
+  column-gap: 0;
+}
+
+.progress-key > span {
+  white-space: nowrap;
+}
+
+.key .fill {
+  display: inline-block;
+  width: 16px;
+  height: 10px;
+  border-radius: 3px;
+  margin: 0 4px 0 10px;
+  vertical-align: -1px;
+  border: 1px solid var(--muted);
+  background: color-mix(in srgb, var(--muted) 30%, transparent);
+}
+
+.key .fill.part {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--muted) 30%, transparent) 45%, transparent 45%);
+}
+
+.key .fill.dash {
+  background: none;
+  border-style: dashed;
+}
+
+.key .duedot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e08a1e;
+  margin: 0 4px 0 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .node rect.progress {
+    transition: none;
+  }
+}

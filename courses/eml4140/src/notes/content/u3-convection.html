@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Convection</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EML 4140 · Heat Transfer · Unit 3 · Lienhard and Lienhard, A Heat Transfer Textbook, chapter 6</div>
+  <h1>Convection</h1>
+  <p class="lede">How a stream carries heat away from a wall, why the heat stays in a thin layer, and why that layer can be far thinner or far thicker than the layer where the flow slows down.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The thermal layer</h3>
+    <a href="#s1"><span>1</span>Two layers on a heated plate</a>
+    <a href="#s2"><span>2</span>Heat leaving the wall</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The thermal layer</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Two layers on a heated plate</h2>
+<p>A stream at \(T_\infty\) flows along a plate held at \(T_s\). Fluid that has touched the plate long enough to warm up forms a thin layer. Heat diffuses out through it while the stream sweeps it along, so it grows as \(\sqrt x\), like the velocity layer.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>In a moving fluid the heat equation gains a material derivative: \(DT/Dt = \alpha\nabla^2T\). In a thin layer only conduction across it counts, so</p>
+\[
+u\frac{\partial T}{\partial x} + v\frac{\partial T}{\partial y} = \alpha\frac{\partial^2 T}{\partial y^2}.
+\]
+<p>With the velocity layer's similarity variable \(\eta = y\sqrt{U/\nu x}\), \(u/U = f'(\eta)\) and \(\theta = (T - T_s)/(T_\infty - T_s)\), it becomes</p>
+\[
+\theta'' + \frac{\text{Pr}}{2}\,f\,\theta' = 0, \qquad \theta(0) = 0, \quad \theta(\infty) = 1, \qquad \text{Pr} = \frac{\nu}{\alpha}.
+\]
+<p>Only Pr enters. At Pr = 1 the equation is the Blasius equation for \(f'\), so the two layers match. Above 1, momentum spreads faster than heat and the thermal layer is the thinner one, close to \(\delta_t/\delta = \text{Pr}^{-1/3}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · air over a warm plate</span>
+<p>Air has Pr = 0.71. Solving the equation numerically gives \(\theta = 0.99\) at \(\eta = 5.60\), against 4.91 for the velocity layer, so</p>
+\[
+\frac{\delta_t}{\delta} = \frac{5.60}{4.91} = 1.14, \qquad \text{Pr}^{-1/3} = 1.12.
+\]
+<p>The wall gradient is \(\theta'(0) = 0.294\), within 1% of \(0.332(0.71)^{1/3} = 0.296\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the thermal layer to be the velocity layer. In water, Pr is about 6 and the thermal layer is half as thick; in an oil, a tenth or less; in a liquid metal, several times thicker.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Heat leaving the wall</h2>
+<p>The fluid at the wall does not move, so heat leaves the plate by conduction into it. The flow's job is to keep the temperature gradient there steep.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>At the wall \(q'' = -k\,\partial T/\partial y\). With \(\partial\eta/\partial y = \sqrt{U/\nu x}\),</p>
+\[
+q'' = k\,(T_s - T_\infty)\,\theta'(0)\sqrt{\frac{U}{\nu x}}, \qquad \text{Nu}_x = \frac{q''x}{k\,(T_s - T_\infty)} = \theta'(0)\sqrt{\text{Re}_x}.
+\]
+<p>For Pr above about 0.6, \(\theta'(0) \approx 0.332\,\text{Pr}^{1/3}\). For a liquid metal, \(\theta'(0) \approx 0.564\,\text{Pr}^{1/2}\). The flux falls as \(1/\sqrt x\): the layer thickens and the gradient flattens.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · water along a plate</span>
+<p>Water at 0.5 m/s with \(k = 0.613\) W/m·K, \(\nu = 8.57\times10^{-7}\) m²/s and Pr = 5.83, over a plate 40 K warmer. The exact solution gives \(\theta'(0) = 0.607\); the rule gives 0.598. At \(x = 0.3\) m, \(\text{Re}_x = 1.75\times10^5\) and</p>
+\[
+q'' = 0.613(40)(0.607)\sqrt{\frac{0.5}{8.57\times10^{-7}(0.3)}} = 20.8\ \text{kW/m}^2.
+\]
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>\(h = q''/(T_s - T_\infty)\) is not a property of the fluid. It depends on how thin the thermal layer is, so on the speed, the distance from the leading edge and Pr.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+\theta'' + \frac{\text{Pr}}{2}f\theta' = 0, \qquad \frac{\delta_t}{\delta} \approx \text{Pr}^{-1/3}, \qquad \text{Nu}_x = \theta'(0)\sqrt{\text{Re}_x}, \qquad \theta'(0) \approx 0.332\,\text{Pr}^{1/3}.
+\]
+\[
+q'' = k\,(T_s - T_\infty)\,\theta'(0)\sqrt{\frac{U}{\nu x}}, \qquad \delta = \frac{4.91\,x}{\sqrt{\text{Re}_x}}, \qquad \text{Re}_x = \frac{Ux}{\nu}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Lienhard and Lienhard, A Heat Transfer Textbook, chapter 6, on laminar boundary layers.</footer>
+</body>
+</html>

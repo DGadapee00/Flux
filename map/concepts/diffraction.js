@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The half-slit pairing argument for the dark fringes.',
+      checked: '2026-11-06',
     },
     {
       title: 'Feynman Lectures Vol. I, Ch. 30: Diffraction',

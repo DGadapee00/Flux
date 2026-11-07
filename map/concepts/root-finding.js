@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The course’s unit on nonlinear equations, in one unknown and in many.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Newton’s method',
@@ -21,6 +22,7 @@ export default {
       kind: 'Reference',
       level: 'Intro',
       why: 'The tangent-line picture, quadratic convergence and its failure cases.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

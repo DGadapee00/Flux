@@ -14,6 +14,7 @@ export default {
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'The method of joints and determinacy.',
+      checked: '2026-11-06',
     },
     {
       title: 'Engineering Statics: Open and Interactive (Baker and Haynes)',
@@ -21,6 +22,7 @@ export default {
       kind: 'Free textbook (CC BY-NC-SA)',
       level: 'Course level',
       why: 'Trusses, frames and machines with interactive examples.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

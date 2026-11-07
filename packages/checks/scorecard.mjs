@@ -34,7 +34,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { withCoaching } from './coaching.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const COURSES = ['phy2049', 'phy2048', 'mac2311', 'mac2313', 'statics', 'egn3321', 'egn3331', 'eml3100', 'sta3032', 'bench', 'map2302'];
+const COURSES = ['phy2049', 'phy2048', 'mac2311', 'mac2313', 'statics', 'egn3321', 'egn3331', 'eml3100', 'sta3032', 'bench', 'map2302', 'eml3015', 'design', 'egn3203', 'ema3010', 'eml4140', 'eel3111', 'satellite'];
 const argv = process.argv.slice(2);
 const args = new Set(argv);
 const marked = new Set(argv.flatMap((a, i) => (a === '--mark' ? [argv[i + 1]] : [])));

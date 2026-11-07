@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Malus’s law, then polarization by reflection and scattering.',
+      checked: '2026-11-06',
     },
     {
       title: 'Feynman Lectures Vol. I, Ch. 33: Polarization',

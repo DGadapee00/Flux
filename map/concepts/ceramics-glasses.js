@@ -14,6 +14,7 @@ export default {
       kind: 'Recitation notes',
       level: 'Course level',
       why: 'Volume against temperature for crystal and glass, and the cooling-rate effect.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 3.091, Recitation 20: Glass formers',
@@ -21,6 +22,7 @@ export default {
       kind: 'Recitation notes',
       level: 'Course level',
       why: 'Network formers and modifiers, and what makes a melt form a glass.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

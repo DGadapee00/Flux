@@ -21,8 +21,10 @@ export default {
       kind: 'Course',
       level: 'Course level',
       why: 'Unit I builds the four subspaces that decide when a system can be solved.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Tilt three planes until two of the equations agree. It corrects the idea that three equations in three unknowns always fix one answer: dependent rows leave a whole line of solutions, or none at all.',
+  labs: [
+    { course: 'egn3203', lab: 'rank', notes: ['s6'], note: 'Three planes in a box: one point, a shared line or none, as the third row is tilted and shifted. Rank by pivots against the largest non-zero minor.' },
+  ],
 };

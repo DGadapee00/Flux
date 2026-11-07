@@ -8,18 +8,20 @@ export default {
   requires: ['stress-on-a-section', 'stress-strain'],
   sources: [
     {
-      title: 'MIT 2.001, Lecture 22: Torsion and twisting',
+      title: 'MIT 2.001, Lecture 24: Torsion and twisting',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec22/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Shear stress and twist in circular shafts.',
+      checked: '2026-11-06',
     },
     {
-      title: 'MIT 2.001, Lecture 23: Torsion examples',
+      title: 'MIT 2.001, Lecture 25: Torsion examples',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec23/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Series shafts, indeterminate shafts and power.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

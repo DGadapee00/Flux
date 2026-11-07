@@ -17,6 +17,13 @@ const PLATFORM_HREF = {
   sta3032: 'sta3032/',
   egn3321: 'egn3321/',
   eml3100: 'eml3100/',
+  eml3015: 'eml3015/',
+  eml4140: 'eml4140/',
+  eel3111: 'eel3111/',
+  satellite: 'satellite/',
+  design: 'design/',
+  egn3203: 'egn3203/',
+  ema3010: 'ema3010/',
   egn3331: 'egn3331/',
   bench: 'bench/',
   map2302: 'map2302/',
@@ -28,14 +35,14 @@ const DIST = path.resolve(import.meta.dirname, '../../site/dist');
 /** Tracks whose first course is not built yet. Their cards list the courses and open nothing. */
 const UNBUILT_TRACKS = [];
 
-test('six tracks in order, each with a built course unless it is still to come', () => {
+test('seven tracks in order, each with a built course unless it is still to come', () => {
   assert.deepEqual(
     TRACKS.map((track) => track.id),
-    ['physics', 'math', 'mechanics', 'stats', 'thermal', 'projects'],
+    ['physics', 'math', 'mechanics', 'stats', 'thermal', 'circuits', 'projects'],
   );
   assert.deepEqual(
     visibleTracks().map((track) => track.id),
-    ['physics', 'math', 'mechanics', 'stats', 'thermal', 'projects'],
+    ['physics', 'math', 'mechanics', 'stats', 'thermal', 'circuits', 'projects'],
   );
   for (const track of TRACKS) {
     const built = track.courses.filter((course) => course.href);
@@ -59,16 +66,17 @@ test('six tracks in order, each with a built course unless it is still to come',
 
 test('the card opens the latest built course, and D5 is on the list', () => {
   assert.equal(latestBuilt(TRACKS[0]).id, 'phy2049');
-  assert.equal(latestBuilt(TRACKS[1]).id, 'map2302');
+  assert.equal(latestBuilt(TRACKS[1]).id, 'egn3203');
   assert.equal(latestBuilt(TRACKS[1]).term, null);
   assert.equal(latestBuilt(TRACKS[2]).id, 'egn3331');
   assert.equal(latestBuilt(TRACKS[2]).code, 'EGN 3331');
   assert.equal(latestBuilt(TRACKS[3]).id, 'sta3032');
-  assert.equal(latestBuilt(TRACKS[4]).id, 'eml3100');
-  assert.equal(latestBuilt(TRACKS[5]).id, 'bench');
+  assert.equal(latestBuilt(TRACKS[4]).id, 'eml4140');
+  assert.equal(latestBuilt(TRACKS[5]).id, 'eel3111');
+  assert.equal(latestBuilt(TRACKS[6]).id, 'satellite');
   assert.deepEqual(
     builtCourses().map((course) => course.id),
-    ['phy2048', 'phy2049', 'mac2311', 'mac2313', 'map2302', 'statics', 'egn3321', 'egn3331', 'sta3032', 'eml3100', 'bench'],
+    ['phy2048', 'phy2049', 'mac2311', 'mac2313', 'map2302', 'egn3203', 'statics', 'egn3321', 'ema3010', 'egn3331', 'sta3032', 'eml3100', 'eml3015', 'eml4140', 'eel3111', 'bench', 'design', 'satellite'],
   );
 });
 
@@ -76,7 +84,7 @@ test('Phase 8: Dynamics, Mechanics of Materials and Thermodynamics are built', (
   const card = (id) => TRACKS.flatMap((track) => track.courses.map((course) => ({ track: track.id, ...course }))).find((course) => course.id === id);
   assert.deepEqual(
     TRACKS[2].courses.map((course) => course.code),
-    ['EGN 3311', 'EGN 3321', 'EGN 3331'],
+    ['EGN 3311', 'EGN 3321', 'EMA 3010', 'EGN 3331'],
   );
   const dynamics = card('egn3321');
   assert.deepEqual([dynamics.track, dynamics.code, dynamics.title, dynamics.href], ['mechanics', 'EGN 3321', 'Dynamics', 'egn3321/']);
@@ -96,12 +104,13 @@ test('a course header gets its track, in hub order, with unbuilt siblings unlink
     [
       ['statics', 'EGN 3311', '../statics/'],
       ['egn3321', 'EGN 3321', '../egn3321/'],
+      ['ema3010', 'EMA 3010', '../ema3010/'],
       ['egn3331', 'EGN 3331', '../egn3331/'],
     ],
   );
   assert.deepEqual(
     trackSiblings('mac2312').map((course) => course.href),
-    ['../mac2311/', '../mac2313/', '../map2302/'],
+    ['../mac2311/', '../mac2313/', '../map2302/', '../egn3203/'],
   );
   assert.deepEqual(trackSiblings('sta3032').map((course) => course.code), ['STA 3032']);
   assert.deepEqual(trackSiblings('missing'), []);

@@ -13,6 +13,7 @@ export default {
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Average stress in bars and connections, set up from cuts.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 1, §12.3 Stress, strain, and elastic modulus',
@@ -20,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Tensile and shear stress defined on simple members.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

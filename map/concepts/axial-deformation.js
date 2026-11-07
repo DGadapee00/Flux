@@ -14,13 +14,15 @@ export default {
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Compatibility as the third ingredient beside equilibrium and material law.',
+      checked: '2026-11-06',
     },
     {
-      title: 'MIT 2.001, Lecture 14: Stress-strain-temperature relationships and thin-walled pressure vessels',
+      title: 'MIT 2.001, Lecture 15: Stress-strain-temperature relationships and thin-walled pressure vessels',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec14/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Thermal strain added to the force-deformation relation.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

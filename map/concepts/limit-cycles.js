@@ -14,6 +14,7 @@ export default {
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Limit cycles and the Poincaré–Bendixson idea.',
+      checked: '2026-11-06',
     },
     {
       title: 'Lebl, Notes on Diffy Qs, §8.3 Applications of nonlinear systems',
@@ -21,6 +22,7 @@ export default {
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'The pendulum and its period at large swings.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

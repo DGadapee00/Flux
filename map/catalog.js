@@ -9,6 +9,13 @@ import * as bench from '../courses/bench/src/data/catalog.js';
 import * as egn3321 from '../courses/egn3321/src/data/catalog.js';
 import * as egn3331 from '../courses/egn3331/src/data/catalog.js';
 import * as eml3100 from '../courses/eml3100/src/data/catalog.js';
+import * as eml3015 from '../courses/eml3015/src/data/catalog.js';
+import * as design from '../courses/design/src/data/catalog.js';
+import * as egn3203 from '../courses/egn3203/src/data/catalog.js';
+import * as ema3010 from '../courses/ema3010/src/data/catalog.js';
+import * as eml4140 from '../courses/eml4140/src/data/catalog.js';
+import * as eel3111 from '../courses/eel3111/src/data/catalog.js';
+import * as satellite from '../courses/satellite/src/data/catalog.js';
 import * as mac2311 from '../courses/mac2311/src/data/catalog.js';
 import * as mac2313 from '../courses/mac2313/src/data/catalog.js';
 import * as map2302 from '../courses/map2302/src/data/catalog.js';
@@ -57,6 +64,13 @@ export const LAB_CATALOGS = {
   egn3321: fromMeta(egn3321.LAB_META),
   egn3331: fromMeta(egn3331.LAB_META),
   eml3100: fromMeta(eml3100.LAB_META),
+  eml3015: fromMeta(eml3015.LAB_META),
+  design: fromMeta(design.LAB_META),
+  egn3203: fromMeta(egn3203.LAB_META),
+  ema3010: fromMeta(ema3010.LAB_META),
+  eml4140: fromMeta(eml4140.LAB_META),
+  eel3111: fromMeta(eel3111.LAB_META),
+  satellite: fromMeta(satellite.LAB_META),
   mac2311: fromMeta(mac2311.LAB_META),
   mac2313: fromMeta(mac2313.LAB_META),
   map2302: fromMeta(map2302.LAB_META),

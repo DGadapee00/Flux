@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Scalar and vector line integrals, then work and flux along a curve.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part B: Vector fields and line integrals',
@@ -21,8 +22,12 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Work, gradient fields and path independence with checked problems.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
+  labs: [
+    { course: 'phy2048', lab: 'work-path', notes: ['s2', 's7'], note: String.raw`Work as \(\int \mathbf F\cdot d\mathbf r\), summed leg by leg on four paths: gravity and a spring give one total, friction and a swirl do not.` },
+    { course: 'egn3321', lab: 'paths', notes: 's5', note: 'Two paths between the same points: gravity and a spring agree, friction does not.' },
+  ],
   candidate: 'A field and a path you drag: the work integral adds up piece by piece, and for a gradient field two paths between the same points give the same total.',
 };

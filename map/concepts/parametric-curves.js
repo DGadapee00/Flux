@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Tangent vectors and derivatives of space curves.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part C: Parametric equations for curves',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Velocity, speed and arc length with recitation videos.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

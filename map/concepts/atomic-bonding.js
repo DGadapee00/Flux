@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Bond energies and lattice energy, with the numbers that set melting points.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 3.091, Recitation 11: Molecular orbital theory and intermolecular forces',
@@ -21,8 +22,10 @@ export default {
       kind: 'Recitation notes',
       level: 'Course level',
       why: 'Primary bonds against the secondary forces that hold molecules and polymer chains together.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Drag two atoms along their energy curve and change its depth and curvature apart. It corrects the idea that a deeper well makes a stiffer solid: stiffness follows the curvature.',
+  labs: [
+    { course: 'ema3010', lab: 'bond', notes: ['s1', 's2', 's3'], note: 'Two atoms on their energy curve: the force as its slope, and a shallow, narrow well twice as stiff as a deep, wide one.' },
+  ],
 };

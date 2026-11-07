@@ -9,18 +9,20 @@ export default {
   requires: ['sampling-distributions'],
   sources: [
     {
-      title: 'MIT 18.05, Reading 17a: Frequentist methods; null hypothesis significance testing',
-      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/resources/mit18_05s14_reading17a/',
+      title: 'MIT 18.05, Reading 17b: Null hypothesis significance testing I',
+      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/resources/mit18_05_s22_class17-prep-b_pdf/',
       kind: 'Reading notes',
       level: 'Course level',
       why: 'Rejection regions, significance and power.',
+      checked: '2026-11-06',
     },
     {
-      title: 'MIT 18.05, Reading 19: NHST III, gallery of tests',
-      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/resources/mit18_05s14_reading19/',
+      title: 'MIT 18.05, Reading 19: Null hypothesis significance testing III',
+      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/resources/mit18_05_s22_class19-prep_pdf/',
       kind: 'Reading notes',
       level: 'Course level',
       why: 'The common tests side by side, which is the choice the lab drills.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

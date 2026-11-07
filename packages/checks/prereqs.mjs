@@ -14,9 +14,16 @@ import { course as sta } from '../../courses/sta3032/src/manifest.js';
 import { course as mech } from '../../courses/statics/src/manifest.js';
 import { course as bench } from '../../courses/bench/src/manifest.js';
 import { course as ode } from '../../courses/map2302/src/manifest.js';
+import { course as fluids } from '../../courses/eml3015/src/manifest.js';
+import { course as design } from '../../courses/design/src/manifest.js';
+import { course as computation } from '../../courses/egn3203/src/manifest.js';
+import { course as matsci } from '../../courses/ema3010/src/manifest.js';
+import { course as heat } from '../../courses/eml4140/src/manifest.js';
+import { course as circuits } from '../../courses/eel3111/src/manifest.js';
+import { course as satellite } from '../../courses/satellite/src/manifest.js';
 import { TRACKS } from '../../site/src/tracks.js';
 
-const courses = [phy, calc1, calc2, mac, mech, dynamics, materials, sta, thermo, bench, ode];
+const courses = [phy, calc1, calc2, mac, mech, dynamics, materials, sta, thermo, bench, ode, fluids, design, computation, matsci, heat, circuits, satellite];
 const known = new Map();
 for (const track of TRACKS) {
   for (const card of track.courses) known.set(card.id, card);

@@ -184,6 +184,22 @@ footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 <p>Under Gauss's law the notes say "Electric field lines are not closed, they have a beginning and end." That is true of the field a <i>charge</i> makes: its lines start on positive charge and end on negative. The electric field made by a changing magnetic field (Faraday's law, Exam 5) has no charge to start or end on. Its lines close on themselves. So do the electric field lines of a wave in empty space. If electric field lines had to end on charges, a wave could not cross a vacuum.</p>
 </div>
 
+<div class="box why"><span class="tag">Derivation · the two flux laws at a point</span>
+<p>Gauss's law holds for any closed surface. Take a small sphere of volume \(V\) around a point and divide both sides by \(V\):</p>
+\[\frac{1}{V}\oint\vec E\cdot d\vec A = \frac{Q_{\text{in}}}{\varepsilon_0 V}.\]
+<p>Shrink the sphere onto the point. On the right, \(Q_{\text{in}}/V\) becomes the charge density \(\rho\) there. On the left is the flux per unit volume leaving the point. That limit is the divergence of \(\vec E\), written \(\nabla\cdot\vec E\). The divergence theorem of Calculus III says the same flux is \(\int\nabla\cdot\vec E\,dV\) over the inside, so the two forms agree. Do the same with Gauss's law for magnetism:</p>
+\[\nabla\cdot\vec E = \frac{\rho}{\varepsilon_0}, \qquad \nabla\cdot\vec B = 0.\]
+<p>The first says field lines spread out from a point in proportion to the charge there. Where there is no charge, as much flux enters a small region as leaves it, however strong the field. The second says that holds for \(\vec B\) everywhere.</p>
+</div>
+
+<div class="box ex"><span class="tag">Worked example · a small sphere in a charged ball</span>
+<p>A ball of radius 1.00 m holds charge spread evenly, \(\rho = 1.00\ \mu\text{C/m}^3\). A small sphere of radius 0.30 m sits wholly inside it. Its volume is \(\tfrac43\pi(0.30)^3 = 0.1131\) m³, so it holds</p>
+\[Q = \rho V = (1.00\times10^{-6})(0.1131) = 1.131\times10^{-7}\ \text{C},\]
+<p>and the flux out of it is</p>
+\[\Phi = \frac{Q}{\varepsilon_0} = \frac{1.131\times10^{-7}}{8.85\times10^{-12}} = 1.28\times10^4\ \text{N·m}^2/\text{C}.\]
+<p>Per unit volume that is \(\Phi/V = \rho/\varepsilon_0 = 1.13\times10^5\) N/(C·m). Halve the radius and the flux falls to an eighth, but \(\Phi/V\) stays the same. Now move the small sphere outside the ball, centred 1.6 m from the ball's centre. The field there is \(\rho R^3/(3\varepsilon_0 r^2) = 14.7\) kN/C, yet the net flux is 0: field enters on the near side and leaves on the far side.</p>
+</div>
+
 <div class="box why"><span class="tag">Derivation · the speed comes out of the equations</span>
 <p>Take a wave moving along \(+x\) with \(\vec E\) along \(y\) and \(\vec B\) along \(z\):</p>
 \[E_y = E_0\sin(kx-\omega t), \qquad B_z = B_0\sin(kx-\omega t).\]

@@ -21,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Series and parallel, the two layouts a breadboard makes easy to get wrong.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

@@ -27,6 +27,7 @@ export default {
       kind: 'Course',
       level: 'Course level',
       why: 'Unit II ends with eigenvalues, diagonalizing and differential equations.',
+      checked: '2026-11-06',
     },
     {
       title: 'Lebl, Notes on Diffy Qs, §3.4 Eigenvalue method',
@@ -34,8 +35,10 @@ export default {
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Uses eigenvalues to solve systems of ODEs, the use this map leads to.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Apply a 2×2 matrix to a ring of arrows and watch which ones only stretch. It corrects the idea that every matrix has directions it only stretches: a quarter-turn rotation turns every arrow, and its eigenvalues are \\(\\pm i\\).',
+  labs: [
+    { course: 'egn3203', lab: 'eigen', notes: ['s7'], note: 'A ring of unit arrows and their images: the directions a matrix only stretches, found from the characteristic polynomial and by scanning the circle. A quarter turn has none.' },
+  ],
 };

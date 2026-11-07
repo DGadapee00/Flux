@@ -14,6 +14,7 @@ export default {
       kind: 'Recitation notes',
       level: 'Course level',
       why: 'The vacancy fraction and its Arrhenius plot, worked.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax Chemistry 2e, §12.5 Collision theory',
@@ -21,8 +22,10 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Where the Arrhenius form comes from, for readers meeting it here first.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Plot the vacancy fraction against temperature on linear and Arrhenius axes. It corrects the idea that vacancies are flaws a perfect process would remove: they are an equilibrium population.',
+  labs: [
+    { course: 'ema3010', lab: 'vacancy', notes: ['s1'], note: 'The free energy per site against the vacancy fraction, lowest at c* = e^(−Q/kT) and never at zero, beside the Arrhenius line ln c* against 1/T.' },
+  ],
 };

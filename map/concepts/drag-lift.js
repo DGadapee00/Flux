@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Drag and lift coefficients, separation and the drag crisis.',
+      checked: '2026-11-06',
     },
     {
       title: 'NASA Glenn, Beginner’s guide to aeronautics: The drag equation',
@@ -21,6 +22,7 @@ export default {
       kind: 'Reference',
       level: 'Intro',
       why: 'What the drag coefficient holds and what it leaves out, from the people who test wings.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

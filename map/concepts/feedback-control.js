@@ -1,0 +1,30 @@
+export default {
+  id: 'feedback-control',
+  title: 'Feedback and PID control',
+  label: ['Feedback and', 'PID control'],
+  subject: 'circuits',
+  courses: ['satellite'],
+  eq: String.raw`\begin{gathered}u = K_p\,e + K_i\!\int e\,dt + K_d\,\dot e \\ 1 + C(s)G(s) = 0\end{gathered}`,
+  idea: String.raw`Feedback measures the output, compares it with what you want, and acts on the error. A proportional gain pushes toward the target, an integral term removes the error that remains, and a derivative term damps the swing. Closing the loop moves the poles to the roots of \(1 + C(s)G(s)\). Too much gain can make a stable plant oscillate, so gains are chosen with the poles in view.`,
+  requires: ['transfer-functions', 'damped-oscillator'],
+  sources: [
+    {
+      title: 'MIT 16.06, Lecture 2: Block diagrams, the effect of feedback',
+      url: 'https://ocw.mit.edu/courses/16-06-principles-of-automatic-control-fall-2012/resources/mit16_06f12_lecture_2/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'Why close the loop: disturbances, plant variations and stabilising an unstable plant.',
+      checked: '2026-11-06',
+    },
+    {
+      title: 'MIT 16.06, Lecture 10: PID control',
+      url: 'https://ocw.mit.edu/courses/16-06-principles-of-automatic-control-fall-2012/resources/mit16_06f12_lecture_10/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'Proportional, integral and derivative terms one at a time, with what each does to the poles.',
+      checked: '2026-11-06',
+    },
+  ],
+  labs: [],
+  candidate: String.raw`Hold a satellite’s pointing against a disturbance torque with P, PI and PID control. It corrects the idea that a bigger gain is always better: past a point the response rings and then grows. The check simulates the closed loop and compares its settling with the poles of \(1 + CG\).`,
+};

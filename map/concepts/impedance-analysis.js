@@ -20,6 +20,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Where the course turns derivatives into algebra.',
+      checked: '2026-11-06',
     },
     {
       title: 'Kuphaldt, Lessons in Electric Circuits, Vol. II: AC',

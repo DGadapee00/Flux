@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Mechanical energy with and without friction, worked on tracks and springs.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 1, §8.4 Potential energy diagrams and stability',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Reading turning points and equilibria off a U curve.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

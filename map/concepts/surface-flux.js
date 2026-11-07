@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Parametrized surfaces step by step, then flux as a special case.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Session 81: Calculating flux, finding n dS',
@@ -21,6 +22,7 @@ export default {
       kind: 'Worked example',
       level: 'Course level',
       why: 'One clean worked example of the area element, the step that trips people up.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

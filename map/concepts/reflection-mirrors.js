@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Ray diagrams and the sign rules, for concave and convex mirrors.',
+      checked: '2026-11-06',
     },
     {
       title: 'PhET: Geometric optics',
@@ -21,6 +22,7 @@ export default {
       kind: 'Simulation',
       level: 'Intro',
       why: 'Move the object and watch the principal rays find the image.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

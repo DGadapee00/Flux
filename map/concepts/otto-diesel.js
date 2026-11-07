@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The six lectures on air-standard cycles that this concept starts.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Engineering Thermodynamics',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Piston-engine cycles on \\(p\\)–\\(v\\) and \\(T\\)–\\(s\\) diagrams, worked through.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Otto cycle',
@@ -28,6 +30,7 @@ export default {
       kind: 'Reference',
       level: 'Intro',
       why: 'The four strokes mapped onto the four processes.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

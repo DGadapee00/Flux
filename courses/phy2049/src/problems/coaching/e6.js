@@ -4,6 +4,13 @@ const SPECTRUM = 'Radio → microwave → infrared → visible → ultraviolet �
 const SOURCE = 'The frequency is set by the source: the wave crests arrive at the boundary as often as they leave it, so it cannot change.';
 
 export default {
+  'e6.53.divergence': {
+    hints: [
+      String.raw`The small sphere is wholly inside the ball, so the charge it holds is $\rho$ times its own volume.`,
+      String.raw`Gauss's law: $\Phi = Q_{\text{in}}/\varepsilon_0$. Convert r to metres before you cube it.`,
+      String.raw`Divide by $V = \tfrac43\pi r^3$ and r cancels: $\Phi/V = \rho/\varepsilon_0$.`,
+    ],
+  },
   'e6.55.solar-sail': {
     hints: [
       String.raw`Sunlight spreads over a sphere, so $I = 1367\ \text{W/m}^2/r^2$ with r in AU.`,

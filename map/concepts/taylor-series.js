@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Building the polynomial and bounding its error.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.01SC, Part B: Taylor series',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Power series and Taylor series with checked problems.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The no-slip condition and what it does to the contact point.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.01SC, 35.1 Translation and rotation of a wheel',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lecture video',
       level: 'Course level',
       why: 'Rolling as translation plus rotation, drawn point by point.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

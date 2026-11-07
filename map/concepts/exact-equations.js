@@ -10,10 +10,11 @@ export default {
   sources: [
     {
       title: 'Lebl, Notes on Diffy Qs, §1.8 Exact equations',
-      url: 'https://www.jirka.org/diffyqs/',
+      url: 'https://www.jirka.org/diffyqs/html/exact_section.html',
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'The course’s book: the test, the potential and integrating factors.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Identifying gradient fields and exact differentials',
@@ -21,6 +22,7 @@ export default {
       kind: 'Problems with solutions',
       level: 'Intro',
       why: 'The same mixed-partials test from the multivariable side.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

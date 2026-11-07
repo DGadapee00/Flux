@@ -31,6 +31,7 @@ const loaders = {
   polar: () => import('./polar.js'),
   radargun: () => import('./radargun.js'),
   solarsail: () => import('./solarsail.js'),
+  divergence: () => import('./divergence.js'),
   refraction: () => import('./refraction.js'),
   mirrors: () => import('./mirrors.js'),
   lenses: () => import('./lenses.js'),

@@ -144,7 +144,7 @@ export const NOTES = {
     load: () => import('./content/e6-waves-of-light.html?raw').then((m) => m.default),
     sections: [
       { id: 's1', n: 1, title: 'Waves and their properties', lab: 'emwave', ch: ['53'], topics: ['em-waves'] },
-      { id: 's2', n: 2, title: "Maxwell's equations and the speed of light", lab: 'emwave', ch: ['53'], problems: ['e6.53.f-from-lambda'] },
+      { id: 's2', n: 2, title: "Maxwell's equations and the speed of light", lab: 'divergence', ch: ['53'], topics: ['maxwell'], problems: ['e6.53.f-from-lambda'] },
       { id: 's3', n: 3, title: 'Light-years and looking back in time', lab: null, ch: ['53'], topics: ['light-year'] },
       { id: 's4', n: 4, title: 'Photons', lab: 'emwave', ch: ['53'], topics: ['photons'] },
       { id: 's5', n: 5, title: 'The Doppler shift for light', lab: 'radargun', ch: ['53'], topics: ['doppler'] },

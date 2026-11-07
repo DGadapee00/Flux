@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Inside and outside a thick wire, the case the lab draws.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.02, Problem-solving guide: Ampère’s law',
@@ -20,6 +21,7 @@ export default {
       kind: 'Guide + solved problems',
       level: 'Course level',
       why: 'How to choose the Amperian loop, then solved cases.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

@@ -14,13 +14,15 @@ export default {
       kind: 'Free textbook',
       level: 'Course level',
       why: 'Chapter 10 covers black bodies, emissivity and spectral and solar radiation.',
+      checked: '2026-11-06',
     },
     {
-      title: 'MIT 2.51, calendar: Radiation, black bodies (session 23)',
+      title: 'MIT 2.51, calendar: Radiation, black bodies (lecture 21)',
       url: 'https://ocw.mit.edu/courses/2-51-intermediate-heat-and-mass-transfer-fall-2008/pages/calendar/',
       kind: 'Course outline',
       level: 'Course level',
       why: 'Opens the radiation part of the course.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 2, §1.6 Mechanisms of heat transfer',
@@ -28,8 +30,10 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The Stefan–Boltzmann law and emissivity at a first-course level.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Plot Planck’s spectrum with a temperature slider and a surface’s emissivity laid over it. It corrects the idea that a white surface is cool in every band: white paint is nearly black in the infrared.',
+  labs: [
+    { course: 'eml4140', lab: 'radiation', notes: ['s1', 's2'], note: 'Planck’s spectrum with a surface’s emissivity laid over it: white paint absorbs a fifth of sunlight but is nearly black in the infrared, so a white plate in the Sun settles near 275 K and a black one near 394 K.' },
+  ],
 };

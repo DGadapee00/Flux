@@ -3,9 +3,11 @@ import test from 'node:test';
 import { LAB_CATALOGS, findCycle } from '@flux/map';
 import { loadConcepts } from '@flux/map/load.mjs';
 import { exportBundle, importBundle, memoryStorage } from '@flux/core';
-import { RECIPES, SATELLITE } from '@flux/map/applications/satellite.js';
+import { RECIPES, SATELLITE, recipeById } from '@flux/map/applications/satellite.js';
+import { projectInstructions, reviewBrief } from '../src/applications/brief.js';
 import { applicationStore, cleanProgress, demonstrated, missingInputs, record, revise, wouldClear } from '../src/applications/progress.js';
 import { backupParts, restoreHubBackup } from '../src/backup.js';
+import { courseStore as fluidsStore } from '@flux/eml3015/src/storage.js';
 
 const concepts = Object.fromEntries((await loadConcepts()).map(({ concept }) => [concept.id, concept]));
 
@@ -27,9 +29,31 @@ test('every recipe uses existing concepts and labs that teach its foundations', 
   SATELLITE.components.forEach((c, i) => {
     for (const dep of c.requires) assert.ok(SATELLITE.components.findIndex((d) => d.id === dep) < i, `${c.id} before ${dep}`);
   });
-  const submissions = SATELLITE.components.filter((c) => c.submission);
-  assert.deepEqual(submissions.map((c) => c.id), ['structure']);
-  assert.equal(new URL(submissions[0].submission.url).protocol, 'https:');
+  // Work is reviewed in a Claude Project, not submitted to another site.
+  assert.deepEqual(SATELLITE.components.filter((c) => c.submission), []);
+  for (const r of RECIPES) {
+    assert.ok(r.method?.length >= 3, `${r.id} method`);
+    assert.ok(r.checklist?.length >= 3, `${r.id} checklist`);
+    assert.ok(r.references?.length >= 1, `${r.id} references`);
+    for (const ref of r.references) assert.equal(new URL(ref.url).protocol, 'https:', ref.url);
+  }
+});
+
+test('a review brief stands on its own: task, method, every checklist item and reference', () => {
+  for (const r of RECIPES) {
+    const text = reviewBrief(r, { byId: concepts, recipeById, standing: (id) => (id === r.concepts?.[0] ? 'solid' : null) });
+    assert.match(text, new RegExp(`^# Review: ${r.title}`));
+    assert.ok(text.includes(r.demonstrate), r.id);
+    for (const item of r.checklist) assert.ok(text.includes(item), `${r.id}: ${item}`);
+    for (const ref of r.references) assert.ok(text.includes(ref.url), `${r.id}: ${ref.url}`);
+    for (const dep of r.requires) assert.ok(text.includes(recipeById[dep].title), `${r.id} names ${dep}`);
+    if (r.concepts?.length) assert.ok(text.includes('(my standing in Flux: solid)'), r.id);
+    assert.match(text, /## My work\n\[Paste/);
+    assert.ok(!/<[a-z]/i.test(text), `${r.id} brief is plain text`);
+  }
+  const rules = projectInstructions();
+  assert.match(rules, /second method/);
+  assert.match(rules, /not .*flight qualification|Do not treat it as flight qualification/);
 });
 
 function complete(state, id) {
@@ -113,4 +137,15 @@ test('old hub backups restore courses without erasing application evidence; inco
   assert.throws(() => restoreHubBackup(invalid, parts), /does not match this course/);
   assert.deepEqual(applications.store.readJSON('satellite'), progress);
   assert.equal('applications' in oldBackup.courses, false, 'restoring does not modify the source backup');
+});
+
+test('a hub backup from before Fluids was added restores and keeps the Fluids record', () => {
+  const parts = backupParts();
+  const fluids = parts.find((p) => p.courseId === 'eml3015');
+  fluids.store = fluidsStore(memoryStorage(), () => 0);
+  fluids.store.writeJSON('problems', { v: 1, kept: true });
+  const before = exportBundle(parts.filter((p) => !['eml3015', 'design', 'egn3203', 'ema3010', 'eml4140', 'eel3111', 'satellite', 'applications'].includes(p.courseId)));
+  assert.equal('eml3015' in before.courses, false);
+  restoreHubBackup(before, parts);
+  assert.deepEqual(fluids.store.readJSON('problems'), { v: 1, kept: true });
 });

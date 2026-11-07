@@ -20,6 +20,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Viscosity from a plate dragged over a fluid layer, with values for common fluids.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 2.06, calendar: Lecture 9, viscous fluids',
@@ -27,8 +28,10 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Where the course adds shear stress to the equations of motion.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Drag a plate over a thin layer of honey, water and mercury, with the velocity profile drawn. It corrects the idea that viscosity is a fluid’s thickness or weight: mercury is dense and runny, and the drag depends on the velocity gradient, not on the speed alone.',
+  labs: [
+    { course: 'eml3015', lab: 'viscosity', notes: ['s1', 's2'], note: 'Drags a plate over water, mercury, glycerol, oil and air, and draws the profile as it grows from rest.' },
+  ],
 };

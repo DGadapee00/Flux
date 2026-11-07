@@ -1,0 +1,31 @@
+export default {
+  id: 'pcb-grounding',
+  title: 'Grounding and decoupling on a board',
+  label: ['Grounding and', 'decoupling'],
+  subject: 'circuits',
+  courses: ['design'],
+  eq: String.raw`V_\text{noise} = L\,\frac{di}{dt},\qquad Z_C = \frac{1}{2\pi f C}`,
+  idea: 'Every current returns to its source, and on a board it takes the path of least impedance. A solid ground plane gives it a short, wide return under its trace, which keeps loops small and noise low. Chips draw current in fast bursts, and the inductance of the supply traces turns those bursts into voltage dips. A decoupling capacitor beside each chip supplies the burst locally.',
+  requires: ['pcb-design', 'capacitance', 'inductance'],
+  sources: [
+    {
+      title: 'Wikipedia, Decoupling capacitor',
+      url: 'https://en.wikipedia.org/wiki/Decoupling_capacitor',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'Why a capacitor sits beside each chip, and how it smooths supply noise.',
+      checked: '2026-11-06',
+    },
+    {
+      title: 'Wikipedia, Ground plane',
+      url: 'https://en.wikipedia.org/wiki/Ground_plane',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'A copper plane as the return path, and its effect on noise.',
+      checked: '2026-11-06',
+    },
+  ],
+  labs: [
+    { course: 'design', lab: 'decoupling', notes: ['s5'], note: 'A chip’s current step with no capacitor near, or 100 nF far or close, and the dip in its supply. Ground planes appear in the Ground return lab.' },
+  ],
+};

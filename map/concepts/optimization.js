@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Boxes, fences and cans, each set up from its constraint.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.01SC, Part B: Optimization, related rates and Newton’s method',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Optimization problems with full solutions.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

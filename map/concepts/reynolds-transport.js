@@ -9,20 +9,23 @@ export default {
   requires: ['mass-cv'],
   sources: [
     {
-      title: 'MIT 2.06, Lecture notes: Control volume formulation',
-      url: 'https://ocw.mit.edu/courses/2-06-fluid-dynamics-spring-2013/resources/mit2_06s13_notes_lens/',
-      kind: 'Lecture notes',
-      level: 'Course level',
-      why: 'Builds the control-volume balances from a system in the course’s own notation.',
+      title: 'Wikipedia, Reynolds transport theorem',
+      url: 'https://en.wikipedia.org/wiki/Reynolds_transport_theorem',
+      kind: 'Reference',
+      level: 'Deeper',
+      why: 'The general form, read as the Leibniz rule in three dimensions, and the special case of a material volume.',
+      checked: '2026-11-06',
     },
     {
-      title: 'Cleynen, Fluid Dynamics for Engineers',
-      url: 'https://fluidmech.ninja/',
+      title: 'Cleynen, Fluid Dynamics for Engineers, Ch. 3: Analysis of existing flows (3D)',
+      url: 'https://fluidmech.ninja/chapter3.pdf',
       kind: 'Open textbook',
       level: 'Course level',
-      why: 'The integral balances for mass, momentum and energy, with worked control volumes.',
+      why: 'Builds the Reynolds transport theorem on an arbitrary control volume, then the balances of mass and momentum from it.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Drag a fixed control volume through a flow while a dyed blob of fluid passes through it. It corrects the idea that a control volume follows the fluid: the blob is the system, the box stays put, and the flux term is the difference.',
+  labs: [
+    { course: 'eml3015', lab: 'transport', notes: ['s8'], note: 'A fixed box in a duct and the water that was in it moving on: box term plus net outflow is the system’s rate, for mass, momentum and a dye blob.' },
+  ],
 };

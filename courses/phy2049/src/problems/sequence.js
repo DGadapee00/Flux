@@ -26,6 +26,7 @@ export const SEQUENCE = {
     ['Photons', ['e6.53.photon-color', 'e6.53.photon-energy']],
     ['E, B and the direction of travel', ['e6.53.B-from-E', 'e6.53.direction']],
     ['Red shift and blue shift', ['e6.53.redshift']],
+    ['Maxwell’s equations at a point', ['e6.53.divergence']],
     ['Application: a police radar gun', ['e6.53.radar-gun']],
   ],
   38: [

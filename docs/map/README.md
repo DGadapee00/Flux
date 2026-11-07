@@ -8,3 +8,25 @@ It is the reference for the refactor: its data shape (`NODES`: idea, equation, p
 sources with a reason for each, the Flux lab that shows it, a lab idea where there is none), its
 layout (subject lanes, prerequisites left to right, a reading panel, a trail of where you have
 been) and its look. Its 15 concepts are the seed data for the map.
+
+## Learner home prototype
+
+`prototype-learner.html` is the proposal for the learner side of Flux. The owner approved its
+Today page and thread reviews on 6 November 2026, and they are in the hub (`site/src/learner/`).
+Its map filled in by progress is built too (6 November). Its satellite that opens from mastery
+is not built yet. It asks what Flux looks like once it
+knows the learner: a Today page (the next concept you are ready for, the next exam, and reviews
+grouped by thread: each due concept follows the due concept it builds on, across subjects where
+the map crosses them, and is recalled before its problems), a map filled in by your own progress, a page per concept with your steps
+through it, and a satellite whose subsystems open as their concepts become solid. The orbit
+subsystem checks the learner's speed and period against a closed form and an integrated orbit.
+
+It is generated from the real map, problem banks and PHY 2049 exam calendar. Rebuild it after the
+data changes:
+
+```bash
+node docs/map/prototype-learner/build.mjs
+```
+
+It opens on a sample learner. Choose "Load a Flux backup file" to see your own progress: make the
+file with the hub's Back up progress button. Course apps are unchanged; the lab links open them.

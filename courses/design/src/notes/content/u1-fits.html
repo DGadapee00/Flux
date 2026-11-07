@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fits and stack-ups</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Design practice · Unit 1 · Wikipedia, Engineering fit and Tolerance analysis</div>
+  <h1>Fits and stack-ups</h1>
+  <p class="lede">How the limits on a hole and a shaft decide whether they slide or press, how often a pair lands either way, and how tolerances add up along a chain of parts.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Fits</h3>
+    <a href="#s1"><span>1</span>Limits decide the fit</a>
+    <a href="#s2"><span>2</span>How often a pair interferes</a>
+    <h3>Part II · Stacks</h3>
+    <a href="#s3"><span>3</span>Worst case and RSS</a>
+    <h3>Reference</h3>
+    <a href="#s4"><span>4</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Fits</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Limits decide the fit</h2>
+<p>No part is made exactly to size. A drawing gives each size a band, its upper and lower limits, and any part inside the band is good. A fit pairs a hole with a shaft. In the hole-basis system the hole's lower limit is the basic size, and the shaft's band is placed to give the fit wanted.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Clearance is hole minus shaft. The tightest pair is the smallest hole with the largest shaft, and the loosest the largest hole with the smallest shaft:</p>
+\[
+c_{\min} = D_{\min} - d_{\max}, \qquad c_{\max} = D_{\max} - d_{\min}.
+\]
+<p>If \(c_{\min} \ge 0\) every pair slides: a clearance fit. If \(c_{\max} \le 0\) every pair presses: an interference fit. Otherwise it is a transition fit.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · H8/f7 at 50 mm</span>
+<p>An H8 hole is 0 to +39 μm over 50 mm and an f7 shaft −50 to −25 μm. The tightest pair has \(0 - (-25) = 25\) μm of clearance and the loosest \(39 - (-50) = 89\) μm. Every pair slides: a close-running fit.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Judging a fit by its nominal or average clearance. A pair with plenty of room on average can still interfere at its worst, if the bands are wide.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Choose the fit for the job first, sliding, located or pressed, and let the standard grades set the limits. The grade number sets the band's width; the letter sets where it sits.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>How often a pair interferes</h2>
+<p>In a transition fit some pairs slide and some press. How many of each depends on the processes that make the parts, not only on the limits.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Take each process as normal, centred in its band, with the band equal to \(\pm 3\sigma/C_p\). The clearance \(c = D - d\) is then normal too, with mean \(\bar c\) the difference of the band middles and</p>
+\[
+\sigma_c = \sqrt{\sigma_D^2 + \sigma_d^2}, \qquad P(c < 0) = \Phi\!\left(-\frac{\bar c}{\sigma_c}\right).
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · H7/k6 with Cp = 1</span>
+<p>An H7 hole is 0 to +25 μm and a k6 shaft +2 to +18 μm over 50 mm. The middles are 12.5 and 10 μm, so \(\bar c = 2.5\) μm. With \(C_p = 1\), \(\sigma_D = 25/6\) and \(\sigma_d = 16/6\) μm, so \(\sigma_c = 4.95\) μm and \(P = \Phi(-0.505) = 30.7\%\) of pairs interfere.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding the spreads, \(\sigma_D + \sigma_d\). Independent spreads add as variances; adding the σ's overstates the scatter.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Stacks</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Worst case and RSS</h2>
+<p>When parts sit end to end, their errors add. The question is how much room to leave for the total.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The worst case puts every part at the same extreme: \(T_\text{worst} = \sum T_i\). Independent errors add as variances, so if each \(T_i\) is \(3\sigma_i\),</p>
+\[
+T_\text{RSS} = 3\sqrt{\textstyle\sum \sigma_i^2} = \sqrt{\textstyle\sum T_i^2}.
+\]
+<p>For \(n\) equal parts that is \(nT\) against \(\sqrt n\,T\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · five parts at ±0.1 mm</span>
+<p>The worst case is \(\pm 0.5\) mm, but the RSS band is only \(\pm 0.1\sqrt5 = \pm 0.224\) mm. Against a \(\pm 0.3\) mm limit, the worst case fails, yet only 57 stacks in a million do.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Designing every stack to the worst case. It wastes tolerance on every part to guard against a combination that almost never happens.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>RSS assumes the parts are independent and centred. Parts cut from one bar, or on one worn tool, err together, and then the worst case comes back. Use worst case where a failure is unacceptable or the parts are not independent.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Formula sheet</h2>
+\[
+c_{\min} = D_{\min} - d_{\max}, \qquad c_{\max} = D_{\max} - d_{\min}, \qquad P(c < 0) = \Phi\!\left(-\frac{\bar c}{\sqrt{\sigma_D^2 + \sigma_d^2}}\right),
+\]
+\[
+T_\text{worst} = \sum T_i, \qquad T_\text{RSS} = \sqrt{\textstyle\sum T_i^2}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Fit deviations for 50 mm from Wikipedia's Engineering fit article, read 6 November 2026. Read alongside Wikipedia's Engineering fit and Tolerance analysis articles.</footer>
+</body>
+</html>

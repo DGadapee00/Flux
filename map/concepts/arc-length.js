@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The formula from the Pythagorean theorem on one small piece.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.01SC, Part B: Partial fractions, integration by parts, arc length, and surface area',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Arc length and surface area with full solutions.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

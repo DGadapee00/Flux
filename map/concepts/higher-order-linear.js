@@ -11,10 +11,11 @@ export default {
   sources: [
     {
       title: 'Lebl, Notes on Diffy Qs, §2.3 Higher order linear ODEs',
-      url: 'https://www.jirka.org/diffyqs/',
+      url: 'https://www.jirka.org/diffyqs/html/sec_hol.html',
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Fundamental sets, the Wronskian and constant coefficients of any order.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.03SC, Linear operators, linear time invariance',
@@ -22,6 +23,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Writing equations as polynomials in D, the language annihilators use.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

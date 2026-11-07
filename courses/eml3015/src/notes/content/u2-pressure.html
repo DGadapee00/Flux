@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pressure on walls and in moving tanks</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EML 3015 · Fluids · Unit 2 · Cleynen, Fluid Dynamics for Engineers, ch. 4</div>
+  <h1>Pressure on walls and in moving tanks</h1>
+  <p class="lede">How big the force of a liquid on a flat wall is, where it acts, and why a liquid that accelerates with its tank tilts its surface the way it does.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Walls</h3>
+    <a href="#s1"><span>1</span>The force on a flat gate</a>
+    <a href="#s2"><span>2</span>Where the force acts</a>
+    <h3>Part II · Moving tanks</h3>
+    <a href="#s3"><span>3</span>A tank that accelerates</a>
+    <a href="#s4"><span>4</span>A tank that spins</a>
+    <h3>Reference</h3>
+    <a href="#s5"><span>5</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Walls</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>The force on a flat gate</h2>
+<p>In a still liquid the gauge pressure grows with depth, \(p = \rho g h\). On a flat gate each strip feels the pressure at its own depth. Adding the strips gives a force equal to the pressure at the gate's centroid times its area.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Measure \(y\) along the gate's plane from the line where that plane meets the surface. A strip at \(y\) is at depth \(y\sin\theta\), so</p>
+\[
+F = \int \rho g\, y \sin\theta\; dA = \rho g \sin\theta \int y\, dA = \rho g\, y_c \sin\theta\, A = \rho g\, h_c A.
+\]
+<p>The integral \(\int y\,dA\) is \(y_c A\) by the definition of the centroid.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a gate 3 m down</span>
+<p>A vertical gate 2 m tall and 1 m wide holds back water, \(\rho = 998\) kg/m³, with its top edge 3 m below the surface. Its centroid is at \(h_c = 3 + 1 = 4\) m, so \(F = 998 \times 9.81 \times 4 \times 2 = 78.3\) kN.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the depth of the top or bottom edge. The pressure at the centroid is the gate's average pressure only because the pressure grows in a straight line with depth.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The force depends on depth, not on how much liquid is behind the gate. A thin slot of water 4 m deep pushes as hard as a lake 4 m deep.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Where the force acts</h2>
+<p>The lower part of a gate feels more pressure than the upper part, so the force acts below the centroid. Where exactly is set by taking moments about the surface line.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+F\, y_{cp} = \int y\, p\, dA = \rho g \sin\theta \int y^2\, dA = \rho g \sin\theta\,(I_{xc} + y_c^2 A),
+\]
+<p>and dividing by \(F = \rho g \sin\theta\, y_c A\) gives \(y_{cp} = y_c + I_{xc}/(y_c A)\). For a rectangle \(I_{xc} = bL^3/12\), so the force acts \(L^2/(12 y_c)\) below the centroid, along the gate.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · where the gate's force acts</span>
+<p>For the gate 3 m down, \(y_c = 4\) m and \(L = 2\) m, so \(y_{cp} = 4 + 4/48 = 4.08\) m. The force acts 8 cm below the centroid. Hinged at its top edge, the gate needs \(F (y_{cp} - 3)/2 = 42.4\) kN at its bottom edge to stay shut.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Placing the force two thirds of the way down every time. That holds only when the top edge is at the surface, where the pressure rises from zero in a triangle. Lower the gate and the force moves toward the centroid.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Deep down the pressure on a gate is nearly even, and the force acts close to the centroid. Near the surface the load leans on the bottom edge.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Moving tanks</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>A tank that accelerates</h2>
+<p>Once a liquid has settled and moves with its tank, no layer slides over another, so there is no shear. Pressure alone must push each parcel along with the tank and hold it up against gravity.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Newton's second law on a small block of liquid, with only pressure and weight acting, gives</p>
+\[
+-\nabla p + \rho\,\mathbf g = \rho\,\mathbf a \quad\Longrightarrow\quad \nabla p = \rho\,(\mathbf g - \mathbf a).
+\]
+<p>Isobars lie square to \(\mathbf g - \mathbf a\). The free surface is one of them, so for a forward acceleration \(a_x\) and an upward one \(a_z\) it tilts by \(\tan\theta = a_x/(g + a_z)\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · water in a truck</span>
+<p>A tank 1 m long holds water 0.45 m deep. The truck speeds up at 3 m/s². The surface tilts by \(\arctan(3/9.81) = 17.0°\) and pivots about the middle, so the back wall rises \((3/9.81)(0.5) = 15.3\) cm. The floor pressure at the back is \(998 \times 9.81 \times 0.603 = 5.90\) kPa.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting the water to pile up at the front, as if thrown forward. The tank pushes the water forward, and only higher pressure at the back can do that. The water climbs the back wall.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Speed does nothing. A tank at a steady 25 m/s keeps a level surface; only acceleration tilts it.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>A tank that spins</h2>
+<p>Spin a round tank until the liquid turns with it. Each parcel now moves in a circle, and its acceleration points to the axis with size \(\omega^2 r\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>In the radial direction \(\partial p/\partial r = \rho\,\omega^2 r\), and vertically \(\partial p/\partial z = -\rho g\). Along the surface \(dp = 0\), so</p>
+\[
+\frac{dz}{dr} = \frac{\omega^2 r}{g} \quad\Longrightarrow\quad z = \frac{\omega^2 r^2}{2g} + C.
+\]
+<p>No liquid is added, so the rest level sits halfway between centre and rim: the centre drops \(\omega^2R^2/(4g)\) and the rim rises the same.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · water spun at 6 rad/s</span>
+<p>A tank of radius 0.3 m holds water 0.45 m deep. At 6 rad/s the surface climbs \(36 \times 0.09/(2 \times 9.81) = 16.5\) cm from centre to rim, so the centre drops 8.26 cm. The floor pressure at the rim is \(998 \times 9.81 \times 0.533 = 5.21\) kPa.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the whole climb \(\omega^2R^2/(2g)\) as the drop at the centre. The same water fills the tank, so the centre falls half the climb and the rim rises the other half.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>The liquid has settled and turns or moves with the tank. Sloshing on the way there, waves and surface tension at the walls are left out.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Formula sheet</h2>
+\[
+F = \rho g\, h_c A, \qquad y_{cp} = y_c + \frac{I_{xc}}{y_c A}, \qquad I_{xc} = \frac{bL^3}{12},
+\]
+\[
+\nabla p = \rho\,(\mathbf g - \mathbf a), \qquad \tan\theta = \frac{a_x}{g + a_z}, \qquad z = \frac{\omega^2 r^2}{2g} + C.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Cleynen, Fluid Dynamics for Engineers, chapter 4 (Effects of pressure).</footer>
+</body>
+</html>

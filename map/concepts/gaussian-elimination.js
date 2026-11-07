@@ -21,8 +21,10 @@ export default {
       kind: 'Open textbook',
       level: 'Deeper',
       why: 'Its first chapter is Gauss’s method, with proofs that it never changes the solution set.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Eliminate a 3×3 system one row operation at a time, with its three planes drawn. It corrects the idea that row operations change the answer: the planes tilt at every step, but they keep meeting at the same point.',
+  labs: [
+    { course: 'egn3203', lab: 'elimination', notes: ['s3', 's4'], note: 'Row operations one at a time on 2×2 and 3×3 systems, with and without pivoting, and a tiny pivot that loses the answer.' },
+  ],
 };

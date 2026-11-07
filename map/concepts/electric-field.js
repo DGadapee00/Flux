@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'From force to field, then superposition of point charges.',
+      checked: '2026-11-06',
     },
     {
       title: 'PhET: Charges and fields',
@@ -20,6 +21,7 @@ export default {
       kind: 'Simulation',
       level: 'Intro',
       why: 'Drop charges and a sensor; good practice reading a field map.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

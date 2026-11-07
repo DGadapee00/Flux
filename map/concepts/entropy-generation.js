@@ -21,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Heat flow between two bodies as the example of entropy rising.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

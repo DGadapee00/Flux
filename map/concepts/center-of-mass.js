@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Point masses, then rods and plates by integration.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.01SC, 17.1 Definition of the center of mass',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lecture video',
       level: 'Course level',
       why: 'The definition and why internal forces drop out.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

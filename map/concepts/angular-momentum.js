@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Skaters, stars and collisions, all one rule.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 2.003SC, Angular momentum and motion of rotating rigid bodies',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Deeper',
       why: 'The rigid-body form, with the inertia tensor where it matters.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

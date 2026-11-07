@@ -1,0 +1,31 @@
+export default {
+  id: 'temperature-sensors',
+  title: 'Thermocouples and RTDs',
+  label: ['Temperature', 'sensors'],
+  subject: 'instruments',
+  courses: ['design'],
+  eq: String.raw`\begin{gathered}V = S\,(T_\text{hot} - T_\text{ref}) \\ R(T) = R_0\,(1 + \alpha T)\end{gathered}`,
+  idea: 'A thermocouple joins two metals, and the junction’s temperature difference makes a small voltage, tens of microvolts per kelvin. It measures a difference, so the reference junction’s temperature must be known. A resistance thermometer uses platinum whose resistance rises steadily with temperature: more accurate and stable, slower, and needing a small current to read it.',
+  requires: ['current-resistance', 'sensor-basics'],
+  sources: [
+    {
+      title: 'Wikipedia, Thermocouple',
+      url: 'https://en.wikipedia.org/wiki/Thermocouple',
+      kind: 'Reference',
+      level: 'Course level',
+      why: 'The Seebeck effect, reference junctions and the common types.',
+      checked: '2026-11-06',
+    },
+    {
+      title: 'Wikipedia, Resistance thermometer',
+      url: 'https://en.wikipedia.org/wiki/Resistance_thermometer',
+      kind: 'Reference',
+      level: 'Course level',
+      why: 'Platinum elements, the Callendar–Van Dusen fit and two-, three- and four-wire hookups.',
+      checked: '2026-11-06',
+    },
+  ],
+  labs: [
+    { course: 'design', lab: 'temperature', notes: ['s4'], note: 'A type K thermocouple and a Pt100 RTD in one bath, with and without cold-junction compensation, on two, three or four wires.' },
+  ],
+};

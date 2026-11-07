@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Boats, planes and wind, solved with vector diagrams.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.01SC, 18.1 Relative velocity',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lecture video',
       level: 'Course level',
       why: 'Relative velocity set up the way the rocket problem then needs it.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

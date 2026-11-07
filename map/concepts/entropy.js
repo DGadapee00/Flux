@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Entropy defined from the Carnot cycle, with ideal-gas changes.',
+      checked: '2026-11-06',
     },
     {
       title: 'Yan, Introduction to Engineering Thermodynamics, Ch. 6 Entropy and the second law',

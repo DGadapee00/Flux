@@ -20,6 +20,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Transients in second-order circuits, with and without damping.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 2, §14.6 RLC series circuits',
@@ -27,6 +28,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The damped RLC oscillation and its mechanical twin.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

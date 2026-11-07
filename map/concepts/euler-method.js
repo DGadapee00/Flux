@@ -13,6 +13,7 @@ export default {
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Euler’s method and its error, from the course’s book.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax Calculus Vol. 2, §4.2 Direction fields and numerical methods',
@@ -20,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Direction fields and Euler steps with worked tables.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

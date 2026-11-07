@@ -13,6 +13,7 @@ export default {
       kind: 'Teaching package',
       level: 'Course level',
       why: 'The creep curve, its mechanisms and its temperature dependence.',
+      checked: '2026-11-06',
     },
     {
       title: 'Creep (deformation) (Wikipedia)',
@@ -20,6 +21,7 @@ export default {
       kind: 'Reference article',
       level: 'Intro',
       why: 'Stages of creep and the power-law form, with examples.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

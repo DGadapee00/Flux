@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Path difference to fringe position, with the small-angle step shown.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.02, Problem-solving guide: Interference',
@@ -21,6 +22,7 @@ export default {
       kind: 'Guide + solved problems',
       level: 'Course level',
       why: 'Intensity, not just positions, worked for two and more slits.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

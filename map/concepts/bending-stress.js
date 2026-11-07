@@ -8,18 +8,20 @@ export default {
   requires: ['internal-loads', 'centroids', 'stress-strain'],
   sources: [
     {
-      title: 'MIT 2.001, Lecture 18: Pure bending',
+      title: 'MIT 2.001, Lecture 20: Pure bending',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec18/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Plane sections, the neutral axis and the flexure formula.',
+      checked: '2026-11-06',
     },
     {
-      title: 'MIT 2.001, Lecture 19: Moment-curvature relationship',
+      title: 'MIT 2.001, Lecture 21: Moment-curvature relationship',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec19/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'Curvature from moment, the start of deflection.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

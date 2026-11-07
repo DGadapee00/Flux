@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Three lectures on the energy of reactions, from fuel to flame.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Engineering Thermodynamics',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Steady-flow energy balances, which the reacting balance extends.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Adiabatic flame temperature',
@@ -28,6 +30,7 @@ export default {
       kind: 'Reference',
       level: 'Intro',
       why: 'Typical flame temperatures and why they peak near stoichiometric.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

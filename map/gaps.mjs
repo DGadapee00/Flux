@@ -14,9 +14,12 @@ import { COURSES } from './courses.js';
 import { buildGraph } from './graph.js';
 import { loadConcepts } from './load.mjs';
 
-const WEIGHT = { 'taking now': 3, 'next term': 2, later: 1, taken: 0 };
+// The owner's projects weigh like next term's courses: they are what the owner is building toward
+// (6 November 2026).
+const WEIGHT = { 'taking now': 3, 'next term': 2, later: 1, taken: 0, project: 2 };
 const RECIPE_WEIGHT = 2;
-const status = Object.fromEntries(COURSES.map((c) => [c.id, c.status]));
+// A project has no status; it prints as one and adds no weight.
+const status = Object.fromEntries(COURSES.map((c) => [c.id, c.kind === 'project' ? 'project' : c.status]));
 
 /**
  * The recipes that name each concept, as `<application>/<recipe>`.

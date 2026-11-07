@@ -28,6 +28,7 @@ export default {
       kind: 'Course',
       level: 'Course level',
       why: 'Unit III is symmetric and positive definite matrices and where they are used.',
+      checked: '2026-11-06',
     },
     {
       title: 'Margalit and Rabinoff, Interactive Linear Algebra',

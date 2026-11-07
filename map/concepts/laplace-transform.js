@@ -13,6 +13,7 @@ export default {
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'The transform and its table, from the course’s book.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.03SC, Laplace transform: solving initial value problems',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Initial-value problems solved start to finish.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

@@ -20,9 +20,11 @@ test('every application recipe names concepts on the map, and its labs belong to
 });
 
 test('a gap that an application recipe needs ranks higher by two per recipe', () => {
-  const without = rankGaps(concepts, []).gaps.find((r) => r.id === 'thermal-radiation');
-  const withApps = rankGaps(concepts).gaps.find((r) => r.id === 'thermal-radiation');
-  assert.deepEqual(withApps.uses, ['satellite/thermal']);
+  // Any gap one recipe needs will do; which one changes as labs are built.
+  const withApps = rankGaps(concepts).gaps.find((r) => r.uses?.length === 1);
+  assert.ok(withApps, 'some gap is needed by exactly one recipe');
+  const without = rankGaps(concepts, []).gaps.find((r) => r.id === withApps.id);
+  assert.match(withApps.uses[0], /^satellite\//);
   assert.equal(withApps.score - without.score, 2);
   assert.deepEqual(recipeUses([{ id: 'a', components: [{ id: 'x', concepts: ['q'] }], integration: { id: 'all' } }]), { q: ['a/x'] });
 });

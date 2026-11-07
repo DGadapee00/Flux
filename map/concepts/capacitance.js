@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Parallel plate, spherical and cylindrical capacitors, each from Gauss’s law.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.02, Problem-solving guide: Capacitors',
@@ -20,6 +21,7 @@ export default {
       kind: 'Guide + solved problems',
       level: 'Course level',
       why: 'The four-step method: field, potential difference, then C, then energy.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

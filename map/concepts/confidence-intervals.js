@@ -9,11 +9,12 @@ export default {
   requires: ['sampling-distributions'],
   sources: [
     {
-      title: 'MIT 18.05, Reading 22: Confidence intervals for normal data',
-      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/resources/mit18_05s14_reading22/',
+      title: 'MIT 18.05, Reading 22: Confidence intervals based on normal data',
+      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/resources/mit18_05_s22_class22-prep_pdf/',
       kind: 'Reading notes',
       level: 'Course level',
       why: 'z and t intervals and what the confidence level means.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax Introductory Statistics 2e, §8.1 A single population mean using the normal distribution',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Building an interval and choosing a sample size.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

@@ -1,0 +1,31 @@
+export default {
+  id: 'kepler-equation',
+  title: 'Elliptical orbits and Kepler’s equation',
+  label: ['Kepler’s equation'],
+  subject: 'mechanics',
+  courses: ['satellite'],
+  eq: String.raw`\begin{gathered}M = E - e\sin E \\ M = \sqrt{\mu/a^{3}}\,(t - t_p)\end{gathered}`,
+  idea: String.raw`A bound orbit is an ellipse with the planet at one focus. Equal areas in equal times means the craft moves fast near perigee and slowly near apogee, so its angle is not a steady fraction of the period. The mean anomaly \(M\) grows steadily with time; solving \(M = E - e\sin E\) for the eccentric anomaly \(E\) gives where the craft is. The equation has no closed-form solution, so it is solved numerically, often by Newton’s method.`,
+  requires: ['gravitation', 'root-finding'],
+  sources: [
+    {
+      title: 'MIT 16.07, Lecture 15: Central force motion, Kepler’s laws',
+      url: 'https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/resources/mit16_07f09_lec15/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'Kepler’s laws from the central-force equations, then the eccentric and mean anomalies and the time on an ellipse.',
+      checked: '2026-11-06',
+    },
+    {
+      title: 'Wikipedia, Kepler’s equation',
+      url: 'https://en.wikipedia.org/wiki/Kepler%27s_equation',
+      kind: 'Reference',
+      level: 'Deeper',
+      why: 'The equation, its anomalies and how it is solved, Newton’s method included.',
+      checked: '2026-11-06',
+    },
+  ],
+  labs: [
+    { course: 'satellite', lab: 'kepler', notes: ['s1', 's2'], note: 'An elliptical orbit with a clock: a quarter period from perigee carries a transfer orbit to 156°, and the position from Kepler’s equation matches an RK4 integration of the orbit.' },
+  ],
+};

@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The course starts numerical calculus with interpolation.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Runge’s phenomenon',
@@ -21,6 +22,7 @@ export default {
       kind: 'Reference',
       level: 'Intro',
       why: 'The classic example, and why Chebyshev points cure it.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

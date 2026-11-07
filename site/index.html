@@ -30,6 +30,8 @@
           <h1>FLUX</h1>
           <p class="lede">One map of the degree. Each box is a concept. Pick one to see what it builds on, where it leads, the sources worth your time and the Flux lab that shows it.</p>
           <nav class="jump" aria-label="On this page">
+            <a href="#today">Today</a>
+            <a href="#explore">Map</a>
             <a href="#applications">Applications</a>
             <a href="#courses">Courses</a>
             <a href="#progress">Progress</a>
@@ -37,7 +39,9 @@
         </div>
       </header>
 
-      <div class="explore">
+      <section class="section today" id="today" aria-labelledby="today-title"></section>
+
+      <div class="explore" id="explore">
         <div class="find" id="find">
           <label class="find-label" for="find-input">Find</label>
           <div class="find-field">
@@ -89,7 +93,7 @@
             <div class="lane-tags" id="lane-tags" aria-hidden="true"></div>
           </div>
         </div>
-        <p class="hint"><span class="map-status" id="map-status"></span> <span class="key"><i class="dot"></i>Flux lab <i class="dot hollow"></i>no lab yet.</span> Solid bright lines: what the chosen concept builds on. Dashed: where it leads. With a course chosen, its concepts are numbered in teaching order. Arrow keys move between boxes, Enter opens one, Ctrl and the scroll wheel zoom.</p>
+        <p class="hint"><span class="map-status" id="map-status"></span> <span class="key"><i class="dot"></i>Flux lab <i class="dot hollow"></i>no lab yet.</span> <span class="key progress-key"><span>Your progress:</span><span><i class="fill"></i>solid</span><span><i class="fill part"></i>learning</span><span><i class="fill dash"></i>needs something first</span><span><i class="duedot"></i>review due.</span></span> Solid bright lines: what the chosen concept builds on. Dashed: where it leads. With a course chosen, its concepts are numbered in teaching order. Arrow keys move between boxes, Enter opens one, Ctrl and the scroll wheel zoom.</p>
         <nav class="trail" id="trail" aria-label="Where you have been"></nav>
         <section class="path-list" id="path-list" hidden aria-live="polite"></section>
         <aside class="detail" id="detail" aria-live="polite" aria-labelledby="concept-title">
@@ -112,7 +116,7 @@
 
       <section class="section backup" id="progress" aria-labelledby="backup-title">
         <h2 id="backup-title">Progress</h2>
-        <p>One file holds your courses and application records. Restoring replaces what this browser has saved.</p>
+        <p>One file holds your progress in every course. Restoring replaces what this browser has saved.</p>
         <div id="backup"></div>
       </section>
 

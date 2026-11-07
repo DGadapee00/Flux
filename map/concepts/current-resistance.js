@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Geometry and temperature, with tables of resistivities.',
+      checked: '2026-11-06',
     },
     {
       title: 'PhET: Ohm’s law',
@@ -21,6 +22,7 @@ export default {
       kind: 'Simulation',
       level: 'Intro',
       why: 'Vary V and R and watch I respond, before any algebra.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

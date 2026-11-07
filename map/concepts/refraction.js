@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Snell’s law with a table of indices to work from.',
+      checked: '2026-11-06',
     },
     {
       title: 'PhET: Bending light',
@@ -20,6 +21,7 @@ export default {
       kind: 'Simulation',
       level: 'Intro',
       why: 'Find the critical angle yourself by turning the laser.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

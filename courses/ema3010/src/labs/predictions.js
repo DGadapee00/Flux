@@ -1,0 +1,117 @@
+/**
+ * Predict first: two to four prompts per lab. `expect` is what the lab's own compute says after
+ * `apply`, and labs-check confirms it. A prediction nobody would get wrong teaches nothing.
+ */
+
+export const PREDICTIONS = {
+  bond: [
+    {
+      id: 'bd-shallow',
+      scenario: 'deep',
+      ask: 'Swap the deep, wide 4 eV well for a shallow, narrow 2 eV one at the same bond length. What happens to the depth and to the stiffness?',
+      apply(s) { Object.assign(s, { shape: 'narrow', E0: 2 }); },
+      watch: [
+        { id: 'E0', label: 'the well’s depth', get: (c) => c.E0 },
+        { id: 'k', label: 'the bond’s stiffness', get: (c) => c.k },
+      ],
+      mode: 'dir',
+      expect: { E0: 'smaller', k: 'bigger' },
+      why: 'Stiffness is the curvature at the bottom, k = nmE₀/r₀². Half the depth, but n·m goes from 3 to 12: four times the shape factor, so twice the stiffness.',
+    },
+    {
+      id: 'bd-double-depth',
+      scenario: 'nacl',
+      ask: 'Keep the shape and the bond length, and make the well twice as deep.',
+      apply(s) { s.E0 *= 2; },
+      watch: [
+        { id: 'k', label: 'the stiffness', get: (c) => c.k },
+        { id: 'r0', label: 'the bond length', get: (c) => c.numeric.r0 },
+      ],
+      mode: 'factor',
+      factors: [4, 2, 1, 0.5],
+      expect: { k: 2, r0: 1 },
+      why: 'With the shape fixed, the whole curve scales by the depth, so its curvature doubles too. The bottom stays at r₀.',
+    },
+    {
+      id: 'bd-squeeze',
+      scenario: 'nacl',
+      ask: 'Squeeze the ion pair from 1.4 r₀ in to 0.85 r₀. Which way does the force on each ion point now?',
+      apply(s) { s.x = 0.85; },
+      watch: [{ id: 'apart', label: 'Do the ions now push apart?', get: (c) => c.Fr > 0, mode: 'bool' }],
+      mode: 'bool',
+      expect: { apart: true },
+      why: 'Inside r₀ the curve rises as r shrinks, so the force, minus its slope, points outward. The repulsion grows as 1/r⁹ and wins.',
+    },
+  ],
+  crystal: [
+    {
+      id: 'cr-fcc-iron',
+      scenario: 'fe',
+      ask: 'Keep iron’s atoms but stack them face-centred instead of body-centred. What happens to the packing fraction and the density?',
+      apply(s) { s.structure = 'fcc'; },
+      watch: [
+        { id: 'apf', label: 'the packing fraction', get: (c) => c.apf },
+        { id: 'rho', label: 'the density', get: (c) => c.density },
+      ],
+      mode: 'dir',
+      expect: { apf: 'bigger', rho: 'bigger' },
+      why: 'FCC packs 74% of space, BCC 68%. The same atoms closer packed weigh more per cubic centimetre: about 9% more.',
+    },
+    {
+      id: 'cr-grow',
+      scenario: 'small',
+      ask: 'The copper atoms are at half the touching size. Grow them until they touch. By what factor does the packing fraction change?',
+      apply(s) { s.grow = 1; },
+      watch: [{ id: 'apf', label: 'the packing fraction', get: (c) => c.apf }],
+      mode: 'factor',
+      factors: [2, 4, 8],
+      expect: { apf: 8 },
+      why: 'The cell stays the same size, and each atom’s volume goes as r³: twice the radius, eight times the volume.',
+    },
+    {
+      id: 'cr-al',
+      scenario: 'cu',
+      ask: 'Swap copper for aluminum, also face-centred cubic. What happens to the packing fraction and the density?',
+      apply(s) { s.material = 'al'; },
+      watch: [
+        { id: 'apf', label: 'the packing fraction', get: (c) => c.apf },
+        { id: 'rho', label: 'the density', get: (c) => c.density },
+      ],
+      mode: 'dir',
+      expect: { apf: 'same', rho: 'smaller' },
+      why: 'The packing fraction depends only on the structure: 0.74 for any FCC metal. Aluminum’s atoms are bigger and much lighter, so it is a third as dense.',
+    },
+  ],
+  vacancy: [
+    {
+      id: 'vc-cool',
+      scenario: 'hot',
+      ask: 'Cool the crystal from 1000 K to room temperature, 300 K. What happens to the vacancy fraction?',
+      apply(s) { s.T = 300; },
+      watch: [{ id: 'c', label: 'the vacancy fraction', get: (c) => c.c }],
+      mode: 'dir',
+      expect: { c: 'smaller' },
+      why: 'c* = e^{−Q/kT} falls steeply as T drops: from 9 × 10⁻⁶ to 2 × 10⁻¹⁷, eleven powers of ten.',
+    },
+    {
+      id: 'vc-zero',
+      scenario: 'room',
+      ask: 'At 300 K, is the equilibrium vacancy fraction exactly zero?',
+      apply() {},
+      watch: [{ id: 'zero', label: 'Exactly zero?', get: (c) => c.c === 0, mode: 'bool' }],
+      mode: 'bool',
+      expect: { zero: false },
+      why: 'The free energy falls as the first vacancies appear, so its minimum is at a small but nonzero fraction at any temperature above absolute zero.',
+    },
+    {
+      id: 'vc-harder',
+      scenario: 'hot',
+      ask: 'Raise the formation energy from 1.0 to 1.5 eV at the same 1000 K. What happens to the fraction?',
+      apply(s) { s.Q = 1.5; },
+      watch: [{ id: 'c', label: 'the vacancy fraction', get: (c) => c.c }],
+      mode: 'dir',
+      expect: { c: 'smaller' },
+      why: 'Half an eV more per vacancy multiplies the fraction by e^{−0.5/kT} = e^{−5.8}, about 1/330.',
+    },
+  ],
+};

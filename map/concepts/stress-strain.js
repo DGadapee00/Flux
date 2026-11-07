@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Tensile, bulk and shear moduli with a table of materials.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 1, §12.4 Elasticity and plasticity',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The stress-strain curve past the elastic limit.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

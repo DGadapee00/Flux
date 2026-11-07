@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Conduction through a slab, with the numbers worked.',
+      checked: '2026-11-06',
     },
     {
       title: 'Lienhard, A Heat Transfer Textbook',
@@ -21,6 +22,7 @@ export default {
       kind: 'Free textbook',
       level: 'Course level',
       why: 'The text MIT 2.51 uses. Chapter 1 introduces conduction; chapter 2 builds the equation.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

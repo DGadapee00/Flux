@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Rods, disks and the parallel-axis theorem from the integral.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Part A: Triple integrals',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'The calculus side: moments of inertia as triple integrals.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

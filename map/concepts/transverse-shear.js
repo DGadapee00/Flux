@@ -14,13 +14,15 @@ export default {
       kind: 'Course outline',
       level: 'Deeper',
       why: 'Where the course’s reading derives the shear formula.',
+      checked: '2026-11-06',
     },
     {
-      title: 'MIT 2.001, Lecture 18: Pure bending',
+      title: 'MIT 2.001, Lecture 20: Pure bending',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec18/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'The bending stress whose change along the beam drives the shear.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

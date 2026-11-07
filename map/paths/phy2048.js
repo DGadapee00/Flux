@@ -5,7 +5,7 @@ export default {
     { title: 'Unit 2: Motion in two and three dimensions', concepts: ['curvilinear-motion', 'relative-motion'] },
     { title: "Unit 3: Newton's laws and their applications", concepts: ['newtons-second-law', 'curved-path-forces'] },
     { title: 'Unit 4: Work, energy and power', concepts: ['work-energy', 'energy-conservation'] },
-    { title: 'Unit 5: Momentum and collisions', concepts: ['impulse-momentum', 'impact', 'center-of-mass'] },
+    { title: 'Unit 5: Momentum and collisions', concepts: ['impulse-momentum', 'rocket-equation', 'impact', 'center-of-mass'] },
     { title: 'Unit 6: Fixed-axis rotation', concepts: ['moment-of-inertia', 'rigid-kinetics'] },
     { title: 'Unit 7: Rolling and angular momentum', concepts: ['rigid-energy', 'angular-momentum'] },
     { title: 'Unit 8: Static equilibrium and elasticity', concepts: ['static-equilibrium', 'stress-strain'] },

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Choosing a design</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Design practice · Unit 3 · MIT 2.007, Lecture 2</div>
+  <h1>Choosing a design</h1>
+  <p class="lede">How to turn a need into requirements, compare concepts against them, model the choice so it survives change, and prove it with margins that rest on what was tested.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Deciding</h3>
+    <a href="#s1"><span>1</span>Requirements, then weights</a>
+    <a href="#s2"><span>2</span>How firm is the choice?</a>
+    <h3>Part II · Modelling and proving</h3>
+    <a href="#s3"><span>3</span>Dimension the reason</a>
+    <a href="#s4"><span>4</span>A margin rests on its assumptions</a>
+    <h3>Reference</h3>
+    <a href="#s5"><span>5</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Deciding</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Requirements, then weights</h2>
+<p>Start from the need, not from a part. Write what the part must do as requirements you can check: a number and a limit, such as deflection at most 0.3 mm under the sensor's load. Write what you would like more of as criteria with weights. Then sketch more than one concept before you judge any.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A requirement is pass or fail. A concept that misses one is out, whatever else it does well. Score the rest on each criterion from 1 (worst of the field) to 5 (best), and rank by the weighted mean:</p>
+\[
+S_j = \frac{\sum_k w_k\, s_{jk}}{\sum_k w_k}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · the run of 1,000</span>
+<p>A sensor bracket can be machined aluminium, bent steel sheet or printed nylon. For a run of 1,000 with deflection at most 0.3 mm, the printed part bends 0.6 mm and is out. With weights 1, 5, 2, 1, 1 on mass, cost, deflection, lead time and heat limit, sheet scores 3.4 and machined 2.6.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Scoring the first concept you thought of against nothing in particular. A machined part is often the first sketch; for a run of 1,000 the bent sheet costs a quarter as much and still meets the stiffness requirement.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>How firm is the choice?</h2>
+<p>Weights are judgements. Before trusting a ranking, ask how far each weight can move before the leader changes.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The leader \(L\) stays ahead of a rival \(j\) while \(\sum_k w_k (s_{Lk} - s_{jk}) > 0\). That is linear in each weight, so holding the others, the crossover is</p>
+\[
+w_k^{*} = -\frac{\sum_{i \ne k} w_i\,(s_{Li} - s_{ji})}{s_{Lk} - s_{jk}}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · how far the cost weight can fall</span>
+<p>For the run of 1,000, sheet leads while the weight on cost stays at 3 or more. Below 3, the machined part's stiffness, lighter weight and shorter lead time carry it.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>A choice that flips when one weight moves a little is a choice the numbers have not made. Get better data on the close criteria, or build both and test.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Scores run straight from the worst concept to the best, so they say nothing about how good the best one is. A matrix ranks the concepts you have; it cannot find one you did not sketch.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Modelling and proving</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Dimension the reason</h2>
+<p>A parametric CAD model is a sketch plus dimensions and relations, turned into features. Two models can look the same and behave differently when edited. What decides it is whether each dimension says why the feature is there.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Each sketch point has two unknowns, and each dimension or relation is an equation. The solver finds positions that satisfy them; the sketch's free degrees of freedom are the unknowns less the rank of the equations' Jacobian. A fully defined sketch has none. For two holes that must match a centred sensor of spacing \(S\) on a plate \(W\) wide, the dimensions that say so are</p>
+\[
+x_1 + x_2 = W, \qquad x_2 - x_1 = S \quad\Longrightarrow\quad x_{1,2} = \frac{W \mp S}{2}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · widening the plate</span>
+<p>An 80 mm plate has holes 40 mm apart, centred: at 20 and 60 mm. Drawn as a chain, 20 from the edge then 40, the holes stay at 20 and 60 when the plate is widened to 100 mm, and miss the sensor by 10 mm. Drawn by intent, centred and spaced \(S\), they move to 30 and 70, where the sensor needs them.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving a sketch under-defined because it looks right. The solver then places the free geometry wherever it last was, and the next edit moves it somewhere else.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Before drawing, decide what each feature is for and what it is located from. Dimension from the features that matter to the function, such as a datum face or the centre line, not from wherever the sketch happened to start.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>A margin rests on its assumptions</h2>
+<p>Each requirement needs a way to show it is met: an analysis, a test, an inspection or a demonstration. A margin of safety says how much room is left, but only within what the analysis behind it assumed.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>For a cantilever arm of width \(b\), thickness \(h\) and length \(L\) with a tip load \(P\),</p>
+\[
+\sigma = \frac{6PL}{bh^2}, \qquad \delta = \frac{PL^3}{3EI} + \frac{PL^2}{k_\theta}, \qquad \text{MS} = \frac{\text{allowable}}{\text{FS} \times \text{applied}} - 1.
+\]
+<p>The second deflection term is the mount turning under the root moment, with stiffness \(k_\theta\). An analysis that takes the root as rigid leaves it out.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the bracket on thin sheet</span>
+<p>A 6061-T6 arm 100 mm long, 20 mm wide and 8 mm thick carries 100 N. The root stress is 46.9 MPa, a strength margin of \(+2.43\) with a factor of 1.5. With a rigid root the tip moves 0.574 mm against a 1 mm limit, a margin of \(+0.74\). Bolted to sheet with \(k_\theta = 1.58\times10^6\) N·mm/rad, the test shows 1.21 mm: a margin of \(-0.17\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading a positive margin on paper as proof. The analysis was right about the arm and silent about the mount. Test what the analysis assumed, or analyse it too.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>A static load at the tip. Real brackets vibrate, so fatigue and the stress concentration at the root corner and bolt holes often govern. Design from the minimum yield, 241 MPa for 6061-T6, not the typical 270 MPa.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Formula sheet</h2>
+\[
+S_j = \frac{\sum_k w_k\, s_{jk}}{\sum_k w_k}, \qquad s_{jk} = 1 + 4\,\frac{v_\text{worst} - v_{jk}}{v_\text{worst} - v_\text{best}}, \qquad w_k^{*} = -\frac{\sum_{i \ne k} w_i\,(s_{Li} - s_{ji})}{s_{Lk} - s_{jk}},
+\]
+\[
+x_{1,2} = \frac{W \mp S}{2}, \qquad \sigma = \frac{6PL}{bh^2}, \qquad \delta = \frac{PL^3}{3EI} + \frac{PL^2}{k_\theta}, \qquad \text{MS} = \frac{\text{allowable}}{\text{FS} \times \text{applied}} - 1.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. The bracket's numbers are illustrative, written for this course. Material values for 6061-T6 from Wikipedia's 6061 aluminium alloy article, read 6 November 2026. Read alongside MIT 2.007 (Spring 2009), Lectures 2 and 4, and Wikipedia's Factor of safety article.</footer>
+</body>
+</html>

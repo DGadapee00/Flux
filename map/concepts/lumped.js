@@ -14,13 +14,15 @@ export default {
       kind: 'Free textbook',
       level: 'Course level',
       why: 'Chapter 1 covers lumped capacity and when it is valid.',
+      checked: '2026-11-06',
     },
     {
-      title: 'MIT 2.51, calendar: Lumped capacity (session 5)',
+      title: 'MIT 2.51, calendar: Lumped capacity (lecture 5)',
       url: 'https://ocw.mit.edu/courses/2-51-intermediate-heat-and-mass-transfer-fall-2008/pages/calendar/',
       kind: 'Course outline',
       level: 'Deeper',
       why: 'Where it sits, between fins and transient conduction.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

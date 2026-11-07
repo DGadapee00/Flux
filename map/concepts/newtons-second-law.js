@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'A fixed method, then connected bodies and inclines.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.01SC, 12.1 Pulley problems, part I: set up the equations',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lecture video',
       level: 'Course level',
       why: 'The constraint equation that most pulley mistakes skip.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

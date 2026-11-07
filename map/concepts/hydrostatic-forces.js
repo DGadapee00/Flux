@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Where the course starts: the pressure field at rest, then the force it puts on a wall.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Fluid Dynamics for Engineers',
@@ -21,8 +22,10 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'A free text for the whole course. Its statics chapter works plane and curved surfaces.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Slide a rectangular gate deeper into a tank and watch the resultant arrow. It corrects the idea that the force acts at the centroid: it acts below it, and closes in on it as the gate goes deeper.',
+  labs: [
+    { course: 'eml3015', lab: 'gate', notes: ['s1', 's2'], note: 'A gate you lower, lengthen and tilt, with the pressure drawn on it and the point where the force acts.' },
+  ],
 };

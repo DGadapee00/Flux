@@ -20,6 +20,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The course’s last topic before the second quiz.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Fluid Dynamics for Engineers',
@@ -27,6 +28,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Series and parallel pipes, and pump and system curves.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

@@ -21,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Phase diagrams and latent heat from the physics side.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

@@ -14,6 +14,7 @@ export default {
       kind: 'Reference article',
       level: 'Course level',
       why: 'Hall–Petch, its pile-up argument and where it stops working.',
+      checked: '2026-11-06',
     },
     {
       title: 'Precipitation hardening (Wikipedia)',
@@ -21,6 +22,7 @@ export default {
       kind: 'Reference article',
       level: 'Course level',
       why: 'Solution treatment, quench and ageing, tied to the solvus on the phase diagram.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

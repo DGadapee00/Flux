@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Methods of analysis</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EEL 3111 · Circuit Analysis I · Unit 1 · Kuphaldt, Lessons in Electric Circuits, Vol. I, DC network analysis</div>
+  <h1>Methods of analysis</h1>
+  <p class="lede">Two systematic ways to turn any resistive circuit into a set of linear equations, and how to tell which one needs fewer.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Two methods</h3>
+    <a href="#s1"><span>1</span>Node voltages</a>
+    <a href="#s2"><span>2</span>Mesh currents</a>
+    <a href="#s3"><span>3</span>Choosing a method</a>
+    <h3>Reference</h3>
+    <a href="#s4"><span>4</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Two methods</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Node voltages</h2>
+<p>Pick one node as ground, at 0 V. Give every other node an unknown voltage. Each branch current then follows from Ohm's law, and Kirchhoff's current law at each node gives one equation.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A branch from node \(a\) to node \(b\) with resistance \(R\) and a source \(V\) pushing from \(a\) to \(b\) carries \(i = (v_a - v_b + V)/R\). Set the currents leaving each node to zero:</p>
+\[
+G\,\mathbf v = \mathbf i_s, \qquad G_{kk} = \sum_{\text{at } k}\frac{1}{R}, \qquad G_{kj} = -\sum_{\text{between } k, j}\frac{1}{R}.
+\]
+<p>There is one equation for each node except ground.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two rails</span>
+<p>Four branches join a bottom rail (ground) to a top rail: 10 V with 2 Ω, a 4 Ω resistor, 6 V with 3 Ω, and a 6 Ω resistor. One unknown, the top rail's voltage \(v\):</p>
+\[
+\frac{v - 10}{2} + \frac{v}{4} + \frac{v - 6}{3} + \frac{v}{6} = 0 \quad\Longrightarrow\quad v = \frac{10/2 + 6/3}{1/2 + 1/4 + 1/3 + 1/6} = \frac{7}{1.25} = 5.6\ \text{V}.
+\]
+<p>The 10 V branch then carries \((10 - 5.6)/2 = 2.2\) A up into the rail.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving the plain resistors out of the sum. Every branch at the node carries current, sources or not.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Mesh currents</h2>
+<p>Give every window of the drawing its own loop current. A branch shared by two windows carries the difference of their currents. Kirchhoff's voltage law round each window gives one equation.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+R\,\mathbf I = \mathbf v_s, \qquad R_{mm} = \sum_{\text{in } m} R, \qquad R_{mn} = -\sum_{\text{shared}} R \ \ (\text{both loops the same way round}).
+\]
+<p>A connected planar circuit with \(b\) branches and \(n\) nodes has \(b - n + 1\) windows, so that many equations.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one loop</span>
+<p>A 12 V source with its own 1 Ω, then 2 Ω, 3 Ω and 4 Ω, all in one loop. One window, one equation:</p>
+\[
+(1 + 2 + 3 + 4)\,I = 12 \quad\Longrightarrow\quad I = 1.2\ \text{A}.
+\]
+<p>The node after the source sits at \(12 - 1.2(1) = 10.8\) V. Nodal analysis would have needed three equations.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Choosing a method</h2>
+<p>Both methods give the same currents, because both are Kirchhoff's laws and Ohm's law. They differ in how many equations they need.</p>
+<div class="box ex"><span class="tag">Worked example · a bridge</span>
+<p>A 12 V source with 1 Ω feeds a bridge: 2 Ω and 3 Ω on top, 4 Ω and 2 Ω below, 5 Ω across the middle. Four nodes and six branches: three nodal equations, \(6 - 4 + 1 = 3\) mesh equations. Either way, the source delivers 3.28 A and 0.309 A crosses the middle. Change the 2 Ω at the bottom right to 6 Ω, so that \(2/4 = 3/6\), and the current across falls to zero: the bridge is balanced.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Count first: nodes minus one, or branches minus nodes plus one. Many branches between few nodes favour nodes; long chains in few loops favour meshes.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Formula sheet</h2>
+\[
+i = \frac{v_a - v_b + V}{R}, \qquad G\mathbf v = \mathbf i_s \ (n - 1 \text{ equations}), \qquad R\mathbf I = \mathbf v_s \ (b - n + 1 \text{ equations}).
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Kuphaldt, Lessons in Electric Circuits, Vol. I: DC, on DC network analysis.</footer>
+</body>
+</html>

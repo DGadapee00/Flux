@@ -13,7 +13,8 @@ export default {
       url: 'https://ocw.mit.edu/courses/6-002-circuits-and-electronics-spring-2007/pages/calendar/',
       kind: 'Course outline',
       level: 'Course level',
-      why: 'Three lectures from the abstraction to integrators, filters and oscillators.',
+      why: 'Three lectures from the abstraction to integrators, differentiators and oscillators.',
+      checked: '2026-11-06',
     },
     {
       title: 'Kuphaldt, Lessons in Electric Circuits, Vol. III: Semiconductors',

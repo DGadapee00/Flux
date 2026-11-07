@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Following the flow</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EML 3015 · Fluids · Unit 3 · Cleynen, Fluid Dynamics for Engineers, ch. 6</div>
+  <h1>Following the flow</h1>
+  <p class="lede">How to find the acceleration of a fluid particle from a flow field, and what that acceleration asks of the pressure, along a stream and across it.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Particles</h3>
+    <a href="#s1"><span>1</span>Acceleration following a particle</a>
+    <a href="#s2"><span>2</span>Time along a path</a>
+    <h3>Part II · Pressure</h3>
+    <a href="#s3"><span>3</span>Euler's equation across a bend</a>
+    <a href="#s4"><span>4</span>Mass in, mass out</a>
+    <h3>Reference</h3>
+    <a href="#s5"><span>5</span>Pressure-driven flow in a pipe</a>
+    <a href="#s6"><span>6</span>Models and similitude</a>
+    <a href="#s7"><span>7</span>Boundary layers</a>
+    <a href="#s8"><span>8</span>A system passing through a box</a>
+    <a href="#s9"><span>9</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Particles</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Acceleration following a particle</h2>
+<p>A flow field gives the velocity at each point and time, \(\mathbf v(x, y, z, t)\). Newton's law is about a particle, which moves through that field. Its velocity changes for two reasons: the field changes in time where the particle is, and the particle moves to a place where the field is different.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Along the particle's path \(x(t)\), the chain rule gives, in one dimension,</p>
+\[
+\frac{Du}{Dt} = \frac{\partial u}{\partial t} + \frac{\partial u}{\partial x}\frac{dx}{dt} = \frac{\partial u}{\partial t} + u\,\frac{\partial u}{\partial x},
+\]
+<p>and in three, \(D\mathbf v/Dt = \partial\mathbf v/\partial t + (\mathbf v\cdot\nabla)\mathbf v\). The first term is the local part, the second the convective part.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a particle leaving the nozzle</span>
+<p>Water enters a nozzle 0.5 m long at a steady 1 m/s, and the area falls in a straight line to a quarter. Then \(u = 1/(1 - 0.75\,x/0.5)\). At the exit \(u = 4\) m/s and \(\partial u/\partial x = u \times 0.75/(0.5 \times 0.25) = 24\) s⁻¹, so the particle accelerates at \(4 \times 24 = 96\) m/s², nearly ten g.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking steady flow to mean no acceleration. Steady means nothing changes at a fixed point. Every particle in a steady nozzle still speeds up, because it moves into the narrow end.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Double the speed and the convective acceleration goes up four times: both \(u\) and \(\partial u/\partial x\) double.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Time along a path</h2>
+<p>To follow a particle, integrate its speed along the path. Where the flow is fast the particle covers ground quickly; dots placed at equal times spread out.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>From \(dt = dx/u\) with \(u = u_0/(1 - c\,x/L)\),</p>
+\[
+T = \int_0^L \frac{1 - c\,x/L}{u_0}\,dx = \frac{L}{u_0}\left(1 - \frac{c}{2}\right).
+\]
+<p>If the inflow ramps up as \(u_0(1 + rt)\), the path separates the same way: \(x - c\,x^2/(2L) = u_0(t + r t^2/2)\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · crossing the nozzle</span>
+<p>For the same nozzle, \(c = 0.75\), so \(T = (0.5/1)(1 - 0.375) = 0.313\) s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Averaging the inlet and exit speeds. The particle spends most of its time near the slow inlet, so the time is longer than \(L\) over the average speed.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Pressure</h2>
+</div>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Euler's equation across a bend</h2>
+<p>With friction left out, the only forces on a particle are pressure and weight. Newton's law with the material derivative is Euler's equation. Across curved streamlines it says how much the pressure must rise to turn the flow.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+\rho\,\frac{D\mathbf v}{Dt} = -\nabla p + \rho\,\mathbf g.
+\]
+<p>A particle on a streamline of radius \(r\) accelerates toward the centre at \(u^2/r\). In the horizontal plane, the normal part of Euler's equation is \(\partial p/\partial r = \rho u^2/r\). For a free vortex, \(u = K/r\), with \(K\) set by the flow rate \(Vw = K\ln(r_2/r_1)\):</p>
+\[
+p_2 - p_1 = \frac{\rho K^2}{2}\left(\frac{1}{r_1^2} - \frac{1}{r_2^2}\right).
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · a water elbow</span>
+<p>Water at a mean 2 m/s turns through a bend 0.2 m wide with centre-line radius 0.3 m, so \(r_1 = 0.2\) and \(r_2 = 0.4\) m. Then \(K = 0.4/\ln 2 = 0.577\) m²/s, the inner wall moves at \(K/r_1 = 2.89\) m/s, and the outer wall carries \(\tfrac{998}{2}(0.577)^2(25 - 6.25) = 3.12\) kPa more than the inner.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the pressure as even across a stream. That holds only where the streamlines are straight. A flow that turns needs a pressure that rises toward the outside of the turn.</p>
+</div>
+<div class="box out"><span class="tag">What the model leaves out</span>
+<p>Friction. In a real pipe bend the slow fluid near the walls cannot resist the same pressure difference, so it drifts inward and sets up a pair of swirls downstream of the bend.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Mass in, mass out</h2>
+<p>Mass is neither made nor lost. For any fixed region of a flow, the mass flowing out through its sides each second must equal the rate the mass inside falls.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>For a region of area \(A\) and boundary \(s\), and then by the divergence theorem for a vanishing region,</p>
+\[
+\oint \rho\,\mathbf v\cdot\mathbf n\,ds = -\frac{d}{dt}\iint \rho\,dA \quad\Longrightarrow\quad \frac{\partial \rho}{\partial t} + \nabla\cdot(\rho\mathbf v) = 0.
+\]
+<p>Where the density cannot change, as in water at ordinary speeds, this says \(\nabla\cdot\mathbf v = 0\): what flows in flows out.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · air squeezed by a piston</span>
+<p>Air at 1.2 kg/m³ moves as \(u = -2x\) s⁻¹ toward a closed end. A square 0.3 m on a side takes in 0.468 kg/s per metre of depth and lets out 0.252: a net 0.216 kg/s stays. The density inside rises at \(0.216/0.09 = 2.4\) kg/m³ each second.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading a speeding-up flow as one that gains or loses mass. Water entering a corner speeds up in one direction and slows in the other; in and out still balance.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Pressure-driven flow in a pipe</h2>
+<p>Push a liquid down a long straight pipe and, far from the inlet, every particle moves straight along at its own steady speed. Nothing accelerates, so Navier–Stokes keeps only two terms: the pressure gradient and viscous shear.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>With \(\mathbf v = u(r)\,\hat{\mathbf x}\), continuity holds and \((\mathbf v\cdot\nabla)\mathbf v = 0\). The axial part of Navier–Stokes, with \(G = \Delta p/L\), is</p>
+\[
+0 = G + \frac{\mu}{r}\frac{d}{dr}\Big(r\frac{du}{dr}\Big).
+\]
+<p>Integrate twice. Keep \(u\) finite on the axis and set \(u(R) = 0\) at the wall (no slip):</p>
+\[
+u = \frac{G}{4\mu}\,(R^2 - r^2), \qquad Q = \int_0^R u\,2\pi r\,dr = \frac{\pi R^4 G}{8\mu}, \qquad \tau_\text{wall} = \frac{GR}{2}.
+\]
+<p>The profile is a parabola. Its peak grows as \(R^2\), and the area it fills grows as \(R^2\), so the flow grows as \(R^4\). Between two plates a gap \(h\) apart the same steps give \(q = Gh^3/(12\mu)\) per unit width.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · olive oil in a 4 mm tube</span>
+<p>Olive oil (\(\mu = 0.0562\) Pa·s, \(\rho = 920\) kg/m³) flows down a tube of radius 2 mm under 10 kPa per metre:</p>
+\[
+Q = \frac{\pi(0.002)^4(10^4)}{8(0.0562)} = 1.12\times10^{-6}\ \text{m}^3/\text{s} = 1.12\ \text{mL/s}.
+\]
+<p>The mean speed is \(Q/\pi R^2 = 0.089\) m/s, so \(Re = \rho V D/\mu = 5.8\): well inside laminar flow. A tube of twice the radius carries 16 times as much, 17.9 mL/s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the formula without checking the Reynolds number. Water under 1 kPa per metre in a 1 cm pipe would, by the formula, move at 3.1 m/s, with \(Re \approx 31{,}000\). Above about 2300 the flow is turbulent and carries far less.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Models and similitude</h2>
+<p>A law of physics cannot depend on the units it is written in. That one fact says which combinations of the variables can matter, and when a small model behaves like the full-size thing.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A ship's drag depends on \(V\), \(L\), \(\rho\), \(\mu\) and \(g\): five variables in three base dimensions, mass, length and time. The dimension matrix has rank 3, so the drag coefficient can depend on only \(5 - 3 = 2\) independent groups:</p>
+\[
+\mathrm{Re} = \frac{VL}{\nu}, \qquad \mathrm{Fr} = \frac{V}{\sqrt{gL}}.
+\]
+<p>Re compares inertia with viscous force, Fr inertia with gravity. A model at scale \(\lambda = L_m/L_p\) matches Fr when \(V_m = V_p\sqrt\lambda\). Its Reynolds number is then</p>
+\[
+\frac{\mathrm{Re}_m}{\mathrm{Re}_p} = \lambda^{3/2}\,\frac{\nu_p}{\nu_m},
+\]
+<p>so matching both needs \(\nu_m = \lambda^{3/2}\nu_p\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 1/25 ship model</span>
+<p>A 100 m ship at 10 m/s, tested with a 4 m model. Matching Fr gives \(V_m = 10\sqrt{1/25} = 2\) m/s. In water the model's Reynolds number is \((1/25)^{3/2} = 1/125\) of the ship's: \(8.0\times10^6\) against \(1.0\times10^9\). Matching both would need \(\nu_m = 1.0\times10^{-6}/125 = 8.0\times10^{-9}\) m²/s, fourteen times thinner than mercury.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Running the model at the ship's own speed. Its waves then match a ship five times faster: the Froude number is \(\sqrt{25}\) times too big.</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Boundary layers</h2>
+<p>A stream sliding along a plate sticks to it at the surface and keeps its full speed a little way off. Between the two is a thin layer where viscosity matters. Outside it, the flow behaves as if it had none.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>In the layer, Navier–Stokes simplifies because it is thin: changes across it are far faster than changes along it. Prandtl's boundary-layer equations follow, and on a flat plate they have a solution of one shape, stretched as the layer grows. With \(u/U = f'(\eta)\) and \(\eta = y\sqrt{U/\nu x}\),</p>
+\[
+f''' + \tfrac12 f f'' = 0, \qquad f(0) = f'(0) = 0, \quad f'(\infty) = 1.
+\]
+<p>Solved numerically, it gives \(f'' = 0.332\) at the wall and \(f' = 0.99\) at \(\eta = 4.91\). So</p>
+\[
+\delta = \frac{4.91\,x}{\sqrt{\mathrm{Re}_x}}, \qquad \tau_w = \frac{0.332\,\rho U^2}{\sqrt{\mathrm{Re}_x}}, \qquad \mathrm{Re}_x = \frac{Ux}{\nu}.
+\]
+<p>The layer grows as \(\sqrt x\) and thins as \(1/\sqrt U\). It stays laminar to about \(\mathrm{Re}_x = 5\times10^5\) on a smooth plate.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · air along a 1 m plate</span>
+<p>Air at 5 m/s, \(\nu = 1.54\times10^{-5}\) m²/s. At the trailing edge \(\mathrm{Re}_L = 5(1)/1.54\times10^{-5} = 3.25\times10^5\), still laminar, and</p>
+\[
+\delta = \frac{4.91(1)}{\sqrt{3.25\times10^5}} = 8.6\ \text{mm}.
+\]
+<p>Halfway along it is \(8.6/\sqrt2 = 6.1\) mm. At 10 m/s the layer turns turbulent at \(x = 5\times10^5\nu/U = 0.77\) m.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Scaling the layer with distance or speed directly. It goes as \(\sqrt{x}\) and \(1/\sqrt{U}\): twice the speed thins it by \(\sqrt2\), not by half.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>A system passing through a box</h2>
+<p>Newton's laws are written for a fixed lump of matter, a system. In a pump or a nozzle the matter keeps moving, so it is easier to watch a fixed region, a control volume. The Reynolds transport theorem turns a law for the system into one for the box.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Take the system to be the water in the box at time \(t\). A moment \(dt\) later it has moved on: it has left a sliver at the inlet face and filled a sliver past the outlet face. So its property \(B\) is what the box holds then, minus the inlet sliver, plus the outlet sliver. For one-dimensional flow with \(b\) per kilogram, each sliver holds \(\rho b\,uA\,dt\), and</p>
+\[
+\frac{dB_\text{sys}}{dt} = \frac{d}{dt}\int_\text{box}\rho b\,dV + \big(\rho b\,uA\big)_\text{out} - \big(\rho b\,uA\big)_\text{in}.
+\]
+<p>With \(b = 1\) it is the mass balance. With \(b = u\) the left side is the net force on the water, by Newton's second law. In three dimensions the flux term becomes \(\int_\text{CS}\rho b\,(\mathbf v\cdot\mathbf n)\,dA\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a steady nozzle</span>
+<p>Water at 10 L/s flows steadily through a duct whose area falls from 0.02 m² to 0.005 m² over 2 m. A box holds the duct from 0.75 m to 1.25 m, where the areas are 0.014375 m² and 0.010625 m². The speeds are \(u = Q/A = 0.696\) m/s in and 0.941 m/s out. Nothing in the box changes, so with \(b = u\)</p>
+\[
+F = \rho Q\,(u_\text{out} - u_\text{in}) = 1000(0.01)(0.941 - 0.696) = 2.46\ \text{N}.
+\]
+<p>The walls and the pressure push the water in the box forward with 2.46 N, though the flow is steady.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Treating the box as the system. In steady flow nothing in the box changes, yet the water passing through it speeds up and needs a force. And when dye drifts into the box, the box gains dye while the water, which carries its dye with it, gains none.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Formula sheet</h2>
+\[
+\frac{D\mathbf v}{Dt} = \frac{\partial\mathbf v}{\partial t} + (\mathbf v\cdot\nabla)\mathbf v, \qquad T = \int \frac{dx}{u}, \qquad \rho\,\frac{D\mathbf v}{Dt} = -\nabla p + \rho\,\mathbf g,
+\]
+\[
+\frac{\partial p}{\partial r} = \rho\,\frac{u^2}{r}, \qquad Vw = K\ln\frac{r_2}{r_1}, \qquad p_2 - p_1 = \frac{\rho K^2}{2}\left(\frac{1}{r_1^2} - \frac{1}{r_2^2}\right).
+\]
+\[
+u = \frac{\Delta p}{4\mu L}(R^2 - r^2), \qquad Q = \frac{\pi R^4\,\Delta p}{8\mu L}, \qquad q_\text{slot} = \frac{\Delta p\,h^3}{12\mu L}, \qquad Re = \frac{\rho V D}{\mu}.
+\]
+\[
+\#\Pi = n - r, \qquad \mathrm{Fr} = \frac{V}{\sqrt{gL}}, \qquad V_m = V_p\sqrt\lambda, \qquad \frac{\mathrm{Re}_m}{\mathrm{Re}_p} = \lambda^{3/2}\frac{\nu_p}{\nu_m}.
+\]
+\[
+\delta = \frac{4.91\,x}{\sqrt{\mathrm{Re}_x}}, \qquad \tau_w = \frac{0.332\rho U^2}{\sqrt{\mathrm{Re}_x}}, \qquad C_f = \frac{1.328}{\sqrt{\mathrm{Re}_L}}.
+\]
+\[
+\frac{dB_\text{sys}}{dt} = \frac{d}{dt}\int_\text{CV}\rho b\,dV + \int_\text{CS}\rho b\,(\mathbf v\cdot\mathbf n)\,dA, \qquad F = \rho Q\,(u_\text{out} - u_\text{in})\ \text{(steady, one-dimensional)}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Cleynen, Fluid Dynamics for Engineers, chapter 6 (Prediction of fluid flows).</footer>
+</body>
+</html>

@@ -13,6 +13,7 @@ export default {
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Coefficients from orthogonality, with the square wave worked.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.03SC, Fourier series: basics',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Lectures and problems on computing coefficients.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

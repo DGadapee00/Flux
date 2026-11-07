@@ -20,6 +20,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The four lectures on vapour power cycles.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Engineering Thermodynamics',
@@ -27,6 +28,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'The Rankine cycle, reheat and regeneration, with steam-table states.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Rankine cycle',
@@ -34,6 +36,7 @@ export default {
       kind: 'Reference',
       level: 'Intro',
       why: 'The cycle on a \\(T\\)–\\(s\\) diagram and its real-plant variants.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

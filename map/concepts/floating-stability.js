@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Buoyancy as the net pressure force on a closed surface, the step before stability.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Metacentric height',
@@ -21,6 +22,7 @@ export default {
       kind: 'Reference',
       level: 'Intro',
       why: 'The metacentre and the righting arm, with the ship-design view of GM.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

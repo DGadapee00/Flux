@@ -21,8 +21,10 @@ export default {
       kind: 'Open textbook',
       level: 'Deeper',
       why: 'Its determinants chapter, with the geometric meaning and the proofs.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Edit a 2×2 matrix and watch the image of the unit square, its area and the inverse. It corrects the idea that a small determinant means a matrix is nearly singular: scale every entry by 0.1 and the determinant falls a hundredfold, yet the matrix is no closer to singular.',
+  labs: [
+    { course: 'egn3203', lab: 'inverse', notes: ['s5'], note: 'Edit and scale a 2×2 matrix: det falls as s², but the circle’s image keeps its shape. The condition number, not the determinant, says how close it is to singular.' },
+  ],
 };

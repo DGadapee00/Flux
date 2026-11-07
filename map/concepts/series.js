@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Partial sums, the geometric series and why the harmonic one diverges.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax Calculus Vol. 2, §5.3 The divergence and integral tests',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'The integral test, with the tail estimate that comes with it.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

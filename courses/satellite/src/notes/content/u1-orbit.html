@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Orbit</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 1 · after MIT 16.07, Lecture 15</div>
+  <h1>Orbit</h1>
+  <p class="lede">Where a satellite on an elliptical orbit is at a given time, how fast it is going, and why that needs an equation no formula solves.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Two-body orbits</h3>
+    <a href="#s1"><span>1</span>Ellipses and their speeds</a>
+    <a href="#s2"><span>2</span>Kepler's equation</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Two-body orbits</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Ellipses and their speeds</h2>
+<p>A craft moving only under Earth's gravity follows an ellipse with Earth's centre at one focus. Its closest point is perigee, its farthest apogee.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>With perigee and apogee radii \(r_p\) and \(r_a\), the semi-major axis and eccentricity are</p>
+\[
+a = \frac{r_p + r_a}{2}, \qquad e = \frac{r_a - r_p}{r_a + r_p}, \qquad T = 2\pi\sqrt{\frac{a^3}{\mu}}.
+\]
+<p>Energy per unit mass is fixed at \(-\mu/2a\), so the speed at any radius is the vis-viva equation, \(v^2 = \mu(2/r - 1/a)\). Angular momentum is fixed too, so the line from Earth to the craft sweeps equal areas in equal times: fast near perigee, slow near apogee.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a geostationary transfer orbit</span>
+<p>Perigee 250 km and apogee 35,786 km above a 6378 km Earth: \(r_p = 6628\) km, \(r_a = 42{,}164\) km, so \(a = 24{,}396\) km and \(e = 0.728\). With \(\mu = 398{,}600\) km³/s², \(T = 2\pi\sqrt{a^3/\mu} = 37{,}920\) s, 10.53 h. At perigee \(v = \sqrt{\mu(2/6628 - 1/24{,}396)} = 10.2\) km/s; at apogee 1.60 km/s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using altitudes for \(r\). Every radius in these formulas is measured from Earth's centre: add Earth's radius.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Kepler's equation</h2>
+<p>The angle round the orbit does not grow steadily with time. What does is the mean anomaly \(M = nt\), with \(n = \sqrt{\mu/a^3}\) and \(t\) from perigee.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Equal areas in equal times, worked through for an ellipse, ties \(M\) to the eccentric anomaly \(E\), an angle measured from the ellipse's centre:</p>
+\[
+M = E - e\sin E, \qquad r = a(1 - e\cos E), \qquad \tan\frac\nu2 = \sqrt{\frac{1 + e}{1 - e}}\,\tan\frac E2.
+\]
+<p>Given \(t\), the first equation has no closed-form solution for \(E\). Newton's method solves it: \(E \leftarrow E - (E - e\sin E - M)/(1 - e\cos E)\), a handful of steps to machine precision.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a quarter period on</span>
+<p>On the transfer orbit, a quarter period after perigee, \(M = 90°\). Newton's method gives \(E = 125.4°\), and then \(\nu = 156.4°\). In a quarter of the period the craft has gone 156° round, not 90°: the rest of the orbit, past apogee, takes the remaining three quarters.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>A ground station needs the position at a given time, so every orbit predictor solves Kepler's equation, or integrates the motion numerically. The lab does both and compares them.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+a = \tfrac12(r_p + r_a), \quad e = \frac{r_a - r_p}{r_a + r_p}, \quad T = 2\pi\sqrt{a^3/\mu}, \quad v^2 = \mu\left(\frac2r - \frac1a\right),
+\]
+\[
+M = \sqrt{\mu/a^3}\,t = E - e\sin E, \qquad \tan\frac\nu2 = \sqrt{\frac{1+e}{1-e}}\tan\frac E2, \qquad \mu_\oplus = 398{,}600\ \text{km}^3/\text{s}^2.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.07 Dynamics, Lecture 15. Earth's radius 6378 km.</footer>
+</body>
+</html>

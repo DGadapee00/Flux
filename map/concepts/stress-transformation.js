@@ -9,11 +9,12 @@ export default {
   requires: ['stress-on-a-section'],
   sources: [
     {
-      title: 'MIT 2.001, Lecture 15: Stress transformations and principal stress',
+      title: 'MIT 2.001, Lecture 16: Stress transformations and principal stress',
       url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/resources/lec15/',
       kind: 'Lecture notes',
       level: 'Course level',
       why: 'The transformation equations and Mohr’s circle derived.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 3.11, calendar: Tensor transformations, Mohr’s circle (17)',
@@ -21,6 +22,7 @@ export default {
       kind: 'Course outline',
       level: 'Deeper',
       why: 'The tensor view, from the course’s reading.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

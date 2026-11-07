@@ -13,6 +13,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Independent x and y motion, worked for range and height.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.01SC, 8.1 Polar coordinates',
@@ -20,6 +21,7 @@ export default {
       kind: 'Lecture video',
       level: 'Course level',
       why: 'Why the polar unit vectors turn, which is where the extra terms come from.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

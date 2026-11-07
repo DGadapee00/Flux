@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Many sketched fields; good for learning to read one at a glance.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.02SC, Session 56: Vector fields (problems with solutions)',
@@ -21,6 +22,7 @@ export default {
       kind: 'Problems + solutions',
       level: 'Course level',
       why: 'Short problems with full solutions to check yourself against.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

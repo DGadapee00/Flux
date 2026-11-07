@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Bonding and structure</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EMA 3010 · Materials Science · Unit 1 · OpenStax Chemistry 2e, and MIT 3.091's recitations</div>
+  <h1>Bonding and structure</h1>
+  <p class="lede">Why two atoms sit a fixed distance apart, what it costs to pull them apart, and why a solid's stiffness depends on the shape of that energy curve, not only its depth.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The bond</h3>
+    <a href="#s1"><span>1</span>The bond-energy curve</a>
+    <a href="#s2"><span>2</span>Force is the slope</a>
+    <a href="#s3"><span>3</span>Stiffness is the curvature</a>
+    <h3>Part II · Structure</h3>
+    <a href="#s4"><span>4</span>Packing atoms into a cell</a>
+    <h3>Reference</h3>
+    <a href="#s5"><span>5</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The bond</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>The bond-energy curve</h2>
+<p>Two atoms far apart do not interact. Brought closer, they attract. Brought too close, their electron clouds overlap and they repel. Add the two and the energy has a well. The atoms settle at its bottom.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Model the attraction and the repulsion as two powers of the separation \(r\), the repulsion steeper:</p>
+\[
+U(r) = -\frac{A}{r^n} + \frac{B}{r^m}, \qquad m > n.
+\]
+<p>The bottom of the well is where \(dU/dr = 0\). Call it the bond length \(r_0\), and call the depth there \(E_0\). Those two conditions fix \(A\) and \(B\):</p>
+\[
+A = \frac{m}{m-n}\,E_0 r_0^{\,n}, \qquad B = \frac{n}{m-n}\,E_0 r_0^{\,m}.
+\]
+<p>For an ion pair the attraction is Coulomb's law between charges \(+e\) and \(-e\): \(n = 1\) and \(A = ke^2 = 14.40\) eV·Å. Then the depth follows from \(r_0\) and \(m\) alone, \(E_0 = (ke^2/r_0)(1 - 1/m)\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an Na⁺Cl⁻ ion pair</span>
+<p>A sodium ion and a chloride ion sit \(r_0 = 2.36\) Å apart. Take \(m = 9\) for the repulsion. The Coulomb energy at that distance is \(14.40/2.36 = 6.10\) eV, and the repulsion takes back a ninth of it:</p>
+\[
+E_0 = 6.10\left(1 - \tfrac19\right) = 5.42\ \text{eV}.
+\]
+<p>So it takes 5.42 eV to pull the pair apart into separate ions.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the Coulomb energy \(ke^2/r_0\) as the bond energy. At \(r_0\) the clouds already repel, and that repulsion takes back \(1/m\) of it.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Force is the slope</h2>
+<p>The force each atom feels is minus the slope of the curve, \(F = -dU/dr\). Outside \(r_0\) the curve rises toward zero, so the force pulls the atoms together. Inside \(r_0\) it rises steeply, so the force pushes them apart.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+F(r) = -\frac{dU}{dr} = -\frac{nA}{r^{n+1}} + \frac{mB}{r^{m+1}}.
+\]
+<p>Positive means apart. The repulsive term grows faster as \(r\) shrinks, which is why solids barely compress.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · squeezing the ion pair</span>
+<p>Squeeze the Na⁺Cl⁻ pair to \(0.85\,r_0 = 2.006\) Å. With \(A = 14.40\) eV·Å and \(B = \tfrac18(5.42)(2.36)^9 = 1540\) eV·Å⁹,</p>
+\[
+F = -\frac{14.40}{2.006^2} + \frac{9(1540)}{2.006^{10}} = -3.58 + 13.13 = 9.55\ \text{eV/Å},
+\]
+<p>apart. That is about 15 nN on each ion.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Stiffness is the curvature</h2>
+<p>Near the bottom any smooth well looks like a parabola. So a bond stretched a little acts as a spring, and its spring constant is the curvature at the bottom.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+k = U''(r_0) = -\frac{n(n+1)A}{r_0^{n+2}} + \frac{m(m+1)B}{r_0^{m+2}} = \frac{n\,m\,E_0}{r_0^{2}}.
+\]
+<p>The depth \(E_0\) is in it, but so is the shape, \(nm\). A solid's Young's modulus follows \(k\), scaled by how many bonds cross a unit area.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a deep well and a shallow one</span>
+<p>Two model bonds both sit at \(r_0 = 2.5\) Å. One is 4 eV deep with \(n = 1, m = 3\). The other is 2 eV deep with \(n = 2, m = 6\).</p>
+\[
+k_\text{deep} = \frac{1\cdot3\cdot4}{2.5^2} = 1.92\ \text{eV/Å}^2, \qquad k_\text{shallow} = \frac{2\cdot6\cdot2}{2.5^2} = 3.84\ \text{eV/Å}^2.
+\]
+<p>The shallow bond is twice as stiff: 61.5 N/m against 30.8 N/m.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Depth sets how much energy breaks the bond, and so how hot the solid melts. Curvature sets how far it stretches under load. They go together often, but not always.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Structure</h2>
+</div>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Packing atoms into a cell</h2>
+<p>In a metal the bonds pull every atom toward its neighbours, and the atoms settle into a repeating pattern. Model them as hard spheres of radius \(R\). The cell is as small as it can be when the spheres touch.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Where the atoms touch fixes the cell edge \(a\). In simple cubic they touch along an edge, \(a = 2R\). In body-centred cubic they touch along the body diagonal, \(\sqrt3\,a = 4R\). In face-centred cubic they touch along a face diagonal, \(\sqrt2\,a = 4R\). Counting shares of atoms (a corner is shared by 8 cells, a face by 2) gives 1, 2 and 4 atoms per cell. Then</p>
+\[
+\text{APF} = \frac{N\,\tfrac43\pi R^3}{a^3}, \qquad \rho = \frac{N A}{a^3 N_A}.
+\]
+<p>Simple cubic fills 52% of space, BCC 68%, FCC 74%. Hexagonal close-packed stacks the same close-packed layers as FCC in a different order, and also fills 74%.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · copper from its atoms</span>
+<p>Copper is face-centred cubic with \(R = 0.1278\) nm and \(A = 63.55\) g/mol. The cell edge is \(a = 2\sqrt2(0.1278) = 0.3615\) nm, so \(a^3 = 4.724\times10^{-23}\) cm³. With 4 atoms per cell,</p>
+\[
+\rho = \frac{4(63.55)}{(4.724\times10^{-23})(6.022\times10^{23})} = 8.94\ \text{g/cm}^3,
+\]
+<p>within 0.3% of the measured 8.96 g/cm³.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Assuming every metal packs as tightly as it can. Iron, chromium and tungsten are body-centred at room temperature and leave 32% of space empty.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Formula sheet</h2>
+\[
+U(r) = -\frac{A}{r^n} + \frac{B}{r^m}, \qquad A = \frac{m}{m-n}E_0r_0^{\,n}, \qquad B = \frac{n}{m-n}E_0r_0^{\,m},
+\]
+\[
+F = -\frac{dU}{dr}, \qquad k = \frac{n\,m\,E_0}{r_0^2}, \qquad E_0^\text{ion pair} = \frac{ke^2}{r_0}\left(1 - \frac1m\right), \qquad ke^2 = 14.40\ \text{eV·Å}.
+\]
+\[
+a_\text{SC} = 2R, \quad a_\text{BCC} = \frac{4R}{\sqrt3}, \quad a_\text{FCC} = 2\sqrt2\,R, \qquad \text{APF} = \frac{N\tfrac43\pi R^3}{a^3}, \qquad \rho = \frac{NA}{a^3N_A}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside OpenStax Chemistry 2e, §7.5, and MIT 3.091's recitations on bonding. 1 eV/Å² = 16.02 N/m; 1 eV/Å = 1.602 nN.</footer>
+</body>
+</html>

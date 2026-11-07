@@ -9,11 +9,12 @@ export default {
   requires: ['compressible-flow', 'momentum-cv'],
   sources: [
     {
-      title: 'NASA Glenn, Beginner’s guide to aeronautics: Normal shock wave',
-      url: 'https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/normal-shock-wave/',
+      title: 'NASA Glenn, Beginner’s guide to aeronautics: Normal shocks interactive',
+      url: 'https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/normal/',
       kind: 'Reference',
       level: 'Intro',
       why: 'The shock relations with a calculator to check them.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 1, §17.8 Shock waves',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Shocks from a source faster than sound, as a first course shows them.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

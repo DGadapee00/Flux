@@ -14,10 +14,11 @@ export default {
   sources: [
     {
       title: 'Lebl, Notes on Diffy Qs, §1.4 Linear equations and the integrating factor',
-      url: 'https://www.jirka.org/diffyqs/',
+      url: 'https://www.jirka.org/diffyqs/html/intfactor_section.html',
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Mixing problems solved with an integrating factor.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.03SC, First order constant coefficient linear ODEs',
@@ -25,6 +26,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'Models with constant rates and their response to inputs.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

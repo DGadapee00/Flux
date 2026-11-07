@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Each property argued from Gauss’s law, including cavities.',
+      checked: '2026-11-06',
     },
     {
       title: 'Feynman Lectures Vol. II, Ch. 5: Application of Gauss’ law',

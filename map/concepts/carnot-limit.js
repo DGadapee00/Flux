@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The cycle step by step, and why its efficiency is the limit.',
+      checked: '2026-11-06',
     },
     {
       title: 'Yan, Introduction to Engineering Thermodynamics, Ch. 6 Entropy and the second law',

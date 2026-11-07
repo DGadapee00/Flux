@@ -14,6 +14,7 @@ export default {
       kind: 'Free textbook (CC BY-NC-SA)',
       level: 'Course level',
       why: 'Centroids and area moments by composite parts, with interactive figures.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax Calculus Vol. 3, §5.6 Calculating centers of mass and moments of inertia',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'The integrals behind the composite-part tables.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

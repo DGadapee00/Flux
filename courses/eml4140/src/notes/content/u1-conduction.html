@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Modes and conduction</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EML 4140 · Heat Transfer · Unit 1 · Lienhard and Lienhard, A Heat Transfer Textbook, chapter 2</div>
+  <h1>Modes and conduction</h1>
+  <p class="lede">Where the heat equation comes from, how a temperature profile in a rod fades, and how a computer steps the same equation forward on a grid.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Conduction in time</h3>
+    <a href="#s1"><span>1</span>The heat equation</a>
+    <a href="#s2"><span>2</span>Sines that fade</a>
+    <a href="#s3"><span>3</span>Stepping on a grid</a>
+    <h3>Part II · Steady conduction</h3>
+    <a href="#s4"><span>4</span>Resistances in series</a>
+    <a href="#s5"><span>5</span>The critical radius</a>
+    <h3>Reference</h3>
+    <a href="#s6"><span>6</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Conduction in time</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>The heat equation</h2>
+<p>Heat flows down a temperature gradient: Fourier's law says the flux is \(q = -k\,\partial T/\partial x\). Where more heat flows into a slice than out, the slice warms.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Take a slice of a rod, of area \(A\) and thickness \(dx\). The heat stored per second is \(\rho c A\,dx\,\partial T/\partial t\). The net heat in is the flux in at \(x\) minus the flux out at \(x + dx\), which is \(-A\,(\partial q/\partial x)\,dx\). Set them equal and use Fourier's law:</p>
+\[
+\rho c\,\frac{\partial T}{\partial t} = k\,\frac{\partial^2 T}{\partial x^2}
+\quad\Longrightarrow\quad
+\frac{\partial T}{\partial t} = \alpha\,\frac{\partial^2 T}{\partial x^2}, \qquad \alpha = \frac{k}{\rho c}.
+\]
+<p>In three dimensions the same balance on a small volume, with the divergence theorem, gives \(\partial T/\partial t = \alpha\nabla^2 T\). The diffusivity \(\alpha\) says how fast temperature spreads: copper's is 117 mm²/s, carbon steel's 17.7 mm²/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a copper rod cools to half</span>
+<p>A copper rod 10 cm long has its ends held at 20 °C. Its middle starts 80 °C hotter, in a half-sine profile. Section 2 shows this profile keeps its shape and sinks as \(e^{-\pi^2 \alpha t/L^2}\). It is half gone when</p>
+\[
+\pi^2\frac{\alpha t}{L^2} = \ln 2 \quad\Longrightarrow\quad t = \frac{\ln 2}{\pi^2}\,\frac{L^2}{\alpha} = 0.0702\times\frac{(0.1)^2}{1.17\times10^{-4}} = 6.0\ \text{s}.
+\]
+<p>The middle is then at \(20 + 40 = 60\) °C. In carbon steel the same takes 39.7 s.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Scaling the time with \(L\). It scales with \(L^2\): a rod twice as long takes four times as long.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Sines that fade</h2>
+<p>With both ends held at the same temperature, measure \(\theta = (T - T_\text{end})/\Delta T_0\). Each sine that is zero at both ends is a solution on its own.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Try \(\theta = \sin(n\pi x/L)\,g(t)\). The equation gives \(g' = -\alpha(n\pi/L)^2 g\), so \(g = e^{-(n\pi)^2\mathrm{Fo}}\) with the Fourier number \(\mathrm{Fo} = \alpha t/L^2\). Any starting profile is a sum of these sines, with coefficients \(b_n = 2\int_0^1 f(s)\sin(n\pi s)\,ds\):</p>
+\[
+\theta(x, t) = \sum_{n=1}^{\infty} b_n \sin\frac{n\pi x}{L}\;e^{-(n\pi)^2\mathrm{Fo}}.
+\]
+<p>Mode \(n\) fades \(n^2\) times faster than the first. Sharp features need short sines, so they go first.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the ripple and the hump</span>
+<p>Start the copper rod from a half sine with a ripple on it: \(\theta_0 = \sin(\pi s) + \tfrac13\sin(5\pi s)\). At \(\mathrm{Fo} = 0.02\), which is 1.71 s,</p>
+\[
+e^{-\pi^2(0.02)} = 0.821, \qquad e^{-25\pi^2(0.02)} = 0.0072.
+\]
+<p>The hump keeps 82% and the ripple keeps 0.7%. At the middle, where \(\sin(5\pi/2) = 1\), \(\theta = 0.821 + 0.0024 = 0.823\), so \(T = 20 + 80(0.823) = 85.9\) °C.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Stepping on a grid</h2>
+<p>A computer does not need the series. Cut the rod into cells and replace each derivative by a difference.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+\frac{\theta_i^{\,new} - \theta_i}{\Delta t} = \alpha\,\frac{\theta_{i+1} - 2\theta_i + \theta_{i-1}}{\Delta x^2}
+\quad\Longrightarrow\quad
+\theta_i^{\,new} = \theta_i + r\,(\theta_{i+1} - 2\theta_i + \theta_{i-1}), \qquad r = \frac{\alpha\,\Delta t}{\Delta x^2}.
+\]
+<p>Each cell moves toward the average of its neighbours. The step is stable only for \(r \le \tfrac12\). Past that, the shortest wiggle on the grid grows instead of fading.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a tent on 80 cells</span>
+<p>Start from a tent, 1 at the middle and 0 at the ends. Its corner needs many sines; their coefficients are \(b_n = 8\sin(n\pi/2)/(n\pi)^2\). At \(\mathrm{Fo} = 0.01\) the series gives \(\theta = 0.774\) at the middle. Stepping 80 cells with \(r = 0.4\) takes 160 steps and also gives 0.774. The two routes share nothing but the equation.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The series shows why the profile fades as it does. The grid works for any shape, any material that changes along the rod, and any boundary. Checking one against the other is how a solver is trusted.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Steady conduction</h2>
+</div>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Resistances in series</h2>
+<p>Once temperatures stop changing, the same heat flows through every layer of a wall. Fourier's law then makes each layer's temperature drop proportional to that flow, like a resistor's voltage drop to its current.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>In steady state with no heat made inside, \(d^2T/dx^2 = 0\) in each layer, so \(T\) falls in a straight line and \(q = k\,\Delta T/L\). A surface losing heat to a fluid passes \(q = h\,\Delta T\). Per unit area,</p>
+\[
+R_\text{layer} = \frac{L}{k}, \qquad R_\text{film} = \frac1h, \qquad q = \frac{T_\text{in} - T_\text{out}}{\sum R}, \qquad \Delta T_i = q R_i.
+\]
+<p>Each layer takes a share of the total drop in proportion to its resistance. \(U = 1/\sum R\) is the overall coefficient.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a house wall</span>
+<p>Inside 20 °C with \(h = 8\); then 13 mm of drywall (\(k = 0.17\)), 90 mm of glass wool (\(k = 0.04\)), 100 mm of brick (\(k = 0.7\)); outside −5 °C with \(h = 25\). The resistances are 0.125, 0.076, 2.25, 0.143 and 0.040 m²·K/W, 2.63 in all, so \(q = 25/2.63 = 9.49\) W/m². The glass wool takes \(9.49\times2.25 = 21.4\) °C of the 25 °C.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting twice the insulation to halve the loss. Only that layer's resistance doubles; the rest stay.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>The critical radius</h2>
+<p>On a pipe, insulation does two things. It adds resistance, which grows slowly, as \(\ln r\). It also adds outer surface for the film, whose resistance falls as \(1/r\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+R' = \frac{\ln(r_2/r_1)}{2\pi k} + \frac{1}{2\pi r_2 h}, \qquad \frac{dR'}{dr_2} = \frac{1}{2\pi r_2}\left(\frac1k - \frac{1}{r_2 h}\right) = 0 \;\Longrightarrow\; r_\text{crit} = \frac kh.
+\]
+<p>The total resistance is smallest, and the heat loss largest, at \(r_2 = k/h\). Below it, adding insulation raises the loss.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · insulating a thin wire</span>
+<p>A 2 mm wire, 50 °C above the air, with \(h = 10\) W/m²·K. Bare, it loses \(50\times2\pi(0.002)(10) = 6.28\) W per metre. Insulation with \(k = 0.1\) has \(r_\text{crit} = 0.1/10 = 10\) mm. Coated to 6 mm, \(R' = \ln 3/(0.628) + 1/(2\pi(0.006)(10)) = 1.75 + 2.65 = 4.40\) m·K/W, so it loses \(50/4.40 = 11.4\) W/m: more than bare.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Formula sheet</h2>
+\[
+q = -k\frac{\partial T}{\partial x}, \qquad \frac{\partial T}{\partial t} = \alpha\frac{\partial^2 T}{\partial x^2}, \qquad \alpha = \frac{k}{\rho c}, \qquad \mathrm{Fo} = \frac{\alpha t}{L^2},
+\]
+\[
+\theta = \sum_n b_n \sin\frac{n\pi x}{L}\,e^{-(n\pi)^2\mathrm{Fo}}, \qquad \theta_i^{\,new} = \theta_i + r(\theta_{i+1} - 2\theta_i + \theta_{i-1}),\ r \le \tfrac12.
+\]
+\[
+q = \frac{\Delta T}{\sum R}, \quad R = \frac Lk,\ \frac1h, \qquad R'_\text{cyl} = \frac{\ln(r_2/r_1)}{2\pi k}, \qquad r_\text{crit} = \frac kh.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Lienhard and Lienhard, A Heat Transfer Textbook, chapter 2. Diffusivities at 300 K: copper 117, aluminum 97.1, carbon steel 17.7, Pyrex 0.75 mm²/s.</footer>
+</body>
+</html>

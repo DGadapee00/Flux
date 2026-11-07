@@ -20,6 +20,7 @@ export default {
       kind: 'Reference',
       level: 'Intro',
       why: 'Humidity ratio, relative humidity, dew point and the chart, defined in one place.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Engineering Thermodynamics',
@@ -27,6 +28,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Saturation pressure and phase change, from which the chart is built.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

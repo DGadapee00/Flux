@@ -20,6 +20,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The lecture that adds the viscous term, followed by three lectures of solutions.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Fluid Dynamics for Engineers',
@@ -27,8 +28,11 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Derives the equations term by term and solves the standard laminar cases.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Start a wall moving under still fluid and watch the velocity spread upward. It corrects the idea that viscosity acts everywhere at once: momentum diffuses in from the wall over a depth of order \\(\\sqrt{\\nu t}\\), as heat does.',
+  labs: [
+    { course: 'eml3015', lab: 'viscosity', notes: ['s2'], note: 'A plate starts moving over a still layer, and momentum diffuses in from it: Navier–Stokes for flow along a wall.' },
+    { course: 'eml3015', lab: 'pipe', notes: ['s5'], note: 'Navier–Stokes driven by a pressure drop in a pipe or slot: the parabolic profile in closed form and by finite volumes. Two-dimensional flows are still to come.' },
+  ],
 };

@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Energy conservation for rolling, including the race down a ramp.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 8.01SC, 37.1 Kinetic energy of translation and rotation',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lecture video',
       level: 'Course level',
       why: 'Splitting kinetic energy about the centre of mass.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

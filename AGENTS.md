@@ -9,7 +9,9 @@ The map grows one concept, one thread or one lab at a time. A concept with no la
 and gaps decide what gets built next.
 
 - The data is in `map/` (`map/README.md` has the shape). `MAP.md` says what it covers.
-- The hub (`site/`) opens on the map. The course apps are reached from it.
+- The hub (`site/`) opens on Today: reviews that follow threads on the map, the next concept to
+  learn and the next exam, read from the course apps' own records (`site/src/learner/`). The map
+  is below it. The course apps are reached from both.
 - The approved look and data shape are in `docs/map/prototype-flux-thread.html`.
 - The old course-by-course plan is archived in `docs/history/guidance-2026-11-02/`. It is history.
   Do not follow it. Code comments that cite a decision number (D5, D23 …) or
@@ -80,7 +82,9 @@ are checked only one way is not done.
 An application is a project the map leads to, such as a satellite built subsystem by subsystem.
 Its recipes are in `map/applications/` and name concepts and labs already on the map; they add no
 new labs. A recipe's `gap` says what is still to build, and `npm run map-gaps` ranks a gap higher
-when a recipe needs it. `docs/map/applications.md` has the rules for capability records.
+when a recipe needs it. Each recipe is a reference and how-to (method, references, checklist);
+the work is reviewed in a Claude Project from a brief the hub builds. `docs/map/applications.md`
+has the details.
 
 ### Audit a course
 

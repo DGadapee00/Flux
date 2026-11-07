@@ -20,6 +20,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'Bearings and laminar pipe flow are the course’s first exact solutions.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax University Physics Vol. 1, §14.7 Viscosity and turbulence',
@@ -27,8 +28,10 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Poiseuille’s law and the fourth-power dependence on radius, with blood-flow examples.',
+      checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Push oil through a tube with a slider for the radius and the pressure drop held fixed. It corrects the idea that doubling the radius doubles or quadruples the flow: it grows sixteenfold.',
+  labs: [
+    { course: 'eml3015', lab: 'pipe', notes: ['s5'], note: 'Oil pushed down a tube: twice the radius carries sixteen times the flow. A slot shows h³, and the Reynolds number shows where the laminar answer ends.' },
+  ],
 };

@@ -9,11 +9,12 @@ export default {
   requires: ['random-variables', 'descriptive-statistics'],
   sources: [
     {
-      title: 'MIT 18.05, Reading 6a: Expectation, variance, law of large numbers and central limit theorem',
-      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/resources/mit18_05s14_reading6a/',
+      title: 'MIT 18.05, Reading 6b: Central limit theorem and the law of large numbers',
+      url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/resources/mit18_05_s22_class06-prep-b_pdf/',
       kind: 'Reading notes',
       level: 'Course level',
-      why: 'The CLT stated carefully, with simulations.',
+      why: 'The CLT stated carefully, with density histograms of many samples.',
+      checked: '2026-11-06',
     },
     {
       title: 'OpenStax Introductory Statistics 2e, §7.1 The central limit theorem for sample means',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The sample mean’s spread, with worked probabilities.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

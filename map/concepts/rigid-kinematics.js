@@ -14,6 +14,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The link between a point’s speed and the body’s rotation.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 2.003SC, Velocity, acceleration, and rotational motion',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Deeper',
       why: 'An engineering dynamics course’s full treatment, with recitations.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

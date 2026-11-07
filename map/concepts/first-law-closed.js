@@ -21,6 +21,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'The law stated as energy bookkeeping, with worked cycles.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

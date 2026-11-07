@@ -20,6 +20,7 @@ export default {
       kind: 'Recitation notes',
       level: 'Course level',
       why: 'Fick’s first law and steady flux, worked as the course does.',
+      checked: '2026-11-06',
     },
     {
       title: 'DoITPoMS, Diffusion (University of Cambridge)',
@@ -27,6 +28,7 @@ export default {
       kind: 'Teaching package',
       level: 'Course level',
       why: 'Both of Fick’s laws, the error-function solution and the atomic mechanisms.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

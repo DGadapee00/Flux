@@ -27,6 +27,7 @@ export const QUANTITIES = {
   A: { sym: 'A', name: 'Area', unit: 'm^2', unitName: '', equals: '', from: '' },
   sigma: { sym: '\\sigma', name: 'Surface charge density', unit: 'C/m^2', unitName: '', equals: '', from: '\\sigma = \\dfrac{q}{A}' },
   lambda: { sym: '\\lambda', name: 'Linear charge density', unit: 'C/m', unitName: '', equals: '', from: '\\lambda = \\dfrac{q}{L}' },
+  rhoQ: { sym: '\\rho', name: 'Volume charge density', unit: 'C/m^3', unitName: '', equals: '', from: '\\rho = \\dfrac{q}{V}' },
   phiE: { sym: '\\Phi_E', name: 'Electric flux', unit: 'N*m^2/C', unitName: '', equals: 'V·m', from: '\\Phi_E = \\oint \\vec E \\cdot d\\vec A = \\dfrac{q_{enc}}{\\varepsilon_0}' },
 
   // --- capacitance ---
@@ -96,6 +97,7 @@ export const LAB_UNITS = {
   polar: ['S', 'E', 'n'],
   radargun: ['f', 'wavelength', 'c'],
   solarsail: ['S', 'F', 'A', 'P', 'c'],
+  divergence: ['phiE', 'rhoQ', 'E', 'q', 'eps0', 'phiB', 'B', 'I', 'r'],
   refraction: ['n', 'c', 'wavelength'],
   mirrors: ['fLens', 'M', 'r'],
   lenses: ['fLens', 'Pwr', 'M', 'n'],

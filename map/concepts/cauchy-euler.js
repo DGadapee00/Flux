@@ -10,10 +10,11 @@ export default {
   sources: [
     {
       title: 'Lebl, Notes on Diffy Qs, §2.1 Second order linear ODEs',
-      url: 'https://www.jirka.org/diffyqs/',
+      url: 'https://www.jirka.org/diffyqs/html/solinear_section.html',
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'Existence for variable coefficients, reduction of order and Euler equations.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.03SC, Modes and the characteristic equation',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'The constant-coefficient case a Cauchy–Euler equation reduces to.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

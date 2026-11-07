@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The course puts eigenvalues inside its ODE unit, for stability.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Stiff equation',
@@ -21,6 +22,7 @@ export default {
       kind: 'Reference',
       level: 'Deeper',
       why: 'Stiffness, A-stability and the classic examples.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

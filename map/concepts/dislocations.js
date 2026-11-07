@@ -13,6 +13,7 @@ export default {
       kind: 'Recitation notes',
       level: 'Course level',
       why: 'Dislocations tied to the stress-strain curve, in the course’s order.',
+      checked: '2026-11-06',
     },
     {
       title: 'DoITPoMS, Introduction to dislocations (University of Cambridge)',
@@ -20,6 +21,7 @@ export default {
       kind: 'Teaching package',
       level: 'Course level',
       why: 'Animations of a dislocation gliding, and why it lowers the yield stress.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

@@ -92,6 +92,29 @@ export default [
   }),
 
   problem({
+    ...E6, id: 'e6.53.divergence', ch: '53', lab: 'divergence', title: 'Flux out of a small sphere in a charged ball', kind: 'numeric', level: 2, topics: ['maxwell'],
+    vars: { rho: range(0.5, 5, 0.5, 'μC/m³', 1e-6), r: range(5, 40, 1, 'cm', 1e-2) },
+    derive: ($) => {
+      const V = (4 / 3) * Math.PI * $.r ** 3;
+      return { V, Q: $.rho * V, Phi: ($.rho * V) / EPS0, div: $.rho / EPS0 };
+    },
+    text: (T) => `A ball of radius 1.00 m holds charge spread evenly through it, ${T.rho} μC/m³. An imaginary sphere of radius ${T.r} cm sits wholly inside it, centred 0.50 m from the ball's centre. Find the electric flux out of the small sphere, and that flux divided by the small sphere's volume.`,
+    parts: [num('Phi', ($) => $.Phi, 'N·m²/C', { label: 'Φ' }), num('div', ($) => $.div, 'N/(C·m)', { label: 'Φ/V' })],
+    steps: ($) => [
+      String.raw`$V = \tfrac43\pi r^3 = \tfrac43\pi(${qty($.r, 'm')})^3 = ${texNum($.V)}\ \text{m}^3$, and it holds $Q = \rho V = ${texNum($.Q)}\ \text{C}$`,
+      String.raw`$\Phi = \dfrac{Q}{\varepsilon_0} = \dfrac{${qty($.Q, 'C')}}{${qty(EPS0, 'C²/N·m²')}} = ${texNum($.Phi)}\ \text{N·m}^2/\text{C}$`,
+      String.raw`$\dfrac{\Phi}{V} = \dfrac{\rho}{\varepsilon_0} = ${texNum($.div)}\ \text{N/(C·m)}$, whatever the radius: this is $\nabla\cdot\vec E$ inside the ball`,
+    ],
+    sim: {
+      scenario: 'inside',
+      setup(s, $) {
+        Object.assign(s, { mode: 'ball', rho: $.rho, r: $.r, d: 0.5 });
+      },
+      read: (c) => ({ Phi: c.dv.numeric.net, div: c.dv.perVolume }),
+    },
+    cases: [kase('the lab’s first setup, moved to 0.5 m', { rho: 1, r: 30 }, { Phi: 1.278e4, div: 1.13e5 })],
+  }),
+  problem({
     ...E6, id: 'e6.53.radar-gun', ch: '53', lab: 'radargun', title: 'Application: a police radar gun', kind: 'numeric', level: 2, topics: ['doppler'],
     vars: { f: choice([10.525, '10.525 GHz (X band)'], [24.15, '24.15 GHz (K band)'], [34.7, '34.7 GHz (Ka band)']), v: range(10, 50, 1, 'm/s') },
     derive: ($) => ({ df: (2 * $.f * 1e9 * $.v) / C_LIGHT, lam: C_LIGHT / ($.f * 1e9), mph: $.v / 0.44704 }),

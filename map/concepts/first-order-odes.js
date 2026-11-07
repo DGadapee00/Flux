@@ -14,6 +14,7 @@ export default {
       kind: 'Free textbook (CC BY-SA)',
       level: 'Course level',
       why: 'The course’s own book: fields, existence and uniqueness.',
+      checked: '2026-11-06',
     },
     {
       title: 'MIT 18.03SC, Solution by integrating factors',
@@ -21,6 +22,7 @@ export default {
       kind: 'Lectures + problems with solutions',
       level: 'Course level',
       why: 'The integrating factor worked on video, with checked problems.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

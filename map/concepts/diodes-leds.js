@@ -8,11 +8,12 @@ export default {
   requires: ['current-resistance', 'kirchhoff'],
   sources: [
     {
-      title: 'OpenStax University Physics Vol. 3, §9.7 Semiconductor devices and transistors',
-      url: 'https://openstax.org/books/university-physics-volume-3/pages/9-7-semiconductor-devices-and-transistors',
+      title: 'OpenStax University Physics Vol. 3, §9.7 Semiconductor devices',
+      url: 'https://openstax.org/books/university-physics-volume-3/pages/9-7-semiconductor-devices',
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Why a p-n junction conducts one way, and its exponential curve.',
+      checked: '2026-11-06',
     },
     {
       title: 'Kuphaldt, Lessons in Electric Circuits',

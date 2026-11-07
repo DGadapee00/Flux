@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The ODE lectures, with the recitation on MATLAB ode45.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Runge–Kutta methods',
@@ -21,6 +22,7 @@ export default {
       kind: 'Reference',
       level: 'Deeper',
       why: 'The classic method, Butcher tableaus and adaptive pairs.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

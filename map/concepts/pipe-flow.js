@@ -14,6 +14,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The lecture that moves from the exact laminar solution to measured turbulent losses.',
+      checked: '2026-11-06',
     },
     {
       title: 'Cleynen, Fluid Dynamics for Engineers',
@@ -21,6 +22,7 @@ export default {
       kind: 'Open textbook',
       level: 'Course level',
       why: 'Pipe flow with the Moody diagram, friction factors and minor losses, worked through.',
+      checked: '2026-11-06',
     },
     {
       title: 'Wikipedia, Darcy friction factor formulae',
@@ -28,6 +30,7 @@ export default {
       kind: 'Reference',
       level: 'Deeper',
       why: 'Colebrook, Haaland and the other fits, with their ranges and errors.',
+      checked: '2026-11-06',
     },
   ],
   labs: [],

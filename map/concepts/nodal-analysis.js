@@ -20,6 +20,7 @@ export default {
       kind: 'Course outline',
       level: 'Course level',
       why: 'The course reaches the node method in its second lecture, before any theorem.',
+      checked: '2026-11-06',
     },
     {
       title: 'Kuphaldt, Lessons in Electric Circuits, Vol. I: DC',
@@ -29,6 +30,7 @@ export default {
       why: 'Branch current, mesh current and node voltage methods, each worked on one network.',
     },
   ],
-  labs: [],
-  candidate: 'Solve one circuit by nodes and by meshes side by side, with the matrix of each shown. It corrects the idea that one method is right for every circuit: the two agree on every current, but one may need half as many equations.',
+  labs: [
+    { course: 'eel3111', lab: 'nodes', notes: ['s1', 's2', 's3'], note: 'One circuit solved by node voltages and by mesh currents, with both matrices: two rails need one nodal equation and three mesh equations, a single loop the reverse.' },
+  ],
 };

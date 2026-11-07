@@ -20,6 +20,7 @@ export default {
       kind: 'Open textbook',
       level: 'Intro',
       why: 'Where the law comes from, molecule by molecule.',
+      checked: '2026-11-06',
     },
   ],
   labs: [

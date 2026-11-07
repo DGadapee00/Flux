@@ -56,7 +56,7 @@ export const EXAMS = [
     title: 'EM waves',
     chapters: '53–57',
     date: 'Fri 11/6',
-    labs: ['emwave', 'polar', 'radargun', 'solarsail'],
+    labs: ['emwave', 'divergence', 'polar', 'radargun', 'solarsail'],
     coming: [],
   },
   {
@@ -106,6 +106,7 @@ export const LAB_META = {
   faraday: { id: 'faraday', exam: 'e5', title: 'Faraday' },
   ac: { id: 'ac', exam: 'e5', title: 'AC' },
   emwave: { id: 'emwave', exam: 'e6', title: 'EM wave' },
+  divergence: { id: 'divergence', exam: 'e6', title: 'Divergence' },
   polar: { id: 'polar', exam: 'e6', title: 'Polarization' },
   interference: { id: 'interference', exam: 'wave', title: 'Interference' },
   diffraction: { id: 'diffraction', exam: 'wave', title: 'Diffraction' },
