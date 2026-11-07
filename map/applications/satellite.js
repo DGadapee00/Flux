@@ -184,7 +184,10 @@ export const SATELLITE = {
       ],
       outcome: 'Turn the satellite toward a target and account for its angular momentum.',
       concepts: ['moment-of-inertia', 'rigid-kinetics', 'angular-momentum', 'linear-systems', 'euler-rigid-body', 'attitude-rotations', 'feedback-control'],
-      labs: [{ concept: 'angular-momentum', course: 'egn3321', lab: 'spin' }],
+      labs: [
+        { concept: 'angular-momentum', course: 'egn3321', lab: 'spin' },
+        { concept: 'attitude-rotations', course: 'satellite', lab: 'attitude' },
+      ],
       demonstrate: 'Use your mass layout to estimate inertia. Predict a turn under a stated torque and check its angular impulse. Define a pointing-error target and explain how feedback would correct a disturbance.',
       deliverable: 'A pointing model, torque estimate and actuator power allowance.',
       interface: 'Give Communications and Payload a pointing limit. Return actuator demand to the power budget.',

@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Turn a model by three angles in sequence until two gimbals line up, then make the same turn with a quaternion. It corrects the idea that three angles can describe every small turn: at gimbal lock one direction has no angle left to change. The check composes the rotation both ways and compares the matrices.',
+  labs: [
+    { course: 'satellite', lab: 'attitude', notes: ['s1', 's2', 's3'], note: 'Yaw, pitch and roll on a satellite model: near 90° of pitch the angle rates for a gentle turn grow as 1/cos θ, at 90° the turn is lost, and the quaternion still makes it.' },
+  ],
 };

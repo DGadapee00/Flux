@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Attitude control</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 3 · after MIT 16.07, Lecture 3</div>
+  <h1>Attitude control</h1>
+  <p class="lede">How to write down which way a satellite points, why three angles can trap a controller at one attitude, and what flight software carries instead.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Describing an attitude</h3>
+    <a href="#s1"><span>1</span>Rotation matrices and three angles</a>
+    <a href="#s2"><span>2</span>Gimbal lock</a>
+    <a href="#s3"><span>3</span>Quaternions</a>
+    <h3>Reference</h3>
+    <a href="#s4"><span>4</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Describing an attitude</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Rotation matrices and three angles</h2>
+<p>An attitude is the rotation that takes the reference axes onto the body axes. A rotation matrix \(R\) does it: its columns are the body's x, y and z axes written in the reference frame.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The columns stay unit length and perpendicular, so \(R^{\mathsf T}R = I\) and \(R^{-1} = R^{\mathsf T}\). Nine numbers with six conditions leave three freedoms. Three angles in sequence name them: yaw \(\psi\) about z, then pitch \(\theta\) about the new y, then roll \(\phi\) about the body x,</p>
+\[
+R = R_z(\psi)\,R_y(\theta)\,R_x(\phi), \qquad R_z(\psi) = \begin{bmatrix}\cos\psi & -\sin\psi & 0\\ \sin\psi & \cos\psi & 0\\ 0 & 0 & 1\end{bmatrix}.
+\]
+<p>Order matters: the same three angles in another order give another attitude.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 3-2-1 turn</span>
+<p>Yaw 30°, pitch 20°, roll 10°. Roll turns the craft about its own nose, so the nose, the first column, depends on yaw and pitch only:</p>
+\[
+\hat{\mathbf x}_\text{body} = (\cos\psi\cos\theta,\ \sin\psi\cos\theta,\ -\sin\theta) = (0.814,\ 0.470,\ -0.342).
+\]
+<p>The nose points 30° round from x and 20° below the x-y plane.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding angles from different sequences, or applying the turns in the other order. Rotations do not commute: \(R_zR_y \ne R_yR_z\).</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Gimbal lock</h2>
+<p>A controller measures the body's angular velocity \(\boldsymbol\omega\) and must turn it into angle rates. Three angles cannot always do that.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Each angle rate turns the body about its own axis: roll about the body x, pitch about the once-turned y, yaw about the reference z. Written in body axes,</p>
+\[
+\boldsymbol\omega = \begin{bmatrix}1 & 0 & -\sin\theta\\ 0 & \cos\phi & \cos\theta\sin\phi\\ 0 & -\sin\phi & \cos\theta\cos\phi\end{bmatrix}\begin{bmatrix}\dot\phi\\ \dot\theta\\ \dot\psi\end{bmatrix}, \qquad \det = \cos\theta.
+\]
+<p>Solving for the angle rates divides by \(\cos\theta\). At \(\theta = \pm90^\circ\) the yaw and roll columns are the same line, so the three angles span only two directions. The third is lost: that is gimbal lock.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · pitched up 80°</span>
+<p>With zero roll, a turn of 1°/s about body z needs \(\dot\psi\cos\theta = 1\) and \(\dot\phi - \dot\psi\sin\theta = 0\):</p>
+\[
+\dot\psi = \frac{1}{\cos 80^\circ} = 5.76\ ^\circ/\text{s}, \qquad \dot\phi = \tan 80^\circ = 5.67\ ^\circ/\text{s}.
+\]
+<p>At 85° both double. At 90° no rates exist: the turn about body z has no angle left to make it.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading the angle rates as the body's turn rates. They match only near zero pitch; near 90° a gentle turn needs violent angle rates.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Quaternions</h2>
+<p>Any rotation is a single turn by an angle \(\alpha\) about one axis \(\hat{\mathbf n}\). A unit quaternion stores that axis and half the angle in four numbers.</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+\mathbf q = \left(\cos\tfrac\alpha2,\ \hat{\mathbf n}\sin\tfrac\alpha2\right), \qquad \lvert\mathbf q\rvert = 1.
+\]
+<p>One turn followed by another is a quaternion product, so the 3-2-1 sequence is \(\mathbf q = q_z(\psi)\,q_y(\theta)\,q_x(\phi)\). A small body turn \(\delta\mathbf q\) updates it as \(\mathbf q \otimes \delta\mathbf q\), which works at every attitude: there are no angles to line up. \(\mathbf q\) and \(-\mathbf q\) are the same attitude.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the tilted craft as a quaternion</span>
+<p>Yaw 30°, pitch 20°, roll 10° multiply out to</p>
+\[
+\mathbf q = (0.9515,\ 0.0381,\ 0.1893,\ 0.2393),
+\]
+<p>a single turn of \(2\arccos 0.9515 = 34.2^\circ\) about the axis \((0.0381, 0.1893, 0.2393)\) made unit length.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Flight software carries a quaternion, or a matrix, and shows angles only to people. Four numbers with one condition, no lock, and cheap products.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Formula sheet</h2>
+\[
+R = R_z(\psi)R_y(\theta)R_x(\phi), \qquad R^{\mathsf T}R = I, \qquad \hat{\mathbf x}_\text{body} = (\cos\psi\cos\theta,\ \sin\psi\cos\theta,\ -\sin\theta).
+\]
+\[
+\dot\psi = \frac{\omega_y\sin\phi + \omega_z\cos\phi}{\cos\theta}, \qquad \dot\theta = \omega_y\cos\phi - \omega_z\sin\phi, \qquad \dot\phi = \omega_x + \dot\psi\sin\theta.
+\]
+\[
+\mathbf q = \left(\cos\tfrac\alpha2,\ \hat{\mathbf n}\sin\tfrac\alpha2\right), \qquad \mathbf q = q_z(\psi)\,q_y(\theta)\,q_x(\phi), \qquad \mathbf q_\text{new} = \mathbf q\otimes\delta\mathbf q.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.07 Dynamics, Lecture 3, on coordinate transformations.</footer>
+</body>
+</html>

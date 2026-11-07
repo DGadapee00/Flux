@@ -23,16 +23,27 @@ export const EXAMS = [
     labs: ['noise'],
     coming: ['Link budget'],
   },
+  {
+    id: 'u3',
+    n: 3,
+    title: 'Attitude control',
+    chapters: '3',
+    date: 'Unit 3',
+    labs: ['attitude'],
+    coming: ['Euler’s equations and spin stability', 'Transfer functions', 'Feedback and PID'],
+  },
 ];
 
 export const LAB_META = {
   kepler: { id: 'kepler', exam: 'u1', title: 'Kepler' },
   noise: { id: 'noise', exam: 'u2', title: 'Noise' },
+  attitude: { id: 'attitude', exam: 'u3', title: 'Attitude' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Orbit',
   2: 'Communications',
+  3: 'Attitude control',
 };
 
 export function examById(id) {
