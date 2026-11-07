@@ -3,10 +3,15 @@
  * hints and named traps (../coaching/u1.js), each checked against the lab (`sim`).
  */
 import { ALPHA } from '@flux/subjects/heat/rod.js';
+import { pipe, wall } from '@flux/subjects/heat/resistance.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 export const HALF = Math.log(2) / Math.PI ** 2;
+/** The house wall with or without its 90 mm of glass wool, 20 °C inside and Tout outside. */
+export const WALL = (ins, Tout) => ({ layers: [{ L: 0.013, k: 0.17 }, { L: ins, k: 0.04 }, { L: 0.1, k: 0.7 }], hIn: 8, hOut: 25, Tin: 20, Tout });
+export const WOOL = { with: 0.09, without: 0 };
+export const KINS = { rubber: 0.13, foam: 0.035 };
 export const NAME = { copper: 'copper', aluminum: 'aluminum', steel: 'carbon steel', glass: 'Pyrex glass' };
 /** The middle of the rod, θ, for the two profiles the problems use. */
 export const midTheta = (profile, Fo) => Math.exp(-(Math.PI ** 2) * Fo) + (profile === 'wiggle' ? Math.exp(-25 * Math.PI ** 2 * Fo) / 3 : 0);
@@ -121,4 +126,119 @@ export default [
     },
     cases: [kase('a fine ripple', { ripple: 'fine' }, { left: 'hump' })],
   }),
+
+  problem({
+    id: 'u1.5.wall',
+    title: 'Heat through a wall',
+    exam: 'u1',
+    ch: '1',
+    lab: 'resistance',
+    src: 'Flux, written for the Resistance lab',
+    topics: ['series'],
+    principles: ['resistance'],
+    vars: { wool: choice(['with', 'with 90 mm of glass wool (k = 0.04 W/m·K) between them'], ['without', 'with nothing between them']), Tout: range(-15, 5, 5, '°C') },
+    text: (T) => `A wall is 13 mm of drywall (k = 0.17 W/m·K) and 100 mm of brick (k = 0.7 W/m·K), ${T.wool}. Inside, the air is at 20 °C with h = 8 W/m²·K; outside, ${T.Tout} °C with h = 25 W/m²·K. What heat flux crosses it, in W/m²?`,
+    parts: [num('q', ($) => wall(WALL(WOOL[$.wool], $.Tout)).q, 'W/m²', { label: 'q' })],
+    level: 2,
+    hints: ['Every layer and both air films are resistances in series: L/k and 1/h.', 'q = (20 − T_out)/ΣR.'],
+    steps: ($) => {
+      const w = wall(WALL(WOOL[$.wool], $.Tout));
+      return [String.raw`$\sum R = ${w.R.map((r) => Number(r.toPrecision(3))).join(' + ')} = ${Number(w.Rtot.toPrecision(3))}$ m²·K/W`, String.raw`$q = \dfrac{20 - (${$.Tout})}{${Number(w.Rtot.toPrecision(3))}} = ${Number(w.q.toPrecision(3))}$ W/m²`];
+    },
+    sim: {
+      scenario: 'house',
+      setup(s, $) {
+        Object.assign(s, { mode: 'wall', ins: WOOL[$.wool], hOut: 25 });
+      },
+      read: (c, s, $) => ({ q: (c.q * (20 - $.Tout)) / 25 }),
+    },
+    cases: [kase('the notes’ wall', { wool: 'with', Tout: -5 }, { q: 9.49 })],
+  }),
+
+  problem({
+    id: 'u1.6.drop',
+    title: 'Which layer takes the drop?',
+    exam: 'u1',
+    ch: '1',
+    lab: 'resistance',
+    src: 'Flux, written for the Resistance lab',
+    topics: ['series'],
+    principles: ['resistance'],
+    vars: { layer: choice(['wool', 'the 90 mm of glass wool'], ['brick', 'the 100 mm of brick']), Tout: range(-15, 5, 5, '°C') },
+    text: (T) => `The insulated wall above: 13 mm drywall (k = 0.17), 90 mm glass wool (k = 0.04), 100 mm brick (k = 0.7), with h = 8 inside at 20 °C and h = 25 outside at ${T.Tout} °C. How many degrees does the temperature fall across ${T.layer}?`,
+    parts: [num('dT', ($) => { const w = wall(WALL(0.09, $.Tout)); return w.drops[$.layer === 'wool' ? 2 : 3]; }, '°C', { label: 'ΔT' })],
+    level: 2,
+    hints: ['Find q from the total resistance first.', 'The drop across a layer is q times that layer’s resistance.'],
+    steps: ($) => {
+      const w = wall(WALL(0.09, $.Tout));
+      const k = $.layer === 'wool' ? 2 : 3;
+      return [String.raw`$q = ${Number(w.q.toPrecision(3))}$ W/m², so $\Delta T = q R = ${Number(w.q.toPrecision(3))}\times${Number(w.R[k].toPrecision(3))} = ${Number(w.drops[k].toPrecision(3))}$ °C`];
+    },
+    sim: {
+      scenario: 'house',
+      setup(s) {
+        Object.assign(s, { mode: 'wall', ins: 0.09, hOut: 25 });
+      },
+      read: (c, s, $) => ({ dT: (c.drops[$.layer === 'wool' ? 2 : 3] * (20 - $.Tout)) / 25 }),
+    },
+    cases: [kase('the glass wool at −5 °C', { layer: 'wool', Tout: -5 }, { dT: 21.35 })],
+  }),
+
+  problem({
+    id: 'u1.7.critical',
+    title: 'The critical radius',
+    exam: 'u1',
+    ch: '1',
+    lab: 'resistance',
+    src: 'Flux, written for the Resistance lab',
+    topics: ['critical'],
+    principles: ['resistance'],
+    vars: { mat: choice(['rubber', 'rubber (k = 0.13 W/m·K)'], ['foam', 'foam (k = 0.035 W/m·K)']), h: range(5, 25, 1, 'W/m²·K') },
+    text: (T) => `A thin tube is to be insulated with ${T.mat}. The outer surface loses heat to air with h = ${T.h} W/m²·K. Below what outer radius, in mm, does adding insulation raise the heat loss?`,
+    parts: [num('r', ($) => (KINS[$.mat] / $.h) * 1000, 'mm', { label: 'r_crit' })],
+    level: 1,
+    hints: ['Write the resistance per metre: ln(r₂/r₁)/(2πk) + 1/(2πr₂h).', 'It is smallest where its derivative in r₂ is zero: r₂ = k/h.'],
+    steps: ($) => [String.raw`$r_\text{crit} = \dfrac{k}{h} = \dfrac{${KINS[$.mat]}}{${$.h}} = ${Number(((KINS[$.mat] / $.h) * 1000).toPrecision(3))}$ mm`],
+    sim: {
+      scenario: 'wire',
+      setup(s, $) {
+        Object.assign(s, { mode: 'pipe', k: KINS[$.mat], h: $.h });
+      },
+      read: (c) => ({ r: c.rCrit * 1000 }),
+    },
+    cases: [kase('rubber, h = 10', { mat: 'rubber', h: 10 }, { r: 13 })],
+  }),
+
+  problem({
+    id: 'u1.8.wire',
+    title: 'More insulation, more loss?',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'resistance',
+    src: 'Flux, written for the Resistance lab',
+    topics: ['critical'],
+    principles: ['resistance'],
+    vars: { coat: choice(['six', 'a 6 mm outer radius'], ['nine', 'a 9 mm outer radius']) },
+    text: (T) => `A bare 2 mm wire is coated with insulation (k = 0.1 W/m·K) to ${T.coat}. The air has h = 10 W/m²·K. Compared with the bare wire, does it lose more heat, less, or the same?`,
+    parts: [
+      pick('loss', 'its heat loss', [
+        ['more', 'more', 'The outer radius is below k/h = 10 mm, where added surface beats added resistance.'],
+        ['less', 'less', 'Insulation cuts the loss only past the critical radius k/h = 10 mm; here it is below it.'],
+        ['same', 'the same', 'The loss depends on the outer radius: it rises until 10 mm.'],
+      ], () => 'more'),
+    ],
+    level: 2,
+    hints: ['Find the critical radius k/h.', 'Is the coated radius above it or below it?'],
+    steps: () => ['r_crit = 0.1/10 = 10 mm. The coating ends below it, so the loss is higher than bare.'],
+    sim: {
+      scenario: 'wire',
+      setup(s, $) {
+        Object.assign(s, { mode: 'pipe', r1: 0.002, r2: $.coat === 'six' ? 0.006 : 0.009, k: 0.1, h: 10 });
+      },
+      read: (c) => ({ loss: c.Q > c.bare ? 'more' : c.Q < c.bare ? 'less' : 'same' }),
+    },
+    cases: [kase('to 6 mm', { coat: 'six' }, { loss: 'more' })],
+  }),
+
 ];

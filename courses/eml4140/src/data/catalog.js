@@ -11,8 +11,8 @@ export const EXAMS = [
     title: 'Modes and conduction',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['rod'],
-    coming: ["Fourier's law", 'Thermal resistance'],
+    labs: ['rod', 'resistance'],
+    coming: ["Fourier's law"],
   },
   {
     id: 'u2',
@@ -27,6 +27,7 @@ export const EXAMS = [
 
 export const LAB_META = {
   rod: { id: 'rod', exam: 'u1', title: 'Rod' },
+  resistance: { id: 'resistance', exam: 'u1', title: 'Resistance' },
   radiation: { id: 'radiation', exam: 'u2', title: 'Radiation' },
 };
 

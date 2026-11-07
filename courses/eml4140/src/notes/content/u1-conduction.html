@@ -20,8 +20,11 @@
     <a href="#s1"><span>1</span>The heat equation</a>
     <a href="#s2"><span>2</span>Sines that fade</a>
     <a href="#s3"><span>3</span>Stepping on a grid</a>
+    <h3>Part II · Steady conduction</h3>
+    <a href="#s4"><span>4</span>Resistances in series</a>
+    <a href="#s5"><span>5</span>The critical radius</a>
     <h3>Reference</h3>
-    <a href="#s4"><span>4</span>Formula sheet</a>
+    <a href="#s6"><span>6</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -93,13 +96,53 @@ e^{-\pi^2(0.02)} = 0.821, \qquad e^{-25\pi^2(0.02)} = 0.0072.
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Steady conduction</h2>
+</div>
+
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">4</span>Resistances in series</h2>
+<p>Once temperatures stop changing, the same heat flows through every layer of a wall. Fourier's law then makes each layer's temperature drop proportional to that flow, like a resistor's voltage drop to its current.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>In steady state with no heat made inside, \(d^2T/dx^2 = 0\) in each layer, so \(T\) falls in a straight line and \(q = k\,\Delta T/L\). A surface losing heat to a fluid passes \(q = h\,\Delta T\). Per unit area,</p>
+\[
+R_\text{layer} = \frac{L}{k}, \qquad R_\text{film} = \frac1h, \qquad q = \frac{T_\text{in} - T_\text{out}}{\sum R}, \qquad \Delta T_i = q R_i.
+\]
+<p>Each layer takes a share of the total drop in proportion to its resistance. \(U = 1/\sum R\) is the overall coefficient.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a house wall</span>
+<p>Inside 20 °C with \(h = 8\); then 13 mm of drywall (\(k = 0.17\)), 90 mm of glass wool (\(k = 0.04\)), 100 mm of brick (\(k = 0.7\)); outside −5 °C with \(h = 25\). The resistances are 0.125, 0.076, 2.25, 0.143 and 0.040 m²·K/W, 2.63 in all, so \(q = 25/2.63 = 9.49\) W/m². The glass wool takes \(9.49\times2.25 = 21.4\) °C of the 25 °C.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting twice the insulation to halve the loss. Only that layer's resistance doubles; the rest stay.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>The critical radius</h2>
+<p>On a pipe, insulation does two things. It adds resistance, which grows slowly, as \(\ln r\). It also adds outer surface for the film, whose resistance falls as \(1/r\).</p>
+<div class="box why"><span class="tag">Derivation</span>
+\[
+R' = \frac{\ln(r_2/r_1)}{2\pi k} + \frac{1}{2\pi r_2 h}, \qquad \frac{dR'}{dr_2} = \frac{1}{2\pi r_2}\left(\frac1k - \frac{1}{r_2 h}\right) = 0 \;\Longrightarrow\; r_\text{crit} = \frac kh.
+\]
+<p>The total resistance is smallest, and the heat loss largest, at \(r_2 = k/h\). Below it, adding insulation raises the loss.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · insulating a thin wire</span>
+<p>A 2 mm wire, 50 °C above the air, with \(h = 10\) W/m²·K. Bare, it loses \(50\times2\pi(0.002)(10) = 6.28\) W per metre. Insulation with \(k = 0.1\) has \(r_\text{crit} = 0.1/10 = 10\) mm. Coated to 6 mm, \(R' = \ln 3/(0.628) + 1/(2\pi(0.006)(10)) = 1.75 + 2.65 = 4.40\) m·K/W, so it loses \(50/4.40 = 11.4\) W/m: more than bare.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Formula sheet</h2>
 \[
 q = -k\frac{\partial T}{\partial x}, \qquad \frac{\partial T}{\partial t} = \alpha\frac{\partial^2 T}{\partial x^2}, \qquad \alpha = \frac{k}{\rho c}, \qquad \mathrm{Fo} = \frac{\alpha t}{L^2},
 \]
 \[
 \theta = \sum_n b_n \sin\frac{n\pi x}{L}\,e^{-(n\pi)^2\mathrm{Fo}}, \qquad \theta_i^{\,new} = \theta_i + r(\theta_{i+1} - 2\theta_i + \theta_{i-1}),\ r \le \tfrac12.
+\]
+\[
+q = \frac{\Delta T}{\sum R}, \quad R = \frac Lk,\ \frac1h, \qquad R'_\text{cyl} = \frac{\ln(r_2/r_1)}{2\pi k}, \qquad r_\text{crit} = \frac kh.
 \]
 </section>
 

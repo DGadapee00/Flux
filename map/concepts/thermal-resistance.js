@@ -39,6 +39,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Stack wall layers and a surface film as resistances, and add insulation to a thin pipe. It corrects the idea that more insulation always cuts heat loss: below the critical radius it adds surface faster than resistance.',
+  labs: [
+    { course: 'eml4140', lab: 'resistance', notes: ['s4', 's5'], note: 'A house wall as resistances in series, where the glass wool takes 21 of 25 °C, and insulation on a thin wire, which raises the loss until the outer radius passes k/h.' },
+  ],
 };

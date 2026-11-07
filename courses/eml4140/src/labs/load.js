@@ -4,6 +4,7 @@ import { PREDICTIONS } from './predictions.js';
 /** One entry per lab. Add each new lab here and in src/data/catalog.js (LAB_META). */
 const loaders = {
   rod: () => import('./rod.js'),
+  resistance: () => import('./resistance.js'),
   radiation: () => import('./radiation.js'),
 };
 
