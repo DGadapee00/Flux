@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Operational amplifiers</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EEL 3111 · Circuit Analysis I · Unit 5 · Kuphaldt, Lessons in Electric Circuits, Vol. III, Semiconductors</div>
+  <h1>Operational amplifiers</h1>
+  <p class="lede">Why an op amp with an enormous, poorly known gain makes a precise amplifier once feedback is added, and where that stops working.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Feedback</h3>
+    <a href="#s1"><span>1</span>The inverting amplifier</a>
+    <a href="#s2"><span>2</span>The rails</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Feedback</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>The inverting amplifier</h2>
+<p>An op amp multiplies the difference between its inputs by a huge gain \(A\), from \(10^4\) to \(10^6\), which varies from part to part and with temperature. Feedback trades that gain for one set by resistors.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Ground the + input, run \(R_1\) from the input to the − input and \(R_f\) from the output back to it. The op amp gives \(v_\text{out} = -A v_-\), and the current law at \(v_-\) is \((v_\text{in} - v_-)/R_1 + (v_\text{out} - v_-)/R_f = 0\). Eliminating \(v_-\),</p>
+\[
+G = \frac{v_\text{out}}{v_\text{in}} = \frac{-R_f/R_1}{1 + (1 + R_f/R_1)/A} \ \longrightarrow\ -\frac{R_f}{R_1} \quad \text{as } A \to \infty.
+\]
+<p>Then \(v_- = -v_\text{out}/A \to 0\): the − input sits at ground without being connected to it, a virtual ground. Every bit of current through \(R_1\) goes on through \(R_f\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a gain of ten</span>
+<p>\(R_1 = 10\) kΩ, \(R_f = 100\) kΩ. With \(A = 10^5\) the gain is \(-10/(1 + 11 \times 10^{-5}) = -9.999\). With an op amp a hundred times worse, \(A = 10^3\), it is \(-10/1.011 = -9.891\), only 1.09% short. For a 0.5 V input, \(v_-\) swings by 4.95 mV.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Thinking the op amp's own gain sets the circuit's gain. It only has to be far larger than \(1 + R_f/R_1\); the resistors do the rest.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>The rails</h2>
+<p>The output comes from the supply, so it cannot go past it. Most op amps stop a volt or two inside each supply rail.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The output follows \(G v_\text{in}\) only while \(|G v_\text{in}| \le V_\text{sat}\), so the largest input that stays linear is \(V_\text{sat}/|G|\). Past it the output is pinned at \(\pm V_\text{sat}\), the op amp no longer has gain to spare, and \(v_-\) leaves zero: the virtual ground fails.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · 2 V in</span>
+<p>The gain of ten on ±15 V supplies, with the output reaching 13.5 V. The largest input is \(13.5/10 = 1.35\) V. A 2 V input would ask for 20 V; the output flattens at 13.5 V for the top of every swing.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Within the rails, feedback makes an op amp circuit exactly what its resistors say. At the rails, the rules stop.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+G = \frac{-R_f/R_1}{1 + (1 + R_f/R_1)/A}, \qquad G_\text{ideal} = -\frac{R_f}{R_1}, \qquad v_- = -\frac{v_\text{out}}{A}, \qquad |v_\text{in}| \le \frac{V_\text{sat}}{|G|}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Kuphaldt, Lessons in Electric Circuits, Vol. III, on operational amplifiers and negative feedback.</footer>
+</body>
+</html>

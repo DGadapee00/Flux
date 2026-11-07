@@ -24,6 +24,7 @@ export default {
       why: 'Its operational amplifiers chapter covers feedback and the common circuits.',
     },
   ],
-  labs: [],
-  candidate: 'An inverting amplifier with sliders for the resistors, the open-loop gain and the supply. It corrects the idea that the op amp’s own gain sets the circuit’s gain: change \\(A\\) a hundredfold and the output barely moves, until it hits a rail.',
+  labs: [
+    { course: 'eel3111', lab: 'opamp', notes: ['s1', 's2'], note: 'An inverting amplifier with sliders for the resistors, the op amp’s own gain, the supply and the input: a hundredfold drop in A moves the gain about 1%, while doubling R_f doubles it, until the output clips at a rail.' },
+  ],
 };
