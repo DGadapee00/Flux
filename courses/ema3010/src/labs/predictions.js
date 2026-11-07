@@ -43,4 +43,43 @@ export const PREDICTIONS = {
       why: 'Inside r₀ the curve rises as r shrinks, so the force, minus its slope, points outward. The repulsion grows as 1/r⁹ and wins.',
     },
   ],
+  crystal: [
+    {
+      id: 'cr-fcc-iron',
+      scenario: 'fe',
+      ask: 'Keep iron’s atoms but stack them face-centred instead of body-centred. What happens to the packing fraction and the density?',
+      apply(s) { s.structure = 'fcc'; },
+      watch: [
+        { id: 'apf', label: 'the packing fraction', get: (c) => c.apf },
+        { id: 'rho', label: 'the density', get: (c) => c.density },
+      ],
+      mode: 'dir',
+      expect: { apf: 'bigger', rho: 'bigger' },
+      why: 'FCC packs 74% of space, BCC 68%. The same atoms closer packed weigh more per cubic centimetre: about 9% more.',
+    },
+    {
+      id: 'cr-grow',
+      scenario: 'small',
+      ask: 'The copper atoms are at half the touching size. Grow them until they touch. By what factor does the packing fraction change?',
+      apply(s) { s.grow = 1; },
+      watch: [{ id: 'apf', label: 'the packing fraction', get: (c) => c.apf }],
+      mode: 'factor',
+      factors: [2, 4, 8],
+      expect: { apf: 8 },
+      why: 'The cell stays the same size, and each atom’s volume goes as r³: twice the radius, eight times the volume.',
+    },
+    {
+      id: 'cr-al',
+      scenario: 'cu',
+      ask: 'Swap copper for aluminum, also face-centred cubic. What happens to the packing fraction and the density?',
+      apply(s) { s.material = 'al'; },
+      watch: [
+        { id: 'apf', label: 'the packing fraction', get: (c) => c.apf },
+        { id: 'rho', label: 'the density', get: (c) => c.density },
+      ],
+      mode: 'dir',
+      expect: { apf: 'same', rho: 'smaller' },
+      why: 'The packing fraction depends only on the structure: 0.74 for any FCC metal. Aluminum’s atoms are bigger and much lighter, so it is a third as dense.',
+    },
+  ],
 };

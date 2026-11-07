@@ -3,6 +3,7 @@
  * traps (../coaching/u1.js), each checked against the lab (`sim`).
  */
 import { KE2, bond, mie } from '@flux/subjects/matsci/bonding.js';
+import { STRUCTURES, crystal } from '@flux/subjects/matsci/crystal.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
@@ -10,6 +11,8 @@ const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, opti
 export const SHAPE = { ionic: { n: 1, m: 9 }, narrow: { n: 2, m: 6 } };
 /** Gas-phase bond lengths of three alkali halide ion pairs, in ångströms. */
 export const PAIR = { nacl: 2.36, kcl: 2.67, lif: 1.56 };
+/** Three metals for the density problem: structure, atomic radius (nm) and molar mass (g/mol). */
+export const METAL = { fe: { st: 'bcc', R: 0.1241, A: 55.85, name: 'Iron' }, cu: { st: 'fcc', R: 0.1278, A: 63.55, name: 'Copper' }, al: { st: 'fcc', R: 0.1431, A: 26.98, name: 'Aluminum' } };
 const DEEP = bond({ E0: 4, r0: 2.5, n: 1, m: 3, r: 2.5 });
 const SHALLOW = bond({ E0: 2, r0: 2.5, n: 2, m: 6, r: 2.5 });
 
@@ -124,6 +127,113 @@ export default [
       read: (c, s, $) => ({ which: $.ask === 'stiff' ? (c.k > DEEP.k ? 'Q' : 'P') : (c.E0 > DEEP.E0 ? 'Q' : 'P') }),
     },
     cases: [kase('which is stiffer', { ask: 'stiff' }, { which: 'Q' })],
+  }),
+  problem({
+    id: 'u1.5.lattice',
+    title: 'The cell from the atom',
+    exam: 'u1',
+    ch: '1',
+    lab: 'crystal',
+    src: 'Flux, written for the Crystal lab',
+    topics: ['crystal'],
+    principles: ['packing'],
+    vars: { st: choice(['bcc', 'body-centred cubic'], ['fcc', 'face-centred cubic']), R: range(0.12, 0.15, 0.001, 'nm') },
+    text: (T) => `A metal is ${T.st}, and its atoms have a radius of ${T.R} nm. Treating them as hard spheres that touch, what is the cell edge a, in nm?`,
+    parts: [num('a', ($) => STRUCTURES[$.st].aOfR($.R), 'nm', { label: 'a' })],
+    level: 1,
+    hints: ['Find the line along which the atoms touch: the body diagonal in BCC, a face diagonal in FCC.', 'Four radii fit along it. The body diagonal is √3 a; a face diagonal is √2 a.'],
+    steps: ($) => [$.st === 'bcc' ? `√3 a = 4R, so a = 4(${$.R})/√3 = ${Number(STRUCTURES.bcc.aOfR($.R).toPrecision(4))} nm.` : `√2 a = 4R, so a = 2√2(${$.R}) = ${Number(STRUCTURES.fcc.aOfR($.R).toPrecision(4))} nm.`],
+    sim: {
+      scenario: 'cu',
+      setup(s, $) {
+        Object.assign(s, { material: 'cu', structure: $.st, grow: 1 });
+      },
+      read: (c, s, $) => ({ a: (c.a / c.R) * $.R }),
+    },
+    cases: [kase('copper', { st: 'fcc', R: 0.1278 }, { a: 0.3615 })],
+  }),
+
+  problem({
+    id: 'u1.6.density',
+    title: 'Density from the cell',
+    exam: 'u1',
+    ch: '1',
+    lab: 'crystal',
+    src: 'Flux, written for the Crystal lab',
+    topics: ['crystal'],
+    principles: ['packing'],
+    vars: { metal: choice(['fe', 'iron: BCC, R = 0.1241 nm, A = 55.85 g/mol'], ['cu', 'copper: FCC, R = 0.1278 nm, A = 63.55 g/mol'], ['al', 'aluminum: FCC, R = 0.1431 nm, A = 26.98 g/mol']) },
+    text: (T) => `Take ${T.metal}. Treating the atoms as touching hard spheres, find the density in g/cm³. Use N_A = 6.022 × 10²³ /mol.`,
+    parts: [num('rho', ($) => crystal({ structure: METAL[$.metal].st, R: METAL[$.metal].R, A: METAL[$.metal].A }).density, 'g/cm³', { label: 'ρ' })],
+    level: 2,
+    hints: ['Find a from R, where the atoms touch, and convert it to cm (1 nm = 10⁻⁷ cm).', 'ρ = N A/(a³ N_A), with N = 2 atoms per BCC cell and 4 per FCC cell.'],
+    steps: ($) => {
+      const m = METAL[$.metal];
+      const c = crystal({ structure: m.st, R: m.R, A: m.A });
+      return [`a = ${Number(c.a.toPrecision(4))} nm, so a³ = ${Number((c.V * 1e-21).toPrecision(4))} cm³.`, `ρ = ${c.N}(${m.A})/(a³ N_A) = ${Number(c.density.toPrecision(3))} g/cm³.`];
+    },
+    sim: {
+      scenario: 'cu',
+      setup(s, $) {
+        Object.assign(s, { material: $.metal, structure: METAL[$.metal].st, grow: 1 });
+      },
+      read: (c) => ({ rho: c.density }),
+    },
+    cases: [kase('copper', { metal: 'cu' }, { rho: 8.937 })],
+  }),
+
+  problem({
+    id: 'u1.7.packing-fraction',
+    title: 'How full is the cell?',
+    exam: 'u1',
+    ch: '1',
+    lab: 'crystal',
+    src: 'Flux, written for the Crystal lab',
+    topics: ['crystal'],
+    principles: ['packing'],
+    vars: { st: choice(['bcc', 'body-centred cubic'], ['fcc', 'face-centred cubic']) },
+    text: (T) => `What fraction of a ${T.st} cell do touching hard-sphere atoms fill?`,
+    parts: [num('apf', ($) => crystal({ structure: $.st, R: 1, A: 1 }).apf, '', { label: 'APF', abs: 1e-4 })],
+    level: 2,
+    hints: ['Count the atoms per cell: a corner is shared by 8 cells, a face by 2, the centre by none.', 'APF = N(4/3)πR³/a³, with a in terms of R from where the atoms touch.'],
+    steps: ($) => [$.st === 'bcc' ? 'N = 2 and a = 4R/√3: APF = 2(4/3)π/(4/√3)³ = π√3/8 = 0.680.' : 'N = 4 and a = 2√2 R: APF = 4(4/3)π/(2√2)³ = π/(3√2) = 0.740.'],
+    sim: {
+      scenario: 'cu',
+      setup(s, $) {
+        Object.assign(s, { material: 'cu', structure: $.st, grow: 1 });
+      },
+      read: (c) => ({ apf: c.apf }),
+    },
+    cases: [kase('BCC', { st: 'bcc' }, { apf: 0.6802 })],
+  }),
+
+  problem({
+    id: 'u1.8.tightest',
+    title: 'As tight as it can?',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'crystal',
+    src: 'Flux, written for the Crystal lab',
+    topics: ['crystal'],
+    principles: ['packing'],
+    vars: { metal: choice(['fe', 'iron'], ['w', 'tungsten'], ['cr', 'chromium']) },
+    text: (T) => `At room temperature ${T.metal} is body-centred cubic. Do its atoms pack as tightly as hard spheres can?`,
+    parts: [
+      pick('tight', 'its packing', [
+        ['yes', 'yes: metals take the densest packing', 'The densest packing of equal spheres is 74%, in FCC and HCP. BCC is not one of them.'],
+        ['no', 'no: it fills 68% of space, not 74%', 'BCC leaves 32% empty against 26% for FCC. Bonding, not packing alone, decides the structure.'],
+      ], () => 'no'),
+    ],
+    level: 1,
+    hints: ['What fraction does BCC fill? Compare it with FCC.', 'π√3/8 against π/(3√2).'],
+    steps: () => ['BCC fills π√3/8 = 0.680 of space; FCC and HCP fill 0.740, the most equal spheres can. So no.'],
+    sim: {
+      scenario: 'fe',
+      setup() {},
+      read: (c) => ({ tight: c.apf > 0.73 ? 'yes' : 'no' }),
+    },
+    cases: [kase('iron', { metal: 'fe' }, { tight: 'no' })],
   }),
 ];
 

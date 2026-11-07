@@ -20,8 +20,10 @@
     <a href="#s1"><span>1</span>The bond-energy curve</a>
     <a href="#s2"><span>2</span>Force is the slope</a>
     <a href="#s3"><span>3</span>Stiffness is the curvature</a>
+    <h3>Part II · Structure</h3>
+    <a href="#s4"><span>4</span>Packing atoms into a cell</a>
     <h3>Reference</h3>
-    <a href="#s4"><span>4</span>Formula sheet</a>
+    <a href="#s5"><span>5</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -96,13 +98,43 @@ k_\text{deep} = \frac{1\cdot3\cdot4}{2.5^2} = 1.92\ \text{eV/Å}^2, \qquad k_\te
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Structure</h2>
+</div>
+
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">4</span>Packing atoms into a cell</h2>
+<p>In a metal the bonds pull every atom toward its neighbours, and the atoms settle into a repeating pattern. Model them as hard spheres of radius \(R\). The cell is as small as it can be when the spheres touch.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Where the atoms touch fixes the cell edge \(a\). In simple cubic they touch along an edge, \(a = 2R\). In body-centred cubic they touch along the body diagonal, \(\sqrt3\,a = 4R\). In face-centred cubic they touch along a face diagonal, \(\sqrt2\,a = 4R\). Counting shares of atoms (a corner is shared by 8 cells, a face by 2) gives 1, 2 and 4 atoms per cell. Then</p>
+\[
+\text{APF} = \frac{N\,\tfrac43\pi R^3}{a^3}, \qquad \rho = \frac{N A}{a^3 N_A}.
+\]
+<p>Simple cubic fills 52% of space, BCC 68%, FCC 74%. Hexagonal close-packed stacks the same close-packed layers as FCC in a different order, and also fills 74%.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · copper from its atoms</span>
+<p>Copper is face-centred cubic with \(R = 0.1278\) nm and \(A = 63.55\) g/mol. The cell edge is \(a = 2\sqrt2(0.1278) = 0.3615\) nm, so \(a^3 = 4.724\times10^{-23}\) cm³. With 4 atoms per cell,</p>
+\[
+\rho = \frac{4(63.55)}{(4.724\times10^{-23})(6.022\times10^{23})} = 8.94\ \text{g/cm}^3,
+\]
+<p>within 0.3% of the measured 8.96 g/cm³.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Assuming every metal packs as tightly as it can. Iron, chromium and tungsten are body-centred at room temperature and leave 32% of space empty.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Formula sheet</h2>
 \[
 U(r) = -\frac{A}{r^n} + \frac{B}{r^m}, \qquad A = \frac{m}{m-n}E_0r_0^{\,n}, \qquad B = \frac{n}{m-n}E_0r_0^{\,m},
 \]
 \[
 F = -\frac{dU}{dr}, \qquad k = \frac{n\,m\,E_0}{r_0^2}, \qquad E_0^\text{ion pair} = \frac{ke^2}{r_0}\left(1 - \frac1m\right), \qquad ke^2 = 14.40\ \text{eV·Å}.
+\]
+\[
+a_\text{SC} = 2R, \quad a_\text{BCC} = \frac{4R}{\sqrt3}, \quad a_\text{FCC} = 2\sqrt2\,R, \qquad \text{APF} = \frac{N\tfrac43\pi R^3}{a^3}, \qquad \rho = \frac{NA}{a^3N_A}.
 \]
 </section>
 

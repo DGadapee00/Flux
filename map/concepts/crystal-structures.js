@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Shrink and grow the atoms in FCC, BCC and HCP cells until they touch, and read the packing fraction. It corrects the idea that every metal packs as tightly as it can.',
+  labs: [
+    { course: 'ema3010', lab: 'crystal', notes: ['s4'], note: 'Hard-sphere atoms in SC, BCC, FCC and HCP cells, grown until they touch: packing fraction and density from the cell, against the measured density. BCC iron leaves 32% of space empty.' },
+  ],
 };
