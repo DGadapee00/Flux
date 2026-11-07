@@ -14,14 +14,25 @@ export const EXAMS = [
     labs: ['rod'],
     coming: ["Fourier's law", 'Thermal resistance'],
   },
+  {
+    id: 'u2',
+    n: 2,
+    title: 'Radiation',
+    chapters: '2',
+    date: 'Unit 2',
+    labs: ['radiation'],
+    coming: ['View factors', 'Radiation networks'],
+  },
 ];
 
 export const LAB_META = {
   rod: { id: 'rod', exam: 'u1', title: 'Rod' },
+  radiation: { id: 'radiation', exam: 'u2', title: 'Radiation' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Modes and conduction',
+  2: 'Radiation',
 };
 
 export function examById(id) {

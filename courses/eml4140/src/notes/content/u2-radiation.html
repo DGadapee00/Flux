@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Radiation</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EML 4140 · Heat Transfer · Unit 2 · Lienhard and Lienhard, A Heat Transfer Textbook, on thermal radiation</div>
+  <h1>Radiation</h1>
+  <p class="lede">How much a surface glows, at which wavelengths, and why the same white paint can be a poor absorber of sunlight and a good emitter of its own heat.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Emission</h3>
+    <a href="#s1"><span>1</span>Black bodies</a>
+    <a href="#s2"><span>2</span>Real surfaces in sunlight</a>
+    <h3>Reference</h3>
+    <a href="#s3"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Emission</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Black bodies</h2>
+<p>Every surface above absolute zero emits electromagnetic waves, and needs no medium to do it. A black body emits the most any surface can at each wavelength.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Planck's law gives the black body's emission per unit wavelength:</p>
+\[
+E_{b\lambda} = \frac{C_1}{\lambda^5\left(e^{C_2/\lambda T} - 1\right)}, \qquad C_1 = 3.742\times10^8\ \text{W·µm}^4/\text{m}^2, \quad C_2 = 1.4388\times10^4\ \text{µm·K}.
+\]
+<p>Integrating over all wavelengths gives the Stefan–Boltzmann law, \(E_b = \sigma T^4\) with \(\sigma = 5.670\times10^{-8}\) W/(m²·K⁴). Setting \(dE_{b\lambda}/d\lambda = 0\) gives Wien's law, \(\lambda_\text{max}T = 2898\) µm·K: hotter bodies peak at shorter wavelengths.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the Sun</span>
+<p>The Sun's surface is near 5778 K. Its peak is at \(2898/5778 = 0.502\) µm, in the visible, and it emits \(\sigma(5778)^4 = 6.32\times10^7\) W/m². A room-temperature wall at 300 K peaks at 9.7 µm, deep in the infrared, and emits 459 W/m².</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Putting temperatures in degrees Celsius into \(\sigma T^4\) or Wien's law. Both need kelvin.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Real surfaces in sunlight</h2>
+<p>A real surface emits a fraction \(\varepsilon_\lambda\) of a black body's emission at each wavelength, and absorbs the same fraction of what falls on it there. Because sunlight is short-wave and a room-temperature surface glows long-wave, one surface can absorb sunlight poorly and emit its own heat well.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The solar absorptivity \(\alpha_s\) weighs \(\varepsilon_\lambda\) by the Sun's spectrum; the emissivity \(\varepsilon\) weighs it by the surface's own. A plate facing the Sun with its back insulated settles where it absorbs as much as it emits:</p>
+\[
+\alpha_s S = \varepsilon\,\sigma T^4 \quad\Longrightarrow\quad T = \left(\frac{\alpha_s}{\varepsilon}\,\frac{S}{\sigma}\right)^{1/4}, \qquad S = 1361\ \text{W/m}^2.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · a plate in sunlight</span>
+<p>A black-painted plate (\(\alpha_s = \varepsilon = 0.95\)) settles at \((1361/5.67\times10^{-8})^{1/4} = 394\) K. Model white paint as emissivity 0.2 below 3 µm and 0.9 above: then \(\alpha_s = 0.215\) and \(\varepsilon = 0.90\), so \(T = 394\,(0.215/0.90)^{1/4} = 275\) K. Polished aluminum, 0.15 and 0.05, reaches 512 K: it absorbs little but can shed even less.</p>
+</div>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The ratio \(\alpha_s/\varepsilon\) sets a sunlit surface's temperature. Spacecraft radiators use coatings with low \(\alpha_s\) and high \(\varepsilon\); solar collectors use the reverse.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[
+E_b = \sigma T^4, \qquad \lambda_\text{max}T = 2898\ \text{µm·K}, \qquad q'' = \varepsilon\sigma\left(T_s^4 - T_\text{sur}^4\right), \qquad T_\text{plate} = \left(\frac{\alpha_s S}{\varepsilon\sigma}\right)^{1/4}.
+\]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux. Read alongside Lienhard and Lienhard, A Heat Transfer Textbook, on thermal radiation. The surface models are two-band simplifications, not measured spectra.</footer>
+</body>
+</html>
