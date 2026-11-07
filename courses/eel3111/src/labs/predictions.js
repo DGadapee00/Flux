@@ -209,6 +209,42 @@ export const PREDICTIONS = {
       why: 'The gain is set by the ratio R_f/R₁: twice the ratio, twice the gain, −10.0 to −20.0. The op amp’s A only trims it.',
     },
   ],
+  power: [
+    {
+      id: 'pf-fix',
+      scenario: 'poor',
+      ask: 'Add a 307 µF capacitor across the motor. What happens to the line current, and to the work the motor does?',
+      apply(s) { s.Cuf = 307; },
+      watch: [
+        { id: 'i', label: 'line current', get: (c) => c.I },
+        { id: 'p', label: 'work done', get: () => 5000 },
+      ],
+      mode: 'dir',
+      expect: { i: 'smaller', p: 'same' },
+      why: 'The capacitor supplies the motor’s 6.67 kvar of reactive power right beside it, so the line no longer carries it: 34.7 A becomes 20.8 A. The motor does the same 5 kW of work.',
+    },
+    {
+      id: 'pf-loss',
+      scenario: 'poor',
+      ask: 'By what factor does the loss in the wires change when the capacitor brings the power factor from 0.6 to 1?',
+      apply(s) { s.Cuf = 307; },
+      watch: [{ id: 'l', label: 'wire loss', get: (c) => c.loss }],
+      mode: 'factor',
+      factors: [0.36, 0.6, 1],
+      expect: { l: 0.36 },
+      why: 'The current falls to 0.6 of what it was, and the loss goes as I²: 0.6² = 0.36, from 241 W to 87 W.',
+    },
+    {
+      id: 'pf-over',
+      scenario: 'fixed',
+      ask: 'The motor is fully corrected with 307 µF. Add more, up to 450 µF. Does the line current fall further?',
+      apply(s) { s.Cuf = 450; },
+      watch: [{ id: 'i', label: 'line current', get: (c) => c.I }],
+      mode: 'dir',
+      expect: { i: 'bigger' },
+      why: 'Past full correction the capacitor supplies more reactive power than the motor uses, and the line now carries the surplus the other way: 20.8 A climbs to 24.5 A, at a leading power factor of 0.85.',
+    },
+  ],
   superpose: [
     {
       id: 'sp-powers',

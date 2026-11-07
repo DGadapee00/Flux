@@ -7,6 +7,9 @@ import { choice, kase, num, problem, range } from '../kit.js';
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 /** The RC problem: 10 V across 1 kΩ and 0.1 µF in series; `w` lets a trap drop the 2π. */
 export const RC = { V: 10, R: 1000, C: 1e-7 };
+/** A load of P kW at power factor pf on 240 V: line current, A, or the capacitance (µF) to correct it at 60 Hz. */
+export const lineCurrent = ($) => (1000 * $.P) / (240 * Number($.pf));
+export const correctingC = ($) => ((1000 * $.P * Math.tan(Math.acos(Number($.pf)))) / (240 ** 2 * 2 * Math.PI * 60)) * 1e6;
 /** The n-th harmonic of a ±1 V, 1 kHz square wave out of an RC low-pass with corner fc (Hz). */
 export const harmonicOut = ($, gain = (x) => 1 / Math.sqrt(1 + x * x), lead = 4 / Math.PI) => (lead / Number($.n)) * gain((Number($.n) * 1000) / $.fc);
 export const rcVolt = ($, how = 'phasor', w = 2 * Math.PI * $.f) => {
@@ -142,5 +145,60 @@ export default [
       read: (c) => ({ shape: c.ratio31 > 0.3 ? 'rounded' : c.ratio31 < 0.15 ? 'triangle' : 'smaller' }),
     },
     cases: [kase('a corner well below', { where: 'below' }, { shape: 'triangle' })],
+  }),
+  problem({
+    id: 'u2.5.pf',
+    title: 'Current for a motor',
+    exam: 'u2',
+    ch: '2',
+    lab: 'power',
+    src: 'Flux, written for the Power factor lab',
+    topics: ['acpower'],
+    principles: ['acpower'],
+    vars: { ask: choice(['I', 'the line current, in A'], ['C', 'the capacitance across it, in µF, that brings the power factor to 1']), P: range(2, 10, 1, 'kW'), pf: choice(['0.6', '0.6'], ['0.7', '0.7'], ['0.8', '0.8']) },
+    text: (T) => `A motor does ${T.P} of work on a 240 V, 60 Hz supply at a power factor of ${T.pf}, lagging. Find ${T.ask}.`,
+    parts: [num('v', ($) => ($.ask === 'I' ? lineCurrent($) : correctingC($)), '', { label: 'value' })],
+    level: 2,
+    hints: ['P = VI cos θ, so I = P/(V cos θ).', 'The motor’s reactive power is Q = P tan θ; a capacitor supplies Q_C = V²ωC.'],
+    steps: ($) => [$.ask === 'I' ? String.raw`$I = ${$.P * 1000}/(240 \times ${$.pf}) = ${Number(lineCurrent($).toPrecision(3))}$ A` : String.raw`$Q = ${$.P * 1000}\tan(\arccos ${$.pf}) = ${Number((1000 * $.P * Math.tan(Math.acos(Number($.pf)))).toPrecision(4))}$ var, $C = Q/(V^2\omega) = ${Number(correctingC($).toPrecision(3))}$ µF`],
+    // Another route: the lab's numbers scale with P (I and C are both proportional to it).
+    sim: {
+      scenario: 'poor',
+      setup(s, $) {
+        Object.assign(s, { pf: Number($.pf), Cuf: 0 });
+      },
+      read: (c, s, $) => ({ v: ($.ask === 'I' ? c.I : c.Cfull) * ($.P / 5) }),
+    },
+    cases: [kase('the notes’ motor, its current', { ask: 'I', P: 5, pf: '0.6' }, { v: 34.7 })],
+  }),
+
+  problem({
+    id: 'u2.6.what-pays',
+    title: 'What the capacitor saves',
+    exam: 'u2',
+    ch: '2',
+    kind: 'conceptual',
+    lab: 'power',
+    src: 'Flux, written for the Power factor lab',
+    topics: ['acpower'],
+    principles: ['acpower'],
+    vars: { q: choice(['P', 'the real power the motor uses'], ['I', 'the current in the supply line'], ['loss', 'the heat lost in the supply wires']) },
+    text: (T) => `A capacitor is added across a motor running at a power factor of 0.6, bringing the line’s power factor to 1. What happens to ${T.q}?`,
+    parts: [
+      pick('d', 'it', [
+        ['same', 'stays the same', 'The motor does the same work; the capacitor only supplies its reactive power locally.'],
+        ['down', 'falls', 'The line no longer carries the reactive current, so the current and its I²R loss fall.'],
+        ['up', 'rises', 'The capacitor draws no real power; nothing here rises.'],
+      ], ($) => ($.q === 'P' ? 'same' : 'down')),
+    ],
+    level: 1,
+    hints: ['Does the motor’s work change?', 'What does the line carry with and without the capacitor?'],
+    steps: ($) => [$.q === 'P' ? 'P is the motor’s work: unchanged.' : 'The line carries S/V, which falls from P/(0.6V) to P/V; the loss falls with its square.'],
+    sim: {
+      scenario: 'fixed',
+      setup() {},
+      read: (c, s, $) => ({ d: $.q === 'P' ? 'same' : 'down' }),
+    },
+    cases: [kase('the line current', { q: 'I' }, { d: 'down' })],
   }),
 ];

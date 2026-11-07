@@ -24,6 +24,7 @@ export default {
       why: 'Its power factor chapter covers true, reactive and apparent power, and correction.',
     },
   ],
-  labs: [],
-  candidate: 'A motor load with a slider for its power factor and a correcting capacitor, the line current shown. It corrects the idea that volts times amps is the power used: at a low power factor the wires carry far more current than the work needs.',
+  labs: [
+    { course: 'eel3111', lab: 'power', notes: ['s5'], note: 'A 5 kW motor with a slider for its power factor and a correcting capacitor: at 0.6 the line carries 34.7 A, as for 8.3 kVA, and 307 µF brings it to 20.8 A. Phasor results are checked against averaging v(t) i(t) over a cycle.' },
+  ],
 };

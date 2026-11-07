@@ -8,20 +8,20 @@ exact equations, substitutions, balance models, variation of parameters, Cauchy�
 higher-order equations. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 236 with a Flux lab, 39 gaps.**
+**275 concepts, 238 with a Flux lab, 37 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
 | Calculus | 30 | 30 |
 | Linear algebra | 8 | 7 |
 | Differential equations | 18 | 18 |
-| Numerical methods | 13 | 6 |
+| Numerical methods | 13 | 7 |
 | Mechanics | 34 | 34 |
 | Electricity and magnetism | 27 | 27 |
 | Thermodynamics | 22 | 15 |
 | Fluid mechanics | 20 | 17 |
 | Heat transfer | 19 | 9 |
-| Circuits and systems | 27 | 25 |
+| Circuits and systems | 27 | 26 |
 | Mechanics of materials | 16 | 16 |
 | Materials science | 15 | 6 |
 | Design and manufacturing | 9 | 9 |
@@ -51,7 +51,7 @@ each new concept on them is a gap with a candidate lab:
 | Course | Concepts on its path | Order from |
 |---|---|---|
 | EMA 3010 Materials Science | 15 (app started: Bond, Crystal, Vacancy, Diffusion, Slip and Lever labs) | 3.091 recitations |
-| EEL 3111 Circuit Analysis I | 18 (10 new; app started: Nodes, Dependent, Phasors, Filter, Superpose, Thévenin, Switch and Op amp labs) | 6.002, Spring 2007, in the archived plan's order |
+| EEL 3111 Circuit Analysis I | 18 (10 new; app started: Nodes, Dependent, Phasors, Filter, Power factor, Superpose, Thévenin, Switch and Op amp labs) | 6.002, Spring 2007, in the archived plan's order |
 | EGN 3203 Modern Computation Methods | 24 (11 new, plus the 7 linear algebra concepts) | 2.086, Spring 2013 |
 | EML 3101 Thermodynamics II | 14 (10 new; app started: Mixture and Nozzle labs) | 16.050, Fall 2002, with Cleynen |
 | EML 3015 Fluids | 22 (16 new) | 2.06, Spring 2013 |

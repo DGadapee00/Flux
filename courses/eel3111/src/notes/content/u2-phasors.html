@@ -21,8 +21,9 @@
     <a href="#s2"><span>2</span>Resonance</a>
     <h3>Part II · Frequency response</h3>
     <a href="#s3"><span>3</span>Filters</a>
+    <a href="#s5"><span>4</span>AC power and power factor</a>
     <h3>Reference</h3>
-    <a href="#s4"><span>4</span>Formula sheet</a>
+    <a href="#s4"><span>5</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -102,8 +103,29 @@ H(j\omega) = \frac{1/(j\omega C)}{R + 1/(j\omega C)} = \frac{1}{1 + j\omega RC},
 </div>
 </section>
 
+<section class="topic" id="s5">
+<h2><span class="n">4</span>AC power and power factor</h2>
+<p>With a sine voltage across it, a load's power swings every half cycle. When its current lags or leads the voltage, part of each cycle sends energy back to the source.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>With \(v = \sqrt2 V\cos\omega t\) and \(i = \sqrt2 I\cos(\omega t - \theta)\), the product averages over a cycle to</p>
+\[
+P = VI\cos\theta, \qquad Q = VI\sin\theta, \qquad S = VI = \sqrt{P^2 + Q^2},
+\]
+<p>in rms values. \(P\) does the work; \(Q\), the reactive power, flows into the load's inductance and back each cycle. \(\cos\theta\), the power factor, is the share of \(VI\) that does work. A capacitor across the load draws \(Q_C = V^2\omega C\) the other way, so the line need only carry \(\sqrt{P^2 + (Q - Q_C)^2}/V\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a motor at 0.6</span>
+<p>A 5 kW motor on 240 V at power factor 0.6 lagging: \(\theta = 53.1^\circ\), \(Q = 5 \tan 53.1^\circ = 6.67\) kvar, \(S = 8.33\) kVA, so the line carries \(8333/240 = 34.7\) A. Through 0.2 Ω of wire, that loses \(34.7^2 \times 0.2 = 241\) W.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · correcting it</span>
+<p>A capacitor of \(Q/(V^2\omega) = 6667/(240^2 \times 377) = 307\) µF across the motor supplies its reactive power locally. The line now carries only \(5000/240 = 20.8\) A, and the wire loss falls to 86.8 W.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking volts times amps as the power used. At power factor 0.6, \(VI\) is 8.33 kVA while the work is 5 kW; the extra current does no work but still heats the wires.</p>
+</div>
+</section>
+
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">5</span>Formula sheet</h2>
 \[
 Z_R = R, \quad Z_L = j\omega L, \quad Z_C = \frac{1}{j\omega C}, \qquad \mathbf I = \frac{\mathbf V}{Z}, \qquad |Z_{RC}| = \sqrt{R^2 + \frac{1}{\omega^2C^2}}.
 \]
@@ -112,6 +134,9 @@ Z_R = R, \quad Z_L = j\omega L, \quad Z_C = \frac{1}{j\omega C}, \qquad \mathbf 
 \]
 \[
 H(j\omega) = \frac{1}{1 + j\omega RC}, \quad f_c = \frac{1}{2\pi RC}, \quad |H(f_c)| = \frac{1}{\sqrt 2}, \qquad v_\text{square} = \frac{4}{\pi}\sum_{n\ \text{odd}}\frac{\sin n\omega_0 t}{n}.
+\]
+\[
+P = V_\text{rms}I_\text{rms}\cos\theta, \quad Q = V_\text{rms}I_\text{rms}\sin\theta, \quad S = \sqrt{P^2 + Q^2}, \quad Q_C = V^2\omega C.
 \]
 </section>
 

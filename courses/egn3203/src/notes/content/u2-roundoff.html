@@ -21,9 +21,11 @@
     <a href="#s2"><span>2</span>Cancellation</a>
     <h3>Part II · Truncation</h3>
     <a href="#s3"><span>3</span>Order of accuracy</a>
-    <h3>Reference</h3>
+    <h3>Part III · Algorithms</h3>
     <a href="#s4"><span>4</span>Root finding</a>
-    <a href="#s5"><span>5</span>Formula sheet</a>
+    <a href="#s6"><span>5</span>Stepping an ODE</a>
+    <h3>Reference</h3>
+    <a href="#s5"><span>6</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -112,6 +114,27 @@ x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}.
 </div>
 </section>
 
+<section class="topic" id="s6">
+<h2><span class="n">5</span>Stepping an ODE</h2>
+<p>Most differential equations have no formula for their solution. A solver steps from \(y(t)\) to \(y(t + h)\) using the slope \(f(t, y)\), and each evaluation of \(f\) costs time. The question is how to spend a fixed number of them.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Euler follows the slope at the start of each step, \(y_{n+1} = y_n + hf(t_n, y_n)\); its error per step is \(O(h^2)\), and over \(T/h\) steps \(O(h)\). Classical RK4 samples the slope four times per step, at the start, twice at the middle and at the end, and weights them</p>
+\[
+y_{n+1} = y_n + \frac{h}{6}\left(k_1 + 2k_2 + 2k_3 + k_4\right),
+\]
+<p>so that the Taylor series matches through \(h^4\): its error over the interval is \(O(h^4)\). Halving \(h\) halves Euler's error and cuts RK4's sixteenfold.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a budget of 64</span>
+<p>Solve \(y' = -y + \sin 3t\), \(y(0) = 1\), to \(t = 4\) with 64 slope evaluations each. Euler takes 64 steps of 0.0625 and misses by \(4.22 \times 10^{-3}\). The midpoint method takes 32 steps and misses by \(1.69 \times 10^{-3}\). RK4 takes only 16 steps of 0.25 and misses by \(1.03 \times 10^{-6}\), four thousand times less.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · y′ = y cos t with 256</span>
+<p>The exact solution is \(e^{\sin t}\), so \(y(4) = 0.469\). With 256 evaluations Euler misses by \(2.2 \times 10^{-3}\) and RK4 by \(2.75 \times 10^{-8}\). Double the budget and Euler's error halves while RK4's falls by 16.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Buying accuracy with more, smaller Euler steps. To gain six digits Euler needs a million times as many steps; RK4 needs about 32 times as many.</p>
+</div>
+</section>
+
 <section class="topic" id="s5">
 <h2><span class="n">5</span>Formula sheet</h2>
 \[
@@ -125,6 +148,9 @@ x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}.
 \]
 \[
 x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}, \qquad |e_k|_\text{bisection} \le \frac{b - a}{2^{k+1}}.
+\]
+\[
+\text{Euler: } y_{n+1} = y_n + hf(t_n, y_n), \ e = O(h); \qquad \text{RK4: } y_{n+1} = y_n + \tfrac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4), \ e = O(h^4).
 \]
 </section>
 

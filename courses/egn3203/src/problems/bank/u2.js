@@ -4,10 +4,13 @@
  */
 import { U } from '@flux/subjects/math/roundoff.js';
 import { CUBICS, df, f } from '@flux/subjects/math/roots.js';
+import { COST, run } from '@flux/subjects/math/rungekutta.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 export const POWER = { four: 4, five: 5, six: 6 };
+/** One step of y′ = −2y from y = 1, by the polynomial each method reduces to. */
+export const oneStep = (method, h) => ({ euler: 1 - 2 * h, midpoint: 1 - 2 * h + 2 * h * h, rk4: 1 - 2 * h + 2 * h * h - (4 / 3) * h ** 3 + (2 / 3) * h ** 4 })[method];
 /** The order of each difference formula the problems name. */
 export const ORDER = { central: 2, five: 4 };
 /** One Newton step; `how` names the traps. */
@@ -190,5 +193,58 @@ export default [
       read: (c, s, $) => ({ d: $.method === 'bisection' ? (c.bisect.valid ? 'yes' : 'no') : c.converged ? 'yes' : 'no' }),
     },
     cases: [kase('Newton from 0', { method: 'newton' }, { d: 'no' })],
+  }),
+  problem({
+    id: 'u2.7.one-step',
+    title: 'One step by hand',
+    exam: 'u2',
+    ch: '2',
+    lab: 'rk',
+    src: 'Flux, written for the Runge–Kutta lab',
+    topics: ['ode'],
+    principles: ['rk'],
+    vars: { method: choice(['euler', 'Euler’s method'], ['rk4', 'classical RK4']), h: range(0.3, 0.6, 0.1, '') },
+    text: (T) => `Take one step of ${T.method} with h = ${T.h} on y′ = −2y from y(0) = 1. What is y₁?`,
+    parts: [num('y', ($) => oneStep($.method, $.h), '', { label: 'y₁', abs: 1e-6 })],
+    level: 2,
+    hints: ['Euler: y₁ = y₀ + h f(t₀, y₀).', 'RK4: k₁ = f(y₀), k₂ = f(y₀ + hk₁/2), k₃ = f(y₀ + hk₂/2), k₄ = f(y₀ + hk₃), then y₁ = y₀ + h(k₁ + 2k₂ + 2k₃ + k₄)/6.'],
+    steps: ($) => [$.method === 'euler' ? String.raw`$y_1 = 1 + ${$.h}\times(-2) = ${Number(oneStep('euler', $.h).toPrecision(4))}$` : String.raw`$k_1 = -2$, $k_2 = -2(1 - ${$.h})$, $k_3 = -2(1 + ${$.h}k_2/2)$, $k_4 = -2(1 + ${$.h}k_3)$, so $y_1 = ${Number(oneStep('rk4', $.h).toPrecision(4))}$`],
+    // Another route: the library's general stepper, one step's worth of slope evaluations.
+    second: ($) => ({ y: run({ f: (t, y) => -2 * y, exact: (t) => Math.exp(-2 * t), y0: 1 }, $.method, COST[$.method], $.h).yT }),
+    cases: [kase('RK4 at h = 0.5', { method: 'rk4', h: 0.5 }, { y: 0.375 })],
+  }),
+
+  problem({
+    id: 'u2.8.how-many',
+    title: 'A hundred times better',
+    exam: 'u2',
+    ch: '2',
+    kind: 'conceptual',
+    lab: 'rk',
+    src: 'Flux, written for the Runge–Kutta lab',
+    topics: ['ode'],
+    principles: ['rk'],
+    vars: { method: choice(['euler', 'Euler’s method (order 1)'], ['midpoint', 'the midpoint method (order 2)'], ['rk4', 'RK4 (order 4)']) },
+    text: (T) => `A solution by ${T.method} is a hundred times less accurate than you need. About how many times as many steps do you need?`,
+    parts: [
+      pick('n', 'steps', [
+        ['hundred', 'about 100 times as many', 'For order 1, error ∝ h: a hundredth of the error needs a hundredth of h.'],
+        ['ten', 'about 10 times as many', 'For order 2, error ∝ h²: √100 = 10.'],
+        ['three', 'about 3 times as many', 'For order 4, error ∝ h⁴: 100^(1/4) ≈ 3.2.'],
+      ], ($) => ({ euler: 'hundred', midpoint: 'ten', rk4: 'three' })[$.method]),
+    ],
+    level: 1,
+    hints: ['Error goes as hᵖ for a method of order p.', 'Solve hᵖ ratio = 1/100 for the ratio of h.'],
+    steps: ($) => [({ euler: '100^(1/1) = 100.', midpoint: '100^(1/2) = 10.', rk4: '100^(1/4) ≈ 3.2.' })[$.method]],
+    // Another route: measure it on the lab's equation, the budget ratio that cuts the error 100-fold.
+    second: ($) => {
+      const eq = { f: (t, y) => y * Math.cos(t), exact: (t) => Math.exp(Math.sin(t)), y0: 1 };
+      const e0 = run(eq, $.method, 1024, 4).error;
+      let n = 1024;
+      while (run(eq, $.method, n, 4).error > e0 / 100 && n < 1024 * 400) n = Math.ceil(n * 1.05);
+      const r = n / 1024;
+      return { n: r > 40 ? 'hundred' : r > 5 ? 'ten' : 'three' };
+    },
+    cases: [kase('RK4', { method: 'rk4' }, { n: 'three' })],
   }),
 ];
