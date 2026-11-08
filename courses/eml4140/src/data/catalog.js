@@ -11,7 +11,7 @@ export const EXAMS = [
     title: 'Modes and conduction',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['rod', 'resistance'],
+    labs: ['rod', 'resistance', 'fin', 'quench', 'touch', 'grid'],
     coming: ["Fourier's law"],
   },
   {
@@ -41,6 +41,10 @@ export const LAB_META = {
   viewfactor: { id: 'viewfactor', exam: 'u2', title: 'View factor' },
   thermal: { id: 'thermal', exam: 'u3', title: 'Thermal layer' },
   nusselt: { id: 'nusselt', exam: 'u3', title: 'Nusselt' },
+  fin: { id: 'fin', exam: 'u1', title: 'Fin' },
+  quench: { id: 'quench', exam: 'u1', title: 'Quench' },
+  touch: { id: 'touch', exam: 'u1', title: 'Touch' },
+  grid: { id: 'grid', exam: 'u1', title: 'Grid' },
 };
 
 export const CHAPTER_TITLES = {

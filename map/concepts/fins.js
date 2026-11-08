@@ -33,6 +33,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'A pin fin with sliders for length and material, the temperature along it drawn. It corrects the idea that a longer fin always sheds more heat: past \\(mL \\approx 2\\) it adds almost nothing, and a plastic fin can lose less than the bare wall.',
+  labs: [
+    { course: 'eml4140', lab: 'fin', notes: ['s7'], note: 'A pin fin with sliders for length, material and h, the temperature along it drawn: past mL ≈ 2 length adds almost nothing, and nylon in strong flow sheds less than the bare wall. Closed form against finite differences.' },
+  ],
 };

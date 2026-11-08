@@ -9,6 +9,10 @@ const loaders = {
   viewfactor: () => import('./viewfactor.js'),
   thermal: () => import('./thermal.js'),
   nusselt: () => import('./nusselt.js'),
+  fin: () => import('./fin.js'),
+  quench: () => import('./quench.js'),
+  touch: () => import('./touch.js'),
+  grid: () => import('./grid.js'),
 };
 
 const labs = createLabLoader(loaders);

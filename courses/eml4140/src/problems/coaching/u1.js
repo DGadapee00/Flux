@@ -5,6 +5,11 @@
 import { ALPHA } from '@flux/subjects/heat/rod.js';
 import { HALF, KINS, WALL, WOOL, midTheta } from '../bank/u1.js';
 import { wall } from '@flux/subjects/heat/resistance.js';
+import { FIN } from '@flux/subjects/heat/fins.js';
+import { longFin } from '../bank/u1.js';
+import { biot } from '../bank/u1.js';
+import { jointT } from '../bank/u1.js';
+import { fourier } from '../bank/u1.js';
 
 export default {
   'u1.1.half-time': {
@@ -52,6 +57,38 @@ export default {
       r: [
         [($) => ((2 * KINS[$.mat]) / $.h) * 1000, 'That is the sphere’s critical radius, 2k/h. A cylinder’s is k/h.'],
         [($) => ($.h / KINS[$.mat]) * 1000, 'Upside down: r_crit = k/h.'],
+      ],
+    },
+  },
+  'u1.9.fin': {
+    traps: {
+      q: [
+        [($) => longFin($, (D) => Math.PI * D * D), 'The cross-section is πD²/4, not πD².'],
+        [($) => longFin($) ** 2 / (FIN.Tb - FIN.Tinf), 'Take the square root: q = √(hPkA_c) θ_b.'],
+      ],
+    },
+  },
+  'u1.11.biot': {
+    traps: {
+      bi: [
+        [($) => biot($, 2 * 0.02), 'Cooled on both faces, use the half-thickness, 2 cm, not the full 4 cm.'],
+        [($) => 1 / biot($), 'Bi = hL/k: the outside coefficient on top.'],
+      ],
+    },
+  },
+  'u1.13.touch': {
+    traps: {
+      T: [
+        [($) => (34 + $.Tb) / 2, 'Not a plain average: the body that trades heat faster pulls the joint toward its own temperature.'],
+        [($) => jointT($, (b) => b.k), 'Weight by √(kρc), the effusivity, not by k alone.'],
+      ],
+    },
+  },
+  'u1.15.fourier': {
+    traps: {
+      fo: [
+        [($) => fourier({ ...$, N: Number($.N) }, false), 'Δx is squared: Fo = αΔt/Δx².'],
+        [($) => fourier({ ...$, N: Number($.N) }) * 1000, 'Δt in seconds, not milliseconds.'],
       ],
     },
   },

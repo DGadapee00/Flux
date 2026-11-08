@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Relax a 2D plate on a grid you can refine, and step a transient with a time-step slider. It corrects the idea that a smaller grid with the same time step is always more accurate: past the stability limit the solution oscillates and blows up.',
+  labs: [
+    { course: 'eml4140', lab: 'grid', notes: ['s10'], note: 'The explicit scheme on a copper rod with sliders for cells and time step: at Δt = 30 ms, 20 cells are stable but 40 cells push Fo past ½ and the finest mode blows up. The run is checked exactly against each mode’s growth factor.' },
+  ],
 };
