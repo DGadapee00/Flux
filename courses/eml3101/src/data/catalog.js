@@ -11,8 +11,8 @@ export const EXAMS = [
     title: 'Gas mixtures and combustion',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['mixture'],
-    coming: ['Combustion'],
+    labs: ['mixture', 'flame', 'coil'],
+    coming: [],
   },
   {
     id: 'u2',
@@ -20,7 +20,16 @@ export const EXAMS = [
     title: 'Compressible flow',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['nozzle'],
+    labs: ['nozzle', 'jet'],
+    coming: [],
+  },
+  {
+    id: 'u3',
+    n: 3,
+    title: 'Cycles and exergy',
+    chapters: '3',
+    date: 'Unit 3',
+    labs: ['exergy', 'cycles', 'rankine', 'heatpump'],
     coming: [],
   },
 ];
@@ -28,11 +37,19 @@ export const EXAMS = [
 export const LAB_META = {
   mixture: { id: 'mixture', exam: 'u1', title: 'Mixture' },
   nozzle: { id: 'nozzle', exam: 'u2', title: 'Nozzle' },
+  flame: { id: 'flame', exam: 'u1', title: 'Flame' },
+  coil: { id: 'coil', exam: 'u1', title: 'Cooling coil' },
+  jet: { id: 'jet', exam: 'u2', title: 'Bypass' },
+  exergy: { id: 'exergy', exam: 'u3', title: 'Exergy' },
+  cycles: { id: 'cycles', exam: 'u3', title: 'Otto and Diesel' },
+  rankine: { id: 'rankine', exam: 'u3', title: 'Rankine' },
+  heatpump: { id: 'heatpump', exam: 'u3', title: 'Heat pump' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Gas mixtures and combustion',
   2: 'Compressible flow',
+  3: 'Cycles and exergy',
 };
 
 export function examById(id) {

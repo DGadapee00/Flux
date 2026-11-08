@@ -33,6 +33,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Deliver one kilojoule of heat at a slider temperature, from a furnace down to room temperature. It corrects the idea that a kilojoule is a kilojoule: the work it can give falls to zero as its temperature nears the surroundings.',
+  labs: [
+    { course: 'eml3101', lab: 'exergy', notes: ['s2'], note: 'One kilojoule of heat at a temperature you set: the work it could give falls to zero as its temperature nears the surroundings, and using hot heat to warm a room destroys most of it. The stream form is checked by summing Carnot engines.' },
+  ],
 };

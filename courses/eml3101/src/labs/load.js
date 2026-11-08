@@ -5,6 +5,13 @@ import { PREDICTIONS } from './predictions.js';
 const loaders = {
   mixture: () => import('./mixture.js'),
   nozzle: () => import('./nozzle.js'),
+  flame: () => import('./flame.js'),
+  coil: () => import('./coil.js'),
+  jet: () => import('./jet.js'),
+  exergy: () => import('./exergy.js'),
+  cycles: () => import('./cycles.js'),
+  rankine: () => import('./rankine.js'),
+  heatpump: () => import('./heatpump.js'),
 };
 
 const labs = createLabLoader(loaders);

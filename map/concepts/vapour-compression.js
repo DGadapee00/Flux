@@ -33,6 +33,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'A heat pump on a \\(p\\)–\\(h\\) chart with a slider for the outdoor temperature. It corrects the idea that a heat pump gets more out than it puts in by a fixed factor: its COP falls as the outdoor air gets colder.',
+  labs: [
+    { course: 'eml3101', lab: 'heatpump', notes: ['s5'], note: 'A heat pump on a p–h chart with a slider for the outdoor temperature: its COP falls as the outdoor air gets colder, though it stays above 1. The compressor work is checked by integrating v dp along the isentrope.' },
+  ],
 };

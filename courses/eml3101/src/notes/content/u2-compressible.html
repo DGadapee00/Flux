@@ -19,8 +19,10 @@
     <h3>Part I · Nozzles</h3>
     <a href="#s1"><span>1</span>Choked flow</a>
     <a href="#s2"><span>2</span>Normal shocks</a>
+    <h3>Part II · Propulsion</h3>
+    <a href="#s4"><span>3</span>Jet propulsion and bypass</a>
     <h3>Reference</h3>
-    <a href="#s3"><span>3</span>Formula sheet</a>
+    <a href="#s3"><span>4</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -69,8 +71,31 @@ M_2^2 = \frac{1 + \frac{\gamma-1}{2}M_1^2}{\gamma M_1^2 - \frac{\gamma-1}{2}}, \
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Propulsion</h2>
+</div>
+
+<section class="topic" id="s4">
+<h2><span class="n">3</span>Jet propulsion and bypass</h2>
+<p>An engine pushes by throwing air backward faster than it arrived. The same power can throw a little air fast or a lot of air slowly.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Momentum through a control volume around the engine gives \(F = \dot m(V_e - V_0) + (p_e - p_0)A_e\), with the pressure term zero for a fully expanded jet. The jet power added is \(P = \tfrac12\dot m(V_e^2 - V_0^2)\), and the useful part is \(FV_0\):</p>
+\[
+\eta_p = \frac{FV_0}{P} = \frac{2}{1 + V_e/V_0}.
+\]
+<p>For a fixed \(P\), raising \(\dot m\) lowers \(V_e\) toward \(V_0\): thrust and efficiency both rise.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · 40 MW at 250 m/s</span>
+<p>Through 100 kg/s alone, 40 MW gives \(V_e = \sqrt{250^2 + 2 \times 4 \times 10^7/100} = 929\) m/s and \(F = 100 \times 679 = 67.9\) kN, at \(\eta_p = 42\%\). Through 1100 kg/s, bypass 10, \(V_e = 368\) m/s and \(F = 130\) kN, at 81%.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking a faster jet as a better engine. A jet much faster than the aircraft leaves most of its power behind in the wake, which is why airliners use large fans.</p>
+</div>
+</section>
+
 <section class="topic" id="s3">
-<h2><span class="n">3</span>Formula sheet</h2>
+<h2><span class="n">4</span>Formula sheet</h2>
 \[
 c = \sqrt{\gamma RT}, \quad \frac{T_0}{T} = 1 + \frac{\gamma-1}{2}M^2, \quad \frac{p_0}{p} = \left(\frac{T_0}{T}\right)^{\frac{\gamma}{\gamma-1}}, \quad \frac{dA}{A} = \left(M^2 - 1\right)\frac{dV}{V}.
 \]
@@ -80,6 +105,7 @@ c = \sqrt{\gamma RT}, \quad \frac{T_0}{T} = 1 + \frac{\gamma-1}{2}M^2, \quad \fr
 \[
 M_2^2 = \frac{1 + \frac{\gamma-1}{2}M_1^2}{\gamma M_1^2 - \frac{\gamma-1}{2}}, \qquad \frac{p_2}{p_1} = 1 + \frac{2\gamma}{\gamma+1}\left(M_1^2 - 1\right), \qquad T_{02} = T_{01}.
 \]
+\[ F = \dot m(V_e - V_0) + (p_e - p_0)A_e, \qquad \eta_p = \frac{2}{1 + V_e/V_0}. \]
 </section>
 
 </main>

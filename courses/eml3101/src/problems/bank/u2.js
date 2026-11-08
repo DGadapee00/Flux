@@ -5,6 +5,7 @@
 import { choice, kase, num, problem, range } from '../kit.js';
 import { GAMMA, R_AIR, shockMach, shockPressure, shockStagnation } from '@flux/subjects/thermo/nozzle.js';
 import { areaRatio, machFromArea, pressureRatio } from '@flux/subjects/thermo/isentropic.js';
+import { jetClosed } from '@flux/subjects/thermo/jet.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 const g = GAMMA;
@@ -17,6 +18,20 @@ export const choked = ($, factor = CHOKE, root = true) => {
 /** Across a normal shock from M₁: M₂, p₂/p₁ or p₀₂/p₀₁. */
 export const across = ($) => ({ M2: shockMach($.M1), p: shockPressure($.M1), p0: shockStagnation($.M1) })[$.ask];
 const p3 = (x) => Number(x.toPrecision(3));
+
+/** Propulsive efficiency from jet and flight speeds; `how` reproduces the traps. */
+export const propEff = ($, how = 'right') => {
+  const r = Number($.Ve) / Number($.V0);
+  if (how === 'ratio') return 1 / r;
+  if (how === 'half') return 1 / (1 + r);
+  return 2 / (1 + r);
+};
+/** The same from energy: thrust power over the jet power added, per kilogram of air. */
+export const propEffEnergy = ($) => {
+  const Ve = Number($.Ve);
+  const V0 = Number($.V0);
+  return ((Ve - V0) * V0) / (0.5 * (Ve * Ve - V0 * V0));
+};
 
 export default [
   problem({
@@ -134,5 +149,49 @@ export default [
       },
     },
     cases: [kase('the stagnation pressure', { q: 'p0' }, { d: 'down' })],
+  }),
+  problem({
+    id: 'u2.5.propulsive',
+    title: 'Propulsive efficiency',
+    exam: 'u2',
+    ch: '2',
+    lab: 'jet',
+    src: 'Flux, written for the Bypass lab',
+    topics: ['propulsion'],
+    principles: ['propulsion'],
+    vars: { V0: choice(['230', '230 m/s'], ['250', '250 m/s']), Ve: choice(['350', '350 m/s'], ['600', '600 m/s'], ['900', '900 m/s']) },
+    text: (T) => `An aircraft flies at ${T.V0}; its engine’s jet leaves at ${T.Ve} relative to it. What is the propulsive efficiency?`,
+    parts: [num('eta', ($) => propEff($), '', { label: 'η_p' })],
+    level: 1,
+    hints: ['Useful power is FV₀; power added is ½ṁ(V_e² − V₀²).', 'η_p = 2/(1 + V_e/V₀).'],
+    steps: ($) => [String.raw`$\eta_p = \frac{2}{1 + ${$.Ve}/${$.V0}} = ${Number(propEff($).toPrecision(3))}$`],
+    second: ($) => ({ eta: propEffEnergy($) }),
+    cases: [kase('250 and 600', { V0: '250', Ve: '600' }, { eta: 0.5882 })],
+  }),
+
+  problem({
+    id: 'u2.6.bigger-fan',
+    title: 'A bigger fan',
+    exam: 'u2',
+    ch: '2',
+    kind: 'conceptual',
+    lab: 'jet',
+    src: 'Flux, written for the Bypass lab',
+    topics: ['propulsion'],
+    principles: ['propulsion'],
+    vars: { B: choice(['5', 'a bypass ratio of 5'], ['10', 'a bypass ratio of 10']) },
+    text: (T) => `A turbojet core is given a fan with ${T.B}, and the same jet power. What happens to the thrust at cruise?`,
+    parts: [
+      pick('a', 'the thrust', [
+        ['up', 'it rises', 'More air at a lower jet speed: less energy is wasted in the wake.'],
+        ['down', 'it falls', 'The jet is slower, but far more air is pushed: F = ṁ(V_e − V₀) rises.'],
+        ['same', 'no change: same power, same thrust', 'Thrust is not fixed by power; the share left in the wake changes.'],
+      ], () => 'up'),
+    ],
+    level: 1,
+    hints: ['F V₀ = η_p P.', 'How does η_p change as V_e approaches V₀?'],
+    steps: () => ['η_p rises as V_e falls toward V₀, so F = η_p P/V₀ rises.'],
+    sim: { scenario: 'turbojet', setup(s, $) { s.B = Number($.B); }, read: (c) => ({ a: c.F > jetClosed({ B: 0 }).F ? 'up' : 'down' }) },
+    cases: [kase('bypass 5', { B: '5' }, { a: 'up' })],
   }),
 ];

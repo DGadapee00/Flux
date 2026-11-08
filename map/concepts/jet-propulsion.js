@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'One engine core with a bypass-ratio slider, thrust and fuel use read out. It corrects the idea that a faster jet means a better engine: at the same thrust, more air at a lower speed wastes less energy in the wake.',
+  labs: [
+    { course: 'eml3101', lab: 'jet', notes: ['s4'], note: 'One engine core with a bypass-ratio slider, thrust and propulsive efficiency drawn: at the same power, more air at a lower speed gives more thrust. The momentum thrust is checked against the energy route.' },
+  ],
 };

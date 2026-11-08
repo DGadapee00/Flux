@@ -33,6 +33,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Run Otto and Diesel cycles side by side on \\(p\\)–\\(v\\) and \\(T\\)–\\(s\\), with a slider for compression ratio. It corrects the idea that the Diesel is the more efficient cycle: at the same compression ratio it is less efficient; it wins only because it can run at a higher one.',
+  labs: [
+    { course: 'eml3101', lab: 'cycles', notes: ['s3'], note: 'Otto and Diesel cycles side by side with a compression-ratio slider: at the same ratio the Otto is more efficient; the Diesel wins only by running at a higher one. The closed forms are checked by integrating ∮p dv.' },
+  ],
 };

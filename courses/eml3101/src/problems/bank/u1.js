@@ -6,6 +6,8 @@
  */
 import { choice, kase, num, problem, range } from '../kit.js';
 import { GASES, mixture } from '@flux/subjects/thermo/mixtures.js';
+import { pg } from '@flux/subjects/thermo/psychro.js';
+import { flameClosed } from '@flux/subjects/thermo/flame.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 /** The lab's mixture for a problem's numbers, at T (K) in the 1 m³ vessel. */
@@ -13,6 +15,32 @@ export const mix = ($, T = 300) => mixture({ gasB: $.gas, mA: $.mA, mB: $.mB, T,
 const gasChoice = () => choice(['CO2', 'carbon dioxide (44.0 g/mol)'], ['H2', 'hydrogen (2.02 g/mol)'], ['AR', 'argon (39.9 g/mol)'], ['CH4', 'methane (16.0 g/mol)']);
 const f = ($) => GASES[$.gas].formula;
 const p3 = (x) => Number(x.toPrecision(3));
+
+/** Air–fuel ratio by mass for methane at a percent of theoretical air; `how` reproduces the traps. */
+export const airFuel = ($, how = 'mass') => {
+  const lam = Number($.air) / 100;
+  if (how === 'molar') return 2 * lam * 4.76;
+  if (how === 'oxygen') return (2 * lam * 32) / 16.04;
+  return (2 * lam * (32 + 3.76 * 28.013)) / 16.04;
+};
+
+/** Humidity ratio (g/kg) at T °C and φ %; `how` reproduces the traps. */
+export const humidity = ($, how = 'right') => {
+  const pv = (Number($.rh) / 100) * pg(Number($.T));
+  if (how === 'phi') return 622 * (Number($.rh) / 100);
+  if (how === 'nofactor') return (1000 * pv) / (101.325 - pv);
+  return (622 * pv) / (101.325 - pv);
+};
+
+/** Water removed (g/kg dry air) cooling air at 30 °C, 60% to T2 °C, saturated out; `how` reproduces the traps. */
+export const dripped = ($, how = 'right') => {
+  const w = (pv) => (622 * pv) / (101.325 - pv);
+  const w1 = w(0.6 * pg(30));
+  const T2 = Number($.T2);
+  if (how === 'phi') return w1 - w(0.6 * pg(T2));
+  if (how === 'out') return w(pg(T2));
+  return w1 - w(pg(T2));
+};
 
 export default [
   problem({
@@ -130,5 +158,110 @@ export default [
       read: (c) => ({ who: c.pA > c.pB ? 'n2' : c.pB > c.pA ? 'other' : 'same' }),
     },
     cases: [kase('carbon dioxide', { gas: 'CO2' }, { who: 'n2' })],
+  }),
+  problem({
+    id: 'u1.5.air-fuel',
+    title: 'How much air',
+    exam: 'u1',
+    ch: '1',
+    lab: 'flame',
+    src: 'Flux, written for the Flame lab',
+    topics: ['combustion'],
+    principles: ['combustion'],
+    vars: { air: choice(['100', '100%'], ['120', '120%'], ['150', '150%'], ['200', '200%']) },
+    text: (T) => `Methane (16.04 g/mol) burns with ${T.air} of the theoretical air, taking air as O₂ + 3.76 N₂ (32.00 and 28.01 g/mol). What is the air–fuel ratio by mass?`,
+    parts: [num('af', ($) => airFuel($), 'kg air/kg fuel', { label: 'A/F' })],
+    level: 1,
+    hints: ['Stoichiometric methane takes 2 mol of O₂, each with 3.76 mol of N₂.', 'Multiply by the fraction of theoretical air, then by molar masses.'],
+    steps: ($) => [String.raw`$\text{A/F} = \frac{2(${Number($.air) / 100})(32.00 + 3.76 \times 28.01)}{16.04} = ${Number(airFuel($).toPrecision(3))}$`],
+    sim: { scenario: 'stoich', setup(s, $) { s.air = Number($.air); }, read: (c) => ({ af: c.AF }) },
+    cases: [kase('100%', { air: '100' }, { af: 17.12 })],
+  }),
+
+  problem({
+    id: 'u1.6.hotter',
+    title: 'More air, hotter flame?',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'flame',
+    src: 'Flux, written for the Flame lab',
+    topics: ['combustion'],
+    principles: ['combustion'],
+    vars: { air: choice(['130', '130%'], ['200', '200%']) },
+    text: (T) => `A methane burner running at stoichiometric is given ${T.air} of the theoretical air instead. What happens to its adiabatic flame temperature?`,
+    parts: [
+      pick('a', 'the flame temperature', [
+        ['falls', 'it falls', 'The fuel was already burning completely; the extra air only adds gas to heat.'],
+        ['rises', 'it rises', 'More oxygen cannot release more than the fuel holds.'],
+        ['same', 'no change', 'The same heat now warms more moles of product.'],
+      ], () => 'falls'),
+    ],
+    level: 1,
+    hints: ['Is any fuel left unburned at stoichiometric?', 'What does the extra air add to the products?'],
+    steps: () => ['Same heat released, more products to heat: a cooler flame.'],
+    sim: { scenario: 'stoich', setup(s, $) { s.air = Number($.air); }, read: (c) => ({ a: c.T < flameClosed({ air: 100 }).T - 1 ? 'falls' : 'rises' }) },
+    cases: [kase('130%', { air: '130' }, { a: 'falls' })],
+  }),
+  problem({
+    id: 'u1.7.humidity',
+    title: 'The humidity ratio',
+    exam: 'u1',
+    ch: '1',
+    lab: 'coil',
+    src: 'Flux, written for the Cooling coil lab',
+    topics: ['psychrometrics'],
+    principles: ['psychrometrics'],
+    vars: { T: choice(['25', '25 °C'], ['30', '30 °C'], ['35', '35 °C']), rh: choice(['40', '40%'], ['60', '60%'], ['80', '80%']) },
+    text: (T, $) => `Air at ${T.T} and ${T.rh} relative humidity is at 101.325 kPa. Water’s saturation pressure at ${T.T} is ${pg(Number($.T)).toFixed(3)} kPa. What is the humidity ratio, in grams of water per kilogram of dry air?`,
+    parts: [num('w', ($) => humidity($), 'g/kg', { label: 'ω' })],
+    level: 1,
+    hints: ['p_v = φ p_g.', 'ω = 0.622 p_v/(p − p_v).'],
+    steps: ($) => [String.raw`$p_v = ${(Number($.rh) / 100 * pg(Number($.T))).toFixed(3)}$ kPa`, String.raw`$\omega = 0.622 \times p_v/(101.325 - p_v) = ${Number(humidity($).toPrecision(3))}$ g/kg`],
+    sim: { scenario: 'summer', setup(s, $) { Object.assign(s, { T1: Number($.T), rh: Number($.rh) }); }, read: (c) => ({ w: 1000 * c.w1 }) },
+    cases: [kase('30 °C, 60%', { T: '30', rh: '60' }, { w: 16.05 })],
+  }),
+
+  problem({
+    id: 'u1.8.drip',
+    title: 'Does it drip?',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'coil',
+    src: 'Flux, written for the Cooling coil lab',
+    topics: ['psychrometrics'],
+    principles: ['psychrometrics'],
+    vars: { T2: choice(['12', '12 °C'], ['25', '25 °C']) },
+    text: (T) => `Air at 30 °C and 60% relative humidity, whose dew point is 21.4 °C, leaves a cooling coil at ${T.T2}. Does water condense on the coil?`,
+    parts: [
+      pick('a', 'water', [
+        ['yes', 'yes', 'The air is cooled below its dew point, so it cannot hold all its vapour.'],
+        ['no', 'no', 'Above the dew point the air still holds all its vapour; only φ rises.'],
+      ], ($) => (Number($.T2) < 21.4 ? 'yes' : 'no')),
+    ],
+    level: 1,
+    hints: ['Find the dew point: where p_g(T) equals the vapour’s partial pressure.', 'Compare the leaving temperature with it.'],
+    steps: ($) => [Number($.T2) < 21.4 ? 'Below the dew point: water condenses.' : 'Above the dew point: none condenses.'],
+    sim: { scenario: 'summer', setup(s, $) { s.T2 = Number($.T2); }, read: (c) => ({ a: c.water > 1e-6 ? 'yes' : 'no' }) },
+    cases: [kase('25 °C', { T2: '25' }, { a: 'no' })],
+  }),
+  problem({
+    id: 'u1.9.dripped',
+    title: 'How much water drips',
+    exam: 'u1',
+    ch: '1',
+    lab: 'coil',
+    src: 'Flux, written for the Cooling coil lab',
+    topics: ['psychrometrics'],
+    principles: ['psychrometrics'],
+    vars: { T2: choice(['8', '8 °C'], ['10', '10 °C'], ['12', '12 °C'], ['15', '15 °C']) },
+    text: (T, $) => `Air at 30 °C and 60% (p_g = ${pg(30).toFixed(3)} kPa) at 101.325 kPa leaves a cooling coil saturated at ${T.T2}, where p_g = ${pg(Number($.T2)).toFixed(3)} kPa. How much water condenses, in grams per kilogram of dry air?`,
+    parts: [num('m', ($) => dripped($), 'g/kg', { label: 'Δω' })],
+    level: 2,
+    hints: ['Find ω in from p_v = 0.6 p_g(30 °C).', 'The air leaves saturated: ω out uses p_v = p_g(T₂).'],
+    steps: ($) => [String.raw`$\Delta\omega = \omega_1 - \omega_2 = ${Number(dripped($).toPrecision(3))}$ g/kg`],
+    sim: { scenario: 'summer', setup(s, $) { s.T2 = Number($.T2); }, read: (c) => ({ m: 1000 * c.water }) },
+    cases: [kase('12 °C', { T2: '12' }, { m: 7.31 })],
   }),
 ];

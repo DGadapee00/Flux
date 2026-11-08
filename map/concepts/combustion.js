@@ -33,6 +33,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Burn methane with air or pure oxygen across the mixture ratio and plot the flame temperature. It corrects the idea that more air makes a hotter flame: the flame peaks near stoichiometric, and extra air or nitrogen only soaks up heat.',
+  labs: [
+    { course: 'eml3101', lab: 'flame', notes: ['s5'], note: 'Methane burning in air with a slider for the percent of theoretical air: the flame peaks near stoichiometric, and extra air only soaks up heat. Newton on the NASA enthalpies is checked by integrating c_p with Simpson’s rule.' },
+  ],
 };

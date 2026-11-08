@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cycles and exergy</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EML 3101 · Thermodynamics II · Unit 3</div>
+  <h1>Cycles and exergy</h1>
+  <p class="lede">What a kilojoule of heat is worth, and how engines, steam plants and heat pumps turn heat and work into each other.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Engines, plants, heat pumps and what heat is worth</h3>
+    <a href="#s2"><span>1</span>Exergy: what heat is worth</a>
+    <a href="#s3"><span>2</span>Otto and Diesel cycles</a>
+    <a href="#s4"><span>3</span>The Rankine cycle</a>
+    <a href="#s5"><span>4</span>Vapour compression and the heat pump</a>
+    <h3>Reference</h3>
+    <a href="#s1"><span>5</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Engines, plants, heat pumps and what heat is worth</h2>
+</div>
+
+<section class="topic" id="s2">
+<h2><span class="n">1</span>Exergy: what heat is worth</h2>
+<p>The first law counts energy; the second says how much of it can become work. That amount, against the surroundings at \(T_0\), is exergy.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The most work heat \(Q\) at \(T\) can give runs a Carnot engine that rejects to \(T_0\):</p>
+\[
+X = Q\left(1 - \frac{T_0}{T}\right).
+\]
+<p>A stream that cools from \(T\) to \(T_0\) as it gives up its heat runs one engine per slice, \(dX = (1 - T_0/T')\,c\,dT'\), which sums to \(Q[1 - T_0\ln(T/T_0)/(T - T_0)]\). Any irreversibility destroys exergy, \(X_\text{destroyed} = T_0S_\text{gen}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · furnace heat for a room</span>
+<p>With surroundings at 283 K, a kilojoule at 1500 K is worth \(1 - 283/1500 = 0.81\) kJ of work. Delivered to a room at 295 K it generates \(1/295 - 1/1500 = 2.72\) J/K of entropy and destroys \(283 \times 0.00272 = 0.77\) kJ: 95% of its potential.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Treating every kilojoule alike. At 320 K a kilojoule is worth 0.12 kJ of work; at the surroundings' temperature, nothing, though the energy is all still there.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">2</span>Otto and Diesel cycles</h2>
+<p>Air-standard cycles model an engine as a fixed mass of air heated and cooled, which is enough to compare them.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Both compress isentropically by \(r = v_1/v_2\), so \(T_2 = T_1r^{k-1}\). Otto adds heat at constant volume and Diesel at constant pressure, until the volume has grown by the cutoff ratio \(r_c\). Then</p>
+\[
+\eta_\text{Otto} = 1 - \frac{1}{r^{\,k-1}}, \qquad \eta_\text{Diesel} = 1 - \frac{1}{r^{\,k-1}}\,\frac{r_c^{\,k} - 1}{k\,(r_c - 1)}.
+\]
+<p>The bracket is above 1 for \(r_c > 1\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · both at r = 10</span>
+<p>With \(k = 1.4\): \(\eta_\text{Otto} = 1 - 10^{-0.4} = 60.2\%\). With cutoff 2, the bracket is \((2^{1.4} - 1)/(1.4 \times 1) = 1.71\), so \(\eta_\text{Diesel} = 1 - 0.398 \times 1.71 = 53.4\%\). At \(r = 18\) the Diesel gives 63.2%.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Calling the Diesel the more efficient cycle. At the same compression ratio it is less efficient; it wins because compressing air alone lets it use a ratio near 18, where a petrol engine would knock.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">3</span>The Rankine cycle</h2>
+<p>A steam plant pumps water to boiler pressure, boils and superheats it, expands it through a turbine and condenses it. Pumping a liquid costs far less work than the turbine gives.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Steady-flow energy balances on each part give the work and heat per kilogram. With states 1 (condenser outlet), 2 (pump outlet), 3 (turbine inlet) and 4 (turbine outlet),</p>
+\[
+\eta = \frac{(h_3 - h_4) - (h_2 - h_1)}{h_3 - h_2}, \qquad w_\text{pump} \approx v_1(p_2 - p_1).
+\]
+<p>The turbine expands isentropically, \(s_4 = s_3\), so a higher boiler pressure at the same \(T_3\), which lowers \(s_3\), leaves state 4 further inside the dome: wetter.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · 6 MPa and 500 °C</span>
+<p>With the condenser at 10 kPa: \(h_1 = 191.8\) kJ/kg, the pump adds 6.1 kJ/kg, \(h_3 = 3423\) kJ/kg, and the turbine exhaust is 83% dry. The efficiency is 38.4%. At 15 MPa it is 41%, with the exhaust 76% dry.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking a higher boiler pressure as free efficiency. It wets the turbine exhaust, and below about 88% dryness droplets erode the last blades. Reheating the steam partway through the turbine fixes it.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">4</span>Vapour compression and the heat pump</h2>
+<p>A vapour-compression cycle moves heat uphill: it evaporates a refrigerant where it is cold and condenses it where it is warm, and a compressor does the lifting.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The refrigerant leaves the evaporator as saturated vapour (1), is compressed (2), condenses (3) and is throttled at constant enthalpy, \(h_4 = h_3\). Per kilogram, the heat delivered is \(h_2 - h_3\) and the work \(h_2 - h_1\):</p>
+\[
+\text{COP}_\text{HP} = \frac{h_2 - h_3}{h_2 - h_1} \le \frac{T_H}{T_H - T_L}.
+\]
+<p>A colder outdoor coil means a lower evaporating pressure, a bigger pressure ratio, and more work for each kilojoule delivered.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · outdoors at 7 °C</span>
+<p>With the model refrigerant evaporating at −1 °C and condensing at 35 °C, the compressor does 32.9 kJ/kg and the condenser delivers 205 kJ/kg: COP 6.2. The Carnot limit for 21 °C indoors and 7 °C outdoors is 21.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking a heat pump's COP as a fixed property. At −10 °C outdoors the same machine gives 4.1, and the Carnot limit itself has fallen from 21 to 9.5.</p>
+</div>
+</section>
+
+<section class="topic" id="s1">
+<h2><span class="n">5</span>Formula sheet</h2>
+\[ X = Q\left(1 - \frac{T_0}{T}\right), \qquad \psi = (h - h_0) - T_0(s - s_0) + \tfrac12V^2 + gz, \qquad X_\text{destroyed} = T_0S_\text{gen}. \]
+\[ \eta_\text{Otto} = 1 - r^{1-k}, \qquad \eta_\text{Diesel} = 1 - r^{1-k}\,\frac{r_c^k - 1}{k(r_c - 1)}, \qquad T_2 = T_1r^{k-1}. \]
+\[ \eta = \frac{(h_3 - h_4) - (h_2 - h_1)}{h_3 - h_2}, \qquad w_\text{pump} \approx v_1(p_2 - p_1), \qquad s_4 = s_3. \]
+\[ \text{COP}_R = \frac{h_1 - h_4}{h_2 - h_1}, \qquad \text{COP}_\text{HP} = \frac{h_2 - h_3}{h_2 - h_1}, \qquad h_4 = h_3, \qquad \text{COP}_\text{HP,Carnot} = \frac{T_H}{T_H - T_L}. \]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux.</footer>
+</body>
+</html>

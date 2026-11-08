@@ -31,6 +31,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Generate the psychrometric chart from its equations and run air through a cooling coil. It corrects the idea that an air conditioner only cools: it dries the air by cooling it below the dew point, and water drips out.',
+  labs: [
+    { course: 'eml3101', lab: 'coil', notes: ['s6'], note: 'Moist air through a cooling coil on a psychrometric chart generated from its equations: below the dew point water condenses, so an air conditioner dries as well as cools. The enthalpy balance is checked by summing heat along the air’s path.' },
+  ],
 };
