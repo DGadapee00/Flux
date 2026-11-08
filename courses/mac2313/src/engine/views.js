@@ -17,6 +17,7 @@ import { SliceAreaView } from '../scene/sliceArea.js';
 import { ElementView } from '../scene/element.js';
 import { FluxLoopView } from '../scene/fluxLoop.js';
 import { TilesView } from '../scene/tiles.js';
+import { BoxFluxView } from '../scene/boxFlux.js';
 import { M } from '../scene/manim.js';
 
 /** Lazy view pool: a lab's first visit builds what it needs; exit hides, does not dispose. */
@@ -48,6 +49,7 @@ export function createViewPool(scene) {
     crits: () => once('crits', () => new CritView(scene)),
     fluxLoop: () => once('fluxLoop', () => new FluxLoopView(scene)),
     tiles: () => once('tiles', () => new TilesView(scene)),
+    boxFlux: () => once('boxFlux', () => new BoxFluxView(scene)),
     hideAll() {
       made.surface?.setVisible(false);
       made.contours?.setVisible(false);
@@ -69,6 +71,7 @@ export function createViewPool(scene) {
       made.crits?.setVisible(false);
       made.fluxLoop?.setVisible(false);
       made.tiles?.setVisible(false);
+      made.boxFlux?.setVisible(false);
     },
   };
   return pool;

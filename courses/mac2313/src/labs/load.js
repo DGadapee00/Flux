@@ -20,6 +20,8 @@ const loaders = {
   sph: () => import('./sph.js'),
   flux2d: () => import('./flux2d.js'),
   tiles: () => import('./tiles.js'),
+  work: () => import('./work.js'),
+  box: () => import('./box.js'),
 };
 
 const labs = createLabLoader(loaders);

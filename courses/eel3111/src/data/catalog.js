@@ -37,7 +37,7 @@ export const EXAMS = [
     title: 'First- and second-order circuits',
     chapters: '4',
     date: 'Unit 4',
-    labs: ['switch', 'rlc'],
+    labs: ['switch', 'rlc', 'lc'],
     coming: [],
   },
   {
@@ -62,6 +62,7 @@ export const LAB_META = {
   switch: { id: 'switch', exam: 'u4', title: 'Switch' },
   opamp: { id: 'opamp', exam: 'u5', title: 'Op amp' },
   rlc: { id: 'rlc', exam: 'u4', title: 'RLC step' },
+  lc: { id: 'lc', exam: 'u4', title: 'LC energy' },
 };
 
 export const CHAPTER_TITLES = {

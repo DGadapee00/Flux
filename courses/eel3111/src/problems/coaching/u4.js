@@ -4,6 +4,7 @@
  */
 import { iSteady, tauMs } from '../bank/u4.js';
 import { zetaSeries } from '../bank/u4.js';
+import { lcPeak } from '../bank/u4.js';
 
 export default {
   'u4.1.tau': {
@@ -27,6 +28,14 @@ export default {
       z: [
         [($) => zetaSeries($, 'parallel'), 'That is the parallel circuit’s ζ. In series α = R/2L, so ζ = (R/2)√(C/L).'],
         [($) => zetaSeries($, 'two'), 'α is R/2L, not R/L: keep the 2.'],
+      ],
+    },
+  },
+  'u4.6.lc-peak': {
+    traps: {
+      I: [
+        [($) => lcPeak($, 'inverted'), 'Upside down: ½LI² = ½CV₀² gives I = V₀√(C/L).'],
+        [($) => lcPeak($, 'omega'), 'That is V₀ω₀. The peak current is V₀√(C/L) = V₀ω₀C.'],
       ],
     },
   },

@@ -27,6 +27,7 @@ export default {
   ],
   labs: [
     { course: 'phy2049', lab: 'transformer', notes: ['s5', 's6', 's7', 's10'], note: 'Two coils on one core: voltage goes with turns, current the other way.' },
+    { course: 'eel3111', lab: 'lc', notes: ['s5'], note: 'A charged capacitor switched across a coil, with sliders for L and R: the energy moves from the capacitor’s electric field to the coil’s magnetic field and back, and the resistor takes a share each swing. The response is checked by Runge–Kutta and the energy books balance.' },
+    { course: 'eel3111', lab: 'switch', notes: ['s1'], note: 'An inductor switched into and out of a resistor network: its current rises and falls with time constant L/R, and its voltage jumps at each switching.' },
   ],
-  candidate: String.raw`An RL circuit beside the RC lab: current rising toward \(\mathcal E/R\) with time constant \(L/R\), and an LC loop trading energy between the capacitor's electric field and the coil's magnetic field.`,
 };

@@ -5,4 +5,7 @@ export default {
   s4: [
     { tag: 'L = 10 mH, C = 1 µF', lab: 'rlc', scenario: 'ring', read: (c) => ({ ζ: [c.zeta, 0.1], overshoot: [c.overshoot, 0.729] }) },
   ],
+  s5: [
+    { tag: '1 µF and 10 mH', lab: 'lc', scenario: 'ideal', read: (c) => ({ 'f (Hz)': [c.f, 1591.5], 'I (A)': [c.Ipk0, 0.1] }) },
+  ],
 };
