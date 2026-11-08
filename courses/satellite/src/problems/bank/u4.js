@@ -4,6 +4,7 @@
  */
 import { transmissibility } from '@flux/subjects/mechanics/basevib.js';
 import { choice, kase, num, problem, range } from '../kit.js';
+import { vibClosed } from '@flux/subjects/mechanics/randomvib.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 /** The mounts by name: natural frequency (Hz); damping ζ = 0.05; input 2 g. */
@@ -13,6 +14,14 @@ export const A_IN = 2;
 export const outG = ($, invert = false) => {
   const r = invert ? MOUNT[$.mount] / $.f : $.f / MOUNT[$.mount];
   return A_IN * transmissibility(r, ZETA);
+};
+
+/** Miles' rms response (g); `how` reproduces the traps. */
+export const milesG = ($, how = 'right') => {
+  const v = Number($.fn) * Number($.Q) * Number($.W);
+  if (how === 'nopi') return Math.sqrt(v);
+  if (how === 'nosqrt') return (Math.PI / 2) * v;
+  return Math.sqrt((Math.PI / 2) * v);
 };
 
 export default [
@@ -74,5 +83,48 @@ export default [
       },
     },
     cases: [kase('a stiffer mount', { change: 'stiffer' }, { d: 'more' })],
+  }),
+  problem({
+    id: 'u4.3.miles',
+    title: 'Miles’ equation',
+    exam: 'u4',
+    ch: '4',
+    lab: 'random',
+    src: 'Flux, written for the Random vibration lab',
+    topics: ['random-vibration'],
+    principles: ['random-vibration'],
+    vars: { fn: choice(['80', '80 Hz'], ['150', '150 Hz'], ['250', '250 Hz']), Q: choice(['10', '10'], ['20', '20']), W: choice(['0.02', '0.02 g²/Hz'], ['0.05', '0.05 g²/Hz']) },
+    text: (T) => `A bracket with natural frequency ${T.fn} and amplification Q = ${T.Q} sits on a flat random input of ${T.W}. By Miles’ equation, what is its rms acceleration, in g?`,
+    parts: [num('g', ($) => milesG($), 'g', { label: 'g_rms' })],
+    level: 1,
+    hints: ['The response is concentrated near f_n.', 'g_rms = √((π/2) f_n Q W).'],
+    steps: ($) => [String.raw`$g_\text{rms} = \sqrt{\tfrac{\pi}{2}(${$.fn})(${$.Q})(${$.W})} = ${Number(milesG($).toPrecision(3))}$ g`],
+    sim: { scenario: 'bracket', setup(s, $) { Object.assign(s, { fn: Number($.fn), Q: Number($.Q), W: Number($.W) }); }, read: (c) => ({ g: c.miles }) },
+    cases: [kase('150 Hz, Q 10, 0.05', { fn: '150', Q: '10', W: '0.05' }, { g: 10.85 })],
+  }),
+
+  problem({
+    id: 'u4.4.stiffer',
+    title: 'A stiffer bracket',
+    exam: 'u4',
+    ch: '4',
+    kind: 'conceptual',
+    lab: 'random',
+    src: 'Flux, written for the Random vibration lab',
+    topics: ['random-vibration'],
+    principles: ['random-vibration'],
+    vars: { fn: choice(['200', 'from 100 Hz to 200 Hz'], ['400', 'from 100 Hz to 400 Hz']) },
+    text: (T) => `A bracket on a flat random input is stiffened, its natural frequency going ${T.fn}, with the same Q. What happens to its rms response?`,
+    parts: [
+      pick('a', 'the rms response', [
+        ['up', 'it rises', 'Under a flat input g_rms ∝ √f_n: a stiffer bracket collects more of the spectrum.'],
+        ['down', 'it falls, as stiffer is stronger', 'Stiffness helps against a single low-frequency load, not against a flat spectrum.'],
+      ], () => 'up'),
+    ],
+    level: 2,
+    hints: ['Look at Miles’ equation.', 'What does f_n multiply?'],
+    steps: () => ['g_rms = √((π/2) f_n Q W) rises with f_n.'],
+    sim: { scenario: 'bracket', setup(s, $) { s.fn = Number($.fn); }, read: (c) => ({ a: c.grms > vibClosed({ fn: 100, Q: 10, W: 0.04 }).grms ? 'up' : 'down' }) },
+    cases: [kase('to 200 Hz', { fn: '200' }, { a: 'up' })],
   }),
 ];

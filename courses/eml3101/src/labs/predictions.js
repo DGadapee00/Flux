@@ -220,9 +220,9 @@ export const PREDICTIONS = {
       apply(s) { s.Tout = -10; },
       watch: [{ id: 'cop', label: 'COP', get: (c) => c.cop }],
       mode: 'factor',
-      factors: [0.653, 1, 0.5],
-      expect: { cop: 0.653 },
-      why: 'The evaporator pressure falls from 289 to 146 kPa, so the compressor lifts further: COP 6.2 becomes 4.1.',
+      factors: [0.660, 1, 0.5],
+      expect: { cop: 0.660 },
+      why: 'The evaporator pressure falls from 297 to 148 kPa, so the compressor lifts further: COP 5.6 becomes 3.7.',
     },
     {
       id: 'hp-work',
@@ -232,7 +232,7 @@ export const PREDICTIONS = {
       watch: [{ id: 'w', label: 'compressor work', get: (c) => c.w }],
       mode: 'dir',
       expect: { w: 'bigger' },
-      why: 'A larger pressure ratio, 6.1 instead of 3.1: 51 kJ/kg instead of 33.',
+      why: 'A larger pressure ratio, 6.0 instead of 3.0: 51 kJ/kg instead of 32.',
     },
   ],
 };

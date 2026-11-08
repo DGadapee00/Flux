@@ -1,0 +1,30 @@
+export default {
+  id: 'plate-buckling',
+  title: 'Buckling of plates and thin shells',
+  label: ['Plate and shell', 'buckling'],
+  subject: 'materials',
+  courses: ['satellite'],
+  eq: String.raw`\sigma_\text{cr} = k\,\frac{\pi^2E}{12(1-\nu^2)}\left(\frac tb\right)^2,\qquad \sigma_\text{cr,cyl} = \gamma\,\frac{E}{\sqrt{3(1-\nu^2)}}\,\frac tR`,
+  idea: String.raw`A thin plate in compression buckles like a column, but the edges hold it, so its critical stress depends on its width \(b\) and on how its edges are supported, through \(k\). Unlike a column it does not collapse when it buckles: the stiff edges keep carrying load, and the panel fails later, by crippling or yield. A thin cylinder in axial compression is the opposite case. Its ideal buckling stress is high, but small dents in its shape lower it sharply, so a design multiplies it by a knockdown factor \(\gamma\) well below 1.`,
+  requires: ['buckling'],
+  sources: [
+    {
+      title: 'MIT 16.20, Unit 18: Other issues in buckling and structural instability',
+      url: 'https://ocw.mit.edu/courses/16-20-structural-mechanics-fall-2002/resources/unit18/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'Plates, thin cylinders and their sensitivity to imperfections, stiffened panels and post-buckling.',
+      checked: '2026-11-08',
+    },
+    {
+      title: 'Wikipedia, Buckling',
+      url: 'https://en.wikipedia.org/wiki/Buckling',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'Plate buckling with its effective width after buckling, and crippling of flanged sections.',
+      checked: '2026-11-08',
+    },
+  ],
+  labs: [],
+  candidate: String.raw`A satellite panel and a thrust tube under launch compression. It shows the plate's buckled half-waves as its aspect ratio changes and the cylinder's load against a knockdown factor. It checks \(k\) by minimising over the number of half-waves against the closed form.`,
+};

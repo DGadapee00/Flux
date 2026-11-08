@@ -13,6 +13,7 @@ const loaders = {
   switch: () => import('./switch.js'),
   opamp: () => import('./opamp.js'),
   rlc: () => import('./rlc.js'),
+  lc: () => import('./lc.js'),
 };
 
 const labs = createLabLoader(loaders);

@@ -29,6 +29,15 @@ export const zetaSeries = ($, how = 'right') => {
   return (R / 2) * Math.sqrt(C / L);
 };
 
+/** Peak current (mA) of an ideal LC with C = 1 µF at 10 V; `how` reproduces the traps. */
+export const lcPeak = ($, how = 'right') => {
+  const L = Number($.L) / 1000;
+  const C = 1e-6;
+  if (how === 'inverted') return 10 * Math.sqrt(L / C) * 1000;
+  if (how === 'omega') return (10 / Math.sqrt(L * C)) * 1000;
+  return 10 * Math.sqrt(C / L) * 1000;
+};
+
 export default [
   problem({
     id: 'u4.1.tau',
@@ -152,5 +161,49 @@ export default [
     steps: () => ['α = 1/2RC: larger R, smaller α, ζ < 1, underdamped.'],
     sim: { scenario: 'parallel', setup(s, $) { s.lR = Math.log10(Number($.R)); }, read: (c) => ({ a: c.zeta < 1 ? 'rings' : 'creeps' }) },
     cases: [kase('to 500 Ω', { R: '500' }, { a: 'rings' })],
+  }),
+  problem({
+    id: 'u4.6.lc-peak',
+    title: 'The peak current in an LC loop',
+    exam: 'u4',
+    ch: '4',
+    lab: 'lc',
+    src: 'Flux, written for the LC energy lab',
+    topics: ['lc-energy'],
+    principles: ['lc-energy'],
+    vars: { L: choice(['5', '5 mH'], ['20', '20 mH'], ['50', '50 mH']) },
+    text: (T) => `A 1 µF capacitor charged to 10 V is switched across an ideal ${T.L} coil. What is the largest current, in mA?`,
+    parts: [num('I', ($) => lcPeak($), 'mA', { label: 'I_pk' })],
+    level: 1,
+    hints: ['The energy ½CV₀² moves entirely into the coil.', 'Set ½LI² = ½CV₀².'],
+    steps: ($) => [String.raw`$I = V_0\sqrt{C/L} = 10\sqrt{10^{-6}/${Number($.L) / 1000}} = ${Number(lcPeak($).toPrecision(3))}$ mA`],
+    sim: { scenario: 'ideal', setup(s, $) { Object.assign(s, { Lmh: Number($.L), R: 0 }); }, read: (c) => ({ I: 1000 * c.Ipk0 }) },
+    cases: [kase('20 mH', { L: '20' }, { I: 70.71 })],
+  }),
+
+  problem({
+    id: 'u4.7.empty',
+    title: 'When the capacitor is empty',
+    exam: 'u4',
+    ch: '4',
+    kind: 'conceptual',
+    lab: 'lc',
+    src: 'Flux, written for the LC energy lab',
+    topics: ['lc-energy'],
+    principles: ['lc-energy'],
+    vars: { L: choice(['10', 'a 10 mH coil'], ['100', 'a 100 mH coil']) },
+    text: (T) => `A charged capacitor rings with ${T.L} and no resistance. At the moment its voltage passes through zero, what is the current?`,
+    parts: [
+      pick('a', 'the current', [
+        ['max', 'at its largest', 'With the capacitor empty, all the energy is in the coil’s field, ½Li².'],
+        ['zero', 'zero', 'The current is zero when the capacitor is fully charged, a quarter period later.'],
+        ['half', 'half its peak', 'Energy is conserved: an empty capacitor means a full coil.'],
+      ], () => 'max'),
+    ],
+    level: 1,
+    hints: ['Where is the energy when the capacitor holds none?', 'Energy is conserved: ½Cv² + ½Li² stays at ½CV₀².'],
+    steps: () => ['½Li² = ½CV₀² at that moment: the current is at its peak.'],
+    sim: { scenario: 'ideal', setup(s, $) { Object.assign(s, { Lmh: Number($.L), R: 0 }); }, read: (c) => ({ a: Math.abs(c.i(c.T / 4)) > 0.99 * c.Ipk0 ? 'max' : 'zero' }) },
+    cases: [kase('10 mH', { L: '10' }, { a: 'max' })],
   }),
 ];

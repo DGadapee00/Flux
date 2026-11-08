@@ -52,7 +52,7 @@ export const EXAMS = [
     title: 'Vector calculus',
     chapters: '6',
     date: 'Ch 6',
-    labs: ['flux2d', 'tiles'],
+    labs: ['flux2d', 'tiles', 'work', 'box'],
     coming: [],
   },
 ];
@@ -77,6 +77,8 @@ export const LAB_META = {
   sph: { id: 'sph', exam: 'ch5', title: 'Spherical' },
   flux2d: { id: 'flux2d', exam: 'ch6', title: 'Flux' },
   tiles: { id: 'tiles', exam: 'ch6', title: 'Tiles' },
+  work: { id: 'work', exam: 'ch6', title: 'Work' },
+  box: { id: 'box', exam: 'ch6', title: 'Box' },
 };
 
 export const CHAPTER_TITLES = {

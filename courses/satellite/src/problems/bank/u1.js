@@ -6,6 +6,7 @@ import { MU_EARTH, R_EARTH, kepler, orbitFromAltitudes } from '@flux/subjects/me
 import { ORBITS } from '../../labs/kepler.js';
 import { transfer } from '@flux/subjects/mechanics/transfer.js';
 import { choice, kase, num, problem, range } from '../kit.js';
+import { EARTH, passesClosed } from '@flux/subjects/mechanics/passes.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 export const orbitOf = (id) => orbitFromAltitudes(ORBITS[id].hp, ORBITS[id].ha);
@@ -36,6 +37,15 @@ export const newApogee = ($, what = 'apogee') => {
   const v = Math.sqrt(MU_G / r) + $.dv;
   const a = 1 / (2 / r - (v * v) / MU_G);
   return what === 'a' ? a - R_G : what === 'radius' ? 2 * a - r : 2 * a - r - R_G;
+};
+
+/** Eclipse minutes at altitude h km; `how` reproduces the traps. */
+export const eclipseMin = ($, how = 'right') => {
+  const r = EARTH.R + Number($.h);
+  const rT = how === 'altitude' ? Number($.h) : r;
+  const T = 2 * Math.PI * Math.sqrt(rT ** 3 / EARTH.mu);
+  const share = Math.asin(EARTH.R / r) / Math.PI;
+  return ((how === 'double' ? 2 : 1) * share * T) / 60;
 };
 
 export default [
@@ -278,6 +288,49 @@ export default [
       },
     },
     cases: [kase('a craft ahead', { other: 'ahead' }, { d: 'backward' })],
+  }),
+  problem({
+    id: 'u1.9.eclipse',
+    title: 'How long in the dark',
+    exam: 'u1',
+    ch: '1',
+    lab: 'passes',
+    src: 'Flux, written for the Passes lab',
+    topics: ['passes'],
+    principles: ['passes'],
+    vars: { h: choice(['400', '400 km'], ['600', '600 km'], ['800', '800 km'], ['1200', '1200 km']) },
+    text: (T) => `A satellite circles at ${T.h} with the Sun in its orbit plane. Take R = 6371 km, μ = 398 600 km³/s² and Earth’s shadow as a cylinder. How long does each eclipse last, in minutes?`,
+    parts: [num('t', ($) => eclipseMin($), 'min', { label: 't_e' })],
+    level: 2,
+    hints: ['r = R + h; T = 2π√(r³/μ).', 'The shadowed arc is 2 arcsin(R/r) out of 2π.'],
+    steps: ($) => [String.raw`$t_e = \frac{T}{\pi}\arcsin\frac{6371}{${6371 + Number($.h)}} = ${Number(eclipseMin($).toPrecision(3))}$ min`],
+    sim: { scenario: 'iss', setup(s, $) { s.hkm = Number($.h); }, read: (c) => ({ t: c.temin }) },
+    cases: [kase('400 km', { h: '400' }, { t: 36.05 })],
+  }),
+
+  problem({
+    id: 'u1.10.longer-pass',
+    title: 'Higher, and seen longer?',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'passes',
+    src: 'Flux, written for the Passes lab',
+    topics: ['passes'],
+    principles: ['passes'],
+    vars: { h: choice(['800', 'from 400 km to 800 km'], ['1500', 'from 400 km to 1500 km']) },
+    text: (T) => `A satellite is raised ${T.h}. Does an overhead pass over a ground station with a 10° mask get longer or shorter?`,
+    parts: [
+      pick('a', 'the pass', [
+        ['longer', 'longer', 'The station sees a wider arc of a slower orbit.'],
+        ['shorter', 'shorter: it is further away', 'Distance weakens the signal, but the visible arc and the period both grow.'],
+      ], () => 'longer'),
+    ],
+    level: 1,
+    hints: ['What happens to λ as r grows?', 'And to the period?'],
+    steps: () => ['Both λ and T grow with r: the pass lengthens.'],
+    sim: { scenario: 'iss', setup(s, $) { s.hkm = Number($.h); }, read: (c) => ({ a: c.tpmin > passesClosed({ hkm: 400, eps: 10 }).tpmin ? 'longer' : 'shorter' }) },
+    cases: [kase('to 800 km', { h: '800' }, { a: 'longer' })],
   }),
 ];
 

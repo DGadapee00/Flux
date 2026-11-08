@@ -27,5 +27,6 @@ export default {
   ],
   labs: [
     { course: 'satellite', lab: 'power', notes: ['s1'], note: 'An array and battery run through five orbits: an array that only matches the average load lets the battery sink a little every orbit.' },
+    { course: 'satellite', lab: 'ageing', notes: ['s3'], note: 'A battery cycled every orbit and an array losing power each year: a fading battery discharges deeper, which fades it faster, so power is sized for end of life. The closed form is checked by marching the battery cycle by cycle.' },
   ],
 };

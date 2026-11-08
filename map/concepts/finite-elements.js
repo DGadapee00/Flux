@@ -1,0 +1,38 @@
+export default {
+  id: 'finite-elements',
+  title: 'Finite element method',
+  label: ['Finite', 'elements'],
+  subject: 'numerics',
+  courses: ['satellite'],
+  eq: String.raw`\mathbf K\mathbf u = \mathbf f,\qquad \mathbf k_e = \frac{EA}{L}\begin{bmatrix}1 & -1\\ -1 & 1\end{bmatrix},\qquad \mathbf K\boldsymbol\phi = \omega^2\mathbf M\boldsymbol\phi`,
+  idea: String.raw`A structure too complex for a closed form is split into small elements joined at nodes. Each element's stiffness links its node forces to its node displacements. Adding them into one matrix \(\mathbf K\) and fixing the supports gives a linear system, solved for every node's displacement at once. The same matrices with a mass matrix give the natural frequencies and mode shapes. The answer converges as the mesh is refined, which is how a result is checked.`,
+  requires: ['energy-methods', 'lu-conditioning', 'normal-modes'],
+  sources: [
+    {
+      title: 'MIT 2.092, Lecture 2: The finite element analysis process',
+      url: 'https://ocw.mit.edu/courses/2-092-finite-element-analysis-of-solids-and-fluids-i-fall-2009/resources/mit2_092f09_lec02/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'Equilibrium, compatibility and the material law assembled for a truss, element by element.',
+      checked: '2026-11-08',
+    },
+    {
+      title: 'MIT 16.20, Unit 21: Influence coefficients',
+      url: 'https://ocw.mit.edu/courses/16-20-structural-mechanics-fall-2002/resources/unit21/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'Stiffness and flexibility influence coefficients, the matrices behind finite elements and lumped-mass models.',
+      checked: '2026-11-08',
+    },
+    {
+      title: 'Wikipedia, Finite element method',
+      url: 'https://en.wikipedia.org/wiki/Finite_element_method',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'Where the method is used and how meshing and assembly work.',
+      checked: '2026-11-08',
+    },
+  ],
+  labs: [],
+  candidate: String.raw`A satellite frame meshed as bars and beams you can refine. It solves for deflection under launch load and for the first modes. It checks the stiffness solve against an energy method and the first frequency against a lumped-mass estimate as the mesh converges.`,
+};

@@ -18,9 +18,9 @@
 export const BAR = { alpha: 6e-6, Ti: 850, Tq: 20, Tn: 700 };
 /** Model values: critical cooling rate at 700 °C (K/s), and hardness of martensite and pearlite (HRC). */
 export const STEELS = {
-  s1045: { name: '1045 plain carbon', rc: 150, Hm: 58, Hp: 18 },
-  s4140: { name: '4140 chromium–molybdenum', rc: 20, Hm: 56, Hp: 26 },
-  s4340: { name: '4340 nickel–chromium–molybdenum', rc: 5, Hm: 55, Hp: 30 },
+  s1045: { name: '1045 plain carbon', rc: 150, Hm: 58, Hp: 22 },
+  s4140: { name: '4140 chromium–molybdenum', rc: 5, Hm: 56, Hp: 26 },
+  s4340: { name: '4340 nickel–chromium–molybdenum', rc: 1, Hm: 55, Hp: 30 },
 };
 
 export function erf(x) {
@@ -59,7 +59,7 @@ export function rateAt(xm) {
 }
 export function hardness(steel, rate) {
   const s = STEELS[steel];
-  const f = 1 / (1 + (s.rc / rate) ** 4);
+  const f = 1 / (1 + (s.rc / rate) ** 2);
   return { f, H: s.Hp + f * (s.Hm - s.Hp) };
 }
 

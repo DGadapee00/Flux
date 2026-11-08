@@ -24,8 +24,9 @@
     <a href="#s4"><span>4</span>Euler’s equations and spin stability</a>
     <a href="#s5"><span>5</span>Feedback and PID</a>
     <a href="#s6"><span>6</span>Poles and stability</a>
+    <a href="#s8"><span>7</span>Reaction wheels and momentum dumping</a>
     <h3>Reference</h3>
-    <a href="#s7"><span>7</span>Formula sheet</a>
+    <a href="#s7"><span>8</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -175,8 +176,25 @@ t_s = \frac{4}{|\sigma|} = 4\ \text{s}.
 </div>
 </section>
 
+<section class="topic" id="s8">
+<h2><span class="n">7</span>Reaction wheels and momentum dumping</h2>
+<p>A reaction wheel points a craft by trading angular momentum with it. Every outside torque the craft resists ends up stored in the wheel.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>With no outside torque the total angular momentum, craft plus wheel, is fixed. To hold the craft still against a disturbance \(\tau(t)\), the wheel takes \(dH/dt = \tau(t)\). A part of \(\tau\) that reverses each orbit cancels over the orbit; the steady part \(\tau_0\) builds up. A magnetorquer with dipole \(m\) gives \(\mathbf m \times \mathbf B\), which can act only across the field; as the field turns once an orbit, it removes on average \((2/\pi)mB\). So</p>
+\[
+t_\text{full} = \frac{H_\text{max}}{\tau_0 - \tfrac{2}{\pi}mB}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · 10 µN·m</span>
+<p>A steady 10 µN·m fills a 0.5 N·m·s wheel in \(0.5/10^{-5} = 50\,000\) s, 13.9 hours. A 0.3 A·m² torquer in a 30 µT field removes \((2/\pi)(0.3)(3 \times 10^{-5}) = 5.7\) µN·m on average, and the wheel lasts 32.5 hours. At 0.53 A·m² it never fills.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Treating a reaction wheel as a source of torque that can hold a craft forever. It only stores momentum; something that pushes on the outside world, a magnetorquer or thrusters, must empty it.</p>
+</div>
+</section>
+
 <section class="topic" id="s7">
-<h2><span class="n">7</span>Formula sheet</h2>
+<h2><span class="n">8</span>Formula sheet</h2>
 \[
 R = R_z(\psi)R_y(\theta)R_x(\phi), \qquad R^{\mathsf T}R = I, \qquad \hat{\mathbf x}_\text{body} = (\cos\psi\cos\theta,\ \sin\psi\cos\theta,\ -\sin\theta).
 \]
@@ -195,6 +213,7 @@ I_1\dot\omega_1 = (I_2 - I_3)\omega_2\omega_3 + M_1, \qquad \lambda_\text{middle
 \[
 G(s) = \frac{K}{(s - p)(s - \bar p)}, \quad p = \sigma \pm j\omega, \qquad \text{stable} \iff \sigma < 0, \qquad M_p = e^{\pi\sigma/\omega}, \quad t_s \approx \frac{4}{|\sigma|}.
 \]
+\[ \frac{dH}{dt} = \tau_\text{dist} - \tau_\text{dump}, \qquad \overline{\tau}_\text{dump} = \tfrac{2}{\pi}mB, \qquad t_\text{full} = \frac{H_\text{max}}{\tau_0 - \tfrac{2}{\pi}mB}. \]
 </section>
 
 </main>

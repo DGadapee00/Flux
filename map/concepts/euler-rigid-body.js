@@ -27,5 +27,6 @@ export default {
   ],
   labs: [
     { course: 'satellite', lab: 'spin', notes: ['s4'], note: 'A box spun about each principal axis with a small wobble: steady about the least and greatest, tumbling about the middle, with the growth rate checked against linear theory.' },
+    { course: 'satellite', lab: 'wheel', notes: ['s8'], note: 'A reaction wheel absorbing a disturbance orbit after orbit, with a magnetorquer to empty it: the wheel fills unless the average dump torque beats the steady disturbance. The whole-orbit closed form is checked by integrating the torques.' },
   ],
 };

@@ -4,8 +4,8 @@ export default {
   units: [
     { title: 'Orbit', concepts: ['kepler-equation', 'rocket-equation', 'orbit-transfers'] },
     { title: 'Power', concepts: ['spacecraft-power'] },
-    { title: 'Structure', concepts: ['launch-loads'] },
-    { title: 'Thermal control', concepts: ['spacecraft-thermal-balance'] },
+    { title: 'Structure', concepts: ['launch-loads', 'composite-laminates', 'plate-buckling', 'fastener-loosening', 'finite-elements'] },
+    { title: 'Thermal control', concepts: ['spacecraft-thermal-balance', 'thermal-mismatch'] },
     { title: 'Attitude control', concepts: ['attitude-rotations', 'euler-rigid-body', 'transfer-functions', 'feedback-control'] },
     { title: 'Communications', concepts: ['thermal-noise', 'link-budget'] },
   ],

@@ -14,6 +14,11 @@ const loaders = {
   shake: () => import('./shake.js'),
   power: () => import('./power.js'),
   balance: () => import('./balance.js'),
+  passes: () => import('./passes.js'),
+  nodes: () => import('./nodes.js'),
+  random: () => import('./random.js'),
+  wheel: () => import('./wheel.js'),
+  ageing: () => import('./ageing.js'),
 };
 
 const labs = createLabLoader(loaders);

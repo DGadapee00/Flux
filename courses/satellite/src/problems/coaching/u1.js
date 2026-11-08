@@ -5,6 +5,7 @@
 import { MU_EARTH } from '@flux/subjects/mechanics/kepler.js';
 import { ORBITS } from '../../labs/kepler.js';
 import { hohmannBurn, newApogee, orbitOf, transferHours } from '../bank/u1.js';
+import { eclipseMin } from '../bank/u1.js';
 
 export default {
   'u1.5.hohmann': {
@@ -52,6 +53,14 @@ export default {
       nu: [
         [() => 90, 'A quarter of the time is not a quarter of the angle: the craft is fastest at perigee.'],
         [($) => { const o = orbitOf($.orbit); let E = Math.PI / 2; for (let k = 0; k < 50; k++) E -= (E - o.e * Math.sin(E) - Math.PI / 2) / (1 - o.e * Math.cos(E)); return (E * 180) / Math.PI; }, 'That is the eccentric anomaly E. Convert it to the true anomaly ν.'],
+      ],
+    },
+  },
+  'u1.9.eclipse': {
+    traps: {
+      t: [
+        [($) => eclipseMin($, 'altitude'), 'The period needs the radius from Earth’s centre, R + h, not the altitude.'],
+        [($) => eclipseMin($, 'double'), 'The shadowed arc is 2 arcsin(R/r) out of 2π: the share is arcsin(R/r)/π, not twice that.'],
       ],
     },
   },

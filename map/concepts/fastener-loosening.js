@@ -1,0 +1,30 @@
+export default {
+  id: 'fastener-loosening',
+  title: 'Fasteners under vibration',
+  label: ['Fasteners under', 'vibration'],
+  subject: 'design',
+  courses: ['design', 'satellite'],
+  eq: String.raw`Q < \mu_j\,F_i \quad\Rightarrow\quad \text{no slip, no self-loosening}`,
+  idea: String.raw`A bolt clamped by its preload \(F_i\) holds the parts by friction. A load across the joint, \(Q\), is resisted by that friction up to \(\mu_jF_i\). Past it the plates slip, and each slip lets the threads slide too, so the nut turns back a little every cycle and the preload drains away. Transverse vibration is the worst case, which is why launch hardware is preloaded high and fitted with a locking feature. A joint is checked for slip under its worst shear load, not only for the bolt's strength.`,
+  requires: ['bolted-joints', 'launch-loads'],
+  sources: [
+    {
+      title: 'Wikipedia, Junker test',
+      url: 'https://en.wikipedia.org/wiki/Junker_test',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'The transverse vibration test that finds when a joint loses its preload, and the standard built on it.',
+      checked: '2026-11-08',
+    },
+    {
+      title: 'Wikipedia, Bolted joint',
+      url: 'https://en.wikipedia.org/wiki/Bolted_joint',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'Slip-resistant shear joints, failure by loss of clamp load, and the locking mechanisms used against it.',
+      checked: '2026-11-08',
+    },
+  ],
+  labs: [],
+  candidate: String.raw`A bracket bolt shaken across its axis. It tracks preload cycle by cycle as the shear amplitude passes \(\mu_jF_i\), with and without a locking feature. It checks the slip threshold against the friction model and the preload loss against a summed per-cycle rotation.`,
+};

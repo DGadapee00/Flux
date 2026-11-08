@@ -24,6 +24,13 @@ export const DIST = { small: 0.002, large: 0.01 };
 export const offsetDeg = ($, mode = 'right') => (mode === 'rad' ? DIST[$.dist] / $.Kp : mode === 'times' ? (DIST[$.dist] * $.Kp * 180) / Math.PI : (DIST[$.dist] / $.Kp) * (180 / Math.PI));
 export const noseComponent = ($) => ($.comp === 'x' ? Math.cos($.psi) * Math.cos($.theta) : Math.sin($.psi) * Math.cos($.theta));
 
+/** Hours until a wheel of Hmax N·m·s fills under τ µN·m with no torquer; `how` reproduces the traps. */
+export const fillHours = ($, how = 'right') => {
+  const tau = Number($.tau) * (how === 'micro' ? 1 : 1e-6);
+  const s = Number($.Hmax) / tau;
+  return how === 'seconds' ? s : s / 3600;
+};
+
 export default [
   problem({
     id: 'u3.1.rates',
@@ -285,5 +292,48 @@ export default [
       read: (c) => ({ st: c.stable ? 'yes' : 'no' }),
     },
     cases: [kase('just right of the axis', { pair: 'slowright' }, { st: 'no' })],
+  }),
+  problem({
+    id: 'u3.10.fill',
+    title: 'How long until the wheel is full',
+    exam: 'u3',
+    ch: '3',
+    lab: 'wheel',
+    src: 'Flux, written for the Wheel lab',
+    topics: ['momentum-dump'],
+    principles: ['momentum-dump'],
+    vars: { tau: choice(['5', '5 µN·m'], ['10', '10 µN·m'], ['20', '20 µN·m']), Hmax: choice(['0.2', '0.2 N·m·s'], ['0.5', '0.5 N·m·s'], ['1', '1 N·m·s']) },
+    text: (T) => `A craft holds its attitude against a steady ${T.tau} disturbance with a reaction wheel that stores up to ${T.Hmax}. With nothing to empty it, how many hours until the wheel is full?`,
+    parts: [num('t', ($) => fillHours($), 'h', { label: 't' })],
+    level: 1,
+    hints: ['The wheel absorbs the torque: H = τt.', 'Convert µN·m to N·m and seconds to hours.'],
+    steps: ($) => [String.raw`$t = ${$.Hmax}/(${$.tau} \times 10^{-6}) = ${Number((Number($.Hmax) / (Number($.tau) * 1e-6)).toPrecision(3))}$ s $= ${Number(fillHours($).toPrecision(3))}$ h`],
+    sim: { scenario: 'none', setup(s, $) { Object.assign(s, { tau0u: Number($.tau), Hmax: Number($.Hmax), m: 0 }); }, read: (c) => ({ t: c.tSatH }) },
+    cases: [kase('10 µN·m, 0.5 N·m·s', { tau: '10', Hmax: '0.5' }, { t: 13.89 })],
+  }),
+
+  problem({
+    id: 'u3.11.dump',
+    title: 'Enough torquer?',
+    exam: 'u3',
+    ch: '3',
+    kind: 'conceptual',
+    lab: 'wheel',
+    src: 'Flux, written for the Wheel lab',
+    topics: ['momentum-dump'],
+    principles: ['momentum-dump'],
+    vars: { m: choice(['0.3', 'a 0.3 A·m² magnetorquer'], ['1', 'a 1 A·m² magnetorquer']) },
+    text: (T) => `A craft feels a steady 10 µN·m and empties its wheel with ${T.m} in a 30 µT field. Does the wheel ever fill?`,
+    parts: [
+      pick('a', 'the wheel', [
+        ['fills', 'yes, only more slowly', 'The average dump, (2/π)mB, is less than the 10 µN·m coming in.'],
+        ['never', 'no, it never fills', 'The average dump, (2/π)mB, beats the 10 µN·m coming in.'],
+      ], ($) => ((2 / Math.PI) * Number($.m) * 3e-5 > 1e-5 ? 'never' : 'fills')),
+    ],
+    level: 2,
+    hints: ['A torquer pushes only across the field: on average (2/π)mB.', 'Compare it with 10 µN·m.'],
+    steps: ($) => [`(2/π)(${$.m})(3 × 10⁻⁵) = ${((2 / Math.PI) * Number($.m) * 30).toFixed(1)} µN·m against 10.`],
+    sim: { scenario: 'small', setup(s, $) { s.m = Number($.m); }, read: (c) => ({ a: Number.isFinite(c.tSatH) ? 'fills' : 'never' }) },
+    cases: [kase('1 A·m²', { m: '1' }, { a: 'never' })],
   }),
 ];

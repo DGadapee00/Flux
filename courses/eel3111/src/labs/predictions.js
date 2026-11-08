@@ -345,4 +345,27 @@ export const PREDICTIONS = {
       why: 'In series ζ = (R/2)√(C/L), in proportion to R: 0.1 becomes 1, critically damped.',
     },
   ],
+  lc: [
+    {
+      id: 'lc-big',
+      scenario: 'ideal',
+      ask: 'Use a coil with ten times the inductance, 10 mH to 100 mH. By what factor does the peak current change?',
+      apply(s) { s.Lmh = 100; },
+      watch: [{ id: 'I', label: 'peak current', get: (c) => c.Ipk0 }],
+      mode: 'factor',
+      factors: [0.316, 0.1, 1],
+      expect: { I: 0.316 },
+      why: 'The same 50 µJ in ½Li²: ten times L needs √10 less current, 100 mA to 31.6 mA.',
+    },
+    {
+      id: 'lc-r',
+      scenario: 'ideal',
+      ask: 'Add 20 Ω of coil resistance. Does the energy in the capacitor and coil together stay at 50 µJ?',
+      apply(s) { s.R = 20; },
+      watch: [{ id: 'k', label: 'Stored energy constant?', get: (c) => Math.abs(c.pts[c.pts.length - 1][3] + c.pts[c.pts.length - 1][4] - c.E0) / c.E0 < 0.01, mode: 'bool' }],
+      mode: 'bool',
+      expect: { k: false },
+      why: 'The resistor takes i²R every instant the current flows: after four periods most of the energy has gone into heat.',
+    },
+  ],
 };

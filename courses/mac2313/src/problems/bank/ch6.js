@@ -9,6 +9,8 @@ import { FIELDS } from '@flux/subjects/math/flux2d.js';
 
 const SRC = 'Flux, written for the Flux lab';
 const TILES = 'Flux, written for the Tiles lab';
+const WORK = 'Flux, written for the Work lab';
+const BOX = 'Flux, written for the Box lab';
 
 /** Place the Tiles lab's region for an instance. */
 function region(slice, field, n, s, a, b) {
@@ -193,5 +195,51 @@ export default [
     steps: ($, f) => [`Adding $3x_i^2\\,\\Delta A$ over all ${$.n * $.n} cells gives $${f($.M)}$. The exact flux is $12s^2(a^2 + s^2/3) = ${f(12 * $.s * $.s * ($.a * $.a + ($.s * $.s) / 3))}$: the sum closes in as the cells shrink.`],
     sim: { scenario: 'cubic', setup: (s, $) => region(s, 'cubic', $.n, $.s, $.a, 0), read: (c) => ({ M: c.t.midpoint }) },
     cases: [kase('sample', { n: 2, a: 0, s: 1 }, { M: 3 })],
+  }),
+
+  problem({
+    id: 'ch6.work.swirl',
+    exam: 'ch6',
+    ch: '6',
+    lab: 'work',
+    src: WORK,
+    title: 'Work of a swirl along a segment',
+    kind: 'numeric',
+    level: 2,
+    topics: ['line-integrals'],
+    vars: { bx: range(0.4, 2, 0.2), by: range(-1, 1.6, 0.2) },
+    derive: ($) => ({ W: -1.2 * $.by + 0.8 * $.bx }),
+    text: (T) => `Let $\\mathbf F=(-y,\\,x)$. Find the work $\\int_C \\mathbf F\\cdot d\\mathbf r$ along the straight segment from $(-1.2,\\,-0.8)$ to $(${T.bx},\\,${T.by})$.`,
+    parts: [num('W', ($) => $.W, '', { label: 'work', abs: 0.005 })],
+    hints: [
+      'Parametrise the segment: $\\mathbf r(t)=A+t(B-A)$, $0\\le t\\le 1$.',
+      'For this field $\\mathbf F(\\mathbf r)\\cdot\\mathbf r\'$ is constant along a segment: $A_xB_y-A_yB_x$.',
+    ],
+    steps: ($, f) => [`$W=\\int_0^1 \\big(-y(t)\\,(B_x-A_x)+x(t)\\,(B_y-A_y)\\big)\\,dt = A_xB_y-A_yB_x = ${f($.W)}$.`],
+    sim: { scenario: 'swirl', setup: (s, $) => { s.field = 'swirl'; s.probe = { x: $.bx, y: $.by, z: 0 }; return ''; }, read: (c) => ({ W: c.W1 }) },
+    cases: [kase('sample', { bx: 1.4, by: 0.6 }, { W: 0.4 })],
+  }),
+
+  problem({
+    id: 'ch6.box.source',
+    exam: 'ch6',
+    ch: '6',
+    lab: 'box',
+    src: BOX,
+    title: 'Flux out of a cube',
+    kind: 'numeric',
+    level: 1,
+    topics: ['divergence'],
+    vars: { s: range(0.2, 1, 0.1), a: range(-1, 1, 0.5), b: range(-1, 1, 0.5) },
+    derive: ($) => ({ F: 3 * (2 * $.s) ** 3 }),
+    text: (T) => `Let $\\mathbf F=(x,\\,y,\\,z)$. Find the outward flux of $\\mathbf F$ through the surface of the cube of half-side $${T.s}$ centred at $(${T.a},\\,${T.b},\\,0)$.`,
+    parts: [num('F', ($) => $.F, '', { label: 'flux', abs: 0.01 })],
+    hints: [
+      'By the divergence theorem the flux is $\\iiint \\nabla\\cdot\\mathbf F\\,dV$.',
+      'Here $\\nabla\\cdot\\mathbf F=3$ everywhere, so the flux is three times the volume, $(2s)^3$.',
+    ],
+    steps: ($, f) => [`$\\nabla\\cdot\\mathbf F=3$, volume $(2s)^3$, so $\\Phi=3(2s)^3=${f($.F)}$.`],
+    sim: { scenario: 'source', setup: (s, $) => { s.field = 'source'; s.s = $.s; s.cz = 0; s.probe = { x: $.a, y: $.b, z: 0 }; return ''; }, read: (c) => ({ F: c.sum }) },
+    cases: [kase('sample', { s: 0.5, a: 0, b: 0 }, { F: 3 })],
   }),
 ];

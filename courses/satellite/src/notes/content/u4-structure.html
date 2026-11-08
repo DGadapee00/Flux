@@ -18,8 +18,9 @@
   <nav class="toc" aria-label="Contents">
     <h3>Part I · Launch loads</h3>
     <a href="#s1"><span>1</span>Shaken at the base</a>
+    <a href="#s3"><span>2</span>Random vibration and fatigue</a>
     <h3>Reference</h3>
-    <a href="#s2"><span>2</span>Formula sheet</a>
+    <a href="#s2"><span>3</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -55,11 +56,30 @@ T = \frac{\sqrt{1 + 0.1^2}}{0.1} = 10.05,
 </div>
 </section>
 
+<section class="topic" id="s3">
+<h2><span class="n">2</span>Random vibration and fatigue</h2>
+<p>Besides a few sharp events, a launcher shakes its payload with broadband noise. It is described by a power spectral density \(W\), in g²/Hz, and its damage builds up like fatigue.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A component on a bracket with natural frequency \(f_n\) and amplification \(Q\) passes the input mostly near \(f_n\). Integrating the transmissibility against a flat input gives</p>
+\[
+g_\text{rms} = \sqrt{\tfrac{\pi}{2} f_n Q W\,(1 + 1/Q^2)} \approx \sqrt{\tfrac{\pi}{2} f_n Q W}\ \text{(Miles)}.
+\]
+<p>The stress follows, \(\sigma_\text{rms} = k\,g_\text{rms}\). Narrow-band peaks follow a Rayleigh distribution, and with an S–N curve \(N \propto S^{-b}\) the damage per second is \(f_n(\sqrt2\sigma_\text{rms})^b\Gamma(1 + b/2)/(N_\text{ref}S_\text{ref}^b)\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 100 Hz bracket</span>
+<p>With \(Q = 10\) under 0.04 g²/Hz: \(g_\text{rms} = \sqrt{1.571 \times 100 \times 10 \times 0.04} = 7.93\) g by Miles, 7.97 g with the \(1/Q^2\) term. At 4 MPa per g the stress is 32 MPa rms, and the bracket lasts about 590 hours of this shaking.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Checking only the 3σ peak against strength. A bracket can pass that check and still fail in fatigue during qualification: at 300 Hz, \(Q = 30\) and 0.1 g²/Hz it lasts about half a minute.</p>
+</div>
+</section>
+
 <section class="topic" id="s2">
-<h2><span class="n">2</span>Formula sheet</h2>
+<h2><span class="n">3</span>Formula sheet</h2>
 \[
 m\ddot z + c\dot z + kz = -m\ddot y, \qquad T = \sqrt{\frac{1 + (2\zeta r)^2}{(1 - r^2)^2 + (2\zeta r)^2}}, \qquad T_\text{peak} \approx \frac{1}{2\zeta}, \qquad f_n = \frac{1}{2\pi}\sqrt{\frac km}.
 \]
+\[ g_\text{rms} = \sqrt{\tfrac{\pi}{2}f_nQW}, \qquad \sigma_\text{rms} = k\,g_\text{rms}, \qquad \dot D = \frac{f_n(\sqrt2\sigma_\text{rms})^b\Gamma(1 + b/2)}{N_\text{ref}S_\text{ref}^b}. \]
 </section>
 
 </main>
