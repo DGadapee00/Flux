@@ -100,7 +100,15 @@ function el(tag, attrs, parent) {
  * match: solid, from a course taken, learning (filled by the share of its problems that are
  * solid), ready, or not yet, with a dot when a review is due. The hub's Today view supplies both.
  */
-export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root = document, record = () => '', status = () => null } = {}) {
+/**
+ * @param {{
+ *   concepts?: any[], paths?: Record<string, any>, root?: Document,
+ *   record?: (id: string) => string, status?: (id: string) => any,
+ *   start?: () => ({ id: string, path?: string|null } | null),
+ * }} [opts] `start` names where the map opens when the link names no concept: the learner's next
+ * concept, on the path of the course that teaches it. Without one it opens on START.
+ */
+export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root = document, record = () => '', status = () => null, start = () => null } = {}) {
   const style = root.createElement('style');
   style.textContent = laneCss(SUBJECTS);
   root.head.append(style);
@@ -444,6 +452,8 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
   const detailBody = root.getElementById('detail-body');
   const trailEl = root.getElementById('trail');
   let trail = [];
+  /** True while the trail holds only the concept the map opened on, which the learner did not choose. */
+  let provisional = false;
 
   const chip = (id) =>
     `<button class="chip" data-go="${id}" style="--c:${colour(byId[id])}">${esc(byId[id].title)}</button>`;
@@ -475,13 +485,13 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
 
   /** Fill each drawn box from the learner's record, without drawing the map again. */
   function paintStatus() {
-    const STATUS_WORDS = { solid: 'solid', assumed: 'from a course you took', learning: 'learning', ready: 'ready to learn', locked: 'needs something first' };
+    const STATUS_WORDS = { solid: 'solid', assumed: 'from a course you took', taught: 'covered in class', learning: 'learning', ready: 'ready to learn', locked: 'needs something first' };
     for (const [id, g] of Object.entries(nodeEls)) {
       const s = status(id);
       const c = byId[id];
       for (const k of Object.keys(STATUS_WORDS)) g.classList.toggle(`st-${k}`, s?.status === k);
       g.classList.toggle('st-due', Boolean(s?.due));
-      const share = !s ? 0 : s.status === 'solid' || s.status === 'assumed' ? 1 : s.status === 'learning' ? Math.max(0.08, s.share) : 0;
+      const share = !s ? 0 : s.status === 'solid' || s.status === 'assumed' || s.status === 'taught' ? 1 : s.status === 'learning' ? Math.max(0.08, s.share) : 0;
       g.querySelector('rect.progress')?.setAttribute('width', String(share * NODEW));
       const lab = c.labs.length > 0 ? '' : ', no lab yet';
       const where = s ? `, ${STATUS_WORDS[s.status]}${s.due ? `, ${s.due} due` : ''}` : '';
@@ -552,6 +562,10 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
   }
 
   function renderTrail(id) {
+    if (provisional) {
+      trail = [];
+      provisional = false;
+    }
     const i = trail.indexOf(id);
     if (i >= 0) trail = trail.slice(0, i + 1);
     else trail.push(id);
@@ -673,7 +687,17 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
     buttons.querySelector(`[data-path="${startPath}"]`)?.setAttribute('aria-pressed', 'true');
     pathsState.textContent = courseOf[startPath].code;
   }
-  if (!show(first)) show(activePath ? pathOrder(paths[activePath])[0] : byId[START] ? START : concepts[0].id);
+  if (!show(first)) {
+    // No concept in the link: open where the learner is, on that course's path, or on START.
+    const here = activePath ? null : start();
+    if (here && byId[here.id] && here.path && paths[here.path]) {
+      activePath = here.path;
+      buttons.querySelector(`[data-path="${here.path}"]`)?.setAttribute('aria-pressed', 'true');
+      pathsState.textContent = courseOf[here.path].code;
+    }
+    show(here && byId[here.id] ? here.id : activePath ? pathOrder(paths[activePath])[0] : byId[START] ? START : concepts[0].id);
+    provisional = true;
+  }
 
   // ---------- Find ----------
   const findInput = /** @type {HTMLInputElement} */ (root.getElementById('find-input'));

@@ -17,7 +17,7 @@ import './style.css';
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const number = (id) => String(RECIPES.findIndex((r) => r.id === id) + 1).padStart(2, '0');
-const WORDS = { solid: 'solid', assumed: 'from a course you took', learning: 'learning', ready: 'ready to learn', locked: 'not yet' };
+const WORDS = { solid: 'solid', assumed: 'from a course you took', taught: 'covered in class', learning: 'learning', ready: 'ready to learn', locked: 'not yet' };
 
 /** Copy text; where the clipboard is refused, select it in its box so the learner can copy it. */
 async function copyText(text, box) {
@@ -69,7 +69,7 @@ export function mountApplications(map, parent = document.querySelector('#applica
   /** The last numbers typed into the Orbit check, kept while the panel redraws. */
   const orbitInput = { h: '550', v: '', T: '' };
   const word = (id) => WORDS[standing(id)?.status] || null;
-  const solid = (id) => ['solid', 'assumed'].includes(standing(id)?.status);
+  const solid = (id) => ['solid', 'assumed', 'taught'].includes(standing(id)?.status);
 
   parent.innerHTML = `<div class="mission-overview">
     <div class="mission-copy"><p class="app-kicker">APPLICATION 01</p>

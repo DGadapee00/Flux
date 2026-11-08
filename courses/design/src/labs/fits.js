@@ -29,8 +29,8 @@ function apply(id, state) {
   Object.assign(state, { scenarioId: sc.id, holeLo: sc.holeLo, holeHi: sc.holeHi, shaftLo: sc.shaftLo, shaftHi: sc.shaftHi, cp: 1 });
 }
 
-/** A share as a percentage, or per million when it is under 0.1%. */
-const share = (x) => (x < 0.001 ? `${fig(x * 1e6)} per million` : `${fig(x * 100)}%`);
+/** A share as a percentage, per million when it is under 0.1%, and in words when it is tinier still. */
+const share = (x) => (x < 1e-8 ? 'under 1 in 100 million' : x < 0.001 ? `${fig(x * 1e6)} per million` : `${fig(x * 100)}%`);
 
 const band = (a, b) => [Math.min(a, b), Math.max(a, b)];
 
@@ -87,7 +87,8 @@ export default defineLab({
     const B = begin(canvas);
     const lo = Math.min(-60, c.cMin - 10, c.shaftLo - 10, c.holeLo - 10);
     const hi = Math.max(70, c.cMax + 10, c.holeHi + 10, c.shaftHi + 10);
-    const P = plotIn(B, B.free, { lo: 0, hi: 3 }, { lo, hi }, { left: 56, right: 14, top: 30, bottom: 30 });
+    // The unit sits just above the plot and the column names a row above it, so they never meet.
+    const P = plotIn(B, B.free, { lo: 0, hi: 3 }, { lo, hi }, { left: 56, right: 14, top: 46, bottom: 30 });
     axes(P, { yLabel: 'μm from 50 mm', xFmt: () => '' });
     seg(P, [0, 0], [3, 0], { color: alpha(C.text, 0.6), width: 1.5 });
     const col = (x0, a, b, color, name, s) => {
@@ -102,7 +103,7 @@ export default defineLab({
         }
         line(P, pts, { color, width: 1.5 });
       }
-      label(P, name, [x0 + 0.5, hi], { color, dy: -12, bold: true });
+      label(P, name, [x0 + 0.5, hi], { color, dy: -28, bold: true });
     };
     col(0, c.holeLo, c.holeHi, C.blue, 'hole', c.hole);
     col(1, c.shaftLo, c.shaftHi, C.gold, 'shaft', c.shaft);
@@ -121,7 +122,7 @@ export default defineLab({
       pts.push([2.15 + 0.6 * (f / peak), y]);
     }
     line(P, pts, { color: C.teal, width: 1.5 });
-    label(P, 'clearance', [2.5, hi], { color: C.teal, dy: -12, bold: true });
+    label(P, 'clearance', [2.5, hi], { color: C.teal, dy: -28, bold: true });
     label(P, 'basic size', [3, 0], { color: C.muted, align: 'right', dy: 10 });
   },
   law: () => [String.raw`c_{\min} = D_{\min} - d_{\max},\qquad c_{\max} = D_{\max} - d_{\min}`, String.raw`P(c < 0) = \Phi\!\left(\frac{-\bar c}{\sqrt{\sigma_D^2 + \sigma_d^2}}\right)`],

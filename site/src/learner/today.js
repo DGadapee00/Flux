@@ -11,12 +11,12 @@
 import katex from 'katex';
 import { COURSES, LAB_CATALOGS, labHref, SUBJECTS } from '@flux/map';
 import { esc, prose, tex } from '../map.js';
-import { createLearner } from './model.js';
+import { createLearner, MASTERED_BOX } from './model.js';
 import { phyExams, readItems } from './records.js';
 import './today.css';
 
 const SESSION_KEY = 'flux.hub.review.v1';
-const STATUS_LABEL = { solid: 'Solid', assumed: 'From a course you took', learning: 'Learning', ready: 'Ready', locked: 'Not yet' };
+const STATUS_LABEL = { solid: 'Solid', assumed: 'From a course you took', taught: 'Covered in class', learning: 'Learning', ready: 'Ready', locked: 'Not yet' };
 const RECALL = { got: 'I had it', partly: 'Partly', not: 'Not really' };
 const subjectOf = Object.fromEntries(SUBJECTS.map((s) => [s.id, s]));
 const courseOf = Object.fromEntries(COURSES.map((c) => [c.id, c]));
@@ -138,11 +138,24 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
     const exam = learner.upcoming[0];
     const words = ['', 'One short review', 'Two short reviews', 'Three short reviews', 'Four short reviews'];
 
+    const going = learner.inProgress(3);
+    // What to learn next, and whether it serves the coming exam: on it, or something it builds on.
+    const forExam = next.length && exam && learner.routeRank(next[0]) === 0;
+    const onExam = forExam && exam.concepts.includes(next[0]);
+    const nextName = next.length ? `<em>${esc(byId[next[0]].title)}</em>` : '';
+    const forWhat = forExam ? `, for Exam ${exam.n}` : '';
     let headline;
-    if (today.length) headline = `${words[today.length]}.${next.length ? ` Then learn <em>${esc(byId[next[0]].title)}</em>.` : ''}`;
-    else if (next.length) headline = `${learner.started.size ? 'Nothing to review. ' : ''}Learn <em>${esc(byId[next[0]].title)}</em> next.`;
+    if (today.length) headline = `${words[today.length]}.${next.length ? ` Then learn ${nextName}${forWhat}.` : ''}`;
+    else if (next.length) headline = `${learner.started.size ? 'Nothing to review. ' : ''}Learn ${nextName} next${forWhat}.`;
+    else if (going.length) headline = `Keep going with <em>${esc(byId[going[0]].title)}</em>.`;
     else headline = 'Nothing due today.';
-    const sub = exam ? `${esc(code(exam.course))} Exam ${exam.n}, ${esc(exam.title)}, is ${examWhen(exam)}.` : '';
+    let sub = '';
+    if (exam) {
+      const left = exam.concepts.filter((id) => !learner.met(id)).length;
+      sub = `${esc(code(exam.course))} Exam ${exam.n}, ${esc(exam.title)}, is ${examWhen(exam)}.`;
+      if (forExam && !onExam) sub += ` Its concepts build on ${esc(byId[next[0]].title)}.`;
+      else if (left && !forExam) sub += ` ${plural(left, 'concept')} on it ${left === 1 ? 'is' : 'are'} not solid yet.`;
+    }
 
     const review = today.length
       ? `<p class="tdy-note">Each review follows one thread on the map: a concept, then the ideas built on it, in order. A thread can cross subjects, the way flux runs from calculus into electricity. Do one at a sitting, about ${Math.max(2, Math.round(todayN * 1.5))} minutes in all.</p>
@@ -153,7 +166,7 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
            <span class="tdy-go">Start this thread →</span></a></li>`).join('')}</ul>
          ${later.length ? `<p class="tdy-meta tdy-later">${plural(later.reduce((s, t) => s + t.n, 0), 'more problem')} can wait for tomorrow: ${later.map((t) => `${esc(byId[t.key].title)}${t.groups.length > 1 ? ` and ${t.groups.length - 1} more` : ''} (${t.n})`).join(', ')}. A day’s delay costs little; the gaps between reviews are widening anyway.</p>` : ''}`
       : learner.started.size
-        ? '<p class="tdy-note">Nothing is due. A problem comes back here when its next review date arrives.</p>'
+        ? `<p class="tdy-note">Nothing is due. A problem comes back here when its next review date arrives.</p>${keepGoing(going)}`
         : '<p class="tdy-note">Nothing to review yet. Practise in any course app below, and each problem you solve comes back here on a widening schedule: a day, three days, a week, then longer.</p>';
 
     const learn = next.length
@@ -172,7 +185,7 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
             <div class="tdy-row"><h3 id="tdy-review-title">Review</h3>${dueN ? `<span class="tdy-meta">${dueN} due</span>` : ''}</div>${review}</div></section>
           <section class="tdy-step" aria-labelledby="tdy-next-title"><span class="tdy-n" aria-hidden="true">2</span><div class="tdy-body">
             <div class="tdy-row"><h3 id="tdy-next-title">Learn next</h3></div>
-            <p class="tdy-note">Concepts whose prerequisites are all solid, starting with the courses you are taking.</p>${learn}</div></section>
+            <p class="tdy-note">Concepts whose prerequisites are all solid, starting with what your next exam needs.</p>${learn}</div></section>
         </div>
         <aside class="tdy-side">${exam ? examCard(exam) : ''}${coursesCard()}</aside>
       </div>`;
@@ -183,7 +196,7 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
     const where = (learner.pathIndex[id] || []).find((p) => courseOf[p.course]?.status === 'taking now') || (learner.pathIndex[id] || [])[0];
     const bits = [];
     if (where) bits.push(`${esc(code(where.course))}${where.unit ? `, ${esc(where.unit.replace(/^(Exam \d+):.*/, '$1'))}` : ''}`);
-    bits.push(c.requires.length ? `All ${plural(c.requires.length, 'prerequisite')} solid` : 'Needs nothing first');
+    bits.push(!c.requires.length ? 'Needs nothing first' : c.requires.length === 1 ? 'Its prerequisite is solid' : `All ${c.requires.length} prerequisites solid`);
     const opens = learner.opens(id);
     if (opens) bits.push(`Opens the way to ${plural(opens, 'concept')}`);
     const st = learner.stats(id);
@@ -192,6 +205,20 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
       <span class="tdy-eyebrow" style="color:var(--lane)">${esc(subjectOf[c.subject].label)}</span>
       <span class="tdy-card-title">${esc(c.title)}</span>
       <span class="tdy-why">${bits.map((b) => `<span>${b}</span>`).join('')}</span></a></li>`;
+  }
+
+  /** Concepts started and not solid, with nothing due: where to pick the thread up again. */
+  function keepGoing(ids) {
+    if (!ids.length) return '';
+    const rec = readRecord();
+    const solidNow = (k) => Boolean(rec[k] && rec[k].box >= MASTERED_BOX && rec[k].lastOk !== false);
+    return `<h4 class="tdy-sub-title">Keep going</h4><ul class="tdy-going">${ids.map((id) => {
+      const st = learner.stats(id);
+      const first = learner.problemsOf[id].find((k) => !solidNow(k)) || learner.problemsOf[id][0];
+      const href = first ? problemHref(first) : null;
+      const when = st.next < Infinity ? `, next review in ${plural(Math.max(1, learner.daysTo(st.next)), 'day')}` : '';
+      return `<li>${conceptLink(id)}<span class="tdy-meta">${st.solid} of ${plural(st.n, 'problem')} solid${when}</span>${href ? `<a class="tdy-solve" href="${href}">Practise ↗</a>` : ''}</li>`;
+    }).join('')}</ul>`;
   }
 
   function pill(status) {
@@ -209,6 +236,12 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
     </section>`;
   }
 
+  /** The concept to open on a course's path: the first learning or ready one, else the first not solid. */
+  function nextOn(course) {
+    const ids = (paths[course]?.units || []).flatMap((u) => u.concepts);
+    return ids.find((id) => ['learning', 'ready'].includes(learner.status(id))) || ids.find((id) => !learner.met(id)) || ids[0] || null;
+  }
+
   function coursesCard() {
     const list = COURSES.filter((c) => paths[c.id] && (c.status === 'taking now' || c.status === 'next term' || c.kind === 'project'));
     if (!list.length) return '';
@@ -216,9 +249,9 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
       <h3 id="tdy-courses-title">Your courses</h3>
       <ul class="tdy-courses">${list.map((c) => {
         const p = learner.courseProgress(c.id);
-        return `<li><div class="tdy-row"><a href="#explore" data-path="${esc(c.id)}"><strong>${esc(c.code)}</strong> ${esc(c.title)}</a><span class="tdy-meta">${p.solid}/${p.total}</span></div>
-          <div class="tdy-bar"><span style="width:${p.total ? (100 * p.solid) / p.total : 0}%"></span></div>
-          <span class="tdy-meta">${c.kind === 'project' ? 'Project' : c.status === 'taking now' ? 'Taking now' : 'Next term'}</span></li>`;
+        const when = c.kind === 'project' ? 'Project' : c.status === 'taking now' ? 'Taking now' : 'Next term';
+        return `<li><div class="tdy-row"><a href="#explore" data-path="${esc(c.id)}" data-concept-next="${esc(nextOn(c.id) || '')}"><strong>${esc(c.code)}</strong> ${esc(c.title)}</a><span class="tdy-meta">${when} · ${p.solid}/${p.total}</span></div>
+          <div class="tdy-bar"><span style="width:${p.total ? (100 * p.solid) / p.total : 0}%"></span></div></li>`;
       }).join('')}</ul></section>`;
   }
 
@@ -346,7 +379,7 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
     if (!t) return;
     if (t.dataset.path) {
       e.preventDefault();
-      onPath(t.dataset.path);
+      onPath(t.dataset.path, t.dataset.conceptNext || null);
       root.getElementById('explore')?.scrollIntoView({ block: 'start' });
       return;
     }
@@ -404,6 +437,17 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
       refresh();
       render();
     },
+    /**
+     * Where the map opens: the next concept to learn, or one in progress, on the path of the course
+     * that teaches it, preferring a course being taken.
+     */
+    startPoint() {
+      const id = learner.nextUp(1)[0] || learner.inProgress(1)[0];
+      if (!id) return null;
+      const where = learner.pathIndex[id] || [];
+      const course = (where.find((p) => courseOf[p.course]?.status === 'taking now') || where[0])?.course || null;
+      return { id, path: course };
+    },
     /** Where the learner stands on one concept, for filling its box on the map. */
     statusOf(id) {
       if (!byId[id]) return null;
@@ -418,7 +462,7 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
       let line;
       if (st.tried) {
         line = `${st.solid} of ${plural(st.n, 'problem')} solid${st.due ? `, ${st.due} due now` : st.next < Infinity ? `, next review in ${plural(Math.max(1, learner.daysTo(st.next)), 'day')}` : ''}.`;
-      } else if (status === 'assumed') line = st.all ? `${plural(st.all, 'problem')} check it. Your first solve starts the record.` : 'No Flux practice measures it yet.';
+      } else if (status === 'assumed' || status === 'taught') line = st.all ? `${plural(st.all, 'problem')} check it. Your first solve starts the record.` : 'No Flux practice measures it yet.';
       else if (status === 'locked') {
         const missing = c.requires.filter((r) => !learner.met(r));
         line = `Builds on ${missing.map((r) => conceptLink(r)).join(', ')}, not solid yet.`;
