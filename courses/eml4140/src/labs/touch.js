@@ -16,28 +16,28 @@ import { BODIES, SKIN, contactChecked } from '@flux/subjects/heat/contact.js';
  */
 const SCENARIOS = [
   {
-    'id': 'steel',
-    'name': 'Steel at 20 °C',
-    'body': 'steel',
-    'Tb': 20
+    id: 'steel',
+    name: 'Steel at 20 °C',
+    body: 'steel',
+    Tb: 20
   },
   {
-    'id': 'wood',
-    'name': 'Wood at 20 °C',
-    'body': 'wood',
-    'Tb': 20
+    id: 'wood',
+    name: 'Wood at 20 °C',
+    body: 'wood',
+    Tb: 20
   },
   {
-    'id': 'glass',
-    'name': 'Glass at 20 °C',
-    'body': 'glass',
-    'Tb': 20
+    id: 'glass',
+    name: 'Glass at 20 °C',
+    body: 'glass',
+    Tb: 20
   },
   {
-    'id': 'hot',
-    'name': 'Steel at 60 °C',
-    'body': 'steel',
-    'Tb': 60
+    id: 'hot',
+    name: 'Steel at 60 °C',
+    body: 'steel',
+    Tb: 60
   }
 ];
 

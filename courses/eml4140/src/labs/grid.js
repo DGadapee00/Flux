@@ -17,28 +17,28 @@ import { ROD, explicitRun } from '@flux/subjects/heat/explicit.js';
  */
 const SCENARIOS = [
   {
-    'id': 'fine',
-    'name': '20 cells, Δt = 30 ms',
-    'N': 20,
-    'dtms': 30
+    id: 'fine',
+    name: '20 cells, Δt = 30 ms',
+    N: 20,
+    dtms: 30
   },
   {
-    'id': 'refined',
-    'name': '40 cells, same Δt: unstable',
-    'N': 40,
-    'dtms': 30
+    id: 'refined',
+    name: '40 cells, same Δt: unstable',
+    N: 40,
+    dtms: 30
   },
   {
-    'id': 'smallstep',
-    'name': '40 cells, Δt = 10 ms',
-    'N': 40,
-    'dtms': 10
+    id: 'smallstep',
+    name: '40 cells, Δt = 10 ms',
+    N: 40,
+    dtms: 10
   },
   {
-    'id': 'coarse',
-    'name': '10 cells, Δt = 100 ms',
-    'N': 10,
-    'dtms': 100
+    id: 'coarse',
+    name: '10 cells, Δt = 100 ms',
+    N: 10,
+    dtms: 100
   }
 ];
 

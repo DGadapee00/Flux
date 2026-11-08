@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'A heated vertical plate with a slider for its temperature, the rising layer drawn. It corrects the idea that \\(h\\) is fixed for still air: it grows with the temperature difference, because a hotter plate drives a faster flow.',
+  labs: [
+    { course: 'eml4140', lab: 'plume', notes: ['s6'], note: 'A heated vertical plate in still air with a slider for its temperature, the rising layer drawn: h grows as ΔT^{1/4}, because a hotter plate drives a faster flow. The fitted Nusselt number is checked against a shooting solution of the similarity equations.' },
+  ],
 };

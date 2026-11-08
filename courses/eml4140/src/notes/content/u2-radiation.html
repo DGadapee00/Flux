@@ -21,8 +21,9 @@
     <a href="#s2"><span>2</span>Real surfaces in sunlight</a>
     <h3>Part II · Exchange</h3>
     <a href="#s3"><span>3</span>View factors</a>
+    <a href="#s5"><span>4</span>Radiation networks and shields</a>
     <h3>Reference</h3>
-    <a href="#s4"><span>4</span>Formula sheet</a>
+    <a href="#s4"><span>5</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -100,14 +101,33 @@ F_{12} = \frac{2.828 - 2}{2} = 0.414,
 </div>
 </section>
 
+<section class="topic" id="s5">
+<h2><span class="n">4</span>Radiation networks and shields</h2>
+<p>A gray surface reflects part of what lands on it. What leaves it, its radiosity \(J\), is what it emits plus what it reflects.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The net flux off a gray surface is \(q = (E_b - J)/[(1 - \varepsilon)/\varepsilon A]\): a surface resistance between its black-body potential \(E_b = \sigma T^4\) and its radiosity. Between two surfaces, \(q_{12} = (J_1 - J_2)/(1/A_1F_{12})\): a space resistance. For two large parallel plates, per unit area,</p>
+\[
+q'' = \frac{\sigma(T_1^4 - T_2^4)}{1/\varepsilon_1 + 1/\varepsilon_2 - 1}.
+\]
+<p>A thin shield between them adds two surface resistances and one space resistance, \(2/\varepsilon_s - 1\) in all.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one polished shield</span>
+<p>Plates at 600 K and 300 K, both \(\varepsilon = 0.8\), exchange 4593 W/m². A shield with \(\varepsilon_s = 0.05\) adds 39 to the resistance of 1.5: the flux falls to 170 W/m², 3.7% of what it was. The shield sits at 512 K.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Thinking a shield must be cold to work. With equal plate emissivities, one shield sits where \(\sigma T^4\) is halfway, \(T = [(T_1^4 + T_2^4)/2]^{1/4} = 512\) K, whatever its own emissivity. Its polish sets the flux, not its temperature.</p>
+</div>
+</section>
+
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">5</span>Formula sheet</h2>
 \[
 E_b = \sigma T^4, \qquad \lambda_\text{max}T = 2898\ \text{µm·K}, \qquad q'' = \varepsilon\sigma\left(T_s^4 - T_\text{sur}^4\right), \qquad T_\text{plate} = \left(\frac{\alpha_s S}{\varepsilon\sigma}\right)^{1/4}.
 \]
 \[
 A_1F_{12} = A_2F_{21}, \qquad \sum_j F_{ij} = 1, \qquad F_{12} = \frac{(\text{crossed}) - (\text{uncrossed})}{2w_1} \ \text{(long strips)}.
 \]
+\[ q'' = \frac{\sigma(T_1^4 - T_2^4)}{1/\varepsilon_1 + 1/\varepsilon_2 - 1 + N(2/\varepsilon_s - 1)}, \qquad R_\text{surface} = \frac{1 - \varepsilon}{\varepsilon A}, \quad R_\text{space} = \frac{1}{A_1F_{12}}. \]
 </section>
 
 </main>

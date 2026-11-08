@@ -16,32 +16,32 @@ import { FIN, MATERIALS, finChecked, finClosed } from '@flux/subjects/heat/fins.
  */
 const SCENARIOS = [
   {
-    'id': 'alu',
-    'name': 'Aluminium, 50 mm, in air',
-    'mat': 'aluminium',
-    'h': 25,
-    'Lmm': 50
+    id: 'alu',
+    name: 'Aluminium, 50 mm, in air',
+    mat: 'aluminium',
+    h: 25,
+    Lmm: 50
   },
   {
-    'id': 'long',
-    'name': 'Aluminium, 200 mm',
-    'mat': 'aluminium',
-    'h': 25,
-    'Lmm': 200
+    id: 'long',
+    name: 'Aluminium, 200 mm',
+    mat: 'aluminium',
+    h: 25,
+    Lmm: 200
   },
   {
-    'id': 'steel',
-    'name': 'Stainless steel, 50 mm',
-    'mat': 'steel',
-    'h': 25,
-    'Lmm': 50
+    id: 'steel',
+    name: 'Stainless steel, 50 mm',
+    mat: 'steel',
+    h: 25,
+    Lmm: 50
   },
   {
-    'id': 'nylon',
-    'name': 'Nylon, 50 mm, in strong flow',
-    'mat': 'plastic',
-    'h': 500,
-    'Lmm': 50
+    id: 'nylon',
+    name: 'Nylon, 50 mm, in strong flow',
+    mat: 'plastic',
+    h: 500,
+    Lmm: 50
   }
 ];
 
@@ -56,10 +56,10 @@ const watts = (q) => `${fig(q)} W`;
 
 function profile(B, rect, state, c) {
   const L = state.Lmm;
-  const P = plotIn(B, rect, { lo: 0, hi: L }, { lo: FIN.Tinf - 5, hi: FIN.Tb + 8 });
+  const P = plotIn(B, rect, { lo: 0, hi: L }, { lo: FIN.Tinf - 14, hi: FIN.Tb + 8 });
   axes(P, { xLabel: 'distance along the fin (mm)', yLabel: 'temperature (°C)' });
   seg(P, [0, FIN.Tinf], [L, FIN.Tinf], { color: alpha(C.blue, 0.6), width: 1, dash: [5, 4] });
-  label(P, `fluid ${FIN.Tinf} °C`, [L, FIN.Tinf], { color: C.blue, align: 'right', dy: -10 });
+  label(P, `fluid ${FIN.Tinf} °C`, [L / 2, FIN.Tinf], { color: C.blue, dy: 14 });
   const pts = Array.from({ length: 121 }, (_, i) => [(L * i) / 120, FIN.Tinf + c.theta((c.L * i) / 120)]);
   line(P, pts, { color: C.gold, width: 3 });
   label(P, `tip ${fig(c.tipT)} °C`, [L, c.tipT], { color: C.gold, align: 'right', dy: -12 });

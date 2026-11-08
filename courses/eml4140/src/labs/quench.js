@@ -16,32 +16,32 @@ import { MATERIALS, SLAB, slabChecked } from '@flux/subjects/heat/transient.js';
  */
 const SCENARIOS = [
   {
-    'id': 'steel',
-    'name': 'Steel after 32 s',
-    'mat': 'steel',
-    'h': 500,
-    'lt': 1.5
+    id: 'steel',
+    name: 'Steel after 32 s',
+    mat: 'steel',
+    h: 500,
+    lt: 1.5
   },
   {
-    'id': 'plastic',
-    'name': 'Polycarbonate after 5 minutes',
-    'mat': 'plastic',
-    'h': 500,
-    'lt': 2.5
+    id: 'plastic',
+    name: 'Polycarbonate after 5 minutes',
+    mat: 'plastic',
+    h: 500,
+    lt: 2.5
   },
   {
-    'id': 'late',
-    'name': 'Polycarbonate after an hour',
-    'mat': 'plastic',
-    'h': 500,
-    'lt': 3.5
+    id: 'late',
+    name: 'Polycarbonate after an hour',
+    mat: 'plastic',
+    h: 500,
+    lt: 3.5
   },
   {
-    'id': 'glass',
-    'name': 'Glass in gentle flow',
-    'mat': 'glass',
-    'h': 100,
-    'lt': 2
+    id: 'glass',
+    name: 'Glass in gentle flow',
+    mat: 'glass',
+    h: 100,
+    lt: 2
   }
 ];
 
@@ -64,7 +64,7 @@ function across(B, rect, state, c) {
   line(P, pts, { color: C.gold, width: 3 });
   seg(P, [-SLAB.L * 1000, SLAB.Tinf], [SLAB.L * 1000, SLAB.Tinf], { color: alpha(C.blue, 0.6), width: 1, dash: [5, 4] });
   label(P, `centre ${degC(c.Tc)}`, [0, c.Tc], { color: C.gold, dy: -12 });
-  label(P, `surface ${degC(c.Ts)}`, [SLAB.L * 1000, c.Ts], { color: C.pink, align: 'right', dy: -12 });
+  label(P, `surface ${degC(c.Ts)}`, [SLAB.L * 1000, c.Ts], { color: C.pink, align: 'right', dy: 16 });
   label(P, `t = ${fig(c.t)} s, Bi = ${fig(c.Bi)}`, [-SLAB.L * 1000, 215], { color: C.muted, align: 'left', dx: 4, dy: 10 });
 }
 
@@ -83,7 +83,7 @@ function history(B, rect, state, c) {
   line(P, run(1), { color: C.pink, width: 2.5 });
   seg(P, [state.lt, 0], [state.lt, 215], { color: alpha(C.muted, 0.6), width: 1, dash: [3, 3] });
   label(P, 'centre', [0.2, 205], { color: C.gold, align: 'left', dy: -2 });
-  label(P, 'surface', [0.2, 185], { color: C.pink, align: 'left', dy: -2 });
+  label(P, 'surface', [0.2, 165], { color: C.pink, align: 'left', dy: -2 });
 }
 
 export default defineLab({

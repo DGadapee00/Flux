@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Walk up the boiling curve of water by raising the wall temperature. It corrects the idea that a hotter wall always boils faster: past the critical flux a vapour film insulates it and the flux falls.',
+  labs: [
+    { course: 'eml4140', lab: 'boil', notes: ['s7'], note: 'Water against a wall hotter or colder than 100 °C: the boiling curve rises to the critical flux and falls past it, and a condensate film gives h near 10⁴ W/(m²·K). The film formulas are checked by growing the film along the wall numerically.' },
+  ],
 };

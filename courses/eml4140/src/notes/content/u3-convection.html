@@ -19,9 +19,13 @@
     <h3>Part I · The thermal layer</h3>
     <a href="#s1"><span>1</span>Two layers on a heated plate</a>
     <a href="#s2"><span>2</span>Heat leaving the wall</a>
-    <h3>Reference</h3>
     <a href="#s3"><span>3</span>The Nusselt number along a plate</a>
-    <a href="#s4"><span>4</span>Formula sheet</a>
+    <h3>Part II · Pipes, buoyancy and phase change</h3>
+    <a href="#s5"><span>4</span>Flow in tubes</a>
+    <a href="#s6"><span>5</span>Natural convection</a>
+    <a href="#s7"><span>6</span>Boiling and condensation</a>
+    <h3>Reference</h3>
+    <a href="#s4"><span>7</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -103,8 +107,67 @@ q'' = 0.613(40)(0.607)\sqrt{\frac{0.5}{8.57\times10^{-7}(0.3)}} = 20.8\ \text{kW
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Pipes, buoyancy and phase change</h2>
+</div>
+
+<section class="topic" id="s5">
+<h2><span class="n">4</span>Flow in tubes</h2>
+<p>Inside a tube the layers from the wall meet in the middle and the flow becomes fully developed. Then \(h\) stops changing along the tube.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>An energy balance on a slice \(dx\) of a tube with perimeter \(P\): \(\dot m c_p\,dT_m = hP(T_s - T_m)\,dx\). With the wall at one temperature this integrates to</p>
+\[
+\frac{T_s - T_m(x)}{T_s - T_{m,i}} = \exp\!\left(-\frac{hPx}{\dot m c_p}\right).
+\]
+<p>The difference to the wall falls by a factor \(e\) every \(\dot m c_p/hP\). In laminar flow \(\text{Nu}_D = 3.66\) for a wall at one temperature; turbulent flow (\(\text{Re}_D = 4\dot m/\pi D\mu > 2300\)) follows \(\text{Nu}_D = 0.023\,\text{Re}_D^{0.8}\text{Pr}^{0.4}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · water at 4 g/s</span>
+<p>Water at 4 g/s in a 10 mm tube: \(\text{Re}_D = 784\), laminar, so \(h = 3.66 \times 0.63/0.01 = 231\) W/(m²·K). Then \(\dot m c_p/hP = 2.31\) m. Over 5 m with the wall at 80 °C, water entering at 20 °C leaves at 73.1 °C, having picked up 888 W.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Assuming the water warms at a steady rate. At 4 g/s it reaches 59.7 °C by halfway: 66% of its rise in the first half of the tube, and only 13.4 °C more in the second.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">5</span>Natural convection</h2>
+<p>Air warmed by a surface is lighter and rises. No fan sets the speed: the buoyancy does, so the Grashof number replaces the Reynolds number.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Buoyancy against viscous force is \(\text{Gr}_L = g\beta\Delta T L^3/\nu^2\), with \(\beta = 1/T\) for a gas. For a laminar layer on a vertical plate the equations have a similarity solution in \(\eta = (y/x)(\text{Gr}_x/4)^{1/4}\), which gives</p>
+\[
+\overline{\text{Nu}}_L = \tfrac{4}{3}\left(\tfrac{\text{Gr}_L}{4}\right)^{1/4} g(\text{Pr}), \qquad g(0.71) = 0.502.
+\]
+<p>Since \(\text{Gr} \propto \Delta T\), \(h \propto \Delta T^{1/4}\). The rough form \(0.59\,\text{Ra}_L^{1/4}\) is about 15% higher for air.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a plate at 60 °C</span>
+<p>A plate 0.3 m tall at 60 °C in air at 20 °C: \(\beta = 1/313\) K, \(\text{Ra}_L = 9.4 \times 10^7\), laminar. \(\overline{\text{Nu}}_L = 50.7\), so \(h = 4.40\) W/(m²·K) and the plate sheds 176 W/m².</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking one \(h\) for still air. At 30 °C the same plate has \(h = 3.1\) W/(m²·K); at 180 °C it has 6.0. Use \(\beta\) in kelvin: \(1/313\), not \(1/40\).</p>
+</div>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">6</span>Boiling and condensation</h2>
+<p>When a fluid changes phase at a wall, the latent heat carries far more energy than warming does. \(h\) can be hundreds of times that of air.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>On a cold vertical wall, condensate runs down as a thin film, and the film is the resistance. A balance on it, with the condensate gained over \(dx\) equal to the heat across it over \(h'_{fg}\), gives \(\delta^4 \propto x\), and averaged over a wall of height \(L\)</p>
+\[
+\overline{h} = 0.943\left[\frac{g\rho_l(\rho_l - \rho_v)h'_{fg}k_l^3}{\mu_l(T_\text{sat} - T_s)L}\right]^{1/4}, \qquad h'_{fg} = h_{fg} + 0.68\,c_{p,l}\Delta T.
+\]
+<p>On a hot wall, bubbles stir the liquid. The flux rises as \(\Delta T_e^3\) to a critical flux, \(q''_\text{max} = 0.149\,h_{fg}\rho_v[\sigma g(\rho_l - \rho_v)/\rho_v^2]^{1/4}\), set by how fast vapour can leave.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · condensing on a wall at 90 °C</span>
+<p>Steam at 100 °C on a wall 0.1 m tall at 90 °C: \(h'_{fg} = 2.29\) MJ/kg and \(\overline{h} = 11\,600\) W/(m²·K), so the wall takes 116 kW/m². The film is 78 µm thick at the bottom.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Assuming a hotter wall always boils faster. Water's critical flux is 1.26 MW/m² at \(\Delta T_e = 21\) K. Past it vapour starts to blanket the wall, and at 30 K the flux is down to 0.36 MW/m².</p>
+</div>
+</section>
+
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">7</span>Formula sheet</h2>
 \[
 \theta'' + \frac{\text{Pr}}{2}f\theta' = 0, \qquad \frac{\delta_t}{\delta} \approx \text{Pr}^{-1/3}, \qquad \text{Nu}_x = \theta'(0)\sqrt{\text{Re}_x}, \qquad \theta'(0) \approx 0.332\,\text{Pr}^{1/3}.
 \]
@@ -114,6 +177,9 @@ q'' = k\,(T_s - T_\infty)\,\theta'(0)\sqrt{\frac{U}{\nu x}}, \qquad \delta = \fr
 \[
 h = \frac{q''}{T_s - T_\infty}, \qquad \overline{\text{Nu}}_L = 0.664\,\text{Re}_L^{1/2}\text{Pr}^{1/3}\ \text{(laminar)}, \qquad \text{Nu}_x = 0.0296\,\text{Re}_x^{4/5}\text{Pr}^{1/3}\ \text{(turbulent)}.
 \]
+\[ \frac{T_s - T_m(x)}{T_s - T_{m,i}} = e^{-hPx/\dot m c_p}, \qquad \text{Re}_D = \frac{4\dot m}{\pi D\mu}, \qquad \text{Nu}_D = 3.66 \ \text{or}\ 0.023\,\text{Re}_D^{0.8}\text{Pr}^{0.4}. \]
+\[ \text{Gr}_L = \frac{g\beta\Delta T L^3}{\nu^2}, \qquad \overline{\text{Nu}}_L = \tfrac{4}{3}\left(\tfrac{\text{Gr}_L}{4}\right)^{1/4} g(\text{Pr}), \qquad h \propto \Delta T^{1/4}. \]
+\[ \overline{h}_\text{cond} = 0.943\left[\frac{g\rho_l(\rho_l - \rho_v)h'_{fg}k_l^3}{\mu_l\Delta T L}\right]^{1/4}, \qquad q''_\text{max} = 0.149\,h_{fg}\rho_v\left[\frac{\sigma g\Delta\rho}{\rho_v^2}\right]^{1/4}. \]
 </section>
 
 </main>

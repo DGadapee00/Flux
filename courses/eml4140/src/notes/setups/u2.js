@@ -6,4 +6,7 @@ export default {
     { tag: 'two strips facing', lab: 'viewfactor', scenario: 'equal', read: (c) => ({ crossed: [c.crossed, 2.828], uncrossed: [c.uncrossed, 2], F12: [c.F12, 0.414] }) },
     { tag: 'a narrow strip over a wide one', lab: 'viewfactor', scenario: 'small', read: (c) => ({ F12: [c.F12, 0.141], F21: [c.F21, 0.704], 'w₁F₁₂': [c.A1F12, 0.141] }) },
   ],
+  s5: [
+    { tag: 'one polished shield', lab: 'shield', scenario: 'polished', read: (c) => ({ 'q (W/m²)': [c.q, 170], 'T_s (K)': [c.T[1], 512] }) },
+  ],
 };
