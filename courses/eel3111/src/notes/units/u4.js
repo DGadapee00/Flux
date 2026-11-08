@@ -1,7 +1,7 @@
 /** Unit 4 notes: the file, and its sections with their labs and topics. See ../index.js. */
 export default {
   exam: 'u4',
-  title: 'First-order circuits',
+  title: 'First- and second-order circuits',
   chapters: '4',
   file: 'u4-first-order.html',
   load: () => import('../content/u4-first-order.html?raw').then((m) => m.default),

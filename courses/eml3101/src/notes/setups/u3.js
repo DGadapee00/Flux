@@ -10,6 +10,6 @@ export default {
     { tag: '6 MPa and 500 °C', lab: 'rankine', scenario: 'base', read: (c) => ({ η: [c.eta, 0.384], 'x₄': [c.x4, 0.831] }) },
   ],
   s5: [
-    { tag: 'outdoors at 7 °C', lab: 'heatpump', scenario: 'mild', read: (c) => ({ COP: [c.cop, 6.23], 'w (kJ/kg)': [c.w, 32.9] }) },
+    { tag: 'outdoors at 7 °C', lab: 'heatpump', scenario: 'mild', read: (c) => ({ COP: [c.cop, 5.65], 'w (kJ/kg)': [c.w, 32.1] }) },
   ],
 };

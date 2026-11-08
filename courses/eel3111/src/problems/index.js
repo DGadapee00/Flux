@@ -26,6 +26,6 @@ export const CHAPTER_TITLES = {
   1: 'Methods of analysis',
   2: 'Sinusoidal steady state',
   3: 'Circuit theorems',
-  4: 'First-order circuits',
+  4: 'First- and second-order circuits',
   5: 'Operational amplifiers',
 };

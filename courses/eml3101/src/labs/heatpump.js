@@ -10,8 +10,8 @@ import { FL, hf, hg, psatR, pumpChecked, pumpClosed } from '@flux/subjects/therm
  * the outdoor temperature.
  *
  * Shows that a heat pump does not deliver a fixed multiple of its work: as the outdoor air cools from
- * 7 °C to −10 °C the pressure lift grows, the compressor works harder, and the COP falls from 6.2 to
- * 4.1, still well above 1. The refrigerant is a simple model of R-134a. The compressor work is checked
+ * 7 °C to −10 °C the pressure lift grows, the compressor works harder, and the COP falls from 5.6 to
+ * 3.7, still well above 1. The refrigerant is a simple model of R-134a. The compressor work is checked
  * by integrating v dp along the isentrope (packages/subjects/src/thermo/heatpump.js).
  */
 const SCENARIOS = [

@@ -8,20 +8,35 @@
  *   COP_HP = (h₂ − h₃)/(h₂ − h₁),   against the Carnot limit T_H/(T_H − T_L).
  * As the outdoor air gets colder the lift grows, and the COP falls.
  *
- * The fluid is a simple model fitted to R-134a's boiling points at 1 atm and 10 bar: an ideal-gas
- * vapour with c_p = 0.90 kJ/(kg·K), a liquid with c = 1.40 kJ/(kg·K), and a latent heat that falls
- * linearly with temperature, with Clapeyron's equation giving the saturation pressure. The second
+ * The fluid is a simple model of R-134a: a latent heat fitted to R-134a's, falling linearly with
+ * temperature; a saturation pressure from Clapeyron's equation, with the vapour's compressibility
+ * fixed so the model boils where R-134a does at 1 atm and at 35 °C; a liquid with c = 1.40 kJ/(kg·K);
+ * and a compressor that treats the vapour as an ideal gas with R-134a's c_p, 0.80 kJ/(kg·K). The second
  * method finds the isentropic compressor work as ∫v dp along the isentrope, by Simpson's rule.
  */
 
-export const FL = { R: 0.0815, cpv: 0.9, cl: 1.4, T0: 233.15, hfg0: 242, room: 21, Tcond: 35, approach: 8, etaC: 0.8 };
-const dc = FL.cpv - FL.cl;
-export const hfg = (T) => FL.hfg0 + dc * (T - FL.T0);
-// Clapeyron with an ideal-gas vapour: d ln p/dT = hfg(T)/(R T²).
-const a = FL.hfg0 - dc * FL.T0;
-export const lnp = (T) => -a / (FL.R * T) + (dc / FL.R) * Math.log(T) + C;
-// Fix C so the model boils at −26.07 °C at 101.325 kPa.
-const C = Math.log(101.325) + a / (FL.R * 247.08) - (dc / FL.R) * Math.log(247.08);
+export const FL = { R: 0.0815, cpv: 0.8, cl: 1.4, T0: 233.15, room: 21, Tcond: 35, approach: 8, etaC: 0.8 };
+/** Latent heat (kJ/kg), a straight line through R-134a's 198.6 kJ/kg at 0 °C falling 0.82 kJ/kg per K. */
+export const hfg = (T) => 198.6 - 0.82 * (T - 273.15);
+const a = 198.6 + 0.82 * 273.15;
+const b = -0.82;
+/** Clapeyron with the vapour's volume ZRT/p: d ln p/dT = hfg/(Z R T²). Z fixed so the model boils at
+ * −26.07 °C at 101.325 kPa and at 35 °C at 887 kPa, as R-134a does. */
+const lnpRaw = (T, Z) => -a / (Z * FL.R * T) + (b / (Z * FL.R)) * Math.log(T);
+const fitZ = () => {
+  let lo = 0.5;
+  let hi = 1.2;
+  for (let i = 0; i < 100; i++) {
+    const Z = (lo + hi) / 2;
+    const r = lnpRaw(308.15, Z) - lnpRaw(247.08, Z);
+    if (r > Math.log(887 / 101.325)) lo = Z;
+    else hi = Z;
+  }
+  return (lo + hi) / 2;
+};
+export const Z = fitZ();
+const C = Math.log(101.325) - lnpRaw(247.08, Z);
+export const lnp = (T) => lnpRaw(T, Z) + C;
 export const psatR = (T) => Math.exp(lnp(T));
 export const hf = (T) => FL.cl * (T - FL.T0);
 export const hg = (T) => hf(T) + hfg(T);
