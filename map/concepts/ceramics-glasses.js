@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Cool a melt at different rates and plot its volume against temperature, crystal against glass. It corrects the idea that old window glass is a liquid still flowing.',
+  labs: [
+    { course: 'ema3010', lab: 'pane', notes: ['s3'], note: 'Soda-lime glass’s viscosity against temperature and the time a pane takes to sink under its own weight: at room temperature, far longer than the age of the universe. The closed form is checked by summing the creep of slices of the pane.' },
+  ],
 };

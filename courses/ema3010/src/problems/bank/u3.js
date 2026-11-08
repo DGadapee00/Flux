@@ -4,6 +4,7 @@
  */
 import { choice, kase, num, problem, range } from '../kit.js';
 import { phaseState } from '@flux/subjects/matsci/phasediagram.js';
+import { BAR, U, hardness } from '@flux/subjects/matsci/jominy.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 /** Tie lines read off the lab's diagram, rounded as a student would read them, atom fraction Ni. */
@@ -13,6 +14,13 @@ export const share = ($) => {
   return $.ask === 'L' ? (t.xS - $.x0) / (t.xS - t.xL) : ($.x0 - t.xL) / (t.xS - t.xL);
 };
 const p3 = (x) => Number(x.toPrecision(3));
+
+/** Cooling rate at 700 °C, x in mm; `unit` converts x and `four` is the 4 in t = x²/4αu². */
+export const quenchRate = ($, unit = 1e-3, four = 4) => {
+  const x = Number($.x) * unit;
+  const t = (x * x) / (four * BAR.alpha * U * U);
+  return ((BAR.Ti - BAR.Tq) * U * Math.exp(-U * U)) / (Math.sqrt(Math.PI) * t);
+};
 
 export default [
   problem({
@@ -100,5 +108,49 @@ export default [
       read: (c, s, $) => ({ x: $.ask === 'L' ? c.xL : c.xS }),
     },
     cases: [kase('the notes’ tie line, its solid end', { ask: 'S', T: 1550 }, { x: 0.541 })],
+  }),
+  problem({
+    id: 'u3.4.jominy',
+    title: 'How fast it cools',
+    exam: 'u3',
+    ch: '3',
+    lab: 'jominy',
+    src: 'Flux, written for the End quench lab',
+    topics: ['hardenability'],
+    principles: ['hardenability'],
+    vars: { x: choice(['3', '3 mm'], ['6', '6 mm'], ['12', '12 mm'], ['24', '24 mm']) },
+    text: (T) => `A steel bar at 850 °C has its end held at 20 °C; α = 6 × 10⁻⁶ m²/s. At 700 °C, erf u = 680/830 gives u = 0.9465. How fast, in K/s, is the point ${T.x} from the end cooling as it passes 700 °C?`,
+    parts: [num('r', ($) => quenchRate($), 'K/s', { label: 'dT/dt' })],
+    level: 3,
+    hints: ['It reaches 700 °C at t = x²/(4αu²).', 'dT/dt = (T_i − T_q) u e^{−u²}/(√π t).'],
+    steps: ($) => [String.raw`$t = x^2/4\alpha u^2 = ${Number(((Number($.x) / 1000) ** 2 / (4 * BAR.alpha * U * U)).toPrecision(3))}$ s`, String.raw`$\dot T = ${Number(quenchRate($).toPrecision(3))}$ K/s`],
+    sim: { scenario: 'end', setup(s, $) { s.xmm = Number($.x); }, read: (c) => ({ r: c.rate }) },
+    cases: [kase('6 mm', { x: '6' }, { r: 108.06 })],
+  }),
+
+  problem({
+    id: 'u3.5.deeper',
+    title: 'Which hardens deeper?',
+    exam: 'u3',
+    ch: '3',
+    kind: 'conceptual',
+    lab: 'jominy',
+    src: 'Flux, written for the End quench lab',
+    topics: ['hardenability'],
+    principles: ['hardenability'],
+    vars: { x: choice(['15', '15 mm'], ['25', '25 mm']) },
+    text: (T) => `Bars of plain 1045 steel and alloy 4340 are end-quenched the same way. ${T.x} from the end, which is harder?`,
+    parts: [
+      pick('a', 'the harder one', [
+        ['alloy', '4340', 'Its alloying slows the change to pearlite, so a slower cooling rate still makes martensite.'],
+        ['plain', '1045', 'It has a little more carbon, but there it has turned to pearlite: too slow for its critical rate.'],
+        ['same', 'the same', 'Both cool at the same rate, but they need different rates to harden.'],
+      ], () => 'alloy'),
+    ],
+    level: 1,
+    hints: ['Both bars cool alike.', 'Which needs the faster rate to make martensite?'],
+    steps: () => ['At the same rate, 4340 is above its low critical rate and 1045 below its high one.'],
+    sim: { scenario: 'deep', setup(s, $) { s.xmm = Number($.x); }, read: (c) => ({ a: hardness('s4340', c.rate).H > hardness('s1045', c.rate).H + 1 ? 'alloy' : hardness('s1045', c.rate).H > hardness('s4340', c.rate).H + 1 ? 'plain' : 'same' }) },
+    cases: [kase('15 mm', { x: '15' }, { a: 'alloy' })],
   }),
 ];

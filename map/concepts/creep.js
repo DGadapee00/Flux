@@ -24,6 +24,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Hold a turbine blade at constant load and raise the temperature, plotting strain against time. It corrects the idea that a load below yield causes no permanent strain.',
+  labs: [
+    { course: 'ema3010', lab: 'creep', notes: ['s4'], note: 'A superalloy part under constant load with sliders for temperature and stress, its strain drawn against time: hot, it creeps below yield, and 100 K changes the life thirteenfold. The life is checked by marching the creep rate with Runge–Kutta.' },
+  ],
 };

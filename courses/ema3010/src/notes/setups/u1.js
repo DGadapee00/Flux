@@ -4,4 +4,7 @@ export default {
   s2: [{ tag: 'squeezing the ion pair', lab: 'bond', scenario: 'squeeze', read: (c) => ({ F: [c.Fr, 9.55], B: [c.B, 1540] }) }],
   s4: [{ tag: 'copper from its atoms', lab: 'crystal', scenario: 'cu', read: (c) => ({ a: [c.a, 0.3615], density: [c.density, 8.94] }) }],
   s3: [{ tag: 'a deep well and a shallow one', lab: 'bond', scenario: 'shallow', read: (c) => ({ k: [c.k, 3.84], 'k (N/m)': [c.kN, 61.5] }) }],
+  s6: [
+    { tag: 'copper’s first peak', lab: 'xrd', scenario: 'copper', read: (c) => ({ '2θ (°)': [c.first.tt, 43.3], 'd (nm)': [c.first.d, 0.2087] }) },
+  ],
 };

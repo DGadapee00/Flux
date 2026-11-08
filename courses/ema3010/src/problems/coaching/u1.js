@@ -5,6 +5,7 @@
 import { KE2, mie } from '@flux/subjects/matsci/bonding.js';
 import { METAL, PAIR, SHAPE } from '../bank/u1.js';
 import { STRUCTURES, crystal } from '@flux/subjects/matsci/crystal.js';
+import { twoTheta } from '../bank/u1.js';
 
 const R = ($) => ($.where === 'in' ? 0.9 : 1.2) * $.r0;
 const well = ($) => mie({ E0: $.E0, r0: $.r0, ...SHAPE[$.shape] });
@@ -55,6 +56,14 @@ export default {
       apf: [
         [($) => crystal({ structure: $.st, R: 1, A: 1 }).apf / STRUCTURES[$.st].N, 'Count every share of an atom: 8 corners at ⅛ each, plus the centre or the face atoms.'],
         [($) => (STRUCTURES[$.st].N * Math.PI) / 6, 'a = 2R is simple cubic. Find a from the diagonal the atoms touch along.'],
+      ],
+    },
+  },
+  'u1.9.bragg': {
+    traps: {
+      tt: [
+        [($) => twoTheta($, 'sc'), 'That counts every plane. In this structure some planes cancel: use only the ones the selection rule allows.'],
+        [($) => twoTheta($, null, 1), 'That is θ. A diffractometer measures 2θ, the angle between the beam in and the beam out.'],
       ],
     },
   },

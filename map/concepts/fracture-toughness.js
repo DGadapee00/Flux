@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Load a plate with a crack and slide the crack length and stress against the toughness. It corrects the idea that a safety factor on strength alone protects a cracked part.',
+  labs: [
+    { course: 'ema3010', lab: 'griffith', notes: ['s2'], note: 'A cracked plate with sliders for crack length and stress against the toughness: it can break far below yield. K = σ√(πa) is checked against the exact elastic stress at the tip, extrapolated by Richardson’s method.' },
+  ],
 };

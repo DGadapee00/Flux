@@ -24,6 +24,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Couple two metals and change their area ratio and the electrolyte. It corrects the idea that painting the anode helps: a small exposed anode beside a large cathode corrodes faster.',
+  labs: [
+    { course: 'ema3010', lab: 'couple', notes: ['s4'], note: 'Steel joined to copper in aerated water with a slider for the area ratio, the Evans diagram drawn: a small anode beside a large cathode corrodes fast, so painting the anode alone is a mistake. The mixed potential is checked by bisection on the net current.' },
+  ],
 };

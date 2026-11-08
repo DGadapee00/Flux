@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Change the grain size and plot yield strength against \\(d^{-1/2}\\). It corrects the idea that more grain boundaries, being flaws, make a metal weaker.',
+  labs: [
+    { course: 'ema3010', lab: 'grain', notes: ['s5'], note: 'Yield strength against grain size for three metals, with a slider for the spread of sizes: boundaries, though defects, make a metal stronger. The log-normal closed form is checked by integrating over the distribution.' },
+  ],
 };

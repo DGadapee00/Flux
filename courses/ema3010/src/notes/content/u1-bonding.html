@@ -22,8 +22,9 @@
     <a href="#s3"><span>3</span>Stiffness is the curvature</a>
     <h3>Part II · Structure</h3>
     <a href="#s4"><span>4</span>Packing atoms into a cell</a>
+    <a href="#s6"><span>5</span>X-ray diffraction</a>
     <h3>Reference</h3>
-    <a href="#s5"><span>5</span>Formula sheet</a>
+    <a href="#s5"><span>6</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -125,8 +126,26 @@ k_\text{deep} = \frac{1\cdot3\cdot4}{2.5^2} = 1.92\ \text{eV/Å}^2, \qquad k_\te
 </div>
 </section>
 
+<section class="topic" id="s6">
+<h2><span class="n">5</span>X-ray diffraction</h2>
+<p>X-rays have wavelengths near the spacing of atoms, so a crystal's planes act as a grating. Waves from successive planes add only at certain angles.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Two planes \(d\) apart, with a beam meeting them at angle \(\theta\): the wave from the lower plane travels \(2d\sin\theta\) further. They add in phase when</p>
+\[
+n\lambda = 2d\sin\theta, \qquad d_{hkl} = \frac{a}{\sqrt{h^2 + k^2 + l^2}}\ \text{(cubic)}.
+\]
+<p>The atoms of the cell also scatter, with phases \(2\pi(hx + ky + lz)\). Their sum, the structure factor, is zero for \(h + k + l\) odd in BCC and for mixed odd and even \(h, k, l\) in FCC.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · copper’s first peak</span>
+<p>Copper is FCC with \(a = 0.3615\) nm. (100) and (110) are mixed, so absent; the first peak is (111), with \(d = 0.3615/\sqrt3 = 0.2087\) nm. With \(\lambda = 0.15406\) nm, \(\sin\theta = 0.369\), so \(2\theta = 43.3^\circ\). Next comes (200) at \(50.4^\circ\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Treating a crystal as a mirror that reflects at every angle, or expecting a peak from every set of planes. In BCC iron there is no (100) peak: the atom at the cell's centre sits on a plane halfway between, and scatters exactly out of step.</p>
+</div>
+</section>
+
 <section class="topic" id="s5">
-<h2><span class="n">5</span>Formula sheet</h2>
+<h2><span class="n">6</span>Formula sheet</h2>
 \[
 U(r) = -\frac{A}{r^n} + \frac{B}{r^m}, \qquad A = \frac{m}{m-n}E_0r_0^{\,n}, \qquad B = \frac{n}{m-n}E_0r_0^{\,m},
 \]
@@ -136,6 +155,7 @@ F = -\frac{dU}{dr}, \qquad k = \frac{n\,m\,E_0}{r_0^2}, \qquad E_0^\text{ion pai
 \[
 a_\text{SC} = 2R, \quad a_\text{BCC} = \frac{4R}{\sqrt3}, \quad a_\text{FCC} = 2\sqrt2\,R, \qquad \text{APF} = \frac{N\tfrac43\pi R^3}{a^3}, \qquad \rho = \frac{NA}{a^3N_A}.
 \]
+\[ n\lambda = 2d\sin\theta, \qquad d_{hkl} = \frac{a}{\sqrt{h^2+k^2+l^2}}, \qquad \text{BCC: } h+k+l \text{ even}, \quad \text{FCC: } h,k,l \text{ unmixed}. \]
 </section>
 
 </main>

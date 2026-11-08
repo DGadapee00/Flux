@@ -3,6 +3,7 @@
  * Folded into the bank by src/problems/index.js.
  */
 import { CELSIUS, D2R, DIFF, caseHours, frac, schmidM } from '../bank/u2.js';
+import { hallPetch } from '../bank/u2.js';
 
 export default {
   'u2.5.schmid': {
@@ -26,6 +27,14 @@ export default {
       c: [
         [($) => frac($.Q, CELSIUS[$.temp]), 'The Boltzmann factor needs kelvin: add 273 to the Celsius temperature.'],
         [($) => frac($.Q, CELSIUS[$.temp] + 273) * 10, 'Check the exponent: c* = exp(−Q/kT), with k in eV/K.'],
+      ],
+    },
+  },
+  'u2.7.hall-petch': {
+    traps: {
+      sy: [
+        [($) => hallPetch($, 1), 'Put d in metres: k_y is in MPa·m^½, so 20 µm is 2 × 10⁻⁵ m.'],
+        [($) => hallPetch($, 1e-6, 1), 'The power is −1/2, not −1: σ_y = σ₀ + k_y/√d.'],
       ],
     },
   },
