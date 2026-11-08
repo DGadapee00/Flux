@@ -12,6 +12,7 @@ const loaders = {
   thevenin: () => import('./thevenin.js'),
   switch: () => import('./switch.js'),
   opamp: () => import('./opamp.js'),
+  rlc: () => import('./rlc.js'),
 };
 
 const labs = createLabLoader(loaders);

@@ -16,6 +16,9 @@ const loaders = {
   network: () => import('./network.js'),
   model: () => import('./model.js'),
   layer: () => import('./layer.js'),
+  capillary: () => import('./capillary.js'),
+  float: () => import('./float.js'),
+  drag: () => import('./drag.js'),
 };
 
 const labs = createLabLoader(loaders);

@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Dip glass tubes of several radii in water and mercury. It corrects the idea that a wider tube draws liquid higher: rise goes as \\(1/r\\), and mercury, which does not wet glass, sinks instead.',
+  labs: [
+    { course: 'eml3015', lab: 'capillary', notes: ['s4'], note: 'Glass tubes of several radii dipped in water, ethanol and mercury: the rise goes as 1/r, and mercury sinks. Jurin’s force balance is checked by minimising the column’s energy.' },
+  ],
 };

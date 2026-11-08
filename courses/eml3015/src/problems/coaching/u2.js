@@ -4,6 +4,7 @@
  */
 import { LIQUIDS } from '@flux/subjects/mechanics/pressure-fields.js';
 import { G } from '../kit.js';
+import { barGM } from '../bank/u2.js';
 
 const rho = ($) => (LIQUIDS[$.fluid] || LIQUIDS.water).rho;
 const TILT = { vertical: 90, sixty: 60, fortyfive: 45 };
@@ -48,6 +49,14 @@ export default {
       p: [
         [($) => (rho($) * G * 0.45) / 1000, 'That is the floor pressure at rest. The liquid is deeper at the rim now.'],
         [($) => (rho($) * G * (0.45 - ($.w * $.w * 0.09) / (4 * G))) / 1000, 'That is the centre. The liquid is deepest at the rim.'],
+      ],
+    },
+  },
+  'u2.7.gm': {
+    traps: {
+      gm: [
+        [($) => barGM($, 'nokb'), 'Measure from the keel: GM = KB + BM − KG, with KB = d/2.'],
+        [($) => barGM($, 'edge'), 'The waterplane rolls about its centre line: I = Lb³/12, not Lb³/3.'],
       ],
     },
   },

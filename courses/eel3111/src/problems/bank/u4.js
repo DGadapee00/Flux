@@ -6,6 +6,7 @@
  * and the element hangs from A to ground behind R₃ = 200 Ω.
  */
 import { choice, kase, num, problem, range } from '../kit.js';
+import { rlcClosed } from '@flux/subjects/em/rlc.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 const R3 = 200;
@@ -17,6 +18,16 @@ export const tauMs = ($, R = $.when === 'on' ? R3 + par($.R1, Number($.R2)) : R3
 /** The inductor's steady current with the switch closed, A, by the Thévenin route. */
 export const iSteady = ($) => (12 * Number($.R2)) / ($.R1 + Number($.R2)) / (R3 + par($.R1, Number($.R2)));
 const p3 = (x) => Number(x.toPrecision(3));
+
+/** Series-RLC damping ratio with L = 10 mH, C = 1 µF; `how` reproduces the traps. */
+export const zetaSeries = ($, how = 'right') => {
+  const R = Number($.R);
+  const L = 0.01;
+  const C = 1e-6;
+  if (how === 'parallel') return (1 / (2 * R)) * Math.sqrt(L / C);
+  if (how === 'two') return R * Math.sqrt(C / L);
+  return (R / 2) * Math.sqrt(C / L);
+};
 
 export default [
   problem({
@@ -98,5 +109,48 @@ export default [
       read: (c, s, $) => ({ can: $.q === 'vc' || $.q === 'il' ? 'no' : 'yes' }),
     },
     cases: [kase('an inductor’s current', { q: 'il' }, { can: 'no' })],
+  }),
+  problem({
+    id: 'u4.4.zeta',
+    title: 'A series RLC’s damping ratio',
+    exam: 'u4',
+    ch: '4',
+    lab: 'rlc',
+    src: 'Flux, written for the RLC step lab',
+    topics: ['rlc'],
+    principles: ['rlc'],
+    vars: { R: choice(['40', '40 Ω'], ['300', '300 Ω'], ['600', '600 Ω'], ['1000', '1 kΩ']) },
+    text: (T) => `A series RLC circuit has R = ${T.R}, L = 10 mH and C = 1 µF. What is its damping ratio ζ?`,
+    parts: [num('z', ($) => zetaSeries($), '', { label: 'ζ' })],
+    level: 1,
+    hints: ['α = R/2L and ω₀ = 1/√(LC).', 'ζ = α/ω₀ = (R/2)√(C/L).'],
+    steps: ($) => [String.raw`$\zeta = \frac{${$.R}}{2}\sqrt{\frac{10^{-6}}{10^{-2}}} = ${Number(zetaSeries($).toPrecision(3))}$`],
+    sim: { scenario: 'ring', setup(s, $) { Object.assign(s, { topo: 'series', lR: Math.log10(Number($.R)) }); }, read: (c) => ({ z: c.zeta }) },
+    cases: [kase('300 Ω', { R: '300' }, { z: 1.5 })],
+  }),
+
+  problem({
+    id: 'u4.5.parallel-r',
+    title: 'More resistance in parallel',
+    exam: 'u4',
+    ch: '4',
+    kind: 'conceptual',
+    lab: 'rlc',
+    src: 'Flux, written for the RLC step lab',
+    topics: ['rlc'],
+    principles: ['rlc'],
+    vars: { R: choice(['500', 'from 50 Ω to 500 Ω'], ['5000', 'from 50 Ω to 5 kΩ']) },
+    text: (T) => `A parallel RLC (L = 10 mH, C = 1 µF) is critically damped with R = 50 Ω. R is raised ${T.R}. What happens to the step response?`,
+    parts: [
+      pick('a', 'the response', [
+        ['rings', 'it rings: less damping', 'ζ = (1/2R)√(L/C) falls as R rises: a larger parallel resistor drains the tank less.'],
+        ['creeps', 'it creeps: more damping', 'That is the series circuit. In parallel, damping goes as 1/R.'],
+      ], () => 'rings'),
+    ],
+    level: 2,
+    hints: ['Write α for the parallel circuit.', 'How much current does a large parallel resistor draw?'],
+    steps: () => ['α = 1/2RC: larger R, smaller α, ζ < 1, underdamped.'],
+    sim: { scenario: 'parallel', setup(s, $) { s.lR = Math.log10(Number($.R)); }, read: (c) => ({ a: c.zeta < 1 ? 'rings' : 'creeps' }) },
+    cases: [kase('to 500 Ω', { R: '500' }, { a: 'rings' })],
   }),
 ];

@@ -12,6 +12,7 @@ import { DUCT, RHO_WATER, flow } from '@flux/subjects/mechanics/transport.js';
 import { vaneForce } from '@flux/subjects/mechanics/vane.js';
 import { headLoss } from '@flux/subjects/mechanics/headloss.js';
 import { choice, kase, num, problem, range } from '../kit.js';
+import { BALLS, cd as dragCd, force as dragForce } from '@flux/subjects/mechanics/spheredrag.js';
 
 /** Two pipes in parallel at one friction factor: A is 15 mm × 10 m; Q in L/s, B in mm and m. */
 export const parallelQA = ($, how = 'loss') => {
@@ -66,6 +67,10 @@ const bend = ($) => bendPressure({ rho: RHO[$.fluid] ?? 998, V: $.V, R: $.R, w: 
 const nozzleSetup = (s, $) => Object.assign(s, { u0: $.u0, L: $.L, CR: RATIO[$.shape], ramp: 0, xf: 1 });
 const bendVars = () => ({ fluid: choice(['water', 'water'], ['air', 'air']), V: range(1, 4, 0.5, 'm/s'), R: range(0.3, 1, 0.1, 'm'), w: range(0.1, 0.2, 0.05, 'm') });
 const bendSetup = (s, $) => Object.assign(s, { fluid: $.fluid, V: $.V, R: $.R, w: $.w, profile: 'vortex' });
+
+/** Drag on the smooth football at V m/s; `half` and `area` reproduce the traps. */
+export const footballCd = ($) => dragCd((Number($.V) * BALLS.football.D) / 1.5e-5, 'smooth');
+export const footballDrag = ($, half = 0.5, area = (D) => (Math.PI * D * D) / 4) => half * footballCd($) * 1.2 * Number($.V) ** 2 * area(BALLS.football.D);
 
 export default [
   problem({
@@ -738,5 +743,48 @@ export default [
       read: (c) => ({ q: c.Qs > 0.0007844 * 1.01 ? 'more' : c.Qs < 0.0007844 * 0.99 ? 'less' : 'same' }),
     },
     cases: [kase('the tap', { act: 'tap' }, { q: 'less' })],
+  }),
+  problem({
+    id: 'u3.23.drag',
+    title: 'Drag on a football',
+    exam: 'u3',
+    ch: '6',
+    lab: 'drag',
+    src: 'Flux, written for the Drag lab',
+    topics: ['drag'],
+    principles: ['drag'],
+    vars: { V: choice(['10', '10 m/s'], ['15', '15 m/s'], ['25', '25 m/s']) },
+    text: (T, $) => `A smooth ball 220 mm across flies at ${T.V} through air (ρ = 1.2 kg/m³). At its Reynolds number C_D = ${footballCd($).toFixed(3)}. What is the drag force, in N?`,
+    parts: [num('F', ($) => footballDrag($), 'N', { label: 'F_D' })],
+    level: 1,
+    hints: ['F_D = ½C_DρV²A.', 'A is the frontal area, πD²/4.'],
+    steps: ($) => [String.raw`$F_D = \tfrac12(${footballCd($).toFixed(3)})(1.2)(${$.V})^2\,\pi(0.22)^2/4 = ${Number(footballDrag($).toPrecision(3))}$ N`],
+    sim: { scenario: 'football', setup(s, $) { Object.assign(s, { ball: 'football', surface: 'smooth', V: Number($.V) }); }, read: (c) => ({ F: c.F }) },
+    cases: [kase('15 m/s', { V: '15' }, { F: 1.966 })],
+  }),
+
+  problem({
+    id: 'u3.24.crisis',
+    title: 'Faster, less drag?',
+    exam: 'u3',
+    ch: '6',
+    kind: 'conceptual',
+    lab: 'drag',
+    src: 'Flux, written for the Drag lab',
+    topics: ['drag'],
+    principles: ['drag'],
+    vars: { V: choice(['25', '25 m/s'], ['28', '28 m/s']) },
+    text: (T) => `A smooth football kicked at 15 m/s is at Re ≈ 2.2 × 10⁵, just below its drag crisis. Kicked at ${T.V} instead, is the drag force larger or smaller?`,
+    parts: [
+      pick('a', 'the drag force', [
+        ['smaller', 'smaller', 'Past the crisis C_D falls faster than V² rises: the turbulent layer leaves a narrower wake.'],
+        ['larger', 'larger, as V²', 'That holds when C_D is steady, not across the drag crisis.'],
+      ], () => 'smaller'),
+    ],
+    level: 2,
+    hints: ['Find the new Re.', 'What happens to C_D past Re ≈ 3 × 10⁵?'],
+    steps: () => ['Re rises past the crisis and C_D drops about fourfold: the force falls.'],
+    sim: { scenario: 'football', setup(s, $) { s.V = Number($.V); }, read: (c) => ({ a: c.F < dragForce(15, 'smooth', 'football') ? 'smaller' : 'larger' }) },
+    cases: [kase('25 m/s', { V: '25' }, { a: 'smaller' })],
   }),
 ];

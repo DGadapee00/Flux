@@ -19,8 +19,9 @@
     <h3>Part I · Switching</h3>
     <a href="#s1"><span>1</span>The time constant</a>
     <a href="#s2"><span>2</span>What carries over a switch</a>
+    <a href="#s4"><span>3</span>Second-order circuits</a>
     <h3>Reference</h3>
-    <a href="#s3"><span>3</span>Formula sheet</a>
+    <a href="#s3"><span>4</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -62,14 +63,33 @@ v(t) = v(\infty) + \big[v(0^+) - v(\infty)\big]\,e^{-t/\tau}, \qquad \tau = R_\t
 </div>
 </section>
 
+<section class="topic" id="s4">
+<h2><span class="n">3</span>Second-order circuits</h2>
+<p>With an inductor and a capacitor together, energy swings between them. A resistor drains it; how fast decides whether the response rings.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Kirchhoff's laws give a second-order equation with natural frequency \(\omega_0 = 1/\sqrt{LC}\) and decay rate \(\alpha\):</p>
+\[
+\ddot y + 2\alpha\dot y + \omega_0^2 y = \omega_0^2 y_\infty, \qquad \alpha_\text{series} = \frac{R}{2L}, \quad \alpha_\text{parallel} = \frac{1}{2RC}.
+\]
+<p>With \(\zeta = \alpha/\omega_0\): below 1 the response rings at \(\omega_d = \omega_0\sqrt{1 - \zeta^2}\) and overshoots by \(e^{-\pi\zeta/\sqrt{1-\zeta^2}}\); at 1 it is critically damped; above 1 it creeps.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · L = 10 mH, C = 1 µF</span>
+<p>\(\omega_0 = 1/\sqrt{10^{-8}} = 10\,000\) rad/s. In series, \(\zeta = (R/2)\sqrt{C/L} = R/200\): 20 Ω gives \(\zeta = 0.1\) and a 73% overshoot; 200 Ω is critical. In parallel, \(\zeta = (1/2R)\sqrt{L/C} = 50/R\): 50 Ω is critical, and 2 kΩ gives \(\zeta = 0.025\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Assuming more resistance always means more damping. In a parallel RLC a larger resistor draws less current from the tank, so it damps less: \(\zeta\) goes as \(1/R\).</p>
+</div>
+</section>
+
 <section class="topic" id="s3">
-<h2><span class="n">3</span>Formula sheet</h2>
+<h2><span class="n">4</span>Formula sheet</h2>
 \[
 x(t) = x(\infty) + \big[x(0^+) - x(\infty)\big]e^{-t/\tau}, \qquad \tau = R_\text{th}C \ \text{ or } \ \frac{L}{R_\text{th}}.
 \]
 \[
 v_C(0^+) = v_C(0^-), \qquad i_L(0^+) = i_L(0^-), \qquad \text{DC: } C \to \text{break}, \ L \to \text{wire}.
 \]
+\[ \omega_0 = \frac1{\sqrt{LC}}, \quad \alpha_\text{s} = \frac{R}{2L}, \quad \alpha_\text{p} = \frac{1}{2RC}, \quad \zeta = \frac{\alpha}{\omega_0}, \quad \text{overshoot} = e^{-\pi\zeta/\sqrt{1 - \zeta^2}}. \]
 </section>
 
 </main>

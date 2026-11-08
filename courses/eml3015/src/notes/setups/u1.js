@@ -25,4 +25,7 @@ export default {
       read: (c) => ({ t1: [c.t1, 1.68] }),
     },
   ],
+  s4: [
+    { tag: 'water in a 0.5 mm tube', lab: 'capillary', scenario: 'water', read: (c) => ({ 'h (mm)': [c.hmm, 29.7] }) },
+  ],
 };

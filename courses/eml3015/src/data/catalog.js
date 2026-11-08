@@ -10,7 +10,7 @@ export const EXAMS = [
     title: 'Viscosity and shear',
     chapters: '5',
     date: 'Unit 1',
-    labs: ['viscosity'],
+    labs: ['viscosity', 'capillary'],
     coming: ['Couette and Poiseuille flow'],
   },
   {
@@ -19,8 +19,8 @@ export const EXAMS = [
     title: 'Pressure on walls and in moving tanks',
     chapters: '4',
     date: 'Unit 2',
-    labs: ['gate', 'rigid-tank'],
-    coming: ['Buoyancy and stability'],
+    labs: ['gate', 'rigid-tank', 'float'],
+    coming: [],
   },
   {
     id: 'u3',
@@ -28,7 +28,7 @@ export const EXAMS = [
     title: 'Following the flow',
     chapters: '6',
     date: 'Unit 3',
-    labs: ['nozzle', 'bend', 'continuity', 'transport', 'vane', 'pipe', 'headloss', 'network', 'model', 'layer'],
+    labs: ['nozzle', 'bend', 'continuity', 'transport', 'vane', 'pipe', 'headloss', 'network', 'model', 'layer', 'drag'],
     coming: [],
   },
 ];
@@ -47,6 +47,9 @@ export const LAB_META = {
   network: { id: 'network', exam: 'u3', title: 'Network' },
   model: { id: 'model', exam: 'u3', title: 'Model' },
   layer: { id: 'layer', exam: 'u3', title: 'Boundary layer' },
+  capillary: { id: 'capillary', exam: 'u1', title: 'Capillary' },
+  float: { id: 'float', exam: 'u2', title: 'Floating' },
+  drag: { id: 'drag', exam: 'u3', title: 'Drag' },
 };
 
 export const CHAPTER_TITLES = {

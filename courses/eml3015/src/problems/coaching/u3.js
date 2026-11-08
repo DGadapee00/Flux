@@ -4,6 +4,7 @@
  */
 import { bendPressure } from '@flux/subjects/mechanics/flowfields.js';
 import { SCALE, STREAM, boxForce, deltaAt, laminarLoss, nuOf, parallelQA, pipeQ, vaneFx } from '../bank/u3.js';
+import { footballDrag } from '../bank/u3.js';
 
 const RATIO = { gentle: 2, medium: 4, sharp: 6 };
 const RHO = { water: 998, air: 1.2 };
@@ -104,6 +105,14 @@ export default {
       qa: [
         [($) => parallelQA($, 'area'), 'Not by area: the pipes share a head loss, which goes as LQ²/D⁵, so length and the fifth power of D decide.'],
         [($) => parallelQA($, 'even'), 'Not evenly: the pipes differ, and the split is whatever makes their losses equal.'],
+      ],
+    },
+  },
+  'u3.23.drag': {
+    traps: {
+      F: [
+        [($) => footballDrag($, 1), 'Keep the ½: the dynamic pressure is ½ρV².'],
+        [($) => footballDrag($, 0.5, (D) => D * D), 'The frontal area is πD²/4, not D².'],
       ],
     },
   },

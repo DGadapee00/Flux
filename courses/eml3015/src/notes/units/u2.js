@@ -10,6 +10,7 @@ export default {
     { id: 's2', n: 2, title: 'Where the force acts', lab: 'gate', ch: ['4'], topics: ['hydrostatic-force'] },
     { id: 's3', n: 3, title: 'A tank that accelerates', lab: 'rigid-tank', ch: ['4'], topics: ['rigid-body'], home: true },
     { id: 's4', n: 4, title: 'A tank that spins', lab: 'rigid-tank', ch: ['4'], topics: ['rigid-body'] },
-    { id: 's5', n: 5, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's6', n: 5, title: 'Buoyancy and floating stability', lab: 'float', ch: ['4'], topics: ['stability'], home: true },
+    { id: 's5', n: 6, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

@@ -3,6 +3,7 @@
  * practice panel shows it with each solution and groups misses by it.
  */
 export const PRINCIPLES = {
+  rlc: { name: 'A second-order circuit’s damping', statement: 'An RLC circuit has ω₀ = 1/√(LC) and ζ = α/ω₀ with α = R/2L in series and 1/(2RC) in parallel; ζ < 1 rings, ζ = 1 is critical, ζ > 1 creeps.', cue: 'A circuit with both an inductor and a capacitor, switched or stepped.', family: 'Transients' },
   kcl: { name: 'Current in equals current out', statement: 'At every node the currents leaving sum to zero; with Ohm’s law on each branch that is one linear equation per node above ground.', cue: 'Unknown node voltages.', family: 'Circuits' },
   kvl: { name: 'Voltages round a loop sum to zero', statement: 'Round every closed loop the rises equal the drops; with loop currents that is one linear equation per window.', cue: 'Unknown loop currents.', family: 'Circuits' },
   phasor: { name: 'Phasors add, amplitudes do not', statement: 'In sinusoidal steady state each voltage is a phasor; impedances Z_R = R, Z_L = jωL, Z_C = 1/(jωC) obey Ohm’s law, and Kirchhoff’s laws hold for the phasors, not the amplitudes.', cue: 'A sine source driving resistors, inductors or capacitors.', family: 'Circuits' },

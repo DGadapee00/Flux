@@ -22,8 +22,10 @@
     <h3>Part II · Moving tanks</h3>
     <a href="#s3"><span>3</span>A tank that accelerates</a>
     <a href="#s4"><span>4</span>A tank that spins</a>
+    <h3>Part III · Floating</h3>
+    <a href="#s6"><span>5</span>Buoyancy and floating stability</a>
     <h3>Reference</h3>
-    <a href="#s5"><span>5</span>Formula sheet</a>
+    <a href="#s5"><span>6</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -121,14 +123,38 @@ F\, y_{cp} = \int y\, p\, dA = \rho g \sin\theta \int y^2\, dA = \rho g \sin\the
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Floating</h2>
+</div>
+
+<section class="topic" id="s6">
+<h2><span class="n">5</span>Buoyancy and floating stability</h2>
+<p>A floating body displaces its own weight of liquid, and the buoyancy acts through the centroid of the displaced volume, B. Whether it floats upright depends on how B moves when it heels.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Heeled through a small angle, a wedge of volume moves from the high side to the low side and B shifts toward the low side. The vertical through the new B crosses the centre line at the metacentre M, a height</p>
+\[
+\overline{BM} = \frac{I_\text{wp}}{V_\text{sub}}
+\]
+<p>above B, with \(I_\text{wp}\) the waterplane's second moment about its long axis. For a box of width \(b\) at draft \(d\), \(\overline{BM} = b^2/12d\). It rights itself if \(\overline{GM} = \overline{KB} + \overline{BM} - \overline{KG} > 0\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a wide barge</span>
+<p>A box 4 m wide, 6 m long, of 12 t floats at \(d = 12\,000/(1000 \times 4 \times 6) = 0.5\) m. \(\overline{KB} = 0.25\) m and \(\overline{BM} = 16/6 = 2.67\) m. With \(\overline{KG} = 1.5\) m, \(\overline{GM} = 1.42\) m: stable, though G is 1.25 m above B.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Thinking a body floats upright only if G is below B. Ships float with G well above B; what matters is that the metacentre M is above G.</p>
+</div>
+</section>
+
 <section class="topic" id="s5">
-<h2><span class="n">5</span>Formula sheet</h2>
+<h2><span class="n">6</span>Formula sheet</h2>
 \[
 F = \rho g\, h_c A, \qquad y_{cp} = y_c + \frac{I_{xc}}{y_c A}, \qquad I_{xc} = \frac{bL^3}{12},
 \]
 \[
 \nabla p = \rho\,(\mathbf g - \mathbf a), \qquad \tan\theta = \frac{a_x}{g + a_z}, \qquad z = \frac{\omega^2 r^2}{2g} + C.
 \]
+\[ F_B = \rho g V_\text{sub}, \qquad \overline{BM} = \frac{I_\text{wp}}{V_\text{sub}}, \qquad \overline{GM} = \overline{KB} + \overline{BM} - \overline{KG} > 0. \]
 </section>
 
 </main>

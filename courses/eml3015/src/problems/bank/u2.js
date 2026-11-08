@@ -5,6 +5,7 @@
  */
 import { LIQUIDS, gateForce, rigidSurface } from '@flux/subjects/mechanics/pressure-fields.js';
 import { G, choice, kase, num, problem, range } from '../kit.js';
+import { BARGE } from '@flux/subjects/mechanics/floating.js';
 
 const liquid = () => choice(['water', 'water'], ['seawater', 'seawater'], ['oil', 'light oil']);
 const rho = ($) => (LIQUIDS[$.fluid] || LIQUIDS.water).rho;
@@ -15,6 +16,14 @@ const gate = ($) => gateForce({ rho: rho($), d: $.d, L: $.L, b: $.b ?? 1, theta:
 const H0 = 0.45;
 const tank = ($) => rigidSurface({ mode: 'linear', len: 1, h0: H0, ax: $.a, az: 0, rho: rho($), g: G });
 const bowl = ($) => rigidSurface({ mode: 'spin', len: 0.3, h0: H0, omega: $.w, az: 0, rho: rho($), g: G });
+
+/** GM (m) of the 12 t, 6 m box barge of width b; `how` reproduces the traps. */
+export const barGM = ($, how = 'right') => {
+  const b = Number($.b);
+  const d = BARGE.m / (BARGE.rho * b * BARGE.L);
+  const BM = (how === 'edge' ? (b ** 3 * BARGE.L) / 3 : (b ** 3 * BARGE.L) / 12) / (b * d * BARGE.L);
+  return (how === 'nokb' ? 0 : d / 2) + BM - Number($.KG);
+};
 
 export default [
   problem({
@@ -194,5 +203,48 @@ export default [
       read: (c) => ({ wall: c.back - c.front > 1e-9 ? 'back' : c.front - c.back > 1e-9 ? 'front' : 'level' }),
     },
     cases: [kase('Speeding up', { motion: 'speeding' }, { wall: 'back' })],
+  }),
+  problem({
+    id: 'u2.7.gm',
+    title: 'A barge’s metacentric height',
+    exam: 'u2',
+    ch: '4',
+    lab: 'float',
+    src: 'Flux, written for the Floating lab',
+    topics: ['stability'],
+    principles: ['stability'],
+    vars: { b: choice(['2.5', '2.5 m'], ['3', '3 m'], ['4', '4 m']), KG: choice(['1', '1.0 m'], ['1.3', '1.3 m']) },
+    text: (T) => `A box barge ${T.b} wide and 6 m long has a mass of 12 t and floats in fresh water. Its centre of gravity is ${T.KG} above the keel. What is its metacentric height GM, in m?`,
+    parts: [num('gm', ($) => barGM($), 'm', { label: 'GM', abs: 0.005 })],
+    level: 2,
+    hints: ['Find the draft from the displaced volume, then KB = d/2.', 'BM = I_wp/V_sub with I_wp = Lb³/12; GM = KB + BM − KG.'],
+    steps: ($) => [String.raw`$d = ${(12 / (6 * Number($.b))).toFixed(3)}$ m, $\overline{BM} = b^2/12d = ${(Number($.b) ** 2 / (12 * (12 / (6 * Number($.b))))).toFixed(3)}$ m`, String.raw`$\overline{GM} = ${Number(barGM($).toPrecision(3))}$ m`],
+    sim: { scenario: 'wide', setup(s, $) { Object.assign(s, { b: Number($.b), KG: Number($.KG) }); }, read: (c) => ({ gm: c.GM }) },
+    cases: [kase('3 m, KG 1.0', { b: '3', KG: '1' }, { gm: 0.4583 })],
+  }),
+
+  problem({
+    id: 'u2.8.g-above-b',
+    title: 'G above B',
+    exam: 'u2',
+    ch: '4',
+    kind: 'conceptual',
+    lab: 'float',
+    src: 'Flux, written for the Floating lab',
+    topics: ['stability'],
+    principles: ['stability'],
+    vars: { boat: choice(['wide', 'a barge 4 m wide with G 1.5 m above the keel'], ['narrow', 'a barge 1.5 m wide with G 1.0 m above the keel']) },
+    text: (T) => `The 12 t, 6 m box is built as ${T.boat}. In both cases G is above B. Does it float upright?`,
+    parts: [
+      pick('a', 'upright', [
+        ['yes', 'yes', 'The metacentre is above G, so heeling swings buoyancy to right it.'],
+        ['no', 'no', 'The metacentre is below G: heeling makes the buoyancy turn it further.'],
+      ], ($) => ($.boat === 'wide' ? 'yes' : 'no')),
+    ],
+    level: 2,
+    hints: ['G above B is not the test.', 'Compare KM = KB + b²/12d with KG.'],
+    steps: ($) => [$.boat === 'wide' ? 'KM = 2.92 m > KG = 1.5 m: stable.' : 'KM = 0.81 m < KG = 1.0 m: it capsizes.'],
+    sim: { scenario: 'wide', setup(s, $) { Object.assign(s, $.boat === 'wide' ? { b: 4, KG: 1.5 } : { b: 1.5, KG: 1 }); }, read: (c) => ({ a: c.stable ? 'yes' : 'no' }) },
+    cases: [kase('narrow', { boat: 'narrow' }, { a: 'no' })],
   }),
 ];

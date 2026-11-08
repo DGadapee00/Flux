@@ -322,4 +322,27 @@ export const PREDICTIONS = {
       why: 'R_th is the network’s resistance with every source switched off, so it does not depend on what the sources are. V_th falls from 7.09 V to 4.36 V, the part V₁ gives alone.',
     },
   ],
+  rlc: [
+    {
+      id: 'rl-par',
+      scenario: 'parallel',
+      ask: 'In the parallel circuit, raise R tenfold, 50 Ω to 500 Ω. Does the damping ratio rise or fall?',
+      apply(s) { s.lR = Math.log10(500); },
+      watch: [{ id: 'z', label: 'damping ratio', get: (c) => c.zeta }],
+      mode: 'dir',
+      expect: { z: 'smaller' },
+      why: 'ζ = (1/2R)√(L/C): ten times the resistance, a tenth the damping, 1 to 0.1. The tank rings.',
+    },
+    {
+      id: 'rl-ser',
+      scenario: 'ring',
+      ask: 'In the series circuit, raise R tenfold, 20 Ω to 200 Ω. By what factor does ζ change?',
+      apply(s) { s.lR = Math.log10(200); },
+      watch: [{ id: 'z', label: 'damping ratio', get: (c) => c.zeta }],
+      mode: 'factor',
+      factors: [10, 0.1, 3.16],
+      expect: { z: 10 },
+      why: 'In series ζ = (R/2)√(C/L), in proportion to R: 0.1 becomes 1, critically damped.',
+    },
+  ],
 };

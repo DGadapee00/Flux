@@ -3,6 +3,7 @@
  * Folded into the bank by src/problems/index.js.
  */
 import { iSteady, tauMs } from '../bank/u4.js';
+import { zetaSeries } from '../bank/u4.js';
 
 export default {
   'u4.1.tau': {
@@ -18,6 +19,14 @@ export default {
       v: [
         [() => 12, 'An inductor’s voltage is not capped at the supply: it takes whatever pushes its current through the new path.'],
         [($) => iSteady($) * 200, 'With the switch open the current flows through R₂ as well as R₃.'],
+      ],
+    },
+  },
+  'u4.4.zeta': {
+    traps: {
+      z: [
+        [($) => zetaSeries($, 'parallel'), 'That is the parallel circuit’s ζ. In series α = R/2L, so ζ = (R/2)√(C/L).'],
+        [($) => zetaSeries($, 'two'), 'α is R/2L, not R/L: keep the 2.'],
       ],
     },
   },

@@ -26,4 +26,7 @@ export default {
       read: (c) => ({ drop: [c.rise * 100, 8.26], p: [c.pOuter / 1000, 5.21] }),
     },
   ],
+  s6: [
+    { tag: 'a wide barge', lab: 'float', scenario: 'wide', read: (c) => ({ 'BM (m)': [c.BM, 2.67], 'GM (m)': [c.GM, 1.42] }) },
+  ],
 };
