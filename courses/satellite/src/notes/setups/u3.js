@@ -9,4 +9,7 @@ export default {
     { tag: 'σ = +0.1', lab: 'poles', scenario: 'growing', read: (c) => ({ 'doubling (s)': [c.doubling, 6.93], 'y at 30 s': [c.yEnd, 19.8] }) },
   ],
   s3: [{ tag: 'the tilted craft as a quaternion', lab: 'attitude', scenario: 'tilted', read: (c) => ({ w: [c.q[0], 0.9515], x: [c.q[1], 0.0381], y: [c.q[2], 0.1893], z: [c.q[3], 0.2393] }) }],
+  s8: [
+    { tag: '10 µN·m', lab: 'wheel', scenario: 'none', read: (c) => ({ 'hours': [c.tSatH, 13.9] }) },
+  ],
 };

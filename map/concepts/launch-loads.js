@@ -27,5 +27,6 @@ export default {
   ],
   labs: [
     { course: 'satellite', lab: 'shake', notes: ['s1'], note: 'A component on a bracket shaken at its base across frequency: ten times the input at resonance, about the input when stiff, less when soft.' },
+    { course: 'satellite', lab: 'random', notes: ['s3'], note: 'A bracket under the launcher’s broadband shaking with sliders for f_n, Q and the input: Miles’ equation for the response and a fatigue life from the Rayleigh peaks. Both are checked by integrating the response spectrum and the damage.' },
   ],
 };

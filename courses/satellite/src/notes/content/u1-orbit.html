@@ -19,9 +19,11 @@
     <h3>Part I · Two-body orbits</h3>
     <a href="#s1"><span>1</span>Ellipses and their speeds</a>
     <a href="#s2"><span>2</span>Kepler's equation</a>
-    <h3>Reference</h3>
     <a href="#s3"><span>3</span>Orbit transfers</a>
-    <a href="#s4"><span>4</span>Formula sheet</a>
+    <h3>Part II · The mission's clock</h3>
+    <a href="#s5"><span>4</span>Eclipses and ground-station passes</a>
+    <h3>Reference</h3>
+    <a href="#s4"><span>5</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -93,8 +95,31 @@ v^2 = \mu\left(\frac2r - \frac1a\right).
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>The mission's clock</h2>
+</div>
+
+<section class="topic" id="s5">
+<h2><span class="n">4</span>Eclipses and ground-station passes</h2>
+<p>Two times run a satellite's day: how long it spends in Earth's shadow, and how long a ground station can see it.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>At radius \(r = R + h\) the period is \(T = 2\pi\sqrt{r^3/\mu}\). With the Sun in the orbit plane and the shadow a cylinder of radius \(R\), the satellite is in shadow over an arc of \(2\arcsin(R/r)\):</p>
+\[
+t_\text{eclipse} = \frac{T}{\pi}\arcsin\frac{R}{r}.
+\]
+<p>A station sees the satellite above elevation \(\varepsilon\) while it is within an Earth-central angle \(\lambda = \arccos((R/r)\cos\varepsilon) - \varepsilon\), so an overhead pass lasts \(T\lambda/\pi\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · 400 km</span>
+<p>At 400 km, \(r = 6771\) km and \(T = 92.4\) min. \(\arcsin(6371/6771) = 70.2^\circ\), so the eclipse lasts 36.0 min. With a 10° mask, \(\lambda = 13.3^\circ\) of arc either side, and an overhead pass lasts 6.2 min.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the altitude where the radius belongs. Both the period and the shadow need \(r\) measured from Earth's centre.</p>
+</div>
+</section>
+
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">5</span>Formula sheet</h2>
 \[
 a = \tfrac12(r_p + r_a), \quad e = \frac{r_a - r_p}{r_a + r_p}, \quad T = 2\pi\sqrt{a^3/\mu}, \quad v^2 = \mu\left(\frac2r - \frac1a\right),
 \]
@@ -104,6 +129,7 @@ M = \sqrt{\mu/a^3}\,t = E - e\sin E, \qquad \tan\frac\nu2 = \sqrt{\frac{1+e}{1-e
 \[
 \Delta v_1 = \sqrt{\frac{\mu}{r_1}}\left(\sqrt{\frac{2r_2}{r_1 + r_2}} - 1\right), \qquad \Delta v_2 = \sqrt{\frac{\mu}{r_2}}\left(1 - \sqrt{\frac{2r_1}{r_1 + r_2}}\right), \qquad t = \pi\sqrt{\frac{a^3}{\mu}}.
 \]
+\[ T = 2\pi\sqrt{r^3/\mu}, \quad t_\text{e} = \frac{T}{\pi}\arcsin\frac{R}{r}, \quad \lambda = \arccos\!\left(\frac{R}{r}\cos\varepsilon\right) - \varepsilon, \quad t_\text{p} = \frac{T\lambda}{\pi}. \]
 </section>
 
 </main>

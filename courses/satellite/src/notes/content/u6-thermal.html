@@ -18,8 +18,9 @@
   <nav class="toc" aria-label="Contents">
     <h3>Part I · Heat in a vacuum</h3>
     <a href="#s1"><span>1</span>The radiation balance</a>
+    <a href="#s3"><span>2</span>Two faces and a link</a>
     <h3>Reference</h3>
-    <a href="#s2"><span>2</span>Formula sheet</a>
+    <a href="#s2"><span>3</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -50,11 +51,30 @@ mc\,\frac{dT}{dt} = \text{absorbed}(t) + Q - \varepsilon\sigma A T^4.
 </div>
 </section>
 
+<section class="topic" id="s3">
+<h2><span class="n">2</span>Two faces and a link</h2>
+<p>A single temperature for the whole craft hides the real problem: the face toward the Sun runs hot while the electronics on the shaded radiator run cold.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Split the craft into nodes, each with its own balance. For a sunlit face (1) and a radiator (2) joined by a conductive link \(G\),</p>
+\[
+\alpha SA_1 = \varepsilon\sigma A_1T_1^4 + G(T_1 - T_2), \qquad Q + H + G(T_1 - T_2) = \varepsilon\sigma A_2T_2^4,
+\]
+<p>with \(Q\) the electronics' heat and \(H\) a heater's. Two equations in \(T_1\), \(T_2\), solved together.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · full sun, a 1 W/K link</span>
+<p>Faces of 0.25 m², \(\alpha = 0.6\), \(\varepsilon = 0.85\), 15 W of electronics: with no link the sunlit face reaches 88 °C and the radiator −85 °C. A 1 W/K link carries 56 W across and the faces settle at 60 °C and 4 °C.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Designing to the craft's average temperature. The average can be comfortable while one face cooks and another freezes. Check each node against its own limits.</p>
+</div>
+</section>
+
 <section class="topic" id="s2">
-<h2><span class="n">2</span>Formula sheet</h2>
+<h2><span class="n">3</span>Formula sheet</h2>
 \[
 \varepsilon\sigma A T^4 = \alpha S A_p + \alpha a S A F + \varepsilon q_E A F + Q, \qquad T_\text{deep space} = \left(\frac{\alpha S}{4\varepsilon\sigma}\right)^{1/4}, \qquad F = \tfrac12\left(1 - \sqrt{1 - (R_E/r)^2}\right).
 \]
+\[ \alpha SA_1 = \varepsilon\sigma A_1T_1^4 + G(T_1 - T_2), \qquad Q + H + G(T_1 - T_2) = \varepsilon\sigma A_2T_2^4. \]
 </section>
 
 </main>

@@ -3,6 +3,7 @@
  * Folded into the bank by src/problems/index.js.
  */
 import { angleRate, offsetDeg, tumbleRate } from '../bank/u3.js';
+import { fillHours } from '../bank/u3.js';
 
 export default {
   'u3.6.offset': {
@@ -42,6 +43,14 @@ export default {
       v: [
         [($) => ($.ask === 'settle' ? 1 / -$.sigma : 100 * Math.exp($.sigma / $.omega)), ($) => ($.ask === 'settle' ? 'That is one time constant, 1/|σ|. Settling to 2% takes about four: e^(−4) ≈ 0.02.' : 'The overshoot is e^(πσ/ω): the first peak comes half a ring period, π/ω, after the start.')],
         [($) => ($.ask === 'settle' ? 4 / $.omega : 100 * Math.exp((Math.PI * $.omega) / $.sigma)), ($) => ($.ask === 'settle' ? 'ω sets the ringing, not the decay. The envelope e^(σt) sets the settling.' : 'σ and ω are the wrong way round: e^(πσ/ω).')],
+      ],
+    },
+  },
+  'u3.10.fill': {
+    traps: {
+      t: [
+        [($) => fillHours($, 'seconds'), 'That is in seconds. Divide by 3600 for hours.'],
+        [($) => fillHours($, 'micro'), 'The torque is in µN·m: multiply by 10⁻⁶ to get N·m.'],
       ],
     },
   },

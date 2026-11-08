@@ -27,5 +27,6 @@ export default {
   ],
   labs: [
     { course: 'satellite', lab: 'balance', notes: ['s1'], note: 'A satellite’s temperature through an orbit for black, white and polished-metal finishes: α/ε sets it, so polished aluminium runs hottest and white coldest.' },
+    { course: 'satellite', lab: 'nodes', notes: ['s3'], note: 'A sunlit face and a radiator joined by a conductive link, with a heater: one temperature hides a hot face and frozen electronics, and the link and heater bring them into range. Newton on the balances is checked by marching both faces in time.' },
   ],
 };

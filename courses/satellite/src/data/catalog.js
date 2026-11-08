@@ -11,7 +11,7 @@ export const EXAMS = [
     title: 'Orbit',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['kepler', 'transfer'],
+    labs: ['kepler', 'transfer', 'passes'],
     coming: ['Rocket equation'],
   },
   {
@@ -29,7 +29,7 @@ export const EXAMS = [
     title: 'Attitude control',
     chapters: '3',
     date: 'Unit 3',
-    labs: ['attitude', 'spin', 'pointing', 'poles'],
+    labs: ['attitude', 'spin', 'pointing', 'poles', 'wheel'],
     coming: [],
   },
   {
@@ -38,7 +38,7 @@ export const EXAMS = [
     title: 'Structure',
     chapters: '4',
     date: 'Unit 4',
-    labs: ['shake'],
+    labs: ['shake', 'random'],
     coming: [],
   },
   {
@@ -47,7 +47,7 @@ export const EXAMS = [
     title: 'Power',
     chapters: '5',
     date: 'Unit 5',
-    labs: ['power'],
+    labs: ['power', 'ageing'],
     coming: [],
   },
   {
@@ -56,7 +56,7 @@ export const EXAMS = [
     title: 'Thermal control',
     chapters: '6',
     date: 'Unit 6',
-    labs: ['balance'],
+    labs: ['balance', 'nodes'],
     coming: [],
   },
 ];
@@ -73,6 +73,11 @@ export const LAB_META = {
   shake: { id: 'shake', exam: 'u4', title: 'Shake' },
   power: { id: 'power', exam: 'u5', title: 'Power' },
   balance: { id: 'balance', exam: 'u6', title: 'Thermal balance' },
+  passes: { id: 'passes', exam: 'u1', title: 'Passes' },
+  nodes: { id: 'nodes', exam: 'u6', title: 'Two faces' },
+  random: { id: 'random', exam: 'u4', title: 'Random vibration' },
+  wheel: { id: 'wheel', exam: 'u3', title: 'Wheel' },
+  ageing: { id: 'ageing', exam: 'u5', title: 'Ageing' },
 };
 
 export const CHAPTER_TITLES = {

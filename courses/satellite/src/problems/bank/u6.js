@@ -4,12 +4,20 @@
  */
 import { FINISHES, SIGMA, SOLAR, balance } from '@flux/subjects/heat/spacecraft.js';
 import { choice, kase, num, problem } from '../kit.js';
+import { CRAFT, SIGMA as SB } from '@flux/subjects/heat/twonode.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 /** A sphere in sunlight far from any planet: T = (αS/(4εσ))^(1/4); `area` and `root` name the traps. */
 export const deepT = ($, area = 4, root = 0.25) => {
   const f = FINISHES[$.finish];
   return ((f.alpha * SOLAR) / (area * f.eps * SIGMA)) ** root;
+};
+
+/** The radiator's temperature (°C) with no link, carrying Q + H; `how` reproduces the traps. */
+export const radiatorC = ($, how = 'right') => {
+  const eps = how === 'black' ? 1 : CRAFT.eps;
+  const T = ((CRAFT.Q + Number($.H)) / (eps * SB * CRAFT.A2)) ** 0.25;
+  return how === 'kelvin' ? T : T - 273.15;
 };
 
 export default [
@@ -72,5 +80,48 @@ export default [
       },
     },
     cases: [kase('black or aluminium', { pair: 'alu' }, { d: 'second' })],
+  }),
+  problem({
+    id: 'u6.3.radiator',
+    title: 'A radiator on its own',
+    exam: 'u6',
+    ch: '6',
+    lab: 'nodes',
+    src: 'Flux, written for the Two faces lab',
+    topics: ['nodes'],
+    principles: ['nodes'],
+    vars: { H: choice(['0', 'no heater'], ['5', 'a 5 W heater'], ['10', 'a 10 W heater'], ['20', 'a 20 W heater']) },
+    text: (T) => `A radiator of 0.25 m² with ε = 0.85 faces deep space, thermally isolated from the rest of the craft. It carries 15 W of electronics and ${T.H}. At what temperature does it settle, in °C?`,
+    parts: [num('T', ($) => radiatorC($), '°C', { label: 'T₂', abs: 0.5 })],
+    level: 2,
+    hints: ['In steady state it radiates what it carries: εσAT⁴ = Q + H.', 'Solve for T in kelvin, then convert.'],
+    steps: ($) => [String.raw`$T = \left(\frac{${15 + Number($.H)}}{0.85\,\sigma\,(0.25)}\right)^{1/4} - 273.15 = ${Number(radiatorC($).toPrecision(3))}$ °C`],
+    sim: { scenario: 'nolink', setup(s, $) { Object.assign(s, { G: 0, H: Number($.H) }); }, read: (c) => ({ T: c.T2c }) },
+    cases: [kase('no heater', { H: '0' }, { T: -85.31 })],
+  }),
+
+  problem({
+    id: 'u6.4.which-face',
+    title: 'Does the average tell you?',
+    exam: 'u6',
+    ch: '6',
+    kind: 'conceptual',
+    lab: 'nodes',
+    src: 'Flux, written for the Two faces lab',
+    topics: ['nodes'],
+    principles: ['nodes'],
+    vars: { G: choice(['0', 'no conductive link'], ['0.2', 'a weak 0.2 W/K link']) },
+    text: (T) => `A craft in full sun has its electronics on a shaded radiator, with ${T.G} to the sunlit face. The average of the two faces is near 0 °C. Are the electronics safe at −10 °C or above?`,
+    parts: [
+      pick('a', 'the electronics', [
+        ['cold', 'no: the radiator is far colder than the average', 'The sunlit face is hot and the radiator cold; the average hides both.'],
+        ['fine', 'yes: the average is above −10 °C', 'Each component sits at its own node’s temperature, not the craft’s average.'],
+      ], () => 'cold'),
+    ],
+    level: 1,
+    hints: ['Where are the electronics mounted?', 'What does a weak link do to the two faces?'],
+    steps: () => ['With little link the radiator settles far below the average: check each node.'],
+    sim: { scenario: 'nolink', setup(s, $) { s.G = Number($.G); }, read: (c) => ({ a: c.T2c < CRAFT.lo ? 'cold' : 'fine' }) },
+    cases: [kase('no link', { G: '0' }, { a: 'cold' })],
   }),
 ];

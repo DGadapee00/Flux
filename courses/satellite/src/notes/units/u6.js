@@ -7,6 +7,7 @@ export default {
   load: () => import('../content/u6-thermal.html?raw').then((m) => m.default),
   sections: [
     { id: 's1', n: 1, title: 'The radiation balance', lab: 'balance', ch: ['6'], topics: ['radiation-balance'], home: true },
-    { id: 's2', n: 2, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's3', n: 2, title: 'Two faces and a link', lab: 'nodes', ch: ['6'], topics: ['nodes'], home: true },
+    { id: 's2', n: 3, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

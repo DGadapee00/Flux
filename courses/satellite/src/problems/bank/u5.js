@@ -3,6 +3,7 @@
  * (../coaching/u5.js), each checked against the lab (`sim`).
  */
 import { choice, kase, num, problem, range } from '../kit.js';
+import { BUS } from '@flux/subjects/em/ageing.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 const MU = 398600;
@@ -25,6 +26,16 @@ export const arrayNeeded = ($, how = 'right') => {
   if (how === 'average') return ($.load * g.T) / Ts;
   if (how === 'load') return $.load;
   return ($.load * (Ts + g.Te / 0.81)) / Ts;
+};
+
+/** Capacity (Wh) after y years from C0, by the cubic law; `how` reproduces the traps. */
+export const capacityAfter = ($, how = 'right') => {
+  const C0 = Number($.C0);
+  const k = C0 / 6000;
+  const n = Number($.y) * BUS.cyclesPerYear;
+  if (how === 'fixed') return C0 - k * (BUS.E / C0) ** 2 * n;
+  if (how === 'depthless') return C0 - k * n;
+  return Math.cbrt(C0 ** 3 - 3 * k * BUS.E ** 2 * n);
 };
 
 export default [
@@ -114,5 +125,49 @@ export default [
       read: (c) => ({ d: c.sustains ? 'keeps' : 'sinks' }),
     },
     cases: [kase('the average', { sizing: 'average' }, { d: 'sinks' })],
+  }),
+  problem({
+    id: 'u5.4.fade',
+    title: 'A fading battery',
+    exam: 'u5',
+    ch: '5',
+    lab: 'ageing',
+    src: 'Flux, written for the Ageing lab',
+    topics: ['ageing'],
+    principles: ['ageing'],
+    vars: { C0: choice(['150', '150 Wh'], ['175', '175 Wh']), y: choice(['4', '4 years'], ['5', '5 years'], ['6', '6 years']) },
+    text: (T) => `A battery of ${T.C0} covers a 35 Wh eclipse 5700 times a year. Its capacity fades as dC/dn = −k(E/C)² per cycle with k = C₀/6000. What is its capacity after ${T.y}, in Wh?`,
+    parts: [num('C', ($) => capacityAfter($), 'Wh', { label: 'C' })],
+    level: 3,
+    hints: ['Separate: C² dC = −kE² dn.', 'C = (C₀³ − 3kE²n)^{1/3}, with n the number of cycles.'],
+    steps: ($) => [String.raw`$n = ${Number($.y) * 5700}$, $C = (${$.C0}^3 - 3(${(Number($.C0) / 6000).toFixed(4)})(35^2)n)^{1/3} = ${Number(capacityAfter($).toPrecision(3))}$ Wh`],
+    sim: { scenario: 'sized', setup(s, $) { Object.assign(s, { C0: Number($.C0), years: Number($.y) }); }, read: (c) => ({ C: c.C }) },
+    cases: [kase('175 Wh, 5 years', { C0: '175', y: '5' }, { C: 132.1 })],
+  }),
+
+  problem({
+    id: 'u5.5.deeper',
+    title: 'Fading faster',
+    exam: 'u5',
+    ch: '5',
+    kind: 'conceptual',
+    lab: 'ageing',
+    src: 'Flux, written for the Ageing lab',
+    topics: ['ageing'],
+    principles: ['ageing'],
+    vars: { C0: choice(['175', 'a 175 Wh battery'], ['250', 'a 250 Wh battery']) },
+    text: (T) => `${T.C0} covers the same 35 Wh eclipse every orbit for years. As it fades, does each cycle cost it more or less capacity than the one before?`,
+    parts: [
+      pick('a', 'each cycle', [
+        ['more', 'more', 'The same 35 Wh is a deeper discharge of a smaller battery, and deeper cycles fade it faster.'],
+        ['less', 'less', 'The fade depends on depth, and depth grows as capacity falls.'],
+        ['same', 'the same', 'Only if the fade per cycle did not depend on depth.'],
+      ], () => 'more'),
+    ],
+    level: 1,
+    hints: ['What is the depth of discharge as capacity falls?', 'How does fade depend on depth?'],
+    steps: () => ['d = E/C rises as C falls, and fade ∝ d²: each cycle costs more.'],
+    sim: { scenario: 'sized', setup(s, $) { Object.assign(s, { C0: Number($.C0), years: 5 }); }, read: (c) => ({ a: c.dod > c.dod0 ? 'more' : 'same' }) },
+    cases: [kase('175 Wh', { C0: '175' }, { a: 'more' })],
   }),
 ];

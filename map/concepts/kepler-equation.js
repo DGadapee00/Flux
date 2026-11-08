@@ -27,5 +27,6 @@ export default {
   ],
   labs: [
     { course: 'satellite', lab: 'kepler', notes: ['s1', 's2'], note: 'An elliptical orbit with a clock: a quarter period from perigee carries a transfer orbit to 156°, and the position from Kepler’s equation matches an RK4 integration of the orbit.' },
+    { course: 'satellite', lab: 'passes', notes: ['s5'], note: 'A circular orbit with sliders for altitude and elevation mask: eclipse and pass times, the numbers Power and Communications need. The closed forms are checked by integrating the orbit.' },
   ],
 };
