@@ -8,21 +8,19 @@ import { latestBuilt, visibleTracks } from './tracks.js';
 
 const concepts = loadConcepts();
 const paths = loadPaths();
-/** @type {ReturnType<typeof mountToday> | null} */
-let today = null;
+/** @type {ReturnType<typeof mountMap>} */
+let map;
 /** @type {{ refresh: () => void } | undefined} */
 let applications;
-const map = mountMap({
-  concepts,
-  paths,
-  record: (id) => today?.recordHtml(id) ?? '',
-  status: (id) => today?.statusOf(id) ?? null,
-});
-today = mountToday({
+// Today first: the map opens where Today says the learner is.
+const today = mountToday({
   concepts,
   paths,
   problems,
-  onPath: (id) => map.choosePath(id),
+  onPath: (course, id) => {
+    map.choosePath(course);
+    if (id) map.go(id);
+  },
   onRefresh: () => {
     map.refreshPanel();
     map.refreshStatus();
@@ -30,13 +28,20 @@ today = mountToday({
   },
   onLeaveReview: () => map.current && map.show(map.current),
 });
+map = mountMap({
+  concepts,
+  paths,
+  record: (id) => today.recordHtml(id),
+  status: (id) => today.statusOf(id),
+  start: () => today.startPoint(),
+});
 map.refreshPanel();
 map.refreshStatus();
 // Today sits above the map. A link that names a concept still opens on the map.
 if (map.current && decodeURIComponent(window.location.hash.slice(1)) === map.current) {
   document.getElementById('explore')?.scrollIntoView({ block: 'start' });
 }
-applications = mountApplications(map, undefined, { status: (id) => today?.statusOf(id) ?? null });
+applications = mountApplications(map, undefined, { status: (id) => today.statusOf(id) });
 
 const root = document.querySelector('#tracks');
 
@@ -70,14 +75,20 @@ for (const track of visibleTracks()) {
     const item = document.createElement('li');
     item.className = course.href ? 'built' : 'unbuilt';
     const code = course.code ? `${course.code} ` : '';
-    const term = course.term ? ` ${course.term}` : '';
     if (course.href) {
       const link = document.createElement('a');
       link.className = 'course-link';
       link.href = course.href;
       link.dataset.course = course.id;
-      link.textContent = `${code}${course.title}${term}`.replace(/\s+/g, ' ').trim();
+      link.textContent = `${code}${course.title}`.replace(/\s+/g, ' ').trim();
       item.append(link);
+      if (course.term) {
+        // The term in its own dim line, so every course name reads the same way.
+        const when = document.createElement('span');
+        when.className = 'term';
+        when.textContent = course.term;
+        item.append(when);
+      }
     } else {
       const label = document.createElement('span');
       label.className = 'course-label';

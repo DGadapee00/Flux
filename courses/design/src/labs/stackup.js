@@ -26,8 +26,8 @@ function apply(id, state) {
   Object.assign(state, { scenarioId: sc.id, n: sc.n, T: sc.T, S: sc.S, kind: sc.kind });
 }
 
-/** A share as a percentage, or per million when it is under 0.1%. */
-const share = (x) => (x < 0.001 ? `${fig(x * 1e6)} per million` : `${fig(x * 100)}%`);
+/** A share as a percentage, per million when it is under 0.1%, and in words when it is tinier still. */
+const share = (x) => (x < 1e-8 ? 'under 1 in 100 million' : x < 0.001 ? `${fig(x * 1e6)} per million` : `${fig(x * 100)}%`);
 
 const spec = (s) => ({ n: Math.round(s.n), T: s.T, S: s.S, kind: s.kind });
 

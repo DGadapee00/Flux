@@ -7,6 +7,8 @@
  *   (`MASTERED_BOX` in @flux/core) and were last answered right;
  * - learning: some of those problems tried, fewer solid;
  * - from a course you took: no Flux practice to measure it, and a course that teaches it is taken;
+ * - covered in class: nothing tried, and it was on an exam of a course being taken that has passed.
+ *   Once tried it is learning, and it still counts toward what builds on it until a problem is missed;
  * - ready: nothing tried, and everything it builds on is solid or from a course you took;
  * - not yet: something it builds on is not.
  * Only courses the learner has started count, so unstarted Dynamics problems do not pull down a
@@ -28,7 +30,7 @@ export const DAILY_CAP = 15;
 export const MAX_THREADS = 4;
 const DAY = 864e5;
 
-/** @typedef {'solid'|'assumed'|'learning'|'ready'|'locked'} Status */
+/** @typedef {'solid'|'assumed'|'taught'|'learning'|'ready'|'locked'} Status */
 
 /**
  * @param {{
@@ -72,6 +74,8 @@ export function createLearner({ concepts, courses, paths = {}, exams = [], byLab
   }
 
   const taken = (c) => c.courses.some((k) => courseOf[k]?.status === 'taken');
+  /** Concepts on an exam that has already passed: the class has covered them. */
+  const taught = new Set(exams.filter((e) => e.day.getTime() < now).flatMap((e) => e.concepts));
   const statusMemo = {};
   /** @returns {Status} */
   function status(id) {
@@ -81,12 +85,15 @@ export function createLearner({ concepts, courses, paths = {}, exams = [], byLab
     if (s.n && s.tried && s.solid / s.n >= SOLID_SHARE) out = 'solid';
     else if (s.tried) out = 'learning';
     else if (!s.n && taken(byId[id])) out = 'assumed';
+    else if (taught.has(id)) out = 'taught';
     else out = byId[id].requires.every(met) ? 'ready' : 'locked';
     return (statusMemo[id] = out);
   }
   function met(id) {
     const s = status(id);
-    return s === 'solid' || s === 'assumed';
+    if (s === 'solid' || s === 'assumed' || s === 'taught') return true;
+    // Covered in class and started in Flux: it still counts until a problem on it is missed.
+    return s === 'learning' && taught.has(id) && !problemsOf[id].some((k) => items[k]?.lastOk === false);
   }
 
   /** Every due problem once, each under the first concept that lists it. Misses first, then oldest. */
@@ -107,6 +114,17 @@ export function createLearner({ concepts, courses, paths = {}, exams = [], byLab
   const upcoming = exams.filter((e) => e.day.getTime() >= now).sort((a, b) => a.day - b.day);
   const examRank = (id) => {
     const i = upcoming.findIndex((e) => e.concepts.includes(id));
+    return i < 0 ? 99 : i;
+  };
+  /** Each upcoming exam's concepts and everything they build on. */
+  const examReach = upcoming.map((e) => {
+    const out = new Set(e.concepts);
+    for (const id of e.concepts) if (byId[id]) for (const r of graph.closure(id, 'requires')) out.add(r);
+    return out;
+  });
+  /** The nearest exam a concept is on or leads to; 99 when none. */
+  const routeRank = (id) => {
+    const i = examReach.findIndex((set) => set.has(id));
     return i < 0 ? 99 : i;
   };
 
@@ -222,15 +240,24 @@ export function createLearner({ concepts, courses, paths = {}, exams = [], byLab
   const opens = (id) => (closureMemo[id] ??= graph.closure(id, 'leads').size);
 
   /**
-   * Concepts to learn next: ready ones, from the courses being taken first, then the nearest
-   * exam's, then teaching order, then the ones that open the most.
+   * Concepts to learn next: ready ones, from the courses being taken first, then the ones the
+   * nearest exam is on or builds on, then teaching order, then the ones that open the most.
    */
   function nextUp(limit = 3) {
     const at = (id) => Math.min(999, ...(pathIndex[id] || []).map((p) => p.i));
     return concepts
       .filter((c) => status(c.id) === 'ready')
       .map((c) => c.id)
-      .sort((a, b) => standing(a) - standing(b) || examRank(a) - examRank(b) || at(a) - at(b) || opens(b) - opens(a))
+      .sort((a, b) => standing(a) - standing(b) || routeRank(a) - routeRank(b) || examRank(a) - examRank(b) || at(a) - at(b) || opens(b) - opens(a))
+      .slice(0, limit);
+  }
+
+  /** Concepts started and not yet solid, nearest exam first, then the soonest review. */
+  function inProgress(limit = 3) {
+    return concepts
+      .filter((c) => status(c.id) === 'learning' && !stats(c.id).due)
+      .map((c) => c.id)
+      .sort((a, b) => routeRank(a) - routeRank(b) || stats(a).next - stats(b).next)
       .slice(0, limit);
   }
 
@@ -256,6 +283,8 @@ export function createLearner({ concepts, courses, paths = {}, exams = [], byLab
     dueRows,
     threads,
     nextUp,
+    inProgress,
+    routeRank,
     opens,
     courseProgress,
     /** Days until `t`, rounded; 0 is today. */

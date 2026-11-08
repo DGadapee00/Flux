@@ -107,7 +107,83 @@ const PAINT = {
   mechanics: paintMechanics,
   stats: paintStats,
   thermal: paintThermal,
+  circuits: paintCircuits,
+  projects: paintProjects,
 };
+
+/**
+ * A capacitor charging through a resistor: the voltage rises toward the source, 63% of the way in
+ * one time constant. A faint outline shows the whole curve at rest; the bright one draws in.
+ * @param {SVGSVGElement} svg
+ */
+function paintCircuits(svg) {
+  const left = 28;
+  const right = 304;
+  const top = 26;
+  const base = 142;
+  const tMax = 5;
+  const at = (t) => ({ x: left + (t / tMax) * (right - left), y: base - (1 - Math.exp(-t)) * (base - top) });
+  const pts = Array.from({ length: 81 }, (_, i) => at((i / 80) * tMax));
+  const str = (list) => list.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  svg.append(svgEl('line', { x1: left, y1: top, x2: right, y2: top, stroke: MUTED, 'stroke-width': 1, 'stroke-dasharray': '4 4' }));
+  const tau = at(1);
+  svg.append(svgEl('line', { x1: tau.x, y1: base, x2: tau.x, y2: tau.y, stroke: MUTED, 'stroke-width': 1, 'stroke-dasharray': '3 3' }));
+  svg.append(svgEl('polyline', { points: str(pts), fill: 'none', stroke: BLUE, 'stroke-width': 1, opacity: 0.35 }));
+  svg.append(svgEl('line', { x1: left, y1: base, x2: right, y2: base, stroke: AXIS, 'stroke-width': 1.2 }));
+  svg.append(svgEl('line', { x1: left, y1: base, x2: left, y2: top - 8, stroke: AXIS, 'stroke-width': 1.2 }));
+  const curve = svgEl('polyline', { points: '', fill: 'none', stroke: BLUE, 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+  svg.append(curve);
+  const dot = svgEl('circle', { r: 4, fill: E, opacity: 0 });
+  svg.append(dot);
+  return (t) => {
+    const n = Math.max(1, Math.round(t * 80));
+    curve.setAttribute('points', t === 0 ? '' : str(pts.slice(0, n + 1)));
+    dot.setAttribute('cx', pts[n].x.toFixed(1));
+    dot.setAttribute('cy', pts[n].y.toFixed(1));
+    dot.setAttribute('opacity', t === 0 ? '0' : '1');
+  };
+}
+
+/**
+ * The projects as one build: the bench's circuits and the design practice feed the satellite.
+ * The links draw in, then the satellite lights.
+ * @param {SVGSVGElement} svg
+ */
+function paintProjects(svg) {
+  const box = (x, y, w, label) => {
+    svg.append(svgEl('rect', { x, y, width: w, height: 34, rx: 6, fill: 'none', stroke: MUTED, 'stroke-width': 1.2 }));
+    const t = svgEl('text', { x: x + w / 2, y: y + 22, 'text-anchor': 'middle', fill: WHITE, 'font-size': 13, 'font-family': 'inherit' });
+    t.textContent = label;
+    svg.append(t);
+  };
+  box(20, 30, 100, 'Bench');
+  box(20, 104, 100, 'Design');
+  const links = [
+    { from: { x: 120, y: 47 }, to: { x: 196, y: 84 } },
+    { from: { x: 120, y: 121 }, to: { x: 196, y: 84 } },
+  ].map(({ from, to }) => {
+    // A faint link at rest, so the still card already shows how the pieces join.
+    svg.append(svgEl('line', { x1: from.x, y1: from.y, x2: to.x, y2: to.y, stroke: TEAL, 'stroke-width': 1, opacity: 0.35 }));
+    const line = svgEl('line', { x1: from.x, y1: from.y, x2: from.x, y2: from.y, stroke: TEAL, 'stroke-width': 2, 'stroke-linecap': 'round' });
+    svg.append(line);
+    return { line, from, to };
+  });
+  const sat = svgEl('rect', { x: 196, y: 64, width: 104, height: 40, rx: 6, fill: 'none', stroke: E, 'stroke-width': 1.6, opacity: 0.45 });
+  svg.append(sat);
+  const label = svgEl('text', { x: 248, y: 89, 'text-anchor': 'middle', fill: E, 'font-size': 13, 'font-family': 'inherit', opacity: 0.6 });
+  label.textContent = 'Satellite';
+  svg.append(label);
+  return (t) => {
+    const k = Math.min(1, t / 0.7);
+    for (const { line, from, to } of links) {
+      line.setAttribute('x2', (from.x + (to.x - from.x) * k).toFixed(1));
+      line.setAttribute('y2', (from.y + (to.y - from.y) * k).toFixed(1));
+    }
+    const glow = Math.max(0, (t - 0.6) / 0.4);
+    sat.setAttribute('opacity', (0.45 + 0.55 * glow).toFixed(2));
+    label.setAttribute('opacity', (0.6 + 0.4 * glow).toFixed(2));
+  };
+}
 
 /**
  * @param {SVGSVGElement} svg

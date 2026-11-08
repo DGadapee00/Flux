@@ -87,7 +87,7 @@ try {
   assert.match(await checkOrbit('7.59', '95.5'), /agree with both routes/);
   // A foundation link selects the concept in the live map.
   await select('communications');
-  await click('[data-concept="em-waves"]');
+  await click('#applications [data-concept="em-waves"]');
   await wait(() => page.eval('document.querySelector("#concept-title")?.textContent.includes("Electromagnetic")'));
   assert.equal(await page.eval('location.hash'), '#em-waves');
   // The address keeps the chosen subsystem, and Back returns to the one before.

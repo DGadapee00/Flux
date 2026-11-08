@@ -155,7 +155,8 @@
 }
 
 .foundation-state[data-state='solid'],
-.foundation-state[data-state='assumed'] {
+.foundation-state[data-state='assumed'],
+.foundation-state[data-state='taught'] {
   color: #3f9a5c;
 }
 

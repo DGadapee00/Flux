@@ -137,6 +137,20 @@ export function createNotes(api, deps) {
     for (const el of root.querySelectorAll('*')) {
       for (const a of [...el.attributes]) if (/^on/i.test(a.name)) el.removeAttribute(a.name);
     }
+    // Straight double quotes in prose become curly pairs: the notes' serif draws a straight " as a
+    // closing quote, so "green" read as ”green”. TeX between \( \) or \[ \] is left alone.
+    const curl = (node) => {
+      for (const t of node.childNodes || []) {
+        if (t.nodeType === 1) curl(t);
+        else if (t.nodeType === 3 && t.textContent.includes('"')) {
+          t.textContent = t.textContent
+            .split(/(\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\])/)
+            .map((part, i) => (i % 2 ? part : part.replace(/"([^"\n]*)"/g, '“$1”')))
+            .join('');
+        }
+      }
+    };
+    curl(root);
     // The app styles .legend as a lab's colour key; the notes' legend is a different thing.
     root.querySelectorAll('.legend').forEach((el) => el.classList.replace('legend', 'nt-legend'));
     for (const sec of root.querySelectorAll('section.topic[id]')) {

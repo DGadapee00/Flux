@@ -130,6 +130,42 @@ test('the nearest exam pulls its thread to the front', () => {
   assert.equal(first.exam.n, 7);
 });
 
+test('a concept on an exam that has passed counts as covered in class', () => {
+  const exams = [
+    { course: 'phy', n: 1, title: 'One', day: new Date(NOW - 20 * DAY), concepts: ['b', 'm'] },
+    { course: 'phy', n: 2, title: 'Two', day: new Date(NOW + 5 * DAY), concepts: ['c'] },
+  ];
+  const l = learn({ 'calc:la0': solid(), 'calc:la1': solid() }, { exams });
+  assert.equal(l.status('b'), 'taught');
+  assert.equal(l.status('m'), 'taught');
+  assert.ok(l.met('m'));
+  assert.equal(l.status('c'), 'ready', 'builds on taught concepts');
+  assert.equal(l.nextUp(1)[0], 'c', 'the coming exam goes first');
+  // Once tried it is learning. It still counts for what builds on it, until a problem is missed.
+  const started = learn({ 'calc:la0': solid(), 'calc:la1': solid(), 'phy:lb0': due() }, { exams });
+  assert.equal(started.status('b'), 'learning');
+  assert.ok(started.met('b'));
+  const missed = learn({ 'calc:la0': solid(), 'calc:la1': solid(), 'phy:lb0': due(true) }, { exams });
+  assert.equal(missed.status('b'), 'learning');
+  assert.ok(!missed.met('b'));
+  assert.equal(missed.status('m'), 'taught');
+  assert.equal(missed.status('c'), 'ready', 'm is still covered');
+});
+
+test('learn next pulls forward what the coming exam builds on', () => {
+  const exams = [{ course: 'phy', n: 3, title: 'Three', day: new Date(NOW + 5 * DAY), concepts: ['c'] }];
+  const l = learn({ 'calc:la0': solid(), 'calc:la1': solid() }, { exams });
+  // b leads to m and c; x and lone are ready too but lead nowhere near the exam.
+  assert.equal(l.nextUp(1)[0], 'b');
+  assert.equal(l.routeRank('b'), 0);
+  assert.equal(l.routeRank('lone'), 99);
+});
+
+test('keep going lists concepts started and not solid, with nothing due', () => {
+  const l = learn({ 'phy:lb0': solid(), 'phy:lc0': due(), 'stat:ll0': { box: 1, due: NOW + DAY, lastOk: true, last: NOW } });
+  assert.deepEqual(l.inProgress(3), ['lone', 'b'], 'soonest review first; c is due, so it is a review instead');
+});
+
 test('learn next starts with the courses being taken', () => {
   const l = learn({ 'calc:la0': solid(), 'calc:la1': solid() });
   const next = l.nextUp(5);
