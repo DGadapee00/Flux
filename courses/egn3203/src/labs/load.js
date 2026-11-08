@@ -14,6 +14,13 @@ const loaders = {
   truncation: () => import('./truncation.js'),
   roots: () => import('./roots.js'),
   rk: () => import('./rk.js'),
+  quadratic: () => import('./quadratic.js'),
+  fit: () => import('./fit.js'),
+  interp: () => import('./interp.js'),
+  derivative: () => import('./derivative.js'),
+  stiff: () => import('./stiff.js'),
+  montecarlo: () => import('./montecarlo.js'),
+  newton: () => import('./newton.js'),
 };
 
 const labs = createLabLoader(loaders);

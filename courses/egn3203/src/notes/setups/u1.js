@@ -9,4 +9,10 @@ export default {
   s8: [{ tag: 'arrows at 45°', lab: 'projection', scenario: 'slant', read: (c) => ({ 'x̂₁': [c.xhat[0], 0.4], 'x̂₂': [c.xhat[1], 1.131], 'shadows miss by': [c.naiveErr, 1.02] }) }],
   s10: [{ tag: 'two nearly parallel lines', lab: 'condition', scenario: 'ill', read: (c) => ({ κ: [c.kappa, 402], 'nudge (%)': [100 * c.relB, 0.354], 'change in x (%)': [100 * c.relX, 70.7], 'residual (%)': [100 * c.relR, 0.353] }) }],
   s4: [{ tag: 'a tiny pivot', lab: 'elimination', scenario: 'tiny-pivot', read: (c) => ({ x1: [c.x[0], 1] }) }],
+  s11: [
+    { tag: 'a long bowl', lab: 'quadratic', scenario: 'tilted', read: (c) => ({ 'λ₁': [c.l1, 3.414], 'λ₂': [c.l2, 0.586] }) },
+  ],
+  s12: [
+    { tag: 'a line through four points', lab: 'fit', scenario: 'line', read: (c) => ({ 'RMS miss': [c.miss, 0.2233] }) },
+  ],
 };

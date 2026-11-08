@@ -3,6 +3,8 @@
  * Folded into the bank by src/problems/index.js.
  */
 import { AREA, NULL_DIR, projCoef } from '../bank/u1.js';
+import { bigEig } from '../bank/u1.js';
+import { lsSlope } from '../bank/u1.js';
 
 export default {
   'u1.12.coefficients': {
@@ -72,6 +74,22 @@ export default {
       v: [
         [($) => $.delta, 'The answer does not move by the size of the nudge: subtracting the equations gives εy = δ, so y = δ/ε.'],
         [($) => $.delta * Number($.eps), 'Divide by ε, not multiply: the smaller ε, the further the crossing moves.'],
+      ],
+    },
+  },
+  'u1.15.eigen-sym': {
+    traps: {
+      l: [
+        [($) => bigEig($, 'drop'), 'Keep ((a − c)/2)² under the root: λ = (a + c)/2 + √(((a − c)/2)² + b²).'],
+        [($) => bigEig($, 'small'), 'That is the smaller eigenvalue: take the + sign for the larger.'],
+      ],
+    },
+  },
+  'u1.17.ls-line': {
+    traps: {
+      m: [
+        [($) => lsSlope($, 'ends'), 'That is the line through the first and last points. Least squares uses all four.'],
+        [($) => lsSlope($, 'origin'), 'That forces the line through the origin. Fit the intercept too: centre x and y on their means.'],
       ],
     },
   },

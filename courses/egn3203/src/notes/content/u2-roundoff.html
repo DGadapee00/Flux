@@ -24,8 +24,13 @@
     <h3>Part III · Algorithms</h3>
     <a href="#s4"><span>4</span>Root finding</a>
     <a href="#s6"><span>5</span>Stepping an ODE</a>
+    <a href="#s7"><span>6</span>Interpolation and Runge’s function</a>
+    <a href="#s8"><span>7</span>Differentiating by differences</a>
+    <a href="#s9"><span>8</span>Stiff equations and stability</a>
+    <a href="#s10"><span>9</span>Monte Carlo</a>
+    <a href="#s11"><span>10</span>Newton’s method for systems</a>
     <h3>Reference</h3>
-    <a href="#s5"><span>6</span>Formula sheet</a>
+    <a href="#s5"><span>11</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -135,8 +140,98 @@ y_{n+1} = y_n + \frac{h}{6}\left(k_1 + 2k_2 + 2k_3 + k_4\right),
 </div>
 </section>
 
+<section class="topic" id="s7">
+<h2><span class="n">6</span>Interpolation and Runge’s function</h2>
+<p>Through \(n + 1\) points with distinct \(x\) passes exactly one polynomial of degree \(n\). How well it follows the function between the points depends on where the points are.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Lagrange's form builds it from basis polynomials that are 1 at one point and 0 at the others:</p>
+\[
+p(x) = \sum_{i=0}^{n} y_i\prod_{j\ne i}\frac{x - x_j}{x_i - x_j}, \qquad f(x) - p(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!}\prod_{i=0}^{n}(x - x_i).
+\]
+<p>On equally spaced points the product is far larger near the ends than in the middle. Chebyshev points, \(x_i = \cos(i\pi/n)\), crowd toward the ends and keep it small throughout.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · three points of Runge’s function</span>
+<p>Through \(f(-1) = 1/26\), \(f(0) = 1\) and \(f(1) = 1/26\) passes \(p(x) = 1 - \tfrac{25}{26}x^2\). At \(x = 0.5\) it gives 0.760, while \(f(0.5) = 0.138\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting more points to give a better fit. For \(1/(1 + 25x^2)\) on equal spacing the largest error is 1.05 with 9 points and 14 with 17. On Chebyshev points it is 0.04 with 17.</p>
+</div>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">7</span>Differentiating by differences</h2>
+<p>A derivative is a limit as \(h \to 0\). On a computer \(h\) cannot go to zero: the subtraction loses digits.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Taylor's series gives the truncation error of each formula:</p>
+\[
+\frac{f(x+h) - f(x)}{h} = f' + \frac h2 f'' + \cdots, \qquad \frac{f(x+h) - f(x-h)}{2h} = f' + \frac{h^2}{6}f''' + \cdots.
+\]
+<p>Each value of \(f\) carries a relative error near \(\varepsilon = 2^{-52}\), and dividing the difference by \(h\) turns that into about \(\varepsilon|f|/h\). The total, \((h/2)|f''| + \varepsilon|f|/h\) for forward differences, is least at \(h = \sqrt{2\varepsilon|f|/|f''|}\), about \(10^{-8}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · sin x at x = 1</span>
+<p>With \(h = 10^{-3}\) the forward difference misses \(\cos 1\) by \(4.2 \times 10^{-4}\), close to \((h/2)\sin 1 = 4.21 \times 10^{-4}\); the central difference by \(9.0 \times 10^{-8}\). At \(h = 10^{-13}\) both miss by about \(10^{-4}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Shrinking \(h\) as far as possible. Below about \(10^{-8}\) the forward difference gets worse, not better; at \(h = 10^{-15}\) it is wrong in the second digit.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">8</span>Stiff equations and stability</h2>
+<p>A method can be accurate for the motion you watch and still blow up. Every mode of the system must stay stable, including ones that died out long ago.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>For \(y' = \lambda y\), one step of explicit Euler multiplies \(y\) by \(1 + h\lambda\), and implicit Euler, which evaluates the slope at the new point, by \(1/(1 - h\lambda)\):</p>
+\[
+y_{n+1} = (1 + h\lambda)\,y_n, \qquad y_{n+1} = \frac{y_n}{1 - h\lambda}.
+\]
+<p>For real \(\lambda < 0\) explicit Euler is stable only if \(|1 + h\lambda| \le 1\), that is \(h \le 2/|\lambda|\). Implicit Euler's factor is below 1 for every \(h\). A system \(y' = Ay\) behaves as one such equation per eigenvalue of \(A\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · rates 1 and 1000</span>
+<p>With eigenvalues \(-1\) and \(-1000\), explicit Euler needs \(h \le 2\) ms. At \(h = 2.1\) ms the fast mode's factor is \(-1.1\), and after 238 steps, 0.5 s, it has grown by \(10^{9.8}\), though the exact fast mode had decayed by \(e^{-500}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Choosing the step to resolve only the visible, slow motion. The fast mode sets the explicit limit even after it has vanished. That is what stiff means.</p>
+</div>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">9</span>Monte Carlo</h2>
+<p>Monte Carlo estimates an integral as an average of the integrand at random points. Its error does not depend on the dimension.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>With \(N\) points uniform in a region \(\Omega\), \(\int_\Omega f\,dV \approx (|\Omega|/N)\sum f(\mathbf x_i)\). Each term is an independent draw with standard deviation \(\sigma_f\), and the average of \(N\) of them has standard deviation \(\sigma_f/\sqrt N\):</p>
+\[
+\text{standard error} = \frac{|\Omega|\,\sigma_f}{\sqrt N}.
+\]
+<p>For π: points in the unit square land inside the quarter circle with probability \(p = \pi/4\), so \(4 \times\) the share inside estimates π with standard error \(4\sqrt{p(1 - p)/N} \approx 1.64/\sqrt N\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · ten thousand points</span>
+<p>With \(N = 10\,000\) the standard error is \(1.64/100 = 0.016\): expect about two correct decimals. To make it 0.0016 takes a million points.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting ten times the samples to give ten times the accuracy. It gives \(\sqrt{10} \approx 3.2\) times; a hundred times the samples gives ten.</p>
+</div>
+</section>
+
+<section class="topic" id="s11">
+<h2><span class="n">10</span>Newton’s method for systems</h2>
+<p>To solve \(\mathbf F(\mathbf x) = \mathbf 0\) for several unknowns, Newton's method replaces every equation by its tangent plane at once.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Near \(\mathbf x_k\), \(\mathbf F(\mathbf x_k + \Delta\mathbf x) \approx \mathbf F(\mathbf x_k) + J(\mathbf x_k)\Delta\mathbf x\), with the Jacobian \(J_{ij} = \partial F_i/\partial x_j\). Setting that to zero gives a linear system for the step:</p>
+\[
+J(\mathbf x_k)\,\Delta\mathbf x = -\mathbf F(\mathbf x_k), \qquad \mathbf x_{k+1} = \mathbf x_k + \Delta\mathbf x.
+\]
+<p>Near a root where \(J\) is invertible, the error is squared each step.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one step from (−1, 1)</span>
+<p>For \(\mathbf F = (x^2 + y^2 - 4,\ e^x + y - 1)\) at \((-1, 1)\): \(\mathbf F = (-2, 0.368)\) and \(J = \begin{bmatrix} -2 & 2 \\ 0.368 & 1 \end{bmatrix}\). Solving gives \(\Delta = (-1, 0)\), so the first step lands at \((-2, 1)\). After four steps the point agrees with the root \((-1.8163, 0.8374)\) to \(10^{-9}\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Solving a system one equation at a time: \(y\) from one, then \(x\) from the other, and repeat. Each move ignores how the other equation changes, so it undoes part of the last; it converges slowly, or not at all.</p>
+</div>
+</section>
+
 <section class="topic" id="s5">
-<h2><span class="n">5</span>Formula sheet</h2>
+<h2><span class="n">11</span>Formula sheet</h2>
 \[
 \operatorname{fl}(x) = x(1 + \delta),\ |\delta| \le u = 2^{-53}, \qquad \text{relative error of } a - b \approx \frac{u|a|}{|a - b|},
 \]
@@ -152,6 +247,11 @@ x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}, \qquad |e_k|_\text{bisection} \le \frac{
 \[
 \text{Euler: } y_{n+1} = y_n + hf(t_n, y_n), \ e = O(h); \qquad \text{RK4: } y_{n+1} = y_n + \tfrac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4), \ e = O(h^4).
 \]
+\[ p(x) = \sum_i y_i \prod_{j\ne i}\frac{x - x_j}{x_i - x_j}, \qquad f - p = \frac{f^{(n+1)}(\xi)}{(n+1)!}\prod_i (x - x_i), \qquad x_i^\text{Cheb} = \cos\frac{i\pi}{n}. \]
+\[ \text{forward: } \tfrac h2|f''| + \tfrac{\varepsilon|f|}{h}, \quad h^* \approx \sqrt{\varepsilon}; \qquad \text{central: } \tfrac{h^2}{6}|f'''| + \tfrac{\varepsilon|f|}{h}, \quad h^* \approx \varepsilon^{1/3}. \]
+\[ g_\text{explicit} = 1 + h\lambda, \qquad g_\text{implicit} = \frac{1}{1 - h\lambda}, \qquad \text{explicit stable for } h \le \frac{2}{|\lambda|}\ (\lambda < 0). \]
+\[ \int_\Omega f\,dV \approx \frac{|\Omega|}{N}\sum f(\mathbf x_i), \qquad \text{SE} = \frac{|\Omega|\sigma_f}{\sqrt N}, \qquad \pi:\ \text{SE} = 4\sqrt{\frac{p(1-p)}{N}}. \]
+\[ J(\mathbf x_k)\Delta\mathbf x = -\mathbf F(\mathbf x_k), \qquad \mathbf x_{k+1} = \mathbf x_k + \Delta\mathbf x, \qquad J_{ij} = \frac{\partial F_i}{\partial x_j}. \]
 </section>
 
 </main>

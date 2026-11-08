@@ -31,6 +31,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Fit polynomials of rising degree to noisy points from a straight line. It corrects the idea that a better fit to the data is a better model: the misses shrink to zero while the curve swings between the points.',
+  labs: [
+    { course: 'egn3203', lab: 'fit', notes: ['s12'], note: 'Polynomials of rising degree fitted to noisy points from a line: the misses at the points shrink to zero while the curve leaves the line. QR is checked against the normal equations.' },
+  ],
 };

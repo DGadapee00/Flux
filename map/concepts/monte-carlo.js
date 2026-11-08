@@ -31,6 +31,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Estimate \\(\\pi\\) by throwing random points at a square around a circle, with a slider for the count. It corrects the idea that ten times the samples gives ten times the accuracy: it gives about three times.',
+  labs: [
+    { course: 'egn3203', lab: 'montecarlo', notes: ['s10'], note: 'Estimating π by random points with a slider for their number: the error falls only as 1/√N, so ten times the points gives about three times the accuracy. The standard error is checked with Simpson’s rule.' },
+  ],
 };
