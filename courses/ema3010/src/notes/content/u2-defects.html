@@ -18,10 +18,12 @@
   <nav class="toc" aria-label="Contents">
     <h3>Part I · Point defects</h3>
     <a href="#s1"><span>1</span>Vacancies in equilibrium</a>
-    <h3>Reference</h3>
     <a href="#s2"><span>2</span>Diffusion</a>
+    <h3>Part II · Dislocations and strength</h3>
     <a href="#s3"><span>3</span>Slip and Schmid’s law</a>
-    <a href="#s4"><span>4</span>Formula sheet</a>
+    <a href="#s5"><span>4</span>Strengthening by grain size</a>
+    <h3>Reference</h3>
+    <a href="#s4"><span>5</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -82,6 +84,11 @@ D = 2.3\times10^{-5}\exp\!\left(-\frac{148000}{8.314(1173)}\right) = 5.91\times1
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Dislocations and strength</h2>
+</div>
+
 <section class="topic" id="s3">
 <h2><span class="n">3</span>Slip and Schmid’s law</h2>
 <p>Sliding one whole plane of atoms over the next at once would take a shear stress near a tenth of the shear modulus, far more than metals yield at. They yield sooner because a dislocation, the edge of an extra half-plane, moves through the crystal one row of bonds at a time.</p>
@@ -100,8 +107,26 @@ D = 2.3\times10^{-5}\exp\!\left(-\frac{148000}{8.314(1173)}\right) = 5.91\times1
 </div>
 </section>
 
+<section class="topic" id="s5">
+<h2><span class="n">4</span>Strengthening by grain size</h2>
+<p>A metal yields when dislocations move. Anything that blocks them makes it stronger: solutes, precipitates, other dislocations, and grain boundaries.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Slip cannot cross a grain boundary directly, because the planes do not line up. Dislocations pile up against it, and a pile-up of length \(d\) concentrates the stress on the boundary by about \(\sqrt{d}\). Slip passes to the next grain once that reaches a fixed value, so</p>
+\[
+\sigma_y = \sigma_0 + k_y\,d^{-1/2}.
+\]
+<p>For a log-normal spread of sizes with median \(d_{50}\) and spread \(s\) in \(\ln d\), the average of \(d^{-1/2}\) is \(d_{50}^{-1/2}e^{s^2/8}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · mild steel</span>
+<p>Mild steel with \(\sigma_0 = 70\) MPa and \(k_y = 0.74\) MPa·m\(^{1/2}\): with 100 µm grains, \(\sigma_y = 70 + 0.74/\sqrt{10^{-4}} = 144\) MPa. With 10 µm grains, \(70 + 234 = 304\) MPa.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Thinking that grain boundaries, being defects, make a metal weaker. At room temperature they are obstacles to slip, so more boundary means a stronger metal. Use \(d\) in metres in \(d^{-1/2}\), with \(k_y\) in MPa·m\(^{1/2}\).</p>
+</div>
+</section>
+
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">5</span>Formula sheet</h2>
 \[
 g(c) = cQ_v + kT[c\ln c + (1 - c)\ln(1 - c)], \qquad c^* \approx e^{-Q_v/kT}, \qquad k = 8.617\times10^{-5}\ \text{eV/K}.
 \]
@@ -111,6 +136,7 @@ J = -D\frac{\partial C}{\partial x}, \qquad \frac{\partial C}{\partial t} = D\fr
 \[
 \tau_R = \sigma\cos\phi\cos\lambda, \qquad \text{slip when } \tau_R \ge \tau_\text{crss}, \qquad \sigma_y = \frac{\tau_\text{crss}}{\cos\phi\cos\lambda} \ge 2\tau_\text{crss}.
 \]
+\[ \sigma_y = \sigma_0 + k_y\,d^{-1/2}, \qquad \mathrm{E}[d^{-1/2}] = d_{50}^{-1/2}e^{s^2/8}\ \text{(log-normal)}. \]
 </section>
 
 </main>

@@ -19,8 +19,10 @@
     <h3>Part I · Shear</h3>
     <a href="#s1"><span>1</span>Viscosity: stress from a velocity gradient</a>
     <a href="#s2"><span>2</span>Momentum spreads in from the wall</a>
+    <h3>Part II · Surfaces</h3>
+    <a href="#s4"><span>3</span>Surface tension and capillary rise</a>
     <h3>Reference</h3>
-    <a href="#s3"><span>3</span>Formula sheet</a>
+    <a href="#s3"><span>4</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -71,11 +73,35 @@
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Surfaces</h2>
+</div>
+
+<section class="topic" id="s4">
+<h2><span class="n">3</span>Surface tension and capillary rise</h2>
+<p>A liquid surface pulls along itself with a force \(\sigma\) per unit length. Curved, it holds a pressure jump across it.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Across a surface with principal radii \(R_1\), \(R_2\), \(\Delta p = \sigma(1/R_1 + 1/R_2)\). In a tube of radius \(r\), where the liquid meets the wall at contact angle \(\theta\), the wall pulls the column up with \(2\pi r\sigma\cos\theta\); the column's weight is \(\rho g\pi r^2h\). Equal when</p>
+\[
+h = \frac{2\sigma\cos\theta}{\rho g r}.
+\]
+<p>For \(\theta > 90^\circ\), \(\cos\theta < 0\) and the column sinks.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · water in a 0.5 mm tube</span>
+<p>With \(\sigma = 0.0728\) N/m, \(\theta = 0\) and \(\rho = 998\) kg/m³: \(h = 2 \times 0.0728/(998 \times 9.81 \times 0.0005) = 29.7\) mm. In a 0.1 mm tube, 149 mm.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting a wider tube to draw more liquid higher. The pull grows with the circumference, \(r\), but the weight with the area, \(r^2\): the rise goes as \(1/r\). Mercury in glass sinks instead, by 11 mm in a 0.5 mm tube.</p>
+</div>
+</section>
+
 <section class="topic" id="s3">
-<h2><span class="n">3</span>Formula sheet</h2>
+<h2><span class="n">4</span>Formula sheet</h2>
 \[
 \tau = \mu\,\frac{du}{dy}, \qquad \tau = \mu\,\frac{U}{h}, \qquad F = \tau A, \qquad \nu = \frac{\mu}{\rho}, \qquad t_1 = \frac{h^2}{\pi^2\nu}\ln\frac{200}{\pi}.
 \]
+\[ \Delta p = \sigma\left(\frac1{R_1} + \frac1{R_2}\right), \qquad h = \frac{2\sigma\cos\theta}{\rho g r}. \]
 </section>
 
 </main>

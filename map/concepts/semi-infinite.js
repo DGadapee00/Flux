@@ -31,6 +31,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Touch a hand to steel, glass and wood, all at room temperature, and read the contact temperature. It corrects the idea that metal feels cold because it is colder: it draws heat faster, because its \\(\\sqrt{k\\rho c}\\) is larger.',
+  labs: [
+    { course: 'eml4140', lab: 'touch', notes: ['s9'], note: 'A hand on steel, glass, wood and foam at the same temperature: the joint settles at a temperature weighted by effusivity √(kρc), 21 °C on steel and 31 °C on wood. Closed form against finite differences across the joint.' },
+  ],
 };

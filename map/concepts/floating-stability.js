@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Tilt a floating block and watch B swing toward the low side. It corrects the idea that a body floats upright only if G sits below B: a ship floats with G above B, as long as the metacentre is higher still.',
+  labs: [
+    { course: 'eml3015', lab: 'float', notes: ['s6'], note: 'A box barge heeled with G, B and the metacentre drawn and sliders for width and the centre of gravity: it floats upright with G above B so long as M is higher. GM is checked by tilting the section and reading the righting arm.' },
+  ],
 };

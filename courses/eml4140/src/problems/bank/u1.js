@@ -5,6 +5,10 @@
 import { ALPHA } from '@flux/subjects/heat/rod.js';
 import { pipe, wall } from '@flux/subjects/heat/resistance.js';
 import { choice, kase, num, problem, range } from '../kit.js';
+import { FIN, MATERIALS, finClosed } from '@flux/subjects/heat/fins.js';
+import { MATERIALS as SLAB_MATERIALS, SLAB } from '@flux/subjects/heat/transient.js';
+import { BODIES, SKIN, eff } from '@flux/subjects/heat/contact.js';
+import { ROD } from '@flux/subjects/heat/explicit.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 export const HALF = Math.log(2) / Math.PI ** 2;
@@ -15,6 +19,24 @@ export const KINS = { rubber: 0.13, foam: 0.035 };
 export const NAME = { copper: 'copper', aluminum: 'aluminum', steel: 'carbon steel', glass: 'Pyrex glass' };
 /** The middle of the rod, θ, for the two profiles the problems use. */
 export const midTheta = (profile, Fo) => Math.exp(-(Math.PI ** 2) * Fo) + (profile === 'wiggle' ? Math.exp(-25 * Math.PI ** 2 * Fo) / 3 : 0);
+
+/** A very long pin fin: q = √(hPkA_c) θ_b, for D in mm. */
+export const longFin = ($, area = (D) => (Math.PI * D * D) / 4) => {
+  const D = Number($.D) / 1000;
+  return Math.sqrt($.h * Math.PI * D * MATERIALS[$.mat].k * area(D)) * (FIN.Tb - FIN.Tinf);
+};
+
+/** Biot number of the lab's 4 cm plate. */
+export const biot = ($, Lc = SLAB.L) => ($.h * Lc) / SLAB_MATERIALS[$.mat].k;
+
+/** The joint temperature for the skin at 34 °C on a block at Tb. */
+export const jointT = ($, weight = eff) => (weight(SKIN) * SKIN.T + weight(BODIES[$.body]) * $.Tb) / (weight(SKIN) + weight(BODIES[$.body]));
+
+/** Fo for the lab's rod with N cells and a step of dt ms. */
+export const fourier = ($, square = true) => {
+  const dx = ROD.L / $.N;
+  return (ROD.alpha * ($.dt / 1000)) / (square ? dx * dx : dx);
+};
 
 export default [
   problem({
@@ -240,5 +262,225 @@ export default [
     },
     cases: [kase('to 6 mm', { coat: 'six' }, { loss: 'more' })],
   }),
+  problem({
+    id: 'u1.9.fin',
+    title: 'A very long fin',
+    exam: 'u1',
+    ch: '1',
+    lab: 'fin',
+    src: 'Flux, written for the Fin lab',
+    topics: ['fins'],
+    principles: ['fins'],
+    vars: { mat: choice(['aluminium', 'aluminium (k = 200 W/(m·K))'], ['copper', 'copper (k = 400 W/(m·K))'], ['steel', 'stainless steel (k = 15 W/(m·K))']), D: choice(['5', '5 mm'], ['10', '10 mm']), h: range(10, 50, 10, 'W/(m²·K)') },
+    text: (T) => `A very long ${T.mat} pin fin, ${T.D} across, stands out of a wall at 100 °C into air at 25 °C with h = ${T.h}. How much heat does it shed, in W?`,
+    parts: [num('q', ($) => longFin($), 'W', { label: 'q' })],
+    level: 2,
+    hints: ['A very long fin sheds √(hPkA_c) θ_b.', 'P = πD and A_c = πD²/4.'],
+    steps: ($) => [String.raw`$q = \sqrt{hPkA_c}\,\theta_b = ${Number(longFin($).toPrecision(3))}$ W`],
+    // Another route: the lab's full formula for a 5 m fin of 5 mm, scaled as q ∝ D^1.5.
+    second: ($) => ({ q: finClosed({ k: MATERIALS[$.mat].k, h: $.h, L: 5 }).q * (Number($.D) / 5) ** 1.5 }),
+    cases: [kase('aluminium, 5 mm, h = 25', { mat: 'aluminium', D: '5', h: 25 }, { q: 2.95 })],
+  }),
 
+  problem({
+    id: 'u1.10.fin-help',
+    title: 'Does the fin help?',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'fin',
+    src: 'Flux, written for the Fin lab',
+    topics: ['fins'],
+    principles: ['fins'],
+    vars: { case: choice(['alu', 'an aluminium pin in still air'], ['nylon', 'a nylon pin in fast-flowing water']) },
+    text: (T) => `Does adding ${T.case} to a hot wall shed more heat than the bare wall under it?`,
+    parts: [
+      pick('a', 'the fin', [
+        ['yes', 'yes, much more', 'A good conductor in weak convection carries heat out along its whole length: effectiveness well above 1.'],
+        ['no', 'no, less', 'A poor conductor in strong convection cannot carry heat to its side: it insulates the wall it covers.'],
+        ['same', 'the same', 'A fin changes the area and the path for heat; the result is rarely a wash.'],
+      ], ($) => ($.case === 'alu' ? 'yes' : 'no')),
+    ],
+    level: 1,
+    hints: ['Compare kP with hA_c.', 'Effectiveness above 1 means the fin helps.'],
+    steps: ($) => [$.case === 'alu' ? 'kP/(hA_c) is large: the fin helps.' : 'kP/(hA_c) is below 1: the fin hurts.'],
+    sim: {
+      scenario: 'alu',
+      setup(s, $) {
+        if ($.case === 'nylon') Object.assign(s, { mat: 'plastic', h: 500 });
+      },
+      read: (c) => ({ a: c.eff > 1.05 ? 'yes' : c.eff < 0.95 ? 'no' : 'same' }),
+    },
+    cases: [kase('nylon in water', { case: 'nylon' }, { a: 'no' })],
+  }),
+  problem({
+    id: 'u1.11.biot',
+    title: 'Lump or not?',
+    exam: 'u1',
+    ch: '1',
+    lab: 'quench',
+    src: 'Flux, written for the Quench lab',
+    topics: ['biot'],
+    principles: ['biot'],
+    vars: { mat: choice(['steel', 'carbon steel (k = 45 W/(m·K))'], ['glass', 'glass (k = 1.4 W/(m·K))']), h: range(50, 500, 50, 'W/(m²·K)') },
+    text: (T) => `A plate of ${T.mat}, 4 cm thick, is cooled on both faces with h = ${T.h}. What is its Biot number, hL/k, with L the half-thickness?`,
+    parts: [num('bi', ($) => biot($), '', { label: 'Bi', abs: 1e-6 })],
+    level: 1,
+    hints: ['Cooled on both faces, the plate is symmetric: L is the half-thickness, 2 cm.', 'Bi = hL/k.'],
+    steps: ($) => [String.raw`$\mathrm{Bi} = ${$.h} \times 0.02/${SLAB_MATERIALS[$.mat].k} = ${Number(biot($).toPrecision(3))}$`],
+    sim: {
+      scenario: 'steel',
+      setup(s, $) {
+        Object.assign(s, { mat: $.mat, h: $.h });
+      },
+      read: (c) => ({ bi: c.Bi }),
+    },
+    cases: [kase('the notes’ steel', { mat: 'steel', h: 500 }, { bi: 0.222 })],
+  }),
+
+  problem({
+    id: 'u1.12.crack',
+    title: 'Which one cracks?',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'quench',
+    src: 'Flux, written for the Quench lab',
+    topics: ['biot'],
+    principles: ['biot'],
+    vars: { bi: choice(['small', 'Bi = 0.05'], ['large', 'Bi = 20']) },
+    text: (T) => `A hot part is quenched with ${T.bi}. In the first moments, how do its centre and surface temperatures compare?`,
+    parts: [
+      pick('a', 'centre and surface', [
+        ['together', 'they fall together', 'Small Bi: the inside conducts far faster than the outside convects.'],
+        ['apart', 'the surface drops while the centre stays hot', 'Large Bi: the inside resists more than the outside, so the inside lags.'],
+        ['centre', 'the centre drops first', 'Heat leaves through the surface; the centre can never lead.'],
+      ], ($) => ($.bi === 'small' ? 'together' : 'apart')),
+    ],
+    level: 1,
+    hints: ['Bi = (L/k)/(1/h): inside resistance over outside.', 'Below about 0.1, treat it as one lump.'],
+    steps: ($) => [$.bi === 'small' ? 'Bi ≪ 1: one lump.' : 'Bi ≫ 1: steep gradients, a cold skin round a hot core.'],
+    sim: {
+      scenario: 'steel',
+      setup(s, $) {
+        if ($.bi === 'large') Object.assign(s, { mat: 'plastic', lt: 2.5 });
+        else Object.assign(s, { h: 100 });
+      },
+      read: (c) => ({ a: c.dT < 10 ? 'together' : 'apart' }),
+    },
+    cases: [kase('a large Biot number', { bi: 'large' }, { a: 'apart' })],
+  }),
+  problem({
+    id: 'u1.13.touch',
+    title: 'The joint temperature',
+    exam: 'u1',
+    ch: '1',
+    lab: 'touch',
+    src: 'Flux, written for the Touch lab',
+    topics: ['contact'],
+    principles: ['contact'],
+    vars: { body: choice(['steel', 'steel (e = 12 700)'], ['glass', 'glass (e = 1670)'], ['wood', 'pine wood (e = 300)']), Tb: range(0, 20, 5, '°C') },
+    text: (T) => `A finger at 34 °C, with effusivity e = 1140 W·s^½/(m²·K), touches ${T.body} at ${T.Tb}. What temperature does the joint settle at, in °C?`,
+    parts: [num('T', ($) => jointT($), '°C', { label: 'T_c' })],
+    level: 2,
+    hints: ['The joint is a weighted average of the two temperatures.', 'The weights are the effusivities √(kρc).'],
+    steps: ($) => [String.raw`$T_c = (1140 \times 34 + e\,T_b)/(1140 + e) = ${Number(jointT($).toPrecision(3))}$ °C`],
+    sim: {
+      scenario: 'steel',
+      setup(s, $) {
+        Object.assign(s, { body: $.body, Tb: $.Tb });
+      },
+      read: (c) => ({ T: c.Tc }),
+    },
+    cases: [kase('the notes’ steel', { body: 'steel', Tb: 20 }, { T: 21.2 })],
+  }),
+
+  problem({
+    id: 'u1.14.feel',
+    title: 'Why metal feels cold',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'touch',
+    src: 'Flux, written for the Touch lab',
+    topics: ['contact'],
+    principles: ['contact'],
+    vars: { pair: choice(['steel', 'a steel rail and a wooden bench, both at 15 °C'], ['hot', 'a steel pan handle and a wooden spoon, both at 60 °C']) },
+    text: (T) => `You touch ${T.pair}. Why does the steel feel more extreme?`,
+    parts: [
+      pick('why', 'because', [
+        ['temp', 'the steel is at a more extreme temperature', 'Both are at the same temperature.'],
+        ['eff', 'steel trades heat with the skin much faster, so the skin’s surface moves further', 'The joint is weighted by √(kρc), and steel’s is about 40 times wood’s.'],
+        ['k', 'steel conducts better, and conductivity alone sets the joint', 'Conductivity matters, but so do density and heat capacity: the weight is √(kρc).'],
+      ], () => 'eff'),
+    ],
+    level: 1,
+    hints: ['Your nerves sense the skin’s surface temperature.', 'That is the joint temperature, weighted by effusivity.'],
+    steps: () => ['The joint is pulled toward whichever body has the larger √(kρc): steel.'],
+    sim: {
+      scenario: 'steel',
+      setup(s, $) {
+        s.Tb = $.pair === 'hot' ? 60 : 15;
+      },
+      read: (c) => ({ why: Math.abs(c.Tc - (c.e1 * 34 + c.e2 * (c.Tc + 0)) / (c.e1 + c.e2)) >= 0 ? 'eff' : 'temp' }),
+    },
+    cases: [kase('the rail and the bench', { pair: 'steel' }, { why: 'eff' })],
+  }),
+  problem({
+    id: 'u1.15.fourier',
+    title: 'Is the step stable?',
+    exam: 'u1',
+    ch: '1',
+    lab: 'grid',
+    src: 'Flux, written for the Grid lab',
+    topics: ['stability'],
+    principles: ['stability'],
+    vars: { N: choice(['10', '10'], ['20', '20'], ['40', '40']), dt: range(5, 50, 5, 'ms') },
+    text: (T) => `A 10 cm copper rod (α = 1.1 × 10⁻⁴ m²/s) is split into ${T.N} cells and stepped explicitly with Δt = ${T.dt}. What is Fo = αΔt/Δx²?`,
+    parts: [num('fo', ($) => fourier({ ...$, N: Number($.N) }), '', { label: 'Fo', abs: 1e-6 })],
+    level: 1,
+    hints: ['Δx = L/N.', 'Fo = αΔt/Δx², with Δt in seconds.'],
+    steps: ($) => [String.raw`$\Delta x = 0.1/${$.N}$ m, $\mathrm{Fo} = 1.1\times10^{-4} \times ${$.dt / 1000}/\Delta x^2 = ${Number(fourier({ ...$, N: Number($.N) }).toPrecision(3))}$`],
+    sim: {
+      scenario: 'fine',
+      setup(s, $) {
+        Object.assign(s, { N: Number($.N), dtms: $.dt });
+      },
+      read: (c) => ({ fo: c.Fo }),
+    },
+    cases: [kase('40 cells at 30 ms', { N: '40', dt: 30 }, { fo: 0.528 })],
+  }),
+
+  problem({
+    id: 'u1.16.refine',
+    title: 'A finer grid',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'grid',
+    src: 'Flux, written for the Grid lab',
+    topics: ['stability'],
+    principles: ['stability'],
+    vars: { fo: choice(['low', 'Fo = 0.1'], ['near', 'Fo = 0.3']) },
+    text: (T) => `An explicit heat-conduction run is stable at ${T.fo}. You halve Δx and keep Δt. Is it still stable?`,
+    parts: [
+      pick('s', 'after halving Δx', [
+        ['yes', 'yes', 'Fo quadruples; it stays stable only if four times the old Fo is still at most ½.'],
+        ['no', 'no', 'Fo quadruples, past ½: the finest mode now grows each step.'],
+        ['always', 'always: a finer grid is always more accurate', 'Accuracy needs stability first; Fo = αΔt/Δx² grows as Δx shrinks.'],
+      ], ($) => ($.fo === 'low' ? 'yes' : 'no')),
+    ],
+    level: 1,
+    hints: ['Fo ∝ 1/Δx².', 'Stable while Fo ≤ ½.'],
+    steps: ($) => [$.fo === 'low' ? 'Fo = 0.4 ≤ 0.5: stable.' : 'Fo = 1.2 > 0.5: unstable.'],
+    sim: {
+      scenario: 'fine',
+      setup(s, $) {
+        // Fo = 0.1 or 0.3 on 20 cells, then the grid doubled.
+        Object.assign(s, { N: 40, dtms: $.fo === 'low' ? 22.7 : 68.2 });
+      },
+      read: (c) => ({ s: c.stable ? 'yes' : 'no' }),
+    },
+    cases: [kase('Fo = 0.3', { fo: 'near' }, { s: 'no' })],
+  }),
 ];

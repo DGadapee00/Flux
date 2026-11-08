@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Turn a beam on a crystal and watch peaks appear only at the angles each plane set allows. It corrects the idea that a crystal reflects X-rays at every angle, like a mirror.',
+  labs: [
+    { course: 'ema3010', lab: 'xrd', notes: ['s6'], note: 'Copper Kα X-rays on a cubic crystal: peaks appear only at the angles Bragg’s law allows, and the structure factor removes some of those. Checked by summing the structure factor over the cell and maximising the intensity from a stack of planes.' },
+  ],
 };

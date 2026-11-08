@@ -11,7 +11,7 @@ export const EXAMS = [
     title: 'Modes and conduction',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['rod', 'resistance'],
+    labs: ['rod', 'resistance', 'fin', 'quench', 'touch', 'grid'],
     coming: ["Fourier's law"],
   },
   {
@@ -20,8 +20,8 @@ export const EXAMS = [
     title: 'Radiation',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['radiation', 'viewfactor'],
-    coming: ['Radiation networks'],
+    labs: ['radiation', 'viewfactor', 'shield'],
+    coming: [],
   },
   {
     id: 'u3',
@@ -29,8 +29,17 @@ export const EXAMS = [
     title: 'Convection',
     chapters: '6',
     date: 'Unit 3',
-    labs: ['thermal', 'nusselt'],
-    coming: ['Flow in tubes', 'Natural convection'],
+    labs: ['thermal', 'nusselt', 'tube', 'plume', 'boil'],
+    coming: [],
+  },
+  {
+    id: 'u4',
+    n: 4,
+    title: 'Exchangers and mass transfer',
+    chapters: '4',
+    date: 'Unit 4',
+    labs: ['exchanger', 'wetbulb'],
+    coming: [],
   },
 ];
 
@@ -41,12 +50,23 @@ export const LAB_META = {
   viewfactor: { id: 'viewfactor', exam: 'u2', title: 'View factor' },
   thermal: { id: 'thermal', exam: 'u3', title: 'Thermal layer' },
   nusselt: { id: 'nusselt', exam: 'u3', title: 'Nusselt' },
+  fin: { id: 'fin', exam: 'u1', title: 'Fin' },
+  quench: { id: 'quench', exam: 'u1', title: 'Quench' },
+  touch: { id: 'touch', exam: 'u1', title: 'Touch' },
+  grid: { id: 'grid', exam: 'u1', title: 'Grid' },
+  shield: { id: 'shield', exam: 'u2', title: 'Shields' },
+  tube: { id: 'tube', exam: 'u3', title: 'Tube' },
+  plume: { id: 'plume', exam: 'u3', title: 'Plume' },
+  boil: { id: 'boil', exam: 'u3', title: 'Boil' },
+  exchanger: { id: 'exchanger', exam: 'u4', title: 'Exchanger' },
+  wetbulb: { id: 'wetbulb', exam: 'u4', title: 'Wet bulb' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Modes and conduction',
   2: 'Radiation',
   6: 'Laminar and turbulent boundary layers',
+  4: 'Exchangers and mass transfer',
 };
 
 export function examById(id) {

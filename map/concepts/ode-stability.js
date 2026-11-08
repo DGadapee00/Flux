@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Integrate a two-mode system with rates 1 and 1000 by explicit and implicit Euler. It corrects the idea that the step only needs to resolve the motion you can see: the fast mode has died out within 10 milliseconds, yet any explicit step over 0.002 still blows up.',
+  labs: [
+    { course: 'egn3203', lab: 'stiff', notes: ['s9'], note: 'A two-mode system with rates 1 and 1000 by explicit and implicit Euler: any explicit step over 2 ms blows up, though the fast mode died out long before. The per-mode closed form is checked by marching the coupled system.' },
+  ],
 };

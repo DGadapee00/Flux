@@ -5,25 +5,26 @@ EML 3101). Since then a linear algebra thread runs from vectors to eigenvalues a
 feeds differential equations and regression. EEL 3111 Circuit Analysis I and EGN 3203 Modern
 Computation Methods are on the map. MAP 2302 gained six concepts and six labs for the UNF schedule:
 exact equations, substitutions, balance models, variation of parameters, Cauchy–Euler equations and
-higher-order equations. For the live numbers run `node map/check.mjs`,
+higher-order equations. On 8 November 2026 the last 37 gaps got labs, in EML 4140, EMA 3010,
+EGN 3203, EML 3101, EML 3015 and EEL 3111: every concept now has one. For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 238 with a Flux lab, 37 gaps.**
+**275 concepts, 275 with a Flux lab, 0 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
 | Calculus | 30 | 30 |
-| Linear algebra | 8 | 7 |
+| Linear algebra | 8 | 8 |
 | Differential equations | 18 | 18 |
-| Numerical methods | 13 | 7 |
+| Numerical methods | 13 | 13 |
 | Mechanics | 34 | 34 |
 | Electricity and magnetism | 27 | 27 |
-| Thermodynamics | 22 | 15 |
-| Fluid mechanics | 20 | 17 |
-| Heat transfer | 19 | 9 |
-| Circuits and systems | 27 | 26 |
+| Thermodynamics | 22 | 22 |
+| Fluid mechanics | 20 | 20 |
+| Heat transfer | 19 | 19 |
+| Circuits and systems | 27 | 27 |
 | Mechanics of materials | 16 | 16 |
-| Materials science | 15 | 6 |
+| Materials science | 15 | 15 |
 | Design and manufacturing | 9 | 9 |
 | Instrumentation and actuators | 8 | 8 |
 | Statistics | 9 | 9 |
@@ -50,12 +51,12 @@ each new concept on them is a gap with a candidate lab:
 
 | Course | Concepts on its path | Order from |
 |---|---|---|
-| EMA 3010 Materials Science | 15 (app started: Bond, Crystal, Vacancy, Diffusion, Slip and Lever labs) | 3.091 recitations |
-| EEL 3111 Circuit Analysis I | 18 (10 new; app started: Nodes, Dependent, Phasors, Filter, Power factor, Superpose, Thévenin, Switch and Op amp labs) | 6.002, Spring 2007, in the archived plan's order |
-| EGN 3203 Modern Computation Methods | 24 (11 new, plus the 7 linear algebra concepts) | 2.086, Spring 2013 |
-| EML 3101 Thermodynamics II | 14 (10 new; app started: Mixture and Nozzle labs) | 16.050, Fall 2002, with Cleynen |
-| EML 3015 Fluids | 22 (16 new) | 2.06, Spring 2013 |
-| EML 4140 Heat Transfer | 19 (15 new; app started: Rod, Resistance, Radiation, View factor, Thermal layer and Nusselt labs) | 2.51, Fall 2008, with Lienhard |
+| EMA 3010 Materials Science | 15 (app: Bond, Crystal, X-ray, Vacancy, Diffusion, Slip, Grain size, Lever, End quench, Crack, Fatigue, Creep, Chains, Glass and Galvanic labs) | 3.091 recitations |
+| EEL 3111 Circuit Analysis I | 18 (10 new; app: Nodes, Dependent, Phasors, Filter, Power factor, Superpose, Thévenin, Switch, RLC step and Op amp labs) | 6.002, Spring 2007, in the archived plan's order |
+| EGN 3203 Modern Computation Methods | 24 (11 new, plus the 7 linear algebra concepts; app: Matrix map, Elimination, Inverse, Rank, Projection, Eigen, Condition, Quadratic form, Fit, Round-off, Truncation, Roots, Runge–Kutta, Interpolation, Derivative, Stiff, Monte Carlo and Newton in 2D labs) | 2.086, Spring 2013 |
+| EML 3101 Thermodynamics II | 14 (10 new; app: Mixture, Flame, Cooling coil, Nozzle, Bypass, Exergy, Otto and Diesel, Rankine and Heat pump labs) | 16.050, Fall 2002, with Cleynen |
+| EML 3015 Fluids | 22 (16 new; app: Viscosity, Capillary, Gate, Accelerating tank, Floating, Nozzle, Bend, Continuity, Transport, Vane, Pipe, Head loss, Network, Model, Boundary layer and Drag labs) | 2.06, Spring 2013 |
+| EML 4140 Heat Transfer | 19 (15 new; app: Rod, Resistance, Fin, Quench, Touch, Grid, Radiation, View factor, Shields, Thermal layer, Nusselt, Tube, Plume, Boil, Exchanger and Wet bulb labs) | 2.51, Fall 2008, with Lienhard |
 | Build a satellite (a project) | 12 (11 new; app started: Kepler, Transfer, Noise, Link budget, Attitude, Spin, Pointing, Shake, Power and Thermal balance labs) | The satellite's subsystems, from MIT 16.07, 16.06 and 16.851 |
 | Design practice (a project) | 20 (20 new) | Requirements to a tested part, then sensors, actuators and boards; MIT 2.007, 2.72 and 2.008 |
 
@@ -106,10 +107,10 @@ reproduce them.
 
 `map-gaps` weighs a project like a next-term course, so these gaps rank beside the courses ahead.
 
-## Gaps most worth a lab
+## Labs most worth a second look
 
-From `npm run map-gaps`, which weighs how many concepts build on a gap and where the owner stands
-in the courses that teach it.
+Every concept has a lab, so `npm run map-gaps` reports none. This list, kept from when it did, names
+the concepts many others build on, where a fuller lab would still pay.
 
 1. **Divergence theorem.** 37 concepts build on it. MAC 2313's Flux lab shows flux across a curve
    and divergence in the plane, and its Tiles lab cuts a square into cells and watches the

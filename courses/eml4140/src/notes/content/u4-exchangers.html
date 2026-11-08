@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Exchangers and mass transfer</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EML 4140 · Heat Transfer · Unit 4</div>
+  <h1>Exchangers and mass transfer</h1>
+  <p class="lede">How heat passes from one stream to another through a wall, why the arrangement of the flows matters, and how evaporation off a wet surface follows the same equations as heat.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Two streams, and evaporation</h3>
+    <a href="#s2"><span>1</span>Heat exchangers</a>
+    <a href="#s3"><span>2</span>Evaporation and the wet bulb</a>
+    <h3>Reference</h3>
+    <a href="#s1"><span>3</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Two streams, and evaporation</h2>
+</div>
+
+<section class="topic" id="s2">
+<h2><span class="n">1</span>Heat exchangers</h2>
+<p>A heat exchanger passes heat from one stream to another through a wall. Its conductance \(UA\) sums the resistances in between.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Energy balances on both streams over an element \(dA\) give \(C_h\,dT_h = -U(T_h - T_c)\,dA\) and \(\pm C_c\,dT_c = U(T_h - T_c)\,dA\), with \(C = \dot m c_p\). Integrated, \(q = UA\,\Delta T_\text{lm}\). Written with \(\text{NTU} = UA/C_\text{min}\) and \(C_r = C_\text{min}/C_\text{max}\), counterflow gives</p>
+\[
+\varepsilon = \frac{1 - e^{-\text{NTU}(1 - C_r)}}{1 - C_r\,e^{-\text{NTU}(1 - C_r)}}, \qquad q = \varepsilon\,C_\text{min}(T_{h,i} - T_{c,i}),
+\]
+<p>and parallel flow \(\varepsilon = [1 - e^{-\text{NTU}(1 + C_r)}]/(1 + C_r)\). With equal streams, counterflow gives \(\varepsilon = \text{NTU}/(1 + \text{NTU})\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · equal streams at NTU 2</span>
+<p>Hot water at 90 °C and cold at 20 °C, both with \(C = 1000\) W/K, through \(UA = 2000\) W/K. In counterflow \(\varepsilon = 2/3\): the duty is 46.7 kW, the cold stream leaves at 66.7 °C and the hot at 43.3 °C. In parallel flow \(\varepsilon = 0.491\) and the duty is 34.4 kW.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Thinking the cold stream can never leave hotter than the hot stream leaves. In counterflow the cold outlet faces the hot inlet, so it can: 66.7 °C against 43.3 °C above. Only parallel flow keeps \(T_{c,o} < T_{h,o}\).</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">2</span>Evaporation and the wet bulb</h2>
+<p>Vapour carried off a wet surface obeys the same equations as heat: Fick's law for Fourier's, concentration for temperature.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The vapour flux is \(\dot m'' = h_m(\rho_{v,s} - \rho_{v,\infty})\), and each kilogram carries \(h_{fg}\). The Chilton–Colburn analogy gives \(h/h_m = \rho c_p\,\text{Le}^{2/3}\), with \(\text{Le} = \alpha/D_{AB}\). In steady state the air's convection pays for the evaporation:</p>
+\[
+T_\infty - T_w = \frac{h_{fg}}{\rho c_p\,\text{Le}^{2/3}}\left[\rho_{v,\text{sat}}(T_w) - \phi\,\rho_{v,\text{sat}}(T_\infty)\right].
+\]
+<p>\(h\) cancels: the wet-bulb temperature does not depend on the air speed.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · air at 30 °C and 50%</span>
+<p>Air at 30 °C holds 15.2 g/m³ of vapour at 50%. Solving the balance, the wick settles at 21.5 °C, 8.5 K below the air, where \(\rho_{v,\text{sat}} = 18.9\) g/m³. The dew point is 18.4 °C.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Thinking a wet surface settles at the air temperature, or at the dew point. It settles between them, where convection in balances latent heat out. Only in saturated air do all three meet.</p>
+</div>
+</section>
+
+<section class="topic" id="s1">
+<h2><span class="n">3</span>Formula sheet</h2>
+\[ q = UA\,\Delta T_\text{lm} = \varepsilon C_\text{min}(T_{h,i} - T_{c,i}), \qquad \text{NTU} = \frac{UA}{C_\text{min}}, \qquad \varepsilon_\text{counter},\ \varepsilon_\text{parallel}\ \text{as above}. \]
+\[ \dot m'' = h_m(\rho_{v,s} - \rho_{v,\infty}), \qquad \frac{h}{h_m} = \rho c_p\,\text{Le}^{2/3}, \qquad h(T_\infty - T_w) = h_m h_{fg}(\rho_{v,s} - \rho_{v,\infty}). \]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux.</footer>
+</body>
+</html>

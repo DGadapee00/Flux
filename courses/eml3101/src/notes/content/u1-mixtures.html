@@ -20,8 +20,11 @@
     <a href="#s1"><span>1</span>Mole and mass fractions</a>
     <a href="#s2"><span>2</span>Partial pressures</a>
     <a href="#s3"><span>3</span>Mixture properties</a>
+    <h3>Part II · Reacting and moist air</h3>
+    <a href="#s5"><span>4</span>Combustion and flame temperature</a>
+    <a href="#s6"><span>5</span>Moist air and the cooling coil</a>
     <h3>Reference</h3>
-    <a href="#s4"><span>4</span>Formula sheet</a>
+    <a href="#s4"><span>6</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -95,14 +98,57 @@ c_p = 0.5 \times 1038 + 0.5 \times 846 = 942\ \text{J/(kg·K)}.
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Reacting and moist air</h2>
+</div>
+
+<section class="topic" id="s5">
+<h2><span class="n">4</span>Combustion and flame temperature</h2>
+<p>Burning a fuel rearranges atoms; the energy released is the difference in enthalpies of formation between reactants and products.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Air is taken as \(\mathrm{O_2} + 3.76\,\mathrm{N_2}\). Stoichiometric methane takes two \(\mathrm O_2\); with a fraction \(\lambda\) of that air,</p>
+\[
+\mathrm{CH_4} + 2\lambda(\mathrm{O_2} + 3.76\,\mathrm{N_2}) \to \mathrm{CO_2} + 2\,\mathrm{H_2O} + 2(\lambda - 1)\mathrm{O_2} + 7.52\lambda\,\mathrm{N_2}.
+\]
+<p>With no heat lost, the products' enthalpy, each \(\bar h\) counting its enthalpy of formation, equals the reactants': \(\sum_\text{P} N_i\bar h_i(T_\text{ad}) = \sum_\text{R} N_i\bar h_i(298\ \text{K})\). That fixes the adiabatic flame temperature \(T_\text{ad}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · stoichiometric methane</span>
+<p>One mole of CH₄ with 2 mol O₂ and 7.52 mol N₂ releases 803 kJ, and it must heat 10.52 mol of products. The balance gives \(T_\text{ad} = 2326\) K. The air–fuel ratio is \(2 \times 4.76 \times 28.97/16.04 = 17.1\) by mass.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Thinking more air makes a hotter flame. At 150% air the same 803 kJ must heat 14.3 mol of products, and the flame falls to 1789 K.</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">5</span>Moist air and the cooling coil</h2>
+<p>Atmospheric air is dry air plus a little water vapour, treated as an ideal-gas mixture. How much vapour it holds sets how it behaves when cooled.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>With vapour partial pressure \(p_v\) in total pressure \(p\), the humidity ratio, mass of vapour per mass of dry air, is \(\omega = 0.622\,p_v/(p - p_v)\), and the relative humidity is \(\phi = p_v/p_g(T)\). Per kilogram of dry air,</p>
+\[
+h = 1.005\,T + \omega\,(2501 + 1.82\,T)\ \text{kJ/kg}, \quad T \text{ in °C}.
+\]
+<p>Cooled at constant \(\omega\), air reaches saturation at its dew point, where \(p_g(T_d) = p_v\). Cooled further, vapour condenses.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a summer day</span>
+<p>Air at 30 °C and 60%: \(p_g = 4.25\) kPa, \(p_v = 2.55\) kPa, \(\omega = 16.0\) g/kg, dew point 21.4 °C. Cooled to 12 °C, it leaves saturated with \(\omega = 8.7\) g/kg: 7.3 g of water drips out per kilogram of air, and the coil removes 36.7 kJ/kg.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Thinking an air conditioner only cools. Once the air passes its dew point it also dries: about half the heat the coil removes above goes into condensing water.</p>
+</div>
+</section>
+
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">6</span>Formula sheet</h2>
 \[
 N_i = \frac{m_i}{M_i}, \quad y_i = \frac{N_i}{N}, \quad x_i = \frac{m_i}{m}, \quad y_i = x_i\,\frac{M}{M_i}.
 \]
 \[
 p_i = \frac{N_i \bar R T}{V} = y_i\,p, \qquad M = \sum y_i M_i, \quad R = \frac{\bar R}{M}, \quad c_p = \sum x_i\,c_{p,i}.
 \]
+\[ \mathrm{CH_4} + 2(\mathrm{O_2} + 3.76\mathrm{N_2}) \to \mathrm{CO_2} + 2\mathrm{H_2O} + 7.52\mathrm{N_2}, \qquad \sum_\text{P} N_i(\bar h_f^\circ + \Delta\bar h)_i = \sum_\text{R} N_i(\bar h_f^\circ + \Delta\bar h)_i. \]
+\[ \omega = 0.622\frac{p_v}{p - p_v}, \quad \phi = \frac{p_v}{p_g(T)}, \quad h = 1.005T + \omega(2501 + 1.82T), \quad q = h_1 - h_2 - (\omega_1 - \omega_2)h_f. \]
 </section>
 
 </main>

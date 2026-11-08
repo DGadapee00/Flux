@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Failure</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EMA 3010 · Materials Science · Unit 4</div>
+  <h1>Failure</h1>
+  <p class="lede">Three ways a part fails below its yield strength: a crack that runs, a crack that grows a little every cycle, and a slow stretch at high temperature.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · How parts fail</h3>
+    <a href="#s2"><span>1</span>Fracture toughness</a>
+    <a href="#s3"><span>2</span>Fatigue crack growth</a>
+    <a href="#s4"><span>3</span>Creep</a>
+    <h3>Reference</h3>
+    <a href="#s1"><span>4</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>How parts fail</h2>
+</div>
+
+<section class="topic" id="s2">
+<h2><span class="n">1</span>Fracture toughness</h2>
+<p>A crack concentrates stress at its tip. Whether it runs depends on the crack's length as much as on the stress.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Close to the tip of a crack the elastic opening stress goes as \(K/\sqrt{2\pi r}\), whatever the loading: only the stress intensity \(K\) changes. For a crack of length \(2a\) in a wide plate,</p>
+\[
+K_I = \sigma\sqrt{\pi a}.
+\]
+<p>The crack runs when \(K_I\) reaches the material's toughness \(K_{Ic}\): at \(\sigma_c = K_{Ic}/\sqrt{\pi a}\), or at a given stress when \(a\) reaches \(a_c = (1/\pi)(K_{Ic}/\sigma)^2\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an aluminium plate</span>
+<p>7075-T651 aluminium has \(K_{Ic} = 24\) MPa·m\(^{1/2}\) and \(\sigma_y = 495\) MPa. With a crack 20 mm long, \(a = 0.01\) m, it breaks at \(24/\sqrt{\pi \times 0.01} = 135\) MPa: 27% of its yield strength.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Trusting a safety factor on yield. 4340 steel run at half its yield, 735 MPa, breaks once a crack's half-length passes \(a_c = (1/\pi)(50/735)^2 = 1.5\) mm. Strength and toughness are different properties, and high-strength alloys often trade one for the other.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">2</span>Fatigue crack growth</h2>
+<p>A load far below yield, repeated, can still break a part. Each cycle opens and closes a crack and moves its tip a little.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The growth per cycle follows the range of stress intensity, \(\Delta K = Y\Delta\sigma\sqrt{\pi a}\), as a power law (Paris):</p>
+\[
+\frac{da}{dN} = C(\Delta K)^m.
+\]
+<p>Separating and integrating from the starting depth \(a_0\) to the depth \(a_c\) where \(K_\text{max}\) reaches \(K_{Ic}\), for \(m \ne 2\),</p>
+\[
+N_f = \frac{a_c^{1 - m/2} - a_0^{1 - m/2}}{C(Y\Delta\sigma\sqrt\pi)^m(1 - m/2)}.
+\]
+</div>
+<div class="box ex"><span class="tag">Worked example · a fifth of yield</span>
+<p>Steel with \(C = 10^{-11}\) m/cycle, \(m = 3\), \(Y = 1.12\) and \(K_{Ic} = 60\) MPa·m\(^{1/2}\), cycled from 0 to 100 MPa with a 1 mm edge crack: \(a_c = (1/\pi)(60/112)^2 = 91\) mm, and the life is 724 000 cycles. At 200 MPa it is 80 000.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking a stress below yield as safe forever. Every cycle grows the crack; the life is finite and goes roughly as \(\Delta\sigma^{-m}\). Design for a life and inspect before it ends.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">3</span>Creep</h2>
+<p>Hot enough, about 0.4 of the melting point in kelvin, a metal under a steady load keeps stretching, even far below its yield strength.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>At high temperature atoms diffuse, so dislocations can climb around obstacles that would stop them cold. The steady creep rate follows the stress as a power and the temperature as an Arrhenius term:</p>
+\[
+\dot\varepsilon_s = A\sigma^n\exp\!\left(-\frac{Q_c}{RT}\right).
+\]
+<p>Before it settles there is a primary stage, here \(\varepsilon_p(1 - e^{-t/\tau})\), as the dislocations arrange themselves.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a superalloy at 850 °C</span>
+<p>With \(n = 5\), \(Q_c = 300\) kJ/mol and \(A\) set so the alloy creeps at \(1.0 \times 10^{-8}\) per second at 850 °C and 200 MPa, it reaches 2% strain in 460 hours. At 950 °C the rate is \(1.4 \times 10^{-7}\) per second and the life 34 hours.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking a stress below yield as giving no permanent strain. That holds cold; at 850 °C the part above is at a quarter of its yield strength and still creeps to retirement in under three weeks. Use kelvin in the Arrhenius term.</p>
+</div>
+</section>
+
+<section class="topic" id="s1">
+<h2><span class="n">4</span>Formula sheet</h2>
+\[ K_I = Y\sigma\sqrt{\pi a}\ (Y = 1 \text{ wide plate}), \qquad a_c = \frac1\pi\left(\frac{K_{Ic}}{\sigma}\right)^2, \qquad r_p = \frac{1}{2\pi}\left(\frac{K}{\sigma_y}\right)^2. \]
+\[ \frac{da}{dN} = C(\Delta K)^m, \qquad \Delta K = Y\Delta\sigma\sqrt{\pi a}, \qquad a_c = \frac1\pi\left(\frac{K_{Ic}}{Y\sigma_\text{max}}\right)^2. \]
+\[ \dot\varepsilon_s = A\sigma^n e^{-Q_c/RT}, \qquad \varepsilon(t) = \frac{\sigma}{E} + \varepsilon_p(1 - e^{-t/\tau}) + \dot\varepsilon_s t. \]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux.</footer>
+</body>
+</html>

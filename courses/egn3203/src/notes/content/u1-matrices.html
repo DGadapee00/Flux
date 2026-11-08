@@ -27,8 +27,10 @@
     <a href="#s7"><span>7</span>Eigenvalues and eigenvectors</a>
     <a href="#s8"><span>8</span>Projection and least squares</a>
     <a href="#s10"><span>9</span>LU and the residual</a>
+    <a href="#s11"><span>10</span>Symmetric matrices and quadratic forms</a>
+    <a href="#s12"><span>11</span>Least squares and overfitting</a>
     <h3>Reference</h3>
-    <a href="#s9"><span>10</span>Formula sheet</a>
+    <a href="#s9"><span>12</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -203,8 +205,44 @@ A^{\mathsf T}A\,\hat{\mathbf x} = A^{\mathsf T}\mathbf b.
 </div>
 </section>
 
+<section class="topic" id="s11">
+<h2><span class="n">10</span>Symmetric matrices and quadratic forms</h2>
+<p>A symmetric matrix \(A = A^{\mathsf T}\) has real eigenvalues and perpendicular eigenvectors. In those directions it only stretches.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>For \(A = \begin{bmatrix} a & b \\ b & c \end{bmatrix}\), the characteristic equation \(\lambda^2 - (a + c)\lambda + ac - b^2 = 0\) gives</p>
+\[
+\lambda = \frac{a + c}{2} \pm \sqrt{\left(\frac{a - c}{2}\right)^2 + b^2},
+\]
+<p>always real. Writing \(A = Q\Lambda Q^{\mathsf T}\), the quadratic form becomes \(\mathbf x^{\mathsf T}A\mathbf x = \lambda_1u^2 + \lambda_2v^2\) in the eigenvector coordinates. It is positive for every \(\mathbf x \ne \mathbf 0\), positive definite, exactly when every \(\lambda > 0\). On the unit circle its largest and smallest values are \(\lambda_1\) and \(\lambda_2\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a long bowl</span>
+<p>For \(A = \begin{bmatrix} 3 & 1 \\ 1 & 1 \end{bmatrix}\): \(\lambda = 2 \pm \sqrt{1 + 1} = 3.414\) and \(0.586\). Both positive, so the level curves are ellipses, \(\sqrt{3.414/0.586} = 2.41\) times as long one way as the other.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking positive entries as positive definite. \(\begin{bmatrix} 1 & 2 \\ 2 & 1 \end{bmatrix}\) has eigenvalues 3 and \(-1\): along \((1, -1)\) the form is negative. In 2×2, positive definite needs \(a > 0\) and \(\det A > 0\).</p>
+</div>
+</section>
+
+<section class="topic" id="s12">
+<h2><span class="n">11</span>Least squares and overfitting</h2>
+<p>With more equations than unknowns, \(A\mathbf x = \mathbf b\) usually has no solution. Least squares picks the \(\mathbf x\) whose misses have the smallest sum of squares.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>At the minimum of \(\|A\mathbf x - \mathbf b\|^2\) the residual is perpendicular to every column of \(A\): \(A^{\mathsf T}(A\hat{\mathbf x} - \mathbf b) = \mathbf 0\), the normal equations. Forming \(A^{\mathsf T}A\) squares the condition number, so in practice \(A = QR\) and</p>
+\[
+R\,\hat{\mathbf x} = Q^{\mathsf T}\mathbf b.
+\]
+<p>For a polynomial fit, column \(j\) of \(A\) holds \(x_i^j\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a line through four points</span>
+<p>Points \((0, 1), (1, 2), (2, 2), (3, 4)\): \(\bar x = 1.5\), \(\bar y = 2.25\), \(\sum(x - \bar x)(y - \bar y) = 4.5\) and \(\sum(x - \bar x)^2 = 5\). The slope is \(0.9\) and the intercept \(2.25 - 0.9 \times 1.5 = 0.9\).</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Judging a model by how well it fits the data it was fitted to. Ten points need ten coefficients to be hit exactly, and a degree-9 polynomial does it by swinging between them: on the lab's data it misses the true line by 1.5, against 0.02 for a straight line.</p>
+</div>
+</section>
+
 <section class="topic" id="s9">
-<h2><span class="n">9</span>Formula sheet</h2>
+<h2><span class="n">12</span>Formula sheet</h2>
 \[
 A\mathbf x = x_1\mathbf a_1 + x_2\mathbf a_2, \qquad \det A = a_{11}a_{22} - a_{12}a_{21}, \qquad (AB)_{ij} = \sum_k a_{ik} b_{kj},
 \]
@@ -220,6 +258,8 @@ A^{\mathsf T}A\,\hat{\mathbf x} = A^{\mathsf T}\mathbf b, \qquad \mathbf p = A\h
 \[
 A\mathbf v = \lambda\mathbf v, \qquad \lambda^2 - (\operatorname{tr}A)\lambda + \det A = 0.
 \]
+\[ \lambda = \tfrac{a + c}{2} \pm \sqrt{\left(\tfrac{a - c}{2}\right)^2 + b^2}, \qquad \mathbf x^{\mathsf T}A\mathbf x > 0\ \forall\mathbf x \ne \mathbf 0 \iff \text{all } \lambda > 0. \]
+\[ A^{\mathsf T}A\,\hat{\mathbf x} = A^{\mathsf T}\mathbf b, \qquad A = QR \Rightarrow R\hat{\mathbf x} = Q^{\mathsf T}\mathbf b, \qquad \text{slope} = \frac{\sum(x - \bar x)(y - \bar y)}{\sum(x - \bar x)^2}. \]
 </section>
 
 </main>

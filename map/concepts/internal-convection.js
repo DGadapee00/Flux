@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'March the bulk temperature down a heated tube with a slider for the flow rate. It corrects the idea that the fluid warms at a steady rate along the pipe: it closes on the wall temperature exponentially, so the last metres do little.',
+  labs: [
+    { course: 'eml4140', lab: 'tube', notes: ['s5'], note: 'Water heated in a tube with a slider for the flow rate, the bulk temperature drawn along it: it closes on the wall exponentially, and h jumps when the flow turns turbulent. Checked by a Runge–Kutta march and the log-mean difference.' },
+  ],
 };

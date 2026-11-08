@@ -26,4 +26,7 @@ export default {
     { tag: 'the tap opens', lab: 'network', scenario: 'tap', read: (c) => ({ 'pump flow (L/s)': [c.Q * 1000, 1.08], 'trunk loss (m)': [c.trunkLoss, 11.9], 'head at J (m)': [c.HJ, 9.85], 'shower (L/s)': [c.Qs * 1000, 0.327] }) },
   ],
   s4: [{ tag: 'air squeezed by a piston', lab: 'continuity', scenario: 'piston', read: (c) => ({ in: [c.in, 0.468], out: [c.out, 0.252], net: [c.net, -0.216], rate: [c.dRhoDt, 2.4] }) }],
+  s13: [
+    { tag: 'a football at 15 m/s', lab: 'drag', scenario: 'football', read: (c) => ({ C_D: [c.cd, 0.383], 'F (N)': [c.F, 1.97] }) },
+  ],
 };

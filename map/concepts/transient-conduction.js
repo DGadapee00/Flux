@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Cool a steel and a plastic slab of the same size, with centre and surface temperatures plotted. It corrects the idea that the whole part cools together: with a large Biot number the surface is cold while the centre is still hot, which is what cracks a quenched part.',
+  labs: [
+    { course: 'eml4140', lab: 'quench', notes: ['s8'], note: 'A plate plunged into cold fluid, steel against polycarbonate: at Bi = 0.22 it cools as a lump, at Bi = 50 the surface is at 26 °C while the centre is at 189 °C. The series solution is checked against Crank–Nicolson.' },
+  ],
 };

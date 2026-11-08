@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Interpolate \\(1/(1 + 25x^2)\\) with more and more equally spaced points, then with Chebyshev points. It corrects the idea that more points always give a better fit: on equal spacing the error near the ends grows without bound.',
+  labs: [
+    { course: 'egn3203', lab: 'interp', notes: ['s7'], note: 'The polynomial through more and more points of Runge’s function, on equal spacing and on Chebyshev points: equal spacing swings ever wider at the ends. The barycentric form is checked against Newton’s divided differences.' },
+  ],
 };

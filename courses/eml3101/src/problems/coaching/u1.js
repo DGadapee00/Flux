@@ -4,6 +4,7 @@
  */
 import { R_UNIVERSAL } from '@flux/subjects/thermo/idealgas.js';
 import { mix } from '../bank/u1.js';
+import { airFuel, dripped, humidity } from '../bank/u1.js';
 
 export default {
   'u1.1.fractions': {
@@ -34,6 +35,30 @@ export default {
           const r = mix($);
           return $.ask === 'M' ? 500 * (r.MA + r.MB) : 0.5 * (R_UNIVERSAL / r.MA + R_UNIVERSAL / r.MB);
         }, 'A plain average ignores how much of each gas there is. Weight by the amounts.'],
+      ],
+    },
+  },
+  'u1.5.air-fuel': {
+    traps: {
+      af: [
+        [($) => airFuel($, 'molar'), 'That is moles of air per mole of fuel. Multiply by the molar masses: 28.97 for air, 16.04 for methane.'],
+        [($) => airFuel($, 'oxygen'), 'That counts only the oxygen. Each O₂ in air brings 3.76 N₂ with it.'],
+      ],
+    },
+  },
+  'u1.7.humidity': {
+    traps: {
+      w: [
+        [($) => humidity($, 'phi'), 'Relative humidity is not the humidity ratio. Find p_v = φp_g, then ω = 0.622 p_v/(p − p_v).'],
+        [($) => humidity($, 'nofactor'), 'That is p_v/(p − p_v), a mole ratio. Multiply by 0.622, water’s molar mass over air’s.'],
+      ],
+    },
+  },
+  'u1.9.dripped': {
+    traps: {
+      m: [
+        [($) => dripped($, 'phi'), 'The air leaves saturated, at 100%: ω out uses p_g(T₂), not 60% of it.'],
+        [($) => dripped($, 'out'), 'That is the water the air still carries. The water removed is ω in − ω out.'],
       ],
     },
   },

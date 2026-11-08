@@ -39,6 +39,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'A wet-bulb thermometer in air with sliders for temperature and humidity. It corrects the idea that a wet surface settles at the air temperature: evaporation holds it below, by an amount the heat and mass analogy predicts.',
+  labs: [
+    { course: 'eml4140', lab: 'wetbulb', notes: ['s3'], note: 'A wet wick in air with sliders for temperature and humidity: evaporation holds it below the air temperature, by what the heat and mass analogy predicts. Newton’s method on the balance is checked by marching a wet bead in time.' },
+  ],
 };

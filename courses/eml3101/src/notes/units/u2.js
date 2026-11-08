@@ -8,6 +8,7 @@ export default {
   sections: [
     { id: 's1', n: 1, title: 'Choked flow', lab: 'nozzle', ch: ['2'], topics: ['choke'], home: true },
     { id: 's2', n: 2, title: 'Normal shocks', lab: 'nozzle', ch: ['2'], topics: ['shock'] },
-    { id: 's3', n: 3, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's4', n: 3, title: 'Jet propulsion and bypass', lab: 'jet', ch: ['2'], topics: ['propulsion'], home: true },
+    { id: 's3', n: 4, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

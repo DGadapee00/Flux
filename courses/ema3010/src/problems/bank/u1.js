@@ -5,6 +5,7 @@
 import { KE2, bond, mie } from '@flux/subjects/matsci/bonding.js';
 import { STRUCTURES, crystal } from '@flux/subjects/matsci/crystal.js';
 import { choice, kase, num, problem, range } from '../kit.js';
+import { LAMBDA, allowed } from '@flux/subjects/matsci/xrd.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 /** The two well shapes the problems use, by the lab's names. */
@@ -15,6 +16,16 @@ export const PAIR = { nacl: 2.36, kcl: 2.67, lif: 1.56 };
 export const METAL = { fe: { st: 'bcc', R: 0.1241, A: 55.85, name: 'Iron' }, cu: { st: 'fcc', R: 0.1278, A: 63.55, name: 'Copper' }, al: { st: 'fcc', R: 0.1431, A: 26.98, name: 'Aluminum' } };
 const DEEP = bond({ E0: 4, r0: 2.5, n: 1, m: 3, r: 2.5 });
 const SHALLOW = bond({ E0: 2, r0: 2.5, n: 2, m: 6, r: 2.5 });
+
+/** Metals for the X-ray problems: structure and lattice parameter (nm). */
+export const XMETAL = { cu: { st: 'fcc', a: 0.3615 }, al: { st: 'fcc', a: 0.4049 }, fe: { st: 'bcc', a: 0.2866 }, w: { st: 'bcc', a: 0.3165 } };
+/** The N = h² + k² + l² of the first peaks, by structure; `sc` reproduces ignoring the selection rule. */
+export const PEAK_N = { fcc: [3, 4, 8], bcc: [2, 4, 6], sc: [1, 2, 3] };
+export const twoTheta = ($, rule = null, two = 2) => {
+  const m = XMETAL[$.metal];
+  const N = PEAK_N[rule || m.st][Number($.k)];
+  return (two * Math.asin((LAMBDA * Math.sqrt(N)) / (2 * m.a)) * 180) / Math.PI;
+};
 
 export default [
   problem({
@@ -234,6 +245,49 @@ export default [
       read: (c) => ({ tight: c.apf > 0.73 ? 'yes' : 'no' }),
     },
     cases: [kase('iron', { metal: 'fe' }, { tight: 'no' })],
+  }),
+  problem({
+    id: 'u1.9.bragg',
+    title: 'Where the peak falls',
+    exam: 'u1',
+    ch: '1',
+    lab: 'xrd',
+    src: 'Flux, written for the X-ray lab',
+    topics: ['diffraction'],
+    principles: ['diffraction'],
+    vars: { metal: choice(['cu', 'copper (FCC, a = 0.3615 nm)'], ['al', 'aluminium (FCC, a = 0.4049 nm)'], ['fe', 'iron (BCC, a = 0.2866 nm)'], ['w', 'tungsten (BCC, a = 0.3165 nm)']), k: choice(['0', 'first'], ['1', 'second']) },
+    text: (T) => `Copper Kα X-rays (λ = 0.15406 nm) fall on powdered ${T.metal}. At what angle 2θ, in degrees, is its ${T.k} diffraction peak?`,
+    parts: [num('tt', ($) => twoTheta($), '°', { label: '2θ' })],
+    level: 2,
+    hints: ['List the planes the structure allows, in order of h² + k² + l².', 'sin θ = λ√(h² + k² + l²)/2a, and the angle measured is 2θ.'],
+    steps: ($) => [`Allowed planes: N = ${PEAK_N[XMETAL[$.metal].st].join(', ')}, …`, String.raw`$2\theta = ${Number(twoTheta($).toPrecision(4))}^\circ$`],
+    sim: { scenario: 'copper', setup(s, $) { Object.assign(s, { struct: XMETAL[$.metal].st, a: XMETAL[$.metal].a }); }, read: (c, s, $) => ({ tt: c.peaks[Number($.k)].tt }) },
+    cases: [kase('copper, first', { metal: 'cu', k: '0' }, { tt: 43.32 })],
+  }),
+
+  problem({
+    id: 'u1.10.absent',
+    title: 'A missing peak',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'xrd',
+    src: 'Flux, written for the X-ray lab',
+    topics: ['diffraction'],
+    principles: ['diffraction'],
+    vars: { st: choice(['bcc', 'BCC iron'], ['fcc', 'FCC copper']), hkl: choice(['100', '(100)'], ['110', '(110)'], ['111', '(111)']) },
+    text: (T) => `Does ${T.st} give a diffraction peak from its ${T.hkl} planes?`,
+    parts: [
+      pick('a', 'the peak', [
+        ['yes', 'yes', 'The cell’s atoms all scatter in step for these planes.'],
+        ['no', 'no', 'Atoms in the cell sit halfway between these planes and cancel them: the structure factor is zero.'],
+      ], ($) => (allowed($.st, ...$.hkl.split('').map(Number)) ? 'yes' : 'no')),
+    ],
+    level: 1,
+    hints: ['BCC: h + k + l must be even.', 'FCC: h, k and l all odd or all even.'],
+    steps: ($) => [allowed($.st, ...$.hkl.split('').map(Number)) ? 'The selection rule allows it.' : 'The selection rule forbids it: F = 0.'],
+    sim: { scenario: 'copper', setup(s, $) { s.struct = $.st; }, read: (c, s, $) => ({ a: c.present(...$.hkl.split('').map(Number)) ? 'yes' : 'no' }) },
+    cases: [kase('BCC (110)', { st: 'bcc', hkl: '110' }, { a: 'yes' })],
   }),
 ];
 

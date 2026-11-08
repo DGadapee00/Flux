@@ -5,12 +5,16 @@
 import { WIEN } from '@flux/subjects/heat/radiation.js';
 import { choice, kase, num, problem, range } from '../kit.js';
 import { crossedStrings, strips } from '@flux/subjects/heat/viewfactor.js';
+import { PLATES, SIGMA } from '@flux/subjects/heat/shields.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 /** The emitters by name, at their temperatures in kelvin. */
 export const EMITTER = { sun: 5778, filament: 2800, skin: 305 };
 /** Two long strips centred one above the other: strip 1 of width 1 on the floor, strip 2 of width w2 at height h. */
 export const strings = ($) => crossedStrings(strips({ w2: Number($.w2), x2: 0, h: $.h, tiltDeg: 0 }), Number($.w2));
+
+/** Flux between the plates with N shields, with the shield adding `add(es)` to the resistance. */
+export const shieldFlux = ($, add = (e) => 2 / e - 1) => (SIGMA * (PLATES.T1 ** 4 - PLATES.T2 ** 4)) / (1 / PLATES.e1 + 1 / PLATES.e2 - 1 + Number($.N) * add(Number($.es)));
 
 export default [
   problem({
@@ -128,5 +132,49 @@ export default [
       read: (c) => ({ cmp: Math.abs(c.F12 - c.F21) < 1e-9 ? 'equal' : c.F12 > c.F21 ? 'bigger' : 'smaller' }),
     },
     cases: [kase('the sensor', { setup: 'sensor' }, { cmp: 'bigger' })],
+  }),
+  problem({
+    id: 'u2.5.shield',
+    title: 'Polished shields',
+    exam: 'u2',
+    ch: '2',
+    lab: 'shield',
+    src: 'Flux, written for the Shields lab',
+    topics: ['shields'],
+    principles: ['shields'],
+    vars: { N: choice(['1', 'one thin shield'], ['2', 'two thin shields']), es: choice(['0.03', '0.03'], ['0.05', '0.05'], ['0.1', '0.1'], ['0.2', '0.2']) },
+    text: (T) => `Two large parallel plates, at 600 K and 300 K and both with ε = 0.8, have ${T.N} between them, each with emissivity ${T.es} on both faces. What flux passes between the plates, in W/m²?`,
+    parts: [num('q', ($) => shieldFlux($), 'W/m²', { label: 'q″' })],
+    level: 2,
+    hints: ['The plates alone give a resistance 1/ε₁ + 1/ε₂ − 1.', 'Each shield has two faces: it adds 2/ε_s − 1.'],
+    steps: ($) => [String.raw`$q'' = \sigma(600^4 - 300^4)/(1.5 + ${$.N}(2/${$.es} - 1)) = ${Number(shieldFlux($).toPrecision(3))}$ W/m²`],
+    sim: { scenario: 'polished', setup(s, $) { s.N = Number($.N); s.es = Number($.es); }, read: (c) => ({ q: c.q }) },
+    cases: [kase('one shield, ε_s = 0.05', { N: '1', es: '0.05' }, { q: 170.1 })],
+  }),
+
+  problem({
+    id: 'u2.6.float',
+    title: 'Where the shield settles',
+    exam: 'u2',
+    ch: '2',
+    kind: 'conceptual',
+    lab: 'shield',
+    src: 'Flux, written for the Shields lab',
+    topics: ['shields'],
+    principles: ['shields'],
+    vars: { es: choice(['0.8', 'a dull shield (ε = 0.8)'], ['0.05', 'a polished shield (ε = 0.05)']) },
+    text: (T) => `${T.es} hangs between two plates at 600 K and 300 K, both with ε = 0.8. Where does its temperature settle?`,
+    parts: [
+      pick('a', 'its temperature', [
+        ['hot', 'above the 450 K midpoint', 'σT⁴ sits halfway, and the fourth root of the average of the fourth powers is 512 K.'],
+        ['mid', 'at 450 K', 'Radiation goes as T⁴, not T: halfway in σT⁴ is not halfway in T.'],
+        ['cold', 'below 450 K', 'A shield is not a cold sheet; it floats where the flux in equals the flux out.'],
+      ], () => 'hot'),
+    ],
+    level: 1,
+    hints: ['The two gaps either side have equal resistance.', 'So σT⁴ on the shield is halfway between the plates’.'],
+    steps: () => ['T_s = ((600⁴ + 300⁴)/2)^{1/4} = 512 K, whatever ε_s is.'],
+    sim: { scenario: 'black', setup(s, $) { s.es = Number($.es); }, read: (c) => ({ a: c.T[1] > 455 ? 'hot' : c.T[1] < 445 ? 'cold' : 'mid' }) },
+    cases: [kase('polished', { es: '0.05' }, { a: 'hot' })],
   }),
 ];

@@ -23,8 +23,13 @@
     <h3>Part II · Steady conduction</h3>
     <a href="#s4"><span>4</span>Resistances in series</a>
     <a href="#s5"><span>5</span>The critical radius</a>
+    <a href="#s7"><span>6</span>Fins</a>
+    <h3>Part III · Transients and grids</h3>
+    <a href="#s8"><span>7</span>Cooling a slab</a>
+    <a href="#s9"><span>8</span>Touching a cold block</a>
+    <a href="#s10"><span>9</span>How large a time step</a>
     <h3>Reference</h3>
-    <a href="#s6"><span>6</span>Formula sheet</a>
+    <a href="#s6"><span>10</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -133,8 +138,85 @@ R' = \frac{\ln(r_2/r_1)}{2\pi k} + \frac{1}{2\pi r_2 h}, \qquad \frac{dR'}{dr_2}
 </div>
 </section>
 
+<section class="topic" id="s7">
+<h2><span class="n">6</span>Fins</h2>
+<p>A fin adds area for convection, but its far end is cooler than its base, so each added length sheds less.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>With \(\theta = T - T_\infty\), conduction along a rod of section \(A_c\) and perimeter \(P\) balances convection off its side: \(\theta'' = m^2\theta\), \(m = \sqrt{hP/kA_c}\). With a convecting tip,</p>
+\[
+q = \sqrt{hPkA_c}\,\theta_b\,\frac{\sinh mL + (h/mk)\cosh mL}{\cosh mL + (h/mk)\sinh mL}.
+\]
+<p>As \(L\) grows the fraction tends to 1, and \(q\) to \(\sqrt{hPkA_c}\,\theta_b\). The effectiveness \(q/(hA_c\theta_b)\) compares the fin with the bare wall it covers.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · an aluminium pin</span>
+<p>A 5 mm aluminium pin (\(k = 200\) W/(m·K)) in air with \(h = 25\) W/(m²·K), base at 100 °C, air at 25 °C: \(m = \sqrt{4h/kD} = 10\) per metre. At 50 mm, \(mL = 0.5\) and it sheds 1.39 W. At 200 mm, \(mL = 2\), it sheds 2.84 W, already 96% of the 2.95 W an infinitely long pin would.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Assuming any fin helps. A nylon pin in a flow with \(h = 500\) W/(m²·K) sheds 0.47 W, less than the 0.74 W the bare wall under it would: its effectiveness is 0.63.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Transients and grids</h2>
+</div>
+
+<section class="topic" id="s8">
+<h2><span class="n">7</span>Cooling a slab</h2>
+<p>A hot part dropped into a cold fluid cools from the outside in. Whether its inside keeps up depends on one number.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>For a plate of half-thickness \(L\), the heat equation with convection at both faces has the solution</p>
+\[
+\theta(x, t) = \sum_n C_n e^{-\zeta_n^2\mathrm{Fo}}\cos\frac{\zeta_n x}{L}, \qquad \zeta_n\tan\zeta_n = \mathrm{Bi},
+\]
+<p>with \(\mathrm{Bi} = hL/k\) and \(\mathrm{Fo} = \alpha t/L^2\). Bi compares the plate's inside resistance, \(L/k\), with the outside one, \(1/h\). Small Bi: the inside evens out faster than heat leaves, and the plate cools as one lump. Large Bi: the surface tracks the fluid while the inside lags.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · steel and polycarbonate</span>
+<p>A 4 cm plate at 200 °C in fluid at 20 °C with \(h = 500\) W/(m²·K). Steel: \(\mathrm{Bi} = 500 \times 0.02/45 = 0.22\); after 32 s its centre is at 173 °C and its surface at 157 °C. Polycarbonate: \(\mathrm{Bi} = 50\); after 5 minutes its surface is at 26 °C but its centre still at 189 °C.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Treating every part as one temperature. The lumped model holds only when Bi is below about 0.1.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">8</span>Touching a cold block</h2>
+<p>For the first seconds of contact, neither a hand nor a block feels its far side: each acts as if infinitely deep.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Two semi-infinite bodies at \(T_1\) and \(T_2\) pressed together: each side's profile is an error function, and matching temperature and heat flux at the joint fixes it at once at</p>
+\[
+T_c = \frac{e_1T_1 + e_2T_2}{e_1 + e_2}, \qquad e = \sqrt{k\rho c},
+\]
+<p>the effusivity. The joint stays there; only the depth of the profiles grows, as \(\sqrt{\alpha t}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · steel and wood</span>
+<p>Skin at 34 °C has \(e \approx 1140\). Steel at 20 °C has \(e = 12\,700\): the joint is at \((1140 \times 34 + 12\,700 \times 20)/13\,840 = 21.2\) °C. Pine at 20 °C has \(e = 300\): the joint is at 31.1 °C.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Thinking the metal is colder. Both blocks are at 20 °C; the steel draws heat out of the skin forty times faster, so the skin's surface drops further.</p>
+</div>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">9</span>How large a time step</h2>
+<p>An explicit scheme updates each node from its neighbours' old values. It is cheap per step, but the step cannot be too long.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>With \(\mathrm{Fo} = \alpha\,\Delta t/\Delta x^2\), the scheme \(T_i \leftarrow T_i + \mathrm{Fo}(T_{i-1} - 2T_i + T_{i+1})\) multiplies each grid sine of wavenumber \(k\) by</p>
+\[
+G_k = 1 - 4\,\mathrm{Fo}\sin^2\frac{k\pi}{2N}.
+\]
+<p>The finest mode has \(\sin^2 \approx 1\), so \(G \approx 1 - 4\mathrm{Fo}\). For \(\mathrm{Fo} > \tfrac12\) that is below \(-1\): the mode flips sign and grows every step, and round-off seeds it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · halving Δx</span>
+<p>Copper, \(\alpha = 1.1 \times 10^{-4}\) m²/s, a 10 cm rod, \(\Delta t = 30\) ms. With 20 cells, \(\Delta x = 5\) mm and \(\mathrm{Fo} = 0.132\): stable. With 40 cells, \(\Delta x = 2.5\) mm and \(\mathrm{Fo} = 0.528\): the finest mode's \(G = -1.11\), and a millionth grows to a million in 268 steps.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Refining the grid without shortening the step. \(\mathrm{Fo}\) goes as \(1/\Delta x^2\): halve \(\Delta x\) and the step must be quartered.</p>
+</div>
+</section>
+
 <section class="topic" id="s6">
-<h2><span class="n">6</span>Formula sheet</h2>
+<h2><span class="n">10</span>Formula sheet</h2>
 \[
 q = -k\frac{\partial T}{\partial x}, \qquad \frac{\partial T}{\partial t} = \alpha\frac{\partial^2 T}{\partial x^2}, \qquad \alpha = \frac{k}{\rho c}, \qquad \mathrm{Fo} = \frac{\alpha t}{L^2},
 \]
@@ -144,6 +226,10 @@ q = -k\frac{\partial T}{\partial x}, \qquad \frac{\partial T}{\partial t} = \alp
 \[
 q = \frac{\Delta T}{\sum R}, \quad R = \frac Lk,\ \frac1h, \qquad R'_\text{cyl} = \frac{\ln(r_2/r_1)}{2\pi k}, \qquad r_\text{crit} = \frac kh.
 \]
+\[ \theta'' = m^2\theta, \quad m = \sqrt{hP/kA_c}, \qquad q_\infty = \sqrt{hPkA_c}\,\theta_b, \qquad \varepsilon = \frac{q}{hA_c\theta_b}. \]
+\[ \mathrm{Bi} = \frac{hL}{k}, \qquad \mathrm{Fo} = \frac{\alpha t}{L^2}, \qquad \theta = \sum C_n e^{-\zeta_n^2\mathrm{Fo}}\cos\frac{\zeta_n x}{L}, \quad \zeta_n\tan\zeta_n = \mathrm{Bi}. \]
+\[ T_c = \frac{e_1T_1 + e_2T_2}{e_1 + e_2}, \quad e = \sqrt{k\rho c}, \qquad q'' = \frac{e_1e_2(T_1 - T_2)}{(e_1 + e_2)\sqrt{\pi t}}. \]
+\[ \mathrm{Fo} = \frac{\alpha\,\Delta t}{\Delta x^2} \le \frac12, \qquad G_k = 1 - 4\,\mathrm{Fo}\sin^2\frac{k\pi}{2N}. \]
 </section>
 
 </main>

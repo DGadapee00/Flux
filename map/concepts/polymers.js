@@ -24,6 +24,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Heat a polymer through its glass transition and watch stiffness fall by orders of magnitude over a few degrees. It corrects the idea that plastics melt at one sharp temperature, like metals.',
+  labs: [
+    { course: 'ema3010', lab: 'chains', notes: ['s2'], note: 'A polymer’s chain lengths and its stiffness against temperature: through the glass transition the modulus falls a thousandfold, and short chains lower the transition. The Flory averages are checked by summing the distribution term by term.' },
+  ],
 };

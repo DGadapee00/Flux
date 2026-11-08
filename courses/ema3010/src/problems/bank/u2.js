@@ -5,6 +5,7 @@
 import { KB } from '@flux/subjects/matsci/vacancies.js';
 import { carburize } from '@flux/subjects/matsci/diffusion.js';
 import { choice, kase, num, problem, range } from '../kit.js';
+import { METALS } from '@flux/subjects/matsci/hallpetch.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 /** Temperatures by name, in °C. */
@@ -19,6 +20,9 @@ export const schmidM = ($) => Math.cos($.phi * D2R) * Math.cos($.lam * D2R);
 export const slipAnswer = ($) => ($.ask === 'tau' ? 3 * schmidM($) : 1 / schmidM($));
 export const DIFF = ($, kelvin = true) => 2.3e-5 * Math.exp(-148e3 / (8.314 * (FURNACE[$.temp] + (kelvin ? 273 : 0))));
 export const caseHours = ($, D = DIFF($), two = 2) => ($.depth ** 2 / (two * two * Z_HALF ** 2 * D)) / 3600;
+
+/** Hall–Petch yield (MPa) for d in µm; `unit` converts d to the length used and `pow` is the power. */
+export const hallPetch = ($, unit = 1e-6, pow = 0.5) => METALS[$.metal].s0 + METALS[$.metal].ky * (Number($.d) * unit) ** -pow;
 
 export default [
   problem({
@@ -210,5 +214,49 @@ export default [
       read: (c) => ({ d: c.m < 1e-9 ? 'never' : c.m > 0.499 ? 'easiest' : 'tensile' }),
     },
     cases: [kase('along the normal', { axis: 'normal' }, { d: 'never' })],
+  }),
+  problem({
+    id: 'u2.7.hall-petch',
+    title: 'Yield from grain size',
+    exam: 'u2',
+    ch: '2',
+    lab: 'grain',
+    src: 'Flux, written for the Grain size lab',
+    topics: ['hall-petch'],
+    principles: ['hall-petch'],
+    vars: { metal: choice(['steel', 'mild steel (σ₀ = 70 MPa, k_y = 0.74 MPa·m^½)'], ['titanium', 'titanium (σ₀ = 80 MPa, k_y = 0.40 MPa·m^½)']), d: choice(['5', '5 µm'], ['20', '20 µm'], ['50', '50 µm']) },
+    text: (T) => `A sample of ${T.metal} has grains ${T.d} across. What is its yield strength, in MPa?`,
+    parts: [num('sy', ($) => hallPetch($), 'MPa', { label: 'σ_y' })],
+    level: 1,
+    hints: ['σ_y = σ₀ + k_y d^{−1/2}.', 'Put d in metres.'],
+    steps: ($) => [String.raw`$\sigma_y = ${METALS[$.metal].s0} + ${METALS[$.metal].ky}/\sqrt{${$.d} \times 10^{-6}} = ${Number(hallPetch($).toPrecision(3))}$ MPa`],
+    sim: { scenario: 'fine', setup(s, $) { Object.assign(s, { metal: $.metal, ld: Math.log10(Number($.d)), s: 0 }); }, read: (c) => ({ sy: c.sy }) },
+    cases: [kase('steel, 20 µm', { metal: 'steel', d: '20' }, { sy: 235.5 })],
+  }),
+
+  problem({
+    id: 'u2.8.boundaries',
+    title: 'Are boundaries weak spots?',
+    exam: 'u2',
+    ch: '2',
+    kind: 'conceptual',
+    lab: 'grain',
+    src: 'Flux, written for the Grain size lab',
+    topics: ['hall-petch'],
+    principles: ['hall-petch'],
+    vars: { change: choice(['finer', 'refined to half the grain size'], ['coarser', 'annealed until its grains double in size']) },
+    text: (T) => `A steel part is ${T.change}. What happens to its yield strength at room temperature?`,
+    parts: [
+      pick('a', 'the yield strength', [
+        ['up', 'it rises', 'More boundary per volume blocks slip more often.'],
+        ['down', 'it falls', 'Fewer boundaries, longer pile-ups, less stress needed to pass slip on.'],
+        ['same', 'no change', 'Grain size enters σ_y through k_y d^{−1/2}.'],
+      ], ($) => ($.change === 'finer' ? 'up' : 'down')),
+    ],
+    level: 1,
+    hints: ['Boundaries block slip.', 'σ_y = σ₀ + k_y d^{−1/2}.'],
+    steps: ($) => [$.change === 'finer' ? 'Smaller d, larger d^{−1/2}: stronger.' : 'Larger d, smaller d^{−1/2}: weaker.'],
+    sim: { scenario: 'fine', setup(s, $) { s.ld = $.change === 'finer' ? Math.log10(5) : Math.log10(20); }, read: (c) => ({ a: c.sy > 305 ? 'up' : c.sy < 303 ? 'down' : 'same' }) },
+    cases: [kase('coarser', { change: 'coarser' }, { a: 'down' })],
   }),
 ];

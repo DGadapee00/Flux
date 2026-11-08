@@ -31,6 +31,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Step a series and a parallel RLC with a resistance slider, the regime named as it changes. It corrects the idea that more resistance always means more damping: in the parallel circuit it means less.',
+  labs: [
+    { course: 'eel3111', lab: 'rlc', notes: ['s4'], note: 'Series and parallel RLC circuits stepped with a resistance slider, the regime named: more resistance damps the series circuit but un-damps the parallel one. The closed-form responses are checked by Runge–Kutta.' },
+  ],
 };

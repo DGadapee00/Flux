@@ -30,8 +30,10 @@
     <a href="#s9"><span>9</span>Momentum on a control volume</a>
     <a href="#s10"><span>10</span>Head loss in pipes</a>
     <a href="#s12"><span>11</span>Pipe networks and pumps</a>
+    <h3>Part IV · Bodies in a stream</h3>
+    <a href="#s13"><span>12</span>Drag and the drag crisis</a>
     <h3>Reference</h3>
-    <a href="#s11"><span>12</span>Formula sheet</a>
+    <a href="#s11"><span>13</span>Formula sheet</a>
   </nav>
 </header>
 <main>
@@ -287,8 +289,31 @@ h_{L,A}(Q_A) = h_{L,B}(Q_B), \qquad Q_A + Q_B = Q.
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part IV</div>
+  <h2>Bodies in a stream</h2>
+</div>
+
+<section class="topic" id="s13">
+<h2><span class="n">12</span>Drag and the drag crisis</h2>
+<p>A body in a stream feels a force along the flow, drag, and across it, lift. Both scale with the dynamic pressure \(\tfrac12\rho V^2\) and an area.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Dimensional analysis leaves the force divided by \(\tfrac12\rho V^2A\) a function of the Reynolds number alone, for a given shape:</p>
+\[
+F_D = \tfrac12\,C_D(\text{Re})\,\rho V^2 A, \qquad F_L = \tfrac12\,C_L\,\rho V^2 A.
+\]
+<p>For a sphere \(C_D\) is near 0.4 to 0.5 over \(10^3 < \text{Re} < 2 \times 10^5\). Near \(3 \times 10^5\) the boundary layer turns turbulent, clings longer to the back, and the wake narrows: \(C_D\) drops to about 0.1. Roughness brings that crisis to lower Re.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a football at 15 m/s</span>
+<p>A 220 mm ball at 15 m/s: \(\text{Re} = 15 \times 0.22/1.5 \times 10^{-5} = 2.2 \times 10^5\), \(C_D = 0.38\), \(A = 0.038\) m². So \(F_D = \tfrac12 \times 0.38 \times 1.2 \times 225 \times 0.038 = 2.0\) N. At 25 m/s, past the crisis, it is 1.5 N.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Assuming drag always rises with speed. Across the drag crisis \(C_D\) falls faster than \(V^2\) rises. Dimples on a golf ball cause the crisis at its own speeds, which is why it flies further than a smooth one.</p>
+</div>
+</section>
+
 <section class="topic" id="s11">
-<h2><span class="n">11</span>Formula sheet</h2>
+<h2><span class="n">13</span>Formula sheet</h2>
 \[
 \frac{D\mathbf v}{Dt} = \frac{\partial\mathbf v}{\partial t} + (\mathbf v\cdot\nabla)\mathbf v, \qquad T = \int \frac{dx}{u}, \qquad \rho\,\frac{D\mathbf v}{Dt} = -\nabla p + \rho\,\mathbf g,
 \]
@@ -313,6 +338,7 @@ u = \frac{\Delta p}{4\mu L}(R^2 - r^2), \qquad Q = \frac{\pi R^4\,\Delta p}{8\mu
 \[
 h_L = f\frac{L}{D}\frac{V^2}{2g}, \qquad f_\text{lam} = \frac{64}{\mathrm{Re}}, \qquad \frac{1}{\sqrt f} = -2\log_{10}\left(\frac{\varepsilon/D}{3.7} + \frac{2.51}{\mathrm{Re}\sqrt f}\right).
 \]
+\[ F_D = \tfrac12 C_D\rho V^2 A, \qquad F_L = \tfrac12 C_L\rho V^2 A, \qquad \text{Re} = \frac{VD}{\nu}. \]
 </section>
 
 </main>

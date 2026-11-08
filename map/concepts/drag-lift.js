@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Plot a sphere’s drag coefficient against Reynolds number, smooth and dimpled. It corrects the idea that drag always rises with speed: past the drag crisis, a faster or rougher ball has less drag, which is why golf balls have dimples.',
+  labs: [
+    { course: 'eml3015', lab: 'drag', notes: ['s13'], note: 'A ball through air with a speed slider and a smooth or rough surface: past the drag crisis a faster or rougher ball has less drag. Checked by the distance it coasts to half speed, marched in time and integrated over speed.' },
+  ],
 };

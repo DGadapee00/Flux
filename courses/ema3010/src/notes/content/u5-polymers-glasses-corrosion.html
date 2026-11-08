@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Polymers, glasses and corrosion</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">EMA 3010 · Materials Science · Unit 5</div>
+  <h1>Polymers, glasses and corrosion</h1>
+  <p class="lede">Long chains that soften through a glass transition, glasses that stop flowing as they cool, and metals that dissolve when two of them touch in water.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Beyond metals, and their decay</h3>
+    <a href="#s2"><span>1</span>Polymer chains and the glass transition</a>
+    <a href="#s3"><span>2</span>Glass and its viscosity</a>
+    <a href="#s4"><span>3</span>Galvanic corrosion</a>
+    <h3>Reference</h3>
+    <a href="#s1"><span>4</span>Formula sheet</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Beyond metals, and their decay</h2>
+</div>
+
+<section class="topic" id="s2">
+<h2><span class="n">1</span>Polymer chains and the glass transition</h2>
+<p>A polymer is long chains of a repeat unit. Their lengths vary, so a sample has averages, not one molecular weight.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>If each chain adds one more unit with probability \(p\), a fraction \(x_i = (1 - p)p^{i-1}\) of chains has \(i\) units. Summing,</p>
+\[
+\bar M_n = \sum x_i M_i = \frac{m_0}{1 - p}, \qquad \bar M_w = \frac{m_0(1 + p)}{1 - p}, \qquad \text{DP} = \frac{\bar M_n}{m_0}.
+\]
+<p>Chain ends loosen the packing, so the glass transition falls with \(\bar M_n\): \(T_g = T_{g,\infty} - K/\bar M_n\) (Flory and Fox).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · polystyrene at p = 0.99</span>
+<p>With \(m_0 = 104\) g/mol and \(p = 0.99\): \(\bar M_n = 10\,400\) g/mol, \(\bar M_w = 20\,700\) g/mol, and the degree of polymerisation is 100. Its glass transition is \(100 - 10^5/10\,400 = 90.4\) °C.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting a plastic to melt at one sharp temperature, like a metal. An amorphous polymer softens through its glass transition: its stiffness falls about a thousandfold over a few tens of degrees, and it never has a sharp melting point.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">2</span>Glass and its viscosity</h2>
+<p>A glass is a solid with no long-range order. Cooled fast enough, a melt grows too stiff for its atoms to line up into a crystal.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The viscosity climbs steeply as the melt cools, \(\eta = \eta_0\exp(Q/RT)\). Through soda-lime glass's annealing point (\(10^{12}\) Pa·s at 546 °C) and softening point (\(10^{6.6}\) Pa·s at 726 °C), \(Q \approx 470\) kJ/mol. Near \(10^{12}\) Pa·s the glass stops flowing on human timescales: the glass transition.</p>
+<p>A pane of height \(H\) standing on edge carries its own weight, \(\rho g z\) at depth \(z\). In tension the viscosity is \(3\eta\), so the top sinks at \(\int_0^H \rho g z/3\eta\,dz = \rho g H^2/6\eta\), and sinking by \(\Delta\) takes \(t = 6\eta\Delta/\rho g H^2\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a pane at 500 °C</span>
+<p>At 500 °C the line gives \(\eta = 10^{13.8}\) Pa·s. A 1 m pane sinks 0.1 mm in \(6 \times 10^{13.8} \times 10^{-4}/(2500 \times 9.81) = 1.5 \times 10^6\) s: about 17 days. At 20 °C the same estimate gives about \(10^{51}\) years.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Believing old window glass is thicker at the bottom because it is still flowing. At room temperature it would take vastly longer than the age of the universe to sink even 0.1 mm; old panes were uneven when made.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">3</span>Galvanic corrosion</h2>
+<p>Corrosion is an electrochemical cell: metal dissolves at an anode, and its electrons reduce something, often oxygen, at a cathode.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Two metals joined in water form a cell with \(E_\text{cell} = E_\text{cathode} - E_\text{anode}\) and \(\Delta G = -nFE_\text{cell}\). Each reaction's current grows tenfold for every \(b\) volts of overpotential (Tafel). The couple settles at the potential where the anode's total current equals the cathode's:</p>
+\[
+A_a\,i_{0,a}10^{(E - E_a)/b_a} = A_c\,i_{0,c}10^{(E_c - E)/b_c}.
+\]
+<p>That is linear in \(E\). The anode's current density then grows as \((A_c/A_a)^{b_c/(b_a + b_c)}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · equal areas</span>
+<p>With the model lines here, steel and copper of equal area settle at \(E = -0.335\) V. The steel dissolves at 0.057 A/m², 0.066 mm/yr. A steel rivet in a copper sheet, 100 times its area, corrodes at 1.4 mm/yr.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Painting the anode to protect it. Every scratch becomes a tiny anode beside the whole cathode, and corrodes far faster than bare steel would. Paint the cathode, or both.</p>
+</div>
+</section>
+
+<section class="topic" id="s1">
+<h2><span class="n">4</span>Formula sheet</h2>
+\[ \bar M_n = \frac{m_0}{1 - p}, \quad \bar M_w = \frac{m_0(1 + p)}{1 - p}, \quad \text{DP} = \frac{\bar M_n}{m_0}, \quad T_g = T_{g,\infty} - \frac{K}{\bar M_n}. \]
+\[ \eta = \eta_0 e^{Q/RT}, \qquad T_g \text{ near } \eta = 10^{12}\ \text{Pa·s}, \qquad t = \frac{6\eta\Delta}{\rho g H^2}. \]
+\[ E_\text{cell} = E_\text{cathode} - E_\text{anode}, \qquad \Delta G = -nFE_\text{cell}, \qquad i_a \propto \left(\frac{A_c}{A_a}\right)^{b_c/(b_a + b_c)}. \]
+</section>
+
+</main>
+<footer>Our own notes, written for Flux.</footer>
+</body>
+</html>

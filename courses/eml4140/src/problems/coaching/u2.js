@@ -4,6 +4,7 @@
  */
 import { WIEN } from '@flux/subjects/heat/radiation.js';
 import { EMITTER, strings } from '../bank/u2.js';
+import { shieldFlux } from '../bank/u2.js';
 
 export default {
   'u2.1.wien': {
@@ -19,6 +20,14 @@ export default {
       F: [
         [($) => strings($)[$.ask === 'F12' ? 'F21' : 'F12'], 'That is the other direction. Divide by twice the width of the surface the radiation leaves.'],
         [($) => strings($).crossed / (2 * ($.ask === 'F12' ? 1 : Number($.w2))), 'Subtract the uncrossed strings: crossed minus uncrossed, over twice the width.'],
+      ],
+    },
+  },
+  'u2.5.shield': {
+    traps: {
+      q: [
+        [($) => shieldFlux($, (e) => 1 / e), 'A shield has two faces, each with its own surface resistance: it adds 2/ε_s − 1, not 1/ε_s.'],
+        [() => shieldFlux({ N: 0, es: 1 }), 'That is the flux with no shield at all. Add each shield’s resistance.'],
       ],
     },
   },

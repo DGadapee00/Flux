@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Plot the error of forward and central differences of \\(\\sin x\\) against \\(h\\) on log axes. It corrects the idea that a smaller step is always more accurate: the error falls, bottoms out, then climbs as round-off takes over.',
+  labs: [
+    { course: 'egn3203', lab: 'derivative', notes: ['s8'], note: 'Forward and central differences of sin x with a slider for h, the errors on log axes: they fall, bottom out, then climb as round-off takes over. The reference value is checked by the complex step.' },
+  ],
 };

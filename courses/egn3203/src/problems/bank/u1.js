@@ -5,6 +5,7 @@
  */
 import { det2, inverse2, mul2, rotation } from '@flux/subjects/math/linalg.js';
 import { choice, kase, num, problem, range } from '../kit.js';
+import { fitChecked, qrSolve } from '@flux/subjects/math/lsq.js';
 
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 export const AREA = { unit: 1, two: 4 };
@@ -26,6 +27,30 @@ export const projCoef = ($, how = 'right') => {
   return { right, own, other }[how][$.ask];
 };
 export const nearly = ($) => 1 + ($.delta / (2.5 * $.eps)) * NULL_DIR[$.ask];
+
+/** Largest eigenvalue of [[a, b], [b, c]]; `how` reproduces the traps. */
+export const bigEig = ($, how = 'right') => {
+  const a = Number($.a);
+  const b = Number($.b);
+  const c = Number($.c);
+  const m = (a + c) / 2;
+  if (how === 'drop') return m + Math.abs(b);
+  if (how === 'small') return m - Math.hypot((a - c) / 2, b);
+  return m + Math.hypot((a - c) / 2, b);
+};
+
+/** Four points at x = 0, 1, 2, 3 for the least-squares line. */
+export const FOUR = { a: [1, 2, 2, 4], b: [3, 2, 2, 0], c: [0, 1, 3, 3] };
+/** Least-squares slope; `how` reproduces the traps. */
+export const lsSlope = ($, how = 'right') => {
+  const ys = FOUR[$.set];
+  const xs = [0, 1, 2, 3];
+  if (how === 'ends') return (ys[3] - ys[0]) / 3;
+  if (how === 'origin') return xs.reduce((s, x, i) => s + x * ys[i], 0) / xs.reduce((s, x) => s + x * x, 0);
+  const mx = 1.5;
+  const my = ys.reduce((s, y) => s + y, 0) / 4;
+  return xs.reduce((s, x, i) => s + (x - mx) * (ys[i] - my), 0) / xs.reduce((s, x) => s + (x - mx) ** 2, 0);
+};
 
 export default [
   problem({
@@ -424,5 +449,91 @@ export default [
       read: (c) => ({ close: c.relX / c.relR > 100 ? 'far' : 'close' }),
     },
     cases: [kase('a large κ', { k: 'big' }, { close: 'far' })],
+  }),
+  problem({
+    id: 'u1.15.eigen-sym',
+    title: 'The larger eigenvalue',
+    exam: 'u1',
+    ch: '1',
+    lab: 'quadratic',
+    src: 'Flux, written for the Quadratic form lab',
+    topics: ['definite'],
+    principles: ['definite'],
+    vars: { a: choice(['3', '3'], ['4', '4']), b: choice(['1', '1'], ['3', '3']), c: choice(['1', '1'], ['-1', '−1']) },
+    text: (T) => `What is the larger eigenvalue of the symmetric matrix A = [[${T.a}, ${T.b}], [${T.b}, ${T.c}]]?`,
+    parts: [num('l', ($) => bigEig($), '', { label: 'λ₁' })],
+    level: 1,
+    hints: ['λ² − (a + c)λ + (ac − b²) = 0.', 'λ = (a + c)/2 + √(((a − c)/2)² + b²).'],
+    steps: ($) => [String.raw`$\lambda_1 = ${(Number($.a) + Number($.c)) / 2} + \sqrt{${((Number($.a) - Number($.c)) / 2) ** 2} + ${Number($.b) ** 2}} = ${Number(bigEig($).toPrecision(4))}$`],
+    sim: { scenario: 'bowl', setup(s, $) { Object.assign(s, { a: Number($.a), b: Number($.b), c: Number($.c) }); }, read: (c) => ({ l: c.l1 }) },
+    cases: [kase('[[3, 1], [1, 1]]', { a: '3', b: '1', c: '1' }, { l: 3.4142 })],
+  }),
+
+  problem({
+    id: 'u1.16.positive',
+    title: 'Positive entries',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'quadratic',
+    src: 'Flux, written for the Quadratic form lab',
+    topics: ['definite'],
+    principles: ['definite'],
+    vars: { m: choice(['saddle', '[[1, 2], [2, 1]]'], ['bowl', '[[2, 1], [1, 2]]']) },
+    text: (T) => `Is the matrix ${T.m} positive definite?`,
+    parts: [
+      pick('a', 'the matrix', [
+        ['yes', 'yes', 'a > 0 and det A > 0: both eigenvalues are positive.'],
+        ['no', 'no', 'det A < 0, so one eigenvalue is negative: a saddle, whatever the signs of the entries.'],
+      ], ($) => ($.m === 'bowl' ? 'yes' : 'no')),
+    ],
+    level: 1,
+    hints: ['Look at the eigenvalues, not the entries.', 'For 2×2: a > 0 and det A > 0.'],
+    steps: ($) => [$.m === 'bowl' ? 'λ = 3 and 1: positive definite.' : 'λ = 3 and −1: indefinite.'],
+    sim: { scenario: 'bowl', setup(s, $) { Object.assign(s, $.m === 'bowl' ? { a: 2, b: 1, c: 2 } : { a: 1, b: 2, c: 1 }); }, read: (c) => ({ a: c.l2 > 1e-12 ? 'yes' : 'no' }) },
+    cases: [kase('[[1, 2], [2, 1]]', { m: 'saddle' }, { a: 'no' })],
+  }),
+  problem({
+    id: 'u1.17.ls-line',
+    title: 'A least-squares line',
+    exam: 'u1',
+    ch: '1',
+    lab: 'fit',
+    src: 'Flux, written for the Fit lab',
+    topics: ['overfit'],
+    principles: ['overfit'],
+    vars: { set: choice(['a', '(0, 1), (1, 2), (2, 2), (3, 4)'], ['b', '(0, 3), (1, 2), (2, 2), (3, 0)'], ['c', '(0, 0), (1, 1), (2, 3), (3, 3)']) },
+    text: (T) => `Fit a straight line y = c₀ + c₁x by least squares to the points ${T.set}. What is its slope c₁?`,
+    parts: [num('m', ($) => lsSlope($), '', { label: 'c₁' })],
+    level: 2,
+    hints: ['Solve AᵀA c = Aᵀy with columns 1 and x.', 'Or: slope = Σ(x − x̄)(y − ȳ)/Σ(x − x̄)².'],
+    steps: ($) => [String.raw`$c_1 = \frac{\sum(x - \bar x)(y - \bar y)}{\sum(x - \bar x)^2} = ${Number(lsSlope($).toPrecision(3))}$`],
+    second: ($) => ({ m: qrSolve([0, 1, 2, 3].map((x) => [1, x]), FOUR[$.set])[1] }),
+    cases: [kase('first set', { set: 'a' }, { m: 0.9 })],
+  }),
+
+  problem({
+    id: 'u1.18.exact',
+    title: 'A perfect fit',
+    exam: 'u1',
+    ch: '1',
+    kind: 'conceptual',
+    lab: 'fit',
+    src: 'Flux, written for the Fit lab',
+    topics: ['overfit'],
+    principles: ['overfit'],
+    vars: { n: choice(['10', 'ten noisy points with a degree-9 polynomial'], ['6', 'six noisy points with a degree-5 polynomial']) },
+    text: (T) => `You fit ${T.n}, and it passes through every point exactly. The points came from a straight line plus noise. Is this the better model of where new points will fall?`,
+    parts: [
+      pick('a', 'the exact fit', [
+        ['no', 'no: it fits the noise and swings between the points', 'Its error against the true line is far larger than a straight line’s.'],
+        ['yes', 'yes: zero error is the best possible', 'Zero error on the data used to fit says nothing about new data.'],
+      ], () => 'no'),
+    ],
+    level: 1,
+    hints: ['What did the extra coefficients fit?', 'Compare the curve with the true line between the points.'],
+    steps: () => ['The extra coefficients fit the noise; between and beyond the points the curve leaves the line.'],
+    sim: { scenario: 'through', setup() {}, read: (c) => ({ a: c.off > fitChecked({ d: 1, sigma: 1 }).off ? 'no' : 'yes' }) },
+    cases: [kase('ten points', { n: '10' }, { a: 'no' })],
   }),
 ];

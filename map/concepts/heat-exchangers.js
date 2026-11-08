@@ -33,6 +33,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Run one exchanger in counterflow and parallel flow, the two temperature profiles drawn. It corrects the idea that the cold stream can never leave hotter than the hot stream leaves: in counterflow it can, and LMTD and ε-NTU give the same duty.',
+  labs: [
+    { course: 'eml4140', lab: 'exchanger', notes: ['s2'], note: 'One exchanger run in counterflow and parallel flow, both temperature profiles drawn: in counterflow the cold stream can leave hotter than the hot stream leaves. ε-NTU is checked against LMTD and a Runge–Kutta march of both streams.' },
+  ],
 };

@@ -8,6 +8,7 @@ export default {
   sections: [
     { id: 's1', n: 1, title: 'The time constant', lab: 'switch', ch: ['4'], topics: ['tau'], home: true },
     { id: 's2', n: 2, title: 'What carries over a switch', lab: 'switch', ch: ['4'], topics: ['continuity'] },
-    { id: 's3', n: 3, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's4', n: 3, title: 'Second-order circuits', lab: 'rlc', ch: ['4'], topics: ['rlc'], home: true },
+    { id: 's3', n: 4, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

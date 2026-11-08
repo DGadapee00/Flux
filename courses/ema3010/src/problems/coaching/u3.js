@@ -4,6 +4,7 @@
  */
 import { phaseState } from '@flux/subjects/matsci/phasediagram.js';
 import { TIE, share } from '../bank/u3.js';
+import { quenchRate } from '../bank/u3.js';
 
 export default {
   'u3.1.lever': {
@@ -19,6 +20,14 @@ export default {
       x: [
         [() => 0.5, 'That is the alloy’s overall composition. Each phase’s composition is at the tie line’s end.'],
         [($) => phaseState({ x0: 0.5, T: $.T })[$.ask === 'L' ? 'xS' : 'xL'], 'That is the other end. The liquid is on the liquidus, the left, nickel-poor end; the solid on the solidus.'],
+      ],
+    },
+  },
+  'u3.4.jominy': {
+    traps: {
+      r: [
+        [($) => quenchRate($, 1), 'Put x in metres: α is in m²/s.'],
+        [($) => quenchRate($, 1e-3, 1), 'The time is x²/(4αu²): the argument of erf is x/(2√(αt)).'],
       ],
     },
   },

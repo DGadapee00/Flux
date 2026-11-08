@@ -17,6 +17,7 @@ export default {
     { id: 's9', n: 9, title: 'Momentum on a control volume', lab: 'vane', ch: ['6'], topics: ['momentum-cv'], home: true },
     { id: 's10', n: 10, title: 'Head loss in pipes', lab: 'headloss', ch: ['6'], topics: ['head-loss'], home: true },
     { id: 's12', n: 11, title: 'Pipe networks and pumps', lab: 'network', ch: ['6'], topics: ['pipe-network'], home: true },
-    { id: 's11', n: 12, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's13', n: 12, title: 'Drag and the drag crisis', lab: 'drag', ch: ['6'], topics: ['drag'], home: true },
+    { id: 's11', n: 13, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

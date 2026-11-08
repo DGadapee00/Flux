@@ -4,6 +4,7 @@
  */
 import { areaRatio, machFromArea, pressureRatio } from '@flux/subjects/thermo/isentropic.js';
 import { choked } from '../bank/u2.js';
+import { propEff } from '../bank/u2.js';
 
 /** The isentropic subsonic flow with the same area ratio: what a shock is not. */
 const noLoss = ($) => machFromArea(areaRatio($.M1), 'subsonic');
@@ -22,6 +23,14 @@ export default {
       v: [
         [($) => ({ M2: noLoss($), p: pressureRatio(noLoss($)) / pressureRatio($.M1), p0: 1 })[$.ask], ($) => ({ M2: 'That is the subsonic flow with the same area ratio, reached without loss. A shock is not isentropic.', p: 'That is an isentropic deceleration. The shock jump is 1 + 2γ(M₁² − 1)/(γ+1).', p0: 'The stagnation temperature is kept across a shock; the stagnation pressure is not.' })[$.ask]],
         [($) => ({ M2: 1 / $.M1, p: ((2.4 * $.M1 ** 2) / (2 + 0.4 * $.M1 ** 2)), p0: 1 / ((2 * 1.4 * $.M1 ** 2) / 2.4 - 0.4 / 2.4) })[$.ask], ($) => ({ M2: 'M₂ is not 1/M₁: use M₂² = (1 + (γ−1)M₁²/2)/(γM₁² − (γ−1)/2).', p: 'That is the density ratio ρ₂/ρ₁. The pressure jumps further: 1 + 2γ(M₁² − 1)/(γ+1).', p0: 'That is the inverse of the static pressure jump. The stagnation ratio needs the isentropic ratios on both sides too.' })[$.ask]],
+      ],
+    },
+  },
+  'u2.5.propulsive': {
+    traps: {
+      eta: [
+        [($) => propEff($, 'ratio'), 'η_p is not V₀/V_e. The useful power is FV₀ = ṁ(V_e − V₀)V₀; divide by ½ṁ(V_e² − V₀²).'],
+        [($) => propEff($, 'half'), 'Keep the 2: η_p = 2/(1 + V_e/V₀), which reaches 1 as V_e → V₀.'],
       ],
     },
   },

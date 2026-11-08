@@ -11,8 +11,8 @@ export const EXAMS = [
     title: 'Bonding and structure',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['bond', 'crystal'],
-    coming: ['X-ray diffraction'],
+    labs: ['bond', 'crystal', 'xrd'],
+    coming: [],
   },
   {
     id: 'u2',
@@ -20,8 +20,8 @@ export const EXAMS = [
     title: 'Defects',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['vacancy', 'diffusion', 'slip'],
-    coming: ['Strengthening'],
+    labs: ['vacancy', 'diffusion', 'slip', 'grain'],
+    coming: [],
   },
   {
     id: 'u3',
@@ -29,8 +29,26 @@ export const EXAMS = [
     title: 'Phase diagrams',
     chapters: '3',
     date: 'Unit 3',
-    labs: ['lever'],
-    coming: ['Eutectics', 'Iron–carbon'],
+    labs: ['lever', 'jominy'],
+    coming: ['Eutectics'],
+  },
+  {
+    id: 'u4',
+    n: 4,
+    title: 'Failure',
+    chapters: '4',
+    date: 'Unit 4',
+    labs: ['griffith', 'paris', 'creep'],
+    coming: [],
+  },
+  {
+    id: 'u5',
+    n: 5,
+    title: 'Polymers, glasses and corrosion',
+    chapters: '5',
+    date: 'Unit 5',
+    labs: ['chains', 'pane', 'couple'],
+    coming: [],
   },
 ];
 
@@ -41,12 +59,23 @@ export const LAB_META = {
   diffusion: { id: 'diffusion', exam: 'u2', title: 'Diffusion' },
   slip: { id: 'slip', exam: 'u2', title: 'Slip' },
   lever: { id: 'lever', exam: 'u3', title: 'Lever' },
+  xrd: { id: 'xrd', exam: 'u1', title: 'X-ray' },
+  grain: { id: 'grain', exam: 'u2', title: 'Grain size' },
+  jominy: { id: 'jominy', exam: 'u3', title: 'End quench' },
+  griffith: { id: 'griffith', exam: 'u4', title: 'Crack' },
+  paris: { id: 'paris', exam: 'u4', title: 'Fatigue' },
+  creep: { id: 'creep', exam: 'u4', title: 'Creep' },
+  chains: { id: 'chains', exam: 'u5', title: 'Chains' },
+  pane: { id: 'pane', exam: 'u5', title: 'Glass' },
+  couple: { id: 'couple', exam: 'u5', title: 'Galvanic' },
 };
 
 export const CHAPTER_TITLES = {
   1: 'Bonding and structure',
   2: 'Defects',
   3: 'Phase diagrams',
+  4: 'Failure',
+  5: 'Polymers, glasses and corrosion',
 };
 
 export function examById(id) {

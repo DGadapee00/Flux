@@ -5,12 +5,26 @@
  */
 import { FLUIDS, couetteStress, settlingTime } from '@flux/subjects/mechanics/couette.js';
 import { choice, kase, num, problem, range } from '../kit.js';
+import { LIQUIDS } from '@flux/subjects/mechanics/capillary.js';
 
 const liquid = () => choice(['water', 'water'], ['mercury', 'mercury'], ['oil', 'olive oil'], ['glycerol', 'glycerol']);
 const mu = ($) => FLUIDS[$.fluid].mu;
 const nu = ($) => FLUIDS[$.fluid].mu / FLUIDS[$.fluid].rho;
 const pick = (id, label, options, correct) => ({ id, kind: 'choice', label, options: options.map(([value, text, why]) => ({ value, label: text, why })), correct, multi: false });
 const muText = ($, sig) => String.raw`$\mu = ${sig(mu($))}\ \mathrm{Pa\,s}$`;
+
+/** Water's capillary rise (mm) in a tube of radius r mm; `rad` and `unit` reproduce the traps. */
+/** Mercury's depression (mm, positive down) in a tube of radius r mm; `cos` and `rad` reproduce the traps. */
+export const sink = ($, cos = Math.cos((140 * Math.PI) / 180), rad = (r) => r) => {
+  const L = LIQUIDS.mercury;
+  return ((-2 * L.sigma * cos) / (L.rho * 9.81 * rad(Number($.r)) * 1e-3)) * 1000;
+};
+/** Pressure jump (Pa) across a water drop of radius r mm; `k` is the number of 1/R terms times surfaces. */
+export const jump = ($, k = 2) => (k * LIQUIDS.water.sigma) / (Number($.r) * 1e-3);
+export const rise = ($, rad = (r) => r, unit = 1e-3) => {
+  const L = LIQUIDS.water;
+  return ((2 * L.sigma) / (L.rho * 9.81 * rad(Number($.r)) * unit)) * 1000;
+};
 
 export default [
   problem({
@@ -125,5 +139,86 @@ export default [
       read: (c) => ({ ratio: c.tau / 0.2504 > 10 ? 'much' : c.tau / 0.2504 > 1 ? 'little' : 'smaller' }),
     },
     cases: [kase('Mercury against water', { pair: 'mercury' }, { ratio: 'little' })],
+  }),
+  problem({
+    id: 'u1.5.rise',
+    title: 'Water up a thin tube',
+    exam: 'u1',
+    ch: '5',
+    lab: 'capillary',
+    src: 'Flux, written for the Capillary lab',
+    topics: ['capillarity'],
+    principles: ['capillarity'],
+    vars: { r: choice(['0.1', '0.1 mm'], ['0.25', '0.25 mm'], ['0.5', '0.5 mm'], ['1', '1 mm']) },
+    text: (T) => `A clean glass tube of radius ${T.r} stands in water (σ = 0.0728 N/m, θ = 0°, ρ = 998 kg/m³). How high does the water rise, in mm?`,
+    parts: [num('h', ($) => rise($), 'mm', { label: 'h' })],
+    level: 1,
+    hints: ['The wall’s pull 2πrσ cos θ holds up the column’s weight ρgπr²h.', 'h = 2σ cos θ/(ρgr), with r in metres.'],
+    steps: ($) => [String.raw`$h = \frac{2(0.0728)}{998 \times 9.81 \times ${Number($.r) / 1000}} = ${Number(rise($).toPrecision(3))}$ mm`],
+    sim: { scenario: 'water', setup(s, $) { s.rmm = Number($.r); }, read: (c) => ({ h: c.hmm }) },
+    cases: [kase('0.5 mm', { r: '0.5' }, { h: 29.74 })],
+  }),
+
+  problem({
+    id: 'u1.6.mercury',
+    title: 'Mercury in glass',
+    exam: 'u1',
+    ch: '5',
+    kind: 'conceptual',
+    lab: 'capillary',
+    src: 'Flux, written for the Capillary lab',
+    topics: ['capillarity'],
+    principles: ['capillarity'],
+    vars: { r: choice(['0.5', 'a 0.5 mm tube'], ['1', 'a 1 mm tube']) },
+    text: (T) => `${T.r} of clean glass is dipped in mercury, which meets glass at about 140°. Where does the mercury inside settle?`,
+    parts: [
+      pick('a', 'the mercury inside', [
+        ['below', 'below the outside level', 'cos 140° < 0: surface tension pulls the column down.'],
+        ['above', 'above the outside level, like water', 'Only a liquid that wets the glass, θ < 90°, rises.'],
+        ['level', 'level with the outside', 'Surface tension acts at the wall whatever the angle; only at θ = 90° does it not shift the column.'],
+      ], () => 'below'),
+    ],
+    level: 1,
+    hints: ['Look at the sign of cos θ.', 'h = 2σ cos θ/(ρgr).'],
+    steps: () => ['cos 140° = −0.77: the rise is negative, a depression.'],
+    sim: { scenario: 'mercury', setup(s, $) { s.rmm = Number($.r); }, read: (c) => ({ a: c.hmm < 0 ? 'below' : 'above' }) },
+    cases: [kase('0.5 mm', { r: '0.5' }, { a: 'below' })],
+  }),
+  problem({
+    id: 'u1.7.sink',
+    title: 'How far mercury sinks',
+    exam: 'u1',
+    ch: '5',
+    lab: 'capillary',
+    src: 'Flux, written for the Capillary lab',
+    topics: ['capillarity'],
+    principles: ['capillarity'],
+    vars: { r: choice(['0.25', '0.25 mm'], ['0.5', '0.5 mm'], ['1', '1 mm']) },
+    text: (T) => `A clean glass tube of radius ${T.r} stands in mercury (σ = 0.485 N/m, θ = 140°, ρ = 13 534 kg/m³). How far below the outside level does the mercury inside sit, in mm?`,
+    parts: [num('d', ($) => sink($), 'mm', { label: 'depth' })],
+    level: 2,
+    hints: ['Jurin’s h = 2σ cos θ/(ρgr) is negative here.', 'The depth is −h.'],
+    steps: ($) => [String.raw`$-h = -\frac{2(0.485)\cos 140^\circ}{13534 \times 9.81 \times ${Number($.r) / 1000}} = ${Number(sink($).toPrecision(3))}$ mm`],
+    sim: { scenario: 'mercury', setup(s, $) { s.rmm = Number($.r); }, read: (c) => ({ d: -c.hmm }) },
+    cases: [kase('0.5 mm', { r: '0.5' }, { d: 11.19 })],
+  }),
+
+  problem({
+    id: 'u1.8.jump',
+    title: 'Pressure inside a drop',
+    exam: 'u1',
+    ch: '5',
+    lab: 'capillary',
+    src: 'Flux, written for the Capillary lab',
+    topics: ['capillarity'],
+    principles: ['capillarity'],
+    vars: { r: choice(['0.05', '0.05 mm'], ['0.2', '0.2 mm'], ['1', '1 mm']) },
+    text: (T) => `A spherical water drop (σ = 0.0728 N/m) has radius ${T.r}. How much higher is the pressure inside than outside, in Pa?`,
+    parts: [num('dp', ($) => jump($), 'Pa', { label: 'Δp' })],
+    level: 1,
+    hints: ['Δp = σ(1/R₁ + 1/R₂).', 'For a sphere both radii are R.'],
+    steps: ($) => [String.raw`$\Delta p = 2\sigma/R = 2(0.0728)/${Number($.r) / 1000} = ${Number(jump($).toPrecision(3))}$ Pa`],
+    sim: { scenario: 'water', setup(s, $) { s.rmm = Number($.r); }, read: (c) => ({ dp: c.dp }) },
+    cases: [kase('0.2 mm', { r: '0.2' }, { dp: 728 })],
   }),
 ];

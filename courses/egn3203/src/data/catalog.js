@@ -11,7 +11,7 @@ export const EXAMS = [
     title: 'Matrices and elimination',
     chapters: '1',
     date: 'Unit 1',
-    labs: ['matrix', 'elimination', 'inverse', 'rank', 'projection', 'eigen', 'condition'],
+    labs: ['matrix', 'elimination', 'inverse', 'rank', 'projection', 'eigen', 'condition', 'quadratic', 'fit'],
     coming: [],
   },
   {
@@ -20,8 +20,8 @@ export const EXAMS = [
     title: 'Numbers on a computer',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['roundoff', 'truncation', 'roots', 'rk'],
-    coming: ['Interpolation', 'Numerical integration'],
+    labs: ['roundoff', 'truncation', 'roots', 'rk', 'interp', 'derivative', 'stiff', 'montecarlo', 'newton'],
+    coming: ['Numerical integration'],
   },
 ];
 
@@ -37,6 +37,13 @@ export const LAB_META = {
   truncation: { id: 'truncation', exam: 'u2', title: 'Truncation' },
   roots: { id: 'roots', exam: 'u2', title: 'Roots' },
   rk: { id: 'rk', exam: 'u2', title: 'Runge–Kutta' },
+  quadratic: { id: 'quadratic', exam: 'u1', title: 'Quadratic form' },
+  fit: { id: 'fit', exam: 'u1', title: 'Fit' },
+  interp: { id: 'interp', exam: 'u2', title: 'Interpolation' },
+  derivative: { id: 'derivative', exam: 'u2', title: 'Derivative' },
+  stiff: { id: 'stiff', exam: 'u2', title: 'Stiff' },
+  montecarlo: { id: 'montecarlo', exam: 'u2', title: 'Monte Carlo' },
+  newton: { id: 'newton', exam: 'u2', title: 'Newton in 2D' },
 };
 
 export const CHAPTER_TITLES = {

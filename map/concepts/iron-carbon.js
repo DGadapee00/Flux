@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Quench a steel bar from one end and read the cooling rate and microstructure along it. It corrects the idea that quenching hardens the whole part equally.',
+  labs: [
+    { course: 'ema3010', lab: 'jominy', notes: ['s4'], note: 'A Jominy end-quench bar with a choice of steel: the cooling rate falls as 1/x² along it, so plain carbon steel hardens only near the end and an alloy steel all along. The erf solution is checked by a Crank–Nicolson solution of the bar.' },
+  ],
 };

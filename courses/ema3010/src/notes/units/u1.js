@@ -10,6 +10,7 @@ export default {
     { id: 's2', n: 2, title: 'Force is the slope', lab: 'bond', ch: ['1'], topics: ['bond-force'] },
     { id: 's3', n: 3, title: 'Stiffness is the curvature', lab: 'bond', ch: ['1'], topics: ['bond-stiffness'] },
     { id: 's4', n: 4, title: 'Packing atoms into a cell', lab: 'crystal', ch: ['1'], topics: ['crystal'], home: true },
-    { id: 's5', n: 5, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's6', n: 5, title: 'X-ray diffraction', lab: 'xrd', ch: ['1'], topics: ['diffraction'], home: true },
+    { id: 's5', n: 6, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

@@ -15,6 +15,8 @@ export default {
     { id: 's7', n: 7, title: 'Eigenvalues and eigenvectors', lab: 'eigen', ch: ['1'], topics: ['eigen'], home: true },
     { id: 's8', n: 8, title: 'Projection and least squares', lab: 'projection', ch: ['1'], topics: ['projection'], home: true },
     { id: 's10', n: 9, title: 'LU and the residual', lab: 'condition', ch: ['1'], topics: ['conditioning'], home: true },
-    { id: 's9', n: 10, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 's11', n: 10, title: 'Symmetric matrices and quadratic forms', lab: 'quadratic', ch: ['1'], topics: ['definite'], home: true },
+    { id: 's12', n: 11, title: 'Least squares and overfitting', lab: 'fit', ch: ['1'], topics: ['overfit'], home: true },
+    { id: 's9', n: 12, title: 'Formula sheet', lab: null, ch: [] },
   ],
 };

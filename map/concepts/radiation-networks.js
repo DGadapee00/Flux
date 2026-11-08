@@ -31,6 +31,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Two hot plates with radiation shields you add one at a time and polish. It corrects the idea that a shield must be cold to work: it floats at an in-between temperature, and its low emissivity does the work.',
+  labs: [
+    { course: 'eml4140', lab: 'shield', notes: ['s5'], note: 'Two plates with radiation shields added one at a time and polished, every surface’s temperature drawn: a shield floats hot and its low emissivity does the work. The resistance network is checked against a sweep of the shield balances.' },
+  ],
 };

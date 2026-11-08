@@ -25,6 +25,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Two curves in the plane whose crossing Newton finds, each step’s tangent planes drawn. It corrects the idea that a system can be solved one equation at a time: fixing one unknown from one equation undoes the other, while Newton moves both together.',
+  labs: [
+    { course: 'egn3203', lab: 'newton', notes: ['s11'], note: 'A circle and an exponential curve whose crossing Newton finds from a start you drag, beside solving one equation at a time: Newton moves both unknowns together and converges quadratically. The roots are checked by substitution and bisection.' },
+  ],
 };

@@ -24,6 +24,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'Cycle a cracked part and grow the crack by the Paris law until it reaches the critical length. It corrects the idea that a load below yield is safe forever.',
+  labs: [
+    { course: 'ema3010', lab: 'paris', notes: ['s3'], note: 'A cracked steel part cycled below yield, its crack grown by the Paris law to the depth where it runs: the life is finite. The closed-form life is checked by integrating the growth law numerically.' },
+  ],
 };

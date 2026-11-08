@@ -39,6 +39,7 @@ export default {
       checked: '2026-11-06',
     },
   ],
-  labs: [],
-  candidate: 'A Rankine cycle on \\(T\\)–\\(s\\) with sliders for boiler pressure, superheat and reheat. It corrects the idea that a higher boiler pressure is free: it raises efficiency but leaves the turbine exhaust wetter, which reheat then fixes.',
+  labs: [
+    { course: 'eml3101', lab: 'rankine', notes: ['s4'], note: 'An ideal steam plant on T–s with sliders for boiler pressure and temperature and a reheat choice: higher pressure raises efficiency but wets the exhaust, which reheat fixes. Properties are IAPWS-IF97; the balance is checked by taking q_out as T·Δs.' },
+  ],
 };

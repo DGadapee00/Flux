@@ -38,6 +38,7 @@ export default {
       why: 'Orthogonal bases and diagonalization, which the spectral theorem combines.',
     },
   ],
-  labs: [],
-  candidate: 'Edit a symmetric 2×2 matrix and draw the level curves of \\(\\mathbf x^{\\mathsf T}A\\mathbf x\\) with its eigenvectors. It corrects the idea that positive entries make a matrix positive definite: \\(\\begin{bmatrix}1&2\\\\2&1\\end{bmatrix}\\) has eigenvalues 3 and \\(-1\\), a saddle.',
+  labs: [
+    { course: 'egn3203', lab: 'quadratic', notes: ['s11'], note: 'A symmetric 2×2 matrix you edit, with the level curves of xᵀAx and its eigenvectors: positive entries can still give a saddle. The eigenvalue formula is checked against the extremes of the Rayleigh quotient on the unit circle.' },
+  ],
 };

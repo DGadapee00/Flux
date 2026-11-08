@@ -9,6 +9,16 @@ const loaders = {
   viewfactor: () => import('./viewfactor.js'),
   thermal: () => import('./thermal.js'),
   nusselt: () => import('./nusselt.js'),
+  fin: () => import('./fin.js'),
+  quench: () => import('./quench.js'),
+  touch: () => import('./touch.js'),
+  grid: () => import('./grid.js'),
+  shield: () => import('./shield.js'),
+  tube: () => import('./tube.js'),
+  plume: () => import('./plume.js'),
+  boil: () => import('./boil.js'),
+  exchanger: () => import('./exchanger.js'),
+  wetbulb: () => import('./wetbulb.js'),
 };
 
 const labs = createLabLoader(loaders);

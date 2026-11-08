@@ -9,6 +9,15 @@ const loaders = {
   diffusion: () => import('./diffusion.js'),
   slip: () => import('./slip.js'),
   lever: () => import('./lever.js'),
+  xrd: () => import('./xrd.js'),
+  grain: () => import('./grain.js'),
+  jominy: () => import('./jominy.js'),
+  griffith: () => import('./griffith.js'),
+  paris: () => import('./paris.js'),
+  creep: () => import('./creep.js'),
+  chains: () => import('./chains.js'),
+  pane: () => import('./pane.js'),
+  couple: () => import('./couple.js'),
 };
 
 const labs = createLabLoader(loaders);
