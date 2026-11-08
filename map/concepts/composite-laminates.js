@@ -1,0 +1,38 @@
+export default {
+  id: 'composite-laminates',
+  title: 'Composite laminates',
+  label: ['Composite', 'laminates'],
+  subject: 'materials',
+  courses: ['satellite'],
+  eq: String.raw`E_1 = V_fE_f + (1-V_f)E_m,\qquad \begin{bmatrix}\mathbf N\\ \mathbf M\end{bmatrix} = \begin{bmatrix}\mathbf A & \mathbf B\\ \mathbf B & \mathbf D\end{bmatrix}\begin{bmatrix}\boldsymbol\varepsilon^0\\ \boldsymbol\kappa\end{bmatrix}`,
+  idea: String.raw`A ply of fibres in a matrix is stiff along the fibres and soft across them. Along the fibres the two strain together, so the modulus is the volume-weighted average; across them they carry the same stress, and the soft matrix rules. Stacking plies at chosen angles builds a laminate with the stiffness a part needs. Each ply's stiffness is turned into the laminate's axes and summed through the thickness, which gives the \(\mathbf A\), \(\mathbf B\) and \(\mathbf D\) matrices. A laminate that is not symmetric has \(\mathbf B \ne 0\), so pulling it also makes it bend or twist.`,
+  requires: ['stress-transformation', 'stress-strain'],
+  sources: [
+    {
+      title: 'MIT 16.20, Unit 5: Engineering constants',
+      url: 'https://ocw.mit.edu/courses/16-20-structural-mechanics-fall-2002/resources/unit5/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'Orthotropic materials and how their constants are measured, with a unidirectional composite as the example.',
+      checked: '2026-11-08',
+    },
+    {
+      title: 'Wikipedia, Composite laminate',
+      url: 'https://en.wikipedia.org/wiki/Composite_laminate',
+      kind: 'Reference',
+      level: 'Course level',
+      why: 'Classical laminate theory, its assumptions and the ABD matrix, and what balanced and symmetric mean.',
+      checked: '2026-11-08',
+    },
+    {
+      title: 'Wikipedia, Rule of mixtures',
+      url: 'https://en.wikipedia.org/wiki/Rule_of_mixtures',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'The upper and lower bounds on a fibre composite’s modulus.',
+      checked: '2026-11-08',
+    },
+  ],
+  labs: [],
+  candidate: String.raw`A ply stack you build angle by angle for a satellite panel. It shows each ply's stress under a load, the laminate's moduli, and the twist an unsymmetric stack gives. It checks the summed \(\mathbf A\) matrix against a ply-by-ply strain compatibility solve.`,
+};

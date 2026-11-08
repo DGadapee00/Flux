@@ -102,7 +102,7 @@ export const SATELLITE = {
         { title: 'MIT 16.07, Lecture 19: Vibration, normal modes, natural frequencies', url: 'https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/resources/mit16_07f09_lec19/', why: 'The tools behind a natural-frequency requirement.' },
       ],
       outcome: 'Support the components without exceeding a stated stress or deflection limit.',
-      concepts: ['static-equilibrium', 'stress-on-a-section', 'beam-deflection', 'forced-resonance', 'launch-loads'],
+      concepts: ['static-equilibrium', 'stress-on-a-section', 'beam-deflection', 'forced-resonance', 'launch-loads', 'composite-laminates', 'plate-buckling', 'fastener-loosening', 'finite-elements'],
       labs: [
         { concept: 'stress-on-a-section', course: 'egn3331', lab: 'pins' },
         { concept: 'launch-loads', course: 'satellite', lab: 'shake' },
@@ -111,7 +111,7 @@ export const SATELLITE = {
       demonstrate: 'Draw the load path for a chosen mass and acceleration. Check one attachment and one frame member against stated allowables. Record what a static check cannot establish about vibration.',
       deliverable: 'A mass budget, load case, attachment check and deflection limit.',
       interface: 'Give Attitude control the mass layout and moments of inertia. Reserve space for the other subsystems.',
-      gap: 'The Shake lab covers sine vibration of one mode, and Random vibration the random environment and one bracket’s fatigue life. Several modes and attachment qualification need dedicated work beyond them.',
+      gap: 'The Shake lab covers sine vibration of one mode, and Random vibration the random environment and one bracket’s fatigue life. Still to build: composite panels, plate and thrust-tube buckling, bolts that loosen under vibration, and a finite element model for several modes.',
     },
     {
       id: 'payload', title: 'Sensor payload', part: 'The measurement', requires: ['power'],
@@ -163,7 +163,7 @@ export const SATELLITE = {
         { title: 'Wikipedia, Spacecraft thermal control', url: 'https://en.wikipedia.org/wiki/Spacecraft_thermal_control', why: 'The thermal environment in orbit and the ways to stay in range.' },
       ],
       outcome: 'Keep the electronics within a chosen temperature range.',
-      concepts: ['first-law-closed', 'thermal-resistance', 'thermal-radiation', 'lumped', 'spacecraft-thermal-balance'],
+      concepts: ['first-law-closed', 'thermal-resistance', 'thermal-radiation', 'lumped', 'spacecraft-thermal-balance', 'thermal-mismatch'],
       labs: [
         { concept: 'first-law-closed', course: 'eml3100', lab: 'balance' },
         { concept: 'lumped', course: 'map2302', lab: 'coffee' },
@@ -174,7 +174,7 @@ export const SATELLITE = {
       demonstrate: 'Use the power budget as a heat input. Write a radiation balance for hot and cold cases, include the absorbed environment, and state the limits of a lumped-temperature model.',
       deliverable: 'Hot and cold temperature estimates with surface assumptions.',
       interface: 'Return temperature limits to Power and Payload. A bigger array also changes the exposed area.',
-      gap: 'The Thermal balance lab treats the craft as one temperature through sun and eclipse, and Two faces splits it into a sunlit face and a radiator with a link and a heater. Many internal nodes and the swing through each eclipse are still to be built.',
+      gap: 'The Thermal balance lab treats the craft as one temperature through sun and eclipse, and Two faces splits it into a sunlit face and a radiator with a link and a heater. Many internal nodes, the swing through each eclipse and the stress that swing puts in joined parts are still to be built.',
     },
     {
       id: 'attitude', title: 'Attitude control', part: 'Pointing + rotation', requires: ['structure', 'power'],

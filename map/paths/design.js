@@ -4,7 +4,7 @@ export default {
   units: [
     { title: 'Start from the need', concepts: ['design-process', 'design-intent-cad'] },
     { title: 'Tolerances and drawings', concepts: ['tolerances-fits', 'tolerance-stackup', 'gdt'] },
-    { title: 'Machine elements', concepts: ['constraint-design', 'bolted-joints'] },
+    { title: 'Machine elements', concepts: ['constraint-design', 'bolted-joints', 'fastener-loosening'] },
     { title: 'Making it', concepts: ['design-for-manufacture', 'process-variation'] },
     { title: 'Proving it', concepts: ['design-verification'] },
     { title: 'Measuring', concepts: ['sensor-basics', 'strain-gauge-bridge', 'temperature-sensors', 'data-acquisition', 'pressure-flow-measurement'] },

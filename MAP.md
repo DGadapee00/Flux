@@ -6,26 +6,27 @@ feeds differential equations and regression. EEL 3111 Circuit Analysis I and EGN
 Computation Methods are on the map. MAP 2302 gained six concepts and six labs for the UNF schedule:
 exact equations, substitutions, balance models, variation of parameters, Cauchy–Euler equations and
 higher-order equations. On 8 November 2026 the last 37 gaps got labs, in EML 4140, EMA 3010,
-EGN 3203, EML 3101, EML 3015 and EEL 3111: every concept now has one. For the live numbers run `node map/check.mjs`,
+EGN 3203, EML 3101, EML 3015 and EEL 3111, and the same day five aerospace component concepts
+joined as new gaps (see below). For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**275 concepts, 275 with a Flux lab, 0 gaps.**
+**280 concepts, 275 with a Flux lab, 5 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
 | Calculus | 30 | 30 |
 | Linear algebra | 8 | 8 |
 | Differential equations | 18 | 18 |
-| Numerical methods | 13 | 13 |
+| Numerical methods | 14 | 13 |
 | Mechanics | 34 | 34 |
 | Electricity and magnetism | 27 | 27 |
 | Thermodynamics | 22 | 22 |
 | Fluid mechanics | 20 | 20 |
 | Heat transfer | 19 | 19 |
 | Circuits and systems | 27 | 27 |
-| Mechanics of materials | 16 | 16 |
+| Mechanics of materials | 19 | 16 |
 | Materials science | 15 | 15 |
-| Design and manufacturing | 9 | 9 |
+| Design and manufacturing | 10 | 9 |
 | Instrumentation and actuators | 8 | 8 |
 | Statistics | 9 | 9 |
 
@@ -107,22 +108,44 @@ reproduce them.
 
 `map-gaps` weighs a project like a next-term course, so these gaps rank beside the courses ahead.
 
+## Aerospace components
+
+The satellite's structure needs more than one bracket and one mode. Five concepts carry the map
+toward flight hardware. Each is a gap with a candidate lab, on the satellite path and in the
+satellite recipe:
+
+- **Composite laminates**: the rule of mixtures for a ply, and the ABD matrix for a stack.
+- **Buckling of plates and thin shells**: a panel's critical stress, post-buckling, and the
+  knockdown factor for a thin cylinder.
+- **Fasteners under vibration**: a joint slips once the shear passes the friction its preload
+  gives, and then loosens. Also on the *Design practice* path.
+- **Thermal stress from expansion mismatch**: joined parts with different \(\alpha\), cycled
+  through each eclipse.
+- **Finite element method**: element stiffness assembled into one system, and the same matrices
+  for the modes.
+
+Sources are MIT 16.20 Structural Mechanics and 2.092 Finite Element Analysis lecture notes and
+reference articles, read on 8 November 2026. Tolerancing, GD&T, bolted joints, column buckling,
+fatigue and margins were already on the map.
+
 ## Labs most worth a second look
 
-Every concept has a lab, so `npm run map-gaps` reports none. This list, kept from when it did, names
-the concepts many others build on, where a fuller lab would still pay.
+`npm run map-gaps` ranks the five aerospace gaps above. This list, kept from when it ranked the
+course concepts, names the ones many others build on, where a fuller lab would still pay.
 
 1. **Divergence theorem.** 37 concepts build on it. MAC 2313's Flux lab shows flux across a curve
    and divergence in the plane, and its Tiles lab cuts a square into cells and watches the
-   inner-face fluxes cancel. Boxes in space are the same picture one dimension up.
+   inner-face fluxes cancel. Its Box lab is the same picture one dimension up: a cube in a 3D field,
+   six face fluxes against the divergence integral.
 2. **Maxwell's divergence equations.** PHY 2049's Divergence lab (Exam 6) puts a small sphere in a
    charged ball and sums E·n̂ ΔA over it against Q_in/ε₀. Φ/V stays ρ/ε₀ as the sphere shrinks,
    and a wire's B gives as much flux in as out.
 3. **Line integrals and work.** PHY 2048's work-path lab and Dynamics' paths lab now show it:
-   work summed along a path, one total for a gradient field, another for friction. A calculus lab
-   where you drag your own path through a field is still worth building.
-4. **An RL and LC lab for Inductance.** PHY 2049 has a transformer lab, but notes sections on
-   self-inductance, RL circuits and LC oscillation have no lab of their own.
+   work summed along a path, one total for a gradient field, another for friction. MAC 2313's Work lab
+   adds a calculus view: a straight path and a bowed one between the same points, and Green's
+   theorem for the difference.
+4. **Inductance.** PHY 2049 has a transformer lab. EEL 3111's Switch lab shows an RL step, and its
+   LC lab trades energy between the capacitor and the coil.
 5. **Matrices as linear maps, and elimination.** The root of the linear algebra thread: 24 and 25
    concepts build on them, through eigenvalues into differential equations, node analysis into
    circuits, and least squares and LU into numerical methods. EGN 3203 now has an app with a Matrix

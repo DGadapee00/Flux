@@ -1,0 +1,30 @@
+export default {
+  id: 'thermal-mismatch',
+  title: 'Thermal stress from expansion mismatch',
+  label: ['Thermal', 'mismatch'],
+  subject: 'materials',
+  courses: ['satellite'],
+  eq: String.raw`\varepsilon = \frac{\sigma}{E} + \alpha\,\Delta T,\qquad \sigma_1 = -\sigma_2 = \frac{E_1E_2}{E_1+E_2}\,(\alpha_2-\alpha_1)\,\Delta T`,
+  idea: String.raw`A part's strain is a mechanical share \(\sigma/E\) plus a thermal share \(\alpha\Delta T\). Free to grow, a heated part has no stress. Joined to a part with a different \(\alpha\), it cannot grow freely, and both parts must end at the same length. That compatibility puts one in tension and the other in compression, with equal and opposite forces. For two bars of equal area the stresses are equal and opposite too. In orbit a bonded joint swings through every eclipse, so the stress cycles and the joint can fatigue or a mount can warp an optic.`,
+  requires: ['axial-deformation', 'spacecraft-thermal-balance'],
+  sources: [
+    {
+      title: 'MIT 16.20, Unit 9: Effects of the environment',
+      url: 'https://ocw.mit.edu/courses/16-20-structural-mechanics-fall-2002/resources/unit9/',
+      kind: 'Lecture notes',
+      level: 'Course level',
+      why: 'Total strain as mechanical plus thermal, and why stresses arise only when the expansion is resisted.',
+      checked: '2026-11-08',
+    },
+    {
+      title: 'Wikipedia, Bimetallic strip',
+      url: 'https://en.wikipedia.org/wiki/Bimetallic_strip',
+      kind: 'Reference',
+      level: 'Intro',
+      why: 'Two bonded metals that bend when heated because they expand at different rates.',
+      checked: '2026-11-08',
+    },
+  ],
+  labs: [],
+  candidate: String.raw`An aluminium bracket bolted to a titanium fitting, taken through the orbit's temperature swing from the Thermal balance lab. It shows each part's stress and the cycle's range. It checks the closed form against a stiffness solve of the two parts in series.`,
+};
