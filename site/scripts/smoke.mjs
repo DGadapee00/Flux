@@ -1,7 +1,7 @@
 /**
  * Opens the hub in headless Chrome at 380px, 720px and 1280px.
- * Fails if Today is not on the first screen, if a link that names a concept does not open on the
- * map, if the page scrolls sideways, if the map is missing a concept, if choosing a concept does
+ * Fails if Today is not on the first screen, if a link that names a concept does not open the Map
+ * tab alone, on that concept, if the page scrolls sideways, if the map is missing a concept, if choosing a concept does
  * not open it, if a phone's map does not bring the chosen concept into view, if a course card is
  * missing, if a concept's Parallels row is wrong or opening it throws, if following a card or a lab
  * link does not land on that course's app, or if a due problem in a course's record does not give
@@ -198,6 +198,11 @@ async function readHub(page) {
   );
 }
 
+/** @param {Record<string, any>} o @param {string[]} keys */
+function pick(o, keys) {
+  return Object.fromEntries(keys.map((k) => [k, o[k]]));
+}
+
 /**
  * Card hrefs are absolute in the DOM. A relative href is the platform copy on this hub.
  * @param {string} href
@@ -349,11 +354,18 @@ async function main() {
         const shot = await page.send('Page.captureScreenshot', { format: 'png' });
         fs.writeFileSync(path.join(outDir, `hub-${width}-today.png`), Buffer.from(shot.data, 'base64'));
       }
-      // A link that names a concept opens on the map, below Today.
+      // A link that names a concept opens the Map tab on it. The course cards are on Courses.
       await navigate(page, `${hub}?from=smoke#${START}`);
       await evalJson(page, 'document.fonts ? document.fonts.ready : null');
       await delay(250);
-      const metrics = await readHub(page);
+      const tab = await evalJson(page, `({ tab: document.body.dataset.activeTab, shown: [...document.querySelectorAll('[data-tab]')].filter((el) => !el.hidden).map((el) => el.dataset.tab) })`);
+      if (tab.tab !== 'map' || JSON.stringify(tab.shown) !== '["map"]') throw new Error(`${width}px: #${START} shows ${tab.shown.join(', ')}, expected the Map tab alone`);
+      const mapShotFirst = await page.send('Page.captureScreenshot', { format: 'png' });
+      fs.writeFileSync(path.join(outDir, `hub-${width}-map-tab.png`), Buffer.from(mapShotFirst.data, 'base64'));
+      const mapMetrics = await readHub(page);
+      await evalJson(page, `location.hash = 'courses'`);
+      await delay(300);
+      const metrics = { ...(await readHub(page)), ...pick(mapMetrics, ['nodes', 'firstScreen', 'chosen', 'mapScrolls']) };
       assertHub(width, metrics, hub);
       if (metrics.motions.some((motion) => motion !== 'still')) {
         throw new Error(`${width}px rest frame is moving (${metrics.motions.join(', ')})`);
@@ -390,6 +402,9 @@ async function main() {
         }
       }
       console.log(`${width}px ok, ${metrics.cols} column(s), ${metrics.nodes} concepts, no horizontal scroll`);
+      // Back to the Map tab for the full map.
+      await evalJson(page, `location.hash = '${START}'`);
+      await delay(400);
 
       // Full map draws every concept. Choosing one opens it; the map scrolls in its box to show it.
       await evalJson(page, `document.querySelector('#scope [data-scope="all"]').click()`);
@@ -442,7 +457,7 @@ async function main() {
     await page.send('Emulation.setEmulatedMedia', {
       features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
     });
-    await navigate(page, hub);
+    await navigate(page, `${hub}#courses`);
     for (const track of visibleTracks()) {
       if (!(await evalJson(page, `!!document.querySelector('[data-track="${track.id}"] .stage')`))) continue;
       await evalJson(

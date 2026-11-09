@@ -9,9 +9,11 @@ The map grows one concept, one thread or one lab at a time. A concept with no la
 and gaps decide what gets built next.
 
 - The data is in `map/` (`map/README.md` has the shape). `MAP.md` says what it covers.
-- The hub (`site/`) opens on Today: reviews that follow threads on the map, the next concept to
-  learn and the next exam, read from the course apps' own records (`site/src/learner/`). The map
-  is below it. The course apps are reached from both.
+- The hub (`site/`) has four tabs, one shown at a time (`site/src/tabs.js`). It opens on Today:
+  reviews that follow threads on the map, the next concept to learn and the next exam, read from
+  the course apps' own records (`site/src/learner/`). Map holds the concept map, Build the
+  applications, and Courses the course apps and the progress backup. A link to a concept opens
+  the Map tab on it; `#review-…` opens Today, `#applications` Build, `#progress` Courses.
 - The approved look and data shape are in `docs/map/prototype-flux-thread.html`.
 - The old course-by-course plan is archived in `docs/history/guidance-2026-11-02/`. It is history.
   Do not follow it. Code comments that cite a decision number (D5, D23 …) or

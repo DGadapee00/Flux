@@ -167,7 +167,7 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
          ${later.length ? `<p class="tdy-meta tdy-later">${plural(later.reduce((s, t) => s + t.n, 0), 'more problem')} can wait for tomorrow: ${later.map((t) => `${esc(byId[t.key].title)}${t.groups.length > 1 ? ` and ${t.groups.length - 1} more` : ''} (${t.n})`).join(', ')}. A day’s delay costs little; the gaps between reviews are widening anyway.</p>` : ''}`
       : learner.started.size
         ? `<p class="tdy-note">Nothing is due. A problem comes back here when its next review date arrives.</p>${keepGoing(going)}`
-        : '<p class="tdy-note">Nothing to review yet. Practise in any course app below, and each problem you solve comes back here on a widening schedule: a day, three days, a week, then longer.</p>';
+        : '<p class="tdy-note">Nothing to review yet. Practise in any course app, from the Courses tab, and each problem you solve comes back here on a widening schedule: a day, three days, a week, then longer.</p>';
 
     const learn = next.length
       ? `<ul class="tdy-next">${next.map((id) => nextCard(id)).join('')}</ul>`
@@ -247,7 +247,7 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
     // Projects share one line, so the card stays about as tall as the column beside it.
     const projects = COURSES.filter((c) => paths[c.id] && c.kind === 'project');
     if (!list.length && !projects.length) return '';
-    const link = (c, inner) => `<a href="#explore" data-path="${esc(c.id)}" data-concept-next="${esc(nextOn(c.id) || '')}">${inner}</a>`;
+    const link = (c, inner) => `<a href="#map" data-path="${esc(c.id)}" data-concept-next="${esc(nextOn(c.id) || '')}">${inner}</a>`;
     return `<section class="tdy-panel" aria-labelledby="tdy-courses-title">
       <h3 id="tdy-courses-title">Your courses</h3>
       <ul class="tdy-courses">${list.map((c) => {
@@ -388,14 +388,10 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
     if (t.dataset.path) {
       e.preventDefault();
       onPath(t.dataset.path, t.dataset.conceptNext || null);
-      root.getElementById('explore')?.scrollIntoView({ block: 'start' });
       return;
     }
-    if (t.hasAttribute('data-concept')) {
-      // The concept opens on the map below; the hash change brings the map into view.
-      toMap = true;
-      return;
-    }
+    // A concept link changes the address; the Map tab opens on it.
+    if (t.hasAttribute('data-concept')) return;
     const s = session.read();
     if (!s) return;
     if (t.dataset.goto != null) {
@@ -412,19 +408,16 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
     if (t.hasAttribute('data-next') || t.dataset.goto != null) section.scrollIntoView({ block: 'start' });
   });
 
-  /** Set by a concept link in Today, so the map comes into view once the concept has opened. */
-  let toMap = false;
   root.defaultView.addEventListener('hashchange', () => {
     const key = reviewKey();
     const h = decodeURIComponent(root.defaultView.location.hash.slice(1));
     if (key || h === 'today') {
       render();
-      section.scrollIntoView({ block: 'start' });
+      // A review step starts at its top; the tab itself scrolls to the top when it opens.
+      if (key) root.defaultView.scrollTo(0, 0);
       return;
     }
     if (section.dataset.mode === 'review') render();
-    if (toMap && byId[h]) root.getElementById('explore')?.scrollIntoView({ block: 'start' });
-    toMap = false;
   });
   // A problem solved in a course tab: read the record again when this tab is back in view.
   root.addEventListener('visibilitychange', () => {
@@ -435,7 +428,6 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
   });
 
   render();
-  if (reviewKey()) section.scrollIntoView({ block: 'start' });
 
   return {
     get learner() {

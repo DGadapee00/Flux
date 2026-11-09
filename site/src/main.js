@@ -4,6 +4,7 @@ import problems from 'virtual:flux-problems';
 import { loadConcepts, loadPaths, mountMap } from './map.js';
 import { mountApplications } from './applications/view.js';
 import { mountToday } from './learner/today.js';
+import { mountTabs } from './tabs.js';
 import { latestBuilt, visibleTracks } from './tracks.js';
 
 const concepts = loadConcepts();
@@ -12,6 +13,8 @@ const paths = loadPaths();
 let map;
 /** @type {{ refresh: () => void } | undefined} */
 let applications;
+/** @type {ReturnType<typeof mountTabs> | undefined} */
+let tabs;
 // Today first: the map opens where Today says the learner is.
 const today = mountToday({
   concepts,
@@ -20,6 +23,7 @@ const today = mountToday({
   onPath: (course, id) => {
     map.choosePath(course);
     if (id) map.go(id);
+    tabs?.show('map');
   },
   onRefresh: () => {
     map.refreshPanel();
@@ -37,10 +41,6 @@ map = mountMap({
 });
 map.refreshPanel();
 map.refreshStatus();
-// Today sits above the map. A link that names a concept still opens on the map.
-if (map.current && decodeURIComponent(window.location.hash.slice(1)) === map.current) {
-  document.getElementById('explore')?.scrollIntoView({ block: 'start' });
-}
 applications = mountApplications(map, undefined, { status: (id) => today.statusOf(id) });
 
 const root = document.querySelector('#tracks');
@@ -115,6 +115,17 @@ for (const track of visibleTracks()) {
 }
 
 mountBackup();
+
+// Last, once every section has been laid out: show one tab and hide the rest. The map is measured
+// again when its tab shows, since a hidden box has no width to fit or centre in.
+tabs = mountTabs({
+  isConcept: (id) => concepts.some((c) => c.id === id),
+  onShow: (tab) => {
+    if (tab !== 'map' || !map.current) return;
+    window.dispatchEvent(new Event('resize'));
+    map.show(map.current);
+  },
+});
 
 if (typeof __BUILD__ !== 'undefined' && __BUILD__.commit) {
   console.log(`FLUX ${__BUILD__.commit}`);
