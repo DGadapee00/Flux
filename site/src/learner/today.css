@@ -29,7 +29,7 @@
   margin: 0;
   font-family: var(--display);
   font-weight: 600;
-  font-size: 19px;
+  font-size: var(--fs-sub);
 }
 
 .tdy-head {
@@ -41,10 +41,11 @@
 .tdy-eyebrow {
   margin: 0;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-meta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--dim);
+  font-weight: 500;
 }
 
 .tdy-eyebrow a {
@@ -54,15 +55,15 @@
 .today .tdy-headline {
   margin: 0;
   font-family: var(--display);
-  font-weight: 600;
-  font-size: clamp(28px, 4.6vw, 42px);
+  font-weight: 700;
+  font-size: var(--fs-hero);
   line-height: 1.12;
   text-wrap: balance;
 }
 
 .tdy-sub {
   margin: 0;
-  font-size: 17px;
+  font-size: var(--fs-body);
   color: var(--muted);
   max-width: 66ch;
 }
@@ -94,8 +95,8 @@
 
 .tdy-n {
   font-family: var(--display);
-  font-weight: 700;
-  font-size: 26px;
+  font-weight: 600;
+  font-size: var(--fs-sub);
   line-height: 1;
   color: var(--dim);
   padding-top: 2px;
@@ -117,7 +118,7 @@
 
 .tdy-meta {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-meta);
   color: var(--dim);
 }
 
@@ -178,14 +179,14 @@
 .tdy-chain {
   font-family: var(--display);
   font-weight: 600;
-  font-size: 18px;
+  font-size: var(--fs-sub);
   line-height: 1.3;
 }
 
 .tdy-go {
   font-family: var(--display);
   font-weight: 600;
-  font-size: 14px;
+  font-size: var(--fs-ui);
   color: var(--lane);
 }
 
@@ -198,15 +199,16 @@
 .tdy-card-title {
   font-family: var(--display);
   font-weight: 600;
-  font-size: 19px;
+  font-size: var(--fs-sub);
   line-height: 1.2;
 }
 
 .tdy-why {
   display: grid;
   gap: 2px;
-  font-size: 14px;
+  font-size: var(--fs-ui);
   color: var(--muted);
+  font-family: var(--display);
 }
 
 .tdy-panel {
@@ -242,7 +244,8 @@
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  font-size: 15px;
+  font-size: var(--fs-body);
+  font-family: var(--display);
 }
 
 .tdy-list a,
@@ -258,13 +261,14 @@
 .tdy-courses li {
   display: grid;
   gap: 4px;
-  font-size: 15px;
+  font-size: var(--fs-body);
+  font-family: var(--display);
 }
 
 .tdy-pill {
   flex: none;
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-meta);
   padding: 1px 8px;
   border-radius: 999px;
   border: 1px solid var(--line);
@@ -321,7 +325,7 @@ body.tdy-reviewing .today {
   width: 100%;
   cursor: pointer;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--fs-meta);
   color: var(--dim);
   min-width: 0;
 }
@@ -372,7 +376,7 @@ body.tdy-reviewing .today {
 }
 
 .today .tdy-big {
-  font-size: 28px;
+  font-size: var(--fs-title);
   line-height: 1.15;
 }
 
@@ -410,7 +414,7 @@ body.tdy-reviewing .today {
   color: var(--bg);
   font-family: var(--display);
   font-weight: 600;
-  font-size: 15px;
+  font-size: var(--fs-ui);
   text-decoration: none;
   cursor: pointer;
 }
@@ -437,7 +441,7 @@ body.tdy-reviewing .today {
   border: 1.5px solid var(--line);
   display: grid;
   place-items: center;
-  font-size: 12px;
+  font-size: var(--fs-meta);
   color: var(--bg);
 }
 
@@ -451,9 +455,10 @@ body.tdy-reviewing .today {
 }
 
 .tdy-solve {
-  font-family: var(--mono);
-  font-size: 13px;
+  font-family: var(--display);
+  font-size: var(--fs-ui);
   white-space: nowrap;
+  font-weight: 600;
 }
 
 /* The learner's record in the map's reading panel */
@@ -462,14 +467,15 @@ body.tdy-reviewing .today {
   flex-wrap: wrap;
   align-items: center;
   gap: 6px 10px;
-  font-size: 15px;
+  font-size: var(--fs-body);
   color: var(--muted);
 }
 
 .tdy-record a {
-  font-family: var(--mono);
-  font-size: 13px;
+  font-family: var(--display);
+  font-size: var(--fs-ui);
   color: var(--fg);
+  font-weight: 600;
 }
 
 @media (max-width: 520px) {
@@ -478,7 +484,7 @@ body.tdy-reviewing .today {
   }
 
   .tdy-n {
-    font-size: 18px;
+    font-size: var(--fs-sub);
     margin-bottom: 4px;
   }
 
@@ -490,7 +496,9 @@ body.tdy-reviewing .today {
 /* Keep going: concepts started and not solid, with nothing due yet. */
 .tdy-sub-title {
   margin: 14px 0 6px;
-  font: 600 15px/1.3 var(--display);
+  font: 500 var(--fs-meta)/1.3 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .tdy-going {
@@ -506,7 +514,8 @@ body.tdy-reviewing .today {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 4px 12px;
-  font-size: 15px;
+  font-size: var(--fs-body);
+  font-family: var(--display);
 }
 
 /* Projects in Your courses: one wrapping line, each with its count. */
@@ -516,7 +525,8 @@ body.tdy-reviewing .today {
   align-items: baseline;
   gap: 4px 14px;
   margin: 14px 0 0;
-  font-size: 15px;
+  font-size: var(--fs-body);
+  font-family: var(--display);
 }
 
 .tdy-projects a {
