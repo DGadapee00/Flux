@@ -606,6 +606,10 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
       const cols = [...new Set(Object.values(view.pos).map((q) => q.x))].sort((a, b) => a - b);
       const start = cols.filter((x) => x * scale - pad <= left).pop();
       left = start != null && (p.x + NODEW) * scale - (start * scale - pad) <= boxW ? start * scale - pad : p.x * scale - pad;
+      // Near the drawing's right end the box cannot scroll that far; stop at the last column edge
+      // it can reach, rather than wherever the scroll runs out.
+      const maxLeft = view.W * scale - boxW;
+      if (left > maxLeft) left = cols.map((x) => x * scale - pad).filter((x) => x <= maxLeft).pop() ?? 0;
       left = Math.max(0, left);
     }
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
