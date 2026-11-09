@@ -145,6 +145,28 @@ h1 {
   align-items: center;
 }
 
+/* The nav is the hub's tabs: the one showing is marked, the others stay quiet until hovered. */
+.tabs a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+.tabs a:hover,
+.tabs a:focus-visible {
+  color: var(--fg);
+}
+
+.tabs a[aria-current='page'] {
+  color: var(--fg);
+  border-bottom-color: var(--accent);
+}
+
+/* One tab shows at a time. Sections set their own display, so hidden needs the extra weight. */
+[data-tab][hidden] {
+  display: none !important;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

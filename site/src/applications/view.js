@@ -197,8 +197,8 @@ export function mountApplications(map, parent = document.querySelector('#applica
     if (concept) {
       event.preventDefault();
       map.choosePath(null);
+      // The address names the concept, so the Map tab opens on it.
       map.go(concept.dataset.concept);
-      document.querySelector('.explore').scrollIntoView({ block: 'start' });
       return;
     }
     const copy = event.target.closest('[data-copy]');

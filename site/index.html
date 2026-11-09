@@ -29,19 +29,18 @@
         <div class="brand-text">
           <h1>FLUX</h1>
           <p class="lede">One map of the degree. Each box is a concept. Pick one to see what it builds on, where it leads, the sources worth your time and the Flux lab that shows it.</p>
-          <nav class="jump" aria-label="On this page">
-            <a href="#today">Today</a>
-            <a href="#explore">Map</a>
-            <a href="#applications">Applications</a>
-            <a href="#courses">Courses</a>
-            <a href="#progress">Progress</a>
+          <nav class="jump tabs" aria-label="Sections">
+            <a href="#today" data-tab-link="today">Today</a>
+            <a href="#map" data-tab-link="map">Map</a>
+            <a href="#build" data-tab-link="build">Build</a>
+            <a href="#courses" data-tab-link="courses">Courses</a>
           </nav>
         </div>
       </header>
 
-      <section class="section today" id="today" aria-labelledby="today-title"></section>
+      <section class="section today" id="today" data-tab="today" aria-labelledby="today-title"></section>
 
-      <div class="explore" id="explore">
+      <div class="explore" id="explore" data-tab="map">
         <div class="find" id="find">
           <label class="find-label" for="find-input">Find</label>
           <div class="find-field">
@@ -103,19 +102,19 @@
         </aside>
       </div>
 
-      <section class="section" id="applications" aria-labelledby="applications-title">
-        <h2 id="applications-title">Applications</h2>
+      <section class="section" id="applications" data-tab="build" aria-labelledby="applications-title">
+        <h2 id="applications-title">Build</h2>
         <p>See what the concepts let you build. Follow the pieces from a first circuit to a working system.</p>
         <div id="application-workbench"></div>
       </section>
 
-      <section class="section" id="courses" aria-labelledby="courses-title">
+      <section class="section" id="courses" data-tab="courses" aria-labelledby="courses-title">
         <h2 id="courses-title">Courses</h2>
         <p>Each course app, as it is today. A card opens its latest course.</p>
         <div id="tracks"></div>
       </section>
 
-      <section class="section backup" id="progress" aria-labelledby="backup-title">
+      <section class="section backup" id="progress" data-tab="courses" aria-labelledby="backup-title">
         <h2 id="backup-title">Progress</h2>
         <p>One file holds your progress in every course. Restoring replaces what this browser has saved.</p>
         <div id="backup"></div>
