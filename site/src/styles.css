@@ -1292,8 +1292,25 @@ footer a {
   opacity: 0.75;
 }
 
-.hint .map-status {
+.hint .map-status,
+.hint .map-zoom-note {
   color: var(--muted);
+}
+
+/* How to read the map: open beside the map on a wide screen, one line to tap open on a phone. */
+.hint-help {
+  margin-top: 4px;
+}
+
+.hint-help > summary {
+  cursor: pointer;
+  width: fit-content;
+}
+
+@media (min-width: 720px) {
+  .hint-help > summary {
+    display: none;
+  }
 }
 
 .hint .key {

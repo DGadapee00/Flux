@@ -243,16 +243,24 @@ export function mountToday({ concepts, paths, problems, root = document, readRec
   }
 
   function coursesCard() {
-    const list = COURSES.filter((c) => paths[c.id] && (c.status === 'taking now' || c.status === 'next term' || c.kind === 'project'));
-    if (!list.length) return '';
+    const list = COURSES.filter((c) => paths[c.id] && (c.status === 'taking now' || c.status === 'next term'));
+    // Projects share one line, so the card stays about as tall as the column beside it.
+    const projects = COURSES.filter((c) => paths[c.id] && c.kind === 'project');
+    if (!list.length && !projects.length) return '';
+    const link = (c, inner) => `<a href="#explore" data-path="${esc(c.id)}" data-concept-next="${esc(nextOn(c.id) || '')}">${inner}</a>`;
     return `<section class="tdy-panel" aria-labelledby="tdy-courses-title">
       <h3 id="tdy-courses-title">Your courses</h3>
       <ul class="tdy-courses">${list.map((c) => {
         const p = learner.courseProgress(c.id);
-        const when = c.kind === 'project' ? 'Project' : c.status === 'taking now' ? 'Taking now' : 'Next term';
-        return `<li><div class="tdy-row"><a href="#explore" data-path="${esc(c.id)}" data-concept-next="${esc(nextOn(c.id) || '')}"><strong>${esc(c.code)}</strong> ${esc(c.title)}</a><span class="tdy-meta">${when} · ${p.solid}/${p.total}</span></div>
+        const when = c.status === 'taking now' ? 'Taking now' : 'Next term';
+        return `<li><div class="tdy-row">${link(c, `<strong>${esc(c.code)}</strong> ${esc(c.title)}`)}<span class="tdy-meta">${when} · ${p.solid}/${p.total}</span></div>
           <div class="tdy-bar"><span style="width:${p.total ? (100 * p.solid) / p.total : 0}%"></span></div></li>`;
-      }).join('')}</ul></section>`;
+      }).join('')}</ul>
+      ${projects.length ? `<p class="tdy-projects"><span class="tdy-meta">Projects</span>${projects.map((c) => {
+        const p = learner.courseProgress(c.id);
+        return `<span>${link(c, esc(c.title))} <span class="tdy-meta">${p.solid}/${p.total}</span></span>`;
+      }).join('')}</p>` : ''}
+    </section>`;
   }
 
   // ---------- A thread review ----------

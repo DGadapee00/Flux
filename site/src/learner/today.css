@@ -508,3 +508,17 @@ body.tdy-reviewing .today {
   gap: 4px 12px;
   font-size: 15px;
 }
+
+/* Projects in Your courses: one wrapping line, each with its count. */
+.tdy-projects {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  margin: 14px 0 0;
+  font-size: 15px;
+}
+
+.tdy-projects a {
+  text-decoration: none;
+}
