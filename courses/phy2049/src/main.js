@@ -618,6 +618,17 @@ function syncViews() {
   ctx.handle = app.handles[app.labId];
   lab.syncViews(slice(), computed, ctx);
   derive?.syncScene(slice(), computed);
+  clearTicks();
+}
+
+/** Keep the grid's tick numbers off the charges: a charge on a tick hides that tick's label. */
+function clearTicks() {
+  const at = [];
+  scene.updateMatrixWorld();
+  scene.traverseVisible((o) => {
+    if (o.userData.chargeId != null) at.push(o.getWorldPosition(new THREE.Vector3()));
+  });
+  grid.clearAround(at);
 }
 
 /**

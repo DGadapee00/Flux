@@ -231,9 +231,15 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
   }
   const zoomMin = () => Math.min(0.25, fitScale());
 
+  const zoomNote = root.getElementById('map-zoom-note');
+  // The map's key reads open beside a wide map; on a phone it is one line, tapped open.
+  const help = /** @type {HTMLDetailsElement|null} */ (root.getElementById('hint-help'));
+  if (help && window.matchMedia('(min-width: 720px)').matches) help.open = true;
   function showZoom() {
     const now = scaleNow();
     zoomLevel.textContent = `${Math.round(now * 100)}%`;
+    // Zoomed far out the boxes cannot be read; a click on one zooms to it (see draw()).
+    if (zoomNote) zoomNote.textContent = now < 0.45 ? ' Zoomed out to see the whole shape: click a box to read it.' : '';
     // Thin lanes are a few pixels tall when zoomed far out; smaller labels keep them apart.
     tags.classList.toggle('small', now < 0.35);
     /** @type {HTMLButtonElement} */ (zoomEl.querySelector('[data-zoom="out"]')).disabled = now <= zoomMin() + 0.005;
@@ -582,16 +588,29 @@ export function mountMap({ concepts = loadConcepts(), paths = loadPaths(), root 
     trailEl.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
   }
 
-  /** Centre the chosen concept in the map's box, across and down, when the drawing overflows it. */
+  /**
+   * Centre the chosen concept in the map's box, across and down, when the drawing overflows it.
+   * Across, the view starts at a column's edge, so the left edge never cuts a box in half: the
+   * column before the chosen one when both fit, else the chosen one.
+   */
   function reveal(id) {
     const p = view.pos[id];
     if (!p) return;
     const scale = svg.getBoundingClientRect().width / view.W;
     const cx = (p.x + NODEW / 2) * scale;
     const cy = (p.y + NODEH / 2) * scale;
+    const boxW = mapbox.clientWidth;
+    let left = Math.max(0, cx - boxW / 2);
+    if (view.W * scale > boxW) {
+      const pad = 10;
+      const cols = [...new Set(Object.values(view.pos).map((q) => q.x))].sort((a, b) => a - b);
+      const start = cols.filter((x) => x * scale - pad <= left).pop();
+      left = start != null && (p.x + NODEW) * scale - (start * scale - pad) <= boxW ? start * scale - pad : p.x * scale - pad;
+      left = Math.max(0, left);
+    }
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     mapbox.scrollTo({
-      left: Math.max(0, cx - mapbox.clientWidth / 2),
+      left,
       top: Math.max(0, cy - mapbox.clientHeight / 2),
       behavior: reduce ? 'auto' : 'smooth',
     });

@@ -898,6 +898,14 @@ select option:disabled {
   cursor: default;
 }
 
+.tab.soon .soon-tag {
+  display: block;
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .tab.soon:hover {
   background: transparent;
   color: var(--text-dim);

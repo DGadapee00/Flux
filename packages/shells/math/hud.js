@@ -181,7 +181,8 @@ export function createHUD(api, catalog) {
       .join('');
     // Unbuilt labs stay visible so the exam's full scope is on screen.
     const soon = (exam?.coming || [])
-      .map((t) => `<button type="button" class="tab soon" disabled title="Coming soon">${t}</button>`)
+      // "soon" is written out: a title only shows on hover, so on a phone the tab just looked broken.
+      .map((t) => `<button type="button" class="tab soon" disabled aria-label="${t}, not built yet">${t}<span class="soon-tag" aria-hidden="true">soon</span></button>`)
       .join('');
     $('lab-tabs').innerHTML = built + soon;
     if(catalog.revealActiveLab && window.innerWidth<=720) $('lab-tabs').querySelector('.tab.active')?.scrollIntoView?.({block:'nearest',inline:'nearest'});

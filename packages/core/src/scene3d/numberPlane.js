@@ -124,6 +124,21 @@ export class NumberPlane {
     }
   }
 
+  /**
+   * Hide each tick label within `r` scene units of one of `points` (world positions). The labels
+   * are HTML drawn over the canvas, so a charge sitting on a tick would otherwise show the number
+   * on top of it.
+   * @param {THREE.Vector3[]} points
+   */
+  clearAround(points, r = 0.75) {
+    const at = new THREE.Vector3();
+    for (const t of this.ticks) {
+      t.obj.getWorldPosition(at);
+      const near = points.some((q) => q.distanceToSquared(at) < r * r);
+      t.el.style.visibility = near ? 'hidden' : '';
+    }
+  }
+
   get visible() {
     return this.group.visible;
   }
