@@ -1,5 +1,6 @@
 import { decisionsOf, optionById } from '@flux/map/applications/decisions/index.js';
 import { conflicts, derive, formatValue, linksOf } from '@flux/map/applications/decide.js';
+import { travelerById } from '@flux/map/applications/travelers/index.js';
 import { decisionRecord } from './brief.js';
 
 /**
@@ -67,6 +68,7 @@ function optionItem(o, d, picks) {
       ${withs.length ? `<dt>Goes with</dt><dd>${esc(withs.join(' · '))}</dd>` : ''}
       ${outs.length ? `<dt>Rules out</dt><dd>${esc(outs.join(' · '))}</dd>` : ''}
     </dl>
+    ${o.traveler ? `<p class="option-traveler"><a href="?traveler=${esc(o.traveler)}#applications">See how it is run: ${esc(travelerById[o.traveler].title)} <span aria-hidden="true">→</span></a></p>` : ''}
     ${notes.map((n) => `<p class="option-standing ${n.kind === 'rules-out' ? 'is-clash' : 'is-fit'}">${esc(n.text)}</p>`).join('')}
   </li>`;
 }
@@ -119,5 +121,5 @@ export function makeHtml(recipe, { picks, open, conceptLink }) {
       <p>Raw stock comes in and tested hardware goes out. Design, material and process are one choice, because each limits the others. Open a card for the usual pick and the options. Pick one, and the other cards show what it goes with and what it rules out.</p>
       <div class="make-status-row"><p class="make-status" data-make-status role="status" tabindex="-1">${esc(status)}</p>${made ? '<button type="button" class="make-clear" data-clear-picks>Clear my picks</button>' : ''}</div></header>
     <div class="decisions">${cards}</div>
-    <p class="app-meta make-note">Flux keeps no picks: copy each record. Still to build: how each process runs, station by station.</p>`;
+    <p class="app-meta make-note">Flux keeps no picks: copy each record. Welding has a traveler that shows how the process is run: see Follow a part. Travelers for machining and metal printing are still to build.</p>`;
 }

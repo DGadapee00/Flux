@@ -19,6 +19,7 @@ test('the address picks the tab, and old section anchors still land', () => {
 
 test('with no hash, the query says where a link was going; an unknown hash keeps the tab', () => {
   assert.equal(tabFor('', '?application=satellite', isConcept), 'build');
+  assert.equal(tabFor('', '?traveler=fsw-dome&station=proof', isConcept), 'build', 'a traveler is on Build');
   assert.equal(tabFor('', '?path=phy2049', isConcept), 'map');
   assert.equal(tabFor('', '?view=all', isConcept), 'map');
   assert.equal(tabFor('#nothing-here', '', isConcept), null);

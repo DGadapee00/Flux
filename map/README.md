@@ -14,6 +14,7 @@ The approved prototype is `docs/map/prototype-flux-thread.html`. Its 15 concepts
 | `concepts/<id>.js` | One concept per file. The file name is the id. |
 | `catalog.js` | Every Flux course's labs, read from that course's own catalog. |
 | `applications/` | Projects the map leads to. Each recipe names concepts and labs on the map (`docs/map/applications.md`). |
+| `applications/travelers/` | One part followed through the shop, station by station: what the engineer decides, what goes wrong, the paper, and the part's own numbers (`dome-numbers.js`). The first is a friction stir welded tank dome. |
 | `applications/decisions/` | A subsystem's Make side: the choices of material, process, joints and finish, one file each, with every figure tied to a source in `refs.js`. `applications/decide.js` computes derived columns and finds picks that rule each other out. |
 | `routes.js` | The link from a concept into a course app. |
 | `graph.js` | What a concept leads to, its depth and its closure. Shared by the hub and the check. |

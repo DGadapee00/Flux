@@ -250,3 +250,61 @@ details > summary { cursor: pointer; color: var(--muted); font: var(--fs-meta)/1
 @media (max-width: 600px) {
   .make { padding: 18px; }
 }
+
+/* Build's two views, and a traveler: one part followed through the shop (traveler.js). */
+.build-switch { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 640px; margin-block: 14px 6px; }
+.build-switch button { display: grid; gap: 2px; min-height: 56px; padding: 10px 14px; text-align: left; cursor: pointer; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--fg); font-family: var(--display); }
+.build-switch button[aria-pressed='true'] { border-color: var(--accent); box-shadow: inset 0 3px var(--accent); }
+.build-switch strong { font-size: var(--fs-body); line-height: 1.25; }
+.build-switch small { color: var(--muted); font-size: var(--fs-ui); line-height: 1.3; }
+.build-switch button:focus-visible, .route button:focus-visible, .station-nav button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.dome-figure .dome-skin { fill: var(--panel); stroke: none; }
+.dome-figure .dome-seam { fill: none; stroke: currentColor; stroke-width: 1.4; }
+.dome-figure .dome-land { fill: none; stroke: currentColor; stroke-width: 9; stroke-linecap: round; opacity: 0; }
+.dome-figure .dome-barrel, .dome-figure .dome-cut { fill: none; stroke: currentColor; stroke-width: 1.4; }
+.dome-figure .dome-cut { stroke-dasharray: 4 5; opacity: .55; }
+.dome-figure .dome-ring { fill: var(--panel); stroke: currentColor; stroke-width: 1.4; }
+.dome-figure .dome-tool { fill: var(--panel); stroke: currentColor; stroke-width: 1.4; opacity: 0; }
+.dome-figure .dome-pin { fill: currentColor; stroke: none; opacity: 0; }
+.dome-figure .dome-leader { fill: none; stroke: currentColor; stroke-width: .8; opacity: .6; }
+.dome-figure .dome-labels text { fill: var(--muted); stroke: none; }
+.dome-figure [data-part] { color: var(--muted); transition: color .2s; }
+.dome-figure [data-part].active { color: var(--accent); }
+.dome-figure [data-part='gores'].active .dome-skin { fill: color-mix(in srgb, var(--accent) 16%, var(--panel)); }
+.dome-figure [data-part='lands'].active .dome-land { opacity: .35; }
+.dome-figure [data-part='tool'].active .dome-tool, .dome-figure [data-part='tool'].active .dome-pin { opacity: 1; }
+.route { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.route button { min-height: 62px; }
+.route strong { font-size: var(--fs-ui); }
+.station-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 32px; padding: 22px; }
+.station-grid > section { min-width: 0; }
+.station-wide { grid-column: 1 / -1; }
+.station-numbers { padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.dome-inputs { margin-bottom: 8px; max-width: 420px; }
+.number-rows { display: grid; gap: 0; margin: 0 0 10px; }
+.number-rows > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px 16px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.number-rows dt { color: var(--muted); font: var(--fs-ui)/1.4 var(--display); }
+.number-rows dd { margin: 0; font: var(--fs-ui)/1.4 var(--mono); font-variant-numeric: tabular-nums; }
+.number-rows .is-strong dd { color: var(--accent); font-weight: 600; }
+.station-numbers .app-meta { margin: 0; }
+.paper { display: grid; gap: 10px; margin: 0; }
+.paper dt { font: 600 var(--fs-body)/1.3 var(--display); }
+.paper dd { margin: 2px 0 0; }
+.station-cases > p { max-width: 76ch; }
+.station-cases .case { margin-top: 8px; background: var(--bg); }
+.station-cases .case > summary { grid-template-columns: auto minmax(0, 1fr); }
+.station-nav { display: flex; justify-content: space-between; gap: 12px; padding: 16px 22px; border-top: 1px solid var(--line); }
+.station-nav button { min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--fg); cursor: pointer; text-align: left; font: 600 var(--fs-ui) var(--display); }
+.option-traveler { margin: 10px 0 0; font: 600 var(--fs-ui)/1.4 var(--display); }
+@media (max-width: 850px) {
+  .route { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .station-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .route { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .station-grid, .station-nav { padding: 18px; }
+  .number-rows > div { grid-template-columns: minmax(0, 1fr); }
+  .dome-figure .dome-labels text { font-size: 15px; }
+  .station-nav { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) { .dome-figure [data-part] { transition: none; } }

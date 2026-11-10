@@ -16,6 +16,8 @@ const lines = (list, mark = '-') => list.map((x, i) => `${mark === '1.' ? `${i +
 export function projectInstructions() {
   return `You review engineering work for Flux, a study map that runs across a mechanical engineering degree. The current project is an educational model of a small satellite, built one subsystem at a time: orbit, power, structure, sensor payload, thermal control, attitude control, communications, then integration.
 
+A brief may also be a case from a traveler, which follows one manufactured part through the shop.
+
 Each chat starts with a review brief from Flux: the task, the inputs it depends on, the expected method, a checklist and references. The student attaches their work: numbers, a report, decision records, CAD files or drawings.
 
 How to review:
@@ -26,6 +28,7 @@ How to review:
 - Say what is missing, not only what is wrong.
 - Ask for anything the brief needs that the student has not given.
 - For a decision record (a choice of material, process, joint or finish): check that each driver is a requirement with a number, that each rejected option has a reason tied to a driver, that the choices for one subsystem agree with each other, and that the risk is named with the test or inspection that would find it. Say what an experienced engineer would have asked before choosing.
+- For a traveler case (a shop-floor situation with its evidence): check that the cause is tied to the evidence, that the disposition names the analysis, test or approval behind it, and that root cause and corrective action are kept apart from the fix to this part. Say what an experienced weld or quality engineer would have asked first.
 - This is a learning model. Do not treat it as flight qualification, and say where a real design would need tests, standards or analysis this one leaves out.
 - Be direct and plain. No praise for its own sake.
 
@@ -122,5 +125,32 @@ export function decisionRecord(decision, { recipe, picks = {} }) {
     'The pick agrees with the other choices for this subsystem.',
     'The risk is named, with the inspection or test that would find it.',
   ])}`);
+  return parts.join('\n\n');
+}
+
+/**
+ * A traveler case to take to review: the part, the station it happens at, the situation, what is
+ * known, the task and the rubric. The dome as the learner set it goes in too, so the reviewer
+ * judges the same numbers.
+ *
+ * @param {any} traveler A traveler from map/applications/travelers/.
+ * @param {any} kase One of its cases.
+ * @param {{ numbers: any }} ctx The dome's numbers, from domeNumbers().
+ */
+export function caseBrief(traveler, kase, { numbers }) {
+  const station = traveler.stations.find((s) => s.id === kase.station);
+  const land = numbers.seams.long;
+  const three = (x) => String(Number(Number(x).toPrecision(3)));
+  const refs = (kase.sources || []).map((id) => traveler.references.find((r) => r.id === id));
+  const parts = [];
+  parts.push(`# Case: ${kase.title} (${traveler.title}, Flux)`);
+  parts.push(`A traveler case: a shop-floor situation to judge. Station: ${station.title}. ${station.what}`);
+  parts.push(`## The part\n${traveler.why}\nThe dome as set on the page: design pressure ${three(numbers.inputs.pressureKPa)} kPa, ${three(numbers.inputs.diameterM)} m across. Its barrel seam land is ${three(land.landMm)} mm from pressure alone, sized so the weld does not ${land.governs === 'yield' ? 'yield at proof' : 'break at 1.4 times pressure'}. Proof pressure is ${three(numbers.proofKPa)} kPa.`);
+  parts.push(`## The situation\n${kase.situation}`);
+  parts.push(`## What is known\n${lines(kase.evidence)}`);
+  parts.push(`## The task\n${kase.task}`);
+  parts.push(`## Check it against\n${lines(kase.checklist)}`);
+  if (refs.length) parts.push(`## References\n${lines(refs.map((r) => `${r.title}: ${r.url}`))}`);
+  parts.push('## My answer\n[Write your reading of the situation, what you would check, your decision and what changes before the next part.]');
   return parts.join('\n\n');
 }

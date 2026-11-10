@@ -56,8 +56,46 @@ for the records, and the Project instructions say how to judge one.
 To add a decision: write its file, add it to `decisions/index.js`, and list its id on the recipe's
 `decisions` in the order the choices are made. Read every source before citing it.
 
-Still to build: travelers, which follow one process station by station (machining from plate, metal
-printing, friction stir welding), cases to practise on, and drills in a course app's problem bank.
+Still to build: drills in a course app's problem bank, and decisions for the other subsystems.
+
+## Travelers: how a process is run
+
+A decision says which process to pick. A traveler shows how that process is run, by following one
+part through the shop. Build has two views, and a switch between them: the satellite, and Follow a
+part. `?traveler=fsw-dome&station=schedule#applications` opens a station. The Welded option on the
+Joints decision links to the traveler.
+
+The first traveler is a friction stir welded tank dome: the 5.5 m dome NASA built at Marshall from
+eight gore panels, a ring and a fitting in alloy 2195. It is one file,
+`map/applications/travelers/fsw-dome.js`, with eleven stations from requirement to design. Every
+station holds the same things:
+
+- `what` happens, and what the engineer `decides`.
+- `wrong`: what goes wrong, why, and how it is found.
+- `paper`: the documents the station produces, such as the weld procedure and its qualification
+  record, the nonconformance report and the data package.
+- `ask`: what to ask on the floor.
+- `concepts` on the map, and `sources`.
+- `numbers`: optional, a block of the part's own numbers. `part`: what the drawing lights.
+
+The dome's numbers follow it (`travelers/dome-numbers.js`). The learner sets the design pressure
+and the diameter at the first station. From those come the load in each seam, the weld land that
+neither breaks at 1.4 times pressure nor yields at proof, the crack each standard inspection is
+counted on to find as a share of that land, what each repair kept of the weld's strength, and the
+stress at proof. Everything but the two inputs is a figure a source states. The tests check the
+seam loads against a force balance by integration, check the land against both strength checks
+the other way round, and check each claim a station makes against the numbers.
+
+A traveler carries `cases`: a situation at a station, what is known, a task and a rubric. The page
+builds a case brief, with the dome as set, to take to the Claude Project. The Project instructions
+say how to judge one. Flux keeps nothing.
+
+Sources are NASA reports and standards, TWI and reference articles, each read on its `checked`
+date. A station that states a figure must name a source. Standards that are sold, such as AWS
+D17.3, are named and not reproduced. To add a traveler: write its file, add it to
+`travelers/index.js`, and give `site/src/applications/traveler.js` a drawing of its part.
+
+Still to build: travelers for machining from plate and metal printing.
 
 ## Review happens in a Claude Project
 
@@ -86,5 +124,5 @@ owner's call.
 
 `npm run map-gaps` adds 2 to a gap's score for each recipe that names it, and prints which recipes
 use it. `npm run smoke` runs the applications browser check after the hub's: every subsystem's
-brief, the copy buttons, the Orbit self-check, the Make side's cards, picks and records, and no
-sideways scroll at 390 and 1280 px.
+brief, the copy buttons, the Orbit self-check, the Make side's cards, picks and records, every
+station of the traveler, its numbers and a case brief, and no sideways scroll at 390 and 1280 px.

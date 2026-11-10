@@ -12,7 +12,7 @@ and gaps decide what gets built next.
 - The hub (`site/`) has four tabs, one shown at a time (`site/src/tabs.js`). It opens on Today:
   reviews that follow threads on the map, the next concept to learn and the next exam, read from
   the course apps' own records (`site/src/learner/`). Map holds the concept map, Build the
-  applications, and Courses the course apps and the progress backup. A link to a concept opens
+  applications and travelers, and Courses the course apps and the progress backup. A link to a concept opens
   the Map tab on it; `#review-…` opens Today, `#applications` Build, `#progress` Courses.
 - The approved look and data shape are in `docs/map/prototype-flux-thread.html`.
 - The old course-by-course plan is archived in `docs/history/guidance-2026-11-02/`. It is history.
@@ -88,7 +88,10 @@ when a recipe needs it. Each recipe is a reference and how-to (method, reference
 the work is reviewed in a Claude Project from a brief the hub builds. A recipe can also list
 decisions (`map/applications/decisions/`): the choices of material, process, joints and finish
 that turn its sizing into hardware. Every figure on a decision names a source that was read, and
-`map/test/decisions.test.js` checks it. `docs/map/applications.md` has the details.
+`map/test/decisions.test.js` checks it. A traveler (`map/applications/travelers/`) follows one
+part through the shop, station by station, to show how a process is run: what the engineer
+decides, what goes wrong, and the paper each step leaves. Its figures name their sources too.
+`docs/map/applications.md` has the details.
 
 ### Audit a course
 

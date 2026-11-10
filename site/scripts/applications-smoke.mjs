@@ -5,6 +5,7 @@ import fs from 'node:fs/promises';
 import { createServer } from 'vite';
 import { SATELLITE } from '@flux/map/applications/satellite.js';
 import { decisionsOf } from '@flux/map/applications/decisions/index.js';
+import { travelerById } from '@flux/map/applications/travelers/index.js';
 
 const out = process.env.FLUX_APPLICATIONS_OUT || '/tmp/flux-applications';
 const port = 9335;
@@ -64,7 +65,7 @@ try {
   async function select(id) { await click(`[data-select="${id}"]`); }
   await navigate();
   // Seven subsystems and the integration, each a reference page with its own review brief.
-  assert.equal(await page.eval('document.querySelectorAll(".component-recipes button").length'), 8);
+  assert.equal(await page.eval('document.querySelectorAll("#application-workbench .component-recipes button").length'), 8);
   assert.equal(await page.eval('document.querySelectorAll("[data-record], #application-evidence, .application-submission").length'), 0);
   for (const r of [...SATELLITE.components, SATELLITE.integration]) {
     await select(r.id);
@@ -131,11 +132,70 @@ try {
   assert.equal(await page.eval('document.querySelectorAll("[data-make], [data-jump-make]").length'), 0);
   assert.equal(await page.eval('new URLSearchParams(location.search).has("decision")'), false);
 
+  // The Welded joint leads to the traveler that shows how the process is run.
+  await navigate(`${structure}&decision=structure-joints#applications`);
+  assert.match(await page.eval('document.querySelector(".option-traveler a").getAttribute("href")'), /^\?traveler=fsw-dome#applications$/);
+
+  // A traveler: one part through the shop. The switch shows it, and the address keeps the station.
+  const dome = travelerById['fsw-dome'];
+  const travelerUrl = 'http://127.0.0.1:5175/?traveler=fsw-dome';
+  await navigate(`${travelerUrl}&station=panels#applications`);
+  assert.equal(await page.eval('document.querySelector("#application-workbench").hidden'), true);
+  assert.equal(await page.eval('document.querySelector("#traveler-workbench").hidden'), false);
+  assert.equal(await page.eval('document.querySelector("[data-build=\\"traveler\\"]").getAttribute("aria-pressed")'), 'true');
+  assert.equal(await page.eval('document.querySelectorAll(".route [data-station]").length'), dome.stations.length);
+  assert.equal(await page.eval('document.querySelector("#station-title").textContent'), 'Gore panels');
+  const station = (sel) => page.eval(`document.querySelectorAll('#traveler-station ${sel}').length`);
+  for (const st of dome.stations) {
+    await click(`.route [data-station="${st.id}"]`);
+    assert.equal(await page.eval('document.querySelector("#station-title").textContent'), st.title, st.id);
+    assert.equal(await station('.option-table tbody tr'), st.wrong.length, `${st.id} failures`);
+    assert.equal(await station('.paper dt'), st.paper.length, `${st.id} paper`);
+    assert.equal(await station('.station-grid > section > .references a'), st.sources.length, `${st.id} sources`);
+    assert.equal(await station('[data-numbers]'), st.numbers ? 1 : 0, `${st.id} numbers`);
+    assert.equal(await station('[data-case]'), dome.cases.filter((c) => c.station === st.id).length, `${st.id} cases`);
+    assert.equal(await page.eval('document.querySelectorAll(".dome-figure [data-part].active").length > 0'), true, `${st.id} lights the drawing`);
+  }
+  // The numbers follow the part: a higher pressure at Requirement is a thicker land at Gore panels.
+  const type = (id, value) => page.eval(`(() => { const el = document.querySelector('${id}'); el.value = '${value}'; el.dispatchEvent(new Event('input', { bubbles: true })); })()`);
+  const rows = () => page.eval('document.querySelector("#traveler-station .number-rows").textContent');
+  await click('.route [data-station="requirement"]');
+  assert.match(await rows(), /247 kPa/);
+  await type('#dome-p', '400');
+  await wait(async () => (await rows()).includes('420 kPa'));
+  await click('.route [data-station="panels"]');
+  assert.match(await rows(), /4\.58 mm: yield at proof governs/);
+  // A case brief carries the dome as set, and copying says what happened.
+  await click('.route [data-station="nonconformance"]');
+  assert.match(await rows(), /Fusion weld repair67% warm, 61% cold/);
+  assert.match(await page.eval('document.querySelector("[data-text-case=\\"repair\\"]").textContent'), /design pressure 400 kPa/);
+  await click('[data-copy-case="repair"]');
+  await wait(() => page.eval('document.querySelector("[data-copied-case=\\"repair\\"]").textContent.length > 0'));
+  assert.equal(await page.eval('new URLSearchParams(location.search).get("station")'), 'nonconformance');
+  // Nonsense for a pressure shows the example and says so.
+  await click('.route [data-station="requirement"]');
+  await type('#dome-p', '-3');
+  await wait(() => page.eval('document.querySelector("[data-dome-hint]").textContent.includes("Showing the example")'));
+  assert.match(await rows(), /247 kPa/);
+  // Next and back walk the route, and the switch returns to the satellite.
+  await click('.station-nav [data-station="material"]');
+  assert.equal(await page.eval('document.querySelector("#station-title").textContent'), 'Material and process');
+  await click('[data-build="satellite"]');
+  assert.equal(await page.eval('document.querySelector("#traveler-workbench").hidden'), true);
+  assert.equal(await page.eval('document.querySelector("#application-workbench").hidden'), false);
+  assert.equal(await page.eval('new URLSearchParams(location.search).has("traveler")'), false);
+  await page.eval('history.back()');
+  await wait(() => page.eval('document.querySelector("#traveler-workbench").hidden === false'));
+
   for (const theme of ['light', 'dark']) {
     for (const [width, height] of [[390, 844], [1280, 800]]) {
       await page.send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 600 });
       // Orbit for the overview and a recipe, Structure for the Make side: every card open in both.
-      for (const [url, views] of [[undefined, [['overview', '#applications'], ['recipe', '#application-recipe']]], [`${structure}#applications`, [['make', '[data-make]'], ['decision', '#decision-structure-material .option-table']]]]) {
+      for (const [url, views] of [
+        [undefined, [['overview', '#applications'], ['recipe', '#application-recipe']]],
+        [`${structure}#applications`, [['make', '[data-make]'], ['decision', '#decision-structure-material .option-table']]],
+        [`${travelerUrl}&station=nonconformance#applications`, [['traveler', '#traveler-workbench'], ['station', '#traveler-station'], ['case', '.station-cases']]],
+      ]) {
         await navigate(url);
         await page.eval(`document.documentElement.dataset.theme = '${theme}'; document.querySelectorAll('#applications details').forEach((d) => d.setAttribute('open', '')); document.querySelector('#applications').scrollIntoView()`);
         await delay(150);
@@ -150,7 +210,7 @@ try {
     }
   }
   assert.deepEqual(page.errors, []);
-  console.log(`Applications smoke passed. Sixteen screenshots: ${out}`);
+  console.log(`Applications smoke passed. Twenty-eight screenshots: ${out}`);
 } finally {
   page?.ws.close();
   chrome.kill();

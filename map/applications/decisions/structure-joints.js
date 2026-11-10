@@ -96,6 +96,8 @@ export default {
       for: 'Permanent and sealed, which a tank needs. Friction stir welding stays below melting, so it avoids pores and solidification cracks.',
       against: 'Heat undoes the temper beside a fusion weld. Friction stir welding needs large forces, heavy clamping and a seam with a plain shape.',
       own: 'A welder and a qualified procedure, or a rigid stir welding machine with its tools. Fixtures either way.',
+      // How this process is run, station by station (../travelers/).
+      traveler: 'fsw-dome',
       links: [
         { to: ['al-6061-t6'], kind: 'goes-with', why: '6061 welds readily, at a cost in strength beside the weld.' },
         { to: ['cfrp-laminate'], kind: 'rules-out', why: 'A laminate does not weld.' },
