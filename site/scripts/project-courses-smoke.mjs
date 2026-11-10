@@ -52,6 +52,7 @@ try{
   await navigate('satellite/#/satellite/u4/shake?n=build-it');
   await wait(()=>page.eval('document.querySelector("#notes")?.textContent.includes("Choose the material")'));
   assert.equal(await page.eval('document.querySelectorAll("#exam-select option").length'),7);
+  assert.equal(await page.eval('document.querySelector("a[href=\"guide.html\"]")'),null);
   await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-structure`);
   await navigate('satellite/#/satellite/u7/?n=integration');
   await wait(()=>page.eval('document.querySelector("#notes")?.textContent.includes("Sensor payload")'));
