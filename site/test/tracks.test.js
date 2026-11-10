@@ -20,7 +20,7 @@ const PLATFORM_HREF = {
   eml3015: 'eml3015/',
   eml4140: 'eml4140/',
   eel3111: 'eel3111/',
-  satellite: 'satellite/',
+  satellite: 'satellite/guide.html',
   eml3101: 'eml3101/',
   design: 'design/',
   egn3203: 'egn3203/',
@@ -142,7 +142,8 @@ test('after a build, each platform copy has an index under site/dist', (t) => {
   }
   for (const course of builtCourses()) {
     if (!PLATFORM_HREF[course.id]) continue;
-    const index = path.join(DIST, course.href, 'index.html');
+    // A course opens on its folder's index, or on a page it names.
+    const index = course.href.endsWith('.html') ? path.join(DIST, course.href) : path.join(DIST, course.href, 'index.html');
     assert.equal(fs.existsSync(index), true, index);
   }
 });

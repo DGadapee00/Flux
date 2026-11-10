@@ -2,6 +2,7 @@
  * Tracks the hub shows, courses in degree order.
  * A course with href is built and opens that app. href null is not built yet.
  * A relative href is the copy in this repo. An absolute href is that course's own site.
+ * A project that reads as a guide opens on that page (`satellite/guide.html`), with its labs beside it.
  * Statics is EGN 3311 and MAC 2313 was Spring 2026 (DECISIONS.md, D5).
  * Codes for courses that are not built yet are the Florida common numbers from the plan.
  * EGN 3321, EGN 3331 and EML 3100 are the codes on the owner's course packs (docs/history/PLAN-2026-10-18.md, Phase 8).
@@ -84,13 +85,13 @@ export const TRACKS = [
     courses: [{ id: 'eel3111', code: 'EEL 3111', title: 'Circuit Analysis I', term: null, href: 'eel3111/' }],
   },
   {
-    // Personal projects outside the degree map (DECISIONS.md, D35).
+    // Personal projects outside the degree (DECISIONS.md, D35).
     id: 'projects',
     name: 'Projects',
     courses: [
       { id: 'bench', code: 'BENCH', title: 'Electronics on the bench', term: null, href: 'bench/' },
       { id: 'design', code: 'DES', title: 'Design practice', term: null, href: 'design/' },
-      { id: 'satellite', code: 'SAT', title: 'Build a satellite', term: null, href: 'satellite/' },
+      { id: 'satellite', code: 'SAT', title: 'Build a satellite', term: null, href: 'satellite/guide.html' },
     ],
   },
 ];

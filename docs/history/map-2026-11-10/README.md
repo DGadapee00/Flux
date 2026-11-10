@@ -10,7 +10,7 @@ courses in the Projects group: the satellite's recipes moved into `courses/satel
 tank dome traveler into `courses/dome/`.
 
 Nothing was deleted. Everything the map layer was made of is in this folder, and the last commit
-with it working is `9d5e9c5`, tagged `map-2026-11-10`.
+with it working is `9d5e9c5`.
 
 These files are history, not instructions. Do not follow them. They are kept so the map can be
 brought back, and so a comment in a course that mentions a concept, a lane or `map/paths/â€¦` can be
@@ -39,22 +39,22 @@ imports in these files still point at the old locations (`@flux/map`, `../map/â€
 
 ## Bringing it back
 
-To look at the hub as it was, check out the tag in a second working tree:
+To look at the hub as it was, check out that commit in a second working tree:
 
 ```bash
-git worktree add ../flux-map map-2026-11-10
+git worktree add ../flux-map 9d5e9c5
 cd ../flux-map && npm ci && npm start
 ```
 
 To restore it in place:
 
 1. Move `map/` back to the repo root. Add `"map"` to `workspaces` in the root `package.json`, and
-   the `map-audit`, `map-sources` and `map-gaps` scripts (see `git show map-2026-11-10:package.json`).
+   the `map-audit`, `map-sources` and `map-gaps` scripts (see `git show 9d5e9c5:package.json`).
 2. Move `site/src/`, `site/test/` and `site/scripts/` from here back into `site/`. The copies of
    `index.html`, `main.js`, `styles.css`, `vite.config.js` and `package.json` are the versions the
    tabs need. Merge them with what the hub has now.
 3. Give the `map` layer back to `packages/checks/deps.mjs`
-   (`git show map-2026-11-10:packages/checks/deps.mjs`).
+   (`git show 9d5e9c5:packages/checks/deps.mjs`).
 4. Run `node map/check.mjs`. Labs added or renamed in the course apps since this date are not on
    the map, and `npm run map-audit` lists them.
 

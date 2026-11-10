@@ -64,11 +64,18 @@ are checked only one way is not done.
 
 A project is a course in the Projects group of `packages/tracks/tracks.js`.
 
-- **Build a satellite** (`courses/satellite/`): labs for the aerospace ideas no degree course
-  teaches.
+- **Build a satellite** (`courses/satellite/`) has two pages. The guide (`guide.html`) is its front
+  page: seven subsystems, each a how-to with a method, references and a checklist, reviewed in a
+  Claude Project from a brief the page builds. Structure also has decisions on material, process,
+  joints and finish. The labs (`index.html`) show the aerospace ideas no degree course teaches.
 - **Electronics on the bench** (`courses/bench/`) and **Design practice** (`courses/design/`).
 
-Every figure a project quotes names a source that was read, and the project's tests check it.
+A project page reads as a document, not a lab stage. It uses the project shell
+(`packages/shells/project/`) and keeps none of the learner's work.
+
+Every figure a project quotes names a source that was read, and the project's tests check it. A
+project links into other courses' labs as plain data: course, unit, lab and title.
+`packages/checks/test/project-links.test.js` fails when a linked lab or notes section is gone.
 
 ## Voice
 
