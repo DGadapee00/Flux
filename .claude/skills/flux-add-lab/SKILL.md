@@ -1,17 +1,16 @@
 ---
 name: flux-add-lab
-description: Build a Flux lab for a gap on the concept map, scaffolded with npm run new-lab, with numbers checked by a second method, then linked from its concept. Use when asked to build or add a lab.
+description: Build a Flux lab inside a course app, scaffolded with npm run new-lab, with numbers checked by a second method. Use when asked to build or add a lab.
 ---
 
-# Add a lab for a gap
+# Add a lab
 
-A lab is built for a gap on the map, not for a course checklist.
+A lab shows one idea. It lives in the course and the unit that teach that idea.
 
-1. **Pick the gap.** `npm run map-gaps` ranks concepts with no lab. Read the concept file and its
-   `candidate`. The lab must show that concept's idea; if it would show something else, add or
-   change the concept first (`flux-add-concept`).
-2. **Choose the course app.** The course in the concept's `courses` the owner is taking now or
-   next, if it has an app (`app` in `map/courses.js`). Pick the unit it belongs in.
+1. **Name the idea.** One sentence: what the learner changes and what they see follow from it. If
+   two ideas are in play, that is two labs.
+2. **Choose the course app and the unit.** Read the course's `src/data/catalog.js` for its units
+   and the labs each already has.
 3. **Scaffold.**
    `npm run new-lab -- <course> <lab-id> --kind plot|scene2d|scene3d --unit <unit> --title "Title"`
    It writes the lab file, its `LAB_META` entry, the loader entry and two prediction stubs.
@@ -21,8 +20,5 @@ A lab is built for a gap on the map, not for a course checklist.
    `labs-check` must also compute them by a second method (numeric integration, a sum, a different
    route through the algebra) and require agreement on every scenario. Fill the predictions from
    the lab's own numbers.
-6. **Link it.** In `map/concepts/<id>.js`, add `{ course, lab, notes, note }` to `labs`. Remove the
-   `candidate` if the lab covers it.
-7. **Check.** The course's own tests, `npm test`, `npm run build`, `node packages/checks/raw.mjs`,
-   `npm run smoke`, and screenshots of the lab and of the concept on the hub at 390×844 and
-   1280×800, light and dark. Look at each one.
+6. **Check.** The course's own tests, `npm test`, `npm run build`, `node packages/checks/raw.mjs`,
+   and screenshots of the lab at 390×844 and 1280×800, light and dark. Look at each one.

@@ -28,105 +28,24 @@
         </svg>
         <div class="brand-text">
           <h1>FLUX</h1>
-          <p class="lede">One map of the degree. Each box is a concept. Pick one to see what it builds on, where it leads, the sources worth your time and the Flux lab that shows it.</p>
-          <nav class="jump tabs" aria-label="Sections">
-            <a href="#today" data-tab-link="today">Today</a>
-            <a href="#map" data-tab-link="map">Map</a>
-            <a href="#build" data-tab-link="build">Build</a>
-            <a href="#courses" data-tab-link="courses">Courses</a>
-          </nav>
+          <p class="lede">Every course, grouped by subject. Each one holds its own labs, notes and practice problems.</p>
         </div>
       </header>
 
-      <section class="section today" id="today" data-tab="today" aria-labelledby="today-title"></section>
-
-      <div class="explore" id="explore" data-tab="map">
-        <div class="find" id="find">
-          <label class="find-label" for="find-input">Find</label>
-          <div class="find-field">
-            <input
-              id="find-input"
-              type="search"
-              role="combobox"
-              aria-autocomplete="list"
-              aria-expanded="false"
-              aria-controls="find-results"
-              aria-describedby="find-help"
-              placeholder="A concept, subject or course"
-              autocomplete="off"
-              spellcheck="false"
-            />
-            <kbd aria-hidden="true">/</kbd>
-            <ul class="find-results" id="find-results" role="listbox" aria-label="Matches" hidden></ul>
-          </div>
-          <span class="visually-hidden" id="find-help">Up and down arrows move through matches. Enter opens one. Press slash to come back here.</span>
-        </div>
-        <div class="map-bar">
-          <div class="scope" id="scope" role="group" aria-label="How much of the map to show">
-            <span class="scope-label">Show:</span>
-            <button type="button" data-scope="near">1 step</button>
-            <button type="button" data-scope="two">2 steps</button>
-            <button type="button" data-scope="all">Full map</button>
-          </div>
-          <div class="zoom" id="zoom" role="group" aria-label="Zoom the map">
-            <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
-            <button type="button" data-zoom="reset" class="zoom-level" aria-label="Actual size" title="Actual size">100%</button>
-            <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
-            <button type="button" data-zoom="width" title="Fill the map width and scroll vertically">Fit width</button>
-            <button type="button" data-zoom="fit" title="Fit the whole drawing in the box">Fit all</button>
-          </div>
-        </div>
-        <div class="filters">
-          <div class="filter-row">
-            <button type="button" class="filter-toggle" id="lanes-toggle" aria-expanded="false" aria-controls="legend">Subjects: <span id="lanes-state">all</span></button>
-            <button type="button" class="filter-toggle" id="paths-toggle" aria-expanded="false" aria-controls="paths" hidden>Course: <span id="paths-state">none</span></button>
-          </div>
-          <div class="legend" id="legend" role="group" aria-label="Show only these subjects" hidden></div>
-          <div class="paths" id="paths" role="group" aria-label="Follow a course" hidden>
-            <div class="path-buttons" id="path-buttons"></div>
-          </div>
-        </div>
-        <div class="mapbox" id="mapbox">
-          <div class="mapinner" id="mapinner">
-            <svg id="map" role="group" aria-label="Concept map"></svg>
-            <div class="lane-tags" id="lane-tags" aria-hidden="true"></div>
-          </div>
-        </div>
-        <div class="hint"><span class="map-status" id="map-status"></span><span class="map-zoom-note" id="map-zoom-note"></span> <span class="key"><i class="dot"></i>Flux lab <i class="dot hollow"></i>no lab yet.</span> <span class="key progress-key"><span>Your progress:</span><span><i class="fill"></i>solid</span><span><i class="fill part"></i>learning</span><span><i class="fill dash"></i>needs something first</span><span><i class="duedot"></i>review due.</span></span>
-          <details class="hint-help" id="hint-help"><summary>How to read the map</summary><span>Solid bright lines: what the chosen concept builds on. Dashed: where it leads. With a course chosen, its concepts are numbered in teaching order.<span class="keys-help"> Arrow keys move between boxes, Enter opens one, Ctrl and the scroll wheel zoom.</span></span></details></div>
-        <nav class="trail" id="trail" aria-label="Where you have been"></nav>
-        <section class="path-list" id="path-list" hidden aria-live="polite"></section>
-        <aside class="detail" id="detail" aria-live="polite" aria-labelledby="concept-title">
-          <div class="detail-head" id="detail-head"></div>
-          <div class="detail-body" id="detail-body"></div>
-        </aside>
-      </div>
-
-      <section class="section" id="applications" data-tab="build" aria-labelledby="applications-title">
-        <h2 id="applications-title">Build</h2>
-        <p>See what the concepts let you build. Follow the pieces from a first circuit to a working system.</p>
-        <nav class="build-switch" aria-label="What to open on Build" data-build-switch>
-          <button type="button" data-build="satellite" aria-pressed="true"><strong>Build a satellite</strong><small>Seven subsystems, sized and made</small></button>
-          <button type="button" data-build="traveler" aria-pressed="false"><strong>Follow a part</strong><small>A tank dome through the weld shop</small></button>
-        </nav>
-        <div id="application-workbench"></div>
-        <div id="traveler-workbench" hidden></div>
-      </section>
-
-      <section class="section" id="courses" data-tab="courses" aria-labelledby="courses-title">
+      <section class="section" id="courses" aria-labelledby="courses-title">
         <h2 id="courses-title">Courses</h2>
-        <p>Each course app, as it is today. A card opens its latest course.</p>
+        <p>A card opens its latest course. A name in the list opens that one.</p>
         <div id="tracks"></div>
       </section>
 
-      <section class="section backup" id="progress" data-tab="courses" aria-labelledby="backup-title">
+      <section class="section backup" id="progress" aria-labelledby="backup-title">
         <h2 id="backup-title">Progress</h2>
         <p>One file holds your progress in every course. Restoring replaces what this browser has saved.</p>
         <div id="backup"></div>
       </section>
 
       <footer>
-        <p>Sources are free and linked with our own reason for each. The explanations on the map are written fresh; nothing is copied. <a href="https://github.com/DGadapee00/Flux">Source</a></p>
+        <p>Labs, notes and problems are written fresh; nothing is copied. Sources are linked where they are used. <a href="https://github.com/DGadapee00/Flux">Source</a></p>
       </footer>
     </div>
     <script type="module" src="/src/main.js"></script>

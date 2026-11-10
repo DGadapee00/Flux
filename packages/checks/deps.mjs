@@ -1,8 +1,6 @@
 /**
  * Dependency direction: courses → shells → subjects → core.
  * Courses and the site may also import `@flux/tracks` (the hub's track list). That package imports nothing.
- * The concept map (`map/`) may read course catalogs and the track list. The site and checks may read the map.
- * No course, shell, subject or core module imports the map: the map points into courses, not back.
  * Core never imports a subject, a shell, a track list, or a course. A subject never imports a shell or a course.
  * A shell never imports a course or the track list. The site and tools may import courses.
  * Nothing in core or a shell may name a course. A shell names no chapter either.
@@ -20,7 +18,6 @@ const LAYER_DIRS = [
   ['shells', 'packages/shells'],
   ['tracks', 'packages/tracks'],
   ['checks', 'packages/checks'],
-  ['map', 'map'],
   ['courses', 'courses'],
   ['site', 'site'],
   ['tools', 'tools'],
@@ -32,10 +29,9 @@ const ALLOWED = {
   subjects: new Set(['core', 'subjects']),
   shells: new Set(['core', 'subjects', 'shells']),
   tracks: new Set(['tracks']),
-  checks: new Set(['core', 'subjects', 'shells', 'tracks', 'checks', 'courses', 'site', 'tools', 'map']),
-  map: new Set(['tracks', 'courses', 'map']),
+  checks: new Set(['core', 'subjects', 'shells', 'tracks', 'checks', 'courses', 'site', 'tools']),
   courses: new Set(['core', 'subjects', 'shells', 'tracks', 'courses']),
-  site: new Set(['core', 'subjects', 'tracks', 'courses', 'site', 'map']),
+  site: new Set(['core', 'subjects', 'tracks', 'courses', 'site']),
   tools: new Set(['core', 'subjects', 'courses', 'tools']),
 };
 

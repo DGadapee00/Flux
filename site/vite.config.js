@@ -26,26 +26,6 @@ function buildInfo() {
 
 const info = buildInfo();
 
-/**
- * `virtual:flux-problems`: which practice problems belong to which lab (map/problems.mjs). The
- * banks run code and are large, so the hub ships this index instead of importing them.
- */
-function problemIndex() {
-  const id = 'virtual:flux-problems';
-  return {
-    name: 'flux-problems',
-    resolveId(source) {
-      return source === id ? `\0${id}` : null;
-    },
-    async load(source) {
-      if (source !== `\0${id}`) return null;
-      const { problemIndex: build } = await import(new URL('../map/problems.mjs', import.meta.url).href);
-      const { byLab, titles } = await build();
-      return `export default ${JSON.stringify({ byLab, titles })};`;
-    },
-  };
-}
-
 export default defineConfig({
   base: './',
   define: {
@@ -53,7 +33,6 @@ export default defineConfig({
   },
   plugins: [
     courseDevServer(),
-    problemIndex(),
     {
       name: 'version-stamp',
       generateBundle() {
