@@ -1,55 +1,11 @@
-// Old project bookmarks now open the standard course and its unit notes.
-const projectQuery = new URLSearchParams(location.search);
-if (projectQuery.get('traveler') === 'fsw-dome') {
- const station = projectQuery.get('station') || 'requirement';
- const route = ['nonconformance'].includes(station) ? ['u3','repairs'] : ['proof','acceptance'].includes(station) ? ['u4','proof'] : ['fitup','schedule','weld','inspection'].includes(station) ? ['u2','inspection'] : ['u1','lands'];
- location.replace(`dome/#/dome/${route[0]}/${route[1]}?n=${encodeURIComponent(station)}`);
-} else if (projectQuery.get('application') === 'satellite') {
- const component = projectQuery.get('component');
- const route = ({orbit:['u1','kepler'],communications:['u2','link'],attitude:['u3','attitude'],structure:['u4','shake'],power:['u5','power'],thermal:['u6','balance'],payload:['u7',''],integration:['u7','']})[component] || ['u1','kepler'];
- location.replace(`satellite/#/satellite/${route[0]}/${route[1]}?n=${route[0]==='u7'?(component==='payload'?'payload':'integration'):'build-it'}`);
-}
 import { hasAnimation, mountCardAnimation } from './anim/draw.js';
 import { mountBackup } from './backup.js';
-import problems from 'virtual:flux-problems';
-import { loadConcepts, loadPaths, mountMap } from './map.js';
-import { mountToday } from './learner/today.js';
-import { mountTabs } from './tabs.js';
 import { latestBuilt, visibleTracks } from './tracks.js';
 
-const concepts = loadConcepts();
-const paths = loadPaths();
-/** @type {ReturnType<typeof mountMap>} */
-let map;
-/** @type {ReturnType<typeof mountTabs> | undefined} */
-let tabs;
-// Today first: the map opens where Today says the learner is.
-const today = mountToday({
-  concepts,
-  paths,
-  problems,
-  onPath: (course, id) => {
-    map.choosePath(course);
-    if (id) map.go(id);
-    tabs?.show('map');
-  },
-  onRefresh: () => {
-    map.refreshPanel();
-    map.refreshStatus();
-  },
-  onLeaveReview: () => map.current && map.show(map.current),
-});
-map = mountMap({
-  concepts,
-  paths,
-  record: (id) => today.recordHtml(id),
-  status: (id) => today.statusOf(id),
-  start: () => today.startPoint(),
-});
-map.refreshPanel();
-map.refreshStatus();
-
-
+/**
+ * The hub: every course app, grouped by subject, and one backup of the progress they keep.
+ * The track list is `@flux/tracks`. A card's heading opens its latest course.
+ */
 const root = document.querySelector('#tracks');
 
 for (const track of visibleTracks()) {
@@ -122,17 +78,6 @@ for (const track of visibleTracks()) {
 }
 
 mountBackup();
-
-// Last, once every section has been laid out: show one tab and hide the rest. The map is measured
-// again when its tab shows, since a hidden box has no width to fit or centre in.
-tabs = mountTabs({
-  isConcept: (id) => concepts.some((c) => c.id === id),
-  onShow: (tab) => {
-    if (tab !== 'map' || !map.current) return;
-    window.dispatchEvent(new Event('resize'));
-    map.show(map.current);
-  },
-});
 
 if (typeof __BUILD__ !== 'undefined' && __BUILD__.commit) {
   console.log(`FLUX ${__BUILD__.commit}`);

@@ -15,10 +15,7 @@
     "smoke:equipment": "node scripts/project-courses-smoke.mjs"
   },
   "dependencies": {
-    "@flux/map": "*",
-    "@flux/tracks": "*",
-    "katex": "^0.16.47",
-    "three": "^0.172.0"
+    "@flux/tracks": "*"
   },
   "devDependencies": {
     "vite": "^6.0.0"

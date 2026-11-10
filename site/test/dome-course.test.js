@@ -1,10 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { COURSE_ORDER, LESSONS } from '../src/applications/dome-course.js';
-import { travelerById } from '@flux/map/applications/travelers/index.js';
+import dome from '../../courses/dome/src/data/traveler.js';
 
 test('the beginner course covers every shop station, with design before fabrication', () => {
-  const dome = travelerById['fsw-dome'];
   assert.deepEqual([...COURSE_ORDER].sort(), dome.stations.map(s => s.id).sort());
   assert.equal(COURSE_ORDER[0], 'requirement');
   assert.equal(COURSE_ORDER.at(-1), 'acceptance');

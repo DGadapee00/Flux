@@ -5,7 +5,6 @@
   "type": "module",
   "workspaces": [
     "packages/*",
-    "map",
     "courses/*",
     "site"
   ],
@@ -22,10 +21,7 @@
     "live": "node scripts/live.mjs",
     "ocw": "node tools/ocw/fetch.mjs",
     "ocw:textbooks": "node tools/ocw/fetch-textbooks.mjs",
-    "new-lab": "node tools/new-lab.mjs",
-    "map-audit": "node map/audit.mjs",
-    "map-sources": "node map/sources.mjs",
-    "map-gaps": "node map/gaps.mjs"
+    "new-lab": "node tools/new-lab.mjs"
   },
   "engines": {
     "node": ">=22"

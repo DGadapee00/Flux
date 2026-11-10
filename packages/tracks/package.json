@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./tracks.js",
-    "./calculus": "./calculus.js"
+    "./calculus": "./calculus.js",
+    "./routes.js": "./routes.js"
   }
 }

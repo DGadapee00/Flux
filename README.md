@@ -1,32 +1,17 @@
 # FLUX
 
-One concept map for the degree. Each concept is a node: a short idea, its key equation, what it
-builds on, where it leads, sources worth your time, and the Flux lab and notes that show it.
-Courses are paths through the map. A concept with no lab is a visible gap.
-
-The hub opens on Today. It reads your practice record from every course app and says what to do
-now: review the problems that are due, grouped by thread on the map so each concept comes after
-the one it builds on, then learn the next concept whose prerequisites are solid. A thread review
-asks you to recall each concept before its problems, and Solve opens each problem in its course
-app. The next PHY 2049 exam and your courses sit beside it. The map fills in as you learn: each box in its
-lane's colour, all the way when solid, part of the way while learning, with a dot when a review
-is due. The reading panel shows your record for the chosen concept.
-
-Below Today, the map opens on a local view: the chosen concept, what it builds on and what it leads
-to, one step each way, beside its reading panel. Widen it to two steps or the full map, or choose a
-course to see its path in teaching order. The find box (press `/`) opens a concept, a subject or a
-course by name. Show only some subjects, zoom out to see the whole map, and move between boxes
-with the arrow keys. The course apps below the map open each course as it is today.
+Course apps for a mechanical engineering degree. Each course holds its own labs, notes and
+practice problems. The hub is one page: every course, grouped by subject, and one backup file for
+the progress the courses keep. Projects, such as the satellite and the tank dome, are courses in the
+Projects group.
 
 | Where | What |
 |---|---|
-| `map/` | The map's data and its check: subjects, courses, concepts, course paths. See `map/README.md`. |
-| `MAP.md` | What the map covers and which gaps are most worth a lab. |
 | `site/` | The hub. |
-| `courses/<id>/` | Each course app: labs, notes and problems. The map links into them. |
-| `packages/` | Shared core, subject libraries, shells, track list and checks. |
-| `docs/map/` | The approved prototype the hub is drawn from. |
-| `docs/history/` | Retired plans, kept for the reasoning behind existing material. |
+| `courses/<id>/` | Each course app: labs, notes and problems. |
+| `packages/` | Shared core, subject libraries, shells, the track list and checks. |
+| `docs/ocw/` | Indexes of the MIT OpenCourseWare material the courses cite. |
+| `docs/history/` | Retired plans, kept for the reasoning behind existing material. The concept map and the hub's Today, Map and Build tabs are in `docs/history/map-2026-11-10/`. |
 
 The hub publishes to https://flux-study.pages.dev. `flux.pages.dev` is an unrelated site, so this
 project does not use that hostname.
@@ -34,13 +19,10 @@ project does not use that hostname.
 ```bash
 npm install
 npm start               # http://localhost:5173
-npm test                # every workspace, the map check and the dependency-direction check
-npm run smoke           # the hub at 380, 720 and 1280px, every map lab link
+npm test                # every workspace and the dependency-direction check
+npm run smoke           # the hub at 380, 720 and 1280px, every course link
 npm run build
-npm run map-audit       # labs and notes sections no concept references
-npm run map-gaps        # concepts with no lab, most worth building first
-npm run map-sources     # open every unchecked source link
 ```
 
 [DEPLOY.md](DEPLOY.md) covers publishing. [AGENTS.md](AGENTS.md) is the rules, including how to add
-a concept, a thread and a lab.
+a lab.

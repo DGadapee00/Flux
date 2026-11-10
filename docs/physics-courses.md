@@ -56,11 +56,12 @@ presenting these topics as finished labs.
 
 All explanations, diagrams and exercises are written for Flux. External textbook and OCW
 references are links for further reading. No source figures, text or exercise statements are
-reproduced. Source links and checked dates are recorded in the concept map.
+reproduced. Source links and reading dates are recorded in the unit notes. The map metadata is retained
+in `docs/history/map-2026-11-10/`; the hub keeps its simplified course list.
 
 ## Verification
 
-`npm test` checks the courses, map, tracks, grading, storage and backup integration.
+`npm test` checks the courses, tracks, grading, storage and backup integration.
 `npm run build` assembles the three course apps under the hub. After building,
 `npm run smoke:physics -w @flux/site` drives the production preview in Chromium at 390×844
 and 1280×800, with both theme settings. It checks all 12 lab routes, slider and scenario updates,

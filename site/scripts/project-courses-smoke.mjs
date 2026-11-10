@@ -21,10 +21,10 @@ try{
  const target=await wait(async()=>(await(await fetch(`http://127.0.0.1:${port}/json/list`)).json()).find(t=>t.type==='page'));
  page=new CDP(target.webSocketDebuggerUrl);await page.open();await page.send('Page.enable');await page.send('Runtime.enable');await fs.mkdir(out,{recursive:true});
  const click=s=>page.eval(`document.querySelector(${JSON.stringify(s)}).click()`);
- async function navigate(path){await page.send('Page.navigate',{url:'about:blank'});await wait(()=>page.eval('location.href === "about:blank"'));await page.send('Page.navigate',{url:'http://127.0.0.1:5186/'+path});await wait(()=>page.eval('!!window.__gauss?.courseId || !!document.querySelector("[data-project-course]")'));}
+ async function navigate(path){await page.send('Page.navigate',{url:'about:blank'});await wait(()=>page.eval('location.href === "about:blank"'));await page.send('Page.navigate',{url:'http://127.0.0.1:5186/'+path});await wait(()=>page.eval('!!window.__gauss?.courseId || !!document.querySelector("[data-course=dome]")'));}
  const shot=async name=>{await delay(120);const r=await page.send('Page.captureScreenshot',{format:'png'});await fs.writeFile(`${out}/${name}.png`,Buffer.from(r.data,'base64'));};
- await navigate('#applications');
- assert.equal(await page.eval('document.querySelector("[data-project-course=dome]").getAttribute("href")'),'dome/');
+ await navigate('');
+ assert.equal(await page.eval('document.querySelector("[data-course=dome]").getAttribute("href")'),'dome/');
  assert.equal(await page.eval('document.querySelector("#traveler-workbench")'),null);
  for(const theme of ['light','dark'])for(const [width,height]of [[390,844],[1280,800]]){
   await page.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<600});
@@ -58,8 +58,6 @@ try{
   assert.equal(await page.eval('window.__gauss.app.lab'),null);
   await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-integration`);
  }
- await navigate('?traveler=fsw-dome&station=proof#applications');
- await wait(()=>page.eval('location.pathname==="/dome/" && window.__gauss?.app.labId==="proof"'));
  assert.deepEqual(page.errors,[]);
- console.log(`Project course checks passed. Standard units, labs, notes, practice and legacy links. Screenshots: ${out}`);
+ console.log(`Project course checks passed. Standard units, labs, notes and practice in the simplified hub. Screenshots: ${out}`);
 }finally{page?.ws.close();chrome.kill();await new Promise(resolve=>server.httpServer.close(resolve));}

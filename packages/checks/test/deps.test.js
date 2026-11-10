@@ -74,19 +74,6 @@ test('a shell may import core, and a course may import a shell', () => {
   ]);
 });
 
-test('the map may read a course catalog, and a course may not import the map', () => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'flux-deps-map-'));
-  write(root, 'map/package.json', { name: '@flux/map' });
-  write(root, 'site/package.json', { name: '@flux/site' });
-  write(root, 'map/catalog.js', "import * as demo from '../courses/demo/src/data/catalog.js';\n");
-  write(root, 'courses/demo/src/data/catalog.js', 'export const LAB_META = {};\n');
-  write(root, 'courses/demo/src/back.js', "import { SUBJECTS } from '@flux/map';\n");
-  write(root, 'site/src/map.js', "import { SUBJECTS } from '@flux/map';\n");
-
-  const messages = scan(root).map((v) => v.message);
-  assert.deepEqual(messages, ["courses imports map via '@flux/map'"]);
-});
-
 /**
  * @param {string} root
  * @param {string} rel

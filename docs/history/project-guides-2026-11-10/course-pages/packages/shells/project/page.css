@@ -1,0 +1,255 @@
+/*
+ * A project page: a course in the Projects group that reads as a document, not a lab stage.
+ * The same look as the hub: near-black or paper ground, condensed display type, a serif for
+ * reading, mono for meta. Light and dark follow the system; data-theme on <html> overrides it.
+ * The tokens match site/src/styles.css. build.css draws what sits on the page.
+ */
+:root {
+  --bg: #0b0c0e;
+  --panel: #131418;
+  --line: #2a2c31;
+  --fg: #ece6e2;
+  --muted: #aaa39e;
+  --dim: #8f8983;
+  --focus: #ece6e2;
+  --accent: #58c4dd;
+  --stage: #0b0c0e;
+  --display: 'IBM Plex Sans Condensed', 'Arial Narrow', system-ui, sans-serif;
+  --body: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  /*
+   * The type scale: six sizes, each with one job. Sans (--display) for headings, names and
+   * controls; serif (--body) for reading text; mono for numbers, metadata and small capitals.
+   */
+  --fs-hero: clamp(30px, 5vw, 40px); /* the project's title */
+  --fs-title: clamp(24px, 3.4vw, 28px); /* the open step's title */
+  --fs-sub: 20px; /* every subheading */
+  --fs-body: 16px; /* reading text, and names in lists */
+  --fs-ui: 14px; /* buttons, captions */
+  --fs-meta: 12px; /* numbers, metadata, small-capital labels */
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --bg: #f6f5f2;
+    --panel: #ffffff;
+    --line: #dcd8d2;
+    --fg: #1d1c1a;
+    --muted: #5d5853;
+    --dim: #6f6963;
+    --focus: #1d1c1a;
+      --accent: #1a7590;
+    color-scheme: light;
+  }
+}
+
+:root[data-theme='light'] {
+  --bg: #f6f5f2;
+  --panel: #ffffff;
+  --line: #dcd8d2;
+  --fg: #1d1c1a;
+  --muted: #5d5853;
+  --dim: #6f6963;
+  --focus: #1d1c1a;
+  --accent: #1a7590;
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--dim);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-block: 20px 40px;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+
+/* ---------- Header ---------- */
+
+.brand {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.mark {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  margin-top: 2px;
+}
+
+.brand-text {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--fs-hero);
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+}
+
+.lede {
+  margin: 0;
+  max-width: 66ch;
+  color: var(--muted);
+}
+
+/* The header is a strip: the mark opens the hub, then the course, then its neighbours. */
+.brand {
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+}
+
+.hub-link {
+  display: flex;
+  flex: none;
+}
+
+.hub-link .mark {
+  margin-top: 0;
+}
+
+.brand-text {
+  flex: 1 1 200px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+}
+
+.brand h1 {
+  font-size: var(--fs-sub);
+}
+
+.brand .lede {
+  font: var(--fs-meta)/1.5 var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.project-nav {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 0 1 auto;
+  gap: 0 18px;
+  font-family: var(--display);
+  font-weight: 600;
+}
+
+.project-nav a,
+.project-nav span {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+.project-nav a:hover,
+.project-nav a:focus-visible {
+  color: var(--fg);
+}
+
+.project-nav [aria-current='page'] {
+  color: var(--fg);
+  border-bottom-color: var(--accent);
+}
+
+.project-nav .is-unbuilt {
+  color: var(--dim);
+}
+
+.project-nav .nav-gap {
+  flex: 1;
+  min-width: 12px;
+  min-height: 0;
+}
+
+.project-nav a.nav-action {
+  gap: 6px;
+  color: var(--accent);
+}
+
+/* On a phone the neighbours take their own row, and the course's own links sit at its end. */
+@media (max-width: 600px) {
+  .project-nav {
+    flex-basis: 100%;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+footer {
+  font-family: var(--mono);
+  font-size: var(--fs-meta);
+  color: var(--dim);
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+footer p {
+  margin: 0;
+}
+
+footer a {
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

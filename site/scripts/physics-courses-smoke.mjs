@@ -62,21 +62,13 @@ try{
    assert.ok(await page.eval(`localStorage.getItem('flux.${course}.problems.v1')`));
   }
   if(notesOnly)continue;
-  await navigate('#courses');
-  await wait(()=>page.eval('document.body.dataset.activeTab==="courses" && !!document.querySelector("[data-course=nuclear]")'));
+  await navigate('');
+  await wait(()=>page.eval('!!document.querySelector("[data-course=nuclear]")'));
   await page.eval(`document.documentElement.dataset.theme='${theme}'`);
   for(const course of Object.keys(courses))assert.ok(await page.eval(`!!document.querySelector('[data-course="${course}"][href="${course}/"]')`),`${course} hub link`);
   assert.equal(await page.eval('document.documentElement.scrollWidth>innerWidth'),false);
   await shot(`${theme}-${width}-hub-courses`);
-  for(const [course,concept,lab] of [['modern','special-relativity','relativity'],['quantum','wavefunction-probability','packet'],['nuclear','radioactive-decay','decay']]){
-   await navigate(`#${concept}`);
-   await wait(()=>page.eval(`document.body.dataset.activeTab==='map' && !!document.querySelector('#detail [data-lab="${course}/${lab}"]')`));
-   await page.eval(`document.documentElement.dataset.theme='${theme}'`);
-   assert.equal(await page.eval('document.documentElement.scrollWidth>innerWidth'),false);
-   await shot(`${theme}-${width}-hub-${course}`);
-   await click(`#detail [data-lab="${course}/${lab}"]`);
-   await wait(()=>page.eval(`window.__gauss?.courseId==='${course}' && window.__gauss.app.labId==='${lab}'`));
-  }
+
  }
  assert.deepEqual(page.errors,[]);
  console.log(`${notesOnly?'Physics reference notes checks passed':'Physics checks passed: 12 labs, slider/scenario updates, notes, practice grading and saved progress'} at both sizes and themes. Screenshots: ${out}`);
