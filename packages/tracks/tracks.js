@@ -92,6 +92,7 @@ export const TRACKS = [
       { id: 'bench', code: 'BENCH', title: 'Electronics on the bench', term: null, href: 'bench/' },
       { id: 'design', code: 'DES', title: 'Design practice', term: null, href: 'design/' },
       { id: 'satellite', code: 'SAT', title: 'Build a satellite', term: null, href: 'satellite/guide.html' },
+      { id: 'dome', code: 'DOME', title: 'A tank dome through the shop', term: null, href: 'dome/' },
     ],
   },
 ];

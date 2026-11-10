@@ -8,6 +8,17 @@ import { FOUNDATIONS } from './foundations.js';
 
 const CARDS = Object.fromEntries(TRACKS.flatMap((track) => track.courses.map((course) => [course.id, course])));
 
+/**
+ * Travelers a decision's option can point to: one part followed through the shop, to show how the
+ * process is run. Each is its own course. packages/checks tests that the course still has it.
+ */
+export const TRAVELERS = {
+  'fsw-dome': { course: 'dome', title: 'A stir-welded tank dome' },
+};
+
+/** Where a traveler opens, or null for an id no course has. */
+export const travelerLink = (id) => (TRAVELERS[id] ? siblingHref(`${TRAVELERS[id].course}/`) : null);
+
 /** A course's code as the hub prints it: `PHY 2048`, `BENCH`. */
 export const courseCode = (id) => CARDS[id]?.code || id.toUpperCase();
 

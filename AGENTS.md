@@ -50,6 +50,18 @@ subjects → core.
 | `npm run scorecard` | Measures each course unit by unit. |
 | `npm run smoke` | Drives the hub at three widths and follows every course link. |
 
+### Add a course
+
+A new course is a workspace in `courses/<id>/`. The hub finds it in four places:
+
+1. `packages/tracks/tracks.js`: its group, code, title and `href`.
+2. `site/courses.js`: the folders the hub serves and `scripts/assemble.mjs` copies.
+3. The root `package.json` build script: `npm run build -w @flux/<id>`, before the site.
+4. `site/test/tracks.test.js`: the lists the hub is checked against.
+
+A course that keeps progress also goes in `site/src/backup.js`, and one with a manifest in
+`packages/checks/scorecard.mjs` and `packages/checks/prereqs.mjs`.
+
 ### Add a lab
 
 Use the `flux-add-lab` skill, which builds on `npm run new-lab`. A lab goes in the course and the
@@ -68,6 +80,10 @@ A project is a course in the Projects group of `packages/tracks/tracks.js`.
   page: seven subsystems, each a how-to with a method, references and a checklist, reviewed in a
   Claude Project from a brief the page builds. Structure also has decisions on material, process,
   joints and finish. The labs (`index.html`) show the aerospace ideas no degree course teaches.
+- **A tank dome through the shop** (`courses/dome/`) is one page: a traveler, which follows one
+  part through the shop, station by station, to show how a process is run. It shows what the
+  engineer decides, what goes wrong and the paper each step leaves. The satellite's Joints decision
+  links to it.
 - **Electronics on the bench** (`courses/bench/`) and **Design practice** (`courses/design/`).
 
 A project page reads as a document, not a lab stage. It uses the project shell

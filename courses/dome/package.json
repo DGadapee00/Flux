@@ -1,0 +1,21 @@
+{
+  "name": "@flux/dome",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4192 --strictPort",
+    "test": "node --test scripts/traveler.test.mjs",
+    "deploy": "node -e \"console.error('This copy ships with the hub. From the repo root: npm run deploy'); process.exit(1)\""
+  },
+  "dependencies": {
+    "@flux/shells": "*",
+    "@flux/tracks": "*"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}

@@ -4,6 +4,9 @@ import { LABS as STA_LABS } from '../../../courses/sta3032/src/labs/index.js';
 import { RECIPES } from '../../../courses/satellite/src/guide/recipes.js';
 import { DECISIONS } from '../../../courses/satellite/src/guide/decisions/index.js';
 import { FOUNDATIONS as SATELLITE_FOUNDATIONS } from '../../../courses/satellite/src/guide/foundations.js';
+import { TRAVELERS } from '../../../courses/satellite/src/guide/links.js';
+import dome from '../../../courses/dome/src/traveler.js';
+import { FOUNDATIONS as DOME_FOUNDATIONS } from '../../../courses/dome/src/foundations.js';
 import { LAB_CATALOGS, STA3032_TITLES, notesIndexes } from '../catalogs.mjs';
 import { notesOf, notesTarget } from '../../tracks/routes.js';
 
@@ -59,4 +62,17 @@ test('the satellite guide links to labs and notes sections their courses still h
   for (const owner of [...RECIPES, ...DECISIONS]) {
     for (const id of owner.foundations || []) assert.ok(SATELLITE_FOUNDATIONS[id], `${owner.id}: ${id}`);
   }
+});
+
+test('the dome traveler links to labs and notes sections their courses still have', () => {
+  checkFoundations('dome', DOME_FOUNDATIONS);
+  for (const s of dome.stations) {
+    for (const id of s.foundations) assert.ok(DOME_FOUNDATIONS[id], `dome ${s.id}: ${id}`);
+  }
+});
+
+test('a traveler the satellite guide points to is the one its course holds', () => {
+  assert.deepEqual(Object.keys(TRAVELERS), [dome.id]);
+  assert.equal(TRAVELERS[dome.id].course, 'dome');
+  assert.equal(TRAVELERS[dome.id].title, dome.title);
 });

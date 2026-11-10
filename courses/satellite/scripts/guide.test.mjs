@@ -5,7 +5,7 @@ import { DECISIONS, decisionById, decisionsOf, optionById } from '../src/guide/d
 import { conflicts, derive, formatValue, linksOf } from '../src/guide/decide.js';
 import { FOUNDATIONS } from '../src/guide/foundations.js';
 import { decisionRecord, projectInstructions, reviewBrief } from '../src/guide/brief.js';
-import { courseCode, foundation, labLink, notesLink } from '../src/guide/links.js';
+import { TRAVELERS, courseCode, foundation, labLink, notesLink, travelerLink } from '../src/guide/links.js';
 
 /**
  * The project guide's data and text: the recipes, the Structure decisions, the briefs and the
@@ -267,6 +267,14 @@ test('links leave the guide for the course that holds the lab', () => {
   assert.equal(taught.code, 'PHY 2048');
   assert.deepEqual(foundation('composite-laminates'), { id: 'composite-laminates', title: 'Composite laminates', href: null, code: null });
   assert.throws(() => foundation('nowhere'), /No foundation/);
+});
+
+test('the Welded joint leads to the traveler that shows how a weld is run', () => {
+  assert.equal(optionById.welded.option.traveler, 'fsw-dome');
+  assert.equal(travelerLink('fsw-dome'), '../dome/');
+  assert.equal(travelerLink('nowhere'), null);
+  // Every traveler an option names is one the guide can link to.
+  for (const d of DECISIONS) for (const o of d.options) if (o.traveler) assert.ok(TRAVELERS[o.traveler], `${o.id}: ${o.traveler}`);
 });
 
 // ---------- Briefs ----------
