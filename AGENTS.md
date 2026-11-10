@@ -85,8 +85,10 @@ An application is a project the map leads to, such as a satellite built subsyste
 Its recipes are in `map/applications/` and name concepts and labs already on the map; they add no
 new labs. A recipe's `gap` says what is still to build, and `npm run map-gaps` ranks a gap higher
 when a recipe needs it. Each recipe is a reference and how-to (method, references, checklist);
-the work is reviewed in a Claude Project from a brief the hub builds. `docs/map/applications.md`
-has the details.
+the work is reviewed in a Claude Project from a brief the hub builds. A recipe can also list
+decisions (`map/applications/decisions/`): the choices of material, process, joints and finish
+that turn its sizing into hardware. Every figure on a decision names a source that was read, and
+`map/test/decisions.test.js` checks it. `docs/map/applications.md` has the details.
 
 ### Audit a course
 

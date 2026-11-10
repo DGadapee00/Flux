@@ -149,3 +149,48 @@ test('a hub backup from before Fluids was added restores and keeps the Fluids re
   restoreHubBackup(before, parts);
   assert.deepEqual(fluids.store.readJSON('problems'), { v: 1, kept: true });
 });
+
+// ---------- The Make side: decisions ----------
+
+const { DECISIONS, decisionById } = await import('@flux/map/applications/decisions/index.js');
+const { decisionRecord } = await import('../src/applications/brief.js');
+
+test('a decision record carries the question, the drivers, every option and five prompts, as plain text', () => {
+  for (const d of DECISIONS) {
+    const text = decisionRecord(d, { recipe: recipeById[d.subsystem] });
+    assert.match(text, new RegExp(`^# Decision: ${d.question.replace(/[?]/g, '\\?')}`), d.id);
+    assert.ok(text.includes(recipeById[d.subsystem].title), `${d.id} names its subsystem`);
+    for (const driver of d.drivers) assert.ok(text.includes(driver), `${d.id}: ${driver}`);
+    for (const o of d.options) assert.ok(text.includes(o.name), `${d.id}: ${o.name}`);
+    for (const n of [1, 2, 3, 4, 5]) assert.match(text, new RegExp(`^${n}\\. `, 'm'), `${d.id} prompt ${n}`);
+    assert.match(text, /^1\. I chose: *$/m, `${d.id}: with no pick the first line is left to fill in`);
+    assert.ok(!/<[a-z]/i.test(text), `${d.id} record is plain text`);
+    assert.ok(!text.includes('—'), `${d.id} record has no em dash`);
+  }
+});
+
+test('a decision record states the pick with its figures, and any other pick it conflicts with', () => {
+  const d = decisionById['structure-material'];
+  const picks = { 'structure-material': 'al-6061-t6', 'structure-process': 'printed-metal' };
+  const text = decisionRecord(d, { recipe: recipeById.structure, picks });
+  assert.match(text, /^1\. I chose: Aluminium 6061-T6$/m);
+  // The pick's own numbers are on its line, with units, so the record stands alone.
+  assert.match(text, /Aluminium 6061-T6 \(my pick\): .*68 GPa.*2\.70 g\/cm³/);
+  assert.match(text, /E\/ρ 25\.2/);
+  // The clash with the process pick is stated, with its reason.
+  assert.match(text, /Conflicts with my pick for "How is the frame made\?": Print in metal\./);
+  assert.ok(text.includes('powder bed machines run their own aluminium alloy'));
+  // The other decisions' picks are listed, since the four are one choice.
+  assert.match(text, /How is the frame made\?: Print in metal/);
+  // A pick that is not one of this decision's options is not recorded.
+  assert.match(decisionRecord(d, { recipe: recipeById.structure, picks: { 'structure-material': 'bolted' } }), /^1\. I chose: *$/m);
+});
+
+test('the structure brief asks for its four decision records, and the reviewer is told how to judge one', () => {
+  const text = reviewBrief(recipeById.structure, { byId: concepts, recipeById });
+  assert.match(text, /## Decisions to record/);
+  for (const d of DECISIONS.filter((x) => x.subsystem === 'structure')) assert.ok(text.includes(d.question), d.id);
+  // A subsystem with no decisions yet has no such section.
+  assert.ok(!reviewBrief(recipeById.orbit, { byId: concepts, recipeById }).includes('## Decisions to record'));
+  assert.match(projectInstructions(), /decision record/i);
+});
