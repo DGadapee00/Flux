@@ -21,6 +21,9 @@ export const TRACKS = [
         term: 'Fall 2026',
         href: 'phy2049/',
       },
+      { id: 'modern', code: 'MOD', title: 'Modern Physics', term: null, href: 'modern/' },
+      { id: 'quantum', code: 'QNT', title: 'Quantum Physics', term: null, href: 'quantum/' },
+      { id: 'nuclear', code: 'NUC', title: 'Nuclear Physics', term: null, href: 'nuclear/' },
     ],
   },
   {
@@ -91,6 +94,7 @@ export const TRACKS = [
       { id: 'bench', code: 'BENCH', title: 'Electronics on the bench', term: null, href: 'bench/' },
       { id: 'design', code: 'DES', title: 'Design practice', term: null, href: 'design/' },
       { id: 'satellite', code: 'SAT', title: 'Build a satellite', term: null, href: 'satellite/' },
+      { id: 'dome', code: 'DOME', title: 'Tank dome', term: null, href: 'dome/' },
     ],
   },
 ];

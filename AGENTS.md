@@ -11,8 +11,8 @@ and gaps decide what gets built next.
 - The data is in `map/` (`map/README.md` has the shape). `MAP.md` says what it covers.
 - The hub (`site/`) has four tabs, one shown at a time (`site/src/tabs.js`). It opens on Today:
   reviews that follow threads on the map, the next concept to learn and the next exam, read from
-  the course apps' own records (`site/src/learner/`). Map holds the concept map, Build the
-  applications and travelers, and Courses the course apps and the progress backup. A link to a concept opens
+  the course apps' own records (`site/src/learner/`). Map holds the concept map, Projects links to project courses in the same shell as Bench and
+  Design, and Courses holds the course apps and progress backup. A link to a concept opens
   the Map tab on it; `#review-…` opens Today, `#applications` Build, `#progress` Courses.
 - The approved look and data shape are in `docs/map/prototype-flux-thread.html`.
 - The old course-by-course plan is archived in `docs/history/guidance-2026-11-02/`. It is history.
@@ -81,17 +81,20 @@ are checked only one way is not done.
 
 ### Applications
 
-An application is a project the map leads to, such as a satellite built subsystem by subsystem.
-Its recipes are in `map/applications/` and name concepts and labs already on the map; they add no
-new labs. A recipe's `gap` says what is still to build, and `npm run map-gaps` ranks a gap higher
-when a recipe needs it. Each recipe is a reference and how-to (method, references, checklist);
-the work is reviewed in a Claude Project from a brief the hub builds. A recipe can also list
-decisions (`map/applications/decisions/`): the choices of material, process, joints and finish
-that turn its sizing into hardware. Every figure on a decision names a source that was read, and
-`map/test/decisions.test.js` checks it. A traveler (`map/applications/travelers/`) follows one
-part through the shop, station by station, to show how a process is run: what the engineer
-decides, what goes wrong, and the paper each step leaves. Its figures name their sources too.
-`docs/map/applications.md` has the details.
+Projects use the normal course structure: units, labs, notes and practice. Satellite and Tank
+Dome are served at `satellite/` and `dome/`, beside Bench and Design. Do not reintroduce the
+standalone project shell, Claude brief controls, option-picking cards or foundations lists.
+The owner's course-layout decision supersedes the earlier standalone guide design.
+
+Build methods, checklists, deliverables, interfaces, material/process comparisons and references
+belong in the unit notes. Shop-floor judgement cases belong in worked examples, not automatically
+marked practice. Numeric labs and problems share checked models and the normal practice engine.
+New numeric labs still need independent checks as described above. Notes-only units must say
+that their labs are not built yet.
+
+Historical recipes in `map/applications/` remain available as source references and for compatibility.
+The former interface is archived under `docs/history/project-guides-2026-11-10/`. Do not follow its
+interface instructions. `docs/map/applications.md` describes the current courses and model limits.
 
 ### Audit a course
 

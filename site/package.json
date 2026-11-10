@@ -9,13 +9,16 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
     "test": "node --test test/*.test.js",
-    "smoke": "node scripts/smoke.mjs && node scripts/applications-smoke.mjs",
-    "smoke:applications": "node scripts/applications-smoke.mjs"
+    "smoke": "node scripts/smoke.mjs && node scripts/project-courses-smoke.mjs && node scripts/physics-courses-smoke.mjs",
+    "smoke:physics": "node scripts/physics-courses-smoke.mjs",
+    "smoke:applications": "node scripts/project-courses-smoke.mjs",
+    "smoke:equipment": "node scripts/project-courses-smoke.mjs"
   },
   "dependencies": {
     "@flux/map": "*",
     "@flux/tracks": "*",
-    "katex": "^0.16.47"
+    "katex": "^0.16.47",
+    "three": "^0.172.0"
   },
   "devDependencies": {
     "vite": "^6.0.0"

@@ -7,10 +7,13 @@ Computation Methods are on the map. MAP 2302 gained six concepts and six labs fo
 exact equations, substitutions, balance models, variation of parameters, Cauchy–Euler equations and
 higher-order equations. On 8 November 2026 the last 37 gaps got labs, in EML 4140, EMA 3010,
 EGN 3203, EML 3101, EML 3015 and EEL 3111, and the same day five aerospace component concepts
-joined as new gaps (see below). For the live numbers run `node map/check.mjs`,
+joined as new gaps (see below). On 10 November, Modern Physics, Quantum Physics and Nuclear
+Physics added twelve concepts with checked labs, notes and practice in the standard course shell.
+Their introductory scope and model limits are in [Physics after PHY 2049](docs/physics-courses.md).
+For the live numbers run `node map/check.mjs`,
 `npm run map-audit` and `npm run map-gaps`.
 
-**280 concepts, 275 with a Flux lab, 5 gaps.**
+**292 concepts, 287 with a Flux lab, 5 gaps.**
 
 | Lane | Concepts | With a lab |
 |---|---|---|
@@ -20,6 +23,9 @@ joined as new gaps (see below). For the live numbers run `node map/check.mjs`,
 | Numerical methods | 14 | 13 |
 | Mechanics | 34 | 34 |
 | Electricity and magnetism | 27 | 27 |
+| Relativity | 1 | 1 |
+| Quantum physics | 7 | 7 |
+| Nuclear physics | 4 | 4 |
 | Thermodynamics | 22 | 22 |
 | Fluid mechanics | 20 | 20 |
 | Heat transfer | 19 | 19 |
@@ -40,6 +46,9 @@ Every Flux course app is on the map: every lab and every notes section sits on a
 | MAP 2302 Differential Equations | 20 |
 | PHY 2048 Physics I | 27 |
 | PHY 2049 Physics II | 33 |
+| Modern Physics | 4 |
+| Quantum Physics | 4 |
+| Nuclear Physics | 4 |
 | EGN 3311 Statics | 8 |
 | EGN 3321 Dynamics | 15 |
 | EGN 3331 Mechanics of Materials | 15 |

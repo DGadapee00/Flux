@@ -10,5 +10,6 @@ export default {
     { id: 's2', n: 2, title: 'Bits in noise', lab: 'noise', ch: ['2'], topics: ['noise'] },
     { id: 's3', n: 3, title: 'The link budget', lab: 'link', ch: ['2'], topics: ['link'], home: true },
     { id: 's4', n: 4, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 'build-it', n: 5, title: 'Build it', lab: null, ch: [] },
   ],
 };

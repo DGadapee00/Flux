@@ -11,5 +11,6 @@ export default {
     { id: 's3', n: 3, title: 'Orbit transfers', lab: 'transfer', ch: ['1'], topics: ['transfer'], home: true },
     { id: 's5', n: 4, title: 'Eclipses and ground-station passes', lab: 'passes', ch: ['1'], topics: ['passes'], home: true },
     { id: 's4', n: 5, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 'build-it', n: 6, title: 'Build it', lab: null, ch: [] },
   ],
 };

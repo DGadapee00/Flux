@@ -26,6 +26,7 @@ export default {
     },
   ],
   labs: [
+    { course: 'dome', lab: 'repairs', notes: ['nonconformance'], note: 'The tank dome course: checked numbers tied to shop decisions and verification evidence.' },
     { course: 'ema3010', lab: 'grain', notes: ['s5'], note: 'Yield strength against grain size for three metals, with a slider for the spread of sizes: boundaries, though defects, make a metal stronger. The log-normal closed form is checked by integrating over the distribution.' },
   ],
 };

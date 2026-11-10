@@ -21,6 +21,10 @@
 export const STATUSES = ['taken', 'taking now', 'next term', 'later'];
 
 export const COURSES = [
+  { id: 'modern', code: 'MOD', title: 'Modern Physics', status: 'later', app: 'modern/' },
+  { id: 'quantum', code: 'QNT', title: 'Quantum Physics', status: 'later', app: 'quantum/' },
+  { id: 'nuclear', code: 'NUC', title: 'Nuclear Physics', status: 'later', app: 'nuclear/' },
+
   { id: 'mac2311', code: 'MAC 2311–2312', title: 'Calculus I and II', status: 'taken', app: 'mac2311/' },
   { id: 'mac2313', code: 'MAC 2313', title: 'Calculus III', status: 'taken', app: 'mac2313/' },
   { id: 'phy2048', code: 'PHY 2048', title: 'Physics I', status: 'taken', app: 'phy2048/' },
@@ -41,6 +45,7 @@ export const COURSES = [
   // The satellite application as a project: the aerospace concepts it needs that no course on the
   // map teaches yet. A real course (controls, astrodynamics) joins a concept's list when it is added.
   { id: 'satellite', code: 'SAT', title: 'Build a satellite', kind: 'project', app: 'satellite/' },
+  { id: 'dome', code: 'DOME', title: 'Tank dome', kind: 'project', app: 'dome/' },
   // Design practice: designing, making and testing parts, and the sensors, actuators and boards in
   // them. A project until the owner's design and measurement courses join the map (6 November 2026).
   { id: 'design', code: 'DES', title: 'Design practice', kind: 'project', app: 'design/' },

@@ -9,5 +9,6 @@ export default {
     { id: 's1', n: 1, title: 'The radiation balance', lab: 'balance', ch: ['6'], topics: ['radiation-balance'], home: true },
     { id: 's3', n: 2, title: 'Two faces and a link', lab: 'nodes', ch: ['6'], topics: ['nodes'], home: true },
     { id: 's2', n: 3, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 'build-it', n: 4, title: 'Build it', lab: null, ch: [] },
   ],
 };

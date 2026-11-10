@@ -21,7 +21,7 @@
     <a href="#s3"><span>2</span>Battery fade and array ageing</a>
     <h3>Reference</h3>
     <a href="#s2"><span>3</span>Formula sheet</a>
-  </nav>
+  <a href="#build-it"><span>4</span>Build it</a></nav>
 </header>
 <main>
 
@@ -82,6 +82,8 @@ T_e = T\,\frac{\arcsin(R/r)}{\pi}, \qquad P_\text{sun} = P_L\,\frac{T_s + T_e/(\
 \[ \frac{dC}{dn} = -k\left(\frac{E}{C}\right)^2, \quad C(n) = (C_0^3 - 3kE^2n)^{1/3}, \qquad P(y) = P_0(1 - f)^y. \]
 </section>
 
+
+<section class="topic" id="build-it"><h2><span class="n">4</span>Build it</h2><p>Keep the electronics powered through sunlight and eclipse.</p><h3>Method</h3><ol><li>List every load with its power and the share of each orbit it runs.</li><li>Split the orbit into sunlight and eclipse using the Orbit numbers.</li><li>Size the battery for the eclipse: energy needed divided by the depth of discharge you allow and the path efficiency.</li><li>Size the array to run the loads in sunlight and refill the battery, at end of life, not at launch.</li><li>Add a margin and say how big it is and why.</li><li>Check one orbit by stepping the battery’s charge through sun and shadow.</li></ol><h3>What to produce</h3><p>A power budget, battery capacity and solar-array requirement.</p><h3>Handoff to other subsystems</h3><p>Give Thermal the dissipated power. Give every powered subsystem its allowed draw.</p><h3>Review checklist</h3><ul><li>Every load is listed with power and duty cycle.</li><li>Battery size follows from eclipse energy, depth of discharge and efficiency.</li><li>Array size covers loads plus recharge, with degradation.</li><li>A margin is stated.</li><li>A step-through of one orbit agrees with the budget.</li><li>Dissipated power is passed to Thermal.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>List each load and its duty cycle. Size stored energy for your eclipse duration, include conversion losses and reserve, and check that sunlight can recharge it.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l3_scpowersys_dm_done2/" target="_blank" rel="noopener">MIT 16.851, Lecture 3: Spacecraft power systems</a>: Arrays, batteries, depth of discharge and end-of-life sizing.</li><li><a href="https://en.wikipedia.org/wiki/Solar_panels_on_spacecraft" target="_blank" rel="noopener">Wikipedia, Solar panels on spacecraft</a>: How arrays are used in orbit and why they degrade.</li></ul></section>
 </main>
 <footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, on power systems.</footer>
 </body>

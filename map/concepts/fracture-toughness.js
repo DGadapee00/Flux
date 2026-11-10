@@ -26,6 +26,7 @@ export default {
     },
   ],
   labs: [
+    { course: 'dome', lab: 'inspection', notes: ['inspection'], note: 'The tank dome course: checked numbers tied to shop decisions and verification evidence.' },
     { course: 'ema3010', lab: 'griffith', notes: ['s2'], note: 'A cracked plate with sliders for crack length and stress against the toughness: it can break far below yield. K = σ√(πa) is checked against the exact elastic stress at the tip, extrapolated by Richardson’s method.' },
   ],
 };

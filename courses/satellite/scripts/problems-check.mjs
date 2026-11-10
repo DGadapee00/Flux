@@ -272,6 +272,8 @@ for (const [key, st] of trapStats) {
 if (!ONLY) {
   for (const exam of EXAMS) {
     const tpls = problemsForExam(exam.id);
+    // A deliberately notes-only unit has no practice population to audit yet.
+    if (exam.notesOnly && exam.labs.length === 0 && tpls.length === 0) continue;
     const share = tpls.filter(conceptual).length / Math.max(1, tpls.length);
     if (share < 0.25) err(exam.id, `${Math.round(share * 100)}% conceptual; the standard asks at least 25%`);
   }

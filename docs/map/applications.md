@@ -1,128 +1,54 @@
-# Applications
+# Project courses
 
-The concept map shows how ideas connect. Applications show what those ideas help a person build.
-The first application is an educational satellite model, reached from the hub's Applications link.
-`?application=satellite&component=power#applications` opens a subsystem.
+Projects use the same course shell as Bench and Design: units, lab tabs, setup, readouts,
+Notes and Practice. The hub links to `satellite/` and `dome/`. It no longer mounts a satellite
+guide or a separate shop traveler. Old project URLs open the corresponding course unit.
 
-## A recipe is a reference and a how-to
+## Satellite
 
-Each subsystem recipe in `map/applications/satellite.js` holds:
+The existing six units retain their labs, problems and notes. Each unit's notes now include
+Build it: method, deliverable, subsystem handoff, checklist and references. The Structure unit
+also holds the material, process, joint and finish comparison tables, options, tradeoffs and
+sources. These are readable notes, without option-picking or conflict feedback.
 
-- `concepts`: the foundations on the map. Each shows where the learner stands, from Today.
-- `labs`: the Flux labs that teach those foundations.
-- `method`: the steps to do the work, in order.
-- `references`: sources read and chosen for the subsystem, each with our own reason.
-- `checklist`: what a good result contains. It is also the review's rubric.
-- `demonstrate`, `deliverable`, `interface`: the task, what to produce and what it passes on.
-- `requires`: every subsystem whose numbers it uses. Communications needs the payload's data volume
-  and Thermal needs its operating limits, so both require Payload. Components are listed and
-  numbered in build order: working from 01 to 07 never needs a later one. A test keeps that order.
-- `gap`: what Flux has not built for this step yet.
+Unit 7 covers sensor payload and integration. It is explicitly notes-only until it has labs
+and practice. Its build checklists do not claim automatic grading or flight qualification.
 
-Existing courses, labs and notes stay where they are. Satellite-specific labs and the coupled
-mission simulator remain visible gaps. A recipe does not imply those tools are built.
+## Tank dome
 
-## Decisions: the Make side
+The course is in `courses/dome/` and uses `@flux/shells/engineering`, as Bench, Design and
+Satellite do. Its units group the eleven original stations:
 
-A recipe sizes a subsystem. Its decisions turn that sizing into hardware, framed as one shop that
-takes raw stock in and sends tested hardware out. Structure has the first four: material, process,
-joints and finish. `?application=satellite&component=structure&decision=structure-material#applications`
-opens one.
+1. Design and materials: requirements, design, material characterization and panels. Lab: weld land sizing.
+2. Joining and inspection: fit-up, qualification, welding and inspection. Lab: inspection capability.
+3. Repair and disposition: nonconformance, repair evidence and corrective action. Lab: repair strength.
+4. Proof and acceptance: proof, leak evidence, traceability and release. Lab: proof test.
 
-A decision is a card to read in a minute. It is one file in `map/applications/decisions/`:
+The notes keep the engineer's decisions, failure modes, records, floor questions, worked
+reasoning, references and transfer challenges. The four shop-floor cases are worked examples
+for judgement and discussion. They are not multiple-choice answers to mark.
 
-- `question`, `lede` and two or three `drivers`: the requirements that decide it.
-- `options`: the usual three to six. Each has a value for every column, the case `for` and
-  `against`, and `own`: what the shop must have to run it in-house.
-- `columns` and, where the figures allow, `derived` columns computed from them.
-- `pick`: the usual pick and why. `changes`: what would change it. `watch`: what bites later.
-- `links`: an option goes with, or rules out, options of the other decisions, each with a reason.
-  Design, material and process are one choice. A link is written once and read from both ends.
-- `concepts` on the map and `references`.
+Thirteen numeric practice templates use the same model as the labs and the normal course
+practice engine. Standard course progress, backup export and restore include the dome.
 
-Every figure names its source. `map/applications/decisions/refs.js` lists each source with the
-date it was read and our own reason. An option that states a figure must name a reference, and
-`map/test/decisions.test.js` fails when one does not. The same test recomputes the derived columns
-a second way, checks that the plate index ranks materials as the mass of a sized plate does, and
-checks each claim the cards make about the numbers against the numbers in the table.
+The checked numeric model lives in `packages/subjects/src/mechanics/tank-dome.js`. The old
+map import remains a compatibility export through the course. The course independently checks
+pressure line load by integrating traction around a cylindrical half-shell, then checks the
+ultimate and proof-yield utilizations. These are pressure-only barrel-seam estimates, not a
+complete analysis of a shaped dome, service life, supports or flight loads. Inspection capability
+is not an acceptance limit; repaired coupon ratios are not an authorized hardware disposition.
 
-On the hub (`site/src/applications/make.js`) a pick in one card marks what it goes with and rules
-out in the others, and `conflicts()` in `map/applications/decide.js` reports picks that cannot be
-made together. Picks live in the page only. Each card builds a five-line decision record to copy
-out: the choice, what drove it, what was rejected and why, the risk accepted, and what would change
-it. The facts are filled in and the reasons are left to write. The subsystem's review brief asks
-for the records, and the Project instructions say how to judge one.
+The improved dome, tensile frame, contour mill, stir tool, ultrasonic section and test article
+are course scene models in `courses/dome/src/visuals/`. They use the course's canvas, camera,
+setup controls and readout. They do not mount a second header, typography system or worksheet.
+Apparatus motion and curves remain explanatory rather than machine qualification data.
 
-To add a decision: write its file, add it to `decisions/index.js`, and list its id on the recipe's
-`decisions` in the order the choices are made. Read every source before citing it.
+## Archive and compatibility
 
-Still to build: drills in a course app's problem bank, and decisions for the other subsystems.
+The earlier standalone interfaces and review workflow are preserved under
+`docs/history/project-guides-2026-11-10/`. Claude briefs, Project instructions, conflict-picking
+cards and foundations lists are absent from the live project courses. Old application backup
+records and local guide notes are kept; they are not converted into course mastery.
 
-## Travelers: how a process is run
-
-A decision says which process to pick. A traveler shows how that process is run, by following one
-part through the shop. Build has two views, and a switch between them: the satellite, and Follow a
-part. `?traveler=fsw-dome&station=schedule#applications` opens a station. The Welded option on the
-Joints decision links to the traveler.
-
-The first traveler is a friction stir welded tank dome: the 5.5 m dome NASA built at Marshall from
-eight gore panels, a ring and a fitting in alloy 2195. It is one file,
-`map/applications/travelers/fsw-dome.js`, with eleven stations from requirement to design. Every
-station holds the same things:
-
-- `what` happens, and what the engineer `decides`.
-- `wrong`: what goes wrong, why, and how it is found.
-- `paper`: the documents the station produces, such as the weld procedure and its qualification
-  record, the nonconformance report and the data package.
-- `ask`: what to ask on the floor.
-- `concepts` on the map, and `sources`.
-- `numbers`: optional, a block of the part's own numbers. `part`: what the drawing lights.
-
-The dome's numbers follow it (`travelers/dome-numbers.js`). The learner sets the design pressure
-and the diameter at the first station. From those come the load in each seam, the weld land that
-neither breaks at 1.4 times pressure nor yields at proof, the crack each standard inspection is
-counted on to find as a share of that land, what each repair kept of the weld's strength, and the
-stress at proof. Everything but the two inputs is a figure a source states. The tests check the
-seam loads against a force balance by integration, check the land against both strength checks
-the other way round, and check each claim a station makes against the numbers.
-
-A traveler carries `cases`: a situation at a station, what is known, a task and a rubric. The page
-builds a case brief, with the dome as set, to take to the Claude Project. The Project instructions
-say how to judge one. Flux keeps nothing.
-
-Sources are NASA reports and standards, TWI and reference articles, each read on its `checked`
-date. A station that states a figure must name a source. Standards that are sold, such as AWS
-D17.3, are named and not reproduced. To add a traveler: write its file, add it to
-`travelers/index.js`, and give `site/src/applications/traveler.js` a drawing of its part.
-
-Still to build: travelers for machining from plate and metal printing.
-
-## Review happens in a Claude Project
-
-Flux teaches and refers; it does not grade the work. The learner makes one Claude Project for the
-satellite and pastes the Project instructions into it once (the hub has a copy button). For each
-subsystem, the hub builds a review brief: the task, its inputs, the method, the checklist, the
-foundations with the learner's standing, the references, and a slot for the learner's numbers. The
-learner opens a new chat in the Project, pastes the brief and attaches their work. A fresh chat
-keeps each review on its own. The instructions ask the reviewer to recompute every number by a
-second method, go through the checklist item by item, and name the next step.
-
-`site/src/applications/brief.js` writes both texts as plain text. A test checks that each brief
-carries the task, every checklist item, every reference and every input subsystem.
-
-Orbit keeps a number check as a self-check. You give an altitude, a speed and a period; Flux
-computes the speed and period from \(v=\sqrt{GM/r}\) and again by integrating the orbit
-(`packages/subjects/src/mechanics/orbit-check.js`). Within 1% of both passes. It records nothing.
-
-## Earlier records
-
-Earlier versions kept capability records in the hub (studied, demonstrated, integrated) and linked
-a separate design-review site for enclosure files. Both are gone from the page. Records already
-saved stay in the browser at `flux.applications.satellite.v1` and in Progress backups, so an old
-backup still restores; `site/src/applications/progress.js` keeps that format. Deleting them is the
-owner's call.
-
-`npm run map-gaps` adds 2 to a gap's score for each recipe that names it, and prints which recipes
-use it. `npm run smoke` runs the applications browser check after the hub's: every subsystem's
-brief, the copy buttons, the Orbit self-check, the Make side's cards, picks and records, every
-station of the traveler, its numbers and a case brief, and no sideways scroll at 390 and 1280 px.
+`site/scripts/project-courses-smoke.mjs` checks the hub links, both course shells, all four dome
+labs, numeric answer submission, notes, the satellite closing unit, legacy URLs and layout.

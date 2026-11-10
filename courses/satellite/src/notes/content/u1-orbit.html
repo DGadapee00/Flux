@@ -24,7 +24,7 @@
     <a href="#s5"><span>4</span>Eclipses and ground-station passes</a>
     <h3>Reference</h3>
     <a href="#s4"><span>5</span>Formula sheet</a>
-  </nav>
+  <a href="#build-it"><span>6</span>Build it</a></nav>
 </header>
 <main>
 
@@ -132,6 +132,8 @@ M = \sqrt{\mu/a^3}\,t = E - e\sin E, \qquad \tan\frac\nu2 = \sqrt{\frac{1+e}{1-e
 \[ T = 2\pi\sqrt{r^3/\mu}, \quad t_\text{e} = \frac{T}{\pi}\arcsin\frac{R}{r}, \quad \lambda = \arccos\!\left(\frac{R}{r}\cos\varepsilon\right) - \varepsilon, \quad t_\text{p} = \frac{T\lambda}{\pi}. \]
 </section>
 
+
+<section class="topic" id="build-it"><h2><span class="n">6</span>Build it</h2><p>Predict where the satellite goes and how long each orbit takes.</p><h3>Method</h3><ol><li>Pick an altitude and say why: lifetime against drag, coverage, launch options.</li><li>Measure r from Earth’s centre: r = R + h.</li><li>Compute speed from v = √(GM/r) and period from T = 2πr/v, with units at every step.</li><li>Check the period a second way: integrate the orbit, or use T = 2π√(r³/GM).</li><li>Estimate the longest eclipse: the share of the orbit behind Earth for a circular orbit at that altitude.</li><li>List what you assumed: circular orbit, no drag, spherical Earth.</li></ol><h3>What to produce</h3><p>An orbit model with altitude, speed, period and assumptions.</p><h3>Handoff to other subsystems</h3><p>Pass the period and an estimated eclipse duration to Power. Pass the ground range to Communications.</p><h3>Review checklist</h3><ul><li>r is measured from Earth’s centre, not the surface.</li><li>Speed and period agree with a second method within 1%.</li><li>Units are stated and carried through.</li><li>The eclipse duration is estimated and explained.</li><li>Assumptions are listed, with what each one leaves out.</li><li>The numbers Power and Communications need are stated.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>Choose an altitude for a circular Earth orbit. Compute speed and period, state your units, and check the period by a second method.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/resources/mit16_07f09_lec15/" target="_blank" rel="noopener">MIT 16.07, Lecture 15: Central force motion, Kepler’s laws</a>: Orbits from the central-force equations.</li><li><a href="https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/resources/mit16_07f09_lec17/" target="_blank" rel="noopener">MIT 16.07, Lecture 17: Orbit transfers</a>: How a satellite gets to the orbit you chose.</li></ul></section>
 </main>
 <footer>Our own notes, written for Flux. Read alongside MIT 16.07 Dynamics, Lectures 15 and 17. Earth's radius 6378 km.</footer>
 </body>

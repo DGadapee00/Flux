@@ -1,0 +1,1 @@
+export default {exam:'u7',title:'Payload and integration',chapters:'7',file:'u7-integration.html',load:()=>import('../content/u7-integration.html?raw').then(m=>m.default),sections:[{id:'payload',n:1,title:'Sensor payload',lab:null,ch:[]},{id:'integration',n:2,title:'Integration',lab:null,ch:[]}]};

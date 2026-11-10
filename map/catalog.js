@@ -16,6 +16,10 @@ import * as egn3203 from '../courses/egn3203/src/data/catalog.js';
 import * as ema3010 from '../courses/ema3010/src/data/catalog.js';
 import * as eml4140 from '../courses/eml4140/src/data/catalog.js';
 import * as eel3111 from '../courses/eel3111/src/data/catalog.js';
+import * as modern from '../courses/modern/src/data/catalog.js';
+import * as quantum from '../courses/quantum/src/data/catalog.js';
+import * as nuclear from '../courses/nuclear/src/data/catalog.js';
+import * as dome from '../courses/dome/src/data/catalog.js';
 import * as satellite from '../courses/satellite/src/data/catalog.js';
 import * as mac2311 from '../courses/mac2311/src/data/catalog.js';
 import * as mac2313 from '../courses/mac2313/src/data/catalog.js';
@@ -61,6 +65,10 @@ function fromUnits(units, titles = {}) {
 
 /** @type {Record<string, Record<string, { unit: string, title: string }>>} */
 export const LAB_CATALOGS = {
+  modern: fromMeta(modern.LAB_META),
+  quantum: fromMeta(quantum.LAB_META),
+  nuclear: fromMeta(nuclear.LAB_META),
+
   bench: fromMeta(bench.LAB_META),
   egn3321: fromMeta(egn3321.LAB_META),
   egn3331: fromMeta(egn3331.LAB_META),
@@ -73,6 +81,7 @@ export const LAB_CATALOGS = {
   eml4140: fromMeta(eml4140.LAB_META),
   eel3111: fromMeta(eel3111.LAB_META),
   satellite: fromMeta(satellite.LAB_META),
+  dome: fromMeta(dome.LAB_META),
   mac2311: fromMeta(mac2311.LAB_META),
   mac2313: fromMeta(mac2313.LAB_META),
   map2302: fromMeta(map2302.LAB_META),

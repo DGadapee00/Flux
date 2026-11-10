@@ -26,6 +26,7 @@ export default {
     },
   ],
   labs: [
+    { course: 'dome', lab: 'lands', notes: ['panels'], note: 'The tank dome course: checked numbers tied to shop decisions and verification evidence.' },
     { course: 'egn3331', lab: 'vessel', notes: ['s1', 's2'], note: 'A closed cylinder against a sphere at the same pressure and wall.' },
     { course: 'egn3331', lab: 'tank', notes: ['s3'], note: 'A 20 lb propane cylinder at its service pressure.' },
   ],

@@ -1,0 +1,3 @@
+const set={"exam":"u2","title":"Joining and inspection","chapters":"2","file":"u2-notes.html","sections":[{"id":"fitup","n":1,"title":"Fit-up and fixturing","lab":"inspection","ch":["2"],"topics":["dome"],"home":true},{"id":"schedule","n":2,"title":"Weld schedule","lab":"inspection","ch":["2"],"topics":["dome"],"home":false},{"id":"weld","n":3,"title":"The weld","lab":"inspection","ch":["2"],"topics":["dome"],"home":false},{"id":"inspection","n":4,"title":"Inspection","lab":"inspection","ch":["2"],"topics":["dome"],"home":false}]};
+set.load=()=>import('../content/u2-notes.html?raw').then(m=>m.default);
+export default set;
