@@ -15,7 +15,8 @@ export function createHUD(api) {
     code: course.code,
     title: course.title,
     courseId: course.id,
-    track: trackSiblings(course.id),
+    // The project guide (guide.html) is this course's front page. The row ends with a way back to it.
+    track: [...trackSiblings(course.id), { id: 'guide', code: 'GUIDE →', title: 'The project guide: subsystems, methods and checklists', href: 'guide.html' }],
     homeId,
     notes: notesDeps,
   });

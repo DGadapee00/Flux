@@ -1,4 +1,4 @@
-import { importBundle, mountHubBackup } from '@flux/core';
+import { browserStorage, createStore, importBundle, mountHubBackup } from '@flux/core';
 import { courseStore as calc1Store } from '@flux/mac2311/src/storage.js';
 import { courseStore as calc2Store } from '@flux/mac2312/src/storage.js';
 import { courseStore as macStore } from '@flux/mac2313/src/storage.js';
@@ -19,7 +19,17 @@ import { courseStore as circuitsStore } from '@flux/eel3111/src/storage.js';
 import { courseStore as satelliteStore } from '@flux/satellite/src/storage.js';
 import { courseStore as thermo2Store } from '@flux/eml3101/src/storage.js';
 import { courseStore as benchStore } from '@flux/bench/src/storage.js';
-import { applicationStore } from './applications/progress.js';
+
+/**
+ * The hub's Build tab once kept satellite records under this key. The tab is gone (archived in
+ * docs/history/map-2026-11-10/), but backup files made then carry an `applications` section, and a
+ * section the hub does not know fails a restore. So the store stays, and the records ride along.
+ */
+export function applicationStore(storage = browserStorage()) {
+  return createStore({ courseId: 'applications', storage, slots: [
+    { name: 'satellite', version: 1, key: 'flux.applications.satellite.v1' },
+  ] });
+}
 
 /** Course stores, in the order a backup file writes them. */
 export function backupParts() {

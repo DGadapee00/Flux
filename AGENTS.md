@@ -1,23 +1,18 @@
 # Flux: rules for agents
 
-Flux is one concept map that runs across the degree. Each concept is a node: a short idea in our
-own words, its key equation, what it builds on, where it leads, two or three vetted sources, and the
-Flux lab and notes that show it. Courses are paths through the map. The labs, notes and problems in
-`courses/` are where the map leads, and they stay.
+Flux is a set of course apps. Each course holds its own labs, notes and practice problems. The hub
+(`site/`) is one page: every course, grouped by subject, and one backup of the progress the
+courses keep. Projects, such as the satellite, are courses in the Projects group.
 
-The map grows one concept, one thread or one lab at a time. A concept with no lab is a visible gap,
-and gaps decide what gets built next.
-
-- The data is in `map/` (`map/README.md` has the shape). `MAP.md` says what it covers.
-- The hub (`site/`) has four tabs, one shown at a time (`site/src/tabs.js`). It opens on Today:
-  reviews that follow threads on the map, the next concept to learn and the next exam, read from
-  the course apps' own records (`site/src/learner/`). Map holds the concept map, Build the
-  applications and travelers, and Courses the course apps and the progress backup. A link to a concept opens
-  the Map tab on it; `#review-…` opens Today, `#applications` Build, `#progress` Courses.
-- The approved look and data shape are in `docs/map/prototype-flux-thread.html`.
-- The old course-by-course plan is archived in `docs/history/guidance-2026-11-02/`. It is history.
-  Do not follow it. Code comments that cite a decision number (D5, D23 …) or
-  `docs/COURSE-STANDARD.md` refer to that archive.
+- A course is a folder, `courses/<id>/`. `courses/README.md` says what one is made of.
+- The hub's groups are in `packages/tracks/tracks.js`. `site/courses.js` lists the course folders
+  the hub serves.
+- Two earlier plans are archived. They are history. Do not follow them.
+  - `docs/history/guidance-2026-11-02/`: every course built in order to one standard. Code
+    comments that cite a decision number (D5, D23 …) or `docs/COURSE-STANDARD.md` refer to it.
+  - `docs/history/map-2026-11-10/`: one concept map across the degree, with the hub's Today, Map
+    and Build tabs. Code comments that mention the map, a concept, a lane or `map/paths/…` refer
+    to it. Its README says how to bring the map back.
 
 ## Rules that protect the repo
 
@@ -25,8 +20,8 @@ and gaps decide what gets built next.
    instructor's permission recorded, and never ship. `packages/checks/raw.mjs` enforces this.
 2. **No student names, grades or submissions** anywhere in the repo.
 3. **Copy nothing** from textbooks, course packs or MIT OpenCourseWare: no text, figures or
-   problem statements. Write our own and cite. MIT's name appears only as attribution. A concept's
-   idea is written fresh; a source is a link with our own one-line reason.
+   problem statements. Write our own and cite. MIT's name appears only as attribution. A source is
+   a link with our own one-line reason, opened and read before it is cited.
 4. **OCW reference material** is fetched with `npm run ocw -- <slug>` into the git-ignored
    `reference/` folder and is never committed. `docs/ocw/<slug>.md` is the index.
 5. **`npm test` and `npm run build` pass before anything is pushed to `main`.** A push to `main`
@@ -37,80 +32,79 @@ and gaps decide what gets built next.
    `flux-content-drop` skill describe. Leave those files, `.github/workflows/canvas-ingest.yml` and
    everything under `courses/*/incoming/` alone unless the task is the content drop.
 9. **Existing labs, notes, problems, libraries and shells are not rewritten, moved or deleted** to
-   fit the map. Touch them only where the map must link in (a route, an id).
+   fit a new layout. Change one only when the task is about that material.
 10. **Old-plan pull requests** stay as they are. Do not extend or merge them unless the owner asks.
 
-## The map
+## Courses
 
-`npm test` runs `map/check.mjs`. It fails on a duplicate id, a prerequisite that names no concept, a
-cycle, a lab or notes section the course does not have, a missing field, a URL that is not https,
-TeX KaTeX cannot parse, an em dash in our prose, a concept with no lab and no `candidate`, and a
-course path that does not match its concepts.
+A course app is a manifest, a catalog of units, its labs, its notes and its problem bank. It
+imports `@flux/core`, `@flux/subjects`, `@flux/shells` and `@flux/tracks`. `npm test` runs
+`packages/checks/deps.mjs`, which fails when the direction is broken: courses → shells →
+subjects → core.
 
 | Command | What it does |
 |---|---|
-| `npm run map-audit` | Every lab and notes section that no concept references, by course. |
-| `npm run map-gaps` | Concepts with no lab, ranked by how much a lab would serve. |
-| `npm run map-sources` | Opens every source without a `checked` date and prints its status and title. |
+| `npm start` | The hub on port 5173, with every course served under `/<id>/`. |
+| `npm run dev -w @flux/<id>` | One course on its own port. |
 | `npm run new-lab` | Scaffolds a lab inside a course app. |
+| `npm run scorecard` | Measures each course unit by unit. |
+| `npm run smoke` | Drives the hub at three widths and follows every course link. |
 
-### Add a concept
+### Add a course
 
-Use the `flux-add-concept` skill. In short: one file, `map/concepts/<id>.js`, with `id`, `title`,
-`subject`, `courses`, `eq`, `idea`, `requires`, `sources`, and `labs` or a `candidate`. Open every
-source link and read it before you cite it, then set `checked` to the date. If the concept is
-taught in a course that has a path, add it to `map/paths/<course>.js`.
+A new course is a workspace in `courses/<id>/`. The hub finds it in four places:
 
-### Add a thread
+1. `packages/tracks/tracks.js`: its group, code, title and `href`.
+2. `site/courses.js`: the folders the hub serves and `scripts/assemble.mjs` copies.
+3. The root `package.json` build script: `npm run build -w @flux/<id>`, before the site.
+4. `site/test/tracks.test.js`: the lists the hub is checked against.
 
-A thread is a chain of `requires` that crosses lanes, like flux running from Calculus III through
-Gauss's law to control volumes and heat transfer. To add one, add the concepts it needs and the
-`requires` edges between them. Each concept's idea says, in a sentence, how it uses the one before.
-Check the chain on the hub: choose its last concept and the solid lines should trace the thread.
+A course that keeps progress also goes in `site/src/backup.js`, and one with a manifest in
+`packages/checks/scorecard.mjs` and `packages/checks/prereqs.mjs`.
 
 ### Add a lab
 
-A lab is built for a gap on the map, not for a course checklist. Start from `npm run map-gaps` or a
-concept's `candidate`. Use the `flux-add-lab` skill, which builds on `npm run new-lab`. When the lab
-works, put it in the concept's `labs` and drop the `candidate` if the lab covers it.
+Use the `flux-add-lab` skill, which builds on `npm run new-lab`. A lab goes in the course and the
+unit that teach its idea.
 
 **Every lab recomputes its numbers and checks them by a second method in its course's tests.** A
 closed form against a numeric integration, a sum against an integral, one route through the
 algebra against another. The course's `labs-check` runs both on every scenario. A lab whose numbers
 are checked only one way is not done.
 
-### Applications
+### Projects
 
-An application is a project the map leads to, such as a satellite built subsystem by subsystem.
-Its recipes are in `map/applications/` and name concepts and labs already on the map; they add no
-new labs. A recipe's `gap` says what is still to build, and `npm run map-gaps` ranks a gap higher
-when a recipe needs it. Each recipe is a reference and how-to (method, references, checklist);
-the work is reviewed in a Claude Project from a brief the hub builds. A recipe can also list
-decisions (`map/applications/decisions/`): the choices of material, process, joints and finish
-that turn its sizing into hardware. Every figure on a decision names a source that was read, and
-`map/test/decisions.test.js` checks it. A traveler (`map/applications/travelers/`) follows one
-part through the shop, station by station, to show how a process is run: what the engineer
-decides, what goes wrong, and the paper each step leaves. Its figures name their sources too.
-`docs/map/applications.md` has the details.
+A project is a course in the Projects group of `packages/tracks/tracks.js`.
 
-### Audit a course
+- **Build a satellite** (`courses/satellite/`) has two pages. The guide (`guide.html`) is its front
+  page: seven subsystems, each a how-to with a method, references and a checklist, reviewed in a
+  Claude Project from a brief the page builds. Structure also has decisions on material, process,
+  joints and finish. The labs (`index.html`) show the aerospace ideas no degree course teaches.
+- **A tank dome through the shop** (`courses/dome/`) is one page: a traveler, which follows one
+  part through the shop, station by station, to show how a process is run. It shows what the
+  engineer decides, what goes wrong and the paper each step leaves. The satellite's Joints decision
+  links to it.
+- **Electronics on the bench** (`courses/bench/`) and **Design practice** (`courses/design/`).
 
-Use the `flux-audit-course` skill: read each lab and notes section `map-audit` lists, attach it to a
-concept or write the concept it shows, and record anything broken or wrong in the PR. Do not fix a
-lab in an audit PR.
+A project page reads as a document, not a lab stage. It uses the project shell
+(`packages/shells/project/`) and keeps none of the learner's work.
+
+Every figure a project quotes names a source that was read, and the project's tests check it. A
+project links into other courses' labs as plain data: course, unit, lab and title.
+`packages/checks/test/project-links.test.js` fails when a linked lab or notes section is gone.
 
 ## Voice
 
-For idea text, notes, labels, docs and commit messages:
+For notes, labels, docs and commit messages:
 
 - Short plain sentences. One idea each.
 - No em dashes. Use a full stop, a colon or a comma.
 - No filler: no "simply", "just", "very", "basically", "it is important to note".
 - Say what a thing does, not that it is powerful or elegant.
-- Equations in TeX: `\( \)` inline, and `eq` for the concept's key equation.
+- Equations in TeX: `\( \)` inline.
 
 ## Checks before a pull request
 
 `npm test`, `npm run build` and `node packages/checks/raw.mjs`. For any change a person sees, take
 screenshots at 390×844 and 1280×800 in light and dark and look at every one: nothing overlaps,
-clips or scrolls sideways. `npm run smoke` drives the hub and follows every map lab link.
+clips or scrolls sideways. `npm run smoke` drives the hub and follows every course link.
