@@ -27,7 +27,7 @@
     <a href="#s8"><span>7</span>Reaction wheels and momentum dumping</a>
     <h3>Reference</h3>
     <a href="#s7"><span>8</span>Formula sheet</a>
-  </nav>
+  <a href="#build-it"><span>9</span>Build it</a></nav>
 </header>
 <main>
 
@@ -216,6 +216,8 @@ G(s) = \frac{K}{(s - p)(s - \bar p)}, \quad p = \sigma \pm j\omega, \qquad \text
 \[ \frac{dH}{dt} = \tau_\text{dist} - \tau_\text{dump}, \qquad \overline{\tau}_\text{dump} = \tfrac{2}{\pi}mB, \qquad t_\text{full} = \frac{H_\text{max}}{\tau_0 - \tfrac{2}{\pi}mB}. \]
 </section>
 
+
+<section class="topic" id="build-it"><h2><span class="n">9</span>Build it</h2><p>Turn the satellite toward a target and account for its angular momentum.</p><h3>Method</h3><ol><li>Find the moments of inertia from the mass layout Structure gives you.</li><li>Set a pointing requirement: how far off target and how steady.</li><li>List disturbance torques and estimate the largest.</li><li>Size an actuator: the torque to turn in the time you need, and the momentum it must store.</li><li>Sketch the feedback loop: sensor, controller, actuator, and the gains you start from.</li><li>Check a turn: torque times time against the change in angular momentum.</li></ol><h3>What to produce</h3><p>A pointing model, torque estimate and actuator power allowance.</p><h3>Handoff to other subsystems</h3><p>Give Communications and Payload a pointing limit. Return actuator demand to the power budget.</p><h3>Review checklist</h3><ul><li>Inertias come from the mass layout.</li><li>Pointing accuracy and stability are stated.</li><li>The largest disturbance torque is estimated.</li><li>Actuator torque and stored momentum are sized.</li><li>The control loop is drawn with its sensor and actuator.</li><li>Actuator power goes back to Power.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>Use your mass layout to estimate inertia. Predict a turn under a stated torque and check its angular impulse. Define a pointing-error target and explain how feedback would correct a disturbance.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l9_acs/" target="_blank" rel="noopener">MIT 16.851, Lecture 9: Attitude determination and control</a>: Sensors, reaction wheels, gravity gradient and control on a satellite.</li><li><a href="https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/resources/mit16_07f09_lec28/" target="_blank" rel="noopener">MIT 16.07, Lecture 28: Euler’s equations</a>: The rigid-body equations and spin stability.</li><li><a href="https://ocw.mit.edu/courses/16-06-principles-of-automatic-control-fall-2012/resources/mit16_06f12_lecture_10/" target="_blank" rel="noopener">MIT 16.06, Lecture 10: PID control</a>: What each control term does.</li></ul></section>
 </main>
 <footer>Our own notes, written for Flux. Read alongside MIT 16.07 Dynamics, Lecture 3, on coordinate transformations, and Lecture 28, on Euler's equations, and MIT 16.06 on feedback.</footer>
 </body>

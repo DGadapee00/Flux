@@ -1,0 +1,1 @@
+export const PRINCIPLES={'model-and-units':{name:'State the model and keep units consistent',statement:'Identify the physical model, convert units before substitution, check a limiting case and compare the result with an independent calculation.',cue:'A model calculation, a limiting case or a probability normalization.',family:'Physics'}};

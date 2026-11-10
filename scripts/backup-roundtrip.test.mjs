@@ -21,6 +21,10 @@ import { courseStore as computationStore } from '@flux/egn3203/src/storage.js';
 import { courseStore as matsciStore } from '@flux/ema3010/src/storage.js';
 import { courseStore as heatStore } from '@flux/eml4140/src/storage.js';
 import { courseStore as circuitsStore } from '@flux/eel3111/src/storage.js';
+import { courseStore as modernStore } from '@flux/modern/src/storage.js';
+import { courseStore as quantumStore } from '@flux/quantum/src/storage.js';
+import { courseStore as nuclearStore } from '@flux/nuclear/src/storage.js';
+import { courseStore as domeStore } from '@flux/dome/src/storage.js';
 import { courseStore as satelliteStore } from '@flux/satellite/src/storage.js';
 import { courseStore as thermo2Store } from '@flux/eml3101/src/storage.js';
 import { courseStore as odeStore } from '@flux/map2302/src/storage.js';
@@ -45,6 +49,11 @@ const COURSES = [
   ['eml4140', heatStore],
   ['eel3111', circuitsStore],
   ['satellite', satelliteStore],
+  ['dome', domeStore],
+  ['modern', modernStore],
+  ['quantum', quantumStore],
+  ['nuclear', nuclearStore],
+
   ['eml3101', thermo2Store],
 ];
 
@@ -70,7 +79,7 @@ test('each course export restores that course and rejects another course id', ()
 test('one hub file round-trips every course', () => {
   const saved = parts(true);
   const blob = exportBundle(saved);
-  assert.deepEqual(Object.keys(blob.courses), ['phy2049', 'mac2311', 'mac2312', 'mac2313', 'statics', 'sta3032', 'egn3321', 'eml3100', 'egn3331', 'phy2048', 'map2302', 'eml3015', 'design', 'egn3203', 'ema3010', 'eml4140', 'eel3111', 'satellite', 'eml3101']);
+  assert.deepEqual(Object.keys(blob.courses), ['phy2049', 'mac2311', 'mac2312', 'mac2313', 'statics', 'sta3032', 'egn3321', 'eml3100', 'egn3331', 'phy2048', 'map2302', 'eml3015', 'design', 'egn3203', 'ema3010', 'eml4140', 'eel3111', 'satellite', 'dome', 'modern', 'quantum', 'nuclear', 'eml3101']);
   const fresh = parts(false);
   importBundle(blob, fresh);
   for (let i = 0; i < fresh.length; i++) assert.equal(fresh[i].store.readJSON('problems').n, i);

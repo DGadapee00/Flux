@@ -67,6 +67,7 @@ class Cdp {
  * @param {string} url
  */
 async function navigate(page, url) {
+  const reload = (await evalJson(page, 'location.href')) === url;
   const loaded = new Promise((resolve) => {
     const handler = (message) => {
       if (message.method === 'Page.loadEventFired') {
@@ -76,8 +77,9 @@ async function navigate(page, url) {
     };
     page.on(handler);
   });
-  await page.send('Page.navigate', { url });
+  await page.send(reload ? 'Page.reload' : 'Page.navigate', reload ? {} : { url });
   await loaded;
+  await evalJson(page, 'scrollTo(0, 0)');
 }
 
 /**

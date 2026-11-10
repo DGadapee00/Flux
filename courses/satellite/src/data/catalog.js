@@ -59,6 +59,7 @@ export const EXAMS = [
     labs: ['balance', 'nodes'],
     coming: [],
   },
+  { id:'u7',notesOnly:true,n:7,title:'Payload and integration',chapters:'7',date:'Unit 7',labs:[],coming:['Payload and integration labs'] },
 ];
 
 export const LAB_META = {

@@ -74,24 +74,19 @@ are checked only one way is not done.
 
 ### Projects
 
-A project is a course in the Projects group of `packages/tracks/tracks.js`.
+Projects use the normal course structure: units, labs, notes and practice. Satellite and Tank
+Dome are served at `satellite/` and `dome/`, beside Bench and Design. Do not reintroduce the
+standalone project shell, Claude brief controls, option-picking cards or foundations lists.
+The owner's course-layout decision supersedes the earlier standalone guide design.
 
-- **Build a satellite** (`courses/satellite/`) has two pages. The guide (`guide.html`) is its front
-  page: seven subsystems, each a how-to with a method, references and a checklist, reviewed in a
-  Claude Project from a brief the page builds. Structure also has decisions on material, process,
-  joints and finish. The labs (`index.html`) show the aerospace ideas no degree course teaches.
-- **A tank dome through the shop** (`courses/dome/`) is one page: a traveler, which follows one
-  part through the shop, station by station, to show how a process is run. It shows what the
-  engineer decides, what goes wrong and the paper each step leaves. The satellite's Joints decision
-  links to it.
-- **Electronics on the bench** (`courses/bench/`) and **Design practice** (`courses/design/`).
+Build methods, checklists, deliverables, interfaces, material/process comparisons and references
+belong in unit notes. Shop-floor judgement cases belong in worked examples, not automatically
+marked practice. Numeric labs and problems share checked models and the normal practice engine.
+Notes-only units must say that their labs are not built yet.
 
-A project page reads as a document, not a lab stage. It uses the project shell
-(`packages/shells/project/`) and keeps none of the learner's work.
-
-Every figure a project quotes names a source that was read, and the project's tests check it. A
-project links into other courses' labs as plain data: course, unit, lab and title.
-`packages/checks/test/project-links.test.js` fails when a linked lab or notes section is gone.
+The retired project pages and shell are preserved in
+`docs/history/project-guides-2026-11-10/`. The concept map remains archived under
+`docs/history/map-2026-11-10/`; adding a course does not restore its hub tabs.
 
 ## Voice
 

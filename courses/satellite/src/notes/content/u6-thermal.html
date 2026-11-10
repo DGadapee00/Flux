@@ -21,7 +21,7 @@
     <a href="#s3"><span>2</span>Two faces and a link</a>
     <h3>Reference</h3>
     <a href="#s2"><span>3</span>Formula sheet</a>
-  </nav>
+  <a href="#build-it"><span>4</span>Build it</a></nav>
 </header>
 <main>
 
@@ -77,6 +77,8 @@ mc\,\frac{dT}{dt} = \text{absorbed}(t) + Q - \varepsilon\sigma A T^4.
 \[ \alpha SA_1 = \varepsilon\sigma A_1T_1^4 + G(T_1 - T_2), \qquad Q + H + G(T_1 - T_2) = \varepsilon\sigma A_2T_2^4. \]
 </section>
 
+
+<section class="topic" id="build-it"><h2><span class="n">4</span>Build it</h2><p>Keep the electronics within a chosen temperature range.</p><h3>Method</h3><ol><li>Collect the heat inputs: absorbed sunlight, Earth’s reflected and emitted heat, and the electronics’ dissipation from Power.</li><li>Choose surface finishes and look up their absorptivity and emissivity.</li><li>Write the balance for a hot case in full sun and a cold case in eclipse.</li><li>Solve each for the temperature and compare with the electronics’ limits.</li><li>If a case fails, change finishes, add insulation or a radiator, and solve again.</li><li>State where a single-temperature model stops being true.</li></ol><h3>What to produce</h3><p>Hot and cold temperature estimates with surface assumptions.</p><h3>Handoff to other subsystems</h3><p>Return temperature limits to Power and Payload. A bigger array also changes the exposed area.</p><h3>Review checklist</h3><ul><li>Hot and cold cases are both solved.</li><li>Absorptivity and emissivity are stated with their source.</li><li>Electronics dissipation comes from the power budget.</li><li>Temperatures are compared with stated limits.</li><li>The limits of the lumped model are stated.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>Use the power budget as a heat input. Write a radiation balance for hot and cold cases, include the absorbed environment, and state the limits of a lumped-temperature model.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l23thermalcontro/" target="_blank" rel="noopener">MIT 16.851, Lecture 23: Spacecraft thermal control systems</a>: Surfaces, insulation and radiators.</li><li><a href="https://en.wikipedia.org/wiki/Spacecraft_thermal_control" target="_blank" rel="noopener">Wikipedia, Spacecraft thermal control</a>: The thermal environment in orbit and the ways to stay in range.</li></ul></section>
 </main>
 <footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, on thermal control, and the EML 4140 notes on radiation. Albedo and Earth's infrared are round orbit-average values.</footer>
 </body>

@@ -1,0 +1,41 @@
+/* The 2D labs have no camera, so the 3D buttons and hints step aside. */
+body.plot-lab #btn-work-first,
+body.plot-lab #btn-reset-cam,
+body.plot-lab #hint-orbit,
+body.plot-lab #hint-plane {
+  display: none !important;
+}
+
+body.plot-lab #toggles:not(:has(#toggle-host :is(button, label))) {
+  display: none;
+}
+
+/* Unit references use the course palette and remain readable in the narrow notes panel. */
+.nt-doc a[href] {
+  color: var(--blue);
+  text-underline-offset: 3px;
+}
+.nt-doc a[href]:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+.nt-doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: .94em;
+}
+.nt-doc th,
+.nt-doc td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+.nt-doc th {
+  font-family: var(--font);
+  color: var(--text-muted);
+  font-size: .85em;
+}
+.nt-doc td:first-child { width: 30%; }

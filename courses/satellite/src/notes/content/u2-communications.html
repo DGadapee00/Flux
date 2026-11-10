@@ -22,7 +22,7 @@
     <h3>Reference</h3>
     <a href="#s3"><span>3</span>The link budget</a>
     <a href="#s4"><span>4</span>Formula sheet</a>
-  </nav>
+  <a href="#build-it"><span>5</span>Build it</a></nav>
 </header>
 <main>
 
@@ -110,6 +110,8 @@ P_r = P_tG_tG_r\left(\frac{\lambda}{4\pi d}\right)^2, \qquad L = 20\log_{10}\fra
 \]
 </section>
 
+
+<section class="topic" id="build-it"><h2><span class="n">5</span>Build it</h2><p>Return sensor readings within the available energy and contact time.</p><h3>Method</h3><ol><li>Take the range from Orbit and the data volume from Payload.</li><li>Choose a frequency, transmitter power and antennas, and state their gains.</li><li>Write the link budget in decibels: power plus gains minus path and other losses.</li><li>Compute the noise from the receiver’s noise temperature and bandwidth.</li><li>Find the margin: what you have above what the data rate needs.</li><li>Check that contact time and transmitter energy can return the planned data.</li></ol><h3>What to produce</h3><p>A link budget and a contact-by-contact data and energy estimate.</p><h3>Handoff to other subsystems</h3><p>Take range from Orbit, pointing from Attitude control, power from Power and data volume from Payload. Tell Payload how much data can be returned.</p><h3>Review checklist</h3><ul><li>Every term of the budget is in decibels with its source.</li><li>Path loss follows from range and wavelength.</li><li>Noise follows from temperature and bandwidth.</li><li>A positive margin is shown and its size justified.</li><li>Data returned per contact covers the payload’s volume.</li><li>Transmitter energy goes back to Power.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>State range, frequency, antenna assumptions, data rate and receiver sensitivity. Build a link budget with a margin, then check whether contact time and transmitter energy can return the planned data.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l21satelitecomm2_done/" target="_blank" rel="noopener">MIT 16.851, Lecture 21: Satellite communication</a>: EIRP, space loss, noise and margin.</li><li><a href="https://en.wikipedia.org/wiki/Friis_transmission_equation" target="_blank" rel="noopener">Wikipedia, Friis transmission equation</a>: The equation behind the path loss.</li></ul></section>
 </main>
 <footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, Lecture 21, on satellite communication.</footer>
 </body>

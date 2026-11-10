@@ -1,0 +1,2 @@
+import { makeLab } from './factory.js';
+export default makeLab('lands');

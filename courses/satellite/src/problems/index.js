@@ -21,7 +21,7 @@ export const problemById = (id) => byIdMap.get(id) || null;
 export const problemsForExam = (examId) => PROBLEMS.filter((p) => p.exam === examId);
 export const problemsForLab = (labId) => PROBLEMS.filter((p) => p.lab === labId);
 
-export const CHAPTER_ORDER = ['1', '2', '3', '4', '5', '6'];
+export const CHAPTER_ORDER = ['1', '2', '3', '4', '5', '6', '7'];
 
 export const CHAPTER_TITLES = {
   1: 'Orbit',
@@ -30,4 +30,5 @@ export const CHAPTER_TITLES = {
   4: 'Structure',
   5: 'Power',
   6: 'Thermal control',
+  7: 'Payload and integration',
 };

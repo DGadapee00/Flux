@@ -26,6 +26,7 @@ export default {
     },
   ],
   labs: [
+    { course: 'dome', lab: 'proof', notes: ['proof'], note: 'The tank dome course: checked numbers tied to shop decisions and verification evidence.' },
     { course: 'design', lab: 'verify', notes: ['s4'], note: 'A bracket arm’s strength and stiffness margins by analysis and by a test on its real mount.' },
   ],
 };

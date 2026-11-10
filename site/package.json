@@ -9,7 +9,10 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
     "test": "node --test test/*.test.js",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs && node scripts/project-courses-smoke.mjs && node scripts/physics-courses-smoke.mjs",
+    "smoke:physics": "node scripts/physics-courses-smoke.mjs",
+    "smoke:applications": "node scripts/project-courses-smoke.mjs",
+    "smoke:equipment": "node scripts/project-courses-smoke.mjs"
   },
   "dependencies": {
     "@flux/tracks": "*"

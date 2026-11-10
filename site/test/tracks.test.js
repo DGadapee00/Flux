@@ -20,8 +20,12 @@ const PLATFORM_HREF = {
   eml3015: 'eml3015/',
   eml4140: 'eml4140/',
   eel3111: 'eel3111/',
-  satellite: 'satellite/guide.html',
+  satellite: 'satellite/',
   dome: 'dome/',
+  modern: 'modern/',
+  quantum: 'quantum/',
+  nuclear: 'nuclear/',
+
   eml3101: 'eml3101/',
   design: 'design/',
   egn3203: 'egn3203/',
@@ -67,7 +71,7 @@ test('seven tracks in order, each with a built course unless it is still to come
 });
 
 test('the card opens the latest built course, and D5 is on the list', () => {
-  assert.equal(latestBuilt(TRACKS[0]).id, 'phy2049');
+  assert.equal(latestBuilt(TRACKS[0]).id, 'nuclear');
   assert.equal(latestBuilt(TRACKS[1]).id, 'egn3203');
   assert.equal(latestBuilt(TRACKS[1]).term, null);
   assert.equal(latestBuilt(TRACKS[2]).id, 'egn3331');
@@ -78,7 +82,7 @@ test('the card opens the latest built course, and D5 is on the list', () => {
   assert.equal(latestBuilt(TRACKS[6]).id, 'dome');
   assert.deepEqual(
     builtCourses().map((course) => course.id),
-    ['phy2048', 'phy2049', 'mac2311', 'mac2313', 'map2302', 'egn3203', 'statics', 'egn3321', 'ema3010', 'egn3331', 'sta3032', 'eml3100', 'eml3101', 'eml3015', 'eml4140', 'eel3111', 'bench', 'design', 'satellite', 'dome'],
+    ['phy2048', 'phy2049', 'modern', 'quantum', 'nuclear', 'mac2311', 'mac2313', 'map2302', 'egn3203', 'statics', 'egn3321', 'ema3010', 'egn3331', 'sta3032', 'eml3100', 'eml3101', 'eml3015', 'eml4140', 'eel3111', 'bench', 'design', 'satellite', 'dome'],
   );
 });
 
@@ -143,8 +147,7 @@ test('after a build, each platform copy has an index under site/dist', (t) => {
   }
   for (const course of builtCourses()) {
     if (!PLATFORM_HREF[course.id]) continue;
-    // A course opens on its folder's index, or on a page it names.
-    const index = course.href.endsWith('.html') ? path.join(DIST, course.href) : path.join(DIST, course.href, 'index.html');
+    const index = path.join(DIST, course.href, 'index.html');
     assert.equal(fs.existsSync(index), true, index);
   }
 });

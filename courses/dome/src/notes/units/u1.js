@@ -1,0 +1,3 @@
+const set={"exam":"u1","title":"Design and materials","chapters":"1","file":"u1-notes.html","sections":[{"id":"requirement","n":1,"title":"Requirement","lab":"lands","ch":["1"],"topics":["dome"],"home":true},{"id":"design","n":2,"title":"Design for it","lab":"lands","ch":["1"],"topics":["dome"],"home":false},{"id":"material","n":3,"title":"Material and process","lab":"lands","ch":["1"],"topics":["dome"],"home":false},{"id":"panels","n":4,"title":"Gore panels","lab":"lands","ch":["1"],"topics":["dome"],"home":false}]};
+set.load=()=>import('../content/u1-notes.html?raw').then(m=>m.default);
+export default set;

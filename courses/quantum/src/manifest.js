@@ -1,0 +1,3 @@
+import { defineCourse } from '@flux/core';
+import { EXAMS } from './data/catalog.js';
+export const course=defineCourse({id:'quantum',code:'QNT',title:'Quantum Physics',subject:'physics',track:'physics',order:4,term:'',text:'Original Flux material; external references are linked in the notes. Introductory sequence, not a complete university syllabus.',units:EXAMS.map(e=>({id:e.id,title:e.title,chapters:[e.chapters],date:e.date,labs:e.labs})),chapters:{},standard:false,labs:()=>import('./labs/load.js'),problems:()=>import('./problems/index.js'),notes:()=>import('./notes/index.js'),prereqs:["modern", "mac2311", "map2302"]});

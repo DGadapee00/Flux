@@ -9,8 +9,7 @@
     "./physics/*": "./physics/*",
     "./styles/*": "./styles/*",
     "./notes.js": "./notes.js",
-    "./practice/*": "./practice/*",
-    "./project/*": "./project/*"
+    "./practice/*": "./practice/*"
   },
   "scripts": {
     "test": "node --test test/*.test.js",

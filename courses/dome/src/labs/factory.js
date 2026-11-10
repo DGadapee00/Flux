@@ -1,0 +1,35 @@
+import { defineLab } from '@flux/core';
+import * as T from 'three';
+import { createEquipmentModel } from '../visuals/equipment-3d.js';
+import { checkedDome } from './model.js';
+import { slider,bindSlider } from './widgets.js';
+import { cells,kv } from '../ui/shared.js';
+import { LAB_META } from '../data/catalog.js';
+import { PREDICTIONS } from './predictions.js';
+import { SCENES } from '../visuals/equipment-state.js';
+const f=(n,d=3)=>Number(n.toPrecision(d));
+const kinds={lands:'dome',inspection:'inspection',repairs:'weld',proof:'proof'};
+const modes={lands:['dome','material','panels'],inspection:['inspection','weld'],repairs:['weld'],proof:['proof']};
+export function makeLab(id){
+ const meta=LAB_META[id],kind=kinds[id];
+ return defineLab({id,predictions:PREDICTIONS[id],exam:meta.exam,title:meta.title,kind:'scene3d',app:true,orbit:true,live:false,keys:{r:'reset'},toggles:[],gapLimit:1e-8,
+ hint:'Change the setup. Read the numbers, inspect the apparatus and use Notes and Practice to work through the unit.',
+ scenarios:[{id:'reference',name:'Reference: 235 kPa, 5.5 m',pressureKPa:235,diameterM:5.5},{id:'higher',name:'Higher pressure: 400 kPa, 5.5 m',pressureKPa:400,diameterM:5.5},{id:'smaller',name:'Smaller article: 235 kPa, 3 m',pressureKPa:235,diameterM:3}],
+ defaultState:()=>({pressureKPa:235,diameterM:5.5,progress:kind==='inspection'?.586:0,apparatus:kind,section:kind==='inspection',condition:id==='inspection',scenarioId:'reference',anim:{playing:false}}),
+ applyScenario(sc,s){const row=this.scenarios.find(x=>x.id===sc)||this.scenarios[0];Object.assign(s,{scenarioId:row.id,pressureKPa:row.pressureKPa,diameterM:row.diameterM});},
+ controls(s=this.defaultState()){return `${slider('dome-p','Design pressure, kPa',s.pressureKPa,50,600,5)}${slider('dome-d','Diameter, m',s.diameterM,1,8,.1)}<label class="field"><span>Apparatus</span><select id="dome-apparatus">${modes[id].map(k=>`<option value="${k}">${SCENES[k].title}</option>`).join('')}</select></label>${slider('dome-progress',id==='lands'?'Assembly / process progression':'Process progression',s.progress,0,1,.005)}<label class="field"><span><input type="checkbox" id="dome-section" checked> Reveal joint / interior</span></label>${['proof','inspection'].includes(id)?`<label class="field"><span><input type="checkbox" id="dome-condition"> ${id==='proof'?'Illustrate permanent set':'Include internal reflector'}</span></label>`:''}<button type="button" class="btn ghost" id="dome-play">Play process</button><p class="tiny">The sizing model is pressure-only. Apparatus geometry and animation are illustrative; process progression does not change a qualified strength or inspection result.</p>`;},
+ bind(api){document.getElementById('dome-play').addEventListener('click',()=>{const s=api.slice();s.anim.playing=!s.anim.playing;if(s.progress>=1)s.progress=0;api.bump(false);});bindSlider('dome-p',(s,v)=>s.pressureKPa=v,api);bindSlider('dome-d',(s,v)=>s.diameterM=v,api);bindSlider('dome-progress',(s,v)=>s.progress=v,api);document.getElementById('dome-apparatus').addEventListener('change',e=>{api.slice().apparatus=e.target.value;api.reframe();api.bump();});for(const [field,key]of [['dome-section','section'],['dome-condition','condition']])document.getElementById(field)?.addEventListener('change',e=>{api.slice()[key]=e.target.checked;api.bump();});},
+ syncControls(s){document.getElementById('dome-play').textContent=s.anim.playing?'Pause process':'Play process';document.getElementById('dome-section').closest('label').hidden=!['dome','weld','inspection'].includes(s.apparatus);for(const [field,key]of [['dome-p','pressureKPa'],['dome-d','diameterM'],['dome-progress','progress'],['dome-apparatus','apparatus']]){const el=document.getElementById(field);if(el&&document.activeElement!==el)el.value=s[key];}for(const [field,key]of [['dome-section','section'],['dome-condition','condition']]){const el=document.getElementById(field);if(el)el.checked=s[key];}},
+ cameraFor(s){const k=s.apparatus||kind,target=k==='material'?new T.Vector3(.1,2.3,0):k==='dome'?new T.Vector3(0,.5*s.diameterM/4,0):new T.Vector3(0,1.2,0),d=k==='panels'?11:k==='dome'?8*s.diameterM/4:8;return {pos:target.clone().add(new T.Vector3(d*.72,d*.5,d*.85)),target};},
+ init(ctx){const group=new T.Group();group.visible=false;ctx.scene.add(group);const models={};for(const k of modes[id]){const m=createEquipmentModel(group,k);m.root.visible=false;models[k]=m;}return {group,models};},
+ enter(ctx,h){h.group.visible=true;},exit(ctx,h){h.group.visible=false;},
+ recompute(s,c){Object.assign(c,checkedDome(s));},
+ syncViews(s,c,ctx){const h=ctx.handle;if(!h?.models)return;ctx.grid.visible=s.apparatus==='dome';h.group.visible=true;for(const [k,m]of Object.entries(h.models)){m.root.visible=k===s.apparatus;if(k==='dome')m.root.scale.setScalar(s.diameterM/4);if(m.root.visible)m.update(s.progress,{section:s.section,condition:s.condition});}},
+ tick(dt,s){if(!s.anim.playing)return false;s.progress=Math.min(1,s.progress+dt/14);if(s.progress>=1)s.anim.playing=false;return true;},pointer:null,
+ law:()=>[id==='lands'?String.raw`N=pr,\quad t=\max\left(\frac{1.4N}{F_{tu}},\frac{1.05N}{F_{ty}}\right)`:id==='inspection'?String.raw`\text{relative detectable depth}=a/t`:id==='repairs'?String.raw`\text{retained strength}=F_{tu,\mathrm{repair}}/F_{tu,\mathrm{weld}}`:String.raw`p_{\mathrm{proof}}=1.05p,\quad\sigma_{\mathrm{proof}}=1.05N/t`],
+ liveRows(s,c){if(id==='inspection')return c.flaws.map(x=>kv(x.name,`${f(x.depthMm)} mm depth; ${f(x.share*100)}% of land${x.applies?'':' (outside tabulated thickness range)'}`)).join('');if(id==='repairs')return c.repairs.map(x=>kv(x.name,`${f(x.roomShare*100)}% warm; ${f(x.coldShare*100)}% cold`)).join('');return [kv('Barrel line load',`${f(c.seams.long.load)} N/mm`),kv('Ultimate thickness check',`${f(c.seams.long.ultimateMm)} mm`),kv('Proof-yield thickness check',`${f(c.seams.long.yieldMm)} mm`),kv('Land from pressure only',`${f(c.seams.long.landMm)} mm`),kv('Proof pressure',`${f(c.proofKPa)} kPa`),kv('Independent force-balance error',c.gap.toExponential(1))].join('');},
+ readout(s,c){return cells([['pressure',`${f(c.inputs.pressureKPa)} kPa`],['diameter',`${f(c.inputs.diameterM)} m`],['land',`${f(c.seams.long.landMm)} mm`],['proof',`${f(c.proofKPa)} kPa`]]);},
+ coach(s,c){return {title:meta.title,body:id==='inspection'?'A detectable flaw size is not an acceptance limit. Method capability, coverage and fracture analysis must agree. Read the worked inspection cases in Notes.':id==='repairs'?'A repair changes the joint condition. A coupon strength ratio does not approve hardware; include analysis, procedure, repair history and reinspection.':id==='proof'?'Reaching proof pressure and passing a leak test do not rule out yielding. Check the after-unloading dimensions and their uncertainty.':'The larger of the ultimate and proof-yield checks governs this pressure-only barrel-seam estimate. The actual dome also needs its shape, service conditions and other loads assessed.'};},
+ plot:()=>null,legend:null
+ });
+}

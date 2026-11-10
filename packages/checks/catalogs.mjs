@@ -28,6 +28,14 @@ import * as phy2049 from '../../courses/phy2049/src/data/catalog.js';
 import * as sta3032 from '../../courses/sta3032/src/data/catalog.js';
 import * as statics from '../../courses/statics/src/data/catalog.js';
 
+import * as dome from '../../courses/dome/src/data/catalog.js';
+
+import * as modern from '../../courses/modern/src/data/catalog.js';
+
+import * as quantum from '../../courses/quantum/src/data/catalog.js';
+
+import * as nuclear from '../../courses/nuclear/src/data/catalog.js';
+
 /** @param {Record<string, { exam: string, title?: string }>} meta */
 function fromMeta(meta) {
   return Object.fromEntries(Object.entries(meta).map(([id, m]) => [id, { unit: m.exam, title: m.title || id }]));
@@ -64,6 +72,10 @@ function fromUnits(units, titles = {}) {
 
 /** @type {Record<string, Record<string, { unit: string, title: string }>>} */
 export const LAB_CATALOGS = {
+  dome: fromMeta(dome.LAB_META),
+  modern: fromMeta(modern.LAB_META),
+  quantum: fromMeta(quantum.LAB_META),
+  nuclear: fromMeta(nuclear.LAB_META),
   bench: fromMeta(bench.LAB_META),
   egn3321: fromMeta(egn3321.LAB_META),
   egn3331: fromMeta(egn3331.LAB_META),
