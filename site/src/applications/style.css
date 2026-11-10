@@ -179,3 +179,132 @@ details > summary { cursor: pointer; color: var(--muted); font: var(--fs-meta)/1
 .recipe-record { display: grid; gap: 12px; align-content: start; }
 .recipe-record p { margin: 0; }
 .recipe-inputs button { min-height: 36px; }
+
+/* The Make side: a subsystem's decisions, as cards that open in place (make.js). */
+.make-jump { align-self: center; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--accent); cursor: pointer; font: 600 var(--fs-ui) var(--display); }
+.make-jump:focus-visible, .make-clear:focus-visible, .decision > summary:focus-visible, .option-pick input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.make { border-top: 1px solid var(--line); padding: 22px; scroll-margin-top: 16px; }
+.make-head p:not(.app-kicker) { max-width: 74ch; }
+.make-head h4:focus { outline: none; }
+.make-status-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; }
+.make-status-row .make-status { margin: 0; color: var(--muted); font: var(--fs-meta)/1.6 var(--mono); }
+.make-status:focus { outline: none; }
+.make-clear { min-height: 44px; padding: 0 2px; border: 0; background: none; color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; font: 500 var(--fs-ui) var(--display); }
+.decisions { display: grid; gap: 8px; margin-block: 16px 12px; }
+.decision { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); scroll-margin-top: 16px; min-width: 0; }
+.decision > summary { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 2px 12px; align-items: baseline; min-height: 44px; padding: 14px 16px; cursor: pointer; list-style: none; border-radius: 8px; }
+.decision > summary::-webkit-details-marker { display: none; }
+.decision-title strong { display: block; font: 600 var(--fs-body)/1.25 var(--display); }
+.decision-title span { color: var(--muted); font: var(--fs-ui)/1.4 var(--display); }
+.decision-state { color: var(--muted); text-align: right; font: var(--fs-meta)/1.6 var(--mono); }
+.decision.has-clash { border-style: dashed; border-color: var(--fg); }
+.decision.has-clash .decision-state { color: var(--fg); }
+.decision-body { display: grid; gap: 10px; padding: 0 16px 18px; border-top: 1px solid var(--line); min-width: 0; }
+.decision-body h5 { margin: 12px 0 0; font: 600 var(--fs-body)/1.3 var(--display); }
+.decision-body > p { margin: 0; max-width: 76ch; }
+.decision-lede { padding-top: 14px; }
+.decision-usual { border-left: 3px solid var(--accent); padding: 2px 0 2px 14px; max-width: 76ch; }
+.decision-usual .app-kicker { margin-bottom: 4px; }
+.decision-usual p:last-child { margin: 0; }
+.decision-list { margin: 0; padding-left: 20px; display: grid; gap: 4px; max-width: 76ch; }
+.decision-read { color: var(--muted); }
+.option-table { overflow-x: auto; }
+.option-table table { border-collapse: collapse; width: 100%; font: var(--fs-ui)/1.4 var(--display); }
+.option-table th, .option-table td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+.option-table thead th { color: var(--muted); font-weight: 600; vertical-align: bottom; }
+.option-table thead small { display: block; color: var(--dim); font: var(--fs-meta)/1.5 var(--mono); }
+.option-table tbody th { font-weight: 600; }
+.option-table .num { text-align: right; }
+.option-table td.num { white-space: nowrap; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.option-table tr.is-picked { box-shadow: inset 3px 0 var(--accent); }
+.option-tag { display: inline-block; margin-left: 4px; padding: 0 7px; border: 1px solid var(--line); border-radius: 10px; color: var(--muted); white-space: nowrap; font: 400 var(--fs-meta)/1.6 var(--mono); }
+.options { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 10px; }
+.option { min-width: 0; padding: 10px 14px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); }
+.option.is-picked { border-color: var(--accent); box-shadow: inset 0 3px var(--accent); }
+.option.is-out { border-style: dashed; }
+.option-pick { display: flex; gap: 10px; align-items: center; min-height: 44px; cursor: pointer; font: var(--fs-body)/1.3 var(--display); }
+.option-pick input { flex: none; width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
+.option-note { margin: 0 0 4px; }
+.option dl { display: grid; gap: 2px; margin: 0; }
+.option dt { margin-top: 8px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; font: var(--fs-meta)/1.6 var(--mono); }
+.option dd { margin: 0; font: var(--fs-ui)/1.5 var(--display); }
+.option-standing { margin: 10px 0 0; padding: 8px 10px; border-radius: 6px; font: var(--fs-ui)/1.45 var(--display); }
+.option-standing.is-clash { border: 1px dashed var(--fg); }
+.option-standing.is-fit { border: 1px solid var(--line); color: var(--muted); }
+.decision-record { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.decision-record > p:not(.app-kicker) { max-width: 76ch; }
+.make-note { margin: 0; }
+@media (max-width: 720px) {
+  /* The table becomes one block per option, each figure beside its own label. */
+  .option-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .option-table table, .option-table tbody, .option-table tr, .option-table th, .option-table td { display: block; }
+  .option-table tr { margin-bottom: 8px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; }
+  .option-table tr.is-picked { box-shadow: inset 0 3px var(--accent); border-color: var(--accent); }
+  .option-table th, .option-table td { padding: 3px 0; border: 0; }
+  .option-table td::before { content: attr(data-label); display: block; color: var(--muted); font: var(--fs-meta)/1.7 var(--mono); }
+  /* A figure sits on its label's line. Text goes under its label. */
+  .option-table td.num { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: baseline; text-align: left; white-space: normal; }
+  .decision > summary { grid-template-columns: auto minmax(0, 1fr); }
+  .decision-state { grid-column: 2; text-align: left; }
+}
+@media (max-width: 600px) {
+  .make { padding: 18px; }
+}
+
+/* Build's two views, and a traveler: one part followed through the shop (traveler.js). */
+.build-switch { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 640px; margin-block: 14px 6px; }
+.build-switch button { display: grid; gap: 2px; min-height: 56px; padding: 10px 14px; text-align: left; cursor: pointer; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--fg); font-family: var(--display); }
+.build-switch button[aria-pressed='true'] { border-color: var(--accent); box-shadow: inset 0 3px var(--accent); }
+.build-switch strong { font-size: var(--fs-body); line-height: 1.25; }
+.build-switch small { color: var(--muted); font-size: var(--fs-ui); line-height: 1.3; }
+.build-switch button:focus-visible, .route button:focus-visible, .station-nav button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.dome-figure .dome-skin { fill: var(--panel); stroke: none; }
+.dome-figure .dome-seam { fill: none; stroke: currentColor; stroke-width: 1.4; }
+.dome-figure .dome-land { fill: none; stroke: currentColor; stroke-width: 9; stroke-linecap: round; opacity: 0; }
+.dome-figure .dome-barrel, .dome-figure .dome-cut { fill: none; stroke: currentColor; stroke-width: 1.4; }
+.dome-figure .dome-cut { stroke-dasharray: 4 5; opacity: .55; }
+.dome-figure .dome-ring { fill: var(--panel); stroke: currentColor; stroke-width: 1.4; }
+.dome-figure .dome-tool { fill: var(--panel); stroke: currentColor; stroke-width: 1.4; opacity: 0; }
+.dome-figure .dome-pin { fill: currentColor; stroke: none; opacity: 0; }
+.dome-figure .dome-leader { fill: none; stroke: currentColor; stroke-width: .8; opacity: .6; }
+.dome-figure .dome-labels text { fill: var(--muted); stroke: none; }
+.dome-figure [data-part] { color: var(--muted); transition: color .2s; }
+.dome-figure [data-part].active { color: var(--accent); }
+.dome-figure [data-part='gores'].active .dome-skin { fill: color-mix(in srgb, var(--accent) 16%, var(--panel)); }
+.dome-figure [data-part='lands'].active .dome-land { opacity: .35; }
+.dome-figure [data-part='tool'].active .dome-tool, .dome-figure [data-part='tool'].active .dome-pin { opacity: 1; }
+.route { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.route button { min-height: 62px; }
+.route strong { font-size: var(--fs-ui); }
+.station-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 32px; padding: 22px; }
+.station-grid > section { min-width: 0; }
+.station-wide { grid-column: 1 / -1; }
+.station-numbers { padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.dome-inputs { margin-bottom: 8px; max-width: 420px; }
+.number-rows { display: grid; gap: 0; margin: 0 0 10px; }
+.number-rows > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px 16px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.number-rows dt { color: var(--muted); font: var(--fs-ui)/1.4 var(--display); }
+.number-rows dd { margin: 0; font: var(--fs-ui)/1.4 var(--mono); font-variant-numeric: tabular-nums; }
+.number-rows .is-strong dd { color: var(--accent); font-weight: 600; }
+.station-numbers .app-meta { margin: 0; }
+.paper { display: grid; gap: 10px; margin: 0; }
+.paper dt { font: 600 var(--fs-body)/1.3 var(--display); }
+.paper dd { margin: 2px 0 0; }
+.station-cases > p { max-width: 76ch; }
+.station-cases .case { margin-top: 8px; background: var(--bg); }
+.station-cases .case > summary { grid-template-columns: auto minmax(0, 1fr); }
+.station-nav { display: flex; justify-content: space-between; gap: 12px; padding: 16px 22px; border-top: 1px solid var(--line); }
+.station-nav button { min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--fg); cursor: pointer; text-align: left; font: 600 var(--fs-ui) var(--display); }
+.option-traveler { margin: 10px 0 0; font: 600 var(--fs-ui)/1.4 var(--display); }
+@media (max-width: 850px) {
+  .route { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .station-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .route { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .station-grid, .station-nav { padding: 18px; }
+  .number-rows > div { grid-template-columns: minmax(0, 1fr); }
+  .dome-figure .dome-labels text { font-size: 15px; }
+  .station-nav { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) { .dome-figure [data-part] { transition: none; } }

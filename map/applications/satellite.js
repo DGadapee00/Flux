@@ -103,6 +103,8 @@ export const SATELLITE = {
       ],
       outcome: 'Support the components without exceeding a stated stress or deflection limit.',
       concepts: ['static-equilibrium', 'stress-on-a-section', 'beam-deflection', 'forced-resonance', 'launch-loads', 'composite-laminates', 'plate-buckling', 'fastener-loosening', 'finite-elements'],
+      // The Make side: the choices that turn this sizing into hardware (decisions/). In the order made.
+      decisions: ['structure-material', 'structure-process', 'structure-joints', 'structure-finish'],
       labs: [
         { concept: 'stress-on-a-section', course: 'egn3331', lab: 'pins' },
         { concept: 'launch-loads', course: 'satellite', lab: 'shake' },

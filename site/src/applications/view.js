@@ -1,7 +1,9 @@
 import { LAB_CATALOGS, labHref, notesHref } from '@flux/map';
 import { SATELLITE, RECIPES, recipeById } from '@flux/map/applications/satellite.js';
 import { checkOrbit } from '@flux/subjects/mechanics/orbit-check.js';
-import { projectInstructions, reviewBrief } from './brief.js';
+import { decisionById, decisionsOf } from '@flux/map/applications/decisions/index.js';
+import { decisionRecord, projectInstructions, reviewBrief } from './brief.js';
+import { makeHtml } from './make.js';
 import './style.css';
 
 /**
@@ -10,6 +12,9 @@ import './style.css';
  * checklist a good result meets. The work is reviewed in a Claude Project: the page copies a
  * self-contained brief to paste into a fresh chat there, and the Project's instructions once.
  * Orbit keeps a number check as a self-check; it records nothing.
+ *
+ * A subsystem with decisions also has a Make side below its method (make.js): the choices of
+ * material, process, joints and finish, with a record to copy. `&decision=<id>` opens one.
  *
  * Earlier versions kept capability records here. They are no longer shown; any saved records stay
  * in the browser and in Progress backups (site/src/applications/progress.js).
@@ -70,6 +75,9 @@ export function mountApplications(map, parent = document.querySelector('#applica
   const orbitInput = { h: '550', v: '', T: '' };
   const word = (id) => WORDS[standing(id)?.status] || null;
   const solid = (id) => ['solid', 'assumed', 'taught'].includes(standing(id)?.status);
+  /** The learner's picks on the Make side, `{ [decision id]: option id }`, and the cards left open. Kept for the page only. */
+  const picks = {};
+  const openDecisions = new Set();
 
   parent.innerHTML = `<div class="mission-overview">
     <div class="mission-copy"><p class="app-kicker">APPLICATION 01</p>
@@ -136,14 +144,28 @@ export function mountApplications(map, parent = document.querySelector('#applica
       <p class="${res.pass ? 'orbit-pass' : 'orbit-fail'}">${res.pass ? 'Your numbers agree with both routes. Put them in your work for review.' : `Not yet: speed is off by ${f(res.speedError * 100, 1)}%, period by ${f(res.periodError * 100, 1)}%. ${esc(res.hint)}`}</p>`;
   }
 
+  /** A concept as a link, with a lab gap marked and where the learner stands on it. */
+  function conceptLink(id) {
+    const c = map.graph.byId[id];
+    const w = word(id);
+    return `<a href="#${id}" data-concept="${id}">${esc(c.title)}${c.labs.length ? '' : ' <span class="app-meta">/ lab gap</span>'}${w ? ` <span class="app-meta foundation-state" data-state="${standing(id).status}">· ${w}</span>` : ''}</a>`;
+  }
+
+  const make = () => makeHtml(recipeById[selected], { picks, open: openDecisions, conceptLink });
+
+  /** Redraw the Make side alone, after a pick, keeping the keyboard where it was. */
+  function renderMake(focus) {
+    const box = panel.querySelector('[data-make]');
+    if (!box) return;
+    box.innerHTML = make();
+    if (focus) box.querySelector(focus)?.focus({ preventScroll: true });
+  }
+
   function render() {
     const r = recipeById[selected];
     const integrated = selected === 'satellite';
-    const foundations = (r.concepts || []).map((id) => {
-      const c = map.graph.byId[id];
-      const w = word(id);
-      return `<a href="#${id}" data-concept="${id}">${esc(c.title)}${c.labs.length ? '' : ' <span class="app-meta">/ lab gap</span>'}${w ? ` <span class="app-meta foundation-state" data-state="${standing(id).status}">· ${w}</span>` : ''}</a>`;
-    }).join('');
+    const foundations = (r.concepts || []).map(conceptLink).join('');
+    const choices = decisionsOf(r.id).length;
     const labs = (r.labs || []).map((ref) => {
       const c = map.graph.byId[ref.concept];
       const source = c.labs.find((l) => l.course === ref.course && l.lab === ref.lab);
@@ -153,7 +175,8 @@ export function mountApplications(map, parent = document.querySelector('#applica
     }).join('');
     const refs = (r.references || []).map((x) => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title)} <span aria-hidden="true">↗</span></a><p class="app-meta">${esc(x.why)}</p></li>`).join('');
     const text = brief();
-    panel.innerHTML = `<header class="recipe-heading"><div><p class="app-kicker">${integrated ? 'FINAL ASSEMBLY' : `SUBSYSTEM ${number(r.id)} / 07`}</p><h3 id="recipe-title">${esc(r.title)}</h3><p>${esc(r.outcome)}</p></div></header>
+    panel.innerHTML = `<header class="recipe-heading"><div><p class="app-kicker">${integrated ? 'FINAL ASSEMBLY' : `SUBSYSTEM ${number(r.id)} / 07`}</p><h3 id="recipe-title">${esc(r.title)}</h3><p>${esc(r.outcome)}</p></div>
+        ${choices ? `<button type="button" class="make-jump" data-jump-make>Make it: ${choices} choices <span aria-hidden="true">↓</span></button>` : ''}</header>
       <div class="recipe-columns"><div class="recipe-learning">
         ${r.requires.length ? `<section><h4>Takes numbers from</h4><div class="recipe-inputs">${r.requires.map((dep) => `<button type="button" data-select="${dep}">${esc(recipeById[dep].title)}</button>`).join('')}</div></section>` : ''}
         ${!integrated ? `<section><h4>Learn the foundations</h4><div class="foundation-links">${foundations}</div><h4>Explore in Flux</h4>${labs ? `<ul class="application-labs">${labs}</ul>` : '<p>No matching spacecraft lab is built yet. Start with the linked concepts and their sources.</p>'}</section>` : ''}
@@ -166,7 +189,8 @@ export function mountApplications(map, parent = document.querySelector('#applica
         <p>Open a new chat in your satellite Project, paste the brief, and attach your work: numbers, report, drawings or CAD.</p>
         <div class="copy-row"><button type="button" class="copy-button" data-copy="brief">Copy the review brief</button><span class="copy-note" data-copied="brief" role="status"></span></div>
         <details><summary>Show the brief</summary><pre class="brief-text" data-text="brief">${esc(text)}</pre></details>
-      </div></div>`;
+      </div></div>
+      ${choices ? `<section class="make" id="make" data-make aria-labelledby="make-title">${make()}</section>` : ''}`;
     summary();
   }
 
@@ -176,6 +200,7 @@ export function mountApplications(map, parent = document.querySelector('#applica
       const url = new URL(window.location.href);
       url.searchParams.set('application', 'satellite');
       url.searchParams.set('component', selected);
+      url.searchParams.delete('decision');
       url.hash = 'applications';
       window.history.pushState(null, '', url);
     }
@@ -201,10 +226,27 @@ export function mountApplications(map, parent = document.querySelector('#applica
       map.go(concept.dataset.concept);
       return;
     }
+    if (event.target.closest('[data-jump-make]')) {
+      const box = panel.querySelector('[data-make]');
+      box?.scrollIntoView({ block: 'start' });
+      const title = box?.querySelector('#make-title');
+      if (title) {
+        title.tabIndex = -1;
+        title.focus({ preventScroll: true });
+      }
+      return;
+    }
+    if (event.target.closest('[data-clear-picks]')) {
+      for (const id of Object.keys(picks)) delete picks[id];
+      renderMake('[data-make-status]');
+      return;
+    }
     const copy = event.target.closest('[data-copy]');
     if (copy) {
-      const kind = copy.dataset.copy;
-      const text = kind === 'instructions' ? projectInstructions() : brief();
+      const record = copy.dataset.copy === 'record' ? decisionById[copy.dataset.decision] : null;
+      // A decision's record is one of several on the page, so its box and note carry its id.
+      const kind = record ? `record-${record.id}` : copy.dataset.copy;
+      const text = record ? decisionRecord(record, { recipe: recipeById[selected], picks }) : kind === 'instructions' ? projectInstructions() : brief();
       const box = parent.querySelector(`[data-text="${kind}"]`);
       const ok = await copyText(text, box);
       if (!ok) box?.closest('details')?.setAttribute('open', '');
@@ -212,6 +254,25 @@ export function mountApplications(map, parent = document.querySelector('#applica
       if (note) note.textContent = ok ? 'Copied. Paste it into Claude.' : 'Copying is blocked here. The text is selected below: copy it by hand.';
     }
   });
+  // A pick: remember it and redraw the cards, since it changes what the others go with and rule out.
+  panel.addEventListener('change', (event) => {
+    const input = event.target.closest('input[name^="pick-"]');
+    if (!input) return;
+    picks[input.name.slice('pick-'.length)] = input.value;
+    renderMake(`input[name="${input.name}"][value="${input.value}"]`);
+  });
+  // `toggle` does not bubble, so it is caught on the way down. The address follows the open card.
+  panel.addEventListener('toggle', (event) => {
+    const card = event.target.closest?.('details[data-decision]');
+    if (!card || event.target !== card) return;
+    const id = card.dataset.decision;
+    if (card.open) openDecisions.add(id);
+    else openDecisions.delete(id);
+    const url = new URL(window.location.href);
+    if (card.open) url.searchParams.set('decision', id);
+    else if (url.searchParams.get('decision') === id) url.searchParams.delete('decision');
+    window.history.replaceState(null, '', url);
+  }, true);
   panel.addEventListener('submit', (event) => {
     if (event.target.matches('[data-orbit-form]')) {
       event.preventDefault();
@@ -219,6 +280,11 @@ export function mountApplications(map, parent = document.querySelector('#applica
     }
   });
   window.addEventListener('popstate', () => select(new URLSearchParams(window.location.search).get('component'), false));
-  select(new URLSearchParams(window.location.search).get('component'), false);
+  const asked = new URLSearchParams(window.location.search);
+  // `&decision=<id>` opens that card, on the subsystem it belongs to.
+  const opening = decisionById[asked.get('decision')];
+  if (opening) openDecisions.add(opening.id);
+  select(opening ? opening.subsystem : asked.get('component'), false);
+  if (opening) panel.querySelector(`#decision-${opening.id}`)?.scrollIntoView({ block: 'start' });
   return { refresh: render };
 }

@@ -149,3 +149,119 @@ test('a hub backup from before Fluids was added restores and keeps the Fluids re
   restoreHubBackup(before, parts);
   assert.deepEqual(fluids.store.readJSON('problems'), { v: 1, kept: true });
 });
+
+// ---------- The Make side: decisions ----------
+
+const { DECISIONS, decisionById } = await import('@flux/map/applications/decisions/index.js');
+const { decisionRecord } = await import('../src/applications/brief.js');
+
+test('a decision record carries the question, the drivers, every option and five prompts, as plain text', () => {
+  for (const d of DECISIONS) {
+    const text = decisionRecord(d, { recipe: recipeById[d.subsystem] });
+    assert.match(text, new RegExp(`^# Decision: ${d.question.replace(/[?]/g, '\\?')}`), d.id);
+    assert.ok(text.includes(recipeById[d.subsystem].title), `${d.id} names its subsystem`);
+    for (const driver of d.drivers) assert.ok(text.includes(driver), `${d.id}: ${driver}`);
+    for (const o of d.options) assert.ok(text.includes(o.name), `${d.id}: ${o.name}`);
+    for (const n of [1, 2, 3, 4, 5]) assert.match(text, new RegExp(`^${n}\\. `, 'm'), `${d.id} prompt ${n}`);
+    assert.match(text, /^1\. I chose: *$/m, `${d.id}: with no pick the first line is left to fill in`);
+    assert.ok(!/<[a-z]/i.test(text), `${d.id} record is plain text`);
+    assert.ok(!text.includes('—'), `${d.id} record has no em dash`);
+  }
+});
+
+test('a decision record states the pick with its figures, and any other pick it conflicts with', () => {
+  const d = decisionById['structure-material'];
+  const picks = { 'structure-material': 'al-6061-t6', 'structure-process': 'printed-metal' };
+  const text = decisionRecord(d, { recipe: recipeById.structure, picks });
+  assert.match(text, /^1\. I chose: Aluminium 6061-T6$/m);
+  // The pick's own numbers are on its line, with units, so the record stands alone.
+  assert.match(text, /Aluminium 6061-T6 \(my pick\): .*68 GPa.*2\.70 g\/cm³/);
+  assert.match(text, /E\/ρ 25\.2/);
+  // The clash with the process pick is stated, with its reason.
+  assert.match(text, /Conflicts with my pick for "How is the frame made\?": Print in metal\./);
+  assert.ok(text.includes('powder bed machines run their own aluminium alloy'));
+  // The other decisions' picks are listed, since the four are one choice.
+  assert.match(text, /How is the frame made\?: Print in metal/);
+  // A pick that is not one of this decision's options is not recorded.
+  assert.match(decisionRecord(d, { recipe: recipeById.structure, picks: { 'structure-material': 'bolted' } }), /^1\. I chose: *$/m);
+});
+
+test('the structure brief asks for its four decision records, and the reviewer is told how to judge one', () => {
+  const text = reviewBrief(recipeById.structure, { byId: concepts, recipeById });
+  assert.match(text, /## Decisions to record/);
+  for (const d of DECISIONS.filter((x) => x.subsystem === 'structure')) assert.ok(text.includes(d.question), d.id);
+  // A subsystem with no decisions yet has no such section.
+  assert.ok(!reviewBrief(recipeById.orbit, { byId: concepts, recipeById }).includes('## Decisions to record'));
+  assert.match(projectInstructions(), /decision record/i);
+});
+
+// ---------- Travelers ----------
+
+const { TRAVELERS, travelerById } = await import('@flux/map/applications/travelers/index.js');
+const { domeNumbers } = await import('@flux/map/applications/travelers/dome-numbers.js');
+const { caseBrief } = await import('../src/applications/brief.js');
+const { blockRows, fig, pickBuildView } = await import('../src/applications/traveler-text.js');
+
+test('a case brief stands on its own: the part, the station, the situation, the evidence, the task and the rubric', () => {
+  for (const t of TRAVELERS) {
+    for (const c of t.cases) {
+      const station = t.stations.find((s) => s.id === c.station);
+      const text = caseBrief(t, c, { numbers: domeNumbers() });
+      assert.match(text, new RegExp(`^# Case: ${c.title}`), c.id);
+      assert.ok(text.includes(t.title) && text.includes(station.title), `${c.id} names the part and the station`);
+      assert.ok(text.includes(c.situation) && text.includes(c.task), `${c.id} situation and task`);
+      for (const e of c.evidence) assert.ok(text.includes(e), `${c.id}: ${e}`);
+      for (const item of c.checklist) assert.ok(text.includes(item), `${c.id}: ${item}`);
+      for (const id of c.sources) assert.ok(text.includes(t.references.find((r) => r.id === id).url), `${c.id}: ${id}`);
+      assert.match(text, /## My answer\n\[Write/);
+      assert.ok(!/<[a-z]/i.test(text), `${c.id} brief is plain text`);
+      assert.ok(!text.includes('—'), `${c.id} brief has no em dash`);
+    }
+  }
+  // The dome the learner set is in the brief, so the reviewer judges the same numbers.
+  const dome = travelerById['fsw-dome'];
+  const text = caseBrief(dome, dome.cases[0], { numbers: domeNumbers({ pressureKPa: 300, diameterM: 4 }) });
+  assert.match(text, /300 kPa/);
+  assert.match(text, /4 m across/);
+  assert.match(projectInstructions(), /traveler case/i);
+});
+
+test('the dome\'s numbers print to three figures, with the units a shop uses', () => {
+  assert.equal(fig(646.25), '646');
+  assert.equal(fig(2.6889), '2.69');
+  assert.equal(fig(0.2379), '0.238');
+  assert.equal(fig(1234.5), '1230');
+  assert.equal(fig(5.5), '5.5');
+  const n = domeNumbers();
+  for (const name of Object.keys(n.blocks)) {
+    const b = blockRows(name, n);
+    assert.ok(b.title && b.note, `${name}: title and note`);
+    assert.ok(b.rows.length >= 3, `${name}: rows`);
+    for (const r of b.rows) {
+      assert.ok(r.label && r.value, `${name}: ${JSON.stringify(r)}`);
+      assert.ok(!/NaN|undefined|Infinity/.test(r.label + r.value), `${name}: ${r.value}`);
+    }
+  }
+  const text = (name) => blockRows(name, n).rows.map((r) => `${r.label}: ${r.value}`).join('\n');
+  assert.match(text('requirement'), /Proof pressure[^\n]*: 247 kPa/);
+  assert.match(text('requirement'), /646 N per mm/);
+  assert.match(text('requirement'), /323 N per mm/);
+  assert.match(text('lands'), /2\.69 mm/);
+  assert.match(text('lands'), /yield at proof governs/);
+  assert.match(text('lands'), /33% thicker/);
+  assert.match(text('flaws'), /Dye penetrant: a crack 0\.64 mm deep and 6\.36 mm long, 24% of the land/);
+  assert.match(text('repairs'), /Fusion weld repair: 67% warm, 61% cold/);
+  assert.match(text('proof'), /1\.6 times/);
+  // A thin land is outside a method's range, and the row says so.
+  assert.match(blockRows('flaws', domeNumbers({ pressureKPa: 100, diameterM: 2 })).rows.map((r) => r.value).join('\n'), /thinner than this method/);
+});
+
+test('the address picks which Build view shows: the satellite, or a traveler', () => {
+  assert.deepEqual(pickBuildView(''), { view: 'satellite' });
+  assert.deepEqual(pickBuildView('?application=satellite&component=structure'), { view: 'satellite' });
+  assert.deepEqual(pickBuildView('?traveler=fsw-dome'), { view: 'traveler', traveler: 'fsw-dome', station: 'requirement' });
+  assert.deepEqual(pickBuildView('?traveler=fsw-dome&station=proof'), { view: 'traveler', traveler: 'fsw-dome', station: 'proof' });
+  // A station the traveler does not have opens its first. A traveler that does not exist shows the satellite.
+  assert.deepEqual(pickBuildView('?traveler=fsw-dome&station=nowhere'), { view: 'traveler', traveler: 'fsw-dome', station: 'requirement' });
+  assert.deepEqual(pickBuildView('?traveler=nothing'), { view: 'satellite' });
+});

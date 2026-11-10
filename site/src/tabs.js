@@ -35,7 +35,7 @@ export function tabFor(hash, search, isConcept) {
   if (h) return null;
   // No hash: a project or a map setting in the query still says where the link was going.
   const q = new URLSearchParams(search);
-  if (q.has('application')) return 'build';
+  if (q.has('application') || q.has('traveler')) return 'build';
   if (q.has('path') || q.has('view') || q.has('lanes')) return 'map';
   return 'today';
 }

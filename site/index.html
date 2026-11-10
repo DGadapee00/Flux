@@ -105,7 +105,12 @@
       <section class="section" id="applications" data-tab="build" aria-labelledby="applications-title">
         <h2 id="applications-title">Build</h2>
         <p>See what the concepts let you build. Follow the pieces from a first circuit to a working system.</p>
+        <nav class="build-switch" aria-label="What to open on Build" data-build-switch>
+          <button type="button" data-build="satellite" aria-pressed="true"><strong>Build a satellite</strong><small>Seven subsystems, sized and made</small></button>
+          <button type="button" data-build="traveler" aria-pressed="false"><strong>Follow a part</strong><small>A tank dome through the weld shop</small></button>
+        </nav>
         <div id="application-workbench"></div>
+        <div id="traveler-workbench" hidden></div>
       </section>
 
       <section class="section" id="courses" data-tab="courses" aria-labelledby="courses-title">

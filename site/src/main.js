@@ -3,6 +3,8 @@ import { mountBackup } from './backup.js';
 import problems from 'virtual:flux-problems';
 import { loadConcepts, loadPaths, mountMap } from './map.js';
 import { mountApplications } from './applications/view.js';
+import { mountBuildSwitch } from './applications/switch.js';
+import { mountTraveler } from './applications/traveler.js';
 import { mountToday } from './learner/today.js';
 import { mountTabs } from './tabs.js';
 import { latestBuilt, visibleTracks } from './tracks.js';
@@ -13,6 +15,8 @@ const paths = loadPaths();
 let map;
 /** @type {{ refresh: () => void } | undefined} */
 let applications;
+/** @type {{ refresh: () => void } | undefined} */
+let traveler;
 /** @type {ReturnType<typeof mountTabs> | undefined} */
 let tabs;
 // Today first: the map opens where Today says the learner is.
@@ -29,6 +33,7 @@ const today = mountToday({
     map.refreshPanel();
     map.refreshStatus();
     applications?.refresh();
+    traveler?.refresh();
   },
   onLeaveReview: () => map.current && map.show(map.current),
 });
@@ -42,6 +47,8 @@ map = mountMap({
 map.refreshPanel();
 map.refreshStatus();
 applications = mountApplications(map, undefined, { status: (id) => today.statusOf(id) });
+traveler = mountTraveler(map, undefined, { status: (id) => today.statusOf(id) });
+mountBuildSwitch();
 
 const root = document.querySelector('#tracks');
 
