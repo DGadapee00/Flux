@@ -26,5 +26,6 @@ export default {
   ],
   labs: [
     { course: 'phy2049', lab: 'refraction', note: 'Rays into and out of water, glass and diamond, through to total internal reflection.' },
+    { course: 'phy2049', lab: 'fiber', note: 'Total internal reflection guiding light down an optical fiber, with its acceptance cone.' },
   ],
 };

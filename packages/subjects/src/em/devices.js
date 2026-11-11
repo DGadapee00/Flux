@@ -297,3 +297,42 @@ export function solarSail({ A, m, r = 1 }) {
   const a = F / m;
   return { I, p, F, a, dvYear: a * YEAR, side: Math.sqrt(A) };
 }
+
+/**
+ * An optical fiber (Ch 58 total internal reflection, Ch 62 fiber optics). A core of index nCore
+ * sits in a cladding of lower index nClad. Light in the core that meets the core-cladding wall at
+ * more than the critical angle, sin θc = nClad/nCore, reflects totally and is guided.
+ *
+ * A ray enters the flat end from a medium nOut at angle θ to the axis and refracts to θr, with
+ * nOut sin θ = nCore sin θr. The wall is parallel to the axis, so the ray meets it at 90° − θr from
+ * the wall's normal. Guided means 90° − θr ≥ θc, that is cos θr ≥ nClad/nCore. At the limit
+ * sin θr = √(nCore² − nClad²)/nCore, so the widest accepted entry angle obeys
+ *   NA = nOut sin θmax = √(nCore² − nClad²).
+ * Inside, light moves at c/nCore, taking L·nCore/c to cross a length L along the axis. A ray at the
+ * guiding limit zigzags along a path longer by 1/cos θr = nCore/nClad, so in a step-index multimode
+ * fiber it arrives (L·nCore/c)(nCore/nClad − 1) later: modal dispersion.
+ * (Course model: ray optics in a straight step-index fiber. Single-mode cores, a few wavelengths
+ * across, need the wave picture; absorption, about 0.2 dB/km at 1550 nm in silica, is left out.)
+ */
+export function opticalFiber({ nCore, nClad, nOut = 1, thetaIn = 0, L = 1000, lambda = 1550e-9 }) {
+  const thetaC = Math.asin(Math.min(1, nClad / nCore));
+  const NA = Math.sqrt(Math.max(0, nCore * nCore - nClad * nClad));
+  const thetaMax = NA >= nOut ? Math.PI / 2 : Math.asin(NA / nOut);
+  const thetaR = Math.asin(Math.min(1, (nOut * Math.sin(thetaIn)) / nCore));
+  const wall = Math.PI / 2 - thetaR; // angle at the side wall, from its normal
+  const guided = wall >= thetaC - 1e-12;
+  const v = C / nCore;
+  const tAxis = L / v;
+  return {
+    thetaC,
+    NA,
+    thetaMax,
+    thetaR,
+    wall,
+    guided,
+    v,
+    tAxis,
+    modalSpread: tAxis * (nCore / nClad - 1),
+    f: C / lambda,
+  };
+}

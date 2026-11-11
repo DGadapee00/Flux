@@ -97,6 +97,7 @@ export const LAB_UNITS = {
   polar: ['S', 'E', 'n'],
   radargun: ['f', 'wavelength', 'c'],
   solarsail: ['S', 'F', 'A', 'P', 'c'],
+  fiber: ['n', 'c', 'wavelength', 'f'],
   divergence: ['phiE', 'rhoQ', 'E', 'q', 'eps0', 'phiB', 'B', 'I', 'r'],
   refraction: ['n', 'c', 'wavelength'],
   mirrors: ['fLens', 'M', 'r'],

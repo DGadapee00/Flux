@@ -1,0 +1,823 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Imaging with Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<style>
+:root{
+  --paper:#F5F6F8; --sheet:#FFFFFF; --ink:#1A2130; --muted:#5A6476; --rule:#DCE0E7;
+  --field:#2C4BB5; --field-soft:#E8ECFA;
+  --copper:#A8531C; --copper-soft:#F8ECE3;
+  --ok:#1F6B4E; --ok-soft:#E5F2EC;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:"IBM Plex Sans Condensed", "Arial Narrow", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#11141B; --sheet:#171B24; --ink:#E4E7EE; --muted:#9AA3B5; --rule:#2A3040;
+    --field:#93A7FF; --field-soft:#1C2340;
+    --copper:#E79461; --copper-soft:#2E2119;
+    --ok:#6FCBA2; --ok-soft:#16281F;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#11141B; --sheet:#171B24; --ink:#E4E7EE; --muted:#9AA3B5; --rule:#2A3040;
+  --field:#93A7FF; --field-soft:#1C2340;
+  --copper:#E79461; --copper-soft:#2E2119;
+  --ok:#6FCBA2; --ok-soft:#16281F;
+}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.62;padding-inline:16px;padding-block:0 64px}
+main{max-width:720px;margin:0 auto}
+header.top{max-width:720px;margin:0 auto;padding-block:48px 24px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3{font-family:var(--sans);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(34px,6vw,52px);font-weight:700;letter-spacing:-.01em;margin-block:10px 14px}
+.lede{font-size:19px;color:var(--muted);max-width:62ch;margin:0}
+.part{margin-top:64px;padding-top:18px;border-top:2px solid var(--ink)}
+.part .eyebrow{color:var(--field)}
+.part h2{font-size:34px;margin-top:6px}
+section.topic{margin-top:44px}
+section.topic h2{font-size:26px;font-weight:600;display:flex;gap:12px;align-items:baseline}
+section.topic h2 .n{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--field);min-width:2.2em}
+h3{font-size:19px;font-weight:600;margin-top:26px}
+p{margin-block:12px;max-width:68ch}
+ul,ol{padding-left:1.3em;max-width:66ch}
+li{margin-block:4px}
+a{color:var(--field)}
+a:focus-visible{outline:2px solid var(--field);outline-offset:2px}
+.bridge{font-style:italic;color:var(--muted);border-left:2px solid var(--rule);padding-left:14px;margin-top:22px}
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;padding-block:4px;margin:14px 0!important}
+.box{border-radius:6px;padding:14px 18px;margin:20px 0;border:1px solid var(--rule);background:var(--sheet)}
+.box > .tag{font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;display:block;margin-bottom:4px}
+.box p{margin-block:8px}
+.box.ex > .tag{color:var(--field)}
+.box.fix{background:var(--copper-soft);border-color:transparent}
+.box.fix > .tag{color:var(--copper)}
+.box.why{background:var(--field-soft);border-color:transparent}
+.box.why > .tag{color:var(--field)}
+.box.key{background:var(--ok-soft);border-color:transparent}
+.box.key > .tag{color:var(--ok)}
+.ans{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto;margin:18px 0}
+table{border-collapse:collapse;width:100%;font-size:16px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--sans);font-weight:600;font-size:15px;border-bottom:2px solid var(--ink)}
+nav.toc{margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:4px 28px;font-size:16px}
+nav.toc h3{grid-column:1/-1;font-size:14px;font-family:var(--mono);font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+nav.toc a{text-decoration:none;color:var(--ink);display:flex;gap:10px;padding:2px 0}
+nav.toc a span{font-family:var(--mono);font-size:13px;color:var(--field);min-width:2em;padding-top:3px}
+nav.toc a:hover{color:var(--field)}
+@media (max-width:560px){nav.toc{grid-template-columns:1fr} body{font-size:17px} mjx-container[display="true"]{font-size:86%} .box{padding:12px 14px}}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid var(--rule);color:var(--muted);font-size:15px}
+</style>
+
+<header class="top">
+  <div class="eyebrow">PHY 2049 · Calculus Physics II · Week 13 · Lecture notes Ch 58–62, rewritten</div>
+  <h1>Imaging with Light</h1>
+  <p class="lede">One continuous set of notes on geometric optics: how light bends when its speed changes, how mirrors and lenses use reflection and refraction to form images, and how microscopes, telescopes, cameras and optical fibers put those images to work. Two rules carry nearly all of it: Snell's law at a boundary, and one equation, \(1/f = 1/d_o + 1/d_i\), for every mirror and thin lens. Chapter 61 is skipped this term.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Correction to the original notes</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Refraction</h3>
+    <a href="#s1"><span>1</span>Speed, wavelength and the index of refraction</a>
+    <a href="#s2"><span>2</span>Snell's law</a>
+    <a href="#s3"><span>3</span>Reflection at a boundary</a>
+    <a href="#s4"><span>4</span>Total internal reflection</a>
+    <a href="#s5"><span>5</span>Hot air, mirages and apparent depth</a>
+    <a href="#s6"><span>6</span>Dispersion, prisms and rainbows</a>
+    <a href="#s7"><span>7</span>Brewster's angle</a>
+    <h3>Part II · Mirrors</h3>
+    <a href="#s8"><span>8</span>Objects, images, real and virtual</a>
+    <a href="#s9"><span>9</span>Plane mirrors</a>
+    <a href="#s10"><span>10</span>Spherical mirrors and the focal point</a>
+    <a href="#s11"><span>11</span>The mirror equation and ray tracing</a>
+    <a href="#s12"><span>12</span>Mirror examples</a>
+    <h3>Part III · Lenses</h3>
+    <a href="#s13"><span>13</span>Converging and diverging lenses</a>
+    <a href="#s14"><span>14</span>The thin-lens equation</a>
+    <a href="#s15"><span>15</span>Lens examples</a>
+    <a href="#s16"><span>16</span>Lenses in liquids, lens power and aberrations</a>
+    <h3>Part IV · Optical instruments</h3>
+    <a href="#s17"><span>17</span>Angular size and the magnifying glass</a>
+    <a href="#s18"><span>18</span>Microscopes and telescopes</a>
+    <a href="#s19"><span>19</span>Cameras</a>
+    <a href="#s20"><span>20</span>Fiber optics</a>
+    <a href="#s21"><span>21</span>Refractometers and shaped reflectors</a>
+    <a href="#s22"><span>22</span>Formula sheet</a>
+  </nav>
+</header>
+
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Refraction</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Speed, wavelength and the index of refraction</h2>
+<p><b>Refraction</b> is the bending of light as it crosses from one material into another. It happens because light travels at a different speed in each material. The boundary between the two materials is the <b>interface</b>. The <b>normal</b> is a line perpendicular to the interface, and every angle is measured from it.</p>
+<p>At an interface such as air and window glass, part of the light reflects and part is transmitted. Follow the transmitted part.</p>
+<ol>
+  <li>In the glass the wave slows down. In one cycle it covers less distance than the wave outside. The wave fronts inside and outside must stay joined at the interface, and the only way they can do that is for the wave inside to change direction.</li>
+  <li>Going from air into glass, the ray bends toward the normal. The slower wave has a shorter wavelength.</li>
+  <li>The frequency does not change. It is set by the source: each crest that arrives at the interface makes one crest that leaves.</li>
+  <li>Going the other way, from glass into air, the wave speeds up, bends away from the normal and gets a longer wavelength.</li>
+</ol>
+<p>From \(v = f\lambda\), with \(f\) fixed, the wavelength in a material is</p>
+\[\lambda_{\text{material}} = \frac{v_{\text{material}}}{f}.\]
+<p>A smaller speed means a shorter wavelength.</p>
+<div class="box ex"><span class="tag">Worked example · soldiers marching into mud</span>
+<p>A line of soldiers marches across grass at 2 m/s. One line passes a point each second, so \(f = 1\) Hz. The spacing between lines is the wavelength:</p>
+\[\lambda_{\text{grass}} = \frac{v}{f} = \frac{2\ \text{m/s}}{1\ \text{Hz}} = 2\ \text{m}.\]
+<p>In mud they slow to 1 m/s. The lines still pass at one per second, so \(\lambda_{\text{mud}} = 1\) m. If the line meets the mud at a slant, the end that reaches the mud first slows first, and the whole line swings toward the normal. That is refraction.</p>
+</div>
+
+<h3>The index of refraction</h3>
+<p>The <b>index of refraction</b> \(n\) of a material is the speed of light in vacuum divided by its speed in the material:</p>
+\[n = \frac{c}{v}, \qquad v = \frac{c}{n}.\]
+<p>A larger \(n\) means slower light, and more bending at a boundary with air. Since \(f\) is the same in both places, \(\lambda_{\text{material}} = v/f = (c/n)/f\), so</p>
+\[\lambda_{\text{material}} = \frac{\lambda_{\text{vacuum}}}{n}.\]
+<p>The index depends on the material's temperature and on the frequency of the light (Sections 5 and 6). Tables quote it at one wavelength, usually 589 nm.</p>
+<div class="tbl"><table>
+<tr><th>Material</th><th>\(n\)</th><th>\(v = c/n\)</th></tr>
+<tr><td>Vacuum (air is 1.0003)</td><td>1.00</td><td>\(3.00\times10^8\) m/s</td></tr>
+<tr><td>Water</td><td>1.33</td><td>\(2.26\times10^8\) m/s</td></tr>
+<tr><td>Glass</td><td>1.52</td><td>\(1.97\times10^8\) m/s</td></tr>
+<tr><td>Diamond</td><td>2.42</td><td>\(1.24\times10^8\) m/s</td></tr>
+</table></div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes' table gives the speed of light in water as \(2.6\times10^8\) m/s. With \(n = 1.33\), \(v = (3.00\times10^8)/1.33 = 2.26\times10^8\) m/s. The other rows are right.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the index of refraction "must be greater than 1.0 because v is always less than or equal to the speed of light in vacuum." If \(v\) can equal \(c\), then \(n\) can equal 1, and the notes' own table lists vacuum as 1.00. The rule is \(n \ge 1\): 1 for vacuum, slightly above 1 for air, larger for everything else in this course.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two flashlights in a race</span>
+<p>Two flashlights switch on at the same instant. One beam passes through a block of glass on its way to the finish line; the other crosses only air. The beam through air wins, because the glass slows the other beam down for part of the trip.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · green light in a block with n = 2.0</span>
+<p>Green light with \(\lambda = 530\) nm in air enters a block 1 m long with \(n = 2.0\).</p>
+<ol>
+  <li>Speed in the block: \(v = c/n = (3.00\times10^8)/2.0 = 1.5\times10^8\) m/s. Time to cross: \(\Delta t = \Delta x/v = (1\ \text{m})/(1.5\times10^8\ \text{m/s}) = 6.7\) ns.</li>
+  <li>The same 1 m in air takes \((1)/(3.00\times10^8) = 3.3\) ns. The light in air arrives in half the time.</li>
+  <li>Frequency, from the air values: \(f = c/\lambda = (3.00\times10^8)/(530\times10^{-9}) = 5.66\times10^{14}\) Hz. It is the same in the block.</li>
+  <li>Wavelength in the block: \(\lambda = v/f = (1.5\times10^8)/(5.66\times10^{14}) = 265\) nm. That is \(530/2.0\), as \(\lambda_{\text{vacuum}}/n\) says.</li>
+</ol>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Snell's law</h2>
+<p><b>Snell's law</b> gives the direction of the refracted ray. With \(n_1\) the index of the material the light comes from and \(n_2\) the one it enters, and both angles measured from the normal,</p>
+\[n_1\sin\theta_1 = n_2\sin\theta_2, \qquad \theta_2 = \sin^{-1}\!\left(\frac{n_1\sin\theta_1}{n_2}\right).\]
+<div class="box why"><span class="tag">Derivation · Snell's law from least time</span>
+<p>Fermat's principle (Chapter 57) says light takes the path of least time. Put A in material 1 at height \(a\) above the interface and B in material 2 at depth \(b\) below it, a horizontal distance \(D\) apart. Let the ray cross the interface a horizontal distance \(x\) from A. The travel time is</p>
+\[t(x) = \frac{\sqrt{a^2+x^2}}{c/n_1} + \frac{\sqrt{b^2+(D-x)^2}}{c/n_2}.\]
+<p>Set the derivative to zero:</p>
+\[\frac{dt}{dx} = \frac{1}{c}\left(n_1\frac{x}{\sqrt{a^2+x^2}} - n_2\frac{D-x}{\sqrt{b^2+(D-x)^2}}\right) = \frac{1}{c}\left(n_1\sin\theta_1 - n_2\sin\theta_2\right) = 0 .\]
+<p>So \(n_1\sin\theta_1 = n_2\sin\theta_2\). The least-time path is not the straight line from A to B. It runs farther through the faster material and cuts across the slower one at a steeper angle. With \(n_1 = n_2\) the same steps give the straight line, and Chapter 57's version with one material gives the law of reflection.</p>
+</div>
+<p>Three cases follow, for light from an incident material \(n_i\) into a transmitted material \(n_t\):</p>
+<ol>
+  <li><b>\(n_i = n_t\).</b> No bending, \(\theta_t = \theta_i\). There is no reflected light either, because there is no change in index to reflect from.</li>
+  <li><b>\(n_i &lt; n_t\).</b> The ray bends toward the normal, \(\theta_t &lt; \theta_i\). Some light reflects.</li>
+  <li><b>\(n_i &gt; n_t\).</b> The ray bends away from the normal, \(\theta_t &gt; \theta_i\). Some light reflects.</li>
+</ol>
+<p>At \(\theta_1 = 0\), along the normal, the light slows down but goes straight through.</p>
+<div class="box ex"><span class="tag">Worked example · ranking three materials</span>
+<p>A ray crosses material 1, then 2, then 3, stacked in layers. In material 2 it is closer to the normal than in 1, so it bent toward the normal: \(n_1 &lt; n_2\). In material 3 it is farther from the normal than in 2, so \(n_2 &gt; n_3\). In 3 it is still a little closer to the normal than in 1.</p>
+<p>With parallel layers, \(n_1\sin\theta_1 = n_2\sin\theta_2 = n_3\sin\theta_3\), so material 2 drops out of the comparison between 1 and 3. \(\theta_3 &lt; \theta_1\) means \(n_3 &gt; n_1\). Together:</p>
+\[n_1 &lt; n_3 &lt; n_2 .\]
+</div>
+<div class="box ex"><span class="tag">Worked example · air, glass, water, air</span>
+<p>Take that stack as air (\(n = 1.0\)), glass (\(n = 1.55\)) and water (\(n = 1.33\)). Light meets the glass at \(\theta_1 = 50^\circ\).</p>
+<ol>
+  <li>Into the glass: \(\theta_{\text{glass}} = \sin^{-1}\!\left(\frac{1.0\sin50^\circ}{1.55}\right) = \sin^{-1}(0.494) = 29.6^\circ\). Low to high index: the angle shrinks.</li>
+  <li>Into the water: \(\theta_{\text{water}} = \sin^{-1}\!\left(\frac{1.55\sin29.6^\circ}{1.33}\right) = 35.2^\circ\). High to low index: the angle grows.</li>
+  <li>Back into air: \(\theta_{\text{air}} = \sin^{-1}(1.33\sin35.2^\circ) = 50^\circ\).</li>
+</ol>
+<p>The ray leaves at the angle it entered. That is no accident: \(n\sin\theta\) is the same in every parallel layer, so air on both ends means the same angle on both ends.</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Reflection at a boundary</h2>
+<p>Wherever the index changes, some light reflects. This is <b>Fresnel reflection</b>. How much reflects depends on how big the change in index is, on the angle, and on the polarization. For light along the normal (\(\theta = 0\)), the fraction reflected is</p>
+\[R = \left(\frac{n_1 - n_2}{n_1 + n_2}\right)^2 .\]
+<p>This formula holds only at normal incidence. The fraction rises toward 1 at grazing angles.</p>
+<div class="box ex"><span class="tag">Worked example · light off a window</span>
+<p>Air (\(n = 1.0\)) and glass (\(n = 1.52\)):</p>
+\[R = \left(\frac{1.0 - 1.52}{1.0 + 1.52}\right)^2 = (-0.206)^2 = 0.043 .\]
+<p>About 4% of the light reflects at each air-glass surface. That is why a cat sees its reflection in a window. A window has two surfaces, so it reflects about 8% in all.</p>
+</div>
+<p><b>Anti-reflection (AR) coatings</b> cut this reflection. A thin film on the glass makes the light reflected from its top surface cancel the light reflected from the glass beneath, by destructive interference, covered with wave optics. With less reflected, more is transmitted.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say that with an AR coating "the reflected part of the wave is eliminated ... all the light is transmitted." A single-layer coating cancels the reflection fully only for one wavelength, at one angle, and only when the film's index is the right one. Other colors still reflect a little, which is why coated lenses look faintly purple or green. Multilayer coatings get close to zero over the visible range but not to zero everywhere.</p>
+</div>
+<p><b>Index matching.</b> An object in a fluid of the same index has no index change at its surface. Nothing reflects from it, and rays pass through it without bending. It becomes invisible. A glass rod (\(n = 1.47\)) in water (\(n = 1.33\)) is easy to see. In an oil with \(n = 1.47\), the same rod disappears. At normal incidence the rod in water reflects \(R = (0.14/2.80)^2 = 0.25\%\); in the oil, zero.</p>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Total internal reflection</h2>
+<p>Light going from a higher index into a lower one bends away from the normal. Tilt the incoming ray more and the refracted ray swings toward the interface. At one incident angle, the <b>critical angle</b> \(\theta_c\), the refracted ray runs along the interface: \(\theta_2 = 90^\circ\). Past that, there is no refracted ray. All the light reflects. This is <b>total internal reflection</b> (TIR).</p>
+<div class="box why"><span class="tag">Derivation · the critical angle</span>
+<p>Put \(\theta_2 = 90^\circ\) in Snell's law: \(n_1\sin\theta_c = n_2\sin90^\circ = n_2\). So</p>
+\[\sin\theta_c = \frac{n_2}{n_1} = \frac{n_{\text{low}}}{n_{\text{high}}}, \qquad n_2 &lt; n_1 .\]
+<p>For \(\theta_1 &gt; \theta_c\), Snell's law would need \(\sin\theta_2 &gt; 1\). No angle has that, so no light is transmitted.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say total internal reflection happens "when the angle of refraction exceeds 90°." A refracted angle can never exceed 90°: at 90° the ray already lies along the surface. TIR happens when the <i>incident</i> angle exceeds the critical angle, the incident angle at which the refracted ray would reach 90°.</p>
+</div>
+<p>TIR needs \(n_2 &lt; n_1\). Going from low index to high, the ray bends toward the normal, and the refracted angle stays below 90° for every incident angle, so there is no critical angle.</p>
+<div class="box ex"><span class="tag">Worked example · Cathy at the bottom of a pool</span>
+<p>Cathy is at the bottom of a pool of fresh water (\(n = 1.33\)) and looks up at the surface.</p>
+\[\theta_c = \sin^{-1}\!\left(\frac{1.0}{1.33}\right) = 48.8^\circ .\]
+<p>Looking up at less than 48.8° from the vertical, she sees out through the surface. Beyond it, the surface is a mirror and she sees the bottom of the pool reflected. Everything above the water is squeezed into a circle of half-angle 48.8° overhead.</p>
+</div>
+<p>Fiber optics (Section 20) and refractometers (Section 21) both run on TIR. A diamond's \(\theta_c = \sin^{-1}(1/2.42) = 24.4^\circ\) is small, so light inside a cut diamond reflects many times before escaping. That is its sparkle.</p>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Hot air, mirages and apparent depth</h2>
+<p>The index of a gas or liquid depends on its temperature. For air, warmer means less dense and a lower index; cooler means a higher index. Light passing through air of mixed temperatures bends one way and another. Above a candle flame you see shimmering light and dark patches. Above a hot rail line the view is hazy. Hot air blown across a checkerboard pattern makes the squares warp.</p>
+<p>A <b>mirage</b> is an image made by light bending through layers of air at different temperatures.</p>
+<ul>
+  <li><b>Inferior mirage.</b> A thin layer of hot air lies on the ground under cooler air, on a hot road or in a desert. Light heading down from an object bends back upward as it enters the lower-index hot air. The eye assumes the light came in a straight line, so it sees an upside-down image of the object below the object. Sky imaged this way looks like a puddle on the road or an oasis in the desert.</li>
+  <li><b>Superior mirage.</b> Warm air lies above a layer of cold air, often over cold water. Light from a ship heading upward bends back down. The image of the ship appears above the ship.</li>
+</ul>
+<p>Stars twinkle for the same reason: moving pockets of warm and cool air keep shifting the starlight's path.</p>
+
+<h3>Apparent depth</h3>
+<p>An object under water looks shallower than it is. Light from it bends away from the normal as it leaves the water, and the eye traces the ray back in a straight line, to a point above the object.</p>
+<div class="box why"><span class="tag">Derivation · apparent depth</span>
+<p>An object at depth \(d\) in a fluid of index \(n_1\) is seen from a medium of index \(n_2\), looking nearly straight down. A ray from it reaches the surface a horizontal distance \(x\) away, at angle \(\theta_1\) from the normal, and leaves at \(\theta_2\). Traced back, it seems to come from depth \(d'\). Then \(\tan\theta_1 = x/d\) and \(\tan\theta_2 = x/d'\), so</p>
+\[\frac{d'}{d} = \frac{\tan\theta_1}{\tan\theta_2} \approx \frac{\sin\theta_1}{\sin\theta_2} = \frac{n_2}{n_1}.\]
+<p>The step \(\tan\theta \approx \sin\theta\) holds for small angles, so the rule is for looking nearly along the normal:</p>
+\[d' = d\,\frac{n_2}{n_1} = d\,\frac{n_{\text{viewer}}}{n_{\text{object}}}.\]
+<p>Viewed at a slant, the object looks shallower still.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · Bob and the dime</span>
+<p>Bob looks down from air (\(n_2 = 1.0\)) at a dime on the bottom of a pool 3 m deep (\(n_1 = 1.33\)):</p>
+\[d' = (3\ \text{m})\frac{1.0}{1.33} = 2.26\ \text{m}.\]
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes define \(n_1\) as the index of the fluid holding the object and \(n_2\) as the index of the viewer's medium, then write the rule as \(d' = d\,[n_1/n_2]\). With those labels that puts water on top: \((3)(1.33/1.0) = 3.99\) m, deeper than the pool. The same lines also write \(d' = d\,[n_{\text{air}}/n_{\text{water}}]\), and the dime example plugs in 1.0/1.33. The right form is \(d' = d\,n_2/n_1\), viewer over object. It holds only for viewing near the normal, which the notes do not say.</p>
+</div>
+<p>A spear fisher aiming at the fish they see throws over it. The fish is deeper, below where it appears.</p>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>Dispersion, prisms and rainbows</h2>
+<p>In a <b>dispersive</b> material, light of different frequencies travels at different speeds. The index is a function of frequency, \(n(f)\), and</p>
+\[v(f) = \frac{c}{n(f)} .\]
+<p>In glass and water across the visible range, higher frequencies have a higher index. Blue and violet are slowed more and bent more. Red is slowed less and bent less. For one glass, \(n_{\text{red}} = 1.520\) and \(n_{\text{violet}} = 1.538\).</p>
+<div class="box ex"><span class="tag">Worked example · red and blue entering glass</span>
+<p>White light meets glass at \(\theta_1 = 60^\circ\), with \(n_{\text{red}} = 1.52\) and \(n_{\text{blue}} = 1.54\):</p>
+\[\theta_{\text{red}} = \sin^{-1}\!\left(\frac{\sin60^\circ}{1.52}\right) = 34.73^\circ, \qquad \theta_{\text{blue}} = \sin^{-1}\!\left(\frac{\sin60^\circ}{1.54}\right) = 34.22^\circ .\]
+<p>Blue ends up closer to the normal: it is bent more. The colors leave the surface half a degree apart.</p>
+</div>
+<p>A <b>prism</b> spreads white light into its colors. Its two faces are tilted toward each other, so the second refraction adds to the first. Red, with the lower index, travels faster in the glass and is bent least. Violet is bent most.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say a block with parallel faces shows no dispersion "because the first wave to enter material is the first wave to leave material." That is not the reason. Inside the block the colors do travel at different angles, as the example above shows. At the parallel exit face, \(n\sin\theta\) carries each color back to its original angle in air, so all colors leave parallel to the incoming beam. They come out side by side, shifted a tiny amount, not fanned out. A prism's faces are not parallel, so the exit angles differ and the colors spread.</p>
+</div>
+
+<h3>Rainbows and sun dogs</h3>
+<p>A <b>rainbow</b> forms when sunlight enters falling raindrops. Each ray refracts going in, reflects off the back of the drop, and refracts again coming out. Both refractions disperse the light, so the colors leave at slightly different angles, about 40° for violet to 42° for red, measured from the direction opposite the Sun. You see a rainbow only with the Sun behind you and the rain in front.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say sunlight in the drop is "total internally reflected off the back surface." It is not total. A ray entering a sphere meets the back surface at the same angle it was refracted to on the way in, which is always below the critical angle. For water, a ray striking at 80° travels at 47.8° inside, still under \(\theta_c = 48.8^\circ\). So most of the light passes out the back, and only a few percent reflects. That is why a rainbow is much fainter than the sunlit cloud behind it.</p>
+</div>
+<p>Each drop sends a given color toward you only if it sits at the right angle from the point opposite the Sun. The drops that do so form a circle around that point. The ground blocks the lower part, so we see an arc; from an airplane the rainbow can be a full circle. Move toward the rain and a different set of drops makes the bow. You can never reach its end.</p>
+<p>A <b>double rainbow</b> comes from light that reflects twice inside the drop. It leaves at about 51°, so the second bow sits outside the first, fainter, with its colors in the reverse order.</p>
+<p><b>Sun dogs</b> are bright colored spots beside the Sun. Flat hexagonal ice crystals in high clouds, drifting with their faces horizontal, refract sunlight toward the ground at about 22° from the Sun. They are the brightest parts of a 22° halo around it.</p>
+</section>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Brewster's angle</h2>
+<p>Reflected light is partly polarized (Chapter 56). At <b>Brewster's angle</b> \(\theta_B\), it is completely polarized, parallel to the surface. The refracted light is only partly polarized.</p>
+<div class="box why"><span class="tag">Derivation · Brewster's angle</span>
+<p>At Brewster's angle the reflected and refracted rays are 90° apart. The reflected ray leaves at \(\theta_B\), so the refracted ray is at \(\theta_2 = 90^\circ - \theta_B\), and \(\sin\theta_2 = \cos\theta_B\). Snell's law becomes \(n_1\sin\theta_B = n_2\cos\theta_B\):</p>
+\[\tan\theta_B = \frac{n_2}{n_1}.\]
+<p>Why 90°: the refracted wave drives the electrons at the surface, and they radiate the reflected wave. For light polarized in the plane of incidence, those electrons oscillate across the refracted ray. When the reflected ray is 90° from the refracted ray, it points along their oscillation, and a dipole sends nothing along its own axis (Chapter 57). Only the polarization parallel to the surface reflects.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · glare off water</span>
+<p>For light in air (\(n_1 = 1.0\)) reflecting off water (\(n_2 = 1.33\)):</p>
+\[\theta_B = \tan^{-1}\!\left(\frac{1.33}{1.0}\right) = 53^\circ \text{ from the normal},\]
+<p>or 37° above the water's surface. Clouds reflected in a lake near that angle send horizontally polarized light. A polarizer with its axis vertical blocks it, and the reflection vanishes.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Mirrors</h2>
+</div>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Objects, images, real and virtual</h2>
+<p>An <b>object</b> is the source of the light rays being imaged. Light leaves every point on it in every direction.</p>
+<ul>
+  <li>A <b>self-illuminating</b> object emits its own light: a bulb, an exit sign, a TV screen.</li>
+  <li>Most objects only <b>reflect</b> light from another source. A tree is seen by the sunlight reflecting off each point of it.</li>
+</ul>
+<p>An <b>image</b> is a point-by-point copy of the object, formed after the light reflects from a mirror or refracts through a lens. Each point of the object maps to one point of the image, where its rays meet or appear to meet. The image keeps the object's proportions, though it may be larger, smaller or upside down. Your eye does this too: the cornea and lens form an image of the scene on the retina.</p>
+<p>The quantities that describe an image are the same for mirrors and lenses:</p>
+<ul>
+  <li><b>Object distance</b> \(d_o\): from the mirror or lens to the object.</li>
+  <li><b>Image distance</b> \(d_i\): from the mirror or lens to where the image forms.</li>
+  <li><b>Object height</b> \(h_o\) and <b>image height</b> \(h_i\).</li>
+  <li><b>Image plane</b>: the plane where the image is in focus.</li>
+  <li><b>Magnification</b> \(m = h_i/h_o\): how much larger the image is, and whether it is upright.</li>
+</ul>
+<div class="box key"><span class="tag">Key idea · real and virtual images</span>
+<p>A <b>real image</b> is where light rays meet. Put a screen there and the image appears on it. A mirror focusing a sunlit tree onto a sheet of paper makes a real image. Take the mirror away and the image is gone.</p>
+<p>A <b>virtual image</b> is where light rays only appear to come from. A screen there shows nothing. You must look into the mirror or lens to see it.</p>
+<p>Your eye cannot tell the two apart. Either way, rays reach the eye as if from the image point.</p>
+</div>
+<p>A bottle in front of a mirror looks as if it sits behind the mirror. The brain assumes the reflected rays traveled in straight lines and traces them back. Hold a sheet of paper behind the mirror and nothing appears on it.</p>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Plane mirrors</h2>
+<p>A <b>plane mirror</b> is a flat reflector. Its image is:</p>
+<ol>
+  <li><b>Upright</b>, the same way up as the object.</li>
+  <li><b>The same size</b>: \(m = 1\), at any distance.</li>
+  <li><b>As far behind the mirror</b> as the object is in front: \(|d_i| = d_o\).</li>
+  <li><b>Virtual</b>: no light comes from behind the mirror.</li>
+  <li><b>Reversed front to back</b>: a finger pointing into the mirror has an image pointing out of it.</li>
+</ol>
+<div class="box why"><span class="tag">Derivation · why the image is as far behind as the object is in front</span>
+<p>Take two rays from a point a distance \(d_o\) in front of the mirror. One goes straight in along the normal and comes straight back. Another hits the mirror a height \(y\) away at angle \(\theta\), and leaves at \(\theta\) on the other side of the normal. Traced back behind the mirror, the second ray meets the normal line where \(\tan\theta = y/d\). The incoming ray has \(\tan\theta = y/d_o\). So \(d = d_o\), for every \(\theta\). All the rays from the point seem to come from one point, as far behind as the object is in front.</p>
+</div>
+<p>Some consequences:</p>
+<ul>
+  <li>Walk toward a mirror at speed \(v\) and your image walks toward the mirror at \(v\) too. You and your image close in on each other at \(2v\).</li>
+  <li>Stand 1 m from a mirror and your face's image is 2 m from your eyes. You focus at 2 m to see it.</li>
+  <li>The image's height does not change as you walk away. It only looks smaller, because it is farther away (Section 17).</li>
+</ul>
+<p><b>Lateral inversion.</b> Writing seen in a mirror reads backwards, and your right hand's image is a left hand. A mirror does not swap left and right: it swaps front and back, and a left hand is a right hand turned front to back. Ambulances print their name reversed on the hood so drivers read it the right way in a rear-view mirror.</p>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Spherical mirrors and the focal point</h2>
+<p>A <b>spherical mirror</b> is a piece cut from the surface of a polished sphere.</p>
+<ul>
+  <li>A <b>concave</b> (converging) mirror reflects from the inside of the sphere. It brings parallel rays together at a point. It can form real or virtual images.</li>
+  <li>A <b>convex</b> (diverging) mirror reflects from the outside. It spreads parallel rays apart, as if they came from a point behind it. It forms only virtual images.</li>
+</ul>
+<p>The <b>center of curvature</b> C is the center of the sphere. The <b>radius of curvature</b> \(R\) is the distance from C to the mirror. The <b>principal axis</b> is the line through C and the middle of the mirror. <b>Paraxial</b> rays are rays close to the principal axis and nearly parallel to it.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>Two labels in the notes' definitions are crossed. The center of curvature is described as "the radius of the spherical surface"; it is a point, the sphere's center, and \(R\) is the distance from it to the mirror. The convex mirror is described as one where "parallel light incident of a concave mirror diverges"; it is the <i>convex</i> mirror that diverges parallel light. Ray 3 in the convex ray-tracing steps, "ray through radius of curvature (C)," means a ray aimed at the center of curvature.</p>
+</div>
+<p>The <b>focal point</b> F of a concave mirror is where paraxial rays parallel to the axis meet after reflecting. It is on the same side as the incoming light, so it is real. Reverse the rays: a point source at F sends out rays that leave the mirror parallel. A convex mirror's focal point is where reflected parallel rays appear to come from, behind the mirror. It is virtual. The <b>focal length</b> \(f\) is the distance from F to the mirror.</p>
+<div class="box why"><span class="tag">Derivation · f = R/2</span>
+<p>A ray parallel to the axis at height \(y\) hits a concave mirror. The normal there is the radius, from the point of impact to C. The ray meets the radius at angle \(\theta\), with \(\sin\theta = y/R\), and reflects at \(\theta\) on the other side. The incoming ray is parallel to the axis, so the radius also makes angle \(\theta\) with the axis at C. The radius, the reflected ray and the axis then form an isosceles triangle, with equal angles \(\theta\) at C and at the point of impact. Its base is the radius, of length \(R\), so the reflected ray crosses the axis a distance \(R/(2\cos\theta)\) from C. For paraxial rays \(\cos\theta \approx 1\), and every ray crosses at \(R/2\) from C, halfway to the mirror:</p>
+\[f = \frac{R}{2}\ \text{(concave)}, \qquad f = -\frac{R}{2}\ \text{(convex)}.\]
+<p>The minus sign marks a virtual focal point, behind the mirror. Rays far from the axis have \(\cos\theta &lt; 1\) and cross closer to the mirror. That spread is spherical aberration (Section 16), and it is why the focal length is defined with paraxial rays.</p>
+</div>
+<p>A mirror has one focal length, and it fixes how the mirror images everything.</p>
+</section>
+
+<section class="topic" id="s11">
+<h2><span class="n">11</span>The mirror equation and ray tracing</h2>
+<div class="box key"><span class="tag">Key idea · the mirror equation</span>
+\[\frac{1}{f} = \frac{1}{d_o} + \frac{1}{d_i}, \qquad d_i = \frac{1}{1/f - 1/d_o}, \qquad m = \frac{h_i}{h_o} = -\frac{d_i}{d_o}.\]
+<p>All distances are measured from the mirror along the principal axis.</p>
+</div>
+<div class="box why"><span class="tag">Derivation · the mirror equation from two rays</span>
+<p>Trace two rays from the top of an object of height \(h_o\) at distance \(d_o\) from a concave mirror. Write image heights as negative when the image is upside down.</p>
+<ul>
+  <li>The ray that hits the mirror at its center reflects at an equal angle below the axis. Its incoming and outgoing legs form two similar right triangles, so \(h_o/d_o = -h_i/d_i\). That is \(m = h_i/h_o = -d_i/d_o\).</li>
+  <li>The ray through F reflects parallel to the axis, at height \(h_i\). Its incoming leg makes similar triangles on either side of F, with sides \(d_o - f\) and \(f\) along the axis: \(h_o/(d_o - f) = -h_i/f\). So \(m = -f/(d_o - f)\).</li>
+</ul>
+<p>Set the two magnifications equal: \(d_i/d_o = f/(d_o - f)\), so \(d_i d_o - d_i f = f d_o\). Divide by \(f d_o d_i\):</p>
+\[\frac{1}{f} = \frac{1}{d_o} + \frac{1}{d_i}.\]
+</div>
+<div class="box key"><span class="tag">Key idea · sign rules for mirrors</span>
+<ul>
+  <li>\(f &gt; 0\) for a concave mirror, \(f &lt; 0\) for a convex one.</li>
+  <li>\(d_o &gt; 0\) for an object in front of the mirror, a real object. That holds for any single mirror. A negative \(d_o\), a virtual object, can only arise in a system of several elements.</li>
+  <li>\(d_i &gt; 0\) for an image in front of the mirror, on the side the light returns to: a real image. \(d_i &lt; 0\) for an image behind the mirror: a virtual image.</li>
+  <li>\(m &gt; 0\): the image is upright. \(m &lt; 0\): it is inverted.</li>
+  <li>\(|m| &gt; 1\): larger than the object. \(|m| = 1\): the same size. \(|m| &lt; 1\): smaller.</li>
+</ul>
+</div>
+<p>A mirror sends light back, so its real images form on the object's side. A lens passes light through, so its real images form on the far side (Section 14).</p>
+
+<h3>Ray tracing</h3>
+<p>Two rays from the top of the object locate the top of the image. A third checks the first two.</p>
+<ol>
+  <li>A ray parallel to the axis reflects through F (or, for a convex mirror, leaves as if from F behind the mirror).</li>
+  <li>A ray through F (or aimed at F behind a convex mirror) reflects parallel to the axis.</li>
+  <li>A ray through C (or aimed at C) hits the mirror along its normal and reflects back on itself.</li>
+</ol>
+<p>Where the reflected rays cross is the image. If they spread apart, trace them back behind the mirror; where the traced lines cross is a virtual image.</p>
+
+<h3>Where the image goes as the object moves in</h3>
+<p>The notes follow Bugs Bunny walking up to a concave mirror from far away.</p>
+<div class="tbl"><table>
+<tr><th>Object at</th><th>Image</th></tr>
+<tr><td>Far away (\(d_o \to \infty\))</td><td>At F. Real, inverted, much smaller.</td></tr>
+<tr><td>Beyond C (\(d_o &gt; R\))</td><td>Between F and C. Real, inverted, smaller.</td></tr>
+<tr><td>At C (\(d_o = R\))</td><td>At C. Real, inverted, same size.</td></tr>
+<tr><td>Between C and F</td><td>Beyond C. Real, inverted, larger.</td></tr>
+<tr><td>At F</td><td>No image: the rays leave parallel (the image is at infinity).</td></tr>
+<tr><td>Inside F</td><td>Behind the mirror. Virtual, upright, larger.</td></tr>
+</table></div>
+<p>From \(m = -f/(d_o - f)\), the image grows without limit as \(d_o\) nears \(f\) from either side. Inside F, it is largest when the object is a little inside F, and shrinks toward \(m = 1\) as the object nears the mirror.</p>
+<p>A convex mirror always forms a virtual, upright, smaller image, with \(0 &lt; m &lt; 1\). With \(f &lt; 0\) and \(d_o &gt; 0\), \(1/d_i = 1/f - 1/d_o\) is always negative and \(|d_i| &lt; d_o\). Store security mirrors and car side mirrors use this to show a wide view.</p>
+</section>
+
+<section class="topic" id="s12">
+<h2><span class="n">12</span>Mirror examples</h2>
+<p>The notes run one candle, \(h_o = 5\) cm, past a concave mirror with \(f = 10\) cm, then past a convex mirror.</p>
+<div class="box ex"><span class="tag">Worked example · candle 100 cm from a concave mirror</span>
+\[d_i = \frac{1}{1/10 - 1/100} = +11.1\ \text{cm}, \qquad m = -\frac{11.1}{100} = -0.111, \qquad h_i = (-0.111)(5\ \text{cm}) = -0.56\ \text{cm}.\]
+<p>Real (\(d_i &gt; 0\)), in front of the mirror, inverted (\(m &lt; 0\)), and about a ninth of the candle's size. A far object images near F.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · candle 12 cm from a concave mirror</span>
+\[d_i = \frac{1}{1/10 - 1/12} = +60\ \text{cm}, \qquad m = -\frac{60}{12} = -5, \qquad h_i = (-5)(5\ \text{cm}) = -25\ \text{cm}.\]
+<p>Real, 60 cm in front of the mirror, inverted and five times the candle's height. The object sits between F and C, so the image lands beyond C.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>In the 100 cm and 12 cm examples the notes compute \(m = -0.11\) and \(m = -5\), then write \(h_i = mh_o = (0.11)(5\ \text{cm}) = 0.55\) cm and \(h_i = (5)(5\ \text{cm}) = 25\) cm. The minus sign is dropped. \(h_i = mh_o\) gives \(-0.55\) cm and \(-25\) cm, and the sign is how the formula says the image is inverted. The 12 cm example also says "A positive image distance means that the <i>object</i> is real." It means the <i>image</i> is real.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · candle 6 cm from a concave mirror</span>
+\[d_i = \frac{1}{1/10 - 1/6} = -15\ \text{cm}, \qquad m = -\frac{-15}{6} = +2.5, \qquad h_i = (2.5)(5\ \text{cm}) = 12.5\ \text{cm}.\]
+<p>Virtual (\(d_i &lt; 0\)), 15 cm behind the mirror, upright and 2.5 times larger. Inside F a concave mirror magnifies, which is how a shaving or makeup mirror works.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · candle 5 cm from a convex mirror</span>
+<p>Now \(f = -20\) cm:</p>
+\[d_i = \frac{1}{-1/20 - 1/5} = -4\ \text{cm}, \qquad m = -\frac{-4}{5} = +0.8, \qquad h_i = (0.8)(5\ \text{cm}) = 4\ \text{cm}.\]
+<p>Virtual, 4 cm behind the mirror, upright and smaller.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The convex-mirror example finds \(d_i = -4\) cm, then sums up that the image "appeared to be formed 15 cm on the opposite side of the mirror." The 15 cm is carried over from the 6 cm example. The image is 4 cm behind the mirror.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · Cathy's mirror</span>
+<p>Cathy sees her image upright, four times her size, and 32 cm behind the mirror. Behind the mirror means virtual, so \(d_i = -32\) cm. Upright and four times larger means \(m = +4\).</p>
+\[d_o = -\frac{d_i}{m} = -\frac{-32}{4} = 8\ \text{cm}, \qquad f = \frac{1}{1/d_o + 1/d_i} = \frac{1}{1/8 - 1/32} = +10.7\ \text{cm}.\]
+<p>\(f &gt; 0\): a concave mirror, with Cathy inside its focal length.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Lenses</h2>
+</div>
+
+<section class="topic" id="s13">
+<h2><span class="n">13</span>Converging and diverging lenses</h2>
+<p>A <b>lens</b> uses refraction at two curved surfaces to bend light rays together or apart and form an image. Two prisms placed base to base make a crude converging lens: each bends light toward its thick end.</p>
+<ul>
+  <li>A <b>converging</b> (positive, convex) lens is thicker in the middle than at the rim. It brings a parallel beam to a point, the focal point. It forms real, inverted images of objects outside F, larger or smaller depending on where the object is. With the object inside F, it forms a virtual, upright, larger image.</li>
+  <li>A <b>diverging</b> (negative, concave) lens is thinner in the middle than at the rim. It spreads a parallel beam as if from a virtual focal point. Its image of a real object is always virtual, upright and smaller.</li>
+</ul>
+<p>The <b>principal focal point</b> is where rays parallel to and near the axis come to a focus (converging lens, real) or appear to come from (diverging lens, virtual). It is where a converging lens images a distant object. For a converging lens it is on the far side from the object; for a diverging lens it is on the object's side. Light through a thin lens can run either way, so every lens has a second focal point, the same distance \(f\) away on the other side. The <b>focal length</b> \(f\) is measured from the center of the lens.</p>
+<p>Lens shapes suit different jobs. A <b>double</b> lens is curved on both sides and gives short focal lengths, for strong bending. A <b>plano</b> lens has one flat side and is the cheapest to make. A <b>meniscus</b> lens curves the same way on both sides, one surface more than the other. It bends rays more evenly and is used in eyeglasses and in many camera lens groups.</p>
+
+<h3>Ray tracing for lenses</h3>
+<p>Three rays from the top of the object locate the image.</p>
+<ol>
+  <li>A ray parallel to the axis leaves through the focal point on the far side (converging), or leaves as if it came from the focal point on the object's side (diverging).</li>
+  <li>A ray through the near focal point (converging), or aimed at the far focal point (diverging), leaves parallel to the axis.</li>
+  <li>A ray through the center of the lens goes straight on. Near the center the two faces are nearly parallel, and a thin slab barely shifts a ray.</li>
+</ol>
+<p>For a diverging lens the outgoing rays spread, so trace them back to where they cross on the object's side. For a converging lens:</p>
+<div class="tbl"><table>
+<tr><th>Object at</th><th>Image</th></tr>
+<tr><td>Beyond \(2f\)</td><td>Between \(f\) and \(2f\) on the far side. Real, inverted, smaller.</td></tr>
+<tr><td>At \(2f\)</td><td>At \(2f\). Real, inverted, same size.</td></tr>
+<tr><td>Between \(f\) and \(2f\)</td><td>Beyond \(2f\). Real, inverted, larger.</td></tr>
+<tr><td>Inside \(f\)</td><td>On the object's side. Virtual, upright, larger.</td></tr>
+</table></div>
+</section>
+
+<section class="topic" id="s14">
+<h2><span class="n">14</span>The thin-lens equation</h2>
+<div class="box key"><span class="tag">Key idea · the thin-lens equation</span>
+\[\frac{1}{f} = \frac{1}{d_o} + \frac{1}{d_i}, \qquad d_i = \frac{1}{1/f - 1/d_o}, \qquad m = \frac{h_i}{h_o} = -\frac{d_i}{d_o}.\]
+<p>It is the mirror equation. Distances are measured from the center of the lens. Given two of \(f\), \(d_o\) and \(d_i\), it gives the third.</p>
+</div>
+<div class="box why"><span class="tag">Derivation · the thin-lens equation from two rays</span>
+<p>An object of height \(h_o\) stands at \(d_o\) in front of a converging lens. Its image is at \(d_i\) behind the lens, with height \(h_i\) (negative if inverted).</p>
+<ul>
+  <li>The ray through the center goes straight. It makes similar triangles on the two sides of the lens: \(h_o/d_o = -h_i/d_i\), so \(m = -d_i/d_o\).</li>
+  <li>The ray parallel to the axis meets the lens at height \(h_o\) and leaves through the far focal point. Beyond the lens it makes similar triangles on either side of F, with sides \(f\) and \(d_i - f\) along the axis: \(h_o/f = -h_i/(d_i - f)\), so \(m = -(d_i - f)/f\).</li>
+</ul>
+<p>Equate the two: \(d_i/d_o = (d_i - f)/f\), so \(d_i f = d_i d_o - f d_o\). Divide by \(f d_o d_i\):</p>
+\[\frac{1}{d_o} = \frac{1}{f} - \frac{1}{d_i}\quad\Longrightarrow\quad \frac{1}{f} = \frac{1}{d_o} + \frac{1}{d_i}.\]
+</div>
+<div class="box key"><span class="tag">Key idea · sign rules for lenses</span>
+<ul>
+  <li>\(f &gt; 0\) for a converging lens, \(f &lt; 0\) for a diverging lens.</li>
+  <li>\(d_o &gt; 0\) for an object in front of the lens, a real object. \(d_o &lt; 0\), a virtual object, needs more than one lens.</li>
+  <li>\(d_i &gt; 0\) for an image on the far side of the lens: real. \(d_i &lt; 0\) for an image on the object's side: virtual.</li>
+  <li>\(m &gt; 0\) upright, \(m &lt; 0\) inverted.</li>
+</ul>
+<p>For a single lens, \(m = -d_i/d_o\) with \(d_o &gt; 0\) ties the signs together. A positive \(m\) means a negative \(d_i\): upright goes with virtual, on the object's side. A negative \(m\) means a positive \(d_i\): inverted goes with real, on the far side.</p>
+</div>
+<p>A lens's real images form on the opposite side from the object, because the light goes through. Its virtual images form on the object's side. This is the main difference from a mirror. A stamp held inside the focal length of a magnifying lens gives a virtual image: look through the lens and the stamp looks larger, but paper on the far side shows nothing.</p>
+
+<h3>The image plane</h3>
+<p>Each point of the object sends out a cone of rays. A converging lens bends every ray of that cone to meet at one point in the image plane. A sheet of paper there shows a sharp image. Move the paper toward the lens or away, and each cone is cut where its rays have not yet met or have spread again. Each object point becomes a small disk, the disks overlap, and the image blurs. The image plane is perpendicular to the axis, at \(d_i\).</p>
+</section>
+
+<section class="topic" id="s15">
+<h2><span class="n">15</span>Lens examples</h2>
+<p>The notes run the same candle, \(h_o = 5\) cm, past a converging lens with \(f = 10\) cm and a diverging lens with \(f = -20\) cm. The numbers match the mirror examples of Section 12, because the equation is the same. What changes is the side: a lens's real image is on the far side.</p>
+<div class="box ex"><span class="tag">Worked example · candle 100 cm from a converging lens</span>
+\[d_i = \frac{1}{1/10 - 1/100} = +11.1\ \text{cm}, \qquad m = -0.111, \qquad h_i = -0.56\ \text{cm}.\]
+<p>Real, 11.1 cm beyond the lens, inverted and about a ninth of the size.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · candle 12 cm from a converging lens</span>
+\[d_i = \frac{1}{1/10 - 1/12} = +60\ \text{cm}, \qquad m = -5, \qquad h_i = -25\ \text{cm}.\]
+<p>Real, 60 cm beyond the lens, inverted and five times larger. This is a projector: a small slide close outside F makes a large image on a far screen.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · candle 6 cm from a converging lens</span>
+\[d_i = \frac{1}{1/10 - 1/6} = -15\ \text{cm}, \qquad m = +2.5, \qquad h_i = +12.5\ \text{cm}.\]
+<p>Virtual, 15 cm from the lens on the candle's side, upright and 2.5 times larger. This is a magnifying glass.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · candle 5 cm from a diverging lens</span>
+\[d_i = \frac{1}{-1/20 - 1/5} = -4\ \text{cm}, \qquad m = +0.8, \qquad h_i = +4\ \text{cm}.\]
+<p>Virtual, 4 cm from the lens on the candle's side, upright and smaller.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The lens examples repeat the mirror examples' slips. The heights are written \((0.11)(5\ \text{cm}) = 0.55\) cm and \((5)(5\ \text{cm}) = 25\) cm, though \(m\) is \(-0.11\) and \(-5\): the images are at \(h_i = -0.55\) cm and \(-25\) cm. The 12 cm example says a positive image distance means "the object is real" (the image is). The diverging-lens summary places the image "15 cm on the same side," but its own \(d_i\) is \(-4\) cm.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The 6 cm example is headed "For object outside focal length." The candle is at 6 cm and \(f = 10\) cm, so it is <i>inside</i> the focal length. That is why the image is virtual and upright.</p>
+</div>
+<p>The notes then work three problems backward, from what is seen to the lens.</p>
+<div class="box ex"><span class="tag">Worked example · a real image 13.33 cm away</span>
+<p>A candle 40 cm from a lens makes an image 13.33 cm on the far side. Far side means real, \(d_i = +13.33\) cm:</p>
+\[f = \frac{1}{1/13.33 + 1/40} = +10\ \text{cm}.\]
+<p>A converging lens.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a virtual image 10 cm away</span>
+<p>A candle 30 cm from a lens makes an image 10 cm away on its own side. Same side means virtual, \(d_i = -10\) cm:</p>
+\[f = \frac{1}{-1/10 + 1/30} = -15\ \text{cm}.\]
+<p>A diverging lens.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · finding a lens from m = +0.4</span>
+<p>An object 40 cm from a single lens has an image with \(m = +0.4\): upright and smaller.</p>
+\[d_i = -md_o = -(0.4)(40\ \text{cm}) = -16\ \text{cm}, \qquad f = \frac{1}{-1/16 + 1/40} = -26.7\ \text{cm}.\]
+<p>The image is virtual, on the object's side, and the lens is diverging. An upright, smaller image from one lens always means a diverging lens.</p>
+</div>
+</section>
+
+<section class="topic" id="s16">
+<h2><span class="n">16</span>Lenses in liquids, lens power and aberrations</h2>
+<h3>A lens in a liquid</h3>
+<p>A lens bends light because of the change in index at its surfaces. Put a glass lens in water and the change is smaller, so it bends light less and its focal length grows.</p>
+<ul>
+  <li>In air, a glass lens sees an index change from 1.0 to 1.5.</li>
+  <li>In water, the change is only 1.33 to 1.5. The lens still converges, but less: a longer focal length.</li>
+  <li>A hollow lens-shaped shell of air in water reverses the change, from 1.33 down to 1.0. A shape that would converge in air now diverges.</li>
+  <li>A lens with the same index as the liquid around it does nothing. Light passes as if it were not there.</li>
+</ul>
+<p>The focusing strength of a surface goes with \(n_{\text{lens}} - n_{\text{outside}}\). The eye's lens system has \(n \approx 1.4\). Against air the change is 0.4; against water it is 0.07, nearly six times smaller. Under water the eye loses most of its focusing power, the image lands far behind the retina, and the view is a blur. A mask puts air back in front of the eye. Fish and whales have eyes built for water, and see poorly in air.</p>
+
+<h3>Lens power</h3>
+<p>Eyeglasses are specified by <b>refractive power</b>, the inverse of the focal length in meters:</p>
+\[P = \frac{1}{f}, \qquad \text{in diopters (D)} = \text{m}^{-1}.\]
+<p>Converging lenses have \(P &gt; 0\) and diverging lenses \(P &lt; 0\). A shorter focal length means more power.</p>
+<div class="box ex"><span class="tag">Worked example · a −0.25 D prescription</span>
+<p>Glasses of power \(-0.25\) D have \(f = 1/P = 1/(-0.25\ \text{D}) = -4\) m. A weak diverging lens, the kind that corrects slight nearsightedness.</p>
+</div>
+
+<h3>Aberrations</h3>
+<p>An <b>aberration</b> is a departure from a perfect image. It comes from the shape of the lens or from dispersion in its glass.</p>
+<ul>
+  <li><b>Spherical aberration.</b> Rays through the outer part of a spherical lens focus closer to the lens than rays near the center (Section 10 shows the same for a mirror). There is no single focus, only a smallest blur spot, the <b>circle of least confusion</b>. An <b>aperture</b> that blocks the outer rays and passes only paraxial ones reduces it, at the cost of light.</li>
+  <li><b>Chromatic aberration.</b> The index depends on color (Section 6), so a lens focuses blue closer than red. White points get colored fringes.</li>
+</ul>
+<p>An <b>achromatic doublet</b> corrects chromatic aberration. A converging lens of low-dispersion glass (crown) is cemented to a weaker diverging lens of high-dispersion glass (flint). The pair still converges, but the flint's color spread cancels the crown's, bringing red and blue to one focus.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say "A Meniscus lens can reduce both Spherical and Chromatic Aberrations," and describe the compound lens as any convergent lens paired with a divergent one. Chromatic aberration comes from the glass, not the shape: a single lens of one glass, of any shape, focuses colors at different points. Bending a lens into a meniscus reduces spherical aberration only. Correcting color takes two glasses with different dispersion, as in the crown-flint doublet. Two lenses of the same glass, one converging and one diverging, cancel each other's color spread only by cancelling their focusing as well.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part IV</div>
+  <h2>Optical instruments</h2>
+</div>
+
+<section class="topic" id="s17">
+<h2><span class="n">17</span>Angular size and the magnifying glass</h2>
+<p>How big a thing looks depends on the size of its image on your retina. That <b>apparent size</b> depends on the object's real size, its distance and any optics in between. What sets it is the <b>angular size</b> \(\theta\): the angle the object spans at your eye. A larger angle covers more of the retina, and the object looks larger or closer.</p>
+<div class="box ex"><span class="tag">Worked example · a penny and the Moon</span>
+<p>Hold a penny at arm's length and it can cover the Moon. A penny 1.9 cm across at 2.1 m spans \(1.9/210 = 0.0090\) rad, 0.52°. The Moon, 3474 km across at 384,000 km, spans \(3474/384{,}000 = 0.0090\) rad too. Their images on the retina are the same size, though the Moon is 180 million times wider.</p>
+</div>
+<p>The brain reads a shrinking image as moving away. A cartoon drawn larger in each frame looks like it is coming closer, though it is only changing size.</p>
+<p><b>Angular magnification</b> compares the angle an image spans through an instrument with the angle the object spans to the unaided eye:</p>
+\[M = \frac{\theta_{\text{aided}}}{\theta_{\text{unaided}}} .\]
+<div class="box ex"><span class="tag">Worked example · Mike reads a page</span>
+<p>A page spans 10° at Mike's eye. He holds a converging lens over it, with the page inside the focal length, and the enlarged virtual image spans 30°:</p>
+\[M = \frac{30^\circ}{10^\circ} = 3 .\]
+<p>The page looks three times as big.</p>
+</div>
+
+<h3>The magnifying glass</h3>
+<p>A <b>magnifying glass</b> is a converging lens of short focal length. The object goes a little inside F, and you look through the lens at a virtual, upright, enlarged image on the object's side.</p>
+<div class="box why"><span class="tag">Derivation · M = N/f</span>
+<p>Without the lens, the closest you can hold an object of height \(h\) and still focus on it is the <b>near point</b>, \(N = 25\) cm for normal vision. There it spans \(\theta_{\text{unaided}} \approx h/N\).</p>
+<p>With the object at the focal point, the rays from each point leave the lens parallel, so the image is at infinity and the relaxed eye can view it. The ray through the lens center goes straight, at angle \(\theta_{\text{aided}} \approx h/f\). So</p>
+\[M = \frac{h/f}{h/N} = \frac{N}{f} = \frac{25\ \text{cm}}{f}.\]
+<p>A shorter focal length gives more magnification. With the image at the near point instead, \(M = 1 + N/f\), slightly more.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · Cathy reads a map</span>
+<p>Cathy uses a magnifier with \(f = 6\) cm on 4-point type, letters 1.4 mm tall:</p>
+\[M = \frac{25\ \text{cm}}{6\ \text{cm}} = 4.17 .\]
+<p>Through the lens the letters span the angle that 5.8 mm letters, \((4.17)(1.4\ \text{mm})\), would span at 25 cm. They read like 17-point type.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The map example writes "\(M = h_i/h_o\) therefore \(h_i = Mh_o = 5.8\) mm," using the angular magnification as if it were a ratio of heights. They are different quantities. With the image at infinity, its height \(h_i\) is infinite and \(m = h_i/h_o\) has no finite value. What 4.17 compares is angles: the letters look as big as 5.8 mm letters held at the near point.</p>
+</div>
+</section>
+
+<section class="topic" id="s18">
+<h2><span class="n">18</span>Microscopes and telescopes</h2>
+<p>Both instruments use two lenses. The <b>objective</b> is the lens nearest the object. It forms a real image. The <b>eyepiece</b> is the lens you look through. It acts as a magnifying glass on that image.</p>
+
+<h3>The compound microscope</h3>
+<p>The object sits a little outside the objective's focal point, so the objective forms a large real image far behind it. The eyepiece magnifies that image. The final image is virtual and inverted. The objective's focal length is shorter than the eyepiece's, \(f_o &lt; f_e\).</p>
+<div class="box why"><span class="tag">Derivation · the microscope's magnification</span>
+<p>The objective's linear magnification is \(m_o = -d_i/d_o\). The object is close to F, so \(d_o \approx f_o\) and \(m_o \approx -d_i/f_o\). The eyepiece, with its object at its focal point, gives \(M_e = N/f_e\). The two multiply:</p>
+\[M = m_o M_e = -\frac{d_i}{f_o}\,\frac{N}{f_e},\]
+<p>where \(d_i\) is the distance from the objective to the image it forms. The minus sign says the final image is inverted.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · Bob's microscope</span>
+<p>Bob's microscope has \(f_o = 1\) cm and \(f_e = 2.5\) cm, and the sample is 1.1 cm from the objective. First the objective's image:</p>
+\[d_i = \frac{1}{1/1 - 1/1.1} = +11\ \text{cm}.\]
+<p>Then</p>
+\[M = -\frac{(11\ \text{cm})(25\ \text{cm})}{(1\ \text{cm})(2.5\ \text{cm})} = -110 .\]
+<p>The sample looks 110 times larger, upside down.</p>
+</div>
+
+<h3>Refracting telescopes</h3>
+<p>A telescope looks at distant objects, effectively at infinity. Its objective forms a small real image at its focal point. The eyepiece, placed one focal length beyond that image, magnifies it. The objective's focal length is the longer one, \(f_o &gt; f_e\).</p>
+<div class="box why"><span class="tag">Derivation · M = −f_o/f_e</span>
+<p>A distant object spans angle \(\theta\) at the objective. Its image, at the objective's focal point, has height \(h = -f_o\theta\) (inverted). The eyepiece is \(f_e\) beyond that image, so the image spans \(\theta' = h/f_e = -f_o\theta/f_e\) at the eye. So</p>
+\[M = \frac{\theta'}{\theta} = -\frac{f_o}{f_e}.\]
+<p>The tube is \(f_o + f_e\) long.</p>
+</div>
+<ul>
+  <li>An <b>astronomical (Keplerian) telescope</b> uses two converging lenses. \(M &lt; 0\): the image is inverted. Prisms or an extra lens turn it upright for viewing on land.</li>
+  <li>A <b>Galilean telescope</b> uses a converging objective and a diverging eyepiece. With \(f_e &lt; 0\), \(M = -f_o/f_e &gt; 0\): the image is upright. Opera glasses work this way.</li>
+</ul>
+<div class="box ex"><span class="tag">Worked example · Mike's bird-watching telescope</span>
+<p>\(f_o = 120\) cm and \(f_e = 3\) cm:</p>
+\[M = -\frac{120\ \text{cm}}{3\ \text{cm}} = -40 .\]
+<p>Birds look 40 times larger, upside down unless the telescope has erecting optics. The tube is about 123 cm long.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>Both instrument examples drop the minus sign their own formulas carry. The microscope line reads \(M = -(11)(25)/((1)(2.5)) = 110\), and the telescope line reads \(M = -120/3 = 40\). They are \(-110\) and \(-40\). The notes say the sign is what tells inverted from upright, so dropping it turns an inverted image upright.</p>
+</div>
+<p>Small refracting telescopes are compact and cheap. Large ones are hard to build, because a big lens is heavy, sags, and can be held only at its rim. Every lens also suffers chromatic aberration.</p>
+
+<h3>Reflecting telescopes</h3>
+<p>A <b>reflecting telescope</b> uses a curved mirror as its objective. The bigger the mirror, the more light it gathers. Mirrors can be made huge, because they can be supported across their whole back. Reflection does not depend on wavelength, so a mirror has no chromatic aberration. A mirror still has to be shaped well: a spherical one shows spherical aberration, so large telescopes use parabolic or related shapes. Designs differ in where the image goes. A <b>prime focus</b> telescope puts the detector at the mirror's focus. A <b>Newtonian</b> uses a flat mirror to send the light out the side of the tube. A <b>Cassegrain</b> uses a small convex secondary mirror to send it back through a hole in the main mirror. The Hubble and Webb telescopes are of the Cassegrain family.</p>
+</section>
+
+<section class="topic" id="s19">
+<h2><span class="n">19</span>Cameras</h2>
+<p>A <b>camera</b> is a lens system that forms a real image on a sensor or film and records it.</p>
+
+<h3>f-number</h3>
+<p>The <b>f-number</b> of a lens is its focal length over its aperture diameter:</p>
+\[N = \frac{f}{D}.\]
+<p>A lens set to f/16 has an f-number of 16. An adjustable aperture inside the lens sets \(D\). A 40 mm lens with a 10 mm aperture is f/4.</p>
+<ul>
+  <li><b>Light.</b> The light collected goes with the aperture's area, \(D^2\), so for a fixed \(f\) the brightness of the image goes as \(1/N^2\). Each full stop, f/2.8, f/4, f/5.6, f/8 and on, multiplies \(N\) by \(\sqrt2\) and halves the light.</li>
+  <li><b>Depth of field.</b> With a large \(N\) (small \(D\)), the cone of rays from each point is narrow. A point a little in front of or behind the focused distance still makes only a small blur spot, so a wide range of distances looks sharp. With a small \(N\) (large \(D\)), the cones are wide, and only things near the focused distance are sharp. A portrait at f/2.8 has a blurred background; a landscape at f/16 is sharp from near to far.</li>
+</ul>
+
+<h3>Shutter speed</h3>
+<p>The <b>shutter speed</b> is the time the shutter stays open, the exposure time. It is quoted as a fraction of a second: 1/15 s is an exposure of 0.067 s.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes write "\(\text{Shutter speed} = 1/\text{Exposure time}\)," then compute "1/15 s the shutter is open for \(1/(15\ \text{s}) = 0.067\) /seconds." The quoted shutter speed is the exposure time itself, not its inverse: "1/15 s" means the shutter is open for \(1/15\) s \(= 0.067\) s. The unit is seconds, not "/seconds." By the notes' formula a 1/15 s setting would be open for 15 s.</p>
+</div>
+<p>A short exposure ("fast") freezes motion and makes a sharp picture but lets in less light. A long exposure ("slow") gathers more light but blurs anything that moves. Halving the exposure time halves the light, which one stop of aperture can make up.</p>
+
+<h3>Digital sensors and autofocus</h3>
+<p>Most digital cameras use <b>CMOS</b> sensors; some high-end and scientific cameras use <b>CCD</b>s. Both are arrays of photodiodes, one per pixel. Light knocks electrons free in each photodiode, and the charge collects on a tiny capacitor. More light means more charge. The charges are read out and turned into the image. CMOS sensors use less power, cost less, and read out faster, so phones and most cameras use them.</p>
+<ul>
+  <li><b>Active autofocus</b> sends out a pulse of infrared light or ultrasound, times or measures its return to find the distance, and sets the focus for that distance.</li>
+  <li><b>Passive autofocus</b> reads the image on the sensor. A blurred image has little contrast: neighboring pixels differ little. The camera moves the lens until the contrast is highest, which is where the image is in focus.</li>
+</ul>
+
+<h3>Pinhole cameras, projectors and Fresnel lenses</h3>
+<p>A <b>pinhole camera</b> is a box with a tiny hole and no lens. From each point of the object, only the narrow bundle of rays through the hole reaches the back of the box. Each object point lights one small spot, and the spots make a real, inverted image. A smaller hole makes a sharper but dimmer image.</p>
+<p>A <b>projector</b> lights a slide, film or small display with a lamp and a condensing lens, which gathers the lamp's light evenly through it. A projection lens then forms a real, magnified, inverted image of it on the screen, as in the 12 cm lens example of Section 15. The slide goes in upside down so the picture appears upright.</p>
+<p>A <b>Fresnel lens</b> keeps the curved surface of a thick converging lens but drops the glass beneath it. The surface is cut into thin concentric rings, each with the slope of the original curve at that radius, set on a flat sheet. It bends light like the full lens with a fraction of the weight and cost, so it can be made large. Lighthouses use Fresnel lenses to send a lamp's light out as a parallel beam; overhead projectors used them as condensers. The ring edges scatter light, so they make poor imaging lenses.</p>
+</section>
+
+<section class="topic" id="s20">
+<h2><span class="n">20</span>Fiber optics</h2>
+<p>An <b>optical fiber</b> is a thin strand of glass or plastic that carries light by total internal reflection. Its <b>core</b> has a high index, and the <b>cladding</b> around it has a lower one. Light in the core strikes the core-cladding interface at more than the critical angle,</p>
+\[\theta_c = \sin^{-1}\!\left(\frac{n_{\text{clad}}}{n_{\text{core}}}\right),\]
+<p>reflects totally, and zigzags along the fiber. Little light is lost at each bounce, so light travels many kilometers.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say light in the core totally reflects at angles larger than the critical angle "measured from the normal to the end surface of the fiber." The critical angle is measured from the normal to the <i>core-cladding interface</i>, the side wall of the core, where the reflection happens. The angle at the end face is the entry angle, and it must be <i>small</i>, below \(\theta_{\text{max}}\) in the derivation below, for the light to be guided. Measuring from the end-face normal reverses the condition.</p>
+</div>
+<div class="box why"><span class="tag">Derivation · the numerical aperture</span>
+<p>A ray enters the flat end of the fiber from a medium of index \(n_{\text{out}}\), at angle \(\theta\) to the fiber's axis. In the core it travels at \(\theta_r\) to the axis, with \(n_{\text{out}}\sin\theta = n_{\text{core}}\sin\theta_r\). The side wall is parallel to the axis, so the ray meets it at \(90^\circ - \theta_r\) from the wall's normal. It is guided if \(90^\circ - \theta_r \ge \theta_c\), that is \(\cos\theta_r \ge \sin\theta_c = n_{\text{clad}}/n_{\text{core}}\). At the limit,</p>
+\[\sin\theta_r = \sqrt{1 - \cos^2\theta_r} = \frac{\sqrt{n_{\text{core}}^2 - n_{\text{clad}}^2}}{n_{\text{core}}}.\]
+<p>Put that into the entry condition. The largest entry angle that is still guided satisfies</p>
+\[\text{NA} = n_{\text{out}}\sin\theta_{\text{max}} = \sqrt{n_{\text{core}}^2 - n_{\text{clad}}^2}.\]
+<p>The <b>numerical aperture</b> NA measures how wide a cone of light the fiber accepts. A larger index difference gives a larger NA.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a plastic fiber</span>
+<p>An acrylic core (\(n = 1.49\)) in a fluoropolymer cladding (\(n = 1.36\)), in air:</p>
+\[\theta_c = \sin^{-1}\!\left(\frac{1.36}{1.49}\right) = 65.9^\circ, \qquad \text{NA} = \sqrt{1.49^2 - 1.36^2} = 0.609, \qquad \theta_{\text{max}} = \sin^{-1}(0.609) = 37.5^\circ .\]
+<p>The fiber accepts light from a cone 37.5° either side of its axis. Easy to couple an LED into, which suits short links in cars and homes.</p>
+</div>
+<div class="box ex"><span class="tag">Application · telecom optical fiber</span>
+<p>The fibers that carry internet traffic are silica glass, with a core of \(n = 1.475\) and a cladding of \(n = 1.460\), a difference of 1%. In air,</p>
+\[\theta_c = \sin^{-1}\!\left(\frac{1.460}{1.475}\right) = 81.8^\circ, \qquad \text{NA} = \sqrt{1.475^2 - 1.460^2} = 0.210, \qquad \theta_{\text{max}} = 12.1^\circ .\]
+<p>Only rays within 12° of the axis are guided, so a laser is needed to launch the light. In the core the light travels at \(v = c/n = 2.03\times10^8\) m/s, so a pulse takes 4.9 µs to cover 1 km. Light enters at 1550 nm, where silica absorbs least, at \(f = c/\lambda = 1.94\times10^{14}\) Hz. A ray at the guiding limit zigzags along a path longer by \(n_{\text{core}}/n_{\text{clad}} = 1.0103\), so in a multimode fiber of this kind it arrives \((4.92\ \mu\text{s})(0.0103) = 50\) ns after a ray along the axis. Double the index difference, to 1.475 and 1.445, and the NA grows by about \(\sqrt2\), to 0.296.</p>
+</div>
+<p>A fiber's capacity comes from the frequency of its carrier. Light near \(2\times10^{14}\) Hz can be switched on and off billions of times a second, far faster than the radio frequencies a copper cable carries well. A thin fiber cable carries as much as a copper cable many times its size, and it has replaced copper for long-distance links.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say "because fiber optics uses light and not electrons to transmit information it can transmit much more information in a lot shorter time." A fiber's signal is not faster. Light in glass travels at about \(c/1.47 = 2.0\times10^8\) m/s, about the same speed a signal travels along a copper coaxial cable; the electrons in a wire drift far slower still, but the signal is the field, not the electrons. The fiber's advantage is bandwidth: its \(10^{14}\) Hz carrier can be modulated far faster, so more information passes each second, with less loss over distance.</p>
+</div>
+
+<h3>Kinds of fiber</h3>
+<ul>
+  <li><b>Single-mode</b> fiber has a core about 9 µm across and a small NA. Only one path, or mode, is guided. Every pulse arrives as one, so it suits long, high-bandwidth links, but the light must be aimed into the tiny core with care.</li>
+  <li><b>Multimode</b> fiber has a larger core and a larger NA. It is easy to couple light into and is cheaper, for short links. Rays at different angles travel different path lengths, so a short pulse spreads out on the way. This <b>modal dispersion</b> limits its bandwidth over long distances.</li>
+  <li>A <b>step-index</b> fiber has a uniform core index that drops abruptly at the cladding. Light travels by total internal reflection, and in multimode form it suffers modal dispersion.</li>
+  <li>A <b>graded-index</b> (GRIN) fiber has a core index that falls smoothly from the center to the edge. Rays that swing far from the axis travel farther but spend that time in lower-index, faster glass, so they keep pace with rays along the axis. That cancels most modal dispersion.</li>
+</ul>
+<p>One fiber cannot carry an image: all the light in it mixes. A <b>fiber bundle</b> of thousands of fibers, each 20 µm across or less, kept in the same order at both ends, carries one spot of the image in each fiber. The spots together form the picture. Medical endoscopes use bundles to see inside the body.</p>
+</section>
+
+<section class="topic" id="s21">
+<h2><span class="n">21</span>Refractometers and shaped reflectors</h2>
+<p>A <b>refractometer</b> measures the index of a liquid placed on a glass prism. Light from inside the glass meets the glass-liquid interface. The liquid's index is lower than the glass's, so there is a critical angle, \(\sin\theta_c = n_{\text{liquid}}/n_{\text{glass}}\). Light beyond it reflects totally and light below it passes into the liquid. The instrument finds the angle where the reflected light switches from partial to total, and reads \(n_{\text{liquid}} = n_{\text{glass}}\sin\theta_c\). More dissolved sugar or salt raises the index, so a scale calibrated against known solutions reads the concentration.</p>
+<ul>
+  <li><b>Degrees Brix</b> measure sugar: 1 °Bx is 1 g of sugar per 100 g of solution. Fruit growers and brewers use it.</li>
+  <li><b>Salinity</b> measures salt, in parts per thousand (ppt) or per million (ppm). Seawater is about 35 ppt.</li>
+</ul>
+<div class="box ex"><span class="tag">Application · refractometer for salt water</span>
+<p>The prism has \(n_{\text{glass}} = 1.55\), and the critical angle against a salt solution is measured at \(\theta_c = 59.61^\circ\):</p>
+\[n_{\text{solution}} = 1.55\sin59.61^\circ = 1.337 .\]
+<p>Pure water is 1.333, so the salt has raised the index by 0.004. The notes' calibration chart reads this as 25 ppt. The method is sensitive: a change of 0.001 in index moves \(\theta_c\) by \(\Delta\theta = \Delta n/(n_{\text{glass}}\cos\theta_c) = 0.001/(1.55\times0.506) = 0.0013\) rad, 0.07°.</p>
+</div>
+
+<h3>Retroreflectors</h3>
+<p>A <b>retroreflector</b> sends light straight back toward its source, whatever direction it arrives from. A <b>corner cube</b> uses three mirror faces at right angles; each reflection reverses one component of the ray's direction (Chapter 57 shows two mirrors doing this in a plane). A <b>cat's eye</b> uses a glass sphere that focuses the light onto a reflector behind it, which sends it back the way it came. Bike and car reflectors, safety stripes on clothing, and raised road markers that light up in headlights all use them.</p>
+
+<h3>Parabolic and elliptical reflectors</h3>
+<ul>
+  <li>A <b>parabolic reflector</b> sends light from a source at its focus out as a parallel beam, with no spherical aberration. Move the source slightly beyond the focus and the beam converges to a point in front of the mirror. Car headlights and searchlights use parabolic reflectors to make beams, and dish antennas use them in reverse, to collect parallel radio waves at the focus.</li>
+  <li>An <b>elliptical reflector</b> has two foci. Light from a source at one focus all reflects through the other. Dental lights and theater spotlights use this to concentrate light at a point.</li>
+</ul>
+</section>
+
+<section class="topic" id="s22">
+<h2><span class="n">22</span>Formula sheet</h2>
+<div class="tbl"><table>
+<tr><th>Idea</th><th>Result</th></tr>
+<tr><td>Index of refraction</td><td>\(n=c/v\), \(\;\lambda_n=\lambda/n\), \(f\) unchanged</td></tr>
+<tr><td>Snell's law</td><td>\(n_1\sin\theta_1=n_2\sin\theta_2\), angles from the normal</td></tr>
+<tr><td>Reflection at normal incidence</td><td>\(R=\left(\dfrac{n_1-n_2}{n_1+n_2}\right)^2\)</td></tr>
+<tr><td>Critical angle</td><td>\(\sin\theta_c=n_{\text{low}}/n_{\text{high}}\)</td></tr>
+<tr><td>Apparent depth (near the normal)</td><td>\(d'=d\,n_{\text{viewer}}/n_{\text{object}}\)</td></tr>
+<tr><td>Brewster's angle</td><td>\(\tan\theta_B=n_2/n_1\)</td></tr>
+<tr><td>Spherical mirror</td><td>\(f=R/2\) concave, \(\;f=-R/2\) convex</td></tr>
+<tr><td>Mirror and thin-lens equation</td><td>\(1/f=1/d_o+1/d_i\)</td></tr>
+<tr><td>Magnification</td><td>\(m=h_i/h_o=-d_i/d_o\)</td></tr>
+<tr><td>Signs</td><td>\(f&gt;0\) converging; \(\;d_i&gt;0\) real; \(\;m&gt;0\) upright</td></tr>
+<tr><td>Lens power</td><td>\(P=1/f\), diopters with \(f\) in m</td></tr>
+<tr><td>Angular magnification</td><td>\(M=\theta_{\text{aided}}/\theta_{\text{unaided}}\)</td></tr>
+<tr><td>Magnifying glass</td><td>\(M=N/f\), \(\;N=25\) cm</td></tr>
+<tr><td>Compound microscope</td><td>\(M=-\dfrac{d_i\,N}{f_o f_e}\)</td></tr>
+<tr><td>Telescope</td><td>\(M=-f_o/f_e\)</td></tr>
+<tr><td>f-number</td><td>\(N=f/D\); brightness \(\propto 1/N^2\)</td></tr>
+<tr><td>Optical fiber</td><td>\(\sin\theta_c=n_{\text{clad}}/n_{\text{core}}\), \(\;\text{NA}=n_{\text{out}}\sin\theta_{\text{max}}=\sqrt{n_{\text{core}}^2-n_{\text{clad}}^2}\)</td></tr>
+<tr><td>Refractometer</td><td>\(n_{\text{liquid}}=n_{\text{glass}}\sin\theta_c\)</td></tr>
+</table></div>
+</section>
+</main>
+
+<footer>Rewritten from the Fall 2026 PHY 2049 lecture notes, Chapters 58, 59, 60 and 62 (Chapter 61 is skipped this term). Every worked answer was recomputed. Constants used: \(c = 3.00\times10^8\) m/s, near point \(N = 25\) cm, indices \(n_{\text{air}} = 1.00\), \(n_{\text{water}} = 1.33\) unless an example gives its own.</footer>
+
+</body></html>

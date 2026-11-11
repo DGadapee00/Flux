@@ -45,6 +45,12 @@ export default {
   'e7.60.lens': {
     why: { type: { 1: IMAGE, 2: IMAGE, 3: IMAGE, 4: IMAGE, 5: IMAGE } },
   },
+  'e7.62.fiber': {
+    hints: [
+      String.raw`The light reflects off the side wall, so the critical angle uses the two indices there: $\sin\theta_c = n_{\text{clad}}/n_{\text{core}}$.`,
+      String.raw`Entering from air, $\sin\theta_{\text{max}} = \text{NA} = \sqrt{n_{\text{core}}^2 - n_{\text{clad}}^2}$. Angles are from the fiber's axis.`,
+    ],
+  },
   'e7.62.magnifier': {
     hints: [
       'Angular magnification compares the angle through the lens with the angle at the near point, 25 cm.',

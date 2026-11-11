@@ -65,7 +65,7 @@ export const EXAMS = [
     title: 'Geometric optics',
     chapters: '58–62',
     date: 'Fri 11/20',
-    labs: ['refraction', 'mirrors', 'lenses'],
+    labs: ['refraction', 'mirrors', 'lenses', 'fiber'],
     coming: [],
   },
   {
@@ -103,6 +103,7 @@ export const LAB_META = {
   flowmeter: { id: 'flowmeter', exam: 'e5', title: 'Flow meter', app: true },
   radargun: { id: 'radargun', exam: 'e6', title: 'Radar gun', app: true },
   solarsail: { id: 'solarsail', exam: 'e6', title: 'Solar sail', app: true },
+  fiber: { id: 'fiber', exam: 'e7', title: 'Optical fiber', app: true },
   faraday: { id: 'faraday', exam: 'e5', title: 'Faraday' },
   ac: { id: 'ac', exam: 'e5', title: 'AC' },
   emwave: { id: 'emwave', exam: 'e6', title: 'EM wave' },

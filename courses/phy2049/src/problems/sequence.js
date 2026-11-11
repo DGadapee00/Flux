@@ -11,6 +11,12 @@
  * otherwise). A chapter not listed keeps the bank's order.
  */
 export const SEQUENCE = {
+  62: [
+    ['Magnifiers', ['e7.62.magnifier']],
+    ['Microscopes and telescopes', ['e7.62.microscope', 'e7.62.telescope']],
+    ['Correcting vision', ['e7.62.eye']],
+    ['Application: an optical fiber', ['e7.62.fiber']],
+  ],
   55: [
     ['Intensity and the fields', ['e6.55.intensity', 'e6.55.E-from-I', 'e6.55.peak-to-rms', 'e6.55.rms-from-I']],
     ['Spreading from a source', ['e6.55.point-source', 'e6.55.detector-distance']],

@@ -532,6 +532,7 @@ export const PRINCIPLE_TAGS = {
   'e7.62.telescope': ['imaging'],
   'e7.62.microscope': ['imaging'],
   'e7.62.eye': ['imaging'],
+  'e7.62.fiber': ['refraction'],
   // Ch 63–65 — wave optics
   'wave.63.double-slit': ['interference'],
   'wave.63.find-lambda': ['interference'],

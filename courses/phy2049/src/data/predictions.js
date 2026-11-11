@@ -1335,6 +1335,38 @@ export const PREDICTIONS = [
     expect: { bright: false },
     why: 'The extra round trip adds $2nt$ of path. Doubling $t$ adds half a wavelength more, which turns constructive into destructive interference.',
   },
+  {
+    id: 'fiber-closer-indices',
+    lab: 'fiber',
+    scenario: 'notes',
+    ask: 'Raise the cladding index from 1.460 to 1.468, closer to the core’s 1.475.',
+    apply(s) {
+      s.nClad = 1.468;
+    },
+    watch: [
+      { id: 'tc', label: 'the critical angle at the wall', get: (c) => c.fb.thetaC, fmt: (v) => `${plain((v * 180) / Math.PI)}°` },
+      { id: 'tmax', label: 'the widest entry angle that is guided', get: (c) => c.fb.thetaMax, fmt: (v) => `${plain((v * 180) / Math.PI)}°` },
+    ],
+    mode: 'dir',
+    expect: { tc: 'bigger', tmax: 'smaller' },
+    why: 'With the indices closer, $\\sin\\theta_c = n_{\\text{clad}}/n_{\\text{core}}$ moves toward 1, so the critical angle grows toward 90°. Rays must meet the wall at a more grazing angle, so fewer entry angles qualify: $\\text{NA} = \\sqrt{n_{\\text{core}}^2 - n_{\\text{clad}}^2}$ shrinks.',
+  },
+  {
+    id: 'fiber-steeper-entry',
+    lab: 'fiber',
+    scenario: 'notes',
+    ask: 'Tilt the incoming ray from 8° to 16° off the axis.',
+    apply(s) {
+      s.theta = 16;
+    },
+    watch: [
+      { id: 'tmax', label: 'the acceptance angle θmax', get: (c) => c.fb.thetaMax, fmt: (v) => `${plain((v * 180) / Math.PI)}°` },
+      { id: 'wall', label: 'the angle the ray meets the wall at', get: (c) => c.fb.wall, fmt: (v) => `${plain((v * 180) / Math.PI)}°` },
+    ],
+    mode: 'dir',
+    expect: { tmax: 'same', wall: 'smaller' },
+    why: 'The acceptance angle belongs to the fiber, not the ray. A steeper ray inside the core meets the wall less obliquely, at a smaller angle from its normal. At 16° it falls below $\\theta_c = 81.8^\\circ$ and leaks out: the fiber only accepts 12.1°.',
+  },
 ];
 
 export const predictionsFor = (labId) => PREDICTIONS.filter((p) => p.lab === labId);

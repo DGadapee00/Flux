@@ -290,4 +290,31 @@ export default [
     steps: ($, f) => [String.raw`$P = ${texNum($.P)}\ \text{D}$ ($f = ${texNum($.f)}\ \text{cm}$)`],
     cases: [kase('myopia', { kind: 1, p: 200 }, { P: -0.5, f: -200 }), kase('hyperopia', { kind: 2, p: 100 }, { P: 3, f: 33.33 })],
   }),
+  problem({
+    ...E7, id: 'e7.62.fiber', ch: '62', lab: 'fiber', title: 'Application: an optical fiber', kind: 'numeric', level: 2, topics: ['tir'],
+    vars: { nCore: range(1.45, 1.6, 0.005), dn: range(0.005, 0.15, 0.005) },
+    derive: ($) => {
+      const nClad = $.nCore - $.dn;
+      const NA = Math.sqrt($.nCore * $.nCore - nClad * nClad);
+      return { nClad, tc: (Math.asin(nClad / $.nCore) * 180) / Math.PI, NA, tmax: (Math.asin(Math.min(1, NA)) * 180) / Math.PI };
+    },
+    valid: ($) => Math.sqrt($.nCore * $.nCore - ($.nCore - $.dn) ** 2) < 1,
+    text: (T, $) => `An optical fiber has a core of index ${T.nCore} and a cladding of index ${Number(($.nCore - $.dn).toFixed(3))}. Light enters its flat end from air. Find the critical angle at the core-cladding wall, the numerical aperture, and the widest entry angle (from the fiber's axis) that is still guided.`,
+    parts: [
+      num('tc', ($) => $.tc, '°', { label: String.raw`$\theta_c$`, abs: 0.2, tol: 0.005 }),
+      num('NA', ($) => $.NA, '1', { label: 'NA' }),
+      num('tmax', ($) => $.tmax, '°', { label: String.raw`$\theta_{\text{max}}$`, abs: 0.2, tol: 0.005 }),
+    ],
+    steps: ($, f) => [
+      String.raw`At the wall: $\sin\theta_c = \dfrac{n_{\text{clad}}}{n_{\text{core}}} = \dfrac{${texNum($.nClad)}}{${texNum($.nCore)}} \;\Longrightarrow\; \theta_c = ${texDeg($.tc)}$`,
+      String.raw`$\text{NA} = \sqrt{n_{\text{core}}^2 - n_{\text{clad}}^2} = ${texNum($.NA)}$`,
+      String.raw`From air, $\sin\theta_{\text{max}} = \text{NA}$, so $\theta_{\text{max}} = ${texDeg($.tmax)}$`,
+    ],
+    sim: {
+      scenario: 'notes',
+      setup: (s, $) => void Object.assign(s, { nCore: $.nCore, nClad: Number(($.nCore - $.dn).toFixed(3)), theta: 0 }),
+      read: (c) => ({ tc: c.fb.thetaC / DEG, NA: c.fb.NA, tmax: c.fb.thetaMax / DEG }),
+    },
+    cases: [kase('the notes', { nCore: 1.475, dn: 0.015 }, { tc: 81.82, NA: 0.2098, tmax: 12.11 }), kase('plastic fiber', { nCore: 1.49, dn: 0.13 }, { tc: 65.89, NA: 0.6087, tmax: 37.49 })],
+  }),
 ];

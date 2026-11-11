@@ -1,5 +1,5 @@
 import { K, EPS0, QE, MU0, C } from './constants.js';
-import { railB, railgunForce, railgunLaunch, thruster, cyclotron, spectrometerRadius, spectrometerMass, AMU, transmission, motor, mriMagnet, transformer, flowMeter, radarGun, solarSail } from './devices.js';
+import { railB, railgunForce, railgunLaunch, thruster, cyclotron, spectrometerRadius, spectrometerMass, AMU, transmission, motor, mriMagnet, transformer, flowMeter, radarGun, solarSail, opticalFiber } from './devices.js';
 import { divergence, divergenceGap, lensVolume } from '@flux/subjects/em/divergence.js';
 import { QUANTITIES, LAB_UNITS, baseUnits, unitsForLab, prettyUnit } from '../data/quantities.js';
 import { parseUnit } from './units.js';
@@ -712,6 +712,30 @@ console.log('\nApplications: power lines, motor, MRI magnet');
   approx(solarSail({ A: 392, m: 300, r: 1 }).F / ss.F, 2, 1e-12, 'solar sail: double the area, double the force');
   approx(solarSail({ A: 196, m: 300, r: 2 }).F / ss.F, 0.25, 1e-12, 'solar sail: twice as far from the Sun, a quarter of the force');
   approx(solarSail({ A: 32, m: 5, r: 1 }).a, 5.84e-5, 2e-3, 'solar sail: a 32 m², 5 kg CubeSat sail accelerates ten times faster');
+}
+
+console.log('\nApplication: an optical fiber (Ch 58, 62)');
+{
+  const DEGS = 180 / Math.PI;
+  const tel = opticalFiber({ nCore: 1.475, nClad: 1.46, L: 1000, lambda: 1550e-9 });
+  approx(tel.thetaC * DEGS, 81.8, 2e-3, 'fiber: silica core 1.475 in cladding 1.460 has θc = 81.8°');
+  approx(tel.NA, 0.21, 3e-3, 'fiber: NA = √(1.475² − 1.460²) = 0.210');
+  approx(tel.thetaMax * DEGS, 12.1, 3e-3, 'fiber: it accepts light within 12.1° of the axis');
+  approx(tel.tAxis, 4.92e-6, 3e-3, 'fiber: a pulse takes 4.9 μs to cross 1 km');
+  approx(tel.modalSpread, 50.5e-9, 3e-3, 'fiber: the steepest guided ray arrives 50 ns late over 1 km');
+  approx(tel.f, 1.934e14, 3e-3, 'fiber: 1550 nm light is at 1.93 × 10¹⁴ Hz');
+  const pl = opticalFiber({ nCore: 1.49, nClad: 1.36 });
+  approx(pl.thetaC * DEGS, 65.9, 2e-3, 'fiber: acrylic in fluoropolymer has θc = 65.9°');
+  approx(pl.NA, 0.609, 2e-3, 'fiber: acrylic fiber NA = 0.609');
+  approx(pl.thetaMax * DEGS, 37.5, 2e-3, 'fiber: acrylic fiber accepts 37.5°');
+  // Second route: trace the limiting ray through both surfaces and check it grazes the wall at θc.
+  const thR = Math.asin(Math.sin(tel.thetaMax) / 1.475);
+  approx(Math.PI / 2 - thR, tel.thetaC, 1e-9, 'fiber: a ray entering at θmax meets the wall at exactly θc');
+  ok(opticalFiber({ nCore: 1.475, nClad: 1.46, thetaIn: tel.thetaMax * 0.99 }).guided, 'fiber: a ray inside θmax is guided');
+  ok(!opticalFiber({ nCore: 1.475, nClad: 1.46, thetaIn: tel.thetaMax * 1.01 }).guided, 'fiber: a ray outside θmax leaks');
+  // Scaling: double the index difference and NA grows by about √2.
+  approx(opticalFiber({ nCore: 1.475, nClad: 1.445 }).NA / tel.NA, Math.SQRT2, 2e-2, 'fiber: double Δn, NA grows by √2');
+  approx(opticalFiber({ nCore: 1.475, nClad: 1.46, L: 2000 }).modalSpread / tel.modalSpread, 2, 1e-12, 'fiber: twice the length, twice the spread');
 }
 
 console.log('\nMaxwell’s divergence equations: tile sums against Gauss’s law');

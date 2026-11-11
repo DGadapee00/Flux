@@ -777,6 +777,93 @@ export const SETUPS = {
       },
     ],
   },
+  e7: {
+    s4: [
+      {
+        tag: 'Cathy at the bottom of a pool',
+        lab: 'refraction',
+        scenario: 'tir',
+        setup: (s) => Object.assign(s, { n1: 'water', n2: 'air', theta: 50 }),
+        note: 'Water to air at 50°, a little past the critical angle: the surface reflects everything.',
+        read: (c) => ({ 'θc (°)': [c.ref.thetaC * DEG, 48.8] }),
+      },
+    ],
+    s12: [
+      {
+        tag: 'candle 12 cm from a concave mirror',
+        lab: 'mirrors',
+        scenario: 'concave-f',
+        setup: (s) => Object.assign(s, { type: 'concave', fAbs: 10, do: 12, ho: 5 }),
+        note: 'The lab works in centimeters.',
+        read: (c) => ({ 'di (cm)': [c.mir.di, 60], m: [c.mir.m, -5], 'hi (cm)': [c.mir.hi, -25] }),
+      },
+      {
+        tag: 'candle 6 cm from a concave mirror',
+        lab: 'mirrors',
+        scenario: 'concave-in',
+        setup: (s) => Object.assign(s, { type: 'concave', fAbs: 10, do: 6, ho: 5 }),
+        note: 'The lab works in centimeters.',
+        read: (c) => ({ 'di (cm)': [c.mir.di, -15], m: [c.mir.m, 2.5], 'hi (cm)': [c.mir.hi, 12.5] }),
+      },
+      {
+        tag: 'candle 5 cm from a convex mirror',
+        lab: 'mirrors',
+        scenario: 'convex',
+        setup: (s) => Object.assign(s, { type: 'convex', fAbs: 20, do: 5, ho: 5 }),
+        note: 'The lab works in centimeters.',
+        read: (c) => ({ 'di (cm)': [c.mir.di, -4], m: [c.mir.m, 0.8], 'hi (cm)': [c.mir.hi, 4] }),
+      },
+      {
+        tag: "Cathy's mirror",
+        lab: 'mirrors',
+        scenario: 'concave-in',
+        setup: (s) => Object.assign(s, { type: 'concave', fAbs: 10.67, do: 8, ho: 5 }),
+        note: 'The lab sets the answer, f = 10.67 cm and d_o = 8 cm, and shows the image it gives. The height is the lab’s own.',
+        read: (c) => ({ 'di (cm)': [c.mir.di, -32], m: [c.mir.m, 4] }),
+      },
+    ],
+    s20: [
+      {
+        tag: 'a plastic fiber',
+        lab: 'fiber',
+        scenario: 'plastic',
+        read: (c) => ({ 'θc (°)': [c.fb.thetaC * DEG, 65.9], NA: [c.fb.NA, 0.609], 'θmax (°)': [c.fb.thetaMax * DEG, 37.5] }),
+      },
+      {
+        tag: 'Application · telecom optical fiber',
+        lab: 'fiber',
+        scenario: 'notes',
+        note: 'The ray enters at 8°, inside the 12.1° cone. Try 20° and it leaks out.',
+        read: (c) => ({ 'θc (°)': [c.fb.thetaC * DEG, 81.8], NA: [c.fb.NA, 0.21], 'θmax (°)': [c.fb.thetaMax * DEG, 12.1], v: [c.fb.v, 2.03e8], 't for 1 km': [c.fb.tAxis, 4.9e-6], 'modal spread': [c.fb.modalSpread, 50e-9] }),
+      },
+    ],
+    s15: [
+      {
+        tag: 'candle 12 cm from a converging lens',
+        lab: 'lenses',
+        scenario: 'conv-f2f',
+        setup: (s) => Object.assign(s, { mode: 'single', type: 'conv', fAbs: 10, do: 12, ho: 5 }),
+        note: 'The lab works in centimeters.',
+        read: (c) => ({ 'di (cm)': [c.len.di, 60], m: [c.len.m, -5], 'hi (cm)': [c.len.hi, -25] }),
+      },
+      {
+        tag: 'candle 6 cm from a converging lens',
+        lab: 'lenses',
+        scenario: 'conv-in',
+        setup: (s) => Object.assign(s, { mode: 'single', type: 'conv', fAbs: 10, do: 6, ho: 5 }),
+        note: 'The lab works in centimeters.',
+        read: (c) => ({ 'di (cm)': [c.len.di, -15], m: [c.len.m, 2.5], 'hi (cm)': [c.len.hi, 12.5] }),
+      },
+      {
+        tag: 'candle 5 cm from a diverging lens',
+        lab: 'lenses',
+        scenario: 'div',
+        setup: (s) => Object.assign(s, { mode: 'single', type: 'div', fAbs: 20, do: 5, ho: 5 }),
+        note: 'The lab works in centimeters.',
+        read: (c) => ({ 'di (cm)': [c.len.di, -4], m: [c.len.m, 0.8], 'hi (cm)': [c.len.hi, 4] }),
+      },
+    ],
+  },
 };
 
 /** An example's tag as the notes write it, without "Worked example · ": '' for an untagged one. */
