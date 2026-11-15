@@ -4,6 +4,38 @@
  */
 
 export const PREDICTIONS = {
+  budget: [
+    {
+      id: 'bg-sun',
+      scenario: 'star',
+      ask: 'With a star tracker, the boresight lands inside the 0.1° cone 99.8% of the time. Swap it for a fine Sun sensor and keep everything else. Does the chance of landing inside rise or fall?',
+      apply(s) { s.sensor = 'sun'; },
+      watch: [{ id: 'p', label: 'the chance of landing inside', get: (c) => c.p }],
+      mode: 'dir',
+      expect: { p: 'smaller' },
+      why: 'The Sun sensor measures to 0.1° per axis, 36 times worse than the tracker. The spread grows from 0.020° to 0.102°, as wide as the cone, and only 36% of pointings land inside.',
+    },
+    {
+      id: 'bg-cal',
+      scenario: 'misaligned',
+      ask: 'The star tracker is mounted 0.08° off, and the boresight lands inside the 0.1° cone 65% of the time. Calibrate the mounting error away against the stars. Does it now land inside more than 99% of the time?',
+      apply(s) { s.misalign = 0; },
+      watch: [{ id: 'good', label: 'Inside more than 99% of the time', get: (c) => c.p > 0.99, mode: 'bool' }],
+      mode: 'bool',
+      expect: { good: true },
+      why: 'The bias falls from 0.09° to 0.01°, the thermal bending alone, and the spread is back near the centre: over 99.999% inside. A bias does not average away, but once measured it can be removed.',
+    },
+    {
+      id: 'bg-rss',
+      scenario: 'sun',
+      ask: 'With the Sun sensor, double the control jitter from 0.02° to 0.04°. Does the spread per axis grow by more than 10%?',
+      apply(s) { s.jitter = 0.04; },
+      watch: [{ id: 'grew', label: 'More than 10% wider', get: (c) => c.sigma > 0.1122, mode: 'bool' }],
+      mode: 'bool',
+      expect: { grew: false },
+      why: 'Random terms add in quadrature: √(0.1² + 0.04²) = 0.108°, against √(0.1² + 0.02²) = 0.102°. Doubling the small term widens the spread by 6%. Spend effort on the largest term.',
+    },
+  ],
   decay: [
     {
       id: 'dc-area',

@@ -31,3 +31,8 @@ U.S. Standard Atmosphere 1976 density at 300 km, an atomic-oxygen scale height H
 exospheric temperature T∞ ≈ 500 + 3.4 F10.7 (Wikipedia, Thermosphere). The doses behind CubeSat
 shielding and the margin of 2 are NASA's small spacecraft report, 6.5. The upset rate is Cassini's
 (Wikipedia, ECC memory). The 6U craft's mass and area are our own round figures.
+
+Unit 3, attitude sensors and the pointing budget: two sections added after the existing ones. The
+sensor accuracies are NASA's small spacecraft report's (2026, Tables 5-5, 5-7 and 5-8): a star
+tracker's 30″, a fine Sun sensor's 0.3° and a horizon sensor's 1°, each taken as 3σ. The jitter,
+misalignment and thermal bending are our own round figures.

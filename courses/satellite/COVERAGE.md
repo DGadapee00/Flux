@@ -32,8 +32,9 @@ reference, when the class reaches it, and what the course has now.
 | Space environment: atmosphere, plasma, magnetic field | [L5](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l5_space_environ_done2/) | none | none | none | u9: decay; u6 uses sunlight, albedo and Earth infrared | covered |
 | Radiation: dose, single-event effects, shielding | [L5](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l5_space_environ_done2/) | [6.5](https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms), [8.2.1](https://www.nasa.gov/smallsat-institute/sst-soa/small-spacecraft-avionics) | none | 1 | u9: upsets; dose and effects in notes and practice | covered |
 | Power: arrays, batteries, energy budget | [L3](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l3_scpowersys_dm_done2/) | [3](https://www.nasa.gov/smallsat-institute/sst-soa/power-subsystems) | none | 2 | u5: power, ageing | covered |
-| Attitude determination and control, pointing budget | [L9](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l9_acs/) | [5](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | 2 | u3: attitude, spin, pointing, poles, wheel | covered |
-| Attitude and position sensors: star trackers, sun sensors, GPS | [L9](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l9_acs/) | [5.2](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | 2 | none | missing |
+| Attitude determination and control, pointing budget | [L9](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l9_acs/) | [5](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | 2 | u3: attitude, spin, pointing, poles, wheel, budget | covered |
+| Attitude sensors: star trackers, Sun and horizon sensors, magnetometers | [L9](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l9_acs/) | [5.2](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | 2 | u3 notes and practice; the budget lab takes each sensor’s accuracy | covered |
+| Position from GPS | none | [5.2.10](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | none | none | missing |
 | Optics and optical payloads | [L6–8](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l6_optics_1/) | [9.3](https://www.nasa.gov/smallsat-institute/sst-soa/soa-communications) | none | 1, 5 | none | missing |
 | Sensor payload and data budget | [L19](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l19scraftcompsys/) | none | none | 1, 3 | u7 notes: sensor model, data count | notes only |
 | Structures and launch loads | [L14](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l14_structures/) | [6](https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms) | none | 5 | u4: shake, random; material, process, joint and finish notes | covered |
@@ -51,7 +52,7 @@ reference, when the class reaches it, and what the course has now.
 
 ## Totals
 
-31 topics: 12 covered, 4 notes only, 15 missing.
+32 topics: 13 covered, 4 notes only, 15 missing.
 
 ## 16.851 lectures and SoA chapters by unit
 

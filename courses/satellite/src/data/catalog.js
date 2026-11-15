@@ -29,7 +29,7 @@ export const EXAMS = [
     title: 'Attitude control',
     chapters: '3',
     date: 'Unit 3',
-    labs: ['attitude', 'spin', 'pointing', 'poles', 'wheel'],
+    labs: ['attitude', 'spin', 'pointing', 'poles', 'wheel', 'budget'],
     coming: [],
   },
   {
@@ -81,6 +81,7 @@ export const EXAMS = [
 ];
 
 export const LAB_META = {
+  budget: { id: 'budget', exam: 'u3', title: 'Pointing budget' },
   upsets: { id: 'upsets', exam: 'u9', title: 'Memory upsets' },
   decay: { id: 'decay', exam: 'u9', title: 'Orbital decay' },
   margin: { id: 'margin', exam: 'u8', title: 'Mass margin' },

@@ -13,7 +13,9 @@ export default {
     { id: 's5', n: 5, title: 'Feedback and PID', lab: 'pointing', ch: ['3'], topics: ['feedback'], home: true },
     { id: 's6', n: 6, title: 'Poles and stability', lab: 'poles', ch: ['3'], topics: ['poles'], home: true },
     { id: 's8', n: 7, title: 'Reaction wheels and momentum dumping', lab: 'wheel', ch: ['3'], topics: ['momentum-dump'], home: true },
-    { id: 's7', n: 8, title: 'Formula sheet', lab: null, ch: [] },
-    { id: 'build-it', n: 9, title: 'Build it', lab: null, ch: [] },
+    { id: 's9', n: 8, title: 'Attitude sensors', lab: null, ch: ['3'], topics: ['sensors'] },
+    { id: 's10', n: 9, title: 'The pointing budget', lab: 'budget', ch: ['3'], topics: ['budget'], home: true },
+    { id: 's7', n: 10, title: 'Formula sheet', lab: null, ch: [] },
+    { id: 'build-it', n: 11, title: 'Build it', lab: null, ch: [] },
   ],
 };

@@ -25,9 +25,12 @@
     <a href="#s5"><span>5</span>Feedback and PID</a>
     <a href="#s6"><span>6</span>Poles and stability</a>
     <a href="#s8"><span>7</span>Reaction wheels and momentum dumping</a>
+    <h3>Part III · Knowing where it points</h3>
+    <a href="#s9"><span>8</span>Attitude sensors</a>
+    <a href="#s10"><span>9</span>The pointing budget</a>
     <h3>Reference</h3>
-    <a href="#s7"><span>8</span>Formula sheet</a>
-  <a href="#build-it"><span>9</span>Build it</a></nav>
+    <a href="#s7"><span>10</span>Formula sheet</a>
+  <a href="#build-it"><span>11</span>Build it</a></nav>
 </header>
 <main>
 
@@ -193,8 +196,55 @@ t_\text{full} = \frac{H_\text{max}}{\tau_0 - \tfrac{2}{\pi}mB}.
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Knowing where it points</h2>
+</div>
+
+<section class="topic" id="s9">
+<h2><span class="n">8</span>Attitude sensors</h2>
+<p>A controller can only point as well as the craft knows where it points. Each sensor measures a direction, and a craft needs two independent directions to fix all three axes.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Star tracker</b>: photographs stars and matches them to a catalogue, giving all three axes to seconds of arc. It needs a dark sky and is blinded by the Sun or Earth in view.</li><li><b>Sun sensor</b>: the Sun's direction, to a few tenths of a degree for a fine sensor. Two axes only, and nothing in eclipse.</li><li><b>Horizon sensor</b>: the direction to Earth's centre from its infrared edge, to about a degree.</li><li><b>Magnetometer</b>: the local magnetic field, compared with a model of it. Coarse, but it works everywhere.</li><li><b>Gyroscopes</b>: rates, not directions. They carry the attitude between the other sensors' updates and drift over time.</li></ul>
+</div>
+<p>One measured direction leaves the craft free to turn about it. Two directions that are not parallel fix the attitude; algorithms such as TRIAD and QUEST combine them. The closer the two are to parallel, the worse the turn about their common line is known, roughly as one over the sine of the angle between them.</p>
+<div class="box ex"><span class="tag">Worked example · two directions, not one</span>
+<p>A craft with a fine Sun sensor knows the Sun's direction to 0.1°, but not how it is turned about that line. Adding a magnetometer gives the field direction. Where the field is 90° from the Sun, the turn about the Sun line is known about as well as the field direction. Where the two are 10° apart, it is known about \(1/\sin 10^\circ = 5.8\) times worse.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Choosing a sensor by its catalogue accuracy alone. A star tracker gives nothing when the Sun is in its field of view, and a Sun sensor gives nothing in eclipse. List when each sensor works through the orbit.</p>
+</div>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">9</span>The pointing budget</h2>
+<p>A pointing requirement is a cone around the target. The budget lists every error that moves the boresight and asks whether it stays inside.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Random errors, such as sensor noise and control jitter, are independent and normal on each cross-axis. Their variances add, so the spread per axis is</p>
+\[
+\sigma = \sqrt{\sigma_\text{sensor}^2 + \sigma_\text{jitter}^2 + \cdots}.
+\]
+<p>Biases, such as a sensor mounted a little off or a frame bent by heat, are fixed. A cautious budget adds them straight: \(b = b_\text{mount} + b_\text{thermal}\). The usual linear check is \(b + 3\sigma \le R\).</p>
+<p>The boresight then lands at distance \(r\) from the target, spread \(\sigma\) about a point \(b\) off centre. The chance it lands inside the cone is</p>
+\[
+P(r < R) = \sum_{n=0}^{\infty} e^{-\lambda}\frac{\lambda^n}{n!}\,P\!\left(n+1,\ \frac{R^2}{2\sigma^2}\right),
+\]
+<p>with \(\lambda = b^2/2\sigma^2\) and \(P\) the regularized incomplete gamma function. With no bias it is \(1 - e^{-R^2/2\sigma^2}\). The lab also integrates the spread over the disc and checks the two agree.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a star tracker against a 0.1° cone</span>
+<p>A star tracker good to 30″ at 3σ gives 0.0028° per axis; control jitter adds 0.02°. Then \(\sigma = \sqrt{0.0028^2 + 0.02^2} = 0.0202^\circ\): the jitter rules. A 0.03° mounting error and 0.01° of thermal bending give \(b = 0.04^\circ\).</p>
+<p>The linear check gives \(0.04 + 3(0.0202) = 0.1006^\circ\), just over the cone. The boresight still lands inside 99.8% of the time: the linear sum is cautious.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a Sun sensor against the same cone</span>
+<p>Swap in a fine Sun sensor, 0.3° at 3σ, 0.1° per axis. Now \(\sigma = 0.102^\circ\), as wide as the cone, and the boresight lands inside only 36% of the time. No controller can point better than the craft can measure.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding the random terms straight, 0.0028 + 0.02 = 0.0228°, or reading a 3σ circle as 99.7%. Independent errors add in quadrature, and a circle of radius 3σ in two axes holds 98.9%, not 99.7%.</p>
+</div>
+</section>
+
 <section class="topic" id="s7">
-<h2><span class="n">8</span>Formula sheet</h2>
+<h2><span class="n">10</span>Formula sheet</h2>
 \[
 R = R_z(\psi)R_y(\theta)R_x(\phi), \qquad R^{\mathsf T}R = I, \qquad \hat{\mathbf x}_\text{body} = (\cos\psi\cos\theta,\ \sin\psi\cos\theta,\ -\sin\theta).
 \]
@@ -214,10 +264,11 @@ I_1\dot\omega_1 = (I_2 - I_3)\omega_2\omega_3 + M_1, \qquad \lambda_\text{middle
 G(s) = \frac{K}{(s - p)(s - \bar p)}, \quad p = \sigma \pm j\omega, \qquad \text{stable} \iff \sigma < 0, \qquad M_p = e^{\pi\sigma/\omega}, \quad t_s \approx \frac{4}{|\sigma|}.
 \]
 \[ \frac{dH}{dt} = \tau_\text{dist} - \tau_\text{dump}, \qquad \overline{\tau}_\text{dump} = \tfrac{2}{\pi}mB, \qquad t_\text{full} = \frac{H_\text{max}}{\tau_0 - \tfrac{2}{\pi}mB}. \]
+\[ \sigma = \sqrt{\textstyle\sum \sigma_i^2}, \qquad b = \textstyle\sum b_i, \qquad b + 3\sigma \le R, \qquad P(r < R)\big|_{b=0} = 1 - e^{-R^2/2\sigma^2}. \]
 </section>
 
 
-<section class="topic" id="build-it"><h2><span class="n">9</span>Build it</h2><p>Turn the satellite toward a target and account for its angular momentum.</p><h3>Method</h3><ol><li>Find the moments of inertia from the mass layout Structure gives you.</li><li>Set a pointing requirement: how far off target and how steady.</li><li>List disturbance torques and estimate the largest.</li><li>Size an actuator: the torque to turn in the time you need, and the momentum it must store.</li><li>Sketch the feedback loop: sensor, controller, actuator, and the gains you start from.</li><li>Check a turn: torque times time against the change in angular momentum.</li></ol><h3>What to produce</h3><p>A pointing model, torque estimate and actuator power allowance.</p><h3>Handoff to other subsystems</h3><p>Give Communications and Payload a pointing limit. Return actuator demand to the power budget.</p><h3>Review checklist</h3><ul><li>Inertias come from the mass layout.</li><li>Pointing accuracy and stability are stated.</li><li>The largest disturbance torque is estimated.</li><li>Actuator torque and stored momentum are sized.</li><li>The control loop is drawn with its sensor and actuator.</li><li>Actuator power goes back to Power.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>Use your mass layout to estimate inertia. Predict a turn under a stated torque and check its angular impulse. Define a pointing-error target and explain how feedback would correct a disturbance.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l9_acs/" target="_blank" rel="noopener">MIT 16.851, Lecture 9: Attitude determination and control</a>: Sensors, reaction wheels, gravity gradient and control on a satellite.</li><li><a href="https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/resources/mit16_07f09_lec28/" target="_blank" rel="noopener">MIT 16.07, Lecture 28: Euler’s equations</a>: The rigid-body equations and spin stability.</li><li><a href="https://ocw.mit.edu/courses/16-06-principles-of-automatic-control-fall-2012/resources/mit16_06f12_lecture_10/" target="_blank" rel="noopener">MIT 16.06, Lecture 10: PID control</a>: What each control term does.</li></ul></section>
+<section class="topic" id="build-it"><h2><span class="n">11</span>Build it</h2><p>Turn the satellite toward a target and account for its angular momentum.</p><h3>Method</h3><ol><li>Find the moments of inertia from the mass layout Structure gives you.</li><li>Set a pointing requirement: how far off target and how steady.</li><li>List disturbance torques and estimate the largest.</li><li>Size an actuator: the torque to turn in the time you need, and the momentum it must store.</li><li>Sketch the feedback loop: sensor, controller, actuator, and the gains you start from.</li><li>Check a turn: torque times time against the change in angular momentum.</li></ol><h3>What to produce</h3><p>A pointing model, torque estimate and actuator power allowance.</p><h3>Handoff to other subsystems</h3><p>Give Communications and Payload a pointing limit. Return actuator demand to the power budget.</p><h3>Review checklist</h3><ul><li>Inertias come from the mass layout.</li><li>Pointing accuracy and stability are stated.</li><li>The largest disturbance torque is estimated.</li><li>Actuator torque and stored momentum are sized.</li><li>The control loop is drawn with its sensor and actuator.</li><li>Actuator power goes back to Power.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>Use your mass layout to estimate inertia. Predict a turn under a stated torque and check its angular impulse. Define a pointing-error target and explain how feedback would correct a disturbance.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l9_acs/" target="_blank" rel="noopener">MIT 16.851, Lecture 9: Attitude determination and control</a>: Sensors, reaction wheels, gravity gradient and control on a satellite.</li><li><a href="https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/resources/mit16_07f09_lec28/" target="_blank" rel="noopener">MIT 16.07, Lecture 28: Euler’s equations</a>: The rigid-body equations and spin stability.</li><li><a href="https://ocw.mit.edu/courses/16-06-principles-of-automatic-control-fall-2012/resources/mit16_06f12_lecture_10/" target="_blank" rel="noopener">MIT 16.06, Lecture 10: PID control</a>: What each control term does.</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 5</a>: Star trackers, Sun and horizon sensors, magnetometers and gyros for small craft, with their accuracies.</li></ul></section>
 </main>
 <footer>Our own notes, written for Flux. Read alongside MIT 16.07 Dynamics, Lecture 3, on coordinate transformations, and Lecture 28, on Euler's equations, and MIT 16.06 on feedback.</footer>
 </body>
