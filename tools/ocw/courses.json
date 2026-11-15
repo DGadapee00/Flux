@@ -193,5 +193,15 @@
       "eml4320c"
     ],
     "role": "program"
+  },
+  {
+    "flux": [
+      "satellite"
+    ],
+    "role": "program",
+    "slug": "16-851",
+    "term": "Fall 2003",
+    "title": "16.851 Satellite Engineering",
+    "url": "https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/"
   }
 ]
