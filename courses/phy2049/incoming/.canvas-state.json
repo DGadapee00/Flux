@@ -277,6 +277,13 @@
    "path": "incoming/2026-wk45/Practice Problems Chapter 59 Imaging Mirrors Fall 2025.pdf",
    "stamp": "2025-10-27T20:44:59Z"
   },
+  "23854744": {
+   "fetched": "2026-11-15",
+   "module": "Week 13 - Lecture - November 9 - 15",
+   "name": "Chapter 58 Power Point Refraction Fall 2025.pptx",
+   "path": "incoming/2026-wk46/Chapter 58 Power Point Refraction Fall 2025.pptx",
+   "stamp": "2026-11-10T14:18:25Z"
+  },
   "23854746": {
    "fetched": "2026-11-08",
    "module": "Week 13 - November 9 - 15",
@@ -304,6 +311,13 @@
    "name": "Practice Problems Chapter 62 Optical Instruments Fall 2025.pdf",
    "path": "incoming/2026-wk45/Practice Problems Chapter 62 Optical Instruments Fall 2025.pdf",
    "stamp": "2025-10-27T20:54:25Z"
+  },
+  "23854754": {
+   "fetched": "2026-11-15",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Interactive Lessons # 6 Imaging with Lens and mirrors Fall 2025.docx",
+   "path": "incoming/2026-wk46/Interactive Lessons _ 6 Imaging with Lens and mirrors Fall 2025.docx",
+   "stamp": "2025-11-04T14:24:36Z"
   },
   "23854756": {
    "fetched": "2026-11-08",
@@ -1110,6 +1124,41 @@
    "path": "incoming/2026-wk45/Calculus Physics II Lecture Notes Ch 62 Optical Insturments Fall 2026.pdf",
    "stamp": "2026-11-05T15:27:11Z"
   },
+  "25005654": {
+   "fetched": "2026-11-15",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Worksheet # 7 MC Part A Fall 2026.pdf",
+   "path": "incoming/2026-wk46/Worksheet _ 7 MC Part A Fall 2026.pdf",
+   "stamp": "2026-11-09T19:12:41Z"
+  },
+  "25006083": {
+   "fetched": "2026-11-15",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Worksheet # 7 UpL Part B Fall 2026.pdf",
+   "path": "incoming/2026-wk46/Worksheet _ 7 UpL Part B Fall 2026.pdf",
+   "stamp": "2026-11-09T19:22:48Z"
+  },
+  "25028675": {
+   "fetched": "2026-11-15",
+   "module": "Exam 7 - Friday November 20",
+   "name": "Exam 7 Equations.pdf",
+   "path": "incoming/2026-wk46/Exam 7 Equations.pdf",
+   "stamp": "2026-11-11T17:17:08Z"
+  },
+  "25061477": {
+   "fetched": "2026-11-15",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Physics 2 Video Solution Problem - Chapter 59 Ray Tracing Mirrors.pdf",
+   "path": "incoming/2026-wk46/Physics 2 Video Solution Problem - Chapter 59 Ray Tracing Mirrors.pdf",
+   "stamp": "2026-11-13T17:32:26Z"
+  },
+  "25061481": {
+   "fetched": "2026-11-15",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Physics 2 Video Solution Problem - Chapter 60 Ray Tracing Lens.pdf",
+   "path": "incoming/2026-wk46/Physics 2 Video Solution Problem - Chapter 60 Ray Tracing Lens.pdf",
+   "stamp": "2026-11-13T17:33:17Z"
+  },
   "assignment:1880067": {
    "fetched": "2026-10-04",
    "module": "Week 1 - Lecture - August 17 - 23",
@@ -1152,6 +1201,13 @@
    "path": "incoming/2026-wk45/Interactive Lesson _ 5 Reflection and Refraction Fall 2026.html",
    "stamp": "2026-11-06T18:37:17Z"
   },
+  "assignment:1880074": {
+   "fetched": "2026-11-15",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Interactive Lesson # 6 Imaging with Lenses and Mirrors Fall 2026",
+   "path": "incoming/2026-wk46/Interactive Lesson _ 6 Imaging with Lenses and Mirrors Fall 2026.html",
+   "stamp": "2026-11-13T19:36:31Z"
+  },
   "assignment:1880080": {
    "fetched": "2026-10-04",
    "module": "Week 4 - Lecture - September 7 - 13",
@@ -1186,6 +1242,13 @@
    "name": "Worksheet # 6 Part B Upload Solutions Fall 2026",
    "path": "incoming/2026-wk44/Worksheet _ 6 Part B Upload Solutions Fall 2026.html",
    "stamp": "2026-10-30T18:56:59Z"
+  },
+  "assignment:1880085": {
+   "fetched": "2026-11-15",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Worksheet # 7 Part B Upload Solutions Fall 2026",
+   "path": "incoming/2026-wk46/Worksheet _ 7 Part B Upload Solutions Fall 2026.html",
+   "stamp": "2026-11-13T19:36:29Z"
   },
   "assignment:1880088": {
    "fetched": "2026-10-04",
@@ -1228,6 +1291,13 @@
    "name": "Checklist Week 13 Calculus Physics 2 Fall 2026",
    "path": "incoming/2026-wk45/Checklist Week 13 Calculus Physics 2 Fall 2026.html",
    "stamp": "2026-11-06T18:37:12Z"
+  },
+  "page:1868128": {
+   "fetched": "2026-11-15",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Checklist Week 14 Calculus Physics 2 Fall 2026",
+   "path": "incoming/2026-wk46/Checklist Week 14 Calculus Physics 2 Fall 2026.html",
+   "stamp": "2026-11-13T19:36:29Z"
   },
   "page:1868131": {
    "fetched": "2026-10-04",
@@ -1620,11 +1690,25 @@
    "name": "Problem Solving Video - Chapter 56 EM Wave Polarization ",
    "path": "incoming/2026-wk45/Problem Solving Video - Chapter 56 EM Wave Polarization .html",
    "stamp": "2026-11-04T18:35:59Z"
+  },
+  "page:1958825": {
+   "fetched": "2026-11-15",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Problem Solving Video - Chapter 59 Mirrors ",
+   "path": "incoming/2026-wk46/Problem Solving Video - Chapter 59 Mirrors .html",
+   "stamp": "2026-11-13T19:42:04Z"
+  },
+  "page:1958826": {
+   "fetched": "2026-11-15",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Problem Solving Video - Chapter 60 Lenses",
+   "path": "incoming/2026-wk46/Problem Solving Video - Chapter 60 Lenses.html",
+   "stamp": "2026-11-13T19:42:04Z"
   }
  },
  "last_run": {
-  "date": "2026-11-08",
+  "date": "2026-11-15",
   "source": "modules",
-  "taken": 25
+  "taken": 12
  }
 }
