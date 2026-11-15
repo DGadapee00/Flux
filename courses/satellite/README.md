@@ -2,9 +2,9 @@
 
 A project course in Flux's standard shell. The six subsystem units keep their labs and practice.
 Their notes include build methods, checklists, deliverables, interfaces and references. Structure
-also includes material, process, joint and finish comparisons. Unit 3 also covers attitude sensors
-and the pointing budget. A notes-only unit covers sensor payload and integration; its labs are not
-built yet.
+also includes material, process, joint and finish comparisons. Unit 2 also covers telemetry,
+tracking and command, and Unit 3 attitude sensors and the pointing budget. A notes-only unit
+covers sensor payload and integration; its labs are not built yet.
 
 Unit 8, mission and requirements, follows the NASA Systems Engineering Handbook: requirements,
 verification, the life cycle's reviews, and a mass budget with its margin. Unit 9 covers the space

@@ -62,7 +62,7 @@ try{
   await wait(()=>page.eval(`window.__gauss?.app.labId==='margin' && Number.isFinite(window.__gauss.computed.pExceed)`));
   assert.equal(await page.eval('document.documentElement.scrollWidth>innerWidth'),false);
   await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-margin`);
-  for(const [unit,lab,key] of [['u9','decay','years'],['u9','upsets','uncorrectable'],['u10','tasks','U'],['u10','data','sent']]){
+  for(const [unit,lab,key] of [['u2','doppler','shift'],['u9','decay','years'],['u9','upsets','uncorrectable'],['u10','tasks','U'],['u10','data','sent']]){
    await navigate(`satellite/#/satellite/${unit}/${lab}`);
    await wait(()=>page.eval(`window.__gauss?.app.labId==='${lab}' && Number.isFinite(window.__gauss.computed.${key})`));
    assert.equal(await page.eval('document.documentElement.scrollWidth>innerWidth'),false);

@@ -4,6 +4,41 @@
  */
 
 export const PREDICTIONS = {
+  doppler: [
+    {
+      id: 'dp-band',
+      scenario: 'uhf',
+      ask: 'At 437 MHz the carrier arrives up to 10.1 kHz off as the craft rises. Switch the radio to S-band at 2200 MHz, with the same orbit. By what factor does the largest shift change?',
+      apply(s) { s.band = 's'; },
+      watch: [{ id: 'shift', label: 'the largest shift', get: (c) => c.shift }],
+      mode: 'factor',
+      factors: [2, 5, 10],
+      tol: 0.02,
+      expect: { shift: 5 },
+      why: 'The shift is the carrier times ρ̇/c, and the craft closes at the same 6.96 km/s. A carrier 5.03 times higher shifts 5.03 times as much: 51.0 kHz.',
+    },
+    {
+      id: 'dp-coherent',
+      scenario: 'sband',
+      ask: 'Make the S-band link two-way coherent: the craft locks its transmitter to the station’s uplink and sends it back. By what factor does the shift the station measures change?',
+      apply(s) { s.twoWay = true; },
+      watch: [{ id: 'shift', label: 'the shift measured', get: (c) => c.shift }],
+      mode: 'factor',
+      factors: [1, 2, 4],
+      expect: { shift: 2 },
+      why: 'The uplink arrives shifted at the craft, and the craft sends that shifted carrier back, which shifts again on the way down: twice the one-way figure, 102 kHz. The station’s own oscillator is the reference, so the craft’s oscillator drift drops out.',
+    },
+    {
+      id: 'dp-high',
+      scenario: 'uhf',
+      ask: 'Raise the orbit from 500 km to 800 km. Does the rate at which the shift changes overhead grow or shrink?',
+      apply(s) { s.hkm = 800; },
+      watch: [{ id: 'slope', label: 'the shift’s rate of change overhead', get: (c) => c.slopeSeen }],
+      mode: 'dir',
+      expect: { slope: 'smaller' },
+      why: 'Overhead the rate is f R a n²/(c(a − R)): a higher craft is farther away and moves more slowly across the sky, so the shift turns more gently, 157 Hz/s at 500 km and 90 Hz/s at 800 km.',
+    },
+  ],
   data: [
     {
       id: 'dt-uhf',

@@ -43,3 +43,8 @@ scheduling). The margin rule, four times the estimate at the requirements review
 launch, is Lecture 16's. Bus speeds are from Wikipedia's I²C and SPI articles; radio rates from
 NASA's small spacecraft report, Table 9-3. The task set, the payload rate and the watchdog figures
 are our own.
+
+Unit 2, telemetry, tracking and command: three sections added after the existing ones, after MIT
+16.851 Lecture 20. Licensing and command protection follow NASA's small spacecraft report, 9.2.5,
+9.2.6 and 11.8.1. The carriers lie in the bands of the report's Table 9-3. The telemetry channel
+list is our own.

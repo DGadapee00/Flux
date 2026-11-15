@@ -20,7 +20,7 @@ export const EXAMS = [
     title: 'Communications',
     chapters: '2',
     date: 'Unit 2',
-    labs: ['noise', 'link'],
+    labs: ['noise', 'link', 'doppler'],
     coming: [],
   },
   {
@@ -90,6 +90,7 @@ export const EXAMS = [
 ];
 
 export const LAB_META = {
+  doppler: { id: 'doppler', exam: 'u2', title: 'Doppler' },
   data: { id: 'data', exam: 'u10', title: 'Data budget' },
   tasks: { id: 'tasks', exam: 'u10', title: 'Flight software' },
   budget: { id: 'budget', exam: 'u3', title: 'Pointing budget' },

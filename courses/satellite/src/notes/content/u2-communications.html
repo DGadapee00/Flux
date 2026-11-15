@@ -19,10 +19,14 @@
     <h3>Part I · Noise</h3>
     <a href="#s1"><span>1</span>Noise from heat</a>
     <a href="#s2"><span>2</span>Bits in noise</a>
-    <h3>Reference</h3>
     <a href="#s3"><span>3</span>The link budget</a>
-    <a href="#s4"><span>4</span>Formula sheet</a>
-  <a href="#build-it"><span>5</span>Build it</a></nav>
+    <h3>Part II · Telemetry, tracking and command</h3>
+    <a href="#ttc"><span>4</span>What TT&amp;C does</a>
+    <a href="#tracking"><span>5</span>Tracking: range and Doppler</a>
+    <a href="#security"><span>6</span>Command security and licensing</a>
+    <h3>Reference</h3>
+    <a href="#s4"><span>7</span>Formula sheet</a>
+  <a href="#build-it"><span>8</span>Build it</a></nav>
 </header>
 <main>
 
@@ -97,8 +101,71 @@ P_r = P_tG_tG_r\left(\frac{\lambda}{4\pi d}\right)^2, \qquad G = \eta\left(\frac
 </div>
 </section>
 
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Telemetry, tracking and command</h2>
+</div>
+
+<section class="topic" id="ttc">
+<h2><span class="n">4</span>What TT&amp;C does</h2>
+<p>Telemetry, tracking and command is the craft's only line to the ground. Through it the team learns the craft's health, finds where it is, and tells it what to do.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Commands</b> come up, are decoded, and are checked before anything acts: the right address, an error check that passes, a valid command, valid timing, and an authenticated sender. Any doubt and the command is rejected.</li><li><b>Telemetry</b> goes down: every sensor sampled, digitized and packed into frames with a sync word, a header and an error check.</li><li><b>Tracking</b> measures where the craft is: the range from the time a signal takes to come back, the range rate from its Doppler shift, and the direction from where the antenna points.</li></ul>
+<p>Commands need fewer errors than telemetry, because a wrong command acts on the craft: MIT 16.851 gives one bit in a million for commands and one in a hundred thousand for telemetry.</p>
+</div>
+<p>Sample each signal at least twice as fast as it changes, the Nyquist criterion, and with enough bits that one step of the converter is smaller than the change you care about. Temperatures change in minutes; a gyro's rate in fractions of a second.</p>
+<div class="box ex"><span class="tag">Worked example · a housekeeping telemetry rate</span>
+<ul><li>40 temperatures, 12 bits, every 10 s: 48 bit/s.</li><li>16 voltages and currents, 12 bits, every second: 192 bit/s.</li><li>6 gyro and magnetometer axes, 16 bits, 10 times a second: 960 bit/s.</li><li>32 status flags, once a second: 32 bit/s.</li></ul>
+<p>That is 1232 bit/s of data. Sync words, headers and error checks add about 10%, so the frames run at 1.36 kbit/s: the 2 kbit/s of housekeeping in Unit 10's data budget covers it.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Sampling everything at the fastest rate any signal needs. Forty temperatures at 10 samples a second would send 4.8 kbit/s of numbers that barely move.</p>
+</div>
+</section>
+
+<section class="topic" id="tracking">
+<h2><span class="n">5</span>Tracking: range and Doppler</h2>
+<p>The station measures how far away the craft is and how fast that distance changes. A run of these through a pass fixes the orbit.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A craft at radius \(a\) passes straight over a station at radius \(R\). At angle \(\theta = nt\) from overhead, with \(n = \sqrt{\mu/a^3}\), the law of cosines gives the range and its rate:</p>
+\[
+\rho = \sqrt{R^2 + a^2 - 2Ra\cos\theta}, \qquad \dot\rho = \frac{R a n \sin\theta}{\rho}.
+\]
+<p>The carrier \(f\) arrives shifted by \(\Delta f = -f\dot\rho/c\): high as the craft closes, zero overhead, low as it recedes. Overhead the shift changes fastest, at \(f R a n^2/(c(a - R))\). In a two-way coherent link the craft turns the station's uplink around, so the shift is counted twice and the craft's own oscillator drops out. A code sent up and returned measures the light time \(2\rho/c\), and so the range.</p>
+<p>The lab checks the range rate against propagating the orbit and projecting the velocity on the line of sight.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · UHF at 500 km</span>
+<p>A craft at 500 km passes overhead. Above 10° the pass lasts 7.38 min and the range runs from 1695 km at the edge to 500 km overhead. At the edge it closes at 6.96 km/s, so a 437 MHz carrier arrives</p>
+\[
+\Delta f = \frac{(437\times10^6)(6.96)}{299\,792} = 10.1\ \text{kHz}
+\]
+<p>high. Overhead the shift changes 157 Hz each second. The two-way light time runs from 3.34 ms overhead to 11.3 ms at the edge.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · S-band, two-way coherent</span>
+<p>At 2200 MHz the one-way shift is 5.03 times larger, 51.0 kHz. Made two-way coherent it doubles to 102 kHz, and the station's receiver must sweep that whole range in the 7.4 minutes of the pass.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using the orbital speed, 7.6 km/s, as the range rate. Only the part of the velocity along the line of sight shifts the carrier, and overhead that part is zero.</p>
+</div>
+</section>
+
+<section class="topic" id="security">
+<h2><span class="n">6</span>Command security and licensing</h2>
+<p>Anyone with a transmitter in the right band can send a craft a command. The command link must accept only its own operators, and every transmitter needs a licence.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>NASA requires its missions to protect command authority with authenticated encryption, from where the command is made to the craft, using validated cryptographic modules. Backup command links must be authenticated too.</p>
+<p>Every non-federal U.S. craft with a transmitter needs an FCC licence, and so does its ground station. University CubeSats often use an experimental licence, FCC Part 5. An amateur licence, Part 97, is for hobby and non-profit use: the downlink may not be encrypted, the data may not be used for profit, and a licensed amateur control operator is required.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · checking a command</span>
+<p>A command arrives with the craft's address, a valid opcode and a passing error check, but its authentication tag does not match the key on board. Command logic rejects it and counts the rejection in telemetry. A burst of rejections warns the operators that someone else is transmitting.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving the command uplink open because the craft is small. An open uplink lets anyone switch the transmitter on, fire a thruster or erase the software, and the craft cannot tell the difference.</p>
+</div>
+</section>
+
 <section class="topic" id="s4">
-<h2><span class="n">4</span>Formula sheet</h2>
+<h2><span class="n">7</span>Formula sheet</h2>
 \[
 N = k_BT_\text{sys}B, \qquad \frac{S}{N} = \frac{S}{k_BT_\text{sys}B}, \qquad \frac{E_b}{N_0} = \frac{S}{k_BT_\text{sys}R_b}, \qquad \text{BER} = \tfrac12\operatorname{erfc}\sqrt{E_b/N_0}.
 \]
@@ -108,10 +175,13 @@ P_\text{dBm} = 10\log_{10}\frac{P}{1\ \text{mW}}, \qquad k_BT_{290} = -174\ \tex
 \[
 P_r = P_tG_tG_r\left(\frac{\lambda}{4\pi d}\right)^2, \qquad L = 20\log_{10}\frac{4\pi d}{\lambda}, \qquad G = \eta\left(\frac{\pi D}{\lambda}\right)^2.
 \]
+\[
+\rho = \sqrt{R^2 + a^2 - 2Ra\cos\theta}, \qquad \dot\rho = \frac{Ran\sin\theta}{\rho}, \qquad \Delta f = -\frac{f\dot\rho}{c}, \qquad t = \frac{2\rho}{c}.
+\]
 </section>
 
 
-<section class="topic" id="build-it"><h2><span class="n">5</span>Build it</h2><p>Return sensor readings within the available energy and contact time.</p><h3>Method</h3><ol><li>Take the range from Orbit and the data volume from Payload.</li><li>Choose a frequency, transmitter power and antennas, and state their gains.</li><li>Write the link budget in decibels: power plus gains minus path and other losses.</li><li>Compute the noise from the receiver’s noise temperature and bandwidth.</li><li>Find the margin: what you have above what the data rate needs.</li><li>Check that contact time and transmitter energy can return the planned data.</li></ol><h3>What to produce</h3><p>A link budget and a contact-by-contact data and energy estimate.</p><h3>Handoff to other subsystems</h3><p>Take range from Orbit, pointing from Attitude control, power from Power and data volume from Payload. Tell Payload how much data can be returned.</p><h3>Review checklist</h3><ul><li>Every term of the budget is in decibels with its source.</li><li>Path loss follows from range and wavelength.</li><li>Noise follows from temperature and bandwidth.</li><li>A positive margin is shown and its size justified.</li><li>Data returned per contact covers the payload’s volume.</li><li>Transmitter energy goes back to Power.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>State range, frequency, antenna assumptions, data rate and receiver sensitivity. Build a link budget with a margin, then check whether contact time and transmitter energy can return the planned data.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l21satelitecomm2_done/" target="_blank" rel="noopener">MIT 16.851, Lecture 21: Satellite communication</a>: EIRP, space loss, noise and margin.</li><li><a href="https://en.wikipedia.org/wiki/Friis_transmission_equation" target="_blank" rel="noopener">Wikipedia, Friis transmission equation</a>: The equation behind the path loss.</li></ul></section>
+<section class="topic" id="build-it"><h2><span class="n">8</span>Build it</h2><p>Return sensor readings within the available energy and contact time.</p><h3>Method</h3><ol><li>Take the range from Orbit and the data volume from Payload.</li><li>Choose a frequency, transmitter power and antennas, and state their gains.</li><li>Write the link budget in decibels: power plus gains minus path and other losses.</li><li>Compute the noise from the receiver’s noise temperature and bandwidth.</li><li>Find the margin: what you have above what the data rate needs.</li><li>Check that contact time and transmitter energy can return the planned data.</li></ol><h3>What to produce</h3><p>A link budget and a contact-by-contact data and energy estimate.</p><h3>Handoff to other subsystems</h3><p>Take range from Orbit, pointing from Attitude control, power from Power and data volume from Payload. Tell Payload how much data can be returned.</p><h3>Review checklist</h3><ul><li>Every term of the budget is in decibels with its source.</li><li>Path loss follows from range and wavelength.</li><li>Noise follows from temperature and bandwidth.</li><li>A positive margin is shown and its size justified.</li><li>Data returned per contact covers the payload’s volume.</li><li>Transmitter energy goes back to Power.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>State range, frequency, antenna assumptions, data rate and receiver sensitivity. Build a link budget with a margin, then check whether contact time and transmitter energy can return the planned data.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l21satelitecomm2_done/" target="_blank" rel="noopener">MIT 16.851, Lecture 21: Satellite communication</a>: EIRP, space loss, noise and margin.</li><li><a href="https://en.wikipedia.org/wiki/Friis_transmission_equation" target="_blank" rel="noopener">Wikipedia, Friis transmission equation</a>: The equation behind the path loss.</li><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l20_satellitettc/" target="_blank" rel="noopener">MIT 16.851, Lecture 20: Satellite telemetry, tracking and control</a>: Commands, telemetry, carrier tracking and ranging.</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/soa-communications" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 9</a>: Bands, radios, licensing and encryption for small craft.</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/ground-data-systems-and-mission-operations" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 11</a>: Frequency licensing and the protection of command authority.</li></ul></section>
 </main>
 <footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, Lecture 21, on satellite communication.</footer>
 </body>
