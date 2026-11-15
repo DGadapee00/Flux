@@ -9,6 +9,7 @@ import u6 from './u6.js';
 import u8 from './u8.js';
 import u9 from './u9.js';
 import u10 from './u10.js';
+import u11 from './u11.js';
 
 /** One coaching file per unit, merged here. */
-export default { ...u1, ...u2, ...u2ttc, ...u3, ...u3budget, ...u4, ...u5, ...u6, ...u8, ...u9, ...u10 };
+export default { ...u1, ...u2, ...u2ttc, ...u3, ...u3budget, ...u4, ...u5, ...u6, ...u8, ...u9, ...u10, ...u11 };

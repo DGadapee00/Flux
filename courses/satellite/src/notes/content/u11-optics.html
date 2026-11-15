@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Optical payloads and laser links</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 11 · after MIT 16.851 Satellite Engineering</div>
+  <h1>Optical payloads and laser links</h1>
+  <p class="lede">How a small telescope in orbit images the ground, what limits the detail it sees, and how a laser beam carries data down when it can be pointed finely enough.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Imaging</h3>
+    <a href="#light"><span>1</span>Light, apertures and telescopes</a>
+    <a href="#imager"><span>2</span>Resolution and ground sampling</a>
+    <h3>Part II · Laser links</h3>
+    <a href="#laser"><span>3</span>The laser link budget</a>
+    <a href="#operations"><span>4</span>Pointing, acquisition and weather</a>
+    <h3>Reference</h3>
+    <a href="#sheet"><span>5</span>Formula sheet</a>
+    <a href="#build-it"><span>6</span>Build it</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Imaging</h2>
+</div>
+
+<section class="topic" id="light">
+<h2><span class="n">1</span>Light, apertures and telescopes</h2>
+<p>An optical payload collects light with an aperture and focuses it onto a detector. Its size, its focal length and the wavelength it works in decide what it can see.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Bands.</b> Visible light runs from 400 to 700 nm, the near infrared from 0.7 to 2.5 µm, and ultraviolet lies below 400 nm.</li><li><b>Mirrors over lenses.</b> A lens bends each colour differently; a mirror reflects them all the same way. Space telescopes are mostly mirrors, folded so a long focal length fits in a short tube.</li><li><b>Focal length</b> sets the scale on the detector: an angle \(\alpha\) on the sky lands \(f\alpha\) across the focal plane.</li><li><b>The f-number</b>, \(f/D\), sets how bright the image is: a lower f-number gathers light faster.</li><li><b>The detector</b> is a grid of pixels, each turning photons into charge.</li></ul>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 6U telescope</span>
+<p>A 9 cm mirror with a 580 mm focal length works at f/6.4. Each 5.5 µm pixel sees</p>
+\[
+\alpha = \frac{p}{f} = \frac{5.5\times10^{-6}}{0.58} = 9.5\ \mu\text{rad}
+\]
+<p>of sky. Diffraction at 550 nm blurs a point over \(1.22\lambda/D = 7.5\) µrad, a little less than a pixel.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the f-number as the resolution. Two telescopes at f/6 with different apertures resolve differently: the aperture sets the blur, the f-number only the brightness and the scale for a given aperture.</p>
+</div>
+</section>
+
+<section class="topic" id="imager">
+<h2><span class="n">2</span>Resolution and ground sampling</h2>
+<p>Two things limit the detail in an image from orbit: the ground one pixel covers, and the blur the aperture makes. The coarser of the two wins.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Looking straight down from height \(h\), a pixel of pitch \(p\) covers the ground sample distance</p>
+\[
+\text{GSD} = \frac{h\,p}{f}.
+\]
+<p>A circular aperture of diameter \(D\) blurs every point into an Airy pattern. Its first dark ring lies where \(\pi D \sin\theta/\lambda\) equals 3.8317, the first zero of the Bessel function \(J_1\), so</p>
+\[
+\theta_R \approx 1.22\,\frac{\lambda}{D},
+\]
+<p>and two points closer than that are not resolved (the Rayleigh criterion). On the ground the blur is \(h\theta_R\). The ratio \(Q = \lambda f/(Dp)\) compares the two: the pixels and the blur match at \(Q = 1/1.22 = 0.82\). Below it the pixels set the detail; above it the optics do.</p>
+<p>The lab also finds the zero of \(J_1\) from its integral and checks it gives the same blur.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 9 cm telescope at 580 mm</span>
+<p>From 500 km, each pixel covers \(500\,000 \times 5.5\times10^{-6}/0.58 = 4.74\) m. The blur at 550 nm is \(500\,000 \times 1.22 \times 550\times10^{-9}/0.09 = 3.73\) m. The pixels set the detail at 4.74 m, and \(Q = 0.64\). 4096 pixels across cover a 19.4 km swath.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the same aperture at 1500 mm</span>
+<p>Stretch the focal length to 1500 mm. Each pixel now covers 1.83 m, finer than the 3.73 m blur, so the optics set the detail and \(Q = 1.67\). The swath shrinks to 7.5 km. Smaller pixels would add nothing; a larger aperture would.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Quoting the ground sample distance as the resolution. A camera can sample the ground every metre and still blur it over four.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Laser links</h2>
+</div>
+
+<section class="topic" id="laser">
+<h2><span class="n">3</span>The laser link budget</h2>
+<p>A laser beam spreads far less than a radio beam, so a small terminal can put much more of its power on a ground telescope. The price is pointing.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A Gaussian beam leaving with waist radius \(w_0\) spreads at the half-angle</p>
+\[
+\theta = \frac{\lambda}{\pi w_0}.
+\]
+<p>At range \(d\) its \(1/e^2\) radius is \(w = \theta d\). A telescope of radius \(r\) at the beam's centre catches</p>
+\[
+P_r = P_t\left(1 - e^{-2r^2/w^2}\right) \approx P_t\,\frac{2r^2}{w^2}.
+\]
+<p>Twice the range or half the transmit aperture makes \(w\) twice as large and delivers a quarter of the power. Pointed off by \(\varepsilon\), the beam's centre lands \(\varepsilon d\) away, and the power falls as \(e^{-2(\varepsilon/\theta)^2}\): half is lost at \(\varepsilon = \theta\sqrt{\ln 2/2} = 0.59\,\theta\).</p>
+<p>The lab computes the power caught off-centre as a series and checks it against integrating the beam over the telescope.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 10 mm terminal at 1000 km</span>
+<p>At 1550 nm a 10 mm aperture, waist radius 5 mm, spreads \(\theta = 1.55\times10^{-6}/(\pi \times 0.005) = 98.7\) µrad. At 1000 km the beam is 98.7 m in radius. A 40 cm telescope catches \(2(0.2)^2/98.7^2 = 8.2\times10^{-6}\) of 1 W: 8.2 µW, −20.9 dBm. At 200 Mbit/s that is \(3.2\times10^5\) photons for each bit.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · pointed by the body alone</span>
+<p>A craft that points with its star tracker and wheels holds about 0.02°, 349 µrad (Unit 3). Turned toward the station by the body alone, the 10 mm beam lands 349 m off, three and a half beam radii. The power falls 109 dB to −130 dBm: nothing usable arrives. Half the power is lost at 58 µrad.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Widening the beam to ease pointing and expecting the same link. A beam ten times wider forgives ten times the error but delivers a hundredth of the power on target.</p>
+</div>
+</section>
+
+<section class="topic" id="operations">
+<h2><span class="n">4</span>Pointing, acquisition and weather</h2>
+<p>A laser link works only when the two ends can find each other, keep the beam on target and see through the air between them.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Two-stage pointing.</b> The craft's attitude control points coarsely; a fine-steering mirror inside the terminal holds the beam to a few microradians. Some small terminals manage with body pointing alone, with precise wheels and a star tracker.</li><li><b>Acquisition.</b> The ground and the craft first shine wider beacon beams, or scan, to find each other before the narrow data beam locks on.</li><li><b>Weather.</b> Clouds stop the link. Optical ground stations sit at dry, clear sites, often beside astronomical observatories, and data waits for a clear pass or goes to another station.</li><li><b>Spectrum.</b> Optical frequencies are not licensed at present, unlike radio, and the narrow beam is hard to intercept or jam.</li></ul>
+</div>
+<div class="box ex"><span class="tag">Worked example · what flies</span>
+<p>NASA's small spacecraft report lists small laser terminals from 1 to 200,000 Mbit/s, mostly at 1550 nm, weighing a few kilograms or less and drawing 3 to 100 W. Aerospace Corporation's OCSD CubeSats sent 200 Mbit/s from a 1.5U craft to a 40 cm ground telescope, pointing the whole craft.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Planning a laser downlink as if every pass were usable. Cloud cover at one station can block days of passes; plan more stations or store the data until a clear one.</p>
+</div>
+</section>
+
+<section class="topic" id="sheet">
+<h2><span class="n">5</span>Formula sheet</h2>
+\[
+\text{GSD} = \frac{h\,p}{f}, \qquad \theta_R = 1.22\,\frac{\lambda}{D}, \qquad Q = \frac{\lambda f}{D\,p}, \qquad N_{f} = \frac{f}{D}.
+\]
+\[
+\theta = \frac{\lambda}{\pi w_0}, \qquad w = \theta d, \qquad P_r = P_t\left(1 - e^{-2r^2/w^2}\right), \qquad \varepsilon_{3\,\text{dB}} = \theta\sqrt{\ln 2/2}.
+\]
+</section>
+
+<section class="topic" id="build-it"><h2><span class="n">6</span>Build it</h2><p>Show the payload can see what the mission needs, and the link can bring it down.</p><h3>Method</h3><ol><li>State the smallest thing the mission must see, and the band.</li><li>Choose an aperture whose diffraction blur from your altitude is finer than that, then a focal length and pixel that sample it.</li><li>Find the swath and the data per image, and give the data to the data budget.</li><li>For a laser downlink, find the beam divergence, the power on the ground telescope and the pointing error that costs 3 dB.</li><li>Compare that pointing error with what attitude control holds; add a fine-steering mirror if it is not enough.</li><li>Plan for cloud: stations, storage and the passes that will be lost.</li></ol><h3>What to produce</h3><p>An imaging budget with GSD, blur and swath; a laser link budget with pointing loss; and a pointing requirement for Attitude control.</p><h3>Handoff to other subsystems</h3><p>Give Attitude control the pointing and stability the payload and the laser need. Give the data budget the volume per image. Give Thermal the terminal's heat.</p><h3>Review checklist</h3><ul><li>The blur from the aperture is finer than the smallest required detail.</li><li>Pixels sample the blur, neither far coarser nor far finer.</li><li>The laser's received power is stated with its pointing loss.</li><li>The pointing requirement is compared with what attitude control holds.</li><li>Clouds and acquisition are in the operations plan.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>For your payload, give the GSD, the blur and which limits; for your downlink, the divergence, the received power and the pointing error that costs 3 dB.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l6_optics_1/" target="_blank" rel="noopener">MIT 16.851, Lecture 6: Introduction to optics</a>: Bands, mirrors, focal length, the Rayleigh criterion and detector sampling.</li><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l7_optics_2/" target="_blank" rel="noopener">MIT 16.851, Lecture 7: Introduction to optics, continued</a>: Interferometers, sparse-aperture arrays, and the fast-steering mirrors and quad-cell sensors that control them.</li><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l8_optics_3/" target="_blank" rel="noopener">MIT 16.851, Lecture 8: ARGOS</a>: A Golay-3 sparse-aperture telescope testbed: its design, pointing and image quality.</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/soa-communications" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 9.3</a>: Laser terminals for small craft, pointing, ground stations and weather.</li><li><a href="https://en.wikipedia.org/wiki/Gaussian_beam" target="_blank" rel="noopener">Wikipedia, Gaussian beam</a>: Beam divergence and the power through an aperture.</li><li><a href="https://en.wikipedia.org/wiki/Airy_disk" target="_blank" rel="noopener">Wikipedia, Airy disk</a>: The zero of J₁ behind the 1.22.</li></ul></section>
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, Lectures 6 to 8.</footer>
+</body>
+</html>

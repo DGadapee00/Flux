@@ -4,6 +4,72 @@
  */
 
 export const PREDICTIONS = {
+  laser: [
+    {
+      id: 'lc-aperture',
+      scenario: 'cube',
+      ask: 'Pointed true, the 10 mm terminal lands −20.9 dBm on the 40 cm telescope 1000 km away. Halve the transmit aperture to 5 mm. By what factor does the received power change?',
+      apply(s) { s.Dtmm /= 2; },
+      watch: [{ id: 'Pr', label: 'the received power', get: (c) => c.Pr }],
+      mode: 'factor',
+      factors: [0.25, 0.5, 2],
+      expect: { Pr: 0.25 },
+      why: 'Half the aperture makes twice the divergence, 197 µrad, and a beam twice as wide spreads the same power over four times the area. A quarter reaches the telescope: −26.9 dBm.',
+    },
+    {
+      id: 'lc-body',
+      scenario: 'cube',
+      ask: 'A star-tracked craft holds its attitude to about 0.02°, 349 µrad. Point the 10 mm terminal by turning the whole craft, with that error. Does more than half the on-target power still arrive?',
+      apply(s) { s.epsur = 349; },
+      watch: [{ id: 'half', label: 'More than half still arrives', get: (c) => c.lossShown < 3, mode: 'bool' }],
+      mode: 'bool',
+      expect: { half: false },
+      why: 'The beam’s 1/e² radius at the ground is 99 m; 349 µrad puts its centre 349 m off, three and a half radii. The power falls about 109 dB, to −130 dBm: the link is gone. Half the power is lost at 58 µrad.',
+    },
+    {
+      id: 'lc-wide',
+      scenario: 'body',
+      ask: 'Still 349 µrad off, swap the 10 mm transmit aperture for a 1 mm one. Does the received power rise or fall?',
+      apply(s) { s.Dtmm = 1; },
+      watch: [{ id: 'Pr', label: 'the received power', get: (c) => c.Pr }],
+      mode: 'dir',
+      expect: { Pr: 'bigger' },
+      why: 'The 1 mm beam spreads 987 µrad, ten times wider, so the 349 µrad error leaves the telescope well inside it. It delivers −41.9 dBm, a hundred times less than a true-pointed narrow beam but nearly ten orders of magnitude more than the narrow beam missing.',
+    },
+  ],
+  imager: [
+    {
+      id: 'im-pixels',
+      scenario: 'cube',
+      ask: 'The 9 cm telescope at 580 mm puts 4.74 m of ground on each 5.5 µm pixel, and the pixels set the finest detail. Halve the pixel pitch. Does the finest detail it shows halve too?',
+      apply(s) { s.pum /= 2; },
+      watch: [{ id: 'halved', label: 'The finest detail halves', get: (c) => c.resolves < 0.51 * 4.741, mode: 'bool' }],
+      mode: 'bool',
+      expect: { halved: false },
+      why: 'Each pixel now covers 2.37 m, but the aperture blurs every point over 3.73 m. The finest detail stops at the blur: 4.74 m becomes 3.73 m, not 2.37 m.',
+    },
+    {
+      id: 'im-long',
+      scenario: 'long',
+      ask: 'At 1500 mm focal length the pixels already cover 1.83 m, finer than the 3.73 m blur. Halve the pixel pitch again. Does the finest detail change?',
+      apply(s) { s.pum /= 2; },
+      watch: [{ id: 'res', label: 'the finest detail', get: (c) => c.resolves }],
+      mode: 'dir',
+      expect: { res: 'same' },
+      why: 'The optics set the limit. Smaller pixels sample the same blur more finely, 0.92 m apart, but show no more: the finest detail stays at 3.73 m.',
+    },
+    {
+      id: 'im-aperture',
+      scenario: 'long',
+      ask: 'Keep the 1500 mm focal length and double the aperture from 9 cm to 18 cm. By what factor does the finest detail change?',
+      apply(s) { s.Dcm *= 2; },
+      watch: [{ id: 'res', label: 'the finest detail', get: (c) => c.resolves }],
+      mode: 'factor',
+      factors: [0.25, 0.5, 1],
+      expect: { res: 0.5 },
+      why: 'The blur goes as λ/D: twice the aperture, half the blur, 1.86 m. It is still just coarser than the 1.83 m pixels, so the optics still set the detail.',
+    },
+  ],
   doppler: [
     {
       id: 'dp-band',

@@ -35,7 +35,7 @@ reference, when the class reaches it, and what the course has now.
 | Attitude determination and control, pointing budget | [L9](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l9_acs/) | [5](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | 2 | u3: attitude, spin, pointing, poles, wheel, budget | covered |
 | Attitude sensors: star trackers, Sun and horizon sensors, magnetometers | [L9](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l9_acs/) | [5.2](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | 2 | u3 notes and practice; the budget lab takes each sensor’s accuracy | covered |
 | Position from GPS | none | [5.2.10](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | none | none | missing |
-| Optics and optical payloads | [L6–8](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l6_optics_1/) | [9.3](https://www.nasa.gov/smallsat-institute/sst-soa/soa-communications) | none | 1, 5 | none | missing |
+| Optics and optical payloads | [L6–8](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l6_optics_1/) | [9.3](https://www.nasa.gov/smallsat-institute/sst-soa/soa-communications) | none | 1, 5 | u11: imager, laser; pointing, acquisition and weather in notes and practice | covered |
 | Sensor payload and data budget | [L19](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l19scraftcompsys/) | none | none | 1, 3 | u10: data; u7 notes: sensor model | covered |
 | Structures and launch loads | [L14](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l14_structures/) | [6](https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms) | none | 5 | u4: shake, random; material, process, joint and finish notes | covered |
 | Mechanisms and deployables | [L14](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l14_structures/) | [6.3](https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms) | none | none | none | missing |
@@ -52,7 +52,7 @@ reference, when the class reaches it, and what the course has now.
 
 ## Totals
 
-32 topics: 18 covered, 3 notes only, 11 missing.
+32 topics: 19 covered, 3 notes only, 10 missing.
 
 ## 16.851 lectures and SoA chapters by unit
 
@@ -68,4 +68,5 @@ reference, when the class reaches it, and what the course has now.
 | u8 Mission and requirements | none | 2 |
 | u9 Space environment and radiation | L5 | 6.5, 8.2.1, 13.2 |
 | u10 Avionics, flight software and data | L16–19 | 8, 9 (rates) |
-| No unit yet | L1, L4, L6–8, L10–13, L15, L22, L24 | 1, 4, 11, 12, 13 |
+| u11 Optical payloads and laser links | L6–8 | 9.3 |
+| No unit yet | L1, L4, L10–13, L15, L22, L24 | 1, 4, 11, 12, 13 |

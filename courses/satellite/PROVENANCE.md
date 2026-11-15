@@ -48,3 +48,9 @@ Unit 2, telemetry, tracking and command: three sections added after the existing
 16.851 Lecture 20. Licensing and command protection follow NASA's small spacecraft report, 9.2.5,
 9.2.6 and 11.8.1. The carriers lie in the bands of the report's Table 9-3. The telemetry channel
 list is our own.
+
+Unit 11: optical payloads and laser links, after MIT 16.851 Lectures 6 to 8 and NASA's small
+spacecraft report, 9.3. The Rayleigh criterion and the Airy zero are from Lecture 6 and Wikipedia's
+Airy disk article; beam divergence and the power through an aperture from Wikipedia's Gaussian
+beam article. Laser wavelengths and rates are from the report's Table 9-4, and the 40 cm ground
+telescope is OCSD's. The camera and terminal figures are our own.

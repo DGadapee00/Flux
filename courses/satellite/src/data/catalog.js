@@ -87,9 +87,20 @@ export const EXAMS = [
     labs: ['tasks', 'data'],
     coming: [],
   },
+  {
+    id: 'u11',
+    n: 11,
+    title: 'Optical payloads and laser links',
+    chapters: '11',
+    date: 'Unit 11',
+    labs: ['imager', 'laser'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
+  laser: { id: 'laser', exam: 'u11', title: 'Laser link' },
+  imager: { id: 'imager', exam: 'u11', title: 'Imager' },
   doppler: { id: 'doppler', exam: 'u2', title: 'Doppler' },
   data: { id: 'data', exam: 'u10', title: 'Data budget' },
   tasks: { id: 'tasks', exam: 'u10', title: 'Flight software' },
@@ -125,6 +136,7 @@ export const CHAPTER_TITLES = {
   8: 'Mission and requirements',
   9: 'Space environment and radiation',
   10: 'Avionics, flight software and data',
+  11: 'Optical payloads and laser links',
 };
 
 export function examById(id) {
