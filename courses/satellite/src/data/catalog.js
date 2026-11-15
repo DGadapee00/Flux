@@ -78,9 +78,20 @@ export const EXAMS = [
     labs: ['decay', 'upsets'],
     coming: [],
   },
+  {
+    id: 'u10',
+    n: 10,
+    title: 'Avionics, flight software and data',
+    chapters: '10',
+    date: 'Unit 10',
+    labs: ['tasks', 'data'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
+  data: { id: 'data', exam: 'u10', title: 'Data budget' },
+  tasks: { id: 'tasks', exam: 'u10', title: 'Flight software' },
   budget: { id: 'budget', exam: 'u3', title: 'Pointing budget' },
   upsets: { id: 'upsets', exam: 'u9', title: 'Memory upsets' },
   decay: { id: 'decay', exam: 'u9', title: 'Orbital decay' },
@@ -112,6 +123,7 @@ export const CHAPTER_TITLES = {
   6: 'Thermal control',
   8: 'Mission and requirements',
   9: 'Space environment and radiation',
+  10: 'Avionics, flight software and data',
 };
 
 export function examById(id) {

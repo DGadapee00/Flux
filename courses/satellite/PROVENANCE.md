@@ -36,3 +36,10 @@ Unit 3, attitude sensors and the pointing budget: two sections added after the e
 sensor accuracies are NASA's small spacecraft report's (2026, Tables 5-5, 5-7 and 5-8): a star
 tracker's 30″, a fine Sun sensor's 0.3° and a horizon sensor's 1°, each taken as 3σ. The jitter,
 misalignment and thermal bending are our own round figures.
+
+Unit 10: avionics, flight software and data, after MIT 16.851 Lectures 16 to 19. The scheduling
+tests are Liu and Layland's bound and response-time analysis (Wikipedia, Rate-monotonic
+scheduling). The margin rule, four times the estimate at the requirements review and twice at
+launch, is Lecture 16's. Bus speeds are from Wikipedia's I²C and SPI articles; radio rates from
+NASA's small spacecraft report, Table 9-3. The task set, the payload rate and the watchdog figures
+are our own.

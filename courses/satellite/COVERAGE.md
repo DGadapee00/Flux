@@ -36,7 +36,7 @@ reference, when the class reaches it, and what the course has now.
 | Attitude sensors: star trackers, Sun and horizon sensors, magnetometers | [L9](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l9_acs/) | [5.2](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | 2 | u3 notes and practice; the budget lab takes each sensor’s accuracy | covered |
 | Position from GPS | none | [5.2.10](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | none | none | missing |
 | Optics and optical payloads | [L6–8](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l6_optics_1/) | [9.3](https://www.nasa.gov/smallsat-institute/sst-soa/soa-communications) | none | 1, 5 | none | missing |
-| Sensor payload and data budget | [L19](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l19scraftcompsys/) | none | none | 1, 3 | u7 notes: sensor model, data count | notes only |
+| Sensor payload and data budget | [L19](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l19scraftcompsys/) | none | none | 1, 3 | u10: data; u7 notes: sensor model | covered |
 | Structures and launch loads | [L14](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l14_structures/) | [6](https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms) | none | 5 | u4: shake, random; material, process, joint and finish notes | covered |
 | Mechanisms and deployables | [L14](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l14_structures/) | [6.3](https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms) | none | none | none | missing |
 | Thermal control | [L23](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l23thermalcontro/) | [7](https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control) | none | 5 | u6: balance, nodes | covered |
@@ -45,14 +45,14 @@ reference, when the class reaches it, and what the course has now.
 | Telemetry, tracking and command | [L20](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l20_satellitettc/) | [9](https://www.nasa.gov/smallsat-institute/sst-soa/soa-communications), [11](https://www.nasa.gov/smallsat-institute/sst-soa/ground-data-systems-and-mission-operations) | none | 3 | none | missing |
 | Ground systems and mission operations | [L24](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l24_groundsysdes/) | [11](https://www.nasa.gov/smallsat-institute/sst-soa/ground-data-systems-and-mission-operations) | [3.8](https://www.nasa.gov/reference/3-0-nasa-program-project-life-cycle/) | 5 | u1 passes covers visibility only | missing |
 | Identification and tracking | none | [12](https://www.nasa.gov/smallsat-institute/sst-soa/identification-and-tracking-systems) | none | none | none | missing |
-| Onboard computing and avionics | [L19](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l19scraftcompsys/) | [8.2](https://www.nasa.gov/smallsat-institute/sst-soa/small-spacecraft-avionics) | none | none | none | missing |
-| Flight software and software engineering | [L16](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l16_software/), [L17](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l17_software_eng/) | [8.3](https://www.nasa.gov/smallsat-institute/sst-soa/small-spacecraft-avionics) | none | 3 | none | missing |
-| Autonomy and fault management | [L18](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l18_autonomy_lec/) | [8.3](https://www.nasa.gov/smallsat-institute/sst-soa/small-spacecraft-avionics) | none | none | none | missing |
+| Onboard computing and avionics | [L19](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l19scraftcompsys/) | [8.2](https://www.nasa.gov/smallsat-institute/sst-soa/small-spacecraft-avionics) | none | none | u10 notes and practice: buses, memory, watchdog | covered |
+| Flight software and software engineering | [L16](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l16_software/), [L17](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l17_software_eng/) | [8.3](https://www.nasa.gov/smallsat-institute/sst-soa/small-spacecraft-avionics) | none | 3 | u10: tasks | covered |
+| Autonomy and fault management | [L18](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l18_autonomy_lec/) | [8.3](https://www.nasa.gov/smallsat-institute/sst-soa/small-spacecraft-avionics) | none | none | u10 notes and practice; no lab, the topic is not numeric | covered |
 | Reentry, deorbit and debris rules | [L22](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l22_reentry/) | [13](https://www.nasa.gov/smallsat-institute/sst-soa/deorbit-systems) | [3.9](https://www.nasa.gov/reference/3-0-nasa-program-project-life-cycle/) | none | none | missing |
 
 ## Totals
 
-32 topics: 13 covered, 4 notes only, 15 missing.
+32 topics: 17 covered, 3 notes only, 12 missing.
 
 ## 16.851 lectures and SoA chapters by unit
 
@@ -67,4 +67,5 @@ reference, when the class reaches it, and what the course has now.
 | u7 Payload and integration | none | 2 |
 | u8 Mission and requirements | none | 2 |
 | u9 Space environment and radiation | L5 | 6.5, 8.2.1, 13.2 |
-| No unit yet | L1, L4, L6–8, L10–13, L15–20, L22, L24 | 1, 4, 8, 11, 12, 13 |
+| u10 Avionics, flight software and data | L16–19 | 8, 9 (rates) |
+| No unit yet | L1, L4, L6–8, L10–13, L15, L20, L22, L24 | 1, 4, 11, 12, 13 |

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Avionics, flight software and data</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 10 · after MIT 16.851 Satellite Engineering</div>
+  <h1>Avionics, flight software and data</h1>
+  <p class="lede">The computer that runs the craft, the software that keeps every task on time, what it does when something fails, and whether the passes can send down all the data it records.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The onboard computer</h3>
+    <a href="#avionics"><span>1</span>The computer and its buses</a>
+    <a href="#tasks"><span>2</span>Flight software and scheduling</a>
+    <a href="#faults"><span>3</span>Faults, watchdogs and safe mode</a>
+    <a href="#software"><span>4</span>Building flight software</a>
+    <h3>Part II · Data</h3>
+    <a href="#data"><span>5</span>The data budget</a>
+    <h3>Reference</h3>
+    <a href="#sheet"><span>6</span>Formula sheet</a>
+    <a href="#build-it"><span>7</span>Build it</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The onboard computer</h2>
+</div>
+
+<section class="topic" id="avionics">
+<h2><span class="n">1</span>The computer and its buses</h2>
+<p>Command and data handling is the craft's nervous system. One computer takes commands from the ground, runs every subsystem's software, gathers telemetry and stores the payload's data.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>The processor</b> runs the flight software. Its speed must cover the busiest moment, with margin.</li><li><b>Memory</b> comes in kinds: read-only memory for the boot image, RAM for the running software, flash for stored data. Flash and RAM take upsets, so they carry a code and a scrubber (Unit 9).</li><li><b>Buses</b> join the computer to sensors, radios and the payload. Small craft use embedded buses: I²C and SPI inside a board, RS-422 and CAN between boards, SpaceWire for fast data.</li><li><b>A watchdog</b> resets the computer if the software stops answering.</li></ul>
+</div>
+<p>Choose a bus by the rate it must carry. I²C shares two wires among many devices at 100 or 400 kbit/s, with a 3.4 Mbit/s mode on newer parts. SPI moves one bit per clock on its own lines, about 20 Mbit/s at a 20 MHz clock.</p>
+<div class="box ex"><span class="tag">Worked example · a camera on the bus</span>
+<p>A camera makes 2048 × 2048 pixels of 12 bits every 10 s:</p>
+\[
+\frac{2048^2 \times 12\ \text{bit}}{10\ \text{s}} = 5.03\ \text{Mbit/s}.
+\]
+<p>That is 12.6 times what fast-mode I²C carries, and more than its 3.4 Mbit/s mode. A 20 MHz SPI link carries it with room to spare. The magnetometer, at a few hundred bits a second, can share an I²C bus with the temperature sensors.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Sizing the bus for the average rate when the device sends in bursts. A camera that dumps a frame in one second needs ten times its average rate while it does.</p>
+</div>
+</section>
+
+<section class="topic" id="tasks">
+<h2><span class="n">2</span>Flight software and scheduling</h2>
+<p>Flight software is a set of tasks that repeat: attitude control ten times a second, commands, payload processing, telemetry, housekeeping. Each must finish before it runs again.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Task \(i\) runs for \(C_i\) every period \(T_i\). The processor's load is</p>
+\[
+U = \sum_i \frac{C_i}{T_i}.
+\]
+<p>Under rate-monotonic scheduling the task with the shortest period has the highest priority and interrupts the rest. Liu and Layland showed that every deadline is met if \(U \le n(2^{1/n} - 1)\): 0.828 for two tasks, 0.743 for five, toward \(\ln 2 = 0.693\) for many. That is a safe test, not a limit.</p>
+<p>The exact test finds each task's worst response. It comes when every task is released together, and it is the smallest \(R_i\) with</p>
+\[
+R_i = C_i + \sum_{j < i} \left\lceil \frac{R_i}{T_j} \right\rceil C_j ,
+\]
+<p>the task's own run plus every higher task's runs that start before it finishes. The task is on time if \(R_i \le T_i\). The lab finds \(R_i\) by iterating this from \(R_i = C_i\), and checks it against a run of the scheduler itself.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the baseline processor</span>
+<p>Attitude control takes 18 ms every 100 ms, commands 20 every 250, payload processing 90 every 500, telemetry 120 every 1000, housekeeping 150 every 2000. The load is</p>
+\[
+U = 0.18 + 0.08 + 0.18 + 0.12 + 0.075 = 0.635,
+\]
+<p>under the 0.743 bound. Housekeeping, the lowest priority, finishes 490 ms after its release in the worst case.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a processor two-thirds as fast</span>
+<p>Every run takes 1.5 times as long and the load is 0.953, past the bound. The exact test still passes: housekeeping's worst response is 1878 ms against its 2000 ms period. Twenty more milliseconds of payload processing at baseline speed take the load past 1, and then no schedule can fit.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading the bound as a limit, or ignoring tasks that share data. When a low task holds a lock a high task needs, a middle task can block both. Mars Pathfinder reset itself repeatedly in 1997 for that reason, until priority inheritance was switched on from Earth.</p>
+</div>
+</section>
+
+<section class="topic" id="faults">
+<h2><span class="n">3</span>Faults, watchdogs and safe mode</h2>
+<p>A craft out of contact for hours must notice its own faults and keep itself alive until the ground can help.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Fault management has three steps: <b>detect</b> that something is wrong, <b>isolate</b> which part, and <b>recover</b>. The simplest tools are a watchdog, which resets a computer that stops answering, and limit checks on telemetry. The last line is <b>safe mode</b>: point the arrays at the Sun, shed loads, keep the radio listening and wait for the ground.</p>
+<p>Rule-based fault management lists each fault and its response, and misses what nobody listed. Model-based fault management reasons from a model of how the craft should behave, so it can handle combinations nobody wrote down.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a watchdog's timing</span>
+<p>The software must reset the watchdog every second; the watchdog resets the computer if 4 s pass without one. A task that hangs is caught within 4 s. The timeout must be longer than the longest normal gap, such as a flash write that blocks for 1.5 s, or the watchdog resets a healthy computer.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>A safe mode that needs the part that failed. If safe mode points the arrays using the star tracker, a failed tracker leaves the craft unable to find the Sun. Safe mode should use the simplest, hardiest sensors: coarse Sun sensors and a magnetometer.</p>
+</div>
+</section>
+
+<section class="topic" id="software">
+<h2><span class="n">4</span>Building flight software</h2>
+<p>Flight software is often the part that runs late. Its size is hard to estimate and its faults show up at integration.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Most small craft build on a framework, such as NASA's Core Flight System or F Prime, over a real-time operating system. The framework gives command handling, telemetry, timing and messaging; the mission writes the control laws and the payload's processing.</p>
+<p>Software grows. MIT 16.851 advises sizing the computer at four times the estimated need at the requirements review, and keeping a full 100% margin at launch: no more than half the processor and half the memory in use.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the margin rule</span>
+<p>At the requirements review the software is estimated to load a candidate processor to 30%. Four times the estimate is 120%: this processor is too small. One twice as fast puts the estimate at 15% and four times it at 60%, which fits. If the delivered software later loads it to 45%, the launch margin, at most 50%, still holds.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Testing the software only on a desktop. Test it on the flight computer, with the flight timing, sensors and buses, or with hardware that stands in for them: test as you fly.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Data</h2>
+</div>
+
+<section class="topic" id="data">
+<h2><span class="n">5</span>The data budget</h2>
+<p>The data budget asks whether the passes can send down everything the craft records, and how big the store must be between passes.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>An overhead pass above elevation \(\varepsilon\) lasts (Unit 1)</p>
+\[
+t_p = T\,\frac{\lambda}{\pi}, \qquad \lambda = \arccos\!\left(\frac{R}{r}\cos\varepsilon\right) - \varepsilon .
+\]
+<p>A mid-latitude station sees a low craft in two groups of passes a day, twelve hours apart, each on \(k\) consecutive orbits. With a radio sending \(D\) and the craft recording \(g\) on average,</p>
+\[
+\text{made} = 86\,400\,g, \qquad \text{sent} = 2k\,t_p\,D .
+\]
+<p>If more can be sent than is made, the store empties in each group of passes and peaks just before the group's first pass, after the long gap. If not, it grows by made − sent every day until it is full.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · S-band, three passes a group</span>
+<p>At 500 km, \(T = 94.5\) min. Above 10°, \(\lambda = 0.245\) rad and an overhead pass lasts 7.38 min. Six passes a day give 44.3 minutes of sending. At 1 Mbit/s that is 2.66 Gbit a day. The craft records 25 kbit/s of payload data and 2 of housekeeping, 2.33 Gbit a day: a 13.8% margin. The store peaks at 106 MB before each group.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 30° mask</span>
+<p>If trees and buildings hide the sky below 30°, \(\lambda = 0.115\) rad and an overhead pass lasts only 3.45 min. The day's sending falls to 1.24 Gbit, short of the 2.33 Gbit recorded, and the store grows 136 MB a day.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Fixing a budget that does not close with a bigger store. The store fills a little more each day whatever its size; a larger one only takes longer. Record less, send faster, or add passes.</p>
+</div>
+</section>
+
+<section class="topic" id="sheet">
+<h2><span class="n">6</span>Formula sheet</h2>
+\[
+U = \sum \frac{C_i}{T_i} \le n\left(2^{1/n} - 1\right), \qquad R_i = C_i + \sum_{j < i}\left\lceil \frac{R_i}{T_j}\right\rceil C_j \le T_i .
+\]
+\[
+t_p = T\,\frac{\lambda}{\pi}, \quad \lambda = \arccos\!\left(\frac{R}{r}\cos\varepsilon\right) - \varepsilon, \qquad \text{made} = 86\,400\,g, \qquad \text{sent} = 2k\,t_p D .
+\]
+</section>
+
+<section class="topic" id="build-it"><h2><span class="n">7</span>Build it</h2><p>Show the computer, the software and the downlink keep up with the mission.</p><h3>Method</h3><ol><li>List every device on the computer with the rate it sends, and give each a bus that carries its peak.</li><li>List the flight software tasks with their periods and run times on the flight processor.</li><li>Find the load and each task's worst response; keep the load at launch under half.</li><li>Write the fault responses: what each limit check does, the watchdog's timeout, and what safe mode needs.</li><li>Count the data a day against what the passes can send, and size the store for the longest gap.</li></ol><h3>What to produce</h3><p>A block diagram with buses and rates, a task table with response times, a fault response table, and a data budget.</p><h3>Handoff to other subsystems</h3><p>Give Power the computer's draw. Give Communications the daily data volume and the rate needed. Give Mission and requirements the load and memory margins.</p><h3>Review checklist</h3><ul><li>Every bus carries its device's peak rate.</li><li>Every task meets its deadline, and the load leaves a 100% margin.</li><li>The watchdog timeout is longer than the longest normal gap.</li><li>Safe mode does not depend on the part most likely to fail.</li><li>The passes send more than the craft records each day, with margin.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>For your craft, list the tasks and find the load; check the slowest task's worst response; count the data a day against your passes and radio; size the store.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l16_software/" target="_blank" rel="noopener">MIT 16.851, Lecture 16: Satellite systems software</a>: Software design, size and the margin rule.</li><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l17_software_eng/" target="_blank" rel="noopener">MIT 16.851, Lecture 17: Software engineering for satellites</a>: Why flight software is hard, and how it is tested.</li><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l18_autonomy_lec/" target="_blank" rel="noopener">MIT 16.851, Lecture 18: Spacecraft autonomy</a>: Fault detection, isolation and recovery, rule-based and model-based.</li><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l19scraftcompsys/" target="_blank" rel="noopener">MIT 16.851, Lecture 19: Spacecraft computer systems</a>: Throughput, memory, buses and watchdogs.</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/small-spacecraft-avionics" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 8</a>: Onboard computers, bus interfaces, frameworks and operating systems for small craft.</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/soa-communications" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 9</a>: Radio data rates, UHF and S-band, for the data budget.</li><li><a href="https://en.wikipedia.org/wiki/Rate-monotonic_scheduling" target="_blank" rel="noopener">Wikipedia, Rate-monotonic scheduling</a>: The Liu–Layland bound and the Mars Pathfinder priority inversion.</li><li><a href="https://en.wikipedia.org/wiki/I%C2%B2C" target="_blank" rel="noopener">Wikipedia, I²C</a> and <a href="https://en.wikipedia.org/wiki/Serial_Peripheral_Interface" target="_blank" rel="noopener">Serial Peripheral Interface</a>: The bus speeds in the camera example.</li></ul></section>
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, Lectures 16 to 19.</footer>
+</body>
+</html>

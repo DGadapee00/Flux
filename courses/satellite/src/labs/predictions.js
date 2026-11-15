@@ -4,6 +4,71 @@
  */
 
 export const PREDICTIONS = {
+  data: [
+    {
+      id: 'dt-uhf',
+      scenario: 'sband',
+      ask: 'On S-band at 1 Mbit/s the craft sends 2.66 Gbit a day against 2.33 Gbit recorded. Swap in a 9.6 kbit/s UHF radio. Does the 2 GB store fill within a week?',
+      apply(s) { s.radio = 'uhf'; },
+      watch: [{ id: 'week', label: 'Full within a week', get: (c) => c.growing && c.daysToFill <= 7, mode: 'bool' }],
+      mode: 'bool',
+      expect: { week: true },
+      why: 'The same 44 minutes of passes a day now send only 25.5 Mbit. Almost everything recorded stays aboard, 288 MB a day, and 2 GB is full in 6.9 days.',
+    },
+    {
+      id: 'dt-mask',
+      scenario: 'sband',
+      ask: 'Trees and buildings around the station hide the sky below 30° of elevation. Does the craft still send all it records each day?',
+      apply(s) { s.eps = 30; },
+      watch: [{ id: 'keeps', label: 'It sends all it records', get: (c) => !c.growing, mode: 'bool' }],
+      mode: 'bool',
+      expect: { keeps: false },
+      why: 'The low edges of a pass carry much of its length: an overhead pass shrinks from 7.4 to 3.5 minutes. The day’s sending falls from 2.66 to 1.24 Gbit, short of the 2.33 Gbit recorded.',
+    },
+    {
+      id: 'dt-store',
+      scenario: 'onepass',
+      ask: 'With one pass a group, the 2 GB store fills in 11 days. Fit a 4 GB store instead. By what factor does the time to fill change?',
+      apply(s) { s.storeGB = 4; },
+      watch: [{ id: 'days', label: 'days until the store is full', get: (c) => c.daysToFill }],
+      mode: 'factor',
+      factors: [1, 2, 4],
+      expect: { days: 2 },
+      why: 'The store grows by the same 181 MB every day, so twice the store lasts twice as long: 22 days. A bigger store only delays a budget that does not close.',
+    },
+  ],
+  tasks: [
+    {
+      id: 'tk-slow',
+      scenario: 'nominal',
+      ask: 'The baseline processor runs at 63.5% load, under the 74.3% Liu–Layland bound for five tasks. Swap in a processor two-thirds as fast. The load rises past the bound. Does every task still meet its deadline?',
+      apply(s) { s.speed = 2 / 3; },
+      watch: [{ id: 'meets', label: 'Every deadline met', get: (c) => c.meets, mode: 'bool' }],
+      mode: 'bool',
+      expect: { meets: true },
+      why: 'The load is 95.3%, well past the bound, yet response-time analysis gives housekeeping 1878 ms against its 2000 ms period. The bound is a safe test, not a limit; it fails only some task sets above it.',
+    },
+    {
+      id: 'tk-pay',
+      scenario: 'slow',
+      ask: 'On the slower processor, the payload team adds 20 ms of processing at baseline speed. Does housekeeping now miss its deadline?',
+      apply(s) { s.payMs += 20; },
+      watch: [{ id: 'miss', label: 'Housekeeping misses', get: (c) => c.misses.includes('hk'), mode: 'bool' }],
+      mode: 'bool',
+      expect: { miss: true },
+      why: 'The load passes 100%, 101.3%, and no schedule can fit more work than the processor has time for. The lowest-priority task takes the loss: housekeeping needs 2025 ms against its 2000 ms period.',
+    },
+    {
+      id: 'tk-loop',
+      scenario: 'nominal',
+      ask: 'Run attitude control at 20 Hz instead of 10 Hz, on the baseline processor. Does housekeeping’s worst response grow or shrink?',
+      apply(s) { s.adcsHz = 20; },
+      watch: [{ id: 'hk', label: 'housekeeping’s worst response', get: (c) => c.hkResponse }],
+      mode: 'dir',
+      expect: { hk: 'bigger' },
+      why: 'Attitude control has the highest priority and now interrupts every task twice as often. The load rises from 63.5% to 81.5%, and housekeeping waits behind it: 490 ms becomes 836 ms.',
+    },
+  ],
   budget: [
     {
       id: 'bg-sun',

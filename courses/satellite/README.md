@@ -9,7 +9,8 @@ built yet.
 Unit 8, mission and requirements, follows the NASA Systems Engineering Handbook: requirements,
 verification, the life cycle's reviews, and a mass budget with its margin. Unit 9 covers the space
 environment and radiation: drag and the solar cycle, total dose with its margin, and memory upsets
-with a correcting code and scrubbing. `COVERAGE.md` maps the course against its references.
+with a correcting code and scrubbing. Unit 10 covers avionics, flight software scheduling, fault
+management and the data budget. `COVERAGE.md` maps the course against its references.
 
 Run `npm run dev -w @flux/satellite` from the repo root. The course opens at `satellite/`.
 The former guide and decision controls are archived under
