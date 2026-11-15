@@ -5,6 +5,7 @@ import u4 from './bank/u4.js';
 import u5 from './bank/u5.js';
 import u6 from './bank/u6.js';
 import u8 from './bank/u8.js';
+import u9 from './bank/u9.js';
 import { foldCoaching } from '@flux/shells/practice/coaching.js';
 import { applyPrincipleTags } from '@flux/shells/practice/principles.js';
 import coaching from './coaching/index.js';
@@ -14,7 +15,7 @@ import { PRINCIPLE_TAGS } from './principles.js';
  * Traps, wrong-option explanations and extra hints live beside the bank (src/problems/coaching/),
  * one file per unit, and are folded in here so the app and the checker see the same thing.
  */
-export const PROBLEMS = foldCoaching(applyPrincipleTags([...u1, ...u2, ...u3, ...u4, ...u5, ...u6, ...u8], PRINCIPLE_TAGS), coaching);
+export const PROBLEMS = foldCoaching(applyPrincipleTags([...u1, ...u2, ...u3, ...u4, ...u5, ...u6, ...u8, ...u9], PRINCIPLE_TAGS), coaching);
 
 const byIdMap = new Map(PROBLEMS.map((p) => [p.id, p]));
 
@@ -22,7 +23,7 @@ export const problemById = (id) => byIdMap.get(id) || null;
 export const problemsForExam = (examId) => PROBLEMS.filter((p) => p.exam === examId);
 export const problemsForLab = (labId) => PROBLEMS.filter((p) => p.lab === labId);
 
-export const CHAPTER_ORDER = ['1', '2', '3', '4', '5', '6', '7', '8'];
+export const CHAPTER_ORDER = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 export const CHAPTER_TITLES = {
   1: 'Orbit',
@@ -33,4 +34,5 @@ export const CHAPTER_TITLES = {
   6: 'Thermal control',
   7: 'Payload and integration',
   8: 'Mission and requirements',
+  9: 'Space environment and radiation',
 };

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Space environment and radiation</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 9 · after MIT 16.851 Satellite Engineering</div>
+  <h1>Space environment and radiation</h1>
+  <p class="lede">What a low orbit does to a satellite: the thin air that drags it down, the Sun that swells that air, and the radiation that ages its electronics and flips its bits.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Air and the Sun</h3>
+    <a href="#environment"><span>1</span>The environment of a low orbit</a>
+    <a href="#drag"><span>2</span>Drag and the upper atmosphere</a>
+    <h3>Part II · Radiation</h3>
+    <a href="#radiation"><span>3</span>Where the radiation comes from</a>
+    <a href="#dose"><span>4</span>Total dose and shielding</a>
+    <a href="#upsets"><span>5</span>Single-event upsets and scrubbing</a>
+    <h3>Reference</h3>
+    <a href="#sheet"><span>6</span>Formula sheet</a>
+    <a href="#build-it"><span>7</span>Build it</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Air and the Sun</h2>
+</div>
+
+<section class="topic" id="environment">
+<h2><span class="n">1</span>The environment of a low orbit</h2>
+<p>Low orbit is not empty. It holds a thin, hot gas, charged particles, a magnetic field and radiation, and the Sun changes all of them.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Six things act on a craft in low orbit:</p>
+<ul><li><b>The Sun</b> runs an eleven-year cycle. Its radio flux at 10.7 cm, F10.7, tracks the cycle: about 70 when quiet and 250 when active.</li><li><b>The neutral atmosphere</b> above 200 km is mostly atomic oxygen. It drags the orbit down and erodes surfaces.</li><li><b>The plasma</b> of the ionosphere charges surfaces, and an uneven charge can arc.</li><li><b>The magnetic field</b> steers charged particles and gives the attitude system something to push against.</li><li><b>Radiation</b> builds up dose in parts and makes single-event upsets in logic.</li><li><b>The vacuum</b> lets materials outgas and coat optics.</li></ul>
+</div>
+<div class="box ex"><span class="tag">Worked example · an oxygen atom at orbital speed</span>
+<p>At 400 km a craft moves at \(v = \sqrt{\mu/r} = 7.67\) km/s. An oxygen atom it meets has, in the craft's frame,</p>
+\[
+E = \tfrac12 m v^2 = \tfrac12 (2.66\times10^{-26}\ \text{kg})(7670\ \text{m/s})^2 = 7.8\times10^{-19}\ \text{J} = 4.9\ \text{eV}.
+\]
+<p>That is several times the energy of a chemical bond, a few electron-volts, so the atoms break polymers apart. Kapton and silver erode on the forward faces, and those faces need oxide coatings.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Designing for a fixed environment. The air at 500 km is several times denser at solar maximum than at minimum, and a solar storm can multiply the radiation for a day. Say which conditions each number assumes.</p>
+</div>
+</section>
+
+<section class="topic" id="drag">
+<h2><span class="n">2</span>Drag and the upper atmosphere</h2>
+<p>Drag in low orbit is tiny, but it never stops, and it decides how long the satellite lives.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A gas at rest balances its weight with its pressure: \(dp/dz = -\rho g\). For an ideal gas at one temperature, \(p = \rho kT/m\), so the density falls by e every scale height:</p>
+\[
+\rho = \rho_r\, e^{-(z - z_r)/H}, \qquad H = \frac{kT}{mg}.
+\]
+<p>Above 300 km the gas is mostly atomic oxygen at the thermosphere's temperature \(T_\infty \approx 500 + 3.4\,F_{10.7}\) kelvin. An active Sun heats it, \(H\) grows, and more air reaches the satellite.</p>
+<p>Drag \(D = \tfrac12 \rho v^2 C_D A\) takes energy from a circular orbit of radius \(a\), where \(v = \sqrt{\mu/a}\) and the energy is \(-\mu m/2a\). Equating the loss of energy to \(Dv\),</p>
+\[
+\frac{da}{dt} = -\frac{C_D A}{m}\,\rho(a)\sqrt{\mu a}.
+\]
+<p>Separating and integrating from the start to 200 km gives the life. With an exponential \(\rho\), the integral is Dawson's integral; the lab also steps the orbit down in time and checks the two agree.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 6U craft at 500 km</span>
+<p>Take a 12 kg craft with 0.06 m² facing the flow and \(C_D = 2.2\): \(C_D A/m = 0.011\) m²/kg. At \(F_{10.7} = 147\), \(T_\infty = 1000\) K and</p>
+\[
+H = \frac{(1.38\times10^{-23})(1000)}{(2.66\times10^{-26})(8.94)} = 58.1\ \text{km}.
+\]
+<p>Anchored at the standard atmosphere's \(1.92\times10^{-11}\) kg/m³ at 300 km, the air at 500 km is \(1.92\times10^{-11}\,e^{-200/58.1} = 6.14\times10^{-13}\) kg/m³. The orbit starts falling 11 km a year and comes down in 5.2 years.</p>
+<p>This model is 23% denser than the 1976 standard atmosphere at 400 km and 18% at 500 km, because it treats all the air above 300 km as oxygen at full temperature.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a quiet Sun</span>
+<p>At \(F_{10.7} = 70\) the thermosphere cools to 738 K and \(H\) shrinks to 42.9 km. The air at 500 km thins to \(1.81\times10^{-13}\) kg/m³, and the same craft lasts 13 years. At \(F_{10.7} = 250\) it lasts 2.8.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking the decay rate at the start and dividing the height by it. The air thickens as the orbit falls, so the decay speeds up: 500 km at 11 km a year suggests 27 years to reach 200 km, against 5.2.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Radiation</h2>
+</div>
+
+<section class="topic" id="radiation">
+<h2><span class="n">3</span>Where the radiation comes from</h2>
+<p>Three sources reach a craft in low orbit. Each harms electronics in its own way.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p><b>Trapped particles</b>: protons and electrons held in the Van Allen belts by Earth's field. In low orbit they come mostly from the South Atlantic Anomaly, where the inner belt dips low. <b>Solar particle events</b>: bursts of protons from the Sun, lasting hours to days. <b>Galactic cosmic rays</b>: heavy nuclei from outside the solar system, too energetic to shield.</p>
+<p>They do harm in two ways. <b>Total ionizing dose</b> builds up over the mission and slowly degrades a part; it is measured in rad. <b>Single-event effects</b> come from one particle: an <i>upset</i> flips a memory bit and does no lasting harm, while a <i>latch-up</i> opens a path that draws a destructive current.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · sorting the effects</span>
+<ul><li>A regulator's output drifts a little more each month: total dose.</li><li>A counter jumps by 2¹⁷ once, and a reload fixes it: a single-event upset.</li><li>A processor's current jumps and stays high until the power is cycled: a single-event latch-up.</li></ul>
+<p>Shielding slows dose. Codes and scrubbing handle upsets. Latch-up needs current limits and a power switch.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Expecting shielding to stop cosmic rays. They carry far too much energy for the millimetres a small craft can afford; their upsets are handled by design, not by mass.</p>
+</div>
+</section>
+
+<section class="topic" id="dose">
+<h2><span class="n">4</span>Total dose and shielding</h2>
+<p>Dose builds year by year. A part fails when its dose reaches its tolerance, and the model behind the dose is uncertain.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Compare the dose the part will see, times a <b>radiation design margin</b>, with the dose it tolerates. NASA's reliability practice asks for a margin of 2. Commercial parts often tolerate 2 to 10 krad.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a commercial part in a CubeSat</span>
+<p>NASA's small spacecraft report gives, for a 500 km orbit at 85° behind the 0.2 cm aluminium of a typical CubeSat frame, 1383 rad a year from the trapped belts and about 750 rad from solar particle events: 2133 rad in all. With a margin of 2, a part must tolerate 4.27 krad for each year. A 5 krad part covers</p>
+\[
+t = \frac{5000}{2 \times 2133} = 1.17\ \text{years}.
+\]
+<p>Behind 1.11 cm of aluminium the report gives 73.6 rad a year trapped, measured on orbit, and 183 rad from solar events: 257 rad. The same part then covers 9.7 years.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Leaving out the margin. The belt models below 840 km are extrapolated and uncertain by at least a factor of two, so a part rated just above the predicted dose can fail early.</p>
+</div>
+</section>
+
+<section class="topic" id="upsets">
+<h2><span class="n">5</span>Single-event upsets and scrubbing</h2>
+<p>Upsets cannot be stopped, so a design lets them happen and corrects them.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Each bit flips at random at \(\lambda\) per day. A code in each \(k\)-bit word corrects one flipped bit and detects two. A scrubber reads every word, corrects it and writes it back each \(T\) days. A word gathers upsets at \(k\lambda\), so the number in one interval is Poisson with mean \(x = k\lambda T\). Data is lost when two or more land first:</p>
+\[
+P_2 = 1 - e^{-x}(1 + x) \approx \frac{x^2}{2}.
+\]
+<p>A memory of \(N\) bits holds \(N/k\) words, so it loses</p>
+\[
+\frac{N}{k}\,\frac{P_2}{T} \approx \frac{N k \lambda^2 T}{2}
+\]
+<p>words a day. The losses go as the square of the rate and in proportion to the scrub interval.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · Cassini's rate in 1 Gbit</span>
+<p>Cassini's recorders saw about 280 single-bit errors a day in 2.5 Gbit: \(\lambda = 1.12\times10^{-7}\) per bit per day. A 1 Gbit memory takes 112 upsets a day. With a code on 72-bit words and a daily scrub, \(x = 72 \times 1.12\times10^{-7} = 8.06\times10^{-6}\) and</p>
+\[
+\frac{10^9}{72}\cdot\frac{(8.06\times10^{-6})^2}{2} = 4.52\times10^{-4}\ \text{a day},
+\]
+<p>one lost word every 6.1 years.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Fitting the code and never scrubbing. Single upsets then pile up in the words that are seldom read, and two in one word cannot be corrected. The code needs the scrubber.</p>
+</div>
+</section>
+
+<section class="topic" id="sheet">
+<h2><span class="n">6</span>Formula sheet</h2>
+\[
+H = \frac{kT}{mg}, \qquad \rho = \rho_r\, e^{-(z - z_r)/H}, \qquad T_\infty \approx 500 + 3.4\,F_{10.7}.
+\]
+\[
+\frac{da}{dt} = -\frac{C_D A}{m}\,\rho\sqrt{\mu a}, \qquad E = \tfrac12 m v^2 .
+\]
+\[
+t_\text{part} = \frac{D_\text{rated}}{\text{RDM} \times \dot D}, \qquad P_2 = 1 - e^{-x}(1 + x), \qquad x = k\lambda T .
+\]
+</section>
+
+<section class="topic" id="build-it"><h2><span class="n">7</span>Build it</h2><p>Say what the environment will do to the craft, and show the design survives it.</p><h3>Method</h3><ol><li>State the orbit and the launch date, so you know where in the solar cycle the mission falls.</li><li>Find the life from drag at a quiet and an active Sun, and check it against the disposal rule that applies.</li><li>Find the yearly dose behind the craft's shielding, and the margin each part has.</li><li>List the parts that can upset or latch up, and how each is handled: a code and scrubbing, current limits, a watchdog.</li><li>Choose surface materials that resist atomic oxygen on the forward faces.</li></ol><h3>What to produce</h3><p>An environment summary, an orbital life range, a dose table with margins for the key parts, and a single-event plan.</p><h3>Handoff to other subsystems</h3><p>Give Avionics the dose and upset rates. Give Structure the shielding thickness. Give Mission and requirements the orbital life against the disposal rule.</p><h3>Review checklist</h3><ul><li>The solar conditions behind each number are stated.</li><li>The life is given at a quiet and an active Sun.</li><li>Every key part has a dose margin of at least 2.</li><li>Every memory has a code and a scrub interval.</li><li>Latch-up has a current limit and a way to cycle power.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>For your orbit, give the life at both ends of the solar cycle, the yearly dose behind your frame, the margin on your processor, and the upset rate your memory will lose data at.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l5_space_environ_done2/" target="_blank" rel="noopener">MIT 16.851, Lecture 5: The environment of space</a>: The solar cycle, the scale height, drag and the radiation sources.</li><li><a href="https://ntrs.nasa.gov/citations/19770009539" target="_blank" rel="noopener">U.S. Standard Atmosphere, 1976</a>: The density at 300 km the model is anchored to, and the densities it is checked against.</li><li><a href="https://en.wikipedia.org/wiki/Thermosphere" target="_blank" rel="noopener">Wikipedia, Thermosphere</a>: The exospheric temperature from the solar flux, T∞ ≈ 500 + 3.4 F10.7.</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 6.5</a>: Yearly dose behind CubeSat shielding, the uncertainty of the belt models, and the margin of 2.</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/small-spacecraft-avionics" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 8.2.1</a>: Total dose, upsets and latch-up, and how small craft mitigate them.</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/deorbit-systems" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 13.2</a>: The 25-year guideline and the FCC's 5-year rule for leaving low orbit.</li><li><a href="https://en.wikipedia.org/wiki/ECC_memory" target="_blank" rel="noopener">Wikipedia, ECC memory</a>: Cassini's measured single-bit error rate, the lab's upset rate.</li></ul></section>
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, on the environment of space.</footer>
+</body>
+</html>

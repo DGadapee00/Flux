@@ -29,8 +29,8 @@ reference, when the class reaches it, and what the course has now.
 | Orbits, Kepler's equation and transfers | [L2](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l2_orbital_mech/) | none | none | none | u1: kepler, transfer | covered |
 | Eclipses and ground-station passes | [L2](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l2_orbital_mech/), [L24](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l24_groundsysdes/) | [11](https://www.nasa.gov/smallsat-institute/sst-soa/ground-data-systems-and-mission-operations) | none | 3 | u1: passes | covered |
 | Formation flight and relative motion | [L10–13](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l10_emformflight/) | [5.3](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | 1 | none | missing |
-| Space environment: atmosphere, plasma, magnetic field | [L5](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l5_space_environ_done2/) | none | none | none | u6 uses sunlight, albedo and Earth infrared only | missing |
-| Radiation: dose, single-event effects, shielding | [L5](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l5_space_environ_done2/) | [6.5](https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms), [8.2.1](https://www.nasa.gov/smallsat-institute/sst-soa/small-spacecraft-avionics) | none | 1 | u7 notes cite L5 in one checklist line | missing |
+| Space environment: atmosphere, plasma, magnetic field | [L5](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l5_space_environ_done2/) | none | none | none | u9: decay; u6 uses sunlight, albedo and Earth infrared | covered |
+| Radiation: dose, single-event effects, shielding | [L5](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l5_space_environ_done2/) | [6.5](https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms), [8.2.1](https://www.nasa.gov/smallsat-institute/sst-soa/small-spacecraft-avionics) | none | 1 | u9: upsets; dose and effects in notes and practice | covered |
 | Power: arrays, batteries, energy budget | [L3](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l3_scpowersys_dm_done2/) | [3](https://www.nasa.gov/smallsat-institute/sst-soa/power-subsystems) | none | 2 | u5: power, ageing | covered |
 | Attitude determination and control, pointing budget | [L9](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l9_acs/) | [5](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | 2 | u3: attitude, spin, pointing, poles, wheel | covered |
 | Attitude and position sensors: star trackers, sun sensors, GPS | [L9](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l9_acs/) | [5.2](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | 2 | none | missing |
@@ -51,7 +51,7 @@ reference, when the class reaches it, and what the course has now.
 
 ## Totals
 
-31 topics: 10 covered, 4 notes only, 17 missing.
+31 topics: 12 covered, 4 notes only, 15 missing.
 
 ## 16.851 lectures and SoA chapters by unit
 
@@ -65,4 +65,5 @@ reference, when the class reaches it, and what the course has now.
 | u6 Thermal control | L23 | 7 |
 | u7 Payload and integration | none | 2 |
 | u8 Mission and requirements | none | 2 |
-| No unit yet | L1, L4, L5, L6–8, L10–13, L15–20, L22, L24 | 1, 4, 8, 11, 12, 13 |
+| u9 Space environment and radiation | L5 | 6.5, 8.2.1, 13.2 |
+| No unit yet | L1, L4, L6–8, L10–13, L15–20, L22, L24 | 1, 4, 8, 11, 12, 13 |

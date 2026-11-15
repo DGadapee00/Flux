@@ -3,6 +3,8 @@ import { PREDICTIONS } from './predictions.js';
 
 /** One entry per lab. Add each new lab here and in src/data/catalog.js (LAB_META). */
 const loaders = {
+  upsets: () => import('./upsets.js'),
+  decay: () => import('./decay.js'),
   margin: () => import('./margin.js'),
   kepler: () => import('./kepler.js'),
   transfer: () => import('./transfer.js'),

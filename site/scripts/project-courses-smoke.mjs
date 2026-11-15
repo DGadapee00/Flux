@@ -51,7 +51,7 @@ try{
   }
   await navigate('satellite/#/satellite/u4/shake?n=build-it');
   await wait(()=>page.eval('document.querySelector("#notes")?.textContent.includes("Choose the material")'));
-  assert.equal(await page.eval('document.querySelectorAll("#exam-select option").length'),8);
+  assert.equal(await page.eval('document.querySelectorAll("#exam-select option").length'),9);
   assert.equal(await page.eval(`document.querySelector('a[href="guide.html"]')`),null);
   await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-structure`);
   await navigate('satellite/#/satellite/u7/?n=integration');
@@ -62,6 +62,12 @@ try{
   await wait(()=>page.eval(`window.__gauss?.app.labId==='margin' && Number.isFinite(window.__gauss.computed.pExceed)`));
   assert.equal(await page.eval('document.documentElement.scrollWidth>innerWidth'),false);
   await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-margin`);
+  for(const [lab,key] of [['decay','years'],['upsets','uncorrectable']]){
+   await navigate(`satellite/#/satellite/u9/${lab}`);
+   await wait(()=>page.eval(`window.__gauss?.app.labId==='${lab}' && Number.isFinite(window.__gauss.computed.${key})`));
+   assert.equal(await page.eval('document.documentElement.scrollWidth>innerWidth'),false);
+   await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-${lab}`);
+  }
  }
  assert.deepEqual(page.errors,[]);
  console.log(`Project course checks passed. Standard units, labs, notes and practice in the simplified hub. Screenshots: ${out}`);

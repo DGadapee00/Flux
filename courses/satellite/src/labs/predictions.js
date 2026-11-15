@@ -4,6 +4,73 @@
  */
 
 export const PREDICTIONS = {
+  decay: [
+    {
+      id: 'dc-area',
+      scenario: 'moderate',
+      ask: 'The 6U craft at 500 km lasts 5.2 years. Deploy panels that double the area facing the flow, with the same mass. By what factor does its life change?',
+      apply(s) { s.A *= 2; },
+      watch: [{ id: 'years', label: 'the life', get: (c) => c.years }],
+      mode: 'factor',
+      factors: [0.25, 0.5, 2, 4],
+      expect: { years: 0.5 },
+      why: 'Drag goes with C_D A/m, and every step of the fall goes with drag. Twice the area falls twice as fast at every height: 2.6 years instead of 5.2.',
+    },
+    {
+      id: 'dc-sun',
+      scenario: 'moderate',
+      ask: 'The Sun turns active: F10.7 rises from 147 to 250. Does the craft at 500 km last longer or shorter?',
+      apply(s) { s.f107 = 250; },
+      watch: [{ id: 'years', label: 'the life', get: (c) => c.years }],
+      mode: 'dir',
+      expect: { years: 'smaller' },
+      why: 'The thermosphere heats from 1000 K to 1350 K and its scale height grows from 58 km to 79 km, so the air at 500 km is 2.4 times as dense. The life falls from 5.2 to 2.8 years.',
+    },
+    {
+      id: 'dc-up',
+      scenario: 'moderate',
+      ask: 'Launch the craft 100 km higher, to 600 km. Does its life more than double?',
+      apply(s) { s.z0 = 600; },
+      watch: [{ id: 'longer', label: 'More than twice the life', get: (c) => c.years > 10.4, mode: 'bool' }],
+      mode: 'bool',
+      expect: { longer: true },
+      why: '100 km is almost two scale heights, so the air at 600 km is a fifth as dense as at 500 km. The craft lasts 29 years: past the 25-year guideline for clearing low orbit.',
+    },
+  ],
+  upsets: [
+    {
+      id: 'up-storm',
+      scenario: 'daily',
+      ask: 'A solar storm raises the upset rate fourfold, from 112 to 448 a day across the memory. By what factor does the data the code cannot fix grow?',
+      apply(s) { s.r7 *= 4; },
+      watch: [{ id: 'lost', label: 'errors the code cannot fix', get: (c) => c.uncorrectable }],
+      mode: 'factor',
+      factors: [4, 8, 16],
+      expect: { lost: 16 },
+      why: 'A loss needs two upsets in one word before the scrub, and the chance of two goes as the square of the rate: four times the rate, sixteen times the losses. One every 6 years becomes one every 4.5 months.',
+    },
+    {
+      id: 'up-half',
+      scenario: 'daily',
+      ask: 'Scrub every 12 hours instead of every 24. By what factor do the losses change?',
+      apply(s) { s.lgH -= Math.log10(2); },
+      watch: [{ id: 'lost', label: 'errors the code cannot fix', get: (c) => c.uncorrectable }],
+      mode: 'factor',
+      factors: [0.25, 0.5, 1],
+      expect: { lost: 0.5 },
+      why: 'Each word gets half as long to gather a second upset, so the chance per scrub falls to a quarter. There are twice as many scrubs a day, so the losses a day halve.',
+    },
+    {
+      id: 'up-bare',
+      scenario: 'daily',
+      ask: 'Remove the code. Does the memory now lose more than 100 words a day?',
+      apply(s) { s.ecc = false; },
+      watch: [{ id: 'many', label: 'More than 100 errors a day', get: (c) => c.uncorrectable > 100, mode: 'bool' }],
+      mode: 'bool',
+      expect: { many: true },
+      why: 'Without the code every one of the 112 upsets a day corrupts a word. With it, data is lost about once in 6 years.',
+    },
+  ],
   margin: [
     {
       id: 'mg-new',

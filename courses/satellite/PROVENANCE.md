@@ -25,3 +25,9 @@ Engineering Handbook. The mass budget's growth model follows NASA/TM-20250008066
 distribution whose mean follows maturity. The bus and payload masses are our own round figures for
 a 6U craft. The mean growth for each maturity is the course's assumption. The 12 kg allocation is
 2 kg per unit (Wikipedia, CubeSat).
+
+Unit 9: the space environment and radiation, after MIT 16.851 Lecture 5. The drag model takes the
+U.S. Standard Atmosphere 1976 density at 300 km, an atomic-oxygen scale height H = kT/(mg), and the
+exospheric temperature T∞ ≈ 500 + 3.4 F10.7 (Wikipedia, Thermosphere). The doses behind CubeSat
+shielding and the margin of 2 are NASA's small spacecraft report, 6.5. The upset rate is Cassini's
+(Wikipedia, ECC memory). The 6U craft's mass and area are our own round figures.

@@ -69,9 +69,20 @@ export const EXAMS = [
     labs: ['margin'],
     coming: [],
   },
+  {
+    id: 'u9',
+    n: 9,
+    title: 'Space environment and radiation',
+    chapters: '9',
+    date: 'Unit 9',
+    labs: ['decay', 'upsets'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
+  upsets: { id: 'upsets', exam: 'u9', title: 'Memory upsets' },
+  decay: { id: 'decay', exam: 'u9', title: 'Orbital decay' },
   margin: { id: 'margin', exam: 'u8', title: 'Mass margin' },
   kepler: { id: 'kepler', exam: 'u1', title: 'Kepler' },
   transfer: { id: 'transfer', exam: 'u1', title: 'Transfer' },
@@ -99,6 +110,7 @@ export const CHAPTER_TITLES = {
   5: 'Power',
   6: 'Thermal control',
   8: 'Mission and requirements',
+  9: 'Space environment and radiation',
 };
 
 export function examById(id) {
