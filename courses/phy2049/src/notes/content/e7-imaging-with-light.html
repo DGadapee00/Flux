@@ -85,7 +85,7 @@ footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 </style>
 
 <header class="top">
-  <div class="eyebrow">PHY 2049 · Calculus Physics II · Week 13 · Lecture notes Ch 58–62, rewritten</div>
+  <div class="eyebrow">PHY 2049 · Calculus Physics II · Weeks 13–14 · Lecture notes Ch 58–62, slides and video problems, rewritten</div>
   <h1>Imaging with Light</h1>
   <p class="lede">One continuous set of notes on geometric optics: how light bends when its speed changes, how mirrors and lenses use reflection and refraction to form images, and how microscopes, telescopes, cameras and optical fibers put those images to work. Two rules carry nearly all of it: Snell's law at a boundary, and one equation, \(1/f = 1/d_o + 1/d_i\), for every mirror and thin lens. Chapter 61 is skipped this term.</p>
   <div class="legend">
@@ -163,6 +163,10 @@ footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 <tr><td>Glass</td><td>1.52</td><td>\(1.97\times10^8\) m/s</td></tr>
 <tr><td>Diamond</td><td>2.42</td><td>\(1.24\times10^8\) m/s</td></tr>
 </table></div>
+<p>The Chapter 58 slides list more materials: ice 1.309, ethanol 1.36, glycerin 1.472, emerald 1.57, and ruby and sapphire at 1.77. Ruby and sapphire are the same crystal, aluminum oxide, with different trace metals. That is why they share an index.</p>
+<div class="box fix"><span class="tag">Correction to the Chapter 58 slides</span>
+<p>The slides' table lists "Alcohol" at 1.329. That is methanol. Ethanol, the alcohol in drinks and the one Worksheet 7 uses, is 1.36, and rubbing alcohol is near 1.38. A problem that says "alcohol" and gives no index means ethanol, 1.36. With 1.329, a ray from glass (1.53) at 40° comes out at 47.7° instead of 46.3°.</p>
+</div>
 <div class="box fix"><span class="tag">Correction to the original notes</span>
 <p>The notes' table gives the speed of light in water as \(2.6\times10^8\) m/s. With \(n = 1.33\), \(v = (3.00\times10^8)/1.33 = 2.26\times10^8\) m/s. The other rows are right.</p>
 </div>
@@ -222,6 +226,9 @@ footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 <p>Wherever the index changes, some light reflects. This is <b>Fresnel reflection</b>. How much reflects depends on how big the change in index is, on the angle, and on the polarization. For light along the normal (\(\theta = 0\)), the fraction reflected is</p>
 \[R = \left(\frac{n_1 - n_2}{n_1 + n_2}\right)^2 .\]
 <p>This formula holds only at normal incidence. The fraction rises toward 1 at grazing angles.</p>
+<div class="box fix"><span class="tag">Correction to the Chapter 58 slides</span>
+<p>The slides give this reflection coefficient "at 90°." In this course every angle is measured from the normal, and on that scale the formula holds at 0°. A ray at 90° from the normal skims along the surface, and nearly all of it reflects, \(R \to 1\). The slide means 90° to the surface. A student who reads 90° as the incident angle has the formula at the one angle where it is most wrong.</p>
+</div>
 <div class="box ex"><span class="tag">Worked example · light off a window</span>
 <p>Air (\(n = 1.0\)) and glass (\(n = 1.52\)):</p>
 \[R = \left(\frac{1.0 - 1.52}{1.0 + 1.52}\right)^2 = (-0.206)^2 = 0.043 .\]
@@ -245,18 +252,21 @@ footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 <div class="box fix"><span class="tag">Correction to the original notes</span>
 <p>The notes say total internal reflection happens "when the angle of refraction exceeds 90°." A refracted angle can never exceed 90°: at 90° the ray already lies along the surface. TIR happens when the <i>incident</i> angle exceeds the critical angle, the incident angle at which the refracted ray would reach 90°.</p>
 </div>
+<div class="box fix"><span class="tag">Correction to the Chapter 58 slides</span>
+<p>The slides' critical-angle figure labels the ray at the critical angle "Angle of reflection = 90°." The 90° belongs to the angle of <i>refraction</i>: the transmitted ray runs along the surface. The reflected ray leaves at the critical angle itself, by the law of reflection, so for glass to air it is near 42°, not 90°.</p>
+</div>
 <p>TIR needs \(n_2 &lt; n_1\). Going from low index to high, the ray bends toward the normal, and the refracted angle stays below 90° for every incident angle, so there is no critical angle.</p>
 <div class="box ex"><span class="tag">Worked example · Cathy at the bottom of a pool</span>
 <p>Cathy is at the bottom of a pool of fresh water (\(n = 1.33\)) and looks up at the surface.</p>
 \[\theta_c = \sin^{-1}\!\left(\frac{1.0}{1.33}\right) = 48.8^\circ .\]
 <p>Looking up at less than 48.8° from the vertical, she sees out through the surface. Beyond it, the surface is a mirror and she sees the bottom of the pool reflected. Everything above the water is squeezed into a circle of half-angle 48.8° overhead.</p>
 </div>
-<p>Fiber optics (Section 20) and refractometers (Section 21) both run on TIR. A diamond's \(\theta_c = \sin^{-1}(1/2.42) = 24.4^\circ\) is small, so light inside a cut diamond reflects many times before escaping. That is its sparkle.</p>
+<p>Fiber optics (Section 20) and refractometers (Section 21) both run on TIR. A diamond's \(\theta_c = \sin^{-1}(1/2.42) = 24.4^\circ\) is small, so light inside a cut diamond reflects many times before escaping. That is its sparkle. The cut matters. In a well-cut stone, light from the top meets each lower face past 24.4° and comes back out the top. Cut the lower faces too deep or too shallow, and the light meets one of them under the critical angle and leaks out the bottom. The stone looks dull.</p>
 </section>
 
 <section class="topic" id="s5">
 <h2><span class="n">5</span>Hot air, mirages and apparent depth</h2>
-<p>The index of a gas or liquid depends on its temperature. For air, warmer means less dense and a lower index; cooler means a higher index. Light passing through air of mixed temperatures bends one way and another. Above a candle flame you see shimmering light and dark patches. Above a hot rail line the view is hazy. Hot air blown across a checkerboard pattern makes the squares warp.</p>
+<p>The index of a gas or liquid depends on its temperature. For air, warmer means less dense and a lower index; cooler means a higher index. Light passing through air of mixed temperatures bends one way and another. Above a candle flame you see shimmering light and dark patches. Above a hot rail line the view is hazy. Hot air blown across a checkerboard pattern makes the squares warp. A <b>schlieren</b> camera turns these small index changes into a picture. It shows the plume of hot air rising from a match, or the shock waves around a supersonic bullet, where the air is compressed and its index rises.</p>
 <p>A <b>mirage</b> is an image made by light bending through layers of air at different temperatures.</p>
 <ul>
   <li><b>Inferior mirage.</b> A thin layer of hot air lies on the ground under cooler air, on a hot road or in a desert. Light heading down from an object bends back upward as it enters the lower-index hot air. The eye assumes the light came in a straight line, so it sees an upside-down image of the object below the object. Sky imaged this way looks like a puddle on the road or an oasis in the desert.</li>
@@ -281,6 +291,15 @@ footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 <p>The notes define \(n_1\) as the index of the fluid holding the object and \(n_2\) as the index of the viewer's medium, then write the rule as \(d' = d\,[n_1/n_2]\). With those labels that puts water on top: \((3)(1.33/1.0) = 3.99\) m, deeper than the pool. The same lines also write \(d' = d\,[n_{\text{air}}/n_{\text{water}}]\), and the dime example plugs in 1.0/1.33. The right form is \(d' = d\,n_2/n_1\), viewer over object. It holds only for viewing near the normal, which the notes do not say.</p>
 </div>
 <p>A spear fisher aiming at the fish they see throws over it. The fish is deeper, below where it appears.</p>
+<p>The rule works in both directions. Looking from water up into air, \(n_{\text{viewer}} &gt; n_{\text{object}}\), and the object looks <i>farther</i> away than it is.</p>
+<div class="box ex"><span class="tag">Worked example · a diver and a gull</span>
+<p>A diver a few centimeters under the surface looks straight up at a gull hovering 3.0 m above the water. Now the viewer is in water (\(n_2 = 1.33\)) and the object is in air (\(n_1 = 1.0\)):</p>
+\[d' = (3.0\ \text{m})\frac{1.33}{1.0} = 3.99\ \text{m}.\]
+<p>The gull looks about a meter higher than it is. Light from it bends toward the normal as it enters the water, so the diver traces it back along a steeper line, to a point above the gull.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the Exam 7 equation sheet</span>
+<p>The equation sheet gives apparent depth as \(d' = d\,[n_{\text{smaller}}/n_{\text{larger}}]\). That ratio is always less than 1, so it always makes the object look closer. It is right only when the viewer is in the lower-index medium, as Bob is over the pool. For the diver it gives \((3.0)(1.0/1.33) = 2.26\) m, when the gull looks 3.99 m away. The general rule is \(d' = d\,n_{\text{viewer}}/n_{\text{object}}\), for viewing near the normal.</p>
+</div>
 </section>
 
 <section class="topic" id="s6">
@@ -475,6 +494,35 @@ footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 \[d_o = -\frac{d_i}{m} = -\frac{-32}{4} = 8\ \text{cm}, \qquad f = \frac{1}{1/d_o + 1/d_i} = \frac{1}{1/8 - 1/32} = +10.7\ \text{cm}.\]
 <p>\(f &gt; 0\): a concave mirror, with Cathy inside its focal length.</p>
 </div>
+
+<h3>The Chapter 59 video problem</h3>
+<p>The course's problem-solving video traces rays for one object at two distances, first with a concave mirror and then with a convex one, both with \(|f| = 30\) cm. Draw the rays first. Then check the picture with the mirror equation.</p>
+<div class="box ex"><span class="tag">Worked example · video problem, object 60 cm from a concave mirror</span>
+<p>With \(f = +30\) cm, the object at 60 cm sits at C, since \(R = 2f = 60\) cm.</p>
+\[d_i = \frac{1}{1/30 - 1/60} = +60\ \text{cm}, \qquad m = -\frac{60}{60} = -1 .\]
+<p>Real, at C in front of the mirror, inverted and the same size. The ray through C returns on itself, and the parallel ray and the ray through F cross it at C.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · video problem, object 20 cm from a concave mirror</span>
+\[d_i = \frac{1}{1/30 - 1/20} = -60\ \text{cm}, \qquad m = -\frac{-60}{20} = +3 .\]
+<p>The object is inside F. The reflected rays spread apart, and their back-traces cross 60 cm behind the mirror: a virtual, upright image three times the object's height.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the Chapter 59 video problem</span>
+<p>The answer key gives \(d_i = +60\) cm and \(m = -2\) for the object at 60 cm. The image distance is right, but \(m = -d_i/d_o = -60/60 = -1\). An object at C images at C, inverted and the same size; the Bugs Bunny table in Section 11 says so. A student who trusts \(-2\) will draw an image twice too tall.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · video problem, a convex mirror</span>
+<p>Now \(f = -30\) cm.</p>
+\[d_o = 60\ \text{cm}: \quad d_i = \frac{1}{-1/30 - 1/60} = -20\ \text{cm}, \quad m = +0.33 .\]
+\[d_o = 20\ \text{cm}: \quad d_i = \frac{1}{-1/30 - 1/20} = -12\ \text{cm}, \quad m = +0.6 .\]
+<p>Both images are virtual, upright and smaller, as a convex mirror's always are. Moving the object closer moves the image closer and makes it larger, but it never reaches the object's size.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · video problem, finding the mirror</span>
+<p>An object 2 cm tall stands 40 cm in front of a mirror. Its image is 10 cm tall and behind the mirror. Behind a mirror means virtual, so the image is upright: \(m = +10/2 = +5\).</p>
+\[d_i = -md_o = -(5)(40\ \text{cm}) = -200\ \text{cm}, \qquad f = \frac{1}{1/40 - 1/200} = +50\ \text{cm}.\]
+<p>A concave mirror, with the object inside its focal length.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the Chapter 59 video problem</span>
+<p>This problem is about a mirror, but it says the image forms "on the opposite side of the lens" and asks for the "type of lens." The word matters. For a lens, an image on the far side is real. Read that way, \(d_i = +200\) cm, \(m = -5\), the image is inverted, and \(f = 1/(1/40 + 1/200) = 33.3\) cm. The key's \(f = +50\) cm needs the mirror reading: an image behind a mirror is virtual.</p>
+</div>
 </section>
 
 <div class="part">
@@ -579,6 +627,46 @@ footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 <p>An object 40 cm from a single lens has an image with \(m = +0.4\): upright and smaller.</p>
 \[d_i = -md_o = -(0.4)(40\ \text{cm}) = -16\ \text{cm}, \qquad f = \frac{1}{-1/16 + 1/40} = -26.7\ \text{cm}.\]
 <p>The image is virtual, on the object's side, and the lens is diverging. An upright, smaller image from one lens always means a diverging lens.</p>
+</div>
+
+<h3>The Chapter 60 video problem</h3>
+<p>The lens video repeats the mirror video of Section 12 with lenses, \(|f| = 30\) cm. The numbers come out the same. The difference is where the image sits: a real image forms on the far side of a lens.</p>
+<div class="box ex"><span class="tag">Worked example · video problem, object 60 cm from a converging lens</span>
+<p>With \(f = +30\) cm the object is at 2F.</p>
+\[d_i = \frac{1}{1/30 - 1/60} = +60\ \text{cm}, \qquad m = -1 .\]
+<p>Real, at 2F on the far side, inverted and the same size. The parallel ray bends through the far F, the ray through the center goes straight, and they cross 60 cm beyond the lens.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · video problem, object 20 cm from a converging lens</span>
+\[d_i = \frac{1}{1/30 - 1/20} = -60\ \text{cm}, \qquad m = +3 .\]
+<p>The object is inside F. The rays leave the lens spreading, and their back-traces cross 60 cm in front of the lens, on the object's side: a virtual, upright image three times taller.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the Chapter 60 video problem</span>
+<p>As in the mirror video, the key gives \(m = -2\) for the object at 60 cm. With \(d_i = +60\) cm, \(m = -60/60 = -1\). An object at 2F images at 2F at the same size.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · video problem, a diverging lens</span>
+<p>With \(f = -30\) cm, the object at 60 cm gives \(d_i = -20\) cm and \(m = +0.33\). At 20 cm it gives \(d_i = -12\) cm and \(m = +0.6\). Both images are virtual, upright, smaller, and on the object's side. The parallel ray leaves as if from the F on the object's side; the ray through the center goes straight.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · video problem, finding the lens</span>
+<p>An object 15 cm from a lens gives an upright image with \(m = 0.3\). Upright from one lens means virtual:</p>
+\[d_i = -md_o = -(0.3)(15\ \text{cm}) = -4.5\ \text{cm}, \qquad f = \frac{1}{1/15 - 1/4.5} = -6.43\ \text{cm}.\]
+<p>A diverging lens, as the rule above predicts for an upright, smaller image.</p>
+</div>
+
+<h3>Two lenses in a row</h3>
+<p>The Exam 7 equation sheet includes \(m_{\text{total}} = m_1m_2\) for two lenses. The first lens forms an image. That image is the object for the second lens. Measure its distance from the second lens and use the lens equation again.</p>
+<div class="box why"><span class="tag">Derivation · the total magnification</span>
+<p>The first image has height \(h_1 = m_1h_o\). The second lens makes an image of it with height \(h_2 = m_2h_1 = m_2m_1h_o\). So</p>
+\[m_{\text{total}} = \frac{h_2}{h_o} = m_1m_2 .\]
+<p>Two inversions make an upright image: two negative magnifications give a positive product.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two converging lenses 50 cm apart</span>
+<p>Two lenses, each with \(f = 10\) cm, stand 50 cm apart. An object is 15 cm in front of the first.</p>
+<ol>
+  <li>First lens: \(d_{i1} = 1/(1/10 - 1/15) = 30\) cm, \(m_1 = -30/15 = -2\).</li>
+  <li>That image is \(50 - 30 = 20\) cm in front of the second lens, so \(d_{o2} = 20\) cm. Then \(d_{i2} = 1/(1/10 - 1/20) = 20\) cm and \(m_2 = -1\).</li>
+  <li>\(m_{\text{total}} = (-2)(-1) = +2\).</li>
+</ol>
+<p>The final image is real, 20 cm beyond the second lens, upright and twice the object's height.</p>
 </div>
 </section>
 
@@ -766,6 +854,7 @@ footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
   <li>A <b>step-index</b> fiber has a uniform core index that drops abruptly at the cladding. Light travels by total internal reflection, and in multimode form it suffers modal dispersion.</li>
   <li>A <b>graded-index</b> (GRIN) fiber has a core index that falls smoothly from the center to the edge. Rays that swing far from the axis travel farther but spend that time in lower-index, faster glass, so they keep pace with rays along the axis. That cancels most modal dispersion.</li>
 </ul>
+<p>The Chapter 58 slides give the standard sizes. Multimode cores are 62.5 µm or 50 µm across, and a single-mode core is about 9 µm. All three sit in a cladding 125 µm across, so the same connectors hold them.</p>
 <p>One fiber cannot carry an image: all the light in it mixes. A <b>fiber bundle</b> of thousands of fibers, each 20 µm across or less, kept in the same order at both ends, carries one spot of the image in each fiber. The spots together form the picture. Medical endoscopes use bundles to see inside the body.</p>
 </section>
 
@@ -805,6 +894,7 @@ footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 <tr><td>Spherical mirror</td><td>\(f=R/2\) concave, \(\;f=-R/2\) convex</td></tr>
 <tr><td>Mirror and thin-lens equation</td><td>\(1/f=1/d_o+1/d_i\)</td></tr>
 <tr><td>Magnification</td><td>\(m=h_i/h_o=-d_i/d_o\)</td></tr>
+<tr><td>Two lenses</td><td>image of lens 1 is the object of lens 2; \(\;m_{\text{total}}=m_1m_2\)</td></tr>
 <tr><td>Signs</td><td>\(f&gt;0\) converging; \(\;d_i&gt;0\) real; \(\;m&gt;0\) upright</td></tr>
 <tr><td>Lens power</td><td>\(P=1/f\), diopters with \(f\) in m</td></tr>
 <tr><td>Angular magnification</td><td>\(M=\theta_{\text{aided}}/\theta_{\text{unaided}}\)</td></tr>
@@ -818,6 +908,6 @@ footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 </section>
 </main>
 
-<footer>Rewritten from the Fall 2026 PHY 2049 lecture notes, Chapters 58, 59, 60 and 62 (Chapter 61 is skipped this term). Every worked answer was recomputed. Constants used: \(c = 3.00\times10^8\) m/s, near point \(N = 25\) cm, indices \(n_{\text{air}} = 1.00\), \(n_{\text{water}} = 1.33\) unless an example gives its own.</footer>
+<footer>Rewritten from the Fall 2026 PHY 2049 lecture notes, Chapters 58, 59, 60 and 62 (Chapter 61 is skipped this term), with the Chapter 58 slides, the Chapter 59 and 60 problem-solving videos and the Exam 7 equation sheet. Every worked answer was recomputed. Constants used: \(c = 3.00\times10^8\) m/s, near point \(N = 25\) cm, indices \(n_{\text{air}} = 1.00\), \(n_{\text{water}} = 1.33\) unless an example gives its own.</footer>
 
 </body></html>
