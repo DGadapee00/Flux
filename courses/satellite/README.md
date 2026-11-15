@@ -3,7 +3,9 @@
 A project course in Flux's standard shell. The six subsystem units keep their labs and practice.
 Their notes include build methods, checklists, deliverables, interfaces and references. Structure
 also includes material, process, joint and finish comparisons. A notes-only closing unit covers
-sensor payload and integration; its labs are not built yet.
+sensor payload and integration; its labs are not built yet. Unit 8, mission and requirements, follows the
+NASA Systems Engineering Handbook: requirements, verification, the life cycle's reviews, and a mass
+budget with its margin.
 
 Run `npm run dev -w @flux/satellite` from the repo root. The course opens at `satellite/`.
 The former guide and decision controls are archived under

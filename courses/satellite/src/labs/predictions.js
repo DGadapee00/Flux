@@ -4,6 +4,44 @@
  */
 
 export const PREDICTIONS = {
+  margin: [
+    {
+      id: 'mg-new',
+      scenario: 'catalog',
+      ask: 'The budget carries a flat 20% on a catalog bus and a new 3 kg payload, and shows 0.6 kg of margin. Make every bus part a new design instead. What happens to the margin the budget shows, and to the chance the finished craft comes in over 12 kg?',
+      apply(s) { s.busM = 'new'; },
+      watch: [
+        { id: 'margin', label: 'the margin the budget shows', get: (c) => c.margin },
+        { id: 'pExceed', label: 'the chance it comes in over', get: (c) => c.pExceed },
+      ],
+      mode: 'dir',
+      expect: { margin: 'same', pExceed: 'bigger' },
+      why: 'The budget adds the same 20% to the same 9.5 kg, so it still shows 0.6 kg. But new designs are expected to grow 30%, not 5%: the craft is expected to weigh 12.35 kg, and it comes in over 12 kg 86% of the time.',
+    },
+    {
+      id: 'mg-allow',
+      scenario: 'new',
+      ask: 'Every part is a new design and the budget carries 20%. Raise the allowance to 30%. What happens to the margin, and to the chance the craft comes in over 12 kg?',
+      apply(s) { s.allow = 30; },
+      watch: [
+        { id: 'margin', label: 'the margin the budget shows', get: (c) => c.margin },
+        { id: 'pExceed', label: 'the chance it comes in over', get: (c) => c.pExceed },
+      ],
+      mode: 'dir',
+      expect: { margin: 'smaller', pExceed: 'same' },
+      why: 'The margin falls from 0.6 kg to −0.35 kg: the budget now admits what the parts are expected to weigh, 12.35 kg. The craft itself does not change, so the 86% chance of coming in over does not move. An honest allowance shows the problem; only taking mass out fixes it.',
+    },
+    {
+      id: 'mg-weigh',
+      scenario: 'heavy',
+      ask: 'A 4 kg new payload on the catalog bus is expected to weigh 12.0 kg in all, about even odds of coming in over. The payload team builds it and it weighs its basic 4 kg plus the small growth of a weighed part. Does the chance of coming in over fall below one in a hundred?',
+      apply(s) { s.payM = 'measured'; },
+      watch: [{ id: 'safe', label: 'Under one chance in a hundred', get: (c) => c.pExceed < 0.01, mode: 'bool' }],
+      mode: 'bool',
+      expect: { safe: true },
+      why: 'A weighed payload is expected to grow 2%, not 30%: the craft is expected to weigh 10.9 kg, give or take 52 g, and the chance of passing 12 kg drops from 51% to almost none. The budget at a flat 20% still shows −0.6 kg. An allowance should fall as parts are built.',
+    },
+  ],
   kepler: [
     {
       id: 'kp-quarter',

@@ -60,9 +60,19 @@ export const EXAMS = [
     coming: [],
   },
   { id:'u7',notesOnly:true,n:7,title:'Payload and integration',chapters:'7',date:'Unit 7',labs:[],coming:['Payload and integration labs'] },
+  {
+    id: 'u8',
+    n: 8,
+    title: 'Mission and requirements',
+    chapters: '8',
+    date: 'Unit 8',
+    labs: ['margin'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
+  margin: { id: 'margin', exam: 'u8', title: 'Mass margin' },
   kepler: { id: 'kepler', exam: 'u1', title: 'Kepler' },
   transfer: { id: 'transfer', exam: 'u1', title: 'Transfer' },
   noise: { id: 'noise', exam: 'u2', title: 'Noise' },
@@ -88,6 +98,7 @@ export const CHAPTER_TITLES = {
   4: 'Structure',
   5: 'Power',
   6: 'Thermal control',
+  8: 'Mission and requirements',
 };
 
 export function examById(id) {

@@ -19,3 +19,9 @@ The order of work on new units follows the class schedule.
 Unit 1: elliptical orbits and Kepler's equation, solved by Newton's method and checked against an
 integrated two-body orbit. Orbit altitudes are standard round figures for a geostationary transfer
 orbit, a Molniya orbit and the ISS.
+
+Unit 8: mission, requirements, verification and the life cycle's reviews, after the NASA Systems
+Engineering Handbook. The mass budget's growth model follows NASA/TM-20250008066, a Beta
+distribution whose mean follows maturity. The bus and payload masses are our own round figures for
+a 6U craft. The mean growth for each maturity is the course's assumption. The 12 kg allocation is
+2 kg per unit (Wikipedia, CubeSat).

@@ -51,13 +51,17 @@ try{
   }
   await navigate('satellite/#/satellite/u4/shake?n=build-it');
   await wait(()=>page.eval('document.querySelector("#notes")?.textContent.includes("Choose the material")'));
-  assert.equal(await page.eval('document.querySelectorAll("#exam-select option").length'),7);
+  assert.equal(await page.eval('document.querySelectorAll("#exam-select option").length'),8);
   assert.equal(await page.eval(`document.querySelector('a[href="guide.html"]')`),null);
   await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-structure`);
   await navigate('satellite/#/satellite/u7/?n=integration');
   await wait(()=>page.eval('document.querySelector("#notes")?.textContent.includes("Sensor payload")'));
   assert.equal(await page.eval('window.__gauss.app.lab'),null);
   await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-integration`);
+  await navigate('satellite/#/satellite/u8/margin');
+  await wait(()=>page.eval(`window.__gauss?.app.labId==='margin' && Number.isFinite(window.__gauss.computed.pExceed)`));
+  assert.equal(await page.eval('document.documentElement.scrollWidth>innerWidth'),false);
+  await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-margin`);
  }
  assert.deepEqual(page.errors,[]);
  console.log(`Project course checks passed. Standard units, labs, notes and practice in the simplified hub. Screenshots: ${out}`);
