@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Environmental test and verification</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 13 · after NASA's General Environmental Verification Standard</div>
+  <h1>Environmental test and verification</h1>
+  <p class="lede">Shake it, cycle it hot and cold in vacuum, and check it works. Testing shows the design has margin and this unit was built right, before launch finds out.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Why test</h3>
+    <a href="#verify"><span>1</span>What a test proves</a>
+    <h3>Part II · The environments</h3>
+    <a href="#levels"><span>2</span>Vibration test levels</a>
+    <a href="#tvac"><span>3</span>Thermal vacuum</a>
+    <a href="#campaign"><span>4</span>The test campaign</a>
+    <h3>Reference</h3>
+    <a href="#sheet"><span>5</span>Formula sheet</a>
+    <a href="#build-it"><span>6</span>Build it</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Why test</h2>
+</div>
+
+<section class="topic" id="verify">
+<h2><span class="n">1</span>What a test proves</h2>
+<p>A test runs the real hardware under controlled conditions and records what it does. It costs the most of the four ways to verify (Unit 8), and it is the one a launch provider asks for.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Qualification</b> shows the design has margin. It runs above the levels the flight will bring, for longer.</li><li><b>Acceptance</b> shows this unit was built right. It runs at the flight levels, long enough to bring out bad joints and loose parts.</li><li><b>Prototype</b> testing qualifies a unit that will not fly. The flight unit then gets an acceptance test.</li><li><b>Protoflight</b> testing runs the flight unit at qualification levels for acceptance durations. One unit does both jobs, and spends some of its life doing it.</li><li><b>Test as you fly, and fly as you test.</b> The test configuration should match flight. Where it differs, the difference is a risk to name.</li></ul>
+</div>
+<div class="box ex"><span class="tag">Worked example · a CubeSat on a launch</span>
+<p>NASA's CubeSat Launch Initiative asks each CubeSat to survive the GEVS vibration environment, about 10 g rms for 2 minutes. A university team builds one flight unit. It cannot afford a prototype, so it tests the flight unit at protoflight levels, functionally checks it before and after, and ships it.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Treating a passed test as proof of margin. An acceptance test at flight levels shows workmanship, not margin. Only a test above the flight levels, or analysis with factors of safety, shows margin.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>The environments</h2>
+</div>
+
+<section class="topic" id="levels">
+<h2><span class="n">2</span>Vibration test levels</h2>
+<p>NASA Goddard's General Environmental Verification Standard (GEVS) sets how far above the flight limit each test runs, and for how long.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Random vibration</b>: qualification and protoflight at the flight limit plus 3 dB, acceptance at the limit. A prototype shakes 2 minutes an axis; protoflight and acceptance 1 minute.</li><li><b>Sine vibration, structural loads</b>: qualification at 1.25 times the limit.</li><li><b>Shock</b>: simulated shocks at 1.4 times the limit for qualification.</li><li>Every acceptance level must still reach the <b>minimum workmanship</b> level, 6.8 g rms for components.</li></ul>
+</div>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A random test spectrum is a set of straight lines on log-log axes. Between breakpoints \(W = W_1 (f/f_1)^n\), and the overall level is</p>
+\[
+g_\text{rms}^2 = \sum \frac{W_1 f_1}{n+1}\left[\left(\frac{f_2}{f_1}\right)^{n+1} - 1\right].
+\]
+<p>A slope of +6 dB an octave is \(n = 2\). Adding 3 dB doubles \(W\) everywhere, so \(g_\text{rms}\) grows by \(\sqrt 2\). A bracket at \(f_n\) responds, by Miles' equation, as \(\sqrt{(\pi/2) f_n Q W(f_n)}\), and its fatigue damage a minute goes as the response to the power \(b\). For Unit 4's bracket \(b = 6.4\), so a minute at +3 dB does \(2^{3.2} = 9.19\) times the damage of a minute at the limit. The lab integrates each spectrum in closed form and checks it by Simpson's rule.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the GEVS component spectrum</span>
+<p>GEVS's generalized level for components up to 22.7 kg rises at +6 dB an octave from 0.013 g²/Hz at 20 Hz to 0.08 at 50 Hz, stays flat to 800 Hz, and falls to 0.013 at 2000 Hz. It integrates to 10.0 g rms. Doubled for qualification it is 14.1 g rms.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · protoflight on a 350 Hz bracket</span>
+<p>Unit 4's bracket at 350 Hz with \(Q = 10\) sees 21.1 g rms in a minute of acceptance testing and uses 5.0% of its fatigue life. At protoflight level it sees 29.8 g rms and the minute uses 46%. With a minute of launch the flight unit keeps 49% of its life.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a prototype instead</span>
+<p>Qualify a separate prototype for 2 minutes at +3 dB: it spends 92% of its life and passes. The flight unit gets an acceptance minute and launch, 5% each, and keeps 90%. The price is a second unit.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Reading 3 dB as a small margin. It doubles the spectrum, and for fatigue it multiplies the damage a minute by nine.</p>
+</div>
+</section>
+
+<section class="topic" id="tvac">
+<h2><span class="n">3</span>Thermal vacuum</h2>
+<p>A thermal vacuum test cycles the hardware between hot and cold plateaus in a vacuum chamber, working the whole time. It shows the hardware works beyond its flight range, and the cycling brings out bad joints before flight does.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Test temperatures</b> come from what the hardware can stand, its allowable flight range, widened by 10 °C at each end. They are not taken from the thermal predictions.</li><li><b>Cycles</b>: at least 12 before flight, spread over the levels of assembly. A CubeSat may run them all at system level.</li><li><b>Plateaus</b>: about 4 hours at unit level, 12 at subsystem and 24 at system, counted once the hardware is stable, changing less than 0.1 °C an hour.</li><li><b>Transitions</b>: no faster than 1 °C a minute.</li><li><b>Thermal balance</b> is a separate phase. It holds the craft in simulated hot and cold orbits to check the thermal model of Unit 6.</li></ul>
+</div>
+<div class="box why"><span class="tag">Derivation</span>
+<p>In vacuum the article exchanges heat with the chamber's shroud only by radiation:</p>
+\[
+m c\,\frac{dT}{dt} = \varepsilon\sigma A\left(a^4 - T^4\right), \qquad a^4 = T_s^4 + \frac{Q}{\varepsilon\sigma A}.
+\]
+<p>Splitting \(1/(a^4 - T^4)\) into \(1/(a^2 - T^2)\) and \(1/(a^2 + T^2)\) integrates it exactly:</p>
+\[
+t = \frac{m c}{\varepsilon\sigma A}\left[F(T_1) - F(T_0)\right],
+\]
+\[
+F(T) = \frac{1}{4a^3}\ln\left|\frac{a+T}{a-T}\right| + \frac{1}{2a^3}\arctan\frac{T}{a}.
+\]
+<p>The time goes with the thermal mass \(mc\) and against \(\varepsilon A\). The lab drives the shroud past each plateau, holds it once the article arrives, and checks the closed form by stepping the article with RK4.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 6U CubeSat, four cycles</span>
+<p>A black 12 kg 6U craft, 0.27 m² of surface, dissipating 10 W. Its range is 0 to 50 °C, so the plateaus are −10 and 60 °C. With the shroud 20 °C past each plateau it heats in 2.0 hours and cools in 6.2, changing at most 0.88 °C a minute. With 24-hour plateaus a cycle takes 56 hours, and four take 9.4 days.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a polished aluminium craft</span>
+<p>The same craft polished, \(\varepsilon = 0.05\), powered off. It radiates eighteen times less, so it takes 41 hours to heat and 78 to cool. One cycle takes a week, and four take 28 days.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Running the cold plateau with everything powered. A craft dissipating 10 W through a shiny surface cannot radiate enough to reach −10 °C, whatever the shroud does. Plan which units are off when, and say so in the procedure.</p>
+</div>
+</section>
+
+<section class="topic" id="campaign">
+<h2><span class="n">4</span>The test campaign</h2>
+<p>A campaign puts the tests in an order, with a functional test before and after each, so a failure can be traced to the test that caused it.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>GEVS sets no fixed order, but asks that the order bring out problems early. Each environment is bracketed by functional tests. The campaign covers structural loads, vibration, shock, thermal vacuum and thermal balance, electromagnetic compatibility, and mass properties. Testing happens at the unit, subsystem and system levels of assembly. A small craft may skip subsystem tests, at the risk of finding problems late.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the magnetometer craft</span>
+<p>Unit 8's craft carries a magnetometer, so its magnetic cleanliness matters. GEVS asks for dc magnetics testing after vibration, because a shaker's fields can magnetise the hardware. The order: functional test, vibration in three axes, functional test, magnetics, thermal vacuum with a functional test at each plateau, and a final functional test before shipping.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Skipping the functional test between environments to save a day. A fault found after three environments cannot be traced to the one that caused it.</p>
+</div>
+</section>
+
+<section class="topic" id="sheet">
+<h2><span class="n">5</span>Formula sheet</h2>
+\[
+g_\text{rms}^2 = \int W\,df, \qquad +3\ \text{dB}: W \times 2,\ g_\text{rms} \times \sqrt 2
+\]
+\[
+\text{damage a minute} \propto g_\text{rms}^{\,b}, \qquad \frac{\text{at } +3\ \text{dB}}{\text{at the limit}} = 2^{b/2}
+\]
+\[
+m c\,\frac{dT}{dt} = \varepsilon\sigma A\left(a^4 - T^4\right)
+\]
+\[
+t = \frac{m c}{\varepsilon\sigma A}\left[F(T_1) - F(T_0)\right]
+\]
+</section>
+
+<section class="topic" id="build-it"><h2><span class="n">6</span>Build it</h2><p>Plan the tests that show the craft will survive launch and work in orbit.</p><h3>Method</h3><ol><li>Choose prototype or protoflight, and say why.</li><li>Get the launch provider's vibration and shock levels, or use GEVS's generalized levels, and set each test's level and duration from the GEVS factors.</li><li>Check each part's response and fatigue life at the test level, not only at flight level.</li><li>Set the thermal vacuum plateaus from each unit's allowable range plus 10 °C, and plan the cycles, plateaus and transition rate.</li><li>Work out the campaign's length and the chamber time it needs.</li><li>Put the tests in order with functional tests between them, and say what is powered in each phase.</li></ol><h3>What to produce</h3><p>A test plan: the approach, a table of levels and durations, the thermal vacuum profile, the sequence, and the pass and fail criteria for each test.</p><h3>Handoff to other subsystems</h3><p>Give Structure the test levels its parts must survive. Give Thermal the plateaus and the balance cases to correlate its model. Give Mission and requirements the verification matrix entries each test closes.</p><h3>Review checklist</h3><ul><li>Qualification or protoflight is stated, with the levels and durations from GEVS.</li><li>Every acceptance level reaches the workmanship minimum.</li><li>Parts survive the qualification level with fatigue life to spare.</li><li>Plateaus come from the allowable ranges, not the predictions.</li><li>Transitions stay below 1 °C a minute.</li><li>Functional tests bracket every environment.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>For your craft, give the random vibration level and duration, the response and life of its most stressed part, the thermal vacuum plateaus and cycle time, and the sequence of tests.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://standards.nasa.gov/standard/GSFC/GSFC-STD-7000" target="_blank" rel="noopener">NASA GSFC-STD-7000B, General Environmental Verification Standard (GEVS)</a>: Hardware types (1.8), test sequence (2.2.1), test factors and durations (Table 2.2-2), random vibration levels (Tables 2.4-3 and 2.4-4), and thermal vacuum margins, cycles, plateaus and rates (2.6, Table 2.6-1).</li><li><a href="https://www.nasa.gov/reference/5-0-product-realization/" target="_blank" rel="noopener">NASA Systems Engineering Handbook, 5.3: Product verification</a>: Test as a verification method, and "test as you fly, fly as you test".</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 6.2.3</a>: The CubeSat Launch Initiative's GEVS vibration requirement, about 10 g rms for 2 minutes.</li><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l14_structures/" target="_blank" rel="noopener">MIT 16.851, Lecture 14: Spacecraft structures</a>: The dynamic and acoustic launch loads the tests stand in for.</li></ul></section>
+</main>
+<footer>Our own notes, written for Flux. Read alongside NASA's General Environmental Verification Standard and MIT 16.851 Satellite Engineering.</footer>
+</body>
+</html>

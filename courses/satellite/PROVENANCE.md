@@ -67,3 +67,11 @@ models on Unit 8's craft. The thermal sphere is Unit 6's, resized to the craft's
 NASA's small spacecraft report's, Table 9-3. The loads, the radios' powers and antennas, the
 payloads, the power system's mass and the 30% depth of discharge are our own round figures. The
 check, flying the craft for twenty days, is our own.
+
+Unit 13: environmental test and verification, after NASA GSFC-STD-7000B (GEVS), the NASA Systems
+Engineering Handbook (5.3) and NASA's small spacecraft report (6.2.3). The random vibration
+spectra are GEVS Tables 2.4-3 and 2.4-4; test factors and durations Table 2.2-2; thermal vacuum
+margins, cycles, plateaus and the 1 °C/min rate 2.6 and Table 2.6-1. The bracket is Unit 4's. The
+minute at flight level in launch, the test articles' masses, areas and dissipations, and the
+chamber's range are our own round figures. The closed-form radiative transition is our own,
+checked by RK4.

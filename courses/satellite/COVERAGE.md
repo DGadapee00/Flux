@@ -40,7 +40,7 @@ reference, when the class reaches it, and what the course has now.
 | Structures and launch loads | [L14](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l14_structures/) | [6](https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms) | none | 5 | u4: shake, random; material, process, joint and finish notes | covered |
 | Mechanisms and deployables | [L14](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l14_structures/) | [6.3](https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms) | none | none | none | missing |
 | Thermal control | [L23](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l23thermalcontro/) | [7](https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control) | none | 5 | u6: balance, nodes | covered |
-| Environmental test and verification | [L14](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l14_structures/) | [6.4.2](https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms) | [5.3](https://www.nasa.gov/reference/5-0-product-realization/) | 5 | none | missing |
+| Environmental test and verification | [L14](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l14_structures/) | [6.2.3](https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms) | [5.3](https://www.nasa.gov/reference/5-0-product-realization/) | 5 | u13: levels, tvac, after GEVS (GSFC-STD-7000B) | covered |
 | Communications and the link budget | [L21](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l21satelitecomm2_done/) | [9](https://www.nasa.gov/smallsat-institute/sst-soa/soa-communications) | none | 3 | u2: noise, link | covered |
 | Telemetry, tracking and command | [L20](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l20_satellitettc/) | [9](https://www.nasa.gov/smallsat-institute/sst-soa/soa-communications), [11](https://www.nasa.gov/smallsat-institute/sst-soa/ground-data-systems-and-mission-operations) | none | 3 | u2: doppler; commands, telemetry and security in notes and practice | covered |
 | Ground systems and mission operations | [L24](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l24_groundsysdes/) | [11](https://www.nasa.gov/smallsat-institute/sst-soa/ground-data-systems-and-mission-operations) | [3.8](https://www.nasa.gov/reference/3-0-nasa-program-project-life-cycle/) | 5 | u12: coverage; networks and operations in notes and practice | covered |
@@ -52,7 +52,7 @@ reference, when the class reaches it, and what the course has now.
 
 ## Totals
 
-32 topics: 21 covered, 2 notes only, 9 missing.
+32 topics: 22 covered, 2 notes only, 8 missing.
 
 ## 16.851 lectures and SoA chapters by unit
 
@@ -70,4 +70,5 @@ reference, when the class reaches it, and what the course has now.
 | u10 Avionics, flight software and data | L16–19 | 8, 9 (rates) |
 | u11 Optical payloads and laser links | L6–8 | 9.3 |
 | u12 Ground systems and operations | L24 | 11 |
+| u13 Environmental test and verification | L14 (launch loads) | 6.2.3 |
 | No unit yet | L1, L4, L10–13, L15, L22 | 1, 4, 12, 13 |

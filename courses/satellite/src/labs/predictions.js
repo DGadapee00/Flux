@@ -4,6 +4,73 @@
  */
 
 export const PREDICTIONS = {
+  tvac: [
+    {
+      id: 'tv-mass',
+      scenario: 'six',
+      ask: 'The 12 kg CubeSat heats from the cold plateau to the hot one in 2.0 hours. Make it 24 kg, with the same surface and power. By what factor does the heating time change?',
+      apply(s) { s.m = 24; },
+      watch: [{ id: 'heat', label: 'the heating time', get: (c) => c.heatH }],
+      mode: 'factor',
+      factors: [1.41, 2, 4],
+      expect: { heat: 2 },
+      why: 'In vacuum only radiation moves heat, and it depends on the surface, not the mass. Twice the thermal mass at the same flux takes twice as long: 4.1 hours.',
+    },
+    {
+      id: 'tv-cold',
+      scenario: 'six',
+      ask: 'The shroud is driven 20 °C past each plateau, hot and cold. Does the craft take longer to cool from 60 °C to −10 °C than to heat from −10 °C to 60 °C?',
+      apply(s) { s.cycles = 4; },
+      watch: [{ id: 'slow', label: 'Cooling takes longer', get: (c) => c.coolH > c.heatH, mode: 'bool' }],
+      mode: 'bool',
+      expect: { slow: true },
+      why: 'Radiation goes as T⁴. Near −10 °C a surface radiates far less than near 60 °C, and the craft’s own 10 W works against the cooling. Heating takes 2.0 hours, cooling 6.2.',
+    },
+    {
+      id: 'tv-drive',
+      scenario: 'six',
+      ask: 'Drive the shroud 50 °C past each plateau instead of 20 °C, to shorten the transitions. Does the craft still change by less than GEVS’s 1 °C a minute?',
+      apply(s) { s.overdrive = 50; },
+      watch: [{ id: 'ok', label: 'Within 1 °C a minute', get: (c) => c.withinRate, mode: 'bool' }],
+      mode: 'bool',
+      expect: { ok: false },
+      why: 'The flux at the start of a transition grows with how far the shroud is from the craft. At 50 °C past, the craft starts changing 1.3 °C a minute. The transitions shrink from 8.2 to 4.6 hours, but the test now stresses the hardware more than the flight would.',
+    },
+  ],
+  levels: [
+    {
+      id: 'lv-pf',
+      scenario: 'accept',
+      ask: 'A one-minute acceptance test at the flight limit level uses 5.0% of a 350 Hz bracket’s fatigue life. Run the same minute at protoflight level, 3 dB higher. By what factor does the share it uses grow?',
+      apply(s) { s.program = 'protoflight'; },
+      watch: [{ id: 'use', label: 'the share of life the test uses', get: (c) => c.testUse }],
+      mode: 'factor',
+      factors: [2, 2.83, 9.19],
+      expect: { use: 9.19 },
+      why: '3 dB doubles the spectrum, so the response grows by √2, from 21.1 to 29.8 g rms. Damage a minute goes as the response to the power b = 6.4: (√2)^6.4 = 9.19. The minute now uses 46% of the life.',
+    },
+    {
+      id: 'lv-proto',
+      scenario: 'stiff',
+      ask: 'After a protoflight test and launch, the 350 Hz flight unit keeps 49% of its fatigue life. Qualify a separate prototype for two minutes at +3 dB instead, and give the flight unit an acceptance test. Does the flight unit keep more or less?',
+      apply(s) { s.program = 'prototype'; },
+      watch: [{ id: 'left', label: 'the flight unit’s life left', get: (c) => c.flightLeft }],
+      mode: 'dir',
+      expect: { left: 'bigger' },
+      why: 'The prototype takes the +3 dB test and spends 92% of its own life. The flight unit sees only a minute at flight level in test and a minute in launch, 5% each, and keeps 90%. The price is a second unit.',
+    },
+    {
+      id: 'lv-fn',
+      scenario: 'bracket',
+      ask: 'The 100 Hz bracket sits on the spectrum’s flat plateau, which runs from 50 to 800 Hz. Stiffen it to 200 Hz with the same Q. By what factor does its rms response change?',
+      apply(s) { s.fn = 200; },
+      watch: [{ id: 'g', label: 'the bracket’s rms response', get: (c) => c.response }],
+      mode: 'factor',
+      factors: [0.71, 1.41, 2],
+      expect: { g: 1.41 },
+      why: 'Miles’ equation gives g_rms = √((π/2) f_n Q W). On the plateau W stays 0.16 g²/Hz, so doubling f_n raises the response by √2, from 15.9 to 22.5 g rms. Stiffer is not always gentler under random vibration.',
+    },
+  ],
   mission: [
     {
       id: 'mi-uhf',

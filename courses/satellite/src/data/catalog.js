@@ -113,9 +113,20 @@ export const EXAMS = [
     labs: ['coverage'],
     coming: [],
   },
+  {
+    id: 'u13',
+    n: 13,
+    title: 'Environmental test and verification',
+    chapters: '13',
+    date: 'Unit 13',
+    labs: ['levels', 'tvac'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
+  tvac: { id: 'tvac', exam: 'u13', title: 'Thermal vacuum' },
+  levels: { id: 'levels', exam: 'u13', title: 'Test levels' },
   mission: { id: 'mission', exam: 'u7', title: 'Mission design' },
   coverage: { id: 'coverage', exam: 'u12', title: 'Station coverage' },
   laser: { id: 'laser', exam: 'u11', title: 'Laser link' },
@@ -158,6 +169,7 @@ export const CHAPTER_TITLES = {
   10: 'Avionics, flight software and data',
   11: 'Optical payloads and laser links',
   12: 'Ground systems and operations',
+  13: 'Environmental test and verification',
 };
 
 export function examById(id) {
