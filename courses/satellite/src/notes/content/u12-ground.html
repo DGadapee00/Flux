@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ground systems and operations</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 12 · after MIT 16.851 Satellite Engineering</div>
+  <h1>Ground systems and operations</h1>
+  <p class="lede">The half of the mission that stays on Earth: the stations that talk to the craft, where they stand, the networks you can buy time on, and the team that flies it.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · The ground segment</h3>
+    <a href="#segment"><span>1</span>What the ground does</a>
+    <a href="#coverage"><span>2</span>Where stations stand</a>
+    <a href="#networks"><span>3</span>Networks, services and relays</a>
+    <h3>Part II · Operations</h3>
+    <a href="#operations"><span>4</span>Flying the mission</a>
+    <h3>Reference</h3>
+    <a href="#sheet"><span>5</span>Formula sheet</a>
+    <a href="#build-it"><span>6</span>Build it</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>The ground segment</h2>
+</div>
+
+<section class="topic" id="segment">
+<h2><span class="n">1</span>What the ground does</h2>
+<p>The ground segment commands the craft, watches its health, tracks it, and carries its data to the people who use it.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>The ground station</b>: antenna, transmitter and receiver, the TT&amp;C equipment, a clock, and the link to everything else.</li><li><b>The mission operations centre</b>: commands the craft, monitors its health, and asks for and retrieves data.</li><li><b>The science or payload operations centre</b>: plans what the payload does and turns its data into products.</li><li><b>Storage and the network</b> that join them, often far apart.</li></ul>
+<p>A station's design starts from where it must be: where it sees the orbit, near its users, at a cost, and available when needed. Then come the link rates it must carry and how its data reaches the users.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a CubeSat's ground segment</span>
+<p>A university CubeSat uses one S-band station on campus for most passes and buys extra passes from a commercial network. Every command goes through the mission operations centre in the lab. Telemetry lands in a database the engineering and science teams read; the science team sends its requests to the operations centre, not to the craft.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Letting anyone with a terminal command the craft. One operations centre owns the command path, so every command is planned, checked and logged.</p>
+</div>
+</section>
+
+<section class="topic" id="coverage">
+<h2><span class="n">2</span>Where stations stand</h2>
+<p>A station sees a low craft only when the craft passes within a small circle around it. Where the station stands, against the orbit's inclination, decides how often that happens.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>From altitude \(h\) above elevation \(\varepsilon\), a station sees the craft while its ground track lies within</p>
+\[
+\lambda = \arccos\!\left(\frac{R}{R + h}\cos\varepsilon\right) - \varepsilon
+\]
+<p>of the station. A craft in an orbit of inclination \(i\) never passes beyond latitude \(i\), or \(180^\circ - i\) for an orbit tilted past 90°, so a station beyond \(i + \lambda\) never sees it. Over many days the Earth turns the track evenly in longitude, and the track spends most time near latitudes \(\pm i\), where it turns. Its density over the globe is</p>
+\[
+p(\beta) = \frac{1}{2\pi^2\sqrt{\sin^2 i - \sin^2\beta}}
+\]
+<p>per steradian. The share of time in view is that density integrated over the station's circle. The lab also flies the orbit for twenty days with the Earth turning under it and checks the two agree; the flight also gives the contacts a day and the longest wait.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one Arctic station</span>
+<p>At 500 km above 10°, \(\lambda = 14.1^\circ\). A sun-synchronous craft, inclined 97.4°, crosses the Arctic every orbit, so a station at Utqiagvik, 71.3°N, sees it 56 minutes a day in 9.6 contacts. It can still wait 11.1 hours between contacts, while Alaska turns away from the orbit's plane. The same craft is seen from Mojave, 35°N, only 17 minutes a day.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · three stations spread around the world</span>
+<p>Add Sodankylä in Finland and Awarua in New Zealand. Together they see the craft 119 minutes a day in 21 contacts, and the longest wait falls to 4.5 hours. Stations far apart in longitude fill each other's gaps.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Choosing a station by its latitude alone. An Arctic station suits a polar orbiter, but a craft in a 51.6° orbit never comes within its 14° circle.</p>
+</div>
+</section>
+
+<section class="topic" id="networks">
+<h2><span class="n">3</span>Networks, services and relays</h2>
+<p>Few small missions build every station they use. They share networks, buy passes, or relay through other satellites.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Dedicated stations</b> fit the mission exactly but cost money to build and staff. <b>Shared networks</b> are cheaper and reliable but must be scheduled with other users.</li><li><b>NASA's networks</b>: the Near Space Network serves craft within 2 million km; the Deep Space Network serves those beyond.</li><li><b>Ground station as a service</b>: commercial networks rent passes, and deliver the data into the cloud, without the mission building antennas.</li><li><b>Relays</b>: satellites such as NASA's TDRS, or commercial LEO networks, carry a low craft's data when no ground station sees it. They are most useful just after launch, before the stations have found the craft.</li><li><b>Polar stations</b> see a polar orbiter on nearly every pass.</li></ul>
+</div>
+<div class="box ex"><span class="tag">Worked example · choosing a service</span>
+<p>A sun-synchronous CubeSat downlinks 2 Gbit a day on S-band. One campus station at mid-latitude sees it about 17 minutes a day, enough for the commands but not the data. Buying passes over a commercial Arctic station adds about 56 minutes a day without building one. A relay is kept for the first days after deployment, to hear the craft before any station has found it.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Assuming a shared network gives every pass. Other missions want the same antennas; plan for the passes you can schedule, not every pass in view.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Operations</h2>
+</div>
+
+<section class="topic" id="operations">
+<h2><span class="n">4</span>Flying the mission</h2>
+<p>Operations plan what the craft does, check every command before it goes up, and find out what went wrong when something does.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The operations team generates command plans, simulates the craft's response, and when the simulation is not convincing runs the plan on an engineering model before it is approved for upload. It schedules the ground stations and the downloads.</p>
+<p>The mission moves through phases: launch and early orbit, when the team finds the craft and checks it out; commissioning; normal operations; anomalies, when engineers need direct access to telemetry; and the end of the mission.</p>
+<p>Before launch, end-to-end compatibility testing proves the ground can talk to the craft. Ideally the flight craft talks to the station it will use; at a minimum the flight radio and processor do.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a new command plan</span>
+<p>The payload team asks for an image of a coastline at noon tomorrow. Operations builds the plan: turn the craft, power the camera, take the image, store it, turn back. The simulator shows the turn draws the battery to 60% depth; operations moves the image to after the next eclipse, runs the plan on the engineering model, approves it, and uploads it on the evening pass.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Testing the radio only on the bench. Compatibility with the real station, its antenna, low-noise amplifier and software, is what the mission depends on.</p>
+</div>
+</section>
+
+<section class="topic" id="sheet">
+<h2><span class="n">5</span>Formula sheet</h2>
+\[
+\lambda = \arccos\!\left(\frac{R}{R + h}\cos\varepsilon\right) - \varepsilon, \qquad \text{seen only if } |\varphi| \le i + \lambda .
+\]
+\[
+p(\beta) = \frac{1}{2\pi^2\sqrt{\sin^2 i - \sin^2\beta}}, \qquad \text{share in view} = \iint_\text{circle} p\, dA .
+\]
+</section>
+
+<section class="topic" id="build-it"><h2><span class="n">6</span>Build it</h2><p>Show the ground can command the craft and bring its data home.</p><h3>Method</h3><ol><li>Draw the ground segment: stations, operations centre, science centre, storage and the links between them.</li><li>Choose stations that can see the orbit, and find the minutes a day and the longest wait.</li><li>Check the passes carry the data budget from Unit 10.</li><li>Decide what to build, what to share and what to buy, and how the first days after launch are covered.</li><li>Write the operations plan: phases, who may command, how a plan is checked, and what happens in an anomaly.</li><li>Plan end-to-end compatibility testing with the real station.</li></ol><h3>What to produce</h3><p>A ground segment diagram, a coverage table with minutes and longest wait, an operations concept, and a compatibility test plan.</p><h3>Handoff to other subsystems</h3><p>Give Communications the stations' antennas and rates. Give Avionics the longest wait, which sets how long the craft must look after itself. Give Mission and requirements the operations concept.</p><h3>Review checklist</h3><ul><li>Every station can see the orbit.</li><li>The longest wait is known and the craft can survive it alone.</li><li>The passes carry the daily data.</li><li>One operations centre owns the command path.</li><li>Compatibility with the real station is tested before launch.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>For your orbit and stations, give the minutes in view a day, the contacts and the longest wait; show the data they carry; and say who approves each command.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l24_groundsysdes/" target="_blank" rel="noopener">MIT 16.851, Lecture 24: Ground system design</a>: What the ground does, station design, control centres, and dedicated against shared systems.</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/ground-data-systems-and-mission-operations" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 11</a>: Ground architecture, NASA and commercial networks, relays, operations centres and compatibility testing; the station positions in the lab are from its Table 11-7.</li></ul></section>
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, on ground system design.</footer>
+</body>
+</html>

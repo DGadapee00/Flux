@@ -4,6 +4,38 @@
  */
 
 export const PREDICTIONS = {
+  coverage: [
+    {
+      id: 'cv-arctic',
+      scenario: 'mid',
+      ask: 'A sun-synchronous craft at 500 km is seen 17 minutes a day from Mojave, at 35°N. Move the one station to Utqiagvik, at 71°N. Does the contact time grow or shrink?',
+      apply(s) { s.s1 = 'utq'; },
+      watch: [{ id: 'min', label: 'minutes in view a day', get: (c) => c.anyMinutes }],
+      mode: 'dir',
+      expect: { min: 'bigger' },
+      why: 'A polar orbit crosses high latitudes on every orbit, and its ground track crowds together near the poles. The Arctic station sees it 56 minutes a day in nearly ten contacts, against 17 minutes in three.',
+    },
+    {
+      id: 'cv-tilt',
+      scenario: 'polar',
+      ask: 'Keep the Arctic station and fly the craft in a 51.6° orbit instead. Does the station still see it?',
+      apply(s) { s.incl = 51.6; },
+      watch: [{ id: 'seen', label: 'The station sees it', get: (c) => c.passesPerDay > 0, mode: 'bool' }],
+      mode: 'bool',
+      expect: { seen: false },
+      why: 'The craft never passes north of 51.6°, and from 500 km above 10° the station sees only 14.1° around it. 71.3° − 14.1° = 57.2°, beyond the orbit’s reach.',
+    },
+    {
+      id: 'cv-network',
+      scenario: 'polar',
+      ask: 'With one Arctic station the sun-synchronous craft can wait 11 hours between contacts. Add stations in Finland and New Zealand. Does the longest wait shrink?',
+      apply(s) { s.s2 = 'sod'; s.s3 = 'awa'; },
+      watch: [{ id: 'wait', label: 'the longest wait', get: (c) => c.longestGapH }],
+      mode: 'dir',
+      expect: { wait: 'smaller' },
+      why: 'The new stations stand far apart in longitude, so each sees passes the others miss. The longest wait falls from 11.1 to about 4.5 hours, while the minutes a day only double.',
+    },
+  ],
   laser: [
     {
       id: 'lc-aperture',

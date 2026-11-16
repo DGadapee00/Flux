@@ -54,3 +54,8 @@ spacecraft report, 9.3. The Rayleigh criterion and the Airy zero are from Lectur
 Airy disk article; beam divergence and the power through an aperture from Wikipedia's Gaussian
 beam article. Laser wavelengths and rates are from the report's Table 9-4, and the 40 cm ground
 telescope is OCSD's. The camera and terminal figures are our own.
+
+Unit 12: ground systems and operations, after MIT 16.851 Lecture 24 and NASA's small spacecraft
+report, chapter 11. Station positions are the ATLAS network's, from the report's Table 11-7. The
+coverage model, a ground-track latitude density integrated over each station's circle of view, is
+our own, checked against flying the orbit.

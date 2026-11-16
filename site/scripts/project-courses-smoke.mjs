@@ -51,7 +51,7 @@ try{
   }
   await navigate('satellite/#/satellite/u4/shake?n=build-it');
   await wait(()=>page.eval('document.querySelector("#notes")?.textContent.includes("Choose the material")'));
-  assert.equal(await page.eval('document.querySelectorAll("#exam-select option").length'),11);
+  assert.equal(await page.eval('document.querySelectorAll("#exam-select option").length'),12);
   assert.equal(await page.eval(`document.querySelector('a[href="guide.html"]')`),null);
   await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-structure`);
   await navigate('satellite/#/satellite/u7/?n=integration');
@@ -62,7 +62,7 @@ try{
   await wait(()=>page.eval(`window.__gauss?.app.labId==='margin' && Number.isFinite(window.__gauss.computed.pExceed)`));
   assert.equal(await page.eval('document.documentElement.scrollWidth>innerWidth'),false);
   await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-margin`);
-  for(const [unit,lab,key] of [['u2','doppler','shift'],['u9','decay','years'],['u9','upsets','uncorrectable'],['u10','tasks','U'],['u10','data','sent'],['u11','imager','gsd'],['u11','laser','Pr']]){
+  for(const [unit,lab,key] of [['u2','doppler','shift'],['u9','decay','years'],['u9','upsets','uncorrectable'],['u10','tasks','U'],['u10','data','sent'],['u11','imager','gsd'],['u11','laser','Pr'],['u12','coverage','anyMinutes']]){
    await navigate(`satellite/#/satellite/${unit}/${lab}`);
    await wait(()=>page.eval(`window.__gauss?.app.labId==='${lab}' && Number.isFinite(window.__gauss.computed.${key})`));
    assert.equal(await page.eval('document.documentElement.scrollWidth>innerWidth'),false);
