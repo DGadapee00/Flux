@@ -3,6 +3,10 @@ import { PREDICTIONS } from './predictions.js';
 
 /** One entry per lab. Add each new lab here and in src/data/catalog.js (LAB_META). */
 const loaders = {
+  separation: () => import('./separation.js'),
+  hinge: () => import('./hinge.js'),
+  reserve: () => import('./reserve.js'),
+  learning: () => import('./learning.js'),
   spiral: () => import('./spiral.js'),
   propellant: () => import('./propellant.js'),
   tvac: () => import('./tvac.js'),

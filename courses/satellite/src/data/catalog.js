@@ -131,9 +131,40 @@ export const EXAMS = [
     labs: ['propellant', 'spiral'],
     coming: [],
   },
+  {
+    id: 'u15',
+    n: 15,
+    title: 'Cost',
+    chapters: '15',
+    date: 'Unit 15',
+    labs: ['learning', 'reserve'],
+    coming: [],
+  },
+  {
+    id: 'u16',
+    n: 16,
+    title: 'Mechanisms and deployables',
+    chapters: '16',
+    date: 'Unit 16',
+    labs: ['hinge'],
+    coming: [],
+  },
+  {
+    id: 'u17',
+    n: 17,
+    title: 'Identification and tracking',
+    chapters: '17',
+    date: 'Unit 17',
+    labs: ['separation'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
+  separation: { id: 'separation', exam: 'u17', title: 'Deployment separation' },
+  hinge: { id: 'hinge', exam: 'u16', title: 'Spring hinge' },
+  reserve: { id: 'reserve', exam: 'u15', title: 'Cost confidence' },
+  learning: { id: 'learning', exam: 'u15', title: 'Learning curve' },
   spiral: { id: 'spiral', exam: 'u14', title: 'Electric spiral' },
   propellant: { id: 'propellant', exam: 'u14', title: 'Propellant budget' },
   tvac: { id: 'tvac', exam: 'u13', title: 'Thermal vacuum' },
@@ -182,6 +213,9 @@ export const CHAPTER_TITLES = {
   12: 'Ground systems and operations',
   13: 'Environmental test and verification',
   14: 'In-space propulsion',
+  15: 'Cost',
+  16: 'Mechanisms and deployables',
+  17: 'Identification and tracking',
 };
 
 export function examById(id) {

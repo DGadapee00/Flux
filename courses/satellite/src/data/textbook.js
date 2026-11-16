@@ -27,7 +27,7 @@ export const SOA_CHAPTERS = Object.freeze([
   { n: 9, title: 'Communications', url: `${SOA}soa-communications`, unit: 'u2' },
   { n: 10, title: 'Integration, Launch, and Deployment', url: `${SOA}integration-launch-and-deployment`, unit: 'u4' },
   { n: 11, title: 'Ground Data Systems and Mission Operations', url: `${SOA}ground-data-systems-and-mission-operations`, unit: 'u12' },
-  { n: 12, title: 'Identification and Tracking Systems', url: `${SOA}identification-and-tracking-systems`, unit: null },
+  { n: 12, title: 'Identification and Tracking Systems', url: `${SOA}identification-and-tracking-systems`, unit: 'u17' },
   { n: 13, title: 'Deorbit Systems', url: `${SOA}deorbit-systems`, unit: null },
 ]);
 

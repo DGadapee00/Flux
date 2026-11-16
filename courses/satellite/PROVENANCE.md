@@ -82,3 +82,15 @@ impulses lie within the report's Table 4-1 ranges, and the thrust per power is c
 75 mN/kW. Nitrogen's heat capacity and 7075-T6's strength and density are Wikipedia's. Tankage,
 hardware masses, thrusts and powers are our own round figures, as is the tank's safety factor of
 2. Drag makeup uses Unit 9's model.
+
+Unit 15: cost, after MIT 16.851 Lecture 15 and the NASA Systems Engineering Handbook (2.5). The
+learning-curve slopes by quantity, the cost spread by readiness level and the management reserves
+are Lecture 15's; its cost estimating relationships are not used. The elements, their costs, the
+development and first-unit costs and the discount rate are our own round figures.
+
+Unit 16: mechanisms and deployables, after NASA-STD-5017B (Equation 4-1, Table 1) and NASA's small
+spacecraft report (6.3). The spring, friction, harness and panel figures are our own.
+
+Unit 17: identification and tracking, after NASA's small spacecraft report, chapter 12, with the
+Clohessy–Wiltshire solution from Wikipedia. The deployer's push and the separation at which a radar
+splits two tracks are our own round figures.
