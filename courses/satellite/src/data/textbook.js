@@ -19,7 +19,7 @@ export const SOA_CHAPTERS = Object.freeze([
   { n: 1, title: 'Introduction', url: `${SOA}introduction`, unit: null },
   { n: 2, title: 'Complete Spacecraft Platforms', url: `${SOA}platforms`, unit: 'u7' },
   { n: 3, title: 'Power', url: `${SOA}power-subsystems`, unit: 'u5' },
-  { n: 4, title: 'In-Space Propulsion', url: `${SOA}in-space_propulsion`, unit: null },
+  { n: 4, title: 'In-Space Propulsion', url: `${SOA}in-space_propulsion`, unit: 'u14' },
   { n: 5, title: 'Guidance, Navigation, and Control', url: `${SOA}guidance-navigation-and-control`, unit: 'u3' },
   { n: 6, title: 'Structures, Materials, and Mechanisms', url: `${SOA}structures-materials-and-mechanisms`, unit: 'u4' },
   { n: 7, title: 'Thermal Control', url: `${SOA}thermal-control`, unit: 'u6' },

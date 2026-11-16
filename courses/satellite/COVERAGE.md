@@ -25,7 +25,7 @@ reference, when the class reaches it, and what the course has now.
 | Risk and trade studies | none | none | [6.4](https://www.nasa.gov/reference/6-0-crosscutting-technical-management/), [6.8](https://www.nasa.gov/reference/6-0-crosscutting-technical-management/) | 2, 3 | u7: mission lab and practice trace one change through every budget; risk in u7 notes only; u4 notes: material and process choices | notes only |
 | Cost modelling | [L15](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l15_costmodellec/) | none | [2.5](https://www.nasa.gov/reference/2-0-fundamentals-of-systems-engineering/) | none | none | missing |
 | Launch vehicles and launch selection | [L1](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l1_launch_system/) | [10](https://www.nasa.gov/smallsat-institute/sst-soa/integration-launch-and-deployment) | none | 5 | none | missing |
-| Rocket equation and in-space propulsion | [L4](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l4_propulsion/) | [4](https://www.nasa.gov/smallsat-institute/sst-soa/in-space_propulsion) | none | none | u1 lists "Rocket equation" as coming | missing |
+| Rocket equation and in-space propulsion | [L4](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l4_propulsion/) | [4](https://www.nasa.gov/smallsat-institute/sst-soa/in-space_propulsion) | none | none | u14: propellant, spiral | covered |
 | Orbits, Kepler's equation and transfers | [L2](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l2_orbital_mech/) | none | none | none | u1: kepler, transfer | covered |
 | Eclipses and ground-station passes | [L2](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l2_orbital_mech/), [L24](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l24_groundsysdes/) | [11](https://www.nasa.gov/smallsat-institute/sst-soa/ground-data-systems-and-mission-operations) | none | 3 | u1: passes | covered |
 | Formation flight and relative motion | [L10–13](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l10_emformflight/) | [5.3](https://www.nasa.gov/smallsat-institute/sst-soa/guidance-navigation-and-control) | none | 1 | none | missing |
@@ -52,7 +52,7 @@ reference, when the class reaches it, and what the course has now.
 
 ## Totals
 
-32 topics: 22 covered, 2 notes only, 8 missing.
+32 topics: 23 covered, 2 notes only, 7 missing.
 
 ## 16.851 lectures and SoA chapters by unit
 
@@ -71,4 +71,5 @@ reference, when the class reaches it, and what the course has now.
 | u11 Optical payloads and laser links | L6–8 | 9.3 |
 | u12 Ground systems and operations | L24 | 11 |
 | u13 Environmental test and verification | L14 (launch loads) | 6.2.3 |
-| No unit yet | L1, L4, L10–13, L15, L22 | 1, 4, 12, 13 |
+| u14 In-space propulsion | L4 | 4 |
+| No unit yet | L1, L10–13, L15, L22 | 1, 12, 13 |

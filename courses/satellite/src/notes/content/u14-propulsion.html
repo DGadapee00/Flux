@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>In-space propulsion</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 14 · after MIT 16.851 Satellite Engineering</div>
+  <h1>In-space propulsion</h1>
+  <p class="lede">How a small craft changes its orbit once it is up there: the rocket equation, the propellant and tank a mission needs, and why electric thrusters trade time for mass.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Rockets</h3>
+    <a href="#rocket"><span>1</span>The rocket equation</a>
+    <a href="#budget"><span>2</span>The Δv budget</a>
+    <a href="#tanks"><span>3</span>Tanks and the cold-gas limit</a>
+    <h3>Part II · Electric propulsion</h3>
+    <a href="#electric"><span>4</span>Thrust limited by power</a>
+    <a href="#choose"><span>5</span>Choosing a thruster</a>
+    <h3>Reference</h3>
+    <a href="#sheet"><span>6</span>Formula sheet</a>
+    <a href="#build-it"><span>7</span>Build it</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Rockets</h2>
+</div>
+
+<section class="topic" id="rocket">
+<h2><span class="n">1</span>The rocket equation</h2>
+<p>A thruster pushes the craft by throwing mass the other way. How fast it throws that mass decides how much it needs.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Mass leaves at the exhaust speed \(u_e = I_{sp}\, g_0\), so the thrust is \(F = \dot m\, u_e\). Burning from mass \(m_0\) down to \(m_f\) changes the velocity by</p>
+\[
+\Delta v = u_e \ln\frac{m_0}{m_f}.
+\]
+<p>The jet carries power \(\tfrac12 \dot m u_e^2 = \tfrac12 F u_e\). A fast exhaust saves propellant and costs power.</p>
+</div>
+<div class="box why"><span class="tag">Derivation</span>
+<p>In a time \(dt\) the craft throws out \(dm\) at \(u_e\) backwards, so momentum gives \(m\, dv = -u_e\, dm\). Integrate from \(m_0\) to \(m_f\) for the rocket equation. Inverting it, the propellant for a \(\Delta v\) is \(m_f\,(e^{\Delta v/u_e} - 1)\): it grows exponentially with \(\Delta v/u_e\). The lab checks this by stepping \(dv/dt = F/m\), \(dm/dt = -F/u_e\) with RK4.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · disposal on hydrazine</span>
+<p>The magnetometer craft from Unit 8 spends a year at 500 km, then lowers its perigee to 200 km so drag brings it down. That takes 92.8 m/s. Hydrazine, at 220 s, throws its exhaust at 2160 m/s, so the craft needs 0.47 kg of propellant. With tank and thruster the propulsion system weighs 1.14 kg, and the craft 11.14 kg of its 12.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Working in specific impulse but forgetting \(g_0\). The exponent is \(\Delta v/(I_{sp} g_0)\), with \(g_0 = 9.81\) m/s². \(I_{sp}\) in seconds is a speed divided by \(g_0\).</p>
+</div>
+</section>
+
+<section class="topic" id="budget">
+<h2><span class="n">2</span>The Δv budget</h2>
+<p>A Δv budget lists every manoeuvre a mission needs, like a mass budget lists every part.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Drag makeup</b>: holding an orbit against drag takes \(\tfrac12 \rho v^2 C_D A/m\) of Δv every second (Unit 9). It grows fast as the orbit drops into thicker air.</li><li><b>Disposal</b>: lowering the perigee so drag ends the mission within the five-year rule.</li><li><b>Raising, phasing and plane changes</b>, if the mission needs them (Unit 1).</li><li>A margin on top, for what the budget did not foresee.</li></ul>
+</div>
+<div class="box ex"><span class="tag">Worked example · three years at 400 km</span>
+<p>The 10 kg craft, 0.06 m², at a middling Sun. At 400 km drag takes 42 m/s a year, so three years need 126 m/s. Lowering the perigee to 200 km adds 58 m/s: 184 m/s in all. At 500 km the same craft needs only 7.4 m/s a year.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Sizing drag makeup at solar minimum. The thermosphere swells with the Sun (Unit 9), and an active Sun can triple the drag.</p>
+</div>
+</section>
+
+<section class="topic" id="tanks">
+<h2><span class="n">3</span>Tanks and the cold-gas limit</h2>
+<p>Propellant has to be held, and the tank grows with what it holds. For cold gas the tank outweighs the gas.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A thin spherical tank of radius \(r\) holding pressure \(p\) needs a wall \(t = p r/(2\sigma)\) at working stress \(\sigma\). Its mass is \(4\pi r^2 t \rho_t = \tfrac32 p V \rho_t/\sigma\). The ideal gas inside weighs \(p V M/(R_u T)\). The ratio</p>
+\[
+k = \frac{m_\text{tank}}{m_\text{gas}} = \frac{3}{2}\,\frac{\rho_t R_u T}{\sigma M}
+\]
+<p>has no \(p\) in it. A tank built for twice the pressure holds twice the gas and weighs twice as much. With tankage \(k\), the propellant for a Δv is</p>
+\[
+m_p = m_d\,\frac{R - 1}{1 - k(R - 1)}, \qquad R = e^{\Delta v/u_e},
+\]
+<p>which runs away as \(k(R - 1) \to 1\). No amount of propellant gives more than \(u_e \ln\frac{1 + k}{k}\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · nitrogen in a 7075 tank</span>
+<p>7075-T6 aluminium yields at about 450 MPa and weighs 2.81 g/cm³. With a safety factor of 2 and nitrogen at 20 °C, \(k = 1.63\): the tank weighs 1.6 times the gas. Nitrogen expanding fully leaves at \(\sqrt{2 c_p T} = 780\) m/s, an \(I_{sp}\) of 80 s. However much is carried, it can never give more than \(780 \ln(2.63/1.63) = 374\) m/s.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the disposal on cold gas</span>
+<p>The same 92.8 m/s on nitrogen takes 1.64 kg of gas in a 2.67 kg tank. The propulsion system weighs 4.6 kg, and the craft 14.6 kg: it no longer fits its 12 kg allocation.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Raising the tank pressure to carry more Δv. The gas and the tank grow together, so the ratio, and the limit, stay put. Only a lighter, stronger tank or a faster exhaust helps.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Electric propulsion</h2>
+</div>
+
+<section class="topic" id="electric">
+<h2><span class="n">4</span>Thrust limited by power</h2>
+<p>An electric thruster accelerates its propellant with electrical power. Its exhaust is fast, so it needs little propellant, but the array limits its thrust.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The jet power \(\tfrac12 F u_e\) is a share \(\eta\) of the electrical power \(P\), so</p>
+\[
+F = \frac{2\eta P}{u_e}.
+\]
+<p>At fixed power, doubling \(u_e\) halves the thrust. A slow spiral from one circular orbit to another, thrusting along the velocity, needs exactly the difference of their circular speeds, \(\Delta v = |\sqrt{\mu/r_1} - \sqrt{\mu/r_2}|\), and takes</p>
+\[
+t = \frac{m_0 u_e}{F}\left(1 - e^{-\Delta v/u_e}\right).
+\]
+<p>The lab checks this by flying the spiral, two-body gravity plus the thrust, step by step.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · raising 400 km to 550 km</span>
+<p>A 12 kg craft gives its ion thruster 40 W at 1500 s and 50% efficiency: 2.7 mN, 68 mN per kilowatt. The climb needs 84 m/s and takes 4.3 days on 68 g of xenon.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · twice the specific impulse</span>
+<p>At 3000 s on the same 40 W the thrust halves to 1.36 mN. The climb takes 8.5 days on 34 g. On 100 W at 1500 s it takes 1.7 days, still on 68 g: only power buys time without propellant.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Choosing the highest specific impulse on offer. For a small craft with little power, it makes every manoeuvre slow, and the thruster must run through eclipses it cannot power.</p>
+</div>
+</section>
+
+<section class="topic" id="choose">
+<h2><span class="n">5</span>Choosing a thruster</h2>
+<p>NASA's small spacecraft report surveys what flies on small craft. Each kind fits a different job.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Cold gas</b>, 40 to 110 s: simple, safe and precise, for small Δv and attitude control.</li><li><b>Hydrazine and other monopropellants</b>, 150 to 310 s: newtons of thrust for quick manoeuvres. Hydrazine is toxic, so handling it adds work and constraints for the launch provider.</li><li><b>Solid motors</b>, 187 to 269 s: one large impulse, fired once.</li><li><b>Electric</b>: gridded ion 500 to 3000 s, Hall 200 to 1920 s, electrospray up to 3000 s. Generally below 75 mN per kilowatt, so they run for hundreds or thousands of hours.</li><li><b>No propellant</b>: sails, tethers and drag devices, still mostly demonstrations.</li></ul>
+<p>Chemical systems win when thrust or speed matters and the total impulse is modest. Electric systems win when the total impulse is large and time is cheap, as in station keeping.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the magnetometer craft</span>
+<p>The craft needs about 93 m/s, once, a year after launch. Hydrazine does it in 17 minutes of burning, for a 1.1 kg system. An ion thruster would weigh about as much, with 70 g of xenon and more hardware, and burn for 4.4 days. Cold gas does not fit. A team might choose a non-toxic monopropellant to ease launch processing.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Comparing thrusters by specific impulse alone. Compare propulsion system mass, burn time and power for the mission's own Δv budget.</p>
+</div>
+</section>
+
+<section class="topic" id="sheet">
+<h2><span class="n">6</span>Formula sheet</h2>
+\[
+F = \dot m\, u_e, \qquad u_e = I_{sp}\, g_0, \qquad \Delta v = u_e \ln\frac{m_0}{m_f}
+\]
+\[
+m_p = m_d\,\frac{R - 1}{1 - k(R - 1)}, \qquad R = e^{\Delta v/u_e}
+\]
+\[
+k = \frac{3}{2}\,\frac{\rho_t R_u T}{\sigma M}, \qquad \Delta v_\text{max} = u_e \ln\frac{1 + k}{k}
+\]
+\[
+F = \frac{2\eta P}{u_e}, \qquad t = \frac{m_0 u_e}{F}\left(1 - e^{-\Delta v/u_e}\right)
+\]
+</section>
+
+<section class="topic" id="build-it"><h2><span class="n">7</span>Build it</h2><p>Choose a propulsion system that gives the mission its Δv within the craft's mass, power and schedule.</p><h3>Method</h3><ol><li>Write the Δv budget: drag makeup over the mission at the right solar conditions, disposal, any raising or phasing, and a margin.</li><li>For each candidate thruster, find the propellant, tankage and hardware mass from the rocket equation.</li><li>For electric candidates, find the thrust from the power the array can spare, and the burn time.</li><li>Check the wet mass against the allocation and the burn time against the mission's timeline.</li><li>Weigh handling, toxicity and the launch provider's rules.</li></ol><h3>What to produce</h3><p>A Δv budget, a trade table of candidate systems with mass, power and burn time, and the chosen system's sizing.</p><h3>Handoff to other subsystems</h3><p>Give Mass the propulsion system's wet and dry mass. Give Power the thruster's draw and when it runs. Give Attitude control the thrust and its misalignment torque. Give Mission and requirements the disposal plan.</p><h3>Review checklist</h3><ul><li>Every manoeuvre is in the Δv budget, with its solar conditions.</li><li>The propellant includes tankage and margin.</li><li>Cold gas is checked against its Δv limit.</li><li>Electric thrust and burn time come from the power actually available.</li><li>The disposal plan meets the five-year rule.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>For your craft, give the Δv budget, the propellant and system mass for two candidate thrusters, the burn time of each, and why you chose one.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l4_propulsion/" target="_blank" rel="noopener">MIT 16.851, Lecture 4: Propulsion</a>: Thrust, exhaust speed, the rocket equation, jet power, the system mass trade, and why a cold-gas tank's mass ratio does not depend on pressure.</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/in-space_propulsion" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 4</a>: The kinds of thruster small craft fly, their thrust and specific impulse ranges (Table 4-1), and electric propulsion's thrust per power.</li><li><a href="https://en.wikipedia.org/wiki/7075_aluminium_alloy" target="_blank" rel="noopener">Wikipedia, 7075 aluminium alloy</a>: 7075-T6's yield strength and density, for the tank.</li><li><a href="https://en.wikipedia.org/wiki/Nitrogen" target="_blank" rel="noopener">Wikipedia, Nitrogen</a>: Nitrogen's heat capacity, for its exhaust speed.</li></ul></section>
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, on propulsion.</footer>
+</body>
+</html>

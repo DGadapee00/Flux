@@ -75,3 +75,10 @@ margins, cycles, plateaus and the 1 °C/min rate 2.6 and Table 2.6-1. The bracke
 minute at flight level in launch, the test articles' masses, areas and dissipations, and the
 chamber's range are our own round figures. The closed-form radiative transition is our own,
 checked by RK4.
+
+Unit 14: in-space propulsion, after MIT 16.851 Lecture 4 and NASA's small spacecraft report,
+chapter 4. The rocket equation, jet power and the cold-gas tank ratio follow Lecture 4. Specific
+impulses lie within the report's Table 4-1 ranges, and the thrust per power is checked against its
+75 mN/kW. Nitrogen's heat capacity and 7075-T6's strength and density are Wikipedia's. Tankage,
+hardware masses, thrusts and powers are our own round figures, as is the tank's safety factor of
+2. Drag makeup uses Unit 9's model.

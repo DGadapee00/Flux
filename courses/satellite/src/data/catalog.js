@@ -12,7 +12,7 @@ export const EXAMS = [
     chapters: '1',
     date: 'Unit 1',
     labs: ['kepler', 'transfer', 'passes'],
-    coming: ['Rocket equation'],
+    coming: [],
   },
   {
     id: 'u2',
@@ -122,9 +122,20 @@ export const EXAMS = [
     labs: ['levels', 'tvac'],
     coming: [],
   },
+  {
+    id: 'u14',
+    n: 14,
+    title: 'In-space propulsion',
+    chapters: '14',
+    date: 'Unit 14',
+    labs: ['propellant', 'spiral'],
+    coming: [],
+  },
 ];
 
 export const LAB_META = {
+  spiral: { id: 'spiral', exam: 'u14', title: 'Electric spiral' },
+  propellant: { id: 'propellant', exam: 'u14', title: 'Propellant budget' },
   tvac: { id: 'tvac', exam: 'u13', title: 'Thermal vacuum' },
   levels: { id: 'levels', exam: 'u13', title: 'Test levels' },
   mission: { id: 'mission', exam: 'u7', title: 'Mission design' },
@@ -170,6 +181,7 @@ export const CHAPTER_TITLES = {
   11: 'Optical payloads and laser links',
   12: 'Ground systems and operations',
   13: 'Environmental test and verification',
+  14: 'In-space propulsion',
 };
 
 export function examById(id) {

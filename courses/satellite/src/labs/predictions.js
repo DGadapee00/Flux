@@ -4,6 +4,72 @@
  */
 
 export const PREDICTIONS = {
+  spiral: [
+    {
+      id: 'sp-isp',
+      scenario: 'raise',
+      ask: 'On 40 W at 1500 s, the 12 kg craft spirals from 400 km to 550 km in 4.3 days. Keep the power and double the specific impulse to 3000 s. By what factor does the time change?',
+      apply(s) { s.isp = 3000; },
+      watch: [{ id: 't', label: 'the time to climb', get: (c) => c.days }],
+      mode: 'factor',
+      factors: [0.5, 1.41, 2],
+      expect: { t: 2 },
+      why: 'The jet carries ½ F u_e of power, so at 40 W doubling u_e halves the thrust, from 2.7 to 1.4 mN. The same 84 m/s takes twice as long: 8.5 days.',
+    },
+    {
+      id: 'sp-prop',
+      scenario: 'raise',
+      ask: 'The climb uses 68 g of propellant at 1500 s. At 3000 s, by what factor does the propellant change?',
+      apply(s) { s.isp = 3000; },
+      watch: [{ id: 'm', label: 'the propellant used', get: (c) => c.mp }],
+      mode: 'factor',
+      factors: [0.25, 0.5, 1],
+      expect: { m: 0.5 },
+      why: 'For a Δv small against the exhaust speed, the propellant is nearly m Δv/u_e. Twice the exhaust speed, half the propellant: 34 g.',
+    },
+    {
+      id: 'sp-power',
+      scenario: 'raise',
+      ask: 'Give the thruster 80 W instead of 40 W, at the same 1500 s. Does the propellant for the climb grow, shrink or stay the same?',
+      apply(s) { s.power = 80; },
+      watch: [{ id: 'm', label: 'the propellant used', get: (c) => c.mp }],
+      mode: 'dir',
+      expect: { m: 'same' },
+      why: 'The propellant depends only on the Δv and the exhaust speed. Twice the power doubles the thrust to 5.4 mN, so the climb takes 2.1 days instead of 4.3, on the same 68 g.',
+    },
+  ],
+  propellant: [
+    {
+      id: 'pr-cold',
+      scenario: 'mono',
+      ask: 'On hydrazine, the magnetometer craft’s year at 500 km and its disposal take 1.1 kg of propulsion system, and the craft weighs 11.1 kg of its 12. Fly the same mission on nitrogen cold gas. Does it still fit in 12 kg?',
+      apply(s) { s.tech = 'cold'; },
+      watch: [{ id: 'fits', label: 'It fits in 12 kg', get: (c) => c.fits, mode: 'bool' }],
+      mode: 'bool',
+      expect: { fits: false },
+      why: 'Nitrogen’s exhaust speed is 780 m/s against hydrazine’s 2160, so 93 m/s takes 1.6 kg of gas, not 0.47 kg of hydrazine. Its tank weighs 1.6 times the gas. The system grows to 4.6 kg and the craft to 14.6 kg.',
+    },
+    {
+      id: 'pr-reach',
+      scenario: 'low',
+      ask: 'Three years at 400 km on cold gas need 184 m/s and a 13 kg propulsion system. Fly five years at 350 km instead, where the air is thicker. Can any amount of nitrogen do it?',
+      apply(s) { s.hkm = 350; s.years = 5; },
+      watch: [{ id: 'reach', label: 'Some amount of nitrogen does it', get: (c) => c.reachable, mode: 'bool' }],
+      mode: 'bool',
+      expect: { reach: false },
+      why: 'The mission now needs over 500 m/s. A cold-gas tank weighs 1.6 times the gas it holds, at any pressure, so nitrogen can never give more than 374 m/s, however much is carried.',
+    },
+    {
+      id: 'pr-electric',
+      scenario: 'low',
+      ask: 'Three years at 400 km on cold gas burn for about 10 hours in all. Switch to the 40 W ion thruster, at 1500 s. Does the total burning time grow or shrink?',
+      apply(s) { s.tech = 'electric'; },
+      watch: [{ id: 'burn', label: 'the total burning time', get: (c) => c.burnH }],
+      mode: 'dir',
+      expect: { burn: 'bigger' },
+      why: 'The propellant falls from 4.8 kg to 0.14 kg, but 40 W at 1500 s gives only 2.7 mN. The thruster burns for 208 hours, nearly nine days, in place of 10 hours at 0.1 N.',
+    },
+  ],
   tvac: [
     {
       id: 'tv-mass',

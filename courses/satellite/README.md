@@ -12,7 +12,8 @@ verification, the life cycle's reviews, and a mass budget with its margin. Unit 
 environment and radiation: drag and the solar cycle, total dose with its margin, and memory upsets
 with a correcting code and scrubbing. Unit 10 covers avionics, flight software scheduling, fault
 management and the data budget. Unit 11 covers imaging from orbit and laser downlinks. Unit 12 covers ground stations, networks and operations. Unit 13 covers environmental testing after
-NASA's General Environmental Verification Standard: vibration test levels and thermal vacuum cycling. `COVERAGE.md` maps the course against its references.
+NASA's General Environmental Verification Standard: vibration test levels and thermal vacuum cycling. Unit 14 covers in-space propulsion: the
+rocket equation, the Δv budget, tankage and the cold-gas limit, and electric orbit raising. `COVERAGE.md` maps the course against its references.
 
 Run `npm run dev -w @flux/satellite` from the repo root. The course opens at `satellite/`.
 The former guide and decision controls are archived under
