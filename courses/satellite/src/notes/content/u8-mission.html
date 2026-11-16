@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mission and requirements</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 8 · after the NASA Systems Engineering Handbook</div>
+  <h1>Mission and requirements</h1>
+  <p class="lede">How a mission becomes a list of requirements that can each be checked, how a budget keeps margin against a limit, and the reviews a design passes on its way to flight.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · From mission to requirements</h3>
+    <a href="#mission"><span>1</span>Mission and concept of operations</a>
+    <a href="#requirements"><span>2</span>Writing requirements</a>
+    <a href="#verification"><span>3</span>Verification</a>
+    <h3>Part II · Budgets and reviews</h3>
+    <a href="#margin"><span>4</span>Mass budget and margin</a>
+    <a href="#reviews"><span>5</span>Life cycle and reviews</a>
+    <h3>Reference</h3>
+    <a href="#sheet"><span>6</span>Formula sheet</a>
+    <a href="#build-it"><span>7</span>Build it</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>From mission to requirements</h2>
+</div>
+
+<section class="topic" id="mission">
+<h2><span class="n">1</span>Mission and concept of operations</h2>
+<p>A mission starts as one sentence: what the craft is for. Everything after it must trace back to that sentence.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The <b>mission statement</b> says why the mission exists. The <b>objectives</b> say what it must achieve, each one measurable. The <b>concept of operations</b> says how the craft, the ground and the people achieve them, from launch to disposal.</p>
+</div>
+<p>A concept of operations walks through the mission in phases: launch and deployment, checkout, normal operations, the off-normal cases, and the end of the mission. For each phase it says what the craft does, what the ground does, and what data moves between them. It is where the first numbers appear: the orbit, how often the craft sees a ground station, how much data it must return.</p>
+<div class="box ex"><span class="tag">Worked example · a magnetometer craft</span>
+<p>Statement: map Earth's magnetic field along a low orbit for a year. Objectives: measure the field to 10 nT at 500 km; cover every latitude the orbit reaches; return each day's data within a day.</p>
+<p>Concept of operations: a 6U craft at 500 km in a near-polar orbit. The magnetometer sits on a boom away from the bus's currents. The craft records all orbit and downlinks in passes over one ground station. After a year it lowers its orbit so drag brings it down.</p>
+<p>Each objective now asks for numbers: the 10 nT sets the sensor and the boom; a day's data and the passes set the radio; a polar orbit sets the launch.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Writing objectives that cannot be measured, such as "study the magnetic field". Nobody can say at the end whether it was met.</p>
+</div>
+</section>
+
+<section class="topic" id="requirements">
+<h2><span class="n">2</span>Writing requirements</h2>
+<p>A requirement is one statement the design must meet. Each one has an owner, a parent it traces to, and a way to show it is met.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>A good requirement says <b>shall</b>, states one thing, gives a number with its unit and tolerance, and can be verified. Words such as <i>adequate</i>, <i>sufficient</i>, <i>light-weight</i>, <i>robust</i>, <i>maximize</i> and <i>minimize</i> cannot be verified, and the NASA handbook's checklist rules them out.</p>
+</div>
+<p>Requirements flow down. A mission objective becomes system requirements, and each system requirement becomes requirements on the subsystems that carry it. Every child traces to a parent. A requirement with no parent is gold plating; an objective with no children will not be met.</p>
+<div class="box ex"><span class="tag">Worked example · rewriting a requirement</span>
+<p>Before: "The craft shall be light-weight and have adequate power."</p>
+<p>That holds two ideas and two words no one can verify. After:</p>
+<ul><li>SYS-12: The flight system shall have a mass of no more than 12.0 kg at launch.</li><li>SYS-13: The power system shall supply 20 W on orbit average at the end of the mission.</li></ul>
+<p>Each now has one number, one unit and a clear check: weighing for SYS-12, an analysis of the end-of-life array and battery for SYS-13.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Stating a design as a requirement, "the craft shall use a 40 Wh battery", when the need is the energy. It closes off better designs before anyone looks for them.</p>
+</div>
+</section>
+
+<section class="topic" id="verification">
+<h2><span class="n">3</span>Verification</h2>
+<p>Verification shows that the built system meets each requirement. Every "shall" gets a method before design starts.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>There are four methods. <b>Test</b> measures the item under controlled conditions. <b>Demonstration</b> operates it and watches that it works, without measuring performance. <b>Inspection</b> looks at it, or at its drawings and records, for a physical feature. <b>Analysis</b> uses models and calculation where a test cannot reach.</p>
+</div>
+<p>The <b>verification matrix</b> lists every "shall" with its identifier, its source, the method, the level at which it is verified and the result. It grows from the first requirement review to the last test.</p>
+<div class="box ex"><span class="tag">Worked example · three rows of a matrix</span>
+<ul><li>SYS-12, mass no more than 12.0 kg: test, weighing the assembled craft on a calibrated scale.</li><li>SYS-13, 20 W orbit average at end of life: analysis, the power budget with array ageing and battery fade.</li><li>HAR-2, every connector labelled with its harness number: inspection, looking at each one.</li></ul>
+<p>The deployment of the boom would be a demonstration: release it and watch it lock.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Choosing analysis for everything because it is cheap. Analysis cannot see what the model leaves out, such as a mount that is softer than drawn. Test what can be tested.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Budgets and reviews</h2>
+</div>
+
+<section class="topic" id="margin">
+<h2><span class="n">4</span>Mass budget and margin</h2>
+<p>A budget lists every item's mass and adds them up. Early in a project most of those numbers are estimates, and estimates grow.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Item \(i\) has a basic mass \(b_i\), the best estimate today. A budget carries a growth allowance \(a\) on top, predicts \(P = B(1 + a)\) with \(B = \sum b_i\), and keeps a margin under the allocation \(L\):</p>
+\[
+P = B\,(1 + a), \qquad \text{margin} = L - P.
+\]
+<p>The finished item weighs \(b_i(1 + g_i)\), where the growth \(g_i\) is uncertain. Model it as a Beta distribution with mean \(\mu_i\), larger for a less mature design. For independent items the finished mass has</p>
+\[
+\bar M = \sum b_i (1 + \mu_i), \qquad \sigma_M^2 = \sum b_i^2 \sigma_i^2 .
+\]
+<p>The chance that \(M > L\) comes from the distribution of the sum. The lab finds it by convolving the items on a grid; a normal curve with mean \(\bar M\) and spread \(\sigma_M\) estimates it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a catalog bus and a new payload</span>
+<p>A 6U craft has a 12 kg allocation, 2 kg per unit. Its bus parts total 6.5 kg and come from catalogs; its 3 kg payload is a new design. The basic mass is 9.5 kg. With a flat 20% allowance the budget predicts 11.4 kg and shows 0.6 kg of margin, 5%.</p>
+<p>With mean growths of 5% for catalog parts and 30% for a new design, the craft is expected to weigh</p>
+\[
+\bar M = 6.5(1.05) + 3(1.30) = 10.73\ \text{kg},
+\]
+<p>give or take 0.24 kg. The 20% allowance more than covers the 12.9% growth expected.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · every part new</span>
+<p>Make every part a new design. The budget does not change: 11.4 kg, 0.6 kg of margin. The craft does: \(\bar M = 9.5(1.30) = 12.35\) kg, and it comes in over 12 kg 86% of the time.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Raising the allowance to make the problem go away. The margin shrinks on paper, but the craft weighs what its parts grow to. The fix is less mass, or an allowance set item by item from each part's maturity.</p>
+</div>
+</section>
+
+<section class="topic" id="reviews">
+<h2><span class="n">5</span>Life cycle and reviews</h2>
+<p>A NASA project moves through phases, and a review closes each one. A review asks whether the design is ready for the next phase.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Pre-Phase A, concept studies, ends at the Mission Concept Review. Phase A, concept and technology development, sets the requirements at the System Requirements Review and the system's design at the Mission or System Definition Review. Phase B ends at the Preliminary Design Review, Phase C at the Critical Design Review and the System Integration Review. Phase D assembles, tests and launches. Phase E operates. Phase F closes the mission out.</p>
+</div>
+<p>Each review looks at the budgets. Mass and power margins are the two the handbook asks every project with hardware to track. A margin that falls faster than the design matures is a warning before any review fails.</p>
+<div class="box ex"><span class="tag">Worked example · margins at each review</span>
+<p>The magnetometer craft at its requirements review: most parts estimated, 9.5 kg basic, so it holds a large allowance. By the preliminary design review its bus parts are chosen from catalogs and their growth is small. By the critical design review most parts are drawn and some are weighed. At the integration review the craft is on a scale, and the allowance is close to zero.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Treating a review as a presentation to get through. Its job is to find the problems while they are cheap: an open requirement, a budget over its limit, a test with no plan.</p>
+</div>
+</section>
+
+<section class="topic" id="sheet">
+<h2><span class="n">6</span>Formula sheet</h2>
+\[
+B = \sum b_i, \qquad P = B\,(1 + a), \qquad \text{margin} = L - P .
+\]
+\[
+\bar M = \sum b_i (1 + \mu_i), \qquad \sigma_M^2 = \sum b_i^2 \sigma_i^2, \qquad a_\text{needed} = \frac{\bar M}{B} - 1 .
+\]
+\[
+\mu = \frac{\alpha}{\alpha + \beta}, \qquad \sigma^2 = \frac{\alpha\beta}{(\alpha + \beta)^2(\alpha + \beta + 1)} .
+\]
+</section>
+
+<section class="topic" id="build-it"><h2><span class="n">7</span>Build it</h2><p>Turn the mission into requirements the team can design to and check.</p><h3>Method</h3><ol><li>Write the mission statement and three to five measurable objectives.</li><li>Walk the concept of operations phase by phase: what the craft, the ground and the data do.</li><li>Write system requirements that trace to the objectives. One "shall", one number, one unit each.</li><li>Give every requirement a verification method and a level.</li><li>Start the mass and power budgets, with each item's maturity and an allowance to match.</li><li>Name the review each budget and requirement must be ready for.</li></ol><h3>What to produce</h3><p>A mission statement and objectives, a concept of operations, a requirements list with a verification matrix, and the first mass and power budgets.</p><h3>Handoff to other subsystems</h3><p>Give each subsystem its requirements and its mass and power allocations. Take back each subsystem's estimates and their maturity.</p><h3>Review checklist</h3><ul><li>Every objective is measurable.</li><li>Every requirement says shall, holds one idea and has a number with a unit.</li><li>Every requirement traces to a parent and has a verification method.</li><li>No requirement uses an unverifiable word.</li><li>Each budget item has a maturity, and the allowance follows it.</li><li>The margin against each allocation is stated.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>Write the mission and objectives, then the requirements that carry them. Fill in the verification matrix, and start the mass budget with a maturity for every item.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://www.nasa.gov/reference/systems-engineering-handbook/" target="_blank" rel="noopener">NASA Systems Engineering Handbook, NASA/SP-2016-6105 Rev 2</a>: The life cycle and its reviews (3.0), requirements (4.2), verification (5.3), the requirement checklist (Appendix C) and the verification matrix (Appendix D).</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/platforms" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 2</a>: The systems engineering questions a small mission settles first, with margins on mass, power, data and pointing.</li><li><a href="https://ntrs.nasa.gov/citations/20250008066" target="_blank" rel="noopener">NASA/TM-20250008066, uncertainty in mass estimates</a>: Growth modelled as a Beta distribution whose mean follows maturity, the method the lab uses.</li><li><a href="https://en.wikipedia.org/wiki/CubeSat" target="_blank" rel="noopener">Wikipedia, CubeSat</a>: The mass limit of 2 kg per unit behind the 12 kg allocation.</li></ul></section>
+</main>
+<footer>Our own notes, written for Flux. Read alongside the NASA Systems Engineering Handbook.</footer>
+</body>
+</html>

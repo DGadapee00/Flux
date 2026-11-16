@@ -1,5 +1,109 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Payload and integration</title></head><body><header class="top"><div class="eyebrow">Build a satellite · Unit 7</div><h1>Payload and integration</h1><p class="lede">Close the mission through a sensor payload and a consistent set of subsystem interfaces. This unit has notes; labs are still to build.</p><div class="legend"><span>Worked examples and build checklists</span></div><nav class="toc"><a href="#payload">1 Sensor payload</a><a href="#integration">2 Integration</a></nav></header><main><div class="part">Closing the build</div>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Payload and integration</title></head><body><header class="top"><div class="eyebrow">Build a satellite · Unit 7</div><h1>Payload and integration</h1><p class="lede">Close the mission through a sensor payload and a consistent set of subsystem interfaces. The mission design lab puts every budget on one page. The payload lab is still to build.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents"><a href="#payload">1 Sensor payload</a><a href="#integration">2 Integration</a><a href="#loop">3 The design loop</a><a href="#budgets">4 Every budget at once</a><a href="#trades">5 One change, every subsystem</a><a href="#review">6 What a design review holds</a><a href="#sheet">7 Formula sheet</a></nav></header><main><div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Closing the build</h2>
+</div>
 <section class="topic" id="payload"><h2><span class="n">1</span>Sensor payload</h2><p>Turn a physical signal into a reading with stated uncertainty.</p><h3>Method</h3><ol><li>Say what you will measure and over what range.</li><li>Choose a sensor and write how its output follows the quantity: sensitivity and offset.</li><li>Design the conditioning: divider, amplifier or filter, so the signal fills the converter’s range.</li><li>Find the resolution: the smallest change one converter step stands for.</li><li>Plan calibration: known inputs, the fit, and the uncertainty left.</li><li>Count the data: bits per sample times samples per orbit.</li></ol><h3>What to produce</h3><p>A sensor model, calibration estimate and data budget.</p><h3>Handoff to other subsystems</h3><p>Send data volume to Communications and operating limits to Thermal. Keep the sample schedule within the power budget.</p><h3>Review checklist</h3><ul><li>Range, sensitivity and resolution are stated.</li><li>Loading by the next stage is checked.</li><li>Calibration and its uncertainty are planned.</li><li>Sample rate, power and data volume are stated.</li><li>The space environment the sensor must survive is considered.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>Choose a sensor and its measurement range. Map the signal to a voltage or digital count, check loading and resolution, and record calibration assumptions, sample rate, power and data volume.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l5_space_environ_done2/" target="_blank" rel="noopener">MIT 16.851, Lecture 5: The environment of space</a>: Radiation and thermal conditions a sensor has to survive.</li></ul></section>
 
 <section class="topic" id="integration"><h2><span class="n">2</span>Integration</h2><p>Make the seven subsystem budgets agree on one mission.</p><h3>Method</h3><ol><li>Write one mission case: orbit, payload and how long it runs.</li><li>Bring the seven budgets together: mass, power, temperature, pointing and data.</li><li>Find where they disagree and settle each disagreement.</li><li>Change one thing, such as transmitter duty cycle, and trace it through Power, Thermal and the data returned.</li><li>Name the margin that limits the mission.</li></ol><h3>What to produce</h3><p>One shared mission report with linked subsystem evidence and a tradeoff study.</p><h3>Final handoff</h3><p>Hand over a consistent set of budgets, interface definitions, assumptions, unresolved risks and verification evidence for the complete system.</p><h3>Review checklist</h3><ul><li>One mission case is stated.</li><li>All seven budgets use the same numbers.</li><li>Each disagreement and how it was settled is recorded.</li><li>A trade study traces one change through the budgets.</li><li>The limiting margin is named.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>Record one mission case. Reconcile mass, energy, temperature, pointing and data budgets. Change transmitter duty cycle, then trace the effect through Power, Thermal and the returned data. Document the margin that limits the mission.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/pages/lecture-notes/" target="_blank" rel="noopener">MIT 16.851 Satellite Engineering, lecture notes</a>: One lecture per subsystem, the order this project follows.</li></ul></section>
-</main></body></html>
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>The whole craft</h2>
+</div>
+
+<section class="topic" id="loop">
+<h2><span class="n">3</span>The design loop</h2>
+<p>A satellite is not designed one subsystem at a time. A first guess at the whole craft is checked against every budget, and the guess changes until all of them close.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>The loop has three products that must agree: an architecture, a concept of operations, and the requirements derived from them. Each pass asks three questions. Will it work? Can it be built within the money and time? Does it do what the mission needs? A no to any of them changes the design, or the mission's expectations, and the loop runs again.</p>
+<p>Each pass goes deeper. Early passes compare whole concepts. Later passes refine one concept until its requirements can be handed down to the subsystems. A design is deep enough when analysis can show it meets its requirements.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · three passes on the magnetometer craft</span>
+<p>Pass one: a 6U craft at 500 km, a UHF radio and one station. The data budget fails by a factor of 59. Pass two: an S-band radio. Every budget closes, but the orbit's life is the margin it spends first. Pass three asks whether 500 km should drop to 480 km to buy life margin, and what that costs in contact time.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Closing each subsystem's budget alone and calling the craft done. Each budget was closed with the others' numbers from an earlier pass. Run them together on one set of numbers.</p>
+</div>
+</section>
+
+<section class="topic" id="budgets">
+<h2><span class="n">4</span>Every budget at once</h2>
+<p>The mission design lab puts eight budgets on one page. Each says what share of what it has the design uses. A share above 1 fails. The largest share names the margin the design spends first.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Mass</b>: the predicted mass, basic plus expected growth (Unit 8), of the 12 kg allowed.</li><li><b>Power</b>: the load's energy each orbit, eclipse share through the battery's losses, of what the array gives (Unit 5).</li><li><b>Battery</b>: the deepest discharge, of the 30% allowed.</li><li><b>Temperature</b>: how far the hottest and coldest points of the orbit lie from the middle of the 0 to 50 °C range, as a share of half the range (Unit 6).</li><li><b>Pointing</b>: bias plus three sigma, of the payload's cone (Unit 3).</li><li><b>Link</b>: the \(E_b/N_0\) needed, of what arrives at the edge of view (Unit 2).</li><li><b>Data</b>: what the craft records a day, of what its contacts can send (Units 10 and 12).</li><li><b>Orbital life</b>: the larger of the mission's year over the life, and the life over the five-year rule (Unit 9).</li></ul>
+</div>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The budgets share their numbers. The average load is</p>
+\[
+\bar P = P_\text{bus} + d\,P_\text{payload} + s\,P_\text{radio},
+\]
+<p>with \(d\) the payload's duty and \(s\) the share of the day a station sees the craft. The power budget, the battery and the temperature all take \(\bar P\). The share \(s\) is the ground track's latitude density integrated over the union of the stations' circles of view, and it sets both the radio's load and the data the contacts carry. The predicted mass sets the ballistic coefficient \(B = C_D A/m\), and so the orbit's life.</p>
+<p>The lab checks the averages by flying the craft for twenty days in ten-second steps: sunlight and shadow, the Earth turning under the orbit, the battery and the data store stepped. The eclipse share and the day's energy must agree within 1%. The contact share is flown from 24 evenly spaced turns of the Earth, so that every longitude is sampled. The flight also gives what averages cannot: the deepest discharge and the fullest store.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the magnetometer craft</span>
+<p>The craft from Unit 8: a catalog bus, a new 3 kg magnetometer recording 20 kbit/s all orbit, a 1 Mbit/s S-band radio, a 20 W sun-tracking array, a 30 Wh battery, black paint, and one station at Utqiagvik. At 500 km in a sun-synchronous orbit:</p>
+<ul><li>Mass 10.2 of 12 kg: 0.85.</li><li>Power 17.0 of 19.6 Wh an orbit: 0.87.</li><li>Battery 23% of 30%: 0.76.</li><li>Temperature 12 to 29 °C: 0.54.</li><li>Link 12.7 dB above what it needs: 0.05.</li><li>Data 1.9 of 3.4 Gbit a day: 0.57.</li><li>Orbital life 4.4 years: 0.88.</li></ul>
+<p>Every budget closes, and orbital life limits. The craft is light enough to fall within five years, but only just.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Sizing the battery from the average load. Move the one station to Mojave and the average eclipse discharge is 21%, but the twenty days find 25%: some contacts fall in eclipse, and the radio's 10 W comes from the battery.</p>
+</div>
+</section>
+
+<section class="topic" id="trades">
+<h2><span class="n">5</span>One change, every subsystem</h2>
+<p>A trade study changes one choice and follows it through every budget. The budget that fails is often not the one the change was made for.</p>
+<div class="box ex"><span class="tag">Worked example · a slower radio</span>
+<p>Swap the S-band radio for a 9.6 kbit/s UHF radio. It is 0.2 kg lighter and draws 4 W, not 10. Mass falls to 0.83 and power to 0.84. The 56 minutes of contact now carry 32 Mbit a day against 1.9 Gbit recorded: the data budget uses 59 times what it has.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a higher orbit</span>
+<p>Raise the magnetometer craft to 550 km. Its station sees it 62 minutes a day, and the data budget falls from 0.57 to 0.51. But the thinner air lets it fly 10.4 years, twice the five-year rule.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a camera instead</span>
+<p>Fly a 2.5 kg camera that images 5% of each orbit at 2 Mbit/s, with a star tracker and the 4 Mbit/s radio. The craft records 8.8 Gbit a day and can send 13.5: 0.66. Pointing is now a budget: 0.10° of a 0.2° cone, 0.50. The craft is nearly a kilogram lighter, so it falls in 4.0 years, and life still limits, at 0.80. With a fine Sun sensor in place of the star tracker, bias plus three sigma is 0.35°, and pointing fails at 1.73.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Making a change for one budget and checking only that budget. The higher orbit helps the data budget and breaks the disposal rule. Rerun every budget after every change.</p>
+</div>
+</section>
+
+<section class="topic" id="review">
+<h2><span class="n">6</span>What a design review holds</h2>
+<p>A design review asks whether the design is ready for the next phase. The budgets with their margins are part of the answer, never all of it.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>The concept of operations</b>: what the craft does through its mission, and when.</li><li><b>The requirements</b>, each with how it will be verified (Unit 8).</li><li><b>The budgets</b>, each with its margin and the maturity behind its numbers. Margins are tracked from review to review, so a margin that shrinks shows up early.</li><li><b>The interfaces</b>: what each subsystem hands the others.</li><li><b>The risks</b>, and what is being done about each.</li></ul>
+<p>The preliminary design review ends the phase in which requirements become designs. Problems it finds are settled so that final design starts from unambiguous design-to numbers. After it, changes should refine the design, not overturn it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the margin table at review</span>
+<p>The magnetometer craft's table lists eight budgets. Orbital life uses 0.88 and is flagged: a craft heavier than predicted lasts longer, and at 12 kg it would fly 5.2 years. The review asks for a deorbit plan, or a lower orbit, before final design.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Showing a margin without its basis. A 13% power margin on estimated loads is weaker than the same margin on measured ones. State what each number rests on.</p>
+</div>
+</section>
+
+<section class="topic" id="sheet">
+<h2><span class="n">7</span>Formula sheet</h2>
+\[
+\text{use} = \frac{\text{need}}{\text{what it has}} \le 1
+\]
+\[
+\bar P = P_\text{bus} + d\,P_\text{payload} + s\,P_\text{radio}
+\]
+\[
+E_\text{load} = \bar P\left(T_s + \frac{T_e}{\eta_c\,\eta_d}\right), \qquad E_\text{array} = P_\text{array}\,T_s
+\]
+\[
+\text{data a day} = 86\,400\,(d\,g + g_\text{house})
+\]
+<h3>References</h3><ul><li><a href="https://www.nasa.gov/reference/4-0-system-design-processes/" target="_blank" rel="noopener">NASA Systems Engineering Handbook, 4.0 and 4.4: System design processes</a>: The iterative design loop of architecture, concept of operations and derived requirements, and successive refinement.</li><li><a href="https://www.nasa.gov/reference/6-7-technical-assessment/" target="_blank" rel="noopener">NASA Systems Engineering Handbook, 6.7: Technical assessment</a>: Technical measures tracked through the life cycle's reviews.</li><li><a href="https://www.nasa.gov/reference/3-0-nasa-program-project-life-cycle/" target="_blank" rel="noopener">NASA Systems Engineering Handbook, 3.0: Program and project life cycle</a>: Phase B and the preliminary design review.</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/platforms" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 2</a>: The systems engineering questions a small mission settles first, with margins on mass, power, data and pointing.</li><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l23thermalcontro/" target="_blank" rel="noopener">MIT 16.851, Lecture 23: Spacecraft thermal control systems</a>: Typical design temperatures; the lab's 0 to 50 °C is its operating range for digital electronics.</li></ul>
+</section>
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering and the NASA Systems Engineering Handbook.</footer>
+</body></html>

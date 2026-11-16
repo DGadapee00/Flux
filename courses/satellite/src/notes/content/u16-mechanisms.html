@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mechanisms and deployables</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 16 · after NASA-STD-5017B and NASA's small spacecraft report</div>
+  <h1>Mechanisms and deployables</h1>
+  <p class="lede">The parts of a satellite that move: releases, hinges, booms and drives. Each one works once or a few times, far from any repair, so each needs margin it can show.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · What moves</h3>
+    <a href="#kinds"><span>1</span>Kinds of mechanism</a>
+    <h3>Part II · Designing for margin</h3>
+    <a href="#margin"><span>2</span>Torque margin</a>
+    <a href="#motion"><span>3</span>Deployment and the latch</a>
+    <a href="#reliability"><span>4</span>Making it work once</a>
+    <h3>Reference</h3>
+    <a href="#sheet"><span>5</span>Formula sheet</a>
+    <a href="#build-it"><span>6</span>Build it</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>What moves</h2>
+</div>
+
+<section class="topic" id="kinds">
+<h2><span class="n">1</span>Kinds of mechanism</h2>
+<p>A mechanism changes the craft's shape or keeps something moving. It works through every phase: leaving the dispenser, unfolding, pointing, and at the end deorbiting.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Separation and release</b>: hold a part stowed for launch and let it go on command. Clamp bands, release nuts, pin pullers, frangible bolts, burn wires.</li><li><b>Deployables</b>: fold small for launch and open in orbit. Solar panels, antennas and booms, on spring hinges, sliding sleeves or rolled composite.</li><li><b>Motorized</b>: keep moving through the mission. Solar array drives, antenna and instrument pointing, gimbals.</li><li><b>Actuators</b> drive them: springs, motors, shape memory alloy, paraffin, and heated wires that cut a restraint.</li><li><b>Passive</b> mechanisms use stored spring energy and draw no power. <b>Active</b> ones are motor driven.</li></ul>
+<p>Mechanisms have caused over 10% of reported small satellite failures. Many are single points of failure: a panel that does not open can end the mission.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the magnetometer boom</span>
+<p>Unit 8's magnetometer sits on a boom away from the bus's currents. A burn wire holds the boom against the side for launch. On command the wire is heated and cuts a restraining cord, a torsion spring swings the boom out, and a latch locks it straight. One release, one hinge, one latch: three things that must each work once.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding a deployable for a small gain. Each mechanism adds a way to fail. Ask whether a fixed design would do.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Designing for margin</h2>
+</div>
+
+<section class="topic" id="margin">
+<h2><span class="n">2</span>Torque margin</h2>
+<p>A mechanism must drive past everything that resists it, with torque to spare for what was not foreseen. NASA-STD-5017B sets how much.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The standard's torque margin is</p>
+\[
+\text{TM} = \frac{T_\text{avail}}{D} - 1 \ge 0,
+\]
+\[
+D = FS_v \sum T_v + FS_f \sum T_f + FS_a T_a,
+\]
+<p>with \(T_\text{avail}\) the least driving torque, \(D\) the factored resistance, \(T_v\) resisting torques that vary with temperature and life (friction, harness), \(T_f\) fixed ones, and \(T_a\) the torque to give a required acceleration. The factors fall as the evidence improves:</p>
+<ul><li>Theory or analysis: \(FS_v = 3.0\), \(FS_f = 1.5\), \(FS_a = 1.25\).</li><li>Qualification test: 2.5, 1.35, 1.15.</li><li>Acceptance test of the flight unit at the environmental extremes: 2.0, 1.25, 1.1.</li></ul>
+<p>The margin is taken at the worst case that can actually happen: least drive and most resistance together, at the same point in the travel. For a torsion spring that is the end of travel, where it is wound least.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a CubeSat panel</span>
+<p>A spring of 10 mN·m per radian, wound 90° past deployed, gives 15.7 mN·m at the end of travel. Friction and harness resist with 3 mN·m. By analysis the margin is \(15.7/(3.0 \times 3) - 1 = 0.75\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · less preload</span>
+<p>Wind the spring only 30° past deployed. It gives 5.2 mN·m at the end, still more than the 3 mN·m of resistance, and the panel latches in 0.91 s. But the margin is −0.42: it fails the requirement. The factor covers friction that rises in the cold and a harness that stiffens over time.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · after testing</span>
+<p>Measure friction and harness in an acceptance test at the environmental extremes. The factor falls to 2.0, and the 90° design's margin rises to 1.62 with no change to the hardware.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Taking a deployment on the bench as proof of margin. It shows the panel opens at room temperature, today. The margin covers the cold, the vacuum and the years in storage.</p>
+</div>
+</section>
+
+<section class="topic" id="motion">
+<h2><span class="n">3</span>Deployment and the latch</h2>
+<p>Torque that is not lost to friction becomes speed. The latch must stop the panel without breaking it or bouncing it back.</p>
+<div class="box why"><span class="tag">Derivation</span>
+<p>With inertia \(I\) and a constant resisting torque \(T_r\), the panel obeys \(I\ddot\theta = k(\theta_0 - \theta) - T_r\): simple harmonic about \(\theta_c = \theta_0 - T_r/k\) at \(\omega_n = \sqrt{k/I}\). From rest,</p>
+\[
+\theta(t) = \theta_c\,(1 - \cos\omega_n t),
+\]
+<p>so it reaches \(\theta_d\) at \(t = \arccos(1 - \theta_d/\theta_c)/\omega_n\). The energy at the latch is the spring's work less the friction's:</p>
+\[
+E = k\left(\theta_0 \theta_d - \tfrac12 \theta_d^2\right) - T_r \theta_d.
+\]
+<p>The lab checks the closed form by stepping the motion with RK4, friction always opposing it.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the panel’s latch</span>
+<p>A panel of 4 g·m² about its hinge, on the 10 mN·m per radian spring, swings 90° in 0.70 s and arrives at 230° a second. The latch absorbs 32 mJ.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · twice the spring</span>
+<p>Double the stiffness to buy margin, and the margin rises to 2.49. But the panel arrives in 0.48 s with 69 mJ, a little more than twice the energy, because friction takes the same amount as before.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Adding spring until the margin is generous. The latch, the hinge and the panel must take the harder blow. Margin and shock trade against each other; dampers can help.</p>
+</div>
+</section>
+
+<section class="topic" id="reliability">
+<h2><span class="n">4</span>Making it work once</h2>
+<p>A deployment cannot be retried by hand. Reliability comes from simple design, margin, careful parts and testing as it will fly.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Verify margin by test</b>, not analysis alone, at the worst-case conditions, through the mechanism's whole life.</li><li><b>Redundancy</b>: two springs in parallel, two release heaters. When a spare spring is tested by leaving one out, NASA-STD-5017B lets the factors be 1.0 for that case.</li><li><b>Materials</b>: clean metal surfaces in vacuum can stick or cold weld; choose lubricants and coatings for vacuum, and avoid bare similar metals in contact.</li><li><b>Life</b>: know how many cycles the mechanism must make, and test beyond them.</li><li><b>Test as you fly</b>: offload gravity in ground deployments, and deploy in the cold and the vacuum if you can.</li></ul>
+</div>
+<div class="box ex"><span class="tag">Worked example · the boom's release</span>
+<p>The burn wire has two heaters on separate circuits, and either alone cuts the cord. The hinge has two springs, each sized for positive margin alone. The team deploys the boom ten times on a gravity offload rig, including twice in thermal vacuum at the cold plateau.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Deploying only at room temperature and pressure. Friction and lubricants change in the cold and in vacuum, which is where the mechanism has to work.</p>
+</div>
+</section>
+
+<section class="topic" id="sheet">
+<h2><span class="n">5</span>Formula sheet</h2>
+\[
+\text{TM} = \frac{T_\text{avail}}{D} - 1
+\]
+\[
+D = FS_v \sum T_v + FS_f \sum T_f + FS_a T_a
+\]
+\[
+\theta(t) = \theta_c (1 - \cos\omega_n t), \qquad \theta_c = \theta_0 - \frac{T_r}{k}
+\]
+\[
+\omega_n = \sqrt{k/I}
+\]
+\[
+E = k\left(\theta_0 \theta_d - \tfrac12 \theta_d^2\right) - T_r \theta_d
+\]
+</section>
+
+<section class="topic" id="build-it"><h2><span class="n">6</span>Build it</h2><p>Design a deployable that opens every time and survives its latch.</p><h3>Method</h3><ol><li>List every mechanism and what fails if it does not work.</li><li>Choose the release, the drive and the latch.</li><li>Find the worst-case resisting torques across temperature, vacuum and life.</li><li>Size the drive for a positive torque margin with the factors for your evidence.</li><li>Find the deployment time and the latch energy, and design the latch for it.</li><li>Plan the tests: margin, deployment in the cold, life cycles.</li></ol><h3>What to produce</h3><p>A mechanism list with failure effects, a torque margin table, latch loads and a test plan.</p><h3>Handoff to other subsystems</h3><p>Give Structure the latch loads and stowed loads. Give Power the release current and its timing. Give Attitude control the deployment's disturbance. Give Thermal the cold limit the deployment must work at.</p><h3>Review checklist</h3><ul><li>Every mechanism's failure effect is stated.</li><li>Torque margin is positive at the worst case with the right factors.</li><li>The latch is designed for the arrival energy.</li><li>Releases are redundant where a failure ends the mission.</li><li>Margin and deployment are verified by test in the cold.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>For your deployable, give the torque margin at the end of travel, the evidence behind its factor, the latch energy, and how a failure of the release is covered.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://standards.nasa.gov/standard/NASA/NASA-STD-5017" target="_blank" rel="noopener">NASA-STD-5017B, Design and Development Requirements for Mechanisms</a>: The torque margin equation (4-1), its safety factors (Table 1), worst-case conditions and verification by test.</li><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 6.3</a>: Kinds of mechanism and actuator, deployable structures, and reliability, including mechanisms' share of small satellite failures.</li><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l14_structures/" target="_blank" rel="noopener">MIT 16.851, Lecture 14: Spacecraft structures</a>: Deployable booms and membranes, and keeping their geometry once deployed.</li></ul></section>
+</main>
+<footer>Our own notes, written for Flux. Read alongside NASA-STD-5017B and NASA's small spacecraft report.</footer>
+</body>
+</html>

@@ -18,7 +18,7 @@ function rows(slug) {
 }
 
 test('the Flux-units column of an OCW index is what unit-maps.json says', () => {
-  for (const slug of ['8-01sc', '2-003sc']) {
+  for (const slug of ['8-01sc', '2-003sc', '16-851']) {
     const list = rows(slug);
     assert.ok(list.length > 10, slug);
     for (const r of list) assert.equal(r.units, fluxUnit(slug, { title: r.title, unit: '' }, r.n - 1), `${slug} #${r.n} ${r.title}`);

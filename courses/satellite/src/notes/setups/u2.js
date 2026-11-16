@@ -13,4 +13,8 @@ export default {
       read: (c) => ({ 'E_b/N_0 (dB)': [c.ebn0DB, 6.6], 'bits wrong': [c.ber, 1.24e-3] }),
     },
   ],
+  tracking: [
+    { tag: 'UHF at 500 km', lab: 'doppler', scenario: 'uhf', read: (c) => ({ 'pass (min)': [c.duration / 60, 7.38], 'range at edge (km)': [c.rhoEdge, 1695], 'closing (km/s)': [c.rateEdge, 6.96], 'shift (kHz)': [c.shift / 1000, 10.1], 'slope (Hz/s)': [c.slopeSeen, 157], 'light, edge (ms)': [c.lightEdge * 1000, 11.3] }) },
+    { tag: 'S-band, two-way coherent', lab: 'doppler', scenario: 'coherent', read: (c) => ({ 'shift (kHz)': [c.shift / 1000, 102] }) },
+  ],
 };

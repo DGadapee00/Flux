@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cost</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 15 · after MIT 16.851 Satellite Engineering</div>
+  <h1>Cost</h1>
+  <p class="lede">What a satellite costs, how sure the estimate is, and why building many is cheaper per craft than building one.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Estimating</h3>
+    <a href="#estimate"><span>1</span>How cost is estimated</a>
+    <a href="#learning"><span>2</span>The learning curve</a>
+    <h3>Part II · Uncertainty and time</h3>
+    <a href="#confidence"><span>3</span>Confidence and reserves</a>
+    <a href="#life"><span>4</span>Life-cycle cost and the value of money</a>
+    <h3>Reference</h3>
+    <a href="#sheet"><span>5</span>Formula sheet</a>
+    <a href="#build-it"><span>6</span>Build it</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Estimating</h2>
+</div>
+
+<section class="topic" id="estimate">
+<h2><span class="n">1</span>How cost is estimated</h2>
+<p>An estimate starts from a work breakdown structure: every task and item the project pays for, in levels, so nothing is counted twice or missed.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Parametric</b>: cost estimating relationships fitted to past missions, cost \(= a + b x^c\), where \(x\) is a mass, a power or an aperture. Fast, and the tool for trade studies early on. Use one only within the range of the data it was fitted to.</li><li><b>Analogy</b>: scale the cost of a similar past system. Works at any level, but is hard to vary in a trade.</li><li><b>Bottom-up</b>: price every task and part. The most accurate and the most work, once the design is mature.</li><li><b>Wraps</b> cover what no part carries: management, systems engineering, product assurance, integration and test. They are often around 30% of development.</li></ul>
+<p>Independent estimates of the same thing can be combined, each weighted by the inverse of its variance.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · two estimates of a bus</span>
+<p>One relationship gives a bus at USD 2.0M with a standard error of USD 0.6M. Another, fitted on closer analogues, gives USD 2.6M ± 0.4M. Weighted by \(1/\sigma^2\), the combined estimate is USD 2.42M ± 0.33M: closer to the tighter one, and tighter than either.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Using a relationship fitted to 100 kg satellites for a 10 kg CubeSat. Outside its data a fitted curve says nothing reliable.</p>
+</div>
+</section>
+
+<section class="topic" id="learning">
+<h2><span class="n">2</span>The learning curve</h2>
+<p>Each unit of a production run costs less than the one before: tooling is set up, people learn, suppliers sell in bulk.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Each doubling of the number built multiplies the unit cost by the slope \(S\). Unit \(n\) costs \(T_1 n^b\), with \(b = \log_2 S\). Lecture 15's guide for aerospace: 95% for fewer than 10 units, 90% for 10 to 50, 85% beyond. Development is paid once, so it is shared among every unit built.</p>
+<p>Some models use the cumulative-average form instead: the average of the first \(N\) units is \(T_1 N^b\), so the run costs \(T_1 N^{b+1}\). With the same slope it gives a smaller total. Say which form an estimate uses.</p>
+</div>
+<div class="box why"><span class="tag">Derivation</span>
+<p>A run of \(N\) costs \(\sum T_1 n^b\). The sum is close to the integral over \([\tfrac12, N + \tfrac12]\):</p>
+\[
+\sum_{n=1}^{N} T_1 n^b \approx T_1\,\frac{(N + \tfrac12)^{b+1} - (\tfrac12)^{b+1}}{b + 1}.
+\]
+<p>The lab subtracts the midpoint rule's next term too, and checks the result against the exact sum.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · one craft</span>
+<p>A 6U craft takes USD 3M of development and USD 1M to build. Built once, it costs USD 4M.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · ten at 95%</span>
+<p>Ten of them cost USD 8.95M to build: the tenth costs USD 843k. With the development, USD 12.0M in all, or USD 1.20M a craft.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a hundred at 85%</span>
+<p>A hundred cost USD 43.8M to build, and the hundredth costs USD 340k. With the development they average USD 468k each. With no learning they would average USD 1.03M: the learning, not the shared development, did most of the saving.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Applying an 85% slope to three units. The steep slopes come from long production runs. A handful of craft learn little.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Uncertainty and time</h2>
+</div>
+
+<section class="topic" id="confidence">
+<h2><span class="n">3</span>Confidence and reserves</h2>
+<p>An estimate is a distribution, not a number. A budget is chosen to cover it at some confidence.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li>The spread of an element's cost follows its technology readiness: Lecture 15 gives over 25% at TRL 1 and 2, 20 to 25% at TRL 3, 15 to 20% at TRL 4, 10 to 15% at TRL 5 and under 10% from TRL 6.</li><li>Costs run high more often than low, so each is skewed, like a lognormal. Its median lies below its mean.</li><li>For independent elements the variances add, not the spreads. The reserve the whole project needs is smaller than the elements' reserves added.</li><li>A management reserve is held on top, for what the estimate missed. Lecture 15 suggests 10% for off-the-shelf hardware up to 50% for new designs beyond the state of the art. It is not for scope changes.</li></ul>
+</div>
+<div class="box why"><span class="tag">Derivation</span>
+<p>The total's mean and variance are</p>
+\[
+\mu = \sum c_i, \qquad \sigma^2 = \sum (c_i s_i)^2.
+\]
+<p>A lognormal with the same two moments has \(\sigma_L^2 = \ln(1 + \sigma^2/\mu^2)\) and \(m = \ln\mu - \sigma_L^2/2\). The budget at confidence \(p\) is \(e^{m + z_p \sigma_L}\), with \(z_p\) the normal quantile. The lab checks the moments by convolving the elements' distributions on a grid.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a mature design</span>
+<p>Unit 8's magnetometer craft, in six elements adding to USD 3.25M, all at TRL 6 or better. To finish within budget 70 times in 100 it needs USD 59k of reserve, 1.8%. Holding each element at 70% on its own and adding would ask for USD 121k.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a new magnetometer</span>
+<p>Make the USD 600k magnetometer a new design at TRL 3, with a TRL 4 boom and TRL 5 software. It now sets 57% of the spread, and the 70% reserve grows to USD 90k. At 90% confidence it is USD 231k.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Funding a project at the sum of its point estimates. Skewed costs put that near the median: it overruns about half the time.</p>
+</div>
+</section>
+
+<section class="topic" id="life">
+<h2><span class="n">4</span>Life-cycle cost and the value of money</h2>
+<p>A satellite's cost does not end at launch, and money spent later is worth less today.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li>The life cycle adds launch, operations and, for a service, replacing failures. Operations are easy to underestimate: a ground station and a team for years.</li><li>Design commits most of the cost early. The SE Handbook shows design spending around 15% of life-cycle cost while committing about 75%.</li><li>A sum \(F\) paid \(N\) years from now is worth \(P = F(1 + r)^{-N}\) today, at discount rate \(r\).</li></ul>
+</div>
+<div class="box ex"><span class="tag">Worked example · five years of operations</span>
+<p>Operating the craft costs USD 400k a year for five years. At a 5% discount rate that is worth USD 1.73M today, not USD 2.0M.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Choosing the design with the cheapest build and the dearest operations. Autonomy built in during design can cost less than the team it replaces over five years.</p>
+</div>
+</section>
+
+<section class="topic" id="sheet">
+<h2><span class="n">5</span>Formula sheet</h2>
+\[
+T_n = T_1 n^b, \qquad b = \log_2 S
+\]
+\[
+\mu = \sum c_i, \qquad \sigma^2 = \sum (c_i s_i)^2, \qquad B_p = e^{m + z_p \sigma_L}
+\]
+\[
+\hat c = \frac{\sum c_i/\sigma_i^2}{\sum 1/\sigma_i^2}, \qquad P = F(1 + r)^{-N}
+\]
+</section>
+
+<section class="topic" id="build-it"><h2><span class="n">6</span>Build it</h2><p>Estimate what the mission costs and how sure that estimate is.</p><h3>Method</h3><ol><li>Write the work breakdown structure to the third level.</li><li>Estimate each element by the best method its maturity allows, and record the basis.</li><li>Give each element a spread from its readiness level.</li><li>For more than one craft, apply a learning curve and say which form.</li><li>Find the budget at the confidence the sponsor asks for, and add a management reserve.</li><li>Add operations and launch, and discount future years.</li></ol><h3>What to produce</h3><p>A cost estimate by work breakdown element, its basis, its confidence curve, and a phased budget.</p><h3>Handoff to other subsystems</h3><p>Give Mission and requirements the budget at its confidence. Tell each subsystem lead which element drives the spread. Give Operations the yearly cost it must work within.</p><h3>Review checklist</h3><ul><li>Every element has an estimate and a basis.</li><li>No relationship is used outside its data.</li><li>Spreads follow readiness levels.</li><li>The budget states its confidence.</li><li>Operations and launch are included and discounted.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>For your mission, give the work breakdown with its estimates, the budget at 70% confidence and its reserve, and the element that drives the spread.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l15_costmodellec/" target="_blank" rel="noopener">MIT 16.851, Lecture 15: Space systems cost modeling</a>: Work breakdown, estimating methods, cost estimating relationships and their weighting, the learning curve and its slopes, spread by readiness level, reserves, operations and the time value of money.</li><li><a href="https://www.nasa.gov/reference/2-0-fundamentals-of-systems-engineering/" target="_blank" rel="noopener">NASA Systems Engineering Handbook, 2.5: Cost effectiveness considerations</a>: Life-cycle cost committed early in design, and the trade between cost, performance, schedule and risk.</li></ul></section>
+</main>
+<footer>Our own notes, written for Flux. Read alongside MIT 16.851 Satellite Engineering, on cost modeling.</footer>
+</body>
+</html>

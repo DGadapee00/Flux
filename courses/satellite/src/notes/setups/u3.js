@@ -12,4 +12,8 @@ export default {
   s8: [
     { tag: '10 µN·m', lab: 'wheel', scenario: 'none', read: (c) => ({ 'hours': [c.tSatH, 13.9] }) },
   ],
+  s10: [
+    { tag: 'a star tracker against a 0.1° cone', lab: 'budget', scenario: 'star', read: (c) => ({ 'σ (°)': [c.sigma, 0.0202], 'bias (°)': [c.bias, 0.04], 'b + 3σ (°)': [c.threeSigma, 0.1006], 'inside': [c.p, 0.998] }) },
+    { tag: 'a Sun sensor against the same cone', lab: 'budget', scenario: 'sun', read: (c) => ({ 'σ (°)': [c.sigma, 0.102], 'inside': [c.p, 0.36] }) },
+  ],
 };

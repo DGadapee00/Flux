@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Identification and tracking</title>
+</head>
+<body>
+<header class="top">
+  <div class="eyebrow">Build a satellite · Unit 17 · after NASA's small spacecraft report</div>
+  <h1>Identification and tracking</h1>
+  <p class="lede">Other people need to know where your craft is, so nothing hits it and it hits nothing. That starts with being told apart from the dozens released beside it.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Common mistake</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Being tracked</h3>
+    <a href="#catalog"><span>1</span>Who tracks what</a>
+    <a href="#confusion"><span>2</span>Telling craft apart</a>
+    <h3>Part II · Helping the trackers</h3>
+    <a href="#aids"><span>3</span>Tracking aids</a>
+    <h3>Reference</h3>
+    <a href="#sheet"><span>4</span>Formula sheet</a>
+    <a href="#build-it"><span>5</span>Build it</a>
+  </nav>
+</header>
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Being tracked</h2>
+</div>
+
+<section class="topic" id="catalog">
+<h2><span class="n">1</span>Who tracks what</h2>
+<p>A catalogue of everything in orbit lets operators screen for close approaches. A craft that is not in it, or is in it under the wrong name, is a hazard to others and to itself.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li>The US Space Force's Space Surveillance Network tracks more than 50,000 objects and can follow pieces down to about 10 cm. Its S-band Space Fence, on Kwajalein, tracks smaller objects in low orbit.</li><li>Two-line elements are published for every catalogued object, but they are not accurate enough for conjunction assessment and carry no covariance.</li><li>Commercial networks of radars and telescopes sell tracking too, and keep their own catalogues.</li><li>Collision screening needs the owner's predicted ephemeris with a realistic covariance: at least daily in low orbit, three times a day for perigees below 500 km, including planned manoeuvres. It is needed until the craft re-enters, not only while it operates.</li></ul>
+</div>
+<div class="box ex"><span class="tag">Worked example · the magnetometer craft's plan</span>
+<p>The craft carries a GNSS receiver. Its team sends a predicted ephemeris with covariance to the screening authority every day, through a commercial ephemeris service, and adds the planned disposal burn when it is scheduled. After the mission it stays trackable by radar until it re-enters.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Screening for collisions with two-line elements. They have no covariance, so they cannot give a probability of collision.</p>
+</div>
+</section>
+
+<section class="topic" id="confusion">
+<h2><span class="n">2</span>Telling craft apart</h2>
+<p>Rideshare launches release dozens of small craft into almost the same orbit within minutes. Until they drift apart, a radar sees a cluster, and nobody knows which track belongs to whom.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>With \(N\) unidentified objects from a launch there are \(N!\) ways to match names to tracks: two ways for two objects, 3,628,800 for ten. Sorting them out can take weeks or months, and some craft are never identified. Until a craft is catalogued it is left out of collision screening.</p>
+</div>
+<div class="box why"><span class="tag">Derivation</span>
+<p>Relative to the deployer, on a circular orbit of mean motion \(n\), a craft pushed off with velocity \((\dot x_0, \dot y_0, \dot z_0)\) (radial, along the track, across the orbit) follows the Clohessy–Wiltshire equations:</p>
+\[
+x = \frac{\dot x_0}{n}\sin nt + \frac{2\dot y_0}{n}(1 - \cos nt),
+\]
+\[
+z = \frac{\dot z_0}{n}\sin nt,
+\]
+\[
+y = \frac{2\dot x_0}{n}(\cos nt - 1) + \frac{\dot y_0}{n}(4 \sin nt - 3nt).
+\]
+<p>Only a push along the track changes the orbit's period, so only it drifts away without limit, at \(3\dot y_0\). A radial push never carries the craft more than \(4\dot x_0/n\) along the track, and a push across the orbit only \(\dot z_0/n\) away. The lab checks the formulas by flying both orbits.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · pushed along the track</span>
+<p>At 500 km a deployer pushes a craft 1 m/s along the track. It drifts away at 10.8 km an hour and passes 10 km from the deployer after 49 minutes.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · pushed outward</span>
+<p>The same 1 m/s pushed radially outward leaves the period unchanged. The craft swings ahead and back once an orbit, never more than 3.6 km away, and returns to the deployer. A radar that needs 10 km to split them never does, until drag pulls them apart.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a gentle push</span>
+<p>At 0.2 m/s along the track the drift is 2.2 km an hour, and 10 km takes 4.3 hours.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Releasing every craft in a batch with the same push in the same direction. They drift together. Give craft different pushes, directions or times so each pair separates.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Helping the trackers</h2>
+</div>
+
+<section class="topic" id="aids">
+<h2><span class="n">3</span>Tracking aids</h2>
+<p>A craft too small to track reliably, or one that might fail, can carry something that helps others find it and say which it is.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<ul><li><b>Position and identity by radio</b>: a GNSS receiver and a small transmitter, through a commercial network or straight to the ground. Best with its own battery, so it outlives the craft's failures.</li><li><b>Coded light</b>: LEDs on the outside, seen by large telescopes or photon-counting cameras.</li><li><b>Radio frequency tags</b>: a Van Atta array on the outside returns a radar's signal with an identifying code.</li><li><b>Corner cube reflectors</b>: one or a few, returning a ground laser; the number of reflectors can identify the craft.</li><li><b>Brighter surfaces</b>: high-albedo paint or tape to make the craft easier to see.</li></ul>
+<p>Most of these have flown. A beacon with its own power can also close the gap after launch, before the craft is catalogued, by giving its position from the first hours.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · choosing an aid</span>
+<p>The magnetometer craft is released with ten others. Its main radio may take days to contact. A small GNSS beacon with its own battery reports its position through a commercial network from the first orbit, so the craft can be named and screened before the cluster has drifted apart.</p>
+</div>
+<div class="box fix"><span class="tag">Common mistake</span>
+<p>Relying on the craft's own radio to be found. If the craft fails at deployment, so does the radio. An aid with its own power works anyway.</p>
+</div>
+</section>
+
+<section class="topic" id="sheet">
+<h2><span class="n">4</span>Formula sheet</h2>
+\[
+y = \frac{2\dot x_0}{n}(\cos nt - 1) + \frac{\dot y_0}{n}(4 \sin nt - 3nt)
+\]
+\[
+\text{drift} = 3\dot y_0, \qquad |y|_\text{max} = \frac{4\dot x_0}{n}\ \text{(radial push)}
+\]
+\[
+\text{matchings} = N!
+\]
+</section>
+
+<section class="topic" id="build-it"><h2><span class="n">5</span>Build it</h2><p>Make sure the craft can be found, named and screened from release to re-entry.</p><h3>Method</h3><ol><li>Coordinate with the trackers before launch: what the craft is, when and how it will be released.</li><li>Ask the launch provider for the push, its direction and timing, and check how fast your craft separates from its neighbours.</li><li>Decide how the craft's position will be known: GNSS, a tracking aid, or radar alone.</li><li>Plan the predicted ephemeris with covariance, how often it is sent, and who sends it.</li><li>Plan trackability after the mission until re-entry.</li></ol><h3>What to produce</h3><p>A tracking and conjunction plan: release geometry, separation time, tracking aid, ephemeris delivery, and end-of-life trackability.</p><h3>Handoff to other subsystems</h3><p>Give Communications the beacon's link and frequency. Give Power the aid's own battery. Give Operations the ephemeris schedule. Give Mission and requirements the trackability requirement until re-entry.</p><h3>Review checklist</h3><ul><li>The trackers know the craft and its release before launch.</li><li>The craft separates from its neighbours within a stated time.</li><li>A predicted ephemeris with covariance goes to screening at least daily.</li><li>A tracking aid or GNSS covers the time before cataloguing.</li><li>The craft stays trackable until re-entry.</li></ul><div class="box ex"><div class="tag">Worked example · build review</div><p>For your craft, give the push and direction at release, the time to separate from the next craft, how its position is known in the first day, and who sends its ephemeris.</p><p>Use the checklist above to review the result. State each assumption and the evidence supporting each interface value.</p></div><h3>References</h3><ul><li><a href="https://www.nasa.gov/smallsat-institute/sst-soa/identification-and-tracking-systems" target="_blank" rel="noopener">NASA, State-of-the-Art of Small Spacecraft Technology, 2026, chapter 12</a>: The identification problem and its \(N!\) matchings, the space surveillance network and commercial trackers, ephemeris and covariance for conjunction assessment, the gap before cataloguing, and tracking aids (Table 12-1).</li><li><a href="https://en.wikipedia.org/wiki/Clohessy%E2%80%93Wiltshire_equations" target="_blank" rel="noopener">Wikipedia, Clohessy–Wiltshire equations</a>: Relative motion near a circular orbit, and the solution the lab uses.</li></ul></section>
+</main>
+<footer>Our own notes, written for Flux. Read alongside NASA's small spacecraft report, on identification and tracking.</footer>
+</body>
+</html>
