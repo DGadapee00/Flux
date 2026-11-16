@@ -59,7 +59,15 @@ export const EXAMS = [
     labs: ['balance', 'nodes'],
     coming: [],
   },
-  { id:'u7',notesOnly:true,n:7,title:'Payload and integration',chapters:'7',date:'Unit 7',labs:[],coming:['Payload and integration labs'] },
+  {
+    id: 'u7',
+    n: 7,
+    title: 'Payload and integration',
+    chapters: '7',
+    date: 'Unit 7',
+    labs: ['mission'],
+    coming: ['Payload lab'],
+  },
   {
     id: 'u8',
     n: 8,
@@ -108,6 +116,7 @@ export const EXAMS = [
 ];
 
 export const LAB_META = {
+  mission: { id: 'mission', exam: 'u7', title: 'Mission design' },
   coverage: { id: 'coverage', exam: 'u12', title: 'Station coverage' },
   laser: { id: 'laser', exam: 'u11', title: 'Laser link' },
   imager: { id: 'imager', exam: 'u11', title: 'Imager' },
@@ -143,6 +152,7 @@ export const CHAPTER_TITLES = {
   4: 'Structure',
   5: 'Power',
   6: 'Thermal control',
+  7: 'Payload and integration',
   8: 'Mission and requirements',
   9: 'Space environment and radiation',
   10: 'Avionics, flight software and data',

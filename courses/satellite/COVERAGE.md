@@ -17,12 +17,12 @@ reference, when the class reaches it, and what the course has now.
 
 | Topic | 16.851 | SoA | SEH | Class | Unit and labs now | Status |
 |---|---|---|---|---|---|---|
-| Mission statement, objectives and concept of operations | none | [2](https://www.nasa.gov/smallsat-institute/sst-soa/platforms) | [3.3](https://www.nasa.gov/reference/3-0-nasa-program-project-life-cycle/), [4.1](https://www.nasa.gov/reference/4-0-system-design-processes/) | 1 | u8 notes; u7 notes: one mission case | notes only |
+| Mission statement, objectives and concept of operations | none | [2](https://www.nasa.gov/smallsat-institute/sst-soa/platforms) | [3.3](https://www.nasa.gov/reference/3-0-nasa-program-project-life-cycle/), [4.1](https://www.nasa.gov/reference/4-0-system-design-processes/) | 1 | u8 notes; u7: the mission lab flies one concept of operations through a day | notes only |
 | Requirements and the verification matrix | [L17](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l17_software_eng/) | none | [4.2](https://www.nasa.gov/reference/4-0-system-design-processes/), [5.3](https://www.nasa.gov/reference/5-0-product-realization/), App. C, App. D | 3 | u8 notes and practice; no lab, the topic is not numeric | covered |
 | Life cycle phases and design reviews | none | none | [3.0](https://www.nasa.gov/reference/3-0-nasa-program-project-life-cycle/), [6.7](https://www.nasa.gov/reference/6-0-crosscutting-technical-management/) | 2, 3, 4 | u8 notes and practice; no lab, the topic is not numeric | covered |
-| Mass budget, margins and performance measures | [L1](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l1_launch_system/) | [2](https://www.nasa.gov/smallsat-institute/sst-soa/platforms) | [4.2](https://www.nasa.gov/reference/4-0-system-design-processes/), [6.7](https://www.nasa.gov/reference/6-0-crosscutting-technical-management/) | 3 | u8: margin | covered |
-| Interfaces and integration | none | [2](https://www.nasa.gov/smallsat-institute/sst-soa/platforms), [10](https://www.nasa.gov/smallsat-institute/sst-soa/integration-launch-and-deployment) | [6.3](https://www.nasa.gov/reference/6-0-crosscutting-technical-management/) | 4 | u7 notes; handoffs in each unit's notes | notes only |
-| Risk and trade studies | none | none | [6.4](https://www.nasa.gov/reference/6-0-crosscutting-technical-management/), [6.8](https://www.nasa.gov/reference/6-0-crosscutting-technical-management/) | 2, 3 | u7 notes: one trade study; u4 notes: material and process choices | notes only |
+| Mass budget, margins and performance measures | [L1](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l1_launch_system/) | [2](https://www.nasa.gov/smallsat-institute/sst-soa/platforms) | [4.2](https://www.nasa.gov/reference/4-0-system-design-processes/), [6.7](https://www.nasa.gov/reference/6-0-crosscutting-technical-management/) | 3 | u8: margin; u7: mission, eight budgets and the limiting margin | covered |
+| Interfaces and integration | none | [2](https://www.nasa.gov/smallsat-institute/sst-soa/platforms), [10](https://www.nasa.gov/smallsat-institute/sst-soa/integration-launch-and-deployment) | [4.0, 4.4](https://www.nasa.gov/reference/4-0-system-design-processes/), [6.3](https://www.nasa.gov/reference/6-0-crosscutting-technical-management/) | 4 | u7: mission, every budget on one design; handoffs in each unit's notes | covered |
+| Risk and trade studies | none | none | [6.4](https://www.nasa.gov/reference/6-0-crosscutting-technical-management/), [6.8](https://www.nasa.gov/reference/6-0-crosscutting-technical-management/) | 2, 3 | u7: mission lab and practice trace one change through every budget; risk in u7 notes only; u4 notes: material and process choices | notes only |
 | Cost modelling | [L15](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l15_costmodellec/) | none | [2.5](https://www.nasa.gov/reference/2-0-fundamentals-of-systems-engineering/) | none | none | missing |
 | Launch vehicles and launch selection | [L1](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l1_launch_system/) | [10](https://www.nasa.gov/smallsat-institute/sst-soa/integration-launch-and-deployment) | none | 5 | none | missing |
 | Rocket equation and in-space propulsion | [L4](https://ocw.mit.edu/courses/16-851-satellite-engineering-fall-2003/resources/l4_propulsion/) | [4](https://www.nasa.gov/smallsat-institute/sst-soa/in-space_propulsion) | none | none | u1 lists "Rocket equation" as coming | missing |
@@ -52,7 +52,7 @@ reference, when the class reaches it, and what the course has now.
 
 ## Totals
 
-32 topics: 20 covered, 3 notes only, 9 missing.
+32 topics: 21 covered, 2 notes only, 9 missing.
 
 ## 16.851 lectures and SoA chapters by unit
 
@@ -64,7 +64,7 @@ reference, when the class reaches it, and what the course has now.
 | u4 Structure | L14 | 6, 10 |
 | u5 Power | L3 | 3 |
 | u6 Thermal control | L23 | 7 |
-| u7 Payload and integration | none | 2 |
+| u7 Payload and integration | L23 (temperature limits) | 2 |
 | u8 Mission and requirements | none | 2 |
 | u9 Space environment and radiation | L5 | 6.5, 8.2.1, 13.2 |
 | u10 Avionics, flight software and data | L16–19 | 8, 9 (rates) |

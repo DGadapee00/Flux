@@ -56,13 +56,13 @@ try{
   await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-structure`);
   await navigate('satellite/#/satellite/u7/?n=integration');
   await wait(()=>page.eval('document.querySelector("#notes")?.textContent.includes("Sensor payload")'));
-  assert.equal(await page.eval('window.__gauss.app.lab'),null);
+  assert.equal(await page.eval('window.__gauss.app.labId'),'mission');
   await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-integration`);
   await navigate('satellite/#/satellite/u8/margin');
   await wait(()=>page.eval(`window.__gauss?.app.labId==='margin' && Number.isFinite(window.__gauss.computed.pExceed)`));
   assert.equal(await page.eval('document.documentElement.scrollWidth>innerWidth'),false);
   await page.eval(`document.documentElement.dataset.theme='${theme}'`);await shot(`${theme}-${width}-satellite-margin`);
-  for(const [unit,lab,key] of [['u2','doppler','shift'],['u9','decay','years'],['u9','upsets','uncorrectable'],['u10','tasks','U'],['u10','data','sent'],['u11','imager','gsd'],['u11','laser','Pr'],['u12','coverage','anyMinutes']]){
+  for(const [unit,lab,key] of [['u2','doppler','shift'],['u9','decay','years'],['u9','upsets','uncorrectable'],['u10','tasks','U'],['u10','data','sent'],['u11','imager','gsd'],['u11','laser','Pr'],['u12','coverage','anyMinutes'],['u7','mission','lifeYears']]){
    await navigate(`satellite/#/satellite/${unit}/${lab}`);
    await wait(()=>page.eval(`window.__gauss?.app.labId==='${lab}' && Number.isFinite(window.__gauss.computed.${key})`));
    assert.equal(await page.eval('document.documentElement.scrollWidth>innerWidth'),false);

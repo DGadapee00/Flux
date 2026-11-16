@@ -3,6 +3,7 @@ import { PREDICTIONS } from './predictions.js';
 
 /** One entry per lab. Add each new lab here and in src/data/catalog.js (LAB_META). */
 const loaders = {
+  mission: () => import('./mission.js'),
   coverage: () => import('./coverage.js'),
   laser: () => import('./laser.js'),
   imager: () => import('./imager.js'),

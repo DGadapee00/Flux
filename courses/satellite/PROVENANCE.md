@@ -59,3 +59,11 @@ Unit 12: ground systems and operations, after MIT 16.851 Lecture 24 and NASA's s
 report, chapter 11. Station positions are the ATLAS network's, from the report's Table 11-7. The
 coverage model, a ground-track latitude density integrated over each station's circle of view, is
 our own, checked against flying the orbit.
+
+Unit 7, mission design: three sections and a lab added after the existing ones, after the NASA
+Systems Engineering Handbook (3.0, 4.0, 4.4 and 6.7). The lab combines the course's subsystem
+models on Unit 8's craft. The thermal sphere is Unit 6's, resized to the craft's surface. The 0 to
+50 °C limits are MIT 16.851 Lecture 23's operating range for digital electronics. Radio rates are
+NASA's small spacecraft report's, Table 9-3. The loads, the radios' powers and antennas, the
+payloads, the power system's mass and the 30% depth of discharge are our own round figures. The
+check, flying the craft for twenty days, is our own.

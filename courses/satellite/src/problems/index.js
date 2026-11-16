@@ -6,6 +6,7 @@ import u3budget from './bank/u3-budget.js';
 import u4 from './bank/u4.js';
 import u5 from './bank/u5.js';
 import u6 from './bank/u6.js';
+import u7 from './bank/u7.js';
 import u8 from './bank/u8.js';
 import u9 from './bank/u9.js';
 import u10 from './bank/u10.js';
@@ -20,7 +21,7 @@ import { PRINCIPLE_TAGS } from './principles.js';
  * Traps, wrong-option explanations and extra hints live beside the bank (src/problems/coaching/),
  * one file per unit, and are folded in here so the app and the checker see the same thing.
  */
-export const PROBLEMS = foldCoaching(applyPrincipleTags([...u1, ...u2, ...u2ttc, ...u3, ...u3budget, ...u4, ...u5, ...u6, ...u8, ...u9, ...u10, ...u11, ...u12], PRINCIPLE_TAGS), coaching);
+export const PROBLEMS = foldCoaching(applyPrincipleTags([...u1, ...u2, ...u2ttc, ...u3, ...u3budget, ...u4, ...u5, ...u6, ...u7, ...u8, ...u9, ...u10, ...u11, ...u12], PRINCIPLE_TAGS), coaching);
 
 const byIdMap = new Map(PROBLEMS.map((p) => [p.id, p]));
 

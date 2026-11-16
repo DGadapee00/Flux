@@ -4,6 +4,50 @@
  */
 
 export const PREDICTIONS = {
+  mission: [
+    {
+      id: 'mi-uhf',
+      scenario: 'base',
+      ask: 'The magnetometer craft sends its data on a 1 Mbit/s S-band radio to one Arctic station. Swap it for a 9.6 kbit/s UHF radio, which is lighter and draws less power. Does the data budget still close?',
+      apply(s) { s.radio = 'uhf'; },
+      watch: [{ id: 'data', label: 'The data budget closes', get: (c) => c.ok.data, mode: 'bool' }],
+      mode: 'bool',
+      expect: { data: false },
+      why: 'The craft records 1.9 Gbit a day. Its 56 minutes of contact carry 3.4 Gbit at 1 Mbit/s but 32 Mbit at 9.6 kbit/s: the budget uses 59 times what it has. Power and mass improve, and it does not matter.',
+    },
+    {
+      id: 'mi-high',
+      scenario: 'base',
+      ask: 'Raise the craft from 500 km to 550 km. Its stations see it longer and its link barely changes. Does it still come down within the five-year rule?',
+      apply(s) { s.h = 550; },
+      watch: [{ id: 'life', label: 'It comes down within five years', get: (c) => c.ok.life, mode: 'bool' }],
+      mode: 'bool',
+      expect: { life: false },
+      why: 'The air thins with height, so drag weakens fast. The life grows from 4.4 to 10.4 years, twice the rule, while the data budget only falls from 0.57 to 0.51 of what it has.',
+    },
+    {
+      id: 'mi-duty',
+      scenario: 'camera',
+      ask: 'The camera images 5% of each orbit at 2 Mbit/s. Double that to 10%. By what factor does the data budget’s use change?',
+      apply(s) { s.duty = 10; },
+      watch: [{ id: 'data', label: 'the data budget’s use', get: (c) => c.dataUse }],
+      mode: 'factor',
+      factors: [1.41, 2, 4],
+      tol: 0.02,
+      expect: { data: 2 },
+      why: 'The craft records 2 Mbit/s for 10% of the day plus 2 kbit/s of housekeeping: 202 kbit/s on average against 102. The contacts do not change, so the use grows from 0.66 to 1.30. The data budget now fails.',
+    },
+    {
+      id: 'mi-sensor',
+      scenario: 'camera',
+      ask: 'The camera must point within 0.2°, and a star tracker holds it there. Swap the star tracker for a fine Sun sensor, accurate to 0.3° at three sigma. Does the pointing budget still close?',
+      apply(s) { s.sensor = 'sun'; },
+      watch: [{ id: 'point', label: 'The pointing budget closes', get: (c) => c.ok.pointing, mode: 'bool' }],
+      mode: 'bool',
+      expect: { point: false },
+      why: 'Bias plus three sigma grows from 0.10° to 0.35°: the Sun sensor alone uses more than the 0.2° cone. The magnetometer never needed pointing, so this budget only appeared with the camera.',
+    },
+  ],
   coverage: [
     {
       id: 'cv-arctic',
