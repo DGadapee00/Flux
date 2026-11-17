@@ -145,8 +145,8 @@ function paintCircuits(svg) {
 }
 
 /**
- * The projects as one build: the bench's circuits and the design practice feed the satellite.
- * The links draw in, then the satellite lights.
+ * The projects as one build: the design practice feeds the satellite.
+ * The link draws in, then the satellite lights.
  * @param {SVGSVGElement} svg
  */
 function paintProjects(svg) {
@@ -156,11 +156,9 @@ function paintProjects(svg) {
     t.textContent = label;
     svg.append(t);
   };
-  box(20, 30, 100, 'Bench');
-  box(20, 104, 100, 'Design');
+  box(20, 67, 100, 'Design');
   const links = [
-    { from: { x: 120, y: 47 }, to: { x: 196, y: 84 } },
-    { from: { x: 120, y: 121 }, to: { x: 196, y: 84 } },
+    { from: { x: 120, y: 84 }, to: { x: 196, y: 84 } },
   ].map(({ from, to }) => {
     // A faint link at rest, so the still card already shows how the pieces join.
     svg.append(svgEl('line', { x1: from.x, y1: from.y, x2: to.x, y2: to.y, stroke: TEAL, 'stroke-width': 1, opacity: 0.35 }));
