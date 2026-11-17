@@ -2,7 +2,12 @@
 
 Flux is a set of course apps. Each course holds its own labs, notes and practice problems. The hub
 (`site/`) is one page: every course, grouped by subject, and one backup of the progress the
-courses keep. Projects, such as the satellite, are courses in the Projects group.
+courses keep.
+
+**Scope.** Flux is for understanding: the laws, the models, and how a requirement becomes a
+number in a spec. Hands-on build work, such as breadboards, shop steps or a full satellite build,
+is not simulated in Flux. A real project lives outside Flux as its own design log and links to the
+Flux labs it needs.
 
 - A course is a folder, `courses/<id>/`. `courses/README.md` says what one is made of.
 - The hub's groups are in `packages/tracks/tracks.js`. `site/courses.js` lists the course folders
@@ -13,6 +18,7 @@ courses keep. Projects, such as the satellite, are courses in the Projects group
   - `docs/history/map-2026-11-10/`: one concept map across the degree, with the hub's Today, Map
     and Build tabs. Code comments that mention the map, a concept, a lane or `map/paths/…` refer
     to it. Its README says how to bring the map back.
+- `docs/history/projects-2026-11-17/` holds the retired Bench and Tank Dome courses.
 
 ## Rules that protect the repo
 
@@ -74,15 +80,18 @@ are checked only one way is not done.
 
 ### Projects
 
-Projects use the normal course structure: units, labs, notes and practice. Satellite and Tank
-Dome are served at `satellite/` and `dome/`, beside Bench and Design. Do not reintroduce the
-standalone project shell, Claude brief controls, option-picking cards or foundations lists.
-The owner's course-layout decision supersedes the earlier standalone guide design.
+The Projects group holds Design and Satellite. They use the normal course structure: units, labs,
+notes and practice. Do not reintroduce the standalone project shell, Claude brief controls,
+option-picking cards or foundations lists.
 
-Build methods, checklists, deliverables, interfaces, material/process comparisons and references
-belong in unit notes. Shop-floor judgement cases belong in worked examples, not automatically
-marked practice. Numeric labs and problems share checked models and the normal practice engine.
-Notes-only units must say that their labs are not built yet.
+Do not add new project courses. A lab that takes a requirement to a spec number (a \( \Delta v \)
+to a propellant mass, a power demand to a panel area) belongs in the course that teaches the idea.
+Step-by-step build guides, shop travelers and hands-on circuit practice do not belong in Flux.
+
+Bench (breadboard circuits) and Tank Dome (the stir-welded dome traveler) were retired on
+17 November 2026. They are archived under `docs/history/projects-2026-11-17/`. Their progress
+stores stay in `site/src/backup.js` so old backup files still restore. Their libraries
+(`@flux/subjects` `em/breadboard.js`, `mechanics/tank-dome.js`) stay in place.
 
 The retired project pages and shell are preserved in
 `docs/history/project-guides-2026-11-10/`. The concept map remains archived under

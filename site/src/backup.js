@@ -18,10 +18,6 @@ import { courseStore as heatStore } from '@flux/eml4140/src/storage.js';
 import { courseStore as circuitsStore } from '@flux/eel3111/src/storage.js';
 import { courseStore as satelliteStore } from '@flux/satellite/src/storage.js';
 import { courseStore as thermo2Store } from '@flux/eml3101/src/storage.js';
-import { courseStore as benchStore } from '@flux/bench/src/storage.js';
-
-import { courseStore as domeStore } from '@flux/dome/src/storage.js';
-
 import { courseStore as modernStore } from '@flux/modern/src/storage.js';
 
 import { courseStore as quantumStore } from '@flux/quantum/src/storage.js';
@@ -39,6 +35,18 @@ export function applicationStore(storage = browserStorage()) {
   ] });
 }
 
+/**
+ * Bench and Tank Dome were retired on 17 November 2026 (archived in
+ * docs/history/projects-2026-11-17/). Their progress stays in the browser and in backup files, and
+ * a section the hub does not know fails a restore. So their stores stay, with the same keys.
+ */
+export function retiredStore(courseId, storage = browserStorage(), now) {
+  const slots = ['problems', 'exam', 'notes.width', 'notes.full'].map((name) => ({
+    name, version: 1, key: `flux.${courseId}.${name}.v1`,
+  }));
+  return createStore({ courseId, storage, slots, now });
+}
+
 /** Course stores, in the order a backup file writes them. */
 export function backupParts() {
   return [
@@ -52,7 +60,7 @@ export function backupParts() {
     { courseId: 'eml3100', store: thermoStore() },
     { courseId: 'egn3331', store: materialsStore() },
     { courseId: 'phy2048', store: phy1Store() },
-    { courseId: 'bench', store: benchStore() },
+    { courseId: 'bench', store: retiredStore('bench') },
     { courseId: 'map2302', store: odeStore() },
     { courseId: 'eml3015', store: fluidsStore() },
     { courseId: 'design', store: designStore() },
@@ -61,7 +69,7 @@ export function backupParts() {
     { courseId: 'eml4140', store: heatStore() },
     { courseId: 'eel3111', store: circuitsStore() },
     { courseId: 'satellite', store: satelliteStore() },
-    { courseId: 'dome', store: domeStore() },
+    { courseId: 'dome', store: retiredStore('dome') },
     { courseId: 'modern', store: modernStore() },
     { courseId: 'quantum', store: quantumStore() },
     { courseId: 'nuclear', store: nuclearStore() },

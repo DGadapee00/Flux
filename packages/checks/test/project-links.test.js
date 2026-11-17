@@ -2,7 +2,6 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { LABS as STA_LABS } from '../../../courses/sta3032/src/labs/index.js';
 import { NOTES as satelliteNotes } from '../../../courses/satellite/src/notes/index.js';
-import { NOTES as domeNotes } from '../../../courses/dome/src/notes/index.js';
 import { LAB_CATALOGS, STA3032_TITLES, notesIndexes } from '../catalogs.mjs';
 import { labHref, notesHref } from '../../tracks/routes.js';
 import { TRACKS } from '../../tracks/tracks.js';
@@ -11,8 +10,8 @@ test("STA 3032's registered lab titles match its definitions", () => {
   assert.deepEqual(STA3032_TITLES, Object.fromEntries(STA_LABS.map(l => [l.id, l.title])));
 });
 
-test('the project courses open the standard course app and their notes name existing labs', () => {
-  for (const [course, notes] of [['satellite', satelliteNotes], ['dome', domeNotes]]) {
+test('the satellite course opens the standard course app and their notes name existing labs', () => {
+  for (const [course, notes] of [['satellite', satelliteNotes]]) {
     assert.equal(TRACKS.flatMap(t => t.courses).find(c => c.id === course).href, `${course}/`);
     for (const [unit, set] of Object.entries(notes)) {
       for (const section of set.sections) {
@@ -24,7 +23,6 @@ test('the project courses open the standard course app and their notes name exis
     }
   }
   assert.equal(Object.keys(satelliteNotes).length, 7);
-  assert.equal(Object.keys(domeNotes).length, 4);
   assert.ok(satelliteNotes.u7.sections.every(s => !s.lab), 'integration is notes-only');
 });
 

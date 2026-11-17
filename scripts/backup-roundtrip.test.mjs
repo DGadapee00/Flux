@@ -24,7 +24,7 @@ import { courseStore as circuitsStore } from '@flux/eel3111/src/storage.js';
 import { courseStore as modernStore } from '@flux/modern/src/storage.js';
 import { courseStore as quantumStore } from '@flux/quantum/src/storage.js';
 import { courseStore as nuclearStore } from '@flux/nuclear/src/storage.js';
-import { courseStore as domeStore } from '@flux/dome/src/storage.js';
+import { retiredStore } from '../site/src/backup.js';
 import { courseStore as satelliteStore } from '@flux/satellite/src/storage.js';
 import { courseStore as thermo2Store } from '@flux/eml3101/src/storage.js';
 import { courseStore as odeStore } from '@flux/map2302/src/storage.js';
@@ -49,7 +49,7 @@ const COURSES = [
   ['eml4140', heatStore],
   ['eel3111', circuitsStore],
   ['satellite', satelliteStore],
-  ['dome', domeStore],
+  ['dome', (storage, now) => retiredStore('dome', storage, now)],
   ['modern', modernStore],
   ['quantum', quantumStore],
   ['nuclear', nuclearStore],
