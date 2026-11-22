@@ -25,6 +25,13 @@
    "path": "incoming/2026-wk40/Practice Problems Chapter 44 More about Circuits Fall 2025.pdf",
    "stamp": "2025-09-19T17:30:47Z"
   },
+  "23854570": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Practice Problems Chapter 64 Solutions.pdf",
+   "path": "incoming/2026-wk47/Practice Problems Chapter 64 Solutions.pdf",
+   "stamp": "2025-11-18T19:16:21Z"
+  },
   "23854591": {
    "fetched": "2026-10-04",
    "module": "Week 3 - Lecture - August 31 - September 6",
@@ -46,12 +53,26 @@
    "path": "incoming/2026-wk43/Practice Problems Chapter 54 Solustions.pdf",
    "stamp": "2025-10-17T15:10:15Z"
   },
+  "23854625": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Practice Problems Chapter 63 Solutions.pdf",
+   "path": "incoming/2026-wk47/Practice Problems Chapter 63 Solutions.pdf",
+   "stamp": "2025-11-18T19:20:03Z"
+  },
   "23854632": {
    "fetched": "2026-10-04",
    "module": "Week 5 - Lecture - September 14 - 20",
    "name": "Practice Problems Chapter 41 Current and Resistance Fall 2025.pdf",
    "path": "incoming/2026-wk40/Practice Problems Chapter 41 Current and Resistance Fall 2025.pdf",
    "stamp": "2026-01-26T18:27:37Z"
+  },
+  "23854653": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Interactive Lessons # 7 Wave interference Fall 2025.docx",
+   "path": "incoming/2026-wk47/Interactive Lessons _ 7 Wave interference Fall 2025.docx",
+   "stamp": "2025-11-18T19:46:36Z"
   },
   "23854657": {
    "fetched": "2026-10-04",
@@ -122,6 +143,13 @@
    "name": "Practice Problems Chapter 48 Solutions.pdf",
    "path": "incoming/2026-wk41/Practice Problems Chapter 48 Solutions.pdf",
    "stamp": "2025-10-02T13:20:51Z"
+  },
+  "23854679": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Practice Problems Chapter 63 Wave Optics Fall 2025.pdf",
+   "path": "incoming/2026-wk47/Practice Problems Chapter 63 Wave Optics Fall 2025.pdf",
+   "stamp": "2025-11-18T19:19:43Z"
   },
   "23854682": {
    "fetched": "2026-10-11",
@@ -325,6 +353,27 @@
    "name": "Practice Problems Chapter 62 Solutions.pdf",
    "path": "incoming/2026-wk45/Practice Problems Chapter 62 Solutions.pdf",
    "stamp": "2025-10-27T20:54:39Z"
+  },
+  "23854775": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Practice Problems Chapter 64 Diffraction of Light Fall 2025.pdf",
+   "path": "incoming/2026-wk47/Practice Problems Chapter 64 Diffraction of Light Fall 2025.pdf",
+   "stamp": "2025-11-18T19:16:00Z"
+  },
+  "23854777": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Practice Problems Chapter 65 Soluitons.pdf",
+   "path": "incoming/2026-wk47/Practice Problems Chapter 65 Soluitons.pdf",
+   "stamp": "2025-11-18T19:18:04Z"
+  },
+  "23854778": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Practice Problems Chapter 65 Thin Film Optics Fall 2025.pdf",
+   "path": "incoming/2026-wk47/Practice Problems Chapter 65 Thin Film Optics Fall 2025.pdf",
+   "stamp": "2025-11-18T19:17:46Z"
   },
   "23854796": {
    "fetched": "2026-09-26",
@@ -1159,6 +1208,83 @@
    "path": "incoming/2026-wk46/Physics 2 Video Solution Problem - Chapter 60 Ray Tracing Lens.pdf",
    "stamp": "2026-11-13T17:33:17Z"
   },
+  "25061486": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Physics 2 Video Solution Problem - Chapter 65 Thin Film Optics.pdf",
+   "path": "incoming/2026-wk47/Physics 2 Video Solution Problem - Chapter 65 Thin Film Optics.pdf",
+   "stamp": "2026-11-13T17:34:13Z"
+  },
+  "25110073": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Worksheet # 8 MC Part A Fall 2026.pdf",
+   "path": "incoming/2026-wk47/Worksheet _ 8 MC Part A Fall 2026.pdf",
+   "stamp": "2026-11-16T20:41:23Z"
+  },
+  "25110141": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Worksheet # 8 UpL Part B Fall 2026.pdf",
+   "path": "incoming/2026-wk47/Worksheet _ 8 UpL Part B Fall 2026.pdf",
+   "stamp": "2026-11-16T20:51:06Z"
+  },
+  "25119044": {
+   "fetched": "2026-11-22",
+   "module": "Final Exam - Wednesday December 9 at 7:00 am",
+   "name": "Exam Final Equations Physics II.pdf",
+   "path": "incoming/2026-wk47/Exam Final Equations Physics II.pdf",
+   "stamp": "2026-11-17T17:51:19Z"
+  },
+  "25119094": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Calculus Physics II Lecture Notes Ch 63 Wave Optics Fall 2026.pdf",
+   "path": "incoming/2026-wk47/Calculus Physics II Lecture Notes Ch 63 Wave Optics Fall 2026.pdf",
+   "stamp": "2026-11-17T17:58:29Z"
+  },
+  "25119096": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Calculus Physics II Lecture Notes Ch 64 Diffraction of light Fall 2026.pdf",
+   "path": "incoming/2026-wk47/Calculus Physics II Lecture Notes Ch 64 Diffraction of light Fall 2026.pdf",
+   "stamp": "2026-11-17T17:58:30Z"
+  },
+  "25119097": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Calculus Physics II Lecture Notes Ch 65 Thin Film Optics Fall 2026.pdf",
+   "path": "incoming/2026-wk47/Calculus Physics II Lecture Notes Ch 65 Thin Film Optics Fall 2026.pdf",
+   "stamp": "2026-11-17T17:58:31Z"
+  },
+  "25123852": {
+   "fetched": "2026-11-22",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Class Activity # 7 Physics 2 Fall 2026.pdf",
+   "path": "incoming/2026-wk47/Class Activity _ 7 Physics 2 Fall 2026.pdf",
+   "stamp": "2026-11-18T13:05:02Z"
+  },
+  "25123964": {
+   "fetched": "2026-11-22",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Class Activity # 7 Physics 2 Solutions.pdf",
+   "path": "incoming/2026-wk47/Class Activity _ 7 Physics 2 Solutions.pdf",
+   "stamp": "2026-11-18T14:05:13Z"
+  },
+  "25132575": {
+   "fetched": "2026-11-22",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Worksheet # 7 MC Part A Solutions.pdf",
+   "path": "incoming/2026-wk47/Worksheet _ 7 MC Part A Solutions.pdf",
+   "stamp": "2026-11-19T15:04:43Z"
+  },
+  "25132576": {
+   "fetched": "2026-11-22",
+   "module": "Week 14 - Lecture - November 16 - 22",
+   "name": "Worksheet # 7 UpL Part B Solutions.pdf",
+   "path": "incoming/2026-wk47/Worksheet _ 7 UpL Part B Solutions.pdf",
+   "stamp": "2026-11-19T15:04:44Z"
+  },
   "assignment:1880067": {
    "fetched": "2026-10-04",
    "module": "Week 1 - Lecture - August 17 - 23",
@@ -1208,6 +1334,13 @@
    "path": "incoming/2026-wk46/Interactive Lesson _ 6 Imaging with Lenses and Mirrors Fall 2026.html",
    "stamp": "2026-11-13T19:36:31Z"
   },
+  "assignment:1880075": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Interactive Lesson # 7 Wave Interference Fall 2026",
+   "path": "incoming/2026-wk47/Interactive Lesson _ 7 Wave Interference Fall 2026.html",
+   "stamp": "2026-11-20T14:37:13Z"
+  },
   "assignment:1880080": {
    "fetched": "2026-10-04",
    "module": "Week 4 - Lecture - September 7 - 13",
@@ -1249,6 +1382,13 @@
    "name": "Worksheet # 7 Part B Upload Solutions Fall 2026",
    "path": "incoming/2026-wk46/Worksheet _ 7 Part B Upload Solutions Fall 2026.html",
    "stamp": "2026-11-13T19:36:29Z"
+  },
+  "assignment:1880087": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Worksheet # 8 Part B Upload Solutions Fall 2026",
+   "path": "incoming/2026-wk47/Worksheet _ 8 Part B Upload Solutions Fall 2026.html",
+   "stamp": "2026-11-20T14:37:12Z"
   },
   "assignment:1880088": {
    "fetched": "2026-10-04",
@@ -1298,6 +1438,13 @@
    "name": "Checklist Week 14 Calculus Physics 2 Fall 2026",
    "path": "incoming/2026-wk46/Checklist Week 14 Calculus Physics 2 Fall 2026.html",
    "stamp": "2026-11-13T19:36:29Z"
+  },
+  "page:1868130": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Checklist Week 16 Calculus Physics 2 Fall 2026",
+   "path": "incoming/2026-wk47/Checklist Week 16 Calculus Physics 2 Fall 2026.html",
+   "stamp": "2026-11-17T17:50:03Z"
   },
   "page:1868131": {
    "fetched": "2026-10-04",
@@ -1565,6 +1712,27 @@
    "path": "incoming/2026-wk45/Practice Problems Chapter 62 Optical Instruments.html",
    "stamp": "2026-11-06T18:37:17Z"
   },
+  "page:1868176": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Practice Problems Chapter 63 Wave Optics",
+   "path": "incoming/2026-wk47/Practice Problems Chapter 63 Wave Optics.html",
+   "stamp": "2026-11-20T14:37:09Z"
+  },
+  "page:1868177": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Practice Problems Chapter 64 Diffraction of Light",
+   "path": "incoming/2026-wk47/Practice Problems Chapter 64 Diffraction of Light.html",
+   "stamp": "2026-11-20T14:37:10Z"
+  },
+  "page:1868178": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Practice Problems Chapter 65 Thin Film Optics ",
+   "path": "incoming/2026-wk47/Practice Problems Chapter 65 Thin Film Optics .html",
+   "stamp": "2026-11-20T14:37:11Z"
+  },
   "page:1868179": {
    "fetched": "2026-10-04",
    "module": "Week 1 - Lecture - August 17 - 23",
@@ -1692,23 +1860,30 @@
    "stamp": "2026-11-04T18:35:59Z"
   },
   "page:1958825": {
-   "fetched": "2026-11-15",
+   "fetched": "2026-11-22",
    "module": "Week 14 - Lecture - November 16 - 22",
-   "name": "Problem Solving Video - Chapter 59 Mirrors ",
-   "path": "incoming/2026-wk46/Problem Solving Video - Chapter 59 Mirrors .html",
-   "stamp": "2026-11-13T19:42:04Z"
+   "name": "Problem Solving Video - Chapter 59 Mirrors with ray tracing  ",
+   "path": "incoming/2026-wk47/Problem Solving Video - Chapter 59 Mirrors with ray tracing  .html",
+   "stamp": "2026-11-19T15:03:50Z"
   },
   "page:1958826": {
-   "fetched": "2026-11-15",
+   "fetched": "2026-11-22",
    "module": "Week 14 - Lecture - November 16 - 22",
-   "name": "Problem Solving Video - Chapter 60 Lenses",
-   "path": "incoming/2026-wk46/Problem Solving Video - Chapter 60 Lenses.html",
-   "stamp": "2026-11-13T19:42:04Z"
+   "name": "Problem Solving Video - Chapter 60 Lenses with ray tracing",
+   "path": "incoming/2026-wk47/Problem Solving Video - Chapter 60 Lenses with ray tracing.html",
+   "stamp": "2026-11-19T15:04:03Z"
+  },
+  "page:1958827": {
+   "fetched": "2026-11-22",
+   "module": "Week 16 - Lecture - November 30 - December 6",
+   "name": "Problem Solving Video - Chapter 65 Thin Films",
+   "path": "incoming/2026-wk47/Problem Solving Video - Chapter 65 Thin Films.html",
+   "stamp": "2026-11-20T14:37:14Z"
   }
  },
  "last_run": {
-  "date": "2026-11-15",
+  "date": "2026-11-22",
   "source": "modules",
-  "taken": 12
+  "taken": 27
  }
 }
