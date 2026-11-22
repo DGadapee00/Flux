@@ -1,0 +1,567 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Interference and Diffraction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<style>
+:root{
+  --paper:#F5F6F8; --sheet:#FFFFFF; --ink:#1A2130; --muted:#5A6476; --rule:#DCE0E7;
+  --field:#2C4BB5; --field-soft:#E8ECFA;
+  --copper:#A8531C; --copper-soft:#F8ECE3;
+  --ok:#1F6B4E; --ok-soft:#E5F2EC;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:"IBM Plex Sans Condensed", "Arial Narrow", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#11141B; --sheet:#171B24; --ink:#E4E7EE; --muted:#9AA3B5; --rule:#2A3040;
+    --field:#93A7FF; --field-soft:#1C2340;
+    --copper:#E79461; --copper-soft:#2E2119;
+    --ok:#6FCBA2; --ok-soft:#16281F;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#11141B; --sheet:#171B24; --ink:#E4E7EE; --muted:#9AA3B5; --rule:#2A3040;
+  --field:#93A7FF; --field-soft:#1C2340;
+  --copper:#E79461; --copper-soft:#2E2119;
+  --ok:#6FCBA2; --ok-soft:#16281F;
+}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.62;padding-inline:16px;padding-block:0 64px}
+main{max-width:720px;margin:0 auto}
+header.top{max-width:720px;margin:0 auto;padding-block:48px 24px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3{font-family:var(--sans);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(34px,6vw,52px);font-weight:700;letter-spacing:-.01em;margin-block:10px 14px}
+.lede{font-size:19px;color:var(--muted);max-width:62ch;margin:0}
+.part{margin-top:64px;padding-top:18px;border-top:2px solid var(--ink)}
+.part .eyebrow{color:var(--field)}
+.part h2{font-size:34px;margin-top:6px}
+section.topic{margin-top:44px}
+section.topic h2{font-size:26px;font-weight:600;display:flex;gap:12px;align-items:baseline}
+section.topic h2 .n{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--field);min-width:2.2em}
+h3{font-size:19px;font-weight:600;margin-top:26px}
+p{margin-block:12px;max-width:68ch}
+ul,ol{padding-left:1.3em;max-width:66ch}
+li{margin-block:4px}
+a{color:var(--field)}
+a:focus-visible{outline:2px solid var(--field);outline-offset:2px}
+.bridge{font-style:italic;color:var(--muted);border-left:2px solid var(--rule);padding-left:14px;margin-top:22px}
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;padding-block:4px;margin:14px 0!important}
+.box{border-radius:6px;padding:14px 18px;margin:20px 0;border:1px solid var(--rule);background:var(--sheet)}
+.box > .tag{font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;display:block;margin-bottom:4px}
+.box p{margin-block:8px}
+.box.ex > .tag{color:var(--field)}
+.box.fix{background:var(--copper-soft);border-color:transparent}
+.box.fix > .tag{color:var(--copper)}
+.box.why{background:var(--field-soft);border-color:transparent}
+.box.why > .tag{color:var(--field)}
+.box.key{background:var(--ok-soft);border-color:transparent}
+.box.key > .tag{color:var(--ok)}
+.ans{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto;margin:18px 0}
+table{border-collapse:collapse;width:100%;font-size:16px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--sans);font-weight:600;font-size:15px;border-bottom:2px solid var(--ink)}
+nav.toc{margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:4px 28px;font-size:16px}
+nav.toc h3{grid-column:1/-1;font-size:14px;font-family:var(--mono);font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+nav.toc a{text-decoration:none;color:var(--ink);display:flex;gap:10px;padding:2px 0}
+nav.toc a span{font-family:var(--mono);font-size:13px;color:var(--field);min-width:2em;padding-top:3px}
+nav.toc a:hover{color:var(--field)}
+@media (max-width:560px){nav.toc{grid-template-columns:1fr} body{font-size:17px} mjx-container[display="true"]{font-size:86%} .box{padding:12px 14px}}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid var(--rule);color:var(--muted);font-size:15px}
+</style>
+
+<header class="top">
+  <div class="eyebrow">PHY 2049 · Calculus Physics II · Week 16 · Lecture notes Ch 63–65 and the Ch 65 video problem, rewritten</div>
+  <h1>Interference and Diffraction</h1>
+  <p class="lede">One set of notes on wave optics, the last unit before the final. Light is a wave, and two waves that meet add. Where crests meet crests the light is bright. Where crests meet troughs it is dark. One question settles every pattern in these notes: by how many wavelengths do the two paths differ? Two slits, a grating, a crystal, a soap film and an interferometer all answer it in their own geometry.</p>
+  <div class="legend">
+    <span><i style="background:var(--field)"></i>Worked example</span>
+    <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
+    <span><i style="background:var(--copper)"></i>Correction to the original notes</span>
+    <span><i style="background:var(--ok)"></i>Key idea</span>
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <h3>Part I · Interference</h3>
+    <a href="#s1"><span>1</span>Superposition and interference</a>
+    <a href="#s2"><span>2</span>Phase and phase shift</a>
+    <a href="#s3"><span>3</span>Monochromatic, collimated and coherent light</a>
+    <a href="#s4"><span>4</span>Optical path length</a>
+    <a href="#s5"><span>5</span>Path difference and the order m</a>
+    <a href="#s6"><span>6</span>The Michelson interferometer</a>
+    <h3>Part II · Diffraction</h3>
+    <a href="#s7"><span>7</span>Diffraction and Huygens' principle</a>
+    <a href="#s8"><span>8</span>Single-slit diffraction</a>
+    <a href="#s9"><span>9</span>Young's double slit</a>
+    <a href="#s10"><span>10</span>Diffraction gratings and spectrometers</a>
+    <a href="#s11"><span>11</span>X-ray diffraction</a>
+    <a href="#s12"><span>12</span>Circular apertures and the Airy disk</a>
+    <a href="#s13"><span>13</span>Resolving power</a>
+    <a href="#s14"><span>14</span>Holograms</a>
+    <h3>Part III · Thin films</h3>
+    <a href="#s15"><span>15</span>Phase shifts on reflection</a>
+    <a href="#s16"><span>16</span>The thin-film conditions</a>
+    <a href="#s17"><span>17</span>Thin-film examples</a>
+    <a href="#s18"><span>18</span>Colors, wedges, rings and coatings</a>
+    <a href="#s19"><span>19</span>Formula sheet</a>
+  </nav>
+</header>
+
+<main>
+
+<div class="part">
+  <div class="eyebrow">Part I</div>
+  <h2>Interference</h2>
+</div>
+
+<section class="topic" id="s1">
+<h2><span class="n">1</span>Superposition and interference</h2>
+<p><b>Wave optics</b> treats light as an electromagnetic wave and asks what happens when waves overlap. Geometric optics (Exam 7) drew light as rays. Rays cannot explain fringes, colors in a soap film or the limit on how sharp a telescope can be. Waves can.</p>
+<p>The rule for overlapping waves is the <b>superposition principle</b>. Where two waves meet, the total electric field is the vector sum of the two fields at that point and instant. The magnetic fields add the same way. Two balls that collide bounce off each other. Two waves that cross pass through each other: after they separate, each goes on with its own shape, speed and direction, as if they had never met.</p>
+<p><b>Interference</b> is what the sum looks like while the waves overlap.</p>
+<ul>
+  <li><b>Constructive interference:</b> crests meet crests. The amplitudes add and the light is brighter.</li>
+  <li><b>Destructive interference:</b> crests meet troughs. The amplitudes subtract. Two equal waves cancel to zero.</li>
+</ul>
+<p>Energy is not lost where waves cancel. It is moved: the dark places are dark because the bright places get more. An <b>interference pattern</b> is the fixed map of bright and dark places, like the ripple pattern two stones make in a pond.</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Interference needs two waves at the same point. They do not need two sources. Every pattern in these notes is one wave split in two (by two slits, a beam splitter or the two faces of a film) and brought back together.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say waves obey superposition "since waves transmit only energy." Light also carries momentum. That is radiation pressure, \(p = U/c\), from Exam 6, and it is what pushes a solar sail. Waves superpose because the equations for \(\vec E\) and \(\vec B\) are linear: the sum of two solutions is also a solution. A student who learns "waves carry only energy" will miss the radiation-pressure questions on the final.</p>
+</div>
+</section>
+
+<section class="topic" id="s2">
+<h2><span class="n">2</span>Phase and phase shift</h2>
+<p>The <b>phase</b> of a wave says where in its cycle it is. Two waves of the same frequency are <b>in phase</b> when their crests arrive together. They are <b>completely out of phase</b> when the crest of one arrives with the trough of the other: half a cycle apart.</p>
+<p>The <b>phase shift</b> between them is the fraction of a cycle by which one leads, times one full cycle. If one wave runs a time \(\Delta t\) ahead and the period is \(T = 1/f\),</p>
+\[\Delta\Phi = \frac{\Delta t}{T}\,(360^\circ) = \frac{\Delta t}{T}\,(2\pi\ \text{rad}) = 2\pi f\,\Delta t .\]
+<p>The same fraction can be counted in length. A lead of \(\Delta l\) along the path is \(\Delta l/\lambda\) of a cycle:</p>
+\[\Delta\Phi = \frac{\Delta l}{\lambda}\,(2\pi\ \text{rad}).\]
+<div class="tbl"><table>
+<tr><th>Lead</th><th>Degrees</th><th>Radians</th><th>Result for two equal waves</th></tr>
+<tr><td>\(\lambda\)</td><td>360°</td><td>\(2\pi\)</td><td>in phase, constructive</td></tr>
+<tr><td>\(\tfrac12\lambda\)</td><td>180°</td><td>\(\pi\)</td><td>out of phase, destructive</td></tr>
+<tr><td>\(\tfrac14\lambda\)</td><td>90°</td><td>\(\pi/2\)</td><td>partial</td></tr>
+</table></div>
+<div class="box ex"><span class="tag">Worked example · two waves at 4.5 × 10¹⁴ Hz</span>
+<p>Two waves of frequency \(4.5\times10^{14}\) Hz travel the same path. The first is \(5.55\times10^{-16}\) s ahead of the second.</p>
+\[T = \frac{1}{4.5\times10^{14}\ \text{Hz}} = 2.22\times10^{-15}\ \text{s}, \qquad \Delta\Phi = \frac{5.55\times10^{-16}}{2.22\times10^{-15}}\,(360^\circ) = 90^\circ .\]
+<p>A quarter cycle: \(\pi/2\) rad, or a lead of \(\tfrac14\lambda\).</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes write the phase shift in wavelengths as \(\Delta\Phi = \Delta\lambda/\lambda\). That ratio is a fraction of a cycle, a pure number with no angle unit. It must be multiplied by \(2\pi\) rad or 360° to be a phase: \(\Delta\Phi = 2\pi\,\Delta l/\lambda\). A lead of \(\lambda/4\) gives 0.25 from the notes' formula, which is not 0.25 rad. It is \(\pi/2\) rad. The quantity on top is also a path length \(\Delta l\), not a change in wavelength: both waves have the same \(\lambda\).</p>
+</div>
+</section>
+
+<section class="topic" id="s3">
+<h2><span class="n">3</span>Monochromatic, collimated and coherent light</h2>
+<p>A clean interference pattern needs light of a special kind.</p>
+<ul>
+  <li><b>Monochromatic:</b> one wavelength, so one frequency and one color. Each wavelength makes its own pattern. White light makes many patterns on top of each other.</li>
+  <li><b>Collimated:</b> the rays are nearly parallel, so the wave fronts are nearly flat.</li>
+  <li><b>Coherent:</b> the waves have the same frequency and a phase difference that stays fixed in time.</li>
+</ul>
+<p>A laser is all three. A light bulb is none of them. Its atoms emit independently, so the phase between any two parts of its light changes in far less than a nanosecond. Any pattern it could make washes out faster than an eye or camera can follow.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes define coherent waves as waves "in phase with one another." Coherence asks only that the phase difference stay <i>constant</i>. Two coherent sources half a cycle apart are still coherent. They still make a sharp pattern, with the bright and dark fringes swapped: the center line between them is dark, not bright. A student who reads "coherent" as "in phase" will put a bright fringe there.</p>
+</div>
+</section>
+
+<section class="topic" id="s4">
+<h2><span class="n">4</span>Optical path length</h2>
+<p>Light slows to \(v = c/n\) in a material, and its wavelength shrinks to \(\lambda_n = \lambda/n\). Its frequency does not change. So a length \(d\) of glass holds more wavelengths than the same length of air. What matters for interference is how many wavelengths fit along a path:</p>
+\[N = \frac{d}{\lambda_n} = \frac{n\,d}{\lambda}.\]
+<p>The product \(n\,d\) is the <b>optical path length</b>. It is the distance in vacuum that would hold the same number of wavelengths. A path through several materials adds up \(n_1d_1 + n_2d_2 + \cdots\). Two paths are in step when their optical path lengths differ by a whole number of vacuum wavelengths.</p>
+<p>In a time \(t\) light covers a distance \(vt = ct/n\) in a material. Its optical path in that time is \(n(ct/n) = ct\), the same in any material. The number of cycles completed in time \(t\) is \(ft\), and that does not depend on the medium either.</p>
+<div class="box ex"><span class="tag">Worked example · red light in air and in water for 2 s</span>
+<p>Beam 1 (\(\lambda = 650\) nm) travels for 2 s in air and beam 2 for 2 s in water (\(n = 1.33\)). The distances covered are</p>
+\[\frac{ct}{n_{\text{air}}} - \frac{ct}{n_{\text{water}}} = (3.00\times10^8)(2)\left(1 - \frac{1}{1.33}\right) = 1.49\times10^{8}\ \text{m}.\]
+<p>The beam in air gets \(1.49\times10^8\) m farther. Both beams have gone through the same number of cycles, \(f t\), so they would still be in phase. The wavelength plays no part in the answer.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes and the final's equation sheet define the optical path length as \(l = vt = ct/n\), "the length that light travels" in a time \(t\). That is the geometric distance. The optical path length is \(n\) times the geometric length, \(nd\), which comes to \(ct\) in a time \(t\). The two differ by a factor of \(n\). For a fixed time, \(ct/n\) shrinks in glass while the optical path stays \(ct\). For a fixed thickness, the optical path \(nd\) grows in glass.</p>
+<p>The difference matters in Part III. A film of thickness \(t\) adds an optical path \(2nt\), not \(2t/n\). Every thin-film equation in the course has \(2n t\) in it. When a course problem asks for "optical path length" with \(l = ct/n\), it means the distance traveled.</p>
+</div>
+</section>
+
+<section class="topic" id="s5">
+<h2><span class="n">5</span>Path difference and the order m</h2>
+<p>Two coherent waves start in phase and reach a point by paths of lengths \(l_1\) and \(l_2\). Each extra wavelength of path delays one wave by a full cycle, which changes nothing. Each extra half wavelength flips it.</p>
+\[l_2 - l_1 = m\lambda \quad\text{constructive}, \qquad l_2 - l_1 = \left(m+\tfrac12\right)\lambda \quad\text{destructive}, \qquad m = 0, 1, 2, \ldots\]
+<p>The integer \(m\) is the <b>order</b>, counted from the straight-through position \(m = 0\). To sort a given path difference, divide by the wavelength:</p>
+<ul>
+  <li>\(\Delta l/\lambda\) a whole number (1, 2, 3 …): constructive, with \(m\) that number.</li>
+  <li>\(\Delta l/\lambda\) a half number (0.5, 1.5, 2.5 …): destructive, with \(m\) the whole part.</li>
+  <li>Anything else: partly bright.</li>
+</ul>
+<p>If the paths pass through materials, \(\Delta l\) is the difference in optical path length from Section 4, and \(\lambda\) is the vacuum wavelength.</p>
+<div class="box ex"><span class="tag">Worked example · blue light, two path differences</span>
+<p>Blue light, \(\lambda = 440\) nm.</p>
+<p>(A) \(\Delta l = 8.8\times10^{-7}\) m: \(\Delta l/\lambda = 880/440 = 2.0\). A whole number, so constructive, \(m = 2\).</p>
+<p>(B) \(\Delta l = 1.54\times10^{-6}\) m: \(\Delta l/\lambda = 1540/440 = 3.5\). A half number, so destructive. In \((m+\tfrac12)\lambda\) that is \(m = 3\).</p>
+</div>
+</section>
+
+<section class="topic" id="s6">
+<h2><span class="n">6</span>The Michelson interferometer</h2>
+<p>In the 19th century most physicists thought light, like sound, needed a medium. They called it the <b>ether</b>, and it was supposed to fill all space. Earth moves through space at about 30 km/s, so light should travel at different speeds along and across Earth's motion. Michelson and Morley built an instrument to detect that difference. They found none. Their null result was a step toward special relativity, in which light needs no medium and has the same speed for every observer.</p>
+<h3>How it works</h3>
+<p>A beam meets a half-silvered mirror at 45°, the <b>beam splitter</b>. Half goes straight on to mirror 1 and half turns 90° to mirror 2. Each reflects back along its arm, and the splitter recombines them at a detector. If the round trips differ by a whole number of wavelengths, the detector sees a bright spot. If they differ by a half number, it sees a dark spot.</p>
+<div class="box why"><span class="tag">Derivation · the fringe count</span>
+<p>Move one mirror a distance \(\Delta d\). Its beam goes out and back, so its path changes by \(2\Delta d\). Each bright fringe that passes the detector marks one more wavelength of path:</p>
+\[2\,\Delta d = m\lambda \qquad\Longrightarrow\qquad \Delta d = \frac{m\lambda}{2}, \qquad m = \frac{2\,\Delta d}{\lambda}.\]
+<p>So the mirror moves \(\lambda/4\) from bright to dark and \(\lambda/2\) from one bright fringe to the next. Count fringes and you have measured a distance to a fraction of a wavelength. Measure a known distance and you have the wavelength: \(\lambda = 2\Delta d/m\).</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · the shift Michelson and Morley expected</span>
+<p>They expected a shift of \(m = 0.4\) fringe with \(\lambda = 550\) nm. That is a path difference of</p>
+\[\Delta l = m\lambda = (0.4)(550\ \text{nm}) = 2.2\times10^{-7}\ \text{m},\]
+<p>the same as moving one mirror by \(\Delta d = m\lambda/2 = 1.1\times10^{-7}\) m. They saw nothing near that size.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · a 650 nm laser and a 1 mm move</span>
+\[m = \frac{2\,\Delta d}{\lambda} = \frac{2(1\times10^{-3}\ \text{m})}{650\times10^{-9}\ \text{m}} = 3077 \approx 3080\ \text{fringes}.\]
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes give the wavelength as \(\lambda = \tfrac12\Delta l\), with \(\Delta l\) "the change in distance of one of the path lengths," for a mirror moved from one bright spot to the next. Between neighboring bright spots the mirror moves \(\lambda/2\) and the path changes by \(\lambda\). So \(\lambda = 2\Delta d\) for the mirror's move, or \(\lambda = \Delta l\) for the path. Half of either one is wrong by a factor of 4 or 2.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>In \(\Delta d = m\lambda_0/2\) the notes call \(\Delta d\) "the distance that the mirror is moved or optical path difference." It is the mirror's move only. The optical path difference is twice that, \(2\Delta d = m\lambda_0\). The Michelson–Morley example asks for "the optical path difference for a \(m = 0.4\) shift" and answers \(1.1\times10^{-7}\) m. That is the mirror's move. The path difference is \(2.2\times10^{-7}\) m.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part II</div>
+  <h2>Diffraction</h2>
+</div>
+
+<section class="topic" id="s7">
+<h2><span class="n">7</span>Diffraction and Huygens' principle</h2>
+<p><b>Diffraction</b> is the spreading of a wave as it passes through an opening or around an edge. Straight ocean waves that pass through a gap in a sea wall spread out in arcs on the other side. Sound bends around a doorway, which is why you can hear someone in the next room.</p>
+<p>How much a wave spreads depends on the ratio of its wavelength \(\lambda\) to the opening's width \(W\):</p>
+<ul>
+  <li>\(\lambda/W\) small (opening much wider than \(\lambda\)): little spreading. The wave goes through like a beam of rays.</li>
+  <li>\(\lambda/W\) near 1: strong spreading. The opening acts almost like a point source.</li>
+</ul>
+<p>Visible light has \(\lambda\) near 500 nm, so it diffracts noticeably only through openings well under a millimeter. Sound, with \(\lambda\) near a meter, diffracts around doors and buildings.</p>
+<p><b>Huygens' principle</b> explains the spreading. Every point on a wave front acts as a source of small spherical wavelets. The wave front a moment later is the surface tangent to all of them, their <b>envelope</b>. An opening lets through only part of the front, so near its edges there is nothing to keep the wavelets in a straight line, and the new front curves. Huygens' wavelets also give the laws of reflection and refraction.</p>
+<p>A <b>diffraction pattern</b> is the set of bright and dark <b>fringes</b> on a screen past the opening. The wavelets from different parts of the opening interfere with each other: diffraction is interference within one wave.</p>
+</section>
+
+<section class="topic" id="s8">
+<h2><span class="n">8</span>Single-slit diffraction</h2>
+<p>A <b>slit</b> is a narrow opening of width \(W\). Light of wavelength \(\lambda\) passes through and lands on a screen a distance \(L\) away. The center is bright. On each side are dark fringes, then weaker bright ones.</p>
+<div class="box why"><span class="tag">Derivation · where the dark fringes are</span>
+<p>Split the slit into a top half and a bottom half. Pair each point in the top half with the point \(W/2\) below it. At angle \(\theta\), the lower point's path is longer by \((W/2)\sin\theta\). If that extra path is \(\lambda/2\), every pair cancels, and the screen is dark there:</p>
+\[\frac{W}{2}\sin\theta = \frac{\lambda}{2} \qquad\Longrightarrow\qquad W\sin\theta = \lambda .\]
+<p>Split the slit into 4, 6, 8 … strips instead and the same pairing gives the other dark fringes:</p>
+\[W\sin\theta = m\lambda, \qquad m = 1, 2, 3, \ldots\]
+<p>On the screen, \(y = L\tan\theta\). For small angles \(\tan\theta \approx \sin\theta\), so the \(m\)th dark fringe is at</p>
+\[y_m \approx \frac{m\lambda L}{W}.\]
+</div>
+<p>The central bright fringe runs from the first dark fringe on one side to the first on the other. Its width is \(2\lambda L/W\), twice the spacing of the others. A narrower slit or a longer wavelength makes the whole pattern wider.</p>
+<div class="box ex"><span class="tag">Worked example · a 100 μm slit</span>
+<p>\(W = 100\ \mu\)m, \(\lambda = 650\) nm, screen at \(L = 2\) m. The first dark fringe is at</p>
+\[y_1 = \frac{(1)(650\times10^{-9}\ \text{m})(2\ \text{m})}{100\times10^{-6}\ \text{m}} = 0.013\ \text{m} = 13\ \text{mm}.\]
+<p>The central bright fringe is 26 mm wide.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · finding the slit from an 18 mm fringe</span>
+<p>Same light and screen. With a new slit the first dark fringe is at 18 mm.</p>
+\[W = \frac{m\lambda L}{y} = \frac{(1)(650\times10^{-9})(2)}{18\times10^{-3}} = 7.22\times10^{-5}\ \text{m} = 72.2\ \mu\text{m}.\]
+<p>The fringe moved out, so the slit got narrower. A narrower slit spreads the light more.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the final's equation sheet</span>
+<p>The sheet lists single-slit dark fringes as \(\sin\theta = m\lambda/W\) "where \(m = 0, 1, 2, 3\ldots\)". With \(m = 0\) that puts a dark fringe at \(\theta = 0\), the center of the pattern, which is the brightest point. The dark fringes start at \(m = 1\), as the lecture notes say.</p>
+</div>
+</section>
+
+<section class="topic" id="s9">
+<h2><span class="n">9</span>Young's double slit</h2>
+<p>In 1801 Thomas Young sent light through two narrow slits a distance \(d\) apart. On a screen past them he saw a row of evenly spaced bright and dark fringes. Particles going through two slits would make two bright bands. Waves make many. This was strong evidence that light is a wave.</p>
+<p>Each slit acts as a point source, and because both are lit by the same wave front, the two sources are coherent.</p>
+<div class="box why"><span class="tag">Derivation · fringe positions</span>
+<p>Seen from a screen far away (\(L \gg d\)), the rays from the two slits to one point are nearly parallel. The lower ray is longer by \(d\sin\theta\). Section 5's conditions become</p>
+\[d\sin\theta = m\lambda \quad\text{bright}, \qquad d\sin\theta = \left(m+\tfrac12\right)\lambda \quad\text{dark}, \qquad m = 0, 1, 2, \ldots\]
+<p>For small angles, \(\sin\theta \approx \tan\theta = y/L\):</p>
+\[y_m = \frac{m\lambda L}{d} \quad\text{bright}, \qquad y_m = \frac{\left(m+\tfrac12\right)\lambda L}{d}\quad\text{dark}.\]
+<p>Neighboring bright fringes are \(\Delta y = \lambda L/d\) apart. The center (\(m = 0\)) is bright, and the first dark fringe is \(m = 0\) in the dark formula.</p>
+</div>
+<p>The pattern is symmetric about the central maximum. A longer wavelength or closer slits spread it out.</p>
+<div class="box ex"><span class="tag">Worked example · double slit, d = 0.2 mm</span>
+<p>\(d = 0.2\) mm, \(\lambda = 650\) nm, \(L = 2\) m. The first bright fringe past the center is at</p>
+\[y_1 = \frac{(1)(650\times10^{-9})(2)}{0.2\times10^{-3}} = 6.5\times10^{-3}\ \text{m} = 6.5\ \text{mm}.\]
+</div>
+<div class="box ex"><span class="tag">Worked example · a new light source, first fringe at 4 mm</span>
+<p>Same slits and screen. With a new source the first bright fringe is at 4 mm. (The notes say "the distance to the first slit"; they mean the first bright fringe.)</p>
+\[\lambda = \frac{d\,y}{mL} = \frac{(0.2\times10^{-3})(4\times10^{-3})}{(1)(2)} = 4.0\times10^{-7}\ \text{m} = 400\ \text{nm}.\]
+<p>Violet light. A shorter wavelength packs the fringes closer.</p>
+</div>
+<h3>Two slits inside one slit's pattern</h3>
+<p>Each real slit has a width, so each one also diffracts. The double-slit fringes are spaced by \(\lambda L/d\), but their brightness follows the single-slit pattern of Section 8, the <b>envelope</b>. Where a double-slit bright fringe falls on a single-slit dark fringe, that order is missing.</p>
+<h3>White light</h3>
+<p>With one wavelength the fringes are one color, the color of the light. Interference moves light around; it does not change its wavelength. With white light each color makes its own pattern. Red, with the longest wavelength, lands farthest out in each order. Violet lands closest in. Every order is a small rainbow, except the center: \(m = 0\) is at \(\theta = 0\) for every color, so the central fringe is white.</p>
+</section>
+
+<section class="topic" id="s10">
+<h2><span class="n">10</span>Diffraction gratings and spectrometers</h2>
+<p>A <b>diffraction grating</b> is a plate with a large number of evenly spaced parallel slits or grooves. Gratings that pass light are transmission gratings. Gratings that reflect it work the same way and are reflection gratings.</p>
+<p>The condition for a bright fringe is the double slit's, with \(d\) the spacing between neighboring slits:</p>
+\[d\sin\theta = m\lambda, \qquad m = 0, 1, 2, \ldots\]
+<p>What changes is the sharpness. With two slits, moving a little off a bright fringe dims it slowly. With thousands of slits, a small move puts the many waves at many different phases, and they cancel. The bright fringes, the <b>principal maxima</b>, become thin bright lines. Between them are faint <b>secondary maxima</b>. Thin lines are what make a grating useful: two wavelengths that differ by a little land in separate lines.</p>
+<p>Gratings are sold by lines per length. If there are \(N\) lines per meter, the spacing is</p>
+\[d = \frac{1}{N}.\]
+<p>Convert to meters first: 500 lines/mm is \(5\times10^5\) lines/m, so \(d = 2\times10^{-6}\) m. More lines per millimeter means a smaller \(d\) and larger angles. A grating is also rated for the wavelength it sends most light toward, its blaze wavelength.</p>
+<p>A <b>spectrometer</b> uses a grating to spread light into its wavelengths. Every element emits and absorbs its own set of wavelengths, its spectral lines. Measure the angles of the lines, compute each \(\lambda\), and you know what the source is made of. Astronomers learn what stars are made of this way.</p>
+<div class="box ex"><span class="tag">Worked example · hydrogen line at 556.3 nm</span>
+<p>A grating with 500 lines/mm (\(d = 2\times10^{-6}\) m) is in front of a hydrogen lamp. The notes' line, \(\lambda = 556.3\) nm, in first order:</p>
+\[\theta = \sin^{-1}\!\left[\frac{(1)(556.3\times10^{-9})}{2\times10^{-6}}\right] = \sin^{-1}(0.278) = 16.1^\circ .\]
+</div>
+<div class="box ex"><span class="tag">Worked example · hydrogen's blue line at 12.53°</span>
+<p>A first-order line is at 12.53°. Its wavelength is</p>
+\[\lambda = \frac{d\sin\theta}{m} = (2\times10^{-6})\sin 12.53^\circ = 4.34\times10^{-7}\ \text{m} = 434\ \text{nm}.\]
+<p>This is a real hydrogen line, in the violet-blue.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes call 556.3 nm "the red line in the hydrogen spectrum." Hydrogen's red line is 656.3 nm, and 556 nm is green. Hydrogen has no visible line near 556 nm. With 656.3 nm the first-order angle is \(\sin^{-1}(0.328) = 19.2^\circ\), not 16.1°. A student who checks a spectrometer against the notes would look for red at the wrong angle.</p>
+</div>
+<p>Natural gratings make color too. The fine ridges on some butterfly wings and the closely spaced track on a CD act as reflection gratings. White light hitting them leaves as rainbows that change with the viewing angle.</p>
+</section>
+
+<section class="topic" id="s11">
+<h2><span class="n">11</span>X-ray diffraction</h2>
+<p>A crystal is a regular stack of atoms, a few tenths of a nanometer apart. That spacing is too fine for visible light but matches X-ray wavelengths. So a crystal acts as a three-dimensional grating for X-rays, and its diffraction pattern reveals how its atoms are arranged. This is how the structure of DNA was found.</p>
+<div class="box why"><span class="tag">Derivation · Bragg's law</span>
+<p>X-rays reflect weakly off each plane of atoms. Planes are a distance \(d\) apart. Measure the angle \(\theta\) from the planes' surface, not from the normal. The ray reflecting off the lower plane travels an extra \(d\sin\theta\) going down and another \(d\sin\theta\) coming back up. The reflections add when that extra path is a whole number of wavelengths:</p>
+\[n\lambda = 2d\sin\theta, \qquad n = 1, 2, 3, \ldots\]
+<p>Here \(n\) is the order, not an index of refraction.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · atomic spacing from a 30° reflection</span>
+<p>First order, \(\theta = 30^\circ\), \(\lambda = 0.5\times10^{-10}\) m (0.5 Å).</p>
+\[d = \frac{n\lambda}{2\sin\theta} = \frac{(1)(0.5\times10^{-10})}{2\sin 30^\circ} = 5\times10^{-11}\ \text{m}.\]
+<p>At 30°, \(2\sin\theta = 1\), so \(d\) equals \(\lambda\) here.</p>
+</div>
+</section>
+
+<section class="topic" id="s12">
+<h2><span class="n">12</span>Circular apertures and the Airy disk</h2>
+<p>Most real openings are round: a pinhole, the pupil of an eye, the lens of a camera or telescope. Light through a round opening of diameter \(D\) diffracts into a bright central spot surrounded by fainter rings. The first dark ring is at</p>
+\[\sin\theta = 1.22\,\frac{\lambda}{D}.\]
+<p>The 1.22 comes from the round shape. A slit of width \(W\) has its first dark fringe at \(\lambda/W\). Averaging over a circle pushes it out by 22%.</p>
+<p>The bright central spot is the <b>Airy disk</b>. It holds about 84% of the light. A lens cannot focus light to a smaller spot than this. A smaller opening or a longer wavelength makes the disk larger.</p>
+<p>An opaque disk diffracts light too. Its shadow has rings, and at the center of the shadow is a small bright spot, where the waves from all round the edge arrive in phase. This spot was predicted from wave theory in 1818 and found soon after. It was a strong test of the wave picture of light.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the concentric circles around the main area "are called the Airy Disk." The Airy disk is the bright center, inside the first dark ring. The rings are the Airy rings; together they make the Airy pattern. The difference matters for the next section: the Rayleigh criterion uses the radius of the disk, the first dark ring, not a ring outside it. The notes also say Airy disks come from "hole/aperture or solid disk." An opaque disk makes a pattern with a bright spot in its shadow, not an Airy pattern.</p>
+</div>
+</section>
+
+<section class="topic" id="s13">
+<h2><span class="n">13</span>Resolving power</h2>
+<p><b>Resolving power</b> is the ability of an optical system to show two close objects as two. Each point of light makes its own Airy disk in the image. If the disks overlap too much, they blur into one.</p>
+<p>The <b>Rayleigh criterion</b> sets the limit. Two points are just resolved when the center of one's pattern falls on the first dark ring of the other's. Their angular separation is then</p>
+\[\theta_{\min} \approx 1.22\,\frac{\lambda}{D}\quad\text{(radians)}.\]
+<p>For two objects a distance \(L\) away, the arc length \(s = L\theta\) gives the smallest spacing that can be seen:</p>
+\[s_{\min} \approx \frac{1.22\,\lambda L}{D}.\]
+<p>A larger aperture or a shorter wavelength resolves finer detail. That is why large telescopes have wide mirrors, and why a microscope sees finer detail in blue light than in red.</p>
+<div class="box ex"><span class="tag">Worked example · Cathy the hang glider</span>
+<p>Cathy flies \(L = 120\) m above the ground. Cathy's pupil is \(D = 10\) mm wide, and the light is green, \(\lambda = 530\) nm.</p>
+\[s_{\min} = \frac{1.22(530\times10^{-9}\ \text{m})(120\ \text{m})}{10\times10^{-3}\ \text{m}} = 7.8\times10^{-3}\ \text{m} = 7.8\ \text{mm}.\]
+<p>How high can Cathy fly and still see two people 0.5 m apart as two?</p>
+\[L = \frac{D\,s_{\min}}{1.22\lambda} = \frac{(10\times10^{-3})(0.5)}{1.22(530\times10^{-9})} = 7.7\times10^{3}\ \text{m}.\]
+<p>About 7.7 km. A real pupil is at most about 8 mm wide, and the eye's lens and retina are not perfect, so the real limit is lower.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the wavelength "at the sensor" must be used, \(\lambda_s = \lambda_{\text{air}}/n\), and with the eye's \(n = 1.34\) get \(s_{\min} = 5.8\) mm and \(L = 10{,}500\) m for Cathy. Inside the eye the diffraction angle is smaller by \(n\). But refraction at the cornea shrinks the angle between the two incoming rays by the same factor. Both shrink together, so the smallest separation outside the eye is set by the wavelength in air: \(\theta_{\min} = 1.22\lambda_{\text{air}}/D\). The corrected answers are 7.8 mm and 7.7 km. The course's own method also does not give 10,500 m: \(L = (0.01)(0.5)/[1.22(395.5\times10^{-9})] = 10{,}360\) m. The course's homework (Practice 64 #17, Worksheet 8 #8) uses \(\lambda/n\); know that method for those problems, and know that it overstates what the eye can see by a factor of \(n\).</p>
+</div>
+</section>
+
+<section class="topic" id="s14">
+<h2><span class="n">14</span>Holograms</h2>
+<p>A photograph records how bright each point of a scene is. A <b>hologram</b> also records the phase of the light from each point, which carries depth. It does that with interference.</p>
+<p><b>Recording.</b> A laser beam is split in two. The <b>object beam</b> lights the object, and the light scattered from it falls on a photographic plate. The <b>reference beam</b> goes straight to the plate. The two beams are coherent, so they interfere. The plate records the fringes. Their spacing and position encode the optical path from each point of the object.</p>
+<p><b>Playback.</b> Light the developed plate with the reference beam again, at the same wavelength and angle. The recorded fringes act as a complicated diffraction grating. They bend the light into the same wave the object sent out. Looking into the plate, you see a three-dimensional virtual image, and it shifts in perspective as you move your head.</p>
+<p>Each point of the plate holds light from the whole object. A broken piece still shows the whole scene, from a narrower range of viewpoints and with less detail.</p>
+<ul>
+  <li>A hologram shows depth; a photograph is flat.</li>
+  <li>A hologram needs coherent light to record; a photograph does not.</li>
+  <li>A hologram needs no lens to record.</li>
+  <li>Any piece of a hologram shows the whole object; a piece of a photograph shows only its own part.</li>
+</ul>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say "photographs must have a lens to be created." A pinhole camera makes a photograph with no lens: the small hole alone forms the image. A lens makes the image brighter and sharper, but it is not required. The difference from a hologram is phase, not the lens.</p>
+</div>
+</section>
+
+<div class="part">
+  <div class="eyebrow">Part III</div>
+  <h2>Thin films</h2>
+</div>
+
+<section class="topic" id="s15">
+<h2><span class="n">15</span>Phase shifts on reflection</h2>
+<p>Light hitting a thin transparent film reflects twice: once from the top surface and once from the bottom. The two reflected waves overlap and interfere. Two things decide how they combine: the extra path through the film (Section 16) and what each reflection does to the wave's phase.</p>
+<p>The rule for reflections:</p>
+<ul>
+  <li>Light in a <b>lower</b>-index medium that reflects off a <b>higher</b>-index medium is flipped: a half-wave shift, \(\tfrac12\lambda\) or 180°. Air to a soap film is an example.</li>
+  <li>Light in a <b>higher</b>-index medium that reflects off a <b>lower</b>-index medium is not shifted. The bottom of a soap film, back into air, is an example.</li>
+  <li>Transmitted light is never shifted, at either boundary.</li>
+</ul>
+<p>The same thing happens to a wave on a rope. A pulse that hits a heavy rope or a wall comes back upside down. A pulse that hits a lighter rope comes back upright.</p>
+<p>For a film, count the flips in the two reflected rays:</p>
+<div class="tbl"><table>
+<tr><th>Film</th><th>Top reflection</th><th>Bottom reflection</th><th>Net relative shift</th></tr>
+<tr><td>\(n_1 &lt; n_{\text{film}} &gt; n_2\) (soap in air, oil on water when \(n_{\text{oil}} &gt; n_{\text{water}}\))</td><td>flipped</td><td>not flipped</td><td>\(\tfrac12\lambda\)</td></tr>
+<tr><td>\(n_1 &lt; n_{\text{film}} &lt; n_2\) (coating on glass)</td><td>flipped</td><td>flipped</td><td>none (two flips cancel)</td></tr>
+</table></div>
+<p>The notes write the "no shift" case as a shift of \(m\lambda\). A whole number of wavelengths is the same as no shift.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes describe "the total relative phase shift between r1 the incident ray and r4 the reflected ray off the bottom of the thin film." The shift that matters is between the two <i>reflected</i> rays, r2 off the top and r4 off the bottom. They are the ones that meet and interfere. The incident ray never meets r4. Compared with the incident ray, r4 in the first figure has no shift at all; it is r2 that carries the \(\tfrac12\lambda\).</p>
+</div>
+</section>
+
+<section class="topic" id="s16">
+<h2><span class="n">16</span>The thin-film conditions</h2>
+<div class="box why"><span class="tag">Derivation · bright and dark films</span>
+<p>Take light at normal incidence on a film of index \(n\) and thickness \(t\). The ray that goes through the film and back travels an extra \(2t\) inside the film, where the wavelength is \(\lambda/n\). That extra path holds</p>
+\[\frac{2t}{\lambda/n} = \frac{2nt}{\lambda}\ \text{wavelengths}.\]
+<p>Here \(\lambda\) is the wavelength in air. Add the reflection shifts from Section 15.</p>
+<p><b>One flip</b> (\(\tfrac12\lambda\) net shift, the course's "Equation 1"). The rays start half a cycle apart. The path must add another half to bring them back in step:</p>
+\[2nt = \left(m+\tfrac12\right)\lambda\quad\text{bright}, \qquad 2nt = m\lambda\quad\text{dark}.\]
+<p><b>No flip or two flips</b> (the course's "Equation 2"). The rays start in step:</p>
+\[2nt = m\lambda\quad\text{bright}, \qquad 2nt = \left(m+\tfrac12\right)\lambda\quad\text{dark}.\]
+</div>
+<p>Solved for the thickness or the wavelength:</p>
+<div class="tbl"><table>
+<tr><th>Net reflection shift</th><th>Bright (constructive)</th><th>Dark (destructive)</th></tr>
+<tr><td>\(\tfrac12\lambda\): Equation 1</td><td>\(t = \dfrac{(m+\frac12)\lambda}{2n}\), \(\lambda = \dfrac{2nt}{m+\frac12}\), \(m = 0, 1, 2\ldots\)</td><td>\(t = \dfrac{m\lambda}{2n}\), \(\lambda = \dfrac{2nt}{m}\), \(m = 1, 2, 3\ldots\)</td></tr>
+<tr><td>none: Equation 2</td><td>\(t = \dfrac{m\lambda}{2n}\), \(\lambda = \dfrac{2nt}{m}\), \(m = 1, 2, 3\ldots\)</td><td>\(t = \dfrac{(m+\frac12)\lambda}{2n}\), \(\lambda = \dfrac{2nt}{m+\frac12}\), \(m = 0, 1, 2\ldots\)</td></tr>
+</table></div>
+<p>The \(n\) is the film's index, not the index above or below it. Those set the flips only. The thinnest film for each case is \(\lambda/4n\) (a quarter of the film wavelength) or \(\lambda/2n\) (a half).</p>
+<div class="box key"><span class="tag">Key idea</span>
+<p>Decide the flips first, then pick the equation. If one reflection flips and the other does not, the bright and dark conditions swap compared with zero or two flips.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say "the wavelength used for thin film interference is the wavelength within the film." The equations above already contain the film wavelength: \(\lambda/n\) is why there is an \(n\) in \(2nt\). The \(\lambda\) you put in them is the wavelength in air. Every worked example in the notes does this, with 520 nm or 500 nm straight in. Putting \(\lambda/n\) into \(t = (m+\tfrac12)\lambda/2n\) divides by \(n\) twice. For the 520 nm soap film below, that gives 66 nm instead of 93 nm.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes give the condition as an extra distance of "an integer number of whole wavelengths (for constructive interference) or an integer number of half wavelengths (for destructive interference)." Two half wavelengths is a whole one, so "an integer number of half wavelengths" includes the constructive case. Destructive needs an <i>odd</i> number of half wavelengths. And both rules hold only when the reflections add no net shift. With one flip they swap.</p>
+</div>
+</section>
+
+<section class="topic" id="s17">
+<h2><span class="n">17</span>Thin-film examples</h2>
+<p>Each example follows the same three steps: count the flips, pick the equation, take the smallest allowed \(m\).</p>
+<div class="box ex"><span class="tag">Worked example · soap film in air, 520 nm</span>
+<p>A soap film (\(n = 1.40\)) has air on both sides, and 520 nm light hits it straight on. The top reflection flips and the bottom does not: Equation 1. The thinnest bright film has \(m = 0\):</p>
+\[t = \frac{(\tfrac12)(520\times10^{-9})}{2(1.40)} = 9.29\times10^{-8}\ \text{m} = 92.9\ \text{nm}.\]
+<p>The thinnest dark film (other than zero thickness) has \(m = 1\): \(t = 520/2.80 = 186\) nm.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · oil on a puddle, 500 nm</span>
+<p>Oil (\(n = 1.25\)) floats on water (\(n = 1.33\)). Both reflections go from lower to higher index, so both flip: Equation 2. Strong reflection, thinnest film, \(m = 1\):</p>
+\[t = \frac{(1)(500\times10^{-9})}{2(1.25)} = 2.0\times10^{-7}\ \text{m} = 200\ \text{nm}.\]
+<p>For no reflection, \(m = 0\): \(t = (\tfrac12)(500)/2.50 = 100\) nm.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · soap bubble 250 nm thick</span>
+<p>A bubble (\(n = 1.35\)) is \(t = 250\) nm thick with air on both sides. Which visible wavelengths (400 to 700 nm) reflect strongly? One flip, Equation 1: \(\lambda = 2nt/(m+\tfrac12)\), with \(2nt = 675\) nm.</p>
+<p>\(m = 0\): 1350 nm, infrared. \(m = 1\): 450 nm. \(m = 2\): 270 nm, ultraviolet.</p>
+<p>Only 450 nm (blue) is visible, so the bubble looks blue.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>In the soap-bubble example the notes say "the total shift is \(m\lambda\)" and then use Equation 1. Air–soap–air has one flip, so the net shift is \(\tfrac12\lambda\). That is why Equation 1 is right. A student who trusts the sentence "total shift is \(m\lambda\)" would pick Equation 2 and get 675 nm and 338 nm, the wrong colors.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · oil on glass 420 nm thick</span>
+<p>Oil (\(n = 1.45\)) on glass (\(n = 1.6\)), \(t = 420\) nm. Two flips, Equation 2: \(\lambda = 2nt/m\), with \(2nt = 1218\) nm.</p>
+<p>\(m = 1\): 1218 nm, infrared. \(m = 2\): 609 nm. \(m = 3\): 406 nm. \(m = 4\): 305 nm, ultraviolet.</p>
+<p>Both 609 nm (orange) and 406 nm (violet) are reflected strongly. The notes' first line writes \(4.4\times10^{-7}\) m for the thickness; the result, 1218 nm, uses the stated 420 nm.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · Cathy's anti-reflection coating</span>
+<p>Cathy designs a coating of MgF₂ (\(n = 1.38\)) on glass (\(n = 1.59\)) that cancels the reflection of 500 nm light, using the \(m = 10\) mode. Two flips, so no net shift. Cancelling needs the path to add half a wavelength:</p>
+\[t = \frac{(m+\tfrac12)\lambda}{2n} = \frac{(10.5)(500\times10^{-9})}{2(1.38)} = 1.90\times10^{-6}\ \text{m} = 1.9\ \mu\text{m}.\]
+<p>The thinnest coating that works is \(m = 0\): \(t = 500/(4 \times 1.38) = 90.6\) nm. Real coatings use that one. A thick \(m = 10\) coating cancels 500 nm but reflects 477 nm and 525 nm strongly, so it would look colored.</p>
+</div>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The coating example says "equation 1 is used for destructive interference." In the notes' own scheme, a coating on higher-index glass has two flips, which is Equation 2. Equation 1's dark condition is \(t = m\lambda/2n\), which for \(m = 10\) gives 1.81 μm, a film that <i>reflects</i> 500 nm strongly here. The formula the example then uses, \((m+\tfrac12)\lambda/2n\), is Equation 2's, and its answer, 1.9 μm, is right.</p>
+</div>
+
+<h3>The Chapter 65 video problem</h3>
+<p>The video works four films with 550 nm light (parts 1 and 2) and white light from 380 to 750 nm (parts 3 and 4). Soap has \(n = 1.42\) with air on both sides. Oil has \(n = 1.5\) and sits on glass with \(n = 1.6\).</p>
+<div class="box ex"><span class="tag">Worked example · video problem 1, a soap film at 550 nm</span>
+<p>One flip, Equation 1. Brightest, thinnest: \(t = (\tfrac12)(550)/[2(1.42)] = 96.8\) nm. Dark, thinnest nonzero: \(t = 550/2.84 = 194\) nm.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · video problem 2, oil on glass at 550 nm</span>
+<p>Two flips, Equation 2. Bright: \(t = 550/[2(1.5)] = 183\) nm. Dark: \(t = (\tfrac12)(550)/3.0 = 91.7\) nm. The bright and dark thicknesses swap compared with the soap film.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · video problem 3, soap 550 nm thick in white light</span>
+<p>\(2nt = 2(1.42)(550) = 1562\) nm. One flip.</p>
+<p>Reflected: \(\lambda = 1562/(m+\tfrac12)\) gives 3124, 1041, <b>625</b>, <b>446</b> and 347 nm. Visible: 625 nm and 446 nm.</p>
+<p>Not reflected: \(\lambda = 1562/m\) gives 1562, 781, <b>521</b>, <b>391</b> and 312 nm. Visible: 521 nm and 391 nm. The 781 nm line is past the 750 nm edge.</p>
+</div>
+<div class="box ex"><span class="tag">Worked example · video problem 4, oil 400 nm thick on glass</span>
+<p>\(2nt = 2(1.5)(400) = 1200\) nm. Two flips.</p>
+<p>Reflected: \(\lambda = 1200/m\) gives 1200, <b>600</b>, <b>400</b> and 300 nm. Visible: 600 nm and 400 nm.</p>
+<p>Not reflected: \(\lambda = 1200/(m+\tfrac12)\) gives 2400, 800, <b>480</b> and 343 nm. Visible: 480 nm only.</p>
+</div>
+</section>
+
+<section class="topic" id="s18">
+<h2><span class="n">18</span>Colors, wedges, rings and coatings</h2>
+<h3>Why films are colored</h3>
+<p>In white light, a film of one thickness reflects some wavelengths strongly and cancels others. The bright condition depends on \(\lambda\), so each thickness picks its own colors. Real films vary in thickness from place to place. A soap film thins at the top as it drains, and an oil slick spreads unevenly. Each band of thickness shows a different color. Where a soap film becomes much thinner than a wavelength, the path difference vanishes and the one flip makes it dark: the black spot seen before a bubble bursts.</p>
+<h3>Air wedge</h3>
+<p>Lay one flat glass plate on another and prop up one end with a thin spacer. Between them is a wedge of air, from zero thickness at the contact line to the spacer's thickness at the other end. Light from above reflects off the bottom surface of the top plate and the top surface of the bottom plate. These two surfaces bound the air film. The reflection off the bottom plate flips; the one inside the top glass does not. So the contact line is dark. Each step of \(\lambda/2\) in gap thickness adds a full wavelength of path and moves one fringe. The result is a row of straight, evenly spaced fringes. A bent fringe shows a bump or dip in one of the plates.</p>
+<div class="box fix"><span class="tag">Correction to the original notes</span>
+<p>The notes say the fringes come from "light reflecting from the first surface of the top plate and the first surface of the bottom plate." The first surface of the top plate is its upper face, a whole plate's thickness away from the gap. The interfering reflections are from the two faces of the air gap: the <i>lower</i> surface of the top plate and the upper surface of the bottom plate. A path difference taken from the top plate's upper face would include the whole plate, and the fringes would no longer map the gap.</p>
+</div>
+<h3>Newton's rings</h3>
+<p>A curved lens set on a flat plate traps an air film that is zero at the contact point and thickens outward. The fringes are circles. If the lens surface is a true sphere, they are perfect circles. Opticians use the rings to test lens surfaces.</p>
+<h3>Oil on water</h3>
+<p>Oil spreads on water into a thin film with an index different from the water's. Its colors trace its changing thickness.</p>
+<h3>Anti-reflection coatings</h3>
+<p>Uncoated glass reflects about 4% of the light at each surface. A camera lens with ten surfaces would lose a third of its light and fill the picture with glare. A coating one quarter of a film wavelength thick cancels the reflection of one chosen color.</p>
+<div class="box ex"><span class="tag">Application · anti-reflection coating on a camera lens</span>
+<p>Lenses are coated with magnesium fluoride (\(n = 1.38\)), which sits between air (1.00) and glass (about 1.50). Both reflections flip, so the coating cancels when \(2nt = \tfrac12\lambda\). Designers aim at the middle of the visible spectrum, green at 550 nm, where the eye is most sensitive:</p>
+\[t = \frac{\lambda}{4n} = \frac{550\times10^{-9}\ \text{m}}{4(1.38)} = 99.6\ \text{nm}.\]
+<p>The coating cancels green well and red and blue less well. They reflect a little, so coated lenses look purple. Cancellation is complete only if the two reflections are equally strong. That needs \(n_{\text{film}} = \sqrt{n_{\text{glass}}} \approx 1.22\). MgF₂ is the closest durable material.</p>
+</div>
+<h3>Iridescence</h3>
+<p><b>Iridescence</b> is color that changes with the viewing angle. At a slant, the path difference through a film changes, so a different wavelength is reinforced. Some iridescence comes from thin films and stacks of them: bubbles, oil, the inside of seashells. Some comes from fine regular grooves acting as gratings: some butterfly wings, beetle shells and bird feathers. Both are interference.</p>
+</section>
+
+<section class="topic" id="s19">
+<h2><span class="n">19</span>Formula sheet</h2>
+<div class="tbl"><table>
+<tr><th>Idea</th><th>Result</th></tr>
+<tr><td>Phase shift</td><td>\(\Delta\Phi = \dfrac{\Delta t}{T}\,360^\circ = 2\pi f\,\Delta t = 2\pi\,\dfrac{\Delta l}{\lambda}\)</td></tr>
+<tr><td>Wavelength in a material</td><td>\(\lambda_n = \lambda/n\)</td></tr>
+<tr><td>Optical path length</td><td>\(nd\) (equals \(ct\) in a time \(t\)); distance traveled in time \(t\) is \(ct/n\)</td></tr>
+<tr><td>Two paths</td><td>\(\Delta l = m\lambda\) bright, \(\;\Delta l = (m+\frac12)\lambda\) dark, \(\;m = \Delta l/\lambda\)</td></tr>
+<tr><td>Michelson interferometer</td><td>\(2\Delta d = m\lambda\), \(\;\Delta d\) = mirror move</td></tr>
+<tr><td>Single slit, dark fringes</td><td>\(W\sin\theta = m\lambda\), \(\;y \approx m\lambda L/W\), \(\;m = 1, 2, 3\ldots\); central width \(2\lambda L/W\)</td></tr>
+<tr><td>Double slit, bright</td><td>\(d\sin\theta = m\lambda\), \(\;y = m\lambda L/d\), \(\;m = 0, 1, 2\ldots\)</td></tr>
+<tr><td>Double slit, dark</td><td>\(d\sin\theta = (m+\frac12)\lambda\), \(\;y = (m+\frac12)\lambda L/d\), \(\;m = 0, 1, 2\ldots\)</td></tr>
+<tr><td>Grating</td><td>\(d\sin\theta = m\lambda\), \(\;d = 1/N\) with \(N\) in lines per meter</td></tr>
+<tr><td>Bragg (X-rays)</td><td>\(n\lambda = 2d\sin\theta\), \(\;\theta\) from the planes</td></tr>
+<tr><td>Circular aperture, Rayleigh</td><td>\(\theta_{\min} = 1.22\lambda/D\), \(\;s_{\min} = 1.22\lambda L/D\), \(\lambda\) in air</td></tr>
+<tr><td>Reflection flip</td><td>\(\tfrac12\lambda\) going from low \(n\) to high \(n\); none from high to low; none on transmission</td></tr>
+<tr><td>Thin film, one flip (Eq. 1)</td><td>bright \(2nt = (m+\frac12)\lambda\); dark \(2nt = m\lambda\)</td></tr>
+<tr><td>Thin film, zero or two flips (Eq. 2)</td><td>bright \(2nt = m\lambda\); dark \(2nt = (m+\frac12)\lambda\)</td></tr>
+<tr><td>Quarter-wave coating</td><td>\(t = \lambda/4n\)</td></tr>
+</table></div>
+</section>
+</main>
+
+<footer>Rewritten from the Fall 2026 PHY 2049 lecture notes, Chapters 63, 64 and 65, with the Chapter 65 problem-solving video and the wave-optics part of the final exam's equation sheet. Every worked answer was recomputed. Constants used: \(c = 3.00\times10^8\) m/s, \(n_{\text{air}} = 1.00\), \(n_{\text{water}} = 1.33\), visible light 400 to 700 nm (380 to 750 nm in the video problem) unless an example gives its own values.</footer>
+
+</body></html>

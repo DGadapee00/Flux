@@ -920,6 +920,132 @@ export const SETUPS = {
       },
     ],
   },
+  wave: {
+    s8: [
+      {
+        tag: 'a 100 μm slit',
+        lab: 'diffraction',
+        scenario: 'single',
+        setup: (s) => Object.assign(s, { lam: 650e-9, a: 100e-6, L: 2 }),
+        read: (c) => ({ 'y₁ (m)': [c.diff.ss.yDark(1), 0.013], 'central width (m)': [c.diff.width, 0.026] }),
+      },
+      {
+        tag: 'finding the slit from an 18 mm fringe',
+        lab: 'diffraction',
+        scenario: 'single',
+        setup: (s) => Object.assign(s, { lam: 650e-9, a: 72.2e-6, L: 2 }),
+        note: 'The lab sets the answer, W = 72.2 μm, and shows the fringe it gives.',
+        read: (c) => ({ 'y₁ (m)': [c.diff.ss.yDark(1), 0.018] }),
+      },
+    ],
+    s9: [
+      {
+        tag: 'double slit, d = 0.2 mm',
+        lab: 'interference',
+        scenario: 'young',
+        setup: (s) => Object.assign(s, { lam: 650e-9, d: 0.2e-3, L: 2, m: 1, envelope: false }),
+        read: (c) => ({ 'y₁ (m)': [c.interf.y, 6.5e-3] }),
+      },
+      {
+        tag: 'a new light source, first fringe at 4 mm',
+        lab: 'interference',
+        scenario: 'young',
+        setup: (s) => Object.assign(s, { lam: 400e-9, d: 0.2e-3, L: 2, m: 1, envelope: false }),
+        note: 'The lab sets the answer, λ = 400 nm, and shows the fringe it gives.',
+        read: (c) => ({ 'y₁ (m)': [c.interf.y, 4e-3] }),
+      },
+    ],
+    s10: [
+      {
+        tag: 'hydrogen line at 556.3 nm',
+        lab: 'diffraction',
+        scenario: 'grating',
+        setup: (s) => Object.assign(s, { lam: 556.3e-9, linesPerMM: 500, m: 1 }),
+        note: 'Set λ to 656.3 nm to see where hydrogen’s red line falls (19.2°).',
+        read: (c) => ({ 'θ₁ (°)': [c.diff.thetaOrderDeg, 16.1] }),
+      },
+      {
+        tag: "hydrogen's blue line at 12.53°",
+        lab: 'diffraction',
+        scenario: 'grating',
+        setup: (s) => Object.assign(s, { lam: 434e-9, linesPerMM: 500, m: 1 }),
+        note: 'The lab sets the answer, λ = 434 nm, and shows the angle it gives.',
+        read: (c) => ({ 'θ₁ (°)': [c.diff.thetaOrderDeg, 12.53] }),
+      },
+    ],
+    s13: [
+      {
+        tag: 'Cathy the hang glider',
+        lab: 'diffraction',
+        scenario: 'rayleigh',
+        setup: (s) => Object.assign(s, { lam: 530e-9, D: 10e-3, Lobj: 120, sepFactor: 1 }),
+        note: 'The lab uses the wavelength in air, as the notes do.',
+        read: (c) => ({ 'θmin (rad)': [c.diff.thetaMin, 6.47e-5], 'smin (m)': [c.diff.separation, 7.8e-3] }),
+      },
+    ],
+    s17: [
+      {
+        tag: 'soap film in air, 520 nm',
+        lab: 'thinfilm',
+        scenario: 'soap',
+        setup: (s) => Object.assign(s, { nf: 1.4, ns: 1, lam: 520e-9, t: 92.9e-9 }),
+        read: (c) => ({ 'bright t (m)': [c.film.tBright, 92.9e-9], 'dark t (m)': [c.film.tDark, 186e-9], reflectance: [c.film.reflectance, 1] }),
+      },
+      {
+        tag: 'oil on a puddle, 500 nm',
+        lab: 'thinfilm',
+        scenario: 'oil',
+        setup: (s) => Object.assign(s, { nf: 1.25, ns: 1.33, lam: 500e-9, t: 200e-9 }),
+        read: (c) => ({ 'bright t (m)': [c.film.tBright, 200e-9], 'dark t (m)': [c.film.tDark, 100e-9], reflectance: [c.film.reflectance, 1] }),
+      },
+      {
+        tag: 'soap bubble 250 nm thick',
+        lab: 'thinfilm',
+        scenario: 'soap',
+        setup: (s) => Object.assign(s, { nf: 1.35, ns: 1, lam: 450e-9, t: 250e-9 }),
+        note: 'The lab shows 450 nm, the one visible color the bubble reflects.',
+        read: (c) => ({ 'phase difference (λ)': [c.film.pathWaves, 2], reflectance: [c.film.reflectance, 1] }),
+      },
+      {
+        tag: 'oil on glass 420 nm thick',
+        lab: 'thinfilm',
+        scenario: 'coat',
+        setup: (s) => Object.assign(s, { nf: 1.45, ns: 1.6, lam: 609e-9, t: 420e-9 }),
+        note: 'The lab shows 609 nm. Set λ to 406 nm for the other reflected color.',
+        read: (c) => ({ 'phase difference (λ)': [c.film.pathWaves, 2], reflectance: [c.film.reflectance, 1] }),
+      },
+      {
+        tag: "Cathy's anti-reflection coating",
+        lab: 'thinfilm',
+        scenario: 'ar',
+        setup: (s) => Object.assign(s, { nf: 1.38, ns: 1.59, lam: 500e-9, t: 1.902e-6 }),
+        read: (c) => ({ 'phase difference (λ)': [c.film.pathWaves, 10.5], 'thinnest dark t (m)': [c.film.tDark, 90.6e-9] }),
+      },
+      {
+        tag: 'video problem 1, a soap film at 550 nm',
+        lab: 'thinfilm',
+        scenario: 'soap',
+        setup: (s) => Object.assign(s, { nf: 1.42, ns: 1, lam: 550e-9, t: 96.8e-9 }),
+        read: (c) => ({ 'bright t (m)': [c.film.tBright, 96.8e-9], 'dark t (m)': [c.film.tDark, 194e-9] }),
+      },
+      {
+        tag: 'video problem 2, oil on glass at 550 nm',
+        lab: 'thinfilm',
+        scenario: 'coat',
+        setup: (s) => Object.assign(s, { nf: 1.5, ns: 1.6, lam: 550e-9, t: 183.3e-9 }),
+        read: (c) => ({ 'bright t (m)': [c.film.tBright, 183e-9], 'dark t (m)': [c.film.tDark, 91.7e-9] }),
+      },
+    ],
+    s18: [
+      {
+        tag: 'Application · anti-reflection coating on a camera lens',
+        lab: 'thinfilm',
+        scenario: 'ar',
+        setup: (s) => Object.assign(s, { nf: 1.38, ns: 1.5, lam: 550e-9, t: 99.6e-9 }),
+        read: (c) => ({ 'dark t (m)': [c.film.tDark, 99.6e-9], 'phase difference (λ)': [c.film.pathWaves, 0.5] }),
+      },
+    ],
+  },
 };
 
 /** An example's tag as the notes write it, without "Worked example · ": '' for an untagged one. */
