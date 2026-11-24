@@ -2,8 +2,7 @@
 
 Course apps for a mechanical engineering degree. Each course holds its own labs, notes and
 practice problems. The hub is one page: every course, grouped by subject, and one backup file for
-the progress the courses keep. Projects, such as the satellite and the tank dome, are courses in the
-Projects group.
+the progress the courses keep. Flux teaches the ideas. Hands-on project work lives outside it.
 
 | Where | What |
 |---|---|

@@ -91,10 +91,8 @@ export const TRACKS = [
     id: 'projects',
     name: 'Projects',
     courses: [
-      { id: 'bench', code: 'BENCH', title: 'Electronics on the bench', term: null, href: 'bench/' },
       { id: 'design', code: 'DES', title: 'Design practice', term: null, href: 'design/' },
       { id: 'satellite', code: 'SAT', title: 'Build a satellite', term: null, href: 'satellite/' },
-      { id: 'dome', code: 'DOME', title: 'Tank dome', term: null, href: 'dome/' },
     ],
   },
 ];
