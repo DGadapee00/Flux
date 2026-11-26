@@ -71,6 +71,15 @@ for (const [key, set] of Object.entries(NOTES)) {
   for (const [what, re] of [['header.top', /<header class="top">/], ['a legend', /class="legend"/], ['a toc', /class="toc"/], ['a div.part', /<div class="part">/]]) {
     if (!re.test(html)) fail(name, `no ${what} (PHY 2049's structure, D32)`);
   }
+  // The story: each Part says why it comes next, and each section opens with what it adds.
+  for (const m of html.matchAll(/<div class="part"><div class="eyebrow">([^<]*)<\/div><h2>([^<]*)<\/h2>(\s*<p>)?/g)) {
+    if (m[1] !== 'Reference' && !m[3]) fail(name, `part "${m[2]}": no bridge paragraph`);
+  }
+  for (const s of set.sections) {
+    if (s.title === 'Formula sheet') continue;
+    if (!new RegExp(`<section class="topic" id="${s.id}"><h2>[\\s\\S]*?</h2>\\s*<p class="lead-in">`).test(html)) fail(name, `${s.id}: no lead-in paragraph`);
+  }
+  if (html.includes('—')) fail(name, 'an em dash (Voice rules)');
   for (const s of set.sections) {
     if (s.title === 'Formula sheet') continue;
     const sec = html.match(new RegExp(`<section class="topic" id="${s.id}">([\\s\\S]*?)</section>`))?.[1] || '';

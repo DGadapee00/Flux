@@ -1,7 +1,7 @@
 <header class="top">
  <div class="eyebrow">MAP 2302 · Unit 1 · OCW 18.03SC Fall 2011 Unit I · Lebl §§1.1–1.4, 1.6–1.7, 2.2</div>
  <h1>First-order equations</h1>
- <p class="lede">An equation for a derivative gives a local rule. An initial value selects a trajectory. Symbols, pictures and numerical steps expose different parts of that rule.</p>
+ <p class="lede">Calculus finds a rate from a function. Many real problems hand you the rate instead. A cooling cup tells you how fast it loses heat now, not what it will read in ten minutes. This unit turns a rule for the rate into a prediction. Part I says what a solution is, when one exists, and how to find it by formula, by picture and by numerical steps. Part II takes linear equations, which always have a formula, and predicts the response to an input. Part III reads behaviour from signs when no formula helps, then applies the whole unit to a coffee server. Part IV adds the remaining standard methods and models.</p>
  <div class="legend"><span><i style="background:var(--field)"></i>Worked example</span><span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation / theorem</span><span><i style="background:var(--ok)"></i>Definition</span><span><i style="background:var(--copper)"></i>Common mistake</span><span>Model limits</span></div>
  <nav class="toc" aria-label="Contents">
   <h3>Part I · Local rules and solution intervals</h3><a href="#s1"><span>1</span>What a solution means</a><a href="#s2"><span>2</span>Separation without losing branches</a><a href="#s3"><span>3</span>Fields, existence and uniqueness</a><a href="#s4"><span>4</span>Euler steps and their limits</a>
@@ -12,8 +12,9 @@
  </nav>
 </header>
 <main>
-<div class="part"><div class="eyebrow">Part I</div><h2>Local rules and solution intervals</h2></div>
+<div class="part"><div class="eyebrow">Part I</div><h2>Local rules and solution intervals</h2><p>Before solving anything, you need to know what counts as an answer. This Part defines a solution and solves the equations that separate. It then asks when a solution exists and whether it is the only one. It ends with Euler's method, which works when no formula does. Each tool covers a gap the one before it leaves.</p></div>
 <section class="topic" id="s1"><h2><span class="n">1</span>What a solution means</h2>
+<p class="lead-in">A differential equation gives a rule for the rate, not the quantity itself. The first job is to say what it means for a function to obey that rule. With that definition, you can check any proposed answer yourself.</p>
 <p>Write a first-order ordinary differential equation as \(y'=f(t,y)\). There is one independent variable, usually time. “First order” means no derivative above the first appears. The dependent variable need not represent a distance. It may be temperature, concentration or a dimensionless response.</p>
 <div class="box key"><span class="tag">Definition · Solution of an IVP</span><p>A solution is a differentiable function on an interval that satisfies the equation at every point. For an initial-value problem it also satisfies \(y(t_0)=y_0\). The interval must contain \(t_0\).</p></div>
 <p>Checking means differentiating the proposed function and substituting it into the original equation. Checking an initial value alone is insufficient. Conversely, a function can satisfy the differential equation but miss the specified initial value.</p>
@@ -26,6 +27,7 @@
 <p>Read: Lebl §1.1. Another view: <a href="https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/pages/unit-i-first-order-differential-equations/basic-de-and-separable-equations/">OCW basic equations and separation</a>.</p>
 </section>
 <section class="topic" id="s2"><h2><span class="n">2</span>Separation without losing branches</h2>
+<p class="lead-in">Checking an answer is not finding one. The first family you can solve by hand is the separable equation, where time and the unknown split onto different sides. Separation also shows that a solution can stop existing at a finite time.</p>
 <p>Suppose \(y'=g(t)h(y)\). On an interval where \(h(y)\ne0\), divide and integrate:</p>
 \[\int\frac{dy}{h(y)}=\int g(t)\,dt+C.\]
 <p>First inspect the zeros of \(h\). Each constant root is an equilibrium solution excluded by division. Keep those branches separately. Also keep restrictions introduced by logarithms, inverse functions and denominators.</p>
@@ -39,6 +41,7 @@
 <p>Not every separable solution can be solved explicitly for \(y\). An implicit relation is acceptable, with its domain and chosen branch stated. Read: Lebl §§1.1–1.3.</p>
 </section>
 <section class="topic" id="s3"><h2><span class="n">3</span>Fields, existence and uniqueness</h2>
+<p class="lead-in">Most equations do not separate. A slope field draws the rule itself, so you can sketch solutions with no formula. The picture raises a question: through one starting point, is there one curve, several or none? The existence and uniqueness theorem answers it.</p>
 <p>At each point \((t,y)\), draw a short segment with slope \(f(t,y)\). A solution must follow those tangents. An isocline is a set where \(f(t,y)=c\), so every segment on it has the same slope. Isoclines are not generally solution curves.</p>
 <p>For \(y'=t-2y\), an isocline has equation \(y=(t-c)/2\). A horizontal tangent lies on \(y=t/2\), but that sloping line has derivative \(1/2\), not zero. It is not a solution. The nearby line \(y=t/2-1/4\) is a solution, because its derivative and the right side both equal \(1/2\).</p>
 <div class="box why"><span class="tag">Theorem · Local existence and uniqueness</span><p>If \(f\) is continuous in a rectangle around the initial point, a local solution exists. If \(f\) is also locally Lipschitz in \(y\), that local solution is unique. Continuous \(\partial f/\partial y\) on the rectangle is a useful sufficient condition for this second hypothesis.</p></div>
@@ -49,6 +52,7 @@
 <p>Read: Lebl §1.2. Another view: <a href="https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/pages/unit-i-first-order-differential-equations/geometric-methods/">OCW geometric methods</a>.</p>
 </section>
 <section class="topic" id="s4"><h2><span class="n">4</span>Euler steps and their limits</h2>
+<p class="lead-in">The theorem says a solution exists. It does not say how to compute it. Euler's method follows the slope field in short straight steps. That turns any equation into numbers, and the error analysis tells you how far to trust them.</p>
 <p>Use a tangent over one short interval. Taylor expansion gives \(y(t+h)=y(t)+hy'(t)+O(h^2)\). Replacing the derivative by the known slope produces Euler's update:</p>
 \[t_{n+1}=t_n+h,\qquad y_{n+1}=y_n+h f(t_n,y_n).\]
 <p>The omitted local term is order \(h^2\). There are about \(1/h\) steps on a fixed interval. Under smoothness and stability assumptions, these errors accumulate to order \(h\). Thus halving the step approximately halves the endpoint error once the computation is in the resolved regime.</p>
@@ -59,8 +63,9 @@
 <div class="box out"><span class="tag">What the model leaves out</span><p>A fixed-step approximation has truncation and roundoff errors. Refinement cannot repair a missing physical process or choose among nonunique branches. A convergence claim needs a fixed interval away from singularities.</p></div>
 <p>Read: Lebl §1.7. Another view: <a href="https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/pages/unit-i-first-order-differential-equations/numerical-methods/">OCW numerical methods</a>.</p>
 </section>
-<div class="part"><div class="eyebrow">Part II</div><h2>Linear input and response</h2></div>
+<div class="part"><div class="eyebrow">Part II</div><h2>Linear input and response</h2><p>Part I gave tools that work on any equation but explain little. Part II narrows to linear equations, where a formula always exists. Linearity also splits the answer into a response to the input plus a part that fades. That split is how you read a sensor, a thermostat or a circuit. Complex numbers enter because they turn a sinusoidal input into algebra.</p></div>
 <section class="topic" id="s5"><h2><span class="n">5</span>The integrating factor</h2>
+<p class="lead-in">A linear equation holds the unknown and its derivative only to the first power. That restriction buys a method that always works: the integrating factor. With it you can solve any linear first-order model, including a tank whose volume changes.</p>
 <p>Start from \(y'+p(t)y=q(t)\) on an interval where both coefficients are continuous. Seek a multiplier \(\mu\) that turns the left side into a product derivative. Since \((\mu y)'=\mu y'+\mu' y\), require \(\mu'=p\mu\). Separation gives a convenient nonzero choice:</p>
 \[\mu(t)=\exp\!\left(\int p(t)\,dt\right),\qquad (\mu y)'=\mu q.\]
 <p>Integrate the entire multiplied equation. A definite-integral version handles the initial value cleanly:</p>
@@ -78,6 +83,7 @@
 <p>Read: Lebl §1.4. Another view: <a href="https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/pages/unit-i-first-order-differential-equations/solution-by-integrating-factors/">OCW integrating factors</a>.</p>
 </section>
 <section class="topic" id="s6"><h2><span class="n">6</span>Complex arithmetic and exponentials</h2>
+<p class="lead-in">The integrating factor handles any input, but a sinusoid makes its integrals long. Complex exponentials replace that integration with multiplication. This section builds the arithmetic the next section needs.</p>
 <p>Write \(z=x+iy\), with \(i^2=-1\). Addition combines components. Multiplication distributes and replaces \(i^2\) by \(-1\). The conjugate is \(\bar z=x-iy\); multiplying by it gives \(z\bar z=x^2+y^2\). This real quantity explains the modulus \(|z|=\sqrt{x^2+y^2}\) and the reciprocal \(1/z=\bar z/|z|^2\), for nonzero \(z\).</p>
 <div class="box why"><span class="tag">Derivation · Euler's identity</span><p>Expand \(e^{i\theta}\) in its power series. Even powers of \(i\) alternate between 1 and −1, producing the cosine series. Odd powers produce \(i\) times the sine series. Therefore \(e^{i\theta}=\cos\theta+i\sin\theta\). Differentiating confirms that this function solves \(z'=iz\), with \(z(0)=1\).</p></div>
 <p>Thus \(z=re^{i\theta}\). Products multiply radii and add angles; reciprocals invert the radius and negate the angle. For integer \(n\), \(z^n=r^n e^{in\theta}\). Arguments differing by \(2\pi\) describe the same nonzero point. A chosen principal argument requires a stated interval and careful quadrants.</p>
@@ -86,6 +92,7 @@
 <p>Read: Lebl §2.2, complex-number review, moved here to match the approved OCW order. Another view: <a href="https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/pages/unit-i-first-order-differential-equations/complex-arithmetic-and-exponentials/">OCW complex arithmetic and exponentials</a>.</p>
 </section>
 <section class="topic" id="s7"><h2><span class="n">7</span>Sinusoids, gain and phase</h2>
+<p class="lead-in">Now drive a first-order system with a sinusoid. The answer comes out as a gain and a phase lag. These two numbers say how much of an oscillating input gets through and how late it arrives. They return in every later unit.</p>
 <p>Expand \(R\cos(\omega t-\phi)\). Matching coefficients in \(a\cos\omega t+b\sin\omega t\) gives \(R\cos\phi=a\) and \(R\sin\phi=b\). Therefore \(R=\sqrt{a^2+b^2}\), \(\phi=\operatorname{atan2}(b,a)\). The two coefficients form a vector, so adding them is not an amplitude calculation. Period is \(2\pi/\omega\), not \(1/\omega\).</p>
 <p>Now solve \(y'+ay=A\cos\omega t\), with \(a&gt;0\). Replace the forcing by \(Ae^{i\omega t}\), and seek a complex response \(Be^{i\omega t}\). Substitution gives \((a+i\omega)B=A\). Take the real part after division:</p>
 \[y_p=\frac{A}{\sqrt{a^2+\omega^2}}\cos(\omega t-\phi),\qquad \phi=\arctan(\omega/a).\]
@@ -95,8 +102,9 @@
 <div class="box out"><span class="tag">What the model leaves out</span><p>This is a linear time-invariant model with constant coefficients. Saturation, delays and coefficients that change with amplitude are absent. A steady periodic approximation also omits the still-decaying initial transient.</p></div>
 <p>Another view: <a href="https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/pages/unit-i-first-order-differential-equations/exponential-input-gain-and-phase-lag/">OCW exponential input, gain and phase lag</a>.</p>
 </section>
-<div class="part"><div class="eyebrow">Part III</div><h2>Models and qualitative behavior</h2></div>
+<div class="part"><div class="eyebrow">Part III</div><h2>Models and qualitative behavior</h2><p>Linear equations have formulas, but most models are nonlinear. Part III asks what you can say without a formula. A phase line shows where a solution heads and whether an equilibrium holds. The coffee server then puts the unit's tools on one real object. The Part ends by naming what linearity buys and what its absence costs.</p></div>
 <section class="topic" id="s8"><h2><span class="n">8</span>Autonomous equations and stability</h2>
+<p class="lead-in">When the rule does not depend on time, signs alone predict the long run. A phase line shows which states attract and which repel. That lets you see a harvested population collapse before you solve anything.</p>
 <p>An autonomous equation has the form \(y'=f(y)\). Time does not appear explicitly. A phase line marks the roots of \(f\) and the sign on each interval between them. Positive slope moves the state upward along the line; negative slope moves it downward.</p>
 <p>At an equilibrium \(y_*\), write \(y=y_*+\eta\). Taylor expansion gives \(\eta'=f'(y_*)\eta+O(\eta^2)\). A negative derivative gives local decay of a small perturbation; a positive derivative gives growth. If the derivative vanishes, inspect signs or higher-order terms. The linear term alone gives no verdict.</p>
 <p>Logistic growth has \(f(y)=ry(1-y/K)\). Its equilibria are zero and \(K\). For positive \(r,K\), zero repels positive perturbations and \(K\) attracts positive states. Adding constant harvest gives \(f(y)=ry(1-y/K)-H\).</p>
@@ -107,6 +115,7 @@
 <p>Read: Lebl §1.6. Another view: <a href="https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/pages/unit-i-first-order-differential-equations/first-order-autonomous-differential-equations/">OCW autonomous equations</a>.</p>
 </section>
 <section class="topic" id="s9"><h2><span class="n">9</span>A cooling coffee server</h2>
+<p class="lead-in">The coffee server puts Parts I to III on one object. Separation solves the model, and the phase line says where it settles. A pair of measurements then fixes its one unknown parameter.</p>
 <p>The application lab draws a HARIO XGSR-60-TB glass server and a cup. HARIO publishes overall dimensions of 145 × 121 × 120 mm. Those dimensions identify the object and guide its silhouette. They do not specify a cooling coefficient. The 300 mL fill, temperatures and coefficient in the lab are chosen teaching inputs.</p>
 <p>A lumped heat balance is \(mc_pT'=-hA_s(T-T_a)\). If mass, heat capacity, transfer area and effective heat-transfer coefficient are constant, define \(k=hA_s/(mc_p)&gt;0\). Then \(T'=-k(T-T_a)\). Separate the temperature excess \(\theta=T-T_a\) to obtain \(T=T_a+(T_0-T_a)e^{-kt}\).</p>
 <div class="box ex"><span class="tag">Worked example · Half the excess, not half the Celsius value</span><p>Choose \(T_0=90\) °C, \(T_a=20\) °C and \(k=0.001\) s⁻¹. After 600 s, \(T=20+70e^{-0.6}\approx58.4168\) °C. Excess half-time is \(\ln2/k\approx693.147\) s, when temperature is 55 °C. Doubling the initial excess leaves this half-time unchanged in the constant-k model.</p></div>
@@ -118,6 +127,7 @@
 <p>Sources: <a href="https://global.hario.com/product/coffee/server/XGSR.html">HARIO dimensions</a>; cooling method, Lebl §1.3. Another view: OCW Unit I first-order physical models.</p>
 </section>
 <section class="topic" id="s10"><h2><span class="n">10</span>Linear versus nonlinear</h2>
+<p class="lead-in">Every section so far has depended on whether the equation was linear. This section states what linearity guarantees and what is lost without it. That boundary decides which methods apply in every later unit.</p>
 <p>For a linear operator \(L[y]=y'+p(t)y\), differentiation and multiplication distribute: \(L[ay_1+by_2]=aL[y_1]+bL[y_2]\). Consequently homogeneous solutions can be superposed. For nonzero forcing, adding two solutions doubles the forcing. Instead, add one particular solution to an arbitrary homogeneous solution.</p>
 <p>Variable coefficients do not break linearity. Powers, products or nonlinear functions of the dependent variable do. A nonlinear equation may still be separable, easy to compute or useful as a model. Those are separate properties.</p>
 <div class="box ex"><span class="tag">Worked example · Doubling initial data need not double the trajectory</span><p>For \(y'=y^2\), initial value 1 gives \(y(1/4)=4/3\). Initial value 2 gives \(y(1/4)=4\), not \(8/3\). Both satisfy the same smooth equation on their own intervals. The missing superposition property has nothing to do with numerical error or nonuniqueness.</p></div>
@@ -125,8 +135,9 @@
 <p class="bridge">Unit 2 keeps the same input-response viewpoint and adds a second derivative. Complex exponentials will become modes, while initial data will determine two free constants.</p>
 <p>Another view: <a href="https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/pages/unit-i-first-order-differential-equations/linear-vs--nonlinear/">OCW linear versus nonlinear</a>.</p>
 </section>
-<div class="part"><div class="eyebrow">Part IV</div><h2>Exact equations, substitutions and models</h2></div>
+<div class="part"><div class="eyebrow">Part IV</div><h2>Exact equations, substitutions and models</h2><p>Parts I to III hold the core ideas. Part IV fills in methods a standard course also expects. Exact equations and substitutions turn some nonlinear equations into forms you already solve. The last section builds balance models for tanks, buildings and falling bodies, so you can set up an equation from a description.</p></div>
 <section class="topic" id="s12"><h2><span class="n">11</span>Exact equations</h2>
+<p class="lead-in">Some nonlinear equations hide a quantity that stays constant along every solution. If you find it, its level curves are the solutions. The test for exactness tells you when such a quantity exists.</p>
 <p>Write a first-order equation in differential form, \(M(x,y)\,dx+N(x,y)\,dy=0\). Along a solution curve, \(dy/dx=-M/N\). Sometimes the left side is the total differential of one function \(F\). Then every solution keeps \(F\) constant.</p>
 <div class="box key"><span class="tag">Definition · Exact equation</span><p>The equation is exact on a rectangle when there is a function \(F\) with \(F_x=M\) and \(F_y=N\). Its solutions are the level curves \(F(x,y)=C\).</p></div>
 <div class="box why"><span class="tag">Theorem · The test for exactness</span><p>Let \(M\), \(N\) and their first partial derivatives be continuous on a rectangle. The equation is exact there exactly when \(M_y=N_x\). One direction follows from equal mixed partials: \(F_{xy}=F_{yx}\). For the other, integrate \(M\) in \(x\) and choose the leftover function of \(y\) so that \(F_y=N\). The test guarantees that this leftover depends on \(y\) alone.</p></div>
@@ -139,6 +150,7 @@
 <p>Read: Lebl §1.8. UNF schedule: §2.4.</p>
 </section>
 <section class="topic" id="s13"><h2><span class="n">12</span>Substitutions</h2>
+<p class="lead-in">Exactness covers some nonlinear equations, not all. Others become linear or separable after a change of variable. Two patterns cover most of the cases in this course.</p>
 <p>A substitution trades the unknown for a new one that satisfies an equation already solved. Two patterns recur. Each ends with the same step: undo the substitution and apply the initial value to the original variable.</p>
 <div class="box key"><span class="tag">Definition · Homogeneous equation</span><p>An equation \(y'=G(x,y)\) is homogeneous when \(G\) depends only on the ratio \(y/x\), that is \(G(tx,ty)=G(x,y)\) for \(t>0\). Put \(v=y/x\). Then \(y=vx\), \(y'=v+xv'\), and the equation becomes \(xv'=G(1,v)-v\), which separates.</p></div>
 <div class="box ex"><span class="tag">Worked example · The ratio y/x</span><p>Solve \(y'=(x^2+y^2)/(xy)\) with \(y(1)=1\). Here \(G=1/v+v\), so \(xv'=1/v\). Separating gives \(v^2=2\ln x+C\). At \(x=1\), \(v=1\), so \(C=1\). Then \(y=x\sqrt{1+2\ln x}\). At \(x=2\), \(y=2\sqrt{1+2\ln2}\approx3.08953\).</p></div>
@@ -150,6 +162,7 @@
 <p>Read: Lebl §1.5. UNF schedule: §2.6.</p>
 </section>
 <section class="topic" id="s14"><h2><span class="n">13</span>Tanks, buildings and falling bodies</h2>
+<p class="lead-in">The methods so far start from an equation. Real problems start from a description. This section turns three descriptions into equations, then solves each with a tool from earlier in the unit.</p>
 <p>Most first-order models are balances. The rate of change equals what comes in minus what goes out. Writing that sentence with units comes before any solving.</p>
 <p>In a compartment model, each well-mixed tank loses solute at its outflow rate times its concentration. Tank 1 starts with \(a_0\) kg of salt and receives fresh water at \(q\) L/min. It drains into tank 2, which drains at the same rate. With \(k_1=q/V_1\) and \(k_2=q/V_2\),</p>
 \[a'=-k_1a,\qquad b'=k_1a-k_2b.\]
