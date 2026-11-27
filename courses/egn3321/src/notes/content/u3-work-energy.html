@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 4 · Hibbeler Ch 14</p>
   <h1>Work and energy</h1>
-  <p class="lede">Work connects the speed at two positions. A spring cares about its end stretches. Gravity cares about the change in height. Friction cares about the path. Each rule is derived from \(\sum F = ma\), and the numbers below are recomputed.</p>
+  <p class="lede">Unit 2 found the acceleration at each instant. Often you only need the speed at a later position, and integrating the acceleration is the long way round. Work and energy go straight from one position to the other. Part I derives the principle and the work of a spring, gravity and friction. Part II asks how fast that work is done, and which forces do work that depends only on the end points. Part III uses braking work to size the sight line on a highway.</p>
   <div class="legend">
     <span><i style="background:var(--field)"></i>Worked example</span>
     <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
@@ -34,10 +34,12 @@
 <div class="part">
   <div class="eyebrow">Part I</div>
   <h2>The principle and the work of forces</h2>
+  <p>Newton's law gives an acceleration, which you then integrate to get a speed. Part I does that integration once, in general. The result is the principle of work and energy. Each section then finds the work of one kind of force.</p>
 </div>
 
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Principle of work and energy</h2>
+<p class="lead-in">Unit 2 gave the acceleration, but you often want the speed at a later position. Integrating Newton's law along the path does that in one step. The result, work equals the change in kinetic energy, skips time entirely.</p>
 <p>Kinetic energy is \(\tfrac{1}{2}mv^2\). The work of every force, from position 1 to position 2, changes that energy.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Along a rod, \(a\,ds = v\,dv\). Multiply by the mass and integrate. The left side is the work. The right side is \(T_2 - T_1\).</p>
@@ -84,6 +86,7 @@ T_1 + \sum U_{1-2} = T_2, \qquad U_{1-2} = \int_1^2 \vec F \cdot d\vec r.
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Work of a spring</h2>
+<p class="lead-in">Section 1 used forces that stayed constant. A spring's force changes with stretch, so its work needs an integral. That integral depends only on the end stretches, which makes spring problems short.</p>
 <p>A spring force depends on the stretch, not on the shape of the trip. Integrate \(-ks\,ds\). The path in between cancels.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>The spring force is \(-ks\), opposite the stretch. Integrate from \(s_1\) to \(s_2\). Every intermediate stretch cancels, and the work is \(\tfrac{1}{2}k(s_1^2 - s_2^2)\).</p>
@@ -114,6 +117,7 @@ U_s = \tfrac{1}{2}k(s_1^2 - s_2^2).
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Friction on a slide</h2>
+<p class="lead-in">Gravity and springs give energy back. Friction does not. This section finds its work on each leg of a slide, so you can tell where a body stops and how far it rebounds.</p>
 <p>Kinetic friction opposes the motion. On a straight rod its magnitude is \(\mu_k mg\cos\theta\). Its work is negative on every leg.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Kinetic friction has size \(\mu_k N\) and opposes the velocity on every leg. On a straight rod, \(N = mg\cos\theta\). The work on a leg is minus that force times the length of the leg. When the direction of motion reverses, so does friction, and its work stays negative.</p>
@@ -147,10 +151,12 @@ U_s = \tfrac{1}{2}k(s_1^2 - s_2^2).
 <div class="part">
   <div class="eyebrow">Part II</div>
   <h2>Power and path independence</h2>
+  <p>Part II pays off twice. Power sizes a motor for a climb or a lift. Path independence turns the work of gravity and springs into potential energy, so a loop or a pendulum needs only its heights.</p>
 </div>
 
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Power and efficiency</h2>
+<p class="lead-in">Work says how much energy moved, not how fast. A motor is rated by a rate. Power links force and speed, and efficiency links what a motor draws to what it delivers. With them you can size a motor for a climb.</p>
 <p>Power is the work per time. For a force along the velocity, \(P = Fv\). Efficiency is output power divided by input power.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>The work in a short time is \(\vec F \cdot d\vec r\). Divide by \(dt\): \(P = \vec F \cdot \vec v\). Along the velocity that is \(Fv\). Efficiency is that output divided by the power the motor draws.</p>
@@ -184,6 +190,7 @@ P = \vec F \cdot \vec v, \qquad \eta = \frac{P_{\text{out}}}{P_{\text{in}}}.
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Path independence</h2>
+<p class="lead-in">Sections 1 to 3 found that the work of gravity and of a spring depends only on the ends. This section names that property and turns it into potential energy. A loop, a pendulum or an arch then needs only heights and stretches, not the path.</p>
 <p>The work of a conservative force equals \(-\Delta V\). Gravity and a spring are conservative. Kinetic friction is not: its work follows the length of the path.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Section 1 showed the weight's work is \(-mg\,\Delta y\). Section 2 showed the spring's is \(-\tfrac12 k\,\Delta(s^2)\). Each depends only on the ends. So each is minus the change of a potential: \(V = mgy + \tfrac{1}{2}ks^2\). The difference \(V_1 - V_2\) uses the ends. No integral along the route remains.</p>
@@ -219,10 +226,12 @@ U_{\text{cons}} = V_1 - V_2, \qquad T_1 + V_1 = T_2 + V_2.
 <div class="part">
   <div class="eyebrow">Part III</div>
   <h2>An application</h2>
+  <p>The result is a distance you can check on any road: how far ahead a driver must see at a given speed, on the level or on a grade.</p>
 </div>
 
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Application: stopping sight distance</h2>
+<p class="lead-in">Parts I and II gave the tools. Here they set a number every road must meet: how far ahead a driver must be able to see at the speed limit.</p>
 <p>Every US highway is built so a driver can see far enough ahead to stop. AASHTO's design policy calls that length the stopping sight distance. The driver sees an object, reacts, then brakes to rest. Work and energy give the braking part without any time history.</p>
 <p>AASHTO takes a reaction time of 2.5 s and a braking rate of 11.2 ft/s² on a level road. About 90% of drivers brake harder than that. The rate is a friction factor \(f = a/g = 11.2/32.2 = 0.348\).</p>
 <div class="box why"><span class="tag">Derivation</span>

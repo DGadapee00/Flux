@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EML 3100 · Thermodynamics · Unit 3 · Yan Ch 5</p>
   <h1>Control volumes: mass and energy</h1>
-  <p class="lede">Most engines are open: a fluid flows in, something happens, and it flows out. One mass balance and one energy balance cover a turbine, a nozzle, a valve, a mixing chamber and a water heater. The balance is the same each time. Only the terms that vanish change. Every number below is recomputed by the course's property library and checked a second way.</p>
+  <p class="lede">Units 1 and 2 followed a fixed mass in a closed system. Most engines are open: fluid flows in, something happens, and it flows out. This unit fixes a region of space instead and balances what crosses it. Part I writes the mass balance and the steady-flow energy equation. Part II applies them to devices that make work or speed: turbines, compressors, nozzles and diffusers. Part III applies them to devices that move energy between streams: throttles, mixers, heat exchangers and a tankless water heater. The balance is the same each time. Only the terms that vanish change. Every number below is recomputed by the course's property library and checked a second way.</p>
   <div class="legend">
     <span><i style="background:var(--field)"></i>Worked example</span>
     <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
@@ -35,10 +35,12 @@
 <div class="part">
   <div class="eyebrow">Part I</div>
   <h2>The two balances</h2>
+  <p>A turbine never holds the same mass twice, so the closed-system balance does not fit it. Part I draws a control volume around the device instead. Two balances, one for mass and one for energy, then cover every device in this unit.</p>
 </div>
 
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Control volumes and the mass balance</h2>
+<p class="lead-in">Unit 2's balance let only heat and work cross the boundary. Most engines let fluid through as well. The first step is to account for the mass that comes and goes.</p>
 <p>A closed system follows a fixed mass. A pump, a turbine or a pipe lets fluid through, so it is easier to fix a region of space instead. That region is the control volume. Its boundary is the control surface. Fluid crosses the surface at the inlets and the outlets.</p>
 <p>Steady flow means nothing inside the volume changes with time. The mass inside stays the same, so the mass entering each second equals the mass leaving.</p>
 <div class="box why"><span class="tag">Why the mass flow is A V / v</span>
@@ -65,6 +67,7 @@
 
 <section class="topic" id="s2">
 <h2><span class="n">02</span>The steady-flow energy equation</h2>
+<p class="lead-in">Mass balances. Now energy. Fluid crossing the boundary carries its energy, and it also does work to push its way in and out. Folding that push work into enthalpy gives the steady-flow energy equation used in every device below.</p>
 <p>Take one unit of mass crossing the control volume from inlet 1 to outlet 2. It carries internal energy, kinetic energy and potential energy. It also has to push itself in and out against the pressure of the fluid around it.</p>
 <div class="box why"><span class="tag">Why enthalpy appears</span>
 <p>Start from the closed-system balance for the mass that crosses. Heat \(q\) is added and shaft work \(w\) is done. Pushing the fluid into the volume at pressure \(P_1\) costs \(P_1 v_1\) per kilogram. Pushing the fluid out at \(P_2\) gives back \(P_2 v_2\). That flow work is not shaft work, so it stays on the energy side:</p>
@@ -103,10 +106,12 @@ q - w &= (u_2 + P_2v_2) - (u_1 + P_1v_1)\\
 <div class="part">
   <div class="eyebrow">Part II</div>
   <h2>Devices that make work or speed</h2>
+  <p>Turbines and compressors trade enthalpy for shaft work. Nozzles and diffusers trade it for speed. Part II drops the terms each device does not have, which leaves a short equation for its power or its exit speed.</p>
 </div>
 
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Turbines and compressors</h2>
+<p class="lead-in">The steady-flow equation has many terms. In a turbine or a compressor most of them vanish. What remains links the shaft power to the change in enthalpy, so you can find a turbine's output or a compressor's input.</p>
 <p>A turbine lets a fluid expand over blades and turns a shaft. A compressor uses a shaft to raise the pressure. Both are close to adiabatic, because the fluid passes through quickly and the casing is small. The speeds in and out are similar. So heat and kinetic energy drop out, and the work is the enthalpy change:</p>
 \[
 \dot W_{turbine} = \dot m(h_1 - h_2)
@@ -132,6 +137,7 @@ q - w &= (u_2 + P_2v_2) - (u_1 + P_1v_1)\\
 
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Nozzles and diffusers</h2>
+<p class="lead-in">A nozzle has no shaft, so the enthalpy drop goes into speed. A diffuser runs it backward. This section finds the exit speed, and explains why a nozzle for very fast flow must narrow and then widen.</p>
 <p>A nozzle turns enthalpy into speed. A diffuser turns speed back into enthalpy. Neither has a shaft, and the flow is fast, so the heat is negligible. The energy equation reduces to</p>
 \[
 V_2^2 = V_1^2 + 2(h_1 - h_2).
@@ -174,10 +180,12 @@ V_2^2 = V_1^2 + 2(h_1 - h_2).
 <div class="part">
   <div class="eyebrow">Part III</div>
   <h2>Devices that move energy between streams</h2>
+  <p>Some devices make no work at all. They change a stream's pressure, or move energy from one stream to another. Part III covers them, ending with a water heater sized for a shower.</p>
 </div>
 
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Throttles</h2>
+<p class="lead-in">A throttle makes no work and no speed. Its pressure drops while its enthalpy stays the same. That one fact explains how a refrigerator's capillary tube cools its refrigerant, and why throttled air hardly cools at all.</p>
 <p>A throttle is a valve, a capillary tube or a porous plug. The fluid squeezes through, and its pressure drops with no shaft and no heat. The speed in and out is similar, so</p>
 \[
 h_2 = h_1.
@@ -206,6 +214,7 @@ h_2 = h_1.
 
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Mixing chambers and heat exchangers</h2>
+<p class="lead-in">Sections 3 to 5 had one stream. Mixers and heat exchangers have two or more, and energy passes between them. The same balance, summed over every stream, gives the outlet temperature or the flow you need.</p>
 <p>A mixing chamber joins streams. A heat exchanger lets two streams swap energy without mixing. Neither has a shaft, and both are insulated from the room. Energy in equals energy out.</p>
 \[
 \sum \dot m_{in} h_{in} = \sum \dot m_{out} h_{out}.
@@ -231,6 +240,7 @@ h_2 = h_1.
 
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Application: a tankless water heater</h2>
+<p class="lead-in">A tankless heater has one stream and one heating element. The steady-flow balance gives the power it needs for a given flow and temperature rise. That answers a real question: can it run two showers in winter?</p>
 <p>A tankless heater has no store of hot water. Cold water goes in, a heating element warms it as it passes, and hot water comes out. The control volume has one inlet, one outlet, heat in and no shaft. The balance is</p>
 \[
 \dot Q = \dot m\,(h_{out} - h_{in}).

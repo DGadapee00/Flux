@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 7 · Hibbeler Ch 18</p>
   <h1>Rigid-body energy</h1>
-  <p class="lede">Work and energy for a rigid body in the plane. Translation of the mass centre and spin about that centre make up T. A one-degree linkage can write the same T about the instantaneous centre. Each formula below is derived by adding up the particles of Unit 4, and the numbers are recomputed.</p>
+  <p class="lede">Unit 6 found forces and accelerations at an instant. As with particles in Unit 3, you often want a speed at a later position instead, and energy skips the integration. A rigid body's kinetic energy has two parts: the mass centre translates, and the body spins about it. Part I finds that energy and the work of a couple. Part II applies the principle to rolling bodies and linkages, then to systems where energy is conserved. Part III asks whether a machine bumped onto one pad tips over, then rolls a wheelchair down a ramp.</p>
   <div class="legend">
     <span><i style="background:var(--field)"></i>Worked example</span>
     <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
@@ -35,10 +35,12 @@
 <div class="part">
   <div class="eyebrow">Part I</div>
   <h2>Kinetic energy and work</h2>
+  <p>Unit 3's principle still holds: work changes kinetic energy. A rigid body adds two things. Its energy includes spin, and a couple can do work by turning it. Part I finds both.</p>
 </div>
 
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Kinetic energy</h2>
+<p class="lead-in">Unit 3 gave a particle's kinetic energy. A rigid body also spins. Adding up its particles gives two terms: one for the mass centre's speed and one for the spin. With them you can see how a flywheel stores energy.</p>
 <p>A rigid body in the plane carries kinetic energy in two parts. The mass centre translates. The body spins about that centre.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Add up \(\tfrac12 v^2\,dm\) over the body. Each element's velocity is \(\vec v = \vec v_G + \omega\times\vec\rho\), with \(\vec\rho\) from the mass centre. Squaring gives three terms: \(v_G^2\), \(2\vec v_G\cdot(\omega\times\vec\rho)\), and \(\omega^2\rho^2\). The middle term integrates to zero, because \(\int\vec\rho\,dm = 0\) about the mass centre. The first gives \(\tfrac12 mv_G^2\). The last gives \(\tfrac12 I_G\omega^2\).</p>
@@ -74,6 +76,7 @@
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Work of a couple</h2>
+<p class="lead-in">Unit 3 found the work of forces. A motor or a wrench applies a couple, which turns a body without pushing it. Its work is the moment times the angle turned. That lets a motor's torque enter the energy balance.</p>
 <p>A couple does work through the angle it turns. The angle is in radians.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>A couple is two equal, opposite forces \(F\) a distance \(r\) apart. Turn the body by \(d\theta\) about a point midway. Each force's point of application moves \((r/2)\,d\theta\) along its own line, so each does \(F(r/2)\,d\theta\). The pair does \(Fr\,d\theta = M\,d\theta\). The same holds about any point.</p>
@@ -109,10 +112,12 @@
 <div class="part">
   <div class="eyebrow">Part II</div>
   <h2>Rolling, the centre, and conservation</h2>
+  <p>With energy and work in hand, many rigid-body problems need only a start and a finish. Rolling contact does no work, a linkage's energy can be written about its instantaneous centre, and a system of bodies can be taken at once. You can then find speeds without solving for any internal force.</p>
 </div>
 
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Rolling without slip</h2>
+<p class="lead-in">Rolling looks as if friction should cost energy, but the contact point does not move, so friction does no work. Energy then gives the speed after any drop in one line. It also shows why a sphere beats a hoop down a ramp.</p>
 <p>A hoop, a disk, and a sphere roll from rest down the same incline. Write \(k = I_G/(mR^2)\). Energy gives the finish speed, and mass and radius cancel.</p>
 \[ v = \sqrt{\frac{2gs\sin\theta}{1+k}} \]
 <div class="box why"><span class="tag">Why</span>
@@ -147,6 +152,7 @@
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>The instantaneous centre</h2>
+<p class="lead-in">A linkage has many moving points but one degree of freedom. Writing its energy about the instantaneous centre from Unit 5 needs one moment of inertia. That turns a sliding rod into a one-line energy problem.</p>
 <p>A rod with one end in a horizontal slot and one end in a vertical slot has a single degree of freedom. At each angle the instantaneous centre is the corner opposite the rod.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>The foot moves horizontally, so the centre of rotation lies on the vertical through the foot. The top moves vertically, so it also lies on the horizontal through the top. That corner is the instantaneous centre. \(I_{IC} = I_G + m(L/2)^2 = mL^2/3\), and \(T = \tfrac{1}{2}I_{IC}\omega^2\).</p>
@@ -178,6 +184,7 @@
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Conservation of energy</h2>
+<p class="lead-in">Sections 3 and 4 tracked work force by force. Often no working force loses energy. Then you can skip the work and compare totals, so a system of pulleys and wheels needs only its heights and speeds.</p>
 <p>When the only forces that do work are conservative, the total \(T + V\) of a system stays fixed. For rigid bodies, the list of forces that do no work at all is long, and that is what makes energy so useful here.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>The principle of work and energy, \(T_1 + \sum U_{1-2} = T_2\), holds for each body. Split the work into a conservative part, \(V_1 - V_2\), and the rest. If the rest is zero, \(T_1 + V_1 = T_2 + V_2\).</p>
@@ -218,10 +225,12 @@
 <div class="part">
   <div class="eyebrow">Part III</div>
   <h2>Tipping, and an application</h2>
+  <p>Energy answers safety questions as well as speeds. A bumped machine tips only if it has the energy to lift its mass centre over the pad. A ramp is safe only if a released chair stays slow enough at the bottom.</p>
 </div>
 
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Tipping about a pad</h2>
+<p class="lead-in">A bumped machine either rocks back or falls over. Energy decides which: the bump must lift the mass centre over the pad. This gives the least bump speed that tips it, and shows how much a wider base helps.</p>
 <p>A tall machine on footpads can tip over. A bump from a forklift, a shove, or a pad on a ledge starts it turning about one pad. It either rocks back or goes over. Energy decides which, in one line.</p>
 <p>Take the outer pad as O. The machine turns about O as a rigid body. The pad's force acts at a point that does not move, so it does no work. Only the weight does. Section 5 applies: \(T_1 + V_1 = T_2 + V_2\).</p>
 <div class="box why"><span class="tag">Why the tip-over speed is what it is</span>
@@ -268,6 +277,7 @@
 </section>
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Application: a wheelchair on a ramp</h2>
+<p class="lead-in">The ADA limits a ramp's slope and rise. Energy shows what those limits mean for a chair released at the top. Part of the energy goes into spinning the wheels, which lowers the speed at the bottom.</p>
 <p>An accessible ramp lets a wheelchair user change level without steps. The 2010 ADA Standards set its limits: a running slope no steeper than 1:12 (§405.2), and no more than 30 in of rise in one run (§405.6). Released at the top, how fast does a chair arrive at the foot?</p>
 <p>Take a 15 kg manual chair and an 80 kg rider, 95 kg in all. The two 24 in rear wheels are 1.2 kg each, spoked, with most of their mass at the rim: \(k = 0.9R\). The two 6 in casters are 0.3 kg solid disks: \(k^2 = R^2/2\).</p>
 <div class="box why"><span class="tag">Derivation</span>

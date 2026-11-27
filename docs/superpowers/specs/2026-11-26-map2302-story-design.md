@@ -59,3 +59,16 @@ Rules:
 
 `npm test`, `npm run build`, `node packages/checks/raw.mjs`. Screenshots of one notes page at
 390×844 and 1280×800, light and dark.
+
+## Extended to EGN 3321 and EML 3100 (2026-11-27)
+
+The owner asked for the same story in Dynamics and Thermodynamics. The design is unchanged, with
+two adjustments:
+
+- Their notes checks required a Part heading to close straight after its `h2`. The check now
+  allows one bridge paragraph there and requires it.
+- Dynamics already had closing `.bridge` paragraphs at the end of most Parts. Those stay. The new
+  Part bridges carry the payoff, so the two do not repeat each other.
+
+An opener must not restate the paragraph after it. A word-overlap scan found 22 that did, and
+each was rewritten to carry only the link and the payoff.

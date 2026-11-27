@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 1 · Hibbeler Ch 12</p>
   <h1>Particle kinematics</h1>
-  <p class="lede">Position, velocity, and acceleration, before any force law. Every relation below is derived from the two definitions \(v = ds/dt\) and \(a = dv/dt\), then used on a worked case. The numbers are recomputed. Dependent motion of pulleys, §12.9, waits for Unit 2, where it meets forces.</p>
+  <p class="lede">Dynamics predicts how things move. Before forces enter, you need a language for motion itself. This unit builds it from two definitions, \(v = ds/dt\) and \(a = dv/dt\). Part I covers units and motion along a line, from formulas and from graphs. Part II moves into a plane, where a path can bend and the acceleration need not point along it. Part III uses the graphs of Part I to plan a train's run between stations. Dependent motion of pulleys, §12.9, waits for Unit 2, where it meets forces.</p>
   <div class="legend">
     <span><i style="background:var(--field)"></i>Worked example</span>
     <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
@@ -36,10 +36,12 @@
 <div class="part">
   <div class="eyebrow">Part I</div>
   <h2>Units and motion along a line</h2>
+  <p>Every later unit needs the same three quantities: position, velocity and acceleration. Part I defines them on a straight line, where each is a slope or an area of the one before. Units come first, because a mixed-unit answer is wrong before the physics starts.</p>
 </div>
 
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Units and significant figures</h2>
+<p class="lead-in">Dynamics problems mix SI and US units, and one wrong factor ruins every later step. This section fixes the conversions and the number of figures to report. Everything after it assumes the units agree.</p>
 <p>A force in pounds and a length in feet have to become newtons and metres before they enter an SI equation. One foot is exactly 0.3048 m. One pound-force is one pound-mass times 9.80665 m/s².</p>
 <div class="box why"><span class="tag">Why</span>
 <p>The pound-force is defined with standard gravity, 9.80665 m/s². A pound-mass is exactly 0.45359237 kg. Multiply them: one pound-force is 4.4482 N. Multiply a force by that factor. Multiply an arm by 0.3048. The product is the moment, in newton-metres.</p>
@@ -69,6 +71,7 @@
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Rectilinear motion</h2>
+<p class="lead-in">Motion on a straight line is the simplest case, and every later case breaks into it. Two definitions link position, velocity and acceleration. Integrating them gives the constant-acceleration formulas you will use in every unit.</p>
 <p>On a straight line, velocity is the slope of \(s(t)\). Acceleration is the slope of \(v(t)\). The other direction is an area.</p>
 \[
 v = \frac{ds}{dt}, \qquad a = \frac{dv}{dt}.
@@ -126,6 +129,7 @@ v = v_0 - ks.
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Erratic graphs</h2>
+<p class="lead-in">The constant-acceleration formulas need a formula for the motion. Often you get a graph or a data log instead. Slopes and areas read the same two definitions off a graph, so you can handle an acceleration that changes in steps.</p>
 <p>When the motion comes as a graph rather than a formula, read it with the same two definitions. The slope of an \(s\)–\(t\) graph is \(v\). The slope of a \(v\)–\(t\) graph is \(a\). Areas run the other way.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Integrate \(a = dv/dt\) over an interval: \(\Delta v = \int a\,dt\), the area under the \(a\)–\(t\) graph. Integrate \(v = ds/dt\): \(\Delta s = \int v\,dt\), the area under the \(v\)–\(t\) graph. On a step where \(a\) is constant, \(v\) is linear. Its area is the width times the average of the end velocities. That trapezoid is exact, not an estimate.</p>
@@ -170,10 +174,12 @@ v = v_0 - ks.
 <div class="part">
   <div class="eyebrow">Part II</div>
   <h2>Motion in a plane</h2>
+  <p>Part II gives three sets of axes for a plane: fixed x and y, axes that follow the path, and axes that turn with a line from a fixed point. Each one makes a different kind of problem short, and choosing well is most of the work. The last section lets one moving body watch another.</p>
 </div>
 
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Projectile motion</h2>
+<p class="lead-in">Now the motion leaves the line. A projectile is the first plane case, and it splits into two straight-line problems, one per axis. With it you can find a range, a height or a launch angle.</p>
 <p>Horizontal velocity stays constant when the only acceleration is gravity. Vertical velocity changes at \(g = 9.81\) m/s². Resolve the launch velocity, then treat the two axes separately.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>The acceleration vector is \((0, -g)\). Each component is a constant-acceleration problem from section 2. Horizontally \(a_x = 0\), so \(x = v_0\cos\theta\,t\). Vertically \(y = v_0\sin\theta\,t - \tfrac12 g t^2\). Eliminate \(t\) between them:</p>
@@ -218,6 +224,7 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Normal and tangential components</h2>
+<p class="lead-in">Fixed axes make a projectile easy, but they hide what a curve does to a moving body. Axes that ride along the path split the acceleration into a part that changes the speed and a part that turns it. That split is what a driver feels on a curve, and Unit 2 needs it for a banked road.</p>
 <p>The tangential piece \(a_t\) changes the speed. The normal piece \(a_n = v^2 / \rho\) turns the velocity. They are perpendicular. The magnitude is the root of the sum of the squares.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Write the velocity as speed times direction: \(\vec{v} = v\,\hat{u}_t\). Differentiate with the product rule: \(\vec{a} = \dot{v}\,\hat{u}_t + v\,\dot{\hat{u}}_t\).</p>
@@ -266,6 +273,7 @@ y = x\tan\theta - \frac{g\,x^2}{2v_0^2\cos^2\theta}.
 </section>
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Polar coordinates</h2>
+<p class="lead-in">Fixed axes and path axes both struggle with a turning arm, because its distance and angle change together. Polar axes match that motion. Unit 2 uses them to find the force an arm must apply.</p>
 <p>Some motions are easiest to describe by a distance \(r\) from a fixed point and an angle \(\theta\): a collar on a turning arm, a cam follower, a target seen by a radar. The unit vectors \(\hat{u}_r\) and \(\hat{u}_\theta\) then turn with the line. That turning adds two terms to the acceleration that \(\ddot r\) and \(\ddot\theta\) alone miss.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Write \(\hat{u}_r = (\cos\theta, \sin\theta)\) and \(\hat{u}_\theta = (-\sin\theta, \cos\theta)\). Differentiate each in time: \(\dot{\hat{u}}_r = \dot\theta\,\hat{u}_\theta\) and \(\dot{\hat{u}}_\theta = -\dot\theta\,\hat{u}_r\).</p>
@@ -312,6 +320,7 @@ a_r &= \ddot r - r\dot\theta^2, & a_\theta &= r\ddot\theta + 2\dot r\dot\theta.
 </section>
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Relative motion, translating axes</h2>
+<p class="lead-in">So far one body moved and the ground watched. Often two bodies move and one watches the other: a pilot in a crosswind, rain seen from a car. Translating axes give the relative motion by subtraction.</p>
 <p>Axes fixed to A, and not rotating, see B by subtraction. The positions are not needed for the relative velocity or the relative acceleration.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Positions add as vectors: \(\vec{r}_B = \vec{r}_A + \vec{r}_{B/A}\). Differentiate in time. Because the axes on A translate and do not rotate, their unit vectors are constant, and each term differentiates directly. One derivative gives the velocities. A second gives the accelerations.</p>
@@ -351,10 +360,12 @@ a_r &= \ddot r - r\dot\theta^2, & a_\theta &= r\ddot\theta + 2\dot r\dot\theta.
 <div class="part">
   <div class="eyebrow">Part III</div>
   <h2>An application</h2>
+  <p>The payoff is a timetable. From a train's top acceleration, its braking rate and the distance between stops, you can find the shortest trip time and the top speed it needs.</p>
 </div>
 
 <section class="topic" id="s8">
 <h2><span class="n">08</span>Application: a train between stations</h2>
+<p class="lead-in">This section turns Part I into a planning tool. Given a train's limits and the distance between stops, you can find the fastest run and check whether it reaches line speed.</p>
 <p>A train leaving a station does the same thing in every city. It accelerates away from the platform, perhaps cruises, then brakes to a stop at the next one. The whole trip is rectilinear motion in pieces, each piece with a constant acceleration. Nothing beyond this unit is needed to find how far apart the stations are.</p>
 <p>While it accelerates, the acceleration is the tractive force over the mass, less the pull of any grade: \(a = F/m - g\sin\theta\) on a slope, and \(a = F/m\) on the flat. While it brakes, the acceleration is the braking rate, pointing backward. Between the two pieces the speed peaks.</p>
 <div class="box why"><span class="tag">Why the distance splits into two pieces</span>

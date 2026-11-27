@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 2 · Hibbeler Ch 13</p>
   <h1>Force and acceleration</h1>
-  <p class="lede">Newton's second law for a particle, in rectangular axes and in n–t. Each special formula below is derived from \(\sum \vec F = m\vec a\) and a free-body diagram, then checked on a worked case. The numbers are recomputed. Central-force motion stays out.</p>
+  <p class="lede">Unit 1 described motion without asking what causes it. This unit adds the cause: Newton's second law, \(\sum \vec F = m\vec a\), applied to a free-body diagram. Part I uses it on straight paths, adding friction, connected bodies, pulleys and drag. Part II bends the path and adds a force that depends on position, the spring. Part III uses the banked curve to design a highway. Central-force motion stays out.</p>
   <div class="legend">
     <span><i style="background:var(--field)"></i>Worked example</span>
     <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
@@ -38,10 +38,12 @@
 <div class="part">
   <div class="eyebrow">Part I</div>
   <h2>Forces on straight paths</h2>
+  <p>Unit 1 got the acceleration from the motion. Part I runs it the other way: draw the forces, and Newton's law gives the acceleration. Each section adds one complication that real problems bring: friction, several bodies, a rope through pulleys, then air drag.</p>
 </div>
 
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Equations of motion</h2>
+<p class="lead-in">Unit 1 could describe any motion but not explain it. Newton's second law links the forces you can draw to the acceleration you measure. Every problem in this unit starts with the free-body diagram this section sets up.</p>
 <p>A free-body diagram comes first. Then \(\sum F = ma\) along each axis. The acceleration is the unknown, or the force is, but not both at once.</p>
 \[
 \sum F_x = m a_x, \qquad \sum F_y = m a_y.
@@ -82,6 +84,7 @@ a = \frac{m_2 - m_1}{m_1 + m_2}\, g, \qquad T = \frac{2 m_1 m_2}{m_1 + m_2}\, g.
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Friction on an incline</h2>
+<p class="lead-in">The first force to add is friction, and it changes with the situation. Below a limit it holds the body still. Past it, the body slides. This section shows how to test which case you are in before you write the force.</p>
 <p>Ask whether the block slides before writing a friction force. At rest, friction is whatever equilibrium needs, up to \(\mu_s N\). Once it slides, friction is \(\mu_k N\) and it opposes the velocity.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Tilt the axes along the slope. Perpendicular to it nothing accelerates, so \(N = mg\cos\theta\). Along it, the downhill part of the weight is \(mg\sin\theta\). The block holds if friction can match that, so the test is \(mg\sin\theta \le \mu_s mg\cos\theta\), or \(\tan\theta \le \mu_s\). The mass cancels.</p>
@@ -116,6 +119,7 @@ a = g(\sin\theta - \mu_k\cos\theta).
 </section>
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Connected bodies</h2>
+<p class="lead-in">One body alone is rare. A cable, a hitch or a string joins bodies so they share one acceleration. This section solves them together, so a tow or a hoist becomes one equation.</p>
 <p>A block on an incline, tied to a hanging mass, is still one coordinate. Positive means the hanging mass descends. Friction on the block opposes that impending motion, or holds the system if it can.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>One light string means one tension. One coordinate means one acceleration. With block mass \(m\) and hanging mass \(M\), the hanging mass gives \(Mg - T = Ma\). If the block slides up, friction acts down the slope, so \(T - mg\sin\theta - \mu_k mg\cos\theta = ma\). Add the two:</p>
@@ -142,6 +146,7 @@ a = \frac{Mg - mg\sin\theta - \mu_k mg\cos\theta}{m + M}.
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Pulley constraints</h2>
+<p class="lead-in">Section 3 had one string and one acceleration. A block and tackle trades force for distance, so its bodies move at different rates. This section links those rates, so a hoist solves as easily as a single string.</p>
 <p>When one rope runs through several pulleys, the bodies on it do not move at the same speed. The rope's length is fixed. That one fact ties their positions, then their speeds, then their accelerations.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Measure the block A on the table by \(s_A\), toward the pulley, and the load B by its depth \(s_B\). If B hangs from \(n\) segments of the rope, lowering B by \(ds_B\) lengthens each segment by \(ds_B\). The rope's free end must give up \(n\,ds_B\), so A moves \(n\,ds_B\) toward the pulley.</p>
@@ -186,6 +191,7 @@ a_B = \frac{m_B g - n f}{m_B + n^2 m_A}, \qquad T = m_A\,n\,a_B + f.
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>Drag</h2>
+<p class="lead-in">Every force so far was constant. Air drag grows with speed, so the acceleration falls as the body speeds up. That gives a terminal speed, which explains why a skydiver stops speeding up.</p>
 <p>A body moving through air feels a force against its velocity that grows with speed. For a person, a ball or a car it grows as the square of the speed: \(F = \tfrac12\rho C A v^2 = kv^2\), with \(\rho\) the air's density, \(A\) the frontal area and \(C\) a drag coefficient. Sea-level air is 1.225 kg/m³. The weight does not grow, so a falling body levels off at the speed where drag matches it.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Down positive: \(m\,dv/dt = mg - kv^2\). The acceleration vanishes at the terminal speed, \(kv_t^2 = mg\), so \(v_t = \sqrt{mg/k}\).</p>
@@ -230,10 +236,12 @@ v_t = \sqrt{\frac{mg}{k}}, \qquad v = v_t\tanh\frac{gt}{v_t}, \qquad k = \tfrac1
 <div class="part">
   <div class="eyebrow">Part II</div>
   <h2>Curves and springs</h2>
+  <p>Each section here reuses a set of axes from Unit 1. A curve needs the normal component, and a turning arm needs the polar components. The spring adds a force that changes as the body moves. Together they let you ask how fast a car may take a bend, or where a sprung collar settles.</p>
 </div>
 
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Banked curve</h2>
+<p class="lead-in">The path now bends. Unit 1 showed that a curve needs an acceleration toward its centre, so some force must supply it. On a banked road it is the tilted normal force and friction. This section finds the speeds a bank allows.</p>
 <p>The path is a horizontal circle, so \(a_n = v^2/\rho\) points toward the centre and \(a_t = 0\) at constant speed. Resolve the normal force and the friction along the bank, then check the same forces horizontally and vertically.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>With no friction the two equations are \(N\sin\theta = mv^2/\rho\) and \(N\cos\theta = mg\). Divide them. The mass cancels, and \(\tan\theta = v^2/(\rho g)\).</p>
@@ -271,6 +279,7 @@ v_{\max}^2 = \rho g\,\frac{\sin\theta + \mu\cos\theta}{\cos\theta - \mu\sin\thet
 </section>
 <section class="topic" id="s7">
 <h2><span class="n">07</span>Vertical loop</h2>
+<p class="lead-in">A vertical loop adds gravity to the turning problem, and the speed changes around it. The normal force must stay positive, or the car leaves the track. This section finds the least entry speed that keeps it on.</p>
 <p>Measure \(\phi\) from the bottom. The height above the bottom is \(\rho(1-\cos\phi)\). Energy gives the speed. The normal force, positive toward the centre, is \(N = m(v^2/\rho + g\cos\phi)\).</p>
 <div class="box why"><span class="tag">Why</span>
 <p>The height above the bottom is \(\rho(1-\cos\phi)\). A smooth track does no work, so energy turns that height into lost speed: \(v^2 = v_b^2 - 2g\rho(1 - \cos\phi)\). Toward the centre, the track pushes with \(N\), and the weight contributes \(-mg\cos\phi\): at the bottom it points away from the centre, at the top toward it. So \(N - mg\cos\phi = mv^2/\rho\), which rearranges to the formula above.</p>
@@ -302,6 +311,7 @@ v_{\max}^2 = \rho g\,\frac{\sin\theta + \mu\cos\theta}{\cos\theta - \mu\sin\thet
 </section>
 <section class="topic" id="s8">
 <h2><span class="n">08</span>Polar equations of motion</h2>
+<p class="lead-in">Some bodies are driven along a turning arm instead of a fixed curve. The polar axes from Unit 1 suit them. Newton's law along each polar axis gives the force the arm must supply.</p>
 <p>Unit 1 found the polar components of the acceleration. Newton's law holds along each of them: the forces along the radial line give \(m a_r\), and the forces across it give \(m a_\theta\). A collar on a turning arm is the standard case: a cord through the pivot pulls along the arm, and the arm pushes across it.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>\(\Sigma\vec F = m\vec a\) is one vector equation. Resolve both sides along \(\hat u_r\) and \(\hat u_\theta\). Unit 1, section 6, gave \(a_r = \ddot r - r\dot\theta^2\) and \(a_\theta = r\ddot\theta + 2\dot r\dot\theta\).</p>
@@ -331,6 +341,7 @@ v_{\max}^2 = \rho g\,\frac{\sin\theta + \mu\cos\theta}{\cos\theta - \mu\sin\thet
 </section>
 <section class="topic" id="s9">
 <h2><span class="n">09</span>Spring on a collar</h2>
+<p class="lead-in">A spring is the first force that depends on position. As the collar moves, the spring force changes, and so does the acceleration. This section finds where the collar settles and how fast it passes that point. Unit 3 gets the same speed more quickly by energy.</p>
 <p>A collar on a smooth rod has one axis, along the rod. The spring force is \(kx\), from the unstretched point. The rod's force is the part of the weight perpendicular to the rod. It does no work, and it does not enter \(\sum F = ma\) along the rod.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Along the rod the forces are \(mg\sin\theta\) downhill and \(kx\) toward the unstretched point. Their difference is \(ma\). Perpendicular to the rod nothing accelerates, so the rod cancels \(mg\cos\theta\). That component is the rod force.</p>
@@ -359,10 +370,12 @@ a = g\sin\theta - \frac{k}{m}\,x, \qquad N_{\text{rod}} = mg\cos\theta.
 <div class="part">
   <div class="eyebrow">Part III</div>
   <h2>An application</h2>
+  <p>The highway section answers a question a road designer faces: for a given speed limit, how tight may a curve be? It uses section 6 almost unchanged, with the numbers a design policy sets.</p>
 </div>
 
 <section class="topic" id="s10">
 <h2><span class="n">10</span>Application: the curve of a highway</h2>
+<p class="lead-in">Here Part II pays off in a design. Instead of checking a curve, you size one: the radius a road needs for its speed limit.</p>
 <p>A highway engineer turns section 6 around. The design speed is set, and so are the bank and the side friction drivers find comfortable. The curve's radius follows. AASHTO's design policy (<em>A Policy on Geometric Design of Highways and Streets</em>, 2011) allows superelevation up to 8% on most rural highways. Its side friction factor falls with speed: 0.14 at 50 mph, 0.12 at 60 mph, 0.10 at 70 mph.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>Section 6 found the top speed on a bank with friction \(f\) down the slope: \(v^2 = Rg(\sin\theta + f\cos\theta)/(\cos\theta - f\sin\theta)\). Divide top and bottom by \(\cos\theta\) and write the bank as its slope, \(e = \tan\theta\): \(v^2 = Rg(e + f)/(1 - ef)\).</p>

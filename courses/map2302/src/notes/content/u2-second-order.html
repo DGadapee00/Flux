@@ -51,7 +51,7 @@
 <p>Read: Lebl §2.6. Another view: OCW gain and phase lag; Practice Problems 12.</p>
 </section>
 <section class="topic" id="s5"><h2><span class="n">5</span>Undetermined coefficients</h2>
-<p class="lead-in">Exponentials and sinusoids are not the only inputs that keep their shape. Polynomials and products of these functions do too. That lets you guess the form of the response and solve for its coefficients.</p>
+<p class="lead-in">Sections 3 and 4 needed an exponential or a sinusoid. A ramp, or a load that grows with time, needs another route. When the forcing's derivatives stay in a small family, you can guess the form of the response and solve for its numbers.</p>
 <p>The method works when differentiation keeps the forcing inside a finite-dimensional family: polynomials, exponentials, sinusoids, or products of them. Guess the entire family and solve its coefficient equations. For a quadratic forcing, include a constant and linear term as well as the quadratic term, because derivatives feed lower powers.</p>
 <p>For \(mx''+cx'+kx=F_2t^2+F_1t+F_0\), try \(x_p=At^2+Bt+C\). Matching descending powers gives \(kA=F_2\), \(2cA+kB=F_1\), \(2mA+cB+kC=F_0\), assuming \(k\ne0\). The equations are triangular.</p>
 <div class="box ex"><span class="tag">Worked example · The second derivative reaches the constant equation</span><p>For \(x''+4x=2t^2+t+3\), the polynomial coefficients are \(A=1/2\), \(B=1/4\), \(C=1/2\). Thus \(x_p(1)=1.25\) m. It has initial data \(x_p(0)=1/2\), \(v_p(0)=1/4\). The lab shows this particular response; other initial data require a homogeneous correction.</p></div>

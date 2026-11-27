@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EGN 3321 · Dynamics · Unit 6 · Hibbeler Ch 17</p>
   <h1>Rigid-body kinetics</h1>
-  <p class="lede">Force and acceleration for a rigid body in the plane. The mass moment says how hard the body is to spin. The pin force and the friction then follow from the motion of the mass centre. Each formula below is derived from \(\Sigma\vec F = m\vec a_G\) and \(\Sigma M_G = I_G\alpha\), and the numbers are recomputed.</p>
+  <p class="lede">Unit 5 described how rigid bodies move. This unit asks what forces make them move that way. A rigid body needs two laws: \(\Sigma\vec F = m\vec a_G\) for its mass centre and \(\Sigma M_G = I_G\alpha\) for its rotation. Part I finds the mass moment of inertia, which says how hard a body is to spin. Part II solves the equations of motion for translation, fixed-axis rotation and general plane motion. Part III applies the fixed-axis case to a traction elevator.</p>
   <div class="legend">
     <span><i style="background:var(--field)"></i>Worked example</span>
     <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
@@ -34,10 +34,12 @@
 <div class="part">
   <div class="eyebrow">Part I</div>
   <h2>Inertia</h2>
+  <p>Mass says how hard a body is to accelerate. For rotation you also need to know where the mass sits. Part I defines the mass moment of inertia, then builds it for shapes made of simple parts.</p>
 </div>
 
 <section class="topic" id="s1">
 <h2><span class="n">01</span>Mass moment of inertia</h2>
+<p class="lead-in">A particle resists acceleration by its mass. A spinning body also resists by how far its mass sits from the axis. This section defines that measure, \(I\), and the parallel-axis theorem that moves it between axes.</p>
 <p>The mass moment \(I\) measures how far the mass sits from the axis. Moving that mass farther out raises \(I\) even when the mass itself stays fixed. For a known centre moment, the parallel-axis theorem gives the moment about a parallel axis:</p>
 <div class="box why"><span class="tag">Why</span>
 <p>\(I = \int r^2\,dm\). For a slender rod of mass \(m\) and length \(L\), \(dm = (m/L)\,dx\). About the centre, \(I_G = \int_{-L/2}^{L/2} x^2 (m/L)\,dx = mL^2/12\). For a disk, add rings: a ring of radius \(r\) and width \(dr\) holds mass \((2m/R^2)\,r\,dr\), so \(I = \int_0^R r^2 (2m/R^2) r\,dr = mR^2/2\).</p>
@@ -71,6 +73,7 @@
 </section>
 <section class="topic" id="s2">
 <h2><span class="n">02</span>Composite bodies</h2>
+<p class="lead-in">Real parts are rarely a single rod or disk. Most are built from simple shapes, some with holes cut out. Adding and subtracting the parts gives the moment of the whole, so you can find \(I\) for a flywheel or a pendulum.</p>
 <p>A composite moment is the sum of the parts, each moved onto the same axis. A hole is a part with negative mass. Subtract its centre moment and its \(md^2\).</p>
 <div class="box why"><span class="tag">Why</span>
 <p>The integral \(\int r^2\,dm\) over the whole body splits into integrals over the parts. Move each part from its own mass centre onto the one axis, using \(I_G + md^2\), then add. A hole is a region where the integral was counted and should not have been: the same term with a minus sign.</p>
@@ -99,10 +102,12 @@
 <div class="part">
   <div class="eyebrow">Part II</div>
   <h2>Equations of motion</h2>
+  <p>Part II takes the three kinds of motion from Unit 5 in turn. Translation explains why a crate tips before it slides. Fixed-axis rotation gives the pin force on a swinging bar. General plane motion decides whether a wheel rolls or slips.</p>
 </div>
 
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Translation</h2>
+<p class="lead-in">Translation is the case with no rotation. Even then the moment equation matters: it says when the body would start to turn. That tells you whether a pushed crate slides or tips, and how load shifts in a braking car.</p>
 <p>In translation the body does not rotate, so \(\alpha = 0\) and \(\Sigma M_G = 0\). The force equations are still \(\Sigma F = ma_G\). A horizontal force on a crate can slide it or tip it. The smaller of those two forces happens first.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>For a rigid body, \(\Sigma M_G = I_G\alpha\). Translation means \(\alpha = 0\), so the moment about the mass centre is zero, even while the body accelerates. Sliding is the friction limit \(\mu mg\). Tipping is the moment limit about the front corner. The smaller force is reached first.</p>
@@ -140,6 +145,7 @@
 </section>
 <section class="topic" id="s4">
 <h2><span class="n">04</span>Rotation about a fixed axis</h2>
+<p class="lead-in">A body on a fixed pin has one rotation and a pin force to find. The moment equation about the pin gives \(\alpha\). The force equation then gives the pin reaction, which is what a bearing must carry.</p>
 <p>A body on a fixed pin obeys \(\Sigma M_O = I_O\alpha\). The pin force then comes from \(\Sigma F = ma_G\). At release from rest, \(\omega = 0\), so the mass centre has no normal acceleration yet.</p>
 <div class="box why"><span class="tag">Why</span>
 <p>About the mass centre, \(\Sigma M_G = I_G\alpha\). Shift the moment point to the pin O, a distance \(d\) away. The resultant force \(m\vec a_G\) adds a moment \(m\,a_t\,d = md^2\alpha\). So \(\Sigma M_O = (I_G + md^2)\alpha = I_O\alpha\). Moments about the pin skip the unknown pin force.</p>
@@ -183,6 +189,7 @@
 </section>
 <section class="topic" id="s5">
 <h2><span class="n">05</span>General plane motion</h2>
+<p class="lead-in">General plane motion combines translation and rotation, as a rolling wheel does. Unit 5's rolling condition links \(a_G\) and \(\alpha\). Friction must supply the torque, and if it cannot, the wheel slips. This section finds which case you are in.</p>
 <p>A round body on an incline rolls without slip when friction can supply the needed torque. The acceleration down the plane is</p>
 \[ a = \frac{g\sin\theta}{1 + k_G^2/R^2} \]
 <p>Write \(k = k_G^2/R^2 = I_G/(mR^2)\). The friction that rolling needs is \(mg\sin\theta\cdot k/(1+k)\). If that force exceeds \(\mu N\), the body slips and friction is \(\mu N\).</p>
@@ -226,10 +233,12 @@
 <div class="part">
   <div class="eyebrow">Part III</div>
   <h2>An application</h2>
+  <p>An elevator motor turns a sheave that lifts a car against a counterweight. The fixed-axis equation sizes the torque and power the motor needs, and shows why the counterweight is there.</p>
 </div>
 
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Application: a traction elevator</h2>
+<p class="lead-in">A traction elevator is a sheave on a fixed axis with a load on each side. Section 4 gives the torque the motor must supply at each load. That shows how much the counterweight saves.</p>
 <p>A traction elevator hangs its car and a counterweight from one set of ropes. The ropes pass over a drive sheave, turned by the motor. Elevator makers size the counterweight as the empty car plus 40 to 50% of the rated load. Then the motor works least near half load.</p>
 <p>Take a 1,000 kg car rated for 1,000 kg, with a counterweight at 45%: 1,450 kg. The sheave has radius 0.32 m. With the motor's rotor, its \(I\) is 12 kg·m². The car starts and stops at 1.0 m/s², under the 1.5 m/s² that would excite the ropes, and runs at 1.6 m/s.</p>
 <div class="box why"><span class="tag">Derivation</span>

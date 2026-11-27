@@ -71,8 +71,15 @@ for (const [key, set] of Object.entries(NOTES)) {
   // Structure (D32): legend, parts that cover every section but the formula sheet, a grouped toc, a footer.
   if (!/<div class="legend">/.test(html)) fail(name, 'no legend in the header');
   if (!/<footer>/.test(html)) fail(name, 'no source footer');
-  const partsAt = [...html.matchAll(/<div class="part">\s*<div class="eyebrow">Part ([IVX]+)<\/div>\s*<h2>([^<]+)<\/h2>\s*<\/div>/g)];
+  const partsAt = [...html.matchAll(/<div class="part">\s*<div class="eyebrow">Part ([IVX]+)<\/div>\s*<h2>([^<]+)<\/h2>\s*(<p>[\s\S]*?<\/p>\s*)?<\/div>/g)];
   if (partsAt.length < 2) fail(name, `${partsAt.length} parts; want at least 2`);
+  // The story: each part says why it comes next, and each section opens with what it adds.
+  for (const m of partsAt) if (!m[3]) fail(name, `part "${m[2]}": no bridge paragraph`);
+  for (const s of set.sections) {
+    if (s.title === 'Formula sheet') continue;
+    if (!new RegExp(`<section class="topic" id="${s.id}">\\s*<h2>[\\s\\S]*?</h2>\\s*<p class="lead-in">`).test(html)) fail(name, `${s.id}: no lead-in paragraph`);
+  }
+  if (html.includes('—')) fail(name, 'an em dash (Voice rules)');
   const tocHeads = [...html.matchAll(/<nav class="toc"[^>]*>([\s\S]*?)<\/nav>/g)].flatMap((m) => [...m[1].matchAll(/<h3>([^<]+)<\/h3>/g)].map((h) => h[1]));
   if (tocHeads.join('|') !== [...partsAt.map((m) => `Part ${m[1]} · ${m[2]}`), 'Reference'].join('|')) fail(name, `the toc headings (${tocHeads.join('; ')}) do not match the parts and a Reference group`);
   const main = html.slice(html.indexOf('<main>'));

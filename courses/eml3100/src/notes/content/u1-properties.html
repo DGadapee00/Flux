@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EML 3100 · Thermodynamics · Unit 1 · Yan Ch 2–3</p>
   <h1>Pure substances and ideal gases</h1>
-  <p class="lede">Two properties fix the state of a pure substance. Water shows why: below its boiling point it is a liquid, above it a vapour, and on the boiling line it can be any mix of the two. These notes build the saturation dome, read the tables Flux generates from IAPWS-IF97, and find where the ideal-gas law is good enough. Every number is computed by the course's property library and checked by a second method.</p>
+  <p class="lede">Thermodynamics tracks energy as it moves between heat, work and what a substance stores. Before any energy balance, you need to describe the substance's state. Two properties fix the state of a pure substance. Part I measures pressure and builds the saturation dome, which shows where water is liquid, vapour or a mix. Part II reads the property tables that every later unit uses, which Flux generates from IAPWS-IF97. Part III finds where the ideal-gas law is good enough to replace them. Every number is computed by the course's property library and checked by a second method.</p>
   <div class="legend">
     <span><i style="background:var(--field)"></i>Worked example</span>
     <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
@@ -34,10 +34,12 @@
 <div class="part">
   <div class="eyebrow">Part I</div>
   <h2>Pressure and the dome</h2>
+  <p>Every energy balance later in the course starts from a state. Part I finds what fixes one. Pressure comes first because it is the easiest property to measure. The dome then maps every state of water, so you can tell which phase you have before you read a number.</p>
 </div>
 
 <section class="topic" id="s0">
 <h2><span class="n">01</span>Pressure and manometers</h2>
+<p class="lead-in">A state needs numbers, and pressure is the one you can read off a gauge. A manometer reads it with a column of liquid. Walking the column leg by leg gives the pressure anywhere in a connected system.</p>
 <p>Pressure is force divided by area. A manometer measures it with a still column of liquid. Yan §2.2 lists pressure as a property of the state.</p>
 <p>Start at the open end, where the pressure is the atmosphere, and walk to the point you want. A leg that descends adds \(\rho g z\). A leg that rises subtracts it. \(z\) is the vertical drop, and downward is positive.</p>
 \[
@@ -73,6 +75,7 @@ P_\mathrm{gauge} = 5.314 - 1.175 = 4.139\ \text{kPa}
 
 <section class="topic" id="s1">
 <h2><span class="n">02</span>Pure substances and phases</h2>
+<p class="lead-in">Pressure is one property. How many does it take to fix a state? For a pure substance in one phase, two. This section says what counts as pure and why two independent properties are enough.</p>
 <p>A pure substance has one fixed chemical make-up throughout. Water is pure whether it is ice, liquid, steam, or a mix of all three. Air is treated as pure too, as long as it does not condense or react. Yan §2.1 sets out the definition.</p>
 <p>A property is anything measured at a state: pressure \(P\), temperature \(T\), specific volume \(v\), internal energy \(u\), enthalpy \(h\), entropy \(s\). Specific means per unit mass. A specific property is intensive: it does not depend on how much substance there is. Yan §1.3 draws that line.</p>
 <div class="box why"><span class="tag">Why two properties are enough</span>
@@ -119,6 +122,7 @@ T &> T_{sat}(P):\ \text{vapour}
 
 <section class="topic" id="s2">
 <h2><span class="n">03</span>The saturation dome</h2>
+<p class="lead-in">During boiling, pressure and temperature stop being independent. A third number is needed: how much of the mass is vapour. The saturation dome shows where that happens and gives the quality that fixes the state.</p>
 <p>Plot the saturated liquid and saturated vapour states for every pressure. On a T–v or P–v diagram they trace a dome. The left side is saturated liquid, \(v_f\). The right side is saturated vapour, \(v_g\). They meet at the top, the critical point: 373.9 °C and 22.06 MPa for water. Yan §2.3 draws the diagrams.</p>
 <p>Inside the dome the substance is a mixture. A horizontal line across it is one temperature and one pressure. Where the state sits along that line says how much of the mass is vapour.</p>
 <div class="box why"><span class="tag">Why the lever rule holds</span>
@@ -163,10 +167,12 @@ x = \frac{0.05 - 0.001092}{0.3827 - 0.001092} = 0.1281
 <div class="part">
   <div class="eyebrow">Part II</div>
   <h2>Reading the tables</h2>
+  <p>The dome says which phase you have. The tables say what its properties are. Part II reads them, interpolates between rows, and finds when a liquid can be read from saturation data alone. Every balance in Units 2 to 5 depends on this skill.</p>
 </div>
 
 <section class="topic" id="s3">
 <h2><span class="n">04</span>Reading property tables</h2>
+<p class="lead-in">The dome tells you the phase. The tables give the numbers: \(v\), \(u\), \(h\) and \(s\). A state rarely sits on a printed row, so this section shows how to interpolate and when a straight line is not good enough.</p>
 <p>Property tables list \(v\), \(u\), \(h\) and \(s\) at round values of \(T\) and \(P\). There are three kinds: saturation by temperature, saturation by pressure, and superheated vapour. A fourth lists compressed liquid. Yan §2.4 explains how to read them. Flux prints its own tables from IAPWS-IF97 and copies none.</p>
 <p>A state rarely falls exactly on a printed row. Between two rows, a student draws a straight line.</p>
 <div class="box why"><span class="tag">Why linear interpolation works, and where it fails</span>
@@ -206,10 +212,12 @@ y \approx y_0 + \frac{x - x_0}{x_1 - x_0}\,(y_1 - y_0)
 <div class="part">
   <div class="eyebrow">Part III</div>
   <h2>Ideal and real gases</h2>
+  <p>Tables exist for water and a few refrigerants. For air and most gases, one equation replaces them: \(Pv = RT\). Part III derives it, then tests it, so you know when one equation is safe and when you must go back to the tables.</p>
 </div>
 
 <section class="topic" id="s4">
 <h2><span class="n">05</span>The ideal-gas law</h2>
+<p class="lead-in">Tables are slow and exist for only a few fluids. A gas far from condensing obeys one equation instead. This section derives \(Pv = RT\) from molecules hitting a wall, so the law has a reason.</p>
 <p>A gas whose molecules are far apart obeys \(Pv = RT\). Here \(R\) is the gas constant of that gas, and \(T\) is absolute. Yan §3.1 states the law; OpenStax UP2 §2.1 derives it from the motion of molecules.</p>
 <div class="box why"><span class="tag">Why Pv = RT</span>
 <p>A molecule of mass \(m_1\) moving at \(v_x\) hits a wall and reverses. It hands the wall momentum \(2m_1v_x\). In a box of length \(L\) it returns every \(2L/v_x\). So its average force is \(m_1v_x^2/L\). Sum over \(N\) molecules and divide by the wall's area \(A\):</p>
@@ -253,6 +261,7 @@ m &= \frac{PV}{RT} = \frac{400 \times 2}{0.2870 \times 298.15}\\
 
 <section class="topic" id="s5">
 <h2><span class="n">06</span>When is a gas ideal?</h2>
+<p class="lead-in">The ideal-gas law is a model, and every model has a limit. The compressibility factor measures how far a real gas strays from it. With it you can decide whether to use \(Pv = RT\) or the tables.</p>
 <p>The compressibility factor compares the real specific volume with the ideal one at the same \(P\) and \(T\). Yan §3.2 defines it:</p>
 \[
 Z = \frac{Pv}{RT}

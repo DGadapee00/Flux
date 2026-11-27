@@ -8,7 +8,7 @@
 <header class="top">
   <p class="eyebrow">EML 3100 · Thermodynamics · Unit 5 · Yan Ch 6</p>
   <h1>Entropy</h1>
-  <p class="lede">Entropy measures how much of a heat transfer can still become work. A reversible path stores that limit in a property. An irreversible device generates more, and the extra is lost. Every number below is recomputed by the course's property library and checked a second way.</p>
+  <p class="lede">Unit 4 set a limit on engines but did not say where the lost work goes. Entropy answers that. It is a property, like enthalpy, so its change between two states can be computed. An irreversible process generates entropy, and the generation measures the work lost. Part I computes entropy changes for an ideal gas, a liquid and steam. Part II uses entropy to define the ideal turbine, compressor and nozzle, and scores real ones against them. Part III finds the entropy a wall generates as heat leaks through it. Every number below is recomputed by the course's property library and checked a second way.</p>
   <div class="legend">
     <span><i style="background:var(--field)"></i>Worked example</span>
     <span><i style="background:var(--field-soft);outline:1px solid var(--field)"></i>Derivation</span>
@@ -34,10 +34,12 @@
 <div class="part">
   <div class="eyebrow">Part I</div>
   <h2>Entropy of a state change</h2>
+  <p>Entropy is useful only if you can compute it. Part I finds the change between two states for the three kinds of substance in this course: an ideal gas, a liquid and steam. Each uses a reversible path, because along it the heat sets the entropy.</p>
 </div>
 
 <section class="topic" id="s1">
 <h2><span class="n">01</span>The ideal-gas change</h2>
+<p class="lead-in">Unit 4 used entropy only around a reversible cycle. To use it on one process, you need its change between two states. This section computes that change for an ideal gas.</p>
 <p>Entropy is a property. The change between two states does not depend on the path the gas took. The convenient path is reversible, because along it \(T\,ds = \delta q\).</p>
 <div class="box why"><span class="tag">Why the pressure term is subtracted</span>
 <p>Start from the first law for a closed reversible step, written per kilogram. \(\delta q - \delta w = du\), and the work is \(p\,dv\), so \(T\,ds = du + p\,dv\). Enthalpy is \(h = u + pv\), which differentiates to \(dh = du + p\,dv + v\,dp\). Swap \(du + p\,dv\) for \(T\,ds\):</p>
@@ -70,6 +72,7 @@ ds = c_p\frac{dT}{T} - R\frac{dp}{p}.
 
 <section class="topic" id="s2">
 <h2><span class="n">02</span>An incompressible liquid</h2>
+<p class="lead-in">Pumped water and heated oil are liquids, not gases, so the ideal-gas formula does not apply. A simpler one does, because a liquid's volume barely changes.</p>
 <p>A liquid model takes the volume as constant and the internal energy as a function of temperature alone. Then \(du = c\,dT\), and the Gibbs relation \(T\,ds = du + p\,dv\) loses the pressure term because \(dv = 0\).</p>
 <div class="box why"><span class="tag">Why pressure drops out of the entropy</span>
 <p>Divide \(c\,dT = T\,ds\) by \(T\) and integrate:</p>
@@ -93,6 +96,7 @@ ds = c_p\frac{dT}{T} - R\frac{dp}{p}.
 
 <section class="topic" id="s3">
 <h2><span class="n">03</span>Steam heated at constant pressure</h2>
+<p class="lead-in">Water near its dome fits neither earlier model. This section also gives a picture in which heat is an area. Later courses read whole power cycles from it.</p>
 <p>Superheated steam is not an incompressible liquid and it is not ideal air. The heat and the entropy come from the steam tables. The path still has a picture: on the T-s diagram a reversible isobar is a curve, and the area under it is the heat.</p>
 <div class="box why"><span class="tag">Why the area equals the heat</span>
 <p>At constant pressure, \(dh = \delta q\) for a reversible step, because the flow work is already inside \(h\) and no shaft work is taken. Divide by \(T\):</p>
@@ -120,10 +124,12 @@ q = h_2 - h_1 = (u_2 - u_1) + p(v_2 - v_1).
 <div class="part">
   <div class="eyebrow">Part II</div>
   <h2>Devices that should be isentropic</h2>
+  <p>An adiabatic device with no losses keeps its entropy constant. That ideal sets the best a turbine, compressor or nozzle can do. Part II finds the ideal exit state, then uses an isentropic efficiency to get the real one.</p>
 </div>
 
 <section class="topic" id="s4">
 <h2><span class="n">04</span>A turbine</h2>
+<p class="lead-in">Part I computed entropy. Part II uses it to judge devices. For a turbine, entropy defines the best expansion possible, and an efficiency measures how close a real one comes.</p>
 <p>An adiabatic turbine has no heat term in the entropy balance. Per kilogram, \(s_\mathrm{gen} = s_2 - s_1\). The generation is zero only when the expansion is reversible, which for an adiabatic device means \(s_2 = s_1\). That exit is the isentropic exit, state 2s.</p>
 <div class="box why"><span class="tag">Why the real exit is not state 2s</span>
 <p>The isentropic work is the whole enthalpy drop, \(h_1 - h_{2s}\). A real turbine delivers a fraction \(\eta\) of it. Solve for the real exit enthalpy:</p>
@@ -149,6 +155,7 @@ h_2 = h_1 - \eta(h_1 - h_{2s}).
 
 <section class="topic" id="s5">
 <h2><span class="n">05</span>A compressor and a nozzle</h2>
+<p class="lead-in">The same idea scores a compressor and a nozzle. Each has an ideal, constant-entropy version to measure against. The algebra differs in one place, and this section shows where.</p>
 <p>A compressor is the turbine turned around, with one change of algebra. The isentropic machine is the one that needs the least work. A real compressor needs more, so the efficiency divides:</p>
 \[
 h_2 = h_1 + \frac{h_{2s} - h_1}{\eta}.
@@ -175,10 +182,12 @@ V_2 = \sqrt{V_1^2 + 2(h_1 - h_2)}.
 <div class="part">
   <div class="eyebrow">Part III</div>
   <h2>Heat and lost work</h2>
+  <p>Losses are not only inside machines. Heat leaking through a wall generates entropy too, though the wall stores none. Part III computes that generation for a house on a cold day.</p>
 </div>
 
 <section class="topic" id="s6">
 <h2><span class="n">06</span>Heat through a wall</h2>
+<p class="lead-in">Every heat flow from hot to cold generates entropy, even with no machine in the way. A wall in winter is the everyday case. This section computes that generation from the heat and the two temperatures.</p>
 <p>Heat leaving a warm room and entering cold air generates entropy even when the wall itself stores none. The room loses \(Q/T_H\). The outdoors gains \(Q/T_L\). Because \(T_L < T_H\), the gain is larger than the loss.</p>
 <div class="box why"><span class="tag">Why the generation is Q times a difference of reciprocals</span>
 <p>Steady state means the wall's entropy is not changing, so the balance closes on the two reservoirs:</p>
